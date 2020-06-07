@@ -1136,7 +1136,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
 
 		if (!monster_is_valid(m_ptr)) continue;
 		if (is_pet(m_ptr) && i != creature_ptr->riding) have_pet = TRUE;
-		if (MON_CSLEEP(m_ptr)) continue;
+		if (monster_csleep_remaining(m_ptr)) continue;
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 		if (!is_hostile(m_ptr)) continue;
 		msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！",

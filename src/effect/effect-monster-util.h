@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "grid/grid.h"
 
 typedef struct effect_monster_type {

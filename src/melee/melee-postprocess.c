@@ -75,7 +75,7 @@ static void prepare_redraw(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
 {
-    if (MON_INVULNER(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY))
+    if (monster_invulner_remaining(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY))
         return FALSE;
 
     if (mam_pp_ptr->seen)
@@ -179,8 +179,8 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    if (!MON_MONFEAR(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0)
-        || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, MON_MONFEAR(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
+    if (!monster_fear_remaining(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0)
+        || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, monster_fear_remaining(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
         return;
 
     *(mam_pp_ptr->fear) = FALSE;
@@ -195,7 +195,7 @@ static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr
 static void make_monster_fear(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 {
     monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
-    if (MON_MONFEAR(mam_pp_ptr->m_ptr) || ((r_ptr->flags3 & RF3_NO_FEAR) == 0))
+    if (monster_fear_remaining(mam_pp_ptr->m_ptr) || ((r_ptr->flags3 & RF3_NO_FEAR) == 0))
         return;
 
     int percentage = (100L * mam_pp_ptr->m_ptr->hp) / mam_pp_ptr->m_ptr->maxhp;

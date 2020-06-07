@@ -291,7 +291,7 @@ static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_mo
 
     if (is_pet(em_ptr->m_ptr)) {
         em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
-        (void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100);
+        (void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100);
         return TRUE;
     }
 
@@ -305,7 +305,7 @@ static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_mo
 
     em_ptr->note = _("を支配した。", " is tamed!");
     set_pet(caster_ptr, em_ptr->m_ptr);
-    (void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100);
+    (void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100);
     if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
         em_ptr->r_ptr->r_flags3 |= RF3_GOOD;
 

@@ -221,7 +221,7 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (MON_CONFUSED(m_ptr) || !aware)
+	if (monster_confused_remaining(m_ptr) || !aware)
 	{
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
 		return TRUE;

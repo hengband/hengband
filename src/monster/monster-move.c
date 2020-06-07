@@ -374,7 +374,7 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
 
 		if (turn_flags_ptr->is_riding_mon)
 		{
-			if (!target_ptr->riding_ryoute && !MON_MONFEAR(&target_ptr->current_floor_ptr->m_list[target_ptr->riding])) turn_flags_ptr->do_move = FALSE;
+			if (!target_ptr->riding_ryoute && !monster_fear_remaining(&target_ptr->current_floor_ptr->m_list[target_ptr->riding])) turn_flags_ptr->do_move = FALSE;
 		}
 
 		if (!process_post_dig_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx)) return FALSE;
@@ -488,7 +488,7 @@ void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy
 	else
 		strcpy(m_name, _("それ", "It"));
 
-	if (MON_MONFEAR(m_ptr))
+	if (monster_fear_remaining(m_ptr))
 		filename = _("monfear_j.txt", "monfear.txt");
 	else if (is_pet(m_ptr))
 		filename = _("monpet_j.txt", "monpet.txt");

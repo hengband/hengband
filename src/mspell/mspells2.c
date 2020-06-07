@@ -234,9 +234,9 @@ void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITI
 static bool dispel_check_monster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
 	monster_type *t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
-	if (MON_INVULNER(t_ptr)) return TRUE;
+	if (monster_invulner_remaining(t_ptr)) return TRUE;
 
-	if ((t_ptr->mspeed < 135) && MON_FAST(t_ptr)) return TRUE;
+	if ((t_ptr->mspeed < 135) && monster_fast_remaining(t_ptr)) return TRUE;
 
 	/* Riding monster */
 	if ((t_idx == target_ptr->riding) && dispel_check(target_ptr, m_idx)) return TRUE;
@@ -294,7 +294,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	bool can_remember;
 
 	/* Cannot cast spells when confused */
-	if (MON_CONFUSED(m_ptr)) return FALSE;
+	if (monster_confused_remaining(m_ptr)) return FALSE;
 
 	/* Extract the racial spell flags */
 	BIT_FLAGS f4 = r_ptr->flags4;
@@ -682,7 +682,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (target_ptr->riding && (m_idx == target_ptr->riding)) disturb(target_ptr, TRUE, TRUE);
 
 	/* Check for spell failure (inate attacks never fail) */
-	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2))))
+	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (monster_stunned_remaining(m_ptr) && one_in_(2))))
 	{
 		disturb(target_ptr, TRUE, TRUE);
 		if (see_m) msg_format(_("%^sは呪文を唱えようとしたが失敗した。",

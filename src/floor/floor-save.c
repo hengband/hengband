@@ -421,7 +421,7 @@ static void preserve_pet(player_type *master_ptr)
 				POSITION dis = distance(master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx);
 
 				/* Confused (etc.) monsters don't follow. */
-				if (MON_CONFUSED(m_ptr) || MON_STUNNED(m_ptr) || MON_CSLEEP(m_ptr)) continue;
+				if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || monster_csleep_remaining(m_ptr)) continue;
 
 				/* Pet of other pet don't follow. */
 				if (m_ptr->parent_m_idx) continue;

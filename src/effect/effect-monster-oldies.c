@@ -1,6 +1,4 @@
-﻿#include "system/angband.h"
-#include "effect/effect-monster-util.h"
-#include "effect/effect-monster-oldies.h"
+﻿#include "effect/effect-monster-oldies.h"
 #include "floor/floor.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
@@ -103,7 +101,7 @@ static void effect_monster_old_heal_check_player(player_type *caster_ptr, effect
 
 static void effect_monster_old_heal_recovery(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (MON_STUNNED(em_ptr->m_ptr))
+	if (monster_stunned_remaining(em_ptr->m_ptr))
 	{
 		if (em_ptr->seen_msg)
 			msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), em_ptr->m_name);
@@ -111,7 +109,7 @@ static void effect_monster_old_heal_recovery(player_type *caster_ptr, effect_mon
 		(void)set_monster_stunned(caster_ptr, em_ptr->g_ptr->m_idx, 0);
 	}
 
-	if (MON_CONFUSED(em_ptr->m_ptr))
+	if (monster_confused_remaining(em_ptr->m_ptr))
 	{
 		if (em_ptr->seen_msg)
 			msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), em_ptr->m_name);
@@ -119,7 +117,7 @@ static void effect_monster_old_heal_recovery(player_type *caster_ptr, effect_mon
 		(void)set_monster_confused(caster_ptr, em_ptr->g_ptr->m_idx, 0);
 	}
 
-	if (MON_MONFEAR(em_ptr->m_ptr))
+	if (monster_fear_remaining(em_ptr->m_ptr))
 	{
 		if (em_ptr->seen_msg)
 			msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), em_ptr->m_name, em_ptr->m_poss);
@@ -160,7 +158,7 @@ gf_switch_result effect_monster_old_speed(player_type *caster_ptr, effect_monste
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
-	if (set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100))
+	if (set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100))
 	{
 		em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
 	}
@@ -192,7 +190,7 @@ gf_switch_result effect_monster_old_slow(player_type *caster_ptr, effect_monster
 		return GF_SWITCH_CONTINUE;
 	}
 
-	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
+	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50))
 		em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
 
 	em_ptr->dam = 0;

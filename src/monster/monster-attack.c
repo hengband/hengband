@@ -37,7 +37,7 @@ void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flag
 		turn_flags_ptr->do_move = FALSE;
 	}
 
-	if (turn_flags_ptr->do_move && ((d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) != 0) && !MON_CONFUSED(m_ptr))
+	if (turn_flags_ptr->do_move && ((d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) != 0) && !monster_confused_remaining(m_ptr))
 	{
 		if (!(r_ptr->flags2 & RF2_STUPID))
 			turn_flags_ptr->do_move = FALSE;
@@ -76,7 +76,7 @@ static bool exe_monster_attack_to_monster(player_type *target_ptr, MONSTER_IDX m
 	if ((y_ptr->r_idx == 0) || (y_ptr->hp < 0)) return FALSE;
 	if (monst_attack_monst(target_ptr, m_idx, g_ptr->m_idx)) return TRUE;
 	if ((d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) == 0) return FALSE;
-	if (MON_CONFUSED(m_ptr)) return TRUE;
+	if (monster_confused_remaining(m_ptr)) return TRUE;
 	if ((r_ptr->flags2 & RF2_STUPID) == 0) return FALSE;
 
 	if (is_original_ap_and_seen(target_ptr, m_ptr))
@@ -108,7 +108,7 @@ bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn
 	if ((((r_ptr->flags2 & RF2_KILL_BODY) != 0) && ((r_ptr->flags1 & RF1_NEVER_BLOW) == 0) &&
 		(r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
 		can_cross && (g_ptr->m_idx != target_ptr->riding)) ||
-		are_enemies(target_ptr, m_ptr, y_ptr) || MON_CONFUSED(m_ptr))
+		are_enemies(target_ptr, m_ptr, y_ptr) || monster_confused_remaining(m_ptr))
 	{
 		return exe_monster_attack_to_monster(target_ptr, m_idx, g_ptr);
 	}

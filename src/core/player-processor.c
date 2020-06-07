@@ -130,34 +130,34 @@ void process_player(player_type *creature_ptr)
     if (creature_ptr->riding && !creature_ptr->confused && !creature_ptr->blind) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
-        if (MON_CSLEEP(m_ptr)) {
+        if (monster_csleep_remaining(m_ptr)) {
             GAME_TEXT m_name[MAX_NLEN];
             (void)set_monster_csleep(creature_ptr, creature_ptr->riding, 0);
             monster_desc(creature_ptr, m_name, m_ptr, 0);
             msg_format(_("%^sを起こした。", "You have woken %s up."), m_name);
         }
 
-        if (MON_STUNNED(m_ptr)) {
+        if (monster_stunned_remaining(m_ptr)) {
             if (set_monster_stunned(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_STUNNED(m_ptr) - 1))) {
+                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
             }
         }
 
-        if (MON_CONFUSED(m_ptr)) {
+        if (monster_confused_remaining(m_ptr)) {
             if (set_monster_confused(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_CONFUSED(m_ptr) - 1))) {
+                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_confused_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
             }
         }
 
-        if (MON_MONFEAR(m_ptr)) {
+        if (monster_fear_remaining(m_ptr)) {
             if (set_monster_monfear(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1))) {
+                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_fear_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer afraid."), m_name);

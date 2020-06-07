@@ -268,7 +268,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
         _("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
-        set_monster_monfear(target_ptr, t_idx, MON_MONFEAR(t_ptr) + randint0(4) + 4);
+        set_monster_monfear(target_ptr, t_idx, monster_fear_remaining(t_ptr) + randint0(4) + 4);
     }
 }
 
@@ -322,7 +322,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
         _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sは目が見えなくなった！ ", "%^s is blinded!"), resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_confused(target_ptr, t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
+        (void)set_monster_confused(target_ptr, t_idx, monster_confused_remaining(t_ptr) + 12 + randint0(4));
     }
 }
 
@@ -368,7 +368,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
         _("%^sは混乱したようだ。", "%^s seems confused."), resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_confused(target_ptr, t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
+        (void)set_monster_confused(target_ptr, t_idx, monster_confused_remaining(t_ptr) + 12 + randint0(4));
     }
 }
 
@@ -413,7 +413,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
         resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_stunned(target_ptr, t_idx, MON_STUNNED(t_ptr) + randint1(4) + 4);
+        (void)set_monster_stunned(target_ptr, t_idx, monster_stunned_remaining(t_ptr) + randint1(4) + 4);
     }
 }
 
@@ -439,7 +439,7 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
         _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
         _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)), target_ptr->blind > 0, TARGET_TYPE);
 
-    if (set_monster_fast(target_ptr, m_idx, MON_FAST(m_ptr) + 100)) {
+    if (set_monster_fast(target_ptr, m_idx, monster_fast_remaining(m_ptr) + 100)) {
         if (TARGET_TYPE == MONSTER_TO_PLAYER || (TARGET_TYPE == MONSTER_TO_MONSTER && see_m))
             msg_format(_("%^sの動きが速くなった。", "%^s starts moving faster."), m_name);
     }
@@ -495,7 +495,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
         _("%^sには効果がなかった。", "%^s is unaffected."), _("%sの動きが遅くなった。", "%^s starts moving slower."), resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
-        set_monster_slow(target_ptr, t_idx, MON_SLOW(t_ptr) + 50);
+        set_monster_slow(target_ptr, t_idx, monster_slow_remaining(t_ptr) + 50);
     }
 }
 
@@ -543,7 +543,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
     if (target_ptr->riding == m_idx)
         target_ptr->redraw |= (PR_UHEALTH);
 
-    if (!MON_MONFEAR(m_ptr))
+    if (!monster_fear_remaining(m_ptr))
         return;
 
     (void)set_monster_monfear(target_ptr, m_idx, 0);
@@ -568,7 +568,7 @@ void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
         _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
         _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."), !seen, TARGET_TYPE);
 
-    if (!MON_INVULNER(m_ptr))
+    if (!monster_invulner_remaining(m_ptr))
         (void)set_monster_invulner(target_ptr, m_idx, randint1(4) + 4, FALSE);
 }
 

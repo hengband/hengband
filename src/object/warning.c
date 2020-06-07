@@ -6,6 +6,7 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
@@ -420,7 +421,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 
 			m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
-			if (MON_CSLEEP(m_ptr)) continue;
+			if (monster_csleep_remaining(m_ptr)) continue;
 			if (!is_hostile(m_ptr)) continue;
 
 			r_ptr = &r_info[m_ptr->r_idx];

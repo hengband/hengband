@@ -170,7 +170,7 @@ void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
             continue;
 
         if (m_ptr->cdis < MAX_SIGHT * 2) {
-            if (MON_CSLEEP(m_ptr)) {
+            if (monster_csleep_remaining(m_ptr)) {
                 (void)set_monster_csleep(caster_ptr, i, 0);
                 sleep = TRUE;
             }
@@ -181,7 +181,7 @@ void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
 
         if (player_has_los_bold(caster_ptr, m_ptr->fy, m_ptr->fx)) {
             if (!is_pet(m_ptr)) {
-                (void)set_monster_fast(caster_ptr, i, MON_FAST(m_ptr) + 100);
+                (void)set_monster_fast(caster_ptr, i, monster_fast_remaining(m_ptr) + 100);
                 speed = TRUE;
             }
         }
@@ -314,9 +314,9 @@ bool probing(player_type *caster_ptr)
 
         monster_desc(caster_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
         speed = m_ptr->mspeed - 110;
-        if (MON_FAST(m_ptr))
+        if (monster_fast_remaining(m_ptr))
             speed += 10;
-        if (MON_SLOW(m_ptr))
+        if (monster_slow_remaining(m_ptr))
             speed -= 10;
         if (ironman_nightmare)
             speed += 5;
@@ -345,15 +345,15 @@ bool probing(player_type *caster_ptr)
             strcat(buf, "xxx ");
         }
 
-        if (MON_CSLEEP(m_ptr))
+        if (monster_csleep_remaining(m_ptr))
             strcat(buf, _("睡眠 ", "sleeping "));
-        if (MON_STUNNED(m_ptr))
+        if (monster_stunned_remaining(m_ptr))
             strcat(buf, _("朦朧 ", "stunned "));
-        if (MON_MONFEAR(m_ptr))
+        if (monster_fear_remaining(m_ptr))
             strcat(buf, _("恐怖 ", "scared "));
-        if (MON_CONFUSED(m_ptr))
+        if (monster_confused_remaining(m_ptr))
             strcat(buf, _("混乱 ", "confused "));
-        if (MON_INVULNER(m_ptr))
+        if (monster_invulner_remaining(m_ptr))
             strcat(buf, _("無敵 ", "invulnerable "));
         buf[strlen(buf) - 1] = '\0';
         prt(buf, 0, 0);

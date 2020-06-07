@@ -88,7 +88,7 @@ HIT_POINT mon_damage_mod(player_type *target_ptr, monster_type *m_ptr, HIT_POINT
 		if ((dam == 0) && one_in_(3)) dam = 1;
 	}
 
-	if (MON_INVULNER(m_ptr))
+	if (monster_invulner_remaining(m_ptr))
 	{
 		if (is_psy_spear)
 		{
@@ -291,7 +291,7 @@ bool set_monster_csleep(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	if (v)
 	{
-		if (!MON_CSLEEP(m_ptr))
+		if (!monster_csleep_remaining(m_ptr))
 		{
 			mproc_add(floor_ptr, m_idx, MTIMED_CSLEEP);
 			notice = TRUE;
@@ -300,7 +300,7 @@ bool set_monster_csleep(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	else
 	{
-		if (MON_CSLEEP(m_ptr))
+		if (monster_csleep_remaining(m_ptr))
 		{
 			mproc_remove(floor_ptr, m_idx, MTIMED_CSLEEP);
 			notice = TRUE;
@@ -342,7 +342,7 @@ bool set_monster_fast(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	if (v)
 	{
-		if (!MON_FAST(m_ptr))
+		if (!monster_fast_remaining(m_ptr))
 		{
 			mproc_add(floor_ptr, m_idx, MTIMED_FAST);
 			notice = TRUE;
@@ -351,7 +351,7 @@ bool set_monster_fast(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	else
 	{
-		if (MON_FAST(m_ptr))
+		if (monster_fast_remaining(m_ptr))
 		{
 			mproc_remove(floor_ptr, m_idx, MTIMED_FAST);
 			notice = TRUE;
@@ -381,7 +381,7 @@ bool set_monster_slow(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	if (v)
 	{
-		if (!MON_SLOW(m_ptr))
+		if (!monster_slow_remaining(m_ptr))
 		{
 			mproc_add(floor_ptr, m_idx, MTIMED_SLOW);
 			notice = TRUE;
@@ -390,7 +390,7 @@ bool set_monster_slow(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	else
 	{
-		if (MON_SLOW(m_ptr))
+		if (monster_slow_remaining(m_ptr))
 		{
 			mproc_remove(floor_ptr, m_idx, MTIMED_SLOW);
 			notice = TRUE;
@@ -425,7 +425,7 @@ bool set_monster_stunned(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	if (v)
 	{
-		if (!MON_STUNNED(m_ptr))
+		if (!monster_stunned_remaining(m_ptr))
 		{
 			mproc_add(floor_ptr, m_idx, MTIMED_STUNNED);
 			notice = TRUE;
@@ -434,7 +434,7 @@ bool set_monster_stunned(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	else
 	{
-		if (MON_STUNNED(m_ptr))
+		if (monster_stunned_remaining(m_ptr))
 		{
 			mproc_remove(floor_ptr, m_idx, MTIMED_STUNNED);
 			notice = TRUE;
@@ -465,7 +465,7 @@ bool set_monster_confused(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	if (v)
 	{
-		if (!MON_CONFUSED(m_ptr))
+		if (!monster_confused_remaining(m_ptr))
 		{
 			mproc_add(floor_ptr, m_idx, MTIMED_CONFUSED);
 			notice = TRUE;
@@ -474,7 +474,7 @@ bool set_monster_confused(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	else
 	{
-		if (MON_CONFUSED(m_ptr))
+		if (monster_confused_remaining(m_ptr))
 		{
 			mproc_remove(floor_ptr, m_idx, MTIMED_CONFUSED);
 			notice = TRUE;
@@ -505,7 +505,7 @@ bool set_monster_monfear(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	if (v)
 	{
-		if (!MON_MONFEAR(m_ptr))
+		if (!monster_fear_remaining(m_ptr))
 		{
 			mproc_add(floor_ptr, m_idx, MTIMED_MONFEAR);
 			notice = TRUE;
@@ -514,7 +514,7 @@ bool set_monster_monfear(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	else
 	{
-		if (MON_MONFEAR(m_ptr))
+		if (monster_fear_remaining(m_ptr))
 		{
 			mproc_remove(floor_ptr, m_idx, MTIMED_MONFEAR);
 			notice = TRUE;
@@ -555,7 +555,7 @@ bool set_monster_invulner(player_type *target_ptr, MONSTER_IDX m_idx, int v, boo
 
 	if (v)
 	{
-		if (!MON_INVULNER(m_ptr))
+		if (!monster_invulner_remaining(m_ptr))
 		{
 			mproc_add(floor_ptr, m_idx, MTIMED_INVULNER);
 			notice = TRUE;
@@ -564,7 +564,7 @@ bool set_monster_invulner(player_type *target_ptr, MONSTER_IDX m_idx, int v, boo
 
 	else
 	{
-		if (MON_INVULNER(m_ptr))
+		if (monster_invulner_remaining(m_ptr))
 		{
 			mproc_remove(floor_ptr, m_idx, MTIMED_INVULNER);
 			if (energy_need && !target_ptr->wild_mode) m_ptr->energy_need += ENERGY_NEED();
@@ -649,7 +649,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		/* Monster wakes up "a little bit" */
 
 		/* Still asleep */
-		if (!set_monster_csleep(target_ptr, m_idx, MON_CSLEEP(m_ptr) - d))
+		if (!set_monster_csleep(target_ptr, m_idx, monster_csleep_remaining(m_ptr) - d))
 		{
 			/* Notice the "not waking up" */
 			if (is_original_ap_and_seen(target_ptr, m_ptr))
@@ -680,7 +680,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 
 	case MTIMED_FAST:
 		/* Reduce by one, note if expires */
-		if (set_monster_fast(target_ptr, m_idx, MON_FAST(m_ptr) - 1))
+		if (set_monster_fast(target_ptr, m_idx, monster_fast_remaining(m_ptr) - 1))
 		{
 			if (is_seen(m_ptr))
 			{
@@ -694,7 +694,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 
 	case MTIMED_SLOW:
 		/* Reduce by one, note if expires */
-		if (set_monster_slow(target_ptr, m_idx, MON_SLOW(m_ptr) - 1))
+		if (set_monster_slow(target_ptr, m_idx, monster_slow_remaining(m_ptr) - 1))
 		{
 			if (is_seen(m_ptr))
 			{
@@ -711,7 +711,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		int rlev = r_info[m_ptr->r_idx].level;
 
 		/* Recover from stun */
-		if (set_monster_stunned(target_ptr, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (MON_STUNNED(m_ptr) - 1)))
+		if (set_monster_stunned(target_ptr, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (monster_stunned_remaining(m_ptr) - 1)))
 		{
 			/* Message if visible */
 			if (is_seen(m_ptr))
@@ -728,7 +728,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 	case MTIMED_CONFUSED:
 	{
 		/* Reduce the confusion */
-		if (!set_monster_confused(target_ptr, m_idx, MON_CONFUSED(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
+		if (!set_monster_confused(target_ptr, m_idx, monster_confused_remaining(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
 			break;
 		/* Message if visible */
 		if (is_seen(m_ptr))
@@ -744,7 +744,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 	case MTIMED_MONFEAR:
 	{
 		/* Reduce the fear */
-		if (!set_monster_monfear(target_ptr, m_idx, MON_MONFEAR(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
+		if (!set_monster_monfear(target_ptr, m_idx, monster_fear_remaining(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
 			break;
 
 		/* Visual note */
@@ -772,7 +772,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 	case MTIMED_INVULNER:
 	{
 		/* Reduce by one, note if expires */
-		if (!set_monster_invulner(target_ptr, m_idx, MON_INVULNER(m_ptr) - 1, TRUE))
+		if (!set_monster_invulner(target_ptr, m_idx, monster_invulner_remaining(m_ptr) - 1, TRUE))
 			break;
 
 		if (is_seen(m_ptr))
@@ -1420,10 +1420,10 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 	}
 
 	/* Mega-Hack -- Pain cancels fear */
-	if (MON_MONFEAR(m_ptr) && (dam > 0))
+	if (monster_fear_remaining(m_ptr) && (dam > 0))
 	{
 		/* Cure fear */
-		if (set_monster_monfear(target_ptr, m_idx, MON_MONFEAR(m_ptr) - randint1(dam)))
+		if (set_monster_monfear(target_ptr, m_idx, monster_fear_remaining(m_ptr) - randint1(dam)))
 		{
 			/* No more fear */
 			(*fear) = FALSE;
@@ -1431,7 +1431,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 	}
 
 	/* Sometimes a monster gets scared by damage */
-	if (!MON_MONFEAR(m_ptr) && !(r_ptr->flags3 & (RF3_NO_FEAR)))
+	if (!monster_fear_remaining(m_ptr) && !(r_ptr->flags3 & (RF3_NO_FEAR)))
 	{
 		/* Percentage of fully healthy */
 		int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
@@ -1461,3 +1461,17 @@ bool monster_is_valid(monster_type *m_ptr)
 {
 	return (m_ptr->r_idx != 0);
 }
+
+TIME_EFFECT monster_csleep_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_CSLEEP]; }
+
+TIME_EFFECT monster_fast_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_FAST]; }
+
+TIME_EFFECT monster_slow_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_SLOW]; }
+
+TIME_EFFECT monster_stunned_remaining(monster_type* m_ptr) { return m_ptr->mtimed[MTIMED_STUNNED]; }
+
+TIME_EFFECT monster_confused_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_CONFUSED]; }
+
+TIME_EFFECT monster_fear_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_MONFEAR]; }
+
+TIME_EFFECT monster_invulner_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_INVULNER]; }

@@ -389,7 +389,7 @@ gf_switch_result effect_monster_inertial(player_type *caster_ptr, effect_monster
 		return GF_SWITCH_CONTINUE;
 	}
 
-	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
+	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50))
 		em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
 
 	return GF_SWITCH_CONTINUE;
@@ -445,7 +445,7 @@ static void effect_monster_gravity_slow(player_type *caster_ptr, effect_monster_
 		(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
 		em_ptr->obvious = FALSE;
 
-	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
+	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50))
 		em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
 }
 

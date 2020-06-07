@@ -10,6 +10,7 @@
 #include "monster-attack/monster-eating.h"
 #include "mind/drs-types.h"
 #include "mind/mind-mirror-master.h"
+#include "monster/monster-status.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "spell-kind/earthquake.h"
@@ -87,7 +88,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     }
     case RBE_EAT_GOLD: {
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (MON_CONFUSED(monap_ptr->m_ptr))
+        if (monster_confused_remaining(monap_ptr->m_ptr))
             break;
 
         if (target_ptr->is_dead || check_multishadow(target_ptr))

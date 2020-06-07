@@ -199,7 +199,7 @@ static void process_monster_attack_effect(player_type *subject_ptr, mam_type *ma
 
 static void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
-    if (mam_ptr->effect && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, MON_STUNNED(mam_ptr->m_ptr))) {
+    if (mam_ptr->effect && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, monster_stunned_remaining(mam_ptr->m_ptr))) {
         describe_monster_missed_monster(subject_ptr, mam_ptr);
         return;
     }

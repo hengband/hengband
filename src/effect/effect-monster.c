@@ -278,10 +278,10 @@ static void pile_monster_stun(player_type *caster_ptr, effect_monster_type *em_p
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
-	if (MON_STUNNED(em_ptr->m_ptr))
+	if (monster_stunned_remaining(em_ptr->m_ptr))
 	{
 		em_ptr->note = _("はひどくもうろうとした。", " is more dazed.");
-		*stun_damage = MON_STUNNED(em_ptr->m_ptr) + (em_ptr->do_stun / 2);
+		*stun_damage = monster_stunned_remaining(em_ptr->m_ptr) + (em_ptr->do_stun / 2);
 	}
 	else
 	{
@@ -310,10 +310,10 @@ static void pile_monster_conf(player_type *caster_ptr, effect_monster_type *em_p
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
-	if (MON_CONFUSED(em_ptr->m_ptr))
+	if (monster_confused_remaining(em_ptr->m_ptr))
 	{
 		em_ptr->note = _("はさらに混乱したようだ。", " looks more confused.");
-		*conf_damage = MON_CONFUSED(em_ptr->m_ptr) + (em_ptr->do_conf / 2);
+		*conf_damage = monster_confused_remaining(em_ptr->m_ptr) + (em_ptr->do_conf / 2);
 	}
 	else
 	{
@@ -415,7 +415,7 @@ static void process_monster_bad_status(player_type *caster_ptr, effect_monster_t
 	process_monster_teleport(caster_ptr, em_ptr);
 	if (em_ptr->do_fear == 0) return;
 
-	(void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, MON_MONFEAR(em_ptr->m_ptr) + em_ptr->do_fear);
+	(void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, monster_fear_remaining(em_ptr->m_ptr) + em_ptr->do_fear);
 	em_ptr->get_angry = TRUE;
 }
 

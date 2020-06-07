@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "system/angband.h"
+
 typedef struct {
 	bool see_m;
 	bool aware;

@@ -39,31 +39,32 @@
  */
 
 #include "system/angband.h"
-#include "util/util.h"
-#include "effect/effect-characteristics.h"
 #include "dungeon/dungeon.h"
-#include "grid/grid.h"
-#include "object-enchant/object-curse.h"
 #include "dungeon/quest.h"
-#include "player/player-move.h"
-#include "player/player-status.h"
+#include "effect/effect-characteristics.h"
+#include "grid/grid.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "monster/smart-learn-types.h"
+#include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"
-#include "spell/spells-type.h"
-#include "world/world.h"
-#include "realm/realm-song-numbers.h"
-#include "view/display-main-window.h"
-#include "player/player-races-table.h"
+#include "mspell/mspell-learn-checker.h"
+#include "object-enchant/object-curse.h"
 #include "player/player-class.h"
+#include "player/player-move.h"
+#include "player/player-races-table.h"
+#include "player/player-status.h"
+#include "realm/realm-song-numbers.h"
+#include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
 #include "spell/range-calc.h"
-#include "spell-realm/spells-hex.h"
-#include "spell-kind/spells-teleport.h"
-#include "mspell/mspell-learn-checker.h"
-#include "mspell/assign-monster-spell.h"
+#include "spell/spells-type.h"
+#include "util/util.h"
+#include "view/display-main-window.h"
+#include "world/world.h"
 
 #define DO_SPELL_NONE    0
 #define DO_SPELL_BR_LITE 1
@@ -961,7 +962,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 
 	if (creature_ptr->riding && (creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].mspeed < 135))
 	{
-		if (MON_FAST(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) return TRUE;
+		if (monster_fast_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) return TRUE;
 	}
 
 	/* No need to cast dispel spell */
@@ -1087,7 +1088,7 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 	}
 
 	/* Hurt badly or afraid, attempt to flee */
-	if (((m_ptr->hp < m_ptr->maxhp / 3) || MON_MONFEAR(m_ptr)) && one_in_(2))
+	if (((m_ptr->hp < m_ptr->maxhp / 3) || monster_fear_remaining(m_ptr)) && one_in_(2))
 	{
 		/* Choose escape spell if possible */
 		if (escape_num) return (escape[randint0(escape_num)]);
@@ -1189,7 +1190,7 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 	}
 
 	/* Haste self if we aren't already somewhat hasted (rarely) */
-	if (haste_num && (randint0(100) < 20) && !MON_FAST(m_ptr))
+	if (haste_num && (randint0(100) < 20) && !monster_fast_remaining(m_ptr))
 	{
 		/* Choose haste spell */
 		return (haste[randint0(haste_num)]);
@@ -1361,7 +1362,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Cannot cast spells when confused */
-	if (MON_CONFUSED(m_ptr))
+	if (monster_confused_remaining(m_ptr))
 	{
 		reset_target(m_ptr);
 		return FALSE;
@@ -1694,7 +1695,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 	/* Check for spell failure (inate attacks never fail) */
 	if (!spell_is_inate(thrown_spell)
-		&& (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
+		&& (in_no_magic_dungeon || (monster_stunned_remaining(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
 	{
 		disturb(target_ptr, TRUE, TRUE);
 		msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);

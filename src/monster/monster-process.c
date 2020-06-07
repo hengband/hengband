@@ -95,7 +95,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	turn_flags_ptr->see_m = is_seen(m_ptr);
 
 	decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
-	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !MON_CSLEEP(m_ptr))
+	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !monster_csleep_remaining(m_ptr))
 	{
 		choose_new_monster(target_ptr, m_idx, FALSE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
@@ -108,7 +108,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (runaway_monster(target_ptr, turn_flags_ptr, m_idx)) return;
 	if (!awake_monster(target_ptr, m_idx)) return;
 
-	if (MON_STUNNED(m_ptr))
+	if (monster_stunned_remaining(m_ptr))
 	{
 		if (one_in_(2)) return;
 	}
@@ -144,7 +144,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (target_ptr->no_flowed && count > 2 && m_ptr->target_y)
 		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
-	if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !MON_MONFEAR(m_ptr) && !turn_flags_ptr->is_riding_mon && turn_flags_ptr->aware)
+	if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !monster_fear_remaining(m_ptr) && !turn_flags_ptr->is_riding_mon && turn_flags_ptr->aware)
 	{
 		if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
 		{
@@ -249,7 +249,7 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (!MON_CSLEEP(m_ptr)) return TRUE;
+	if (!monster_csleep_remaining(m_ptr)) return TRUE;
 	if (!(target_ptr->cursed & TRC_AGGRAVATE)) return FALSE;
 
 	(void)set_monster_csleep(target_ptr, m_idx, 0);
@@ -446,7 +446,7 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
 bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && MON_MONFEAR(m_ptr) && turn_flags_ptr->aware;
+	bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && monster_fear_remaining(m_ptr) && turn_flags_ptr->aware;
 	if (!is_battle_determined) return FALSE;
 
 	(void)set_monster_monfear(target_ptr, m_idx, 0);

@@ -142,7 +142,7 @@ gf_switch_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_
 		return GF_SWITCH_CONTINUE;
 	}
 
-	if (MON_CSLEEP(em_ptr->m_ptr))
+	if (monster_csleep_remaining(em_ptr->m_ptr))
 	{
 		em_ptr->note = _("には効果がなかった。", " is unaffected.");
 		em_ptr->dam = 0;
@@ -165,7 +165,7 @@ gf_switch_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_
 		}
 		else
 		{
-			if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
+			if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50))
 			{
 				em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
 			}

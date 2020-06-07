@@ -211,7 +211,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
         return FALSE;
     }
 
-    if (MON_CSLEEP(m_ptr))
+    if (monster_csleep_remaining(m_ptr))
     {
         if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5))
             chg_virtue(attacker_ptr, V_COMPASSION, -1);

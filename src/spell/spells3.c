@@ -333,7 +333,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 			f_ptr = &f_info[g_ptr->feat];
 			g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 			m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-			if (g_ptr->m_idx && MON_CSLEEP(m_ptr))
+			if (g_ptr->m_idx && monster_csleep_remaining(m_ptr))
 			{
 				(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 				if (m_ptr->ml)

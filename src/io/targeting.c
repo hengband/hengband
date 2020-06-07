@@ -1696,7 +1696,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-		if (MON_CONFUSED(m_ptr))
+		if (monster_confused_remaining(m_ptr))
 		{
 			/* Standard confusion */
 			if (randint0(100) < 75)
@@ -1731,7 +1731,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 
 			monster_desc(creature_ptr, m_name, m_ptr, 0);
-			if (MON_CONFUSED(m_ptr))
+			if (monster_confused_remaining(m_ptr))
 			{
 				msg_format(_("%sは混乱している。", "%^s is confused."), m_name);
 			}
@@ -1834,7 +1834,7 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
 		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-		if (MON_CONFUSED(m_ptr))
+		if (monster_confused_remaining(m_ptr))
 		{
 			/* Standard confusion */
 			if (randint0(100) < 75)
@@ -1869,7 +1869,7 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
 			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 
 			monster_desc(creature_ptr, m_name, m_ptr, 0);
-			if (MON_CONFUSED(m_ptr))
+			if (monster_confused_remaining(m_ptr))
 			{
 				msg_format(_("%sは混乱している。", "%^s is confused."), m_name);
 			}

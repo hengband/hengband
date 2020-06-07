@@ -7,8 +7,8 @@
  * 引数に入っていたらここには移動させないこと
  */
 
-#include "system/angband.h"
 #include "monster-util.h"
+#include "monster/monster-status.h"
 
  /*!
   * @brief ターン経過フラグ構造体の初期化
@@ -361,8 +361,8 @@ SPEED decide_monster_speed(monster_type *m_ptr)
 	SPEED speed = m_ptr->mspeed;
 	if (ironman_nightmare) speed += 5;
 
-	if (MON_FAST(m_ptr)) speed += 10;
-	if (MON_SLOW(m_ptr)) speed -= 10;
+	if (monster_fast_remaining(m_ptr)) speed += 10;
+	if (monster_slow_remaining(m_ptr)) speed -= 10;
 
 	return speed;
 }

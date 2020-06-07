@@ -2768,8 +2768,8 @@ void calc_bonuses(player_type *creature_ptr)
 		}
 
 		new_speed += (creature_ptr->skill_exp[GINOU_RIDING] + creature_ptr->lev * 160L) / 3200;
-		if (MON_FAST(riding_m_ptr)) new_speed += 10;
-		if (MON_SLOW(riding_m_ptr)) new_speed -= 10;
+		if (monster_fast_remaining(riding_m_ptr)) new_speed += 10;
+		if (monster_slow_remaining(riding_m_ptr)) new_speed -= 10;
 		riding_levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
 		if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) creature_ptr->can_swim = TRUE;
 

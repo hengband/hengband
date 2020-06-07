@@ -1,6 +1,7 @@
 ﻿#include "view/display-player-middle.h"
 #include "combat/shoot.h"
 #include "floor/floor.h"
+#include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
 #include "player/player-effects.h"
@@ -173,8 +174,8 @@ static int calc_temporary_speed(player_type *creature_ptr)
 	}
 	else
 	{
-		if (MON_FAST(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed += 10;
-		if (MON_SLOW(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed -= 10;
+		if (monster_fast_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed += 10;
+		if (monster_slow_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed -= 10;
 	}
 
 	return tmp_speed;

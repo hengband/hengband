@@ -146,7 +146,7 @@ gf_switch_result effect_monster_brain_smash(player_type *caster_ptr, effect_mons
 			em_ptr->do_stun = randint0(8) + 8;
 		}
 
-		(void)set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 10);
+		(void)set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 10);
 	}
 
 	return GF_SWITCH_CONTINUE;

@@ -1,5 +1,4 @@
 ﻿/*!
- * @file xtra1.c
  * @brief プレイヤーのステータス処理 / status
  * @date 2018/09/25
  * @author
@@ -31,6 +30,7 @@
 #include "io/targeting.h"
 #include "market/arena-info-table.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "monster/smart-learn-types.h"
 #include "object/object-flavor.h"
@@ -1201,8 +1201,8 @@ static void print_speed(player_type *player_ptr)
 		if (player_ptr->riding)
 		{
 			monster_type *m_ptr = &floor_ptr->m_list[player_ptr->riding];
-			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
-			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
+			if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr)) attr = TERM_L_BLUE;
+			else if (monster_slow_remaining(m_ptr) && !monster_fast_remaining(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_GREEN;
 		}
 		else if ((is_fast && !player_ptr->slow) || player_ptr->lightspeed) attr = TERM_YELLOW;
@@ -1217,8 +1217,8 @@ static void print_speed(player_type *player_ptr)
 		if (player_ptr->riding)
 		{
 			monster_type *m_ptr = &floor_ptr->m_list[player_ptr->riding];
-			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
-			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
+			if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr)) attr = TERM_L_BLUE;
+			else if (monster_slow_remaining(m_ptr) && !monster_fast_remaining(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_RED;
 		}
 		else if (is_fast && !player_ptr->slow) attr = TERM_YELLOW;
@@ -1493,13 +1493,13 @@ static void health_redraw(player_type *creature_ptr, bool riding)
 	TERM_COLOR attr = TERM_RED;
 
 	/* Invulnerable */
-	if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;
+	if (monster_invulner_remaining(m_ptr)) attr = TERM_WHITE;
 
 	/* Asleep */
-	else if (MON_CSLEEP(m_ptr)) attr = TERM_BLUE;
+	else if (monster_csleep_remaining(m_ptr)) attr = TERM_BLUE;
 
 	/* Afraid */
-	else if (MON_MONFEAR(m_ptr)) attr = TERM_VIOLET;
+	else if (monster_fear_remaining(m_ptr)) attr = TERM_VIOLET;
 
 	/* Healthy */
 	else if (pct >= 100) attr = TERM_L_GREEN;

@@ -6,6 +6,7 @@
 #include "floor/floor-object.h"
 #include "io/targeting.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-status.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
@@ -171,13 +172,13 @@ void process_surprise_attack(player_type *attacker_ptr, player_attack_type *pa_p
         tmp /= 2;
     if (r_ptr->level > (attacker_ptr->lev * attacker_ptr->lev / 20 + 10))
         tmp /= 3;
-    if (MON_CSLEEP(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
+    if (monster_csleep_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
         /* Can't backstab creatures that we can't see, right? */
         pa_ptr->backstab = TRUE;
     } else if ((attacker_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && pa_ptr->m_ptr->ml
         && !(r_ptr->flagsr & RFR_RES_ALL)) {
         pa_ptr->surprise_attack = TRUE;
-    } else if (MON_MONFEAR(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
+    } else if (monster_fear_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
         pa_ptr->stab_fleeing = TRUE;
     }
 }

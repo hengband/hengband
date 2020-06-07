@@ -623,7 +623,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 				/* Note the collision */
 				hit_body = TRUE;
 
-				if (MON_CSLEEP(m_ptr))
+				if (monster_csleep_remaining(m_ptr))
 				{
 					if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(shooter_ptr, V_COMPASSION, -1);
 					if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(shooter_ptr, V_HONOUR, -1);
@@ -930,7 +930,7 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
 		ac /= 8;
 	}
 
-	if (m_ptr->r_idx == MON_GOEMON && !MON_CSLEEP(m_ptr)) ac *= 3;
+	if (m_ptr->r_idx == MON_GOEMON && !monster_csleep_remaining(m_ptr)) ac *= 3;
 
 	/* Invisible monsters are harder to hit */
 	if (!vis) chance = (chance + 1) / 2;
@@ -938,7 +938,7 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
 	/* Power competes against armor */
 	if (randint0(chance) < (ac * 3 / 4))
 	{
-		if (m_ptr->r_idx == MON_GOEMON && !MON_CSLEEP(m_ptr))
+		if (m_ptr->r_idx == MON_GOEMON && !monster_csleep_remaining(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(shooter_ptr, m_name, m_ptr, 0);

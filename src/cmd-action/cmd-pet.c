@@ -260,7 +260,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 			return FALSE;
 		}
 
-		if (MON_CSLEEP(m_ptr))
+		if (monster_csleep_remaining(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(creature_ptr, m_name, m_ptr, 0);

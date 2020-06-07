@@ -133,13 +133,13 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
 	real_r_ptr(m_ptr)->cur_num--;
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) floor_ptr->num_repro--;
 
-	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(player_ptr, i, 0);
-	if (MON_FAST(m_ptr)) (void)set_monster_fast(player_ptr, i, 0);
-	if (MON_SLOW(m_ptr)) (void)set_monster_slow(player_ptr, i, 0);
-	if (MON_STUNNED(m_ptr)) (void)set_monster_stunned(player_ptr, i, 0);
-	if (MON_CONFUSED(m_ptr)) (void)set_monster_confused(player_ptr, i, 0);
-	if (MON_MONFEAR(m_ptr)) (void)set_monster_monfear(player_ptr, i, 0);
-	if (MON_INVULNER(m_ptr)) (void)set_monster_invulner(player_ptr, i, 0, FALSE);
+	if (monster_csleep_remaining(m_ptr)) (void)set_monster_csleep(player_ptr, i, 0);
+	if (monster_fast_remaining(m_ptr)) (void)set_monster_fast(player_ptr, i, 0);
+	if (monster_slow_remaining(m_ptr)) (void)set_monster_slow(player_ptr, i, 0);
+	if (monster_stunned_remaining(m_ptr)) (void)set_monster_stunned(player_ptr, i, 0);
+	if (monster_confused_remaining(m_ptr)) (void)set_monster_confused(player_ptr, i, 0);
+	if (monster_fear_remaining(m_ptr)) (void)set_monster_monfear(player_ptr, i, 0);
+	if (monster_invulner_remaining(m_ptr)) (void)set_monster_invulner(player_ptr, i, 0, FALSE);
 
 	if (i == target_who) target_who = 0;
 
@@ -2419,7 +2419,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 
 	if (r_ptr->flags7 & RF7_SELF_LD_MASK)
 		player_ptr->update |= (PU_MON_LITE);
-	else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !MON_CSLEEP(m_ptr))
+	else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !monster_csleep_remaining(m_ptr))
 		player_ptr->update |= (PU_MON_LITE);
 	update_monster(player_ptr, g_ptr->m_idx, TRUE);
 

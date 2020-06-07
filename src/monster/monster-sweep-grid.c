@@ -8,6 +8,7 @@
 #include "floor/floor.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-safety-hiding.h"
+#include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 
@@ -39,7 +40,7 @@ static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	if (m_ptr->cdis > MAX_SIGHT + 5) return FALSE;
-	if (MON_MONFEAR(m_ptr)) return TRUE;
+	if (monster_fear_remaining(m_ptr)) return TRUE;
 	if (m_ptr->cdis <= 5) return FALSE;
 
 	PLAYER_LEVEL p_lev = target_ptr->lev;

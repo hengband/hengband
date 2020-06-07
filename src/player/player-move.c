@@ -1034,7 +1034,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			can_move = FALSE;
 			disturb(creature_ptr, FALSE, TRUE);
 		}
-		else if (MON_MONFEAR(riding_m_ptr))
+		else if (monster_fear_remaining(riding_m_ptr))
 		{
 			GAME_TEXT steed_name[MAX_NLEN];
 			monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
@@ -1079,7 +1079,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			disturb(creature_ptr, FALSE, TRUE);
 		}
 
-		if (can_move && MON_STUNNED(riding_m_ptr) && one_in_(2))
+		if (can_move && monster_stunned_remaining(riding_m_ptr) && one_in_(2))
 		{
 			GAME_TEXT steed_name[MAX_NLEN];
 			monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
