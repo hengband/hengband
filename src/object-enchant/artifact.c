@@ -18,6 +18,7 @@
 #include "grid/grid.h"
 #include "io/files-util.h"
 #include "monster/monster.h"
+#include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
@@ -28,7 +29,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
-#include "object/object1.h"
+#include "object/object1.h" // 相互参照している.
 #include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-weapon-types.h"

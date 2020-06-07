@@ -1232,6 +1232,9 @@
     <ClCompile Include="..\..\src\info-reader\fixed-map-parser.c">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\perception\identification.c">
+      <Filter>perception</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2628,6 +2631,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h">
       <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\perception\identification.h">
+      <Filter>perception</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

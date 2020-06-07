@@ -42,6 +42,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
 #include "object/item-use-flags.h"
+#include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"

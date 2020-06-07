@@ -38,10 +38,6 @@ void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 concptr item_activation(object_type *o_ptr);
 
-#define SCROBJ_FAKE_OBJECT  0x00000001
-#define SCROBJ_FORCE_DETAIL 0x00000002
-bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode);
-
 char index_to_label(int i);
 s16b wield_slot(player_type *owner_ptr, object_type *o_ptr);
 

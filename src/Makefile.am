@@ -345,6 +345,7 @@ hengband_SOURCES = \
 	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
 	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
 	\
+	perception/identification.c perception/identification.h \
 	perception/object-perception.c perception/object-perception.h \
 	perception/simple-perception.c perception/simple-perception.h \
 	\

@@ -12,6 +12,7 @@
 #include "io-dump/dump-util.h"
 #include "knowledge/object-group-table.h"
 #include "object-enchant/artifact.h"
+#include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
