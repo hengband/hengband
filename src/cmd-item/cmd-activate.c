@@ -22,6 +22,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object/item-use-flags.h"
+#include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object1.h"

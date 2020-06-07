@@ -186,6 +186,7 @@
     <ClCompile Include="..\..\src\info-reader\race-reader.c" />
     <ClCompile Include="..\..\src\info-reader\skill-reader.c" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.c" />
+    <ClCompile Include="..\..\src\object\object-flags.c" />
     <ClCompile Include="..\..\src\perception\identification.c" />
     <ClCompile Include="..\..\src\player-attack\attack-chaos-effect.c" />
     <ClCompile Include="..\..\src\combat\attack-criticality.c" />
@@ -526,6 +527,7 @@
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\object-enchant\random-art-bias-types.h" />
     <ClInclude Include="..\..\src\object-enchant\trg-types.h" />
+    <ClInclude Include="..\..\src\object\object-flags.h" />
     <ClInclude Include="..\..\src\perception\identification.h" />
     <ClInclude Include="..\..\src\player-attack\attack-chaos-effect.h" />
     <ClInclude Include="..\..\src\combat\attack-criticality.h" />

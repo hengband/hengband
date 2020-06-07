@@ -5,8 +5,6 @@
 
 #define OBJ_GOLD_LIST 480 /* First "gold" entry */
 
-void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
-void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 concptr item_activation(object_type *o_ptr);
 char index_to_label(int i);
 s16b wield_slot(player_type *owner_ptr, object_type *o_ptr);

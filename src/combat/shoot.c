@@ -15,6 +15,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-broken.h"
+#include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"

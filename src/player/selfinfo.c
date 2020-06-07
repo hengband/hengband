@@ -17,7 +17,7 @@
 #include "player/selfinfo.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/object1.h"
+#include "object/object-flags.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-races-table.h"

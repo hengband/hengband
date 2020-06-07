@@ -13,10 +13,10 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object/item-use-flags.h"
+#include "object/object-flags.h" // todo 相互参照している.
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
-#include "object/object1.h"
 #include "perception/object-perception.h"
 #include "player/player-status.h"
 #include "term/term-color-types.h"

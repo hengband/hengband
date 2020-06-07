@@ -5,10 +5,10 @@
 #include "object/object-broken.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
+#include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
-#include "object/object1.h"
 #include "object-enchant/special-object-flags.h"
 
 /*!

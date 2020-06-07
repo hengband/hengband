@@ -11,11 +11,11 @@
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "display-util.h"
-#include "perception/object-perception.h"
-#include "object/object1.h"
 #include "object-enchant/special-object-flags.h"
-#include "sv-definition/sv-weapon-types.h"
 #include "object-enchant/tr-types.h"
+#include "object/object-flags.h"
+#include "perception/object-perception.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "term/term-color-types.h"
 
 static TERM_COLOR likert_color = TERM_WHITE;

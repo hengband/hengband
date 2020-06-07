@@ -15,6 +15,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
+#include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "object/object1.h"
 #include "perception/object-perception.h"
