@@ -304,6 +304,8 @@ hengband_SOURCES = \
 	monster-attack/monster-attack-util.c monster-attack/monster-attack-util.h \
 	monster-attack/monster-eating.c monster-attack/monster-eating.h \
 	\
+	monster-race/race-indice-types.h \
+	\
 	mspell/monster-spell.h \
 	mspell/mspells1.c mspell/mspells2.c mspell/mspells3.c \
 	mspell/assign-monster-spell.c mspell/assign-monster-spell.h \
@@ -525,9 +527,9 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat \
 	-Icore -Idungeon -Ieffect -Ifloor -Igrid -Iinfo-reader -Iinventory -Iio \
 	-Iio-dump -Iknowledge -Imarket -Imelee -Imind -Imonster -Imonster-attack \
-	-Imspell -Imutation -Iobject -Iobject-enchant -Ipet -Iplayer -Iplayer-attack \
-	-Irealm -Iroom -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
-	-Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
+	-Imonster-race -Imspell -Imutation -Iobject -Iobject-enchant -Ipet -Iplayer \
+	-Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell -Ispell-kind \
+	-Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

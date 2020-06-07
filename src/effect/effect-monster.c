@@ -11,6 +11,7 @@
 #include "floor/floor-object.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-generator.h"

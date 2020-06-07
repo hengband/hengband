@@ -7,6 +7,7 @@
 
 #include "object-enchant/apply-magic-others.h"
 #include "floor/floor.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-race-hook.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"

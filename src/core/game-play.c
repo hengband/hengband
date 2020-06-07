@@ -38,6 +38,7 @@
 #include "io/write-diary.h"
 #include "market/arena-info-table.h"
 #include "market/bounty.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/creature.h"
 #include "object/object-flavor.h"
 #include "player/player-class.h"

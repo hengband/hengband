@@ -3,6 +3,7 @@
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"

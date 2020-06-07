@@ -3,6 +3,7 @@
 #include "mspell/monster-spell.h"
 #include "spell/spells-type.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-indice-types.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "player/player-move.h"

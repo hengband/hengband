@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-resist-hurt.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "spell/spells3.h"
 

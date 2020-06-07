@@ -9,6 +9,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-indice-types.h"
 #include "pet/pet-fall-off.h"
 #include "spell/spells-type.h"
 #include "spell/range-calc.h"

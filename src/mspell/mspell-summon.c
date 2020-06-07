@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-summon.h"
 #include "effect/effect-characteristics.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-util.h"

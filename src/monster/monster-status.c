@@ -13,6 +13,7 @@
 #include "io/report.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/creature.h"
 #include "monster/monster-process.h"
 #include "monster/monster-race-hook.h"

@@ -2686,6 +2686,9 @@
     <ClInclude Include="..\..\src\art-definition\random-art-effects.h">
       <Filter>art-definition</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-indice-types.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2835,6 +2838,9 @@
     </Filter>
     <Filter Include="art-definition">
       <UniqueIdentifier>{fffcb35e-069c-4a97-ab60-0010a4d5d488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="monster-race">
+      <UniqueIdentifier>{8de4a55f-fa83-496b-a42f-81078346c918}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

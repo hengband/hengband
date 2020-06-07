@@ -47,6 +47,7 @@
 #include "dungeon/quest.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
 #include "spell/spells-type.h"

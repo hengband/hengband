@@ -5,6 +5,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"
 #include "io/targeting.h"
+#include "monster-race/race-indice-types.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"

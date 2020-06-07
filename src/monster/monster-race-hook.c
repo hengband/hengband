@@ -1,14 +1,13 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
-
-#include "monster/monster-race-hook.h"
-#include "monster/monster.h"
-#include "mspell/monster-spell.h"
-#include "floor/floor.h"
+﻿#include "monster/monster-race-hook.h"
 #include "dungeon/dungeon.h"
-#include "monster/monster-race.h"
+#include "floor/floor.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-race.h"
+#include "monster/monster.h"
+#include "mspell/monster-spell.h"
+#include "util/util.h"
 
 /*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */
 int vault_aux_race;

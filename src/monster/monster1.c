@@ -31,6 +31,7 @@
 #include "melee/melee-postprocess.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"

@@ -5,6 +5,7 @@
 #include "grid/feature.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"

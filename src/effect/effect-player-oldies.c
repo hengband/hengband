@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "effect/effect-player-util.h"
 #include "effect/effect-player-oldies.h"
+#include "monster-race/race-indice-types.h"
 #include "player/player-effects.h"
 
 void effect_player_old_heal(player_type *target_ptr,

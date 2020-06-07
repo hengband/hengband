@@ -6,6 +6,7 @@
 #include "inventory/inventory-object.h"
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-race-hook.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"

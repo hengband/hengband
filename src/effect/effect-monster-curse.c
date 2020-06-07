@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-curse.h"
+#include "monster-race/race-indice-types.h"
 
 gf_switch_result effect_monster_curse_1(effect_monster_type *em_ptr)
 {

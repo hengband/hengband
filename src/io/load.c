@@ -62,6 +62,7 @@
 #include "locale/japanese.h"
 #include "market/arena.h"
 #include "market/bounty.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
