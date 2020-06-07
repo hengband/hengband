@@ -12,9 +12,9 @@
 
 #include "object/object-info.h"
 #include "art-definition/art-weapon-types.h"
-#include "cmd-item/cmd-activate.h" // 相互参照している。cmd-activateからここへ引っ越しを検討.
 #include "floor/floor.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"

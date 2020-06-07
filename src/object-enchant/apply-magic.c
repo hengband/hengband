@@ -19,13 +19,14 @@
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-armor-types.h"
-#include "sv-definition/sv-weapon-types.h"
 #include "sv-definition/sv-protector-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "world/world.h"
 
 /*!

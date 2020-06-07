@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "object-enchant/tr-types.h"
 
 extern void do_cmd_activate(player_type *user_ptr);
 extern void exe_activate(player_type *user_ptr, INVENTORY_IDX item);
@@ -20,14 +19,6 @@ typedef struct {
 } activation_type;
 
 extern const activation_type activation_info[];
-
-typedef struct {
-	tr_type flag;
-	int type;
-	concptr name;
-} dragonbreath_type;
-
-extern const dragonbreath_type dragonbreath_info[];
 
 /* Activation effects for random artifacts */
 #define ACT_SUNLIGHT            1

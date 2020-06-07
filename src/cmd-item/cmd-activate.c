@@ -20,12 +20,13 @@
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object-info.h" // 相互参照している。このファイルが長いのでobject-infoの方へ引っ越しを検討.
+#include "object/object-info.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
@@ -54,28 +55,6 @@
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "world/world.h"
-
-/*!
- * @brief 装備耐性に準じたブレス効果の選択テーブル /
- * Define flags, effect type, name for dragon breath activation
- */
-const dragonbreath_type dragonbreath_info[] = {
-	{ TR_RES_ACID, GF_ACID, _("酸", "acid") },
-	{ TR_RES_ELEC, GF_ELEC, _("電撃", "lightning") },
-	{ TR_RES_FIRE, GF_FIRE, _("火炎", "fire") },
-	{ TR_RES_COLD, GF_COLD, _("冷気", "cold") },
-	{ TR_RES_POIS, GF_POIS, _("毒", "poison") },
-	{ TR_RES_LITE, GF_LITE, _("閃光", "light") },
-	{ TR_RES_DARK, GF_DARK, _("暗黒", "dark") },
-	{ TR_RES_SHARDS, GF_SHARDS, _("破片", "shard") },
-	{ TR_RES_CONF, GF_CONFUSION, _("混乱", "confusion") },
-	{ TR_RES_SOUND, GF_SOUND, _("轟音", "sound") },
-	{ TR_RES_NEXUS, GF_NEXUS, _("因果混乱", "nexus") },
-	{ TR_RES_NETHER, GF_NETHER, _("地獄", "nether") },
-	{ TR_RES_CHAOS, GF_CHAOS, _("カオス", "chaos") },
-	{ TR_RES_DISEN, GF_DISENCHANT, _("劣化", "disenchant") },
-	{ 0, 0, NULL }
-};
 
 /*!
  * @brief アイテムの発動効果テーブル /
