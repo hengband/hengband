@@ -131,7 +131,6 @@ hengband_SOURCES = \
 	effect/effect-monster-util.c effect/effect-monster-util.h \
 	effect/effect-monster-resist-hurt.c effect/effect-monster-resist-hurt.h \
 	effect/effect-monster-psi.c effect/effect-monster-psi.h \
-	effect/effect-monster-domination.c effect/effect-monster-domination.h \
 	effect/effect-monster-oldies.c effect/effect-monster-oldies.h \
 	effect/effect-monster-charm.c effect/effect-monster-charm.h \
 	effect/effect-monster-lite-dark.c effect/effect-monster-lite-dark.h \

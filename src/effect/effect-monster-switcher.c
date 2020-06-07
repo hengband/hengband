@@ -10,7 +10,6 @@
 #include "cmd-action/cmd-attack.h"
 #include "effect/effect-monster-charm.h"
 #include "effect/effect-monster-curse.h"
-#include "effect/effect-monster-domination.h"
 #include "effect/effect-monster-evil.h"
 #include "effect/effect-monster-lite-dark.h"
 #include "effect/effect-monster-oldies.h"
