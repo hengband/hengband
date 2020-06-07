@@ -10,7 +10,7 @@
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-staff-types.h"
 #include "player/avatar.h"

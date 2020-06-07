@@ -12,7 +12,7 @@
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "sv-definition/sv-other-types.h"

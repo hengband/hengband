@@ -443,9 +443,6 @@
     <ClCompile Include="..\..\src\floor\floor-town.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object1.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object\object-broken.c">
       <Filter>object</Filter>
     </ClCompile>
@@ -1239,6 +1236,9 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object\object-flags.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-info.c">
       <Filter>object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2149,9 +2149,6 @@
     <ClInclude Include="..\..\src\object\object-util.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\object1.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\item-use-flags.h">
       <Filter>object</Filter>
     </ClInclude>
@@ -2669,6 +2666,9 @@
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-flags.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-info.h">
       <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>

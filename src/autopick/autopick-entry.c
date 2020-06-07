@@ -11,7 +11,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "perception/object-perception.h"
 
 #ifdef JP

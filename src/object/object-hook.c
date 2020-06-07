@@ -17,7 +17,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"

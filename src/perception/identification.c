@@ -8,7 +8,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"

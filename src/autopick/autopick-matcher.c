@@ -14,7 +14,7 @@
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "object-enchant/special-object-flags.h"
 
 /*

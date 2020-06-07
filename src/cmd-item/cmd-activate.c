@@ -25,7 +25,7 @@
 #include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object1.h"
+#include "object/object-info.h" // 相互参照している。このファイルが長いのでobject-infoの方へ引っ越しを検討.
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

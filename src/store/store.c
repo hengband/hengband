@@ -51,7 +51,7 @@
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "player/avatar.h"

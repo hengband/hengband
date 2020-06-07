@@ -23,7 +23,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "object/object-flags.h"
 #include "player/player-class.h"

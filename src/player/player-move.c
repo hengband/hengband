@@ -164,7 +164,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "object/warning.h"
 #include "perception/object-perception.h"
 #include "player/player-class.h"

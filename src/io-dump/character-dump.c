@@ -14,7 +14,7 @@
 #include "market/arena-info-table.h"
 #include "monster/monster-status.h"
 #include "object/object-flavor.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "pet/pet-util.h"
 #include "player/avatar.h"
 #include "player/race-info-table.h"

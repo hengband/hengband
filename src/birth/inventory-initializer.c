@@ -11,7 +11,7 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "player/player-personalities-table.h"
 #include "player/player-races-table.h"
 #include "sv-definition/sv-bow-types.h"

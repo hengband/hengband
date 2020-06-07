@@ -8,7 +8,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "sv-definition/sv-other-types.h"
 #include "player/player-move.h"
 #include "term/gameterm.h"

@@ -765,7 +765,7 @@
     <ClCompile Include="..\..\src\mspell\mspells3.c" />
     <ClCompile Include="..\..\src\mspell\assign-monster-spell.c" />
     <ClCompile Include="..\..\src\mutation\mutation.c" />
-    <ClCompile Include="..\..\src\object\object1.c" />
+    <ClCompile Include="..\..\src\object\object-info.c" />
     <ClCompile Include="..\..\src\mind\racial.c" />
     <ClCompile Include="..\..\src\term\readdib.c" />
     <ClCompile Include="..\..\src\realm\realm-arcane.c" />
@@ -977,7 +977,7 @@
     <ClInclude Include="..\..\src\object-enchant\object-ego.h" />
     <ClInclude Include="..\..\src\object\object-hook.h" />
     <ClInclude Include="..\..\src\object\object-broken.h" />
-    <ClInclude Include="..\..\src\object\object1.h" />
+    <ClInclude Include="..\..\src\object\object-info.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
     <ClInclude Include="..\..\src\object\object-kind.h" />
     <ClInclude Include="..\..\src\player\patron.h" />

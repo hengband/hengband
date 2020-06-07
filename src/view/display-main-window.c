@@ -34,7 +34,7 @@
 #include "object/object-flavor.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"

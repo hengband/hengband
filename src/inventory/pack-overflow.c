@@ -4,7 +4,7 @@
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "object/object-flavor.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "player/player-move.h"
 
 /*!
