@@ -36,6 +36,7 @@
 #include "mind/mind.h"
 #include "mind/mind-force-trainer.h"
 #include "monster/creature.h"
+#include "monster/monster-flag-types.h"
 #include "monster/monster-process.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"

@@ -5,6 +5,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"

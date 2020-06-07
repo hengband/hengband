@@ -49,45 +49,21 @@ typedef struct monster_type {
 
 	POSITION fy;		/* Y location on map */
 	POSITION fx;		/* X location on map */
-
 	HIT_POINT hp;		/* Current Hit points */
 	HIT_POINT maxhp;		/* Max Hit points */
 	HIT_POINT max_maxhp;		/* Max Max Hit points */
 	HIT_POINT dealt_damage;		/* Sum of damages dealt by player */
-
 	TIME_EFFECT mtimed[MAX_MTIMED];	/* Timed status counter */
-
 	SPEED mspeed;	        /* Monster "speed" */
 	ACTION_ENERGY energy_need;	/* Monster "energy" */
-
 	POSITION cdis;		/* Current dis from player */
-
 	BIT_FLAGS8 mflag;	/* Extra monster flags */
-#define MFLAG_VIEW      0x01    /* Monster is in line of sight */
-#define MFLAG_LOS       0x02    /* Monster is marked for project_all_los(caster_ptr, ) */
-#define MFLAG_XXX2      0x04    /* (unused) */
-#define MFLAG_ETF       0x08    /* Monster is entering the field. */
-#define MFLAG_BORN      0x10    /* Monster is still being born */
-#define MFLAG_NICE      0x20    /* Monster is still being nice */
-
 	BIT_FLAGS8 mflag2;	/* Extra monster flags */
-#define MFLAG2_KAGE      0x01    /* Monster is kage */
-#define MFLAG2_NOPET     0x02    /* Cannot make monster pet */
-#define MFLAG2_NOGENO    0x04    /* Cannot genocide */
-#define MFLAG2_CHAMELEON 0x08    /* Monster is chameleon */
-#define MFLAG2_NOFLOW    0x10    /* Monster is in no_flow_by_smell mode */
-#define MFLAG2_SHOW      0x20    /* Monster is recently memorized */
-#define MFLAG2_MARK      0x40    /* Monster is currently memorized */
-
 	bool ml;		/* Monster is "visible" */
-
 	OBJECT_IDX hold_o_idx;	/* Object being held (if any) */
-
 	POSITION target_y;		/* Can attack !los player */
 	POSITION target_x;		/* Can attack !los player */
-
 	STR_OFFSET nickname;		/* Monster's Nickname */
-
 	EXP exp;
 
 	/* TODO: クローン、ペット、有効化は意義が異なるので別変数に切り離すこと。save/loadのバージョン更新が面倒そうだけど */

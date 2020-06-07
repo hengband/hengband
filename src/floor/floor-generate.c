@@ -28,6 +28,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
 #include "market/arena-info-table.h"
+#include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "player/player-status.h"

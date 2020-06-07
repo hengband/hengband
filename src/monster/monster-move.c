@@ -12,6 +12,7 @@
 #include "monster/creature.h"
 #include "io/files-util.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
 #include "spell/spells-type.h"

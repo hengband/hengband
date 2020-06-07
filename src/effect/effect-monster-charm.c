@@ -1,10 +1,9 @@
-﻿#include "system/angband.h"
-#include "effect/effect-monster-util.h"
-#include "effect/effect-monster-charm.h"
+﻿#include "effect/effect-monster-charm.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/monster-flag-types.h"
+#include "object-enchant/trc-types.h"
 #include "player/avatar.h"
 #include "spell/spells-diceroll.h"
-#include "monster-race/monster-race-hook.h"
-#include "object-enchant/trc-types.h"
 
 static void effect_monster_charm_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

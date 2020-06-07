@@ -3,6 +3,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "io/write-diary.h"
+#include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"

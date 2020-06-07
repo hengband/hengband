@@ -277,22 +277,23 @@ hengband_SOURCES = \
 	mind/racial-vampire.c mind/racial-vampire.h \
 	\
 	monster/creature.h monster/creature.c \
+	monster/horror-descriptions.c monster/horror-descriptions.h \
 	monster/monster.h \
-	monster/monster-util.c monster/monster-util.h \
-	monster/monster-direction.c monster/monster-direction.h \
+	monster/monster1.c monster/monster2.c \
 	monster/monster-attack.c monster/monster-attack.h \
+	monster/monster-direction.c monster/monster-direction.h \
+	monster/monster-dist-offsets.c monster/monster-dist-offsets.h \
+	monster/monster-flag-types.h \
 	monster/monster-move.c monster/monster-move.h \
 	monster/monster-object.c monster/monster-object.h \
+	monster/monster-process.c monster/monster-process.h \
 	monster/monster-runaway.c monster/monster-runaway.h \
 	monster/monster-safety-hiding.c monster/monster-safety-hiding.h \
+	monster/monster-status.c monster/monster-status.h \
 	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
 	monster/monster-update.c monster/monster-update.h \
+	monster/monster-util.c monster/monster-util.h \
 	monster/quantum-effect.c monster/quantum-effect.h \
-	monster/monster-dist-offsets.c monster/monster-dist-offsets.h \
-	monster/monster-process.c monster/monster-process.h \
-	monster/monster-status.c monster/monster-status.h \
-	monster/monster1.c monster/monster2.c \
-	monster/horror-descriptions.c monster/horror-descriptions.h \
 	\
 	monster-attack/insults-moans.c monster-attack/insults-moans.h \
 	monster-attack/monster-attack-describer.c monster-attack/monster-attack-describer.h \

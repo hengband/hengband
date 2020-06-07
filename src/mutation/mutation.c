@@ -23,6 +23,7 @@
 #include "io/write-diary.h"
 #include "mind/mind-warrior.h"
 #include "mind/racial-vampire.h"
+#include "monster/monster-flag-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"

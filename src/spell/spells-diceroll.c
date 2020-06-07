@@ -1,12 +1,11 @@
-﻿#include "system/angband.h"
-#include "spell/spells-diceroll.h"
+﻿#include "spell/spells-diceroll.h"
 #include "floor/floor.h"
-#include "monster/monster.h"
 #include "monster-race/monster-race-hook.h"
-#include "player/player-class.h"
+#include "monster/monster-flag-types.h"
+#include "monster/monster.h"
 #include "mutation/mutation.h"
+#include "player/player-class.h"
 #include "room/rooms.h"
-
 
 /*!
  * @brief モンスター魅了用セービングスロー共通部(汎用系)

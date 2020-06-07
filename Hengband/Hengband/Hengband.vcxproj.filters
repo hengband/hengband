@@ -2692,6 +2692,9 @@
     <ClInclude Include="..\..\src\mind\drs-types.h">
       <Filter>mind</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-flag-types.h">
+      <Filter>monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
