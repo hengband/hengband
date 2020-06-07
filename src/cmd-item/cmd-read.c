@@ -6,6 +6,7 @@
 
 #include "cmd-item/cmd-read.h"
 #include "art-definition/art-accessory-types.h"
+#include "art-definition/art-armor-types.h"
 #include "cmd/cmd-basic.h"
 #include "core/show-file.h"
 #include "floor/floor.h"
@@ -13,7 +14,6 @@
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
 #include "main/sound-definitions-table.h"
-#include "object-enchant/artifact.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "object/object-flavor.h"

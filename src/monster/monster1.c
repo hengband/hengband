@@ -11,6 +11,7 @@
  */
 
 #include "system/angband.h"
+#include "art-definition/art-armor-types.h"
 #include "util/util.h"
 #include "main/music-definitions-table.h"
 #include "term/term-color-types.h"

@@ -48,35 +48,6 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 bool make_artifact(player_type *player_ptr, object_type *o_ptr);
 bool make_artifact_special(player_type *player_ptr, object_type *o_ptr);
 
-/* Dragon Scale */
-#define ART_RAZORBACK           129
-#define ART_BLADETURNER         130
-#define ART_SEIRYU              201
-
-/* Hard Armour */
-#define ART_SOULKEEPER          19
-#define ART_ISILDUR             20
-#define ART_ROHIRRIM            21
-#define ART_LOHENGRIN           22
-#define ART_JULIAN              23
-#define ART_ARVEDUI             24
-#define ART_CASPANION           25
-#define ART_GILES               168
-#define ART_MORLOK              203
-#define ART_VETERAN             206
-
-/* Soft Armour */
-#define ART_SHIVA_JACKET        26
-#define ART_HITHLOMIR           27
-#define ART_THALKETTOTH         28
-#define ART_HIMRING             127
-#define ART_ICANUS              131
-#define ART_NAMAKE_ARMOR        183
-#define ART_GHB                 192
-#define ART_DASAI               200
-#define ART_KESHO               204
-#define ART_MILIM               246
-
 /* Shields */
 #define ART_THORIN              30
 #define ART_CELEGORM            31

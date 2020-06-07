@@ -6,6 +6,7 @@
 
 #include "object/object-hook.h"
 #include "art-definition/art-accessory-types.h"
+#include "art-definition/art-armor-types.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "monster/monster.h"
