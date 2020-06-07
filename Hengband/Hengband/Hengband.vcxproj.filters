@@ -2647,6 +2647,9 @@
     <ClInclude Include="..\..\src\art-definition\art-sword-types.h">
       <Filter>art-definition</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\art-definition\art-accessory-types.h">
+      <Filter>art-definition</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

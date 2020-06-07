@@ -48,38 +48,6 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 bool make_artifact(player_type *player_ptr, object_type *o_ptr);
 bool make_artifact_special(player_type *player_ptr, object_type *o_ptr);
 
-/* Lites */
-#define ART_GALADRIEL            1
-#define ART_ELENDIL              2
-#define ART_JUDGE                3
-#define ART_EDISON               7
-#define ART_PALANTIR             15
-#define ART_STONE_LORE           17
-#define ART_FLY_STONE            147
-#define ART_ORB_OF_FATE          245 
-/* Amulets */
-#define ART_CARLAMMAS            4
-#define ART_INGWE                5
-#define ART_DWARVES              6
-#define ART_FARAMIR              18
-#define ART_BOROMIR              143
-#define ART_MAGATAMA             149
-#define ART_INROU                166
-#define ART_NIGHT                215
-#define ART_SACRED_KNIGHTS       217
-#define ART_HELL                 218
-#define ART_CHARMED              219
-#define ART_GOGO                 220
-
-/* Rings */
-#define ART_FRAKIR               8
-#define ART_TULKAS               9
-#define ART_NARYA               10
-#define ART_NENYA               11
-#define ART_VILYA               12
-#define ART_POWER               13
-#define ART_AHO                 14
-
 /* Dragon Scale */
 #define ART_RAZORBACK           129
 #define ART_BLADETURNER         130

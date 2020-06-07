@@ -5,6 +5,7 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 bin_PROGRAMS = hengband
 
 hengband_SOURCES = \
+	art-definition/art-accessory.h \
 	art-definition/art-sword-types.h \
 	\
 	autopick/autopick.c autopick/autopick.h \

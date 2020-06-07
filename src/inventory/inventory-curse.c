@@ -1,6 +1,6 @@
 ﻿#include "inventory/inventory-curse.h"
+#include "art-definition/art-accessory-types.h"
 #include "io/files-util.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"

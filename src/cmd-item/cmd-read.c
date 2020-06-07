@@ -5,6 +5,7 @@
  */
 
 #include "cmd-item/cmd-read.h"
+#include "art-definition/art-accessory-types.h"
 #include "cmd/cmd-basic.h"
 #include "core/show-file.h"
 #include "floor/floor.h"
