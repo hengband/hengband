@@ -343,6 +343,7 @@ hengband_SOURCES = \
 	object-enchant/object-curse.c object-enchant/object-curse.h \
 	object-enchant/object-ego.c object-enchant/object-ego.h \
 	object-enchant/tr-types.h object-enchant/trc-types.h \
+	object-enchant/trg-types.h \
 	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
 	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
 	\

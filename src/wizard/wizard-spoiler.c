@@ -20,6 +20,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object-enchant/trg-types.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"

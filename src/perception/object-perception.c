@@ -1,12 +1,12 @@
 ﻿#include "perception/object-perception.h"
 #include "io/write-diary.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
+#include "object-enchant/special-object-flags.h"
+#include "object-enchant/trg-types.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h" // 暫定、このファイルへ引っ越す.
 #include "object/object-kind.h"
-#include "object-enchant/special-object-flags.h"
 
 /*!
  * @brief オブジェクトを鑑定済にする /

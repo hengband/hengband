@@ -12,6 +12,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/trg-types.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"

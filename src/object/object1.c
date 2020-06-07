@@ -1,5 +1,4 @@
 ﻿/*!
- * @file object1.c
  * @brief オブジェクトの実装 / Object code, part 1
  * @date 2014/01/10
  * @author

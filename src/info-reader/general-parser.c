@@ -7,6 +7,7 @@
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/trg-types.h"
 #include "object/object-kind-hook.h"
 #include "system/system-variables.h"
 

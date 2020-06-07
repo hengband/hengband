@@ -518,6 +518,7 @@
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h" />
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
+    <ClInclude Include="..\..\src\object-enchant\trg-types.h" />
     <ClInclude Include="..\..\src\perception\identification.h" />
     <ClInclude Include="..\..\src\player-attack\attack-chaos-effect.h" />
     <ClInclude Include="..\..\src\combat\attack-criticality.h" />

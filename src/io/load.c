@@ -68,6 +68,7 @@
 #include "object-enchant/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object-enchant/trg-types.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind-hook.h"
