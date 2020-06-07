@@ -146,7 +146,7 @@ static concptr item_activation_aux(object_type *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-concptr item_activation(object_type *o_ptr)
+concptr activation_explanation(object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(o_ptr, flgs);

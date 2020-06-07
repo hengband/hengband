@@ -1316,7 +1316,7 @@ static void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc
 	analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
 	analyze_addition(o_ptr, desc_ptr->addition);
 	analyze_misc(o_ptr, desc_ptr->misc_desc);
-	desc_ptr->activation = item_activation(o_ptr);
+	desc_ptr->activation = activation_explanation(o_ptr);
 }
 
 
@@ -2375,7 +2375,7 @@ static void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr,
 	analyze_resist(o_ptr, desc_ptr->resistances);
 	analyze_sustains(o_ptr, desc_ptr->sustains);
 	analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
-	desc_ptr->activation = item_activation(o_ptr);
+	desc_ptr->activation = activation_explanation(o_ptr);
 #ifdef JP
 	sprintf(desc_ptr->misc_desc, "重さ %d.%d kg",
 		lbtokg1(o_ptr->weight), lbtokg2(o_ptr->weight));
