@@ -25,7 +25,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "object-enchant/object-curse.h"

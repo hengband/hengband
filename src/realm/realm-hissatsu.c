@@ -12,7 +12,7 @@
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "mind/mind-ninja.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster/monster.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"

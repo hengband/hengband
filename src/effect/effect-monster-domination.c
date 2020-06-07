@@ -3,7 +3,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "pet/pet-fall-off.h"
 #include "object-enchant/trc-types.h"

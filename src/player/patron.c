@@ -4,7 +4,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "floor/floor.h"
 #include "io/write-diary.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "mutation/mutation.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-flavor.h"

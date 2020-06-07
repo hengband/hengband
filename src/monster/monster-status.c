@@ -16,7 +16,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/creature.h"
 #include "monster/monster-process.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/object-curse.h"

@@ -24,7 +24,7 @@
 #include "io/write-diary.h"
 #include "locale/japanese.h"
 #include "main/music-definitions-table.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "player/player-class.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"

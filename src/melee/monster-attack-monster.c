@@ -14,7 +14,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
 #include "spell/process-effect.h"

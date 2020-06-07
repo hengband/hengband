@@ -11,7 +11,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "main/sound-definitions-table.h"
-#include "monster/monster-race.h"
+#include "monster-race/monster-race.h"
 #include "player/player-status.h"
 #include "term/term-color-types.h"
 #include "util/util.h"

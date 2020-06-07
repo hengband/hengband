@@ -4,7 +4,7 @@
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster/monster.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind-hook.h"

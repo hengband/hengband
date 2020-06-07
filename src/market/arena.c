@@ -6,7 +6,7 @@
 #include "player/player-effects.h"
 #include "core/stuff-handler.h"
 #include "core/show-file.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "world/world.h"
 #include "dungeon/dungeon.h"
 #include "market/building-actions-table.h"

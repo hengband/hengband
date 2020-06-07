@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "monster/monster-race.h"
+#include "monster-race/monster-race.h"
 
 typedef bool(*monsterrace_hook_type)(MONRACE_IDX r_idx);
 

@@ -276,7 +276,7 @@ hengband_SOURCES = \
 	mind/racial-vampire.c mind/racial-vampire.h \
 	\
 	monster/creature.h monster/creature.c \
-	monster/monster.h monster/monster-race.c monster/monster-race.h \
+	monster/monster.h \
 	monster/monster-util.c monster/monster-util.h \
 	monster/monster-direction.c monster/monster-direction.h \
 	monster/monster-attack.c monster/monster-attack.h \
@@ -287,7 +287,6 @@ hengband_SOURCES = \
 	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
 	monster/monster-update.c monster/monster-update.h \
 	monster/quantum-effect.c monster/quantum-effect.h \
-	monster/monster-race-hook.c monster/monster-race-hook.h \
 	monster/monster-dist-offsets.c monster/monster-dist-offsets.h \
 	monster/monster-process.c monster/monster-process.h \
 	monster/monster-status.c monster/monster-status.h \
@@ -304,6 +303,8 @@ hengband_SOURCES = \
 	monster-attack/monster-attack-util.c monster-attack/monster-attack-util.h \
 	monster-attack/monster-eating.c monster-attack/monster-eating.h \
 	\
+	monster-race/monster-race.c monster-race/monster-race.h \
+	monster-race/monster-race-hook.c monster-race/monster-race-hook.h \
 	monster-race/race-indice-types.h \
 	\
 	mspell/monster-spell.h \

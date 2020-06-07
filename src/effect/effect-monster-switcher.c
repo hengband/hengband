@@ -17,7 +17,7 @@
 #include "effect/effect-monster-psi.h"
 #include "effect/effect-monster-resist-hurt.h"
 #include "effect/effect-monster-spirit.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"

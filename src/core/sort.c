@@ -3,7 +3,7 @@
 #include "floor/floor.h"
 #include "dungeon/quest.h"
 #include "object-enchant/artifact.h"
-#include "monster/monster-race.h"
+#include "monster-race/monster-race.h"
 
 /*
  * Angband sorting algorithm -- quick sort in place

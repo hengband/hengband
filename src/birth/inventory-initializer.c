@@ -3,7 +3,7 @@
 #include "birth/initial-equipments-table.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"

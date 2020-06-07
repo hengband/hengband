@@ -6,7 +6,7 @@
 
 #include "player-attack/blood-sucking-processor.h"
 #include "art-definition/art-sword-types.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "object-enchant/tr-types.h"
 #include "player/player-effects.h"
 #include "realm/realm-hex-numbers.h"

@@ -587,9 +587,6 @@
     <ClCompile Include="..\..\src\monster\creature.c">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-race.c">
-      <Filter>monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\io\report.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -823,9 +820,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-race-hook.c">
-      <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\util\util.c">
       <Filter>util</Filter>
@@ -1246,6 +1240,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\activation-info-table.c">
       <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\monster-race.c">
+      <Filter>monster-race</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\monster-race-hook.c">
+      <Filter>monster-race</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1888,9 +1888,6 @@
     <ClInclude Include="..\..\src\monster\creature.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-race.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\io\report.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -2142,9 +2139,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\monk-attack.h">
       <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-race-hook.h">
-      <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\util.h">
       <Filter>util</Filter>
@@ -2687,6 +2681,12 @@
       <Filter>art-definition</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\monster-race.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\monster-race-hook.h">
       <Filter>monster-race</Filter>
     </ClInclude>
   </ItemGroup>

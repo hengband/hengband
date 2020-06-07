@@ -7,7 +7,7 @@
 #include "io/input-key-processor.h"
 #include "mind/mind-force-trainer.h"
 #include "monster/creature.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation.h"
 #include "player/player-effects.h"

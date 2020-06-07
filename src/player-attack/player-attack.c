@@ -15,7 +15,7 @@
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
 #include "mind/monk-attack.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/vorpal-weapon.h"
