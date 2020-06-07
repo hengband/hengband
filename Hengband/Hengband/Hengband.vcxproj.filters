@@ -2689,6 +2689,9 @@
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h">
       <Filter>monster-race</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mind\drs-types.h">
+      <Filter>mind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

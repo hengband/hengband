@@ -24,6 +24,7 @@
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "mind/drs-types.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/creature.h"

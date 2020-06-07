@@ -7,6 +7,7 @@
 #include "mspell/mspell-floor.h"
 #include "art-definition/art-bow-types.h"
 #include "effect/effect-characteristics.h"
+#include "mind/drs-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"

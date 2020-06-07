@@ -216,31 +216,7 @@ extern void update_monsters(player_type *player_ptr, bool full);
 extern bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
 extern bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode);
 extern bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);
-
-/*
- * Some things which induce learning
- */
-#define DRS_ACID         1
-#define DRS_ELEC         2
-#define DRS_FIRE         3
-#define DRS_COLD         4
-#define DRS_POIS         5
-#define DRS_NETH         6
-#define DRS_LITE         7
-#define DRS_DARK         8
-#define DRS_FEAR         9
-#define DRS_CONF        10
-#define DRS_CHAOS       11
-#define DRS_DISEN       12
-#define DRS_BLIND       13
-#define DRS_NEXUS       14
-#define DRS_SOUND       15
-#define DRS_SHARD       16
-#define DRS_FREE        30
-#define DRS_MANA        31
-#define DRS_REFLECT     32
 extern void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what);
-
 extern void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 extern SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);
 extern void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);

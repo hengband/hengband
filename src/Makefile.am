@@ -259,6 +259,7 @@ hengband_SOURCES = \
 	melee/melee-switcher.c melee/melee-switcher.h \
 	melee/melee-util.c melee/melee-util.h \
 	\
+	mind/drs-typs.h \
 	mind/mind.c mind/mind.h \
 	mind/mind-cavalry.c mind/mind-cavalry.h \
 	mind/mind-force-trainer.c mind/mind-force-trainer.h \

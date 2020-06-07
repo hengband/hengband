@@ -8,6 +8,7 @@
 #include "monster-attack/monster-attack-switcher.h"
 #include "monster-attack/monster-attack-status.h"
 #include "monster-attack/monster-eating.h"
+#include "mind/drs-types.h"
 #include "mind/mind-mirror-master.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

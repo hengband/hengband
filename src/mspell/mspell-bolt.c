@@ -1,11 +1,11 @@
-﻿#include "system/angband.h"
-#include "mspell/mspell-bolt.h"
+﻿#include "mspell/mspell-bolt.h"
 #include "main/sound-definitions-table.h"
-#include "mspell/mspell-type.h"
-#include "spell/spells-type.h"
+#include "mind/drs-types.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief RF4_SHOOTの処理。射撃。 /
@@ -17,15 +17,12 @@
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF4_SHOOT(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_SHOOT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが奇妙な音を発した。", "%^s makes a strange noise."),
-        _("%^sが矢を放った。", "%^s fires an arrow."),
-        _("%^sが%sに矢を放った。", "%^s fires an arrow at %s."),
-        TARGET_TYPE);
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが奇妙な音を発した。", "%^s makes a strange noise."), _("%^sが矢を放った。", "%^s fires an arrow."),
+        _("%^sが%sに矢を放った。", "%^s fires an arrow at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_SHOOT), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_ARROW, dam, MS_SHOOT, TARGET_TYPE);
@@ -44,15 +41,13 @@ HIT_POINT spell_RF4_SHOOT(player_type* target_ptr, POSITION y, POSITION x, MONST
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_BO_ACID(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_ACID(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがアシッド・ボルトの呪文を唱えた。", "%^s casts a acid bolt."),
-        _("%sが%sに向かってアシッド・ボルトの呪文を唱えた。", "%^s casts an acid bolt at %s."),
-        TARGET_TYPE);
+        _("%sが%sに向かってアシッド・ボルトの呪文を唱えた。", "%^s casts an acid bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_ACID), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, TARGET_TYPE);
@@ -74,15 +69,13 @@ HIT_POINT spell_RF5_BO_ACID(player_type* target_ptr, POSITION y, POSITION x, MON
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_BO_ELEC(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_ELEC(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt."),
-        _("%^sが%sに向かってサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt at %s."),
-        TARGET_TYPE);
+        _("%^sが%sに向かってサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_ELEC), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, TARGET_TYPE);
@@ -104,15 +97,13 @@ HIT_POINT spell_RF5_BO_ELEC(player_type* target_ptr, POSITION y, POSITION x, MON
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_BO_FIRE(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_FIRE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt."),
-        _("%^sが%sに向かってファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt at %s."),
-        TARGET_TYPE);
+        _("%^sが%sに向かってファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_FIRE), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, TARGET_TYPE);
@@ -134,15 +125,13 @@ HIT_POINT spell_RF5_BO_FIRE(player_type* target_ptr, POSITION y, POSITION x, MON
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_BO_COLD(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_COLD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt."),
-        _("%^sが%sに向かってアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt at %s."),
-        TARGET_TYPE);
+        _("%^sが%sに向かってアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_COLD), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, TARGET_TYPE);
@@ -164,15 +153,12 @@ HIT_POINT spell_RF5_BO_COLD(player_type* target_ptr, POSITION y, POSITION x, MON
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_BO_NETH(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_NETH(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
-        _("%^sが地獄の矢の呪文を唱えた。", "%^s casts a nether bolt."),
-        _("%^sが%sに向かって地獄の矢の呪文を唱えた。", "%^s casts a nether bolt at %s."),
-        TARGET_TYPE);
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが地獄の矢の呪文を唱えた。", "%^s casts a nether bolt."),
+        _("%^sが%sに向かって地獄の矢の呪文を唱えた。", "%^s casts a nether bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_NETHER), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, TARGET_TYPE);
@@ -194,15 +180,13 @@ HIT_POINT spell_RF5_BO_NETH(player_type* target_ptr, POSITION y, POSITION x, MON
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_BO_WATE(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_WATE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt."),
-        _("%^sが%sに向かってウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt at %s."),
-        TARGET_TYPE);
+        _("%^sが%sに向かってウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_WATER), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, TARGET_TYPE);
@@ -223,15 +207,12 @@ HIT_POINT spell_RF5_BO_WATE(player_type* target_ptr, POSITION y, POSITION x, MON
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_BO_MANA(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_MANA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
-        _("%^sが魔力の矢の呪文を唱えた。", "%^s casts a mana bolt."),
-        _("%^sが%sに向かって魔力の矢の呪文を唱えた。", "%^s casts a mana bolt at %s."),
-        TARGET_TYPE);
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔力の矢の呪文を唱えた。", "%^s casts a mana bolt."),
+        _("%^sが%sに向かって魔力の矢の呪文を唱えた。", "%^s casts a mana bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_MANA), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, TARGET_TYPE);
@@ -252,15 +233,13 @@ HIT_POINT spell_RF5_BO_MANA(player_type* target_ptr, POSITION y, POSITION x, MON
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_BO_PLAS(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_PLAS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt."),
-        _("%^sが%sに向かってプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt at %s."),
-        TARGET_TYPE);
+        _("%^sが%sに向かってプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_PLASMA), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, TARGET_TYPE);
@@ -281,15 +260,12 @@ HIT_POINT spell_RF5_BO_PLAS(player_type* target_ptr, POSITION y, POSITION x, MON
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_BO_ICEE(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BO_ICEE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
-        _("%^sが極寒の矢の呪文を唱えた。", "%^s casts an ice bolt."),
-        _("%^sが%sに向かって極寒の矢の呪文を唱えた。", "%^s casts an ice bolt at %s."),
-        TARGET_TYPE);
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが極寒の矢の呪文を唱えた。", "%^s casts an ice bolt."),
+        _("%^sが%sに向かって極寒の矢の呪文を唱えた。", "%^s casts an ice bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_ICE), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, TARGET_TYPE);
@@ -311,15 +287,13 @@ HIT_POINT spell_RF5_BO_ICEE(player_type* target_ptr, POSITION y, POSITION x, MON
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF5_MISSILE(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_MISSILE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile."),
-        _("%^sが%sに向かってマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile at %s."),
-        TARGET_TYPE);
+        _("%^sが%sに向かってマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_MAGIC_MISSILE), m_idx, DAM_ROLL);
     bolt(target_ptr, m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, TARGET_TYPE);
