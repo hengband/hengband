@@ -16,7 +16,6 @@
 #include "market/arena-info-table.h"
 #include "mind/mind-mirror-master.h"
 #include "mspell/monster-spell.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"

@@ -6,7 +6,6 @@
 #include "io/write-diary.h"
 #include "monster/monster-race-hook.h"
 #include "mutation/mutation.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-flavor.h"
 #include "object/object-kind-hook.h"

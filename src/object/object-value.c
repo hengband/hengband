@@ -1,5 +1,6 @@
 ﻿#include "object/object-value.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/tr-types.h"
 #include "perception/object-perception.h"
 #include "object/object-broken.h"
 #include "object-enchant/object-curse.h"

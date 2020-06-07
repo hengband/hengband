@@ -10,6 +10,7 @@
 #include "monster/monster-race-hook.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "perception/object-perception.h"
 #include "object/object-kind.h"

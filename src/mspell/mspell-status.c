@@ -11,7 +11,6 @@
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
-#include "object-enchant/artifact.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-personalities-table.h"

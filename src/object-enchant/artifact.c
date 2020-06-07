@@ -27,6 +27,7 @@
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/random-art-bias-types.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

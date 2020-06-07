@@ -31,7 +31,6 @@
 #include "io/targeting.h"
 #include "market/arena-info-table.h"
 #include "monster/monster.h"
-#include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"

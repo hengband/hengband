@@ -6,7 +6,6 @@
 
 #include "object/object-stack.h"
 #include "sv-definition/sv-other-types.h"
-#include "object-enchant/artifact.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
