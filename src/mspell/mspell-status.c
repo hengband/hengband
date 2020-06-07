@@ -5,17 +5,17 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "mspell/mspell-status.h"
-#include "mspell/monster-spell.h"
-#include "mspell/mspell-util.h"
-#include "player/player-move.h"
+#include "art-definition/art-bow-types.h"
 #include "monster/monster-status.h"
-#include "spell/spells-type.h"
-#include "player/player-personalities-table.h"
+#include "mspell/monster-spell.h"
+#include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-util.h"
 #include "object-enchant/artifact.h"
 #include "player/player-effects.h"
-#include "mspell/mspell-damage-calculator.h"
+#include "player/player-move.h"
+#include "player/player-personalities-table.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief 状態異常呪文のメッセージ処理関数。 /
@@ -30,9 +30,10 @@
  * @param saving_throw 抵抗に成功したか判別するフラグ
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_badstatus_message(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool resist, bool saving_throw, int TARGET_TYPE)
+void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool resist,
+    bool saving_throw, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     bool see_either = see_monster(floor_ptr, m_idx) || see_monster(floor_ptr, t_idx);
     bool see_t = see_monster(floor_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
@@ -88,16 +89,14 @@ void spell_badstatus_message(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
     monster_name(target_ptr, t_idx, t_name);
 
-    monspell_message(target_ptr, m_idx, t_idx,
-        _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
-        _("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."),
-        _("%^sが%sに対して魔力消去の呪文を念じた。", "%^s invokes a dispel magic at %s."),
+    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+        _("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."), _("%^sが%sに対して魔力消去の呪文を念じた。", "%^s invokes a dispel magic at %s."),
         TARGET_TYPE);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
@@ -126,16 +125,16 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_
 }
 
 /*!
-* @brief RF5_DRAIN_MANAの処理。魔力吸収。 /
-* @param target_ptr プレーヤーへの参照ポインタ
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-* @return ダメージ量を返す。
-*/
-HIT_POINT spell_RF5_DRAIN_MANA(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+ * @brief RF5_DRAIN_MANAの処理。魔力吸収。 /
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @return ダメージ量を返す。
+ */
+HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam;
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -158,19 +157,19 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type* target_ptr, POSITION y, POSITION x, 
 }
 
 /*!
-* @brief RF5_MIND_BLASTの処理。精神攻撃。 /
-* @param target_ptr プレーヤーへの参照ポインタ
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-* @return ダメージ量を返す。
-*/
-HIT_POINT spell_RF5_MIND_BLAST(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+ * @brief RF5_MIND_BLASTの処理。精神攻撃。 /
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @return ダメージ量を返す。
+ */
+HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* m_ptr = &floor_ptr->m_list[m_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     bool seen = (!target_ptr->blind && m_ptr->ml);
     HIT_POINT dam;
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -193,19 +192,19 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type* target_ptr, POSITION y, POSITION x, 
 }
 
 /*!
-* @brief RF5_BRAIN_SMASHの処理。脳攻撃。 /
-* @param target_ptr プレーヤーへの参照ポインタ
-* @param y 対象の地点のy座標
-* @param x 対象の地点のx座標
-* @param m_idx 呪文を唱えるモンスターID
-* @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
-* @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-* @return ダメージ量を返す。
-*/
-HIT_POINT spell_RF5_BRAIN_SMASH(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+ * @brief RF5_BRAIN_SMASHの処理。脳攻撃。 /
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+ * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @return ダメージ量を返す。
+ */
+HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* m_ptr = &floor_ptr->m_list[m_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     bool seen = (!target_ptr->blind && m_ptr->ml);
     HIT_POINT dam;
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -233,23 +232,20 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type* target_ptr, POSITION y, POSITION x,
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race* tr_ptr = &r_info[t_ptr->r_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+    monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = target_ptr->resist_fear;
         saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
-        spell_badstatus_message(target_ptr, m_idx, t_idx,
-            _("%^sが何かをつぶやくと、恐ろしげな音が聞こえた。", "%^s mumbles, and you hear scary noises."),
-            _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion."),
-            _("しかし恐怖に侵されなかった。", "You refuse to be frightened."),
-            _("しかし恐怖に侵されなかった。", "You refuse to be frightened."),
-            resist, saving_throw, TARGET_TYPE);
+        spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやくと、恐ろしげな音が聞こえた。", "%^s mumbles, and you hear scary noises."),
+            _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion."), _("しかし恐怖に侵されなかった。", "You refuse to be frightened."),
+            _("しかし恐怖に侵されなかった。", "You refuse to be frightened."), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
             (void)set_afraid(target_ptr, target_ptr->afraid + randint0(4) + 4);
@@ -266,12 +262,9 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_i
     resist = tr_ptr->flags3 & RF3_NO_FEAR;
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message(target_ptr, m_idx, t_idx,
-        _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion in front of %s."),
-        _("%^sは恐怖を感じない。", "%^s refuses to be frightened."),
-        _("%^sは恐怖を感じない。", "%^s refuses to be frightened."),
-        _("%^sは恐怖して逃げ出した！", "%^s flees in terror!"),
-        resist, saving_throw, TARGET_TYPE);
+    spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion in front of %s."),
+        _("%^sは恐怖を感じない。", "%^s refuses to be frightened."), _("%^sは恐怖を感じない。", "%^s refuses to be frightened."),
+        _("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
         set_monster_monfear(target_ptr, t_idx, MON_MONFEAR(t_ptr) + randint0(4) + 4);
@@ -284,23 +277,20 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_i
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race* tr_ptr = &r_info[t_ptr->r_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+    monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = target_ptr->resist_blind;
         saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
-        spell_badstatus_message(target_ptr, m_idx, t_idx,
-            _("%^sが何かをつぶやいた。", "%^s mumbles."),
-            _("%^sが呪文を唱えてあなたの目をくらました！", "%^s casts a spell, burning your eyes!"),
-            _("しかし効果がなかった！", "You are unaffected!"),
-            _("しかし効力を跳ね返した！", "You resist the effects!"),
-            resist, saving_throw, TARGET_TYPE);
+        spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
+            _("%^sが呪文を唱えてあなたの目をくらました！", "%^s casts a spell, burning your eyes!"), _("しかし効果がなかった！", "You are unaffected!"),
+            _("しかし効力を跳ね返した！", "You resist the effects!"), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
             (void)set_blind(target_ptr, 12 + randint0(4));
@@ -327,12 +317,8 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_i
     resist = tr_ptr->flags3 & RF3_NO_CONF;
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message(target_ptr, m_idx, t_idx,
-        msg1,
-        _("%^sには効果がなかった。", "%^s is unaffected."),
-        _("%^sには効果がなかった。", "%^s is unaffected."),
-        _("%^sは目が見えなくなった！ ", "%^s is blinded!"),
-        resist, saving_throw, TARGET_TYPE);
+    spell_badstatus_message(target_ptr, m_idx, t_idx, msg1, _("%^sには効果がなかった。", "%^s is unaffected."),
+        _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sは目が見えなくなった！ ", "%^s is blinded!"), resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
         (void)set_monster_confused(target_ptr, t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
@@ -345,23 +331,21 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_i
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_CONF(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race* tr_ptr = &r_info[t_ptr->r_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+    monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = target_ptr->resist_conf;
         saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
-        spell_badstatus_message(target_ptr, m_idx, t_idx,
-            _("%^sが何かをつぶやくと、頭を悩ます音がした。", "%^s mumbles, and you hear puzzling noises."),
+        spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやくと、頭を悩ます音がした。", "%^s mumbles, and you hear puzzling noises."),
             _("%^sが誘惑的な幻覚を作り出した。", "%^s creates a mesmerising illusion."),
             _("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."),
-            _("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."),
-            resist, saving_throw, TARGET_TYPE);
+            _("しかし幻覚にはだまされなかった。", "You disbelieve the feeble spell."), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
             (void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
@@ -378,12 +362,9 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_id
     resist = tr_ptr->flags3 & RF3_NO_CONF;
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message(target_ptr, m_idx, t_idx,
-        _("%^sが%sの前に幻惑的な幻をつくり出した。", "%^s casts a mesmerizing illusion in front of %s."),
-        _("%^sは惑わされなかった。", "%^s disbelieves the feeble spell."),
-        _("%^sは惑わされなかった。", "%^s disbelieves the feeble spell."),
-        _("%^sは混乱したようだ。", "%^s seems confused."),
-        resist, saving_throw, TARGET_TYPE);
+    spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが%sの前に幻惑的な幻をつくり出した。", "%^s casts a mesmerizing illusion in front of %s."),
+        _("%^sは惑わされなかった。", "%^s disbelieves the feeble spell."), _("%^sは惑わされなかった。", "%^s disbelieves the feeble spell."),
+        _("%^sは混乱したようだ。", "%^s seems confused."), resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
         (void)set_monster_confused(target_ptr, t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
@@ -396,23 +377,20 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_id
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race* tr_ptr = &r_info[t_ptr->r_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+    monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = target_ptr->free_act;
         saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
-        spell_badstatus_message(target_ptr, m_idx, t_idx,
-            _("%^sが何かをつぶやいた。", "%^s mumbles."),
-            _("%^sがあなたの目をじっと見つめた！", "%^s stares deep into your eyes!"),
-            _("しかし効果がなかった！", "You are unaffected!"),
-            _("しかし効力を跳ね返した！", "You resist the effects!"),
-            resist, saving_throw, TARGET_TYPE);
+        spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
+            _("%^sがあなたの目をじっと見つめた！", "%^s stares deep into your eyes!"), _("しかし効果がなかった！", "You are unaffected!"),
+            _("しかし効力を跳ね返した！", "You resist the effects!"), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
             (void)set_paralyzed(target_ptr, target_ptr->paralyzed + randint0(4) + 4);
@@ -429,11 +407,8 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_id
     resist = (tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flags3 & RF3_NO_STUN);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message(target_ptr, m_idx, t_idx,
-        _("%^sは%sをじっと見つめた。", "%^s stares intently at %s."),
-        _("%^sには効果がなかった。", "%^s is unaffected."),
-        _("%^sには効果がなかった。", "%^s is unaffected."),
-        _("%^sは麻痺した！", "%^s is paralyzed!"),
+    spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sは%sをじっと見つめた。", "%^s stares intently at %s."),
+        _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sには効果がなかった。", "%^s is unaffected."), _("%^sは麻痺した！", "%^s is paralyzed!"),
         resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
@@ -448,22 +423,20 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_id
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF6_HASTE(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     bool see_m = see_monster(floor_ptr, m_idx);
-    monster_type* m_ptr = &floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
     char m_poss[10];
     monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
-    monspell_message_base(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    monspell_message_base(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
         _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
-        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
-        target_ptr->blind > 0, TARGET_TYPE);
+        _("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)), target_ptr->blind > 0, TARGET_TYPE);
 
     if (set_monster_fast(target_ptr, m_idx, MON_FAST(m_ptr) + 100)) {
         if (TARGET_TYPE == MONSTER_TO_PLAYER || (TARGET_TYPE == MONSTER_TO_MONSTER && see_m))
@@ -477,23 +450,20 @@ void spell_RF6_HASTE(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* t_ptr = &floor_ptr->m_list[t_idx];
-    monster_race* tr_ptr = &r_info[t_ptr->r_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+    monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool resist, saving_throw;
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         resist = target_ptr->resist_conf;
         saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
-        spell_badstatus_message(target_ptr, m_idx, t_idx,
-            _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
-            _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
-            _("しかし効果がなかった！", "You are unaffected!"),
-            _("しかし効力を跳ね返した！", "You resist the effects!"),
-            resist, saving_throw, TARGET_TYPE);
+        spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
+            _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"), _("しかし効果がなかった！", "You are unaffected!"),
+            _("しかし効力を跳ね返した！", "You resist the effects!"), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
             (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
@@ -520,12 +490,8 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_id
     resist = tr_ptr->flags1 & RF1_UNIQUE;
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
-    spell_badstatus_message(target_ptr, m_idx, t_idx,
-        msg1,
-        _("%^sには効果がなかった。", "%^s is unaffected."),
-        _("%^sには効果がなかった。", "%^s is unaffected."),
-        _("%sの動きが遅くなった。", "%^s starts moving slower."),
-        resist, saving_throw, TARGET_TYPE);
+    spell_badstatus_message(target_ptr, m_idx, t_idx, msg1, _("%^sには効果がなかった。", "%^s is unaffected."),
+        _("%^sには効果がなかった。", "%^s is unaffected."), _("%sの動きが遅くなった。", "%^s starts moving slower."), resist, saving_throw, TARGET_TYPE);
 
     if (!resist && !saving_throw) {
         set_monster_slow(target_ptr, t_idx, MON_SLOW(t_ptr) + 50);
@@ -539,10 +505,10 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_id
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF6_HEAL(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* m_ptr = &floor_ptr->m_list[m_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     bool seen = (!target_ptr->blind && m_ptr->ml);
     GAME_TEXT m_name[MAX_NLEN];
@@ -552,31 +518,23 @@ void spell_RF6_HEAL(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 
     disturb(target_ptr, TRUE, TRUE);
 
-    monspell_message_base(target_ptr, m_idx, t_idx,
-        _("%^sが何かをつぶやいた。", "%^s mumbles."),
+    monspell_message_base(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss)),
         _("%^sが自分の傷に集中した。", format("%%^s concentrates on %s wounds.", m_poss)),
-        _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss)),
-        target_ptr->blind > 0, TARGET_TYPE);
+        _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss)), target_ptr->blind > 0, TARGET_TYPE);
 
     m_ptr->hp += (rlev * 6);
     if (m_ptr->hp >= m_ptr->maxhp) {
         /* Fully healed */
         m_ptr->hp = m_ptr->maxhp;
 
-        monspell_message_base(target_ptr, m_idx, t_idx,
-            _("%^sは完全に治ったようだ！", "%^s sounds completely healed!"),
-            _("%^sは完全に治ったようだ！", "%^s sounds completely healed!"),
-            _("%^sは完全に治った！", "%^s looks completely healed!"),
-            _("%^sは完全に治った！", "%^s looks completely healed!"),
-            !seen, TARGET_TYPE);
+        monspell_message_base(target_ptr, m_idx, t_idx, _("%^sは完全に治ったようだ！", "%^s sounds completely healed!"),
+            _("%^sは完全に治ったようだ！", "%^s sounds completely healed!"), _("%^sは完全に治った！", "%^s looks completely healed!"),
+            _("%^sは完全に治った！", "%^s looks completely healed!"), !seen, TARGET_TYPE);
     } else {
-        monspell_message_base(target_ptr, m_idx, t_idx,
-            _("%^sは体力を回復したようだ。", "%^s sounds healthier."),
-            _("%^sは体力を回復したようだ。", "%^s sounds healthier."),
-            _("%^sは体力を回復したようだ。", "%^s looks healthier."),
-            _("%^sは体力を回復したようだ。", "%^s looks healthier."),
-            !seen, TARGET_TYPE);
+        monspell_message_base(target_ptr, m_idx, t_idx, _("%^sは体力を回復したようだ。", "%^s sounds healthier."),
+            _("%^sは体力を回復したようだ。", "%^s sounds healthier."), _("%^sは体力を回復したようだ。", "%^s looks healthier."),
+            _("%^sは体力を回復したようだ。", "%^s looks healthier."), !seen, TARGET_TYPE);
     }
 
     if (target_ptr->health_who == m_idx)
@@ -600,17 +558,14 @@ void spell_RF6_HEAL(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF6_INVULNER(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    monster_type* m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!target_ptr->blind && m_ptr->ml);
 
-    monspell_message_base(target_ptr, m_idx, t_idx,
-        _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
-        _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
-        _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
-        _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
-        !seen, TARGET_TYPE);
+    monspell_message_base(target_ptr, m_idx, t_idx, _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
+        _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
+        _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."), !seen, TARGET_TYPE);
 
     if (!MON_INVULNER(m_ptr))
         (void)set_monster_invulner(target_ptr, m_idx, randint1(4) + 4, FALSE);
@@ -622,7 +577,7 @@ void spell_RF6_INVULNER(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
  * @param m_idx 呪文を唱えるモンスターID
  * @param なし
  */
-void spell_RF6_FORGET(player_type* target_ptr, MONSTER_IDX m_idx)
+void spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     DEPTH rlev = monster_level_idx(target_ptr->current_floor_ptr, m_idx);
     GAME_TEXT m_name[MAX_NLEN];
@@ -630,9 +585,7 @@ void spell_RF6_FORGET(player_type* target_ptr, MONSTER_IDX m_idx)
 
     disturb(target_ptr, TRUE, TRUE);
 
-    msg_format(_("%^sがあなたの記憶を消去しようとしている。",
-                   "%^s tries to blank your mind."),
-        m_name);
+    msg_format(_("%^sがあなたの記憶を消去しようとしている。", "%^s tries to blank your mind."), m_name);
 
     if (randint0(100 + rlev / 2) < target_ptr->skill_sav) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));

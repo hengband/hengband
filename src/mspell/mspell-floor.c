@@ -5,12 +5,12 @@
  */
 
 #include "mspell/mspell-floor.h"
+#include "art-definition/art-bow-types.h"
 #include "effect/effect-characteristics.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-status.h"
 #include "mspell/mspell-util.h"
-#include "object-enchant/artifact.h"
 #include "player/player-move.h"
 #include "player/player-personalities-table.h"
 #include "spell/process-effect.h"

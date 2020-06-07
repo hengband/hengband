@@ -6,6 +6,7 @@
  */
 
 #include "spell-kind/spells-teleport.h"
+#include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-save.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -15,7 +16,7 @@
 #include "main/sound-definitions-table.h"
 #include "monster/creature.h"
 #include "monster/monster-status.h"
-#include "object-enchant/artifact.h"
+#include "object-enchant/tr-types.h"
 #include "object/object-hook.h"
 #include "object/object1.h"
 #include "player/avatar.h"

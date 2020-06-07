@@ -10,6 +10,7 @@
  */
 
 #include "cmd/cmd-basic.h"
+#include "art-definition/art-bow-types.h"
 #include "art-definition/art-weapon-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-io/cmd-dump.h"
@@ -37,7 +38,6 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/item-use-flags.h"

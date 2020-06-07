@@ -1,4 +1,5 @@
 ﻿#include "combat/shoot.h"
+#include "art-definition/art-bow-types.h"
 #include "combat/snipe.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"

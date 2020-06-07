@@ -31,6 +31,7 @@
  */
 
 #include "cmd-io/cmd-dump.h"
+#include "art-definition/art-bow-types.h"
 #include "cmd-io/feeling-table.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
@@ -41,7 +42,6 @@
 #include "io/interpret-pref-file.h"
 #include "io/read-pref-file.h"
 #include "locale/english.h"
-#include "object-enchant/artifact.h"
 #include "player/player-personalities-table.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"

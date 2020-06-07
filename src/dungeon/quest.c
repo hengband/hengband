@@ -1,4 +1,5 @@
 ﻿#include "dungeon/quest.h"
+#include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-dump.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-events.h"

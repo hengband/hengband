@@ -5,6 +5,7 @@
  */
 
 #include "cmd-item/cmd-activate.h"
+#include "art-definition/art-bow-types.h"
 #include "art-definition/art-sword-types.h"
 #include "art-definition/art-weapon-types.h"
 #include "cmd-io/cmd-save.h"

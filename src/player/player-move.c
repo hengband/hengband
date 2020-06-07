@@ -139,6 +139,7 @@
  */
 
 #include "player/player-move.h"
+#include "art-definition/art-bow-types.h"
 #include "art-definition/art-sword-types.h"
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-attack.h"
@@ -159,7 +160,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

@@ -48,22 +48,6 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 bool make_artifact(player_type *player_ptr, object_type *o_ptr);
 bool make_artifact_special(player_type *player_ptr, object_type *o_ptr);
 
-/* Bows */
-#define ART_BELTHRONDING        124
-#define ART_BARD                125
-#define ART_BRAND               126
-#define ART_CRIMSON             16
-#define ART_BUCKLAND            134
-#define ART_YOICHI              148
-#define ART_HARAD               180
-#define ART_NAMAKE_BOW          182
-#define ART_ROBIN_HOOD          221
-#define ART_HELLFIRE            222
-
-/* Arrows */
-#define ART_BARD_ARROW          153
-
-
 /* "Biases" for random artifact gen */
 #define BIAS_ELEC            1 /*!< ランダムアーティファクトバイアス:電撃 */
 #define BIAS_POIS            2 /*!< ランダムアーティファクトバイアス:毒 */

@@ -1,4 +1,5 @@
 ﻿#include "monster/monster-status.h"
+#include "art-definition/art-bow-types.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-draw.h"
@@ -17,7 +18,6 @@
 #include "monster/monster-race-hook.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-curse.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"

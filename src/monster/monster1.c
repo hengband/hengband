@@ -13,6 +13,7 @@
 #include "system/angband.h"
 #include "monster/monster.h"
 #include "art-definition/art-armor-types.h"
+#include "art-definition/art-bow-types.h"
 #include "art-definition/art-protector-types.h"
 #include "art-definition/art-weapon-types.h"
 #include "cmd-building/cmd-building.h"
