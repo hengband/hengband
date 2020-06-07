@@ -2,9 +2,9 @@
 #include "monster-race/monster-race.h"
 #include "util/util.h"
 
-extern monster_race *r_info;
-extern char *r_name;
-extern char *r_text;
+monster_race *r_info;
+char *r_name;
+char *r_text;
 
 /*
  * The size of "alloc_race_table" (at most max_r_idx)

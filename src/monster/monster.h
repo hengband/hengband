@@ -36,8 +36,7 @@ extern MONSTER_IDX hack_m_idx_ii;
  */
 
 typedef struct floor_type floor_type;
-typedef struct
-{
+typedef struct monster_type {
 	MONRACE_IDX r_idx;		/* Monster race index 0 = dead. */
 	MONRACE_IDX ap_r_idx;	/* Monster race appearance index */
 	floor_type *current_floor_ptr;

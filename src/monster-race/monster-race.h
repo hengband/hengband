@@ -42,11 +42,7 @@ extern MONRACE_IDX max_r_idx;
  * fields have a special prefix to aid in searching for them.
  */
 
-
-typedef struct monster_race monster_race;
-
-struct monster_race
-{
+typedef struct monster_race {
 	STR_OFFSET name;	/*!< 名前データのオフセット(日本語) /  Name offset(Japanese) */
 #ifdef JP
 	STR_OFFSET E_name;		/*!< 名前データのオフセット(英語) /  Name offset(English) */
@@ -439,7 +435,7 @@ struct monster_race
 	u32b r_flags6;			/* Observed racial flags */
 	/* u32b r_flags7; */	/* Observed racial flags */
 	u32b r_flagsr;			/* Observed racial resistance flags */
-};
+} monster_race;
 
 /*
  * Hack -- "torch" masks
@@ -464,9 +460,9 @@ struct monster_race
 /*
  * The monster race arrays
  */
-monster_race *r_info;
-char *r_name;
-char *r_text;
+extern monster_race *r_info;
+extern char *r_name;
+extern char *r_text;
 
 extern s16b alloc_race_size;
 extern alloc_entry *alloc_race_table;
