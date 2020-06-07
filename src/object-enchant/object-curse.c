@@ -2,9 +2,9 @@
 #include "util/util.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"
+#include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "object/object1.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 

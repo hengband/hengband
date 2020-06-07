@@ -144,7 +144,7 @@ COMMAND_NUM command_rep;	/*!< 各種コマンドの汎用的なリピート数�
 DIRECTION command_dir;		/*!< 各種コマンドの汎用的な方向値処理として扱う/ Gives direction of current command */
 s16b command_see;		/* アイテム使用時等にリストを表示させるかどうか (ゲームオプションの他、様々なタイミングでONになったりOFFになったりする模様……) */
 s16b command_wrk;		/* アイテムの使用許可状況 (ex. 装備品のみ、床上もOK等) */
-TERM_LEN command_gap = 999;         /* See "object1.c" */
+TERM_LEN command_gap = 999;         /* アイテムの表示に使う (詳細未調査) */
 s16b command_new;		/* Command chaining from inven/equip view */
 
 #ifdef SET_UID

@@ -15,7 +15,7 @@
 #include "monster/monster-race-hook.h"
 #include "monster/monster.h"
 #include "object-enchant/tr-types.h"
-#include "object/object1.h"
+#include "object/object-flags.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
