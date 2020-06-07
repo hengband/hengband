@@ -38,6 +38,7 @@
 #include "main/sound-definitions-table.h"
 #include "mind/snipe-types.h"
 #include "monster/monster-status.h"
+#include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"

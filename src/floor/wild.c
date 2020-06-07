@@ -23,6 +23,7 @@
 #include "main/init.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
+#include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"

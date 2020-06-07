@@ -9,6 +9,7 @@
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "monster/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"

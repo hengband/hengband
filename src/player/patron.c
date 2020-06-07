@@ -5,6 +5,7 @@
 #include "floor/floor.h"
 #include "io/write-diary.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-flavor.h"

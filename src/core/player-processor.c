@@ -10,6 +10,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
+#include "monster/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"

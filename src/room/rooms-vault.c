@@ -1,20 +1,25 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
-#include "room/rooms-vault.h"
+﻿/*!
+ * @brief Vaultの生成処理
+ * @date 2018/09/11
+ * @author deskull
+ */
 
-#include "floor/floor-generate.h"
-#include "grid/grid.h"
-#include "room/rooms.h"
-#include "store/store.h"
-#include "grid/trap.h"
-#include "monster/monster.h"
-#include "grid/feature.h"
-#include "floor/floor.h"
+#include "room/rooms-vault.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor-generate.h"
+#include "floor/floor.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
-#include "store/store-util.h"
+#include "grid/feature.h"
+#include "grid/grid.h"
+#include "grid/trap.h"
+#include "monster/monster.h"
+#include "monster/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
+#include "room/rooms.h"
+#include "store/store-util.h"
+#include "store/store.h"
+#include "util/util.h"
 
 /*
  * The vault generation arrays

@@ -1,17 +1,16 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
-
+﻿#include "realm/realm-craft.h"
 #include "cmd-action/cmd-spell.h"
+#include "monster/place-monster-types.h"
+#include "mutation/mutation.h"
+#include "player/player-effects.h"
+#include "player/player-status.h"
 #include "player/selfinfo.h"
 #include "spell/range-calc.h"
 #include "spell/spells-object.h"
-#include "spell/spells-summon.h"
 #include "spell/spells-status.h"
-#include "mutation/mutation.h"
-#include "player/player-status.h"
-#include "player/player-effects.h"
-#include "realm/realm-craft.h"
+#include "spell/spells-summon.h"
 #include "spell/spells3.h"
+#include "util/util.h"
 
 /*!
 * @brief 匠領域魔法の各処理を行う

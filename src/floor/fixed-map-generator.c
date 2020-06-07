@@ -8,6 +8,7 @@
 #include "info-reader/general-parser.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
+#include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/artifact.h"

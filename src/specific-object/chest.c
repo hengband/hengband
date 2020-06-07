@@ -4,10 +4,10 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
+#include "monster/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
-#include "perception/object-perception.h"
 #include "object/object-generator.h"
-#include "sv-definition/sv-other-types.h"
+#include "perception/object-perception.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
@@ -17,6 +17,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spells-type.h"
 #include "spell/spells3.h"
+#include "sv-definition/sv-other-types.h"
 #include "util/util.h"
 
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */

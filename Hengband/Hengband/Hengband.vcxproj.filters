@@ -1744,9 +1744,6 @@
     <ClInclude Include="..\..\src\room\rooms-normal.h">
       <Filter>room</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\room\room\rooms-pit-nest.h">
-      <Filter>room</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\room\rooms-special.h">
       <Filter>room</Filter>
     </ClInclude>
@@ -2694,6 +2691,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\smart-learn-types.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\place-monster-types.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-pit-nest.h">
+      <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

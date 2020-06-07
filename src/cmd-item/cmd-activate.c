@@ -29,6 +29,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-info.h"
+#include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"

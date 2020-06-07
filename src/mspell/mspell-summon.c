@@ -2,6 +2,7 @@
 #include "effect/effect-characteristics.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
+#include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-util.h"

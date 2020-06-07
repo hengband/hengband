@@ -1,17 +1,16 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
-
-#include "grid/grid.h"
-#include "floor/floor-generate.h"
-#include "rooms.h"
-#include "room/rooms-pit-nest.h"
-#include "monster/monster.h"
-#include "monster-race/monster-race-hook.h"
+﻿#include "room/rooms-pit-nest.h"
 #include "core/sort.h"
+#include "dungeon/dungeon.h"
+#include "floor/floor-generate.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
-#include "dungeon/dungeon.h"
+#include "grid/grid.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/monster.h"
+#include "monster/place-monster-types.h"
 #include "room/pit-nest-kinds-table.h"
+#include "rooms.h"
+#include "util/util.h"
 
 /*!
 * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める

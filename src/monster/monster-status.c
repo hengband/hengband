@@ -19,6 +19,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-process.h"
 #include "monster/monster.h"
+#include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/object-curse.h"

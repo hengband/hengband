@@ -31,6 +31,7 @@
 #include "mind/mind-ninja.h"
 #include "mind/mind-warrior.h"
 #include "monster/monster-status.h"
+#include "monster/place-monster-types.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"

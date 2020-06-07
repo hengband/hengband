@@ -531,6 +531,7 @@
     <ClInclude Include="..\..\src\mind\snipe-types.h" />
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h" />
     <ClInclude Include="..\..\src\monster\monster-flag-types.h" />
+    <ClInclude Include="..\..\src\monster\place-monster-types.h" />
     <ClInclude Include="..\..\src\monster\smart-learn-types.h" />
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h" />
     <ClInclude Include="..\..\src\object-enchant\dragon-breaths-table.h" />
@@ -1019,7 +1020,7 @@
     <ClInclude Include="..\..\src\room\rooms-city.h" />
     <ClInclude Include="..\..\src\room\rooms-fractal.h" />
     <ClInclude Include="..\..\src\room\rooms-normal.h" />
-    <ClInclude Include="..\..\src\room\room\rooms-pit-nest.h" />
+    <ClInclude Include="..\..\src\room\rooms-pit-nest.h" />
     <ClInclude Include="..\..\src\room\rooms-special.h" />
     <ClInclude Include="..\..\src\room\rooms-trap.h" />
     <ClInclude Include="..\..\src\room\rooms-vault.h" />
