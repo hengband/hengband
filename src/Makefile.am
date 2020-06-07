@@ -108,6 +108,7 @@ hengband_SOURCES = \
 	core/player-processor.c core/player-processor.h \
 	core/scores.c core/scores.h \
 	core/sort.c core/sort.h \
+	core/visuals-reseter.c core/visuals-reseter.h \
 	\
 	dungeon/dungeon.c dungeon/dungeon.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \

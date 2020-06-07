@@ -1235,6 +1235,9 @@
     <ClCompile Include="..\..\src\perception\identification.c">
       <Filter>perception</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\visuals-reseter.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2634,6 +2637,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\perception\identification.h">
       <Filter>perception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\visuals-reseter.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

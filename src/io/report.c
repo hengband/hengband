@@ -5,19 +5,18 @@
  * @author Hengband Team
  */
 
-#include "system/angband.h"
 #include "io/report.h"
-#include "floor/floor.h"
-#include "core/turn-compensator.h"
-#include "system/angband-version.h"
 #include "core/stuff-handler.h"
-#include "io/inet.h"
+#include "core/turn-compensator.h"
+#include "core/visuals-reseter.h"
 #include "dungeon/dungeon.h"
-#include "player/player-personality.h"
+#include "floor/floor.h"
 #include "io-dump/character-dump.h"
-#include "world/world.h"
+#include "io/inet.h"
+#include "player/player-personality.h"
+#include "system/angband-version.h"
 #include "term/gameterm.h"
-#include "object/object1.h"
+#include "world/world.h"
 
 #ifdef WORLD_SCORE
 

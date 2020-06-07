@@ -1,5 +1,6 @@
 ﻿#include "cmd/cmd-visuals.h"
 #include "cmd/cmd-draw.h"
+#include "core/visuals-reseter.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
 #include "knowledge/knowledge-features.h"
@@ -9,7 +10,6 @@
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind.h"
-#include "object/object1.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 
