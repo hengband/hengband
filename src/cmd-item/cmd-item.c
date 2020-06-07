@@ -10,6 +10,7 @@
  */
 
 #include "cmd-item/cmd-item.h"
+#include "art-definition/art-protector-types.h"
 #include "autopick/autopick-registry.h"
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-pet.h"
@@ -31,7 +32,6 @@
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "monster/monster.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"

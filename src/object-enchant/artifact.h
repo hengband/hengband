@@ -48,61 +48,6 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 bool make_artifact(player_type *player_ptr, object_type *o_ptr);
 bool make_artifact_special(player_type *player_ptr, object_type *o_ptr);
 
-/* Shields */
-#define ART_THORIN              30
-#define ART_CELEGORM            31
-#define ART_ANARION             32
-#define ART_GIL_GALAD           138
-#define ART_YENDOR              141
-#define ART_YATA                151
-#define ART_EARENDIL            186
-#define ART_PERSEUS             197
-
-/* Helms and Crowns */
-#define ART_INDRA               33
-#define ART_CHAOS               34
-#define ART_BERUTHIEL           35
-#define ART_THRANDUIL           36
-#define ART_THENGEL             37
-#define ART_HAMMERHAND          38
-#define ART_DOR                 39
-#define ART_HOLHENNETH          40
-#define ART_TERROR              41
-#define ART_AMBER               42
-#define ART_NUMENOR             132
-#define ART_STONEMASK           146
-
-/* Cloaks */
-#define ART_JACK                43
-#define ART_COLLUIN             44
-#define ART_HOLCOLLETH          45
-#define ART_THINGOL             46
-#define ART_THORONGIL           47
-#define ART_COLANNON            48
-#define ART_LUTHIEN             49
-#define ART_TUOR                50
-#define ART_MOOK                205
-#define ART_HEAVENLY_MAIDEN     233
-
-/* Gloves */
-#define ART_CAMBELEG            52
-#define ART_CAMMITHRIM          53
-#define ART_PAURHACH            54
-#define ART_CORWIN              55
-#define ART_PAURAEGEN           56
-#define ART_PAURNEN             57
-#define ART_THANOS              58
-#define ART_FINGOLFIN           59
-#define ART_PAURNIMMEN          185
-
-/* Boots */
-#define ART_FEANOR              60
-#define ART_FLORA               61
-#define ART_THROR               62
-#define ART_SHIVA_BOOTS         63
-#define ART_GLASS               165
-#define ART_GETA                210
-
 /* Digging */
 #define ART_NAIN                211
 

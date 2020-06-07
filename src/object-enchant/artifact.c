@@ -12,6 +12,7 @@
 
 #include "object-enchant/artifact.h"
 #include "art-definition/art-armor-types.h"
+#include "art-definition/art-protector-types.h"
 #include "art-definition/art-sword-types.h"
 #include "cmd-item/cmd-activate.h"
 #include "cmd-item/cmd-smith.h"

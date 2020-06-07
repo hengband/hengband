@@ -1,4 +1,5 @@
 ﻿#include "perception/identification.h"
+#include "art-definition/art-protector-types.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
