@@ -21,6 +21,7 @@
 #include "main/sound-definitions-table.h"
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "pet/pet-fall-off.h"

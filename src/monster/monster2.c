@@ -30,6 +30,7 @@
 #include "monster/creature.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "monster/place-monster-types.h"

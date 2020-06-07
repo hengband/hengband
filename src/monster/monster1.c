@@ -33,6 +33,7 @@
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster.h"
 #include "monster/place-monster-types.h"

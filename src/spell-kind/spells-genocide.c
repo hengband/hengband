@@ -3,6 +3,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "io/write-diary.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"

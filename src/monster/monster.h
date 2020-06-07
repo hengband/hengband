@@ -76,24 +76,8 @@ extern bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_F
 extern bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x);
 extern bool alloc_guardian(player_type *player_ptr, bool def_val);
 extern bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode);
-
 extern void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode);
-/* Bit flags for monster_desc() */
-#define MD_OBJECTIVE      0x00000001 /* Objective (or Reflexive) */
-#define MD_POSSESSIVE     0x00000002 /* Possessive (or Reflexive) */
-#define MD_INDEF_HIDDEN   0x00000004 /* Use indefinites for hidden monsters ("something") */
-#define MD_INDEF_VISIBLE  0x00000008 /* Use indefinites for visible monsters ("a kobold") */
-#define MD_PRON_HIDDEN    0x00000010 /* Pronominalize hidden monsters */
-#define MD_PRON_VISIBLE   0x00000020 /* Pronominalize visible monsters */
-#define MD_ASSUME_HIDDEN  0x00000040 /* Assume the monster is hidden */
-#define MD_ASSUME_VISIBLE 0x00000080 /* Assume the monster is visible */
-#define MD_TRUE_NAME      0x00000100 /* Chameleon's true name */
-#define MD_IGNORE_HALLU   0x00000200 /* Ignore hallucination, and penetrate shape change */
-
-#define MD_WRONGDOER_NAME (MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE) /* 加害明記向け */
-
 extern void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char* m_name);
-
 extern void roff_top(MONRACE_IDX r_idx);
 extern void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern void display_roff(player_type *player_ptr);
@@ -114,7 +98,6 @@ extern void anger_monster(player_type *player_ptr, monster_type *m_ptr);
 #define CEM_P_CAN_ENTER_PATTERN 0x0002
 extern bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode);
 extern bool monster_can_enter(player_type *player_ptr, POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode);
-
 extern bool are_enemies(player_type *player_ptr, monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
@@ -135,7 +118,6 @@ extern errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type mons
 
 #define GMN_ARENA 0x00000001 //!< 賭け闘技場向け生成 
 extern MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option);
-
 extern int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx);
 extern void lore_treasure(player_type *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
 extern void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full);

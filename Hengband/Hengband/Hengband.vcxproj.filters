@@ -2698,6 +2698,9 @@
     <ClInclude Include="..\..\src\room\rooms-pit-nest.h">
       <Filter>room</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-description-types.h">
+      <Filter>monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

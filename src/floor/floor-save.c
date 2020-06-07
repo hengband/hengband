@@ -32,6 +32,7 @@
 #include "io/uid-checker.h"
 #include "io/write-diary.h"
 #include "mind/mind-mirror-master.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"

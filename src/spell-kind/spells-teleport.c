@@ -15,6 +15,7 @@
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "monster/creature.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/tr-types.h"

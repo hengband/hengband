@@ -281,6 +281,7 @@ hengband_SOURCES = \
 	monster/monster.h \
 	monster/monster1.c monster/monster2.c \
 	monster/monster-attack.c monster/monster-attack.h \
+	monster/monster-description-types.h \
 	monster/monster-direction.c monster/monster-direction.h \
 	monster/monster-dist-offsets.c monster/monster-dist-offsets.h \
 	monster/monster-flag-types.h \

@@ -2,6 +2,7 @@
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"

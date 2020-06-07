@@ -5,6 +5,7 @@
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "io/write-diary.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "player/player-damage.h"

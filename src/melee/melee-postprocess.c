@@ -15,6 +15,7 @@
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "monster/smart-learn-types.h"

@@ -13,6 +13,7 @@
 #include "io-dump/dump-util.h"
 #include "knowledge/monster-group-table.h"
 #include "locale/english.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "term/term-color-types.h"
