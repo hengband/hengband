@@ -11,6 +11,7 @@ hengband_SOURCES = \
 	art-definition/art-protector-types.h \
 	art-definition/art-sword-types.h \
 	art-definition/art-weapon-types.h \
+	art-definition/random-art-effects.h \
 	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
@@ -341,6 +342,7 @@ hengband_SOURCES = \
 	object/object-util.h \
 	object/item-use-flags.h \
 	\
+	object-enchant/activation-info-table.c object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.c object-enchant/apply-magic.h \
 	object-enchant/apply-magic-accessory.c object-enchant/apply-magic-accessory.h \
 	object-enchant/apply-magic-armor.c object-enchant/apply-magic-armor.h \

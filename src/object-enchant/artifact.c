@@ -15,7 +15,7 @@
 #include "art-definition/art-protector-types.h"
 #include "art-definition/art-sword-types.h"
 #include "art-definition/art-weapon-types.h"
-#include "cmd-item/cmd-activate.h"
+#include "art-definition/random-art-effects.h"
 #include "cmd-item/cmd-smith.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"

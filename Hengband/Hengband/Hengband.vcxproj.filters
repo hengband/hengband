@@ -1244,6 +1244,9 @@
     <ClCompile Include="..\..\src\object-enchant\dragon-breaths-table.c">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\activation-info-table.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2676,6 +2679,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\dragon-breaths-table.h">
       <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\activation-info-table.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\art-definition\random-art-effects.h">
+      <Filter>art-definition</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "cmd-item/cmd-activate.h"
+#include "object-enchant/activation-info-table.h"
 
 /*!
  * @struct artifact_type

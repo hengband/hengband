@@ -12,7 +12,9 @@
 
 #include "object/object-info.h"
 #include "art-definition/art-weapon-types.h"
+#include "art-definition/random-art-effects.h"
 #include "floor/floor.h"
+#include "object-enchant/activation-info-table.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
