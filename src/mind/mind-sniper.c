@@ -6,7 +6,7 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "cmd/cmd-basic.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"

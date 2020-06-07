@@ -27,7 +27,7 @@
 #include "cmd/cmd-basic.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-visuals.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-events.h"
 #include "floor/floor-town.h"

@@ -19,7 +19,7 @@
 #include "birth/character-builder.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"

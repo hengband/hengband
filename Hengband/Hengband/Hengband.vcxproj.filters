@@ -608,9 +608,6 @@
     <ClCompile Include="..\..\src\mind\racial.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\snipe.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\main\init.c">
       <Filter>main</Filter>
     </ClCompile>
@@ -1243,6 +1240,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\monster-race\monster-race-hook.c">
       <Filter>monster-race</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-sniper.c">
+      <Filter>mind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1908,9 +1908,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial.h">
       <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\snipe.h">
-      <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\init.h">
       <Filter>main</Filter>
@@ -2688,6 +2685,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-flag-types.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-sniper.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

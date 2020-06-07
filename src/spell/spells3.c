@@ -16,7 +16,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-building/cmd-building.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

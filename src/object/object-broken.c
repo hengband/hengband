@@ -4,7 +4,7 @@
  * @author deskull
  */
 #include "object/object-broken.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "effect/effect-characteristics.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"

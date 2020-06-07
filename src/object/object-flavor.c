@@ -11,7 +11,7 @@
 
 #include "object/object-flavor.h"
 #include "cmd-item/cmd-smith.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "grid/trap.h"
 #include "io/files-util.h"
 #include "locale/japanese.h"

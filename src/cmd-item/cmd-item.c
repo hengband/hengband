@@ -22,7 +22,7 @@
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "cmd/cmd-basic.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "core/sort.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"

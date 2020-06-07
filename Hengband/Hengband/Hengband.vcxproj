@@ -795,7 +795,7 @@
     <ClCompile Include="..\..\src\core\scores.c" />
     <ClCompile Include="..\..\src\player\selfinfo.c" />
     <ClCompile Include="..\..\src\io\signal-handlers.c" />
-    <ClCompile Include="..\..\src\combat\snipe.c" />
+    <ClCompile Include="..\..\src\mind\mind-sniper.c" />
     <ClCompile Include="..\..\src\core\sort.c" />
     <ClCompile Include="..\..\src\spell\spells-diceroll.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-floor.c" />
@@ -1026,7 +1026,7 @@
     <ClInclude Include="..\..\src\io\save.h" />
     <ClInclude Include="..\..\src\core\scores.h" />
     <ClInclude Include="..\..\src\player\selfinfo.h" />
-    <ClInclude Include="..\..\src\combat\snipe.h" />
+    <ClInclude Include="..\..\src\mind\mind-sniper.h" />
     <ClInclude Include="..\..\src\core\sort.h" />
     <ClInclude Include="..\..\src\spell\spells-diceroll.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-floor.h" />

@@ -101,7 +101,6 @@ hengband_SOURCES = \
 	combat/attack-criticality.c combat/attack-criticality.h \
 	combat/vorpal-weapon.c combat/vorpal-weapon.h \
 	combat/shoot.c combat/shoot.h \
-	combat/snipe.c combat/snipe.h \
 	\
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
@@ -266,6 +265,7 @@ hengband_SOURCES = \
 	mind/mind-mirror-master.c mind/mind-mirror-master.h \
 	mind/mind-ninja.c mind/mind-ninja.h \
 	mind/mind-samurai.c mind/mind-samurai.h \
+	mind/mind-sniper.c mind/mind-sniper.h \
 	mind/mind-warrior.c mind/mind-warrior.h \
 	mind/mind-warrior-mage.c mind/mind-warrior-mage.h \
 	mind/monk-attack.c mind/monk-attack.h \

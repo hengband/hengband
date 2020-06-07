@@ -1,5 +1,5 @@
 ﻿#include "core/player-processor.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "floor/wild.h"

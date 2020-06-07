@@ -10,7 +10,7 @@
 #include "world/world.h"
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "autopick/autopick-pref-processor.h"
 #include "store/store-util.h"
 #include "main/sound-definitions-table.h"

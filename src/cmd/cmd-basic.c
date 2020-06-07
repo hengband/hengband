@@ -18,7 +18,7 @@
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "combat/slaying.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "core/output-updater.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
