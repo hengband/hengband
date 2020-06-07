@@ -528,6 +528,7 @@
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\mind\drs-types.h" />
+    <ClInclude Include="..\..\src\mind\snipe-types.h" />
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h" />
     <ClInclude Include="..\..\src\monster\monster-flag-types.h" />
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h" />

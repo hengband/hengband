@@ -9,6 +9,7 @@
 #include "inventory/inventory-object.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "mind/snipe-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"

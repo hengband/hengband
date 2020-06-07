@@ -5,60 +5,59 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "io/input-key-processor.h"
-#include "world/world.h"
-#include "core/special-internal-keys.h"
-#include "dungeon/dungeon.h"
-#include "mind/mind-sniper.h"
 #include "autopick/autopick-pref-processor.h"
-#include "store/store-util.h"
-#include "main/sound-definitions-table.h"
-#include "io/write-diary.h"
-#include "inventory/player-inventory.h"
-#include "player/player-effects.h"
-#include "store/store.h" // do_cmd_store() がある。後で移設する.
-#include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
-#include "floor/wild.h"
-#include "spell/spells-object.h"
-#include "mind/mind.h" // do_cmd_mind_browse() がある。後で移設する.
-#include "mspell/monster-spell.h" // do_cmd_cast_learned() がある。後で移設する.
-#include "mind/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
-#include "view/display-main-window.h"
-#include "knowledge/knowledge-autopick.h"
-#include "knowledge/knowledge-quests.h"
-#include "io/chuukei.h"
-#include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
-#include "io/files-util.h"
-
-#include "cmd-item/cmd-activate.h"
-#include "cmd-io/cmd-autopick.h"
-#include "cmd-building/cmd-building.h"
-#include "cmd-io/cmd-diary.h"
-#include "cmd/cmd-draw.h"
-#include "cmd-io/cmd-dump.h"
-#include "cmd-io/cmd-process-screen.h"
-#include "cmd-item/cmd-eat.h"
-#include "cmd-io/cmd-help.h"
 #include "cmd-action/cmd-hissatsu.h"
-#include "cmd-item/cmd-item.h"
-#include "cmd-io/cmd-knowledge.h"
-#include "cmd-item/cmd-magiceat.h"
 #include "cmd-action/cmd-mane.h"
+#include "cmd-action/cmd-pet.h"
+#include "cmd-action/cmd-spell.h"
+#include "cmd-building/cmd-building.h"
+#include "cmd-io/cmd-autopick.h"
+#include "cmd-io/cmd-diary.h"
+#include "cmd-io/cmd-dump.h"
+#include "cmd-io/cmd-help.h"
+#include "cmd-io/cmd-knowledge.h"
 #include "cmd-io/cmd-macro.h"
+#include "cmd-io/cmd-process-screen.h"
+#include "cmd-io/cmd-save.h"
+#include "cmd-item/cmd-activate.h"
+#include "cmd-item/cmd-eat.h"
+#include "cmd-item/cmd-item.h"
+#include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-quaff.h"
 #include "cmd-item/cmd-read.h"
-#include "cmd-io/cmd-save.h"
 #include "cmd-item/cmd-smith.h"
-#include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
-#include "cmd-action/cmd-pet.h"
 #include "cmd/cmd-basic.h"
+#include "cmd/cmd-draw.h"
 #include "cmd/cmd-visuals.h"
-#include "wizard/wizard-spoiler.h"
+#include "core/special-internal-keys.h"
+#include "dungeon/dungeon.h"
+#include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
+#include "floor/wild.h"
+#include "inventory/player-inventory.h"
+#include "io/chuukei.h"
+#include "io/files-util.h"
+#include "io/write-diary.h"
+#include "knowledge/knowledge-autopick.h"
+#include "knowledge/knowledge-quests.h"
+#include "main/sound-definitions-table.h"
+#include "mind/mind-sniper.h"
+#include "mind/mind.h" // do_cmd_mind_browse() がある。後で移設する.
+#include "mind/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
+#include "mind/snipe-types.h"
+#include "mspell/monster-spell.h" // do_cmd_cast_learned() がある。後で移設する.
+#include "player/player-effects.h"
+#include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
+#include "spell/spells-object.h"
+#include "store/store-util.h"
+#include "store/store.h" // do_cmd_store() がある。後で移設する.
+#include "view/display-main-window.h"
 #include "wizard/wizard-special-process.h"
+#include "wizard/wizard-spoiler.h"
+#include "world/world.h"
 
 // todo command-processor.h と util.h が相互依存している。後で別な場所に移す.
 COMMAND_CODE now_message;
@@ -69,7 +68,7 @@ COMMAND_CODE now_message;
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return 実際にウィザードモードへ移行したらTRUEを返す。
  */
-bool enter_wizard_mode(player_type* player_ptr)
+bool enter_wizard_mode(player_type *player_ptr)
 {
     if (!current_world_ptr->noscore) {
         if (!allow_debug_opts || arg_wizard) {
@@ -84,7 +83,8 @@ bool enter_wizard_mode(player_type* player_ptr)
             return FALSE;
         }
 
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "gave up recording score to enter wizard mode."));
+        exe_write_diary(
+            player_ptr, DIARY_DESCRIPTION, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "gave up recording score to enter wizard mode."));
         current_world_ptr->noscore |= 0x0002;
     }
 
@@ -97,7 +97,7 @@ bool enter_wizard_mode(player_type* player_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return 実際にデバッグコマンドへ移行したらTRUEを返す。
  */
-static bool enter_debug_mode(player_type* player_ptr)
+static bool enter_debug_mode(player_type *player_ptr)
 {
     if (!current_world_ptr->noscore) {
         if (!allow_debug_opts) {
@@ -112,7 +112,8 @@ static bool enter_debug_mode(player_type* player_ptr)
             return FALSE;
         }
 
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("デバッグモードに突入してスコアを残せなくなった。", "gave up sending score to use debug commands."));
+        exe_write_diary(
+            player_ptr, DIARY_DESCRIPTION, 0, _("デバッグモードに突入してスコアを残せなくなった。", "gave up sending score to use debug commands."));
         current_world_ptr->noscore |= 0x0008;
     }
 
@@ -125,7 +126,7 @@ static bool enter_debug_mode(player_type* player_ptr)
  * @todo Make some "blocks"
  * @return なし
  */
-void process_command(player_type* creature_ptr)
+void process_command(player_type *creature_ptr)
 {
     COMMAND_CODE old_now_message = now_message;
     repeat_check();
@@ -133,7 +134,7 @@ void process_command(player_type* creature_ptr)
     if ((creature_ptr->pclass == CLASS_SNIPER) && (creature_ptr->concent))
         creature_ptr->reset_concent = TRUE;
 
-    floor_type* floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     switch (command_cmd) {
     case ESCAPE:
     case ' ':
@@ -325,7 +326,8 @@ void process_command(player_type* creature_ptr)
         break;
     }
     case 'b': {
-        if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_BERSERKER) || (creature_ptr->pclass == CLASS_NINJA) || (creature_ptr->pclass == CLASS_MIRROR_MASTER))
+        if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_BERSERKER) || (creature_ptr->pclass == CLASS_NINJA)
+            || (creature_ptr->pclass == CLASS_MIRROR_MASTER))
             do_cmd_mind_browse(creature_ptr);
         else if (creature_ptr->pclass == CLASS_SMITH)
             do_cmd_kaji(creature_ptr, TRUE);
@@ -342,7 +344,8 @@ void process_command(player_type* creature_ptr)
         if (!creature_ptr->wild_mode) {
             if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_ARCHER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
                 msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
-            } else if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH)) {
+            } else if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER)
+                && (creature_ptr->pclass != CLASS_SMITH)) {
                 msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
                 msg_print(NULL);
             } else if (creature_ptr->anti_magic && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH)) {
@@ -366,7 +369,8 @@ void process_command(player_type* creature_ptr)
                 msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
                 free_turn(creature_ptr);
             } else {
-                if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_BERSERKER) || (creature_ptr->pclass == CLASS_NINJA) || (creature_ptr->pclass == CLASS_MIRROR_MASTER))
+                if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_BERSERKER) || (creature_ptr->pclass == CLASS_NINJA)
+                    || (creature_ptr->pclass == CLASS_MIRROR_MASTER))
                     do_cmd_mind(creature_ptr);
                 else if (creature_ptr->pclass == CLASS_IMITATOR)
                     do_cmd_mane(creature_ptr, FALSE);

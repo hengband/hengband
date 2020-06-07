@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 extern COMMAND_CODE now_message;
 
 bool enter_wizard_mode(player_type* player_ptr);
