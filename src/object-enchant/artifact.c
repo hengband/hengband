@@ -21,7 +21,6 @@
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "io/files-util.h"
-#include "monster/monster.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-boost.h"

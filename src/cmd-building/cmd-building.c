@@ -41,7 +41,6 @@
 #include "market/play-gamble.h"
 #include "market/poker.h"
 #include "monster-race/monster-race.h"
-#include "monster/monster.h"
 #include "mutation/mutation.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

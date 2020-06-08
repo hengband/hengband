@@ -47,7 +47,6 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"
-#include "monster/monster.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"
