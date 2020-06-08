@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/monster-type-definition.h"
 
 bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx);
 DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx);

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/monster-type-definition.h"
 
 typedef bool (*monsterrace_hook_type)(MONRACE_IDX r_idx);
 

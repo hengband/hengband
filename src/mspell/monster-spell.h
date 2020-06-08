@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "mspell/mspell-type.h"
+#include "system/monster-type-definition.h"
 
 /* Imitator */
 typedef struct monster_power monster_power;

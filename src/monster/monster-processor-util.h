@@ -7,6 +7,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "system/monster-type-definition.h"
 
 typedef struct {
 	bool see_m;

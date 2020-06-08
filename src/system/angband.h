@@ -38,8 +38,6 @@
  */
 #include "system/gamevalue.h"
 #include "cmd-io/cmd-gameoption.h"
-
-#include "system/monster-type-definition.h"
 #include "monster-race/monster-race.h"
 #include "player/player-status.h"
 

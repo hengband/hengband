@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/monster-type-definition.h"
 
 /* MONster-Attack-Player、地図のMAPと紛らわしいのでmonapとした */
 typedef struct monap_type {

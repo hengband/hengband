@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "monster/monster1.h"
+#include "system/monster-type-definition.h"
 
 extern MONSTER_IDX hack_m_idx;
 extern MONSTER_IDX hack_m_idx_ii;

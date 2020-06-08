@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/monster-type-definition.h"
 
 void reset_concentration(player_type *creature_ptr, bool msg);
 void display_snipe_list(player_type *sniper_ptr);
