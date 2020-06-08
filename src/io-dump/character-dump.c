@@ -14,6 +14,7 @@
 #include "market/arena-info-table.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "object/object-flavor.h"
 #include "object/object-info.h"

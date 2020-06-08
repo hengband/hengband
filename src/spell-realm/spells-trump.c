@@ -1,6 +1,7 @@
 ﻿#include "spell-realm/spells-trump.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
+#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/avatar.h"

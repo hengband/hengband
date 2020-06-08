@@ -8,6 +8,7 @@
 #include "cmd-action/cmd-pet.h"
 #include "floor/floor.h"
 #include "monster/smart-learn-types.h"
+#include "monster/monster2.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-skill.h"
 

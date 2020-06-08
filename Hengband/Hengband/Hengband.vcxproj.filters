@@ -2713,6 +2713,9 @@
     <ClInclude Include="..\..\src\player\eldritch-horror.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster2.h">
+      <Filter>monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -12,7 +12,7 @@
 #include "mind/snipe-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"

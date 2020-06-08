@@ -19,6 +19,7 @@
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
+#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"

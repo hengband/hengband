@@ -15,7 +15,6 @@
  * 2013 Deskull Doxygen向けのコメント整理\n
  */
 
-#include "system/angband.h"
 #include "grid/grid.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -24,7 +23,7 @@
 #include "grid/feature.h"
 #include "grid/trap.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"

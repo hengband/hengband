@@ -5,7 +5,7 @@
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "util/util.h"
 

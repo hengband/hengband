@@ -1,6 +1,8 @@
 ﻿#pragma once
 
-#define MAX_PATRON      16 /*!< カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
+#include "system/angband.h"
+
+#define MAX_PATRON 16 /*!< カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
 
 /* カオスパトロンからの報酬種別定義 / Chaos Warrior: Reward types: */
 #define REW_POLY_SLF    1   /*!< カオスパトロンからの報酬: 自己変容 */

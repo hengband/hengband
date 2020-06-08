@@ -6,7 +6,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "room/pit-nest-kinds-table.h"
 #include "rooms.h"

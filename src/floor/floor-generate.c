@@ -30,7 +30,7 @@
 #include "market/arena-info-table.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "player/player-status.h"
 #include "room/rooms.h"

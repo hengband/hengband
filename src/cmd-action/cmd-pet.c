@@ -11,7 +11,7 @@
 #include "io/write-diary.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "object/object-hook.h"
 #include "pet/pet-util.h"

@@ -40,6 +40,7 @@
 #include "market/bounty.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/creature.h"
+#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "object/object-flavor.h"
 #include "player/player-class.h"

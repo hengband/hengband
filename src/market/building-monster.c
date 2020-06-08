@@ -1,6 +1,7 @@
 ﻿#include "market/building-monster.h"
 #include "core/sort.h"
 #include "core/stuff-handler.h"
+#include "monster/monster2.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"

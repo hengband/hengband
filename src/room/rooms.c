@@ -42,7 +42,7 @@
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
 #include "room/rooms-city.h"

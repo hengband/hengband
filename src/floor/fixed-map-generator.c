@@ -10,6 +10,7 @@
 #include "io/tokenizer.h"
 #include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
+#include "monster/monster2.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"

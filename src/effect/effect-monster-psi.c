@@ -2,6 +2,7 @@
 #include "floor/floor.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-description-types.h"
+#include "monster/monster2.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "world/world.h"

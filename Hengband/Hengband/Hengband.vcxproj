@@ -535,6 +535,7 @@
     <ClInclude Include="..\..\src\monster\monster-flag-types.h" />
     <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h" />
     <ClInclude Include="..\..\src\monster\monster-type-definition.h" />
+    <ClInclude Include="..\..\src\monster\monster2.h" />
     <ClInclude Include="..\..\src\monster\place-monster-types.h" />
     <ClInclude Include="..\..\src\monster\smart-learn-types.h" />
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h" />

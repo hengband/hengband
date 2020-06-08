@@ -5,6 +5,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "player/avatar.h"
 #include "spell/process-effect.h"

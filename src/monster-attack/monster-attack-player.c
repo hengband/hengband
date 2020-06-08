@@ -9,31 +9,32 @@
 #include "cmd-action/cmd-pet.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
+#include "combat/aura-counterattack.h"
 #include "combat/combat-options-type.h"
 #include "combat/hallucination-attacks-table.h"
-#include "monster-attack/monster-attack-describer.h"
-#include "monster-attack/monster-attack-effect.h"
-#include "monster-attack/monster-attack-switcher.h"
-#include "monster-attack/monster-attack-util.h"
-#include "combat/aura-counterattack.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
+#include "monster-attack/monster-attack-describer.h"
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-switcher.h"
+#include "monster-attack/monster-attack-util.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
-#include "pet/pet-fall-off.h"
 #include "object/object-hook.h"
+#include "pet/pet-fall-off.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
-#include "spell/process-effect.h"
-#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-hex.h"
+#include "spell/process-effect.h"
 #include "spell/spells-type.h"
 
 static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
@@ -374,7 +375,8 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
 
         power = mbe_info[monap_ptr->effect].power;
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
-        if ((monap_ptr->effect == RBE_NONE) || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr)))
+        if ((monap_ptr->effect == RBE_NONE)
+            || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr)))
             if (!process_monster_attack_hit(target_ptr, monap_ptr))
                 continue;
             else

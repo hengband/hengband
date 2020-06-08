@@ -10,7 +10,6 @@
  * 2014 Deskull rearranged comment for Doxygen. \n
  */
 
-#include "system/angband.h"
 #include "floor/floor-save.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
@@ -35,7 +34,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/artifact.h"
 #include "object/object-hook.h"

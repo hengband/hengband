@@ -20,6 +20,7 @@
 #include "floor/wild.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
+#include "monster/monster2.h"
 #include "player/player-races-table.h"
 #include "player/player-sex.h"
 #include "store/store.h"

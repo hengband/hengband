@@ -9,6 +9,7 @@
 #include "floor/floor.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster/monster2.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"

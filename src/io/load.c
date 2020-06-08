@@ -64,7 +64,7 @@
 #include "market/bounty.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"

@@ -25,7 +25,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/mutation.h"
 #include "object-enchant/object-ego.h"

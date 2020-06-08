@@ -1,15 +1,15 @@
-﻿#include "system/angband.h"
-#include "floor/floor.h"
-#include "market/arena.h"
-#include "market/arena-info-table.h"
-#include "market/building-util.h"
-#include "player/player-effects.h"
-#include "core/stuff-handler.h"
+﻿#include "market/arena.h"
 #include "core/show-file.h"
-#include "monster-race/monster-race-hook.h"
-#include "world/world.h"
+#include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor.h"
+#include "market/arena-info-table.h"
 #include "market/building-actions-table.h"
+#include "market/building-util.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/monster2.h"
+#include "player/player-effects.h"
+#include "world/world.h"
 
 /*!
  * @brief 優勝時のメッセージを表示し、賞金を与える
@@ -46,8 +46,7 @@ static bool battle_metal_babble(player_type *player_ptr)
         return FALSE;
 
     if (player_ptr->arena_number >= MAX_ARENA_MONS + 2) {
-        msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。",
-            "You enter the arena briefly and bask in your glory."));
+        msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。", "You enter the arena briefly and bask in your glory."));
         msg_print(NULL);
         return TRUE;
     }
@@ -83,8 +82,7 @@ static void go_to_arena(player_type *player_ptr)
         return;
 
     if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY)) {
-        msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。",
-            "You don't have permission to enter with pet."));
+        msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。", "You don't have permission to enter with pet."));
         msg_print(NULL);
         return;
     }
@@ -101,8 +99,7 @@ static void go_to_arena(player_type *player_ptr)
 static void see_arena_poster(player_type *player_ptr)
 {
     if (player_ptr->arena_number == MAX_ARENA_MONS) {
-        msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。",
-            "You are victorious. Enter the arena for the ceremony."));
+        msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。", "You are victorious. Enter the arena for the ceremony."));
         return;
     }
 
@@ -284,9 +281,7 @@ bool monster_arena_comm(player_type *player_ptr)
 
     clear_bldg(4, 10);
 
-    prt(_("モンスター                                                     倍率",
-            "Monsters                                                       Odds"),
-        4, 4);
+    prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
     for (int i = 0; i < 4; i++) {
         char buf[80];
         monster_race *r_ptr = &r_info[battle_mon[i]];
@@ -332,9 +327,9 @@ bool monster_arena_comm(player_type *player_ptr)
     sprintf(tmp_str, _("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet);
 
     /*
-	 * Use get_string() because we may need more than
-	 * the s16b value returned by get_quantity().
-	 */
+     * Use get_string() because we may need more than
+     * the s16b value returned by get_quantity().
+     */
     if (!get_string(tmp_str, out_val, 32)) {
         screen_load();
         return FALSE;

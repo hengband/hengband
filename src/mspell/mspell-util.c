@@ -1,5 +1,5 @@
-﻿#include "system/angband.h"
-#include "mspell/mspell-util.h"
+﻿#include "mspell/mspell-util.h"
+#include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "player/player-move.h"
 

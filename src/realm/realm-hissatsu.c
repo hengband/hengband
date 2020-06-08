@@ -13,7 +13,7 @@
 #include "io/targeting.h"
 #include "mind/mind-ninja.h"
 #include "monster-race/monster-race-hook.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/player-damage.h"

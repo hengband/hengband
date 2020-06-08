@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 /*!
  * 箱のトラップ定義 Chest trap flags
  */

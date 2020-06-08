@@ -12,6 +12,7 @@
 #include "main/sound-definitions-table.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-description-types.h"
+#include "monster/monster2.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "realm/realm-hex-numbers.h"

@@ -14,6 +14,7 @@
  * included in all such copies.
  */
 
+#include "system/angband.h"
 #include "spell/spells-util.h"
 
  /*

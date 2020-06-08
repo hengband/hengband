@@ -11,7 +11,6 @@
  * </pre>
  */
 
-#include "system/angband.h"
 #include "io/save.h"
 #include "birth/quick-start.h"
 #include "cmd-building/cmd-building.h"
@@ -28,6 +27,7 @@
 #include "io/uid-checker.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
+#include "monster/monster2.h"
 #include "object-enchant/artifact.h"
 #include "object/object-kind.h"
 #include "store/store-util.h"

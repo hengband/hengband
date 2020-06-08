@@ -17,7 +17,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "pet/pet-fall-off.h"

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define MAX_SAVED_FLOORS       20 /*!< 保存フロアの最大数 / Maximum number of saved floors. */
 
 struct player_type;

@@ -8,6 +8,7 @@
 #include "market/building-util.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster/monster2.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-flavor.h"

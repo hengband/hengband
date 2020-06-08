@@ -18,6 +18,7 @@
 #include "main/sound-definitions-table.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster2.h"
 #include "monster/monster.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"

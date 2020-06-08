@@ -35,6 +35,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster2.h" // todo 相互参照している、いずれ消す.
 #include "monster/monster.h"
 #include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"

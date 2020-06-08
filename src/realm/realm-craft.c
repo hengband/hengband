@@ -1,5 +1,6 @@
 ﻿#include "realm/realm-craft.h"
 #include "cmd-action/cmd-spell.h"
+#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/player-effects.h"

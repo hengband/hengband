@@ -10,6 +10,7 @@
 #include "cmd/cmd-basic.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
+#include "monster/monster2.h"
 #include "object-enchant/tr-types.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"

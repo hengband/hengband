@@ -3,6 +3,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"

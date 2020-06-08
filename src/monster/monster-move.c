@@ -5,20 +5,21 @@
  */
 
 #include "monster/monster-move.h"
-#include "monster/monster-attack.h"
-#include "monster/monster-object.h"
-#include "monster/monster-update.h"
-#include "pet/pet-util.h"
-#include "monster/creature.h"
+#include "effect/effect-characteristics.h"
 #include "io/files-util.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/creature.h"
+#include "monster/monster-attack.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-object.h"
 #include "monster/monster-status.h"
+#include "monster/monster-update.h"
+#include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
+#include "pet/pet-util.h"
 #include "player/player-move.h"
-#include "spell/spells-type.h"
 #include "spell/process-effect.h"
-#include "effect/effect-characteristics.h"
+#include "spell/spells-type.h"
 
 static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
 {

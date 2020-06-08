@@ -29,6 +29,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
+#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "monster/quantum-effect.h"
 #include "monster/smart-learn-types.h"
