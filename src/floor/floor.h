@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "object/object-util.h"
+#include "system/object-type-definition.h"
 #include "floor/floor-save.h"
 
 

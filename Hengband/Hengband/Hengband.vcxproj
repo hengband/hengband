@@ -646,7 +646,7 @@
     <ClInclude Include="..\..\src\object-enchant\item-feeling.h" />
     <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
-    <ClInclude Include="..\..\src\object\object-util.h" />
+    <ClInclude Include="..\..\src\system\object-type-definition.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
     <ClInclude Include="..\..\src\realm\realm-hex-numbers.h" />

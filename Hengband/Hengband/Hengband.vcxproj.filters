@@ -2125,9 +2125,6 @@
     <ClInclude Include="..\..\src\object\object-mark-types.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\object-util.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\item-use-flags.h">
       <Filter>object</Filter>
     </ClInclude>
@@ -2715,6 +2712,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\speed-table.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\object-type-definition.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

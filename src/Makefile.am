@@ -348,7 +348,6 @@ hengband_SOURCES = \
 	object/tval-types.h \
 	object/warning.c object/warning.h \
 	object/object-mark-types.h \
-	object/object-util.h \
 	object/item-use-flags.h \
 	\
 	object-enchant/activation-info-table.c object-enchant/activation-info-table.h \
@@ -490,6 +489,7 @@ hengband_SOURCES = \
 	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
 	system/monster-type-definition.h \
+	system/object-type-definition.h \
 	system/system-variables.c system/system-variables.h \
 	system/gamevalue.h \
 	\

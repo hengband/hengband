@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "object/lite-processor.h"
+﻿#include "object/lite-processor.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
 #include "sv-definition/sv-lite-types.h"

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "object/object-util.h"
+#include "system/object-type-definition.h"
 
 #define OBJ_GOLD_LIST 480 /* First "gold" entry */
 
