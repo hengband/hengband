@@ -14,7 +14,7 @@
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"

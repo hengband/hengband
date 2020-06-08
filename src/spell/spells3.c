@@ -35,7 +35,7 @@
 #include "market/building-util.h"
 #include "mind/mind.h"
 #include "mind/mind-force-trainer.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"

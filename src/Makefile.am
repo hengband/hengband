@@ -115,6 +115,7 @@ hengband_SOURCES = \
 	core/player-processor.c core/player-processor.h \
 	core/scores.c core/scores.h \
 	core/sort.c core/sort.h \
+	core/speed-table.c core/speed-table.h \
 	core/visuals-reseter.c core/visuals-reseter.h \
 	\
 	dungeon/dungeon.c dungeon/dungeon.h \
@@ -276,7 +277,6 @@ hengband_SOURCES = \
 	mind/racial-draconian.c mind/racial-draconian.h \
 	mind/racial-vampire.c mind/racial-vampire.h \
 	\
-	monster/creature.h monster/creature.c \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
 	monster/monster1.c monster/monster1.h \
 	monster/monster2.c monster/monster2.h \

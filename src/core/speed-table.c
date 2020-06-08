@@ -1,11 +1,11 @@
-﻿#include "system/angband.h"
-#include "monster/creature.h"
+﻿#include "core/speed-table.h"
 
 /*!
  * @brief 加速値による実質速度修正倍率テーブル /
  * This table allows quick conversion from "speed" to "energy"
+ * @date 2019/05/10
+ * @author deskull
  * @details
- * <pre>
  * The basic function WAS ((S>=110) ? (S-110) : (100 / (120-S)))
  * Note that table access is *much* quicker than computation.
  *
@@ -26,10 +26,8 @@
  * 100 units to 50 units, though this may interact badly with
  * the (compiled out) small random energy boost code.  It may
  * also tend to cause more "clumping" at high speeds.
- * </pre>
  */
-const byte extract_energy[200] =
-{
+const byte extract_energy[NUM_SPEED] = {
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
 	/* Slow */     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,

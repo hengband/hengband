@@ -8,7 +8,7 @@
 #include "effect/effect-characteristics.h"
 #include "io/files-util.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
 #include "monster/monster-attack.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-object.h"

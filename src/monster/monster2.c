@@ -26,7 +26,7 @@
 #include "mind/drs-types.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-description-types.h"

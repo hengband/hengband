@@ -20,7 +20,7 @@
 #include "io/write-diary.h"
 #include "melee/melee-postprocess.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-direction.h"
 #include "monster/monster-flag-types.h"

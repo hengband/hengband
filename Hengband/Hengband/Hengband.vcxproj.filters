@@ -575,9 +575,6 @@
     <ClCompile Include="..\..\src\floor\wild.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\creature.c">
-      <Filter>monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\io\report.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -1247,6 +1244,9 @@
     <ClCompile Include="..\..\src\monster\monster-processor.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\speed-table.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1869,9 +1869,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\floor\wild.h">
       <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\creature.h">
-      <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\report.h">
       <Filter>io</Filter>
@@ -2715,6 +2712,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-processor.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\speed-table.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -398,7 +398,7 @@
     <ClCompile Include="..\..\src\spell-kind\spells-teleport.c" />
     <ClCompile Include="..\..\src\system\system-variables.c" />
     <ClCompile Include="..\..\src\core\show-file.c" />
-    <ClCompile Include="..\..\src\monster\creature.c" />
+    <ClCompile Include="..\..\src\core\speed-table.c" />
     <ClCompile Include="..\..\src\info-reader\fixed-map-parser.c" />
     <ClCompile Include="..\..\src\dungeon\dungeon.c" />
     <ClCompile Include="..\..\src\locale\english.c" />
@@ -957,7 +957,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\system\angband.h" />
     <ClInclude Include="..\..\src\system\system-variables.h" />
-    <ClInclude Include="..\..\src\monster\creature.h" />
+    <ClInclude Include="..\..\src\core\speed-table.h" />
     <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon.h" />
     <ClInclude Include="..\..\src\grid\feature.h" />

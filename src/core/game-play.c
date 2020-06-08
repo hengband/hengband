@@ -39,7 +39,7 @@
 #include "market/arena-info-table.h"
 #include "market/bounty.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
 #include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "object/object-flavor.h"

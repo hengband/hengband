@@ -1,5 +1,5 @@
 ﻿#include "player/digestion-processor.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
 #include "object-enchant/trc-types.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

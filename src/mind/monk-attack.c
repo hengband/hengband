@@ -13,7 +13,7 @@
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "mind/mind-force-trainer.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
 #include "monster/monster-status.h"
 #include "world/world.h"
 

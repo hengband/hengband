@@ -29,7 +29,7 @@
 #include "io/files-util.h"
 #include "io/report.h"
 #include "io/save.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
 #include "mutation/mutation.h"
