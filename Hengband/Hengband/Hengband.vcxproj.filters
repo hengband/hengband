@@ -62,9 +62,6 @@
     <ClCompile Include="..\..\src\monster\quantum-effect.c">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-util.c">
-      <Filter>monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-object.c">
       <Filter>monster</Filter>
     </ClCompile>
@@ -507,9 +504,6 @@
       <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-dist-offsets.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-process.c">
       <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-status.c">
@@ -1247,6 +1241,12 @@
     <ClCompile Include="..\..\src\player\eldritch-horror.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-processor-util.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-processor.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1307,9 +1307,6 @@
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\quantum-effect.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-util.h">
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-object.h">
@@ -1784,9 +1781,6 @@
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-dist-offsets.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-process.h">
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-status.h">
@@ -2715,6 +2709,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\monster-type-definition.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-processor-util.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-processor.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

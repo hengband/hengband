@@ -18,7 +18,7 @@
 #include "monster/creature.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
-#include "monster/monster-process.h"
+#include "monster/monster-processor.h"
 #include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"

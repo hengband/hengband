@@ -287,7 +287,8 @@ hengband_SOURCES = \
 	monster/monster-flag-types.h \
 	monster/monster-move.c monster/monster-move.h \
 	monster/monster-object.c monster/monster-object.h \
-	monster/monster-process.c monster/monster-process.h \
+	monster/monster-processor.c monster/monster-processor.h \
+	monster/monster-processor-util.c monster/monster-processor-util.h \
 	monster/monster-runaway.c monster/monster-runaway.h \
 	monster/monster-safety-hiding.c monster/monster-safety-hiding.h \
 	monster/monster-timed-effect-types.h \
@@ -296,7 +297,6 @@ hengband_SOURCES = \
 	monster/monster-status.c monster/monster-status.h \
 	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
 	monster/monster-update.c monster/monster-update.h \
-	monster/monster-util.c monster/monster-util.h \
 	monster/quantum-effect.c monster/quantum-effect.h \
 	\
 	monster-attack/insults-moans.c monster-attack/insults-moans.h \

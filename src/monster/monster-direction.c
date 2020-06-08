@@ -7,7 +7,7 @@
 #include "monster/monster-direction.h"
 #include "floor/floor.h"
 #include "monster/monster-sweep-grid.h"
-#include "monster/monster-util.h"
+#include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"

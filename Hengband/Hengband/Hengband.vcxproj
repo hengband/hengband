@@ -431,7 +431,7 @@
     <ClCompile Include="..\..\src\store\store-owners.c" />
     <ClCompile Include="..\..\src\store\store-util.c" />
     <ClCompile Include="..\..\src\monster\monster-dist-offsets.c" />
-    <ClCompile Include="..\..\src\monster\monster-process.c" />
+    <ClCompile Include="..\..\src\monster\monster-processor.c" />
     <ClCompile Include="..\..\src\monster\monster-status.c" />
     <ClCompile Include="..\..\src\monster-race\monster-race-hook.c" />
     <ClCompile Include="..\..\src\monster-race\monster-race.c" />
@@ -443,7 +443,7 @@
     <ClCompile Include="..\..\src\monster\monster-safety-hiding.c" />
     <ClCompile Include="..\..\src\monster\monster-sweep-grid.c" />
     <ClCompile Include="..\..\src\monster\monster-update.c" />
-    <ClCompile Include="..\..\src\monster\monster-util.c" />
+    <ClCompile Include="..\..\src\monster\monster-processor-util.c" />
     <ClCompile Include="..\..\src\monster\quantum-effect.c" />
     <ClCompile Include="..\..\src\mutation\mutation-processor.c" />
     <ClCompile Include="..\..\src\object-enchant\object-boost.c" />
@@ -915,7 +915,7 @@
     <ClInclude Include="..\..\src\monster\monster-safety-hiding.h" />
     <ClInclude Include="..\..\src\monster\monster-sweep-grid.h" />
     <ClInclude Include="..\..\src\monster\monster-update.h" />
-    <ClInclude Include="..\..\src\monster\monster-util.h" />
+    <ClInclude Include="..\..\src\monster\monster-processor-util.h" />
     <ClInclude Include="..\..\src\monster\quantum-effect.h" />
     <ClInclude Include="..\..\src\mutation\mutation-processor.h" />
     <ClInclude Include="..\..\src\object\object-flavor.h" />
@@ -980,7 +980,7 @@
     <ClInclude Include="..\..\src\main\init.h" />
     <ClInclude Include="..\..\src\io\load.h" />
     <ClInclude Include="..\..\src\mind\mind.h" />
-    <ClInclude Include="..\..\src\monster\monster-process.h" />
+    <ClInclude Include="..\..\src\monster\monster-processor.h" />
     <ClInclude Include="..\..\src\mspell\monster-spell.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
     <ClInclude Include="..\..\src\system\monster-type-definition.h" />

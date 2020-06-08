@@ -7,7 +7,7 @@
  * 引数に入っていたらここには移動させないこと
  */
 
-#include "monster-util.h"
+#include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
 
  /*!
