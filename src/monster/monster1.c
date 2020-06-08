@@ -10,8 +10,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "system/angband.h"
-#include "monster/monster.h"
+#include "monster/monster1.h"
 #include "art-definition/art-armor-types.h"
 #include "art-definition/art-bow-types.h"
 #include "art-definition/art-protector-types.h"

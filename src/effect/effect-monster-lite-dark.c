@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-lite-dark.h"
+#include "monster/monster1.h"
 
 gf_switch_result effect_monster_lite_weak(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

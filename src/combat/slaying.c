@@ -2,6 +2,7 @@
 #include "art-definition/art-sword-types.h"
 #include "mind/mind-samurai.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster1.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "realm/realm-hex-numbers.h"

@@ -2,7 +2,7 @@
 #include "floor/floor.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-flag-types.h"
-#include "monster/monster.h"
+#include "monster/monster1.h"
 #include "mutation/mutation.h"
 #include "player/player-class.h"
 #include "room/rooms.h"

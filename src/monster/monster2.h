@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "monster/monster1.h"
 
 extern MONSTER_IDX hack_m_idx;
 extern MONSTER_IDX hack_m_idx_ii;

@@ -9,6 +9,7 @@
 #include "monster/monster-status.h"
 #include "dungeon/dungeon.h"
 #include "monster-attack/monster-attack-player.h"
+#include "monster/monster1.h"
 #include "melee/monster-attack-monster.h"
 
  /*!

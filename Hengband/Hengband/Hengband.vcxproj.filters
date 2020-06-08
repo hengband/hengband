@@ -2716,6 +2716,9 @@
     <ClInclude Include="..\..\src\monster\monster2.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster1.h">
+      <Filter>monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

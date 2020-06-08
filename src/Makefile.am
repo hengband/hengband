@@ -279,7 +279,7 @@ hengband_SOURCES = \
 	monster/creature.h monster/creature.c \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
 	monster/monster.h \
-	monster/monster1.c \
+	monster/monster1.c monster/monster1.h \
 	monster/monster2.c monster/monster2.h \
 	monster/monster-attack.c monster/monster-attack.h \
 	monster/monster-description-types.h \

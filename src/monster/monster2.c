@@ -10,8 +10,6 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "system/angband.h"
-#include "monster/monster.h"
 #include "monster/monster2.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/player-processor.h"

@@ -20,7 +20,7 @@
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "monster/monster.h"
+#include "monster/monster1.h"
 #include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
