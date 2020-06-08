@@ -1783,9 +1783,6 @@
     <ClInclude Include="..\..\src\player\player-status.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-dist-offsets.h">
       <Filter>monster</Filter>
     </ClInclude>
@@ -2707,9 +2704,6 @@
     <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-type-definition.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player\eldritch-horror.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -2718,6 +2712,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster1.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\monster-type-definition.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

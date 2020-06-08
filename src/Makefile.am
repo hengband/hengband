@@ -278,7 +278,6 @@ hengband_SOURCES = \
 	\
 	monster/creature.h monster/creature.c \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
-	monster/monster.h \
 	monster/monster1.c monster/monster1.h \
 	monster/monster2.c monster/monster2.h \
 	monster/monster-attack.c monster/monster-attack.h \
@@ -490,6 +489,7 @@ hengband_SOURCES = \
 	system/angband.h system/angband-version.h \
 	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
+	system/monster-type-definition.h \
 	system/system-variables.c system/system-variables.h \
 	system/gamevalue.h \
 	\

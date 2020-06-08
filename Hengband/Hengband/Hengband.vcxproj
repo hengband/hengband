@@ -534,7 +534,6 @@
     <ClInclude Include="..\..\src\monster\monster-description-types.h" />
     <ClInclude Include="..\..\src\monster\monster-flag-types.h" />
     <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h" />
-    <ClInclude Include="..\..\src\monster\monster-type-definition.h" />
     <ClInclude Include="..\..\src\monster\monster1.h" />
     <ClInclude Include="..\..\src\monster\monster2.h" />
     <ClInclude Include="..\..\src\monster\place-monster-types.h" />
@@ -984,7 +983,7 @@
     <ClInclude Include="..\..\src\monster\monster-process.h" />
     <ClInclude Include="..\..\src\mspell\monster-spell.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
-    <ClInclude Include="..\..\src\monster\monster.h" />
+    <ClInclude Include="..\..\src\system\monster-type-definition.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race.h" />
     <ClInclude Include="..\..\src\mutation\mutation.h" />
