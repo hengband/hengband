@@ -5,6 +5,7 @@
  */
 
 #include "monster/monster-update.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "player/player-move.h"
 

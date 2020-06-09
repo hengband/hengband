@@ -32,6 +32,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
@@ -56,9 +57,6 @@
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
 #define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */
 #define MON_SCAT_MAXD 10 /*!< mon_scatter()関数によるモンスター配置で許される中心からの最大距離 */
-
-MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
-MONSTER_IDX hack_m_idx_ii = 0;
 
 bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx);
 

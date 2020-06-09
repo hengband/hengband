@@ -1,5 +1,6 @@
 ﻿#include "effect/effect-monster-spirit.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "player/player-effects.h"

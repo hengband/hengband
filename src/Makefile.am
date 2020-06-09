@@ -297,6 +297,7 @@ hengband_SOURCES = \
 	monster/monster-status.c monster/monster-status.h \
 	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
 	monster/monster-update.c monster/monster-update.h \
+	monster/monster-util.c monster/monster-util.h \
 	monster/quantum-effect.c monster/quantum-effect.h \
 	\
 	monster-attack/insults-moans.c monster-attack/insults-moans.h \

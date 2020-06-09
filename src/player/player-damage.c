@@ -16,6 +16,7 @@
 #include "market/arena-info-table.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-description-types.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/tr-types.h"

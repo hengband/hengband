@@ -9,6 +9,7 @@
 #include "art-definition/art-weapon-types.h"
 #include "floor/floor.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "inventory/inventory-object.h"
 #include "object/object-flavor.h"

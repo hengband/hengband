@@ -14,7 +14,7 @@
 #include "core/sort.h"
 #include "floor/floor-town.h"
 #include "io/files-util.h"
-#include "monster/monster2.h"
+#include "monster/monster1.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"

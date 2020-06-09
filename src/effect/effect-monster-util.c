@@ -7,6 +7,7 @@
 #include "effect/effect-monster-util.h"
 #include "floor/floor.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 
 /*!

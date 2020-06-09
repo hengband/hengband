@@ -29,6 +29,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/object-curse.h"

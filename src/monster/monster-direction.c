@@ -9,6 +9,7 @@
 #include "monster/monster-sweep-grid.h"
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "pet/pet-util.h"

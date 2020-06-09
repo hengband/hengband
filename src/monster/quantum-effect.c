@@ -1,5 +1,6 @@
-﻿#include "quantum-effect.h"
+﻿#include "monster/quantum-effect.h"
 #include "floor/floor.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"

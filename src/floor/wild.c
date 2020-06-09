@@ -22,6 +22,7 @@
 #include "io/tokenizer.h"
 #include "main/init.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"

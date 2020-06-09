@@ -17,6 +17,7 @@
 #include "mind/monk-attack.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/vorpal-weapon.h"

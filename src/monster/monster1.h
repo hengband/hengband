@@ -1,9 +1,8 @@
 ﻿#pragma once
 
+#include "monster/monster-util.h"
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
-
-typedef bool (*monsterrace_hook_type)(MONRACE_IDX r_idx);
 
 void roff_top(MONRACE_IDX r_idx);
 void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode);

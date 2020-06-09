@@ -1,11 +1,8 @@
 ﻿#pragma once
 
+#include "monster/monster-util.h"
 #include "system/angband.h"
-#include "monster/monster1.h"
 #include "system/monster-type-definition.h"
-
-extern MONSTER_IDX hack_m_idx;
-extern MONSTER_IDX hack_m_idx_ii;
 
 void set_target(monster_type *m_ptr, POSITION y, POSITION x);
 void reset_target(monster_type *m_ptr);

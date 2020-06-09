@@ -9,6 +9,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-safety-hiding.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"

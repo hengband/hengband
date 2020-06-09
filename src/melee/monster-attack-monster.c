@@ -16,6 +16,7 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-teleport.h"

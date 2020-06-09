@@ -14,6 +14,7 @@
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "object/item-use-flags.h"
 #include "player/avatar.h"
