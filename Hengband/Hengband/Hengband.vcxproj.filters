@@ -1250,6 +1250,9 @@
     <ClCompile Include="..\..\src\monster\monster-util.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-lore\monster-lore.c">
+      <Filter>monster-lore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2752,6 +2755,9 @@
     <ClInclude Include="..\..\src\monster-race\race-flags8.h">
       <Filter>monster-race</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-lore\monster-lore.h">
+      <Filter>monster-lore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2904,6 +2910,9 @@
     </Filter>
     <Filter Include="monster-race">
       <UniqueIdentifier>{8de4a55f-fa83-496b-a42f-81078346c918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="monster-lore">
+      <UniqueIdentifier>{9db4d67c-5c55-4cc0-a9cd-643e5ffc3e73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

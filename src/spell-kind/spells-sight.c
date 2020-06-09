@@ -2,6 +2,7 @@
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
+#include "locale/english.h"
 #include "monster-race/race-flags3.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"

@@ -52,6 +52,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags9.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster1.h"
