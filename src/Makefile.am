@@ -519,6 +519,7 @@ hengband_SOURCES = \
 	view/display-fruit.c view/display-fruit.h \
 	view/display-main-window.c view/display-main-window.h \
 	view/display-monster-lore.c view/display-monster-lore.h \
+	view/display-monster-status.c view/display-monster-status.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player-middle.c view/display-player-middle.h \
