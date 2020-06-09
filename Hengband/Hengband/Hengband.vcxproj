@@ -168,6 +168,7 @@
     <ClCompile Include="..\..\src\birth\inventory-initializer.c" />
     <ClCompile Include="..\..\src\birth\quick-start.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.c" />
+    <ClCompile Include="..\..\src\cmd-io\cmd-lore.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\core\visuals-reseter.c" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
@@ -512,6 +513,7 @@
     <ClInclude Include="..\..\src\birth\inventory-initializer.h" />
     <ClInclude Include="..\..\src\birth\quick-start.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h" />
+    <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />

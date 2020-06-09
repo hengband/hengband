@@ -18,6 +18,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-help.h"
 #include "cmd-io/cmd-knowledge.h"
+#include "cmd-io/cmd-lore.h"
 #include "cmd-io/cmd-macro.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-item/cmd-item.h"

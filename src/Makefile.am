@@ -73,6 +73,7 @@ hengband_SOURCES = \
 	cmd-io/cmd-gameoption.c cmd-io/cmd-gameoption.h \
 	cmd-io/cmd-help.c cmd-io/cmd-help.h \
 	cmd-io/cmd-knowledge.c cmd-io/cmd-knowledge.h \
+	cmd-io/cmd-lore.c cmd-io/cmd-lore.h \
 	cmd-io/cmd-macro.c cmd-io/cmd-macro.h \
 	cmd-io/cmd-menu-content-table.c cmd-io/cmd-menu-content-table.h \
 	cmd-io/cmd-process-screen.c cmd-io/cmd-process-screen.h \
@@ -548,9 +549,10 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat \
 	-Icore -Idungeon -Ieffect -Ifloor -Igrid -Iinfo-reader -Iinventory -Iio \
 	-Iio-dump -Iknowledge -Imarket -Imelee -Imind -Imonster -Imonster-attack \
-	-Imonster-race -Imspell -Imutation -Iobject -Iobject-enchant -Ipet -Iplayer \
-	-Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell -Ispell-kind \
-	-Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
+	-Imonster-lore -Imonster-race -Imspell -Imutation -Iobject -Iobject-enchant \
+	-Ipet -Iplayer -Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell \
+	-Ispell-kind -Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview \
+	-Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID
