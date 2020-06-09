@@ -310,6 +310,7 @@ hengband_SOURCES = \
 	monster-attack/monster-attack-util.c monster-attack/monster-attack-util.h \
 	monster-attack/monster-eating.c monster-attack/monster-eating.h \
 	\
+	monster-lore/lore-store.c monster-lore/lore-store.h \
 	monster-lore/monster-lore.c monster-lore/monster-lore.h \
 	\
 	monster-race/monster-race.c monster-race/monster-race.h \

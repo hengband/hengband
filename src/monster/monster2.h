@@ -14,8 +14,6 @@ MONSTER_IDX m_pop(player_type *player_ptr);
 
 #define GMN_ARENA 0x00000001 //!< 賭け闘技場向け生成
 MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option);
-int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx);
-void lore_treasure(player_type *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
 void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full);
 void update_monsters(player_type *player_ptr, bool full);
 bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
@@ -32,8 +30,8 @@ void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);
 
 #define is_hostile(A) (bool)((is_friendly(A) || is_pet(A)) ? FALSE : TRUE)
 
-/* Hack -- Determine monster race appearance index is same as race index */
-#define is_original_ap(A) (bool)(((A)->ap_r_idx == (A)->r_idx) ? TRUE : FALSE)
+/*  Determine monster race appearance index is same as race index */
+bool is_original_ap(monster_type *m_ptr);
 
 int get_monster_crowd_number(player_type *player_ptr, MONSTER_IDX m_idx);
 void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam);

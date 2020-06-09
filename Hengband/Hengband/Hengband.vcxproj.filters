@@ -1253,6 +1253,9 @@
     <ClCompile Include="..\..\src\monster-lore\monster-lore.c">
       <Filter>monster-lore</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-lore\lore-store.c">
+      <Filter>monster-lore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2756,6 +2759,9 @@
       <Filter>monster-race</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-lore\monster-lore.h">
+      <Filter>monster-lore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-lore\lore-store.h">
       <Filter>monster-lore</Filter>
     </ClInclude>
   </ItemGroup>

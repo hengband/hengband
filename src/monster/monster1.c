@@ -28,6 +28,7 @@
 #include "melee/melee-postprocess.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
+#include "monster-lore/lore-store.h"
 #include "monster-lore/monster-lore.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags-ability1.h"
