@@ -4,6 +4,8 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "market/arena.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags7.h"
 #include "object-enchant/artifact.h"
 #include "object/object-generator.h"
 #include "object/object-kind.h"

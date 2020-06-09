@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "floor/floor.h"
+#include "monster-race/race-flags2.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/monster-spell.h"

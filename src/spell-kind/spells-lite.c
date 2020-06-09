@@ -3,6 +3,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
+#include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"
 #include "player/player-effects.h"

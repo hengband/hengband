@@ -6,6 +6,9 @@
 
 #include "monster/monster-runaway.h"
 #include "dungeon/quest.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"

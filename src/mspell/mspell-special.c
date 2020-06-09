@@ -8,6 +8,7 @@
 #include "melee/melee-postprocess.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-util.h"

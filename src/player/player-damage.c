@@ -15,6 +15,8 @@
 #include "main/sound-definitions-table.h"
 #include "market/arena-info-table.h"
 #include "mind/mind-mirror-master.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster1.h"
 #include "monster/monster2.h"

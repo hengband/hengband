@@ -1,5 +1,6 @@
 ﻿#include "combat/attack-accuracy.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-flags-resistance.h"
 #include "specific-object/death-scythe.h"
 #include "sv-definition/sv-weapon-types.h"
 

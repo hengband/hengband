@@ -12,6 +12,7 @@
 #include "knowledge/knowledge-quests.h"
 #include "main/init.h"
 #include "market/arena-info-table.h"
+#include "monster-race/race-flags1.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"

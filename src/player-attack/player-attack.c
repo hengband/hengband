@@ -15,6 +15,7 @@
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
 #include "mind/monk-attack.h"
+#include "monster-race/race-flags3.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "monster/monster1.h"

@@ -19,6 +19,7 @@
 #include "io/files-util.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-flags1.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
 #include "monster/monster1.h"

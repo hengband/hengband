@@ -12,6 +12,8 @@
 #include "floor/floor.h"
 #include "main/sound-definitions-table.h"
 #include "mind/snipe-types.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags3.h"
 #include "monster-race/monster-race.h"
 #include "player/player-status.h"
 #include "term/term-color-types.h"

@@ -25,6 +25,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
+#include "monster-race/race-flags1.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"

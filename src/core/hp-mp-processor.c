@@ -4,6 +4,8 @@
 #include "floor/floor.h"
 #include "floor/pattern-walk.h"
 #include "grid/feature.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-flavor.h"

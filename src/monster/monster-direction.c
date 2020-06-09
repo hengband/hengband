@@ -6,6 +6,8 @@
 
 #include "monster/monster-direction.h"
 #include "floor/floor.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
 #include "monster/monster-sweep-grid.h"
 #include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"

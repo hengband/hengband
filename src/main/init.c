@@ -54,6 +54,7 @@
 #include "io/read-pref-file.h"
 #include "io/uid-checker.h"
 #include "market/articles-on-sale.h"
+#include "monster-race/race-flags7.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-kind.h"

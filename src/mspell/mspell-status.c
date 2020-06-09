@@ -8,6 +8,8 @@
 #include "mspell/mspell-status.h"
 #include "art-definition/art-bow-types.h"
 #include "mind/drs-types.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags3.h"
 #include "monster/monster-status.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster2.h"

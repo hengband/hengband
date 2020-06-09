@@ -1,5 +1,8 @@
 ﻿#include "effect/effect-monster-oldies.h"
 #include "floor/floor.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster1.h"

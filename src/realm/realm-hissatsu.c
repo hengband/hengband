@@ -12,6 +12,7 @@
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "mind/mind-ninja.h"
+#include "monster-race/race-flags7.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster1.h"
 #include "monster/monster2.h"

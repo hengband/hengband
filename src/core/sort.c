@@ -2,6 +2,7 @@
 #include "floor/floor.h"
 #include "dungeon/quest.h"
 #include "object-enchant/artifact.h"
+#include "monster-race/race-flags1.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"
 

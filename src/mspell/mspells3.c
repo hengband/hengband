@@ -18,6 +18,11 @@
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-flags-ability1.h"
+#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags4.h"
 #include "monster/monster-status.h"
 #include "monster/monster1.h"
 #include "monster/monster2.h"
@@ -1842,7 +1847,7 @@ void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode)
 			break;
 
 		case MONSPELL_TYPE_BREATH:
-			*f4 = RF4_BREATH_MASK;
+			*f4 = (BIT_FLAGS)RF4_BREATH_MASK;
 			*f5 = RF5_BREATH_MASK;
 			*f6 = RF6_BREATH_MASK;
 			break;
@@ -1850,7 +1855,7 @@ void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode)
 		case MONSPELL_TYPE_SUMMON:
 			*f4 = RF4_SUMMON_MASK;
 			*f5 = RF5_SUMMON_MASK;
-			*f6 = RF6_SUMMON_MASK;
+			*f6 = (BIT_FLAGS)RF6_SUMMON_MASK;
 			break;
 
 		case MONSPELL_TYPE_OTHER:

@@ -6,6 +6,9 @@
 
 #include "monster/monster-object.h"
 #include "floor/floor-object.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"

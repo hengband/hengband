@@ -531,6 +531,16 @@
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\mind\drs-types.h" />
     <ClInclude Include="..\..\src\mind\snipe-types.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags8.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags-ability1.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags-ability2.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags1.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags2.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags3.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags4.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags7.h" />
+    <ClInclude Include="..\..\src\monster-race\race-flags9.h" />
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h" />
     <ClInclude Include="..\..\src\monster\monster-description-types.h" />
     <ClInclude Include="..\..\src\monster\monster-flag-types.h" />

@@ -31,6 +31,8 @@
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "mind/snipe-types.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags7.h"
 #include "monster/monster1.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"

@@ -4,6 +4,7 @@
 #include "autopick/autopick-keys-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "inventory/player-inventory.h"
+#include "monster-race/race-flags1.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"

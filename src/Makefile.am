@@ -312,6 +312,12 @@ hengband_SOURCES = \
 	\
 	monster-race/monster-race.c monster-race/monster-race.h \
 	monster-race/monster-race-hook.c monster-race/monster-race-hook.h \
+	monster-race/race-flags-resistance.h \
+	monster-race/race-flags1.h monster-race/race-flags2.h \
+	monster-race/race-flags3.h monster-race/race-flags4.h \
+	monster-race/race-flags-ability1.h monster-race/race-flags-ability2.h \
+	monster-race/race-flags7.h monster-race/race-flags8.h \
+	monster-race/race-flags9.h \
 	monster-race/race-indice-types.h \
 	\
 	mspell/monster-spell.h \

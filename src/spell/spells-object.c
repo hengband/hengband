@@ -14,6 +14,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
+#include "monster-race/race-flags1.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"

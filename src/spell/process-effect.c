@@ -8,6 +8,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster1.h"

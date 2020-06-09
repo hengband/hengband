@@ -6,6 +6,12 @@
 
 #include "monster/monster-sweep-grid.h"
 #include "floor/floor.h"
+#include "monster-race/race-flags-ability1.h"
+#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/race-flags4.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-safety-hiding.h"
 #include "monster/monster-status.h"

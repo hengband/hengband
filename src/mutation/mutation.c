@@ -23,6 +23,8 @@
 #include "io/write-diary.h"
 #include "mind/mind-warrior.h"
 #include "mind/racial-vampire.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags3.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-description-types.h"
 #include "monster/place-monster-types.h"

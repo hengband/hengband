@@ -9,6 +9,7 @@
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "market/arena.h"
+#include "monster-race/race-flags1.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"

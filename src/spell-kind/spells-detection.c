@@ -4,6 +4,8 @@
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"

@@ -29,6 +29,8 @@
 #include "io/input-key-processor.h"
 #include "io/targeting.h"
 #include "market/arena-info-table.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster1.h"

@@ -4,6 +4,8 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags7.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"

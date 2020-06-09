@@ -9,6 +9,7 @@
 #include "io-dump/dump-util.h"
 #include "core/sort.h"
 #include "core/show-file.h"
+#include "monster-race/race-flags1.h"
 
 /*
  * Display known uniques
