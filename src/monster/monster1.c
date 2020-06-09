@@ -131,7 +131,7 @@ void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	msg_erase();
 	Term_erase(0, 1, 255);
 	hook_c_roff = c_roff;
-	display_monster_lore(player_ptr, r_idx, mode);
+	process_monster_lore(player_ptr, r_idx, mode);
 	roff_top(r_idx);
 }
 
@@ -152,7 +152,7 @@ void display_roff(player_type *player_ptr)
 	Term_gotoxy(0, 1);
 	hook_c_roff = c_roff;
 	MONRACE_IDX r_idx = player_ptr->monster_race_idx;
-	display_monster_lore(player_ptr, r_idx, 0);
+	process_monster_lore(player_ptr, r_idx, 0);
 	roff_top(r_idx);
 }
 
@@ -167,7 +167,7 @@ void display_roff(player_type *player_ptr)
 void output_monster_spoiler(player_type *player_ptr, MONRACE_IDX r_idx, void(*roff_func)(TERM_COLOR attr, concptr str))
 {
 	hook_c_roff = roff_func;
-	display_monster_lore(player_ptr, r_idx, 0x03);
+	process_monster_lore(player_ptr, r_idx, 0x03);
 }
 
 

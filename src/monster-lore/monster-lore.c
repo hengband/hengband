@@ -166,7 +166,7 @@ static void set_damage(player_type *player_ptr, MONRACE_IDX r_idx, monster_spell
 static void hooked_roff(concptr str) { hook_c_roff(TERM_WHITE, str); }
 
 /*!
- * @brief モンスターの思い出情報を表示する
+ * @brief モンスターの思い出情報を表示するメインルーチン
  * Hack -- display monster information using "hooked_roff()"
  * @param r_idx モンスターの種族ID
  * @param mode 表示オプション
@@ -176,7 +176,7 @@ static void hooked_roff(concptr str) { hook_c_roff(TERM_WHITE, str); }
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
  */
-void display_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
+void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 #ifdef JP
     char jverb_buf[64];
