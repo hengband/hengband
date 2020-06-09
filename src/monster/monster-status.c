@@ -24,6 +24,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-indice-types.h"
 #include "core/speed-table.h"
+#include "monster/monster-death.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-processor.h"

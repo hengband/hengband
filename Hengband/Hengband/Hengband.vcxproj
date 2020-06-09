@@ -187,6 +187,7 @@
     <ClCompile Include="..\..\src\info-reader\race-reader.c" />
     <ClCompile Include="..\..\src\info-reader\skill-reader.c" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.c" />
+    <ClCompile Include="..\..\src\monster\monster-death.c" />
     <ClCompile Include="..\..\src\monster-lore\lore-store.c" />
     <ClCompile Include="..\..\src\monster-lore\monster-lore.c" />
     <ClCompile Include="..\..\src\monster\monster-util.c" />
@@ -536,6 +537,7 @@
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\mind\drs-types.h" />
     <ClInclude Include="..\..\src\mind\snipe-types.h" />
+    <ClInclude Include="..\..\src\monster\monster-death.h" />
     <ClInclude Include="..\..\src\monster-lore\lore-store.h" />
     <ClInclude Include="..\..\src\monster-lore\monster-lore.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags8.h" />

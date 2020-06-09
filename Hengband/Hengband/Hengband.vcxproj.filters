@@ -1265,6 +1265,9 @@
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.c">
       <Filter>cmd-io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-death.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2781,6 +2784,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h">
       <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-death.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
