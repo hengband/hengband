@@ -7,6 +7,7 @@
 #include "market/building-actions-table.h"
 #include "market/building-util.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster/monster-util.h"
 #include "monster/monster2.h"
 #include "player/player-effects.h"
 #include "world/world.h"

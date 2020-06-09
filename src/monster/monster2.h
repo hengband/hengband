@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "monster/monster-util.h"
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
 
@@ -12,7 +11,6 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i);
 void compact_monsters(player_type *player_ptr, int size);
 void wipe_monsters_list(player_type *player_ptr);
 MONSTER_IDX m_pop(player_type *player_ptr);
-errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
 
 #define GMN_ARENA 0x00000001 //!< 賭け闘技場向け生成
 MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option);

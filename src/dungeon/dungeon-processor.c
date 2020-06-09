@@ -11,6 +11,7 @@
 #include "market/arena.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
+#include "monster/monster-util.h"
 #include "monster/monster2.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"

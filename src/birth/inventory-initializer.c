@@ -4,6 +4,7 @@
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster/monster-util.h"
 #include "monster/monster2.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"

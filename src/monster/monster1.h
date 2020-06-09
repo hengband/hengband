@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "monster/monster-util.h"
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
 
@@ -10,8 +9,6 @@ void display_roff(player_type *player_ptr);
 void output_monster_spoiler(player_type *player_ptr, MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str));
 concptr extract_note_dies(MONRACE_IDX r_idx);
 void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item);
-monsterrace_hook_type get_monster_hook(player_type *player_ptr);
-monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x);
 void set_friendly(monster_type *m_ptr);
 void set_pet(player_type *player_ptr, monster_type *m_ptr);
 void set_hostile(player_type *player_ptr, monster_type *m_ptr);

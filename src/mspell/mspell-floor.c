@@ -11,6 +11,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
+#include "monster/monster1.h"
 #include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-status.h"

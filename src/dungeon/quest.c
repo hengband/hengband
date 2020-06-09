@@ -12,6 +12,7 @@
 #include "locale/english.h"
 #include "main/music-definitions-table.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster/monster-util.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/artifact.h"
