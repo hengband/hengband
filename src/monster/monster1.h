@@ -3,10 +3,6 @@
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
 
-void roff_top(MONRACE_IDX r_idx);
-void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode);
-void display_roff(player_type *player_ptr);
-void output_monster_spoiler(player_type *player_ptr, MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str));
 concptr extract_note_dies(MONRACE_IDX r_idx);
 void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item);
 void set_friendly(monster_type *m_ptr);

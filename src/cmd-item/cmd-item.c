@@ -33,7 +33,6 @@
 #include "mind/snipe-types.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "monster/monster1.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
@@ -62,6 +61,7 @@
 #include "term/term-color-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
+#include "view/display-monster-lore.h"
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list

@@ -838,6 +838,7 @@
     <ClCompile Include="..\..\src\view\display-birth.c" />
     <ClCompile Include="..\..\src\view\display-characteristic.c" />
     <ClCompile Include="..\..\src\view\display-fruit.c" />
+    <ClCompile Include="..\..\src\view\display-monster-lore.c" />
     <ClCompile Include="..\..\src\view\display-player-middle.c" />
     <ClCompile Include="..\..\src\view\display-player-stat-info.c" />
     <ClCompile Include="..\..\src\view\display-player.c" />
@@ -902,6 +903,7 @@
     <ClInclude Include="..\..\src\term\term-color-types.h" />
     <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
+    <ClInclude Include="..\..\src\view\display-monster-lore.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\..\src\world\world-object.h" />
     <ClInclude Include="..\src\locele\english.h" />

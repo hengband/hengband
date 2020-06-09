@@ -16,7 +16,6 @@
 #include "io/files-util.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "monster/monster1.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
@@ -36,6 +35,7 @@
 #include "system/angband-version.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
+#include "view/display-monster-lore.h"
 
  /*
   * The spoiler file being created

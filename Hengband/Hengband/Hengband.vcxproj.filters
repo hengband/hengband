@@ -1259,6 +1259,9 @@
     <ClCompile Include="..\..\src\mspell\summon-checker.c">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-monster-lore.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2769,6 +2772,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\summon-checker.h">
       <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-monster-lore.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

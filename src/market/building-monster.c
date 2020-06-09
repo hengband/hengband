@@ -3,10 +3,10 @@
 #include "core/stuff-handler.h"
 #include "monster-race/race-flags1.h"
 #include "monster-lore/lore-store.h"
-#include "monster/monster1.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
+#include "view/display-monster-lore.h"
 
 /*!
  * @brief 施設でモンスターの情報を知るメインルーチン / research_mon -KMW-
