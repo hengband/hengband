@@ -189,6 +189,7 @@
     <ClCompile Include="..\..\src\monster-lore\lore-store.c" />
     <ClCompile Include="..\..\src\monster-lore\monster-lore.c" />
     <ClCompile Include="..\..\src\monster\monster-util.c" />
+    <ClCompile Include="..\..\src\mspell\summon-checker.c" />
     <ClCompile Include="..\..\src\object-enchant\activation-info-table.c" />
     <ClCompile Include="..\..\src\object-enchant\dragon-breaths-table.c" />
     <ClCompile Include="..\..\src\object\object-flags.c" />
@@ -554,6 +555,7 @@
     <ClInclude Include="..\..\src\monster\monster2.h" />
     <ClInclude Include="..\..\src\monster\place-monster-types.h" />
     <ClInclude Include="..\..\src\monster\smart-learn-types.h" />
+    <ClInclude Include="..\..\src\mspell\summon-checker.h" />
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h" />
     <ClInclude Include="..\..\src\object-enchant\dragon-breaths-table.h" />
     <ClInclude Include="..\..\src\object-enchant\random-art-bias-types.h" />
