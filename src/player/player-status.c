@@ -28,6 +28,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster2.h"

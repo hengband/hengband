@@ -4,7 +4,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
-#include "monster/monster2.h" // todo 相互参照している.
+#include "monster/monster-info.h"
 
 /*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.

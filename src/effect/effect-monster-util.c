@@ -7,8 +7,8 @@
 #include "effect/effect-monster-util.h"
 #include "floor/floor.h"
 #include "monster/monster-death.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "monster/monster2.h"
 
 /*!
  * @brief affect_monster() に亘ってきた引数をeffect_monster_type構造体に代入する

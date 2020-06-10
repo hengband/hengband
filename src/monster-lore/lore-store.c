@@ -1,7 +1,7 @@
 ﻿#include "monster-lore/lore-store.h"
 #include "floor/floor.h"
 #include "monster-race/race-flags1.h"
-#include "monster/monster2.h" // todo 依存しているのは気持ち悪い。後で消したい.
+#include "monster/monster-info.h"
 #include "system/monster-type-definition.h"
 
 /*!

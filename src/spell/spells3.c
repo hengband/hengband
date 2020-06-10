@@ -40,6 +40,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"

@@ -18,8 +18,8 @@
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h" // 暫定、後で消す.

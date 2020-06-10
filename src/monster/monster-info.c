@@ -1,5 +1,4 @@
 ﻿/*!
- * @file monster1.c
  * @brief モンスター情報の記述 / describe monsters (using monster memory)
  * @date 2013/12/11
  * @author
@@ -14,13 +13,14 @@
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
-#include "monster/monster2.h" // todo 相互参照している、いずれ消す.
 #include "monster/smart-learn-types.h"
 #include "player/avatar.h"
 
@@ -280,4 +280,33 @@ bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int
 bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr)
 {
 	return m_ptr->ml && !player_ptr->image && (m_ptr->ap_r_idx == m_ptr->r_idx);
+}
+
+/*  Determine monster race appearance index is same as race index */
+bool is_original_ap(monster_type *m_ptr) { return m_ptr->ap_r_idx == m_ptr->r_idx; }
+
+bool is_friendly(monster_type *m_ptr) { return (m_ptr->smart & SM_FRIENDLY) != 0; }
+
+bool is_pet(monster_type *m_ptr) { return (m_ptr->smart & SM_PET) != 0; }
+
+bool is_hostile(monster_type *m_ptr) { return !is_friendly(m_ptr) && !is_pet(m_ptr); }
+
+/*!
+ * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
+ * @param m_ptr モンスターの参照ポインタ
+ * @return 本当のモンスター種族参照ポインタ
+ */
+monster_race *real_r_ptr(monster_type *m_ptr) { return &r_info[real_r_idx(m_ptr)]; }
+
+MONRACE_IDX real_r_idx(monster_type *m_ptr)
+{
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    if (m_ptr->mflag2 & MFLAG2_CHAMELEON) {
+        if (r_ptr->flags1 & RF1_UNIQUE)
+            return MON_CHAMELEON_K;
+        else
+            return MON_CHAMELEON;
+    }
+
+    return m_ptr->r_idx;
 }

@@ -5,8 +5,6 @@
 
 void set_target(monster_type *m_ptr, POSITION y, POSITION x);
 void reset_target(monster_type *m_ptr);
-monster_race *real_r_ptr(monster_type *m_ptr);
-MONRACE_IDX real_r_idx(monster_type *m_ptr);
 void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i);
 void compact_monsters(player_type *player_ptr, int size);
 void wipe_monsters_list(player_type *player_ptr);
@@ -21,12 +19,6 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what);
 void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);
 void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);
-bool is_friendly(monster_type *m_ptr);
-bool is_pet(monster_type *m_ptr);
-bool is_hostile(monster_type *m_ptr);
-
-/*  Determine monster race appearance index is same as race index */
-bool is_original_ap(monster_type *m_ptr);
 
 int get_monster_crowd_number(player_type *player_ptr, MONSTER_IDX m_idx);
 void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam);

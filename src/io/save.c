@@ -26,6 +26,7 @@
 #include "io/report.h"
 #include "io/uid-checker.h"
 #include "monster-race/monster-race.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"
 #include "object-enchant/artifact.h"

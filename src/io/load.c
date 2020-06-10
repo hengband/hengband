@@ -68,6 +68,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"

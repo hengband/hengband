@@ -18,3 +18,11 @@ bool monster_can_enter(player_type *player_ptr, POSITION y, POSITION x, monster_
 bool are_enemies(player_type *player_ptr, monster_type *m_ptr1, monster_type *m_ptr2);
 bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr);
+
+bool is_friendly(monster_type *m_ptr);
+bool is_pet(monster_type *m_ptr);
+bool is_hostile(monster_type *m_ptr);
+bool is_original_ap(monster_type *m_ptr);
+
+monster_race *real_r_ptr(monster_type *m_ptr);
+MONRACE_IDX real_r_idx(monster_type *m_ptr);

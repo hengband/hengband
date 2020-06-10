@@ -11,7 +11,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster2.h"
+#include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"

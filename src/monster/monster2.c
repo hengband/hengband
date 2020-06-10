@@ -78,26 +78,6 @@ void set_target(monster_type *m_ptr, POSITION y, POSITION x)
 void reset_target(monster_type *m_ptr) { set_target(m_ptr, 0, 0); }
 
 /*!
- * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
- * @param m_ptr モンスターの参照ポインタ
- * @return 本当のモンスター種族参照ポインタ
- */
-monster_race *real_r_ptr(monster_type *m_ptr) { return &r_info[real_r_idx(m_ptr)]; }
-
-MONRACE_IDX real_r_idx(monster_type *m_ptr)
-{
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (m_ptr->mflag2 & MFLAG2_CHAMELEON) {
-        if (r_ptr->flags1 & RF1_UNIQUE)
-            return MON_CHAMELEON_K;
-        else
-            return MON_CHAMELEON;
-    }
-
-    return m_ptr->r_idx;
-}
-
-/*!
  * @brief モンスター配列からモンスターを消去する / Delete a monster by index.
  * @param i 消去するモンスターのID
  * @return なし
@@ -2416,11 +2396,3 @@ int get_monster_crowd_number(player_type *player_ptr, MONSTER_IDX m_idx)
 
     return count;
 }
-
-bool is_original_ap(monster_type *m_ptr) { return m_ptr->ap_r_idx == m_ptr->r_idx; }
-
-bool is_friendly(monster_type *m_ptr) { return (m_ptr->smart & SM_FRIENDLY) != 0; }
-
-bool is_pet(monster_type *m_ptr) { return (m_ptr->smart & SM_PET) != 0; }
-
-bool is_hostile(monster_type *m_ptr) { return !is_friendly(m_ptr) && !is_pet(m_ptr); }

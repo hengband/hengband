@@ -4,6 +4,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"
 #include "monster/place-monster-types.h"
