@@ -2884,3 +2884,9 @@ bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx)
 }
 
 bool is_original_ap(monster_type* m_ptr) { return m_ptr->ap_r_idx == m_ptr->r_idx; }
+
+bool is_friendly(monster_type *m_ptr) { return (m_ptr->smart & SM_FRIENDLY) != 0; }
+
+bool is_pet(monster_type *m_ptr) { return (m_ptr->smart & SM_PET) != 0; }
+
+bool is_hostile(monster_type *m_ptr) {return !is_friendly(m_ptr) && !is_pet(m_ptr); }

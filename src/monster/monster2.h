@@ -23,12 +23,9 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what);
 void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);
 void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);
-
-#define is_friendly(A) (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
-
-#define is_pet(A) (bool)(((A)->smart & SM_PET) ? TRUE : FALSE)
-
-#define is_hostile(A) (bool)((is_friendly(A) || is_pet(A)) ? FALSE : TRUE)
+bool is_friendly(monster_type *m_ptr);
+bool is_pet(monster_type *m_ptr);
+bool is_hostile(monster_type *m_ptr);
 
 /*  Determine monster race appearance index is same as race index */
 bool is_original_ap(monster_type *m_ptr);

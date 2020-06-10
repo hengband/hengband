@@ -39,7 +39,6 @@
 #include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "monster/quantum-effect.h"
-#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"

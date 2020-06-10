@@ -11,7 +11,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
 #include "monster/monster2.h"
-#include "monster/smart-learn-types.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "player/avatar.h"

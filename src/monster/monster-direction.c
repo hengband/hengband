@@ -13,7 +13,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
 #include "monster/monster2.h"
-#include "monster/smart-learn-types.h"
 #include "pet/pet-util.h"
 #include "spell/range-calc.h"
 

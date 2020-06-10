@@ -11,7 +11,6 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster2.h"
-#include "monster/smart-learn-types.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-move.h"
 

@@ -27,7 +27,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
 #include "monster/monster2.h"
-#include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"
 #include "pet/pet-util.h"

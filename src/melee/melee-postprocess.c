@@ -23,7 +23,6 @@
 #include "monster/monster-death.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"
-#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-class.h"

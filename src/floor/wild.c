@@ -26,7 +26,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "monster/place-monster-types.h"
-#include "monster/smart-learn-types.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
