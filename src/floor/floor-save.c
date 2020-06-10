@@ -37,6 +37,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster-update.h"
 #include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"

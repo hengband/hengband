@@ -8,6 +8,7 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster-update.h"
 #include "monster/monster2.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-generator.h"

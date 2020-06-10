@@ -14,8 +14,6 @@ MONSTER_IDX m_pop(player_type *player_ptr);
 
 #define GMN_ARENA 0x00000001 //!< 賭け闘技場向け生成
 MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option);
-void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full);
-void update_monsters(player_type *player_ptr, bool full);
 bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
 bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode);
 bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);

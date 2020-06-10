@@ -5,7 +5,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
-#include "monster/monster2.h"
+#include "monster/monster-update.h"
 #include "player/player-effects.h"
 #include "room/rooms.h"
 #include "spell/process-effect.h" // 暫定、後で消す.

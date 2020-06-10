@@ -19,6 +19,7 @@
 #include "monster/monster-death.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
+#include "monster/monster-update.h"
 #include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/artifact.h"

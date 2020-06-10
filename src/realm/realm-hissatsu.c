@@ -15,6 +15,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-info.h"
+#include "monster/monster-update.h"
 #include "monster/monster2.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"

@@ -7,6 +7,7 @@
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "monster/monster-update.h"
 #include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "object-enchant/artifact.h"

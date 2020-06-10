@@ -9,6 +9,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster-update.h"
 #include "monster/monster2.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
