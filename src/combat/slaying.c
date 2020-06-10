@@ -5,7 +5,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "realm/realm-hex-numbers.h"

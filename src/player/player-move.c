@@ -163,7 +163,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster/monster-status.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"

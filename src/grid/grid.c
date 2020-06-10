@@ -23,7 +23,7 @@
 #include "grid/feature.h"
 #include "grid/trap.h"
 #include "monster/monster-status.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

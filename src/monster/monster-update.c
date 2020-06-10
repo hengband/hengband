@@ -7,7 +7,7 @@
 #include "monster/monster-update.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "player/player-move.h"
 

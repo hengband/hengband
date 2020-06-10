@@ -6,7 +6,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "spell/spells3.h"
 
 gf_switch_result effect_monster_void(effect_monster_type *em_ptr)

@@ -6,7 +6,7 @@
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster/monster-status.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "player/player-effects.h"

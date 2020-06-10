@@ -10,7 +10,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "monster/smart-learn-types.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-skill.h"

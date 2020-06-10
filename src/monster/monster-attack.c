@@ -11,7 +11,7 @@
 #include "monster-attack/monster-attack-player.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "melee/monster-attack-monster.h"
 
  /*!

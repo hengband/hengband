@@ -10,7 +10,7 @@
 #include "monster-race/race-flags4.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-util.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "room/pit-nest-kinds-table.h"

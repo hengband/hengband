@@ -497,9 +497,6 @@
     <ClCompile Include="..\..\src\player\player-status.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster1.c">
-      <Filter>monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster2.c">
       <Filter>monster</Filter>
     </ClCompile>
@@ -1270,6 +1267,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\view\display-monster-status.c">
       <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-info.c">
+      <Filter>monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2722,9 +2722,6 @@
     <ClInclude Include="..\..\src\monster\monster2.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster1.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\system\monster-type-definition.h">
       <Filter>system</Filter>
     </ClInclude>
@@ -2793,6 +2790,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-monster-status.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-info.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

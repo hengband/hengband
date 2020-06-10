@@ -11,7 +11,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "pet/pet-fall-off.h"
 #include "spell/spells-type.h"

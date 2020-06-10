@@ -22,7 +22,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-death.h"
 #include "monster/monster-status.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-genocide.h"

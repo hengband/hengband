@@ -12,7 +12,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-status.h"
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "object-enchant/tr-types.h"
 #include "player/avatar.h"

@@ -10,7 +10,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "monster/monster1.h"
+#include "monster/monster-info.h"
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "monster-race/race-flags-resistance.h"
