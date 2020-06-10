@@ -39,6 +39,7 @@
 #include "mind/snipe-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-death.h"
+#include "monster/monster-generator.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
 #include "monster/monster2.h"

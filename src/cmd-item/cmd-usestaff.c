@@ -5,7 +5,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
-#include "monster/monster2.h"
+#include "monster/monster-generator.h"
 #include "monster/place-monster-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"

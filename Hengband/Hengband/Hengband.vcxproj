@@ -191,6 +191,7 @@
     <ClCompile Include="..\..\src\monster-lore\lore-store.c" />
     <ClCompile Include="..\..\src\monster-lore\monster-lore.c" />
     <ClCompile Include="..\..\src\monster\monster-describer.c" />
+    <ClCompile Include="..\..\src\monster\monster-generator.c" />
     <ClCompile Include="..\..\src\monster\monster-util.c" />
     <ClCompile Include="..\..\src\mspell\summon-checker.c" />
     <ClCompile Include="..\..\src\object-enchant\activation-info-table.c" />
@@ -555,6 +556,7 @@
     <ClInclude Include="..\..\src\monster\monster-describer.h" />
     <ClInclude Include="..\..\src\monster\monster-description-types.h" />
     <ClInclude Include="..\..\src\monster\monster-flag-types.h" />
+    <ClInclude Include="..\..\src\monster\monster-generator.h" />
     <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h" />
     <ClInclude Include="..\..\src\monster\monster-util.h" />
     <ClInclude Include="..\..\src\monster\monster-info.h" />

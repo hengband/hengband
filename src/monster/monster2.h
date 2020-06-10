@@ -12,9 +12,6 @@ MONSTER_IDX m_pop(player_type *player_ptr);
 
 #define GMN_ARENA 0x00000001 //!< 賭け闘技場向け生成
 MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option);
-bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
-bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode);
-bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);
 void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what);
 void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);

@@ -1274,6 +1274,9 @@
     <ClCompile Include="..\..\src\monster\monster-describer.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-generator.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2798,6 +2801,9 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-describer.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-generator.h">
       <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>

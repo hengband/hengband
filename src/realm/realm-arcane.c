@@ -1,7 +1,7 @@
 ﻿#include "realm/realm-arcane.h"
 #include "cmd-action/cmd-spell.h"
 #include "io/targeting.h"
-#include "monster/monster2.h"
+#include "monster/monster-generator.h"
 #include "monster/place-monster-types.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"

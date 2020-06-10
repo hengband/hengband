@@ -1,7 +1,7 @@
 ﻿#include "mutation/mutation-processor.h"
 #include "io/targeting.h"
+#include "monster/monster-generator.h"
 #include "monster/monster-status.h"
-#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "object/lite-processor.h"

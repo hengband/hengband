@@ -30,6 +30,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-direction.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-generator.h"
 #include "monster/monster-info.h"
 #include "monster/monster-move.h"
 #include "monster/monster-processor-util.h"
