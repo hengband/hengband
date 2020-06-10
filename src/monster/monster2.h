@@ -35,5 +35,4 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
 bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x);
 bool alloc_guardian(player_type *player_ptr, bool def_val);
 bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode);
-void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char *m_name);

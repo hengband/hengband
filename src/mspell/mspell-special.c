@@ -12,6 +12,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-death.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-util.h"
 #include "monster/monster2.h"
 #include "mspell/monster-spell.h"

@@ -37,6 +37,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "mind/snipe-types.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-death.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"

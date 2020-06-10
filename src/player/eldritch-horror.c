@@ -12,6 +12,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/horror-descriptions.h"
+#include "monster/monster-describer.h"
 #include "monster/smart-learn-types.h"
 #include "monster/monster-util.h"
 #include "monster/monster2.h"

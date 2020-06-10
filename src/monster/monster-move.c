@@ -14,6 +14,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster/monster-attack.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-object.h"
 #include "monster/monster-status.h"

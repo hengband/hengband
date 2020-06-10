@@ -38,6 +38,7 @@
 #include "core/speed-table.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"

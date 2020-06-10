@@ -18,6 +18,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster2.h" // todo 相互参照している、いずれ消す.
 #include "monster/smart-learn-types.h"

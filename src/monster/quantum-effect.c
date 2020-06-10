@@ -3,6 +3,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-death.h"
+#include "monster/monster-describer.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"

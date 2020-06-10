@@ -32,6 +32,7 @@
 #include "market/arena.h"
 #include "monster/monster-status.h"
 #include "monster/monster-description-types.h"
+#include "monster/monster-describer.h"
 #include "monster/place-monster-types.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"

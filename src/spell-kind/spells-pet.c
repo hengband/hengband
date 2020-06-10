@@ -3,6 +3,7 @@
 #include "floor/floor.h"
 #include "io/write-diary.h"
 #include "monster-race/race-flags1.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster2.h"
 #include "monster/smart-learn-types.h"

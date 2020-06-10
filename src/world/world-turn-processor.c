@@ -11,6 +11,7 @@
 #include "io/write-diary.h"
 #include "market/arena.h"
 #include "market/bounty.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster2.h"
 #include "mutation/mutation-processor.h"

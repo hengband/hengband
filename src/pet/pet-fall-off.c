@@ -8,7 +8,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
-#include "monster/monster2.h"
+#include "monster/monster-describer.h"
 #include "pet/pet-util.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
