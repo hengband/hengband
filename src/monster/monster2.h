@@ -17,9 +17,4 @@ void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);
 
 int get_monster_crowd_number(player_type *player_ptr, MONSTER_IDX m_idx);
 void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam);
-bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode);
-bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
-bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x);
-bool alloc_guardian(player_type *player_ptr, bool def_val);
-bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode);
 void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char *m_name);

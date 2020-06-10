@@ -24,7 +24,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
-#include "monster/monster2.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/dragon-breaths-table.h"

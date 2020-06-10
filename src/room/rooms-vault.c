@@ -13,7 +13,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
-#include "monster/monster2.h"
+#include "monster/monster-generator.h"
 #include "monster/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
 #include "room/rooms.h"
