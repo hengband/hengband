@@ -11,10 +11,9 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
-#include "monster/monster-info.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "monster/monster2.h"
 #include "player/eldritch-horror.h"
 #include "player/player-move.h"
 

@@ -12,7 +12,6 @@
 #include "monster/smart-learn-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
-#include "monster/monster2.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-skill.h"
 

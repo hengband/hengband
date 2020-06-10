@@ -18,7 +18,6 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
-#include "monster/monster2.h"
 #include "object/item-use-flags.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"

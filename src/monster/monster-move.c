@@ -20,7 +20,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-info.h"
-#include "monster/monster2.h"
 #include "pet/pet-util.h"
 #include "player/player-move.h"
 #include "spell/process-effect.h"
