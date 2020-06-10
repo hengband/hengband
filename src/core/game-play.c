@@ -40,6 +40,7 @@
 #include "market/bounty.h"
 #include "monster-race/race-indice-types.h"
 #include "core/speed-table.h"
+#include "monster/monster-remover.h"
 #include "monster/monster-util.h"
 #include "monster/monster2.h"
 #include "monster/place-monster-types.h"

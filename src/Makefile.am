@@ -293,6 +293,7 @@ hengband_SOURCES = \
 	monster/monster-object.c monster/monster-object.h \
 	monster/monster-processor.c monster/monster-processor.h \
 	monster/monster-processor-util.c monster/monster-processor-util.h \
+	monster/monster-remover.c monster/monster-remover.h \
 	monster/monster-runaway.c monster/monster-runaway.h \
 	monster/monster-safety-hiding.c monster/monster-safety-hiding.h \
 	monster/monster-timed-effect-types.h \

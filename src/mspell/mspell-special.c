@@ -15,6 +15,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-generator.h"
 #include "monster/monster-info.h"
+#include "monster/monster-remover.h"
 #include "monster/monster-util.h"
 #include "monster/monster2.h"
 #include "mspell/monster-spell.h"

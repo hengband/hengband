@@ -6,7 +6,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
-#include "monster/monster2.h"
+#include "monster/monster-remover.h"
 #include "monster/smart-learn-types.h"
 #include "spell/process-effect.h"
 #include "spell/spells-type.h"

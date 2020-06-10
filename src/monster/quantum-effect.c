@@ -5,7 +5,7 @@
 #include "monster/monster-death.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
-#include "monster/monster2.h"
+#include "monster/monster-remover.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"

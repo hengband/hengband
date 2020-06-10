@@ -34,6 +34,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-move.h"
 #include "monster/monster-processor-util.h"
+#include "monster/monster-remover.h"
 #include "monster/monster-runaway.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"

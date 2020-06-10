@@ -21,6 +21,7 @@
 #include "io/files-util.h"
 #include "io/tokenizer.h"
 #include "main/init.h"
+#include "monster/monster-remover.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
 #include "monster/monster-info.h"

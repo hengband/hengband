@@ -12,7 +12,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
-#include "monster/monster2.h"
+#include "monster/monster-remover.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-move.h"
 

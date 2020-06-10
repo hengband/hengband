@@ -1,0 +1,136 @@
+﻿#include "monster/monster-remover.h"
+#include "floor/floor-object.h"
+#include "floor/floor.h"
+#include "io/targeting.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags7.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-info.h"
+#include "monster/monster-status.h"
+#include "system/monster-type-definition.h"
+#include "view/display-main-window.h"
+
+/*!
+ * @brief モンスター配列からモンスターを消去する / Delete a monster by index.
+ * @param i 消去するモンスターのID
+ * @return なし
+ * @details
+ * モンスターを削除するとそのモンスターが拾っていたアイテムも同時に削除される。 /
+ * When a monster is deleted, all of its objects are deleted.
+ */
+void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[i];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+    POSITION y = m_ptr->fy;
+    POSITION x = m_ptr->fx;
+
+    real_r_ptr(m_ptr)->cur_num--;
+    if (r_ptr->flags2 & (RF2_MULTIPLY))
+        floor_ptr->num_repro--;
+
+    if (monster_csleep_remaining(m_ptr))
+        (void)set_monster_csleep(player_ptr, i, 0);
+    if (monster_fast_remaining(m_ptr))
+        (void)set_monster_fast(player_ptr, i, 0);
+    if (monster_slow_remaining(m_ptr))
+        (void)set_monster_slow(player_ptr, i, 0);
+    if (monster_stunned_remaining(m_ptr))
+        (void)set_monster_stunned(player_ptr, i, 0);
+    if (monster_confused_remaining(m_ptr))
+        (void)set_monster_confused(player_ptr, i, 0);
+    if (monster_fear_remaining(m_ptr))
+        (void)set_monster_monfear(player_ptr, i, 0);
+    if (monster_invulner_remaining(m_ptr))
+        (void)set_monster_invulner(player_ptr, i, 0, FALSE);
+
+    if (i == target_who)
+        target_who = 0;
+
+    if (i == player_ptr->health_who)
+        health_track(player_ptr, 0);
+
+    if (player_ptr->pet_t_m_idx == i)
+        player_ptr->pet_t_m_idx = 0;
+    if (player_ptr->riding_t_m_idx == i)
+        player_ptr->riding_t_m_idx = 0;
+    if (player_ptr->riding == i)
+        player_ptr->riding = 0;
+
+    floor_ptr->grid_array[y][x].m_idx = 0;
+    OBJECT_IDX next_o_idx = 0;
+    for (OBJECT_IDX this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {
+        object_type *o_ptr;
+        o_ptr = &floor_ptr->o_list[this_o_idx];
+        next_o_idx = o_ptr->next_o_idx;
+        delete_object_idx(player_ptr, this_o_idx);
+    }
+
+    (void)WIPE(m_ptr, monster_type);
+    floor_ptr->m_cnt--;
+    lite_spot(player_ptr, y, x);
+    if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) {
+        player_ptr->update |= (PU_MON_LITE);
+    }
+}
+
+/*!
+ * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
+ * @brief プレイヤーのフロア離脱に伴う全モンスター配列の消去 / Delete/Remove all the monsters when the player leaves the level
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ * @details
+ * This is an efficient method of simulating multiple calls to the
+ * "delete_monster()" function, with no visual effects.
+ */
+void wipe_monsters_list(player_type *player_ptr)
+{
+    if (!r_info[MON_BANORLUPART].max_num) {
+        if (r_info[MON_BANOR].max_num) {
+            r_info[MON_BANOR].max_num = 0;
+            r_info[MON_BANOR].r_pkills++;
+            r_info[MON_BANOR].r_akills++;
+            if (r_info[MON_BANOR].r_tkills < MAX_SHORT)
+                r_info[MON_BANOR].r_tkills++;
+        }
+
+        if (r_info[MON_LUPART].max_num) {
+            r_info[MON_LUPART].max_num = 0;
+            r_info[MON_LUPART].r_pkills++;
+            r_info[MON_LUPART].r_akills++;
+            if (r_info[MON_LUPART].r_tkills < MAX_SHORT)
+                r_info[MON_LUPART].r_tkills++;
+        }
+    }
+
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    for (int i = floor_ptr->m_max - 1; i >= 1; i--) {
+        monster_type *m_ptr = &floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr))
+            continue;
+
+        floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
+        (void)WIPE(m_ptr, monster_type);
+    }
+
+    /*
+     * Wiping racial counters of all monsters and incrementing of racial
+     * counters of monsters in party_mon[] are required to prevent multiple
+     * generation of unique monster who is the minion of player.
+     */
+    for (int i = 1; i < max_r_idx; i++)
+        r_info[i].cur_num = 0;
+
+    floor_ptr->m_max = 1;
+    floor_ptr->m_cnt = 0;
+    for (int i = 0; i < MAX_MTIMED; i++)
+        floor_ptr->mproc_max[i] = 0;
+
+    floor_ptr->num_repro = 0;
+    target_who = 0;
+    player_ptr->pet_t_m_idx = 0;
+    player_ptr->riding_t_m_idx = 0;
+    health_track(player_ptr, 0);
+}

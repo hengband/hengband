@@ -5,8 +5,8 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
+#include "monster/monster-generator.h"
 #include "monster/monster-info.h"
-#include "monster/monster2.h"
 #include "player/avatar.h"
 
 // Powerful monsters can resist.
