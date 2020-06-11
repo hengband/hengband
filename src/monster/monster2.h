@@ -5,7 +5,6 @@
 
 void set_target(monster_type *m_ptr, POSITION y, POSITION x);
 void reset_target(monster_type *m_ptr);
-void compact_monsters(player_type *player_ptr, int size);
 MONSTER_IDX m_pop(player_type *player_ptr);
 
 #define GMN_ARENA 0x00000001 //!< 賭け闘技場向け生成

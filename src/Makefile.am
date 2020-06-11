@@ -281,6 +281,7 @@ hengband_SOURCES = \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
 	monster/monster2.c monster/monster2.h \
 	monster/monster-attack.c monster/monster-attack.h \
+	monster/monster-compaction.c monster/monster-compaction.h \
 	monster/monster-death.c monster/monster-death.h \
 	monster/monster-describer.c monster/monster-describer.h \
 	monster/monster-description-types.h \
