@@ -166,6 +166,30 @@ static void set_damage(player_type *player_ptr, MONRACE_IDX r_idx, monster_spell
  */
 static void hooked_roff(concptr str) { hook_c_roff(TERM_WHITE, str); }
 
+static void set_drop_flags(lore_type *lore_ptr)
+{
+    if (!lore_ptr->know_everything)
+        return;
+
+    lore_ptr->drop_gold = lore_ptr->drop_item = (((lore_ptr->r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0)
+        + ((lore_ptr->r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0)
+        + ((lore_ptr->r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
+
+    if (lore_ptr->r_ptr->flags1 & RF1_ONLY_GOLD)
+        lore_ptr->drop_item = 0;
+
+    if (lore_ptr->r_ptr->flags1 & RF1_ONLY_ITEM)
+        lore_ptr->drop_gold = 0;
+
+    lore_ptr->flags1 = lore_ptr->r_ptr->flags1;
+    lore_ptr->flags2 = lore_ptr->r_ptr->flags2;
+    lore_ptr->flags3 = lore_ptr->r_ptr->flags3;
+    lore_ptr->flags4 = lore_ptr->r_ptr->flags4;
+    lore_ptr->a_ability_flags1 = lore_ptr->r_ptr->a_ability_flags1;
+    lore_ptr->a_ability_flags2 = lore_ptr->r_ptr->a_ability_flags2;
+    lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
+}
+
 /*!
  * @brief モンスターの思い出情報を表示するメインルーチン
  * Hack -- display monster information using "hooked_roff()"
@@ -186,29 +210,10 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             lore_ptr->reinforce = TRUE;
     }
 
-    if (cheat_know || (mode & 0x01)) {
+    if (cheat_know || (mode & 0x01))
         lore_ptr->know_everything = TRUE;
-    }
 
-    if (lore_ptr->know_everything) {
-        lore_ptr->drop_gold = lore_ptr->drop_item = (((lore_ptr->r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0)
-            + ((lore_ptr->r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0)
-            + ((lore_ptr->r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
-
-        if (lore_ptr->r_ptr->flags1 & RF1_ONLY_GOLD)
-            lore_ptr->drop_item = 0;
-        if (lore_ptr->r_ptr->flags1 & RF1_ONLY_ITEM)
-            lore_ptr->drop_gold = 0;
-
-        lore_ptr->flags1 = lore_ptr->r_ptr->flags1;
-        lore_ptr->flags2 = lore_ptr->r_ptr->flags2;
-        lore_ptr->flags3 = lore_ptr->r_ptr->flags3;
-        lore_ptr->flags4 = lore_ptr->r_ptr->flags4;
-        lore_ptr->a_ability_flags1 = lore_ptr->r_ptr->a_ability_flags1;
-        lore_ptr->a_ability_flags2 = lore_ptr->r_ptr->a_ability_flags2;
-        lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
-    }
-
+    set_drop_flags(lore_ptr);
     int msex = 0;
     if (lore_ptr->r_ptr->flags1 & RF1_FEMALE)
         msex = 2;
