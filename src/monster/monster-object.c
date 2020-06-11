@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief モンスターが移動した結果、床のアイテムに重なった時の処理
+ * @brief モンスターが移動した結果、床のアイテムに重なった時の処理と、モンスターがアイテムを落とす処理
  * @date 2020/03/07
  * @author Hourier
  */
@@ -16,6 +16,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
 
@@ -155,4 +156,29 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 			(((~(r_ptr->flagsr) & flgr) != 0) && !(r_ptr->flagsr & RFR_RES_ALL));
 		monster_pickup_object(target_ptr, turn_flags_ptr, m_idx, o_ptr, is_special_object, ny, nx, m_name, o_name, this_o_idx);
 	}
+}
+
+/*!
+ * @brief モンスターが盗みや拾いで確保していたアイテムを全てドロップさせる / Drop all items carried by a monster
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param m_ptr モンスター参照ポインタ
+ * @return なし
+ */
+void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr)
+{
+    OBJECT_IDX next_o_idx = 0;
+    for (OBJECT_IDX this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {
+        object_type forge;
+        object_type *o_ptr;
+        object_type *q_ptr;
+        o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        next_o_idx = o_ptr->next_o_idx;
+        q_ptr = &forge;
+        object_copy(q_ptr, o_ptr);
+        q_ptr->held_m_idx = 0;
+        delete_object_idx(player_ptr, this_o_idx);
+        (void)drop_near(player_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);
+    }
+
+    m_ptr->hold_o_idx = 0;
 }

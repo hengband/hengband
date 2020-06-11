@@ -403,33 +403,6 @@ SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr)
 }
 
 /*!
- * @brief モンスターが盗みや拾いで確保していたアイテムを全てドロップさせる / Drop all items carried by a monster
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param m_ptr モンスター参照ポインタ
- * @return なし
- */
-void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr)
-{
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    OBJECT_IDX next_o_idx = 0;
-    for (OBJECT_IDX this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {
-        object_type forge;
-        object_type *o_ptr;
-        object_type *q_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
-        q_ptr = &forge;
-
-        object_copy(q_ptr, o_ptr);
-        q_ptr->held_m_idx = 0;
-        delete_object_idx(player_ptr, this_o_idx);
-        (void)drop_near(player_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);
-    }
-
-    m_ptr->hold_o_idx = 0;
-}
-
-/*!
  * @brief 指定したモンスターに隣接しているモンスターの数を返す。
  * / Count number of adjacent monsters
  * @param player_ptr プレーヤーへの参照ポインタ
