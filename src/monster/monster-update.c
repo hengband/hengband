@@ -6,6 +6,7 @@
 
 #include "monster/monster-update.h"
 #include "dungeon/dungeon.h"
+#include "mind/drs-types.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
@@ -14,6 +15,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "player/eldritch-horror.h"
 #include "player/player-move.h"
 
@@ -409,5 +411,139 @@ void update_monsters(player_type *player_ptr, bool full)
         if (!monster_is_valid(m_ptr))
             continue;
         update_monster(player_ptr, i, full);
+    }
+}
+
+/*!
+ * @brief SMART(適格に攻撃を行う)モンスターの学習状況を更新する / Learn about an "observed" resistance.
+ * @param m_idx 更新を行う「モンスター情報ID
+ * @param what 学習対象ID
+ * @return なし
+ */
+void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
+{
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+    if (!smart_learn)
+        return;
+    if (r_ptr->flags2 & (RF2_STUPID))
+        return;
+    if (!(r_ptr->flags2 & (RF2_SMART)) && (randint0(100) < 50))
+        return;
+
+    switch (what) {
+    case DRS_ACID:
+        if (player_ptr->resist_acid)
+            m_ptr->smart |= (SM_RES_ACID);
+        if (is_oppose_acid(player_ptr))
+            m_ptr->smart |= (SM_OPP_ACID);
+        if (player_ptr->immune_acid)
+            m_ptr->smart |= (SM_IMM_ACID);
+        break;
+
+    case DRS_ELEC:
+        if (player_ptr->resist_elec)
+            m_ptr->smart |= (SM_RES_ELEC);
+        if (is_oppose_elec(player_ptr))
+            m_ptr->smart |= (SM_OPP_ELEC);
+        if (player_ptr->immune_elec)
+            m_ptr->smart |= (SM_IMM_ELEC);
+        break;
+
+    case DRS_FIRE:
+        if (player_ptr->resist_fire)
+            m_ptr->smart |= (SM_RES_FIRE);
+        if (is_oppose_fire(player_ptr))
+            m_ptr->smart |= (SM_OPP_FIRE);
+        if (player_ptr->immune_fire)
+            m_ptr->smart |= (SM_IMM_FIRE);
+        break;
+
+    case DRS_COLD:
+        if (player_ptr->resist_cold)
+            m_ptr->smart |= (SM_RES_COLD);
+        if (is_oppose_cold(player_ptr))
+            m_ptr->smart |= (SM_OPP_COLD);
+        if (player_ptr->immune_cold)
+            m_ptr->smart |= (SM_IMM_COLD);
+        break;
+
+    case DRS_POIS:
+        if (player_ptr->resist_pois)
+            m_ptr->smart |= (SM_RES_POIS);
+        if (is_oppose_pois(player_ptr))
+            m_ptr->smart |= (SM_OPP_POIS);
+        break;
+
+    case DRS_NETH:
+        if (player_ptr->resist_neth)
+            m_ptr->smart |= (SM_RES_NETH);
+        break;
+
+    case DRS_LITE:
+        if (player_ptr->resist_lite)
+            m_ptr->smart |= (SM_RES_LITE);
+        break;
+
+    case DRS_DARK:
+        if (player_ptr->resist_dark)
+            m_ptr->smart |= (SM_RES_DARK);
+        break;
+
+    case DRS_FEAR:
+        if (player_ptr->resist_fear)
+            m_ptr->smart |= (SM_RES_FEAR);
+        break;
+
+    case DRS_CONF:
+        if (player_ptr->resist_conf)
+            m_ptr->smart |= (SM_RES_CONF);
+        break;
+
+    case DRS_CHAOS:
+        if (player_ptr->resist_chaos)
+            m_ptr->smart |= (SM_RES_CHAOS);
+        break;
+
+    case DRS_DISEN:
+        if (player_ptr->resist_disen)
+            m_ptr->smart |= (SM_RES_DISEN);
+        break;
+
+    case DRS_BLIND:
+        if (player_ptr->resist_blind)
+            m_ptr->smart |= (SM_RES_BLIND);
+        break;
+
+    case DRS_NEXUS:
+        if (player_ptr->resist_nexus)
+            m_ptr->smart |= (SM_RES_NEXUS);
+        break;
+
+    case DRS_SOUND:
+        if (player_ptr->resist_sound)
+            m_ptr->smart |= (SM_RES_SOUND);
+        break;
+
+    case DRS_SHARD:
+        if (player_ptr->resist_shard)
+            m_ptr->smart |= (SM_RES_SHARD);
+        break;
+
+    case DRS_FREE:
+        if (player_ptr->free_act)
+            m_ptr->smart |= (SM_IMM_FREE);
+        break;
+
+    case DRS_MANA:
+        if (!player_ptr->msp)
+            m_ptr->smart |= (SM_IMM_MANA);
+        break;
+
+    case DRS_REFLECT:
+        if (player_ptr->reflect)
+            m_ptr->smart |= (SM_IMM_REFLECT);
+        break;
     }
 }

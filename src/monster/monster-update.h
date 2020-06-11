@@ -10,3 +10,4 @@ void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_p
 void update_player_window(player_type *target_ptr, old_race_flags *old_race_flags_ptr);
 void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full);
 void update_monsters(player_type *player_ptr, bool full);
+void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what);

@@ -10,7 +10,7 @@
 
 #include "mspell/mspell-particularity.h"
 #include "mind/drs-types.h"
-#include "monster/monster2.h"
+#include "monster/monster-update.h"
 #include "mspell/mspell-type.h"
 #include "mspell/monster-spell.h"
 #include "spell/spells-type.h"

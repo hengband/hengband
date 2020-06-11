@@ -3,7 +3,7 @@
 #include "mind/drs-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
-#include "monster/monster2.h"
+#include "monster/monster-update.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
