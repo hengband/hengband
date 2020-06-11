@@ -32,6 +32,8 @@ typedef struct lore_type {
     bool know_everything;
     BIT_FLAGS mode;
     monster_sex msex;
+    bool old;
+    MONRACE_IDX r_idx;
 } lore_type;
 
 typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);

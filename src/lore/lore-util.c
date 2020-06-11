@@ -11,6 +11,7 @@ hook_c_roff_pf hook_c_roff = c_roff;
 
 lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
+    lore_ptr->r_idx = r_idx;
     lore_ptr->nightmare = ironman_nightmare && !(mode & 0x02);
     lore_ptr->r_ptr = &r_info[r_idx];
     lore_ptr->speed = lore_ptr->nightmare ? lore_ptr->r_ptr->speed + 5 : lore_ptr->r_ptr->speed;
@@ -27,6 +28,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAG
     lore_ptr->reinforce = FALSE;
     lore_ptr->know_everything = FALSE;
     lore_ptr->mode = mode;
+    lore_ptr->old = FALSE;
     return lore_ptr;
 }
 

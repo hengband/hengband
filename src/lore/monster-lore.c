@@ -282,32 +282,8 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         return;
     }
 
-    bool old = FALSE;
-    if (lore_ptr->r_ptr->level == 0) {
-        hooked_roff(format(_("%^sは町に住み", "%^s lives in the town"), wd_he[lore_ptr->msex]));
-        old = TRUE;
-    } else if (lore_ptr->r_ptr->r_tkills || lore_ptr->know_everything) {
-        if (depth_in_feet) {
-            hooked_roff(format(
-                _("%^sは通常地下 %d フィートで出現し", "%^s is normally found at depths of %d feet"), wd_he[lore_ptr->msex], lore_ptr->r_ptr->level * 50));
-        } else {
-            hooked_roff(format(_("%^sは通常地下 %d 階で出現し", "%^s is normally found on dungeon level %d"), wd_he[lore_ptr->msex], lore_ptr->r_ptr->level));
-        }
-
-        old = TRUE;
-    }
-
-    if (r_idx == MON_CHAMELEON) {
-        hooked_roff(_("、他のモンスターに化ける。", "and can take the shape of other monster."));
+    if (!display_where_to_appear(lore_ptr))
         return;
-    }
-
-    if (old) {
-        hooked_roff(_("、", ", and "));
-    } else {
-        hooked_roff(format(_("%^sは", "%^s "), wd_he[lore_ptr->msex]));
-        old = TRUE;
-    }
 
 #ifdef JP
 #else
@@ -359,19 +335,19 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 #endif
 
     if (lore_ptr->flags1 & RF1_NEVER_MOVE) {
-        if (old) {
+        if (lore_ptr->old) {
             hooked_roff(_("、しかし", ", but "));
         } else {
             hooked_roff(format(_("%^sは", "%^s "), wd_he[lore_ptr->msex]));
-            old = TRUE;
+            lore_ptr->old = TRUE;
         }
 
         hooked_roff(_("侵入者を追跡しない", "does not deign to chase intruders"));
     }
 
-    if (old) {
+    if (lore_ptr->old) {
         hooked_roff(_("。", ".  "));
-        old = FALSE;
+        lore_ptr->old = FALSE;
     }
 
     if (lore_ptr->r_ptr->r_tkills || lore_ptr->know_everything) {
