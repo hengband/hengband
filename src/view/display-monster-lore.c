@@ -370,3 +370,22 @@ void display_monster_exp(player_type *player_ptr, lore_type *lore_ptr)
     hooked_roff(format(" for a%s %lu%s level character.  ", vowel, (long)exp_integer, ordinal));
 #endif
 }
+
+void display_monster_aura(lore_type *lore_ptr)
+{
+    if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC) && (lore_ptr->flags3 & RF3_AURA_COLD))
+        hook_c_roff(
+            TERM_VIOLET, format(_("%^sは炎と氷とスパークに包まれている。", "%^s is surrounded by flames, ice and electricity.  "), wd_he[lore_ptr->msex]));
+    else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC))
+        hook_c_roff(TERM_L_RED, format(_("%^sは炎とスパークに包まれている。", "%^s is surrounded by flames and electricity.  "), wd_he[lore_ptr->msex]));
+    else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags3 & RF3_AURA_COLD))
+        hook_c_roff(TERM_BLUE, format(_("%^sは炎と氷に包まれている。", "%^s is surrounded by flames and ice.  "), wd_he[lore_ptr->msex]));
+    else if ((lore_ptr->flags3 & RF3_AURA_COLD) && (lore_ptr->flags2 & RF2_AURA_ELEC))
+        hook_c_roff(TERM_L_GREEN, format(_("%^sは氷とスパークに包まれている。", "%^s is surrounded by ice and electricity.  "), wd_he[lore_ptr->msex]));
+    else if (lore_ptr->flags2 & RF2_AURA_FIRE)
+        hook_c_roff(TERM_RED, format(_("%^sは炎に包まれている。", "%^s is surrounded by flames.  "), wd_he[lore_ptr->msex]));
+    else if (lore_ptr->flags3 & RF3_AURA_COLD)
+        hook_c_roff(TERM_BLUE, format(_("%^sは氷に包まれている。", "%^s is surrounded by ice.  "), wd_he[lore_ptr->msex]));
+    else if (lore_ptr->flags2 & RF2_AURA_ELEC)
+        hook_c_roff(TERM_L_BLUE, format(_("%^sはスパークに包まれている。", "%^s is surrounded by electricity.  "), wd_he[lore_ptr->msex]));
+}
