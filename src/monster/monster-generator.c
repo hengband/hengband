@@ -21,11 +21,11 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-list.h"
 #include "monster/monster-move.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "monster/monster2.h" // todo get_mon_num() が依存している。後で消す.
 #include "monster/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/summon-checker.h"

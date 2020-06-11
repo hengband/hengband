@@ -564,7 +564,7 @@
     <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h" />
     <ClInclude Include="..\..\src\monster\monster-util.h" />
     <ClInclude Include="..\..\src\monster\monster-info.h" />
-    <ClInclude Include="..\..\src\monster\monster2.h" />
+    <ClInclude Include="..\..\src\monster\monster-list.h" />
     <ClInclude Include="..\..\src\monster\place-monster-types.h" />
     <ClInclude Include="..\..\src\monster\smart-learn-types.h" />
     <ClInclude Include="..\..\src\mspell\summon-checker.h" />
@@ -804,7 +804,7 @@
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\mind\mind.c" />
     <ClCompile Include="..\..\src\monster\monster-info.c" />
-    <ClCompile Include="..\..\src\monster\monster2.c" />
+    <ClCompile Include="..\..\src\monster\monster-list.c" />
     <ClCompile Include="..\..\src\mspell\mspells1.c" />
     <ClCompile Include="..\..\src\mspell\mspells2.c" />
     <ClCompile Include="..\..\src\mspell\mspells3.c" />

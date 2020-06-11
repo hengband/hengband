@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "monster/monster2.h"
+#include "monster/monster-list.h"
 #include "core/speed-table.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-object.h"
