@@ -321,56 +321,24 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
         display_monster_alignment(lore_ptr);
         display_monster_kind(lore_ptr);
-#ifdef JP
-        hooked_roff("を倒すことは");
-#endif
-        long exp_integer = (long)lore_ptr->r_ptr->mexp * lore_ptr->r_ptr->level / (player_ptr->max_plv + 2) * 3 / 2;
-        long exp_decimal
-            = ((((long)lore_ptr->r_ptr->mexp * lore_ptr->r_ptr->level % (player_ptr->max_plv + 2) * 3 / 2) * (long)1000 / (player_ptr->max_plv + 2) + 5) / 10);
-
-#ifdef JP
-        hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", player_ptr->lev, (long)exp_integer, (long)exp_decimal));
-#else
-        hooked_roff(format(" is worth about %ld.%02ld point%s", (long)exp_integer, (long)exp_decimal, ((exp_integer == 1) && (exp_decimal == 0)) ? "" : "s"));
-
-        char *ordinal;
-        ordinal = "th";
-        exp_integer = player_ptr->lev % 10;
-        if ((player_ptr->lev / 10) != 1) {
-            if (exp_integer == 1)
-                ordinal = "st";
-            else if (exp_integer == 2)
-                ordinal = "nd";
-            else if (exp_integer == 3)
-                ordinal = "rd";
-        }
-
-        char *vowel;
-        vowel = "";
-        exp_integer = player_ptr->lev;
-        if ((exp_integer == 8) || (exp_integer == 11) || (exp_integer == 18))
-            vowel = "n";
-
-        hooked_roff(format(" for a%s %lu%s level character.  ", vowel, (long)exp_integer, ordinal));
-#endif
+        display_monster_exp(player_ptr, lore_ptr);
     }
 
-    if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC) && (lore_ptr->flags3 & RF3_AURA_COLD)) {
+    if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC) && (lore_ptr->flags3 & RF3_AURA_COLD))
         hook_c_roff(
             TERM_VIOLET, format(_("%^sは炎と氷とスパークに包まれている。", "%^s is surrounded by flames, ice and electricity.  "), wd_he[lore_ptr->msex]));
-    } else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC)) {
+    else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC))
         hook_c_roff(TERM_L_RED, format(_("%^sは炎とスパークに包まれている。", "%^s is surrounded by flames and electricity.  "), wd_he[lore_ptr->msex]));
-    } else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags3 & RF3_AURA_COLD)) {
+    else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags3 & RF3_AURA_COLD))
         hook_c_roff(TERM_BLUE, format(_("%^sは炎と氷に包まれている。", "%^s is surrounded by flames and ice.  "), wd_he[lore_ptr->msex]));
-    } else if ((lore_ptr->flags3 & RF3_AURA_COLD) && (lore_ptr->flags2 & RF2_AURA_ELEC)) {
+    else if ((lore_ptr->flags3 & RF3_AURA_COLD) && (lore_ptr->flags2 & RF2_AURA_ELEC))
         hook_c_roff(TERM_L_GREEN, format(_("%^sは氷とスパークに包まれている。", "%^s is surrounded by ice and electricity.  "), wd_he[lore_ptr->msex]));
-    } else if (lore_ptr->flags2 & RF2_AURA_FIRE) {
+    else if (lore_ptr->flags2 & RF2_AURA_FIRE)
         hook_c_roff(TERM_RED, format(_("%^sは炎に包まれている。", "%^s is surrounded by flames.  "), wd_he[lore_ptr->msex]));
-    } else if (lore_ptr->flags3 & RF3_AURA_COLD) {
+    else if (lore_ptr->flags3 & RF3_AURA_COLD)
         hook_c_roff(TERM_BLUE, format(_("%^sは氷に包まれている。", "%^s is surrounded by ice.  "), wd_he[lore_ptr->msex]));
-    } else if (lore_ptr->flags2 & RF2_AURA_ELEC) {
+    else if (lore_ptr->flags2 & RF2_AURA_ELEC)
         hook_c_roff(TERM_L_BLUE, format(_("%^sはスパークに包まれている。", "%^s is surrounded by electricity.  "), wd_he[lore_ptr->msex]));
-    }
 
     if (lore_ptr->flags2 & RF2_REFLECTING)
         hooked_roff(format(_("%^sは矢の呪文を跳ね返す。", "%^s reflects bolt spells.  "), wd_he[lore_ptr->msex]));
@@ -415,7 +383,6 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             hooked_roff(_("で成り立っている。", "."));
         }
     }
-
     else if (lore_ptr->flags1 & RF1_FRIENDS) {
         hooked_roff(format(_("%^sは通常集団で現れる。", "%^s usually appears in groups.  "), wd_he[lore_ptr->msex]));
     }

@@ -334,3 +334,39 @@ void display_monster_alignment(lore_type *lore_ptr)
     if (lore_ptr->flags3 & RF3_AMBERITE)
         hook_c_roff(TERM_VIOLET, _("アンバーの王族の", " Amberite"));
 }
+
+void display_monster_exp(player_type *player_ptr, lore_type *lore_ptr)
+{
+#ifdef JP
+    hooked_roff("を倒すことは");
+#endif
+    long exp_integer = (long)lore_ptr->r_ptr->mexp * lore_ptr->r_ptr->level / (player_ptr->max_plv + 2) * 3 / 2;
+    long exp_decimal
+        = ((((long)lore_ptr->r_ptr->mexp * lore_ptr->r_ptr->level % (player_ptr->max_plv + 2) * 3 / 2) * (long)1000 / (player_ptr->max_plv + 2) + 5) / 10);
+
+#ifdef JP
+    hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", player_ptr->lev, (long)exp_integer, (long)exp_decimal));
+#else
+    hooked_roff(format(" is worth about %ld.%02ld point%s", (long)exp_integer, (long)exp_decimal, ((exp_integer == 1) && (exp_decimal == 0)) ? "" : "s"));
+
+    char *ordinal;
+    ordinal = "th";
+    exp_integer = player_ptr->lev % 10;
+    if ((player_ptr->lev / 10) != 1) {
+        if (exp_integer == 1)
+            ordinal = "st";
+        else if (exp_integer == 2)
+            ordinal = "nd";
+        else if (exp_integer == 3)
+            ordinal = "rd";
+    }
+
+    char *vowel;
+    vowel = "";
+    exp_integer = player_ptr->lev;
+    if ((exp_integer == 8) || (exp_integer == 11) || (exp_integer == 18))
+        vowel = "n";
+
+    hooked_roff(format(" for a%s %lu%s level character.  ", vowel, (long)exp_integer, ordinal));
+#endif
+}
