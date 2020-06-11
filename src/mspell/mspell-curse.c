@@ -1,4 +1,5 @@
 ﻿#include "mspell/mspell-curse.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"

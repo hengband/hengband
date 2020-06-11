@@ -1,5 +1,5 @@
 ﻿#include "mspell/mspell-util.h"
-#include "monster/monster2.h"
+#include "monster/monster-info.h"
 #include "mspell/monster-spell.h"
 #include "player/player-move.h"
 

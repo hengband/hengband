@@ -16,4 +16,3 @@ SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);
 void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);
 
 int get_monster_crowd_number(floor_type *floor_ptr, MONSTER_IDX m_idx);
-void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char *m_name);

@@ -26,3 +26,4 @@ bool is_original_ap(monster_type *m_ptr);
 
 monster_race *real_r_ptr(monster_type *m_ptr);
 MONRACE_IDX real_r_idx(monster_type *m_ptr);
+void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char *m_name);

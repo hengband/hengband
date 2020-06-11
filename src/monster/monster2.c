@@ -1,5 +1,4 @@
 ﻿/*!
- * @file monster2.c
  * @brief モンスター処理 / misc code for monsters
  * @date 2014/07/08
  * @author
@@ -234,18 +233,6 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option)
     }
 
     return (table[found_count].index);
-}
-
-/*!
- * @brief モンスターIDを取り、モンスター名をm_nameに代入する /
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスターID
- * @param m_name モンスター名を入力する配列
- */
-void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char *m_name)
-{
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    monster_desc(player_ptr, m_name, m_ptr, 0x00);
 }
 
 /*!

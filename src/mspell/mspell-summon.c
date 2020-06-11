@@ -7,7 +7,6 @@
 #include "monster/monster-generator.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "monster/monster2.h"
 #include "monster/place-monster-types.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-util.h"

@@ -17,7 +17,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-remover.h"
 #include "monster/monster-util.h"
-#include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-util.h"
 #include "player/player-damage.h"

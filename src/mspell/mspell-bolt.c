@@ -1,6 +1,7 @@
 ﻿#include "mspell/mspell-bolt.h"
 #include "main/sound-definitions-table.h"
 #include "mind/drs-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster2.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
