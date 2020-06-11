@@ -56,161 +56,78 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
 
         concptr res = _("何か", "it");
         switch (kind + (mode & (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE))) {
-#ifdef JP
         case 0x00:
-            res = "何か";
+            res = _("何か", "it");
             break;
         case 0x00 + (MD_OBJECTIVE):
-            res = "何か";
+            res = _("何か", "it");
             break;
         case 0x00 + (MD_POSSESSIVE):
-            res = "何かの";
+            res = _("何かの", "its");
             break;
         case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "何か自身";
+            res = _("何か自身", "itself");
             break;
         case 0x00 + (MD_INDEF_HIDDEN):
-            res = "何か";
+            res = _("何か", "something");
             break;
         case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
-            res = "何か";
+            res = _("何か", "something");
             break;
         case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
-            res = "何か";
+            res = _("何か", "something's");
             break;
         case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "それ自身";
+            res = _("それ自身", "itself");
             break;
-#else
-        case 0x00:
-            res = "it";
-            break;
-        case 0x00 + (MD_OBJECTIVE):
-            res = "it";
-            break;
-        case 0x00 + (MD_POSSESSIVE):
-            res = "its";
-            break;
-        case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "itself";
-            break;
-        case 0x00 + (MD_INDEF_HIDDEN):
-            res = "something";
-            break;
-        case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
-            res = "something";
-            break;
-        case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
-            res = "something's";
-            break;
-        case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "itself";
-            break;
-#endif
-
-#ifdef JP
         case 0x10:
-            res = "彼";
+            res = _("彼", "he");
             break;
         case 0x10 + (MD_OBJECTIVE):
-            res = "彼";
+            res = _("彼", "him");
             break;
         case 0x10 + (MD_POSSESSIVE):
-            res = "彼の";
+            res = _("彼の", "his");
             break;
         case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "彼自身";
+            res = _("彼自身", "himself");
             break;
         case 0x10 + (MD_INDEF_HIDDEN):
-            res = "誰か";
+            res = _("誰か", "someone");
             break;
         case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
-            res = "誰か";
+            res = _("誰か", "someone");
             break;
         case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
-            res = "誰かの";
+            res = _("誰かの", "someone's");
             break;
         case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "彼自身";
+            res = _("彼自身", "himself");
             break;
-#else
-        case 0x10:
-            res = "he";
-            break;
-        case 0x10 + (MD_OBJECTIVE):
-            res = "him";
-            break;
-        case 0x10 + (MD_POSSESSIVE):
-            res = "his";
-            break;
-        case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "himself";
-            break;
-        case 0x10 + (MD_INDEF_HIDDEN):
-            res = "someone";
-            break;
-        case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
-            res = "someone";
-            break;
-        case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
-            res = "someone's";
-            break;
-        case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "himself";
-            break;
-#endif
-
-#ifdef JP
         case 0x20:
-            res = "彼女";
+            res = _("彼女", "she");
             break;
         case 0x20 + (MD_OBJECTIVE):
-            res = "彼女";
+            res = _("彼女", "her");
             break;
         case 0x20 + (MD_POSSESSIVE):
-            res = "彼女の";
+            res = _("彼女の", "her");
             break;
         case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "彼女自身";
+            res = _("彼女自身", "herself");
             break;
         case 0x20 + (MD_INDEF_HIDDEN):
-            res = "誰か";
+            res = _("誰か", "someone");
             break;
         case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
-            res = "誰か";
+            res = _("誰か", "someone");
             break;
         case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
-            res = "誰かの";
+            res = _("誰かの", "someone's");
             break;
         case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "彼女自身";
+            res = _("彼女自身", "herself");
             break;
-#else
-        case 0x20:
-            res = "she";
-            break;
-        case 0x20 + (MD_OBJECTIVE):
-            res = "her";
-            break;
-        case 0x20 + (MD_POSSESSIVE):
-            res = "her";
-            break;
-        case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "herself";
-            break;
-        case 0x20 + (MD_INDEF_HIDDEN):
-            res = "someone";
-            break;
-        case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):
-            res = "someone";
-            break;
-        case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):
-            res = "someone's";
-            break;
-        case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE):
-            res = "herself";
-            break;
-#endif
         }
 
         (void)strcpy(desc, res);
