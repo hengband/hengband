@@ -231,3 +231,281 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
         (void)strcat(desc, _("の", "'s"));
     }
 }
+
+/*!
+ * @brief ダメージを受けたモンスターの様子を記述する / Dump a message describing a monster's reaction to damage
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスター情報ID
+ * @param dam 与えたダメージ
+ * @return なし
+ * @details
+ * Technically should attempt to treat "Beholder"'s as jelly's
+ */
+void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
+{
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+    GAME_TEXT m_name[MAX_NLEN];
+
+    monster_desc(player_ptr, m_name, m_ptr, 0);
+
+    if (dam == 0) {
+        msg_format(_("%^sはダメージを受けていない。", "%^s is unharmed."), m_name);
+        return;
+    }
+
+    HIT_POINT newhp = m_ptr->hp;
+    HIT_POINT oldhp = newhp + dam;
+    HIT_POINT tmp = (newhp * 100L) / oldhp;
+    PERCENTAGE percentage = tmp;
+
+    if (my_strchr(",ejmvwQ", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%^sはほとんど気にとめていない。", "%^s barely notices."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%^sはしり込みした。", "%^s flinches."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sは縮こまった。", "%^s squelches."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sは痛みに震えた。", "%^s quivers in pain."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは身もだえした。", "%^s writhes about."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sは苦痛で身もだえした。", "%^s writhes in agony."), m_name);
+        else
+            msg_format(_("%^sはぐにゃぐにゃと痙攣した。", "%^s jerks limply."), m_name);
+        return;
+    }
+
+    if (my_strchr("l", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%^sはほとんど気にとめていない。", "%^s barely notices."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%^sはしり込みした。", "%^s flinches."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sは躊躇した。", "%^s hesitates."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sは痛みに震えた。", "%^s quivers in pain."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは身もだえした。", "%^s writhes about."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sは苦痛で身もだえした。", "%^s writhes in agony."), m_name);
+        else
+            msg_format(_("%^sはぐにゃぐにゃと痙攣した。", "%^s jerks limply."), m_name);
+        return;
+    }
+
+    if (my_strchr("g#+<>", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sは雷鳴のように吠えた。", "%^s roars thunderously."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sは苦しげに吠えた。", "%^s rumbles."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sはうめいた。", "%^s grunts."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sは躊躇した。", "%^s hesitates."), m_name);
+        else
+            msg_format(_("%^sはくしゃくしゃになった。", "%^s crumples."), m_name);
+        return;
+    }
+
+    if (my_strchr("JMR", r_ptr->d_char) || !isalpha(r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%^sはほとんど気にとめていない。", "%^s barely notices."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%^sはシーッと鳴いた。", "%^s hisses."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sは怒って頭を上げた。", "%^s rears up in anger."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sは猛然と威嚇した。", "%^s hisses furiously."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは身もだえした。", "%^s writhes about."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sは苦痛で身もだえした。", "%^s writhes in agony."), m_name);
+        else
+            msg_format(_("%^sはぐにゃぐにゃと痙攣した。", "%^s jerks limply."), m_name);
+        return;
+    }
+
+    if (my_strchr("f", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%^sは吠えた。", "%^s roars."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sは怒って吠えた。", "%^s growls angrily."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sは痛みでシーッと鳴いた。", "%^s hisses with pain."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは痛みで弱々しく鳴いた。", "%^s mewls in pain."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sは苦痛にうめいた。", "%^s hisses in agony."), m_name);
+        else
+            msg_format(_("%sは哀れな鳴き声を出した。", "%^s mewls pitifully."), m_name);
+        return;
+    }
+
+    if (my_strchr("acFIKS", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%^sはキーキー鳴いた。", "%^s chitters."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sはヨロヨロ逃げ回った。", "%^s scuttles about."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sはうるさく鳴いた。", "%^s twitters."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは痛みに痙攣した。", "%^s jerks in pain."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sは苦痛で痙攣した。", "%^s jerks in agony."), m_name);
+        else
+            msg_format(_("%^sはピクピクひきつった。", "%^s twitches."), m_name);
+        return;
+    }
+
+    if (my_strchr("B", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%^sはさえずった。", "%^s chirps."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%^sはピーピー鳴いた。", "%^s twitters."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sはギャーギャー鳴いた。", "%^s squawks."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sはギャーギャー鳴きわめいた。", "%^s chatters."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは苦しんだ。", "%^s jeers."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sはのたうち回った。", "%^s flutters about."), m_name);
+        else
+            msg_format(_("%^sはキーキーと鳴き叫んだ。", "%^s squeaks."), m_name);
+        return;
+    }
+
+    if (my_strchr("duDLUW", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%^sはしり込みした。", "%^s flinches."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sは痛みでシーッと鳴いた。", "%^s hisses in pain."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sは痛みでうなった。", "%^s snarls with pain."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは痛みに吠えた。", "%^s roars with pain."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sは苦しげに叫んだ。", "%^s gasps."), m_name);
+        else
+            msg_format(_("%^sは弱々しくうなった。", "%^s snarls feebly."), m_name);
+        return;
+    }
+
+    if (my_strchr("s", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sはカタカタと笑った。", "%^s rattles."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sはよろめいた。", "%^s stumbles."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sはカタカタ言った。", "%^s rattles."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sはよろめいた。", "%^s staggers."), m_name);
+        else
+            msg_format(_("%^sはガタガタ言った。", "%^s clatters."), m_name);
+        return;
+    }
+
+    if (my_strchr("z", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sはうめいた。", "%^s groans."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%sは苦しげにうめいた。", "%^s moans."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは躊躇した。", "%^s hesitates."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sはうなった。", "%^s grunts."), m_name);
+        else
+            msg_format(_("%^sはよろめいた。", "%^s staggers."), m_name);
+        return;
+    }
+
+    if (my_strchr("G", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%sはうめいた。", "%^s moans."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sは泣きわめいた。", "%^s wails."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは吠えた。", "%^s howls."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%sは弱々しくうめいた。", "%^s moans softly."), m_name);
+        else
+            msg_format(_("%^sはかすかにうめいた。", "%^s sighs."), m_name);
+        return;
+    }
+
+    if (my_strchr("CZ", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%^sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%^sは痛みでうなった。", "%^s snarls with pain."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sは痛みでキャンキャン吠えた。", "%^s yelps in pain."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sは痛みで鳴きわめいた。", "%^s howls in pain."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは苦痛のあまり鳴きわめいた。", "%^s howls in agony."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sは苦痛でもだえ苦しんだ。", "%^s writhes in agony."), m_name);
+        else
+            msg_format(_("%^sは弱々しく吠えた。", "%^s yelps feebly."), m_name);
+        return;
+    }
+
+    if (my_strchr("Xbilqrt", r_ptr->d_char)) {
+        if (percentage > 95)
+            msg_format(_("%^sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
+        else if (percentage > 75)
+            msg_format(_("%^sは痛みでうなった。", "%^s grunts with pain."), m_name);
+        else if (percentage > 50)
+            msg_format(_("%^sは痛みで叫んだ。", "%^s squeals in pain."), m_name);
+        else if (percentage > 35)
+            msg_format(_("%^sは痛みで絶叫した。", "%^s shrieks in pain."), m_name);
+        else if (percentage > 20)
+            msg_format(_("%^sは苦痛のあまり絶叫した。", "%^s shrieks in agony."), m_name);
+        else if (percentage > 10)
+            msg_format(_("%^sは苦痛でもだえ苦しんだ。", "%^s writhes in agony."), m_name);
+        else
+            msg_format(_("%^sは弱々しく叫んだ。", "%^s cries out feebly."), m_name);
+        return;
+    }
+
+    if (percentage > 95)
+        msg_format(_("%^sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
+    else if (percentage > 75)
+        msg_format(_("%^sは痛みでうなった。", "%^s grunts with pain."), m_name);
+    else if (percentage > 50)
+        msg_format(_("%^sは痛みで叫んだ。", "%^s cries out in pain."), m_name);
+    else if (percentage > 35)
+        msg_format(_("%^sは痛みで絶叫した。", "%^s screams in pain."), m_name);
+    else if (percentage > 20)
+        msg_format(_("%^sは苦痛のあまり絶叫した。", "%^s screams in agony."), m_name);
+    else if (percentage > 10)
+        msg_format(_("%^sは苦痛でもだえ苦しんだ。", "%^s writhes in agony."), m_name);
+    else
+        msg_format(_("%^sは弱々しく叫んだ。", "%^s cries out feebly."), m_name);
+}
