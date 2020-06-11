@@ -12,3 +12,4 @@ bool display_where_to_appear(lore_type *lore_ptr);
 void display_random_move(lore_type *lore_ptr);
 void display_monster_move(lore_type *lore_ptr);
 void display_monster_never_move(lore_type *lore_ptr);
+void display_monster_kind(lore_type *lore_ptr);

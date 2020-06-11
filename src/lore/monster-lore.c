@@ -337,27 +337,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         if (lore_ptr->flags3 & RF3_AMBERITE)
             hook_c_roff(TERM_VIOLET, _("アンバーの王族の", " Amberite"));
 
-        if ((lore_ptr->flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_ANGEL)) || (lore_ptr->flags2 & (RF2_QUANTUM | RF2_HUMAN))) {
-            if (lore_ptr->flags3 & RF3_DRAGON)
-                hook_c_roff(TERM_ORANGE, _("ドラゴン", " dragon"));
-            if (lore_ptr->flags3 & RF3_DEMON)
-                hook_c_roff(TERM_VIOLET, _("デーモン", " demon"));
-            if (lore_ptr->flags3 & RF3_GIANT)
-                hook_c_roff(TERM_L_UMBER, _("巨人", " giant"));
-            if (lore_ptr->flags3 & RF3_TROLL)
-                hook_c_roff(TERM_BLUE, _("トロル", " troll"));
-            if (lore_ptr->flags3 & RF3_ORC)
-                hook_c_roff(TERM_UMBER, _("オーク", " orc"));
-            if (lore_ptr->flags2 & RF2_HUMAN)
-                hook_c_roff(TERM_L_WHITE, _("人間", " human"));
-            if (lore_ptr->flags2 & RF2_QUANTUM)
-                hook_c_roff(TERM_VIOLET, _("量子生物", " quantum creature"));
-            if (lore_ptr->flags3 & RF3_ANGEL)
-                hook_c_roff(TERM_YELLOW, _("天使", " angel"));
-        } else {
-            hooked_roff(_("モンスター", " creature"));
-        }
-
+        display_monster_kind(lore_ptr);
 #ifdef JP
         hooked_roff("を倒すことは");
 #endif

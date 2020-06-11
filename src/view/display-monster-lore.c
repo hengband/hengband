@@ -1,6 +1,8 @@
 ﻿#include "view/display-monster-lore.h"
 #include "lore/monster-lore.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
 #include "term/term-color-types.h"
 #include "world/world.h"
@@ -278,4 +280,36 @@ void display_monster_never_move(lore_type *lore_ptr)
     }
 
     hooked_roff(_("侵入者を追跡しない", "does not deign to chase intruders"));
+}
+
+void display_monster_kind(lore_type *lore_ptr)
+{
+    if (((lore_ptr->flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_ANGEL)) == 0) && ((lore_ptr->flags2 & (RF2_QUANTUM | RF2_HUMAN)) == 0)) {
+        hooked_roff(_("モンスター", " creature"));
+        return;
+    }
+
+    if (lore_ptr->flags3 & RF3_DRAGON)
+        hook_c_roff(TERM_ORANGE, _("ドラゴン", " dragon"));
+
+    if (lore_ptr->flags3 & RF3_DEMON)
+        hook_c_roff(TERM_VIOLET, _("デーモン", " demon"));
+
+    if (lore_ptr->flags3 & RF3_GIANT)
+        hook_c_roff(TERM_L_UMBER, _("巨人", " giant"));
+
+    if (lore_ptr->flags3 & RF3_TROLL)
+        hook_c_roff(TERM_BLUE, _("トロル", " troll"));
+
+    if (lore_ptr->flags3 & RF3_ORC)
+        hook_c_roff(TERM_UMBER, _("オーク", " orc"));
+
+    if (lore_ptr->flags2 & RF2_HUMAN)
+        hook_c_roff(TERM_L_WHITE, _("人間", " human"));
+
+    if (lore_ptr->flags2 & RF2_QUANTUM)
+        hook_c_roff(TERM_VIOLET, _("量子生物", " quantum creature"));
+
+    if (lore_ptr->flags3 & RF3_ANGEL)
+        hook_c_roff(TERM_YELLOW, _("天使", " angel"));
 }
