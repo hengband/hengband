@@ -313,3 +313,24 @@ void display_monster_kind(lore_type *lore_ptr)
     if (lore_ptr->flags3 & RF3_ANGEL)
         hook_c_roff(TERM_YELLOW, _("天使", " angel"));
 }
+
+void display_monster_alignment(lore_type *lore_ptr)
+{
+    if (lore_ptr->flags2 & RF2_ELDRITCH_HORROR)
+        hook_c_roff(TERM_VIOLET, _("狂気を誘う", " sanity-blasting"));
+
+    if (lore_ptr->flags3 & RF3_ANIMAL)
+        hook_c_roff(TERM_L_GREEN, _("自然界の", " natural"));
+
+    if (lore_ptr->flags3 & RF3_EVIL)
+        hook_c_roff(TERM_L_DARK, _("邪悪なる", " evil"));
+
+    if (lore_ptr->flags3 & RF3_GOOD)
+        hook_c_roff(TERM_YELLOW, _("善良な", " good"));
+
+    if (lore_ptr->flags3 & RF3_UNDEAD)
+        hook_c_roff(TERM_VIOLET, _("アンデッドの", " undead"));
+
+    if (lore_ptr->flags3 & RF3_AMBERITE)
+        hook_c_roff(TERM_VIOLET, _("アンバーの王族の", " Amberite"));
+}
