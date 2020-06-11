@@ -306,20 +306,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     hooked_roff("moves");
 #endif
 
-    if ((lore_ptr->flags1 & RF1_RAND_50) || (lore_ptr->flags1 & RF1_RAND_25)) {
-        if ((lore_ptr->flags1 & RF1_RAND_50) && (lore_ptr->flags1 & RF1_RAND_25)) {
-            hooked_roff(_("かなり", " extremely"));
-        } else if (lore_ptr->flags1 & RF1_RAND_50) {
-            hooked_roff(_("幾分", " somewhat"));
-        } else if (lore_ptr->flags1 & RF1_RAND_25) {
-            hooked_roff(_("少々", " a bit"));
-        }
-
-        hooked_roff(_("不規則に", " erratically"));
-        if (lore_ptr->speed != 110)
-            hooked_roff(_("、かつ", ", and"));
-    }
-
+    display_random_move(lore_ptr);
     if (lore_ptr->speed > 110) {
         if (lore_ptr->speed > 139)
             hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));

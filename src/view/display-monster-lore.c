@@ -207,3 +207,21 @@ bool display_where_to_appear(lore_type *lore_ptr)
 
     return TRUE;
 }
+
+void display_random_move(lore_type *lore_ptr)
+{
+    if (((lore_ptr->flags1 & RF1_RAND_50) == 0) && ((lore_ptr->flags1 & RF1_RAND_25) == 0))
+        return;
+
+    if ((lore_ptr->flags1 & RF1_RAND_50) && (lore_ptr->flags1 & RF1_RAND_25)) {
+        hooked_roff(_("かなり", " extremely"));
+    } else if (lore_ptr->flags1 & RF1_RAND_50) {
+        hooked_roff(_("幾分", " somewhat"));
+    } else if (lore_ptr->flags1 & RF1_RAND_25) {
+        hooked_roff(_("少々", " a bit"));
+    }
+
+    hooked_roff(_("不規則に", " erratically"));
+    if (lore_ptr->speed != 110)
+        hooked_roff(_("、かつ", ", and"));
+}
