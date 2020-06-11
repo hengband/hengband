@@ -302,17 +302,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         return;
 
     display_monster_move(lore_ptr);
-    if (lore_ptr->flags1 & RF1_NEVER_MOVE) {
-        if (lore_ptr->old) {
-            hooked_roff(_("、しかし", ", but "));
-        } else {
-            hooked_roff(format(_("%^sは", "%^s "), wd_he[lore_ptr->msex]));
-            lore_ptr->old = TRUE;
-        }
-
-        hooked_roff(_("侵入者を追跡しない", "does not deign to chase intruders"));
-    }
-
+    display_monster_never_move(lore_ptr);
     if (lore_ptr->old) {
         hooked_roff(_("。", ".  "));
         lore_ptr->old = FALSE;
@@ -331,14 +321,19 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
         if (lore_ptr->flags2 & RF2_ELDRITCH_HORROR)
             hook_c_roff(TERM_VIOLET, _("狂気を誘う", " sanity-blasting"));
+
         if (lore_ptr->flags3 & RF3_ANIMAL)
             hook_c_roff(TERM_L_GREEN, _("自然界の", " natural"));
+
         if (lore_ptr->flags3 & RF3_EVIL)
             hook_c_roff(TERM_L_DARK, _("邪悪なる", " evil"));
+
         if (lore_ptr->flags3 & RF3_GOOD)
             hook_c_roff(TERM_YELLOW, _("善良な", " good"));
+
         if (lore_ptr->flags3 & RF3_UNDEAD)
             hook_c_roff(TERM_VIOLET, _("アンデッドの", " undead"));
+
         if (lore_ptr->flags3 & RF3_AMBERITE)
             hook_c_roff(TERM_VIOLET, _("アンバーの王族の", " Amberite"));
 

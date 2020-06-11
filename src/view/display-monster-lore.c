@@ -264,3 +264,18 @@ void display_random_move(lore_type *lore_ptr)
     if (lore_ptr->speed != 110)
         hooked_roff(_("、かつ", ", and"));
 }
+
+void display_monster_never_move(lore_type *lore_ptr)
+{
+    if ((lore_ptr->flags1 & RF1_NEVER_MOVE) == 0)
+        return;
+
+    if (lore_ptr->old) {
+        hooked_roff(_("、しかし", ", but "));
+    } else {
+        hooked_roff(format(_("%^sは", "%^s "), wd_he[lore_ptr->msex]));
+        lore_ptr->old = TRUE;
+    }
+
+    hooked_roff(_("侵入者を追跡しない", "does not deign to chase intruders"));
+}
