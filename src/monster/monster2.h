@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "floor/floor.h"
 #include "system/monster-type-definition.h"
 
 void set_target(monster_type *m_ptr, POSITION y, POSITION x);
@@ -14,5 +15,5 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);
 void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);
 
-int get_monster_crowd_number(player_type *player_ptr, MONSTER_IDX m_idx);
+int get_monster_crowd_number(floor_type *floor_ptr, MONSTER_IDX m_idx);
 void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char *m_name);
