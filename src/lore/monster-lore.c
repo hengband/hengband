@@ -301,42 +301,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     if (!display_where_to_appear(lore_ptr))
         return;
 
-#ifdef JP
-#else
-    hooked_roff("moves");
-#endif
-
-    display_random_move(lore_ptr);
-    if (lore_ptr->speed > 110) {
-        if (lore_ptr->speed > 139)
-            hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));
-        else if (lore_ptr->speed > 134)
-            hook_c_roff(TERM_ORANGE, _("猛烈に", " extremely"));
-        else if (lore_ptr->speed > 129)
-            hook_c_roff(TERM_ORANGE, _("非常に", " very"));
-        else if (lore_ptr->speed > 124)
-            hook_c_roff(TERM_UMBER, _("かなり", " fairly"));
-        else if (lore_ptr->speed < 120)
-            hook_c_roff(TERM_L_UMBER, _("やや", " somewhat"));
-        hook_c_roff(TERM_L_RED, _("素早く", " quickly"));
-    } else if (lore_ptr->speed < 110) {
-        if (lore_ptr->speed < 90)
-            hook_c_roff(TERM_L_GREEN, _("信じ難いほど", " incredibly"));
-        else if (lore_ptr->speed < 95)
-            hook_c_roff(TERM_BLUE, _("非常に", " very"));
-        else if (lore_ptr->speed < 100)
-            hook_c_roff(TERM_BLUE, _("かなり", " fairly"));
-        else if (lore_ptr->speed > 104)
-            hook_c_roff(TERM_GREEN, _("やや", " somewhat"));
-        hook_c_roff(TERM_L_BLUE, _("ゆっくりと", " slowly"));
-    } else {
-        hooked_roff(_("普通の速さで", " at normal speed"));
-    }
-
-#ifdef JP
-    hooked_roff("動いている");
-#endif
-
+    display_monster_move(lore_ptr);
     if (lore_ptr->flags1 & RF1_NEVER_MOVE) {
         if (lore_ptr->old) {
             hooked_roff(_("、しかし", ", but "));
