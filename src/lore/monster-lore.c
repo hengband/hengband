@@ -7,6 +7,7 @@
 #include "lore/monster-lore.h"
 #include "locale/english.h"
 #include "locale/japanese.h"
+#include "lore/lore-util.h"
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags-resistance.h"
@@ -16,10 +17,10 @@
 #include "monster-race/race-flags4.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
-#include "mspell/mspell-type.h"
 #include "mspell/monster-spell.h"
-#include "term/term-color-types.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-type.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 
 /*!
@@ -178,123 +179,102 @@ static void hooked_roff(concptr str) { hook_c_roff(TERM_WHITE, str); }
  */
 void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-#ifdef JP
-    char jverb_buf[64];
-#else
-    bool sin = FALSE;
-#endif
-
-    bool nightmare = ironman_nightmare && !(mode & 0x02);
-    monster_race *r_ptr = &r_info[r_idx];
-    SPEED speed = nightmare ? r_ptr->speed + 5 : r_ptr->speed;
-
-    /* Obtain a copy of the "known" number of drops */
-    ITEM_NUMBER drop_gold = r_ptr->r_drop_gold;
-    ITEM_NUMBER drop_item = r_ptr->r_drop_item;
-
-    /* Obtain a copy of the "known" flags */
-    BIT_FLAGS flags1 = (r_ptr->flags1 & r_ptr->r_flags1);
-    BIT_FLAGS flags2 = (r_ptr->flags2 & r_ptr->r_flags2);
-    BIT_FLAGS flags3 = (r_ptr->flags3 & r_ptr->r_flags3);
-    BIT_FLAGS flags4 = (r_ptr->flags4 & r_ptr->r_flags4);
-    BIT_FLAGS a_ability_flags1 = (r_ptr->a_ability_flags1 & r_ptr->r_flags5);
-    BIT_FLAGS a_ability_flags2 = (r_ptr->a_ability_flags2 & r_ptr->r_flags6);
-    BIT_FLAGS flags7 = (r_ptr->flags7 & r_ptr->flags7);
-    BIT_FLAGS flagsr = (r_ptr->flagsr & r_ptr->r_flagsr);
-
-    bool reinforce = FALSE;
+    lore_type tmp_lore;
+    lore_type *lore_ptr = initialize_lore_type(&tmp_lore, r_idx, mode);
     for (int n = 0; n < A_MAX; n++) {
-        if (r_ptr->reinforce_id[n] > 0)
-            reinforce = TRUE;
+        if (lore_ptr->r_ptr->reinforce_id[n] > 0)
+            lore_ptr->reinforce = TRUE;
     }
 
-    bool know_everything = FALSE;
     if (cheat_know || (mode & 0x01)) {
-        know_everything = TRUE;
+        lore_ptr->know_everything = TRUE;
     }
 
-    if (know_everything) {
-        drop_gold = drop_item = (((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) + ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0)
-            + ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) + ((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
+    if (lore_ptr->know_everything) {
+        lore_ptr->drop_gold = lore_ptr->drop_item = (((lore_ptr->r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0)
+            + ((lore_ptr->r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0)
+            + ((lore_ptr->r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) + ((lore_ptr->r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
 
-        if (r_ptr->flags1 & RF1_ONLY_GOLD)
-            drop_item = 0;
-        if (r_ptr->flags1 & RF1_ONLY_ITEM)
-            drop_gold = 0;
+        if (lore_ptr->r_ptr->flags1 & RF1_ONLY_GOLD)
+            lore_ptr->drop_item = 0;
+        if (lore_ptr->r_ptr->flags1 & RF1_ONLY_ITEM)
+            lore_ptr->drop_gold = 0;
 
-        flags1 = r_ptr->flags1;
-        flags2 = r_ptr->flags2;
-        flags3 = r_ptr->flags3;
-        flags4 = r_ptr->flags4;
-        a_ability_flags1 = r_ptr->a_ability_flags1;
-        a_ability_flags2 = r_ptr->a_ability_flags2;
-        flagsr = r_ptr->flagsr;
+        lore_ptr->flags1 = lore_ptr->r_ptr->flags1;
+        lore_ptr->flags2 = lore_ptr->r_ptr->flags2;
+        lore_ptr->flags3 = lore_ptr->r_ptr->flags3;
+        lore_ptr->flags4 = lore_ptr->r_ptr->flags4;
+        lore_ptr->a_ability_flags1 = lore_ptr->r_ptr->a_ability_flags1;
+        lore_ptr->a_ability_flags2 = lore_ptr->r_ptr->a_ability_flags2;
+        lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
     }
 
     int msex = 0;
-    if (r_ptr->flags1 & RF1_FEMALE)
+    if (lore_ptr->r_ptr->flags1 & RF1_FEMALE)
         msex = 2;
-    else if (r_ptr->flags1 & RF1_MALE)
+    else if (lore_ptr->r_ptr->flags1 & RF1_MALE)
         msex = 1;
 
-    if (r_ptr->flags1 & RF1_UNIQUE)
-        flags1 |= (RF1_UNIQUE);
-    if (r_ptr->flags1 & RF1_QUESTOR)
-        flags1 |= (RF1_QUESTOR);
-    if (r_ptr->flags1 & RF1_MALE)
-        flags1 |= (RF1_MALE);
-    if (r_ptr->flags1 & RF1_FEMALE)
-        flags1 |= (RF1_FEMALE);
+    if (lore_ptr->r_ptr->flags1 & RF1_UNIQUE)
+        lore_ptr->flags1 |= (RF1_UNIQUE);
+    if (lore_ptr->r_ptr->flags1 & RF1_QUESTOR)
+        lore_ptr->flags1 |= (RF1_QUESTOR);
+    if (lore_ptr->r_ptr->flags1 & RF1_MALE)
+        lore_ptr->flags1 |= (RF1_MALE);
+    if (lore_ptr->r_ptr->flags1 & RF1_FEMALE)
+        lore_ptr->flags1 |= (RF1_FEMALE);
 
-    if (r_ptr->flags1 & RF1_FRIENDS)
-        flags1 |= (RF1_FRIENDS);
-    if (r_ptr->flags1 & RF1_ESCORT)
-        flags1 |= (RF1_ESCORT);
-    if (r_ptr->flags1 & RF1_ESCORTS)
-        flags1 |= (RF1_ESCORTS);
+    if (lore_ptr->r_ptr->flags1 & RF1_FRIENDS)
+        lore_ptr->flags1 |= (RF1_FRIENDS);
+    if (lore_ptr->r_ptr->flags1 & RF1_ESCORT)
+        lore_ptr->flags1 |= (RF1_ESCORT);
+    if (lore_ptr->r_ptr->flags1 & RF1_ESCORTS)
+        lore_ptr->flags1 |= (RF1_ESCORTS);
 
-    if (r_ptr->r_tkills || know_everything) {
-        if (r_ptr->flags3 & RF3_ORC)
-            flags3 |= (RF3_ORC);
-        if (r_ptr->flags3 & RF3_TROLL)
-            flags3 |= (RF3_TROLL);
-        if (r_ptr->flags3 & RF3_GIANT)
-            flags3 |= (RF3_GIANT);
-        if (r_ptr->flags3 & RF3_DRAGON)
-            flags3 |= (RF3_DRAGON);
-        if (r_ptr->flags3 & RF3_DEMON)
-            flags3 |= (RF3_DEMON);
-        if (r_ptr->flags3 & RF3_UNDEAD)
-            flags3 |= (RF3_UNDEAD);
-        if (r_ptr->flags3 & RF3_EVIL)
-            flags3 |= (RF3_EVIL);
-        if (r_ptr->flags3 & RF3_GOOD)
-            flags3 |= (RF3_GOOD);
-        if (r_ptr->flags3 & RF3_ANIMAL)
-            flags3 |= (RF3_ANIMAL);
-        if (r_ptr->flags3 & RF3_AMBERITE)
-            flags3 |= (RF3_AMBERITE);
-        if (r_ptr->flags2 & RF2_HUMAN)
-            flags2 |= (RF2_HUMAN);
-        if (r_ptr->flags2 & RF2_QUANTUM)
-            flags2 |= (RF2_QUANTUM);
+    if (lore_ptr->r_ptr->r_tkills || lore_ptr->know_everything) {
+        if (lore_ptr->r_ptr->flags3 & RF3_ORC)
+            lore_ptr->flags3 |= (RF3_ORC);
+        if (lore_ptr->r_ptr->flags3 & RF3_TROLL)
+            lore_ptr->flags3 |= (RF3_TROLL);
+        if (lore_ptr->r_ptr->flags3 & RF3_GIANT)
+            lore_ptr->flags3 |= (RF3_GIANT);
+        if (lore_ptr->r_ptr->flags3 & RF3_DRAGON)
+            lore_ptr->flags3 |= (RF3_DRAGON);
+        if (lore_ptr->r_ptr->flags3 & RF3_DEMON)
+            lore_ptr->flags3 |= (RF3_DEMON);
+        if (lore_ptr->r_ptr->flags3 & RF3_UNDEAD)
+            lore_ptr->flags3 |= (RF3_UNDEAD);
+        if (lore_ptr->r_ptr->flags3 & RF3_EVIL)
+            lore_ptr->flags3 |= (RF3_EVIL);
+        if (lore_ptr->r_ptr->flags3 & RF3_GOOD)
+            lore_ptr->flags3 |= (RF3_GOOD);
+        if (lore_ptr->r_ptr->flags3 & RF3_ANIMAL)
+            lore_ptr->flags3 |= (RF3_ANIMAL);
+        if (lore_ptr->r_ptr->flags3 & RF3_AMBERITE)
+            lore_ptr->flags3 |= (RF3_AMBERITE);
+        if (lore_ptr->r_ptr->flags2 & RF2_HUMAN)
+            lore_ptr->flags2 |= (RF2_HUMAN);
+        if (lore_ptr->r_ptr->flags2 & RF2_QUANTUM)
+            lore_ptr->flags2 |= (RF2_QUANTUM);
 
-        if (r_ptr->flags1 & RF1_FORCE_DEPTH)
-            flags1 |= (RF1_FORCE_DEPTH);
-        if (r_ptr->flags1 & RF1_FORCE_MAXHP)
-            flags1 |= (RF1_FORCE_MAXHP);
+        if (lore_ptr->r_ptr->flags1 & RF1_FORCE_DEPTH)
+            lore_ptr->flags1 |= (RF1_FORCE_DEPTH);
+        if (lore_ptr->r_ptr->flags1 & RF1_FORCE_MAXHP)
+            lore_ptr->flags1 |= (RF1_FORCE_MAXHP);
     }
 
     if (!(mode & 0x02)) {
-        if (flags1 & RF1_UNIQUE) {
-            bool dead = (r_ptr->max_num == 0) ? TRUE : FALSE;
-            if (r_ptr->r_deaths) {
-                hooked_roff(format(_("%^sはあなたの先祖を %d 人葬っている", "%^s has slain %d of your ancestors"), wd_he[msex], r_ptr->r_deaths));
+        if (lore_ptr->flags1 & RF1_UNIQUE) {
+            bool dead = (lore_ptr->r_ptr->max_num == 0) ? TRUE : FALSE;
+            if (lore_ptr->r_ptr->r_deaths) {
+                hooked_roff(format(_("%^sはあなたの先祖を %d 人葬っている", "%^s has slain %d of your ancestors"), wd_he[msex], lore_ptr->r_ptr->r_deaths));
 
                 if (dead) {
-                    hooked_roff(_(format("が、すでに仇討ちは果たしている！"), format(", but you have avenged %s!  ", plural(r_ptr->r_deaths, "him", "them"))));
+                    hooked_roff(_(
+                        format("が、すでに仇討ちは果たしている！"), format(", but you have avenged %s!  ", plural(lore_ptr->r_ptr->r_deaths, "him", "them"))));
                 } else {
-                    hooked_roff(_(format("のに、まだ仇討ちを果たしていない。"), format(", who %s unavenged.  ", plural(r_ptr->r_deaths, "remains", "remain"))));
+                    hooked_roff(_(
+                        format("のに、まだ仇討ちを果たしていない。"), format(", who %s unavenged.  ", plural(lore_ptr->r_ptr->r_deaths, "remains", "remain"))));
                 }
 
                 hooked_roff("\n");
@@ -302,30 +282,30 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
                 hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
                 hooked_roff("\n");
             }
-        } else if (r_ptr->r_deaths) {
-            hooked_roff(_(format("このモンスターはあなたの先祖を %d 人葬っている", r_ptr->r_deaths),
-                format("%d of your ancestors %s been killed by this creature, ", r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have"))));
+        } else if (lore_ptr->r_ptr->r_deaths) {
+            hooked_roff(_(format("このモンスターはあなたの先祖を %d 人葬っている", lore_ptr->r_ptr->r_deaths),
+                format("%d of your ancestors %s been killed by this creature, ", lore_ptr->r_ptr->r_deaths, plural(lore_ptr->r_ptr->r_deaths, "has", "have"))));
 
-            if (r_ptr->r_pkills) {
+            if (lore_ptr->r_ptr->r_pkills) {
                 hooked_roff(format(_("が、あなたはこのモンスターを少なくとも %d 体は倒している。", "and you have exterminated at least %d of the creatures.  "),
-                    r_ptr->r_pkills));
-            } else if (r_ptr->r_tkills) {
+                    lore_ptr->r_ptr->r_pkills));
+            } else if (lore_ptr->r_ptr->r_tkills) {
                 hooked_roff(format(_("が、あなたの先祖はこのモンスターを少なくとも %d 体は倒している。",
                                        "and your ancestors have exterminated at least %d of the creatures.  "),
-                    r_ptr->r_tkills));
+                    lore_ptr->r_ptr->r_tkills));
             } else {
                 hooked_roff(format(_("が、まだ%sを倒したことはない。", "and %s is not ever known to have been defeated.  "), wd_he[msex]));
             }
 
             hooked_roff("\n");
         } else {
-            if (r_ptr->r_pkills) {
-                hooked_roff(
-                    format(_("あなたはこのモンスターを少なくとも %d 体は殺している。", "You have killed at least %d of these creatures.  "), r_ptr->r_pkills));
-            } else if (r_ptr->r_tkills) {
+            if (lore_ptr->r_ptr->r_pkills) {
+                hooked_roff(format(_("あなたはこのモンスターを少なくとも %d 体は殺している。", "You have killed at least %d of these creatures.  "),
+                    lore_ptr->r_ptr->r_pkills));
+            } else if (lore_ptr->r_ptr->r_tkills) {
                 hooked_roff(
                     format(_("あなたの先祖はこのモンスターを少なくとも %d 体は殺している。", "Your ancestors have killed at least %d of these creatures.  "),
-                        r_ptr->r_tkills));
+                        lore_ptr->r_ptr->r_tkills));
             } else {
                 hooked_roff(_("このモンスターを倒したことはない。", "No battles to the death are recalled.  "));
             }
@@ -334,7 +314,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         }
     }
 
-    concptr tmp = r_text + r_ptr->text;
+    concptr tmp = r_text + lore_ptr->r_ptr->text;
     if (tmp[0]) {
         hooked_roff(tmp);
         hooked_roff("\n");
@@ -346,14 +326,14 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     bool old = FALSE;
-    if (r_ptr->level == 0) {
+    if (lore_ptr->r_ptr->level == 0) {
         hooked_roff(format(_("%^sは町に住み", "%^s lives in the town"), wd_he[msex]));
         old = TRUE;
-    } else if (r_ptr->r_tkills || know_everything) {
+    } else if (lore_ptr->r_ptr->r_tkills || lore_ptr->know_everything) {
         if (depth_in_feet) {
-            hooked_roff(format(_("%^sは通常地下 %d フィートで出現し", "%^s is normally found at depths of %d feet"), wd_he[msex], r_ptr->level * 50));
+            hooked_roff(format(_("%^sは通常地下 %d フィートで出現し", "%^s is normally found at depths of %d feet"), wd_he[msex], lore_ptr->r_ptr->level * 50));
         } else {
-            hooked_roff(format(_("%^sは通常地下 %d 階で出現し", "%^s is normally found on dungeon level %d"), wd_he[msex], r_ptr->level));
+            hooked_roff(format(_("%^sは通常地下 %d 階で出現し", "%^s is normally found on dungeon level %d"), wd_he[msex], lore_ptr->r_ptr->level));
         }
 
         old = TRUE;
@@ -376,40 +356,40 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     hooked_roff("moves");
 #endif
 
-    if ((flags1 & RF1_RAND_50) || (flags1 & RF1_RAND_25)) {
-        if ((flags1 & RF1_RAND_50) && (flags1 & RF1_RAND_25)) {
+    if ((lore_ptr->flags1 & RF1_RAND_50) || (lore_ptr->flags1 & RF1_RAND_25)) {
+        if ((lore_ptr->flags1 & RF1_RAND_50) && (lore_ptr->flags1 & RF1_RAND_25)) {
             hooked_roff(_("かなり", " extremely"));
-        } else if (flags1 & RF1_RAND_50) {
+        } else if (lore_ptr->flags1 & RF1_RAND_50) {
             hooked_roff(_("幾分", " somewhat"));
-        } else if (flags1 & RF1_RAND_25) {
+        } else if (lore_ptr->flags1 & RF1_RAND_25) {
             hooked_roff(_("少々", " a bit"));
         }
 
         hooked_roff(_("不規則に", " erratically"));
-        if (speed != 110)
+        if (lore_ptr->speed != 110)
             hooked_roff(_("、かつ", ", and"));
     }
 
-    if (speed > 110) {
-        if (speed > 139)
+    if (lore_ptr->speed > 110) {
+        if (lore_ptr->speed > 139)
             hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));
-        else if (speed > 134)
+        else if (lore_ptr->speed > 134)
             hook_c_roff(TERM_ORANGE, _("猛烈に", " extremely"));
-        else if (speed > 129)
+        else if (lore_ptr->speed > 129)
             hook_c_roff(TERM_ORANGE, _("非常に", " very"));
-        else if (speed > 124)
+        else if (lore_ptr->speed > 124)
             hook_c_roff(TERM_UMBER, _("かなり", " fairly"));
-        else if (speed < 120)
+        else if (lore_ptr->speed < 120)
             hook_c_roff(TERM_L_UMBER, _("やや", " somewhat"));
         hook_c_roff(TERM_L_RED, _("素早く", " quickly"));
-    } else if (speed < 110) {
-        if (speed < 90)
+    } else if (lore_ptr->speed < 110) {
+        if (lore_ptr->speed < 90)
             hook_c_roff(TERM_L_GREEN, _("信じ難いほど", " incredibly"));
-        else if (speed < 95)
+        else if (lore_ptr->speed < 95)
             hook_c_roff(TERM_BLUE, _("非常に", " very"));
-        else if (speed < 100)
+        else if (lore_ptr->speed < 100)
             hook_c_roff(TERM_BLUE, _("かなり", " fairly"));
-        else if (speed > 104)
+        else if (lore_ptr->speed > 104)
             hook_c_roff(TERM_GREEN, _("やや", " somewhat"));
         hook_c_roff(TERM_L_BLUE, _("ゆっくりと", " slowly"));
     } else {
@@ -420,7 +400,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     hooked_roff("動いている");
 #endif
 
-    if (flags1 & RF1_NEVER_MOVE) {
+    if (lore_ptr->flags1 & RF1_NEVER_MOVE) {
         if (old) {
             hooked_roff(_("、しかし", ", but "));
         } else {
@@ -436,46 +416,46 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         old = FALSE;
     }
 
-    if (r_ptr->r_tkills || know_everything) {
+    if (lore_ptr->r_ptr->r_tkills || lore_ptr->know_everything) {
 #ifdef JP
         hooked_roff("この");
 #else
-        if (flags1 & RF1_UNIQUE) {
+        if (lore_ptr->flags1 & RF1_UNIQUE) {
             hooked_roff("Killing this");
         } else {
             hooked_roff("A kill of this");
         }
 #endif
 
-        if (flags2 & RF2_ELDRITCH_HORROR)
+        if (lore_ptr->flags2 & RF2_ELDRITCH_HORROR)
             hook_c_roff(TERM_VIOLET, _("狂気を誘う", " sanity-blasting"));
-        if (flags3 & RF3_ANIMAL)
+        if (lore_ptr->flags3 & RF3_ANIMAL)
             hook_c_roff(TERM_L_GREEN, _("自然界の", " natural"));
-        if (flags3 & RF3_EVIL)
+        if (lore_ptr->flags3 & RF3_EVIL)
             hook_c_roff(TERM_L_DARK, _("邪悪なる", " evil"));
-        if (flags3 & RF3_GOOD)
+        if (lore_ptr->flags3 & RF3_GOOD)
             hook_c_roff(TERM_YELLOW, _("善良な", " good"));
-        if (flags3 & RF3_UNDEAD)
+        if (lore_ptr->flags3 & RF3_UNDEAD)
             hook_c_roff(TERM_VIOLET, _("アンデッドの", " undead"));
-        if (flags3 & RF3_AMBERITE)
+        if (lore_ptr->flags3 & RF3_AMBERITE)
             hook_c_roff(TERM_VIOLET, _("アンバーの王族の", " Amberite"));
 
-        if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_ANGEL)) || (flags2 & (RF2_QUANTUM | RF2_HUMAN))) {
-            if (flags3 & RF3_DRAGON)
+        if ((lore_ptr->flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_ANGEL)) || (lore_ptr->flags2 & (RF2_QUANTUM | RF2_HUMAN))) {
+            if (lore_ptr->flags3 & RF3_DRAGON)
                 hook_c_roff(TERM_ORANGE, _("ドラゴン", " dragon"));
-            if (flags3 & RF3_DEMON)
+            if (lore_ptr->flags3 & RF3_DEMON)
                 hook_c_roff(TERM_VIOLET, _("デーモン", " demon"));
-            if (flags3 & RF3_GIANT)
+            if (lore_ptr->flags3 & RF3_GIANT)
                 hook_c_roff(TERM_L_UMBER, _("巨人", " giant"));
-            if (flags3 & RF3_TROLL)
+            if (lore_ptr->flags3 & RF3_TROLL)
                 hook_c_roff(TERM_BLUE, _("トロル", " troll"));
-            if (flags3 & RF3_ORC)
+            if (lore_ptr->flags3 & RF3_ORC)
                 hook_c_roff(TERM_UMBER, _("オーク", " orc"));
-            if (flags2 & RF2_HUMAN)
+            if (lore_ptr->flags2 & RF2_HUMAN)
                 hook_c_roff(TERM_L_WHITE, _("人間", " human"));
-            if (flags2 & RF2_QUANTUM)
+            if (lore_ptr->flags2 & RF2_QUANTUM)
                 hook_c_roff(TERM_VIOLET, _("量子生物", " quantum creature"));
-            if (flags3 & RF3_ANGEL)
+            if (lore_ptr->flags3 & RF3_ANGEL)
                 hook_c_roff(TERM_YELLOW, _("天使", " angel"));
         } else {
             hooked_roff(_("モンスター", " creature"));
@@ -484,8 +464,9 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 #ifdef JP
         hooked_roff("を倒すことは");
 #endif
-        long exp_integer = (long)r_ptr->mexp * r_ptr->level / (player_ptr->max_plv + 2) * 3 / 2;
-        long exp_decimal = ((((long)r_ptr->mexp * r_ptr->level % (player_ptr->max_plv + 2) * 3 / 2) * (long)1000 / (player_ptr->max_plv + 2) + 5) / 10);
+        long exp_integer = (long)lore_ptr->r_ptr->mexp * lore_ptr->r_ptr->level / (player_ptr->max_plv + 2) * 3 / 2;
+        long exp_decimal
+            = ((((long)lore_ptr->r_ptr->mexp * lore_ptr->r_ptr->level % (player_ptr->max_plv + 2) * 3 / 2) * (long)1000 / (player_ptr->max_plv + 2) + 5) / 10);
 
 #ifdef JP
         hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", player_ptr->lev, (long)exp_integer, (long)exp_decimal));
@@ -514,31 +495,31 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 #endif
     }
 
-    if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC) && (flags3 & RF3_AURA_COLD)) {
+    if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC) && (lore_ptr->flags3 & RF3_AURA_COLD)) {
         hook_c_roff(TERM_VIOLET, format(_("%^sは炎と氷とスパークに包まれている。", "%^s is surrounded by flames, ice and electricity.  "), wd_he[msex]));
-    } else if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC)) {
+    } else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC)) {
         hook_c_roff(TERM_L_RED, format(_("%^sは炎とスパークに包まれている。", "%^s is surrounded by flames and electricity.  "), wd_he[msex]));
-    } else if ((flags2 & RF2_AURA_FIRE) && (flags3 & RF3_AURA_COLD)) {
+    } else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags3 & RF3_AURA_COLD)) {
         hook_c_roff(TERM_BLUE, format(_("%^sは炎と氷に包まれている。", "%^s is surrounded by flames and ice.  "), wd_he[msex]));
-    } else if ((flags3 & RF3_AURA_COLD) && (flags2 & RF2_AURA_ELEC)) {
+    } else if ((lore_ptr->flags3 & RF3_AURA_COLD) && (lore_ptr->flags2 & RF2_AURA_ELEC)) {
         hook_c_roff(TERM_L_GREEN, format(_("%^sは氷とスパークに包まれている。", "%^s is surrounded by ice and electricity.  "), wd_he[msex]));
-    } else if (flags2 & RF2_AURA_FIRE) {
+    } else if (lore_ptr->flags2 & RF2_AURA_FIRE) {
         hook_c_roff(TERM_RED, format(_("%^sは炎に包まれている。", "%^s is surrounded by flames.  "), wd_he[msex]));
-    } else if (flags3 & RF3_AURA_COLD) {
+    } else if (lore_ptr->flags3 & RF3_AURA_COLD) {
         hook_c_roff(TERM_BLUE, format(_("%^sは氷に包まれている。", "%^s is surrounded by ice.  "), wd_he[msex]));
-    } else if (flags2 & RF2_AURA_ELEC) {
+    } else if (lore_ptr->flags2 & RF2_AURA_ELEC) {
         hook_c_roff(TERM_L_BLUE, format(_("%^sはスパークに包まれている。", "%^s is surrounded by electricity.  "), wd_he[msex]));
     }
 
-    if (flags2 & RF2_REFLECTING)
+    if (lore_ptr->flags2 & RF2_REFLECTING)
         hooked_roff(format(_("%^sは矢の呪文を跳ね返す。", "%^s reflects bolt spells.  "), wd_he[msex]));
 
-    if ((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS) || reinforce) {
+    if ((lore_ptr->flags1 & RF1_ESCORT) || (lore_ptr->flags1 & RF1_ESCORTS) || lore_ptr->reinforce) {
         hooked_roff(format(_("%^sは通常護衛を伴って現れる。", "%^s usually appears with escorts.  "), wd_he[msex]));
 
-        if (reinforce) {
+        if (lore_ptr->reinforce) {
             hooked_roff(_("護衛の構成は", "These escorts"));
-            if ((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS)) {
+            if ((lore_ptr->flags1 & RF1_ESCORT) || (lore_ptr->flags1 & RF1_ESCORTS)) {
                 hooked_roff(_("少なくとも", " at the least"));
             }
 #ifdef JP
@@ -546,27 +527,27 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             hooked_roff(" contain ");
 #endif
             for (int n = 0; n < A_MAX; n++) {
-                bool is_reinforced = r_ptr->reinforce_id[n] > 0;
-                is_reinforced &= r_ptr->reinforce_dd[n] > 0;
-                is_reinforced &= r_ptr->reinforce_ds[n] > 0;
+                bool is_reinforced = lore_ptr->r_ptr->reinforce_id[n] > 0;
+                is_reinforced &= lore_ptr->r_ptr->reinforce_dd[n] > 0;
+                is_reinforced &= lore_ptr->r_ptr->reinforce_ds[n] > 0;
                 if (!is_reinforced)
                     continue;
 
-                monster_race *rf_ptr = &r_info[r_ptr->reinforce_id[n]];
+                monster_race *rf_ptr = &r_info[lore_ptr->r_ptr->reinforce_id[n]];
                 if (rf_ptr->flags1 & RF1_UNIQUE) {
                     hooked_roff(format(_("、%s", ", %s"), r_name + rf_ptr->name));
                     continue;
                 }
 
 #ifdef JP
-                hooked_roff(format("、 %dd%d 体の%s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n], r_name + rf_ptr->name));
+                hooked_roff(format("、 %dd%d 体の%s", lore_ptr->r_ptr->reinforce_dd[n], lore_ptr->r_ptr->reinforce_ds[n], r_name + rf_ptr->name));
 #else
-                bool plural = (r_ptr->reinforce_dd[n] * r_ptr->reinforce_ds[n] > 1);
+                bool plural = (lore_ptr->r_ptr->reinforce_dd[n] * lore_ptr->r_ptr->reinforce_ds[n] > 1);
                 GAME_TEXT name[MAX_NLEN];
                 strcpy(name, r_name + rf_ptr->name);
                 if (plural)
                     plural_aux(name);
-                hooked_roff(format(",%dd%d %s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n], name));
+                hooked_roff(format(",%dd%d %s", lore_ptr->r_ptr->reinforce_dd[n], lore_ptr->r_ptr->reinforce_ds[n], name));
 #endif
             }
 
@@ -574,7 +555,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         }
     }
 
-    else if (flags1 & RF1_FRIENDS) {
+    else if (lore_ptr->flags1 & RF1_FRIENDS) {
         hooked_roff(format(_("%^sは通常集団で現れる。", "%^s usually appears in groups.  "), wd_he[msex]));
     }
 
@@ -582,24 +563,25 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     byte color[96];
     concptr vp[96];
     char tmp_msg[96][96];
-    if (flags4 & RF4_SHRIEK) {
+    if (lore_ptr->flags4 & RF4_SHRIEK) {
         vp[vn] = _("悲鳴で助けを求める", "shriek for help");
         color[vn++] = TERM_L_WHITE;
     }
 
-    if (flags4 & RF4_ROCKET) {
+    if (lore_ptr->flags4 & RF4_ROCKET) {
         set_damage(player_ptr, r_idx, (MS_ROCKET), _("ロケット%sを発射する", "shoot a rocket%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_UMBER;
     }
 
-    if (flags4 & RF4_SHOOT) {
+    if (lore_ptr->flags4 & RF4_SHOOT) {
         for (int m = 0; m < 4; m++) {
-            if (r_ptr->blow[m].method != RBM_SHOOT)
+            if (lore_ptr->r_ptr->blow[m].method != RBM_SHOOT)
                 continue;
 
             if (know_armour(r_idx))
-                sprintf(tmp_msg[vn], _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), r_ptr->blow[m].d_side, r_ptr->blow[m].d_dice);
+                sprintf(
+                    tmp_msg[vn], _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blow[m].d_side, lore_ptr->r_ptr->blow[m].d_dice);
             else
                 sprintf(tmp_msg[vn], _("射撃をする", "fire an arrow"));
             vp[vn] = tmp_msg[vn];
@@ -608,7 +590,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         }
     }
 
-    if (a_ability_flags2 & (RF6_SPECIAL)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_SPECIAL)) {
         vp[vn] = _("特別な行動をする", "do something");
         color[vn++] = TERM_VIOLET;
     }
@@ -618,8 +600,8 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         for (int n = 0; n < vn; n++) {
 #ifdef JP
             if (n != vn - 1) {
-                jverb(vp[n], jverb_buf, JVERB_OR);
-                hook_c_roff(color[n], jverb_buf);
+                jverb(vp[n], lore_ptr->jverb_buf, JVERB_OR);
+                hook_c_roff(color[n], lore_ptr->jverb_buf);
                 hook_c_roff(color[n], "り");
                 hooked_roff("、");
             } else
@@ -640,133 +622,133 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     vn = 0;
-    if (flags4 & (RF4_BR_ACID)) {
+    if (lore_ptr->flags4 & (RF4_BR_ACID)) {
         set_damage(player_ptr, r_idx, (MS_BR_ACID), _("酸%s", "acid%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_GREEN;
     }
 
-    if (flags4 & (RF4_BR_ELEC)) {
+    if (lore_ptr->flags4 & (RF4_BR_ELEC)) {
         set_damage(player_ptr, r_idx, (MS_BR_ELEC), _("稲妻%s", "lightning%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_BLUE;
     }
 
-    if (flags4 & (RF4_BR_FIRE)) {
+    if (lore_ptr->flags4 & (RF4_BR_FIRE)) {
         set_damage(player_ptr, r_idx, (MS_BR_FIRE), _("火炎%s", "fire%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_RED;
     }
 
-    if (flags4 & (RF4_BR_COLD)) {
+    if (lore_ptr->flags4 & (RF4_BR_COLD)) {
         set_damage(player_ptr, r_idx, (MS_BR_COLD), _("冷気%s", "frost%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_WHITE;
     }
 
-    if (flags4 & (RF4_BR_POIS)) {
+    if (lore_ptr->flags4 & (RF4_BR_POIS)) {
         set_damage(player_ptr, r_idx, (MS_BR_POIS), _("毒%s", "poison%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_GREEN;
     }
 
-    if (flags4 & (RF4_BR_NETH)) {
+    if (lore_ptr->flags4 & (RF4_BR_NETH)) {
         set_damage(player_ptr, r_idx, (MS_BR_NETHER), _("地獄%s", "nether%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_DARK;
     }
 
-    if (flags4 & (RF4_BR_LITE)) {
+    if (lore_ptr->flags4 & (RF4_BR_LITE)) {
         set_damage(player_ptr, r_idx, (MS_BR_LITE), _("閃光%s", "light%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_YELLOW;
     }
 
-    if (flags4 & (RF4_BR_DARK)) {
+    if (lore_ptr->flags4 & (RF4_BR_DARK)) {
         set_damage(player_ptr, r_idx, (MS_BR_DARK), _("暗黒%s", "darkness%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_DARK;
     }
 
-    if (flags4 & (RF4_BR_CONF)) {
+    if (lore_ptr->flags4 & (RF4_BR_CONF)) {
         set_damage(player_ptr, r_idx, (MS_BR_CONF), _("混乱%s", "confusion%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_UMBER;
     }
 
-    if (flags4 & (RF4_BR_SOUN)) {
+    if (lore_ptr->flags4 & (RF4_BR_SOUN)) {
         set_damage(player_ptr, r_idx, (MS_BR_SOUND), _("轟音%s", "sound%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_ORANGE;
     }
 
-    if (flags4 & (RF4_BR_CHAO)) {
+    if (lore_ptr->flags4 & (RF4_BR_CHAO)) {
         set_damage(player_ptr, r_idx, (MS_BR_CHAOS), _("カオス%s", "chaos%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_VIOLET;
     }
 
-    if (flags4 & (RF4_BR_DISE)) {
+    if (lore_ptr->flags4 & (RF4_BR_DISE)) {
         set_damage(player_ptr, r_idx, (MS_BR_DISEN), _("劣化%s", "disenchantment%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_VIOLET;
     }
 
-    if (flags4 & (RF4_BR_NEXU)) {
+    if (lore_ptr->flags4 & (RF4_BR_NEXU)) {
         set_damage(player_ptr, r_idx, (MS_BR_NEXUS), _("因果混乱%s", "nexus%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_VIOLET;
     }
 
-    if (flags4 & (RF4_BR_TIME)) {
+    if (lore_ptr->flags4 & (RF4_BR_TIME)) {
         set_damage(player_ptr, r_idx, (MS_BR_TIME), _("時間逆転%s", "time%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_BLUE;
     }
 
-    if (flags4 & (RF4_BR_INER)) {
+    if (lore_ptr->flags4 & (RF4_BR_INER)) {
         set_damage(player_ptr, r_idx, (MS_BR_INERTIA), _("遅鈍%s", "inertia%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_SLATE;
     }
 
-    if (flags4 & (RF4_BR_GRAV)) {
+    if (lore_ptr->flags4 & (RF4_BR_GRAV)) {
         set_damage(player_ptr, r_idx, (MS_BR_GRAVITY), _("重力%s", "gravity%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_SLATE;
     }
 
-    if (flags4 & (RF4_BR_SHAR)) {
+    if (lore_ptr->flags4 & (RF4_BR_SHAR)) {
         set_damage(player_ptr, r_idx, (MS_BR_SHARDS), _("破片%s", "shards%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_UMBER;
     }
 
-    if (flags4 & (RF4_BR_PLAS)) {
+    if (lore_ptr->flags4 & (RF4_BR_PLAS)) {
         set_damage(player_ptr, r_idx, (MS_BR_PLASMA), _("プラズマ%s", "plasma%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_RED;
     }
 
-    if (flags4 & (RF4_BR_WALL)) {
+    if (lore_ptr->flags4 & (RF4_BR_WALL)) {
         set_damage(player_ptr, r_idx, (MS_BR_FORCE), _("フォース%s", "force%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_UMBER;
     }
 
-    if (flags4 & (RF4_BR_MANA)) {
+    if (lore_ptr->flags4 & (RF4_BR_MANA)) {
         set_damage(player_ptr, r_idx, (MS_BR_MANA), _("魔力%s", "mana%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_BLUE;
     }
 
-    if (flags4 & (RF4_BR_NUKE)) {
+    if (lore_ptr->flags4 & (RF4_BR_NUKE)) {
         set_damage(player_ptr, r_idx, (MS_BR_NUKE), _("放射性廃棄物%s", "toxic waste%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_GREEN;
     }
 
-    if (flags4 & (RF4_BR_DISI)) {
+    if (lore_ptr->flags4 & (RF4_BR_DISI)) {
         set_damage(player_ptr, r_idx, (MS_BR_DISI), _("分解%s", "disintegration%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_SLATE;
@@ -797,254 +779,254 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     vn = 0;
-    if (a_ability_flags1 & (RF5_BA_ACID)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_ACID)) {
         set_damage(player_ptr, r_idx, (MS_BALL_ACID), _("アシッド・ボール%s", "produce acid balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_GREEN;
     }
 
-    if (a_ability_flags1 & (RF5_BA_ELEC)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_ELEC)) {
         set_damage(player_ptr, r_idx, (MS_BALL_ELEC), _("サンダー・ボール%s", "produce lightning balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_BLUE;
     }
 
-    if (a_ability_flags1 & (RF5_BA_FIRE)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_FIRE)) {
         set_damage(player_ptr, r_idx, (MS_BALL_FIRE), _("ファイア・ボール%s", "produce fire balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_RED;
     }
 
-    if (a_ability_flags1 & (RF5_BA_COLD)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_COLD)) {
         set_damage(player_ptr, r_idx, (MS_BALL_COLD), _("アイス・ボール%s", "produce frost balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_WHITE;
     }
 
-    if (a_ability_flags1 & (RF5_BA_POIS)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_POIS)) {
         set_damage(player_ptr, r_idx, (MS_BALL_POIS), _("悪臭雲%s", "produce poison balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_GREEN;
     }
 
-    if (a_ability_flags1 & (RF5_BA_NETH)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_NETH)) {
         set_damage(player_ptr, r_idx, (MS_BALL_NETHER), _("地獄球%s", "produce nether balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_DARK;
     }
 
-    if (a_ability_flags1 & (RF5_BA_WATE)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_WATE)) {
         set_damage(player_ptr, r_idx, (MS_BALL_WATER), _("ウォーター・ボール%s", "produce water balls%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_BLUE;
     }
 
-    if (flags4 & (RF4_BA_NUKE)) {
+    if (lore_ptr->flags4 & (RF4_BA_NUKE)) {
         set_damage(player_ptr, r_idx, (MS_BALL_NUKE), _("放射能球%s", "produce balls of radiation%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_GREEN;
     }
 
-    if (a_ability_flags1 & (RF5_BA_MANA)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_MANA)) {
         set_damage(player_ptr, r_idx, (MS_BALL_MANA), _("魔力の嵐%s", "invoke mana storms%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_BLUE;
     }
 
-    if (a_ability_flags1 & (RF5_BA_DARK)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_DARK)) {
         set_damage(player_ptr, r_idx, (MS_BALL_DARK), _("暗黒の嵐%s", "invoke darkness storms%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_DARK;
     }
 
-    if (a_ability_flags1 & (RF5_BA_LITE)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BA_LITE)) {
         set_damage(player_ptr, r_idx, (MS_STARBURST), _("スターバースト%s", "invoke starburst%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_YELLOW;
     }
 
-    if (flags4 & (RF4_BA_CHAO)) {
+    if (lore_ptr->flags4 & (RF4_BA_CHAO)) {
         set_damage(player_ptr, r_idx, (MS_BALL_CHAOS), _("純ログルス%s", "invoke raw Logrus%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_VIOLET;
     }
 
-    if (a_ability_flags2 & (RF6_HAND_DOOM)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_HAND_DOOM)) {
         vp[vn] = _("破滅の手(40%-60%)", "invoke the Hand of Doom(40%-60%)");
         color[vn++] = TERM_VIOLET;
     }
 
-    if (a_ability_flags2 & (RF6_PSY_SPEAR)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_PSY_SPEAR)) {
         set_damage(player_ptr, r_idx, (MS_PSY_SPEAR), _("光の剣%s", "psycho-spear%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_YELLOW;
     }
 
-    if (a_ability_flags1 & (RF5_DRAIN_MANA)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_DRAIN_MANA)) {
         set_damage(player_ptr, r_idx, (MS_DRAIN_MANA), _("魔力吸収%s", "drain mana%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_SLATE;
     }
 
-    if (a_ability_flags1 & (RF5_MIND_BLAST)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_MIND_BLAST)) {
         set_damage(player_ptr, r_idx, (MS_MIND_BLAST), _("精神攻撃%s", "cause mind blasting%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_RED;
     }
 
-    if (a_ability_flags1 & (RF5_BRAIN_SMASH)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BRAIN_SMASH)) {
         set_damage(player_ptr, r_idx, (MS_BRAIN_SMASH), _("脳攻撃%s", "cause brain smashing%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_RED;
     }
 
-    if (a_ability_flags1 & (RF5_CAUSE_1)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_1)) {
         set_damage(player_ptr, r_idx, (MS_CAUSE_1), _("軽傷＋呪い%s", "cause light wounds and cursing%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_WHITE;
     }
 
-    if (a_ability_flags1 & (RF5_CAUSE_2)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_2)) {
         set_damage(player_ptr, r_idx, (MS_CAUSE_2), _("重傷＋呪い%s", "cause serious wounds and cursing%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_WHITE;
     }
 
-    if (a_ability_flags1 & (RF5_CAUSE_3)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_3)) {
         set_damage(player_ptr, r_idx, (MS_CAUSE_3), _("致命傷＋呪い%s", "cause critical wounds and cursing%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_WHITE;
     }
 
-    if (a_ability_flags1 & (RF5_CAUSE_4)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_4)) {
         set_damage(player_ptr, r_idx, (MS_CAUSE_4), _("秘孔を突く%s", "cause mortal wounds%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_WHITE;
     }
 
-    if (a_ability_flags1 & (RF5_BO_ACID)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_ACID)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_ACID), _("アシッド・ボルト%s", "produce acid bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_GREEN;
     }
 
-    if (a_ability_flags1 & (RF5_BO_ELEC)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_ELEC)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_ELEC), _("サンダー・ボルト%s", "produce lightning bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_BLUE;
     }
 
-    if (a_ability_flags1 & (RF5_BO_FIRE)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_FIRE)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_FIRE), _("ファイア・ボルト%s", "produce fire bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_RED;
     }
 
-    if (a_ability_flags1 & (RF5_BO_COLD)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_COLD)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_COLD), _("アイス・ボルト%s", "produce frost bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_WHITE;
     }
 
-    if (a_ability_flags1 & (RF5_BO_NETH)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_NETH)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_NETHER), _("地獄の矢%s", "produce nether bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_DARK;
     }
 
-    if (a_ability_flags1 & (RF5_BO_WATE)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_WATE)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_WATER), _("ウォーター・ボルト%s", "produce water bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_BLUE;
     }
 
-    if (a_ability_flags1 & (RF5_BO_MANA)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_MANA)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_MANA), _("魔力の矢%s", "produce mana bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_BLUE;
     }
 
-    if (a_ability_flags1 & (RF5_BO_PLAS)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_PLAS)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_PLASMA), _("プラズマ・ボルト%s", "produce plasma bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_L_RED;
     }
 
-    if (a_ability_flags1 & (RF5_BO_ICEE)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_ICEE)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_ICE), _("極寒の矢%s", "produce ice bolts%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_WHITE;
     }
 
-    if (a_ability_flags1 & (RF5_MISSILE)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_MISSILE)) {
         set_damage(player_ptr, r_idx, (MS_MAGIC_MISSILE), _("マジックミサイル%s", "produce magic missiles%s"), tmp_msg[vn]);
         vp[vn] = tmp_msg[vn];
         color[vn++] = TERM_SLATE;
     }
 
-    if (a_ability_flags1 & (RF5_SCARE)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_SCARE)) {
         vp[vn] = _("恐怖", "terrify");
         color[vn++] = TERM_SLATE;
     }
-    if (a_ability_flags1 & (RF5_BLIND)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_BLIND)) {
         vp[vn] = _("目くらまし", "blind");
         color[vn++] = TERM_L_DARK;
     }
-    if (a_ability_flags1 & (RF5_CONF)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_CONF)) {
         vp[vn] = _("混乱", "confuse");
         color[vn++] = TERM_L_UMBER;
     }
-    if (a_ability_flags1 & (RF5_SLOW)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_SLOW)) {
         vp[vn] = _("減速", "slow");
         color[vn++] = TERM_UMBER;
     }
-    if (a_ability_flags1 & (RF5_HOLD)) {
+    if (lore_ptr->a_ability_flags1 & (RF5_HOLD)) {
         vp[vn] = _("麻痺", "paralyze");
         color[vn++] = TERM_RED;
     }
-    if (a_ability_flags2 & (RF6_HASTE)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_HASTE)) {
         vp[vn] = _("加速", "haste-self");
         color[vn++] = TERM_L_GREEN;
     }
-    if (a_ability_flags2 & (RF6_HEAL)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_HEAL)) {
         vp[vn] = _("治癒", "heal-self");
         color[vn++] = TERM_WHITE;
     }
-    if (a_ability_flags2 & (RF6_INVULNER)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_INVULNER)) {
         vp[vn] = _("無敵化", "make invulnerable");
         color[vn++] = TERM_WHITE;
     }
-    if (flags4 & RF4_DISPEL) {
+    if (lore_ptr->flags4 & RF4_DISPEL) {
         vp[vn] = _("魔力消去", "dispel-magic");
         color[vn++] = TERM_L_WHITE;
     }
-    if (a_ability_flags2 & (RF6_BLINK)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_BLINK)) {
         vp[vn] = _("ショートテレポート", "blink-self");
         color[vn++] = TERM_UMBER;
     }
-    if (a_ability_flags2 & (RF6_TPORT)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_TPORT)) {
         vp[vn] = _("テレポート", "teleport-self");
         color[vn++] = TERM_ORANGE;
     }
-    if (a_ability_flags2 & (RF6_WORLD)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_WORLD)) {
         vp[vn] = _("時を止める", "stop the time");
         color[vn++] = TERM_L_BLUE;
     }
-    if (a_ability_flags2 & (RF6_TELE_TO)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_TELE_TO)) {
         vp[vn] = _("テレポートバック", "teleport to");
         color[vn++] = TERM_L_UMBER;
     }
-    if (a_ability_flags2 & (RF6_TELE_AWAY)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_TELE_AWAY)) {
         vp[vn] = _("テレポートアウェイ", "teleport away");
         color[vn++] = TERM_UMBER;
     }
-    if (a_ability_flags2 & (RF6_TELE_LEVEL)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_TELE_LEVEL)) {
         vp[vn] = _("テレポート・レベル", "teleport level");
         color[vn++] = TERM_ORANGE;
     }
 
-    if (a_ability_flags2 & (RF6_DARKNESS)) {
-        if ((player_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (r_ptr->flags7 & RF7_DARK_MASK)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_DARKNESS)) {
+        if ((player_ptr->pclass != CLASS_NINJA) || (lore_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (lore_ptr->r_ptr->flags7 & RF7_DARK_MASK)) {
             vp[vn] = _("暗闇", "create darkness");
             color[vn++] = TERM_L_DARK;
         } else {
@@ -1053,79 +1035,79 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         }
     }
 
-    if (a_ability_flags2 & (RF6_TRAPS)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_TRAPS)) {
         vp[vn] = _("トラップ", "create traps");
         color[vn++] = TERM_BLUE;
     }
-    if (a_ability_flags2 & (RF6_FORGET)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_FORGET)) {
         vp[vn] = _("記憶消去", "cause amnesia");
         color[vn++] = TERM_BLUE;
     }
-    if (a_ability_flags2 & (RF6_RAISE_DEAD)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_RAISE_DEAD)) {
         vp[vn] = _("死者復活", "raise dead");
         color[vn++] = TERM_RED;
     }
-    if (a_ability_flags2 & (RF6_S_MONSTER)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_MONSTER)) {
         vp[vn] = _("モンスター一体召喚", "summon a monster");
         color[vn++] = TERM_SLATE;
     }
-    if (a_ability_flags2 & (RF6_S_MONSTERS)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_MONSTERS)) {
         vp[vn] = _("モンスター複数召喚", "summon monsters");
         color[vn++] = TERM_L_WHITE;
     }
-    if (a_ability_flags2 & (RF6_S_KIN)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_KIN)) {
         vp[vn] = _("救援召喚", "summon aid");
         color[vn++] = TERM_ORANGE;
     }
-    if (a_ability_flags2 & (RF6_S_ANT)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_ANT)) {
         vp[vn] = _("アリ召喚", "summon ants");
         color[vn++] = TERM_RED;
     }
-    if (a_ability_flags2 & (RF6_S_SPIDER)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_SPIDER)) {
         vp[vn] = _("クモ召喚", "summon spiders");
         color[vn++] = TERM_L_DARK;
     }
-    if (a_ability_flags2 & (RF6_S_HOUND)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_HOUND)) {
         vp[vn] = _("ハウンド召喚", "summon hounds");
         color[vn++] = TERM_L_UMBER;
     }
-    if (a_ability_flags2 & (RF6_S_HYDRA)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_HYDRA)) {
         vp[vn] = _("ヒドラ召喚", "summon hydras");
         color[vn++] = TERM_L_GREEN;
     }
-    if (a_ability_flags2 & (RF6_S_ANGEL)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_ANGEL)) {
         vp[vn] = _("天使一体召喚", "summon an angel");
         color[vn++] = TERM_YELLOW;
     }
-    if (a_ability_flags2 & (RF6_S_DEMON)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_DEMON)) {
         vp[vn] = _("デーモン一体召喚", "summon a demon");
         color[vn++] = TERM_L_RED;
     }
-    if (a_ability_flags2 & (RF6_S_UNDEAD)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_UNDEAD)) {
         vp[vn] = _("アンデッド一体召喚", "summon an undead");
         color[vn++] = TERM_L_DARK;
     }
-    if (a_ability_flags2 & (RF6_S_DRAGON)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_DRAGON)) {
         vp[vn] = _("ドラゴン一体召喚", "summon a dragon");
         color[vn++] = TERM_ORANGE;
     }
-    if (a_ability_flags2 & (RF6_S_HI_UNDEAD)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_HI_UNDEAD)) {
         vp[vn] = _("強力なアンデッド召喚", "summon Greater Undead");
         color[vn++] = TERM_L_DARK;
     }
-    if (a_ability_flags2 & (RF6_S_HI_DRAGON)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_HI_DRAGON)) {
         vp[vn] = _("古代ドラゴン召喚", "summon Ancient Dragons");
         color[vn++] = TERM_ORANGE;
     }
-    if (a_ability_flags2 & (RF6_S_CYBER)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_CYBER)) {
         vp[vn] = _("サイバーデーモン召喚", "summon Cyberdemons");
         color[vn++] = TERM_UMBER;
     }
-    if (a_ability_flags2 & (RF6_S_AMBERITES)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_AMBERITES)) {
         vp[vn] = _("アンバーの王族召喚", "summon Lords of Amber");
         color[vn++] = TERM_VIOLET;
     }
-    if (a_ability_flags2 & (RF6_S_UNIQUE)) {
+    if (lore_ptr->a_ability_flags2 & (RF6_S_UNIQUE)) {
         vp[vn] = _("ユニーク・モンスター召喚", "summon Unique Monsters");
         color[vn++] = TERM_VIOLET;
     }
@@ -1140,12 +1122,12 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         }
 
 #ifdef JP
-        if (flags2 & (RF2_SMART))
+        if (lore_ptr->flags2 & (RF2_SMART))
             hook_c_roff(TERM_YELLOW, "的確に");
         hooked_roff("魔法を使うことができ、");
 #else
         hooked_roff(" magical, casting spells");
-        if (flags2 & RF2_SMART)
+        if (lore_ptr->flags2 & RF2_SMART)
             hook_c_roff(TERM_YELLOW, " intelligently");
 #endif
 
@@ -1170,9 +1152,9 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     if (breath || magic) {
-        int m = r_ptr->r_cast_spell;
-        int n = r_ptr->freq_spell;
-        if (m > 100 || know_everything) {
+        int m = lore_ptr->r_ptr->r_cast_spell;
+        int n = lore_ptr->r_ptr->freq_spell;
+        if (m > 100 || lore_ptr->know_everything) {
             hooked_roff(format(_("(確率:1/%d)", "; 1 time in %d"), 100 / n));
         } else if (m) {
             n = ((n + 9) / 10) * 10;
@@ -1182,63 +1164,64 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         hooked_roff(_("。", ".  "));
     }
 
-    if (know_everything || know_armour(r_idx)) {
-        hooked_roff(format(_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"), wd_he[msex], r_ptr->ac));
+    if (lore_ptr->know_everything || know_armour(r_idx)) {
+        hooked_roff(format(_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"), wd_he[msex], lore_ptr->r_ptr->ac));
 
-        if ((flags1 & RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
-            u32b hp = r_ptr->hdice * (nightmare ? 2 : 1) * r_ptr->hside;
+        if ((lore_ptr->flags1 & RF1_FORCE_MAXHP) || (lore_ptr->r_ptr->hside == 1)) {
+            u32b hp = lore_ptr->r_ptr->hdice * (lore_ptr->nightmare ? 2 : 1) * lore_ptr->r_ptr->hside;
             hooked_roff(format(_(" %d の体力がある。", " and a life rating of %d.  "), (s16b)MIN(30000, hp)));
         } else {
-            hooked_roff(format(_(" %dd%d の体力がある。", " and a life rating of %dd%d.  "), r_ptr->hdice * (nightmare ? 2 : 1), r_ptr->hside));
+            hooked_roff(format(
+                _(" %dd%d の体力がある。", " and a life rating of %dd%d.  "), lore_ptr->r_ptr->hdice * (lore_ptr->nightmare ? 2 : 1), lore_ptr->r_ptr->hside));
         }
     }
 
     vn = 0;
-    if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) {
+    if (lore_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) {
         vp[vn] = _("ダンジョンを照らす", "illuminate the dungeon");
         color[vn++] = TERM_WHITE;
     }
-    if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) {
+    if (lore_ptr->flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) {
         vp[vn] = _("ダンジョンを暗くする", "darken the dungeon");
         color[vn++] = TERM_L_DARK;
     }
-    if (flags2 & RF2_OPEN_DOOR) {
+    if (lore_ptr->flags2 & RF2_OPEN_DOOR) {
         vp[vn] = _("ドアを開ける", "open doors");
         color[vn++] = TERM_WHITE;
     }
-    if (flags2 & RF2_BASH_DOOR) {
+    if (lore_ptr->flags2 & RF2_BASH_DOOR) {
         vp[vn] = _("ドアを打ち破る", "bash down doors");
         color[vn++] = TERM_WHITE;
     }
-    if (flags7 & RF7_CAN_FLY) {
+    if (lore_ptr->flags7 & RF7_CAN_FLY) {
         vp[vn] = _("空を飛ぶ", "fly");
         color[vn++] = TERM_WHITE;
     }
-    if (flags7 & RF7_CAN_SWIM) {
+    if (lore_ptr->flags7 & RF7_CAN_SWIM) {
         vp[vn] = _("水を渡る", "swim");
         color[vn++] = TERM_WHITE;
     }
-    if (flags2 & RF2_PASS_WALL) {
+    if (lore_ptr->flags2 & RF2_PASS_WALL) {
         vp[vn] = _("壁をすり抜ける", "pass through walls");
         color[vn++] = TERM_WHITE;
     }
-    if (flags2 & RF2_KILL_WALL) {
+    if (lore_ptr->flags2 & RF2_KILL_WALL) {
         vp[vn] = _("壁を掘り進む", "bore through walls");
         color[vn++] = TERM_WHITE;
     }
-    if (flags2 & RF2_MOVE_BODY) {
+    if (lore_ptr->flags2 & RF2_MOVE_BODY) {
         vp[vn] = _("弱いモンスターを押しのける", "push past weaker monsters");
         color[vn++] = TERM_WHITE;
     }
-    if (flags2 & RF2_KILL_BODY) {
+    if (lore_ptr->flags2 & RF2_KILL_BODY) {
         vp[vn] = _("弱いモンスターを倒す", "destroy weaker monsters");
         color[vn++] = TERM_WHITE;
     }
-    if (flags2 & RF2_TAKE_ITEM) {
+    if (lore_ptr->flags2 & RF2_TAKE_ITEM) {
         vp[vn] = _("アイテムを拾う", "pick up objects");
         color[vn++] = TERM_WHITE;
     }
-    if (flags2 & RF2_KILL_ITEM) {
+    if (lore_ptr->flags2 & RF2_KILL_ITEM) {
         vp[vn] = _("アイテムを壊す", "destroy objects");
         color[vn++] = TERM_WHITE;
     }
@@ -1248,8 +1231,8 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         for (int n = 0; n < vn; n++) {
 #ifdef JP
             if (n != vn - 1) {
-                jverb(vp[n], jverb_buf, JVERB_AND);
-                hook_c_roff(color[n], jverb_buf);
+                jverb(vp[n], lore_ptr->jverb_buf, JVERB_AND);
+                hook_c_roff(color[n], lore_ptr->jverb_buf);
                 hooked_roff("、");
             } else {
                 hook_c_roff(color[n], vp[n]);
@@ -1269,58 +1252,58 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         hooked_roff(_("ことができる。", ".  "));
     }
 
-    if (flags7 & RF7_AQUATIC) {
+    if (lore_ptr->flags7 & RF7_AQUATIC) {
         hooked_roff(format(_("%^sは水中に棲んでいる。", "%^s lives in water.  "), wd_he[msex]));
     }
 
-    if (flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) {
+    if (lore_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) {
         hooked_roff(format(_("%^sは光っている。", "%^s is shining.  "), wd_he[msex]));
     }
 
-    if (flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) {
+    if (lore_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) {
         hook_c_roff(TERM_L_DARK, format(_("%^sは暗黒に包まれている。", "%^s is surrounded by darkness.  "), wd_he[msex]));
     }
 
-    if (flags2 & RF2_INVISIBLE) {
+    if (lore_ptr->flags2 & RF2_INVISIBLE) {
         hooked_roff(format(_("%^sは透明で目に見えない。", "%^s is invisible.  "), wd_he[msex]));
     }
 
-    if (flags2 & RF2_COLD_BLOOD) {
+    if (lore_ptr->flags2 & RF2_COLD_BLOOD) {
         hooked_roff(format(_("%^sは冷血動物である。", "%^s is cold blooded.  "), wd_he[msex]));
     }
 
-    if (flags2 & RF2_EMPTY_MIND) {
+    if (lore_ptr->flags2 & RF2_EMPTY_MIND) {
         hooked_roff(format(_("%^sはテレパシーでは感知できない。", "%^s is not detected by telepathy.  "), wd_he[msex]));
-    } else if (flags2 & RF2_WEIRD_MIND) {
+    } else if (lore_ptr->flags2 & RF2_WEIRD_MIND) {
         hooked_roff(format(_("%^sはまれにテレパシーで感知できる。", "%^s is rarely detected by telepathy.  "), wd_he[msex]));
     }
 
-    if (flags2 & RF2_MULTIPLY) {
+    if (lore_ptr->flags2 & RF2_MULTIPLY) {
         hook_c_roff(TERM_L_UMBER, format(_("%^sは爆発的に増殖する。", "%^s breeds explosively.  "), wd_he[msex]));
     }
 
-    if (flags2 & RF2_REGENERATE) {
+    if (lore_ptr->flags2 & RF2_REGENERATE) {
         hook_c_roff(TERM_L_WHITE, format(_("%^sは素早く体力を回復する。", "%^s regenerates quickly.  "), wd_he[msex]));
     }
 
-    if (flags7 & RF7_RIDING) {
+    if (lore_ptr->flags7 & RF7_RIDING) {
         hook_c_roff(TERM_SLATE, format(_("%^sに乗ることができる。", "%^s is suitable for riding.  "), wd_he[msex]));
     }
 
     vn = 0;
-    if (flags3 & RF3_HURT_ROCK) {
+    if (lore_ptr->flags3 & RF3_HURT_ROCK) {
         vp[vn] = _("岩を除去するもの", "rock remover");
         color[vn++] = TERM_UMBER;
     }
-    if (flags3 & RF3_HURT_LITE) {
+    if (lore_ptr->flags3 & RF3_HURT_LITE) {
         vp[vn] = _("明るい光", "bright light");
         color[vn++] = TERM_YELLOW;
     }
-    if (flags3 & RF3_HURT_FIRE) {
+    if (lore_ptr->flags3 & RF3_HURT_FIRE) {
         vp[vn] = _("炎", "fire");
         color[vn++] = TERM_RED;
     }
-    if (flags3 & RF3_HURT_COLD) {
+    if (lore_ptr->flags3 & RF3_HURT_COLD) {
         vp[vn] = _("冷気", "cold");
         color[vn++] = TERM_L_WHITE;
     }
@@ -1347,88 +1330,88 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     vn = 0;
-    if (flagsr & RFR_IM_ACID) {
+    if (lore_ptr->flagsr & RFR_IM_ACID) {
         vp[vn] = _("酸", "acid");
         color[vn++] = TERM_GREEN;
     }
-    if (flagsr & RFR_IM_ELEC) {
+    if (lore_ptr->flagsr & RFR_IM_ELEC) {
         vp[vn] = _("稲妻", "lightning");
         color[vn++] = TERM_BLUE;
     }
-    if (flagsr & RFR_IM_FIRE) {
+    if (lore_ptr->flagsr & RFR_IM_FIRE) {
         vp[vn] = _("炎", "fire");
         color[vn++] = TERM_RED;
     }
-    if (flagsr & RFR_IM_COLD) {
+    if (lore_ptr->flagsr & RFR_IM_COLD) {
         vp[vn] = _("冷気", "cold");
         color[vn++] = TERM_L_WHITE;
     }
-    if (flagsr & RFR_IM_POIS) {
+    if (lore_ptr->flagsr & RFR_IM_POIS) {
         vp[vn] = _("毒", "poison");
         color[vn++] = TERM_L_GREEN;
     }
 
-    if (flagsr & RFR_RES_LITE) {
+    if (lore_ptr->flagsr & RFR_RES_LITE) {
         vp[vn] = _("閃光", "light");
         color[vn++] = TERM_YELLOW;
     }
-    if (flagsr & RFR_RES_DARK) {
+    if (lore_ptr->flagsr & RFR_RES_DARK) {
         vp[vn] = _("暗黒", "dark");
         color[vn++] = TERM_L_DARK;
     }
-    if (flagsr & RFR_RES_NETH) {
+    if (lore_ptr->flagsr & RFR_RES_NETH) {
         vp[vn] = _("地獄", "nether");
         color[vn++] = TERM_L_DARK;
     }
-    if (flagsr & RFR_RES_WATE) {
+    if (lore_ptr->flagsr & RFR_RES_WATE) {
         vp[vn] = _("水", "water");
         color[vn++] = TERM_BLUE;
     }
-    if (flagsr & RFR_RES_PLAS) {
+    if (lore_ptr->flagsr & RFR_RES_PLAS) {
         vp[vn] = _("プラズマ", "plasma");
         color[vn++] = TERM_L_RED;
     }
-    if (flagsr & RFR_RES_SHAR) {
+    if (lore_ptr->flagsr & RFR_RES_SHAR) {
         vp[vn] = _("破片", "shards");
         color[vn++] = TERM_L_UMBER;
     }
-    if (flagsr & RFR_RES_SOUN) {
+    if (lore_ptr->flagsr & RFR_RES_SOUN) {
         vp[vn] = _("轟音", "sound");
         color[vn++] = TERM_ORANGE;
     }
-    if (flagsr & RFR_RES_CHAO) {
+    if (lore_ptr->flagsr & RFR_RES_CHAO) {
         vp[vn] = _("カオス", "chaos");
         color[vn++] = TERM_VIOLET;
     }
-    if (flagsr & RFR_RES_NEXU) {
+    if (lore_ptr->flagsr & RFR_RES_NEXU) {
         vp[vn] = _("因果混乱", "nexus");
         color[vn++] = TERM_VIOLET;
     }
-    if (flagsr & RFR_RES_DISE) {
+    if (lore_ptr->flagsr & RFR_RES_DISE) {
         vp[vn] = _("劣化", "disenchantment");
         color[vn++] = TERM_VIOLET;
     }
-    if (flagsr & RFR_RES_WALL) {
+    if (lore_ptr->flagsr & RFR_RES_WALL) {
         vp[vn] = _("フォース", "force");
         color[vn++] = TERM_UMBER;
     }
-    if (flagsr & RFR_RES_INER) {
+    if (lore_ptr->flagsr & RFR_RES_INER) {
         vp[vn] = _("遅鈍", "inertia");
         color[vn++] = TERM_SLATE;
     }
-    if (flagsr & RFR_RES_TIME) {
+    if (lore_ptr->flagsr & RFR_RES_TIME) {
         vp[vn] = _("時間逆転", "time");
         color[vn++] = TERM_L_BLUE;
     }
-    if (flagsr & RFR_RES_GRAV) {
+    if (lore_ptr->flagsr & RFR_RES_GRAV) {
         vp[vn] = _("重力", "gravity");
         color[vn++] = TERM_SLATE;
     }
-    if (flagsr & RFR_RES_ALL) {
+    if (lore_ptr->flagsr & RFR_RES_ALL) {
         vp[vn] = _("あらゆる攻撃", "all");
         color[vn++] = TERM_YELLOW;
     }
-    if ((flagsr & RFR_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) {
+    if ((lore_ptr->flagsr & RFR_RES_TELE) && !(lore_ptr->r_ptr->flags1 & RF1_UNIQUE)) {
         vp[vn] = _("テレポート", "teleportation");
         color[vn++] = TERM_ORANGE;
     }
@@ -1453,35 +1436,35 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         hooked_roff(_("の耐性を持っている。", ".  "));
     }
 
-    if ((r_ptr->r_xtra1 & MR1_SINKA) || know_everything) {
-        if (r_ptr->next_r_idx) {
+    if ((lore_ptr->r_ptr->r_xtra1 & MR1_SINKA) || lore_ptr->know_everything) {
+        if (lore_ptr->r_ptr->next_r_idx) {
             hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), wd_he[msex]));
-            hook_c_roff(TERM_YELLOW, format("%s", r_name + r_info[r_ptr->next_r_idx].name));
+            hook_c_roff(TERM_YELLOW, format("%s", r_name + r_info[lore_ptr->r_ptr->next_r_idx].name));
 
             hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", wd_he[msex])));
-        } else if (!(r_ptr->flags1 & RF1_UNIQUE)) {
+        } else if (!(lore_ptr->r_ptr->flags1 & RF1_UNIQUE)) {
             hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), wd_he[msex]));
         }
     }
 
     vn = 0;
-    if (flags3 & RF3_NO_STUN) {
+    if (lore_ptr->flags3 & RF3_NO_STUN) {
         vp[vn] = _("朦朧としない", "stunned");
         color[vn++] = TERM_ORANGE;
     }
-    if (flags3 & RF3_NO_FEAR) {
+    if (lore_ptr->flags3 & RF3_NO_FEAR) {
         vp[vn] = _("恐怖を感じない", "frightened");
         color[vn++] = TERM_SLATE;
     }
-    if (flags3 & RF3_NO_CONF) {
+    if (lore_ptr->flags3 & RF3_NO_CONF) {
         vp[vn] = _("混乱しない", "confused");
         color[vn++] = TERM_L_UMBER;
     }
-    if (flags3 & RF3_NO_SLEEP) {
+    if (lore_ptr->flags3 & RF3_NO_SLEEP) {
         vp[vn] = _("眠らされない", "slept");
         color[vn++] = TERM_BLUE;
     }
-    if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) {
+    if ((lore_ptr->flagsr & RFR_RES_TELE) && (lore_ptr->r_ptr->flags1 & RF1_UNIQUE)) {
         vp[vn] = _("テレポートされない", "teleported");
         color[vn++] = TERM_ORANGE;
     }
@@ -1506,50 +1489,50 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         hooked_roff(_("。", ".  "));
     }
 
-    if ((((int)r_ptr->r_wake * (int)r_ptr->r_wake) > r_ptr->sleep) || (r_ptr->r_ignore == MAX_UCHAR) || (r_ptr->sleep == 0 && r_ptr->r_tkills >= 10)
-        || know_everything) {
+    if ((((int)lore_ptr->r_ptr->r_wake * (int)lore_ptr->r_ptr->r_wake) > lore_ptr->r_ptr->sleep) || (lore_ptr->r_ptr->r_ignore == MAX_UCHAR)
+        || (lore_ptr->r_ptr->sleep == 0 && lore_ptr->r_ptr->r_tkills >= 10) || lore_ptr->know_everything) {
         concptr act;
-        if (r_ptr->sleep > 200) {
+        if (lore_ptr->r_ptr->sleep > 200) {
             act = _("を無視しがちであるが", "prefers to ignore");
-        } else if (r_ptr->sleep > 95) {
+        } else if (lore_ptr->r_ptr->sleep > 95) {
             act = _("に対してほとんど注意を払わないが", "pays very little attention to");
-        } else if (r_ptr->sleep > 75) {
+        } else if (lore_ptr->r_ptr->sleep > 75) {
             act = _("に対してあまり注意を払わないが", "pays little attention to");
-        } else if (r_ptr->sleep > 45) {
+        } else if (lore_ptr->r_ptr->sleep > 45) {
             act = _("を見過ごしがちであるが", "tends to overlook");
-        } else if (r_ptr->sleep > 25) {
+        } else if (lore_ptr->r_ptr->sleep > 25) {
             act = _("をほんの少しは見ており", "takes quite a while to see");
-        } else if (r_ptr->sleep > 10) {
+        } else if (lore_ptr->r_ptr->sleep > 10) {
             act = _("をしばらくは見ており", "takes a while to see");
-        } else if (r_ptr->sleep > 5) {
+        } else if (lore_ptr->r_ptr->sleep > 5) {
             act = _("を幾分注意深く見ており", "is fairly observant of");
-        } else if (r_ptr->sleep > 3) {
+        } else if (lore_ptr->r_ptr->sleep > 3) {
             act = _("を注意深く見ており", "is observant of");
-        } else if (r_ptr->sleep > 1) {
+        } else if (lore_ptr->r_ptr->sleep > 1) {
             act = _("をかなり注意深く見ており", "is very observant of");
-        } else if (r_ptr->sleep > 0) {
+        } else if (lore_ptr->r_ptr->sleep > 0) {
             act = _("を警戒しており", "is vigilant for");
         } else {
             act = _("をかなり警戒しており", "is ever vigilant for");
         }
 
-        hooked_roff(_(format("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", wd_he[msex], act, 10 * r_ptr->aaf),
-            format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf)));
+        hooked_roff(_(format("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", wd_he[msex], act, 10 * lore_ptr->r_ptr->aaf),
+            format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * lore_ptr->r_ptr->aaf)));
     }
 
-    if (drop_gold || drop_item) {
+    if (lore_ptr->drop_gold || lore_ptr->drop_item) {
         hooked_roff(format(_("%^sは", "%^s may carry"), wd_he[msex]));
 #ifdef JP
 #else
-        sin = FALSE;
+        lore_ptr->sin = FALSE;
 #endif
 
-        int n = MAX(drop_gold, drop_item);
+        int n = MAX(lore_ptr->drop_gold, lore_ptr->drop_item);
         if (n == 1) {
             hooked_roff(_("一つの", " a"));
 #ifdef JP
 #else
-            sin = TRUE;
+            lore_ptr->sin = TRUE;
 #endif
         } else if (n == 2) {
             hooked_roff(_("一つか二つの", " one or two"));
@@ -1558,24 +1541,25 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         }
 
         concptr p;
-        if (flags1 & RF1_DROP_GREAT) {
+        if (lore_ptr->flags1 & RF1_DROP_GREAT) {
             p = _("特別な", " exceptional");
-        } else if (flags1 & RF1_DROP_GOOD) {
+        } else if (lore_ptr->flags1 & RF1_DROP_GOOD) {
             p = _("上質な", " good");
 #ifdef JP
 #else
-            sin = FALSE;
+            lore_ptr->sin = FALSE;
 #endif
         } else {
             p = NULL;
         }
 
-        if (drop_item) {
+        if (lore_ptr->drop_item) {
 #ifdef JP
 #else
-            if (sin)
+            if (lore_ptr->sin)
                 hooked_roff("n");
-            sin = FALSE;
+
+            lore_ptr->sin = FALSE;
 #endif
             if (p)
                 hooked_roff(p);
@@ -1588,14 +1572,16 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             p = _("や", " or");
         }
 
-        if (drop_gold) {
+        if (lore_ptr->drop_gold) {
 #ifdef JP
 #else
             if (!p)
-                sin = FALSE;
-            if (sin)
+                lore_ptr->sin = FALSE;
+
+            if (lore_ptr->sin)
                 hooked_roff("n");
-            sin = FALSE;
+
+            lore_ptr->sin = FALSE;
 #endif
             if (p)
                 hooked_roff(p);
@@ -1613,28 +1599,28 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     const int max_attack_numbers = 4;
     int count = 0;
     for (int m = 0; m < max_attack_numbers; m++) {
-        if (!r_ptr->blow[m].method)
+        if (!lore_ptr->r_ptr->blow[m].method)
             continue;
-        if (r_ptr->blow[m].method == RBM_SHOOT)
+        if (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT)
             continue;
 
-        if (r_ptr->r_blows[m] || know_everything)
+        if (lore_ptr->r_ptr->r_blows[m] || lore_ptr->know_everything)
             count++;
     }
 
     int attack_numbers = 0;
     for (int m = 0; m < max_attack_numbers; m++) {
-        if (!r_ptr->blow[m].method)
+        if (!lore_ptr->r_ptr->blow[m].method)
             continue;
-        if (r_ptr->blow[m].method == RBM_SHOOT)
+        if (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT)
             continue;
-        if (!r_ptr->r_blows[m] && !know_everything)
+        if (!lore_ptr->r_ptr->r_blows[m] && !lore_ptr->know_everything)
             continue;
 
-        rbm_type method = r_ptr->blow[m].method;
-        int effect = r_ptr->blow[m].effect;
-        int d1 = r_ptr->blow[m].d_dice;
-        int d2 = r_ptr->blow[m].d_side;
+        rbm_type method = lore_ptr->r_ptr->blow[m].method;
+        int effect = lore_ptr->r_ptr->blow[m].effect;
+        int d1 = lore_ptr->r_ptr->blow[m].d_dice;
+        int d2 = lore_ptr->r_ptr->blow[m].d_side;
 
         concptr p = NULL;
         switch (method) {
@@ -1825,7 +1811,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             hooked_roff(format("%^sは", wd_he[msex]));
         }
 
-        if (d1 && d2 && (know_everything || know_damage(r_idx, m))) {
+        if (d1 && d2 && (lore_ptr->know_everything || know_damage(r_idx, m))) {
             hooked_roff(format(" %dd%d ", d1, d2));
             hooked_roff("のダメージで");
         }
@@ -1835,19 +1821,19 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
         /* XXしてYYし/XXしてYYする/XXし/XXする */
         if (q != NULL)
-            jverb(p, jverb_buf, JVERB_TO);
+            jverb(p, lore_ptr->jverb_buf, JVERB_TO);
         else if (attack_numbers != count - 1)
-            jverb(p, jverb_buf, JVERB_AND);
+            jverb(p, lore_ptr->jverb_buf, JVERB_AND);
         else
-            strcpy(jverb_buf, p);
+            strcpy(lore_ptr->jverb_buf, p);
 
-        hooked_roff(jverb_buf);
+        hooked_roff(lore_ptr->jverb_buf);
         if (q) {
             if (attack_numbers != count - 1)
-                jverb(q, jverb_buf, JVERB_AND);
+                jverb(q, lore_ptr->jverb_buf, JVERB_AND);
             else
-                strcpy(jverb_buf, q);
-            hooked_roff(jverb_buf);
+                strcpy(lore_ptr->jverb_buf, q);
+            hooked_roff(lore_ptr->jverb_buf);
         }
 
         if (attack_numbers != count - 1)
@@ -1867,7 +1853,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         if (q) {
             hooked_roff(" to ");
             hooked_roff(q);
-            if (d1 && d2 && (know_everything || know_damage(r_idx, m))) {
+            if (d1 && d2 && (lore_ptr->know_everything || know_damage(r_idx, m))) {
                 hooked_roff(" with damage");
                 hooked_roff(format(" %dd%d", d1, d2));
             }
@@ -1879,19 +1865,19 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
     if (attack_numbers > 0) {
         hooked_roff(_("。", ".  "));
-    } else if (flags1 & RF1_NEVER_BLOW) {
+    } else if (lore_ptr->flags1 & RF1_NEVER_BLOW) {
         hooked_roff(format(_("%^sは物理的な攻撃方法を持たない。", "%^s has no physical attacks.  "), wd_he[msex]));
     } else {
         hooked_roff(format(_("%s攻撃については何も知らない。", "Nothing is known about %s attack.  "), wd_his[msex]));
     }
 
-    bool is_kingpin = (flags1 & RF1_QUESTOR) != 0;
-    is_kingpin &= r_ptr->r_sights > 0;
-    is_kingpin &= r_ptr->max_num > 0;
+    bool is_kingpin = (lore_ptr->flags1 & RF1_QUESTOR) != 0;
+    is_kingpin &= lore_ptr->r_ptr->r_sights > 0;
+    is_kingpin &= lore_ptr->r_ptr->max_num > 0;
     is_kingpin &= (r_idx == MON_OBERON) || (r_idx == MON_SERPENT);
     if (is_kingpin) {
         hook_c_roff(TERM_VIOLET, _("あなたはこのモンスターを殺したいという強い欲望を感じている...", "You feel an intense desire to kill this monster...  "));
-    } else if (flags7 & RF7_GUARDIAN) {
+    } else if (lore_ptr->flags7 & RF7_GUARDIAN) {
         hook_c_roff(TERM_L_RED, _("このモンスターはダンジョンの主である。", "This monster is the master of a dungeon."));
     }
 

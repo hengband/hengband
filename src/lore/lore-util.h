@@ -23,6 +23,7 @@ typedef struct lore_type {
     BIT_FLAGS flags7;
     BIT_FLAGS flagsr;
     bool reinforce;
+    bool know_everything;
 } lore_type;
 
 lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode);

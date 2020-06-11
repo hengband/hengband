@@ -16,5 +16,6 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAG
     lore_ptr->flags7 = (lore_ptr->r_ptr->flags7 & lore_ptr->r_ptr->flags7);
     lore_ptr->flagsr = (lore_ptr->r_ptr->flagsr & lore_ptr->r_ptr->r_flagsr);
     lore_ptr->reinforce = FALSE;
+    lore_ptr->know_everything = FALSE;
     return lore_ptr;
 }
