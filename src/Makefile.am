@@ -228,6 +228,10 @@ hengband_SOURCES = \
 	\
 	locale/japanese.c locale/japanese.h locale/english.c locale/english.h \
 	\
+	lore/lore-store.c lore/lore-store.h \
+	lore/lore-util.c lore/lore-util.h \
+	lore/monster-lore.c lore/monster-lore.h \
+	\
 	main.c main-x11.c main-gcu.c \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
@@ -315,9 +319,6 @@ hengband_SOURCES = \
 	monster-attack/monster-attack-types.c monster-attack/monster-attack-types.h \
 	monster-attack/monster-attack-util.c monster-attack/monster-attack-util.h \
 	monster-attack/monster-eating.c monster-attack/monster-eating.h \
-	\
-	lore/lore-store.c lore/lore-store.h \
-	lore/monster-lore.c lore/monster-lore.h \
 	\
 	monster-race/monster-race.c monster-race/monster-race.h \
 	monster-race/monster-race-hook.c monster-race/monster-race-hook.h \
