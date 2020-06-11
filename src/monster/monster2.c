@@ -32,36 +32,14 @@
 #define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */
 
 /*!
- * @brief モンスターの目標地点をセットする / Set the target of counter attack
- * @param m_ptr モンスターの参照ポインタ
- * @param y 目標y座標
- * @param x 目標x座標
- * @return なし
- */
-void set_target(monster_type *m_ptr, POSITION y, POSITION x)
-{
-    m_ptr->target_y = y;
-    m_ptr->target_x = x;
-}
-
-/*!
- * @brief モンスターの目標地点をリセットする / Reset the target of counter attack
- * @param m_ptr モンスターの参照ポインタ
- * @return なし
- */
-void reset_target(monster_type *m_ptr) { set_target(m_ptr, 0, 0); }
-
-/*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief モンスター配列の空きを探す / Acquires and returns the index of a "free" monster.
  * @return 利用可能なモンスター配列の添字
  * @details
  * This routine should almost never fail, but it *can* happen.
  */
-MONSTER_IDX m_pop(player_type *player_ptr)
+MONSTER_IDX m_pop(floor_type *floor_ptr)
 {
     /* Normal allocation */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->m_max < current_world_ptr->max_m_idx) {
         MONSTER_IDX i = floor_ptr->m_max;
         floor_ptr->m_max++;

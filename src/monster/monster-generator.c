@@ -21,6 +21,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-move.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
@@ -422,7 +423,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
     if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10))
         mode &= ~PM_KAGE;
 
-    g_ptr->m_idx = m_pop(player_ptr);
+    g_ptr->m_idx = m_pop(floor_ptr);
     hack_m_idx_ii = g_ptr->m_idx;
     if (!g_ptr->m_idx)
         return FALSE;

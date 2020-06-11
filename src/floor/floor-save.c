@@ -533,7 +533,7 @@ static void place_pet(player_type *master_ptr)
 {
 	int i;
 	int max_num = master_ptr->wild_mode ? 1 : MAX_PARTY_MON;
-
+        floor_type *floor_ptr = master_ptr->current_floor_ptr;
 	for (i = 0; i < max_num; i++)
 	{
 		POSITION cy = 0, cx = 0;
@@ -543,7 +543,7 @@ static void place_pet(player_type *master_ptr)
 
 		if (i == 0)
 		{
-			m_idx = m_pop(master_ptr);
+			m_idx = m_pop(floor_ptr);
 			master_ptr->riding = m_idx;
 			if (m_idx)
 			{
@@ -565,7 +565,7 @@ static void place_pet(player_type *master_ptr)
 				}
 				if (j) break;
 			}
-			m_idx = (d == 6) ? 0 : m_pop(master_ptr);
+			m_idx = (d == 6) ? 0 : m_pop(floor_ptr);
 		}
 
 		if (m_idx)

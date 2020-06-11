@@ -69,6 +69,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-move.h"
 #include "monster/monster2.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
@@ -2644,7 +2645,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	{
 		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
-		m_idx = m_pop(creature_ptr);
+		m_idx = m_pop(floor_ptr);
 		if (i != m_idx)
 		{
 			note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
@@ -2870,7 +2871,7 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		grid_type *g_ptr;
 		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
-		m_idx = m_pop(player_ptr);
+		m_idx = m_pop(floor_ptr);
 		if (i != m_idx) return 162;
 
 		m_ptr = &floor_ptr->m_list[m_idx];
