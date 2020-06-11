@@ -1,4 +1,13 @@
 ﻿#include "lore/lore-util.h"
+#include "term/term-color-types.h"
+
+concptr wd_he[3] = { _("それ", "it"), _("彼", "he"), _("彼女", "she") };
+concptr wd_his[3] = { _("それの", "its"), _("彼の", "his"), _("彼女の", "her") };
+
+/*
+ * Prepare hook for c_roff(). It will be changed for spoiler generation in wizard1.c.
+ */
+hook_c_roff_pf hook_c_roff = c_roff;
 
 lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
@@ -17,5 +26,13 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAG
     lore_ptr->flagsr = (lore_ptr->r_ptr->flagsr & lore_ptr->r_ptr->r_flagsr);
     lore_ptr->reinforce = FALSE;
     lore_ptr->know_everything = FALSE;
+    lore_ptr->mode = mode;
     return lore_ptr;
 }
+
+/*!
+ * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
+ * @param str 出力文字列
+ * @return なし
+ */
+void hooked_roff(concptr str) { hook_c_roff(TERM_WHITE, str); }

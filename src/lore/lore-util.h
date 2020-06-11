@@ -3,6 +3,12 @@
 #include "system/angband.h"
 #include "monster-race/monster-race.h"
 
+typedef enum monster_sex {
+    MSEX_NONE = 0,
+    MSEX_MALE = 1,
+    MSEX_FEMALE = 2,
+} monster_sex;
+
 typedef struct lore_type {
 #ifdef JP
     char jverb_buf[64];
@@ -24,6 +30,15 @@ typedef struct lore_type {
     BIT_FLAGS flagsr;
     bool reinforce;
     bool know_everything;
+    BIT_FLAGS mode;
+    monster_sex msex;
 } lore_type;
 
+typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);
+extern hook_c_roff_pf hook_c_roff;
+
+extern concptr wd_he[3];
+extern concptr wd_his[3];
+
 lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode);
+void hooked_roff(concptr str);

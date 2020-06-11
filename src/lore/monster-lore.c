@@ -22,20 +22,12 @@
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
+#include "view/display-monster-lore.h"
 
 /*!
  * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)
  */
 #define plural(c, s, p) (((c) == 1) ? (s) : (p))
-
-static concptr wd_he[3] = { _("それ", "it"), _("彼", "he"), _("彼女", "she") };
-
-static concptr wd_his[3] = { _("それの", "its"), _("彼の", "his"), _("彼女の", "her") };
-
-/*
- * Prepare hook for c_roff(). It will be changed for spoiler generation in wizard1.c.
- */
-hook_c_roff_pf hook_c_roff = c_roff;
 
 /*!
  * @brief ダイス目を文字列に変換する
@@ -159,13 +151,6 @@ static void set_damage(player_type *player_ptr, MONRACE_IDX r_idx, monster_spell
         sprintf(tmp, msg, "");
 }
 
-/*!
- * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
- * @param str 出力文字列
- * @return なし
- */
-static void hooked_roff(concptr str) { hook_c_roff(TERM_WHITE, str); }
-
 static void set_drop_flags(lore_type *lore_ptr)
 {
     if (!lore_ptr->know_everything)
@@ -188,6 +173,54 @@ static void set_drop_flags(lore_type *lore_ptr)
     lore_ptr->a_ability_flags1 = lore_ptr->r_ptr->a_ability_flags1;
     lore_ptr->a_ability_flags2 = lore_ptr->r_ptr->a_ability_flags2;
     lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
+}
+
+static void set_race_flags(lore_type *lore_ptr)
+{
+    if (!lore_ptr->r_ptr->r_tkills && !lore_ptr->know_everything)
+        return;
+
+    if (lore_ptr->r_ptr->flags3 & RF3_ORC)
+        lore_ptr->flags3 |= (RF3_ORC);
+
+    if (lore_ptr->r_ptr->flags3 & RF3_TROLL)
+        lore_ptr->flags3 |= (RF3_TROLL);
+
+    if (lore_ptr->r_ptr->flags3 & RF3_GIANT)
+        lore_ptr->flags3 |= (RF3_GIANT);
+
+    if (lore_ptr->r_ptr->flags3 & RF3_DRAGON)
+        lore_ptr->flags3 |= (RF3_DRAGON);
+
+    if (lore_ptr->r_ptr->flags3 & RF3_DEMON)
+        lore_ptr->flags3 |= (RF3_DEMON);
+
+    if (lore_ptr->r_ptr->flags3 & RF3_UNDEAD)
+        lore_ptr->flags3 |= (RF3_UNDEAD);
+
+    if (lore_ptr->r_ptr->flags3 & RF3_EVIL)
+        lore_ptr->flags3 |= (RF3_EVIL);
+
+    if (lore_ptr->r_ptr->flags3 & RF3_GOOD)
+        lore_ptr->flags3 |= (RF3_GOOD);
+
+    if (lore_ptr->r_ptr->flags3 & RF3_ANIMAL)
+        lore_ptr->flags3 |= (RF3_ANIMAL);
+
+    if (lore_ptr->r_ptr->flags3 & RF3_AMBERITE)
+        lore_ptr->flags3 |= (RF3_AMBERITE);
+
+    if (lore_ptr->r_ptr->flags2 & RF2_HUMAN)
+        lore_ptr->flags2 |= (RF2_HUMAN);
+
+    if (lore_ptr->r_ptr->flags2 & RF2_QUANTUM)
+        lore_ptr->flags2 |= (RF2_QUANTUM);
+
+    if (lore_ptr->r_ptr->flags1 & RF1_FORCE_DEPTH)
+        lore_ptr->flags1 |= (RF1_FORCE_DEPTH);
+
+    if (lore_ptr->r_ptr->flags1 & RF1_FORCE_MAXHP)
+        lore_ptr->flags1 |= (RF1_FORCE_MAXHP);
 }
 
 /*!
@@ -214,11 +247,11 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         lore_ptr->know_everything = TRUE;
 
     set_drop_flags(lore_ptr);
-    int msex = 0;
+    lore_ptr->msex = MSEX_NONE;
     if (lore_ptr->r_ptr->flags1 & RF1_FEMALE)
-        msex = 2;
+        lore_ptr->msex = MSEX_FEMALE;
     else if (lore_ptr->r_ptr->flags1 & RF1_MALE)
-        msex = 1;
+        lore_ptr->msex = MSEX_MALE;
 
     if (lore_ptr->r_ptr->flags1 & RF1_UNIQUE)
         lore_ptr->flags1 |= (RF1_UNIQUE);
@@ -236,89 +269,8 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     if (lore_ptr->r_ptr->flags1 & RF1_ESCORTS)
         lore_ptr->flags1 |= (RF1_ESCORTS);
 
-    if (lore_ptr->r_ptr->r_tkills || lore_ptr->know_everything) {
-        if (lore_ptr->r_ptr->flags3 & RF3_ORC)
-            lore_ptr->flags3 |= (RF3_ORC);
-        if (lore_ptr->r_ptr->flags3 & RF3_TROLL)
-            lore_ptr->flags3 |= (RF3_TROLL);
-        if (lore_ptr->r_ptr->flags3 & RF3_GIANT)
-            lore_ptr->flags3 |= (RF3_GIANT);
-        if (lore_ptr->r_ptr->flags3 & RF3_DRAGON)
-            lore_ptr->flags3 |= (RF3_DRAGON);
-        if (lore_ptr->r_ptr->flags3 & RF3_DEMON)
-            lore_ptr->flags3 |= (RF3_DEMON);
-        if (lore_ptr->r_ptr->flags3 & RF3_UNDEAD)
-            lore_ptr->flags3 |= (RF3_UNDEAD);
-        if (lore_ptr->r_ptr->flags3 & RF3_EVIL)
-            lore_ptr->flags3 |= (RF3_EVIL);
-        if (lore_ptr->r_ptr->flags3 & RF3_GOOD)
-            lore_ptr->flags3 |= (RF3_GOOD);
-        if (lore_ptr->r_ptr->flags3 & RF3_ANIMAL)
-            lore_ptr->flags3 |= (RF3_ANIMAL);
-        if (lore_ptr->r_ptr->flags3 & RF3_AMBERITE)
-            lore_ptr->flags3 |= (RF3_AMBERITE);
-        if (lore_ptr->r_ptr->flags2 & RF2_HUMAN)
-            lore_ptr->flags2 |= (RF2_HUMAN);
-        if (lore_ptr->r_ptr->flags2 & RF2_QUANTUM)
-            lore_ptr->flags2 |= (RF2_QUANTUM);
-
-        if (lore_ptr->r_ptr->flags1 & RF1_FORCE_DEPTH)
-            lore_ptr->flags1 |= (RF1_FORCE_DEPTH);
-        if (lore_ptr->r_ptr->flags1 & RF1_FORCE_MAXHP)
-            lore_ptr->flags1 |= (RF1_FORCE_MAXHP);
-    }
-
-    if (!(mode & 0x02)) {
-        if (lore_ptr->flags1 & RF1_UNIQUE) {
-            bool dead = (lore_ptr->r_ptr->max_num == 0) ? TRUE : FALSE;
-            if (lore_ptr->r_ptr->r_deaths) {
-                hooked_roff(format(_("%^sはあなたの先祖を %d 人葬っている", "%^s has slain %d of your ancestors"), wd_he[msex], lore_ptr->r_ptr->r_deaths));
-
-                if (dead) {
-                    hooked_roff(_(
-                        format("が、すでに仇討ちは果たしている！"), format(", but you have avenged %s!  ", plural(lore_ptr->r_ptr->r_deaths, "him", "them"))));
-                } else {
-                    hooked_roff(_(
-                        format("のに、まだ仇討ちを果たしていない。"), format(", who %s unavenged.  ", plural(lore_ptr->r_ptr->r_deaths, "remains", "remain"))));
-                }
-
-                hooked_roff("\n");
-            } else if (dead) {
-                hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
-                hooked_roff("\n");
-            }
-        } else if (lore_ptr->r_ptr->r_deaths) {
-            hooked_roff(_(format("このモンスターはあなたの先祖を %d 人葬っている", lore_ptr->r_ptr->r_deaths),
-                format("%d of your ancestors %s been killed by this creature, ", lore_ptr->r_ptr->r_deaths, plural(lore_ptr->r_ptr->r_deaths, "has", "have"))));
-
-            if (lore_ptr->r_ptr->r_pkills) {
-                hooked_roff(format(_("が、あなたはこのモンスターを少なくとも %d 体は倒している。", "and you have exterminated at least %d of the creatures.  "),
-                    lore_ptr->r_ptr->r_pkills));
-            } else if (lore_ptr->r_ptr->r_tkills) {
-                hooked_roff(format(_("が、あなたの先祖はこのモンスターを少なくとも %d 体は倒している。",
-                                       "and your ancestors have exterminated at least %d of the creatures.  "),
-                    lore_ptr->r_ptr->r_tkills));
-            } else {
-                hooked_roff(format(_("が、まだ%sを倒したことはない。", "and %s is not ever known to have been defeated.  "), wd_he[msex]));
-            }
-
-            hooked_roff("\n");
-        } else {
-            if (lore_ptr->r_ptr->r_pkills) {
-                hooked_roff(format(_("あなたはこのモンスターを少なくとも %d 体は殺している。", "You have killed at least %d of these creatures.  "),
-                    lore_ptr->r_ptr->r_pkills));
-            } else if (lore_ptr->r_ptr->r_tkills) {
-                hooked_roff(
-                    format(_("あなたの先祖はこのモンスターを少なくとも %d 体は殺している。", "Your ancestors have killed at least %d of these creatures.  "),
-                        lore_ptr->r_ptr->r_tkills));
-            } else {
-                hooked_roff(_("このモンスターを倒したことはない。", "No battles to the death are recalled.  "));
-            }
-
-            hooked_roff("\n");
-        }
-    }
-
+    set_race_flags(lore_ptr);
+    display_kill_numbers(lore_ptr);
     concptr tmp = r_text + lore_ptr->r_ptr->text;
     if (tmp[0]) {
         hooked_roff(tmp);
@@ -332,13 +284,14 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
     bool old = FALSE;
     if (lore_ptr->r_ptr->level == 0) {
-        hooked_roff(format(_("%^sは町に住み", "%^s lives in the town"), wd_he[msex]));
+        hooked_roff(format(_("%^sは町に住み", "%^s lives in the town"), wd_he[lore_ptr->msex]));
         old = TRUE;
     } else if (lore_ptr->r_ptr->r_tkills || lore_ptr->know_everything) {
         if (depth_in_feet) {
-            hooked_roff(format(_("%^sは通常地下 %d フィートで出現し", "%^s is normally found at depths of %d feet"), wd_he[msex], lore_ptr->r_ptr->level * 50));
+            hooked_roff(format(
+                _("%^sは通常地下 %d フィートで出現し", "%^s is normally found at depths of %d feet"), wd_he[lore_ptr->msex], lore_ptr->r_ptr->level * 50));
         } else {
-            hooked_roff(format(_("%^sは通常地下 %d 階で出現し", "%^s is normally found on dungeon level %d"), wd_he[msex], lore_ptr->r_ptr->level));
+            hooked_roff(format(_("%^sは通常地下 %d 階で出現し", "%^s is normally found on dungeon level %d"), wd_he[lore_ptr->msex], lore_ptr->r_ptr->level));
         }
 
         old = TRUE;
@@ -352,7 +305,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     if (old) {
         hooked_roff(_("、", ", and "));
     } else {
-        hooked_roff(format(_("%^sは", "%^s "), wd_he[msex]));
+        hooked_roff(format(_("%^sは", "%^s "), wd_he[lore_ptr->msex]));
         old = TRUE;
     }
 
@@ -409,7 +362,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         if (old) {
             hooked_roff(_("、しかし", ", but "));
         } else {
-            hooked_roff(format(_("%^sは", "%^s "), wd_he[msex]));
+            hooked_roff(format(_("%^sは", "%^s "), wd_he[lore_ptr->msex]));
             old = TRUE;
         }
 
@@ -501,26 +454,27 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC) && (lore_ptr->flags3 & RF3_AURA_COLD)) {
-        hook_c_roff(TERM_VIOLET, format(_("%^sは炎と氷とスパークに包まれている。", "%^s is surrounded by flames, ice and electricity.  "), wd_he[msex]));
+        hook_c_roff(
+            TERM_VIOLET, format(_("%^sは炎と氷とスパークに包まれている。", "%^s is surrounded by flames, ice and electricity.  "), wd_he[lore_ptr->msex]));
     } else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags2 & RF2_AURA_ELEC)) {
-        hook_c_roff(TERM_L_RED, format(_("%^sは炎とスパークに包まれている。", "%^s is surrounded by flames and electricity.  "), wd_he[msex]));
+        hook_c_roff(TERM_L_RED, format(_("%^sは炎とスパークに包まれている。", "%^s is surrounded by flames and electricity.  "), wd_he[lore_ptr->msex]));
     } else if ((lore_ptr->flags2 & RF2_AURA_FIRE) && (lore_ptr->flags3 & RF3_AURA_COLD)) {
-        hook_c_roff(TERM_BLUE, format(_("%^sは炎と氷に包まれている。", "%^s is surrounded by flames and ice.  "), wd_he[msex]));
+        hook_c_roff(TERM_BLUE, format(_("%^sは炎と氷に包まれている。", "%^s is surrounded by flames and ice.  "), wd_he[lore_ptr->msex]));
     } else if ((lore_ptr->flags3 & RF3_AURA_COLD) && (lore_ptr->flags2 & RF2_AURA_ELEC)) {
-        hook_c_roff(TERM_L_GREEN, format(_("%^sは氷とスパークに包まれている。", "%^s is surrounded by ice and electricity.  "), wd_he[msex]));
+        hook_c_roff(TERM_L_GREEN, format(_("%^sは氷とスパークに包まれている。", "%^s is surrounded by ice and electricity.  "), wd_he[lore_ptr->msex]));
     } else if (lore_ptr->flags2 & RF2_AURA_FIRE) {
-        hook_c_roff(TERM_RED, format(_("%^sは炎に包まれている。", "%^s is surrounded by flames.  "), wd_he[msex]));
+        hook_c_roff(TERM_RED, format(_("%^sは炎に包まれている。", "%^s is surrounded by flames.  "), wd_he[lore_ptr->msex]));
     } else if (lore_ptr->flags3 & RF3_AURA_COLD) {
-        hook_c_roff(TERM_BLUE, format(_("%^sは氷に包まれている。", "%^s is surrounded by ice.  "), wd_he[msex]));
+        hook_c_roff(TERM_BLUE, format(_("%^sは氷に包まれている。", "%^s is surrounded by ice.  "), wd_he[lore_ptr->msex]));
     } else if (lore_ptr->flags2 & RF2_AURA_ELEC) {
-        hook_c_roff(TERM_L_BLUE, format(_("%^sはスパークに包まれている。", "%^s is surrounded by electricity.  "), wd_he[msex]));
+        hook_c_roff(TERM_L_BLUE, format(_("%^sはスパークに包まれている。", "%^s is surrounded by electricity.  "), wd_he[lore_ptr->msex]));
     }
 
     if (lore_ptr->flags2 & RF2_REFLECTING)
-        hooked_roff(format(_("%^sは矢の呪文を跳ね返す。", "%^s reflects bolt spells.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sは矢の呪文を跳ね返す。", "%^s reflects bolt spells.  "), wd_he[lore_ptr->msex]));
 
     if ((lore_ptr->flags1 & RF1_ESCORT) || (lore_ptr->flags1 & RF1_ESCORTS) || lore_ptr->reinforce) {
-        hooked_roff(format(_("%^sは通常護衛を伴って現れる。", "%^s usually appears with escorts.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sは通常護衛を伴って現れる。", "%^s usually appears with escorts.  "), wd_he[lore_ptr->msex]));
 
         if (lore_ptr->reinforce) {
             hooked_roff(_("護衛の構成は", "These escorts"));
@@ -561,7 +515,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     else if (lore_ptr->flags1 & RF1_FRIENDS) {
-        hooked_roff(format(_("%^sは通常集団で現れる。", "%^s usually appears in groups.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sは通常集団で現れる。", "%^s usually appears in groups.  "), wd_he[lore_ptr->msex]));
     }
 
     int vn = 0;
@@ -601,7 +555,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     if (vn > 0) {
-        hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
+        hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
         for (int n = 0; n < vn; n++) {
 #ifdef JP
             if (n != vn - 1) {
@@ -762,7 +716,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     bool breath = FALSE;
     if (vn > 0) {
         breath = TRUE;
-        hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
+        hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
         for (int n = 0; n < vn; n++) {
 #ifdef JP
             if (n != 0)
@@ -1123,7 +1077,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         if (breath) {
             hooked_roff(_("、なおかつ", ", and is also"));
         } else {
-            hooked_roff(format(_("%^sは", "%^s is"), wd_he[msex]));
+            hooked_roff(format(_("%^sは", "%^s is"), wd_he[lore_ptr->msex]));
         }
 
 #ifdef JP
@@ -1170,7 +1124,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     if (lore_ptr->know_everything || know_armour(r_idx)) {
-        hooked_roff(format(_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"), wd_he[msex], lore_ptr->r_ptr->ac));
+        hooked_roff(format(_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"), wd_he[lore_ptr->msex], lore_ptr->r_ptr->ac));
 
         if ((lore_ptr->flags1 & RF1_FORCE_MAXHP) || (lore_ptr->r_ptr->hside == 1)) {
             u32b hp = lore_ptr->r_ptr->hdice * (lore_ptr->nightmare ? 2 : 1) * lore_ptr->r_ptr->hside;
@@ -1232,7 +1186,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     if (vn > 0) {
-        hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
+        hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
         for (int n = 0; n < vn; n++) {
 #ifdef JP
             if (n != vn - 1) {
@@ -1258,41 +1212,41 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     if (lore_ptr->flags7 & RF7_AQUATIC) {
-        hooked_roff(format(_("%^sは水中に棲んでいる。", "%^s lives in water.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sは水中に棲んでいる。", "%^s lives in water.  "), wd_he[lore_ptr->msex]));
     }
 
     if (lore_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) {
-        hooked_roff(format(_("%^sは光っている。", "%^s is shining.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sは光っている。", "%^s is shining.  "), wd_he[lore_ptr->msex]));
     }
 
     if (lore_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) {
-        hook_c_roff(TERM_L_DARK, format(_("%^sは暗黒に包まれている。", "%^s is surrounded by darkness.  "), wd_he[msex]));
+        hook_c_roff(TERM_L_DARK, format(_("%^sは暗黒に包まれている。", "%^s is surrounded by darkness.  "), wd_he[lore_ptr->msex]));
     }
 
     if (lore_ptr->flags2 & RF2_INVISIBLE) {
-        hooked_roff(format(_("%^sは透明で目に見えない。", "%^s is invisible.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sは透明で目に見えない。", "%^s is invisible.  "), wd_he[lore_ptr->msex]));
     }
 
     if (lore_ptr->flags2 & RF2_COLD_BLOOD) {
-        hooked_roff(format(_("%^sは冷血動物である。", "%^s is cold blooded.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sは冷血動物である。", "%^s is cold blooded.  "), wd_he[lore_ptr->msex]));
     }
 
     if (lore_ptr->flags2 & RF2_EMPTY_MIND) {
-        hooked_roff(format(_("%^sはテレパシーでは感知できない。", "%^s is not detected by telepathy.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sはテレパシーでは感知できない。", "%^s is not detected by telepathy.  "), wd_he[lore_ptr->msex]));
     } else if (lore_ptr->flags2 & RF2_WEIRD_MIND) {
-        hooked_roff(format(_("%^sはまれにテレパシーで感知できる。", "%^s is rarely detected by telepathy.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sはまれにテレパシーで感知できる。", "%^s is rarely detected by telepathy.  "), wd_he[lore_ptr->msex]));
     }
 
     if (lore_ptr->flags2 & RF2_MULTIPLY) {
-        hook_c_roff(TERM_L_UMBER, format(_("%^sは爆発的に増殖する。", "%^s breeds explosively.  "), wd_he[msex]));
+        hook_c_roff(TERM_L_UMBER, format(_("%^sは爆発的に増殖する。", "%^s breeds explosively.  "), wd_he[lore_ptr->msex]));
     }
 
     if (lore_ptr->flags2 & RF2_REGENERATE) {
-        hook_c_roff(TERM_L_WHITE, format(_("%^sは素早く体力を回復する。", "%^s regenerates quickly.  "), wd_he[msex]));
+        hook_c_roff(TERM_L_WHITE, format(_("%^sは素早く体力を回復する。", "%^s regenerates quickly.  "), wd_he[lore_ptr->msex]));
     }
 
     if (lore_ptr->flags7 & RF7_RIDING) {
-        hook_c_roff(TERM_SLATE, format(_("%^sに乗ることができる。", "%^s is suitable for riding.  "), wd_he[msex]));
+        hook_c_roff(TERM_SLATE, format(_("%^sに乗ることができる。", "%^s is suitable for riding.  "), wd_he[lore_ptr->msex]));
     }
 
     vn = 0;
@@ -1314,7 +1268,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     if (vn > 0) {
-        hooked_roff(format(_("%^sには", "%^s"), wd_he[msex]));
+        hooked_roff(format(_("%^sには", "%^s"), wd_he[lore_ptr->msex]));
 
         for (int n = 0; n < vn; n++) {
 #ifdef JP
@@ -1422,7 +1376,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     if (vn > 0) {
-        hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
+        hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
         for (int n = 0; n < vn; n++) {
 #ifdef JP
             if (n != 0)
@@ -1443,12 +1397,12 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
     if ((lore_ptr->r_ptr->r_xtra1 & MR1_SINKA) || lore_ptr->know_everything) {
         if (lore_ptr->r_ptr->next_r_idx) {
-            hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), wd_he[msex]));
+            hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), wd_he[lore_ptr->msex]));
             hook_c_roff(TERM_YELLOW, format("%s", r_name + r_info[lore_ptr->r_ptr->next_r_idx].name));
 
-            hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", wd_he[msex])));
+            hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", wd_he[lore_ptr->msex])));
         } else if (!(lore_ptr->r_ptr->flags1 & RF1_UNIQUE)) {
-            hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), wd_he[msex]));
+            hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), wd_he[lore_ptr->msex]));
         }
     }
 
@@ -1475,7 +1429,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     }
 
     if (vn > 0) {
-        hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
+        hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
         for (int n = 0; n < vn; n++) {
 #ifdef JP
             if (n != 0)
@@ -1521,12 +1475,12 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             act = _("をかなり警戒しており", "is ever vigilant for");
         }
 
-        hooked_roff(_(format("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", wd_he[msex], act, 10 * lore_ptr->r_ptr->aaf),
-            format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * lore_ptr->r_ptr->aaf)));
+        hooked_roff(_(format("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", wd_he[lore_ptr->msex], act, 10 * lore_ptr->r_ptr->aaf),
+            format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[lore_ptr->msex], act, wd_he[lore_ptr->msex], 10 * lore_ptr->r_ptr->aaf)));
     }
 
     if (lore_ptr->drop_gold || lore_ptr->drop_item) {
-        hooked_roff(format(_("%^sは", "%^s may carry"), wd_he[msex]));
+        hooked_roff(format(_("%^sは", "%^s may carry"), wd_he[lore_ptr->msex]));
 #ifdef JP
 #else
         lore_ptr->sin = FALSE;
@@ -1813,7 +1767,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
 #ifdef JP
         if (attack_numbers == 0) {
-            hooked_roff(format("%^sは", wd_he[msex]));
+            hooked_roff(format("%^sは", wd_he[lore_ptr->msex]));
         }
 
         if (d1 && d2 && (lore_ptr->know_everything || know_damage(r_idx, m))) {
@@ -1845,7 +1799,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             hooked_roff("、");
 #else
         if (attack_numbers == 0) {
-            hooked_roff(format("%^s can ", wd_he[msex]));
+            hooked_roff(format("%^s can ", wd_he[lore_ptr->msex]));
         } else if (attack_numbers < count - 1) {
             hooked_roff(", ");
         } else {
@@ -1871,9 +1825,9 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     if (attack_numbers > 0) {
         hooked_roff(_("。", ".  "));
     } else if (lore_ptr->flags1 & RF1_NEVER_BLOW) {
-        hooked_roff(format(_("%^sは物理的な攻撃方法を持たない。", "%^s has no physical attacks.  "), wd_he[msex]));
+        hooked_roff(format(_("%^sは物理的な攻撃方法を持たない。", "%^s has no physical attacks.  "), wd_he[lore_ptr->msex]));
     } else {
-        hooked_roff(format(_("%s攻撃については何も知らない。", "Nothing is known about %s attack.  "), wd_his[msex]));
+        hooked_roff(format(_("%s攻撃については何も知らない。", "Nothing is known about %s attack.  "), wd_his[lore_ptr->msex]));
     }
 
     bool is_kingpin = (lore_ptr->flags1 & RF1_QUESTOR) != 0;
