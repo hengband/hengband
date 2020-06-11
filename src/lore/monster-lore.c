@@ -175,6 +175,18 @@ static void set_drop_flags(lore_type *lore_ptr)
     lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
 }
 
+static void set_msex_flags(lore_type *lore_ptr)
+{
+    lore_ptr->msex = MSEX_NONE;
+    if (lore_ptr->r_ptr->flags1 & RF1_FEMALE) {
+        lore_ptr->msex = MSEX_FEMALE;
+        return;
+    }
+
+    if (lore_ptr->r_ptr->flags1 & RF1_MALE)
+        lore_ptr->msex = MSEX_MALE;
+}
+
 static void set_race_flags(lore_type *lore_ptr)
 {
     if (!lore_ptr->r_ptr->r_tkills && !lore_ptr->know_everything)
@@ -247,25 +259,25 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         lore_ptr->know_everything = TRUE;
 
     set_drop_flags(lore_ptr);
-    lore_ptr->msex = MSEX_NONE;
-    if (lore_ptr->r_ptr->flags1 & RF1_FEMALE)
-        lore_ptr->msex = MSEX_FEMALE;
-    else if (lore_ptr->r_ptr->flags1 & RF1_MALE)
-        lore_ptr->msex = MSEX_MALE;
-
+    set_msex_flags(lore_ptr);
     if (lore_ptr->r_ptr->flags1 & RF1_UNIQUE)
         lore_ptr->flags1 |= (RF1_UNIQUE);
+
     if (lore_ptr->r_ptr->flags1 & RF1_QUESTOR)
         lore_ptr->flags1 |= (RF1_QUESTOR);
+
     if (lore_ptr->r_ptr->flags1 & RF1_MALE)
         lore_ptr->flags1 |= (RF1_MALE);
+
     if (lore_ptr->r_ptr->flags1 & RF1_FEMALE)
         lore_ptr->flags1 |= (RF1_FEMALE);
 
     if (lore_ptr->r_ptr->flags1 & RF1_FRIENDS)
         lore_ptr->flags1 |= (RF1_FRIENDS);
+
     if (lore_ptr->r_ptr->flags1 & RF1_ESCORT)
         lore_ptr->flags1 |= (RF1_ESCORT);
+
     if (lore_ptr->r_ptr->flags1 & RF1_ESCORTS)
         lore_ptr->flags1 |= (RF1_ESCORTS);
 
