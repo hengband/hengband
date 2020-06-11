@@ -1,5 +1,5 @@
 ﻿#include "view/display-monster-lore.h"
-#include "monster-lore/monster-lore.h"
+#include "lore/monster-lore.h"
 #include "term/term-color-types.h"
 #include "world/world.h"
 

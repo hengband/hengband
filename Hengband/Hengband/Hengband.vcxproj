@@ -189,8 +189,8 @@
     <ClCompile Include="..\..\src\info-reader\vault-reader.c" />
     <ClCompile Include="..\..\src\monster\monster-compaction.c" />
     <ClCompile Include="..\..\src\monster\monster-death.c" />
-    <ClCompile Include="..\..\src\monster-lore\lore-store.c" />
-    <ClCompile Include="..\..\src\monster-lore\monster-lore.c" />
+    <ClCompile Include="..\..\src\lore\lore-store.c" />
+    <ClCompile Include="..\..\src\lore\monster-lore.c" />
     <ClCompile Include="..\..\src\monster\monster-describer.c" />
     <ClCompile Include="..\..\src\monster\monster-generator.c" />
     <ClCompile Include="..\..\src\monster\monster-remover.c" />
@@ -543,8 +543,8 @@
     <ClInclude Include="..\..\src\mind\snipe-types.h" />
     <ClInclude Include="..\..\src\monster\monster-compaction.h" />
     <ClInclude Include="..\..\src\monster\monster-death.h" />
-    <ClInclude Include="..\..\src\monster-lore\lore-store.h" />
-    <ClInclude Include="..\..\src\monster-lore\monster-lore.h" />
+    <ClInclude Include="..\..\src\lore\lore-store.h" />
+    <ClInclude Include="..\..\src\lore\monster-lore.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags8.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags-ability1.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags-ability2.h" />

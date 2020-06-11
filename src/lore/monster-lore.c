@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "monster-lore/monster-lore.h"
+#include "lore/monster-lore.h"
 #include "locale/english.h"
 #include "locale/japanese.h"
 #include "monster-race/race-flags-ability1.h"

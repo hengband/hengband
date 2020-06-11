@@ -316,8 +316,8 @@ hengband_SOURCES = \
 	monster-attack/monster-attack-util.c monster-attack/monster-attack-util.h \
 	monster-attack/monster-eating.c monster-attack/monster-eating.h \
 	\
-	monster-lore/lore-store.c monster-lore/lore-store.h \
-	monster-lore/monster-lore.c monster-lore/monster-lore.h \
+	lore/lore-store.c lore/lore-store.h \
+	lore/monster-lore.c lore/monster-lore.h \
 	\
 	monster-race/monster-race.c monster-race/monster-race.h \
 	monster-race/monster-race-hook.c monster-race/monster-race-hook.h \
@@ -555,7 +555,7 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat \
 	-Icore -Idungeon -Ieffect -Ifloor -Igrid -Iinfo-reader -Iinventory -Iio \
 	-Iio-dump -Iknowledge -Imarket -Imelee -Imind -Imonster -Imonster-attack \
-	-Imonster-lore -Imonster-race -Imspell -Imutation -Iobject -Iobject-enchant \
+	-Ilore -Imonster-race -Imspell -Imutation -Iobject -Iobject-enchant \
 	-Ipet -Iplayer -Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell \
 	-Ispell-kind -Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview \
 	-Iwizard -Iworld

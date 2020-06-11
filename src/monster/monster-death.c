@@ -12,7 +12,7 @@
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "market/arena-info-table.h"
-#include "monster-lore/lore-store.h"
+#include "lore/lore-store.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"

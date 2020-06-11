@@ -3,7 +3,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "locale/english.h"
-#include "monster-lore/lore-store.h"
+#include "lore/lore-store.h"
 #include "monster-race/race-flags3.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"

@@ -2,7 +2,7 @@
 #include "core/sort.h"
 #include "core/stuff-handler.h"
 #include "monster-race/race-flags1.h"
-#include "monster-lore/lore-store.h"
+#include "lore/lore-store.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"

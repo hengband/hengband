@@ -1244,12 +1244,6 @@
     <ClCompile Include="..\..\src\monster\monster-util.c">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-lore\monster-lore.c">
-      <Filter>monster-lore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster-lore\lore-store.c">
-      <Filter>monster-lore</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\summon-checker.c">
       <Filter>mspell</Filter>
     </ClCompile>
@@ -1282,6 +1276,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-list.c">
       <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\lore\lore-store.c">
+      <Filter>lore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\lore\monster-lore.c">
+      <Filter>lore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2779,12 +2779,6 @@
     <ClInclude Include="..\..\src\monster-race\race-flags8.h">
       <Filter>monster-race</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-lore\monster-lore.h">
-      <Filter>monster-lore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-lore\lore-store.h">
-      <Filter>monster-lore</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mspell\summon-checker.h">
       <Filter>mspell</Filter>
     </ClInclude>
@@ -2817,6 +2811,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-list.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\lore\lore-store.h">
+      <Filter>lore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\lore\monster-lore.h">
+      <Filter>lore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2971,7 +2971,7 @@
     <Filter Include="monster-race">
       <UniqueIdentifier>{8de4a55f-fa83-496b-a42f-81078346c918}</UniqueIdentifier>
     </Filter>
-    <Filter Include="monster-lore">
+    <Filter Include="lore">
       <UniqueIdentifier>{9db4d67c-5c55-4cc0-a9cd-643e5ffc3e73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
