@@ -415,3 +415,57 @@ void display_lore_this(player_type *player_ptr, lore_type *lore_ptr)
     display_monster_kind(lore_ptr);
     display_monster_exp(player_ptr, lore_ptr);
 }
+
+static void display_monster_escort_contents(lore_type *lore_ptr)
+{
+    if (!lore_ptr->reinforce)
+        return;
+
+    hooked_roff(_("護衛の構成は", "These escorts"));
+    if ((lore_ptr->flags1 & RF1_ESCORT) || (lore_ptr->flags1 & RF1_ESCORTS)) {
+        hooked_roff(_("少なくとも", " at the least"));
+    }
+
+#ifdef JP
+#else
+    hooked_roff(" contain ");
+#endif
+
+    for (int n = 0; n < A_MAX; n++) {
+        bool is_reinforced = lore_ptr->r_ptr->reinforce_id[n] > 0;
+        is_reinforced &= lore_ptr->r_ptr->reinforce_dd[n] > 0;
+        is_reinforced &= lore_ptr->r_ptr->reinforce_ds[n] > 0;
+        if (!is_reinforced)
+            continue;
+
+        monster_race *rf_ptr = &r_info[lore_ptr->r_ptr->reinforce_id[n]];
+        if (rf_ptr->flags1 & RF1_UNIQUE) {
+            hooked_roff(format(_("、%s", ", %s"), r_name + rf_ptr->name));
+            continue;
+        }
+
+#ifdef JP
+        hooked_roff(format("、 %dd%d 体の%s", lore_ptr->r_ptr->reinforce_dd[n], lore_ptr->r_ptr->reinforce_ds[n], r_name + rf_ptr->name));
+#else
+        bool plural = (lore_ptr->r_ptr->reinforce_dd[n] * lore_ptr->r_ptr->reinforce_ds[n] > 1);
+        GAME_TEXT name[MAX_NLEN];
+        strcpy(name, r_name + rf_ptr->name);
+        if (plural)
+            plural_aux(name);
+        hooked_roff(format(",%dd%d %s", lore_ptr->r_ptr->reinforce_dd[n], lore_ptr->r_ptr->reinforce_ds[n], name));
+#endif
+    }
+
+    hooked_roff(_("で成り立っている。", "."));
+}
+
+void display_monster_collective(lore_type *lore_ptr)
+{
+    if ((lore_ptr->flags1 & RF1_ESCORT) || (lore_ptr->flags1 & RF1_ESCORTS) || lore_ptr->reinforce) {
+        hooked_roff(format(_("%^sは通常護衛を伴って現れる。", "%^s usually appears with escorts.  "), wd_he[lore_ptr->msex]));
+        display_monster_escort_contents(lore_ptr);
+    }
+    else if (lore_ptr->flags1 & RF1_FRIENDS) {
+        hooked_roff(format(_("%^sは通常集団で現れる。", "%^s usually appears in groups.  "), wd_he[lore_ptr->msex]));
+    }
+}
