@@ -187,6 +187,7 @@
     <ClCompile Include="..\..\src\info-reader\race-reader.c" />
     <ClCompile Include="..\..\src\info-reader\skill-reader.c" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.c" />
+    <ClCompile Include="..\..\src\lore\combat-types-setter.c" />
     <ClCompile Include="..\..\src\lore\magic-types-setter.c" />
     <ClCompile Include="..\..\src\lore\lore-calculator.c" />
     <ClCompile Include="..\..\src\lore\lore-util.c" />
@@ -542,6 +543,7 @@
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h" />
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
+    <ClInclude Include="..\..\src\lore\combat-types-setter.h" />
     <ClInclude Include="..\..\src\lore\magic-types-setter.h" />
     <ClInclude Include="..\..\src\lore\lore-calculator.h" />
     <ClInclude Include="..\..\src\lore\lore-util.h" />

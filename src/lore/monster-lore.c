@@ -7,6 +7,7 @@
 #include "lore/monster-lore.h"
 #include "locale/english.h"
 #include "locale/japanese.h"
+#include "lore/combat-types-setter.h"
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
 #include "lore/magic-types-setter.h"
@@ -214,7 +215,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     display_monster_concrete_immunities(lore_ptr);
     display_monster_immunities(lore_ptr);
     display_monster_alert(lore_ptr);
-    display_monster_drop(lore_ptr);
+    display_monster_drops(lore_ptr);
 
     const int max_attack_numbers = 4;
     int count = 0;
@@ -232,194 +233,10 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything)))
             continue;
 
-        rbm_type method = lore_ptr->r_ptr->blow[m].method;
-        int effect = lore_ptr->r_ptr->blow[m].effect;
+        set_monster_blow_method(lore_ptr, m);
+        set_monster_blow_effect(lore_ptr, m);
         int d1 = lore_ptr->r_ptr->blow[m].d_dice;
         int d2 = lore_ptr->r_ptr->blow[m].d_side;
-
-        concptr p = NULL;
-        switch (method) {
-        case RBM_HIT:
-            p = _("殴る", "hit");
-            break;
-        case RBM_TOUCH:
-            p = _("触る", "touch");
-            break;
-        case RBM_PUNCH:
-            p = _("パンチする", "punch");
-            break;
-        case RBM_KICK:
-            p = _("蹴る", "kick");
-            break;
-        case RBM_CLAW:
-            p = _("ひっかく", "claw");
-            break;
-        case RBM_BITE:
-            p = _("噛む", "bite");
-            break;
-        case RBM_STING:
-            p = _("刺す", "sting");
-            break;
-        case RBM_SLASH:
-            p = _("斬る", "slash");
-            break;
-        case RBM_BUTT:
-            p = _("角で突く", "butt");
-            break;
-        case RBM_CRUSH:
-            p = _("体当たりする", "crush");
-            break;
-        case RBM_ENGULF:
-            p = _("飲み込む", "engulf");
-            break;
-        case RBM_CHARGE:
-            p = _("請求書をよこす", "charge");
-            break;
-        case RBM_CRAWL:
-            p = _("体の上を這い回る", "crawl on you");
-            break;
-        case RBM_DROOL:
-            p = _("よだれをたらす", "drool on you");
-            break;
-        case RBM_SPIT:
-            p = _("つばを吐く", "spit");
-            break;
-        case RBM_EXPLODE:
-            p = _("爆発する", "explode");
-            break;
-        case RBM_GAZE:
-            p = _("にらむ", "gaze");
-            break;
-        case RBM_WAIL:
-            p = _("泣き叫ぶ", "wail");
-            break;
-        case RBM_SPORE:
-            p = _("胞子を飛ばす", "release spores");
-            break;
-        case RBM_XXX4:
-            break;
-        case RBM_BEG:
-            p = _("金をせがむ", "beg");
-            break;
-        case RBM_INSULT:
-            p = _("侮辱する", "insult");
-            break;
-        case RBM_MOAN:
-            p = _("うめく", "moan");
-            break;
-        case RBM_SHOW:
-            p = _("歌う", "sing");
-            break;
-        }
-
-        concptr q = NULL;
-        switch (effect) {
-        case RBE_SUPERHURT:
-            q = _("強力に攻撃する", "slaughter");
-            break;
-        case RBE_HURT:
-            q = _("攻撃する", "attack");
-            break;
-        case RBE_POISON:
-            q = _("毒をくらわす", "poison");
-            break;
-        case RBE_UN_BONUS:
-            q = _("劣化させる", "disenchant");
-            break;
-        case RBE_UN_POWER:
-            q = _("充填魔力を吸収する", "drain charges");
-            break;
-        case RBE_EAT_GOLD:
-            q = _("金を盗む", "steal gold");
-            break;
-        case RBE_EAT_ITEM:
-            q = _("アイテムを盗む", "steal items");
-            break;
-        case RBE_EAT_FOOD:
-            q = _("あなたの食料を食べる", "eat your food");
-            break;
-        case RBE_EAT_LITE:
-            q = _("明かりを吸収する", "absorb light");
-            break;
-        case RBE_ACID:
-            q = _("酸を飛ばす", "shoot acid");
-            break;
-        case RBE_ELEC:
-            q = _("感電させる", "electrocute");
-            break;
-        case RBE_FIRE:
-            q = _("燃やす", "burn");
-            break;
-        case RBE_COLD:
-            q = _("凍らせる", "freeze");
-            break;
-        case RBE_BLIND:
-            q = _("盲目にする", "blind");
-            break;
-        case RBE_CONFUSE:
-            q = _("混乱させる", "confuse");
-            break;
-        case RBE_TERRIFY:
-            q = _("恐怖させる", "terrify");
-            break;
-        case RBE_PARALYZE:
-            q = _("麻痺させる", "paralyze");
-            break;
-        case RBE_LOSE_STR:
-            q = _("腕力を減少させる", "reduce strength");
-            break;
-        case RBE_LOSE_INT:
-            q = _("知能を減少させる", "reduce intelligence");
-            break;
-        case RBE_LOSE_WIS:
-            q = _("賢さを減少させる", "reduce wisdom");
-            break;
-        case RBE_LOSE_DEX:
-            q = _("器用さを減少させる", "reduce dexterity");
-            break;
-        case RBE_LOSE_CON:
-            q = _("耐久力を減少させる", "reduce constitution");
-            break;
-        case RBE_LOSE_CHR:
-            q = _("魅力を減少させる", "reduce charisma");
-            break;
-        case RBE_LOSE_ALL:
-            q = _("全ステータスを減少させる", "reduce all stats");
-            break;
-        case RBE_SHATTER:
-            q = _("粉砕する", "shatter");
-            break;
-        case RBE_EXP_10:
-            q = _("経験値を減少(10d6+)させる", "lower experience (by 10d6+)");
-            break;
-        case RBE_EXP_20:
-            q = _("経験値を減少(20d6+)させる", "lower experience (by 20d6+)");
-            break;
-        case RBE_EXP_40:
-            q = _("経験値を減少(40d6+)させる", "lower experience (by 40d6+)");
-            break;
-        case RBE_EXP_80:
-            q = _("経験値を減少(80d6+)させる", "lower experience (by 80d6+)");
-            break;
-        case RBE_DISEASE:
-            q = _("病気にする", "disease");
-            break;
-        case RBE_TIME:
-            q = _("時間を逆戻りさせる", "time");
-            break;
-        case RBE_DR_LIFE:
-            q = _("生命力を吸収する", "drain life");
-            break;
-        case RBE_DR_MANA:
-            q = _("魔力を奪う", "drain mana force");
-            break;
-        case RBE_INERTIA:
-            q = _("減速させる", "slow");
-            break;
-        case RBE_STUN:
-            q = _("朦朧とさせる", "stun");
-            break;
-        }
 
 #ifdef JP
         if (attack_numbers == 0) {
@@ -431,23 +248,23 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             hooked_roff("のダメージで");
         }
 
-        if (!p)
-            p = "何か奇妙なことをする";
+        if (!lore_ptr->p)
+            lore_ptr->p = "何か奇妙なことをする";
 
         /* XXしてYYし/XXしてYYする/XXし/XXする */
-        if (q != NULL)
-            jverb(p, lore_ptr->jverb_buf, JVERB_TO);
+        if (lore_ptr->q != NULL)
+            jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_TO);
         else if (attack_numbers != count - 1)
-            jverb(p, lore_ptr->jverb_buf, JVERB_AND);
+            jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_AND);
         else
-            strcpy(lore_ptr->jverb_buf, p);
+            strcpy(lore_ptr->jverb_buf, lore_ptr->p);
 
         hooked_roff(lore_ptr->jverb_buf);
-        if (q) {
+        if (lore_ptr->q) {
             if (attack_numbers != count - 1)
-                jverb(q, lore_ptr->jverb_buf, JVERB_AND);
+                jverb(lore_ptr->q, lore_ptr->jverb_buf, JVERB_AND);
             else
-                strcpy(lore_ptr->jverb_buf, q);
+                strcpy(lore_ptr->jverb_buf, lore_ptr->q);
             hooked_roff(lore_ptr->jverb_buf);
         }
 
@@ -462,12 +279,13 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             hooked_roff(", and ");
         }
 
-        if (!p)
-            p = "do something weird";
-        hooked_roff(p);
-        if (q) {
+        if (lore_ptr->p == NULL)
+            lore_ptr->p = "do something weird";
+
+        hooked_roff(lore_ptr->p);
+        if (lore_ptr->q != NULL) {
             hooked_roff(" to ");
-            hooked_roff(q);
+            hooked_roff(lore_ptr->q);
             if (d1 && d2 && (lore_ptr->know_everything || know_damage(r_idx, m))) {
                 hooked_roff(" with damage");
                 hooked_roff(format(" %dd%d", d1, d2));

@@ -42,6 +42,9 @@ typedef struct lore_type {
     bool magic;
     int drop_quantity;
     concptr drop_quality;
+    concptr p;
+    concptr q;
+    rbm_type method;
 } lore_type;
 
 typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);
