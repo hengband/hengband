@@ -856,6 +856,7 @@
     <ClCompile Include="..\..\src\view\display-birth.c" />
     <ClCompile Include="..\..\src\view\display-characteristic.c" />
     <ClCompile Include="..\..\src\view\display-fruit.c" />
+    <ClCompile Include="..\..\src\view\display-lore-drops.c" />
     <ClCompile Include="..\..\src\view\display-lore-magics.c" />
     <ClCompile Include="..\..\src\view\display-lore-status.c" />
     <ClCompile Include="..\..\src\view\display-lore.c" />
@@ -924,6 +925,7 @@
     <ClInclude Include="..\..\src\term\term-color-types.h" />
     <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
+    <ClInclude Include="..\..\src\view\display-lore-drops.h" />
     <ClInclude Include="..\..\src\view\display-lore-magics.h" />
     <ClInclude Include="..\..\src\view\display-lore-status.h" />
     <ClInclude Include="..\..\src\view\display-lore.h" />

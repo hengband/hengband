@@ -524,6 +524,7 @@ hengband_SOURCES = \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \
+	view/display-lore-drops.c view/display-lore-drops.h \
 	view/display-lore-magics.c view/display-lore-magics.h \
 	view/display-lore-status.c view/display-lore-status.h \
 	view/display-lore.c view/display-lore.h \

@@ -24,6 +24,7 @@
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
+#include "view/display-lore-drops.h"
 #include "view/display-lore-magics.h"
 #include "view/display-lore-status.h"
 #include "view/display-lore.h"
@@ -225,19 +226,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         lore_ptr->sin = FALSE;
 #endif
 
-        int n = MAX(lore_ptr->drop_gold, lore_ptr->drop_item);
-        if (n == 1) {
-            hooked_roff(_("一つの", " a"));
-#ifdef JP
-#else
-            lore_ptr->sin = TRUE;
-#endif
-        } else if (n == 2) {
-            hooked_roff(_("一つか二つの", " one or two"));
-        } else {
-            hooked_roff(format(_(" %d 個までの", " up to %d"), n));
-        }
-
+        display_monster_drop_numbers(lore_ptr);
         concptr p;
         if (lore_ptr->flags1 & RF1_DROP_GREAT) {
             p = _("特別な", " exceptional");
