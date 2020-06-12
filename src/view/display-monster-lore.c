@@ -389,3 +389,23 @@ void display_monster_aura(lore_type *lore_ptr)
     else if (lore_ptr->flags2 & RF2_AURA_ELEC)
         hook_c_roff(TERM_L_BLUE, format(_("%^sはスパークに包まれている。", "%^s is surrounded by electricity.  "), wd_he[lore_ptr->msex]));
 }
+
+void display_lore_this(player_type *player_ptr, lore_type *lore_ptr)
+{
+    if ((lore_ptr->r_ptr->r_tkills == 0) && !lore_ptr->know_everything)
+        return;
+
+#ifdef JP
+    hooked_roff("この");
+#else
+    if (lore_ptr->flags1 & RF1_UNIQUE) {
+        hooked_roff("Killing this");
+    } else {
+        hooked_roff("A kill of this");
+    }
+#endif
+
+    display_monster_alignment(lore_ptr);
+    display_monster_kind(lore_ptr);
+    display_monster_exp(player_ptr, lore_ptr);
+}

@@ -308,22 +308,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         lore_ptr->old = FALSE;
     }
 
-    if (lore_ptr->r_ptr->r_tkills || lore_ptr->know_everything) {
-#ifdef JP
-        hooked_roff("この");
-#else
-        if (lore_ptr->flags1 & RF1_UNIQUE) {
-            hooked_roff("Killing this");
-        } else {
-            hooked_roff("A kill of this");
-        }
-#endif
-
-        display_monster_alignment(lore_ptr);
-        display_monster_kind(lore_ptr);
-        display_monster_exp(player_ptr, lore_ptr);
-    }
-
+    display_lore_this(player_ptr, lore_ptr);
     display_monster_aura(lore_ptr);
     if (lore_ptr->flags2 & RF2_REFLECTING)
         hooked_roff(format(_("%^sは矢の呪文を跳ね返す。", "%^s reflects bolt spells.  "), wd_he[lore_ptr->msex]));

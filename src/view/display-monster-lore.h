@@ -16,3 +16,4 @@ void display_monster_kind(lore_type *lore_ptr);
 void display_monster_alignment(lore_type *lore_ptr);
 void display_monster_exp(player_type *player_ptr, lore_type *lore_ptr);
 void display_monster_aura(lore_type *lore_ptr);
+void display_lore_this(player_type *player_ptr, lore_type *lore_ptr);
