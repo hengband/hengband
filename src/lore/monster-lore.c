@@ -202,69 +202,8 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
     lore_ptr->vn = 0;
     display_monster_concrete_abilities(lore_ptr);
-    if (lore_ptr->vn > 0) {
-        hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
-        for (int n = 0; n < lore_ptr->vn; n++) {
-#ifdef JP
-            if (n != lore_ptr->vn - 1) {
-                jverb(lore_ptr->vp[n], lore_ptr->jverb_buf, JVERB_AND);
-                hook_c_roff(lore_ptr->color[n], lore_ptr->jverb_buf);
-                hooked_roff("、");
-            } else {
-                hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
-            }
-#else
-            if (n == 0)
-                hooked_roff(" can ");
-            else if (n < lore_ptr->vn - 1)
-                hooked_roff(", ");
-            else
-                hooked_roff(" and ");
-
-            hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
-#endif
-        }
-
-        hooked_roff(_("ことができる。", ".  "));
-    }
-
-    if (lore_ptr->flags7 & RF7_AQUATIC) {
-        hooked_roff(format(_("%^sは水中に棲んでいる。", "%^s lives in water.  "), wd_he[lore_ptr->msex]));
-    }
-
-    if (lore_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) {
-        hooked_roff(format(_("%^sは光っている。", "%^s is shining.  "), wd_he[lore_ptr->msex]));
-    }
-
-    if (lore_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) {
-        hook_c_roff(TERM_L_DARK, format(_("%^sは暗黒に包まれている。", "%^s is surrounded by darkness.  "), wd_he[lore_ptr->msex]));
-    }
-
-    if (lore_ptr->flags2 & RF2_INVISIBLE) {
-        hooked_roff(format(_("%^sは透明で目に見えない。", "%^s is invisible.  "), wd_he[lore_ptr->msex]));
-    }
-
-    if (lore_ptr->flags2 & RF2_COLD_BLOOD) {
-        hooked_roff(format(_("%^sは冷血動物である。", "%^s is cold blooded.  "), wd_he[lore_ptr->msex]));
-    }
-
-    if (lore_ptr->flags2 & RF2_EMPTY_MIND) {
-        hooked_roff(format(_("%^sはテレパシーでは感知できない。", "%^s is not detected by telepathy.  "), wd_he[lore_ptr->msex]));
-    } else if (lore_ptr->flags2 & RF2_WEIRD_MIND) {
-        hooked_roff(format(_("%^sはまれにテレパシーで感知できる。", "%^s is rarely detected by telepathy.  "), wd_he[lore_ptr->msex]));
-    }
-
-    if (lore_ptr->flags2 & RF2_MULTIPLY) {
-        hook_c_roff(TERM_L_UMBER, format(_("%^sは爆発的に増殖する。", "%^s breeds explosively.  "), wd_he[lore_ptr->msex]));
-    }
-
-    if (lore_ptr->flags2 & RF2_REGENERATE) {
-        hook_c_roff(TERM_L_WHITE, format(_("%^sは素早く体力を回復する。", "%^s regenerates quickly.  "), wd_he[lore_ptr->msex]));
-    }
-
-    if (lore_ptr->flags7 & RF7_RIDING) {
-        hook_c_roff(TERM_SLATE, format(_("%^sに乗ることができる。", "%^s is suitable for riding.  "), wd_he[lore_ptr->msex]));
-    }
+    display_monster_abilities(lore_ptr);
+    display_monster_constitutions(lore_ptr);
 
     lore_ptr->vn = 0;
     if (lore_ptr->flags3 & RF3_HURT_ROCK) {
