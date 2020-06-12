@@ -18,3 +18,4 @@ void display_monster_exp(player_type *player_ptr, lore_type *lore_ptr);
 void display_monster_aura(lore_type *lore_ptr);
 void display_lore_this(player_type *player_ptr, lore_type *lore_ptr);
 void display_monster_collective(lore_type *lore_ptr);
+void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr);

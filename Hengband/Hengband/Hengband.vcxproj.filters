@@ -1286,6 +1286,9 @@
     <ClCompile Include="..\..\src\view\display-lore.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\lore\lore-calculator.c">
+      <Filter>lore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2823,6 +2826,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-lore.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\lore\lore-calculator.h">
+      <Filter>lore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

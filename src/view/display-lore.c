@@ -5,11 +5,14 @@
  */
 
 #include "view/display-lore.h"
+#include "lore/lore-calculator.h"
 #include "lore/monster-lore.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
+#include "monster-race/race-flags4.h"
 #include "monster-race/race-indice-types.h"
+#include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
 #include "world/world.h"
 
@@ -467,5 +470,31 @@ void display_monster_collective(lore_type *lore_ptr)
     }
     else if (lore_ptr->flags1 & RF1_FRIENDS) {
         hooked_roff(format(_("%^sは通常集団で現れる。", "%^s usually appears in groups.  "), wd_he[lore_ptr->msex]));
+    }
+}
+
+void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
+{
+    if (lore_ptr->flags4 & RF4_ROCKET) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_ROCKET), _("ロケット%sを発射する", "shoot a rocket%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+    }
+
+    if ((lore_ptr->flags4 & RF4_SHOOT) == 0)
+        return;
+
+    for (int m = 0; m < 4; m++) {
+        if (lore_ptr->r_ptr->blow[m].method != RBM_SHOOT)
+            continue;
+
+        if (know_armour(lore_ptr->r_idx))
+            sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blow[m].d_side,
+                lore_ptr->r_ptr->blow[m].d_dice);
+        else
+            sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("射撃をする", "fire an arrow"));
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+        break;
     }
 }
