@@ -189,59 +189,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
     lore_ptr->vn = 0;
     set_ball_types(player_ptr, lore_ptr);
-    if (lore_ptr->a_ability_flags2 & (RF6_HAND_DOOM)) {
-        lore_ptr->vp[lore_ptr->vn] = _("破滅の手(40%-60%)", "invoke the Hand of Doom(40%-60%)");
-        lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
-    }
-
-    if (lore_ptr->a_ability_flags2 & (RF6_PSY_SPEAR)) {
-        set_damage(player_ptr, r_idx, (MS_PSY_SPEAR), _("光の剣%s", "psycho-spear%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
-        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-        lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
-    }
-
-    if (lore_ptr->a_ability_flags1 & (RF5_DRAIN_MANA)) {
-        set_damage(player_ptr, r_idx, (MS_DRAIN_MANA), _("魔力吸収%s", "drain mana%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
-        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-        lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
-    }
-
-    if (lore_ptr->a_ability_flags1 & (RF5_MIND_BLAST)) {
-        set_damage(player_ptr, r_idx, (MS_MIND_BLAST), _("精神攻撃%s", "cause mind blasting%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
-        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-        lore_ptr->color[lore_ptr->vn++] = TERM_L_RED;
-    }
-
-    if (lore_ptr->a_ability_flags1 & (RF5_BRAIN_SMASH)) {
-        set_damage(player_ptr, r_idx, (MS_BRAIN_SMASH), _("脳攻撃%s", "cause brain smashing%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
-        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-        lore_ptr->color[lore_ptr->vn++] = TERM_RED;
-    }
-
-    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_1)) {
-        set_damage(player_ptr, r_idx, (MS_CAUSE_1), _("軽傷＋呪い%s", "cause light wounds and cursing%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
-        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
-    }
-
-    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_2)) {
-        set_damage(player_ptr, r_idx, (MS_CAUSE_2), _("重傷＋呪い%s", "cause serious wounds and cursing%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
-        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
-    }
-
-    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_3)) {
-        set_damage(player_ptr, r_idx, (MS_CAUSE_3), _("致命傷＋呪い%s", "cause critical wounds and cursing%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
-        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
-    }
-
-    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_4)) {
-        set_damage(player_ptr, r_idx, (MS_CAUSE_4), _("秘孔を突く%s", "cause mortal wounds%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
-        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
-    }
-
+    set_particular_types(player_ptr, lore_ptr);
     if (lore_ptr->a_ability_flags1 & (RF5_BO_ACID)) {
         set_damage(player_ptr, r_idx, (MS_BOLT_ACID), _("アシッド・ボルト%s", "produce acid bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];

@@ -1,6 +1,7 @@
 ﻿#include "lore/magic-types-setter.h"
 #include "lore/lore-calculator.h"
 #include "monster-race/race-flags-ability1.h"
+#include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags4.h"
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
@@ -144,74 +145,130 @@ void set_breath_types(player_type *player_ptr, lore_type *lore_ptr)
 void set_ball_types(player_type *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->a_ability_flags1 & (RF5_BA_ACID)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_ACID), _("アシッド・ボール%s", "produce acid balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_ACID), _("アシッド・ボール%s", "produce acid balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_GREEN;
     }
 
     if (lore_ptr->a_ability_flags1 & (RF5_BA_ELEC)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_ELEC), _("サンダー・ボール%s", "produce lightning balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_ELEC), _("サンダー・ボール%s", "produce lightning balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
     }
 
     if (lore_ptr->a_ability_flags1 & (RF5_BA_FIRE)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_FIRE), _("ファイア・ボール%s", "produce fire balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_FIRE), _("ファイア・ボール%s", "produce fire balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_RED;
     }
 
     if (lore_ptr->a_ability_flags1 & (RF5_BA_COLD)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_COLD), _("アイス・ボール%s", "produce frost balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_COLD), _("アイス・ボール%s", "produce frost balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
     }
 
     if (lore_ptr->a_ability_flags1 & (RF5_BA_POIS)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_POIS), _("悪臭雲%s", "produce poison balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_POIS), _("悪臭雲%s", "produce poison balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_L_GREEN;
     }
 
     if (lore_ptr->a_ability_flags1 & (RF5_BA_NETH)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_NETHER), _("地獄球%s", "produce nether balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_NETHER), _("地獄球%s", "produce nether balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
 
     if (lore_ptr->a_ability_flags1 & (RF5_BA_WATE)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_WATER), _("ウォーター・ボール%s", "produce water balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_WATER), _("ウォーター・ボール%s", "produce water balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
     }
 
     if (lore_ptr->flags4 & (RF4_BA_NUKE)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_NUKE), _("放射能球%s", "produce balls of radiation%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_NUKE), _("放射能球%s", "produce balls of radiation%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_L_GREEN;
     }
 
     if (lore_ptr->a_ability_flags1 & (RF5_BA_MANA)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_MANA), _("魔力の嵐%s", "invoke mana storms%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_MANA), _("魔力の嵐%s", "invoke mana storms%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_L_BLUE;
     }
 
     if (lore_ptr->a_ability_flags1 & (RF5_BA_DARK)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_DARK), _("暗黒の嵐%s", "invoke darkness storms%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_DARK), _("暗黒の嵐%s", "invoke darkness storms%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
     }
 
     if (lore_ptr->a_ability_flags1 & (RF5_BA_LITE)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_STARBURST), _("スターバースト%s", "invoke starburst%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_STARBURST), _("スターバースト%s", "invoke starburst%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
     }
 
     if (lore_ptr->flags4 & (RF4_BA_CHAO)) {
-        set_damage(player_ptr, lore_ptr->breath, (MS_BALL_CHAOS), _("純ログルス%s", "invoke raw Logrus%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BALL_CHAOS), _("純ログルス%s", "invoke raw Logrus%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
+    }
+}
+
+void set_particular_types(player_type *player_ptr, lore_type *lore_ptr)
+{
+    if (lore_ptr->a_ability_flags2 & (RF6_HAND_DOOM)) {
+        lore_ptr->vp[lore_ptr->vn] = _("破滅の手(40%-60%)", "invoke the Hand of Doom(40%-60%)");
+        lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_PSY_SPEAR)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_PSY_SPEAR), _("光の剣%s", "psycho-spear%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_DRAIN_MANA)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_DRAIN_MANA), _("魔力吸収%s", "drain mana%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_MIND_BLAST)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_MIND_BLAST), _("精神攻撃%s", "cause mind blasting%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_RED;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BRAIN_SMASH)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BRAIN_SMASH), _("脳攻撃%s", "cause brain smashing%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_RED;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_1)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_CAUSE_1), _("軽傷＋呪い%s", "cause light wounds and cursing%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_2)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_CAUSE_2), _("重傷＋呪い%s", "cause serious wounds and cursing%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_3)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_CAUSE_3), _("致命傷＋呪い%s", "cause critical wounds and cursing%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_CAUSE_4)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_CAUSE_4), _("秘孔を突く%s", "cause mortal wounds%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
     }
 }
