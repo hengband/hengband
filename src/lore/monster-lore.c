@@ -25,6 +25,7 @@
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
+#include "view/display-lore-attacks.h"
 #include "view/display-lore-drops.h"
 #include "view/display-lore-magics.h"
 #include "view/display-lore-status.h"
@@ -218,13 +219,12 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     display_monster_drops(lore_ptr);
 
     const int max_attack_numbers = 4;
-    int count = 0;
     for (int m = 0; m < max_attack_numbers; m++) {
         if (!lore_ptr->r_ptr->blow[m].method || (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT))
             continue;
 
         if (lore_ptr->r_ptr->r_blows[m] || lore_ptr->know_everything)
-            count++;
+            lore_ptr->count++;
     }
 
     int attack_numbers = 0;
@@ -235,64 +235,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
         set_monster_blow_method(lore_ptr, m);
         set_monster_blow_effect(lore_ptr, m);
-        int d1 = lore_ptr->r_ptr->blow[m].d_dice;
-        int d2 = lore_ptr->r_ptr->blow[m].d_side;
-
-#ifdef JP
-        if (attack_numbers == 0) {
-            hooked_roff(format("%^sは", wd_he[lore_ptr->msex]));
-        }
-
-        if (d1 && d2 && (lore_ptr->know_everything || know_damage(r_idx, m))) {
-            hooked_roff(format(" %dd%d ", d1, d2));
-            hooked_roff("のダメージで");
-        }
-
-        if (!lore_ptr->p)
-            lore_ptr->p = "何か奇妙なことをする";
-
-        /* XXしてYYし/XXしてYYする/XXし/XXする */
-        if (lore_ptr->q != NULL)
-            jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_TO);
-        else if (attack_numbers != count - 1)
-            jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_AND);
-        else
-            strcpy(lore_ptr->jverb_buf, lore_ptr->p);
-
-        hooked_roff(lore_ptr->jverb_buf);
-        if (lore_ptr->q) {
-            if (attack_numbers != count - 1)
-                jverb(lore_ptr->q, lore_ptr->jverb_buf, JVERB_AND);
-            else
-                strcpy(lore_ptr->jverb_buf, lore_ptr->q);
-            hooked_roff(lore_ptr->jverb_buf);
-        }
-
-        if (attack_numbers != count - 1)
-            hooked_roff("、");
-#else
-        if (attack_numbers == 0) {
-            hooked_roff(format("%^s can ", wd_he[lore_ptr->msex]));
-        } else if (attack_numbers < count - 1) {
-            hooked_roff(", ");
-        } else {
-            hooked_roff(", and ");
-        }
-
-        if (lore_ptr->p == NULL)
-            lore_ptr->p = "do something weird";
-
-        hooked_roff(lore_ptr->p);
-        if (lore_ptr->q != NULL) {
-            hooked_roff(" to ");
-            hooked_roff(lore_ptr->q);
-            if (d1 && d2 && (lore_ptr->know_everything || know_damage(r_idx, m))) {
-                hooked_roff(" with damage");
-                hooked_roff(format(" %dd%d", d1, d2));
-            }
-        }
-#endif
-
+        display_monster_blows(lore_ptr, m, attack_numbers);
         attack_numbers++;
     }
 

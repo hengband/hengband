@@ -1304,6 +1304,9 @@
     <ClCompile Include="..\..\src\lore\combat-types-setter.c">
       <Filter>lore</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-lore-attacks.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2859,6 +2862,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\lore\combat-types-setter.h">
       <Filter>lore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-lore-attacks.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -33,6 +33,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAG
     lore_ptr->know_everything = FALSE;
     lore_ptr->mode = mode;
     lore_ptr->old = FALSE;
+    lore_ptr->count = 0;
     return lore_ptr;
 }
 

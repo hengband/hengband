@@ -45,6 +45,7 @@ typedef struct lore_type {
     concptr p;
     concptr q;
     rbm_type method;
+    int count;
 } lore_type;
 
 typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);
