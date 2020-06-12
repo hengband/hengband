@@ -192,36 +192,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     set_particular_types(player_ptr, lore_ptr);
     set_bolt_types(player_ptr, lore_ptr);
     set_status_types(lore_ptr);
-    if (lore_ptr->a_ability_flags2 & (RF6_BLINK)) {
-        lore_ptr->vp[lore_ptr->vn] = _("ショートテレポート", "blink-self");
-        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
-    }
-
-    if (lore_ptr->a_ability_flags2 & (RF6_TPORT)) {
-        lore_ptr->vp[lore_ptr->vn] = _("テレポート", "teleport-self");
-        lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
-    }
-
-    if (lore_ptr->a_ability_flags2 & (RF6_WORLD)) {
-        lore_ptr->vp[lore_ptr->vn] = _("時を止める", "stop the time");
-        lore_ptr->color[lore_ptr->vn++] = TERM_L_BLUE;
-    }
-
-    if (lore_ptr->a_ability_flags2 & (RF6_TELE_TO)) {
-        lore_ptr->vp[lore_ptr->vn] = _("テレポートバック", "teleport to");
-        lore_ptr->color[lore_ptr->vn++] = TERM_L_UMBER;
-    }
-
-    if (lore_ptr->a_ability_flags2 & (RF6_TELE_AWAY)) {
-        lore_ptr->vp[lore_ptr->vn] = _("テレポートアウェイ", "teleport away");
-        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
-    }
-
-    if (lore_ptr->a_ability_flags2 & (RF6_TELE_LEVEL)) {
-        lore_ptr->vp[lore_ptr->vn] = _("テレポート・レベル", "teleport level");
-        lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
-    }
-
+    set_teleport_types(lore_ptr);
     if (lore_ptr->a_ability_flags2 & (RF6_DARKNESS)) {
         if ((player_ptr->pclass != CLASS_NINJA) || (lore_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (lore_ptr->r_ptr->flags7 & RF7_DARK_MASK)) {
             lore_ptr->vp[lore_ptr->vn] = _("暗闇", "create darkness");

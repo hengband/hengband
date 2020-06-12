@@ -383,3 +383,39 @@ void set_status_types(lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
     }
 }
+
+/*!
+ * @details 間にザ・ワールドが入っているが、元々こうなので敢えて修正はしない
+ */
+void set_teleport_types(lore_type *lore_ptr)
+{
+    if (lore_ptr->a_ability_flags2 & (RF6_BLINK)) {
+        lore_ptr->vp[lore_ptr->vn] = _("ショートテレポート", "blink-self");
+        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_TPORT)) {
+        lore_ptr->vp[lore_ptr->vn] = _("テレポート", "teleport-self");
+        lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_WORLD)) {
+        lore_ptr->vp[lore_ptr->vn] = _("時を止める", "stop the time");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_BLUE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_TELE_TO)) {
+        lore_ptr->vp[lore_ptr->vn] = _("テレポートバック", "teleport to");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_UMBER;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_TELE_AWAY)) {
+        lore_ptr->vp[lore_ptr->vn] = _("テレポートアウェイ", "teleport away");
+        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_TELE_LEVEL)) {
+        lore_ptr->vp[lore_ptr->vn] = _("テレポート・レベル", "teleport level");
+        lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
+    }
+}
