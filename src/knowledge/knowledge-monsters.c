@@ -23,7 +23,7 @@
 #include "monster/smart-learn-types.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
-#include "view/display-monster-lore.h"
+#include "view/display-lore.h"
 #include "view/display-monster-status.h"
 #include "world/world.h"
 

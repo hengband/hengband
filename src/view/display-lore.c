@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "view/display-monster-lore.h"
+#include "view/display-lore.h"
 #include "lore/monster-lore.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"

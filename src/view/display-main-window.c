@@ -54,7 +54,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
-#include "view/display-monster-lore.h"
+#include "view/display-lore.h"
 #include "view/display-player.h"
 #include "view/object-describer.h"
 #include "world/world.h"

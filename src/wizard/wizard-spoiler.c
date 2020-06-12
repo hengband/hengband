@@ -35,7 +35,7 @@
 #include "system/angband-version.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
-#include "view/display-monster-lore.h"
+#include "view/display-lore.h"
 
  /*
   * The spoiler file being created

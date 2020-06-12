@@ -6,7 +6,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
-#include "view/display-monster-lore.h"
+#include "view/display-lore.h"
 
 /*!
  * @brief 施設でモンスターの情報を知るメインルーチン / research_mon -KMW-

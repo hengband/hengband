@@ -22,7 +22,7 @@
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
-#include "view/display-monster-lore.h"
+#include "view/display-lore.h"
 
 /*!
  * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)
