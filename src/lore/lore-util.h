@@ -39,6 +39,7 @@ typedef struct lore_type {
     concptr vp[96];
     char tmp_msg[96][96];
     bool breath;
+    bool magic;
 } lore_type;
 
 typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);

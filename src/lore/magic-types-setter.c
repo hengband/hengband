@@ -449,3 +449,86 @@ void set_floor_types(player_type *player_ptr, lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_RED;
     }
 }
+
+void set_summon_types(lore_type *lore_ptr)
+{
+    if (lore_ptr->a_ability_flags2 & (RF6_S_MONSTER)) {
+        lore_ptr->vp[lore_ptr->vn] = _("モンスター一体召喚", "summon a monster");
+        lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_MONSTERS)) {
+        lore_ptr->vp[lore_ptr->vn] = _("モンスター複数召喚", "summon monsters");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_KIN)) {
+        lore_ptr->vp[lore_ptr->vn] = _("救援召喚", "summon aid");
+        lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_ANT)) {
+        lore_ptr->vp[lore_ptr->vn] = _("アリ召喚", "summon ants");
+        lore_ptr->color[lore_ptr->vn++] = TERM_RED;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_SPIDER)) {
+        lore_ptr->vp[lore_ptr->vn] = _("クモ召喚", "summon spiders");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_HOUND)) {
+        lore_ptr->vp[lore_ptr->vn] = _("ハウンド召喚", "summon hounds");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_UMBER;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_HYDRA)) {
+        lore_ptr->vp[lore_ptr->vn] = _("ヒドラ召喚", "summon hydras");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_GREEN;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_ANGEL)) {
+        lore_ptr->vp[lore_ptr->vn] = _("天使一体召喚", "summon an angel");
+        lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_DEMON)) {
+        lore_ptr->vp[lore_ptr->vn] = _("デーモン一体召喚", "summon a demon");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_RED;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_UNDEAD)) {
+        lore_ptr->vp[lore_ptr->vn] = _("アンデッド一体召喚", "summon an undead");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_DRAGON)) {
+        lore_ptr->vp[lore_ptr->vn] = _("ドラゴン一体召喚", "summon a dragon");
+        lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_HI_UNDEAD)) {
+        lore_ptr->vp[lore_ptr->vn] = _("強力なアンデッド召喚", "summon Greater Undead");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_HI_DRAGON)) {
+        lore_ptr->vp[lore_ptr->vn] = _("古代ドラゴン召喚", "summon Ancient Dragons");
+        lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_CYBER)) {
+        lore_ptr->vp[lore_ptr->vn] = _("サイバーデーモン召喚", "summon Cyberdemons");
+        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_AMBERITES)) {
+        lore_ptr->vp[lore_ptr->vn] = _("アンバーの王族召喚", "summon Lords of Amber");
+        lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_S_UNIQUE)) {
+        lore_ptr->vp[lore_ptr->vn] = _("ユニーク・モンスター召喚", "summon Unique Monsters");
+        lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
+    }
+}
