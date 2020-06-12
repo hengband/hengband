@@ -335,3 +335,51 @@ void set_bolt_types(player_type *player_ptr, lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
     }
 }
+
+void set_status_types(lore_type *lore_ptr)
+{
+    if (lore_ptr->a_ability_flags1 & (RF5_SCARE)) {
+        lore_ptr->vp[lore_ptr->vn] = _("恐怖", "terrify");
+        lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BLIND)) {
+        lore_ptr->vp[lore_ptr->vn] = _("目くらまし", "blind");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_CONF)) {
+        lore_ptr->vp[lore_ptr->vn] = _("混乱", "confuse");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_UMBER;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_SLOW)) {
+        lore_ptr->vp[lore_ptr->vn] = _("減速", "slow");
+        lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_HOLD)) {
+        lore_ptr->vp[lore_ptr->vn] = _("麻痺", "paralyze");
+        lore_ptr->color[lore_ptr->vn++] = TERM_RED;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_HASTE)) {
+        lore_ptr->vp[lore_ptr->vn] = _("加速", "haste-self");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_GREEN;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_HEAL)) {
+        lore_ptr->vp[lore_ptr->vn] = _("治癒", "heal-self");
+        lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_INVULNER)) {
+        lore_ptr->vp[lore_ptr->vn] = _("無敵化", "make invulnerable");
+        lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
+    }
+
+    if (lore_ptr->flags4 & RF4_DISPEL) {
+        lore_ptr->vp[lore_ptr->vn] = _("魔力消去", "dispel-magic");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
+    }
+}
