@@ -14,3 +14,4 @@ void display_monster_resistances(lore_type *lore_ptr);
 void display_monster_evolution(lore_type *lore_ptr);
 void display_monster_concrete_immunities(lore_type *lore_ptr);
 void display_monster_immunities(lore_type *lore_ptr);
+void display_monster_alert(lore_type *lore_ptr);

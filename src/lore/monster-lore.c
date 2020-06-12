@@ -217,37 +217,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     lore_ptr->vn = 0;
     display_monster_concrete_immunities(lore_ptr);
     display_monster_immunities(lore_ptr);
-    if ((((int)lore_ptr->r_ptr->r_wake * (int)lore_ptr->r_ptr->r_wake) > lore_ptr->r_ptr->sleep) || (lore_ptr->r_ptr->r_ignore == MAX_UCHAR)
-        || (lore_ptr->r_ptr->sleep == 0 && lore_ptr->r_ptr->r_tkills >= 10) || lore_ptr->know_everything) {
-        concptr act;
-        if (lore_ptr->r_ptr->sleep > 200) {
-            act = _("を無視しがちであるが", "prefers to ignore");
-        } else if (lore_ptr->r_ptr->sleep > 95) {
-            act = _("に対してほとんど注意を払わないが", "pays very little attention to");
-        } else if (lore_ptr->r_ptr->sleep > 75) {
-            act = _("に対してあまり注意を払わないが", "pays little attention to");
-        } else if (lore_ptr->r_ptr->sleep > 45) {
-            act = _("を見過ごしがちであるが", "tends to overlook");
-        } else if (lore_ptr->r_ptr->sleep > 25) {
-            act = _("をほんの少しは見ており", "takes quite a while to see");
-        } else if (lore_ptr->r_ptr->sleep > 10) {
-            act = _("をしばらくは見ており", "takes a while to see");
-        } else if (lore_ptr->r_ptr->sleep > 5) {
-            act = _("を幾分注意深く見ており", "is fairly observant of");
-        } else if (lore_ptr->r_ptr->sleep > 3) {
-            act = _("を注意深く見ており", "is observant of");
-        } else if (lore_ptr->r_ptr->sleep > 1) {
-            act = _("をかなり注意深く見ており", "is very observant of");
-        } else if (lore_ptr->r_ptr->sleep > 0) {
-            act = _("を警戒しており", "is vigilant for");
-        } else {
-            act = _("をかなり警戒しており", "is ever vigilant for");
-        }
-
-        hooked_roff(_(format("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", wd_he[lore_ptr->msex], act, 10 * lore_ptr->r_ptr->aaf),
-            format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[lore_ptr->msex], act, wd_he[lore_ptr->msex], 10 * lore_ptr->r_ptr->aaf)));
-    }
-
+    display_monster_alert(lore_ptr);
     if (lore_ptr->drop_gold || lore_ptr->drop_item) {
         hooked_roff(format(_("%^sは", "%^s may carry"), wd_he[lore_ptr->msex]));
 #ifdef JP
