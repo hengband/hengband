@@ -196,19 +196,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     set_floor_types(player_ptr, lore_ptr);
     set_summon_types(lore_ptr);
     display_monster_magic_types(lore_ptr);
-    if (lore_ptr->breath || lore_ptr->magic) {
-        int m = lore_ptr->r_ptr->r_cast_spell;
-        int n = lore_ptr->r_ptr->freq_spell;
-        if (m > 100 || lore_ptr->know_everything) {
-            hooked_roff(format(_("(確率:1/%d)", "; 1 time in %d"), 100 / n));
-        } else if (m) {
-            n = ((n + 9) / 10) * 10;
-            hooked_roff(format(_("(確率:約1/%d)", "; about 1 time in %d"), 100 / n));
-        }
-
-        hooked_roff(_("。", ".  "));
-    }
-
+    display_mosnter_magic_possibility(lore_ptr);
     if (lore_ptr->know_everything || know_armour(r_idx)) {
         hooked_roff(format(_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"), wd_he[lore_ptr->msex], lore_ptr->r_ptr->ac));
 
