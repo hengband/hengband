@@ -457,9 +457,9 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 			(void)inkey();
 
 #ifdef JP
-			if (!get_check_strict("もう一度接続を試みますか? ", CHECK_NO_HISTORY))
+			if (!get_check_strict(creature_ptr, "もう一度接続を試みますか? ", CHECK_NO_HISTORY))
 #else
-			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
+			if (!get_check_strict(creature_ptr, "Try again? ", CHECK_NO_HISTORY))
 #endif
 			{
 #ifdef WINDOWS
@@ -489,9 +489,9 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 			(void)inkey();
 
 #ifdef JP
-			if (!get_check_strict("もう一度接続を試みますか? ", CHECK_NO_HISTORY))
+			if (!get_check_strict(creature_ptr, "もう一度接続を試みますか? ", CHECK_NO_HISTORY))
 #else
-			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
+			if (!get_check_strict(creature_ptr, "Try again? ", CHECK_NO_HISTORY))
 #endif
 			{
 #ifdef WINDOWS

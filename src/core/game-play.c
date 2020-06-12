@@ -116,7 +116,7 @@ void play_game(player_type *player_ptr, bool new_game)
         char buf[1024];
         bool success;
 
-        if (!get_check_strict(_("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
+        if (!get_check_strict(player_ptr, _("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
             quit(0);
 
         player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
@@ -132,7 +132,7 @@ void play_game(player_type *player_ptr, bool new_game)
         parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
         success = send_world_score(player_ptr, TRUE, update_playtime, display_player, map_name);
 
-        if (!success && !get_check_strict(_("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
+        if (!success && !get_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
             prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
             (void)inkey();
         } else {

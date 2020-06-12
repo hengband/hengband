@@ -2838,7 +2838,7 @@ void do_cmd_suicide(player_type *creature_ptr)
 	if (current_world_ptr->total_winner)
 	{
 		/* Verify */
-		if (!get_check_strict(_("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) return;
+		if (!get_check_strict(creature_ptr, _("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) return;
 	}
 
 	/* Verify Suicide */
@@ -2873,7 +2873,7 @@ void do_cmd_suicide(player_type *creature_ptr)
 		do
 		{
 			while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof buf));
-		} while (!get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
+		} while (!get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
 		if (buf[0])
 		{

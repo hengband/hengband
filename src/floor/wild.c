@@ -1152,7 +1152,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
 		concptr msg = _("ペットを置いて広域マップに入りますか？",
 			"Do you leave your pets behind? ");
 
-		if (!get_check_strict(msg, CHECK_OKAY_CANCEL))
+		if (!get_check_strict(creature_ptr, msg, CHECK_OKAY_CANCEL))
 		{
 			free_turn(creature_ptr);
 			return FALSE;

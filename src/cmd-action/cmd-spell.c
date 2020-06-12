@@ -1150,7 +1150,7 @@ void do_cmd_cast(player_type *caster_ptr)
 		if (!over_exert) return;
 
 		/* Verify */
-		if (!get_check_strict(_("それでも挑戦しますか? ", "Attempt it anyway? "), CHECK_OKAY_CANCEL)) return;
+		if (!get_check_strict(caster_ptr, _("それでも挑戦しますか? ", "Attempt it anyway? "), CHECK_OKAY_CANCEL)) return;
 	}
 
 	/* Spell failure chance */

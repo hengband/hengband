@@ -280,14 +280,14 @@ static void cleanup_realm_selection_window(void)
  * @param count 魔法領域の数
  * @return 選んだ魔法領域で良ければTRUE、再選択ならばFALSE
  */
-static bool check_realm_selection(int count)
+static bool check_realm_selection(player_type *creature_ptr, int count)
 {
     if (count < 2) {
         prt(_("何かキーを押してください", "Hit any key."), 0, 0);
         (void)inkey();
         prt("", 0, 0);
         return TRUE;
-    } else if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+    } else if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
         return TRUE;
 
     return FALSE;
@@ -329,7 +329,7 @@ bool get_player_realms(player_type *creature_ptr)
             }
         }
 
-        if (check_realm_selection(count))
+        if (check_realm_selection(creature_ptr, count))
             break;
     }
 
@@ -365,7 +365,7 @@ bool get_player_realms(player_type *creature_ptr)
             }
         }
 
-        if (check_realm_selection(count))
+        if (check_realm_selection(creature_ptr, count))
             break;
     }
 

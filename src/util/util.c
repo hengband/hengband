@@ -2712,7 +2712,7 @@ bool get_string(concptr prompt, char *buf, int len)
  */
 bool get_check(concptr prompt)
 {
-	return get_check_strict(prompt, 0);
+	return get_check_strict(p_ptr, prompt, 0);
 }
 
 
@@ -2724,13 +2724,13 @@ bool get_check(concptr prompt)
  * mode & CHECK_NO_HISTORY  : no message_add
  * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool get_check_strict(concptr prompt, BIT_FLAGS mode)
+bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
 {
 	char buf[80];
 	if (auto_more)
 	{
-		p_ptr->window |= PW_MESSAGE;
-		handle_stuff(p_ptr);
+		player_ptr->window |= PW_MESSAGE;
+		handle_stuff(player_ptr);
 		num_more = 0;
 	}
 
@@ -2755,11 +2755,11 @@ bool get_check_strict(concptr prompt, BIT_FLAGS mode)
 	}
 
 	prt(buf, 0, 0);
-	if (!(mode & CHECK_NO_HISTORY) && p_ptr->playing)
+        if (!(mode & CHECK_NO_HISTORY) && player_ptr->playing)
 	{
 		message_add(buf);
-		p_ptr->window |= (PW_MESSAGE);
-		handle_stuff(p_ptr);
+		player_ptr->window |= (PW_MESSAGE);
+		handle_stuff(player_ptr);
 	}
 
 	bool flag = FALSE;

@@ -493,7 +493,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 			flush();
 
-			if (get_check_strict(_("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
+			if (get_check_strict(creature_ptr, _("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
 			{
 				do_cmd_save_screen(creature_ptr, process_autopick_file_command);
 			}
@@ -533,7 +533,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 #else
 					while (!get_string("Last word: ", death_message, 1024));
 #endif
-				} while (winning_seppuku && !get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
+				} while (winning_seppuku && !get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
 				if (death_message[0] == '\0')
 				{

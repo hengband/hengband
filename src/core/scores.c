@@ -440,7 +440,8 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, void(*updat
 			return TRUE;
 		}
 		
-		bool is_registration = get_check_strict(_("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY));
+		bool is_registration = get_check_strict(current_player_ptr,
+                    _("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY));
 		if (!is_registration) return FALSE;
 
 		errr err;

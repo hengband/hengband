@@ -525,7 +525,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 
     if (!follow)
         return;
-    if (!get_check_strict(_("ついていきますか？", "Do you follow it? "), CHECK_OKAY_CANCEL))
+    if (!get_check_strict(tracer_ptr, _("ついていきますか？", "Do you follow it? "), CHECK_OKAY_CANCEL))
         return;
 
     if (one_in_(3)) {

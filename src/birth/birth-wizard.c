@@ -162,7 +162,7 @@ static bool let_player_select_race(player_type *creature_ptr)
                 t += strlen(t) + 1;
             }
         }
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
 
         clear_from(10);
@@ -193,7 +193,7 @@ static bool let_player_select_class(player_type *creature_ptr)
             }
         }
 
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
 
         c_put_str(TERM_WHITE, "              ", 5, 15);
@@ -222,7 +222,7 @@ static bool let_player_select_personality(player_type *creature_ptr)
             }
         }
 
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
 
         c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
