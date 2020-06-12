@@ -212,7 +212,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     lore_ptr->vn = 0;
     display_monster_concrete_resistances(lore_ptr);
     display_monster_resistances(lore_ptr);
-    if ((lore_ptr->r_ptr->r_xtra1 & MR1_SINKA) || lore_ptr->know_everything) {
+    if ((lore_ptr->r_ptr->r_xtra1 & MR1_EVOLUTION) || lore_ptr->know_everything) {
         if (lore_ptr->r_ptr->next_r_idx) {
             hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), wd_he[lore_ptr->msex]));
             hook_c_roff(TERM_YELLOW, format("%s", r_name + r_info[lore_ptr->r_ptr->next_r_idx].name));

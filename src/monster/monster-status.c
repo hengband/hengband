@@ -1027,7 +1027,7 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
 			}
 		}
 
-		if (!target_ptr->image) r_info[old_r_idx].r_xtra1 |= MR1_SINKA;
+		if (!target_ptr->image) r_info[old_r_idx].r_xtra1 |= MR1_EVOLUTION;
 
 		/* Now you feel very close to this pet. */
 		m_ptr->parent_m_idx = 0;

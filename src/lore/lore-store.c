@@ -79,9 +79,9 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
     r_ptr->r_flags6 = r_ptr->a_ability_flags2;
     r_ptr->r_flagsr = r_ptr->flagsr;
 
-    if (!(r_ptr->r_xtra1 & MR1_SINKA))
+    if (!(r_ptr->r_xtra1 & MR1_EVOLUTION))
         n++;
-    r_ptr->r_xtra1 |= MR1_SINKA;
+    r_ptr->r_xtra1 |= MR1_EVOLUTION;
 
     if (player_ptr->monster_race_idx == r_idx) {
         player_ptr->window |= (PW_MONSTER);

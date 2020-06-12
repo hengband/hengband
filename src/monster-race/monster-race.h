@@ -93,7 +93,7 @@ typedef struct monster_race {
 	MONSTER_NUMBER r_tkills;	/* Count monsters killed in all lives */
 	byte r_wake;			/* Number of times woken up (?) */
 	byte r_ignore;			/* Number of times ignored (?) */
-	#define MR1_SINKA 0x01
+	#define MR1_EVOLUTION 0x01
 	byte r_xtra1;			/* Something */
 	byte r_xtra2;			/* Something (unused) */
 	ITEM_NUMBER r_drop_gold;	/*!< これまでに撃破時に落とした財宝の数 / Max number of gold dropped at once */
