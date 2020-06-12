@@ -231,6 +231,7 @@ hengband_SOURCES = \
 	lore/lore-calculator.c lore/lore-calculator.h \
 	lore/lore-store.c lore/lore-store.h \
 	lore/lore-util.c lore/lore-util.h \
+	lore/magic-types-setter.c lore/magic-types-setter.h \
 	lore/monster-lore.c lore/monster-lore.h \
 	\
 	main.c main-x11.c main-gcu.c \
