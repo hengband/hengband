@@ -24,6 +24,7 @@
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
+#include "view/display-lore-magics.h"
 #include "view/display-lore.h"
 
 /*!
@@ -184,30 +185,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
     display_monster_sometimes(lore_ptr);
     set_breath_types(player_ptr, lore_ptr);
-    bool breath = FALSE;
-    if (lore_ptr->vn > 0) {
-        breath = TRUE;
-        hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
-        for (int n = 0; n < lore_ptr->vn; n++) {
-#ifdef JP
-            if (n != 0)
-                hooked_roff("や");
-#else
-            if (n == 0)
-                hooked_roff(" may breathe ");
-            else if (n < lore_ptr->vn - 1)
-                hooked_roff(", ");
-            else
-                hooked_roff(" or ");
-#endif
-            hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
-        }
-
-#ifdef JP
-        hooked_roff("のブレスを吐くことがある");
-#endif
-    }
-
+    display_monster_breath(lore_ptr);
     lore_ptr->vn = 0;
     if (lore_ptr->a_ability_flags1 & (RF5_BA_ACID)) {
         set_damage(player_ptr, r_idx, (MS_BALL_ACID), _("アシッド・ボール%s", "produce acid balls%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
@@ -545,7 +523,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     bool magic = FALSE;
     if (lore_ptr->vn) {
         magic = TRUE;
-        if (breath) {
+        if (lore_ptr->breath) {
             hooked_roff(_("、なおかつ", ", and is also"));
         } else {
             hooked_roff(format(_("%^sは", "%^s is"), wd_he[lore_ptr->msex]));
@@ -581,7 +559,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 #endif
     }
 
-    if (breath || magic) {
+    if (lore_ptr->breath || magic) {
         int m = lore_ptr->r_ptr->r_cast_spell;
         int n = lore_ptr->r_ptr->freq_spell;
         if (m > 100 || lore_ptr->know_everything) {

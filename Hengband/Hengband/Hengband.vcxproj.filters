@@ -1292,6 +1292,9 @@
     <ClCompile Include="..\..\src\lore\magic-types-setter.c">
       <Filter>lore</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-lore-magics.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2835,6 +2838,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\lore\magic-types-setter.h">
       <Filter>lore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-lore-magics.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
