@@ -5,6 +5,7 @@
  */
 
 #include "view/display-lore.h"
+#include "locale/japanese.h"
 #include "lore/lore-calculator.h"
 #include "lore/monster-lore.h"
 #include "monster-race/race-flags1.h"
@@ -497,4 +498,34 @@ void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
         break;
     }
+}
+
+void display_monster_sometimes(lore_type *lore_ptr)
+{
+    if (lore_ptr->vn <= 0)
+        return;
+
+    hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
+    for (int n = 0; n < lore_ptr->vn; n++) {
+#ifdef JP
+        if (n != lore_ptr->vn - 1) {
+            jverb(lore_ptr->vp[n], lore_ptr->jverb_buf, JVERB_OR);
+            hook_c_roff(lore_ptr->color[n], lore_ptr->jverb_buf);
+            hook_c_roff(lore_ptr->color[n], "り");
+            hooked_roff("、");
+        } else
+            hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
+#else
+        if (n == 0)
+            hooked_roff(" may ");
+        else if (n < lore_ptr->vn - 1)
+            hooked_roff(", ");
+        else
+            hooked_roff(" or ");
+
+        hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
+#endif
+    }
+
+    hooked_roff(_("ことがある。", ".  "));
 }

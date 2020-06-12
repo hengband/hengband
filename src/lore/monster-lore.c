@@ -181,32 +181,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
         lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
     }
 
-    if (lore_ptr->vn > 0) {
-        hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
-        for (int n = 0; n < lore_ptr->vn; n++) {
-#ifdef JP
-            if (n != lore_ptr->vn - 1) {
-                jverb(lore_ptr->vp[n], lore_ptr->jverb_buf, JVERB_OR);
-                hook_c_roff(lore_ptr->color[n], lore_ptr->jverb_buf);
-                hook_c_roff(lore_ptr->color[n], "り");
-                hooked_roff("、");
-            } else
-                hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
-#else
-            if (n == 0)
-                hooked_roff(" may ");
-            else if (n < lore_ptr->vn - 1)
-                hooked_roff(", ");
-            else
-                hooked_roff(" or ");
-
-            hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
-#endif
-        }
-
-        hooked_roff(_("ことがある。", ".  "));
-    }
-
+    display_monster_sometimes(lore_ptr);
     lore_ptr->vn = 0;
     if (lore_ptr->flags4 & (RF4_BR_ACID)) {
         set_damage(player_ptr, r_idx, (MS_BR_ACID), _("酸%s", "acid%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
