@@ -1,6 +1,6 @@
 ﻿#include "view/display-lore-magics.h"
 
-void diaplay_monster_breath(lore_type *lore_ptr)
+void display_monster_breath(lore_type *lore_ptr)
 {
     lore_ptr->breath = FALSE;
     if (lore_ptr->vn <= 0)

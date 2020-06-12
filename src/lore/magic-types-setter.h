@@ -6,3 +6,4 @@
 void set_breath_types(player_type *player_ptr, lore_type *lore_ptr);
 void set_ball_types(player_type *player_ptr, lore_type *lore_ptr);
 void set_particular_types(player_type *player_ptr, lore_type *lore_ptr);
+void set_bolt_types(player_type *player_ptr, lore_type *lore_ptr);

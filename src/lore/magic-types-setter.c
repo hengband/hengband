@@ -272,3 +272,66 @@ void set_particular_types(player_type *player_ptr, lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
     }
 }
+
+void set_bolt_types(player_type *player_ptr, lore_type *lore_ptr)
+{
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_ACID)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BOLT_ACID), _("アシッド・ボルト%s", "produce acid bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_GREEN;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_ELEC)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BOLT_ELEC), _("サンダー・ボルト%s", "produce lightning bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_FIRE)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BOLT_FIRE), _("ファイア・ボルト%s", "produce fire bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_RED;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_COLD)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BOLT_COLD), _("アイス・ボルト%s", "produce frost bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_NETH)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BOLT_NETHER), _("地獄の矢%s", "produce nether bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_WATE)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BOLT_WATER), _("ウォーター・ボルト%s", "produce water bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_MANA)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BOLT_MANA), _("魔力の矢%s", "produce mana bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_BLUE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_PLAS)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BOLT_PLASMA), _("プラズマ・ボルト%s", "produce plasma bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_RED;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_BO_ICEE)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_BOLT_ICE), _("極寒の矢%s", "produce ice bolts%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_WHITE;
+    }
+
+    if (lore_ptr->a_ability_flags1 & (RF5_MISSILE)) {
+        set_damage(player_ptr, lore_ptr->r_idx, (MS_MAGIC_MISSILE), _("マジックミサイル%s", "produce magic missiles%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+        lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
+    }
+}
