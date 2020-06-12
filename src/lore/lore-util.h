@@ -13,7 +13,7 @@ typedef struct lore_type {
 #ifdef JP
     char jverb_buf[64];
 #else
-    bool sin = FALSE;
+    bool sin;
 #endif
     bool nightmare;
     monster_race *r_ptr;
@@ -40,6 +40,8 @@ typedef struct lore_type {
     char tmp_msg[96][96];
     bool breath;
     bool magic;
+    int drop_quantity;
+    concptr drop_quality;
 } lore_type;
 
 typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);

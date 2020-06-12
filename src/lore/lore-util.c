@@ -11,6 +11,10 @@ hook_c_roff_pf hook_c_roff = c_roff;
 
 lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
+#ifdef JP
+#else
+    lore_ptr->sin = FALSE;
+#endif
     lore_ptr->r_idx = r_idx;
     lore_ptr->nightmare = ironman_nightmare && !(mode & 0x02);
     lore_ptr->r_ptr = &r_info[r_idx];

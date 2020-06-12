@@ -5,6 +5,7 @@
  */
 
 #include "view/display-lore.h"
+#include "locale/english.h"
 #include "locale/japanese.h"
 #include "lore/lore-calculator.h"
 #include "lore/monster-lore.h"
@@ -16,6 +17,11 @@
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
 #include "world/world.h"
+
+/*!
+ * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)
+ */
+#define plural(c, s, p) (((c) == 1) ? (s) : (p))
 
 /*!
  * @brief モンスター情報のヘッダを記述する
