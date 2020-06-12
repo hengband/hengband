@@ -2,7 +2,9 @@
 #include "lore/lore-calculator.h"
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-flags3.h"
 #include "monster-race/race-flags4.h"
+#include "monster-race/race-flags7.h"
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
 
@@ -417,5 +419,33 @@ void set_teleport_types(lore_type *lore_ptr)
     if (lore_ptr->a_ability_flags2 & (RF6_TELE_LEVEL)) {
         lore_ptr->vp[lore_ptr->vn] = _("テレポート・レベル", "teleport level");
         lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
+    }
+}
+
+void set_floor_types(player_type *player_ptr, lore_type *lore_ptr)
+{
+    if (lore_ptr->a_ability_flags2 & (RF6_DARKNESS)) {
+        if ((player_ptr->pclass != CLASS_NINJA) || (lore_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (lore_ptr->r_ptr->flags7 & RF7_DARK_MASK)) {
+            lore_ptr->vp[lore_ptr->vn] = _("暗闇", "create darkness");
+            lore_ptr->color[lore_ptr->vn++] = TERM_L_DARK;
+        } else {
+            lore_ptr->vp[lore_ptr->vn] = _("閃光", "create light");
+            lore_ptr->color[lore_ptr->vn++] = TERM_YELLOW;
+        }
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_TRAPS)) {
+        lore_ptr->vp[lore_ptr->vn] = _("トラップ", "create traps");
+        lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_FORGET)) {
+        lore_ptr->vp[lore_ptr->vn] = _("記憶消去", "cause amnesia");
+        lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
+    }
+
+    if (lore_ptr->a_ability_flags2 & (RF6_RAISE_DEAD)) {
+        lore_ptr->vp[lore_ptr->vn] = _("死者復活", "raise dead");
+        lore_ptr->color[lore_ptr->vn++] = TERM_RED;
     }
 }
