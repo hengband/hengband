@@ -1,4 +1,10 @@
-﻿#include "view/display-monster-lore.h"
+﻿/*!
+ * @brief モンスターの思い出を表示する処理
+ * @date 2020/06/09
+ * @author Hourier
+ */
+
+#include "view/display-monster-lore.h"
 #include "lore/monster-lore.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
