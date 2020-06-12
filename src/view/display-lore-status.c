@@ -326,3 +326,70 @@ void display_monster_resistances(lore_type *lore_ptr)
 
     hooked_roff(_("の耐性を持っている。", ".  "));
 }
+
+void display_monster_evolution(lore_type* lore_ptr)
+{
+    if (((lore_ptr->r_ptr->r_xtra1 & MR1_EVOLUTION) == 0) && !lore_ptr->know_everything)
+        return;
+
+    if (lore_ptr->r_ptr->next_r_idx) {
+        hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), wd_he[lore_ptr->msex]));
+        hook_c_roff(TERM_YELLOW, format("%s", r_name + r_info[lore_ptr->r_ptr->next_r_idx].name));
+
+        hooked_roff(_(format("に進化する。"), format(" when %s gets enough experience.  ", wd_he[lore_ptr->msex])));
+    } else if (!(lore_ptr->r_ptr->flags1 & RF1_UNIQUE)) {
+        hooked_roff(format(_("%sは進化しない。", "%s won't evolve.  "), wd_he[lore_ptr->msex]));
+    }
+}
+
+void display_monster_concrete_immunities(lore_type *lore_ptr)
+{
+    if (lore_ptr->flags3 & RF3_NO_STUN) {
+        lore_ptr->vp[lore_ptr->vn] = _("朦朧としない", "stunned");
+        lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
+    }
+
+    if (lore_ptr->flags3 & RF3_NO_FEAR) {
+        lore_ptr->vp[lore_ptr->vn] = _("恐怖を感じない", "frightened");
+        lore_ptr->color[lore_ptr->vn++] = TERM_SLATE;
+    }
+
+    if (lore_ptr->flags3 & RF3_NO_CONF) {
+        lore_ptr->vp[lore_ptr->vn] = _("混乱しない", "confused");
+        lore_ptr->color[lore_ptr->vn++] = TERM_L_UMBER;
+    }
+
+    if (lore_ptr->flags3 & RF3_NO_SLEEP) {
+        lore_ptr->vp[lore_ptr->vn] = _("眠らされない", "slept");
+        lore_ptr->color[lore_ptr->vn++] = TERM_BLUE;
+    }
+
+    if ((lore_ptr->flagsr & RFR_RES_TELE) && (lore_ptr->r_ptr->flags1 & RF1_UNIQUE)) {
+        lore_ptr->vp[lore_ptr->vn] = _("テレポートされない", "teleported");
+        lore_ptr->color[lore_ptr->vn++] = TERM_ORANGE;
+    }
+}
+
+void display_monster_immunities(lore_type *lore_ptr)
+{
+    if (lore_ptr->vn <= 0)
+        return;
+
+    hooked_roff(format(_("%^sは", "%^s"), wd_he[lore_ptr->msex]));
+    for (int n = 0; n < lore_ptr->vn; n++) {
+#ifdef JP
+        if (n != 0)
+            hooked_roff("し、");
+#else
+        if (n == 0)
+            hooked_roff(" cannot be ");
+        else if (n < lore_ptr->vn - 1)
+            hooked_roff(", ");
+        else
+            hooked_roff(" or ");
+#endif
+        hook_c_roff(lore_ptr->color[n], lore_ptr->vp[n]);
+    }
+
+    hooked_roff(_("。", ".  "));
+}
