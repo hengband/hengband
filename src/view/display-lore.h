@@ -20,3 +20,4 @@ void display_lore_this(player_type *player_ptr, lore_type *lore_ptr);
 void display_monster_collective(lore_type *lore_ptr);
 void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr);
 void display_monster_sometimes(lore_type *lore_ptr);
+void display_monster_guardian(lore_type *lore_ptr);

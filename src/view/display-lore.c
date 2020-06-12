@@ -13,6 +13,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags4.h"
+#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
@@ -534,4 +535,19 @@ void display_monster_sometimes(lore_type *lore_ptr)
     }
 
     hooked_roff(_("ことがある。", ".  "));
+}
+
+void display_monster_guardian(lore_type *lore_ptr)
+{
+    bool is_kingpin = (lore_ptr->flags1 & RF1_QUESTOR) != 0;
+    is_kingpin &= lore_ptr->r_ptr->r_sights > 0;
+    is_kingpin &= lore_ptr->r_ptr->max_num > 0;
+    is_kingpin &= (lore_ptr->r_idx == MON_OBERON) || (lore_ptr->r_idx == MON_SERPENT);
+    if (is_kingpin) {
+        hook_c_roff(TERM_VIOLET, _("あなたはこのモンスターを殺したいという強い欲望を感じている...", "You feel an intense desire to kill this monster...  "));
+    } else if (lore_ptr->flags7 & RF7_GUARDIAN) {
+        hook_c_roff(TERM_L_RED, _("このモンスターはダンジョンの主である。", "This monster is the master of a dungeon."));
+    }
+
+    hooked_roff("\n");
 }

@@ -5,26 +5,16 @@
  */
 
 #include "lore/monster-lore.h"
-#include "locale/english.h"
-#include "locale/japanese.h"
-#include "lore/combat-types-setter.h"
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
 #include "lore/magic-types-setter.h"
-#include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
-#include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags4.h"
-#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
-#include "mspell/monster-spell.h"
-#include "mspell/mspell-damage-calculator.h"
-#include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
 #include "view/display-lore-attacks.h"
 #include "view/display-lore-drops.h"
 #include "view/display-lore-magics.h"
@@ -217,45 +207,6 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     display_monster_immunities(lore_ptr);
     display_monster_alert(lore_ptr);
     display_monster_drops(lore_ptr);
-
-    const int max_attack_numbers = 4;
-    for (int m = 0; m < max_attack_numbers; m++) {
-        if (!lore_ptr->r_ptr->blow[m].method || (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT))
-            continue;
-
-        if (lore_ptr->r_ptr->r_blows[m] || lore_ptr->know_everything)
-            lore_ptr->count++;
-    }
-
-    int attack_numbers = 0;
-    for (int m = 0; m < max_attack_numbers; m++) {
-        if (!lore_ptr->r_ptr->blow[m].method || (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT)
-            || (((lore_ptr->r_ptr->r_blows[m] == 0) && !lore_ptr->know_everything)))
-            continue;
-
-        set_monster_blow_method(lore_ptr, m);
-        set_monster_blow_effect(lore_ptr, m);
-        display_monster_blows(lore_ptr, m, attack_numbers);
-        attack_numbers++;
-    }
-
-    if (attack_numbers > 0) {
-        hooked_roff(_("。", ".  "));
-    } else if (lore_ptr->flags1 & RF1_NEVER_BLOW) {
-        hooked_roff(format(_("%^sは物理的な攻撃方法を持たない。", "%^s has no physical attacks.  "), wd_he[lore_ptr->msex]));
-    } else {
-        hooked_roff(format(_("%s攻撃については何も知らない。", "Nothing is known about %s attack.  "), wd_his[lore_ptr->msex]));
-    }
-
-    bool is_kingpin = (lore_ptr->flags1 & RF1_QUESTOR) != 0;
-    is_kingpin &= lore_ptr->r_ptr->r_sights > 0;
-    is_kingpin &= lore_ptr->r_ptr->max_num > 0;
-    is_kingpin &= (r_idx == MON_OBERON) || (r_idx == MON_SERPENT);
-    if (is_kingpin) {
-        hook_c_roff(TERM_VIOLET, _("あなたはこのモンスターを殺したいという強い欲望を感じている...", "You feel an intense desire to kill this monster...  "));
-    } else if (lore_ptr->flags7 & RF7_GUARDIAN) {
-        hook_c_roff(TERM_L_RED, _("このモンスターはダンジョンの主である。", "This monster is the master of a dungeon."));
-    }
-
-    hooked_roff("\n");
+    display_monster_attacks(lore_ptr);
+    display_monster_guardian(lore_ptr);
 }
