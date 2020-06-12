@@ -181,7 +181,7 @@ extern errr Term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN 
 
 extern errr Term_get_cursor(int *v);
 extern errr Term_get_size(TERM_LEN *w, TERM_LEN *h);
-extern errr Term_locate(int *x, int *y);
+extern errr Term_locate(TERM_LEN *x, TERM_LEN *y);
 extern errr Term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
 
 extern errr Term_flush(void);
@@ -194,12 +194,12 @@ extern errr Term_load(void);
 
 extern errr Term_exchange(void);
 
-extern errr Term_resize(int w, int h);
+extern errr Term_resize(TERM_LEN w, TERM_LEN h);
 
 extern errr Term_activate(term *t);
 
 extern errr term_nuke(term *t);
-extern errr term_init(term *t, int w, int h, int k);
+extern errr term_init(term *t, TERM_LEN w, TERM_LEN h, int k);
 
 
 #endif
