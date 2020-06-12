@@ -223,48 +223,8 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
 
         display_monster_drop_quantity(lore_ptr);
         display_monster_drop_quality(lore_ptr);
-        if (lore_ptr->drop_item) {
-#ifdef JP
-#else
-            if (lore_ptr->sin)
-                hooked_roff("n");
-
-            lore_ptr->sin = FALSE;
-#endif
-            if (lore_ptr->drop_quality != NULL)
-                hooked_roff(lore_ptr->drop_quality);
-
-            hooked_roff(_("アイテム", " object"));
-#ifdef JP
-#else
-            if (lore_ptr->drop_quantity != 1)
-                hooked_roff("s");
-#endif
-            lore_ptr->drop_quality = _("や", " or");
-        }
-
-        if (lore_ptr->drop_gold) {
-#ifdef JP
-#else
-            if (lore_ptr->drop_quality == NULL)
-                lore_ptr->sin = FALSE;
-
-            if (lore_ptr->sin)
-                hooked_roff("n");
-
-            lore_ptr->sin = FALSE;
-#endif
-            if (lore_ptr->drop_quality != NULL)
-                hooked_roff(lore_ptr->drop_quality);
-
-            hooked_roff(_("財宝", " treasure"));
-#ifdef JP
-#else
-            if (lore_ptr->drop_quantity != 1)
-                hooked_roff("s");
-#endif
-        }
-
+        display_monster_drop_items(lore_ptr);
+        display_monster_drop_golds(lore_ptr);
         hooked_roff(_("を持っていることがある。", ".  "));
     }
 

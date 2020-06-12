@@ -31,3 +31,55 @@ void display_monster_drop_quality(lore_type* lore_ptr)
         lore_ptr->drop_quality = NULL;
     }
 }
+
+void display_monster_drop_items(lore_type *lore_ptr)
+{
+    if (lore_ptr->drop_item == 0)
+        return;
+
+#ifdef JP
+#else
+    if (lore_ptr->sin)
+        hooked_roff("n");
+
+    lore_ptr->sin = FALSE;
+#endif
+
+    if (lore_ptr->drop_quality != NULL)
+        hooked_roff(lore_ptr->drop_quality);
+
+    hooked_roff(_("アイテム", " object"));
+#ifdef JP
+#else
+    if (lore_ptr->drop_quantity != 1)
+        hooked_roff("s");
+#endif
+    lore_ptr->drop_quality = _("や", " or");
+}
+
+void display_monster_drop_golds(lore_type *lore_ptr)
+{
+    if (lore_ptr->drop_gold == 0)
+        return;
+
+#ifdef JP
+#else
+    if (lore_ptr->drop_quality == NULL)
+        lore_ptr->sin = FALSE;
+
+    if (lore_ptr->sin)
+        hooked_roff("n");
+
+    lore_ptr->sin = FALSE;
+#endif
+
+    if (lore_ptr->drop_quality != NULL)
+        hooked_roff(lore_ptr->drop_quality);
+
+    hooked_roff(_("財宝", " treasure"));
+#ifdef JP
+#else
+    if (lore_ptr->drop_quantity != 1)
+        hooked_roff("s");
+#endif
+}
