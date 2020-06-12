@@ -83,3 +83,21 @@ void display_monster_drop_golds(lore_type *lore_ptr)
         hooked_roff("s");
 #endif
 }
+
+void display_monster_drops(lore_type *lore_ptr)
+{
+    if ((lore_ptr->drop_gold == 0) && (lore_ptr->drop_item == 0))
+        return;
+
+    hooked_roff(format(_("%^sは", "%^s may carry"), wd_he[lore_ptr->msex]));
+#ifdef JP
+#else
+    lore_ptr->sin = FALSE;
+#endif
+
+    display_monster_drop_quantity(lore_ptr);
+    display_monster_drop_quality(lore_ptr);
+    display_monster_drop_items(lore_ptr);
+    display_monster_drop_golds(lore_ptr);
+    hooked_roff(_("を持っていることがある。", ".  "));
+}

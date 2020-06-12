@@ -214,19 +214,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
     display_monster_concrete_immunities(lore_ptr);
     display_monster_immunities(lore_ptr);
     display_monster_alert(lore_ptr);
-    if (lore_ptr->drop_gold || lore_ptr->drop_item) {
-        hooked_roff(format(_("%^sは", "%^s may carry"), wd_he[lore_ptr->msex]));
-#ifdef JP
-#else
-        lore_ptr->sin = FALSE;
-#endif
-
-        display_monster_drop_quantity(lore_ptr);
-        display_monster_drop_quality(lore_ptr);
-        display_monster_drop_items(lore_ptr);
-        display_monster_drop_golds(lore_ptr);
-        hooked_roff(_("を持っていることがある。", ".  "));
-    }
+    display_monster_drop(lore_ptr);
 
     const int max_attack_numbers = 4;
     int count = 0;
