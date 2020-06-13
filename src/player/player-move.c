@@ -150,6 +150,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-object.h"
+#include "game-option/auto-destruction-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"

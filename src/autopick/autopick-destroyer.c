@@ -7,6 +7,7 @@
 #include "autopick/autopick-destroyer.h"
 #include "autopick-methods-table.h"
 #include "autopick/autopick-util.h"
+#include "game-option/auto-destruction-options.h"
 #include "game-option/input-options.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"

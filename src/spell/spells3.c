@@ -26,6 +26,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor-town.h"
 #include "floor/wild.h"
+#include "game-option/auto-destruction-options.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
