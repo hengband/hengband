@@ -220,34 +220,6 @@ void user_name(char *buf, int id)
 #endif /* SET_UID */
 
 
-/*
- * The concept of the "file" routines below (and elsewhere) is that all
- * file handling should be done using as few routines as possible, since
- * every machine is slightly different, but these routines always have the
- * same semantics.
- *
- * In fact, perhaps we should use the "path_parse()" routine below to convert
- * from "canonical" filenames (optional leading tilde's, internal wildcards,
- * slash as the path seperator, etc) to "system" filenames (no special symbols,
- * system-specific path seperator, etc).  This would allow the program itself
- * to assume that all filenames are "Unix" filenames, and explicitly "extract"
- * such filenames if needed (by "path_parse()", or perhaps "path_canon()").
- *
- * Note that "path_temp" should probably return a "canonical" filename.
- *
- * Note that "angband_fopen()" and "my_open()" and "my_make()" and "my_kill()"
- * and "my_move()" and "my_copy()" should all take "canonical" filenames.
- *
- * Note that "canonical" filenames use a leading "slash" to indicate an absolute
- * path, and a leading "tilde" to indicate a special directory, and default to a
- * relative path, but MSDOS uses a leading "drivename plus colon" to indicate the
- * use of a "special drive", and then the rest of the path is parsed "normally",
- * and an embedded colon to indicate a "drive plus absolute path", and finally
- * defaults to a file in the current working directory, which may or may not be defined.
- *
- * We should probably parse a leading "~~/" as referring to "ANGBAND_DIR". (?)
- */
-
 #ifdef SET_UID
  /*
   * Extract a "parsed" path from an initial filename

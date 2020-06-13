@@ -154,7 +154,7 @@ static void change_path(concptr info)
 	concptr s;
 
 	/* Find equal sign */
-	s = my_strchr(info, '=');
+	s = angband_strchr(info, '=');
 
 	/* Verify equal sign */
 	if (!s) quit_fmt("Try '-d<what>=<path>' not '-d%s'", info);
