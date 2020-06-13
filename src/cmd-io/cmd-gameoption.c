@@ -3,6 +3,7 @@
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/show-file.h"
+#include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/text-display-options.h"
@@ -17,24 +18,6 @@
 /*
  * Software options (set via the '=' command).
  */
-
-					/*** Game-Play Options ***/
-
-bool stack_force_notes;	/* Merge inscriptions when stacking */
-bool stack_force_costs;	/* Merge discounts when stacking */
-bool expand_list;	/* Expand the power of the list commands */
-bool small_levels;	/* Allow unusually small dungeon levels */
-bool always_small_levels;	/* Always create unusually small dungeon levels */
-bool empty_levels;	/* Allow empty 'arena' levels */
-bool bound_walls_perm;	/* Boundary walls become 'permanent wall' */
-bool last_words;	/* Leave last words when your character dies */
-
-#ifdef WORLD_SCORE
-bool send_score;	/* Send score dump to the world score server */
-#endif
-
-bool allow_debug_opts;	/* Allow use of debug/cheat options */
-
 
 						/*** Disturbance Options ***/
 

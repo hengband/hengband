@@ -20,6 +20,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-generate.h"
+#include "game-option/game-play-options.h"
 #include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/trap.h"

@@ -5,6 +5,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
+#include "game-option/game-play-options.h"
 #include "io-dump/player-status-dump.h"
 #include "io-dump/special-class-dump.h"
 #include "io/mutations-dump.h"
