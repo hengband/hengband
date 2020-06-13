@@ -717,6 +717,7 @@
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\system\building-type-definition.h" />
     <ClInclude Include="..\..\src\system\game-option-types.h" />
+    <ClInclude Include="..\..\src\system\monster-race-definition.h" />
     <ClInclude Include="..\..\src\system\object-type-definition.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />

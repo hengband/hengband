@@ -2971,6 +2971,9 @@
     <ClInclude Include="..\..\src\spell\spell-types.h">
       <Filter>spell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\monster-race-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

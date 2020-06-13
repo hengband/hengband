@@ -529,6 +529,7 @@ hengband_SOURCES = \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
+	system/monster-race-definition.h \
 	system/monster-type-definition.h \
 	system/object-type-definition.h \
 	system/system-variables.c system/system-variables.h \
