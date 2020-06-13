@@ -723,6 +723,7 @@ bool monster_hook_human(MONRACE_IDX r_idx)
 }
 
 /*!
+ * todo ここにplayer_tyepを追加すると関数ポインタの収拾がつかなくなるので保留
  * @brief 悪夢の元凶となるモンスターかどうかを返す。
  * @param r_idx 判定対象となるモンスターのＩＤ
  * @return 悪夢の元凶となり得るか否か。
