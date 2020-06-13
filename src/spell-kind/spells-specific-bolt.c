@@ -1,7 +1,7 @@
 ﻿#include "spell-kind/spells-specific-bolt.h"
 #include "effect/effect-characteristics.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief 衰弱ボルト処理

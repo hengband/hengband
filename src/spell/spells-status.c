@@ -24,7 +24,7 @@
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 

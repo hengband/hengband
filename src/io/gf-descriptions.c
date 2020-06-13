@@ -3,7 +3,7 @@
  */
 
 #include "gf-descriptions.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 const named_num gf_desc[MAX_NAMED_NUM] =
 {

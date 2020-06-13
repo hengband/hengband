@@ -13,7 +13,7 @@
 #include "monster/monster-update.h"
 #include "mspell/mspell-type.h"
 #include "mspell/monster-spell.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell-damage-calculator.h"
 

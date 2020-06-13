@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "birth/birth-body-spec.h"
-#include "player/player-personalities-table.h"
-#include "player/player-races-table.h"
+#include "player/player-personalities-types.h"
+#include "player/player-races-types.h"
 
 /*!
  * @brief プレイヤーの身長体重を決める / Get character's height and weight

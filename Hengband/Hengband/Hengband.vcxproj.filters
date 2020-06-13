@@ -1654,9 +1654,6 @@
     <ClInclude Include="..\..\src\effect\effect-monster-switcher.h">
       <Filter>effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-type.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-player-util.h">
       <Filter>effect</Filter>
     </ClInclude>
@@ -2103,15 +2100,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\birth\history.h">
       <Filter>birth</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\player-races-table.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\player-classes-table.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\player-personalities-table.h">
-      <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\files-util.h">
       <Filter>io</Filter>
@@ -2970,6 +2958,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\building-type-definition.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-personalities-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-races-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-classes-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spell-types.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

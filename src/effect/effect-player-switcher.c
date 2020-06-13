@@ -12,8 +12,8 @@
 #include "player/mimic-info-table.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "player/player-races-table.h"
-#include "spell/spells-type.h"
+#include "player/player-races-types.h"
+#include "spell/spell-types.h"
 #include "world/world.h"
 
 void effect_player_mana(player_type *target_ptr, effect_player_type *ep_ptr) {

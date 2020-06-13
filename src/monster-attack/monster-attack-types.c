@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "monster-attack/monster-attack-types.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief モンスターの打撃効力テーブル /

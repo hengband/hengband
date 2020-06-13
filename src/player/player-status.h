@@ -1,10 +1,10 @@
 ﻿#pragma once 
 
 /* 人畜無害なenumヘッダを先に読み込む */
-#include "player/player-classes-table.h"
-#include "player/player-races-table.h"
+#include "player/player-classes-types.h"
+#include "player/player-races-types.h"
 #include "cmd-building/cmd-building.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "system/object-type-definition.h"
 
 struct floor_type;

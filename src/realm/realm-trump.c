@@ -16,7 +16,7 @@
 #include "spell-kind/spells-floor.h"
 #include "spell-realm/spells-trump.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "util/util.h"
 

@@ -97,7 +97,7 @@
 #include "player/patron.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "player/player-sex.h"
 #include "player/player-skill.h"
 #include "player/race-info-table.h"

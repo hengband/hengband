@@ -22,7 +22,7 @@
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "monster-floor/monster-remover.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "player/player-sex.h"
 #include "store/store.h"
 #include "world/world.h"

@@ -1,7 +1,7 @@
 ﻿#include "mind/racial-balrog.h"
 #include "io/targeting.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 bool demonic_breath(player_type *creature_ptr)
 {

@@ -22,7 +22,7 @@
 #include "perception/object-perception.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "player/player-skill.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"

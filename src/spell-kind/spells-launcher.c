@@ -2,7 +2,7 @@
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief ボール系スペルの発動 / Cast a ball spell

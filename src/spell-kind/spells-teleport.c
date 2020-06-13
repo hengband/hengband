@@ -36,7 +36,7 @@
 #include "player/avatar.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "world/world.h"
 
 /*!

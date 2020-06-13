@@ -37,7 +37,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/range-calc.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"

@@ -8,7 +8,7 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
 #include "player/player-move.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief RF4_BR_*の処理。各種ブレス。 /

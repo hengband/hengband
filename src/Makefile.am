@@ -415,6 +415,7 @@ hengband_SOURCES = \
 	player/avatar.h player/avatar.c \
 	player/eldritch-horror.c player/eldritch-horror.h \
 	player/mimic-info-table.c player/mimic-info-table.h \
+	player/patron.c player/patron.h \
 	player/process-death.c player/process-death.h \
 	player/process-name.c player/process-name.h \
 	player/race-info-table.c player/race-info-table.h\
@@ -422,19 +423,19 @@ hengband_SOURCES = \
 	player/permanent-resistances.c player/permanent-resistances.h \
 	player/temporary-resistances.c player/temporary-resistances.h \
 	player/digestion-processor.c player/digestion-processor.h \
-	player/player-move.c player/player-move.h \
-	player/player-damage.c player/player-damage.h \
-	player/player-status.c player/player-status.h \
-	player/player-effects.c player/player-effects.h \
-	player/player-skill.c player/player-skill.h \
+	player/player-classes-types.h \
 	player/player-class.c player/player-class.h \
-	player/player-race.c player/player-race.h \
-	player/player-races-table.h \
-	player/player-classes-table.h \
-	player/player-personalities-table.h \
-	player/patron.h player/patron.c \
+	player/player-damage.c player/player-damage.h \
+	player/player-effects.c player/player-effects.h \
+	player/player-move.c player/player-move.h \
 	player/player-personality.c player/player-personality.h \
-	player/player-sex.c player/player-sex.h player/selfinfo.c player/selfinfo.h \
+	player/player-race.c player/player-race.h \
+	player/player-races-types.h \
+	player/player-skill.c player/player-skill.h \
+	player/player-status.c player/player-status.h \
+	player/player-personalities-types.h \
+	player/player-sex.c player/player-sex.h \
+	player/selfinfo.c player/selfinfo.h \
 	\
 	player-attack/player-attack-util.h \
 	player-attack/attack-chaos-effect.c player-attack/attack-chaos-effect.h \
@@ -482,7 +483,7 @@ hengband_SOURCES = \
 	spell/spells-staff-only.c spell/spells-staff-only.h \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-status.c spell/spells-status.h \
-	spell/spells-type.h spell/spells-util.h \
+	spell/spell-types.h spell/spells-util.h \
 	spell/technic-info-table.c spell/technic-info-table.h \
 	\
 	spell-kind/earthquake.c spell-kind/earthquake.h \

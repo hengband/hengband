@@ -1,5 +1,5 @@
 ﻿#include "store/store-owners.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 
 /*!
  * todo _() でまとめる

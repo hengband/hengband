@@ -42,7 +42,7 @@
 #include "io/interpret-pref-file.h"
 #include "io/read-pref-file.h"
 #include "locale/english.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"

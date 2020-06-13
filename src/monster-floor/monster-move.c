@@ -24,7 +24,7 @@
 #include "pet/pet-util.h"
 #include "player/player-move.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
 {

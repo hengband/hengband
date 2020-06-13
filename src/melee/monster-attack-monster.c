@@ -26,7 +26,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /* todo モンスター共通なので、monster-attack-player.cでも使うはず */
 const int MAX_BLOW = 4;

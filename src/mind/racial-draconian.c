@@ -1,7 +1,7 @@
 ﻿#include "mind/racial-draconian.h"
 #include "io/targeting.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 static void decide_breath_kind(player_type *creature_ptr, int *breath_type, concptr *breath_type_description)
 {

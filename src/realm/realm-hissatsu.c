@@ -29,7 +29,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells-util.h"
 #include "spell/spells3.h"
 #include "spell/technic-info-table.h"

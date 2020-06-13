@@ -20,14 +20,14 @@
 #include "mspell/mspell-status.h"
 #include "mspell/mspell-util.h"
 #include "player/player-move.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "spell/process-effect.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief RF4_SHRIEKの処理。叫び。 /

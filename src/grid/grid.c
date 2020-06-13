@@ -38,7 +38,7 @@
 #include "realm/realm-song-numbers.h"
 #include "room/rooms.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"

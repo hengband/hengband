@@ -9,7 +9,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"

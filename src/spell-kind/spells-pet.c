@@ -10,7 +10,7 @@
 #include "monster-floor/monster-remover.h"
 #include "monster/smart-learn-types.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief ペット爆破処理 /

@@ -9,7 +9,7 @@
 #include "player/player-effects.h"
 #include "room/rooms.h"
 #include "spell/process-effect.h" // 暫定、後で消す.
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "world/world.h"
 
 /*!

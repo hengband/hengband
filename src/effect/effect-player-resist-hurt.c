@@ -8,7 +8,7 @@
 #include "object/object-broken.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells3.h"

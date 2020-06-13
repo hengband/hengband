@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*
  * Convert a "pict" (P) into an "attr" (A)

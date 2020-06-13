@@ -11,7 +11,7 @@
 #include "object/object-flavor.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "realm/realm-song-numbers.h"
 #include "world/world.h"
 

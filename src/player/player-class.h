@@ -4,7 +4,7 @@
 #include "object/tval-types.h"
 #include "spell/technic-info-table.h"
 #include "player/player-status.h"
-#include "player/player-classes-table.h"
+#include "player/player-personalities-types.h"
 
 /*
  * 職業ごとの選択可能な魔法領域現在の所 bitrh.c でのみ使用。

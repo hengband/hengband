@@ -14,7 +14,7 @@
 #include "monster/smart-learn-types.h"
 #include "player/avatar.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "view/display-main-window.h"
 
 /*!

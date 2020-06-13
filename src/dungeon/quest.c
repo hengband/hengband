@@ -24,7 +24,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-generator.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "system/system-variables.h"
 #include "util/util.h"

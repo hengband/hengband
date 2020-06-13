@@ -31,8 +31,8 @@
 #include "pet/pet-fall-off.h"
 #include "player/player-class.h"
 #include "player/player-move.h"
-#include "player/player-personalities-table.h"
-#include "player/player-races-table.h"
+#include "player/player-personalities-types.h"
+#include "player/player-races-types.h"
 #include "util/util.h"
 
 // Melee-post-process-type

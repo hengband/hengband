@@ -44,7 +44,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-mark-types.h"
 #include "player/player-move.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "player/player-status.h"
 #include "spell/spells-summon.h"
 #include "system/building-type-definition.h"

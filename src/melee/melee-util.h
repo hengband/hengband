@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "system/monster-type-definition.h"
 
 /* monster-attack-monster type*/

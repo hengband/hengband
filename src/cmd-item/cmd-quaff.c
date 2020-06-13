@@ -28,7 +28,7 @@
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
 #include "realm/realm-hex-numbers.h"

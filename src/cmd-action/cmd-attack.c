@@ -25,7 +25,7 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "view/display-main-window.h"
 
 /*!

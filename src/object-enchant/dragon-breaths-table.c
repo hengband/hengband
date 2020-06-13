@@ -1,5 +1,5 @@
 ﻿#include "object-enchant/dragon-breaths-table.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /

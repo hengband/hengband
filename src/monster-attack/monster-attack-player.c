@@ -38,7 +38,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
 {

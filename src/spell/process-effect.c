@@ -15,7 +15,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "pet/pet-fall-off.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/range-calc.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h" // 暫定、後で消すかも.

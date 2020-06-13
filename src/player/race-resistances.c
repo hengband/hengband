@@ -1,5 +1,5 @@
 ﻿#include "race-resistances.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "object/object-flags.h"
 #include "object-enchant/tr-types.h"
 

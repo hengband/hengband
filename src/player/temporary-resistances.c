@@ -1,6 +1,6 @@
 ﻿#include "temporary-resistances.h"
 #include "object-enchant/tr-types.h"
-#include "player/player-races-table.h"
+#include "player/player-races-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-hex.h"

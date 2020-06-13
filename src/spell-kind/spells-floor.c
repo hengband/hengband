@@ -36,7 +36,7 @@
 #include "player/player-effects.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 

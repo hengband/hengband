@@ -43,7 +43,7 @@
 #include "object-enchant/trc-types.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "spell/spells-object.h"
 #include "util/util.h"
 #include "view/display-main-window.h"

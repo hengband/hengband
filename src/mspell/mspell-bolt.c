@@ -7,7 +7,7 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief RF4_SHOOTの処理。射撃。 /

@@ -23,7 +23,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-random.h"
@@ -31,7 +31,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/process-effect.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "util/util.h"
 #include "world/world.h"
 

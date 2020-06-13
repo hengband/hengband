@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 /* 人畜無害なenumヘッダを先に読み込む */
-#include "player/player-classes-table.h"
-#include "player/player-races-table.h"
+#include "player/player-classes-types.h"
+#include "player/player-races-types.h"
 #include "system/angband.h"
 
 #define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */

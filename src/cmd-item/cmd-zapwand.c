@@ -25,7 +25,7 @@
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"

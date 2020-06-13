@@ -50,7 +50,7 @@
 #include "pet/pet-util.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "spell-kind/spells-floor.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"

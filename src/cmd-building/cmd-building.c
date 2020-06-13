@@ -45,7 +45,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"

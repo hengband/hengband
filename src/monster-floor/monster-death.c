@@ -39,7 +39,7 @@
 #include "player/patron.h"
 #include "spell/process-effect.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-scroll-types.h"
