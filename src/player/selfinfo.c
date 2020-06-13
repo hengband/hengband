@@ -1255,7 +1255,7 @@ void self_knowledge(player_type *creature_ptr)
 		info[i++] = _("あなたは電撃への耐性を持っている。", "You are resistant to lightning.");
 	}
 
-	if (PRACE_IS_(creature_ptr, RACE_ANDROID) && !creature_ptr->immune_elec)
+	if (is_specific_player_race(creature_ptr, RACE_ANDROID) && !creature_ptr->immune_elec)
 	{
 		info[i++] = _("あなたは電撃に弱い。", "You are susceptible to damage from lightning.");
 	}
@@ -1273,7 +1273,7 @@ void self_knowledge(player_type *creature_ptr)
 		info[i++] = _("あなたは火への耐性を持っている。", "You are resistant to fire.");
 	}
 
-	if (PRACE_IS_(creature_ptr, RACE_ENT) && !creature_ptr->immune_fire)
+	if (is_specific_player_race(creature_ptr, RACE_ENT) && !creature_ptr->immune_fire)
 	{
 		info[i++] = _("あなたは火に弱い。", "You are susceptible to damage from fire.");
 	}
@@ -1305,12 +1305,12 @@ void self_knowledge(player_type *creature_ptr)
 		info[i++] = _("あなたは閃光への耐性を持っている。", "You are resistant to bright light.");
 	}
 
-	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || PRACE_IS_(creature_ptr, RACE_S_FAIRY) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
+	if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_S_FAIRY) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
 		info[i++] = _("あなたは閃光に弱い。", "You are susceptible to damage from bright light.");
 	}
 
-	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE) || creature_ptr->wraith_form)
+	if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE) || creature_ptr->wraith_form)
 	{
 		info[i++] = _("あなたは暗黒に対する完全なる免疫を持っている。", "You are completely immune to darkness.");
 	}
@@ -1344,7 +1344,7 @@ void self_knowledge(player_type *creature_ptr)
 		info[i++] = _("あなたは因果混乱の攻撃への耐性を持っている。", "You are resistant to nexus attacks.");
 	}
 
-	if (PRACE_IS_(creature_ptr, RACE_SPECTRE))
+	if (is_specific_player_race(creature_ptr, RACE_SPECTRE))
 	{
 		info[i++] = _("あなたは地獄の力を吸収できる。", "You can drain nether forces.");
 	}

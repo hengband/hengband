@@ -330,7 +330,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	/* Food can feed the player */
-	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
+	if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
 		/* Reduced nutritional benefit */
 		(void)set_food(creature_ptr, creature_ptr->food + (o_ptr->pval / 10));
@@ -341,10 +341,10 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 			msg_print(_("あなたの飢えは新鮮な血によってのみ満たされる！",
 				"Your hunger can only be satisfied with fresh blood!"));
 	}
-	else if ((PRACE_IS_(creature_ptr, RACE_SKELETON) ||
-		PRACE_IS_(creature_ptr, RACE_GOLEM) ||
-		PRACE_IS_(creature_ptr, RACE_ZOMBIE) ||
-		PRACE_IS_(creature_ptr, RACE_SPECTRE)) &&
+	else if ((is_specific_player_race(creature_ptr, RACE_SKELETON) ||
+		is_specific_player_race(creature_ptr, RACE_GOLEM) ||
+		is_specific_player_race(creature_ptr, RACE_ZOMBIE) ||
+		is_specific_player_race(creature_ptr, RACE_SPECTRE)) &&
 		(o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND))
 	{
 		concptr staff;
@@ -418,7 +418,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		return;
 	}
 
-	if ((PRACE_IS_(creature_ptr, RACE_BALROG) ||
+	if ((is_specific_player_race(creature_ptr, RACE_BALROG) ||
 		(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) &&
 		(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE &&
 			angband_strchr("pht", r_info[o_ptr->pval].d_char)))
@@ -429,7 +429,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
 		(void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 	}
-	else if (PRACE_IS_(creature_ptr, RACE_SKELETON))
+	else if (is_specific_player_race(creature_ptr, RACE_SKELETON))
 	{
 		if (!((o_ptr->sval == SV_FOOD_WAYBREAD) ||
 			(o_ptr->sval < SV_FOOD_BISCUIT)))
@@ -448,12 +448,12 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 			msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
 		}
 	}
-	else if (PRACE_IS_(creature_ptr, RACE_GOLEM) ||
-		PRACE_IS_(creature_ptr, RACE_ZOMBIE) ||
-		PRACE_IS_(creature_ptr, RACE_ENT) ||
-		PRACE_IS_(creature_ptr, RACE_BALROG) ||
-		PRACE_IS_(creature_ptr, RACE_ANDROID) ||
-		PRACE_IS_(creature_ptr, RACE_SPECTRE) ||
+	else if (is_specific_player_race(creature_ptr, RACE_GOLEM) ||
+		is_specific_player_race(creature_ptr, RACE_ZOMBIE) ||
+		is_specific_player_race(creature_ptr, RACE_ENT) ||
+		is_specific_player_race(creature_ptr, RACE_BALROG) ||
+		is_specific_player_race(creature_ptr, RACE_ANDROID) ||
+		is_specific_player_race(creature_ptr, RACE_SPECTRE) ||
 		(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
 	{
 		msg_print(_("生者の食物はあなたにとってほとんど栄養にならない。", "The food of mortals is poor sustenance for you."));

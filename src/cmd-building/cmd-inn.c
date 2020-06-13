@@ -47,10 +47,10 @@ static bool is_healthy_stay(player_type *customer_ptr)
 
 static bool is_player_undead(player_type *customer_ptr)
 {
-	bool is_player_undead = PRACE_IS_(customer_ptr, RACE_SKELETON) ||
-		PRACE_IS_(customer_ptr, RACE_ZOMBIE) ||
-		PRACE_IS_(customer_ptr, RACE_VAMPIRE) ||
-		PRACE_IS_(customer_ptr, RACE_SPECTRE);
+	bool is_player_undead = is_specific_player_race(customer_ptr, RACE_SKELETON) ||
+		is_specific_player_race(customer_ptr, RACE_ZOMBIE) ||
+		is_specific_player_race(customer_ptr, RACE_VAMPIRE) ||
+		is_specific_player_race(customer_ptr, RACE_SPECTRE);
 	return is_player_undead;
 }
 

@@ -183,7 +183,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 	/* Vulnerability (Ouch!) */
 	if (creature_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
 	if (creature_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
-	if (PRACE_IS_(creature_ptr, RACE_ANDROID)) dam += dam / 3;
+	if (is_specific_player_race(creature_ptr, RACE_ANDROID)) dam += dam / 3;
 
 	/* Resist the damage */
 	if (creature_ptr->resist_elec) dam = (dam + 2) / 3;
@@ -231,7 +231,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 
 	/* Vulnerability (Ouch!) */
 	if (creature_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
-	if (PRACE_IS_(creature_ptr, RACE_ENT)) dam += dam / 3;
+	if (is_specific_player_race(creature_ptr, RACE_ENT)) dam += dam / 3;
 	if (creature_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 
 	/* Resist the damage */

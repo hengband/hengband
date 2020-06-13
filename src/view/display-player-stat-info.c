@@ -49,7 +49,7 @@ static int calc_basic_stat(player_type *creature_ptr, int stat_num)
  */
 static int compensate_special_race(player_type *creature_ptr, int stat_num)
 {
-	if (!PRACE_IS_(creature_ptr, RACE_ENT)) return 0;
+	if (!is_specific_player_race(creature_ptr, RACE_ENT)) return 0;
 
 	int r_adj = 0;
 	switch (stat_num)

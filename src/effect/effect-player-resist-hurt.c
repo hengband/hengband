@@ -158,14 +158,14 @@ void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr) {
     msg_print(_("地獄の力で攻撃された！", "You are hit by nether forces!"));
 
   if (target_ptr->resist_neth) {
-    if (!PRACE_IS_(target_ptr, RACE_SPECTRE))
+    if (!is_specific_player_race(target_ptr, RACE_SPECTRE))
       ep_ptr->dam *= 6;
     ep_ptr->dam /= (randint1(4) + 7);
   } else if (!check_multishadow(target_ptr))
     drain_exp(target_ptr, 200 + (target_ptr->exp / 100),
               200 + (target_ptr->exp / 1000), 75);
 
-  if (!PRACE_IS_(target_ptr, RACE_SPECTRE) || check_multishadow(target_ptr)) {
+  if (!is_specific_player_race(target_ptr, RACE_SPECTRE) || check_multishadow(target_ptr)) {
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
                                   ep_ptr->killer, ep_ptr->monspell);
     return;
@@ -383,12 +383,12 @@ void effect_player_lite(player_type *target_ptr, effect_player_type *ep_ptr) {
     (void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
   }
 
-  if (PRACE_IS_(target_ptr, RACE_VAMPIRE) ||
+  if (is_specific_player_race(target_ptr, RACE_VAMPIRE) ||
       (target_ptr->mimic_form == MIMIC_VAMPIRE)) {
     if (!check_multishadow(target_ptr))
       msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
     ep_ptr->dam *= 2;
-  } else if (PRACE_IS_(target_ptr, RACE_S_FAIRY)) {
+  } else if (is_specific_player_race(target_ptr, RACE_S_FAIRY)) {
     ep_ptr->dam = ep_ptr->dam * 4 / 3;
   }
 
@@ -416,7 +416,7 @@ void effect_player_dark(player_type *target_ptr, effect_player_type *ep_ptr) {
     ep_ptr->dam *= 4;
     ep_ptr->dam /= (randint1(4) + 7);
 
-    if (PRACE_IS_(target_ptr, RACE_VAMPIRE) ||
+    if (is_specific_player_race(target_ptr, RACE_VAMPIRE) ||
         (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form)
       ep_ptr->dam = 0;
   } else if (!target_ptr->blind && !target_ptr->resist_blind &&

@@ -120,11 +120,11 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 		case SV_POTION_SALT_WATER:
 			msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
 
-			if (!(PRACE_IS_(creature_ptr, RACE_GOLEM) ||
-			      PRACE_IS_(creature_ptr, RACE_ZOMBIE) ||
-			      PRACE_IS_(creature_ptr, RACE_BALROG) ||
-			      PRACE_IS_(creature_ptr, RACE_ANDROID) ||
-			      PRACE_IS_(creature_ptr, RACE_SPECTRE) ||
+			if (!(is_specific_player_race(creature_ptr, RACE_GOLEM) ||
+			      is_specific_player_race(creature_ptr, RACE_ZOMBIE) ||
+			      is_specific_player_race(creature_ptr, RACE_BALROG) ||
+			      is_specific_player_race(creature_ptr, RACE_ANDROID) ||
+			      is_specific_player_race(creature_ptr, RACE_SPECTRE) ||
 			      (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)))
 			{
 				/* Only living creatures get thirsty */
@@ -498,7 +498,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 		}
 	}
 
-	if (PRACE_IS_(creature_ptr, RACE_SKELETON))
+	if (is_specific_player_race(creature_ptr, RACE_SKELETON))
 	{
 		msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
 		(void)potion_smash_effect(creature_ptr, 0, creature_ptr->y, creature_ptr->x, q_ptr->k_idx);

@@ -1452,8 +1452,8 @@ void calc_bonuses(player_type *creature_ptr)
 	case CLASS_FORCETRAINER:
 		if (!(heavy_armor(creature_ptr)))
 		{
-			if (!(PRACE_IS_(creature_ptr, RACE_KLACKON) ||
-				PRACE_IS_(creature_ptr, RACE_SPRITE) ||
+			if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) ||
+				is_specific_player_race(creature_ptr, RACE_SPRITE) ||
 				(creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
 				new_speed += (creature_ptr->lev) / 10;
 
@@ -1503,8 +1503,8 @@ void calc_bonuses(player_type *creature_ptr)
 			(!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite))
 		{
 			new_speed += 3;
-			if (!(PRACE_IS_(creature_ptr, RACE_KLACKON) ||
-				PRACE_IS_(creature_ptr, RACE_SPRITE) ||
+			if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) ||
+				is_specific_player_race(creature_ptr, RACE_SPRITE) ||
 				(creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
 				new_speed += (creature_ptr->lev) / 10;
 			creature_ptr->skill_stl += (creature_ptr->lev) / 10;
@@ -2393,7 +2393,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 	if (creature_ptr->sh_fire) creature_ptr->lite = TRUE;
 
-	if (PRACE_IS_(creature_ptr, RACE_GOLEM) || PRACE_IS_(creature_ptr, RACE_ANDROID))
+	if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID))
 	{
 		creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
 		creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
@@ -3309,7 +3309,7 @@ void calc_bonuses(player_type *creature_ptr)
 	creature_ptr->skill_thb += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 	creature_ptr->skill_tht += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 
-	if ((PRACE_IS_(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE))
+	if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE))
 	{
 		creature_ptr->cursed &= ~(TRC_AGGRAVATE);
 		creature_ptr->skill_stl = MIN(creature_ptr->skill_stl - 3, (creature_ptr->skill_stl + 2) / 2);
