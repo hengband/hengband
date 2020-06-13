@@ -43,6 +43,7 @@
 #include "io/load.h"
 #include "art-definition/art-accessory-types.h"
 #include "birth/quick-start.h"
+#include "cmd-io/cmd-gameoption.h"
 #include "cmd-item/cmd-smith.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

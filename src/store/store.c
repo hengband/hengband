@@ -16,6 +16,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-diary.h"
 #include "cmd-io/cmd-dump.h"
+#include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/cmd-help.h"
 #include "cmd-io/cmd-knowledge.h"
 #include "cmd-io/cmd-lore.h"

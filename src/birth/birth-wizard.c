@@ -12,6 +12,7 @@
 #include "birth/history-editor.h"
 #include "birth/history-generator.h"
 #include "birth/quick-start.h"
+#include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/cmd-help.h"
 #include "game-option/birth-options.h"
 #include "main/sound-definitions-table.h"

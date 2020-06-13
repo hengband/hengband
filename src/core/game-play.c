@@ -14,6 +14,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "birth/character-builder.h"
 #include "birth/inventory-initializer.h"
+#include "cmd-io/cmd-gameoption.h"
 #include "core/game-closer.h"
 #include "core/output-updater.h"
 #include "core/player-processor.h"
