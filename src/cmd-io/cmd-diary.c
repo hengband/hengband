@@ -1,10 +1,11 @@
 ﻿#include "cmd-io/cmd-diary.h"
-#include "io/chuukei.h"
-#include "core/show-file.h"
-#include "io/files-util.h"
 #include "cmd-io/diary-subtitle-table.h"
-#include "player/player-personality.h"
+#include "core/show-file.h"
+#include "game-option/play-record-options.h"
+#include "io/chuukei.h"
+#include "io/files-util.h"
 #include "io/write-diary.h"
+#include "player/player-personality.h"
 #include "world/world.h"
 
 /*!

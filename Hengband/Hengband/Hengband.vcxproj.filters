@@ -1334,6 +1334,9 @@
     <ClCompile Include="..\..\src\game-option\auto-destruction-options.c">
       <Filter>game-option</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game-option\play-record-options.c">
+      <Filter>game-option</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2921,6 +2924,9 @@
       <Filter>game-option</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\game-option\auto-destruction-options.h">
+      <Filter>game-option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game-option\play-record-options.h">
       <Filter>game-option</Filter>
     </ClInclude>
   </ItemGroup>

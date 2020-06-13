@@ -178,6 +178,7 @@
     <ClCompile Include="..\..\src\game-option\game-play-options.c" />
     <ClCompile Include="..\..\src\game-option\input-options.c" />
     <ClCompile Include="..\..\src\game-option\map-screen-options.c" />
+    <ClCompile Include="..\..\src\game-option\play-record-options.c" />
     <ClCompile Include="..\..\src\game-option\text-display-options.c" />
     <ClCompile Include="..\..\src\info-reader\artifact-reader.c" />
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.c" />
@@ -541,6 +542,7 @@
     <ClInclude Include="..\..\src\game-option\game-play-options.h" />
     <ClInclude Include="..\..\src\game-option\input-options.h" />
     <ClInclude Include="..\..\src\game-option\map-screen-options.h" />
+    <ClInclude Include="..\..\src\game-option\play-record-options.h" />
     <ClInclude Include="..\..\src\game-option\text-display-options.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />

@@ -1,5 +1,6 @@
 ﻿#include "monster/monster-compaction.h"
 #include "floor/floor.h"
+#include "game-option/play-record-options.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "monster-race/race-flags1.h"

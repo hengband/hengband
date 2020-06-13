@@ -30,6 +30,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "info-reader/fixed-map-parser.h"

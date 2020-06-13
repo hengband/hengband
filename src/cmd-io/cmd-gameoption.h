@@ -7,25 +7,6 @@
  */
 #define CHEAT_MAX 10
 
-							/*** Play-record Options ***/
-
-extern bool record_fix_art;	/* Record fixed artifacts */
-extern bool record_rand_art;	/* Record random artifacts */
-extern bool record_destroy_uniq;	/* Record when destroy unique monster */
-extern bool record_fix_quest;	/* Record fixed quests */
-extern bool record_rand_quest;	/* Record random quests */
-extern bool record_maxdepth;	/* Record movements to deepest level */
-extern bool record_stair;	/* Record recall and stair movements */
-extern bool record_buy;	/* Record purchased items */
-extern bool record_sell;	/* Record sold items */
-extern bool record_danger;	/* Record hitpoint warning */
-extern bool record_arena;	/* Record arena victories */
-extern bool record_ident;	/* Record first identified items */
-extern bool record_named_pet;	/* Record information about named pets */
-
-extern char record_o_name[MAX_NLEN];
-extern GAME_TURN record_turn;
-
 extern bool cheat_peek;
 extern bool cheat_hear;
 extern bool cheat_room;

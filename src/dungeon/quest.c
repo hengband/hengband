@@ -6,6 +6,7 @@
 #include "floor/floor-object.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
+#include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"

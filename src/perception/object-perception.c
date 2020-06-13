@@ -1,4 +1,5 @@
 ﻿#include "perception/object-perception.h"
+#include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"

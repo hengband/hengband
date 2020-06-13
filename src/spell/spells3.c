@@ -30,6 +30,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"

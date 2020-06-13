@@ -37,6 +37,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"

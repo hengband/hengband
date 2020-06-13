@@ -16,6 +16,7 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
+#include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"

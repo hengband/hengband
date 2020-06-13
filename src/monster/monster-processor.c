@@ -16,6 +16,7 @@
 #include "monster/monster-processor.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/speed-table.h"
+#include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"

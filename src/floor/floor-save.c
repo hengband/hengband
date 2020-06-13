@@ -22,6 +22,7 @@
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
+#include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/files-util.h"

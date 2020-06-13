@@ -9,6 +9,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
 #include "inventory/inventory-damage.h"
 #include "io/files-util.h"
 #include "io/report.h"

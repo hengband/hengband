@@ -26,6 +26,7 @@
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"

@@ -1,6 +1,7 @@
 ﻿#include "spell-kind/spells-pet.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
+#include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-describer.h"

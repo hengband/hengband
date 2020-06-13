@@ -9,6 +9,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-monster-switcher.h"
 #include "floor/floor-object.h"
+#include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "monster-race/race-indice-types.h"

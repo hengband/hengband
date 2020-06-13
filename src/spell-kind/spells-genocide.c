@@ -2,6 +2,7 @@
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
