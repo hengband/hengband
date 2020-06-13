@@ -67,6 +67,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"
+#include "system/building-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"

@@ -50,10 +50,9 @@
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells3.h"
+#include "system/building-type-definition.h"
 #include "util/util.h"
 #include "world/world.h"
-
-building_type building[MAX_BLDG];
 
 MONRACE_IDX battle_mon[4];
 u32b mon_odds[4];

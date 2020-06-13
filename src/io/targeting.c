@@ -47,6 +47,7 @@
 #include "player/player-races-table.h"
 #include "player/player-status.h"
 #include "spell/spells-summon.h"
+#include "system/building-type-definition.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"

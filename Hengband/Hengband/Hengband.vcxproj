@@ -425,6 +425,7 @@
     <ClCompile Include="..\..\src\spell-kind\spells-specific-bolt.c" />
     <ClCompile Include="..\..\src\spell\spells-staff-only.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-teleport.c" />
+    <ClCompile Include="..\..\src\system\building-type-definition.c" />
     <ClCompile Include="..\..\src\system\system-variables.c" />
     <ClCompile Include="..\..\src\core\show-file.c" />
     <ClCompile Include="..\..\src\core\speed-table.c" />
@@ -714,6 +715,7 @@
     <ClInclude Include="..\..\src\object-enchant\item-feeling.h" />
     <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
+    <ClInclude Include="..\..\src\system\building-type-definition.h" />
     <ClInclude Include="..\..\src\system\game-option-types.h" />
     <ClInclude Include="..\..\src\system\object-type-definition.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />

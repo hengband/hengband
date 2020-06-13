@@ -524,6 +524,7 @@ hengband_SOURCES = \
 	sv-definition/sv-other-types.h \
 	\
 	system/angband.h system/angband-version.h \
+	system/building-type-definition.c system/building-type-definition.h \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \

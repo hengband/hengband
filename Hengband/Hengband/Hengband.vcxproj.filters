@@ -1355,6 +1355,9 @@
     <ClCompile Include="..\..\src\util\angband-files.c">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\building-type-definition.c">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2964,6 +2967,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\util\angband-files.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\building-type-definition.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
