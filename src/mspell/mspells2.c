@@ -26,7 +26,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
-#include "monster/monster-move.h"
+#include "monster-floor/monster-move.h"
 #include "monster/monster-status.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"

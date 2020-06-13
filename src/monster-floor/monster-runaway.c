@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "monster/monster-runaway.h"
+#include "monster-floor/monster-runaway.h"
 #include "dungeon/quest.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -12,7 +12,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
-#include "monster/monster-remover.h"
+#include "monster-floor/monster-remover.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-move.h"
 

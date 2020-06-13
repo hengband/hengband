@@ -4,9 +4,9 @@
  * @author Hourier
  */
 
-#include "monster/monster-safety-hiding.h"
+#include "monster-floor/monster-safety-hiding.h"
 #include "floor/floor.h"
-#include "monster/monster-dist-offsets.h"
+#include "monster-floor/monster-dist-offsets.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "mspell/monster-spell.h"

@@ -287,30 +287,18 @@ hengband_SOURCES = \
 	\
 	monster/horror-descriptions.c monster/horror-descriptions.h \
 	monster/monster-compaction.c monster/monster-compaction.h \
-	monster/monster-death.c monster/monster-death.h \
 	monster/monster-describer.c monster/monster-describer.h \
 	monster/monster-description-types.h \
-	monster/monster-direction.c monster/monster-direction.h \
-	monster/monster-dist-offsets.c monster/monster-dist-offsets.h \
 	monster/monster-flag-types.h \
-	monster/monster-generator.c monster/monster-generator.h \
 	monster/monster-info.c monster/monster-info.h \
 	monster/monster-list.c monster/monster-list.h \
-	monster/monster-move.c monster/monster-move.h \
-	monster/monster-object.c monster/monster-object.h \
 	monster/monster-processor.c monster/monster-processor.h \
 	monster/monster-processor-util.c monster/monster-processor-util.h \
-	monster/monster-remover.c monster/monster-remover.h \
-	monster/monster-runaway.c monster/monster-runaway.h \
-	monster/monster-safety-hiding.c monster/monster-safety-hiding.h \
 	monster/monster-timed-effect-types.h \
-	monster/place-monster-types.h \
 	monster/smart-learn-types.h \
 	monster/monster-status.c monster/monster-status.h \
-	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
 	monster/monster-update.c monster/monster-update.h \
 	monster/monster-util.c monster/monster-util.h \
-	monster/quantum-effect.c monster/quantum-effect.h \
 	\
 	monster-attack/insults-moans.c monster-attack/insults-moans.h \
 	monster-attack/monster-attack-describer.c monster-attack/monster-attack-describer.h \
@@ -322,6 +310,19 @@ hengband_SOURCES = \
 	monster-attack/monster-attack-types.c monster-attack/monster-attack-types.h \
 	monster-attack/monster-attack-util.c monster-attack/monster-attack-util.h \
 	monster-attack/monster-eating.c monster-attack/monster-eating.h \
+	\
+	monster-floor/monster-death.c monster-floor/monster-death.h \
+	monster-floor/monster-direction.c monster-floor/monster-direction.h \
+	monster-floor/monster-dist-offsets.c monster-floor/monster-dist-offsets.h \
+	monster-floor/monster-generator.c monster-floor/monster-generator.h \
+	monster-floor/monster-move.c monster-floor/monster-move.h \
+	monster-floor/monster-object.c monster-floor/monster-object.h \
+	monster-floor/monster-remover.c monster-floor/monster-remover.h \
+	monster-floor/monster-runaway.c monster-floor/monster-runaway.h \
+	monster-floor/monster-safety-hiding.c monster-floor/monster-safety-hiding.h \
+	monster-floor/monster-sweep-grid.c monster-floor/monster-sweep-grid.h \
+	monster-floor/place-monster-types.h \
+	monster-floor/quantum-effect.c monster-floor/quantum-effect.h \
 	\
 	monster-race/monster-race.c monster-race/monster-race.h \
 	monster-race/monster-race-hook.c monster-race/monster-race-hook.h \

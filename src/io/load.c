@@ -70,7 +70,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
-#include "monster/monster-move.h"
+#include "monster-floor/monster-move.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"

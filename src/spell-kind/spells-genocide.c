@@ -10,7 +10,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
-#include "monster/monster-remover.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"

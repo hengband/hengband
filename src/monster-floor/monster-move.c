@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "monster/monster-move.h"
+#include "monster-floor/monster-move.h"
 #include "effect/effect-characteristics.h"
 #include "io/files-util.h"
 #include "monster-race/race-indice-types.h"
@@ -16,7 +16,7 @@
 #include "monster-attack/monster-attack-processor.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
-#include "monster/monster-object.h"
+#include "monster-floor/monster-object.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-info.h"

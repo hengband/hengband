@@ -12,7 +12,7 @@
 #include "market/arena.h"
 #include "market/bounty.h"
 #include "monster/monster-describer.h"
-#include "monster/monster-generator.h"
+#include "monster-floor/monster-generator.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation-processor.h"
 #include "object/lite-processor.h"

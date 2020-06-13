@@ -1,5 +1,4 @@
-#include "system/angband.h"
-#include "monster/monster-dist-offsets.h"
+#include "monster-floor/monster-dist-offsets.h"
 
 /*
  * Hack -- Precompute a bunch of calls to distance() in find_safety() and

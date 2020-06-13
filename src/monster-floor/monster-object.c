@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "monster/monster-object.h"
+#include "monster-floor/monster-object.h"
 #include "floor/floor-object.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags2.h"

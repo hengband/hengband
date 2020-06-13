@@ -59,28 +59,7 @@
     <ClCompile Include="..\..\src\io\interpret-pref-file.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\quantum-effect.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-object.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-move.c">
-      <Filter>monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-update.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-safety-hiding.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-direction.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-runaway.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-sweep-grid.c">
       <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\io\write-diary.c">
@@ -493,9 +472,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\player\player-status.c">
       <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-dist-offsets.c">
-      <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-status.c">
       <Filter>monster</Filter>
@@ -1247,9 +1223,6 @@
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.c">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-death.c">
-      <Filter>monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\view\display-monster-status.c">
       <Filter>view</Filter>
     </ClCompile>
@@ -1257,12 +1230,6 @@
       <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-describer.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-generator.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-remover.c">
       <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-compaction.c">
@@ -1306,6 +1273,39 @@
     </ClCompile>
     <ClCompile Include="..\..\src\monster-attack\monster-attack-processor.c">
       <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-death.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-direction.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-dist-offsets.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-generator.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-move.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-object.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-remover.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-runaway.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-safety-hiding.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-sweep-grid.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\quantum-effect.c">
+      <Filter>monster-floor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1366,28 +1366,7 @@
     <ClInclude Include="..\..\src\io\interpret-pref-file.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\quantum-effect.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-object.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-move.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-update.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-safety-hiding.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-direction.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-runaway.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-sweep-grid.h">
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\write-diary.h">
@@ -1836,9 +1815,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-status.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-dist-offsets.h">
-      <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-status.h">
       <Filter>monster</Filter>
@@ -2737,9 +2713,6 @@
     <ClInclude Include="..\..\src\monster\smart-learn-types.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\place-monster-types.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\room\rooms-pit-nest.h">
       <Filter>room</Filter>
     </ClInclude>
@@ -2806,9 +2779,6 @@
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h">
       <Filter>cmd-io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-death.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\view\display-monster-status.h">
       <Filter>view</Filter>
     </ClInclude>
@@ -2816,12 +2786,6 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-describer.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-generator.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-remover.h">
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-compaction.h">
@@ -2865,6 +2829,42 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-attack\monster-attack-processor.h">
       <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-death.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-direction.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-dist-offsets.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-generator.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-move.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-object.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-remover.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-runaway.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-safety-hiding.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\place-monster-types.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-sweep-grid.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\quantum-effect.h">
+      <Filter>monster-floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3021,6 +3021,9 @@
     </Filter>
     <Filter Include="lore">
       <UniqueIdentifier>{9db4d67c-5c55-4cc0-a9cd-643e5ffc3e73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="monster-floor">
+      <UniqueIdentifier>{d266d557-ad7c-4751-a1b1-04ced61292a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

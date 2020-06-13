@@ -2,7 +2,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "effect/spells-effect-util.h"
 #include "io/targeting.h"
-#include "monster/place-monster-types.h"
+#include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"

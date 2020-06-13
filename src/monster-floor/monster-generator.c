@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "monster/monster-generator.h"
+#include "monster-floor/monster-generator.h"
 #include "core/player-processor.h" // 相互参照している、後で何とかする.
 #include "core/speed-table.h"
 #include "dungeon/dungeon.h"
@@ -22,11 +22,11 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
-#include "monster/monster-move.h"
+#include "monster-floor/monster-move.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "monster/place-monster-types.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/summon-checker.h"
 #include "object/object-flavor.h"

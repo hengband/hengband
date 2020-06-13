@@ -56,7 +56,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
-#include "monster/monster-move.h"
+#include "monster-floor/monster-move.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"
