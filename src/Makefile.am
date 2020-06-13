@@ -510,6 +510,7 @@ hengband_SOURCES = \
 	sv-definition/sv-other-types.h \
 	\
 	system/angband.h system/angband-version.h \
+	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
 	system/monster-type-definition.h \
@@ -566,10 +567,10 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat \
 	-Icore -Idungeon -Ieffect -Ifloor -Igrid -Iinfo-reader -Iinventory -Iio \
 	-Iio-dump -Iknowledge -Imarket -Imelee -Imind -Imonster -Imonster-attack \
-	-Ilore -Imonster-race -Imspell -Imutation -Iobject -Iobject-enchant \
-	-Ipet -Iplayer -Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell \
-	-Ispell-kind -Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview \
-	-Iwizard -Iworld
+	-Imonster-floor -Imonster-race -Ilore -Imspell -Imutation -Iobject \
+	-Iobject-enchant -Ipet -Iplayer -Iplayer-attack -Irealm -Iroom \
+	-Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Isv-definition \
+	-Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

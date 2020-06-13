@@ -5,6 +5,7 @@
 #include "core/show-file.h"
 #include "io/files-util.h"
 #include "io/write-diary.h"
+#include "system/game-option-types.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"

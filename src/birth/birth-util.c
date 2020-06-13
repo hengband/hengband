@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "birth/birth-util.h"
 #include "core/show-file.h"
+#include "system/game-option-types.h"
 
 /*!
  * @brief プレイヤー作成を中断して変愚蛮怒を終了する

@@ -2878,6 +2878,9 @@
     <ClInclude Include="..\..\src\monster-floor\monster-summon.h">
       <Filter>monster-floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\game-option-types.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

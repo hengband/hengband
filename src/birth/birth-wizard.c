@@ -18,6 +18,7 @@
 #include "player/patron.h"
 #include "player/player-sex.h"
 #include "player/process-name.h"
+#include "system/game-option-types.h"
 #include "term/term-color-types.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
 #include "view/display-main-window.h" // 暫定。後で消す.

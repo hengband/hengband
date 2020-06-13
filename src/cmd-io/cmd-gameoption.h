@@ -2,19 +2,6 @@
 
 #include "system/angband.h"
 
-/*** Option Definitions ***/
-
-#define OPT_PAGE_INPUT          1
-#define OPT_PAGE_MAPSCREEN      2
-#define OPT_PAGE_TEXT           3
-#define OPT_PAGE_GAMEPLAY       4
-#define OPT_PAGE_DISTURBANCE    5
-#define OPT_PAGE_BIRTH          6
-#define OPT_PAGE_AUTODESTROY    7
-#define OPT_PAGE_PLAYRECORD    10
-
-#define OPT_PAGE_JAPANESE_ONLY 99
-
 /*!
  * チートオプションの最大数 / Number of cheating options
  */
