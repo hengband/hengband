@@ -77,42 +77,27 @@ static void do_cmd_options_autosave(concptr info)
 	char ch;
 	int i, k = 0, n = 2;
 	char buf[80];
-
 	Term_clear();
-
-	/* Interact with the player */
 	while (TRUE)
 	{
-		/* Prompt */
 		sprintf(buf, _("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ",
 			"%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info);
-
 		prt(buf, 0, 0);
-
-		/* Display the options */
 		for (i = 0; i < n; i++)
 		{
 			byte a = TERM_WHITE;
-
-			/* Color current option */
 			if (i == k) a = TERM_L_BLUE;
 
-			/* Display the option text */
 			sprintf(buf, "%-48s: %s (%s)",
 				autosave_info[i].o_desc,
 				(*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
 				autosave_info[i].o_text);
 			c_prt(a, buf, i + 2, 0);
 		}
+
 		prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
-
-		/* Hilite current option */
 		move_cursor(k + 2, 50);
-
-		/* Get a key */
 		ch = inkey();
-
-		/* Analyze */
 		switch (ch)
 		{
 		case ESCAPE:
@@ -179,7 +164,6 @@ static void do_cmd_options_autosave(concptr info)
 	}
 }
 
-
 /*!
  * @brief ウィンドウオプションを変更するコマンドのメインルーチン /
  * Modify the "window" options
@@ -194,76 +178,47 @@ static void do_cmd_options_win(void)
 	bool go = TRUE;
 	u32b old_flag[8];
 
-
-	/* Memorize old flags */
 	for (j = 0; j < 8; j++)
 	{
-		/* Acquire current flags */
 		old_flag[j] = window_flag[j];
 	}
 
 	Term_clear();
-
-	/* Interact */
 	while (go)
 	{
-		/* Prompt */
 		prt(_("ウィンドウ・フラグ (<方向>で移動, tでチェンジ, y/n でセット, ESC)", "Window Flags (<dir>, t, y, n, ESC) "), 0, 0);
-
-		/* Display the windows */
 		for (j = 0; j < 8; j++)
 		{
 			byte a = TERM_WHITE;
-
 			concptr s = angband_term_name[j];
-
-			/* Use color */
 			if (j == x) a = TERM_L_BLUE;
 
-			/* Window name, staggered, centered */
 			Term_putstr(35 + j * 5 - strlen(s) / 2, 2 + j % 2, -1, a, s);
 		}
 
-		/* Display the options */
 		for (i = 0; i < 16; i++)
 		{
 			byte a = TERM_WHITE;
-
 			concptr str = window_flag_desc[i];
-
-			/* Use color */
 			if (i == y) a = TERM_L_BLUE;
 
-			/* Unused option */
 			if (!str) str = _("(未使用)", "(Unused option)");
 
-			/* Flag name */
 			Term_putstr(0, i + 5, -1, a, str);
-
-			/* Display the windows */
 			for (j = 0; j < 8; j++)
 			{
 				char c = '.';
 				a = TERM_WHITE;
-
-				/* Use color */
 				if ((i == y) && (j == x)) a = TERM_L_BLUE;
 
-				/* Active flag */
 				if (window_flag[j] & (1L << i)) c = 'X';
 
-				/* Flag value */
 				Term_putch(35 + j * 5, i + 5, a, c);
 			}
 		}
 
-		/* Place Cursor */
 		Term_gotoxy(35 + x * 5, y + 5);
-
-		/* Get key */
 		ch = inkey();
-
-		/* Analyze */
 		switch (ch)
 		{
 		case ESCAPE:
@@ -271,75 +226,57 @@ static void do_cmd_options_win(void)
 			go = FALSE;
 			break;
 		}
-
 		case 'T':
 		case 't':
 		{
-			/* Clear windows */
 			for (j = 0; j < 8; j++)
 			{
 				window_flag[j] &= ~(1L << y);
 			}
 
-			/* Clear flags */
 			for (i = 0; i < 16; i++)
 			{
 				window_flag[x] &= ~(1L << i);
 			}
 		}
 			/* Fall through */
-
 		case 'y':
 		case 'Y':
 		{
-			/* Ignore screen */
 			if (x == 0) break;
 
-			/* Set flag */
 			window_flag[x] |= (1L << y);
 			break;
 		}
-
 		case 'n':
 		case 'N':
 		{
-			/* Clear flag */
 			window_flag[x] &= ~(1L << y);
 			break;
 		}
-
 		case '?':
 		{
 			(void)show_file(p_ptr, TRUE, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
-
 			Term_clear();
 			break;
 		}
-
 		default:
 		{
 			d = get_keymap_dir(ch);
-
 			x = (x + ddx[d] + 8) % 8;
 			y = (y + ddy[d] + 16) % 16;
-
 			if (!d) bell();
 		}
 		}
 	}
 
-	/* Notice changes */
 	for (j = 0; j < 8; j++)
 	{
 		term *old = Term;
-
-		/* Dead window */
 		if (!angband_term[j]) continue;
 
-		/* Ignore non-changes */
 		if (window_flag[j] == old_flag[j]) continue;
 
-		/* Activate */
 		Term_activate(angband_term[j]);
 		Term_clear();
 		Term_fresh();
@@ -360,15 +297,10 @@ static void do_cmd_options_cheat(concptr info)
 	int		i, k = 0, n = MAX_CHEAT_OPTIONS;
 	char	buf[80];
 	Term_clear();
-
-	/* Interact with the player */
 	while (TRUE)
 	{
 		DIRECTION dir;
-
-		/* Prompt */
 		sprintf(buf, _("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info);
-
 		prt(buf, 0, 0);
 
 #ifdef JP
@@ -378,15 +310,11 @@ static void do_cmd_options_cheat(concptr info)
 		prt("      後に解除してもダメですので、勝利者を目指す方はここのオプションはい", 13, 0);
 		prt("      じらないようにして下さい。", 14, 0);
 #endif
-		/* Display the options */
 		for (i = 0; i < n; i++)
 		{
 			byte a = TERM_WHITE;
-
-			/* Color current option */
 			if (i == k) a = TERM_L_BLUE;
 
-			/* Display the option text */
 			sprintf(buf, "%-48s: %s (%s)",
 				cheat_info[i].o_desc,
 				(*cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
@@ -394,35 +322,24 @@ static void do_cmd_options_cheat(concptr info)
 			c_prt(a, buf, i + 2, 0);
 		}
 
-		/* Hilite current option */
 		move_cursor(k + 2, 50);
-
-		/* Get a key */
 		ch = inkey();
-
-		/*
-		 * HACK - Try to translate the key into a direction
-		 * to allow using the roguelike keys for navigation.
-		 */
 		dir = get_keymap_dir(ch);
 		if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
 			ch = I2D(dir);
 
-		/* Analyze */
 		switch (ch)
 		{
 		case ESCAPE:
 		{
 			return;
 		}
-
 		case '-':
 		case '8':
 		{
 			k = (n + k - 1) % n;
 			break;
 		}
-
 		case ' ':
 		case '\n':
 		case '\r':
@@ -431,7 +348,6 @@ static void do_cmd_options_cheat(concptr info)
 			k = (k + 1) % n;
 			break;
 		}
-
 		case 'y':
 		case 'Y':
 		case '6':
@@ -439,12 +355,12 @@ static void do_cmd_options_cheat(concptr info)
 			if (!current_world_ptr->noscore)
 				exe_write_diary(p_ptr, DIARY_DESCRIPTION, 0,
 					_("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
+
 			current_world_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
 			(*cheat_info[k].o_var) = TRUE;
 			k = (k + 1) % n;
 			break;
 		}
-
 		case 'n':
 		case 'N':
 		case '4':
@@ -453,17 +369,13 @@ static void do_cmd_options_cheat(concptr info)
 			k = (k + 1) % n;
 			break;
 		}
-
 		case '?':
 		{
 			strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), cheat_info[k].o_text);
-			/* Peruse the help file */
 			(void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
-
 			Term_clear();
 			break;
 		}
-
 		default:
 		{
 			bell();
@@ -472,7 +384,6 @@ static void do_cmd_options_cheat(concptr info)
 		}
 	}
 }
-
 
 /*!
  * @brief ビットセットからゲームオプションを展開する / Extract option variables from bit sets
@@ -486,14 +397,10 @@ void extract_option_vars(void)
 	{
 		int os = option_info[i].o_set;
 		int ob = option_info[i].o_bit;
-
-		/* Set the "default" options */
 		if (option_info[i].o_var)
 		{
-			/* Set */
 			if (option_flag[os] & (1L << ob))
 			{
-				/* Set */
 				(*option_info[i].o_var) = TRUE;
 			}
 			else
@@ -521,22 +428,15 @@ void do_cmd_options(void)
 	int d, skey;
 	TERM_LEN i, y = 0;
 	screen_save();
-
-	/* Interact */
 	while (TRUE)
 	{
 		int n = OPT_NUM;
-
-		/* Does not list cheat option when cheat option is off */
 		if (!current_world_ptr->noscore && !allow_debug_opts) n--;
+
 		Term_clear();
-
-		/* Why are we here */
 		prt(_("[ オプションの設定 ]", "Game options"), 1, 0);
-
 		while (TRUE)
 		{
-			/* Give some choices */
 			for (i = 0; i < n; i++)
 			{
 				byte a = TERM_WHITE;
@@ -546,8 +446,6 @@ void do_cmd_options(void)
 			}
 
 			prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
-
-			/* Get command */
 			skey = inkey_special(TRUE);
 			if (!(skey & SKEY_MASK)) k = (char)skey;
 			else k = 0;
@@ -565,13 +463,10 @@ void do_cmd_options(void)
 				if (tolower(k) == option_fields[i].key) break;
 			}
 
-			/* Command is found */
 			if (i < n) break;
 
-			/* Hack -- browse help */
 			if (k == '?') break;
 
-			/* Move cursor */
 			d = 0;
 			if (skey == SKEY_UP) d = 8;
 			if (skey == SKEY_DOWN) d = 2;
@@ -581,98 +476,72 @@ void do_cmd_options(void)
 
 		if (k == ESCAPE) break;
 
-		/* Analyze */
 		switch (k)
 		{
 		case '1':
 		{
-			/* Process the general options */
 			do_cmd_options_aux(OPT_PAGE_INPUT, _("キー入力オプション", "Input Options"));
 			break;
 		}
-
 		case '2':
 		{
-			/* Process the general options */
 			do_cmd_options_aux(OPT_PAGE_MAPSCREEN, _("マップ画面オプション", "Map Screen Options"));
 			break;
 		}
-
 		case '3':
 		{
-			/* Spawn */
 			do_cmd_options_aux(OPT_PAGE_TEXT, _("テキスト表示オプション", "Text Display Options"));
 			break;
 		}
-
 		case '4':
 		{
-			/* Spawn */
 			do_cmd_options_aux(OPT_PAGE_GAMEPLAY, _("ゲームプレイ・オプション", "Game-Play Options"));
 			break;
 		}
-
 		case '5':
 		{
-			/* Spawn */
 			do_cmd_options_aux(OPT_PAGE_DISTURBANCE, _("行動中止関係のオプション", "Disturbance Options"));
 			break;
 		}
-
 		case '6':
 		{
-			/* Spawn */
 			do_cmd_options_aux(OPT_PAGE_AUTODESTROY, _("簡易自動破壊オプション", "Easy Auto-Destroyer Options"));
 			break;
 		}
-
-		/* Play-record Options */
 		case 'R':
 		case 'r':
 		{
-			/* Spawn */
 			do_cmd_options_aux(OPT_PAGE_PLAYRECORD, _("プレイ記録オプション", "Play-record Options"));
 			break;
 		}
-
-		/* Birth Options */
 		case 'B':
 		case 'b':
 		{
-			/* Spawn */
 			do_cmd_options_aux(OPT_PAGE_BIRTH, (!current_world_ptr->wizard || !allow_debug_opts) ?
 				_("初期オプション(参照のみ)", "Birth Options(browse only)") :
 				_("初期オプション((*)はスコアに影響)", "Birth Options((*)s effect score)"));
 			break;
 		}
-
-		/* Cheating Options */
 		case 'C':
 		{
 			if (!current_world_ptr->noscore && !allow_debug_opts)
 			{
-				/* Cheat options are not permitted */
 				bell();
 				break;
 			}
 
-			/* Spawn */
 			do_cmd_options_cheat(_("詐欺師は決して勝利できない！", "Cheaters never win"));
 			break;
 		}
-
 		case 'a':
 		case 'A':
 		{
 			do_cmd_options_autosave(_("自動セーブ", "Autosave"));
 			break;
 		}
-
-		/* Window flags */
 		case 'W':
 		case 'w':
 		{
-			/* Spawn */
 			do_cmd_options_win();
 			p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL |
 				PW_PLAYER | PW_MESSAGE | PW_OVERHEAD |
@@ -680,24 +549,17 @@ void do_cmd_options(void)
 				PW_DUNGEON | PW_MONSTER_LIST);
 			break;
 		}
-
-		/* Auto-picker/destroyer editor */
 		case 'P':
 		case 'p':
 		{
 			do_cmd_edit_autopick(p_ptr);
 			break;
 		}
-
-		/* Hack -- Delay Speed */
 		case 'D':
 		case 'd':
 		{
-			/* Prompt */
 			clear_from(18);
 			prt(_("コマンド: 基本ウェイト量", "Command: Base Delay Factor"), 19, 0);
-
-			/* Get a new value */
 			while (TRUE)
 			{
 				int msec = delay_factor * delay_factor * delay_factor;
@@ -716,16 +578,11 @@ void do_cmd_options(void)
 
 			break;
 		}
-
-		/* Hack -- hitpoint warning factor */
 		case 'H':
 		case 'h':
 		{
-			/* Prompt */
 			clear_from(18);
 			prt(_("コマンド: 低ヒットポイント警告", "Command: Hitpoint Warning"), 19, 0);
-
-			/* Get a new value */
 			while (TRUE)
 			{
 				prt(format(_("現在の低ヒットポイント警告: %d0%%", "Current hitpoint warning: %d0%%"), hitpoint_warn), 22, 0);
@@ -743,16 +600,11 @@ void do_cmd_options(void)
 
 			break;
 		}
-
-		/* Hack -- mana color factor */
 		case 'M':
 		case 'm':
 		{
-			/* Prompt */
 			clear_from(18);
 			prt(_("コマンド: 低魔力色閾値", "Command: Mana Color Threshold"), 19, 0);
-
-			/* Get a new value */
 			while (TRUE)
 			{
 				prt(format(_("現在の低魔力色閾値: %d0%%", "Current mana color threshold: %d0%%"), mana_warn), 22, 0);
@@ -770,13 +622,10 @@ void do_cmd_options(void)
 
 			break;
 		}
-
 		case '?':
 			(void)show_file(p_ptr, TRUE, _("joption.txt", "option.txt"), NULL, 0, 0);
 			Term_clear();
 			break;
-
-			/* Unknown option */
 		default:
 		{
 			bell();
@@ -788,8 +637,6 @@ void do_cmd_options(void)
 	}
 
 	screen_load();
-
-	/* Hack - Redraw equippy chars */
 	p_ptr->redraw |= (PR_EQUIPPY);
 }
 
@@ -810,42 +657,29 @@ void do_cmd_options_aux(int page, concptr info)
 	bool    browse_only = (page == OPT_PAGE_BIRTH) && current_world_ptr->character_generated &&
 		(!current_world_ptr->wizard || !allow_debug_opts);
 
-
-	/* Lookup the options */
 	for (i = 0; i < 24; i++) opt[i] = 0;
 
-	/* Scan the options */
 	for (i = 0; option_info[i].o_desc; i++)
 	{
-		/* Notice options on this "page" */
 		if (option_info[i].o_page == page) opt[n++] = i;
 	}
-	Term_clear();
 
-	/* Interact with the player */
+	Term_clear();
 	while (TRUE)
 	{
 		DIRECTION dir;
-
-		/* Prompt */
 		sprintf(buf, _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "),
 			info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept"));
 		prt(buf, 0, 0);
-
-		/* HACK -- description for easy-auto-destroy options */
 		if (page == OPT_PAGE_AUTODESTROY)
 			c_prt(TERM_YELLOW, _("以下のオプションは、簡易自動破壊を使用するときのみ有効",
 				"Following options will protect items from easy auto-destroyer."), 6, _(6, 3));
 
-		/* Display the options */
 		for (i = 0; i < n; i++)
 		{
 			byte a = TERM_WHITE;
-
-			/* Color current option */
 			if (i == k) a = TERM_L_BLUE;
 
-			/* Display the option text */
 			sprintf(buf, "%-48s: %s (%.19s)",
 				option_info[opt[i]].o_desc,
 				(*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
@@ -857,35 +691,24 @@ void do_cmd_options_aux(int page, concptr info)
 		if ((page == OPT_PAGE_AUTODESTROY) && (k > 2)) l = 3;
 		else l = 0;
 
-		/* Hilite current option */
 		move_cursor(k + 2 + l, 50);
-
-		/* Get a key */
 		ch = inkey();
-
-		/*
-		 * HACK - Try to translate the key into a direction
-		 * to allow using the roguelike keys for navigation.
-		 */
 		dir = get_keymap_dir(ch);
 		if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
 			ch = I2D(dir);
 
-		/* Analyze */
 		switch (ch)
 		{
 		case ESCAPE:
 		{
 			return;
 		}
-
 		case '-':
 		case '8':
 		{
 			k = (n + k - 1) % n;
 			break;
 		}
-
 		case ' ':
 		case '\n':
 		case '\r':
@@ -894,7 +717,6 @@ void do_cmd_options_aux(int page, concptr info)
 			k = (k + 1) % n;
 			break;
 		}
-
 		case 'y':
 		case 'Y':
 		case '6':
@@ -904,7 +726,6 @@ void do_cmd_options_aux(int page, concptr info)
 			k = (k + 1) % n;
 			break;
 		}
-
 		case 'n':
 		case 'N':
 		case '4':
@@ -914,24 +735,19 @@ void do_cmd_options_aux(int page, concptr info)
 			k = (k + 1) % n;
 			break;
 		}
-
 		case 't':
 		case 'T':
 		{
 			if (!browse_only) (*option_info[opt[k]].o_var) = !(*option_info[opt[k]].o_var);
 			break;
 		}
-
 		case '?':
 		{
 			strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), option_info[opt[k]].o_text);
-			/* Peruse the help file */
 			(void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
-
 			Term_clear();
 			break;
 		}
-
 		default:
 		{
 			bell();
