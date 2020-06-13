@@ -38,6 +38,7 @@
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/option-flags.h"
+#include "game-option/option-types-table.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
 #include "info-reader/artifact-reader.h"

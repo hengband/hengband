@@ -7,6 +7,7 @@
 #include "io/interpret-pref-file.h"
 #include "birth/character-builder.h"
 #include "game-option/option-flags.h"
+#include "game-option/option-types-table.h"
 #include "io/gf-descriptions.h"
 #include "io/tokenizer.h"
 #include "object/object-kind.h"

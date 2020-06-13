@@ -166,6 +166,7 @@ hengband_SOURCES = \
 	game-option/input-options.c game-option/input-options.h \
 	game-option/map-screen-options.c game-option/map-screen-options.h \
 	game-option/option-flags.c game-option/option-flags.h \
+	game-option/option-types-table.c game-option/option-types-table.h \
 	game-option/play-record-options.c game-option/play-record-options.h \
 	game-option/runtime-arguments.c game-option/runtime-arguments.h \
 	game-option/special-options.c game-option/special-options.h \

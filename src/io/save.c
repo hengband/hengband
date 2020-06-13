@@ -24,6 +24,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/option-flags.h"
+#include "game-option/option-types-table.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"

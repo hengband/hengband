@@ -22,6 +22,7 @@
 #include "floor/floor-object.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
+#include "game-option/option-types-table.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
