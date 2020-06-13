@@ -79,7 +79,7 @@ static s16b toggle_frequency(s16b current)
  * @param info 表示メッセージ
  * @return なし
  */
-static void do_cmd_options_autosave(concptr info)
+static void do_cmd_options_autosave(player_type *player_ptr, concptr info)
 {
     char ch;
     int i, k = 0, n = 2;
@@ -146,7 +146,7 @@ static void do_cmd_options_autosave(concptr info)
         }
 
         case '?': {
-            (void)show_file(p_ptr, TRUE, _("joption.txt#Autosave", "option.txt#Autosave"), NULL, 0, 0);
+            (void)show_file(player_ptr, TRUE, _("joption.txt#Autosave", "option.txt#Autosave"), NULL, 0, 0);
             Term_clear();
             break;
         }
@@ -164,7 +164,7 @@ static void do_cmd_options_autosave(concptr info)
  * Modify the "window" options
  * @return なし
  */
-static void do_cmd_options_win(void)
+static void do_cmd_options_win(player_type *player_ptr)
 {
     int i, j, d;
     TERM_LEN y = 0;
@@ -244,7 +244,7 @@ static void do_cmd_options_win(void)
             break;
         }
         case '?': {
-            (void)show_file(p_ptr, TRUE, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
+            (void)show_file(player_ptr, TRUE, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
             Term_clear();
             break;
         }
@@ -279,7 +279,7 @@ static void do_cmd_options_win(void)
  * @param info 表示メッセージ
  * @return なし
  */
-static void do_cmd_options_cheat(concptr info)
+static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
 {
     char ch;
     int i, k = 0, n = MAX_CHEAT_OPTIONS;
@@ -332,8 +332,8 @@ static void do_cmd_options_cheat(concptr info)
         case 'Y':
         case '6': {
             if (!current_world_ptr->noscore)
-                exe_write_diary(
-                    p_ptr, DIARY_DESCRIPTION, 0, _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
+                exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0,
+                    _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
 
             current_world_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
             (*cheat_info[k].o_var) = TRUE;
@@ -349,7 +349,7 @@ static void do_cmd_options_cheat(concptr info)
         }
         case '?': {
             strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), cheat_info[k].o_text);
-            (void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
+            (void)show_file(player_ptr, TRUE, buf, NULL, 0, 0);
             Term_clear();
             break;
         }
@@ -390,7 +390,7 @@ void extract_option_vars(void)
  * in any options which control "visual" aspects of the game.
  * </pre>
  */
-void do_cmd_options(void)
+void do_cmd_options(player_type *player_ptr)
 {
     char k;
     int d, skey;
@@ -452,37 +452,37 @@ void do_cmd_options(void)
 
         switch (k) {
         case '1': {
-            do_cmd_options_aux(OPT_PAGE_INPUT, _("キー入力オプション", "Input Options"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_INPUT, _("キー入力オプション", "Input Options"));
             break;
         }
         case '2': {
-            do_cmd_options_aux(OPT_PAGE_MAPSCREEN, _("マップ画面オプション", "Map Screen Options"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_MAPSCREEN, _("マップ画面オプション", "Map Screen Options"));
             break;
         }
         case '3': {
-            do_cmd_options_aux(OPT_PAGE_TEXT, _("テキスト表示オプション", "Text Display Options"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_TEXT, _("テキスト表示オプション", "Text Display Options"));
             break;
         }
         case '4': {
-            do_cmd_options_aux(OPT_PAGE_GAMEPLAY, _("ゲームプレイ・オプション", "Game-Play Options"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_GAMEPLAY, _("ゲームプレイ・オプション", "Game-Play Options"));
             break;
         }
         case '5': {
-            do_cmd_options_aux(OPT_PAGE_DISTURBANCE, _("行動中止関係のオプション", "Disturbance Options"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_DISTURBANCE, _("行動中止関係のオプション", "Disturbance Options"));
             break;
         }
         case '6': {
-            do_cmd_options_aux(OPT_PAGE_AUTODESTROY, _("簡易自動破壊オプション", "Easy Auto-Destroyer Options"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_AUTODESTROY, _("簡易自動破壊オプション", "Easy Auto-Destroyer Options"));
             break;
         }
         case 'R':
         case 'r': {
-            do_cmd_options_aux(OPT_PAGE_PLAYRECORD, _("プレイ記録オプション", "Play-record Options"));
+            do_cmd_options_aux(player_ptr, OPT_PAGE_PLAYRECORD, _("プレイ記録オプション", "Play-record Options"));
             break;
         }
         case 'B':
         case 'b': {
-            do_cmd_options_aux(OPT_PAGE_BIRTH,
+            do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH,
                 (!current_world_ptr->wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
                                                                   : _("初期オプション((*)はスコアに影響)", "Birth Options((*)s effect score)"));
             break;
@@ -493,24 +493,24 @@ void do_cmd_options(void)
                 break;
             }
 
-            do_cmd_options_cheat(_("詐欺師は決して勝利できない！", "Cheaters never win"));
+            do_cmd_options_cheat(player_ptr, _("詐欺師は決して勝利できない！", "Cheaters never win"));
             break;
         }
         case 'a':
         case 'A': {
-            do_cmd_options_autosave(_("自動セーブ", "Autosave"));
+            do_cmd_options_autosave(player_ptr, _("自動セーブ", "Autosave"));
             break;
         }
         case 'W':
         case 'w': {
-            do_cmd_options_win();
-            p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MESSAGE | PW_OVERHEAD | PW_MONSTER | PW_OBJECT | PW_SNAPSHOT | PW_DUNGEON
+            do_cmd_options_win(player_ptr);
+            player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MESSAGE | PW_OVERHEAD | PW_MONSTER | PW_OBJECT | PW_SNAPSHOT | PW_DUNGEON
                 | PW_MONSTER_LIST);
             break;
         }
         case 'P':
         case 'p': {
-            do_cmd_edit_autopick(p_ptr);
+            do_cmd_edit_autopick(player_ptr);
             break;
         }
         case 'D':
@@ -525,7 +525,7 @@ void do_cmd_options(void)
                 if (k == ESCAPE)
                     break;
                 else if (k == '?') {
-                    (void)show_file(p_ptr, TRUE, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), NULL, 0, 0);
+                    (void)show_file(player_ptr, TRUE, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), NULL, 0, 0);
                     Term_clear();
                 } else if (isdigit(k))
                     delay_factor = D2I(k);
@@ -546,7 +546,7 @@ void do_cmd_options(void)
                 if (k == ESCAPE)
                     break;
                 else if (k == '?') {
-                    (void)show_file(p_ptr, TRUE, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), NULL, 0, 0);
+                    (void)show_file(player_ptr, TRUE, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), NULL, 0, 0);
                     Term_clear();
                 } else if (isdigit(k))
                     hitpoint_warn = D2I(k);
@@ -567,7 +567,7 @@ void do_cmd_options(void)
                 if (k == ESCAPE)
                     break;
                 else if (k == '?') {
-                    (void)show_file(p_ptr, TRUE, _("joption.txt#Manapoint", "option.txt#Manapoint"), NULL, 0, 0);
+                    (void)show_file(player_ptr, TRUE, _("joption.txt#Manapoint", "option.txt#Manapoint"), NULL, 0, 0);
                     Term_clear();
                 } else if (isdigit(k))
                     mana_warn = D2I(k);
@@ -578,7 +578,7 @@ void do_cmd_options(void)
             break;
         }
         case '?':
-            (void)show_file(p_ptr, TRUE, _("joption.txt", "option.txt"), NULL, 0, 0);
+            (void)show_file(player_ptr, TRUE, _("joption.txt", "option.txt"), NULL, 0, 0);
             Term_clear();
             break;
         default: {
@@ -591,7 +591,7 @@ void do_cmd_options(void)
     }
 
     screen_load();
-    p_ptr->redraw |= (PR_EQUIPPY);
+    player_ptr->redraw |= (PR_EQUIPPY);
 }
 
 /*!
@@ -601,7 +601,7 @@ void do_cmd_options(void)
  * @param info 表示メッセージ
  * @return なし
  */
-void do_cmd_options_aux(int page, concptr info)
+void do_cmd_options_aux(player_type *player_ptr, int page, concptr info)
 {
     char ch;
     int i, k = 0, n = 0, l;
@@ -693,7 +693,7 @@ void do_cmd_options_aux(int page, concptr info)
         }
         case '?': {
             strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), option_info[opt[k]].o_text);
-            (void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
+            (void)show_file(player_ptr, TRUE, buf, NULL, 0, 0);
             Term_clear();
             break;
         }

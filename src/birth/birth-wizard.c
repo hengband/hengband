@@ -62,7 +62,7 @@ static void display_help_on_sex_select(player_type *creature_ptr, char c)
         do_cmd_help(creature_ptr);
     else if (c == '=') {
         screen_save();
-        do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+        do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
         screen_load();
     } else if (c != '4' && c != '6')
         bell();
@@ -256,14 +256,14 @@ static bool let_player_build_character(player_type *creature_ptr)
     return TRUE;
 }
 
-static void display_initial_options(void)
+static void display_initial_options(player_type *creature_ptr)
 {
     clear_from(10);
     put_str("                                   ", 3, 40);
     put_str("                                   ", 4, 40);
     put_str("                                   ", 5, 40);
     screen_save();
-    do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+    do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
     screen_load();
 }
 
@@ -504,7 +504,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     if (!let_player_build_character(creature_ptr))
         return FALSE;
 
-    display_initial_options();
+    display_initial_options(creature_ptr);
     if (autoroller || autochara)
         auto_round = 0L;
 

@@ -54,7 +54,7 @@ void birth_help_option(player_type *creature_ptr, char c, birth_kind bk)
         show_help(creature_ptr, help_file);
     } else if (c == '=') {
         screen_save();
-        do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth option((*)s effect score)"));
+        do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth option((*)s effect score)"));
         screen_load();
     } else if (c != '2' && c != '4' && c != '6' && c != '8')
         bell();

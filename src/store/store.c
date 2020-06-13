@@ -1992,7 +1992,7 @@ static void store_process_command(player_type *client_ptr)
 	}
 	case '=':
 	{
-		do_cmd_options();
+		do_cmd_options(client_ptr);
 		(void)combine_and_reorder_home(STORE_HOME);
 		do_cmd_redraw(client_ptr);
 		display_store(client_ptr);
