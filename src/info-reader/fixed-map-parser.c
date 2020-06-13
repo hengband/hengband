@@ -10,6 +10,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "floor/fixed-map-generator.h"
+#include "game-option/birth-options.h"
 #include "io/files-util.h"
 #include "system/system-variables.h"
 #include "world/world.h"

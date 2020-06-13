@@ -1,6 +1,7 @@
 ﻿#include "spell/spells-summon.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "monster-floor/monster-summon.h"

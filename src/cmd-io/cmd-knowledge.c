@@ -1,5 +1,6 @@
 ﻿#include "cmd-io/cmd-knowledge.h"
 #include "cmd/cmd-draw.h"
+#include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-experiences.h"

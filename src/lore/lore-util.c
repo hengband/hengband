@@ -1,4 +1,5 @@
 ﻿#include "lore/lore-util.h"
+#include "game-option/birth-options.h"
 #include "term/term-color-types.h"
 
 concptr wd_he[3] = { _("それ", "it"), _("彼", "he"), _("彼女", "she") };

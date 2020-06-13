@@ -8,6 +8,7 @@
  */
 
 #include "monster/monster-processor-util.h"
+#include "game-option/birth-options.h"
 #include "monster/monster-status.h"
 
  /*!

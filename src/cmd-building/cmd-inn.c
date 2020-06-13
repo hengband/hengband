@@ -1,6 +1,7 @@
 ﻿#include "cmd-building/cmd-inn.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "core/turn-compensator.h"
+#include "game-option/birth-options.h"
 #include "io/write-diary.h"
 #include "market/building-actions-table.h"
 #include "player/eldritch-horror.h"

@@ -2,6 +2,7 @@
 #include "cmd-io/cmd-save.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "game-option/birth-options.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "monster-race/race-flags1.h"

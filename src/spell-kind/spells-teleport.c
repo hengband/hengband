@@ -11,6 +11,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "game-option/birth-options.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"

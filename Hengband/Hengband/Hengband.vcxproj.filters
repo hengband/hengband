@@ -1328,6 +1328,9 @@
     <ClCompile Include="..\..\src\game-option\disturbance-options.c">
       <Filter>game-option</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game-option\birth-options.c">
+      <Filter>game-option</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2909,6 +2912,9 @@
       <Filter>game-option</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\game-option\disturbance-options.h">
+      <Filter>game-option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game-option\birth-options.h">
       <Filter>game-option</Filter>
     </ClInclude>
   </ItemGroup>

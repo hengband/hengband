@@ -40,6 +40,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"

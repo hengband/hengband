@@ -1,6 +1,7 @@
 ﻿#include "view/display-player-middle.h"
 #include "combat/shoot.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"

@@ -13,6 +13,7 @@
 #include "birth/history-generator.h"
 #include "birth/quick-start.h"
 #include "cmd-io/cmd-help.h"
+#include "game-option/birth-options.h"
 #include "main/sound-definitions-table.h"
 #include "player/avatar.h"
 #include "player/patron.h"

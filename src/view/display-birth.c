@@ -1,6 +1,7 @@
 ﻿#include "view/display-birth.h"
 #include "birth/auto-roller.h"
 #include "birth/birth-stat.h"
+#include "game-option/birth-options.h"
 #include "player/player-personality.h"
 #include "term/term-color-types.h"
 

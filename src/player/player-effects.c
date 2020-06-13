@@ -24,6 +24,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"

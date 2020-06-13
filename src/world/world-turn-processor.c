@@ -6,6 +6,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor-events.h"
 #include "floor/wild.h"
+#include "game-option/birth-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-curse.h"
 #include "inventory/recharge-processor.h"

@@ -51,6 +51,7 @@
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"

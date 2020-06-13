@@ -1,4 +1,5 @@
 ﻿#include "dungeon/dungeon.h"
+#include "game-option/birth-options.h"
 #include "world/world.h"
 
 /*

@@ -3,6 +3,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
 #include "market/arena.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"

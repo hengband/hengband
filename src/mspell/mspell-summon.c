@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-summon.h"
 #include "effect/effect-characteristics.h"
+#include "game-option/birth-options.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/race-flags1.h"

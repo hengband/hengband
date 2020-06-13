@@ -3,6 +3,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"

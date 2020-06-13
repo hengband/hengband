@@ -9,6 +9,7 @@
 #include "art-definition/art-armor-types.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"

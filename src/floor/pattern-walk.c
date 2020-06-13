@@ -2,6 +2,7 @@
 #include "cmd-io/cmd-save.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "game-option/birth-options.h"
 #include "io/write-diary.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
