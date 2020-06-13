@@ -1,5 +1,5 @@
-﻿#include "system/angband.h"
-#include "io/pref-file-expressor.h"
+﻿#include "io/pref-file-expressor.h"
+#include "game-option/runtime-arguments.h"
 #include "system/system-variables.h"
 
 /*!

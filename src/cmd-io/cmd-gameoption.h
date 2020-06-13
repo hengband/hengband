@@ -7,16 +7,6 @@
  */
 #define CHEAT_MAX 10
 
-extern bool arg_fiddle;
-extern bool arg_wizard;
-extern bool arg_music;
-extern bool arg_sound;
-extern byte arg_graphics;
-extern bool arg_monochrome;
-extern bool arg_force_original;
-extern bool arg_force_roguelike;
-extern bool arg_bigtile;
-
 extern BIT_FLAGS option_flag[8];
 extern BIT_FLAGS option_mask[8];
 extern BIT_FLAGS window_flag[8];

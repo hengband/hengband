@@ -25,19 +25,6 @@
  * Software options (set via the '=' command).
  */
 
-/*
- * Run-time arguments
- */
-bool arg_fiddle;			/* Command arg -- Request fiddle mode */
-bool arg_wizard;			/* Command arg -- Request wizard mode */
-bool arg_sound;				/* Command arg -- Request special sounds */
-bool arg_music;				/* Command arg -- Request special musics */
-byte arg_graphics;			/* Command arg -- Request graphics mode */
-bool arg_monochrome;		/* Command arg -- Request monochrome mode */
-bool arg_force_original;	/* Command arg -- Request original keyset */
-bool arg_force_roguelike;	/* Command arg -- Request roguelike keyset */
-bool arg_bigtile = FALSE;	/* Command arg -- Request big tile mode */
-
 BIT_FLAGS option_flag[8]; //!< The array of normal options
 BIT_FLAGS option_mask[8]; //!< The array of normal options
 BIT_FLAGS window_flag[8]; //!< The array of window options

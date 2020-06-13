@@ -11,6 +11,7 @@
 #include "floor/floor.h"
 #include "floor/fixed-map-generator.h"
 #include "game-option/birth-options.h"
+#include "game-option/runtime-arguments.h"
 #include "io/files-util.h"
 #include "system/system-variables.h"
 #include "world/world.h"

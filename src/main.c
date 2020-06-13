@@ -12,6 +12,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "core/game-play.h"
 #include "core/scores.h"
+#include "game-option/runtime-arguments.h"
 #include "io/chuukei.h"
 #include "io/files-util.h"
 #include "io/inet.h"

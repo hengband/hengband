@@ -42,6 +42,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
+#include "game-option/runtime-arguments.h"
 #include "inventory/player-inventory.h"
 #include "io/chuukei.h"
 #include "io/files-util.h"

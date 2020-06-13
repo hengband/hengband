@@ -101,6 +101,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor-events.h"
 #include "floor/floor.h"
+#include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/chuukei.h"
 #include "io/files-util.h"
