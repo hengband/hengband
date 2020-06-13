@@ -1313,6 +1313,9 @@
     <ClCompile Include="..\..\src\monster-floor\monster-summon.c">
       <Filter>monster-floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game-option\input-options.c">
+      <Filter>game-option</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2881,6 +2884,9 @@
     <ClInclude Include="..\..\src\system\game-option-types.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\game-option\input-options.h">
+      <Filter>game-option</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3039,6 +3045,9 @@
     </Filter>
     <Filter Include="monster-floor">
       <UniqueIdentifier>{d266d557-ad7c-4751-a1b1-04ced61292a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game-option">
+      <UniqueIdentifier>{14acbc0e-8760-48c6-860f-4c9fd993feef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

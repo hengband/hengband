@@ -2,6 +2,7 @@
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-dirty-flags.h"
+#include "game-option/input-options.h"
 
 /*
  * Check if this line is expression or not.

@@ -2,6 +2,7 @@
 #include "art-definition/art-sword-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
+#include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"

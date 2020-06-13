@@ -38,6 +38,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
 #include "floor/wild.h"
+#include "game-option/input-options.h"
 #include "inventory/player-inventory.h"
 #include "io/chuukei.h"
 #include "io/files-util.h"

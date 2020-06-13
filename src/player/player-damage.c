@@ -6,6 +6,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "game-option/input-options.h"
 #include "inventory/inventory-damage.h"
 #include "io/files-util.h"
 #include "io/report.h"

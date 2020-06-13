@@ -158,6 +158,8 @@ hengband_SOURCES = \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	floor/wild.h floor/wild.c \
 	\
+	game-option/input-options.c game-option/input-options.h \
+	\
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	\
@@ -565,10 +567,10 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat \
-	-Icore -Idungeon -Ieffect -Ifloor -Igrid -Iinfo-reader -Iinventory -Iio \
-	-Iio-dump -Iknowledge -Imarket -Imelee -Imind -Imonster -Imonster-attack \
-	-Imonster-floor -Imonster-race -Ilore -Imspell -Imutation -Iobject \
-	-Iobject-enchant -Ipet -Iplayer -Iplayer-attack -Irealm -Iroom \
+	-Icore -Idungeon -Ieffect -Ifloor -Igame-option -Igrid -Iinfo-reader \
+	-Iinventory -Iio -Iio-dump -Iknowledge -Imarket -Imelee -Imind -Imonster \
+	-Imonster-attack -Imonster-floor -Imonster-race -Ilore -Imspell -Imutation \
+	-Iobject -Iobject-enchant -Ipet -Iplayer -Iplayer-attack -Irealm -Iroom \
 	-Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Isv-definition \
 	-Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 

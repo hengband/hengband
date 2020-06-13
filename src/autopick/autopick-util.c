@@ -1,5 +1,6 @@
 ﻿#include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
+#include "game-option/input-options.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/item-feeling.h"
 

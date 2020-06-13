@@ -18,6 +18,7 @@
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "game-option/input-options.h"
 #include "io/files-util.h"
 #include "io/input-key-processor.h"
 #include "io/signal-handlers.h"
