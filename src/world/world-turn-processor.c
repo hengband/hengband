@@ -11,8 +11,9 @@
 #include "io/write-diary.h"
 #include "market/arena.h"
 #include "market/bounty.h"
-#include "monster/monster-describer.h"
 #include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-summon.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation-processor.h"
 #include "object/lite-processor.h"
@@ -145,7 +146,7 @@ void process_world(player_type *player_ptr)
     }
 
     if (one_in_(d_info[player_ptr->dungeon_idx].max_m_alloc_chance) && !floor_ptr->inside_arena && !floor_ptr->inside_quest && !player_ptr->phase_out) {
-        (void)alloc_monster(player_ptr, MAX_SIGHT + 5, 0);
+        (void)alloc_monster(player_ptr, MAX_SIGHT + 5, 0, summon_specific);
     }
 
     if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out)

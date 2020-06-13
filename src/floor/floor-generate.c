@@ -32,6 +32,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
+#include "monster-floor/monster-summon.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
@@ -847,7 +848,7 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
 	/* Put some monsters in the dungeon */
 	for (i = i + k; i > 0; i--)
 	{
-		(void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP);
+		(void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP, summon_specific);
 	}
 
 	/* Place some traps in the dungeon */

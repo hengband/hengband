@@ -194,7 +194,7 @@ static void do_cmd_summon_horde(player_type *caster_ptr)
 		if (is_cave_empty_bold(caster_ptr, wy, wx)) break;
 	}
 
-	(void)alloc_horde(caster_ptr, wy, wx);
+	(void)alloc_horde(caster_ptr, wy, wx, summon_specific);
 }
 
 /*!

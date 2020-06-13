@@ -31,16 +31,17 @@
 #include "io/uid-checker.h"
 #include "io/write-diary.h"
 #include "mind/mind-mirror-master.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-remover.h"
+#include "monster-floor/monster-summon.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
-#include "monster-floor/monster-generator.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
-#include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
@@ -1274,7 +1275,7 @@ void change_floor(player_type *creature_ptr)
 			for (i = 0; i < alloc_times; i++)
 			{
 				/* Make a (group of) new monster */
-				(void)alloc_monster(creature_ptr, 0, 0);
+				(void)alloc_monster(creature_ptr, 0, 0, summon_specific);
 			}
 
 		}

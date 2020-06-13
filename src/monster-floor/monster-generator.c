@@ -8,7 +8,6 @@
 #include "monster-floor/monster-generator.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
-#include "monster-floor/monster-summon.h" // todo 相互依存してしまった、何とかする.
 #include "monster-floor/one-monster-placer.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
@@ -334,7 +333,7 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
  * @param x 生成地点x座標
  * @return 生成に成功したらtrue
  */
-bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x)
+bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specific_pf summon_specific)
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
@@ -377,7 +376,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x)
     POSITION cx = x;
     for (attempts = randint1(10) + 5; attempts; attempts--) {
         scatter(player_ptr, &cy, &cx, y, x, 5, 0);
-        (void)summon_specific(player_ptr, m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
+        (void)(*summon_specific)(player_ptr, m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
         y = cy;
         x = cx;
     }
@@ -436,7 +435,7 @@ bool alloc_guardian(player_type *player_ptr, bool def_val)
  * Use "slp" to choose the initial "sleep" status
  * Use "floor_ptr->monster_level" for the monster level
  */
-bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
+bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode, summon_specific_pf summon_specific)
 {
     if (alloc_guardian(player_ptr, FALSE))
         return TRUE;
@@ -469,7 +468,7 @@ bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
     }
 
     if (randint1(5000) <= floor_ptr->dun_level) {
-        if (alloc_horde(player_ptr, y, x)) {
+        if (alloc_horde(player_ptr, y, x, summon_specific)) {
             return TRUE;
         }
     } else {

@@ -2,7 +2,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "main/sound-definitions-table.h"
-#include "monster-floor/monster-generator.h" // todo 相互依存してしまった、何とかする.
+#include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-flags1.h"

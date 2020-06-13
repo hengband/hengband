@@ -23,6 +23,7 @@
 #include "main/init.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
+#include "monster-floor/monster-summon.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
 #include "monster/monster-info.h"
@@ -683,7 +684,7 @@ void wilderness_gen(player_type *creature_ptr)
 			mode |= PM_ALLOW_SLEEP;
 
 		/* Make a resident */
-		(void)alloc_monster(creature_ptr, generate_encounter ? 0 : 3, mode);
+		(void)alloc_monster(creature_ptr, generate_encounter ? 0 : 3, mode, summon_specific);
 	}
 
 	if(generate_encounter) creature_ptr->ambush_flag = TRUE;
