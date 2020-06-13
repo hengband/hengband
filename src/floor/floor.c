@@ -5,6 +5,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/floor-generate.h"
 #include "floor/floor-object.h"
+#include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"

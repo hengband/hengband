@@ -4,6 +4,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "core/show-file.h"
 #include "game-option/input-options.h"
+#include "game-option/map-screen-options.h"
 #include "io/files-util.h"
 #include "io/write-diary.h"
 #include "system/game-option-types.h"
@@ -15,25 +16,6 @@
 /*
  * Software options (set via the '=' command).
  */
-
-							/*** Map Screen Options ***/
-
-bool center_player;	/* Center map while walking (*slow*) */
-bool center_running;	/* Centering even while running */
-bool view_yellow_lite;	/* Use special colors for torch-lit grids */
-bool view_bright_lite;	/* Use special colors for 'viewable' grids */
-bool view_granite_lite;	/* Use special colors for wall grids (slow) */
-bool view_special_lite;	/* Use special colors for floor grids (slow) */
-bool view_perma_grids;	/* Map remembers all perma-lit grids */
-bool view_torch_grids;	/* Map remembers all torch-lit grids */
-bool view_unsafe_grids;	/* Map marked by detect traps */
-bool view_reduce_view;	/* Reduce view-radius in town */
-bool fresh_before;	/* Flush output while in repeated command */
-bool fresh_after;	/* Flush output after monster's move */
-bool fresh_message;	/* Flush output after every message */
-bool hilite_player;	/* Hilite the player with the cursor */
-bool display_path;	/* Display actual path before shooting */
-
 
 					/*** Text Display Options ***/
 

@@ -1316,6 +1316,9 @@
     <ClCompile Include="..\..\src\game-option\input-options.c">
       <Filter>game-option</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game-option\map-screen-options.c">
+      <Filter>game-option</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2885,6 +2888,9 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\game-option\input-options.h">
+      <Filter>game-option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game-option\map-screen-options.h">
       <Filter>game-option</Filter>
     </ClInclude>
   </ItemGroup>

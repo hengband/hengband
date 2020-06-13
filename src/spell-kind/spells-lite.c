@@ -2,6 +2,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
+#include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-describer.h"

@@ -15,6 +15,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
+#include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/parse-error-types.h"

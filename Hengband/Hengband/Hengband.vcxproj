@@ -173,6 +173,7 @@
     <ClCompile Include="..\..\src\core\visuals-reseter.c" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
     <ClCompile Include="..\..\src\game-option\input-options.c" />
+    <ClCompile Include="..\..\src\game-option\map-screen-options.c" />
     <ClCompile Include="..\..\src\info-reader\artifact-reader.c" />
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.c" />
     <ClCompile Include="..\..\src\info-reader\dungeon-reader.c" />
@@ -530,6 +531,7 @@
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
     <ClInclude Include="..\..\src\game-option\input-options.h" />
+    <ClInclude Include="..\..\src\game-option\map-screen-options.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-reader.h" />

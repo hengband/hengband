@@ -159,6 +159,7 @@ hengband_SOURCES = \
 	floor/wild.h floor/wild.c \
 	\
 	game-option/input-options.c game-option/input-options.h \
+	game-option/map-screen-options.c game-option/map-screen-options.h \
 	\
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
