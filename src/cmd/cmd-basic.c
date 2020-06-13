@@ -26,6 +26,7 @@
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
+#include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "grid/grid.h"

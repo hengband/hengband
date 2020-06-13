@@ -2,6 +2,7 @@
 #include "cmd/cmd-basic.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
+#include "game-option/disturbance-options.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"

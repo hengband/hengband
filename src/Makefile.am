@@ -158,6 +158,7 @@ hengband_SOURCES = \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	floor/wild.h floor/wild.c \
 	\
+	game-option/disturbance-options.c game-option/disturbance-options.h \
 	game-option/game-play-options.c game-option/game-play-options.h \
 	game-option/input-options.c game-option/input-options.h \
 	game-option/map-screen-options.c game-option/map-screen-options.h \

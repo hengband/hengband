@@ -6,6 +6,7 @@
 
 #include "monster/monster-update.h"
 #include "dungeon/dungeon.h"
+#include "game-option/disturbance-options.h"
 #include "mind/drs-types.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"

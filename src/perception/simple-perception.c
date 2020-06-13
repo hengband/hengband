@@ -6,6 +6,7 @@
 
 #include "perception/simple-perception.h"
 #include "autopick/autopick.h"
+#include "game-option/disturbance-options.h"
 #include "inventory/player-inventory.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-flavor.h"

@@ -6,6 +6,7 @@
 
 #include "monster-floor/monster-move.h"
 #include "effect/effect-characteristics.h"
+#include "game-option/disturbance-options.h"
 #include "io/files-util.h"
 #include "monster-race/race-indice-types.h"
 #include "core/speed-table.h"

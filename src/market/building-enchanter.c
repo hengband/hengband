@@ -1,11 +1,11 @@
-﻿#include "system/angband.h"
-#include "market/building-enchanter.h"
+﻿#include "market/building-enchanter.h"
+#include "game-option/disturbance-options.h"
+#include "inventory/player-inventory.h"
+#include "market/building-util.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
-#include "spell/spells-object.h"
-#include "market/building-util.h"
-#include "inventory/player-inventory.h"
 #include "player/player-effects.h"
+#include "spell/spells-object.h"
 
 /*!
  * @brief アイテムの強化を行う。 / Enchant item

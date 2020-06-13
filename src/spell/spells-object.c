@@ -10,6 +10,7 @@
 #include "cmd/cmd-basic.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
+#include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"

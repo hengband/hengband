@@ -13,6 +13,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
 #include "core/stuff-handler.h"
+#include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"

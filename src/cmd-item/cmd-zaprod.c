@@ -1,6 +1,7 @@
 ﻿#include "cmd-item/cmd-zaprod.h"
 #include "cmd/cmd-basic.h"
 #include "floor/floor.h"
+#include "game-option/disturbance-options.h"
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"

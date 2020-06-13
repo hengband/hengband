@@ -4,6 +4,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-save.h"
 #include "floor/wild.h"
+#include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "inventory/pack-overflow.h"
 #include "io/input-key-processor.h"
