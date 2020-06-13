@@ -13,7 +13,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
-#include "monster/monster-attack.h"
+#include "monster-attack/monster-attack-processor.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-object.h"

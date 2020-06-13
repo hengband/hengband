@@ -286,7 +286,6 @@ hengband_SOURCES = \
 	mind/racial-vampire.c mind/racial-vampire.h \
 	\
 	monster/horror-descriptions.c monster/horror-descriptions.h \
-	monster/monster-attack.c monster/monster-attack.h \
 	monster/monster-compaction.c monster/monster-compaction.h \
 	monster/monster-death.c monster/monster-death.h \
 	monster/monster-describer.c monster/monster-describer.h \
@@ -317,6 +316,7 @@ hengband_SOURCES = \
 	monster-attack/monster-attack-describer.c monster-attack/monster-attack-describer.h \
 	monster-attack/monster-attack-effect.h \
 	monster-attack/monster-attack-player.c monster-attack/monster-attack-player.h \
+	monster-attack/monster-attack-processor.c monster-attack/monster-attack-processor.h \
 	monster-attack/monster-attack-status.c monster-attack/monster-attack-status.h \
 	monster-attack/monster-attack-switcher.c monster-attack/monster-attack-switcher.h \
 	monster-attack/monster-attack-types.c monster-attack/monster-attack-types.h \

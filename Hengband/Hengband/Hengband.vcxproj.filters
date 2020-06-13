@@ -65,9 +65,6 @@
     <ClCompile Include="..\..\src\monster\monster-object.c">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-attack.c">
-      <Filter>monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-move.c">
       <Filter>monster</Filter>
     </ClCompile>
@@ -1307,6 +1304,9 @@
     <ClCompile Include="..\..\src\view\display-lore-attacks.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-processor.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1370,9 +1370,6 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-object.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster\monster-attack.h">
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-move.h">
@@ -2865,6 +2862,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-lore-attacks.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-processor.h">
+      <Filter>monster-attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

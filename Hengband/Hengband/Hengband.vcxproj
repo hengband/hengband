@@ -449,7 +449,7 @@
     <ClCompile Include="..\..\src\monster\monster-status.c" />
     <ClCompile Include="..\..\src\monster-race\monster-race-hook.c" />
     <ClCompile Include="..\..\src\monster-race\monster-race.c" />
-    <ClCompile Include="..\..\src\monster\monster-attack.c" />
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-processor.c" />
     <ClCompile Include="..\..\src\monster\monster-direction.c" />
     <ClCompile Include="..\..\src\monster\monster-move.c" />
     <ClCompile Include="..\..\src\monster\monster-object.c" />
@@ -957,7 +957,7 @@
     <ClInclude Include="..\..\src\store\store-owners.h" />
     <ClInclude Include="..\..\src\store\store-util.h" />
     <ClInclude Include="..\..\src\monster\monster-dist-offsets.h" />
-    <ClInclude Include="..\..\src\monster\monster-attack.h" />
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-processor.h" />
     <ClInclude Include="..\..\src\monster\monster-direction.h" />
     <ClInclude Include="..\..\src\monster\monster-move.h" />
     <ClInclude Include="..\..\src\monster\monster-object.h" />
