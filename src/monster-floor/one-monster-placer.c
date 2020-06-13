@@ -89,6 +89,41 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
 }
 
 /*!
+ * @brief ユニークが生成可能か評価する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param r_idx 生成モンスター種族
+ * @return ユニークの生成が不可能ならFALSE、それ以外はTRUE
+ */
+static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
+{
+    if (player_ptr->phase_out)
+        return TRUE;
+
+    monster_race *r_ptr = &r_info[r_idx];
+    if (((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL))) && (r_ptr->cur_num >= r_ptr->max_num)) {
+        return FALSE;
+    }
+
+    if ((r_ptr->flags7 & (RF7_UNIQUE2)) && (r_ptr->cur_num >= 1)) {
+        return FALSE;
+    }
+
+    if (r_idx == MON_BANORLUPART) {
+        if (r_info[MON_BANOR].cur_num > 0)
+            return FALSE;
+        if (r_info[MON_LUPART].cur_num > 0)
+            return FALSE;
+    }
+
+    if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level)
+        && (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR)))) {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+/*!
  * @brief モンスターを一体生成する / Attempt to place a monster of the given race at the given location.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param who 召喚を行ったモンスターID
@@ -102,7 +137,6 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    monster_type *m_ptr;
     monster_race *r_ptr = &r_info[r_idx];
     concptr name = (r_name + r_ptr->name);
 
@@ -122,26 +156,8 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
             return FALSE;
     }
 
-    if (!player_ptr->phase_out) {
-        if (((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL))) && (r_ptr->cur_num >= r_ptr->max_num)) {
-            return FALSE;
-        }
-
-        if ((r_ptr->flags7 & (RF7_UNIQUE2)) && (r_ptr->cur_num >= 1)) {
-            return FALSE;
-        }
-
-        if (r_idx == MON_BANORLUPART) {
-            if (r_info[MON_BANOR].cur_num > 0)
-                return FALSE;
-            if (r_info[MON_LUPART].cur_num > 0)
-                return FALSE;
-        }
-
-        if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (floor_ptr->dun_level < r_ptr->level) && (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR)))) {
-            return FALSE;
-        }
-    }
+    if (!check_unique_placeable(player_ptr, r_idx))
+        return FALSE;
 
     if (quest_number(player_ptr, floor_ptr->dun_level)) {
         int hoge = quest_number(player_ptr, floor_ptr->dun_level);
@@ -185,6 +201,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (!g_ptr->m_idx)
         return FALSE;
 
+    monster_type *m_ptr;
     m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     m_ptr->r_idx = r_idx;
     m_ptr->ap_r_idx = initial_r_appearance(player_ptr, r_idx, mode);
