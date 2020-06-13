@@ -1,7 +1,7 @@
 ﻿#include "inventory/inventory-curse.h"
 #include "art-definition/art-accessory-types.h"
 #include "io/files-util.h"
-#include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"

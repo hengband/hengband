@@ -12,6 +12,7 @@
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-move.h"
+#include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -395,7 +396,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (r_ptr->flags2 & RF2_MULTIPLY)
         floor_ptr->num_repro++;
 
-    warn_unique_generation();
+    warn_unique_generation(player_ptr, r_idx);
     if (!is_explosive_rune_grid(g_ptr))
         return TRUE;
 

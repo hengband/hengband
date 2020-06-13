@@ -320,6 +320,7 @@ hengband_SOURCES = \
 	monster-floor/monster-remover.c monster-floor/monster-remover.h \
 	monster-floor/monster-runaway.c monster-floor/monster-runaway.h \
 	monster-floor/monster-safety-hiding.c monster-floor/monster-safety-hiding.h \
+	monster-floor/monster-summon.c monster-floor/monster-summon.h \
 	monster-floor/monster-sweep-grid.c monster-floor/monster-sweep-grid.h \
 	monster-floor/one-monster-placer.c monster-floor/one-monster-placer.h \
 	monster-floor/place-monster-types.h \

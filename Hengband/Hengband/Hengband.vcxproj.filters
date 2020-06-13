@@ -1310,6 +1310,9 @@
     <ClCompile Include="..\..\src\monster-floor\one-monster-placer.c">
       <Filter>monster-floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-summon.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2870,6 +2873,9 @@
       <Filter>monster-floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-floor\one-monster-placer.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-summon.h">
       <Filter>monster-floor</Filter>
     </ClInclude>
   </ItemGroup>

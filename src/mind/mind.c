@@ -30,7 +30,7 @@
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-ninja.h"
 #include "mind/mind-warrior.h"
-#include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-summon.h"
 #include "monster/monster-status.h"
 #include "monster-floor/place-monster-types.h"
 #include "player/avatar.h"

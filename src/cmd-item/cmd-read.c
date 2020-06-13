@@ -14,7 +14,7 @@
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
 #include "main/sound-definitions-table.h"
-#include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"

@@ -8,7 +8,7 @@
 #include "monster-floor/monster-generator.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
-#include "main/sound-definitions-table.h"
+#include "monster-floor/monster-summon.h" // todo 相互依存してしまった、何とかする.
 #include "monster-floor/one-monster-placer.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
@@ -40,20 +40,6 @@ static MONSTER_IDX place_monster_idx = 0;
 static MONSTER_IDX place_monster_m_idx = 0;
 
 /*!
- * @var summon_specific_who
- * @brief 召喚を行ったプレイヤーあるいはモンスターのIDを示すグローバル変数 / Hack -- the index of the summoning monster
- * @todo summon_specific_who グローバル変数の除去と関数引数への代替を行う
- */
-int summon_specific_who = -1;
-
-/*!
- * @var summon_unique_okay
- * @brief 召喚対象にユニークを含めるかを示すグローバル変数 / summoning unique enable
- * @todo summon_unique_okay グローバル変数の除去と関数引数への代替を行う
- */
-bool summon_unique_okay = FALSE;
-
-/*!
  * @brief モンスター1体を目標地点に可能な限り近い位置に生成する / improved version of scatter() for place monster
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param r_idx 生成モンスター種族
@@ -65,7 +51,7 @@ bool summon_unique_okay = FALSE;
  * @return 成功したらtrue
  *
  */
-static bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
+bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
 {
     POSITION place_x[MON_SCAT_MAXD];
     POSITION place_y[MON_SCAT_MAXD];
@@ -118,114 +104,6 @@ static bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp
     *yp = place_y[i];
 
     return TRUE;
-}
-
-/*!
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
- * @brief モンスターが召喚の基本条件に合っているかをチェックする / Hack -- help decide if a monster race is "okay" to summon
- * @param r_idx チェックするモンスター種族ID
- * @return 召喚対象にできるならばTRUE
- */
-static bool summon_specific_okay(MONRACE_IDX r_idx)
-{
-    monster_race *r_ptr = &r_info[r_idx];
-    monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[summon_specific_who];
-    if (!mon_hook_dungeon(r_idx))
-        return FALSE;
-
-    if (summon_specific_who > 0) {
-        if (monster_has_hostile_align(p_ptr, m_ptr, 0, 0, r_ptr))
-            return FALSE;
-    } else if (summon_specific_who < 0) {
-        if (monster_has_hostile_align(p_ptr, NULL, 10, -10, r_ptr)) {
-            if (!one_in_(ABS(p_ptr->align) / 2 + 1))
-                return FALSE;
-        }
-    }
-
-    if (!summon_unique_okay && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
-        return FALSE;
-
-    if (!summon_specific_type)
-        return TRUE;
-
-    if ((summon_specific_who < 0) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(p_ptr, NULL, 10, -10, r_ptr))
-        return FALSE;
-
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON))
-        return TRUE;
-
-    return (check_summon_specific(p_ptr, m_ptr->r_idx, r_idx));
-}
-
-/*!
- * @brief モンスターを召喚により配置する / Place a monster (of the specified "type") near the given location. Return TRUE if a monster was actually summoned.
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param who 召喚主のモンスター情報ID
- * @param y1 目標地点y座標
- * @param x1 目標地点x座標
- * @param lev 相当生成階
- * @param type 召喚種別
- * @param mode 生成オプション
- * @return 召喚できたらtrueを返す
- */
-bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode)
-{
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->inside_arena)
-        return FALSE;
-
-    POSITION x, y;
-    if (!mon_scatter(player_ptr, 0, &y, &x, y1, x1, 2))
-        return FALSE;
-
-    summon_specific_who = who;
-    summon_specific_type = type;
-    summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
-    get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
-
-    MONRACE_IDX r_idx = get_mon_num(player_ptr, (floor_ptr->dun_level + lev) / 2 + 5, 0);
-    if (!r_idx) {
-        summon_specific_type = 0;
-        return FALSE;
-    }
-
-    if ((type == SUMMON_BLUE_HORROR) || (type == SUMMON_DAWN))
-        mode |= PM_NO_KAGE;
-
-    if (!place_monster_aux(player_ptr, who, y, x, r_idx, mode)) {
-        summon_specific_type = 0;
-        return FALSE;
-    }
-
-    summon_specific_type = 0;
-    sound(SOUND_SUMMON);
-    return TRUE;
-}
-
-/*!
- * @brief 特定モンスター種族を召喚により生成する / A "dangerous" function, creates a pet of the specified type
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param who 召喚主のモンスター情報ID
- * @param oy 目標地点y座標
- * @param ox 目標地点x座標
- * @param r_idx 生成するモンスター種族ID
- * @param mode 生成オプション
- * @return 召喚できたらtrueを返す
- */
-bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
-{
-    if (r_idx >= max_r_idx)
-        return FALSE;
-
-    POSITION x, y;
-    if (player_ptr->current_floor_ptr->inside_arena)
-        return FALSE;
-
-    if (!mon_scatter(player_ptr, r_idx, &y, &x, oy, ox, 2))
-        return FALSE;
-
-    return place_monster_aux(player_ptr, who, y, x, r_idx, (mode | PM_NO_KAGE));
 }
 
 /*!
