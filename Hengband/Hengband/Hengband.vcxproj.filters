@@ -1346,6 +1346,9 @@
     <ClCompile Include="..\..\src\game-option\runtime-arguments.c">
       <Filter>game-option</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game-option\option-flags.c">
+      <Filter>game-option</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2945,6 +2948,9 @@
       <Filter>game-option</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\game-option\runtime-arguments.h">
+      <Filter>game-option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game-option\option-flags.h">
       <Filter>game-option</Filter>
     </ClInclude>
   </ItemGroup>

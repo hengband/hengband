@@ -22,6 +22,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
+#include "game-option/option-flags.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
 #include "io/input-key-processor.h"

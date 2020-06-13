@@ -18,6 +18,7 @@
 #include "birth/quick-start.h"
 #include "floor/floor-town.h"
 #include "floor/wild.h"
+#include "game-option/option-flags.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "monster-floor/monster-remover.h"

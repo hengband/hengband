@@ -10,6 +10,7 @@
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
+#include "game-option/option-flags.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
@@ -20,15 +21,6 @@
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
-
-/*
- * Software options (set via the '=' command).
- */
-
-BIT_FLAGS option_flag[8]; //!< The array of normal options
-BIT_FLAGS option_mask[8]; //!< The array of normal options
-BIT_FLAGS window_flag[8]; //!< The array of window options
-BIT_FLAGS window_mask[8]; //!< The array of window options
 
 /*!
  * @brief オプションテーブル /
