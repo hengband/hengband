@@ -11,6 +11,7 @@
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "display-util.h"
+#include "game-option/text-display-options.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"

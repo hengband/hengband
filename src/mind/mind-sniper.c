@@ -10,6 +10,7 @@
 #include "cmd/cmd-basic.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "game-option/text-display-options.h"
 #include "main/sound-definitions-table.h"
 #include "mind/snipe-types.h"
 #include "monster-race/race-flags-resistance.h"

@@ -7,6 +7,7 @@
 #include "cmd-item/cmd-smith.h"
 #include "autopick/autopick.h"
 #include "cmd/cmd-basic.h"
+#include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"

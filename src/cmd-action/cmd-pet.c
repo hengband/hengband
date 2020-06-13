@@ -7,6 +7,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
 #include "game-option/input-options.h"
+#include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"

@@ -12,6 +12,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/input-options.h"
+#include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
 #include "io/write-diary.h"
 #include "locale/japanese.h"

@@ -10,23 +10,21 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "system/angband.h"
-#include "core/stuff-handler.h"
-#include "util/util.h"
-#include "main/sound-definitions-table.h"
-
-#include "monster-race/monster-race-hook.h"
-#include "player/player-status.h"
-#include "player/player-effects.h"
-#include "inventory/player-inventory.h"
-#include "spell/technic-info-table.h"
-#include "object/item-use-flags.h"
-
-#include "cmd/cmd-basic.h"
 #include "cmd-action/cmd-spell.h"
-#include "view/display-main-window.h"
-#include "spell/spells-util.h"
+#include "cmd/cmd-basic.h"
+#include "core/stuff-handler.h"
+#include "game-option/text-display-options.h"
+#include "inventory/player-inventory.h"
+#include "main/sound-definitions-table.h"
+#include "monster-race/monster-race-hook.h"
+#include "object/item-use-flags.h"
+#include "player/player-effects.h"
+#include "player/player-status.h"
 #include "spell/spells-execution.h"
+#include "spell/spells-util.h"
+#include "spell/technic-info-table.h"
+#include "util/util.h"
+#include "view/display-main-window.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 

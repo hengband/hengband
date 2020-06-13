@@ -22,6 +22,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "game-option/input-options.h"
+#include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/targeting.h"

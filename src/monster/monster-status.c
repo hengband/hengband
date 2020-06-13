@@ -7,6 +7,7 @@
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
+#include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "io/files-util.h"
 #include "io/report.h"

@@ -5,6 +5,7 @@
  */
 
 #include "view/display-lore.h"
+#include "game-option/text-display-options.h"
 #include "locale/english.h"
 #include "locale/japanese.h"
 #include "lore/lore-calculator.h"

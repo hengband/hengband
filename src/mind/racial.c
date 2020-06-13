@@ -19,6 +19,7 @@
 #include "melee/melee-postprocess.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
+#include "game-option/text-display-options.h"
 #include "io/targeting.h"
 #include "mind/racial-balrog.h"
 #include "mind/mind-cavalry.h"

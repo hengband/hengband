@@ -56,6 +56,7 @@
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "cmd/cmd-basic.h"
+#include "game-option/text-display-options.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "object/object-kind-hook.h"

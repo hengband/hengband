@@ -4,6 +4,7 @@
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
+#include "game-option/text-display-options.h"
 #include "io/write-diary.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
