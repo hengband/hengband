@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "player/player-personality.h"
 
 extern concptr race_explanations[MAX_RACES];

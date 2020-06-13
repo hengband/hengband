@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "autopick/autopick-util.h"
+#include "system/angband.h"
+
 void check_expression_line(text_body_type *tb, int y);
 bool insert_return_code(text_body_type *tb);
 bool insert_macro_line(text_body_type *tb);

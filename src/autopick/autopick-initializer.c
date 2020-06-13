@@ -1,7 +1,7 @@
-﻿#include "system/angband.h"
-#include "autopick/autopick-util.h"
+﻿#include "autopick/autopick-initializer.h"
 #include "autopick/autopick-entry.h"
-#include "autopick/autopick-initializer.h"
+#include "autopick/autopick-util.h"
+#include "system/angband.h"
 
 /*
  * Initialize the autopick
