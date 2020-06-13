@@ -17,32 +17,30 @@
 
 #define OPT_NUM 15
 
-typedef struct
-{
-	char key;
-	concptr name;
-	int row;
+typedef struct {
+    char key;
+    concptr name;
+    int row;
 } opts;
 
-static opts option_fields[OPT_NUM] =
-{
-	{ '1', _("    キー入力     オプション", "Input Options"), 3 },
-	{ '2', _("   マップ画面    オプション", "Map Screen Options"), 4 },
-	{ '3', _("  テキスト表示   オプション", "Text Display Options"), 5 },
-	{ '4', _("  ゲームプレイ   オプション", "Game-Play Options"), 6 },
-	{ '5', _("  行動中止関係   オプション", "Disturbance Options"), 7 },
-	{ '6', _("  簡易自動破壊   オプション", "Easy Auto-Destroyer Options"), 8 },
-	{ 'r', _("   プレイ記録    オプション", "Play record Options"), 9 },
+static opts option_fields[OPT_NUM] = {
+    { '1', _("    キー入力     オプション", "Input Options"), 3 },
+    { '2', _("   マップ画面    オプション", "Map Screen Options"), 4 },
+    { '3', _("  テキスト表示   オプション", "Text Display Options"), 5 },
+    { '4', _("  ゲームプレイ   オプション", "Game-Play Options"), 6 },
+    { '5', _("  行動中止関係   オプション", "Disturbance Options"), 7 },
+    { '6', _("  簡易自動破壊   オプション", "Easy Auto-Destroyer Options"), 8 },
+    { 'r', _("   プレイ記録    オプション", "Play record Options"), 9 },
 
-	{ 'p', _("自動拾いエディタ", "Auto-picker/destroyer editor"), 11 },
-	{ 'd', _(" 基本ウェイト量 ", "Base Delay Factor"), 12 },
-	{ 'h', _("低ヒットポイント", "Hitpoint Warning"), 13 },
-	{ 'm', _("  低魔力色閾値  ", "Mana Color Threshold"), 14 },
-	{ 'a', _("   自動セーブ    オプション", "Autosave Options"), 15 },
-	{ 'w', _("ウインドウフラグ", "Window Flags"), 16 },
+    { 'p', _("自動拾いエディタ", "Auto-picker/destroyer editor"), 11 },
+    { 'd', _(" 基本ウェイト量 ", "Base Delay Factor"), 12 },
+    { 'h', _("低ヒットポイント", "Hitpoint Warning"), 13 },
+    { 'm', _("  低魔力色閾値  ", "Mana Color Threshold"), 14 },
+    { 'a', _("   自動セーブ    オプション", "Autosave Options"), 15 },
+    { 'w', _("ウインドウフラグ", "Window Flags"), 16 },
 
-	{ 'b', _("      初期       オプション (参照のみ)", "Birth Options (Browse Only)"), 18 },
-	{ 'c', _("      詐欺       オプション", "Cheat Options"), 19 },
+    { 'b', _("      初期       オプション (参照のみ)", "Birth Options (Browse Only)"), 18 },
+    { 'c', _("      詐欺       オプション", "Cheat Options"), 19 },
 };
 
 /*!
@@ -52,19 +50,28 @@ static opts option_fields[OPT_NUM] =
  */
 static s16b toggle_frequency(s16b current)
 {
-	switch (current)
-	{
-	case 0: return 50;
-	case 50: return 100;
-	case 100: return 250;
-	case 250: return 500;
-	case 500: return 1000;
-	case 1000: return 2500;
-	case 2500: return 5000;
-	case 5000: return 10000;
-	case 10000: return 25000;
-	default: return 0;
-	}
+    switch (current) {
+    case 0:
+        return 50;
+    case 50:
+        return 100;
+    case 100:
+        return 250;
+    case 250:
+        return 500;
+    case 500:
+        return 1000;
+    case 1000:
+        return 2500;
+    case 2500:
+        return 5000;
+    case 5000:
+        return 10000;
+    case 10000:
+        return 25000;
+    default:
+        return 0;
+    }
 }
 
 /*!
@@ -74,94 +81,82 @@ static s16b toggle_frequency(s16b current)
  */
 static void do_cmd_options_autosave(concptr info)
 {
-	char ch;
-	int i, k = 0, n = 2;
-	char buf[80];
-	Term_clear();
-	while (TRUE)
-	{
-		sprintf(buf, _("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ",
-			"%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info);
-		prt(buf, 0, 0);
-		for (i = 0; i < n; i++)
-		{
-			byte a = TERM_WHITE;
-			if (i == k) a = TERM_L_BLUE;
+    char ch;
+    int i, k = 0, n = 2;
+    char buf[80];
+    Term_clear();
+    while (TRUE) {
+        sprintf(buf,
+            _("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info);
+        prt(buf, 0, 0);
+        for (i = 0; i < n; i++) {
+            byte a = TERM_WHITE;
+            if (i == k)
+                a = TERM_L_BLUE;
 
-			sprintf(buf, "%-48s: %s (%s)",
-				autosave_info[i].o_desc,
-				(*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
-				autosave_info[i].o_text);
-			c_prt(a, buf, i + 2, 0);
-		}
+            sprintf(
+                buf, "%-48s: %s (%s)", autosave_info[i].o_desc, (*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), autosave_info[i].o_text);
+            c_prt(a, buf, i + 2, 0);
+        }
 
-		prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
-		move_cursor(k + 2, 50);
-		ch = inkey();
-		switch (ch)
-		{
-		case ESCAPE:
-		{
-			return;
-		}
+        prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
+        move_cursor(k + 2, 50);
+        ch = inkey();
+        switch (ch) {
+        case ESCAPE: {
+            return;
+        }
 
-		case '-':
-		case '8':
-		{
-			k = (n + k - 1) % n;
-			break;
-		}
+        case '-':
+        case '8': {
+            k = (n + k - 1) % n;
+            break;
+        }
 
-		case ' ':
-		case '\n':
-		case '\r':
-		case '2':
-		{
-			k = (k + 1) % n;
-			break;
-		}
+        case ' ':
+        case '\n':
+        case '\r':
+        case '2': {
+            k = (k + 1) % n;
+            break;
+        }
 
-		case 'y':
-		case 'Y':
-		case '6':
-		{
+        case 'y':
+        case 'Y':
+        case '6': {
 
-			(*autosave_info[k].o_var) = TRUE;
-			k = (k + 1) % n;
-			break;
-		}
+            (*autosave_info[k].o_var) = TRUE;
+            k = (k + 1) % n;
+            break;
+        }
 
-		case 'n':
-		case 'N':
-		case '4':
-		{
-			(*autosave_info[k].o_var) = FALSE;
-			k = (k + 1) % n;
-			break;
-		}
+        case 'n':
+        case 'N':
+        case '4': {
+            (*autosave_info[k].o_var) = FALSE;
+            k = (k + 1) % n;
+            break;
+        }
 
-		case 'f':
-		case 'F':
-		{
-			autosave_freq = toggle_frequency(autosave_freq);
-			prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
-			break;
-		}
+        case 'f':
+        case 'F': {
+            autosave_freq = toggle_frequency(autosave_freq);
+            prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"), autosave_freq), 5, 0);
+            break;
+        }
 
-		case '?':
-		{
-			(void)show_file(p_ptr, TRUE, _("joption.txt#Autosave", "option.txt#Autosave"), NULL, 0, 0);
-			Term_clear();
-			break;
-		}
+        case '?': {
+            (void)show_file(p_ptr, TRUE, _("joption.txt#Autosave", "option.txt#Autosave"), NULL, 0, 0);
+            Term_clear();
+            break;
+        }
 
-		default:
-		{
-			bell();
-			break;
-		}
-		}
-	}
+        default: {
+            bell();
+            break;
+        }
+        }
+    }
 }
 
 /*!
@@ -171,119 +166,112 @@ static void do_cmd_options_autosave(concptr info)
  */
 static void do_cmd_options_win(void)
 {
-	int i, j, d;
-	TERM_LEN y = 0;
-	TERM_LEN x = 0;
-	char ch;
-	bool go = TRUE;
-	u32b old_flag[8];
+    int i, j, d;
+    TERM_LEN y = 0;
+    TERM_LEN x = 0;
+    char ch;
+    bool go = TRUE;
+    u32b old_flag[8];
 
-	for (j = 0; j < 8; j++)
-	{
-		old_flag[j] = window_flag[j];
-	}
+    for (j = 0; j < 8; j++) {
+        old_flag[j] = window_flag[j];
+    }
 
-	Term_clear();
-	while (go)
-	{
-		prt(_("ウィンドウ・フラグ (<方向>で移動, tでチェンジ, y/n でセット, ESC)", "Window Flags (<dir>, t, y, n, ESC) "), 0, 0);
-		for (j = 0; j < 8; j++)
-		{
-			byte a = TERM_WHITE;
-			concptr s = angband_term_name[j];
-			if (j == x) a = TERM_L_BLUE;
+    Term_clear();
+    while (go) {
+        prt(_("ウィンドウ・フラグ (<方向>で移動, tでチェンジ, y/n でセット, ESC)", "Window Flags (<dir>, t, y, n, ESC) "), 0, 0);
+        for (j = 0; j < 8; j++) {
+            byte a = TERM_WHITE;
+            concptr s = angband_term_name[j];
+            if (j == x)
+                a = TERM_L_BLUE;
 
-			Term_putstr(35 + j * 5 - strlen(s) / 2, 2 + j % 2, -1, a, s);
-		}
+            Term_putstr(35 + j * 5 - strlen(s) / 2, 2 + j % 2, -1, a, s);
+        }
 
-		for (i = 0; i < 16; i++)
-		{
-			byte a = TERM_WHITE;
-			concptr str = window_flag_desc[i];
-			if (i == y) a = TERM_L_BLUE;
+        for (i = 0; i < 16; i++) {
+            byte a = TERM_WHITE;
+            concptr str = window_flag_desc[i];
+            if (i == y)
+                a = TERM_L_BLUE;
 
-			if (!str) str = _("(未使用)", "(Unused option)");
+            if (!str)
+                str = _("(未使用)", "(Unused option)");
 
-			Term_putstr(0, i + 5, -1, a, str);
-			for (j = 0; j < 8; j++)
-			{
-				char c = '.';
-				a = TERM_WHITE;
-				if ((i == y) && (j == x)) a = TERM_L_BLUE;
+            Term_putstr(0, i + 5, -1, a, str);
+            for (j = 0; j < 8; j++) {
+                char c = '.';
+                a = TERM_WHITE;
+                if ((i == y) && (j == x))
+                    a = TERM_L_BLUE;
 
-				if (window_flag[j] & (1L << i)) c = 'X';
+                if (window_flag[j] & (1L << i))
+                    c = 'X';
 
-				Term_putch(35 + j * 5, i + 5, a, c);
-			}
-		}
+                Term_putch(35 + j * 5, i + 5, a, c);
+            }
+        }
 
-		Term_gotoxy(35 + x * 5, y + 5);
-		ch = inkey();
-		switch (ch)
-		{
-		case ESCAPE:
-		{
-			go = FALSE;
-			break;
-		}
-		case 'T':
-		case 't':
-		{
-			for (j = 0; j < 8; j++)
-			{
-				window_flag[j] &= ~(1L << y);
-			}
+        Term_gotoxy(35 + x * 5, y + 5);
+        ch = inkey();
+        switch (ch) {
+        case ESCAPE: {
+            go = FALSE;
+            break;
+        }
+        case 'T':
+        case 't': {
+            for (j = 0; j < 8; j++) {
+                window_flag[j] &= ~(1L << y);
+            }
 
-			for (i = 0; i < 16; i++)
-			{
-				window_flag[x] &= ~(1L << i);
-			}
-		}
-			/* Fall through */
-		case 'y':
-		case 'Y':
-		{
-			if (x == 0) break;
+            for (i = 0; i < 16; i++) {
+                window_flag[x] &= ~(1L << i);
+            }
+        }
+            /* Fall through */
+        case 'y':
+        case 'Y': {
+            if (x == 0)
+                break;
 
-			window_flag[x] |= (1L << y);
-			break;
-		}
-		case 'n':
-		case 'N':
-		{
-			window_flag[x] &= ~(1L << y);
-			break;
-		}
-		case '?':
-		{
-			(void)show_file(p_ptr, TRUE, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
-			Term_clear();
-			break;
-		}
-		default:
-		{
-			d = get_keymap_dir(ch);
-			x = (x + ddx[d] + 8) % 8;
-			y = (y + ddy[d] + 16) % 16;
-			if (!d) bell();
-		}
-		}
-	}
+            window_flag[x] |= (1L << y);
+            break;
+        }
+        case 'n':
+        case 'N': {
+            window_flag[x] &= ~(1L << y);
+            break;
+        }
+        case '?': {
+            (void)show_file(p_ptr, TRUE, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
+            Term_clear();
+            break;
+        }
+        default: {
+            d = get_keymap_dir(ch);
+            x = (x + ddx[d] + 8) % 8;
+            y = (y + ddy[d] + 16) % 16;
+            if (!d)
+                bell();
+        }
+        }
+    }
 
-	for (j = 0; j < 8; j++)
-	{
-		term *old = Term;
-		if (!angband_term[j]) continue;
+    for (j = 0; j < 8; j++) {
+        term *old = Term;
+        if (!angband_term[j])
+            continue;
 
-		if (window_flag[j] == old_flag[j]) continue;
+        if (window_flag[j] == old_flag[j])
+            continue;
 
-		Term_activate(angband_term[j]);
-		Term_clear();
-		Term_fresh();
-		Term_activate(old);
-	}
+        Term_activate(angband_term[j]);
+        Term_clear();
+        Term_fresh();
+        Term_activate(old);
+    }
 }
-
 
 /*!
  * @brief チートオプションを変更するコマンドのメインルーチン
@@ -293,96 +281,84 @@ static void do_cmd_options_win(void)
  */
 static void do_cmd_options_cheat(concptr info)
 {
-	char	ch;
-	int		i, k = 0, n = MAX_CHEAT_OPTIONS;
-	char	buf[80];
-	Term_clear();
-	while (TRUE)
-	{
-		DIRECTION dir;
-		sprintf(buf, _("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info);
-		prt(buf, 0, 0);
+    char ch;
+    int i, k = 0, n = MAX_CHEAT_OPTIONS;
+    char buf[80];
+    Term_clear();
+    while (TRUE) {
+        DIRECTION dir;
+        sprintf(buf, _("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info);
+        prt(buf, 0, 0);
 
 #ifdef JP
-		/* 詐欺オプションをうっかりいじってしまう人がいるようなので注意 */
-		prt("                                 <<  注意  >>", 11, 0);
-		prt("      詐欺オプションを一度でも設定すると、スコア記録が残らなくなります！", 12, 0);
-		prt("      後に解除してもダメですので、勝利者を目指す方はここのオプションはい", 13, 0);
-		prt("      じらないようにして下さい。", 14, 0);
+        /* 詐欺オプションをうっかりいじってしまう人がいるようなので注意 */
+        prt("                                 <<  注意  >>", 11, 0);
+        prt("      詐欺オプションを一度でも設定すると、スコア記録が残らなくなります！", 12, 0);
+        prt("      後に解除してもダメですので、勝利者を目指す方はここのオプションはい", 13, 0);
+        prt("      じらないようにして下さい。", 14, 0);
 #endif
-		for (i = 0; i < n; i++)
-		{
-			byte a = TERM_WHITE;
-			if (i == k) a = TERM_L_BLUE;
+        for (i = 0; i < n; i++) {
+            byte a = TERM_WHITE;
+            if (i == k)
+                a = TERM_L_BLUE;
 
-			sprintf(buf, "%-48s: %s (%s)",
-				cheat_info[i].o_desc,
-				(*cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
-				cheat_info[i].o_text);
-			c_prt(a, buf, i + 2, 0);
-		}
+            sprintf(buf, "%-48s: %s (%s)", cheat_info[i].o_desc, (*cheat_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")), cheat_info[i].o_text);
+            c_prt(a, buf, i + 2, 0);
+        }
 
-		move_cursor(k + 2, 50);
-		ch = inkey();
-		dir = get_keymap_dir(ch);
-		if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
-			ch = I2D(dir);
+        move_cursor(k + 2, 50);
+        ch = inkey();
+        dir = get_keymap_dir(ch);
+        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
+            ch = I2D(dir);
 
-		switch (ch)
-		{
-		case ESCAPE:
-		{
-			return;
-		}
-		case '-':
-		case '8':
-		{
-			k = (n + k - 1) % n;
-			break;
-		}
-		case ' ':
-		case '\n':
-		case '\r':
-		case '2':
-		{
-			k = (k + 1) % n;
-			break;
-		}
-		case 'y':
-		case 'Y':
-		case '6':
-		{
-			if (!current_world_ptr->noscore)
-				exe_write_diary(p_ptr, DIARY_DESCRIPTION, 0,
-					_("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
+        switch (ch) {
+        case ESCAPE: {
+            return;
+        }
+        case '-':
+        case '8': {
+            k = (n + k - 1) % n;
+            break;
+        }
+        case ' ':
+        case '\n':
+        case '\r':
+        case '2': {
+            k = (k + 1) % n;
+            break;
+        }
+        case 'y':
+        case 'Y':
+        case '6': {
+            if (!current_world_ptr->noscore)
+                exe_write_diary(
+                    p_ptr, DIARY_DESCRIPTION, 0, _("詐欺オプションをONにして、スコアを残せなくなった。", "gave up sending score to use cheating options."));
 
-			current_world_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
-			(*cheat_info[k].o_var) = TRUE;
-			k = (k + 1) % n;
-			break;
-		}
-		case 'n':
-		case 'N':
-		case '4':
-		{
-			(*cheat_info[k].o_var) = FALSE;
-			k = (k + 1) % n;
-			break;
-		}
-		case '?':
-		{
-			strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), cheat_info[k].o_text);
-			(void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
-			Term_clear();
-			break;
-		}
-		default:
-		{
-			bell();
-			break;
-		}
-		}
-	}
+            current_world_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
+            (*cheat_info[k].o_var) = TRUE;
+            k = (k + 1) % n;
+            break;
+        }
+        case 'n':
+        case 'N':
+        case '4': {
+            (*cheat_info[k].o_var) = FALSE;
+            k = (k + 1) % n;
+            break;
+        }
+        case '?': {
+            strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), cheat_info[k].o_text);
+            (void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
+            Term_clear();
+            break;
+        }
+        default: {
+            bell();
+            break;
+        }
+        }
+    }
 }
 
 /*!
@@ -391,26 +367,18 @@ static void do_cmd_options_cheat(concptr info)
  */
 void extract_option_vars(void)
 {
-	int i;
-
-	for (i = 0; option_info[i].o_desc; i++)
-	{
-		int os = option_info[i].o_set;
-		int ob = option_info[i].o_bit;
-		if (option_info[i].o_var)
-		{
-			if (option_flag[os] & (1L << ob))
-			{
-				(*option_info[i].o_var) = TRUE;
-			}
-			else
-			{
-				(*option_info[i].o_var) = FALSE;
-			}
-		}
-	}
+    for (int i = 0; option_info[i].o_desc; i++) {
+        int os = option_info[i].o_set;
+        int ob = option_info[i].o_bit;
+        if (option_info[i].o_var) {
+            if (option_flag[os] & (1L << ob)) {
+                (*option_info[i].o_var) = TRUE;
+            } else {
+                (*option_info[i].o_var) = FALSE;
+            }
+        }
+    }
 }
-
 
 /*!
  * @brief 標準オプションを変更するコマンドのメインルーチン /
@@ -424,222 +392,207 @@ void extract_option_vars(void)
  */
 void do_cmd_options(void)
 {
-	char k;
-	int d, skey;
-	TERM_LEN i, y = 0;
-	screen_save();
-	while (TRUE)
-	{
-		int n = OPT_NUM;
-		if (!current_world_ptr->noscore && !allow_debug_opts) n--;
+    char k;
+    int d, skey;
+    TERM_LEN i, y = 0;
+    screen_save();
+    while (TRUE) {
+        int n = OPT_NUM;
+        if (!current_world_ptr->noscore && !allow_debug_opts)
+            n--;
 
-		Term_clear();
-		prt(_("[ オプションの設定 ]", "Game options"), 1, 0);
-		while (TRUE)
-		{
-			for (i = 0; i < n; i++)
-			{
-				byte a = TERM_WHITE;
-				if (i == y) a = TERM_L_BLUE;
-				Term_putstr(5, option_fields[i].row, -1, a,
-					format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name));
-			}
+        Term_clear();
+        prt(_("[ オプションの設定 ]", "Game options"), 1, 0);
+        while (TRUE) {
+            for (i = 0; i < n; i++) {
+                byte a = TERM_WHITE;
+                if (i == y)
+                    a = TERM_L_BLUE;
+                Term_putstr(5, option_fields[i].row, -1, a, format("(%c) %s", toupper(option_fields[i].key), option_fields[i].name));
+            }
 
-			prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
-			skey = inkey_special(TRUE);
-			if (!(skey & SKEY_MASK)) k = (char)skey;
-			else k = 0;
+            prt(_("<方向>で移動, Enterで決定, ESCでキャンセル, ?でヘルプ: ", "Move to <dir>, Select to Enter, Cancel to ESC, ? to help: "), 21, 0);
+            skey = inkey_special(TRUE);
+            if (!(skey & SKEY_MASK))
+                k = (char)skey;
+            else
+                k = 0;
 
-			if (k == ESCAPE) break;
+            if (k == ESCAPE)
+                break;
 
-			if (my_strchr("\n\r ", k))
-			{
-				k = option_fields[y].key;
-				break;
-			}
+            if (my_strchr("\n\r ", k)) {
+                k = option_fields[y].key;
+                break;
+            }
 
-			for (i = 0; i < n; i++)
-			{
-				if (tolower(k) == option_fields[i].key) break;
-			}
+            for (i = 0; i < n; i++) {
+                if (tolower(k) == option_fields[i].key)
+                    break;
+            }
 
-			if (i < n) break;
+            if (i < n)
+                break;
 
-			if (k == '?') break;
+            if (k == '?')
+                break;
 
-			d = 0;
-			if (skey == SKEY_UP) d = 8;
-			if (skey == SKEY_DOWN) d = 2;
-			y = (y + ddy[d] + n) % n;
-			if (!d) bell();
-		}
+            d = 0;
+            if (skey == SKEY_UP)
+                d = 8;
+            if (skey == SKEY_DOWN)
+                d = 2;
+            y = (y + ddy[d] + n) % n;
+            if (!d)
+                bell();
+        }
 
-		if (k == ESCAPE) break;
+        if (k == ESCAPE)
+            break;
 
-		switch (k)
-		{
-		case '1':
-		{
-			do_cmd_options_aux(OPT_PAGE_INPUT, _("キー入力オプション", "Input Options"));
-			break;
-		}
-		case '2':
-		{
-			do_cmd_options_aux(OPT_PAGE_MAPSCREEN, _("マップ画面オプション", "Map Screen Options"));
-			break;
-		}
-		case '3':
-		{
-			do_cmd_options_aux(OPT_PAGE_TEXT, _("テキスト表示オプション", "Text Display Options"));
-			break;
-		}
-		case '4':
-		{
-			do_cmd_options_aux(OPT_PAGE_GAMEPLAY, _("ゲームプレイ・オプション", "Game-Play Options"));
-			break;
-		}
-		case '5':
-		{
-			do_cmd_options_aux(OPT_PAGE_DISTURBANCE, _("行動中止関係のオプション", "Disturbance Options"));
-			break;
-		}
-		case '6':
-		{
-			do_cmd_options_aux(OPT_PAGE_AUTODESTROY, _("簡易自動破壊オプション", "Easy Auto-Destroyer Options"));
-			break;
-		}
-		case 'R':
-		case 'r':
-		{
-			do_cmd_options_aux(OPT_PAGE_PLAYRECORD, _("プレイ記録オプション", "Play-record Options"));
-			break;
-		}
-		case 'B':
-		case 'b':
-		{
-			do_cmd_options_aux(OPT_PAGE_BIRTH, (!current_world_ptr->wizard || !allow_debug_opts) ?
-				_("初期オプション(参照のみ)", "Birth Options(browse only)") :
-				_("初期オプション((*)はスコアに影響)", "Birth Options((*)s effect score)"));
-			break;
-		}
-		case 'C':
-		{
-			if (!current_world_ptr->noscore && !allow_debug_opts)
-			{
-				bell();
-				break;
-			}
+        switch (k) {
+        case '1': {
+            do_cmd_options_aux(OPT_PAGE_INPUT, _("キー入力オプション", "Input Options"));
+            break;
+        }
+        case '2': {
+            do_cmd_options_aux(OPT_PAGE_MAPSCREEN, _("マップ画面オプション", "Map Screen Options"));
+            break;
+        }
+        case '3': {
+            do_cmd_options_aux(OPT_PAGE_TEXT, _("テキスト表示オプション", "Text Display Options"));
+            break;
+        }
+        case '4': {
+            do_cmd_options_aux(OPT_PAGE_GAMEPLAY, _("ゲームプレイ・オプション", "Game-Play Options"));
+            break;
+        }
+        case '5': {
+            do_cmd_options_aux(OPT_PAGE_DISTURBANCE, _("行動中止関係のオプション", "Disturbance Options"));
+            break;
+        }
+        case '6': {
+            do_cmd_options_aux(OPT_PAGE_AUTODESTROY, _("簡易自動破壊オプション", "Easy Auto-Destroyer Options"));
+            break;
+        }
+        case 'R':
+        case 'r': {
+            do_cmd_options_aux(OPT_PAGE_PLAYRECORD, _("プレイ記録オプション", "Play-record Options"));
+            break;
+        }
+        case 'B':
+        case 'b': {
+            do_cmd_options_aux(OPT_PAGE_BIRTH,
+                (!current_world_ptr->wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
+                                                                  : _("初期オプション((*)はスコアに影響)", "Birth Options((*)s effect score)"));
+            break;
+        }
+        case 'C': {
+            if (!current_world_ptr->noscore && !allow_debug_opts) {
+                bell();
+                break;
+            }
 
-			do_cmd_options_cheat(_("詐欺師は決して勝利できない！", "Cheaters never win"));
-			break;
-		}
-		case 'a':
-		case 'A':
-		{
-			do_cmd_options_autosave(_("自動セーブ", "Autosave"));
-			break;
-		}
-		case 'W':
-		case 'w':
-		{
-			do_cmd_options_win();
-			p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL |
-				PW_PLAYER | PW_MESSAGE | PW_OVERHEAD |
-				PW_MONSTER | PW_OBJECT | PW_SNAPSHOT |
-				PW_DUNGEON | PW_MONSTER_LIST);
-			break;
-		}
-		case 'P':
-		case 'p':
-		{
-			do_cmd_edit_autopick(p_ptr);
-			break;
-		}
-		case 'D':
-		case 'd':
-		{
-			clear_from(18);
-			prt(_("コマンド: 基本ウェイト量", "Command: Base Delay Factor"), 19, 0);
-			while (TRUE)
-			{
-				int msec = delay_factor * delay_factor * delay_factor;
-				prt(format(_("現在のウェイト: %d (%dミリ秒)", "Current base delay factor: %d (%d msec)"), delay_factor, msec), 22, 0);
-				prt(_("ウェイト (0-9) ESCで決定: ", "Delay Factor (0-9 or ESC to accept): "), 20, 0);
-				k = inkey();
-				if (k == ESCAPE) break;
-				else if (k == '?')
-				{
-					(void)show_file(p_ptr, TRUE, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), NULL, 0, 0);
-					Term_clear();
-				}
-				else if (isdigit(k)) delay_factor = D2I(k);
-				else bell();
-			}
+            do_cmd_options_cheat(_("詐欺師は決して勝利できない！", "Cheaters never win"));
+            break;
+        }
+        case 'a':
+        case 'A': {
+            do_cmd_options_autosave(_("自動セーブ", "Autosave"));
+            break;
+        }
+        case 'W':
+        case 'w': {
+            do_cmd_options_win();
+            p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MESSAGE | PW_OVERHEAD | PW_MONSTER | PW_OBJECT | PW_SNAPSHOT | PW_DUNGEON
+                | PW_MONSTER_LIST);
+            break;
+        }
+        case 'P':
+        case 'p': {
+            do_cmd_edit_autopick(p_ptr);
+            break;
+        }
+        case 'D':
+        case 'd': {
+            clear_from(18);
+            prt(_("コマンド: 基本ウェイト量", "Command: Base Delay Factor"), 19, 0);
+            while (TRUE) {
+                int msec = delay_factor * delay_factor * delay_factor;
+                prt(format(_("現在のウェイト: %d (%dミリ秒)", "Current base delay factor: %d (%d msec)"), delay_factor, msec), 22, 0);
+                prt(_("ウェイト (0-9) ESCで決定: ", "Delay Factor (0-9 or ESC to accept): "), 20, 0);
+                k = inkey();
+                if (k == ESCAPE)
+                    break;
+                else if (k == '?') {
+                    (void)show_file(p_ptr, TRUE, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), NULL, 0, 0);
+                    Term_clear();
+                } else if (isdigit(k))
+                    delay_factor = D2I(k);
+                else
+                    bell();
+            }
 
-			break;
-		}
-		case 'H':
-		case 'h':
-		{
-			clear_from(18);
-			prt(_("コマンド: 低ヒットポイント警告", "Command: Hitpoint Warning"), 19, 0);
-			while (TRUE)
-			{
-				prt(format(_("現在の低ヒットポイント警告: %d0%%", "Current hitpoint warning: %d0%%"), hitpoint_warn), 22, 0);
-				prt(_("低ヒットポイント警告 (0-9) ESCで決定: ", "Hitpoint Warning (0-9 or ESC to accept): "), 20, 0);
-				k = inkey();
-				if (k == ESCAPE) break;
-				else if (k == '?')
-				{
-					(void)show_file(p_ptr, TRUE, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), NULL, 0, 0);
-					Term_clear();
-				}
-				else if (isdigit(k)) hitpoint_warn = D2I(k);
-				else bell();
-			}
+            break;
+        }
+        case 'H':
+        case 'h': {
+            clear_from(18);
+            prt(_("コマンド: 低ヒットポイント警告", "Command: Hitpoint Warning"), 19, 0);
+            while (TRUE) {
+                prt(format(_("現在の低ヒットポイント警告: %d0%%", "Current hitpoint warning: %d0%%"), hitpoint_warn), 22, 0);
+                prt(_("低ヒットポイント警告 (0-9) ESCで決定: ", "Hitpoint Warning (0-9 or ESC to accept): "), 20, 0);
+                k = inkey();
+                if (k == ESCAPE)
+                    break;
+                else if (k == '?') {
+                    (void)show_file(p_ptr, TRUE, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), NULL, 0, 0);
+                    Term_clear();
+                } else if (isdigit(k))
+                    hitpoint_warn = D2I(k);
+                else
+                    bell();
+            }
 
-			break;
-		}
-		case 'M':
-		case 'm':
-		{
-			clear_from(18);
-			prt(_("コマンド: 低魔力色閾値", "Command: Mana Color Threshold"), 19, 0);
-			while (TRUE)
-			{
-				prt(format(_("現在の低魔力色閾値: %d0%%", "Current mana color threshold: %d0%%"), mana_warn), 22, 0);
-				prt(_("低魔力閾値 (0-9) ESCで決定: ", "Mana color Threshold (0-9 or ESC to accept): "), 20, 0);
-				k = inkey();
-				if (k == ESCAPE) break;
-				else if (k == '?')
-				{
-					(void)show_file(p_ptr, TRUE, _("joption.txt#Manapoint", "option.txt#Manapoint"), NULL, 0, 0);
-					Term_clear();
-				}
-				else if (isdigit(k)) mana_warn = D2I(k);
-				else bell();
-			}
+            break;
+        }
+        case 'M':
+        case 'm': {
+            clear_from(18);
+            prt(_("コマンド: 低魔力色閾値", "Command: Mana Color Threshold"), 19, 0);
+            while (TRUE) {
+                prt(format(_("現在の低魔力色閾値: %d0%%", "Current mana color threshold: %d0%%"), mana_warn), 22, 0);
+                prt(_("低魔力閾値 (0-9) ESCで決定: ", "Mana color Threshold (0-9 or ESC to accept): "), 20, 0);
+                k = inkey();
+                if (k == ESCAPE)
+                    break;
+                else if (k == '?') {
+                    (void)show_file(p_ptr, TRUE, _("joption.txt#Manapoint", "option.txt#Manapoint"), NULL, 0, 0);
+                    Term_clear();
+                } else if (isdigit(k))
+                    mana_warn = D2I(k);
+                else
+                    bell();
+            }
 
-			break;
-		}
-		case '?':
-			(void)show_file(p_ptr, TRUE, _("joption.txt", "option.txt"), NULL, 0, 0);
-			Term_clear();
-			break;
-		default:
-		{
-			bell();
-			break;
-		}
-		}
+            break;
+        }
+        case '?':
+            (void)show_file(p_ptr, TRUE, _("joption.txt", "option.txt"), NULL, 0, 0);
+            Term_clear();
+            break;
+        default: {
+            bell();
+            break;
+        }
+        }
 
-		msg_erase();
-	}
+        msg_erase();
+    }
 
-	screen_load();
-	p_ptr->redraw |= (PR_EQUIPPY);
+    screen_load();
+    p_ptr->redraw |= (PR_EQUIPPY);
 }
-
 
 /*!
  * @brief 標準オプションを変更するコマンドのサブルーチン /
@@ -650,109 +603,104 @@ void do_cmd_options(void)
  */
 void do_cmd_options_aux(int page, concptr info)
 {
-	char    ch;
-	int     i, k = 0, n = 0, l;
-	int     opt[24];
-	char    buf[80];
-	bool    browse_only = (page == OPT_PAGE_BIRTH) && current_world_ptr->character_generated &&
-		(!current_world_ptr->wizard || !allow_debug_opts);
+    char ch;
+    int i, k = 0, n = 0, l;
+    int opt[24];
+    char buf[80];
+    bool browse_only = (page == OPT_PAGE_BIRTH) && current_world_ptr->character_generated && (!current_world_ptr->wizard || !allow_debug_opts);
 
-	for (i = 0; i < 24; i++) opt[i] = 0;
+    for (i = 0; i < 24; i++)
+        opt[i] = 0;
 
-	for (i = 0; option_info[i].o_desc; i++)
-	{
-		if (option_info[i].o_page == page) opt[n++] = i;
-	}
+    for (i = 0; option_info[i].o_desc; i++) {
+        if (option_info[i].o_page == page)
+            opt[n++] = i;
+    }
 
-	Term_clear();
-	while (TRUE)
-	{
-		DIRECTION dir;
-		sprintf(buf, _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "),
-			info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept"));
-		prt(buf, 0, 0);
-		if (page == OPT_PAGE_AUTODESTROY)
-			c_prt(TERM_YELLOW, _("以下のオプションは、簡易自動破壊を使用するときのみ有効",
-				"Following options will protect items from easy auto-destroyer."), 6, _(6, 3));
+    Term_clear();
+    while (TRUE) {
+        DIRECTION dir;
+        sprintf(buf, _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "), info,
+            browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept"));
+        prt(buf, 0, 0);
+        if (page == OPT_PAGE_AUTODESTROY)
+            c_prt(TERM_YELLOW, _("以下のオプションは、簡易自動破壊を使用するときのみ有効", "Following options will protect items from easy auto-destroyer."), 6,
+                _(6, 3));
 
-		for (i = 0; i < n; i++)
-		{
-			byte a = TERM_WHITE;
-			if (i == k) a = TERM_L_BLUE;
+        for (i = 0; i < n; i++) {
+            byte a = TERM_WHITE;
+            if (i == k)
+                a = TERM_L_BLUE;
 
-			sprintf(buf, "%-48s: %s (%.19s)",
-				option_info[opt[i]].o_desc,
-				(*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
-				option_info[opt[i]].o_text);
-			if ((page == OPT_PAGE_AUTODESTROY) && i > 2) c_prt(a, buf, i + 5, 0);
-			else c_prt(a, buf, i + 2, 0);
-		}
+            sprintf(buf, "%-48s: %s (%.19s)", option_info[opt[i]].o_desc, (*option_info[opt[i]].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
+                option_info[opt[i]].o_text);
+            if ((page == OPT_PAGE_AUTODESTROY) && i > 2)
+                c_prt(a, buf, i + 5, 0);
+            else
+                c_prt(a, buf, i + 2, 0);
+        }
 
-		if ((page == OPT_PAGE_AUTODESTROY) && (k > 2)) l = 3;
-		else l = 0;
+        if ((page == OPT_PAGE_AUTODESTROY) && (k > 2))
+            l = 3;
+        else
+            l = 0;
 
-		move_cursor(k + 2 + l, 50);
-		ch = inkey();
-		dir = get_keymap_dir(ch);
-		if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
-			ch = I2D(dir);
+        move_cursor(k + 2 + l, 50);
+        ch = inkey();
+        dir = get_keymap_dir(ch);
+        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8))
+            ch = I2D(dir);
 
-		switch (ch)
-		{
-		case ESCAPE:
-		{
-			return;
-		}
-		case '-':
-		case '8':
-		{
-			k = (n + k - 1) % n;
-			break;
-		}
-		case ' ':
-		case '\n':
-		case '\r':
-		case '2':
-		{
-			k = (k + 1) % n;
-			break;
-		}
-		case 'y':
-		case 'Y':
-		case '6':
-		{
-			if (browse_only) break;
-			(*option_info[opt[k]].o_var) = TRUE;
-			k = (k + 1) % n;
-			break;
-		}
-		case 'n':
-		case 'N':
-		case '4':
-		{
-			if (browse_only) break;
-			(*option_info[opt[k]].o_var) = FALSE;
-			k = (k + 1) % n;
-			break;
-		}
-		case 't':
-		case 'T':
-		{
-			if (!browse_only) (*option_info[opt[k]].o_var) = !(*option_info[opt[k]].o_var);
-			break;
-		}
-		case '?':
-		{
-			strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), option_info[opt[k]].o_text);
-			(void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
-			Term_clear();
-			break;
-		}
-		default:
-		{
-			bell();
-			break;
-		}
-		}
-	}
+        switch (ch) {
+        case ESCAPE: {
+            return;
+        }
+        case '-':
+        case '8': {
+            k = (n + k - 1) % n;
+            break;
+        }
+        case ' ':
+        case '\n':
+        case '\r':
+        case '2': {
+            k = (k + 1) % n;
+            break;
+        }
+        case 'y':
+        case 'Y':
+        case '6': {
+            if (browse_only)
+                break;
+            (*option_info[opt[k]].o_var) = TRUE;
+            k = (k + 1) % n;
+            break;
+        }
+        case 'n':
+        case 'N':
+        case '4': {
+            if (browse_only)
+                break;
+            (*option_info[opt[k]].o_var) = FALSE;
+            k = (k + 1) % n;
+            break;
+        }
+        case 't':
+        case 'T': {
+            if (!browse_only)
+                (*option_info[opt[k]].o_var) = !(*option_info[opt[k]].o_var);
+            break;
+        }
+        case '?': {
+            strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), option_info[opt[k]].o_text);
+            (void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
+            Term_clear();
+            break;
+        }
+        default: {
+            bell();
+            break;
+        }
+        }
+    }
 }
