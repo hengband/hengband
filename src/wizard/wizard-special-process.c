@@ -76,7 +76,7 @@
 #include "spell/spells3.h"
 #include "system/angband-version.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
+#include "util/angband-files.h"
 #include "view/display-main-window.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"

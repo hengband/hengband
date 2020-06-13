@@ -223,24 +223,6 @@ extern int usleep(huge usecs);
 extern const char hexsym[16];
 
 // todo ファイル処理関数・メッセージ処理関数・画面描画関数で最低限分割する.
-extern errr path_parse(char *buf, int max, concptr file);
-extern errr path_build(char *buf, int max, concptr path, concptr file);
-extern FILE *angband_fopen(concptr file, concptr mode);
-extern FILE *angband_fopen_temp(char *buf, int max);
-extern errr angband_fgets(FILE *fff, char *buf, huge n);
-extern errr angband_fputs(FILE *fff, concptr buf, huge n);
-extern errr angband_fclose(FILE *fff);
-extern errr fd_kill(concptr file);
-extern errr fd_move(concptr file, concptr what);
-extern errr fd_copy(concptr file, concptr what);
-extern int fd_make(concptr file, BIT_FLAGS mode);
-extern int fd_open(concptr file, int flags);
-extern errr fd_lock(int fd, int what);
-extern errr fd_seek(int fd, huge n);
-extern errr fd_chop(int fd, huge n);
-extern errr fd_read(int fd, char *buf, huge n);
-extern errr fd_write(int fd, concptr buf, huge n);
-extern errr fd_close(int fd);
 extern void flush(void);
 extern void bell(void);
 extern errr play_music(int type, int num);

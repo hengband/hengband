@@ -1,5 +1,4 @@
 ﻿/*
- * @file cmd-dump.c
  * @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
  * @date 2020/03/01
  * @author Mogami & Hourier
@@ -14,16 +13,16 @@
  *     Add a footer, and close the file.
  */
 
-#include "system/angband.h"
-#include "io-dump/dump-remover.h"
 #include "io/read-pref-file.h"
-#include "io/interpret-pref-file.h"
 #include "autopick/autopick-pref-processor.h"
-#include "io/files-util.h"
-#include "io/pref-file-expressor.h"
-#include "world/world.h"
-#include "system/system-variables.h"
 #include "autopick/autopick-reader-writer.h"
+#include "io-dump/dump-remover.h"
+#include "io/files-util.h"
+#include "io/interpret-pref-file.h"
+#include "io/pref-file-expressor.h"
+#include "system/system-variables.h"
+#include "util/angband-files.h"
+#include "world/world.h"
 
 // todo コールバック関数に変更するので、いずれ消す.
 #define PREF_TYPE_NORMAL   0

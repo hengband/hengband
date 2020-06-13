@@ -18,6 +18,7 @@
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"
+#include "util/angband-files.h"
 
 static concptr inven_res_label = _(
 	"                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",

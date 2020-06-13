@@ -17,6 +17,7 @@
 #include "player/player-personality.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"
+#include "util/angband-files.h"
 #include "world/world.h"
 
 #ifdef WORLD_SCORE

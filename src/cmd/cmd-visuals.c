@@ -12,6 +12,7 @@
 #include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 
 /*!

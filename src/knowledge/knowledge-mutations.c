@@ -4,11 +4,11 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
+#include "core/show-file.h"
 #include "knowledge/knowledge-mutations.h"
 #include "io-dump/dump-util.h"
-#include "core/show-file.h"
 #include "io/mutations-dump.h"
+#include "util/angband-files.h"
 
 /*!
  * @brief 突然変異表示コマンドの実装 / List mutations we have...

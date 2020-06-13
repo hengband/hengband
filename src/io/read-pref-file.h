@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 extern char auto_dump_header[];
 extern char auto_dump_footer[];
 

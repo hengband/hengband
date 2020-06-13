@@ -15,6 +15,7 @@
 #include "io-dump/character-dump.h"
 #include "io/uid-checker.h"
 #include "monster-race/race-flags1.h"
+#include "util/angband-files.h"
 
 concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
 concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms

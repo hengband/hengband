@@ -10,6 +10,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-kind-hook.h"
 #include "system/system-variables.h"
+#include "util/angband-files.h"
 
 /*!
  * @brief パース関数に基づいてデータファイルからデータを読み取る /

@@ -65,7 +65,7 @@
 #include "system/angband-version.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
-#include "util/util.h"
+#include "util/angband-files.h"
 #include "view/display-main-window.h"
 #include "view/display-player.h"
 #include "world/world.h"

@@ -12,6 +12,7 @@
 #include "io/files-util.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
 
 // Encode the screen colors
 static char hack[17] = "dwsorgbuDWvyRGBU";

@@ -1352,6 +1352,9 @@
     <ClCompile Include="..\..\src\game-option\option-types-table.c">
       <Filter>game-option</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\angband-files.c">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2958,6 +2961,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\game-option\option-types-table.h">
       <Filter>game-option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\angband-files.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

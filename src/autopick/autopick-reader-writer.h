@@ -1,5 +1,6 @@
 #pragma once
 
+#include "system/angband.h"
 #include "autopick/autopick-util.h"
 
 void autopick_load_pref(player_type *player_ptr, bool disp_mes);

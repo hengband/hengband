@@ -46,6 +46,7 @@
 #include "system/angband-version.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "world/world.h"
 

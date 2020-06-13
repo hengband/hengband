@@ -53,7 +53,7 @@
 #include "player/player-personalities-table.h"
 #include "spell-kind/spells-floor.h"
 #include "system/system-variables.h"
-#include "util/util.h"
+#include "util/angband-files.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

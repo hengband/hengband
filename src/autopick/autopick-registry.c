@@ -15,7 +15,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object-enchant/special-object-flags.h"
-#include "util/util.h"
+#include "util/angband-files.h"
 
 static const char autoregister_header[] = "?:$AUTOREGISTER";
 

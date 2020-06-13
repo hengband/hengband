@@ -6,17 +6,15 @@
     2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "system/angband.h"
-
-#include "io/signal-handlers.h"
-#include "io/files-util.h"
-#include "util/util.h"
-#include "term/gameterm.h"
+#include "io/chuukei.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-draw.h"
+#include "io/files-util.h"
 #include "io/inet.h"
+#include "io/signal-handlers.h"
 #include "locale/japanese.h"
-#include "io/chuukei.h"
+#include "term/gameterm.h"
+#include "util/angband-files.h"
 
 #include <stdio.h>
 #include <stdarg.h>

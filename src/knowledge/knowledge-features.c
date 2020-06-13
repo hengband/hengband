@@ -11,6 +11,7 @@
 #include "io-dump/dump-util.h"
 #include "knowledge/lighting-level-table.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
 #include "world/world.h"
 

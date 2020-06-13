@@ -12,6 +12,7 @@
 #include "io/files-util.h"
 #include "market/arena-info-table.h"
 #include "system/system-variables.h"
+#include "util/angband-files.h"
 #include "world/world.h"
 
 // todo *抹殺* したい…

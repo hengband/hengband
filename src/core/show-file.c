@@ -3,6 +3,7 @@
 #include "system/angband-version.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
 
 /*!
  * todo 表示とそれ以外を分割する

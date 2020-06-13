@@ -1,10 +1,12 @@
-﻿/* File: inet.c */
+﻿/*
+ * @brief ネットワーク機能処理
+ * @date 2002/01/12
+ * @author mogami
+ */
 
-#include "system/angband.h"
-#include "util/util.h"
-#include "io/files-util.h"
 #include "io/inet.h"
-
+#include "io/files-util.h"
+#include "util/angband-files.h"
 
 #ifdef WORLD_SCORE
 

@@ -1,9 +1,10 @@
 ﻿#include "player/process-name.h"
 #include "autopick/autopick-reader-writer.h"
-#include "player/player-personality.h"
 #include "io/files-util.h"
-#include "world/world.h"
+#include "player/player-personality.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
+#include "world/world.h"
 
 /*!
  * @brief プレイヤーの名前をチェックして修正する
