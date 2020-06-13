@@ -92,7 +92,7 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
  * @brief ユニークが生成可能か評価する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param r_idx 生成モンスター種族
- * @return ユニークの生成が不可能ならFALSE、それ以外はTRUE
+ * @return ユニークの生成が不可能な条件ならFALSE、それ以外はTRUE
  */
 static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 {
@@ -127,7 +127,7 @@ static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
  * @brief クエスト内に生成可能か評価する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param r_idx 生成モンスター種族
- * @return 生成が不可能ならFALSE、それ以外はTRUE
+ * @return 生成が可能ならTRUE、不可能ならFALSE
  */
 static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 {
@@ -151,6 +151,34 @@ static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
     if (number_mon + quest[hoge].cur_num >= quest[hoge].max_num)
         return FALSE;
 
+    return TRUE;
+}
+
+/*!
+ * @brief 守りのルーン上にモンスターの配置を試みる
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param r_idx 生成モンスター種族
+ * @param y 生成位置y座標
+ * @param x 生成位置x座標
+ * @return 生成が可能ならTRUE、不可能ならFALSE
+ */
+static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, POSITION y, POSITION x)
+{
+    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    if (!is_glyph_grid(g_ptr))
+        return TRUE;
+
+    monster_race *r_ptr = &r_info[r_idx];
+    if (randint1(BREAK_GLYPH) >= (r_ptr->level + 20))
+        return FALSE;
+
+    if (g_ptr->info & CAVE_MARK)
+        msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
+
+    g_ptr->info &= ~(CAVE_MARK);
+    g_ptr->info &= ~(CAVE_OBJECT);
+    g_ptr->mimic = 0;
+    note_spot(player_ptr, y, x);
     return TRUE;
 }
 
@@ -193,20 +221,8 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (!check_quest_placeable(player_ptr, r_idx))
         return FALSE;
 
-    if (is_glyph_grid(g_ptr)) {
-        if (randint1(BREAK_GLYPH) < (r_ptr->level + 20)) {
-            if (g_ptr->info & CAVE_MARK) {
-                msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
-            }
-
-            g_ptr->info &= ~(CAVE_MARK);
-            g_ptr->info &= ~(CAVE_OBJECT);
-            g_ptr->mimic = 0;
-
-            note_spot(player_ptr, y, x);
-        } else
-            return FALSE;
-    }
+    if (!check_procection_rune(player_ptr, r_idx, y, x))
+        return FALSE;
 
     msg_format_wizard(CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
     if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10))
