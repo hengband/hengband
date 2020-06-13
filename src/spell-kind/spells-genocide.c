@@ -57,7 +57,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
     }
 
     if (resist && player_cast) {
-        bool see_m = is_seen(m_ptr);
+        bool see_m = is_seen(caster_ptr, m_ptr);
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(caster_ptr, m_name, m_ptr, 0);
         if (see_m) {

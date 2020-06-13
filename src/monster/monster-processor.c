@@ -103,7 +103,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	turn_flags tmp_flags;
 	turn_flags *turn_flags_ptr = init_turn_flags(target_ptr->riding, m_idx, &tmp_flags);
-	turn_flags_ptr->see_m = is_seen(m_ptr);
+	turn_flags_ptr->see_m = is_seen(target_ptr, m_ptr);
 
 	decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
 	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !monster_csleep_remaining(m_ptr))

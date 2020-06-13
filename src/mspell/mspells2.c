@@ -14,6 +14,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "monster-race/race-flags-ability1.h"
@@ -291,7 +292,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	bool see_m = is_seen(m_ptr);
+	bool see_m = is_seen(target_ptr, m_ptr);
 	bool maneable = player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx);
 	bool pet = is_pet(m_ptr);
 

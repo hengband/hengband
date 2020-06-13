@@ -238,7 +238,7 @@ HIT_POINT spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 {
     HIT_POINT dam;
     bool known = monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx);
-    bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
+    bool see_either = see_monster(target_ptr, m_idx) || see_monster(target_ptr, t_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     GAME_TEXT t_name[MAX_NLEN];

@@ -585,7 +585,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
     } else {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
         monster_desc(creature_ptr, m_name, m_ptr, 0);
-        see_m = is_seen(m_ptr);
+        see_m = is_seen(creature_ptr, m_ptr);
     }
 
     if (is_teleport_level_ineffective(creature_ptr, m_idx)) {

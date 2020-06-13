@@ -9,10 +9,10 @@
 * @param m_idx モンスターID
 * @return プレイヤーがモンスターを見ることができるならTRUE、そうでなければFALSEを返す。
 */
-bool see_monster(floor_type* floor_ptr, MONSTER_IDX m_idx)
+bool see_monster(player_type* player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type* m_ptr = &floor_ptr->m_list[m_idx];
-    return is_seen(m_ptr);
+    monster_type* m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    return is_seen(player_ptr, m_ptr);
 }
 
 /*!
@@ -45,7 +45,7 @@ void monspell_message_base(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_I
 {
     floor_type* floor_ptr = target_ptr->current_floor_ptr;
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
-    bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
+    bool see_either = see_monster(target_ptr, m_idx) || see_monster(target_ptr, t_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];

@@ -487,7 +487,7 @@ static void preserve_pet(player_type *master_ptr)
 		{
 			/* Its parent have gone, it also goes away. */
 
-			if (is_seen(m_ptr))
+			if (is_seen(master_ptr, m_ptr))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(master_ptr, m_name, m_ptr, 0);

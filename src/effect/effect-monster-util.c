@@ -60,7 +60,7 @@ effect_monster_type *initialize_effect_monster(player_type *caster_ptr, effect_m
 	em_ptr->m_caster_ptr = (em_ptr->who > 0) ? &floor_ptr->m_list[em_ptr->who] : NULL;
 	em_ptr->r_ptr = &r_info[em_ptr->m_ptr->r_idx];
 	em_ptr->seen = em_ptr->m_ptr->ml;
-	em_ptr->seen_msg = is_seen(em_ptr->m_ptr);
+        em_ptr->seen_msg = is_seen(caster_ptr, em_ptr->m_ptr);
 	em_ptr->slept = (bool)monster_csleep_remaining(em_ptr->m_ptr);
 	em_ptr->obvious = FALSE;
 	em_ptr->known = ((em_ptr->m_ptr->cdis <= MAX_SIGHT) || caster_ptr->phase_out);

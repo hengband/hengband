@@ -40,8 +40,8 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
     bool saving_throw, int TARGET_TYPE)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    bool see_either = see_monster(floor_ptr, m_idx) || see_monster(floor_ptr, t_idx);
-    bool see_t = see_monster(floor_ptr, t_idx);
+    bool see_either = see_monster(target_ptr, m_idx) || see_monster(target_ptr, t_idx);
+    bool see_t = see_monster(target_ptr, t_idx);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
@@ -149,7 +149,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         disturb(target_ptr, TRUE, TRUE);
-    } else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr->current_floor_ptr, m_idx)) {
+    } else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr, m_idx)) {
         /* Basic message */
         msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
     }
@@ -174,8 +174,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
  */
 HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!target_ptr->blind && m_ptr->ml);
     HIT_POINT dam;
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -188,7 +187,7 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
             msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
         else
             msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
-    } else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(floor_ptr, m_idx)) {
+    } else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr, m_idx)) {
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
@@ -209,8 +208,7 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
  */
 HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!target_ptr->blind && m_ptr->ml);
     HIT_POINT dam;
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -223,7 +221,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
             msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
         else
             msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
-    } else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(floor_ptr, m_idx)) {
+    } else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr, m_idx)) {
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
@@ -431,9 +429,8 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
  */
 void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    bool see_m = see_monster(floor_ptr, m_idx);
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    bool see_m = see_monster(target_ptr, m_idx);
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
     char m_poss[10];
@@ -553,7 +550,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 
     (void)set_monster_monfear(target_ptr, m_idx, 0);
 
-    if (see_monster(floor_ptr, m_idx))
+    if (see_monster(target_ptr, m_idx))
         msg_format(_("%^sは勇気を取り戻した。", format("%%^s recovers %s courage.", m_poss)), m_name);
 }
 

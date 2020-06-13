@@ -219,14 +219,14 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             }
 
             monster_desc(caster_ptr, m_name, m_ptr, 0);
-            if (!ignore_unview || is_seen(m_ptr))
+            if (!ignore_unview || is_seen(caster_ptr, m_ptr))
                 msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
 
             damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
             (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
             m_ptr->hp -= damage;
             if (m_ptr->hp < 0) {
-                if (!ignore_unview || is_seen(m_ptr))
+                if (!ignore_unview || is_seen(caster_ptr, m_ptr))
                     msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name);
 
                 if (g_ptr->m_idx) {

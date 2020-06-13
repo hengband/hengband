@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/monster-type-definition.h"
 
 typedef struct player_type player_type;
 
@@ -58,30 +59,4 @@ struct coord
 	POSITION x;
 };
 
-/*
- * Is the monster seen by the player?
- */
-#define is_seen(A) \
-	((bool)((A)->ml && (!ignore_unview || p_ptr->phase_out || \
-	 (player_can_see_bold(p_ptr, (A)->fy, (A)->fx) && projectable(p_ptr, p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
-
-/*
- * todo is_seen() の関数マクロをバラそうとしたがインクルード関係のコンパイルエラーで失敗
- * Is the monster seen by the player?
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param m_ptr 個々のモンスターへの参照ポインタ
- * @return 個々のモンスターがプレーヤーが見えたらTRUE
- */
-
-/*
-extern bool is_seen(player_type *creature_ptr, monster_type *m_ptr);
-bool is_seen(player_type *creature_ptr, monster_type *m_ptr)
-{
-	bool is_inside_view = !ignore_unview;
-	is_inside_view |= creature_ptr->phase_out;
-	is_inside_view |= player_can_see_bold(creature_ptr, m_ptr->fy, m_ptr->fx) &&
-		projectable(creature_ptr, creature_ptr->y, creature_ptr->x, m_ptr->fy, m_ptr->fx);
-	return m_ptr->ml && is_inside_view;
-}
-
-*/
+bool is_seen(player_type *creature_ptr, monster_type *m_ptr);

@@ -108,7 +108,7 @@ HIT_POINT mon_damage_mod(player_type *target_ptr, monster_type *m_ptr, HIT_POINT
 	{
 		if (is_psy_spear)
 		{
-			if (!target_ptr->blind && is_seen(m_ptr))
+			if (!target_ptr->blind && is_seen(target_ptr, m_ptr))
 			{
 				msg_print(_("バリアを切り裂いた！", "The barrier is penetrated!"));
 			}
@@ -698,7 +698,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		/* Reduce by one, note if expires */
 		if (set_monster_fast(target_ptr, m_idx, monster_fast_remaining(m_ptr) - 1))
 		{
-			if (is_seen(m_ptr))
+			if (is_seen(target_ptr, m_ptr))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(target_ptr, m_name, m_ptr, 0);
@@ -712,7 +712,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		/* Reduce by one, note if expires */
 		if (set_monster_slow(target_ptr, m_idx, monster_slow_remaining(m_ptr) - 1))
 		{
-			if (is_seen(m_ptr))
+			if (is_seen(target_ptr, m_ptr))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(target_ptr, m_name, m_ptr, 0);
@@ -730,7 +730,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		if (set_monster_stunned(target_ptr, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (monster_stunned_remaining(m_ptr) - 1)))
 		{
 			/* Message if visible */
-			if (is_seen(m_ptr))
+			if (is_seen(target_ptr, m_ptr))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(target_ptr, m_name, m_ptr, 0);
@@ -747,7 +747,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		if (!set_monster_confused(target_ptr, m_idx, monster_confused_remaining(m_ptr) - randint1(r_info[m_ptr->r_idx].level / 20 + 1)))
 			break;
 		/* Message if visible */
-		if (is_seen(m_ptr))
+		if (is_seen(target_ptr, m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(target_ptr, m_name, m_ptr, 0);
@@ -764,7 +764,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 			break;
 
 		/* Visual note */
-		if (is_seen(m_ptr))
+		if (is_seen(target_ptr, m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 #ifdef JP
@@ -791,7 +791,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		if (!set_monster_invulner(target_ptr, m_idx, monster_invulner_remaining(m_ptr) - 1, TRUE))
 			break;
 
-		if (is_seen(m_ptr))
+		if (is_seen(target_ptr, m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(target_ptr, m_name, m_ptr, 0);

@@ -88,14 +88,13 @@ void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         disturb(target_ptr, TRUE, TRUE);
 
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     if (!is_quantum_effect && teleport_barrier(target_ptr, m_idx)) {
-        if (see_monster(floor_ptr, m_idx))
+        if (see_monster(target_ptr, m_idx))
             msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。", "Magic barrier obstructs teleporting of %^s."), m_name);
         return;
     }
 
-    if (see_monster(floor_ptr, m_idx))
+    if (see_monster(target_ptr, m_idx))
         msg_format(_("%^sが瞬時に消えた。", "%^s blinks away."), m_name);
 
     teleport_away(target_ptr, m_idx, 10, TELEPORT_SPONTANEOUS);
@@ -115,16 +114,15 @@ void spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
 
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         disturb(target_ptr, TRUE, TRUE);
     if (teleport_barrier(target_ptr, m_idx)) {
-        if (see_monster(floor_ptr, m_idx))
+        if (see_monster(target_ptr, m_idx))
             msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。", "Magic barrier obstructs teleporting of %^s."), m_name);
         return;
     }
 
-    if (see_monster(floor_ptr, m_idx))
+    if (see_monster(target_ptr, m_idx))
         msg_format(_("%^sがテレポートした。", "%^s teleports away."), m_name);
 
     teleport_away_followable(target_ptr, m_idx);
@@ -165,14 +163,14 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
         if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL)) {
             if (is_original_ap_and_seen(target_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
-            if (see_monster(floor_ptr, t_idx)) {
+            if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
             }
             resists_tele = TRUE;
         } else if (tr_ptr->level > randint1(100)) {
             if (is_original_ap_and_seen(target_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
-            if (see_monster(floor_ptr, t_idx)) {
+            if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
             }
             resists_tele = TRUE;
@@ -234,14 +232,14 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL)) {
             if (is_original_ap_and_seen(target_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
-            if (see_monster(floor_ptr, t_idx)) {
+            if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
             }
             resists_tele = TRUE;
         } else if (tr_ptr->level > randint1(100)) {
             if (is_original_ap_and_seen(target_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
-            if (see_monster(floor_ptr, t_idx)) {
+            if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
             }
             resists_tele = TRUE;
@@ -337,14 +335,14 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
         monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
             _("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."), _("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."), TARGET_TYPE);
 
-        if (see_monster(floor_ptr, t_idx) && monster_to_monster) {
+        if (see_monster(target_ptr, t_idx) && monster_to_monster) {
             msg_format(_("%^sは白い光に包まれた。", "%^s is surrounded by a white light."), t_name);
         }
     } else {
         monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."),
             _("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."), TARGET_TYPE);
 
-        if (see_monster(floor_ptr, t_idx) && monster_to_monster) {
+        if (see_monster(target_ptr, t_idx) && monster_to_monster) {
             msg_format(_("%^sは暗闇に包まれた。", "%^s is surrounded by darkness."), t_name);
         }
     }
