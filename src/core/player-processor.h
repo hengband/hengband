@@ -4,7 +4,6 @@
 
 extern bool load; /*!<ロード処理中の分岐フラグ*/
 extern bool can_save;
-extern bool repair_monsters;
 
 void process_player(player_type *creature_ptr);
 void process_upkeep_with_speed(player_type *creature_ptr);

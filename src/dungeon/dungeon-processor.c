@@ -6,6 +6,7 @@
 #include "core/turn-compensator.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "floor/floor-save.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "market/arena.h"

@@ -2,6 +2,7 @@
 #include "mind/mind-sniper.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
+#include "floor/floor-save.h"
 #include "floor/wild.h"
 #include "inventory/pack-overflow.h"
 #include "io/input-key-processor.h"
@@ -28,7 +29,6 @@
 
 bool load = TRUE;
 bool can_save = FALSE;
-bool repair_monsters; // todo より適切なファイルへ移設する可能性あり.
 
 static void process_fishing(player_type *creature_ptr)
 {

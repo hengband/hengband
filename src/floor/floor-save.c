@@ -1,5 +1,4 @@
 ﻿/*!
- * @file floors.c
  * @brief 保存された階の管理 / management of the saved floor
  * @date 2014/01/04
  * @author
@@ -14,7 +13,6 @@
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-basic.h"
-#include "core/player-processor.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-events.h"
@@ -56,6 +54,8 @@
 #include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
+
+bool repair_monsters;
 
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
 static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */

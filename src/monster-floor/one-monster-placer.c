@@ -5,10 +5,10 @@
  */
 
 #include "monster-floor/one-monster-placer.h"
-#include "core/player-processor.h" // todo repar_monstersのせいでここに依存している、後で何とかする.
 #include "core/speed-table.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-move.h"

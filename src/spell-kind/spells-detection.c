@@ -1,6 +1,6 @@
 ﻿#include "spell-kind/spells-detection.h"
-#include "core/player-processor.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
