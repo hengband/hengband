@@ -3,6 +3,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
+#include "game-option/cheat-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/race-flags2.h"

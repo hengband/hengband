@@ -8,6 +8,7 @@
 #include "monster-floor/monster-generator.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
+#include "game-option/cheat-options.h"
 #include "monster-floor/one-monster-placer.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"

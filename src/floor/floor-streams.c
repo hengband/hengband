@@ -19,6 +19,7 @@
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-info.h"

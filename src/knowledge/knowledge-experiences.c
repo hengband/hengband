@@ -6,6 +6,7 @@
 
 #include "knowledge/knowledge-experiences.h"
 #include "core/show-file.h"
+#include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
 #include "object/object-flavor.h"
 #include "object/object-kind.h"

@@ -5,6 +5,7 @@
 #include "core/show-file.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
@@ -22,20 +23,6 @@
 /*
  * Software options (set via the '=' command).
  */
-
-/* Cheating options */
-
-bool cheat_peek;	/* Peek into object creation */
-bool cheat_hear;	/* Peek into monster creation */
-bool cheat_room;	/* Peek into dungeon creation */
-bool cheat_xtra;	/* Peek into something else */
-bool cheat_know;	/* Know complete monster info */
-bool cheat_live;	/* Allow player to avoid death */
-bool cheat_save;	/* Ask for saving death */
-bool cheat_diary_output; /* Detailed info to diary */
-bool cheat_turn;	/* Peek turn */
-bool cheat_sight;
-
 
 /* Special options */
 

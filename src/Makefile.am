@@ -160,6 +160,7 @@ hengband_SOURCES = \
 	\
 	game-option/auto-destruction-option.c game-option/auto-destruction-option.h \
 	game-option/birth-options.c game-option/birth-options.h \
+	game-option/cheat-options.c game-option/cheat-options.h \
 	game-option/disturbance-options.c game-option/disturbance-options.h \
 	game-option/game-play-options.c game-option/game-play-options.h \
 	game-option/input-options.c game-option/input-options.h \

@@ -2,6 +2,7 @@
 #include "core/game-closer.h"
 #include "cmd-io/cmd-save.h"
 #include "core/stuff-handler.h"
+#include "game-option/cheat-options.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "main/music-definitions-table.h"

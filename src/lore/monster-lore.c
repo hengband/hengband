@@ -5,6 +5,7 @@
  */
 
 #include "lore/monster-lore.h"
+#include "game-option/cheat-options.h"
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
 #include "lore/magic-types-setter.h"

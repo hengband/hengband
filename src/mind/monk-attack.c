@@ -10,6 +10,7 @@
 #include "combat/attack-criticality.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "game-option/cheat-options.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "mind/mind-force-trainer.h"

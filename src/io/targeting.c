@@ -22,6 +22,7 @@
 #include "floor/floor-object.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
+#include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"

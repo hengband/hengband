@@ -7,6 +7,7 @@
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/play-record-options.h"

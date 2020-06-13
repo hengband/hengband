@@ -7,6 +7,7 @@
 
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
 #include "main/sound-definitions-table.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/artifact.h"

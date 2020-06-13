@@ -5,6 +5,7 @@
  */
 
 #include "system/angband.h"
+#include "game-option/cheat-options.h"
 #include "knowledge-items.h"
 #include "io-dump/dump-util.h"
 #include "core/sort.h"

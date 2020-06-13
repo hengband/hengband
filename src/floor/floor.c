@@ -6,6 +6,7 @@
 #include "floor/floor-generate.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
