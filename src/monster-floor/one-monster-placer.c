@@ -124,6 +124,37 @@ static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 }
 
 /*!
+ * @brief クエスト内に生成可能か評価する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param r_idx 生成モンスター種族
+ * @return 生成が不可能ならFALSE、それ以外はTRUE
+ */
+static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (quest_number(player_ptr, floor_ptr->dun_level) == 0)
+        return TRUE;
+
+    int hoge = quest_number(player_ptr, floor_ptr->dun_level);
+    if ((quest[hoge].type != QUEST_TYPE_KILL_LEVEL) && (quest[hoge].type != QUEST_TYPE_RANDOM))
+        return TRUE;
+
+    if (r_idx != quest[hoge].r_idx)
+        return TRUE;
+
+    int number_mon = 0;
+    for (int i2 = 0; i2 < floor_ptr->width; ++i2)
+        for (int j2 = 0; j2 < floor_ptr->height; j2++)
+            if ((floor_ptr->grid_array[j2][i2].m_idx > 0) && (floor_ptr->m_list[floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest[hoge].r_idx))
+                number_mon++;
+
+    if (number_mon + quest[hoge].cur_num >= quest[hoge].max_num)
+        return FALSE;
+
+    return TRUE;
+}
+
+/*!
  * @brief モンスターを一体生成する / Attempt to place a monster of the given race at the given location.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param who 召喚を行ったモンスターID
@@ -159,23 +190,8 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (!check_unique_placeable(player_ptr, r_idx))
         return FALSE;
 
-    if (quest_number(player_ptr, floor_ptr->dun_level)) {
-        int hoge = quest_number(player_ptr, floor_ptr->dun_level);
-        if ((quest[hoge].type == QUEST_TYPE_KILL_LEVEL) || (quest[hoge].type == QUEST_TYPE_RANDOM)) {
-            if (r_idx == quest[hoge].r_idx) {
-                int number_mon, i2, j2;
-                number_mon = 0;
-
-                for (i2 = 0; i2 < floor_ptr->width; ++i2)
-                    for (j2 = 0; j2 < floor_ptr->height; j2++)
-                        if (floor_ptr->grid_array[j2][i2].m_idx > 0)
-                            if (floor_ptr->m_list[floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest[hoge].r_idx)
-                                number_mon++;
-                if (number_mon + quest[hoge].cur_num >= quest[hoge].max_num)
-                    return FALSE;
-            }
-        }
-    }
+    if (!check_quest_placeable(player_ptr, r_idx))
+        return FALSE;
 
     if (is_glyph_grid(g_ptr)) {
         if (randint1(BREAK_GLYPH) < (r_ptr->level + 20)) {
