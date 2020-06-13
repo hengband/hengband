@@ -13,25 +13,25 @@ void plural_aux(char *Name)
 {
 	int NameLen = strlen(Name);
 
-	if (my_strstr(Name, "Disembodied hand"))
+	if (angband_strstr(Name, "Disembodied hand"))
 	{
 		strcpy(Name, "Disembodied hands that strangled people");
 	}
-	else if (my_strstr(Name, "Colour out of space"))
+	else if (angband_strstr(Name, "Colour out of space"))
 	{
 		strcpy(Name, "Colours out of space");
 	}
-	else if (my_strstr(Name, "stairway to hell"))
+	else if (angband_strstr(Name, "stairway to hell"))
 	{
 		strcpy(Name, "stairways to hell");
 	}
-	else if (my_strstr(Name, "Dweller on the threshold"))
+	else if (angband_strstr(Name, "Dweller on the threshold"))
 	{
 		strcpy(Name, "Dwellers on the threshold");
 	}
-	else if (my_strstr(Name, " of "))
+	else if (angband_strstr(Name, " of "))
 	{
-		concptr aider = my_strstr(Name, " of ");
+		concptr aider = angband_strstr(Name, " of ");
 		char dummy[80];
 		int i = 0;
 		concptr ctr = Name;
@@ -55,7 +55,7 @@ void plural_aux(char *Name)
 		strcpy(&(dummy[i + 1]), aider);
 		strcpy(Name, dummy);
 	}
-	else if (my_strstr(Name, "coins"))
+	else if (angband_strstr(Name, "coins"))
 	{
 		char dummy[80];
 		strcpy(dummy, "piles of ");
@@ -63,7 +63,7 @@ void plural_aux(char *Name)
 		strcpy(Name, dummy);
 		return;
 	}
-	else if (my_strstr(Name, "Manes"))
+	else if (angband_strstr(Name, "Manes"))
 	{
 		return;
 	}

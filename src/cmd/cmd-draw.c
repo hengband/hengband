@@ -175,7 +175,7 @@ void do_cmd_messages(int num_now)
 			if (!shower || !shower[0]) continue;
 
 			concptr str = msg;
-			while ((str = my_strstr(str, shower)) != NULL)
+			while ((str = angband_strstr(str, shower)) != NULL)
 			{
 				int len = strlen(shower);
 				Term_putstr(str - msg, num_lines + 1 - j, len, TERM_YELLOW, shower);
@@ -225,7 +225,7 @@ void do_cmd_messages(int num_now)
 			for (int z = i + 1; z < n; z++)
 			{
 				concptr msg = message_str(z);
-				if (my_strstr(msg, finder_str))
+				if (angband_strstr(msg, finder_str))
 				{
 					i = z;
 					break;

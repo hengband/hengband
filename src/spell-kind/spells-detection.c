@@ -530,7 +530,7 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
         if (distance(caster_ptr->y, caster_ptr->x, y, x) > range)
             continue;
 
-        if (my_strchr(Match, r_ptr->d_char)) {
+        if (angband_strchr(Match, r_ptr->d_char)) {
             if (caster_ptr->monster_race_idx == m_ptr->r_idx) {
                 caster_ptr->window |= (PW_MONSTER);
             }

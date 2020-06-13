@@ -122,7 +122,7 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         break;
     }
     case SUMMON_ANIMAL_RANGER: {
-        is_match = ((r_ptr->flags3 & (RF3_ANIMAL)) && (my_strchr("abcflqrwBCHIJKMRS", r_ptr->d_char)) && !(r_ptr->flags3 & (RF3_DRAGON))
+        is_match = ((r_ptr->flags3 & (RF3_ANIMAL)) && (angband_strchr("abcflqrwBCHIJKMRS", r_ptr->d_char)) && !(r_ptr->flags3 & (RF3_DRAGON))
             && !(r_ptr->flags3 & (RF3_EVIL)) && !(r_ptr->flags3 & (RF3_UNDEAD)) && !(r_ptr->flags3 & (RF3_DEMON)) && !(r_ptr->flags2 & (RF2_MULTIPLY))
             && !(r_ptr->flags4 || r_ptr->a_ability_flags1 || r_ptr->a_ability_flags2));
         break;

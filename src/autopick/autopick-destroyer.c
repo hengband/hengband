@@ -35,7 +35,7 @@ static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
 	{
 		if (o_ptr->tval == TV_CORPSE &&
 			o_ptr->sval == SV_CORPSE &&
-			my_strchr("pht", r_info[o_ptr->pval].d_char))
+			angband_strchr("pht", r_info[o_ptr->pval].d_char))
 			return FALSE;
 	}
 	else if (player_ptr->pclass == CLASS_ARCHER)

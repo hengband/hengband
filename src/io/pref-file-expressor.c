@@ -118,13 +118,13 @@ concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp)
 
     /* Accept all printables except spaces and brackets */
 #ifdef JP
-    while (iskanji(*s) || (isprint(*s) && !my_strchr(" []", *s))) {
+    while (iskanji(*s) || (isprint(*s) && !angband_strchr(" []", *s))) {
         if (iskanji(*s))
             s++;
         s++;
     }
 #else
-    while (isprint(*s) && !my_strchr(" []", *s))
+    while (isprint(*s) && !angband_strchr(" []", *s))
         ++s;
 #endif
 
@@ -172,7 +172,7 @@ concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp)
                 continue;
             }
 #endif
-            *tpn = my_strchr(" []", *pn) ? '_' : *pn;
+            *tpn = angband_strchr(" []", *pn) ? '_' : *pn;
         }
 
         *tpn = '\0';

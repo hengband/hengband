@@ -298,7 +298,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 		if (!o_ptr->inscription) continue;
 
 		/* Find a '@' */
-		concptr s = my_strchr(quark_str(o_ptr->inscription), '@');
+		concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -314,7 +314,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 			}
 
 			/* Find another '@' */
-			s = my_strchr(s + 1, '@');
+			s = angband_strchr(s + 1, '@');
 		}
 	}
 
@@ -337,7 +337,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 		if (!o_ptr->inscription) continue;
 
 		/* Find a '@' */
-		concptr s = my_strchr(quark_str(o_ptr->inscription), '@');
+		concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -353,7 +353,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 			}
 
 			/* Find another '@' */
-			s = my_strchr(s + 1, '@');
+			s = angband_strchr(s + 1, '@');
 		}
 	}
 
@@ -411,7 +411,7 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
 		if (!item_tester_okay(owner_ptr, o_ptr, tval) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
-		concptr s = my_strchr(quark_str(o_ptr->inscription), '@');
+		concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -426,7 +426,7 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
 			}
 
 			/* Find another '@' */
-			s = my_strchr(s + 1, '@');
+			s = angband_strchr(s + 1, '@');
 		}
 	}
 
@@ -453,7 +453,7 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
 		if (!item_tester_okay(owner_ptr, o_ptr, tval) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
-		concptr s = my_strchr(quark_str(o_ptr->inscription), '@');
+		concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -468,7 +468,7 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
 			}
 
 			/* Find another '@' */
-			s = my_strchr(s + 1, '@');
+			s = angband_strchr(s + 1, '@');
 		}
 	}
 
@@ -771,7 +771,7 @@ static bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
 	if (!o_ptr->inscription) return TRUE;
 
 	/* Find a '!' */
-	concptr s = my_strchr(quark_str(o_ptr->inscription), '!');
+	concptr s = angband_strchr(quark_str(o_ptr->inscription), '!');
 
 	/* Process preventions */
 	while (s)
@@ -784,7 +784,7 @@ static bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
 		}
 
 		/* Find another '!' */
-		s = my_strchr(s + 1, '!');
+		s = angband_strchr(s + 1, '!');
 	}
 
 	return TRUE;

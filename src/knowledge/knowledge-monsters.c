@@ -86,7 +86,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
 		}
 		else
 		{
-			if (!my_strchr(group_char, r_ptr->d_char)) continue;
+			if (!angband_strchr(group_char, r_ptr->d_char)) continue;
 		}
 
 		mon_idx[mon_cnt++] = i;
@@ -136,7 +136,7 @@ void do_cmd_knowledge_pets(player_type *creature_ptr)
 #endif
 	fprintf(fff, _(" 維持コスト: %d%% MP\n", "   Upkeep: %d%% mana.\n"), show_upkeep);
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("現在のペット", "Current Pets"), 0, 0);
 	fd_kill(file_name);
 }
@@ -220,14 +220,14 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 		if (this_monster <= 0) continue;
 
 #ifdef JP
-		if (my_strchr("pt", r_ptr->d_char))
+		if (angband_strchr("pt", r_ptr->d_char))
 			fprintf(fff, "     %3d 人の %s\n", (int)this_monster, r_name + r_ptr->name);
 		else
 			fprintf(fff, "     %3d 体の %s\n", (int)this_monster, r_name + r_ptr->name);
 #else
 		if (this_monster < 2)
 		{
-			if (my_strstr(r_name + r_ptr->name, "coins"))
+			if (angband_strstr(r_name + r_ptr->name, "coins"))
 			{
 				fprintf(fff, "     1 pile of %s\n", (r_name + r_ptr->name));
 			}
@@ -255,7 +255,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 #endif
 
 	C_KILL(who, max_r_idx, s16b);
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
 	fd_kill(file_name);
 }
@@ -536,7 +536,7 @@ void do_cmd_knowledge_bounty(player_type *creature_ptr)
 		fprintf(fff, "\n%s\n", _("賞金首はもう残っていません。", "There are no more wanted monster."));
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
 	fd_kill(file_name);
 }

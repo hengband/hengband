@@ -210,7 +210,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_play
 	GAME_TEXT file_name[1024];
 
 	/* Open a new file */
-	fff = my_fopen_temp(file_name, 1024);
+	fff = angband_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
 #ifdef JP
@@ -224,16 +224,16 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_play
 
 	/* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
 	make_character_dump(creature_ptr, fff, update_playtime, display_player, map_name);
-	my_fclose(fff);
+	angband_fclose(fff);
 
 	/* Open for read */
-	fff = my_fopen(file_name, "r");
+	fff = angband_fopen(file_name, "r");
 
 	while (fgets(buf, 1024, fff))
 	{
 		(void)buf_sprintf(dumpbuf, "%s", buf);
 	}
-	my_fclose(fff);
+	angband_fclose(fff);
 	fd_kill(file_name);
 
 	/* Success */

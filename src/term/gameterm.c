@@ -494,7 +494,7 @@ static TERM_COLOR spell_color(EFFECT_ID type)
 		c = s[randint0(strlen(s))];
 
 		/* Lookup this color */
-		a = my_strchr(color_char, c) - color_char;
+		a = angband_strchr(color_char, c) - color_char;
 
 		/* Invalid color (note check for < 0 removed, gave a silly
 		 * warning because bytes are always >= 0 -- RG) */

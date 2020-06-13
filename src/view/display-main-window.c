@@ -781,7 +781,7 @@ static void print_title(player_type *creature_ptr)
 	}
 	else
 	{
-		my_strcpy(str, player_title[creature_ptr->pclass][(creature_ptr->lev - 1) / 5], sizeof(str));
+		angband_strcpy(str, player_title[creature_ptr->pclass][(creature_ptr->lev - 1) / 5], sizeof(str));
 		p = str;
 	}
 
@@ -1544,7 +1544,7 @@ static void print_frame_basic(player_type *creature_ptr)
 	else
 	{
 		char str[14];
-		my_strcpy(str, rp_ptr->title, sizeof(str));
+		angband_strcpy(str, rp_ptr->title, sizeof(str));
 		print_field(str, ROW_RACE, COL_RACE);
 	}
 

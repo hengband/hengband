@@ -260,7 +260,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
     HIT_POINT tmp = (newhp * 100L) / oldhp;
     PERCENTAGE percentage = tmp;
 
-    if (my_strchr(",ejmvwQ", r_ptr->d_char)) {
+    if (angband_strchr(",ejmvwQ", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%^sはほとんど気にとめていない。", "%^s barely notices."), m_name);
         else if (percentage > 75)
@@ -278,7 +278,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("l", r_ptr->d_char)) {
+    if (angband_strchr("l", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%^sはほとんど気にとめていない。", "%^s barely notices."), m_name);
         else if (percentage > 75)
@@ -296,7 +296,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("g#+<>", r_ptr->d_char)) {
+    if (angband_strchr("g#+<>", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
         else if (percentage > 75)
@@ -314,7 +314,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("JMR", r_ptr->d_char) || !isalpha(r_ptr->d_char)) {
+    if (angband_strchr("JMR", r_ptr->d_char) || !isalpha(r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%^sはほとんど気にとめていない。", "%^s barely notices."), m_name);
         else if (percentage > 75)
@@ -332,7 +332,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("f", r_ptr->d_char)) {
+    if (angband_strchr("f", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
         else if (percentage > 75)
@@ -350,7 +350,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("acFIKS", r_ptr->d_char)) {
+    if (angband_strchr("acFIKS", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
         else if (percentage > 75)
@@ -368,7 +368,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("B", r_ptr->d_char)) {
+    if (angband_strchr("B", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%^sはさえずった。", "%^s chirps."), m_name);
         else if (percentage > 75)
@@ -386,7 +386,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("duDLUW", r_ptr->d_char)) {
+    if (angband_strchr("duDLUW", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
         else if (percentage > 75)
@@ -404,7 +404,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("s", r_ptr->d_char)) {
+    if (angband_strchr("s", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
         else if (percentage > 75)
@@ -422,7 +422,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("z", r_ptr->d_char)) {
+    if (angband_strchr("z", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
         else if (percentage > 75)
@@ -440,7 +440,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("G", r_ptr->d_char)) {
+    if (angband_strchr("G", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
         else if (percentage > 75)
@@ -458,7 +458,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("CZ", r_ptr->d_char)) {
+    if (angband_strchr("CZ", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%^sは攻撃に肩をすくめた。", "%^s shrugs off the attack."), m_name);
         else if (percentage > 75)
@@ -476,7 +476,7 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
         return;
     }
 
-    if (my_strchr("Xbilqrt", r_ptr->d_char)) {
+    if (angband_strchr("Xbilqrt", r_ptr->d_char)) {
         if (percentage > 95)
             msg_format(_("%^sは攻撃を気にとめていない。", "%^s ignores the attack."), m_name);
         else if (percentage > 75)

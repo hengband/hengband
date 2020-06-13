@@ -444,7 +444,7 @@ bool store_will_buy(object_type *o_ptr)
 			{
 				if (r_ptr->flags3 & RF3_GOOD) break;
 				if (r_ptr->flags3 & RF3_ANIMAL) break;
-				if (my_strchr("?!", r_ptr->d_char)) break;
+				if (angband_strchr("?!", r_ptr->d_char)) break;
 			}
 		}
 			/* Fall through */

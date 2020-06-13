@@ -463,14 +463,14 @@ static errr init_info(concptr filename, angband_header *head, void **info, char 
 	/*** Load the ascii template file ***/
 	path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s.txt", filename));
 	FILE *fp;
-	fp = my_fopen(buf, "r");
+	fp = angband_fopen(buf, "r");
 
 	/* Parse it */
 	if (!fp) quit(format(_("'%s.txt'ファイルをオープンできません。", "Cannot open '%s.txt' file."), filename));
 
 	/* Parse the file */
 	err = init_info_txt(fp, buf, head, head->parse_info_txt);
-	my_fclose(fp);
+	angband_fclose(fp);
 
 	/* Errors */
 	if (err)
@@ -1305,20 +1305,20 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 
 	/* Open the News file */
 	FILE *fp;
-	fp = my_fopen(buf, "r");
+	fp = angband_fopen(buf, "r");
 
 	/* Dump */
 	if (fp)
 	{
 		/* Dump the file to the screen */
 		int i = 0;
-		while (0 == my_fgets(fp, buf, sizeof(buf)))
+		while (0 == angband_fgets(fp, buf, sizeof(buf)))
 		{
 			/* Display and advance */
 			Term_putstr(0, i++, -1, TERM_WHITE, buf);
 		}
 
-		my_fclose(fp);
+		angband_fclose(fp);
 	}
 
 	Term_flush();

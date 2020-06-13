@@ -55,7 +55,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
 	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
-	*fff = my_fopen(buf, "a");
+	*fff = angband_fopen(buf, "a");
 	if (*fff) return TRUE;
 
 	msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
@@ -404,7 +404,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		break;
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	if (do_level) write_level = FALSE;
 
 	return 0;

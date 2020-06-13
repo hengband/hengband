@@ -242,13 +242,13 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
 	{
 		strncat(buff, format("に「%s」", describer->insc), 80);
 
-		if (my_strstr(describer->insc, "%%all"))
+		if (angband_strstr(describer->insc, "%%all"))
 			strcat(buff, "(%%allは全能力を表す英字の記号で置換)");
-		else if (my_strstr(describer->insc, "%all"))
+		else if (angband_strstr(describer->insc, "%all"))
 			strcat(buff, "(%allは全能力を表す記号で置換)");
-		else if (my_strstr(describer->insc, "%%"))
+		else if (angband_strstr(describer->insc, "%%"))
 			strcat(buff, "(%%は追加能力を表す英字の記号で置換)");
-		else if (my_strstr(describer->insc, "%"))
+		else if (angband_strstr(describer->insc, "%"))
 			strcat(buff, "(%は追加能力を表す記号で置換)");
 
 		strcat(buff, "と刻んで");
@@ -500,9 +500,9 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 	{
 		strncat(buff, format("and inscribe \"%s\"", describer->insc), 80);
 
-		if (my_strstr(describer->insc, "%all"))
+		if (angband_strstr(describer->insc, "%all"))
 			strcat(buff, ", replacing %all with code string representing all abilities,");
-		else if (my_strstr(describer->insc, "%"))
+		else if (angband_strstr(describer->insc, "%"))
 			strcat(buff, ", replacing % with code string representing extra random abilities,");
 
 		strcat(buff, " on ");

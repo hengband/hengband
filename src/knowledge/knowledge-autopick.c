@@ -77,7 +77,7 @@ void do_cmd_knowledge_autopick(player_type *creature_ptr)
 		fprintf(fff, "\n");
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 
 	(void)show_file(creature_ptr, TRUE, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
 	fd_kill(file_name);

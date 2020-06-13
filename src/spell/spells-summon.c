@@ -201,7 +201,7 @@ bool item_tester_offer(object_type *o_ptr)
 {
 	if (o_ptr->tval != TV_CORPSE) return FALSE;
 	if (o_ptr->sval != SV_CORPSE) return FALSE;
-	if (my_strchr("pht", r_info[o_ptr->pval].d_char)) return TRUE;
+	if (angband_strchr("pht", r_info[o_ptr->pval].d_char)) return TRUE;
 	return FALSE;
 }
 

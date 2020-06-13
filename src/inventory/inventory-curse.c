@@ -154,7 +154,7 @@ static void curse_teleport(player_type *creature_ptr)
         if (!have_flag(flgs, TR_TELEPORT))
             continue;
 
-        if (o_ptr->inscription && my_strchr(quark_str(o_ptr->inscription), '.'))
+        if (o_ptr->inscription && angband_strchr(quark_str(o_ptr->inscription), '.'))
             continue;
 
         count++;

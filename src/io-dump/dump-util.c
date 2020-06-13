@@ -137,7 +137,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
  */
 bool open_temporary_file(FILE **fff, char *file_name)
 {
-	*fff = my_fopen_temp(file_name, FILE_NAME_SIZE);
+	*fff = angband_fopen_temp(file_name, FILE_NAME_SIZE);
 	if (*fff != NULL) return TRUE;
 
 	msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);

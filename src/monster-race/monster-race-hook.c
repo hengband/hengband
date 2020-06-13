@@ -331,7 +331,7 @@ bool vault_aux_jelly(MONRACE_IDX r_idx)
     if (r_ptr->flags3 & (RF3_EVIL))
         return FALSE;
 
-    if (!my_strchr("ijm,", r_ptr->d_char))
+    if (!angband_strchr("ijm,", r_ptr->d_char))
         return FALSE;
 
     return TRUE;
@@ -416,7 +416,7 @@ bool vault_aux_kennel(MONRACE_IDX r_idx)
     if (!vault_monster_okay(r_idx))
         return FALSE;
 
-    if (!my_strchr("CZ", r_ptr->d_char))
+    if (!angband_strchr("CZ", r_ptr->d_char))
         return FALSE;
 
     return TRUE;
@@ -434,7 +434,7 @@ bool vault_aux_mimic(MONRACE_IDX r_idx)
     if (!vault_monster_okay(r_idx))
         return FALSE;
 
-    if (!my_strchr("!$&(/=?[\\|", r_ptr->d_char))
+    if (!angband_strchr("!$&(/=?[\\|", r_ptr->d_char))
         return FALSE;
 
     return TRUE;
@@ -716,7 +716,7 @@ bool monster_hook_human(MONRACE_IDX r_idx)
     if (r_ptr->flags1 & (RF1_UNIQUE))
         return FALSE;
 
-    if (my_strchr("pht", r_ptr->d_char))
+    if (angband_strchr("pht", r_ptr->d_char))
         return TRUE;
 
     return FALSE;
@@ -748,7 +748,7 @@ bool get_nightmare(MONRACE_IDX r_idx)
 bool monster_is_fishing_target(MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    if ((r_ptr->flags7 & RF7_AQUATIC) && !(r_ptr->flags1 & RF1_UNIQUE) && my_strchr("Jjlw", r_ptr->d_char))
+    if ((r_ptr->flags7 & RF7_AQUATIC) && !(r_ptr->flags1 & RF1_UNIQUE) && angband_strchr("Jjlw", r_ptr->d_char))
         return TRUE;
     else
         return FALSE;

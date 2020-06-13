@@ -2126,7 +2126,7 @@ void calc_bonuses(player_type *creature_ptr)
 		if (have_flag(flgs, TR_FREE_ACT))    creature_ptr->free_act = TRUE;
 		if (have_flag(flgs, TR_HOLD_EXP))   creature_ptr->hold_exp = TRUE;
 		if (have_flag(flgs, TR_WARNING)) {
-			if (!o_ptr->inscription || !(my_strchr(quark_str(o_ptr->inscription), '$')))
+			if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
 				creature_ptr->warning = TRUE;
 		}
 
@@ -2138,7 +2138,7 @@ void calc_bonuses(player_type *creature_ptr)
 				concptr insc = quark_str(o_ptr->inscription);
 
 				/* {.} will stop random teleportation. */
-				if (o_ptr->inscription && my_strchr(insc, '.'))
+				if (o_ptr->inscription && angband_strchr(insc, '.'))
 				{
 				}
 				else

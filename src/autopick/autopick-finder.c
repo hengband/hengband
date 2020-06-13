@@ -261,7 +261,7 @@ byte get_string_for_search(player_type *player_ptr, object_type **o_handle, conc
 			}
 
 			buf[pos] = '\0';
-			my_strcat(buf, tmp, len + 1);
+			angband_strcat(buf, tmp, len + 1);
 
 			break;
 		}
@@ -356,7 +356,7 @@ void search_for_string(text_body_type *tb, concptr search_str, bool forward)
 			if (--i < 0) break;
 		}
 
-		pos = my_strstr(tb->lines_list[i], search_str);
+		pos = angband_strstr(tb->lines_list[i], search_str);
 		if (!pos) continue;
 
 		if ((tb->states[i] & LSTAT_BYPASS) &&

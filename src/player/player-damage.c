@@ -466,7 +466,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 #else
 				sprintf(dummy, "%s%s", hit_from, !creature_ptr->paralyzed ? "" : " while helpless");
 #endif
-				my_strcpy(creature_ptr->died_from, dummy, sizeof creature_ptr->died_from);
+				angband_strcpy(creature_ptr->died_from, dummy, sizeof creature_ptr->died_from);
 			}
 
 			/* No longer a winner */
@@ -571,13 +571,13 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 					str = death_message;
 					if (strncmp(str, "「", 2) == 0) str += 2;
 
-					str2 = my_strstr(str, "」");
+					str2 = angband_strstr(str, "」");
 					if (str2 != NULL) *str2 = '\0';
 
 					i = 0;
 					while (i < 9)
 					{
-						str2 = my_strstr(str, " ");
+						str2 = angband_strstr(str, " ");
 						if (str2 == NULL) len = strlen(str);
 						else len = str2 - str;
 

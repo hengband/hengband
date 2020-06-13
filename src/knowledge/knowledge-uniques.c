@@ -96,7 +96,7 @@ void do_cmd_knowledge_uniques(player_type *creature_ptr)
 	}
 
 	C_KILL(who, max_r_idx, s16b);
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("まだ生きているユニーク・モンスター", "Alive Uniques"), 0, 0);
 	fd_kill(file_name);
 }

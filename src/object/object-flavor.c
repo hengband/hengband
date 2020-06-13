@@ -2197,7 +2197,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 			if (*str)
 			{
 				/* Find the '#' */
-				concptr str_aux = my_strchr(quark_str(o_ptr->inscription), '#');
+				concptr str_aux = angband_strchr(quark_str(o_ptr->inscription), '#');
 
 				/* Add the false name */
 				t = object_desc_str(t, "『");
@@ -2242,10 +2242,10 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 				t = object_desc_str(t, e_name + e_ptr->name);
 			}
 
-			if (o_ptr->inscription && my_strchr(quark_str(o_ptr->inscription), '#'))
+			if (o_ptr->inscription && angband_strchr(quark_str(o_ptr->inscription), '#'))
 			{
 				/* Find the '#' */
-				concptr str = my_strchr(quark_str(o_ptr->inscription), '#');
+				concptr str = angband_strchr(quark_str(o_ptr->inscription), '#');
 
 				/* Add the false name */
 				t = object_desc_chr(t, ' ');
@@ -2259,7 +2259,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	/* No more details wanted */
 	if (mode & OD_NAME_ONLY)
 	{
-		my_strcpy(buf, tmp_val, MAX_NLEN);
+		angband_strcpy(buf, tmp_val, MAX_NLEN);
 		return;
 	}
 
@@ -2601,7 +2601,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	/* No more details wanted */
 	if (mode & OD_NAME_AND_ENCHANT)
 	{
-		my_strcpy(buf, tmp_val, MAX_NLEN);
+		angband_strcpy(buf, tmp_val, MAX_NLEN);
 		return;
 	}
 
@@ -2733,7 +2733,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	/* No more details wanted */
 	if (mode & OD_OMIT_INSCRIPTION)
 	{
-		my_strcpy(buf, tmp_val, MAX_NLEN);
+		angband_strcpy(buf, tmp_val, MAX_NLEN);
 		return;
 	}
 
@@ -2743,7 +2743,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	/* Auto abbreviation inscribe */
 	if ((abbrev_extra || abbrev_all) && object_is_fully_known(o_ptr))
 	{
-		if (!o_ptr->inscription || !my_strchr(quark_str(o_ptr->inscription), '%'))
+		if (!o_ptr->inscription || !angband_strchr(quark_str(o_ptr->inscription), '%'))
 		{
 			bool kanji, all;
 
@@ -2764,7 +2764,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 		char buff[1024];
 		if (tmp_val2[0]) strcat(tmp_val2, ", ");
 		get_inscription(buff, o_ptr);
-		my_strcat(tmp_val2, buff, sizeof(tmp_val2));
+		angband_strcat(tmp_val2, buff, sizeof(tmp_val2));
 	}
 
 
@@ -2851,7 +2851,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 		t = object_desc_chr(t, c2);
 	}
 
-	my_strcpy(buf, tmp_val, MAX_NLEN);
+	angband_strcpy(buf, tmp_val, MAX_NLEN);
 }
 
 

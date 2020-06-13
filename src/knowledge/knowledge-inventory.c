@@ -313,7 +313,7 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 		show_home_equipment_resistances(creature_ptr, tval, &label_number, fff);
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"), 0, 0);
 	fd_kill(file_name);
 }

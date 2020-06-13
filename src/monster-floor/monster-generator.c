@@ -317,7 +317,7 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
         return FALSE;
 
     if ((one_in_(5) || (player_ptr->current_floor_ptr->base_level == 0)) && !(r_info[r_idx].flags1 & RF1_UNIQUE)
-        && my_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char)) {
+        && angband_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char)) {
         mode |= PM_JURAL;
     }
 

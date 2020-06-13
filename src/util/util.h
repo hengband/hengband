@@ -225,11 +225,11 @@ extern const char hexsym[16];
 // todo ファイル処理関数・メッセージ処理関数・画面描画関数で最低限分割する.
 extern errr path_parse(char *buf, int max, concptr file);
 extern errr path_build(char *buf, int max, concptr path, concptr file);
-extern FILE *my_fopen(concptr file, concptr mode);
-extern FILE *my_fopen_temp(char *buf, int max);
-extern errr my_fgets(FILE *fff, char *buf, huge n);
-extern errr my_fputs(FILE *fff, concptr buf, huge n);
-extern errr my_fclose(FILE *fff);
+extern FILE *angband_fopen(concptr file, concptr mode);
+extern FILE *angband_fopen_temp(char *buf, int max);
+extern errr angband_fgets(FILE *fff, char *buf, huge n);
+extern errr angband_fputs(FILE *fff, concptr buf, huge n);
+extern errr angband_fclose(FILE *fff);
 extern errr fd_kill(concptr file);
 extern errr fd_move(concptr file, concptr what);
 extern errr fd_copy(concptr file, concptr what);
@@ -299,10 +299,10 @@ extern void roff_to_buf(concptr str, int wlen, char *tbuf, size_t bufsize);
 
 extern void tag_sort(tag_type elements[], int number);
 
-extern size_t my_strcpy(char *buf, concptr src, size_t bufsize);
-extern size_t my_strcat(char *buf, concptr src, size_t bufsize);
-extern char *my_strstr(concptr haystack, concptr needle);
-extern char *my_strchr(concptr ptr, char ch);
+extern size_t angband_strcpy(char *buf, concptr src, size_t bufsize);
+extern size_t angband_strcat(char *buf, concptr src, size_t bufsize);
+extern char *angband_strstr(concptr haystack, concptr needle);
+extern char *angband_strchr(concptr ptr, char ch);
 extern void str_tolower(char *str);
 
 /*

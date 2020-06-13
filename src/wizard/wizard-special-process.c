@@ -1645,7 +1645,7 @@ static void do_cmd_dump_options()
 	path_build(buf, sizeof buf, ANGBAND_DIR_USER, "opt_info.txt");
 
 	FILE *fff;
-	fff = my_fopen(buf, "a");
+	fff = angband_fopen(buf, "a");
 
 	if (!fff)
 	{
@@ -1696,7 +1696,7 @@ static void do_cmd_dump_options()
 	/* Free the "exist" array (2-dimension) */
 	C_KILL(*exist, NUM_O_BIT * NUM_O_SET, int);
 	C_KILL(exist, NUM_O_SET, int *);
-	my_fclose(fff);
+	angband_fclose(fff);
 
 	msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);
 }

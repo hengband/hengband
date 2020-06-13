@@ -68,7 +68,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 				i += strlen(PATH_SEP);
 			}
 #if defined(WINDOWS)
-			else if (my_strchr("\"*,/:;<>?\\|", c))
+			else if (angband_strchr("\"*,/:;<>?\\|", c))
 				creature_ptr->base_name[k++] = '_';
 #endif
 			else if (isprint(c))
@@ -88,7 +88,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 		while (TRUE)
 		{
 			concptr t;
-			t = my_strstr(s, PATH_SEP);
+			t = angband_strstr(s, PATH_SEP);
 			if (!t)
 				break;
 			s = t + 1;

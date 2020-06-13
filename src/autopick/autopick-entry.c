@@ -358,7 +358,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 		ADD_FLG(FLG_UNIQUE);
 	}
 
-	if (o_ptr->tval == TV_CORPSE && my_strchr("pht", r_info[o_ptr->pval].d_char))
+	if (o_ptr->tval == TV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
 	{
 		ADD_FLG(FLG_HUMAN);
 	}

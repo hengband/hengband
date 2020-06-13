@@ -323,7 +323,7 @@ static errr interpret_xy_token(player_type *creature_ptr, char *buf)
  */
 static errr interpret_z_token(char *buf)
 {
-	char *t = my_strchr(buf + 2, ':');
+	char *t = angband_strchr(buf + 2, ':');
 	if (!t) return 1;
 
 	*(t++) = '\0';
@@ -522,5 +522,5 @@ void add_history_from_pref_line(concptr t)
     if (!histpref_buf)
         return;
 
-    my_strcat(histpref_buf, t, HISTPREF_LIMIT);
+    angband_strcat(histpref_buf, t, HISTPREF_LIMIT);
 }

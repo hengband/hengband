@@ -123,9 +123,9 @@ bool research_mon(player_type *player_ptr)
             }
 
 #ifdef JP
-            if (my_strstr(temp2, temp) || my_strstr(r_name + r_ptr->name, temp))
+            if (angband_strstr(temp2, temp) || angband_strstr(r_name + r_ptr->name, temp))
 #else
-            if (my_strstr(temp2, temp))
+            if (angband_strstr(temp2, temp))
 #endif
                 who[n++] = i;
         } else if (all || (r_ptr->d_char == sym)) {

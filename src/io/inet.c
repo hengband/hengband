@@ -44,7 +44,7 @@ void set_proxy(char *default_url, int default_port)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, "proxy.prf");
 
 	/* ファイルから設定を読む。 */
-	fp = my_fopen(buf, "r");
+	fp = angband_fopen(buf, "r");
 
 	if (!fp)
 	{
@@ -54,12 +54,12 @@ void set_proxy(char *default_url, int default_port)
 		return;
 	}
 
-	while (my_fgets(fp, buf, sizeof(buf)) == 0)
+	while (angband_fgets(fp, buf, sizeof(buf)) == 0)
 	{
 		if (buf[0] != '#' && buf[0] != '\0') break;
 	}
 
-	my_fclose(fp);
+	angband_fclose(fp);
 
 	/* ポインタを用意。 */
 	s = buf;

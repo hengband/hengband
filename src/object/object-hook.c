@@ -156,7 +156,7 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 	{
 		if (o_ptr->tval == TV_CORPSE &&
 			o_ptr->sval == SV_CORPSE &&
-			my_strchr("pht", r_info[o_ptr->pval].d_char))
+			angband_strchr("pht", r_info[o_ptr->pval].d_char))
 			return TRUE;
 	}
 

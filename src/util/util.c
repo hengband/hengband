@@ -235,7 +235,7 @@ void user_name(char *buf, int id)
  *
  * Note that "path_temp" should probably return a "canonical" filename.
  *
- * Note that "my_fopen()" and "my_open()" and "my_make()" and "my_kill()"
+ * Note that "angband_fopen()" and "my_open()" and "my_make()" and "my_kill()"
  * and "my_move()" and "my_copy()" should all take "canonical" filenames.
  *
  * Note that "canonical" filenames use a leading "slash" to indicate an absolute
@@ -268,7 +268,7 @@ errr path_parse(char *buf, int max, concptr file)
 	}
 
 	concptr u = file + 1;
-	concptr s = my_strstr(u, PATH_SEP);
+	concptr s = angband_strstr(u, PATH_SEP);
 	char user[128];
 	if (s && (s >= u + sizeof(user))) return 1;
 
@@ -375,7 +375,7 @@ errr path_build(char *buf, int max, concptr path, concptr file)
 /*
  * Hack -- replacement for "fopen()"
  */
-FILE *my_fopen(concptr file, concptr mode)
+FILE *angband_fopen(concptr file, concptr mode)
 {
 	char buf[1024];
 	if (path_parse(buf, 1024, file)) return (NULL);
@@ -387,7 +387,7 @@ FILE *my_fopen(concptr file, concptr mode)
 /*
  * Hack -- replacement for "fclose()"
  */
-errr my_fclose(FILE *fff)
+errr angband_fclose(FILE *fff)
 {
 	if (!fff) return -1;
 	if (fclose(fff) == EOF) return 1;
@@ -396,7 +396,7 @@ errr my_fclose(FILE *fff)
 
 
 #ifdef HAVE_MKSTEMP
-FILE *my_fopen_temp(char *buf, int max)
+FILE *angband_fopen_temp(char *buf, int max)
 {
 	strncpy(buf, "/tmp/anXXXXXX", max);
 	int fd = mkstemp(buf);
@@ -405,10 +405,10 @@ FILE *my_fopen_temp(char *buf, int max)
 	return (fdopen(fd, "w"));
 }
 #else /* HAVE_MKSTEMP */
-FILE *my_fopen_temp(char *buf, int max)
+FILE *angband_fopen_temp(char *buf, int max)
 {
 	if (path_temp(buf, max)) return (NULL);
-	return (my_fopen(buf, "w"));
+	return (angband_fopen(buf, "w"));
 }
 #endif /* HAVE_MKSTEMP */
 
@@ -420,7 +420,7 @@ FILE *my_fopen_temp(char *buf, int max)
  *
  * Process tabs, strip internal non-printables
  */
-errr my_fgets(FILE *fff, char *buf, huge n)
+errr angband_fgets(FILE *fff, char *buf, huge n)
 {
 	huge i = 0;
 	char *s;
@@ -481,7 +481,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
  * Dump a string, plus a newline, to a file
  * Process internal weirdness?
  */
-errr my_fputs(FILE *fff, concptr buf, huge n)
+errr angband_fputs(FILE *fff, concptr buf, huge n)
 {
 	n = n ? n : 0;
 	(void)fprintf(fff, "%s\n", buf);
@@ -870,7 +870,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 
 	if (i == max_macrotrigger)
 	{
-		str = my_strchr(str, ']');
+		str = angband_strchr(str, ']');
 		if (str)
 		{
 			*s++ = (char)31;
@@ -1036,7 +1036,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 		switch (ch)
 		{
 		case '&':
-			while ((tmp = my_strchr(macro_modifier_chr, *str)) != 0)
+			while ((tmp = angband_strchr(macro_modifier_chr, *str)) != 0)
 			{
 				int j = (int)(tmp - macro_modifier_chr);
 				tmp = macro_modifier_name[j];
@@ -2667,7 +2667,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 			}
 
 			buf[pos] = '\0';
-			my_strcat(buf, tmp, len + 1);
+			angband_strcat(buf, tmp, len + 1);
 
 			break;
 		}
@@ -2746,17 +2746,17 @@ bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
 
 	if (mode & CHECK_OKAY_CANCEL)
 	{
-		my_strcpy(buf, prompt, sizeof(buf) - 15);
+		angband_strcpy(buf, prompt, sizeof(buf) - 15);
 		strcat(buf, "[(O)k/(C)ancel]");
 	}
 	else if (mode & CHECK_DEFAULT_Y)
 	{
-		my_strcpy(buf, prompt, sizeof(buf) - 5);
+		angband_strcpy(buf, prompt, sizeof(buf) - 5);
 		strcat(buf, "[Y/n]");
 	}
 	else
 	{
-		my_strcpy(buf, prompt, sizeof(buf) - 5);
+		angband_strcpy(buf, prompt, sizeof(buf) - 5);
 		strcat(buf, "[y/n]");
 	}
 
@@ -3210,7 +3210,7 @@ void request_command(player_type *player_ptr, int shopping)
 
 	if (always_repeat && (command_arg <= 0))
 	{
-		if (my_strchr("TBDoc+", (char)command_cmd))
+		if (angband_strchr("TBDoc+", (char)command_cmd))
 		{
 			command_arg = 99;
 		}
@@ -3254,7 +3254,7 @@ void request_command(player_type *player_ptr, int shopping)
 		if (!o_ptr->inscription) continue;
 
 		concptr s = quark_str(o_ptr->inscription);
-		s = my_strchr(s, '^');
+		s = angband_strchr(s, '^');
 		while (s)
 		{
 #ifdef JP
@@ -3269,7 +3269,7 @@ void request_command(player_type *player_ptr, int shopping)
 				}
 			}
 
-			s = my_strchr(s + 1, '^');
+			s = angband_strchr(s + 1, '^');
 		}
 	}
 
@@ -3637,16 +3637,16 @@ void roff_to_buf(concptr str, int maxlen, char *tbuf, size_t bufsize)
 
 
 /*
- * The my_strcpy() function copies up to 'bufsize'-1 characters from 'src'
+ * The angband_strcpy() function copies up to 'bufsize'-1 characters from 'src'
  * to 'buf' and NUL-terminates the result.  The 'buf' and 'src' strings may
  * not overlap.
  *
- * my_strcpy() returns strlen(src).  This makes checking for truncation
- * easy.  Example: if (my_strcpy(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
+ * angband_strcpy() returns strlen(src).  This makes checking for truncation
+ * easy.  Example: if (angband_strcpy(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
  *
  * This function should be equivalent to the strlcpy() function in BSD.
  */
-size_t my_strcpy(char *buf, concptr src, size_t bufsize)
+size_t angband_strcpy(char *buf, concptr src, size_t bufsize)
 {
 #ifdef JP
 	char *d = buf;
@@ -3694,22 +3694,22 @@ size_t my_strcpy(char *buf, concptr src, size_t bufsize)
 
 
 /*
- * The my_strcat() tries to append a string to an existing NUL-terminated string.
+ * The angband_strcat() tries to append a string to an existing NUL-terminated string.
  * It never writes more characters into the buffer than indicated by 'bufsize' and
  * NUL-terminates the buffer.  The 'buf' and 'src' strings may not overlap.
  *
- * my_strcat() returns strlen(buf) + strlen(src).  This makes checking for
+ * angband_strcat() returns strlen(buf) + strlen(src).  This makes checking for
  * truncation easy.  Example:
- * if (my_strcat(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
+ * if (angband_strcat(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
  *
  * This function should be equivalent to the strlcat() function in BSD.
  */
-size_t my_strcat(char *buf, concptr src, size_t bufsize)
+size_t angband_strcat(char *buf, concptr src, size_t bufsize)
 {
 	size_t dlen = strlen(buf);
 	if (dlen < bufsize - 1)
 	{
-		return (dlen + my_strcpy(buf + dlen, src, bufsize - dlen));
+		return (dlen + angband_strcpy(buf + dlen, src, bufsize - dlen));
 	}
 	else
 	{
@@ -3721,9 +3721,9 @@ size_t my_strcat(char *buf, concptr src, size_t bufsize)
 /*
  * A copy of ANSI strstr()
  *
- * my_strstr() can handle Kanji strings correctly.
+ * angband_strstr() can handle Kanji strings correctly.
  */
-char *my_strstr(concptr haystack, concptr needle)
+char *angband_strstr(concptr haystack, concptr needle)
 {
 	int l1 = strlen(haystack);
 	int l2 = strlen(needle);
@@ -3748,9 +3748,9 @@ char *my_strstr(concptr haystack, concptr needle)
 /*
  * A copy of ANSI strchr()
  *
- * my_strchr() can handle Kanji strings correctly.
+ * angband_strchr() can handle Kanji strings correctly.
  */
-char *my_strchr(concptr ptr, char ch)
+char *angband_strchr(concptr ptr, char ch)
 {
 	for (; *ptr != '\0'; ptr++)
 	{

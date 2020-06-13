@@ -1455,7 +1455,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
 		safe_setuid_grab();
 
 		/* Open the savefile */
-		fff = my_fopen(name, "wb");
+		fff = angband_fopen(name, "wb");
 
 		/* Drop permissions */
 		safe_setuid_drop();
@@ -1467,7 +1467,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
 			if (wr_savefile_new(player_ptr)) is_save_successful = TRUE;
 
 			/* Attempt to close it */
-			if (my_fclose(fff)) is_save_successful = FALSE;
+			if (angband_fclose(fff)) is_save_successful = FALSE;
 		}
 
 		/* Grab permissions */
@@ -1826,7 +1826,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 		safe_setuid_grab();
 
 		/* Open the savefile */
-		fff = my_fopen(floor_savefile, "wb");
+		fff = angband_fopen(floor_savefile, "wb");
 
 		/* Drop permissions */
 		safe_setuid_drop();
@@ -1838,7 +1838,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 			if (save_floor_aux(player_ptr, sf_ptr)) is_save_successful = TRUE;
 
 			/* Attempt to close it */
-			if (my_fclose(fff)) is_save_successful = FALSE;
+			if (angband_fclose(fff)) is_save_successful = FALSE;
 		}
 
 		/* Remove "broken" files */

@@ -421,7 +421,7 @@ void do_cmd_options(player_type *player_ptr)
             if (k == ESCAPE)
                 break;
 
-            if (my_strchr("\n\r ", k)) {
+            if (angband_strchr("\n\r ", k)) {
                 k = option_fields[y].key;
                 break;
             }

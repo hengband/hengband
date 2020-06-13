@@ -3492,13 +3492,13 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 errr rd_savefile_new(player_type *player_ptr)
 {
 	safe_setuid_grab();
-	fff = my_fopen(savefile, "rb");
+	fff = angband_fopen(savefile, "rb");
 	safe_setuid_drop();
 	if (!fff) return -1;
 	errr err = rd_savefile_new_aux(player_ptr);
 
 	if (ferror(fff)) err = -1;
-	my_fclose(fff);
+	angband_fclose(fff);
 	return err;
 }
 
@@ -3593,7 +3593,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
 	safe_setuid_grab();
-	fff = my_fopen(floor_savefile, "rb");
+	fff = angband_fopen(floor_savefile, "rb");
 	safe_setuid_drop();
 
 	bool is_save_successful = TRUE;
@@ -3603,7 +3603,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	{
 		is_save_successful = load_floor_aux(player_ptr, sf_ptr);
 		if (ferror(fff)) is_save_successful = FALSE;
-		my_fclose(fff);
+		angband_fclose(fff);
 
 		safe_setuid_grab();
 		if (!(mode & SLF_NO_KILL)) (void)fd_kill(floor_savefile);

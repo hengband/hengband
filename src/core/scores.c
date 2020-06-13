@@ -518,10 +518,10 @@ errr top_twenty(player_type *current_player_ptr)
 	if (strlen(current_player_ptr->died_from) >= sizeof(the_score.how))
 	{
 #ifdef JP
-		my_strcpy(the_score.how, current_player_ptr->died_from, sizeof(the_score.how) - 2);
+		angband_strcpy(the_score.how, current_player_ptr->died_from, sizeof(the_score.how) - 2);
 		strcat(the_score.how, "…");
 #else
-		my_strcpy(the_score.how, current_player_ptr->died_from, sizeof(the_score.how) - 3);
+		angband_strcpy(the_score.how, current_player_ptr->died_from, sizeof(the_score.how) - 3);
 		strcat(the_score.how, "...");
 #endif
 	}
