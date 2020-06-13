@@ -182,6 +182,40 @@ static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, PO
     return TRUE;
 }
 
+static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
+{
+    if (!player_ptr->warning || !current_world_ptr->character_dungeon)
+        return;
+
+    monster_race *r_ptr = &r_info[r_idx];
+    if ((r_ptr->flags1 & RF1_UNIQUE) == 0)
+        return;
+
+    concptr color;
+    object_type *o_ptr;
+    GAME_TEXT o_name[MAX_NLEN];
+    if (r_ptr->level > player_ptr->lev + 30)
+        color = _("黒く", "black");
+    else if (r_ptr->level > player_ptr->lev + 15)
+        color = _("紫色に", "purple");
+    else if (r_ptr->level > player_ptr->lev + 5)
+        color = _("ルビー色に", "deep red");
+    else if (r_ptr->level > player_ptr->lev - 5)
+        color = _("赤く", "red");
+    else if (r_ptr->level > player_ptr->lev - 15)
+        color = _("ピンク色に", "pink");
+    else
+        color = _("白く", "white");
+
+    o_ptr = choose_warning_item(player_ptr);
+    if (o_ptr != NULL) {
+        object_desc(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        msg_format(_("%sは%s光った。", "%s glows %s."), o_name, color);
+    } else {
+        msg_format(_("%s光る物が頭に浮かんだ。", "An %s image forms in your mind."), color);
+    }
+}
+
 /*!
  * @brief モンスターを一体生成する / Attempt to place a monster of the given race at the given location.
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -361,35 +395,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (r_ptr->flags2 & RF2_MULTIPLY)
         floor_ptr->num_repro++;
 
-    if (player_ptr->warning && current_world_ptr->character_dungeon) {
-        if (r_ptr->flags1 & RF1_UNIQUE) {
-            concptr color;
-            object_type *o_ptr;
-            GAME_TEXT o_name[MAX_NLEN];
-
-            if (r_ptr->level > player_ptr->lev + 30)
-                color = _("黒く", "black");
-            else if (r_ptr->level > player_ptr->lev + 15)
-                color = _("紫色に", "purple");
-            else if (r_ptr->level > player_ptr->lev + 5)
-                color = _("ルビー色に", "deep red");
-            else if (r_ptr->level > player_ptr->lev - 5)
-                color = _("赤く", "red");
-            else if (r_ptr->level > player_ptr->lev - 15)
-                color = _("ピンク色に", "pink");
-            else
-                color = _("白く", "white");
-
-            o_ptr = choose_warning_item(player_ptr);
-            if (o_ptr) {
-                object_desc(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-                msg_format(_("%sは%s光った。", "%s glows %s."), o_name, color);
-            } else {
-                msg_format(_("%s光る物が頭に浮かんだ。", "An %s image forms in your mind."), color);
-            }
-        }
-    }
-
+    warn_unique_generation();
     if (!is_explosive_rune_grid(g_ptr))
         return TRUE;
 
