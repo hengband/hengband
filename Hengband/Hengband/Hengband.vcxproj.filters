@@ -1307,6 +1307,9 @@
     <ClCompile Include="..\..\src\monster-floor\quantum-effect.c">
       <Filter>monster-floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\one-monster-placer.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2864,6 +2867,9 @@
       <Filter>monster-floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-floor\quantum-effect.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\one-monster-placer.h">
       <Filter>monster-floor</Filter>
     </ClInclude>
   </ItemGroup>

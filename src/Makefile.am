@@ -321,6 +321,7 @@ hengband_SOURCES = \
 	monster-floor/monster-runaway.c monster-floor/monster-runaway.h \
 	monster-floor/monster-safety-hiding.c monster-floor/monster-safety-hiding.h \
 	monster-floor/monster-sweep-grid.c monster-floor/monster-sweep-grid.h \
+	monster-floor/one-monster-placer.c monster-floor/one-monster-placer.h \
 	monster-floor/place-monster-types.h \
 	monster-floor/quantum-effect.c monster-floor/quantum-effect.h \
 	\

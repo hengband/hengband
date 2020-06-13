@@ -191,6 +191,7 @@
     <ClCompile Include="..\..\src\lore\magic-types-setter.c" />
     <ClCompile Include="..\..\src\lore\lore-calculator.c" />
     <ClCompile Include="..\..\src\lore\lore-util.c" />
+    <ClCompile Include="..\..\src\monster-floor\one-monster-placer.c" />
     <ClCompile Include="..\..\src\monster\monster-compaction.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-death.c" />
     <ClCompile Include="..\..\src\lore\lore-store.c" />
@@ -549,6 +550,7 @@
     <ClInclude Include="..\..\src\lore\lore-util.h" />
     <ClInclude Include="..\..\src\mind\drs-types.h" />
     <ClInclude Include="..\..\src\mind\snipe-types.h" />
+    <ClInclude Include="..\..\src\monster-floor\one-monster-placer.h" />
     <ClInclude Include="..\..\src\monster\monster-compaction.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-death.h" />
     <ClInclude Include="..\..\src\lore\lore-store.h" />
