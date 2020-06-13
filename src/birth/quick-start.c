@@ -50,7 +50,7 @@ bool ask_quick_start(player_type *creature_ptr)
     rp_ptr = &race_info[creature_ptr->prace];
     cp_ptr = &class_info[creature_ptr->pclass];
     mp_ptr = &m_info[creature_ptr->pclass];
-    ap_ptr = &seikaku_info[creature_ptr->pseikaku];
+    ap_ptr = &personality_info[creature_ptr->pseikaku];
 
     get_extra(creature_ptr, FALSE);
     creature_ptr->update |= (PU_BONUS | PU_HP);

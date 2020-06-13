@@ -56,7 +56,7 @@ static void write_birth_diary(player_type *creature_ptr)
     }
 
     sprintf(buf, _("                            性格に%sを選択した。", "                            chose %s personality."),
-        seikaku_info[creature_ptr->pseikaku].title);
+        personality_info[creature_ptr->pseikaku].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 }
 

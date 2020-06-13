@@ -71,7 +71,7 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
 
     roff_to_buf(personality_explanations[creature_ptr->pseikaku], 78, temp, sizeof(temp));
     fprintf(fff, "\n");
-    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), seikaku_info[creature_ptr->pseikaku].title);
+    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[creature_ptr->pseikaku].title);
 
     t = temp;
     for (int i = 0; i < A_MAX; i++) {

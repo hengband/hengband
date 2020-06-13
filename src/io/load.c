@@ -3297,7 +3297,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	sp_ptr = &sex_info[creature_ptr->psex];
 	rp_ptr = &race_info[creature_ptr->prace];
 	cp_ptr = &class_info[creature_ptr->pclass];
-	ap_ptr = &seikaku_info[creature_ptr->pseikaku];
+	ap_ptr = &personality_info[creature_ptr->pseikaku];
 
 	if (z_older_than(10, 2, 2) && (creature_ptr->pclass == CLASS_BEASTMASTER) && !creature_ptr->is_dead)
 	{

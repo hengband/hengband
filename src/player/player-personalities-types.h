@@ -14,4 +14,5 @@ typedef enum player_personality_type {
     PERSONALITY_PATIENT = 10,
     PERSONALITY_MUNCHKIN = 11,
     PERSONALITY_CHARGEMAN = 12,
+    MAX_PERSONALITIES = 13,
 } player_personality_type;
