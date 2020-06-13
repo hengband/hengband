@@ -7,6 +7,7 @@
 #include "knowledge/knowledge-features.h"
 #include "core/show-file.h"
 #include "dungeon/dungeon.h"
+#include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
 #include "knowledge/lighting-level-table.h"
 #include "term/term-color-types.h"

@@ -1,4 +1,5 @@
 ﻿#include "core/visuals-reseter.h"
+#include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "io/read-pref-file.h"
 #include "object/object-kind.h"

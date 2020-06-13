@@ -1,4 +1,5 @@
 ﻿#include "io-dump/dump-util.h"
+#include "game-option/special-options.h"
 #include "term/term-color-types.h"
 
 TERM_COLOR attr_idx = 0;

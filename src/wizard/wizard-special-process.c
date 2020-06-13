@@ -23,6 +23,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "game-option/play-record-options.h"
+#include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-object.h"

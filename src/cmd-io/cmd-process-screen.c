@@ -1,14 +1,14 @@
 ﻿/*!
-* @file cmd-process-screen.c
-* @brief 記念撮影のセーブとロード
-* @date 2020/04/22
-* @Author Hourier
-*/
+ * @brief 記念撮影のセーブとロード
+ * @date 2020/04/22
+ * @Author Hourier
+ */
 
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd/cmd-draw.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
+#include "game-option/special-options.h"
 #include "io/files-util.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"

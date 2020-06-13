@@ -6,6 +6,7 @@
 #include "effect/effect-monster.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
+#include "game-option/special-options.h"
 #include "io/targeting.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"

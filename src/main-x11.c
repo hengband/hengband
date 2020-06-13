@@ -93,9 +93,10 @@
  */
 
 #include "system/angband.h"
+#include "game-option/special-options.h"
+#include "io/files-util.h"
 #include "main/sound-definitions-table.h"
 #include "system/system-variables.h"
-#include "io/files-util.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 

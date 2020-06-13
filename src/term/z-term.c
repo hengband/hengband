@@ -10,6 +10,7 @@
 
  /* Purpose: a generic, efficient, terminal window package -BEN- */
 #include "term/z-term.h"
+#include "game-option/special-options.h"
 #include "term/term-color-types.h"
 #include "term/z-virt.h"
 

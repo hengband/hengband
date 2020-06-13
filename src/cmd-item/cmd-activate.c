@@ -17,6 +17,7 @@
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
+#include "game-option/special-options.h"
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
 #include "io/targeting.h"

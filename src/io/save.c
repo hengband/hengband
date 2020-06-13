@@ -23,6 +23,7 @@
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
+#include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "io/files-util.h"
 #include "io/load.h"

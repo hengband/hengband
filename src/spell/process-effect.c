@@ -7,6 +7,7 @@
 #include "effect/effect-player.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
+#include "game-option/special-options.h"
 #include "main/sound-definitions-table.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"

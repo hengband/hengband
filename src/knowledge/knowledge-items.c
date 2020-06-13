@@ -9,6 +9,7 @@
 #include "core/sort.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
 #include "knowledge/object-group-table.h"
 #include "object-enchant/artifact.h"

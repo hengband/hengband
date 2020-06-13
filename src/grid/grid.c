@@ -22,6 +22,7 @@
 #include "floor/floor-generate.h"
 #include "game-option/game-play-options.h"
 #include "game-option/map-screen-options.h"
+#include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
 #include "monster/monster-info.h"

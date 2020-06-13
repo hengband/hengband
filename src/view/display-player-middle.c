@@ -2,6 +2,7 @@
 #include "combat/shoot.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "game-option/special-options.h"
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"

@@ -11,6 +11,7 @@
 #include "core/visuals-reseter.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
+#include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
 #include "io/inet.h"
 #include "player/player-personality.h"

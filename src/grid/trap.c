@@ -7,6 +7,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor-save.h"
 #include "game-option/birth-options.h"
+#include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/feature-reader.h"

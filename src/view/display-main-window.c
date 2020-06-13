@@ -23,6 +23,7 @@
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "game-option/map-screen-options.h"
+#include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

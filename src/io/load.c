@@ -53,6 +53,7 @@
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
+#include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
