@@ -14,7 +14,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-summon.h"

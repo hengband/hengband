@@ -22,7 +22,7 @@
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-move.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "spell/spell-types.h"
 #include "util/util.h"

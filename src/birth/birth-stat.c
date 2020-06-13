@@ -5,7 +5,7 @@
 #include "player/player-personalities-types.h"
 #include "player/player-skill.h"
 #include "spell/spells-status.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 
 /*!
  * @brief プレイヤーの能力値表現に基づいて加減算を行う。

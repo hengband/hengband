@@ -13,7 +13,7 @@
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"

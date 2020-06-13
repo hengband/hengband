@@ -6,7 +6,7 @@
 #include "market/building-actions-table.h"
 #include "player/eldritch-horror.h"
 #include "player/player-effects.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "store/rumor.h"
 #include "world/world.h"
 

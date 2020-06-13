@@ -53,7 +53,7 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-personalities-types.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/process-name.h"
 #include "realm/realm-names-table.h"

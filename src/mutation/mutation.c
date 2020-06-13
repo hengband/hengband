@@ -41,7 +41,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-personalities-types.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
 #include "spell-kind/earthquake.h"

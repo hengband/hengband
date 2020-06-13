@@ -2,7 +2,7 @@
 #include "core/stuff-handler.h"
 #include "io/files-util.h"
 #include "player/player-effects.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "player/process-name.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"

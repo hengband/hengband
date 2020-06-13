@@ -7,7 +7,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
 #include "player/player-effects.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "realm/realm-song-numbers.h"
 #include "sv-definition/sv-bow-types.h"

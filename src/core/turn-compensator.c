@@ -6,7 +6,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 
 /*!
  * @brief ゲームターンからの実時間換算を行うための補正をかける

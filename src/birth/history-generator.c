@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "birth/history-generator.h"
 #include "birth/history.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 
 static int get_history_chart(player_type *creature_ptr)
 {

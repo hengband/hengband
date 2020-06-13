@@ -42,4 +42,5 @@ typedef enum player_race_type {
     RACE_KUTAR = 35,
     RACE_ANDROID = 36,
     RACE_MERFOLK = 37,
+    MAX_RACES = 38,
 } player_race_type;

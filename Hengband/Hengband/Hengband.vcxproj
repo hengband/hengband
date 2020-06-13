@@ -789,7 +789,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\mspell-ball.h" />
     <ClInclude Include="..\..\src\player\player-personalities-types.h" />
-    <ClInclude Include="..\..\src\player\player-races-types.h" />
+    <ClInclude Include="..\..\src\player\player-race-types.h" />
     <ClInclude Include="..\..\src\player\player-classes-types.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-detection.h" />
     <ClInclude Include="..\..\src\system\angband-version.h" />

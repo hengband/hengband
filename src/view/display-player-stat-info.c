@@ -12,7 +12,7 @@
 #include "player/mimic-info-table.h"
 #include "player/permanent-resistances.h"
 #include "player/player-personality.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "term/term-color-types.h"
 
 /*!

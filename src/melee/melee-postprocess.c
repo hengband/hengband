@@ -32,7 +32,7 @@
 #include "player/player-class.h"
 #include "player/player-move.h"
 #include "player/player-personalities-types.h"
-#include "player/player-races-types.h"
+#include "player/player-race-types.h"
 #include "util/util.h"
 
 // Melee-post-process-type
