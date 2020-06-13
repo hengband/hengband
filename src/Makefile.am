@@ -457,6 +457,7 @@ hengband_SOURCES = \
 	realm/realm-song.c realm/realm-song.h \
 	realm/realm-sorcery.c realm/realm-sorcery.h \
 	realm/realm-trump.c realm/realm-trump.h \
+	realm/realm-types.h \
 	\
 	room/rooms.c room/rooms.h room/rooms-city.c room/rooms-city.h \
 	room/rooms-fractal.c room/rooms-fractal.h \

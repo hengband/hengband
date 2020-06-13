@@ -672,6 +672,7 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-weapon.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic.h" />
     <ClInclude Include="..\..\src\player\eldritch-horror.h" />
+    <ClInclude Include="..\..\src\realm\realm-types.h" />
     <ClInclude Include="..\..\src\specific-object\bow.h" />
     <ClInclude Include="..\..\src\object\object-stack.h" />
     <ClInclude Include="..\..\src\object\object-value-calc.h" />

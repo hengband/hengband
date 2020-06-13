@@ -2974,6 +2974,9 @@
     <ClInclude Include="..\..\src\player\player-race-types.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-types.h">
+      <Filter>realm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+#include "realm/realm-types.h"
+
+#define NUM_TECHNIC (MAX_REALM - MIN_TECHNIC + 1)
+
 /*
  * The "name" of spell 'N' is stored as spell_names[X][N],
  * where X is 0 for mage-spells and 1 for priest-spells.
