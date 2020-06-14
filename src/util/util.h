@@ -139,8 +139,6 @@ extern void user_name(char *buf, int id);
 extern int usleep(huge usecs);
 #endif
 
-extern const char hexsym[16];
-
 extern bool is_a_vowel(int ch);
 extern int get_keymap_dir(char ch);
 extern errr type_string(concptr str, uint len);

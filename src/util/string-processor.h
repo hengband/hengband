@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+extern const char hexsym[16];
+
 /*
  * Automatically generated "variable" declarations
  */

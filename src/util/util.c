@@ -46,17 +46,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-/*!
- * 10進数から16進数への変換テーブル /
- * Global array for converting numbers to uppercase hecidecimal digit
- * This array can also be used to convert a number to an octal digit
- */
-const char hexsym[16] =
-{
-	'0', '1', '2', '3', '4', '5', '6', '7',
-	'8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-};
-
 pos_list tmp_pos;
 
 /*
@@ -128,7 +117,7 @@ int get_keymap_dir(char ch)
 
 
 /*
- * Array size for which InsertionSort
+ * Array size for which insertion_sort
  * is used instead of QuickSort
  */
 #define CUTOFF 4
@@ -153,7 +142,7 @@ static void swap(tag_type *a, tag_type *b)
  * Insertion-Sort algorithm
  * (used by the Quicksort algorithm)
  */
-static void InsertionSort(tag_type elements[], int number)
+static void insertion_sort(tag_type elements[], int number)
 {
 	tag_type tmp;
 	for (int i = 1; i < number; i++)
@@ -192,7 +181,7 @@ static tag_type median3(tag_type elements[], int left, int right)
  * The "median of three" pivot selection eliminates
  * the bad case of already sorted input.
  *
- * We use InsertionSort for smaller sub-arrays,
+ * We use insertion_sort for smaller sub-arrays,
  * because it is faster in this case.
  *
  * For details see: "Data Structures and Algorithm
@@ -226,7 +215,7 @@ static void quicksort(tag_type elements[], int left, int right)
 	}
 	else
 	{
-		InsertionSort(elements + left, right - left + 1);
+		insertion_sort(elements + left, right - left + 1);
 	}
 }
 

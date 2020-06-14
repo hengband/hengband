@@ -1,5 +1,12 @@
 ﻿#include "util/string-processor.h"
 
+/*!
+ * 10進数から16進数への変換テーブル /
+ * Global array for converting numbers to uppercase hecidecimal digit
+ * This array can also be used to convert a number to an octal digit
+ */
+const char hexsym[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
 int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
 concptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
 concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
