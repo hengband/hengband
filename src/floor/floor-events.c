@@ -26,6 +26,7 @@
 #include "sv-definition/sv-ring-types.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"

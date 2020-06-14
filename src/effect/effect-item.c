@@ -15,6 +15,7 @@
 #include "spell/spells3.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

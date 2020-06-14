@@ -15,6 +15,7 @@
 #include "object-enchant/trc-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief 防具系オブジェクトに生成ランクごとの強化を与えるサブルーチン

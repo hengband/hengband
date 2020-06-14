@@ -80,6 +80,7 @@
 #include "system/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 #include "util/object-sort.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"

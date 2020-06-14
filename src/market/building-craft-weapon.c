@@ -17,6 +17,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

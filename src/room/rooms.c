@@ -54,6 +54,7 @@
 #include "room/rooms-special.h"
 #include "room/rooms-trap.h"
 #include "room/rooms-vault.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
  /*!

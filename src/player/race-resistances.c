@@ -2,6 +2,7 @@
 #include "player/player-race-types.h"
 #include "object/object-flags.h"
 #include "object-enchant/tr-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief プレイヤーの種族による免疫フラグを返す

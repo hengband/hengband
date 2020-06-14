@@ -19,6 +19,7 @@
 #include "player/avatar.h"
 #include "player/player-effects.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 

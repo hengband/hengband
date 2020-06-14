@@ -10,6 +10,7 @@
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
 #include "object-enchant/special-object-flags.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief 未鑑定なベースアイテムの基本価格を返す /

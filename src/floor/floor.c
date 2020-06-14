@@ -22,6 +22,7 @@
 #include "perception/object-perception.h"
 #include "player/player-effects.h"
 #include "room/rooms.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
 #include "world/world.h"

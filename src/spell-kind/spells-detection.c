@@ -15,6 +15,7 @@
 #include "object/object-mark-types.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

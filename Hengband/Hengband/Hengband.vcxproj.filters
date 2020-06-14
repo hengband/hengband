@@ -1391,9 +1391,6 @@
     <ClCompile Include="..\..\src\locale\vowel-checker.c">
       <Filter>locale</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\keymap-directory-getter.h">
-      <Filter>game-option</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\game-option\keymap-directory-getter.c">
       <Filter>game-option</Filter>
     </ClCompile>
@@ -3059,6 +3056,9 @@
       <Filter>game-option</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\int-char-converter.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\bit-flags-calculator.h">
       <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>

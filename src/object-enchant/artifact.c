@@ -47,6 +47,7 @@
 #include "player/player-class.h"
 #include "player/player-personalities-types.h"
 #include "spell/spells-object.h"
+#include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

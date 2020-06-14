@@ -26,6 +26,7 @@
 #include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

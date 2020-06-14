@@ -4,6 +4,7 @@
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

@@ -7,6 +7,7 @@
 #include "room/rooms.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*

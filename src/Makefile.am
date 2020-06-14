@@ -553,6 +553,7 @@ hengband_SOURCES = \
 	term/z-virt.c term/z-virt.h \
 	\
 	util/angband-files.c util/angband-files.h \
+	util/bit-flags-calculator.h \
 	util/int-char-converter.h \
 	util/object-sort.c util/object-sort.h \
 	util/quarks.c util/quarks.h \

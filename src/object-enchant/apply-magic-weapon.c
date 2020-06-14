@@ -13,6 +13,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief 武器系オブジェクトに生成ランクごとの強化を与えるサブルーチン

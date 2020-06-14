@@ -19,6 +19,7 @@
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-summon.h"
+#include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
 

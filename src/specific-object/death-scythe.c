@@ -13,6 +13,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/player-damage.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

@@ -23,6 +23,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/smart-learn-types.h"
 #include "player/avatar.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

@@ -58,6 +58,7 @@
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

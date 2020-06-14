@@ -19,6 +19,7 @@
 #include "spell/spell-types.h"
 #include "spell/range-calc.h"
 #include "term/gameterm.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h" // 暫定、後で消すかも.
 #include "view/display-messages.h"
 

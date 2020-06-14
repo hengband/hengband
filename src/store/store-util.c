@@ -21,6 +21,7 @@
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "util/bit-flags-calculator.h"
 #include "world/world-object.h"
 
 int cur_store_num = 0;

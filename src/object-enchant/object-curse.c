@@ -7,6 +7,7 @@
 #include "object/object-hook.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 #define MAX_CURSE 18

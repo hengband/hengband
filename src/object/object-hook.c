@@ -29,7 +29,7 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "util/util.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

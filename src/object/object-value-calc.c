@@ -6,6 +6,7 @@
 #include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief オブジェクトのフラグ類から価格を算出する /

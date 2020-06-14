@@ -11,6 +11,7 @@
 #include "spell/range-calc.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
 * @brief 破邪魔法「神の怒り」の処理としてターゲットを指定した後分解のボールを最大20回発生させる。

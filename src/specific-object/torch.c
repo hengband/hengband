@@ -1,6 +1,7 @@
 ﻿#include "specific-object/torch.h"
 #include "sv-definition/sv-lite-types.h"
 #include "object-enchant/tr-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief 投擲時たいまつに投げやすい/焼棄/アンデッドスレイの特別効果を返す。

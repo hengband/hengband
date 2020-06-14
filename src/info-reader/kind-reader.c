@@ -3,6 +3,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-kind.h"
 #include "term/gameterm.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

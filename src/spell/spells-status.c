@@ -25,6 +25,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 

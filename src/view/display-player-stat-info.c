@@ -15,6 +15,7 @@
 #include "player/player-race-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief プレーヤーのパラメータ基礎値 (腕力等)を18以下になるようにして返す

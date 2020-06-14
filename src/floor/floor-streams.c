@@ -29,6 +29,7 @@
 #include "object/object-hook.h"
 #include "room/rooms.h"
 #include "spell-kind/spells-floor.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

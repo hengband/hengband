@@ -2,6 +2,7 @@
 #include "art-definition/random-art-effects.h"
 #include "floor/floor.h"
 #include "object-enchant/tr-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief 上質以上のオブジェクトに与えるための各種ボーナスを正規乱数も加えて算出する。
