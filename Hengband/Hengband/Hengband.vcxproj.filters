@@ -1397,6 +1397,9 @@
     <ClCompile Include="..\..\src\util\tag-sorter.c">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\buffer-shaper.c">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3059,6 +3062,9 @@
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\buffer-shaper.h">
       <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>

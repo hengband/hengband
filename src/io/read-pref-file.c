@@ -23,6 +23,7 @@
 #include "io/pref-file-expressor.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
+#include "util/buffer-shaper.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -354,7 +355,7 @@ bool read_histpref(player_type *creature_ptr, void (*process_autopick_file_comma
     while ((n > 0) && (s[n - 1] == ' '))
         s[--n] = '\0';
 
-    roff_to_buf(s, 60, temp, sizeof(temp));
+    shape_buffer(s, 60, temp, sizeof(temp));
     t = temp;
     for (i = 0; i < 4; i++) {
         if (t[0] == 0)

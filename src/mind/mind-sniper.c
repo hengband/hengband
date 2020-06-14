@@ -22,6 +22,7 @@
 #include "player/player-status.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
@@ -582,7 +583,7 @@ void do_cmd_snipe_browse(player_type *sniper_ptr)
 		Term_erase(12, 19, 255);
 		Term_erase(12, 18, 255);
 
-		roff_to_buf(snipe_tips[n], 62, temp, sizeof(temp));
+		shape_buffer(snipe_tips[n], 62, temp, sizeof(temp));
 		for(j = 0, line = 19; temp[j]; j += (1 + strlen(&temp[j])))
 		{
 			prt(&temp[j], line, 15);

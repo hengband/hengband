@@ -14,6 +14,7 @@
 #include "player/avatar.h"
 #include "store/store-util.h"
 #include "util/angband-files.h"
+#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
 
@@ -46,7 +47,7 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
         return;
 
     char temp[80 * 10];
-    roff_to_buf(race_explanations[creature_ptr->prace], 78, temp, sizeof(temp));
+    shape_buffer(race_explanations[creature_ptr->prace], 78, temp, sizeof(temp));
     fprintf(fff, "\n\n");
     fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[creature_ptr->prace].title);
     concptr t = temp;
@@ -58,7 +59,7 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
         t += strlen(t) + 1;
     }
 
-    roff_to_buf(class_explanations[creature_ptr->pclass], 78, temp, sizeof(temp));
+    shape_buffer(class_explanations[creature_ptr->pclass], 78, temp, sizeof(temp));
     fprintf(fff, "\n");
     fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[creature_ptr->pclass].title);
 
@@ -70,7 +71,7 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
         t += strlen(t) + 1;
     }
 
-    roff_to_buf(personality_explanations[creature_ptr->pseikaku], 78, temp, sizeof(temp));
+    shape_buffer(personality_explanations[creature_ptr->pseikaku], 78, temp, sizeof(temp));
     fprintf(fff, "\n");
     fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[creature_ptr->pseikaku].title);
 
@@ -84,7 +85,7 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
 
     fprintf(fff, "\n");
     if (creature_ptr->realm1) {
-        roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 78, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 78, temp, sizeof(temp));
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm1]);
 
         t = temp;
@@ -99,7 +100,7 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
 
     fprintf(fff, "\n");
     if (creature_ptr->realm2) {
-        roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 78, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 78, temp, sizeof(temp));
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm2]);
 
         t = temp;

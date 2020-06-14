@@ -75,6 +75,7 @@
 #include "spell/spells3.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -490,7 +491,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 			Term_erase(7, 21, 255);
 			Term_erase(7, 20, 255);
 
-			roff_to_buf(k_text + k_info[lookup_kind(tval, i)].text, 62, temp, sizeof(temp));
+			shape_buffer(k_text + k_info[lookup_kind(tval, i)].text, 62, temp, sizeof(temp));
 			for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j]))
 			{
 				prt(&temp[j], line, 10);

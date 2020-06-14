@@ -9,6 +9,7 @@
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-matcher.h"
+#include "core/show-file.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"

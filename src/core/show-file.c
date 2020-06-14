@@ -506,3 +506,19 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 	angband_fclose(fff);
 	return (skey != 'q');
 }
+
+/*
+ * Convert string to lower case
+ */
+void str_tolower(char *str)
+{
+    for (; *str; str++) {
+#ifdef JP
+        if (iskanji(*str)) {
+            str++;
+            continue;
+        }
+#endif
+        *str = (char)tolower(*str);
+    }
+}

@@ -45,6 +45,7 @@
 #include "spell/spells3.h"
 #include "spell/technic-info-table.h"
 #include "term/screen-processor.h"
+#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
@@ -709,7 +710,7 @@ void do_cmd_browse(player_type *caster_ptr)
 		Term_erase(14, 12, 255);
 		Term_erase(14, 11, 255);
 
-		roff_to_buf(exe_spell(caster_ptr, use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
+		shape_buffer(exe_spell(caster_ptr, use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
 
 		for (j = 0, line = 11; temp[j]; j += 1 + strlen(&temp[j]))
 		{

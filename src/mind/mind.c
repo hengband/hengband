@@ -62,6 +62,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "term/screen-processor.h"
+#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
@@ -2059,7 +2060,7 @@ void do_cmd_mind_browse(player_type *caster_ptr)
 		Term_erase(12, 17, 255);
 		Term_erase(12, 16, 255);
 
-		roff_to_buf(mind_tips[use_mind][n], 62, temp, sizeof(temp));
+		shape_buffer(mind_tips[use_mind][n], 62, temp, sizeof(temp));
 		for(j=0, line = 17;temp[j];j+=(1+strlen(&temp[j])))
 		{
 			prt(&temp[j], line, 15);

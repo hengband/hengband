@@ -208,6 +208,7 @@
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\locale\vowel-checker.c" />
     <ClCompile Include="..\..\src\term\screen-processor.c" />
+    <ClCompile Include="..\..\src\util\buffer-shaper.c" />
     <ClCompile Include="..\..\src\util\quarks.c" />
     <ClCompile Include="..\..\src\lore\combat-types-setter.c" />
     <ClCompile Include="..\..\src\lore\magic-types-setter.c" />
@@ -591,6 +592,7 @@
     <ClInclude Include="..\..\src\locale\vowel-checker.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
+    <ClInclude Include="..\..\src\util\buffer-shaper.h" />
     <ClInclude Include="..\..\src\util\int-char-converter.h" />
     <ClInclude Include="..\..\src\util\quarks.h" />
     <ClInclude Include="..\..\src\lore\combat-types-setter.h" />

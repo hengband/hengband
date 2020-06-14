@@ -28,6 +28,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
+#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
@@ -1506,7 +1507,7 @@ void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
 				Term_erase(14, 17, 255);
 				Term_erase(14, 16, 255);
 
-				roff_to_buf(kaji_tips[mode - 1], 62, temp, sizeof(temp));
+				shape_buffer(kaji_tips[mode - 1], 62, temp, sizeof(temp));
 				for (j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j])))
 				{
 					prt(&temp[j], line, 15);
