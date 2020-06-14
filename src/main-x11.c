@@ -99,6 +99,7 @@
 #include "io/files-util.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "main/x11-type-string.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"

@@ -33,6 +33,5 @@ struct alloc_entry
 	u16b total;		/* Unused for now */
 };
 
-errr type_string(concptr str, uint len);
 void roff_to_buf(concptr str, int wlen, char *tbuf, size_t bufsize);
 void str_tolower(char *str);
