@@ -13,6 +13,7 @@
 
 #include "io/files-util.h"
 #include "io-dump/character-dump.h"
+#include "io/input-key-acceptor.h"
 #include "io/uid-checker.h"
 #include "monster-race/race-flags1.h"
 #include "util/angband-files.h"

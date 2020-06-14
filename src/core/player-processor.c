@@ -7,6 +7,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "inventory/pack-overflow.h"
+#include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
 #include "mind/mind-force-trainer.h"
 #include "core/speed-table.h"

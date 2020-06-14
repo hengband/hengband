@@ -3,6 +3,7 @@
 #include "cmd-io/macro-util.h"
 #include "game-option/input-options.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "main/sound-of-music.h"
 #include "term/term-color-types.h"

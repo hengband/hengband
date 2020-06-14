@@ -10,6 +10,7 @@
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"

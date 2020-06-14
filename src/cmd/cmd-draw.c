@@ -1,6 +1,7 @@
 ﻿#include "cmd/cmd-draw.h"
 #include "core/stuff-handler.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "player/player-effects.h"
 #include "player/player-race-types.h"

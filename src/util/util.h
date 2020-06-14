@@ -121,11 +121,6 @@ extern char *macro__buf;
 
 extern bool get_com_no_macros;
 
-extern bool inkey_base;
-extern bool inkey_xtra;
-extern bool inkey_scan;
-extern bool inkey_flag;
-
 extern bool use_menu;
 
 extern pos_list tmp_pos;
@@ -222,7 +217,6 @@ extern const char hexsym[16];
 // todo ファイル処理関数・メッセージ処理関数・画面描画関数で最低限分割する.
 extern void flush(void);
 extern void move_cursor(int row, int col);
-extern char inkey(void);
 extern concptr quark_str(STR_OFFSET num);
 extern void quark_init(void);
 extern u16b quark_add(concptr str);
@@ -276,25 +270,6 @@ extern char *angband_strstr(concptr haystack, concptr needle);
 extern char *angband_strchr(concptr ptr, char ch);
 extern void str_tolower(char *str);
 
-/*
- * Special key code used for inkey_special()
- */
-#define SKEY_MOD_MASK     0x0f00
-#define SKEY_MOD_SHIFT    0x0100
-#define SKEY_MOD_CONTROL  0x0200
-
-#define SKEY_MASK         0xf000
-#define SKEY_DOWN   	  0xf001
-#define SKEY_LEFT   	  0xf002
-#define SKEY_RIGHT  	  0xf003
-#define SKEY_UP     	  0xf004
-#define SKEY_PGUP   	  0xf005
-#define SKEY_PGDOWN 	  0xf006
-#define SKEY_TOP    	  0xf007
-#define SKEY_BOTTOM 	  0xf008
-extern int inkey_special(bool numpad_cursor);
-
-/* util.c */
 extern void repeat_push(COMMAND_CODE what);
 extern bool repeat_pull(COMMAND_CODE *what);
 extern void repeat_check(void);

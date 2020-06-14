@@ -15,6 +15,7 @@
 #include "game-option/input-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
+#include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "locale/japanese.h"
 #include "main/sound-definitions-table.h"

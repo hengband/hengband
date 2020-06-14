@@ -1,5 +1,6 @@
 ﻿#include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
+#include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "world/world.h"
 

@@ -2,6 +2,7 @@
 #include "cmd/cmd-draw.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
+#include "io/input-key-acceptor.h"
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-experiences.h"
 #include "knowledge/knowledge-features.h"

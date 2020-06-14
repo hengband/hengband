@@ -3,6 +3,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "io/input-key-acceptor.h"
 #include "locale/english.h"
 #include "lore/lore-store.h"
 #include "monster-race/race-flags3.h"

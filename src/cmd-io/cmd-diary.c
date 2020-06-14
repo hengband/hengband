@@ -5,6 +5,7 @@
 #include "main/sound-of-music.h"
 #include "io/chuukei.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "player/player-personality.h"
 #include "util/angband-files.h"

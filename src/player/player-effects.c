@@ -29,6 +29,7 @@
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/report.h"
 #include "io/save.h"
 #include "mind/mind-sniper.h"
@@ -64,7 +65,6 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

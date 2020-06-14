@@ -1,5 +1,6 @@
 ﻿#include "birth/birth-select-personality.h"
 #include "birth/birth-util.h"
+#include "io/input-key-acceptor.h"
 #include "player/player-personality.h"
 #include "term/term-color-types.h"
 

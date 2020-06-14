@@ -2,6 +2,7 @@
 #include "core/sort.h"
 #include "core/stuff-handler.h"
 #include "game-option/game-play-options.h"
+#include "io/input-key-acceptor.h"
 #include "monster-race/race-flags1.h"
 #include "lore/lore-store.h"
 #include "term/gameterm.h"

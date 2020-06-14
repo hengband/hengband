@@ -8,6 +8,7 @@
 #include "autopick/autopick-command-menu.h"
 #include "autopick/autopick-menu-data-table.h"
 #include "autopick/autopick-util.h"
+#include "io/input-key-acceptor.h"
 #include "system/angband.h"
 #include "term/term-color-types.h"
 

@@ -1,5 +1,5 @@
-﻿#include "system/angband.h"
-#include "quick-start.h"
+﻿#include "birth/quick-start.h"
+#include "io/input-key-acceptor.h"
 #include "player/player-sex.h"
 #include "player/player-personality.h"
 #include "birth/birth-util.h"

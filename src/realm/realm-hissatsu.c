@@ -10,6 +10,7 @@
 #include "effect/spells-effect-util.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "io/input-key-acceptor.h"
 #include "io/targeting.h"
 #include "mind/mind-ninja.h"
 #include "monster-race/race-flags7.h"
@@ -33,7 +34,6 @@
 #include "spell/spells-util.h"
 #include "spell/spells3.h"
 #include "spell/technic-info-table.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

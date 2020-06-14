@@ -25,6 +25,7 @@
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "market/arena.h"

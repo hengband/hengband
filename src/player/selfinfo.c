@@ -15,6 +15,7 @@
  */
 
 #include "player/selfinfo.h"
+#include "io/input-key-acceptor.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
@@ -24,7 +25,6 @@
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-song-numbers.h"
-#include "util/util.h"
 
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.

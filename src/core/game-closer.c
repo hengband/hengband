@@ -1,20 +1,21 @@
 ﻿#include "core/game-closer.h"
 #include "cmd-io/cmd-save.h"
+#include "core/scores.h"
 #include "core/stuff-handler.h"
 #include "game-option/cheat-options.h"
+#include "io/input-key-acceptor.h"
+#include "io/save.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player/process-death.h"
-#include "io/save.h"
-#include "core/scores.h"
 #include "util/angband-files.h"
 #include "view/display-main-window.h"
 #include "view/display-player.h"
 #include "world/world.h"
 
-static void clear_floor(player_type* player_ptr)
+static void clear_floor(player_type *player_ptr)
 {
     (void)fd_close(highscore_fd);
     highscore_fd = -1;
@@ -22,13 +23,13 @@ static void clear_floor(player_type* player_ptr)
     signals_handle_tstp();
 }
 
-static void send_world_score_on_closing(player_type* player_ptr, bool do_send)
+static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
 {
     if (send_world_score(player_ptr, do_send, update_playtime, display_player, map_name))
         return;
 
-    if (!get_check_strict(player_ptr, _("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
-            (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
+    if (!get_check_strict(
+            player_ptr, _("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
         return;
 
     player_ptr->wait_report_score = TRUE;
@@ -37,7 +38,7 @@ static void send_world_score_on_closing(player_type* player_ptr, bool do_send)
         msg_print(_("セーブ失敗！", "death save failed!"));
 }
 
-static bool check_death(player_type* player_ptr)
+static bool check_death(player_type *player_ptr)
 {
     if (player_ptr->is_dead)
         return TRUE;
@@ -62,7 +63,7 @@ static bool check_death(player_type* player_ptr)
  * This function is called only from "main.c" and "signals.c".
  * </pre>
  */
-void close_game(player_type* player_ptr)
+void close_game(player_type *player_ptr)
 {
     bool do_send = TRUE;
     handle_stuff(player_ptr);

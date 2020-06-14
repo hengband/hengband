@@ -1,4 +1,4 @@
-﻿#include "system/angband.h"
+﻿#include "io/input-key-acceptor.h"
 #include "market/building-craft-armor.h"
 #include "market/building-util.h"
 

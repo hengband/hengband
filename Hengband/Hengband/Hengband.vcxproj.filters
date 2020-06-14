@@ -1367,6 +1367,9 @@
     <ClCompile Include="..\..\src\main\sound-of-music.c">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\input-key-acceptor.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2994,6 +2997,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\main\sound-of-music.h">
       <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\input-key-acceptor.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
+#include "io/input-key-acceptor.h"
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"
 #include "monster-race/race-flags1.h"

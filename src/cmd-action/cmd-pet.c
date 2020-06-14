@@ -10,6 +10,7 @@
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
+#include "io/input-key-acceptor.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "main/sound-of-music.h"

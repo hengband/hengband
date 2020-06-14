@@ -202,24 +202,25 @@ hengband_SOURCES = \
 	inventory/player-inventory.c inventory/player-inventory.h \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
 	\
+	io/chuukei.c io/chuukei.h \
+	io/exit-panic.c io/exit-panic.h \
 	io/files-util.c io/files-util.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
+	io/inet.c io/inet.h \
+	io/input-key-acceptor.c io/input-key-acceptor.h \
+	io/input-key-processor.c io/input-key-processor.h \
+	io/interpret-pref-file.c io/interpret-pref-file.h \
+	io/load.c io/load.h \
+	io/mutations-dump.c io/mutations-dump.h \
+	io/pref-file-expressor.c io/pref-file-expressor.h \
+	io/read-pref-file.c io/read-pref-file.h \
+	io/report.c io/report.h \
+	io/save.c io/save.h \
+	io/signal-handlers.c io/signal-handlers.h \
 	io/targeting.c io/targeting.h \
 	io/tokenizer.c io/tokenizer.h \
-	io/interpret-pref-file.c io/interpret-pref-file.h \
-	io/read-pref-file.c io/read-pref-file.h \
-	io/exit-panic.c io/exit-panic.h \
-	io/write-diary.c io/write-diary.h \
-	io/mutations-dump.c io/mutations-dump.h \
-	io/report.c io/report.h \
-	io/signal-handlers.c io/signal-handlers.h \
 	io/uid-checker.c io/uid-checker.h \
-	io/input-key-processor.c io/input-key-processor.h \
-	io/load.c io/load.h \
-	io/save.c io/save.h \
-	io/inet.c io/inet.h \
-	io/chuukei.c io/chuukei.h \
-	io/pref-file-expressor.c io/pref-file-expressor.h \
+	io/write-diary.c io/write-diary.h \
 	\
 	io-dump/character-dump.c io-dump/character-dump.h \
 	io-dump/dump-remover.c io-dump/dump-remover.h \

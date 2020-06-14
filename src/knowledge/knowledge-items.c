@@ -11,6 +11,7 @@
 #include "floor/floor.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
+#include "io/input-key-acceptor.h"
 #include "knowledge/object-group-table.h"
 #include "object-enchant/artifact.h"
 #include "perception/identification.h"

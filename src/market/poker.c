@@ -1,4 +1,5 @@
 ﻿#include "market/poker.h"
+#include "io/input-key-acceptor.h"
 #include "system/angband.h"
 #include "term/term-color-types.h"
 

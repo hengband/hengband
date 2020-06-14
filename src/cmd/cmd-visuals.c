@@ -3,6 +3,7 @@
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "knowledge/knowledge-features.h"
 #include "knowledge/knowledge-items.h"

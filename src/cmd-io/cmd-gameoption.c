@@ -8,6 +8,7 @@
 #include "game-option/option-types-table.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-of-music.h"
 #include "system/game-option-types.h"

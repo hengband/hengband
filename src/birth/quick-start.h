@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 /*
  * A structure to hold "rolled" information
  */

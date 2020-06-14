@@ -35,6 +35,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "lore/lore-calculator.h"
@@ -93,7 +94,6 @@
 #include "spell/spell-types.h"
 #include "spell/technic-info-table.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

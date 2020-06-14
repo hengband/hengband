@@ -14,6 +14,7 @@
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
 #include "io/inet.h"
+#include "io/input-key-acceptor.h"
 #include "player/player-personality.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"

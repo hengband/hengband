@@ -30,6 +30,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "market/arena.h"

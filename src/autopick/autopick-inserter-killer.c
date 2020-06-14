@@ -2,6 +2,7 @@
 #include "autopick/autopick-dirty-flags.h"
 #include "cmd-io/macro-util.h"
 #include "game-option/input-options.h"
+#include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "util/string-processor.h"
 

@@ -17,6 +17,7 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
+#include "io/input-key-acceptor.h"
 #include "io/report.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"

@@ -26,6 +26,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "io/input-key-acceptor.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

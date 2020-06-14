@@ -9,6 +9,7 @@
 #include "dungeon/dungeon.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
+#include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"

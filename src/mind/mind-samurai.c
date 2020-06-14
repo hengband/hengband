@@ -8,6 +8,7 @@
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd/cmd-basic.h"
+#include "io/input-key-acceptor.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/monster-race-hook.h"

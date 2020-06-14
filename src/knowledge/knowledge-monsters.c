@@ -13,6 +13,7 @@
 #include "game-option/cheat-options.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
+#include "io/input-key-acceptor.h"
 #include "knowledge/monster-group-table.h"
 #include "locale/english.h"
 #include "monster-race/race-flags1.h"
