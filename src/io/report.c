@@ -18,6 +18,7 @@
 #include "io/input-key-acceptor.h"
 #include "player/player-personality.h"
 #include "system/angband-version.h"
+#include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"

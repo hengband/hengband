@@ -24,6 +24,13 @@
 #define F_WRLCK 2
 #endif
 
+#ifdef SET_UID
+extern void user_name(char *buf, int id);
+#ifndef HAVE_USLEEP
+extern int usleep(huge usecs);
+#endif
+#endif
+
 errr path_parse(char *buf, int max, concptr file);
 errr path_build(char *buf, int max, concptr path, concptr file);
 FILE *angband_fopen(concptr file, concptr mode);

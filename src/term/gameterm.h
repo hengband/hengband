@@ -20,6 +20,7 @@ extern const concptr window_flag_desc[32];
 extern const concptr ident_info[];
 
 extern term *angband_term[8];
+#define term_screen (angband_term[0])
 
 extern TERM_COLOR misc_to_attr[256];
 extern SYMBOL_CODE misc_to_char[256];

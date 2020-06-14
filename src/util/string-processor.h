@@ -2,6 +2,9 @@
 
 #include "system/angband.h"
 
+#define MAX_MACRO_MOD 12
+#define MAX_MACRO_TRIG 200 /*!< 登録を許すマクロ（トリガー）の最大数 */
+
 extern const char hexsym[16];
 
 /*
