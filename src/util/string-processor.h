@@ -19,3 +19,7 @@ extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
 void text_to_ascii(char *buf, concptr str);
 void ascii_to_text(char *buf, concptr str);
+size_t angband_strcpy(char *buf, concptr src, size_t bufsize);
+size_t angband_strcat(char *buf, concptr src, size_t bufsize);
+char *angband_strstr(concptr haystack, concptr needle);
+char *angband_strchr(concptr ptr, char ch);

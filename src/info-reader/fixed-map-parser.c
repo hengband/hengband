@@ -15,6 +15,7 @@
 #include "io/files-util.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

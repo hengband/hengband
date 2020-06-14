@@ -5,6 +5,7 @@
  */
 
 #include "locale/japanese.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 #ifdef JP

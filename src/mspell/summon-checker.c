@@ -9,6 +9,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
 #include "spell/spells-summon.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief 指定されたモンスター種族がsummon_specific_typeで指定された召喚条件に合うかどうかを返す

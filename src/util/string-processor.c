@@ -352,3 +352,125 @@ void ascii_to_text(char *buf, concptr str)
 
     *s = '\0';
 }
+
+/*
+ * The angband_strcpy() function copies up to 'bufsize'-1 characters from 'src'
+ * to 'buf' and NUL-terminates the result.  The 'buf' and 'src' strings may
+ * not overlap.
+ *
+ * angband_strcpy() returns strlen(src).  This makes checking for truncation
+ * easy.  Example: if (angband_strcpy(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
+ *
+ * This function should be equivalent to the strlcpy() function in BSD.
+ */
+size_t angband_strcpy(char *buf, concptr src, size_t bufsize)
+{
+#ifdef JP
+    char *d = buf;
+    concptr s = src;
+    size_t len = 0;
+
+    if (bufsize > 0) {
+        /* reserve for NUL termination */
+        bufsize--;
+
+        /* Copy as many bytes as will fit */
+        while (*s && (len < bufsize)) {
+            if (iskanji(*s)) {
+                if (len + 1 >= bufsize || !*(s + 1))
+                    break;
+                *d++ = *s++;
+                *d++ = *s++;
+                len += 2;
+            } else {
+                *d++ = *s++;
+                len++;
+            }
+        }
+        *d = '\0';
+    }
+
+    while (*s++)
+        len++;
+    return len;
+
+#else
+    size_t len = strlen(src);
+    size_t ret = len;
+    if (bufsize == 0)
+        return ret;
+
+    if (len >= bufsize)
+        len = bufsize - 1;
+
+    (void)memcpy(buf, src, len);
+    buf[len] = '\0';
+    return ret;
+#endif
+}
+
+/*
+ * The angband_strcat() tries to append a string to an existing NUL-terminated string.
+ * It never writes more characters into the buffer than indicated by 'bufsize' and
+ * NUL-terminates the buffer.  The 'buf' and 'src' strings may not overlap.
+ *
+ * angband_strcat() returns strlen(buf) + strlen(src).  This makes checking for
+ * truncation easy.  Example:
+ * if (angband_strcat(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
+ *
+ * This function should be equivalent to the strlcat() function in BSD.
+ */
+size_t angband_strcat(char *buf, concptr src, size_t bufsize)
+{
+    size_t dlen = strlen(buf);
+    if (dlen < bufsize - 1) {
+        return (dlen + angband_strcpy(buf + dlen, src, bufsize - dlen));
+    } else {
+        return (dlen + strlen(src));
+    }
+}
+
+/*
+ * A copy of ANSI strstr()
+ *
+ * angband_strstr() can handle Kanji strings correctly.
+ */
+char *angband_strstr(concptr haystack, concptr needle)
+{
+    int l1 = strlen(haystack);
+    int l2 = strlen(needle);
+
+    if (l1 >= l2) {
+        for (int i = 0; i <= l1 - l2; i++) {
+            if (!strncmp(haystack + i, needle, l2))
+                return (char *)haystack + i;
+
+#ifdef JP
+            if (iskanji(*(haystack + i)))
+                i++;
+#endif
+        }
+    }
+
+    return NULL;
+}
+
+/*
+ * A copy of ANSI strchr()
+ *
+ * angband_strchr() can handle Kanji strings correctly.
+ */
+char *angband_strchr(concptr ptr, char ch)
+{
+    for (; *ptr != '\0'; ptr++) {
+        if (*ptr == ch)
+            return (char *)ptr;
+
+#ifdef JP
+        if (iskanji(*ptr))
+            ptr++;
+#endif
+    }
+
+    return NULL;
+}

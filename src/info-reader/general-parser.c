@@ -12,6 +12,7 @@
 #include "system/building-type-definition.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief パース関数に基づいてデータファイルからデータを読み取る /

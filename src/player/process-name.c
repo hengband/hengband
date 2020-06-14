@@ -6,6 +6,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 #include "world/world.h"
 
 /*!

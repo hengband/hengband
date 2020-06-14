@@ -1,6 +1,7 @@
 ﻿#include "io/pref-file-expressor.h"
 #include "game-option/runtime-arguments.h"
 #include "system/system-variables.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief process_pref_fileのサブルーチンとして条件分岐処理の解釈と結果を返す

@@ -22,6 +22,7 @@
 #include "monster/smart-learn-types.h"
 #include "mspell/summon-checker.h"
 #include "spell/spells-summon.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 #define MON_SCAT_MAXD 10 /*!< mon_scatter()関数によるモンスター配置で許される中心からの最大距離 */

@@ -10,6 +10,7 @@
 #include "autopick/autopick-key-flag-process.h"
 #include "autopick/autopick-methods-table.h"
 #include "system/angband.h"
+#include "util/string-processor.h"
 
 typedef struct
 {

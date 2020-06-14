@@ -9,6 +9,7 @@
 #include "term/screen-processor.h" // todo 相互依存している、後で何とかする.
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
+#include "util/string-processor.h"
 #include "view/display-main-window.h" // todo panel_row_min が依存している。後で移設を検討する.
 #include "view/display-messages.h"
 

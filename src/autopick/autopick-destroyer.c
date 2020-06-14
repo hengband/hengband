@@ -20,6 +20,7 @@
 #include "sv-definition/sv-wand-types.h"
 #include "player/player-move.h"
 #include "player/player-race-types.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!

@@ -7,6 +7,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "util/quarks.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!

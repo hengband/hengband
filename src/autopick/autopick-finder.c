@@ -17,6 +17,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 
  /*
   * @brief —^‚¦‚ç‚ê‚½ƒAƒCƒeƒ€‚ª©“®E‚¢‚ÌƒŠƒXƒg‚É“o˜^‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğŒŸõ‚·‚é

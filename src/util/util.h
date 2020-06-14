@@ -35,8 +35,4 @@ struct alloc_entry
 
 errr type_string(concptr str, uint len);
 void roff_to_buf(concptr str, int wlen, char *tbuf, size_t bufsize);
-size_t angband_strcpy(char *buf, concptr src, size_t bufsize);
-size_t angband_strcat(char *buf, concptr src, size_t bufsize);
-char *angband_strstr(concptr haystack, concptr needle);
-char *angband_strchr(concptr ptr, char ch);
 void str_tolower(char *str);

@@ -4,6 +4,7 @@
 #include "object/object-kind.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!

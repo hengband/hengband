@@ -25,6 +25,7 @@
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!

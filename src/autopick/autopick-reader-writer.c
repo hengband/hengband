@@ -4,6 +4,7 @@
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*

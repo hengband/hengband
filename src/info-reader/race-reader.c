@@ -1,6 +1,7 @@
 ﻿#include "info-reader/race-reader.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "term/gameterm.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!

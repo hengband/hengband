@@ -36,6 +36,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
+#include "util/string-processor.h"
 #include "world/world.h"
 
  /*!
