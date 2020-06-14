@@ -1,28 +1,37 @@
-﻿#include "system/angband.h"
-#include "core/stuff-handler.h"
-#include "util/util.h"
-
-#include "io/write-diary.h"
+﻿#include "cmd-action/cmd-pet.h"
+#include "cmd-action/cmd-attack.h"
 #include "cmd-io/cmd-dump.h"
-#include "floor/floor.h"
+#include "cmd/cmd-basic.h"
 #include "core/sort.h"
-#include "player/player-move.h"
-#include "player/player-status.h"
-#include "player/player-effects.h"
-#include "player/player-skill.h"
+#include "core/stuff-handler.h"
+#include "effect/spells-effect-util.h"
+#include "floor/floor.h"
+#include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
+#include "game-option/text-display-options.h"
+#include "grid/grid.h"
+#include "io/targeting.h"
+#include "io/write-diary.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags7.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster/monster-info.h"
+#include "monster-floor/monster-object.h"
+#include "monster-floor/monster-remover.h"
+#include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
+#include "object/object-hook.h"
+#include "pet/pet-util.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "object/object-hook.h"
-#include "monster/monster.h"
-#include "monster/monster-status.h"
-#include "cmd-action/cmd-pet.h"
-#include "cmd/cmd-basic.h"
+#include "player/player-effects.h"
+#include "player/player-move.h"
+#include "player/player-skill.h"
+#include "player/player-status.h"
+#include "util/util.h"
 #include "view/display-main-window.h"
-#include "io/targeting.h"
 #include "world/world.h"
-#include "effect/spells-effect-util.h"
-#include "cmd-action/cmd-attack.h"
-#include "pet/pet-util.h"
 
 int total_friends = 0;
 
@@ -259,7 +268,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 			return FALSE;
 		}
 
-		if (MON_CSLEEP(m_ptr))
+		if (monster_csleep_remaining(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(creature_ptr, m_name, m_ptr, 0);

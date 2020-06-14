@@ -4,7 +4,7 @@
 #include "floor/wild.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
-#include "monster/monster-race.h"
+#include "monster-race/monster-race.h"
 #include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

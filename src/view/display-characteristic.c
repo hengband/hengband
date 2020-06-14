@@ -7,6 +7,7 @@
 #include "display-characteristic.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "player/permanent-resistances.h"
 #include "player/race-resistances.h"

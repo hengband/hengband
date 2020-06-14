@@ -1,11 +1,19 @@
 ﻿#include "mspell/mspell-summon.h"
 #include "effect/effect-characteristics.h"
+#include "game-option/birth-options.h"
+#include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-util.h"
 #include "player/player-move.h"
-#include "spell/process-effect.h"
 #include "spell-kind/spells-launcher.h"
+#include "spell/process-effect.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-type.h"
 
@@ -184,7 +192,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 
     disturb(target_ptr, TRUE, TRUE);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
-    bool see_either = see_monster(floor_ptr, m_idx) || see_monster(floor_ptr, t_idx);
+    bool see_either = see_monster(target_ptr, m_idx) || see_monster(target_ptr, t_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT) {
@@ -241,7 +249,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
     if (target_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-    if (known && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (known && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -277,7 +285,7 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
     if (target_ptr->blind && count && mon_to_player)
         msg_print(_("重厚な足音が近くで聞こえる。", "You hear heavy steps nearby."));
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -312,7 +320,7 @@ void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTE
     if (target_ptr->blind && count && mon_to_player)
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -348,7 +356,7 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
     if (target_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -379,7 +387,7 @@ void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
     if (target_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -410,7 +418,7 @@ void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER
     if (target_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -442,7 +450,7 @@ void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
     if (target_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -473,7 +481,7 @@ void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
     if (target_ptr->blind && count && mon_to_player)
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -515,7 +523,7 @@ void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
     }
 
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -546,7 +554,7 @@ void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -577,7 +585,7 @@ void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -608,7 +616,7 @@ void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -715,7 +723,7 @@ void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONS
         msg_print(_("間近で何か多くのものが這い回る音が聞こえる。", "You hear many creepy things appear nearby."));
     }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -752,7 +760,7 @@ void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONS
         msg_print(_("多くの力強いものが間近に現れた音が聞こえる。", "You hear many powerful things appear nearby."));
     }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -785,7 +793,7 @@ void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONS
         msg_print(_("不死の者が近くに現れるのが聞こえた。", "You hear immortal beings appear nearby."));
     }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -834,6 +842,6 @@ void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER
             uniques_are_summoned ? _("力強いもの", "powerful things") : _("もの", "things"));
     }
 
-    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+    if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 }

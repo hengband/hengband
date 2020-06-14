@@ -3,9 +3,9 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object1.h"
 
 /*!
  * @brief オブジェクトのフラグ類から価格を算出する /

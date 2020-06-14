@@ -1,8 +1,6 @@
-﻿#include "system/angband.h"
+﻿#include "object-enchant/object-boost.h"
+#include "art-definition/random-art-effects.h"
 #include "floor/floor.h"
-#include "object-enchant/object-boost.h"
-#include "object-enchant/object-boost.h"
-#include "cmd-item/cmd-activate.h"
 #include "object-enchant/tr-types.h"
 
 /*!

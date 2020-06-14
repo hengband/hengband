@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "spell/spells-type.h"
+#include "system/monster-type-definition.h"
 
 /* monster-attack-monster type*/
 typedef struct mam_type {

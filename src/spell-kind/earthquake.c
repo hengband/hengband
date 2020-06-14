@@ -4,8 +4,17 @@
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
+#include "game-option/play-record-options.h"
+#include "game-option/text-display-options.h"
 #include "io/write-diary.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "monster/monster-update.h"
+#include "monster/smart-learn-types.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
@@ -212,14 +221,14 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             }
 
             monster_desc(caster_ptr, m_name, m_ptr, 0);
-            if (!ignore_unview || is_seen(m_ptr))
+            if (!ignore_unview || is_seen(caster_ptr, m_ptr))
                 msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
 
             damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
             (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
             m_ptr->hp -= damage;
             if (m_ptr->hp < 0) {
-                if (!ignore_unview || is_seen(m_ptr))
+                if (!ignore_unview || is_seen(caster_ptr, m_ptr))
                     msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name);
 
                 if (g_ptr->m_idx) {

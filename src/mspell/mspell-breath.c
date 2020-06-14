@@ -1,11 +1,14 @@
-﻿#include "system/angband.h"
-#include "mspell/mspell-breath.h"
-#include "mspell/monster-spell.h"
-#include "spell/spells-type.h"
+﻿#include "mspell/mspell-breath.h"
 #include "main/sound-definitions-table.h"
-#include "mspell/mspell-util.h"
+#include "mind/drs-types.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-info.h"
+#include "monster/monster-update.h"
+#include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-util.h"
 #include "player/player-move.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief RF4_BR_*の処理。各種ブレス。 /
@@ -18,15 +21,15 @@
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF4_BREATH(player_type* target_ptr, int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam, ms_type, drs_type = 0;
     concptr type_s;
     bool smart_learn_aux = TRUE;
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* m_ptr = &floor_ptr->m_list[m_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
-    bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
+    bool see_either = see_monster(target_ptr, m_idx) || see_monster(target_ptr, t_idx);
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -189,8 +192,7 @@ HIT_POINT spell_RF4_BREATH(player_type* target_ptr, int GF_TYPE, POSITION y, POS
         if (mon_to_player) {
             msg_format(_("%^sが%^sのブレスを吐いた。", "%^s breathes %^s."), m_name, type_s);
         } else if (mon_to_mon && known && see_either) {
-            _(msg_format("%^sが%^sに%^sのブレスを吐いた。", m_name, t_name, type_s),
-                msg_format("%^s breathes %^s at %^s.", m_name, type_s, t_name));
+            _(msg_format("%^sが%^sに%^sのブレスを吐いた。", m_name, t_name, type_s), msg_format("%^s breathes %^s at %^s.", m_name, type_s, t_name));
         }
     }
 

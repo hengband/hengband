@@ -6,10 +6,15 @@
  */
 
 #include "player-attack/attack-chaos-effect.h"
+#include "art-definition/art-weapon-types.h"
 #include "floor/floor.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-status.h"
+#include "monster/monster-info.h"
 #include "inventory/inventory-object.h"
-#include "object-enchant/artifact.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags3.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "realm/realm-hex-numbers.h"
@@ -42,7 +47,7 @@ static void attack_confuse(player_type *attacker_ptr, player_attack_type *pa_ptr
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
     } else {
         msg_format(_("%^sは混乱したようだ。", "%^s appears confused."), pa_ptr->m_name);
-        (void)set_monster_confused(attacker_ptr, pa_ptr->g_ptr->m_idx, MON_CONFUSED(pa_ptr->m_ptr) + 10 + randint0(attacker_ptr->lev) / 5);
+        (void)set_monster_confused(attacker_ptr, pa_ptr->g_ptr->m_idx, monster_confused_remaining(pa_ptr->m_ptr) + 10 + randint0(attacker_ptr->lev) / 5);
     }
 }
 

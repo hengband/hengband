@@ -9,9 +9,22 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-monster-switcher.h"
 #include "floor/floor-object.h"
+#include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-indice-types.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/race-flags7.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster-floor/monster-death.h"
+#include "monster/monster-info.h"
+#include "monster-floor/monster-move.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
+#include "monster/monster-update.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
@@ -275,10 +288,10 @@ static void pile_monster_stun(player_type *caster_ptr, effect_monster_type *em_p
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
-	if (MON_STUNNED(em_ptr->m_ptr))
+	if (monster_stunned_remaining(em_ptr->m_ptr))
 	{
 		em_ptr->note = _("はひどくもうろうとした。", " is more dazed.");
-		*stun_damage = MON_STUNNED(em_ptr->m_ptr) + (em_ptr->do_stun / 2);
+		*stun_damage = monster_stunned_remaining(em_ptr->m_ptr) + (em_ptr->do_stun / 2);
 	}
 	else
 	{
@@ -307,10 +320,10 @@ static void pile_monster_conf(player_type *caster_ptr, effect_monster_type *em_p
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
-	if (MON_CONFUSED(em_ptr->m_ptr))
+	if (monster_confused_remaining(em_ptr->m_ptr))
 	{
 		em_ptr->note = _("はさらに混乱したようだ。", " looks more confused.");
-		*conf_damage = MON_CONFUSED(em_ptr->m_ptr) + (em_ptr->do_conf / 2);
+		*conf_damage = monster_confused_remaining(em_ptr->m_ptr) + (em_ptr->do_conf / 2);
 	}
 	else
 	{
@@ -412,7 +425,7 @@ static void process_monster_bad_status(player_type *caster_ptr, effect_monster_t
 	process_monster_teleport(caster_ptr, em_ptr);
 	if (em_ptr->do_fear == 0) return;
 
-	(void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, MON_MONFEAR(em_ptr->m_ptr) + em_ptr->do_fear);
+	(void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, monster_fear_remaining(em_ptr->m_ptr) + em_ptr->do_fear);
 	em_ptr->get_angry = TRUE;
 }
 

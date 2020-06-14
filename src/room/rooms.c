@@ -36,15 +36,16 @@
  * None of the pits/nests are allowed to include "unique" monsters.\n
  */
 
-#include "system/angband.h"
-#include "util/util.h"
-
-#include "grid/feature.h"
-#include "floor/floor.h"
-#include "floor/floor-generate.h"
-#include "dungeon/dungeon.h"
 #include "room/rooms.h"
-
+#include "dungeon/dungeon.h"
+#include "floor/floor-generate.h"
+#include "floor/floor.h"
+#include "game-option/birth-options.h"
+#include "grid/feature.h"
+#include "grid/trap.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/place-monster-types.h"
+#include "object-enchant/item-apply-magic.h"
 #include "room/rooms-city.h"
 #include "room/rooms-fractal.h"
 #include "room/rooms-normal.h"
@@ -52,11 +53,7 @@
 #include "room/rooms-special.h"
 #include "room/rooms-trap.h"
 #include "room/rooms-vault.h"
-
-#include "grid/trap.h"
-
-#include "monster/monster.h"
-#include "object-enchant/item-apply-magic.h"
+#include "util/util.h"
 
  /*!
   * 各部屋タイプの生成比定義

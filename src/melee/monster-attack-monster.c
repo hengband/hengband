@@ -7,19 +7,25 @@
 #include "melee/monster-attack-monster.h"
 #include "combat/attack-accuracy.h"
 #include "combat/hallucination-attacks-table.h"
+#include "dungeon/dungeon.h"
+#include "effect/effect-characteristics.h"
+#include "main/sound-definitions-table.h"
 #include "melee/melee-postprocess.h"
 #include "melee/melee-switcher.h"
 #include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
-#include "dungeon/dungeon.h"
-#include "effect/effect-characteristics.h"
-#include "main/sound-definitions-table.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-status.h"
+#include "monster/monster-info.h"
 #include "player/player-move.h"
-#include "spell/process-effect.h"
-#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-hex.h"
+#include "spell/process-effect.h"
 #include "spell/spells-type.h"
 
 /* todo モンスター共通なので、monster-attack-player.cでも使うはず */
@@ -199,7 +205,7 @@ static void process_monster_attack_effect(player_type *subject_ptr, mam_type *ma
 
 static void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
-    if (mam_ptr->effect && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, MON_STUNNED(mam_ptr->m_ptr))) {
+    if (mam_ptr->effect && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, monster_stunned_remaining(mam_ptr->m_ptr))) {
         describe_monster_missed_monster(subject_ptr, mam_ptr);
         return;
     }

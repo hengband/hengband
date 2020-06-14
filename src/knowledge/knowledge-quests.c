@@ -348,7 +348,7 @@ void do_cmd_knowledge_quests(player_type *creature_ptr)
 		do_cmd_knowledge_quests_wiz_random(fff);
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
 	fd_kill(file_name);
 	C_KILL(quest_num, max_q_idx, QUEST_IDX);

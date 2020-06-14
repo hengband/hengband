@@ -4,14 +4,16 @@
 #include "autopick/autopick-keys-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "inventory/player-inventory.h"
+#include "monster-race/race-flags1.h"
 #include "object-enchant/item-feeling.h"
-#include "object/item-use-flags.h"
-#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/special-object-flags.h"
+#include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object-enchant/special-object-flags.h"
+#include "object/object-info.h"
+#include "perception/object-perception.h"
 
 #ifdef JP
 static char kanji_colon[] = "：";
@@ -356,7 +358,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 		ADD_FLG(FLG_UNIQUE);
 	}
 
-	if (o_ptr->tval == TV_CORPSE && my_strchr("pht", r_info[o_ptr->pval].d_char))
+	if (o_ptr->tval == TV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
 	{
 		ADD_FLG(FLG_HUMAN);
 	}

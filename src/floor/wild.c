@@ -15,14 +15,21 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
+#include "game-option/birth-options.h"
+#include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
 #include "main/init.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-remover.h"
+#include "monster-floor/monster-summon.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster-util.h"
+#include "monster/monster-info.h"
+#include "monster-floor/place-monster-types.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
@@ -679,7 +686,7 @@ void wilderness_gen(player_type *creature_ptr)
 			mode |= PM_ALLOW_SLEEP;
 
 		/* Make a resident */
-		(void)alloc_monster(creature_ptr, generate_encounter ? 0 : 3, mode);
+		(void)alloc_monster(creature_ptr, generate_encounter ? 0 : 3, mode, summon_specific);
 	}
 
 	if(generate_encounter) creature_ptr->ambush_flag = TRUE;
@@ -1134,7 +1141,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
 
 		if (!monster_is_valid(m_ptr)) continue;
 		if (is_pet(m_ptr) && i != creature_ptr->riding) have_pet = TRUE;
-		if (MON_CSLEEP(m_ptr)) continue;
+		if (monster_csleep_remaining(m_ptr)) continue;
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 		if (!is_hostile(m_ptr)) continue;
 		msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！",
@@ -1148,7 +1155,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
 		concptr msg = _("ペットを置いて広域マップに入りますか？",
 			"Do you leave your pets behind? ");
 
-		if (!get_check_strict(msg, CHECK_OKAY_CANCEL))
+		if (!get_check_strict(creature_ptr, msg, CHECK_OKAY_CANCEL))
 		{
 			free_turn(creature_ptr);
 			return FALSE;

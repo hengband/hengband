@@ -80,10 +80,10 @@ static int show_killing_monster(player_type *dead_ptr, char *buf, char *tomb_mes
 		for (t = dummy + strlen(dummy) - 2; iskanji(*(t - 1)); t--) /* Loop */;
 		strcpy(t, "…");
 	}
-	else if (my_strstr(tomb_message, "『") && suffix(dummy, "』"))
+	else if (angband_strstr(tomb_message, "『") && suffix(dummy, "』"))
 	{
 		char dummy2[80];
-		char *name_head = my_strstr(tomb_message, "『");
+		char *name_head = angband_strstr(tomb_message, "『");
 		sprintf(dummy2, "%s%s", name_head, dummy);
 		if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
 		{
@@ -91,10 +91,10 @@ static int show_killing_monster(player_type *dead_ptr, char *buf, char *tomb_mes
 			*name_head = '\0';
 		}
 	}
-	else if (my_strstr(tomb_message, "「") && suffix(dummy, "」"))
+	else if (angband_strstr(tomb_message, "「") && suffix(dummy, "」"))
 	{
 		char dummy2[80];
-		char *name_head = my_strstr(tomb_message, "「");
+		char *name_head = angband_strstr(tomb_message, "「");
 		sprintf(dummy2, "%s%s", name_head, dummy);
 		if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
 		{

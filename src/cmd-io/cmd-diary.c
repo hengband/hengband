@@ -1,10 +1,11 @@
 ﻿#include "cmd-io/cmd-diary.h"
-#include "io/chuukei.h"
-#include "core/show-file.h"
-#include "io/files-util.h"
 #include "cmd-io/diary-subtitle-table.h"
-#include "player/player-personality.h"
+#include "core/show-file.h"
+#include "game-option/play-record-options.h"
+#include "io/chuukei.h"
+#include "io/files-util.h"
 #include "io/write-diary.h"
+#include "player/player-personality.h"
 #include "world/world.h"
 
 /*!
@@ -87,10 +88,10 @@ static void do_cmd_erase_diary(void)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 	fd_kill(buf);
 
-	fff = my_fopen(buf, "w");
+	fff = angband_fopen(buf, "w");
 	if (fff)
 	{
-		my_fclose(fff);
+		angband_fclose(fff);
 		msg_format(_("記録を消去しました。", "deleted record."));
 	}
 	else

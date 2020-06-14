@@ -17,6 +17,7 @@
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
 #include "core/show-file.h"
+#include "game-option/input-options.h"
 #include "term/term-color-types.h"
 
 /*

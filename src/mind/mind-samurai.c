@@ -8,8 +8,12 @@
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd/cmd-basic.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-status.h"
+#include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"
@@ -436,13 +440,13 @@ void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr)
     }
 
     int tmp = (10 + randint1(15) + attacker_ptr->lev / 5);
-    if (MON_STUNNED(pa_ptr->m_ptr)) {
+    if (monster_stunned_remaining(pa_ptr->m_ptr)) {
         msg_format(_("%sはひどくもうろうとした。", "%s is more dazed."), pa_ptr->m_name);
         tmp /= 2;
     } else
         msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
 
-    (void)set_monster_stunned(attacker_ptr, pa_ptr->g_ptr->m_idx, MON_STUNNED(pa_ptr->m_ptr) + tmp);
+    (void)set_monster_stunned(attacker_ptr, pa_ptr->g_ptr->m_idx, monster_stunned_remaining(pa_ptr->m_ptr) + tmp);
 }
 
 /*!

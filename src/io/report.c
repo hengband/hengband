@@ -5,19 +5,19 @@
  * @author Hengband Team
  */
 
-#include "system/angband.h"
 #include "io/report.h"
-#include "floor/floor.h"
-#include "core/turn-compensator.h"
-#include "system/angband-version.h"
 #include "core/stuff-handler.h"
-#include "io/inet.h"
+#include "core/turn-compensator.h"
+#include "core/visuals-reseter.h"
 #include "dungeon/dungeon.h"
-
-#include "player/player-personality.h"
+#include "floor/floor.h"
+#include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
-#include "world/world.h"
+#include "io/inet.h"
+#include "player/player-personality.h"
+#include "system/angband-version.h"
 #include "term/gameterm.h"
+#include "world/world.h"
 
 #ifdef WORLD_SCORE
 
@@ -210,7 +210,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_play
 	GAME_TEXT file_name[1024];
 
 	/* Open a new file */
-	fff = my_fopen_temp(file_name, 1024);
+	fff = angband_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
 #ifdef JP
@@ -224,16 +224,16 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_play
 
 	/* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
 	make_character_dump(creature_ptr, fff, update_playtime, display_player, map_name);
-	my_fclose(fff);
+	angband_fclose(fff);
 
 	/* Open for read */
-	fff = my_fopen(file_name, "r");
+	fff = angband_fopen(file_name, "r");
 
 	while (fgets(buf, 1024, fff))
 	{
 		(void)buf_sprintf(dumpbuf, "%s", buf);
 	}
-	my_fclose(fff);
+	angband_fclose(fff);
 	fd_kill(file_name);
 
 	/* Success */
@@ -458,9 +458,9 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 			(void)inkey();
 
 #ifdef JP
-			if (!get_check_strict("もう一度接続を試みますか? ", CHECK_NO_HISTORY))
+			if (!get_check_strict(creature_ptr, "もう一度接続を試みますか? ", CHECK_NO_HISTORY))
 #else
-			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
+			if (!get_check_strict(creature_ptr, "Try again? ", CHECK_NO_HISTORY))
 #endif
 			{
 #ifdef WINDOWS
@@ -490,9 +490,9 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 			(void)inkey();
 
 #ifdef JP
-			if (!get_check_strict("もう一度接続を試みますか? ", CHECK_NO_HISTORY))
+			if (!get_check_strict(creature_ptr, "もう一度接続を試みますか? ", CHECK_NO_HISTORY))
 #else
-			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
+			if (!get_check_strict(creature_ptr, "Try again? ", CHECK_NO_HISTORY))
 #endif
 			{
 #ifdef WINDOWS

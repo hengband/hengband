@@ -1,27 +1,33 @@
-﻿#include "system/angband.h"
-#include "world/world-turn-processor.h"
-#include "world/world.h"
-#include "dungeon/dungeon.h"
-#include "store/store.h"
-#include "store/store-util.h"
-#include "io/write-diary.h"
-#include "floor/floor-events.h"
-#include "core/hp-mp-regenerator.h"
+﻿#include "world/world-turn-processor.h"
 #include "cmd-io/cmd-save.h"
-#include "monster/monster-status.h"
-#include "player/player-move.h"
-#include "floor/wild.h"
-#include "player/digestion-processor.h"
 #include "core/hp-mp-processor.h"
+#include "core/hp-mp-regenerator.h"
 #include "core/magic-effects-timeout-reducer.h"
-#include "object/lite-processor.h"
-#include "mutation/mutation-processor.h"
+#include "dungeon/dungeon.h"
+#include "floor/floor-events.h"
+#include "floor/wild.h"
+#include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
+#include "game-option/special-options.h"
+#include "game-option/text-display-options.h"
 #include "inventory/inventory-curse.h"
 #include "inventory/recharge-processor.h"
-#include "perception/simple-perception.h"
-#include "world/world-movement-processor.h"
+#include "io/write-diary.h"
 #include "market/arena.h"
 #include "market/bounty.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-summon.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-status.h"
+#include "mutation/mutation-processor.h"
+#include "object/lite-processor.h"
+#include "perception/simple-perception.h"
+#include "player/digestion-processor.h"
+#include "player/player-move.h"
+#include "store/store-util.h"
+#include "store/store.h"
+#include "world/world-movement-processor.h"
+#include "world/world.h"
 
 /*!
  * @brief 10ゲームターンが進行する毎にゲーム世界全体の処理を行う。
@@ -29,7 +35,7 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void process_world(player_type* player_ptr)
+void process_world(player_type *player_ptr)
 {
     const s32b A_DAY = TURNS_PER_TICK * TOWN_DAWN;
     s32b prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % A_DAY + A_DAY / 4) % A_DAY;
@@ -40,7 +46,7 @@ void process_world(player_type* player_ptr)
     update_dungeon_feeling(player_ptr);
 
     /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
-    floor_type* floor_ptr = player_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (ironman_downward && (player_ptr->dungeon_idx != DUNGEON_ANGBAND && player_ptr->dungeon_idx != 0)) {
         floor_ptr->dun_level = 0;
         player_ptr->dungeon_idx = 0;
@@ -55,7 +61,7 @@ void process_world(player_type* player_ptr)
         int number_mon = 0;
         for (int i2 = 0; i2 < floor_ptr->width; ++i2) {
             for (int j2 = 0; j2 < floor_ptr->height; j2++) {
-                grid_type* g_ptr = &floor_ptr->grid_array[j2][i2];
+                grid_type *g_ptr = &floor_ptr->grid_array[j2][i2];
                 if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != player_ptr->riding)) {
                     number_mon++;
                     win_m_idx = g_ptr->m_idx;
@@ -70,7 +76,7 @@ void process_world(player_type* player_ptr)
             update_gambling_monsters(player_ptr);
         } else if ((number_mon - 1) == 0) {
             GAME_TEXT m_name[MAX_NLEN];
-            monster_type* wm_ptr;
+            monster_type *wm_ptr;
             wm_ptr = &floor_ptr->m_list[win_m_idx];
             monster_desc(player_ptr, m_name, wm_ptr, 0);
             msg_format(_("%sが勝利した！", "%s won!"), m_name);
@@ -125,7 +131,7 @@ void process_world(player_type* player_ptr)
                 } while ((n == STORE_HOME) || (n == STORE_MUSEUM));
 
                 for (FEAT_IDX i = 1; i < max_f_idx; i++) {
-                    feature_type* f_ptr = &f_info[i];
+                    feature_type *f_ptr = &f_info[i];
                     if (!f_ptr->name)
                         continue;
                     if (!have_flag(f_ptr->flags, FF_STORE))
@@ -144,7 +150,7 @@ void process_world(player_type* player_ptr)
     }
 
     if (one_in_(d_info[player_ptr->dungeon_idx].max_m_alloc_chance) && !floor_ptr->inside_arena && !floor_ptr->inside_quest && !player_ptr->phase_out) {
-        (void)alloc_monster(player_ptr, MAX_SIGHT + 5, 0);
+        (void)alloc_monster(player_ptr, MAX_SIGHT + 5, 0, summon_specific);
     }
 
     if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out)
@@ -167,9 +173,9 @@ void process_world(player_type* player_ptr)
     }
 
     /*
-	 * Nightmare mode activates the TY_CURSE at midnight
-	 * Require exact minute -- Don't activate multiple times in a minute
-	 */
+     * Nightmare mode activates the TY_CURSE at midnight
+     * Require exact minute -- Don't activate multiple times in a minute
+     */
     if (ironman_nightmare && (min != prev_min)) {
         if ((hour == 23) && !(min % 15)) {
             disturb(player_ptr, FALSE, TRUE);

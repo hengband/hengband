@@ -21,6 +21,9 @@
 #include "floor/floor-streams.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "game-option/birth-options.h"
+#include "game-option/game-play-options.h"
+#include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
@@ -28,8 +31,16 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
 #include "market/arena-info-table.h"
+#include "monster-race/race-flags1.h"
+#include "monster/monster-flag-types.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-remover.h"
+#include "monster-floor/monster-summon.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster-update.h"
+#include "monster/monster-util.h"
+#include "monster/monster-info.h"
+#include "monster-floor/place-monster-types.h"
 #include "player/player-status.h"
 #include "room/rooms.h"
 #include "system/system-variables.h"
@@ -840,7 +851,7 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
 	/* Put some monsters in the dungeon */
 	for (i = i + k; i > 0; i--)
 	{
-		(void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP);
+		(void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP, summon_specific);
 	}
 
 	/* Place some traps in the dungeon */

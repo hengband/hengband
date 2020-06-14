@@ -1,5 +1,5 @@
 ﻿#include "info-reader/info-reader-util.h"
-#include "cmd-item/cmd-activate.h"
+#include "object-enchant/activation-info-table.h"
 
 /*!
  * @brief データの可変文字列情報をテキストとして保管する /

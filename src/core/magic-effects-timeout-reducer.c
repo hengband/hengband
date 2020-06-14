@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "core/magic-effects-timeout-reducer.h"
+#include "game-option/birth-options.h"
 #include "player/player-effects.h"
 
 /*!

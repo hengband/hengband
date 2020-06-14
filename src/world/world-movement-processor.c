@@ -1,13 +1,16 @@
-﻿#include "system/angband.h"
-#include "world/world-movement-processor.h"
-#include "main/sound-definitions-table.h"
-#include "io/write-diary.h"
+﻿#include "world/world-movement-processor.h"
+#include "cmd-io/cmd-save.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
-#include "world/world.h"
-#include "cmd-io/cmd-save.h"
+#include "game-option/birth-options.h"
+#include "game-option/play-record-options.h"
+#include "game-option/special-options.h"
+#include "io/write-diary.h"
+#include "main/sound-definitions-table.h"
+#include "monster-race/race-flags1.h"
 #include "player/player-move.h"
 #include "view/display-main-window.h"
+#include "world/world.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとに帰還の残り時間カウントダウンと発動を処理する。
@@ -18,7 +21,7 @@
  * Autosave BEFORE resetting the recall counter (rr9)
  * The player is yanked up/down as soon as he loads the autosaved game.
  */
-void execute_recall(player_type* creature_ptr)
+void execute_recall(player_type *creature_ptr)
 {
     if (creature_ptr->word_recall == 0)
         return;
@@ -32,7 +35,7 @@ void execute_recall(player_type* creature_ptr)
         return;
 
     disturb(creature_ptr, FALSE, TRUE);
-    floor_type* floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     if (floor_ptr->dun_level || creature_ptr->current_floor_ptr->inside_quest || creature_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
         if (creature_ptr->dungeon_idx)
@@ -79,9 +82,9 @@ void execute_recall(player_type* creature_ptr)
     creature_ptr->wild_mode = FALSE;
 
     /*
-    * Clear all saved floors
-    * and create a first saved floor
-    */
+     * Clear all saved floors
+     * and create a first saved floor
+     */
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
     creature_ptr->leaving = TRUE;
 
@@ -91,7 +94,7 @@ void execute_recall(player_type* creature_ptr)
     }
 
     for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
-        quest_type* const q_ptr = &quest[i];
+        quest_type *const q_ptr = &quest[i];
         if ((q_ptr->type == QUEST_TYPE_RANDOM) && (q_ptr->status == QUEST_STATUS_TAKEN) && (q_ptr->level < floor_ptr->dun_level)) {
             q_ptr->status = QUEST_STATUS_FAILED;
             q_ptr->complev = (byte)creature_ptr->lev;
@@ -110,14 +113,14 @@ void execute_recall(player_type* creature_ptr)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void execute_floor_reset(player_type* creature_ptr)
+void execute_floor_reset(player_type *creature_ptr)
 {
-    floor_type* floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     if (creature_ptr->alter_reality == 0)
         return;
 
     if (autosave_l && (creature_ptr->alter_reality == 1) && !creature_ptr->phase_out)
-    do_cmd_save_game(creature_ptr, TRUE);
+        do_cmd_save_game(creature_ptr, TRUE);
 
     creature_ptr->alter_reality--;
     creature_ptr->redraw |= (PR_STATUS);

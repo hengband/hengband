@@ -11,31 +11,44 @@
  */
 
 #include "system/angband.h"
-#include "core/stuff-handler.h"
-#include "util/util.h"
-#include "main/sound-definitions-table.h"
-#include "floor/floor.h"
-#include "grid/grid.h"
-#include "spell/spells-summon.h"
-#include "player/avatar.h"
-#include "spell/spells-status.h"
 #include "cmd-action/cmd-spell.h"
-#include "player/player-status.h"
-#include "mspell/monster-spell.h"
-#include "monster/monster-status.h"
-#include "spell/spells-type.h"
 #include "cmd/cmd-basic.h"
-#include "player/player-effects.h"
+#include "core/stuff-handler.h"
+#include "floor/floor.h"
+#include "game-option/disturbance-options.h"
+#include "game-option/input-options.h"
+#include "game-option/text-display-options.h"
+#include "grid/grid.h"
 #include "io/targeting.h"
-#include "view/display-main-window.h"
+#include "lore/lore-calculator.h"
+#include "main/sound-definitions-table.h"
+#include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
+#include "monster-race/race-flags-ability1.h"
+#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags4.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-info.h"
+#include "monster/monster-status.h"
+#include "mspell/monster-spell.h"
+#include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-type.h"
+#include "player/avatar.h"
+#include "player/player-effects.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell/spells-status.h"
+#include "spell/spells-summon.h"
+#include "spell/spells-type.h"
 #include "spell/spells3.h"
-#include "mspell/mspell-type.h"
-#include "mspell/mspell-damage-calculator.h"
+#include "util/util.h"
+#include "view/display-main-window.h"
 
  /*!
   * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル
@@ -1839,7 +1852,7 @@ void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode)
 			break;
 
 		case MONSPELL_TYPE_BREATH:
-			*f4 = RF4_BREATH_MASK;
+			*f4 = (BIT_FLAGS)RF4_BREATH_MASK;
 			*f5 = RF5_BREATH_MASK;
 			*f6 = RF6_BREATH_MASK;
 			break;
@@ -1847,7 +1860,7 @@ void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode)
 		case MONSPELL_TYPE_SUMMON:
 			*f4 = RF4_SUMMON_MASK;
 			*f5 = RF5_SUMMON_MASK;
-			*f6 = RF6_SUMMON_MASK;
+			*f6 = (BIT_FLAGS)RF6_SUMMON_MASK;
 			break;
 
 		case MONSPELL_TYPE_OTHER:

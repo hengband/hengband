@@ -6,6 +6,7 @@
 
 #include "knowledge/knowledge-experiences.h"
 #include "core/show-file.h"
+#include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
 #include "object/object-flavor.h"
 #include "object/object-kind.h"
@@ -50,7 +51,7 @@ void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
 		}
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("武器の経験値", "Weapon Proficiency"), 0, 0);
 	fd_kill(file_name);
 }
@@ -128,7 +129,7 @@ void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 		}
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("魔法の経験値", "Spell Proficiency"), 0, 0);
 	fd_kill(file_name);
 }
@@ -164,7 +165,7 @@ void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 		fprintf(fff, "\n");
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("技能の経験値", "Miscellaneous Proficiency"), 0, 0);
 	fd_kill(file_name);
 }

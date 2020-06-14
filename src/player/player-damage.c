@@ -6,6 +6,12 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
+#include "game-option/game-play-options.h"
+#include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
+#include "game-option/special-options.h"
 #include "inventory/inventory-damage.h"
 #include "io/files-util.h"
 #include "io/report.h"
@@ -15,10 +21,15 @@
 #include "main/sound-definitions-table.h"
 #include "market/arena-info-table.h"
 #include "mind/mind-mirror-master.h"
+#include "monster/monster-describer.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
+#include "monster/monster-description-types.h"
+#include "monster/monster-info.h"
 #include "mspell/monster-spell.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-broken.h"
+#include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"
@@ -455,7 +466,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 #else
 				sprintf(dummy, "%s%s", hit_from, !creature_ptr->paralyzed ? "" : " while helpless");
 #endif
-				my_strcpy(creature_ptr->died_from, dummy, sizeof creature_ptr->died_from);
+				angband_strcpy(creature_ptr->died_from, dummy, sizeof creature_ptr->died_from);
 			}
 
 			/* No longer a winner */
@@ -488,7 +499,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 			flush();
 
-			if (get_check_strict(_("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
+			if (get_check_strict(creature_ptr, _("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
 			{
 				do_cmd_save_screen(creature_ptr, process_autopick_file_command);
 			}
@@ -528,7 +539,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 #else
 					while (!get_string("Last word: ", death_message, 1024));
 #endif
-				} while (winning_seppuku && !get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
+				} while (winning_seppuku && !get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
 				if (death_message[0] == '\0')
 				{
@@ -560,13 +571,13 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 					str = death_message;
 					if (strncmp(str, "「", 2) == 0) str += 2;
 
-					str2 = my_strstr(str, "」");
+					str2 = angband_strstr(str, "」");
 					if (str2 != NULL) *str2 = '\0';
 
 					i = 0;
 					while (i < 9)
 					{
-						str2 = my_strstr(str, " ");
+						str2 = angband_strstr(str, " ");
 						if (str2 == NULL) len = strlen(str);
 						else len = str2 - str;
 

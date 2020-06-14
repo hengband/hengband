@@ -16,8 +16,10 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-diary.h"
 #include "cmd-io/cmd-dump.h"
+#include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/cmd-help.h"
 #include "cmd-io/cmd-knowledge.h"
+#include "cmd-io/cmd-lore.h"
 #include "cmd-io/cmd-macro.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-item/cmd-item.h"
@@ -27,12 +29,18 @@
 #include "cmd/cmd-basic.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-visuals.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-events.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "game-option/birth-options.h"
+#include "game-option/game-play-options.h"
+#include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
+#include "game-option/special-options.h"
+#include "game-option/text-display-options.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
@@ -43,15 +51,17 @@
 #include "market/gold-magnification-table.h"
 #include "mind/mind.h"
 #include "object-enchant/item-feeling.h"
+#include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
-#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "object-enchant/special-object-flags.h"
+#include "object/object-info.h"
+#include "perception/identification.h"
+#include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
@@ -1982,7 +1992,7 @@ static void store_process_command(player_type *client_ptr)
 	}
 	case '=':
 	{
-		do_cmd_options();
+		do_cmd_options(client_ptr);
 		(void)combine_and_reorder_home(STORE_HOME);
 		do_cmd_redraw(client_ptr);
 		display_store(client_ptr);

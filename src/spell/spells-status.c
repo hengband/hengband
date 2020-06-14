@@ -13,7 +13,7 @@
 #include "inventory/inventory-object.h"
 #include "io/targeting.h"
 #include "mind/mind-force-trainer.h"
-#include "monster/monster.h"
+#include "monster/monster-describer.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"

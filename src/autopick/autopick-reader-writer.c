@@ -12,7 +12,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 {
 	GAME_TEXT buf[80];
 	init_autopick();
-	my_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
+	angband_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
 	errr err = process_autopick_file(player_ptr, buf, process_autopick_file_command);
 	if (err == 0 && disp_mes)
 	{
@@ -21,7 +21,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 
 	if (err < 0)
 	{
-		my_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
+		angband_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
 		err = process_autopick_file(player_ptr, buf, process_autopick_file_command);
 		if (err == 0 && disp_mes)
 		{
@@ -69,11 +69,11 @@ static concptr *read_text_lines(concptr filename)
 	char buf[1024];
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-	fff = my_fopen(buf, "r");
+	fff = angband_fopen(buf, "r");
 	if (!fff) return NULL;
 
 	C_MAKE(lines_list, MAX_LINES, concptr);
-	while (my_fgets(fff, buf, sizeof(buf)) == 0)
+	while (angband_fgets(fff, buf, sizeof(buf)) == 0)
 	{
 		lines_list[lines++] = string_make(buf);
 		if (lines >= MAX_LINES - 1) break;
@@ -82,7 +82,7 @@ static concptr *read_text_lines(concptr filename)
 	if (lines == 0)
 		lines_list[0] = string_make("");
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	return lines_list;
 }
 
@@ -109,7 +109,7 @@ static void prepare_default_pickpref(player_type *player_ptr)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
 	FILE *user_fp;
-	user_fp = my_fopen(buf, "w");
+	user_fp = angband_fopen(buf, "w");
 	if (!user_fp) return;
 
 	fprintf(user_fp, "#***\n");
@@ -121,21 +121,21 @@ static void prepare_default_pickpref(player_type *player_ptr)
 	fprintf(user_fp, "#***\n\n\n");
 	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename);
 	FILE *pref_fp;
-	pref_fp = my_fopen(buf, "r");
+	pref_fp = angband_fopen(buf, "r");
 
 	if (!pref_fp)
 	{
-		my_fclose(user_fp);
+		angband_fclose(user_fp);
 		return;
 	}
 
-	while (!my_fgets(pref_fp, buf, sizeof(buf)))
+	while (!angband_fgets(pref_fp, buf, sizeof(buf)))
 	{
 		fprintf(user_fp, "%s\n", buf);
 	}
 
-	my_fclose(user_fp);
-	my_fclose(pref_fp);
+	angband_fclose(user_fp);
+	angband_fclose(pref_fp);
 }
 
 /*
@@ -182,14 +182,14 @@ bool write_text_lines(concptr filename, concptr *lines_list)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
 	FILE *fff;
-	fff = my_fopen(buf, "w");
+	fff = angband_fopen(buf, "w");
 	if (!fff) return FALSE;
 
 	for (int lines = 0; lines_list[lines]; lines++)
 	{
-		my_fputs(fff, lines_list[lines], 1024);
+		angband_fputs(fff, lines_list[lines], 1024);
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	return TRUE;
 }

@@ -7,6 +7,11 @@
 #include "mind/mind-cavalry.h"
 #include "cmd-action/cmd-pet.h"
 #include "floor/floor.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags7.h"
+#include "monster/smart-learn-types.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-info.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-skill.h"
 

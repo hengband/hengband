@@ -93,9 +93,11 @@
  */
 
 #include "system/angband.h"
+#include "game-option/runtime-arguments.h"
+#include "game-option/special-options.h"
+#include "io/files-util.h"
 #include "main/sound-definitions-table.h"
 #include "system/system-variables.h"
-#include "io/files-util.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 
@@ -903,7 +905,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 		char *kanji = malloc(outlen);
 		char *sp; char *kp = kanji;
 		char sbuf[1024];
-		my_strcpy(sbuf, str, sizeof(sbuf));
+		angband_strcpy(sbuf, str, sizeof(sbuf));
 		sp = sbuf;
 		iconv(cd, &sp, &inlen, &kp, &outlen);
 		iconv_close(cd);

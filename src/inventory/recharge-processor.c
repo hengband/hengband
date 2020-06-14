@@ -17,7 +17,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
     if (!o_ptr->inscription)
         return;
 
-    concptr s = my_strchr(quark_str(o_ptr->inscription), '!');
+    concptr s = angband_strchr(quark_str(o_ptr->inscription), '!');
     while (s) {
         if (s[1] == '!') {
             GAME_TEXT o_name[MAX_NLEN];
@@ -34,7 +34,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
             return;
         }
 
-        s = my_strchr(s + 1, '!');
+        s = angband_strchr(s + 1, '!');
     }
 }
 

@@ -14,6 +14,7 @@
 #include "io/uid-checker.h"
 #include "io/files-util.h"
 #include "io-dump/character-dump.h"
+#include "monster-race/race-flags1.h"
 
 concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
 concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
@@ -56,11 +57,11 @@ errr file_character(player_type *creature_ptr, concptr name, update_playtime_pf 
 		char out_val[160];
 		(void)fd_close(fd);
 		(void)sprintf(out_val, _("現存するファイル %s に上書きしますか? ", "Replace existing file %s? "), buf);
-		if (get_check_strict(out_val, CHECK_NO_HISTORY)) fd = -1;
+		if (get_check_strict(creature_ptr, out_val, CHECK_NO_HISTORY)) fd = -1;
 	}
 
 	FILE *fff = NULL;
-	if (fd < 0) fff = my_fopen(buf, "w");
+	if (fd < 0) fff = angband_fopen(buf, "w");
 
 	if (!fff)
 	{
@@ -70,7 +71,7 @@ errr file_character(player_type *creature_ptr, concptr name, update_playtime_pf 
 	}
 
 	make_character_dump(creature_ptr, fff, update_playtime, display_player, map_name);
-	my_fclose(fff);
+	angband_fclose(fff);
 	msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
 	msg_print(NULL);
 	return 0;
@@ -94,16 +95,16 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, file_name);
 	FILE *fp;
-	fp = my_fopen(buf, "r");
+	fp = angband_fopen(buf, "r");
 	if (!fp) return -1;
 
 	int test;
 	int line_num = 0;
 	while (TRUE)
 	{
-		if (my_fgets(fp, buf, sizeof(buf)) != 0)
+		if (angband_fgets(fp, buf, sizeof(buf)) != 0)
 		{
-			my_fclose(fp);
+			angband_fclose(fp);
 			return -1;
 		}
 
@@ -129,7 +130,7 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 		else
 		{
 			msg_format("Error in line %d of %s!", line_num, file_name);
-			my_fclose(fp);
+			angband_fclose(fp);
 			return -1;
 		}
 	}
@@ -139,7 +140,7 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 	{
 		while (TRUE)
 		{
-			test = my_fgets(fp, buf, sizeof(buf));
+			test = angband_fgets(fp, buf, sizeof(buf));
 			if (!test)
 			{
 				/* Ignore lines starting with 'N:' */
@@ -155,7 +156,7 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 		if (one_in_(counter + 1)) strcpy(output, buf);
 	}
 
-	my_fclose(fp);
+	angband_fclose(fp);
 	return counter ? 0 : -1;
 }
 
@@ -310,14 +311,14 @@ void read_dead_file(char *buf, size_t buf_size)
 	path_build(buf, buf_size, ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
 
 	FILE *fp;
-	fp = my_fopen(buf, "r");
+	fp = angband_fopen(buf, "r");
 	if (!fp) return;
 
 	int i = 0;
-	while (my_fgets(fp, buf, buf_size) == 0)
+	while (angband_fgets(fp, buf, buf_size) == 0)
 	{
 		put_str(buf, i++, 0);
 	}
 
-	my_fclose(fp);
+	angband_fclose(fp);
 }

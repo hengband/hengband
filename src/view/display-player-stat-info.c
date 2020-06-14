@@ -8,7 +8,7 @@
 
 #include "display-player-stat-info.h"
 #include "object-enchant/tr-types.h"
-#include "object/object1.h"
+#include "object/object-flags.h"
 #include "player/mimic-info-table.h"
 #include "player/permanent-resistances.h"
 #include "player/player-personality.h"

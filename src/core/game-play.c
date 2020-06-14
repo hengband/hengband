@@ -10,55 +10,65 @@
  * 2013 Deskull rearranged comment for Doxygen.
  */
 
-#include "system/angband.h"
 #include "core/game-play.h"
-#include "io/signal-handlers.h"
-#include "util/util.h"
-#include "system/angband-version.h"
-#include "core/stuff-handler.h"
-#include "io/inet.h"
-#include "term/gameterm.h"
-#include "io/chuukei.h"
+#include "autopick/autopick-pref-processor.h"
 #include "birth/character-builder.h"
 #include "birth/inventory-initializer.h"
-#include "monster/creature.h"
-#include "grid/feature.h"
+#include "cmd-io/cmd-gameoption.h"
+#include "core/game-closer.h"
+#include "core/output-updater.h"
+#include "core/player-processor.h"
+#include "core/scores.h"
+#include "core/stuff-handler.h"
+#include "core/visuals-reseter.h"
+#include "dungeon/dungeon-processor.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
+#include "floor/wild.h"
+#include "game-option/cheat-options.h"
+#include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
+#include "game-option/runtime-arguments.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
+#include "info-reader/fixed-map-parser.h"
+#include "io/chuukei.h"
+#include "io/inet.h"
+#include "io/input-key-processor.h"
+#include "io/read-pref-file.h"
+#include "io/save.h"
+#include "io/signal-handlers.h"
+#include "io/targeting.h"
 #include "io/write-diary.h"
 #include "market/arena-info-table.h"
 #include "market/bounty.h"
-#include "store/store-util.h"
-#include "store/store.h"
+#include "monster-race/race-indice-types.h"
+#include "core/speed-table.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-remover.h"
+#include "monster/monster-util.h"
+#include "monster-floor/place-monster-types.h"
 #include "object/object-flavor.h"
-#include "sv-definition/sv-weapon-types.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-personalities-table.h"
 #include "player/player-races-table.h"
 #include "player/player-skill.h"
 #include "player/process-name.h"
-#include "spell/technic-info-table.h"
-#include "spell/spells-status.h"
-#include "view/display-player.h"
-#include "floor/wild.h"
-#include "world/world.h"
-#include "autopick/autopick-pref-processor.h"
-#include "core/game-closer.h"
-#include "core/output-updater.h"
-#include "core/player-processor.h"
-#include "info-reader/fixed-map-parser.h"
-#include "dungeon/dungeon-processor.h"
-#include "io/input-key-processor.h"
-#include "io/read-pref-file.h"
 #include "realm/realm-names-table.h"
-#include "io/save.h"
-#include "core/scores.h"
-#include "io/targeting.h"
-#include "view/display-main-window.h"
+#include "spell/spells-status.h"
+#include "spell/technic-info-table.h"
+#include "store/store-util.h"
+#include "store/store.h"
+#include "sv-definition/sv-weapon-types.h"
+#include "system/angband-version.h"
 #include "system/system-variables.h"
+#include "term/gameterm.h"
+#include "util/util.h"
+#include "view/display-main-window.h"
+#include "view/display-player.h"
+#include "world/world.h"
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
@@ -68,7 +78,7 @@
  * savefile, we will commit suicide, if necessary, to allow the
  * player to start a new game.
  */
-void play_game(player_type* player_ptr, bool new_game)
+void play_game(player_type *player_ptr, bool new_game)
 {
     bool load_game = TRUE;
     bool init_random_seed = FALSE;
@@ -111,7 +121,7 @@ void play_game(player_type* player_ptr, bool new_game)
         char buf[1024];
         bool success;
 
-        if (!get_check_strict(_("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
+        if (!get_check_strict(player_ptr, _("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
             quit(0);
 
         player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
@@ -127,7 +137,7 @@ void play_game(player_type* player_ptr, bool new_game)
         parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
         success = send_world_score(player_ptr, TRUE, update_playtime, display_player, map_name);
 
-        if (!success && !get_check_strict(_("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
+        if (!success && !get_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
             prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
             (void)inkey();
         } else {
@@ -163,7 +173,7 @@ void play_game(player_type* player_ptr, bool new_game)
         Rand_state_init();
     }
 
-    floor_type* floor_ptr = player_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (new_game) {
         current_world_ptr->character_dungeon = FALSE;
 
@@ -185,15 +195,14 @@ void play_game(player_type* player_ptr, bool new_game)
         wipe_o_list(floor_ptr);
     } else {
         write_level = FALSE;
-        exe_write_diary(player_ptr, DIARY_GAMESTART, 1,
-            _("                            ----ゲーム再開----",
-                "                            --- Restarted Game ---"));
+        exe_write_diary(
+            player_ptr, DIARY_GAMESTART, 1, _("                            ----ゲーム再開----", "                            --- Restarted Game ---"));
 
         /*
-		 * todo もう2.2.Xなので互換性は打ち切ってもいいのでは？
-		 * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
-		 * もう不要だが、以前のセーブファイルとの互換のために残しておく。
-		 */
+         * todo もう2.2.Xなので互換性は打ち切ってもいいのでは？
+         * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
+         * もう不要だが、以前のセーブファイルとの互換のために残しておく。
+         */
         if (player_ptr->riding == -1) {
             player_ptr->riding = 0;
             for (MONSTER_IDX i = floor_ptr->m_max; i > 0; i--) {
@@ -296,11 +305,10 @@ void play_game(player_type* player_ptr, bool new_game)
         calc_android_exp(player_ptr);
 
     if (new_game && ((player_ptr->pclass == CLASS_CAVALRY) || (player_ptr->pclass == CLASS_BEASTMASTER))) {
-        monster_type* m_ptr;
+        monster_type *m_ptr;
         MONRACE_IDX pet_r_idx = ((player_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
-        monster_race* r_ptr = &r_info[pet_r_idx];
-        place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx,
-            (PM_FORCE_PET | PM_NO_KAGE));
+        monster_race *r_ptr = &r_info[pet_r_idx];
+        place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
         m_ptr = &floor_ptr->m_list[hack_m_idx_ii];
         m_ptr->mspeed = r_ptr->speed;
         m_ptr->maxhp = r_ptr->hdice * (r_ptr->hside + 1) / 2;

@@ -10,16 +10,15 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
+#include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
-#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object-enchant/special-object-flags.h"
-#include "sv-definition/sv-food-types.h"
-#include "sv-definition/sv-other-types.h"
+#include "object/object-info.h"
+#include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
@@ -29,6 +28,8 @@
 #include "player/player-status.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
+#include "sv-definition/sv-food-types.h"
+#include "sv-definition/sv-other-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 #include "view/object-describer.h"
@@ -420,7 +421,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 	if ((PRACE_IS_(creature_ptr, RACE_BALROG) ||
 		(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) &&
 		(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE &&
-			my_strchr("pht", r_info[o_ptr->pval].d_char)))
+			angband_strchr("pht", r_info[o_ptr->pval].d_char)))
 	{
 		/* Drain vitality of humanoids */
 		GAME_TEXT o_name[MAX_NLEN];

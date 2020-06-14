@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/monster-type-definition.h"
 
 #define DAMAGE_FORCE    1
 #define DAMAGE_GENO     2

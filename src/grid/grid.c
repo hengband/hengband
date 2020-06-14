@@ -15,16 +15,20 @@
  * 2013 Deskull Doxygen向けのコメント整理\n
  */
 
-#include "system/angband.h"
 #include "grid/grid.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-generate.h"
+#include "game-option/game-play-options.h"
+#include "game-option/map-screen-options.h"
+#include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
+#include "monster/monster-info.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
+#include "monster/monster-update.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"

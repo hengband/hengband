@@ -1,368 +1,359 @@
-﻿/*!
- * @brief monster-processのための構造体群初期化処理と共通性の極めて高い処理
- * @date 2020/03/07
- * @author Hourier
- * @details
- * 概ね、player_type 構造体が引数でない場合はここへ移動させることを検討しても良い
- * 引数に入っていたらここには移動させないこと
- */
+﻿#include "monster/monster-util.h"
+#include "dungeon/dungeon.h"
+#include "dungeon/quest.h"
+#include "floor/floor.h"
+#include "grid/grid.h"
+#include "floor/wild.h"
+#include "monster-race/race-flags-ability1.h"
+#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags4.h"
+#include "monster-race/race-flags7.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster-race/race-indice-types.h"
+#include "mspell/monster-spell.h"
+#include "spell/spells-summon.h"
 
-#include "system/angband.h"
-#include "monster-util.h"
-
- /*!
-  * @brief ターン経過フラグ構造体の初期化
-  * @param riding_idx 乗馬中のモンスターID
-  * @param m_idx モンスターID
-  * @return 初期化済のターン経過フラグ
-  */
-turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr)
-{
-	turn_flags_ptr->is_riding_mon = (m_idx == riding_idx);
-	turn_flags_ptr->do_turn = FALSE;
-	turn_flags_ptr->do_move = FALSE;
-	turn_flags_ptr->do_view = FALSE;
-	turn_flags_ptr->must_alter_to_move = FALSE;
-	turn_flags_ptr->did_open_door = FALSE;
-	turn_flags_ptr->did_bash_door = FALSE;
-	turn_flags_ptr->did_take_item = FALSE;
-	turn_flags_ptr->did_kill_item = FALSE;
-	turn_flags_ptr->did_move_body = FALSE;
-	turn_flags_ptr->did_pass_wall = FALSE;
-	turn_flags_ptr->did_kill_wall = FALSE;
-	return turn_flags_ptr;
-}
-
+MONSTER_IDX hack_m_idx = 0; /* Hack -- see "process_monsters()" */
+MONSTER_IDX hack_m_idx_ii = 0;
 
 /*!
- * @brief old_race_flags_ptr の初期化
+ * @var chameleon_change_m_idx
+ * @brief カメレオンの変身先モンスターIDを受け渡すためのグローバル変数
+ * @todo 変数渡しの問題などもあるができればchameleon_change_m_idxのグローバル変数を除去し、関数引き渡しに移行すること
  */
-old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr)
-{
-	old_race_flags_ptr->old_r_flags1 = 0L;
-	old_race_flags_ptr->old_r_flags2 = 0L;
-	old_race_flags_ptr->old_r_flags3 = 0L;
-	old_race_flags_ptr->old_r_flags4 = 0L;
-	old_race_flags_ptr->old_r_flags5 = 0L;
-	old_race_flags_ptr->old_r_flags6 = 0L;
-	old_race_flags_ptr->old_r_flagsr = 0L;
-
-	old_race_flags_ptr->old_r_blows0 = 0;
-	old_race_flags_ptr->old_r_blows1 = 0;
-	old_race_flags_ptr->old_r_blows2 = 0;
-	old_race_flags_ptr->old_r_blows3 = 0;
-
-	old_race_flags_ptr->old_r_cast_spell = 0;
-	return old_race_flags_ptr;
-}
-
+int chameleon_change_m_idx = 0;
 
 /*!
- * @brief coordinate_candidate の初期化
- * @param なし
- * @return 初期化済の構造体
+ * @var summon_specific_type
+ * @brief 召喚条件を指定するグローバル変数 / Hack -- the "type" of the current "summon specific"
+ * @todo summon_specific_typeグローバル変数の除去と関数引数への代替を行う
  */
-coordinate_candidate init_coordinate_candidate(void)
-{
-	coordinate_candidate candidate;
-	candidate.gy = 0;
-	candidate.gx = 0;
-	candidate.gdis = 0;
-	return candidate;
-}
+int summon_specific_type = 0;
 
+static monsterrace_hook_type get_mon_num_hook;
+static monsterrace_hook_type get_mon_num2_hook;
 
 /*!
- * @brief モンスターの移動方向を保存する
- * @param mm 移動方向
- * @param y 移動先Y座標
- * @param x 移動先X座標
+ * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
+ * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param r_idx チェックするモンスター種族ID
+ * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
+static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-	/* North, South, East, West, North-West, North-East, South-West, South-East */
-	if ((y < 0) && (x == 0))
-	{
-		mm[0] = 8;
-		mm[1] = 7;
-		mm[2] = 9;
-	}
-	else if ((y > 0) && (x == 0))
-	{
-		mm[0] = 2;
-		mm[1] = 1;
-		mm[2] = 3;
-	}
-	else if ((x > 0) && (y == 0))
-	{
-		mm[0] = 6;
-		mm[1] = 9;
-		mm[2] = 3;
-	}
-	else if ((x < 0) && (y == 0))
-	{
-		mm[0] = 4;
-		mm[1] = 7;
-		mm[2] = 1;
-	}
-	else if ((y < 0) && (x < 0))
-	{
-		mm[0] = 7;
-		mm[1] = 4;
-		mm[2] = 8;
-	}
-	else if ((y < 0) && (x > 0))
-	{
-		mm[0] = 9;
-		mm[1] = 6;
-		mm[2] = 8;
-	}
-	else if ((y > 0) && (x < 0))
-	{
-		mm[0] = 1;
-		mm[1] = 4;
-		mm[2] = 2;
-	}
-	else if ((y > 0) && (x > 0))
-	{
-		mm[0] = 3;
-		mm[1] = 6;
-		mm[2] = 2;
-	}
+    DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
+    dungeon_type *d_ptr = &d_info[d_idx];
+    monster_race *r_ptr = &r_info[r_idx];
+
+    if (d_ptr->flags1 & DF1_CHAMELEON) {
+        if (chameleon_change_m_idx)
+            return TRUE;
+    }
+
+    if (d_ptr->flags1 & DF1_NO_MAGIC) {
+        if (r_idx != MON_CHAMELEON && r_ptr->freq_spell && !(r_ptr->flags4 & RF4_NOMAGIC_MASK) && !(r_ptr->a_ability_flags1 & RF5_NOMAGIC_MASK)
+            && !(r_ptr->a_ability_flags2 & RF6_NOMAGIC_MASK))
+            return FALSE;
+    }
+
+    if (d_ptr->flags1 & DF1_NO_MELEE) {
+        if (r_idx == MON_CHAMELEON)
+            return TRUE;
+        if (!(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK))
+            && !(r_ptr->a_ability_flags1
+                & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_CAUSE_1 | RF5_CAUSE_2 | RF5_CAUSE_3 | RF5_CAUSE_4 | RF5_MIND_BLAST | RF5_BRAIN_SMASH))
+            && !(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK)))
+            return FALSE;
+    }
+
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (d_ptr->flags1 & DF1_BEGINNER) {
+        if (r_ptr->level > floor_ptr->dun_level)
+            return FALSE;
+    }
+
+    if (d_ptr->special_div >= 64)
+        return TRUE;
+    if (summon_specific_type && !(d_ptr->flags1 & DF1_CHAMELEON))
+        return TRUE;
+
+    byte a;
+    switch (d_ptr->mode) {
+    case DUNGEON_MODE_AND: {
+        if (d_ptr->mflags1) {
+            if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1)
+                return FALSE;
+        }
+
+        if (d_ptr->mflags2) {
+            if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2)
+                return FALSE;
+        }
+
+        if (d_ptr->mflags3) {
+            if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3)
+                return FALSE;
+        }
+
+        if (d_ptr->mflags4) {
+            if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
+                return FALSE;
+        }
+
+        if (d_ptr->m_a_ability_flags1) {
+            if ((d_ptr->m_a_ability_flags1 & r_ptr->a_ability_flags1) != d_ptr->m_a_ability_flags1)
+                return FALSE;
+        }
+
+        if (d_ptr->m_a_ability_flags2) {
+            if ((d_ptr->m_a_ability_flags2 & r_ptr->a_ability_flags2) != d_ptr->m_a_ability_flags2)
+                return FALSE;
+        }
+
+        if (d_ptr->mflags7) {
+            if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7)
+                return FALSE;
+        }
+
+        if (d_ptr->mflags8) {
+            if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8)
+                return FALSE;
+        }
+
+        if (d_ptr->mflags9) {
+            if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9)
+                return FALSE;
+        }
+
+        if (d_ptr->mflagsr) {
+            if ((d_ptr->mflagsr & r_ptr->flagsr) != d_ptr->mflagsr)
+                return FALSE;
+        }
+
+        for (a = 0; a < 5; a++)
+            if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char))
+                return FALSE;
+
+        return TRUE;
+    }
+    case DUNGEON_MODE_NAND: {
+        if (d_ptr->mflags1) {
+            if ((d_ptr->mflags1 & r_ptr->flags1) != d_ptr->mflags1)
+                return TRUE;
+        }
+
+        if (d_ptr->mflags2) {
+            if ((d_ptr->mflags2 & r_ptr->flags2) != d_ptr->mflags2)
+                return TRUE;
+        }
+
+        if (d_ptr->mflags3) {
+            if ((d_ptr->mflags3 & r_ptr->flags3) != d_ptr->mflags3)
+                return TRUE;
+        }
+
+        if (d_ptr->mflags4) {
+            if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
+                return TRUE;
+        }
+
+        if (d_ptr->m_a_ability_flags1) {
+            if ((d_ptr->m_a_ability_flags1 & r_ptr->a_ability_flags1) != d_ptr->m_a_ability_flags1)
+                return TRUE;
+        }
+
+        if (d_ptr->m_a_ability_flags2) {
+            if ((d_ptr->m_a_ability_flags2 & r_ptr->a_ability_flags2) != d_ptr->m_a_ability_flags2)
+                return TRUE;
+        }
+
+        if (d_ptr->mflags7) {
+            if ((d_ptr->mflags7 & r_ptr->flags7) != d_ptr->mflags7)
+                return TRUE;
+        }
+
+        if (d_ptr->mflags8) {
+            if ((d_ptr->mflags8 & r_ptr->flags8) != d_ptr->mflags8)
+                return TRUE;
+        }
+
+        if (d_ptr->mflags9) {
+            if ((d_ptr->mflags9 & r_ptr->flags9) != d_ptr->mflags9)
+                return TRUE;
+        }
+
+        if (d_ptr->mflagsr) {
+            if ((d_ptr->mflagsr & r_ptr->flagsr) != d_ptr->mflagsr)
+                return TRUE;
+        }
+
+        for (a = 0; a < 5; a++)
+            if (d_ptr->r_char[a] && (d_ptr->r_char[a] != r_ptr->d_char))
+                return TRUE;
+
+        return FALSE;
+    }
+    case DUNGEON_MODE_OR: {
+        if (r_ptr->flags1 & d_ptr->mflags1)
+            return TRUE;
+        if (r_ptr->flags2 & d_ptr->mflags2)
+            return TRUE;
+        if (r_ptr->flags3 & d_ptr->mflags3)
+            return TRUE;
+        if (r_ptr->flags4 & d_ptr->mflags4)
+            return TRUE;
+        if (r_ptr->a_ability_flags1 & d_ptr->m_a_ability_flags1)
+            return TRUE;
+        if (r_ptr->a_ability_flags2 & d_ptr->m_a_ability_flags2)
+            return TRUE;
+        if (r_ptr->flags7 & d_ptr->mflags7)
+            return TRUE;
+        if (r_ptr->flags8 & d_ptr->mflags8)
+            return TRUE;
+        if (r_ptr->flags9 & d_ptr->mflags9)
+            return TRUE;
+        if (r_ptr->flagsr & d_ptr->mflagsr)
+            return TRUE;
+        for (a = 0; a < 5; a++)
+            if (d_ptr->r_char[a] == r_ptr->d_char)
+                return TRUE;
+
+        return FALSE;
+    }
+    case DUNGEON_MODE_NOR: {
+        if (r_ptr->flags1 & d_ptr->mflags1)
+            return FALSE;
+        if (r_ptr->flags2 & d_ptr->mflags2)
+            return FALSE;
+        if (r_ptr->flags3 & d_ptr->mflags3)
+            return FALSE;
+        if (r_ptr->flags4 & d_ptr->mflags4)
+            return FALSE;
+        if (r_ptr->a_ability_flags1 & d_ptr->m_a_ability_flags1)
+            return FALSE;
+        if (r_ptr->a_ability_flags2 & d_ptr->m_a_ability_flags2)
+            return FALSE;
+        if (r_ptr->flags7 & d_ptr->mflags7)
+            return FALSE;
+        if (r_ptr->flags8 & d_ptr->mflags8)
+            return FALSE;
+        if (r_ptr->flags9 & d_ptr->mflags9)
+            return FALSE;
+        if (r_ptr->flagsr & d_ptr->mflagsr)
+            return FALSE;
+        for (a = 0; a < 5; a++)
+            if (d_ptr->r_char[a] == r_ptr->d_char)
+                return FALSE;
+
+        return TRUE;
+    }
+    }
+
+    return TRUE;
 }
 
-
 /*!
- * @brief get_movable_grid() における移動の方向を保存する
- * @param mm 移動方向
- * @param y 移動先Y座標
- * @param x 移動先X座標
- * @return なし
+ * @brief プレイヤーの現在の広域マップ座標から得た地勢を元にモンスターの生成条件関数を返す
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return 地勢にあったモンスターの生成条件関数
  */
-void store_moves_val(int *mm, int y, int x)
+monsterrace_hook_type get_monster_hook(player_type *player_ptr)
 {
-	POSITION ax = ABS(x);
-	POSITION ay = ABS(y);
+    if ((player_ptr->current_floor_ptr->dun_level > 0) || (player_ptr->current_floor_ptr->inside_quest > 0))
+        return (monsterrace_hook_type)mon_hook_dungeon;
 
-	int move_val = 0;
-	if (y < 0) move_val += 8;
-	if (x > 0) move_val += 4;
-
-	if (ay > (ax << 1)) move_val += 2;
-	else if (ax > (ay << 1)) move_val++;
-
-	switch (move_val)
-	{
-	case 0:
-	{
-		mm[0] = 9;
-		if (ay > ax)
-		{
-			mm[1] = 8;
-			mm[2] = 6;
-			mm[3] = 7;
-			mm[4] = 3;
-		}
-		else
-		{
-			mm[1] = 6;
-			mm[2] = 8;
-			mm[3] = 3;
-			mm[4] = 7;
-		}
-
-		break;
-	}
-	case 1:
-	case 9:
-	{
-		mm[0] = 6;
-		if (y < 0)
-		{
-			mm[1] = 3;
-			mm[2] = 9;
-			mm[3] = 2;
-			mm[4] = 8;
-		}
-		else
-		{
-			mm[1] = 9;
-			mm[2] = 3;
-			mm[3] = 8;
-			mm[4] = 2;
-		}
-
-		break;
-	}
-	case 2:
-	case 6:
-	{
-		mm[0] = 8;
-		if (x < 0)
-		{
-			mm[1] = 9;
-			mm[2] = 7;
-			mm[3] = 6;
-			mm[4] = 4;
-		}
-		else
-		{
-			mm[1] = 7;
-			mm[2] = 9;
-			mm[3] = 4;
-			mm[4] = 6;
-		}
-
-		break;
-	}
-	case 4:
-	{
-		mm[0] = 7;
-		if (ay > ax)
-		{
-			mm[1] = 8;
-			mm[2] = 4;
-			mm[3] = 9;
-			mm[4] = 1;
-		}
-		else
-		{
-			mm[1] = 4;
-			mm[2] = 8;
-			mm[3] = 1;
-			mm[4] = 9;
-		}
-
-		break;
-	}
-	case 5:
-	case 13:
-	{
-		mm[0] = 4;
-		if (y < 0)
-		{
-			mm[1] = 1;
-			mm[2] = 7;
-			mm[3] = 2;
-			mm[4] = 8;
-		}
-		else
-		{
-			mm[1] = 7;
-			mm[2] = 1;
-			mm[3] = 8;
-			mm[4] = 2;
-		}
-
-		break;
-	}
-	case 8:
-	{
-		mm[0] = 3;
-		if (ay > ax)
-		{
-			mm[1] = 2;
-			mm[2] = 6;
-			mm[3] = 1;
-			mm[4] = 9;
-		}
-		else
-		{
-			mm[1] = 6;
-			mm[2] = 2;
-			mm[3] = 9;
-			mm[4] = 1;
-		}
-	
-		break;
-	}
-	case 10:
-	case 14:
-	{
-		mm[0] = 2;
-		if (x < 0)
-		{
-			mm[1] = 3;
-			mm[2] = 1;
-			mm[3] = 6;
-			mm[4] = 4;
-		}
-		else
-		{
-			mm[1] = 1;
-			mm[2] = 3;
-			mm[3] = 4;
-			mm[4] = 6;
-		}
-
-		break;
-	}
-	case 12:
-	{
-		mm[0] = 1;
-		if (ay > ax)
-		{
-			mm[1] = 2;
-			mm[2] = 4;
-			mm[3] = 3;
-			mm[4] = 7;
-		}
-		else
-		{
-			mm[1] = 4;
-			mm[2] = 2;
-			mm[3] = 7;
-			mm[4] = 3;
-		}
-
-		break;
-	}
-	}
+    switch (wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].terrain) {
+    case TERRAIN_TOWN:
+        return (monsterrace_hook_type)mon_hook_town;
+    case TERRAIN_DEEP_WATER:
+        return (monsterrace_hook_type)mon_hook_ocean;
+    case TERRAIN_SHALLOW_WATER:
+    case TERRAIN_SWAMP:
+        return (monsterrace_hook_type)mon_hook_shore;
+    case TERRAIN_DIRT:
+    case TERRAIN_DESERT:
+        return (monsterrace_hook_type)mon_hook_waste;
+    case TERRAIN_GRASS:
+        return (monsterrace_hook_type)mon_hook_grass;
+    case TERRAIN_TREES:
+        return (monsterrace_hook_type)mon_hook_wood;
+    case TERRAIN_SHALLOW_LAVA:
+    case TERRAIN_DEEP_LAVA:
+        return (monsterrace_hook_type)mon_hook_volcano;
+    case TERRAIN_MOUNTAIN:
+        return (monsterrace_hook_type)mon_hook_mountain;
+    default:
+        return (monsterrace_hook_type)mon_hook_dungeon;
+    }
 }
 
-
 /*!
- * @brief 古いモンスター情報の保存
- * @param monster_race_idx モンスターID
- * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
- * @return なし
+ * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
+ * @return 地勢にあったモンスターの生成条件関数
  */
-void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_flags_ptr)
+monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x)
 {
-	if (monster_race_idx == 0) return;
+    feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
+    if (have_flag(f_ptr->flags, FF_WATER)) {
+        if (have_flag(f_ptr->flags, FF_DEEP)) {
+            return (monsterrace_hook_type)mon_hook_deep_water;
+        } else {
+            return (monsterrace_hook_type)mon_hook_shallow_water;
+        }
+    }
 
-	monster_race *r_ptr;
-	r_ptr = &r_info[monster_race_idx];
+    if (have_flag(f_ptr->flags, FF_LAVA)) {
+        return (monsterrace_hook_type)mon_hook_lava;
+    }
 
-	old_race_flags_ptr->old_r_flags1 = r_ptr->r_flags1;
-	old_race_flags_ptr->old_r_flags2 = r_ptr->r_flags2;
-	old_race_flags_ptr->old_r_flags3 = r_ptr->r_flags3;
-	old_race_flags_ptr->old_r_flags4 = r_ptr->r_flags4;
-	old_race_flags_ptr->old_r_flags5 = r_ptr->r_flags5;
-	old_race_flags_ptr->old_r_flags6 = r_ptr->r_flags6;
-	old_race_flags_ptr->old_r_flagsr = r_ptr->r_flagsr;
-
-	old_race_flags_ptr->old_r_blows0 = r_ptr->r_blows[0];
-	old_race_flags_ptr->old_r_blows1 = r_ptr->r_blows[1];
-	old_race_flags_ptr->old_r_blows2 = r_ptr->r_blows[2];
-	old_race_flags_ptr->old_r_blows3 = r_ptr->r_blows[3];
-
-	old_race_flags_ptr->old_r_cast_spell = r_ptr->r_cast_spell;
+    return (monsterrace_hook_type)mon_hook_floor;
 }
 
-
 /*!
- * @brief モンスターの加速値を決定する
- * @param m_ptr モンスターへの参照ポインタ
- * return モンスターの加速値
+ * @brief モンスター生成制限関数最大2つから / Apply a "monster restriction function" to the "monster allocation table"
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param monster_hook 制限関数1
+ * @param monster_hook2 制限関数2
+ * @return エラーコード
  */
-SPEED decide_monster_speed(monster_type *m_ptr)
+errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2)
 {
-	SPEED speed = m_ptr->mspeed;
-	if (ironman_nightmare) speed += 5;
+    /* Todo: Check the hooks for non-changes */
+    get_mon_num_hook = monster_hook;
+    get_mon_num2_hook = monster_hook2;
 
-	if (MON_FAST(m_ptr)) speed += 10;
-	if (MON_SLOW(m_ptr)) speed -= 10;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    for (int i = 0; i < alloc_race_size; i++) {
+        monster_race *r_ptr;
+        alloc_entry *entry = &alloc_race_table[i];
+        entry->prob2 = 0;
+        r_ptr = &r_info[entry->index];
 
-	return speed;
+        if ((get_mon_num_hook && !((*get_mon_num_hook)(entry->index))) || (get_mon_num2_hook && !((*get_mon_num2_hook)(entry->index))))
+            continue;
+
+        if (!player_ptr->phase_out && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {
+            if (r_ptr->flags1 & RF1_QUESTOR)
+                continue;
+
+            if (r_ptr->flags7 & RF7_GUARDIAN)
+                continue;
+
+            if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (r_ptr->level > floor_ptr->dun_level))
+                continue;
+        }
+
+        entry->prob2 = entry->prob1;
+        if (floor_ptr->dun_level && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest))
+            && !restrict_monster_to_dungeon(player_ptr, entry->index) && !player_ptr->phase_out) {
+            int hoge = entry->prob2 * d_info[player_ptr->dungeon_idx].special_div;
+            entry->prob2 = hoge / 64;
+            if (randint0(64) < (hoge & 0x3f))
+                entry->prob2++;
+        }
+    }
+
+    return 0;
 }

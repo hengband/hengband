@@ -6,10 +6,13 @@
 
 #include "perception/simple-perception.h"
 #include "autopick/autopick.h"
+#include "game-option/auto-destruction-options.h"
+#include "game-option/disturbance-options.h"
 #include "inventory/player-inventory.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "player/player-move.h"

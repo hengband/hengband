@@ -67,7 +67,7 @@ errr parse_f_info(char *buf, angband_header *head)
     int i;
     char *s, *t;
     if (buf[0] == 'N') {
-        s = my_strchr(buf + 2, ':');
+        s = angband_strchr(buf + 2, ':');
 
         if (s) {
             *s++ = '\0';

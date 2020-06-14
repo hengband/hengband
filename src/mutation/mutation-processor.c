@@ -1,5 +1,7 @@
 ﻿#include "mutation/mutation-processor.h"
 #include "io/targeting.h"
+#include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation.h"
 #include "object/lite-processor.h"
@@ -8,12 +10,12 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-floor.h"
-#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-sight.h"
-#include "spell/spells-summon.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-hex.h"
+#include "spell/spells-summon.h"
 #include "spell/spells-type.h"
 #include "spell/spells3.h"
 #include "store/store-owners.h"
@@ -25,7 +27,7 @@
  * / Handle mutation effects once every 10 game turns
  * @return なし
  */
-void process_world_aux_mutation(player_type* creature_ptr)
+void process_world_aux_mutation(player_type *creature_ptr)
 {
     if (!creature_ptr->muta2)
         return;
@@ -171,7 +173,7 @@ void process_world_aux_mutation(player_type* creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_EAT_LIGHT) && one_in_(3000)) {
-        object_type* o_ptr;
+        object_type *o_ptr;
 
         msg_print(_("影につつまれた。", "A shadow passes over you."));
         msg_print(NULL);
@@ -192,9 +194,9 @@ void process_world_aux_mutation(player_type* creature_ptr)
         }
 
         /*
-		 * Unlite the area (radius 10) around player and
-		 * do 50 points damage to every affected monster
-		 */
+         * Unlite the area (radius 10) around player and
+         * do 50 points damage to every affected monster
+         */
         unlite_area(creature_ptr, 50, 10);
     }
 
@@ -323,8 +325,8 @@ void process_world_aux_mutation(player_type* creature_ptr)
     if ((creature_ptr->muta2 & MUT2_WARNING) && one_in_(1000)) {
         int danger_amount = 0;
         for (MONSTER_IDX monster = 0; monster < creature_ptr->current_floor_ptr->m_max; monster++) {
-            monster_type* m_ptr = &creature_ptr->current_floor_ptr->m_list[monster];
-            monster_race* r_ptr = &r_info[m_ptr->r_idx];
+            monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[monster];
+            monster_race *r_ptr = &r_info[m_ptr->r_idx];
             if (!monster_is_valid(m_ptr))
                 continue;
 

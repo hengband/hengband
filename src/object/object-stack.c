@@ -5,15 +5,15 @@
  */
 
 #include "object/object-stack.h"
-#include "sv-definition/sv-other-types.h"
-#include "object-enchant/artifact.h"
-#include "perception/object-perception.h"
+#include "game-option/game-play-options.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/special-object-flags.h"
+#include "object-enchant/trc-types.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
-#include "object-enchant/special-object-flags.h"
-#include "object-enchant/trc-types.h"
+#include "perception/object-perception.h"
+#include "sv-definition/sv-other-types.h"
 
 /*!
  * @brief 魔法棒やロッドのスロット分割時に使用回数を分配する /

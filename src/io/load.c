@@ -41,9 +41,10 @@
  */
 
 #include "io/load.h"
+#include "art-definition/art-accessory-types.h"
 #include "birth/quick-start.h"
+#include "cmd-io/cmd-gameoption.h"
 #include "cmd-item/cmd-smith.h"
-#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-generate.h"
@@ -51,9 +52,15 @@
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
+#include "game-option/option-flags.h"
+#include "game-option/runtime-arguments.h"
+#include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "info-reader/fixed-map-parser.h"
 #include "io/files-util.h"
 #include "io/report.h"
 #include "io/save.h"
@@ -61,22 +68,30 @@
 #include "locale/japanese.h"
 #include "market/arena.h"
 #include "market/bounty.h"
-#include "monster/monster.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/race-flags7.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-flag-types.h"
+#include "monster/monster-info.h"
+#include "monster/monster-list.h"
+#include "monster-floor/monster-move.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
+#include "object-enchant/tr-types.h"
+#include "object-enchant/trc-types.h"
+#include "object-enchant/trg-types.h"
+#include "object/object-flags.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object-stack.h"
-#include "object-enchant/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
 #include "object/object-value.h"
-#include "sv-definition/sv-armor-types.h"
-#include "sv-definition/sv-lite-types.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
 #include "pet/pet-util.h"
 #include "player/avatar.h"
 #include "player/patron.h"
@@ -89,6 +104,8 @@
 #include "spell/spells-status.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "sv-definition/sv-armor-types.h"
+#include "sv-definition/sv-lite-types.h"
 #include "system/angband-version.h"
 #include "system/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
 #include "util/object-sort.h"
@@ -2634,7 +2651,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	{
 		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
-		m_idx = m_pop(creature_ptr);
+		m_idx = m_pop(floor_ptr);
 		if (i != m_idx)
 		{
 			note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
@@ -2860,7 +2877,7 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		grid_type *g_ptr;
 		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
-		m_idx = m_pop(player_ptr);
+		m_idx = m_pop(floor_ptr);
 		if (i != m_idx) return 162;
 
 		m_ptr = &floor_ptr->m_list[m_idx];
@@ -3475,13 +3492,13 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 errr rd_savefile_new(player_type *player_ptr)
 {
 	safe_setuid_grab();
-	fff = my_fopen(savefile, "rb");
+	fff = angband_fopen(savefile, "rb");
 	safe_setuid_drop();
 	if (!fff) return -1;
 	errr err = rd_savefile_new_aux(player_ptr);
 
 	if (ferror(fff)) err = -1;
-	my_fclose(fff);
+	angband_fclose(fff);
 	return err;
 }
 
@@ -3576,7 +3593,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
 	safe_setuid_grab();
-	fff = my_fopen(floor_savefile, "rb");
+	fff = angband_fopen(floor_savefile, "rb");
 	safe_setuid_drop();
 
 	bool is_save_successful = TRUE;
@@ -3586,7 +3603,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	{
 		is_save_successful = load_floor_aux(player_ptr, sf_ptr);
 		if (ferror(fff)) is_save_successful = FALSE;
-		my_fclose(fff);
+		angband_fclose(fff);
 
 		safe_setuid_grab();
 		if (!(mode & SLF_NO_KILL)) (void)fd_kill(floor_savefile);

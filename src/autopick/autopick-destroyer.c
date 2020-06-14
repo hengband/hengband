@@ -7,6 +7,8 @@
 #include "autopick/autopick-destroyer.h"
 #include "autopick-methods-table.h"
 #include "autopick/autopick-util.h"
+#include "game-option/auto-destruction-options.h"
+#include "game-option/input-options.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-flavor.h"
@@ -33,7 +35,7 @@ static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
 	{
 		if (o_ptr->tval == TV_CORPSE &&
 			o_ptr->sval == SV_CORPSE &&
-			my_strchr("pht", r_info[o_ptr->pval].d_char))
+			angband_strchr("pht", r_info[o_ptr->pval].d_char))
 			return FALSE;
 	}
 	else if (player_ptr->pclass == CLASS_ARCHER)

@@ -1,9 +1,15 @@
 ﻿#include "spell/spells-summon.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
+#include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"
@@ -195,7 +201,7 @@ bool item_tester_offer(object_type *o_ptr)
 {
 	if (o_ptr->tval != TV_CORPSE) return FALSE;
 	if (o_ptr->sval != SV_CORPSE) return FALSE;
-	if (my_strchr("pht", r_info[o_ptr->pval].d_char)) return TRUE;
+	if (angband_strchr("pht", r_info[o_ptr->pval].d_char)) return TRUE;
 	return FALSE;
 }
 

@@ -14,7 +14,7 @@ errr parse_v_info(char *buf, angband_header *head)
     static vault_type *v_ptr = NULL;
 
     if (buf[0] == 'N') {
-        s = my_strchr(buf + 2, ':');
+        s = angband_strchr(buf + 2, ':');
         if (!s)
             return 1;
 

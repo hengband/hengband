@@ -1,5 +1,6 @@
 ﻿#include "pet/pet-util.h"
 #include "core/stuff-handler.h"
+#include "monster/monster-info.h"
 #include "world/world.h"
 
 /*!

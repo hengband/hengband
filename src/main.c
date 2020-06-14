@@ -12,6 +12,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "core/game-play.h"
 #include "core/scores.h"
+#include "game-option/runtime-arguments.h"
 #include "io/chuukei.h"
 #include "io/files-util.h"
 #include "io/inet.h"
@@ -153,7 +154,7 @@ static void change_path(concptr info)
 	concptr s;
 
 	/* Find equal sign */
-	s = my_strchr(info, '=');
+	s = angband_strchr(info, '=');
 
 	/* Verify equal sign */
 	if (!s) quit_fmt("Try '-d<what>=<path>' not '-d%s'", info);

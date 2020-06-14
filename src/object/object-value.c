@@ -1,13 +1,14 @@
 ﻿#include "object/object-value.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/tr-types.h"
 #include "perception/object-perception.h"
 #include "object/object-broken.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
+#include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
-#include "object/object1.h"
 #include "object-enchant/special-object-flags.h"
 
 /*!

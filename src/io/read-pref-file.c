@@ -50,7 +50,7 @@ static int auto_dump_line_num;
 static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int preftype, void(*process_autopick_file_command)(char*))
 {
 	FILE *fp;
-	fp = my_fopen(name, "r");
+	fp = angband_fopen(name, "r");
 	if (!fp) return -1;
 
 	char buf[1024];
@@ -58,7 +58,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 	int line = -1;
 	errr err = 0;
 	bool bypass = FALSE;
-	while (my_fgets(fp, buf, sizeof(buf)) == 0)
+	while (angband_fgets(fp, buf, sizeof(buf)) == 0)
 	{
 		line++;
 		if (!buf[0]) continue;
@@ -129,7 +129,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 		msg_print(NULL);
 	}
 
-	my_fclose(fp);
+	angband_fclose(fp);
 	return (err);
 }
 
@@ -235,7 +235,7 @@ bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
 	concptr auto_dump_mark = mark;
 	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
 	remove_auto_dump(buf, mark);
-	*fpp = my_fopen(buf, "a");
+	*fpp = angband_fopen(buf, "a");
 	if (!fpp)
 	{
 		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
@@ -266,7 +266,7 @@ void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
 	auto_dump_printf(*fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
 		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	fprintf(*fpp, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
-	my_fclose(*fpp);
+	angband_fclose(*fpp);
 }
 
 /*!

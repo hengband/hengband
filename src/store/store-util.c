@@ -5,16 +5,18 @@
  */
 
 #include "store/store-util.h"
+#include "monster-race/race-flags3.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
-#include "perception/object-perception.h"
+#include "object/object-flags.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
+#include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-scroll-types.h"
@@ -442,7 +444,7 @@ bool store_will_buy(object_type *o_ptr)
 			{
 				if (r_ptr->flags3 & RF3_GOOD) break;
 				if (r_ptr->flags3 & RF3_ANIMAL) break;
-				if (my_strchr("?!", r_ptr->d_char)) break;
+				if (angband_strchr("?!", r_ptr->d_char)) break;
 			}
 		}
 			/* Fall through */

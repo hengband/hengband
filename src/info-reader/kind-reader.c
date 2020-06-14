@@ -43,7 +43,7 @@ errr parse_k_info(char *buf, angband_header *head)
 #ifdef JP
         char *flavor;
 #endif
-        s = my_strchr(buf + 2, ':');
+        s = angband_strchr(buf + 2, ':');
         if (!s)
             return 1;
 
@@ -62,7 +62,7 @@ errr parse_k_info(char *buf, angband_header *head)
         if (!*s)
             return 1;
 
-        flavor = my_strchr(s, ':');
+        flavor = angband_strchr(s, ':');
         if (flavor) {
             *flavor++ = '\0';
             if (!add_name(&k_ptr->flavor_name, head, flavor))
@@ -85,7 +85,7 @@ errr parse_k_info(char *buf, angband_header *head)
     else if (buf[0] == 'E') {
         char *flavor;
         s = buf + 2;
-        flavor = my_strchr(s, ':');
+        flavor = angband_strchr(s, ':');
         if (flavor) {
             *flavor++ = '\0';
             if (!add_name(&k_ptr->flavor_name, head, flavor))
@@ -150,8 +150,8 @@ errr parse_k_info(char *buf, angband_header *head)
         for (s = buf + 1; s && (s[0] == ':') && s[1]; ++i) {
             k_ptr->chance[i] = 1;
             k_ptr->locale[i] = atoi(s + 1);
-            t = my_strchr(s + 1, '/');
-            s = my_strchr(s + 1, ':');
+            t = angband_strchr(s + 1, '/');
+            s = angband_strchr(s + 1, ':');
             if (t && (!s || t < s)) {
                 int chance = atoi(t + 1);
                 if (chance > 0)

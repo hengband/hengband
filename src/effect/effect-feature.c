@@ -1,16 +1,16 @@
-﻿#include "system/angband.h"
-#include "effect/effect-feature.h"
-#include "room/rooms.h"
+﻿#include "effect/effect-feature.h"
 #include "dungeon/dungeon.h"
-#include "main/sound-definitions-table.h"
+#include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "main/sound-definitions-table.h"
+#include "monster/monster-update.h"
 #include "player/player-effects.h"
-#include "world/world.h"
-#include "spell/spells-type.h"
+#include "room/rooms.h"
 #include "spell/process-effect.h" // 暫定、後で消す.
-#include "effect/effect-characteristics.h"
+#include "spell/spells-type.h"
+#include "world/world.h"
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系による地形効果処理 / We are called from "project()" to "damage" terrain features

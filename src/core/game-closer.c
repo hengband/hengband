@@ -2,6 +2,7 @@
 #include "core/game-closer.h"
 #include "cmd-io/cmd-save.h"
 #include "core/stuff-handler.h"
+#include "game-option/cheat-options.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "main/music-definitions-table.h"
@@ -25,7 +26,7 @@ static void send_world_score_on_closing(player_type* player_ptr, bool do_send)
     if (send_world_score(player_ptr, do_send, update_playtime, display_player, map_name))
         return;
 
-    if (!get_check_strict(_("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
+    if (!get_check_strict(player_ptr, _("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
             (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
         return;
 

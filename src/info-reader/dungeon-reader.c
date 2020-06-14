@@ -90,7 +90,7 @@ errr parse_d_info(char *buf, angband_header *head)
     static dungeon_type *d_ptr = NULL;
     char *s, *t;
     if (buf[0] == 'N') {
-        s = my_strchr(buf + 2, ':');
+        s = angband_strchr(buf + 2, ':');
         if (!s)
             return 1;
 

@@ -11,6 +11,9 @@
 #include "cmd/cmd-basic.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "game-option/disturbance-options.h"
+#include "game-option/input-options.h"
+#include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
 #include "io/write-diary.h"
 #include "locale/japanese.h"
@@ -19,6 +22,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"
+#include "player/eldritch-horror.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
@@ -1149,7 +1153,7 @@ void do_cmd_cast(player_type *caster_ptr)
 		if (!over_exert) return;
 
 		/* Verify */
-		if (!get_check_strict(_("それでも挑戦しますか? ", "Attempt it anyway? "), CHECK_OKAY_CANCEL)) return;
+		if (!get_check_strict(caster_ptr, _("それでも挑戦しますか? ", "Attempt it anyway? "), CHECK_OKAY_CANCEL)) return;
 	}
 
 	/* Spell failure chance */

@@ -1,26 +1,31 @@
-﻿
-#include "system/angband.h"
-#include "util/util.h"
-
-#include "object-enchant/artifact.h"
-#include "player/player-move.h"
-#include "grid/feature.h"
-#include "floor/floor.h"
-#include "object/warning.h"
-#include "player/player-status.h"
-#include "monster/monster.h"
-#include "mspell/monster-spell.h"
-#include "spell/spells-type.h"
-#include "object/object-flavor.h"
+﻿#include "object/warning.h"
+#include "art-definition/art-sword-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor.h"
+#include "game-option/input-options.h"
+#include "grid/feature.h"
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-types.h"
+#include "monster-race/race-flags-ability1.h"
+#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags4.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-info.h"
+#include "monster/monster-status.h"
+#include "mspell/monster-spell.h"
+#include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-type.h"
+#include "object-enchant/tr-types.h"
+#include "object/object-flags.h"
+#include "object/object-flavor.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
-#include "monster-attack/monster-attack-effect.h"
-#include "mspell/mspell-type.h"
-#include "mspell/mspell-damage-calculator.h"
+#include "player/player-move.h"
 #include "player/player-races-table.h"
-#include "monster-attack/monster-attack-types.h"
-#include "object-enchant/tr-types.h"
+#include "player/player-status.h"
+#include "spell/spells-type.h"
+#include "util/util.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /
@@ -420,7 +425,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 
 			m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
-			if (MON_CSLEEP(m_ptr)) continue;
+			if (monster_csleep_remaining(m_ptr)) continue;
 			if (!is_hostile(m_ptr)) continue;
 
 			r_ptr = &r_info[m_ptr->r_idx];

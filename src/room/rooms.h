@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "system/angband.h"
 #include "grid/grid.h"
 
 #define ALLOW_CAVERNS_AND_LAKES

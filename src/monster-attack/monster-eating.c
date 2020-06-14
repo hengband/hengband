@@ -8,10 +8,12 @@
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "mind/mind-mirror-master.h"
+#include "monster/monster-status.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
+#include "object/object-info.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-effects.h"
@@ -63,7 +65,7 @@ void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
  */
 bool check_eat_item(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (MON_CONFUSED(monap_ptr->m_ptr))
+    if (monster_confused_remaining(monap_ptr->m_ptr))
         return FALSE;
 
     if (target_ptr->is_dead || check_multishadow(target_ptr))

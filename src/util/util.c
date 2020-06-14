@@ -18,13 +18,19 @@
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "game-option/cheat-options.h"
+#include "game-option/disturbance-options.h"
+#include "game-option/input-options.h"
+#include "game-option/map-screen-options.h"
+#include "game-option/option-flags.h"
+#include "game-option/special-options.h"
 #include "io/files-util.h"
 #include "io/input-key-processor.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
 #include "locale/japanese.h"
 #include "main/music-definitions-table.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/monster-race-hook.h"
 #include "player/player-class.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
@@ -142,9 +148,9 @@ s16b command_cmd;		/* Current "Angband Command" */
 COMMAND_ARG command_arg;	/*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */
 COMMAND_NUM command_rep;	/*!< 各種コマンドの汎用的なリピート数として扱う / Gives repetition of current command */
 DIRECTION command_dir;		/*!< 各種コマンドの汎用的な方向値処理として扱う/ Gives direction of current command */
-s16b command_see;		/* See "object1.c" */
-s16b command_wrk;		/* See "object1.c" */
-TERM_LEN command_gap = 999;         /* See "object1.c" */
+s16b command_see;		/* アイテム使用時等にリストを表示させるかどうか (ゲームオプションの他、様々なタイミングでONになったりOFFになったりする模様……) */
+s16b command_wrk;		/* アイテムの使用許可状況 (ex. 装備品のみ、床上もOK等) */
+TERM_LEN command_gap = 999;         /* アイテムの表示に使う (詳細未調査) */
 s16b command_new;		/* Command chaining from inven/equip view */
 
 #ifdef SET_UID
@@ -214,34 +220,6 @@ void user_name(char *buf, int id)
 #endif /* SET_UID */
 
 
-/*
- * The concept of the "file" routines below (and elsewhere) is that all
- * file handling should be done using as few routines as possible, since
- * every machine is slightly different, but these routines always have the
- * same semantics.
- *
- * In fact, perhaps we should use the "path_parse()" routine below to convert
- * from "canonical" filenames (optional leading tilde's, internal wildcards,
- * slash as the path seperator, etc) to "system" filenames (no special symbols,
- * system-specific path seperator, etc).  This would allow the program itself
- * to assume that all filenames are "Unix" filenames, and explicitly "extract"
- * such filenames if needed (by "path_parse()", or perhaps "path_canon()").
- *
- * Note that "path_temp" should probably return a "canonical" filename.
- *
- * Note that "my_fopen()" and "my_open()" and "my_make()" and "my_kill()"
- * and "my_move()" and "my_copy()" should all take "canonical" filenames.
- *
- * Note that "canonical" filenames use a leading "slash" to indicate an absolute
- * path, and a leading "tilde" to indicate a special directory, and default to a
- * relative path, but MSDOS uses a leading "drivename plus colon" to indicate the
- * use of a "special drive", and then the rest of the path is parsed "normally",
- * and an embedded colon to indicate a "drive plus absolute path", and finally
- * defaults to a file in the current working directory, which may or may not be defined.
- *
- * We should probably parse a leading "~~/" as referring to "ANGBAND_DIR". (?)
- */
-
 #ifdef SET_UID
  /*
   * Extract a "parsed" path from an initial filename
@@ -262,7 +240,7 @@ errr path_parse(char *buf, int max, concptr file)
 	}
 
 	concptr u = file + 1;
-	concptr s = my_strstr(u, PATH_SEP);
+	concptr s = angband_strstr(u, PATH_SEP);
 	char user[128];
 	if (s && (s >= u + sizeof(user))) return 1;
 
@@ -369,7 +347,7 @@ errr path_build(char *buf, int max, concptr path, concptr file)
 /*
  * Hack -- replacement for "fopen()"
  */
-FILE *my_fopen(concptr file, concptr mode)
+FILE *angband_fopen(concptr file, concptr mode)
 {
 	char buf[1024];
 	if (path_parse(buf, 1024, file)) return (NULL);
@@ -381,7 +359,7 @@ FILE *my_fopen(concptr file, concptr mode)
 /*
  * Hack -- replacement for "fclose()"
  */
-errr my_fclose(FILE *fff)
+errr angband_fclose(FILE *fff)
 {
 	if (!fff) return -1;
 	if (fclose(fff) == EOF) return 1;
@@ -390,7 +368,7 @@ errr my_fclose(FILE *fff)
 
 
 #ifdef HAVE_MKSTEMP
-FILE *my_fopen_temp(char *buf, int max)
+FILE *angband_fopen_temp(char *buf, int max)
 {
 	strncpy(buf, "/tmp/anXXXXXX", max);
 	int fd = mkstemp(buf);
@@ -399,10 +377,10 @@ FILE *my_fopen_temp(char *buf, int max)
 	return (fdopen(fd, "w"));
 }
 #else /* HAVE_MKSTEMP */
-FILE *my_fopen_temp(char *buf, int max)
+FILE *angband_fopen_temp(char *buf, int max)
 {
 	if (path_temp(buf, max)) return (NULL);
-	return (my_fopen(buf, "w"));
+	return (angband_fopen(buf, "w"));
 }
 #endif /* HAVE_MKSTEMP */
 
@@ -414,7 +392,7 @@ FILE *my_fopen_temp(char *buf, int max)
  *
  * Process tabs, strip internal non-printables
  */
-errr my_fgets(FILE *fff, char *buf, huge n)
+errr angband_fgets(FILE *fff, char *buf, huge n)
 {
 	huge i = 0;
 	char *s;
@@ -475,7 +453,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
  * Dump a string, plus a newline, to a file
  * Process internal weirdness?
  */
-errr my_fputs(FILE *fff, concptr buf, huge n)
+errr angband_fputs(FILE *fff, concptr buf, huge n)
 {
 	n = n ? n : 0;
 	(void)fprintf(fff, "%s\n", buf);
@@ -864,7 +842,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 
 	if (i == max_macrotrigger)
 	{
-		str = my_strchr(str, ']');
+		str = angband_strchr(str, ']');
 		if (str)
 		{
 			*s++ = (char)31;
@@ -1030,7 +1008,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 		switch (ch)
 		{
 		case '&':
-			while ((tmp = my_strchr(macro_modifier_chr, *str)) != 0)
+			while ((tmp = angband_strchr(macro_modifier_chr, *str)) != 0)
 			{
 				int j = (int)(tmp - macro_modifier_chr);
 				tmp = macro_modifier_name[j];
@@ -2661,7 +2639,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 			}
 
 			buf[pos] = '\0';
-			my_strcat(buf, tmp, len + 1);
+			angband_strcat(buf, tmp, len + 1);
 
 			break;
 		}
@@ -2712,7 +2690,7 @@ bool get_string(concptr prompt, char *buf, int len)
  */
 bool get_check(concptr prompt)
 {
-	return get_check_strict(prompt, 0);
+	return get_check_strict(p_ptr, prompt, 0);
 }
 
 
@@ -2724,13 +2702,13 @@ bool get_check(concptr prompt)
  * mode & CHECK_NO_HISTORY  : no message_add
  * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool get_check_strict(concptr prompt, BIT_FLAGS mode)
+bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
 {
 	char buf[80];
 	if (auto_more)
 	{
-		p_ptr->window |= PW_MESSAGE;
-		handle_stuff(p_ptr);
+		player_ptr->window |= PW_MESSAGE;
+		handle_stuff(player_ptr);
 		num_more = 0;
 	}
 
@@ -2740,26 +2718,26 @@ bool get_check_strict(concptr prompt, BIT_FLAGS mode)
 
 	if (mode & CHECK_OKAY_CANCEL)
 	{
-		my_strcpy(buf, prompt, sizeof(buf) - 15);
+		angband_strcpy(buf, prompt, sizeof(buf) - 15);
 		strcat(buf, "[(O)k/(C)ancel]");
 	}
 	else if (mode & CHECK_DEFAULT_Y)
 	{
-		my_strcpy(buf, prompt, sizeof(buf) - 5);
+		angband_strcpy(buf, prompt, sizeof(buf) - 5);
 		strcat(buf, "[Y/n]");
 	}
 	else
 	{
-		my_strcpy(buf, prompt, sizeof(buf) - 5);
+		angband_strcpy(buf, prompt, sizeof(buf) - 5);
 		strcat(buf, "[y/n]");
 	}
 
 	prt(buf, 0, 0);
-	if (!(mode & CHECK_NO_HISTORY) && p_ptr->playing)
+        if (!(mode & CHECK_NO_HISTORY) && player_ptr->playing)
 	{
 		message_add(buf);
-		p_ptr->window |= (PW_MESSAGE);
-		handle_stuff(p_ptr);
+		player_ptr->window |= (PW_MESSAGE);
+		handle_stuff(player_ptr);
 	}
 
 	bool flag = FALSE;
@@ -3204,7 +3182,7 @@ void request_command(player_type *player_ptr, int shopping)
 
 	if (always_repeat && (command_arg <= 0))
 	{
-		if (my_strchr("TBDoc+", (char)command_cmd))
+		if (angband_strchr("TBDoc+", (char)command_cmd))
 		{
 			command_arg = 99;
 		}
@@ -3248,7 +3226,7 @@ void request_command(player_type *player_ptr, int shopping)
 		if (!o_ptr->inscription) continue;
 
 		concptr s = quark_str(o_ptr->inscription);
-		s = my_strchr(s, '^');
+		s = angband_strchr(s, '^');
 		while (s)
 		{
 #ifdef JP
@@ -3263,7 +3241,7 @@ void request_command(player_type *player_ptr, int shopping)
 				}
 			}
 
-			s = my_strchr(s + 1, '^');
+			s = angband_strchr(s + 1, '^');
 		}
 	}
 
@@ -3631,16 +3609,16 @@ void roff_to_buf(concptr str, int maxlen, char *tbuf, size_t bufsize)
 
 
 /*
- * The my_strcpy() function copies up to 'bufsize'-1 characters from 'src'
+ * The angband_strcpy() function copies up to 'bufsize'-1 characters from 'src'
  * to 'buf' and NUL-terminates the result.  The 'buf' and 'src' strings may
  * not overlap.
  *
- * my_strcpy() returns strlen(src).  This makes checking for truncation
- * easy.  Example: if (my_strcpy(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
+ * angband_strcpy() returns strlen(src).  This makes checking for truncation
+ * easy.  Example: if (angband_strcpy(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
  *
  * This function should be equivalent to the strlcpy() function in BSD.
  */
-size_t my_strcpy(char *buf, concptr src, size_t bufsize)
+size_t angband_strcpy(char *buf, concptr src, size_t bufsize)
 {
 #ifdef JP
 	char *d = buf;
@@ -3688,22 +3666,22 @@ size_t my_strcpy(char *buf, concptr src, size_t bufsize)
 
 
 /*
- * The my_strcat() tries to append a string to an existing NUL-terminated string.
+ * The angband_strcat() tries to append a string to an existing NUL-terminated string.
  * It never writes more characters into the buffer than indicated by 'bufsize' and
  * NUL-terminates the buffer.  The 'buf' and 'src' strings may not overlap.
  *
- * my_strcat() returns strlen(buf) + strlen(src).  This makes checking for
+ * angband_strcat() returns strlen(buf) + strlen(src).  This makes checking for
  * truncation easy.  Example:
- * if (my_strcat(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
+ * if (angband_strcat(buf, src, sizeof(buf)) >= sizeof(buf)) ...;
  *
  * This function should be equivalent to the strlcat() function in BSD.
  */
-size_t my_strcat(char *buf, concptr src, size_t bufsize)
+size_t angband_strcat(char *buf, concptr src, size_t bufsize)
 {
 	size_t dlen = strlen(buf);
 	if (dlen < bufsize - 1)
 	{
-		return (dlen + my_strcpy(buf + dlen, src, bufsize - dlen));
+		return (dlen + angband_strcpy(buf + dlen, src, bufsize - dlen));
 	}
 	else
 	{
@@ -3715,9 +3693,9 @@ size_t my_strcat(char *buf, concptr src, size_t bufsize)
 /*
  * A copy of ANSI strstr()
  *
- * my_strstr() can handle Kanji strings correctly.
+ * angband_strstr() can handle Kanji strings correctly.
  */
-char *my_strstr(concptr haystack, concptr needle)
+char *angband_strstr(concptr haystack, concptr needle)
 {
 	int l1 = strlen(haystack);
 	int l2 = strlen(needle);
@@ -3742,9 +3720,9 @@ char *my_strstr(concptr haystack, concptr needle)
 /*
  * A copy of ANSI strchr()
  *
- * my_strchr() can handle Kanji strings correctly.
+ * angband_strchr() can handle Kanji strings correctly.
  */
-char *my_strchr(concptr ptr, char ch)
+char *angband_strchr(concptr ptr, char ch)
 {
 	for (; *ptr != '\0'; ptr++)
 	{

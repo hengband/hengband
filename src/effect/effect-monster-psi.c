@@ -1,11 +1,15 @@
-﻿#include "system/angband.h"
-#include "effect/effect-monster-util.h"
-#include "effect/effect-monster-psi.h"
+﻿#include "effect/effect-monster-psi.h"
 #include "floor/floor.h"
-#include "player/player-damage.h"
 #include "mind/mind-mirror-master.h"
-#include "world/world.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster/monster-info.h"
+#include "player/player-damage.h"
 #include "player/player-effects.h"
+#include "world/world.h"
 
 static bool effect_monster_psi_empty_mind(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

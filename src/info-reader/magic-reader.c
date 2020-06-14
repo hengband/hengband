@@ -28,7 +28,7 @@ errr parse_m_info(char *buf, angband_header *head)
         char *book, *stat;
         int xtra, type, first, weight;
         char *s;
-        s = my_strchr(buf + 2, ':');
+        s = angband_strchr(buf + 2, ':');
 
         /* Verify that colon */
         if (!s)
@@ -53,7 +53,7 @@ errr parse_m_info(char *buf, angband_header *head)
             return 5;
 
         stat = s;
-        s = my_strchr(s, ':');
+        s = angband_strchr(s, ':');
         if (!s)
             return 1;
         *s++ = '\0';

@@ -10,24 +10,31 @@
  */
 
 #include "cmd/cmd-basic.h"
+#include "art-definition/art-bow-types.h"
+#include "art-definition/art-weapon-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-save.h"
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "combat/slaying.h"
-#include "combat/snipe.h"
 #include "core/output-updater.h"
 #include "core/stuff-handler.h"
-#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
+#include "game-option/birth-options.h"
+#include "game-option/disturbance-options.h"
+#include "game-option/game-play-options.h"
+#include "game-option/input-options.h"
+#include "game-option/play-record-options.h"
+#include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
@@ -35,28 +42,35 @@
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
+#include "mind/snipe-types.h"
+#include "monster/monster-describer.h"
+#include "monster-floor/monster-death.h"
+#include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster/monster-status.h"
-#include "object-enchant/artifact.h"
-#include "specific-object/chest.h"
+#include "monster/monster-info.h"
+#include "object-enchant/special-object-flags.h"
+#include "object-enchant/tr-types.h"
 #include "object/item-use-flags.h"
-#include "perception/object-perception.h"
 #include "object/object-broken.h"
+#include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
-#include "object-enchant/special-object-flags.h"
-#include "sv-definition/sv-bow-types.h"
-#include "specific-object/torch.h"
-#include "object-enchant/tr-types.h"
+#include "object/object-info.h"
+#include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-personalities-table.h"
 #include "player/player-status.h"
-#include "spell-realm/spells-hex.h"
+#include "specific-object/chest.h"
+#include "specific-object/torch.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-hex.h"
+#include "sv-definition/sv-bow-types.h"
 #include "system/system-variables.h"
 #include "view/display-main-window.h"
 #include "view/object-describer.h"
@@ -2693,7 +2707,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			if (potion_smash_effect(creature_ptr, 0, y, x, q_ptr->k_idx))
 			{
 				monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx];
-				if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx && is_friendly(m_ptr) && !MON_INVULNER(m_ptr))
+				if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx && is_friendly(m_ptr) && !monster_invulner_remaining(m_ptr))
 				{
 					GAME_TEXT m_name[MAX_NLEN];
 					monster_desc(creature_ptr, m_name, m_ptr, 0);
@@ -2830,7 +2844,7 @@ void do_cmd_suicide(player_type *creature_ptr)
 	if (current_world_ptr->total_winner)
 	{
 		/* Verify */
-		if (!get_check_strict(_("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) return;
+		if (!get_check_strict(creature_ptr, _("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) return;
 	}
 
 	/* Verify Suicide */
@@ -2865,7 +2879,7 @@ void do_cmd_suicide(player_type *creature_ptr)
 		do
 		{
 			while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof buf));
-		} while (!get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
+		} while (!get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
 		if (buf[0])
 		{

@@ -3,9 +3,16 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
+#include "game-option/disturbance-options.h"
+#include "game-option/map-screen-options.h"
 #include "grid/grid.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags7.h"
+#include "monster/monster-info.h"
+#include "monster/monster-list.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
@@ -24,7 +31,6 @@
 
 static bool mon_invis;
 static POSITION mon_fy, mon_fx;
-byte get_dungeon_feeling(player_type *subject_ptr);
 
 void day_break(player_type *subject_ptr)
 {
@@ -146,10 +152,9 @@ MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
   * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
   * @return 算出されたダンジョンの雰囲気ランク
   */
-byte get_dungeon_feeling(player_type *subject_ptr)
+byte get_dungeon_feeling(floor_type *floor_ptr)
 {
 	/* Hack -- no feeling in the town */
-	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	if (!floor_ptr->dun_level) return 0;
 
 	/* Examine each monster */
@@ -188,11 +193,11 @@ byte get_dungeon_feeling(player_type *subject_ptr)
 		/* Unusually crowded monsters get a little bit of rating boost */
 		if (r_ptr->flags1 & RF1_FRIENDS)
 		{
-			if (5 <= get_monster_crowd_number(subject_ptr, i)) delta += 1;
+			if (5 <= get_monster_crowd_number(floor_ptr, i)) delta += 1;
 		}
 		else
 		{
-			if (2 <= get_monster_crowd_number(subject_ptr, i)) delta += 1;
+			if (2 <= get_monster_crowd_number(floor_ptr, i)) delta += 1;
 		}
 
 
@@ -302,7 +307,7 @@ void update_dungeon_feeling(player_type *subject_ptr)
 
 
 	/* Get new dungeon feeling */
-	byte new_feeling = get_dungeon_feeling(subject_ptr);
+	byte new_feeling = get_dungeon_feeling(floor_ptr);
 
 	/* Remember last time updated */
 	subject_ptr->feeling_turn = current_world_ptr->game_turn;
@@ -1483,14 +1488,14 @@ void update_mon_lite(player_type *subject_ptr)
 			int f_flag;
 			if (rad > 0)
 			{
-				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!floor_ptr->dun_level && is_daytime()) || subject_ptr->phase_out)) continue;
+				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (monster_csleep_remaining(m_ptr) || (!floor_ptr->dun_level && is_daytime()) || subject_ptr->phase_out)) continue;
 				if (d_info[subject_ptr->dungeon_idx].flags1 & DF1_DARKNESS) rad = 1;
 				add_mon_lite = mon_lite_hack;
 				f_flag = FF_LOS;
 			}
 			else
 			{
-				if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (MON_CSLEEP(m_ptr) || (!floor_ptr->dun_level && !is_daytime()))) continue;
+				if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (monster_csleep_remaining(m_ptr) || (!floor_ptr->dun_level && !is_daytime()))) continue;
 				add_mon_lite = mon_dark_hack;
 				f_flag = FF_PROJECT;
 				rad = -rad; /* Use absolute value */

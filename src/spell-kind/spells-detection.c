@@ -1,11 +1,16 @@
 ﻿#include "spell-kind/spells-detection.h"
-#include "core/player-processor.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/monster-flag-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "monster/monster-update.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
 #include "realm/realm-song-numbers.h"
@@ -525,7 +530,7 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
         if (distance(caster_ptr->y, caster_ptr->x, y, x) > range)
             continue;
 
-        if (my_strchr(Match, r_ptr->d_char)) {
+        if (angband_strchr(Match, r_ptr->d_char)) {
             if (caster_ptr->monster_race_idx == m_ptr->r_idx) {
                 caster_ptr->window |= (PW_MONSTER);
             }

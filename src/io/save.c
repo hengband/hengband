@@ -11,30 +11,39 @@
  * </pre>
  */
 
-#include "system/angband.h"
-#include "util/util.h"
 #include "io/save.h"
-#include "io/load.h"
-#include "io/report.h"
-#include "system/angband-version.h"
-#include "object-enchant/artifact.h"
+#include "birth/quick-start.h"
+#include "cmd-building/cmd-building.h"
 #include "core/sort.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
-#include "store/store.h"
-#include "store/store-util.h"
-#include "floor/wild.h"
-#include "floor/floor.h"
 #include "floor/floor-events.h"
 #include "floor/floor-town.h"
-#include "io/uid-checker.h"
+#include "floor/floor.h"
+#include "floor/wild.h"
+#include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
+#include "game-option/option-flags.h"
+#include "game-option/option-types-table.h"
+#include "game-option/runtime-arguments.h"
+#include "game-option/special-options.h"
+#include "game-option/text-display-options.h"
 #include "io/files-util.h"
-#include "world/world.h"
+#include "io/load.h"
+#include "io/report.h"
+#include "io/uid-checker.h"
+#include "monster-race/monster-race.h"
+#include "monster/monster-compaction.h"
+#include "monster/monster-info.h"
+#include "monster/monster-status.h"
+#include "object-enchant/artifact.h"
 #include "object/object-kind.h"
-#include "monster/monster-race.h"
-#include "cmd-building/cmd-building.h"
+#include "store/store-util.h"
+#include "store/store.h"
+#include "system/angband-version.h"
+#include "util/util.h"
 #include "view/display-main-window.h"
-#include "birth/quick-start.h"
+#include "world/world.h"
 
  /*
   * Some "local" parameters, used to help write savefiles
@@ -248,15 +257,15 @@ static void wr_monster(monster_type *m_ptr)
 	BIT_FLAGS flags = 0x00000000;
 	if (!is_original_ap(m_ptr)) flags |= SAVE_MON_AP_R_IDX;
 	if (m_ptr->sub_align) flags |= SAVE_MON_SUB_ALIGN;
-	if (MON_CSLEEP(m_ptr)) flags |= SAVE_MON_CSLEEP;
-	if (MON_FAST(m_ptr)) flags |= SAVE_MON_FAST;
-	if (MON_SLOW(m_ptr)) flags |= SAVE_MON_SLOW;
-	if (MON_STUNNED(m_ptr)) flags |= SAVE_MON_STUNNED;
-	if (MON_CONFUSED(m_ptr)) flags |= SAVE_MON_CONFUSED;
-	if (MON_MONFEAR(m_ptr)) flags |= SAVE_MON_MONFEAR;
+	if (monster_csleep_remaining(m_ptr)) flags |= SAVE_MON_CSLEEP;
+	if (monster_fast_remaining(m_ptr)) flags |= SAVE_MON_FAST;
+	if (monster_slow_remaining(m_ptr)) flags |= SAVE_MON_SLOW;
+	if (monster_stunned_remaining(m_ptr)) flags |= SAVE_MON_STUNNED;
+	if (monster_confused_remaining(m_ptr)) flags |= SAVE_MON_CONFUSED;
+	if (monster_fear_remaining(m_ptr)) flags |= SAVE_MON_MONFEAR;
 	if (m_ptr->target_y) flags |= SAVE_MON_TARGET_Y;
 	if (m_ptr->target_x) flags |= SAVE_MON_TARGET_X;
-	if (MON_INVULNER(m_ptr)) flags |= SAVE_MON_INVULNER;
+	if (monster_invulner_remaining(m_ptr)) flags |= SAVE_MON_INVULNER;
 	if (m_ptr->smart) flags |= SAVE_MON_SMART;
 	if (m_ptr->exp) flags |= SAVE_MON_EXP;
 	if (m_ptr->mflag2) flags |= SAVE_MON_MFLAG2;
@@ -1446,7 +1455,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
 		safe_setuid_grab();
 
 		/* Open the savefile */
-		fff = my_fopen(name, "wb");
+		fff = angband_fopen(name, "wb");
 
 		/* Drop permissions */
 		safe_setuid_drop();
@@ -1458,7 +1467,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
 			if (wr_savefile_new(player_ptr)) is_save_successful = TRUE;
 
 			/* Attempt to close it */
-			if (my_fclose(fff)) is_save_successful = FALSE;
+			if (angband_fclose(fff)) is_save_successful = FALSE;
 		}
 
 		/* Grab permissions */
@@ -1817,7 +1826,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 		safe_setuid_grab();
 
 		/* Open the savefile */
-		fff = my_fopen(floor_savefile, "wb");
+		fff = angband_fopen(floor_savefile, "wb");
 
 		/* Drop permissions */
 		safe_setuid_drop();
@@ -1829,7 +1838,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 			if (save_floor_aux(player_ptr, sf_ptr)) is_save_successful = TRUE;
 
 			/* Attempt to close it */
-			if (my_fclose(fff)) is_save_successful = FALSE;
+			if (angband_fclose(fff)) is_save_successful = FALSE;
 		}
 
 		/* Remove "broken" files */

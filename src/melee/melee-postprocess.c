@@ -12,11 +12,21 @@
 
 #include "melee/melee-postprocess.h"
 #include "monster-attack/monster-attack-types.h"
+#include "floor/floor.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
-#include "monster/monster-race-hook.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/race-flags7.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster-floor/monster-death.h"
+#include "monster/monster-info.h"
+#include "monster-floor/monster-move.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
-#include "monster/monster.h"
 #include "mspell/monster-spell.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-class.h"
@@ -44,7 +54,7 @@ mam_pp_type *initialize_mam_pp_type(
 {
     mam_pp_ptr->m_idx = m_idx;
     mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    mam_pp_ptr->seen = is_seen(mam_pp_ptr->m_ptr);
+    mam_pp_ptr->seen = is_seen(player_ptr, mam_pp_ptr->m_ptr);
     mam_pp_ptr->dam = dam;
     mam_pp_ptr->known = mam_pp_ptr->m_ptr->cdis <= MAX_SIGHT;
     mam_pp_ptr->dead = dead;
@@ -73,7 +83,7 @@ static void prepare_redraw(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
 {
-    if (MON_INVULNER(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY))
+    if (monster_invulner_remaining(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY))
         return FALSE;
 
     if (mam_pp_ptr->seen)
@@ -177,8 +187,8 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    if (!MON_MONFEAR(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0)
-        || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, MON_MONFEAR(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
+    if (!monster_fear_remaining(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0)
+        || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, monster_fear_remaining(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
         return;
 
     *(mam_pp_ptr->fear) = FALSE;
@@ -193,7 +203,7 @@ static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr
 static void make_monster_fear(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 {
     monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
-    if (MON_MONFEAR(mam_pp_ptr->m_ptr) || ((r_ptr->flags3 & RF3_NO_FEAR) == 0))
+    if (monster_fear_remaining(mam_pp_ptr->m_ptr) || ((r_ptr->flags3 & RF3_NO_FEAR) == 0))
         return;
 
     int percentage = (100L * mam_pp_ptr->m_ptr->hp) / mam_pp_ptr->m_ptr->maxhp;

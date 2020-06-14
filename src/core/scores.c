@@ -15,6 +15,8 @@
 #include "core/turn-compensator.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
+#include "game-option/game-play-options.h"
 #include "io/report.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
@@ -440,7 +442,8 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, void(*updat
 			return TRUE;
 		}
 		
-		bool is_registration = get_check_strict(_("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY));
+		bool is_registration = get_check_strict(current_player_ptr,
+                    _("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY));
 		if (!is_registration) return FALSE;
 
 		errr err;
@@ -515,10 +518,10 @@ errr top_twenty(player_type *current_player_ptr)
 	if (strlen(current_player_ptr->died_from) >= sizeof(the_score.how))
 	{
 #ifdef JP
-		my_strcpy(the_score.how, current_player_ptr->died_from, sizeof(the_score.how) - 2);
+		angband_strcpy(the_score.how, current_player_ptr->died_from, sizeof(the_score.how) - 2);
 		strcat(the_score.how, "…");
 #else
-		my_strcpy(the_score.how, current_player_ptr->died_from, sizeof(the_score.how) - 3);
+		angband_strcpy(the_score.how, current_player_ptr->died_from, sizeof(the_score.how) - 3);
 		strcat(the_score.how, "...");
 #endif
 	}

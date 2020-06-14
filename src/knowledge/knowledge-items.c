@@ -9,9 +9,11 @@
 #include "core/sort.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
 #include "knowledge/object-group-table.h"
 #include "object-enchant/artifact.h"
+#include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
@@ -110,7 +112,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
 
 	C_KILL(who, max_a_idx, ARTIFACT_IDX);
 	C_KILL(okay, max_a_idx, bool);
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(player_ptr, TRUE, file_name, _("既知の伝説のアイテム", "Artifacts Seen"), 0, 0);
 	fd_kill(file_name);
 }

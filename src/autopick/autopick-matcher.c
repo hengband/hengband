@@ -8,13 +8,14 @@
 #include "autopick/autopick-matcher.h"
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-key-flag-process.h"
-#include "object-enchant/item-feeling.h"
+#include "monster-race/race-flags1.h"
 #include "perception/object-perception.h"
 #include "object/object-hook.h"
+#include "object-enchant/item-feeling.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "object/object1.h"
+#include "object/object-info.h"
 #include "object-enchant/special-object-flags.h"
 
 /*
@@ -197,7 +198,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 
 	if (IS_FLG(FLG_HUMAN) &&
 		(o_ptr->tval != TV_CORPSE ||
-			!my_strchr("pht", r_info[o_ptr->pval].d_char)))
+			!angband_strchr("pht", r_info[o_ptr->pval].d_char)))
 		return FALSE;
 
 	if (IS_FLG(FLG_UNREADABLE) &&
@@ -346,7 +347,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 	}
 	else
 	{
-		if (!my_strstr(o_name, ptr)) return FALSE;
+		if (!angband_strstr(o_name, ptr)) return FALSE;
 	}
 
 	if (!IS_FLG(FLG_COLLECTING)) return TRUE;

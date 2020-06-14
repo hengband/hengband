@@ -1,8 +1,8 @@
 ﻿/*!
- *  @file wizard1.c
- *  @brief ウィザードモードの処理(スポイラー出力中心) / Spoiler generation -BEN-
- *  @date 2014/02/17
- *  @author
+ * @file wizard1.c
+ * @brief ウィザードモードの処理(スポイラー出力中心) / Spoiler generation -BEN-
+ * @date 2014/02/17
+ * @author
  * Copyright (c) 1997 Ben Harrison, and others
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
@@ -14,23 +14,28 @@
 #include "core/sort.h"
 #include "floor/floor-town.h"
 #include "io/files-util.h"
-#include "monster/monster.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags7.h"
 #include "object-enchant/artifact.h"
-#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/special-object-flags.h"
+#include "object-enchant/tr-types.h"
+#include "object-enchant/trc-types.h"
+#include "object-enchant/trg-types.h"
+#include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
-#include "object-enchant/special-object-flags.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
+#include "object/object-info.h"
+#include "perception/object-perception.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"
 #include "term/term-color-types.h"
 #include "util/util.h"
+#include "view/display-lore.h"
 
  /*
   * The spoiler file being created
@@ -285,7 +290,7 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	fff = my_fopen(buf, "w");
+	fff = angband_fopen(buf, "w");
 
 	if (!fff)
 	{
@@ -383,7 +388,7 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
 
 
 	/* Check for errors */
-	if (ferror(fff) || my_fclose(fff))
+	if (ferror(fff) || angband_fclose(fff))
 	{
 		msg_print("Cannot close spoiler file.");
 		return;
@@ -1313,7 +1318,7 @@ static void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc
 	analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
 	analyze_addition(o_ptr, desc_ptr->addition);
 	analyze_misc(o_ptr, desc_ptr->misc_desc);
-	desc_ptr->activation = item_activation(o_ptr);
+	desc_ptr->activation = activation_explanation(o_ptr);
 }
 
 
@@ -1573,7 +1578,7 @@ static void spoil_artifact(player_type *player_ptr, concptr fname)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	fff = my_fopen(buf, "w");
+	fff = angband_fopen(buf, "w");
 
 	if (!fff)
 	{
@@ -1617,7 +1622,7 @@ static void spoil_artifact(player_type *player_ptr, concptr fname)
 	}
 
 	/* Check for errors */
-	if (ferror(fff) || my_fclose(fff))
+	if (ferror(fff) || angband_fclose(fff))
 	{
 		msg_print("Cannot close spoiler file.");
 		return;
@@ -1651,7 +1656,7 @@ static void spoil_mon_desc(concptr fname)
 	char exp[80];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	fff = my_fopen(buf, "w");
+	fff = angband_fopen(buf, "w");
 	if (!fff)
 	{
 		msg_print("Cannot create spoiler file.");
@@ -1757,7 +1762,7 @@ static void spoil_mon_desc(concptr fname)
 	C_KILL(who, max_r_idx, s16b);
 
 	/* Check for errors */
-	if (ferror(fff) || my_fclose(fff))
+	if (ferror(fff) || angband_fclose(fff))
 	{
 		msg_print("Cannot close spoiler file.");
 		return;
@@ -1978,7 +1983,7 @@ static void spoil_mon_info(player_type *player_ptr, concptr fname)
 	MONRACE_IDX *who;
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	fff = my_fopen(buf, "w");
+	fff = angband_fopen(buf, "w");
 	if (!fff)
 	{
 		msg_print("Cannot create spoiler file.");
@@ -2103,7 +2108,7 @@ static void spoil_mon_info(player_type *player_ptr, concptr fname)
 	C_KILL(who, max_r_idx, s16b);
 
 	/* Check for errors */
-	if (ferror(fff) || my_fclose(fff))
+	if (ferror(fff) || angband_fclose(fff))
 	{
 		msg_print("Cannot close spoiler file.");
 		return;
@@ -2179,7 +2184,7 @@ static void spoil_mon_evol(concptr fname)
 	int *evol_tree_zero; /* For C_KILL() */
 	path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
 
-	fff = my_fopen(buf, "w");
+	fff = angband_fopen(buf, "w");
 	if (!fff)
 	{
 		msg_print("Cannot create spoiler file.");
@@ -2275,7 +2280,7 @@ static void spoil_mon_evol(concptr fname)
 	C_KILL(evol_tree, max_r_idx, int *);
 
 	/* Check for errors */
-	if (ferror(fff) || my_fclose(fff))
+	if (ferror(fff) || angband_fclose(fff))
 	{
 		msg_print("Cannot close spoiler file.");
 		return;
@@ -2372,7 +2377,7 @@ static void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr,
 	analyze_resist(o_ptr, desc_ptr->resistances);
 	analyze_sustains(o_ptr, desc_ptr->sustains);
 	analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
-	desc_ptr->activation = item_activation(o_ptr);
+	desc_ptr->activation = activation_explanation(o_ptr);
 #ifdef JP
 	sprintf(desc_ptr->misc_desc, "重さ %d.%d kg",
 		lbtokg1(o_ptr->weight), lbtokg2(o_ptr->weight));
@@ -2471,7 +2476,7 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	fff = my_fopen(buf, "w");
+	fff = angband_fopen(buf, "w");
 	if (!fff)
 	{
 		msg_print("Cannot create list file.");
@@ -2516,7 +2521,7 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 	}
 
 	/* Check for errors */
-	if (ferror(fff) || my_fclose(fff))
+	if (ferror(fff) || angband_fclose(fff))
 	{
 		msg_print("Cannot close list file.");
 		return;

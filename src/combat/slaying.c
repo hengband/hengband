@@ -1,10 +1,15 @@
 ﻿#include "combat/slaying.h"
+#include "art-definition/art-sword-types.h"
 #include "mind/mind-samurai.h"
-#include "object-enchant/artifact.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
-#include "object/object1.h"
-#include "specific-object/torch.h"
+#include "object/object-flags.h"
 #include "realm/realm-hex-numbers.h"
+#include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"
 
 /*!

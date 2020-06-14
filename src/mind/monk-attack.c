@@ -10,10 +10,13 @@
 #include "combat/attack-criticality.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "game-option/cheat-options.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "mind/mind-force-trainer.h"
-#include "monster/creature.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags3.h"
+#include "core/speed-table.h"
 #include "monster/monster-status.h"
 #include "world/world.h"
 
@@ -115,7 +118,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
     }
 
     else if (pa_ptr->ma_ptr->effect == MA_SLOW) {
-        if (!((r_ptr->flags1 & RF1_NEVER_MOVE) || my_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char))) {
+        if (!((r_ptr->flags1 & RF1_NEVER_MOVE) || angband_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char))) {
             msg_format(_("%sの足首に関節蹴りをくらわした！", "You kick %s in the ankle."), pa_ptr->m_name);
             special_effect = MA_SLOW;
         } else
@@ -192,7 +195,7 @@ static void print_stun_effect(player_type *attacker_ptr, player_attack_type *pa_
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (stun_effect && ((pa_ptr->attack_damage + attacker_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
         if (attacker_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
-            if (set_monster_stunned(attacker_ptr, pa_ptr->g_ptr->m_idx, stun_effect + MON_STUNNED(pa_ptr->m_ptr))) {
+            if (set_monster_stunned(attacker_ptr, pa_ptr->g_ptr->m_idx, stun_effect + monster_stunned_remaining(pa_ptr->m_ptr))) {
                 msg_format(_("%^sはフラフラになった。", "%^s is stunned."), pa_ptr->m_name);
             } else {
                 msg_format(_("%^sはさらにフラフラになった。", "%^s is more stunned."), pa_ptr->m_name);

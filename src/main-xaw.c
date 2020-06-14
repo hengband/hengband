@@ -6,7 +6,7 @@
 #ifdef USE_XAW
 
 #include "system/angband.h"
-
+#include "game-option/runtime-arguments.h"
 
 #ifndef __MAKEDEPEND__
 #include <X11/Xlib.h>

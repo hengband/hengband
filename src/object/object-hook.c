@@ -5,24 +5,30 @@
  */
 
 #include "object/object-hook.h"
+#include "art-definition/art-accessory-types.h"
+#include "art-definition/art-armor-types.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
-#include "monster/monster.h"
+#include "game-option/birth-options.h"
+#include "monster-race/race-indice-types.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
-#include "perception/object-perception.h"
-#include "object/object-kind.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-enchant/tr-types.h"
+#include "object-enchant/trg-types.h"
+#include "object/object-flags.h"
+#include "object/object-kind.h"
+#include "object/object-info.h"
+#include "perception/object-perception.h"
+#include "player/mimic-info-table.h"
+#include "player/player-class.h"
+#include "player/player-races-table.h"
+#include "player/player-skill.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "object-enchant/tr-types.h"
-#include "player/mimic-info-table.h"
-#include "player/player-class.h"
-#include "player/player-races-table.h"
-#include "player/player-skill.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
@@ -150,7 +156,7 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 	{
 		if (o_ptr->tval == TV_CORPSE &&
 			o_ptr->sval == SV_CORPSE &&
-			my_strchr("pht", r_info[o_ptr->pval].d_char))
+			angband_strchr("pht", r_info[o_ptr->pval].d_char))
 			return TRUE;
 	}
 

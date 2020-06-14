@@ -1,14 +1,25 @@
 ﻿#include "core/player-processor.h"
-#include "combat/snipe.h"
+#include "mind/mind-sniper.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
+#include "floor/floor-save.h"
 #include "floor/wild.h"
+#include "game-option/disturbance-options.h"
+#include "game-option/map-screen-options.h"
 #include "inventory/pack-overflow.h"
 #include "io/input-key-processor.h"
 #include "mind/mind-force-trainer.h"
-#include "monster/creature.h"
-#include "monster/monster-race-hook.h"
+#include "core/speed-table.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-flag-types.h"
+#include "monster-floor/monster-generator.h"
+#include "monster/monster-list.h"
 #include "monster/monster-status.h"
+#include "monster/monster-update.h"
+#include "monster/monster-util.h"
+#include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
@@ -20,7 +31,6 @@
 
 bool load = TRUE;
 bool can_save = FALSE;
-bool repair_monsters; // todo より適切なファイルへ移設する可能性あり.
 
 static void process_fishing(player_type *creature_ptr)
 {
@@ -128,34 +138,34 @@ void process_player(player_type *creature_ptr)
     if (creature_ptr->riding && !creature_ptr->confused && !creature_ptr->blind) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
-        if (MON_CSLEEP(m_ptr)) {
+        if (monster_csleep_remaining(m_ptr)) {
             GAME_TEXT m_name[MAX_NLEN];
             (void)set_monster_csleep(creature_ptr, creature_ptr->riding, 0);
             monster_desc(creature_ptr, m_name, m_ptr, 0);
             msg_format(_("%^sを起こした。", "You have woken %s up."), m_name);
         }
 
-        if (MON_STUNNED(m_ptr)) {
+        if (monster_stunned_remaining(m_ptr)) {
             if (set_monster_stunned(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_STUNNED(m_ptr) - 1))) {
+                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
             }
         }
 
-        if (MON_CONFUSED(m_ptr)) {
+        if (monster_confused_remaining(m_ptr)) {
             if (set_monster_confused(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_CONFUSED(m_ptr) - 1))) {
+                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_confused_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
             }
         }
 
-        if (MON_MONFEAR(m_ptr)) {
+        if (monster_fear_remaining(m_ptr)) {
             if (set_monster_monfear(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1))) {
+                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_fear_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer afraid."), m_name);

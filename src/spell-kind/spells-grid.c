@@ -3,6 +3,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
+#include "game-option/birth-options.h"
 
 /*!
  * @brief 守りのルーン設置処理 /

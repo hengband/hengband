@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "grid/grid.h"
+#include "system/angband.h"
 
 extern int total_friends;
 

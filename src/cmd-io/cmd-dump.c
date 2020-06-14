@@ -31,6 +31,7 @@
  */
 
 #include "cmd-io/cmd-dump.h"
+#include "art-definition/art-bow-types.h"
 #include "cmd-io/feeling-table.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
@@ -41,7 +42,6 @@
 #include "io/interpret-pref-file.h"
 #include "io/read-pref-file.h"
 #include "locale/english.h"
-#include "object-enchant/artifact.h"
 #include "player/player-personalities-table.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"
@@ -287,7 +287,7 @@ void do_cmd_time(player_type *creature_ptr)
 	}
 
 	FILE *fff;
-	fff = my_fopen(buf, "rt");
+	fff = angband_fopen(buf, "rt");
 
 	if (!fff) return;
 
@@ -295,7 +295,7 @@ void do_cmd_time(player_type *creature_ptr)
 	int start = 9999;
 	int end = -9999;
 	int num = 0;
-	while (!my_fgets(fff, buf, sizeof(buf)))
+	while (!angband_fgets(fff, buf, sizeof(buf)))
 	{
 		if (!buf[0] || (buf[0] == '#')) continue;
 		if (buf[1] != ':') continue;
@@ -325,5 +325,5 @@ void do_cmd_time(player_type *creature_ptr)
 	}
 
 	msg_print(desc);
-	my_fclose(fff);
+	angband_fclose(fff);
 }

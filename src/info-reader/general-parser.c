@@ -7,6 +7,7 @@
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/trg-types.h"
 #include "object/object-kind-hook.h"
 #include "system/system-variables.h"
 
@@ -29,7 +30,7 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_fun
     head->tag_size = 0;
 
     errr err;
-    while (my_fgets(fp, buf, 1024) == 0) {
+    while (angband_fgets(fp, buf, 1024) == 0) {
         error_line++;
         if (!buf[0] || (buf[0] == '#'))
             continue;
@@ -195,7 +196,7 @@ errr parse_line_building(char *buf)
     s = buf + 3;
 #endif
     int index = atoi(s);
-    s = my_strchr(s, ':');
+    s = angband_strchr(s, ':');
     if (!s)
         return 1;
 

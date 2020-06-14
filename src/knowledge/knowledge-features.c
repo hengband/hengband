@@ -7,6 +7,7 @@
 #include "knowledge/knowledge-features.h"
 #include "core/show-file.h"
 #include "dungeon/dungeon.h"
+#include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
 #include "knowledge/lighting-level-table.h"
 #include "term/term-color-types.h"
@@ -391,7 +392,7 @@ void do_cmd_knowledge_dungeon(player_type *creature_ptr)
 		fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_name + d_info[i].name, (int)max_dlv[i]);
 	}
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	(void)show_file(creature_ptr, TRUE, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
 	fd_kill(file_name);
 }

@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "spell/process-effect.h"
+﻿#include "spell/process-effect.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-feature.h"
@@ -8,7 +7,13 @@
 #include "effect/effect-player.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
+#include "game-option/special-options.h"
 #include "main/sound-definitions-table.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster/monster-info.h"
 #include "pet/pet-fall-off.h"
 #include "spell/spells-type.h"
 #include "spell/range-calc.h"
@@ -520,7 +525,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
     update_creature(caster_ptr);
 
     if (flag & PROJECT_KILL) {
-        see_s_msg = (who > 0) ? is_seen(&caster_ptr->current_floor_ptr->m_list[who])
+        see_s_msg = (who > 0) ? is_seen(caster_ptr, &caster_ptr->current_floor_ptr->m_list[who])
                               : (!who ? TRUE : (player_can_see_bold(caster_ptr, y1, x1) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
     }
 
@@ -594,7 +599,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
                     }
 
                     sound(SOUND_REFLECT);
-                    if (is_seen(m_ptr)) {
+                    if (is_seen(caster_ptr, m_ptr)) {
                         if ((m_ptr->r_idx == MON_KENSHIROU) || (m_ptr->r_idx == MON_RAOU))
                             msg_print(_("「北斗神拳奥義・二指真空把！」", "The attack bounces!"));
                         else if (m_ptr->r_idx == MON_DIO)

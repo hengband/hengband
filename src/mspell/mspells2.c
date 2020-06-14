@@ -11,25 +11,36 @@
  */
 
 #include "system/angband.h"
-#include "util/util.h"
-#include "main/sound-definitions-table.h"
-#include "pet/pet-util.h"
-#include "effect/effect-characteristics.h"
-#include "grid/grid.h"
-#include "dungeon/quest.h"
-#include "player/player-move.h"
-#include "player/player-class.h"
-#include "monster/monster.h"
-#include "monster/monster-status.h"
-#include "mspell/monster-spell.h"
-#include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
-#include "spell/range-calc.h"
 #include "dungeon/dungeon.h"
-#include "world/world.h"
-#include "view/display-main-window.h"
+#include "dungeon/quest.h"
+#include "effect/effect-characteristics.h"
+#include "floor/floor.h"
+#include "grid/grid.h"
+#include "main/sound-definitions-table.h"
+#include "monster-race/race-flags-ability1.h"
+#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/race-flags4.h"
+#include "monster-race/race-flags7.h"
+#include "monster-race/race-indice-types.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster/monster-info.h"
+#include "monster-floor/monster-move.h"
+#include "monster/monster-status.h"
 #include "mspell/assign-monster-spell.h"
+#include "mspell/monster-spell.h"
+#include "pet/pet-util.h"
+#include "player/player-class.h"
+#include "player/player-move.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
+#include "spell/range-calc.h"
+#include "spell/spells-type.h"
+#include "util/util.h"
+#include "view/display-main-window.h"
+#include "world/world.h"
 
  /*!
   * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
@@ -232,9 +243,9 @@ void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITI
 static bool dispel_check_monster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
 	monster_type *t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
-	if (MON_INVULNER(t_ptr)) return TRUE;
+	if (monster_invulner_remaining(t_ptr)) return TRUE;
 
-	if ((t_ptr->mspeed < 135) && MON_FAST(t_ptr)) return TRUE;
+	if ((t_ptr->mspeed < 135) && monster_fast_remaining(t_ptr)) return TRUE;
 
 	/* Riding monster */
 	if ((t_idx == target_ptr->riding) && dispel_check(target_ptr, m_idx)) return TRUE;
@@ -281,7 +292,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	bool see_m = is_seen(m_ptr);
+	bool see_m = is_seen(target_ptr, m_ptr);
 	bool maneable = player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx);
 	bool pet = is_pet(m_ptr);
 
@@ -292,7 +303,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	bool can_remember;
 
 	/* Cannot cast spells when confused */
-	if (MON_CONFUSED(m_ptr)) return FALSE;
+	if (monster_confused_remaining(m_ptr)) return FALSE;
 
 	/* Extract the racial spell flags */
 	BIT_FLAGS f4 = r_ptr->flags4;
@@ -680,7 +691,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (target_ptr->riding && (m_idx == target_ptr->riding)) disturb(target_ptr, TRUE, TRUE);
 
 	/* Check for spell failure (inate attacks never fail) */
-	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2))))
+	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (monster_stunned_remaining(m_ptr) && one_in_(2))))
 	{
 		disturb(target_ptr, TRUE, TRUE);
 		if (see_m) msg_format(_("%^sは呪文を唱えようとしたが失敗した。",

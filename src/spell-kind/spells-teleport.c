@@ -6,16 +6,32 @@
  */
 
 #include "spell-kind/spells-teleport.h"
+#include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-save.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "game-option/birth-options.h"
+#include "game-option/play-record-options.h"
+#include "game-option/special-options.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
-#include "monster/creature.h"
+#include "core/speed-table.h"
+#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags7.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster/monster-info.h"
+#include "monster-floor/monster-move.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
-#include "object-enchant/artifact.h"
+#include "monster/monster-update.h"
+#include "monster/smart-learn-types.h"
+#include "object-enchant/tr-types.h"
+#include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
@@ -373,7 +389,7 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 
             bool is_resistible = (r_ptr->a_ability_flags2 & RF6_TPORT) != 0;
             is_resistible &= (r_ptr->flagsr & RFR_RES_TELE) == 0;
-            is_resistible &= MON_CSLEEP(m_ptr) == 0;
+            is_resistible &= monster_csleep_remaining(m_ptr) == 0;
             if (is_resistible) {
                 teleport_monster_to(creature_ptr, tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
             }
@@ -412,7 +428,7 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION d
 
             bool is_resistible = (r_ptr->a_ability_flags2 & RF6_TPORT) != 0;
             is_resistible &= (r_ptr->flagsr & RFR_RES_TELE) == 0;
-            is_resistible &= MON_CSLEEP(m_ptr) == 0;
+            is_resistible &= monster_csleep_remaining(m_ptr) == 0;
             if (is_resistible) {
                 teleport_monster_to(target_ptr, tmp_m_idx, target_ptr->y, target_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
             }
@@ -512,7 +528,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 
     if (!follow)
         return;
-    if (!get_check_strict(_("ついていきますか？", "Do you follow it? "), CHECK_OKAY_CANCEL))
+    if (!get_check_strict(tracer_ptr, _("ついていきますか？", "Do you follow it? "), CHECK_OKAY_CANCEL))
         return;
 
     if (one_in_(3)) {
@@ -572,7 +588,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
     } else {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
         monster_desc(creature_ptr, m_name, m_ptr, 0);
-        see_m = is_seen(m_ptr);
+        see_m = is_seen(creature_ptr, m_ptr);
     }
 
     if (is_teleport_level_ineffective(creature_ptr, m_idx)) {

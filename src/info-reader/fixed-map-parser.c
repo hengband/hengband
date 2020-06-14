@@ -10,6 +10,8 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "floor/fixed-map-generator.h"
+#include "game-option/birth-options.h"
+#include "game-option/runtime-arguments.h"
 #include "io/files-util.h"
 #include "system/system-variables.h"
 #include "world/world.h"
@@ -121,13 +123,13 @@ static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, ch
     }
 
 #ifdef JP
-    while (iskanji(*s) || (isprint(*s) && !my_strchr(" []", *s))) {
+    while (iskanji(*s) || (isprint(*s) && !angband_strchr(" []", *s))) {
         if (iskanji(*s))
             s++;
         s++;
     }
 #else
-    while (isprint(*s) && !my_strchr(" []", *s))
+    while (isprint(*s) && !angband_strchr(" []", *s))
         ++s;
 #endif
     if ((f = *s) != '\0')
@@ -168,7 +170,7 @@ static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, ch
                 continue;
             }
 #endif
-            *tpn = my_strchr(" []", *pn) ? '_' : *pn;
+            *tpn = angband_strchr(" []", *pn) ? '_' : *pn;
         }
 
         *tpn = '\0';
@@ -226,7 +228,7 @@ errr parse_fixed_map(player_type *player_ptr, concptr name, int ymin, int xmin, 
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
     FILE *fp;
-    fp = my_fopen(buf, "r");
+    fp = angband_fopen(buf, "r");
     if (fp == NULL)
         return -1;
 
@@ -236,7 +238,7 @@ errr parse_fixed_map(player_type *player_ptr, concptr name, int ymin, int xmin, 
     int x = xmin, y = ymin;
     qtwg_type tmp_qg;
     qtwg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, buf, ymin, xmin, ymax, xmax, &y, &x);
-    while (my_fgets(fp, buf, sizeof(buf)) == 0) {
+    while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
         num++;
         if (!buf[0])
             continue;
@@ -268,6 +270,6 @@ errr parse_fixed_map(player_type *player_ptr, concptr name, int ymin, int xmin, 
         msg_print(NULL);
     }
 
-    my_fclose(fp);
+    angband_fclose(fp);
     return err;
 }

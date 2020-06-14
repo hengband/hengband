@@ -12,12 +12,15 @@
 #include "birth/history-editor.h"
 #include "birth/history-generator.h"
 #include "birth/quick-start.h"
+#include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/cmd-help.h"
+#include "game-option/birth-options.h"
 #include "main/sound-definitions-table.h"
 #include "player/avatar.h"
 #include "player/patron.h"
 #include "player/player-sex.h"
 #include "player/process-name.h"
+#include "system/game-option-types.h"
 #include "term/term-color-types.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
 #include "view/display-main-window.h" // 暫定。後で消す.
@@ -59,7 +62,7 @@ static void display_help_on_sex_select(player_type *creature_ptr, char c)
         do_cmd_help(creature_ptr);
     else if (c == '=') {
         screen_save();
-        do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+        do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
         screen_load();
     } else if (c != '4' && c != '6')
         bell();
@@ -162,7 +165,7 @@ static bool let_player_select_race(player_type *creature_ptr)
                 t += strlen(t) + 1;
             }
         }
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
 
         clear_from(10);
@@ -193,7 +196,7 @@ static bool let_player_select_class(player_type *creature_ptr)
             }
         }
 
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
 
         c_put_str(TERM_WHITE, "              ", 5, 15);
@@ -222,7 +225,7 @@ static bool let_player_select_personality(player_type *creature_ptr)
             }
         }
 
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
 
         c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
@@ -253,14 +256,14 @@ static bool let_player_build_character(player_type *creature_ptr)
     return TRUE;
 }
 
-static void display_initial_options(void)
+static void display_initial_options(player_type *creature_ptr)
 {
     clear_from(10);
     put_str("                                   ", 3, 40);
     put_str("                                   ", 4, 40);
     put_str("                                   ", 5, 40);
     screen_save();
-    do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+    do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
     screen_load();
 }
 
@@ -501,7 +504,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     if (!let_player_build_character(creature_ptr))
         return FALSE;
 
-    display_initial_options();
+    display_initial_options(creature_ptr);
     if (autoroller || autochara)
         auto_round = 0L;
 

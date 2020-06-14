@@ -2,7 +2,17 @@
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "game-option/play-record-options.h"
+#include "game-option/special-options.h"
 #include "io/write-diary.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/race-flags7.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
+#include "monster/monster-flag-types.h"
+#include "monster/monster-info.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
@@ -49,14 +59,14 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
     }
 
     if (resist && player_cast) {
-        bool see_m = is_seen(m_ptr);
+        bool see_m = is_seen(caster_ptr, m_ptr);
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(caster_ptr, m_name, m_ptr, 0);
         if (see_m) {
             msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
         }
 
-        if (MON_CSLEEP(m_ptr)) {
+        if (monster_csleep_remaining(m_ptr)) {
             (void)set_monster_csleep(caster_ptr, m_idx, 0);
             if (m_ptr->ml) {
                 msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);

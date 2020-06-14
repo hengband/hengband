@@ -2,8 +2,12 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
+#include "game-option/map-screen-options.h"
 #include "grid/grid.h"
+#include "monster-race/race-flags2.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-status.h"
+#include "monster/monster-update.h"
 #include "player/player-effects.h"
 #include "spell/process-effect.h"
 #include "spell-kind/spells-launcher.h"
@@ -46,7 +50,7 @@ static void cave_temp_room_lite(player_type *caster_ptr)
             if (r_ptr->flags2 & (RF2_SMART))
                 chance = 100;
 
-            if (MON_CSLEEP(m_ptr) && (randint0(100) < chance)) {
+            if (monster_csleep_remaining(m_ptr) && (randint0(100) < chance)) {
                 (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
                 if (m_ptr->ml) {
                     GAME_TEXT m_name[MAX_NLEN];

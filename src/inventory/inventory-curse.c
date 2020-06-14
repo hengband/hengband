@@ -1,13 +1,16 @@
 ﻿#include "inventory/inventory-curse.h"
+#include "art-definition/art-accessory-types.h"
 #include "io/files-util.h"
-#include "object-enchant/artifact.h"
+#include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-feeling.h"
-#include "perception/object-perception.h"
 #include "object-enchant/object-curse.h"
-#include "object/object-flavor.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object/object-flags.h"
+#include "object/object-flavor.h"
+#include "perception/object-perception.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
@@ -151,7 +154,7 @@ static void curse_teleport(player_type *creature_ptr)
         if (!have_flag(flgs, TR_TELEPORT))
             continue;
 
-        if (o_ptr->inscription && my_strchr(quark_str(o_ptr->inscription), '.'))
+        if (o_ptr->inscription && angband_strchr(quark_str(o_ptr->inscription), '.'))
             continue;
 
         count++;
@@ -162,7 +165,7 @@ static void curse_teleport(player_type *creature_ptr)
     o_ptr = &creature_ptr->inventory_list[i_keep];
     object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
-    if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL)) {
+    if (get_check_strict(creature_ptr, _("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL)) {
         disturb(creature_ptr, FALSE, TRUE);
         teleport_player(creature_ptr, 50, TELEPORT_SPONTANEOUS);
     } else {

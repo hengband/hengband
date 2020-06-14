@@ -1,17 +1,17 @@
 ﻿/*!
-* @file cmd-process-screen.c
-* @brief 記念撮影のセーブとロード
-* @date 2020/04/22
-* @Author Hourier
-*/
+ * @brief 記念撮影のセーブとロード
+ * @date 2020/04/22
+ * @Author Hourier
+ */
 
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd/cmd-draw.h"
+#include "core/stuff-handler.h"
+#include "core/visuals-reseter.h"
+#include "game-option/special-options.h"
 #include "io/files-util.h"
-#include "object/object1.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
-#include "core/stuff-handler.h"
 
 // Encode the screen colors
 static char hack[17] = "dwsorgbuDWvyRGBU";
@@ -33,7 +33,7 @@ static void read_temporary_file(FILE *fff, FILE *tmpfff, char buf[], size_t buf_
 {
 	bool is_first_line = TRUE;
 	int next_tag = num_tag + 1;
-	while (!my_fgets(tmpfff, buf, buf_size))
+	while (!angband_fgets(tmpfff, buf, buf_size))
 	{
 		if (is_first_line)
 		{
@@ -171,7 +171,7 @@ static void write_html_footer(FILE *tmpfff, FILE *fff, char buf[], size_t buf_si
 	{
 		rewind(tmpfff);
 		read_temporary_file(fff, tmpfff, buf, buf_size, 2);
-		my_fclose(tmpfff);
+		angband_fclose(tmpfff);
 	}
 
 	fprintf(fff, "\n");
@@ -183,7 +183,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
 	FILE *fff;
-	fff = my_fopen(filename, "w");
+	fff = angband_fopen(filename, "w");
 	if (!check_screen_html_can_open(fff, filename, message)) return;
 
 	if (message) screen_save();
@@ -191,11 +191,11 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	char buf[2048];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
 	FILE *tmpfff;
-	tmpfff = my_fopen(buf, "r");
+	tmpfff = angband_fopen(buf, "r");
 	write_html_header(tmpfff, fff, buf, sizeof(buf));
 	screen_dump_lines(wid, hgt, fff);
 	write_html_footer(tmpfff, fff, buf, sizeof(buf));
-	my_fclose(fff);
+	angband_fclose(fff);
 	if (message)
 	{
 		msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
@@ -287,7 +287,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 	FILE *fff;
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-	fff = my_fopen(buf, "w");
+	fff = angband_fopen(buf, "w");
 	if (!check_screen_text_can_open(fff, buf)) return FALSE;
 
 	screen_save();
@@ -319,7 +319,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 	}
 
 	fprintf(fff, "\n");
-	my_fclose(fff);
+	angband_fclose(fff);
 	msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
 	msg_print(NULL);
 	screen_load();
@@ -459,7 +459,7 @@ void do_cmd_load_screen(void)
 	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-	fff = my_fopen(buf, "r");
+	fff = angband_fopen(buf, "r");
 	if (!fff)
 	{
 		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
@@ -472,7 +472,7 @@ void do_cmd_load_screen(void)
 	bool okay = draw_white_characters(buf, fff, wid, hgt);
 	draw_colored_characters(buf, fff, wid, hgt, okay);
 
-	my_fclose(fff);
+	angband_fclose(fff);
 	prt(_("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded."), 0, 0);
 	flush();
 	inkey();

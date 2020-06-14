@@ -3,6 +3,8 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "market/building-util.h"
+#include "monster-race/race-flags1.h"
+#include "monster/monster-list.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
 

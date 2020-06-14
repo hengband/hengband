@@ -1,8 +1,14 @@
-﻿#include "system/angband.h"
-#include "effect/effect-monster-util.h"
-#include "effect/effect-monster-spirit.h"
-#include "mspell/monster-spell.h"
+﻿#include "effect/effect-monster-spirit.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags3.h"
+#include "monster-race/race-flags4.h"
+#include "monster-race/race-flags-ability1.h"
+#include "monster-race/race-flags-ability2.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-status.h"
+#include "monster/monster-info.h"
+#include "mspell/monster-spell.h"
 #include "player/player-effects.h"
 
 gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)
@@ -146,7 +152,7 @@ gf_switch_result effect_monster_brain_smash(player_type *caster_ptr, effect_mons
 			em_ptr->do_stun = randint0(8) + 8;
 		}
 
-		(void)set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 10);
+		(void)set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 10);
 	}
 
 	return GF_SWITCH_CONTINUE;
