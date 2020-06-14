@@ -37,6 +37,7 @@
 #include "system/angband-version.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/quarks.h"
 #include "view/display-lore.h"
 
  /*

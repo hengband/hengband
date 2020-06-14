@@ -20,6 +20,7 @@
 #include "player/player-move.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "util/quarks.h"
 #include "view/display-main-window.h"
 
 bool select_ring_slot;

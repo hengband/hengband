@@ -32,6 +32,7 @@
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "view/display-main-window.h"
+#include "util/quarks.h"
 #include "world/world.h"
 
 int total_friends = 0;

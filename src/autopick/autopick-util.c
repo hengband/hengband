@@ -4,6 +4,7 @@
 #include "main/sound-of-music.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/item-feeling.h"
+#include "util/quarks.h"
 
 /*
  * 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries

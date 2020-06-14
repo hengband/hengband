@@ -1370,6 +1370,9 @@
     <ClCompile Include="..\..\src\io\input-key-acceptor.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\quarks.c">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3000,6 +3003,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\input-key-acceptor.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\quarks.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

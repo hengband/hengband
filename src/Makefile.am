@@ -547,6 +547,7 @@ hengband_SOURCES = \
 	\
 	util/angband-files.c util/angband-files.h \
 	util/object-sort.c util/object-sort.h \
+	util/quarks.c util/quarks.h \
 	util/string-processor.c util/string-processor.h \
 	util/util.c util/util.h \
 	\

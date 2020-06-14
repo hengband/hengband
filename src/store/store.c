@@ -77,6 +77,7 @@
 #include "system/angband.h"
 #include "term/gameterm.h"
 #include "util/object-sort.h"
+#include "util/quarks.h"
 #include "view/display-main-window.h"
 #include "view/object-describer.h"
 #include "world/world.h"

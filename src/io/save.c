@@ -42,6 +42,7 @@
 #include "store/store.h"
 #include "system/angband-version.h"
 #include "util/angband-files.h"
+#include "util/quarks.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

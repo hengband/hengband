@@ -33,7 +33,7 @@
 #include "shoot.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
-#include "util/util.h"
+#include "util/quarks.h"
 #include "world/world.h"
 
  /*!

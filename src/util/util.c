@@ -38,6 +38,7 @@
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
@@ -106,16 +107,6 @@ bool use_menu;
 
 pos_list tmp_pos;
 
-/*
- * The number of quarks
- */
-STR_OFFSET quark__num;
-
-/*
- * The pointers to the quarks [QUARK_MAX]
- */
-concptr *quark__str;
-
 int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
 concptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
 concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
@@ -153,58 +144,10 @@ void flush(void)
 }
 
 
-/*
- * Initialize the quark array
+/*!
+ * @brief 保存中の過去ゲームメッセージの数を返す。 / How many messages are "available"?
+ * @return 残っているメッセージの数
  */
-void quark_init(void)
-{
-	C_MAKE(quark__str, QUARK_MAX, concptr);
-	quark__str[1] = string_make("");
-	quark__num = 2;
-}
-
-
-/*
- * Add a new "quark" to the set of quarks.
- */
-u16b quark_add(concptr str)
-{
-	u16b i;
-	for (i = 1; i < quark__num; i++)
-	{
-		if (streq(quark__str[i], str)) return (i);
-	}
-
-	if (quark__num == QUARK_MAX) return 1;
-
-	quark__num = i + 1;
-	quark__str[i] = string_make(str);
-	return (i);
-}
-
-
-/*
- * This function looks up a quark
- */
-concptr quark_str(STR_OFFSET i)
-{
-	concptr q;
-
-	/* Return NULL for an invalid index */
-	if ((i < 1) || (i >= quark__num)) return NULL;
-
-	/* Access the quark */
-	q = quark__str[i];
-
-	/* Return the quark */
-	return (q);
-}
-
-
- /*!
-  * @brief 保存中の過去ゲームメッセージの数を返す。 / How many messages are "available"?
-  * @return 残っているメッセージの数
-  */
 s32b message_num(void)
 {
 	int n;

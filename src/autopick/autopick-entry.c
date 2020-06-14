@@ -14,6 +14,7 @@
 #include "object/object-kind.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
+#include "util/quarks.h"
 
 #ifdef JP
 static char kanji_colon[] = "：";

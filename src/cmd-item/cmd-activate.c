@@ -67,6 +67,7 @@
 #include "spell/spells3.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
+#include "util/quarks.h"
 #include "world/world.h"
 
 /*!

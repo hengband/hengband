@@ -45,7 +45,7 @@
 #include "player/player-class.h"
 #include "player/player-personalities-types.h"
 #include "spell/spells-object.h"
-#include "util/util.h"
+#include "util/quarks.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

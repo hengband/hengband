@@ -73,6 +73,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/quarks.h"
 #include "world/world.h"
 
 #include <sys/stat.h>

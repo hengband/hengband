@@ -125,8 +125,6 @@ extern bool use_menu;
 
 extern pos_list tmp_pos;
 
-extern STR_OFFSET quark__num;
-extern concptr *quark__str;
 /*
  * Automatically generated "variable" declarations
  */
@@ -147,14 +145,6 @@ extern s16b command_wrk;
 extern s16b command_new;
 
 extern concptr keymap_act[KEYMAP_MODES][256];
-
-/*!
- * @brief 銘情報の最大数 / Maximum number of "quarks" (see "io.c")
- * @note
- * Default: assume at most 512 different inscriptions are used<br>
- * Was 512... 256 quarks added for random artifacts<br>
- */
-#define QUARK_MAX       768
 
 /*
  * OPTION: Maximum number of messages to remember (see "io.c")
@@ -217,9 +207,6 @@ extern const char hexsym[16];
 // todo ファイル処理関数・メッセージ処理関数・画面描画関数で最低限分割する.
 extern void flush(void);
 extern void move_cursor(int row, int col);
-extern concptr quark_str(STR_OFFSET num);
-extern void quark_init(void);
-extern u16b quark_add(concptr str);
 extern s32b message_num(void);
 extern concptr message_str(int age);
 extern void message_add(concptr msg);
