@@ -1,6 +1,6 @@
 ﻿#include "io-dump/character-dump.h"
 #include "art-definition/art-bow-types.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"

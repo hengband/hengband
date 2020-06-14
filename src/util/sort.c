@@ -1,4 +1,4 @@
-﻿#include "core/sort.h"
+﻿#include "util/sort.h"
 #include "floor/floor.h"
 #include "dungeon/quest.h"
 #include "object-enchant/artifact.h"

@@ -1,5 +1,5 @@
 ﻿#include "room/rooms-pit-nest.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"

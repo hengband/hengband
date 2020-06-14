@@ -11,7 +11,7 @@
  */
 
 #include "wizard/wizard-spoiler.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "floor/floor-town.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"

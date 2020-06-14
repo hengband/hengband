@@ -7,7 +7,7 @@
 
 #include "knowledge/knowledge-monsters.h"
 #include "core/show-file.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/cheat-options.h"

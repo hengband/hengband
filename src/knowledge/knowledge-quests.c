@@ -6,7 +6,7 @@
 
 #include "knowledge-quests.h"
 #include "core/show-file.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"

@@ -12,7 +12,7 @@
 #include "cmd-io/cmd-save.h"
 #include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"

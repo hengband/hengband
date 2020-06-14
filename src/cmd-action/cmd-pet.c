@@ -3,7 +3,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"

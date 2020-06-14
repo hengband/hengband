@@ -114,7 +114,6 @@ hengband_SOURCES = \
 	core/player-processor.c core/player-processor.h \
 	core/scores.c core/scores.h \
 	core/show-file.c core/show-file.h \
-	core/sort.c core/sort.h \
 	core/special-internal-keys.h \
 	core/speed-table.c core/speed-table.h \
 	core/stuff-handler.c core/stuff-handler.h \
@@ -550,6 +549,7 @@ hengband_SOURCES = \
 	util/angband-files.c util/angband-files.h \
 	util/object-sort.c util/object-sort.h \
 	util/quarks.c util/quarks.h \
+	util/sort.c util/sort.h \
 	util/string-processor.c util/string-processor.h \
 	util/util.c util/util.h \
 	\

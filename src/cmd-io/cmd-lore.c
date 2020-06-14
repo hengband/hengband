@@ -1,6 +1,6 @@
 ﻿#include "cmd-io/cmd-lore.h"
 #include "core/asking-player.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "core/stuff-handler.h"
 #include "game-option/game-play-options.h"
 #include "game-option/cheat-options.h"
