@@ -153,7 +153,3 @@ extern size_t angband_strcat(char *buf, concptr src, size_t bufsize);
 extern char *angband_strstr(concptr haystack, concptr needle);
 extern char *angband_strchr(concptr ptr, char ch);
 extern void str_tolower(char *str);
-
-extern void repeat_push(COMMAND_CODE what);
-extern bool repeat_pull(COMMAND_CODE *what);
-extern void repeat_check(void);

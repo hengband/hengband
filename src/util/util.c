@@ -1,14 +1,13 @@
-﻿/* File: util.c */
-
-/*
+﻿/*
+ * @author
+ * 2002/01/12 mogami
+ * 2020/05/16 Hourier
+ * @details
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
  */
-
- /* Purpose: Angband utilities -BEN- */
 
 #include "system/angband.h"
 #include "util/util.h"
@@ -125,60 +124,6 @@ int get_keymap_dir(char ch)
 	if (d == 5) d = 0;
 
 	return (d);
-}
-
-
-#define REPEAT_MAX		20
-
-/* Number of chars saved */
-static int repeat__cnt = 0;
-
-/* Current index */
-static int repeat__idx = 0;
-
-/* Saved "stuff" */
-static COMMAND_CODE repeat__key[REPEAT_MAX];
-
-void repeat_push(COMMAND_CODE what)
-{
-	if (repeat__cnt == REPEAT_MAX) return;
-
-	repeat__key[repeat__cnt++] = what;
-	++repeat__idx;
-}
-
-
-bool repeat_pull(COMMAND_CODE *what)
-{
-	if (repeat__idx == repeat__cnt) return FALSE;
-
-	*what = repeat__key[repeat__idx++];
-	return TRUE;
-}
-
-void repeat_check(void)
-{
-	if (command_cmd == ESCAPE) return;
-	if (command_cmd == ' ') return;
-	if (command_cmd == '\r') return;
-	if (command_cmd == '\n') return;
-
-	COMMAND_CODE what;
-	if (command_cmd == 'n')
-	{
-		repeat__idx = 0;
-		if (repeat_pull(&what))
-		{
-			command_cmd = what;
-		}
-	}
-	else
-	{
-		repeat__cnt = 0;
-		repeat__idx = 0;
-		what = command_cmd;
-		repeat_push(what);
-	}
 }
 
 

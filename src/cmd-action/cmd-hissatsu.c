@@ -17,6 +17,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
+#include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

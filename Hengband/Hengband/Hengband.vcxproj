@@ -202,6 +202,7 @@
     <ClCompile Include="..\..\src\info-reader\race-reader.c" />
     <ClCompile Include="..\..\src\info-reader\skill-reader.c" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.c" />
+    <ClCompile Include="..\..\src\io\command-repeater.c" />
     <ClCompile Include="..\..\src\io\input-key-acceptor.c" />
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\term\screen-processor.c" />
@@ -581,6 +582,7 @@
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h" />
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
+    <ClInclude Include="..\..\src\io\command-repeater.h" />
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />

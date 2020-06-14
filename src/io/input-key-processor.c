@@ -47,6 +47,7 @@
 #include "game-option/runtime-arguments.h"
 #include "inventory/player-inventory.h"
 #include "io/chuukei.h"
+#include "io/command-repeater.h"
 #include "io/files-util.h"
 #include "io/input-key-requester.h" // todo 相互依存している、後で何とかする.
 #include "io/write-diary.h"

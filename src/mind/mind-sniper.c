@@ -11,6 +11,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/text-display-options.h"
+#include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

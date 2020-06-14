@@ -203,6 +203,7 @@ hengband_SOURCES = \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
 	\
 	io/chuukei.c io/chuukei.h \
+	io/command-repeater.c io/command-repeater.h \
 	io/exit-panic.c io/exit-panic.h \
 	io/files-util.c io/files-util.h \
 	io/gf-descriptions.c io/gf-descriptions.h \

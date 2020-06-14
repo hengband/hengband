@@ -59,6 +59,7 @@
 #include "core/asking-player.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
+#include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/targeting.h"

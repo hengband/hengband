@@ -1385,6 +1385,9 @@
     <ClCompile Include="..\..\src\io\input-key-requester.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\command-repeater.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3029,6 +3032,9 @@
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\input-key-requester.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\command-repeater.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
