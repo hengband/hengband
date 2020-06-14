@@ -1,28 +1,27 @@
 ﻿#include "cmd-io/macro-util.h"
 
-/*
- * Array of macro patterns [MACRO_MAX]
- */
+/* Array of macro types [MACRO_MAX] */
+bool *macro__cmd;
+
+/* Current macro action [1024] */
+char *macro__buf;
+
+/* Array of macro patterns [MACRO_MAX] */
 concptr *macro__pat;
 
-/*
- * Array of macro actions [MACRO_MAX]
- */
+/* Array of macro actions [MACRO_MAX] */
 concptr *macro__act;
 
-/*
- * Number of active macros.
- */
+/* Number of active macros */
 s16b macro__num;
 
- /*
- * Determine if any macros have ever started with a given character.
- */
+/* Expand macros in "get_com" or not */
+bool get_com_no_macros = FALSE;
+
+/* Determine if any macros have ever started with a given character */
 static bool macro__use[256];
 
-/*
- * Find the macro (if any) which exactly matches the given pattern
- */
+/* Find the macro (if any) which exactly matches the given pattern */
 int macro_find_exact(concptr pat)
 {
     if (!macro__use[(byte)(pat[0])]) {

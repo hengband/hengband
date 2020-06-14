@@ -1,5 +1,12 @@
 ﻿#include "util/string-processor.h"
 
+int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
+concptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
+concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
+concptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
+concptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
+concptr macro_trigger_keycode[2][MAX_MACRO_TRIG]; /*!< マクロの内容 */
+
 /*
  * Convert a decimal to a single digit octal number
  */

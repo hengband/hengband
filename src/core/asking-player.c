@@ -1,4 +1,5 @@
 ﻿#include "core/asking-player.h"
+#include "cmd-io/macro-util.h"
 #include "core/stuff-handler.h"
 #include "game-option/input-options.h"
 #include "io/input-key-acceptor.h"

@@ -62,28 +62,9 @@ const char hexsym[16] =
  */
 concptr keymap_act[KEYMAP_MODES][256];
 
-/*
- * Array of macro types [MACRO_MAX]
- */
-bool *macro__cmd;
-
-/*
- * Current macro action [1024]
- */
-char *macro__buf;
-
-bool get_com_no_macros = FALSE;	/* Expand macros in "get_com" or not */
-
 bool use_menu;
 
 pos_list tmp_pos;
-
-int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
-concptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
-concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
-concptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
-concptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
-concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];  /*!< マクロの内容 */
 
 s16b command_cmd;		/* Current "Angband Command" */
 COMMAND_ARG command_arg;	/*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */

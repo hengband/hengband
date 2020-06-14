@@ -107,24 +107,9 @@ struct alloc_entry
 	u16b total;		/* Unused for now */
 };
 
-extern bool *macro__cmd;
-extern char *macro__buf;
-
-extern bool get_com_no_macros;
-
 extern bool use_menu;
 
 extern pos_list tmp_pos;
-
-/*
- * Automatically generated "variable" declarations
- */
-extern int max_macrotrigger;
-extern concptr macro_template;
-extern concptr macro_modifier_chr;
-extern concptr macro_modifier_name[MAX_MACRO_MOD];
-extern concptr macro_trigger_name[MAX_MACRO_TRIG];
-extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
 extern COMMAND_CODE command_cmd;
 extern COMMAND_ARG command_arg;

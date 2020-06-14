@@ -22,6 +22,7 @@
 #include "cmd-io/cmd-lore.h"
 #include "cmd-io/cmd-macro.h"
 #include "cmd-io/cmd-process-screen.h"
+#include "cmd-io/macro-util.h"
 #include "cmd-item/cmd-item.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-smith.h"
