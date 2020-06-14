@@ -10,6 +10,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-messages.h"
 #include "view/display-player.h" // 暫定。後で消す.

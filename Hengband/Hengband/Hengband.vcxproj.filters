@@ -3058,6 +3058,9 @@
     <ClInclude Include="..\..\src\game-option\cheat-types.h">
       <Filter>game-option</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\int-char-converter.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

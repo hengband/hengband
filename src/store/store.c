@@ -81,6 +81,7 @@
 #include "system/angband.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "util/object-sort.h"
 #include "util/quarks.h"
 #include "view/display-main-window.h"

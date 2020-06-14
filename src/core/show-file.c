@@ -8,6 +8,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
 /*!

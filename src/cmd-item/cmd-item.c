@@ -62,6 +62,7 @@
 #include "spell/spells3.h"
 #include "sv-definition/sv-lite-types.h"
 #include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
 #include "view/display-main-window.h"

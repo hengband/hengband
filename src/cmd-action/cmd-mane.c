@@ -41,6 +41,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 

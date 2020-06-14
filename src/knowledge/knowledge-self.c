@@ -14,6 +14,7 @@
 #include "player/avatar.h"
 #include "store/store-util.h"
 #include "util/angband-files.h"
+#include "util/int-char-converter.h"
 #include "world/world.h"
 
 /*

@@ -4,6 +4,7 @@
 #include "player/player-personality.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 
 static const char p2 = ')';
 

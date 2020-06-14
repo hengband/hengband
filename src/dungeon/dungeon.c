@@ -3,6 +3,7 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

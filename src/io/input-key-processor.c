@@ -66,6 +66,7 @@
 #include "store/store-util.h"
 #include "store/store.h" // do_cmd_store() がある。後で移設する.
 #include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-special-process.h"

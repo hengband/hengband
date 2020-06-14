@@ -2,6 +2,7 @@
 #include "game-option/input-options.h"
 #include "io/input-key-requester.h"
 #include "system/angband.h"
+#include "util/int-char-converter.h"
 
 /*
  * GH

@@ -23,6 +23,7 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 
 /*!
  * @brief オブジェクトの発動効果名称を返す（サブルーチン/ブレス）

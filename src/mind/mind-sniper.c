@@ -22,6 +22,7 @@
 #include "player/player-status.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 

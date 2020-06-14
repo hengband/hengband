@@ -11,6 +11,7 @@
 #include "main/sound-of-music.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 #include "world/world.h"
 
 /* The next "free" index to use */

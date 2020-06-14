@@ -15,6 +15,7 @@
 #include "knowledge/knowledge-uniques.h"
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
 /*

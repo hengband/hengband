@@ -1,4 +1,5 @@
 ﻿#include "util/string-processor.h"
+#include "util/int-char-converter.h"
 
 /*!
  * 10進数から16進数への変換テーブル /

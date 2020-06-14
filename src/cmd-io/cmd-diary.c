@@ -11,6 +11,7 @@
 #include "player/player-personality.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
+#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

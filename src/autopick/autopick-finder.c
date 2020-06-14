@@ -16,6 +16,7 @@
 #include "object/object-flavor.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 
  /*
   * @brief 与えられたアイテムが自動拾いのリストに登録されているかどうかを検索する

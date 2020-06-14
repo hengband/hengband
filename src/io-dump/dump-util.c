@@ -4,6 +4,7 @@
 #include "term/term-color-types.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
+#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
 TERM_COLOR attr_idx = 0;

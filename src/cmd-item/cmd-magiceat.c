@@ -75,6 +75,7 @@
 #include "spell/spells3.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
 /*!

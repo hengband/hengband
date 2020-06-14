@@ -7,6 +7,7 @@
 
 #include "system/angband.h"
 #include "game-option/runtime-arguments.h"
+#include "util/int-char-converter.h"
 
 #ifndef __MAKEDEPEND__
 #include <X11/Xlib.h>

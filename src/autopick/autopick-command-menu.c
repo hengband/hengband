@@ -12,6 +12,7 @@
 #include "system/angband.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 
 /*!
  * @brief 自動拾いエディタの画面を再描画する

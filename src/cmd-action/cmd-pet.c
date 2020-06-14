@@ -35,6 +35,7 @@
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "view/display-main-window.h"
+#include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"

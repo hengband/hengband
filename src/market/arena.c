@@ -19,6 +19,7 @@
 #include "monster/monster-util.h"
 #include "player/player-effects.h"
 #include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

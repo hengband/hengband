@@ -5,6 +5,7 @@
 #include "io/input-key-acceptor.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 
 static const byte REALM_SELECT_CANCEL = 255;
 
