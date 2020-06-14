@@ -1,7 +1,7 @@
 ﻿#include "spell-kind/spells-charm.h"
 #include "effect/effect-characteristics.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief チャーム・モンスター(1体)

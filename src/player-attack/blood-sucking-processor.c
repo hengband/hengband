@@ -12,6 +12,8 @@
 #include "player/player-effects.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 生命のあるモンスターから吸血できるか判定する

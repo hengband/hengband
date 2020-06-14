@@ -14,6 +14,7 @@
 #include "io/files-util.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
@@ -23,7 +24,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-random.h"
@@ -31,8 +32,9 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/process-effect.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
-#include "util/util.h"
+#include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];

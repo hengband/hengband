@@ -16,6 +16,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-building/cmd-inn.h"
+#include "core/asking-player.h"
 #include "core/scores.h"
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"
@@ -25,7 +26,10 @@
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "market/arena.h"
 #include "market/bounty.h"
 #include "market/building-actions-table.h"
@@ -45,15 +49,17 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells3.h"
-#include "util/util.h"
+#include "system/building-type-definition.h"
+#include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
+#include "util/int-char-converter.h"
+#include "view/display-messages.h"
 #include "world/world.h"
-
-building_type building[MAX_BLDG];
 
 MONRACE_IDX battle_mon[4];
 u32b mon_odds[4];

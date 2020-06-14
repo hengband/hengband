@@ -24,9 +24,10 @@
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
-#include "util/util.h"
+#include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief モンスター回復処理

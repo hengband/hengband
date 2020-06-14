@@ -1,11 +1,18 @@
 ﻿#include "cmd-io/cmd-diary.h"
 #include "cmd-io/diary-subtitle-table.h"
+#include "core/asking-player.h"
 #include "core/show-file.h"
 #include "game-option/play-record-options.h"
+#include "main/sound-of-music.h"
 #include "io/chuukei.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "player/player-personality.h"
+#include "term/screen-processor.h"
+#include "util/angband-files.h"
+#include "util/int-char-converter.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

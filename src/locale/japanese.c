@@ -4,9 +4,9 @@
  *  @date 2014/07/07
  */
 
-#include "system/angband.h"
-#include "util/util.h"
-#include "japanese.h"
+#include "locale/japanese.h"
+#include "util/string-processor.h"
+#include "view/display-messages.h"
 
 #ifdef JP
 

@@ -16,6 +16,7 @@
 
 #include "system/angband.h"
 #include "spell/spells-util.h"
+#include "floor/geometry.h"
 
  /*
   * A single "grid" in a Cave
@@ -153,10 +154,6 @@ typedef struct
 #define CONVERT_TYPE_STREAM1 5
 #define CONVERT_TYPE_STREAM2 6
 
-/* Externs */
-
-extern bool new_player_spot(player_type *creature_ptr);
-
 /* Types of doors */
 #define DOOR_DEFAULT    -1
 #define DOOR_DOOR        0
@@ -165,14 +162,15 @@ extern bool new_player_spot(player_type *creature_ptr);
 
 #define MAX_DOOR_TYPES   3
 
-extern void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr);
+extern bool new_player_spot(player_type *creature_ptr);
+extern pos_list tmp_pos;
 
+extern void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr);
 extern bool is_known_trap(player_type *player_ptr, grid_type *g_ptr);
 extern bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr);
 extern bool is_mirror_grid(grid_type *g_ptr);
 extern bool is_glyph_grid(grid_type *g_ptr);
 extern bool is_explosive_rune_grid(grid_type *g_ptr);
-
 extern bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
 
 /*!

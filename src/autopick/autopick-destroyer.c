@@ -19,7 +19,9 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "player/player-move.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
+#include "util/string-processor.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief クラス依存のアイテム破壊を調べる

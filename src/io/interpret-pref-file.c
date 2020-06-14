@@ -6,14 +6,19 @@
 
 #include "io/interpret-pref-file.h"
 #include "birth/character-builder.h"
+#include "cmd-io/macro-util.h"
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
 #include "io/gf-descriptions.h"
+#include "io/input-key-requester.h"
 #include "io/tokenizer.h"
 #include "object/object-kind.h"
 #include "system/game-option-types.h"
 #include "term/gameterm.h"
+#include "util/quarks.h"
+#include "util/string-processor.h"
 #include "view/display-main-window.h" // 暫定。apply_default_feat_lighting()。後で消す.
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #define MAX_MACRO_CHARS 16128 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).

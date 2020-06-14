@@ -14,6 +14,7 @@
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object/item-use-flags.h"
@@ -40,12 +41,14 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "store/rumor.h"
 #include "sv-definition/sv-scroll-types.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
+#include "util/angband-files.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

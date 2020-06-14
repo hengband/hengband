@@ -1,41 +1,12 @@
 ﻿/*!
- * @file mspells1.c
  * @brief モンスター魔法の実装 / Monster spells (attack player)
  * @date 2014/01/17
  * @author
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
- * This software may be copied and distributed for educational, research,\n
- * and not for profit purposes provided that this copyright and statement\n
- * are included in all such copies.  Other copyrights may also apply.\n
- * 2014 Deskull rearranged comment for Doxygen.\n
- * @details
- * And now for Intelligent monster attacks (including spells).\n
- *\n
- * Original idea and code by "DRS" (David Reeves Sward).\n
- * Major modifications by "BEN" (Ben Harrison).\n
- *\n
- * Give monsters more intelligent attack/spell selection based on\n
- * observations of previous attacks on the player, and/or by allowing\n
- * the monster to "cheat" and know the player status.\n
- *\n
- * Maintain an idea of the player status, and use that information\n
- * to occasionally eliminate "ineffective" spell attacks.  We could\n
- * also eliminate ineffective normal attacks, but there is no reason\n
- * for the monster to do this, since he gains no benefit.\n
- * Note that MINDLESS monsters are not allowed to use this code.\n
- * And non-INTELLIGENT monsters only use it partially effectively.\n
- *\n
- * Actually learn what the player resists, and use that information\n
- * to remove attacks or spells before using them.  This will require\n
- * much less space, if I am not mistaken.  Thus, each monster gets a\n
- * set of 32 bit flags, "smart", build from the various "SM_*" flags.\n
- *\n
- * This has the added advantage that attacks and spells are related.\n
- * The "smart_learn" option means that the monster "learns" the flags\n
- * that should be set, and "smart_cheat" means that he "knows" them.\n
- * So "smart_cheat" means that the "smart" field is always up to date,\n
- * while "smart_learn" means that the "smart" field is slowly learned.\n
- * Both of them have the same effect on the "choose spell" routine.\n
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
+ * This software may be copied and distributed for educational, research,
+ * and not for profit purposes provided that this copyright and statement
+ * are included in all such copies.  Other copyrights may also apply.
+ * 2014 Deskull rearranged comment for Doxygen.
  */
 
 #include "system/angband.h"
@@ -66,16 +37,17 @@
 #include "object-enchant/object-curse.h"
 #include "player/player-class.h"
 #include "player/player-move.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
 #include "spell/range-calc.h"
-#include "spell/spells-type.h"
-#include "util/util.h"
+#include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #define DO_SPELL_NONE    0
@@ -275,7 +247,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 
 	if (smart & (SM_RES_NETH))
 	{
-		if (PRACE_IS_(target_ptr, RACE_SPECTRE))
+		if (is_specific_player_race(target_ptr, RACE_SPECTRE))
 		{
 			f4 &= ~(RF4_BR_NETH);
 			f5 &= ~(RF5_BA_NETH);
@@ -297,7 +269,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 
 	if (smart & (SM_RES_DARK))
 	{
-		if (PRACE_IS_(target_ptr, RACE_VAMPIRE))
+		if (is_specific_player_race(target_ptr, RACE_VAMPIRE))
 		{
 			f4 &= ~(RF4_BR_DARK);
 			f5 &= ~(RF5_BA_DARK);

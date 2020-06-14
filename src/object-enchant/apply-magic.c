@@ -27,6 +27,7 @@
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
 /*!

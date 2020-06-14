@@ -1,9 +1,11 @@
-#include "system/angband.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-initializer.h"
 #include "autopick/autopick-pref-processor.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
+#include "util/angband-files.h"
+#include "util/string-processor.h"
+#include "view/display-messages.h"
 
 /*
  * Load an autopick preference file

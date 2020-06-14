@@ -18,6 +18,7 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 
 static TERM_COLOR likert_color = TERM_WHITE;
 

@@ -7,6 +7,7 @@
 #include "player/eldritch-horror.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "locale/vowel-checker.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
@@ -20,6 +21,7 @@
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "player/mimic-info-table.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!
@@ -121,12 +123,12 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         }
 
         see_eldritch_horror(m_name, r_ptr);
-        if (PRACE_IS_(creature_ptr, RACE_IMP) || PRACE_IS_(creature_ptr, RACE_BALROG) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)
+        if (is_specific_player_race(creature_ptr, RACE_IMP) || is_specific_player_race(creature_ptr, RACE_BALROG) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)
             || current_world_ptr->wizard)
             return;
 
-        if (PRACE_IS_(creature_ptr, RACE_SKELETON) || PRACE_IS_(creature_ptr, RACE_ZOMBIE) || PRACE_IS_(creature_ptr, RACE_VAMPIRE)
-            || PRACE_IS_(creature_ptr, RACE_SPECTRE) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)) {
+        if (is_specific_player_race(creature_ptr, RACE_SKELETON) || is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_VAMPIRE)
+            || is_specific_player_race(creature_ptr, RACE_SPECTRE) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)) {
             if (saving_throw(25 + creature_ptr->lev))
                 return;
         }

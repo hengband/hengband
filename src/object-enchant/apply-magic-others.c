@@ -21,6 +21,8 @@
 #include "object/object-kind.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief その他雑多のオブジェクトに生成ランクごとの強化を与えるサブルーチン

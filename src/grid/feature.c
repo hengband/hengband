@@ -1,4 +1,5 @@
 ﻿#include "grid/feature.h"
+#include "util/bit-flags-calculator.h"
 
 /*** Terrain feature variables ***/
 

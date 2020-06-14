@@ -13,6 +13,8 @@
 #include "monster-race/race-indice-types.h"
 #include "mspell/monster-spell.h"
 #include "spell/spells-summon.h"
+#include "system/alloc-entries.h"
+#include "util/bit-flags-calculator.h"
 
 MONSTER_IDX hack_m_idx = 0; /* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;

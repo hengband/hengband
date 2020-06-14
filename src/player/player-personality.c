@@ -4,7 +4,7 @@
  * @brief 性格情報 /
  * Player Character
  */
-const player_seikaku seikaku_info[MAX_SEIKAKU] =
+const player_personality personality_info[MAX_PERSONALITIES] =
 {
 	{
 #ifdef JP
@@ -138,4 +138,4 @@ const player_seikaku seikaku_info[MAX_SEIKAKU] =
 
 };
 
-const player_seikaku *ap_ptr;
+const player_personality *ap_ptr;

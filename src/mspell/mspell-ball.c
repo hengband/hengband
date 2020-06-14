@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-ball.h"
 #include "floor/floor.h"
+#include "main/sound-of-music.h"
 #include "mind/drs-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
@@ -9,7 +10,8 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief RF4_BA_NUKEの処理。放射能球。 /

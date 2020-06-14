@@ -3,6 +3,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief プレイヤーからモンスターへの打撃クリティカル判定 /

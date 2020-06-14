@@ -4,7 +4,8 @@
 #include "grid/feature.h"
 #include "spell/process-effect.h"
 #include "spell-kind/earthquake.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief ドア生成処理(プレイヤー中心に周囲1マス) / Hooks -- affect adjacent grids (radius 1 ball attack)

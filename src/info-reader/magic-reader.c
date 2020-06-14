@@ -1,4 +1,5 @@
 ﻿#include "info-reader/magic-reader.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief 職業魔法情報(m_info)のパース関数 /

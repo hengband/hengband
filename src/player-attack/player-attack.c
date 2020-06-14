@@ -11,7 +11,9 @@
 #include "combat/martial-arts-table.h"
 #include "combat/slaying.h"
 #include "floor/floor.h"
+#include "game-option/cheat-types.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
 #include "mind/monk-attack.h"
@@ -35,6 +37,8 @@
 #include "spell-kind/earthquake.h"
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 static player_attack_type *initialize_player_attack_type(

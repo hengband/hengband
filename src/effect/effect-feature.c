@@ -5,11 +5,14 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster/monster-update.h"
 #include "player/player-effects.h"
 #include "room/rooms.h"
 #include "spell/process-effect.h" // 暫定、後で消す.
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

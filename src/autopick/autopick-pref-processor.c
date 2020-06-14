@@ -1,7 +1,7 @@
-﻿#include "system/angband.h"
-#include "autopick/autopick-pref-processor.h"
-#include "autopick/autopick-util.h"
+﻿#include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick-entry.h"
+#include "autopick/autopick-util.h"
+#include "system/angband.h"
 
 /*
  *  Process line for auto picker/destroyer.

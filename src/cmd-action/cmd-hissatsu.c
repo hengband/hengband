@@ -12,11 +12,15 @@
 
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
+#include "io/command-repeater.h"
+#include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
 #include "object/item-use-flags.h"
 #include "player/player-effects.h"
@@ -24,8 +28,10 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 

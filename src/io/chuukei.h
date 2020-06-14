@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #ifdef CHUUKEI
 extern bool chuukei_server;
 extern bool chuukei_client;

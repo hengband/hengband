@@ -11,7 +11,9 @@
 #include "player/player-effects.h"
 #include "spell/process-effect.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

@@ -27,6 +27,8 @@
 #include "monster/monster-util.h"
 #include "object/object-generator.h"
 #include "pet/pet-fall-off.h"
+#include "system/alloc-entries.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */

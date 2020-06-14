@@ -10,6 +10,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "combat/attack-power-table.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -19,8 +20,10 @@
 #include "grid/feature.h"
 #include "inventory/inventory-object.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "mind/mind-force-trainer.h"
 #include "monster-race/race-flags1.h"
@@ -52,9 +55,9 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "player/player-personalities-table.h"
+#include "player/player-personalities-types.h"
 #include "player/player-personality.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/race-info-table.h"
 #include "realm/realm-hex-numbers.h"
@@ -69,8 +72,12 @@
 #include "spell/technic-info-table.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
+#include "util/quarks.h"
+#include "util/string-processor.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!
@@ -1452,8 +1459,8 @@ void calc_bonuses(player_type *creature_ptr)
 	case CLASS_FORCETRAINER:
 		if (!(heavy_armor(creature_ptr)))
 		{
-			if (!(PRACE_IS_(creature_ptr, RACE_KLACKON) ||
-				PRACE_IS_(creature_ptr, RACE_SPRITE) ||
+			if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) ||
+				is_specific_player_race(creature_ptr, RACE_SPRITE) ||
 				(creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
 				new_speed += (creature_ptr->lev) / 10;
 
@@ -1503,8 +1510,8 @@ void calc_bonuses(player_type *creature_ptr)
 			(!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite))
 		{
 			new_speed += 3;
-			if (!(PRACE_IS_(creature_ptr, RACE_KLACKON) ||
-				PRACE_IS_(creature_ptr, RACE_SPRITE) ||
+			if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) ||
+				is_specific_player_race(creature_ptr, RACE_SPRITE) ||
 				(creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
 				new_speed += (creature_ptr->lev) / 10;
 			creature_ptr->skill_stl += (creature_ptr->lev) / 10;
@@ -2393,7 +2400,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 	if (creature_ptr->sh_fire) creature_ptr->lite = TRUE;
 
-	if (PRACE_IS_(creature_ptr, RACE_GOLEM) || PRACE_IS_(creature_ptr, RACE_ANDROID))
+	if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID))
 	{
 		creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
 		creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
@@ -3309,7 +3316,7 @@ void calc_bonuses(player_type *creature_ptr)
 	creature_ptr->skill_thb += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 	creature_ptr->skill_tht += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 
-	if ((PRACE_IS_(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE))
+	if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE))
 	{
 		creature_ptr->cursed &= ~(TRC_AGGRAVATE);
 		creature_ptr->skill_stl = MIN(creature_ptr->skill_stl - 3, (creature_ptr->skill_stl + 2) / 2);

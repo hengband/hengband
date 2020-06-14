@@ -14,7 +14,7 @@
 #include "io/save.h"
 #include "birth/quick-start.h"
 #include "cmd-building/cmd-building.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-events.h"
@@ -41,8 +41,10 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"
-#include "util/util.h"
+#include "util/angband-files.h"
+#include "util/quarks.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
  /*

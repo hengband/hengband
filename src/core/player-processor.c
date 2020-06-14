@@ -7,7 +7,9 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "inventory/pack-overflow.h"
+#include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
+#include "io/input-key-requester.h"
 #include "mind/mind-force-trainer.h"
 #include "core/speed-table.h"
 #include "monster-race/race-flags1.h"
@@ -24,10 +26,12 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
-#include "spell/music-checker.h"
+#include "spell-realm/spells-song.h"
 #include "spell-kind/spells-random.h"
 #include "spell-realm/spells-hex.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 bool load = TRUE;
 bool can_save = FALSE;

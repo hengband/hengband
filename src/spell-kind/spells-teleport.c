@@ -8,6 +8,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-save.h"
+#include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
@@ -17,6 +18,7 @@
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "core/speed-table.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags-resistance.h"
@@ -36,7 +38,9 @@
 #include "player/avatar.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

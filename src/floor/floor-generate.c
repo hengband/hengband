@@ -22,6 +22,7 @@
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-types.h"
 #include "game-option/game-play-options.h"
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
@@ -44,7 +45,9 @@
 #include "player/player-status.h"
 #include "room/rooms.h"
 #include "system/system-variables.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 int dun_tun_rnd; 

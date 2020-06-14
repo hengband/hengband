@@ -14,6 +14,7 @@
 #include "monster/monster-info.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-skill.h"
+#include "view/display-messages.h"
 
 /*!
  * 荒馬慣らし

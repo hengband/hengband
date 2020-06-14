@@ -17,7 +17,7 @@
 #include "mspell/mspell-summon.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief モンスターからプレイヤーへの呪文の振り分け関数。 /

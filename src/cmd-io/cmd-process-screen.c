@@ -6,12 +6,17 @@
 
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd/cmd-draw.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
+#include "view/display-messages.h"
 
 // Encode the screen colors
 static char hack[17] = "dwsorgbuDWvyRGBU";

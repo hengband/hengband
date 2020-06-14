@@ -11,6 +11,7 @@
 #include "monster/monster-status.h"
 #include "system/monster-type-definition.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief モンスター情報を配列内移動する / Move an object from index i1 to index i2 in the object list

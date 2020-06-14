@@ -41,6 +41,7 @@
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
@@ -53,7 +54,8 @@
 #include "room/rooms-special.h"
 #include "room/rooms-trap.h"
 #include "room/rooms-vault.h"
-#include "util/util.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
  /*!
   * 各部屋タイプの生成比定義

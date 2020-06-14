@@ -1,9 +1,10 @@
 ﻿#include "temporary-resistances.h"
 #include "object-enchant/tr-types.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-hex.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief プレイヤーの一時的魔法効果による耐性を返す
@@ -30,7 +31,7 @@ void tim_player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 	if (IS_FAST(creature_ptr) || creature_ptr->slow)
 		add_flag(flgs, TR_SPEED);
 
-	if (is_oppose_acid(creature_ptr) && !(creature_ptr->special_defense & DEFENSE_ACID) && !(PRACE_IS_(creature_ptr, RACE_YEEK) && (creature_ptr->lev > 19)))
+	if (is_oppose_acid(creature_ptr) && !(creature_ptr->special_defense & DEFENSE_ACID) && !(is_specific_player_race(creature_ptr, RACE_YEEK) && (creature_ptr->lev > 19)))
 		add_flag(flgs, TR_RES_ACID);
 	if (is_oppose_elec(creature_ptr) && !(creature_ptr->special_defense & DEFENSE_ELEC))
 		add_flag(flgs, TR_RES_ELEC);

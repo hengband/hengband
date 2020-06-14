@@ -9,15 +9,20 @@
 #include "autopick/autopick-reader-writer.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
+#include "io/command-repeater.h"
+#include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
@@ -39,8 +44,11 @@
 #include "spell/spells-util.h"
 #include "spell/spells3.h"
 #include "spell/technic-info-table.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
+#include "util/buffer-shaper.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
  /*!
   * 魔法領域フラグ管理テーブル /
@@ -702,7 +710,7 @@ void do_cmd_browse(player_type *caster_ptr)
 		Term_erase(14, 12, 255);
 		Term_erase(14, 11, 255);
 
-		roff_to_buf(exe_spell(caster_ptr, use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
+		shape_buffer(exe_spell(caster_ptr, use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
 
 		for (j = 0, line = 11; temp[j]; j += 1 + strlen(&temp[j]))
 		{

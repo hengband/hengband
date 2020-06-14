@@ -1,6 +1,7 @@
 ﻿#include "floor/floor.h"
 #include "floor/geometry.h"
 #include "game-option/text-display-options.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * キーパッドの方向を南から反時計回り順に列挙 / Global array for looping through the "keypad directions"

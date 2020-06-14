@@ -17,6 +17,7 @@
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-effects.h"
+#include "view/display-messages.h"
 #include "world/world-object.h"
 
 void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)

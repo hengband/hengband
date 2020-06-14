@@ -8,9 +8,10 @@
 #include "game-option/cheat-options.h"
 #include "knowledge-items.h"
 #include "io-dump/dump-util.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "core/show-file.h"
 #include "monster-race/race-flags1.h"
+#include "util/angband-files.h"
 
 /*
  * Display known uniques

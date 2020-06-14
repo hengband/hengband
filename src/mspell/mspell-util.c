@@ -2,6 +2,7 @@
 #include "monster/monster-info.h"
 #include "mspell/monster-spell.h"
 #include "player/player-move.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief プレイヤーがモンスターを見ることができるかの判定 /

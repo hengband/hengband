@@ -16,6 +16,7 @@
 #include "object/object-kind.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-ring-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief 装飾品系オブジェクトに生成ランクごとの強化を与えるサブルーチン

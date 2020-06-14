@@ -1,6 +1,7 @@
 ﻿#include "perception/identification.h"
 #include "art-definition/art-protector-types.h"
 #include "game-option/special-options.h"
+#include "io/input-key-acceptor.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/artifact.h"
@@ -16,6 +17,9 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
+#include "util/buffer-shaper.h"
 
 /*!
  * @brief オブジェクトの*鑑定*内容を詳述して表示する /
@@ -36,7 +40,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     int trivial_info = 0;
     object_flags(o_ptr, flgs);
 
-    roff_to_buf(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) : (k_text + k_info[o_ptr->k_idx].text), 77 - 15, temp, sizeof(temp));
+    shape_buffer(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) : (k_text + k_info[o_ptr->k_idx].text), 77 - 15, temp, sizeof(temp));
 
     int i = 0;
     for (int j = 0; temp[j]; j += 1 + strlen(&temp[j])) {

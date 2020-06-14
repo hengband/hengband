@@ -22,6 +22,8 @@
 #include "perception/object-perception.h"
 #include "player/player-effects.h"
 #include "room/rooms.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 #include "world/world-object.h"
 #include "world/world.h"
 
@@ -1145,7 +1147,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
  * by "update_view_los()", and very different from the one used by "los()".
  * </pre>
  */
-sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
+int project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
 {
 	if ((x1 == x2) && (y1 == y2)) return 0;
 

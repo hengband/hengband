@@ -1,7 +1,12 @@
 ﻿#include "birth/birth-select-realm.h"
 #include "birth/birth-explanations-table.h"
 #include "birth/birth-util.h"
+#include "core/asking-player.h"
+#include "io/input-key-acceptor.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/buffer-shaper.h"
+#include "util/int-char-converter.h"
 
 static const byte REALM_SELECT_CANCEL = 255;
 
@@ -318,7 +323,7 @@ bool get_player_realms(player_type *creature_ptr)
             break;
 
         cleanup_realm_selection_window();
-        roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 74, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)
@@ -354,7 +359,7 @@ bool get_player_realms(player_type *creature_ptr)
             break;
 
         cleanup_realm_selection_window();
-        roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 74, temp, sizeof(temp));
+        shape_buffer(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)

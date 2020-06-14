@@ -1,6 +1,12 @@
 ﻿#include "io-dump/dump-util.h"
+#include "floor/geometry.h"
+#include "game-option/keymap-directory-getter.h"
 #include "game-option/special-options.h"
 #include "term/term-color-types.h"
+#include "term/screen-processor.h"
+#include "util/angband-files.h"
+#include "util/int-char-converter.h"
+#include "view/display-messages.h"
 
 TERM_COLOR attr_idx = 0;
 SYMBOL_CODE char_idx = 0;

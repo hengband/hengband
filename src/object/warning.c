@@ -1,5 +1,6 @@
 ﻿#include "object/warning.h"
 #include "art-definition/art-sword-types.h"
+#include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "game-option/input-options.h"
@@ -22,10 +23,11 @@
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-move.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "player/player-status.h"
-#include "spell/spells-type.h"
-#include "util/util.h"
+#include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /
@@ -87,7 +89,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
 		if (target_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
 		if (target_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
-		if (PRACE_IS_(target_ptr, RACE_ANDROID)) dam += dam / 3;
+		if (is_specific_player_race(target_ptr, RACE_ANDROID)) dam += dam / 3;
 		if (target_ptr->resist_elec) dam = (dam + 2) / 3;
 		if (is_oppose_elec(target_ptr)) dam = (dam + 2) / 3;
 		break;
@@ -135,7 +137,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 		}
 
 		if (target_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
-		if (PRACE_IS_(target_ptr, RACE_ENT)) dam += dam / 3;
+		if (is_specific_player_race(target_ptr, RACE_ENT)) dam += dam / 3;
 		if (target_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 		if (target_ptr->resist_fire) dam = (dam + 2) / 3;
 		if (is_oppose_fire(target_ptr)) dam = (dam + 2) / 3;
@@ -158,14 +160,14 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
 	case GF_LITE:
 		if (target_ptr->resist_lite) dam /= 2; /* Worst case of 4 / (d4 + 7) */
-		if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE)) dam *= 2;
-		else if (PRACE_IS_(target_ptr, RACE_S_FAIRY)) dam = dam * 4 / 3;
+		if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE)) dam *= 2;
+		else if (is_specific_player_race(target_ptr, RACE_S_FAIRY)) dam = dam * 4 / 3;
 
 		if (target_ptr->wraith_form) dam *= 2;
 		break;
 
 	case GF_DARK:
-		if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form)
+		if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form)
 		{
 			dam = 0;
 			ignore_wraith_form = TRUE;
@@ -190,7 +192,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 		break;
 
 	case GF_NETHER:
-		if (PRACE_IS_(target_ptr, RACE_SPECTRE))
+		if (is_specific_player_race(target_ptr, RACE_SPECTRE))
 		{
 			dam = 0;
 			ignore_wraith_form = TRUE;

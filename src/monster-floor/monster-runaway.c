@@ -15,6 +15,7 @@
 #include "monster-floor/monster-remover.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-move.h"
+#include "view/display-messages.h"
 
  /*!
   * @brief HPが1/3未満になった有効的なユニークモンスターの逃走処理を行う

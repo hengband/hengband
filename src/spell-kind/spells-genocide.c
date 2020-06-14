@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-genocide.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
@@ -17,6 +18,7 @@
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief モンスターへの単体抹殺処理サブルーチン / Delete a non-unique/non-quest monster

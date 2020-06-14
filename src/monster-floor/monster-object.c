@@ -19,6 +19,8 @@
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief オブジェクトのフラグを更新する

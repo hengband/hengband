@@ -18,6 +18,7 @@
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
@@ -26,8 +27,12 @@
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "io/command-repeater.h"
+#include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-mindcrafter.h"
 #include "mind/mind-mirror-master.h"
@@ -54,10 +59,13 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
+#include "util/buffer-shaper.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =
@@ -2052,7 +2060,7 @@ void do_cmd_mind_browse(player_type *caster_ptr)
 		Term_erase(12, 17, 255);
 		Term_erase(12, 16, 255);
 
-		roff_to_buf(mind_tips[use_mind][n], 62, temp, sizeof(temp));
+		shape_buffer(mind_tips[use_mind][n], 62, temp, sizeof(temp));
 		for(j=0, line = 17;temp[j];j+=(1+strlen(&temp[j])))
 		{
 			prt(&temp[j], line, 15);

@@ -14,6 +14,7 @@
 #include "mutation/mutation.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
@@ -40,8 +41,8 @@
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "player/player-personalities-table.h"
-#include "player/player-races-table.h"
+#include "player/player-personalities-types.h"
+#include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
 #include "spell-kind/earthquake.h"
@@ -53,9 +54,9 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

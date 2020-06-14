@@ -1,6 +1,9 @@
 ﻿#include "market/poker.h"
+#include "io/input-key-acceptor.h"
 #include "system/angband.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
 
 /*!
  * ポーカーの現在の手札ID

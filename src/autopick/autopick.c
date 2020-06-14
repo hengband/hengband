@@ -16,6 +16,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-menu-data-table.h"
 #include "autopick/autopick-methods-table.h"
+#include "core/asking-player.h"
 #include "floor/floor.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
@@ -23,7 +24,8 @@
 #include "object/object-mark-types.h"
 #include "object/object-info.h"
 #include "player/player-move.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
+#include "view/display-messages.h"
 
 /*
  *  Auto-destroy marked item

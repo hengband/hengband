@@ -7,6 +7,7 @@
 #include "mspell/mspell-special.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "melee/melee-postprocess.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-remover.h"
@@ -24,7 +25,8 @@
 #include "player/player-move.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief バーノール・ルパートのRF6_SPECIALの処理。分裂・合体。 /

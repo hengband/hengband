@@ -1,3 +1,5 @@
 ﻿#pragma once
 
-extern void plural_aux(char * Name);
+#include "system/angband.h"
+
+void plural_aux(char * Name);

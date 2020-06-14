@@ -35,6 +35,7 @@
 #include "cmd/cmd-basic.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-visuals.h"
+#include "core/asking-player.h"
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
@@ -46,11 +47,14 @@
 #include "game-option/runtime-arguments.h"
 #include "inventory/player-inventory.h"
 #include "io/chuukei.h"
+#include "io/command-repeater.h"
 #include "io/files-util.h"
+#include "io/input-key-requester.h" // todo 相互依存している、後で何とかする.
 #include "io/write-diary.h"
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-quests.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind.h" // do_cmd_mind_browse() がある。後で移設する.
 #include "mind/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
@@ -61,7 +65,10 @@
 #include "spell/spells-object.h"
 #include "store/store-util.h"
 #include "store/store.h" // do_cmd_store() がある。後で移設する.
+#include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "wizard/wizard-special-process.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"

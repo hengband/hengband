@@ -1,5 +1,4 @@
 ﻿/*!
- * @file racial.c
  * @brief レイシャルと突然変異の技能処理 / Racial powers (and mutations)
  * @date 2014/01/08
  * @author
@@ -16,11 +15,16 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
+#include "io/command-repeater.h"
+#include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
+#include "main/sound-of-music.h"
 #include "melee/melee-postprocess.h"
 #include "mind/mind-cavalry.h"
 #include "mind/mind-force-trainer.h"
@@ -39,7 +43,7 @@
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-detection.h"
@@ -51,10 +55,12 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 修行僧の構え設定処理

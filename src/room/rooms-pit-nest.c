@@ -1,9 +1,10 @@
 ﻿#include "room/rooms-pit-nest.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
 #include "game-option/cheat-options.h"
+#include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/race-flags2.h"
@@ -17,7 +18,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "room/pit-nest-kinds-table.h"
 #include "rooms.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める

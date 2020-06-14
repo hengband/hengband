@@ -12,11 +12,13 @@
 
 #include "core/scores.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/asking-player.h"
 #include "core/turn-compensator.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
+#include "io/input-key-acceptor.h"
 #include "io/report.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
@@ -28,8 +30,12 @@
 #include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "system/angband-version.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
+#include "util/angband-files.h"
+#include "util/int-char-converter.h"
+#include "util/string-processor.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
  /*
@@ -274,7 +280,7 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 /*sprintf(out_val, "%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
 			sprintf(out_val, "%3d.%9s  %s%s%s - %s%s (レベル %d)",
 				place, the_score.pts,
-				seikaku_info[pa].title, (seikaku_info[pa].no ? "の" : ""),
+				personality_info[pa].title, (personality_info[pa].no ? "の" : ""),
 				the_score.who,
 				race_info[pr].title, class_info[pc].title,
 				clev);
@@ -282,7 +288,7 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 #else
 			sprintf(out_val, "%3d.%9s  %s %s the %s %s, Level %d",
 				place, the_score.pts,
-				seikaku_info[pa].title,
+				personality_info[pa].title,
 				the_score.who, race_info[pr].title, class_info[pc].title,
 				clev);
 #endif
@@ -506,7 +512,7 @@ errr top_twenty(player_type *current_player_ptr)
 	sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
 	sprintf(the_score.p_r, "%2d", MIN(current_player_ptr->prace, MAX_RACES));
 	sprintf(the_score.p_c, "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
-	sprintf(the_score.p_a, "%2d", MIN(current_player_ptr->pseikaku, MAX_SEIKAKU));
+	sprintf(the_score.p_a, "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
 
 	/* Save the level and such */
 	sprintf(the_score.cur_lev, "%3d", MIN((u16b)current_player_ptr->lev, 999));
@@ -610,7 +616,7 @@ errr predict_score(player_type *current_player_ptr)
 	sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
 	sprintf(the_score.p_r, "%2d", MIN(current_player_ptr->prace, MAX_RACES));
 	sprintf(the_score.p_c, "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
-	sprintf(the_score.p_a, "%2d", MIN(current_player_ptr->pseikaku, MAX_SEIKAKU));
+	sprintf(the_score.p_a, "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
 
 	/* Save the level and such */
 	sprintf(the_score.cur_lev, "%3d", MIN((u16b)current_player_ptr->lev, 999));

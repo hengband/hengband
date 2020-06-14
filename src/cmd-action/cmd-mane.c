@@ -1,5 +1,4 @@
 ﻿/*!
- * @file mane.c
  * @brief ものまねの処理実装 / Imitation code
  * @date 2014/01/14
  * @author
@@ -12,6 +11,7 @@
 
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
@@ -19,6 +19,7 @@
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-describer.h"
@@ -38,9 +39,11 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
-#include "util/util.h"
+#include "spell/spell-types.h"
+#include "term/screen-processor.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 static int damage;
 

@@ -7,6 +7,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief オブジェクトのフラグ類を配列に与える

@@ -16,6 +16,7 @@
 #include "grid/trap.h"
 #include "io/files-util.h"
 #include "locale/japanese.h"
+#include "locale/vowel-checker.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/artifact.h"
@@ -33,7 +34,9 @@
 #include "shoot.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
-#include "util/util.h"
+#include "util/bit-flags-calculator.h"
+#include "util/quarks.h"
+#include "util/string-processor.h"
 #include "world/world.h"
 
  /*!
@@ -595,7 +598,7 @@ char *object_desc_kosuu(char *t, object_type *o_ptr)
  * sprintf(t, "%+d", n), and return a pointer to the terminator.
  * Note that we always print a sign, either "+" or "-".
  */
-static char *object_desc_int(char *t, sint v)
+static char *object_desc_int(char *t, int v)
 {
 	uint p, n;
 

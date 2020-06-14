@@ -2,6 +2,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
+#include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race-hook.h"
@@ -13,7 +14,7 @@
 #include "object/object-kind-hook.h"
 #include "room/rooms.h"
 #include "system/system-variables.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms

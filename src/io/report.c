@@ -6,6 +6,7 @@
  */
 
 #include "io/report.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "core/turn-compensator.h"
 #include "core/visuals-reseter.h"
@@ -14,9 +15,14 @@
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
 #include "io/inet.h"
+#include "io/input-key-acceptor.h"
 #include "player/player-personality.h"
 #include "system/angband-version.h"
+#include "system/system-variables.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
+#include "util/angband-files.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #ifdef WORLD_SCORE

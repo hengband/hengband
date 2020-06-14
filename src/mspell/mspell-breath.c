@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-breath.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/drs-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
@@ -8,7 +9,8 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
 #include "player/player-move.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief RF4_BR_*の処理。各種ブレス。 /

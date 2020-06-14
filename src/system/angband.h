@@ -31,7 +31,7 @@
 #include "term/z-form.h"
 #include "term/z-rand.h"
 #include "term/z-term.h"
-
+#include "locale/language-switcher.h"
 
 /*
  * Include the "Angband" configuration header

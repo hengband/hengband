@@ -1,5 +1,6 @@
 ﻿#include "realm/realm-trump.h"
 #include "cmd-action/cmd-spell.h"
+#include "core/asking-player.h"
 #include "effect/spells-effect-util.h"
 #include "game-option/input-options.h"
 #include "io/targeting.h"
@@ -16,9 +17,9 @@
 #include "spell-kind/spells-floor.h"
 #include "spell-realm/spells-trump.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief トランプ領域魔法の各処理を行う

@@ -11,8 +11,10 @@
 #include "object/object-flavor.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "realm/realm-song-numbers.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!
@@ -51,7 +53,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         take_hit(creature_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound"), -1);
     }
 
-    if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
+    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
         if (!creature_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !IS_INVULN(creature_ptr) && is_daytime()) {
             if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
@@ -87,7 +89,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
 
         if (damage) {
-            if (PRACE_IS_(creature_ptr, RACE_ENT))
+            if (is_specific_player_race(creature_ptr, RACE_ENT))
                 damage += damage / 3;
             if (creature_ptr->resist_fire)
                 damage = damage / 3;
@@ -271,7 +273,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         HIT_POINT damage;
         if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !creature_ptr->immune_fire) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
-            if (PRACE_IS_(creature_ptr, RACE_ENT))
+            if (is_specific_player_race(creature_ptr, RACE_ENT))
                 damage += damage / 3;
             if (creature_ptr->resist_fire)
                 damage = damage / 3;
@@ -282,7 +284,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
         if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !creature_ptr->immune_elec) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
-            if (PRACE_IS_(creature_ptr, RACE_ANDROID))
+            if (is_specific_player_race(creature_ptr, RACE_ANDROID))
                 damage += damage / 3;
             if (creature_ptr->resist_elec)
                 damage = damage / 3;

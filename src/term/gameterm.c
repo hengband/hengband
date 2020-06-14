@@ -1,7 +1,8 @@
 ﻿#include "term/gameterm.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
+#include "util/quarks.h"
+#include "util/string-processor.h"
 
  /*
  * Convert an "attr"/"char" pair into a "pict" (P)

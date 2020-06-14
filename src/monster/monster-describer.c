@@ -1,10 +1,14 @@
 ﻿#include "monster/monster-describer.h"
 #include "floor/floor.h"
 #include "io/files-util.h"
+#include "locale/vowel-checker.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "util/quarks.h"
+#include "util/string-processor.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.

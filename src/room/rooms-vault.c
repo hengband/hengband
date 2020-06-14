@@ -10,6 +10,7 @@
 #include "floor/floor.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
+#include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
@@ -19,7 +20,7 @@
 #include "room/rooms.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*
  * The vault generation arrays

@@ -1,6 +1,8 @@
-﻿#include "system/angband.h"
+﻿#include "io/input-key-acceptor.h"
 #include "market/building-craft-armor.h"
 #include "market/building-util.h"
+#include "term/screen-processor.h"
+#include "util/buffer-shaper.h"
 
 /*!
  * @brief ACから回避率、ダメージ減少率を計算し表示する。 / Evaluate AC
@@ -67,7 +69,7 @@ bool eval_ac(ARMOUR_CLASS iAC)
         put_str(format("%3d", average), row + 2, col);
     }
 
-    roff_to_buf(memo, 70, buf, sizeof(buf));
+    shape_buffer(memo, 70, buf, sizeof(buf));
     for (t = buf; t[0]; t += strlen(t) + 1)
         put_str(t, (row++) + 4, 4);
 

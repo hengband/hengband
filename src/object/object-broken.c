@@ -10,8 +10,9 @@
 #include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "sv-definition/sv-potion-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
 * @brief アイテムが酸で破損するかどうかを判定する

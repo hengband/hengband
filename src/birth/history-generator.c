@@ -1,7 +1,8 @@
 ﻿#include "system/angband.h"
 #include "birth/history-generator.h"
 #include "birth/history.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
+#include "util/buffer-shaper.h"
 
 static int get_history_chart(player_type *creature_ptr)
 {
@@ -139,7 +140,7 @@ void get_history(player_type *creature_ptr)
 
     {
         char temp[64 * 4];
-        roff_to_buf(s, 60, temp, sizeof(temp));
+        shape_buffer(s, 60, temp, sizeof(temp));
         char *t;
         t = temp;
         for (int i = 0; i < 4; i++) {

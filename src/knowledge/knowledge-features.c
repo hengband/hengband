@@ -9,8 +9,12 @@
 #include "dungeon/dungeon.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
+#include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
 #include "world/world.h"
 

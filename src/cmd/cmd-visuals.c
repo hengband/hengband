@@ -1,18 +1,25 @@
 ﻿#include "cmd/cmd-visuals.h"
 #include "cmd/cmd-draw.h"
+#include "core/asking-player.h"
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "knowledge/knowledge-features.h"
 #include "knowledge/knowledge-items.h"
 #include "knowledge/knowledge-monsters.h"
 #include "knowledge/lighting-level-table.h"
+#include "main/sound-of-music.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
+#include "view/display-messages.h"
 
 /*!
  * @brief キャラクタのビジュアルIDを変更する際の対象指定関数

@@ -11,9 +11,11 @@
  */
 
 #include "wizard/wizard-spoiler.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "floor/floor-town.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
+#include "main/sound-of-music.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "object-enchant/artifact.h"
@@ -33,9 +35,14 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
+#include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
+#include "util/int-char-converter.h"
+#include "util/quarks.h"
 #include "view/display-lore.h"
+#include "view/display-messages.h"
 
  /*
   * The spoiler file being created

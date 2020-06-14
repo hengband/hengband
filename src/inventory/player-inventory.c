@@ -1,4 +1,5 @@
 ﻿#include "inventory/player-inventory.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
@@ -8,6 +9,10 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-object.h"
+#include "io/command-repeater.h"
+#include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
+#include "main/sound-of-music.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
@@ -17,9 +22,13 @@
 #include "sv-definition/sv-other-types.h"
 #include "player/player-move.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
+#include "util/int-char-converter.h"
+#include "util/quarks.h"
+#include "util/string-processor.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 bool select_ring_slot;
 

@@ -6,11 +6,12 @@
 
 #include "knowledge/knowledge-items.h"
 #include "core/show-file.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
+#include "io/input-key-acceptor.h"
 #include "knowledge/object-group-table.h"
 #include "object-enchant/artifact.h"
 #include "perception/identification.h"
@@ -21,8 +22,12 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object-enchant/special-object-flags.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*

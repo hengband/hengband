@@ -4,13 +4,14 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "knowledge/knowledge-autopick.h"
-#include "io-dump/dump-util.h"
-#include "core/show-file.h"
-#include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-methods-table.h"
+#include "autopick/autopick-reader-writer.h"
+#include "core/asking-player.h"
+#include "core/show-file.h"
+#include "io-dump/dump-util.h"
+#include "util/angband-files.h"
 
  /*!
   * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /

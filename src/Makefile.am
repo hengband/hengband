@@ -80,6 +80,7 @@ hengband_SOURCES = \
 	cmd-io/cmd-save.c cmd-io/cmd-save.h \
 	cmd-io/diary-subtitle-table.c cmd-io/diary-subtitle-table.h \
 	cmd-io/feeling-table.c cmd-io/feeling-table.h \
+	cmd-io/macro-util.c cmd-io/macro-util.h \
 	\
 	cmd-item/cmd-activate.c cmd-item/cmd-activate.h \
 	cmd-item/cmd-eat.c cmd-item/cmd-eat.h \
@@ -103,20 +104,20 @@ hengband_SOURCES = \
 	combat/vorpal-weapon.c combat/vorpal-weapon.h \
 	combat/shoot.c combat/shoot.h \
 	\
-	core/game-play.c core/game-play.h \
-	core/show-file.c core/show-file.h \
-	core/stuff-handler.c core/stuff-handler.h \
-	core/special-internal-keys.h \
-	core/output-updater.c core/output-updater.h \
+	core/asking-player.c core/asking-player.h \
 	core/game-closer.c core/game-closer.h \
-	core/turn-compensator.c core/turn-compensator.h \
-	core/hp-mp-regenerator.c core/hp-mp-regenerator.h \
+	core/game-play.c core/game-play.h \
 	core/hp-mp-processor.c core/hp-mp-processor.h \
+	core/hp-mp-regenerator.c core/hp-mp-regenerator.h \
 	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
+	core/output-updater.c core/output-updater.h \
 	core/player-processor.c core/player-processor.h \
 	core/scores.c core/scores.h \
-	core/sort.c core/sort.h \
+	core/show-file.c core/show-file.h \
+	core/special-internal-keys.h \
 	core/speed-table.c core/speed-table.h \
+	core/stuff-handler.c core/stuff-handler.h \
+	core/turn-compensator.c core/turn-compensator.h \
 	core/visuals-reseter.c core/visuals-reseter.h \
 	\
 	dungeon/dungeon.c dungeon/dungeon.h \
@@ -161,9 +162,11 @@ hengband_SOURCES = \
 	game-option/auto-destruction-option.c game-option/auto-destruction-option.h \
 	game-option/birth-options.c game-option/birth-options.h \
 	game-option/cheat-options.c game-option/cheat-options.h \
+	game-option/cheat-types.h \
 	game-option/disturbance-options.c game-option/disturbance-options.h \
 	game-option/game-play-options.c game-option/game-play-options.h \
 	game-option/input-options.c game-option/input-options.h \
+	game-option/keymap-directory-getter.c game-option/keymap-directory-getter.h \
 	game-option/map-screen-options.c game-option/map-screen-options.h \
 	game-option/option-flags.c game-option/option-flags.h \
 	game-option/option-types-table.c game-option/option-types-table.h \
@@ -201,24 +204,27 @@ hengband_SOURCES = \
 	inventory/player-inventory.c inventory/player-inventory.h \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
 	\
+	io/chuukei.c io/chuukei.h \
+	io/command-repeater.c io/command-repeater.h \
+	io/exit-panic.c io/exit-panic.h \
 	io/files-util.c io/files-util.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
+	io/inet.c io/inet.h \
+	io/input-key-acceptor.c io/input-key-acceptor.h \
+	io/input-key-processor.c io/input-key-processor.h \
+	io/input-key-requester.c io/input-key-requester.h \
+	io/interpret-pref-file.c io/interpret-pref-file.h \
+	io/load.c io/load.h \
+	io/mutations-dump.c io/mutations-dump.h \
+	io/pref-file-expressor.c io/pref-file-expressor.h \
+	io/read-pref-file.c io/read-pref-file.h \
+	io/report.c io/report.h \
+	io/save.c io/save.h \
+	io/signal-handlers.c io/signal-handlers.h \
 	io/targeting.c io/targeting.h \
 	io/tokenizer.c io/tokenizer.h \
-	io/interpret-pref-file.c io/interpret-pref-file.h \
-	io/read-pref-file.c io/read-pref-file.h \
-	io/exit-panic.c io/exit-panic.h \
-	io/write-diary.c io/write-diary.h \
-	io/mutations-dump.c io/mutations-dump.h \
-	io/report.c io/report.h \
-	io/signal-handlers.c io/signal-handlers.h \
 	io/uid-checker.c io/uid-checker.h \
-	io/input-key-processor.c io/input-key-processor.h \
-	io/load.c io/load.h \
-	io/save.c io/save.h \
-	io/inet.c io/inet.h \
-	io/chuukei.c io/chuukei.h \
-	io/pref-file-expressor.c io/pref-file-expressor.h \
+	io/write-diary.c io/write-diary.h \
 	\
 	io-dump/character-dump.c io-dump/character-dump.h \
 	io-dump/dump-remover.c io-dump/dump-remover.h \
@@ -240,7 +246,10 @@ hengband_SOURCES = \
 	knowledge/monster-group-table.c knowledge/monster-group-table.h \
 	knowledge/object-group-table.c knowledge/object-group-table.h \
 	\
-	locale/japanese.c locale/japanese.h locale/english.c locale/english.h \
+	locale/english.c locale/english.h \
+	locale/japanese.c locale/japanese.h \
+	locale/language-switcher.h \
+	locale/vowel-checker.c locale/vowel-checker.h \
 	\
 	lore/combat-types-setter.c lore/combat-types-setter.h \
 	lore/lore-calculator.c lore/lore-calculator.h \
@@ -251,10 +260,12 @@ hengband_SOURCES = \
 	\
 	main.c main-x11.c main-gcu.c \
 	\
+	main/init.c main/init.h \
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
+	main/sound-of-music.c main/sound-of-music.h \
 	main/x11-gamma-builder.c main/x11-gamma-builder.h \
-	main/init.c main/init.h \
+	main/x11-type-string.c main/x11-type-string.h \
 	\
 	market/arena-info-table.c market/arena-info-table.h \
 	market/building-util.c market/building-util.h \
@@ -415,6 +426,7 @@ hengband_SOURCES = \
 	player/avatar.h player/avatar.c \
 	player/eldritch-horror.c player/eldritch-horror.h \
 	player/mimic-info-table.c player/mimic-info-table.h \
+	player/patron.c player/patron.h \
 	player/process-death.c player/process-death.h \
 	player/process-name.c player/process-name.h \
 	player/race-info-table.c player/race-info-table.h\
@@ -422,19 +434,19 @@ hengband_SOURCES = \
 	player/permanent-resistances.c player/permanent-resistances.h \
 	player/temporary-resistances.c player/temporary-resistances.h \
 	player/digestion-processor.c player/digestion-processor.h \
-	player/player-move.c player/player-move.h \
-	player/player-damage.c player/player-damage.h \
-	player/player-status.c player/player-status.h \
-	player/player-effects.c player/player-effects.h \
-	player/player-skill.c player/player-skill.h \
+	player/player-classes-types.h \
 	player/player-class.c player/player-class.h \
-	player/player-race.c player/player-race.h \
-	player/player-races-table.h \
-	player/player-classes-table.h \
-	player/player-personalities-table.h \
-	player/patron.h player/patron.c \
+	player/player-damage.c player/player-damage.h \
+	player/player-effects.c player/player-effects.h \
+	player/player-move.c player/player-move.h \
 	player/player-personality.c player/player-personality.h \
-	player/player-sex.c player/player-sex.h player/selfinfo.c player/selfinfo.h \
+	player/player-race.c player/player-race.h \
+	player/player-race-types.h \
+	player/player-skill.c player/player-skill.h \
+	player/player-status.c player/player-status.h \
+	player/player-personalities-types.h \
+	player/player-sex.c player/player-sex.h \
+	player/selfinfo.c player/selfinfo.h \
 	\
 	player-attack/player-attack-util.h \
 	player-attack/attack-chaos-effect.c player-attack/attack-chaos-effect.h \
@@ -456,6 +468,7 @@ hengband_SOURCES = \
 	realm/realm-song.c realm/realm-song.h \
 	realm/realm-sorcery.c realm/realm-sorcery.h \
 	realm/realm-trump.c realm/realm-trump.h \
+	realm/realm-types.h \
 	\
 	room/rooms.c room/rooms.h room/rooms-city.c room/rooms-city.h \
 	room/rooms-fractal.c room/rooms-fractal.h \
@@ -471,7 +484,6 @@ hengband_SOURCES = \
 	specific-object/death-scythe.c specific-object/death-scythe.h \
 	specific-object/torch.c specific-object/torch.h \
 	\
-	spell/music-checker.c spell/music-checker.h \
 	spell/process-effect.c spell/process-effect.h \
 	spell/range-calc.c spell/range-calc.h \
 	spell/spells3.c spell/spells3.h \
@@ -482,7 +494,7 @@ hengband_SOURCES = \
 	spell/spells-staff-only.c spell/spells-staff-only.h \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-status.c spell/spells-status.h \
-	spell/spells-type.h spell/spells-util.h \
+	spell/spell-types.h spell/spells-util.h \
 	spell/technic-info-table.c spell/technic-info-table.h \
 	\
 	spell-kind/earthquake.c spell-kind/earthquake.h \
@@ -504,6 +516,7 @@ hengband_SOURCES = \
 	\
 	spell-realm/spells-crusade.c spell-realm/spells-crusade.h \
 	spell-realm/spells-hex.c spell-realm/spells-hex.h \
+	spell-realm/spells-song.c spell-realm/spells-song.h \
 	spell-realm/spells-trump.c spell-realm/spells-trump.h \
 	\
 	store/store.c store/store.h \
@@ -523,23 +536,36 @@ hengband_SOURCES = \
 	sv-definition/sv-wand-types.h sv-definition/sv-weapon-types.h \
 	sv-definition/sv-other-types.h \
 	\
+	system/alloc-entries.c system/alloc-entries.h \
+	system/alloc-entry-definition.h \
 	system/angband.h system/angband-version.h \
+	system/building-type-definition.c system/building-type-definition.h \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
+	system/monster-race-definition.h \
 	system/monster-type-definition.h \
 	system/object-type-definition.h \
 	system/system-variables.c system/system-variables.h \
 	system/gamevalue.h \
 	\
 	term/gameterm.c term/gameterm.h \
+	term/screen-processor.c term/screen-processor.h \
 	term/term-color-types.h \
 	term/z-form.c term/z-form.h term/z-rand.c term/z-rand.h \
 	term/z-term.c term/z-term.h term/z-util.c term/z-util.h \
 	term/z-virt.c term/z-virt.h \
 	\
+	util/angband-files.c util/angband-files.h \
+	util/buffer-shaper.c util/buffer-shaper.h \
+	util/buffer-shaper.c util/buffer-shaper.h \
+	util/bit-flags-calculator.h \
+	util/int-char-converter.h \
 	util/object-sort.c util/object-sort.h \
-	util/util.c util/util.h \
+	util/quarks.c util/quarks.h \
+	util/sort.c util/sort.h \
+	util/string-processor.c util/string-processor.h \
+	util/tag-sorter.c util/tag-sorter.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \
@@ -549,6 +575,7 @@ hengband_SOURCES = \
 	view/display-lore-status.c view/display-lore-status.h \
 	view/display-lore.c view/display-lore.h \
 	view/display-main-window.c view/display-main-window.h \
+	view/display-messages.c view/display-messages.h \
 	view/display-monster-status.c view/display-monster-status.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
 	view/display-player-misc-info.c view/display-player-misc-info.h \

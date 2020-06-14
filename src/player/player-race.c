@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "player/player-race.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 
 const player_race *rp_ptr;
 
@@ -109,3 +109,5 @@ SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr)
 	}
 	return symbol;
 }
+
+bool is_specific_player_race(player_type *creature_ptr, player_race_type prace) { return (!creature_ptr->mimic_form && (creature_ptr->prace == prace)); }

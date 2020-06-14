@@ -1,5 +1,4 @@
 ﻿/*!
- * @file snipe.c
  * @brief スナイパー技能の実装 / Sniping
  * @date 2014/01/18
  * @author
@@ -8,18 +7,25 @@
 
 #include "mind/mind-sniper.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/text-display-options.h"
+#include "io/command-repeater.h"
+#include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/snipe-types.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/monster-race.h"
 #include "player/player-status.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
+#include "util/buffer-shaper.h"
+#include "util/int-char-converter.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 #define MAX_SNIPE_POWERS 16
 
@@ -577,7 +583,7 @@ void do_cmd_snipe_browse(player_type *sniper_ptr)
 		Term_erase(12, 19, 255);
 		Term_erase(12, 18, 255);
 
-		roff_to_buf(snipe_tips[n], 62, temp, sizeof(temp));
+		shape_buffer(snipe_tips[n], 62, temp, sizeof(temp));
 		for(j = 0, line = 19; temp[j]; j += (1 + strlen(&temp[j])))
 		{
 			prt(&temp[j], line, 15);

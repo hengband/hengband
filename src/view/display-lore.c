@@ -17,7 +17,9 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "mspell/mspell-type.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

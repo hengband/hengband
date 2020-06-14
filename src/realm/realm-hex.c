@@ -1,5 +1,4 @@
 ﻿/*!
- * @file hex.c
  * @brief 呪術の処理実装 / Hex code
  * @date 2014/01/14
  * @author
@@ -18,10 +17,12 @@
 #include "realm/realm-hex.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-quaff.h"
+#include "core/asking-player.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
@@ -43,11 +44,13 @@
 #include "spell-kind/spells-sight.h"
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "spell/technic-info-table.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

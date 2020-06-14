@@ -1,6 +1,4 @@
-﻿#include "system/angband.h"
-#include "autopick/autopick-util.h"
-#include "autopick/autopick-editor-util.h"
+﻿#include "autopick/autopick-editor-util.h"
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-dirty-flags.h"

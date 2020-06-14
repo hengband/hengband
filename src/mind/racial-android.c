@@ -1,7 +1,8 @@
 ﻿#include "mind/racial-android.h"
 #include "io/targeting.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 bool android_inside_weapon(player_type *creature_ptr)
 {

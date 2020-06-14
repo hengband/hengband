@@ -13,6 +13,8 @@
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる

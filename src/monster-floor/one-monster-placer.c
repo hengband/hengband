@@ -11,6 +11,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-types.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-move.h"
 #include "monster-floor/monster-summon.h"
@@ -29,7 +30,8 @@
 #include "object/object-flavor.h"
 #include "object/warning.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx) { return m_idx > 0 && is_friendly(&player_ptr->current_floor_ptr->m_list[(m_idx)]); }

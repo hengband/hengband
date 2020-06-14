@@ -20,7 +20,9 @@
 #include "player/player-sex.h"
 #include "status-first-page.h"
 #include "system/system-variables.h" // 暫定。後で消す
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/buffer-shaper.h"
 #include "view/display-characteristic.h"
 #include "view/display-player-middle.h"
 #include "view/display-player-misc-info.h"
@@ -269,7 +271,7 @@ static void decide_current_floor(player_type *creature_ptr, char *statmsg, map_n
 static void display_current_floor(char *statmsg)
 {
 	char temp[128];
-	roff_to_buf(statmsg, 60, temp, sizeof(temp));
+	shape_buffer(statmsg, 60, temp, sizeof(temp));
 	char  *t;
 	t = temp;
 	for (int i = 0; i < 2; i++)

@@ -5,6 +5,7 @@
 #include "io/targeting.h"
 #include "player/player-effects.h"
 #include "spell-kind/spells-specific-bolt.h"
+#include "view/display-messages.h"
 
 bool vampirism(player_type *caster_ptr)
 {

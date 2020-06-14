@@ -1,5 +1,6 @@
 ﻿#include "inventory/inventory-curse.h"
 #include "art-definition/art-accessory-types.h"
+#include "core/asking-player.h"
 #include "io/files-util.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
@@ -14,10 +15,14 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-summon.h"
+#include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
+#include "util/quarks.h"
+#include "view/display-messages.h"
 
 #define TRC_P_FLAG_MASK \
     (TRC_TELEPORT_SELF | TRC_CHAINSWORD | TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | TRC_CALL_ANIMAL | TRC_CALL_DEMON \

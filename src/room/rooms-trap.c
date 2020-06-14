@@ -1,12 +1,11 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
-
-#include "grid/grid.h"
+﻿#include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
-#include "room/rooms.h"
 #include "floor/floor.h"
+#include "game-option/cheat-types.h"
 #include "grid/feature.h"
-#include "dungeon/dungeon.h"
+#include "grid/grid.h"
+#include "room/rooms.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief タイプ14の部屋…特殊トラップ部屋の生成 / Type 14 -- trapped rooms

@@ -1,8 +1,11 @@
 ﻿#include "market/arena.h"
+#include "core/asking-player.h"
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
+#include "io/input-key-acceptor.h"
+#include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "market/building-actions-table.h"
 #include "market/building-util.h"
@@ -15,6 +18,9 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "player/player-effects.h"
+#include "term/screen-processor.h"
+#include "util/int-char-converter.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

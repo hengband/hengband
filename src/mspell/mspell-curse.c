@@ -6,7 +6,8 @@
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "player/player-move.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief RF5_CAUSE_*のメッセージ処理関数 /

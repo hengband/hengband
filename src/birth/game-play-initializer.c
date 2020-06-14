@@ -12,7 +12,7 @@
 #include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "system/system-variables.h"
 #include "world/world.h"
 

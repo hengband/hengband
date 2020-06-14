@@ -1,6 +1,5 @@
-﻿#include "system/angband.h"
-#include "spell-kind/spells-world.h"
-#include "util/util.h"
+﻿#include "spell-kind/spells-world.h"
+#include "core/asking-player.h"
 #include "world/world.h"
 
 /*!
@@ -24,4 +23,3 @@ bool set_gametime(void)
 	return TRUE;
 
 }
-

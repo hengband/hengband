@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "birth/birth-explanations-table.h"
+﻿#include "birth/birth-explanations-table.h"
 
 /*! 種族の解説メッセージテーブル */
 concptr race_explanations[MAX_RACES] = {
@@ -207,7 +206,7 @@ concptr class_explanations[MAX_CLASS] =
 };
 
 /*! 性格の解説メッセージテーブル */
-concptr personality_explanations[MAX_SEIKAKU] = {
+concptr personality_explanations[MAX_PERSONALITIES] = {
     _("ふつうは、特に特筆するべき部分がない性格です。あらゆる技能を平均的にこなします。",
         "\"Ordinary\" is a personality with no special skills or talents, with unmodified stats and skills."),
 

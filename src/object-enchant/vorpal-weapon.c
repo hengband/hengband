@@ -2,6 +2,7 @@
 #include "art-definition/art-sword-types.h"
 #include "io/files-util.h"
 #include "monster-race/race-flags-resistance.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief ヴォーパル武器で攻撃した時のメッセージ表示

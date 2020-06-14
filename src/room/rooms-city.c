@@ -1,14 +1,14 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
-
-#include "grid/grid.h"
-#include "floor/floor.h"
+﻿#include "room/rooms-city.h"
 #include "floor/floor-generate.h"
-#include "room/rooms.h"
-#include "room/rooms-city.h"
-#include "store/store.h"
+#include "floor/floor.h"
 #include "floor/wild.h"
+#include "game-option/cheat-types.h"
+#include "grid/grid.h"
+#include "room/rooms.h"
 #include "store/store-util.h"
+#include "store/store.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*
 * Precalculate buildings' location of underground arcade

@@ -9,6 +9,7 @@
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
@@ -28,8 +29,9 @@
 #include "spell/spells-diceroll.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 混沌招来処理

@@ -8,6 +8,7 @@
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd/cmd-basic.h"
+#include "io/input-key-acceptor.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/monster-race-hook.h"
@@ -17,6 +18,10 @@
 #include "object-enchant/tr-types.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"
+#include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
+#include "util/int-char-converter.h"
+#include "view/display-messages.h"
 
 typedef struct samurai_slaying_type {
     MULTIPLY mult;

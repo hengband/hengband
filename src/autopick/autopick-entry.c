@@ -3,6 +3,7 @@
 #include "autopick/autopick-key-flag-process.h"
 #include "autopick/autopick-keys-table.h"
 #include "autopick/autopick-methods-table.h"
+#include "core/show-file.h"
 #include "inventory/player-inventory.h"
 #include "monster-race/race-flags1.h"
 #include "object-enchant/item-feeling.h"
@@ -14,6 +15,8 @@
 #include "object/object-kind.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
+#include "util/quarks.h"
+#include "util/string-processor.h"
 
 #ifdef JP
 static char kanji_colon[] = "：";

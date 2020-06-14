@@ -5,9 +5,10 @@
  */
 
 #include "monster-attack/monster-attack-describer.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-attack/insults-moans.h"
 #include "monster-race/race-indice-types.h"
-#include "main/sound-definitions-table.h"
 
 static void show_jaian_song(monap_type *monap_ptr)
 {

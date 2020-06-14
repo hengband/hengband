@@ -6,7 +6,7 @@
 
 #include "knowledge-quests.h"
 #include "core/show-file.h"
-#include "core/sort.h"
+#include "util/sort.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
@@ -19,6 +19,8 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
+#include "term/screen-processor.h"
+#include "util/angband-files.h"
 #include "world/world.h"
 
  /*

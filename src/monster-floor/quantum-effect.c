@@ -10,6 +10,7 @@
 #include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"
 #include "spell-kind/spells-teleport.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief ユニークでない量子生物を消滅させる

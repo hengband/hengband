@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 void say_comment_1(player_type *player_ptr);
 void say_comment_2(PRICE value, int annoyed);
 void say_comment_3(PRICE value, int annoyed);

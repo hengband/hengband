@@ -11,6 +11,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief プレイヤー攻撃の種族スレイング倍率計算

@@ -1,8 +1,16 @@
 ﻿#include "core/show-file.h"
+#include "core/asking-player.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
+#include "main/sound-of-music.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
+#include "util/int-char-converter.h"
+#include "util/string-processor.h"
+#include "view/display-messages.h"
 
 /*!
  * todo 表示とそれ以外を分割する
@@ -497,4 +505,20 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
 	angband_fclose(fff);
 	return (skey != 'q');
+}
+
+/*
+ * Convert string to lower case
+ */
+void str_tolower(char *str)
+{
+    for (; *str; str++) {
+#ifdef JP
+        if (iskanji(*str)) {
+            str++;
+            continue;
+        }
+#endif
+        *str = (char)tolower(*str);
+    }
 }

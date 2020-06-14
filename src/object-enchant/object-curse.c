@@ -1,12 +1,12 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
+﻿#include "object-enchant/object-curse.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/object-curse.h"
+#include "object-enchant/tr-types.h"
+#include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 #define MAX_CURSE 18
 #define TRC_SPECIAL_MASK (TRC_TY_CURSE | TRC_AGGRAVATE)

@@ -4,6 +4,7 @@
 #include "object/object-hook.h"
 #include "sv-definition/sv-lite-types.h"
 #include "player/player-move.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

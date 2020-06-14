@@ -3,6 +3,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "io/input-key-acceptor.h"
 #include "locale/english.h"
 #include "lore/lore-store.h"
 #include "monster-race/race-flags3.h"
@@ -14,8 +15,10 @@
 #include "monster/smart-learn-types.h"
 #include "player/avatar.h"
 #include "spell/process-effect.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 視界内モンスターに魔法効果を与える / Apply a "project()" directly to all viewable monsters

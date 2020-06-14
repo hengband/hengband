@@ -1,9 +1,19 @@
 ﻿#include "cmd-io/cmd-macro.h"
 #include "cmd-io/cmd-gameoption.h"
+#include "cmd-io/macro-util.h"
+#include "core/asking-player.h"
 #include "game-option/input-options.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/read-pref-file.h"
+#include "main/sound-of-music.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
+#include "util/int-char-converter.h"
+#include "util/string-processor.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief マクロ情報をprefファイルに保存する /

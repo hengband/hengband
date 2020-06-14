@@ -21,6 +21,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells3.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief カオス武器か混乱の手でモンスターを混乱させる処理

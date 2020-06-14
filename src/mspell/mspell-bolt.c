@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-bolt.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/drs-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
@@ -7,7 +8,7 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 
 /*!
  * @brief RF4_SHOOTの処理。射撃。 /

@@ -21,10 +21,12 @@
 #include "game-option/option-flags.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-remover.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "player/player-sex.h"
 #include "store/store.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!
@@ -56,7 +58,7 @@ static void write_birth_diary(player_type *creature_ptr)
     }
 
     sprintf(buf, _("                            性格に%sを選択した。", "                            chose %s personality."),
-        seikaku_info[creature_ptr->pseikaku].title);
+        personality_info[creature_ptr->pseikaku].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 }
 

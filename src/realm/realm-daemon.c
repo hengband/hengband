@@ -17,8 +17,8 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
-#include "util/util.h"
+#include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief 悪魔領域魔法の各処理を行う

@@ -1,5 +1,6 @@
 ﻿#include "realm/realm-sorcery.h"
 #include "cmd-action/cmd-spell.h"
+#include "core/asking-player.h"
 #include "io/targeting.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"
@@ -13,9 +14,9 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief 仙術領域魔法の各処理を行う

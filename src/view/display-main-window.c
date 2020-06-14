@@ -30,8 +30,11 @@
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
+#include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
+#include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -48,7 +51,7 @@
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-song-numbers.h"
@@ -56,9 +59,12 @@
 #include "spell/spells3.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
+#include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-lore.h"
+#include "view/display-messages.h"
 #include "view/display-player.h"
 #include "view/object-describer.h"
 #include "world/world.h"
@@ -3427,7 +3433,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 	C_MAKE(ma, (hgt + 2), TERM_COLOR *);
 	C_MAKE(mc, (hgt + 2), char_ptr);
 	C_MAKE(mp, (hgt + 2), byte_ptr);
-	C_MAKE(match_autopick_yx, (hgt + 2), sint_ptr);
+	C_MAKE(match_autopick_yx, (hgt + 2), int*);
 	C_MAKE(object_autopick_yx, (hgt + 2), object_type **);
 
 	/* Allocate and wipe each line map */
@@ -3633,7 +3639,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 	C_KILL(ma, (hgt + 2), TERM_COLOR *);
 	C_KILL(mc, (hgt + 2), char_ptr);
 	C_KILL(mp, (hgt + 2), byte_ptr);
-	C_KILL(match_autopick_yx, (hgt + 2), sint_ptr);
+	C_KILL(match_autopick_yx, (hgt + 2), int*);
 	C_KILL(object_autopick_yx, (hgt + 2), object_type **);
 
 	/* Free each line map */

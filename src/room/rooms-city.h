@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 extern bool build_type16(player_type *player_ptr);
 
 /* Minimum & maximum town size */

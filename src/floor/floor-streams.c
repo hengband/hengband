@@ -20,6 +20,7 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
+#include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-info.h"
@@ -28,7 +29,8 @@
 #include "object/object-hook.h"
 #include "room/rooms.h"
 #include "spell-kind/spells-floor.h"
-#include "util/util.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する /

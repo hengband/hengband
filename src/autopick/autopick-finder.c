@@ -9,10 +9,16 @@
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-matcher.h"
+#include "core/show-file.h"
 #include "inventory/player-inventory.h"
+#include "io/input-key-acceptor.h"
+#include "main/sound-of-music.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/int-char-converter.h"
+#include "util/string-processor.h"
 
  /*
   * @brief —^‚¦‚ç‚ê‚½ƒAƒCƒeƒ€‚ª©“®E‚¢‚ÌƒŠƒXƒg‚É“o˜^‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğŒŸõ‚·‚é

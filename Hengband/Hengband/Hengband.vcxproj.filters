@@ -371,9 +371,6 @@
     <ClCompile Include="..\..\src\core\player-processor.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\music-checker.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player\digestion-processor.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -587,9 +584,6 @@
     <ClCompile Include="..\..\src\core\scores.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\sort.c">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-bolt.c">
       <Filter>mspell</Filter>
     </ClCompile>
@@ -772,9 +766,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\util\util.c">
-      <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\aura-counterattack.c">
       <Filter>combat</Filter>
@@ -1352,6 +1343,63 @@
     <ClCompile Include="..\..\src\game-option\option-types-table.c">
       <Filter>game-option</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\angband-files.c">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\building-type-definition.c">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\string-processor.c">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\macro-util.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main\sound-of-music.c">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\input-key-acceptor.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\quarks.c">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-messages.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\asking-player.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\term\screen-processor.c">
+      <Filter>term</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\sort.c">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\input-key-requester.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\command-repeater.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\locale\vowel-checker.c">
+      <Filter>locale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\game-option\keymap-directory-getter.c">
+      <Filter>game-option</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\tag-sorter.c">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\buffer-shaper.c">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\alloc-entries.c">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-song.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1648,9 +1696,6 @@
     <ClInclude Include="..\..\src\effect\effect-monster-switcher.h">
       <Filter>effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-type.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-player-util.h">
       <Filter>effect</Filter>
     </ClInclude>
@@ -1761,9 +1806,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\player-processor.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\music-checker.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\digestion-processor.h">
       <Filter>player</Filter>
@@ -1897,12 +1939,6 @@
     <ClInclude Include="..\..\src\spell\spells-summon.h">
       <Filter>spell</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\locele\japanese.h">
-      <Filter>locale</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\locele\english.h">
-      <Filter>locale</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\io\save.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -1994,9 +2030,6 @@
       <Filter>dungeon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\scores.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\sort.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\monster-spell.h">
@@ -2098,15 +2131,6 @@
     <ClInclude Include="..\..\src\birth\history.h">
       <Filter>birth</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\player-races-table.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\player-classes-table.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\player-personalities-table.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\io\files-util.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -2196,9 +2220,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\monk-attack.h">
       <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\util\util.h">
-      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-mark-types.h">
       <Filter>object</Filter>
@@ -2958,6 +2979,99 @@
     </ClInclude>
     <ClInclude Include="..\..\src\game-option\option-types-table.h">
       <Filter>game-option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\angband-files.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\building-type-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-personalities-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-classes-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spell-types.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\monster-race-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-race-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-types.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\string-processor.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\macro-util.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\sound-of-music.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\input-key-acceptor.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\quarks.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-messages.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\japanese.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\english.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\asking-player.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\term\screen-processor.h">
+      <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\sort.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\input-key-requester.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\command-repeater.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\vowel-checker.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\tag-sorter.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game-option\cheat-types.h">
+      <Filter>game-option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\int-char-converter.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\bit-flags-calculator.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\buffer-shaper.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\language-switcher.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\alloc-entry-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\alloc-entries.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-song.h">
+      <Filter>spell-realm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

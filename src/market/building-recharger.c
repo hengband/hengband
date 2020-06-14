@@ -1,5 +1,6 @@
 ﻿#include "market/building-recharger.h"
 #include "autopick/autopick.h"
+#include "core/asking-player.h"
 #include "inventory/player-inventory.h"
 #include "market/building-util.h"
 #include "object/item-use-flags.h"
@@ -9,6 +10,8 @@
 #include "object/object-kind.h"
 #include "object-enchant/special-object-flags.h"
 #include "spell/spells3.h"
+#include "term/screen-processor.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staffs

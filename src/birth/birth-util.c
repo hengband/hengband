@@ -2,7 +2,9 @@
 #include "birth/birth-util.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "core/show-file.h"
+#include "main/sound-of-music.h"
 #include "system/game-option-types.h"
+#include "term/screen-processor.h"
 
 /*!
  * @brief プレイヤー作成を中断して変愚蛮怒を終了する

@@ -1,8 +1,13 @@
-﻿#include "system/angband.h"
-#include "autopick/autopick-util.h"
-#include "autopick/autopick-inserter-killer.h"
+﻿#include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-dirty-flags.h"
+#include "cmd-io/macro-util.h"
 #include "game-option/input-options.h"
+#include "game-option/keymap-directory-getter.h"
+#include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
+#include "main/sound-of-music.h"
+#include "term/screen-processor.h"
+#include "util/string-processor.h"
 
 /*
  * Check if this line is expression or not.

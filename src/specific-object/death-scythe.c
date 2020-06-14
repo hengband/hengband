@@ -9,9 +9,12 @@
 #include "combat/attack-criticality.h"
 #include "core/stuff-handler.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/player-damage.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 死の大鎌ダメージが跳ね返ってきた時の、種族ごとのダメージ倍率を返す

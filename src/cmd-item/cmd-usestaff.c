@@ -6,6 +6,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/special-object-flags.h"
@@ -18,7 +19,7 @@
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"
@@ -33,8 +34,9 @@
 #include "spell/spells-summon.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-staff-types.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "view/object-describer.h"
 
 /*!
@@ -282,8 +284,8 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 		case SV_STAFF_NOTHING:
 		{
 			msg_print(_("何も起らなかった。", "Nothing happen."));
-			if (PRACE_IS_(creature_ptr, RACE_SKELETON) || PRACE_IS_(creature_ptr, RACE_GOLEM) ||
-				PRACE_IS_(creature_ptr, RACE_ZOMBIE) || PRACE_IS_(creature_ptr, RACE_SPECTRE))
+			if (is_specific_player_race(creature_ptr, RACE_SKELETON) || is_specific_player_race(creature_ptr, RACE_GOLEM) ||
+				is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_SPECTRE))
 				msg_print(_("もったいない事をしたような気がする。食べ物は大切にしなくては。", "What a waste.  It's your food!"));
 			break;
 		}

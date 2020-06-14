@@ -14,6 +14,7 @@
 #include "io/write-diary.h"
 #include "lore/lore-store.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "monster-floor/monster-object.h"
 #include "monster-floor/monster-summon.h"
@@ -39,13 +40,14 @@
 #include "player/patron.h"
 #include "spell/process-effect.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/monster-type-definition.h"
 #include "system/system-variables.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

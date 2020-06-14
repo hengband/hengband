@@ -6,7 +6,9 @@
 #include "monster-race/race-flags1.h"
 #include "monster/monster-list.h"
 #include "system/system-variables.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief クエスト情報を表示しつつ処理する。/ Display quest information

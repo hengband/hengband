@@ -5,6 +5,7 @@
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
@@ -26,12 +27,13 @@
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief ロッドの効果を発動する

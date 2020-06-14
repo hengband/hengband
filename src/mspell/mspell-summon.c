@@ -15,7 +15,8 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/process-effect.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 特定条件のモンスター召喚のみPM_ALLOW_UNIQUEを許可する /

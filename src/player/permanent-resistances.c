@@ -1,7 +1,8 @@
 ﻿#include "permanent-resistances.h"
-#include "player/player-personalities-table.h"
-#include "player/player-races-table.h"
+#include "player/player-personalities-types.h"
+#include "player/player-race-types.h"
 #include "object-enchant/tr-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief プレーヤーの職業による耐性フラグを返す

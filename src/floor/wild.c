@@ -11,7 +11,7 @@
  */
 
 #include "floor/wild.h"
-#include "info-reader/fixed-map-parser.h"
+#include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
@@ -19,6 +19,7 @@
 #include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "info-reader/fixed-map-parser.h"
 #include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
@@ -26,16 +27,18 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
+#include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
-#include "monster/monster-info.h"
-#include "monster-floor/place-monster-types.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "spell-realm/spells-hex.h"
 #include "system/system-variables.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #define MAX_FEAT_IN_TERRAIN 18

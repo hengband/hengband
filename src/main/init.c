@@ -31,6 +31,7 @@
 
 #include "main/init.h"
 #include "cmd-building/cmd-building.h"
+#include "cmd-io/macro-util.h"
 #include "info-reader/fixed-map-parser.h" // 相互参照、後で何とかする.
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -66,11 +67,17 @@
 #include "room/rooms.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/alloc-entries.h"
 #include "system/angband-version.h"
+#include "system/building-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
+#include "util/angband-files.h"
+#include "util/quarks.h"
+#include "util/tag-sorter.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #include <sys/stat.h>

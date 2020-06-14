@@ -16,11 +16,13 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "term/screen-processor.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとに突然変異の発動判定を行う処理

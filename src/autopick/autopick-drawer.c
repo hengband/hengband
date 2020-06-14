@@ -9,7 +9,9 @@
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-entry.h"
 #include "io/pref-file-expressor.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/buffer-shaper.h"
 
 #define DESCRIPT_HGT 3
 
@@ -286,7 +288,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 			strcat(buf, _("この行は現在は無効な状態です。", "  This line is bypassed currently."));
 		}
 
-		roff_to_buf(buf, 81, temp, sizeof(temp));
+		shape_buffer(buf, 81, temp, sizeof(temp));
 		t = temp;
 		for (int j = 0; j < 3; j++)
 		{

@@ -20,8 +20,9 @@
 #include "mspell/mspell-util.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "player/player-personalities-table.h"
-#include "spell/spells-type.h"
+#include "player/player-personalities-types.h"
+#include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 状態異常呪文のメッセージ処理関数。 /

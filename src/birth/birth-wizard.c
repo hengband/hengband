@@ -14,14 +14,20 @@
 #include "birth/quick-start.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/cmd-help.h"
+#include "core/asking-player.h"
 #include "game-option/birth-options.h"
+#include "io/input-key-acceptor.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "player/avatar.h"
 #include "player/patron.h"
 #include "player/player-sex.h"
 #include "player/process-name.h"
 #include "system/game-option-types.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/buffer-shaper.h"
+#include "util/int-char-converter.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
 #include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-player.h" // 暫定。後で消す.
@@ -155,7 +161,7 @@ static bool let_player_select_race(player_type *creature_ptr)
             return FALSE;
 
         clear_from(10);
-        roff_to_buf(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
+        shape_buffer(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)
@@ -185,7 +191,7 @@ static bool let_player_select_class(player_type *creature_ptr)
             return FALSE;
 
         clear_from(10);
-        roff_to_buf(class_explanations[creature_ptr->pclass], 74, temp, sizeof(temp));
+        shape_buffer(class_explanations[creature_ptr->pclass], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 9; i++) {
             if (t[0] == 0)
@@ -214,7 +220,7 @@ static bool let_player_select_personality(player_type *creature_ptr)
             return FALSE;
 
         clear_from(10);
-        roff_to_buf(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
+        shape_buffer(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)

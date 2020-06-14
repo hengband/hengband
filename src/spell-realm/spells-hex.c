@@ -1,10 +1,14 @@
 ﻿#include "spell-realm/spells-hex.h"
+#include "core/asking-player.h"
 #include "floor/floor.h"
 #include "player/player-effects.h" // todo 相互参照している.
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell/spells3.h"
 #include "spell/spells-execution.h"
+#include "term/screen-processor.h"
+#include "util/int-char-converter.h"
+#include "view/display-messages.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 

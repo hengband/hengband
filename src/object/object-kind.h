@@ -79,6 +79,3 @@ extern object_kind *k_info;
 extern char *k_name;
 extern char *k_text;
 extern KIND_OBJECT_IDX max_k_idx;
-
-extern s16b alloc_kind_size;
-extern alloc_entry *alloc_kind_table;

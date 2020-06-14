@@ -7,16 +7,23 @@
  */
 
 #include "process-death.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "inventory/player-inventory.h"
+#include "io/input-key-acceptor.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
+#include "util/buffer-shaper.h"
+#include "util/int-char-converter.h"
+#include "util/string-processor.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #define GRAVE_LINE_WIDTH 31
@@ -68,7 +75,7 @@ static void show_basic_params(player_type *dead_ptr, char *buf)
  */
 static int show_killing_monster(player_type *dead_ptr, char *buf, char *tomb_message, size_t tomb_message_size)
 {
-	roff_to_buf(dead_ptr->died_from, GRAVE_LINE_WIDTH + 1, tomb_message, tomb_message_size);
+	shape_buffer(dead_ptr->died_from, GRAVE_LINE_WIDTH + 1, tomb_message, tomb_message_size);
 	char *t;
 	t = tomb_message + strlen(tomb_message) + 1;
 	if (!*t) return 0;
@@ -199,7 +206,7 @@ static void show_tomb_detail(player_type *dead_ptr, char *buf)
 	center_string(buf, tomb_message);
 	put_str(buf, 14, 11);
 
-	roff_to_buf(format("by %s.", dead_ptr->died_from), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
+	shape_buffer(format("by %s.", dead_ptr->died_from), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
 	center_string(buf, tomb_message);
 	char *t;
 	put_str(buf, 15, 11);

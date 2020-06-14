@@ -8,6 +8,7 @@
 #include "art-definition/art-weapon-types.h"
 #include "autopick/autopick.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
@@ -47,8 +48,10 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "util/util.h"
+#include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 typedef struct
 {

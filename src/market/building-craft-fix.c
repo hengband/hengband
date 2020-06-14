@@ -1,5 +1,6 @@
 ﻿#include "market/building-craft-fix.h"
 #include "art-definition/art-sword-types.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
@@ -19,6 +20,9 @@
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 修復材料のオブジェクトから修復対象に特性を移植する。

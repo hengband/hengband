@@ -3,6 +3,7 @@
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "spell-kind/spells-teleport.h"
+#include "view/display-messages.h"
 
 /*!
  * 戦士と盗賊における、ヒット＆アウェイのレイシャルパワー/突然変異

@@ -1,9 +1,11 @@
 ﻿#include "market/bounty.h"
 #include "autopick/autopick.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
+#include "io/input-key-acceptor.h"
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"
 #include "monster-race/race-flags1.h"
@@ -23,7 +25,9 @@
 #include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "sv-definition/sv-other-types.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

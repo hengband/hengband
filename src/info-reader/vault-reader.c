@@ -1,5 +1,6 @@
 ﻿#include "info-reader/vault-reader.h"
 #include "room/rooms-vault.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief Vault情報(v_info)のパース関数 /

@@ -4,6 +4,7 @@
 #include "combat/shoot.h"
 #include "core/stuff-handler.h"
 #include "inventory/player-inventory.h"
+#include "io/input-key-acceptor.h"
 #include "market/building-util.h"
 #include "object-enchant/tr-types.h"
 #include "object/item-use-flags.h"
@@ -14,7 +15,10 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

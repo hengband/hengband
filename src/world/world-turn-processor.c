@@ -26,6 +26,8 @@
 #include "player/player-move.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 #include "world/world-movement-processor.h"
 #include "world/world.h"
 

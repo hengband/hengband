@@ -9,16 +9,19 @@
 #include "floor/floor.h"
 #include "game-option/special-options.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "pet/pet-fall-off.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/range-calc.h"
 #include "term/gameterm.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-main-window.h" // 暫定、後で消すかも.
+#include "view/display-messages.h"
 
 /*!
  * @brief 配置した鏡リストの次を取得する /

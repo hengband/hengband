@@ -12,6 +12,7 @@
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
@@ -31,10 +32,11 @@
 #include "player/avatar.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-type.h"
+#include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "spells-effect-util.h"
 #include "sv-definition/sv-other-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief ビーム/ボルト/ボール系魔法によるモンスターへの効果があるかないかを判定する

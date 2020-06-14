@@ -17,6 +17,7 @@
 #include "object/object-value.h"
 #include "object/object-info.h"
 #include "object-enchant/special-object-flags.h"
+#include "util/string-processor.h"
 
 /*
  * A function for Auto-picker/destroyer

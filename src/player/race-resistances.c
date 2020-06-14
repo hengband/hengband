@@ -1,7 +1,8 @@
 ﻿#include "race-resistances.h"
-#include "player/player-races-table.h"
+#include "player/player-race-types.h"
 #include "object/object-flags.h"
 #include "object-enchant/tr-types.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief プレイヤーの種族による免疫フラグを返す
@@ -16,13 +17,13 @@ void player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
 	for (int i = 0; i < TR_FLAG_SIZE; i++)
 		flags[i] = 0L;
 
-	if (PRACE_IS_(creature_ptr, RACE_SPECTRE))
+	if (is_specific_player_race(creature_ptr, RACE_SPECTRE))
 		add_flag(flags, TR_RES_NETHER);
-	if (creature_ptr->mimic_form == MIMIC_VAMPIRE || PRACE_IS_(creature_ptr, RACE_VAMPIRE))
+	if (creature_ptr->mimic_form == MIMIC_VAMPIRE || is_specific_player_race(creature_ptr, RACE_VAMPIRE))
 		add_flag(flags, TR_RES_DARK);
 	if (creature_ptr->mimic_form == MIMIC_DEMON_LORD)
 		add_flag(flags, TR_RES_FIRE);
-	else if (PRACE_IS_(creature_ptr, RACE_YEEK) && creature_ptr->lev > 19)
+	else if (is_specific_player_race(creature_ptr, RACE_YEEK) && creature_ptr->lev > 19)
 		add_flag(flags, TR_RES_ACID);
 }
 
@@ -103,11 +104,11 @@ void player_vulnerability_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		add_flag(flags, TR_RES_COLD);
 	}
 
-	if (PRACE_IS_(creature_ptr, RACE_ANDROID))
+	if (is_specific_player_race(creature_ptr, RACE_ANDROID))
 		add_flag(flags, TR_RES_ELEC);
-	if (PRACE_IS_(creature_ptr, RACE_ENT))
+	if (is_specific_player_race(creature_ptr, RACE_ENT))
 		add_flag(flags, TR_RES_FIRE);
-	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || PRACE_IS_(creature_ptr, RACE_S_FAIRY) ||
+	if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_S_FAIRY) ||
 		(creature_ptr->mimic_form == MIMIC_VAMPIRE))
 		add_flag(flags, TR_RES_LITE);
 }

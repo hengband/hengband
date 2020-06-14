@@ -1,5 +1,4 @@
 ﻿/*
- * @file cmd-dump.c
  * @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
  * @date 2020/03/01
  * @author Mogami & Hourier
@@ -14,16 +13,19 @@
  *     Add a footer, and close the file.
  */
 
-#include "system/angband.h"
-#include "io-dump/dump-remover.h"
 #include "io/read-pref-file.h"
-#include "io/interpret-pref-file.h"
 #include "autopick/autopick-pref-processor.h"
-#include "io/files-util.h"
-#include "io/pref-file-expressor.h"
-#include "world/world.h"
-#include "system/system-variables.h"
 #include "autopick/autopick-reader-writer.h"
+#include "core/asking-player.h"
+#include "io-dump/dump-remover.h"
+#include "io/files-util.h"
+#include "io/interpret-pref-file.h"
+#include "io/pref-file-expressor.h"
+#include "system/system-variables.h"
+#include "util/angband-files.h"
+#include "util/buffer-shaper.h"
+#include "view/display-messages.h"
+#include "world/world.h"
 
 // todo コールバック関数に変更するので、いずれ消す.
 #define PREF_TYPE_NORMAL   0
@@ -353,7 +355,7 @@ bool read_histpref(player_type *creature_ptr, void (*process_autopick_file_comma
     while ((n > 0) && (s[n - 1] == ' '))
         s[--n] = '\0';
 
-    roff_to_buf(s, 60, temp, sizeof(temp));
+    shape_buffer(s, 60, temp, sizeof(temp));
     t = temp;
     for (i = 0; i < 4; i++) {
         if (t[0] == 0)

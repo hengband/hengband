@@ -17,6 +17,7 @@
 #include "player/avatar.h"
 #include "player/player-effects.h"
 #include "spell/spells-diceroll.h"
+#include "view/display-messages.h"
 
 static void effect_monster_charm_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
