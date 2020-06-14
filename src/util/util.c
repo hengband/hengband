@@ -46,8 +46,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-pos_list tmp_pos;
-
 /*
  * Add a series of keypresses to the "queue".
  *

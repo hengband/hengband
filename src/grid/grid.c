@@ -47,17 +47,19 @@
 
 #define MONSTER_FLOW_DEPTH 32 /*!< 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る) / OPTION: Maximum flow depth when using "MONSTER_FLOW" */
 
- /*
-  * Feature action flags
-  */
+/*
+ * Feature action flags
+ */
 #define FAF_DESTROY     0x01
 #define FAF_NO_DROP     0x02
 #define FAF_CRASH_GLASS 0x04
 
-  /*!
-   * @brief 地形状態フラグテーブル /
-   * The table of features' actions
-   */
+pos_list tmp_pos;
+
+/*!
+ * @brief 地形状態フラグテーブル /
+ * The table of features' actions
+ */
 static const byte feature_action_flags[FF_FLAG_MAX] =
 {
 	0, /* LOS */

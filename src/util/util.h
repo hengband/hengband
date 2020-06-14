@@ -41,8 +41,6 @@ struct alloc_entry
 	u16b total;		/* Unused for now */
 };
 
-extern pos_list tmp_pos;
-
 /*
  * OPTION: Maximum number of messages to remember (see "io.c")
  * Default: assume maximal memorization of 2048 total messages
