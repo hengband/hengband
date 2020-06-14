@@ -181,7 +181,6 @@
     <ClCompile Include="..\..\src\game-option\game-play-options.c" />
     <ClCompile Include="..\..\src\game-option\input-options.c" />
     <ClCompile Include="..\..\src\game-option\keymap-directory-getter.c" />
-    <ClCompile Include="..\..\src\game-option\keymap-directory-getter.h" />
     <ClCompile Include="..\..\src\game-option\map-screen-options.c" />
     <ClCompile Include="..\..\src\game-option\option-flags.c" />
     <ClCompile Include="..\..\src\game-option\option-types-table.c" />
