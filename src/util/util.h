@@ -3,15 +3,6 @@
 #include "floor/geometry.h"
 
 /*
- *Language selection macro
- */
-#ifdef JP
-#define _(JAPANESE, ENGLISH) (JAPANESE)
-#else
-#define _(JAPANESE, ENGLISH) (ENGLISH)
-#endif
-
-/*
  * An entry for the object/monster allocation functions
  *
  * Pass 1 is determined from allocation information

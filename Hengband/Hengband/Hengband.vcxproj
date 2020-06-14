@@ -589,6 +589,7 @@
     <ClInclude Include="..\..\src\io\command-repeater.h" />
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
+    <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\locale\vowel-checker.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
@@ -939,7 +940,6 @@
     <ClCompile Include="..\..\src\io\targeting.c" />
     <ClCompile Include="..\..\src\term\gameterm.c" />
     <ClCompile Include="..\..\src\grid\trap.c" />
-    <ClCompile Include="..\..\src\util\util.c" />
     <ClCompile Include="..\..\src\view\display-main-window.c" />
     <ClCompile Include="..\..\src\object\warning.c" />
     <ClCompile Include="..\..\src\floor\wild.c" />

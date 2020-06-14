@@ -248,6 +248,7 @@ hengband_SOURCES = \
 	\
 	locale/english.c locale/english.h \
 	locale/japanese.c locale/japanese.h \
+	locale/language-switcher.h \
 	locale/vowel-checker.c locale/vowel-checker.h \
 	\
 	lore/combat-types-setter.c lore/combat-types-setter.h \
@@ -563,7 +564,7 @@ hengband_SOURCES = \
 	util/sort.c util/sort.h \
 	util/string-processor.c util/string-processor.h \
 	util/tag-sorter.c util/tag-sorter.h \
-	util/util.c util/util.h \
+	util/util.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \

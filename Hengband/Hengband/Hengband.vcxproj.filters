@@ -770,9 +770,6 @@
     <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\util.c">
-      <Filter>util</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\aura-counterattack.c">
       <Filter>combat</Filter>
     </ClCompile>
@@ -3066,6 +3063,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\util\buffer-shaper.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\language-switcher.h">
+      <Filter>locale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
