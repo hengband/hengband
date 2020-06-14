@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "util/util.h"
+#include "system/alloc-entry-definition.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-flags.h"

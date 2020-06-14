@@ -536,6 +536,7 @@ hengband_SOURCES = \
 	sv-definition/sv-wand-types.h sv-definition/sv-weapon-types.h \
 	sv-definition/sv-other-types.h \
 	\
+	system/alloc-entry-definition.h \
 	system/angband.h system/angband-version.h \
 	system/building-type-definition.c system/building-type-definition.h \
 	system/game-option-types.h \
@@ -564,7 +565,6 @@ hengband_SOURCES = \
 	util/sort.c util/sort.h \
 	util/string-processor.c util/string-processor.h \
 	util/tag-sorter.c util/tag-sorter.h \
-	util/util.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \

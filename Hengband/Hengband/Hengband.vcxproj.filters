@@ -2221,9 +2221,6 @@
     <ClInclude Include="..\..\src\mind\monk-attack.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\util\util.h">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\object-mark-types.h">
       <Filter>object</Filter>
     </ClInclude>
@@ -3066,6 +3063,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\locale\language-switcher.h">
       <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\alloc-entry-definition.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿#include "object-kind.h"
-#include "util/util.h"
+#include "system/alloc-entry-definition.h"
 
 /*
  * The object kind arrays

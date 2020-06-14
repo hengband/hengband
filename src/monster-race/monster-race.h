@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/monster-race-definition.h"
-#include "util/util.h"
+#include "system/alloc-entry-definition.h"
 
 /*
  * The monster race arrays
