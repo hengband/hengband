@@ -3427,7 +3427,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 	C_MAKE(ma, (hgt + 2), TERM_COLOR *);
 	C_MAKE(mc, (hgt + 2), char_ptr);
 	C_MAKE(mp, (hgt + 2), byte_ptr);
-	C_MAKE(match_autopick_yx, (hgt + 2), sint_ptr);
+	C_MAKE(match_autopick_yx, (hgt + 2), int*);
 	C_MAKE(object_autopick_yx, (hgt + 2), object_type **);
 
 	/* Allocate and wipe each line map */

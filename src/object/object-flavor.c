@@ -595,7 +595,7 @@ char *object_desc_kosuu(char *t, object_type *o_ptr)
  * sprintf(t, "%+d", n), and return a pointer to the terminator.
  * Note that we always print a sign, either "+" or "-".
  */
-static char *object_desc_int(char *t, sint v)
+static char *object_desc_int(char *t, int v)
 {
 	uint p, n;
 

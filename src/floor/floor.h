@@ -365,7 +365,7 @@ extern void try_door(player_type *player_ptr, POSITION y, POSITION x);
 extern FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
 extern void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num);
 
-extern sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
+extern int project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
 
 extern void set_floor(player_type *player_ptr, POSITION x, POSITION y);
 extern void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode);

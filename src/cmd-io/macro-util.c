@@ -23,7 +23,7 @@ static bool macro__use[256];
 /*
  * Find the macro (if any) which exactly matches the given pattern
  */
-sint macro_find_exact(concptr pat)
+int macro_find_exact(concptr pat)
 {
     if (!macro__use[(byte)(pat[0])]) {
         return -1;
@@ -42,7 +42,7 @@ sint macro_find_exact(concptr pat)
 /*
  * Find the first macro (if any) which contains the given pattern
  */
-sint macro_find_check(concptr pat)
+int macro_find_check(concptr pat)
 {
     if (!macro__use[(byte)(pat[0])]) {
         return -1;
@@ -61,7 +61,7 @@ sint macro_find_check(concptr pat)
 /*
  * Find the first macro (if any) which contains the given pattern and more
  */
-sint macro_find_maybe(concptr pat)
+int macro_find_maybe(concptr pat)
 {
     if (!macro__use[(byte)(pat[0])]) {
         return -1;
@@ -82,7 +82,7 @@ sint macro_find_maybe(concptr pat)
 /*
  * Find the longest macro (if any) which starts with the given pattern
  */
-sint macro_find_ready(concptr pat)
+int macro_find_ready(concptr pat)
 {
     int t, n = -1, s = -1;
 
