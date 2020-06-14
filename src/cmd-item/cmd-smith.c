@@ -23,6 +23,7 @@
 #include "object/object-hook.h"
 #include "perception/object-perception.h"
 #include "player/player-status.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

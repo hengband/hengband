@@ -541,6 +541,7 @@ hengband_SOURCES = \
 	system/gamevalue.h \
 	\
 	term/gameterm.c term/gameterm.h \
+	term/screen-processor.c term/screen-processor.h \
 	term/term-color-types.h \
 	term/z-form.c term/z-form.h term/z-rand.c term/z-rand.h \
 	term/z-term.c term/z-term.h term/z-util.c term/z-util.h \

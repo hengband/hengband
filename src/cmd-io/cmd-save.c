@@ -1,13 +1,14 @@
-﻿#include "io/signal-handlers.h"
-#include "io/write-diary.h"
-#include "cmd-io/cmd-save.h"
+﻿#include "cmd-io/cmd-save.h"
 #include "cmd-io/cmd-dump.h"
-#include "player/player-move.h"
 #include "core/stuff-handler.h"
 #include "io/save.h"
-#include "world/world.h"
+#include "io/signal-handlers.h"
+#include "io/write-diary.h"
 #include "monster/monster-status.h" // 違和感。要調査.
+#include "player/player-move.h"
+#include "term/screen-processor.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 /*!
  * @brief セーブするコマンドのメインルーチン

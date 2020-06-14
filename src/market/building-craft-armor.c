@@ -1,6 +1,7 @@
 ﻿#include "io/input-key-acceptor.h"
 #include "market/building-craft-armor.h"
 #include "market/building-util.h"
+#include "term/screen-processor.h"
 
 /*!
  * @brief ACから回避率、ダメージ減少率を計算し表示する。 / Evaluate AC

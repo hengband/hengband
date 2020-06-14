@@ -17,6 +17,7 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "term/screen-processor.h"
 
 /*!
  * @brief オブジェクトの*鑑定*内容を詳述して表示する /

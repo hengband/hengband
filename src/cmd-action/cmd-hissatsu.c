@@ -26,6 +26,7 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 

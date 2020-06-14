@@ -71,6 +71,7 @@
 #include "player/player-class.h"
 #include "player/player-status.h"
 #include "spell/spells3.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 

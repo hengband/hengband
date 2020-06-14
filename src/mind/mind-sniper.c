@@ -19,6 +19,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/monster-race.h"
 #include "player/player-status.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

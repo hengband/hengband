@@ -64,6 +64,7 @@
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

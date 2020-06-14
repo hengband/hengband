@@ -24,6 +24,7 @@
 #include "object/object-mark-types.h"
 #include "object/object-info.h"
 #include "player/player-move.h"
+#include "term/screen-processor.h"
 #include "view/display-messages.h"
 
 /*

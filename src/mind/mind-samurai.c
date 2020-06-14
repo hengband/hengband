@@ -18,6 +18,7 @@
 #include "object-enchant/tr-types.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"
+#include "term/screen-processor.h"
 #include "view/display-messages.h"
 
 typedef struct samurai_slaying_type {

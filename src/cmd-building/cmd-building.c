@@ -54,6 +54,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells3.h"
 #include "system/building-type-definition.h"
+#include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

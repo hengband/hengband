@@ -6,6 +6,7 @@
 #include "main/sound-of-music.h"
 #include "player/player-personality.h"
 #include "system/game-option-types.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
 /*!

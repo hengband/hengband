@@ -1,5 +1,6 @@
 ﻿#include "cmd-io/cmd-help.h"
 #include "core/show-file.h"
+#include "term/screen-processor.h"
 
 /*!
  * @brief ヘルプを表示するコマンドのメインルーチン

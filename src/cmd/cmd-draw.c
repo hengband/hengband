@@ -8,6 +8,7 @@
 #include "player/player-race-types.h"
 #include "player/process-name.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-messages.h"

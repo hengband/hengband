@@ -6,6 +6,7 @@
 #include "birth/game-play-initializer.h"
 #include "birth/birth-stat.h"
 #include "player/process-name.h"
+#include "term/screen-processor.h"
 
 /*
  * The last character rolled,

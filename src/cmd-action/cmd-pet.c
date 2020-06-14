@@ -34,6 +34,7 @@
 #include "player/player-status.h"
 #include "view/display-main-window.h"
 #include "util/quarks.h"
+#include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

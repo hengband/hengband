@@ -72,6 +72,7 @@
 #include "spell/technic-info-table.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "term/screen-processor.h"
 #include "util/quarks.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

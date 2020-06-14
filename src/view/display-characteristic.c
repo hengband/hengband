@@ -12,6 +12,7 @@
 #include "player/permanent-resistances.h"
 #include "player/race-resistances.h"
 #include "player/temporary-resistances.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
 typedef struct {

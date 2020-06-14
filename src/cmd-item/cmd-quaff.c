@@ -38,6 +38,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
 #include "spell/spells3.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 

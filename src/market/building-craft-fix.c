@@ -20,6 +20,7 @@
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "term/screen-processor.h"
 #include "view/display-messages.h"
 
 /*!

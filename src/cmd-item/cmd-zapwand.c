@@ -28,6 +28,7 @@
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-wand-types.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"

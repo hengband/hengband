@@ -14,6 +14,7 @@
 #include "main/sound-of-music.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
  /*

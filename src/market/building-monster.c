@@ -7,6 +7,7 @@
 #include "monster-race/race-flags1.h"
 #include "lore/lore-store.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
 #include "view/display-lore.h"

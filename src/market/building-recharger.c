@@ -10,6 +10,7 @@
 #include "object/object-kind.h"
 #include "object-enchant/special-object-flags.h"
 #include "spell/spells3.h"
+#include "term/screen-processor.h"
 #include "view/display-messages.h"
 
 /*!

@@ -30,6 +30,7 @@
 #include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "system/angband-version.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"

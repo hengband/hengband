@@ -77,6 +77,7 @@
 #include "spell/spells-util.h"
 #include "spell/spells3.h"
 #include "system/angband-version.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "view/display-main-window.h"

@@ -5,6 +5,7 @@
 #include "main/sound-of-music.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"

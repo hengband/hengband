@@ -45,6 +45,7 @@
 #include "spell/spells3.h"
 #include "store/rumor.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

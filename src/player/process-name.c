@@ -3,6 +3,7 @@
 #include "core/asking-player.h"
 #include "io/files-util.h"
 #include "player/player-personality.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "world/world.h"

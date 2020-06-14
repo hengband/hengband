@@ -75,6 +75,7 @@
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/system-variables.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"

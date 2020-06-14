@@ -68,6 +68,7 @@
 #include "system/angband-version.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

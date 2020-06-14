@@ -1,6 +1,7 @@
 ﻿#include "birth/birth-select-race.h"
 #include "birth/birth-util.h"
 #include "io/input-key-acceptor.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
 static const char p2 = ')';

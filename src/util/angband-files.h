@@ -2,6 +2,28 @@
 
 #include "system/angband.h"
 
+/* Force definitions -- see fd_seek() */
+#ifndef SEEK_SET
+#define SEEK_SET 0
+#endif
+#ifndef SEEK_CUR
+#define SEEK_CUR 1
+#endif
+#ifndef SEEK_END
+#define SEEK_END 2
+#endif
+
+/* Force definitions -- see fd_lock() */
+#ifndef F_UNLCK
+#define F_UNLCK 0
+#endif
+#ifndef F_RDLCK
+#define F_RDLCK 1
+#endif
+#ifndef F_WRLCK
+#define F_WRLCK 2
+#endif
+
 errr path_parse(char *buf, int max, concptr file);
 errr path_build(char *buf, int max, concptr path, concptr file);
 FILE *angband_fopen(concptr file, concptr mode);

@@ -78,6 +78,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/angband-version.h"
 #include "system/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
+#include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/object-sort.h"
 #include "util/quarks.h"

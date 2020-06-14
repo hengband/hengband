@@ -13,6 +13,7 @@
 #include "player/permanent-resistances.h"
 #include "player/player-personality.h"
 #include "player/player-race-types.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
 /*!

@@ -71,6 +71,7 @@
 #include "system/building-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/quarks.h"

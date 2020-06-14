@@ -3,6 +3,7 @@
 #include "game-option/input-options.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 

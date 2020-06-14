@@ -7,6 +7,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "main/sound-of-music.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"

@@ -19,6 +19,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

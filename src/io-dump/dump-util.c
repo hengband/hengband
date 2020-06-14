@@ -1,6 +1,7 @@
 ﻿#include "io-dump/dump-util.h"
 #include "game-option/special-options.h"
 #include "term/term-color-types.h"
+#include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 

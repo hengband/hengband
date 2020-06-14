@@ -46,6 +46,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "spell/technic-info-table.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"

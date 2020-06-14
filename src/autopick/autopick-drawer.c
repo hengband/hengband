@@ -9,6 +9,7 @@
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-entry.h"
 #include "io/pref-file-expressor.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
 #define DESCRIPT_HGT 3

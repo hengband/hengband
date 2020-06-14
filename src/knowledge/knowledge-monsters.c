@@ -24,6 +24,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "view/display-main-window.h" // 暫定、後で消す.

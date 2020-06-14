@@ -167,46 +167,7 @@ extern void user_name(char *buf, int id);
 extern int usleep(huge usecs);
 #endif
 
-/*
- * Hack -- force definitions -- see fd_seek()
- */
-#ifndef SEEK_SET
-# define SEEK_SET	0
-#endif
-#ifndef SEEK_CUR
-# define SEEK_CUR	1
-#endif
-#ifndef SEEK_END
-# define SEEK_END	2
-#endif
-
- /*
-  * Hack -- force definitions -- see fd_lock()
-  */
-#ifndef F_UNLCK
-# define F_UNLCK	0
-#endif
-#ifndef F_RDLCK
-# define F_RDLCK	1
-#endif
-#ifndef F_WRLCK
-# define F_WRLCK	2
-#endif
-
 extern const char hexsym[16];
-
-// todo ファイル処理関数・メッセージ処理関数・画面描画関数で最低限分割する.
-extern void flush(void);
-extern void move_cursor(int row, int col);
-extern void screen_save();
-extern void screen_load();
-extern void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col);
-extern void put_str(concptr str, TERM_LEN row, TERM_LEN col);
-extern void c_prt(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col);
-extern void prt(concptr str, TERM_LEN row, TERM_LEN col);
-extern void c_roff(TERM_COLOR attr, concptr str);
-extern void roff(concptr str);
-extern void clear_from(int row);
 
 extern void request_command(player_type *player_ptr, int shopping);
 extern bool is_a_vowel(int ch);

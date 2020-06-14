@@ -3,6 +3,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/special-options.h"
 #include "main/music-definitions-table.h"
+#include "term/screen-processor.h"
 
 /*
  * Flush the screen, make a noise

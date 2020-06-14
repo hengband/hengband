@@ -25,6 +25,7 @@
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-song-numbers.h"
+#include "term/screen-processor.h"
 
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.

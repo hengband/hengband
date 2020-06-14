@@ -43,6 +43,7 @@
 #include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

@@ -34,6 +34,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-staff-types.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"

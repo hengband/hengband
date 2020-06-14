@@ -35,6 +35,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/quarks.h"

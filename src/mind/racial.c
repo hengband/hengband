@@ -55,6 +55,7 @@
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 

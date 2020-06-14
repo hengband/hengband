@@ -28,6 +28,7 @@
 #include "spell/music-checker.h"
 #include "spell-kind/spells-random.h"
 #include "spell-realm/spells-hex.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 

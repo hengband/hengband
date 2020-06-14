@@ -203,6 +203,7 @@
     <ClCompile Include="..\..\src\info-reader\skill-reader.c" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.c" />
     <ClCompile Include="..\..\src\io\input-key-acceptor.c" />
+    <ClCompile Include="..\..\src\term\screen-processor.c" />
     <ClCompile Include="..\..\src\util\quarks.c" />
     <ClCompile Include="..\..\src\lore\combat-types-setter.c" />
     <ClCompile Include="..\..\src\lore\magic-types-setter.c" />
@@ -580,6 +581,7 @@
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />
+    <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\quarks.h" />
     <ClInclude Include="..\..\src\lore\combat-types-setter.h" />
     <ClInclude Include="..\..\src\lore\magic-types-setter.h" />

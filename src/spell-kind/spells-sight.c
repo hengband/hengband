@@ -16,6 +16,7 @@
 #include "player/avatar.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 

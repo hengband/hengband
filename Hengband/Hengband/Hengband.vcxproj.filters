@@ -1379,6 +1379,9 @@
     <ClCompile Include="..\..\src\core\asking-player.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\term\screen-processor.c">
+      <Filter>term</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3018,6 +3021,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\asking-player.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\term\screen-processor.h">
+      <Filter>term</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

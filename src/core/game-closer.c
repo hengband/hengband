@@ -11,6 +11,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player/process-death.h"
+#include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

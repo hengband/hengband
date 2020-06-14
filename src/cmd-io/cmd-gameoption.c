@@ -13,6 +13,7 @@
 #include "main/sound-of-music.h"
 #include "system/game-option-types.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"

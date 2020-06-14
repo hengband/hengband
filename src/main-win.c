@@ -117,6 +117,7 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"

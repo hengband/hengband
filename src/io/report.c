@@ -19,6 +19,7 @@
 #include "player/player-personality.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"

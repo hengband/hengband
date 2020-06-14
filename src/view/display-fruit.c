@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "display-fruit.h"
+#include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
 /*!
