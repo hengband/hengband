@@ -22,6 +22,7 @@
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"

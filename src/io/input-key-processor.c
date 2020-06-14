@@ -35,6 +35,7 @@
 #include "cmd/cmd-basic.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-visuals.h"
+#include "core/asking-player.h"
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.

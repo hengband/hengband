@@ -12,6 +12,7 @@
  */
 
 #include "io/files-util.h"
+#include "core/asking-player.h"
 #include "io-dump/character-dump.h"
 #include "io/input-key-acceptor.h"
 #include "io/uid-checker.h"

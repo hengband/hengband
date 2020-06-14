@@ -1,5 +1,6 @@
 ﻿#include "realm/realm-trump.h"
 #include "cmd-action/cmd-spell.h"
+#include "core/asking-player.h"
 #include "effect/spells-effect-util.h"
 #include "game-option/input-options.h"
 #include "io/targeting.h"

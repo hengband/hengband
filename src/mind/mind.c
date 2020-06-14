@@ -18,6 +18,7 @@
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"

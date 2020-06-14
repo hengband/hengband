@@ -1,4 +1,5 @@
 ﻿#include "play-gamble.h"
+#include "core/asking-player.h"
 #include "core/show-file.h"
 #include "io/input-key-acceptor.h"
 #include "market/building-actions-table.h"

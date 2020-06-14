@@ -9,6 +9,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
+#include "core/asking-player.h"
 #include "io/files-util.h"
 #include "object-enchant/item-feeling.h"
 #include "perception/object-perception.h"

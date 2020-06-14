@@ -1,5 +1,4 @@
 ﻿/*!
- * @file racial.c
  * @brief レイシャルと突然変異の技能処理 / Racial powers (and mutations)
  * @date 2014/01/08
  * @author
@@ -16,6 +15,7 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "game-option/disturbance-options.h"

@@ -7,6 +7,7 @@
 #include "cmd-item/cmd-smith.h"
 #include "autopick/autopick.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-acceptor.h"

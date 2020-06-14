@@ -1,5 +1,6 @@
 ﻿#include "cmd/cmd-visuals.h"
 #include "cmd/cmd-draw.h"
+#include "core/asking-player.h"
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"

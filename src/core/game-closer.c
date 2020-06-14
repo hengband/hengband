@@ -1,5 +1,6 @@
 ﻿#include "core/game-closer.h"
 #include "cmd-io/cmd-save.h"
+#include "core/asking-player.h"
 #include "core/scores.h"
 #include "core/stuff-handler.h"
 #include "game-option/cheat-options.h"

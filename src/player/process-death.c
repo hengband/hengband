@@ -7,6 +7,7 @@
  */
 
 #include "process-death.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"

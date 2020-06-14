@@ -1,5 +1,6 @@
 ﻿#include "player/process-name.h"
 #include "autopick/autopick-reader-writer.h"
+#include "core/asking-player.h"
 #include "io/files-util.h"
 #include "player/player-personality.h"
 #include "term/term-color-types.h"

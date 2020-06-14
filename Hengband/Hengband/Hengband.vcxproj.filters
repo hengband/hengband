@@ -1376,6 +1376,9 @@
     <ClCompile Include="..\..\src\view\display-messages.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\asking-player.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3012,6 +3015,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\locale\english.h">
       <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\asking-player.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

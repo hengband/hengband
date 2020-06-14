@@ -1,5 +1,6 @@
 ﻿#include "object/warning.h"
 #include "art-definition/art-sword-types.h"
+#include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "game-option/input-options.h"

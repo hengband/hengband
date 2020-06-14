@@ -1,5 +1,6 @@
 ﻿#include "inventory/inventory-curse.h"
 #include "art-definition/art-accessory-types.h"
+#include "core/asking-player.h"
 #include "io/files-util.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"

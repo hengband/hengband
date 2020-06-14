@@ -207,23 +207,7 @@ extern void prt(concptr str, TERM_LEN row, TERM_LEN col);
 extern void c_roff(TERM_COLOR attr, concptr str);
 extern void roff(concptr str);
 extern void clear_from(int row);
-extern bool askfor_aux(char *buf, int len, bool numpad_cursor);
-extern bool askfor(char *buf, int len);
-extern bool get_string(concptr prompt, char *buf, int len);
 
-/*
- * Bit flags for control of get_check_strict()
- */
-#define CHECK_OKAY_CANCEL 0x01
-#define CHECK_NO_ESCAPE   0x02
-#define CHECK_NO_HISTORY  0x04
-#define CHECK_DEFAULT_Y   0x08
-extern bool get_check(concptr prompt);
-extern bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode);
-
-extern bool get_com(concptr prompt, char *command, bool z_escape);
-extern QUANTITY get_quantity(concptr prompt, QUANTITY max);
-extern void pause_line(int row);
 extern void request_command(player_type *player_ptr, int shopping);
 extern bool is_a_vowel(int ch);
 extern int get_keymap_dir(char ch);

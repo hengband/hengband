@@ -144,6 +144,7 @@
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

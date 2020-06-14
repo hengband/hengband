@@ -4,6 +4,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
 #include "combat/combat-options-type.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"

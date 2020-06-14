@@ -1,5 +1,6 @@
 ﻿#include "realm/realm-sorcery.h"
 #include "cmd-action/cmd-spell.h"
+#include "core/asking-player.h"
 #include "io/targeting.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"

@@ -29,6 +29,7 @@
 #include "cmd/cmd-basic.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-visuals.h"
+#include "core/asking-player.h"
 #include "mind/mind-sniper.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-events.h"

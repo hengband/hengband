@@ -10,6 +10,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "combat/attack-power-table.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

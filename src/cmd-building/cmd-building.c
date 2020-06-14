@@ -16,6 +16,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-building/cmd-inn.h"
+#include "core/asking-player.h"
 #include "core/scores.h"
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"

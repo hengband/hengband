@@ -12,6 +12,7 @@
 
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"

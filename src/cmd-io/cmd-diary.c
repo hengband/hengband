@@ -1,5 +1,6 @@
 ﻿#include "cmd-io/cmd-diary.h"
 #include "cmd-io/diary-subtitle-table.h"
+#include "core/asking-player.h"
 #include "core/show-file.h"
 #include "game-option/play-record-options.h"
 #include "main/sound-of-music.h"

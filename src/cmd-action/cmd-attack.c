@@ -8,7 +8,7 @@
 #include "art-definition/art-sword-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
-#include "player-attack/player-attack.h"
+#include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
@@ -17,9 +17,10 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster/monster-describer.h"
-#include "monster/monster-status.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status.h"
 #include "object/item-use-flags.h"
+#include "player-attack/player-attack.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
@@ -217,8 +218,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
         return FALSE;
     }
 
-    if (monster_csleep_remaining(m_ptr))
-    {
+    if (monster_csleep_remaining(m_ptr)) {
         if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5))
             chg_virtue(attacker_ptr, V_COMPASSION, -1);
         if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5))

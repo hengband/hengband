@@ -1,5 +1,6 @@
 ﻿#include "realm/realm-chaos.h"
 #include "cmd-action/cmd-spell.h"
+#include "core/asking-player.h"
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "player/player-class.h"

@@ -1,5 +1,6 @@
 ﻿#include "market/building-recharger.h"
 #include "autopick/autopick.h"
+#include "core/asking-player.h"
 #include "inventory/player-inventory.h"
 #include "market/building-util.h"
 #include "object/item-use-flags.h"

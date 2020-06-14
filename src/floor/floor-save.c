@@ -13,6 +13,7 @@
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-events.h"

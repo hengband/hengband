@@ -1,6 +1,7 @@
 ﻿#include "birth/birth-select-realm.h"
 #include "birth/birth-explanations-table.h"
 #include "birth/birth-util.h"
+#include "core/asking-player.h"
 #include "io/input-key-acceptor.h"
 #include "term/term-color-types.h"
 

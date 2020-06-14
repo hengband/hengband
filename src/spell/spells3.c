@@ -16,6 +16,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/asking-player.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

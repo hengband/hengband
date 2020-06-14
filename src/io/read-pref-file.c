@@ -16,6 +16,7 @@
 #include "io/read-pref-file.h"
 #include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick-reader-writer.h"
+#include "core/asking-player.h"
 #include "io-dump/dump-remover.h"
 #include "io/files-util.h"
 #include "io/interpret-pref-file.h"

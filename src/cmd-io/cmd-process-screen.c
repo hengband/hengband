@@ -6,6 +6,7 @@
 
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd/cmd-draw.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"

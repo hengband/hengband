@@ -1,38 +1,18 @@
 ﻿/*!
- * @file cmd-dump.c
  * @brief プレイヤーのインターフェイスに関するコマンドの実装 / Interface commands
  * @date 2014/01/02
  * @author
- * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
- * </pre>
- * @details
- * <pre>
- * A set of functions to maintain automatic dumps of various kinds.
- * The dump commands of original Angband simply add new lines to
- * existing files; these files will become bigger and bigger unless
- * an user deletes some or all of these files by hand at some
- * point.
- * These three functions automatically delete old dumped lines
- * before adding new ones.  Since there are various kinds of automatic
- * dumps in a single file, we add a header and a footer with a type
- * name for every automatic dump, and kill old lines only when the
- * lines have the correct type of header and footer.
- * We need to be quite paranoid about correctness; the user might
- * (mistakenly) edit the file by hand, and see all their work come
- * to nothing on the next auto dump otherwise.  The current code only
- * detects changes by noting inconsistencies between the actual number
- * of lines and the number written in the footer.  Note that this will
- * not catch single-line edits.
- * </pre>
+ * 2020 Hourier Rearranged
  */
 
 #include "cmd-io/cmd-dump.h"
 #include "art-definition/art-bow-types.h"
 #include "cmd-io/feeling-table.h"
+#include "core/asking-player.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"

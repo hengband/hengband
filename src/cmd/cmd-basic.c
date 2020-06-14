@@ -18,6 +18,7 @@
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "combat/slaying.h"
+#include "core/asking-player.h"
 #include "core/output-updater.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

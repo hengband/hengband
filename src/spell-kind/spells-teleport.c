@@ -8,6 +8,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-save.h"
+#include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"

@@ -1,6 +1,7 @@
 ﻿#include "cmd-io/cmd-macro.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/macro-util.h"
+#include "core/asking-player.h"
 #include "game-option/input-options.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"

@@ -8,6 +8,7 @@
 #include "art-definition/art-weapon-types.h"
 #include "autopick/autopick.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"

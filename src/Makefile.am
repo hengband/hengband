@@ -104,20 +104,21 @@ hengband_SOURCES = \
 	combat/vorpal-weapon.c combat/vorpal-weapon.h \
 	combat/shoot.c combat/shoot.h \
 	\
-	core/game-play.c core/game-play.h \
-	core/show-file.c core/show-file.h \
-	core/stuff-handler.c core/stuff-handler.h \
-	core/special-internal-keys.h \
-	core/output-updater.c core/output-updater.h \
+	core/asking-player.c core/asking-player.h \
 	core/game-closer.c core/game-closer.h \
-	core/turn-compensator.c core/turn-compensator.h \
-	core/hp-mp-regenerator.c core/hp-mp-regenerator.h \
+	core/game-play.c core/game-play.h \
 	core/hp-mp-processor.c core/hp-mp-processor.h \
+	core/hp-mp-regenerator.c core/hp-mp-regenerator.h \
 	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
+	core/output-updater.c core/output-updater.h \
 	core/player-processor.c core/player-processor.h \
 	core/scores.c core/scores.h \
+	core/show-file.c core/show-file.h \
 	core/sort.c core/sort.h \
+	core/special-internal-keys.h \
 	core/speed-table.c core/speed-table.h \
+	core/stuff-handler.c core/stuff-handler.h \
+	core/turn-compensator.c core/turn-compensator.h \
 	core/visuals-reseter.c core/visuals-reseter.h \
 	\
 	dungeon/dungeon.c dungeon/dungeon.h \

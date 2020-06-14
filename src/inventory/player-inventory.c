@@ -1,4 +1,5 @@
 ﻿#include "inventory/player-inventory.h"
+#include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"

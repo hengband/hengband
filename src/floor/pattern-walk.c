@@ -1,5 +1,6 @@
 ﻿#include "floor/pattern-walk.h"
 #include "cmd-io/cmd-save.h"
+#include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"

@@ -14,6 +14,7 @@
 #include "mutation/mutation.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-basic.h"
+#include "core/asking-player.h"
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"

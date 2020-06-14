@@ -14,6 +14,7 @@
 #include "birth/quick-start.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/cmd-help.h"
+#include "core/asking-player.h"
 #include "game-option/birth-options.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-definitions-table.h"

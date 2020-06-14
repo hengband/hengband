@@ -12,6 +12,7 @@
 
 #include "core/scores.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/asking-player.h"
 #include "core/turn-compensator.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"

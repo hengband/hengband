@@ -1,5 +1,4 @@
 ﻿/*!
- * @file hex.c
  * @brief 呪術の処理実装 / Hex code
  * @date 2014/01/14
  * @author
@@ -18,6 +17,7 @@
 #include "realm/realm-hex.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-quaff.h"
+#include "core/asking-player.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "grid/grid.h"

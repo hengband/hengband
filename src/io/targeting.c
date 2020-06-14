@@ -12,6 +12,7 @@
 #include "io/targeting.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-building/cmd-building.h"
+#include "core/asking-player.h"
 #include "core/sort.h"
 #include "core/stuff-handler.h"
 #include "info-reader/fixed-map-parser.h"
