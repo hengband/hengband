@@ -248,7 +248,7 @@ static int dehex(char c)
 }
 
 
-static int my_stricmp(concptr a, concptr b)
+static int angband_stricmp(concptr a, concptr b)
 {
 	for (concptr s1 = a, s2 = b; TRUE; s1++, s2++)
 	{
@@ -260,7 +260,7 @@ static int my_stricmp(concptr a, concptr b)
 	}
 }
 
-static int my_strnicmp(concptr a, concptr b, int n)
+static int angband_strnicmp(concptr a, concptr b, int n)
 {
 	for (concptr s1 = a, s2 = b; n > 0; s1++, s2++, n--)
 	{
@@ -299,7 +299,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 		{
 			len = strlen(macro_modifier_name[i]);
 
-			if (!my_strnicmp(str, macro_modifier_name[i], len))
+			if (!angband_strnicmp(str, macro_modifier_name[i], len))
 				break;
 		}
 
@@ -313,7 +313,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 	for (i = 0; i < max_macrotrigger; i++)
 	{
 		len = strlen(macro_trigger_name[i]);
-		if (!my_strnicmp(str, macro_trigger_name[i], len) && ']' == str[len])
+		if (!angband_strnicmp(str, macro_trigger_name[i], len) && ']' == str[len])
 		{
 			break;
 		}
@@ -514,8 +514,8 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 
 	for (i = 0; i < max_macrotrigger; i++)
 	{
-		if (!my_stricmp(key_code, macro_trigger_keycode[0][i])
-			|| !my_stricmp(key_code, macro_trigger_keycode[1][i]))
+		if (!angband_stricmp(key_code, macro_trigger_keycode[0][i])
+			|| !angband_stricmp(key_code, macro_trigger_keycode[1][i]))
 			break;
 	}
 
