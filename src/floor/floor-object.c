@@ -23,6 +23,7 @@
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "perception/object-perception.h"
+#include "system/alloc-entries.h"
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

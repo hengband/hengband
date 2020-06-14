@@ -1397,6 +1397,9 @@
     <ClCompile Include="..\..\src\util\buffer-shaper.c">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\alloc-entries.c">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3065,6 +3068,9 @@
       <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\alloc-entry-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\alloc-entries.h">
       <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>

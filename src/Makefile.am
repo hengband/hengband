@@ -536,6 +536,7 @@ hengband_SOURCES = \
 	sv-definition/sv-wand-types.h sv-definition/sv-weapon-types.h \
 	sv-definition/sv-other-types.h \
 	\
+	system/alloc-entries.c system/alloc-entries.h \
 	system/alloc-entry-definition.h \
 	system/angband.h system/angband-version.h \
 	system/building-type-definition.c system/building-type-definition.h \

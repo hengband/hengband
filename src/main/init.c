@@ -67,6 +67,7 @@
 #include "room/rooms.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/alloc-entries.h"
 #include "system/angband-version.h"
 #include "system/building-type-definition.h"
 #include "system/system-variables.h"

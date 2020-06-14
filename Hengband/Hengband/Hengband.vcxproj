@@ -207,6 +207,7 @@
     <ClCompile Include="..\..\src\io\input-key-acceptor.c" />
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\locale\vowel-checker.c" />
+    <ClCompile Include="..\..\src\system\alloc-entries.c" />
     <ClCompile Include="..\..\src\term\screen-processor.c" />
     <ClCompile Include="..\..\src\util\buffer-shaper.c" />
     <ClCompile Include="..\..\src\util\quarks.c" />
@@ -591,6 +592,7 @@
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\locale\vowel-checker.h" />
+    <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />
