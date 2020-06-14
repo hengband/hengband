@@ -244,7 +244,9 @@ hengband_SOURCES = \
 	knowledge/monster-group-table.c knowledge/monster-group-table.h \
 	knowledge/object-group-table.c knowledge/object-group-table.h \
 	\
-	locale/japanese.c locale/japanese.h locale/english.c locale/english.h \
+	locale/english.c locale/english.h \
+	locale/japanese.c locale/japanese.h \
+	locale/vowel-checker.c locale/vowel-checker.h \
 	\
 	lore/combat-types-setter.c lore/combat-types-setter.h \
 	lore/lore-calculator.c lore/lore-calculator.h \

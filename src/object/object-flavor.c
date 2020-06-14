@@ -16,6 +16,7 @@
 #include "grid/trap.h"
 #include "io/files-util.h"
 #include "locale/japanese.h"
+#include "locale/vowel-checker.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/artifact.h"

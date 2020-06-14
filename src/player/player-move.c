@@ -165,6 +165,7 @@
 #include "inventory/player-inventory.h"
 #include "io/input-key-requester.h"
 #include "io/targeting.h"
+#include "locale/vowel-checker.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/race-flags-resistance.h"

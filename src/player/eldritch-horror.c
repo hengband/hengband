@@ -7,6 +7,7 @@
 #include "player/eldritch-horror.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "locale/vowel-checker.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"

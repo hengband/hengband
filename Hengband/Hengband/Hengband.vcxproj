@@ -205,6 +205,7 @@
     <ClCompile Include="..\..\src\io\command-repeater.c" />
     <ClCompile Include="..\..\src\io\input-key-acceptor.c" />
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
+    <ClCompile Include="..\..\src\locale\vowel-checker.c" />
     <ClCompile Include="..\..\src\term\screen-processor.c" />
     <ClCompile Include="..\..\src\util\quarks.c" />
     <ClCompile Include="..\..\src\lore\combat-types-setter.c" />
@@ -585,6 +586,7 @@
     <ClInclude Include="..\..\src\io\command-repeater.h" />
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
+    <ClInclude Include="..\..\src\locale\vowel-checker.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\quarks.h" />
     <ClInclude Include="..\..\src\lore\combat-types-setter.h" />

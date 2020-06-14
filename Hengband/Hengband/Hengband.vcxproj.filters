@@ -1388,6 +1388,9 @@
     <ClCompile Include="..\..\src\io\command-repeater.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\locale\vowel-checker.c">
+      <Filter>locale</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3036,6 +3039,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\command-repeater.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\vowel-checker.h">
+      <Filter>locale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

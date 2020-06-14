@@ -34,6 +34,7 @@
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "locale/vowel-checker.h"
 #include "main/sound-of-music.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/monster-race-hook.h"

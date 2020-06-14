@@ -32,6 +32,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/report.h"
 #include "io/save.h"
+#include "locale/vowel-checker.h"
 #include "mind/mind-sniper.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
