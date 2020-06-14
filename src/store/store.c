@@ -46,6 +46,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
+#include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "locale/japanese.h"
 #include "main/music-definitions-table.h"

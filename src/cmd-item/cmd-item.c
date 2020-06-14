@@ -31,6 +31,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

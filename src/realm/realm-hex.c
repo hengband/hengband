@@ -22,6 +22,7 @@
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"

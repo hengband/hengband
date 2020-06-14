@@ -32,6 +32,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"

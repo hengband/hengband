@@ -1,5 +1,4 @@
 ﻿/*!
- * @file snipe.c
  * @brief スナイパー技能の実装 / Sniping
  * @date 2014/01/18
  * @author
@@ -12,6 +11,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/text-display-options.h"
+#include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/snipe-types.h"

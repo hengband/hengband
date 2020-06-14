@@ -5,6 +5,7 @@
 #include "game-option/input-options.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/read-pref-file.h"
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h"

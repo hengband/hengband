@@ -12,6 +12,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "mind/mind-ninja.h"
 #include "monster-race/race-flags7.h"

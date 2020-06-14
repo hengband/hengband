@@ -11,6 +11,7 @@
 #include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"

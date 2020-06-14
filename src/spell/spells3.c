@@ -37,6 +37,7 @@
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "lore/lore-calculator.h"

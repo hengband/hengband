@@ -32,6 +32,7 @@
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/monster-race-hook.h"

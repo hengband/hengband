@@ -107,20 +107,7 @@ struct alloc_entry
 	u16b total;		/* Unused for now */
 };
 
-extern bool use_menu;
-
 extern pos_list tmp_pos;
-
-extern COMMAND_CODE command_cmd;
-extern COMMAND_ARG command_arg;
-extern s16b command_rep;
-extern DIRECTION command_dir;
-extern s16b command_see;
-extern TERM_LEN command_gap;
-extern s16b command_wrk;
-extern s16b command_new;
-
-extern concptr keymap_act[KEYMAP_MODES][256];
 
 /*
  * OPTION: Maximum number of messages to remember (see "io.c")
@@ -154,7 +141,6 @@ extern int usleep(huge usecs);
 
 extern const char hexsym[16];
 
-extern void request_command(player_type *player_ptr, int shopping);
 extern bool is_a_vowel(int ch);
 extern int get_keymap_dir(char ch);
 extern errr type_string(concptr str, uint len);

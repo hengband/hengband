@@ -209,6 +209,7 @@ hengband_SOURCES = \
 	io/inet.c io/inet.h \
 	io/input-key-acceptor.c io/input-key-acceptor.h \
 	io/input-key-processor.c io/input-key-processor.h \
+	io/input-key-requester.c io/input-key-requester.h \
 	io/interpret-pref-file.c io/interpret-pref-file.h \
 	io/load.c io/load.h \
 	io/mutations-dump.c io/mutations-dump.h \

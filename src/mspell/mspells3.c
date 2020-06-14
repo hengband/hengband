@@ -20,6 +20,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "lore/lore-calculator.h"
 #include "main/sound-definitions-table.h"

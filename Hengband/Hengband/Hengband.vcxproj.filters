@@ -1382,6 +1382,9 @@
     <ClCompile Include="..\..\src\util\sort.c">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\input-key-requester.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3024,6 +3027,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\util\sort.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\input-key-requester.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

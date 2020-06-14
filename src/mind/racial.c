@@ -21,6 +21,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "main/sound-of-music.h"
 #include "melee/melee-postprocess.h"

@@ -9,6 +9,7 @@
 #include "inventory/pack-overflow.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
+#include "io/input-key-requester.h"
 #include "mind/mind-force-trainer.h"
 #include "core/speed-table.h"
 #include "monster-race/race-flags1.h"
