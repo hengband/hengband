@@ -16,6 +16,7 @@
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "term/term-color-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

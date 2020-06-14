@@ -121,6 +121,7 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #ifdef WINDOWS

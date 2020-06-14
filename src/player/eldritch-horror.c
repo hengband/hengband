@@ -20,6 +20,7 @@
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "player/mimic-info-table.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

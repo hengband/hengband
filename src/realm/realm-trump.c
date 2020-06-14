@@ -18,7 +18,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief トランプ領域魔法の各処理を行う

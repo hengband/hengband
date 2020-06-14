@@ -28,7 +28,7 @@
 #include "object/object-hook.h"
 #include "room/rooms.h"
 #include "spell-kind/spells-floor.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する /

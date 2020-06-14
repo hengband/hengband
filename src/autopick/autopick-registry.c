@@ -16,6 +16,7 @@
 #include "object/object-hook.h"
 #include "object-enchant/special-object-flags.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 
 static const char autoregister_header[] = "?:$AUTOREGISTER";
 

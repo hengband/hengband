@@ -29,6 +29,7 @@
 #include "player/player-status.h"
 #include "system/system-variables.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 quest_type *quest; /*!< Quest info */

@@ -26,6 +26,7 @@
 #include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 

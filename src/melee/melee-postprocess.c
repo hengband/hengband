@@ -34,6 +34,7 @@
 #include "player/player-move.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
+#include "view/display-messages.h"
 
 // Melee-post-process-type
 typedef struct mam_pp_type {

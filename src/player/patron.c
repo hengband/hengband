@@ -25,6 +25,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
 #include "util/util.h"
+#include "view/display-messages.h"
 
 #ifdef JP
 /*!

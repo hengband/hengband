@@ -53,7 +53,7 @@
 #include "room/rooms-special.h"
 #include "room/rooms-trap.h"
 #include "room/rooms-vault.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
  /*!
   * 各部屋タイプの生成比定義

@@ -63,6 +63,7 @@
 #include "store/store-util.h"
 #include "store/store.h" // do_cmd_store() がある。後で移設する.
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "wizard/wizard-special-process.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"

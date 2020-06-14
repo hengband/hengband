@@ -13,6 +13,7 @@
 #include "player/player-effects.h"
 #include "player/player-race-types.h"
 #include "realm/realm-song-numbers.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

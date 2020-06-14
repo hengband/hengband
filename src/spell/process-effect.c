@@ -20,6 +20,7 @@
 #include "spell/range-calc.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h" // 暫定、後で消すかも.
+#include "view/display-messages.h"
 
 /*!
  * @brief 配置した鏡リストの次を取得する /

@@ -10,6 +10,7 @@
 #include "monster/monster-info.h"
 #include "mspell/monster-spell.h"
 #include "player/player-effects.h"
+#include "view/display-messages.h"
 
 gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

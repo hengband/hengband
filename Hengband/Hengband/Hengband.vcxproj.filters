@@ -1373,6 +1373,9 @@
     <ClCompile Include="..\..\src\util\quarks.c">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-messages.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1914,12 +1917,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-summon.h">
       <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\locele\japanese.h">
-      <Filter>locale</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\locele\english.h">
-      <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\save.h">
       <Filter>io</Filter>
@@ -3006,6 +3003,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\util\quarks.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-messages.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\japanese.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\english.h">
+      <Filter>locale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

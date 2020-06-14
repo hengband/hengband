@@ -10,6 +10,7 @@
 #include "mspell/mspell-util.h"
 #include "player/player-move.h"
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief RF4_BR_*の処理。各種ブレス。 /

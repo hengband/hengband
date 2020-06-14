@@ -2,6 +2,7 @@
 #include "info-reader/kind-info-tokens-table.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(エゴ用) /

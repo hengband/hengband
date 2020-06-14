@@ -9,6 +9,7 @@
 #include "io/write-diary.h"
 #include "player/player-personality.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

@@ -19,6 +19,7 @@
 #include "system/angband-version.h"
 #include "term/gameterm.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #ifdef WORLD_SCORE

@@ -74,6 +74,7 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/quarks.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #include <sys/stat.h>

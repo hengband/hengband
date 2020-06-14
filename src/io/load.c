@@ -81,6 +81,7 @@
 #include "util/angband-files.h"
 #include "util/object-sort.h"
 #include "util/quarks.h"
+#include "view/display-messages.h"
 #include "world/world-object.h"
 #include "world/world.h"
 

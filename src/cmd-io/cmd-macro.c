@@ -9,6 +9,7 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief マクロ情報をprefファイルに保存する /

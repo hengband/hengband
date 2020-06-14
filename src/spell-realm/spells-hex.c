@@ -5,6 +5,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell/spells3.h"
 #include "spell/spells-execution.h"
+#include "view/display-messages.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 

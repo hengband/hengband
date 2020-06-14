@@ -22,6 +22,7 @@
 #include "io/pref-file-expressor.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 // todo コールバック関数に変更するので、いずれ消す.

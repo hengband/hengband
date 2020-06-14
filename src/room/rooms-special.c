@@ -13,7 +13,7 @@
 #include "object/object-kind-hook.h"
 #include "room/rooms.h"
 #include "system/system-variables.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms

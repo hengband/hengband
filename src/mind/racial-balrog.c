@@ -2,6 +2,7 @@
 #include "io/targeting.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 bool demonic_breath(player_type *creature_ptr)
 {

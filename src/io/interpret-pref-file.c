@@ -17,6 +17,7 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-main-window.h" // 暫定。apply_default_feat_lighting()。後で消す.
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #define MAX_MACRO_CHARS 16128 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).

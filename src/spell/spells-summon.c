@@ -25,6 +25,7 @@
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief トランプ魔法独自の召喚処理を行う / Handle summoning and failure of trump spells

@@ -16,6 +16,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief トランプ領域の「シャッフル」の効果をランダムに決めて処理する。

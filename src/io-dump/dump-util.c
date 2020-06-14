@@ -2,6 +2,7 @@
 #include "game-option/special-options.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 
 TERM_COLOR attr_idx = 0;
 SYMBOL_CODE char_idx = 0;

@@ -5,6 +5,7 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "io/tokenizer.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ダンジョン用) /

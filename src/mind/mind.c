@@ -59,6 +59,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

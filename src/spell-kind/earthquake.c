@@ -18,6 +18,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 地震処理

@@ -18,6 +18,7 @@
 #include "monster-race/race-indice-types.h"
 #include "mspell/mspell-type.h"
 #include "term/term-color-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

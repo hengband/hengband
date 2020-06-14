@@ -23,7 +23,7 @@
 #include "object/object-mark-types.h"
 #include "object/object-info.h"
 #include "player/player-move.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*
  *  Auto-destroy marked item

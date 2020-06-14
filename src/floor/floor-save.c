@@ -56,6 +56,7 @@
 #include "system/system-variables.h"
 #include "util/angband-files.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 bool repair_monsters;

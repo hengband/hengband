@@ -6,6 +6,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 
 /*!
  * todo 表示とそれ以外を分割する

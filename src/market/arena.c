@@ -17,6 +17,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "player/player-effects.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

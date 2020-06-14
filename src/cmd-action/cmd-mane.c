@@ -1,5 +1,4 @@
 ﻿/*!
- * @file mane.c
  * @brief ものまねの処理実装 / Imitation code
  * @date 2014/01/14
  * @author
@@ -41,6 +40,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 static int damage;
 

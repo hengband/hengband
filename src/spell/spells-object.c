@@ -47,8 +47,8 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 typedef struct
 {

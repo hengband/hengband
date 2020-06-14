@@ -6,6 +6,7 @@
 #include "object/object-flavor.h"
 #include "player/player-effects.h"
 #include "spell/spells-object.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief アイテムの強化を行う。 / Enchant item

@@ -17,7 +17,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "room/pit-nest-kinds-table.h"
 #include "rooms.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める

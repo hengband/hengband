@@ -30,7 +30,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-food-types.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief 自然領域魔法の各処理を行う

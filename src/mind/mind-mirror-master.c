@@ -14,6 +14,7 @@
 #include "spell/spell-types.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*

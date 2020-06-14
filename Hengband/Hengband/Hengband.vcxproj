@@ -926,6 +926,7 @@
     <ClCompile Include="..\..\src\view\display-main-window.c" />
     <ClCompile Include="..\..\src\object\warning.c" />
     <ClCompile Include="..\..\src\floor\wild.c" />
+    <ClCompile Include="..\..\src\view\display-messages.c" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.c" />
     <ClCompile Include="..\..\src\wizard\wizard-special-process.c" />
     <ClCompile Include="..\..\src\world\world-object.c" />
@@ -980,10 +981,11 @@
     <ClInclude Include="..\..\src\view\display-lore-magics.h" />
     <ClInclude Include="..\..\src\view\display-lore-status.h" />
     <ClInclude Include="..\..\src\view\display-lore.h" />
+    <ClInclude Include="..\..\src\view\display-messages.h" />
     <ClInclude Include="..\..\src\view\display-monster-status.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\..\src\world\world-object.h" />
-    <ClInclude Include="..\src\locele\english.h" />
+    <ClInclude Include="..\..\src\locale\english.h" />
     <ClInclude Include="..\..\src\monster\horror-descriptions.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />
     <ClInclude Include="..\..\src\io\interpret-pref-file.h" />
@@ -1048,7 +1050,7 @@
     <ClInclude Include="..\..\src\wizard\wizard-spoiler.h" />
     <ClInclude Include="..\..\src\world\world-movement-processor.h" />
     <ClInclude Include="..\..\src\world\world-turn-processor.h" />
-    <ClInclude Include="..\src\locele\japanese.h" />
+    <ClInclude Include="..\..\src\locale\japanese.h" />
     <ClInclude Include="..\..\src\combat\aura-counterattack.h" />
   </ItemGroup>
   <ItemGroup>

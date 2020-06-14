@@ -95,6 +95,7 @@
 #include "spell/technic-info-table.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 // todo コピペ感が強くなったので関数化

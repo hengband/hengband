@@ -5,6 +5,7 @@
 #include "spell/process-effect.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 聖浄の杖の効果

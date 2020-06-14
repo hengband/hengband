@@ -29,6 +29,7 @@
 #include "spell-kind/spells-random.h"
 #include "spell-realm/spells-hex.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 bool load = TRUE;
 bool can_save = FALSE;

@@ -15,6 +15,7 @@
 #include "object/object-kind-hook.h"
 #include "player/player-effects.h"
 #include "spell-kind/spells-teleport.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 変わり身処理

@@ -56,6 +56,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 修行僧の構え設定処理

@@ -23,6 +23,7 @@
 #include "object/object-stack.h"
 #include "perception/object-perception.h"
 #include "system/system-variables.h"
+#include "view/display-messages.h"
 #include "view/object-describer.h"
 #include "world/world-object.h"
 #include "world/world.h"

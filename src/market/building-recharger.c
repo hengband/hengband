@@ -9,6 +9,7 @@
 #include "object/object-kind.h"
 #include "object-enchant/special-object-flags.h"
 #include "spell/spells3.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staffs

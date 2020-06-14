@@ -25,6 +25,7 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*

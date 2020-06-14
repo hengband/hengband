@@ -14,6 +14,7 @@
 #include "knowledge/knowledge-self.h"
 #include "knowledge/knowledge-uniques.h"
 #include "main/sound-of-music.h"
+#include "view/display-messages.h"
 
 /*
  * Interact with "knowledge"

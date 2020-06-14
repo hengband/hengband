@@ -7,6 +7,7 @@
 #include "player/avatar.h"
 #include "term/term-color-types.h"
 #include "view/display-fruit.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief カジノ1プレイごとのメインルーチン / gamble_comm

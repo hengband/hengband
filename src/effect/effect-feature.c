@@ -11,6 +11,7 @@
 #include "room/rooms.h"
 #include "spell/process-effect.h" // 暫定、後で消す.
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

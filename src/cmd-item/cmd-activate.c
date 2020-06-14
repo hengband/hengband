@@ -68,6 +68,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "util/quarks.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

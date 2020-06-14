@@ -38,6 +38,7 @@
 #include "player/player-move.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

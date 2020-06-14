@@ -5,6 +5,7 @@
 #include "store/store-util.h"
 #include "player/avatar.h"
 #include "store/rumor.h"
+#include "view/display-messages.h"
 
 #define RUMOR_CHANCE 8
 

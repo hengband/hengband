@@ -33,6 +33,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];

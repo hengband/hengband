@@ -25,6 +25,7 @@
 #include "player/avatar.h"
 #include "sv-definition/sv-other-types.h"
 #include "term/term-color-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

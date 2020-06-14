@@ -60,6 +60,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "view/display-lore.h"
+#include "view/display-messages.h"
 #include "view/display-player.h"
 #include "view/object-describer.h"
 #include "world/world.h"

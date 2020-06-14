@@ -40,6 +40,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
 {

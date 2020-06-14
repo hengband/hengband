@@ -9,6 +9,7 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "perception/simple-perception.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the inventory (or on the floor)

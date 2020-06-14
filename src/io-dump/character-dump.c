@@ -28,6 +28,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

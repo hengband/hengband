@@ -25,8 +25,8 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief モンスター回復処理

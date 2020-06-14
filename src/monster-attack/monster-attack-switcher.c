@@ -16,6 +16,7 @@
 #include "player/player-effects.h"
 #include "spell-kind/earthquake.h"
 #include "spell/spells3.h"
+#include "view/display-messages.h"
 
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
 {

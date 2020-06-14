@@ -2,6 +2,7 @@
 #include "dungeon/dungeon.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

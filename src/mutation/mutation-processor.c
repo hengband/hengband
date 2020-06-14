@@ -21,6 +21,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとに突然変異の発動判定を行う処理

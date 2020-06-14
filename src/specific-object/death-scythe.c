@@ -13,6 +13,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/player-damage.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 死の大鎌ダメージが跳ね返ってきた時の、種族ごとのダメージ倍率を返す

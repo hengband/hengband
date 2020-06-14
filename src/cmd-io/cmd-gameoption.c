@@ -15,6 +15,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #define OPT_NUM 15

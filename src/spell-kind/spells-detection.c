@@ -15,6 +15,7 @@
 #include "object/object-mark-types.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief プレイヤー周辺の地形を感知する

@@ -8,6 +8,7 @@
 #include "object/object-hook.h"
 #include "object/object-stack.h"
 #include "object/object-info.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief アイテムを指定確率で破損させる /

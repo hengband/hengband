@@ -15,6 +15,7 @@
 #include "locale/japanese.h"
 #include "term/gameterm.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 
 #include <stdio.h>
 #include <stdarg.h>

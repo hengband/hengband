@@ -6,6 +6,7 @@
 #include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "player/player-move.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief アイテムの所持種類数が超えた場合にアイテムを床に落とす処理

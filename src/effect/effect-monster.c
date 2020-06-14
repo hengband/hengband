@@ -36,6 +36,7 @@
 #include "spell/spells3.h"
 #include "spells-effect-util.h"
 #include "sv-definition/sv-other-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief ビーム/ボルト/ボール系魔法によるモンスターへの効果があるかないかを判定する

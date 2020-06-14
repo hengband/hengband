@@ -7,6 +7,7 @@
 #include "room/rooms.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 angband_header f_head; /*!< 地形情報のヘッダ構造体 */
 

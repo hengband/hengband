@@ -1,8 +1,4 @@
-﻿
-#include "system/angband.h"
-#include "util/util.h"
-#include "japanese.h"
-
+﻿#include "locale/english.h"
 
 /*!
  * @brief 英単語、句、説を複数形を変換する / Pluralize a monster name

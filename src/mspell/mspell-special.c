@@ -26,6 +26,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief バーノール・ルパートのRF6_SPECIALの処理。分裂・合体。 /

@@ -17,6 +17,7 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 視界内モンスターに魔法効果を与える / Apply a "project()" directly to all viewable monsters

@@ -71,6 +71,7 @@
 #include "player/player-status.h"
 #include "spell/spells3.h"
 #include "term/term-color-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 魔道具術師の取り込んだ魔力一覧から選択/閲覧する /

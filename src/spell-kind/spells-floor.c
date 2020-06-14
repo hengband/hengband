@@ -39,6 +39,7 @@
 #include "spell/spell-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*
  * @brief 啓蒙/陽光召喚処理

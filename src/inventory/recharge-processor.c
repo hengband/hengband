@@ -5,6 +5,7 @@
 #include "object/object-kind.h"
 #include "player/player-move.h"
 #include "util/quarks.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief

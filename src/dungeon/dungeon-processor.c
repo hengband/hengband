@@ -22,6 +22,7 @@
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
 

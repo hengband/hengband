@@ -1,5 +1,6 @@
 ﻿#include "info-reader/info-reader-util.h"
 #include "object-enchant/activation-info-table.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief データの可変文字列情報をテキストとして保管する /

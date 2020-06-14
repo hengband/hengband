@@ -17,6 +17,7 @@
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief モンスターへの単体抹殺処理サブルーチン / Delete a non-unique/non-quest monster

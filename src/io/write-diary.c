@@ -13,6 +13,7 @@
 #include "market/arena-info-table.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 // todo *抹殺* したい…

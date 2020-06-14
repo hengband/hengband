@@ -4,6 +4,7 @@
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 
 /*
  * Load an autopick preference file

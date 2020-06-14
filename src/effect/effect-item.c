@@ -15,6 +15,7 @@
 #include "spell/spells3.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるアイテムオブジェクトへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.

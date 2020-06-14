@@ -8,6 +8,7 @@
 #include "player/player-effects.h"
 #include "player/player-race-types.h"
 #include "store/rumor.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

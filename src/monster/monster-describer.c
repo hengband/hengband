@@ -6,6 +6,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "util/quarks.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.

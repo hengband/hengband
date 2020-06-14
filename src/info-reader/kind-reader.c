@@ -3,6 +3,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-kind.h"
 #include "term/gameterm.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用) /

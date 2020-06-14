@@ -559,6 +559,7 @@ hengband_SOURCES = \
 	view/display-lore-status.c view/display-lore-status.h \
 	view/display-lore.c view/display-lore.h \
 	view/display-main-window.c view/display-main-window.h \
+	view/display-messages.c view/display-messages.h \
 	view/display-monster-status.c view/display-monster-status.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
 	view/display-player-misc-info.c view/display-player-misc-info.h \

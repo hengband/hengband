@@ -8,6 +8,7 @@
 #include "monster-floor/monster-generator.h"
 #include "monster/monster-info.h"
 #include "player/avatar.h"
+#include "view/display-messages.h"
 
 // Powerful monsters can resist.
 gf_switch_result effect_monster_old_poly(effect_monster_type *em_ptr)

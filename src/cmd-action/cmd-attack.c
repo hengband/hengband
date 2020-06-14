@@ -28,6 +28,7 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief プレイヤーの変異要素による打撃処理

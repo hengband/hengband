@@ -24,6 +24,7 @@
 #include "player/player-status.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * エッセンス情報の構造体 / A structure for smithing

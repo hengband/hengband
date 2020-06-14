@@ -16,6 +16,7 @@
 #include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 擬似鑑定を実際に行い判定を反映する

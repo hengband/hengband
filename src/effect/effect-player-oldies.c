@@ -3,6 +3,7 @@
 #include "monster-race/race-indice-types.h"
 #include "player/eldritch-horror.h"
 #include "player/player-effects.h"
+#include "view/display-messages.h"
 
 void effect_player_old_heal(player_type *target_ptr, effect_player_type *ep_ptr)
 {

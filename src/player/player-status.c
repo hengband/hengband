@@ -73,6 +73,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "util/quarks.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

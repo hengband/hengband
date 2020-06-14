@@ -10,7 +10,7 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object-enchant/special-object-flags.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*

@@ -75,6 +75,7 @@
 #include "sv-definition/sv-bow-types.h"
 #include "system/system-variables.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "view/object-describer.h"
 #include "world/world.h"
 

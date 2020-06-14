@@ -4,6 +4,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell/spells-execution.h"
 #include "spell/spells3.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief プレイヤーの歌に関する継続処理

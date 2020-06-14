@@ -22,7 +22,7 @@
 #include "spell/spell-types.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell/spells3.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

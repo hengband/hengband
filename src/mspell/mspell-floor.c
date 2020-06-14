@@ -28,6 +28,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief RF4_SHRIEKの処理。叫び。 /

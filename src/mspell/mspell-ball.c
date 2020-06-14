@@ -11,6 +11,7 @@
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "spell/spell-types.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief RF4_BA_NUKEの処理。放射能球。 /

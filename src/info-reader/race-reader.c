@@ -1,6 +1,7 @@
 ﻿#include "info-reader/race-reader.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "term/gameterm.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(モンスター用1) /

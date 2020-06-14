@@ -1,13 +1,12 @@
 ﻿/*!
- * @file mspells3.c
  * @brief 青魔法の処理実装 / Blue magic
  * @date 2014/01/15
  * @author
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
- * This software may be copied and distributed for educational, research,\n
- * and not for profit purposes provided that this copyright and statement\n
- * are included in all such copies.  Other copyrights may also apply.\n
- * 2014 Deskull rearranged comment for Doxygen.\n
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
+ * This software may be copied and distributed for educational, research,
+ * and not for profit purposes provided that this copyright and statement
+ * are included in all such copies.  Other copyrights may also apply.
+ * 2014 Deskull rearranged comment for Doxygen.
  */
 
 #include "system/angband.h"
@@ -50,6 +49,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
  /*!
   * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル

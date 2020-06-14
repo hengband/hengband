@@ -44,6 +44,7 @@
 #include "realm/realm-song-numbers.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

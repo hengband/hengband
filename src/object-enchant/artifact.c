@@ -47,6 +47,7 @@
 #include "spell/spells-object.h"
 #include "util/quarks.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
  /*

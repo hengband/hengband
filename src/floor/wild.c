@@ -36,6 +36,7 @@
 #include "spell-realm/spells-hex.h"
 #include "system/system-variables.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #define MAX_FEAT_IN_TERRAIN 18

@@ -19,7 +19,7 @@
 #include "room/rooms.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "util/util.h"
+#include "view/display-messages.h"
 
 /*
  * The vault generation arrays

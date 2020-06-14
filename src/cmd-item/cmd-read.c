@@ -47,6 +47,7 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "util/angband-files.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

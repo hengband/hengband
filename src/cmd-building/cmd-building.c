@@ -53,6 +53,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells3.h"
 #include "system/building-type-definition.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 MONRACE_IDX battle_mon[4];

@@ -50,6 +50,7 @@
 #include "spell-kind/spells-random.h"
 #include "spell/spells-summon.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

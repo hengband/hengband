@@ -18,6 +18,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "term/gameterm.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 #define GRAVE_LINE_WIDTH 31

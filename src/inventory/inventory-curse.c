@@ -19,6 +19,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-summon.h"
 #include "util/quarks.h"
+#include "view/display-messages.h"
 
 #define TRC_P_FLAG_MASK \
     (TRC_TELEPORT_SELF | TRC_CHAINSWORD | TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | TRC_CALL_ANIMAL | TRC_CALL_DEMON \

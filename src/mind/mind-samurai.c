@@ -18,6 +18,7 @@
 #include "object-enchant/tr-types.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"
+#include "view/display-messages.h"
 
 typedef struct samurai_slaying_type {
     MULTIPLY mult;

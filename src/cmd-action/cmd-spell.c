@@ -42,6 +42,7 @@
 #include "spell/spells3.h"
 #include "spell/technic-info-table.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
  /*!
   * 魔法領域フラグ管理テーブル /

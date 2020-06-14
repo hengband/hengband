@@ -39,6 +39,7 @@
 #include "util/angband-files.h"
 #include "util/quarks.h"
 #include "view/display-lore.h"
+#include "view/display-messages.h"
 
  /*
   * The spoiler file being created

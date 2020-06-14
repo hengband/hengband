@@ -36,6 +36,7 @@
 #include "spell-kind/earthquake.h"
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 static player_attack_type *initialize_player_attack_type(

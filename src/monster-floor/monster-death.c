@@ -47,6 +47,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/monster-type-definition.h"
 #include "system/system-variables.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

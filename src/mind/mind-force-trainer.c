@@ -1,5 +1,6 @@
 ﻿#include "mind/mind-force-trainer.h"
 #include "cmd-action/cmd-pet.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 練気術師が「練気」で溜めた気の量を返す

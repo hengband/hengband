@@ -8,6 +8,7 @@
 #include "mind/monk-attack.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/attack-criticality.h"
+#include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/cheat-options.h"
@@ -17,8 +18,8 @@
 #include "mind/mind-force-trainer.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
-#include "core/speed-table.h"
 #include "monster/monster-status.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

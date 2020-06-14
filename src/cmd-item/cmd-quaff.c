@@ -39,6 +39,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells3.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

@@ -107,15 +107,6 @@ struct alloc_entry
 	u16b total;		/* Unused for now */
 };
 
-extern u32b message__next;
-extern u32b message__last;
-extern u32b message__head;
-extern u32b message__tail;
-extern u32b *message__ptr;
-extern char *message__buf;
-
-extern bool msg_flag;
-
 extern bool *macro__cmd;
 extern char *macro__buf;
 
@@ -207,16 +198,6 @@ extern const char hexsym[16];
 // todo ファイル処理関数・メッセージ処理関数・画面描画関数で最低限分割する.
 extern void flush(void);
 extern void move_cursor(int row, int col);
-extern s32b message_num(void);
-extern concptr message_str(int age);
-extern void message_add(concptr msg);
-extern void msg_erase(void);
-extern void msg_print(concptr msg);
-extern void msg_print_wizard(int cheat_type, concptr msg);
-#ifndef SWIG
-extern void msg_format(concptr fmt, ...);
-extern void msg_format_wizard(int cheat_type, concptr fmt, ...);
-#endif /* SWIG */
 extern void screen_save();
 extern void screen_load();
 extern void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col);

@@ -26,6 +26,7 @@
 #include "player/player-race-types.h"
 #include "player/player-sex.h"
 #include "store/store.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!

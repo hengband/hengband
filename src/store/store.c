@@ -79,6 +79,7 @@
 #include "util/object-sort.h"
 #include "util/quarks.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 #include "view/object-describer.h"
 #include "world/world.h"
 

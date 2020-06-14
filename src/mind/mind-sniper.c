@@ -20,6 +20,7 @@
 #include "player/player-status.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 #define MAX_SNIPE_POWERS 16
 

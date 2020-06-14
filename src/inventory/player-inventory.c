@@ -22,6 +22,7 @@
 #include "term/term-color-types.h"
 #include "util/quarks.h"
 #include "view/display-main-window.h"
+#include "view/display-messages.h"
 
 bool select_ring_slot;
 
