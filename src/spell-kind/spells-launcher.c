@@ -1,5 +1,6 @@
 ﻿#include "spell-kind/spells-launcher.h"
 #include "effect/effect-characteristics.h"
+#include "floor/geometry.h"
 #include "io/targeting.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"

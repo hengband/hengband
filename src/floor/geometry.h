@@ -33,30 +33,18 @@ extern bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION 
 #define TEMP_MAX 2298
 
 //!< 対象グリッドの一覧をまとめる構造体
-typedef struct
-{
+typedef struct pos_list {
 	POSITION_IDX n; //!< Array of grids for use by various functions (see grid.c")
 	POSITION y[TEMP_MAX];
 	POSITION x[TEMP_MAX];
 } pos_list;
 
-//!< ターゲット指定構造体
-typedef struct
-{
-	DIRECTION dir;
-	POSITION y;
-	POSITION x;
-} target_dir;
-
 /*
  * Simple structure to hold a map location
  */
-typedef struct coord coord;
-
-struct coord
-{
+typedef struct coord {
 	POSITION y;
 	POSITION x;
-};
+} coord;
 
 bool is_seen(player_type *creature_ptr, monster_type *m_ptr);

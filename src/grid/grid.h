@@ -16,6 +16,7 @@
 
 #include "system/angband.h"
 #include "spell/spells-util.h"
+#include "floor/geometry.h"
 
  /*
   * A single "grid" in a Cave

@@ -12,8 +12,6 @@
 
 #pragma once
 
-#include "floor/geometry.h"
-
 /*
  * An entry for the object/monster allocation functions
  *

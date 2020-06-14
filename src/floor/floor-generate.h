@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "floor/floor.h"
+#include "floor/geometry.h"
 
 /*!
  * @file generate.h
