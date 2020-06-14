@@ -556,6 +556,7 @@ hengband_SOURCES = \
 	util/quarks.c util/quarks.h \
 	util/sort.c util/sort.h \
 	util/string-processor.c util/string-processor.h \
+	util/tag-sorter.c util/tag-sorter.h \
 	util/util.c util/util.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \

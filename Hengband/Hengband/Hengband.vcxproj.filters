@@ -1397,6 +1397,9 @@
     <ClCompile Include="..\..\src\game-option\keymap-directory-getter.c">
       <Filter>game-option</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\tag-sorter.c">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3048,6 +3051,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\locale\vowel-checker.h">
       <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\tag-sorter.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

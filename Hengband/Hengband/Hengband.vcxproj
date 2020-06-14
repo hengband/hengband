@@ -912,6 +912,7 @@
     <ClCompile Include="..\..\src\util\angband-files.c" />
     <ClCompile Include="..\..\src\util\object-sort.c" />
     <ClCompile Include="..\..\src\util\string-processor.c" />
+    <ClCompile Include="..\..\src\util\tag-sorter.c" />
     <ClCompile Include="..\..\src\view\display-birth.c" />
     <ClCompile Include="..\..\src\view\display-characteristic.c" />
     <ClCompile Include="..\..\src\view\display-fruit.c" />
@@ -987,6 +988,7 @@
     <ClInclude Include="..\..\src\util\angband-files.h" />
     <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\util\string-processor.h" />
+    <ClInclude Include="..\..\src\util\tag-sorter.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\display-lore-attacks.h" />
     <ClInclude Include="..\..\src\view\display-lore-drops.h" />

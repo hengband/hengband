@@ -73,15 +73,6 @@
 #endif
 
 /*
- * Sort-array element
- */
-typedef struct tag_type
-{
-	int tag;
-	int index;
-} tag_type;
-
-/*
  * An entry for the object/monster allocation functions
  *
  * Pass 1 is determined from allocation information
@@ -137,8 +128,6 @@ extern int usleep(huge usecs);
 
 extern errr type_string(concptr str, uint len);
 extern void roff_to_buf(concptr str, int wlen, char *tbuf, size_t bufsize);
-
-extern void tag_sort(tag_type elements[], int number);
 
 extern size_t angband_strcpy(char *buf, concptr src, size_t bufsize);
 extern size_t angband_strcat(char *buf, concptr src, size_t bufsize);
