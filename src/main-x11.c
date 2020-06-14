@@ -2182,6 +2182,11 @@ static void IMDestroyCallback(XIM xim, XPointer client_data, XPointer call_data)
 }
 #endif
 
+static char force_lower(char a)
+{
+	return ((isupper((a))) ? tolower((a)) : (a))
+}
+
 /*
  * Initialize a term_data
  */
@@ -2334,7 +2339,7 @@ static errr term_data_init(term_data *td, int i)
 	if (ch == NULL) quit("XAllocClassHint failed");
 
 	strcpy(res_name, name);
-	res_name[0] = FORCELOWER(res_name[0]);
+	res_name[0] = force_lower(res_name[0]);
 	ch->res_name = res_name;
 
 	strcpy(res_class, "Angband");

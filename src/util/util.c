@@ -248,12 +248,15 @@ static int dehex(char c)
 }
 
 
+static char force_upper(char a) { return (islower(a)) ? toupper(a) : a; }
+
+
 static int angband_stricmp(concptr a, concptr b)
 {
 	for (concptr s1 = a, s2 = b; TRUE; s1++, s2++)
 	{
-		char z1 = FORCEUPPER(*s1);
-		char z2 = FORCEUPPER(*s2);
+		char z1 = force_upper(*s1);
+		char z2 = force_upper(*s2);
 		if (z1 < z2) return -1;
 		if (z1 > z2) return 1;
 		if (!z1) return 0;
@@ -264,8 +267,8 @@ static int angband_strnicmp(concptr a, concptr b, int n)
 {
 	for (concptr s1 = a, s2 = b; n > 0; s1++, s2++, n--)
 	{
-		char z1 = FORCEUPPER(*s1);
-		char z2 = FORCEUPPER(*s2);
+		char z1 = force_upper(*s1);
+		char z2 = force_upper(*s2);
 		if (z1 < z2) return -1;
 		if (z1 > z2) return 1;
 		if (!z1) return 0;

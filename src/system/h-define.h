@@ -27,12 +27,6 @@
 #endif
 
 /*
- * Force a character to lowercase/uppercase
- */
-#define FORCELOWER(A)  ((isupper((A))) ? tolower((A)) : (A))
-#define FORCEUPPER(A)  ((islower((A))) ? toupper((A)) : (A))
-
-/*
  * Non-typed minimum value macro
  */
 #undef MIN
