@@ -1358,6 +1358,9 @@
     <ClCompile Include="..\..\src\system\building-type-definition.c">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\string-processor.c">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2976,6 +2979,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-types.h">
       <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\string-processor.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

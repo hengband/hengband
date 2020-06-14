@@ -544,6 +544,7 @@ hengband_SOURCES = \
 	\
 	util/angband-files.c util/angband-files.h \
 	util/object-sort.c util/object-sort.h \
+	util/string-processor.c util/string-processor.h \
 	util/util.c util/util.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \

@@ -5,6 +5,7 @@
 #include "io/read-pref-file.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief マクロ情報をprefファイルに保存する /

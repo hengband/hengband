@@ -13,6 +13,7 @@
 #include "object/object-kind.h"
 #include "system/game-option-types.h"
 #include "term/gameterm.h"
+#include "util/string-processor.h"
 #include "view/display-main-window.h" // 暫定。apply_default_feat_lighting()。後で消す.
 #include "world/world.h"
 

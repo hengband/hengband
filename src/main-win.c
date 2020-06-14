@@ -117,6 +117,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

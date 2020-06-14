@@ -1,0 +1,339 @@
+﻿#include "util/string-processor.h"
+
+/*
+ * Convert a decimal to a single digit octal number
+ */
+static char octify(uint i) { return (hexsym[i % 8]); }
+
+/*
+ * Convert a decimal to a single digit hex number
+ */
+static char hexify(uint i) { return (hexsym[i % 16]); }
+
+/*
+ * Convert a octal-digit into a decimal
+ */
+static int deoct(char c)
+{
+    if (isdigit(c))
+        return (D2I(c));
+    return 0;
+}
+
+/*
+ * Convert a hexidecimal-digit into a decimal
+ */
+static int dehex(char c)
+{
+    if (isdigit(c))
+        return (D2I(c));
+    if (islower(c))
+        return (A2I(c) + 10);
+    if (isupper(c))
+        return (A2I(tolower(c)) + 10);
+    return 0;
+}
+
+static char force_upper(char a) { return (islower(a)) ? toupper(a) : a; }
+
+static int angband_stricmp(concptr a, concptr b)
+{
+    for (concptr s1 = a, s2 = b; TRUE; s1++, s2++) {
+        char z1 = force_upper(*s1);
+        char z2 = force_upper(*s2);
+        if (z1 < z2)
+            return -1;
+        if (z1 > z2)
+            return 1;
+        if (!z1)
+            return 0;
+    }
+}
+
+static int angband_strnicmp(concptr a, concptr b, int n)
+{
+    for (concptr s1 = a, s2 = b; n > 0; s1++, s2++, n--) {
+        char z1 = force_upper(*s1);
+        char z2 = force_upper(*s2);
+        if (z1 < z2)
+            return -1;
+        if (z1 > z2)
+            return 1;
+        if (!z1)
+            return 0;
+    }
+
+    return 0;
+}
+
+static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
+{
+    char *s = *bufptr;
+    concptr str = *strptr;
+    bool mod_status[MAX_MACRO_MOD];
+
+    int i, len = 0;
+    int shiftstatus = 0;
+    concptr key_code;
+
+    if (macro_template == NULL)
+        return;
+
+    for (i = 0; macro_modifier_chr[i]; i++)
+        mod_status[i] = FALSE;
+    str++;
+
+    /* Examine modifier keys */
+    while (TRUE) {
+        for (i = 0; macro_modifier_chr[i]; i++) {
+            len = strlen(macro_modifier_name[i]);
+
+            if (!angband_strnicmp(str, macro_modifier_name[i], len))
+                break;
+        }
+
+        if (!macro_modifier_chr[i])
+            break;
+        str += len;
+        mod_status[i] = TRUE;
+        if ('S' == macro_modifier_chr[i])
+            shiftstatus = 1;
+    }
+
+    for (i = 0; i < max_macrotrigger; i++) {
+        len = strlen(macro_trigger_name[i]);
+        if (!angband_strnicmp(str, macro_trigger_name[i], len) && ']' == str[len]) {
+            break;
+        }
+    }
+
+    if (i == max_macrotrigger) {
+        str = angband_strchr(str, ']');
+        if (str) {
+            *s++ = (char)31;
+            *s++ = '\r';
+            *bufptr = s;
+            *strptr = str; /* where **strptr == ']' */
+        }
+
+        return;
+    }
+
+    key_code = macro_trigger_keycode[shiftstatus][i];
+    str += len;
+
+    *s++ = (char)31;
+    for (i = 0; macro_template[i]; i++) {
+        char ch = macro_template[i];
+        switch (ch) {
+        case '&':
+            for (int j = 0; macro_modifier_chr[j]; j++) {
+                if (mod_status[j])
+                    *s++ = macro_modifier_chr[j];
+            }
+
+            break;
+        case '#':
+            strcpy(s, key_code);
+            s += strlen(key_code);
+            break;
+        default:
+            *s++ = ch;
+            break;
+        }
+    }
+
+    *s++ = '\r';
+
+    *bufptr = s;
+    *strptr = str; /* where **strptr == ']' */
+    return;
+}
+
+/*
+ * Hack -- convert a printable string into real ascii
+ *
+ * I have no clue if this function correctly handles, for example,
+ * parsing "\xFF" into a (signed) char.  Whoever thought of making
+ * the "sign" of a "char" undefined is a complete moron.  Oh well.
+ */
+void text_to_ascii(char *buf, concptr str)
+{
+    char *s = buf;
+    while (*str) {
+        if (*str == '\\') {
+            str++;
+            if (!(*str))
+                break;
+
+            if (*str == '[') {
+                trigger_text_to_ascii(&s, &str);
+            } else {
+                if (*str == 'x') {
+                    *s = 16 * (char)dehex(*++str);
+                    *s++ += (char)dehex(*++str);
+                } else if (*str == '\\') {
+                    *s++ = '\\';
+                } else if (*str == '^') {
+                    *s++ = '^';
+                } else if (*str == 's') {
+                    *s++ = ' ';
+                } else if (*str == 'e') {
+                    *s++ = ESCAPE;
+                } else if (*str == 'b') {
+                    *s++ = '\b';
+                } else if (*str == 'n') {
+                    *s++ = '\n';
+                } else if (*str == 'r') {
+                    *s++ = '\r';
+                } else if (*str == 't') {
+                    *s++ = '\t';
+                } else if (*str == '0') {
+                    *s = 8 * (char)deoct(*++str);
+                    *s++ += (char)deoct(*++str);
+                } else if (*str == '1') {
+                    *s = 64 + 8 * (char)deoct(*++str);
+                    *s++ += (char)deoct(*++str);
+                } else if (*str == '2') {
+                    *s = 64 * 2 + 8 * (char)deoct(*++str);
+                    *s++ += (char)deoct(*++str);
+                } else if (*str == '3') {
+                    *s = 64 * 3 + 8 * (char)deoct(*++str);
+                    *s++ += (char)deoct(*++str);
+                }
+            }
+
+            str++;
+        } else if (*str == '^') {
+            str++;
+            *s++ = (*str++ & 037);
+        } else {
+            *s++ = *str++;
+        }
+    }
+
+    *s = '\0';
+}
+
+static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
+{
+    char *s = *bufptr;
+    concptr str = *strptr;
+    char key_code[100];
+    int i;
+    if (macro_template == NULL)
+        return FALSE;
+
+    *s++ = '\\';
+    *s++ = '[';
+
+    concptr tmp;
+    for (i = 0; macro_template[i]; i++) {
+        char ch = macro_template[i];
+
+        switch (ch) {
+        case '&':
+            while ((tmp = angband_strchr(macro_modifier_chr, *str)) != 0) {
+                int j = (int)(tmp - macro_modifier_chr);
+                tmp = macro_modifier_name[j];
+                while (*tmp)
+                    *s++ = *tmp++;
+                str++;
+            }
+
+            break;
+        case '#': {
+            int j;
+            for (j = 0; *str && *str != '\r'; j++)
+                key_code[j] = *str++;
+            key_code[j] = '\0';
+            break;
+        }
+        default:
+            if (ch != *str)
+                return FALSE;
+            str++;
+        }
+    }
+
+    if (*str++ != '\r')
+        return FALSE;
+
+    for (i = 0; i < max_macrotrigger; i++) {
+        if (!angband_stricmp(key_code, macro_trigger_keycode[0][i]) || !angband_stricmp(key_code, macro_trigger_keycode[1][i]))
+            break;
+    }
+
+    if (i == max_macrotrigger)
+        return FALSE;
+
+    tmp = macro_trigger_name[i];
+    while (*tmp)
+        *s++ = *tmp++;
+
+    *s++ = ']';
+
+    *bufptr = s;
+    *strptr = str;
+    return TRUE;
+}
+
+/*
+ * Hack -- convert a string into a printable form
+ */
+void ascii_to_text(char *buf, concptr str)
+{
+    char *s = buf;
+    while (*str) {
+        byte i = (byte)(*str++);
+        if (i == 31) {
+            if (!trigger_ascii_to_text(&s, &str)) {
+                *s++ = '^';
+                *s++ = '_';
+            }
+        } else {
+            if (i == ESCAPE) {
+                *s++ = '\\';
+                *s++ = 'e';
+            } else if (i == ' ') {
+                *s++ = '\\';
+                *s++ = 's';
+            } else if (i == '\b') {
+                *s++ = '\\';
+                *s++ = 'b';
+            } else if (i == '\t') {
+                *s++ = '\\';
+                *s++ = 't';
+            } else if (i == '\n') {
+                *s++ = '\\';
+                *s++ = 'n';
+            } else if (i == '\r') {
+                *s++ = '\\';
+                *s++ = 'r';
+            } else if (i == '^') {
+                *s++ = '\\';
+                *s++ = '^';
+            } else if (i == '\\') {
+                *s++ = '\\';
+                *s++ = '\\';
+            } else if (i < 32) {
+                *s++ = '^';
+                *s++ = i + 64;
+            } else if (i < 127) {
+                *s++ = i;
+            } else if (i < 64) {
+                *s++ = '\\';
+                *s++ = '0';
+                *s++ = octify(i / 8);
+                *s++ = octify(i % 8);
+            } else {
+                *s++ = '\\';
+                *s++ = 'x';
+                *s++ = hexify(i / 16);
+                *s++ = hexify(i % 16);
+            }
+        }
+    }
+
+    *s = '\0';
+}

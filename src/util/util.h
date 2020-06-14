@@ -229,8 +229,6 @@ extern errr play_music(int type, int num);
 extern void select_floor_music(player_type *player_ptr);
 extern void sound(int num);
 extern void move_cursor(int row, int col);
-extern void text_to_ascii(char *buf, concptr str);
-extern void ascii_to_text(char *buf, concptr str);
 extern errr macro_add(concptr pat, concptr act);
 extern sint macro_find_exact(concptr pat);
 extern char inkey(void);
