@@ -484,7 +484,6 @@ hengband_SOURCES = \
 	specific-object/death-scythe.c specific-object/death-scythe.h \
 	specific-object/torch.c specific-object/torch.h \
 	\
-	spell/music-checker.c spell/music-checker.h \
 	spell/process-effect.c spell/process-effect.h \
 	spell/range-calc.c spell/range-calc.h \
 	spell/spells3.c spell/spells3.h \
@@ -517,6 +516,7 @@ hengband_SOURCES = \
 	\
 	spell-realm/spells-crusade.c spell-realm/spells-crusade.h \
 	spell-realm/spells-hex.c spell-realm/spells-hex.h \
+	spell-realm/spells-song.c spell-realm/spells-song.h \
 	spell-realm/spells-trump.c spell-realm/spells-trump.h \
 	\
 	store/store.c store/store.h \

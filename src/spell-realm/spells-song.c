@@ -1,4 +1,4 @@
-﻿#include "spell/music-checker.h"
+﻿#include "spell-realm/spells-song.h"
 #include "floor/floor.h"
 #include "player/player-skill.h"
 #include "realm/realm-song-numbers.h"

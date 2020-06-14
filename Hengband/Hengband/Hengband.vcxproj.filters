@@ -371,9 +371,6 @@
     <ClCompile Include="..\..\src\core\player-processor.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\music-checker.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player\digestion-processor.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -1400,6 +1397,9 @@
     <ClCompile Include="..\..\src\system\alloc-entries.c">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-song.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1806,9 +1806,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\player-processor.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\music-checker.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\digestion-processor.h">
       <Filter>player</Filter>
@@ -3072,6 +3069,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\alloc-entries.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-song.h">
+      <Filter>spell-realm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
