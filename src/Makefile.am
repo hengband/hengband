@@ -165,6 +165,7 @@ hengband_SOURCES = \
 	game-option/disturbance-options.c game-option/disturbance-options.h \
 	game-option/game-play-options.c game-option/game-play-options.h \
 	game-option/input-options.c game-option/input-options.h \
+	game-option/keymap-directory-getter.c game-option/keymap-directory-getter.h \
 	game-option/map-screen-options.c game-option/map-screen-options.h \
 	game-option/option-flags.c game-option/option-flags.h \
 	game-option/option-types-table.c game-option/option-types-table.h \

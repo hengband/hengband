@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "game-option/keymap-directory-getter.h"
 
 extern concptr keymap_act[KEYMAP_MODES][256];
 

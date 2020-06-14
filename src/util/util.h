@@ -17,10 +17,6 @@
 #define KTRL(X)	((X) & 0x1F)
 #define ESCAPE	'\033'
 
-#define KEYMAP_MODE_ORIG	0 /*!< オリジナルキー配置 / Mode for original keyset commands */
-#define KEYMAP_MODE_ROGUE	1 /*!< ローグライクキー配置 / Mode for roguelike keyset commands */
-#define KEYMAP_MODES		2 /*!< キー配置の数 / Number of keymap modes */
-
 #define SCREEN_BUF_MAX_SIZE (4 * 65536) /*!< Max size of screen dump buffer */
 
 /* Cheat Info Type */
@@ -139,7 +135,6 @@ extern void user_name(char *buf, int id);
 extern int usleep(huge usecs);
 #endif
 
-extern int get_keymap_dir(char ch);
 extern errr type_string(concptr str, uint len);
 extern void roff_to_buf(concptr str, int wlen, char *tbuf, size_t bufsize);
 

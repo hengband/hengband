@@ -1391,6 +1391,12 @@
     <ClCompile Include="..\..\src\locale\vowel-checker.c">
       <Filter>locale</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game-option\keymap-directory-getter.h">
+      <Filter>game-option</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\game-option\keymap-directory-getter.c">
+      <Filter>game-option</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">

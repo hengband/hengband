@@ -19,6 +19,7 @@
 #include "core/asking-player.h"
 #include "core/show-file.h"
 #include "game-option/input-options.h"
+#include "game-option/keymap-directory-getter.h"
 #include "term/term-color-types.h"
 
 /*
