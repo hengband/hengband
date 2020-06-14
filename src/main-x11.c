@@ -93,6 +93,7 @@
  */
 
 #include "system/angband.h"
+#include "cmd-io/macro-util.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"

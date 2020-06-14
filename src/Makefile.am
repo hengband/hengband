@@ -80,6 +80,7 @@ hengband_SOURCES = \
 	cmd-io/cmd-save.c cmd-io/cmd-save.h \
 	cmd-io/diary-subtitle-table.c cmd-io/diary-subtitle-table.h \
 	cmd-io/feeling-table.c cmd-io/feeling-table.h \
+	cmd-io/macro-util.c cmd-io/macro-util.h \
 	\
 	cmd-item/cmd-activate.c cmd-item/cmd-activate.h \
 	cmd-item/cmd-eat.c cmd-item/cmd-eat.h \

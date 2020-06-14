@@ -116,9 +116,6 @@ extern char *message__buf;
 
 extern bool msg_flag;
 
-extern s16b macro__num;
-extern concptr *macro__pat;
-extern concptr *macro__act;
 extern bool *macro__cmd;
 extern char *macro__buf;
 
@@ -229,8 +226,6 @@ extern errr play_music(int type, int num);
 extern void select_floor_music(player_type *player_ptr);
 extern void sound(int num);
 extern void move_cursor(int row, int col);
-extern errr macro_add(concptr pat, concptr act);
-extern sint macro_find_exact(concptr pat);
 extern char inkey(void);
 extern concptr quark_str(STR_OFFSET num);
 extern void quark_init(void);

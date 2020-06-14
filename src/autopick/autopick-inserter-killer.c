@@ -1,5 +1,6 @@
 ﻿#include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-dirty-flags.h"
+#include "cmd-io/macro-util.h"
 #include "game-option/input-options.h"
 #include "util/string-processor.h"
 

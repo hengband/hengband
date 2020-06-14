@@ -31,6 +31,7 @@
 
 #include "main/init.h"
 #include "cmd-building/cmd-building.h"
+#include "cmd-io/macro-util.h"
 #include "info-reader/fixed-map-parser.h" // 相互参照、後で何とかする.
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

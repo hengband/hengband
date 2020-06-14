@@ -1361,6 +1361,9 @@
     <ClCompile Include="..\..\src\util\string-processor.c">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\macro-util.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2982,6 +2985,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\util\string-processor.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\macro-util.h">
+      <Filter>cmd-io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
