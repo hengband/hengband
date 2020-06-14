@@ -22,6 +22,7 @@
 #include "io/files-util.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-race/race-flags1.h"

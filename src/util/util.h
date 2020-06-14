@@ -221,10 +221,6 @@ extern const char hexsym[16];
 
 // todo ファイル処理関数・メッセージ処理関数・画面描画関数で最低限分割する.
 extern void flush(void);
-extern void bell(void);
-extern errr play_music(int type, int num);
-extern void select_floor_music(player_type *player_ptr);
-extern void sound(int num);
 extern void move_cursor(int row, int col);
 extern char inkey(void);
 extern concptr quark_str(STR_OFFSET num);

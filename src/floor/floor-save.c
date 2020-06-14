@@ -30,6 +30,7 @@
 #include "io/save.h"
 #include "io/uid-checker.h"
 #include "io/write-diary.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"

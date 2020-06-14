@@ -26,6 +26,7 @@
 #include "floor/wild.h"
 #include "io/files-util.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "market/arena.h"
 #include "market/bounty.h"
 #include "market/building-actions-table.h"
@@ -51,7 +52,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells3.h"
 #include "system/building-type-definition.h"
-#include "util/util.h"
 #include "world/world.h"
 
 MONRACE_IDX battle_mon[4];

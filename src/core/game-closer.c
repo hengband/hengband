@@ -5,6 +5,7 @@
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "player/process-death.h"
 #include "io/save.h"
 #include "core/scores.h"

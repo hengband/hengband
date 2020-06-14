@@ -10,6 +10,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
@@ -30,7 +31,6 @@
 #include "spell/spells-status.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "view/object-describer.h"
 

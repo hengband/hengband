@@ -14,6 +14,7 @@
 #include "io/write-diary.h"
 #include "lore/lore-store.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "monster-floor/monster-object.h"
 #include "monster-floor/monster-summon.h"

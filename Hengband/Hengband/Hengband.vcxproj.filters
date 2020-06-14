@@ -1364,6 +1364,9 @@
     <ClCompile Include="..\..\src\cmd-io\macro-util.c">
       <Filter>cmd-io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\sound-of-music.c">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2988,6 +2991,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-io\macro-util.h">
       <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\sound-of-music.h">
+      <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

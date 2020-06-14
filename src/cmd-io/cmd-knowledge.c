@@ -12,6 +12,7 @@
 #include "knowledge/knowledge-quests.h"
 #include "knowledge/knowledge-self.h"
 #include "knowledge/knowledge-uniques.h"
+#include "main/sound-of-music.h"
 
 /*
  * Interact with "knowledge"

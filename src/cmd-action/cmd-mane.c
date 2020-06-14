@@ -19,6 +19,7 @@
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-describer.h"
@@ -39,7 +40,6 @@
 #include "spell/spells-summon.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 
 static int damage;

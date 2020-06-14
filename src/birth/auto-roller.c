@@ -2,6 +2,7 @@
 #include "birth/birth-stat.h"
 #include "birth/birth-util.h"
 #include "cmd-io/cmd-gameoption.h"
+#include "main/sound-of-music.h"
 #include "player/player-personality.h"
 #include "system/game-option-types.h"
 #include "term/term-color-types.h"

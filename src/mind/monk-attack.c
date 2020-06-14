@@ -13,6 +13,7 @@
 #include "game-option/cheat-options.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"

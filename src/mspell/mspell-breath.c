@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-breath.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/drs-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"

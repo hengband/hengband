@@ -9,6 +9,7 @@
 #include "game-option/special-options.h"
 #include "io/files-util.h"
 #include "io/write-diary.h"
+#include "main/sound-of-music.h"
 #include "system/game-option-types.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"

@@ -31,6 +31,7 @@
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/snipe-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
@@ -56,7 +57,6 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-lite-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 
 /*!

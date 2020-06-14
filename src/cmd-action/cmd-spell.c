@@ -18,6 +18,7 @@
 #include "io/write-diary.h"
 #include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
@@ -39,7 +40,6 @@
 #include "spell/spells-util.h"
 #include "spell/spells3.h"
 #include "spell/technic-info-table.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 
  /*!

@@ -3,6 +3,7 @@
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
+#include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "market/building-actions-table.h"
 #include "market/building-util.h"

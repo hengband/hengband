@@ -9,6 +9,7 @@
 #include "combat/attack-criticality.h"
 #include "core/stuff-handler.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/player-damage.h"

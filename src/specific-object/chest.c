@@ -4,6 +4,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
@@ -19,7 +20,6 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-other-types.h"
-#include "util/util.h"
 
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
 #define SV_CHEST_MIN_LARGE 4

@@ -162,6 +162,7 @@
 #include "io/exit-panic.h"
 #include "io/files-util.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 

@@ -5,6 +5,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster/monster-update.h"
 #include "player/player-effects.h"
 #include "room/rooms.h"

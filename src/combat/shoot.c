@@ -10,6 +10,7 @@
 #include "inventory/inventory-object.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/snipe-types.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
@@ -42,7 +43,6 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-bow-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world-object.h"
 

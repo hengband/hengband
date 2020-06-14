@@ -12,6 +12,7 @@
 #include "io/write-diary.h"
 #include "locale/english.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
@@ -27,7 +28,6 @@
 #include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "system/system-variables.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

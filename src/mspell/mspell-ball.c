@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-ball.h"
 #include "floor/floor.h"
+#include "main/sound-of-music.h"
 #include "mind/drs-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"

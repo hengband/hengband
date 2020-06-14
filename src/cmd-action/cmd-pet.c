@@ -12,6 +12,7 @@
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
+#include "main/sound-of-music.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
@@ -29,7 +30,6 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

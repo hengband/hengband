@@ -22,6 +22,7 @@
 #include "io/targeting.h"
 #include "lore/lore-calculator.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/race-flags-ability1.h"
@@ -47,7 +48,6 @@
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 
  /*!

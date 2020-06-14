@@ -21,6 +21,7 @@
 #include "io/files-util.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "mind/mind-force-trainer.h"
 #include "monster-race/race-flags1.h"
@@ -69,7 +70,6 @@
 #include "spell/technic-info-table.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

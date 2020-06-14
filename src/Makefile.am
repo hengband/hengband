@@ -252,10 +252,11 @@ hengband_SOURCES = \
 	\
 	main.c main-x11.c main-gcu.c \
 	\
+	main/init.c main/init.h \
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
+	main/sound-of-music.c main/sound-of-music.h \
 	main/x11-gamma-builder.c main/x11-gamma-builder.h \
-	main/init.c main/init.h \
 	\
 	market/arena-info-table.c market/arena-info-table.h \
 	market/building-util.c market/building-util.h \

@@ -4,6 +4,7 @@
 #include "game-option/input-options.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
+#include "main/sound-of-music.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"

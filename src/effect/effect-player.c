@@ -10,6 +10,7 @@
 #include "effect/effect-player-util.h"
 #include "effect/spells-effect-util.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"

@@ -42,6 +42,7 @@
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/snipe-types.h"
 #include "monster/monster-describer.h"
 #include "monster-floor/monster-death.h"

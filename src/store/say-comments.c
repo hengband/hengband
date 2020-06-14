@@ -1,6 +1,6 @@
-﻿#include "system/angband.h"
-#include "store/say-comments.h"
+﻿#include "store/say-comments.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "store/store-owner-comments.h"
 #include "store/store-util.h"
 #include "player/avatar.h"

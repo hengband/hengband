@@ -2,6 +2,7 @@
 #include "birth/birth-util.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "core/show-file.h"
+#include "main/sound-of-music.h"
 #include "system/game-option-types.h"
 
 /*!

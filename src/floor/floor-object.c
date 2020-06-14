@@ -9,6 +9,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"

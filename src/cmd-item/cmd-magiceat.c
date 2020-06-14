@@ -60,6 +60,7 @@
 #include "game-option/text-display-options.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-other-types.h"
@@ -69,7 +70,6 @@
 #include "player/player-status.h"
 #include "spell/spells3.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
 
 /*!
  * @brief 魔道具術師の取り込んだ魔力一覧から選択/閲覧する /

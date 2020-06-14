@@ -17,6 +17,7 @@
 #include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
 #include "object/item-use-flags.h"
 #include "player/player-effects.h"
@@ -24,7 +25,6 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)

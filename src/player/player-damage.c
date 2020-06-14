@@ -19,6 +19,7 @@
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-describer.h"
@@ -41,7 +42,6 @@
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

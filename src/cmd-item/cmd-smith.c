@@ -9,6 +9,7 @@
 #include "cmd/cmd-basic.h"
 #include "game-option/text-display-options.h"
 #include "inventory/player-inventory.h"
+#include "main/sound-of-music.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
@@ -21,7 +22,6 @@
 #include "perception/object-perception.h"
 #include "player/player-status.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 
 /*!

@@ -2,6 +2,7 @@
 #include "cmd-io/diary-subtitle-table.h"
 #include "core/show-file.h"
 #include "game-option/play-record-options.h"
+#include "main/sound-of-music.h"
 #include "io/chuukei.h"
 #include "io/files-util.h"
 #include "io/write-diary.h"

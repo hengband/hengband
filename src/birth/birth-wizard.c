@@ -16,6 +16,7 @@
 #include "cmd-io/cmd-help.h"
 #include "game-option/birth-options.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "player/avatar.h"
 #include "player/patron.h"
 #include "player/player-sex.h"

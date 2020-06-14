@@ -7,6 +7,7 @@
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
@@ -27,7 +28,6 @@
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-wand-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "view/object-describer.h"
 

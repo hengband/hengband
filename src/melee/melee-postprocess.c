@@ -15,6 +15,7 @@
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
@@ -33,7 +34,6 @@
 #include "player/player-move.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
-#include "util/util.h"
 
 // Melee-post-process-type
 typedef struct mam_pp_type {

@@ -28,6 +28,7 @@
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-mindcrafter.h"
 #include "mind/mind-mirror-master.h"
@@ -56,7 +57,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 
 /*! 特殊技能の一覧テーブル */

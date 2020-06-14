@@ -8,6 +8,7 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-object.h"
+#include "main/sound-of-music.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
@@ -18,7 +19,6 @@
 #include "player/player-move.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 
 bool select_ring_slot;

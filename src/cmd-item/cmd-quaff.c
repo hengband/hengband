@@ -13,6 +13,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mutation/mutation.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
@@ -37,7 +38,6 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
 #include "spell/spells3.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 
 /*!

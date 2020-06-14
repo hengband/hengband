@@ -12,6 +12,7 @@
 #include "combat/slaying.h"
 #include "floor/floor.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
 #include "mind/monk-attack.h"

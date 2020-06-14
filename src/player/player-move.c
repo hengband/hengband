@@ -164,6 +164,7 @@
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -191,7 +192,6 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

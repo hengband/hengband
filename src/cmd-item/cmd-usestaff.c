@@ -6,6 +6,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/special-object-flags.h"
@@ -33,7 +34,6 @@
 #include "spell/spells-summon.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-staff-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "view/object-describer.h"
 

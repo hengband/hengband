@@ -205,6 +205,7 @@
     <ClCompile Include="..\..\src\lore\magic-types-setter.c" />
     <ClCompile Include="..\..\src\lore\lore-calculator.c" />
     <ClCompile Include="..\..\src\lore\lore-util.c" />
+    <ClCompile Include="..\..\src\main\sound-of-music.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-summon.c" />
     <ClCompile Include="..\..\src\monster-floor\one-monster-placer.c" />
     <ClCompile Include="..\..\src\monster\monster-compaction.c" />
@@ -578,6 +579,7 @@
     <ClInclude Include="..\..\src\lore\magic-types-setter.h" />
     <ClInclude Include="..\..\src\lore\lore-calculator.h" />
     <ClInclude Include="..\..\src\lore\lore-util.h" />
+    <ClInclude Include="..\..\src\main\sound-of-music.h" />
     <ClInclude Include="..\..\src\mind\drs-types.h" />
     <ClInclude Include="..\..\src\mind\snipe-types.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-summon.h" />

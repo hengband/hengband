@@ -10,6 +10,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "melee/melee-postprocess.h"
 #include "melee/melee-switcher.h"
 #include "melee/melee-util.h"

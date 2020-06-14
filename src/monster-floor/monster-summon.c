@@ -2,6 +2,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"

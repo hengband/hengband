@@ -41,6 +41,7 @@
 #include "io/chuukei.h"
 #include "io/interpret-pref-file.h"
 #include "io/read-pref-file.h"
+#include "main/sound-of-music.h"
 #include "locale/english.h"
 #include "player/player-personalities-types.h"
 #include "system/angband-version.h"

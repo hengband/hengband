@@ -15,6 +15,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
 #include "monster-attack/monster-attack-describer.h"

@@ -1,5 +1,6 @@
 ﻿#include "core/show-file.h"
 #include "io/files-util.h"
+#include "main/sound-of-music.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"

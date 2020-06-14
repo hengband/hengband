@@ -21,6 +21,7 @@
 #include "game-option/option-flags.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-remover.h"
 #include "player/player-race-types.h"
 #include "player/player-sex.h"

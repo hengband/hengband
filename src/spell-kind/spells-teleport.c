@@ -17,6 +17,7 @@
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "core/speed-table.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags-resistance.h"

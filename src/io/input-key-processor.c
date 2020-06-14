@@ -51,6 +51,7 @@
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-quests.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind.h" // do_cmd_mind_browse() がある。後で移設する.
 #include "mind/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.

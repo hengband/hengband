@@ -15,6 +15,7 @@
 #include "io/report.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-floor/monster-death.h"
@@ -48,7 +49,6 @@
 #include "player/player-personalities-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell/spells-summon.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

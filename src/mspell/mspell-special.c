@@ -7,6 +7,7 @@
 #include "mspell/mspell-special.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "melee/melee-postprocess.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-remover.h"

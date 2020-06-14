@@ -8,6 +8,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
+#include "main/sound-of-music.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"
@@ -25,7 +26,6 @@
 #include "sv-definition/sv-ring-types.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 
