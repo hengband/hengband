@@ -41,6 +41,7 @@
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"

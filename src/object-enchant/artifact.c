@@ -20,6 +20,7 @@
 #include "core/asking-player.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
+#include "game-option/cheat-types.h"
 #include "grid/grid.h"
 #include "io/files-util.h"
 #include "perception/identification.h"

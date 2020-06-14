@@ -3055,6 +3055,9 @@
     <ClInclude Include="..\..\src\util\tag-sorter.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\game-option\cheat-types.h">
+      <Filter>game-option</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

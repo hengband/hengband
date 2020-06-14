@@ -558,6 +558,7 @@
     <ClInclude Include="..\..\src\game-option\auto-destruction-options.h" />
     <ClInclude Include="..\..\src\game-option\birth-options.h" />
     <ClInclude Include="..\..\src\game-option\cheat-options.h" />
+    <ClInclude Include="..\..\src\game-option\cheat-types.h" />
     <ClInclude Include="..\..\src\game-option\disturbance-options.h" />
     <ClInclude Include="..\..\src\game-option\game-play-options.h" />
     <ClInclude Include="..\..\src\game-option\input-options.h" />

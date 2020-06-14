@@ -2,6 +2,7 @@
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "game-option/cheat-types.h"
 #include "grid/grid.h"
 #include "room/rooms.h"
 #include "store/store-util.h"

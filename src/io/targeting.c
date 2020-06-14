@@ -27,6 +27,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
+#include "game-option/keymap-directory-getter.h"
 #include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

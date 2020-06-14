@@ -1,6 +1,7 @@
 ﻿#include "view/display-messages.h"
 #include "core/output-updater.h"
 #include "game-option/cheat-options.h"
+#include "game-option/cheat-types.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/option-flags.h"

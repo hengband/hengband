@@ -28,6 +28,7 @@
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-types.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"

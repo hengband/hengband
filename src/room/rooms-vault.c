@@ -10,6 +10,7 @@
 #include "floor/floor.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
+#include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"

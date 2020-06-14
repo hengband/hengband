@@ -19,12 +19,6 @@
 
 #define SCREEN_BUF_MAX_SIZE (4 * 65536) /*!< Max size of screen dump buffer */
 
-/* Cheat Info Type */
-#define CHEAT_OBJECT 0
-#define CHEAT_MONSTER 1
-#define CHEAT_DUNGEON 2
-#define CHEAT_MISC 3
-
 /*
  * Max numbers of macro trigger names
  */

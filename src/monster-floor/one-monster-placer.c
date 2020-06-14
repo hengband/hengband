@@ -11,6 +11,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-types.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-move.h"
 #include "monster-floor/monster-summon.h"
