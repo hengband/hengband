@@ -19,10 +19,7 @@
  * Pass 2 is determined from allocation restriction
  * Pass 3 is determined from allocation calculation
  */
-
-typedef struct alloc_entry alloc_entry;
-
-struct alloc_entry {
+typedef struct alloc_entry {
     KIND_OBJECT_IDX index; /* The actual index */
 
     DEPTH level; /* Base dungeon level */
@@ -31,4 +28,4 @@ struct alloc_entry {
     PROB prob3; /* Probability, pass 3 */
 
     u16b total; /* Unused for now */
-};
+} alloc_entry;

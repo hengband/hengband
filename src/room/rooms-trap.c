@@ -5,7 +5,6 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/rooms.h"
-#include "system/alloc-entry-definition.h"
 #include "view/display-messages.h"
 
 /*!

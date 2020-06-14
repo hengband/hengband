@@ -1,6 +1,5 @@
 ﻿#include "system/angband.h"
 #include "monster-race/monster-race.h"
-#include "system/alloc-entry-definition.h"
 
 monster_race *r_info;
 char *r_name;

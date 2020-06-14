@@ -24,7 +24,6 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
-#include "system/alloc-entry-definition.h"
 #include "view/display-messages.h"
 
 #ifdef JP

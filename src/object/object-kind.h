@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/alloc-entry-definition.h"
 
 /*!
  * @struct object_kind
