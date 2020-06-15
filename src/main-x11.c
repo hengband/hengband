@@ -2190,7 +2190,7 @@ static void IMDestroyCallback(XIM xim, XPointer client_data, XPointer call_data)
 
 static char force_lower(char a)
 {
-	return ((isupper((a))) ? tolower((a)) : (a))
+	return ((isupper((a))) ? tolower((a)) : (a));
 }
 
 /*
