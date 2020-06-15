@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-types.h"
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
 

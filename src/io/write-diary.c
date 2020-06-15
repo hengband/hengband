@@ -11,6 +11,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io/files-util.h"
 #include "market/arena-info-table.h"
+#include "monster-race/monster-race.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"

@@ -7,6 +7,7 @@
 #include "grid/feature.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags1.h"

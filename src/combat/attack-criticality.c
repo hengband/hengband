@@ -1,5 +1,6 @@
 ﻿#include "combat/combat-options-type.h"
 #include "combat/attack-criticality.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "sv-definition/sv-weapon-types.h"

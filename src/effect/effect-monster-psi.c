@@ -1,6 +1,7 @@
 ﻿#include "effect/effect-monster-psi.h"
 #include "floor/floor.h"
 #include "mind/mind-mirror-master.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"

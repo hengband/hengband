@@ -32,6 +32,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
 #include "market/arena-info-table.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
 #include "monster-floor/monster-generator.h"

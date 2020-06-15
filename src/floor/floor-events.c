@@ -9,6 +9,7 @@
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "main/sound-of-music.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"

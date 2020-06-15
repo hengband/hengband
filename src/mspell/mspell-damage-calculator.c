@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-damage-calculator.h"

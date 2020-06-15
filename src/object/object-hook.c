@@ -10,6 +10,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"

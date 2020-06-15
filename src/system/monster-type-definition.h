@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "monster/monster-timed-effect-types.h"
-#include "monster-race/monster-race.h"
 
 /*
  * Monster information, for a specific monster.
@@ -10,6 +9,7 @@
  * of objects (if any) being carried by the monster (see above).
  */
 typedef struct floor_type floor_type;
+typedef struct monster_race monster_race;
 typedef struct monster_type {
 	MONRACE_IDX r_idx;		/* Monster race index 0 = dead. */
 	MONRACE_IDX ap_r_idx;	/* Monster race appearance index */

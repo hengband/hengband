@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/object-type-definition.h"
 
 bool create_ammo(player_type *creature_ptr);
 bool import_magic_device(player_type *creature_ptr);

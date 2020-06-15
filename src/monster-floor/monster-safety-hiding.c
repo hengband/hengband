@@ -7,6 +7,7 @@
 #include "monster-floor/monster-safety-hiding.h"
 #include "floor/floor.h"
 #include "monster-floor/monster-dist-offsets.h"
+#include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "mspell/monster-spell.h"

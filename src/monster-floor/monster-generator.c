@@ -12,6 +12,7 @@
 #include "monster-floor/one-monster-placer.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"

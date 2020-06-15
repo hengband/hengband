@@ -1,5 +1,6 @@
 ﻿#include "spell/spells-diceroll.h"
 #include "floor/floor.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"

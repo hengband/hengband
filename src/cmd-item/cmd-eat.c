@@ -11,6 +11,7 @@
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "monster-race/monster-race.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"

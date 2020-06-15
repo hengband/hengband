@@ -1,4 +1,7 @@
-﻿#include "system/angband.h"
+﻿#pragma once
+
+#include "system/angband.h"
+#include "floor/floor.h"
 
 void add_river(floor_type *floor_ptr);
 void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance);

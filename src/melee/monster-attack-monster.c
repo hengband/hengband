@@ -15,6 +15,7 @@
 #include "melee/melee-switcher.h"
 #include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"

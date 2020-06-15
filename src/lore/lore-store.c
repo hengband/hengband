@@ -7,6 +7,7 @@
 #include "lore/lore-store.h"
 #include "floor/floor.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "system/monster-type-definition.h"
 

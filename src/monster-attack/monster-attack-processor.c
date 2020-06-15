@@ -9,6 +9,7 @@
 #include "monster/monster-status.h"
 #include "dungeon/dungeon.h"
 #include "monster-attack/monster-attack-player.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-info.h"

@@ -9,6 +9,7 @@
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
 #include "lore/magic-types-setter.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"

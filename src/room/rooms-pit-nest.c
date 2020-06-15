@@ -7,6 +7,7 @@
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags4.h"

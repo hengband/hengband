@@ -9,6 +9,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
 #include "mind/drs-types.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"

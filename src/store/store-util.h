@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/object-type-definition.h"
 
 #define STORE_OBJ_LEVEL 5 /* Magic Level for normal stores */
 

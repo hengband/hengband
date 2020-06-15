@@ -29,6 +29,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-floor/quantum-effect.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"

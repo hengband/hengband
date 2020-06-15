@@ -13,6 +13,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
 #include "locale/english.h"
+#include "monster-race/monster-race.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-flavor.h"

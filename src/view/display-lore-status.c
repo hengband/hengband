@@ -1,6 +1,7 @@
 ﻿#include "view/display-lore-status.h"
 #include "locale/japanese.h"
 #include "lore/lore-calculator.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"

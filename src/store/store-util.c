@@ -5,6 +5,7 @@
  */
 
 #include "store/store-util.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"

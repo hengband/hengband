@@ -2,6 +2,7 @@
 #include "io/targeting.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation.h"
 #include "object/lite-processor.h"

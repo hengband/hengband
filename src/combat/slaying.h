@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "combat/combat-options-type.h"
+#include "system/object-type-definition.h"
 #include "system/monster-type-definition.h"
 
 MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const BIT_FLAGS *flgs, monster_type *m_ptr);

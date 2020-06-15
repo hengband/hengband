@@ -2,6 +2,7 @@
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"

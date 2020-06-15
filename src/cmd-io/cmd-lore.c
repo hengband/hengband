@@ -5,6 +5,7 @@
 #include "game-option/game-play-options.h"
 #include "game-option/cheat-options.h"
 #include "io/input-key-acceptor.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "term/gameterm.h"

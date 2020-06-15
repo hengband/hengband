@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/object-type-definition.h"
 
 extern bool (*item_tester_hook)(object_type *o_ptr);
 

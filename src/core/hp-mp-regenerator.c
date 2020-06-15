@@ -1,7 +1,7 @@
-﻿#include "system/angband.h"
-#include "core/hp-mp-regenerator.h"
+﻿#include "core/hp-mp-regenerator.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "floor/floor.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
 

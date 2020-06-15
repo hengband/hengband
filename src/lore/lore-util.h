@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "monster-race/monster-race.h"
+#include "system/monster-race-definition.h"
 
 typedef enum monster_sex {
     MSEX_NONE = 0,

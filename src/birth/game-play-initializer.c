@@ -6,6 +6,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "market/arena.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "object-enchant/artifact.h"

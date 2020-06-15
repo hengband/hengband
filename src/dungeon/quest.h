@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 
 /*
  * Quest constants

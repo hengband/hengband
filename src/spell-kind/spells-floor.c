@@ -21,6 +21,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"

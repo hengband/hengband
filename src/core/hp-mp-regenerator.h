@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 extern int wild_regen;
 
 void regenhp(player_type* creature_ptr, int percent);

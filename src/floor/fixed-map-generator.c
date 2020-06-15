@@ -8,6 +8,7 @@
 #include "info-reader/general-parser.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "monster-floor/monster-generator.h"

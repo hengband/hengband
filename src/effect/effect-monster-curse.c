@@ -1,4 +1,5 @@
 ﻿#include "effect/effect-monster-curse.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "view/display-messages.h"
 

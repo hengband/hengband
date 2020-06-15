@@ -16,6 +16,7 @@
 #include "io/input-key-acceptor.h"
 #include "knowledge/monster-group-table.h"
 #include "locale/english.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"

@@ -15,6 +15,7 @@
 #include "effect/effect-characteristics.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags-resistance.h"

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "floor/floor.h"
+#include "system/angband.h"
 #include "system/monster-type-definition.h"
 
 MONSTER_IDX m_pop(floor_type *floor_ptr);

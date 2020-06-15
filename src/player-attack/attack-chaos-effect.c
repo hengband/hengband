@@ -8,6 +8,7 @@
 #include "player-attack/attack-chaos-effect.h"
 #include "art-definition/art-weapon-types.h"
 #include "floor/floor.h"
+#include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"

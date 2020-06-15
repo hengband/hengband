@@ -2,6 +2,7 @@
 #include "floor/floor.h"
 #include "io/files-util.h"
 #include "locale/vowel-checker.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
