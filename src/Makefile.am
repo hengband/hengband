@@ -158,7 +158,7 @@ hengband_SOURCES = \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	floor/wild.h floor/wild.c \
 	\
-	game-option/auto-destruction-option.c game-option/auto-destruction-option.h \
+	game-option/auto-destruction-options.c game-option/auto-destruction-options.h \
 	game-option/birth-options.c game-option/birth-options.h \
 	game-option/cheat-options.c game-option/cheat-options.h \
 	game-option/cheat-types.h \
