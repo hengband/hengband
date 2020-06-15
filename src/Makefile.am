@@ -101,7 +101,6 @@ hengband_SOURCES = \
 	combat/slaying.c combat/slaying.h \
 	combat/combat-options-type.h \
 	combat/attack-criticality.c combat/attack-criticality.h \
-	combat/vorpal-weapon.c combat/vorpal-weapon.h \
 	combat/shoot.c combat/shoot.h \
 	\
 	core/asking-player.c core/asking-player.h \
@@ -417,6 +416,7 @@ hengband_SOURCES = \
 	object-enchant/random-art-bias-types.h \
 	object-enchant/tr-types.h object-enchant/trc-types.h \
 	object-enchant/trg-types.h \
+	object-enchant/vorpal-weapon.c object-enchant/vorpal-weapon.h \
 	\
 	perception/identification.c perception/identification.h \
 	perception/object-perception.c perception/object-perception.h \
