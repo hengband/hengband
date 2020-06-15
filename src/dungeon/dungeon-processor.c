@@ -1,4 +1,5 @@
 ﻿#include "dungeon/dungeon-processor.h"
+#include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/hp-mp-regenerator.h"
 #include "core/player-processor.h"

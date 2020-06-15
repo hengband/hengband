@@ -2,6 +2,7 @@
 #include "player/player-race-types.h"
 #include "object/object-flags.h"
 #include "object-enchant/tr-types.h"
+#include "player/player-race.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

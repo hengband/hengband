@@ -20,6 +20,8 @@
 #include "core/show-file.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
+#include "player/player-class.h"
+#include "player/player-race.h"
 #include "term/term-color-types.h"
 
 /*

@@ -12,6 +12,8 @@
 #include "io-dump/dump-util.h"
 #include "object/object-flavor.h"
 #include "player/avatar.h"
+#include "player/player-class.h"
+#include "player/race-info-table.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
 #include "util/angband-files.h"

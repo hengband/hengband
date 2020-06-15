@@ -1,11 +1,14 @@
 ﻿#include "birth/quick-start.h"
-#include "io/input-key-acceptor.h"
-#include "player/player-sex.h"
-#include "player/player-personality.h"
+#include "birth/birth-stat.h"
 #include "birth/birth-util.h"
 #include "birth/game-play-initializer.h"
-#include "birth/birth-stat.h"
+#include "io/input-key-acceptor.h"
+#include "player/player-class.h"
+#include "player/player-personality.h"
+#include "player/player-race.h"
+#include "player/player-sex.h"
 #include "player/process-name.h"
+#include "player/race-info-table.h"
 #include "term/screen-processor.h"
 
 /*
@@ -66,7 +69,7 @@ bool ask_quick_start(player_type *creature_ptr)
  * @param birther_ptr クイックスタート構造体の参照ポインタ
  * @return なし。
  */
-void save_prev_data(player_type* creature_ptr, birther* birther_ptr)
+void save_prev_data(player_type *creature_ptr, birther *birther_ptr)
 {
     birther_ptr->psex = creature_ptr->psex;
     birther_ptr->prace = creature_ptr->prace;
@@ -104,7 +107,7 @@ void save_prev_data(player_type* creature_ptr, birther* birther_ptr)
  * @param swap TRUEならば現在のプレイヤー構造体上との内容をスワップする形で読み込む。
  * @return なし。
  */
-void load_prev_data(player_type* creature_ptr, bool swap)
+void load_prev_data(player_type *creature_ptr, bool swap)
 {
     birther temp;
     if (swap)

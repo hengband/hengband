@@ -9,6 +9,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-race-types.h"
+#include "player/player-race.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
 #include "spell/spells3.h"

@@ -8,6 +8,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
+#include "player/player-class.h"
 #include "player/player-personality.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"

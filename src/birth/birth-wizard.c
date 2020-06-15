@@ -21,6 +21,8 @@
 #include "main/sound-of-music.h"
 #include "player/avatar.h"
 #include "player/patron.h"
+#include "player/player-class.h"
+#include "player/player-race.h"
 #include "player/player-sex.h"
 #include "player/process-name.h"
 #include "system/game-option-types.h"

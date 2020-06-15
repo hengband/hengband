@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "object/tval-types.h"
 #include "system/angband.h"
+#include "system/object-type-definition.h"
 
 extern bool select_ring_slot;
 

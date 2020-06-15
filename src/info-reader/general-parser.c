@@ -9,6 +9,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-kind-hook.h"
+#include "realm/realm-types.h"
 #include "system/building-type-definition.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 /*
  * Constant for kinds of mimic
  */

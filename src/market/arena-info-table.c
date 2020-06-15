@@ -1,6 +1,6 @@
-﻿#include "system/angband.h"
-#include "arena-info-table.h"
+﻿#include "market/arena-info-table.h"
 #include "monster-race/race-indice-types.h"
+#include "object/tval-types.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-potion-types.h"

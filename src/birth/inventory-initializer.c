@@ -16,6 +16,7 @@
 #include "object/object-info.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
+#include "realm/realm-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"

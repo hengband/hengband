@@ -7,6 +7,7 @@
 #include "player/eldritch-horror.h"
 #include "player/player-effects.h"
 #include "player/player-race-types.h"
+#include "player/player-race.h"
 #include "store/rumor.h"
 #include "view/display-messages.h"
 #include "world/world.h"

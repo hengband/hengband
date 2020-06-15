@@ -4,6 +4,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell/spells-execution.h"
 #include "spell/spells3.h"
+#include "spell/technic-info-table.h"
 #include "view/display-messages.h"
 
 /*!

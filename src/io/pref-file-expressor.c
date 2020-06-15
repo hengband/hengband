@@ -1,5 +1,8 @@
 ﻿#include "io/pref-file-expressor.h"
 #include "game-option/runtime-arguments.h"
+#include "player/player-class.h"
+#include "player/player-race.h"
+#include "realm/realm-names-table.h"
 #include "system/system-variables.h"
 #include "util/string-processor.h"
 

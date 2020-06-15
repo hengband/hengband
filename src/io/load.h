@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "floor/floor-save.h"
+#include "system/angband.h"
 
 /*
  * Flags for wr_item()/rd_item()

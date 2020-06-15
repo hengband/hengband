@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "race-info-table.h"
+﻿#include "player/race-info-table.h"
 
 /*!
  * @brief 種族情報 /

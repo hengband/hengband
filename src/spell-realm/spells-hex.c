@@ -5,8 +5,10 @@
 #include "player/player-effects.h" // todo 相互参照している.
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
+#include "realm/realm-types.h"
 #include "spell/spells3.h"
 #include "spell/spells-execution.h"
+#include "spell/technic-info-table.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"

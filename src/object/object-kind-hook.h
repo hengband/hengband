@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "object/tval-types.h"
 #include "system/angband.h"
 
 bool kind_is_cloak(KIND_OBJECT_IDX k_idx);

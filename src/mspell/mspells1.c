@@ -39,6 +39,7 @@
 #include "player/player-class.h"
 #include "player/player-move.h"
 #include "player/player-race-types.h"
+#include "player/player-race.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-teleport.h"

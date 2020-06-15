@@ -43,6 +43,7 @@
 #include "player/avatar.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
+#include "realm/realm-types.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"

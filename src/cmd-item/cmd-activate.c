@@ -46,6 +46,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-race-types.h"
+#include "realm/realm-types.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-charm.h"

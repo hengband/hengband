@@ -4,6 +4,7 @@
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object-enchant/special-object-flags.h"
+#include "realm/realm-names-table.h"
 #include "spell/spells3.h"
 #include "system/object-type-definition.h"
 #include "term/term-color-types.h"

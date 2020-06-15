@@ -1,5 +1,6 @@
 ﻿#include "market/bounty.h"
 #include "autopick/autopick.h"
+#include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

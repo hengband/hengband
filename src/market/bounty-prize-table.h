@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "object/tval-types.h"
 #include "system/angband.h"
 #include "world/world.h"
 

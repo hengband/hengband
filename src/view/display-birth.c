@@ -2,7 +2,9 @@
 #include "birth/auto-roller.h"
 #include "birth/birth-stat.h"
 #include "game-option/birth-options.h"
+#include "player/player-class.h"
 #include "player/player-personality.h"
+#include "player/player-race.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 

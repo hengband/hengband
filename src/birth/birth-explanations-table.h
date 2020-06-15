@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "player/player-personality.h"
+#include "realm/realm-names-table.h"
 
 extern concptr race_explanations[MAX_RACES];
 extern concptr class_explanations[MAX_CLASS];

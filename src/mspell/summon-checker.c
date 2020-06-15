@@ -9,6 +9,7 @@
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
+#include "player/player-race.h"
 #include "spell/spells-summon.h"
 #include "util/string-processor.h"
 

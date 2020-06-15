@@ -11,6 +11,7 @@
 #include "object/object-flags.h"
 #include "player/mimic-info-table.h"
 #include "player/permanent-resistances.h"
+#include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-race-types.h"
 #include "term/screen-processor.h"

@@ -12,6 +12,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-race-types.h"
+#include "player/player-race.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"

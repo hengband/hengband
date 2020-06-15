@@ -21,6 +21,7 @@
 #include "object-enchant/object-ego.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "realm/realm-names-table.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "term/term-color-types.h"

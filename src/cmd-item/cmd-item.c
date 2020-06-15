@@ -59,6 +59,8 @@
 #include "player/player-status.h"
 #include "player/selfinfo.h"
 #include "realm/realm-hex-numbers.h"
+#include "realm/realm-names-table.h"
+#include "realm/realm-types.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-lite-types.h"
 #include "term/screen-processor.h"

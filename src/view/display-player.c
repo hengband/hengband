@@ -16,8 +16,10 @@
 #include "object/object-info.h"
 #include "player/mimic-info-table.h"
 #include "player/patron.h"
+#include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"
+#include "realm/realm-names-table.h"
 #include "status-first-page.h"
 #include "system/system-variables.h" // 暫定。後で消す
 #include "term/screen-processor.h"

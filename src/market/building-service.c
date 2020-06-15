@@ -1,4 +1,5 @@
 ﻿#include "market/building-service.h"
+#include "cmd-building/cmd-building.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 

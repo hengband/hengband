@@ -2,7 +2,6 @@
 #include "cmd-io/cmd-dump.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
-#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"

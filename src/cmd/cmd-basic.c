@@ -71,6 +71,7 @@
 #include "player/player-move.h"
 #include "player/player-personalities-types.h"
 #include "player/player-status.h"
+#include "realm/realm-types.h"
 #include "specific-object/chest.h"
 #include "specific-object/torch.h"
 #include "spell-kind/spells-teleport.h"

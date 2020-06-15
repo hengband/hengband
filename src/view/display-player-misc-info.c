@@ -1,4 +1,5 @@
 ﻿#include "player/mimic-info-table.h"
+#include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "term/screen-processor.h"

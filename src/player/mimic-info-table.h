@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "system/angband.h"
+#include "player/player-race.h"
 
 #define MAX_MIMIC_FORMS 4
 
