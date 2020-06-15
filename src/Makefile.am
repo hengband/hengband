@@ -377,8 +377,8 @@ hengband_SOURCES = \
 	mspell/mspell-mask-definitions.h \
 	mspell/mspell-special.c mspell/mspell-special.h \
 	mspell/mspell-status.c mspell/mspell-status.h \
-	mspell/mspell-summon-checker.c mspell/mspell-summon-checker.h \
 	mspell/mspell-particularity.c mspell/mspell-particularity.h \
+	mspell/summon-checker.c mspell/summon-checker.h \
 	\
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
