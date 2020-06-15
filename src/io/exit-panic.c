@@ -11,6 +11,7 @@
 #include "player-move.h"
 #include "signal-handlers.h"
 #include "save.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief Handle abrupt death of the visual system
