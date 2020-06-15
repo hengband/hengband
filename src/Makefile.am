@@ -468,6 +468,7 @@ hengband_SOURCES = \
 	realm/realm-names-table.c realm/realm-names-table.h \
 	realm/realm-nature.c realm/realm-nature.h \
 	realm/realm-song.c realm/realm-song.h \
+	realm/realm-song-numbers.h \
 	realm/realm-sorcery.c realm/realm-sorcery.h \
 	realm/realm-trump.c realm/realm-trump.h \
 	realm/realm-types.h \
