@@ -22,7 +22,7 @@ const concptr copyright[5] =
 concptr ANGBAND_SYS = "xxx";
 concptr ANGBAND_KEYBOARD = _("JAPAN", "0");
 concptr ANGBAND_GRAF = "ascii";
-int init_flags;
+init_flags_type init_flags;
 
 /*!
  * Function hook to restrict "get_obj_num_prep()" function
