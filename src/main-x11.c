@@ -104,6 +104,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
+#include "util/angband-files.h"
 
 /*
  * Available graphic modes
