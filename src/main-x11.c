@@ -105,6 +105,7 @@
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 
 /*
  * Available graphic modes
