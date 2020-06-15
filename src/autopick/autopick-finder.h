@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "autopick/autopick-util.h"
+#include "system/object-type-definition.h"
 
 int find_autopick_list(player_type *player_ptr, object_type *o_ptr);
 bool get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp);

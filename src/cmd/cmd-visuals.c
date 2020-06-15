@@ -11,6 +11,7 @@
 #include "knowledge/knowledge-monsters.h"
 #include "knowledge/lighting-level-table.h"
 #include "main/sound-of-music.h"
+#include "monster-race/monster-race.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind.h"

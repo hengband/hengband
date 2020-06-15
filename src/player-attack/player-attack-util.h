@@ -1,9 +1,10 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "combat/combat-options-type.h"
 #include "combat/martial-arts-table.h"
 #include "grid/grid.h"
+#include "system/angband.h"
+#include "system/object-type-definition.h"
 #include "system/monster-type-definition.h"
 
 typedef enum chaotic_effect {

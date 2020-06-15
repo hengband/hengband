@@ -1,5 +1,6 @@
 ﻿#include "mspell/summon-checker.h"
 #include "monster-race/monster-race-hook.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"

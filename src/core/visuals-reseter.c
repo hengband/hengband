@@ -2,6 +2,7 @@
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "io/read-pref-file.h"
+#include "monster-race/monster-race.h"
 #include "object/object-kind.h"
 
 /*!

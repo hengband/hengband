@@ -10,6 +10,7 @@
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
 #include "object-enchant/special-object-flags.h"
+#include "monster-race/monster-race.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

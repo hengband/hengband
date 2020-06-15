@@ -13,6 +13,7 @@
 #include "io/input-key-requester.h"
 #include "io/tokenizer.h"
 #include "object/object-kind.h"
+#include "monster-race/monster-race.h"
 #include "system/game-option-types.h"
 #include "term/gameterm.h"
 #include "util/quarks.h"

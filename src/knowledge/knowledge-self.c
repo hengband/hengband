@@ -13,6 +13,7 @@
 #include "object/object-flavor.h"
 #include "player/avatar.h"
 #include "store/store-util.h"
+#include "system/object-type-definition.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"

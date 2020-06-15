@@ -4,14 +4,14 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "game-option/cheat-options.h"
-#include "knowledge-items.h"
-#include "io-dump/dump-util.h"
-#include "util/sort.h"
 #include "core/show-file.h"
+#include "game-option/cheat-options.h"
+#include "io-dump/dump-util.h"
+#include "knowledge-items.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "util/angband-files.h"
+#include "util/sort.h"
 
 typedef struct unique_list_type {
     bool is_alive;
@@ -122,9 +122,9 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
  */
 void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
 {
-	int n_alive[10];
-	for (IDX i = 0; i < 10; i++)
-		n_alive[i] = 0;
+    int n_alive[10];
+    for (IDX i = 0; i < 10; i++)
+        n_alive[i] = 0;
 
     unique_list_type tmp_list;
     unique_list_type *unique_list_ptr = initialize_unique_lsit_type(&tmp_list, is_alive);

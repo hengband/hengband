@@ -12,6 +12,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
 #include "spell/spells3.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

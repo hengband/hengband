@@ -5,6 +5,7 @@
  */
 
 #include "util/object-sort.h"
+#include "monster-race/monster-race.h"
 #include "object/object-hook.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"

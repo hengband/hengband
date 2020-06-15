@@ -1,7 +1,6 @@
-﻿#include "system/angband.h"
+﻿#include "store/black-market.h"
 #include "floor/floor-town.h"
 #include "object/object-hook.h"
-#include "store/black-market.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 
@@ -19,23 +18,30 @@
  */
 bool black_market_crap(player_type *player_ptr, object_type *o_ptr)
 {
-	if (object_is_ego(o_ptr)) return FALSE;
+    if (object_is_ego(o_ptr))
+        return FALSE;
 
-	if (o_ptr->to_a > 0) return FALSE;
-	if (o_ptr->to_h > 0) return FALSE;
-	if (o_ptr->to_d > 0) return FALSE;
+    if (o_ptr->to_a > 0)
+        return FALSE;
 
-	for (int i = 0; i < MAX_STORES; i++)
-	{
-		if (i == STORE_HOME) continue;
-		if (i == STORE_MUSEUM) continue;
+    if (o_ptr->to_h > 0)
+        return FALSE;
 
-		for (int j = 0; j < town_info[player_ptr->town_num].store[i].stock_num; j++)
-		{
-			object_type *j_ptr = &town_info[player_ptr->town_num].store[i].stock[j];
-			if (o_ptr->k_idx == j_ptr->k_idx) return TRUE;
-		}
-	}
+    if (o_ptr->to_d > 0)
+        return FALSE;
 
-	return FALSE;
+    for (int i = 0; i < MAX_STORES; i++) {
+        if (i == STORE_HOME)
+            continue;
+        if (i == STORE_MUSEUM)
+            continue;
+
+        for (int j = 0; j < town_info[player_ptr->town_num].store[i].stock_num; j++) {
+            object_type *j_ptr = &town_info[player_ptr->town_num].store[i].stock[j];
+            if (o_ptr->k_idx == j_ptr->k_idx)
+                return TRUE;
+        }
+    }
+
+    return FALSE;
 }

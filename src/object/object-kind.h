@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/object-type-definition.h"
 
 /*!
  * @struct object_kind

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/object-type-definition.h"
 
 #define MAX_LINELEN 1024
 #define MAX_AUTOPICK_DEFAULT 200

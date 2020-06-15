@@ -9,6 +9,7 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "perception/simple-perception.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

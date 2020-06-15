@@ -5,10 +5,6 @@
 #include "player/player-race-types.h"
 #include "cmd-building/cmd-building.h"
 #include "player/player-personalities-types.h"
-#include "system/object-type-definition.h"
-
-struct floor_type;
-typedef struct floor_type floor_type;
 
 /*
  * Most of the "player" information goes here.
@@ -90,8 +86,8 @@ extern const byte adj_chr_chm[];
 extern const concptr stat_names[6];
 extern const concptr stat_names_reduced[6];
 
-struct floor_type;
-
+typedef struct floor_type floor_type;
+typedef struct object_type object_type;
 typedef struct player_type
 {
 	int player_uid;

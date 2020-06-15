@@ -28,6 +28,7 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
+#include "system/object-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-main-window.h"

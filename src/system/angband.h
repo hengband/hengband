@@ -37,7 +37,6 @@
  * Include the "Angband" configuration header
  */
 #include "system/gamevalue.h"
-#include "monster-race/monster-race.h"
 #include "player/player-status.h"
 
 

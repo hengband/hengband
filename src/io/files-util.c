@@ -16,6 +16,7 @@
 #include "io-dump/character-dump.h"
 #include "io/input-key-acceptor.h"
 #include "io/uid-checker.h"
+#include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"

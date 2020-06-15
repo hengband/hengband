@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/object-type-definition.h"
 
 /* Body Armor */
 #define EGO_A_MORGUL            4
