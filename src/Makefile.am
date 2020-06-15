@@ -560,7 +560,6 @@ hengband_SOURCES = \
 	\
 	util/angband-files.c util/angband-files.h \
 	util/buffer-shaper.c util/buffer-shaper.h \
-	util/buffer-shaper.c util/buffer-shaper.h \
 	util/bit-flags-calculator.h \
 	util/int-char-converter.h \
 	util/object-sort.c util/object-sort.h \
