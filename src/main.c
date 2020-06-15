@@ -10,6 +10,7 @@
 
 #include "system/angband.h"
 #include "autopick/autopick-pref-processor.h"
+#include "core/asking-player.h"
 #include "core/game-play.h"
 #include "core/scores.h"
 #include "game-option/runtime-arguments.h"
