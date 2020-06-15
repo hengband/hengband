@@ -165,6 +165,7 @@
 #include "main/sound-of-music.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "util/angband-files.h"
 
 #ifdef USE_GCU
 
