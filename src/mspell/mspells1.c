@@ -69,10 +69,8 @@
   */
 static bool int_outof(monster_race *r_ptr, PERCENTAGE prob)
 {
-	/* Non-Smart monsters are half as "smart" */
 	if (!(r_ptr->flags2 & RF2_SMART)) prob = prob / 2;
 
-	/* Roll the dice */
 	return (randint0(100) < prob);
 }
 
@@ -90,37 +88,23 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
 	u32b f4 = (*f4p);
 	u32b f5 = (*f5p);
 	u32b f6 = (*f6p);
-
 	u32b smart = 0L;
-
-	/* Too stupid to know anything */
 	if (r_ptr->flags2 & RF2_STUPID) return;
 
-
-	/* Must be cheating or learning */
 	if (!smart_cheat && !smart_learn) return;
 
-
-	/* Update acquired knowledge */
 	if (smart_learn)
 	{
-		/* Hack -- Occasionally forget player status */
-		/* Only save SM_FRIENDLY, SM_PET or SM_CLONED */
 		if (m_ptr->smart && (randint0(100) < 1)) m_ptr->smart &= (SM_FRIENDLY | SM_PET | SM_CLONED);
 
-		/* Use the memorized flags */
 		smart = m_ptr->smart;
 	}
 
-
-	/* Cheat if requested */
 	if (smart_cheat)
 	{
-		/* Know element info */
 		if (target_ptr->resist_acid) smart |= (SM_RES_ACID);
 		if (is_oppose_acid(target_ptr)) smart |= (SM_OPP_ACID);
 		if (target_ptr->immune_acid) smart |= (SM_IMM_ACID);
@@ -136,7 +120,6 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 		if (target_ptr->resist_pois) smart |= (SM_RES_POIS);
 		if (is_oppose_pois(target_ptr)) smart |= (SM_OPP_POIS);
 
-		/* Know special resistances */
 		if (target_ptr->resist_neth) smart |= (SM_RES_NETH);
 		if (target_ptr->resist_lite) smart |= (SM_RES_LITE);
 		if (target_ptr->resist_dark) smart |= (SM_RES_DARK);
@@ -150,7 +133,6 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 		if (target_ptr->resist_shard) smart |= (SM_RES_SHARD);
 		if (target_ptr->reflect) smart |= (SM_IMM_REFLECT);
 
-		/* Know bizarre "resistances" */
 		if (target_ptr->free_act) smart |= (SM_IMM_FREE);
 		if (!target_ptr->msp) smart |= (SM_IMM_MANA);
 	}
@@ -175,7 +157,6 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 		if (int_outof(r_ptr, 30)) f5 &= ~(RF5_BA_ACID);
 		if (int_outof(r_ptr, 30)) f5 &= ~(RF5_BO_ACID);
 	}
-
 
 	if (smart & (SM_IMM_ELEC))
 	{
@@ -354,9 +335,6 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 		f5 &= ~(RF5_DRAIN_MANA);
 	}
 
-	/* No spells left? */
-	/* if (!f4 && !f5 && !f6) ... */
-
 	(*f4p) = f4;
 	(*f5p) = f5;
 	(*f6p) = f6;
@@ -374,23 +352,17 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1)
 {
 	POSITION y, x;
-
-	/* Start at the player's location, and check 2 grids in each dir */
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	for (y = y1 - 2; y <= y1 + 2; y++)
 	{
 		for (x = x1 - 2; x <= x1 + 2; x++)
 		{
-			/* Ignore illegal locations */
 			if (!in_bounds(floor_ptr, y, x)) continue;
 
-			/* Only check a circular area */
 			if (distance(y1, x1, y, x) > 2) continue;
 
-			/* ...nor on the Pattern */
 			if (pattern_tile(floor_ptr, y, x)) continue;
 
-			/* Require empty floor grid in line of projection */
 			if (is_cave_empty_bold(target_ptr, y, x) && projectable(target_ptr, y1, x1, y, x) && projectable(target_ptr, y, x, y1, x1)) return TRUE;
 		}
 	}
@@ -421,14 +393,11 @@ bool raise_possible(player_type *target_ptr, monster_type *m_ptr)
 			if (!projectable(target_ptr, y, x, yy, xx)) continue;
 
 			g_ptr = &floor_ptr->grid_array[yy][xx];
-			/* Scan the pile of objects */
 			OBJECT_IDX this_o_idx, next_o_idx = 0;
 			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
-
-				/* Known to be worthless? */
 				if (o_ptr->tval == TV_CORPSE)
 				{
 					if (!monster_has_hostile_align(target_ptr, m_ptr, 0, 0, &r_info[o_ptr->pval])) return TRUE;
@@ -463,19 +432,13 @@ bool raise_possible(player_type *target_ptr, monster_type *m_ptr)
  */
 bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
-	/* Check the projection path */
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	u16b grid_g[512];
 	int grid_n = project_path(target_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
-
-	/* No grid is ever projectable from itself */
 	if (!grid_n) return FALSE;
 
-	/* Final grid */
 	POSITION y = GRID_Y(grid_g[grid_n - 1]);
 	POSITION x = GRID_X(grid_g[grid_n - 1]);
-
-	/* May not end in an unrequested grid */
 	if ((y != y2) || (x != x2)) return FALSE;
 
 	for (int i = 0; i < grid_n; i++)
@@ -492,7 +455,6 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
 			}
 		}
 
-		/* Pets may not shoot through the character - TNB */
 		if (player_bold(target_ptr, y, x) && is_friend) return FALSE;
 	}
 
@@ -526,7 +488,6 @@ void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
 		break;
 	}
 
-	/* Target the player with a bolt attack */
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
 	bool learnable = spell_learnable(target_ptr, m_idx);
 	(void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
@@ -558,7 +519,6 @@ void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
 		break;
 	}
 
-	/* Target the player with a bolt attack */
 	bool learnable = spell_learnable(target_ptr, m_idx);
 	(void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
@@ -594,10 +554,8 @@ void breath(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, 
 		break;
 	}
 
-	/* Determine the radius of the blast */
 	if ((rad < 1) && breath) rad = (r_ptr->flags2 & (RF2_POWERFUL)) ? 3 : 2;
 
-	/* Handle breath attacks */
 	if (breath) rad = 0 - rad;
 
 	switch (typ)
@@ -617,7 +575,6 @@ void breath(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, 
 		break;
 	}
 
-	/* Target the player with a ball attack */
 	bool learnable = spell_learnable(target_ptr, m_idx);
 	(void)project(target_ptr, m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
@@ -865,31 +822,22 @@ static bool spell_dispel(byte spell)
  */
 bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 {
-	/* Invulnabilty (including the song) */
 	if (IS_INVULN(creature_ptr)) return TRUE;
 
-	/* Wraith form */
 	if (creature_ptr->wraith_form) return TRUE;
 
-	/* Shield */
 	if (creature_ptr->shield) return TRUE;
 
-	/* Magic defence */
 	if (creature_ptr->magicdef) return TRUE;
 
-	/* Multi Shadow */
 	if (creature_ptr->multishadow) return TRUE;
 
-	/* Robe of dust */
 	if (creature_ptr->dustrobe) return TRUE;
 
-	/* Berserk Strength */
 	if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER)) return TRUE;
 
-	/* Demon Lord */
 	if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) return TRUE;
 
-	/* Elemental resistances */
 	monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	if (r_ptr->flags4 & RF4_BR_ACID)
@@ -928,13 +876,10 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 		}
 	}
 
-	/* Ultimate resistance */
 	if (creature_ptr->ult_res) return TRUE;
 
-	/* Potion of Neo Tsuyosi special */
 	if (creature_ptr->tsuyoshi) return TRUE;
 
-	/* Elemental Brands */
 	if ((creature_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)) return TRUE;
 	if ((creature_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) return TRUE;
 	if ((creature_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) return TRUE;
@@ -946,7 +891,6 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 		if (IS_FAST(creature_ptr)) return TRUE;
 	}
 
-	/* Light speed */
 	if (creature_ptr->lightspeed && (m_ptr->mspeed < 136)) return TRUE;
 
 	if (creature_ptr->riding && (creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].mspeed < 135))
@@ -954,7 +898,6 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 		if (monster_fast_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) return TRUE;
 	}
 
-	/* No need to cast dispel spell */
 	return FALSE;
 }
 
@@ -996,64 +939,44 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 	byte heal[96], heal_num = 0;
 	byte dispel[96], dispel_num = 0;
 
-	/* Stupid monsters choose randomly */
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	if (r_ptr->flags2 & (RF2_STUPID)) return (spells[randint0(num)]);
 
-	/* Categorize spells */
 	for (int i = 0; i < num; i++)
 	{
-		/* Escape spell? */
 		if (spell_escape(spells[i])) escape[escape_num++] = spells[i];
 
-		/* Attack spell? */
 		if (spell_attack(spells[i])) attack[attack_num++] = spells[i];
 
-		/* Summon spell? */
 		if (spell_summon(spells[i])) summon[summon_num++] = spells[i];
 
-		/* Tactical spell? */
 		if (spell_tactic(spells[i])) tactic[tactic_num++] = spells[i];
 
-		/* Annoyance spell? */
 		if (spell_annoy(spells[i])) annoy[annoy_num++] = spells[i];
 
-		/* Invulnerability spell? */
 		if (spell_invulner(spells[i])) invul[invul_num++] = spells[i];
 
-		/* Haste spell? */
 		if (spell_haste(spells[i])) haste[haste_num++] = spells[i];
 
-		/* World spell? */
 		if (spell_world(spells[i])) world[world_num++] = spells[i];
 
-		/* Special spell? */
 		if (spell_special(target_ptr, spells[i])) special[special_num++] = spells[i];
 
-		/* Psycho-spear spell? */
 		if (spell_psy_spe(spells[i])) psy_spe[psy_spe_num++] = spells[i];
 
-		/* Raise-dead spell? */
 		if (spell_raise(spells[i])) raise[raise_num++] = spells[i];
 
-		/* Heal spell? */
 		if (spell_heal(spells[i])) heal[heal_num++] = spells[i];
 
-		/* Dispel spell? */
 		if (spell_dispel(spells[i])) dispel[dispel_num++] = spells[i];
 	}
 
-	/*** Try to pick an appropriate spell type ***/
-
-	/* world */
 	if (world_num && (randint0(100) < 15) && !current_world_ptr->timewalk_m_idx)
 	{
-		/* Choose haste spell */
 		return (world[randint0(world_num)]);
 	}
 
-	/* special */
 	if (special_num)
 	{
 		bool success = FALSE;
@@ -1069,21 +992,16 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 		if (success) return (special[randint0(special_num)]);
 	}
 
-	/* Still hurt badly, couldn't flee, attempt to heal */
 	if (m_ptr->hp < m_ptr->maxhp / 3 && one_in_(2))
 	{
-		/* Choose heal spell if possible */
 		if (heal_num) return (heal[randint0(heal_num)]);
 	}
 
-	/* Hurt badly or afraid, attempt to flee */
 	if (((m_ptr->hp < m_ptr->maxhp / 3) || monster_fear_remaining(m_ptr)) && one_in_(2))
 	{
-		/* Choose escape spell if possible */
 		if (escape_num) return (escape[randint0(escape_num)]);
 	}
 
-	/* special */
 	if (special_num)
 	{
 		bool success = FALSE;
@@ -1106,93 +1024,70 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 		if (success) return (special[randint0(special_num)]);
 	}
 
-	/* Player is close and we have attack spells, blink away */
 	if ((distance(target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->a_ability_flags2 & RF6_TRAPS)) && (randint0(100) < 75) && !current_world_ptr->timewalk_m_idx)
 	{
-		/* Choose tactical spell */
 		if (tactic_num) return (tactic[randint0(tactic_num)]);
 	}
 
-	/* Summon if possible (sometimes) */
 	if (summon_num && (randint0(100) < 40))
 	{
-		/* Choose summon spell */
 		return (summon[randint0(summon_num)]);
 	}
 
-	/* dispel */
 	if (dispel_num && one_in_(2))
 	{
-		/* Choose dispel spell if possible */
 		if (dispel_check(target_ptr, m_idx))
 		{
 			return (dispel[randint0(dispel_num)]);
 		}
 	}
 
-	/* Raise-dead if possible (sometimes) */
 	if (raise_num && (randint0(100) < 40))
 	{
-		/* Choose raise-dead spell */
 		return (raise[randint0(raise_num)]);
 	}
 
-	/* Attack spell (most of the time) */
 	if (IS_INVULN(target_ptr))
 	{
 		if (psy_spe_num && (randint0(100) < 50))
 		{
-			/* Choose attack spell */
 			return (psy_spe[randint0(psy_spe_num)]);
 		}
 		else if (attack_num && (randint0(100) < 40))
 		{
-			/* Choose attack spell */
 			return (attack[randint0(attack_num)]);
 		}
 	}
 	else if (attack_num && (randint0(100) < 85))
 	{
-		/* Choose attack spell */
 		return (attack[randint0(attack_num)]);
 	}
 
-	/* Try another tactical spell (sometimes) */
 	if (tactic_num && (randint0(100) < 50) && !current_world_ptr->timewalk_m_idx)
 	{
-		/* Choose tactic spell */
 		return (tactic[randint0(tactic_num)]);
 	}
 
-	/* Cast globe of invulnerability if not already in effect */
 	if (invul_num && !m_ptr->mtimed[MTIMED_INVULNER] && (randint0(100) < 50))
 	{
-		/* Choose Globe of Invulnerability */
 		return (invul[randint0(invul_num)]);
 	}
 
-	/* We're hurt (not badly), try to heal */
 	if ((m_ptr->hp < m_ptr->maxhp * 3 / 4) && (randint0(100) < 25))
 	{
-		/* Choose heal spell if possible */
 		if (heal_num) return (heal[randint0(heal_num)]);
 	}
 
-	/* Haste self if we aren't already somewhat hasted (rarely) */
 	if (haste_num && (randint0(100) < 20) && !monster_fast_remaining(m_ptr))
 	{
-		/* Choose haste spell */
 		return (haste[randint0(haste_num)]);
 	}
 
-	/* Annoy player (most of the time) */
 	if (annoy_num && (randint0(100) < 80))
 	{
-		/* Choose annoyance spell */
 		return (annoy[randint0(annoy_num)]);
 	}
 
-	/* Choose no spell */
 	return 0;
 }
 
@@ -1259,11 +1154,7 @@ static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, PO
 		int next_x = *xp + tonari_x[next][i];
 		int next_y = *yp + tonari_y[next][i];
 		grid_type *g_ptr;
-
-		/* Access the next grid */
 		g_ptr = &floor_ptr->grid_array[next_y][next_x];
-
-		/* Skip this feature */
 		if (!cave_have_flag_grid(g_ptr, f_flag)) continue;
 
 		if (path_check(target_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x))
@@ -1285,98 +1176,35 @@ static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, PO
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスター構造体配列のID
  * @return 実際に特殊技能を利用したらTRUEを返す
- * @details
- * Returns "TRUE" if a spell (or whatever) was (successfully) cast.\n
- *\n
- * This function could use some work, but remember to\n
- * keep it as optimized as possible, while retaining generic code.\n
- *\n
- * Verify the various "blind-ness" checks in the code.\n
- *\n
- * Note that several effects should really not be "seen"\n
- * if the player is blind.  See also "effects.c" for other "mistakes".\n
- *\n
- * Perhaps monsters should breathe at locations *near* the player,\n
- * since this would allow them to inflict "partial" damage.\n
- *\n
- * Perhaps smart monsters should decline to use "bolt" spells if\n
- * there is a monster in the way, unless they wish to kill it.\n
- *\n
- * Note that, to allow the use of the "track_target" option at some\n
- * later time, certain non-optimal things are done in the code below,\n
- * including explicit checks against the "direct" variable, which is\n
- * currently always true by the time it is checked, but which should\n
- * really be set according to an explicit "projectable()" test, and\n
- * the use of generic "x,y" locations instead of the player location,\n
- * with those values being initialized with the player location.\n
- *\n
- * It will not be possible to "correctly" handle the case in which a\n
- * monster attempts to attack a location which is thought to contain\n
- * the player, but which in fact is nowhere near the player, since this\n
- * might induce all sorts of messages about the attack itself, and about\n
- * the effects of the attack, which the player might or might not be in\n
- * a position to observe.  Thus, for simplicity, it is probably best to\n
- * only allow "faulty" attacks by a monster if one of the important grids\n
- * (probably the initial or final grid) is in fact in view of the player.\n
- * It may be necessary to actually prevent spell attacks except when the\n
- * monster actually has line of sight to the player.  Note that a monster\n
- * could be left in a bizarre situation after the player ducked behind a\n
- * pillar and then teleported away, for example.\n
- *\n
- * @note
- * that certain spell attacks do not use the "project()" function\n
- * but "simulate" it via the "direct" variable, which is always at least\n
- * as restrictive as the "project()" function.  This is necessary to\n
- * prevent "blindness" attacks and such from bending around walls, etc,\n
- * and to allow the use of the "track_target" option in the future.\n
- *\n
- * Note that this function attempts to optimize the use of spells for the\n
- * cases in which the monster has no spells, or has spells but cannot use\n
- * them, or has spells but they will have no "useful" effect.  Note that\n
- * this function has been an efficiency bottleneck in the past.\n
- *\n
- * Note the special "MFLAG_NICE" flag, which prevents a monster from using\n
- * any spell attacks until the player has had a single chance to move.\n
  */
 bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 {
 #ifdef JP
 #else
-
 	char m_poss[80];
 #endif
-	/* Extract the "see-able-ness" */
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	/* Cannot cast spells when confused */
 	if (monster_confused_remaining(m_ptr))
 	{
 		reset_target(m_ptr);
 		return FALSE;
 	}
 
-	/* Cannot cast spells when nice */
 	if (m_ptr->mflag & MFLAG_NICE) return FALSE;
 	if (!is_hostile(m_ptr)) return FALSE;
 
-
-	/* Sometimes forbid inate attacks (breaths) */
 	bool no_inate = FALSE;
 	if (randint0(100) >= (r_ptr->freq_spell * 2)) no_inate = TRUE;
 
-	/* Extract the racial spell flags */
 	BIT_FLAGS f4 = r_ptr->flags4;
 	BIT_FLAGS f5 = r_ptr->a_ability_flags1;
 	BIT_FLAGS f6 = r_ptr->a_ability_flags2;
 
-	/*** require projectable player ***/
-
-	/* Check range */
 	if ((m_ptr->cdis > MAX_RANGE) && !m_ptr->target_y) return FALSE;
 
-	/* Check path for lite breath */
 	POSITION x = target_ptr->x;
 	POSITION y = target_ptr->y;
 	POSITION x_br_lite = 0;
@@ -1395,11 +1223,8 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 				if (have_flag(f_ptr->flags, FF_PROJECT) && one_in_(2)) f4 &= ~(RF4_BR_LITE);
 			}
 		}
-
-		/* Check path to next grid */
 		else if (!adjacent_grid_check(target_ptr, m_ptr, &y_br_lite, &x_br_lite, FF_LOS, los)) f4 &= ~(RF4_BR_LITE);
 
-		/* Don't breath lite to the wall if impossible */
 		if (!(f4 & RF4_BR_LITE))
 		{
 			y_br_lite = 0;
@@ -1407,27 +1232,19 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		}
 	}
 
-	/* Check path */
 	bool do_spell = DO_SPELL_NONE;
 	if (projectable(target_ptr, m_ptr->fy, m_ptr->fx, y, x))
 	{
 		feature_type *f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
-
 		if (!have_flag(f_ptr->flags, FF_PROJECT))
 		{
-			/* Breath disintegration to the wall if possible */
 			if ((f4 & RF4_BR_DISI) && have_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2)) do_spell = DO_SPELL_BR_DISI;
-
-			/* Breath lite to the transparent wall if possible */
 			else if ((f4 & RF4_BR_LITE) && have_flag(f_ptr->flags, FF_LOS) && one_in_(2)) do_spell = DO_SPELL_BR_LITE;
 		}
 	}
-
-	/* Check path to next grid */
 	else
 	{
 		bool success = FALSE;
-
 		if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE / 2) &&
 			in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, y, x) &&
 			(one_in_(10) || (projectable(target_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
@@ -1479,15 +1296,11 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 			}
 		}
 
-		/* No spells */
 		if (!success) return FALSE;
 	}
 
 	reset_target(m_ptr);
-
 	DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-
-	/* Forbid inate attacks sometimes */
 	if (no_inate)
 	{
 		f4 &= ~(RF4_NOMAGIC_MASK);
@@ -1521,29 +1334,23 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 	if (r_ptr->flags2 & RF2_SMART)
 	{
-		/* Hack -- allow "desperate" spells */
 		if ((m_ptr->hp < m_ptr->maxhp / 10) &&
 			(randint0(100) < 50))
 		{
-			/* Require intelligent spells */
 			f4 &= (RF4_INT_MASK);
 			f5 &= (RF5_INT_MASK);
 			f6 &= (RF6_INT_MASK);
 		}
 
-		/* Hack -- decline "teleport level" in some case */
 		if ((f6 & RF6_TELE_LEVEL) && is_teleport_level_ineffective(target_ptr, 0))
 		{
 			f6 &= ~(RF6_TELE_LEVEL);
 		}
 	}
 
-	/* No spells left */
 	if (!f4 && !f5 && !f6) return FALSE;
 
-	/* Remove the "ineffective" spells */
 	remove_bad_spells(m_idx, target_ptr, &f4, &f5, &f6);
-
 	if (floor_ptr->inside_arena || target_ptr->phase_out)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
@@ -1553,45 +1360,37 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		if (m_ptr->r_idx == MON_ROLENTO) f6 &= ~(RF6_SPECIAL);
 	}
 
-	/* No spells left */
 	if (!f4 && !f5 && !f6) return FALSE;
 
 	if (!(r_ptr->flags2 & RF2_STUPID))
 	{
 		if (!target_ptr->csp) f5 &= ~(RF5_DRAIN_MANA);
 
-		/* Check for a clean bolt shot */
 		if (((f4 & RF4_BOLT_MASK) ||
 			(f5 & RF5_BOLT_MASK) ||
 			(f6 & RF6_BOLT_MASK)) &&
 			!clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x, FALSE))
 		{
-			/* Remove spells that will only hurt friends */
 			f4 &= ~(RF4_BOLT_MASK);
 			f5 &= ~(RF5_BOLT_MASK);
 			f6 &= ~(RF6_BOLT_MASK);
 		}
 
-		/* Check for a possible summon */
 		if (((f4 & RF4_SUMMON_MASK) ||
 			(f5 & RF5_SUMMON_MASK) ||
 			(f6 & RF6_SUMMON_MASK)) &&
 			!(summon_possible(target_ptr, y, x)))
 		{
-			/* Remove summoning spells */
 			f4 &= ~(RF4_SUMMON_MASK);
 			f5 &= ~(RF5_SUMMON_MASK);
 			f6 &= ~(RF6_SUMMON_MASK);
 		}
 
-		/* Check for a possible raise dead */
 		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, m_ptr))
 		{
-			/* Remove raise dead spell */
 			f6 &= ~(RF6_RAISE_DEAD);
 		}
 
-		/* Special moves restriction */
 		if (f6 & RF6_SPECIAL)
 		{
 			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, y, x))
@@ -1600,39 +1399,31 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 			}
 		}
 
-		/* No spells left */
 		if (!f4 && !f5 && !f6) return FALSE;
 	}
 
-	/* Extract the "inate" spells */
 	byte spell[96], num = 0;
 	for (int k = 0; k < 32; k++)
 	{
 		if (f4 & (1L << k)) spell[num++] = k + RF4_SPELL_START;
 	}
 
-	/* Extract the "normal" spells */
 	for (int k = 0; k < 32; k++)
 	{
 		if (f5 & (1L << k)) spell[num++] = k + RF5_SPELL_START;
 	}
 
-	/* Extract the "bizarre" spells */
 	for (int k = 0; k < 32; k++)
 	{
 		if (f6 & (1L << k)) spell[num++] = k + RF6_SPELL_START;
 	}
 
-	/* No spells left */
 	if (!num) return FALSE;
 
-	/* Stop if player is dead or gone */
 	if (!target_ptr->playing || target_ptr->is_dead) return FALSE;
 
-	/* Stop if player is leaving */
 	if (target_ptr->leaving) return FALSE;
 
-	/* Get the monster name (or "it") */
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_desc(target_ptr, m_name, m_ptr, 0x00);
 
@@ -1653,36 +1444,27 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 			thrown_spell = choose_attack_spell(target_ptr, m_idx, spell, num);
 			if (thrown_spell) break;
 		}
-	}
-
-	break;
-
+                break;
+    }
 	case DO_SPELL_BR_LITE:
 		thrown_spell = 96 + 14; /* RF4_BR_LITE */
 		break;
-
 	case DO_SPELL_BR_DISI:
 		thrown_spell = 96 + 31; /* RF4_BR_DISI */
 		break;
-
 	case DO_SPELL_BA_LITE:
 		thrown_spell = 128 + 20; /* RF5_BA_LITE */
 		break;
-
 	default:
 		return FALSE;
 	}
 
-	/* Abort if no spell was chosen */
 	if (!thrown_spell) return FALSE;
 
-	/* Calculate spell failure rate */
 	PERCENTAGE failrate = 25 - (rlev + 3) / 4;
 
-	/* Hack -- Stupid monsters will never fail (for jellies and such) */
 	if (r_ptr->flags2 & RF2_STUPID) failrate = 0;
 
-	/* Check for spell failure (inate attacks never fail) */
 	if (!spell_is_inate(thrown_spell)
 		&& (in_no_magic_dungeon || (monster_stunned_remaining(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
 	{
@@ -1692,14 +1474,12 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		return TRUE;
 	}
 
-	/* Hex: Anti Magic Barrier */
 	if (!spell_is_inate(thrown_spell) && magic_barrier(target_ptr, m_idx))
 	{
 		msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), m_name);
 		return TRUE;
 	}
 
-	/* Projectable? */
 	bool direct = player_bold(target_ptr, y, x);
 	bool can_remember = is_original_ap_and_seen(target_ptr, m_ptr);
 	if (!direct)
@@ -1741,7 +1521,6 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		}
 	}
 
-	/* Cast the spell. */
 	int dam = monspell_to_player(target_ptr, thrown_spell, y, x, m_idx);
 	if (dam < 0) return FALSE;
 
@@ -1775,24 +1554,18 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		}
 	}
 
-	/* Remember what the monster did to us */
 	if (can_remember)
 	{
-		/* Inate spell */
 		if (thrown_spell < 32 * 4)
 		{
 			r_ptr->r_flags4 |= (1L << (thrown_spell - 32 * 3));
 			if (r_ptr->r_cast_spell < MAX_UCHAR) r_ptr->r_cast_spell++;
 		}
-
-		/* Bolt or Ball */
 		else if (thrown_spell < 32 * 5)
 		{
 			r_ptr->r_flags5 |= (1L << (thrown_spell - 32 * 4));
 			if (r_ptr->r_cast_spell < MAX_UCHAR) r_ptr->r_cast_spell++;
 		}
-
-		/* Special spell */
 		else if (thrown_spell < 32 * 6)
 		{
 			r_ptr->r_flags6 |= (1L << (thrown_spell - 32 * 5));
@@ -1800,12 +1573,10 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		}
 	}
 
-	/* Always take note of monsters that kill you */
 	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena)
 	{
-		r_ptr->r_deaths++; /* Ignore appearance difference */
+		r_ptr->r_deaths++;
 	}
 
-	/* A spell was cast */
 	return TRUE;
 }

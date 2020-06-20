@@ -269,14 +269,11 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	bool            flag, redraw;
 	int menu_line = (use_menu ? 1 : 0);
 
-	/* Assume cancelled */
 	*sn = (-1);
 
 	flag = FALSE;
 	redraw = FALSE;
 
-	/* Get the spell, if available */
-	
 	if (repeat_pull(&code))
 	{
 		*sn = (SPELL_IDX)code;
@@ -286,7 +283,6 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	if (use_menu)
 	{
 		screen_save();
-
 		while(!mode)
 		{
 			prt(format(_(" %s ボルト", " %s bolt"), (menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
@@ -389,7 +385,6 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 		return FALSE;
 	}
 
-	/* Build a prompt (accept all spells) */
 	(void)strnfmt(out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
 		I2A(0), I2A(num - 1), p);
 
@@ -463,70 +458,48 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 				}
 			}
 		}
-		/* Request redraw */
+
 		if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask))
 		{
-			/* Show the list */
 			if (!redraw || use_menu)
 			{
 				char psi_desc[80];
 				redraw = TRUE;
 				if (!use_menu) screen_save();
 
-				/* Display a list of spells */
 				prt("", y, x);
 				put_str(_("名前", "Name"), y, x + 5);
 				put_str(_("MP 失率 効果", "SP Fail Info"), y, x + 33);
 
-
-				/* Dump the spells */
 				for (i = 0; i < num; i++)
 				{
 					int need_mana;
-
 					prt("", y + i + 1, x);
 					if (!caster_ptr->magic_num2[spellnum[i]]) continue;
 
-					/* Access the spell */
 					spell = monster_powers[spellnum[i]];
-
 					chance = spell.fail;
-
-					/* Reduce failure rate by "effective" level adjustment */
 					if (plev > spell.level) chance -= 3 * (plev - spell.level);
 					else chance += (spell.level - plev);
 
-					/* Reduce failure rate by INT/WIS adjustment */
 					chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
-
 					chance = mod_spell_chance_1(caster_ptr, chance);
-
 					need_mana = mod_need_mana(caster_ptr, monster_powers[spellnum[i]].smana, 0, REALM_NONE);
-
-					/* Not enough mana to cast */
 					if (need_mana > caster_ptr->csp)
 					{
 						chance += 5 * (need_mana - caster_ptr->csp);
 					}
 
-					/* Extract the minimum failure rate */
 					minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
-
-					/* Minimum failure rate */
 					if (chance < minfail) chance = minfail;
 
-					/* Stunning makes spells harder */
 					if (caster_ptr->stun > 50) chance += 25;
 					else if (caster_ptr->stun) chance += 15;
 
-					/* Always a 5 percent chance of working */
 					if (chance > 95) chance = 95;
 
 					chance = mod_spell_chance_2(caster_ptr, chance);
-
-					/* Get info */
 					learned_info(caster_ptr, comment, spellnum[i]);
-
 					if (use_menu)
 					{
 						if (i == (menu_line-1)) strcpy(psi_desc, _("  》", "  > "));
@@ -534,64 +507,45 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 					}
 					else sprintf(psi_desc, "  %c)", I2A(i));
 
-					/* Dump the spell --(-- */
 					strcat(psi_desc, format(" %-26s %3d %3d%%%s",
 						spell.name, need_mana,
 						chance, comment));
 					prt(psi_desc, y + i + 1, x);
 				}
 
-				/* Clear the bottom line */
 				if (y < 22) prt("", y + i + 1, x);
 			}
-
-			/* Hide the list */
 			else
 			{
-				/* Hide list */
 				redraw = FALSE;
 				screen_load();
 			}
 
-			/* Redo asking */
 			continue;
 		}
 
 		if (!use_menu)
 		{
-			/* Note verify */
 			ask = isupper(choice);
-
-			/* Lowercase */
 			if (ask) choice = (char)tolower(choice);
 
-			/* Extract request */
 			i = (islower(choice) ? A2I(choice) : -1);
 		}
 
-		/* Totally Illegal */
 		if ((i < 0) || (i >= num) || !caster_ptr->magic_num2[spellnum[i]])
 		{
 			bell();
 			continue;
 		}
 
-		/* Save the spell index */
 		spell = monster_powers[spellnum[i]];
-
-		/* Verify it */
 		if (ask)
 		{
 			char tmp_val[160];
-
-			/* Prompt */
 			(void) strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[spellnum[i]].name);
-
-			/* Belay that order */
 			if (!get_check(tmp_val)) continue;
 		}
 
-		/* Stop the loop */
 		flag = TRUE;
 	}
 
@@ -600,15 +554,9 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	caster_ptr->window |= (PW_SPELL);
 	handle_stuff(caster_ptr);
 
-	/* Abort if needed */
 	if (!flag) return FALSE;
 
-	/* Save the choice */
 	(*sn) = spellnum[i];
-
-	repeat_push((COMMAND_CODE)spellnum[i]);
-
-	/* Success */
 	return TRUE;
 }
 
@@ -643,7 +591,6 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 
 	if (!success || (randint1(50+plev) < plev/10)) u_mode = PM_ALLOW_UNIQUE;
 
-	/* spell code */
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	switch (spell)
 	{
@@ -1452,62 +1399,40 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
 	if (!get_learned_power(caster_ptr, &n)) return FALSE;
 
 	spell = monster_powers[n];
-
 	need_mana = mod_need_mana(caster_ptr, spell.smana, 0, REALM_NONE);
-
-	/* Verify "dangerous" spells */
 	if (need_mana > caster_ptr->csp)
 	{
-		/* Warning */
 		msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
-
 		if (!over_exert) return FALSE;
 
-		/* Verify */
 		if (!get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "))) return FALSE;
 	}
 
-	/* Spell failure chance */
 	chance = spell.fail;
-
-	/* Reduce failure rate by "effective" level adjustment */
 	if (plev > spell.level) chance -= 3 * (plev - spell.level);
 	else chance += (spell.level - plev);
 
-	/* Reduce failure rate by INT/WIS adjustment */
 	chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
-
 	chance = mod_spell_chance_1(caster_ptr, chance);
-
-	/* Not enough mana to cast */
 	if (need_mana > caster_ptr->csp)
 	{
 		chance += 5 * (need_mana - caster_ptr->csp);
 	}
 
-	/* Extract the minimum failure rate */
 	minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
-
-	/* Minimum failure rate */
 	if (chance < minfail) chance = minfail;
 
-	/* Stunning makes spells harder */
 	if (caster_ptr->stun > 50) chance += 25;
 	else if (caster_ptr->stun) chance += 15;
 
-	/* Always a 5 percent chance of working */
 	if (chance > 95) chance = 95;
 
 	chance = mod_spell_chance_2(caster_ptr, chance);
-
-	/* Failed spell */
 	if (randint0(100) < chance)
 	{
 		if (flush_failure) flush();
 		msg_print(_("魔法をうまく唱えられなかった。", "You failed to concentrate hard enough!"));
-
 		sound(SOUND_FAIL);
-
 		if (n >= MS_S_KIN)
 			cast = cast_learned_spell(caster_ptr, n, FALSE);
 	}
@@ -1518,44 +1443,29 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
 		if (!cast) return FALSE;
 	}
 
-	/* Sufficient mana */
 	if (need_mana <= caster_ptr->csp)
 	{
-		/* Use some mana */
 		caster_ptr->csp -= need_mana;
 	}
 	else
 	{
 		int oops = need_mana;
-
-		/* No mana left */
 		caster_ptr->csp = 0;
 		caster_ptr->csp_frac = 0;
-
 		msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
-
-		/* Hack -- Bypass free action */
 		(void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(5 * oops + 1));
-
 		chg_virtue(caster_ptr, V_KNOWLEDGE, -10);
-
-		/* Damage CON (possibly permanently) */
 		if (randint0(100) < 50)
 		{
 			bool perm = (randint0(100) < 25);
-
 			msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
-
-			/* Reduce constitution */
 			(void)dec_stat(caster_ptr, A_CON, 15 + randint1(10), perm);
 		}
 	}
 
 	take_turn(caster_ptr, 100);
-
 	caster_ptr->redraw |= (PR_MANA);
 	caster_ptr->window |= (PW_PLAYER | PW_SPELL);
-
 	return TRUE;
 }
 
