@@ -467,7 +467,7 @@ bool no_lite(player_type *creature_ptr)
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */
-void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
+void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x)
 {
 	/* Only do "legal" locations */
 	if (panel_contains(y, x))

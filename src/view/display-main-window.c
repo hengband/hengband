@@ -2904,6 +2904,8 @@ void update_playtime(void)
     }
 }
 
+bool panel_contains(POSITION y, POSITION x) { return (y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) && (x <= panel_col_max); }
+
 /*
  * Delayed visual update
  * Only used if update_view(), update_lite() or update_mon_lite() was called
