@@ -1011,6 +1011,7 @@
     <ClInclude Include="..\..\src\view\display-lore.h" />
     <ClInclude Include="..\..\src\view\display-messages.h" />
     <ClInclude Include="..\..\src\view\display-monster-status.h" />
+    <ClInclude Include="..\..\src\view\main-window-row-column.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\..\src\view\status-bars-table.h" />
     <ClInclude Include="..\..\src\world\world-object.h" />
