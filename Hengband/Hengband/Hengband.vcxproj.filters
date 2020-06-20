@@ -1403,6 +1403,9 @@
     <ClCompile Include="..\..\src\mspell\monster-power-table.c">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\status-bars-table.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3090,6 +3093,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspells3.h">
       <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\status-bars-table.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

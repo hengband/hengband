@@ -571,6 +571,7 @@ hengband_SOURCES = \
 	util/string-processor.c util/string-processor.h \
 	util/tag-sorter.c util/tag-sorter.h \
 	\
+	view/display-birth.c view/display-birth.h \
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \
 	view/display-lore-attacks.c view/display-lore-attacks.h \
@@ -585,10 +586,10 @@ hengband_SOURCES = \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player-middle.c view/display-player-middle.h \
 	view/display-player.c view/display-player.h \
+	view/display-util.c view/display-util.h \
 	view/object-describer.c view/object-describer.h \
 	view/status-first-page.c view/status-first-page.h \
-	view/display-util.c view/display-util.h \
-	view/display-birth.c view/display-birth.h \
+	view/status-bars-table.c view/status-bars-table.h \
 	\
 	wizard/wizard-spoiler.c wizard/wizard-spoiler.h\
 	wizard/wizard-special-process.c wizard/wizard-special-process.h \

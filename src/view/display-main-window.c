@@ -68,6 +68,7 @@
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "view/object-describer.h"
+#include "view/status-bars-table.h"
 #include "world/world.h"
 
 /*
@@ -338,49 +339,6 @@ static void print_stat(player_type *creature_ptr, int stat)
 #define BAR_CURE 65 /*!< 下部ステータス表示: 回復 */
 #define BAR_ESP_EVIL 66 /*!< 下部ステータス表示: 邪悪感知 */
 
-static struct {
-    TERM_COLOR attr;
-    concptr sstr;
-    concptr lstr;
-} bar[]
-#ifdef JP
-    = { { TERM_YELLOW, "つ", "つよし" }, { TERM_VIOLET, "幻", "幻覚" }, { TERM_L_DARK, "盲", "盲目" }, { TERM_RED, "痺", "麻痺" },
-          { TERM_VIOLET, "乱", "混乱" }, { TERM_GREEN, "毒", "毒" }, { TERM_BLUE, "恐", "恐怖" }, { TERM_L_BLUE, "浮", "浮遊" }, { TERM_SLATE, "反", "反射" },
-          { TERM_SLATE, "壁", "壁抜け" }, { TERM_L_DARK, "幽", "幽体" }, { TERM_SLATE, "邪", "防邪" }, { TERM_VIOLET, "変", "変わり身" },
-          { TERM_YELLOW, "魔", "魔法鎧" }, { TERM_L_UMBER, "伸", "伸び" }, { TERM_WHITE, "石", "石肌" }, { TERM_L_BLUE, "分", "分身" },
-          { TERM_SLATE, "防", "魔法防御" }, { TERM_YELLOW, "究", "究極" }, { TERM_YELLOW, "無", "無敵" }, { TERM_L_GREEN, "酸", "酸免疫" },
-          { TERM_GREEN, "酸", "耐酸" }, { TERM_L_BLUE, "電", "電免疫" }, { TERM_BLUE, "電", "耐電" }, { TERM_L_RED, "火", "火免疫" },
-          { TERM_RED, "火", "耐火" }, { TERM_WHITE, "冷", "冷免疫" }, { TERM_SLATE, "冷", "耐冷" }, { TERM_GREEN, "毒", "耐毒" },
-          { TERM_L_DARK, "獄", "耐地獄" }, { TERM_L_BLUE, "時", "耐時間" }, { TERM_L_DARK, "鏡", "鏡オーラ" }, { TERM_L_RED, "オ", "火オーラ" },
-          { TERM_WHITE, "闘", "闘気" }, { TERM_WHITE, "聖", "聖オーラ" }, { TERM_VIOLET, "目", "目には目" }, { TERM_WHITE, "祝", "祝福" },
-          { TERM_WHITE, "勇", "勇" }, { TERM_RED, "狂", "狂乱" }, { TERM_L_RED, "火", "魔剣火" }, { TERM_WHITE, "冷", "魔剣冷" },
-          { TERM_L_BLUE, "電", "魔剣電" }, { TERM_SLATE, "酸", "魔剣酸" }, { TERM_L_GREEN, "毒", "魔剣毒" }, { TERM_RED, "乱", "混乱打撃" },
-          { TERM_L_BLUE, "視", "透明視" }, { TERM_ORANGE, "テ", "テレパシ" }, { TERM_L_BLUE, "回", "回復" }, { TERM_L_RED, "赤", "赤外" },
-          { TERM_UMBER, "隠", "隠密" }, { TERM_YELLOW, "隠", "超隠密" }, { TERM_WHITE, "帰", "帰還" }, { TERM_WHITE, "現", "現実変容" },
-          { TERM_WHITE, "オ", "氷オーラ" }, { TERM_BLUE, "オ", "電オーラ" }, { TERM_L_DARK, "オ", "影オーラ" }, { TERM_YELLOW, "腕", "腕力強化" },
-          { TERM_RED, "肉", "肉体強化" }, { TERM_L_DARK, "殖", "反増殖" }, { TERM_ORANGE, "テ", "反テレポ" }, { TERM_RED, "魔", "反魔法" },
-          { TERM_SLATE, "我", "我慢" }, { TERM_SLATE, "宣", "宣告" }, { TERM_L_DARK, "剣", "魔剣化" }, { TERM_RED, "吸", "吸血打撃" },
-          { TERM_WHITE, "回", "回復" }, { TERM_L_DARK, "感", "邪悪感知" }, { 0, NULL, NULL } };
-#else
-    = { { TERM_YELLOW, "Ts", "Tsuyoshi" }, { TERM_VIOLET, "Ha", "Halluc" }, { TERM_L_DARK, "Bl", "Blind" }, { TERM_RED, "Pa", "Paralyzed" },
-          { TERM_VIOLET, "Cf", "Confused" }, { TERM_GREEN, "Po", "Poisoned" }, { TERM_BLUE, "Af", "Afraid" }, { TERM_L_BLUE, "Lv", "Levit" },
-          { TERM_SLATE, "Rf", "Reflect" }, { TERM_SLATE, "Pw", "PassWall" }, { TERM_L_DARK, "Wr", "Wraith" }, { TERM_SLATE, "Ev", "PrtEvl" },
-          { TERM_VIOLET, "Kw", "Kawarimi" }, { TERM_YELLOW, "Md", "MgcArm" }, { TERM_L_UMBER, "Eh", "Expand" }, { TERM_WHITE, "Ss", "StnSkn" },
-          { TERM_L_BLUE, "Ms", "MltShdw" }, { TERM_SLATE, "Rm", "ResMag" }, { TERM_YELLOW, "Ul", "Ultima" }, { TERM_YELLOW, "Iv", "Invuln" },
-          { TERM_L_GREEN, "IAc", "ImmAcid" }, { TERM_GREEN, "Ac", "Acid" }, { TERM_L_BLUE, "IEl", "ImmElec" }, { TERM_BLUE, "El", "Elec" },
-          { TERM_L_RED, "IFi", "ImmFire" }, { TERM_RED, "Fi", "Fire" }, { TERM_WHITE, "ICo", "ImmCold" }, { TERM_SLATE, "Co", "Cold" },
-          { TERM_GREEN, "Po", "Pois" }, { TERM_L_DARK, "Nt", "Nthr" }, { TERM_L_BLUE, "Ti", "Time" }, { TERM_L_DARK, "Mr", "Mirr" },
-          { TERM_L_RED, "SFi", "SFire" }, { TERM_WHITE, "Fo", "Force" }, { TERM_WHITE, "Ho", "Holy" }, { TERM_VIOLET, "Ee", "EyeEye" },
-          { TERM_WHITE, "Bs", "Bless" }, { TERM_WHITE, "He", "Hero" }, { TERM_RED, "Br", "Berserk" }, { TERM_L_RED, "BFi", "BFire" },
-          { TERM_WHITE, "BCo", "BCold" }, { TERM_L_BLUE, "BEl", "BElec" }, { TERM_SLATE, "BAc", "BAcid" }, { TERM_L_GREEN, "BPo", "BPois" },
-          { TERM_RED, "TCf", "TchCnf" }, { TERM_L_BLUE, "Se", "SInv" }, { TERM_ORANGE, "Te", "Telepa" }, { TERM_L_BLUE, "Rg", "Regen" },
-          { TERM_L_RED, "If", "Infr" }, { TERM_UMBER, "Sl", "Stealth" }, { TERM_YELLOW, "Stlt", "Stealth" }, { TERM_WHITE, "Rc", "Recall" },
-          { TERM_WHITE, "Al", "Alter" }, { TERM_WHITE, "SCo", "SCold" }, { TERM_BLUE, "SEl", "SElec" }, { TERM_L_DARK, "SSh", "SShadow" },
-          { TERM_YELLOW, "EMi", "ExMight" }, { TERM_RED, "Bu", "BuildUp" }, { TERM_L_DARK, "AMl", "AntiMulti" }, { TERM_ORANGE, "AT", "AntiTele" },
-          { TERM_RED, "AM", "AntiMagic" }, { TERM_SLATE, "Pa", "Patience" }, { TERM_SLATE, "Rv", "Revenge" }, { TERM_L_DARK, "Rs", "RuneSword" },
-          { TERM_RED, "Vm", "Vampiric" }, { TERM_WHITE, "Cu", "Cure" }, { TERM_L_DARK, "ET", "EvilTele" }, { 0, NULL, NULL } };
-#endif
-
 /*!
  * @brief 32ビット変数配列の指定位置のビットフラグを1にする。
  * @param FLG フラグ位置(ビット)
@@ -606,9 +564,9 @@ static void print_status(player_type *creature_ptr)
     }
 
     TERM_LEN col = 0, num = 0;
-    for (int i = 0; bar[i].sstr; i++) {
+    for (int i = 0; stat_bars[i].sstr; i++) {
         if (IS_FLG(i)) {
-            col += strlen(bar[i].lstr) + 1;
+            col += strlen(stat_bars[i].lstr) + 1;
             num++;
         }
     }
@@ -618,9 +576,9 @@ static void print_status(player_type *creature_ptr)
         space = 0;
         col = 0;
 
-        for (int i = 0; bar[i].sstr; i++) {
+        for (int i = 0; stat_bars[i].sstr; i++) {
             if (IS_FLG(i)) {
-                col += strlen(bar[i].sstr);
+                col += strlen(stat_bars[i].sstr);
             }
         }
 
@@ -631,17 +589,17 @@ static void print_status(player_type *creature_ptr)
     }
 
     col = (max_col_statbar - col) / 2;
-    for (int i = 0; bar[i].sstr; i++) {
+    for (int i = 0; stat_bars[i].sstr; i++) {
         if (!IS_FLG(i))
             continue;
 
         concptr str;
         if (space == 2)
-            str = bar[i].lstr;
+            str = stat_bars[i].lstr;
         else
-            str = bar[i].sstr;
+            str = stat_bars[i].sstr;
 
-        c_put_str(bar[i].attr, str, row_statbar, col);
+        c_put_str(stat_bars[i].attr, str, row_statbar, col);
         col += strlen(str);
         if (space > 0)
             col++;
