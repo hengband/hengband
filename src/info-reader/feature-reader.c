@@ -1,6 +1,7 @@
 ﻿#include "info-reader/feature-reader.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "grid/trap.h"
 #include "info-reader/feature-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"

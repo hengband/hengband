@@ -41,6 +41,7 @@
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "grid/trap.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/dungeon-reader.h"

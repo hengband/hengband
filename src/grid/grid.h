@@ -154,8 +154,6 @@ typedef struct grid_template_type {
 #define DOOR_GLASS_DOOR  1
 #define DOOR_CURTAIN     2
 
-#define MAX_DOOR_TYPES   3
-
 extern bool new_player_spot(player_type *creature_ptr);
 extern pos_list tmp_pos;
 

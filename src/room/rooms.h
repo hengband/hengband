@@ -12,7 +12,6 @@
 #pragma once
 
 #include "system/angband.h"
-#include "grid/grid.h"
 
 #define ALLOW_CAVERNS_AND_LAKES
 
@@ -54,16 +53,13 @@
 /*
  * Room type information
  */
-typedef struct room_info_type room_info_type;
-
-struct room_info_type
-{
+typedef struct room_info_type {
         /* Allocation information. */
         s16b prob[ROOM_T_MAX];
 
         /* Minimum level on which room can appear. */
         byte min_level;
-};
+} room_info_type;
 
 extern void build_lake(player_type *player_ptr, int type);
 extern void build_cavern(player_type *player_ptr);
@@ -74,8 +70,7 @@ extern void build_cavern(player_type *player_ptr);
 /*
  * A structure type for doors
  */
-typedef struct
-{
+typedef struct door_type {
 	FEAT_IDX open;
 	FEAT_IDX broken;
 	FEAT_IDX closed;
@@ -84,6 +79,8 @@ typedef struct
 	FEAT_IDX jammed[MAX_LJ_DOORS];
 	FEAT_IDX num_jammed;
 } door_type;
+
+#define MAX_DOOR_TYPES 3
 
 door_type feat_door[MAX_DOOR_TYPES];
 
