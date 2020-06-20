@@ -19,6 +19,10 @@
 #include "spell/spell-types.h"
 #include "view/display-messages.h"
 
+/* summoning number */
+#define S_NUM_6 (easy_band ? 2 : 6)
+#define S_NUM_4 (easy_band ? 1 : 4)
+
 /*!
  * @brief 特定条件のモンスター召喚のみPM_ALLOW_UNIQUEを許可する /
  * @param floor_ptr 現在フロアへの参照ポインタ
