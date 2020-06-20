@@ -25,16 +25,6 @@ struct monster_power
 #define RF5_SPELL_START 32 * 4
 #define RF6_SPELL_START 32 * 5
 
-/* Spell Damage Calc Flag*/
-#define DAM_ROLL 1
-#define DAM_MAX 2
-#define DAM_MIN 3
-#define DICE_NUM 4
-#define DICE_SIDE 5
-#define DICE_MULT 6
-#define DICE_DIV 7
-#define BASE_DAM 8
-
 #define MAX_MONSPELLS 96
 
 /*

@@ -1,23 +1,21 @@
-﻿#include "system/angband.h"
+﻿#include "mspell/mspell-damage-calculator.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
-#include "mspell/mspell-type.h"
-#include "mspell/mspell-damage-calculator.h"
-#include "mspell/monster-spell.h"
 #include "monster/monster-status.h"
+#include "mspell/monster-spell.h"
 
 /*!
-* @brief モンスターの使う呪文の威力を決定する /
-* @param dam 定数値
-* @param dice_num ダイス数
-* @param dice_side ダイス面
-* @param mult ダイス倍率
-* @param div ダイス倍率
-* @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
-* @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
-*/
+ * @brief モンスターの使う呪文の威力を決定する /
+ * @param dam 定数値
+ * @param dice_num ダイス数
+ * @param dice_side ダイス面
+ * @param mult ダイス倍率
+ * @param div ダイス倍率
+ * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
+ * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
+ */
 static HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side, int mult, int div, int TYPE)
 {
     switch (TYPE) {
@@ -48,19 +46,20 @@ static HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side
 }
 
 /*!
-* @brief モンスターの使う呪文の威力を返す /
-* @param target_ptr プレーヤーへの参照ポインタ (破滅の手用)
-* @param SPELL_NUM 呪文番号
-* @param hp 呪文を唱えるモンスターの体力
-* @param rlev 呪文を唱えるモンスターのレベル
-* @param powerful 呪文を唱えるモンスターのpowerfulフラグ
-* @param shoot_dd 射撃のダイス数
-* @param shoot_ds 射撃のダイス面
-* @param shoot_base 射撃の固定威力値
-* @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
-* @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
-*/
-static HIT_POINT monspell_damage_base(player_type* target_ptr, monster_spell_type ms_type, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
+ * @brief モンスターの使う呪文の威力を返す /
+ * @param target_ptr プレーヤーへの参照ポインタ (破滅の手用)
+ * @param SPELL_NUM 呪文番号
+ * @param hp 呪文を唱えるモンスターの体力
+ * @param rlev 呪文を唱えるモンスターのレベル
+ * @param powerful 呪文を唱えるモンスターのpowerfulフラグ
+ * @param shoot_dd 射撃のダイス数
+ * @param shoot_ds 射撃のダイス面
+ * @param shoot_base 射撃の固定威力値
+ * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
+ * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
+ */
+static HIT_POINT monspell_damage_base(
+    player_type *target_ptr, monster_spell_type ms_type, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
 {
     HIT_POINT dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
 
@@ -401,18 +400,18 @@ static HIT_POINT monspell_damage_base(player_type* target_ptr, monster_spell_typ
 }
 
 /*!
-* @brief モンスターの使う呪文の威力を返す /
-* @param target_ptr プレーヤーへの参照ポインタ
-* @param SPELL_NUM 呪文番号
-* @param m_idx 呪文を唱えるモンスターID
-* @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
-* @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
-*/
-HIT_POINT monspell_damage(player_type* target_ptr, monster_spell_type ms_type, MONSTER_IDX m_idx, int TYPE)
+ * @brief モンスターの使う呪文の威力を返す /
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param SPELL_NUM 呪文番号
+ * @param m_idx 呪文を唱えるモンスターID
+ * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
+ * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
+ */
+HIT_POINT monspell_damage(player_type *target_ptr, monster_spell_type ms_type, MONSTER_IDX m_idx, int TYPE)
 {
-    floor_type* floor_ptr = target_ptr->current_floor_ptr;
-    monster_type* m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race* r_ptr = &r_info[m_ptr->r_idx];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
     int hp;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
     int shoot_dd = r_ptr->blow[0].d_dice;
@@ -423,16 +422,16 @@ HIT_POINT monspell_damage(player_type* target_ptr, monster_spell_type ms_type, M
 }
 
 /*!
-* @brief モンスターの使う呪文の威力を返す /
-* @param target_ptr プレーヤーへの参照ポインタ
-* @param SPELL_NUM 呪文番号
-* @param r_idx 呪文を唱えるモンスターの種族ID
-* @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
-* @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
-*/
-HIT_POINT monspell_race_damage(player_type* target_ptr, monster_spell_type ms_type, MONRACE_IDX r_idx, int TYPE)
+ * @brief モンスターの使う呪文の威力を返す /
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param SPELL_NUM 呪文番号
+ * @param r_idx 呪文を唱えるモンスターの種族ID
+ * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
+ * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
+ */
+HIT_POINT monspell_race_damage(player_type *target_ptr, monster_spell_type ms_type, MONRACE_IDX r_idx, int TYPE)
 {
-    monster_race* r_ptr = &r_info[r_idx];
+    monster_race *r_ptr = &r_info[r_idx];
     int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : FALSE;
     u32b hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
@@ -443,18 +442,18 @@ HIT_POINT monspell_race_damage(player_type* target_ptr, monster_spell_type ms_ty
 }
 
 /*!
-* @brief 青魔導師の使う呪文の威力を返す /
-* @param target_ptr プレーヤーへの参照ポインタ
-* @param SPELL_NUM 呪文番号
-* @param plev 使用するレベル。2倍して扱う。
-* @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
-* @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
-*/
-HIT_POINT monspell_bluemage_damage(player_type* target_ptr, monster_spell_type ms_type, PLAYER_LEVEL plev, int TYPE)
+ * @brief 青魔導師の使う呪文の威力を返す /
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param SPELL_NUM 呪文番号
+ * @param plev 使用するレベル。2倍して扱う。
+ * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
+ * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
+ */
+HIT_POINT monspell_bluemage_damage(player_type *target_ptr, monster_spell_type ms_type, PLAYER_LEVEL plev, int TYPE)
 {
     int hp = target_ptr->chp;
     int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
-    object_type* o_ptr = NULL;
+    object_type *o_ptr = NULL;
 
     if (has_melee_weapon(target_ptr, INVEN_RARM))
         o_ptr = &target_ptr->inventory_list[INVEN_RARM];
