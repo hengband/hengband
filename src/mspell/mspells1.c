@@ -36,6 +36,7 @@
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-learn-checker.h"
 #include "mspell/mspell-mask-definitions.h"
+#include "mspell/mspell-util.h"
 #include "object-enchant/object-curse.h"
 #include "player/player-class.h"
 #include "player/player-move.h"

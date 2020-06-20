@@ -13,15 +13,6 @@ typedef struct monster_power {
     concptr name;
 } monster_power;
 
-/* Spell Type flag */
-#define MONSTER_TO_PLAYER 0x01
-#define MONSTER_TO_MONSTER 0x02
-
-/* monster spell number */
-#define RF4_SPELL_START 32 * 3
-#define RF5_SPELL_START 32 * 4
-#define RF6_SPELL_START 32 * 5
-
 #define MAX_MONSPELLS 96
 
 extern const monster_power monster_powers[MAX_MONSPELLS];
