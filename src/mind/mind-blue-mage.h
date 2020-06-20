@@ -1,0 +1,7 @@
+﻿#pragma once
+
+#define MONSPELL_TYPE_BOLT 1
+#define MONSPELL_TYPE_BALL 2
+#define MONSPELL_TYPE_BREATH 3
+#define MONSPELL_TYPE_SUMMON 4
+#define MONSPELL_TYPE_OTHER 5

@@ -36,11 +36,6 @@ struct monster_power
 #define BASE_DAM 8
 
 #define MAX_MONSPELLS 96
-#define MONSPELL_TYPE_BOLT 1
-#define MONSPELL_TYPE_BALL 2
-#define MONSPELL_TYPE_BREATH 3
-#define MONSPELL_TYPE_SUMMON 4
-#define MONSPELL_TYPE_OTHER 5
 
 /*
  * Hack -- choose "intelligent" spells when desperate

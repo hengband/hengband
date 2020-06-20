@@ -3073,6 +3073,9 @@
     <ClInclude Include="..\..\src\spell-realm\spells-song.h">
       <Filter>spell-realm</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-blue-mage.h">
+      <Filter>mind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

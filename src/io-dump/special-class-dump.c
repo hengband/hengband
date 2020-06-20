@@ -7,6 +7,7 @@
 #include "io-dump/special-class-dump.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-smith.h"
+#include "mind/mind-blue-mage.h"
 #include "mspell/monster-spell.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
