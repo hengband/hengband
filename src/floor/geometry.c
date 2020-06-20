@@ -1,6 +1,7 @@
 ﻿#include "floor/floor.h"
 #include "floor/geometry.h"
 #include "game-option/text-display-options.h"
+#include "grid/feature.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

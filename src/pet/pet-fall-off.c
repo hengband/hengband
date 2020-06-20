@@ -7,6 +7,7 @@
 #include "pet/pet-fall-off.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "grid/feature.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"

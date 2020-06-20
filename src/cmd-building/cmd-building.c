@@ -25,6 +25,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "grid/feature.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"

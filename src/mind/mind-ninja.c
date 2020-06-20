@@ -4,6 +4,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"
+#include "grid/feature.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
