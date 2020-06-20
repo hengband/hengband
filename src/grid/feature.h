@@ -144,31 +144,22 @@
  * @struct feature_state
  * @brief 地形状態変化指定構造体 / Feature state structure
  */
-typedef struct feature_state feature_state;
-
-struct feature_state
-{
+typedef struct feature_state {
 	FF_FLAGS_IDX action; /*!< 変化条件をFF_*のIDで指定 / Action (FF_*) */
 	STR_OFFSET result_tag; /*!< 変化先ID / Result (f_info ID) */
 	FEAT_IDX result; /*!< 変化先ID / Result (f_info ID) */
-};
+} feature_state;
 
-typedef struct
-{
+typedef struct feat_prob {
 	FEAT_IDX feat;    /* Feature tile */
 	PERCENTAGE percent; /* Chance of type */
-}
-feat_prob;
+} feat_prob;
 
 /*!
  * @struct feature_type
  * @brief 地形情報の構造体 / Information about terrain "features"
  */
-
-typedef struct feature_type feature_type;
-
-struct feature_type
-{
+typedef struct feature_type {
 	STR_OFFSET name;                /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
 	STR_OFFSET text;                /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
 	STR_OFFSET tag;                 /*!< 地形特性タグ参照のためのネームバッファオフセット値 /  Tag (offset) */
@@ -193,7 +184,7 @@ struct feature_type
 
 	TERM_COLOR x_attr[F_LIT_MAX];   /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
 	SYMBOL_CODE x_char[F_LIT_MAX];   /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
-};
+} feature_type;
 
 extern FEAT_IDX max_f_idx;
 extern feature_type *f_info;
