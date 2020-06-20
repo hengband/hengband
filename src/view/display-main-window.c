@@ -89,7 +89,6 @@ POSITION panel_row_min, panel_row_max;
 POSITION panel_col_min, panel_col_max;
 POSITION panel_col_prt, panel_row_prt;
 
-void print_equippy(player_type *creature_ptr);
 void print_map(player_type *player_ptr);
 void display_map(player_type *player_ptr, int *cy, int *cx);
 void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp);
@@ -269,14 +268,14 @@ static void print_stat(player_type *creature_ptr, int stat)
  * @param FLG フラグ位置(ビット)
  * @return なし
  */
-#define ADD_FLG(FLG) (bar_flags[FLG / 32] |= (1L << (FLG % 32)))
+#define ADD_BAR_FLAG(FLG) (bar_flags[FLG / 32] |= (1L << (FLG % 32)))
 
 /*!
  * @brief 32ビット変数配列の指定位置のビットフラグが1かどうかを返す。
  * @param FLG フラグ位置(ビット)
  * @return 1ならば0以外を返す
  */
-#define IS_FLG(FLG) (bar_flags[FLG / 32] & (1L << (FLG % 32)))
+#define IS_BAR_FLAG(FLG) (bar_flags[FLG / 32] & (1L << (FLG % 32)))
 
 /*!
  * @brief 下部に状態表示を行う / Show status bar
@@ -295,202 +294,202 @@ static void print_status(player_type *creature_ptr)
     bar_flags[0] = bar_flags[1] = bar_flags[2] = 0L;
 
     if (creature_ptr->tsuyoshi)
-        ADD_FLG(BAR_TSUYOSHI);
+        ADD_BAR_FLAG(BAR_TSUYOSHI);
 
     if (creature_ptr->image)
-        ADD_FLG(BAR_HALLUCINATION);
+        ADD_BAR_FLAG(BAR_HALLUCINATION);
 
     if (creature_ptr->blind)
-        ADD_FLG(BAR_BLINDNESS);
+        ADD_BAR_FLAG(BAR_BLINDNESS);
 
     if (creature_ptr->paralyzed)
-        ADD_FLG(BAR_PARALYZE);
+        ADD_BAR_FLAG(BAR_PARALYZE);
 
     if (creature_ptr->confused)
-        ADD_FLG(BAR_CONFUSE);
+        ADD_BAR_FLAG(BAR_CONFUSE);
 
     if (creature_ptr->poisoned)
-        ADD_FLG(BAR_POISONED);
+        ADD_BAR_FLAG(BAR_POISONED);
 
     if (creature_ptr->tim_invis)
-        ADD_FLG(BAR_SENSEUNSEEN);
+        ADD_BAR_FLAG(BAR_SENSEUNSEEN);
 
     if (is_time_limit_esp(creature_ptr))
-        ADD_FLG(BAR_TELEPATHY);
+        ADD_BAR_FLAG(BAR_TELEPATHY);
 
     if (creature_ptr->tim_regen)
-        ADD_FLG(BAR_REGENERATION);
+        ADD_BAR_FLAG(BAR_REGENERATION);
 
     if (creature_ptr->tim_infra)
-        ADD_FLG(BAR_INFRAVISION);
+        ADD_BAR_FLAG(BAR_INFRAVISION);
 
     if (creature_ptr->protevil)
-        ADD_FLG(BAR_PROTEVIL);
+        ADD_BAR_FLAG(BAR_PROTEVIL);
 
     if (IS_INVULN(creature_ptr))
-        ADD_FLG(BAR_INVULN);
+        ADD_BAR_FLAG(BAR_INVULN);
 
     if (creature_ptr->wraith_form)
-        ADD_FLG(BAR_WRAITH);
+        ADD_BAR_FLAG(BAR_WRAITH);
 
     if (creature_ptr->kabenuke)
-        ADD_FLG(BAR_PASSWALL);
+        ADD_BAR_FLAG(BAR_PASSWALL);
 
     if (creature_ptr->tim_reflect)
-        ADD_FLG(BAR_REFLECTION);
+        ADD_BAR_FLAG(BAR_REFLECTION);
 
     if (IS_HERO(creature_ptr))
-        ADD_FLG(BAR_HEROISM);
+        ADD_BAR_FLAG(BAR_HEROISM);
 
     if (creature_ptr->shero)
-        ADD_FLG(BAR_BERSERK);
+        ADD_BAR_FLAG(BAR_BERSERK);
 
     if (is_blessed(creature_ptr))
-        ADD_FLG(BAR_BLESSED);
+        ADD_BAR_FLAG(BAR_BLESSED);
 
     if (creature_ptr->magicdef)
-        ADD_FLG(BAR_MAGICDEFENSE);
+        ADD_BAR_FLAG(BAR_MAGICDEFENSE);
 
     if (creature_ptr->tsubureru)
-        ADD_FLG(BAR_EXPAND);
+        ADD_BAR_FLAG(BAR_EXPAND);
 
     if (creature_ptr->shield)
-        ADD_FLG(BAR_STONESKIN);
+        ADD_BAR_FLAG(BAR_STONESKIN);
 
     if (creature_ptr->special_defense & NINJA_KAWARIMI)
-        ADD_FLG(BAR_KAWARIMI);
+        ADD_BAR_FLAG(BAR_KAWARIMI);
 
     if (creature_ptr->special_defense & DEFENSE_ACID)
-        ADD_FLG(BAR_IMMACID);
+        ADD_BAR_FLAG(BAR_IMMACID);
     if (is_oppose_acid(creature_ptr))
-        ADD_FLG(BAR_RESACID);
+        ADD_BAR_FLAG(BAR_RESACID);
 
     if (creature_ptr->special_defense & DEFENSE_ELEC)
-        ADD_FLG(BAR_IMMELEC);
+        ADD_BAR_FLAG(BAR_IMMELEC);
     if (is_oppose_elec(creature_ptr))
-        ADD_FLG(BAR_RESELEC);
+        ADD_BAR_FLAG(BAR_RESELEC);
 
     if (creature_ptr->special_defense & DEFENSE_FIRE)
-        ADD_FLG(BAR_IMMFIRE);
+        ADD_BAR_FLAG(BAR_IMMFIRE);
     if (is_oppose_fire(creature_ptr))
-        ADD_FLG(BAR_RESFIRE);
+        ADD_BAR_FLAG(BAR_RESFIRE);
 
     if (creature_ptr->special_defense & DEFENSE_COLD)
-        ADD_FLG(BAR_IMMCOLD);
+        ADD_BAR_FLAG(BAR_IMMCOLD);
     if (is_oppose_cold(creature_ptr))
-        ADD_FLG(BAR_RESCOLD);
+        ADD_BAR_FLAG(BAR_RESCOLD);
 
     if (is_oppose_pois(creature_ptr))
-        ADD_FLG(BAR_RESPOIS);
+        ADD_BAR_FLAG(BAR_RESPOIS);
 
     if (creature_ptr->word_recall)
-        ADD_FLG(BAR_RECALL);
+        ADD_BAR_FLAG(BAR_RECALL);
 
     if (creature_ptr->alter_reality)
-        ADD_FLG(BAR_ALTER);
+        ADD_BAR_FLAG(BAR_ALTER);
 
     if (creature_ptr->afraid)
-        ADD_FLG(BAR_AFRAID);
+        ADD_BAR_FLAG(BAR_AFRAID);
 
     if (creature_ptr->tim_res_time)
-        ADD_FLG(BAR_RESTIME);
+        ADD_BAR_FLAG(BAR_RESTIME);
 
     if (creature_ptr->multishadow)
-        ADD_FLG(BAR_MULTISHADOW);
+        ADD_BAR_FLAG(BAR_MULTISHADOW);
 
     if (creature_ptr->special_attack & ATTACK_CONFUSE)
-        ADD_FLG(BAR_ATTKCONF);
+        ADD_BAR_FLAG(BAR_ATTKCONF);
 
     if (creature_ptr->resist_magic)
-        ADD_FLG(BAR_REGMAGIC);
+        ADD_BAR_FLAG(BAR_REGMAGIC);
 
     if (creature_ptr->ult_res)
-        ADD_FLG(BAR_ULTIMATE);
+        ADD_BAR_FLAG(BAR_ULTIMATE);
 
     if (creature_ptr->tim_levitation)
-        ADD_FLG(BAR_LEVITATE);
+        ADD_BAR_FLAG(BAR_LEVITATE);
 
     if (creature_ptr->tim_res_nether)
-        ADD_FLG(BAR_RESNETH);
+        ADD_BAR_FLAG(BAR_RESNETH);
 
     if (creature_ptr->dustrobe)
-        ADD_FLG(BAR_DUSTROBE);
+        ADD_BAR_FLAG(BAR_DUSTROBE);
 
     if (creature_ptr->special_attack & ATTACK_FIRE)
-        ADD_FLG(BAR_ATTKFIRE);
+        ADD_BAR_FLAG(BAR_ATTKFIRE);
     if (creature_ptr->special_attack & ATTACK_COLD)
-        ADD_FLG(BAR_ATTKCOLD);
+        ADD_BAR_FLAG(BAR_ATTKCOLD);
     if (creature_ptr->special_attack & ATTACK_ELEC)
-        ADD_FLG(BAR_ATTKELEC);
+        ADD_BAR_FLAG(BAR_ATTKELEC);
     if (creature_ptr->special_attack & ATTACK_ACID)
-        ADD_FLG(BAR_ATTKACID);
+        ADD_BAR_FLAG(BAR_ATTKACID);
     if (creature_ptr->special_attack & ATTACK_POIS)
-        ADD_FLG(BAR_ATTKPOIS);
+        ADD_BAR_FLAG(BAR_ATTKPOIS);
     if (creature_ptr->special_defense & NINJA_S_STEALTH)
-        ADD_FLG(BAR_SUPERSTEALTH);
+        ADD_BAR_FLAG(BAR_SUPERSTEALTH);
 
     if (creature_ptr->tim_sh_fire)
-        ADD_FLG(BAR_SHFIRE);
+        ADD_BAR_FLAG(BAR_SHFIRE);
 
     if (is_time_limit_stealth(creature_ptr))
-        ADD_FLG(BAR_STEALTH);
+        ADD_BAR_FLAG(BAR_STEALTH);
 
     if (creature_ptr->tim_sh_touki)
-        ADD_FLG(BAR_TOUKI);
+        ADD_BAR_FLAG(BAR_TOUKI);
 
     if (creature_ptr->tim_sh_holy)
-        ADD_FLG(BAR_SHHOLY);
+        ADD_BAR_FLAG(BAR_SHHOLY);
 
     if (creature_ptr->tim_eyeeye)
-        ADD_FLG(BAR_EYEEYE);
+        ADD_BAR_FLAG(BAR_EYEEYE);
 
     if (creature_ptr->realm1 == REALM_HEX) {
         if (hex_spelling(creature_ptr, HEX_BLESS))
-            ADD_FLG(BAR_BLESSED);
+            ADD_BAR_FLAG(BAR_BLESSED);
         if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
-            ADD_FLG(BAR_SHFIRE);
-            ADD_FLG(BAR_REGENERATION);
+            ADD_BAR_FLAG(BAR_SHFIRE);
+            ADD_BAR_FLAG(BAR_REGENERATION);
         }
         if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT))
-            ADD_FLG(BAR_MIGHT);
+            ADD_BAR_FLAG(BAR_MIGHT);
         if (hex_spelling(creature_ptr, HEX_DETECT_EVIL))
-            ADD_FLG(BAR_ESP_EVIL);
+            ADD_BAR_FLAG(BAR_ESP_EVIL);
         if (hex_spelling(creature_ptr, HEX_ICE_ARMOR))
-            ADD_FLG(BAR_SHCOLD);
+            ADD_BAR_FLAG(BAR_SHCOLD);
         if (hex_spelling(creature_ptr, HEX_RUNESWORD))
-            ADD_FLG(BAR_RUNESWORD);
+            ADD_BAR_FLAG(BAR_RUNESWORD);
         if (hex_spelling(creature_ptr, HEX_BUILDING))
-            ADD_FLG(BAR_BUILD);
+            ADD_BAR_FLAG(BAR_BUILD);
         if (hex_spelling(creature_ptr, HEX_ANTI_TELE))
-            ADD_FLG(BAR_ANTITELE);
+            ADD_BAR_FLAG(BAR_ANTITELE);
         if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK))
-            ADD_FLG(BAR_SHELEC);
+            ADD_BAR_FLAG(BAR_SHELEC);
         if (hex_spelling(creature_ptr, HEX_SHADOW_CLOAK))
-            ADD_FLG(BAR_SHSHADOW);
+            ADD_BAR_FLAG(BAR_SHSHADOW);
         if (hex_spelling(creature_ptr, HEX_CONFUSION))
-            ADD_FLG(BAR_ATTKCONF);
+            ADD_BAR_FLAG(BAR_ATTKCONF);
         if (hex_spelling(creature_ptr, HEX_EYE_FOR_EYE))
-            ADD_FLG(BAR_EYEEYE);
+            ADD_BAR_FLAG(BAR_EYEEYE);
         if (hex_spelling(creature_ptr, HEX_ANTI_MULTI))
-            ADD_FLG(BAR_ANTIMULTI);
+            ADD_BAR_FLAG(BAR_ANTIMULTI);
         if (hex_spelling(creature_ptr, HEX_VAMP_BLADE))
-            ADD_FLG(BAR_VAMPILIC);
+            ADD_BAR_FLAG(BAR_VAMPILIC);
         if (hex_spelling(creature_ptr, HEX_ANTI_MAGIC))
-            ADD_FLG(BAR_ANTIMAGIC);
+            ADD_BAR_FLAG(BAR_ANTIMAGIC);
         if (hex_spelling(creature_ptr, HEX_CURE_LIGHT) || hex_spelling(creature_ptr, HEX_CURE_SERIOUS) || hex_spelling(creature_ptr, HEX_CURE_CRITICAL))
-            ADD_FLG(BAR_CURE);
+            ADD_BAR_FLAG(BAR_CURE);
 
         if (hex_revenge_turn(creature_ptr)) {
             if (hex_revenge_type(creature_ptr) == 1)
-                ADD_FLG(BAR_PATIENCE);
+                ADD_BAR_FLAG(BAR_PATIENCE);
             if (hex_revenge_type(creature_ptr) == 2)
-                ADD_FLG(BAR_REVENGE);
+                ADD_BAR_FLAG(BAR_REVENGE);
         }
     }
 
     TERM_LEN col = 0, num = 0;
     for (int i = 0; stat_bars[i].sstr; i++) {
-        if (IS_FLG(i)) {
+        if (IS_BAR_FLAG(i)) {
             col += strlen(stat_bars[i].lstr) + 1;
             num++;
         }
@@ -502,7 +501,7 @@ static void print_status(player_type *creature_ptr)
         col = 0;
 
         for (int i = 0; stat_bars[i].sstr; i++) {
-            if (IS_FLG(i)) {
+            if (IS_BAR_FLAG(i)) {
                 col += strlen(stat_bars[i].sstr);
             }
         }
@@ -515,7 +514,7 @@ static void print_status(player_type *creature_ptr)
 
     col = (max_col_statbar - col) / 2;
     for (int i = 0; stat_bars[i].sstr; i++) {
-        if (!IS_FLG(i))
+        if (!IS_BAR_FLAG(i))
             continue;
 
         concptr str;
@@ -1694,7 +1693,7 @@ void redraw_stuff(player_type *creature_ptr)
 
     if (creature_ptr->redraw & (PR_EQUIPPY)) {
         creature_ptr->redraw &= ~(PR_EQUIPPY);
-        print_equippy(creature_ptr);
+        display_player_equippy(creature_ptr, ROW_EQUIPPY, COL_EQUIPPY, 0);
     }
 
     if (creature_ptr->redraw & (PR_MISC)) {
@@ -1979,13 +1978,6 @@ bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
     handle_stuff(player_ptr);
     return TRUE;
 }
-
-/*!
- * @brief プレイヤーの装備一覧シンボルを固定位置に表示する
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void print_equippy(player_type *creature_ptr) { display_player_equippy(creature_ptr, ROW_EQUIPPY, COL_EQUIPPY, 0); }
 
 /*!
  * @brief 現在のコンソール表示の縦横を返す。 /
