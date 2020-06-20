@@ -1,5 +1,5 @@
-﻿#include "system/angband.h"
-#include "floor/floor.h"
+﻿#include "floor/floor.h"
+#include "grid/grid.h"
 #include "mspell-learn-checker.h"
 #include "world/world.h"
 

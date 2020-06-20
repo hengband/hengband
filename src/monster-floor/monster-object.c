@@ -6,6 +6,7 @@
 
 #include "monster-floor/monster-object.h"
 #include "floor/floor-object.h"
+#include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags2.h"

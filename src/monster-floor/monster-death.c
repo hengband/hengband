@@ -11,6 +11,7 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
+#include "grid/grid.h"
 #include "io/write-diary.h"
 #include "lore/lore-store.h"
 #include "main/music-definitions-table.h"

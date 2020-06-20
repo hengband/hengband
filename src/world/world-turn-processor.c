@@ -11,6 +11,7 @@
 #include "game-option/cheat-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/grid.h"
 #include "inventory/inventory-curse.h"
 #include "inventory/recharge-processor.h"
 #include "io/write-diary.h"

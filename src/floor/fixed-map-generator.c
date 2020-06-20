@@ -4,6 +4,7 @@
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "grid/grid.h"
 #include "grid/trap.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/random-grid-effect-types.h"

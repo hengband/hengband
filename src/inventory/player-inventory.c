@@ -8,6 +8,7 @@
 #include "game-option/option-flags.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"

@@ -28,6 +28,7 @@
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/grid.h"
 #include "io/files-util.h"
 #include "io/load.h"
 #include "io/report.h"

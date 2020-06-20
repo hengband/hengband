@@ -10,6 +10,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/special-options.h"
+#include "grid/grid.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/object-group-table.h"

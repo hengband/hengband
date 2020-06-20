@@ -44,10 +44,7 @@
   * Note the special fields for the "MONSTER_FLOW" code.
   */
 
-typedef struct grid_type grid_type;
-
-struct grid_type
-{
+typedef struct grid_type {
 	BIT_FLAGS info;		/* Hack -- grid flags */
 
 	FEAT_IDX feat;		/* Hack -- feature type */
@@ -66,13 +63,10 @@ struct grid_type
 	byte cost;		/* Hack -- cost of flowing */
 	byte dist;		/* Hack -- distance from player */
 	byte when;		/* Hack -- when cost was computed */
-};
+} grid_type;
 
-/*
- *  A structure type for terrain template of saving dungeon floor
- */
-typedef struct
-{
+/*  A structure type for terrain template of saving dungeon floor */
+typedef struct grid_template_type {
 	BIT_FLAGS info;
 	FEAT_IDX feat;
 	FEAT_IDX mimic;

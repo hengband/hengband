@@ -13,6 +13,7 @@
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"

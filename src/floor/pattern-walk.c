@@ -6,6 +6,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
+#include "grid/grid.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "player/player-damage.h"

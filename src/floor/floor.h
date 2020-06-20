@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "grid/grid.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "floor/floor-save.h"
@@ -83,7 +82,7 @@
  */
 #define REDRAW_MAX 2298
 
-
+typedef struct grid_type grid_type;
 typedef struct floor_type {
 	DUNGEON_IDX dungeon_idx;
 	grid_type *grid_array[MAX_HGT];

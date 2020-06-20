@@ -3,6 +3,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "grid/grid.h"
 #include "market/building-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

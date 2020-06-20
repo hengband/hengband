@@ -15,6 +15,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/grid.h"
 #include "inventory/player-inventory.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"

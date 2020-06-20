@@ -5,6 +5,7 @@
 #include "floor/floor.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-race.h"

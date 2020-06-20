@@ -20,6 +20,7 @@
 #include "game-option/input-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
 #include "io/targeting.h"

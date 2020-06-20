@@ -8,6 +8,7 @@
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
+#include "grid/grid.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

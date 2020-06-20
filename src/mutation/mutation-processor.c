@@ -1,4 +1,5 @@
 ﻿#include "mutation/mutation-processor.h"
+#include "grid/grid.h"
 #include "io/targeting.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"

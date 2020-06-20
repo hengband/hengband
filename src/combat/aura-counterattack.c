@@ -7,6 +7,7 @@
 #include "combat/aura-counterattack.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
+#include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"

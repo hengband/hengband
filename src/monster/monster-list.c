@@ -15,6 +15,7 @@
 #include "floor/floor-object.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
+#include "grid/grid.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

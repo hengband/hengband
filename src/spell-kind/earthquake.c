@@ -6,6 +6,7 @@
 #include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/grid.h"
 #include "io/write-diary.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

@@ -2,6 +2,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "spell/process-effect.h"
 #include "spell-kind/earthquake.h"
 #include "spell/spell-types.h"

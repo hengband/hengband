@@ -1,4 +1,5 @@
 ﻿#include "mspell/mspell-util.h"
+#include "grid/grid.h"
 #include "monster/monster-info.h"
 #include "player/player-move.h"
 #include "view/display-messages.h"
