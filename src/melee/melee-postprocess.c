@@ -29,7 +29,6 @@
 #include "monster-floor/monster-move.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
-#include "mspell/monster-spell.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-class.h"
 #include "player/player-move.h"

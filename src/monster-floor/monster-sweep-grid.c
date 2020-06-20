@@ -18,7 +18,6 @@
 #include "monster-floor/monster-safety-hiding.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-mask-definitions.h"
-#include "mspell/monster-spell.h"
 
  /*!
   * @brief モンスターがプレイヤーから逃走するかどうかを返す /

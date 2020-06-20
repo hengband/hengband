@@ -26,7 +26,6 @@
 #include "monster/monster-info.h"
 #include "monster-floor/monster-move.h"
 #include "monster/monster-update.h"
-#include "mspell/monster-spell.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-broken.h"

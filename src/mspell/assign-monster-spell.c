@@ -5,7 +5,6 @@
  */
 
 #include "mspell/assign-monster-spell.h"
-#include "mspell/monster-spell.h"
 #include "mspell/mspell-ball.h"
 #include "mspell/mspell-bolt.h"
 #include "mspell/mspell-breath.h"

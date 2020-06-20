@@ -43,7 +43,6 @@
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
-#include "mspell/monster-spell.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "object-enchant/object-curse.h"
 #include "player/avatar.h"

@@ -2035,9 +2035,6 @@
     <ClInclude Include="..\..\src\core\scores.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mspell\monster-spell.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-bolt.h">
       <Filter>mspell</Filter>
     </ClInclude>
@@ -3083,6 +3080,15 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\monster-power-table.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspells1.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspells2.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspells3.h">
       <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>

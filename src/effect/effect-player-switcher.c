@@ -6,7 +6,7 @@
 #include "effect/effect-player-spirit.h"
 #include "inventory/inventory-damage.h"
 #include "mind/mind-mirror-master.h"
-#include "mspell/monster-spell.h"
+#include "mspell/mspells3.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-broken.h"
 #include "player/mimic-info-table.h"

@@ -2,7 +2,6 @@
 #include "game-option/cheat-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
-#include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
 
 /*!

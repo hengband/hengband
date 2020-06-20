@@ -45,7 +45,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
-#include "mspell/monster-spell.h"
+#include "mspell/mspells3.h"
 #include "mutation/mutation.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/artifact.h"

@@ -15,7 +15,6 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
 #include "object-enchant/tr-types.h"

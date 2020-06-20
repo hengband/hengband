@@ -1,7 +1,7 @@
 ﻿#include "effect/effect-player-curse.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/race-indice-types.h"
-#include "mspell/monster-spell.h"
+#include "mspell/mspells3.h"
 #include "object-enchant/object-curse.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

@@ -35,7 +35,6 @@
 #include "locale/vowel-checker.h"
 #include "mind/mind-sniper.h"
 #include "monster/monster-status.h"
-#include "mspell/monster-spell.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"

@@ -60,7 +60,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "mspell/monster-spell.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-boost.h"

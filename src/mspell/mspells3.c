@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "system/angband.h"
+#include "mspell/mspells3.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
@@ -39,7 +39,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-power-table.h"
-#include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-type.h"
@@ -52,9 +51,9 @@
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell/spell-types.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
