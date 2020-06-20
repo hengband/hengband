@@ -31,6 +31,7 @@
 #include "monster/monster-status.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"
+#include "mspell/mspell-mask-definitions.h"
 #include "pet/pet-util.h"
 #include "player/player-class.h"
 #include "player/player-move.h"

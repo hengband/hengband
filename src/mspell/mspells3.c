@@ -40,6 +40,7 @@
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-type.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"

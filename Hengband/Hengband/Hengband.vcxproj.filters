@@ -3076,6 +3076,9 @@
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h">
       <Filter>mind</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-mask-definitions.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -375,6 +375,7 @@ hengband_SOURCES = \
 	mspell/mspell-ball.c mspell/mspell-ball.h \
 	mspell/mspell-bolt.c mspell/mspell-bolt.h \
 	mspell/mspell-floor.c mspell/mspell-floor.h \
+	mspell/mspell-mask-definitions.h \
 	mspell/mspell-special.c mspell/mspell-special.h \
 	mspell/mspell-status.c mspell/mspell-status.h \
 	mspell/mspell-summon-checker.c mspell/mspell-summon-checker.h \

@@ -19,6 +19,7 @@
 #include "monster/monster-update.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-status.h"
+#include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "player/player-move.h"
 #include "player/player-personalities-types.h"

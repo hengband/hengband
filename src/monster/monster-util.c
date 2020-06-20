@@ -13,6 +13,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-indice-types.h"
 #include "mspell/monster-spell.h"
+#include "mspell/mspell-mask-definitions.h"
 #include "spell/spells-summon.h"
 #include "system/alloc-entries.h"
 #include "util/bit-flags-calculator.h"
