@@ -1400,6 +1400,9 @@
     <ClCompile Include="..\..\src\spell-realm\spells-song.c">
       <Filter>spell-realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\monster-power-table.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3077,6 +3080,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-mask-definitions.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\monster-power-table.h">
       <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>

@@ -361,9 +361,9 @@ hengband_SOURCES = \
 	monster-race/race-flags9.h \
 	monster-race/race-indice-types.h \
 	\
-	mspell/monster-spell.h \
-	mspell/mspells1.c mspell/mspells2.c mspell/mspells3.c \
 	mspell/assign-monster-spell.c mspell/assign-monster-spell.h \
+	mspell/monster-power-table.c mspell/monster-spell.h \
+	mspell/mspells1.c mspell/mspells2.c mspell/mspells3.c \
 	mspell/mspell-summon.c mspell/mspell-summon.h \
 	mspell/mspell-util.c mspell/mspell-util.h \
 	mspell/mspell-curse.c mspell/mspell-curse.h \

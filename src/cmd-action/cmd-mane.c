@@ -29,7 +29,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
-#include "mspell/monster-spell.h"
+#include "mspell/monster-power-table.h"
 #include "mspell/mspell-type.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"

@@ -2,22 +2,6 @@
 
 #include "system/monster-type-definition.h"
 
-/* Imitator */
-typedef struct monster_power {
-    PLAYER_LEVEL level;
-    MANA_POINT smana;
-    PERCENTAGE fail;
-    int manedam;
-    int manefail;
-    int use_stat;
-    concptr name;
-} monster_power;
-
-#define MAX_MONSPELLS 96
-
-extern const monster_power monster_powers[MAX_MONSPELLS];
-extern const concptr monster_powers_short[MAX_MONSPELLS];
-
 /* mspells1.c */
 extern bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
 extern bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1);
