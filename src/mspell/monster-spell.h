@@ -25,10 +25,6 @@ struct monster_power
 #define RF5_SPELL_START 32 * 4
 #define RF6_SPELL_START 32 * 5
 
-#define RF4_SPELL_SIZE 32
-#define RF5_SPELL_SIZE 32
-#define RF6_SPELL_SIZE 32
-
 /* Spell Damage Calc Flag*/
 #define DAM_ROLL 1
 #define DAM_MAX 2

@@ -43,17 +43,21 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
- /*!
-  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
-  * Determine if a beam spell will hit the target.
-  * @param target_ptr プレーヤーへの参照ポインタ
-  * @param y1 始点のY座標
-  * @param x1 始点のX座標
-  * @param y2 目標のY座標
-  * @param x2 目標のX座標
-  * @param m_ptr 使用するモンスターの構造体参照ポインタ
-  * @return ビームが到達可能ならばTRUEを返す
-  */
+#define RF4_SPELL_SIZE 32
+#define RF5_SPELL_SIZE 32
+#define RF6_SPELL_SIZE 32
+
+/*!
+ * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
+ * Determine if a beam spell will hit the target.
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param y1 始点のY座標
+ * @param x1 始点のX座標
+ * @param y2 目標のY座標
+ * @param x2 目標のX座標
+ * @param m_ptr 使用するモンスターの構造体参照ポインタ
+ * @return ビームが到達可能ならばTRUEを返す
+ */
 static bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
 	/* Check the projection path */
