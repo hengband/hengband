@@ -1331,7 +1331,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
 void calc_bonuses(player_type *creature_ptr)
 {
 	int hold;
-	int new_speed;
 	int default_hand = 0;
 	int empty_hands_status = empty_hands(creature_ptr, TRUE);
 	int extra_blows[2];
@@ -1363,6 +1362,7 @@ void calc_bonuses(player_type *creature_ptr)
 	bool old_esp_unique = creature_ptr->esp_unique;
 	bool old_see_inv = creature_ptr->see_inv;
 	bool old_mighty_throw = creature_ptr->mighty_throw;
+    bool old_speed = creature_ptr->pspeed;
 
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	feature_type *f_ptr = &f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
@@ -1371,9 +1371,10 @@ void calc_bonuses(player_type *creature_ptr)
 	ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
 
 	extra_blows[0] = extra_blows[1] = 0;
-    new_speed = 110;
+    creature_ptr->pspeed = 110;
 
 	clear_creature_bonuses(creature_ptr);
+    calc_race_status(creature_ptr);
 
 
 	if (creature_ptr->mimic_form) tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
@@ -1471,7 +1472,7 @@ void calc_bonuses(player_type *creature_ptr)
 			if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) ||
 				is_specific_player_race(creature_ptr, RACE_SPRITE) ||
 				(creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
-				new_speed += (creature_ptr->lev) / 10;
+				creature_ptr->pspeed += (creature_ptr->lev) / 10;
 
 			if (creature_ptr->lev > 24)
 				creature_ptr->free_act = TRUE;
@@ -1495,11 +1496,11 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->sustain_con = TRUE;
 		creature_ptr->regenerate = TRUE;
 		creature_ptr->free_act = TRUE;
-		new_speed += 2;
-		if (creature_ptr->lev > 29) new_speed++;
-		if (creature_ptr->lev > 39) new_speed++;
-		if (creature_ptr->lev > 44) new_speed++;
-		if (creature_ptr->lev > 49) new_speed++;
+		creature_ptr->pspeed += 2;
+		if (creature_ptr->lev > 29) creature_ptr->pspeed++;
+		if (creature_ptr->lev > 39) creature_ptr->pspeed++;
+		if (creature_ptr->lev > 44) creature_ptr->pspeed++;
+		if (creature_ptr->lev > 49) creature_ptr->pspeed++;
 		creature_ptr->to_a += 10 + creature_ptr->lev / 2;
 		creature_ptr->dis_to_a += 10 + creature_ptr->lev / 2;
 		creature_ptr->skill_dig += (100 + creature_ptr->lev * 8);
@@ -1512,17 +1513,17 @@ void calc_bonuses(player_type *creature_ptr)
 	case CLASS_NINJA:
 		if (heavy_armor(creature_ptr))
 		{
-			new_speed -= (creature_ptr->lev) / 10;
+			creature_ptr->pspeed -= (creature_ptr->lev) / 10;
 			creature_ptr->skill_stl -= (creature_ptr->lev) / 10;
 		}
 		else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite) &&
 			(!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite))
 		{
-			new_speed += 3;
+			creature_ptr->pspeed += 3;
 			if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) ||
 				is_specific_player_race(creature_ptr, RACE_SPRITE) ||
 				(creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
-				new_speed += (creature_ptr->lev) / 10;
+				creature_ptr->pspeed += (creature_ptr->lev) / 10;
 			creature_ptr->skill_stl += (creature_ptr->lev) / 10;
 			if (creature_ptr->lev > 24)
 				creature_ptr->free_act = TRUE;
@@ -1550,264 +1551,6 @@ void calc_bonuses(player_type *creature_ptr)
 		break;
 	}
 
-	if (creature_ptr->mimic_form)
-	{
-		switch (creature_ptr->mimic_form)
-		{
-		case MIMIC_DEMON:
-			creature_ptr->hold_exp = TRUE;
-			creature_ptr->resist_chaos = TRUE;
-			creature_ptr->resist_neth = TRUE;
-			creature_ptr->resist_fire = TRUE;
-			creature_ptr->oppose_fire = 1;
-			creature_ptr->see_inv = TRUE;
-			new_speed += 3;
-			creature_ptr->redraw |= PR_STATUS;
-			creature_ptr->to_a += 10;
-			creature_ptr->dis_to_a += 10;
-			break;
-		case MIMIC_DEMON_LORD:
-			creature_ptr->hold_exp = TRUE;
-			creature_ptr->resist_chaos = TRUE;
-			creature_ptr->resist_neth = TRUE;
-			creature_ptr->immune_fire = TRUE;
-			creature_ptr->resist_acid = TRUE;
-			creature_ptr->resist_fire = TRUE;
-			creature_ptr->resist_cold = TRUE;
-			creature_ptr->resist_elec = TRUE;
-			creature_ptr->resist_pois = TRUE;
-			creature_ptr->resist_conf = TRUE;
-			creature_ptr->resist_disen = TRUE;
-			creature_ptr->resist_nexus = TRUE;
-			creature_ptr->resist_fear = TRUE;
-			creature_ptr->sh_fire = TRUE;
-			creature_ptr->see_inv = TRUE;
-			creature_ptr->telepathy = TRUE;
-			creature_ptr->levitation = TRUE;
-			creature_ptr->kill_wall = TRUE;
-			new_speed += 5;
-			creature_ptr->to_a += 20;
-			creature_ptr->dis_to_a += 20;
-			break;
-		case MIMIC_VAMPIRE:
-			creature_ptr->resist_dark = TRUE;
-			creature_ptr->hold_exp = TRUE;
-			creature_ptr->resist_neth = TRUE;
-			creature_ptr->resist_cold = TRUE;
-			creature_ptr->resist_pois = TRUE;
-			creature_ptr->see_inv = TRUE;
-			new_speed += 3;
-			creature_ptr->to_a += 10;
-			creature_ptr->dis_to_a += 10;
-			if (creature_ptr->pclass != CLASS_NINJA) creature_ptr->lite = TRUE;
-			break;
-		}
-	}
-	else
-	{
-		switch (creature_ptr->prace)
-		{
-		case RACE_ELF:
-			creature_ptr->resist_lite = TRUE;
-			break;
-		case RACE_HOBBIT:
-			creature_ptr->hold_exp = TRUE;
-			break;
-		case RACE_GNOME:
-			creature_ptr->free_act = TRUE;
-			break;
-		case RACE_DWARF:
-			creature_ptr->resist_blind = TRUE;
-			break;
-		case RACE_HALF_ORC:
-			creature_ptr->resist_dark = TRUE;
-			break;
-		case RACE_HALF_TROLL:
-			creature_ptr->sustain_str = TRUE;
-
-			if (creature_ptr->lev > 14)
-			{
-				creature_ptr->regenerate = TRUE;
-				if (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_BERSERKER)
-				{
-					creature_ptr->slow_digest = TRUE;
-					/* Let's not make Regeneration
-					 * a disadvantage for the poor warriors who can
-					 * never learn a spell that satisfies hunger (actually
-					 * neither can rogues, but half-trolls are not
-					 * supposed to play rogues) */
-				}
-			}
-			break;
-		case RACE_AMBERITE:
-			creature_ptr->sustain_con = TRUE;
-			creature_ptr->regenerate = TRUE;
-			break;
-		case RACE_HIGH_ELF:
-			creature_ptr->resist_lite = TRUE;
-			creature_ptr->see_inv = TRUE;
-			break;
-		case RACE_BARBARIAN:
-			creature_ptr->resist_fear = TRUE;
-			break;
-		case RACE_HALF_OGRE:
-			creature_ptr->resist_dark = TRUE;
-			creature_ptr->sustain_str = TRUE;
-			break;
-		case RACE_HALF_GIANT:
-			creature_ptr->sustain_str = TRUE;
-			creature_ptr->resist_shard = TRUE;
-			break;
-		case RACE_HALF_TITAN:
-			creature_ptr->resist_chaos = TRUE;
-			break;
-		case RACE_CYCLOPS:
-			creature_ptr->resist_sound = TRUE;
-			break;
-		case RACE_YEEK:
-			creature_ptr->resist_acid = TRUE;
-			if (creature_ptr->lev > 19) creature_ptr->immune_acid = TRUE;
-			break;
-		case RACE_KLACKON:
-			creature_ptr->resist_conf = TRUE;
-			creature_ptr->resist_acid = TRUE;
-			new_speed += (creature_ptr->lev) / 10;
-			break;
-		case RACE_KOBOLD:
-			creature_ptr->resist_pois = TRUE;
-			break;
-		case RACE_NIBELUNG:
-			creature_ptr->resist_disen = TRUE;
-			creature_ptr->resist_dark = TRUE;
-			break;
-		case RACE_DARK_ELF:
-			creature_ptr->resist_dark = TRUE;
-			if (creature_ptr->lev > 19) creature_ptr->see_inv = TRUE;
-			break;
-		case RACE_DRACONIAN:
-			creature_ptr->levitation = TRUE;
-			if (creature_ptr->lev > 4) creature_ptr->resist_fire = TRUE;
-			if (creature_ptr->lev > 9) creature_ptr->resist_cold = TRUE;
-			if (creature_ptr->lev > 14) creature_ptr->resist_acid = TRUE;
-			if (creature_ptr->lev > 19) creature_ptr->resist_elec = TRUE;
-			if (creature_ptr->lev > 34) creature_ptr->resist_pois = TRUE;
-			break;
-		case RACE_MIND_FLAYER:
-			creature_ptr->sustain_int = TRUE;
-			creature_ptr->sustain_wis = TRUE;
-			if (creature_ptr->lev > 14) creature_ptr->see_inv = TRUE;
-			if (creature_ptr->lev > 29) creature_ptr->telepathy = TRUE;
-			break;
-		case RACE_IMP:
-			creature_ptr->resist_fire = TRUE;
-			if (creature_ptr->lev > 9) creature_ptr->see_inv = TRUE;
-			break;
-		case RACE_GOLEM:
-			creature_ptr->slow_digest = TRUE;
-			creature_ptr->free_act = TRUE;
-			creature_ptr->see_inv = TRUE;
-			creature_ptr->resist_pois = TRUE;
-			if (creature_ptr->lev > 34) creature_ptr->hold_exp = TRUE;
-			break;
-		case RACE_SKELETON:
-			creature_ptr->resist_shard = TRUE;
-			creature_ptr->hold_exp = TRUE;
-			creature_ptr->see_inv = TRUE;
-			creature_ptr->resist_pois = TRUE;
-			if (creature_ptr->lev > 9) creature_ptr->resist_cold = TRUE;
-			break;
-		case RACE_ZOMBIE:
-			creature_ptr->resist_neth = TRUE;
-			creature_ptr->hold_exp = TRUE;
-			creature_ptr->see_inv = TRUE;
-			creature_ptr->resist_pois = TRUE;
-			creature_ptr->slow_digest = TRUE;
-			if (creature_ptr->lev > 4) creature_ptr->resist_cold = TRUE;
-			break;
-		case RACE_VAMPIRE:
-			creature_ptr->resist_dark = TRUE;
-			creature_ptr->hold_exp = TRUE;
-			creature_ptr->resist_neth = TRUE;
-			creature_ptr->resist_cold = TRUE;
-			creature_ptr->resist_pois = TRUE;
-			if (creature_ptr->pclass != CLASS_NINJA) creature_ptr->lite = TRUE;
-			break;
-		case RACE_SPECTRE:
-			creature_ptr->levitation = TRUE;
-			creature_ptr->free_act = TRUE;
-			creature_ptr->resist_neth = TRUE;
-			creature_ptr->hold_exp = TRUE;
-			creature_ptr->see_inv = TRUE;
-			creature_ptr->resist_pois = TRUE;
-			creature_ptr->slow_digest = TRUE;
-			creature_ptr->resist_cold = TRUE;
-			creature_ptr->pass_wall = TRUE;
-			if (creature_ptr->lev > 34) creature_ptr->telepathy = TRUE;
-			break;
-		case RACE_SPRITE:
-			creature_ptr->levitation = TRUE;
-			creature_ptr->resist_lite = TRUE;
-
-			new_speed += (creature_ptr->lev) / 10;
-			break;
-		case RACE_BEASTMAN:
-			creature_ptr->resist_conf = TRUE;
-			creature_ptr->resist_sound = TRUE;
-			break;
-		case RACE_ENT:
-			if (!creature_ptr->inventory_list[INVEN_RARM].k_idx)
-				creature_ptr->skill_dig += creature_ptr->lev * 10;
-
-			if (creature_ptr->lev > 25) creature_ptr->stat_add[A_STR]++;
-			if (creature_ptr->lev > 40) creature_ptr->stat_add[A_STR]++;
-			if (creature_ptr->lev > 45) creature_ptr->stat_add[A_STR]++;
-
-			if (creature_ptr->lev > 25) creature_ptr->stat_add[A_DEX]--;
-			if (creature_ptr->lev > 40) creature_ptr->stat_add[A_DEX]--;
-			if (creature_ptr->lev > 45) creature_ptr->stat_add[A_DEX]--;
-
-			if (creature_ptr->lev > 25) creature_ptr->stat_add[A_CON]++;
-			if (creature_ptr->lev > 40) creature_ptr->stat_add[A_CON]++;
-			if (creature_ptr->lev > 45) creature_ptr->stat_add[A_CON]++;
-			break;
-		case RACE_ARCHON:
-			creature_ptr->levitation = TRUE;
-			creature_ptr->see_inv = TRUE;
-			break;
-		case RACE_BALROG:
-			creature_ptr->resist_fire = TRUE;
-			creature_ptr->resist_neth = TRUE;
-			creature_ptr->hold_exp = TRUE;
-			if (creature_ptr->lev > 9) creature_ptr->see_inv = TRUE;
-			if (creature_ptr->lev > 44)
-			{
-				creature_ptr->oppose_fire = 1;
-				creature_ptr->redraw |= PR_STATUS;
-			}
-
-			break;
-		case RACE_DUNADAN:
-			creature_ptr->sustain_con = TRUE;
-			break;
-		case RACE_S_FAIRY:
-			creature_ptr->levitation = TRUE;
-			break;
-		case RACE_KUTAR:
-			creature_ptr->resist_conf = TRUE;
-			break;
-		case RACE_ANDROID:
-			creature_ptr->slow_digest = TRUE;
-			creature_ptr->free_act = TRUE;
-			creature_ptr->resist_pois = TRUE;
-			creature_ptr->hold_exp = TRUE;
-			break;
-		case RACE_MERFOLK:
-			creature_ptr->resist_water = TRUE;
-			break;
-		default:
-			break;
-		}
-	}
 
 	if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU))
 	{
@@ -1888,7 +1631,7 @@ void calc_bonuses(player_type *creature_ptr)
 		if (creature_ptr->pclass != CLASS_NINJA) creature_ptr->lite = TRUE;
 
 		if ((creature_ptr->prace != RACE_KLACKON) && (creature_ptr->prace != RACE_SPRITE))
-			new_speed += (creature_ptr->lev) / 10 + 5;
+			creature_ptr->pspeed += (creature_ptr->lev) / 10 + 5;
 	}
 
 	if (music_singing(creature_ptr, MUSIC_WALL))
@@ -1933,7 +1676,7 @@ void calc_bonuses(player_type *creature_ptr)
 		if (creature_ptr->muta3 & MUT3_XTRA_FAT)
 		{
 			creature_ptr->stat_add[A_CON] += 2;
-			new_speed -= 2;
+			creature_ptr->pspeed -= 2;
 		}
 
 		if (creature_ptr->muta3 & MUT3_ALBINO)
@@ -1981,12 +1724,12 @@ void calc_bonuses(player_type *creature_ptr)
 
 		if (creature_ptr->muta3 & MUT3_XTRA_LEGS)
 		{
-			new_speed += 3;
+			creature_ptr->pspeed += 3;
 		}
 
 		if (creature_ptr->muta3 & MUT3_SHORT_LEG)
 		{
-			new_speed -= 3;
+			creature_ptr->pspeed -= 3;
 		}
 
 		if (creature_ptr->muta3 & MUT3_ELEC_TOUC)
@@ -2092,7 +1835,7 @@ void calc_bonuses(player_type *creature_ptr)
 		if (have_flag(flgs, TR_SEARCH)) creature_ptr->skill_fos += (o_ptr->pval * 5);
 		if (have_flag(flgs, TR_INFRA)) creature_ptr->see_infra += o_ptr->pval;
 		if (have_flag(flgs, TR_TUNNEL)) creature_ptr->skill_dig += (o_ptr->pval * 20);
-		if (have_flag(flgs, TR_SPEED)) new_speed += o_ptr->pval;
+		if (have_flag(flgs, TR_SPEED)) creature_ptr->pspeed += o_ptr->pval;
 		if (have_flag(flgs, TR_BLOWS))
 		{
 			if ((i == INVEN_RARM || i == INVEN_RIGHT) && !creature_ptr->ryoute) extra_blows[0] += o_ptr->pval;
@@ -2443,7 +2186,7 @@ void calc_bonuses(player_type *creature_ptr)
 		if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK))
 		{
 			creature_ptr->sh_elec = TRUE;
-			new_speed += 3;
+			creature_ptr->pspeed += 3;
 		}
 
 		for (int i = INVEN_RARM; i <= INVEN_FEET; i++)
@@ -2630,12 +2373,12 @@ void calc_bonuses(player_type *creature_ptr)
 
 	if (IS_FAST(creature_ptr))
 	{
-		new_speed += 10;
+		creature_ptr->pspeed += 10;
 	}
 
 	if (creature_ptr->slow)
 	{
-		new_speed -= 10;
+		creature_ptr->pspeed -= 10;
 	}
 
 	if (is_time_limit_esp(creature_ptr))
@@ -2711,9 +2454,9 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->update |= (PU_MONSTERS);
 	}
 
-	if (creature_ptr->food >= PY_FOOD_MAX) new_speed -= 10;
+	if (creature_ptr->food >= PY_FOOD_MAX) creature_ptr->pspeed -= 10;
 
-	if (creature_ptr->special_defense & KAMAE_SUZAKU) new_speed += 10;
+	if (creature_ptr->special_defense & KAMAE_SUZAKU) creature_ptr->pspeed += 10;
 
 	if ((creature_ptr->migite && (empty_hands_status & EMPTY_HAND_RARM)) ||
 		(creature_ptr->hidarite && (empty_hands_status & EMPTY_HAND_LARM)))
@@ -2731,7 +2474,7 @@ void calc_bonuses(player_type *creature_ptr)
 		{
 			penalty1 = penalty1 / 2 - 5;
 			penalty2 = penalty2 / 2 - 5;
-			new_speed += 7;
+			creature_ptr->pspeed += 7;
 			creature_ptr->to_a += 10;
 			creature_ptr->dis_to_a += 10;
 		}
@@ -2781,17 +2524,17 @@ void calc_bonuses(player_type *creature_ptr)
 
 		if (riding_m_ptr->mspeed > 110)
 		{
-			new_speed = 110 + (s16b)((speed - 110) * (creature_ptr->skill_exp[GINOU_RIDING] * 3 + creature_ptr->lev * 160L - 10000L) / (22000L));
-			if (new_speed < 110) new_speed = 110;
+			creature_ptr->pspeed = 110 + (s16b)((speed - 110) * (creature_ptr->skill_exp[GINOU_RIDING] * 3 + creature_ptr->lev * 160L - 10000L) / (22000L));
+			if (creature_ptr->pspeed < 110) creature_ptr->pspeed = 110;
 		}
 		else
 		{
-			new_speed = speed;
+			creature_ptr->pspeed = speed;
 		}
 
-		new_speed += (creature_ptr->skill_exp[GINOU_RIDING] + creature_ptr->lev * 160L) / 3200;
-		if (monster_fast_remaining(riding_m_ptr)) new_speed += 10;
-		if (monster_slow_remaining(riding_m_ptr)) new_speed -= 10;
+		creature_ptr->pspeed += (creature_ptr->skill_exp[GINOU_RIDING] + creature_ptr->lev * 160L) / 3200;
+		if (monster_fast_remaining(riding_m_ptr)) creature_ptr->pspeed += 10;
+		if (monster_slow_remaining(riding_m_ptr)) creature_ptr->pspeed -= 10;
 		riding_levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
 		if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) creature_ptr->can_swim = TRUE;
 
@@ -2804,17 +2547,17 @@ void calc_bonuses(player_type *creature_ptr)
 		count = 1500 + riding_r_ptr->level * 25;
 	}
 
-	if (j > count) new_speed -= ((j - count) / (count / 5));
-	if (creature_ptr->action == ACTION_SEARCH) new_speed -= 10;
+	if (j > count) creature_ptr->pspeed -= ((j - count) / (count / 5));
+	if (creature_ptr->action == ACTION_SEARCH) creature_ptr->pspeed -= 10;
 	if (creature_ptr->prace == RACE_MERFOLK)
 	{
 		if (have_flag(f_ptr->flags, FF_WATER))
 		{
-			new_speed += (2 + creature_ptr->lev / 10);
+			creature_ptr->pspeed += (2 + creature_ptr->lev / 10);
 		}
 		else if (!creature_ptr->levitation)
 		{
-			new_speed -= 2;
+			creature_ptr->pspeed -= 2;
 		}
 	}
 
@@ -3259,17 +3002,16 @@ void calc_bonuses(player_type *creature_ptr)
 
 	/* Maximum speed is (+99). (internally it's 110 + 99) */
 	/* Temporary lightspeed forces to be maximum speed */
-	if ((creature_ptr->lightspeed && !creature_ptr->riding) || (new_speed > 209))
+	if ((creature_ptr->lightspeed && !creature_ptr->riding) || (creature_ptr->pspeed > 209))
 	{
-		new_speed = 209;
+		creature_ptr->pspeed = 209;
 	}
 
 	/* Minimum speed is (-99). (internally it's 110 - 99) */
-	if (new_speed < 11) new_speed = 11;
+	if (creature_ptr->pspeed < 11) creature_ptr->pspeed = 11;
 
-	if (creature_ptr->pspeed != (byte)new_speed)
+	if (creature_ptr->pspeed != old_speed)
 	{
-		creature_ptr->pspeed = (byte)new_speed;
 		creature_ptr->redraw |= (PR_SPEED);
 	}
 

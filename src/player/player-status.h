@@ -754,7 +754,7 @@ typedef struct player_type
 	byte tval_xtra;		/* Correct xtra tval */
 	byte tval_ammo;		/* Correct ammo tval */
 
-	byte pspeed;		/* Current speed */
+	s16b pspeed;		/* Current speed */
 
 	ENERGY energy_use;	/* Energy use this turn */
 
