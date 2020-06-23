@@ -1204,6 +1204,105 @@ int spell_exp_level(int spell_exp)
 	else return EXP_LEVEL_MASTER;
 }
 
+/*!
+ * @brief プレイヤー構造体の全ステータスを初期化する
+ */
+static void clear_creature_bonuses(player_type *creature_ptr)
+{
+    for (int i = 0; i < A_MAX; i++)
+        creature_ptr->stat_add[i] = 0;
+
+    creature_ptr->dis_ac = creature_ptr->ac = 0;
+    creature_ptr->dis_to_h[0] = creature_ptr->to_h[0] = 0;
+    creature_ptr->dis_to_h[1] = creature_ptr->to_h[1] = 0;
+    creature_ptr->dis_to_d[0] = creature_ptr->to_d[0] = 0;
+    creature_ptr->dis_to_d[1] = creature_ptr->to_d[1] = 0;
+    creature_ptr->dis_to_h_b = creature_ptr->to_h_b = 0;
+    creature_ptr->dis_to_a = creature_ptr->to_a = 0;
+    creature_ptr->to_h_m = 0;
+    creature_ptr->to_d_m = 0;
+    creature_ptr->to_m_chance = 0;
+    creature_ptr->to_dd[0] = creature_ptr->to_ds[0] = 0;
+    creature_ptr->to_dd[1] = creature_ptr->to_ds[1] = 0;
+
+    creature_ptr->num_blow[0] = 1;
+    creature_ptr->num_blow[1] = 1;
+    creature_ptr->num_fire = 100;
+    creature_ptr->tval_xtra = 0;
+    creature_ptr->tval_ammo = 0;
+    creature_ptr->cursed = 0L;
+    creature_ptr->bless_blade = FALSE;
+    creature_ptr->xtra_might = FALSE;
+    creature_ptr->impact[0] = FALSE;
+    creature_ptr->impact[1] = FALSE;
+    creature_ptr->pass_wall = FALSE;
+    creature_ptr->kill_wall = FALSE;
+    creature_ptr->dec_mana = FALSE;
+    creature_ptr->easy_spell = FALSE;
+    creature_ptr->heavy_spell = FALSE;
+    creature_ptr->see_inv = FALSE;
+    creature_ptr->free_act = FALSE;
+    creature_ptr->slow_digest = FALSE;
+    creature_ptr->regenerate = FALSE;
+    creature_ptr->can_swim = FALSE;
+    creature_ptr->levitation = FALSE;
+    creature_ptr->hold_exp = FALSE;
+    creature_ptr->telepathy = FALSE;
+    creature_ptr->esp_animal = FALSE;
+    creature_ptr->esp_undead = FALSE;
+    creature_ptr->esp_demon = FALSE;
+    creature_ptr->esp_orc = FALSE;
+    creature_ptr->esp_troll = FALSE;
+    creature_ptr->esp_giant = FALSE;
+    creature_ptr->esp_dragon = FALSE;
+    creature_ptr->esp_human = FALSE;
+    creature_ptr->esp_evil = FALSE;
+    creature_ptr->esp_good = FALSE;
+    creature_ptr->esp_nonliving = FALSE;
+    creature_ptr->esp_unique = FALSE;
+    creature_ptr->lite = FALSE;
+    creature_ptr->sustain_str = FALSE;
+    creature_ptr->sustain_int = FALSE;
+    creature_ptr->sustain_wis = FALSE;
+    creature_ptr->sustain_con = FALSE;
+    creature_ptr->sustain_dex = FALSE;
+    creature_ptr->sustain_chr = FALSE;
+    creature_ptr->resist_acid = FALSE;
+    creature_ptr->resist_elec = FALSE;
+    creature_ptr->resist_fire = FALSE;
+    creature_ptr->resist_cold = FALSE;
+    creature_ptr->resist_pois = FALSE;
+    creature_ptr->resist_conf = FALSE;
+    creature_ptr->resist_sound = FALSE;
+    creature_ptr->resist_lite = FALSE;
+    creature_ptr->resist_dark = FALSE;
+    creature_ptr->resist_chaos = FALSE;
+    creature_ptr->resist_disen = FALSE;
+    creature_ptr->resist_shard = FALSE;
+    creature_ptr->resist_nexus = FALSE;
+    creature_ptr->resist_blind = FALSE;
+    creature_ptr->resist_neth = FALSE;
+    creature_ptr->resist_time = FALSE;
+    creature_ptr->resist_water = FALSE;
+    creature_ptr->resist_fear = FALSE;
+    creature_ptr->reflect = FALSE;
+    creature_ptr->sh_fire = FALSE;
+    creature_ptr->sh_elec = FALSE;
+    creature_ptr->sh_cold = FALSE;
+    creature_ptr->anti_magic = FALSE;
+    creature_ptr->anti_tele = FALSE;
+    creature_ptr->warning = FALSE;
+    creature_ptr->mighty_throw = FALSE;
+    creature_ptr->see_nocto = FALSE;
+    creature_ptr->immune_acid = FALSE;
+    creature_ptr->immune_elec = FALSE;
+    creature_ptr->immune_fire = FALSE;
+    creature_ptr->immune_cold = FALSE;
+    creature_ptr->ryoute = FALSE;
+    creature_ptr->migite = FALSE;
+    creature_ptr->hidarite = FALSE;
+    creature_ptr->no_flowed = FALSE;
+}
 
 /*!
  * @brief プレイヤーの全ステータスを更新する /
@@ -1272,100 +1371,10 @@ void calc_bonuses(player_type *creature_ptr)
 	ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
 
 	extra_blows[0] = extra_blows[1] = 0;
+    new_speed = 110;
 
-	for (int i = 0; i < A_MAX; i++) creature_ptr->stat_add[i] = 0;
+	clear_creature_bonuses(creature_ptr);
 
-	creature_ptr->dis_ac = creature_ptr->ac = 0;
-	creature_ptr->dis_to_h[0] = creature_ptr->to_h[0] = 0;
-	creature_ptr->dis_to_h[1] = creature_ptr->to_h[1] = 0;
-	creature_ptr->dis_to_d[0] = creature_ptr->to_d[0] = 0;
-	creature_ptr->dis_to_d[1] = creature_ptr->to_d[1] = 0;
-	creature_ptr->dis_to_h_b = creature_ptr->to_h_b = 0;
-	creature_ptr->dis_to_a = creature_ptr->to_a = 0;
-	creature_ptr->to_h_m = 0;
-	creature_ptr->to_d_m = 0;
-	creature_ptr->to_m_chance = 0;
-	creature_ptr->to_dd[0] = creature_ptr->to_ds[0] = 0;
-	creature_ptr->to_dd[1] = creature_ptr->to_ds[1] = 0;
-
-	new_speed = 110;
-	creature_ptr->num_blow[0] = 1;
-	creature_ptr->num_blow[1] = 1;
-	creature_ptr->num_fire = 100;
-	creature_ptr->tval_xtra = 0;
-	creature_ptr->tval_ammo = 0;
-	creature_ptr->cursed = 0L;
-	creature_ptr->bless_blade = FALSE;
-	creature_ptr->xtra_might = FALSE;
-	creature_ptr->impact[0] = FALSE;
-	creature_ptr->impact[1] = FALSE;
-	creature_ptr->pass_wall = FALSE;
-	creature_ptr->kill_wall = FALSE;
-	creature_ptr->dec_mana = FALSE;
-	creature_ptr->easy_spell = FALSE;
-	creature_ptr->heavy_spell = FALSE;
-	creature_ptr->see_inv = FALSE;
-	creature_ptr->free_act = FALSE;
-	creature_ptr->slow_digest = FALSE;
-	creature_ptr->regenerate = FALSE;
-	creature_ptr->can_swim = FALSE;
-	creature_ptr->levitation = FALSE;
-	creature_ptr->hold_exp = FALSE;
-	creature_ptr->telepathy = FALSE;
-	creature_ptr->esp_animal = FALSE;
-	creature_ptr->esp_undead = FALSE;
-	creature_ptr->esp_demon = FALSE;
-	creature_ptr->esp_orc = FALSE;
-	creature_ptr->esp_troll = FALSE;
-	creature_ptr->esp_giant = FALSE;
-	creature_ptr->esp_dragon = FALSE;
-	creature_ptr->esp_human = FALSE;
-	creature_ptr->esp_evil = FALSE;
-	creature_ptr->esp_good = FALSE;
-	creature_ptr->esp_nonliving = FALSE;
-	creature_ptr->esp_unique = FALSE;
-	creature_ptr->lite = FALSE;
-	creature_ptr->sustain_str = FALSE;
-	creature_ptr->sustain_int = FALSE;
-	creature_ptr->sustain_wis = FALSE;
-	creature_ptr->sustain_con = FALSE;
-	creature_ptr->sustain_dex = FALSE;
-	creature_ptr->sustain_chr = FALSE;
-	creature_ptr->resist_acid = FALSE;
-	creature_ptr->resist_elec = FALSE;
-	creature_ptr->resist_fire = FALSE;
-	creature_ptr->resist_cold = FALSE;
-	creature_ptr->resist_pois = FALSE;
-	creature_ptr->resist_conf = FALSE;
-	creature_ptr->resist_sound = FALSE;
-	creature_ptr->resist_lite = FALSE;
-	creature_ptr->resist_dark = FALSE;
-	creature_ptr->resist_chaos = FALSE;
-	creature_ptr->resist_disen = FALSE;
-	creature_ptr->resist_shard = FALSE;
-	creature_ptr->resist_nexus = FALSE;
-	creature_ptr->resist_blind = FALSE;
-	creature_ptr->resist_neth = FALSE;
-	creature_ptr->resist_time = FALSE;
-	creature_ptr->resist_water = FALSE;
-	creature_ptr->resist_fear = FALSE;
-	creature_ptr->reflect = FALSE;
-	creature_ptr->sh_fire = FALSE;
-	creature_ptr->sh_elec = FALSE;
-	creature_ptr->sh_cold = FALSE;
-	creature_ptr->anti_magic = FALSE;
-	creature_ptr->anti_tele = FALSE;
-	creature_ptr->warning = FALSE;
-	creature_ptr->mighty_throw = FALSE;
-	creature_ptr->see_nocto = FALSE;
-	creature_ptr->immune_acid = FALSE;
-	creature_ptr->immune_elec = FALSE;
-	creature_ptr->immune_fire = FALSE;
-	creature_ptr->immune_cold = FALSE;
-	creature_ptr->ryoute = FALSE;
-	creature_ptr->migite = FALSE;
-	creature_ptr->hidarite = FALSE;
-	creature_ptr->no_flowed = FALSE;
 
 	if (creature_ptr->mimic_form) tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
 	else tmp_rp_ptr = &race_info[creature_ptr->prace];
