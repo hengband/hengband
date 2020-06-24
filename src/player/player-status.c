@@ -1212,6 +1212,18 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     for (int i = 0; i < A_MAX; i++)
         creature_ptr->stat_add[i] = 0;
 
+	creature_ptr->see_infra = 0;
+    creature_ptr->skill_dis = 0;
+    creature_ptr->skill_dev = 0;
+    creature_ptr->skill_sav = 0;
+    creature_ptr->skill_stl = 0;
+    creature_ptr->skill_srh = 0;
+    creature_ptr->skill_fos = 0;
+    creature_ptr->skill_thn = 0;
+    creature_ptr->skill_thb = 0;
+    creature_ptr->skill_tht = 0;
+    creature_ptr->skill_dig = 0;
+
     creature_ptr->dis_ac = creature_ptr->ac = 0;
     creature_ptr->dis_to_h[0] = creature_ptr->to_h[0] = 0;
     creature_ptr->dis_to_h[1] = creature_ptr->to_h[1] = 0;
@@ -1302,6 +1314,7 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->migite = FALSE;
     creature_ptr->hidarite = FALSE;
     creature_ptr->no_flowed = FALSE;
+    creature_ptr->pspeed = 110;
 }
 
 /*!
@@ -1344,7 +1357,6 @@ void calc_bonuses(player_type *creature_ptr)
 	bool easy_2weapon = FALSE;
 	bool riding_levitation = FALSE;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
-	const player_race *tmp_rp_ptr;
 
 	/* Save the old vision stuff */
 	bool old_telepathy = creature_ptr->telepathy;
@@ -1362,7 +1374,7 @@ void calc_bonuses(player_type *creature_ptr)
 	bool old_esp_unique = creature_ptr->esp_unique;
 	bool old_see_inv = creature_ptr->see_inv;
 	bool old_mighty_throw = creature_ptr->mighty_throw;
-    bool old_speed = creature_ptr->pspeed;
+    s16b old_speed = creature_ptr->pspeed;
 
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	feature_type *f_ptr = &f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
@@ -1371,26 +1383,19 @@ void calc_bonuses(player_type *creature_ptr)
 	ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
 
 	extra_blows[0] = extra_blows[1] = 0;
-    creature_ptr->pspeed = 110;
 
 	clear_creature_bonuses(creature_ptr);
     calc_race_status(creature_ptr);
 
-
-	if (creature_ptr->mimic_form) tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
-	else tmp_rp_ptr = &race_info[creature_ptr->prace];
-
-	creature_ptr->see_infra = tmp_rp_ptr->infra;
-	creature_ptr->skill_dis = tmp_rp_ptr->r_dis + cp_ptr->c_dis + ap_ptr->a_dis;
-	creature_ptr->skill_dev = tmp_rp_ptr->r_dev + cp_ptr->c_dev + ap_ptr->a_dev;
-	creature_ptr->skill_sav = tmp_rp_ptr->r_sav + cp_ptr->c_sav + ap_ptr->a_sav;
-	creature_ptr->skill_stl = tmp_rp_ptr->r_stl + cp_ptr->c_stl + ap_ptr->a_stl;
-	creature_ptr->skill_srh = tmp_rp_ptr->r_srh + cp_ptr->c_srh + ap_ptr->a_srh;
-	creature_ptr->skill_fos = tmp_rp_ptr->r_fos + cp_ptr->c_fos + ap_ptr->a_fos;
-	creature_ptr->skill_thn = tmp_rp_ptr->r_thn + cp_ptr->c_thn + ap_ptr->a_thn;
-	creature_ptr->skill_thb = tmp_rp_ptr->r_thb + cp_ptr->c_thb + ap_ptr->a_thb;
-	creature_ptr->skill_tht = tmp_rp_ptr->r_thb + cp_ptr->c_thb + ap_ptr->a_thb;
-	creature_ptr->skill_dig = 0;
+	creature_ptr->skill_dis = cp_ptr->c_dis + ap_ptr->a_dis;
+	creature_ptr->skill_dev = cp_ptr->c_dev + ap_ptr->a_dev;
+	creature_ptr->skill_sav = cp_ptr->c_sav + ap_ptr->a_sav;
+	creature_ptr->skill_stl = cp_ptr->c_stl + ap_ptr->a_stl;
+	creature_ptr->skill_srh = cp_ptr->c_srh + ap_ptr->a_srh;
+	creature_ptr->skill_fos = cp_ptr->c_fos + ap_ptr->a_fos;
+	creature_ptr->skill_thn = cp_ptr->c_thn + ap_ptr->a_thn;
+	creature_ptr->skill_thb = cp_ptr->c_thb + ap_ptr->a_thb;
+	creature_ptr->skill_tht = cp_ptr->c_thb + ap_ptr->a_thb;
 
 	if (has_melee_weapon(creature_ptr, INVEN_RARM)) creature_ptr->migite = TRUE;
 	if (has_melee_weapon(creature_ptr, INVEN_LARM))
@@ -1641,7 +1646,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 	for (int i = 0; i < A_MAX; i++)
 	{
-		creature_ptr->stat_add[i] += (tmp_rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i]);
+		creature_ptr->stat_add[i] += (cp_ptr->c_adj[i] + ap_ptr->a_adj[i]);
 	}
 
 	if (creature_ptr->muta3)

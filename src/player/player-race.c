@@ -1,6 +1,8 @@
 ﻿#include "player/player-race.h"
 #include "player/player-race-types.h"
 #include "system/object-type-definition.h"
+#include "mimic-info-table.h"
+#include "player/race-info-table.h"
 
 const player_race *rp_ptr;
 
@@ -118,6 +120,29 @@ bool is_specific_player_race(player_type *creature_ptr, player_race_type prace) 
 
 void calc_race_status(player_type *creature_ptr)
 {
+    const player_race *tmp_rp_ptr;
+	
+	if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+
+    creature_ptr->see_infra += tmp_rp_ptr->infra;
+    creature_ptr->skill_dis += tmp_rp_ptr->r_dis;
+    creature_ptr->skill_dev += tmp_rp_ptr->r_dev;
+    creature_ptr->skill_sav += tmp_rp_ptr->r_sav;
+    creature_ptr->skill_stl += tmp_rp_ptr->r_stl;
+    creature_ptr->skill_srh += tmp_rp_ptr->r_srh;
+    creature_ptr->skill_fos += tmp_rp_ptr->r_fos;
+    creature_ptr->skill_thn += tmp_rp_ptr->r_thn;
+    creature_ptr->skill_thb += tmp_rp_ptr->r_thb;
+    creature_ptr->skill_tht += tmp_rp_ptr->r_thb;
+
+	for (int i = 0; i < A_MAX; i++) {
+        creature_ptr->stat_add[i] += tmp_rp_ptr->r_adj[i];
+    }
+
+
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
         case MIMIC_DEMON:
