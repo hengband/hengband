@@ -99,3 +99,5 @@ extern const player_class class_info[MAX_CLASS];
 extern const s32b realm_choices1[];
 extern const s32b realm_choices2[];
 extern const concptr player_title[MAX_CLASS][10];
+
+void calc_class_status(player_type *creature_ptr);

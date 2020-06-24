@@ -5,6 +5,7 @@
  */
 
 #include "player/player-class.h"
+#include "system/object-type-definition.h"
 
 /*
  * The magic info
@@ -1256,3 +1257,120 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 };
 #endif
 
+void calc_class_status(player_type *creature_ptr)
+{
+    switch (creature_ptr->pclass) {
+    case CLASS_WARRIOR:
+        if (creature_ptr->lev > 29)
+            creature_ptr->resist_fear = TRUE;
+        if (creature_ptr->lev > 44)
+            creature_ptr->regenerate = TRUE;
+        break;
+    case CLASS_PALADIN:
+        if (creature_ptr->lev > 39)
+            creature_ptr->resist_fear = TRUE;
+        break;
+    case CLASS_CHAOS_WARRIOR:
+        if (creature_ptr->lev > 29)
+            creature_ptr->resist_chaos = TRUE;
+        if (creature_ptr->lev > 39)
+            creature_ptr->resist_fear = TRUE;
+        break;
+    case CLASS_MINDCRAFTER:
+        if (creature_ptr->lev > 9)
+            creature_ptr->resist_fear = TRUE;
+        if (creature_ptr->lev > 19)
+            creature_ptr->sustain_wis = TRUE;
+        if (creature_ptr->lev > 29)
+            creature_ptr->resist_conf = TRUE;
+        if (creature_ptr->lev > 39)
+            creature_ptr->telepathy = TRUE;
+        break;
+    case CLASS_MONK:
+    case CLASS_FORCETRAINER:
+        if (!(heavy_armor(creature_ptr))) {
+            if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
+                    || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
+                creature_ptr->pspeed += (creature_ptr->lev) / 10;
+
+            if (creature_ptr->lev > 24)
+                creature_ptr->free_act = TRUE;
+        }
+
+        break;
+    case CLASS_SORCERER:
+        creature_ptr->to_a -= 50;
+        creature_ptr->dis_to_a -= 50;
+        break;
+    case CLASS_BARD:
+        creature_ptr->resist_sound = TRUE;
+        break;
+    case CLASS_SAMURAI:
+        if (creature_ptr->lev > 29)
+            creature_ptr->resist_fear = TRUE;
+        break;
+    case CLASS_BERSERKER:
+        creature_ptr->shero = 1;
+        creature_ptr->sustain_str = TRUE;
+        creature_ptr->sustain_dex = TRUE;
+        creature_ptr->sustain_con = TRUE;
+        creature_ptr->regenerate = TRUE;
+        creature_ptr->free_act = TRUE;
+        creature_ptr->pspeed += 2;
+        if (creature_ptr->lev > 29)
+            creature_ptr->pspeed++;
+        if (creature_ptr->lev > 39)
+            creature_ptr->pspeed++;
+        if (creature_ptr->lev > 44)
+            creature_ptr->pspeed++;
+        if (creature_ptr->lev > 49)
+            creature_ptr->pspeed++;
+        creature_ptr->to_a += 10 + creature_ptr->lev / 2;
+        creature_ptr->dis_to_a += 10 + creature_ptr->lev / 2;
+        creature_ptr->skill_dig += (100 + creature_ptr->lev * 8);
+        if (creature_ptr->lev > 39)
+            creature_ptr->reflect = TRUE;
+        creature_ptr->redraw |= PR_STATUS;
+        break;
+    case CLASS_MIRROR_MASTER:
+        if (creature_ptr->lev > 39)
+            creature_ptr->reflect = TRUE;
+        break;
+    case CLASS_NINJA:
+        if (heavy_armor(creature_ptr)) {
+            creature_ptr->pspeed -= (creature_ptr->lev) / 10;
+            creature_ptr->skill_stl -= (creature_ptr->lev) / 10;
+        } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite)
+            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite)) {
+            creature_ptr->pspeed += 3;
+            if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
+                    || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
+                creature_ptr->pspeed += (creature_ptr->lev) / 10;
+            creature_ptr->skill_stl += (creature_ptr->lev) / 10;
+            if (creature_ptr->lev > 24)
+                creature_ptr->free_act = TRUE;
+        }
+
+        if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite)
+            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite)) {
+            creature_ptr->to_a += creature_ptr->lev / 2 + 5;
+            creature_ptr->dis_to_a += creature_ptr->lev / 2 + 5;
+        }
+
+        creature_ptr->slow_digest = TRUE;
+        creature_ptr->resist_fear = TRUE;
+        if (creature_ptr->lev > 19)
+            creature_ptr->resist_pois = TRUE;
+        if (creature_ptr->lev > 24)
+            creature_ptr->sustain_dex = TRUE;
+        if (creature_ptr->lev > 29)
+            creature_ptr->see_inv = TRUE;
+        if (creature_ptr->lev > 44) {
+            creature_ptr->oppose_pois = 1;
+            creature_ptr->redraw |= PR_STATUS;
+        }
+
+        creature_ptr->see_nocto = TRUE;
+        break;
+    }
+}
