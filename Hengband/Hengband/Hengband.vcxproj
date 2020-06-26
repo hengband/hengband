@@ -207,6 +207,7 @@
     <ClCompile Include="..\..\src\io\input-key-acceptor.c" />
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\locale\vowel-checker.c" />
+    <ClCompile Include="..\..\src\view\display-sub-windows.c" />
     <ClCompile Include="..\..\src\view\main-window-left-frame.c" />
     <ClCompile Include="..\..\src\view\main-window-stat-poster.c" />
     <ClCompile Include="..\..\src\view\main-window-util.c" />
@@ -1014,6 +1015,7 @@
     <ClInclude Include="..\..\src\view\display-lore.h" />
     <ClInclude Include="..\..\src\view\display-messages.h" />
     <ClInclude Include="..\..\src\view\display-monster-status.h" />
+    <ClInclude Include="..\..\src\view\display-sub-windows.h" />
     <ClInclude Include="..\..\src\view\main-window-left-frame.h" />
     <ClInclude Include="..\..\src\view\main-window-row-column.h" />
     <ClInclude Include="..\..\src\view\main-window-stat-poster.h" />

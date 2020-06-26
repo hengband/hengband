@@ -775,7 +775,6 @@ extern s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr);
 extern void calc_bonuses(player_type *creature_ptr);
 extern WEIGHT weight_limit(player_type *creature_ptr);
 extern bool has_melee_weapon(player_type *creature_ptr, int i);
-extern bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr);
 
 extern bool heavy_armor(player_type *creature_ptr);
 extern void update_creature(player_type *creature_ptr);

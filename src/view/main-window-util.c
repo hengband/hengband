@@ -10,7 +10,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "view/display-main-window.h" // 相互依存している。後で何とかする
+#include "view/display-main-window.h" // 相互依存している。後で何とかする.
 #include "world/world.h"
 
 /*

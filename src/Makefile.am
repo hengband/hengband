@@ -573,6 +573,7 @@ hengband_SOURCES = \
 	\
 	view/display-birth.c view/display-birth.h \
 	view/display-characteristic.c view/display-characteristic.h \
+	view/display-sub-windows.c view/display-sub-windows.h \
 	view/display-fruit.c view/display-fruit.h \
 	view/display-lore-attacks.c view/display-lore-attacks.h \
 	view/display-lore-drops.c view/display-lore-drops.h \

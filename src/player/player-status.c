@@ -1319,6 +1319,17 @@ static void clear_creature_bonuses(player_type *creature_ptr)
 }
 
 /*!
+ * @brief 射撃武器がプレイヤーにとって重すぎるかどうかの判定 /
+ * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
+ * @return 重すぎるならばTRUE
+ */
+static bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
+{
+    int hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
+    return (hold < o_ptr->weight / 10);
+}
+
+/*!
  * @brief プレイヤーの全ステータスを更新する /
  * Calculate the players current "state", taking into account
  * not only race/class intrinsics, but also objects being worn
