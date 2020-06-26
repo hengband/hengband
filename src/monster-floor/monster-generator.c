@@ -203,7 +203,6 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
 }
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief モンスター種族が召喚主の護衛となれるかどうかをチェックする / Hack -- help pick an escort type
  * @param r_idx チェックするモンスター種族のID

@@ -108,6 +108,7 @@ bool mon_hook_quest(MONRACE_IDX r_idx)
 }
 
 /*!
+ * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief モンスターがダンジョンに出現するかどうかを返す
  * @param r_idx 判定するモンスターの種族ID
  * @return ダンジョンに出現するならばTRUEを返す
