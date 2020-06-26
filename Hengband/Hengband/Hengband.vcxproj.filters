@@ -1409,6 +1409,9 @@
     <ClCompile Include="..\..\src\view\main-window-util.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\main-window-stat-poster.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3106,6 +3109,9 @@
     <ClInclude Include="..\..\src\view\main-window-util.h">
       <Filter>view</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\view\main-window-stat-poster.h">
+      <Filter>view</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3250,9 +3256,6 @@
     <Filter Include="melee">
       <UniqueIdentifier>{642ec95b-f054-4958-a614-49ccf88cfc25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="info-reader">
-      <UniqueIdentifier>{149ff96c-b8c9-4df9-845d-d0618427d100}</UniqueIdentifier>
-    </Filter>
     <Filter Include="art-definition">
       <UniqueIdentifier>{fffcb35e-069c-4a97-ab60-0010a4d5d488}</UniqueIdentifier>
     </Filter>
@@ -3267,6 +3270,9 @@
     </Filter>
     <Filter Include="game-option">
       <UniqueIdentifier>{14acbc0e-8760-48c6-860f-4c9fd993feef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="info-reader">
+      <UniqueIdentifier>{149ff96c-b8c9-4df9-845d-d0618427d100}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
