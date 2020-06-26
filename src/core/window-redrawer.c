@@ -4,6 +4,7 @@
  * @author Hourier
  */
 #include "core/window-redrawer.h"
+#include "core/stuff-handler.h"
 #include "game-option/option-flags.h"
 #include "player/player-race.h"
 #include "term/gameterm.h"
@@ -18,6 +19,24 @@
 #include "view/main-window-stat-poster.h"
 #include "view/main-window-util.h"
 #include "world/world.h"
+
+/*!
+ * todo ここにplayer_type を追加するとz-termに影響が行くので保留
+ * @brief コンソールを再描画する /
+ * Redraw a term when it is resized
+ * @return なし
+ */
+void redraw_window(void)
+{
+    if (!current_world_ptr->character_dungeon)
+        return;
+
+    p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
+    p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+
+    handle_stuff(p_ptr);
+    Term_redraw();
+}
 
 /*!
  * @brief 現在のマップ名を描画する / Print dungeon

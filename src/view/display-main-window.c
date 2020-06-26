@@ -111,24 +111,6 @@ void resize_map()
 }
 
 /*!
- * todo ここにplayer_type を追加するとz-termに影響が行くので保留
- * @brief コンソールを再描画する /
- * Redraw a term when it is resized
- * @return なし
- */
-void redraw_window(void)
-{
-    if (!current_world_ptr->character_dungeon)
-        return;
-
-    p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-    p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
-
-    handle_stuff(p_ptr);
-    Term_redraw();
-}
-
-/*!
  * @brief フォーカスを当てるべきマップ描画の基準座標を指定する（サブルーチン）
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param dy 変更先のフロアY座標
