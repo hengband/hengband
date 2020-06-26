@@ -74,6 +74,7 @@
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
+#include "view/main-window-util.h"
 #include "world/world.h"
 
 /*!

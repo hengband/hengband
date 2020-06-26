@@ -24,18 +24,10 @@ extern bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx);
 extern void window_stuff(player_type *player_ptr);
 extern void update_playtime(void);
 
-#define ROW_MAP                 0
-#define COL_MAP                 12
-
-
 /*
  * Bit flags for the "redraw" variable
  */
 extern void redraw_stuff(player_type *creature_ptr);
-
-extern POSITION panel_row_min, panel_row_max;
-extern POSITION panel_col_min, panel_col_max;
-extern POSITION panel_col_prt, panel_row_prt;
 
 /*
  * Determines if a map location is currently "on screen" -RAK-

@@ -10,8 +10,9 @@
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h" // todo panel_row_min が依存している。後で移設を検討する.
+#include "view/display-main-window.h" // todo move_cursor_relative() が依存している。後で移設を検討する.
 #include "view/display-messages.h"
+#include "view/main-window-util.h"
 
 /*
  * Keymaps for each "mode" associated with each keypress.

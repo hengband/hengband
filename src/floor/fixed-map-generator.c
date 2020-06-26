@@ -4,6 +4,7 @@
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "info-reader/general-parser.h"
@@ -28,7 +29,7 @@
 #include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/system-variables.h"
-#include "view/display-main-window.h"
+#include "view/main-window-util.h"
 #include "world/world-object.h"
 #include "world/world.h"
 

@@ -119,11 +119,11 @@ static bool clear_auto_register(player_type *player_ptr)
 bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 {
 	autopick_type an_entry, *entry = &an_entry;
-	int match_autopick = find_autopick_list(player_ptr, o_ptr);
-	if (match_autopick != -1)
+	int autopick_registered = find_autopick_list(player_ptr, o_ptr);
+	if (autopick_registered != -1)
 	{
 		concptr what;
-		byte act = autopick_list[match_autopick].action;
+		byte act = autopick_list[autopick_registered].action;
 		if (act & DO_AUTOPICK) what = _("自動で拾う", "auto-pickup");
 		else if (act & DO_AUTODESTROY) what = _("自動破壊する", "auto-destroy");
 		else if (act & DONT_AUTOPICK) what = _("放置する", "leave on floor");

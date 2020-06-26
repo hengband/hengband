@@ -58,8 +58,8 @@
 #include "system/system-variables.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
+#include "view/main-window-util.h"
 #include "world/world.h"
 
 bool repair_monsters;

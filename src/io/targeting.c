@@ -65,6 +65,7 @@
 #include "view/display-messages.h"
 #include "view/display-lore.h"
 #include "view/display-monster-status.h"
+#include "view/main-window-util.h"
 #include "world/world.h"
 
  /*!
