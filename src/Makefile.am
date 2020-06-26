@@ -587,6 +587,7 @@ hengband_SOURCES = \
 	view/display-player-middle.c view/display-player-middle.h \
 	view/display-player.c view/display-player.h \
 	view/display-util.c view/display-util.h \
+	view/main-window-left-frame.c view/main-window-left-frame.h \
 	view/main-window-row-column.h \
 	view/main-window-stat-poster.c view/main-window-stat-poster.h \
 	view/main-window-util.c view/main-window-util.h \
