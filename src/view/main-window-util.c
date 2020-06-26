@@ -10,7 +10,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "view/display-main-window.h" // 相互依存している。後で何とかする.
+#include "view/display-map.h"
 #include "world/world.h"
 
 /*
@@ -375,4 +375,15 @@ void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR 
     *ap = r_ptr->x_attr;
     *cp = r_ptr->x_char;
     feat_priority = 31;
+}
+
+/*
+ * Calculate panel colum of a location in the map
+ */
+int panel_col_of(int col)
+{
+    col -= panel_col_min;
+    if (use_bigtile)
+        col *= 2;
+    return col + 13;
 }

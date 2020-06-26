@@ -19,3 +19,4 @@ void print_field(concptr info, TERM_LEN row, TERM_LEN col);
 void print_map(player_type *player_ptr);
 void display_map(player_type *player_ptr, int *cy, int *cx);
 void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp);
+int panel_col_of(int col);

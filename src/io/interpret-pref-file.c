@@ -9,6 +9,7 @@
 #include "cmd-io/macro-util.h"
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
+#include "grid/feature.h"
 #include "io/gf-descriptions.h"
 #include "io/input-key-requester.h"
 #include "io/tokenizer.h"

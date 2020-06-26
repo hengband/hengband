@@ -10,6 +10,7 @@
 #include "game-option/input-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"

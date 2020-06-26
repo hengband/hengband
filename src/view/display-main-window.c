@@ -20,6 +20,7 @@
 #include "floor/floor.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/input-key-acceptor.h"
 #include "io/targeting.h"
@@ -30,7 +31,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-map.h"
 #include "view/main-window-row-column.h"
-#include "view/main-window-util.h" // 相互依存している。後で何とかする.
+#include "view/main-window-util.h"
 #include "world/world.h"
 
 /*
@@ -168,17 +169,6 @@ void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
         *wid_p /= 2;
 }
 
-/*
- * Calculate panel colum of a location in the map
- */
-int panel_col_of(int col)
-{
-    col -= panel_col_min;
-    if (use_bigtile)
-        col *= 2;
-    return col + 13;
-}
-
 /*!
  * 照明の表現を行うための色合いの関係を{暗闇時, 照明時} で定義する /
  * This array lists the effects of "brightness" on various "base" colours.\n
@@ -242,7 +232,7 @@ static TERM_COLOR lighting_colours[16][2] = {
  * @brief 調査中
  * @todo コメントを付加すること
  */
-void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_char[F_LIT_MAX])
+void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char)
 {
     TERM_COLOR s_attr = f_attr[F_LIT_STANDARD];
     SYMBOL_CODE s_char = f_char[F_LIT_STANDARD];
@@ -377,6 +367,10 @@ void update_playtime(void)
     }
 }
 
+/*
+ * Determines if a map location is currently "on screen" -RAK-
+ * Note that "panel_contains(Y,X)" always implies "in_bounds2(Y,X)".
+ */
 bool panel_contains(POSITION y, POSITION x) { return (y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) && (x <= panel_col_max); }
 
 /*

@@ -166,6 +166,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "view/display-map.h"
 
 #ifdef USE_GCU
 

@@ -2,6 +2,7 @@
 #include "floor/floor.h"
 #include "game-option/option-flags.h"
 #include "game-option/special-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-processor.h"
@@ -14,7 +15,8 @@
 #include "system/monster-type-definition.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
-#include "view/display-main-window.h" // todo 相互依存している、後で何とかする.
+#include "view/display-main-window.h" // todo map_name() のせいで相互依存している、後で何とかする.
+#include "view/display-map.h"
 #include "view/display-messages.h"
 #include "view/display-lore.h"
 #include "view/display-player.h"

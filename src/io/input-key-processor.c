@@ -32,6 +32,7 @@
 #include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
+#include "cmd-visual/cmd-map.h"
 #include "cmd/cmd-basic.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-visuals.h"
@@ -67,7 +68,6 @@
 #include "store/store.h" // do_cmd_store() がある。後で移設する.
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-special-process.h"
 #include "wizard/wizard-spoiler.h"

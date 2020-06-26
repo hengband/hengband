@@ -123,6 +123,7 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-main-window.h"
+#include "view/display-map.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

@@ -43,6 +43,7 @@
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/feature.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/command-repeater.h"
