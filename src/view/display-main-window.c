@@ -68,6 +68,7 @@
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "view/main-window-row-column.h"
+#include "view/main-window-util.h"
 #include "view/object-describer.h"
 #include "view/status-bars-table.h"
 #include "world/world.h"
@@ -92,20 +93,6 @@ POSITION panel_col_prt, panel_row_prt;
 void print_map(player_type *player_ptr);
 void display_map(player_type *player_ptr, int *cy, int *cx);
 void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp);
-
-/*!
- * @brief 画面左の能力値表示を行うために指定位置から13キャラ分を空白消去後指定のメッセージを明るい青で描画する /
- * Print character info at given row, column in a 13 char field
- * @param info 表示文字列
- * @param row 描画列
- * @param col 描画行
- * @return なし
- */
-static void print_field(concptr info, TERM_LEN row, TERM_LEN col)
-{
-    c_put_str(TERM_WHITE, "             ", row, col);
-    c_put_str(TERM_L_BLUE, info, row, col);
-}
 
 /*!
  * @brief ゲーム時刻を表示する /

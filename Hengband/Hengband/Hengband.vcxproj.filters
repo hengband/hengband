@@ -1406,6 +1406,9 @@
     <ClCompile Include="..\..\src\view\status-bars-table.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\main-window-util.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3098,6 +3101,9 @@
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\main-window-row-column.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\main-window-util.h">
       <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
