@@ -171,6 +171,7 @@
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\cmd-io\macro-util.c" />
+    <ClCompile Include="..\..\src\cmd-visual\cmd-map.c" />
     <ClCompile Include="..\..\src\core\asking-player.c" />
     <ClCompile Include="..\..\src\core\visuals-reseter.c" />
     <ClCompile Include="..\..\src\core\window-redrawer.c" />
@@ -208,6 +209,7 @@
     <ClCompile Include="..\..\src\io\input-key-acceptor.c" />
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\locale\vowel-checker.c" />
+    <ClCompile Include="..\..\src\view\display-map.c" />
     <ClCompile Include="..\..\src\view\display-sub-windows.c" />
     <ClCompile Include="..\..\src\view\main-window-left-frame.c" />
     <ClCompile Include="..\..\src\view\main-window-stat-poster.c" />
@@ -559,6 +561,7 @@
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\cmd-io\macro-util.h" />
+    <ClInclude Include="..\..\src\cmd-visual\cmd-map.h" />
     <ClInclude Include="..\..\src\core\asking-player.h" />
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\core\window-redrawer.h" />
@@ -1015,6 +1018,7 @@
     <ClInclude Include="..\..\src\view\display-lore-magics.h" />
     <ClInclude Include="..\..\src\view\display-lore-status.h" />
     <ClInclude Include="..\..\src\view\display-lore.h" />
+    <ClInclude Include="..\..\src\view\display-map.h" />
     <ClInclude Include="..\..\src\view\display-messages.h" />
     <ClInclude Include="..\..\src\view\display-monster-status.h" />
     <ClInclude Include="..\..\src\view\display-sub-windows.h" />

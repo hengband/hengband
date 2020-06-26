@@ -1421,6 +1421,12 @@
     <ClCompile Include="..\..\src\core\window-redrawer.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-visual\cmd-map.c">
+      <Filter>cmd-visual</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-map.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3130,6 +3136,12 @@
     <ClInclude Include="..\..\src\core\window-redrawer.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\cmd-visual\cmd-map.h">
+      <Filter>cmd-visual</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-map.h">
+      <Filter>view</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3291,6 +3303,9 @@
     </Filter>
     <Filter Include="info-reader">
       <UniqueIdentifier>{149ff96c-b8c9-4df9-845d-d0618427d100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd-visual">
+      <UniqueIdentifier>{30be068e-64fc-431f-a90b-07f12e2539a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

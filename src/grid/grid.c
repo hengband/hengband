@@ -1423,3 +1423,10 @@ void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask)
 {
     floor_ptr->grid_array[y][x].info |= cave_mask;
 }
+
+/*
+ * @brief Get feature mimic from f_info[] (applying "mimic" field)
+ * @param g_ptr グリッドへの参照ポインタ
+ * @return 地形情報
+ */
+FEAT_IDX get_feat_mimic(grid_type *g_ptr) { return (f_info[g_ptr->mimic ? g_ptr->mimic : g_ptr->feat].mimic); }

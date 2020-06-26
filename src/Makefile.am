@@ -93,6 +93,7 @@ hengband_SOURCES = \
 	cmd-item/cmd-zaprod.c cmd-item/cmd-zaprod.h \
 	cmd-item/cmd-zapwand.c cmd-item/cmd-zapwand.h \
 	\
+	cmd-visual/cmd-map.c cmd-visual/cmd-map.h \
 	combat/attack-power-table.c combat/attack-power-table.h \
 	combat/aura-counterattack.c combat/aura-counterattack.h \
 	combat/hallucination-attacks-table.c combat/hallucination-attacks-table.h \
@@ -582,6 +583,7 @@ hengband_SOURCES = \
 	view/display-lore-status.c view/display-lore-status.h \
 	view/display-lore.c view/display-lore.h \
 	view/display-main-window.c view/display-main-window.h \
+	view/display-map.c view/display-map.h \
 	view/display-messages.c view/display-messages.h \
 	view/display-monster-status.c view/display-monster-status.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
@@ -616,13 +618,13 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat \
-	-Icore -Idungeon -Ieffect -Ifloor -Igame-option -Igrid -Iinfo-reader \
-	-Iinventory -Iio -Iio-dump -Iknowledge -Imarket -Imelee -Imind -Imonster \
-	-Imonster-attack -Imonster-floor -Imonster-race -Ilore -Imspell -Imutation \
-	-Iobject -Iobject-enchant -Ipet -Iplayer -Iplayer-attack -Irealm -Iroom \
-	-Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Isv-definition \
-	-Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
+	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icmd-visual \
+	-Icombat -Icore -Idungeon -Ieffect -Ifloor -Igame-option -Igrid \
+	-Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge -Imarket -Imelee \
+	-Imind -Imonster -Imonster-attack -Imonster-floor -Imonster-race -Ilore \
+	-Imspell -Imutation -Iobject -Iobject-enchant -Ipet -Iplayer \
+	-Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell -Ispell-kind \
+	-Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

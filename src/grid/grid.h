@@ -209,12 +209,7 @@ void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
 void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
 void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx);
 void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask);
-
-/*
- * Get feature mimic from f_info[] (applying "mimic" field)
- */
-#define get_feat_mimic(C) \
-	(f_info[(C)->mimic ? (C)->mimic : (C)->feat].mimic)
+FEAT_IDX get_feat_mimic(grid_type *g_ptr);
 
 /*
  * This macro allows us to efficiently add a grid to the "lite" array,
