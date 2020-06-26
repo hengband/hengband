@@ -4,9 +4,8 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "core/output-updater.h"
-#include "view/display-main-window.h"
+#include "core/window-redrawer.h"
 
 void update_output(player_type* player_ptr)
 {

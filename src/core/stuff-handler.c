@@ -1,6 +1,5 @@
-﻿#include "system/angband.h"
-#include "core/stuff-handler.h"
-#include "view/display-main-window.h"
+﻿#include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 
 /*!
  * @brief 全更新処理をチェックして処理していく

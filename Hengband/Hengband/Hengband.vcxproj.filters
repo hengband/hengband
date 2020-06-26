@@ -1418,6 +1418,9 @@
     <ClCompile Include="..\..\src\view\display-sub-windows.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\window-redrawer.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3123,6 +3126,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-sub-windows.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\window-redrawer.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

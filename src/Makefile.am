@@ -118,6 +118,7 @@ hengband_SOURCES = \
 	core/stuff-handler.c core/stuff-handler.h \
 	core/turn-compensator.c core/turn-compensator.h \
 	core/visuals-reseter.c core/visuals-reseter.h \
+	core/window-redrawer.c core/window-redrawer.h \
 	\
 	dungeon/dungeon.c dungeon/dungeon.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \

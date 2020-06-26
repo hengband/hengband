@@ -23,6 +23,7 @@
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
+#include "core/window-redrawer.h"
 #include "dungeon/dungeon-processor.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"

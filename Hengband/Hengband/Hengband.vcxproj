@@ -173,6 +173,7 @@
     <ClCompile Include="..\..\src\cmd-io\macro-util.c" />
     <ClCompile Include="..\..\src\core\asking-player.c" />
     <ClCompile Include="..\..\src\core\visuals-reseter.c" />
+    <ClCompile Include="..\..\src\core\window-redrawer.c" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
     <ClCompile Include="..\..\src\game-option\auto-destruction-options.c" />
     <ClCompile Include="..\..\src\game-option\birth-options.c" />
@@ -560,6 +561,7 @@
     <ClInclude Include="..\..\src\cmd-io\macro-util.h" />
     <ClInclude Include="..\..\src\core\asking-player.h" />
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
+    <ClInclude Include="..\..\src\core\window-redrawer.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
     <ClInclude Include="..\..\src\game-option\auto-destruction-options.h" />
     <ClInclude Include="..\..\src\game-option\birth-options.h" />
