@@ -768,7 +768,7 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->fast > v) return FALSE;
 		}
-		else if (!IS_FAST(creature_ptr) && !creature_ptr->lightspeed)
+		else if (!is_fast(creature_ptr) && !creature_ptr->lightspeed)
 		{
 			msg_print(_("素早く動けるようになった！", "You feel yourself moving much faster!"));
 			notice = TRUE;
@@ -1091,7 +1091,7 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->hero > v) return FALSE;
 		}
-		else if (!IS_HERO(creature_ptr))
+		else if (!is_hero(creature_ptr))
 		{
 			msg_print(_("ヒーローになった気がする！", "You feel like a hero!"));
 			notice = TRUE;
@@ -1290,7 +1290,7 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->invuln > v) return FALSE;
 		}
-		else if (!IS_INVULN(creature_ptr))
+		else if (!is_invuln(creature_ptr))
 		{
 			msg_print(_("無敵だ！", "Invulnerability!"));
 			notice = TRUE;

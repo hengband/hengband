@@ -4,7 +4,6 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "realm/realm-song-numbers.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -51,7 +50,7 @@ void starve_player(player_type *creature_ptr)
 
     if (creature_ptr->food < PY_FOOD_STARVE) {
         HIT_POINT dam = (PY_FOOD_STARVE - creature_ptr->food) / 10;
-        if (!IS_INVULN(creature_ptr))
+        if (!is_invuln(creature_ptr))
             take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
     }
 }

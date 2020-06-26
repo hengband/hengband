@@ -47,7 +47,6 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
-#include "realm/realm-song-numbers.h"
 #include "spell/process-effect.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"
@@ -1161,7 +1160,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		 * Only heal when Adrenalin Channeling is not active. We check
 		 * that by checking if the player isn't fast and 'heroed' atm.
 		 */
-		if (!IS_FAST(caster_ptr) || !IS_HERO(caster_ptr))
+		if (!is_fast(caster_ptr) || !is_hero(caster_ptr))
 		{
 			hp_player(caster_ptr, plev);
 		}

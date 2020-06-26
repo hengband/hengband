@@ -1029,7 +1029,7 @@ void self_knowledge(player_type *creature_ptr)
 	{
 		info[i++] = _("あなたは高潔さを感じている。", "You feel rightous.");
 	}
-	if (IS_HERO(creature_ptr))
+	if (is_hero(creature_ptr))
 	{
 		info[i++] = _("あなたはヒーロー気分だ。", "You feel heroic.");
 	}
@@ -1045,7 +1045,7 @@ void self_knowledge(player_type *creature_ptr)
 	{
 		info[i++] = _("あなたは神秘のシールドで守られている。", "You are protected by a mystic shield.");
 	}
-	if (IS_INVULN(creature_ptr))
+	if (is_invuln(creature_ptr))
 	{
 		info[i++] = _("あなたは現在傷つかない。", "You are temporarily invulnerable.");
 	}

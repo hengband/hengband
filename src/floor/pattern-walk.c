@@ -14,7 +14,6 @@
 #include "player/player-move.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
-#include "realm/realm-song-numbers.h"
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"
 #include "view/display-messages.h"
@@ -126,14 +125,14 @@ bool pattern_effect(player_type *creature_ptr)
         break;
 
     case PATTERN_TILE_WRECKED:
-        if (!IS_INVULN(creature_ptr))
+        if (!is_invuln(creature_ptr))
             take_hit(creature_ptr, DAMAGE_NOESCAPE, 200, _("壊れた「パターン」を歩いたダメージ", "walking the corrupted Pattern"), -1);
         break;
 
     default:
         if (is_specific_player_race(creature_ptr, RACE_AMBERITE) && !one_in_(2))
             return TRUE;
-        else if (!IS_INVULN(creature_ptr))
+        else if (!is_invuln(creature_ptr))
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"), -1);
         break;
     }

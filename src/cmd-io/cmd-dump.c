@@ -10,7 +10,6 @@
  */
 
 #include "cmd-io/cmd-dump.h"
-#include "art-definition/art-bow-types.h"
 #include "cmd-io/feeling-table.h"
 #include "core/asking-player.h"
 #include "dungeon/quest.h"
@@ -235,7 +234,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 
 	if (creature_ptr->muta3 & MUT3_GOOD_LUCK)
 		msg_print(do_cmd_feeling_text_lucky[creature_ptr->feeling]);
-	else if (IS_ECHIZEN(creature_ptr))
+	else if (is_echizen(creature_ptr))
 		msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);
 	else
 		msg_print(do_cmd_feeling_text[creature_ptr->feeling]);

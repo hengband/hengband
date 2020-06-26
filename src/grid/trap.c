@@ -1,5 +1,4 @@
 ﻿#include "grid/trap.h"
-#include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-save.h"
 #include "dungeon/dungeon.h"
@@ -440,7 +439,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 		else
 		{
 			msg_print(_("落とし戸に落ちた！", "You have fallen through a trap door!"));
-			if (IS_ECHIZEN(trapped_ptr))
+			if (is_echizen(trapped_ptr))
 				msg_print(_("くっそ～！", ""));
 			else if((trapped_ptr->pseikaku == PERSONALITY_CHARGEMAN))
 				msg_print(_("ジュラル星人の仕業に違いない！", ""));

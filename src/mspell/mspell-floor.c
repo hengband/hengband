@@ -5,7 +5,6 @@
  */
 
 #include "mspell/mspell-floor.h"
-#include "art-definition/art-bow-types.h"
 #include "effect/effect-characteristics.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
@@ -210,7 +209,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         _("%^sは%sをテレポートさせた。", "%^s teleports %s away."), TARGET_TYPE);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        if (IS_ECHIZEN(target_ptr))
+        if (is_echizen(target_ptr))
             msg_print(_("くっそ～", ""));
         else if ((target_ptr->pseikaku == PERSONALITY_CHARGEMAN)) {
             if (randint0(2) == 0)

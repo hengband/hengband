@@ -36,7 +36,6 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
-#include "realm/realm-song-numbers.h"
 #include "room/rooms.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
@@ -476,7 +475,7 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y
 		if (!use_graphics)
 		{
 			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-			else if (IS_INVULN(subject_ptr) || subject_ptr->timewalk) a = TERM_WHITE;
+			else if (is_invuln(subject_ptr) || subject_ptr->timewalk) a = TERM_WHITE;
 			else if (subject_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
@@ -633,7 +632,7 @@ void lite_spot(player_type *player_ptr, POSITION y, POSITION x)
 		if (!use_graphics)
 		{
 			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-			else if (IS_INVULN(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
+			else if (is_invuln(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
 			else if (player_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
@@ -1170,7 +1169,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
 			if (!player_ptr->levitation && !player_ptr->can_swim) return FALSE;
 		}
 
-		if (have_flag(f_ptr->flags, FF_LAVA) && !player_ptr->immune_fire && !IS_INVULN(player_ptr))
+		if (have_flag(f_ptr->flags, FF_LAVA) && !player_ptr->immune_fire && !is_invuln(player_ptr))
 		{
 			/* Always forbid deep lava */
 			if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;

@@ -55,7 +55,6 @@
 #include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
-#include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells3.h"
 #include "system/system-variables.h"
@@ -242,7 +241,7 @@ static void print_status(player_type *creature_ptr)
     if (creature_ptr->protevil)
         ADD_BAR_FLAG(BAR_PROTEVIL);
 
-    if (IS_INVULN(creature_ptr))
+    if (is_invuln(creature_ptr))
         ADD_BAR_FLAG(BAR_INVULN);
 
     if (creature_ptr->wraith_form)
@@ -254,7 +253,7 @@ static void print_status(player_type *creature_ptr)
     if (creature_ptr->tim_reflect)
         ADD_BAR_FLAG(BAR_REFLECTION);
 
-    if (IS_HERO(creature_ptr))
+    if (is_hero(creature_ptr))
         ADD_BAR_FLAG(BAR_HEROISM);
 
     if (creature_ptr->shero)
@@ -836,7 +835,7 @@ static void print_speed(player_type *player_ptr)
         i += 10;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_fast = IS_FAST(player_ptr);
+    bool is_player_fast = is_fast(player_ptr);
     char buf[32] = "";
     TERM_COLOR attr = TERM_WHITE;
     if (i > 110) {
@@ -848,9 +847,9 @@ static void print_speed(player_type *player_ptr)
                 attr = TERM_VIOLET;
             else
                 attr = TERM_GREEN;
-        } else if ((is_fast && !player_ptr->slow) || player_ptr->lightspeed)
+        } else if ((is_player_fast && !player_ptr->slow) || player_ptr->lightspeed)
             attr = TERM_YELLOW;
-        else if (player_ptr->slow && !is_fast)
+        else if (player_ptr->slow && !is_player_fast)
             attr = TERM_VIOLET;
         else
             attr = TERM_L_GREEN;
@@ -864,9 +863,9 @@ static void print_speed(player_type *player_ptr)
                 attr = TERM_VIOLET;
             else
                 attr = TERM_RED;
-        } else if (is_fast && !player_ptr->slow)
+        } else if (is_player_fast && !player_ptr->slow)
             attr = TERM_YELLOW;
-        else if (player_ptr->slow && !is_fast)
+        else if (player_ptr->slow && !is_player_fast)
             attr = TERM_VIOLET;
         else
             attr = TERM_L_UMBER;
@@ -1474,7 +1473,7 @@ static void display_dungeon(player_type *player_ptr)
             if (!use_graphics) {
                 if (current_world_ptr->timewalk_m_idx)
                     a = TERM_DARK;
-                else if (IS_INVULN(player_ptr) || player_ptr->timewalk)
+                else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     a = TERM_WHITE;
                 else if (player_ptr->wraith_form)
                     a = TERM_L_DARK;
@@ -1966,7 +1965,7 @@ void print_map(player_type *player_ptr)
             if (!use_graphics) {
                 if (current_world_ptr->timewalk_m_idx)
                     a = TERM_DARK;
-                else if (IS_INVULN(player_ptr) || player_ptr->timewalk)
+                else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     a = TERM_WHITE;
                 else if (player_ptr->wraith_form)
                     a = TERM_L_DARK;
@@ -2582,7 +2581,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
             if (!use_graphics) {
                 if (current_world_ptr->timewalk_m_idx)
                     ta = TERM_DARK;
-                else if (IS_INVULN(player_ptr) || player_ptr->timewalk)
+                else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     ta = TERM_WHITE;
                 else if (player_ptr->wraith_form)
                     ta = TERM_L_DARK;
@@ -2764,7 +2763,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
             if (!use_graphics) {
                 if (current_world_ptr->timewalk_m_idx)
                     a = TERM_DARK;
-                else if (IS_INVULN(player_ptr) || player_ptr->timewalk)
+                else if (is_invuln(player_ptr) || player_ptr->timewalk)
                     a = TERM_WHITE;
                 else if (player_ptr->wraith_form)
                     a = TERM_L_DARK;

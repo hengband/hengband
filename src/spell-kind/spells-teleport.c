@@ -6,7 +6,6 @@
  */
 
 #include "spell-kind/spells-teleport.h"
-#include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/speed-table.h"
@@ -361,7 +360,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantu
 
     sound(SOUND_TELEPORT);
 #ifdef JP
-    if (IS_ECHIZEN(creature_ptr))
+    if (is_echizen(creature_ptr))
         msg_format("『こっちだぁ、%s』", creature_ptr->name);
 #endif
     (void)move_player_effect(creature_ptr, yy, xx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);

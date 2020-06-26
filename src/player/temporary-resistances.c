@@ -23,7 +23,7 @@ void tim_player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 	for (int i = 0; i < TR_FLAG_SIZE; i++)
 		flags[i] = 0L;
 
-	if (IS_HERO(creature_ptr) || creature_ptr->shero)
+	if (is_hero(creature_ptr) || creature_ptr->shero)
 		add_flag(flags, TR_RES_FEAR);
 	if (creature_ptr->tim_invis)
 		add_flag(flags, TR_SEE_INVIS);
@@ -31,7 +31,7 @@ void tim_player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		add_flag(flags, TR_REGEN);
 	if (is_time_limit_esp(creature_ptr))
 		add_flag(flags, TR_TELEPATHY);
-	if (IS_FAST(creature_ptr) || creature_ptr->slow)
+	if (is_fast(creature_ptr) || creature_ptr->slow)
 		add_flag(flags, TR_SPEED);
 
 	if (is_oppose_acid(creature_ptr) && !(creature_ptr->special_defense & DEFENSE_ACID) && !(is_specific_player_race(creature_ptr, RACE_YEEK) && (creature_ptr->lev > 19)))

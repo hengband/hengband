@@ -1,5 +1,4 @@
 ﻿#include "monster/monster-status.h"
-#include "art-definition/art-bow-types.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-draw.h"
@@ -1349,7 +1348,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		else if (!m_ptr->ml)
 		{
 #ifdef JP
-			if (IS_ECHIZEN(target_ptr))
+			if (is_echizen(target_ptr))
 				msg_format("せっかくだから%sを殺した。", m_name);
 			else
 				msg_format("%sを殺した。", m_name);
@@ -1375,7 +1374,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 			else
 			{
 #ifdef JP
-				if (IS_ECHIZEN(target_ptr))
+				if (is_echizen(target_ptr))
 					msg_format("せっかくだから%sを倒した。", m_name);
 				else
 					msg_format("%sを倒した。", m_name);
@@ -1389,7 +1388,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		else
 		{
 #ifdef JP
-			if (IS_ECHIZEN(target_ptr))
+			if (is_echizen(target_ptr))
 				msg_format("せっかくだから%sを葬り去った。", m_name);
 			else
 				msg_format("%sを葬り去った。", m_name);

@@ -10,7 +10,6 @@
  */
 
 #include "cmd/cmd-basic.h"
-#include "art-definition/art-bow-types.h"
 #include "art-definition/art-weapon-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-io/cmd-dump.h"
@@ -239,7 +238,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 		if (!confirm_leave_level(creature_ptr, FALSE)) return;
 	
 		/* Success */
-		if (IS_ECHIZEN(creature_ptr))
+		if (is_echizen(creature_ptr))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("上の階に登った。", "You enter the up staircase."));
@@ -336,7 +335,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 	if (record_stair) exe_write_diary(creature_ptr, DIARY_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
 
 	/* Success */
-	if (IS_ECHIZEN(creature_ptr))
+	if (is_echizen(creature_ptr))
 		msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 	else if (up_num == creature_ptr->current_floor_ptr->dun_level)
 		msg_print(_("地上に戻った。", "You go back to the surface."));
@@ -385,7 +384,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		/* Confirm Leaving */
 		if(!confirm_leave_level(creature_ptr, TRUE)) return;
 		
-		if (IS_ECHIZEN(creature_ptr))
+		if (is_echizen(creature_ptr))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("下の階に降りた。", "You enter the down staircase."));
@@ -483,7 +482,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		}
 		else
 		{
-			if (IS_ECHIZEN(creature_ptr))
+			if (is_echizen(creature_ptr))
 				msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 			else
 				msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));

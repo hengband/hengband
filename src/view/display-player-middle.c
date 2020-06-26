@@ -9,7 +9,6 @@
 #include "player/player-effects.h"
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
-#include "realm/realm-song-numbers.h"
 #include "sv-definition/sv-bow-types.h"
 #include "term/term-color-types.h"
 #include "view/display-util.h"
@@ -170,7 +169,7 @@ static int calc_temporary_speed(player_type *creature_ptr)
 	int tmp_speed = 0;
 	if (!creature_ptr->riding)
 	{
-		if (IS_FAST(creature_ptr)) tmp_speed += 10;
+		if (is_fast(creature_ptr)) tmp_speed += 10;
 		if (creature_ptr->slow) tmp_speed -= 10;
 		if (creature_ptr->lightspeed) tmp_speed = 99;
 	}

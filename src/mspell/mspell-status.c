@@ -6,7 +6,6 @@
  */
 
 #include "mspell/mspell-status.h"
-#include "art-definition/art-bow-types.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -113,7 +112,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
         if (target_ptr->riding)
             dispel_monster_status(target_ptr, target_ptr->riding);
 
-        if (IS_ECHIZEN(target_ptr))
+        if (is_echizen(target_ptr))
             msg_print(_("やりやがったな！", ""));
         else if ((target_ptr->pseikaku == PERSONALITY_CHARGEMAN)) {
             if (randint0(2) == 0)

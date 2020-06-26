@@ -871,7 +871,7 @@ static bool spell_dispel(byte spell)
  */
 bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 {
-    if (IS_INVULN(creature_ptr))
+    if (is_invuln(creature_ptr))
         return TRUE;
 
     if (creature_ptr->wraith_form)
@@ -954,7 +954,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
         return TRUE;
 
     if (creature_ptr->pspeed < 145) {
-        if (IS_FAST(creature_ptr))
+        if (is_fast(creature_ptr))
             return TRUE;
     }
 
@@ -1126,7 +1126,7 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
         return (raise[randint0(raise_num)]);
     }
 
-    if (IS_INVULN(target_ptr)) {
+    if (is_invuln(target_ptr)) {
         if (psy_spe_num && (randint0(100) < 50)) {
             return (psy_spe[randint0(psy_spe_num)]);
         } else if (attack_num && (randint0(100) < 40)) {

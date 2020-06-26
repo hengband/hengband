@@ -796,14 +796,6 @@ extern long calc_score(player_type *creature_ptr);
 extern const s32b player_exp[PY_MAX_LEVEL];
 extern const s32b player_exp_a[PY_MAX_LEVEL];
 
-
-/* Temporary flags macro */
-#define IS_FAST(C) (C->fast || music_singing(C, MUSIC_SPEED) || music_singing(C, MUSIC_SHERO))
-#define IS_INVULN(C) (C->invuln || music_singing(C, MUSIC_INVULN))
-#define IS_HERO(C) (C->hero || music_singing(C, MUSIC_HERO) || music_singing(C, MUSIC_SHERO))
-
-#define IS_ECHIZEN(C) (((C)->pseikaku == PERSONALITY_COMBAT) || ((C)->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
-
 extern bool is_blessed(player_type *creature_ptr);
 extern bool is_oppose_acid(player_type *creature_ptr);
 extern bool is_oppose_elec(player_type *creature_ptr);
@@ -813,6 +805,10 @@ extern bool is_oppose_pois(player_type *creature_ptr);
 extern bool is_time_limit_esp(player_type *creature_ptr);
 extern bool is_time_limit_stealth(player_type *creature_ptr);
 extern bool can_two_hands_wielding(player_type *creature_ptr);
+bool is_fast(player_type *creature_ptr);
+bool is_invuln(player_type *creature_ptr);
+bool is_hero(player_type *creature_ptr);
+bool is_echizen(player_type *creature_ptr);
 
 /*
  * Player "food" crucial values

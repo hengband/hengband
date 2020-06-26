@@ -1592,7 +1592,7 @@ static bool run_test(player_type *creature_ptr)
 				}
 
 				/* Lava */
-				else if (have_flag(f_ptr->flags, FF_LAVA) && (creature_ptr->immune_fire || IS_INVULN(creature_ptr)))
+				else if (have_flag(f_ptr->flags, FF_LAVA) && (creature_ptr->immune_fire || is_invuln(creature_ptr)))
 				{
 					/* Ignore */
 					notice = FALSE;

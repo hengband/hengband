@@ -1,5 +1,4 @@
 ﻿#include "dungeon/quest.h"
-#include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
 #include "dungeon/dungeon.h"
@@ -539,7 +538,7 @@ void do_cmd_quest(player_type *player_ptr)
 
 	msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
 	if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
-	if (IS_ECHIZEN(player_ptr))
+	if (is_echizen(player_ptr))
 		msg_print(_("『とにかく入ってみようぜぇ。』", ""));
 	else if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN) msg_print("『全滅してやるぞ！』");
 

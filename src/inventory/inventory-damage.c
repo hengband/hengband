@@ -1,5 +1,4 @@
 ﻿#include "inventory/inventory-damage.h"
-#include "art-definition/art-bow-types.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "mind/mind-mirror-master.h"
@@ -67,7 +66,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
 #endif
 
 #ifdef JP
-        if (IS_ECHIZEN(player_ptr))
+        if (is_echizen(player_ptr))
             msg_print("やりやがったな！");
         else if ((player_ptr->pseikaku == PERSONALITY_CHARGEMAN)) {
             if (randint0(2) == 0)

@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include "art-definition/art-bow-types.h"
 #include "player/player-status.h"
 #include "art-definition/art-sword-types.h"
 #include "art-definition/art-weapon-types.h"
@@ -2236,7 +2237,7 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->levitation = TRUE;
 	}
 
-	if (IS_HERO(creature_ptr))
+	if (is_hero(creature_ptr))
 	{
 		creature_ptr->to_h[0] += 12;
 		creature_ptr->to_h[1] += 12;
@@ -2272,7 +2273,7 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->skill_dig += 30;
 	}
 
-	if (IS_FAST(creature_ptr))
+	if (is_fast(creature_ptr))
 	{
 		creature_ptr->pspeed += 10;
 	}
@@ -2324,7 +2325,7 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->reflect = TRUE;
 	}
 
-	if (IS_HERO(creature_ptr) || creature_ptr->shero)
+	if (is_hero(creature_ptr) || creature_ptr->shero)
 	{
 		creature_ptr->resist_fear = TRUE;
 	}
@@ -3275,7 +3276,7 @@ static void calc_hitpoints(player_type *creature_ptr)
 	}
 
 	if (mhp < creature_ptr->lev + 1) mhp = creature_ptr->lev + 1;
-	if (IS_HERO(creature_ptr)) mhp += 10;
+	if (is_hero(creature_ptr)) mhp += 10;
 	if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER)) mhp += 30;
 	if (creature_ptr->tsuyoshi) mhp += 50;
 	if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT)) mhp += 15;
@@ -4188,7 +4189,7 @@ void wreck_the_pattern(player_type *creature_ptr)
 	msg_print(_("パターンを血で汚してしまった！", "You bleed on the Pattern!"));
 	msg_print(_("何か恐ろしい事が起こった！", "Something terrible happens!"));
 
-	if (!IS_INVULN(creature_ptr))
+	if (!is_invuln(creature_ptr))
 		take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
 
 	int to_ruin = randint1(45) + 35;
@@ -4740,4 +4741,15 @@ PERCENTAGE calculate_upkeep(player_type *creature_ptr)
 bool music_singing(player_type *caster_ptr, int music_songs)
 {
 	return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs);
+}
+
+bool is_fast(player_type *creature_ptr) { return creature_ptr->fast || music_singing(creature_ptr, MUSIC_SPEED) || music_singing(creature_ptr, MUSIC_SHERO); }
+
+bool is_invuln(player_type *creature_ptr) { return creature_ptr->invuln || music_singing(creature_ptr, MUSIC_INVULN); }
+
+bool is_hero(player_type *creature_ptr) { return creature_ptr->hero || music_singing(creature_ptr, MUSIC_HERO) || music_singing(creature_ptr, MUSIC_SHERO); }
+
+bool is_echizen(player_type *creature_ptr)
+{
+    return (creature_ptr->pseikaku == PERSONALITY_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
 }
