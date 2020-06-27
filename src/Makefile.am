@@ -55,8 +55,6 @@ hengband_SOURCES = \
 	birth/birth-wizard.c birth/birth-wizard.h \
 	\
 	cmd/cmd-basic.c cmd/cmd-basic.h \
-	cmd/cmd-draw.c cmd/cmd-draw.h \
-	cmd/cmd-visuals.c cmd/cmd-visuals.h \
 	\
 	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
 	cmd-action/cmd-hissatsu.c cmd-action/cmd-hissatsu.h \
@@ -93,7 +91,10 @@ hengband_SOURCES = \
 	cmd-item/cmd-zaprod.c cmd-item/cmd-zaprod.h \
 	cmd-item/cmd-zapwand.c cmd-item/cmd-zapwand.h \
 	\
+	cmd-visual/cmd-draw.c cmd-visual/cmd-draw.h \
 	cmd-visual/cmd-map.c cmd-visual/cmd-map.h \
+	cmd-visual/cmd-visuals.c cmd-visual/cmd-visuals.h \
+	\
 	combat/attack-power-table.c combat/attack-power-table.h \
 	combat/aura-counterattack.c combat/aura-counterattack.h \
 	combat/hallucination-attacks-table.c combat/hallucination-attacks-table.h \

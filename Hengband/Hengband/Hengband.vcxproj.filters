@@ -65,9 +65,6 @@
     <ClCompile Include="..\..\src\io\write-diary.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-visuals.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\market\poker.c">
       <Filter>market</Filter>
     </ClCompile>
@@ -803,9 +800,6 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-zapwand.c">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-draw.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-io\cmd-diary.c">
       <Filter>cmd-io</Filter>
     </ClCompile>
@@ -1427,6 +1421,12 @@
     <ClCompile Include="..\..\src\view\display-map.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-visual\cmd-draw.c">
+      <Filter>cmd-visual</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-visual\cmd-visuals.c">
+      <Filter>cmd-visual</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1491,12 +1491,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\write-diary.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-draw.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-visuals.h">
-      <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\poker.h">
       <Filter>market</Filter>
@@ -3141,6 +3135,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-map.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-visual\cmd-draw.h">
+      <Filter>cmd-visual</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-visual\cmd-visuals.h">
+      <Filter>cmd-visual</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

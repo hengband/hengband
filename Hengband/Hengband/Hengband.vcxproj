@@ -390,7 +390,7 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-activate.c" />
     <ClCompile Include="..\..\src\cmd\cmd-basic.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-diary.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-draw.c" />
+    <ClCompile Include="..\..\src\cmd-visual\cmd-draw.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-dump.c" />
     <ClCompile Include="..\..\src\cmd-item\cmd-eat.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-gameoption.c" />
@@ -409,7 +409,7 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-smith.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-spell.c" />
     <ClCompile Include="..\..\src\cmd-item\cmd-usestaff.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-visuals.c" />
+    <ClCompile Include="..\..\src\cmd-visual\cmd-visuals.c" />
     <ClCompile Include="..\..\src\cmd-item\cmd-zaprod.c" />
     <ClCompile Include="..\..\src\cmd-item\cmd-zapwand.c" />
     <ClCompile Include="..\..\src\cmd-io\diary-subtitle-table.c" />
@@ -977,7 +977,7 @@
     <ClInclude Include="..\..\src\cmd-item\cmd-activate.h" />
     <ClInclude Include="..\..\src\cmd\cmd-basic.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-diary.h" />
-    <ClInclude Include="..\..\src\cmd\cmd-draw.h" />
+    <ClInclude Include="..\..\src\cmd-visual\cmd-draw.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-dump.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-eat.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-gameoption.h" />
@@ -996,7 +996,7 @@
     <ClInclude Include="..\..\src\cmd-item\cmd-smith.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-spell.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-usestaff.h" />
-    <ClInclude Include="..\..\src\cmd\cmd-visuals.h" />
+    <ClInclude Include="..\..\src\cmd-visual\cmd-visuals.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-zapwand.h" />
     <ClInclude Include="..\..\src\cmd-io\diary-subtitle-table.h" />

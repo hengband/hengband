@@ -1,7 +1,7 @@
 ﻿#include "monster/monster-status.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-draw.h"
+#include "cmd-visual/cmd-draw.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

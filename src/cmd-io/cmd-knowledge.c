@@ -1,5 +1,5 @@
 ﻿#include "cmd-io/cmd-knowledge.h"
-#include "cmd/cmd-draw.h"
+#include "cmd-visual/cmd-draw.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "io/input-key-acceptor.h"
