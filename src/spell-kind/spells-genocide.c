@@ -6,6 +6,7 @@
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
+#include "io/cursor.h"
 #include "io/write-diary.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -19,7 +20,6 @@
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 /*!

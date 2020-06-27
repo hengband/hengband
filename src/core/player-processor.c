@@ -8,6 +8,7 @@
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "inventory/pack-overflow.h"
+#include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
 #include "io/input-key-requester.h"
@@ -32,7 +33,6 @@
 #include "spell-kind/spells-random.h"
 #include "spell-realm/spells-hex.h"
 #include "term/screen-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
 

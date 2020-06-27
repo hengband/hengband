@@ -4,6 +4,7 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
+#include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "locale/english.h"
 #include "lore/lore-store.h"
@@ -19,7 +20,6 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "term/screen-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 /*!

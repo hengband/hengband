@@ -10,6 +10,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
+#include "io/cursor.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

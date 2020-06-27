@@ -211,6 +211,7 @@ hengband_SOURCES = \
 	\
 	io/chuukei.c io/chuukei.h \
 	io/command-repeater.c io/command-repeater.h \
+	io/cursor.c io/cursor.h \
 	io/exit-panic.c io/exit-panic.h \
 	io/files-util.c io/files-util.h \
 	io/gf-descriptions.c io/gf-descriptions.h \

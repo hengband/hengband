@@ -38,6 +38,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
+#include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/targeting.h"

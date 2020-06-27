@@ -4,13 +4,13 @@
 #include "core/asking-player.h" // todo 相互依存している、後で何とかする.
 #include "floor/floor.h"
 #include "game-option/input-options.h"
+#include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h" // todo 相互依存している、後で何とかする.
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h" // todo move_cursor_relative() が依存している。後で移設を検討する.
 #include "view/display-messages.h"
 #include "view/main-window-util.h"
 

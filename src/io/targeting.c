@@ -33,6 +33,7 @@
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
 #include "io/command-repeater.h"
+#include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "locale/vowel-checker.h"

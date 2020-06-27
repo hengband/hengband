@@ -1433,6 +1433,9 @@
     <ClCompile Include="..\..\src\grid\lighting-colors-table.c">
       <Filter>grid</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\cursor.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3153,6 +3156,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\grid\lighting-colors-table.h">
       <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\cursor.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
