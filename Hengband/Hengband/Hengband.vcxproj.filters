@@ -1442,6 +1442,9 @@
     <ClCompile Include="..\..\src\player\bad-status-setter.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\status-reseter.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3174,6 +3177,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\bad-status-setter.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\status-reseter.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
