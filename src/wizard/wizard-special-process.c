@@ -163,16 +163,15 @@ static bool do_cmd_debug_spell(player_type *creature_ptr)
 /*!
  * @brief 必ず成功するウィザードモード用次元の扉処理 / Wizard Dimension Door
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return 実際にテレポートを行ったらTRUEを返す
+ * @return なし
  */
-static bool wiz_dimension_door(player_type *caster_ptr)
+static void wiz_dimension_door(player_type *caster_ptr)
 {
     POSITION x = 0, y = 0;
     if (!tgt_pt(caster_ptr, &x, &y))
-        return FALSE;
+        return;
 
     teleport_player_to(caster_ptr, y, x, TELEPORT_NONMAGICAL);
-    return TRUE;
 }
 
 /*!
