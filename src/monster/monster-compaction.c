@@ -1,4 +1,5 @@
 ﻿#include "monster/monster-compaction.h"
+#include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"
@@ -12,7 +13,6 @@
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
 #include "system/monster-type-definition.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 /*!

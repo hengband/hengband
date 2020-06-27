@@ -4015,6 +4015,34 @@ bool heavy_armor(player_type *creature_ptr)
 	return (monk_arm_wgt > (100 + (creature_ptr->lev * 4)));
 }
 
+/*
+ * Delayed visual update
+ * Only used if update_view(), update_lite() or update_mon_lite() was called
+ */
+static void delayed_visual_update(player_type *player_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    for (int i = 0; i < floor_ptr->redraw_n; i++) {
+        POSITION y = floor_ptr->redraw_y[i];
+        POSITION x = floor_ptr->redraw_x[i];
+        grid_type *g_ptr;
+        g_ptr = &floor_ptr->grid_array[y][x];
+        if (!(g_ptr->info & CAVE_REDRAW))
+            continue;
+
+        if (g_ptr->info & CAVE_NOTE)
+            note_spot(player_ptr, y, x);
+
+        lite_spot(player_ptr, y, x);
+        if (g_ptr->m_idx)
+            update_monster(player_ptr, g_ptr->m_idx, FALSE);
+
+        g_ptr->info &= ~(CAVE_NOTE | CAVE_REDRAW);
+    }
+
+    floor_ptr->redraw_n = 0;
+}
+
 
 /*!
  * @brief update のフラグに応じた更新をまとめて行う / Handle "update"

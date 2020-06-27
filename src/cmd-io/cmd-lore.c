@@ -13,7 +13,6 @@
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-lore.h"
 
 /*!

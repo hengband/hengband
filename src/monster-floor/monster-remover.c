@@ -1,4 +1,5 @@
 ﻿#include "monster-floor/monster-remover.h"
+#include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
@@ -10,7 +11,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "system/monster-type-definition.h"
-#include "view/display-main-window.h"
 
 /*!
  * @brief モンスター配列からモンスターを消去する / Delete a monster by index.

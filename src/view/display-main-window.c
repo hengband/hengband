@@ -231,21 +231,6 @@ void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char)
 }
 
 /*
- * Track a new monster
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param m_idx トラッキング対象のモンスターID。0の時キャンセル
- * @param なし
- */
-void health_track(player_type *player_ptr, MONSTER_IDX m_idx)
-{
-    if (m_idx && m_idx == player_ptr->riding)
-        return;
-
-    player_ptr->health_who = m_idx;
-    player_ptr->redraw |= (PR_HEALTH);
-}
-
-/*
  * Moves the cursor to a given MAP (y,x) location
  */
 void move_cursor_relative(int row, int col)
@@ -316,53 +301,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
 }
 
 /*
- * Track the given monster race
- */
-void monster_race_track(player_type *player_ptr, MONRACE_IDX r_idx)
-{
-    player_ptr->monster_race_idx = r_idx;
-    player_ptr->window |= (PW_MONSTER);
-}
-
-/*
- * Track the given object kind
- */
-void object_kind_track(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
-{
-    player_ptr->object_kind_idx = k_idx;
-    player_ptr->window |= (PW_OBJECT);
-}
-
-/*
  * Determines if a map location is currently "on screen" -RAK-
  * Note that "panel_contains(Y,X)" always implies "in_bounds2(Y,X)".
  */
 bool panel_contains(POSITION y, POSITION x) { return (y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) && (x <= panel_col_max); }
-
-/*
- * Delayed visual update
- * Only used if update_view(), update_lite() or update_mon_lite() was called
- */
-void delayed_visual_update(player_type *player_ptr)
-{
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    for (int i = 0; i < floor_ptr->redraw_n; i++) {
-        POSITION y = floor_ptr->redraw_y[i];
-        POSITION x = floor_ptr->redraw_x[i];
-        grid_type *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
-        if (!(g_ptr->info & CAVE_REDRAW))
-            continue;
-
-        if (g_ptr->info & CAVE_NOTE)
-            note_spot(player_ptr, y, x);
-
-        lite_spot(player_ptr, y, x);
-        if (g_ptr->m_idx)
-            update_monster(player_ptr, g_ptr->m_idx, FALSE);
-
-        g_ptr->info &= ~(CAVE_NOTE | CAVE_REDRAW);
-    }
-
-    floor_ptr->redraw_n = 0;
-}
