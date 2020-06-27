@@ -1,11 +1,10 @@
 ﻿#include "grid/feature.h"
+#include "grid/lighting-colors-table.h"
 #include "util/bit-flags-calculator.h"
 
 /*** Terrain feature variables ***/
 
-/*
- * The terrain feature arrays
- */
+/* The terrain feature arrays */
 feature_type *f_info;
 char *f_name;
 char *f_tag;
@@ -124,3 +123,32 @@ bool is_closed_door(player_type *player_ptr, FEAT_IDX feat)
 	return (have_flag(f_ptr->flags, FF_OPEN) || have_flag(f_ptr->flags, FF_BASH)) &&
 		!have_flag(f_ptr->flags, FF_MOVE);
 }
+
+/*!
+ * @brief 調査中
+ * @todo コメントを付加すること
+ */
+void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char)
+{
+    TERM_COLOR s_attr = f_attr[F_LIT_STANDARD];
+    SYMBOL_CODE s_char = f_char[F_LIT_STANDARD];
+
+    if (is_ascii_graphics(s_attr)) /* For ASCII */
+    {
+        f_attr[F_LIT_LITE] = lighting_colours[s_attr & 0x0f][0];
+        f_attr[F_LIT_DARK] = lighting_colours[s_attr & 0x0f][1];
+        for (int i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++)
+            f_char[i] = s_char;
+    } else /* For tile graphics */
+    {
+        for (int i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++)
+            f_attr[i] = s_attr;
+        f_char[F_LIT_LITE] = s_char + 2;
+        f_char[F_LIT_DARK] = s_char + 1;
+    }
+}
+
+/*
+ * Not using graphical tiles for this feature?
+ */
+bool is_ascii_graphics(char x) { return (x & 0x80) == 0; }

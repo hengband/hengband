@@ -49,7 +49,6 @@
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
  /*!

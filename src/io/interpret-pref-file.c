@@ -19,7 +19,6 @@
 #include "term/gameterm.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h" // 暫定。apply_default_feat_lighting()。後で消す.
 #include "view/display-messages.h"
 #include "world/world.h"
 

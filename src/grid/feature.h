@@ -193,6 +193,8 @@ extern char *f_tag;
 
 extern bool is_closed_door(player_type *player_ptr, FEAT_IDX feat);
 extern bool is_trap(player_type *player_ptr, FEAT_IDX feat);
+void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char);
+bool is_ascii_graphics(char x);
 
 /*** Terrain feature variables ***/
 extern FEAT_IDX feat_none;

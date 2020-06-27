@@ -3,7 +3,6 @@
 #include "system/angband.h"
 
 void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);
-void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char);
 void print_time(player_type *player_ptr);
 void move_cursor_relative(int row, int col);
 void print_path(player_type *player_ptr, POSITION y, POSITION x);

@@ -34,11 +34,6 @@
 #include "view/main-window-util.h"
 #include "world/world.h"
 
-/*
- * Not using graphical tiles for this feature?
- */
-#define IS_ASCII_GRAPHICS(A) (!((A)&0x80))
-
 /*!
  * @brief ゲーム時刻を表示する /
  * Print time
@@ -147,32 +142,6 @@ void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
         *wid_p /= 2;
 }
 
-#include "grid/lighting-colors-table.h"
-
-/*!
- * @brief 調査中
- * @todo コメントを付加すること
- */
-void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char)
-{
-    TERM_COLOR s_attr = f_attr[F_LIT_STANDARD];
-    SYMBOL_CODE s_char = f_char[F_LIT_STANDARD];
-
-    if (IS_ASCII_GRAPHICS(s_attr)) /* For ASCII */
-    {
-        f_attr[F_LIT_LITE] = lighting_colours[s_attr & 0x0f][0];
-        f_attr[F_LIT_DARK] = lighting_colours[s_attr & 0x0f][1];
-        for (int i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++)
-            f_char[i] = s_char;
-    } else /* For tile graphics */
-    {
-        for (int i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++)
-            f_attr[i] = s_attr;
-        f_char[F_LIT_LITE] = s_char + 2;
-        f_char[F_LIT_DARK] = s_char + 1;
-    }
-}
-
 /*
  * Moves the cursor to a given MAP (y,x) location
  */
@@ -214,7 +183,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
             if (g_ptr->m_idx && floor_ptr->m_list[g_ptr->m_idx].ml) {
                 map_info(player_ptr, ny, nx, &a, &c, &ta, &tc);
 
-                if (!IS_ASCII_GRAPHICS(a))
+                if (!is_ascii_graphics(a))
                     a = default_color;
                 else if (c == '.' && (a == TERM_WHITE || a == TERM_L_WHITE))
                     a = default_color;
