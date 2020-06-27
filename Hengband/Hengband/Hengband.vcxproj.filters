@@ -1430,6 +1430,9 @@
     <ClCompile Include="..\..\src\floor\floor-util.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\grid\lighting-colors-table.c">
+      <Filter>grid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3147,6 +3150,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-util.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\lighting-colors-table.h">
+      <Filter>grid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

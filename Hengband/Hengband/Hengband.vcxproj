@@ -191,6 +191,7 @@
     <ClCompile Include="..\..\src\game-option\runtime-arguments.c" />
     <ClCompile Include="..\..\src\game-option\special-options.c" />
     <ClCompile Include="..\..\src\game-option\text-display-options.c" />
+    <ClCompile Include="..\..\src\grid\lighting-colors-table.c" />
     <ClCompile Include="..\..\src\info-reader\artifact-reader.c" />
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.c" />
     <ClCompile Include="..\..\src\info-reader\dungeon-reader.c" />
@@ -582,6 +583,7 @@
     <ClInclude Include="..\..\src\game-option\runtime-arguments.h" />
     <ClInclude Include="..\..\src\game-option\special-options.h" />
     <ClInclude Include="..\..\src\game-option\text-display-options.h" />
+    <ClInclude Include="..\..\src\grid\lighting-colors-table.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-reader.h" />

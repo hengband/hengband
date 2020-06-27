@@ -179,7 +179,9 @@ hengband_SOURCES = \
 	game-option/text-display-options.c game-option/text-display-options.h \
 	\
 	grid/feature.c grid/feature.h \
-	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
+	grid/grid.c grid/grid.h \
+	grid/lighting-colors-table.c grid/lighting-colors-table.h \
+	grid/trap.c grid/trap.h \
 	\
 	info-reader/artifact-reader.c info-reader/artifact-reader.h \
 	info-reader/dungeon-info-tokens-table.c info-reader/dungeon-info-tokens-table.h \
