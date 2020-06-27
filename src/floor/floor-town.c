@@ -1,12 +1,7 @@
-﻿#include "system/angband.h"
-#include "floor/floor-town.h"
+﻿#include "floor/floor-town.h"
 
-/*
- * Maximum number of towns
- */
+/* Maximum number of towns */
 TOWN_IDX max_towns;
 
-/*
- * The towns [max_towns]
- */
+/* The towns [max_towns] */
 town_type *town_info;

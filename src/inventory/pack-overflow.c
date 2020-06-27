@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "inventory/pack-overflow.h"
+﻿#include "inventory/pack-overflow.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
