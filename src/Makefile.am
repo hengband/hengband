@@ -317,6 +317,7 @@ hengband_SOURCES = \
 	mind/racial-android.c mind/racial-android.h \
 	mind/racial-balrog.c mind/racial-balrog.h \
 	mind/racial-draconian.c mind/racial-draconian.h \
+	mind/racial-kutar.c mind/racial-kutar.h \
 	mind/racial-vampire.c mind/racial-vampire.h \
 	mind/stances-table.c mind/stances-table.h \
 	\

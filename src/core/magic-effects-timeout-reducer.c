@@ -1,5 +1,6 @@
 ﻿#include "core/magic-effects-timeout-reducer.h"
 #include "game-option/birth-options.h"
+#include "mind/racial-kutar.h"
 #include "player/bad-status-setter.h"
 #include "player/player-effects.h"
 
@@ -156,7 +157,7 @@ void reduce_magic_effects_timeout(player_type *creature_ptr)
     }
 
     if (creature_ptr->tsubureru) {
-        (void)set_tsubureru(creature_ptr, creature_ptr->tsubureru - 1, TRUE);
+        (void)set_leveling(creature_ptr, creature_ptr->tsubureru - 1, TRUE);
     }
 
     if (creature_ptr->magicdef) {

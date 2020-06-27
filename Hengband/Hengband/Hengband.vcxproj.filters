@@ -1445,6 +1445,9 @@
     <ClCompile Include="..\..\src\core\status-reseter.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-kutar.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3180,6 +3183,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\status-reseter.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-kutar.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

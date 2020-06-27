@@ -37,6 +37,7 @@
 #include "mind/racial-android.h"
 #include "mind/racial-balrog.h"
 #include "mind/racial-draconian.h"
+#include "mind/racial-kutar.h"
 #include "mind/racial-vampire.h"
 #include "mind/stances-table.h"
 #include "mutation/mutation.h"
@@ -730,7 +731,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			break;
 
 		case RACE_KUTAR:
-			(void)set_tsubureru(creature_ptr, randint1(20) + 30, FALSE);
+			(void)set_leveling(creature_ptr, randint1(20) + 30, FALSE);
 			break;
 
 		case RACE_ANDROID:
