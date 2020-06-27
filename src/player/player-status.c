@@ -1452,66 +1452,7 @@ void calc_bonuses(player_type *creature_ptr)
 	}
 
 	calc_class_status(creature_ptr);
-
-	if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU))
-	{
-		creature_ptr->see_inv = TRUE;
-		creature_ptr->free_act = TRUE;
-		creature_ptr->slow_digest = TRUE;
-		creature_ptr->regenerate = TRUE;
-		creature_ptr->levitation = TRUE;
-		creature_ptr->hold_exp = TRUE;
-		creature_ptr->telepathy = TRUE;
-		creature_ptr->lite = TRUE;
-		creature_ptr->sustain_str = TRUE;
-		creature_ptr->sustain_int = TRUE;
-		creature_ptr->sustain_wis = TRUE;
-		creature_ptr->sustain_con = TRUE;
-		creature_ptr->sustain_dex = TRUE;
-		creature_ptr->sustain_chr = TRUE;
-		creature_ptr->resist_acid = TRUE;
-		creature_ptr->resist_elec = TRUE;
-		creature_ptr->resist_fire = TRUE;
-		creature_ptr->resist_cold = TRUE;
-		creature_ptr->resist_pois = TRUE;
-		creature_ptr->resist_conf = TRUE;
-		creature_ptr->resist_sound = TRUE;
-		creature_ptr->resist_lite = TRUE;
-		creature_ptr->resist_dark = TRUE;
-		creature_ptr->resist_chaos = TRUE;
-		creature_ptr->resist_disen = TRUE;
-		creature_ptr->resist_shard = TRUE;
-		creature_ptr->resist_nexus = TRUE;
-		creature_ptr->resist_blind = TRUE;
-		creature_ptr->resist_neth = TRUE;
-		creature_ptr->resist_fear = TRUE;
-		creature_ptr->reflect = TRUE;
-		creature_ptr->sh_fire = TRUE;
-		creature_ptr->sh_elec = TRUE;
-		creature_ptr->sh_cold = TRUE;
-		creature_ptr->to_a += 100;
-		creature_ptr->dis_to_a += 100;
-	}
-	else if (creature_ptr->tsubureru || creature_ptr->shield || creature_ptr->magicdef)
-	{
-		creature_ptr->to_a += 50;
-		creature_ptr->dis_to_a += 50;
-	}
-
-	if (creature_ptr->tim_res_nether)
-	{
-		creature_ptr->resist_neth = TRUE;
-	}
-
-	if (creature_ptr->tim_sh_fire)
-	{
-		creature_ptr->sh_fire = TRUE;
-	}
-
-	if (creature_ptr->tim_res_time)
-	{
-		creature_ptr->resist_time = TRUE;
-	}
+    calc_timelimit_status(creature_ptr);
 
 	if (creature_ptr->pseikaku == PERSONALITY_SEXY) creature_ptr->cursed |= (TRC_AGGRAVATE);
 	if (creature_ptr->pseikaku == PERSONALITY_LAZY) creature_ptr->to_m_chance += 10;

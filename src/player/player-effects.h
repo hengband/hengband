@@ -83,3 +83,5 @@ bool set_superstealth(player_type *creature_ptr, bool set);
 void do_poly_wounds(player_type *creature_ptr);
 void change_race(player_type *creature_ptr, player_race_type new_race, concptr effect_msg);
 bool drop_weapons(player_type *creature_ptr);
+
+void calc_timelimit_status(player_type *creature_ptr);

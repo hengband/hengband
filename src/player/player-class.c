@@ -4,6 +4,7 @@
  * @author deskull
  */
 
+#include "player/player-race.h"
 #include "player/player-class.h"
 #include "system/object-type-definition.h"
 
