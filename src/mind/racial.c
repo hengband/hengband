@@ -38,6 +38,7 @@
 #include "mind/racial-balrog.h"
 #include "mind/racial-draconian.h"
 #include "mind/racial-vampire.h"
+#include "mind/stances-table.h"
 #include "mutation/mutation.h"
 #include "object/object-hook.h"
 #include "player/player-class.h"
@@ -80,9 +81,9 @@ static bool choose_kamae(player_type *creature_ptr)
 
 	for (i = 0; i < MAX_KAMAE; i++)
 	{
-		if (creature_ptr->lev >= kamae_shurui[i].min_level)
+		if (creature_ptr->lev >= monk_stances[i].min_level)
 		{
-			sprintf(buf," %c) %-12s  %s",I2A(i+1), kamae_shurui[i].desc, kamae_shurui[i].info);
+			sprintf(buf," %c) %-12s  %s",I2A(i+1), monk_stances[i].desc, monk_stances[i].info);
 			prt(buf, 3+i, 20);
 		}
 	}
@@ -142,7 +143,7 @@ static bool choose_kamae(player_type *creature_ptr)
 		creature_ptr->special_defense &= ~(KAMAE_MASK);
 		creature_ptr->update |= (PU_BONUS);
 		creature_ptr->redraw |= (PR_STATE);
-		msg_format(_("%sの構えをとった。", "You assume the %s stance."), kamae_shurui[new_kamae].desc);
+		msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[new_kamae].desc);
 		creature_ptr->special_defense |= (KAMAE_GENBU << new_kamae);
 	}
 	creature_ptr->redraw |= PR_STATE;

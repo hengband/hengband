@@ -3,10 +3,10 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"
+#include "mind/stances-table.h"
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
-#include "player/player-effects.h"
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "sv-definition/sv-bow-types.h"
@@ -76,7 +76,7 @@ static void display_left_hand(player_type *creature_ptr)
 
 	if (kamae_num < MAX_KAMAE)
 	{
-		display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), kamae_shurui[kamae_num].desc), TERM_YELLOW);
+		display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), monk_stances[kamae_num].desc), TERM_YELLOW);
 	}
 }
 

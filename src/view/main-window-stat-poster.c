@@ -1,9 +1,9 @@
 ﻿#include "view/main-window-stat-poster.h"
 #include "floor/floor.h"
-#include "realm/realm-hex-numbers.h"
 #include "io/input-key-requester.h"
+#include "mind/stances-table.h"
 #include "monster/monster-status.h"
-#include "player/player-effects.h"
+#include "realm/realm-hex-numbers.h"
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
 #include "term/screen-processor.h"
@@ -234,7 +234,7 @@ void print_state(player_type *player_ptr)
             break;
         }
 
-        strcpy(text, kamae_shurui[i].desc);
+        strcpy(text, monk_stances[i].desc);
         break;
     }
     case ACTION_KATA: {
@@ -243,7 +243,7 @@ void print_state(player_type *player_ptr)
             if (player_ptr->special_defense & (KATA_IAI << i))
                 break;
 
-        strcpy(text, kata_shurui[i].desc);
+        strcpy(text, samurai_stances[i].desc);
         break;
     }
     case ACTION_SING: {

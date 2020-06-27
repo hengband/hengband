@@ -317,6 +317,7 @@ hengband_SOURCES = \
 	mind/racial-balrog.c mind/racial-balrog.h \
 	mind/racial-draconian.c mind/racial-draconian.h \
 	mind/racial-vampire.c mind/racial-vampire.h \
+	mind/stances-table.c mind/stances-table.h \
 	\
 	monster/horror-descriptions.c monster/horror-descriptions.h \
 	monster/monster-compaction.c monster/monster-compaction.h \

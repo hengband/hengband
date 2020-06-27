@@ -9,6 +9,7 @@
 #include "cmd-action/cmd-pet.h"
 #include "cmd/cmd-basic.h"
 #include "io/input-key-acceptor.h"
+#include "mind/stances-table.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
@@ -346,8 +347,8 @@ bool choose_kata(player_type *creature_ptr)
     screen_save();
     prt(_(" a) 型を崩す", " a) No Form"), 2, 20);
     for (i = 0; i < MAX_KATA; i++) {
-        if (creature_ptr->lev >= kata_shurui[i].min_level) {
-            sprintf(buf, _(" %c) %sの型    %s", " %c) Stance of %-12s  %s"), I2A(i + 1), kata_shurui[i].desc, kata_shurui[i].info);
+        if (creature_ptr->lev >= samurai_stances[i].min_level) {
+            sprintf(buf, _(" %c) %sの型    %s", " %c) Stance of %-12s  %s"), I2A(i + 1), samurai_stances[i].desc, samurai_stances[i].info);
             prt(buf, 3 + i, 20);
         }
     }
@@ -389,7 +390,7 @@ bool choose_kata(player_type *creature_ptr)
     } else {
         creature_ptr->special_defense &= ~(KATA_MASK);
         creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
-        msg_format(_("%sの型で構えた。", "You assume the %s stance."), kata_shurui[new_kata].desc);
+        msg_format(_("%sの型で構えた。", "You assume the %s stance."), samurai_stances[new_kata].desc);
         creature_ptr->special_defense |= (KATA_IAI << new_kata);
     }
 

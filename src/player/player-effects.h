@@ -2,15 +2,6 @@
 
 #include "system/angband.h"
 
-typedef struct kamae {
-	concptr desc;       /* A verbose kamae description */
-	PLAYER_LEVEL min_level;  /* Minimum level to use */
-	concptr info;
-} kamae;
-
-extern const kamae kamae_shurui[MAX_KAMAE];
-extern const kamae kata_shurui[MAX_KATA];
-
 void set_action(player_type *creature_ptr, ACTION_IDX typ);
 void reset_tim_flags(player_type *creature_ptr);
 void dispel_player(player_type *creature_ptr);

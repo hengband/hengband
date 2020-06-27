@@ -1436,6 +1436,9 @@
     <ClCompile Include="..\..\src\io\screen-util.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\stances-table.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3159,6 +3162,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\screen-util.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\stances-table.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
