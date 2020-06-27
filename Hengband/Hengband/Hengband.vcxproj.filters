@@ -1457,6 +1457,9 @@
     <ClCompile Include="..\..\src\spell-kind\spells-recall.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-chaos.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3204,6 +3207,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-recall.h">
       <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-chaos.h">
+      <Filter>spell-realm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -217,6 +217,7 @@
     <ClCompile Include="..\..\src\mind\stances-table.c" />
     <ClCompile Include="..\..\src\player\bad-status-setter.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-recall.c" />
+    <ClCompile Include="..\..\src\spell-realm\spells-chaos.c" />
     <ClCompile Include="..\..\src\view\display-map.c" />
     <ClCompile Include="..\..\src\view\display-sub-windows.c" />
     <ClCompile Include="..\..\src\view\main-window-left-frame.c" />
@@ -627,6 +628,7 @@
     <ClInclude Include="..\..\src\player\bad-status-setter.h" />
     <ClInclude Include="..\..\src\player\special-defense-types.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-recall.h" />
+    <ClInclude Include="..\..\src\spell-realm\spells-chaos.h" />
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />

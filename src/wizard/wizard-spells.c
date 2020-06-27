@@ -14,8 +14,8 @@
 #include "mspell/mspells3.h"
 #include "player/player-effects.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-chaos.h"
 #include "spell/spells-status.h"
-#include "spell/spells3.h"
 #include "view/display-messages.h"
 
 debug_spell_command debug_spell_commands_list[SPELL_MAX] = {

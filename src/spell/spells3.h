@@ -7,7 +7,6 @@
 bool eat_magic(player_type *caster_ptr, int power);
 
 bool apply_disenchant(player_type* target_ptr, BIT_FLAGS mode);
-void call_the_void(player_type* caster_ptr);
 void fetch(player_type* caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los);
 void reserve_alter_reality(player_type* caster_ptr);
 void identify_pack(player_type* target_ptr);
@@ -37,4 +36,3 @@ bool booze(player_type* creature_ptr);
 bool detonation(player_type* creature_ptr);
 void blood_curse_to_enemy(player_type* caster_ptr, MONSTER_IDX m_idx);
 bool fire_crimson(player_type* shooter_ptr);
-bool vanish_dungeon(player_type *caster_ptr);
