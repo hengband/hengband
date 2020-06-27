@@ -48,3 +48,22 @@ void health_track(player_type *player_ptr, MONSTER_IDX m_idx)
     player_ptr->health_who = m_idx;
     player_ptr->redraw |= (PR_HEALTH);
 }
+
+bool update_player(player_type *caster_ptr)
+{
+    caster_ptr->update |= PU_COMBINE | PU_REORDER;
+    caster_ptr->window |= PW_INVEN;
+    return TRUE;
+}
+
+bool redraw_player(player_type *caster_ptr)
+{
+    if (caster_ptr->csp > caster_ptr->msp) {
+        caster_ptr->csp = caster_ptr->msp;
+    }
+
+    caster_ptr->redraw |= PR_MANA;
+    caster_ptr->update |= PU_COMBINE | PU_REORDER;
+    caster_ptr->window |= PW_INVEN;
+    return TRUE;
+}

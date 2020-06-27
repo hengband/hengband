@@ -23,6 +23,7 @@
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
+#include "mind/mind-mage.h"
 #include "mind/mind-warrior.h"
 #include "mind/racial-vampire.h"
 #include "monster-floor/monster-remover.h"

@@ -4,7 +4,6 @@
 #include "spell/spells-util.h"
 #include "system/angband.h"
 
-bool eat_magic(player_type *caster_ptr, int power);
 bool apply_disenchant(player_type* target_ptr, BIT_FLAGS mode);
 void fetch(player_type* caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los);
 void reserve_alter_reality(player_type* caster_ptr);

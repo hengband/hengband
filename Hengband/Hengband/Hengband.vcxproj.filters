@@ -1466,6 +1466,9 @@
     <ClCompile Include="..\..\src\spell-kind\spells-perception.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-mage.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3222,6 +3225,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-perception.h">
       <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-mage.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

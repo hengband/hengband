@@ -28,6 +28,7 @@
 #include "melee/melee-postprocess.h"
 #include "mind/mind-cavalry.h"
 #include "mind/mind-force-trainer.h"
+#include "mind/mind-mage.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
@@ -325,18 +326,22 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			break;
 		}
 		case CLASS_HIGH_MAGE:
-		if (creature_ptr->realm1 == REALM_HEX)
-		{
-			bool retval = stop_hex_spell(creature_ptr);
-			if (retval) creature_ptr->energy_use = 10;
-			return (retval);
-		}
+			if (creature_ptr->realm1 == REALM_HEX)
+			{
+				bool retval = stop_hex_spell(creature_ptr);
+				if (retval)
+					creature_ptr->energy_use = 10;
+
+				return retval;
+			}
+
 			/* Fall through */
 		case CLASS_MAGE:
-		/* case CLASS_HIGH_MAGE: */
 		case CLASS_SORCERER:
 		{
-			if (!eat_magic(creature_ptr, creature_ptr->lev * 2)) return FALSE;
+			if (!eat_magic(creature_ptr, creature_ptr->lev * 2))
+				return FALSE;
+
 			break;
 		}
 		case CLASS_PRIEST:
