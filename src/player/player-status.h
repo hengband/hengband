@@ -521,6 +521,8 @@ typedef struct player_type
 	bool old_riding_wield[2];
 	bool old_riding_ryoute;
 	bool old_monlite;
+    int extra_blows[2];
+
 
 	POSITION old_lite;		/* Old radius of lite (if any) */
 
@@ -532,6 +534,10 @@ typedef struct player_type
 	bool riding_wield[2];	/* Riding weapon */
 	bool riding_ryoute;	/* Riding weapon */
 	bool monlite;
+    bool yoiyami;
+    bool easy_2weapon;
+	bool down_saving;
+
 
 	POSITION cur_lite;		/* Radius of lite (if any) */
 
