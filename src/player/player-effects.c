@@ -71,34 +71,20 @@
  * @brief 修行僧の構え能力テーブル
  */
 const kamae kamae_shurui[MAX_KAMAE] = {
-#ifdef JP
-    { "玄武", 25, "" },
-    { "白虎", 30, "" },
-    { "青竜", 35, "" },
-    { "朱雀", 40, "" },
-#else
-    { "Genbu", 25, "(Black Tortoise) " },
-    { "Byakko", 30, "(White Tiger) " },
-    { "Seiryuu", 35, "(Blue Dragon) " },
-    { "Suzaku", 40, "(Red Phoenix) " },
-#endif
+    { _("玄武", "Genbu"), 25, _("", "(Black Tortoise) ") },
+    { _("白虎", "Byakko"), 30, _("", "(White Tiger) ") },
+    { _("青竜", "Seiryuu"), 35, _("", "(Blue Dragon) ") },
+    { _("朱雀", "Suzaku"), 40, _("", "(Red Phoenix) ") },
 };
 
 /*!
  * @brief 剣術家の構え能力テーブル
  */
 const kamae kata_shurui[MAX_KATA] = {
-#ifdef JP
-    { "居合", 25, "" },
-    { "風塵", 30, "" },
-    { "降鬼", 35, "" },
-    { "無想", 40, "" },
-#else
-    { "Iai", 25, "" },
-    { "Huujin", 30, "" },
-    { "Kouki", 35, "" },
-    { "Musou", 40, "" },
-#endif
+    { _("居合", "Iai"), 25, "" },
+    { _("風塵", "Huujin"), 30, "" },
+    { _("降鬼", "Kouki"), 35, "" },
+    { _("無想", "Musou"), 40, "" },
 };
 
 /*!
