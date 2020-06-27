@@ -9,7 +9,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object-enchant/special-object-flags.h"
-#include "spell/spells3.h"
+#include "spell-kind/spells-perception.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 

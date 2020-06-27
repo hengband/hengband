@@ -13,6 +13,7 @@
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-neighbor.h"
+#include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell/process-effect.h"
@@ -21,7 +22,6 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
-#include "spell/spells3.h"
 
 /*!
 * @brief 暗黒領域魔法の各処理を行う

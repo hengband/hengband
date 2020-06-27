@@ -64,7 +64,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
-#include "spell/spells3.h"
+#include "spell-kind/spells-perception.h"
 #include "sv-definition/sv-lite-types.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"

@@ -103,10 +103,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-// todo コピペ感が強くなったので関数化
-static bool update_player(player_type *caster_ptr);
-static bool redraw_player(player_type *caster_ptr);
-
 /*!
  * @brief プレイヤーの装備劣化処理 /
  * Apply disenchantment to the player's stuff
@@ -325,25 +321,6 @@ void reserve_alter_reality(player_type *caster_ptr)
 }
 
 /*!
- * @brief 全所持アイテム鑑定処理 /
- * Identify everything being carried.
- * Done by a potion of "self knowledge".
- * @param target_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void identify_pack(player_type *target_ptr)
-{
-    for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &target_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        identify_item(target_ptr, o_ptr);
-        autopick_alter_item(target_ptr, i, FALSE);
-    }
-}
-
-/*!
  * @brief アイテムの価値に応じた錬金術処理 /
  * Turns an object into gold, gain some of its value in a shop
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -499,99 +476,6 @@ bool artifact_scroll(player_type *caster_ptr)
 }
 
 /*!
- * @brief アイテム鑑定処理 /
- * Identify an object
- * @param owner_ptr プレーヤーへの参照ポインタ
- * @param o_ptr 鑑定されるアイテムの情報参照ポインタ
- * @return 実際に鑑定できたらTRUEを返す
- */
-bool identify_item(player_type *owner_ptr, object_type *o_ptr)
-{
-    GAME_TEXT o_name[MAX_NLEN];
-    object_desc(owner_ptr, o_name, o_ptr, 0);
-
-    bool old_known = FALSE;
-    if (o_ptr->ident & IDENT_KNOWN)
-        old_known = TRUE;
-
-    if (!object_is_fully_known(o_ptr)) {
-        if (object_is_artifact(o_ptr) || one_in_(5))
-            chg_virtue(owner_ptr, V_KNOWLEDGE, 1);
-    }
-
-    object_aware(owner_ptr, o_ptr);
-    object_known(o_ptr);
-    o_ptr->marked |= OM_TOUCHED;
-
-    owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    owner_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-
-    strcpy(record_o_name, o_name);
-    record_turn = current_world_ptr->game_turn;
-
-    object_desc(owner_ptr, o_name, o_ptr, OD_NAME_ONLY);
-
-    if (record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
-        exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
-    if (record_rand_art && !old_known && o_ptr->art_name)
-        exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
-
-    return old_known;
-}
-
-/*!
- * @brief アイテム鑑定のメインルーチン処理 /
- * Identify an object in the inventory (or on the floor)
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param only_equip 装備品のみを対象とするならばTRUEを返す
- * @return 実際に鑑定を行ったならばTRUEを返す
- * @details
- * This routine does *not* automatically combine objects.
- * Returns TRUE if something was identified, else FALSE.
- */
-bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester_tval)
-{
-    if (only_equip)
-        item_tester_hook = item_tester_hook_identify_weapon_armour;
-    else
-        item_tester_hook = item_tester_hook_identify;
-
-    concptr q;
-    if (can_get_item(caster_ptr, item_tester_tval)) {
-        q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
-    } else {
-        if (only_equip)
-            item_tester_hook = object_is_weapon_armour_ammo;
-        else
-            item_tester_hook = NULL;
-
-        q = _("すべて鑑定済みです。 ", "All items are identified. ");
-    }
-
-    concptr s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
-    OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-    if (!o_ptr)
-        return FALSE;
-
-    bool old_known = identify_item(caster_ptr, o_ptr);
-
-    GAME_TEXT o_name[MAX_NLEN];
-    object_desc(caster_ptr, o_name, o_ptr, 0);
-    if (item >= INVEN_RARM) {
-        msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
-    } else if (item >= 0) {
-        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
-    } else {
-        msg_format(_("床上: %s。", "On the ground: %s."), o_name);
-    }
-
-    autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
-    return TRUE;
-}
-
-/*!
  * @brief アイテム凡庸化のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
  * @param owner_ptr プレーヤーへの参照ポインタ
@@ -640,60 +524,22 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     return TRUE;
 }
 
-/*!
- * @brief アイテム*鑑定*のメインルーチン処理 /
- * Identify an object in the inventory (or on the floor)
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param only_equip 装備品のみを対象とするならばTRUEを返す
- * @return 実際に鑑定を行ったならばTRUEを返す
- * @details
- * Fully "identify" an object in the inventory -BEN-
- * This routine returns TRUE if an item was identified.
- */
-bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tester_tval)
+static bool update_player(player_type *caster_ptr)
 {
-    if (only_equip)
-        item_tester_hook = item_tester_hook_identify_fully_weapon_armour;
-    else
-        item_tester_hook = item_tester_hook_identify_fully;
+    caster_ptr->update |= PU_COMBINE | PU_REORDER;
+    caster_ptr->window |= PW_INVEN;
+    return TRUE;
+}
 
-    concptr q;
-    if (can_get_item(caster_ptr, item_tester_tval)) {
-        q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
-    } else {
-        if (only_equip)
-            item_tester_hook = object_is_weapon_armour_ammo;
-        else
-            item_tester_hook = NULL;
-
-        q = _("すべて*鑑定*済みです。 ", "All items are *identified*. ");
+static bool redraw_player(player_type *caster_ptr)
+{
+    if (caster_ptr->csp > caster_ptr->msp) {
+        caster_ptr->csp = caster_ptr->msp;
     }
 
-    concptr s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
-
-    OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-    if (!o_ptr)
-        return FALSE;
-
-    bool old_known = identify_item(caster_ptr, o_ptr);
-
-    o_ptr->ident |= (IDENT_FULL_KNOWN);
-    handle_stuff(caster_ptr);
-
-    GAME_TEXT o_name[MAX_NLEN];
-    object_desc(caster_ptr, o_name, o_ptr, 0);
-    if (item >= INVEN_RARM) {
-        msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
-    } else if (item >= 0) {
-        msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
-    } else {
-        msg_format(_("床上: %s。", "On the ground: %s."), o_name);
-    }
-
-    (void)screen_object(caster_ptr, o_ptr, 0L);
-    autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
+    caster_ptr->redraw |= PR_MANA;
+    caster_ptr->update |= PU_COMBINE | PU_REORDER;
+    caster_ptr->window |= PW_INVEN;
     return TRUE;
 }
 
@@ -1804,32 +1650,25 @@ bool fetch_monster(player_type *caster_ptr)
             tx = nx;
         }
     }
-    /* Update the old location */
+
     caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx = 0;
-
-    /* Update the new location */
     caster_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
-
-    /* Move the monster */
     m_ptr->fy = ty;
     m_ptr->fx = tx;
-
-    /* Wake the monster up */
     (void)set_monster_csleep(caster_ptr, m_idx, 0);
-
     update_monster(caster_ptr, m_idx, TRUE);
     lite_spot(caster_ptr, target_row, target_col);
     lite_spot(caster_ptr, ty, tx);
-
     if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
         caster_ptr->update |= (PU_MON_LITE);
 
     if (m_ptr->ml) {
-        /* Auto-Recall if possible and visible */
         if (!caster_ptr->image)
             monster_race_track(caster_ptr, m_ptr->ap_r_idx);
+
         health_track(caster_ptr, m_idx);
     }
+
     return TRUE;
 }
 
@@ -2104,24 +1943,5 @@ bool tele_town(player_type *caster_ptr)
     caster_ptr->leave_bldg = TRUE;
     caster_ptr->teleport_town = TRUE;
     screen_load();
-    return TRUE;
-}
-
-static bool update_player(player_type *caster_ptr)
-{
-    caster_ptr->update |= PU_COMBINE | PU_REORDER;
-    caster_ptr->window |= PW_INVEN;
-    return TRUE;
-}
-
-static bool redraw_player(player_type *caster_ptr)
-{
-    if (caster_ptr->csp > caster_ptr->msp) {
-        caster_ptr->csp = caster_ptr->msp;
-    }
-
-    caster_ptr->redraw |= PR_MANA;
-    caster_ptr->update |= PU_COMBINE | PU_REORDER;
-    caster_ptr->window |= PW_INVEN;
     return TRUE;
 }

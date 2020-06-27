@@ -7,6 +7,7 @@
 #include "player/player-status.h"
 #include "player/selfinfo.h"
 #include "spell-kind/spells-curse-removal.h"
+#include "spell-kind/spells-perception.h"
 #include "spell/range-calc.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"

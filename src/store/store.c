@@ -72,7 +72,7 @@
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"
-#include "spell/spells3.h"
+#include "spell-kind/spells-perception.h"
 #include "store/black-market.h"
 #include "store/rumor.h"
 #include "store/say-comments.h"
