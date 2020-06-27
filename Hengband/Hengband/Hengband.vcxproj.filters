@@ -1001,9 +1001,6 @@
     <ClCompile Include="..\..\src\spell-kind\spells-teleport.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-world.c">
-      <Filter>spell-kind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell-kind\spells-charm.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
@@ -2576,9 +2573,6 @@
       <Filter>spell-kind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-teleport.h">
-      <Filter>spell-kind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell-kind\spells-world.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-charm.h">
