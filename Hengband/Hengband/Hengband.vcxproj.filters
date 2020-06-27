@@ -1451,6 +1451,9 @@
     <ClCompile Include="..\..\src\wizard\spoiler-table.c">
       <Filter>wizard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-spells.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3191,6 +3194,9 @@
       <Filter>wizard</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\wizard\spoiler-table.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-spells.h">
       <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>

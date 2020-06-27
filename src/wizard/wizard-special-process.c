@@ -21,7 +21,6 @@
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save.h"
-#include "floor/floor.h"
 #include "game-option/option-types-table.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
@@ -35,16 +34,13 @@
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "market/arena.h"
-#include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
-#include "monster-floor/place-monster-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
-#include "mspell/mspells3.h"
 #include "mutation/mutation.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/artifact.h"
@@ -84,6 +80,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/tval-descriptions-table.h"
+#include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 
@@ -91,88 +88,6 @@
 
 #define NUM_O_SET 8
 #define NUM_O_BIT 32
-
-typedef union spell_functions {
-    struct debug_spell_type1 {
-        bool (*spell_function)(player_type *, floor_type *);
-    } spell1;
-
-    struct debug_spell_type2 {
-        bool (*spell_function)(player_type *);
-    } spell2;
-
-    struct debug_spell_type3 {
-        bool (*spell_function)(player_type *, HIT_POINT);
-    } spell3;
-
-} spell_functions;
-
-typedef struct debug_spell_command {
-    int type;
-    char *command_name;
-    spell_functions command_function;
-} debug_spell_command;
-
-#define SPELL_MAX 3
-
-debug_spell_command debug_spell_commands_list[SPELL_MAX] =
-{
-    { 2, "vanish dungeon", { .spell2 = { vanish_dungeon } } },
-    { 3, "true healing", { .spell3 = { true_healing } } },
-    { 2, "drop weapons", { .spell2 = { drop_weapons } } },
-};
-
-/*!
- * @brief コマンド入力により任意にスペル効果を起こす / Wizard spells
- * @return 実際にテレポートを行ったらTRUEを返す
- */
-static bool do_cmd_debug_spell(player_type *creature_ptr)
-{
-    char tmp_val[50] = "\0";
-    int tmp_int;
-
-    if (!get_string("SPELL: ", tmp_val, 32))
-        return FALSE;
-
-    for (int i = 0; i < SPELL_MAX; i++) {
-        if (strcmp(tmp_val, debug_spell_commands_list[i].command_name) != 0)
-            continue;
-
-        switch (debug_spell_commands_list[i].type) {
-        case 2:
-            (*(debug_spell_commands_list[i].command_function.spell2.spell_function))(creature_ptr);
-            return TRUE;
-            break;
-        case 3:
-            tmp_val[0] = '\0';
-            if (!get_string("POWER:", tmp_val, 32))
-                return FALSE;
-            tmp_int = atoi(tmp_val);
-            (*(debug_spell_commands_list[i].command_function.spell3.spell_function))(creature_ptr, tmp_int);
-            return TRUE;
-            break;
-        default:
-            break;
-        }
-    }
-
-    msg_format("Command not found.");
-    return FALSE;
-}
-
-/*!
- * @brief 必ず成功するウィザードモード用次元の扉処理 / Wizard Dimension Door
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-static void wiz_dimension_door(player_type *caster_ptr)
-{
-    POSITION x = 0, y = 0;
-    if (!tgt_pt(caster_ptr, &x, &y))
-        return;
-
-    teleport_player_to(caster_ptr, y, x, TELEPORT_NONMAGICAL);
-}
 
 /*!
  * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
@@ -191,25 +106,6 @@ static void wiz_create_named_art(player_type *caster_ptr)
 
     (void)create_named_art(caster_ptr, a_idx, caster_ptr->y, caster_ptr->x);
     msg_print("Allocated.");
-}
-
-/*!
- * @brief ウィザードモード用モンスターの群れ生成 / Summon a horde of monsters
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-static void do_cmd_summon_horde(player_type *caster_ptr)
-{
-    POSITION wy = caster_ptr->y, wx = caster_ptr->x;
-    int attempts = 1000;
-
-    while (--attempts) {
-        scatter(caster_ptr, &wy, &wx, caster_ptr->y, caster_ptr->x, 3, 0);
-        if (is_cave_empty_bold(caster_ptr, wy, wx))
-            break;
-    }
-
-    (void)alloc_horde(caster_ptr, wy, wx, summon_specific);
 }
 
 /*!
@@ -318,18 +214,6 @@ static void do_cmd_wiz_reset_class(player_type *creature_ptr)
     creature_ptr->window |= (PW_PLAYER);
     creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     handle_stuff(creature_ptr);
-}
-
-/*!
- * @brief ウィザードモード用処理としてターゲット中の相手をテレポートバックする / Hack -- Teleport to the target
- * @return なし
- */
-static void do_cmd_wiz_bamf(player_type *caster_ptr)
-{
-    if (!target_who)
-        return;
-
-    teleport_player_to(caster_ptr, target_row, target_col, TELEPORT_NONMAGICAL);
 }
 
 /*!
@@ -829,35 +713,6 @@ static void wiz_quantity_item(object_type *o_ptr)
 }
 
 /*!
- * @brief 青魔導師の魔法を全て習得済みにする /
- * debug command for blue mage
- * @return なし
- */
-static void do_cmd_wiz_blue_mage(player_type *caster_ptr)
-{
-    BIT_FLAGS f4 = 0L, f5 = 0L, f6 = 0L;
-    for (int j = 1; j < A_MAX; j++) {
-        set_rf_masks(&f4, &f5, &f6, j);
-
-        int i;
-        for (i = 0; i < 32; i++) {
-            if ((0x00000001 << i) & f4)
-                caster_ptr->magic_num2[i] = 1;
-        }
-
-        for (; i < 64; i++) {
-            if ((0x00000001 << (i - 32)) & f5)
-                caster_ptr->magic_num2[i] = 1;
-        }
-
-        for (; i < 96; i++) {
-            if ((0x00000001 << (i - 64)) & f6)
-                caster_ptr->magic_num2[i] = 1;
-        }
-    }
-}
-
-/*!
  * @brief アイテム検査のメインルーチン /
  * Play with an item. Options include:
  * @return なし
@@ -1058,46 +913,6 @@ static void do_cmd_wiz_learn(player_type *caster_ptr)
             object_aware(caster_ptr, q_ptr);
         }
     }
-}
-
-/*!
- * @brief 現在のフロアに合ったモンスターをランダムに召喚する /
- * Summon some creatures
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param num 生成処理回数
- * @return なし
- */
-static void do_cmd_wiz_summon(player_type *caster_ptr, int num)
-{
-    for (int i = 0; i < num; i++) {
-        (void)summon_specific(caster_ptr, 0, caster_ptr->y, caster_ptr->x, caster_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
-    }
-}
-
-/*!
- * @brief モンスターを種族IDを指定して敵対的に召喚する /
- * Summon a creature of the specified type
- * @param r_idx モンスター種族ID
- * @return なし
- * @details
- * This function is rather dangerous
- */
-static void do_cmd_wiz_named(player_type *summoner_ptr, MONRACE_IDX r_idx)
-{
-    (void)summon_named_creature(summoner_ptr, 0, summoner_ptr->y, summoner_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-}
-
-/*!
- * @brief モンスターを種族IDを指定してペット召喚する /
- * Summon a creature of the specified type
- * @param r_idx モンスター種族ID
- * @return なし
- * @details
- * This function is rather dangerous
- */
-static void do_cmd_wiz_named_friendly(player_type *summoner_ptr, MONRACE_IDX r_idx)
-{
-    (void)summon_named_creature(summoner_ptr, 0, summoner_ptr->y, summoner_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET));
 }
 
 /*!
