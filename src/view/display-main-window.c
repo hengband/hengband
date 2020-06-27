@@ -35,24 +35,6 @@
 #include "world/world.h"
 
 /*!
- * @brief ゲーム時刻を表示する /
- * Print time
- * @return なし
- */
-void print_time(player_type *player_ptr)
-{
-    int day, hour, min;
-    c_put_str(TERM_WHITE, "             ", ROW_DAY, COL_DAY);
-    extract_day_hour_min(player_ptr, &day, &hour, &min);
-    if (day < 1000)
-        c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), ROW_DAY, COL_DAY);
-    else
-        c_put_str(TERM_WHITE, _("***日目", "Day***"), ROW_DAY, COL_DAY);
-
-    c_put_str(TERM_WHITE, format("%2d:%02d", hour, min), ROW_DAY, COL_DAY + 7);
-}
-
-/*!
  * todo ここにplayer_type を追加するとz-termに影響が行くので保留
  * @brief コンソールのリサイズに合わせてマップを再描画する /
  * Map resizing whenever the main term changes size

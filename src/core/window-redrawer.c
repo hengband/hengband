@@ -11,7 +11,6 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "view/display-sub-windows.h"
@@ -19,6 +18,7 @@
 #include "view/main-window-row-column.h"
 #include "view/main-window-stat-poster.h"
 #include "view/main-window-util.h"
+#include "world/world-turn-processor.h"
 #include "world/world.h"
 
 /*!

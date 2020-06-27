@@ -34,6 +34,7 @@
 #include "term/screen-processor.h"
 #include "view/display-main-window.h"
 #include "view/display-messages.h"
+#include "world/world-turn-processor.h"
 
 bool load = TRUE;
 bool can_save = FALSE;
