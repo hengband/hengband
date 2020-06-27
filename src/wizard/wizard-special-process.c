@@ -84,7 +84,6 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"

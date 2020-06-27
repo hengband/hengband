@@ -1427,6 +1427,9 @@
     <ClCompile Include="..\..\src\cmd-visual\cmd-visuals.c">
       <Filter>cmd-visual</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-util.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3142,6 +3145,9 @@
     <ClInclude Include="..\..\src\cmd-visual\cmd-visuals.h">
       <Filter>cmd-visual</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-util.h">
+      <Filter>floor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3256,9 +3262,6 @@
     <Filter Include="io-dump">
       <UniqueIdentifier>{739c9774-e51a-46eb-87c1-cd7cd332e97c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="cmd-building">
-      <UniqueIdentifier>{6982e0e0-d2db-422e-8e92-77b1276e4030}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sv-definition">
       <UniqueIdentifier>{9e020507-fdf0-4cfb-9d60-d9c26cbcf325}</UniqueIdentifier>
     </Filter>
@@ -3306,6 +3309,9 @@
     </Filter>
     <Filter Include="cmd-visual">
       <UniqueIdentifier>{30be068e-64fc-431f-a90b-07f12e2539a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd-building">
+      <UniqueIdentifier>{6982e0e0-d2db-422e-8e92-77b1276e4030}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

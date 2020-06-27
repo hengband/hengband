@@ -12,7 +12,6 @@
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-messages.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "world/world.h"
@@ -78,12 +77,12 @@ void do_cmd_player_status(player_type *creature_ptr)
 	while (TRUE)
 	{
 		update_playtime();
-		display_player(creature_ptr, mode, map_name);
+		display_player(creature_ptr, mode);
 
 		if (mode == 4)
 		{
 			mode = 0;
-			display_player(creature_ptr, mode, map_name);
+			display_player(creature_ptr, mode);
 		}
 
 		Term_putstr(2, 23, -1, TERM_WHITE,
@@ -103,7 +102,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 			{
 				if (tmp[0] && (tmp[0] != ' '))
 				{
-					file_character(creature_ptr, tmp, update_playtime, display_player, map_name);
+					file_character(creature_ptr, tmp, update_playtime, display_player);
 				}
 			}
 		}

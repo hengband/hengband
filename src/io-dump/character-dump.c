@@ -565,13 +565,13 @@ static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
  * @param fff ファイルポインタ
  * @return エラーコード
  */
-void make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
+void make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_playtime)(void), display_player_pf display_player)
 {
 	fprintf(fff, _("  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n", "  [Hengband %d.%d.%d Character Dump]\n\n"),
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 	(*update_playtime)();
 
-	dump_aux_player_status(creature_ptr, fff, display_player, map_name);
+	dump_aux_player_status(creature_ptr, fff, display_player);
 	dump_aux_last_message(creature_ptr, fff);
 	dump_aux_options(fff);
 	dump_aux_recall(fff);

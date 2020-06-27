@@ -436,7 +436,7 @@ void display_scores(int from, int to)
  * @param do_send 実際に転送ア処置を行うか否か
  * @return 転送が成功したらTRUEを返す
  */
-bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
+bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), display_player_pf display_player)
 {
 #ifdef WORLD_SCORE
 	if (send_score && do_send)
@@ -457,7 +457,7 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, void(*updat
 		prt(_("送信中．．", "Sending..."), 0, 0);
 		Term_fresh();
 		screen_save();
-		err = report_score(current_player_ptr, update_playtime, display_player, map_name);
+		err = report_score(current_player_ptr, update_playtime, display_player);
 		screen_load();
 		if (err) return FALSE;
 

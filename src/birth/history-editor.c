@@ -1,12 +1,10 @@
 ﻿#include "birth/history-editor.h"
-#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "locale/japanese.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-player.h" // 暫定。後で消す.
 
 /*!
@@ -33,7 +31,7 @@ void edit_history(player_type *creature_ptr, void (*process_autopick_file_comman
         creature_ptr->history[i][59] = '\0';
     }
 
-    display_player(creature_ptr, 1, map_name);
+    display_player(creature_ptr, 1);
     c_put_str(TERM_L_GREEN, _("(キャラクターの生い立ち - 編集モード)", "(Character Background - Edit Mode)"), 11, 20);
     put_str(_("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", "[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]"), 17, 10);
     TERM_LEN y = 0;

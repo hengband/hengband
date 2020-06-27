@@ -15,7 +15,6 @@
 #include "system/monster-type-definition.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
-#include "view/display-main-window.h" // todo map_name() のせいで相互依存している、後で何とかする.
 #include "view/display-map.h"
 #include "view/display-messages.h"
 #include "view/display-lore.h"
@@ -243,7 +242,7 @@ void fix_player(player_type *player_ptr)
 
         Term_activate(angband_term[j]);
         update_playtime();
-        display_player(player_ptr, 0, map_name);
+        display_player(player_ptr, 0);
         Term_fresh();
         Term_activate(old);
     }

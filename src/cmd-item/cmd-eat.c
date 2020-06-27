@@ -33,7 +33,6 @@
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
 

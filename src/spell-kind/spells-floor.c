@@ -39,7 +39,6 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 /*

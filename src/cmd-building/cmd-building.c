@@ -26,7 +26,6 @@
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/music-definitions-table.h"

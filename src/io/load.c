@@ -32,7 +32,6 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "info-reader/fixed-map-parser.h"
-#include "io/files-util.h"
 #include "io/report.h"
 #include "io/save.h"
 #include "io/uid-checker.h"

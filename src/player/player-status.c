@@ -20,7 +20,6 @@
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-object.h"
-#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"

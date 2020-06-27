@@ -17,7 +17,6 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "view/display-messages.h"
-#include "view/display-main-window.h"
 
 /*!
 * @brief 歌の開始を処理する / Start singing if the player is a Bard

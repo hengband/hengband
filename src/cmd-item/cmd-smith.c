@@ -30,7 +30,6 @@
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 /*!

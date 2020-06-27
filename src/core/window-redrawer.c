@@ -5,6 +5,7 @@
  */
 #include "core/window-redrawer.h"
 #include "core/stuff-handler.h"
+#include "floor/floor-util.h"
 #include "game-option/option-flags.h"
 #include "player/player-race.h"
 #include "term/gameterm.h"

@@ -212,7 +212,7 @@ static bool http_post(int sd, concptr url, BUF *buf)
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
-static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
+static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_playtime)(void), display_player_pf display_player)
 {
 	char		buf[1024];
 	FILE *fff;
@@ -232,7 +232,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_play
 	}
 
 	/* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
-	make_character_dump(creature_ptr, fff, update_playtime, display_player, map_name);
+	make_character_dump(creature_ptr, fff, update_playtime, display_player);
 	angband_fclose(fff);
 
 	/* Open for read */
@@ -377,7 +377,7 @@ concptr make_screen_dump(player_type *creature_ptr, void(*process_autopick_file_
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return 正常終了の時0、異常があったら1
  */
-errr report_score(player_type *creature_ptr, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
+errr report_score(player_type *creature_ptr, void(*update_playtime)(void), display_player_pf display_player)
 {
 #ifdef WINDOWS
 	WSADATA wsaData;
@@ -418,7 +418,7 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 	buf_sprintf(score, "killer: %s\n", creature_ptr->died_from);
 	buf_sprintf(score, "-----charcter dump-----\n");
 
-	make_dump(creature_ptr, score, update_playtime, display_player, map_name);
+	make_dump(creature_ptr, score, update_playtime, display_player);
 
 	if (screen_dump)
 	{

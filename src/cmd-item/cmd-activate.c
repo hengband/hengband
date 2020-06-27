@@ -22,7 +22,6 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
-#include "io/files-util.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

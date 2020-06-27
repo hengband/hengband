@@ -8,7 +8,6 @@
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
 #include "game-option/special-options.h"
-#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-of-music.h"
@@ -18,7 +17,6 @@
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

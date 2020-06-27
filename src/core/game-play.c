@@ -27,6 +27,7 @@
 #include "dungeon/dungeon-processor.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
+#include "floor/floor-util.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
@@ -143,7 +144,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
         /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
         parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-        success = send_world_score(player_ptr, TRUE, update_playtime, display_player, map_name);
+        success = send_world_score(player_ptr, TRUE, update_playtime, display_player);
 
         if (!success && !get_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
             prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);

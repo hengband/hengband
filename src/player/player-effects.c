@@ -28,7 +28,6 @@
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
-#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/report.h"
 #include "io/save.h"
@@ -66,7 +65,6 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

@@ -14,7 +14,6 @@
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "world/world.h"
@@ -29,7 +28,7 @@ static void clear_floor(player_type *player_ptr)
 
 static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
 {
-    if (send_world_score(player_ptr, do_send, update_playtime, display_player, map_name))
+    if (send_world_score(player_ptr, do_send, update_playtime, display_player))
         return;
 
     if (!get_check_strict(
@@ -96,7 +95,7 @@ void close_game(player_type *player_ptr)
 
     print_tomb(player_ptr);
     flush();
-    show_death_info(player_ptr, update_playtime, display_player, map_name);
+    show_death_info(player_ptr, update_playtime, display_player);
     Term_clear();
     if (check_score(player_ptr)) {
         send_world_score_on_closing(player_ptr, do_send);

@@ -28,7 +28,6 @@
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 bool select_ring_slot;

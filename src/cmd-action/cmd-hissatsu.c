@@ -31,7 +31,6 @@
 #include "system/object-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)

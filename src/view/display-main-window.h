@@ -6,7 +6,6 @@ void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);
 void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char);
 void health_track(player_type *player_ptr, MONSTER_IDX m_idx);
 void print_time(player_type *player_ptr);
-concptr map_name(player_type *creature_ptr);
 void move_cursor_relative(int row, int col);
 void print_path(player_type *player_ptr, POSITION y, POSITION x);
 void monster_race_track(player_type *player_ptr, MONRACE_IDX r_idx);

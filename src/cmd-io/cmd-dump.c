@@ -18,6 +18,7 @@
 #include "io-dump/dump-remover.h"
 #include "io-dump/dump-util.h"
 #include "io/chuukei.h"
+#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/interpret-pref-file.h"
 #include "io/read-pref-file.h"

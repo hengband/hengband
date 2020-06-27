@@ -14,7 +14,6 @@
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "inventory/inventory-damage.h"
-#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/report.h"
 #include "io/save.h"
@@ -48,7 +47,6 @@
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

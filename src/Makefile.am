@@ -157,6 +157,7 @@ hengband_SOURCES = \
 	floor/floor-save.h floor/floor-save.c \
 	floor/floor-streams.c floor/floor-streams.h \
 	floor/floor-town.h floor/floor-town.c \
+	floor/floor-util.c floor/floor-util.h \
 	floor/geometry.c floor/geometry.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	floor/wild.h floor/wild.c \

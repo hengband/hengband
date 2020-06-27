@@ -58,28 +58,6 @@ void print_time(player_type *player_ptr)
 }
 
 /*!
- * @brief 現在のマップ名を返す /
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return マップ名の文字列参照ポインタ
- */
-concptr map_name(player_type *creature_ptr)
-{
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest) && (quest[floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
-        return _("クエスト", "Quest");
-    else if (creature_ptr->wild_mode)
-        return _("地上", "Surface");
-    else if (floor_ptr->inside_arena)
-        return _("アリーナ", "Arena");
-    else if (creature_ptr->phase_out)
-        return _("闘技場", "Monster Arena");
-    else if (!floor_ptr->dun_level && creature_ptr->town_num)
-        return town_info[creature_ptr->town_num].name;
-    else
-        return d_name + d_info[creature_ptr->dungeon_idx].name;
-}
-
-/*!
  * todo ここにplayer_type を追加するとz-termに影響が行くので保留
  * @brief コンソールのリサイズに合わせてマップを再描画する /
  * Map resizing whenever the main term changes size

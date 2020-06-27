@@ -382,7 +382,7 @@ static void show_dead_home_items(player_type *creature_ptr)
  * @param file_character ステータスダンプへのコールバック
  * @return なし
  */
-static void export_player_info(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player, map_name_pf map_name)
+static void export_player_info(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player)
 {
 	prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
 	prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
@@ -395,7 +395,7 @@ static void export_player_info(player_type *creature_ptr, update_playtime_pf upd
 		if (!out_val[0]) break;
 
 		screen_save();
-		(void)file_character(creature_ptr, out_val, update_playtime, display_player, map_name);
+		(void)file_character(creature_ptr, out_val, update_playtime, display_player);
 		screen_load();
 	}
 }
@@ -410,7 +410,7 @@ static void export_player_info(player_type *creature_ptr, update_playtime_pf upd
  * @param display_player ステータス表示へのコールバック
  * @return なし
  */
-void show_death_info(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player, map_name_pf map_name)
+void show_death_info(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player)
 {
 	inventory_aware(creature_ptr);
 	home_aware(creature_ptr);
@@ -420,9 +420,9 @@ void show_death_info(player_type *creature_ptr, update_playtime_pf update_playti
 	flush();
 	msg_erase();
 	
-	export_player_info(creature_ptr, update_playtime, display_player, map_name);
+	export_player_info(creature_ptr, update_playtime, display_player);
 	(*update_playtime)();
-	(*display_player)(creature_ptr, 0, map_name);
+	(*display_player)(creature_ptr, 0);
 	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
 	if (inkey() == ESCAPE) return;
 	if (show_dead_player_items(creature_ptr)) return;

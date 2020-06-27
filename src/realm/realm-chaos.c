@@ -18,7 +18,6 @@
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 /*!
