@@ -25,6 +25,7 @@
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/earthquake.h"
+#include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"

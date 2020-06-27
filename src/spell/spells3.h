@@ -5,15 +5,11 @@
 #include "system/angband.h"
 
 bool eat_magic(player_type *caster_ptr, int power);
-
 bool apply_disenchant(player_type* target_ptr, BIT_FLAGS mode);
 void fetch(player_type* caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los);
 void reserve_alter_reality(player_type* caster_ptr);
 void identify_pack(player_type* target_ptr);
-int remove_curse(player_type* caster_ptr);
-int remove_all_curse(player_type* caster_ptr);
 bool alchemy(player_type* caster_ptr);
-
 bool artifact_scroll(player_type* caster_ptr);
 bool ident_spell(player_type* caster_ptr, bool only_equip, tval_type item_tester_tval);
 bool mundane_spell(player_type* ownner_ptr, bool only_equip);

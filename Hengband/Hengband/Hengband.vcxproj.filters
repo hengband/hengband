@@ -1460,6 +1460,9 @@
     <ClCompile Include="..\..\src\spell-realm\spells-chaos.c">
       <Filter>spell-realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-curse-removal.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3210,6 +3213,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-chaos.h">
       <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-curse-removal.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@
 #include "player/bad-status-setter.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
+#include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"

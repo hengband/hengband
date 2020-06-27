@@ -518,6 +518,7 @@ hengband_SOURCES = \
 	spell-kind/earthquake.c spell-kind/earthquake.h \
 	spell-kind/spells-beam.c spell-kind/spells-beam.h \
 	spell-kind/spells-charm.c spell-kind/spells-charm.h \
+	spell-kind/spells-curse-removal.c spell-kind/spells-curse-removal.h \
 	spell-kind/spells-detection.c spell-kind/spells-detection.h \
 	spell-kind/spells-floor.c spell-kind/spells-floor.h \
 	spell-kind/spells-genocide.c spell-kind/spells-genocide.h \
