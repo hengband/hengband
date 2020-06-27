@@ -10,7 +10,6 @@
 #include "monster/monster-info.h"
 #include "player/bad-status-setter.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

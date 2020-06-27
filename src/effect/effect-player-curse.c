@@ -3,8 +3,8 @@
 #include "monster-race/race-indice-types.h"
 #include "mspell/mspells3.h"
 #include "object-enchant/object-curse.h"
+#include "player/bad-status-setter.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

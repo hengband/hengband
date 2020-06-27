@@ -32,6 +32,7 @@
 #include "monster/smart-learn-types.h"
 #include "object/object-hook.h"
 #include "pet/pet-fall-off.h"
+#include "player/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"

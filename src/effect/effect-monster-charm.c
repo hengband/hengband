@@ -17,7 +17,6 @@
 #include "pet/pet-fall-off.h"
 #include "player/avatar.h"
 #include "player/bad-status-setter.h"
-#include "player/player-effects.h"
 #include "spell/spells-diceroll.h"
 #include "view/display-messages.h"
 
