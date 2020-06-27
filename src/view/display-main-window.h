@@ -13,6 +13,5 @@ void monster_race_track(player_type *player_ptr, MONRACE_IDX r_idx);
 void object_kind_track(player_type *player_ptr, KIND_OBJECT_IDX k_idx);
 void resize_map(void);
 bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx);
-void update_playtime(void);
 bool panel_contains(POSITION y, POSITION x);
 void delayed_visual_update(player_type *player_ptr);

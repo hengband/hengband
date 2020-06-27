@@ -17,7 +17,6 @@
 #include "util/int-char-converter.h"
 #include "term/screen-processor.h"
 #include "world/world.h"
-#include "view/display-main-window.h" // 暫定。後で消す.
 
 /*
  * Check special key code and get a movement command id

@@ -73,3 +73,4 @@ extern world_type *current_world_ptr;
 
 bool is_daytime(void);
 void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min);
+void update_playtime(void);

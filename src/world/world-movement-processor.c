@@ -11,7 +11,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "player/player-move.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

@@ -69,7 +69,7 @@ concptr map_name(player_type *creature_ptr)
         return _("クエスト", "Quest");
     else if (creature_ptr->wild_mode)
         return _("地上", "Surface");
-    else if (creature_ptr->current_floor_ptr->inside_arena)
+    else if (floor_ptr->inside_arena)
         return _("アリーナ", "Arena");
     else if (creature_ptr->phase_out)
         return _("闘技場", "Monster Arena");
@@ -353,18 +353,6 @@ void object_kind_track(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
 {
     player_ptr->object_kind_idx = k_idx;
     player_ptr->window |= (PW_OBJECT);
-}
-
-/*!
- * @brief 実ゲームプレイ時間を更新する
- */
-void update_playtime(void)
-{
-    if (current_world_ptr->start_time != 0) {
-        u32b tmp = (u32b)time(NULL);
-        current_world_ptr->play_time += (tmp - current_world_ptr->start_time);
-        current_world_ptr->start_time = tmp;
-    }
 }
 
 /*
