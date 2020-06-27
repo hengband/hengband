@@ -28,6 +28,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"

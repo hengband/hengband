@@ -21,6 +21,7 @@
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "object-enchant/special-object-flags.h"
+#include "player/special-defense-types.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"

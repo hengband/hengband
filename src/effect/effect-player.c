@@ -17,6 +17,7 @@
 #include "monster/monster-description-types.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spell-types.h"

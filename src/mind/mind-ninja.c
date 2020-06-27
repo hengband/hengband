@@ -16,6 +16,7 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "player/player-effects.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

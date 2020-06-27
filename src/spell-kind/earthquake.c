@@ -20,6 +20,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
+#include "player/special-defense-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

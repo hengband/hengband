@@ -60,6 +60,7 @@
 #include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"

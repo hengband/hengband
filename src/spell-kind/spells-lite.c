@@ -10,6 +10,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "player/player-effects.h"
+#include "player/special-defense-types.h"
 #include "spell/process-effect.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"

@@ -36,6 +36,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"

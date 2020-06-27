@@ -22,6 +22,7 @@
 #include "monster/smart-learn-types.h"
 #include "player/eldritch-horror.h"
 #include "player/player-move.h"
+#include "player/special-defense-types.h"
 
 /*!
  * @brief 騎乗中のモンスター情報を更新する

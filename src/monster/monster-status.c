@@ -47,6 +47,7 @@
 #include "player/avatar.h"
 #include "player/player-effects.h"
 #include "player/player-personalities-types.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell/spells-summon.h"
 #include "view/display-messages.h"

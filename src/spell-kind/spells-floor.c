@@ -35,6 +35,7 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player/player-effects.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"

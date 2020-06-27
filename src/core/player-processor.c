@@ -29,6 +29,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
+#include "player/special-defense-types.h"
 #include "spell-realm/spells-song.h"
 #include "spell-kind/spells-random.h"
 #include "spell-realm/spells-hex.h"

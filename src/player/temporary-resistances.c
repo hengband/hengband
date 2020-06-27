@@ -2,6 +2,7 @@
 #include "object-enchant/tr-types.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-types.h"

@@ -18,6 +18,7 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-launcher.h"

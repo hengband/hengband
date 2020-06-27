@@ -72,6 +72,7 @@
 #include "player/player-sex.h"
 #include "player/player-skill.h"
 #include "player/race-info-table.h"
+#include "player/special-defense-types.h"
 #include "spell/spells-status.h"
 #include "store/store-util.h"
 #include "store/store.h"

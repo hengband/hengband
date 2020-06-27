@@ -4,6 +4,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
+#include "player/special-defense-types.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

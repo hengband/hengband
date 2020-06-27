@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "player/special-defense-types.h"
 #include "system/angband.h"
 
 typedef struct blow_stance {

@@ -23,6 +23,7 @@
 #include "monster/monster-util.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
 #include "view/display-messages.h"

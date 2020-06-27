@@ -51,6 +51,7 @@
 #include "pet/pet-fall-off.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
+#include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-summon.h"
 #include "view/display-messages.h"

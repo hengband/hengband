@@ -3166,6 +3166,9 @@
     <ClInclude Include="..\..\src\mind\stances-table.h">
       <Filter>mind</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player\special-defense-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

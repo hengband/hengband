@@ -25,6 +25,7 @@
 #include "object/item-use-flags.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
+#include "player/special-defense-types.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "spell/technic-info-table.h"

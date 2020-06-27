@@ -64,6 +64,7 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
+#include "player/special-defense-types.h"
 #include "spell/spells-object.h"
 #include "store/store-util.h"
 #include "store/store.h" // do_cmd_store() がある。後で移設する.

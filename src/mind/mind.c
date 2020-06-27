@@ -47,6 +47,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
+#include "player/special-defense-types.h"
 #include "spell/process-effect.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"

@@ -460,6 +460,7 @@ hengband_SOURCES = \
 	player/player-personalities-types.h \
 	player/player-sex.c player/player-sex.h \
 	player/selfinfo.c player/selfinfo.h \
+	player/special-defense-types.h \
 	\
 	player-attack/player-attack-util.h \
 	player-attack/attack-chaos-effect.c player-attack/attack-chaos-effect.h \

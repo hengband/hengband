@@ -4,6 +4,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
+#include "player/special-defense-types.h"
 
 /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
 int wild_regen = 20;

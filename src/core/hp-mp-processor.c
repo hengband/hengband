@@ -15,6 +15,7 @@
 #include "player/player-effects.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
+#include "player/special-defense-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"

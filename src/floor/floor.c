@@ -21,6 +21,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player/player-effects.h"
+#include "player/special-defense-types.h"
 #include "room/rooms.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

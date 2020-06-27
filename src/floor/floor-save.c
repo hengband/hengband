@@ -54,6 +54,7 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-personalities-types.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-floor.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"

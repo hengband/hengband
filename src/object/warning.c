@@ -26,6 +26,7 @@
 #include "player/player-move.h"
 #include "player/player-race-types.h"
 #include "player/player-status.h"
+#include "player/special-defense-types.h"
 #include "spell/spell-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

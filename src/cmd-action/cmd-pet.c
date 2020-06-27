@@ -36,6 +36,7 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
+#include "player/special-defense-types.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"

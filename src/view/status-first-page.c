@@ -16,6 +16,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
+#include "player/special-defense-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"

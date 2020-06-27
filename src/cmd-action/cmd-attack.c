@@ -29,6 +29,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
+#include "player/special-defense-types.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "view/display-messages.h"

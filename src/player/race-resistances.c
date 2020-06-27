@@ -3,6 +3,7 @@
 #include "object/object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "player/player-race.h"
+#include "player/special-defense-types.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

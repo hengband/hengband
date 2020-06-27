@@ -32,6 +32,7 @@
 #include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
