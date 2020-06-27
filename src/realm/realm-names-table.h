@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "realm/realm-types.h"
+
 #define VALID_REALM        (MAX_REALM + MAX_MAGIC - MIN_TECHNIC + 1)
 
 #define is_magic(A) ((((A) > REALM_NONE) && ((A) < MAX_MAGIC + 1)) ? TRUE : FALSE)

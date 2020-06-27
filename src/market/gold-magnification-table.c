@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "market/gold-magnification-table.h"
+﻿#include "market/gold-magnification-table.h"
 
 /*
  * Buying and selling adjustments for race combinations.

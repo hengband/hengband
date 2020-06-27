@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "market/building-util.h"
+﻿#include "market/building-util.h"
 
 #include "term/screen-processor.h"
 /*!

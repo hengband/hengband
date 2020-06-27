@@ -1,4 +1,7 @@
-﻿/* avatar.c */
+﻿#pragma once
+
+#include "system/angband.h"
+
 #define MAX_VIRTUE 18 /*!< 徳定義の最大数 */
 
 #define V_COMPASSION    1
@@ -22,10 +25,11 @@
 
 #define VIRTUE_LARGE 1
 #define VIRTUE_SMALL 2
-extern bool compare_virtue(player_type *creature_ptr, int type, int num, int tekitou);
-extern int virtue_number(player_type *creature_ptr, int type);
-extern concptr virtue[MAX_VIRTUE];
-extern void get_virtues(player_type *creature_ptr);
-extern void chg_virtue(player_type *creature_ptr, int virtue, int amount);
-extern void set_virtue(player_type *creature_ptr, int virtue, int amount);
-extern void dump_virtues(player_type *creature_ptr, FILE *OutFile);
+
+bool compare_virtue(player_type *creature_ptr, int type, int num, int tekitou);
+int virtue_number(player_type *creature_ptr, int type);
+concptr virtue[MAX_VIRTUE];
+void get_virtues(player_type *creature_ptr);
+void chg_virtue(player_type *creature_ptr, int virtue, int amount);
+void set_virtue(player_type *creature_ptr, int virtue, int amount);
+void dump_virtues(player_type *creature_ptr, FILE *OutFile);

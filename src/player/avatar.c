@@ -13,7 +13,6 @@
     included in all such copies.
 */
 
-#include "system/angband.h"
 #include "player/avatar.h"
 #include "realm/realm-names-table.h"
 #include "player/player-race-types.h"

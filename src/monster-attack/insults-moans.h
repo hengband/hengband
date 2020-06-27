@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define MAX_INSULTS 10
 #define MAX_MOANS 4
 
