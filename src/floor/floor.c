@@ -10,6 +10,7 @@
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "io/targeting.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-update.h"
@@ -541,7 +542,7 @@ bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITIO
 bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	u16b grid_g[512];
-	int grid_n = project_path(player_ptr, grid_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, 0);
+    int grid_n = project_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
 	if (!grid_n) return TRUE;
 
 	POSITION y = GRID_Y(grid_g[grid_n - 1]);

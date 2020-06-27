@@ -233,7 +233,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
         tx = target_col;
         ty = target_row;
 
-        if (distance(caster_ptr->y, caster_ptr->x, ty, tx) > MAX_RANGE) {
+        if (distance(caster_ptr->y, caster_ptr->x, ty, tx) > get_max_range(caster_ptr)) {
             msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
             return;
         }
@@ -269,7 +269,8 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
             tx += ddx[dir];
             g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
 
-            if ((distance(caster_ptr->y, caster_ptr->x, ty, tx) > MAX_RANGE) || !cave_have_flag_bold(caster_ptr->current_floor_ptr, ty, tx, FF_PROJECT))
+            if ((distance(caster_ptr->y, caster_ptr->x, ty, tx) > get_max_range(caster_ptr))
+                || !cave_have_flag_bold(caster_ptr->current_floor_ptr, ty, tx, FF_PROJECT))
                 return;
         }
     }
@@ -1121,7 +1122,7 @@ bool fetch_monster(player_type *caster_ptr)
     m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
     monster_desc(caster_ptr, m_name, m_ptr, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
-    path_n = project_path(caster_ptr, path_g, MAX_RANGE, target_row, target_col, caster_ptr->y, caster_ptr->x, 0);
+    path_n = project_path(caster_ptr, path_g, get_max_range(caster_ptr), target_row, target_col, caster_ptr->y, caster_ptr->x, 0);
     ty = target_row, tx = target_col;
     for (i = 1; i < path_n; i++) {
         POSITION ny = GRID_Y(path_g[i]);

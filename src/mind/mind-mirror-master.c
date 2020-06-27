@@ -98,7 +98,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 
     for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < caster_ptr->current_floor_ptr->height; y++) {
-            if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) && distance(caster_ptr->y, caster_ptr->x, y, x) <= MAX_RANGE
+            if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) && distance(caster_ptr->y, caster_ptr->x, y, x) <= get_max_range(caster_ptr)
                 && distance(caster_ptr->y, caster_ptr->x, y, x) != 0 && player_has_los_bold(caster_ptr, y, x)
                 && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
                 mirror_y[mirror_num] = y;

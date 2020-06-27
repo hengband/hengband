@@ -15,6 +15,7 @@
 #include "effect/effect-characteristics.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
+#include "io/targeting.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"
@@ -476,7 +477,7 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     u16b grid_g[512];
-    int grid_n = project_path(target_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
+    int grid_n = project_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, 0);
     if (!grid_n)
         return FALSE;
 
@@ -1271,7 +1272,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
     BIT_FLAGS f5 = r_ptr->a_ability_flags1;
     BIT_FLAGS f6 = r_ptr->a_ability_flags2;
 
-    if ((m_ptr->cdis > MAX_RANGE) && !m_ptr->target_y)
+    if ((m_ptr->cdis > get_max_range(target_ptr)) && !m_ptr->target_y)
         return FALSE;
 
     POSITION x = target_ptr->x;
@@ -1309,14 +1310,14 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
         }
     } else {
         bool success = FALSE;
-        if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE / 2) && in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, y, x)
+        if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < get_max_range(target_ptr) / 2) && in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, y, x)
             && (one_in_(10) || (projectable(target_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2)))) {
             do_spell = DO_SPELL_BR_DISI;
             success = TRUE;
-        } else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < MAX_RANGE / 2) && los(target_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5)) {
+        } else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < get_max_range(target_ptr) / 2) && los(target_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5)) {
             do_spell = DO_SPELL_BR_LITE;
             success = TRUE;
-        } else if ((f5 & RF5_BA_LITE) && (m_ptr->cdis <= MAX_RANGE)) {
+        } else if ((f5 & RF5_BA_LITE) && (m_ptr->cdis <= get_max_range(target_ptr))) {
             POSITION by = y, bx = x;
             get_project_point(target_ptr, m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
             if ((distance(by, bx, y, x) <= 3) && los(target_ptr, by, bx, y, x) && one_in_(5)) {
@@ -1338,7 +1339,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
                 success = TRUE;
             }
 
-            if (y_br_lite && x_br_lite && (m_ptr->cdis < MAX_RANGE / 2) && one_in_(5)) {
+            if (y_br_lite && x_br_lite && (m_ptr->cdis < get_max_range(target_ptr) / 2) && one_in_(5)) {
                 if (!success) {
                     y = y_br_lite;
                     x = x_br_lite;

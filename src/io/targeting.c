@@ -395,10 +395,10 @@ static void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
 	if (mode & TARGET_KILL)
 	{
 		/* Inner range */
-		min_hgt = MAX((creature_ptr->y - MAX_RANGE), 0);
-		max_hgt = MIN((creature_ptr->y + MAX_RANGE), creature_ptr->current_floor_ptr->height - 1);
-		min_wid = MAX((creature_ptr->x - MAX_RANGE), 0);
-		max_wid = MIN((creature_ptr->x + MAX_RANGE), creature_ptr->current_floor_ptr->width - 1);
+		min_hgt = MAX((creature_ptr->y - get_max_range(creature_ptr)), 0);
+		max_hgt = MIN((creature_ptr->y + get_max_range(creature_ptr)), creature_ptr->current_floor_ptr->height - 1);
+		min_wid = MAX((creature_ptr->x - get_max_range(creature_ptr)), 0);
+		max_wid = MIN((creature_ptr->x + get_max_range(creature_ptr)), creature_ptr->current_floor_ptr->width - 1);
 	}
 	else /* not targetting */
 	{
@@ -2230,3 +2230,10 @@ bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 	*dp = dir;
 	return TRUE;
 }
+
+/*!
+ * @briefプレイヤーの攻撃射程(マス) / Maximum range (spells, etc)
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 射程
+ */
+int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 36 : 18; }

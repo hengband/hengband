@@ -15,6 +15,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
+#include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
@@ -63,7 +64,7 @@ static bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSIT
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     u16b grid_g[512];
-    int grid_n = project_path(target_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
+    int grid_n = project_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, PROJECT_THRU);
     if (!grid_n)
         return FALSE;
 
@@ -118,7 +119,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
     }
 
     u16b grid_g[512];
-    int grid_n = project_path(master_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
+    int grid_n = project_path(master_ptr, grid_g, get_max_range(master_ptr), y1, x1, y2, x2, flg);
     int i;
     POSITION y = y1;
     POSITION x = x1;
@@ -200,7 +201,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
     u16b path_g[128];
-    int path_n = project_path(target_ptr, path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
+    int path_n = project_path(target_ptr, path_g, get_max_range(target_ptr), sy, sx, *ty, *tx, flg);
     *ty = sy;
     *tx = sx;
     for (int i = 0; i < path_n; i++) {
