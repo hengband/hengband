@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define MAX_ADJ_STR 38
 #define MAX_ADJ_DEX 39
 

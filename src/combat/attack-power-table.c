@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "combat/attack-power-table.h"
+﻿#include "combat/attack-power-table.h"
 
 /*!
  * @brief 修行僧のターンダメージ算出テーブル
