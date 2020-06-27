@@ -9,6 +9,7 @@
 #include "grid/grid.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
+#include "player/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"

@@ -1,5 +1,6 @@
 ﻿#include "core/magic-effects-timeout-reducer.h"
 #include "game-option/birth-options.h"
+#include "player/bad-status-setter.h"
 #include "player/player-effects.h"
 
 /*!

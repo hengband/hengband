@@ -8,6 +8,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
+#include "player/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "view/display-messages.h"

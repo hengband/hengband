@@ -1,6 +1,7 @@
 ﻿#include "cmd-action/cmd-spell.h"
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
+#include "player/bad-status-setter.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "realm/realm-song-numbers.h"

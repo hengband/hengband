@@ -1,6 +1,7 @@
 ﻿#include "effect/effect-player-oldies.h"
 #include "game-option/birth-options.h"
 #include "monster-race/race-indice-types.h"
+#include "player/bad-status-setter.h"
 #include "player/eldritch-horror.h"
 #include "player/player-effects.h"
 #include "view/display-messages.h"

@@ -1,5 +1,6 @@
 ﻿#include "spell/spells-staff-only.h"
 #include "effect/effect-characteristics.h"
+#include "player/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "spell/process-effect.h"

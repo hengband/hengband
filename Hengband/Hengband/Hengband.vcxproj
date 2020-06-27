@@ -213,6 +213,7 @@
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\locale\vowel-checker.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
+    <ClCompile Include="..\..\src\player\bad-status-setter.c" />
     <ClCompile Include="..\..\src\view\display-map.c" />
     <ClCompile Include="..\..\src\view\display-sub-windows.c" />
     <ClCompile Include="..\..\src\view\main-window-left-frame.c" />
@@ -616,6 +617,7 @@
     <ClInclude Include="..\..\src\mspell\mspells1.h" />
     <ClInclude Include="..\..\src\mspell\mspells2.h" />
     <ClInclude Include="..\..\src\mspell\mspells3.h" />
+    <ClInclude Include="..\..\src\player\bad-status-setter.h" />
     <ClInclude Include="..\..\src\player\special-defense-types.h" />
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />

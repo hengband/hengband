@@ -2,6 +2,7 @@
 #include "core/speed-table.h"
 #include "object-enchant/trc-types.h"
 #include "player/player-damage.h"
+#include "player/bad-status-setter.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"

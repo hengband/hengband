@@ -10,6 +10,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-generator.h"
 #include "perception/object-perception.h"
+#include "player/bad-status-setter.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

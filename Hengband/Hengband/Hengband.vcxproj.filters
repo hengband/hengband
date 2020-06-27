@@ -1439,6 +1439,9 @@
     <ClCompile Include="..\..\src\mind\stances-table.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\bad-status-setter.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3167,6 +3170,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\special-defense-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\bad-status-setter.h">
       <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>

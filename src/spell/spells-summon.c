@@ -14,6 +14,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"
+#include "player/bad-status-setter.h"
 #include "player/player-effects.h"
 #include "spell/spells-diceroll.h"
 #include "spell-kind/earthquake.h"

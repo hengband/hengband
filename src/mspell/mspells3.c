@@ -43,6 +43,7 @@
 #include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-type.h"
 #include "player/avatar.h"
+#include "player/bad-status-setter.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "realm/realm-types.h"

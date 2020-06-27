@@ -5,6 +5,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "player/avatar.h"
+#include "player/bad-status-setter.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-beam.h"

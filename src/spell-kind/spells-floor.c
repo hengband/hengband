@@ -34,6 +34,7 @@
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
+#include "player/bad-status-setter.h"
 #include "player/player-effects.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
