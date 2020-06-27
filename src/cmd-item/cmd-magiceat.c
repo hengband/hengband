@@ -72,7 +72,7 @@
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
-#include "spell/spells3.h"
+#include "spell/spell-info.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"

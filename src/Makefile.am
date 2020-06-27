@@ -509,6 +509,7 @@ hengband_SOURCES = \
 	spell/spells-describer.c spell/spells-describer.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
 	spell/spells-execution.c spell/spells-execution.h \
+	spell/spell-info.c spell/spell-info.h \
 	spell/spells-object.c spell/spells-object.h \
 	spell/spells-staff-only.c spell/spells-staff-only.h \
 	spell/spells-summon.c spell/spells-summon.h \
