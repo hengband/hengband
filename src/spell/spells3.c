@@ -85,6 +85,7 @@
 #include "player/player-personalities-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
+#include "realm/realm-names-table.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"

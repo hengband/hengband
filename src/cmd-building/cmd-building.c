@@ -11,7 +11,6 @@
  * Changed for ZAngband by Robert Ruehlmann
  */
 
-#include "system/angband.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-dump.h"

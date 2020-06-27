@@ -26,6 +26,7 @@
 #include "pet/pet-util.h"
 #include "player/avatar.h"
 #include "player/race-info-table.h"
+#include "realm/realm-names-table.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"

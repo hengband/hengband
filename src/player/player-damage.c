@@ -43,6 +43,7 @@
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "player/player-status.h"
+#include "player/race-info-table.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"

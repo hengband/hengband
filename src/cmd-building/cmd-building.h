@@ -1,10 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "object/tval-types.h"
-#include "realm/realm-names-table.h"
-#include "player/player-race.h"
-#include "player/race-info-table.h"
-#include "player/player-class.h"
 
 #define BUILDING_NON_MEMBER 0 /*!< 不明(現在未使用) */
 #define BUILDING_MEMBER     1 /*!< 不明(現在未使用) */
@@ -28,11 +25,10 @@ extern int sel_monster;
  * @struct arena_type
  * @brief 闘技場のモンスターエントリー構造体 / A structure type for arena entry
  */
-typedef struct
-{
+typedef struct arena_type {
 	MONRACE_IDX r_idx; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
 	tval_type tval;  /*!< モンスター打倒後に得られるアイテムの大カテゴリID / tval of prize (0 means no prize) */
 	OBJECT_SUBTYPE_VALUE sval;  /*!< モンスター打倒後に得られるアイテムの小カテゴリID / sval of prize */
 } arena_type;
 
-extern void do_cmd_building(player_type *player_ptr);
+void do_cmd_building(player_type *player_ptr);

@@ -4,7 +4,6 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "cmd-io/feeling-table.h"
 
 concptr do_cmd_feeling_text[MAX_FEELING_TEXT] =

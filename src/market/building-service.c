@@ -1,5 +1,6 @@
 ﻿#include "market/building-service.h"
 #include "cmd-building/cmd-building.h"
+#include "realm/realm-names-table.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 

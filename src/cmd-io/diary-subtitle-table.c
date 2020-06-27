@@ -4,7 +4,6 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "cmd-io/diary-subtitle-table.h"
 
 concptr subtitle[MAX_SUBTITLE] = {

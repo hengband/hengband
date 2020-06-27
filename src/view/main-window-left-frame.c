@@ -6,6 +6,7 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
 #include "player/mimic-info-table.h"
+#include "player/player-class.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/string-processor.h"

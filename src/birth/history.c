@@ -1,6 +1,10 @@
-﻿#include "system/angband.h"
-#include "birth/history.h"
+﻿/*!
+ * @brief 生い立ちメッセージテーブル / Forward declare
+ * @date 2002/01/12
+ * @author mogami
+ */
 
+#include "birth/history.h"
 
 /*!
 * 生い立ちテーブルの定義 / Background information (see below)\n

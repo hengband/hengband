@@ -61,6 +61,7 @@
 #include "mind/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
 #include "mind/snipe-types.h"
 #include "mspell/mspells3.h" // do_cmd_cast_learned() がある。後で移設する.
+#include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
 #include "spell/spells-object.h"
