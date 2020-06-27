@@ -34,6 +34,7 @@
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "io/screen-util.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -46,10 +47,10 @@
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
+#include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "object/object-info.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "player/avatar.h"
@@ -68,7 +69,6 @@
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
-#include "view/display-main-window.h"
 #include "view/main-window-util.h"
 
 /*!

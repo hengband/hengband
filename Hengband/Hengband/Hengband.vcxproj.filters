@@ -164,9 +164,6 @@
     <ClCompile Include="..\..\src\io\uid-checker.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-main-window.c">
-      <Filter>view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\autopick\autopick-destroyer.c">
       <Filter>autopick</Filter>
     </ClCompile>
@@ -1436,6 +1433,9 @@
     <ClCompile Include="..\..\src\io\cursor.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\screen-util.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1623,9 +1623,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\uid-checker.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view\display-main-window.h">
-      <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-destroyer.h">
       <Filter>autopick</Filter>
@@ -3158,6 +3155,9 @@
       <Filter>grid</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\cursor.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\screen-util.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>

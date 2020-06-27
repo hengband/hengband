@@ -10,6 +10,7 @@
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "io/cursor.h"
+#include "io/screen-util.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
@@ -23,7 +24,6 @@
 #include "spell/range-calc.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h" // 暫定、後で消すかも.
 #include "view/display-messages.h"
 
 /*!

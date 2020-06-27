@@ -9,6 +9,7 @@
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "io/cursor.h"
+#include "io/screen-util.h"
 #include "io/targeting.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
@@ -16,7 +17,6 @@
 #include "spell/spell-types.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

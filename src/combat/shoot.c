@@ -11,6 +11,7 @@
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "io/cursor.h"
+#include "io/screen-util.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -47,7 +48,6 @@
 #include "spell/spell-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
 

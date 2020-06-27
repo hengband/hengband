@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief プレイヤーのステータス処理 / status
+ * @brief 画面描画のユーティリティ
  * @date 2018/09/25
  * @author
  * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "view/display-main-window.h"
+#include "io/screen-util.h"
 #include "core/player-processor.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

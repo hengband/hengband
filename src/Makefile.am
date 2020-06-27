@@ -226,6 +226,7 @@ hengband_SOURCES = \
 	io/read-pref-file.c io/read-pref-file.h \
 	io/report.c io/report.h \
 	io/save.c io/save.h \
+	io/screen-util.c io/screen-util.h \
 	io/signal-handlers.c io/signal-handlers.h \
 	io/targeting.c io/targeting.h \
 	io/tokenizer.c io/tokenizer.h \
@@ -587,7 +588,6 @@ hengband_SOURCES = \
 	view/display-lore-magics.c view/display-lore-magics.h \
 	view/display-lore-status.c view/display-lore-status.h \
 	view/display-lore.c view/display-lore.h \
-	view/display-main-window.c view/display-main-window.h \
 	view/display-map.c view/display-map.h \
 	view/display-messages.c view/display-messages.h \
 	view/display-monster-status.c view/display-monster-status.h \

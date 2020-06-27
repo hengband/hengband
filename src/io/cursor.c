@@ -7,10 +7,10 @@
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "io/screen-util.h"
 #include "io/targeting.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h" // todo 暫定.
 #include "view/display-map.h"
 #include "view/main-window-util.h"
 #include "world/world.h"
@@ -33,17 +33,14 @@ void move_cursor_relative(int row, int col)
  */
 void print_path(player_type *player_ptr, POSITION y, POSITION x)
 {
-    int path_n;
     u16b path_g[512];
     byte default_color = TERM_SLATE;
 
-    if (!display_path)
-        return;
-    if (project_length == -1)
+    if (!display_path || (project_length == -1))
         return;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    path_n = project_path(player_ptr, path_g, (project_length ? project_length : MAX_RANGE), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
+    int path_n = project_path(player_ptr, path_g, (project_length ? project_length : MAX_RANGE), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
     player_ptr->redraw |= (PR_MAP);
     handle_stuff(player_ptr);
     for (int i = 0; i < path_n; i++) {
