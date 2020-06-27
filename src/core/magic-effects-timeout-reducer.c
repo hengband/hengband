@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "core/magic-effects-timeout-reducer.h"
+﻿#include "core/magic-effects-timeout-reducer.h"
 #include "game-option/birth-options.h"
 #include "player/player-effects.h"
 
@@ -8,7 +7,7 @@
  * / Handle timeout every 10 game turns
  * @return なし
  */
-void reduce_magic_effects_timeout(player_type* creature_ptr)
+void reduce_magic_effects_timeout(player_type *creature_ptr)
 {
     const int dec_count = (easy_band ? 2 : 1);
     if (creature_ptr->tim_mimic) {

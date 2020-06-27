@@ -1,6 +1,4 @@
-﻿#include "system/angband.h"
-#include "effect/effect-monster-util.h"
-#include "effect/effect-monster-resist-hurt.h"
+﻿#include "effect/effect-monster-resist-hurt.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"

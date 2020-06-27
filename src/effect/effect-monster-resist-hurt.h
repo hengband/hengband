@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "effect/effect-monster-util.h"
+#include "system/angband.h"
+
 gf_switch_result effect_monster_void(effect_monster_type *em_ptr);
 gf_switch_result effect_monster_acid(player_type *caster_ptr, effect_monster_type *em_ptr);
 gf_switch_result effect_monster_elec(player_type *caster_ptr, effect_monster_type *em_ptr);
