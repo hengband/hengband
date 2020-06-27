@@ -5,3 +5,4 @@
 MAGIC_NUM1 get_current_ki(player_type *caster_ptr);
 void set_current_ki(player_type *caster_ptr, bool is_reset, MAGIC_NUM1 ki);
 bool clear_mind(player_type *creature_ptr);
+void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);

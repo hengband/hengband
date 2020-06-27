@@ -184,9 +184,8 @@ void process_player(player_type *creature_ptr)
     }
 
     load = FALSE;
-    if (creature_ptr->lightspeed) {
-        (void)set_lightspeed(creature_ptr, creature_ptr->lightspeed - 1, TRUE);
-    }
+    if (creature_ptr->lightspeed)
+        set_lightspeed(creature_ptr, creature_ptr->lightspeed - 1, TRUE);
 
     if ((creature_ptr->pclass == CLASS_FORCETRAINER) && get_current_ki(creature_ptr)) {
         if (get_current_ki(creature_ptr) < 40)

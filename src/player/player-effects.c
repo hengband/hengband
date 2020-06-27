@@ -32,6 +32,7 @@
 #include "io/save.h"
 #include "locale/vowel-checker.h"
 #include "mind/stances-table.h"
+#include "mind/mind-force-trainer.h"
 #include "mind/mind-sniper.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation.h"
@@ -167,7 +168,7 @@ void set_action(player_type *creature_ptr, ACTION_IDX typ)
 void dispel_player(player_type *creature_ptr)
 {
     (void)set_fast(creature_ptr, 0, TRUE);
-    (void)set_lightspeed(creature_ptr, 0, TRUE);
+    set_lightspeed(creature_ptr, 0, TRUE);
     (void)set_slow(creature_ptr, 0, TRUE);
     (void)set_shield(creature_ptr, 0, TRUE);
     (void)set_blessed(creature_ptr, 0, TRUE);
@@ -308,52 +309,6 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     creature_ptr->fast = v;
-    if (!notice)
-        return FALSE;
-
-    if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
-    return TRUE;
-}
-
-/*!
- * @brief 光速移動の継続時間をセットする / Set "lightspeed", notice observable changes
- * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
- * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
- */
-bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
-{
-    bool notice = FALSE;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
-    if (creature_ptr->is_dead)
-        return FALSE;
-
-    if (creature_ptr->wild_mode)
-        v = 0;
-
-    if (v) {
-        if (creature_ptr->lightspeed && !do_dec) {
-            if (creature_ptr->lightspeed > v)
-                return FALSE;
-        } else if (!creature_ptr->lightspeed) {
-            msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely fast!"));
-            notice = TRUE;
-            chg_virtue(creature_ptr, V_PATIENCE, -1);
-            chg_virtue(creature_ptr, V_DILIGENCE, 1);
-        }
-    } else {
-        if (creature_ptr->lightspeed) {
-            msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
-            notice = TRUE;
-        }
-    }
-
-    creature_ptr->lightspeed = v;
-
     if (!notice)
         return FALSE;
 

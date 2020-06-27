@@ -1,5 +1,9 @@
 ﻿#include "mind/mind-force-trainer.h"
 #include "cmd-action/cmd-pet.h"
+#include "core/stuff-handler.h"
+#include "game-option/disturbance-options.h"
+#include "player/avatar.h"
+#include "player/player-move.h"
 #include "view/display-messages.h"
 
 /*!
@@ -46,4 +50,49 @@ bool clear_mind(player_type *creature_ptr)
 
     creature_ptr->redraw |= (PR_MANA);
     return TRUE;
+}
+
+/*!
+ * @brief 光速移動の継続時間をセットする / Set "lightspeed", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return なし
+ */
+void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+{
+    bool notice = FALSE;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+    if (creature_ptr->is_dead)
+        return;
+
+    if (creature_ptr->wild_mode)
+        v = 0;
+
+    if (v) {
+        if (creature_ptr->lightspeed && !do_dec) {
+            if (creature_ptr->lightspeed > v)
+                return;
+        } else if (!creature_ptr->lightspeed) {
+            msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely fast!"));
+            notice = TRUE;
+            chg_virtue(creature_ptr, V_PATIENCE, -1);
+            chg_virtue(creature_ptr, V_DILIGENCE, 1);
+        }
+    } else {
+        if (creature_ptr->lightspeed) {
+            msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
+            notice = TRUE;
+        }
+    }
+
+    creature_ptr->lightspeed = v;
+
+    if (!notice)
+        return;
+
+    if (disturb_state)
+        disturb(creature_ptr, FALSE, FALSE);
+    creature_ptr->update |= (PU_BONUS);
+    handle_stuff(creature_ptr);
 }
