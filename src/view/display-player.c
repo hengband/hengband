@@ -359,7 +359,7 @@ void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, B
 		o_ptr = &creature_ptr->inventory_list[i];
 
 		TERM_COLOR a = object_attr(o_ptr);
-		char c = object_char(o_ptr);
+		SYMBOL_CODE c = object_char(o_ptr);
 
 		if (!equippy_chars || !o_ptr->k_idx)
 		{

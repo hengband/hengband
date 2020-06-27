@@ -2750,7 +2750,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			{
 				if (panel_contains(ny[i], nx[i]) && player_can_see_bold(creature_ptr, ny[i], nx[i]))
 				{
-					char c = object_char(q_ptr);
+					SYMBOL_CODE c = object_char(q_ptr);
 					byte a = object_attr(q_ptr);
 
 					/* Draw, Hilite, Fresh, Pause, Erase */

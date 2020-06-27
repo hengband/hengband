@@ -1,10 +1,17 @@
-﻿#include "mind/mind-mage.h"
+﻿/*!
+ * @brief 魔力喰い処理
+ * @date 2020/06/27
+ * @author Hourier
+ */
+
+#include "mind/mind-mage.h"
 #include "core/stuff-handler.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "player/player-class.h"

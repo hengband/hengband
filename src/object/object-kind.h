@@ -3,16 +3,6 @@
 #include "system/angband.h"
 #include "system/object-type-definition.h"
 
-/*
- * Return the "char" for a given item.
- * Use "flavor" if available.
- * Default to user definitions.
- */
-#define object_char(T) \
-	((k_info[(T)->k_idx].flavor) ? \
-	 (k_info[k_info[(T)->k_idx].flavor].x_char) : \
-	 (k_info[(T)->k_idx].x_char))
-
 typedef struct object_kind {
 	STR_OFFSET name;			/*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
 	STR_OFFSET text;			/*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
@@ -67,3 +57,5 @@ extern object_kind *k_info;
 extern char *k_name;
 extern char *k_text;
 extern KIND_OBJECT_IDX max_k_idx;
+
+SYMBOL_CODE object_char(object_type *o_ptr);

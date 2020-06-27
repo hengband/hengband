@@ -20,3 +20,13 @@ char *k_text;
  * Maximum number of items in k_info.txt
  */
 KIND_OBJECT_IDX max_k_idx;
+
+/*
+ * Return the "char" for a given item.
+ * Use "flavor" if available.
+ * Default to user definitions.
+ */
+SYMBOL_CODE object_char(object_type *o_ptr)
+{
+    return k_info[o_ptr->k_idx].flavor ? k_info[k_info[o_ptr->k_idx].flavor].x_char : k_info[o_ptr->k_idx].x_char;
+}
