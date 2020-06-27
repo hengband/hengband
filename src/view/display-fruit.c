@@ -1,5 +1,5 @@
-﻿#include "system/angband.h"
-#include "display-fruit.h"
+﻿#include "display-fruit.h"
+#include "system/angband.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 

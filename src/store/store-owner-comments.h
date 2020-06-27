@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define MAX_COMMENT_1	6
 #define MAX_COMMENT_2A	2
 #define MAX_COMMENT_2B	12

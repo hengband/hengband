@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define NUM_NEST_MON_TYPE 64 /*!<nestの種別数 */
 
 /*! nestのID定義 /  Nest types code */

@@ -79,7 +79,6 @@
 #include "store/say-comments.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
-#include "system/angband.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
