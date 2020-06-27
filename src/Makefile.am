@@ -609,6 +609,7 @@ hengband_SOURCES = \
 	view/status-first-page.c view/status-first-page.h \
 	view/status-bars-table.c view/status-bars-table.h \
 	\
+	wizard/tval-descriptions-table.c wizard/tval-descriptions-table.h \
 	wizard/wizard-spoiler.c wizard/wizard-spoiler.h\
 	wizard/wizard-special-process.c wizard/wizard-special-process.h \
 	\

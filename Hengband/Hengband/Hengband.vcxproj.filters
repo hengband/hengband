@@ -1448,6 +1448,9 @@
     <ClCompile Include="..\..\src\realm\realm-demon.c">
       <Filter>realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3186,6 +3189,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-demon.h">
       <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\tval-descriptions-table.h">
+      <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
