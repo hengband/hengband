@@ -531,7 +531,7 @@
     <ClCompile Include="..\..\src\dungeon\quest.c" />
     <ClCompile Include="..\..\src\realm\realm-craft.c" />
     <ClCompile Include="..\..\src\realm\realm-crusade.c" />
-    <ClCompile Include="..\..\src\realm\realm-daemon.c" />
+    <ClCompile Include="..\..\src\realm\realm-demon.c" />
     <ClCompile Include="..\..\src\realm\realm-death.c" />
     <ClCompile Include="..\..\src\realm\realm-hissatsu.c" />
     <ClCompile Include="..\..\src\realm\realm-nature.c" />
@@ -1169,7 +1169,7 @@
     <ClInclude Include="..\..\src\realm\realm-chaos.h" />
     <ClInclude Include="..\..\src\realm\realm-craft.h" />
     <ClInclude Include="..\..\src\realm\realm-crusade.h" />
-    <ClInclude Include="..\..\src\realm\realm-daemon.h" />
+    <ClInclude Include="..\..\src\realm\realm-demon.h" />
     <ClInclude Include="..\..\src\realm\realm-death.h" />
     <ClInclude Include="..\..\src\realm\realm-hex.h" />
     <ClInclude Include="..\..\src\realm\realm-hissatsu.h" />

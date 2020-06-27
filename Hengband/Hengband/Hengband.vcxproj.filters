@@ -215,9 +215,6 @@
     <ClCompile Include="..\..\src\realm\realm-crusade.c">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-daemon.c">
-      <Filter>realm</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\realm\realm-death.c">
       <Filter>realm</Filter>
     </ClCompile>
@@ -1448,6 +1445,9 @@
     <ClCompile Include="..\..\src\mind\racial-kutar.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-demon.c">
+      <Filter>realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1682,9 +1682,6 @@
       <Filter>realm</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-crusade.h">
-      <Filter>realm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm\realm-daemon.h">
       <Filter>realm</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-death.h">
@@ -3186,6 +3183,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-kutar.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-demon.h">
+      <Filter>realm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
