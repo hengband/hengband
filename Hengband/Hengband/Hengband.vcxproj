@@ -542,6 +542,7 @@
     <ClCompile Include="..\..\src\spell\spells-execution.c" />
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
     <ClCompile Include="..\..\src\combat\aura-counterattack.c" />
+    <ClCompile Include="..\..\src\wizard\spoiler-table.c" />
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c" />
     <ClInclude Include="..\..\src\art-definition\art-accessory-types.h" />
     <ClInclude Include="..\..\src\art-definition\art-armor-types.h" />
@@ -1043,6 +1044,7 @@
     <ClInclude Include="..\..\src\view\main-window-util.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\..\src\view\status-bars-table.h" />
+    <ClInclude Include="..\..\src\wizard\spoiler-table.h" />
     <ClInclude Include="..\..\src\world\world-object.h" />
     <ClInclude Include="..\..\src\locale\english.h" />
     <ClInclude Include="..\..\src\monster\horror-descriptions.h" />
