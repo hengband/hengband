@@ -527,6 +527,7 @@ hengband_SOURCES = \
 	spell-kind/spells-neighbor.c spell-kind/spells-neighbor.h \
 	spell-kind/spells-pet.c spell-kind/spells-pet.h \
 	spell-kind/spells-random.c spell-kind/spells-random.h \
+	spell-kind/spells-recall.c spell-kind/spells-recall.h \
 	spell-kind/spells-sight.c spell-kind/spells-sight.h \
 	spell-kind/spells-specific-bolt.c spell-kind/spells-specific-bolt.h \
 	spell-kind/spells-teleport.c spell-kind/spells-teleport.h \

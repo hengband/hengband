@@ -1454,6 +1454,9 @@
     <ClCompile Include="..\..\src\wizard\wizard-spells.c">
       <Filter>wizard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-recall.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3198,6 +3201,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\wizard\wizard-spells.h">
       <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-recall.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

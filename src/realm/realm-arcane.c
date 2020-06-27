@@ -14,6 +14,7 @@
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
+#include "spell-kind/spells-recall.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"

@@ -6,9 +6,6 @@
 
 bool eat_magic(player_type *caster_ptr, int power);
 
-bool recall_player(player_type* creature_ptr, TIME_EFFECT turns);
-bool free_level_recall(player_type* creature_ptr);
-bool reset_recall(player_type* caster_ptr);
 bool apply_disenchant(player_type* target_ptr, BIT_FLAGS mode);
 void call_the_void(player_type* caster_ptr);
 void fetch(player_type* caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los);
