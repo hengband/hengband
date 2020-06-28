@@ -18,7 +18,7 @@
  * @param j_ptr 比較対象オブジェクトの構造体参照ポインタ2
  * @return o_ptrの方が上位ならばTRUEを返す。
  */
-bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
+bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, s32b o_value, object_type *j_ptr)
 {
     int o_type, j_type;
     if (!j_ptr->k_idx)
@@ -105,5 +105,5 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
         break;
     }
 
-    return o_value > object_value(j_ptr);
+    return o_value > object_value(player_ptr, j_ptr);
 }

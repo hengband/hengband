@@ -146,7 +146,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
     if (!o_ptr->k_idx)
         return FALSE;
 
-    if (!object_is_weapon_armour_ammo(o_ptr))
+    if (!object_is_weapon_armour_ammo(target_ptr, o_ptr))
         return FALSE;
 
     if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0) && (o_ptr->pval <= 1)) {
@@ -355,7 +355,7 @@ bool alchemy(player_type *caster_ptr)
     o_ptr->number = old_number;
 
     if (!force) {
-        if (confirm_destroy || (object_value(o_ptr) > 0)) {
+        if (confirm_destroy || (object_value(caster_ptr, o_ptr) > 0)) {
             char out_val[MAX_NLEN + 40];
             sprintf(out_val, _("本当に%sを金に変えますか？", "Really turn %s to gold? "), o_name);
             if (!get_check(out_val))
@@ -368,7 +368,7 @@ bool alchemy(player_type *caster_ptr)
         return FALSE;
     }
 
-    PRICE price = object_value_real(o_ptr);
+    PRICE price = object_value_real(caster_ptr, o_ptr);
     if (price <= 0) {
         msg_format(_("%sをニセの金に変えた。", "You turn %s to fool's gold."), o_name);
         vary_item(caster_ptr, item, -amt);
@@ -511,7 +511,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     WEIGHT weight = o_ptr->number * o_ptr->weight;
     u16b inscription = o_ptr->inscription;
 
-    object_prep(o_ptr, o_ptr->k_idx);
+    object_prep(owner_ptr, o_ptr, o_ptr->k_idx);
 
     o_ptr->iy = iy;
     o_ptr->ix = ix;

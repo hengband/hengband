@@ -130,7 +130,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
     int vorpal_div = 1;
     int dmg_bonus = o_ptr->to_d + owner_ptr->to_d[0];
 
-    object_flags(o_ptr, flgs);
+    object_flags(owner_ptr, o_ptr, flgs);
     if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         dokubari = TRUE;
 

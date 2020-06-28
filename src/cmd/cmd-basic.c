@@ -2431,7 +2431,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	object_copy(q_ptr, o_ptr);
 
 	/* Extract the thrown object's flags. */
-	object_flags(q_ptr, flgs);
+	object_flags(creature_ptr, q_ptr, flgs);
 	torch_flags(q_ptr, flgs);
 
 	/* Distribute the charges of rods/wands between the stacks */

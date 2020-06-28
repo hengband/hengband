@@ -666,7 +666,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 	if (!o_ptr) return;
 
 	/* Verify unless quantity given beforehand */
-	if (!force && (confirm_destroy || (object_value(o_ptr) > 0)))
+	if (!force && (confirm_destroy || (object_value(creature_ptr, o_ptr) > 0)))
 	{
 		object_desc(creature_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
@@ -797,10 +797,10 @@ void do_cmd_destroy(player_type *creature_ptr)
 		if (q_ptr->to_a || q_ptr->to_h || q_ptr->to_d)
 			chg_virtue(creature_ptr, V_ENCHANT, -1);
 	
-		if (object_value_real(q_ptr) > 30000)
+		if (object_value_real(creature_ptr, q_ptr) > 30000)
 			chg_virtue(creature_ptr, V_SACRIFICE, 2);
 	
-		else if (object_value_real(q_ptr) > 10000)
+		else if (object_value_real(creature_ptr, q_ptr) > 10000)
 			chg_virtue(creature_ptr, V_SACRIFICE, 1);
 	}
 

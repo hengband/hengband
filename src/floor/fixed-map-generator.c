@@ -84,7 +84,7 @@ static void generate_artifact(player_type *player_ptr, qtwg_type *qtwg_ptr, cons
     KIND_OBJECT_IDX k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
     object_type forge;
     object_type *q_ptr = &forge;
-    object_prep(q_ptr, k_idx);
+    object_prep(player_ptr, q_ptr, k_idx);
     drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
@@ -172,10 +172,10 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
         } else if (object_index) {
             object_type tmp_object;
             object_type *o_ptr = &tmp_object;
-            object_prep(o_ptr, object_index);
+            object_prep(player_ptr, o_ptr, object_index);
             if (o_ptr->tval == TV_GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;
-                make_gold(floor_ptr, o_ptr);
+                make_gold(player_ptr, o_ptr);
                 coin_type = 0;
             }
 

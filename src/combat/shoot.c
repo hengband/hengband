@@ -66,7 +66,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	object_flags(o_ptr, flgs);
+	object_flags(sniper_ptr, o_ptr, flgs);
 
 	/* Some "weapons" and "ammo" do extra damage */
 	switch (o_ptr->tval)

@@ -1455,7 +1455,7 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 	object_type *q_ptr;
 	q_ptr = &forge;
 	object_wipe(q_ptr);
-	if (!make_gold(floor_ptr, q_ptr)) return;
+	if (!make_gold(player_ptr, q_ptr)) return;
 
 	OBJECT_IDX o_idx = o_pop(floor_ptr);
 	if (o_idx == 0) return;

@@ -108,7 +108,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 						object_type forge;
 						object_type *q_ptr = &forge;
 						KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
-						object_prep(q_ptr, k_idx);
+						object_prep(creature_ptr, q_ptr, k_idx);
 						q_ptr->name1 = quest[i].k_idx;
 						q_ptr->ident = IDENT_STORE;
 						object_desc(creature_ptr, name, q_ptr, OD_NAME_ONLY);

@@ -39,7 +39,7 @@
 /*
  * Used during calls to "get_item()" and "show_inven()" and "show_equip()", and the choice window routines.
  */
-bool (*item_tester_hook)(object_type *);
+bool (*item_tester_hook)(player_type *, object_type *);
 
 /*!
  * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/
@@ -47,8 +47,11 @@ bool (*item_tester_hook)(object_type *);
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 材料にできるならTRUEを返す
  */
-bool item_tester_hook_convertible(object_type *o_ptr)
+bool item_tester_hook_convertible(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if ((o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_SKELETON))
         return TRUE;
     if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON))
@@ -61,8 +64,11 @@ bool item_tester_hook_convertible(object_type *o_ptr)
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 対象になるならTRUEを返す。
  */
-bool item_tester_hook_orthodox_melee_weapons(object_type *o_ptr)
+bool item_tester_hook_orthodox_melee_weapons(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     switch (o_ptr->tval) {
     case TV_HAFTED:
     case TV_POLEARM:
@@ -83,11 +89,15 @@ bool item_tester_hook_orthodox_melee_weapons(object_type *o_ptr)
  * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
  * @return 右手か左手の武器として装備できるならばTRUEを返す。
  */
-bool item_tester_hook_melee_weapon(object_type *o_ptr)
+bool item_tester_hook_melee_weapon(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     /* Check for a usable slot */
     if ((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD))
         return TRUE;
+
     return FALSE;
 }
 
@@ -96,8 +106,11 @@ bool item_tester_hook_melee_weapon(object_type *o_ptr)
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 対象になるならTRUEを返す。
  */
-bool item_tester_hook_ammo(object_type *o_ptr)
+bool item_tester_hook_ammo(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     switch (o_ptr->tval) {
     case TV_SHOT:
     case TV_ARROW:
@@ -114,8 +127,11 @@ bool item_tester_hook_ammo(object_type *o_ptr)
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 修復対象になるならTRUEを返す。
  */
-bool item_tester_hook_broken_weapon(object_type *o_ptr)
+bool item_tester_hook_broken_weapon(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if (o_ptr->tval != TV_SWORD)
         return FALSE;
 
@@ -133,10 +149,14 @@ bool item_tester_hook_broken_weapon(object_type *o_ptr)
  * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
  * @return 投射可能な武器ならばTRUE
  */
-bool item_tester_hook_boomerang(object_type *o_ptr)
+bool item_tester_hook_boomerang(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if ((o_ptr->tval == TV_DIGGING) || (o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM) || (o_ptr->tval == TV_HAFTED))
         return TRUE;
+
     return FALSE;
 }
 
@@ -147,16 +167,16 @@ bool item_tester_hook_boomerang(object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 食べることが可能ならばTRUEを返す
  */
-bool item_tester_hook_eatable(object_type *o_ptr)
+bool item_tester_hook_eatable(player_type *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->tval == TV_FOOD)
         return TRUE;
 
-    if (is_specific_player_race(p_ptr, RACE_SKELETON) || is_specific_player_race(p_ptr, RACE_GOLEM) || is_specific_player_race(p_ptr, RACE_ZOMBIE)
-        || is_specific_player_race(p_ptr, RACE_SPECTRE)) {
+    if (is_specific_player_race(player_ptr, RACE_SKELETON) || is_specific_player_race(player_ptr, RACE_GOLEM) || is_specific_player_race(player_ptr, RACE_ZOMBIE)
+        || is_specific_player_race(player_ptr, RACE_SPECTRE)) {
         if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
             return TRUE;
-    } else if (is_specific_player_race(p_ptr, RACE_BALROG) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) {
+    } else if (is_specific_player_race(player_ptr, RACE_BALROG) || (mimic_info[player_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) {
         if (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
             return TRUE;
     }
@@ -169,11 +189,15 @@ bool item_tester_hook_eatable(object_type *o_ptr)
  * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
  * @return 左右両方の手で装備できるならばTRUEを返す。
  */
-bool item_tester_hook_mochikae(object_type *o_ptr)
+bool item_tester_hook_mochikae(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     /* Check for a usable slot */
     if (((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) || (o_ptr->tval == TV_SHIELD) || (o_ptr->tval == TV_CAPTURE) || (o_ptr->tval == TV_CARD))
         return TRUE;
+
     return FALSE;
 }
 
@@ -183,14 +207,18 @@ bool item_tester_hook_mochikae(object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 魔道具として発動可能ならばTRUEを返す
  */
-bool item_tester_hook_activate(object_type *o_ptr)
+bool item_tester_hook_activate(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
     /* Not known */
     if (!object_is_known(o_ptr))
         return FALSE;
-    object_flags(o_ptr, flgs);
+
+    object_flags(player_ptr, o_ptr, flgs);
 
     /* Check activation flag */
     if (have_flag(flgs, TR_ACTIVATE))
@@ -204,14 +232,14 @@ bool item_tester_hook_activate(object_type *o_ptr)
  * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
  * @return オブジェクトが防具として装備できるならTRUEを返す。
  */
-bool item_tester_hook_wear(object_type *o_ptr)
+bool item_tester_hook_wear(player_type *player_ptr, object_type *o_ptr)
 {
     if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI))
-        if (p_ptr->psex == SEX_MALE)
+        if (player_ptr->psex == SEX_MALE)
             return FALSE;
 
     /* Check for a usable slot */
-    if (wield_slot(p_ptr, o_ptr) >= INVEN_RARM)
+    if (wield_slot(player_ptr, o_ptr) >= INVEN_RARM)
         return TRUE;
 
     return FALSE;
@@ -223,12 +251,15 @@ bool item_tester_hook_wear(object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 利用可能ならばTRUEを返す
  */
-bool item_tester_hook_use(object_type *o_ptr)
+bool item_tester_hook_use(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
     /* Ammo */
-    if (o_ptr->tval == p_ptr->tval_ammo)
+    if (o_ptr->tval == player_ptr->tval_ammo)
         return TRUE;
 
     /* Useable object */
@@ -252,8 +283,8 @@ bool item_tester_hook_use(object_type *o_ptr)
 
         /* HACK - only items from the equipment can be activated */
         for (i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-            if (&p_ptr->inventory_list[i] == o_ptr) {
-                object_flags(o_ptr, flgs);
+            if (&player_ptr->inventory_list[i] == o_ptr) {
+                object_flags(player_ptr, o_ptr, flgs);
 
                 /* Check activation flag */
                 if (have_flag(flgs, TR_ACTIVATE))
@@ -272,12 +303,12 @@ bool item_tester_hook_use(object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 飲むことが可能ならばTRUEを返す
  */
-bool item_tester_hook_quaff(object_type *o_ptr)
+bool item_tester_hook_quaff(player_type *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->tval == TV_POTION)
         return TRUE;
 
-    if (is_specific_player_race(p_ptr, RACE_ANDROID)) {
+    if (is_specific_player_race(player_ptr, RACE_ANDROID)) {
         if (o_ptr->tval == TV_FLASK && o_ptr->sval == SV_FLASK_OIL)
             return TRUE;
     }
@@ -290,10 +321,14 @@ bool item_tester_hook_quaff(object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 読むことが可能ならばTRUEを返す
  */
-bool item_tester_hook_readable(object_type *o_ptr)
+bool item_tester_hook_readable(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if ((o_ptr->tval == TV_SCROLL) || (o_ptr->tval == TV_PARCHMENT) || (o_ptr->name1 == ART_GHB) || (o_ptr->name1 == ART_POWER))
         return TRUE;
+
     return FALSE;
 }
 
@@ -302,8 +337,11 @@ bool item_tester_hook_readable(object_type *o_ptr)
  * @param o_ptr チェックしたいオブジェクトの構造体参照ポインタ
  * @return エッセンスの付加可能な武器か矢弾ならばTRUEを返す。
  */
-bool item_tester_hook_melee_ammo(object_type *o_ptr)
+bool item_tester_hook_melee_ammo(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     switch (o_ptr->tval) {
     case TV_HAFTED:
     case TV_POLEARM:
@@ -327,8 +365,11 @@ bool item_tester_hook_melee_ammo(object_type *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @return 呪縛可能な武器ならばTRUEを返す
  */
-bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
+bool item_tester_hook_weapon_except_bow(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     switch (o_ptr->tval) {
     case TV_SWORD:
     case TV_HAFTED:
@@ -346,7 +387,13 @@ bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @return 使える装備ならばTRUEを返す
  */
-bool item_tester_hook_cursed(object_type *o_ptr) { return (bool)(object_is_cursed(o_ptr)); }
+bool item_tester_hook_cursed(player_type *player_ptr, object_type *o_ptr)
+{
+    /* Unused */
+    (void)player_ptr;
+
+    return (bool)(object_is_cursed(o_ptr));
+}
 
 /*!
  * @brief アイテムが並の価値のアイテムかどうか判定する /
@@ -354,14 +401,17 @@ bool item_tester_hook_cursed(object_type *o_ptr) { return (bool)(object_is_curse
  * @param o_ptr 判定するアイテムの情報参照ポインタ
  * @return 並ならばTRUEを返す
  */
-bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
+bool item_tester_hook_nameless_weapon_armour(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     /* Require weapon or armour */
-    if (!object_is_weapon_armour_ammo(o_ptr))
+    if (!object_is_weapon_armour_ammo(player_ptr, o_ptr))
         return FALSE;
 
     /* Require nameless object if the object is well known */
-    if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
+    if (object_is_known(o_ptr) && !object_is_nameless(player_ptr, o_ptr))
         return FALSE;
 
     return TRUE;
@@ -372,18 +422,28 @@ bool item_tester_hook_nameless_weapon_armour(object_type *o_ptr)
  * @param o_ptr 判定するアイテムの情報参照ポインタ
  * @return 実際に鑑定済みならばTRUEを返す
  */
-bool item_tester_hook_identify(object_type *o_ptr) { return (bool)!object_is_known(o_ptr); }
+bool item_tester_hook_identify(player_type *player_ptr, object_type *o_ptr)
+{
+    /* Unused */
+    (void)player_ptr;
+
+    return (bool)!object_is_known(o_ptr);
+}
 
 /*!
  * @brief アイテムが鑑定済みの武器防具かを判定する /
  * @param o_ptr 判定するアイテムの情報参照ポインタ
  * @return 実際に鑑定済みならばTRUEを返す
  */
-bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
+bool item_tester_hook_identify_weapon_armour(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if (object_is_known(o_ptr))
+
         return FALSE;
-    return object_is_weapon_armour_ammo(o_ptr);
+    return object_is_weapon_armour_ammo(player_ptr, o_ptr);
 }
 
 /*!
@@ -391,18 +451,28 @@ bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
  * @param o_ptr 判定するアイテムの情報参照ポインタ
  * @return 実際に鑑定済みならばTRUEを返す
  */
-bool item_tester_hook_identify_fully(object_type *o_ptr) { return (bool)(!object_is_known(o_ptr) || !object_is_fully_known(o_ptr)); }
+bool item_tester_hook_identify_fully(player_type *player_ptr, object_type *o_ptr)
+{
+    /* Unused */
+    (void)player_ptr;
+
+    return (bool)(!object_is_known(o_ptr) || !object_is_fully_known(o_ptr));
+}
 
 /*!
  * @brief アイテムが*鑑定*済みの武器防具かを判定する /
  * @param o_ptr 判定するアイテムの情報参照ポインタ
  * @return 実際に鑑定済みならばTRUEを返す
  */
-bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
+bool item_tester_hook_identify_fully_weapon_armour(player_type *player_ptr, object_type *o_ptr)
 {
-    if (!item_tester_hook_identify_fully(o_ptr))
+    /* Unused */
+    (void)player_ptr;
+
+    if (!item_tester_hook_identify_fully(player_ptr, o_ptr))
         return FALSE;
-    return object_is_weapon_armour_ammo(o_ptr);
+
+    return object_is_weapon_armour_ammo(player_ptr, o_ptr);
 }
 
 /*!
@@ -411,8 +481,11 @@ bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
  * @param o_ptr 判定するアイテムの情報参照ポインタ
  * @return 魔力充填が可能ならばTRUEを返す
  */
-bool item_tester_hook_recharge(object_type *o_ptr)
+bool item_tester_hook_recharge(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     /* Recharge staffs */
     if (o_ptr->tval == TV_STAFF)
         return TRUE;
@@ -433,12 +506,12 @@ bool item_tester_hook_recharge(object_type *o_ptr)
  * @param o_ptr 判定したいオブ会ジェクトの構造体参照ポインタ
  * @return 学習できる魔道書ならばTRUEを返す
  */
-bool item_tester_learn_spell(object_type *o_ptr)
+bool item_tester_learn_spell(player_type *player_ptr, object_type *o_ptr)
 {
-    s32b choices = realm_choices2[p_ptr->pclass];
+    s32b choices = realm_choices2[player_ptr->pclass];
 
-    if (p_ptr->pclass == CLASS_PRIEST) {
-        if (is_good_realm(p_ptr->realm1)) {
+    if (player_ptr->pclass == CLASS_PRIEST) {
+        if (is_good_realm(player_ptr->realm1)) {
             choices &= ~(CH_DEATH | CH_DAEMON);
         } else {
             choices &= ~(CH_LIFE | CH_CRUSADE);
@@ -447,7 +520,7 @@ bool item_tester_learn_spell(object_type *o_ptr)
 
     if ((o_ptr->tval < TV_LIFE_BOOK) || (o_ptr->tval > (TV_LIFE_BOOK + MAX_REALM - 1)))
         return FALSE;
-    if ((o_ptr->tval == TV_MUSIC_BOOK) && (p_ptr->pclass == CLASS_BARD))
+    if ((o_ptr->tval == TV_MUSIC_BOOK) && (player_ptr->pclass == CLASS_BARD))
         return TRUE;
     else if (!is_magic(tval2realm(o_ptr->tval)))
         return FALSE;
@@ -483,8 +556,11 @@ bool item_tester_high_level_book(object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトがランタンの燃料になるならばTRUEを返す
  */
-bool item_tester_refill_lantern(object_type *o_ptr)
+bool item_tester_refill_lantern(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     /* Flasks of oil are okay */
     if (o_ptr->tval == TV_FLASK)
         return TRUE;
@@ -545,7 +621,7 @@ bool object_is_bounty(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが適正武器ならばTRUEを返す
  */
-bool object_is_favorite(object_type *o_ptr)
+bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
 {
     /* Only melee weapons match */
     if (!(o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD || o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)) {
@@ -553,10 +629,10 @@ bool object_is_favorite(object_type *o_ptr)
     }
 
     /* Favorite weapons are varied depend on the class */
-    switch (p_ptr->pclass) {
+    switch (player_ptr->pclass) {
     case CLASS_PRIEST: {
         BIT_FLAGS flgs[TR_FLAG_SIZE];
-        object_flags_known(o_ptr, flgs);
+        object_flags_known(player_ptr, o_ptr, flgs);
 
         if (!have_flag(flgs, TR_BLESSED) && !(o_ptr->tval == TV_HAFTED))
             return FALSE;
@@ -566,14 +642,14 @@ bool object_is_favorite(object_type *o_ptr)
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
         /* Icky to wield? */
-        if (!(s_info[p_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval]))
+        if (!(s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval]))
             return FALSE;
         break;
 
     case CLASS_BEASTMASTER:
     case CLASS_CAVALRY: {
         BIT_FLAGS flgs[TR_FLAG_SIZE];
-        object_flags_known(o_ptr, flgs);
+        object_flags_known(player_ptr, o_ptr, flgs);
 
         /* Is it known to be suitable to using while riding? */
         if (!(have_flag(flgs, TR_RIDING)))
@@ -584,7 +660,7 @@ bool object_is_favorite(object_type *o_ptr)
 
     case CLASS_NINJA:
         /* Icky to wield? */
-        if (s_info[p_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
+        if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
             return FALSE;
         break;
 
@@ -666,8 +742,11 @@ bool object_is_rare(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 武器として使えるならばTRUEを返す
  */
-bool object_is_weapon(object_type *o_ptr)
+bool object_is_weapon(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if (TV_WEAPON_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END)
         return TRUE;
 
@@ -706,8 +785,11 @@ bool object_is_ammo(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 矢弾として使えるならばTRUEを返す
  */
-bool object_is_armour(object_type *o_ptr)
+bool object_is_armour(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if (TV_ARMOR_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_ARMOR_END)
         return TRUE;
 
@@ -719,9 +801,12 @@ bool object_is_armour(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 武器、防具、矢弾として使えるならばTRUEを返す
  */
-bool object_is_weapon_armour_ammo(object_type *o_ptr)
+bool object_is_weapon_armour_ammo(player_type *player_ptr, object_type *o_ptr)
 {
-    if (object_is_weapon_ammo(o_ptr) || object_is_armour(o_ptr))
+    /* Unused */
+    (void)player_ptr;
+
+    if (object_is_weapon_ammo(o_ptr) || object_is_armour(player_ptr, o_ptr))
         return TRUE;
 
     return FALSE;
@@ -785,8 +870,11 @@ bool object_refuse_enchant_weapon(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 強化可能ならばTRUEを返す
  */
-bool object_allow_enchant_weapon(object_type *o_ptr)
+bool object_allow_enchant_weapon(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if (object_is_weapon_ammo(o_ptr) && !object_refuse_enchant_weapon(o_ptr))
         return TRUE;
 
@@ -799,8 +887,11 @@ bool object_allow_enchant_weapon(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 強化可能な近接武器ならばTRUEを返す
  */
-bool object_allow_enchant_melee_weapon(object_type *o_ptr)
+bool object_allow_enchant_melee_weapon(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if (object_is_melee_weapon(o_ptr) && !object_refuse_enchant_weapon(o_ptr))
         return TRUE;
 
@@ -813,9 +904,12 @@ bool object_allow_enchant_melee_weapon(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return エッセンス付加済みならばTRUEを返す
  */
-bool object_is_smith(object_type *o_ptr)
+bool object_is_smith(player_type *player_ptr, object_type *o_ptr)
 {
-    if (object_is_weapon_armour_ammo(o_ptr) && o_ptr->xtra3)
+    /* Unused */
+    (void)player_ptr;
+
+    if (object_is_weapon_armour_ammo(player_ptr, o_ptr) && o_ptr->xtra3)
         return TRUE;
 
     return FALSE;
@@ -855,9 +949,12 @@ bool object_is_random_artifact(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 通常のアイテムならばTRUEを返す
  */
-bool object_is_nameless(object_type *o_ptr)
+bool object_is_nameless(player_type *player_ptr, object_type *o_ptr)
 {
-    if (!object_is_artifact(o_ptr) && !object_is_ego(o_ptr) && !object_is_smith(o_ptr))
+    /* Unused */
+    (void)player_ptr;
+
+    if (!object_is_artifact(o_ptr) && !object_is_ego(o_ptr) && !object_is_smith(player_ptr, o_ptr))
         return TRUE;
 
     return FALSE;
@@ -883,8 +980,11 @@ bool object_allow_two_hands_wielding(object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトが松明に束ねられるならばTRUEを返す
  */
-bool object_can_refill_torch(object_type *o_ptr)
+bool object_can_refill_torch(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     /* Torches are okay */
     if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
         return TRUE;
@@ -984,7 +1084,7 @@ bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tva
 
     /* Check the hook */
     if (item_tester_hook) {
-        if (!(*item_tester_hook)(o_ptr))
+        if (!(*item_tester_hook)(player_ptr, o_ptr))
             return FALSE;
     }
 

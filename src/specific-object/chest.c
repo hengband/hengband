@@ -91,7 +91,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 		if (small && (randint0(100) < 25))
 		{
 			/* Make some gold */
-			if (!make_gold(floor_ptr, q_ptr)) continue;
+			if (!make_gold(owner_ptr, q_ptr)) continue;
 		}
 
 		/* Otherwise drop an item */

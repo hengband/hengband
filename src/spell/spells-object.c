@@ -187,7 +187,7 @@ bool create_ammo(player_type *creature_ptr)
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
-		object_prep(q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+		object_prep(creature_ptr, q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
 		q_ptr->number = (byte)rand_range(15, 30);
 		object_aware(creature_ptr, q_ptr);
 		object_known(q_ptr);
@@ -226,7 +226,7 @@ bool create_ammo(player_type *creature_ptr)
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
-		object_prep(q_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+                object_prep(creature_ptr, q_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
 		q_ptr->number = (byte)rand_range(5, 10);
 		object_aware(creature_ptr, q_ptr);
 		object_known(q_ptr);
@@ -263,7 +263,7 @@ bool create_ammo(player_type *creature_ptr)
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
-		object_prep(q_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+		object_prep(creature_ptr, q_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
 		q_ptr->number = (byte)rand_range(4, 8);
 		object_aware(creature_ptr, q_ptr);
 		object_known(q_ptr);
@@ -425,7 +425,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
 		}
 
 		/* Make an object (if possible) */
-		object_prep(i_ptr, k_idx);
+		object_prep(creature_ptr, i_ptr, k_idx);
 		if (a_idx) i_ptr->name1 = a_idx;
 		apply_magic(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
 
@@ -584,7 +584,7 @@ void acquire_chaos_weapon(player_type *creature_ptr)
 		dummy2 = SV_BLADE_OF_CHAOS;
 	}
 
-	object_prep(q_ptr, lookup_kind(dummy, dummy2));
+	object_prep(creature_ptr, q_ptr, lookup_kind(dummy, dummy2));
 	q_ptr->to_h = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
 	q_ptr->to_d = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
 	one_resistance(q_ptr);
@@ -939,7 +939,7 @@ bool bless_weapon(player_type *caster_ptr)
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	object_flags(o_ptr, flgs);
+	object_flags(caster_ptr, o_ptr, flgs);
 
 	if (object_is_cursed(o_ptr))
 	{
@@ -1080,7 +1080,7 @@ bool pulish_shield(player_type *caster_ptr)
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	object_flags(o_ptr, flgs);
+	object_flags(caster_ptr, o_ptr, flgs);
 
 	bool is_pulish_successful = o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr);
 	is_pulish_successful &= !object_is_cursed(o_ptr);
@@ -1453,7 +1453,7 @@ bool create_ration(player_type *creature_ptr)
 	object_type *q_ptr;
 	object_type forge;
 	q_ptr = &forge;
-	object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+	object_prep(creature_ptr, q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
 	(void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
 	msg_print(_("食事を料理して作った。", "You cook some food."));
 	return TRUE;

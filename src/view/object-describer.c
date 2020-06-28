@@ -89,7 +89,7 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
         return;
     q_ptr = &forge;
 
-    object_prep(q_ptr, k_idx);
+    object_prep(owner_ptr, q_ptr, k_idx);
     object_desc(owner_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
     Term_putstr(0, 0, -1, TERM_WHITE, o_name);

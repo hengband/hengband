@@ -79,10 +79,10 @@ static bool acid_minus_ac(player_type *creature_ptr)
 	}
 
 	if (!o_ptr->k_idx) return FALSE;
-	if (!object_is_armour(o_ptr)) return FALSE;
+	if (!object_is_armour(creature_ptr, o_ptr)) return FALSE;
 
 	object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-	object_flags(o_ptr, flgs);
+	object_flags(creature_ptr, o_ptr, flgs);
 	/* No damage left to be done */
 	if (o_ptr->ac + o_ptr->to_a <= 0)
 	{

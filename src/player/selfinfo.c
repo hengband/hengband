@@ -94,7 +94,7 @@ void self_knowledge(player_type *creature_ptr)
 
 		o_ptr = &creature_ptr->inventory_list[k];
 		if (!o_ptr->k_idx) continue;
-		object_flags(o_ptr, tflgs);
+		object_flags(creature_ptr, o_ptr, tflgs);
 
 		/* Extract flags */
 		for (j = 0; j < TR_FLAG_SIZE; j++)

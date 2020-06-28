@@ -156,7 +156,7 @@ void do_cmd_visuals(player_type *creature_ptr, void(*process_autopick_file_comma
 				else
 				{
 					object_type forge;
-					object_prep(&forge, k_idx);
+					object_prep(creature_ptr, &forge, k_idx);
 					object_desc(creature_ptr, o_name, &forge, OD_FORCE_FLAVOR);
 				}
 

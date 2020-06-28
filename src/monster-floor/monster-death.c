@@ -161,7 +161,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
         if (arena_info[player_ptr->arena_number].tval) {
             q_ptr = &forge;
-            object_prep(q_ptr, lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
+            object_prep(player_ptr, q_ptr, lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
             apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
             (void)drop_near(player_ptr, q_ptr, -1, y, x);
         }
@@ -201,7 +201,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         }
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
         apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
         q_ptr->pval = m_ptr->r_idx;
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
@@ -247,7 +247,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
             break;
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
         apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | mo_mode);
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
         break;
@@ -339,12 +339,12 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
             break;
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
         q_ptr->name1 = ART_GROND;
         apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
         q_ptr->name1 = ART_CHAOS;
         apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
@@ -355,7 +355,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
             break;
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_SWORD, randint1(2)));
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
         break;
     }
@@ -369,7 +369,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
             break;
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
         apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
         break;
@@ -488,7 +488,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
             if (k_idx != 0) {
                 q_ptr = &forge;
-                object_prep(q_ptr, k_idx);
+                object_prep(player_ptr, q_ptr, k_idx);
                 apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
                 (void)drop_near(player_ptr, q_ptr, -1, y, x);
             }
@@ -533,7 +533,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         object_wipe(q_ptr);
 
         if (do_gold && (!do_item || (randint0(100) < 50))) {
-            if (!make_gold(floor_ptr, q_ptr))
+            if (!make_gold(player_ptr, q_ptr))
                 continue;
             dump_gold++;
         } else {

@@ -39,7 +39,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     char desc[256];
 
     int trivial_info = 0;
-    object_flags(o_ptr, flgs);
+    object_flags(player_ptr, o_ptr, flgs);
 
     shape_buffer(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) : (k_text + k_info[o_ptr->k_idx].text), 77 - 15, temp, sizeof(temp));
 
@@ -55,7 +55,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
     if (have_flag(flgs, TR_ACTIVATE)) {
         info[i++] = _("始動したときの効果...", "It can be activated for...");
-        info[i++] = activation_explanation(o_ptr);
+        info[i++] = activation_explanation(player_ptr, o_ptr);
         info[i++] = _("...ただし装備していなければならない。", "...if it is being worn.");
     }
 

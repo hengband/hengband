@@ -137,7 +137,7 @@ static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TE
 		BIT_FLAGS flags[TR_FLAG_SIZE];
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[i];
-		object_flags_known(o_ptr, flags);
+                object_flags_known(creature_ptr, o_ptr, flags);
 		if (!(mode & DP_IMM))
 			c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, *col);
 

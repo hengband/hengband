@@ -1067,11 +1067,11 @@ static bool have_flag_of(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
  * @param all TRUEならばベースアイテム上で明らかなフラグは省略する
  * @return ptrと同じアドレス
  */
-static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji, bool all)
+static char *get_ability_abbreviation(player_type *player_ptr, char *ptr, object_type *o_ptr, bool kanji, bool all)
 {
 	char *prev_ptr = ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	object_flags(o_ptr, flgs);
+	object_flags(player_ptr, o_ptr, flgs);
 
 	/* Remove obvious flags */
 	if (!all)
@@ -1218,7 +1218,7 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @return なし
  */
-static void get_inscription(char *buff, object_type *o_ptr)
+static void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr)
 {
 	concptr insc = quark_str(o_ptr->inscription);
 	char *ptr = buff;
@@ -1277,7 +1277,7 @@ static void get_inscription(char *buff, object_type *o_ptr)
 				all = FALSE;
 			}
 
-			ptr = get_ability_abbreviation(ptr, o_ptr, kanji, all);
+			ptr = get_ability_abbreviation(player_ptr, ptr, o_ptr, kanji, all);
 
 			if (ptr == start)
 				ADD_INSC(" ");
@@ -1382,7 +1382,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	object_kind *flavor_k_ptr = &k_info[k_ptr->flavor];
 
 	/* Extract some flags */
-	object_flags(o_ptr, flgs);
+	object_flags(player_ptr, o_ptr, flgs);
 
 	/* See if the object is "aware" */
 	if (object_is_aware(o_ptr)) aware = TRUE;
@@ -2042,7 +2042,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	/* while (*s == '~') s++; */
 
 #ifdef JP
-	if (object_is_smith(o_ptr))
+	if (object_is_smith(player_ptr, o_ptr))
 	{
 		t = object_desc_str(t, format("鍛冶師%sの", player_ptr->name));
 	}
@@ -2362,7 +2362,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	if (have_flag(flgs, TR_SHOW_MODS)) show_weapon = TRUE;
 
 	/* Display the item like a weapon */
-	if (object_is_smith(o_ptr) && (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+	if (object_is_smith(player_ptr, o_ptr) && (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
 		show_weapon = TRUE;
 
 	/* Display the item like a weapon */
@@ -2757,7 +2757,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 #endif
 			all = abbrev_all;
 
-			get_ability_abbreviation(tmp_val2, o_ptr, kanji, all);
+			get_ability_abbreviation(player_ptr, tmp_val2, o_ptr, kanji, all);
 		}
 	}
 
@@ -2766,7 +2766,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	{
 		char buff[1024];
 		if (tmp_val2[0]) strcat(tmp_val2, ", ");
-		get_inscription(buff, o_ptr);
+		get_inscription(player_ptr, buff, o_ptr);
 		angband_strcat(tmp_val2, buff, sizeof(tmp_val2));
 	}
 

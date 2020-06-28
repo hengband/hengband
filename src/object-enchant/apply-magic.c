@@ -134,11 +134,11 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
         if (a_ptr->gen_flags & TRG_PERMA_CURSE)
             o_ptr->curse_flags |= (TRC_PERMA_CURSE);
         if (a_ptr->gen_flags & (TRG_RANDOM_CURSE0))
-            o_ptr->curse_flags |= get_curse(0, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 0, o_ptr);
         if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1))
-            o_ptr->curse_flags |= get_curse(1, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 1, o_ptr);
         if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2))
-            o_ptr->curse_flags |= get_curse(2, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 2, o_ptr);
 
         return;
     }
@@ -218,11 +218,11 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
         if (e_ptr->gen_flags & TRG_PERMA_CURSE)
             o_ptr->curse_flags |= (TRC_PERMA_CURSE);
         if (e_ptr->gen_flags & (TRG_RANDOM_CURSE0))
-            o_ptr->curse_flags |= get_curse(0, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 0, o_ptr);
         if (e_ptr->gen_flags & (TRG_RANDOM_CURSE1))
-            o_ptr->curse_flags |= get_curse(1, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 1, o_ptr);
         if (e_ptr->gen_flags & (TRG_RANDOM_CURSE2))
-            o_ptr->curse_flags |= get_curse(2, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 2, o_ptr);
 
         if (e_ptr->gen_flags & (TRG_ONE_SUSTAIN))
             one_sustain(o_ptr);
@@ -352,10 +352,10 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
         if (k_ptr->gen_flags & (TRG_PERMA_CURSE))
             o_ptr->curse_flags |= TRC_PERMA_CURSE;
         if (k_ptr->gen_flags & (TRG_RANDOM_CURSE0))
-            o_ptr->curse_flags |= get_curse(0, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 0, o_ptr);
         if (k_ptr->gen_flags & (TRG_RANDOM_CURSE1))
-            o_ptr->curse_flags |= get_curse(1, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 1, o_ptr);
         if (k_ptr->gen_flags & (TRG_RANDOM_CURSE2))
-            o_ptr->curse_flags |= get_curse(2, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 2, o_ptr);
     }
 }

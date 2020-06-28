@@ -240,9 +240,9 @@ void reorder_pack(player_type *owner_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        o_value = object_value(o_ptr);
+        o_value = object_value(owner_ptr, o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(o_ptr, o_value, &owner_ptr->inventory_list[j]))
+            if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
                 break;
         }
 
@@ -317,9 +317,9 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 
     i = j;
     if (i < INVEN_PACK) {
-        s32b o_value = object_value(o_ptr);
+        s32b o_value = object_value(owner_ptr, o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(o_ptr, o_value, &owner_ptr->inventory_list[j]))
+            if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
                 break;
         }
 
@@ -347,15 +347,17 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 }
 
 /*!
- * todo ここのp_ptrだけは抜けない……関数ポインタの嵐でにっちもさっちもいかない
  * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
  * Check if we have space for an item in the pack without overflow
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
  * @return 溢れずに済むならTRUEを返す
  */
-bool check_store_item_to_inventory(object_type *o_ptr)
+bool check_store_item_to_inventory(player_type *player_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)player_ptr;
+
     if (p_ptr->inven_cnt < INVEN_PACK)
         return TRUE;
 

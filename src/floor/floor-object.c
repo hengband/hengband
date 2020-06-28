@@ -107,7 +107,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
         if (!k_idx)
             return FALSE;
 
-        object_prep(j_ptr, k_idx);
+        object_prep(owner_ptr, j_ptr, k_idx);
     }
 
     apply_magic(owner_ptr, j_ptr, floor_ptr->object_level, mode);
@@ -136,8 +136,9 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
  * @details
  * The location must be a legal, clean, floor grid.
  */
-bool make_gold(floor_type *floor_ptr, object_type *j_ptr)
+bool make_gold(player_type *player_ptr, object_type *j_ptr)
 {
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int i = ((randint1(floor_ptr->object_level + 2) + 2) / 2) - 1;
     if (one_in_(GREAT_OBJ)) {
         i += randint1(floor_ptr->object_level + 1);
@@ -147,7 +148,7 @@ bool make_gold(floor_type *floor_ptr, object_type *j_ptr)
         i = coin_type;
     if (i >= MAX_GOLD)
         i = MAX_GOLD - 1;
-    object_prep(j_ptr, OBJ_GOLD_LIST + i);
+    object_prep(player_ptr, j_ptr, OBJ_GOLD_LIST + i);
 
     s32b base = k_info[OBJ_GOLD_LIST + i].cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));

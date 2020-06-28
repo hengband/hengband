@@ -18,7 +18,7 @@
  * @param o_ptr 呪いをかけられる装備オブジェクトの構造体参照ポインタ
  * @return 与える呪いのID
  */
-BIT_FLAGS get_curse(int power, object_type *o_ptr)
+BIT_FLAGS get_curse(player_type *owner_ptr, int power, object_type *o_ptr)
 {
 	BIT_FLAGS new_curse;
 
@@ -38,8 +38,8 @@ BIT_FLAGS get_curse(int power, object_type *o_ptr)
 			if (new_curse & TRC_HEAVY_MASK) continue;
 		}
 
-		if (new_curse == TRC_LOW_MELEE && !object_is_weapon(o_ptr)) continue;
-		if (new_curse == TRC_LOW_AC && !object_is_armour(o_ptr)) continue;
+		if (new_curse == TRC_LOW_MELEE && !object_is_weapon(owner_ptr, o_ptr)) continue;
+		if (new_curse == TRC_LOW_AC && !object_is_armour(owner_ptr, o_ptr)) continue;
 		break;
 	}
 
@@ -61,7 +61,7 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
 	object_type *o_ptr = &owner_ptr->inventory_list[INVEN_RARM + randint0(12)];
 	if (!o_ptr->k_idx) return;
 	BIT_FLAGS oflgs[TR_FLAG_SIZE];
-	object_flags(o_ptr, oflgs);
+	object_flags(owner_ptr, o_ptr, oflgs);
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -97,7 +97,7 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
 
 	if (heavy_chance >= 50) curse_power++;
 
-	BIT_FLAGS new_curse = get_curse(curse_power, o_ptr);
+	BIT_FLAGS new_curse = get_curse(owner_ptr, curse_power, o_ptr);
 	if (!(o_ptr->curse_flags & new_curse))
 	{
 		changed = TRUE;

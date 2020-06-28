@@ -76,7 +76,7 @@ void known_obj_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
 		o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
-		object_flags_known(o_ptr, o_flags);
+		object_flags_known(creature_ptr, o_ptr, o_flags);
 		if (have_flag(o_flags, TR_IM_ACID)) add_flag(flags, TR_RES_ACID);
 		if (have_flag(o_flags, TR_IM_ELEC)) add_flag(flags, TR_RES_ELEC);
 		if (have_flag(o_flags, TR_IM_FIRE)) add_flag(flags, TR_RES_FIRE);

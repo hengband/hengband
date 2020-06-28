@@ -1731,7 +1731,7 @@ void calc_bonuses(player_type *creature_ptr)
 		o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
-		object_flags(o_ptr, flgs);
+		object_flags(creature_ptr, o_ptr, flgs);
 
 		creature_ptr->cursed |= (o_ptr->curse_flags & (0xFFFFFFF0L));
 		if (o_ptr->name1 == ART_CHAINSWORD) creature_ptr->cursed |= TRC_CHAINSWORD;
@@ -1984,7 +1984,7 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->dis_to_d[default_hand] += (s16b)bonus_to_d;
 	}
 
-	if (object_is_armour(&creature_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&creature_ptr->inventory_list[INVEN_LARM]))
+	if (object_is_armour(creature_ptr, &creature_ptr->inventory_list[INVEN_RARM]) || object_is_armour(creature_ptr, &creature_ptr->inventory_list[INVEN_LARM]))
 	{
 		creature_ptr->ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
 		creature_ptr->dis_ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
@@ -2107,7 +2107,7 @@ void calc_bonuses(player_type *creature_ptr)
 			ARMOUR_CLASS ac = 0;
 			o_ptr = &creature_ptr->inventory_list[i];
 			if (!o_ptr->k_idx) continue;
-			if (!object_is_armour(o_ptr)) continue;
+			if (!object_is_armour(creature_ptr, o_ptr)) continue;
 			if (!object_is_cursed(o_ptr)) continue;
 			ac += 5;
 			if (o_ptr->curse_flags & TRC_HEAVY_CURSE) ac += 7;
@@ -2524,7 +2524,7 @@ void calc_bonuses(player_type *creature_ptr)
 	for (int i = 0; i < 2; i++)
 	{
 		o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
-		object_flags(o_ptr, flgs);
+		object_flags(creature_ptr, o_ptr, flgs);
 		creature_ptr->heavy_wield[i] = FALSE;
 		creature_ptr->icky_wield[i] = FALSE;
 		creature_ptr->riding_wield[i] = FALSE;
@@ -3339,7 +3339,7 @@ static void calc_torch(player_type *creature_ptr)
 		}
 
 		BIT_FLAGS flgs[TR_FLAG_SIZE];
-		object_flags(o_ptr, flgs);
+		object_flags(creature_ptr, o_ptr, flgs);
 
 		POSITION rad = 0;
 		if (have_flag(flgs, TR_LITE_1) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 1;
@@ -3703,7 +3703,7 @@ static void calc_mana(player_type *creature_ptr)
 		creature_ptr->cumber_glove = FALSE;
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[INVEN_HANDS];
-		object_flags(o_ptr, flgs);
+		object_flags(creature_ptr, o_ptr, flgs);
 		if (o_ptr->k_idx &&
 			!(have_flag(flgs, TR_FREE_ACT)) &&
 			!(have_flag(flgs, TR_DEC_MANA)) &&
@@ -3897,11 +3897,11 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 
 		if (i == INVEN_BOW) continue;
 
-		object_flags(q_ptr, flgs);
+		object_flags(creature_ptr, q_ptr, flgs);
 		if (have_flag(flgs, TR_XTRA_SHOTS)) extra_shots++;
 	}
 
-	object_flags(o_ptr, flgs);
+	object_flags(creature_ptr, o_ptr, flgs);
 	if (have_flag(flgs, TR_XTRA_SHOTS)) extra_shots++;
 
 	int num = 0;

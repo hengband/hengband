@@ -2928,7 +2928,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 		}
 
 		/* Count non-gold objects that can be picked up. */
-		if (check_store_item_to_inventory(o_ptr))
+		if (check_store_item_to_inventory(owner_ptr, o_ptr))
 		{
 			can_pickup++;
 		}

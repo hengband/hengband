@@ -51,7 +51,7 @@ object_type *choose_warning_item(player_type *creature_ptr)
 		BIT_FLAGS flgs[TR_FLAG_SIZE];
 		object_type *o_ptr = &creature_ptr->inventory_list[i];
 
-		object_flags(o_ptr, flgs);
+		object_flags(creature_ptr, o_ptr, flgs);
 		if (have_flag(flgs, TR_WARNING))
 		{
 			choices[number] = i;

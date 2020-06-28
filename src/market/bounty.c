@@ -156,7 +156,7 @@ bool exchange_cash(player_type *player_ptr)
 
             msg_format(_("これで合計 %d ポイント獲得しました。", "You earned %d point%s total."), num, (num > 1 ? "s" : ""));
 
-            object_prep(&forge, lookup_kind(prize_list[num - 1].tval, prize_list[num - 1].sval));
+            object_prep(player_ptr, &forge, lookup_kind(prize_list[num - 1].tval, prize_list[num - 1].sval));
             apply_magic(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
 
             object_aware(player_ptr, &forge);

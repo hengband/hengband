@@ -113,10 +113,10 @@ void store_delete(void)
  * Some objects can be sold at a "discount" (in small piles)
  * </pre>
  */
-static void mass_produce(object_type *o_ptr)
+static void mass_produce(player_type *player_ptr, object_type *o_ptr)
 {
 	int size = 1;
-	PRICE cost = object_value(o_ptr);
+    PRICE cost = object_value(player_ptr, o_ptr);
 	switch (o_ptr->tval)
 	{
 	case TV_FOOD:
@@ -296,9 +296,9 @@ void store_create(player_type *player_ptr, bool (*black_market_crap)(player_type
 		object_type forge;
 		object_type *q_ptr;
 		q_ptr = &forge;
-		object_prep(q_ptr, i);
+		object_prep(player_ptr, q_ptr, i);
 		apply_magic(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
-		if (!store_will_buy(q_ptr)) continue;
+		if (!store_will_buy(player_ptr, q_ptr)) continue;
 
 		if (q_ptr->tval == TV_LITE)
 		{
@@ -313,15 +313,15 @@ void store_create(player_type *player_ptr, bool (*black_market_crap)(player_type
 		if (cur_store_num == STORE_BLACK)
 		{
 			if (black_market_crap(player_ptr, q_ptr)) continue;
-			if (object_value(q_ptr) < 10) continue;
+			if (object_value(player_ptr, q_ptr) < 10) continue;
 		}
 		else
 		{
-			if (object_value(q_ptr) <= 0) continue;
+			if (object_value(player_ptr, q_ptr) <= 0) continue;
 		}
 
-		mass_produce(q_ptr);
-		(void)store_carry(q_ptr);
+		mass_produce(player_ptr, q_ptr);
+		(void)store_carry(player_ptr, q_ptr);
 		break;
 	}
 }
@@ -332,10 +332,10 @@ void store_create(player_type *player_ptr, bool (*black_market_crap)(player_type
  * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
  * @return アイテムが祝福されたアイテムならばTRUEを返す
  */
-static bool is_blessed_item(object_type *o_ptr)
+static bool is_blessed_item(player_type *player_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	object_flags(o_ptr, flgs);
+    object_flags(player_ptr, o_ptr, flgs);
 	if (have_flag(flgs, TR_BLESSED)) return TRUE;
 	else return FALSE;
 }
@@ -349,9 +349,14 @@ static bool is_blessed_item(object_type *o_ptr)
  * @note
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
-bool store_will_buy(object_type *o_ptr)
+bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
 {
-	if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) return TRUE;
+    /* Unused */
+    (void)player_ptr;
+
+	if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM))
+		return TRUE;
+
 	switch (cur_store_num)
 	{
 	case STORE_GENERAL:
@@ -454,7 +459,7 @@ bool store_will_buy(object_type *o_ptr)
 		case TV_POLEARM:
 		case TV_SWORD:
 		{
-			if (is_blessed_item(o_ptr)) break;
+			if (is_blessed_item(player_ptr, o_ptr)) break;
 		}
 			/* Fall through */
 		default:
@@ -535,7 +540,7 @@ bool store_will_buy(object_type *o_ptr)
 	}
 	}
 
-	if (object_value(o_ptr) <= 0) return FALSE;
+	if (object_value(player_ptr, o_ptr) <= 0) return FALSE;
 	return TRUE;
 }
 
@@ -619,9 +624,9 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
  */
-int store_carry(object_type *o_ptr)
+int store_carry(player_type *player_ptr, object_type *o_ptr)
 {
-	PRICE value = object_value(o_ptr);
+    PRICE value = object_value(player_ptr, o_ptr);
 	if (value <= 0) return -1;
 	o_ptr->ident |= IDENT_FULL_KNOWN;
 	o_ptr->inscription = 0;
@@ -654,7 +659,7 @@ int store_carry(object_type *o_ptr)
 			if (o_ptr->pval > j_ptr->pval) continue;
 		}
 
-		PRICE j_value = object_value(j_ptr);
+		PRICE j_value = object_value(player_ptr, j_ptr);
 		if (value > j_value) break;
 		if (value < j_value) continue;
 	}

@@ -126,7 +126,7 @@ static int cur_store_feat;
  */
 static PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool flip)
 {
-	PRICE price = object_value(o_ptr);
+    PRICE price = object_value(player_ptr, o_ptr);
 	if (price <= 0) return (0L);
 
 	int factor = rgold_adj[ot_ptr->owner_race][player_ptr->prace];
@@ -245,7 +245,7 @@ static int store_check_num(object_type *o_ptr)
  * @param store_num 店舗ID
  * @return 実際に整理が行われたならばTRUEを返す。
  */
-bool combine_and_reorder_home(int store_num)
+bool combine_and_reorder_home(player_type *player_ptr, int store_num)
 {
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
@@ -323,11 +323,11 @@ bool combine_and_reorder_home(int store_num)
 		o_ptr = &st_ptr->stock[i];
 		if (!o_ptr->k_idx) continue;
 
-		s32b o_value = object_value(o_ptr);
+		s32b o_value = object_value(player_ptr, o_ptr);
 		int j;
 		for (j = 0; j < st_ptr->stock_num; j++)
 		{
-			if (object_sort_comp(o_ptr, o_value, &st_ptr->stock[j])) break;
+			if (object_sort_comp(player_ptr, o_ptr, o_value, &st_ptr->stock[j])) break;
 		}
 
 		if (j >= i) continue;
@@ -422,11 +422,11 @@ static int home_carry(player_type *player_ptr, object_type *o_ptr)
 		}
 	}
 
-	PRICE value = object_value(o_ptr);
+	PRICE value = object_value(player_ptr, o_ptr);
 	int slot;
 	for (slot = 0; slot < st_ptr->stock_num; slot++)
 	{
-		if (object_sort_comp(o_ptr, value, &st_ptr->stock[slot])) break;
+		if (object_sort_comp(player_ptr, o_ptr, value, &st_ptr->stock[slot])) break;
 	}
 
 	for (int i = st_ptr->stock_num; i > slot; i--)
@@ -437,7 +437,7 @@ static int home_carry(player_type *player_ptr, object_type *o_ptr)
 	st_ptr->stock_num++;
 	st_ptr->stock[slot] = *o_ptr;
 	chg_virtue(player_ptr, V_SACRIFICE, -1);
-	(void)combine_and_reorder_home(cur_store_num);
+	(void)combine_and_reorder_home(player_ptr, cur_store_num);
 	return slot;
 }
 
@@ -967,7 +967,7 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
 	final_ask *= o_ptr->number;
 	s32b min_per = ot_ptr->haggle_per;
 	s32b max_per = min_per * 3;
-	s32b last_offer = object_value(o_ptr) * o_ptr->number;
+	s32b last_offer = object_value(player_ptr, o_ptr) * o_ptr->number;
 	last_offer = last_offer * (200 - (int)(ot_ptr->max_inflate)) / 100L;
 	if (last_offer <= 0) last_offer = 1;
 
@@ -1117,7 +1117,7 @@ static bool sell_haggle(player_type *player_ptr, object_type *o_ptr, s32b *price
 
 	s32b min_per = ot_ptr->haggle_per;
 	s32b max_per = min_per * 3;
-	s32b last_offer = object_value(o_ptr) * o_ptr->number;
+	s32b last_offer = object_value(player_ptr, o_ptr) * o_ptr->number;
 	last_offer = last_offer * ot_ptr->max_inflate / 100L;
 	s32b offer = 0;
 	allow_inc = FALSE;
@@ -1291,7 +1291,7 @@ static void store_purchase(player_type *player_ptr)
 	 */
 	reduce_charges(j_ptr, o_ptr->number - amt);
 	j_ptr->number = amt;
-	if (!check_store_item_to_inventory(j_ptr))
+	if (!check_store_item_to_inventory(player_ptr, j_ptr))
 	{
 		msg_print(_("そんなにアイテムを持てない。", "You cannot carry that many different items."));
 		return;
@@ -1319,7 +1319,7 @@ static void store_purchase(player_type *player_ptr)
 	 */
 	reduce_charges(j_ptr, o_ptr->number - amt);
 	j_ptr->number = amt;
-	if (!check_store_item_to_inventory(j_ptr))
+	if (!check_store_item_to_inventory(player_ptr, j_ptr))
 	{
 		msg_print(_("ザックにそのアイテムを入れる隙間がない。", "You cannot carry that many items."));
 		return;
@@ -1342,7 +1342,7 @@ static void store_purchase(player_type *player_ptr)
 		i = st_ptr->stock_num;
 		store_item_increase(item, -amt);
 		store_item_optimize(item);
-		combined_or_reordered = combine_and_reorder_home(STORE_HOME);
+		combined_or_reordered = combine_and_reorder_home(player_ptr, STORE_HOME);
 		if (i == st_ptr->stock_num)
 		{
 			if (combined_or_reordered) display_store_inventory(player_ptr);
@@ -1580,7 +1580,7 @@ static void store_sell(player_type *owner_ptr)
 
 			owner_ptr->au += price;
 			store_prt_gold(owner_ptr);
-			dummy = object_value(q_ptr) * q_ptr->number;
+			dummy = object_value(owner_ptr, q_ptr) * q_ptr->number;
 
 			identify_item(owner_ptr, o_ptr);
 			q_ptr = &forge;
@@ -1597,7 +1597,7 @@ static void store_sell(player_type *owner_ptr)
 				q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
 			}
 
-			value = object_value(q_ptr) * q_ptr->number;
+			value = object_value(owner_ptr, q_ptr) * q_ptr->number;
 			object_desc(owner_ptr, o_name, q_ptr, 0);
 			msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, (long)price);
 
@@ -1621,7 +1621,7 @@ static void store_sell(player_type *owner_ptr)
 
 			inven_item_optimize(owner_ptr, item);
 			handle_stuff(owner_ptr);
-			int item_pos = store_carry(q_ptr);
+			int item_pos = store_carry(owner_ptr, q_ptr);
 			if (item_pos >= 0)
 			{
 				store_top = (item_pos / store_bottom) * store_bottom;
@@ -1767,7 +1767,7 @@ static void museum_remove_object(player_type *player_ptr)
 	store_item_increase(item, -o_ptr->number);
 	store_item_optimize(item);
 
-	(void)combine_and_reorder_home(STORE_MUSEUM);
+	(void)combine_and_reorder_home(player_ptr, STORE_MUSEUM);
 	if (st_ptr->stock_num == 0) store_top = 0;
 
 	else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
@@ -2000,7 +2000,7 @@ static void store_process_command(player_type *client_ptr)
 	case '=':
 	{
 		do_cmd_options(client_ptr);
-		(void)combine_and_reorder_home(STORE_HOME);
+		(void)combine_and_reorder_home(client_ptr, STORE_HOME);
 		do_cmd_redraw(client_ptr);
 		display_store(client_ptr);
 		break;

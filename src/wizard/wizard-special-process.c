@@ -321,7 +321,7 @@ static void do_cmd_wiz_change(player_type *creature_ptr)
 static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(o_ptr, flgs);
+    object_flags(player_ptr, o_ptr, flgs);
 
     int j = 13;
     for (int i = 1; i <= 23; i++)
@@ -334,7 +334,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), 4, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
-    prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), 7, j);
+    prt(format("name1 = %-4d  name2 = %-4d  cost = %ld", o_ptr->name1, o_ptr->name2, (long)object_value_real(player_ptr, o_ptr)), 7, j);
     prt(format("ident = %04x  xtra1 = %-4d  xtra2 = %-4d  timeout = %-d", o_ptr->ident, o_ptr->xtra1, o_ptr->xtra2, o_ptr->timeout), 8, j);
     prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d", o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
 
@@ -525,42 +525,42 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
         /* Apply bad magic, but first clear object */
         case 'w':
         case 'W': {
-            object_prep(q_ptr, o_ptr->k_idx);
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
             apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
             break;
         }
         /* Apply bad magic, but first clear object */
         case 'c':
         case 'C': {
-            object_prep(q_ptr, o_ptr->k_idx);
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
             apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
             break;
         }
         /* Apply normal magic, but first clear object */
         case 'n':
         case 'N': {
-            object_prep(q_ptr, o_ptr->k_idx);
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
             apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
             break;
         }
         /* Apply good magic, but first clear object */
         case 'g':
         case 'G': {
-            object_prep(q_ptr, o_ptr->k_idx);
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
             apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
             break;
         }
         /* Apply great magic, but first clear object */
         case 'e':
         case 'E': {
-            object_prep(q_ptr, o_ptr->k_idx);
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
             apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
             break;
         }
         /* Apply special magic, but first clear object */
         case 's':
         case 'S': {
-            object_prep(q_ptr, o_ptr->k_idx);
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
             apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
 
             if (!object_is_artifact(q_ptr))
@@ -820,7 +820,7 @@ static void wiz_create_item(player_type *caster_ptr)
     object_type forge;
     object_type *q_ptr;
     q_ptr = &forge;
-    object_prep(q_ptr, k_idx);
+    object_prep(caster_ptr, q_ptr, k_idx);
     apply_magic(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
     (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
     msg_print("Allocated.");
@@ -909,7 +909,7 @@ static void do_cmd_wiz_learn(player_type *caster_ptr)
         object_kind *k_ptr = &k_info[i];
         if (k_ptr->level <= command_arg) {
             q_ptr = &forge;
-            object_prep(q_ptr, i);
+            object_prep(caster_ptr, q_ptr, i);
             object_aware(caster_ptr, q_ptr);
         }
     }

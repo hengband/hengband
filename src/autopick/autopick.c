@@ -116,7 +116,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 		}
 
 		disturb(player_ptr, FALSE, FALSE);
-		if (!check_store_item_to_inventory(o_ptr))
+		if (!check_store_item_to_inventory(player_ptr, o_ptr))
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 			object_desc(player_ptr, o_name, o_ptr, 0);

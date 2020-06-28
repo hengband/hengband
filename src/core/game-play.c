@@ -328,8 +328,8 @@ void play_game(player_type *player_ptr, bool new_game)
         m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
     }
 
-    (void)combine_and_reorder_home(STORE_HOME);
-    (void)combine_and_reorder_home(STORE_MUSEUM);
+    (void)combine_and_reorder_home(player_ptr, STORE_HOME);
+    (void)combine_and_reorder_home(player_ptr, STORE_MUSEUM);
     select_floor_music(player_ptr);
 
     while (TRUE) {

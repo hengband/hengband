@@ -364,7 +364,7 @@ static void strip_bytes(int n)
  * a complete hack, items which are inscribed with "uncursed" will be
  * "uncursed" when imported from pre-2.7.9 savefiles.
  */
-static void rd_item_old(object_type *o_ptr)
+static void rd_item_old(player_type *player_ptr, object_type *o_ptr)
 {
     rd_s16b(&o_ptr->k_idx);
 
@@ -576,7 +576,7 @@ static void rd_item_old(object_type *o_ptr)
     } else {
         rd_byte(&o_ptr->xtra3);
         if (h_older_than(1, 3, 0, 1)) {
-            if (object_is_smith(o_ptr) && o_ptr->xtra3 >= 1 + 96)
+            if (object_is_smith(player_ptr, o_ptr) && o_ptr->xtra3 >= 1 + 96)
                 o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
         }
 
@@ -642,10 +642,10 @@ static void rd_item_old(object_type *o_ptr)
  * @param o_ptr アイテムオブジェクト保存先ポインタ
  * @return なし
  */
-static void rd_item(object_type *o_ptr)
+static void rd_item(player_type *player_ptr, object_type *o_ptr)
 {
     if (h_older_than(1, 5, 0, 0)) {
-        rd_item_old(o_ptr);
+        rd_item_old(player_ptr, o_ptr);
         return;
     }
 
@@ -830,7 +830,7 @@ static void rd_item(object_type *o_ptr)
         return;
 
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(o_ptr, flgs);
+    object_flags(player_ptr, o_ptr, flgs);
 
     if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) {
         add_flag(o_ptr->art_flags, TR_LITE_M1);
@@ -1328,10 +1328,10 @@ static void home_carry(player_type *player_ptr, store_type *store_ptr, object_ty
     if (store_ptr->stock_num >= STORE_INVEN_MAX * 10)
         return;
 
-    s32b value = object_value(o_ptr);
+    s32b value = object_value(player_ptr, o_ptr);
     int slot;
     for (slot = 0; slot < store_ptr->stock_num; slot++) {
-        if (object_sort_comp(o_ptr, value, &store_ptr->stock[slot]))
+        if (object_sort_comp(player_ptr, o_ptr, value, &store_ptr->stock[slot]))
             break;
     }
 
@@ -1388,7 +1388,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
         q_ptr = &forge;
         object_wipe(q_ptr);
 
-        rd_item(q_ptr);
+        rd_item(player_ptr, q_ptr);
 
         bool is_valid_item = store_ptr->stock_num
             < (store_number == STORE_HOME ? STORE_INVEN_MAX * 10 : store_number == STORE_MUSEUM ? STORE_INVEN_MAX * 50 : STORE_INVEN_MAX);
@@ -2244,7 +2244,7 @@ static errr rd_inventory(player_type *player_ptr)
         q_ptr = &forge;
         object_wipe(q_ptr);
 
-        rd_item(q_ptr);
+        rd_item(player_ptr, q_ptr);
         if (!q_ptr->k_idx)
             return (53);
 
@@ -2304,24 +2304,24 @@ static void rd_messages(void)
 
 /*!
  * @brief メッセージログを読み込む / Read the dungeon (old method)
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-static errr rd_dungeon_old(player_type *creature_ptr)
+static errr rd_dungeon_old(player_type *player_ptr)
 {
     s16b tmp16s;
     rd_s16b(&tmp16s);
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = (DEPTH)tmp16s;
     if (z_older_than(10, 3, 8))
-        creature_ptr->dungeon_idx = DUNGEON_ANGBAND;
+        player_ptr->dungeon_idx = DUNGEON_ANGBAND;
     else {
         byte tmp8u;
         rd_byte(&tmp8u);
-        creature_ptr->dungeon_idx = (IDX)tmp8u;
+        player_ptr->dungeon_idx = (IDX)tmp8u;
     }
 
     floor_ptr->base_level = floor_ptr->dun_level;
@@ -2331,12 +2331,12 @@ static errr rd_dungeon_old(player_type *creature_ptr)
     rd_s16b(&tmp16s);
     floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
     rd_s16b(&tmp16s);
-    creature_ptr->y = (POSITION)tmp16s;
+    player_ptr->y = (POSITION)tmp16s;
     rd_s16b(&tmp16s);
-    creature_ptr->x = (POSITION)tmp16s;
+    player_ptr->x = (POSITION)tmp16s;
     if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {
-        creature_ptr->y = 33;
-        creature_ptr->x = 131;
+        player_ptr->y = 33;
+        player_ptr->x = 131;
     }
     rd_s16b(&tmp16s);
     floor_ptr->height = (POSITION)tmp16s;
@@ -2468,7 +2468,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
                 } else if (g_ptr->info & CAVE_TRAP) {
                     g_ptr->info &= ~CAVE_TRAP;
                     g_ptr->mimic = g_ptr->feat;
-                    g_ptr->feat = choose_random_trap(creature_ptr);
+                    g_ptr->feat = choose_random_trap(player_ptr);
                 } else if (g_ptr->feat == OLD_FEAT_INVIS) {
                     g_ptr->mimic = feat_floor;
                     g_ptr->feat = feat_trap_open;
@@ -2515,7 +2515,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[o_idx];
-        rd_item(o_ptr);
+        rd_item(player_ptr, o_ptr);
         if (OBJECT_IS_HELD_MONSTER(o_ptr)) {
             monster_type *m_ptr;
             m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
@@ -2546,7 +2546,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
         }
 
         m_ptr = &floor_ptr->m_list[m_idx];
-        rd_monster(creature_ptr, m_ptr);
+        rd_monster(player_ptr, m_ptr);
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
         g_ptr->m_idx = m_idx;
@@ -2726,7 +2726,7 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
             return 152;
 
         o_ptr = &floor_ptr->o_list[o_idx];
-        rd_item(o_ptr);
+        rd_item(player_ptr, o_ptr);
 
         if (OBJECT_IS_HELD_MONSTER(o_ptr)) {
             monster_type *m_ptr;

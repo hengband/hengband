@@ -64,8 +64,8 @@ char *a_text;
  */
 ARTIFACT_IDX max_a_idx;
 
-static bool has_extreme_damage_rate(object_type *o_ptr);
-static bool weakening_artifact(object_type *o_ptr);
+static bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr);
+static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr);
 
 #ifdef JP
 /*!
@@ -759,7 +759,7 @@ static void random_resistance(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
-static void random_misc(object_type *o_ptr)
+static void random_misc(player_type *player_ptr, object_type *o_ptr)
 {
 	switch (o_ptr->artifact_bias)
 	{
@@ -915,8 +915,8 @@ static void random_misc(object_type *o_ptr)
 	case 24:
 	case 25:
 	case 26:
-		if (object_is_armour(o_ptr))
-			random_misc(o_ptr);
+		if (object_is_armour(player_ptr, o_ptr))
+			random_misc(player_ptr, o_ptr);
 		else
 		{
 			o_ptr->to_a = 4 + randint1(11);
@@ -1785,7 +1785,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 				random_resistance(o_ptr);
 			break;
 		case 5:
-			random_misc(o_ptr);
+			random_misc(player_ptr, o_ptr);
 			break;
 		case 6: case 7:
 			random_slay(o_ptr);
@@ -1818,7 +1818,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 
 
 	/* give it some plusses... */
-	if (object_is_armour(o_ptr))
+	if (object_is_armour(player_ptr, o_ptr))
 		o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
 	else if (object_is_weapon_ammo(o_ptr))
 	{
@@ -1833,18 +1833,18 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 	add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
 	add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
 
-	s32b total_flags = flag_cost(o_ptr, o_ptr->pval);
+	s32b total_flags = flag_cost(player_ptr, o_ptr, o_ptr->pval);
 
 	if (a_cursed) curse_artifact(player_ptr, o_ptr);
 
 	if (!a_cursed &&
-		one_in_(object_is_armour(o_ptr) ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE))
+		one_in_(object_is_armour(player_ptr, o_ptr) ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE))
 	{
 		o_ptr->xtra2 = 0;
 		give_activation_power(o_ptr);
 	}
 
-	if (object_is_armour(o_ptr))
+	if (object_is_armour(player_ptr, o_ptr))
 	{
 		while ((o_ptr->to_d + o_ptr->to_h) > 20)
 		{
@@ -1906,9 +1906,9 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 	}
 
 	/* ダメージ抑制処理を行う */
-	while (has_extreme_damage_rate(o_ptr) && !one_in_(SWORDFISH_LUCK))
+	while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK))
 	{
-		weakening_artifact(o_ptr);
+		weakening_artifact(player_ptr, o_ptr);
 	}
 
 	if (a_scroll)
@@ -1947,7 +1947,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 	}
 	else
 	{
-		get_random_name(o_ptr, new_name, object_is_armour(o_ptr), power_level);
+		get_random_name(o_ptr, new_name, object_is_armour(player_ptr, o_ptr), power_level);
 	}
 
 	/* Save the inscription */
@@ -1969,10 +1969,10 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果のIDを返す
  */
-int activation_index(object_type *o_ptr)
+int activation_index(player_type *player_ptr, object_type *o_ptr)
 {
 	/* Give priority to weaponsmith's essential activations */
-	if (object_is_smith(o_ptr))
+	if (object_is_smith(player_ptr, o_ptr))
 	{
 		switch (o_ptr->xtra3 - 1)
 		{
@@ -2018,9 +2018,9 @@ int activation_index(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果構造体のポインタを返す
  */
-const activation_type* find_activation_info(object_type *o_ptr)
+const activation_type *find_activation_info(player_type *player_ptr, object_type *o_ptr)
 {
-	const int index = activation_index(o_ptr);
+    const int index = activation_index(player_ptr, o_ptr);
 	const activation_type* p;
 	for (p = activation_info; p->flag != NULL; ++p)
 	{
@@ -2067,7 +2067,7 @@ void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, art
 			add_flag(o_ptr->art_flags, TR_TY_CURSE);
 			o_ptr->curse_flags |=
 				(TRC_CURSED | TRC_HEAVY_CURSE);
-			o_ptr->curse_flags |= get_curse(2, o_ptr);
+			o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
 			return;
 		}
 	}
@@ -2169,7 +2169,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 	object_type forge;
 	object_type *q_ptr;
 	q_ptr = &forge;
-	object_prep(q_ptr, i);
+	object_prep(player_ptr, q_ptr, i);
 
 	/* Save the name */
 	q_ptr->name1 = a_idx;
@@ -2188,9 +2188,9 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 	if (a_ptr->gen_flags & TRG_CURSED) q_ptr->curse_flags |= (TRC_CURSED);
 	if (a_ptr->gen_flags & TRG_HEAVY_CURSE) q_ptr->curse_flags |= (TRC_HEAVY_CURSE);
 	if (a_ptr->gen_flags & TRG_PERMA_CURSE) q_ptr->curse_flags |= (TRC_PERMA_CURSE);
-	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE0)) q_ptr->curse_flags |= get_curse(0, q_ptr);
-	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1)) q_ptr->curse_flags |= get_curse(1, q_ptr);
-	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2)) q_ptr->curse_flags |= get_curse(2, q_ptr);
+	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE0)) q_ptr->curse_flags |= get_curse(player_ptr, 0, q_ptr);
+	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1)) q_ptr->curse_flags |= get_curse(player_ptr, 1, q_ptr);
+	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2)) q_ptr->curse_flags |= get_curse(player_ptr, 2, q_ptr);
 
 	random_artifact_resistance(player_ptr, q_ptr, a_ptr);
 
@@ -2200,10 +2200,10 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 
 
 /*対邪平均ダメージの計算処理*/
-HIT_POINT calc_arm_avgdamage(object_type *o_ptr)
+static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	object_flags(o_ptr, flgs);
+    object_flags(player_ptr, o_ptr, flgs);
 
 	HIT_POINT base, forced, vorpal;
 	HIT_POINT s_evil = forced = vorpal = 0;
@@ -2239,29 +2239,29 @@ HIT_POINT calc_arm_avgdamage(object_type *o_ptr)
 }
 
 
-static bool has_extreme_damage_rate(object_type *o_ptr)
+static bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	object_flags(o_ptr, flgs);
+    object_flags(player_ptr, o_ptr, flgs);
 
 	if (have_flag(flgs, TR_VAMPIRIC))
 	{
-		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(o_ptr) > 52))
+        if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52))
 		{
 			return TRUE;
 		}
 
-		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 43))
+		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 43))
 		{
 			return TRUE;
 		}
 
-		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 33))
+		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 33))
 		{
 			return TRUE;
 		}
 
-		if (calc_arm_avgdamage(o_ptr) > 63)
+		if (calc_arm_avgdamage(player_ptr, o_ptr) > 63)
 		{
 			return TRUE;
 		}
@@ -2269,22 +2269,22 @@ static bool has_extreme_damage_rate(object_type *o_ptr)
 		return FALSE;
 	}
 
-	if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(o_ptr) > 65))
+	if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 65))
 	{
 		return TRUE;
 	}
 
-	if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 52))
+	if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52))
 	{
 		return TRUE;
 	}
 
-	if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 40))
+	if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 40))
 	{
 		return TRUE;
 	}
 
-	if (calc_arm_avgdamage(o_ptr) > 75)
+	if (calc_arm_avgdamage(player_ptr, o_ptr) > 75)
 	{
 		return TRUE;
 	}
@@ -2293,12 +2293,12 @@ static bool has_extreme_damage_rate(object_type *o_ptr)
 }
 
 
-static bool weakening_artifact(object_type *o_ptr)
+static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
 {
 	KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
 	object_kind *k_ptr = &k_info[k_idx];
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	object_flags(o_ptr, flgs);
+	object_flags(player_ptr, o_ptr, flgs);
 
 	if (have_flag(flgs, TR_KILL_EVIL))
 	{
@@ -2456,7 +2456,7 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
 
 		/*! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す /
 		 * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
-		object_prep(o_ptr, k_idx);
+		object_prep(player_ptr, o_ptr, k_idx);
 
 		o_ptr->name1 = i;
 		random_artifact_resistance(player_ptr, o_ptr, a_ptr);

@@ -48,6 +48,6 @@ void store_delete(void);
 void store_create(player_type *player_ptr, bool(*black_market_crap)(player_type*, object_type*));
 void store_item_increase(INVENTORY_IDX item, int num);
 void store_item_optimize(INVENTORY_IDX item);
-bool store_will_buy(object_type *o_ptr);
-int store_carry(object_type *o_ptr);
+bool store_will_buy(player_type *player_ptr, object_type *o_ptr);
+int store_carry(player_type *player_ptr, object_type *o_ptr);
 bool store_object_similar(object_type *o_ptr, object_type *j_ptr);

@@ -157,7 +157,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 			if (!o_ptr) return FALSE;
 
 			object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
-			object_flags(o_ptr, f);
+			object_flags(caster_ptr, o_ptr, f);
 
 			if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name))) return FALSE;
 
@@ -208,7 +208,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 					}
 				}
 
-				o_ptr->curse_flags |= get_curse(curse_rank, o_ptr);
+				o_ptr->curse_flags |= get_curse(caster_ptr, curse_rank, o_ptr);
 			}
 
 			caster_ptr->update |= (PU_BONUS);
@@ -454,7 +454,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
 			o_ptr = &caster_ptr->inventory_list[item];
 			object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
-			object_flags(o_ptr, f);
+			object_flags(caster_ptr, o_ptr, f);
 
 			if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name))) return FALSE;
 
@@ -506,7 +506,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 					}
 				}
 
-				o_ptr->curse_flags |= get_curse(curse_rank, o_ptr);
+				o_ptr->curse_flags |= get_curse(caster_ptr, curse_rank, o_ptr);
 			}
 
 			caster_ptr->update |= (PU_BONUS);
@@ -659,7 +659,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 			o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
 
-			object_flags(o_ptr, f);
+			object_flags(caster_ptr, o_ptr, f);
 
 			caster_ptr->csp += (caster_ptr->lev / 5) + randint1(caster_ptr->lev / 5);
 			if (have_flag(f, TR_TY_CURSE) || (o_ptr->curse_flags & TRC_TY_CURSE)) caster_ptr->csp += randint1(5);

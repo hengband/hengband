@@ -560,7 +560,7 @@ static void drain_essence(player_type *creature_ptr)
 	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
-	if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
+	if (object_is_known(o_ptr) && !object_is_nameless(creature_ptr, o_ptr))
 	{
 		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -569,7 +569,7 @@ static void drain_essence(player_type *creature_ptr)
 
 	take_turn(creature_ptr, 100);
 
-	object_flags(o_ptr, old_flgs);
+	object_flags(creature_ptr, o_ptr, old_flgs);
 	if (have_flag(old_flgs, TR_KILL_DRAGON)) add_flag(old_flgs, TR_SLAY_DRAGON);
 	if (have_flag(old_flgs, TR_KILL_ANIMAL)) add_flag(old_flgs, TR_SLAY_ANIMAL);
 	if (have_flag(old_flgs, TR_KILL_EVIL)) add_flag(old_flgs, TR_SLAY_EVIL);
@@ -616,7 +616,7 @@ static void drain_essence(player_type *creature_ptr)
 	weight = o_ptr->weight;
 	number = o_ptr->number;
 
-	object_prep(o_ptr, o_ptr->k_idx);
+	object_prep(creature_ptr, o_ptr, o_ptr->k_idx);
 
 	o_ptr->iy = iy;
 	o_ptr->ix = ix;
@@ -629,7 +629,7 @@ static void drain_essence(player_type *creature_ptr)
 	object_aware(creature_ptr, o_ptr);
 	object_known(o_ptr);
 
-	object_flags(o_ptr, new_flgs);
+	object_flags(creature_ptr, o_ptr, new_flgs);
 
 	for (i = 0; essence_info[i].add_name; i++)
 	{
@@ -1137,7 +1137,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
 	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), tval);
 	if (!o_ptr) return;
 
-	if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(o_ptr)))
+	if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(creature_ptr, o_ptr)))
 	{
 		msg_print(_("そのアイテムはこれ以上改良できない。", "This item can not be improved any further."));
 		return;
@@ -1370,7 +1370,7 @@ static void erase_essence(player_type *creature_ptr)
 		if (o_ptr->to_d < 0) o_ptr->to_d = 0;
 	}
 	o_ptr->xtra3 = 0;
-	object_flags(o_ptr, flgs);
+        object_flags(creature_ptr, o_ptr, flgs);
 	if (!(have_pval_flags(flgs))) o_ptr->pval = 0;
 	msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
 	creature_ptr->update |= (PU_COMBINE | PU_REORDER);

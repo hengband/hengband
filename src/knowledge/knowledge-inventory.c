@@ -103,10 +103,10 @@ static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
  * @param fff 一時ファイルへの参照ポインタ
  * @return なし
  */
-static void display_identified_resistances_flag(object_type *o_ptr, FILE *fff)
+static void display_identified_resistances_flag(player_type *creature_ptr, object_type *o_ptr, FILE *fff)
 {
 	BIT_FLAGS flags[TR_FLAG_SIZE];
-	object_flags_known(o_ptr, flags);
+    object_flags_known(creature_ptr, o_ptr, flags);
 
 	print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flags, fff);
 	print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC, flags, fff);
@@ -179,7 +179,7 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 		return;
 	}
 
-	display_identified_resistances_flag(o_ptr, fff);
+	display_identified_resistances_flag(creature_ptr, o_ptr, fff);
 }
 
 

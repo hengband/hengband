@@ -30,12 +30,12 @@
  * @param from_ptr 修復材料オブジェクトの構造体の参照ポインタ。
  * @return 修復対象になるならTRUEを返す。
  */
-static void give_one_ability_of_object(object_type *to_ptr, object_type *from_ptr)
+static void give_one_ability_of_object(player_type *player_ptr, object_type *to_ptr, object_type *from_ptr)
 {
     BIT_FLAGS to_flgs[TR_FLAG_SIZE];
     BIT_FLAGS from_flgs[TR_FLAG_SIZE];
-    object_flags(to_ptr, to_flgs);
-    object_flags(from_ptr, from_flgs);
+    object_flags(player_ptr, to_ptr, to_flgs);
+    object_flags(player_ptr, from_ptr, from_flgs);
 
     int n = 0;
     int cand[TR_FLAG_MAX];
@@ -130,7 +130,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     object_desc(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
     prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
-    PRICE cost = bcost + object_value_real(o_ptr) * 2;
+    PRICE cost = bcost + object_value_real(player_ptr, o_ptr) * 2;
     if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost)))
         return 0;
 
@@ -228,7 +228,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         o_ptr->pval = MIN(o_ptr->pval, bmax);
     }
 
-    give_one_ability_of_object(o_ptr, mo_ptr);
+    give_one_ability_of_object(player_ptr, o_ptr, mo_ptr);
     o_ptr->to_d += MAX(0, (mo_ptr->to_d / 3));
     o_ptr->to_h += MAX(0, (mo_ptr->to_h / 3));
     o_ptr->to_a += MAX(0, (mo_ptr->to_a));
@@ -239,8 +239,8 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
             add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
         }
 
-        give_one_ability_of_object(o_ptr, mo_ptr);
-        if (!activation_index(o_ptr))
+        give_one_ability_of_object(player_ptr, o_ptr, mo_ptr);
+        if (!activation_index(player_ptr, o_ptr))
             one_activation(o_ptr);
 
         if (o_ptr->name1 == ART_NARSIL) {

@@ -112,7 +112,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	if (object_is_fixed_artifact(o_ptr)) lev = a_info[o_ptr->name1].level;
 	else if (object_is_random_artifact(o_ptr))
 	{
-		const activation_type* const act_ptr = find_activation_info(o_ptr);
+		const activation_type* const act_ptr = find_activation_info(user_ptr, o_ptr);
 		if (act_ptr) {
 			lev = act_ptr->level;
 		}
@@ -176,7 +176,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	sound(SOUND_ZAP);
 
 	/* Activate object */
-	if (activation_index(o_ptr))
+	if (activation_index(user_ptr, o_ptr))
 	{
 		(void)activate_artifact(user_ptr, o_ptr);
 
@@ -412,7 +412,7 @@ static bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
 
 	if (!get_aim_dir(user_ptr, &dir)) return FALSE;
 
-	object_flags(o_ptr, flgs);
+	object_flags(user_ptr, o_ptr, flgs);
 
 	for (i = 0; dragonbreath_info[i].flag != 0; i++)
 	{
@@ -449,7 +449,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	int k, dummy = 0;
 	DIRECTION dir;
 	concptr name = k_name + k_info[o_ptr->k_idx].name;
-	const activation_type* const act_ptr = find_activation_info(o_ptr);
+	const activation_type* const act_ptr = find_activation_info(user_ptr, o_ptr);
 	if (!act_ptr) {
 		/* Maybe forgot adding information to activation_info table ? */
 		msg_print("Activation information is not found.");

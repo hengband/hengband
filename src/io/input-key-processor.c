@@ -532,7 +532,7 @@ void process_command(player_type *creature_ptr)
     }
     case '=': {
         do_cmd_options(creature_ptr);
-        (void)combine_and_reorder_home(STORE_HOME);
+        (void)combine_and_reorder_home(creature_ptr, STORE_HOME);
         do_cmd_redraw(creature_ptr);
         break;
     }

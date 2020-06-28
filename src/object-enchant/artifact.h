@@ -43,8 +43,8 @@ extern char *a_text;
 extern ARTIFACT_IDX max_a_idx;
 
 bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_scroll);
-int activation_index(object_type *o_ptr);
-const activation_type* find_activation_info(object_type *o_ptr);
+int activation_index(player_type *player_ptr, object_type *o_ptr);
+const activation_type *find_activation_info(player_type *player_ptr, object_type *o_ptr);
 void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, artifact_type *a_ptr);
 bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x);
 bool make_artifact(player_type *player_ptr, object_type *o_ptr);

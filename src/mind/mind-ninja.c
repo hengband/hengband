@@ -52,7 +52,7 @@ bool kawarimi(player_type *caster_ptr, bool success)
     teleport_player(caster_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
     object_wipe(q_ptr);
     const int SV_WOODEN_STATUE = 0;
-    object_prep(q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
+    object_prep(caster_ptr, q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
     q_ptr->pval = MON_NINJA;
     (void)drop_near(caster_ptr, q_ptr, -1, y, x);

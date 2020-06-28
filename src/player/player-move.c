@@ -435,7 +435,7 @@ void carry(player_type *creature_ptr, bool pickup)
 			continue;
 		}
 		
-		if (!check_store_item_to_inventory(o_ptr))
+		if (!check_store_item_to_inventory(creature_ptr, o_ptr))
 		{
 			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 			continue;
