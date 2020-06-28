@@ -954,7 +954,7 @@ static void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 	/* Sort by occurrence */
 	int dummy_why;
-	ang_sort(templates, &dummy_why, num_temp, ang_sort_comp_cave_temp, ang_sort_swap_cave_temp);
+	ang_sort(player_ptr, templates, &dummy_why, num_temp, ang_sort_comp_cave_temp, ang_sort_swap_cave_temp);
 
 	/*** Dump templates ***/
 

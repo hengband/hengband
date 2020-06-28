@@ -104,7 +104,7 @@ static void dump_aux_quest(player_type *creature_ptr, FILE *fff)
 	for (QUEST_IDX i = 1; i < max_q_idx; i++)
 		quest_num[i] = i;
 	int dummy;
-	ang_sort(quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
+	ang_sort(creature_ptr, quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
 	fputc('\n', fff);
 	do_cmd_knowledge_quests_completed(creature_ptr, fff, quest_num);
@@ -288,7 +288,7 @@ static void dump_aux_arena(player_type *creature_ptr, FILE *fff)
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_monsters(FILE *fff)
+static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
 {
 	fprintf(fff, _("\n  [倒したモンスター]\n\n", "\n  [Defeated Monsters]\n\n"));
 
@@ -354,7 +354,7 @@ static void dump_aux_monsters(FILE *fff)
 #endif
 
 	/* Sort the array by dungeon depth of monsters */
-	ang_sort(who, &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
+        ang_sort(creature_ptr, who, &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
 	fprintf(fff, _("\n《上位%ld体のユニーク・モンスター》\n", "\n< Unique monsters top %ld >\n"), MIN(uniq_total, 10));
 
 	for (IDX k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--)
@@ -577,7 +577,7 @@ void make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_play
 	dump_aux_recall(fff);
 	dump_aux_quest(creature_ptr, fff);
 	dump_aux_arena(creature_ptr, fff);
-	dump_aux_monsters(fff);
+	dump_aux_monsters(creature_ptr, fff);
 	dump_aux_virtues(creature_ptr, fff);
 	dump_aux_race_history(creature_ptr, fff);
 	dump_aux_realm_history(creature_ptr, fff);

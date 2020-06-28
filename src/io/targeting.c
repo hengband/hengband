@@ -439,11 +439,11 @@ static void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
 	/* Set the sort hooks */
 	if (mode & (TARGET_KILL))
 	{
-		ang_sort(tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_distance);
+		ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_distance);
 	}
 	else
 	{
-		ang_sort(tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_importance, ang_sort_swap_distance);
+		ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_importance, ang_sort_swap_distance);
 	}
 
 	if (creature_ptr->riding == 0 || !target_pet || (tmp_pos.n <= 1) || !(mode & (TARGET_KILL)))
@@ -1969,7 +1969,7 @@ static void tgt_pt_prepare(player_type *creature_ptr)
 		}
 	}
 
-	ang_sort(tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_distance);
+	ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_distance);
 }
 
 

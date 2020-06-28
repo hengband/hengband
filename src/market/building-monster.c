@@ -149,7 +149,7 @@ bool research_mon(player_type *player_ptr)
     char query = 'y';
 
     if (why) {
-        ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+        ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     }
 
     if (old_sym == sym && old_i < n)

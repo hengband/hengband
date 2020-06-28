@@ -338,7 +338,7 @@ void do_cmd_knowledge_quests(player_type *creature_ptr)
 		quest_num[i] = i;
 
 	int dummy;
-	ang_sort(quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
+	ang_sort(creature_ptr, quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
 	do_cmd_knowledge_quests_current(creature_ptr, fff);
 	fputc('\n', fff);

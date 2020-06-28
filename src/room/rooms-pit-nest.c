@@ -140,17 +140,18 @@ static concptr pit_subtype_string(int type, bool nest)
 *  @param b 比較対象参照ID2
 *  TODO: to sort.c
 */
-static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
+static bool ang_sort_comp_nest_mon_info(player_type *player_ptr, vptr u, vptr v, int a, int b)
 {
-	nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
+    /* Unused */
+    (void)player_ptr;
+    (void)v;
+
+    nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
 	MONSTER_IDX w1 = nest_mon_info[a].r_idx;
 	MONSTER_IDX w2 = nest_mon_info[b].r_idx;
 	monster_race *r1_ptr = &r_info[w1];
 	monster_race *r2_ptr = &r_info[w2];
 	int z1, z2;
-
-	/* Unused */
-	(void)v;
 
 	/* Extract used info */
 	z1 = nest_mon_info[a].used;
@@ -182,13 +183,14 @@ static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 * @param b スワップ対象参照ID2
 * TODO: to sort.c
 */
-static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
+static void ang_sort_swap_nest_mon_info(player_type *player_ptr, vptr u, vptr v, int a, int b)
 {
-	nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
-	nest_mon_info_type holder;
+    /* Unused */
+    (void)player_ptr;
+    (void)v;
 
-	/* Unused */
-	(void)v;
+    nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
+	nest_mon_info_type holder;
 
 	/* Swap */
 	holder = nest_mon_info[a];
@@ -371,7 +373,7 @@ bool build_type5(player_type *player_ptr)
 
 	if (cheat_room)
 	{
-		ang_sort(nest_mon_info, NULL, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
+		ang_sort(player_ptr, nest_mon_info, NULL, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
 
 		/* Dump the entries (prevent multi-printing) */
 		for (i = 0; i < NUM_NEST_MON_TYPE; i++)
@@ -382,6 +384,7 @@ bool build_type5(player_type *player_ptr)
 				if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx) break;
 				if (!nest_mon_info[i + 1].used) break;
 			}
+
 			msg_format_wizard(CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
 		}
 	}

@@ -100,7 +100,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
 
 	mon_idx[mon_cnt] = -1;
 	int dummy_why;
-	ang_sort(mon_idx, &dummy_why, mon_cnt, ang_sort_comp_monster_level, ang_sort_swap_hook);
+	ang_sort(creature_ptr, mon_idx, &dummy_why, mon_cnt, ang_sort_comp_monster_level, ang_sort_swap_hook);
 	return mon_cnt;
 }
 
@@ -205,7 +205,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 	}
 
 	u16b why = 2;
-	ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+	ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
 	for (int k = 0; k < n; k++)
 	{
 		monster_race *r_ptr = &r_info[who[k]];

@@ -147,7 +147,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     query = inkey();
     prt(buf, 0, 0);
     why = 2;
-    ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     if (query == 'k') {
         why = 4;
         query = 'y';
@@ -159,7 +159,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     }
 
     if (why == 4) {
-        ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+        ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     }
 
     i = n - 1;

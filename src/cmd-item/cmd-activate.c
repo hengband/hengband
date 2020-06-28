@@ -208,7 +208,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 					who[max_pet++] = pet_ctr;
 			}
 
-			ang_sort(who, &dummy_why, max_pet, ang_sort_comp_pet, ang_sort_swap_hook);
+			ang_sort(user_ptr, who, &dummy_why, max_pet, ang_sort_comp_pet, ang_sort_swap_hook);
 
 			/* Process the monsters (backwards) */
 			for (i = 0; i < max_pet; i++)

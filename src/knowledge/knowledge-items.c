@@ -94,7 +94,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
 	}
 
 	u16b why = 3;
-	ang_sort(who, &why, n, ang_sort_art_comp, ang_sort_art_swap);
+	ang_sort(player_ptr, who, &why, n, ang_sort_art_comp, ang_sort_art_swap);
 	for (ARTIFACT_IDX k = 0; k < n; k++)
 	{
 		artifact_type *a_ptr = &a_info[who[k]];

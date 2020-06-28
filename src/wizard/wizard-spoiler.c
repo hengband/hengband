@@ -828,7 +828,7 @@ static void spoil_artifact(player_type *player_ptr, concptr fname)
  * @param fname 生成ファイル名
  * @return なし
  */
-static void spoil_mon_desc(concptr fname)
+static void spoil_mon_desc(player_type *player_ptr, concptr fname)
 {
     int i, n = 0;
     u16b why = 2;
@@ -859,7 +859,7 @@ static void spoil_mon_desc(concptr fname)
             who[n++] = (s16b)i;
     }
 
-    ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];
         concptr name = (r_name + r_ptr->name);
@@ -1103,7 +1103,7 @@ static void spoil_mon_info(player_type *player_ptr, concptr fname)
             who[n++] = (s16b)i;
     }
 
-    ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (l = 0; l < n; l++) {
         monster_race *r_ptr = &r_info[who[l]];
         flags1 = r_ptr->flags1;
@@ -1211,7 +1211,7 @@ static bool is_partial_tree(int *tree, int *partial_tree)
  * @param fname 出力ファイル名
  * @return なし
  */
-static void spoil_mon_evol(concptr fname)
+static void spoil_mon_evol(player_type *player_ptr, concptr fname)
 {
     char buf[1024];
     monster_race *r_ptr;
@@ -1264,7 +1264,7 @@ static void spoil_mon_evol(concptr fname)
         }
     }
 
-    ang_sort(evol_tree, NULL, max_r_idx, ang_sort_comp_evol_tree, ang_sort_swap_evol_tree);
+    ang_sort(player_ptr, evol_tree, NULL, max_r_idx, ang_sort_comp_evol_tree, ang_sort_swap_evol_tree);
     for (i = 0; i < max_r_idx; i++) {
         r_idx = evol_tree[i][0];
         if (!r_idx)
@@ -1320,13 +1320,13 @@ void do_cmd_spoilers(player_type *player_ptr)
             spoil_artifact(player_ptr, "artifact.txt");
             break;
         case '3':
-            spoil_mon_desc("mon-desc.txt");
+            spoil_mon_desc(player_ptr, "mon-desc.txt");
             break;
         case '4':
             spoil_mon_info(player_ptr, "mon-info.txt");
             break;
         case '5':
-            spoil_mon_evol("mon-evol.txt");
+            spoil_mon_evol(player_ptr, "mon-evol.txt");
             break;
         default:
             bell();
