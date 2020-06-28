@@ -54,14 +54,15 @@ void vault_prep_symbol(player_type *player_ptr)
 }
 
 /*!
- * todo 関数ポインタ設計の都合上、使わないが引数に含めなければならない
  * @brief pit/nestの基準となるドラゴンの種類を決める /
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void vault_prep_dragon(player_type *player_ptr)
 {
+    /* Unused */
     (void)player_ptr;
+
     switch (randint0(6)) {
     case 0: /* Black */
         vault_aux_dragon_mask4 = RF4_BR_ACID;
