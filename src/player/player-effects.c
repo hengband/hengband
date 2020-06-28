@@ -567,48 +567,6 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 超隠密状態をセットする
- * @param set TRUEならば超隠密状態になる。
- * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
- */
-bool set_superstealth(player_type *creature_ptr, bool set)
-{
-    bool notice = FALSE;
-
-    if (creature_ptr->is_dead)
-        return FALSE;
-
-    if (set) {
-        if (!(creature_ptr->special_defense & NINJA_S_STEALTH)) {
-            if (creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_MNLT) {
-                msg_print(_("敵の目から薄い影の中に覆い隠された。", "You are mantled in weak shadow from ordinary eyes."));
-                creature_ptr->monlite = creature_ptr->old_monlite = TRUE;
-            } else {
-                msg_print(_("敵の目から影の中に覆い隠された！", "You are mantled in shadow from ordinary eyes!"));
-                creature_ptr->monlite = creature_ptr->old_monlite = FALSE;
-            }
-
-            notice = TRUE;
-            creature_ptr->special_defense |= NINJA_S_STEALTH;
-        }
-    } else {
-        if (creature_ptr->special_defense & NINJA_S_STEALTH) {
-            msg_print(_("再び敵の目にさらされるようになった。", "You are exposed to common sight once more."));
-            notice = TRUE;
-            creature_ptr->special_defense &= ~(NINJA_S_STEALTH);
-        }
-    }
-
-    if (!notice)
-        return FALSE;
-    creature_ptr->redraw |= (PR_STATUS);
-
-    if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
-    return TRUE;
-}
-
-/*!
  * @brief 一時的浮遊の継続時間をセットする / Set "tim_levitation", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする

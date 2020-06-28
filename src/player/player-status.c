@@ -26,6 +26,7 @@
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "mind/mind-force-trainer.h"
+#include "mind/mind-ninja.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"

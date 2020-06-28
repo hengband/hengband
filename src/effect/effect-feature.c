@@ -6,8 +6,8 @@
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
-#include "player/player-effects.h"
 #include "player/special-defense-types.h"
 #include "room/rooms.h"
 #include "spell/process-effect.h" // 暫定、後で消す.
