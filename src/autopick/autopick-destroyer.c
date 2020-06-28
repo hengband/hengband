@@ -82,7 +82,7 @@ static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
 		if ((o_ptr->tval == TV_CHEST) && o_ptr->pval) return FALSE;
 
 	if (leave_wanted)
-		if (object_is_bounty(o_ptr)) return FALSE;
+		if (object_is_bounty(player_ptr, o_ptr)) return FALSE;
 
 	if (leave_corpse)
 		if (o_ptr->tval == TV_CORPSE) return FALSE;
@@ -117,7 +117,7 @@ void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int autopick
 	if (!destroy) return;
 
 	disturb(player_ptr, FALSE, FALSE);
-	if (!can_player_destroy_object(o_ptr))
+	if (!can_player_destroy_object(player_ptr, o_ptr))
 	{
 		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(player_ptr, o_name, o_ptr, 0);

@@ -2385,7 +2385,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	case TV_DIGGING:
 
 		/* In Vault Quest, hide the dice of target weapon. */
-		if (object_is_quest_target(o_ptr) && !known)
+		if (object_is_quest_target(player_ptr, o_ptr) && !known)
 		{
 			break;
 		}

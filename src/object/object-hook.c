@@ -585,7 +585,7 @@ bool object_is_potion(object_type *o_ptr) { return (k_info[o_ptr->k_idx].tval ==
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが報酬対象になるならTRUEを返す
  */
-bool object_is_bounty(object_type *o_ptr)
+bool object_is_bounty(player_type *player_ptr, object_type *o_ptr)
 {
     int i;
 
@@ -598,7 +598,7 @@ bool object_is_bounty(object_type *o_ptr)
         return FALSE;
 
     /* Today's wanted */
-    if (p_ptr->today_mon > 0 && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
+    if (player_ptr->today_mon > 0 && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
         return TRUE;
 
     /* Tsuchinoko */
@@ -999,7 +999,7 @@ bool object_can_refill_torch(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 破壊可能かを確認したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトが破壊可能ならばTRUEを返す
  */
-bool can_player_destroy_object(object_type *o_ptr)
+bool can_player_destroy_object(player_type *player_ptr, object_type *o_ptr)
 {
     /* Artifacts cannot be destroyed */
     if (!object_is_artifact(o_ptr))
@@ -1018,8 +1018,8 @@ bool can_player_destroy_object(object_type *o_ptr)
 
         /* We have "felt" it (again) */
         o_ptr->ident |= (IDENT_SENSE);
-        p_ptr->update |= (PU_COMBINE);
-        p_ptr->window |= (PW_INVEN | PW_EQUIP);
+        player_ptr->update |= (PU_COMBINE);
+        player_ptr->window |= (PW_INVEN | PW_EQUIP);
 
         return FALSE;
     }
@@ -1033,10 +1033,10 @@ bool can_player_destroy_object(object_type *o_ptr)
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @return 現在クエスト達成目的のアイテムならばTRUEを返す。
  */
-bool object_is_quest_target(object_type *o_ptr)
+bool object_is_quest_target(player_type *player_ptr, object_type *o_ptr)
 {
-    if (p_ptr->current_floor_ptr->inside_quest) {
-        ARTIFACT_IDX a_idx = quest[p_ptr->current_floor_ptr->inside_quest].k_idx;
+    if (player_ptr->current_floor_ptr->inside_quest) {
+        ARTIFACT_IDX a_idx = quest[player_ptr->current_floor_ptr->inside_quest].k_idx;
         if (a_idx) {
             artifact_type *a_ptr = &a_info[a_idx];
             if (!(a_ptr->gen_flags & TRG_INSTA_ART)) {

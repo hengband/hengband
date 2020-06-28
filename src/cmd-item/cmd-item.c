@@ -732,7 +732,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 	take_turn(creature_ptr, 100);
 
 	/* Artifacts cannot be destroyed */
-	if (!can_player_destroy_object(o_ptr))
+	if (!can_player_destroy_object(creature_ptr, o_ptr))
 	{
 		free_turn(creature_ptr);
 

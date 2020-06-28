@@ -350,7 +350,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 			ADD_FLG(FLG_BOOSTED);
 	}
 
-	if (object_is_bounty(o_ptr))
+	if (object_is_bounty(player_ptr, o_ptr))
 	{
 		REM_FLG(FLG_WORTHLESS);
 		ADD_FLG(FLG_WANTED);

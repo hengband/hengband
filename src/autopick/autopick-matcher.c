@@ -50,7 +50,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 		if ((o_ptr->dd == k_ptr->dd) && (o_ptr->ds == k_ptr->ds))
 			return FALSE;
 
-		if (!object_is_known(o_ptr) && object_is_quest_target(o_ptr))
+		if (!object_is_known(o_ptr) && object_is_quest_target(player_ptr, o_ptr))
 		{
 			return FALSE;
 		}
@@ -190,7 +190,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 	if (IS_FLG(FLG_COMMON) && object_is_rare(o_ptr))
 		return FALSE;
 
-	if (IS_FLG(FLG_WANTED) && !object_is_bounty(o_ptr))
+	if (IS_FLG(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr))
 		return FALSE;
 
 	if (IS_FLG(FLG_UNIQUE) &&

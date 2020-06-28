@@ -33,7 +33,7 @@ bool item_tester_high_level_book(object_type *o_ptr);
 bool item_tester_refill_lantern(player_type *player_ptr, object_type *o_ptr);
 
 bool object_is_potion(object_type *o_ptr);
-bool object_is_bounty(object_type *o_ptr);
+bool object_is_bounty(player_type *player_ptr, object_type *o_ptr);
 bool object_is_favorite(player_type *player_ptr, object_type *o_ptr);
 bool object_is_rare(object_type *o_ptr);
 bool object_is_weapon(player_type *player_ptr, object_type *o_ptr);
@@ -53,8 +53,8 @@ bool object_is_random_artifact(object_type *o_ptr);
 bool object_is_nameless(player_type *player_ptr, object_type *o_ptr);
 bool object_allow_two_hands_wielding(object_type *o_ptr);
 bool object_can_refill_torch(player_type *player_ptr, object_type *o_ptr);
-bool can_player_destroy_object(object_type *o_ptr);
-bool object_is_quest_target(object_type *o_ptr);
+bool can_player_destroy_object(player_type *player_ptr, object_type *o_ptr);
+bool object_is_quest_target(player_type *player_ptr, object_type *o_ptr);
 
 #define OBJECT_IS_VALID(T) ((T)->k_idx != 0)
 

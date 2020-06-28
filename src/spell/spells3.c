@@ -363,7 +363,7 @@ bool alchemy(player_type *caster_ptr)
         }
     }
 
-    if (!can_player_destroy_object(o_ptr)) {
+    if (!can_player_destroy_object(caster_ptr, o_ptr)) {
         msg_format(_("%sを金に変えることに失敗した。", "You fail to turn %s to gold!"), o_name);
         return FALSE;
     }
