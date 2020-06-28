@@ -58,8 +58,6 @@ void calc_equipment_status(player_type* creature_ptr) {
             creature_ptr->stat_add[A_CON] += o_ptr->pval;
         if (have_flag(flgs, TR_CHR))
             creature_ptr->stat_add[A_CHR] += o_ptr->pval;
-        if (have_flag(flgs, TR_MAGIC_MASTERY))
-            creature_ptr->skill_dev += 8 * o_ptr->pval;
         if (have_flag(flgs, TR_STEALTH))
             creature_ptr->skill_stl += o_ptr->pval;
         if (have_flag(flgs, TR_SEARCH))

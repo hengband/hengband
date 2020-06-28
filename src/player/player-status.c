@@ -83,6 +83,7 @@
 
 static void calc_stealth(player_type *creature_ptr);
 static void calc_disarming(player_type *creature_ptr);
+static void calc_device_ability(player_type *creature_ptr);
 
 
 /*!
@@ -1218,7 +1219,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
         creature_ptr->stat_add[i] = 0;
 
 	creature_ptr->see_infra = 0;
-    creature_ptr->skill_dev = 0;
     creature_ptr->skill_sav = 0;
     creature_ptr->skill_srh = 0;
     creature_ptr->skill_fos = 0;
@@ -1388,7 +1388,6 @@ void calc_bonuses(player_type *creature_ptr)
 	clear_creature_bonuses(creature_ptr);
     calc_race_status(creature_ptr);
 
-	creature_ptr->skill_dev = cp_ptr->c_dev + ap_ptr->a_dev;
 	creature_ptr->skill_sav = cp_ptr->c_sav + ap_ptr->a_sav;
 	creature_ptr->skill_srh = cp_ptr->c_srh + ap_ptr->a_srh;
 	creature_ptr->skill_fos = cp_ptr->c_fos + ap_ptr->a_fos;
@@ -2468,10 +2467,8 @@ void calc_bonuses(player_type *creature_ptr)
 	if (is_special_class && (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)))
 		creature_ptr->ryoute = FALSE;
 
-	creature_ptr->skill_dev += adj_int_dev[creature_ptr->stat_ind[A_INT]];
 	creature_ptr->skill_sav += adj_wis_sav[creature_ptr->stat_ind[A_WIS]];
 	creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
-	creature_ptr->skill_dev += ((cp_ptr->x_dev * creature_ptr->lev / 10) + (ap_ptr->a_dev * creature_ptr->lev / 50));
 	creature_ptr->skill_sav += ((cp_ptr->x_sav * creature_ptr->lev / 10) + (ap_ptr->a_sav * creature_ptr->lev / 50));
 	creature_ptr->skill_srh += (cp_ptr->x_srh * creature_ptr->lev / 10);
 	creature_ptr->skill_fos += (cp_ptr->x_fos * creature_ptr->lev / 10);
@@ -2495,6 +2492,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 	calc_stealth(creature_ptr);
     calc_disarming(creature_ptr);
+    calc_device_ability(creature_ptr);
 
 	if (current_world_ptr->character_xtra) return;
 
@@ -3522,6 +3520,41 @@ static void calc_disarming(player_type *creature_ptr)
     creature_ptr->skill_dis += adj_dex_dis[creature_ptr->stat_ind[A_DEX]];
     creature_ptr->skill_dis += adj_int_dis[creature_ptr->stat_ind[A_INT]];
     creature_ptr->skill_dis += ((cp_ptr->x_dis * creature_ptr->lev / 10) + (ap_ptr->a_dis * creature_ptr->lev / 50));
+}
+
+/*!
+ * @brief プレイヤーの魔道具使用能力値を計算する
+ * @return なし
+ * @details
+ * This function induces status messages.
+ */
+static void calc_device_ability(player_type *creature_ptr)
+{
+    const player_race *tmp_rp_ptr;
+
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+
+	creature_ptr->skill_dev = tmp_rp_ptr->r_dev + cp_ptr->c_dev + ap_ptr->a_dev;
+ 
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+		object_type *o_ptr;
+		BIT_FLAGS flgs[TR_FLAG_SIZE];
+		o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(o_ptr, flgs);
+        if (have_flag(flgs, TR_MAGIC_MASTERY))
+			creature_ptr->skill_dev += 8 * o_ptr->pval;
+    }
+
+	creature_ptr->skill_dev += adj_int_dev[creature_ptr->stat_ind[A_INT]];
+    creature_ptr->skill_dev += ((cp_ptr->x_dev * creature_ptr->lev / 10) + (ap_ptr->a_dev * creature_ptr->lev / 50));
+    if (creature_ptr->shero) {
+        creature_ptr->skill_stl -= 7;
+    }
 }
 
 /*!
