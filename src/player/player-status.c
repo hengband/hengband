@@ -3553,7 +3553,7 @@ static void calc_saving_throw(player_type *creature_ptr)
     else
         tmp_rp_ptr = &race_info[creature_ptr->prace];
 
-    creature_ptr->skill_dev = tmp_rp_ptr->r_sav + cp_ptr->c_sav + ap_ptr->a_sav;
+    creature_ptr->skill_sav = tmp_rp_ptr->r_sav + cp_ptr->c_sav + ap_ptr->a_sav;
     if (creature_ptr->shero) creature_ptr->skill_sav -= 30;
 	if (creature_ptr->muta3 & MUT3_MAGIC_RES) creature_ptr->skill_sav += (15 + (creature_ptr->lev / 5));
     creature_ptr->skill_sav += adj_wis_sav[creature_ptr->stat_ind[A_WIS]];
