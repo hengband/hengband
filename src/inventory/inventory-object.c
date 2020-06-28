@@ -358,11 +358,11 @@ bool check_store_item_to_inventory(player_type *player_ptr, object_type *o_ptr)
     /* Unused */
     (void)player_ptr;
 
-    if (p_ptr->inven_cnt < INVEN_PACK)
+    if (player_ptr->inven_cnt < INVEN_PACK)
         return TRUE;
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        object_type *j_ptr = &p_ptr->inventory_list[j];
+        object_type *j_ptr = &player_ptr->inventory_list[j];
         if (!j_ptr->k_idx)
             continue;
 
