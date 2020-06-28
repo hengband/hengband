@@ -9,6 +9,7 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
+#include "player/player-realm.h"
 
 /*!
  * @brief オブジェクトを定義された基準に従いソートするための関数 /
@@ -24,14 +25,14 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, s32b o_value,
     if (!j_ptr->k_idx)
         return TRUE;
 
-    if ((o_ptr->tval == REALM1_BOOK) && (j_ptr->tval != REALM1_BOOK))
+    if ((o_ptr->tval == get_realm1_book(player_ptr)) && (j_ptr->tval != get_realm1_book(player_ptr)))
         return TRUE;
-    if ((j_ptr->tval == REALM1_BOOK) && (o_ptr->tval != REALM1_BOOK))
+    if ((j_ptr->tval == get_realm1_book(player_ptr)) && (o_ptr->tval != get_realm1_book(player_ptr)))
         return FALSE;
 
-    if ((o_ptr->tval == REALM2_BOOK) && (j_ptr->tval != REALM2_BOOK))
+    if ((o_ptr->tval == get_realm2_book(player_ptr)) && (j_ptr->tval != get_realm2_book(player_ptr)))
         return TRUE;
-    if ((j_ptr->tval == REALM2_BOOK) && (o_ptr->tval != REALM2_BOOK))
+    if ((j_ptr->tval == get_realm2_book(player_ptr)) && (o_ptr->tval != get_realm2_book(player_ptr)))
         return FALSE;
 
     if (o_ptr->tval > j_ptr->tval)

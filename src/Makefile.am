@@ -470,6 +470,7 @@ hengband_SOURCES = \
 	player/player-personality.c player/player-personality.h \
 	player/player-race.c player/player-race.h \
 	player/player-race-types.h \
+	player/player-realm.c player/player-realm.h \
 	player/player-skill.c player/player-skill.h \
 	player/player-status.c player/player-status.h \
 	player/player-personalities-types.h \

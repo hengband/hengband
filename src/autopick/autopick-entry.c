@@ -19,6 +19,7 @@
 #include "object/object-kind.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
+#include "player/player-realm.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
@@ -377,7 +378,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 		if (o_ptr->tval != TV_ARCANE_BOOK) name = FALSE;
 	}
 
-	if (REALM1_BOOK == o_ptr->tval &&
+	if (get_realm1_book(player_ptr) == o_ptr->tval &&
 		player_ptr->pclass != CLASS_SORCERER &&
 		player_ptr->pclass != CLASS_RED_MAGE)
 	{
@@ -385,7 +386,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 		name = FALSE;
 	}
 
-	if (REALM2_BOOK == o_ptr->tval &&
+	if (get_realm2_book(player_ptr) == o_ptr->tval &&
 		player_ptr->pclass != CLASS_SORCERER &&
 		player_ptr->pclass != CLASS_RED_MAGE)
 	{

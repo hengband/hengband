@@ -34,14 +34,6 @@
 #define MAGIC_FAIL_5PERCENT     0x0002
 #define MAGIC_GAIN_EXP          0x0004
 
-/*
- * todo ここからp_ptrを消すと、object-hookにある大量の関数ポインタを全部修正する必要がある
- * 影響範囲が広すぎるので保留
- * Magic-books for the realms
- */
-#define REALM1_BOOK     (p_ptr->realm1 + TV_LIFE_BOOK - 1)
-#define REALM2_BOOK     (p_ptr->realm2 + TV_LIFE_BOOK - 1)
-
 /* no_flowed 判定対象となるスペル */
 #define SPELL_DD_S 27
 #define SPELL_DD_T 13

@@ -21,6 +21,7 @@
 #include "object-enchant/object-ego.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "player/player-realm.h"
 #include "realm/realm-names-table.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
@@ -268,7 +269,7 @@ bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const O
             return ((book_tval == TV_ARCANE_BOOK) || (book_sval < 2));
     }
 
-    return (REALM1_BOOK == book_tval || REALM2_BOOK == book_tval);
+    return (get_realm1_book(owner_ptr) == book_tval || get_realm2_book(owner_ptr) == book_tval);
 }
 
 object_type *ref_item(player_type *owner_ptr, INVENTORY_IDX item)

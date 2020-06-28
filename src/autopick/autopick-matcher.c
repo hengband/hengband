@@ -23,6 +23,7 @@
 #include "object/object-value.h"
 #include "object/object-info.h"
 #include "object-enchant/special-object-flags.h"
+#include "player/player-realm.h"
 #include "util/string-processor.h"
 
 /*
@@ -213,14 +214,12 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 			check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)))
 		return FALSE;
 
-	if (IS_FLG(FLG_REALM1) &&
-		(REALM1_BOOK != o_ptr->tval ||
+	if (IS_FLG(FLG_REALM1) && (get_realm1_book(player_ptr) != o_ptr->tval ||
 			player_ptr->pclass == CLASS_SORCERER ||
 			player_ptr->pclass == CLASS_RED_MAGE))
 		return FALSE;
 
-	if (IS_FLG(FLG_REALM2) &&
-		(REALM2_BOOK != o_ptr->tval ||
+	if (IS_FLG(FLG_REALM2) && (get_realm2_book(player_ptr) != o_ptr->tval ||
 			player_ptr->pclass == CLASS_SORCERER ||
 			player_ptr->pclass == CLASS_RED_MAGE))
 		return FALSE;

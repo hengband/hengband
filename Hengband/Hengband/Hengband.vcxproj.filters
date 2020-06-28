@@ -1502,6 +1502,9 @@
     <ClCompile Include="..\..\src\object\item-tester-hooker.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\player-realm.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3294,6 +3297,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\item-tester-hooker.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-realm.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -34,6 +34,7 @@
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
@@ -836,8 +837,8 @@ void do_cmd_study(player_type *caster_ptr)
 	/* Access the item's sval */
 	sval = o_ptr->sval;
 
-	if (o_ptr->tval == REALM2_BOOK) increment = 32;
-	else if (o_ptr->tval != REALM1_BOOK)
+	if (o_ptr->tval == get_realm2_book(caster_ptr)) increment = 32;
+	else if (o_ptr->tval != get_realm1_book(caster_ptr))
 	{
 		if (!get_check(_("本当に魔法の領域を変更しますか？", "Really, change magic realm? "))) return;
 		change_realm2(caster_ptr, tval2realm(o_ptr->tval));
@@ -1095,7 +1096,7 @@ void do_cmd_cast(player_type *caster_ptr)
 	/* Access the item's sval */
 	sval = o_ptr->sval;
 
-	if ((caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE) && (o_ptr->tval == REALM2_BOOK)) increment = 32;
+	if ((caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE) && (o_ptr->tval == get_realm2_book(caster_ptr))) increment = 32;
 
 	/* Track the object kind */
 	object_kind_track(caster_ptr, o_ptr->k_idx);
