@@ -38,13 +38,12 @@
 static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx) { return m_idx > 0 && is_friendly(&player_ptr->current_floor_ptr->m_list[(m_idx)]); }
 
 /*!
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief たぬきの変身対象となるモンスターかどうか判定する / Hook for Tanuki
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_tanuki(MONRACE_IDX r_idx)
+static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
 
@@ -61,7 +60,7 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
         || (r_ptr->blow[3].method == RBM_EXPLODE))
         return FALSE;
 
-    return (*(get_monster_hook(p_ptr)))(r_idx);
+    return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);
 }
 
 /*!

@@ -203,18 +203,17 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
 }
 
 /*!
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief モンスター種族が召喚主の護衛となれるかどうかをチェックする / Hack -- help pick an escort type
  * @param r_idx チェックするモンスター種族のID
  * @return 護衛にできるならばtrue
  */
-static bool place_monster_can_escort(MONRACE_IDX r_idx)
+static bool place_monster_can_escort(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[place_monster_idx];
-    monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[place_monster_m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
     monster_race *z_ptr = &r_info[r_idx];
 
-    if (mon_hook_dungeon(place_monster_idx) != mon_hook_dungeon(r_idx))
+    if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx))
         return FALSE;
     if (z_ptr->d_char != r_ptr->d_char)
         return FALSE;
@@ -224,11 +223,11 @@ static bool place_monster_can_escort(MONRACE_IDX r_idx)
         return FALSE;
     if (place_monster_idx == r_idx)
         return FALSE;
-    if (monster_has_hostile_align(p_ptr, m_ptr, 0, 0, z_ptr))
+    if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, z_ptr))
         return FALSE;
 
     if (r_ptr->flags7 & RF7_FRIENDLY) {
-        if (monster_has_hostile_align(p_ptr, NULL, 1, -1, z_ptr))
+        if (monster_has_hostile_align(player_ptr, NULL, 1, -1, z_ptr))
             return FALSE;
     }
 

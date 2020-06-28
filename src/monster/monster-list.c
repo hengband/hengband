@@ -201,15 +201,14 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option)
 }
 
 /*!
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @param player_ptr プレーヤーへの参照ポインタ
  * @brief カメレオンの王の変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
+static bool monster_hook_chameleon_lord(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-    floor_type *floor_ptr = p_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];
     monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
@@ -226,14 +225,14 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
         || (r_ptr->blow[3].method == RBM_EXPLODE))
         return FALSE;
 
-    if (!monster_can_cross_terrain(p_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
+    if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
         return FALSE;
 
     if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
-        if (monster_has_hostile_align(p_ptr, m_ptr, 0, 0, r_ptr))
+        if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
             return FALSE;
     } else if (summon_specific_who > 0) {
-        if (monster_has_hostile_align(p_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
+        if (monster_has_hostile_align(player_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
             return FALSE;
     }
 
@@ -241,15 +240,14 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 }
 
 /*!
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief カメレオンの変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_chameleon(MONRACE_IDX r_idx)
+static bool monster_hook_chameleon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-    floor_type *floor_ptr = p_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];
     monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
@@ -265,7 +263,7 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
         || (r_ptr->blow[3].method == RBM_EXPLODE))
         return FALSE;
 
-    if (!monster_can_cross_terrain(p_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
+    if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
         return FALSE;
 
     if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
@@ -276,11 +274,11 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
         if (!(old_r_ptr->flags3 & (RF3_GOOD | RF3_EVIL)) && (r_ptr->flags3 & (RF3_GOOD | RF3_EVIL)))
             return FALSE;
     } else if (summon_specific_who > 0) {
-        if (monster_has_hostile_align(p_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
+        if (monster_has_hostile_align(player_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
             return FALSE;
     }
 
-    return (*(get_monster_hook(p_ptr)))(r_idx);
+    return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);
 }
 
 /*!
