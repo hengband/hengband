@@ -13,6 +13,7 @@
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

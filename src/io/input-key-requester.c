@@ -7,6 +7,7 @@
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "system/object-type-definition.h"
 #include "term/screen-processor.h" // todo 相互依存している、後で何とかする.
 #include "util/int-char-converter.h"
 #include "util/quarks.h"

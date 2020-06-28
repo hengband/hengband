@@ -10,6 +10,7 @@
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "sv-definition/sv-bow-types.h"
+#include "system/object-type-definition.h"
 #include "term/term-color-types.h"
 #include "view/display-util.h"
 #include "view/status-first-page.h"

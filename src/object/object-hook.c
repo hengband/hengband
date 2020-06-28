@@ -72,42 +72,6 @@ bool item_tester_hook_melee_ammo(player_type *player_ptr, object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトが賞金首の報酬対象になるかを返す
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return オブジェクトが報酬対象になるならTRUEを返す
- */
-bool object_is_bounty(player_type *player_ptr, object_type *o_ptr)
-{
-    int i;
-
-    /* Require corpse or skeleton */
-    if (o_ptr->tval != TV_CORPSE)
-        return FALSE;
-
-    /* No wanted monsters in vanilla town */
-    if (vanilla_town)
-        return FALSE;
-
-    /* Today's wanted */
-    if (player_ptr->today_mon > 0 && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
-        return TRUE;
-
-    /* Tsuchinoko */
-    if (o_ptr->pval == MON_TSUCHINOKO)
-        return TRUE;
-
-    /* Unique monster */
-    for (i = 0; i < MAX_BOUNTY; i++)
-        if (o_ptr->pval == current_world_ptr->bounty_r_idx[i])
-            break;
-    if (i < MAX_BOUNTY)
-        return TRUE;
-
-    /* Not wanted */
-    return FALSE;
-}
-
-/*!
  * @brief オブジェクトがレアアイテムかどうかを返す /
  * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
  * @param o_ptr 対象のオブジェクト構造体ポインタ
@@ -223,27 +187,6 @@ bool object_is_nameless(player_type *player_ptr, object_type *o_ptr)
     (void)player_ptr;
 
     return !object_is_artifact(o_ptr) && !object_is_ego(o_ptr) && !object_is_smith(player_ptr, o_ptr);
-}
-
-/*!
- * @brief オブジェクトがクエストの達成目的か否かを返す。
- * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
- * @return 現在クエスト達成目的のアイテムならばTRUEを返す。
- */
-bool object_is_quest_target(player_type *player_ptr, object_type *o_ptr)
-{
-    if (player_ptr->current_floor_ptr->inside_quest == 0)
-        return FALSE;
-
-    ARTIFACT_IDX a_idx = quest[player_ptr->current_floor_ptr->inside_quest].k_idx;
-    if (a_idx == 0)
-        return FALSE;
-
-    artifact_type *a_ptr = &a_info[a_idx];
-    if ((a_ptr->gen_flags & TRG_INSTA_ART) != 0)
-        return FALSE;
-
-    return (o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval);
 }
 
 /*!

@@ -21,6 +21,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */

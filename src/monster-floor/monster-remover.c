@@ -11,6 +11,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 
 /*!
  * @brief モンスター配列からモンスターを消去する / Delete a monster by index.

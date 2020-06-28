@@ -221,6 +221,7 @@
     <ClCompile Include="..\..\src\object-hook\hook-expendable.c" />
     <ClCompile Include="..\..\src\object-hook\hook-magic.c" />
     <ClCompile Include="..\..\src\object-hook\hook-perception.c" />
+    <ClCompile Include="..\..\src\object-hook\hook-quest.c" />
     <ClCompile Include="..\..\src\object-hook\hook-weapon.c" />
     <ClCompile Include="..\..\src\object-hook\hook-armor.c" />
     <ClCompile Include="..\..\src\player\bad-status-setter.c" />
@@ -643,6 +644,7 @@
     <ClInclude Include="..\..\src\object-hook\hook-expendable.h" />
     <ClInclude Include="..\..\src\object-hook\hook-magic.h" />
     <ClInclude Include="..\..\src\object-hook\hook-perception.h" />
+    <ClInclude Include="..\..\src\object-hook\hook-quest.h" />
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
     <ClInclude Include="..\..\src\player\bad-status-setter.h" />
     <ClInclude Include="..\..\src\player\special-defense-types.h" />

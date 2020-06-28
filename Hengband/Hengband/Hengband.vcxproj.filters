@@ -1493,6 +1493,9 @@
     <ClCompile Include="..\..\src\object-hook\hook-magic.c">
       <Filter>object-hook</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-quest.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3275,6 +3278,9 @@
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-magic.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-quest.h">
       <Filter>object-hook</Filter>
     </ClInclude>
   </ItemGroup>

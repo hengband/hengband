@@ -11,6 +11,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-bow.h"
+#include "object-hook/hook-quest.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"

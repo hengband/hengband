@@ -4,6 +4,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
+#include "system/object-type-definition.h"
 
 /*!
  * @brief モンスターの使う呪文の威力を決定する /
