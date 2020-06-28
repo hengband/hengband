@@ -72,28 +72,6 @@ bool item_tester_hook_melee_ammo(player_type *player_ptr, object_type *o_ptr)
 }
 
 /*!
- * @brief 呪術領域の武器呪縛の対象にできる武器かどうかを返す。 / An "item_tester_hook" for offer
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @return 呪縛可能な武器ならばTRUEを返す
- */
-bool item_tester_hook_weapon_except_bow(player_type *player_ptr, object_type *o_ptr)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    switch (o_ptr->tval) {
-    case TV_SWORD:
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_DIGGING: {
-        return TRUE;
-    }
-    }
-
-    return FALSE;
-}
-
-/*!
  * @brief オブジェクトが賞金首の報酬対象になるかを返す
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが報酬対象になるならTRUEを返す
@@ -219,10 +197,7 @@ bool object_is_smith(player_type *player_ptr, object_type *o_ptr)
  */
 bool object_is_artifact(object_type *o_ptr)
 {
-    if (object_is_fixed_artifact(o_ptr) || o_ptr->art_name)
-        return TRUE;
-
-    return FALSE;
+    return object_is_fixed_artifact(o_ptr) || (o_ptr->art_name != 0);
 }
 
 /*!
@@ -233,10 +208,7 @@ bool object_is_artifact(object_type *o_ptr)
  */
 bool object_is_random_artifact(object_type *o_ptr)
 {
-    if (object_is_artifact(o_ptr) && !object_is_fixed_artifact(o_ptr))
-        return TRUE;
-
-    return FALSE;
+    return object_is_artifact(o_ptr) && !object_is_fixed_artifact(o_ptr);
 }
 
 /*!
@@ -250,10 +222,7 @@ bool object_is_nameless(player_type *player_ptr, object_type *o_ptr)
     /* Unused */
     (void)player_ptr;
 
-    if (!object_is_artifact(o_ptr) && !object_is_ego(o_ptr) && !object_is_smith(player_ptr, o_ptr))
-        return TRUE;
-
-    return FALSE;
+    return !object_is_artifact(o_ptr) && !object_is_ego(o_ptr) && !object_is_smith(player_ptr, o_ptr);
 }
 
 /*!
@@ -263,18 +232,18 @@ bool object_is_nameless(player_type *player_ptr, object_type *o_ptr)
  */
 bool object_is_quest_target(player_type *player_ptr, object_type *o_ptr)
 {
-    if (player_ptr->current_floor_ptr->inside_quest) {
-        ARTIFACT_IDX a_idx = quest[player_ptr->current_floor_ptr->inside_quest].k_idx;
-        if (a_idx) {
-            artifact_type *a_ptr = &a_info[a_idx];
-            if (!(a_ptr->gen_flags & TRG_INSTA_ART)) {
-                if ((o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval)) {
-                    return TRUE;
-                }
-            }
-        }
-    }
-    return FALSE;
+    if (player_ptr->current_floor_ptr->inside_quest == 0)
+        return FALSE;
+
+    ARTIFACT_IDX a_idx = quest[player_ptr->current_floor_ptr->inside_quest].k_idx;
+    if (a_idx == 0)
+        return FALSE;
+
+    artifact_type *a_ptr = &a_info[a_idx];
+    if ((a_ptr->gen_flags & TRG_INSTA_ART) != 0)
+        return FALSE;
+
+    return (o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval);
 }
 
 /*!
@@ -285,36 +254,23 @@ bool object_is_quest_target(player_type *player_ptr, object_type *o_ptr)
  */
 bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tval)
 {
-    /* Require an item */
     if (!o_ptr->k_idx)
         return FALSE;
 
-    /* Hack -- ignore "gold" */
     if (o_ptr->tval == TV_GOLD) {
-        /* See xtra2.c */
         extern bool show_gold_on_floor;
-
         if (!show_gold_on_floor)
             return FALSE;
     }
 
-    /* Check the tval */
     if (tval) {
-        /* Is it a spellbook? If so, we need a hack -- TY */
         if ((tval <= TV_DEATH_BOOK) && (tval >= TV_LIFE_BOOK))
             return check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval);
         else if (tval != o_ptr->tval)
             return FALSE;
     }
 
-    /* Check the hook */
-    if (item_tester_hook) {
-        if (!(*item_tester_hook)(player_ptr, o_ptr))
-            return FALSE;
-    }
-
-    /* Assume okay */
-    return TRUE;
+    return (item_tester_hook != NULL) && (*item_tester_hook)(player_ptr, o_ptr);
 }
 
 /*

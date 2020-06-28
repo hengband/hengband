@@ -55,6 +55,28 @@
 #include "world/world.h"
 
 /*!
+ * @brief 呪術領域の武器呪縛の対象にできる武器かどうかを返す。 / An "item_tester_hook" for offer
+ * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @return 呪縛可能な武器ならばTRUEを返す
+ */
+static bool item_tester_hook_weapon_except_bow(player_type *player_ptr, object_type *o_ptr)
+{
+    /* Unused */
+    (void)player_ptr;
+
+    switch (o_ptr->tval) {
+    case TV_SWORD:
+    case TV_HAFTED:
+    case TV_POLEARM:
+    case TV_DIGGING: {
+        return TRUE;
+    }
+    }
+
+    return FALSE;
+}
+
+/*!
 * @brief 呪術領域魔法の各処理を行う
 * @param spell 魔法ID
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
