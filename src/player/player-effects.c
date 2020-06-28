@@ -3997,7 +3997,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->dis_to_d[1] += 3 + (creature_ptr->lev / 5);
         creature_ptr->to_a -= 10;
         creature_ptr->dis_to_a -= 10;
-        creature_ptr->skill_sav -= 30;
         creature_ptr->skill_srh -= 15;
         creature_ptr->skill_fos -= 15;
         creature_ptr->skill_tht -= 20;

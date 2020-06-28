@@ -84,6 +84,8 @@
 static void calc_stealth(player_type *creature_ptr);
 static void calc_disarming(player_type *creature_ptr);
 static void calc_device_ability(player_type *creature_ptr);
+static void calc_saving_throw(player_type *creature_ptr);
+
 
 
 /*!
@@ -1219,7 +1221,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
         creature_ptr->stat_add[i] = 0;
 
 	creature_ptr->see_infra = 0;
-    creature_ptr->skill_sav = 0;
     creature_ptr->skill_srh = 0;
     creature_ptr->skill_fos = 0;
     creature_ptr->skill_thn = 0;
@@ -1388,7 +1389,6 @@ void calc_bonuses(player_type *creature_ptr)
 	clear_creature_bonuses(creature_ptr);
     calc_race_status(creature_ptr);
 
-	creature_ptr->skill_sav = cp_ptr->c_sav + ap_ptr->a_sav;
 	creature_ptr->skill_srh = cp_ptr->c_srh + ap_ptr->a_srh;
 	creature_ptr->skill_fos = cp_ptr->c_fos + ap_ptr->a_fos;
 	creature_ptr->skill_thn = cp_ptr->c_thn + ap_ptr->a_thn;
@@ -1545,11 +1545,6 @@ void calc_bonuses(player_type *creature_ptr)
 		{
 			creature_ptr->skill_fos += 15;
 			creature_ptr->skill_srh += 15;
-		}
-
-		if (creature_ptr->muta3 & MUT3_MAGIC_RES)
-		{
-			creature_ptr->skill_sav += (15 + (creature_ptr->lev / 5));
 		}
 
 		if (creature_ptr->muta3 & MUT3_INFRAVIS)
@@ -2467,9 +2462,7 @@ void calc_bonuses(player_type *creature_ptr)
 	if (is_special_class && (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)))
 		creature_ptr->ryoute = FALSE;
 
-	creature_ptr->skill_sav += adj_wis_sav[creature_ptr->stat_ind[A_WIS]];
 	creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
-	creature_ptr->skill_sav += ((cp_ptr->x_sav * creature_ptr->lev / 10) + (ap_ptr->a_sav * creature_ptr->lev / 50));
 	creature_ptr->skill_srh += (cp_ptr->x_srh * creature_ptr->lev / 10);
 	creature_ptr->skill_fos += (cp_ptr->x_fos * creature_ptr->lev / 10);
 	creature_ptr->skill_thn += ((cp_ptr->x_thn * creature_ptr->lev / 10) + (ap_ptr->a_thn * creature_ptr->lev / 50));
@@ -2477,13 +2470,6 @@ void calc_bonuses(player_type *creature_ptr)
 	creature_ptr->skill_tht += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 
 	if (creature_ptr->skill_dig < 1) creature_ptr->skill_dig = 1;
-	if (creature_ptr->anti_magic && (creature_ptr->skill_sav < (90 + creature_ptr->lev)))
-		creature_ptr->skill_sav = 90 + creature_ptr->lev;
-	if (creature_ptr->tsubureru) creature_ptr->skill_sav = 10;
-	if ((creature_ptr->ult_res || creature_ptr->resist_magic || creature_ptr->magicdef) && (creature_ptr->skill_sav < (95 + creature_ptr->lev)))
-		creature_ptr->skill_sav = 95 + creature_ptr->lev;
-
-	if (creature_ptr->down_saving) creature_ptr->skill_sav /= 2;
 
 	if (creature_ptr->immune_acid) creature_ptr->resist_acid = TRUE;
 	if (creature_ptr->immune_elec) creature_ptr->resist_elec = TRUE;
@@ -2493,6 +2479,7 @@ void calc_bonuses(player_type *creature_ptr)
 	calc_stealth(creature_ptr);
     calc_disarming(creature_ptr);
     calc_device_ability(creature_ptr);
+    calc_saving_throw(creature_ptr);
 
 	if (current_world_ptr->character_xtra) return;
 
@@ -3555,6 +3542,31 @@ static void calc_device_ability(player_type *creature_ptr)
     if (creature_ptr->shero) {
         creature_ptr->skill_stl -= 7;
     }
+}
+
+static void calc_saving_throw(player_type *creature_ptr)
+{
+    const player_race *tmp_rp_ptr;
+
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+
+    creature_ptr->skill_dev = tmp_rp_ptr->r_sav + cp_ptr->c_sav + ap_ptr->a_sav;
+    if (creature_ptr->shero) creature_ptr->skill_sav -= 30;
+	if (creature_ptr->muta3 & MUT3_MAGIC_RES) creature_ptr->skill_sav += (15 + (creature_ptr->lev / 5));
+    creature_ptr->skill_sav += adj_wis_sav[creature_ptr->stat_ind[A_WIS]];
+    creature_ptr->skill_sav += ((cp_ptr->x_sav * creature_ptr->lev / 10) + (ap_ptr->a_sav * creature_ptr->lev / 50));
+    if (creature_ptr->anti_magic && (creature_ptr->skill_sav < (90 + creature_ptr->lev))) creature_ptr->skill_sav = 90 + creature_ptr->lev;
+
+	if (creature_ptr->tsubureru) creature_ptr->skill_sav = 10;
+
+	if ((creature_ptr->ult_res || creature_ptr->resist_magic || creature_ptr->magicdef) && (creature_ptr->skill_sav < (95 + creature_ptr->lev)))
+		creature_ptr->skill_sav = 95 + creature_ptr->lev;
+
+    if (creature_ptr->down_saving)
+		creature_ptr->skill_sav /= 2;
 }
 
 /*!
