@@ -29,7 +29,7 @@
 #include "object/item-use-flags.h"
 #include "object/item-tester-hooker.h"
 #include "player/avatar.h"
-#include "player/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "player/eldritch-horror.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"

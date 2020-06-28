@@ -19,7 +19,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-util.h"
 #include "player/eldritch-horror.h"
-#include "player/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

@@ -12,7 +12,7 @@
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "perception/object-perception.h"
-#include "player/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-race-types.h"

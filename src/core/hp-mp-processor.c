@@ -11,7 +11,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-flavor.h"
-#include "player/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"

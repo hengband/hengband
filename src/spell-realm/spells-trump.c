@@ -5,7 +5,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/avatar.h"
-#include "player/buff-setter.h"
+#include "status/buff-setter.h"
 #include "player/player-effects.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"

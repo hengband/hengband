@@ -1430,9 +1430,6 @@
     <ClCompile Include="..\..\src\mind\stances-table.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\bad-status-setter.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\status-reseter.c">
       <Filter>core</Filter>
     </ClCompile>
@@ -1505,10 +1502,13 @@
     <ClCompile Include="..\..\src\player\player-realm.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\buff-setter.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\status\sight-setter.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\buff-setter.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\bad-status-setter.c">
       <Filter>status</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3232,9 +3232,6 @@
     <ClInclude Include="..\..\src\player\special-defense-types.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\bad-status-setter.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\status-reseter.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -3307,10 +3304,13 @@
     <ClInclude Include="..\..\src\player\player-realm.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\buff-setter.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\status\sight-setter.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\buff-setter.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\bad-status-setter.h">
       <Filter>status</Filter>
     </ClInclude>
   </ItemGroup>

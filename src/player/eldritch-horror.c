@@ -19,7 +19,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
-#include "player/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "player/mimic-info-table.h"

@@ -1,4 +1,4 @@
-﻿#include "player/bad-status-setter.h"
+﻿#include "status/bad-status-setter.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "mind/mind-sniper.h"

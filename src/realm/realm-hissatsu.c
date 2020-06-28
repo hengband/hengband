@@ -23,7 +23,7 @@
 #include "monster/monster-update.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
-#include "player/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-status.h"

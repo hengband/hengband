@@ -451,8 +451,6 @@ hengband_SOURCES = \
 	pet/pet-util.c pet/pet-util.h \
 	\
 	player/avatar.h player/avatar.c \
-	player/bad-status-setter.c player/bad-status-setter.h \
-	player/buff-setter.c player/buff-setter.h \
 	player/eldritch-horror.c player/eldritch-horror.h \
 	player/mimic-info-table.c player/mimic-info-table.h \
 	player/patron.c player/patron.h \
@@ -555,6 +553,8 @@ hengband_SOURCES = \
 	spell-realm/spells-song.c spell-realm/spells-song.h \
 	spell-realm/spells-trump.c spell-realm/spells-trump.h \
 	\
+	status/bad-status-setter.c status/bad-status-setter.h \
+	status/buff-setter.c status/buff-setter.h \
 	status/sight-setter.c status/sight-setter.h \
 	\
 	store/store.c store/store.h \

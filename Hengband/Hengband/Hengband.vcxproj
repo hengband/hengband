@@ -226,8 +226,8 @@
     <ClCompile Include="..\..\src\object-hook\hook-quest.c" />
     <ClCompile Include="..\..\src\object-hook\hook-weapon.c" />
     <ClCompile Include="..\..\src\object-hook\hook-armor.c" />
-    <ClCompile Include="..\..\src\player\bad-status-setter.c" />
-    <ClCompile Include="..\..\src\player\buff-setter.c" />
+    <ClCompile Include="..\..\src\status\bad-status-setter.c" />
+    <ClCompile Include="..\..\src\status\buff-setter.c" />
     <ClCompile Include="..\..\src\player\player-realm.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-curse-removal.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-perception.c" />
@@ -653,8 +653,8 @@
     <ClInclude Include="..\..\src\object-hook\hook-perception.h" />
     <ClInclude Include="..\..\src\object-hook\hook-quest.h" />
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
-    <ClInclude Include="..\..\src\player\bad-status-setter.h" />
-    <ClInclude Include="..\..\src\player\buff-setter.h" />
+    <ClInclude Include="..\..\src\status\bad-status-setter.h" />
+    <ClInclude Include="..\..\src\status\buff-setter.h" />
     <ClInclude Include="..\..\src\player\player-realm.h" />
     <ClInclude Include="..\..\src\player\special-defense-types.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-curse-removal.h" />

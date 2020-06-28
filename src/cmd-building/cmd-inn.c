@@ -4,7 +4,7 @@
 #include "game-option/birth-options.h"
 #include "io/write-diary.h"
 #include "market/building-actions-table.h"
-#include "player/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "player/eldritch-horror.h"
 #include "player/player-effects.h"
 #include "player/player-race-types.h"

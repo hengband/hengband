@@ -6,7 +6,7 @@
 #include "mspell/mspells3.h"
 #include "mutation/mutation.h"
 #include "object/object-broken.h"
-#include "player/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-race-types.h"

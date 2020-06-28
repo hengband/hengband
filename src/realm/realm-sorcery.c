@@ -3,7 +3,7 @@
 #include "core/asking-player.h"
 #include "io/targeting.h"
 #include "player/avatar.h"
-#include "player/buff-setter.h"
+#include "status/buff-setter.h"
 #include "player/player-effects.h"
 #include "player/selfinfo.h"
 #include "spell-kind/spells-charm.h"

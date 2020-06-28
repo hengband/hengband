@@ -8,7 +8,7 @@
 #include "mind/mind-mirror-master.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
-#include "player/bad-status-setter.h"
+#include "status/bad-status-setter.h"
 #include "player/player-effects.h"
 #include "view/display-messages.h"
 

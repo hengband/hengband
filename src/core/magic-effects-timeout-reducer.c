@@ -1,8 +1,8 @@
 ﻿#include "core/magic-effects-timeout-reducer.h"
 #include "game-option/birth-options.h"
 #include "mind/racial-kutar.h"
-#include "player/bad-status-setter.h"
-#include "player/buff-setter.h"
+#include "status/bad-status-setter.h"
+#include "status/buff-setter.h"
 #include "player/player-effects.h"
 #include "status/sight-setter.h"
 
