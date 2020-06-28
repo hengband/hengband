@@ -42,6 +42,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
 #include "spell/spells3.h"
+#include "status/sight-setter.h"
 #include "sv-definition/sv-potion-types.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"

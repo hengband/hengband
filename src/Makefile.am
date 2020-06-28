@@ -555,6 +555,8 @@ hengband_SOURCES = \
 	spell-realm/spells-song.c spell-realm/spells-song.h \
 	spell-realm/spells-trump.c spell-realm/spells-trump.h \
 	\
+	status/sight-setter.c status/sight-setter.h \
+	\
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \
 	store/rumor.c store/rumor.h \
@@ -655,7 +657,8 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Imind -Imonster -Imonster-attack -Imonster-floor -Imonster-race -Ilore \
 	-Imspell -Imutation -Iobject -Iobject-enchant -Iobject-hook -Ipet -Iplayer \
 	-Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell -Ispell-kind \
-	-Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
+	-Ispell-realm -Istatus -Isv-definition -Isystem -Iterm -Iutil -Iview \
+	-Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

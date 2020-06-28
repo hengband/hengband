@@ -8,8 +8,6 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
 bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
@@ -52,7 +50,6 @@ bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool choose_ele_attack(player_type *creature_ptr);
 bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT turn);
 bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_superstealth(player_type *creature_ptr, bool set);
 void do_poly_wounds(player_type *creature_ptr);
 void change_race(player_type *creature_ptr, player_race_type new_race, concptr effect_msg);

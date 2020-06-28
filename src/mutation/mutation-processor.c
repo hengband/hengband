@@ -23,6 +23,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "status/sight-setter.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"

@@ -21,6 +21,7 @@
 #include "spell/spells-summon.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
+#include "status/sight-setter.h"
 #include "view/display-messages.h"
 
 /*!

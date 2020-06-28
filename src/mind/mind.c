@@ -65,6 +65,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "status/sight-setter.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"

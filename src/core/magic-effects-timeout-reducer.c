@@ -4,6 +4,7 @@
 #include "player/bad-status-setter.h"
 #include "player/buff-setter.h"
 #include "player/player-effects.h"
+#include "status/sight-setter.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとに魔法効果の残りターンを減らしていく処理

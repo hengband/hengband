@@ -77,6 +77,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "status/sight-setter.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "term/screen-processor.h"

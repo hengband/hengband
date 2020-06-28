@@ -20,6 +20,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
+#include "status/sight-setter.h"
 #include "view/display-messages.h"
 
 /*!
