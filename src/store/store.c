@@ -58,6 +58,7 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

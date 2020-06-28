@@ -36,6 +36,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
+#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-magic.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"

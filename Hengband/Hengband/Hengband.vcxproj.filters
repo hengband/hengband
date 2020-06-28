@@ -1496,6 +1496,9 @@
     <ClCompile Include="..\..\src\object-hook\hook-quest.c">
       <Filter>object-hook</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-enchant.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3281,6 +3284,9 @@
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-quest.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-enchant.h">
       <Filter>object-hook</Filter>
     </ClInclude>
   </ItemGroup>

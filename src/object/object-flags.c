@@ -3,6 +3,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"

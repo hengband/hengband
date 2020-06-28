@@ -66,6 +66,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-expendable.h"
 #include "object-hook/hook-perception.h"
 #include "object-hook/hook-magic.h"

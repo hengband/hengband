@@ -25,6 +25,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
 #include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-quest.h"
 #include "object/object-flags.h"
 #include "object/object-hook.h"

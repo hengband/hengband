@@ -9,6 +9,7 @@
 #include "object-enchant/object-boost.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
+#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"

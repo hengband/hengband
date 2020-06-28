@@ -50,7 +50,7 @@
 #include "monster/smart-learn-types.h"
 #include "object-enchant/artifact.h"
 #include "object-hook/hook-checker.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-enchant.h"
 #include "pet/pet-util.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"

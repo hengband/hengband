@@ -12,10 +12,10 @@
 #include "core/asking-player.h"
 #include "io/files-util.h"
 #include "object-enchant/item-feeling.h"
-#include "perception/object-perception.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-hook/hook-enchant.h"
+#include "object/object-flavor.h"
+#include "perception/object-perception.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 

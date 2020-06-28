@@ -1,6 +1,6 @@
 ﻿#include "object-hook/hook-perception.h"
+#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-hook.h"
 #include "perception/object-perception.h"
 #include "system/object-type-definition.h"
 

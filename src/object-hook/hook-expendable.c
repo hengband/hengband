@@ -5,7 +5,7 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-checker.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player/mimic-info-table.h"
