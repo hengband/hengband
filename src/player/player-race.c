@@ -128,10 +128,8 @@ void calc_race_status(player_type *creature_ptr)
         tmp_rp_ptr = &race_info[creature_ptr->prace];
 
     creature_ptr->see_infra += tmp_rp_ptr->infra;
-    creature_ptr->skill_dis += tmp_rp_ptr->r_dis;
     creature_ptr->skill_dev += tmp_rp_ptr->r_dev;
     creature_ptr->skill_sav += tmp_rp_ptr->r_sav;
-    creature_ptr->skill_stl += tmp_rp_ptr->r_stl;
     creature_ptr->skill_srh += tmp_rp_ptr->r_srh;
     creature_ptr->skill_fos += tmp_rp_ptr->r_fos;
     creature_ptr->skill_thn += tmp_rp_ptr->r_thn;

@@ -82,6 +82,7 @@
 #include "world/world.h"
 
 static void calc_stealth(player_type *creature_ptr);
+static void calc_disarming(player_type *creature_ptr);
 
 
 /*!
@@ -1217,7 +1218,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
         creature_ptr->stat_add[i] = 0;
 
 	creature_ptr->see_infra = 0;
-    creature_ptr->skill_dis = 0;
     creature_ptr->skill_dev = 0;
     creature_ptr->skill_sav = 0;
     creature_ptr->skill_srh = 0;
@@ -1387,9 +1387,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 	clear_creature_bonuses(creature_ptr);
     calc_race_status(creature_ptr);
-	calc_stealth(creature_ptr);
 
-	creature_ptr->skill_dis = cp_ptr->c_dis + ap_ptr->a_dis;
 	creature_ptr->skill_dev = cp_ptr->c_dev + ap_ptr->a_dev;
 	creature_ptr->skill_sav = cp_ptr->c_sav + ap_ptr->a_sav;
 	creature_ptr->skill_srh = cp_ptr->c_srh + ap_ptr->a_srh;
@@ -2470,12 +2468,9 @@ void calc_bonuses(player_type *creature_ptr)
 	if (is_special_class && (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)))
 		creature_ptr->ryoute = FALSE;
 
-	creature_ptr->skill_dis += adj_dex_dis[creature_ptr->stat_ind[A_DEX]];
-	creature_ptr->skill_dis += adj_int_dis[creature_ptr->stat_ind[A_INT]];
 	creature_ptr->skill_dev += adj_int_dev[creature_ptr->stat_ind[A_INT]];
 	creature_ptr->skill_sav += adj_wis_sav[creature_ptr->stat_ind[A_WIS]];
 	creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
-	creature_ptr->skill_dis += ((cp_ptr->x_dis * creature_ptr->lev / 10) + (ap_ptr->a_dis * creature_ptr->lev / 50));
 	creature_ptr->skill_dev += ((cp_ptr->x_dev * creature_ptr->lev / 10) + (ap_ptr->a_dev * creature_ptr->lev / 50));
 	creature_ptr->skill_sav += ((cp_ptr->x_sav * creature_ptr->lev / 10) + (ap_ptr->a_sav * creature_ptr->lev / 50));
 	creature_ptr->skill_srh += (cp_ptr->x_srh * creature_ptr->lev / 10);
@@ -2497,6 +2492,9 @@ void calc_bonuses(player_type *creature_ptr)
 	if (creature_ptr->immune_elec) creature_ptr->resist_elec = TRUE;
 	if (creature_ptr->immune_fire) creature_ptr->resist_fire = TRUE;
 	if (creature_ptr->immune_cold) creature_ptr->resist_cold = TRUE;
+
+	calc_stealth(creature_ptr);
+    calc_disarming(creature_ptr);
 
 	if (current_world_ptr->character_xtra) return;
 
@@ -3485,6 +3483,28 @@ static void calc_stealth(player_type *creature_ptr)
         creature_ptr->skill_stl = 0;
 }
 
+/*!
+ * @brief プレイヤーの解除能力値を計算する
+ * @return なし
+ * @details
+ * This function induces status messages.
+ */
+static void calc_disarming(player_type *creature_ptr)
+{
+    const player_race *tmp_rp_ptr;
+
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
+
+	creature_ptr->skill_dis = tmp_rp_ptr->r_dis + c_ptr->c_dis + a_ptr->a_dis;
+    creature_ptr->skill_dis += adj_dex_dis[creature_ptr->stat_ind[A_DEX]];
+    creature_ptr->skill_dis += adj_int_dis[creature_ptr->stat_ind[A_INT]];
+    creature_ptr->skill_dis += ((cp_ptr->x_dis * creature_ptr->lev / 10) + (ap_ptr->a_dis * creature_ptr->lev / 50));
+}
 
 /*!
  * @brief プレイヤーの所持重量制限を計算する /
