@@ -10,6 +10,7 @@
 #include "object/object-kind-hook.h"
 #include "player/avatar.h"
 #include "player/bad-status-setter.h"
+#include "player/buff-setter.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-race-types.h"

@@ -3,6 +3,7 @@
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "player/avatar.h"
+#include "player/buff-setter.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

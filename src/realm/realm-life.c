@@ -3,6 +3,7 @@
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "player/bad-status-setter.h"
+#include "player/buff-setter.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-curse-removal.h"

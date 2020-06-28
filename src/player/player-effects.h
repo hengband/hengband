@@ -5,11 +5,6 @@
 void set_action(player_type *creature_ptr, ACTION_IDX typ);
 void dispel_player(player_type *creature_ptr);
 bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool do_dec);
-bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);

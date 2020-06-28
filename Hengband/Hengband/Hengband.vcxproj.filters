@@ -1505,6 +1505,9 @@
     <ClCompile Include="..\..\src\player\player-realm.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\buff-setter.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3299,6 +3302,9 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-realm.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\buff-setter.h">
       <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>

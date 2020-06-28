@@ -452,6 +452,7 @@ hengband_SOURCES = \
 	\
 	player/avatar.h player/avatar.c \
 	player/bad-status-setter.c player/bad-status-setter.h \
+	player/buff-setter.c player/buff-setter.h \
 	player/eldritch-horror.c player/eldritch-horror.h \
 	player/mimic-info-table.c player/mimic-info-table.h \
 	player/patron.c player/patron.h \

@@ -27,6 +27,7 @@
 #include "player/bad-status-setter.h"
 #include "player/eldritch-horror.h"
 #include "player/mimic-info-table.h"
+#include "player/buff-setter.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

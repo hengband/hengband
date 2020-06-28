@@ -26,6 +26,7 @@
 #include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "player/bad-status-setter.h"
+#include "player/buff-setter.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

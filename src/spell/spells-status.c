@@ -22,6 +22,7 @@
 #include "object/object-kind.h"
 #include "player/avatar.h"
 #include "player/bad-status-setter.h"
+#include "player/buff-setter.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"

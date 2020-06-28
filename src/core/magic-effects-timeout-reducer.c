@@ -2,6 +2,7 @@
 #include "game-option/birth-options.h"
 #include "mind/racial-kutar.h"
 #include "player/bad-status-setter.h"
+#include "player/buff-setter.h"
 #include "player/player-effects.h"
 
 /*!
