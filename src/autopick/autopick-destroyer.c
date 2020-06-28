@@ -12,6 +12,7 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-hook/hook-expendable.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

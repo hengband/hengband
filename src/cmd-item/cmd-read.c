@@ -17,6 +17,7 @@
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "object-hook/hook-expendable.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

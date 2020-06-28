@@ -2,6 +2,7 @@
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "mind/mind-mirror-master.h"
+#include "object-hook/hook-expendable.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

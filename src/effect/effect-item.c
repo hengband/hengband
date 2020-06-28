@@ -6,6 +6,7 @@
 #include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-checker.h"
+#include "object-hook/hook-expendable.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
