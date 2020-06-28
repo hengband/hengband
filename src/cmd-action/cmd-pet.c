@@ -28,7 +28,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-weapon.h"
 #include "pet/pet-util.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"

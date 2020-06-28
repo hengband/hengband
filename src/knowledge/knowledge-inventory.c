@@ -10,6 +10,7 @@
 #include "io-dump/dump-util.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
+#include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

@@ -7,6 +7,7 @@
 #include "io/write-diary.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-perception.h"
+#include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

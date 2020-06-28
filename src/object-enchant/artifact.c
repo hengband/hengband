@@ -33,6 +33,7 @@
 #include "object-enchant/trg-types.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-checker.h"
+#include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

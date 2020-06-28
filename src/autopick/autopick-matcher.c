@@ -15,6 +15,7 @@
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-bow.h"
 #include "object-hook/hook-checker.h"
+#include "object-hook/hook-weapon.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"

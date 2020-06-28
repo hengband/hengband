@@ -48,6 +48,7 @@
 #include "mutation/mutation.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-bow.h"
+#include "object-hook/hook-weapon.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"
