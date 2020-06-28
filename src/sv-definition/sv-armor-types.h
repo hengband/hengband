@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The "sval" codes for TV_SOFT_ARMOR */
-typedef enum sv_soft_armor_type_type {
+typedef enum sv_soft_armor_type {
     SV_T_SHIRT = 0,
     SV_FILTHY_RAG = 1,
     SV_ROBE = 2,
