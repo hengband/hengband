@@ -436,6 +436,7 @@ hengband_SOURCES = \
 	object-hook/hook-bow.c object-hook/hook-bow.h \
 	object-hook/hook-checker.c object-hook/hook-checker.h \
 	object-hook/hook-expendable.c object-hook/hook-expendable.h \
+	object-hook/hook-magic.c object-hook/hook-magic.h \
 	object-hook/hook-perception.c object-hook/hook-perception.h \
 	object-hook/hook-weapon.c object-hook/hook-weapon.h \
 	\

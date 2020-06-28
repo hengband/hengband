@@ -9,6 +9,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-hook/hook-magic.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

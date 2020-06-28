@@ -68,6 +68,7 @@
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-expendable.h"
 #include "object-hook/hook-perception.h"
+#include "object-hook/hook-magic.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"

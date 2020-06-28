@@ -25,6 +25,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind.h"
+#include "object-hook/hook-magic.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"

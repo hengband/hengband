@@ -46,6 +46,7 @@
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-expendable.h"
+#include "object-hook/hook-magic.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
