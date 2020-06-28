@@ -312,6 +312,7 @@ hengband_SOURCES = \
 	mind/mind-sniper.c mind/mind-sniper.h \
 	mind/mind-warrior.c mind/mind-warrior.h \
 	mind/mind-warrior-mage.c mind/mind-warrior-mage.h \
+	mind/mind-weaponsmith.c mind/mind-weaponsmith.h \
 	mind/monk-attack.c mind/monk-attack.h \
 	mind/snipe-types.h \
 	mind/racial.c mind/racial.h \

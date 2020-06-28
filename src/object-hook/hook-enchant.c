@@ -1,5 +1,5 @@
 ﻿#include "object-hook/hook-enchant.h"
-#include "object/object-hook.h"
+#include "mind/mind-weaponsmith.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"

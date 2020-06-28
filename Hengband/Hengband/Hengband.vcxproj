@@ -214,6 +214,7 @@
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\locale\vowel-checker.c" />
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
+    <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
     <ClCompile Include="..\..\src\mind\racial-kutar.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
     <ClCompile Include="..\..\src\object-hook\hook-bow.c" />
@@ -632,6 +633,7 @@
     <ClInclude Include="..\..\src\locale\vowel-checker.h" />
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-mage.h" />
+    <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
     <ClInclude Include="..\..\src\mind\racial-kutar.h" />
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />

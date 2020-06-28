@@ -1499,6 +1499,9 @@
     <ClCompile Include="..\..\src\object-hook\hook-enchant.c">
       <Filter>object-hook</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-weaponsmith.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3288,6 +3291,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-enchant.h">
       <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-weaponsmith.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
