@@ -81,6 +81,9 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static void calc_stealth(player_type *creature_ptr);
+
+
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
  */
@@ -1217,7 +1220,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->skill_dis = 0;
     creature_ptr->skill_dev = 0;
     creature_ptr->skill_sav = 0;
-    creature_ptr->skill_stl = 0;
     creature_ptr->skill_srh = 0;
     creature_ptr->skill_fos = 0;
     creature_ptr->skill_thn = 0;
@@ -1385,11 +1387,11 @@ void calc_bonuses(player_type *creature_ptr)
 
 	clear_creature_bonuses(creature_ptr);
     calc_race_status(creature_ptr);
+	calc_stealth(creature_ptr);
 
 	creature_ptr->skill_dis = cp_ptr->c_dis + ap_ptr->a_dis;
 	creature_ptr->skill_dev = cp_ptr->c_dev + ap_ptr->a_dev;
 	creature_ptr->skill_sav = cp_ptr->c_sav + ap_ptr->a_sav;
-	creature_ptr->skill_stl = cp_ptr->c_stl + ap_ptr->a_stl;
 	creature_ptr->skill_srh = cp_ptr->c_srh + ap_ptr->a_srh;
 	creature_ptr->skill_fos = cp_ptr->c_fos + ap_ptr->a_fos;
 	creature_ptr->skill_thn = cp_ptr->c_thn + ap_ptr->a_thn;
@@ -1553,11 +1555,6 @@ void calc_bonuses(player_type *creature_ptr)
 			creature_ptr->skill_sav += (15 + (creature_ptr->lev / 5));
 		}
 
-		if (creature_ptr->muta3 & MUT3_XTRA_NOIS)
-		{
-			creature_ptr->skill_stl -= 3;
-		}
-
 		if (creature_ptr->muta3 & MUT3_INFRAVIS)
 		{
 			creature_ptr->see_infra += 3;
@@ -1638,7 +1635,6 @@ void calc_bonuses(player_type *creature_ptr)
 		if (creature_ptr->muta3 & MUT3_MOTION)
 		{
 			creature_ptr->free_act = TRUE;
-			creature_ptr->skill_stl += 1;
 		}
 
 		if (creature_ptr->muta3 & MUT3_ILL_NORM)
@@ -1744,7 +1740,6 @@ void calc_bonuses(player_type *creature_ptr)
 
 	if (creature_ptr->realm1 == REALM_HEX)
 	{
-		if (hex_spelling_any(creature_ptr)) creature_ptr->skill_stl -= (1 + casting_hex_num(creature_ptr));
 		if (hex_spelling(creature_ptr, HEX_DETECT_EVIL)) creature_ptr->esp_evil = TRUE;
 		if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT)) creature_ptr->stat_add[A_STR] += 4;
 		if (hex_spelling(creature_ptr, HEX_BUILDING))
@@ -2475,8 +2470,6 @@ void calc_bonuses(player_type *creature_ptr)
 	if (is_special_class && (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)))
 		creature_ptr->ryoute = FALSE;
 
-	creature_ptr->skill_stl += 1;
-
 	creature_ptr->skill_dis += adj_dex_dis[creature_ptr->stat_ind[A_DEX]];
 	creature_ptr->skill_dis += adj_int_dis[creature_ptr->stat_ind[A_INT]];
 	creature_ptr->skill_dev += adj_int_dev[creature_ptr->stat_ind[A_INT]];
@@ -2485,21 +2478,12 @@ void calc_bonuses(player_type *creature_ptr)
 	creature_ptr->skill_dis += ((cp_ptr->x_dis * creature_ptr->lev / 10) + (ap_ptr->a_dis * creature_ptr->lev / 50));
 	creature_ptr->skill_dev += ((cp_ptr->x_dev * creature_ptr->lev / 10) + (ap_ptr->a_dev * creature_ptr->lev / 50));
 	creature_ptr->skill_sav += ((cp_ptr->x_sav * creature_ptr->lev / 10) + (ap_ptr->a_sav * creature_ptr->lev / 50));
-	creature_ptr->skill_stl += (cp_ptr->x_stl * creature_ptr->lev / 10);
 	creature_ptr->skill_srh += (cp_ptr->x_srh * creature_ptr->lev / 10);
 	creature_ptr->skill_fos += (cp_ptr->x_fos * creature_ptr->lev / 10);
 	creature_ptr->skill_thn += ((cp_ptr->x_thn * creature_ptr->lev / 10) + (ap_ptr->a_thn * creature_ptr->lev / 50));
 	creature_ptr->skill_thb += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 	creature_ptr->skill_tht += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 
-	if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE))
-	{
-		creature_ptr->cursed &= ~(TRC_AGGRAVATE);
-		creature_ptr->skill_stl = MIN(creature_ptr->skill_stl - 3, (creature_ptr->skill_stl + 2) / 2);
-	}
-
-	if (creature_ptr->skill_stl > 30) creature_ptr->skill_stl = 30;
-	if (creature_ptr->skill_stl < 0) creature_ptr->skill_stl = 0;
 	if (creature_ptr->skill_dig < 1) creature_ptr->skill_dig = 1;
 	if (creature_ptr->anti_magic && (creature_ptr->skill_sav < (90 + creature_ptr->lev)))
 		creature_ptr->skill_sav = 90 + creature_ptr->lev;
@@ -3458,6 +3442,47 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 	}
 
 	return (s16b)num;
+}
+
+/*!
+ * @brief プレイヤーの隠密値を計算する
+ * @return なし
+ * @details
+ * This function induces status messages.
+ */
+static void calc_stealth(player_type *creature_ptr)
+{
+    const player_race *tmp_rp_ptr;
+
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
+
+    creature_ptr->skill_stl = tmp_rp_ptr->r_stl + c_ptr->c_stl + a_ptr->a_stl;
+    if (creature_ptr->muta3 & MUT3_XTRA_NOIS) {
+        creature_ptr->skill_stl -= 3;
+    }
+    if (creature_ptr->muta3 & MUT3_MOTION) {
+        creature_ptr->skill_stl += 1;
+    }
+    if (creature_ptr->realm1 == REALM_HEX) {
+        if (hex_spelling_any(creature_ptr))
+            creature_ptr->skill_stl -= (1 + casting_hex_num(creature_ptr));
+    }
+    creature_ptr->skill_stl += 1;
+    creature_ptr->skill_stl += (c_ptr->x_stl * creature_ptr->lev / 10);
+    if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE)) {
+        creature_ptr->cursed &= ~(TRC_AGGRAVATE);
+        creature_ptr->skill_stl = MIN(creature_ptr->skill_stl - 3, (creature_ptr->skill_stl + 2) / 2);
+    }
+
+    if (creature_ptr->skill_stl > 30)
+        creature_ptr->skill_stl = 30;
+    if (creature_ptr->skill_stl < 0)
+        creature_ptr->skill_stl = 0;
 }
 
 
