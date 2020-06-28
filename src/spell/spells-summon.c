@@ -12,7 +12,7 @@
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "object/item-use-flags.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "player/avatar.h"
 #include "player/bad-status-setter.h"
 #include "player/player-effects.h"

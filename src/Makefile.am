@@ -398,11 +398,11 @@ hengband_SOURCES = \
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
+	object/item-tester-hooker.c object/item-tester-hooker.h \
 	object/object-broken.c object/object-broken.h \
 	object/object-flags.c object/object-flags.h \
 	object/object-flavor.c object/object-flavor.h \
 	object/object-generator.c object/object-generator.h \
-	object/object-hook.c object/object-hook.h \
 	object/object-info.c object/object-info.h \
 	object/object-kind.c object/object-kind.h \
 	object/object-kind-hook.c object/object-kind-hook.h \

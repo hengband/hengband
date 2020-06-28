@@ -27,7 +27,7 @@
 #include "mind/mind.h"
 #include "object-hook/hook-magic.h"
 #include "object/item-use-flags.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "player/avatar.h"
 #include "player/bad-status-setter.h"
 #include "player/eldritch-horror.h"

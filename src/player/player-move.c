@@ -180,7 +180,7 @@
 #include "monster/monster-update.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-flavor.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
 #include "object/object-info.h"
 #include "object/warning.h"

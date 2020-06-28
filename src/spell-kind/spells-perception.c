@@ -11,7 +11,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/identification.h"

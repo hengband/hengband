@@ -20,7 +20,7 @@
 #include "object-hook/hook-expendable.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"

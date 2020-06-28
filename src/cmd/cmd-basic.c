@@ -64,7 +64,7 @@
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "object/object-info.h"

@@ -523,7 +523,7 @@
     <ClCompile Include="..\..\src\object-enchant\object-curse.c" />
     <ClCompile Include="..\..\src\object-enchant\object-ego.c" />
     <ClCompile Include="..\..\src\object\object-flavor.c" />
-    <ClCompile Include="..\..\src\object\object-hook.c" />
+    <ClCompile Include="..\..\src\object\item-tester-hooker.c" />
     <ClCompile Include="..\..\src\object\object-kind.c" />
     <ClCompile Include="..\..\src\object\object-kind-hook.c" />
     <ClCompile Include="..\..\src\object\object-broken.c" />
@@ -1184,7 +1184,7 @@
     <ClInclude Include="..\..\src\object-enchant\object-boost.h" />
     <ClInclude Include="..\..\src\object-enchant\object-curse.h" />
     <ClInclude Include="..\..\src\object-enchant\object-ego.h" />
-    <ClInclude Include="..\..\src\object\object-hook.h" />
+    <ClInclude Include="..\..\src\object\item-tester-hooker.h" />
     <ClInclude Include="..\..\src\object\object-broken.h" />
     <ClInclude Include="..\..\src\object\object-info.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />

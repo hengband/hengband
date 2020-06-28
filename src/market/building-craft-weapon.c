@@ -12,7 +12,7 @@
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"

@@ -26,7 +26,7 @@
 #include "object/object-flags.h" // todo 相互参照している.
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "perception/object-perception.h"
 #include "player/player-status.h"
 #include "term/screen-processor.h"

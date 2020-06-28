@@ -50,7 +50,7 @@
 #include "object-hook/hook-bow.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flavor.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "player/avatar.h"
 #include "player/player-personalities-types.h"
 #include "player/player-status.h"

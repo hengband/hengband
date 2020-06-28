@@ -4,7 +4,7 @@
  * @author deskull
  */
 
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/object-info.h"
 
 /*

@@ -6,7 +6,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h" // 暫定、このファイルへ引っ越す.
+#include "object/item-tester-hooker.h" // 暫定、このファイルへ引っ越す.
 #include "object/object-kind.h"
 
 /*!

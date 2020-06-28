@@ -12,7 +12,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"

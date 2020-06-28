@@ -407,9 +407,6 @@
     <ClCompile Include="..\..\src\object\object-flavor.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-hook.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\room\rooms.c">
       <Filter>room</Filter>
     </ClCompile>
@@ -1502,6 +1499,9 @@
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\item-tester-hooker.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1940,9 +1940,6 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-flavor.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-hook.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\room\rooms.h">
@@ -3294,6 +3291,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\item-tester-hooker.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

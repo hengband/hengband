@@ -17,7 +17,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-info.h"

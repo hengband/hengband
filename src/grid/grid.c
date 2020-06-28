@@ -32,7 +32,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "object/object-flavor.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"

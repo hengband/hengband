@@ -40,7 +40,7 @@
 #include "object-hook/hook-magic.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/object-kind.h"
 #include "object/object-info.h"
 #include "monster-floor/place-monster-types.h"
