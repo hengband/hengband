@@ -38,7 +38,7 @@
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/item-feeling.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-checker.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"

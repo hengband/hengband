@@ -30,6 +30,7 @@
 #include "monster/smart-learn-types.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"

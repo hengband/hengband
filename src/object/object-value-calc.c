@@ -3,6 +3,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

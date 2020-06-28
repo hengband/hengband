@@ -12,6 +12,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
 #include "realm/realm-song-numbers.h"

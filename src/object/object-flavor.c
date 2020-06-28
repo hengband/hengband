@@ -24,6 +24,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-info.h"

@@ -19,6 +19,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
 #include "object-hook/hook-armor.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -813,10 +814,6 @@ bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tva
     return TRUE;
 }
 
-bool object_is_valid(object_type *o_ptr) { return o_ptr->k_idx != 0; }
-
-bool object_is_held_monster(object_type *o_ptr) { return o_ptr->held_m_idx != 0; }
-
 /*
  * Artifacts use the "name1" field
  */
@@ -826,13 +823,3 @@ bool object_is_fixed_artifact(object_type *o_ptr) { return o_ptr->name1 != 0; }
  * Ego-Items use the "name2" field
  */
 bool object_is_ego(object_type *o_ptr) { return o_ptr->name2 != 0; }
-
-/*
- * Broken items.
- */
-bool object_is_broken(object_type *o_ptr) { return (o_ptr->ident & IDENT_BROKEN) != 0; }
-
-/*
- * Cursed items.
- */
-bool object_is_cursed(object_type *o_ptr) { return o_ptr->curse_flags != 0; }

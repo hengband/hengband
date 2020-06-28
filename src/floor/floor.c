@@ -17,6 +17,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

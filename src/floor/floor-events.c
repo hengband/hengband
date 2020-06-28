@@ -16,6 +16,7 @@
 #include "monster/monster-status.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"

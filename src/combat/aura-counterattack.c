@@ -14,7 +14,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
 #include "object-hook/hook-armor.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-checker.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"
 #include "spell-realm/spells-hex.h"

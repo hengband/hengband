@@ -49,6 +49,7 @@
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/artifact.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-hook.h"
 #include "pet/pet-util.h"
 #include "player/player-class.h"

@@ -1,7 +1,7 @@
 ﻿#include "inventory/recharge-processor.h"
 #include "core/hp-mp-regenerator.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-flavor.h"
-#include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "player/player-move.h"
 #include "util/quarks.h"

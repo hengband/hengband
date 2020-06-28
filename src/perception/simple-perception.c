@@ -10,6 +10,7 @@
 #include "game-option/disturbance-options.h"
 #include "inventory/player-inventory.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-info.h"

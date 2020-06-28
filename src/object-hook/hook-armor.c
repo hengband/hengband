@@ -1,5 +1,5 @@
 ﻿#include "object-hook/hook-armor.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-info.h"
 #include "sv-definition/sv-armor-types.h"
 #include "system/object-type-definition.h"
