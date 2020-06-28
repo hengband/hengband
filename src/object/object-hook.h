@@ -7,13 +7,8 @@ extern bool (*item_tester_hook)(player_type *, object_type *o_ptr);
 
 bool item_tester_hook_convertible(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_recharge(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_orthodox_melee_weapons(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_melee_weapon(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_ammo(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_broken_weapon(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_boomerang(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_eatable(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_mochikae(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_activate(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_wear(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_use(player_type *player_ptr, object_type *o_ptr);

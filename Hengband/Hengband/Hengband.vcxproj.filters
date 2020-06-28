@@ -1475,6 +1475,9 @@
     <ClCompile Include="..\..\src\object-hook\hook-perception.c">
       <Filter>object-hook</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-weapon.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3239,6 +3242,9 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-perception.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-weapon.h">
       <Filter>object-hook</Filter>
     </ClInclude>
   </ItemGroup>

@@ -56,6 +56,7 @@
 #include "monster/monster-info.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
+#include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"

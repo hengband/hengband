@@ -7,6 +7,7 @@
 #include "io/input-key-acceptor.h"
 #include "market/building-util.h"
 #include "object-enchant/tr-types.h"
+#include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
 #include "object/object-flavor.h"

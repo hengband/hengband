@@ -43,6 +43,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
+#include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

@@ -433,6 +433,7 @@ hengband_SOURCES = \
 	object-enchant/vorpal-weapon.c object-enchant/vorpal-weapon.h \
 	\
 	object-hook/hook-perception.c object-hook/hook-perception.h \
+	object-hook/hook-weapon.c object-hook/hook-weapon.h \
 	\
 	perception/identification.c perception/identification.h \
 	perception/object-perception.c perception/object-perception.h \
@@ -642,7 +643,7 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Icombat -Icore -Idungeon -Ieffect -Ifloor -Igame-option -Igrid \
 	-Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge -Imarket -Imelee \
 	-Imind -Imonster -Imonster-attack -Imonster-floor -Imonster-race -Ilore \
-	-Imspell -Imutation -Iobject -Iobject-enchant -Ipet -Iplayer \
+	-Imspell -Imutation -Iobject -Iobject-enchant -Iobject-hook -Ipet -Iplayer \
 	-Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell -Ispell-kind \
 	-Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
