@@ -52,4 +52,3 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT turn);
 bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 void do_poly_wounds(player_type *creature_ptr);
 void change_race(player_type *creature_ptr, player_race_type new_race, concptr effect_msg);
-bool drop_weapons(player_type *creature_ptr);

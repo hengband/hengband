@@ -2377,34 +2377,3 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
     screen_load();
     return TRUE;
 }
-
-bool drop_weapons(player_type *creature_ptr)
-{
-    INVENTORY_IDX slot = 0;
-    object_type *o_ptr = NULL;
-
-    if (creature_ptr->wild_mode)
-        return FALSE;
-
-    msg_print(NULL);
-    if (has_melee_weapon(creature_ptr, INVEN_RARM)) {
-        slot = INVEN_RARM;
-        o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
-
-        if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2)) {
-            o_ptr = &creature_ptr->inventory_list[INVEN_LARM];
-            slot = INVEN_LARM;
-        }
-    } else if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-        o_ptr = &creature_ptr->inventory_list[INVEN_LARM];
-        slot = INVEN_LARM;
-    }
-
-    if (slot && !object_is_cursed(o_ptr)) {
-        msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
-        drop_from_inventory(creature_ptr, slot, 1);
-        return TRUE;
-    }
-
-    return FALSE;
-}
