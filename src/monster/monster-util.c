@@ -334,7 +334,7 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
         entry->prob2 = 0;
         r_ptr = &r_info[entry->index];
 
-        if ((get_mon_num_hook && !((*get_mon_num_hook)(entry->index))) || (get_mon_num2_hook && !((*get_mon_num2_hook)(entry->index))))
+        if ((get_mon_num_hook && !((*get_mon_num_hook)(player_ptr, entry->index))) || (get_mon_num2_hook && !((*get_mon_num2_hook)(player_ptr, entry->index))))
             continue;
 
         if (!player_ptr->phase_out && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {

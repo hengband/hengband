@@ -31,24 +31,23 @@ int summon_specific_who = -1;
 bool summon_unique_okay = FALSE;
 
 /*!
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief モンスターが召喚の基本条件に合っているかをチェックする / Hack -- help decide if a monster race is "okay" to summon
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚対象にできるならばTRUE
  */
-static bool summon_specific_okay(MONRACE_IDX r_idx)
+static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[summon_specific_who];
-    if (!mon_hook_dungeon(r_idx))
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
+    if (!mon_hook_dungeon(player_ptr, r_idx))
         return FALSE;
 
     if (summon_specific_who > 0) {
-        if (monster_has_hostile_align(p_ptr, m_ptr, 0, 0, r_ptr))
+        if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
             return FALSE;
     } else if (summon_specific_who < 0) {
-        if (monster_has_hostile_align(p_ptr, NULL, 10, -10, r_ptr)) {
-            if (!one_in_(ABS(p_ptr->align) / 2 + 1))
+        if (monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr)) {
+            if (!one_in_(ABS(player_ptr->align) / 2 + 1))
                 return FALSE;
         }
     }
@@ -59,13 +58,13 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
     if (!summon_specific_type)
         return TRUE;
 
-    if ((summon_specific_who < 0) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(p_ptr, NULL, 10, -10, r_ptr))
+    if ((summon_specific_who < 0) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr))
         return FALSE;
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON))
+    if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[player_ptr->dungeon_idx].flags1 & DF1_CHAMELEON))
         return TRUE;
 
-    return (check_summon_specific(p_ptr, m_ptr->r_idx, r_idx));
+    return (check_summon_specific(player_ptr, m_ptr->r_idx, r_idx));
 }
 
 /*!

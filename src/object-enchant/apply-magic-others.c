@@ -126,7 +126,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
         while (TRUE) {
             i = randint1(max_r_idx - 1);
 
-            if (!item_monster_okay(i))
+            if (!item_monster_okay(owner_ptr, i))
                 continue;
             if (i == MON_TSUCHINOKO)
                 continue;

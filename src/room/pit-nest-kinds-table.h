@@ -35,8 +35,8 @@
 typedef struct vault_aux_type
 {
 	concptr name;
-	bool(*hook_func)(MONRACE_IDX r_idx);
-	void(*prep_func)(player_type *player_ptr);
+    bool (*hook_func)(player_type *player_ptr, MONRACE_IDX r_idx);
+	void (*prep_func)(player_type *player_ptr);
 	DEPTH level;
 	int chance;
 } vault_aux_type;

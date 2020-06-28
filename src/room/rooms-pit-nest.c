@@ -1,5 +1,4 @@
 ﻿#include "room/rooms-pit-nest.h"
-#include "util/sort.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
@@ -7,18 +6,22 @@
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/place-monster-types.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags4.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster-floor/monster-generator.h"
+#include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "monster-floor/place-monster-types.h"
 #include "room/pit-nest-kinds-table.h"
 #include "rooms.h"
+#include "util/sort.h"
 #include "view/display-messages.h"
 
 /*!
@@ -644,16 +647,17 @@ bool build_type6(player_type *player_ptr)
 	return TRUE;
 }
 
-
 /*
-* todo vault_monster_okay() をmonsterrace-hook以外から呼んでいるのはここだけなので、何とかしたい
-* Helper function for "trapped monster pit"
-*/
-static bool vault_aux_trapped_pit(MONRACE_IDX r_idx)
+ * Helper function for "trapped monster pit"
+ */
+static bool vault_aux_trapped_pit(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-	monster_race *r_ptr = &r_info[r_idx];
+    /* Unused */
+    (void)player_ptr;
 
-	if (!vault_monster_okay(r_idx)) return FALSE;
+    monster_race *r_ptr = &r_info[r_idx];
+
+	if (!vault_monster_okay(player_ptr, r_idx)) return FALSE;
 
 	/* No wall passing monster */
 	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return FALSE;
