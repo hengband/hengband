@@ -161,7 +161,6 @@ bool item_tester_hook_boomerang(player_type *player_ptr, object_type *o_ptr)
 }
 
 /*!
- * todo ここにplayer_type を追加すると関数ポインタの収拾がつかなくなったので保留
  * @brief オブジェクトをプレイヤーが食べることができるかを判定する /
  * Hook to determine if an object is eatable
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
@@ -1057,9 +1056,6 @@ bool object_is_quest_target(player_type *player_ptr, object_type *o_ptr)
  */
 bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tval)
 {
-    /* Hack -- allow listing empty slots */
-    // if (item_tester_full) return TRUE; // TODO:DELETE
-
     /* Require an item */
     if (!o_ptr->k_idx)
         return FALSE;
