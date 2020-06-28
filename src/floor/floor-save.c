@@ -677,7 +677,7 @@ static void update_unique_artifact(floor_type *floor_ptr, s16b cur_floor_id)
 	{
 		object_type *o_ptr = &floor_ptr->o_list[i];
 
-		if (!OBJECT_IS_VALID(o_ptr)) continue;
+		if (!object_is_valid(o_ptr)) continue;
 
 		/* Memorize location of the artifact */
 		if (object_is_fixed_artifact(o_ptr))
@@ -932,7 +932,7 @@ void leave_floor(player_type *creature_ptr)
 	{
 		object_type *o_ptr = &creature_ptr->inventory_list[i];
 
-		if (!OBJECT_IS_VALID(o_ptr)) continue;
+		if (!object_is_valid(o_ptr)) continue;
 
 		/* Delete old memorized location of the artifact */
 		if (object_is_fixed_artifact(o_ptr))
@@ -1254,7 +1254,7 @@ void change_floor(player_type *creature_ptr)
 			{
 				object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
 
-				if (!OBJECT_IS_VALID(o_ptr)) continue;
+				if (!object_is_valid(o_ptr)) continue;
 
 				/* Ignore non-artifact */
 				if (!object_is_fixed_artifact(o_ptr)) continue;

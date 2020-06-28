@@ -1481,6 +1481,9 @@
     <ClCompile Include="..\..\src\object-hook\hook-bow.c">
       <Filter>object-hook</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-armor.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3251,6 +3254,9 @@
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-bow.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-armor.h">
       <Filter>object-hook</Filter>
     </ClInclude>
   </ItemGroup>

@@ -213,7 +213,7 @@ static byte get_dungeon_feeling(player_type *subject_ptr)
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];
 		int delta = 0;
 
-		if (!OBJECT_IS_VALID(o_ptr)) continue;
+		if (!object_is_valid(o_ptr)) continue;
 
 		/* Skip known objects */
 		if (object_is_known(o_ptr))

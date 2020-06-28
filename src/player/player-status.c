@@ -42,6 +42,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object-hook/hook-armor.h"
 #include "object/object-flags.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"

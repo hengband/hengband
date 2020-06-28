@@ -162,9 +162,9 @@ bool detect_objects_gold(player_type *caster_ptr, POSITION range)
     for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
 
-        if (!OBJECT_IS_VALID(o_ptr))
+        if (!object_is_valid(o_ptr))
             continue;
-        if (OBJECT_IS_HELD_MONSTER(o_ptr))
+        if (object_is_held_monster(o_ptr))
             continue;
 
         y = o_ptr->iy;
@@ -208,9 +208,9 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
     for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
 
-        if (!OBJECT_IS_VALID(o_ptr))
+        if (!object_is_valid(o_ptr))
             continue;
-        if (OBJECT_IS_HELD_MONSTER(o_ptr))
+        if (object_is_held_monster(o_ptr))
             continue;
 
         POSITION y = o_ptr->iy;
@@ -263,9 +263,9 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
     for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
 
-        if (!OBJECT_IS_VALID(o_ptr))
+        if (!object_is_valid(o_ptr))
             continue;
-        if (OBJECT_IS_HELD_MONSTER(o_ptr))
+        if (object_is_held_monster(o_ptr))
             continue;
 
         POSITION y = o_ptr->iy;

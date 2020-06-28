@@ -239,7 +239,7 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     excise_object_idx(floor_ptr, o_idx);
     j_ptr = &floor_ptr->o_list[o_idx];
-    if (!OBJECT_IS_HELD_MONSTER(j_ptr)) {
+    if (!object_is_held_monster(j_ptr)) {
         POSITION y, x;
         y = j_ptr->iy;
         x = j_ptr->ix;
@@ -263,7 +263,7 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
     object_type *j_ptr;
     j_ptr = &floor_ptr->o_list[o_idx];
 
-    if (OBJECT_IS_HELD_MONSTER(j_ptr)) {
+    if (object_is_held_monster(j_ptr)) {
         monster_type *m_ptr;
         m_ptr = &floor_ptr->m_list[j_ptr->held_m_idx];
         for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {

@@ -2516,7 +2516,7 @@ static errr rd_dungeon_old(player_type *player_ptr)
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[o_idx];
         rd_item(player_ptr, o_ptr);
-        if (OBJECT_IS_HELD_MONSTER(o_ptr)) {
+        if (object_is_held_monster(o_ptr)) {
             monster_type *m_ptr;
             m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
             o_ptr->next_o_idx = m_ptr->hold_o_idx;
@@ -2728,7 +2728,7 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         o_ptr = &floor_ptr->o_list[o_idx];
         rd_item(player_ptr, o_ptr);
 
-        if (OBJECT_IS_HELD_MONSTER(o_ptr)) {
+        if (object_is_held_monster(o_ptr)) {
             monster_type *m_ptr;
             m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
             o_ptr->next_o_idx = m_ptr->hold_o_idx;

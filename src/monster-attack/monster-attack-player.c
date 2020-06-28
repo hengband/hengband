@@ -30,6 +30,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
+#include "object-hook/hook-armor.h"
 #include "object/object-hook.h"
 #include "pet/pet-fall-off.h"
 #include "player/bad-status-setter.h"

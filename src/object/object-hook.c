@@ -18,6 +18,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
+#include "object-hook/hook-armor.h"
 #include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -85,24 +86,6 @@ bool item_tester_hook_activate(player_type *player_ptr, object_type *o_ptr)
 
     /* Check activation flag */
     if (have_flag(flgs, TR_ACTIVATE))
-        return TRUE;
-
-    return FALSE;
-}
-
-/*!
- * @brief オブジェクトを防具として装備できるかの判定 / The "wearable" tester
- * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
- * @return オブジェクトが防具として装備できるならTRUEを返す。
- */
-bool item_tester_hook_wear(player_type *player_ptr, object_type *o_ptr)
-{
-    if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI))
-        if (player_ptr->psex == SEX_MALE)
-            return FALSE;
-
-    /* Check for a usable slot */
-    if (wield_slot(player_ptr, o_ptr) >= INVEN_RARM)
         return TRUE;
 
     return FALSE;
@@ -243,19 +226,6 @@ bool item_tester_hook_weapon_except_bow(player_type *player_ptr, object_type *o_
     }
 
     return FALSE;
-}
-
-/*!
- * @brief 呪術領域の各処理に使える呪われた装備かどうかを返す。 / An "item_tester_hook" for offer
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @return 使える装備ならばTRUEを返す
- */
-bool item_tester_hook_cursed(player_type *player_ptr, object_type *o_ptr)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    return (bool)(object_is_cursed(o_ptr));
 }
 
 /*!
@@ -545,22 +515,6 @@ bool object_is_weapon(player_type *player_ptr, object_type *o_ptr)
 bool object_is_weapon_ammo(object_type *o_ptr)
 {
     if (TV_MISSILE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END)
-        return TRUE;
-
-    return FALSE;
-}
-
-/*!
- * @brief オブジェクトが防具として装備できるかどうかを返す / Check if an object is armour
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 矢弾として使えるならばTRUEを返す
- */
-bool object_is_armour(player_type *player_ptr, object_type *o_ptr)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    if (TV_ARMOR_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_ARMOR_END)
         return TRUE;
 
     return FALSE;

@@ -13,6 +13,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
+#include "object-hook/hook-armor.h"
 #include "object/object-hook.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"

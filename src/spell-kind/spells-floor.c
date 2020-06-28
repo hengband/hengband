@@ -55,8 +55,8 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
 	for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
-		if (!OBJECT_IS_VALID(o_ptr)) continue;
-		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
+		if (!object_is_valid(o_ptr)) continue;
+		if (object_is_held_monster(o_ptr)) continue;
 		o_ptr->marked |= OM_FOUND;
 	}
 
@@ -164,8 +164,8 @@ void wiz_dark(player_type *caster_ptr)
 	{
 		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
 
-		if (!OBJECT_IS_VALID(o_ptr)) continue;
-		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
+		if (!object_is_valid(o_ptr)) continue;
+		if (object_is_held_monster(o_ptr)) continue;
 
 		/* Forget the object */
 		o_ptr->marked &= OM_TOUCHED;

@@ -791,7 +791,7 @@ void wipe_o_list(floor_type *floor_ptr)
 	for (int i = 1; i < floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &floor_ptr->o_list[i];
-		if (!OBJECT_IS_VALID(o_ptr)) continue;
+		if (!object_is_valid(o_ptr)) continue;
 
 		if (!current_world_ptr->character_dungeon || preserve_mode)
 		{
@@ -801,7 +801,7 @@ void wipe_o_list(floor_type *floor_ptr)
 			}
 		}
 
-		if (OBJECT_IS_HELD_MONSTER(o_ptr))
+		if (object_is_held_monster(o_ptr))
 		{
 			monster_type *m_ptr;
 			m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
@@ -1517,7 +1517,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 
 	o_ptr = &floor_ptr->o_list[i1];
 
-	if (OBJECT_IS_HELD_MONSTER(o_ptr))
+	if (object_is_held_monster(o_ptr))
 	{
 		monster_type *m_ptr;
 		m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
@@ -1580,11 +1580,11 @@ void compact_objects(player_type *player_ptr, int size)
 		{
 			o_ptr = &floor_ptr->o_list[i];
 
-			if (!OBJECT_IS_VALID(o_ptr)) continue;
+			if (!object_is_valid(o_ptr)) continue;
 			if (k_info[o_ptr->k_idx].level > cur_lev) continue;
 
 			POSITION y, x;
-			if (OBJECT_IS_HELD_MONSTER(o_ptr))
+			if (object_is_held_monster(o_ptr))
 			{
 				monster_type *m_ptr;
 				m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
