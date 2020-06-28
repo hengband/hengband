@@ -3459,6 +3459,17 @@ static void calc_stealth(player_type *creature_ptr)
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(o_ptr, flgs);
+        if (have_flag(flgs, TR_STEALTH))
+            creature_ptr->skill_stl += o_ptr->pval;
+    }
+
     creature_ptr->skill_stl = tmp_rp_ptr->r_stl + c_ptr->c_stl + a_ptr->a_stl;
     if (creature_ptr->muta3 & MUT3_XTRA_NOIS) {
         creature_ptr->skill_stl -= 3;
@@ -3476,6 +3487,13 @@ static void calc_stealth(player_type *creature_ptr)
         creature_ptr->cursed &= ~(TRC_AGGRAVATE);
         creature_ptr->skill_stl = MIN(creature_ptr->skill_stl - 3, (creature_ptr->skill_stl + 2) / 2);
     }
+
+    if (creature_ptr->shero) {
+        creature_ptr->skill_stl -= 7;
+    }
+
+	if (is_time_limit_stealth(creature_ptr))
+        creature_ptr->skill_stl += 99;
 
     if (creature_ptr->skill_stl > 30)
         creature_ptr->skill_stl = 30;
