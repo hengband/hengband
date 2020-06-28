@@ -13,6 +13,7 @@
 #include "perception/object-perception.h"
 #include "object/object-hook.h"
 #include "object-enchant/item-feeling.h"
+#include "object-hook/hook-bow.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"

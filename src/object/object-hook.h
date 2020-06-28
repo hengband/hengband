@@ -5,9 +5,7 @@
 
 extern bool (*item_tester_hook)(player_type *, object_type *o_ptr);
 
-bool item_tester_hook_convertible(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_recharge(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_ammo(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_eatable(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_activate(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_wear(player_type *player_ptr, object_type *o_ptr);
@@ -28,7 +26,6 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr);
 bool object_is_rare(object_type *o_ptr);
 bool object_is_weapon(player_type *player_ptr, object_type *o_ptr);
 bool object_is_weapon_ammo(object_type *o_ptr);
-bool object_is_ammo(object_type *o_ptr);
 bool object_is_armour(player_type *player_ptr, object_type *o_ptr);
 bool object_is_weapon_armour_ammo(player_type *player_ptr, object_type *o_ptr);
 bool object_is_melee_weapon(object_type *o_ptr);
@@ -70,4 +67,4 @@ bool object_is_quest_target(player_type *player_ptr, object_type *o_ptr);
  */
 #define object_is_cursed(T) ((T)->curse_flags)
 
-extern bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tval);
+bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tval);

@@ -29,6 +29,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
+#include "object-hook/hook-bow.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
 #include "object/object-flavor.h"

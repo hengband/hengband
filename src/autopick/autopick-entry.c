@@ -10,6 +10,7 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-hook/hook-bow.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

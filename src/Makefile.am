@@ -432,6 +432,7 @@ hengband_SOURCES = \
 	object-enchant/trg-types.h \
 	object-enchant/vorpal-weapon.c object-enchant/vorpal-weapon.h \
 	\
+	object-hook/hook-bow.c object-hook/hook-bow.h \
 	object-hook/hook-perception.c object-hook/hook-perception.h \
 	object-hook/hook-weapon.c object-hook/hook-weapon.h \
 	\
