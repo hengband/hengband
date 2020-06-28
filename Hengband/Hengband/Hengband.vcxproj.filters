@@ -1472,6 +1472,9 @@
     <ClCompile Include="..\..\src\spell\spell-info.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-perception.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3235,6 +3238,9 @@
     <ClInclude Include="..\..\src\spell\spell-info.h">
       <Filter>spell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-perception.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3399,6 +3405,9 @@
     </Filter>
     <Filter Include="cmd-building">
       <UniqueIdentifier>{6982e0e0-d2db-422e-8e92-77b1276e4030}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-hook">
+      <UniqueIdentifier>{e466c69b-eaf4-4110-bc9d-e865b36cc732}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

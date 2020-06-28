@@ -216,6 +216,7 @@
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
     <ClCompile Include="..\..\src\mind\racial-kutar.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
+    <ClCompile Include="..\..\src\object-hook\hook-perception.c" />
     <ClCompile Include="..\..\src\player\bad-status-setter.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-curse-removal.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-perception.c" />
@@ -630,6 +631,7 @@
     <ClInclude Include="..\..\src\mspell\mspells1.h" />
     <ClInclude Include="..\..\src\mspell\mspells2.h" />
     <ClInclude Include="..\..\src\mspell\mspells3.h" />
+    <ClInclude Include="..\..\src\object-hook\hook-perception.h" />
     <ClInclude Include="..\..\src\player\bad-status-setter.h" />
     <ClInclude Include="..\..\src\player\special-defense-types.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-curse-removal.h" />

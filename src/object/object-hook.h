@@ -22,11 +22,6 @@ bool item_tester_hook_readable(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_melee_ammo(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_weapon_except_bow(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_cursed(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_nameless_weapon_armour(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_identify(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_identify_weapon_armour(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_identify_fully(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_identify_fully_weapon_armour(player_type *player_ptr, object_type *o_ptr);
 
 bool item_tester_learn_spell(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_high_level_book(object_type *o_ptr);
