@@ -61,8 +61,6 @@ void calc_equipment_status(player_type* creature_ptr) {
         if (have_flag(flgs, TR_STEALTH))
             creature_ptr->skill_stl += o_ptr->pval;
         if (have_flag(flgs, TR_SEARCH))
-            creature_ptr->skill_srh += (o_ptr->pval * 5);
-        if (have_flag(flgs, TR_SEARCH))
             creature_ptr->skill_fos += (o_ptr->pval * 5);
         if (have_flag(flgs, TR_INFRA))
             creature_ptr->see_infra += o_ptr->pval;
