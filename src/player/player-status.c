@@ -86,7 +86,7 @@ static void calc_disarming(player_type *creature_ptr);
 static void calc_device_ability(player_type *creature_ptr);
 static void calc_saving_throw(player_type *creature_ptr);
 static void calc_search(player_type *creature_ptr);
-
+static void calc_search_freq(player_type *creature_ptr);
 
 
 /*!
@@ -1222,7 +1222,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
         creature_ptr->stat_add[i] = 0;
 
 	creature_ptr->see_infra = 0;
-    creature_ptr->skill_fos = 0;
     creature_ptr->skill_thn = 0;
     creature_ptr->skill_thb = 0;
     creature_ptr->skill_tht = 0;
@@ -1389,7 +1388,6 @@ void calc_bonuses(player_type *creature_ptr)
 	clear_creature_bonuses(creature_ptr);
     calc_race_status(creature_ptr);
 
-	creature_ptr->skill_fos = cp_ptr->c_fos + ap_ptr->a_fos;
 	creature_ptr->skill_thn = cp_ptr->c_thn + ap_ptr->a_thn;
 	creature_ptr->skill_thb = cp_ptr->c_thb + ap_ptr->a_thb;
 	creature_ptr->skill_tht = cp_ptr->c_thb + ap_ptr->a_thb;
@@ -1538,11 +1536,6 @@ void calc_bonuses(player_type *creature_ptr)
 		if (creature_ptr->muta3 & MUT3_BLANK_FAC)
 		{
 			creature_ptr->stat_add[A_CHR] -= 1;
-		}
-
-		if (creature_ptr->muta3 & MUT3_XTRA_EYES)
-		{
-			creature_ptr->skill_fos += 15;
 		}
 
 		if (creature_ptr->muta3 & MUT3_INFRAVIS)
@@ -2461,7 +2454,6 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->ryoute = FALSE;
 
 	creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
-	creature_ptr->skill_fos += (cp_ptr->x_fos * creature_ptr->lev / 10);
 	creature_ptr->skill_thn += ((cp_ptr->x_thn * creature_ptr->lev / 10) + (ap_ptr->a_thn * creature_ptr->lev / 50));
 	creature_ptr->skill_thb += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 	creature_ptr->skill_tht += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
@@ -2478,6 +2470,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_device_ability(creature_ptr);
     calc_saving_throw(creature_ptr);
     calc_search(creature_ptr);
+    calc_search_freq(creature_ptr);
 
 	if (current_world_ptr->character_xtra) return;
 
@@ -3442,6 +3435,8 @@ static void calc_stealth(player_type *creature_ptr)
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
+    creature_ptr->skill_stl = tmp_rp_ptr->r_stl + c_ptr->c_stl + a_ptr->a_stl;
+
 	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -3453,7 +3448,6 @@ static void calc_stealth(player_type *creature_ptr)
             creature_ptr->skill_stl += o_ptr->pval;
     }
 
-    creature_ptr->skill_stl = tmp_rp_ptr->r_stl + c_ptr->c_stl + a_ptr->a_stl;
     if (creature_ptr->muta3 & MUT3_XTRA_NOIS) {
         creature_ptr->skill_stl -= 3;
     }
@@ -3539,8 +3533,9 @@ static void calc_device_ability(player_type *creature_ptr)
 
 	creature_ptr->skill_dev += adj_int_dev[creature_ptr->stat_ind[A_INT]];
     creature_ptr->skill_dev += ((cp_ptr->x_dev * creature_ptr->lev / 10) + (ap_ptr->a_dev * creature_ptr->lev / 50));
-    if (creature_ptr->shero) {
-        creature_ptr->skill_stl -= 7;
+
+	if (creature_ptr->shero) {
+        creature_ptr->skill_dev -= 20;
     }
 }
 
@@ -3606,7 +3601,43 @@ static void calc_search(player_type *creature_ptr)
 
 }
 
-/*!
+static void calc_search_freq(player_type *creature_ptr)
+{
+    const player_race *tmp_rp_ptr;
+
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
+
+	creature_ptr->skill_fos = tmp_rp_ptr->r_fos + c_ptr->c_fos + a_ptr->a_fos;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(o_ptr, flgs);
+        if (have_flag(flgs, TR_SEARCH))
+            creature_ptr->skill_fos += (o_ptr->pval * 5);
+    }
+
+    if (creature_ptr->shero) {
+        creature_ptr->skill_fos -= 15;
+    }
+
+	if (creature_ptr->muta3 & MUT3_XTRA_EYES) {
+        creature_ptr->skill_fos += 15;
+    }
+
+	creature_ptr->skill_fos += (cp_ptr->x_fos * creature_ptr->lev / 10);
+}
+
+
+    /*!
  * @brief プレイヤーの所持重量制限を計算する /
  * Computes current weight limit.
  * @return 制限重量(ポンド)
