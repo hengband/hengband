@@ -88,6 +88,7 @@ static void calc_device_ability(player_type *creature_ptr);
 static void calc_saving_throw(player_type *creature_ptr);
 static void calc_search(player_type *creature_ptr);
 static void calc_search_freq(player_type *creature_ptr);
+static void calc_to_hit(player_type *creature_ptr);
 
 
 /*!
@@ -1222,7 +1223,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     for (int i = 0; i < A_MAX; i++)
         creature_ptr->stat_add[i] = 0;
 
-    creature_ptr->skill_thn = 0;
     creature_ptr->skill_thb = 0;
     creature_ptr->skill_tht = 0;
     creature_ptr->skill_dig = 0;
@@ -1388,7 +1388,6 @@ void calc_bonuses(player_type *creature_ptr)
 	clear_creature_bonuses(creature_ptr);
     calc_race_status(creature_ptr);
 
-	creature_ptr->skill_thn = cp_ptr->c_thn + ap_ptr->a_thn;
 	creature_ptr->skill_thb = cp_ptr->c_thb + ap_ptr->a_thb;
 	creature_ptr->skill_tht = cp_ptr->c_thb + ap_ptr->a_thb;
 
@@ -2449,7 +2448,6 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->ryoute = FALSE;
 
 	creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
-	creature_ptr->skill_thn += ((cp_ptr->x_thn * creature_ptr->lev / 10) + (ap_ptr->a_thn * creature_ptr->lev / 50));
 	creature_ptr->skill_thb += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 	creature_ptr->skill_tht += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 
@@ -2467,6 +2465,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_saving_throw(creature_ptr);
     calc_search(creature_ptr);
     calc_search_freq(creature_ptr);
+    calc_to_hit(creature_ptr);
 
 	if (current_world_ptr->character_xtra) return;
 
@@ -3661,8 +3660,23 @@ static void calc_search_freq(player_type *creature_ptr)
 	creature_ptr->skill_fos += (cp_ptr->x_fos * creature_ptr->lev / 10);
 }
 
+static void calc_to_hit(player_type *creature_ptr)
+{
+    const player_race *tmp_rp_ptr;
+    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
-    /*!
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+
+    creature_ptr->skill_thn = tmp_rp_ptr->r_thn + c_ptr->c_thn + a_ptr->a_thn;
+	creature_ptr->skill_thn += ((c_ptr->x_thn * creature_ptr->lev / 10) + (a_ptr->a_thn * creature_ptr->lev / 50));
+}
+
+
+/*!
  * @brief プレイヤーの所持重量制限を計算する /
  * Computes current weight limit.
  * @return 制限重量(ポンド)

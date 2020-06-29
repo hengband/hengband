@@ -127,7 +127,6 @@ void calc_race_status(player_type *creature_ptr)
     else
         tmp_rp_ptr = &race_info[creature_ptr->prace];
 
-    creature_ptr->skill_thn += tmp_rp_ptr->r_thn;
     creature_ptr->skill_thb += tmp_rp_ptr->r_thb;
     creature_ptr->skill_tht += tmp_rp_ptr->r_thb;
 
