@@ -4,6 +4,7 @@
 #include "mind/racial-kutar.h"
 #include "player/player-effects.h"
 #include "spell-realm/spells-craft.h"
+#include "spell-realm/spells-song.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
