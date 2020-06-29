@@ -54,6 +54,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 #include "world/world.h"
 
  /*

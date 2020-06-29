@@ -49,6 +49,7 @@
 #include "sv-definition/sv-bow-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 #include "world/world-object.h"
 
 /*!

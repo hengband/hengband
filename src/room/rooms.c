@@ -57,6 +57,7 @@
 #include "room/rooms-vault.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
  /*!
   * 各部屋タイプの生成比定義

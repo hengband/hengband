@@ -1511,6 +1511,9 @@
     <ClCompile Include="..\..\src\status\bad-status-setter.c">
       <Filter>status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-messages.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3312,6 +3315,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\status\bad-status-setter.h">
       <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-messages.h">
+      <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

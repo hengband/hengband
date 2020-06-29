@@ -30,7 +30,7 @@
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "view/object-describer.h"
+#include "wizard/wizard-messages.h"
 #include "world/world-object.h"
 #include "world/world.h"
 

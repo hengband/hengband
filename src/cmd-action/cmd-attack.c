@@ -33,6 +33,7 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
 /*!
  * @brief プレイヤーの変異要素による打撃処理

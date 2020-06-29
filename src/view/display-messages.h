@@ -29,9 +29,4 @@ concptr message_str(int age);
 void message_add(concptr msg);
 void msg_erase(void);
 void msg_print(concptr msg);
-void msg_print_wizard(int cheat_type, concptr msg);
-
-#ifndef SWIG
 void msg_format(concptr fmt, ...);
-void msg_format_wizard(int cheat_type, concptr fmt, ...);
-#endif

@@ -1,13 +1,10 @@
 ﻿#include "view/display-messages.h"
 #include "core/output-updater.h"
-#include "game-option/cheat-options.h"
-#include "game-option/cheat-types.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/option-flags.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
-#include "io/write-diary.h"
 #include "main/sound-of-music.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
@@ -425,27 +422,6 @@ void msg_print(concptr msg)
         Term_fresh();
 }
 
-void msg_print_wizard(int cheat_type, concptr msg)
-{
-    if (!cheat_room && cheat_type == CHEAT_DUNGEON)
-        return;
-    if (!cheat_peek && cheat_type == CHEAT_OBJECT)
-        return;
-    if (!cheat_hear && cheat_type == CHEAT_MONSTER)
-        return;
-    if (!cheat_xtra && cheat_type == CHEAT_MISC)
-        return;
-
-    concptr cheat_mes[] = { "ITEM", "MONS", "DUNG", "MISC" };
-    char buf[1024];
-    sprintf(buf, "WIZ-%s:%s", cheat_mes[cheat_type], msg);
-    msg_print(buf);
-
-    if (cheat_diary_output) {
-        exe_write_diary(p_ptr, DIARY_WIZARD_LOG, 0, buf);
-    }
-}
-
 /*
  * Display a formatted message, using "vstrnfmt()" and "msg_print()".
  */
@@ -457,26 +433,4 @@ void msg_format(concptr fmt, ...)
     (void)vstrnfmt(buf, 1024, fmt, vp);
     va_end(vp);
     msg_print(buf);
-}
-
-/*
- * Display a formatted message, using "vstrnfmt()" and "msg_print()".
- */
-void msg_format_wizard(int cheat_type, concptr fmt, ...)
-{
-    if (!cheat_room && cheat_type == CHEAT_DUNGEON)
-        return;
-    if (!cheat_peek && cheat_type == CHEAT_OBJECT)
-        return;
-    if (!cheat_hear && cheat_type == CHEAT_MONSTER)
-        return;
-    if (!cheat_xtra && cheat_type == CHEAT_MISC)
-        return;
-
-    va_list vp;
-    char buf[1024];
-    va_start(vp, fmt);
-    (void)vstrnfmt(buf, 1024, fmt, vp);
-    va_end(vp);
-    msg_print_wizard(cheat_type, buf);
 }

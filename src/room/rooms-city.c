@@ -9,7 +9,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
 /*
 * Precalculate buildings' location of underground arcade

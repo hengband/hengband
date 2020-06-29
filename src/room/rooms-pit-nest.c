@@ -23,6 +23,7 @@
 #include "rooms.h"
 #include "util/sort.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
 /*!
 * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める

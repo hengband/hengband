@@ -49,6 +49,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/main-window-util.h"
+#include "wizard/wizard-messages.h"
 #include "world/world.h"
 
 int dun_tun_rnd; 

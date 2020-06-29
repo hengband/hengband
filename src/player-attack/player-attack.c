@@ -40,6 +40,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 #include "world/world.h"
 
 static player_attack_type *initialize_player_attack_type(

@@ -31,6 +31,7 @@
 #include "spell-kind/spells-floor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
 /*!
  * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する /

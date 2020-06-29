@@ -5,7 +5,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/rooms.h"
-#include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
 /*!
 * @brief タイプ14の部屋…特殊トラップ部屋の生成 / Type 14 -- trapped rooms
