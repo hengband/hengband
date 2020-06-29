@@ -103,7 +103,7 @@ void init_saved_floors(player_type *creature_ptr, bool force)
 		sprintf(floor_savefile, "%s.F%02d", savefile, i);
 
 		/* Grab permissions */
-		safe_setuid_grab();
+		safe_setuid_grab(creature_ptr);
 
 		/* Try to create the file */
 		fd = fd_make(floor_savefile, mode);
@@ -132,7 +132,7 @@ void init_saved_floors(player_type *creature_ptr, bool force)
 		}
 
 		/* Grab permissions */
-		safe_setuid_grab();
+		safe_setuid_grab(creature_ptr);
 
 		/* Simply kill the temporary file */ 
 		(void)fd_kill(floor_savefile);
@@ -181,7 +181,7 @@ void clear_saved_floor_files(player_type *creature_ptr)
 		sprintf(floor_savefile, "%s.F%02d", savefile, i);
 
 		/* Grab permissions */
-		safe_setuid_grab();
+		safe_setuid_grab(creature_ptr);
 
 		/* Simply kill the temporary file */ 
 		(void)fd_kill(floor_savefile);
@@ -242,7 +242,7 @@ static void kill_saved_floor(player_type *creature_ptr, saved_floor_type *sf_ptr
 		sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
 		/* Grab permissions */
-		safe_setuid_grab();
+		safe_setuid_grab(creature_ptr);
 
 		/* Simply kill the temporary file */ 
 		(void)fd_kill(floor_savefile);

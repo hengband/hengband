@@ -599,7 +599,7 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case ']': {
-        prepare_movie_hooks();
+        prepare_movie_hooks(creature_ptr);
         break;
     }
     case KTRL('V'): {

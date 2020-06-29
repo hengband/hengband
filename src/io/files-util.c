@@ -267,16 +267,16 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
 
-    safe_setuid_grab();
+    safe_setuid_grab(creature_ptr);
     int fd = fd_open(buf, O_RDWR);
     safe_setuid_drop();
     if (fd < 0) {
-        safe_setuid_grab();
+        safe_setuid_grab(creature_ptr);
         fd = fd_make(buf, 0644);
         safe_setuid_drop();
     }
 
-    safe_setuid_grab();
+    safe_setuid_grab(creature_ptr);
     errr err = fd_lock(fd, F_WRLCK);
     safe_setuid_drop();
     if (err)
@@ -284,7 +284,7 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
 
     counts_seek(creature_ptr, fd, where, TRUE);
     fd_write(fd, (char *)(&count), sizeof(u32b));
-    safe_setuid_grab();
+    safe_setuid_grab(creature_ptr);
     err = fd_lock(fd, F_UNLCK);
     safe_setuid_drop();
 

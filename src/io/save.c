@@ -1436,7 +1436,7 @@ static bool wr_savefile_new(player_type *player_ptr)
 static bool save_player_aux(player_type *player_ptr, char *name)
 {
 	/* Grab permissions */
-	safe_setuid_grab();
+	safe_setuid_grab(player_ptr);
 
 	/* Create the savefile */
 	int file_permission = 0644;
@@ -1453,7 +1453,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
 		(void)fd_close(fd);
 
 		/* Grab permissions */
-		safe_setuid_grab();
+		safe_setuid_grab(player_ptr);
 
 		/* Open the savefile */
 		fff = angband_fopen(name, "wb");
@@ -1472,7 +1472,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
 		}
 
 		/* Grab permissions */
-		safe_setuid_grab();
+		safe_setuid_grab(player_ptr);
 
 		/* Remove "broken" files */
 		if (!is_save_successful) (void)fd_kill(name);
@@ -1502,7 +1502,7 @@ bool save_player(player_type *player_ptr)
 	strcat(safe, ".new");
 
 	/* Grab permissions */
-	safe_setuid_grab();
+	safe_setuid_grab(player_ptr);
 
 	fd_kill(safe);
 
@@ -1521,7 +1521,7 @@ bool save_player(player_type *player_ptr)
 		strcat(temp, ".old");
 
 		/* Grab permissions */
-		safe_setuid_grab();
+		safe_setuid_grab(player_ptr);
 
 		/* Remove it */
 		fd_kill(temp);
@@ -1795,7 +1795,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
 	/* Grab permissions */
-	safe_setuid_grab();
+	safe_setuid_grab(player_ptr);
 
 	/* Remove it */
 	fd_kill(floor_savefile);
@@ -1809,7 +1809,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	fff = NULL;
 
 	/* Grab permissions */
-	safe_setuid_grab();
+	safe_setuid_grab(player_ptr);
 
 	/* Create the savefile */
 	int fd = fd_make(floor_savefile, 0644);
@@ -1824,7 +1824,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 		(void)fd_close(fd);
 
 		/* Grab permissions */
-		safe_setuid_grab();
+		safe_setuid_grab(player_ptr);
 
 		/* Open the savefile */
 		fff = angband_fopen(floor_savefile, "wb");
@@ -1846,7 +1846,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 		if (!is_save_successful)
 		{
 			/* Grab permissions */
-			safe_setuid_grab();
+			safe_setuid_grab(player_ptr);
 
 			(void)fd_kill(floor_savefile);
 

@@ -3320,7 +3320,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
  */
 errr rd_savefile_new(player_type *player_ptr)
 {
-    safe_setuid_grab();
+    safe_setuid_grab(player_ptr);
     fff = angband_fopen(savefile, "rb");
     safe_setuid_drop();
     if (!fff)
@@ -3424,7 +3424,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     char floor_savefile[1024];
     sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
-    safe_setuid_grab();
+    safe_setuid_grab(player_ptr);
     fff = angband_fopen(floor_savefile, "rb");
     safe_setuid_drop();
 
@@ -3438,7 +3438,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
             is_save_successful = FALSE;
         angband_fclose(fff);
 
-        safe_setuid_grab();
+        safe_setuid_grab(player_ptr);
         if (!(mode & SLF_NO_KILL))
             (void)fd_kill(floor_savefile);
 

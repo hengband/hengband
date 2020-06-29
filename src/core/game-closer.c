@@ -77,7 +77,7 @@ void close_game(player_type *player_ptr)
     current_world_ptr->character_icky = TRUE;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-    safe_setuid_grab();
+    safe_setuid_grab(player_ptr);
     highscore_fd = fd_open(buf, O_RDWR);
     safe_setuid_drop();
 

@@ -537,7 +537,7 @@ errr top_twenty(player_type *current_player_ptr)
 	}
 
 	/* Grab permissions */
-	safe_setuid_grab();
+	safe_setuid_grab(current_player_ptr);
 
 	/* Lock (for writing) the highscore file, or fail */
 	errr err = fd_lock(highscore_fd, F_WRLCK);
@@ -551,7 +551,7 @@ errr top_twenty(player_type *current_player_ptr)
 	int j = highscore_add(&the_score);
 
 	/* Grab permissions */
-	safe_setuid_grab();
+	safe_setuid_grab(current_player_ptr);
 
 	/* Unlock the highscore file, or fail */
 	err = fd_lock(highscore_fd, F_UNLCK);

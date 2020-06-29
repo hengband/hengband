@@ -149,7 +149,7 @@ void do_cmd_diary(player_type *creature_ptr)
 			break;
 		case 'r': case 'R':
 			screen_load();
-			prepare_movie_hooks();
+			prepare_movie_hooks(creature_ptr);
 			return;
 		default:
 			bell();
