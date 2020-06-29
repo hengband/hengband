@@ -70,7 +70,7 @@ static void object_mention(player_type *owner_ptr, object_type *o_ptr)
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     GAME_TEXT o_name[MAX_NLEN];
     object_desc(owner_ptr, o_name, o_ptr, 0);
-    msg_format_wizard(CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
+    msg_format_wizard(owner_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
 /*!

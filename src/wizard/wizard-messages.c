@@ -4,7 +4,7 @@
 #include "io/write-diary.h"
 #include "view/display-messages.h"
 
-void msg_print_wizard(int cheat_type, concptr msg)
+void msg_print_wizard(player_type *player_ptr, int cheat_type, concptr msg)
 {
     if (!cheat_room && cheat_type == CHEAT_DUNGEON)
         return;
@@ -21,14 +21,14 @@ void msg_print_wizard(int cheat_type, concptr msg)
     msg_print(buf);
 
     if (cheat_diary_output) {
-        exe_write_diary(p_ptr, DIARY_WIZARD_LOG, 0, buf);
+        exe_write_diary(player_ptr, DIARY_WIZARD_LOG, 0, buf);
     }
 }
 
 /*
  * Display a formatted message, using "vstrnfmt()" and "msg_print()".
  */
-void msg_format_wizard(int cheat_type, concptr fmt, ...)
+void msg_format_wizard(player_type *player_ptr, int cheat_type, concptr fmt, ...)
 {
     if (!cheat_room && cheat_type == CHEAT_DUNGEON)
         return;
@@ -44,5 +44,5 @@ void msg_format_wizard(int cheat_type, concptr fmt, ...)
     va_start(vp, fmt);
     (void)vstrnfmt(buf, 1024, fmt, vp);
     va_end(vp);
-    msg_print_wizard(cheat_type, buf);
+    msg_print_wizard(player_ptr, cheat_type, buf);
 }

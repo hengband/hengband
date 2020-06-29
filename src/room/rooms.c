@@ -1675,7 +1675,7 @@ void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITIO
 	bool light;
 	grid_type *g_ptr;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
 	/* Choose lite or dark */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -2309,11 +2309,10 @@ bool generate_rooms(player_type *player_ptr)
 	/*! @details 部屋生成数が2未満の場合生成失敗を返す */
 	if (rooms_built < 2)
 	{
-		msg_format_wizard(CHEAT_DUNGEON, _("部屋数が2未満でした。生成を再試行します。", "Number of rooms was under 2. Retry."), rooms_built);
+		msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("部屋数が2未満でした。生成を再試行します。", "Number of rooms was under 2. Retry."), rooms_built);
 		return FALSE;
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("このダンジョンの部屋数は %d です。", "Number of Rooms: %d"), rooms_built);
-
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("このダンジョンの部屋数は %d です。", "Number of Rooms: %d"), rooms_built);
 	return TRUE;
 }

@@ -61,7 +61,7 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	POSITION xhsize = xsize / 2;
 	POSITION yhsize = ysize / 2;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Room Vault."));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Room Vault."));
 
 	/* Allocate center of bubbles */
 	center[0].x = (byte)randint1(xsize - 3) + 1;
@@ -186,7 +186,7 @@ static void build_room_vault(player_type *player_ptr, POSITION x0, POSITION y0, 
 	xhsize = xsize / 2;
 	yhsize = ysize / 2;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("部屋型ランダムVaultを生成しました。", "Room Vault."));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("部屋型ランダムVaultを生成しました。", "Room Vault."));
 
 	/* fill area so don't get problems with arena levels */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -239,7 +239,7 @@ static void build_cave_vault(player_type *player_ptr, POSITION x0, POSITION y0, 
 	xsize = xhsize * 2;
 	ysize = yhsize * 2;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("洞穴ランダムVaultを生成しました。", "Cave Vault."));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("洞穴ランダムVaultを生成しました。", "Cave Vault."));
 
 	light = done = FALSE;
 	room = TRUE;
@@ -669,7 +669,7 @@ bool build_type7(player_type *player_ptr)
 	/* No lesser vault found */
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
-		msg_print_wizard(CHEAT_DUNGEON, _("小型固定Vaultを配置できませんでした。", "Could not place lesser vault."));
+		msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("小型固定Vaultを配置できませんでした。", "Could not place lesser vault."));
 		return FALSE;
 	}
 
@@ -711,7 +711,7 @@ bool build_type7(player_type *player_ptr)
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(player_ptr, &yval, &xval, abs(y), abs(x))) return FALSE;
 
-	msg_format_wizard(CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
@@ -747,7 +747,7 @@ bool build_type8(player_type *player_ptr)
 	/* No greater vault found */
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
-		msg_print_wizard(CHEAT_DUNGEON, _("大型固定Vaultを配置できませんでした。", "Could not place greater vault."));
+		msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("大型固定Vaultを配置できませんでした。", "Could not place greater vault."));
 		return FALSE;
 	}
 
@@ -795,7 +795,7 @@ bool build_type8(player_type *player_ptr)
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(player_ptr, &yval, &xval, (POSITION)(abs(y) + 2), (POSITION)(abs(x) + 2))) return FALSE;
 
-	msg_format_wizard(CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_name + v_ptr->name);
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
@@ -821,7 +821,7 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	h3 = randint1(32);
 	h4 = randint1(32) - 16;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("対称形ランダムVaultを生成しました。", "Elemental Vault"));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("対称形ランダムVaultを生成しました。", "Elemental Vault"));
 
 	/* work out outer radius */
 	if (xsize > ysize)
@@ -942,7 +942,7 @@ static void build_elemental_vault(player_type *player_ptr, POSITION x0, POSITION
 	int i;
 	int type;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("精霊界ランダムVaultを生成しました。", "Elemental Vault"));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("精霊界ランダムVaultを生成しました。", "Elemental Vault"));
 
 	/* round to make sizes even */
 	xhsize = xsiz / 2;
@@ -1033,7 +1033,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	int m, n, num_vertices;
 	int *visited;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("小型チェッカーランダムVaultを生成しました。", "Mini Checker Board Vault."));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("小型チェッカーランダムVaultを生成しました。", "Mini Checker Board Vault."));
 
 	/* Pick a random room size */
 	dy = ysize / 2 - 1;
@@ -1165,7 +1165,7 @@ static void build_castle_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	y2 = y0 + dy;
 	x2 = x0 + dx;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("城型ランダムVaultを生成しました。", "Castle Vault"));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("城型ランダムVaultを生成しました。", "Castle Vault"));
 
 	/* generate the room */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -1256,7 +1256,7 @@ bool build_type17(player_type *player_ptr)
 	/* No lesser vault found */
 	if (dummy >= SAFE_MAX_ATTEMPTS)
 	{
-		msg_print_wizard(CHEAT_DUNGEON, _("固定特殊部屋を配置できませんでした。", "Could not place fixed special room."));
+            msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("固定特殊部屋を配置できませんでした。", "Could not place fixed special room."));
 		return FALSE;
 	}
 
@@ -1298,7 +1298,7 @@ bool build_type17(player_type *player_ptr)
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(player_ptr, &yval, &xval, abs(y), abs(x))) return FALSE;
 
-	msg_format_wizard(CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
 	build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,

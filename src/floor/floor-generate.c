@@ -281,7 +281,7 @@ static void alloc_object(player_type *owner_ptr, int set, EFFECT_ID typ, int num
 
 		if (dummy >= SAFE_MAX_ATTEMPTS)
 		{
-			msg_print_wizard(CHEAT_DUNGEON, _("アイテムの配置に失敗しました。", "Failed to place object."));
+			msg_print_wizard(owner_ptr, CHEAT_DUNGEON, _("アイテムの配置に失敗しました。", "Failed to place object."));
 			return;
 		}
 
@@ -477,7 +477,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_
 
 		if (dun->laketype)
 		{
-			msg_print_wizard(CHEAT_DUNGEON, _("湖を生成します。", "Lake on the level."));
+			msg_print_wizard(owner_ptr, CHEAT_DUNGEON, _("湖を生成します。", "Lake on the level."));
 			build_lake(owner_ptr, dun->laketype);
 		}
 	}
@@ -490,7 +490,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_
 
 		/* make a large fractal floor_ptr->grid_array in the middle of the dungeon */
 
-		msg_print_wizard(CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
+		msg_print_wizard(owner_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
 		build_cavern(owner_ptr);
 	}
 
@@ -559,7 +559,7 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
 	if (ironman_empty_levels || ((dungeon_ptr->flags1 & DF1_ARENA) && (empty_levels && one_in_(EMPTY_LEVEL))))
 	{
 		dun->empty_level = TRUE;
-		msg_print_wizard(CHEAT_DUNGEON, _("アリーナレベルを生成。", "Arena level."));
+		msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("アリーナレベルを生成。", "Arena level."));
 	}
 
 	if (dun->empty_level)
@@ -846,7 +846,7 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
 		i += 1;
 
 		if (i > small_tester) i = small_tester;
-		else msg_format_wizard(CHEAT_DUNGEON,
+		else msg_format_wizard(player_ptr, CHEAT_DUNGEON,
 			_("モンスター数基本値を %d から %d に減らします", "Reduced monsters base from %d to %d"), small_tester, i);
 
 	}
@@ -1219,7 +1219,7 @@ static bool level_gen(player_type *player_ptr, concptr *why)
 		panel_row_min = floor_ptr->height;
 		panel_col_min = floor_ptr->width;
 
-		msg_format_wizard(CHEAT_DUNGEON,
+		msg_format_wizard(player_ptr, CHEAT_DUNGEON,
 			_("小さなフロア: X:%d, Y:%d", "A 'small' dungeon level: X:%d, Y:%d."),
 			floor_ptr->width, floor_ptr->height);
 	}

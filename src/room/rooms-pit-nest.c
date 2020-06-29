@@ -356,7 +356,8 @@ bool build_type5(player_type *player_ptr)
 	case 4: place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name,
+            pit_subtype_string(cur_nest_type, TRUE));
 
 	/* Place some monsters */
 	for (y = yval - 2; y <= yval + 2; y++)
@@ -389,7 +390,7 @@ bool build_type5(player_type *player_ptr)
 				if (!nest_mon_info[i + 1].used) break;
 			}
 
-			msg_format_wizard(CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
+			msg_format_wizard(player_ptr, CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
 		}
 	}
 
@@ -586,14 +587,15 @@ bool build_type6(player_type *player_ptr)
 		}
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name,
+            pit_subtype_string(cur_pit_type, FALSE));
 
 	/* Select the entries */
 	for (i = 0; i < 8; i++)
 	{
 		/* Every other entry */
 		what[i] = what[i * 2];
-		msg_format_wizard(CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, r_name + r_info[what[i]].name);
+		msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, r_name + r_info[what[i]].name);
 	}
 
 	/* Top and bottom rows */
@@ -896,7 +898,7 @@ bool build_type13(player_type *player_ptr)
 		}
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"),
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"),
 		n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 
 	/* Select the entries */

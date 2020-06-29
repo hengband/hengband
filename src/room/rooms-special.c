@@ -252,7 +252,6 @@ bool build_type15(player_type *player_ptr)
 	break;
 	}
 
-	msg_print_wizard(CHEAT_DUNGEON, _("ガラスの部屋が生成されました。", "Glass room was generated."));
-
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("ガラスの部屋が生成されました。", "Glass room was generated."));
 	return TRUE;
 }

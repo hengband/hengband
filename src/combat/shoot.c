@@ -732,7 +732,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						tdam = mon_damage_mod(shooter_ptr, m_ptr, tdam, FALSE);
 					}
 
-					msg_format_wizard(CHEAT_MONSTER,
+					msg_format_wizard(shooter_ptr, CHEAT_MONSTER,
 						_("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
 						tdam, m_ptr->hp - tdam, m_ptr->maxhp, m_ptr->max_maxhp);
 
