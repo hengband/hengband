@@ -4028,10 +4028,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->see_inv = TRUE;
     }
 
-    if (creature_ptr->tim_infra) {
-        creature_ptr->see_infra += 3;
-    }
-
     if (creature_ptr->tim_regen) {
         creature_ptr->regenerate = TRUE;
     }

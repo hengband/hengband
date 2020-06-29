@@ -81,6 +81,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static void calc_intra_vision(player_type *creature_ptr);
 static void calc_stealth(player_type *creature_ptr);
 static void calc_disarming(player_type *creature_ptr);
 static void calc_device_ability(player_type *creature_ptr);
@@ -1221,7 +1222,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     for (int i = 0; i < A_MAX; i++)
         creature_ptr->stat_add[i] = 0;
 
-	creature_ptr->see_infra = 0;
     creature_ptr->skill_thn = 0;
     creature_ptr->skill_thb = 0;
     creature_ptr->skill_tht = 0;
@@ -1536,11 +1536,6 @@ void calc_bonuses(player_type *creature_ptr)
 		if (creature_ptr->muta3 & MUT3_BLANK_FAC)
 		{
 			creature_ptr->stat_add[A_CHR] -= 1;
-		}
-
-		if (creature_ptr->muta3 & MUT3_INFRAVIS)
-		{
-			creature_ptr->see_infra += 3;
 		}
 
 		if (creature_ptr->muta3 & MUT3_XTRA_LEGS)
@@ -2465,6 +2460,7 @@ void calc_bonuses(player_type *creature_ptr)
 	if (creature_ptr->immune_fire) creature_ptr->resist_fire = TRUE;
 	if (creature_ptr->immune_cold) creature_ptr->resist_cold = TRUE;
 
+	calc_intra_vision(creature_ptr);
 	calc_stealth(creature_ptr);
     calc_disarming(creature_ptr);
     calc_device_ability(creature_ptr);
@@ -3417,6 +3413,35 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 
 	return (s16b)num;
 }
+
+/*!
+ * @brief プレイヤーの赤外線視力値を計算する
+ * @return なし
+ * @details
+ * This function induces status messages.
+ */
+static void calc_intra_vision(player_type *creature_ptr)
+{
+
+    const player_race *tmp_rp_ptr;
+
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+
+    creature_ptr->see_infra = tmp_rp_ptr->infra;
+
+
+	if (creature_ptr->muta3 & MUT3_INFRAVIS) {
+        creature_ptr->see_infra += 3;
+    }
+
+	if (creature_ptr->tim_infra) {
+        creature_ptr->see_infra += 3;
+    }
+}
+
 
 /*!
  * @brief プレイヤーの隠密値を計算する
