@@ -9,11 +9,12 @@
 #include "mspell/mspells3.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-broken.h"
-#include "status/bad-status-setter.h"
 #include "player/mimic-info-table.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "spell/spell-types.h"
+#include "status/bad-status-setter.h"
+#include "status/element-resistance.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

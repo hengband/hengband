@@ -1517,6 +1517,9 @@
     <ClCompile Include="..\..\src\spell-realm\spells-craft.c">
       <Filter>spell-realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\status\element-resistance.c">
+      <Filter>status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3324,6 +3327,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-craft.h">
       <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\element-resistance.h">
+      <Filter>status</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

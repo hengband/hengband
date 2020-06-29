@@ -4,7 +4,6 @@
 #include "io/targeting.h"
 #include "player/digestion-processor.h"
 #include "player/player-effects.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
@@ -21,6 +20,7 @@
 #include "spell/spells3.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
+#include "status/element-resistance.h"
 
 /*!
 * @brief 生命領域魔法の各処理を行う

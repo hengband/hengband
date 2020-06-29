@@ -14,6 +14,7 @@
 #include "object/object-flags.h"
 #include "player/player-damage.h"
 #include "player/player-race.h"
+#include "status/element-resistance.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

@@ -9,8 +9,6 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "player/avatar.h"
-#include "status/bad-status-setter.h"
-#include "status/buff-setter.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-race-types.h"
@@ -33,6 +31,9 @@
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "status/bad-status-setter.h"
+#include "status/buff-setter.h"
+#include "status/element-resistance.h"
 #include "sv-definition/sv-food-types.h"
 #include "view/display-messages.h"
 

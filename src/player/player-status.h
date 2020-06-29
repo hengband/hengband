@@ -766,11 +766,6 @@ extern const s32b player_exp[PY_MAX_LEVEL];
 extern const s32b player_exp_a[PY_MAX_LEVEL];
 
 extern bool is_blessed(player_type *creature_ptr);
-extern bool is_oppose_acid(player_type *creature_ptr);
-extern bool is_oppose_elec(player_type *creature_ptr);
-extern bool is_oppose_fire(player_type *creature_ptr);
-extern bool is_oppose_cold(player_type *creature_ptr);
-extern bool is_oppose_pois(player_type *creature_ptr);
 extern bool is_time_limit_esp(player_type *creature_ptr);
 extern bool is_time_limit_stealth(player_type *creature_ptr);
 extern bool can_two_hands_wielding(player_type *creature_ptr);

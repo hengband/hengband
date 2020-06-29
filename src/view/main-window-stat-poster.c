@@ -6,6 +6,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
+#include "status/element-resistance.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/main-window-row-column.h"

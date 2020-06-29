@@ -12,11 +12,12 @@
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "spell-kind/earthquake.h"
 #include "spell/spells3.h"
+#include "status/bad-status-setter.h"
+#include "status/element-resistance.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 

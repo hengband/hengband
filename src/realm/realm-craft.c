@@ -5,7 +5,6 @@
 #include "mutation/mutation.h"
 #include "player/digestion-processor.h"
 #include "player/player-effects.h"
-#include "player/player-status.h"
 #include "player/selfinfo.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-perception.h"
@@ -16,6 +15,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spells3.h"
 #include "status/buff-setter.h"
+#include "status/element-resistance.h"
 #include "status/sight-setter.h"
 #include "view/display-messages.h"
 

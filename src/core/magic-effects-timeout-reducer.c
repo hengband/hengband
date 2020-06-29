@@ -6,6 +6,7 @@
 #include "spell-realm/spells-craft.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
+#include "status/element-resistance.h"
 #include "status/sight-setter.h"
 
 /*!

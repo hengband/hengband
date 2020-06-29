@@ -3,8 +3,6 @@
 #include "io/targeting.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "status/bad-status-setter.h"
-#include "status/buff-setter.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
@@ -20,6 +18,9 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
+#include "status/bad-status-setter.h"
+#include "status/buff-setter.h"
+#include "status/element-resistance.h"
 #include "status/sight-setter.h"
 #include "view/display-messages.h"
 

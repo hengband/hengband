@@ -4620,36 +4620,6 @@ bool is_blessed(player_type *creature_ptr)
 }
 
 
-bool is_oppose_acid(player_type *creature_ptr)
-{
-	return creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
-}
-
-
-bool is_oppose_elec(player_type *creature_ptr)
-{
-	return creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
-}
-
-
-bool is_oppose_fire(player_type *creature_ptr)
-{
-	return creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
-}
-
-
-bool is_oppose_cold(player_type *creature_ptr)
-{
-	return creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
-}
-
-
-bool is_oppose_pois(player_type *creature_ptr)
-{
-	return creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
-}
-
-
 bool is_tim_esp(player_type *creature_ptr)
 {
 	return creature_ptr->tim_esp || music_singing(creature_ptr, MUSIC_MIND) || (creature_ptr->concent >= CONCENT_TELE_THRESHOLD);

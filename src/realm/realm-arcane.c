@@ -6,8 +6,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "player/avatar.h"
 #include "player/digestion-processor.h"
-#include "player/player-effects.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
@@ -22,6 +20,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "status/bad-status-setter.h"
+#include "status/element-resistance.h"
 #include "status/sight-setter.h"
 #include "view/display-messages.h"
 

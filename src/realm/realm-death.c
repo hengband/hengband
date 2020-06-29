@@ -8,7 +8,6 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-race.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-genocide.h"
@@ -24,6 +23,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "status/buff-setter.h"
+#include "status/element-resistance.h"
 
 /*!
 * @brief 暗黒領域魔法の各処理を行う
