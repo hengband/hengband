@@ -7,7 +7,7 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "object/object-info.h"
-#include "player/player-effects.h" // 暫定、相互参照している.
+#include "spell-realm/spells-craft.h"
 #include "util/object-sort.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"

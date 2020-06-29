@@ -1514,6 +1514,9 @@
     <ClCompile Include="..\..\src\wizard\wizard-messages.c">
       <Filter>wizard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-craft.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3318,6 +3321,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\wizard\wizard-messages.h">
       <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-craft.h">
+      <Filter>spell-realm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

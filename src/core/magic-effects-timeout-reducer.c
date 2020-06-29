@@ -2,9 +2,10 @@
 #include "game-option/birth-options.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/racial-kutar.h"
+#include "player/player-effects.h"
+#include "spell-realm/spells-craft.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
-#include "player/player-effects.h"
 #include "status/sight-setter.h"
 
 /*!
