@@ -1,5 +1,6 @@
 ﻿#include "core/magic-effects-timeout-reducer.h"
 #include "game-option/birth-options.h"
+#include "mind/mind-mirror-master.h"
 #include "mind/racial-kutar.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"

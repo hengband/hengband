@@ -33,6 +33,7 @@
 #include "locale/vowel-checker.h"
 #include "mind/stances-table.h"
 #include "mind/mind-force-trainer.h"
+#include "mind/mind-mirror-master.h"
 #include "mind/mind-sniper.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation.h"
@@ -847,87 +848,6 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     creature_ptr->tim_reflect = v;
-    creature_ptr->redraw |= (PR_STATUS);
-
-    if (!notice)
-        return FALSE;
-
-    if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
-    return TRUE;
-}
-
-/*
- * Set "multishadow", notice observable changes
- */
-bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
-{
-    bool notice = FALSE;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
-    if (creature_ptr->is_dead)
-        return FALSE;
-
-    if (v) {
-        if (creature_ptr->multishadow && !do_dec) {
-            if (creature_ptr->multishadow > v)
-                return FALSE;
-        } else if (!creature_ptr->multishadow) {
-            msg_print(_("あなたの周りに幻影が生まれた。", "Your Shadow enveloped you."));
-            notice = TRUE;
-        }
-    } else {
-        if (creature_ptr->multishadow) {
-            msg_print(_("幻影が消えた。", "Your Shadow disappears."));
-            notice = TRUE;
-        }
-    }
-
-    creature_ptr->multishadow = v;
-    creature_ptr->redraw |= (PR_STATUS);
-
-    if (!notice)
-        return FALSE;
-
-    if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
-    return TRUE;
-}
-
-/*!
- * @brief 一時的破片のオーラの継続時間をセットする / Set "dustrobe", notice observable changes
- * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
- * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
- */
-bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
-{
-    bool notice = FALSE;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
-    if (creature_ptr->is_dead)
-        return FALSE;
-
-    if (v) {
-        if (creature_ptr->dustrobe && !do_dec) {
-            if (creature_ptr->dustrobe > v)
-                return FALSE;
-        } else if (!creature_ptr->dustrobe) {
-            msg_print(_("体が鏡のオーラで覆われた。", "You were enveloped by mirror shards."));
-            notice = TRUE;
-        }
-    } else {
-        if (creature_ptr->dustrobe) {
-            msg_print(_("鏡のオーラが消えた。", "The mirror shards disappear."));
-            notice = TRUE;
-        }
-    }
-
-    creature_ptr->dustrobe = v;
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)

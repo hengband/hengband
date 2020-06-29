@@ -17,8 +17,6 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_ele_attack(player_type *creature_ptr, u32b attack_type, TIME_EFFECT v);
