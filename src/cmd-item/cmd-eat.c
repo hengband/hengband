@@ -25,6 +25,7 @@
 #include "player/avatar.h"
 #include "status/bad-status-setter.h"
 #include "player/mimic-info-table.h"
+#include "player/digestion-processor.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

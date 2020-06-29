@@ -3,7 +3,7 @@
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "player/avatar.h"
-#include "status/buff-setter.h"
+#include "player/digestion-processor.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
@@ -18,11 +18,12 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell/process-effect.h"
+#include "spell/spell-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spell-types.h"
+#include "status/buff-setter.h"
 
 /*!
 * @brief 暗黒領域魔法の各処理を行う

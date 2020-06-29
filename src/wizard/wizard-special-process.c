@@ -55,6 +55,7 @@
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
+#include "player/digestion-processor.h"
 #include "player/patron.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"

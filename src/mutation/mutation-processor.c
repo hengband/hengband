@@ -10,6 +10,7 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
 #include "object/lite-processor.h"
+#include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"

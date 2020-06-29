@@ -48,6 +48,7 @@
 #include "player/avatar.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
+#include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-race-types.h"
