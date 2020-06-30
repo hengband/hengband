@@ -3567,8 +3567,20 @@ static void calc_to_hit_throw(player_type *creature_ptr)
 
 static void calc_dig(player_type *creature_ptr)
 {
+    creature_ptr->skill_dig = 0;
     if (creature_ptr->shero) creature_ptr->skill_dig += 30;
     creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
+
+	for (int i = 0; i < 2; i++)
+	{
+        object_type *o_ptr;
+        o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
+
+        if (has_melee_weapon(creature_ptr, INVEN_RARM + i) && !creature_ptr->heavy_wield[i]) {
+            creature_ptr->skill_dig += (o_ptr->weight / 10);
+        }
+    }
+
 
     if (creature_ptr->skill_dig < 1) creature_ptr->skill_dig = 1;
 }
@@ -3783,7 +3795,6 @@ static void calc_num_blow(player_type* creature_ptr, int i)
         if (creature_ptr->num_blow[i] < 1)
             creature_ptr->num_blow[i] = 1;
 
-        creature_ptr->skill_dig += (o_ptr->weight / 10);
     }
 }
 
