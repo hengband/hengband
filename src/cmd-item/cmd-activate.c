@@ -43,6 +43,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-kind.h"
 #include "object/object-info.h"
+#include "mind/racial-android.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "player/avatar.h"

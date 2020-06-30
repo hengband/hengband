@@ -48,6 +48,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
+#include "mind/racial-android.h"
 #include "mind/snipe-types.h"
 #include "monster/monster-describer.h"
 #include "monster-floor/monster-death.h"

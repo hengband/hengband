@@ -21,7 +21,6 @@ bool do_dec_stat(player_type *creature_ptr, int stat);
 bool do_res_stat(player_type *creature_ptr, int stat);
 bool do_inc_stat(player_type *creature_ptr, int stat);
 bool lose_all_info(player_type *creature_ptr);
-void calc_android_exp(player_type *creature_ptr);
 void do_poly_self(player_type *creature_ptr);
 void do_poly_wounds(player_type *creature_ptr);
 void change_race(player_type *creature_ptr, player_race_type new_race, concptr effect_msg);

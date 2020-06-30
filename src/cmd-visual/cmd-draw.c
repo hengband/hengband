@@ -4,7 +4,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
-#include "player/player-effects.h"
+#include "mind/racial-android.h"
 #include "player/player-race-types.h"
 #include "player/process-name.h"
 #include "term/gameterm.h"

@@ -36,6 +36,7 @@
 #include "io/input-key-requester.h"
 #include "io/screen-util.h"
 #include "io/targeting.h"
+#include "mind/racial-android.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/snipe-types.h"

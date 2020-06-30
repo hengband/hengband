@@ -44,6 +44,7 @@
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind.h"
+#include "mind/racial-android.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
