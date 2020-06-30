@@ -1529,6 +1529,9 @@
     <ClCompile Include="..\..\src\status\experience.c">
       <Filter>status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-demon.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3348,6 +3351,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\status\experience.h">
       <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-demon.h">
+      <Filter>spell-realm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

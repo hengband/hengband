@@ -227,6 +227,7 @@
     <ClCompile Include="..\..\src\object-hook\hook-weapon.c" />
     <ClCompile Include="..\..\src\object-hook\hook-armor.c" />
     <ClCompile Include="..\..\src\spell-realm\spells-craft.c" />
+    <ClCompile Include="..\..\src\spell-realm\spells-demon.c" />
     <ClCompile Include="..\..\src\status\bad-status-setter.c" />
     <ClCompile Include="..\..\src\status\buff-setter.c" />
     <ClCompile Include="..\..\src\player\player-realm.c" />
@@ -659,6 +660,7 @@
     <ClInclude Include="..\..\src\object-hook\hook-quest.h" />
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-craft.h" />
+    <ClInclude Include="..\..\src\spell-realm\spells-demon.h" />
     <ClInclude Include="..\..\src\status\bad-status-setter.h" />
     <ClInclude Include="..\..\src\status\buff-setter.h" />
     <ClInclude Include="..\..\src\player\player-realm.h" />
