@@ -34,6 +34,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
+#include "mind/mind-magic-resistance.h"
 #include "mind/mind-mindcrafter.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-ninja.h"

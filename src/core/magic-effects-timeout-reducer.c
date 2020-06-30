@@ -1,6 +1,7 @@
 ﻿#include "core/magic-effects-timeout-reducer.h"
 #include "game-option/birth-options.h"
 #include "mind/mind-force-trainer.h"
+#include "mind/mind-magic-resistance.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/racial-kutar.h"
 #include "player/player-effects.h"
