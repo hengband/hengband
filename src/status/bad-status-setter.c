@@ -3,12 +3,13 @@
 #include "game-option/disturbance-options.h"
 #include "mind/mind-sniper.h"
 #include "player/avatar.h"
-#include "player/player-effects.h" // つよし状態、後で依存を消す.
+#include "player/player-effects.h" // todo do_dec_stat()、後で依存を消す.
 #include "player/player-move.h"
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
+#include "status/form-changer.h"
 #include "view/display-messages.h"
 
 /*!

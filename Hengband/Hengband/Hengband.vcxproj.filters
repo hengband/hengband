@@ -1523,6 +1523,9 @@
     <ClCompile Include="..\..\src\status\temporary-resistance.c">
       <Filter>status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\status\form-changer.c">
+      <Filter>status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3335,6 +3338,9 @@
       <Filter>status</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\status\temporary-resistance.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\form-changer.h">
       <Filter>status</Filter>
     </ClInclude>
   </ItemGroup>

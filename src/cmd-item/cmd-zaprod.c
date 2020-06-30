@@ -33,6 +33,7 @@
 #include "spell/spell-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
+#include "status/form-changer.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 

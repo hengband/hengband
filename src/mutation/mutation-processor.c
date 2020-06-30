@@ -26,6 +26,7 @@
 #include "spell/spells3.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
+#include "status/form-changer.h"
 #include "status/sight-setter.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"

@@ -51,6 +51,7 @@
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
+#include "status/form-changer.h"
 #include "store/rumor.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "term/screen-processor.h"

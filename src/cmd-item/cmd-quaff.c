@@ -43,6 +43,7 @@
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
+#include "status/form-changer.h"
 #include "status/sight-setter.h"
 #include "sv-definition/sv-potion-types.h"
 #include "term/screen-processor.h"
