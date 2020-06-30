@@ -1,5 +1,6 @@
 ﻿#include "core/magic-effects-timeout-reducer.h"
 #include "game-option/birth-options.h"
+#include "mind/mind-force-trainer.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/racial-kutar.h"
 #include "player/player-effects.h"
@@ -68,7 +69,7 @@ void reduce_magic_effects_timeout(player_type *creature_ptr)
     }
 
     if (creature_ptr->tim_sh_touki) {
-        (void)set_tim_sh_touki(creature_ptr, creature_ptr->tim_sh_touki - 1, TRUE);
+        (void)set_tim_sh_force(creature_ptr, creature_ptr->tim_sh_touki - 1, TRUE);
     }
 
     if (creature_ptr->tim_sh_fire) {

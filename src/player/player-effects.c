@@ -199,7 +199,7 @@ void dispel_player(player_type *creature_ptr)
     (void)set_tim_regen(creature_ptr, 0, TRUE);
     (void)set_tim_stealth(creature_ptr, 0, TRUE);
     (void)set_tim_levitation(creature_ptr, 0, TRUE);
-    (void)set_tim_sh_touki(creature_ptr, 0, TRUE);
+    (void)set_tim_sh_force(creature_ptr, 0, TRUE);
     (void)set_tim_sh_fire(creature_ptr, 0, TRUE);
     (void)set_tim_sh_holy(creature_ptr, 0, TRUE);
     (void)set_tim_eyeeye(creature_ptr, 0, TRUE);
@@ -524,47 +524,6 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     if (disturb_state)
         disturb(creature_ptr, FALSE, FALSE);
     creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
-    return TRUE;
-}
-
-/*!
- * @brief 一時的闘気のオーラの継続時間をセットする / Set "tim_sh_touki", notice observable changes
- * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
- * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
- */
-bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
-{
-    bool notice = FALSE;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
-    if (creature_ptr->is_dead)
-        return FALSE;
-
-    if (v) {
-        if (creature_ptr->tim_sh_touki && !do_dec) {
-            if (creature_ptr->tim_sh_touki > v)
-                return FALSE;
-        } else if (!creature_ptr->tim_sh_touki) {
-            msg_print(_("体が闘気のオーラで覆われた。", "You are enveloped by an aura of the Force!"));
-            notice = TRUE;
-        }
-    } else {
-        if (creature_ptr->tim_sh_touki) {
-            msg_print(_("闘気が消えた。", "The aura of the Force disappeared."));
-            notice = TRUE;
-        }
-    }
-
-    creature_ptr->tim_sh_touki = v;
-    creature_ptr->redraw |= (PR_STATUS);
-
-    if (!notice)
-        return FALSE;
-
-    if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
     handle_stuff(creature_ptr);
     return TRUE;
 }

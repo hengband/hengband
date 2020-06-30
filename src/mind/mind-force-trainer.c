@@ -96,3 +96,44 @@ void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
 }
+
+/*!
+ * @brief 一時的闘気のオーラの継続時間をセットする / Set "tim_sh_touki", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
+bool set_tim_sh_force(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+{
+    bool notice = FALSE;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+    if (creature_ptr->is_dead)
+        return FALSE;
+
+    if (v) {
+        if (creature_ptr->tim_sh_touki && !do_dec) {
+            if (creature_ptr->tim_sh_touki > v)
+                return FALSE;
+        } else if (!creature_ptr->tim_sh_touki) {
+            msg_print(_("体が闘気のオーラで覆われた。", "You are enveloped by an aura of the Force!"));
+            notice = TRUE;
+        }
+    } else {
+        if (creature_ptr->tim_sh_touki) {
+            msg_print(_("闘気が消えた。", "The aura of the Force disappeared."));
+            notice = TRUE;
+        }
+    }
+
+    creature_ptr->tim_sh_touki = v;
+    creature_ptr->redraw |= (PR_STATUS);
+
+    if (!notice)
+        return FALSE;
+
+    if (disturb_state)
+        disturb(creature_ptr, FALSE, FALSE);
+    handle_stuff(creature_ptr);
+    return TRUE;
+}
