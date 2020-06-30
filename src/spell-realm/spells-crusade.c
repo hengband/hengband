@@ -13,6 +13,7 @@
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "player/player-move.h"
+#include "spell-realm/spells-crusade.h"
 #include "spell/range-calc.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
@@ -122,6 +123,49 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     creature_ptr->tim_sh_holy = v;
+    creature_ptr->redraw |= (PR_STATUS);
+
+    if (!notice)
+        return FALSE;
+
+    if (disturb_state)
+        disturb(creature_ptr, FALSE, FALSE);
+    creature_ptr->update |= (PU_BONUS);
+    handle_stuff(creature_ptr);
+    return TRUE;
+}
+
+/*!
+ * @brief 目には目をの残り時間をセットする / Set "tim_eyeeye", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す
+ * @details 呪術領域でも使えるが、汎用性と行数の兼ね合いを考えて破邪側に入れた
+ */
+bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+{
+    bool notice = FALSE;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+    if (creature_ptr->is_dead)
+        return FALSE;
+
+    if (v) {
+        if (creature_ptr->tim_eyeeye && !do_dec) {
+            if (creature_ptr->tim_eyeeye > v)
+                return FALSE;
+        } else if (!creature_ptr->tim_eyeeye) {
+            msg_print(_("法の守り手になった気がした！", "You feel like a keeper of commandments!"));
+            notice = TRUE;
+        }
+    } else {
+        if (creature_ptr->tim_eyeeye) {
+            msg_print(_("懲罰を執行することができなくなった。", "You no longer feel like a keeper."));
+            notice = TRUE;
+        }
+    }
+
+    creature_ptr->tim_eyeeye = v;
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
