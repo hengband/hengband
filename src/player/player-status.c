@@ -91,6 +91,7 @@ static void calc_search_freq(player_type *creature_ptr);
 static void calc_to_hit_melee(player_type *creature_ptr);
 static void calc_to_hit_shoot(player_type *creature_ptr);
 static void calc_to_hit_throw(player_type *creature_ptr);
+static void calc_dig(player_type *creature_ptr);
 
 
 /*!
@@ -1224,8 +1225,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
 {
     for (int i = 0; i < A_MAX; i++)
         creature_ptr->stat_add[i] = 0;
-
-    creature_ptr->skill_dig = 0;
 
     creature_ptr->dis_ac = creature_ptr->ac = 0;
     creature_ptr->dis_to_h[0] = creature_ptr->to_h[0] = 0;
@@ -2444,9 +2443,6 @@ void calc_bonuses(player_type *creature_ptr)
 	if (is_special_class && (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)))
 		creature_ptr->ryoute = FALSE;
 
-	creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
-
-	if (creature_ptr->skill_dig < 1) creature_ptr->skill_dig = 1;
 
 	if (creature_ptr->immune_acid) creature_ptr->resist_acid = TRUE;
 	if (creature_ptr->immune_elec) creature_ptr->resist_elec = TRUE;
@@ -2463,6 +2459,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_to_hit_melee(creature_ptr);
     calc_to_hit_shoot(creature_ptr);
     calc_to_hit_throw(creature_ptr);
+    calc_dig(creature_ptr);
 
 	if (current_world_ptr->character_xtra) return;
 
@@ -3706,6 +3703,13 @@ static void calc_to_hit_throw(player_type *creature_ptr)
     creature_ptr->skill_tht += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));
 }
 
+static void calc_dig(player_type *creature_ptr)
+{
+    if (creature_ptr->shero) creature_ptr->skill_dig += 30;
+    creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
+
+    if (creature_ptr->skill_dig < 1) creature_ptr->skill_dig = 1;
+}
 
 /*!
  * @brief プレイヤーの所持重量制限を計算する /
