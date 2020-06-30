@@ -7,7 +7,6 @@ void dispel_player(player_type *creature_ptr);
 bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);

@@ -5,15 +5,19 @@
  */
 
 #include "spell-realm/spells-crusade.h"
+#include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
+#include "game-option/disturbance-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
+#include "player/player-move.h"
 #include "spell/range-calc.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief 破邪魔法「神の怒り」の処理としてターゲットを指定した後分解のボールを最大20回発生させる。
@@ -86,4 +90,46 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 	}
 
 	return TRUE;
+}
+
+/*!
+ * @brief 一時的聖なるのオーラの継続時間をセットする / Set "tim_sh_holy", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
+bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+{
+    bool notice = FALSE;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+    if (creature_ptr->is_dead)
+        return FALSE;
+
+    if (v) {
+        if (creature_ptr->tim_sh_holy && !do_dec) {
+            if (creature_ptr->tim_sh_holy > v)
+                return FALSE;
+        } else if (!creature_ptr->tim_sh_holy) {
+            msg_print(_("体が聖なるオーラで覆われた。", "You are enveloped by a holy aura!"));
+            notice = TRUE;
+        }
+    } else {
+        if (creature_ptr->tim_sh_holy) {
+            msg_print(_("聖なるオーラが消えた。", "The holy aura disappeared."));
+            notice = TRUE;
+        }
+    }
+
+    creature_ptr->tim_sh_holy = v;
+    creature_ptr->redraw |= (PR_STATUS);
+
+    if (!notice)
+        return FALSE;
+
+    if (disturb_state)
+        disturb(creature_ptr, FALSE, FALSE);
+    creature_ptr->update |= (PU_BONUS);
+    handle_stuff(creature_ptr);
+    return TRUE;
 }

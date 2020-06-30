@@ -62,6 +62,7 @@
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-realm/spells-craft.h"
+#include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-demon.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
@@ -366,48 +367,6 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     creature_ptr->tim_regen = v;
-    creature_ptr->redraw |= (PR_STATUS);
-
-    if (!notice)
-        return FALSE;
-
-    if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
-    creature_ptr->update |= (PU_BONUS);
-    handle_stuff(creature_ptr);
-    return TRUE;
-}
-
-/*!
- * @brief 一時的聖なるのオーラの継続時間をセットする / Set "tim_sh_holy", notice observable changes
- * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
- * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
- */
-bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
-{
-    bool notice = FALSE;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
-    if (creature_ptr->is_dead)
-        return FALSE;
-
-    if (v) {
-        if (creature_ptr->tim_sh_holy && !do_dec) {
-            if (creature_ptr->tim_sh_holy > v)
-                return FALSE;
-        } else if (!creature_ptr->tim_sh_holy) {
-            msg_print(_("体が聖なるオーラで覆われた。", "You are enveloped by a holy aura!"));
-            notice = TRUE;
-        }
-    } else {
-        if (creature_ptr->tim_sh_holy) {
-            msg_print(_("聖なるオーラが消えた。", "The holy aura disappeared."));
-            notice = TRUE;
-        }
-    }
-
-    creature_ptr->tim_sh_holy = v;
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
