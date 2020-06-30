@@ -3,8 +3,8 @@
 #include "game-option/disturbance-options.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
-#include "player/player-effects.h" // todo 相互依存.
 #include "player/player-race.h"
+#include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "view/display-messages.h"
 

@@ -32,6 +32,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "status/base-status.h"
 #include "status/experience.h"
 #include "view/display-messages.h"
 

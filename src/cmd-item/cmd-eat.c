@@ -33,6 +33,7 @@
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
+#include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "status/experience.h"
 #include "sv-definition/sv-food-types.h"

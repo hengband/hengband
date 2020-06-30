@@ -557,6 +557,7 @@ hengband_SOURCES = \
 	spell-realm/spells-trump.c spell-realm/spells-trump.h \
 	\
 	status/bad-status-setter.c status/bad-status-setter.h \
+	status/base-status.c status/base-status.h \
 	status/buff-setter.c status/buff-setter.h \
 	status/element-resistance.c status/element-resistance.h \
 	status/experience.c status/experience.h \

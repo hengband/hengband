@@ -3,7 +3,7 @@
 #include "mspell/mspells3.h"
 #include "status/bad-status-setter.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
+#include "status/base-status.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

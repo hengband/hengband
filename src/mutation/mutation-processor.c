@@ -25,6 +25,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spells3.h"
 #include "status/bad-status-setter.h"
+#include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "status/form-changer.h"
 #include "status/sight-setter.h"

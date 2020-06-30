@@ -76,6 +76,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
+#include "status/base-status.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "term/screen-processor.h"

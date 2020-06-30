@@ -37,6 +37,7 @@
 #include "spell/spells-staff-only.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "status/base-status.h"
 #include "status/experience.h"
 #include "status/form-changer.h"
 #include "sv-definition/sv-staff-types.h"
