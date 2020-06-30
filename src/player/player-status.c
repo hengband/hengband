@@ -90,6 +90,7 @@ static void calc_search(player_type *creature_ptr);
 static void calc_search_freq(player_type *creature_ptr);
 static void calc_to_hit_melee(player_type *creature_ptr);
 static void calc_to_hit_shoot(player_type *creature_ptr);
+static void calc_to_hit_throw(player_type *creature_ptr);
 
 
 /*!
@@ -1224,7 +1225,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     for (int i = 0; i < A_MAX; i++)
         creature_ptr->stat_add[i] = 0;
 
-    creature_ptr->skill_tht = 0;
     creature_ptr->skill_dig = 0;
 
     creature_ptr->dis_ac = creature_ptr->ac = 0;
@@ -1387,8 +1387,6 @@ void calc_bonuses(player_type *creature_ptr)
 
 	clear_creature_bonuses(creature_ptr);
     calc_race_status(creature_ptr);
-
-	creature_ptr->skill_tht = cp_ptr->c_thb + ap_ptr->a_thb;
 
 	if (has_melee_weapon(creature_ptr, INVEN_RARM)) creature_ptr->migite = TRUE;
 	if (has_melee_weapon(creature_ptr, INVEN_LARM))
@@ -2447,7 +2445,6 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->ryoute = FALSE;
 
 	creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
-	creature_ptr->skill_tht += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 
 	if (creature_ptr->skill_dig < 1) creature_ptr->skill_dig = 1;
 
@@ -2465,6 +2462,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_search_freq(creature_ptr);
     calc_to_hit_melee(creature_ptr);
     calc_to_hit_shoot(creature_ptr);
+    calc_to_hit_throw(creature_ptr);
 
 	if (current_world_ptr->character_xtra) return;
 
@@ -3687,6 +3685,25 @@ static void calc_to_hit_shoot(player_type *creature_ptr)
 
 	creature_ptr->skill_thb = tmp_rp_ptr->r_thb + c_ptr->c_thb + a_ptr->a_thb;
     creature_ptr->skill_thb += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));
+}
+
+static void calc_to_hit_throw(player_type *creature_ptr)
+{
+    const player_race *tmp_rp_ptr;
+    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
+
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+
+    if (creature_ptr->shero) {
+        creature_ptr->skill_tht -= 20;
+    }
+
+    creature_ptr->skill_tht = tmp_rp_ptr->r_thb + c_ptr->c_thb + a_ptr->a_thb;
+    creature_ptr->skill_tht += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));
 }
 
 
