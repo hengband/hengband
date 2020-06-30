@@ -31,6 +31,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
+#include "status/experience.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
 #include "status/form-changer.h"

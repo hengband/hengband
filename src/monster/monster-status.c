@@ -46,11 +46,11 @@
 #include "mspell/mspell-mask-definitions.h"
 #include "object-enchant/object-curse.h"
 #include "player/avatar.h"
-#include "player/player-effects.h"
 #include "player/player-personalities-types.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell/spells-summon.h"
+#include "status/experience.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

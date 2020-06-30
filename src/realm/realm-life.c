@@ -3,7 +3,6 @@
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "player/digestion-processor.h"
-#include "player/player-effects.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
@@ -21,6 +20,7 @@
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
+#include "status/experience.h"
 #include "status/temporary-resistance.h"
 
 /*!

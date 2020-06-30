@@ -50,6 +50,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
+#include "status/experience.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"

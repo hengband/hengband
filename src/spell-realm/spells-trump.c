@@ -17,6 +17,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "status/experience.h"
 #include "view/display-messages.h"
 
 /*!

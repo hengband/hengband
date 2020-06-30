@@ -15,6 +15,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells3.h"
 #include "status/element-resistance.h"
+#include "status/experience.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"

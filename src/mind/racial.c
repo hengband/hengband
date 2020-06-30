@@ -66,6 +66,7 @@
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "status/experience.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"

@@ -18,6 +18,7 @@
 #include "spell/spells3.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
+#include "status/experience.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 

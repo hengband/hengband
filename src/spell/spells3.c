@@ -102,6 +102,7 @@
 #include "spell/spells-summon.h"
 #include "spell/technic-info-table.h"
 #include "status/bad-status-setter.h"
+#include "status/experience.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"

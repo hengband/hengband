@@ -9,14 +9,14 @@
 #include "grid/grid.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
-#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"
+#include "status/bad-status-setter.h"
+#include "status/experience.h"
 #include "view/display-messages.h"
 
 /*!

@@ -29,6 +29,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
+#include "status/experience.h"
 #include "status/form-changer.h"
 #include "status/sight-setter.h"
 #include "util/bit-flags-calculator.h"

@@ -557,6 +557,7 @@ hengband_SOURCES = \
 	status/bad-status-setter.c status/bad-status-setter.h \
 	status/buff-setter.c status/buff-setter.h \
 	status/element-resistance.c status/element-resistance.h \
+	status/experience.c status/experience.h \
 	status/form-changer.c status/form-changer.h \
 	status/sight-setter.c status/sight-setter.h \
 	status/temporary-resistance.c status/temporary-resistance.h \

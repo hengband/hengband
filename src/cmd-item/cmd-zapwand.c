@@ -27,6 +27,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
+#include "status/experience.h"
 #include "sv-definition/sv-wand-types.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"

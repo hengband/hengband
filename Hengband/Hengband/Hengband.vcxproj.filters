@@ -1526,6 +1526,9 @@
     <ClCompile Include="..\..\src\status\form-changer.c">
       <Filter>status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\status\experience.c">
+      <Filter>status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3341,6 +3344,9 @@
       <Filter>status</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\status\form-changer.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\experience.h">
       <Filter>status</Filter>
     </ClInclude>
   </ItemGroup>
