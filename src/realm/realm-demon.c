@@ -22,6 +22,7 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "status/sight-setter.h"
+#include "status/temporary-resistance.h"
 #include "view/display-messages.h"
 
 /*!

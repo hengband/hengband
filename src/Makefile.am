@@ -558,6 +558,7 @@ hengband_SOURCES = \
 	status/buff-setter.c status/buff-setter.h \
 	status/element-resistance.c status/element-resistance.h \
 	status/sight-setter.c status/sight-setter.h \
+	status/temporary-resistance.c status/temporary-resistance.h \
 	\
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \

@@ -237,6 +237,7 @@
     <ClCompile Include="..\..\src\spell\spell-info.c" />
     <ClCompile Include="..\..\src\status\element-resistance.c" />
     <ClCompile Include="..\..\src\status\sight-setter.c" />
+    <ClCompile Include="..\..\src\status\temporary-resistance.c" />
     <ClCompile Include="..\..\src\view\display-map.c" />
     <ClCompile Include="..\..\src\view\display-sub-windows.c" />
     <ClCompile Include="..\..\src\view\main-window-left-frame.c" />
@@ -667,6 +668,7 @@
     <ClInclude Include="..\..\src\spell\spell-info.h" />
     <ClInclude Include="..\..\src\status\element-resistance.h" />
     <ClInclude Include="..\..\src\status\sight-setter.h" />
+    <ClInclude Include="..\..\src\status\temporary-resistance.h" />
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />

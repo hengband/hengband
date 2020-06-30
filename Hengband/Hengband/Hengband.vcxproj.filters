@@ -1520,6 +1520,9 @@
     <ClCompile Include="..\..\src\status\element-resistance.c">
       <Filter>status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\status\temporary-resistance.c">
+      <Filter>status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3329,6 +3332,9 @@
       <Filter>spell-realm</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\status\element-resistance.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\temporary-resistance.h">
       <Filter>status</Filter>
     </ClInclude>
   </ItemGroup>
