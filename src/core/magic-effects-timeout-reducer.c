@@ -116,8 +116,8 @@ void reduce_magic_effects_timeout(player_type *creature_ptr)
         (void)set_dustrobe(creature_ptr, creature_ptr->dustrobe - 1, TRUE);
     }
 
-    if (creature_ptr->kabenuke) {
-        (void)set_kabenuke(creature_ptr, creature_ptr->kabenuke - 1, TRUE);
+    if (creature_ptr->tim_pass_wall) {
+        (void)set_pass_wall(creature_ptr, creature_ptr->tim_pass_wall - 1, TRUE);
     }
 
     if (creature_ptr->paralyzed) {

@@ -430,7 +430,7 @@ void print_status(player_type *creature_ptr)
     if (creature_ptr->wraith_form)
         ADD_BAR_FLAG(BAR_WRAITH);
 
-    if (creature_ptr->kabenuke)
+    if (creature_ptr->tim_pass_wall)
         ADD_BAR_FLAG(BAR_PASSWALL);
 
     if (creature_ptr->tim_reflect)

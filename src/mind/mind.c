@@ -1690,7 +1690,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		explosive_rune(caster_ptr, caster_ptr->y, caster_ptr->x);
 		break;
 	case 16:
-		(void)set_kabenuke(caster_ptr, randint1(plev/2) + plev/2, FALSE);
+		(void)set_pass_wall(caster_ptr, randint1(plev/2) + plev/2, FALSE);
 		set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 17:

@@ -1370,7 +1370,7 @@ void calc_bonuses(player_type *creature_ptr)
 	bool yoiyami = FALSE;
 	bool down_saving = FALSE;
 
-	bool have_sw = FALSE, have_kabe = FALSE;
+	bool have_sw = FALSE, have_wall = FALSE;
 	bool easy_2weapon = FALSE;
 	bool riding_levitation = FALSE;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
@@ -2226,7 +2226,7 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->pass_wall = TRUE;
 	}
 
-	if (creature_ptr->kabenuke)
+	if (creature_ptr->tim_pass_wall)
 	{
 		creature_ptr->pass_wall = TRUE;
 	}
@@ -3135,7 +3135,7 @@ void calc_bonuses(player_type *creature_ptr)
 	for (int i = 0; i < INVEN_PACK; i++)
 	{
 		if ((creature_ptr->inventory_list[i].tval == TV_NATURE_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_sw = TRUE;
-		if ((creature_ptr->inventory_list[i].tval == TV_CRAFT_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_kabe = TRUE;
+		if ((creature_ptr->inventory_list[i].tval == TV_CRAFT_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_wall = TRUE;
 	}
 
 	for (this_o_idx = floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -3144,7 +3144,7 @@ void calc_bonuses(player_type *creature_ptr)
 		next_o_idx = o_ptr->next_o_idx;
 
 		if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2)) have_sw = TRUE;
-		if ((o_ptr->tval == TV_CRAFT_BOOK) && (o_ptr->sval == 2)) have_kabe = TRUE;
+		if ((o_ptr->tval == TV_CRAFT_BOOK) && (o_ptr->sval == 2)) have_wall = TRUE;
 	}
 
 	if (creature_ptr->pass_wall && !creature_ptr->kill_wall) creature_ptr->no_flowed = TRUE;
@@ -3155,9 +3155,9 @@ void calc_bonuses(player_type *creature_ptr)
 		if (creature_ptr->lev >= s_ptr->slevel) creature_ptr->no_flowed = TRUE;
 	}
 
-	if (have_kabe && ((creature_ptr->realm1 == REALM_CRAFT) || (creature_ptr->realm2 == REALM_CRAFT) || (creature_ptr->pclass == CLASS_SORCERER)))
+	if (have_wall && ((creature_ptr->realm1 == REALM_CRAFT) || (creature_ptr->realm2 == REALM_CRAFT) || (creature_ptr->pclass == CLASS_SORCERER)))
 	{
-		const magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT - 1][SPELL_KABE];
+		const magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT - 1][SPELL_WALL];
 		if (creature_ptr->lev >= s_ptr->slevel) creature_ptr->no_flowed = TRUE;
 	}
 }

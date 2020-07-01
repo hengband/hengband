@@ -41,7 +41,7 @@ static void dispel_player(player_type *creature_ptr)
     (void)set_protevil(creature_ptr, 0, TRUE);
     (void)set_invuln(creature_ptr, 0, TRUE);
     (void)set_wraith_form(creature_ptr, 0, TRUE);
-    (void)set_kabenuke(creature_ptr, 0, TRUE);
+    (void)set_pass_wall(creature_ptr, 0, TRUE);
     (void)set_tim_res_nether(creature_ptr, 0, TRUE);
     (void)set_tim_res_time(creature_ptr, 0, TRUE);
     (void)set_tim_reflect(creature_ptr, 0, TRUE);

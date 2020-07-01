@@ -695,11 +695,11 @@ static int read_movie_file(void)
 /* Win版の床の中点と壁の豆腐をピリオドとシャープにする。*/
 static void win2unix(int col, char *buf)
 {
-    char kabe;
+    char wall;
     if (col == 9)
-        kabe = '%';
+        wall = '%';
     else
-        kabe = '#';
+        wall = '#';
 
     while (*buf) {
 #ifdef JP
@@ -709,7 +709,7 @@ static void win2unix(int col, char *buf)
         }
 #endif
         if (*buf == 127)
-            *buf = kabe;
+            *buf = wall;
         else if (*buf == 31)
             *buf = '.';
         buf++;

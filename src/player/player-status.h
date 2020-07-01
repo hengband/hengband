@@ -38,7 +38,7 @@
 #define SPELL_DD_S 27
 #define SPELL_DD_T 13
 #define SPELL_SW   22
-#define SPELL_KABE 20
+#define SPELL_WALL 20
 
 /* Empty hand status */
 #define EMPTY_HAND_NONE 0x0000 /* Both hands are used */
@@ -188,7 +188,7 @@ typedef struct player_type
 
 	TIME_EFFECT resist_magic;  /* Timed Resist Magic (later) */
 	TIME_EFFECT tim_regen;
-	TIME_EFFECT kabenuke;
+	TIME_EFFECT tim_pass_wall;
 	TIME_EFFECT tim_stealth;
 	TIME_EFFECT tim_levitation;
 	TIME_EFFECT tim_sh_touki;

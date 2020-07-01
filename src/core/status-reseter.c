@@ -42,7 +42,7 @@ void reset_tim_flags(player_type *creature_ptr)
     creature_ptr->magicdef = 0;
     creature_ptr->resist_magic = 0;
     creature_ptr->tsuyoshi = 0;
-    creature_ptr->kabenuke = 0;
+    creature_ptr->tim_pass_wall = 0;
     creature_ptr->tim_res_nether = 0;
     creature_ptr->tim_res_time = 0;
     creature_ptr->tim_mimic = 0;

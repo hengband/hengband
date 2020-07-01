@@ -196,12 +196,12 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的壁抜けの継続時間をセットする / Set "kabenuke", notice observable changes
+ * @brief 一時的壁抜けの継続時間をセットする / Set "tim_pass_wall", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+bool set_pass_wall(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = FALSE;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -210,21 +210,21 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return FALSE;
 
     if (v) {
-        if (creature_ptr->kabenuke && !do_dec) {
-            if (creature_ptr->kabenuke > v)
+        if (creature_ptr->tim_pass_wall && !do_dec) {
+            if (creature_ptr->tim_pass_wall > v)
                 return FALSE;
-        } else if (!creature_ptr->kabenuke) {
+        } else if (!creature_ptr->tim_pass_wall) {
             msg_print(_("体が半物質の状態になった。", "You became ethereal."));
             notice = TRUE;
         }
     } else {
-        if (creature_ptr->kabenuke) {
+        if (creature_ptr->tim_pass_wall) {
             msg_print(_("体が物質化した。", "You are no longer ethereal."));
             notice = TRUE;
         }
     }
 
-    creature_ptr->kabenuke = v;
+    creature_ptr->tim_pass_wall = v;
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)

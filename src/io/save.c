@@ -752,7 +752,7 @@ static void wr_extra(player_type *creature_ptr)
 	wr_s16b(creature_ptr->wraith_form);
 	wr_s16b(creature_ptr->resist_magic);
 	wr_s16b(creature_ptr->tim_regen);
-	wr_s16b(creature_ptr->kabenuke);
+	wr_s16b(creature_ptr->tim_pass_wall);
 	wr_s16b(creature_ptr->tim_stealth);
 	wr_s16b(creature_ptr->tim_levitation);
 	wr_s16b(creature_ptr->tim_sh_touki);

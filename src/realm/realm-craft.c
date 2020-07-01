@@ -364,7 +364,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
 			if (cast)
 			{
-				set_kabenuke(caster_ptr, randint1(base) + base, FALSE);
+				set_pass_wall(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
