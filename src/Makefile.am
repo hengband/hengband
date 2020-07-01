@@ -380,15 +380,16 @@ hengband_SOURCES = \
 	mspell/mspells1.c mspell/mspells1.h \
 	mspell/mspells2.c mspell/mspells2.h \
 	mspell/mspells3.c mspell/mspells3.h \
-	mspell/mspell-summon.c mspell/mspell-summon.h \
-	mspell/mspell-util.c mspell/mspell-util.h \
-	mspell/mspell-curse.c mspell/mspell-curse.h \
-	mspell/mspell-type.h \
-	mspell/mspell-damage-calculator.c mspell/mspell-damage-calculator.h \
-	mspell/mspell-learn-checker.c mspell/mspell-learn-checker.h \
 	mspell/mspell-breath.c mspell/mspell-breath.h \
 	mspell/mspell-ball.c mspell/mspell-ball.h \
 	mspell/mspell-bolt.c mspell/mspell-bolt.h \
+	mspell/mspell-curse.c mspell/mspell-curse.h \
+	mspell/mspell-dispel.c mspell/mspell-dispel.h \
+	mspell/mspell-summon.c mspell/mspell-summon.h \
+	mspell/mspell-util.c mspell/mspell-util.h \
+	mspell/mspell-type.h \
+	mspell/mspell-damage-calculator.c mspell/mspell-damage-calculator.h \
+	mspell/mspell-learn-checker.c mspell/mspell-learn-checker.h \
 	mspell/mspell-floor.c mspell/mspell-floor.h \
 	mspell/mspell-mask-definitions.h \
 	mspell/mspell-special.c mspell/mspell-special.h \

@@ -218,6 +218,7 @@
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
     <ClCompile Include="..\..\src\mind\racial-kutar.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
+    <ClCompile Include="..\..\src\mspell\mspell-dispel.c" />
     <ClCompile Include="..\..\src\object-hook\hook-bow.c" />
     <ClCompile Include="..\..\src\object-hook\hook-checker.c" />
     <ClCompile Include="..\..\src\object-hook\hook-enchant.c" />
@@ -650,6 +651,7 @@
     <ClInclude Include="..\..\src\mind\racial-kutar.h" />
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />
+    <ClInclude Include="..\..\src\mspell\mspell-dispel.h" />
     <ClInclude Include="..\..\src\mspell\mspell-mask-definitions.h" />
     <ClInclude Include="..\..\src\mspell\mspells1.h" />
     <ClInclude Include="..\..\src\mspell\mspells2.h" />
