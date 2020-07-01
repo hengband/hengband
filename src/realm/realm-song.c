@@ -1,4 +1,5 @@
 ﻿#include "cmd-action/cmd-spell.h"
+#include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "status/bad-status-setter.h"

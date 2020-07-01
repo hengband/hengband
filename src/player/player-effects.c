@@ -18,6 +18,7 @@
 #include "birth/character-builder.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/hp-mp-processor.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
@@ -238,49 +239,6 @@ void dispel_player(player_type *creature_ptr)
         creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
         creature_ptr->energy_need += ENERGY_NEED();
     }
-}
-
-/*
- * Increase players hit points, notice effects
- */
-bool hp_player(player_type *creature_ptr, int num)
-{
-    int vir;
-    vir = virtue_number(creature_ptr, V_VITALITY);
-
-    if (num <= 0)
-        return FALSE;
-
-    if (vir) {
-        num = num * (creature_ptr->virtues[vir - 1] + 1250) / 1250;
-    }
-
-    if (creature_ptr->chp < creature_ptr->mhp) {
-        if ((num > 0) && (creature_ptr->chp < (creature_ptr->mhp / 3)))
-            chg_virtue(creature_ptr, V_TEMPERANCE, 1);
-
-        creature_ptr->chp += num;
-        if (creature_ptr->chp >= creature_ptr->mhp) {
-            creature_ptr->chp = creature_ptr->mhp;
-            creature_ptr->chp_frac = 0;
-        }
-
-        creature_ptr->redraw |= (PR_HP);
-        creature_ptr->window |= (PW_PLAYER);
-        if (num < 5) {
-            msg_print(_("少し気分が良くなった。", "You feel a little better."));
-        } else if (num < 15) {
-            msg_print(_("気分が良くなった。", "You feel better."));
-        } else if (num < 35) {
-            msg_print(_("とても気分が良くなった。", "You feel much better."));
-        } else {
-            msg_print(_("ひじょうに気分が良くなった。", "You feel very good."));
-        }
-
-        return TRUE;
-    }
-
-    return FALSE;
 }
 
 void do_poly_wounds(player_type *creature_ptr)

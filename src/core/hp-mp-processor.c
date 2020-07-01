@@ -11,6 +11,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-flavor.h"
+#include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
@@ -395,4 +396,47 @@ void process_player_hp_mp(player_type *creature_ptr)
     if ((creature_ptr->chp < creature_ptr->mhp) && !cave_no_regen) {
         regenhp(creature_ptr, regen_amount);
     }
+}
+
+/*
+ * Increase players hit points, notice effects
+ */
+bool hp_player(player_type *creature_ptr, int num)
+{
+    int vir;
+    vir = virtue_number(creature_ptr, V_VITALITY);
+
+    if (num <= 0)
+        return FALSE;
+
+    if (vir) {
+        num = num * (creature_ptr->virtues[vir - 1] + 1250) / 1250;
+    }
+
+    if (creature_ptr->chp < creature_ptr->mhp) {
+        if ((num > 0) && (creature_ptr->chp < (creature_ptr->mhp / 3)))
+            chg_virtue(creature_ptr, V_TEMPERANCE, 1);
+
+        creature_ptr->chp += num;
+        if (creature_ptr->chp >= creature_ptr->mhp) {
+            creature_ptr->chp = creature_ptr->mhp;
+            creature_ptr->chp_frac = 0;
+        }
+
+        creature_ptr->redraw |= (PR_HP);
+        creature_ptr->window |= (PW_PLAYER);
+        if (num < 5) {
+            msg_print(_("少し気分が良くなった。", "You feel a little better."));
+        } else if (num < 15) {
+            msg_print(_("気分が良くなった。", "You feel better."));
+        } else if (num < 35) {
+            msg_print(_("とても気分が良くなった。", "You feel much better."));
+        } else {
+            msg_print(_("ひじょうに気分が良くなった。", "You feel very good."));
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
 }

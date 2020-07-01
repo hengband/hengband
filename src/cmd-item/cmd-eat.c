@@ -5,6 +5,7 @@
  */
 
 #include "cmd-item/cmd-eat.h"
+#include "core/hp-mp-processor.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
@@ -23,7 +24,6 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/avatar.h"
-#include "status/bad-status-setter.h"
 #include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
@@ -33,6 +33,7 @@
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
+#include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "status/experience.h"

@@ -5,6 +5,7 @@
  */
 
 #include "spell-kind/spells-random.h"
+#include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
@@ -16,7 +17,6 @@
 #include "player/avatar.h"
 #include "status/bad-status-setter.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
