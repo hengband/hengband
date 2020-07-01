@@ -30,6 +30,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "status/base-status.h"
+#include "status/body-improvement.h"
 #include "status/experience.h"
 #include "status/form-changer.h"
 #include "status/sight-setter.h"

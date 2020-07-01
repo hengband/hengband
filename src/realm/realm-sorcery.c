@@ -4,7 +4,6 @@
 #include "io/targeting.h"
 #include "player/avatar.h"
 #include "status/buff-setter.h"
-#include "player/player-effects.h"
 #include "player/selfinfo.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
@@ -19,6 +18,7 @@
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "status/body-improvement.h"
 #include "status/sight-setter.h"
 #include "view/display-messages.h"
 

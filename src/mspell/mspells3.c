@@ -57,6 +57,7 @@
 #include "spell/spells-summon.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/experience.h"
 #include "term/screen-processor.h"

@@ -42,6 +42,7 @@
 #include "spell/spells3.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "status/experience.h"

@@ -558,6 +558,7 @@ hengband_SOURCES = \
 	\
 	status/bad-status-setter.c status/bad-status-setter.h \
 	status/base-status.c status/base-status.h \
+	status/body-improvement.c status/body-improvement.h \
 	status/buff-setter.c status/buff-setter.h \
 	status/element-resistance.c status/element-resistance.h \
 	status/experience.c status/experience.h \

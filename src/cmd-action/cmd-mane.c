@@ -33,6 +33,7 @@
 #include "mspell/monster-power-table.h"
 #include "mspell/mspell-type.h"
 #include "status/bad-status-setter.h"
+#include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"

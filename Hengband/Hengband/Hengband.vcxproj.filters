@@ -1538,6 +1538,9 @@
     <ClCompile Include="..\..\src\status\base-status.c">
       <Filter>status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\status\body-improvement.c">
+      <Filter>status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3365,6 +3368,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\status\base-status.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\body-improvement.h">
       <Filter>status</Filter>
     </ClInclude>
   </ItemGroup>

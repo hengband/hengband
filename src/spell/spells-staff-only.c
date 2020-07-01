@@ -6,6 +6,7 @@
 #include "spell/process-effect.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/spell-types.h"
+#include "status/body-improvement.h"
 #include "view/display-messages.h"
 
 /*!
