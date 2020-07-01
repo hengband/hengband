@@ -1892,12 +1892,10 @@ void set_mutation_flags(player_type *creature_ptr)
     if (creature_ptr->muta3) {
 
         if (creature_ptr->muta3 & MUT3_HYPER_INT) {
-            creature_ptr->stat_add[A_INT] += 4;
             creature_ptr->stat_add[A_WIS] += 4;
         }
 
         if (creature_ptr->muta3 & MUT3_MORONIC) {
-            creature_ptr->stat_add[A_INT] -= 4;
             creature_ptr->stat_add[A_WIS] -= 4;
         }
 
