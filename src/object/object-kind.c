@@ -46,8 +46,6 @@ void calc_equipment_status(player_type* creature_ptr) {
         if (o_ptr->name1 == ART_CHAINSWORD)
             creature_ptr->cursed |= TRC_CHAINSWORD;
 
-        if (have_flag(flgs, TR_DEX))
-            creature_ptr->stat_add[A_DEX] += o_ptr->pval;
         if (have_flag(flgs, TR_CON))
             creature_ptr->stat_add[A_CON] += o_ptr->pval;
         if (have_flag(flgs, TR_CHR))

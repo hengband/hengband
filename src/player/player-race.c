@@ -349,13 +349,6 @@ void calc_race_status(player_type *creature_ptr)
                 creature_ptr->skill_dig += creature_ptr->lev * 10;
 
             if (creature_ptr->lev > 25)
-                creature_ptr->stat_add[A_DEX]--;
-            if (creature_ptr->lev > 40)
-                creature_ptr->stat_add[A_DEX]--;
-            if (creature_ptr->lev > 45)
-                creature_ptr->stat_add[A_DEX]--;
-
-            if (creature_ptr->lev > 25)
                 creature_ptr->stat_add[A_CON]++;
             if (creature_ptr->lev > 40)
                 creature_ptr->stat_add[A_CON]++;

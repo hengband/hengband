@@ -1948,7 +1948,6 @@ void set_mutation_flags(player_type *creature_ptr)
         }
 
         if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
-            creature_ptr->stat_add[A_DEX] -= 1;
             creature_ptr->to_a += 25;
             creature_ptr->dis_to_a += 25;
         }
@@ -1967,14 +1966,6 @@ void set_mutation_flags(player_type *creature_ptr)
 
         if (creature_ptr->muta3 & MUT3_ESP) {
             creature_ptr->telepathy = TRUE;
-        }
-
-        if (creature_ptr->muta3 & MUT3_LIMBER) {
-            creature_ptr->stat_add[A_DEX] += 3;
-        }
-
-        if (creature_ptr->muta3 & MUT3_ARTHRITIS) {
-            creature_ptr->stat_add[A_DEX] -= 3;
         }
 
         if (creature_ptr->muta3 & MUT3_MOTION) {
