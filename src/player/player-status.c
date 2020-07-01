@@ -95,6 +95,7 @@ static void calc_dig(player_type *creature_ptr);
 static void calc_num_blow(player_type *creature_ptr, int i);
 static void calc_strength_addition(player_type *creature_ptr);
 static void calc_intelligence_addition(player_type *creature_ptr);
+static void calc_wisdom_addition(player_type *creature_ptr);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -1532,13 +1533,11 @@ void calc_bonuses(player_type *creature_ptr)
 		}
 		else if (creature_ptr->special_defense & KAMAE_GENBU)
 		{
-			creature_ptr->stat_add[A_WIS] -= 1;
 			creature_ptr->stat_add[A_DEX] -= 2;
 			creature_ptr->stat_add[A_CON] += 3;
 		}
 		else if (creature_ptr->special_defense & KAMAE_SUZAKU)
 		{
-			creature_ptr->stat_add[A_WIS] += 1;
 			creature_ptr->stat_add[A_DEX] += 2;
 			creature_ptr->stat_add[A_CON] -= 2;
 		}
@@ -1605,6 +1604,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 	calc_strength_addition(creature_ptr);
     calc_intelligence_addition(creature_ptr);
+    calc_wisdom_addition(creature_ptr);
 
 	int count = 0;
 	for (int i = 0; i < A_MAX; i++)
@@ -3737,6 +3737,38 @@ void calc_intelligence_addition(player_type *creature_ptr)
         if (creature_ptr->muta3 & MUT3_MORONIC) {
             creature_ptr->stat_add[A_INT] -= 4;
         }
+    }
+}
+
+static void calc_wisdom_addition(player_type *creature_ptr)
+{
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(o_ptr, flgs);
+        if (have_flag(flgs, TR_WIS)) {
+            creature_ptr->stat_add[A_WIS] += o_ptr->pval;
+        }
+    }
+	
+	if (creature_ptr->muta3) {
+
+        if (creature_ptr->muta3 & MUT3_HYPER_INT) {
+            creature_ptr->stat_add[A_WIS] += 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_MORONIC) {
+            creature_ptr->stat_add[A_WIS] -= 4;
+        }
+    }
+
+	if (creature_ptr->special_defense & KAMAE_GENBU) {
+        creature_ptr->stat_add[A_WIS] -= 1;
+    } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        creature_ptr->stat_add[A_WIS] += 1;
     }
 }
 
