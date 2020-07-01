@@ -1544,6 +1544,9 @@
     <ClCompile Include="..\..\src\mspell\mspell-dispel.c">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\status\shape-changer.c">
+      <Filter>status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3378,6 +3381,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-dispel.h">
       <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\shape-changer.h">
+      <Filter>status</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

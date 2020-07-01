@@ -4,7 +4,6 @@
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "player/player-class.h"
-#include "player/player-effects.h"
 #include "spell/process-effect.h"
 #include "spell/spells-diceroll.h"
 #include "spell-kind/spells-random.h"
@@ -19,6 +18,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
+#include "status/shape-changer.h"
 #include "view/display-messages.h"
 
 /*!

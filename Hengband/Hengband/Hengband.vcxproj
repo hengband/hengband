@@ -242,6 +242,7 @@
     <ClCompile Include="..\..\src\spell\spell-info.c" />
     <ClCompile Include="..\..\src\status\element-resistance.c" />
     <ClCompile Include="..\..\src\status\form-changer.c" />
+    <ClCompile Include="..\..\src\status\shape-changer.c" />
     <ClCompile Include="..\..\src\status\sight-setter.c" />
     <ClCompile Include="..\..\src\status\experience.c" />
     <ClCompile Include="..\..\src\status\temporary-resistance.c" />
@@ -679,6 +680,7 @@
     <ClInclude Include="..\..\src\spell-realm\spells-chaos.h" />
     <ClInclude Include="..\..\src\spell\spell-info.h" />
     <ClInclude Include="..\..\src\status\element-resistance.h" />
+    <ClInclude Include="..\..\src\status\shape-changer.h" />
     <ClInclude Include="..\..\src\status\sight-setter.h" />
     <ClInclude Include="..\..\src\status\form-changer.h" />
     <ClInclude Include="..\..\src\status\experience.h" />

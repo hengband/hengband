@@ -42,7 +42,6 @@
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "player/selfinfo.h"
@@ -59,6 +58,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "status/element-resistance.h"
+#include "status/shape-changer.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 

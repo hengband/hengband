@@ -72,6 +72,7 @@
 #include "realm/realm-types.h"
 #include "spell-kind/spells-perception.h"
 #include "status/experience.h"
+#include "status/shape-changer.h"
 #include "sv-definition/sv-lite-types.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"

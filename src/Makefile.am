@@ -564,6 +564,7 @@ hengband_SOURCES = \
 	status/element-resistance.c status/element-resistance.h \
 	status/experience.c status/experience.h \
 	status/form-changer.c status/form-changer.h \
+	status/shape-changer.c status/shape-changer.h \
 	status/sight-setter.c status/sight-setter.h \
 	status/temporary-resistance.c status/temporary-resistance.h \
 	\

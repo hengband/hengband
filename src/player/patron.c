@@ -12,7 +12,6 @@
 #include "object/object-kind-hook.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-floor.h"
@@ -26,6 +25,7 @@
 #include "spell/spell-types.h"
 #include "status/base-status.h"
 #include "status/experience.h"
+#include "status/shape-changer.h"
 #include "view/display-messages.h"
 
 #ifdef JP
