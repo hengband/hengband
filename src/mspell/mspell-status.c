@@ -19,12 +19,11 @@
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
 #include "mspell/mspells3.h"
-#include "status/bad-status-setter.h"
-#include "status/base-status.h"
-#include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-personalities-types.h"
 #include "spell/spell-types.h"
+#include "status/bad-status-setter.h"
+#include "status/base-status.h"
 #include "view/display-messages.h"
 
 /*!

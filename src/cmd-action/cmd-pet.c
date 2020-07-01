@@ -32,7 +32,7 @@
 #include "pet/pet-util.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"

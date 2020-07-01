@@ -16,7 +16,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"

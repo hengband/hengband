@@ -28,7 +28,7 @@
 #include "player/digestion-processor.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"

@@ -4,7 +4,7 @@
 #include "io/targeting.h"
 #include "status/bad-status-setter.h"
 #include "player/player-class.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/process-effect.h"
 #include "spell-kind/earthquake.h"

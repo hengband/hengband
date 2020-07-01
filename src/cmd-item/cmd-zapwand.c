@@ -15,7 +15,7 @@
 #include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-beam.h"

@@ -437,9 +437,6 @@
     <ClCompile Include="..\..\src\player\player-damage.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-effects.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player\player-move.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -1547,6 +1544,9 @@
     <ClCompile Include="..\..\src\status\shape-changer.c">
       <Filter>status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\status\action-setter.c">
+      <Filter>status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2012,9 +2012,6 @@
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-damage.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\player-effects.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-move.h">
@@ -3383,6 +3380,9 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\status\shape-changer.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\action-setter.h">
       <Filter>status</Filter>
     </ClInclude>
   </ItemGroup>

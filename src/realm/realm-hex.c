@@ -35,7 +35,7 @@
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
 #include "object/item-tester-hooker.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"

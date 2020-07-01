@@ -34,7 +34,7 @@
 #include "object/item-tester-hooker.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/special-defense-types.h"

@@ -19,7 +19,7 @@
 #include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
 #include "player/avatar.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"

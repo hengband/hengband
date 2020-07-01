@@ -545,7 +545,7 @@
     <ClCompile Include="..\..\src\player\patron.c" />
     <ClCompile Include="..\..\src\player\player-class.c" />
     <ClCompile Include="..\..\src\player\player-damage.c" />
-    <ClCompile Include="..\..\src\player\player-effects.c" />
+    <ClCompile Include="..\..\src\status\action-setter.c" />
     <ClCompile Include="..\..\src\inventory\player-inventory.c" />
     <ClCompile Include="..\..\src\player\player-personality.c" />
     <ClCompile Include="..\..\src\player\player-race.c" />
@@ -1222,7 +1222,7 @@
     <ClInclude Include="..\..\src\player\patron.h" />
     <ClInclude Include="..\..\src\player\player-class.h" />
     <ClInclude Include="..\..\src\player\player-damage.h" />
-    <ClInclude Include="..\..\src\player\player-effects.h" />
+    <ClInclude Include="..\..\src\status\action-setter.h" />
     <ClInclude Include="..\..\src\player\player-move.h" />
     <ClInclude Include="..\..\src\player\player-personality.h" />
     <ClInclude Include="..\..\src\player\player-race.h" />

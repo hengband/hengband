@@ -1,5 +1,4 @@
 ﻿/*!
- * @file hissatsu.c
  * @brief 剣術の実装 / Blade arts
  * @date 2014/01/17
  * @author
@@ -23,7 +22,7 @@
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
 #include "object/item-use-flags.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell/spells-execution.h"

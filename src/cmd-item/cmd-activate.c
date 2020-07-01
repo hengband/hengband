@@ -50,7 +50,7 @@
 #include "player/avatar.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-race-types.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"

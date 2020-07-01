@@ -33,7 +33,7 @@
 #include "player/eldritch-horror.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"

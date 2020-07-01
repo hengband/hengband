@@ -35,7 +35,6 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
 #include "player/player-class.h"
-#include "player/player-effects.h"
 #include "player/player-status.h"
 #include "room/rooms.h"
 #include "spell/process-effect.h"

@@ -26,12 +26,12 @@
 #include "player-attack/player-attack.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/special-defense-types.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "status/action-setter.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 
@@ -113,8 +113,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 
     k = mon_damage_mod(attacker_ptr, m_ptr, k, FALSE);
     msg_format_wizard(attacker_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, m_ptr->hp - k,
-        m_ptr->maxhp,
-        m_ptr->max_maxhp);
+        m_ptr->maxhp, m_ptr->max_maxhp);
     if (k > 0)
         anger_monster(attacker_ptr, m_ptr);
 

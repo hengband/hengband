@@ -31,7 +31,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "spell-realm/spells-hex.h"

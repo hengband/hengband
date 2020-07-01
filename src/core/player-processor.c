@@ -26,7 +26,7 @@
 #include "monster/monster-util.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/special-defense-types.h"

@@ -187,7 +187,7 @@
 #include "object/warning.h"
 #include "perception/object-perception.h"
 #include "player/player-class.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "player/player-status.h"

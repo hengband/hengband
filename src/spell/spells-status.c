@@ -23,7 +23,7 @@
 #include "object/object-kind.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
-#include "player/player-effects.h"
+#include "status/action-setter.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"

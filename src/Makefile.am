@@ -466,7 +466,6 @@ hengband_SOURCES = \
 	player/player-classes-types.h \
 	player/player-class.c player/player-class.h \
 	player/player-damage.c player/player-damage.h \
-	player/player-effects.c player/player-effects.h \
 	player/player-move.c player/player-move.h \
 	player/player-personality.c player/player-personality.h \
 	player/player-race.c player/player-race.h \
@@ -557,6 +556,7 @@ hengband_SOURCES = \
 	spell-realm/spells-song.c spell-realm/spells-song.h \
 	spell-realm/spells-trump.c spell-realm/spells-trump.h \
 	\
+	status/action-setter.c status/action-setter.h \
 	status/bad-status-setter.c status/bad-status-setter.h \
 	status/base-status.c status/base-status.h \
 	status/body-improvement.c status/body-improvement.h \
