@@ -6,7 +6,6 @@
 #include "player/player-move.h"
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
-#include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/base-status.h"
 #include "status/form-changer.h"

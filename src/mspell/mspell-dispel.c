@@ -9,7 +9,6 @@
 #include "mspell/mspell-util.h"
 #include "mspell/mspells3.h"
 #include "realm/realm-song-numbers.h"
-#include "realm/realm-types.h"
 #include "spell-realm/spells-craft.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-demon.h"

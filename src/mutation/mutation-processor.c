@@ -14,7 +14,6 @@
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
-#include "realm/realm-types.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"

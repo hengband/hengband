@@ -4,7 +4,6 @@
 #include "monster-race/monster-race.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
-#include "realm/realm-types.h"
 #include "spell/spell-info.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
@@ -316,3 +315,5 @@ bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
 }
 
 bool hex_spelling(player_type *caster_ptr, int hex) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1L << (hex))); }
+
+bool hex_spelling_any(player_type *caster_ptr) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0); }

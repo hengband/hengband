@@ -12,8 +12,7 @@ bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
 bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx);
 bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
 bool hex_spelling(player_type *caster_type, int hex);
-
-#define hex_spelling_any(CREATURE_PTR) (((CREATURE_PTR)->realm1 == REALM_HEX) && ((CREATURE_PTR)->magic_num1[0]))
+bool hex_spelling_any(player_type *caster_type);
 #define casting_hex_flags(P_PTR) ((P_PTR)->magic_num1[0])
 #define casting_hex_num(P_PTR) ((P_PTR)->magic_num2[0])
 #define hex_revenge_power(P_PTR) ((P_PTR)->magic_num1[2])
