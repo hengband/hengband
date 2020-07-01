@@ -1886,3 +1886,120 @@ void become_living_trump(player_type *creature_ptr)
 		msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
 	}
 }
+
+void set_mutation_flags(player_type *creature_ptr)
+{
+    if (creature_ptr->muta3) {
+        if (creature_ptr->muta3 & MUT3_HYPER_STR) {
+            creature_ptr->stat_add[A_STR] += 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_PUNY) {
+            creature_ptr->stat_add[A_STR] -= 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_HYPER_INT) {
+            creature_ptr->stat_add[A_INT] += 4;
+            creature_ptr->stat_add[A_WIS] += 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_MORONIC) {
+            creature_ptr->stat_add[A_INT] -= 4;
+            creature_ptr->stat_add[A_WIS] -= 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_RESILIENT) {
+            creature_ptr->stat_add[A_CON] += 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
+            creature_ptr->stat_add[A_CON] += 2;
+            creature_ptr->pspeed -= 2;
+        }
+
+        if (creature_ptr->muta3 & MUT3_ALBINO) {
+            creature_ptr->stat_add[A_CON] -= 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
+            creature_ptr->stat_add[A_CON] -= 2;
+            creature_ptr->stat_add[A_CHR] -= 1;
+            creature_ptr->regenerate = FALSE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_SILLY_VOI) {
+            creature_ptr->stat_add[A_CHR] -= 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_BLANK_FAC) {
+            creature_ptr->stat_add[A_CHR] -= 1;
+        }
+
+        if (creature_ptr->muta3 & MUT3_XTRA_LEGS) {
+            creature_ptr->pspeed += 3;
+        }
+
+        if (creature_ptr->muta3 & MUT3_SHORT_LEG) {
+            creature_ptr->pspeed -= 3;
+        }
+
+        if (creature_ptr->muta3 & MUT3_ELEC_TOUC) {
+            creature_ptr->sh_elec = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
+            creature_ptr->sh_fire = TRUE;
+            creature_ptr->lite = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_WART_SKIN) {
+            creature_ptr->stat_add[A_CHR] -= 2;
+            creature_ptr->to_a += 5;
+            creature_ptr->dis_to_a += 5;
+        }
+
+        if (creature_ptr->muta3 & MUT3_SCALES) {
+            creature_ptr->stat_add[A_CHR] -= 1;
+            creature_ptr->to_a += 10;
+            creature_ptr->dis_to_a += 10;
+        }
+
+        if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
+            creature_ptr->stat_add[A_DEX] -= 1;
+            creature_ptr->to_a += 25;
+            creature_ptr->dis_to_a += 25;
+        }
+
+        if (creature_ptr->muta3 & MUT3_WINGS) {
+            creature_ptr->levitation = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_FEARLESS) {
+            creature_ptr->resist_fear = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_REGEN) {
+            creature_ptr->regenerate = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_ESP) {
+            creature_ptr->telepathy = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_LIMBER) {
+            creature_ptr->stat_add[A_DEX] += 3;
+        }
+
+        if (creature_ptr->muta3 & MUT3_ARTHRITIS) {
+            creature_ptr->stat_add[A_DEX] -= 3;
+        }
+
+        if (creature_ptr->muta3 & MUT3_MOTION) {
+            creature_ptr->free_act = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_ILL_NORM) {
+            creature_ptr->stat_add[A_CHR] = 0;
+        }
+    }
+}
