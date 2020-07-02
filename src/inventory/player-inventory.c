@@ -2,7 +2,6 @@
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
 #include "game-option/option-flags.h"
@@ -27,11 +26,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
-#include "util/quarks.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
-
-void prepare_label_string(player_type *creature_ptr, char *label, BIT_FLAGS mode, tval_type tval);
 
 /*!
  * @brief 所持/装備オブジェクトIDの部位表現を返す /
@@ -204,32 +199,6 @@ bool can_get_item(player_type *owner_ptr, tval_type tval)
     OBJECT_IDX floor_list[23];
     ITEM_NUMBER floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
     return floor_num != 0;
-}
-
-/*!
- * @brief タグIDにあわせてタグアルファベットのリストを返す /
- * Move around label characters with correspond tags
- * @param owner_ptr プレーヤーへの参照ポインタ
- * @param label ラベルリストを取得する文字列参照ポインタ
- * @param mode 所持品リストか装備品リストかの切り替え
- * @return なし
- */
-void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, tval_type tval)
-{
-    concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    int offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
-    strcpy(label, alphabet_chars);
-    for (int i = 0; i < 52; i++) {
-        COMMAND_CODE index;
-        SYMBOL_CODE c = alphabet_chars[i];
-        if (!get_tag(owner_ptr, &index, c, mode, tval))
-            continue;
-
-        if (label[i] == c)
-            label[i] = ' ';
-
-        label[index - offset] = c;
-    }
 }
 
 /*!

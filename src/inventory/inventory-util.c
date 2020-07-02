@@ -1,4 +1,11 @@
-﻿#include "inventory/inventory-util.h"
+﻿/*!
+ * @brief インベントリ関係のユーティリティ
+ * @date 2020/07/02
+ * @author Hourier
+ * @details 少々雑多なので後で整理を検討する
+ */
+
+#include "inventory/inventory-util.h"
 #include "core/asking-player.h"
 #include "floor/floor.h"
 #include "io/input-key-requester.h"
@@ -267,4 +274,30 @@ bool verify(player_type *owner_ptr, concptr prompt, INVENTORY_IDX item)
     object_desc(owner_ptr, o_name, o_ptr, 0);
     (void)sprintf(out_val, _("%s%sですか? ", "%s %s? "), prompt, o_name);
     return get_check(out_val);
+}
+
+/*!
+ * @brief タグIDにあわせてタグアルファベットのリストを返す /
+ * Move around label characters with correspond tags
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param label ラベルリストを取得する文字列参照ポインタ
+ * @param mode 所持品リストか装備品リストかの切り替え
+ * @return なし
+ */
+void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, tval_type tval)
+{
+    concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    int offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
+    strcpy(label, alphabet_chars);
+    for (int i = 0; i < 52; i++) {
+        COMMAND_CODE index;
+        SYMBOL_CODE c = alphabet_chars[i];
+        if (!get_tag(owner_ptr, &index, c, mode, tval))
+            continue;
+
+        if (label[i] == c)
+            label[i] = ' ';
+
+        label[index - offset] = c;
+    }
 }

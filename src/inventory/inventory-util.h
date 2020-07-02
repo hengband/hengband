@@ -13,3 +13,4 @@ bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item);
 INVENTORY_IDX label_to_equipment(player_type *owner_ptr, int c);
 INVENTORY_IDX label_to_inventory(player_type *owner_ptr, int c);
 bool verify(player_type *owner_ptr, concptr prompt, INVENTORY_IDX item);
+void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, tval_type tval);
