@@ -347,13 +347,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_ENT:
             if (!creature_ptr->inventory_list[INVEN_RARM].k_idx)
                 creature_ptr->skill_dig += creature_ptr->lev * 10;
-
-            if (creature_ptr->lev > 25)
-                creature_ptr->stat_add[A_CON]++;
-            if (creature_ptr->lev > 40)
-                creature_ptr->stat_add[A_CON]++;
-            if (creature_ptr->lev > 45)
-                creature_ptr->stat_add[A_CON]++;
             break;
         case RACE_ARCHON:
             creature_ptr->levitation = TRUE;

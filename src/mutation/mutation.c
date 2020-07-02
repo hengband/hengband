@@ -1891,21 +1891,11 @@ void set_mutation_flags(player_type *creature_ptr)
 {
     if (creature_ptr->muta3) {
 
-        if (creature_ptr->muta3 & MUT3_RESILIENT) {
-            creature_ptr->stat_add[A_CON] += 4;
-        }
-
         if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
-            creature_ptr->stat_add[A_CON] += 2;
             creature_ptr->pspeed -= 2;
         }
 
-        if (creature_ptr->muta3 & MUT3_ALBINO) {
-            creature_ptr->stat_add[A_CON] -= 4;
-        }
-
         if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
-            creature_ptr->stat_add[A_CON] -= 2;
             creature_ptr->stat_add[A_CHR] -= 1;
             creature_ptr->regenerate = FALSE;
         }

@@ -97,6 +97,7 @@ static void calc_strength_addition(player_type *creature_ptr);
 static void calc_intelligence_addition(player_type *creature_ptr);
 static void calc_wisdom_addition(player_type *creature_ptr);
 static void calc_dexterity_addition(player_type *creature_ptr);
+static void calc_constitution_addition(player_type *creature_ptr);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -1607,6 +1608,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_intelligence_addition(creature_ptr);
     calc_wisdom_addition(creature_ptr);
     calc_dexterity_addition(creature_ptr);
+    calc_constitution_addition(creature_ptr);
 
 	int count = 0;
 	for (int i = 0; i < A_MAX; i++)
@@ -3810,7 +3812,48 @@ static void calc_dexterity_addition(player_type* creature_ptr) {
     }
 }
 
+static void calc_constitution_addition(player_type *creature_ptr)
+{
 
+	if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_ENT) {
+        if (creature_ptr->lev > 25)
+            creature_ptr->stat_add[A_CON]++;
+        if (creature_ptr->lev > 40)
+            creature_ptr->stat_add[A_CON]++;
+        if (creature_ptr->lev > 45)
+            creature_ptr->stat_add[A_CON]++;
+    }
+
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(o_ptr, flgs);
+        if (have_flag(flgs, TR_CON))
+            creature_ptr->stat_add[A_CON] += o_ptr->pval;
+	}
+	
+	if (creature_ptr->muta3) {
+        if (creature_ptr->muta3 & MUT3_RESILIENT) {
+            creature_ptr->stat_add[A_CON] += 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_ALBINO) {
+            creature_ptr->stat_add[A_CON] -= 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
+            creature_ptr->stat_add[A_CON] += 2;
+        }
+
+        if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
+            creature_ptr->stat_add[A_CON] -= 2;
+        }
+
+	}
+}
 
 /*!
  * @brief プレイヤーの所持重量制限を計算する /
