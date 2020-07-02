@@ -39,18 +39,19 @@
  */
 bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, tval_type tval)
 {
-    char n1 = ' ', n2 = ' ', which = ' ';
-    int j;
+    char n1 = ' ';
+    char n2 = ' ';
+    char which = ' ';
     COMMAND_CODE i1, i2;
     COMMAND_CODE e1, e2;
     COMMAND_CODE k;
     bool done;
     bool item;
     bool oops = FALSE;
-    bool equip = (mode & USE_EQUIP) ? TRUE : FALSE;
-    bool inven = (mode & USE_INVEN) ? TRUE : FALSE;
-    bool floor = (mode & USE_FLOOR) ? TRUE : FALSE;
-    bool force = (mode & USE_FORCE) ? TRUE : FALSE;
+    bool equip = (mode & USE_EQUIP) != 0;
+    bool inven = (mode & USE_INVEN) != 0;
+    bool floor = (mode & USE_FLOOR) != 0;
+    bool force = (mode & USE_FORCE) != 0;
     bool allow_equip = FALSE;
     bool allow_inven = FALSE;
     bool allow_floor = FALSE;
@@ -64,8 +65,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     int menu_line = (use_menu ? 1 : 0);
     int max_inven = 0;
     int max_equip = 0;
-    static char prev_tag = '\0';
     char cur_tag = '\0';
+    static char *prev_tag = '\0';
     if (repeat_pull(cp)) {
         if (force && (*cp == INVEN_FORCE)) {
             tval = 0;
@@ -73,9 +74,9 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             command_cmd = 0;
             return TRUE;
         } else if (floor && (*cp < 0)) {
-            if (prev_tag && command_cmd) {
+            if (*prev_tag && command_cmd) {
                 floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
-                if (get_tag_floor(owner_ptr->current_floor_ptr, &k, prev_tag, floor_list, floor_num)) {
+                if (get_tag_floor(owner_ptr->current_floor_ptr, &k, *prev_tag, floor_list, floor_num)) {
                     (*cp) = 0 - floor_list[k];
                     tval = 0;
                     item_tester_hook = NULL;
@@ -83,7 +84,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     return TRUE;
                 }
 
-                prev_tag = '\0';
+                *prev_tag = '\0';
             } else if (item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*cp)], tval) || (mode & USE_FULL)) {
                 tval = 0;
                 item_tester_hook = NULL;
@@ -91,8 +92,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 return TRUE;
             }
         } else if ((inven && (*cp >= 0) && (*cp < INVEN_PACK)) || (equip && (*cp >= INVEN_RARM) && (*cp < INVEN_TOTAL))) {
-            if (prev_tag && command_cmd) {
-                if (!get_tag(owner_ptr, &k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */
+            if (*prev_tag && command_cmd) {
+                if (!get_tag(owner_ptr, &k, *prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */
                     ;
                 else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */
                     ;
@@ -106,7 +107,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     return TRUE;
                 }
 
-                prev_tag = '\0';
+                *prev_tag = '\0';
             } else if (get_item_okay(owner_ptr, *cp, tval)) {
                 tval = 0;
                 item_tester_hook = NULL;
@@ -124,8 +125,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     if (!inven)
         i2 = -1;
     else if (use_menu)
-        for (j = 0; j < INVEN_PACK; j++)
-            if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval) || (mode & USE_FULL))
+        for (int i = 0; i < INVEN_PACK; i++)
+            if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], tval) || (mode & USE_FULL))
                 max_inven++;
 
     while ((i1 <= i2) && (!get_item_okay(owner_ptr, i1, tval)))
@@ -139,8 +140,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     if (!equip)
         e2 = -1;
     else if (use_menu)
-        for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-            if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval) || (mode & USE_FULL))
+        for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
+            if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], tval) || (mode & USE_FULL))
                 max_equip++;
     if (owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
         max_equip++;
@@ -182,19 +183,17 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             item = TRUE;
         }
     } else {
-        if (command_see && (command_wrk == (USE_EQUIP)) && allow_equip)
-            command_wrk = (USE_EQUIP);
+        if (command_see && (command_wrk == USE_EQUIP) && allow_equip)
+            command_wrk = USE_EQUIP;
         else if (allow_inven)
-            command_wrk = (USE_INVEN);
+            command_wrk = USE_INVEN;
         else if (allow_equip)
-            command_wrk = (USE_EQUIP);
+            command_wrk = USE_EQUIP;
         else if (allow_floor)
-            command_wrk = (USE_FLOOR);
+            command_wrk = USE_FLOOR;
     }
 
-    /*
-     * 追加オプション(always_show_list)が設定されている場合は常に一覧を表示する
-     */
+    /* 追加オプション(always_show_list)が設定されている場合は常に一覧を表示する */
     if ((always_show_list == TRUE) || use_menu)
         command_see = TRUE;
 
@@ -205,14 +204,14 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         COMMAND_CODE get_item_label = 0;
         int ni = 0;
         int ne = 0;
-        for (j = 0; j < 8; j++) {
-            if (!angband_term[j])
+        for (int i = 0; i < 8; i++) {
+            if (!angband_term[i])
                 continue;
 
-            if (window_flag[j] & (PW_INVEN))
+            if (window_flag[i] & PW_INVEN)
                 ni++;
 
-            if (window_flag[j] & (PW_EQUIP))
+            if (window_flag[i] & PW_EQUIP)
                 ne++;
         }
 
@@ -223,26 +222,26 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
         owner_ptr->window |= (PW_INVEN | PW_EQUIP);
         handle_stuff(owner_ptr);
-        if (command_wrk == (USE_INVEN)) {
+        if (command_wrk == USE_INVEN) {
             n1 = I2A(i1);
             n2 = I2A(i2);
             if (command_see)
                 get_item_label = show_inventory(owner_ptr, menu_line, mode, tval);
-        } else if (command_wrk == (USE_EQUIP)) {
+        } else if (command_wrk == USE_EQUIP) {
             n1 = I2A(e1 - INVEN_RARM);
             n2 = I2A(e2 - INVEN_RARM);
             if (command_see)
                 get_item_label = show_equipment(owner_ptr, menu_line, mode, tval);
-        } else if (command_wrk == (USE_FLOOR)) {
-            j = floor_top;
+        } else if (command_wrk == USE_FLOOR) {
+            int j = floor_top;
             k = MIN(floor_top + 23, floor_num) - 1;
-            n1 = I2A(j - floor_top);
+            n1 = I2A(j - floor_top); // TODO: 常に'0'になる。どんな意図でこのようなコードになっているのか不明.
             n2 = I2A(k - floor_top);
             if (command_see)
                 get_item_label = show_floor_items(owner_ptr, menu_line, owner_ptr->y, owner_ptr->x, &min_width, tval);
         }
 
-        if (command_wrk == (USE_INVEN)) {
+        if (command_wrk == USE_INVEN) {
             sprintf(out_val, _("持ち物:", "Inven:"));
             if (!use_menu) {
                 sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(i1), index_to_label(i2));
@@ -765,7 +764,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     if (item) {
         repeat_push(*cp);
         if (command_cmd)
-            prev_tag = cur_tag;
+            *prev_tag = cur_tag;
         command_cmd = 0;
     }
 
