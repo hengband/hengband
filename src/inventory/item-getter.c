@@ -7,7 +7,7 @@
 #include "grid/grid.h"
 #include "inventory/floor-item-getter.h"
 #include "inventory/inventory-util.h"
-#include "inventory/player-inventory.h" // todo 相互依存している.
+#include "inventory/player-inventory.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"

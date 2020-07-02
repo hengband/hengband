@@ -6,11 +6,13 @@
  */
 
 #include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "inventory/item-getter.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/apply-magic.h"
@@ -605,4 +607,22 @@ void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 #else
     msg_format("You see %s.", o_name);
 #endif
+}
+
+/*
+ * Choose an item and get auto-picker entry from it.
+ */
+object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, tval_type tval)
+{
+    OBJECT_IDX item;
+    if (!get_item(owner_ptr, &item, q, s, option, tval))
+        return NULL;
+
+    if (idx)
+        *idx = item;
+
+    if (item == INVEN_FORCE)
+        return NULL;
+
+    return ref_item(owner_ptr, item);
 }

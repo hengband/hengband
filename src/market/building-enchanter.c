@@ -1,6 +1,6 @@
 ﻿#include "market/building-enchanter.h"
+#include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
-#include "inventory/player-inventory.h"
 #include "market/building-util.h"
 #include "mind/racial-android.h"
 #include "object/item-use-flags.h"

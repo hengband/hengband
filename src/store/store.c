@@ -34,6 +34,7 @@
 #include "mind/mind-sniper.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-events.h"
+#include "floor/floor-object.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "floor/wild.h"

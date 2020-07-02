@@ -12,7 +12,6 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
 COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS mode, tval_type tval);
 void toggle_inventory_equipment(player_type *owner_ptr);
 
-object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, tval_type tval);
 bool can_get_item(player_type *owner_ptr, tval_type tval);
 ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, tval_type item_tester_tval);
 COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, tval_type item_tester_tval);

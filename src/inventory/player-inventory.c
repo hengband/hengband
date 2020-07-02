@@ -10,7 +10,6 @@
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-util.h"
-#include "inventory/item-getter.h" // todo 相互依存している.
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -334,24 +333,6 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
 
     command_gap = col;
     return target_item_label;
-}
-
-/*
- * Choose an item and get auto-picker entry from it.
- */
-object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, tval_type tval)
-{
-    OBJECT_IDX item;
-    if (!get_item(owner_ptr, &item, q, s, option, tval))
-        return NULL;
-
-    if (idx)
-        *idx = item;
-
-    if (item == INVEN_FORCE)
-        return NULL;
-
-    return ref_item(owner_ptr, item);
 }
 
 /*!

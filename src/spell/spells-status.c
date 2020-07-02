@@ -11,6 +11,7 @@
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"

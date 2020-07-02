@@ -1,7 +1,7 @@
 ﻿#include "mind/mind-mindcrafter.h"
 #include "autopick/autopick.h"
+#include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
-#include "inventory/player-inventory.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"

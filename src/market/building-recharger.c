@@ -1,7 +1,7 @@
 ﻿#include "market/building-recharger.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
-#include "inventory/player-inventory.h"
+#include "floor/floor-object.h"
 #include "market/building-util.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-magic.h"

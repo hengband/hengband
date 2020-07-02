@@ -14,6 +14,7 @@
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
 #include "core/stuff-handler.h"
+#include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
