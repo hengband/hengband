@@ -203,6 +203,7 @@ hengband_SOURCES = \
 	info-reader/skill-reader.c info-reader/skill-reader.h \
 	info-reader/vault-reader.c info-reader/vault-reader.h \
 	\
+	inventory/floor-item-getter.c inventory/floor-item-getter.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \
 	inventory/inventory-damage.c inventory/inventory-damage.h \
 	inventory/inventory-object.c inventory/inventory-object.h \
