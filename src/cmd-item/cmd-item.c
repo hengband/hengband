@@ -31,7 +31,6 @@
 #include "game-option/keymap-directory-getter.h"
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-object.h"
-#include "inventory/player-inventory.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -78,6 +77,7 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
+#include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include "view/main-window-util.h"
 

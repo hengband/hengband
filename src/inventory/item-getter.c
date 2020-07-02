@@ -7,7 +7,6 @@
 #include "grid/grid.h"
 #include "inventory/floor-item-getter.h"
 #include "inventory/inventory-util.h"
-#include "inventory/player-inventory.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -19,6 +18,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
+#include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include "view/display-sub-windows.h"
 

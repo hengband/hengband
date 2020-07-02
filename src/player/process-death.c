@@ -11,7 +11,6 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
-#include "inventory/player-inventory.h"
 #include "io/input-key-acceptor.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
@@ -24,6 +23,7 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
+#include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

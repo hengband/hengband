@@ -251,6 +251,7 @@
     <ClCompile Include="..\..\src\status\sight-setter.c" />
     <ClCompile Include="..\..\src\status\experience.c" />
     <ClCompile Include="..\..\src\status\temporary-resistance.c" />
+    <ClCompile Include="..\..\src\view\display-inventory.c" />
     <ClCompile Include="..\..\src\view\display-map.c" />
     <ClCompile Include="..\..\src\view\display-sub-windows.c" />
     <ClCompile Include="..\..\src\view\main-window-left-frame.c" />
@@ -1101,6 +1102,7 @@
     <ClInclude Include="..\..\src\util\string-processor.h" />
     <ClInclude Include="..\..\src\util\tag-sorter.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
+    <ClInclude Include="..\..\src\view\display-inventory.h" />
     <ClInclude Include="..\..\src\view\display-lore-attacks.h" />
     <ClInclude Include="..\..\src\view\display-lore-drops.h" />
     <ClInclude Include="..\..\src\view\display-lore-magics.h" />
