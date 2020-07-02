@@ -160,6 +160,7 @@ hengband_SOURCES = \
 	floor/floor-town.h floor/floor-town.c \
 	floor/floor-util.c floor/floor-util.h \
 	floor/geometry.c floor/geometry.h \
+	floor/object-scanner.c floor/object-scanner.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	floor/wild.h floor/wild.c \
 	\

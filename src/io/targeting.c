@@ -23,6 +23,7 @@
 #include "floor/floor-object.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
+#include "floor/object-scanner.h"
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
@@ -31,7 +32,6 @@
 #include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "inventory/player-inventory.h"
 #include "io/command-repeater.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
@@ -556,7 +556,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 	/* Scan all objects in the grid */
 	if (easy_floor)
 	{
-		floor_num = scan_floor(subject_ptr, floor_list, y, x, 0x02, 0);
+		floor_num = scan_floor_items(subject_ptr, floor_list, y, x, 0x02, 0);
 
 		if (floor_num)
 		{
@@ -795,7 +795,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 
 				/* Display */
 				show_gold_on_floor = TRUE;
-				(void)show_floor(subject_ptr, 0, y, x, &min_width, 0);
+				(void)show_floor_items(subject_ptr, 0, y, x, &min_width, 0);
 				show_gold_on_floor = FALSE;
 
 				/* Prompt */

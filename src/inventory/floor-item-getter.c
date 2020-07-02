@@ -8,6 +8,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
+#include "floor/object-scanner.h"
 #include "game-option/input-options.h"
 #include "game-option/option-flags.h"
 #include "game-option/text-display-options.h"
@@ -73,7 +74,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             return TRUE;
         } else if (floor && (*cp < 0)) {
             if (prev_tag && command_cmd) {
-                floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
+                floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
                 if (get_tag_floor(owner_ptr->current_floor_ptr, &k, prev_tag, floor_list, floor_num)) {
                     (*cp) = 0 - floor_list[k];
                     tval = 0;
@@ -160,7 +161,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
     floor_num = 0;
     if (floor)
-        floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
+        floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
 
     if (i1 <= i2)
         allow_inven = TRUE;
@@ -238,7 +239,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             n1 = I2A(j - floor_top);
             n2 = I2A(k - floor_top);
             if (command_see)
-                get_item_label = show_floor(owner_ptr, menu_line, owner_ptr->y, owner_ptr->x, &min_width, tval);
+                get_item_label = show_floor_items(owner_ptr, menu_line, owner_ptr->y, owner_ptr->x, &min_width, tval);
         }
 
         if (command_wrk == (USE_INVEN)) {
@@ -540,7 +541,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 i = owner_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
             owner_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
-            floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
+            floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
             if (command_see) {
                 screen_load();
                 screen_save();

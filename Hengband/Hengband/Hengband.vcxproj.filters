@@ -1556,6 +1556,9 @@
     <ClCompile Include="..\..\src\inventory\item-getter.c">
       <Filter>inventory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\object-scanner.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3402,6 +3405,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\inventory\item-getter.h">
       <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\object-scanner.h">
+      <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
