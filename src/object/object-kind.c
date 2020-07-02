@@ -46,8 +46,6 @@ void calc_equipment_status(player_type* creature_ptr) {
         if (o_ptr->name1 == ART_CHAINSWORD)
             creature_ptr->cursed |= TRC_CHAINSWORD;
 
-        if (have_flag(flgs, TR_CHR))
-            creature_ptr->stat_add[A_CHR] += o_ptr->pval;
         if (have_flag(flgs, TR_INFRA))
             creature_ptr->see_infra += o_ptr->pval;
         if (have_flag(flgs, TR_TUNNEL))

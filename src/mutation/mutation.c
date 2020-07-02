@@ -1896,16 +1896,7 @@ void set_mutation_flags(player_type *creature_ptr)
         }
 
         if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
-            creature_ptr->stat_add[A_CHR] -= 1;
             creature_ptr->regenerate = FALSE;
-        }
-
-        if (creature_ptr->muta3 & MUT3_SILLY_VOI) {
-            creature_ptr->stat_add[A_CHR] -= 4;
-        }
-
-        if (creature_ptr->muta3 & MUT3_BLANK_FAC) {
-            creature_ptr->stat_add[A_CHR] -= 1;
         }
 
         if (creature_ptr->muta3 & MUT3_XTRA_LEGS) {
@@ -1926,13 +1917,11 @@ void set_mutation_flags(player_type *creature_ptr)
         }
 
         if (creature_ptr->muta3 & MUT3_WART_SKIN) {
-            creature_ptr->stat_add[A_CHR] -= 2;
             creature_ptr->to_a += 5;
             creature_ptr->dis_to_a += 5;
         }
 
         if (creature_ptr->muta3 & MUT3_SCALES) {
-            creature_ptr->stat_add[A_CHR] -= 1;
             creature_ptr->to_a += 10;
             creature_ptr->dis_to_a += 10;
         }
@@ -1960,10 +1949,6 @@ void set_mutation_flags(player_type *creature_ptr)
 
         if (creature_ptr->muta3 & MUT3_MOTION) {
             creature_ptr->free_act = TRUE;
-        }
-
-        if (creature_ptr->muta3 & MUT3_ILL_NORM) {
-            creature_ptr->stat_add[A_CHR] = 0;
         }
     }
 }

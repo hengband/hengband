@@ -98,6 +98,7 @@ static void calc_intelligence_addition(player_type *creature_ptr);
 static void calc_wisdom_addition(player_type *creature_ptr);
 static void calc_dexterity_addition(player_type *creature_ptr);
 static void calc_constitution_addition(player_type *creature_ptr);
+static void calc_charisma_addition(player_type *creature_ptr);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -1609,6 +1610,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_wisdom_addition(creature_ptr);
     calc_dexterity_addition(creature_ptr);
     calc_constitution_addition(creature_ptr);
+    calc_charisma_addition(creature_ptr);
 
 	int count = 0;
 	for (int i = 0; i < A_MAX; i++)
@@ -3855,7 +3857,42 @@ static void calc_constitution_addition(player_type *creature_ptr)
 	}
 }
 
-/*!
+static void calc_charisma_addition(player_type *creature_ptr)
+{
+
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(o_ptr, flgs);
+        if (have_flag(flgs, TR_CHR))
+            creature_ptr->stat_add[A_CHR] += o_ptr->pval;
+    }
+
+    if (creature_ptr->muta3) {
+        if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
+            creature_ptr->stat_add[A_CHR] -= 1;
+        }
+        if (creature_ptr->muta3 & MUT3_SILLY_VOI) {
+            creature_ptr->stat_add[A_CHR] -= 4;
+        }
+        if (creature_ptr->muta3 & MUT3_BLANK_FAC) {
+            creature_ptr->stat_add[A_CHR] -= 1;
+        }
+        if (creature_ptr->muta3 & MUT3_WART_SKIN) {
+            creature_ptr->stat_add[A_CHR] -= 2;
+        }
+        if (creature_ptr->muta3 & MUT3_SCALES) {
+            creature_ptr->stat_add[A_CHR] -= 1;
+        }
+        if (creature_ptr->muta3 & MUT3_ILL_NORM) {
+            creature_ptr->stat_add[A_CHR] = 0;
+        }
+    }
+}
+    /*!
  * @brief プレイヤーの所持重量制限を計算する /
  * Computes current weight limit.
  * @return 制限重量(ポンド)
