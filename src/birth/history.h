@@ -12,5 +12,6 @@ typedef struct hist_type {
 	byte bonus;			    /*!> メッセージに伴う社会的地位の変化量(50が基準値) / Social Class Bonus + 50 */
 } hist_type;
 
-struct hist_type;
-extern hist_type bg[];
+#define MAX_BACKGROUNDS 593
+
+extern hist_type bg[MAX_BACKGROUNDS];

@@ -21,8 +21,7 @@
 *\n
 * This table *must* be correct or drastic errors may occur!\n
 */
-hist_type bg[] =
-{
+hist_type bg[MAX_BACKGROUNDS] = {
 #ifdef JP
 { "妾腹の子で認知すらされていません。",			 10, 2, 3, 25 },
 { "妾腹の子ですが認知はされています。",			 20, 2, 3, 35 },
