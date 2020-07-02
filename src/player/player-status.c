@@ -1551,11 +1551,6 @@ void calc_bonuses(player_type *creature_ptr)
 	if (creature_ptr->realm1 == REALM_HEX)
 	{
 		if (hex_spelling(creature_ptr, HEX_DETECT_EVIL)) creature_ptr->esp_evil = TRUE;
-		if (hex_spelling(creature_ptr, HEX_BUILDING))
-		{
-			creature_ptr->stat_add[A_DEX] += 4;
-			creature_ptr->stat_add[A_CON] += 4;
-		}
 
 		if (hex_spelling(creature_ptr, HEX_DEMON_AURA))
 		{
@@ -3708,7 +3703,6 @@ static void calc_strength_addition(player_type *creature_ptr)
 
 	if (creature_ptr->tsuyoshi) {
         creature_ptr->stat_add[A_STR] += 4;
-        creature_ptr->stat_add[A_CON] += 4;
     }
 }
 
@@ -3804,7 +3798,8 @@ static void calc_wisdom_addition(player_type *creature_ptr)
     }
 }
 
-static void calc_dexterity_addition(player_type* creature_ptr) {
+static void calc_dexterity_addition(player_type *creature_ptr)
+{
 
     const player_race *tmp_rp_ptr;
     if (creature_ptr->mimic_form)
@@ -3815,7 +3810,7 @@ static void calc_dexterity_addition(player_type* creature_ptr) {
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
     creature_ptr->stat_add[A_DEX] = tmp_rp_ptr->r_adj[A_DEX] + c_ptr->c_adj[A_DEX] + a_ptr->a_adj[A_DEX];
 
-	if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_ENT) {
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_ENT) {
         if (creature_ptr->lev > 25)
             creature_ptr->stat_add[A_DEX]--;
         if (creature_ptr->lev > 40)
@@ -3824,7 +3819,7 @@ static void calc_dexterity_addition(player_type* creature_ptr) {
             creature_ptr->stat_add[A_DEX]--;
     }
 
-	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         BIT_FLAGS flgs[TR_FLAG_SIZE];
         o_ptr = &creature_ptr->inventory_list[i];
@@ -3836,11 +3831,11 @@ static void calc_dexterity_addition(player_type* creature_ptr) {
         }
     }
 
-	if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+    if (creature_ptr->special_defense & KATA_KOUKIJIN) {
         creature_ptr->stat_add[A_DEX] += 5;
     }
 
-	if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
+    if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
         creature_ptr->stat_add[A_DEX] -= 1;
     }
 
@@ -3850,6 +3845,12 @@ static void calc_dexterity_addition(player_type* creature_ptr) {
 
     if (creature_ptr->muta3 & MUT3_ARTHRITIS) {
         creature_ptr->stat_add[A_DEX] -= 3;
+    }
+
+    if (creature_ptr->realm1 == REALM_HEX) {
+        if (hex_spelling(creature_ptr, HEX_BUILDING)) {
+            creature_ptr->stat_add[A_DEX] += 4;
+        }
     }
 }
 
@@ -3906,6 +3907,16 @@ static void calc_constitution_addition(player_type *creature_ptr)
         }
 
 	}
+
+	if (creature_ptr->realm1 == REALM_HEX) {
+        if (hex_spelling(creature_ptr, HEX_BUILDING)) {
+            creature_ptr->stat_add[A_CON] += 4;
+        }
+    }
+
+	if (creature_ptr->tsuyoshi) {
+        creature_ptr->stat_add[A_CON] += 4;
+    }
 }
 
 static void calc_charisma_addition(player_type *creature_ptr)
