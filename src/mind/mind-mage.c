@@ -6,8 +6,8 @@
 
 #include "mind/mind-mage.h"
 #include "core/stuff-handler.h"
+#include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
-#include "inventory/player-inventory.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-magic.h"

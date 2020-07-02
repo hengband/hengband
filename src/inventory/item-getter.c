@@ -20,6 +20,7 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-sub-windows.h"
 
 /*!
  * @brief オブジェクト選択の汎用関数 /

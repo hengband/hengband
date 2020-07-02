@@ -46,7 +46,6 @@
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-object.h"
-#include "inventory/player-inventory.h"
 #include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
@@ -88,6 +87,7 @@
 #include "util/object-sort.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
+#include "view/display-sub-windows.h"
 #include "view/object-describer.h"
 #include "world/world.h"
 

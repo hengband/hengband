@@ -416,3 +416,29 @@ void fix_object(player_type *player_ptr)
         Term_activate(old);
     }
 }
+
+/*!
+ * @brief サブウィンドウに所持品、装備品リストの表示を行う /
+ * Flip "inven" and "equip" in any sub-windows
+ * @return なし
+ */
+void toggle_inventory_equipment(player_type *owner_ptr)
+{
+    for (int j = 0; j < 8; j++) {
+        if (!angband_term[j])
+            continue;
+
+        if (window_flag[j] & (PW_INVEN)) {
+            window_flag[j] &= ~(PW_INVEN);
+            window_flag[j] |= (PW_EQUIP);
+            owner_ptr->window |= (PW_EQUIP);
+            continue;
+        }
+
+        if (window_flag[j] & PW_EQUIP) {
+            window_flag[j] &= ~(PW_EQUIP);
+            window_flag[j] |= PW_INVEN;
+            owner_ptr->window |= PW_INVEN;
+        }
+    }
+}

@@ -1,19 +1,14 @@
 ﻿#include "inventory/player-inventory.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
-#include "game-option/option-flags.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-util.h"
-#include "io/command-repeater.h"
-#include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
-#include "main/sound-of-music.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
@@ -21,11 +16,9 @@
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "player/player-move.h"
-#include "sv-definition/sv-other-types.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
 /*!
@@ -155,32 +148,6 @@ void display_equipment(player_type *owner_ptr, tval_type tval)
 
     for (int i = INVEN_TOTAL - INVEN_RARM; i < hgt; i++) {
         Term_erase(0, i, 255);
-    }
-}
-
-/*!
- * @brief サブウィンドウに所持品、装備品リストの表示を行う /
- * Flip "inven" and "equip" in any sub-windows
- * @return なし
- */
-void toggle_inventory_equipment(player_type *owner_ptr)
-{
-    for (int j = 0; j < 8; j++) {
-        if (!angband_term[j])
-            continue;
-
-        if (window_flag[j] & (PW_INVEN)) {
-            window_flag[j] &= ~(PW_INVEN);
-            window_flag[j] |= (PW_EQUIP);
-            owner_ptr->window |= (PW_EQUIP);
-            continue;
-        }
-
-        if (window_flag[j] & PW_EQUIP) {
-            window_flag[j] &= ~(PW_EQUIP);
-            window_flag[j] |= PW_INVEN;
-            owner_ptr->window |= PW_INVEN;
-        }
     }
 }
 

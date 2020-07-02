@@ -13,7 +13,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-util.h"
-#include "inventory/player-inventory.h" // todo 相互依存している.
+#include "inventory/player-inventory.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -25,6 +25,7 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "view/display-sub-windows.h"
 
 /*!
  * @brief オブジェクト選択の汎用関数(床上アイテム用) /
