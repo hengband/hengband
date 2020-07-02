@@ -99,6 +99,7 @@ static void calc_wisdom_addition(player_type *creature_ptr);
 static void calc_dexterity_addition(player_type *creature_ptr);
 static void calc_constitution_addition(player_type *creature_ptr);
 static void calc_charisma_addition(player_type *creature_ptr);
+static void calc_to_magic_chance(player_type *creature_ptr);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -1238,7 +1239,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->dis_to_a = creature_ptr->to_a = 0;
     creature_ptr->to_h_m = 0;
     creature_ptr->to_d_m = 0;
-    creature_ptr->to_m_chance = 0;
     creature_ptr->to_dd[0] = creature_ptr->to_ds[0] = 0;
     creature_ptr->to_dd[1] = creature_ptr->to_ds[1] = 0;
 
@@ -1446,12 +1446,8 @@ void calc_bonuses(player_type *creature_ptr)
     calc_timelimit_status(creature_ptr);
 
 	if (creature_ptr->pseikaku == PERSONALITY_SEXY) creature_ptr->cursed |= (TRC_AGGRAVATE);
-	if (creature_ptr->pseikaku == PERSONALITY_LAZY) creature_ptr->to_m_chance += 10;
-	if (creature_ptr->pseikaku == PERSONALITY_SHREWD) creature_ptr->to_m_chance -= 3;
-	if ((creature_ptr->pseikaku == PERSONALITY_PATIENT) || (creature_ptr->pseikaku == PERSONALITY_MIGHTY)) creature_ptr->to_m_chance++;
 	if (creature_ptr->pseikaku == PERSONALITY_CHARGEMAN)
 	{
-		creature_ptr->to_m_chance += 5;
 		creature_ptr->resist_conf = TRUE;
 	}
 
@@ -1601,6 +1597,8 @@ void calc_bonuses(player_type *creature_ptr)
     calc_dexterity_addition(creature_ptr);
     calc_constitution_addition(creature_ptr);
     calc_charisma_addition(creature_ptr);
+    calc_to_magic_chance(creature_ptr);
+
 
 	int count = 0;
 	for (int i = 0; i < A_MAX; i++)
@@ -3957,7 +3955,39 @@ static void calc_charisma_addition(player_type *creature_ptr)
         }
     }
 }
-    /*!
+
+static void calc_to_magic_chance(player_type* creature_ptr)
+{
+    creature_ptr->to_m_chance = 0;
+
+	if (creature_ptr->pseikaku == PERSONALITY_LAZY)
+        creature_ptr->to_m_chance += 10;
+    if (creature_ptr->pseikaku == PERSONALITY_SHREWD)
+        creature_ptr->to_m_chance -= 3;
+    if ((creature_ptr->pseikaku == PERSONALITY_PATIENT) || (creature_ptr->pseikaku == PERSONALITY_MIGHTY))
+        creature_ptr->to_m_chance++;
+    if (creature_ptr->pseikaku == PERSONALITY_CHARGEMAN)
+        creature_ptr->to_m_chance += 5;
+
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(o_ptr, flgs);
+        if (o_ptr->curse_flags & TRC_LOW_MAGIC) {
+            if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+                creature_ptr->to_m_chance += 10;
+            } else {
+                creature_ptr->to_m_chance += 3;
+            }
+        }
+    }
+}
+
+
+/*!
  * @brief プレイヤーの所持重量制限を計算する /
  * Computes current weight limit.
  * @return 制限重量(ポンド)
