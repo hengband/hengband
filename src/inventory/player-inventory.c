@@ -28,7 +28,7 @@
  * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
  * @return 部位表現の文字列ポインタ
  */
-static concptr mention_use(player_type *owner_ptr, int i)
+concptr mention_use(player_type *owner_ptr, int i)
 {
     concptr p;
 
@@ -90,65 +90,6 @@ static concptr mention_use(player_type *owner_ptr, int i)
     }
 
     return p;
-}
-
-/*!
- * @brief 装備アイテム一覧を表示する /
- * Choice window "shadow" of the "show_equip()" function
- * @return なし
- */
-void display_equipment(player_type *owner_ptr, tval_type tval)
-{
-    if (!owner_ptr || !owner_ptr->inventory_list)
-        return;
-
-    TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
-
-    TERM_COLOR attr = TERM_WHITE;
-    char tmp_val[80];
-    GAME_TEXT o_name[MAX_NLEN];
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr;
-        o_ptr = &owner_ptr->inventory_list[i];
-        tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-        if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval)) {
-            tmp_val[0] = index_to_label(i);
-            tmp_val[1] = ')';
-        }
-
-        Term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
-        if ((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute) {
-            strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
-            attr = TERM_WHITE;
-        } else {
-            object_desc(owner_ptr, o_name, o_ptr, 0);
-            attr = tval_to_attr[o_ptr->tval % 128];
-        }
-
-        int n = strlen(o_name);
-        if (o_ptr->timeout) {
-            attr = TERM_L_DARK;
-        }
-        Term_putstr(3, i - INVEN_RARM, n, attr, o_name);
-
-        Term_erase(3 + n, i - INVEN_RARM, 255);
-
-        if (show_weights) {
-            int wgt = o_ptr->weight * o_ptr->number;
-            sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
-            prt(tmp_val, i - INVEN_RARM, wid - (show_labels ? 28 : 9));
-        }
-
-        if (show_labels) {
-            Term_putstr(wid - 20, i - INVEN_RARM, -1, TERM_WHITE, " <-- ");
-            prt(mention_use(owner_ptr, i), i - INVEN_RARM, wid - 15);
-        }
-    }
-
-    for (int i = INVEN_TOTAL - INVEN_RARM; i < hgt; i++) {
-        Term_erase(0, i, 255);
-    }
 }
 
 /*!
