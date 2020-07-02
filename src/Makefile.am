@@ -208,6 +208,7 @@ hengband_SOURCES = \
 	inventory/inventory-damage.c inventory/inventory-damage.h \
 	inventory/inventory-object.c inventory/inventory-object.h \
 	inventory/inventory-util.c inventory/inventory-util.h \
+	inventory/item-getter.c inventory/item-getter.h \
 	inventory/pack-overflow.c inventory/pack-overflow.h \
 	inventory/player-inventory.c inventory/player-inventory.h \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
