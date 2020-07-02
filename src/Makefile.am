@@ -207,6 +207,7 @@ hengband_SOURCES = \
 	inventory/floor-item-getter.c inventory/floor-item-getter.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \
 	inventory/inventory-damage.c inventory/inventory-damage.h \
+	inventory/inventory-describer.c inventory/inventory-describer.h \
 	inventory/inventory-object.c inventory/inventory-object.h \
 	inventory/inventory-util.c inventory/inventory-util.h \
 	inventory/item-getter.c inventory/item-getter.h \

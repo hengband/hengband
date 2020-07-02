@@ -7,6 +7,7 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
+#include "inventory/inventory-describer.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
@@ -21,77 +22,6 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
-
-/*!
- * @brief 所持/装備オブジェクトIDの部位表現を返す /
- * Return a string mentioning how a given item is carried
- * @param owner_ptr プレーヤーへの参照ポインタ
- * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
- * @return 部位表現の文字列ポインタ
- */
-concptr mention_use(player_type *owner_ptr, int i)
-{
-    concptr p;
-
-    /* Examine the location */
-    switch (i) {
-#ifdef JP
-    case INVEN_RARM:
-        p = owner_ptr->heavy_wield[0] ? "運搬中" : ((owner_ptr->ryoute && owner_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手"));
-        break;
-#else
-    case INVEN_RARM:
-        p = owner_ptr->heavy_wield[0] ? "Just lifting" : (owner_ptr->migite ? "Wielding" : "On arm");
-        break;
-#endif
-
-#ifdef JP
-    case INVEN_LARM:
-        p = owner_ptr->heavy_wield[1] ? "運搬中" : ((owner_ptr->ryoute && owner_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手"));
-        break;
-#else
-    case INVEN_LARM:
-        p = owner_ptr->heavy_wield[1] ? "Just lifting" : (owner_ptr->hidarite ? "Wielding" : "On arm");
-        break;
-#endif
-
-    case INVEN_BOW:
-        p = (adj_str_hold[owner_ptr->stat_ind[A_STR]] < owner_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting");
-        break;
-    case INVEN_RIGHT:
-        p = (left_hander ? _("左手指", "On left hand") : _("右手指", "On right hand"));
-        break;
-    case INVEN_LEFT:
-        p = (left_hander ? _("右手指", "On right hand") : _("左手指", "On left hand"));
-        break;
-    case INVEN_NECK:
-        p = _("  首", "Around neck");
-        break;
-    case INVEN_LITE:
-        p = _(" 光源", "Light source");
-        break;
-    case INVEN_BODY:
-        p = _("  体", "On body");
-        break;
-    case INVEN_OUTER:
-        p = _("体の上", "About body");
-        break;
-    case INVEN_HEAD:
-        p = _("  頭", "On head");
-        break;
-    case INVEN_HANDS:
-        p = _("  手", "On hands");
-        break;
-    case INVEN_FEET:
-        p = _("  足", "On feet");
-        break;
-    default:
-        p = _("ザック", "In pack");
-        break;
-    }
-
-    return p;
-}
 
 /*!
  * @brief 規定の処理にできるアイテムがプレイヤーの利用可能範囲内にあるかどうかを返す /
@@ -484,79 +414,4 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
 
     command_gap = col;
     return target_item_label;
-}
-
-/*!
- * @brief 所持/装備オブジェクトIDの現在の扱い方の状態表現を返す /
- * Return a string describing how a given item is being worn.
- * @param i 状態表現を求めるプレイヤーの所持/装備オブジェクトID
- * @return 状態表現内容の文字列ポインタ
- * @details
- * Currently, only used for items in the equipment, inventory.
- */
-concptr describe_use(player_type *owner_ptr, int i)
-{
-    concptr p;
-    switch (i) {
-#ifdef JP
-    case INVEN_RARM:
-        p = owner_ptr->heavy_wield[0]
-            ? "運搬中の"
-            : ((owner_ptr->ryoute && owner_ptr->migite) ? "両手に装備している" : (left_hander ? "左手に装備している" : "右手に装備している"));
-        break;
-#else
-    case INVEN_RARM:
-        p = owner_ptr->heavy_wield[0] ? "just lifting" : (owner_ptr->migite ? "attacking monsters with" : "wearing on your arm");
-        break;
-#endif
-
-#ifdef JP
-    case INVEN_LARM:
-        p = owner_ptr->heavy_wield[1]
-            ? "運搬中の"
-            : ((owner_ptr->ryoute && owner_ptr->hidarite) ? "両手に装備している" : (left_hander ? "右手に装備している" : "左手に装備している"));
-        break;
-#else
-    case INVEN_LARM:
-        p = owner_ptr->heavy_wield[1] ? "just lifting" : (owner_ptr->hidarite ? "attacking monsters with" : "wearing on your arm");
-        break;
-#endif
-
-    case INVEN_BOW:
-        p = (adj_str_hold[owner_ptr->stat_ind[A_STR]] < owner_ptr->inventory_list[i].weight / 10) ? _("持つだけで精一杯の", "just holding")
-                                                                                                  : _("射撃用に装備している", "shooting missiles with");
-        break;
-    case INVEN_RIGHT:
-        p = (left_hander ? _("左手の指にはめている", "wearing on your left hand") : _("右手の指にはめている", "wearing on your right hand"));
-        break;
-    case INVEN_LEFT:
-        p = (left_hander ? _("右手の指にはめている", "wearing on your right hand") : _("左手の指にはめている", "wearing on your left hand"));
-        break;
-    case INVEN_NECK:
-        p = _("首にかけている", "wearing around your neck");
-        break;
-    case INVEN_LITE:
-        p = _("光源にしている", "using to light the way");
-        break;
-    case INVEN_BODY:
-        p = _("体に着ている", "wearing on your body");
-        break;
-    case INVEN_OUTER:
-        p = _("身にまとっている", "wearing on your back");
-        break;
-    case INVEN_HEAD:
-        p = _("頭にかぶっている", "wearing on your head");
-        break;
-    case INVEN_HANDS:
-        p = _("手につけている", "wearing on your hands");
-        break;
-    case INVEN_FEET:
-        p = _("足にはいている", "wearing on your feet");
-        break;
-    default:
-        p = _("ザックに入っている", "carrying in your pack");
-        break;
-    }
-
-    return p;
 }

@@ -5,6 +5,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "inventory/inventory-describer.h"
 #include "inventory/inventory-util.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-processor.h"

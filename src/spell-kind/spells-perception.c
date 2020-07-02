@@ -4,6 +4,7 @@
 #include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/play-record-options.h"
+#include "inventory/inventory-describer.h"
 #include "inventory/player-inventory.h"
 #include "io/write-diary.h"
 #include "object-enchant/special-object-flags.h"

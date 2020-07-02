@@ -29,6 +29,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
+#include "inventory/inventory-describer.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/cursor.h"

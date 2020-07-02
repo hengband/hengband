@@ -8,7 +8,7 @@
 #include "autopick/autopick.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/disturbance-options.h"
-#include "inventory/player-inventory.h"
+#include "inventory/inventory-describer.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"

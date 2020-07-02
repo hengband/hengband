@@ -210,6 +210,7 @@
     <ClCompile Include="..\..\src\info-reader\skill-reader.c" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.c" />
     <ClCompile Include="..\..\src\inventory\floor-item-getter.c" />
+    <ClCompile Include="..\..\src\inventory\inventory-describer.c" />
     <ClCompile Include="..\..\src\inventory\inventory-util.c" />
     <ClCompile Include="..\..\src\inventory\item-getter.c" />
     <ClCompile Include="..\..\src\io\command-repeater.c" />
@@ -645,6 +646,7 @@
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\inventory\floor-item-getter.h" />
+    <ClInclude Include="..\..\src\inventory\inventory-describer.h" />
     <ClInclude Include="..\..\src\inventory\inventory-util.h" />
     <ClInclude Include="..\..\src\inventory\item-getter.h" />
     <ClInclude Include="..\..\src\io\command-repeater.h" />
