@@ -4,9 +4,6 @@
 #include "system/angband.h"
 #include "system/object-type-definition.h"
 
-extern bool select_ring_slot;
-
-bool is_ring_slot(int i);
 concptr describe_use(player_type *owner_ptr, int i);
 
 void display_inventory(player_type *creature_ptr, tval_type tval);

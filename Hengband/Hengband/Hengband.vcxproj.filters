@@ -1547,6 +1547,9 @@
     <ClCompile Include="..\..\src\status\action-setter.c">
       <Filter>status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\inventory\inventory-util.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3384,6 +3387,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\status\action-setter.h">
       <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\inventory-util.h">
+      <Filter>inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
