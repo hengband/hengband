@@ -15,6 +15,7 @@
 #pragma once
 
 typedef enum tval_type {
+    TV_NONE = 0,
     TV_SKELETON = 1, /* Skeletons ('s'), not specified */
     TV_BOTTLE = 2, /* Empty bottles ('!') */
     TV_JUNK = 3, /* Sticks, Pottery, etc ('~') */
