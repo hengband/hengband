@@ -142,7 +142,7 @@ static bool check_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev
 }
 
 /*!
- * @brief インベントリ内のアイテムが妥当化を判定する
+ * @brief インベントリ内のアイテムが妥当かを判定する
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @return なし
@@ -160,6 +160,27 @@ static void test_inventory(player_type *owner_ptr, fis_type *fis_ptr)
     for (int i = 0; i < INVEN_PACK; i++)
         if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], fis_ptr->tval) || (fis_ptr->mode & USE_FULL))
             fis_ptr->max_inven++;
+}
+
+/*!
+ * @brief 装備品がが妥当かを判定する
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @return なし
+ */
+static void test_equipment(player_type *owner_ptr, fis_type *fis_ptr)
+{
+    if (!fis_ptr->equip) {
+        fis_ptr->e2 = -1;
+        return;
+    }
+    
+    if (!use_menu)
+        return;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
+        if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], fis_ptr->tval) || (fis_ptr->mode & USE_FULL))
+            fis_ptr->max_equip++;
 }
 
 /*!
@@ -193,13 +214,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
     fis_ptr->e1 = INVEN_RARM;
     fis_ptr->e2 = INVEN_TOTAL - 1;
-    if (!fis_ptr->equip)
-        fis_ptr->e2 = -1;
-    else if (use_menu)
-        for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
-            if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], tval) || (mode & USE_FULL))
-                fis_ptr->max_equip++;
-
+    test_equipment(owner_ptr, fis_ptr);
     if (owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
         fis_ptr->max_equip++;
 
@@ -258,7 +273,6 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         screen_save();
 
     while (!fis_ptr->done) {
-        COMMAND_CODE get_item_label = 0;
         int ni = 0;
         int ne = 0;
         for (int i = 0; i < 8; i++) {
@@ -279,6 +293,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
         owner_ptr->window |= (PW_INVEN | PW_EQUIP);
         handle_stuff(owner_ptr);
+        COMMAND_CODE get_item_label = 0;
         if (command_wrk == USE_INVEN) {
             fis_ptr->n1 = I2A(fis_ptr->i1);
             fis_ptr->n2 = I2A(fis_ptr->i2);
