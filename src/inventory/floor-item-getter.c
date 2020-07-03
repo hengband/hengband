@@ -30,6 +30,42 @@
 #include "view/display-sub-windows.h"
 
 /*!
+ * @brief 床上アイテムへにタグ付けがされているかの調査処理 (のはず)
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param prev_tag 前回選択したアイテムのタグ (のはず)
+ * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ */
+static bool check_item_tag_floor(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+{
+    if (!fis_ptr->floor || (*fis_ptr->cp >= 0))
+        return FALSE;
+
+    if (*prev_tag && command_cmd) {
+        fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, fis_ptr->tval);
+        if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
+            *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
+            fis_ptr->tval = 0;
+            item_tester_hook = NULL;
+            command_cmd = 0;
+            return TRUE;
+        }
+
+        *prev_tag = '\0';
+        return FALSE;
+    }
+    
+    if (item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)], fis_ptr->tval) || (fis_ptr->mode & USE_FULL)) {
+        fis_ptr->tval = 0;
+        item_tester_hook = NULL;
+        command_cmd = 0;
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+/*!
  * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
@@ -48,28 +84,9 @@ static bool check_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev
         return TRUE;
     }
     
-    if (fis_ptr->floor && (*fis_ptr->cp < 0)) {
-        if (*prev_tag && command_cmd) {
-            fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, fis_ptr->tval);
-            if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
-                *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
-                fis_ptr->tval = 0;
-                item_tester_hook = NULL;
-                command_cmd = 0;
-                return TRUE;
-            }
+    if (check_item_tag_floor(owner_ptr, fis_ptr, prev_tag))
+        return TRUE;
 
-            *prev_tag = '\0';
-        } else if (item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)], fis_ptr->tval) || (fis_ptr->mode & USE_FULL)) {
-            fis_ptr->tval = 0;
-            item_tester_hook = NULL;
-            command_cmd = 0;
-            return TRUE;
-        }
-
-        return FALSE;
-    }
-    
     if ((fis_ptr->inven && (*fis_ptr->cp >= 0) && (*fis_ptr->cp < INVEN_PACK))
         || (fis_ptr->equip && (*fis_ptr->cp >= INVEN_RARM) && (*fis_ptr->cp < INVEN_TOTAL))) {
         if (*prev_tag && command_cmd) {
