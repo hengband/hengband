@@ -723,7 +723,7 @@ typedef struct player_type
 	s16b to_h_m;		/* Bonus to hit (misc) */
 	s16b to_d[2];		/* Bonus to dam (wield) */
 	s16b to_d_m;		/* Bonus to dam (misc) */
-	s16b to_a;			/* Bonus to ac */
+	ARMOUR_CLASS to_a;			/* Bonus to ac */
 
 	s16b to_m_chance;		/* Minusses to cast chance */
 

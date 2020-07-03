@@ -1550,8 +1550,8 @@ void calc_bonuses(player_type *creature_ptr)
 			ac += 5;
 			if (o_ptr->curse_flags & TRC_HEAVY_CURSE) ac += 7;
 			if (o_ptr->curse_flags & TRC_PERMA_CURSE) ac += 13;
-			creature_ptr->to_a += (s16b)ac;
-			creature_ptr->dis_to_a += (s16b)ac;
+			creature_ptr->to_a += ac;
+			creature_ptr->dis_to_a += ac;
 		}
 	}
 
