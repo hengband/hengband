@@ -66,6 +66,48 @@ static bool check_item_tag_floor(player_type *owner_ptr, fis_type *fis_ptr, char
 }
 
 /*!
+ * @brief インベントリのアイテムへにタグ付けがされているかの調査処理 (のはず)
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param prev_tag 前回選択したアイテムのタグ (のはず)
+ * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ */
+static bool check_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+{
+    if ((!fis_ptr->inven || (*fis_ptr->cp < 0) || (*fis_ptr->cp >= INVEN_PACK))
+        && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_RARM) || (*fis_ptr->cp >= INVEN_TOTAL)))
+        return FALSE;
+
+    if (*prev_tag && command_cmd) {
+        if (!get_tag(owner_ptr, &fis_ptr->k, *prev_tag, (*fis_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, fis_ptr->tval)) /* Reject */
+            ;
+        else if ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip) /* Reject */
+            ;
+        else if (!get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval)) /* Reject */
+            ;
+        else {
+            *fis_ptr->cp = fis_ptr->k;
+            fis_ptr->tval = 0;
+            item_tester_hook = NULL;
+            command_cmd = 0;
+            return TRUE;
+        }
+
+        *prev_tag = '\0';
+        return FALSE;
+    }
+    
+    if (get_item_okay(owner_ptr, *fis_ptr->cp, fis_ptr->tval)) {
+        fis_ptr->tval = 0;
+        item_tester_hook = NULL;
+        command_cmd = 0;
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+/*!
  * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
@@ -87,35 +129,7 @@ static bool check_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev
     if (check_item_tag_floor(owner_ptr, fis_ptr, prev_tag))
         return TRUE;
 
-    if ((fis_ptr->inven && (*fis_ptr->cp >= 0) && (*fis_ptr->cp < INVEN_PACK))
-        || (fis_ptr->equip && (*fis_ptr->cp >= INVEN_RARM) && (*fis_ptr->cp < INVEN_TOTAL))) {
-        if (*prev_tag && command_cmd) {
-            if (!get_tag(owner_ptr, &fis_ptr->k, *prev_tag, (*fis_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, fis_ptr->tval)) /* Reject */
-                ;
-            else if ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip) /* Reject */
-                ;
-            else if (!get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval)) /* Reject */
-                ;
-            else {
-                *fis_ptr->cp = fis_ptr->k;
-                fis_ptr->tval = 0;
-                item_tester_hook = NULL;
-                command_cmd = 0;
-                return TRUE;
-            }
-
-            *prev_tag = '\0';
-        } else if (get_item_okay(owner_ptr, *fis_ptr->cp, fis_ptr->tval)) {
-            fis_ptr->tval = 0;
-            item_tester_hook = NULL;
-            command_cmd = 0;
-            return TRUE;
-        }
-
-        return FALSE;
-    }
-
-    return FALSE;
+    return check_item_tag_inventory(owner_ptr, fis_ptr, prev_tag);
 }
 
 /*!
