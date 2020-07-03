@@ -1501,21 +1501,6 @@ void calc_bonuses(player_type *creature_ptr)
 			creature_ptr->to_a += (creature_ptr->lev / 3);
 			creature_ptr->dis_to_a += (creature_ptr->lev / 3);
 		}
-		if (creature_ptr->special_defense & KAMAE_BYAKKO)
-		{
-			creature_ptr->stat_add[A_DEX] += 2;
-			creature_ptr->stat_add[A_CON] -= 3;
-		}
-		else if (creature_ptr->special_defense & KAMAE_GENBU)
-		{
-			creature_ptr->stat_add[A_DEX] -= 2;
-			creature_ptr->stat_add[A_CON] += 3;
-		}
-		else if (creature_ptr->special_defense & KAMAE_SUZAKU)
-		{
-			creature_ptr->stat_add[A_DEX] += 2;
-			creature_ptr->stat_add[A_CON] -= 2;
-		}
 	}
 
 	if (creature_ptr->special_defense & KATA_KOUKIJIN)
@@ -3836,6 +3821,15 @@ static void calc_dexterity_addition(player_type *creature_ptr)
             creature_ptr->stat_add[A_DEX] += 4;
         }
     }
+
+	if (creature_ptr->special_defense & KAMAE_BYAKKO) {
+        creature_ptr->stat_add[A_DEX] += 2;
+    } else if (creature_ptr->special_defense & KAMAE_GENBU) {
+        creature_ptr->stat_add[A_DEX] -= 2;
+    } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        creature_ptr->stat_add[A_DEX] += 2;
+    }
+
 }
 
 static void calc_constitution_addition(player_type *creature_ptr)
@@ -3900,6 +3894,14 @@ static void calc_constitution_addition(player_type *creature_ptr)
 
 	if (creature_ptr->tsuyoshi) {
         creature_ptr->stat_add[A_CON] += 4;
+    }
+
+	if (creature_ptr->special_defense & KAMAE_BYAKKO) {
+        creature_ptr->stat_add[A_CON] -= 3;
+    } else if (creature_ptr->special_defense & KAMAE_GENBU) {
+        creature_ptr->stat_add[A_CON] += 3;
+    } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        creature_ptr->stat_add[A_CON] -= 2;
     }
 }
 
