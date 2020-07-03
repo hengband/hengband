@@ -2,16 +2,19 @@
 #include "io/input-key-requester.h"
 #include "object/item-use-flags.h"
 
-fis_type *initialize_fis_type(fis_type *fis_ptr, BIT_FLAGS mode)
+fis_type *initialize_fis_type(fis_type *fis_ptr, COMMAND_CODE *cp, BIT_FLAGS mode, tval_type tval)
 {
+    fis_ptr->cp = cp;
+    fis_ptr->mode = mode;
+    fis_ptr->tval = tval;
     fis_ptr->n1 = ' ';
     fis_ptr->n2 = ' ';
     fis_ptr->which = ' ';
     fis_ptr->oops = FALSE;
-    fis_ptr->equip = (mode & USE_EQUIP) != 0;
-    fis_ptr->inven = (mode & USE_INVEN) != 0;
-    fis_ptr->floor = (mode & USE_FLOOR) != 0;
-    fis_ptr->force = (mode & USE_FORCE) != 0;
+    fis_ptr->equip = (fis_ptr->mode & USE_EQUIP) != 0;
+    fis_ptr->inven = (fis_ptr->mode & USE_INVEN) != 0;
+    fis_ptr->floor = (fis_ptr->mode & USE_FLOOR) != 0;
+    fis_ptr->force = (fis_ptr->mode & USE_FORCE) != 0;
     fis_ptr->allow_equip = FALSE;
     fis_ptr->allow_inven = FALSE;
     fis_ptr->allow_floor = FALSE;

@@ -30,6 +30,78 @@
 #include "view/display-sub-windows.h"
 
 /*!
+ * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param prev_tag 前回選択したアイテムのタグ (のはず)
+ * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ */
+static bool check_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+{
+    if (!repeat_pull(fis_ptr->cp))
+        return FALSE;
+
+    if (fis_ptr->force && (*fis_ptr->cp == INVEN_FORCE)) {
+        fis_ptr->tval = 0;
+        item_tester_hook = NULL;
+        command_cmd = 0;
+        return TRUE;
+    }
+    
+    if (fis_ptr->floor && (*fis_ptr->cp < 0)) {
+        if (*prev_tag && command_cmd) {
+            fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, fis_ptr->tval);
+            if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
+                *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
+                fis_ptr->tval = 0;
+                item_tester_hook = NULL;
+                command_cmd = 0;
+                return TRUE;
+            }
+
+            *prev_tag = '\0';
+        } else if (item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)], fis_ptr->tval) || (fis_ptr->mode & USE_FULL)) {
+            fis_ptr->tval = 0;
+            item_tester_hook = NULL;
+            command_cmd = 0;
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+    
+    if ((fis_ptr->inven && (*fis_ptr->cp >= 0) && (*fis_ptr->cp < INVEN_PACK))
+        || (fis_ptr->equip && (*fis_ptr->cp >= INVEN_RARM) && (*fis_ptr->cp < INVEN_TOTAL))) {
+        if (*prev_tag && command_cmd) {
+            if (!get_tag(owner_ptr, &fis_ptr->k, *prev_tag, (*fis_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, fis_ptr->tval)) /* Reject */
+                ;
+            else if ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip) /* Reject */
+                ;
+            else if (!get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval)) /* Reject */
+                ;
+            else {
+                *fis_ptr->cp = fis_ptr->k;
+                fis_ptr->tval = 0;
+                item_tester_hook = NULL;
+                command_cmd = 0;
+                return TRUE;
+            }
+
+            *prev_tag = '\0';
+        } else if (get_item_okay(owner_ptr, *fis_ptr->cp, fis_ptr->tval)) {
+            fis_ptr->tval = 0;
+            item_tester_hook = NULL;
+            command_cmd = 0;
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    return FALSE;
+}
+
+/*!
  * @brief オブジェクト選択の汎用関数(床上アイテム用) /
  * Let the user select an item, save its "index"
  * @param cp 選択したオブジェクトのIDを返す。
@@ -41,57 +113,10 @@
 bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, tval_type tval)
 {
     fis_type tmp_fis;
-    fis_type *fis_ptr = initialize_fis_type(&tmp_fis, mode);
-    static char *prev_tag = '\0';
-    if (repeat_pull(cp)) {
-        if (fis_ptr->force && (*cp == INVEN_FORCE)) {
-            tval = 0;
-            item_tester_hook = NULL;
-            command_cmd = 0;
-            return TRUE;
-        } else if (fis_ptr->floor && (*cp < 0)) {
-            if (*prev_tag && command_cmd) {
-                fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
-                if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
-                    *cp = 0 - fis_ptr->floor_list[fis_ptr->k];
-                    tval = 0;
-                    item_tester_hook = NULL;
-                    command_cmd = 0;
-                    return TRUE;
-                }
-
-                *prev_tag = '\0';
-            } else if (item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*cp)], tval) || (mode & USE_FULL)) {
-                tval = 0;
-                item_tester_hook = NULL;
-                command_cmd = 0;
-                return TRUE;
-            }
-        } else if ((fis_ptr->inven && (*cp >= 0) && (*cp < INVEN_PACK)) || (fis_ptr->equip && (*cp >= INVEN_RARM) && (*cp < INVEN_TOTAL))) {
-            if (*prev_tag && command_cmd) {
-                if (!get_tag(owner_ptr, &fis_ptr->k, *prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */
-                    ;
-                else if ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip) /* Reject */
-                    ;
-                else if (!get_item_okay(owner_ptr, fis_ptr->k, tval)) /* Reject */
-                    ;
-                else {
-                    *cp = fis_ptr->k;
-                    tval = 0;
-                    item_tester_hook = NULL;
-                    command_cmd = 0;
-                    return TRUE;
-                }
-
-                *prev_tag = '\0';
-            } else if (get_item_okay(owner_ptr, *cp, tval)) {
-                tval = 0;
-                item_tester_hook = NULL;
-                command_cmd = 0;
-                return TRUE;
-            }
-        }
-    }
+    fis_type *fis_ptr = initialize_fis_type(&tmp_fis, cp, mode, tval);
+    static char prev_tag = '\0';
+    if (check_item_tag(owner_ptr, fis_ptr, &prev_tag))
+        return TRUE;
 
     msg_print(NULL);
     fis_ptr->done = FALSE;
@@ -740,7 +765,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     if (fis_ptr->item) {
         repeat_push(*cp);
         if (command_cmd)
-            *prev_tag = fis_ptr->cur_tag;
+            prev_tag = fis_ptr->cur_tag;
         command_cmd = 0;
     }
 

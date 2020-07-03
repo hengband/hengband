@@ -1,9 +1,13 @@
 ﻿#pragma once
 
+#include "object/tval-types.h"
 #include "system/angband.h"
 
 /* Floor Item Selection*/
 typedef struct fis_type {
+    COMMAND_CODE *cp;
+    BIT_FLAGS mode;
+    tval_type tval;
     char n1;
     char n2;
     char which;
@@ -35,4 +39,4 @@ typedef struct fis_type {
     char cur_tag;
 } fis_type;
 
-fis_type *initialize_fis_type(fis_type *fis_ptr, BIT_FLAGS mode);
+fis_type *initialize_fis_type(fis_type *fis_ptr, COMMAND_CODE *cp, BIT_FLAGS mode, tval_type tval);
