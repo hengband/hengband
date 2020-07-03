@@ -249,7 +249,6 @@ void calc_equipment_status(player_type* creature_ptr) {
         if (o_ptr->tval == TV_CAPTURE)
             continue;
 
-        creature_ptr->dis_ac += o_ptr->ac;
         creature_ptr->to_a += o_ptr->to_a;
         if (object_is_known(o_ptr))
             creature_ptr->dis_to_a += o_ptr->to_a;

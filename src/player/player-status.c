@@ -1232,7 +1232,6 @@ int spell_exp_level(int spell_exp)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->dis_ac = 0;
     creature_ptr->dis_to_h[0] = creature_ptr->to_h[0] = 0;
     creature_ptr->dis_to_h[1] = creature_ptr->to_h[1] = 0;
     creature_ptr->dis_to_d[0] = creature_ptr->to_d[0] = 0;
@@ -1457,11 +1456,6 @@ void calc_bonuses(player_type *creature_ptr)
 
 	calc_equipment_status(creature_ptr);
 
-	if (object_is_armour(&creature_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&creature_ptr->inventory_list[INVEN_LARM]))
-	{
-		creature_ptr->dis_ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
-	}
-
 	if (old_mighty_throw != creature_ptr->mighty_throw)
 	{
 		creature_ptr->window |= PW_INVEN;
@@ -1563,6 +1557,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_charisma_addition(creature_ptr);
     calc_to_magic_chance(creature_ptr);
     calc_base_ac(creature_ptr);
+    calc_base_ac_display(creature_ptr);
 
 	int count = 0;
 	for (int i = 0; i < A_MAX; i++)
@@ -3997,6 +3992,22 @@ static void calc_base_ac(player_type *creature_ptr)
     }
 	if (object_is_armour(&creature_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&creature_ptr->inventory_list[INVEN_LARM])) {
         creature_ptr->ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
+    }
+}
+
+static void calc_base_ac_display(player_type *creature_ptr)
+{ 
+	creature_ptr->dis_ac = 0;
+
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        creature_ptr->dis_ac += o_ptr->ac;
+    }
+	if (object_is_armour(&creature_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&creature_ptr->inventory_list[INVEN_LARM])) {
+        creature_ptr->dis_ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
     }
 }
 
