@@ -59,7 +59,7 @@ static void aura_elec_by_monster_attack(player_type *target_ptr, monap_type *mon
     HIT_POINT dam = damroll(2, 6);
     dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
     msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
-    if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は燃え殻の山になった。", " turns into a pile of cinder."))) {
+    if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は燃え殻の山になった。", " turns into a pile of cinders."))) {
         monap_ptr->blinked = FALSE;
         monap_ptr->alive = FALSE;
     }
