@@ -1565,6 +1565,9 @@
     <ClCompile Include="..\..\src\view\display-inventory.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\inventory\item-selection-util.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3420,6 +3423,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-inventory.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\item-selection-util.h">
+      <Filter>inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

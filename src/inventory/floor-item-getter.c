@@ -14,6 +14,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-util.h"
+#include "inventory/item-selection-util.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -39,45 +40,20 @@
  */
 bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, tval_type tval)
 {
-    char n1 = ' ';
-    char n2 = ' ';
-    char which = ' ';
-    COMMAND_CODE i1, i2;
-    COMMAND_CODE e1, e2;
-    COMMAND_CODE k;
-    bool done;
-    bool item;
-    bool oops = FALSE;
-    bool equip = (mode & USE_EQUIP) != 0;
-    bool inven = (mode & USE_INVEN) != 0;
-    bool floor = (mode & USE_FLOOR) != 0;
-    bool force = (mode & USE_FORCE) != 0;
-    bool allow_equip = FALSE;
-    bool allow_inven = FALSE;
-    bool allow_floor = FALSE;
-    bool toggle = FALSE;
-    char tmp_val[160];
-    char out_val[160];
-    ITEM_NUMBER floor_num;
-    OBJECT_IDX floor_list[23];
-    int floor_top = 0;
-    TERM_LEN min_width = 0;
-    int menu_line = (use_menu ? 1 : 0);
-    int max_inven = 0;
-    int max_equip = 0;
-    char cur_tag = '\0';
+    fis_type tmp_fis;
+    fis_type *fis_ptr = initialize_fis_type(&tmp_fis, mode);
     static char *prev_tag = '\0';
     if (repeat_pull(cp)) {
-        if (force && (*cp == INVEN_FORCE)) {
+        if (fis_ptr->force && (*cp == INVEN_FORCE)) {
             tval = 0;
             item_tester_hook = NULL;
             command_cmd = 0;
             return TRUE;
-        } else if (floor && (*cp < 0)) {
+        } else if (fis_ptr->floor && (*cp < 0)) {
             if (*prev_tag && command_cmd) {
-                floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
-                if (get_tag_floor(owner_ptr->current_floor_ptr, &k, *prev_tag, floor_list, floor_num)) {
-                    (*cp) = 0 - floor_list[k];
+                fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
+                if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
+                    *cp = 0 - fis_ptr->floor_list[fis_ptr->k];
                     tval = 0;
                     item_tester_hook = NULL;
                     command_cmd = 0;
@@ -91,16 +67,16 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 command_cmd = 0;
                 return TRUE;
             }
-        } else if ((inven && (*cp >= 0) && (*cp < INVEN_PACK)) || (equip && (*cp >= INVEN_RARM) && (*cp < INVEN_TOTAL))) {
+        } else if ((fis_ptr->inven && (*cp >= 0) && (*cp < INVEN_PACK)) || (fis_ptr->equip && (*cp >= INVEN_RARM) && (*cp < INVEN_TOTAL))) {
             if (*prev_tag && command_cmd) {
-                if (!get_tag(owner_ptr, &k, *prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */
+                if (!get_tag(owner_ptr, &fis_ptr->k, *prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */
                     ;
-                else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */
+                else if ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip) /* Reject */
                     ;
-                else if (!get_item_okay(owner_ptr, k, tval)) /* Reject */
+                else if (!get_item_okay(owner_ptr, fis_ptr->k, tval)) /* Reject */
                     ;
                 else {
-                    (*cp) = k;
+                    *cp = fis_ptr->k;
                     tval = 0;
                     item_tester_hook = NULL;
                     command_cmd = 0;
@@ -118,78 +94,78 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     }
 
     msg_print(NULL);
-    done = FALSE;
-    item = FALSE;
-    i1 = 0;
-    i2 = INVEN_PACK - 1;
-    if (!inven)
-        i2 = -1;
+    fis_ptr->done = FALSE;
+    fis_ptr->item = FALSE;
+    fis_ptr->i1 = 0;
+    fis_ptr->i2 = INVEN_PACK - 1;
+    if (!fis_ptr->inven)
+        fis_ptr->i2 = -1;
     else if (use_menu)
         for (int i = 0; i < INVEN_PACK; i++)
             if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], tval) || (mode & USE_FULL))
-                max_inven++;
+                fis_ptr->max_inven++;
 
-    while ((i1 <= i2) && (!get_item_okay(owner_ptr, i1, tval)))
-        i1++;
+    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i1, tval)))
+        fis_ptr->i1++;
 
-    while ((i1 <= i2) && (!get_item_okay(owner_ptr, i2, tval)))
-        i2--;
+    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i2, tval)))
+        fis_ptr->i2--;
 
-    e1 = INVEN_RARM;
-    e2 = INVEN_TOTAL - 1;
-    if (!equip)
-        e2 = -1;
+    fis_ptr->e1 = INVEN_RARM;
+    fis_ptr->e2 = INVEN_TOTAL - 1;
+    if (!fis_ptr->equip)
+        fis_ptr->e2 = -1;
     else if (use_menu)
         for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
             if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], tval) || (mode & USE_FULL))
-                max_equip++;
+                fis_ptr->max_equip++;
     if (owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
-        max_equip++;
+        fis_ptr->max_equip++;
 
-    while ((e1 <= e2) && (!get_item_okay(owner_ptr, e1, tval)))
-        e1++;
+    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e1, tval)))
+        fis_ptr->e1++;
 
-    while ((e1 <= e2) && (!get_item_okay(owner_ptr, e2, tval)))
-        e2--;
+    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e2, tval)))
+        fis_ptr->e2--;
 
-    if (equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) {
+    if (fis_ptr->equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) {
         if (owner_ptr->migite) {
-            if (e2 < INVEN_LARM)
-                e2 = INVEN_LARM;
+            if (fis_ptr->e2 < INVEN_LARM)
+                fis_ptr->e2 = INVEN_LARM;
         } else if (owner_ptr->hidarite)
-            e1 = INVEN_RARM;
+            fis_ptr->e1 = INVEN_RARM;
     }
 
-    floor_num = 0;
-    if (floor)
-        floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
+    fis_ptr->floor_num = 0;
+    if (fis_ptr->floor)
+        fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
 
-    if (i1 <= i2)
-        allow_inven = TRUE;
+    if (fis_ptr->i1 <= fis_ptr->i2)
+        fis_ptr->allow_inven = TRUE;
 
-    if (e1 <= e2)
-        allow_equip = TRUE;
+    if (fis_ptr->e1 <= fis_ptr->e2)
+        fis_ptr->allow_equip = TRUE;
 
-    if (floor_num)
-        allow_floor = TRUE;
+    if (fis_ptr->floor_num)
+        fis_ptr->allow_floor = TRUE;
 
-    if (!allow_inven && !allow_equip && !allow_floor) {
+    if (!fis_ptr->allow_inven && !fis_ptr->allow_equip && !fis_ptr->allow_floor) {
         command_see = FALSE;
-        oops = TRUE;
-        done = TRUE;
+        fis_ptr->oops = TRUE;
+        fis_ptr->done = TRUE;
 
-        if (force) {
+        if (fis_ptr->force) {
             *cp = INVEN_FORCE;
-            item = TRUE;
+            fis_ptr->item = TRUE;
         }
     } else {
-        if (command_see && (command_wrk == USE_EQUIP) && allow_equip)
+        if (command_see && (command_wrk == USE_EQUIP) && fis_ptr->allow_equip)
             command_wrk = USE_EQUIP;
-        else if (allow_inven)
+        else if (fis_ptr->allow_inven)
             command_wrk = USE_INVEN;
-        else if (allow_equip)
+        else if (fis_ptr->allow_equip)
             command_wrk = USE_EQUIP;
-        else if (allow_floor)
+        else if (fis_ptr->allow_floor)
             command_wrk = USE_FLOOR;
     }
 
@@ -200,7 +176,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     if (command_see)
         screen_save();
 
-    while (!done) {
+    while (!fis_ptr->done) {
         COMMAND_CODE get_item_label = 0;
         int ni = 0;
         int ne = 0;
@@ -217,173 +193,173 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
         if ((command_wrk == (USE_EQUIP) && ni && !ne) || (command_wrk == (USE_INVEN) && !ni && ne)) {
             toggle_inventory_equipment(owner_ptr);
-            toggle = !toggle;
+            fis_ptr->toggle = !fis_ptr->toggle;
         }
 
         owner_ptr->window |= (PW_INVEN | PW_EQUIP);
         handle_stuff(owner_ptr);
         if (command_wrk == USE_INVEN) {
-            n1 = I2A(i1);
-            n2 = I2A(i2);
+            fis_ptr->n1 = I2A(fis_ptr->i1);
+            fis_ptr->n2 = I2A(fis_ptr->i2);
             if (command_see)
-                get_item_label = show_inventory(owner_ptr, menu_line, mode, tval);
+                get_item_label = show_inventory(owner_ptr, fis_ptr->menu_line, mode, tval);
         } else if (command_wrk == USE_EQUIP) {
-            n1 = I2A(e1 - INVEN_RARM);
-            n2 = I2A(e2 - INVEN_RARM);
+            fis_ptr->n1 = I2A(fis_ptr->e1 - INVEN_RARM);
+            fis_ptr->n2 = I2A(fis_ptr->e2 - INVEN_RARM);
             if (command_see)
-                get_item_label = show_equipment(owner_ptr, menu_line, mode, tval);
+                get_item_label = show_equipment(owner_ptr, fis_ptr->menu_line, mode, tval);
         } else if (command_wrk == USE_FLOOR) {
-            int j = floor_top;
-            k = MIN(floor_top + 23, floor_num) - 1;
-            n1 = I2A(j - floor_top); // TODO: 常に'0'になる。どんな意図でこのようなコードになっているのか不明.
-            n2 = I2A(k - floor_top);
+            int j = fis_ptr->floor_top;
+            fis_ptr->k = MIN(fis_ptr->floor_top + 23, fis_ptr->floor_num) - 1;
+            fis_ptr->n1 = I2A(j - fis_ptr->floor_top); // TODO: 常に'0'になる。どんな意図でこのようなコードになっているのか不明.
+            fis_ptr->n2 = I2A(fis_ptr->k - fis_ptr->floor_top);
             if (command_see)
-                get_item_label = show_floor_items(owner_ptr, menu_line, owner_ptr->y, owner_ptr->x, &min_width, tval);
+                get_item_label = show_floor_items(owner_ptr, fis_ptr->menu_line, owner_ptr->y, owner_ptr->x, &fis_ptr->min_width, tval);
         }
 
         if (command_wrk == USE_INVEN) {
-            sprintf(out_val, _("持ち物:", "Inven:"));
+            sprintf(fis_ptr->out_val, _("持ち物:", "Inven:"));
             if (!use_menu) {
-                sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(i1), index_to_label(i2));
-                strcat(out_val, tmp_val);
+                sprintf(fis_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->i1), index_to_label(fis_ptr->i2));
+                strcat(fis_ptr->out_val, fis_ptr->tmp_val);
             }
 
             if (!command_see && !use_menu)
-                strcat(out_val, _(" '*'一覧,", " * to see,"));
+                strcat(fis_ptr->out_val, _(" '*'一覧,", " * to see,"));
 
-            if (allow_equip) {
+            if (fis_ptr->allow_equip) {
                 if (!use_menu)
-                    strcat(out_val, _(" '/' 装備品,", " / for Equip,"));
-                else if (allow_floor)
-                    strcat(out_val, _(" '6' 装備品,", " 6 for Equip,"));
+                    strcat(fis_ptr->out_val, _(" '/' 装備品,", " / for Equip,"));
+                else if (fis_ptr->allow_floor)
+                    strcat(fis_ptr->out_val, _(" '6' 装備品,", " 6 for Equip,"));
                 else
-                    strcat(out_val, _(" '4'or'6' 装備品,", " 4 or 6 for Equip,"));
+                    strcat(fis_ptr->out_val, _(" '4'or'6' 装備品,", " 4 or 6 for Equip,"));
             }
 
-            if (allow_floor) {
+            if (fis_ptr->allow_floor) {
                 if (!use_menu)
-                    strcat(out_val, _(" '-'床上,", " - for floor,"));
-                else if (allow_equip)
-                    strcat(out_val, _(" '4' 床上,", " 4 for floor,"));
+                    strcat(fis_ptr->out_val, _(" '-'床上,", " - for floor,"));
+                else if (fis_ptr->allow_equip)
+                    strcat(fis_ptr->out_val, _(" '4' 床上,", " 4 for floor,"));
                 else
-                    strcat(out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"));
+                    strcat(fis_ptr->out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"));
             }
         } else if (command_wrk == (USE_EQUIP)) {
-            sprintf(out_val, _("装備品:", "Equip:"));
+            sprintf(fis_ptr->out_val, _("装備品:", "Equip:"));
             if (!use_menu) {
-                sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(e1), index_to_label(e2));
-                strcat(out_val, tmp_val);
+                sprintf(fis_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->e1), index_to_label(fis_ptr->e2));
+                strcat(fis_ptr->out_val, fis_ptr->tmp_val);
             }
 
             if (!command_see && !use_menu)
-                strcat(out_val, _(" '*'一覧,", " * to see,"));
+                strcat(fis_ptr->out_val, _(" '*'一覧,", " * to see,"));
 
-            if (allow_inven) {
+            if (fis_ptr->allow_inven) {
                 if (!use_menu)
-                    strcat(out_val, _(" '/' 持ち物,", " / for Inven,"));
-                else if (allow_floor)
-                    strcat(out_val, _(" '4' 持ち物,", " 4 for Inven,"));
+                    strcat(fis_ptr->out_val, _(" '/' 持ち物,", " / for Inven,"));
+                else if (fis_ptr->allow_floor)
+                    strcat(fis_ptr->out_val, _(" '4' 持ち物,", " 4 for Inven,"));
                 else
-                    strcat(out_val, _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,"));
+                    strcat(fis_ptr->out_val, _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,"));
             }
 
-            if (allow_floor) {
+            if (fis_ptr->allow_floor) {
                 if (!use_menu)
-                    strcat(out_val, _(" '-'床上,", " - for floor,"));
-                else if (allow_inven)
-                    strcat(out_val, _(" '6' 床上,", " 6 for floor,"));
+                    strcat(fis_ptr->out_val, _(" '-'床上,", " - for floor,"));
+                else if (fis_ptr->allow_inven)
+                    strcat(fis_ptr->out_val, _(" '6' 床上,", " 6 for floor,"));
                 else
-                    strcat(out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"));
+                    strcat(fis_ptr->out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"));
             }
         } else if (command_wrk == (USE_FLOOR)) {
-            sprintf(out_val, _("床上:", "Floor:"));
+            sprintf(fis_ptr->out_val, _("床上:", "Floor:"));
             if (!use_menu) {
-                sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), n1, n2);
-                strcat(out_val, tmp_val);
+                sprintf(fis_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), fis_ptr->n1, fis_ptr->n2);
+                strcat(fis_ptr->out_val, fis_ptr->tmp_val);
             }
 
             if (!command_see && !use_menu)
-                strcat(out_val, _(" '*'一覧,", " * to see,"));
+                strcat(fis_ptr->out_val, _(" '*'一覧,", " * to see,"));
 
             if (use_menu) {
-                if (allow_inven && allow_equip) {
-                    strcat(out_val, _(" '4' 装備品, '6' 持ち物,", " 4 for Equip, 6 for Inven,"));
-                } else if (allow_inven) {
-                    strcat(out_val, _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,"));
-                } else if (allow_equip) {
-                    strcat(out_val, _(" '4'or'6' 装備品,", " 4 or 6 for Equip,"));
+                if (fis_ptr->allow_inven && fis_ptr->allow_equip) {
+                    strcat(fis_ptr->out_val, _(" '4' 装備品, '6' 持ち物,", " 4 for Equip, 6 for Inven,"));
+                } else if (fis_ptr->allow_inven) {
+                    strcat(fis_ptr->out_val, _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,"));
+                } else if (fis_ptr->allow_equip) {
+                    strcat(fis_ptr->out_val, _(" '4'or'6' 装備品,", " 4 or 6 for Equip,"));
                 }
-            } else if (allow_inven) {
-                strcat(out_val, _(" '/' 持ち物,", " / for Inven,"));
-            } else if (allow_equip) {
-                strcat(out_val, _(" '/'装備品,", " / for Equip,"));
+            } else if (fis_ptr->allow_inven) {
+                strcat(fis_ptr->out_val, _(" '/' 持ち物,", " / for Inven,"));
+            } else if (fis_ptr->allow_equip) {
+                strcat(fis_ptr->out_val, _(" '/'装備品,", " / for Equip,"));
             }
 
             if (command_see && !use_menu) {
-                strcat(out_val, _(" Enter 次,", " Enter for scroll down,"));
+                strcat(fis_ptr->out_val, _(" Enter 次,", " Enter for scroll down,"));
             }
         }
 
-        if (force)
-            strcat(out_val, _(" 'w'練気術,", " w for the Force,"));
+        if (fis_ptr->force)
+            strcat(fis_ptr->out_val, _(" 'w'練気術,", " w for the Force,"));
 
-        strcat(out_val, " ESC");
-        sprintf(tmp_val, "(%s) %s", out_val, pmt);
-        prt(tmp_val, 0, 0);
-        which = inkey();
+        strcat(fis_ptr->out_val, " ESC");
+        sprintf(fis_ptr->tmp_val, "(%s) %s", fis_ptr->out_val, pmt);
+        prt(fis_ptr->tmp_val, 0, 0);
+        fis_ptr->which = inkey();
         if (use_menu) {
             int max_line = 1;
             if (command_wrk == USE_INVEN)
-                max_line = max_inven;
+                max_line = fis_ptr->max_inven;
             else if (command_wrk == USE_EQUIP)
-                max_line = max_equip;
+                max_line = fis_ptr->max_equip;
             else if (command_wrk == USE_FLOOR)
-                max_line = MIN(23, floor_num);
-            switch (which) {
+                max_line = MIN(23, fis_ptr->floor_num);
+            switch (fis_ptr->which) {
             case ESCAPE:
             case 'z':
             case 'Z':
             case '0': {
-                done = TRUE;
+                fis_ptr->done = TRUE;
                 break;
             }
             case '8':
             case 'k':
             case 'K': {
-                menu_line += (max_line - 1);
+                fis_ptr->menu_line += (max_line - 1);
                 break;
             }
             case '2':
             case 'j':
             case 'J': {
-                menu_line++;
+                fis_ptr->menu_line++;
                 break;
             }
             case '4':
             case 'h':
             case 'H': {
                 if (command_wrk == (USE_INVEN)) {
-                    if (allow_floor)
+                    if (fis_ptr->allow_floor)
                         command_wrk = USE_FLOOR;
-                    else if (allow_equip)
+                    else if (fis_ptr->allow_equip)
                         command_wrk = USE_EQUIP;
                     else {
                         bell();
                         break;
                     }
                 } else if (command_wrk == (USE_EQUIP)) {
-                    if (allow_inven)
+                    if (fis_ptr->allow_inven)
                         command_wrk = USE_INVEN;
-                    else if (allow_floor)
+                    else if (fis_ptr->allow_floor)
                         command_wrk = USE_FLOOR;
                     else {
                         bell();
                         break;
                     }
                 } else if (command_wrk == (USE_FLOOR)) {
-                    if (allow_equip)
+                    if (fis_ptr->allow_equip)
                         command_wrk = USE_EQUIP;
-                    else if (allow_inven)
+                    else if (fis_ptr->allow_inven)
                         command_wrk = USE_INVEN;
                     else {
                         bell();
@@ -400,14 +376,14 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 }
 
                 if (command_wrk == USE_INVEN)
-                    max_line = max_inven;
+                    max_line = fis_ptr->max_inven;
                 else if (command_wrk == USE_EQUIP)
-                    max_line = max_equip;
+                    max_line = fis_ptr->max_equip;
                 else if (command_wrk == USE_FLOOR)
-                    max_line = MIN(23, floor_num);
+                    max_line = MIN(23, fis_ptr->floor_num);
 
-                if (menu_line > max_line)
-                    menu_line = max_line;
+                if (fis_ptr->menu_line > max_line)
+                    fis_ptr->menu_line = max_line;
 
                 break;
             }
@@ -415,27 +391,27 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             case 'l':
             case 'L': {
                 if (command_wrk == (USE_INVEN)) {
-                    if (allow_equip)
+                    if (fis_ptr->allow_equip)
                         command_wrk = USE_EQUIP;
-                    else if (allow_floor)
+                    else if (fis_ptr->allow_floor)
                         command_wrk = USE_FLOOR;
                     else {
                         bell();
                         break;
                     }
                 } else if (command_wrk == (USE_EQUIP)) {
-                    if (allow_floor)
+                    if (fis_ptr->allow_floor)
                         command_wrk = USE_FLOOR;
-                    else if (allow_inven)
+                    else if (fis_ptr->allow_inven)
                         command_wrk = USE_INVEN;
                     else {
                         bell();
                         break;
                     }
                 } else if (command_wrk == (USE_FLOOR)) {
-                    if (allow_inven)
+                    if (fis_ptr->allow_inven)
                         command_wrk = USE_INVEN;
-                    else if (allow_equip)
+                    else if (fis_ptr->allow_equip)
                         command_wrk = USE_EQUIP;
                     else {
                         bell();
@@ -452,14 +428,14 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 }
 
                 if (command_wrk == USE_INVEN)
-                    max_line = max_inven;
+                    max_line = fis_ptr->max_inven;
                 else if (command_wrk == USE_EQUIP)
-                    max_line = max_equip;
+                    max_line = fis_ptr->max_equip;
                 else if (command_wrk == USE_FLOOR)
-                    max_line = MIN(23, floor_num);
+                    max_line = MIN(23, fis_ptr->floor_num);
 
-                if (menu_line > max_line)
-                    menu_line = max_line;
+                if (fis_ptr->menu_line > max_line)
+                    fis_ptr->menu_line = max_line;
 
                 break;
             }
@@ -468,7 +444,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             case '\r':
             case '\n': {
                 if (command_wrk == USE_FLOOR)
-                    (*cp) = -get_item_label;
+                    *cp = -get_item_label;
                 else {
                     if (!get_item_okay(owner_ptr, get_item_label, tval)) {
                         bell();
@@ -476,36 +452,36 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     }
 
                     if (!get_item_allow(owner_ptr, get_item_label)) {
-                        done = TRUE;
+                        fis_ptr->done = TRUE;
                         break;
                     }
 
-                    (*cp) = get_item_label;
+                    *cp = get_item_label;
                 }
 
-                item = TRUE;
-                done = TRUE;
+                fis_ptr->item = TRUE;
+                fis_ptr->done = TRUE;
                 break;
             }
             case 'w': {
-                if (force) {
+                if (fis_ptr->force) {
                     *cp = INVEN_FORCE;
-                    item = TRUE;
-                    done = TRUE;
+                    fis_ptr->item = TRUE;
+                    fis_ptr->done = TRUE;
                     break;
                 }
             }
             }
 
-            if (menu_line > max_line)
-                menu_line -= max_line;
+            if (fis_ptr->menu_line > max_line)
+                fis_ptr->menu_line -= max_line;
 
             continue;
         }
 
-        switch (which) {
+        switch (fis_ptr->which) {
         case ESCAPE: {
-            done = TRUE;
+            fis_ptr->done = TRUE;
             break;
         }
         case '*':
@@ -540,7 +516,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 i = owner_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
             owner_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
-            floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
+            fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
             if (command_see) {
                 screen_load();
                 screen_save();
@@ -550,21 +526,21 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         }
         case '/': {
             if (command_wrk == (USE_INVEN)) {
-                if (!allow_equip) {
+                if (!fis_ptr->allow_equip) {
                     bell();
                     break;
                 }
                 command_wrk = (USE_EQUIP);
             } else if (command_wrk == (USE_EQUIP)) {
-                if (!allow_inven) {
+                if (!fis_ptr->allow_inven) {
                     bell();
                     break;
                 }
                 command_wrk = (USE_INVEN);
             } else if (command_wrk == (USE_FLOOR)) {
-                if (allow_inven) {
+                if (fis_ptr->allow_inven) {
                     command_wrk = (USE_INVEN);
-                } else if (allow_equip) {
+                } else if (fis_ptr->allow_equip) {
                     command_wrk = (USE_EQUIP);
                 } else {
                     bell();
@@ -580,22 +556,22 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             break;
         }
         case '-': {
-            if (!allow_floor) {
+            if (!fis_ptr->allow_floor) {
                 bell();
                 break;
             }
 
-            if (floor_num == 1) {
+            if (fis_ptr->floor_num == 1) {
                 if ((command_wrk == (USE_FLOOR)) || (!carry_query_flag)) {
-                    k = 0 - floor_list[0];
-                    if (!get_item_allow(owner_ptr, k)) {
-                        done = TRUE;
+                    fis_ptr->k = 0 - fis_ptr->floor_list[0];
+                    if (!get_item_allow(owner_ptr, fis_ptr->k)) {
+                        fis_ptr->done = TRUE;
                         break;
                     }
 
-                    (*cp) = k;
-                    item = TRUE;
-                    done = TRUE;
+                    *cp = fis_ptr->k;
+                    fis_ptr->item = TRUE;
+                    fis_ptr->done = TRUE;
                     break;
                 }
             }
@@ -619,45 +595,45 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '8':
         case '9': {
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(owner_ptr, &k, which, command_wrk, tval)) {
+                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, tval)) {
                     bell();
                     break;
                 }
 
-                if ((k < INVEN_RARM) ? !inven : !equip) {
+                if ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip) {
                     bell();
                     break;
                 }
 
-                if (!get_item_okay(owner_ptr, k, tval)) {
+                if (!get_item_okay(owner_ptr, fis_ptr->k, tval)) {
                     bell();
                     break;
                 }
             } else {
-                if (get_tag_floor(owner_ptr->current_floor_ptr, &k, which, floor_list, floor_num)) {
-                    k = 0 - floor_list[k];
+                if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
+                    fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
                 } else {
                     bell();
                     break;
                 }
             }
 
-            if (!get_item_allow(owner_ptr, k)) {
-                done = TRUE;
+            if (!get_item_allow(owner_ptr, fis_ptr->k)) {
+                fis_ptr->done = TRUE;
                 break;
             }
 
-            (*cp) = k;
-            item = TRUE;
-            done = TRUE;
-            cur_tag = which;
+            *cp = fis_ptr->k;
+            fis_ptr->item = TRUE;
+            fis_ptr->done = TRUE;
+            fis_ptr->cur_tag = fis_ptr->which;
             break;
         }
         case 'w': {
-            if (force) {
+            if (fis_ptr->force) {
                 *cp = INVEN_FORCE;
-                item = TRUE;
-                done = TRUE;
+                fis_ptr->item = TRUE;
+                fis_ptr->done = TRUE;
                 break;
             }
         }
@@ -666,80 +642,80 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             int ver;
             if (command_wrk != USE_FLOOR) {
                 bool not_found = FALSE;
-                if (!get_tag(owner_ptr, &k, which, command_wrk, tval))
+                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, tval))
                     not_found = TRUE;
-                else if ((k < INVEN_RARM) ? !inven : !equip)
+                else if ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip)
                     not_found = TRUE;
-                else if (!get_item_okay(owner_ptr, k, tval))
+                else if (!get_item_okay(owner_ptr, fis_ptr->k, tval))
                     not_found = TRUE;
 
                 if (!not_found) {
-                    (*cp) = k;
-                    item = TRUE;
-                    done = TRUE;
-                    cur_tag = which;
+                    *cp = fis_ptr->k;
+                    fis_ptr->item = TRUE;
+                    fis_ptr->done = TRUE;
+                    fis_ptr->cur_tag = fis_ptr->which;
                     break;
                 }
             } else {
-                if (get_tag_floor(owner_ptr->current_floor_ptr, &k, which, floor_list, floor_num)) {
-                    k = 0 - floor_list[k];
-                    (*cp) = k;
-                    item = TRUE;
-                    done = TRUE;
-                    cur_tag = which;
+                if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
+                    fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
+                    *cp = fis_ptr->k;
+                    fis_ptr->item = TRUE;
+                    fis_ptr->done = TRUE;
+                    fis_ptr->cur_tag = fis_ptr->which;
                     break;
                 }
             }
 
-            ver = isupper(which);
-            which = (char)tolower(which);
+            ver = isupper(fis_ptr->which);
+            fis_ptr->which = (char)tolower(fis_ptr->which);
             if (command_wrk == (USE_INVEN)) {
-                if (which == '(')
-                    k = i1;
-                else if (which == ')')
-                    k = i2;
+                if (fis_ptr->which == '(')
+                    fis_ptr->k = fis_ptr->i1;
+                else if (fis_ptr->which == ')')
+                    fis_ptr->k = fis_ptr->i2;
                 else
-                    k = label_to_inventory(owner_ptr, which);
+                    fis_ptr->k = label_to_inventory(owner_ptr, fis_ptr->which);
             } else if (command_wrk == (USE_EQUIP)) {
-                if (which == '(')
-                    k = e1;
-                else if (which == ')')
-                    k = e2;
+                if (fis_ptr->which == '(')
+                    fis_ptr->k = fis_ptr->e1;
+                else if (fis_ptr->which == ')')
+                    fis_ptr->k = fis_ptr->e2;
                 else
-                    k = label_to_equipment(owner_ptr, which);
+                    fis_ptr->k = label_to_equipment(owner_ptr, fis_ptr->which);
             } else if (command_wrk == USE_FLOOR) {
-                if (which == '(')
-                    k = 0;
-                else if (which == ')')
-                    k = floor_num - 1;
+                if (fis_ptr->which == '(')
+                    fis_ptr->k = 0;
+                else if (fis_ptr->which == ')')
+                    fis_ptr->k = fis_ptr->floor_num - 1;
                 else
-                    k = islower(which) ? A2I(which) : -1;
-                if (k < 0 || k >= floor_num || k >= 23) {
+                    fis_ptr->k = islower(fis_ptr->which) ? A2I(fis_ptr->which) : -1;
+                if (fis_ptr->k < 0 || fis_ptr->k >= fis_ptr->floor_num || fis_ptr->k >= 23) {
                     bell();
                     break;
                 }
 
-                k = 0 - floor_list[k];
+                fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
             }
 
-            if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, k, tval)) {
+            if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, fis_ptr->k, tval)) {
                 bell();
                 break;
             }
 
-            if (ver && !verify(owner_ptr, _("本当に", "Try"), k)) {
-                done = TRUE;
+            if (ver && !verify(owner_ptr, _("本当に", "Try"), fis_ptr->k)) {
+                fis_ptr->done = TRUE;
                 break;
             }
 
-            if (!get_item_allow(owner_ptr, k)) {
-                done = TRUE;
+            if (!get_item_allow(owner_ptr, fis_ptr->k)) {
+                fis_ptr->done = TRUE;
                 break;
             }
 
-            (*cp) = k;
-            item = TRUE;
-            done = TRUE;
+            *cp = fis_ptr->k;
+            fis_ptr->item = TRUE;
+            fis_ptr->done = TRUE;
             break;
         }
         }
@@ -752,21 +728,21 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
     tval = 0;
     item_tester_hook = NULL;
-    if (toggle)
+    if (fis_ptr->toggle)
         toggle_inventory_equipment(owner_ptr);
 
     owner_ptr->window |= (PW_INVEN | PW_EQUIP);
     handle_stuff(owner_ptr);
     prt("", 0, 0);
-    if (oops && str)
+    if (fis_ptr->oops && str)
         msg_print(str);
 
-    if (item) {
+    if (fis_ptr->item) {
         repeat_push(*cp);
         if (command_cmd)
-            *prev_tag = cur_tag;
+            *prev_tag = fis_ptr->cur_tag;
         command_cmd = 0;
     }
 
-    return item;
+    return fis_ptr->item;
 }
