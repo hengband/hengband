@@ -14,6 +14,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "knowledge/knowledge-mutations.h"
+#include "mutation/mutation-flag-types.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "player/mimic-info-table.h"

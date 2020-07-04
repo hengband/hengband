@@ -405,6 +405,7 @@ hengband_SOURCES = \
 	mspell/summon-checker.c mspell/summon-checker.h \
 	\
 	mutation/mutation.c mutation/mutation.h \
+	mutation/mutation-flag-types.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
 	object/item-tester-hooker.c object/item-tester-hooker.h \

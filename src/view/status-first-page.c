@@ -13,6 +13,7 @@
 #include "display-util.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"

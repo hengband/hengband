@@ -8,6 +8,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
+#include "mutation/mutation-flag-types.h"
 #include "mutation/mutation.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"

@@ -38,6 +38,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-hook/hook-checker.h"
 #include "player/avatar.h"
@@ -73,7 +74,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 	int attempts_left = 20;
 	concptr muta_desc = "";
 	bool muta_chosen = FALSE;
-	BIT_FLAGS muta_which = 0;
+	int muta_which = 0; // mutation_flag_type_1 とmutation_flag_type_2 の両対応とするため、敢えてint型で定義する
 	BIT_FLAGS *muta_class = NULL;
 
 	if (choose_mut) attempts_left = 1;
@@ -910,7 +911,7 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 	int attempts_left = 20;
 	concptr muta_desc = "";
 	bool muta_chosen = FALSE;
-	BIT_FLAGS muta_which = 0;
+	int muta_which = 0; // mutation_flag_type_1 とmutation_flag_type_2 の両対応とするため、敢えてint型で定義する
 	BIT_FLAGS *muta_class = NULL;
 
 	if (choose_mut) attempts_left = 1;

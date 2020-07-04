@@ -3430,6 +3430,9 @@
     <ClInclude Include="..\..\src\inventory\inventory-slot-types.h">
       <Filter>inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-flag-types.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -31,6 +31,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
+#include "mutation/mutation-flag-types.h"
 #include "mspell/mspells3.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"

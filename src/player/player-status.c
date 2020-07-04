@@ -39,6 +39,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
+#include "mutation/mutation-flag-types.h"
 #include "mutation/mutation.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"

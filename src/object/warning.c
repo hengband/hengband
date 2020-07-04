@@ -19,6 +19,7 @@
 #include "monster/monster-status.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-flavor.h"

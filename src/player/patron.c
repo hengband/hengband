@@ -7,6 +7,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
+#include "mutation/mutation-flag-types.h"
 #include "mutation/mutation.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-flavor.h"

@@ -8,6 +8,7 @@
 
 #include "display-player-stat-info.h"
 #include "inventory/inventory-slot-types.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/mimic-info-table.h"

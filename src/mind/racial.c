@@ -42,6 +42,7 @@
 #include "mind/racial-kutar.h"
 #include "mind/racial-vampire.h"
 #include "mind/stances-table.h"
+#include "mutation/mutation-flag-types.h"
 #include "mutation/mutation.h"
 #include "object/item-tester-hooker.h"
 #include "status/bad-status-setter.h"

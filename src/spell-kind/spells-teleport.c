@@ -34,6 +34,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-checker.h"
 #include "object/object-flags.h"

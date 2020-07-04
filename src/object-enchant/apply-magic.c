@@ -9,6 +9,7 @@
 #include "art-definition/art-armor-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/apply-magic-accessory.h"
 #include "object-enchant/apply-magic-armor.h"
 #include "object-enchant/apply-magic-others.h"

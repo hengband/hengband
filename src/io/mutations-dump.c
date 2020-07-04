@@ -5,6 +5,7 @@
  */
 
 #include "io/mutations-dump.h"
+#include "mutation/mutation-flag-types.h"
 
 /*!
  * @brief ファイルポインタを通じて突然変異の一覧を出力する

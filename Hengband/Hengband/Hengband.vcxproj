@@ -671,6 +671,7 @@
     <ClInclude Include="..\..\src\mspell\mspells1.h" />
     <ClInclude Include="..\..\src\mspell\mspells2.h" />
     <ClInclude Include="..\..\src\mspell\mspells3.h" />
+    <ClInclude Include="..\..\src\mutation\mutation-flag-types.h" />
     <ClInclude Include="..\..\src\object-hook\hook-armor.h" />
     <ClInclude Include="..\..\src\object-hook\hook-bow.h" />
     <ClInclude Include="..\..\src\object-hook\hook-checker.h" />
