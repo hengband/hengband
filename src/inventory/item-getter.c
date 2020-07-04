@@ -65,6 +65,44 @@ static bool check_item_tag_aux(player_type *owner_ptr, item_selection_type *item
 }
 
 /*!
+ * @brief インベントリのアイテムにタグ付けがされているかの調査処理 (のはず)
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param prev_tag 前回選択したアイテムのタグ (のはず)
+ * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ */
+static bool check_item_tag_inventory(player_type *owner_ptr, item_selection_type *item_selection_ptr, char *prev_tag)
+{
+    if ((!item_selection_ptr->inven || (*item_selection_ptr->cp < 0) || (*item_selection_ptr->cp >= INVEN_PACK))
+        && (!item_selection_ptr->equip || (*item_selection_ptr->cp < INVEN_RARM) || (*item_selection_ptr->cp >= INVEN_TOTAL)))
+        return FALSE;
+
+    if (*prev_tag && command_cmd) {
+        if (!get_tag(owner_ptr, &item_selection_ptr->k, *prev_tag, (*item_selection_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, item_selection_ptr->tval)
+                    || (item_selection_ptr->k < INVEN_RARM)
+                ? !item_selection_ptr->inven
+                : !item_selection_ptr->equip || !get_item_okay(owner_ptr, item_selection_ptr->k, item_selection_ptr->tval)) {
+            *prev_tag = '\0';
+            return FALSE;
+        }
+
+        *item_selection_ptr->cp = item_selection_ptr->k;
+        item_selection_ptr->tval = 0;
+        item_tester_hook = NULL;
+        command_cmd = 0;
+        return TRUE;
+    }
+
+    if (!get_item_okay(owner_ptr, *item_selection_ptr->cp, item_selection_ptr->tval))
+        return FALSE;
+
+    item_selection_ptr->tval = 0;
+    item_tester_hook = NULL;
+    command_cmd = 0;
+    return TRUE;
+}
+
+/*!
  * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param item_selection_ptr アイテムへの参照ポインタ
@@ -86,39 +124,7 @@ static bool check_item_tag(player_type *owner_ptr, item_selection_type *item_sel
     if (check_item_tag_aux(owner_ptr, item_selection_ptr))
         return TRUE;
 
-    if ((item_selection_ptr->inven && (*item_selection_ptr->cp >= 0) && (*item_selection_ptr->cp < INVEN_PACK))
-        || (item_selection_ptr->equip && (*item_selection_ptr->cp >= INVEN_RARM) && (*item_selection_ptr->cp < INVEN_TOTAL))) {
-        if (*prev_tag && command_cmd) {
-            if (!get_tag(owner_ptr, &item_selection_ptr->k, *prev_tag, (*item_selection_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN,
-                    item_selection_ptr->tval)) /* Reject */
-                ;
-            else if ((item_selection_ptr->k < INVEN_RARM) ? !item_selection_ptr->inven : !item_selection_ptr->equip) /* Reject */
-                ;
-            else if (!get_item_okay(owner_ptr, item_selection_ptr->k, item_selection_ptr->tval)) /* Reject */
-                ;
-            else {
-                *item_selection_ptr->cp = item_selection_ptr->k;
-                item_selection_ptr->tval = 0;
-                item_tester_hook = NULL;
-                command_cmd = 0;
-                return TRUE;
-            }
-
-            *prev_tag = '\0';
-            return FALSE;
-        }
-        
-        if (get_item_okay(owner_ptr, *item_selection_ptr->cp, item_selection_ptr->tval)) {
-            item_selection_ptr->tval = 0;
-            item_tester_hook = NULL;
-            command_cmd = 0;
-            return TRUE;
-        }
-
-        return FALSE;
-    }
-
-    return FALSE;
+    return check_item_tag_inventory(owner_ptr, item_selection_ptr, prev_tag);
 }
 
 /*!
