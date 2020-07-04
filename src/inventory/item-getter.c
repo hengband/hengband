@@ -149,6 +149,31 @@ static void test_inventory(player_type *owner_ptr, item_selection_type *item_sel
 }
 
 /*!
+ * @brief 装備品が妥当かを判定する
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param fis_ptr アイテム選択への参照ポインタ
+ * @return なし
+ */
+static void test_equipment(player_type *owner_ptr, item_selection_type *item_selection_ptr)
+{
+    if (!item_selection_ptr->equip) {
+        item_selection_ptr->e2 = -1;
+        return;
+    }
+    
+    if (!use_menu)
+        return;
+
+    for (int j = INVEN_RARM; j < INVEN_TOTAL; j++)
+        if (select_ring_slot ? is_ring_slot(j)
+                             : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL))
+            item_selection_ptr->max_equip++;
+
+    if (owner_ptr->ryoute && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT))
+        item_selection_ptr->max_equip++;
+}
+
+/*!
  * @brief オブジェクト選択の汎用関数 / General function for the selection of item
  * Let the user select an item, save its "index"
  * @param owner_ptr プレーヤーへの参照ポインタ
@@ -185,17 +210,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
     item_selection_ptr->e1 = INVEN_RARM;
     item_selection_ptr->e2 = INVEN_TOTAL - 1;
-    if (!item_selection_ptr->equip)
-        item_selection_ptr->e2 = -1;
-    else if (use_menu) {
-        for (int j = INVEN_RARM; j < INVEN_TOTAL; j++)
-            if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL))
-                item_selection_ptr->max_equip++;
-
-        if (owner_ptr->ryoute && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT))
-            item_selection_ptr->max_equip++;
-    }
-
+    test_equipment(owner_ptr, item_selection_ptr);
     while ((item_selection_ptr->e1 <= item_selection_ptr->e2) && (!get_item_okay(owner_ptr, item_selection_ptr->e1, item_selection_ptr->tval)))
         item_selection_ptr->e1++;
 
