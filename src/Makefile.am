@@ -407,6 +407,7 @@ hengband_SOURCES = \
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-flag-types.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
+	mutation/mutation-techniques.c mutation/mutation-techniques.h \
 	\
 	object/item-tester-hooker.c object/item-tester-hooker.h \
 	object/object-broken.c object/object-broken.h \

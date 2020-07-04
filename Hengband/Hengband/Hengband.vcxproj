@@ -225,6 +225,7 @@
     <ClCompile Include="..\..\src\mind\racial-kutar.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
     <ClCompile Include="..\..\src\mspell\mspell-dispel.c" />
+    <ClCompile Include="..\..\src\mutation\mutation-techniques.c" />
     <ClCompile Include="..\..\src\object-hook\hook-bow.c" />
     <ClCompile Include="..\..\src\object-hook\hook-checker.c" />
     <ClCompile Include="..\..\src\object-hook\hook-enchant.c" />
@@ -677,6 +678,7 @@
     <ClInclude Include="..\..\src\mspell\mspells2.h" />
     <ClInclude Include="..\..\src\mspell\mspells3.h" />
     <ClInclude Include="..\..\src\mutation\mutation-flag-types.h" />
+    <ClInclude Include="..\..\src\mutation\mutation-techniques.h" />
     <ClInclude Include="..\..\src\object-hook\hook-armor.h" />
     <ClInclude Include="..\..\src\object-hook\hook-bow.h" />
     <ClInclude Include="..\..\src\object-hook\hook-checker.h" />

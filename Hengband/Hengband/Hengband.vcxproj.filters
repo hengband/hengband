@@ -1583,6 +1583,9 @@
     <ClCompile Include="..\..\src\spell-kind\spells-polymorph.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-techniques.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3462,6 +3465,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-polymorph.h">
       <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-techniques.h">
+      <Filter>mutation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
