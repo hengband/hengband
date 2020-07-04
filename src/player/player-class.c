@@ -1290,10 +1290,6 @@ void calc_class_status(player_type *creature_ptr)
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
         if (!(heavy_armor(creature_ptr))) {
-            if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
-                    || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
-                creature_ptr->pspeed += (creature_ptr->lev) / 10;
-
             if (creature_ptr->lev > 24)
                 creature_ptr->free_act = TRUE;
         }
@@ -1317,15 +1313,6 @@ void calc_class_status(player_type *creature_ptr)
         creature_ptr->sustain_con = TRUE;
         creature_ptr->regenerate = TRUE;
         creature_ptr->free_act = TRUE;
-        creature_ptr->pspeed += 2;
-        if (creature_ptr->lev > 29)
-            creature_ptr->pspeed++;
-        if (creature_ptr->lev > 39)
-            creature_ptr->pspeed++;
-        if (creature_ptr->lev > 44)
-            creature_ptr->pspeed++;
-        if (creature_ptr->lev > 49)
-            creature_ptr->pspeed++;
         creature_ptr->to_a += 10 + creature_ptr->lev / 2;
         creature_ptr->dis_to_a += 10 + creature_ptr->lev / 2;
         creature_ptr->skill_dig += (100 + creature_ptr->lev * 8);

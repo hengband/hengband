@@ -1654,10 +1654,6 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->update |= (PU_MONSTERS);
 	}
 
-	if (creature_ptr->food >= PY_FOOD_MAX) creature_ptr->pspeed -= 10;
-
-	if (creature_ptr->special_defense & KAMAE_SUZAKU) creature_ptr->pspeed += 10;
-
 	if ((creature_ptr->migite && (empty_hands_status & EMPTY_HAND_RARM)) ||
 		(creature_ptr->hidarite && (empty_hands_status & EMPTY_HAND_LARM)))
 	{
@@ -1720,21 +1716,6 @@ void calc_bonuses(player_type *creature_ptr)
 	{
 		monster_type *riding_m_ptr = &floor_ptr->m_list[creature_ptr->riding];
 		monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-		SPEED speed = riding_m_ptr->mspeed;
-
-		if (riding_m_ptr->mspeed > 110)
-		{
-			creature_ptr->pspeed = 110 + (s16b)((speed - 110) * (creature_ptr->skill_exp[GINOU_RIDING] * 3 + creature_ptr->lev * 160L - 10000L) / (22000L));
-			if (creature_ptr->pspeed < 110) creature_ptr->pspeed = 110;
-		}
-		else
-		{
-			creature_ptr->pspeed = speed;
-		}
-
-		creature_ptr->pspeed += (creature_ptr->skill_exp[GINOU_RIDING] + creature_ptr->lev * 160L) / 3200;
-		if (monster_fast_remaining(riding_m_ptr)) creature_ptr->pspeed += 10;
-		if (monster_slow_remaining(riding_m_ptr)) creature_ptr->pspeed -= 10;
 		riding_levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
 		if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC)) creature_ptr->can_swim = TRUE;
 
@@ -4008,52 +3989,94 @@ static void calc_speed(player_type *creature_ptr)
 {
     creature_ptr->pspeed = 110;
 
-    const player_race *tmp_rp_ptr;
-    if (creature_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
-    else
-        tmp_rp_ptr = &race_info[creature_ptr->prace];
+	if (!creature_ptr->riding) {
+        const player_race *tmp_rp_ptr;
+        if (creature_ptr->mimic_form)
+            tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+        else
+            tmp_rp_ptr = &race_info[creature_ptr->prace];
 
-    if (creature_ptr->mimic_form) {
-        switch (creature_ptr->mimic_form) {
-        case MIMIC_DEMON:
-            creature_ptr->pspeed += 3;
-            break;
-        case MIMIC_DEMON_LORD:
-            creature_ptr->pspeed += 5;
-            break;
-        case MIMIC_VAMPIRE:
-            creature_ptr->pspeed += 3;
-            break;
-        }
-    }
-
-    if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN && creature_ptr->prace != RACE_KLACKON && creature_ptr->prace != RACE_SPRITE) 
-	{
-        creature_ptr->pspeed += (creature_ptr->lev) / 10 + 5;
-    }
-
-    if (IS_FAST(creature_ptr)) {
-        creature_ptr->pspeed += 10;
-    }
-
-    if (creature_ptr->slow) {
-        creature_ptr->pspeed -= 10;
-    }
-
-    if (creature_ptr->muta3) {
-
-        if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
-            creature_ptr->pspeed -= 2;
+        if (creature_ptr->mimic_form) {
+            switch (creature_ptr->mimic_form) {
+            case MIMIC_DEMON:
+                creature_ptr->pspeed += 3;
+                break;
+            case MIMIC_DEMON_LORD:
+                creature_ptr->pspeed += 5;
+                break;
+            case MIMIC_VAMPIRE:
+                creature_ptr->pspeed += 3;
+                break;
+            }
         }
 
-        if (creature_ptr->muta3 & MUT3_XTRA_LEGS) {
-            creature_ptr->pspeed += 3;
+        if (creature_ptr->pclass == CLASS_FORCETRAINER && !(heavy_armor(creature_ptr))) {
+            if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
+                    || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
+                creature_ptr->pspeed += (creature_ptr->lev) / 10;
         }
 
-        if (creature_ptr->muta3 & MUT3_SHORT_LEG) {
-            creature_ptr->pspeed -= 3;
+        if (creature_ptr->pclass == CLASS_BERSERKER) {
+            creature_ptr->pspeed += 2;
+            if (creature_ptr->lev > 29)
+                creature_ptr->pspeed++;
+            if (creature_ptr->lev > 39)
+                creature_ptr->pspeed++;
+            if (creature_ptr->lev > 44)
+                creature_ptr->pspeed++;
+            if (creature_ptr->lev > 49)
+                creature_ptr->pspeed++;
         }
+
+        if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN && creature_ptr->prace != RACE_KLACKON && creature_ptr->prace != RACE_SPRITE) {
+            creature_ptr->pspeed += (creature_ptr->lev) / 10 + 5;
+        }
+
+        if (IS_FAST(creature_ptr)) {
+            creature_ptr->pspeed += 10;
+        }
+
+        if (creature_ptr->slow) {
+            creature_ptr->pspeed -= 10;
+        }
+
+		if (creature_ptr->food >= PY_FOOD_MAX)
+            creature_ptr->pspeed -= 10;
+
+        if (creature_ptr->special_defense & KAMAE_SUZAKU)
+            creature_ptr->pspeed += 10;
+
+        if (creature_ptr->muta3) {
+
+            if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
+                creature_ptr->pspeed -= 2;
+            }
+
+            if (creature_ptr->muta3 & MUT3_XTRA_LEGS) {
+                creature_ptr->pspeed += 3;
+            }
+
+            if (creature_ptr->muta3 & MUT3_SHORT_LEG) {
+                creature_ptr->pspeed -= 3;
+            }
+        }
+    } else {
+        monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+        SPEED speed = riding_m_ptr->mspeed;
+
+        if (riding_m_ptr->mspeed > 110) {
+            creature_ptr->pspeed = 110 + (s16b)((speed - 110) * (creature_ptr->skill_exp[GINOU_RIDING] * 3 + creature_ptr->lev * 160L - 10000L) / (22000L));
+            if (creature_ptr->pspeed < 110)
+                creature_ptr->pspeed = 110;
+        } else {
+            creature_ptr->pspeed = speed;
+        }
+
+        creature_ptr->pspeed += (creature_ptr->skill_exp[GINOU_RIDING] + creature_ptr->lev * 160L) / 3200;
+        if (monster_fast_remaining(riding_m_ptr))
+            creature_ptr->pspeed += 10;
+        if (monster_slow_remaining(riding_m_ptr))
+            creature_ptr->pspeed -= 10;
     }
 
 	/* Maximum speed is (+99). (internally it's 110 + 99) */
