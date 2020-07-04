@@ -1610,6 +1610,9 @@
     <ClCompile Include="..\..\src\savedata\load-v1-5-0.c">
       <Filter>savedata</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\savedata\item-loader.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3518,6 +3521,12 @@
       <Filter>savedata</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\savedata\load-v1-5-0.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\item-loader.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\savedata-flag-types.h">
       <Filter>savedata</Filter>
     </ClInclude>
   </ItemGroup>

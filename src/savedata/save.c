@@ -38,6 +38,7 @@
 #include "object-enchant/artifact.h"
 #include "object/object-kind.h"
 #include "savedata/load.h"
+#include "savedata/savedata-flag-types.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"

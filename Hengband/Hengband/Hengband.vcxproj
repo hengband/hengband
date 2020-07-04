@@ -237,6 +237,7 @@
     <ClCompile Include="..\..\src\object-hook\hook-armor.c" />
     <ClCompile Include="..\..\src\object-potion\quaff-execution.c" />
     <ClCompile Include="..\..\src\savedata\angband-version-comparer.c" />
+    <ClCompile Include="..\..\src\savedata\item-loader.c" />
     <ClCompile Include="..\..\src\savedata\load-util.c" />
     <ClCompile Include="..\..\src\savedata\load-v1-5-0.c" />
     <ClCompile Include="..\..\src\specific-object\death-crimson.c" />
@@ -698,9 +699,11 @@
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
     <ClInclude Include="..\..\src\object-potion\quaff-execution.h" />
     <ClInclude Include="..\..\src\savedata\angband-version-comparer.h" />
+    <ClInclude Include="..\..\src\savedata\item-loader.h" />
     <ClInclude Include="..\..\src\savedata\load-util.h" />
     <ClInclude Include="..\..\src\savedata\load-v1-5-0.h" />
     <ClInclude Include="..\..\src\savedata\old-feature-types.h" />
+    <ClInclude Include="..\..\src\savedata\savedata-flag-types.h" />
     <ClInclude Include="..\..\src\specific-object\death-crimson.h" />
     <ClInclude Include="..\..\src\spell-kind\blood-curse.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-enchant.h" />
