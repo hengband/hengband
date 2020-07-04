@@ -305,9 +305,6 @@
     <ClCompile Include="..\..\src\core\stuff-handler.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells3.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\birth\birth-explanations-table.c">
       <Filter>birth</Filter>
     </ClCompile>
@@ -1601,6 +1598,9 @@
     <ClCompile Include="..\..\src\spell-kind\spells-enchant.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\magic-item-recharger.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1938,9 +1938,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\special-internal-keys.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells3.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h">
       <Filter>birth</Filter>
@@ -3497,6 +3494,9 @@
       <Filter>spell-kind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-enchant.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\magic-item-recharger.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>

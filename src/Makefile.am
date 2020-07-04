@@ -529,7 +529,6 @@ hengband_SOURCES = \
 	\
 	spell/process-effect.c spell/process-effect.h \
 	spell/range-calc.c spell/range-calc.h \
-	spell/spells3.c spell/spells3.h \
 	spell/spells-describer.c spell/spells-describer.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
 	spell/spells-execution.c spell/spells-execution.h \
@@ -543,6 +542,7 @@ hengband_SOURCES = \
 	\
 	spell-kind/blood-curse.c spell-kind/blood-curse.h \
 	spell-kind/earthquake.c spell-kind/earthquake.h \
+	spell/magic-item-recharger.c spell/magic-item-recharger.h \
 	spell-kind/spells-beam.c spell-kind/spells-beam.h \
 	spell-kind/spells-charm.c spell-kind/spells-charm.h \
 	spell-kind/spells-curse-removal.c spell-kind/spells-curse-removal.h \

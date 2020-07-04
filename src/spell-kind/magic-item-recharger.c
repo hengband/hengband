@@ -10,7 +10,7 @@
  * </pre>
  */
 
-#include "spell/spells3.h"
+#include "spell-kind/magic-item-recharger.h"
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-spell.h"

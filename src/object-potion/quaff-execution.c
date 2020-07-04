@@ -32,7 +32,6 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
 #include "spell/spells-util.h"
-#include "spell/spells3.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/body-improvement.h"

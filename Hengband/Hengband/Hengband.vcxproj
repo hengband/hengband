@@ -1042,7 +1042,7 @@
     <ClCompile Include="..\..\src\spell\spells-summon.c" />
     <ClCompile Include="..\..\src\spell\range-calc.c" />
     <ClCompile Include="..\..\src\spell-realm\spells-crusade.c" />
-    <ClCompile Include="..\..\src\spell\spells3.c" />
+    <ClCompile Include="..\..\src\spell-kind\magic-item-recharger.c" />
     <ClCompile Include="..\..\src\io\uid-checker.c" />
     <ClCompile Include="..\..\src\util\angband-files.c" />
     <ClCompile Include="..\..\src\util\object-sort.c" />
@@ -1198,7 +1198,7 @@
     <ClInclude Include="..\..\src\spell\spells-util.h" />
     <ClInclude Include="..\..\src\spell\spells-execution.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-crusade.h" />
-    <ClInclude Include="..\..\src\spell\spells3.h" />
+    <ClInclude Include="..\..\src\spell-kind\magic-item-recharger.h" />
     <ClInclude Include="..\..\src\spell\technic-info-table.h" />
     <ClInclude Include="..\..\src\view\display-characteristic.h" />
     <ClInclude Include="..\..\src\view\display-fruit.h" />

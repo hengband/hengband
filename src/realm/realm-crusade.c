@@ -24,7 +24,6 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spells3.h"
 #include "status/body-improvement.h"
 #include "status/sight-setter.h"
 #include "view/display-messages.h"

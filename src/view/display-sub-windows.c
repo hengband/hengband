@@ -18,7 +18,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-flavor.h"
 #include "object/object-info.h"
-#include "spell/spells3.h"
+#include "spell-kind/magic-item-recharger.h"
 #include "system/monster-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
