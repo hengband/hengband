@@ -113,31 +113,6 @@
 #include "world/world.h"
 
 /*!
- * @brief 現実変容処理
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void reserve_alter_reality(player_type *caster_ptr)
-{
-    if (caster_ptr->current_floor_ptr->inside_arena || ironman_downward) {
-        msg_print(_("何も起こらなかった。", "Nothing happens."));
-        return;
-    }
-
-    if (caster_ptr->alter_reality) {
-        caster_ptr->alter_reality = 0;
-        msg_print(_("景色が元に戻った...", "The view around you returns to normal..."));
-        caster_ptr->redraw |= PR_STATUS;
-        return;
-    }
-
-    TIME_EFFECT turns = randint0(21) + 15;
-    caster_ptr->alter_reality = turns;
-    msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
-    caster_ptr->redraw |= PR_STATUS;
-}
-
-/*!
  * @brief アーティファクト生成の巻物処理 /
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 生成が実際に試みられたらTRUEを返す
@@ -533,78 +508,5 @@ bool shock_power(player_type *caster_ptr)
 
     if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
         caster_ptr->update |= (PU_MON_LITE);
-    return TRUE;
-}
-
-/*!
- * @brief 町間のテレポートを行うメインルーチン
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @return テレポート処理を決定したか否か
- */
-bool tele_town(player_type *caster_ptr)
-{
-    if (caster_ptr->current_floor_ptr->dun_level) {
-        msg_print(_("この魔法は地上でしか使えない！", "This spell can only be used on the surface!"));
-        return FALSE;
-    }
-
-    if (caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) {
-        msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
-        return FALSE;
-    }
-
-    screen_save();
-    clear_bldg(4, 10);
-
-    int i;
-    int num = 0;
-    for (i = 1; i < max_towns; i++) {
-        char buf[80];
-
-        if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == caster_ptr->town_num) || !(caster_ptr->visit & (1L << (i - 1))))
-            continue;
-
-        sprintf(buf, "%c) %-20s", I2A(i - 1), town_info[i].name);
-        prt(buf, 5 + i, 5);
-        num++;
-    }
-
-    if (num == 0) {
-        msg_print(_("まだ行けるところがない。", "You have not yet visited any town."));
-        msg_print(NULL);
-        screen_load();
-        return FALSE;
-    }
-
-    prt(_("どこに行きますか:", "Where do you want to go: "), 0, 0);
-    while (TRUE) {
-        i = inkey();
-
-        if (i == ESCAPE) {
-            screen_load();
-            return FALSE;
-        }
-
-        else if ((i < 'a') || (i > ('a' + max_towns - 2)))
-            continue;
-        else if (((i - 'a' + 1) == caster_ptr->town_num) || ((i - 'a' + 1) == NO_TOWN) || ((i - 'a' + 1) == SECRET_TOWN)
-            || !(caster_ptr->visit & (1L << (i - 'a'))))
-            continue;
-        break;
-    }
-
-    for (POSITION y = 0; y < current_world_ptr->max_wild_y; y++) {
-        for (POSITION x = 0; x < current_world_ptr->max_wild_x; x++) {
-            if (wilderness[y][x].town == (i - 'a' + 1)) {
-                caster_ptr->wilderness_y = y;
-                caster_ptr->wilderness_x = x;
-            }
-        }
-    }
-
-    caster_ptr->leaving = TRUE;
-    caster_ptr->leave_bldg = TRUE;
-    caster_ptr->teleport_town = TRUE;
-    screen_load();
     return TRUE;
 }

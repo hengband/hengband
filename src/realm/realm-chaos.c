@@ -12,6 +12,7 @@
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
 #include "spell-realm/spells-chaos.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"

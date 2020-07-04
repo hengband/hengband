@@ -14,6 +14,7 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-recall.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
 #include "spell/spell-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"

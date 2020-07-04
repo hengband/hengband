@@ -563,6 +563,7 @@ hengband_SOURCES = \
 	spell-kind/spells-sight.c spell-kind/spells-sight.h \
 	spell-kind/spells-specific-bolt.c spell-kind/spells-specific-bolt.h \
 	spell-kind/spells-teleport.c spell-kind/spells-teleport.h \
+	spell-kind/spells-world.c spell-kind/spells-world.h \
 	\
 	spell-realm/spells-chaos.c spell-realm/spells-chaos.h \
 	spell-realm/spells-craft.c spell-realm/spells-craft.h \

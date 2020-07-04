@@ -37,7 +37,7 @@
 #include "pet/pet-util.h"
 #include "player/player-class.h"
 #include "player/player-move.h"
-#include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"

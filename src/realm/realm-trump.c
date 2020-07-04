@@ -15,6 +15,7 @@
 #include "spell-kind/spells-recall.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
 #include "spell-realm/spells-trump.h"
 #include "spell/spell-types.h"
 #include "spell/spells-object.h"

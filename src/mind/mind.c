@@ -63,6 +63,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
 #include "status/bad-status-setter.h"

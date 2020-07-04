@@ -51,6 +51,7 @@
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
 #include "spell/spell-info.h"
 #include "spell/spell-types.h"
 #include "spell/spells-status.h"

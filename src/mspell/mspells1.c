@@ -46,7 +46,7 @@
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"
-#include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
 #include "spell/range-calc.h"
