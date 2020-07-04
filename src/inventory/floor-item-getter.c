@@ -147,7 +147,7 @@ static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @return なし
  */
-static void test_inventory(player_type *owner_ptr, fis_type *fis_ptr)
+static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr)
 {
     if (!fis_ptr->inven) {
         fis_ptr->i2 = -1;
@@ -168,7 +168,7 @@ static void test_inventory(player_type *owner_ptr, fis_type *fis_ptr)
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @return なし
  */
-static void test_equipment(player_type *owner_ptr, fis_type *fis_ptr)
+static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
 {
     if (!fis_ptr->equip) {
         fis_ptr->e2 = -1;
@@ -201,7 +201,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         return TRUE;
 
     msg_print(NULL);
-    test_inventory(owner_ptr, fis_ptr);
+    test_inventory_floor(owner_ptr, fis_ptr);
     fis_ptr->done = FALSE;
     fis_ptr->item = FALSE;
     fis_ptr->i1 = 0;
@@ -214,7 +214,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
     fis_ptr->e1 = INVEN_RARM;
     fis_ptr->e2 = INVEN_TOTAL - 1;
-    test_equipment(owner_ptr, fis_ptr);
+    test_equipment_floor(owner_ptr, fis_ptr);
     if (owner_ptr->ryoute && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
         fis_ptr->max_equip++;
 

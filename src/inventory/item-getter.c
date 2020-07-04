@@ -128,6 +128,27 @@ static bool check_item_tag(player_type *owner_ptr, item_selection_type *item_sel
 }
 
 /*!
+ * @brief インベントリ内のアイテムが妥当かを判定する
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param fis_ptr アイテム選択への参照ポインタ
+ * @return なし
+ */
+static void test_inventory(player_type *owner_ptr, item_selection_type *item_selection_ptr)
+{
+    if (!item_selection_ptr->inven) {
+        item_selection_ptr->i2 = -1;
+        return;
+    }
+    
+    if (!use_menu)
+        return;
+
+    for (int j = 0; j < INVEN_PACK; j++)
+        if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL))
+            item_selection_ptr->max_inven++;
+}
+
+/*!
  * @brief オブジェクト選択の汎用関数 / General function for the selection of item
  * Let the user select an item, save its "index"
  * @param owner_ptr プレーヤーへの参照ポインタ
@@ -155,13 +176,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     item_selection_ptr->item = FALSE;
     item_selection_ptr->i1 = 0;
     item_selection_ptr->i2 = INVEN_PACK - 1;
-    if (!item_selection_ptr->inven)
-        item_selection_ptr->i2 = -1;
-    else if (use_menu)
-        for (int j = 0; j < INVEN_PACK; j++)
-            if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL))
-                item_selection_ptr->max_inven++;
-
+    test_inventory(owner_ptr, item_selection_ptr);
     while ((item_selection_ptr->i1 <= item_selection_ptr->i2) && (!get_item_okay(owner_ptr, item_selection_ptr->i1, item_selection_ptr->tval)))
         item_selection_ptr->i1++;
 
