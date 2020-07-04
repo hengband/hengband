@@ -563,6 +563,7 @@ hengband_SOURCES = \
 	spell-realm/spells-demon.c spell-realm/spells-demon.h \
 	spell-realm/spells-hex.c spell-realm/spells-hex.h \
 	spell-realm/spells-song.c spell-realm/spells-song.h \
+	spell-realm/spells-sorcery.c spell-realm/spells-sorcery.h \
 	spell-realm/spells-trump.c spell-realm/spells-trump.h \
 	\
 	status/action-setter.c status/action-setter.h \

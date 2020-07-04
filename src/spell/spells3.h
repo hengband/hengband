@@ -4,7 +4,6 @@
 
 bool apply_disenchant(player_type* target_ptr, BIT_FLAGS mode);
 void reserve_alter_reality(player_type* caster_ptr);
-bool alchemy(player_type* caster_ptr);
 bool artifact_scroll(player_type* caster_ptr);
 bool mundane_spell(player_type* ownner_ptr, bool only_equip);
 bool recharge(player_type* caster_ptr, int power);

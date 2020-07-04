@@ -56,6 +56,7 @@
 #include "spell-kind/spells-recall.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-sorcery.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
