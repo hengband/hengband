@@ -228,12 +228,10 @@ hengband_SOURCES = \
 	io/input-key-processor.c io/input-key-processor.h \
 	io/input-key-requester.c io/input-key-requester.h \
 	io/interpret-pref-file.c io/interpret-pref-file.h \
-	io/load.c io/load.h \
 	io/mutations-dump.c io/mutations-dump.h \
 	io/pref-file-expressor.c io/pref-file-expressor.h \
 	io/read-pref-file.c io/read-pref-file.h \
 	io/report.c io/report.h \
-	io/save.c io/save.h \
 	io/screen-util.c io/screen-util.h \
 	io/signal-handlers.c io/signal-handlers.h \
 	io/targeting.c io/targeting.h \
@@ -520,6 +518,10 @@ hengband_SOURCES = \
 	room/rooms-vault.c room/rooms-vault.h \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
+	\
+	savedata/old-feature-types.h \
+	savedata/load.c savedata/load.h \
+	savedata/save.c savedata/save.h \
 	\
 	specific-object/bow.c specific-object/bow.h \
 	specific-object/chest.c specific-object/chest.h \

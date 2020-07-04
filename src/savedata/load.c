@@ -1,5 +1,4 @@
 ﻿/*!
- * @file load.c
  * @brief セーブファイル読み込み処理 / Purpose: support for loading savefiles -BEN-
  * @date 2014/07/07
  * @author
@@ -75,6 +74,7 @@
 #include "player/player-skill.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
+#include "savedata/old-feature-types.h"
 #include "savedata/save.h"
 #include "spell/spells-status.h"
 #include "store/store-util.h"
@@ -92,24 +92,8 @@
 #include "world/world-object.h"
 #include "world/world.h"
 
-/*
- * Maximum number of tries for selection of a proper quest monster
- */
-#define MAX_TRIES 100
-
-#define OLD_MAX_MANE 22
-
 /* Old hidden trap flag */
-#define CAVE_TRAP 0x8000
-
-/*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
-#define OLD_FEAT_INVIS 0x02
-#define OLD_FEAT_GLYPH 0x03
-#define OLD_FEAT_QUEST_ENTER 0x08
-#define OLD_FEAT_QUEST_EXIT 0x09
-#define OLD_FEAT_MINOR_GLYPH 0x40
-#define OLD_FEAT_BLDG_1 0x81
-#define OLD_FEAT_MIRROR 0xc3
+static const BIT_FLAGS CAVE_TRAP = 0x8000;
 
 /* Old quests */
 #define OLD_QUEST_WATER_CAVE 18
@@ -1781,6 +1765,7 @@ static void rd_extra(player_type *creature_ptr)
         creature_ptr->mane_num = 0;
     } else if (z_older_than(10, 2, 3)) {
         s16b tmp16s;
+        const int OLD_MAX_MANE = 22;
         for (int i = 0; i < OLD_MAX_MANE; i++) {
             rd_s16b(&tmp16s);
             rd_s16b(&tmp16s);
@@ -2923,9 +2908,11 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     if (arg_fiddle)
         note(_("メッセージをロードしました", "Loaded Messages"));
 
+        /* ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster */
+    const int MAX_TRIES = 100;
     for (int i = 0; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
-        r_ptr->max_num = 100;
+        r_ptr->max_num = MAX_TRIES;
 
         if (r_ptr->flags1 & RF1_UNIQUE)
             r_ptr->max_num = 1;

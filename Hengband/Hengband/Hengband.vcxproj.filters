@@ -3499,6 +3499,9 @@
     <ClInclude Include="..\..\src\savedata\load.h">
       <Filter>savedata</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\savedata\old-feature-types.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
