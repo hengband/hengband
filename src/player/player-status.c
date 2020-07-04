@@ -1485,8 +1485,6 @@ void calc_bonuses(player_type *creature_ptr)
 		if (hex_spelling(creature_ptr, HEX_ICE_ARMOR))
 		{
 			creature_ptr->sh_cold = TRUE;
-			creature_ptr->to_a += 30;
-			creature_ptr->dis_to_a += 30;
 		}
 
 		if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK))
@@ -3960,6 +3958,12 @@ static void calc_to_ac(player_type *creature_ptr)
         }
     }
 
+	if (creature_ptr->realm1 == REALM_HEX) {
+        if (hex_spelling(creature_ptr, HEX_ICE_ARMOR)) {
+            creature_ptr->to_a += 30;
+        }
+    }
+
 	if (creature_ptr->special_defense & KAMAE_BYAKKO) {
         creature_ptr->to_a -= 40;
     } else if (creature_ptr->special_defense & KAMAE_SEIRYU) {
@@ -4018,6 +4022,12 @@ static void calc_to_ac_display(player_type *creature_ptr)
 
 	if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
+    }
+
+	if (creature_ptr->realm1 == REALM_HEX) {
+        if (hex_spelling(creature_ptr, HEX_ICE_ARMOR)) {
+            creature_ptr->dis_to_a += 30;
+        }
     }
 
     if (creature_ptr->muta3) {
