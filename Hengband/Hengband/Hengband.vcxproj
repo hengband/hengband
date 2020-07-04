@@ -237,6 +237,7 @@
     <ClCompile Include="..\..\src\object-hook\hook-armor.c" />
     <ClCompile Include="..\..\src\object-potion\quaff-execution.c" />
     <ClCompile Include="..\..\src\specific-object\death-crimson.c" />
+    <ClCompile Include="..\..\src\spell-kind\blood-curse.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-equipment.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-fetcher.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-polymorph.c" />
@@ -692,6 +693,7 @@
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
     <ClInclude Include="..\..\src\object-potion\quaff-execution.h" />
     <ClInclude Include="..\..\src\specific-object\death-crimson.h" />
+    <ClInclude Include="..\..\src\spell-kind\blood-curse.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-equipment.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-fetcher.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-polymorph.h" />

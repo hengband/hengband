@@ -1592,6 +1592,9 @@
     <ClCompile Include="..\..\src\specific-object\death-crimson.c">
       <Filter>specific-object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\blood-curse.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3480,6 +3483,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\specific-object\death-crimson.h">
       <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\blood-curse.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
