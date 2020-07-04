@@ -29,6 +29,7 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/load.h"
 #include "io/report.h"
 #include "io/uid-checker.h"

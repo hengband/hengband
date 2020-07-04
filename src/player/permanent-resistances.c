@@ -1,4 +1,5 @@
 ﻿#include "permanent-resistances.h"
+#include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"

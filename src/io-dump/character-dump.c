@@ -7,6 +7,7 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "io-dump/player-status-dump.h"
 #include "io-dump/special-class-dump.h"
 #include "io/mutations-dump.h"

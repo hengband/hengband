@@ -8,6 +8,7 @@
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd/cmd-basic.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "mind/stances-table.h"
 #include "monster-race/monster-race.h"

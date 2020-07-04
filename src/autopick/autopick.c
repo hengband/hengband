@@ -20,6 +20,7 @@
 #include "floor/floor.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "object/object-info.h"

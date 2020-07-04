@@ -35,6 +35,7 @@
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/targeting.h"
@@ -1199,6 +1200,11 @@ bool booze(player_type *creature_ptr)
     return ident;
 }
 
+/*!
+ * @brief 爆発の薬の効果処理 / Fumble ramble
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 常にTRUE
+ */
 bool detonation(player_type *creature_ptr)
 {
     msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));

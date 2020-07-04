@@ -6,6 +6,7 @@
  */
 
 #include "monster-attack/monster-attack-switcher.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-attack/monster-attack-status.h"
 #include "monster-attack/monster-eating.h"
 #include "mind/drs-types.h"

@@ -5,6 +5,7 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "market/arena.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

@@ -209,6 +209,7 @@ hengband_SOURCES = \
 	inventory/inventory-damage.c inventory/inventory-damage.h \
 	inventory/inventory-describer.c inventory/inventory-describer.h \
 	inventory/inventory-object.c inventory/inventory-object.h \
+	inventory/inventory-slot-types.h \
 	inventory/inventory-util.c inventory/inventory-util.h \
 	inventory/item-getter.c inventory/item-getter.h \
 	inventory/item-selection-util.c inventory/item-selection-util.h \

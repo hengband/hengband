@@ -1,5 +1,6 @@
 ﻿#include "inventory/inventory-object.h"
 #include "floor/floor-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

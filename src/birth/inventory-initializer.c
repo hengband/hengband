@@ -3,6 +3,7 @@
 #include "birth/initial-equipments-table.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"

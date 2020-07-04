@@ -6,6 +6,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-describer.h"
+#include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-processor.h"

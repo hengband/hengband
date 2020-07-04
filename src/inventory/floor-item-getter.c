@@ -13,6 +13,7 @@
 #include "game-option/option-flags.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
+#include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "inventory/item-selection-util.h"
 #include "io/command-repeater.h"

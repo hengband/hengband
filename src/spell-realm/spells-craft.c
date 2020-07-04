@@ -1,6 +1,7 @@
 ﻿#include "spell-realm/spells-craft.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"

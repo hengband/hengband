@@ -1,5 +1,6 @@
 ﻿#include "status/base-status.h"
 #include "game-option/birth-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"

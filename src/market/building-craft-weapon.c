@@ -4,6 +4,7 @@
 #include "combat/shoot.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "market/building-util.h"
 #include "object-enchant/tr-types.h"

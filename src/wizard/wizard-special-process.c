@@ -28,6 +28,7 @@
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"

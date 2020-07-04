@@ -1,6 +1,7 @@
 ﻿#include "inventory/inventory-damage.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-expendable.h"

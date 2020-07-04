@@ -3427,6 +3427,9 @@
     <ClInclude Include="..\..\src\inventory\item-selection-util.h">
       <Filter>inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\inventory\inventory-slot-types.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

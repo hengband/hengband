@@ -6,6 +6,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"

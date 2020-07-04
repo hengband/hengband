@@ -12,6 +12,7 @@
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "inventory/inventory-slot-types.h"
 #include "inventory/item-getter.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

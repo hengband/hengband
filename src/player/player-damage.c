@@ -14,6 +14,7 @@
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "inventory/inventory-damage.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/report.h"
 #include "io/save.h"

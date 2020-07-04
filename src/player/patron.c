@@ -2,6 +2,7 @@
 #include "cmd-action/cmd-pet.h"
 #include "cmd-io/cmd-dump.h"
 #include "floor/floor.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"

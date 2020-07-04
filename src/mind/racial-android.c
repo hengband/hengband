@@ -1,4 +1,5 @@
 ﻿#include "mind/racial-android.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/targeting.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"

@@ -8,6 +8,7 @@
 #include "inventory/inventory-util.h"
 #include "core/asking-player.h"
 #include "floor/floor.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"

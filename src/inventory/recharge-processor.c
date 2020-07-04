@@ -1,5 +1,6 @@
 ﻿#include "inventory/recharge-processor.h"
 #include "core/hp-mp-regenerator.h"
+#include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-checker.h"
 #include "object/object-flavor.h"
 #include "object/object-kind.h"

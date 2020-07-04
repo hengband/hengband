@@ -7,6 +7,7 @@
 #include "knowledge/knowledge-inventory.h"
 #include "core/show-file.h"
 #include "floor/floor-town.h"
+#include "inventory/inventory-slot-types.h"
 #include "io-dump/dump-util.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"

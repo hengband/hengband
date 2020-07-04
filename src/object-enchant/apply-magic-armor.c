@@ -6,6 +6,7 @@
  */
 
 #include "object-enchant/apply-magic-armor.h"
+#include "inventory/inventory-slot-types.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"

@@ -37,6 +37,7 @@
 #include "grid/trap.h"
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "inventory/player-inventory.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"

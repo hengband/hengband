@@ -8,6 +8,7 @@
 #include "object-enchant/apply-magic-others.h"
 #include "floor/floor.h"
 #include "game-option/cheat-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags9.h"
 #include "monster-race/race-indice-types.h"

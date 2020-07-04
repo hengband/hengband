@@ -162,6 +162,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-requester.h"
 #include "io/targeting.h"

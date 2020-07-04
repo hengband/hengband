@@ -1,5 +1,4 @@
 ﻿/*!
- * @file store.c
  * @brief 店の処理 / Store commands
  * @date 2014/02/02
  * @author
@@ -46,6 +45,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"

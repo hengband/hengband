@@ -2,6 +2,7 @@
 #include "art-definition/art-sword-types.h"
 #include "core/hp-mp-processor.h"
 #include "inventory/inventory-damage.h"
+#include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/race-indice-types.h"
 #include "mspell/mspells3.h"

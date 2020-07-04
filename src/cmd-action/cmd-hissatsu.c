@@ -16,6 +16,7 @@
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"

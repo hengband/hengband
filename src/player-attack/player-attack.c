@@ -12,6 +12,7 @@
 #include "combat/slaying.h"
 #include "floor/floor.h"
 #include "game-option/cheat-types.h"
+#include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"

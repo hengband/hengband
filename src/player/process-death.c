@@ -11,6 +11,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"

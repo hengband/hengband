@@ -11,6 +11,7 @@
 
 #include "wizard/wizard-spoiler.h"
 #include "floor/floor-town.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"

@@ -32,6 +32,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "info-reader/fixed-map-parser.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/report.h"
 #include "io/save.h"
 #include "io/uid-checker.h"

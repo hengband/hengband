@@ -26,6 +26,7 @@
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/load.h"
 #include "io/save.h"

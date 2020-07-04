@@ -3,6 +3,7 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"

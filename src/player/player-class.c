@@ -5,6 +5,7 @@
  */
 
 #include "player/player-class.h"
+#include "inventory/inventory-slot-types.h"
 #include "player/player-race.h"
 #include "system/object-type-definition.h"
 

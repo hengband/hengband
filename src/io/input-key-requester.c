@@ -4,6 +4,7 @@
 #include "core/asking-player.h" // todo 相互依存している、後で何とかする.
 #include "floor/floor.h"
 #include "game-option/input-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"

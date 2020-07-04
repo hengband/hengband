@@ -9,6 +9,7 @@
 #include "grid/grid.h"
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
 #include "object/item-tester-hooker.h"

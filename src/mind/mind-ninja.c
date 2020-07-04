@@ -6,6 +6,7 @@
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"

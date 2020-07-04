@@ -9,6 +9,7 @@
 #include "game-option/auto-destruction-options.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-describer.h"
+#include "inventory/inventory-slot-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"

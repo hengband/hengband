@@ -13,6 +13,7 @@
 #include "cmd-item/cmd-smith.h"
 #include "game-option/text-display-options.h"
 #include "grid/trap.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "locale/japanese.h"
 #include "locale/vowel-checker.h"

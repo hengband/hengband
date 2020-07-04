@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-curse-removal.h"
+#include "inventory/inventory-slot-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"

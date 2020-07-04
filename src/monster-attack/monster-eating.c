@@ -7,6 +7,7 @@
 #include "monster-attack/monster-eating.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-status.h"
 #include "object-hook/hook-enchant.h"

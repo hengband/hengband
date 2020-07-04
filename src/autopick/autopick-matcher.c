@@ -8,6 +8,7 @@
 #include "autopick/autopick-matcher.h"
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-key-flag-process.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "perception/object-perception.h"

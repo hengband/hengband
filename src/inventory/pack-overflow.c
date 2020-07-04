@@ -2,6 +2,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "player/player-move.h"

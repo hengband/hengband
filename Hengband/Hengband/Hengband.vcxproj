@@ -648,6 +648,7 @@
     <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\inventory\floor-item-getter.h" />
+    <ClInclude Include="..\..\src\inventory\inventory-slot-types.h" />
     <ClInclude Include="..\..\src\inventory\item-selection-util.h" />
     <ClInclude Include="..\..\src\inventory\inventory-describer.h" />
     <ClInclude Include="..\..\src\inventory\inventory-util.h" />

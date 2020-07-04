@@ -1,4 +1,5 @@
 ﻿#include "race-resistances.h"
+#include "inventory/inventory-slot-types.h"
 #include "player/player-race-types.h"
 #include "object/object-flags.h"
 #include "object-enchant/tr-types.h"
