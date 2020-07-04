@@ -239,7 +239,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_KLACKON:
             creature_ptr->resist_conf = TRUE;
             creature_ptr->resist_acid = TRUE;
-            creature_ptr->pspeed += (creature_ptr->lev) / 10;
             break;
         case RACE_KOBOLD:
             creature_ptr->resist_pois = TRUE;
