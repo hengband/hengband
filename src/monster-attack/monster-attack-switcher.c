@@ -15,7 +15,7 @@
 #include "monster/monster-update.h"
 #include "player/player-damage.h"
 #include "spell-kind/earthquake.h"
-#include "spell/spells3.h"
+#include "spell-kind/spells-equipment.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/element-resistance.h"
