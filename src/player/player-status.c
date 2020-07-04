@@ -1469,39 +1469,32 @@ void calc_bonuses(player_type *creature_ptr)
 	{
 		if (!(creature_ptr->inventory_list[INVEN_BODY].k_idx))
 		{
-			creature_ptr->to_a += (creature_ptr->lev * 3) / 2;
 			creature_ptr->dis_to_a += (creature_ptr->lev * 3) / 2;
 		}
 		if (!(creature_ptr->inventory_list[INVEN_OUTER].k_idx) && (creature_ptr->lev > 15))
 		{
-			creature_ptr->to_a += ((creature_ptr->lev - 13) / 3);
 			creature_ptr->dis_to_a += ((creature_ptr->lev - 13) / 3);
 		}
 		if (!(creature_ptr->inventory_list[INVEN_LARM].k_idx) && (creature_ptr->lev > 10))
 		{
-			creature_ptr->to_a += ((creature_ptr->lev - 8) / 3);
 			creature_ptr->dis_to_a += ((creature_ptr->lev - 8) / 3);
 		}
 		if (!(creature_ptr->inventory_list[INVEN_HEAD].k_idx) && (creature_ptr->lev > 4))
 		{
-			creature_ptr->to_a += (creature_ptr->lev - 2) / 3;
 			creature_ptr->dis_to_a += (creature_ptr->lev - 2) / 3;
 		}
 		if (!(creature_ptr->inventory_list[INVEN_HANDS].k_idx))
 		{
-			creature_ptr->to_a += (creature_ptr->lev / 2);
 			creature_ptr->dis_to_a += (creature_ptr->lev / 2);
 		}
 		if (!(creature_ptr->inventory_list[INVEN_FEET].k_idx))
 		{
-			creature_ptr->to_a += (creature_ptr->lev / 3);
 			creature_ptr->dis_to_a += (creature_ptr->lev / 3);
 		}
 	}
 
 	if (creature_ptr->special_defense & KATA_KOUKIJIN)
 	{
-		creature_ptr->to_a -= 50;
 		creature_ptr->dis_to_a -= 50;
 	}
 
@@ -3985,6 +3978,31 @@ static void calc_to_ac(player_type *creature_ptr)
 
     if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
         creature_ptr->to_a += 25;
+    }
+
+	if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && !heavy_armor(creature_ptr)) {
+        if (!(creature_ptr->inventory_list[INVEN_BODY].k_idx)) {
+            creature_ptr->to_a += (creature_ptr->lev * 3) / 2;
+        }
+        if (!(creature_ptr->inventory_list[INVEN_OUTER].k_idx) && (creature_ptr->lev > 15)) {
+            creature_ptr->to_a += ((creature_ptr->lev - 13) / 3);
+        }
+        if (!(creature_ptr->inventory_list[INVEN_LARM].k_idx) && (creature_ptr->lev > 10)) {
+            creature_ptr->to_a += ((creature_ptr->lev - 8) / 3);
+        }
+        if (!(creature_ptr->inventory_list[INVEN_HEAD].k_idx) && (creature_ptr->lev > 4)) {
+            creature_ptr->to_a += (creature_ptr->lev - 2) / 3;
+        }
+        if (!(creature_ptr->inventory_list[INVEN_HANDS].k_idx)) {
+            creature_ptr->to_a += (creature_ptr->lev / 2);
+        }
+        if (!(creature_ptr->inventory_list[INVEN_FEET].k_idx)) {
+            creature_ptr->to_a += (creature_ptr->lev / 3);
+        }
+    }
+
+    if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+        creature_ptr->to_a -= 50;
     }
 }
 
