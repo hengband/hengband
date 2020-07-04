@@ -542,7 +542,7 @@ hengband_SOURCES = \
 	\
 	spell-kind/blood-curse.c spell-kind/blood-curse.h \
 	spell-kind/earthquake.c spell-kind/earthquake.h \
-	spell/magic-item-recharger.c spell/magic-item-recharger.h \
+	spell-kind/magic-item-recharger.c spell-kind/magic-item-recharger.h \
 	spell-kind/spells-beam.c spell-kind/spells-beam.h \
 	spell-kind/spells-charm.c spell-kind/spells-charm.h \
 	spell-kind/spells-curse-removal.c spell-kind/spells-curse-removal.h \
