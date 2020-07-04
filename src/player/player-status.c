@@ -4070,7 +4070,7 @@ static void calc_speed(player_type *creature_ptr)
         else
             tmp_rp_ptr = &race_info[creature_ptr->prace];
 
-		if (is_specific_player_race(creature_ptr, RACE_KLACKON))
+		if (is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE))
 			creature_ptr->pspeed += (creature_ptr->lev) / 10;
 
         if (creature_ptr->mimic_form) {

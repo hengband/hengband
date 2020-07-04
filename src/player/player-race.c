@@ -328,8 +328,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_SPRITE:
             creature_ptr->levitation = TRUE;
             creature_ptr->resist_lite = TRUE;
-
-            creature_ptr->pspeed += (creature_ptr->lev) / 10;
             break;
         case RACE_BEASTMAN:
             creature_ptr->resist_conf = TRUE;
