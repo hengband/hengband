@@ -1601,6 +1601,9 @@
     <ClCompile Include="..\..\src\savedata\load.c">
       <Filter>savedata</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\savedata\angband-version-comparer.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3500,6 +3503,9 @@
       <Filter>savedata</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\savedata\old-feature-types.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\angband-version-comparer.h">
       <Filter>savedata</Filter>
     </ClInclude>
   </ItemGroup>

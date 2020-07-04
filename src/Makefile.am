@@ -519,6 +519,7 @@ hengband_SOURCES = \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	\
+	savedata/angband-version-comparer.c savedata/angband-version-comparer.h \
 	savedata/old-feature-types.h \
 	savedata/load.c savedata/load.h \
 	savedata/save.c savedata/save.h \

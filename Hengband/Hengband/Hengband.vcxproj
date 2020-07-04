@@ -236,6 +236,7 @@
     <ClCompile Include="..\..\src\object-hook\hook-weapon.c" />
     <ClCompile Include="..\..\src\object-hook\hook-armor.c" />
     <ClCompile Include="..\..\src\object-potion\quaff-execution.c" />
+    <ClCompile Include="..\..\src\savedata\angband-version-comparer.c" />
     <ClCompile Include="..\..\src\specific-object\death-crimson.c" />
     <ClCompile Include="..\..\src\spell-kind\blood-curse.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-enchant.c" />
@@ -694,6 +695,7 @@
     <ClInclude Include="..\..\src\object-hook\hook-quest.h" />
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
     <ClInclude Include="..\..\src\object-potion\quaff-execution.h" />
+    <ClInclude Include="..\..\src\savedata\angband-version-comparer.h" />
     <ClInclude Include="..\..\src\savedata\old-feature-types.h" />
     <ClInclude Include="..\..\src\specific-object\death-crimson.h" />
     <ClInclude Include="..\..\src\spell-kind\blood-curse.h" />
