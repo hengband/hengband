@@ -1906,17 +1906,14 @@ void set_mutation_flags(player_type *creature_ptr)
         }
 
         if (creature_ptr->muta3 & MUT3_WART_SKIN) {
-            creature_ptr->to_a += 5;
             creature_ptr->dis_to_a += 5;
         }
 
         if (creature_ptr->muta3 & MUT3_SCALES) {
-            creature_ptr->to_a += 10;
             creature_ptr->dis_to_a += 10;
         }
 
         if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
-            creature_ptr->to_a += 25;
             creature_ptr->dis_to_a += 25;
         }
 

@@ -104,6 +104,7 @@ static void calc_to_magic_chance(player_type *creature_ptr);
 static void calc_base_ac(player_type *creature_ptr);
 static void calc_base_ac_display(player_type *creature_ptr);
 static void calc_speed(player_type *creature_ptr);
+static void calc_to_ac(player_type *creature_ptr);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -1239,7 +1240,7 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->dis_to_d[0] = creature_ptr->to_d[0] = 0;
     creature_ptr->dis_to_d[1] = creature_ptr->to_d[1] = 0;
     creature_ptr->dis_to_h_b = creature_ptr->to_h_b = 0;
-    creature_ptr->dis_to_a = creature_ptr->to_a = 0;
+    creature_ptr->dis_to_a = 0;
     creature_ptr->to_h_m = 0;
     creature_ptr->to_d_m = 0;
     creature_ptr->to_dd[0] = creature_ptr->to_ds[0] = 0;
@@ -1558,6 +1559,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_charisma_addition(creature_ptr);
     calc_to_magic_chance(creature_ptr);
     calc_base_ac(creature_ptr);
+    calc_to_ac(creature_ptr);
     calc_base_ac_display(creature_ptr);
 
 	int count = 0;
@@ -3966,6 +3968,23 @@ static void calc_base_ac(player_type *creature_ptr)
     }
 	if (object_is_armour(&creature_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&creature_ptr->inventory_list[INVEN_LARM])) {
         creature_ptr->ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
+    }
+}
+
+static void calc_to_ac(player_type *creature_ptr)
+{
+    creature_ptr->to_a = 0;
+
+    if (creature_ptr->muta3 & MUT3_WART_SKIN) {
+        creature_ptr->to_a += 5;
+    }
+
+    if (creature_ptr->muta3 & MUT3_SCALES) {
+        creature_ptr->to_a += 10;
+    }
+
+    if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
+        creature_ptr->to_a += 25;
     }
 }
 
