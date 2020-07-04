@@ -50,6 +50,7 @@
 #include "object-hook/hook-expendable.h"
 #include "object-hook/hook-magic.h"
 #include "object-hook/hook-weapon.h"
+#include "object-potion/quaff-execution.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

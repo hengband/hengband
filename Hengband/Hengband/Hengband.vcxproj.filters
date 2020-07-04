@@ -1586,6 +1586,9 @@
     <ClCompile Include="..\..\src\mutation\mutation-techniques.c">
       <Filter>mutation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-potion\quaff-execution.c">
+      <Filter>object-potion</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3469,6 +3472,9 @@
     <ClInclude Include="..\..\src\mutation\mutation-techniques.h">
       <Filter>mutation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object-potion\quaff-execution.h">
+      <Filter>object-potion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3639,6 +3645,9 @@
     </Filter>
     <Filter Include="status">
       <UniqueIdentifier>{c2656391-c200-4334-8150-88f4691c6079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-potion">
+      <UniqueIdentifier>{3e8ea357-82a2-4978-a257-338b953d1469}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
