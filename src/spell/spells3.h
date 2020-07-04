@@ -6,7 +6,6 @@ void reserve_alter_reality(player_type* caster_ptr);
 bool artifact_scroll(player_type* caster_ptr);
 bool mundane_spell(player_type* ownner_ptr, bool only_equip);
 bool recharge(player_type* caster_ptr, int power);
-void display_spell_list(player_type* caster_ptr);
 bool polymorph_monster(player_type* caster_ptr, POSITION y, POSITION x);
 void massacre(player_type* caster_ptr);
 bool eat_rock(player_type* caster_ptr);

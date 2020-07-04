@@ -14,6 +14,7 @@
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "view/display-sub-windows.h"
+#include "view/display-sub-window-spells.h"
 #include "view/main-window-left-frame.h"
 #include "view/main-window-row-column.h"
 #include "view/main-window-stat-poster.h"

@@ -266,29 +266,6 @@ void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
 }
 
 /*!
- * @brief 現在の習得済魔法をサブウィンドウに表示する /
- * @param player_ptr プレーヤーへの参照ポインタ
- * Hack -- display spells in sub-windows
- * @return なし
- */
-void fix_spell(player_type *player_ptr)
-{
-    for (int j = 0; j < 8; j++) {
-        term *old = Term;
-        if (!angband_term[j])
-            continue;
-
-        if (!(window_flag[j] & (PW_SPELL)))
-            continue;
-
-        Term_activate(angband_term[j]);
-        display_spell_list(player_ptr);
-        Term_fresh();
-        Term_activate(old);
-    }
-}
-
-/*!
  * @brief 現在のプレイヤーステータスをサブウィンドウに表示する /
  * @param player_ptr プレーヤーへの参照ポインタ
  * Hack -- display character in sub-windows

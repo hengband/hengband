@@ -1577,6 +1577,9 @@
     <ClCompile Include="..\..\src\spell-kind\spells-equipment.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-sub-window-spells.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3450,6 +3453,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-equipment.h">
       <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-sub-window-spells.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
