@@ -7,6 +7,7 @@
 #include "player/selfinfo.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
@@ -474,7 +475,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 			{
 				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
-				fetch(caster_ptr, dir, weight, FALSE);
+				fetch_item(caster_ptr, dir, weight, FALSE);
 			}
 		}
 		break;

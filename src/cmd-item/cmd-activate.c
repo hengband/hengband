@@ -58,6 +58,7 @@
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-grid.h"
@@ -1336,7 +1337,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		if (!get_aim_dir(user_ptr, &dir)) return FALSE;
 		msg_format(_("%sを伸ばした。", "You stretched your %s."), name);
-		fetch(user_ptr, dir, 500, TRUE);
+		fetch_item(user_ptr, dir, 500, TRUE);
 		break;
 	}
 

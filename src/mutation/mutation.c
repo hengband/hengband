@@ -50,6 +50,7 @@
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-recall.h"
@@ -1624,7 +1625,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 		case MUT1_TELEKINES:
 			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			msg_print(_("集中している...", "You concentrate..."));
-			fetch(creature_ptr, dir, lvl * 10, TRUE);
+			fetch_item(creature_ptr, dir, lvl * 10, TRUE);
 			break;
 
 		case MUT1_VTELEPORT:

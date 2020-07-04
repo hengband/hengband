@@ -1568,6 +1568,9 @@
     <ClCompile Include="..\..\src\inventory\item-selection-util.c">
       <Filter>inventory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-fetcher.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3432,6 +3435,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-flag-types.h">
       <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-fetcher.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

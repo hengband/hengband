@@ -52,6 +52,7 @@
 #include "spell/process-effect.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
@@ -1184,7 +1185,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		/* Telekinesis */
 		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
-		fetch(caster_ptr, dir, plev * 15, FALSE);
+		fetch_item(caster_ptr, dir, plev * 15, FALSE);
 
 		break;
 	case 11:
