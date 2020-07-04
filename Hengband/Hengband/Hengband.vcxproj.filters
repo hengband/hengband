@@ -1589,6 +1589,9 @@
     <ClCompile Include="..\..\src\object-potion\quaff-execution.c">
       <Filter>object-potion</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\death-crimson.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3474,6 +3477,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-potion\quaff-execution.h">
       <Filter>object-potion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\death-crimson.h">
+      <Filter>specific-object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

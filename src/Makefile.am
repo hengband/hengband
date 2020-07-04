@@ -523,6 +523,7 @@ hengband_SOURCES = \
 	\
 	specific-object/bow.c specific-object/bow.h \
 	specific-object/chest.c specific-object/chest.h \
+	specific-object/death-crimson.c specific-object/death-crimson.h \
 	specific-object/death-scythe.c specific-object/death-scythe.h \
 	specific-object/torch.c specific-object/torch.h \
 	\

@@ -9,4 +9,3 @@ bool recharge(player_type* caster_ptr, int power);
 void massacre(player_type* caster_ptr);
 bool shock_power(player_type* caster_ptr);
 void blood_curse_to_enemy(player_type* caster_ptr, MONSTER_IDX m_idx);
-bool fire_crimson(player_type* shooter_ptr);

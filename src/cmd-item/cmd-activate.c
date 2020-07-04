@@ -53,6 +53,7 @@
 #include "status/action-setter.h"
 #include "player/player-race-types.h"
 #include "player/special-defense-types.h"
+#include "specific-object/death-crimson.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-charm.h"
