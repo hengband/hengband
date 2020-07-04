@@ -33,6 +33,7 @@
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-enchant.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-grid.h"

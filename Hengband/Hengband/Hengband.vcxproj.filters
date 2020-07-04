@@ -1598,6 +1598,9 @@
     <ClCompile Include="..\..\src\spell-kind\spells-world.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-enchant.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3491,6 +3494,9 @@
       <Filter>spell-kind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-world.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-enchant.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>
