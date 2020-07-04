@@ -20,9 +20,9 @@
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "realm/realm-hex-numbers.h"
-#include "spell-realm/spells-hex.h"
+#include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells3.h"
+#include "spell-realm/spells-hex.h"
 #include "view/display-messages.h"
 
 /*!

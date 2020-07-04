@@ -32,6 +32,7 @@
 #include "object/object-kind-hook.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
+#include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "spell/spells3.h"
