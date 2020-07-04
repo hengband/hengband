@@ -1891,7 +1891,6 @@ void set_mutation_flags(player_type *creature_ptr)
 {
     if (creature_ptr->muta3) {
 
-
         if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
             creature_ptr->regenerate = FALSE;
         }
@@ -1903,18 +1902,6 @@ void set_mutation_flags(player_type *creature_ptr)
         if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
             creature_ptr->sh_fire = TRUE;
             creature_ptr->lite = TRUE;
-        }
-
-        if (creature_ptr->muta3 & MUT3_WART_SKIN) {
-            creature_ptr->dis_to_a += 5;
-        }
-
-        if (creature_ptr->muta3 & MUT3_SCALES) {
-            creature_ptr->dis_to_a += 10;
-        }
-
-        if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
-            creature_ptr->dis_to_a += 25;
         }
 
         if (creature_ptr->muta3 & MUT3_WINGS) {

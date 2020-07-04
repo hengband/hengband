@@ -1922,16 +1922,8 @@ void calc_bonuses(player_type *creature_ptr)
 			creature_ptr->dis_to_d[0] += (creature_ptr->lev / 6);
 		}
 
-		if (creature_ptr->special_defense & KAMAE_BYAKKO)
+		if (creature_ptr->special_defense & KAMAE_SEIRYU)
 		{
-			creature_ptr->to_a -= 40;
-			creature_ptr->dis_to_a -= 40;
-
-		}
-		else if (creature_ptr->special_defense & KAMAE_SEIRYU)
-		{
-			creature_ptr->to_a -= 50;
-			creature_ptr->dis_to_a -= 50;
 			creature_ptr->resist_acid = TRUE;
 			creature_ptr->resist_fire = TRUE;
 			creature_ptr->resist_elec = TRUE;
@@ -3968,8 +3960,18 @@ static void calc_to_ac(player_type *creature_ptr)
         }
     }
 
-    if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+	if (creature_ptr->special_defense & KAMAE_BYAKKO) {
+        creature_ptr->to_a -= 40;
+    } else if (creature_ptr->special_defense & KAMAE_SEIRYU) {
         creature_ptr->to_a -= 50;
+    } else if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+        creature_ptr->to_a -= 50;
+    }
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->to_a += 100;
+    } else if (creature_ptr->tsubureru || creature_ptr->shield || creature_ptr->magicdef) {
+        creature_ptr->to_a += 50;
     }
 }
 
@@ -4018,8 +4020,32 @@ static void calc_to_ac_display(player_type *creature_ptr)
         creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
     }
 
-	if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+    if (creature_ptr->muta3) {
+        if (creature_ptr->muta3 & MUT3_WART_SKIN) {
+            creature_ptr->dis_to_a += 5;
+        }
+
+        if (creature_ptr->muta3 & MUT3_SCALES) {
+            creature_ptr->dis_to_a += 10;
+        }
+
+        if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
+            creature_ptr->dis_to_a += 25;
+        }
+    }
+
+	if (creature_ptr->special_defense & KAMAE_BYAKKO) {
+        creature_ptr->dis_to_a -= 40;
+    } else if (creature_ptr->special_defense & KAMAE_SEIRYU) {
         creature_ptr->dis_to_a -= 50;
+    } else if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+        creature_ptr->dis_to_a -= 50;
+    }
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->dis_to_a += 100;
+    } else if (creature_ptr->tsubureru || creature_ptr->shield || creature_ptr->magicdef) {
+        creature_ptr->dis_to_a += 50;
     }
 }
 
