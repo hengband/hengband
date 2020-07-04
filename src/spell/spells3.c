@@ -536,54 +536,6 @@ bool shock_power(player_type *caster_ptr)
     return TRUE;
 }
 
-bool booze(player_type *creature_ptr)
-{
-    bool ident = FALSE;
-    if (creature_ptr->pclass != CLASS_MONK)
-        chg_virtue(creature_ptr, V_HARMONY, -1);
-    else if (!creature_ptr->resist_conf)
-        creature_ptr->special_attack |= ATTACK_SUIKEN;
-    if (!creature_ptr->resist_conf && set_confused(creature_ptr, randint0(20) + 15)) {
-        ident = TRUE;
-    }
-
-    if (creature_ptr->resist_chaos) {
-        return ident;
-    }
-
-    if (one_in_(2) && set_image(creature_ptr, creature_ptr->image + randint0(150) + 150)) {
-        ident = TRUE;
-    }
-
-    if (one_in_(13) && (creature_ptr->pclass != CLASS_MONK)) {
-        ident = TRUE;
-        if (one_in_(3))
-            lose_all_info(creature_ptr);
-        else
-            wiz_dark(creature_ptr);
-        (void)teleport_player_aux(creature_ptr, 100, FALSE, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
-        wiz_dark(creature_ptr);
-        msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
-        msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing or how you got here!"));
-    }
-
-    return ident;
-}
-
-/*!
- * @brief 爆発の薬の効果処理 / Fumble ramble
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return 常にTRUE
- */
-bool detonation(player_type *creature_ptr)
-{
-    msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
-    take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"), -1);
-    (void)set_stun(creature_ptr, creature_ptr->stun + 75);
-    (void)set_cut(creature_ptr, creature_ptr->cut + 5000);
-    return TRUE;
-}
-
 void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
