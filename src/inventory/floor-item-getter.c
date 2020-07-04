@@ -56,14 +56,13 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
         return FALSE;
     }
 
-    if (item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)], fis_ptr->tval) || (fis_ptr->mode & USE_FULL)) {
-        fis_ptr->tval = 0;
-        item_tester_hook = NULL;
-        command_cmd = 0;
-        return TRUE;
-    }
+    if (!item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)], fis_ptr->tval) && ((fis_ptr->mode & USE_FULL) == 0))
+        return FALSE;
 
-    return FALSE;
+    fis_ptr->tval = 0;
+    item_tester_hook = NULL;
+    command_cmd = 0;
+    return TRUE;
 }
 
 /*!

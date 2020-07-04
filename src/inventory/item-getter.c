@@ -41,9 +41,33 @@ static void check_item_selection_mode(item_selection_type *item_selection_ptr)
 }
 
 /*!
+ * todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
+ * @brief アイテムへにタグ付けがされているかの調査処理 (のはず)
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param item_selection_ptr アイテムへの参照ポインタ
+ * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ */
+static bool check_item_tag_aux(player_type *owner_ptr, item_selection_type *item_selection_ptr)
+{
+    if (!item_selection_ptr->floor || (*item_selection_ptr->cp >= 0))
+        return FALSE;
+
+    object_type *o_ptr;
+    item_selection_ptr->k = 0 - (*item_selection_ptr->cp);
+    o_ptr = &owner_ptr->current_floor_ptr->o_list[item_selection_ptr->k];
+    if (!item_tester_okay(owner_ptr, o_ptr, item_selection_ptr->tval) && ((item_selection_ptr->mode & USE_FULL) == 0))
+        return FALSE;
+
+    item_selection_ptr->tval = 0;
+    item_tester_hook = NULL;
+    command_cmd = 0;
+    return TRUE;
+}
+
+/*!
  * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
  * @param owner_ptr プレーヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param item_selection_ptr アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
@@ -58,21 +82,10 @@ static bool check_item_tag(player_type *owner_ptr, item_selection_type *item_sel
         command_cmd = 0;
         return TRUE;
     }
-    
-    if (item_selection_ptr->floor && (*item_selection_ptr->cp < 0)) {
-        object_type *o_ptr;
-        item_selection_ptr->k = 0 - (*item_selection_ptr->cp);
-        o_ptr = &owner_ptr->current_floor_ptr->o_list[item_selection_ptr->k];
-        if (item_tester_okay(owner_ptr, o_ptr, item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL)) {
-            item_selection_ptr->tval = 0;
-            item_tester_hook = NULL;
-            command_cmd = 0;
-            return TRUE;
-        }
 
-        return FALSE;
-    }
-    
+    if (check_item_tag_aux(owner_ptr, item_selection_ptr))
+        return TRUE;
+
     if ((item_selection_ptr->inven && (*item_selection_ptr->cp >= 0) && (*item_selection_ptr->cp < INVEN_PACK))
         || (item_selection_ptr->equip && (*item_selection_ptr->cp >= INVEN_RARM) && (*item_selection_ptr->cp < INVEN_TOTAL))) {
         if (*prev_tag && command_cmd) {
