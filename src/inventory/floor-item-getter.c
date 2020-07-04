@@ -174,7 +174,7 @@ static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
         fis_ptr->e2 = -1;
         return;
     }
-    
+
     if (!use_menu)
         return;
 

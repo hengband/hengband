@@ -139,7 +139,7 @@ static void test_inventory(player_type *owner_ptr, item_selection_type *item_sel
         item_selection_ptr->i2 = -1;
         return;
     }
-    
+
     if (!use_menu)
         return;
 
@@ -160,7 +160,7 @@ static void test_equipment(player_type *owner_ptr, item_selection_type *item_sel
         item_selection_ptr->e2 = -1;
         return;
     }
-    
+
     if (!use_menu)
         return;
 
@@ -226,7 +226,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     }
 
     if (item_selection_ptr->floor) {
-        for (item_selection_ptr->this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; item_selection_ptr->this_o_idx; item_selection_ptr->this_o_idx = item_selection_ptr->next_o_idx) {
+        for (item_selection_ptr->this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; item_selection_ptr->this_o_idx;
+             item_selection_ptr->this_o_idx = item_selection_ptr->next_o_idx) {
             object_type *o_ptr;
             o_ptr = &owner_ptr->current_floor_ptr->o_list[item_selection_ptr->this_o_idx];
             item_selection_ptr->next_o_idx = o_ptr->next_o_idx;
@@ -296,7 +297,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         if (!command_wrk) {
             sprintf(item_selection_ptr->out_val, _("持ち物:", "Inven:"));
             if ((item_selection_ptr->i1 <= item_selection_ptr->i2) && !use_menu) {
-                sprintf(item_selection_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->i1), index_to_label(item_selection_ptr->i2));
+                sprintf(item_selection_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->i1),
+                    index_to_label(item_selection_ptr->i2));
                 strcat(item_selection_ptr->out_val, item_selection_ptr->tmp_val);
             }
 
@@ -308,7 +310,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         } else {
             sprintf(item_selection_ptr->out_val, _("装備品:", "Equip:"));
             if ((item_selection_ptr->e1 <= item_selection_ptr->e2) && !use_menu) {
-                sprintf(item_selection_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->e1), index_to_label(item_selection_ptr->e2));
+                sprintf(item_selection_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->e1),
+                    index_to_label(item_selection_ptr->e2));
                 strcat(item_selection_ptr->out_val, item_selection_ptr->tmp_val);
             }
 
@@ -452,7 +455,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
         case '-': {
             if (item_selection_ptr->allow_floor) {
-                for (item_selection_ptr->this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; item_selection_ptr->this_o_idx; item_selection_ptr->this_o_idx = item_selection_ptr->next_o_idx) {
+                for (item_selection_ptr->this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx;
+                     item_selection_ptr->this_o_idx; item_selection_ptr->this_o_idx = item_selection_ptr->next_o_idx) {
                     object_type *o_ptr;
                     o_ptr = &owner_ptr->current_floor_ptr->o_list[item_selection_ptr->this_o_idx];
                     item_selection_ptr->next_o_idx = o_ptr->next_o_idx;
