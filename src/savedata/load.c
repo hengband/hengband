@@ -10,7 +10,7 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-#include "io/load.h"
+#include "savedata/load.h"
 #include "art-definition/art-accessory-types.h"
 #include "birth/quick-start.h"
 #include "cmd-building/cmd-building.h"
@@ -34,7 +34,6 @@
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/report.h"
-#include "io/save.h"
 #include "io/uid-checker.h"
 #include "locale/japanese.h"
 #include "market/arena.h"
@@ -76,6 +75,7 @@
 #include "player/player-skill.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
+#include "savedata/save.h"
 #include "spell/spells-status.h"
 #include "store/store-util.h"
 #include "store/store.h"

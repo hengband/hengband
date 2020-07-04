@@ -689,9 +689,9 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge -Imarket -Imelee \
 	-Imind -Imonster -Imonster-attack -Imonster-floor -Imonster-race -Ilore \
 	-Imspell -Imutation -Iobject -Iobject-enchant -Iobject-hook -Iobject-potion \
-	-Ipet -Iplayer -Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell \
-	-Ispell-kind -Ispell-realm -Istatus -Isv-definition -Isystem -Iterm -Iutil \
-	-Iview -Iwizard -Iworld
+	-Ipet -Iplayer -Iplayer-attack -Irealm -Iroom -Isavedata -Ispecific-object \
+	-Ispell -Ispell-kind -Ispell-realm -Istatus -Isv-definition -Isystem -Iterm \
+	-Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

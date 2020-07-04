@@ -999,7 +999,7 @@
     <ClCompile Include="..\..\src\grid\grid.c" />
     <ClCompile Include="..\..\src\io\inet.c" />
     <ClCompile Include="..\..\src\locale\japanese.c" />
-    <ClCompile Include="..\..\src\io\load.c" />
+    <ClCompile Include="..\..\src\savedata\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\mind\mind.c" />
     <ClCompile Include="..\..\src\monster\monster-info.c" />
@@ -1029,7 +1029,7 @@
     <ClCompile Include="..\..\src\room\rooms.c" />
     <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c" />
     <ClCompile Include="..\..\src\store\rumor.c" />
-    <ClCompile Include="..\..\src\io\save.c" />
+    <ClCompile Include="..\..\src\savedata\save.c" />
     <ClCompile Include="..\..\src\core\scores.c" />
     <ClCompile Include="..\..\src\player\selfinfo.c" />
     <ClCompile Include="..\..\src\io\signal-handlers.c" />
@@ -1241,7 +1241,7 @@
     <ClInclude Include="..\..\src\birth\history.h" />
     <ClInclude Include="..\..\src\io\inet.h" />
     <ClInclude Include="..\..\src\main\init.h" />
-    <ClInclude Include="..\..\src\io\load.h" />
+    <ClInclude Include="..\..\src\savedata\load.h" />
     <ClInclude Include="..\..\src\mind\mind.h" />
     <ClInclude Include="..\..\src\monster\monster-processor.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
@@ -1294,7 +1294,7 @@
     <ClInclude Include="..\..\src\room\rooms-vault.h" />
     <ClInclude Include="..\..\src\room\rooms.h" />
     <ClInclude Include="..\..\src\store\rumor.h" />
-    <ClInclude Include="..\..\src\io\save.h" />
+    <ClInclude Include="..\..\src\savedata\save.h" />
     <ClInclude Include="..\..\src\core\scores.h" />
     <ClInclude Include="..\..\src\player\selfinfo.h" />
     <ClInclude Include="..\..\src\mind\mind-sniper.h" />

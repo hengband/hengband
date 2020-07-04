@@ -476,12 +476,6 @@
     <ClCompile Include="..\..\src\locale\japanese.c">
       <Filter>locale</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\save.c">
-      <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\io\load.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\grid\grid.c">
       <Filter>grid</Filter>
     </ClCompile>
@@ -1601,6 +1595,12 @@
     <ClCompile Include="..\..\src\spell-kind\magic-item-recharger.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\savedata\save.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\savedata\load.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2118,12 +2118,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-summon.h">
       <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\save.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\load.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\grid\feature.h">
       <Filter>grid</Filter>
@@ -3499,6 +3493,12 @@
     <ClInclude Include="..\..\src\spell-kind\magic-item-recharger.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\savedata\save.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\load.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3672,6 +3672,9 @@
     </Filter>
     <Filter Include="object-potion">
       <UniqueIdentifier>{3e8ea357-82a2-4978-a257-338b953d1469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="savedata">
+      <UniqueIdentifier>{2bfe9405-f65a-4dac-afde-56800ae04b9f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
