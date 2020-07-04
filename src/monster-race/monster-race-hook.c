@@ -131,8 +131,11 @@ bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 海洋に出現するならばTRUEを返す
  */
-bool mon_hook_ocean(MONRACE_IDX r_idx)
+bool mon_hook_ocean(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    /* Unused */
+    (void)player_ptr;
+
     monster_race *r_ptr = &r_info[r_idx];
     return (r_ptr->flags8 & RF8_WILD_OCEAN) != 0;
 }
@@ -142,8 +145,11 @@ bool mon_hook_ocean(MONRACE_IDX r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 海岸に出現するならばTRUEを返す
  */
-bool mon_hook_shore(MONRACE_IDX r_idx)
+bool mon_hook_shore(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    /* Unused */
+    (void)player_ptr;
+
     monster_race *r_ptr = &r_info[r_idx];
     return (r_ptr->flags8 & RF8_WILD_SHORE) != 0;
 }
@@ -167,8 +173,11 @@ bool mon_hook_waste(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 荒地に出現するならばTRUEを返す
  */
-bool mon_hook_town(MONRACE_IDX r_idx)
+bool mon_hook_town(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    /* Unused */
+    (void)player_ptr;
+
     monster_race *r_ptr = &r_info[r_idx];
     return (r_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL)) != 0;
 }
@@ -178,8 +187,11 @@ bool mon_hook_town(MONRACE_IDX r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 森林に出現するならばTRUEを返す
  */
-bool mon_hook_wood(MONRACE_IDX r_idx)
+bool mon_hook_wood(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    /* Unused */
+    (void)player_ptr;
+
     monster_race *r_ptr = &r_info[r_idx];
     return (r_ptr->flags8 & (RF8_WILD_WOOD | RF8_WILD_ALL)) != 0;
 }
@@ -189,8 +201,11 @@ bool mon_hook_wood(MONRACE_IDX r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 火山に出現するならばTRUEを返す
  */
-bool mon_hook_volcano(MONRACE_IDX r_idx)
+bool mon_hook_volcano(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    /* Unused */
+    (void)player_ptr;
+
     monster_race *r_ptr = &r_info[r_idx];
     return (r_ptr->flags8 & RF8_WILD_VOLCANO) != 0;
 }
@@ -200,8 +215,11 @@ bool mon_hook_volcano(MONRACE_IDX r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 山地に出現するならばTRUEを返す
  */
-bool mon_hook_mountain(MONRACE_IDX r_idx)
+bool mon_hook_mountain(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    /* Unused */
+    (void)player_ptr;
+
     monster_race *r_ptr = &r_info[r_idx];
     return (r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0;
 }
@@ -211,8 +229,11 @@ bool mon_hook_mountain(MONRACE_IDX r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 森林に出現するならばTRUEを返す
  */
-bool mon_hook_grass(MONRACE_IDX r_idx)
+bool mon_hook_grass(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    /* Unused */
+    (void)player_ptr;
+
     monster_race *r_ptr = &r_info[r_idx];
     return (r_ptr->flags8 & (RF8_WILD_GRASS | RF8_WILD_ALL)) != 0;
 }
@@ -267,8 +288,11 @@ bool mon_hook_lava(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param r_idx 判定するモンスターの種族ID
  * @return 通常の床地形に出現するならばTRUEを返す
  */
-bool mon_hook_floor(MONRACE_IDX r_idx)
+bool mon_hook_floor(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    /* Unused */
+    (void)player_ptr;
+
     monster_race *r_ptr = &r_info[r_idx];
     if (!(r_ptr->flags7 & RF7_AQUATIC) || (r_ptr->flags7 & RF7_CAN_FLY))
         return TRUE;
