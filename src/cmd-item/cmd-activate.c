@@ -47,6 +47,7 @@
 #include "mind/racial-android.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/smart-learn-types.h"
+#include "player-attack/player-attack.h"
 #include "player/avatar.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"

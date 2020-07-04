@@ -294,22 +294,3 @@ bool recharge(player_type *caster_ptr, int power)
 
     return update_player(caster_ptr);
 }
-
-/*!
- * @brief 皆殺し(全方向攻撃)処理
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void massacre(player_type *caster_ptr)
-{
-    grid_type *g_ptr;
-    monster_type *m_ptr;
-    for (DIRECTION dir = 0; dir < 8; dir++) {
-        POSITION y = caster_ptr->y + ddy_ddd[dir];
-        POSITION x = caster_ptr->x + ddx_ddd[dir];
-        g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
-        m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
-            do_cmd_attack(caster_ptr, y, x, 0);
-    }
-}

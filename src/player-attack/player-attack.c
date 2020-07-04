@@ -6,12 +6,14 @@
 
 #include "player-attack/player-attack.h"
 #include "art-definition/art-sword-types.h"
+#include "cmd-action/cmd-attack.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "combat/martial-arts-table.h"
 #include "combat/slaying.h"
 #include "floor/floor.h"
 #include "game-option/cheat-types.h"
+#include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -477,4 +479,23 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         chg_virtue(attacker_ptr, V_UNLIFE, 1);
 
     cause_earthquake(attacker_ptr, pa_ptr, do_quake, y, x);
+}
+
+/*!
+ * @brief 皆殺し(全方向攻撃)処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void massacre(player_type *caster_ptr)
+{
+    grid_type *g_ptr;
+    monster_type *m_ptr;
+    for (DIRECTION dir = 0; dir < 8; dir++) {
+        POSITION y = caster_ptr->y + ddy_ddd[dir];
+        POSITION x = caster_ptr->x + ddx_ddd[dir];
+        g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
+        m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+        if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
+            do_cmd_attack(caster_ptr, y, x, 0);
+    }
 }
