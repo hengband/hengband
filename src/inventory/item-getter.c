@@ -24,6 +24,23 @@
 #include "view/display-sub-windows.h"
 
 /*!
+ * @brief オブジェクト選択のモード設定
+ * @param item_selection_ptr アイテム選択への参照ポインタ
+ * @return なし
+ */
+static void check_item_selection_mode(item_selection_type *item_selection_ptr)
+{
+    if (item_selection_ptr->mode & USE_EQUIP)
+        item_selection_ptr->equip = TRUE;
+
+    if (item_selection_ptr->mode & USE_INVEN)
+        item_selection_ptr->inven = TRUE;
+
+    if (item_selection_ptr->mode & USE_FLOOR)
+        item_selection_ptr->floor = TRUE;
+}
+
+/*!
  * @brief オブジェクト選択の汎用関数 / General function for the selection of item
  * Let the user select an item, save its "index"
  * @param owner_ptr プレーヤーへの参照ポインタ
@@ -42,15 +59,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
     item_selection_type tmp_selection;
     item_selection_type *item_selection_ptr = initialize_item_selection_type(&tmp_selection, cp, mode, tval);
-    if (item_selection_ptr->mode & USE_EQUIP)
-        item_selection_ptr->equip = TRUE;
-
-    if (item_selection_ptr->mode & USE_INVEN)
-        item_selection_ptr->inven = TRUE;
-
-    if (item_selection_ptr->mode & USE_FLOOR)
-        item_selection_ptr->floor = TRUE;
-
+    check_item_selection_mode(item_selection_ptr);
     if (repeat_pull(item_selection_ptr->cp)) {
         if (item_selection_ptr->mode & USE_FORCE && (*item_selection_ptr->cp == INVEN_FORCE)) {
             item_selection_ptr->tval = 0;
