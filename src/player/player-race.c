@@ -121,7 +121,7 @@ bool is_specific_player_race(player_type *creature_ptr, player_race_type prace) 
 void calc_race_status(player_type *creature_ptr)
 {
     const player_race *tmp_rp_ptr;
-		if (creature_ptr->mimic_form)
+	if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
         tmp_rp_ptr = &race_info[creature_ptr->prace];
@@ -135,7 +135,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_fire = TRUE;
             creature_ptr->oppose_fire = 1;
             creature_ptr->see_inv = TRUE;
-            creature_ptr->pspeed += 3;
             creature_ptr->redraw |= PR_STATUS;
             creature_ptr->to_a += 10;
             creature_ptr->dis_to_a += 10;
@@ -159,7 +158,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->telepathy = TRUE;
             creature_ptr->levitation = TRUE;
             creature_ptr->kill_wall = TRUE;
-            creature_ptr->pspeed += 5;
             creature_ptr->to_a += 20;
             creature_ptr->dis_to_a += 20;
             break;
@@ -170,7 +168,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
             creature_ptr->see_inv = TRUE;
-            creature_ptr->pspeed += 3;
             creature_ptr->to_a += 10;
             creature_ptr->dis_to_a += 10;
             if (creature_ptr->pclass != CLASS_NINJA)

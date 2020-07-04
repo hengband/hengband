@@ -157,8 +157,5 @@ void set_personality_flags(player_type *creature_ptr)
         creature_ptr->hold_exp = TRUE;
         if (creature_ptr->pclass != CLASS_NINJA)
             creature_ptr->lite = TRUE;
-
-        if ((creature_ptr->prace != RACE_KLACKON) && (creature_ptr->prace != RACE_SPRITE))
-            creature_ptr->pspeed += (creature_ptr->lev) / 10 + 5;
     }
 }

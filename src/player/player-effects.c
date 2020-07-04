@@ -4000,14 +4000,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->skill_dig += 30;
     }
 
-    if (IS_FAST(creature_ptr)) {
-        creature_ptr->pspeed += 10;
-    }
-
-    if (creature_ptr->slow) {
-        creature_ptr->pspeed -= 10;
-    }
-
     if (is_time_limit_esp(creature_ptr)) {
         creature_ptr->telepathy = TRUE;
     }

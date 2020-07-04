@@ -102,6 +102,8 @@ static void calc_constitution_addition(player_type *creature_ptr);
 static void calc_charisma_addition(player_type *creature_ptr);
 static void calc_to_magic_chance(player_type *creature_ptr);
 static void calc_base_ac(player_type *creature_ptr);
+static void calc_base_ac_display(player_type *creature_ptr);
+static void calc_speed(player_type *creature_ptr);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -1319,7 +1321,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->migite = FALSE;
     creature_ptr->hidarite = FALSE;
     creature_ptr->no_flowed = FALSE;
-    creature_ptr->pspeed = 110;
     creature_ptr->yoiyami = FALSE;
     creature_ptr->easy_2weapon = FALSE;
     creature_ptr->down_saving = FALSE;
@@ -2063,15 +2064,7 @@ void calc_bonuses(player_type *creature_ptr)
 		if (creature_ptr->num_blow[i] < 1) creature_ptr->num_blow[i] = 1;
 	}
 
-	/* Maximum speed is (+99). (internally it's 110 + 99) */
-	/* Temporary lightspeed forces to be maximum speed */
-	if ((creature_ptr->lightspeed && !creature_ptr->riding) || (creature_ptr->pspeed > 209))
-	{
-		creature_ptr->pspeed = 209;
-	}
-
-	/* Minimum speed is (-99). (internally it's 110 - 99) */
-	if (creature_ptr->pspeed < 11) creature_ptr->pspeed = 11;
+	calc_speed(creature_ptr);
 
 	if (creature_ptr->pspeed != old_speed)
 	{
@@ -4009,6 +4002,69 @@ static void calc_base_ac_display(player_type *creature_ptr)
 	if (object_is_armour(&creature_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&creature_ptr->inventory_list[INVEN_LARM])) {
         creature_ptr->dis_ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
     }
+}
+
+static void calc_speed(player_type *creature_ptr)
+{
+    creature_ptr->pspeed = 110;
+
+    const player_race *tmp_rp_ptr;
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+
+    if (creature_ptr->mimic_form) {
+        switch (creature_ptr->mimic_form) {
+        case MIMIC_DEMON:
+            creature_ptr->pspeed += 3;
+            break;
+        case MIMIC_DEMON_LORD:
+            creature_ptr->pspeed += 5;
+            break;
+        case MIMIC_VAMPIRE:
+            creature_ptr->pspeed += 3;
+            break;
+        }
+    }
+
+    if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN && creature_ptr->prace != RACE_KLACKON && creature_ptr->prace != RACE_SPRITE) 
+	{
+        creature_ptr->pspeed += (creature_ptr->lev) / 10 + 5;
+    }
+
+    if (IS_FAST(creature_ptr)) {
+        creature_ptr->pspeed += 10;
+    }
+
+    if (creature_ptr->slow) {
+        creature_ptr->pspeed -= 10;
+    }
+
+    if (creature_ptr->muta3) {
+
+        if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
+            creature_ptr->pspeed -= 2;
+        }
+
+        if (creature_ptr->muta3 & MUT3_XTRA_LEGS) {
+            creature_ptr->pspeed += 3;
+        }
+
+        if (creature_ptr->muta3 & MUT3_SHORT_LEG) {
+            creature_ptr->pspeed -= 3;
+        }
+    }
+
+	/* Maximum speed is (+99). (internally it's 110 + 99) */
+    /* Temporary lightspeed forces to be maximum speed */
+    if ((creature_ptr->lightspeed && !creature_ptr->riding) || (creature_ptr->pspeed > 209)) {
+        creature_ptr->pspeed = 209;
+    }
+
+    /* Minimum speed is (-99). (internally it's 110 - 99) */
+    if (creature_ptr->pspeed < 11)
+        creature_ptr->pspeed = 11;
 }
 
 
