@@ -50,8 +50,6 @@ void calc_equipment_status(player_type* creature_ptr) {
             creature_ptr->see_infra += o_ptr->pval;
         if (have_flag(flgs, TR_TUNNEL))
             creature_ptr->skill_dig += (o_ptr->pval * 20);
-        if (have_flag(flgs, TR_SPEED))
-            creature_ptr->pspeed += o_ptr->pval;
         if (have_flag(flgs, TR_BLOWS)) {
             if ((i == INVEN_RARM || i == INVEN_RIGHT) && !creature_ptr->ryoute)
                 creature_ptr->extra_blows[0] += o_ptr->pval;

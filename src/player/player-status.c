@@ -4070,8 +4070,20 @@ static void calc_speed(player_type *creature_ptr)
         else
             tmp_rp_ptr = &race_info[creature_ptr->prace];
 
-		if (is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE))
-			creature_ptr->pspeed += (creature_ptr->lev) / 10;
+        if (is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE))
+            creature_ptr->pspeed += (creature_ptr->lev) / 10;
+
+        for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+            object_type *o_ptr = &creature_ptr->inventory_list[i];
+            BIT_FLAGS flgs[TR_FLAG_SIZE];
+            object_flags(o_ptr, flgs);
+
+            if (!o_ptr->k_idx)
+                continue;
+            if (have_flag(flgs, TR_SPEED))
+                creature_ptr->pspeed += o_ptr->pval;
+        }
+    
 
         if (creature_ptr->mimic_form) {
             switch (creature_ptr->mimic_form) {
