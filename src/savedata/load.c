@@ -96,35 +96,23 @@
 /* Old hidden trap flag */
 static const BIT_FLAGS CAVE_TRAP = 0x8000;
 
-/* Old quests */
-#define OLD_QUEST_WATER_CAVE 18
+static const int OLD_QUEST_WATER_CAVE = 18; // 湖の洞窟.
+static const int QUEST_OLD_CASTLE = 27; // 古い城.
+static const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
 
-/* Quest constants */
-#define QUEST_OLD_CASTLE 27
-#define QUEST_ROYAL_CRYPT 28
+static FILE *loading_savefile;
 
-/*
- * Local "savefile" pointer
- */
-static FILE *fff;
+/* Old "encryption" byte */
+static byte load_xor_byte;
 
-/*
- * Hack -- old "encryption" byte
- */
-static byte xor_byte;
-
-/*
- * Hack -- simple "checksum" on the actual values
- */
+/* Simple "checksum" on the actual values */
 static u32b v_check = 0L;
 
-/*
- * Hack -- simple "checksum" on the encoded bytes
- */
+/* Simple "checksum" on the encoded bytes */
 static u32b x_check = 0L;
 
 /*
- * Hack -- Japanese Kanji code
+ * Japanese Kanji code
  * 0: Unknown
  * 1: ASCII
  * 2: EUC
@@ -139,7 +127,7 @@ static byte kanji_code = 0;
  * @details
  * Avoid the top two lines, to avoid interference with "msg_print()".
  */
-static void note(concptr msg)
+static void load_note(concptr msg)
 {
     static TERM_LEN y = 2;
     prt(msg, y, 0);
@@ -158,12 +146,12 @@ static void note(concptr msg)
  */
 static byte sf_get(void)
 {
-    byte c = getc(fff) & 0xFF;
-    byte v = c ^ xor_byte;
-    xor_byte = c;
+    byte c = getc(loading_savefile) & 0xFF;
+    byte v = c ^ load_xor_byte;
+    load_xor_byte = c;
 
     v_check += v;
-    x_check += xor_byte;
+    x_check += load_xor_byte;
     return v;
 }
 
@@ -273,7 +261,7 @@ static void strip_bytes(int n)
 }
 
 /*!
- * @brief アイテムオブジェクト１件を読み込む(変愚ver1.5.0以前) / Read an object (Old method)
+ * @brief アイテムオブジェクト1件を読み込む(変愚ver1.5.0以前) / Read an object (Old method)
  * @param o_ptr アイテムオブジェクト読み取り先ポインタ
  * @return なし
  * @details
@@ -2185,7 +2173,7 @@ static errr rd_inventory(player_type *player_ptr)
         }
 
         if (player_ptr->inven_cnt == INVEN_PACK) {
-            note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory"));
+            load_note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory"));
             return (54);
         }
 
@@ -2430,14 +2418,14 @@ static errr rd_dungeon_old(player_type *player_ptr)
     u16b limit;
     rd_u16b(&limit);
     if (limit > current_world_ptr->max_o_idx) {
-        note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
+        load_note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
         return (151);
     }
 
     for (int i = 1; i < limit; i++) {
         OBJECT_IDX o_idx = o_pop(floor_ptr);
         if (i != o_idx) {
-            note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
+            load_note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
             return (152);
         }
 
@@ -2460,7 +2448,7 @@ static errr rd_dungeon_old(player_type *player_ptr)
 
     rd_u16b(&limit);
     if (limit > current_world_ptr->max_m_idx) {
-        note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
+        load_note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
         return (161);
     }
 
@@ -2469,7 +2457,7 @@ static errr rd_dungeon_old(player_type *player_ptr)
         monster_type *m_ptr;
         m_idx = m_pop(floor_ptr);
         if (i != m_idx) {
-            note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
+            load_note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
             return (162);
         }
 
@@ -2765,31 +2753,31 @@ static errr rd_dungeon(player_type *player_ptr)
 
     switch (err) {
     case 151:
-        note(_("アイテムの配列が大きすぎる！", "Too many object entries!"));
+        load_note(_("アイテムの配列が大きすぎる！", "Too many object entries!"));
         break;
 
     case 152:
-        note(_("アイテム配置エラー", "Object allocation error"));
+        load_note(_("アイテム配置エラー", "Object allocation error"));
         break;
 
     case 161:
-        note(_("モンスターの配列が大きすぎる！", "Too many monster entries!"));
+        load_note(_("モンスターの配列が大きすぎる！", "Too many monster entries!"));
         break;
 
     case 162:
-        note(_("モンスター配置エラー", "Monster allocation error"));
+        load_note(_("モンスター配置エラー", "Monster allocation error"));
         break;
 
     case 171:
-        note(_("保存されたフロアのダンジョンデータが壊れています！", "Dungeon data of saved floors are broken!"));
+        load_note(_("保存されたフロアのダンジョンデータが壊れています！", "Dungeon data of saved floors are broken!"));
         break;
 
     case 182:
-        note(_("テンポラリ・ファイルを作成できません！", "Failed to make temporary files!"));
+        load_note(_("テンポラリ・ファイルを作成できません！", "Failed to make temporary files!"));
         break;
 
     case 183:
-        note(_("Error 183", "Error 183"));
+        load_note(_("Error 183", "Error 183"));
         break;
     }
 
@@ -2807,7 +2795,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     u32b o_x_check, o_v_check;
 
     strip_bytes(4);
-    xor_byte = current_world_ptr->sf_extra;
+    load_xor_byte = current_world_ptr->sf_extra;
     v_check = 0L;
     x_check = 0L;
 
@@ -2817,7 +2805,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     rd_byte(&current_world_ptr->h_ver_minor);
     rd_byte(&current_world_ptr->h_ver_major);
 
-    note(format(_("バージョン %d.%d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d.%d savefile..."),
+    load_note(format(_("バージョン %d.%d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d.%d savefile..."),
         (current_world_ptr->h_ver_major > 9) ? current_world_ptr->h_ver_major - 10 : current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor,
         current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra));
 
@@ -2838,15 +2826,15 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
     rd_randomizer();
     if (arg_fiddle)
-        note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
+        load_note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
 
     rd_options();
     if (arg_fiddle)
-        note(_("オプションをロードしました", "Loaded Option Flags"));
+        load_note(_("オプションをロードしました", "Loaded Option Flags"));
 
     rd_messages();
     if (arg_fiddle)
-        note(_("メッセージをロードしました", "Loaded Messages"));
+        load_note(_("メッセージをロードしました", "Loaded Messages"));
 
         /* ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster */
     const int MAX_TRIES = 100;
@@ -2862,7 +2850,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
     rd_u16b(&tmp16u);
     if (tmp16u > max_r_idx) {
-        note(format(_("モンスターの種族が多すぎる(%u)！", "Too many (%u) monster races!"), tmp16u));
+        load_note(format(_("モンスターの種族が多すぎる(%u)！", "Too many (%u) monster races!"), tmp16u));
         return (21);
     }
 
@@ -2871,11 +2859,11 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     }
 
     if (arg_fiddle)
-        note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
+        load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
 
     rd_u16b(&tmp16u);
     if (tmp16u > max_k_idx) {
-        note(format(_("アイテムの種類が多すぎる(%u)！", "Too many (%u) object kinds!"), tmp16u));
+        load_note(format(_("アイテムの種類が多すぎる(%u)！", "Too many (%u) object kinds!"), tmp16u));
         return (22);
     }
 
@@ -2886,7 +2874,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
         k_ptr->tried = (tmp8u & 0x02) ? TRUE : FALSE;
     }
     if (arg_fiddle)
-        note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
+        load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
 
     /* 2.1.3 or newer version */
     {
@@ -2897,7 +2885,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
         rd_u16b(&max_towns_load);
         if (max_towns_load > max_towns) {
-            note(format(_("町が多すぎる(%u)！", "Too many (%u) towns!"), max_towns_load));
+            load_note(format(_("町が多すぎる(%u)！", "Too many (%u) towns!"), max_towns_load));
             return (23);
         }
 
@@ -2909,7 +2897,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
         }
 
         if (max_quests_load > max_q_idx) {
-            note(format(_("クエストが多すぎる(%u)！", "Too many (%u) quests!"), max_quests_load));
+            load_note(format(_("クエストが多すぎる(%u)！", "Too many (%u) quests!"), max_quests_load));
             return (23);
         }
 
@@ -3011,7 +2999,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
         rd_s32b(&wild_y_size);
 
         if ((wild_x_size > current_world_ptr->max_wild_x) || (wild_y_size > current_world_ptr->max_wild_y)) {
-            note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
+            load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
             return (23);
         }
 
@@ -3023,11 +3011,11 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     }
 
     if (arg_fiddle)
-        note(_("クエスト情報をロードしました", "Loaded Quests"));
+        load_note(_("クエスト情報をロードしました", "Loaded Quests"));
 
     rd_u16b(&tmp16u);
     if (tmp16u > max_a_idx) {
-        note(format(_("伝説のアイテムが多すぎる(%u)！", "Too many (%u) artifacts!"), tmp16u));
+        load_note(format(_("伝説のアイテムが多すぎる(%u)！", "Too many (%u) artifacts!"), tmp16u));
         return (24);
     }
 
@@ -3049,18 +3037,18 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     }
 
     if (arg_fiddle)
-        note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
+        load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
 
     rd_extra(creature_ptr);
     if (creature_ptr->energy_need < -999)
         creature_ptr->timewalk = TRUE;
 
     if (arg_fiddle)
-        note(_("特別情報をロードしました", "Loaded extra information"));
+        load_note(_("特別情報をロードしました", "Loaded extra information"));
 
     rd_u16b(&tmp16u);
     if (tmp16u > PY_MAX_LEVEL) {
-        note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
+        load_note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
         return (25);
     }
 
@@ -3128,7 +3116,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     }
 
     if (rd_inventory(creature_ptr)) {
-        note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
+        load_note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
         return (21);
     }
 
@@ -3200,9 +3188,9 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     }
 
     if (!creature_ptr->is_dead) {
-        note(_("ダンジョン復元中...", "Restoring Dungeon..."));
+        load_note(_("ダンジョン復元中...", "Restoring Dungeon..."));
         if (rd_dungeon(creature_ptr)) {
-            note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
+            load_note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
             return (34);
         }
 
@@ -3227,14 +3215,14 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     n_v_check = v_check;
     rd_u32b(&o_v_check);
     if (o_v_check != n_v_check) {
-        note(_("チェックサムがおかしい", "Invalid checksum"));
+        load_note(_("チェックサムがおかしい", "Invalid checksum"));
         return 11;
     }
 
     n_x_check = x_check;
     rd_u32b(&o_x_check);
     if (o_x_check != n_x_check) {
-        note(_("エンコードされたチェックサムがおかしい", "Invalid encoded checksum"));
+        load_note(_("エンコードされたチェックサムがおかしい", "Invalid encoded checksum"));
         return 11;
     }
 
@@ -3249,15 +3237,15 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 errr rd_savefile_new(player_type *player_ptr)
 {
     safe_setuid_grab(player_ptr);
-    fff = angband_fopen(savefile, "rb");
+    loading_savefile = angband_fopen(savefile, "rb");
     safe_setuid_drop();
-    if (!fff)
+    if (!loading_savefile)
         return -1;
     errr err = rd_savefile_new_aux(player_ptr);
 
-    if (ferror(fff))
+    if (ferror(loading_savefile))
         err = -1;
-    angband_fclose(fff);
+    angband_fclose(loading_savefile);
     return err;
 }
 
@@ -3272,7 +3260,7 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
     u32b n_x_check, n_v_check;
     u32b o_x_check, o_v_check;
 
-    xor_byte = 0;
+    load_xor_byte = 0;
     byte tmp8u;
     rd_byte(&tmp8u);
 
@@ -3339,8 +3327,8 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     byte old_h_ver_patch = 0;
     byte old_h_ver_extra = 0;
     if (mode & SLF_SECOND) {
-        old_fff = fff;
-        old_xor_byte = xor_byte;
+        old_fff = loading_savefile;
+        old_xor_byte = load_xor_byte;
         old_v_check = v_check;
         old_x_check = x_check;
         old_h_ver_major = current_world_ptr->h_ver_major;
@@ -3353,18 +3341,18 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
     safe_setuid_grab(player_ptr);
-    fff = angband_fopen(floor_savefile, "rb");
+    loading_savefile = angband_fopen(floor_savefile, "rb");
     safe_setuid_drop();
 
     bool is_save_successful = TRUE;
-    if (!fff)
+    if (!loading_savefile)
         is_save_successful = FALSE;
 
     if (is_save_successful) {
         is_save_successful = load_floor_aux(player_ptr, sf_ptr);
-        if (ferror(fff))
+        if (ferror(loading_savefile))
             is_save_successful = FALSE;
-        angband_fclose(fff);
+        angband_fclose(loading_savefile);
 
         safe_setuid_grab(player_ptr);
         if (!(mode & SLF_NO_KILL))
@@ -3374,8 +3362,8 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     }
 
     if (mode & SLF_SECOND) {
-        fff = old_fff;
-        xor_byte = old_xor_byte;
+        loading_savefile = old_fff;
+        load_xor_byte = old_xor_byte;
         v_check = old_v_check;
         x_check = old_x_check;
         current_world_ptr->h_ver_major = old_h_ver_major;

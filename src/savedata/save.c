@@ -51,8 +51,8 @@
  * Some "local" parameters, used to help write savefiles
  */
 
-static FILE *fff; /* Current save "file" */
-static byte xor_byte; /* Simple encryption */
+static FILE *saving_savefile; /* Current save "file" */
+static byte save_xor_byte; /* Simple encryption */
 static u32b v_stamp = 0L; /* A simple "checksum" on the actual values */
 static u32b x_stamp = 0L; /* A simple "checksum" on the encoded bytes */
 
@@ -64,12 +64,12 @@ static u32b x_stamp = 0L; /* A simple "checksum" on the encoded bytes */
 static void sf_put(byte v)
 {
     /* Encode the value, write a character */
-    xor_byte ^= v;
-    (void)putc((int)xor_byte, fff);
+    save_xor_byte ^= v;
+    (void)putc((int)save_xor_byte, saving_savefile);
 
     /* Maintain the checksum info */
     v_stamp += v;
-    x_stamp += xor_byte;
+    x_stamp += save_xor_byte;
 }
 
 /*!
@@ -1223,13 +1223,13 @@ static bool wr_savefile_new(player_type *player_ptr)
 
     /*** Actually write the file ***/
     /* Dump the file header */
-    xor_byte = 0;
+    save_xor_byte = 0;
     wr_byte(FAKE_VER_MAJOR);
-    xor_byte = 0;
+    save_xor_byte = 0;
     wr_byte(FAKE_VER_MINOR);
-    xor_byte = 0;
+    save_xor_byte = 0;
     wr_byte(FAKE_VER_PATCH);
-    xor_byte = 0;
+    save_xor_byte = 0;
 
     /* Initial value of xor_byte */
     byte tmp8u = (byte)Rand_external(256);
@@ -1458,7 +1458,7 @@ static bool wr_savefile_new(player_type *player_ptr)
     /* Write the "encoded checksum" */
     wr_u32b(x_stamp);
 
-    if (ferror(fff) || (fflush(fff) == EOF))
+    if (ferror(saving_savefile) || (fflush(saving_savefile) == EOF))
         return FALSE;
     return TRUE;
 }
@@ -1484,7 +1484,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
     safe_setuid_drop();
 
     bool is_save_successful = FALSE;
-    fff = NULL;
+    saving_savefile = NULL;
     if (fd >= 0) {
         /* Close the "fd" */
         (void)fd_close(fd);
@@ -1493,19 +1493,19 @@ static bool save_player_aux(player_type *player_ptr, char *name)
         safe_setuid_grab(player_ptr);
 
         /* Open the savefile */
-        fff = angband_fopen(name, "wb");
+        saving_savefile = angband_fopen(name, "wb");
 
         /* Drop permissions */
         safe_setuid_drop();
 
         /* Successful open */
-        if (fff) {
+        if (saving_savefile) {
             /* Write the savefile */
             if (wr_savefile_new(player_ptr))
                 is_save_successful = TRUE;
 
             /* Attempt to close it */
-            if (angband_fclose(fff))
+            if (angband_fclose(saving_savefile))
                 is_save_successful = FALSE;
         }
 
@@ -1769,7 +1769,7 @@ static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
     /*** Actually write the file ***/
     /* Initial value of xor_byte */
     byte tmp8u = (byte)randint0(256);
-    xor_byte = 0;
+    save_xor_byte = 0;
     wr_byte(tmp8u);
 
     /* Reset the checksum */
@@ -1788,7 +1788,7 @@ static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
     /* Write the "encoded checksum" */
     wr_u32b(x_stamp);
 
-    if (ferror(fff) || (fflush(fff) == EOF))
+    if (ferror(saving_savefile) || (fflush(saving_savefile) == EOF))
         return FALSE;
     return TRUE;
 }
@@ -1814,8 +1814,8 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     /* We have one file already opened */
     else {
         /* Backup original values */
-        old_fff = fff;
-        old_xor_byte = xor_byte;
+        old_fff = saving_savefile;
+        old_xor_byte = save_xor_byte;
         old_v_stamp = v_stamp;
         old_x_stamp = x_stamp;
     }
@@ -1835,7 +1835,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     /* Attempt to save the player */
 
     /* No file yet */
-    fff = NULL;
+    saving_savefile = NULL;
 
     /* Grab permissions */
     safe_setuid_grab(player_ptr);
@@ -1855,19 +1855,19 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
         safe_setuid_grab(player_ptr);
 
         /* Open the savefile */
-        fff = angband_fopen(floor_savefile, "wb");
+        saving_savefile = angband_fopen(floor_savefile, "wb");
 
         /* Drop permissions */
         safe_setuid_drop();
 
         /* Successful open */
-        if (fff) {
+        if (saving_savefile) {
             /* Write the savefile */
             if (save_floor_aux(player_ptr, sf_ptr))
                 is_save_successful = TRUE;
 
             /* Attempt to close it */
-            if (angband_fclose(fff))
+            if (angband_fclose(saving_savefile))
                 is_save_successful = FALSE;
         }
 
@@ -1889,8 +1889,8 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     /* We have one file already opened */
     else {
         /* Restore original values */
-        fff = old_fff;
-        xor_byte = old_xor_byte;
+        saving_savefile = old_fff;
+        save_xor_byte = old_xor_byte;
         v_stamp = old_v_stamp;
         x_stamp = old_x_stamp;
     }

@@ -1188,7 +1188,7 @@ static errr init_alloc(void)
  * Hack -- take notes on line 23
  * @return なし
  */
-static void note(concptr str)
+static void init_note(concptr str)
 {
 	Term_erase(0, 23, 255);
 	Term_putstr(20, 23, -1, TERM_WHITE, str);
@@ -1369,12 +1369,12 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	/*** Initialize some arrays ***/
 
 	/* Initialize misc. values */
-	note(_("[変数を初期化しています...(その他)", "[Initializing values... (misc)]"));
+	init_note(_("[変数を初期化しています...(その他)", "[Initializing values... (misc)]"));
 	if (init_misc(player_ptr)) quit(_("その他の変数を初期化できません", "Cannot initialize misc. values"));
 
 	/* Initialize feature info */
 #ifdef JP
-	note("[データの初期化中... (地形)]");
+	init_note("[データの初期化中... (地形)]");
 	if (init_f_info(player_ptr)) quit("地形初期化不能");
 	if (init_feat_variables()) quit("地形初期化不能");
 #else
@@ -1384,26 +1384,26 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 #endif
 
 	/* Initialize object info */
-	note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
+	init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
 	if (init_k_info(player_ptr)) quit(_("アイテム初期化不能", "Cannot initialize objects"));
 
 	/* Initialize artifact info */
-	note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
+	init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
 	if (init_a_info(player_ptr)) quit(_("伝説のアイテム初期化不能", "Cannot initialize artifacts"));
 
 
 	/* Initialize ego-item info */
-	note(_("[データの初期化中... (名のあるアイテム)]", "[Initializing arrays... (ego-items)]"));
+	init_note(_("[データの初期化中... (名のあるアイテム)]", "[Initializing arrays... (ego-items)]"));
 	if (init_e_info(player_ptr)) quit(_("名のあるアイテム初期化不能", "Cannot initialize ego-items"));
 
 
 	/* Initialize monster info */
-	note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
+	init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
 	if (init_r_info(player_ptr)) quit(_("モンスター初期化不能", "Cannot initialize monsters"));
 
 
 	/* Initialize dungeon info */
-	note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
+	init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
 	if (init_d_info(player_ptr)) quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
 	{
 		for (int i = 1; i < current_world_ptr->max_d_idx; i++)
@@ -1412,45 +1412,45 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	}
 
 	/* Initialize magic info */
-	note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
+	init_note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
 	if (init_m_info(player_ptr)) quit(_("魔法初期化不能", "Cannot initialize magic"));
 
 	/* Initialize weapon_exp info */
-	note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
+	init_note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
 	if (init_s_info(player_ptr)) quit(_("熟練度初期化不能", "Cannot initialize skill"));
 
 	/* Initialize wilderness array */
-	note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
+	init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
 
 	if (init_wilderness()) quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
 
 	/* Initialize town array */
-	note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
+	init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
 	if (init_towns()) quit(_("街を初期化できません", "Cannot initialize towns"));
 
 	/* Initialize building array */
-	note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
+	init_note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
 	if (init_buildings()) quit(_("建物を初期化できません", "Cannot initialize buildings"));
 
 	/* Initialize quest array */
-	note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
+	init_note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
 	if (init_quests()) quit(_("クエストを初期化できません", "Cannot initialize quests"));
 
 	/* Initialize vault info */
 	if (init_v_info(player_ptr)) quit(_("vault 初期化不能", "Cannot initialize vaults"));
 
 	/* Initialize some other arrays */
-	note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));
+	init_note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));
 	if (init_other(player_ptr)) quit(_("その他のデータ初期化不能", "Cannot initialize other stuff"));
 
 	/* Initialize some other arrays */
-	note(_("[データの初期化中... (アロケーション)]", "[Initializing arrays... (alloc)]"));
+	init_note(_("[データの初期化中... (アロケーション)]", "[Initializing arrays... (alloc)]"));
 	if (init_alloc()) quit(_("アロケーション・スタッフ初期化不能", "Cannot initialize alloc stuff"));
 
 	/*** Load default user pref files ***/
 
 	/* Initialize feature info */
-	note(_("[ユーザー設定ファイルを初期化しています...]", "[Initializing user pref files...]"));
+	init_note(_("[ユーザー設定ファイルを初期化しています...]", "[Initializing user pref files...]"));
 
 	/* Access the "basic" pref file */
 	strcpy(buf, "pref.prf");
@@ -1464,7 +1464,7 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	/* Process that file */
 	process_pref_file(player_ptr, buf, process_autopick_file_command);
 
-	note(_("[初期化終了]", "[Initialization complete]"));
+	init_note(_("[初期化終了]", "[Initialization complete]"));
 }
 
 

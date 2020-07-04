@@ -102,7 +102,7 @@ typedef struct obj_desc_list {
 /*
  * The spoiler file being created
  */
-static FILE *fff = NULL;
+static FILE *spoiler_file = NULL;
 
 /*!
  * @brief シンボル職の記述名を返す /
@@ -253,16 +253,16 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
     char dam[80];
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    fff = angband_fopen(buf, "w");
+    spoiler_file = angband_fopen(buf, "w");
 
-    if (!fff) {
+    if (!spoiler_file) {
         msg_print("Cannot create spoiler file.");
         return;
     }
 
-    fprintf(fff, "Spoiler File -- Basic Items (Hengband %d.%d.%d.%d)\n\n\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
-    fprintf(fff, "%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
-    fprintf(fff, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
+    fprintf(spoiler_file, "Spoiler File -- Basic Items (Hengband %d.%d.%d.%d)\n\n\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
+    fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
+    fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
     for (i = 0; TRUE; i++) {
         if (group_item[i].name) {
             if (n) {
@@ -288,12 +288,12 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
                     }
                 }
 
-                fprintf(fff, "\n\n%s\n\n", group_item[group_start].name);
+                fprintf(spoiler_file, "\n\n%s\n\n", group_item[group_start].name);
                 for (s = 0; s < n; s++) {
                     DEPTH e;
                     PRICE v;
                     kind_info(player_ptr, buf, dam, wgt, chance, &e, &v, who[s]);
-                    fprintf(fff, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, (int)e, chance, (long)(v));
+                    fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, (int)e, chance, (long)(v));
                 }
 
                 n = 0;
@@ -314,7 +314,7 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
         }
     }
 
-    if (ferror(fff) || angband_fclose(fff)) {
+    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
         msg_print("Cannot close spoiler file.");
         return;
     }
@@ -332,7 +332,7 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
 static void spoiler_out_n_chars(int n, char c)
 {
     while (--n >= 0)
-        fputc(c, fff);
+        fputc(c, spoiler_file);
 }
 
 /*!
@@ -351,9 +351,9 @@ static void spoiler_blanklines(int n) { spoiler_out_n_chars(n, '\n'); }
  */
 static void spoiler_underline(concptr str)
 {
-    fprintf(fff, "%s\n", str);
+    fprintf(spoiler_file, "%s\n", str);
     spoiler_out_n_chars(strlen(str), '-');
-    fprintf(fff, "\n");
+    fprintf(spoiler_file, "\n");
 }
 
 /*!
@@ -689,10 +689,10 @@ static void spoiler_outlist(concptr header, concptr *list, char separator)
         } else {
             if (line_len > 1 && line[line_len - 1] == ' ' && line[line_len - 2] == LIST_SEP) {
                 line[line_len - 2] = '\0';
-                fprintf(fff, "%s\n", line);
+                fprintf(spoiler_file, "%s\n", line);
                 sprintf(line, "%s%s", INDENT1, buf);
             } else {
-                fprintf(fff, "%s\n", line);
+                fprintf(spoiler_file, "%s\n", line);
                 sprintf(line, "%s%s", INDENT2, buf);
             }
 
@@ -703,7 +703,7 @@ static void spoiler_outlist(concptr header, concptr *list, char separator)
             break;
     }
 
-    fprintf(fff, "%s\n", line);
+    fprintf(spoiler_file, "%s\n", line);
 }
 
 /*!
@@ -716,7 +716,7 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
 {
     pval_info_type *pval_ptr = &art_ptr->pval_info;
     char buf[80];
-    fprintf(fff, "%s\n", art_ptr->description);
+    fprintf(spoiler_file, "%s\n", art_ptr->description);
     if (pval_ptr->pval_desc[0]) {
         sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
         spoiler_outlist(buf, pval_ptr->pval_affects, ITEM_SEP);
@@ -730,12 +730,12 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
     spoiler_outlist("", art_ptr->misc_magic, LIST_SEP);
 
     if (art_ptr->addition[0])
-        fprintf(fff, _("%s追加: %s\n", "%sAdditional %s\n"), INDENT1, art_ptr->addition);
+        fprintf(spoiler_file, _("%s追加: %s\n", "%sAdditional %s\n"), INDENT1, art_ptr->addition);
 
     if (art_ptr->activation)
-        fprintf(fff, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
+        fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
 
-    fprintf(fff, "%s%s\n\n", INDENT1, art_ptr->misc_desc);
+    fprintf(spoiler_file, "%s%s\n\n", INDENT1, art_ptr->misc_desc);
 }
 
 /*!
@@ -785,9 +785,9 @@ static void spoil_artifact(player_type *player_ptr, concptr fname)
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-    fff = angband_fopen(buf, "w");
+    spoiler_file = angband_fopen(buf, "w");
 
-    if (!fff) {
+    if (!spoiler_file) {
         msg_print("Cannot create spoiler file.");
         return;
     }
@@ -815,7 +815,7 @@ static void spoil_artifact(player_type *player_ptr, concptr fname)
         }
     }
 
-    if (ferror(fff) || angband_fclose(fff)) {
+    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
         msg_print("Cannot close spoiler file.");
         return;
     }
@@ -843,17 +843,17 @@ static void spoil_mon_desc(player_type *player_ptr, concptr fname)
     char hp[80];
     char exp[80];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    fff = angband_fopen(buf, "w");
-    if (!fff) {
+    spoiler_file = angband_fopen(buf, "w");
+    if (!spoiler_file) {
         msg_print("Cannot create spoiler file.");
         return;
     }
 
     C_MAKE(who, max_r_idx, MONRACE_IDX);
-    fprintf(fff, "Monster Spoilers for Hengband Version %d.%d.%d\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-    fprintf(fff, "------------------------------------------\n\n");
-    fprintf(fff, "    %-38.38s%4s%4s%4s%7s%5s  %11.11s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
-    fprintf(fff, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n", "--------", "---", "---", "---", "--", "--", "-----------");
+    fprintf(spoiler_file, "Monster Spoilers for Hengband Version %d.%d.%d\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+    fprintf(spoiler_file, "------------------------------------------\n\n");
+    fprintf(spoiler_file, "    %-38.38s%4s%4s%4s%7s%5s  %11.11s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
+    fprintf(spoiler_file, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n", "--------", "---", "---", "---", "--", "--", "-----------");
     for (i = 1; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
         if (r_ptr->name)
@@ -886,12 +886,12 @@ static void spoil_mon_desc(player_type *player_ptr, concptr fname)
 
         sprintf(exp, "%ld", (long)(r_ptr->mexp));
         sprintf(exp, "%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
-        fprintf(fff, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n", nam, lev, rar, spd, hp, ac, exp);
+        fprintf(spoiler_file, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n", nam, lev, rar, spd, hp, ac, exp);
     }
 
-    fprintf(fff, "\n");
+    fprintf(spoiler_file, "\n");
     C_KILL(who, max_r_idx, s16b);
-    if (ferror(fff) || angband_fclose(fff)) {
+    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
         msg_print("Cannot close spoiler file.");
         return;
     }
@@ -921,7 +921,7 @@ static void spoil_out(concptr str)
     static bool waiting_output = FALSE;
     if (!str) {
         if (waiting_output) {
-            fputs(roff_waiting_buf, fff);
+            fputs(roff_waiting_buf, spoiler_file);
             waiting_output = FALSE;
         }
 
@@ -931,10 +931,10 @@ static void spoil_out(concptr str)
             roff_p--;
 
         if (roff_p == roff_buf)
-            fprintf(fff, "\n");
+            fprintf(spoiler_file, "\n");
         else {
             *(roff_p + 1) = '\0';
-            fprintf(fff, "%s\n\n", roff_buf);
+            fprintf(spoiler_file, "%s\n\n", roff_buf);
         }
 
         roff_p = roff_buf;
@@ -962,9 +962,9 @@ static void spoil_out(concptr str)
 #endif
 
         if (waiting_output) {
-            fputs(roff_waiting_buf, fff);
+            fputs(roff_waiting_buf, spoiler_file);
             if (!wrap)
-                fputc('\n', fff);
+                fputc('\n', spoiler_file);
 
             waiting_output = FALSE;
         }
@@ -1027,7 +1027,7 @@ static void spoil_out(concptr str)
             }
 
             if (!waiting_output)
-                fprintf(fff, "%s\n", roff_buf);
+                fprintf(spoiler_file, "%s\n", roff_buf);
             else
                 strcpy(roff_waiting_buf, roff_buf);
 
@@ -1088,8 +1088,8 @@ static void spoil_mon_info(player_type *player_ptr, concptr fname)
     u16b why = 2;
     MONRACE_IDX *who;
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    fff = angband_fopen(buf, "w");
-    if (!fff) {
+    spoiler_file = angband_fopen(buf, "w");
+    if (!spoiler_file) {
         msg_print("Cannot create spoiler file.");
         return;
     }
@@ -1151,7 +1151,7 @@ static void spoil_mon_info(player_type *player_ptr, concptr fname)
     }
 
     C_KILL(who, max_r_idx, s16b);
-    if (ferror(fff) || angband_fclose(fff)) {
+    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
         msg_print("Cannot close spoiler file.");
         return;
     }
@@ -1219,8 +1219,8 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
     int **evol_tree, i, j, n, r_idx;
     int *evol_tree_zero; /* For C_KILL() */
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
-    fff = angband_fopen(buf, "w");
-    if (!fff) {
+    spoiler_file = angband_fopen(buf, "w");
+    if (!spoiler_file) {
         msg_print("Cannot create spoiler file.");
         return;
     }
@@ -1272,20 +1272,20 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
             continue;
 
         r_ptr = &r_info[r_idx];
-        fprintf(fff, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), r_idx, r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
+        fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), r_idx, r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
         for (n = 1; r_ptr->next_exp; n++) {
-            fprintf(fff, "%*s-(%ld)-> ", n * 2, "", (long int)r_ptr->next_exp);
-            fprintf(fff, "[%d]: ", r_ptr->next_r_idx);
+            fprintf(spoiler_file, "%*s-(%ld)-> ", n * 2, "", (long int)r_ptr->next_exp);
+            fprintf(spoiler_file, "[%d]: ", r_ptr->next_r_idx);
             r_ptr = &r_info[r_ptr->next_r_idx];
-            fprintf(fff, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"), r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
+            fprintf(spoiler_file, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"), r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
         }
 
-        fputc('\n', fff);
+        fputc('\n', spoiler_file);
     }
 
     C_KILL(evol_tree_zero, max_r_idx * (MAX_EVOL_DEPTH + 1), int);
     C_KILL(evol_tree, max_r_idx, int *);
-    if (ferror(fff) || angband_fclose(fff)) {
+    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
         msg_print("Cannot close spoiler file.");
         return;
     }
@@ -1372,9 +1372,9 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 {
     pval_info_type *pval_ptr = &art_ptr->pval_info;
     char buf[80];
-    fprintf(fff, "%s\n", art_ptr->description);
+    fprintf(spoiler_file, "%s\n", art_ptr->description);
     if (!object_is_fully_known(o_ptr)) {
-        fprintf(fff, _("%s不明\n", "%sUnknown\n"), INDENT1);
+        fprintf(spoiler_file, _("%s不明\n", "%sUnknown\n"), INDENT1);
     } else {
         if (pval_ptr->pval_desc[0]) {
             sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
@@ -1388,11 +1388,11 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
         spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, ITEM_SEP);
         spoiler_outlist("", art_ptr->misc_magic, LIST_SEP);
         if (art_ptr->activation) {
-            fprintf(fff, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
+            fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
         }
     }
 
-    fprintf(fff, "%s%s\n\n", INDENT1, art_ptr->misc_desc);
+    fprintf(spoiler_file, "%s%s\n\n", INDENT1, art_ptr->misc_desc);
 }
 
 /*!
@@ -1425,8 +1425,8 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
     object_type *q_ptr;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    fff = angband_fopen(buf, "w");
-    if (!fff) {
+    spoiler_file = angband_fopen(buf, "w");
+    if (!spoiler_file) {
         msg_print("Cannot create list file.");
         return;
     }
@@ -1457,7 +1457,7 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
         }
     }
 
-    if (ferror(fff) || angband_fclose(fff)) {
+    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
         msg_print("Cannot close list file.");
         return;
     }
