@@ -41,6 +41,74 @@ static void check_item_selection_mode(item_selection_type *item_selection_ptr)
 }
 
 /*!
+ * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param prev_tag 前回選択したアイテムのタグ (のはず)
+ * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ */
+static bool check_item_tag(player_type *owner_ptr, item_selection_type *item_selection_ptr, char *prev_tag)
+{
+    if (!repeat_pull(item_selection_ptr->cp))
+        return FALSE;
+
+    if (item_selection_ptr->mode & USE_FORCE && (*item_selection_ptr->cp == INVEN_FORCE)) {
+        item_selection_ptr->tval = 0;
+        item_tester_hook = NULL;
+        command_cmd = 0;
+        return TRUE;
+    }
+    
+    if (item_selection_ptr->floor && (*item_selection_ptr->cp < 0)) {
+        object_type *o_ptr;
+        item_selection_ptr->k = 0 - (*item_selection_ptr->cp);
+        o_ptr = &owner_ptr->current_floor_ptr->o_list[item_selection_ptr->k];
+        if (item_tester_okay(owner_ptr, o_ptr, item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL)) {
+            item_selection_ptr->tval = 0;
+            item_tester_hook = NULL;
+            command_cmd = 0;
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+    
+    if ((item_selection_ptr->inven && (*item_selection_ptr->cp >= 0) && (*item_selection_ptr->cp < INVEN_PACK))
+        || (item_selection_ptr->equip && (*item_selection_ptr->cp >= INVEN_RARM) && (*item_selection_ptr->cp < INVEN_TOTAL))) {
+        if (*prev_tag && command_cmd) {
+            if (!get_tag(owner_ptr, &item_selection_ptr->k, *prev_tag, (*item_selection_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN,
+                    item_selection_ptr->tval)) /* Reject */
+                ;
+            else if ((item_selection_ptr->k < INVEN_RARM) ? !item_selection_ptr->inven : !item_selection_ptr->equip) /* Reject */
+                ;
+            else if (!get_item_okay(owner_ptr, item_selection_ptr->k, item_selection_ptr->tval)) /* Reject */
+                ;
+            else {
+                *item_selection_ptr->cp = item_selection_ptr->k;
+                item_selection_ptr->tval = 0;
+                item_tester_hook = NULL;
+                command_cmd = 0;
+                return TRUE;
+            }
+
+            *prev_tag = '\0';
+            return FALSE;
+        }
+        
+        if (get_item_okay(owner_ptr, *item_selection_ptr->cp, item_selection_ptr->tval)) {
+            item_selection_ptr->tval = 0;
+            item_tester_hook = NULL;
+            command_cmd = 0;
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    return FALSE;
+}
+
+/*!
  * @brief オブジェクト選択の汎用関数 / General function for the selection of item
  * Let the user select an item, save its "index"
  * @param owner_ptr プレーヤーへの参照ポインタ
@@ -53,54 +121,15 @@ static void check_item_selection_mode(item_selection_type *item_selection_ptr)
  */
 bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, tval_type tval)
 {
-    static char prev_tag = '\0'; // TODO: repeat_pull の中だけポインタにする
+    static char prev_tag = '\0';
     if (easy_floor || use_menu)
         return get_item_floor(owner_ptr, cp, pmt, str, mode, tval);
 
     item_selection_type tmp_selection;
     item_selection_type *item_selection_ptr = initialize_item_selection_type(&tmp_selection, cp, mode, tval);
     check_item_selection_mode(item_selection_ptr);
-    if (repeat_pull(item_selection_ptr->cp)) {
-        if (item_selection_ptr->mode & USE_FORCE && (*item_selection_ptr->cp == INVEN_FORCE)) {
-            item_selection_ptr->tval = 0;
-            item_tester_hook = NULL;
-            command_cmd = 0;
-            return TRUE;
-        } else if (item_selection_ptr->floor && (*item_selection_ptr->cp < 0)) {
-            object_type *o_ptr;
-            item_selection_ptr->k = 0 - (*item_selection_ptr->cp);
-            o_ptr = &owner_ptr->current_floor_ptr->o_list[item_selection_ptr->k];
-            if (item_tester_okay(owner_ptr, o_ptr, item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL)) {
-                item_selection_ptr->tval = 0;
-                item_tester_hook = NULL;
-                command_cmd = 0;
-                return TRUE;
-            }
-        } else if ((item_selection_ptr->inven && (*item_selection_ptr->cp >= 0) && (*item_selection_ptr->cp < INVEN_PACK)) || (item_selection_ptr->equip && (*item_selection_ptr->cp >= INVEN_RARM) && (*item_selection_ptr->cp < INVEN_TOTAL))) {
-            if (prev_tag && command_cmd) {
-                if (!get_tag(owner_ptr, &item_selection_ptr->k, prev_tag, (*item_selection_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, item_selection_ptr->tval)) /* Reject */
-                    ;
-                else if ((item_selection_ptr->k < INVEN_RARM) ? !item_selection_ptr->inven : !item_selection_ptr->equip) /* Reject */
-                    ;
-                else if (!get_item_okay(owner_ptr, item_selection_ptr->k, item_selection_ptr->tval)) /* Reject */
-                    ;
-                else {
-                    *item_selection_ptr->cp = item_selection_ptr->k;
-                    item_selection_ptr->tval = 0;
-                    item_tester_hook = NULL;
-                    command_cmd = 0;
-                    return TRUE;
-                }
-
-                prev_tag = '\0';
-            } else if (get_item_okay(owner_ptr, *item_selection_ptr->cp, item_selection_ptr->tval)) {
-                item_selection_ptr->tval = 0;
-                item_tester_hook = NULL;
-                command_cmd = 0;
-                return TRUE;
-            }
-        }
-    }
+    if (check_item_tag(owner_ptr, item_selection_ptr, &prev_tag))
+        return TRUE;
 
     msg_print(NULL);
     item_selection_ptr->done = FALSE;

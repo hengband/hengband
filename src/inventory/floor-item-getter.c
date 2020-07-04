@@ -30,13 +30,14 @@
 #include "view/display-sub-windows.h"
 
 /*!
+ * todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  * @brief 床上アイテムへにタグ付けがされているかの調査処理 (のはず)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_item_tag_floor(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
 {
     if (!fis_ptr->floor || (*fis_ptr->cp >= 0))
         return FALSE;
@@ -72,7 +73,7 @@ static bool check_item_tag_floor(player_type *owner_ptr, fis_type *fis_ptr, char
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool get_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
 {
     if ((*prev_tag == '\0') || !command_cmd)
         return FALSE;
@@ -97,13 +98,13 @@ static bool get_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, ch
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
 {
     if ((!fis_ptr->inven || (*fis_ptr->cp < 0) || (*fis_ptr->cp >= INVEN_PACK))
         && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_RARM) || (*fis_ptr->cp >= INVEN_TOTAL)))
         return FALSE;
 
-    if (get_item_tag_inventory(owner_ptr, fis_ptr, prev_tag))
+    if (get_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag))
         return TRUE;
 
     if (get_item_okay(owner_ptr, *fis_ptr->cp, fis_ptr->tval)) {
@@ -117,13 +118,13 @@ static bool check_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, 
 }
 
 /*!
- * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
+ * @brief 床上アイテムにタグ付けがされているかの調査処理 (のはず)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
 {
     if (!repeat_pull(fis_ptr->cp))
         return FALSE;
@@ -135,10 +136,10 @@ static bool check_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev
         return TRUE;
     }
 
-    if (check_item_tag_floor(owner_ptr, fis_ptr, prev_tag))
+    if (check_floor_item_tag_aux(owner_ptr, fis_ptr, prev_tag))
         return TRUE;
 
-    return check_item_tag_inventory(owner_ptr, fis_ptr, prev_tag);
+    return check_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag);
 }
 
 /*!
@@ -197,7 +198,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     fis_type tmp_fis;
     fis_type *fis_ptr = initialize_fis_type(&tmp_fis, cp, mode, tval);
     static char prev_tag = '\0';
-    if (check_item_tag(owner_ptr, fis_ptr, &prev_tag))
+    if (check_floor_item_tag(owner_ptr, fis_ptr, &prev_tag))
         return TRUE;
 
     msg_print(NULL);
