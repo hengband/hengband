@@ -103,8 +103,9 @@ static void calc_charisma_addition(player_type *creature_ptr);
 static void calc_to_magic_chance(player_type *creature_ptr);
 static void calc_base_ac(player_type *creature_ptr);
 static void calc_base_ac_display(player_type *creature_ptr);
-static void calc_speed(player_type *creature_ptr);
 static void calc_to_ac(player_type *creature_ptr);
+static void calc_to_ac_display(player_type *creature_ptr);
+static void calc_speed(player_type *creature_ptr);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -1240,7 +1241,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->dis_to_d[0] = creature_ptr->to_d[0] = 0;
     creature_ptr->dis_to_d[1] = creature_ptr->to_d[1] = 0;
     creature_ptr->dis_to_h_b = creature_ptr->to_h_b = 0;
-    creature_ptr->dis_to_a = 0;
     creature_ptr->to_h_m = 0;
     creature_ptr->to_d_m = 0;
     creature_ptr->to_dd[0] = creature_ptr->to_ds[0] = 0;
@@ -1465,45 +1465,11 @@ void calc_bonuses(player_type *creature_ptr)
 
 	if (creature_ptr->cursed & TRC_TELEPORT) creature_ptr->cursed &= ~(TRC_TELEPORT_SELF);
 
-	if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && !heavy_armor(creature_ptr))
-	{
-		if (!(creature_ptr->inventory_list[INVEN_BODY].k_idx))
-		{
-			creature_ptr->dis_to_a += (creature_ptr->lev * 3) / 2;
-		}
-		if (!(creature_ptr->inventory_list[INVEN_OUTER].k_idx) && (creature_ptr->lev > 15))
-		{
-			creature_ptr->dis_to_a += ((creature_ptr->lev - 13) / 3);
-		}
-		if (!(creature_ptr->inventory_list[INVEN_LARM].k_idx) && (creature_ptr->lev > 10))
-		{
-			creature_ptr->dis_to_a += ((creature_ptr->lev - 8) / 3);
-		}
-		if (!(creature_ptr->inventory_list[INVEN_HEAD].k_idx) && (creature_ptr->lev > 4))
-		{
-			creature_ptr->dis_to_a += (creature_ptr->lev - 2) / 3;
-		}
-		if (!(creature_ptr->inventory_list[INVEN_HANDS].k_idx))
-		{
-			creature_ptr->dis_to_a += (creature_ptr->lev / 2);
-		}
-		if (!(creature_ptr->inventory_list[INVEN_FEET].k_idx))
-		{
-			creature_ptr->dis_to_a += (creature_ptr->lev / 3);
-		}
-	}
-
-	if (creature_ptr->special_defense & KATA_KOUKIJIN)
-	{
-		creature_ptr->dis_to_a -= 50;
-	}
-
 	if (creature_ptr->sh_fire) creature_ptr->lite = TRUE;
 
 	if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID))
 	{
 		creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
-		creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
 	}
 
 	if (creature_ptr->realm1 == REALM_HEX)
@@ -1554,6 +1520,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_base_ac(creature_ptr);
     calc_to_ac(creature_ptr);
     calc_base_ac_display(creature_ptr);
+    calc_to_ac_display(creature_ptr);
 
 	int count = 0;
 	for (int i = 0; i < A_MAX; i++)
@@ -4019,6 +3986,40 @@ static void calc_base_ac_display(player_type *creature_ptr)
     }
 	if (object_is_armour(&creature_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&creature_ptr->inventory_list[INVEN_LARM])) {
         creature_ptr->dis_ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
+    }
+}
+
+static void calc_to_ac_display(player_type *creature_ptr)
+{
+    creature_ptr->dis_to_a = 0;
+
+    if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && !heavy_armor(creature_ptr)) {
+        if (!(creature_ptr->inventory_list[INVEN_BODY].k_idx)) {
+            creature_ptr->dis_to_a += (creature_ptr->lev * 3) / 2;
+        }
+        if (!(creature_ptr->inventory_list[INVEN_OUTER].k_idx) && (creature_ptr->lev > 15)) {
+            creature_ptr->dis_to_a += ((creature_ptr->lev - 13) / 3);
+        }
+        if (!(creature_ptr->inventory_list[INVEN_LARM].k_idx) && (creature_ptr->lev > 10)) {
+            creature_ptr->dis_to_a += ((creature_ptr->lev - 8) / 3);
+        }
+        if (!(creature_ptr->inventory_list[INVEN_HEAD].k_idx) && (creature_ptr->lev > 4)) {
+            creature_ptr->dis_to_a += (creature_ptr->lev - 2) / 3;
+        }
+        if (!(creature_ptr->inventory_list[INVEN_HANDS].k_idx)) {
+            creature_ptr->dis_to_a += (creature_ptr->lev / 2);
+        }
+        if (!(creature_ptr->inventory_list[INVEN_FEET].k_idx)) {
+            creature_ptr->dis_to_a += (creature_ptr->lev / 3);
+        }
+    }
+
+	if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
+        creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
+    }
+
+	if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+        creature_ptr->dis_to_a -= 50;
     }
 }
 
