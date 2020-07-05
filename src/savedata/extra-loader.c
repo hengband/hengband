@@ -409,6 +409,17 @@ static void rd_special_attack(player_type *creature_ptr)
     rd_u32b(&creature_ptr->special_attack);
 }
 
+static void rd_action(player_type *creature_ptr)
+{
+    if (creature_ptr->special_attack & KAMAE_MASK) {
+        creature_ptr->action = ACTION_KAMAE;
+        return;
+    }
+    
+    if (creature_ptr->special_attack & KATA_MASK)
+        creature_ptr->action = ACTION_KATA;
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -454,11 +465,7 @@ void rd_extra(player_type *creature_ptr)
     rd_timed_effects(creature_ptr);
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
     rd_special_attack(creature_ptr);
-    if (creature_ptr->special_attack & KAMAE_MASK)
-        creature_ptr->action = ACTION_KAMAE;
-    else if (creature_ptr->special_attack & KATA_MASK)
-        creature_ptr->action = ACTION_KATA;
-
+    rd_action(creature_ptr);
     if (z_older_than(10, 0, 12))
         set_zangband_special_defense(creature_ptr);
     else {
