@@ -242,7 +242,7 @@ static void rd_arena(player_type *creature_ptr)
  * @return なし
  * @details もはや何に使われていたのか不明
  */
-void rd_dummy1(void)
+static void rd_dummy1(void)
 {
     s16b tmp16s;
     rd_s16b(&tmp16s);
@@ -369,6 +369,14 @@ static void rd_alter_reality(player_type *creature_ptr)
         rd_s16b(&creature_ptr->alter_reality);
 }
 
+static void rd_tsuyoshi(player_type *creature_ptr)
+{
+    if (z_older_than(10, 0, 2))
+        creature_ptr->tsuyoshi = 0;
+    else
+        rd_s16b(&creature_ptr->tsuyoshi);
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -410,11 +418,7 @@ void rd_extra(player_type *creature_ptr)
     rd_s16b(&creature_ptr->oppose_acid);
     rd_s16b(&creature_ptr->oppose_elec);
     rd_s16b(&creature_ptr->oppose_pois);
-    if (z_older_than(10, 0, 2))
-        creature_ptr->tsuyoshi = 0;
-    else
-        rd_s16b(&creature_ptr->tsuyoshi);
-
+    rd_tsuyoshi(creature_ptr);
     if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6))
         set_zangband_timed_effects(creature_ptr);
     else {
