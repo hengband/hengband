@@ -399,7 +399,6 @@ static void rd_timed_effects(player_type *creature_ptr)
 
 static void rd_special_attack(player_type *creature_ptr)
 {
-    byte tmp8u;
     if (z_older_than(10, 0, 9)) {
         set_zangband_special_attack(creature_ptr);
         return;
@@ -418,6 +417,17 @@ static void rd_action(player_type *creature_ptr)
     
     if (creature_ptr->special_attack & KATA_MASK)
         creature_ptr->action = ACTION_KATA;
+}
+
+static void rd_special_defense(player_type *creature_ptr)
+{
+    if (z_older_than(10, 0, 12)) {
+        set_zangband_special_defense(creature_ptr);
+        return;
+    }
+    
+    rd_s16b(&creature_ptr->ele_immune);
+    rd_u32b(&creature_ptr->special_defense);
 }
 
 /*!
@@ -466,13 +476,7 @@ void rd_extra(player_type *creature_ptr)
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
     rd_special_attack(creature_ptr);
     rd_action(creature_ptr);
-    if (z_older_than(10, 0, 12))
-        set_zangband_special_defense(creature_ptr);
-    else {
-        rd_s16b(&creature_ptr->ele_immune);
-        rd_u32b(&creature_ptr->special_defense);
-    }
-
+    rd_special_defense(creature_ptr);
     rd_byte(&creature_ptr->knowledge);
     byte tmp8u;
     rd_byte(&tmp8u);
