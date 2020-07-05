@@ -112,6 +112,22 @@ static void set_imitation(player_type *creature_ptr)
     rd_s16b(&creature_ptr->mane_num);
 }
 
+static void set_mutations(player_type *creature_ptr)
+{
+    rd_u32b(&creature_ptr->muta1);
+    rd_u32b(&creature_ptr->muta2);
+    rd_u32b(&creature_ptr->muta3);
+}
+
+static void set_virtues(player_type *creature_ptr)
+{
+    for (int i = 0; i < 8; i++)
+        rd_s16b(&creature_ptr->virtues[i]);
+
+    for (int i = 0; i < 8; i++)
+        rd_s16b(&creature_ptr->vir_types[i]);
+}
+
 static void set_timed_effects(player_type *creature_ptr)
 {
     rd_s16b(&creature_ptr->tim_esp);
@@ -156,17 +172,6 @@ static void set_timed_effects(player_type *creature_ptr)
         rd_s16b(&creature_ptr->multishadow);
         rd_s16b(&creature_ptr->dustrobe);
     }
-
-    rd_s16b(&creature_ptr->chaos_patron);
-    rd_u32b(&creature_ptr->muta1);
-    rd_u32b(&creature_ptr->muta2);
-    rd_u32b(&creature_ptr->muta3);
-
-    for (int i = 0; i < 8; i++)
-        rd_s16b(&creature_ptr->virtues[i]);
-
-    for (int i = 0; i < 8; i++)
-        rd_s16b(&creature_ptr->vir_types[i]);
 }
 
 /*!
@@ -429,6 +434,9 @@ void rd_extra(player_type *creature_ptr)
         set_zangband_timed_effects(creature_ptr);
     else {
         set_timed_effects(creature_ptr);
+        rd_s16b(&creature_ptr->chaos_patron);
+        set_mutations(creature_ptr);
+        set_virtues(creature_ptr);
     }
 
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
