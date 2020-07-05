@@ -76,10 +76,11 @@
 #include "savedata/angband-version-comparer.h"
 #include "savedata/item-loader.h"
 #include "savedata/load-util.h"
+#include "savedata/load-v1-5-0.h"
 #include "savedata/monster-loader.h"
 #include "savedata/old-feature-types.h"
-#include "savedata/savedata-flag-types.h"
 #include "savedata/save.h"
+#include "savedata/savedata-flag-types.h"
 #include "spell/spells-status.h"
 #include "store/store-util.h"
 #include "store/store.h"
@@ -102,48 +103,6 @@ static const BIT_FLAGS CAVE_TRAP = 0x8000;
 static const int OLD_QUEST_WATER_CAVE = 18; // 湖の洞窟.
 static const int QUEST_OLD_CASTLE = 27; // 古い城.
 static const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
-
-/*
- * Old monster bit flags of racial resistances
- */
-#define RF3_IM_ACID 0x00010000 /* Resist acid a lot */
-#define RF3_IM_ELEC 0x00020000 /* Resist elec a lot */
-#define RF3_IM_FIRE 0x00040000 /* Resist fire a lot */
-#define RF3_IM_COLD 0x00080000 /* Resist cold a lot */
-#define RF3_IM_POIS 0x00100000 /* Resist poison a lot */
-#define RF3_RES_TELE 0x00200000 /* Resist teleportation */
-#define RF3_RES_NETH 0x00400000 /* Resist nether a lot */
-#define RF3_RES_WATE 0x00800000 /* Resist water */
-#define RF3_RES_PLAS 0x01000000 /* Resist plasma */
-#define RF3_RES_NEXU 0x02000000 /* Resist nexus */
-#define RF3_RES_DISE 0x04000000 /* Resist disenchantment */
-#define RF3_RES_ALL 0x08000000 /* Resist all */
-
-#define MOVE_RF3_TO_RFR(R_PTR, RF3, RFR)                                                                                                                       \
-    {                                                                                                                                                          \
-        if ((R_PTR)->r_flags3 & (RF3)) {                                                                                                                       \
-            (R_PTR)->r_flags3 &= ~(RF3);                                                                                                                       \
-            (R_PTR)->r_flagsr |= (RFR);                                                                                                                        \
-        }                                                                                                                                                      \
-    }
-
-#define RF4_BR_TO_RFR(R_PTR, RF4_BR, RFR)                                                                                                                      \
-    {                                                                                                                                                          \
-        if ((R_PTR)->r_flags4 & (RF4_BR)) {                                                                                                                    \
-            (R_PTR)->r_flagsr |= (RFR);                                                                                                                        \
-        }                                                                                                                                                      \
-    }
-
-#define RF4_BR_LITE 0x00004000 /* Breathe Lite */
-#define RF4_BR_DARK 0x00008000 /* Breathe Dark */
-#define RF4_BR_CONF 0x00010000 /* Breathe Confusion */
-#define RF4_BR_SOUN 0x00020000 /* Breathe Sound */
-#define RF4_BR_CHAO 0x00040000 /* Breathe Chaos */
-#define RF4_BR_TIME 0x00200000 /* Breathe Time */
-#define RF4_BR_INER 0x00400000 /* Breathe Inertia */
-#define RF4_BR_GRAV 0x00800000 /* Breathe Gravity */
-#define RF4_BR_SHAR 0x01000000 /* Breathe Shards */
-#define RF4_BR_WALL 0x04000000 /* Breathe Force */
 
 /*!
  * @brief モンスターの思い出を読み込む / Read the monster lore
@@ -199,40 +158,10 @@ static void rd_lore(MONRACE_IDX r_idx)
     rd_u32b(&r_ptr->r_flags4);
     rd_u32b(&r_ptr->r_flags5);
     rd_u32b(&r_ptr->r_flags6);
-    if (h_older_than(1, 5, 0, 3)) {
-        r_ptr->r_flagsr = 0L;
-        MOVE_RF3_TO_RFR(r_ptr, RF3_IM_ACID, RFR_IM_ACID);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_IM_ELEC, RFR_IM_ELEC);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_IM_FIRE, RFR_IM_FIRE);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_IM_COLD, RFR_IM_COLD);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_IM_POIS, RFR_IM_POIS);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_RES_TELE, RFR_RES_TELE);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_RES_NETH, RFR_RES_NETH);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_RES_WATE, RFR_RES_WATE);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_RES_PLAS, RFR_RES_PLAS);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_RES_NEXU, RFR_RES_NEXU);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_RES_DISE, RFR_RES_DISE);
-        MOVE_RF3_TO_RFR(r_ptr, RF3_RES_ALL, RFR_RES_ALL);
-
-        RF4_BR_TO_RFR(r_ptr, RF4_BR_LITE, RFR_RES_LITE);
-        RF4_BR_TO_RFR(r_ptr, RF4_BR_DARK, RFR_RES_DARK);
-        RF4_BR_TO_RFR(r_ptr, RF4_BR_SOUN, RFR_RES_SOUN);
-        RF4_BR_TO_RFR(r_ptr, RF4_BR_CHAO, RFR_RES_CHAO);
-        RF4_BR_TO_RFR(r_ptr, RF4_BR_TIME, RFR_RES_TIME);
-        RF4_BR_TO_RFR(r_ptr, RF4_BR_INER, RFR_RES_INER);
-        RF4_BR_TO_RFR(r_ptr, RF4_BR_GRAV, RFR_RES_GRAV);
-        RF4_BR_TO_RFR(r_ptr, RF4_BR_SHAR, RFR_RES_SHAR);
-        RF4_BR_TO_RFR(r_ptr, RF4_BR_WALL, RFR_RES_WALL);
-
-        if (r_ptr->r_flags4 & RF4_BR_CONF)
-            r_ptr->r_flags3 |= RF3_NO_CONF;
-        if (r_idx == MON_STORMBRINGER)
-            r_ptr->r_flagsr |= RFR_RES_CHAO;
-        if (r_ptr->r_flags3 & RF3_ORC)
-            r_ptr->r_flagsr |= RFR_RES_DARK;
-    } else {
+    if (h_older_than(1, 5, 0, 3))
+        set_old_lore(r_ptr, r_idx);
+    else
         rd_u32b(&r_ptr->r_flagsr);
-    }
 
     rd_byte(&tmp8u);
     r_ptr->max_num = (MONSTER_NUMBER)tmp8u;
@@ -1871,7 +1800,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     if (arg_fiddle)
         load_note(_("メッセージをロードしました", "Loaded Messages"));
 
-        /* ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster */
+    /* ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster */
     const int MAX_TRIES = 100;
     for (int i = 0; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
