@@ -2,6 +2,8 @@
 #include "game-option/option-flags.h"
 #include "market/bounty.h"
 #include "monster-race/monster-race.h"
+#include "player/avatar.h"
+#include "player/patron.h"
 #include "player/player-skill.h"
 #include "realm/realm-types.h"
 #include "world/world.h"
@@ -102,4 +104,37 @@ void set_zangband_bounty_uniques(player_type *creature_ptr)
         if (!r_info[current_world_ptr->bounty_r_idx[i]].max_num)
             current_world_ptr->bounty_r_idx[i] += 10000;
     }
+}
+
+/*!
+ * @brief ZAngband v2.0.6に存在しない時限効果を0で初期化する / Old savefiles do not have the following fields...
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ * @details 厳密にv2.0.6しか見ていないため、ZAngband v2.0.5 以前のセーブデータは非対応
+ */
+void set_zangband_timed_effects(player_type *creature_ptr)
+{
+    creature_ptr->tim_esp = 0;
+    creature_ptr->wraith_form = 0;
+    creature_ptr->resist_magic = 0;
+    creature_ptr->tim_regen = 0;
+    creature_ptr->tim_pass_wall = 0;
+    creature_ptr->tim_stealth = 0;
+    creature_ptr->tim_levitation = 0;
+    creature_ptr->tim_sh_touki = 0;
+    creature_ptr->lightspeed = 0;
+    creature_ptr->tsubureru = 0;
+    creature_ptr->tim_res_nether = 0;
+    creature_ptr->tim_res_time = 0;
+    creature_ptr->mimic_form = 0;
+    creature_ptr->tim_mimic = 0;
+    creature_ptr->tim_sh_fire = 0;
+    creature_ptr->tim_reflect = 0;
+    creature_ptr->multishadow = 0;
+    creature_ptr->dustrobe = 0;
+    creature_ptr->chaos_patron = ((creature_ptr->age + creature_ptr->sc) % MAX_PATRON);
+    creature_ptr->muta1 = 0;
+    creature_ptr->muta2 = 0;
+    creature_ptr->muta3 = 0;
+    get_virtues(creature_ptr);
 }

@@ -368,32 +368,9 @@ void rd_extra(player_type *creature_ptr)
     else
         rd_s16b(&creature_ptr->tsuyoshi);
 
-    /* Old savefiles do not have the following fields... */
-    if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6)) {
-        creature_ptr->tim_esp = 0;
-        creature_ptr->wraith_form = 0;
-        creature_ptr->resist_magic = 0;
-        creature_ptr->tim_regen = 0;
-        creature_ptr->tim_pass_wall = 0;
-        creature_ptr->tim_stealth = 0;
-        creature_ptr->tim_levitation = 0;
-        creature_ptr->tim_sh_touki = 0;
-        creature_ptr->lightspeed = 0;
-        creature_ptr->tsubureru = 0;
-        creature_ptr->tim_res_nether = 0;
-        creature_ptr->tim_res_time = 0;
-        creature_ptr->mimic_form = 0;
-        creature_ptr->tim_mimic = 0;
-        creature_ptr->tim_sh_fire = 0;
-        creature_ptr->tim_reflect = 0;
-        creature_ptr->multishadow = 0;
-        creature_ptr->dustrobe = 0;
-        creature_ptr->chaos_patron = ((creature_ptr->age + creature_ptr->sc) % MAX_PATRON);
-        creature_ptr->muta1 = 0;
-        creature_ptr->muta2 = 0;
-        creature_ptr->muta3 = 0;
-        get_virtues(creature_ptr);
-    } else {
+    if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6))
+        set_zangband_timed_effects(creature_ptr);
+    else {
         rd_s16b(&creature_ptr->tim_esp);
         rd_s16b(&creature_ptr->wraith_form);
         rd_s16b(&creature_ptr->resist_magic);
