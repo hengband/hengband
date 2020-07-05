@@ -522,6 +522,7 @@ hengband_SOURCES = \
 	\
 	savedata/angband-version-comparer.c savedata/angband-version-comparer.h \
 	savedata/birth-loader.c savedata/birth-loader.h \
+	savedata/dummy-loader.c savedata/dummy-loader.h \
 	savedata/extra-loader.c savedata/extra-loader.h \
 	savedata/item-loader.c savedata/item-loader.h \
 	savedata/monster-loader.c savedata/monster-loader.h \
@@ -533,10 +534,12 @@ hengband_SOURCES = \
 	savedata/load.c savedata/load.h \
 	savedata/lore-loader.c savedata/lore-loader.h \
 	savedata/option-loader.c savedata/option-loader.h \
+	savedata/player-attack-loader.c savedata/player-attack-loader. \
 	savedata/player-info-loader.c savedata/player-info-loader.h \
 	savedata/savedata-flag-types.h \
 	savedata/save.c savedata/save.h \
 	savedata/store-loader.c savedata/store-loader.h \
+	savedata/world-loader.c savedata/world-loader.h \
 	\
 	specific-object/bow.c specific-object/bow.h \
 	specific-object/chest.c specific-object/chest.h \

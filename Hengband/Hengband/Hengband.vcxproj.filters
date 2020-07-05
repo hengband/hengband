@@ -1643,6 +1643,15 @@
     <ClCompile Include="..\..\src\savedata\player-info-loader.c">
       <Filter>savedata</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\savedata\dummy-loader.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\savedata\world-loader.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\savedata\player-attack-loader.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3591,6 +3600,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\attack-defense-types.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\dummy-loader.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\world-loader.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\player-attack-loader.h">
+      <Filter>savedata</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

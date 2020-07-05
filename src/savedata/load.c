@@ -1053,6 +1053,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
         load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
 
     rd_base_info(creature_ptr);
+    rd_player_info(creature_ptr);
     rd_extra(creature_ptr);
     if (creature_ptr->energy_need < -999)
         creature_ptr->timewalk = TRUE;
