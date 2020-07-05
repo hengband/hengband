@@ -9,9 +9,14 @@
 #include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/patron.h"
+#include "player/player-class.h"
+#include "player/player-personality.h"
+#include "player/player-race.h"
 #include "player/player-skill.h"
 #include "realm/realm-types.h"
+#include "savedata/angband-version-comparer.h"
 #include "savedata/load-util.h"
+#include "spell/spells-status.h"
 #include "system/system-variables.h"
 #include "world/world.h"
 
@@ -231,4 +236,35 @@ void set_zangband_quest(player_type *creature_ptr, quest_type *const q_ptr, int 
     creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)loading_quest_index;
     parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
     creature_ptr->current_floor_ptr->inside_quest = old_inside_quest;
+}
+
+void set_zangband_class(player_type *creature_ptr)
+{
+    if (z_older_than(10, 2, 2) && (creature_ptr->pclass == CLASS_BEASTMASTER) && !creature_ptr->is_dead) {
+        creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        roll_hitdice(creature_ptr, 0L);
+    }
+
+    if (z_older_than(10, 3, 2) && (creature_ptr->pclass == CLASS_ARCHER) && !creature_ptr->is_dead) {
+        creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        roll_hitdice(creature_ptr, 0L);
+    }
+
+    if (z_older_than(10, 2, 6) && (creature_ptr->pclass == CLASS_SORCERER) && !creature_ptr->is_dead) {
+        creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        roll_hitdice(creature_ptr, 0L);
+    }
+
+    if (z_older_than(10, 4, 7) && (creature_ptr->pclass == CLASS_BLUE_MAGE) && !creature_ptr->is_dead) {
+        creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+        roll_hitdice(creature_ptr, 0L);
+    }
+}
+
+void set_zangband_spells(player_type *creature_ptr)
+{
+    creature_ptr->learned_spells = 0;
+    for (int i = 0; i < 64; i++)
+        if ((i < 32) ? (creature_ptr->spell_learned1 & (1L << i)) : (creature_ptr->spell_learned2 & (1L << (i - 32))))
+            creature_ptr->learned_spells++;
 }

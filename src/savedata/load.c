@@ -439,26 +439,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     cp_ptr = &class_info[creature_ptr->pclass];
     ap_ptr = &personality_info[creature_ptr->pseikaku];
 
-    if (z_older_than(10, 2, 2) && (creature_ptr->pclass == CLASS_BEASTMASTER) && !creature_ptr->is_dead) {
-        creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        roll_hitdice(creature_ptr, 0L);
-    }
-
-    if (z_older_than(10, 3, 2) && (creature_ptr->pclass == CLASS_ARCHER) && !creature_ptr->is_dead) {
-        creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        roll_hitdice(creature_ptr, 0L);
-    }
-
-    if (z_older_than(10, 2, 6) && (creature_ptr->pclass == CLASS_SORCERER) && !creature_ptr->is_dead) {
-        creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        roll_hitdice(creature_ptr, 0L);
-    }
-
-    if (z_older_than(10, 4, 7) && (creature_ptr->pclass == CLASS_BLUE_MAGE) && !creature_ptr->is_dead) {
-        creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        roll_hitdice(creature_ptr, 0L);
-    }
-
+    set_zangband_class(creature_ptr);
     mp_ptr = &m_info[creature_ptr->pclass];
 
     rd_u32b(&creature_ptr->spell_learned1);
@@ -468,19 +449,14 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     rd_u32b(&creature_ptr->spell_forgotten1);
     rd_u32b(&creature_ptr->spell_forgotten2);
 
-    if (z_older_than(10, 0, 5)) {
-        creature_ptr->learned_spells = 0;
-        for (int i = 0; i < 64; i++) {
-            if ((i < 32) ? (creature_ptr->spell_learned1 & (1L << i)) : (creature_ptr->spell_learned2 & (1L << (i - 32)))) {
-                creature_ptr->learned_spells++;
-            }
-        }
-    } else
+    if (z_older_than(10, 0, 5))
+        set_zangband_spells(creature_ptr);
+    else
         rd_s16b(&creature_ptr->learned_spells);
 
-    if (z_older_than(10, 0, 6)) {
+    if (z_older_than(10, 0, 6))
         creature_ptr->add_spells = 0;
-    } else
+    else
         rd_s16b(&creature_ptr->add_spells);
 
     if (creature_ptr->pclass == CLASS_MINDCRAFTER)
