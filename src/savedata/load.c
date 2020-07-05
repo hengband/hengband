@@ -420,6 +420,21 @@ static void load_spells(player_type *creature_ptr)
         rd_s16b(&creature_ptr->add_spells);
 }
 
+static errr load_inventory(player_type *creature_ptr)
+{
+    byte tmp8u;
+    for (int i = 0; i < 64; i++) {
+        rd_byte(&tmp8u);
+        creature_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
+    }
+
+    if (!rd_inventory(creature_ptr))
+        return 0;
+
+    load_note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
+    return 21;
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -466,30 +481,21 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (creature_ptr->pclass == CLASS_MINDCRAFTER)
         creature_ptr->add_spells = 0;
 
-    byte tmp8u;
-    for (int i = 0; i < 64; i++) {
-        rd_byte(&tmp8u);
-        creature_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
-    }
-
-    if (rd_inventory(creature_ptr)) {
-        load_note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
-        return 21;
-    }
+    errr load_inventory_result = load_inventory(creature_ptr);
+    if (load_inventory_result != 0)
+        return load_inventory_result;
 
     u16b tmp16u;
     rd_u16b(&tmp16u);
     int town_count = tmp16u;
-
     rd_u16b(&tmp16u);
-    for (int i = 1; i < town_count; i++) {
-        for (int j = 0; j < tmp16u; j++) {
+    for (int i = 1; i < town_count; i++)
+        for (int j = 0; j < tmp16u; j++)
             if (rd_store(creature_ptr, i, j))
-                return (22);
-        }
-    }
+                return 22;
 
     rd_s16b(&creature_ptr->pet_follow_distance);
+    byte tmp8u;
     if (z_older_than(10, 4, 10)) {
         creature_ptr->pet_extra_flags = 0;
         rd_byte(&tmp8u);
