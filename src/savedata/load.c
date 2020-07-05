@@ -77,6 +77,7 @@
 #include "savedata/item-loader.h"
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
+#include "savedata/load-zangband.h"
 #include "savedata/monster-loader.h"
 #include "savedata/old-feature-types.h"
 #include "savedata/save.h"
@@ -374,44 +375,8 @@ static void rd_options(void)
         }
     }
 
-    if (z_older_than(10, 4, 5)) {
-        if (option_flag[5] & (0x00000001 << 4))
-            option_flag[5] &= ~(0x00000001 << 4);
-        else
-            option_flag[5] |= (0x00000001 << 4);
-        if (option_flag[2] & (0x00000001 << 5))
-            option_flag[2] &= ~(0x00000001 << 5);
-        else
-            option_flag[2] |= (0x00000001 << 5);
-        if (option_flag[4] & (0x00000001 << 5))
-            option_flag[4] &= ~(0x00000001 << 5);
-        else
-            option_flag[4] |= (0x00000001 << 5);
-        if (option_flag[5] & (0x00000001 << 0))
-            option_flag[5] &= ~(0x00000001 << 0);
-        else
-            option_flag[5] |= (0x00000001 << 0);
-        if (option_flag[5] & (0x00000001 << 12))
-            option_flag[5] &= ~(0x00000001 << 12);
-        else
-            option_flag[5] |= (0x00000001 << 12);
-        if (option_flag[1] & (0x00000001 << 0))
-            option_flag[1] &= ~(0x00000001 << 0);
-        else
-            option_flag[1] |= (0x00000001 << 0);
-        if (option_flag[1] & (0x00000001 << 18))
-            option_flag[1] &= ~(0x00000001 << 18);
-        else
-            option_flag[1] |= (0x00000001 << 18);
-        if (option_flag[1] & (0x00000001 << 19))
-            option_flag[1] &= ~(0x00000001 << 19);
-        else
-            option_flag[1] |= (0x00000001 << 19);
-        if (option_flag[5] & (0x00000001 << 3))
-            option_flag[1] &= ~(0x00000001 << 3);
-        else
-            option_flag[5] |= (0x00000001 << 3);
-    }
+    if (z_older_than(10, 4, 5))
+        load_zangband_options();
 
     extract_option_vars();
     for (int n = 0; n < 8; n++)
