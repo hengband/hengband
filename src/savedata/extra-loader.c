@@ -286,6 +286,17 @@ static void rd_mana(player_type *creature_ptr)
     rd_u32b(&creature_ptr->csp_frac);
 }
 
+static void rd_dungeons(player_type *creature_ptr)
+{
+    if (z_older_than(10, 3, 8))
+        rd_zangband_dungeon();
+    else
+        rd_dungeons();
+
+    if (creature_ptr->max_plv < creature_ptr->lev)
+        creature_ptr->max_plv = creature_ptr->lev;
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -306,14 +317,7 @@ void rd_extra(player_type *creature_ptr)
     rd_hp(creature_ptr);
     rd_mana(creature_ptr);
     rd_s16b(&creature_ptr->max_plv);
-    if (z_older_than(10, 3, 8))
-        rd_zangband_dungeon();
-    else
-        rd_dungeons();
-
-    if (creature_ptr->max_plv < creature_ptr->lev)
-        creature_ptr->max_plv = creature_ptr->lev;
-
+    rd_dungeons(creature_ptr);
     strip_bytes(8);
     rd_s16b(&creature_ptr->sc);
     rd_s16b(&creature_ptr->concent);
