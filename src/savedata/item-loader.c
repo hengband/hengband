@@ -1,5 +1,6 @@
 ﻿#include "savedata/item-loader.h"
 #include "art-definition/art-accessory-types.h"
+#include "game-option/runtime-arguments.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-enchant.h"
@@ -257,4 +258,27 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
             return;
         }
     }
+}
+
+errr load_item(void)
+{
+    u16b tmp16u;
+    rd_u16b(&tmp16u);
+    if (tmp16u > max_k_idx) {
+        load_note(format(_("アイテムの種類が多すぎる(%u)！", "Too many (%u) object kinds!"), tmp16u));
+        return 22;
+    }
+
+    byte tmp8u;
+    for (int i = 0; i < tmp16u; i++) {
+        object_kind *k_ptr = &k_info[i];
+        rd_byte(&tmp8u);
+        k_ptr->aware = (tmp8u & 0x01) ? TRUE : FALSE;
+        k_ptr->tried = (tmp8u & 0x02) ? TRUE : FALSE;
+    }
+
+    if (arg_fiddle)
+        load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
+
+    return 0;
 }

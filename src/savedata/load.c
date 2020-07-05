@@ -167,24 +167,11 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (load_lore_result != 0)
         return load_lore_result;
 
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-    if (tmp16u > max_k_idx) {
-        load_note(format(_("アイテムの種類が多すぎる(%u)！", "Too many (%u) object kinds!"), tmp16u));
-        return 22;
-    }
+    errr load_item_result = load_item();
+    if (load_item_result != 0)
+        return load_item_result;
 
     byte tmp8u;
-    for (int i = 0; i < tmp16u; i++) {
-        object_kind *k_ptr = &k_info[i];
-        rd_byte(&tmp8u);
-        k_ptr->aware = (tmp8u & 0x01) ? TRUE : FALSE;
-        k_ptr->tried = (tmp8u & 0x02) ? TRUE : FALSE;
-    }
-
-    if (arg_fiddle)
-        load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
-
     /* 2.1.3 or newer version */
     {
         u16b max_towns_load;
@@ -322,6 +309,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (arg_fiddle)
         load_note(_("クエスト情報をロードしました", "Loaded Quests"));
 
+    u16b tmp16u;
     rd_u16b(&tmp16u);
     if (tmp16u > max_a_idx) {
         load_note(format(_("伝説のアイテムが多すぎる(%u)！", "Too many (%u) artifacts!"), tmp16u));
