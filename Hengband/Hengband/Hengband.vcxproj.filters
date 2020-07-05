@@ -3589,6 +3589,9 @@
     <ClInclude Include="..\..\src\savedata\player-info-loader.h">
       <Filter>savedata</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player\attack-defense-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

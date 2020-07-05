@@ -240,32 +240,10 @@ typedef struct player_type
 	 * prevents the player from getting more than one at a time.
 	 */
 	BIT_FLAGS special_attack;
-#define ATTACK_CONFUSE	0x00000001 /*!< プレイヤーのステータス:混乱打撃 */
-#define ATTACK_XXX1		0x00000002 /*!< プレイヤーのステータス:未使用1 */
-#define ATTACK_XXX2		0x00000004 /*!< プレイヤーのステータス:未使用2 */
-#define ATTACK_XXX3	    0x00000008 /*!< プレイヤーのステータス:未使用3 */
-#define ATTACK_ACID		0x00000010 /*!< プレイヤーのステータス:魔法剣/溶解 */
-#define ATTACK_ELEC		0x00000020 /*!< プレイヤーのステータス:魔法剣/電撃 */
-#define ATTACK_FIRE		0x00000040 /*!< プレイヤーのステータス:魔法剣/火炎 */
-#define ATTACK_COLD		0x00000080 /*!< プレイヤーのステータス:魔法剣/冷凍 */
-#define ATTACK_POIS		0x00000100 /*!< プレイヤーのステータス:魔法剣/毒殺 */
-#define ATTACK_HOLY		0x00000200 /*!< プレイヤーのステータス:対邪?(未使用) */
-#define ATTACK_SUIKEN	0x00000400 /*!< プレイヤーのステータス:酔拳 */
 
 	/* プレイヤーの防御状態の定義 / Bit flags for the "p_ptr->special_defense" variable. -LM- */
 	BIT_FLAGS special_defense;
 	ACTION_IDX action;		  /* Currently action */
-#define ACTION_NONE     0 /*!< 持続行動: なし */
-#define ACTION_SEARCH   1 /*!< 持続行動: 探索 */
-#define ACTION_REST     2 /*!< 持続行動: 休憩 */
-#define ACTION_LEARN    3 /*!< 持続行動: 青魔法ラーニング */
-#define ACTION_FISH     4 /*!< 持続行動: 釣り */
-#define ACTION_KAMAE    5 /*!< 持続行動: 修行僧の構え */
-#define ACTION_KATA     6 /*!< 持続行動: 剣術家の型 */
-#define ACTION_SING     7 /*!< 持続行動: 歌 */
-#define ACTION_HAYAGAKE 8 /*!< 持続行動: 早駆け */
-#define ACTION_SPELL    9 /*!< 持続行動: 呪術 */
-
 	BIT_FLAGS spell_learned1;	  /* bit mask of spells learned */
 	BIT_FLAGS spell_learned2;	  /* bit mask of spells learned */
 	BIT_FLAGS spell_worked1;	  /* bit mask of spells tried and worked */

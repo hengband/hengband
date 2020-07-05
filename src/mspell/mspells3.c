@@ -43,6 +43,7 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-type.h"
+#include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/player-status.h"
 #include "realm/realm-types.h"

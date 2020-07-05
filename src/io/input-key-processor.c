@@ -32,10 +32,10 @@
 #include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
-#include "cmd-visual/cmd-map.h"
-#include "cmd/cmd-basic.h"
 #include "cmd-visual/cmd-draw.h"
+#include "cmd-visual/cmd-map.h"
 #include "cmd-visual/cmd-visuals.h"
+#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon.h"
@@ -60,11 +60,12 @@
 #include "mind/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
 #include "mind/snipe-types.h"
 #include "mspell/mspells3.h" // do_cmd_cast_learned() がある。後で移設する.
+#include "player/attack-defense-types.h"
 #include "player/player-class.h"
-#include "status/action-setter.h"
 #include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
 #include "player/special-defense-types.h"
 #include "spell/spells-object.h"
+#include "status/action-setter.h"
 #include "store/store-util.h"
 #include "store/store.h" // do_cmd_store() がある。後で移設する.
 #include "term/screen-processor.h"

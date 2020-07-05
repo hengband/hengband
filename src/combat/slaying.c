@@ -9,6 +9,7 @@
 #include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player/attack-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"

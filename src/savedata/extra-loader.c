@@ -15,6 +15,7 @@
 #include "monster-race/monster-race.h"
 #include "mutation/mutation.h"
 #include "object-enchant/tr-types.h"
+#include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/patron.h"
 #include "player/player-skill.h"
@@ -378,6 +379,25 @@ static void rd_tsuyoshi(player_type *creature_ptr)
 }
 
 /*!
+ * @brief 各種時限効果を読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ * @details ZAngbandとの互換性を保つ都合上、突然変異と徳の処理も追加している
+ */
+static void rd_timed_effects(player_type *creature_ptr)
+{
+    if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6)) {
+        set_zangband_timed_effects(creature_ptr);
+        return;
+    }
+
+    set_timed_effects(creature_ptr);
+    rd_s16b(&creature_ptr->chaos_patron);
+    set_mutations(creature_ptr);
+    set_virtues(creature_ptr);
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -419,15 +439,7 @@ void rd_extra(player_type *creature_ptr)
     rd_s16b(&creature_ptr->oppose_elec);
     rd_s16b(&creature_ptr->oppose_pois);
     rd_tsuyoshi(creature_ptr);
-    if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6))
-        set_zangband_timed_effects(creature_ptr);
-    else {
-        set_timed_effects(creature_ptr);
-        rd_s16b(&creature_ptr->chaos_patron);
-        set_mutations(creature_ptr);
-        set_virtues(creature_ptr);
-    }
-
+    rd_timed_effects(creature_ptr);
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
     byte tmp8u;
     if (z_older_than(10, 0, 9)) {

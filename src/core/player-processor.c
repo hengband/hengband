@@ -1,6 +1,6 @@
 ﻿#include "core/player-processor.h"
-#include "mind/mind-sniper.h"
 #include "core/special-internal-keys.h"
+#include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-save.h"
 #include "floor/wild.h"
@@ -13,26 +13,27 @@
 #include "io/input-key-processor.h"
 #include "io/input-key-requester.h"
 #include "mind/mind-force-trainer.h"
-#include "core/speed-table.h"
+#include "mind/mind-sniper.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/place-monster-types.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
-#include "monster-floor/monster-generator.h"
 #include "monster/monster-list.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
-#include "status/action-setter.h"
+#include "player/attack-defense-types.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/special-defense-types.h"
-#include "spell-realm/spells-song.h"
 #include "spell-kind/spells-random.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
+#include "status/action-setter.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
@@ -154,8 +155,8 @@ void process_player(player_type *creature_ptr)
         }
 
         if (monster_stunned_remaining(m_ptr)) {
-            if (set_monster_stunned(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
+            if (set_monster_stunned(creature_ptr, creature_ptr->riding,
+                    (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
@@ -163,8 +164,8 @@ void process_player(player_type *creature_ptr)
         }
 
         if (monster_confused_remaining(m_ptr)) {
-            if (set_monster_confused(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_confused_remaining(m_ptr) - 1))) {
+            if (set_monster_confused(creature_ptr, creature_ptr->riding,
+                    (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_confused_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
@@ -172,8 +173,8 @@ void process_player(player_type *creature_ptr)
         }
 
         if (monster_fear_remaining(m_ptr)) {
-            if (set_monster_monfear(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_fear_remaining(m_ptr) - 1))) {
+            if (set_monster_monfear(creature_ptr, creature_ptr->riding,
+                    (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_fear_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer afraid."), m_name);

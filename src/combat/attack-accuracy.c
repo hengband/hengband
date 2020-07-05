@@ -4,6 +4,7 @@
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
+#include "player/attack-defense-types.h"
 #include "specific-object/death-scythe.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "view/display-messages.h"

@@ -182,14 +182,14 @@
 #include "monster/monster-update.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-flavor.h"
 #include "object/item-tester-hooker.h"
-#include "object/object-mark-types.h"
+#include "object/object-flavor.h"
 #include "object/object-info.h"
+#include "object/object-mark-types.h"
 #include "object/warning.h"
 #include "perception/object-perception.h"
+#include "player/attack-defense-types.h"
 #include "player/player-class.h"
-#include "status/action-setter.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "player/player-status.h"
@@ -198,6 +198,7 @@
 #include "spell-kind/spells-perception.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "status/action-setter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -215,42 +216,39 @@ travel_type travel;
  */
 static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr;
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	g_ptr = &floor_ptr->grid_array[y][x];
+    grid_type *g_ptr;
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    g_ptr = &floor_ptr->grid_array[y][x];
 
-	if (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat))
-	{
-		disclose_grid(creature_ptr, y, x);
-		msg_print(_("トラップを発見した。", "You have found a trap."));
-		disturb(creature_ptr, FALSE, TRUE);
-	}
+    if (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat)) {
+        disclose_grid(creature_ptr, y, x);
+        msg_print(_("トラップを発見した。", "You have found a trap."));
+        disturb(creature_ptr, FALSE, TRUE);
+    }
 
-	if (is_hidden_door(creature_ptr, g_ptr))
-	{
-		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
-		disclose_grid(creature_ptr, y, x);
-		disturb(creature_ptr, FALSE, FALSE);
-	}
+    if (is_hidden_door(creature_ptr, g_ptr)) {
+        msg_print(_("隠しドアを発見した。", "You have found a secret door."));
+        disclose_grid(creature_ptr, y, x);
+        disturb(creature_ptr, FALSE, FALSE);
+    }
 
-	/* Scan all objects in the grid */
-	OBJECT_IDX next_o_idx = 0;
-	for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
-	{
-		object_type *o_ptr;
-		o_ptr = &floor_ptr->o_list[this_o_idx];
-		next_o_idx = o_ptr->next_o_idx;
-		if (o_ptr->tval != TV_CHEST) continue;
-		if (!chest_traps[o_ptr->pval]) continue;
-		if (!object_is_known(o_ptr))
-		{
-			msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
-			object_known(o_ptr);
-			disturb(creature_ptr, FALSE, FALSE);
-		}
-	}
+    /* Scan all objects in the grid */
+    OBJECT_IDX next_o_idx = 0;
+    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+        object_type *o_ptr;
+        o_ptr = &floor_ptr->o_list[this_o_idx];
+        next_o_idx = o_ptr->next_o_idx;
+        if (o_ptr->tval != TV_CHEST)
+            continue;
+        if (!chest_traps[o_ptr->pval])
+            continue;
+        if (!object_is_known(o_ptr)) {
+            msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
+            object_known(o_ptr);
+            disturb(creature_ptr, FALSE, FALSE);
+        }
+    }
 }
-
 
 /*!
  * @brief プレイヤーの探索処理判定
@@ -259,24 +257,23 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
  */
 void search(player_type *creature_ptr)
 {
-	/* Start with base search ability */
-	PERCENTAGE chance = creature_ptr->skill_srh;
+    /* Start with base search ability */
+    PERCENTAGE chance = creature_ptr->skill_srh;
 
-	/* Penalize various conditions */
-	if (creature_ptr->blind || no_lite(creature_ptr)) chance = chance / 10;
-	if (creature_ptr->confused || creature_ptr->image) chance = chance / 10;
+    /* Penalize various conditions */
+    if (creature_ptr->blind || no_lite(creature_ptr))
+        chance = chance / 10;
+    if (creature_ptr->confused || creature_ptr->image)
+        chance = chance / 10;
 
-	/* Search the nearby grids, which are always in bounds */
-	for (DIRECTION i = 0; i < 9; ++ i)
-	{
-		/* Sometimes, notice things */
-		if (randint0(100) < chance)
-		{
-			discover_hidden_things(creature_ptr, creature_ptr->y + ddy_ddd[i], creature_ptr->x + ddx_ddd[i]);
-		}
-	}
+    /* Search the nearby grids, which are always in bounds */
+    for (DIRECTION i = 0; i < 9; ++i) {
+        /* Sometimes, notice things */
+        if (randint0(100) < chance) {
+            discover_hidden_things(creature_ptr, creature_ptr->y + ddy_ddd[i], creature_ptr->x + ddx_ddd[i]);
+        }
+    }
 }
-
 
 /*!
  * @brief プレイヤーがオブジェクトを拾った際のメッセージ表示処理 /
@@ -296,77 +293,69 @@ void search(player_type *creature_ptr)
 void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 {
 #ifdef JP
-	GAME_TEXT o_name[MAX_NLEN];
-	GAME_TEXT old_name[MAX_NLEN];
-	char kazu_str[80];
-	int hirottakazu;
+    GAME_TEXT o_name[MAX_NLEN];
+    GAME_TEXT old_name[MAX_NLEN];
+    char kazu_str[80];
+    int hirottakazu;
 #else
-	GAME_TEXT o_name[MAX_NLEN];
+    GAME_TEXT o_name[MAX_NLEN];
 #endif
 
-	object_type *o_ptr;
-	o_ptr = &owner_ptr->current_floor_ptr->o_list[o_idx];
+    object_type *o_ptr;
+    o_ptr = &owner_ptr->current_floor_ptr->o_list[o_idx];
 
 #ifdef JP
-	object_desc(owner_ptr, old_name, o_ptr, OD_NAME_ONLY);
-	object_desc_kosuu(kazu_str, o_ptr);
-	hirottakazu = o_ptr->number;
+    object_desc(owner_ptr, old_name, o_ptr, OD_NAME_ONLY);
+    object_desc_kosuu(kazu_str, o_ptr);
+    hirottakazu = o_ptr->number;
 #endif
 
-	/* Carry the object */
-	INVENTORY_IDX slot = store_item_to_inventory(owner_ptr, o_ptr);
+    /* Carry the object */
+    INVENTORY_IDX slot = store_item_to_inventory(owner_ptr, o_ptr);
 
-	/* Get the object again */
-	o_ptr = &owner_ptr->inventory_list[slot];
+    /* Get the object again */
+    o_ptr = &owner_ptr->inventory_list[slot];
 
-	delete_object_idx(owner_ptr, o_idx);
+    delete_object_idx(owner_ptr, o_idx);
 
-	if (owner_ptr->pseikaku == PERSONALITY_MUNCHKIN)
-	{
-		bool old_known = identify_item(owner_ptr, o_ptr);
+    if (owner_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+        bool old_known = identify_item(owner_ptr, o_ptr);
 
-		/* Auto-inscription/destroy */
-		autopick_alter_item(owner_ptr, slot, (bool)(destroy_identify && !old_known));
+        /* Auto-inscription/destroy */
+        autopick_alter_item(owner_ptr, slot, (bool)(destroy_identify && !old_known));
 
-		/* If it is destroyed, don't pick it up */
-		if (o_ptr->marked & OM_AUTODESTROY) return;
-	}
+        /* If it is destroyed, don't pick it up */
+        if (o_ptr->marked & OM_AUTODESTROY)
+            return;
+    }
 
-	object_desc(owner_ptr, o_name, o_ptr, 0);
+    object_desc(owner_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
-	if ((o_ptr->name1 == ART_CRIMSON) && (owner_ptr->pseikaku == PERSONALITY_COMBAT))
-	{
-		msg_format("こうして、%sは『クリムゾン』を手に入れた。", owner_ptr->name);
-		msg_print("しかし今、『混沌のサーペント』の放ったモンスターが、");
-		msg_format("%sに襲いかかる．．．", owner_ptr->name);
-	}
-	else
-	{
-		if (plain_pickup)
-		{
-			msg_format("%s(%c)を持っている。",o_name, index_to_label(slot));
-		}
-		else
-		{
-			if (o_ptr->number > hirottakazu) {
-			    msg_format("%s拾って、%s(%c)を持っている。",
-			       kazu_str, o_name, index_to_label(slot));
-			} else {
-				msg_format("%s(%c)を拾った。", o_name, index_to_label(slot));
-			}
-		}
-	}
+    if ((o_ptr->name1 == ART_CRIMSON) && (owner_ptr->pseikaku == PERSONALITY_COMBAT)) {
+        msg_format("こうして、%sは『クリムゾン』を手に入れた。", owner_ptr->name);
+        msg_print("しかし今、『混沌のサーペント』の放ったモンスターが、");
+        msg_format("%sに襲いかかる．．．", owner_ptr->name);
+    } else {
+        if (plain_pickup) {
+            msg_format("%s(%c)を持っている。", o_name, index_to_label(slot));
+        } else {
+            if (o_ptr->number > hirottakazu) {
+                msg_format("%s拾って、%s(%c)を持っている。", kazu_str, o_name, index_to_label(slot));
+            } else {
+                msg_format("%s(%c)を拾った。", o_name, index_to_label(slot));
+            }
+        }
+    }
 
-	strcpy(record_o_name, old_name);
+    strcpy(record_o_name, old_name);
 #else
-	msg_format("You have %s (%c).", o_name, index_to_label(slot));
-	strcpy(record_o_name, o_name);
+    msg_format("You have %s (%c).", o_name, index_to_label(slot));
+    strcpy(record_o_name, o_name);
 #endif
-	record_turn = current_world_ptr->game_turn;
-	check_find_art_quest_completion(owner_ptr, o_ptr);
+    record_turn = current_world_ptr->game_turn;
+    check_find_art_quest_completion(owner_ptr, o_ptr);
 }
-
 
 /*!
  * @brief プレイヤーがオブジェクト上に乗った際の表示処理
@@ -380,85 +369,75 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
  */
 void carry(player_type *creature_ptr, bool pickup)
 {
-	/* Recenter the map around the player */
-	verify_panel(creature_ptr);
+    /* Recenter the map around the player */
+    verify_panel(creature_ptr);
 
-	creature_ptr->update |= (PU_MONSTERS);
-	creature_ptr->redraw |= (PR_MAP);
-	creature_ptr->window |= (PW_OVERHEAD);
-	handle_stuff(creature_ptr);
+    creature_ptr->update |= (PU_MONSTERS);
+    creature_ptr->redraw |= (PR_MAP);
+    creature_ptr->window |= (PW_OVERHEAD);
+    handle_stuff(creature_ptr);
 
-	/* Automatically pickup/destroy/inscribe items */
-	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
-	autopick_pickup_items(creature_ptr, g_ptr);
+    /* Automatically pickup/destroy/inscribe items */
+    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+    autopick_pickup_items(creature_ptr, g_ptr);
 
-	if (easy_floor)
-	{
-		py_pickup_floor(creature_ptr, pickup);
-		return;
-	}
+    if (easy_floor) {
+        py_pickup_floor(creature_ptr, pickup);
+        return;
+    }
 
-	/* Scan the pile of objects */
-	OBJECT_IDX next_o_idx = 0;
-	for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
-	{
-		object_type *o_ptr;
-		o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
-		GAME_TEXT o_name[MAX_NLEN];
-		object_desc(creature_ptr, o_name, o_ptr, 0);
-		next_o_idx = o_ptr->next_o_idx;
+    /* Scan the pile of objects */
+    OBJECT_IDX next_o_idx = 0;
+    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+        object_type *o_ptr;
+        o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
+        GAME_TEXT o_name[MAX_NLEN];
+        object_desc(creature_ptr, o_name, o_ptr, 0);
+        next_o_idx = o_ptr->next_o_idx;
 
-		disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, FALSE);
 
-		if (o_ptr->tval == TV_GOLD)
-		{
-			int value = (long)o_ptr->pval;
-			delete_object_idx(creature_ptr, this_o_idx);
-			msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."),
-			   (long)value, o_name);
+        if (o_ptr->tval == TV_GOLD) {
+            int value = (long)o_ptr->pval;
+            delete_object_idx(creature_ptr, this_o_idx);
+            msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."), (long)value, o_name);
 
-			sound(SOUND_SELL);
+            sound(SOUND_SELL);
 
-			creature_ptr->au += value;
-			creature_ptr->redraw |= (PR_GOLD);
-			creature_ptr->window |= (PW_PLAYER);
-			continue;
-		}
+            creature_ptr->au += value;
+            creature_ptr->redraw |= (PR_GOLD);
+            creature_ptr->window |= (PW_PLAYER);
+            continue;
+        }
 
-		/* Hack - some objects were handled in autopick_pickup_items(). */
-		if (o_ptr->marked & OM_NOMSG)
-		{
-			o_ptr->marked &= ~OM_NOMSG;
-			continue;
-		}
-		
-		if (!pickup)
-		{
-			msg_format(_("%sがある。", "You see %s."), o_name);
-			continue;
-		}
-		
-		if (!check_store_item_to_inventory(creature_ptr, o_ptr))
-		{
-			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
-			continue;
-		}
+        /* Hack - some objects were handled in autopick_pickup_items(). */
+        if (o_ptr->marked & OM_NOMSG) {
+            o_ptr->marked &= ~OM_NOMSG;
+            continue;
+        }
 
-		int is_pickup_successful = TRUE;
-		if (carry_query_flag)
-		{
-			char out_val[MAX_NLEN + 20];
-			sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
-			is_pickup_successful = get_check(out_val);
-		}
+        if (!pickup) {
+            msg_format(_("%sがある。", "You see %s."), o_name);
+            continue;
+        }
 
-		if (is_pickup_successful)
-		{
-			py_pickup_aux(creature_ptr, this_o_idx);
-		}
-	}
+        if (!check_store_item_to_inventory(creature_ptr, o_ptr)) {
+            msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
+            continue;
+        }
+
+        int is_pickup_successful = TRUE;
+        if (carry_query_flag) {
+            char out_val[MAX_NLEN + 20];
+            sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
+            is_pickup_successful = get_check(out_val);
+        }
+
+        if (is_pickup_successful) {
+            py_pickup_aux(creature_ptr, this_o_idx);
+        }
+    }
 }
-
 
 /*!
  * @brief パターンによる移動制限処理
@@ -471,118 +450,96 @@ void carry(player_type *creature_ptr, bool pickup)
  */
 bool pattern_seq(player_type *creature_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 {
-	feature_type *cur_f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
-	feature_type *new_f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
-	bool is_pattern_tile_cur = have_flag(cur_f_ptr->flags, FF_PATTERN);
-	bool is_pattern_tile_new = have_flag(new_f_ptr->flags, FF_PATTERN);
+    feature_type *cur_f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
+    feature_type *new_f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
+    bool is_pattern_tile_cur = have_flag(cur_f_ptr->flags, FF_PATTERN);
+    bool is_pattern_tile_new = have_flag(new_f_ptr->flags, FF_PATTERN);
 
-	if (!is_pattern_tile_cur && !is_pattern_tile_new) return TRUE;
+    if (!is_pattern_tile_cur && !is_pattern_tile_new)
+        return TRUE;
 
-	int pattern_type_cur = is_pattern_tile_cur ? cur_f_ptr->subtype : NOT_PATTERN_TILE;
-	int pattern_type_new = is_pattern_tile_new ? new_f_ptr->subtype : NOT_PATTERN_TILE;
+    int pattern_type_cur = is_pattern_tile_cur ? cur_f_ptr->subtype : NOT_PATTERN_TILE;
+    int pattern_type_new = is_pattern_tile_new ? new_f_ptr->subtype : NOT_PATTERN_TILE;
 
-	if (pattern_type_new == PATTERN_TILE_START)
-	{
-		if (!is_pattern_tile_cur && !creature_ptr->confused && !creature_ptr->stun && !creature_ptr->image)
-		{
-			if (get_check(_("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？", 
-							"If you start walking the Pattern, you must walk the whole way. Ok? ")))
-				return TRUE;
-			else
-				return FALSE;
-		}
-		else
-			return TRUE;
-	}
-	
-	if ((pattern_type_new == PATTERN_TILE_OLD) ||
-		 (pattern_type_new == PATTERN_TILE_END) ||
-		 (pattern_type_new == PATTERN_TILE_WRECKED))
-	{
-		if (is_pattern_tile_cur)
-		{
-			return TRUE;
-		}
-		else
-		{
-			msg_print(_("パターンの上を歩くにはスタート地点から歩き始めなくてはなりません。",
-						"You must start walking the Pattern from the startpoint."));
+    if (pattern_type_new == PATTERN_TILE_START) {
+        if (!is_pattern_tile_cur && !creature_ptr->confused && !creature_ptr->stun && !creature_ptr->image) {
+            if (get_check(_("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？",
+                    "If you start walking the Pattern, you must walk the whole way. Ok? ")))
+                return TRUE;
+            else
+                return FALSE;
+        } else
+            return TRUE;
+    }
 
-			return FALSE;
-		}
-	}
-	
-	if ((pattern_type_new == PATTERN_TILE_TELEPORT) ||
-		 (pattern_type_cur == PATTERN_TILE_TELEPORT))
-	{
-		return TRUE;
-	}
-	
-	if (pattern_type_cur == PATTERN_TILE_START)
-	{
-		if (is_pattern_tile_new)
-			return TRUE;
-		else
-		{
-			msg_print(_("パターンの上は正しい順序で歩かねばなりません。", "You must walk the Pattern in correct order."));
-			return FALSE;
-		}
-	}
-	
-	if ((pattern_type_cur == PATTERN_TILE_OLD) ||
-		 (pattern_type_cur == PATTERN_TILE_END) ||
-		 (pattern_type_cur == PATTERN_TILE_WRECKED))
-	{
-		if (!is_pattern_tile_new)
-		{
-			msg_print(_("パターンを踏み外してはいけません。", "You may not step off from the Pattern."));
-			return FALSE;
-		}
-		else
-		{
-			return TRUE;
-		}
-	}
-	
-	if (!is_pattern_tile_cur)
-	{
-		msg_print(_("パターンの上を歩くにはスタート地点から歩き始めなくてはなりません。",
-			"You must start walking the Pattern from the startpoint."));
+    if ((pattern_type_new == PATTERN_TILE_OLD) || (pattern_type_new == PATTERN_TILE_END) || (pattern_type_new == PATTERN_TILE_WRECKED)) {
+        if (is_pattern_tile_cur) {
+            return TRUE;
+        } else {
+            msg_print(_("パターンの上を歩くにはスタート地点から歩き始めなくてはなりません。", "You must start walking the Pattern from the startpoint."));
 
-		return FALSE;
-	}
-	
-	byte ok_move = PATTERN_TILE_START;
-	switch (pattern_type_cur)
-	{
-	case PATTERN_TILE_1:
-		ok_move = PATTERN_TILE_2;
-		break;
-	case PATTERN_TILE_2:
-		ok_move = PATTERN_TILE_3;
-		break;
-	case PATTERN_TILE_3:
-		ok_move = PATTERN_TILE_4;
-		break;
-	case PATTERN_TILE_4:
-		ok_move = PATTERN_TILE_1;
-		break;
-	default:
-		if (current_world_ptr->wizard)
-			msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
-		return TRUE;
-	}
+            return FALSE;
+        }
+    }
 
-	if ((pattern_type_new == ok_move) || (pattern_type_new == pattern_type_cur)) return TRUE;
-	
-	if (!is_pattern_tile_new)
-		msg_print(_("パターンを踏み外してはいけません。", "You may not step off from the Pattern."));
-	else
-		msg_print(_("パターンの上は正しい順序で歩かねばなりません。", "You must walk the Pattern in correct order."));
+    if ((pattern_type_new == PATTERN_TILE_TELEPORT) || (pattern_type_cur == PATTERN_TILE_TELEPORT)) {
+        return TRUE;
+    }
 
-	return FALSE;
+    if (pattern_type_cur == PATTERN_TILE_START) {
+        if (is_pattern_tile_new)
+            return TRUE;
+        else {
+            msg_print(_("パターンの上は正しい順序で歩かねばなりません。", "You must walk the Pattern in correct order."));
+            return FALSE;
+        }
+    }
+
+    if ((pattern_type_cur == PATTERN_TILE_OLD) || (pattern_type_cur == PATTERN_TILE_END) || (pattern_type_cur == PATTERN_TILE_WRECKED)) {
+        if (!is_pattern_tile_new) {
+            msg_print(_("パターンを踏み外してはいけません。", "You may not step off from the Pattern."));
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    if (!is_pattern_tile_cur) {
+        msg_print(_("パターンの上を歩くにはスタート地点から歩き始めなくてはなりません。", "You must start walking the Pattern from the startpoint."));
+
+        return FALSE;
+    }
+
+    byte ok_move = PATTERN_TILE_START;
+    switch (pattern_type_cur) {
+    case PATTERN_TILE_1:
+        ok_move = PATTERN_TILE_2;
+        break;
+    case PATTERN_TILE_2:
+        ok_move = PATTERN_TILE_3;
+        break;
+    case PATTERN_TILE_3:
+        ok_move = PATTERN_TILE_4;
+        break;
+    case PATTERN_TILE_4:
+        ok_move = PATTERN_TILE_1;
+        break;
+    default:
+        if (current_world_ptr->wizard)
+            msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
+        return TRUE;
+    }
+
+    if ((pattern_type_new == ok_move) || (pattern_type_new == pattern_type_cur))
+        return TRUE;
+
+    if (!is_pattern_tile_new)
+        msg_print(_("パターンを踏み外してはいけません。", "You may not step off from the Pattern."));
+    else
+        msg_print(_("パターンの上は正しい順序で歩かねばなりません。", "You must walk the Pattern in correct order."));
+
+    return FALSE;
 }
-
 
 /*!
  * @brief 移動に伴うプレイヤーのステータス変化処理
@@ -594,211 +551,193 @@ bool pattern_seq(player_type *creature_ptr, POSITION c_y, POSITION c_x, POSITION
  */
 bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 {
-	POSITION oy = creature_ptr->y;
-	POSITION ox = creature_ptr->x;
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	grid_type *g_ptr = &floor_ptr->grid_array[ny][nx];
-	grid_type *oc_ptr = &floor_ptr->grid_array[oy][ox];
-	feature_type *f_ptr = &f_info[g_ptr->feat];
-	feature_type *of_ptr = &f_info[oc_ptr->feat];
+    POSITION oy = creature_ptr->y;
+    POSITION ox = creature_ptr->x;
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    grid_type *g_ptr = &floor_ptr->grid_array[ny][nx];
+    grid_type *oc_ptr = &floor_ptr->grid_array[oy][ox];
+    feature_type *f_ptr = &f_info[g_ptr->feat];
+    feature_type *of_ptr = &f_info[oc_ptr->feat];
 
-	if (!(mpe_mode & MPE_STAYING))
-	{
-		MONSTER_IDX om_idx = oc_ptr->m_idx;
-		MONSTER_IDX nm_idx = g_ptr->m_idx;
+    if (!(mpe_mode & MPE_STAYING)) {
+        MONSTER_IDX om_idx = oc_ptr->m_idx;
+        MONSTER_IDX nm_idx = g_ptr->m_idx;
 
-		creature_ptr->y = ny;
-		creature_ptr->x = nx;
+        creature_ptr->y = ny;
+        creature_ptr->x = nx;
 
-		/* Hack -- For moving monster or riding player's moving */
-		if (!(mpe_mode & MPE_DONT_SWAP_MON))
-		{
-			/* Swap two monsters */
-			g_ptr->m_idx = om_idx;
-			oc_ptr->m_idx = nm_idx;
+        /* Hack -- For moving monster or riding player's moving */
+        if (!(mpe_mode & MPE_DONT_SWAP_MON)) {
+            /* Swap two monsters */
+            g_ptr->m_idx = om_idx;
+            oc_ptr->m_idx = nm_idx;
 
-			if (om_idx > 0) /* Monster on old spot (or creature_ptr->riding) */
-			{
-				monster_type *om_ptr = &floor_ptr->m_list[om_idx];
-				om_ptr->fy = ny;
-				om_ptr->fx = nx;
-				update_monster(creature_ptr, om_idx, TRUE);
-			}
+            if (om_idx > 0) /* Monster on old spot (or creature_ptr->riding) */
+            {
+                monster_type *om_ptr = &floor_ptr->m_list[om_idx];
+                om_ptr->fy = ny;
+                om_ptr->fx = nx;
+                update_monster(creature_ptr, om_idx, TRUE);
+            }
 
-			if (nm_idx > 0) /* Monster on new spot */
-			{
-				monster_type *nm_ptr = &floor_ptr->m_list[nm_idx];
-				nm_ptr->fy = oy;
-				nm_ptr->fx = ox;
-				update_monster(creature_ptr, nm_idx, TRUE);
-			}
-		}
+            if (nm_idx > 0) /* Monster on new spot */
+            {
+                monster_type *nm_ptr = &floor_ptr->m_list[nm_idx];
+                nm_ptr->fy = oy;
+                nm_ptr->fx = ox;
+                update_monster(creature_ptr, nm_idx, TRUE);
+            }
+        }
 
-		lite_spot(creature_ptr, oy, ox);
-		lite_spot(creature_ptr, ny, nx);
+        lite_spot(creature_ptr, oy, ox);
+        lite_spot(creature_ptr, ny, nx);
 
-		/* Check for new panel (redraw map) */
-		verify_panel(creature_ptr);
+        /* Check for new panel (redraw map) */
+        verify_panel(creature_ptr);
 
-		if (mpe_mode & MPE_FORGET_FLOW)
-		{
-			forget_flow(floor_ptr);
+        if (mpe_mode & MPE_FORGET_FLOW) {
+            forget_flow(floor_ptr);
 
-			creature_ptr->update |= (PU_UN_VIEW);
-			creature_ptr->redraw |= (PR_MAP);
-		}
+            creature_ptr->update |= (PU_UN_VIEW);
+            creature_ptr->redraw |= (PR_MAP);
+        }
 
-		creature_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
-		creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+        creature_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
+        creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-		/* Remove "unsafe" flag */
-		if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(creature_ptr, g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
+        /* Remove "unsafe" flag */
+        if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(creature_ptr, g_ptr->feat))
+            g_ptr->info &= ~(CAVE_UNSAFE);
 
-		/* For get everything when requested hehe I'm *NASTY* */
-		if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark(creature_ptr);
-		if (mpe_mode & MPE_HANDLE_STUFF) handle_stuff(creature_ptr);
+        /* For get everything when requested hehe I'm *NASTY* */
+        if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET))
+            wiz_dark(creature_ptr);
+        if (mpe_mode & MPE_HANDLE_STUFF)
+            handle_stuff(creature_ptr);
 
-		if (creature_ptr->pclass == CLASS_NINJA)
-		{
-			if (g_ptr->info & (CAVE_GLOW)) set_superstealth(creature_ptr, FALSE);
-			else if (creature_ptr->cur_lite <= 0) set_superstealth(creature_ptr, TRUE);
-		}
+        if (creature_ptr->pclass == CLASS_NINJA) {
+            if (g_ptr->info & (CAVE_GLOW))
+                set_superstealth(creature_ptr, FALSE);
+            else if (creature_ptr->cur_lite <= 0)
+                set_superstealth(creature_ptr, TRUE);
+        }
 
-		if ((creature_ptr->action == ACTION_HAYAGAKE) &&
-		    (!have_flag(f_ptr->flags, FF_PROJECT) ||
-		     (!creature_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP))))
-		{
-			msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
-			set_action(creature_ptr, ACTION_NONE);
-		}
-		if (creature_ptr->prace == RACE_MERFOLK)
-		{
-			if(have_flag(f_ptr->flags, FF_WATER) ^ have_flag(of_ptr->flags, FF_WATER))
-			{
-				creature_ptr->update |= PU_BONUS;
-				update_creature(creature_ptr);
-			}
-		}
-	}
+        if ((creature_ptr->action == ACTION_HAYAGAKE)
+            && (!have_flag(f_ptr->flags, FF_PROJECT) || (!creature_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP)))) {
+            msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
+            set_action(creature_ptr, ACTION_NONE);
+        }
+        if (creature_ptr->prace == RACE_MERFOLK) {
+            if (have_flag(f_ptr->flags, FF_WATER) ^ have_flag(of_ptr->flags, FF_WATER)) {
+                creature_ptr->update |= PU_BONUS;
+                update_creature(creature_ptr);
+            }
+        }
+    }
 
-	if (mpe_mode & MPE_ENERGY_USE)
-	{
-		if (music_singing(creature_ptr, MUSIC_WALL))
-		{
-			(void)project(creature_ptr, 0, 0, creature_ptr->y, creature_ptr->x, (60 + creature_ptr->lev), GF_DISINTEGRATE,
-				PROJECT_KILL | PROJECT_ITEM, -1);
+    if (mpe_mode & MPE_ENERGY_USE) {
+        if (music_singing(creature_ptr, MUSIC_WALL)) {
+            (void)project(creature_ptr, 0, 0, creature_ptr->y, creature_ptr->x, (60 + creature_ptr->lev), GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
 
-			if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving) return FALSE;
-		}
+            if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving)
+                return FALSE;
+        }
 
-		/* Spontaneous Searching */
-		if ((creature_ptr->skill_fos >= 50) || (0 == randint0(50 - creature_ptr->skill_fos)))
-		{
-			search(creature_ptr);
-		}
+        /* Spontaneous Searching */
+        if ((creature_ptr->skill_fos >= 50) || (0 == randint0(50 - creature_ptr->skill_fos))) {
+            search(creature_ptr);
+        }
 
-		/* Continuous Searching */
-		if (creature_ptr->action == ACTION_SEARCH)
-		{
-			search(creature_ptr);
-		}
-	}
+        /* Continuous Searching */
+        if (creature_ptr->action == ACTION_SEARCH) {
+            search(creature_ptr);
+        }
+    }
 
-	/* Handle "objects" */
-	if (!(mpe_mode & MPE_DONT_PICKUP))
-	{
-		carry(creature_ptr, (mpe_mode & MPE_DO_PICKUP) ? TRUE : FALSE);
-	}
+    /* Handle "objects" */
+    if (!(mpe_mode & MPE_DONT_PICKUP)) {
+        carry(creature_ptr, (mpe_mode & MPE_DO_PICKUP) ? TRUE : FALSE);
+    }
 
-	/* Handle "store doors" */
-	if (have_flag(f_ptr->flags, FF_STORE))
-	{
-		disturb(creature_ptr, FALSE, TRUE);
+    /* Handle "store doors" */
+    if (have_flag(f_ptr->flags, FF_STORE)) {
+        disturb(creature_ptr, FALSE, TRUE);
 
-		free_turn(creature_ptr);
-		/* Hack -- Enter store */
-		command_new = SPECIAL_KEY_STORE;
-	}
+        free_turn(creature_ptr);
+        /* Hack -- Enter store */
+        command_new = SPECIAL_KEY_STORE;
+    }
 
-	/* Handle "building doors" -KMW- */
-	else if (have_flag(f_ptr->flags, FF_BLDG))
-	{
-		disturb(creature_ptr, FALSE, TRUE);
+    /* Handle "building doors" -KMW- */
+    else if (have_flag(f_ptr->flags, FF_BLDG)) {
+        disturb(creature_ptr, FALSE, TRUE);
 
-		free_turn(creature_ptr);
-		/* Hack -- Enter building */
-		command_new = SPECIAL_KEY_BUILDING;
-	}
+        free_turn(creature_ptr);
+        /* Hack -- Enter building */
+        command_new = SPECIAL_KEY_BUILDING;
+    }
 
-	/* Handle quest areas -KMW- */
-	else if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
-	{
-		disturb(creature_ptr, FALSE, TRUE);
+    /* Handle quest areas -KMW- */
+    else if (have_flag(f_ptr->flags, FF_QUEST_ENTER)) {
+        disturb(creature_ptr, FALSE, TRUE);
 
-		free_turn(creature_ptr);
-		/* Hack -- Enter quest level */
-		command_new = SPECIAL_KEY_QUEST;
-	}
+        free_turn(creature_ptr);
+        /* Hack -- Enter quest level */
+        command_new = SPECIAL_KEY_QUEST;
+    }
 
-	else if (have_flag(f_ptr->flags, FF_QUEST_EXIT))
-	{
-		if (quest[floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
-		{
-			complete_quest(creature_ptr, floor_ptr->inside_quest);
-		}
+    else if (have_flag(f_ptr->flags, FF_QUEST_EXIT)) {
+        if (quest[floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT) {
+            complete_quest(creature_ptr, floor_ptr->inside_quest);
+        }
 
-		leave_quest_check(creature_ptr);
+        leave_quest_check(creature_ptr);
 
-		floor_ptr->inside_quest = g_ptr->special;
-		floor_ptr->dun_level = 0;
-		creature_ptr->oldpx = 0;
-		creature_ptr->oldpy = 0;
+        floor_ptr->inside_quest = g_ptr->special;
+        floor_ptr->dun_level = 0;
+        creature_ptr->oldpx = 0;
+        creature_ptr->oldpy = 0;
 
-		creature_ptr->leaving = TRUE;
-	}
+        creature_ptr->leaving = TRUE;
+    }
 
-	/* Set off a trap */
-	else if (have_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING))
-	{
-		disturb(creature_ptr, FALSE, TRUE);
+    /* Set off a trap */
+    else if (have_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
+        disturb(creature_ptr, FALSE, TRUE);
 
-		/* Hidden trap */
-		if (g_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET))
-		{
-			msg_print(_("トラップだ！", "You found a trap!"));
+        /* Hidden trap */
+        if (g_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET)) {
+            msg_print(_("トラップだ！", "You found a trap!"));
 
-			/* Pick a trap */
-			disclose_grid(creature_ptr, creature_ptr->y, creature_ptr->x);
-		}
+            /* Pick a trap */
+            disclose_grid(creature_ptr, creature_ptr->y, creature_ptr->x);
+        }
 
-		/* Hit the trap */
-		hit_trap(creature_ptr, (mpe_mode & MPE_BREAK_TRAP) ? TRUE : FALSE);
+        /* Hit the trap */
+        hit_trap(creature_ptr, (mpe_mode & MPE_BREAK_TRAP) ? TRUE : FALSE);
 
-		if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving) return FALSE;
-	}
+        if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving)
+            return FALSE;
+    }
 
-	/* Warn when leaving trap detected region */
-	if (!(mpe_mode & MPE_STAYING) && (disturb_trap_detect || alert_trap_detect)
-	    && creature_ptr->dtrap && !(g_ptr->info & CAVE_IN_DETECT))
-	{
-		/* No duplicate warning */
-		creature_ptr->dtrap = FALSE;
+    /* Warn when leaving trap detected region */
+    if (!(mpe_mode & MPE_STAYING) && (disturb_trap_detect || alert_trap_detect) && creature_ptr->dtrap && !(g_ptr->info & CAVE_IN_DETECT)) {
+        /* No duplicate warning */
+        creature_ptr->dtrap = FALSE;
 
-		/* You are just on the edge */
-		if (!(g_ptr->info & CAVE_UNSAFE))
-		{
-			if (alert_trap_detect)
-			{
-				msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
-			}
+        /* You are just on the edge */
+        if (!(g_ptr->info & CAVE_UNSAFE)) {
+            if (alert_trap_detect) {
+                msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
+            }
 
-			if (disturb_trap_detect) disturb(creature_ptr, FALSE, TRUE);
-		}
-	}
+            if (disturb_trap_detect)
+                disturb(creature_ptr, FALSE, TRUE);
+        }
+    }
 
-	return player_bold(creature_ptr, ny, nx) && !creature_ptr->is_dead && !creature_ptr->leaving;
+    return player_bold(creature_ptr, ny, nx) && !creature_ptr->is_dead && !creature_ptr->leaving;
 }
-
 
 /*!
  * @brief 該当地形のトラップがプレイヤーにとって無効かどうかを判定して返す
@@ -808,44 +747,51 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
  */
 bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
 {
-	feature_type *f_ptr = &f_info[feat];
+    feature_type *f_ptr = &f_info[feat];
 
-	if (!have_flag(f_ptr->flags, FF_TRAP)) return TRUE;
+    if (!have_flag(f_ptr->flags, FF_TRAP))
+        return TRUE;
 
-	switch (f_ptr->subtype)
-	{
-	case TRAP_TRAPDOOR:
-	case TRAP_PIT:
-	case TRAP_SPIKED_PIT:
-	case TRAP_POISON_PIT:
-		if (creature_ptr->levitation) return TRUE;
-		break;
-	case TRAP_TELEPORT:
-		if (creature_ptr->anti_tele) return TRUE;
-		break;
-	case TRAP_FIRE:
-		if (creature_ptr->immune_fire) return TRUE;
-		break;
-	case TRAP_ACID:
-		if (creature_ptr->immune_acid) return TRUE;
-		break;
-	case TRAP_BLIND:
-		if (creature_ptr->resist_blind) return TRUE;
-		break;
-	case TRAP_CONFUSE:
-		if (creature_ptr->resist_conf) return TRUE;
-		break;
-	case TRAP_POISON:
-		if (creature_ptr->resist_pois) return TRUE;
-		break;
-	case TRAP_SLEEP:
-		if (creature_ptr->free_act) return TRUE;
-		break;
-	}
+    switch (f_ptr->subtype) {
+    case TRAP_TRAPDOOR:
+    case TRAP_PIT:
+    case TRAP_SPIKED_PIT:
+    case TRAP_POISON_PIT:
+        if (creature_ptr->levitation)
+            return TRUE;
+        break;
+    case TRAP_TELEPORT:
+        if (creature_ptr->anti_tele)
+            return TRUE;
+        break;
+    case TRAP_FIRE:
+        if (creature_ptr->immune_fire)
+            return TRUE;
+        break;
+    case TRAP_ACID:
+        if (creature_ptr->immune_acid)
+            return TRUE;
+        break;
+    case TRAP_BLIND:
+        if (creature_ptr->resist_blind)
+            return TRUE;
+        break;
+    case TRAP_CONFUSE:
+        if (creature_ptr->resist_conf)
+            return TRUE;
+        break;
+    case TRAP_POISON:
+        if (creature_ptr->resist_pois)
+            return TRUE;
+        break;
+    case TRAP_SLEEP:
+        if (creature_ptr->free_act)
+            return TRUE;
+        break;
+    }
 
-	return FALSE;
+    return FALSE;
 }
-
 
 /*
  * todo 負論理なので反転させたい
@@ -857,14 +803,13 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
  */
 bool boundary_floor(grid_type *g_ptr, feature_type *f_ptr, feature_type *mimic_f_ptr)
 {
-	bool is_boundary_floor = g_ptr->mimic > 0;
-	is_boundary_floor &= permanent_wall(f_ptr);
-	is_boundary_floor &= have_flag((mimic_f_ptr)->flags, FF_MOVE) || have_flag((mimic_f_ptr)->flags, FF_CAN_FLY);
-	is_boundary_floor &= have_flag((mimic_f_ptr)->flags, FF_PROJECT);
-	is_boundary_floor &= !have_flag((mimic_f_ptr)->flags, FF_OPEN);
-	return is_boundary_floor;
+    bool is_boundary_floor = g_ptr->mimic > 0;
+    is_boundary_floor &= permanent_wall(f_ptr);
+    is_boundary_floor &= have_flag((mimic_f_ptr)->flags, FF_MOVE) || have_flag((mimic_f_ptr)->flags, FF_CAN_FLY);
+    is_boundary_floor &= have_flag((mimic_f_ptr)->flags, FF_PROJECT);
+    is_boundary_floor &= !have_flag((mimic_f_ptr)->flags, FF_OPEN);
+    return is_boundary_floor;
 }
-
 
 /*!
  * @brief 該当地形のトラップがプレイヤーにとって無効かどうかを判定して返す /
@@ -883,394 +828,346 @@ bool boundary_floor(grid_type *g_ptr, feature_type *f_ptr, feature_type *mimic_f
  */
 void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool break_trap)
 {
-	POSITION y = creature_ptr->y + ddy[dir];
-	POSITION x = creature_ptr->x + ddx[dir];
+    POSITION y = creature_ptr->y + ddy[dir];
+    POSITION x = creature_ptr->x + ddx[dir];
 
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-	bool p_can_enter = player_can_enter(creature_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
-	bool stormbringer = FALSE;
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    bool p_can_enter = player_can_enter(creature_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
+    bool stormbringer = FALSE;
 
-	/* Exit the area */
-	if (!floor_ptr->dun_level && !creature_ptr->wild_mode &&
-		((x == 0) || (x == MAX_WID - 1) ||
-		 (y == 0) || (y == MAX_HGT - 1)))
-	{
-		/* Can the player enter the grid? */
-		if (g_ptr->mimic && player_can_enter(creature_ptr, g_ptr->mimic, 0))
-		{
-			/* Hack: move to new area */
-			if ((y == 0) && (x == 0))
-			{
-				creature_ptr->wilderness_y--;
-				creature_ptr->wilderness_x--;
-				creature_ptr->oldpy = floor_ptr->height - 2;
-				creature_ptr->oldpx = floor_ptr->width - 2;
-				creature_ptr->ambush_flag = FALSE;
-			}
+    /* Exit the area */
+    if (!floor_ptr->dun_level && !creature_ptr->wild_mode && ((x == 0) || (x == MAX_WID - 1) || (y == 0) || (y == MAX_HGT - 1))) {
+        /* Can the player enter the grid? */
+        if (g_ptr->mimic && player_can_enter(creature_ptr, g_ptr->mimic, 0)) {
+            /* Hack: move to new area */
+            if ((y == 0) && (x == 0)) {
+                creature_ptr->wilderness_y--;
+                creature_ptr->wilderness_x--;
+                creature_ptr->oldpy = floor_ptr->height - 2;
+                creature_ptr->oldpx = floor_ptr->width - 2;
+                creature_ptr->ambush_flag = FALSE;
+            }
 
-			else if ((y == 0) && (x == MAX_WID - 1))
-			{
-				creature_ptr->wilderness_y--;
-				creature_ptr->wilderness_x++;
-				creature_ptr->oldpy = floor_ptr->height - 2;
-				creature_ptr->oldpx = 1;
-				creature_ptr->ambush_flag = FALSE;
-			}
+            else if ((y == 0) && (x == MAX_WID - 1)) {
+                creature_ptr->wilderness_y--;
+                creature_ptr->wilderness_x++;
+                creature_ptr->oldpy = floor_ptr->height - 2;
+                creature_ptr->oldpx = 1;
+                creature_ptr->ambush_flag = FALSE;
+            }
 
-			else if ((y == MAX_HGT - 1) && (x == 0))
-			{
-				creature_ptr->wilderness_y++;
-				creature_ptr->wilderness_x--;
-				creature_ptr->oldpy = 1;
-				creature_ptr->oldpx = floor_ptr->width - 2;
-				creature_ptr->ambush_flag = FALSE;
-			}
+            else if ((y == MAX_HGT - 1) && (x == 0)) {
+                creature_ptr->wilderness_y++;
+                creature_ptr->wilderness_x--;
+                creature_ptr->oldpy = 1;
+                creature_ptr->oldpx = floor_ptr->width - 2;
+                creature_ptr->ambush_flag = FALSE;
+            }
 
-			else if ((y == MAX_HGT - 1) && (x == MAX_WID - 1))
-			{
-				creature_ptr->wilderness_y++;
-				creature_ptr->wilderness_x++;
-				creature_ptr->oldpy = 1;
-				creature_ptr->oldpx = 1;
-				creature_ptr->ambush_flag = FALSE;
-			}
+            else if ((y == MAX_HGT - 1) && (x == MAX_WID - 1)) {
+                creature_ptr->wilderness_y++;
+                creature_ptr->wilderness_x++;
+                creature_ptr->oldpy = 1;
+                creature_ptr->oldpx = 1;
+                creature_ptr->ambush_flag = FALSE;
+            }
 
-			else if (y == 0)
-			{
-				creature_ptr->wilderness_y--;
-				creature_ptr->oldpy = floor_ptr->height - 2;
-				creature_ptr->oldpx = x;
-				creature_ptr->ambush_flag = FALSE;
-			}
+            else if (y == 0) {
+                creature_ptr->wilderness_y--;
+                creature_ptr->oldpy = floor_ptr->height - 2;
+                creature_ptr->oldpx = x;
+                creature_ptr->ambush_flag = FALSE;
+            }
 
-			else if (y == MAX_HGT - 1)
-			{
-				creature_ptr->wilderness_y++;
-				creature_ptr->oldpy = 1;
-				creature_ptr->oldpx = x;
-				creature_ptr->ambush_flag = FALSE;
-			}
+            else if (y == MAX_HGT - 1) {
+                creature_ptr->wilderness_y++;
+                creature_ptr->oldpy = 1;
+                creature_ptr->oldpx = x;
+                creature_ptr->ambush_flag = FALSE;
+            }
 
-			else if (x == 0)
-			{
-				creature_ptr->wilderness_x--;
-				creature_ptr->oldpx = floor_ptr->width - 2;
-				creature_ptr->oldpy = y;
-				creature_ptr->ambush_flag = FALSE;
-			}
+            else if (x == 0) {
+                creature_ptr->wilderness_x--;
+                creature_ptr->oldpx = floor_ptr->width - 2;
+                creature_ptr->oldpy = y;
+                creature_ptr->ambush_flag = FALSE;
+            }
 
-			else if (x == MAX_WID - 1)
-			{
-				creature_ptr->wilderness_x++;
-				creature_ptr->oldpx = 1;
-				creature_ptr->oldpy = y;
-				creature_ptr->ambush_flag = FALSE;
-			}
+            else if (x == MAX_WID - 1) {
+                creature_ptr->wilderness_x++;
+                creature_ptr->oldpx = 1;
+                creature_ptr->oldpy = y;
+                creature_ptr->ambush_flag = FALSE;
+            }
 
-			creature_ptr->leaving = TRUE;
-			take_turn(creature_ptr, 100);
+            creature_ptr->leaving = TRUE;
+            take_turn(creature_ptr, 100);
 
-			return;
-		}
+            return;
+        }
 
-		/* "Blocked" message appears later */
-		/* oktomove = FALSE; */
-		p_can_enter = FALSE;
-	}
+        /* "Blocked" message appears later */
+        /* oktomove = FALSE; */
+        p_can_enter = FALSE;
+    }
 
-	monster_type *m_ptr;
-	m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    monster_type *m_ptr;
+    m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
-	if (creature_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
-	if (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
+    if (creature_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER)
+        stormbringer = TRUE;
+    if (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER)
+        stormbringer = TRUE;
 
-	/* Player can not walk through "walls"... */
-	/* unless in Shadow Form */
-	feature_type *f_ptr = &f_info[g_ptr->feat];
-	bool p_can_kill_walls = creature_ptr->kill_wall && have_flag(f_ptr->flags, FF_HURT_DISI) &&
-		(!p_can_enter || !have_flag(f_ptr->flags, FF_LOS)) &&
-		!have_flag(f_ptr->flags, FF_PERMANENT);
+    /* Player can not walk through "walls"... */
+    /* unless in Shadow Form */
+    feature_type *f_ptr = &f_info[g_ptr->feat];
+    bool p_can_kill_walls = creature_ptr->kill_wall && have_flag(f_ptr->flags, FF_HURT_DISI) && (!p_can_enter || !have_flag(f_ptr->flags, FF_LOS))
+        && !have_flag(f_ptr->flags, FF_PERMANENT);
 
-	/* Hack -- attack monsters */
-	GAME_TEXT m_name[MAX_NLEN];
-	bool can_move = TRUE;
-	bool do_past = FALSE;
-	if (g_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls))
-	{
-		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    /* Hack -- attack monsters */
+    GAME_TEXT m_name[MAX_NLEN];
+    bool can_move = TRUE;
+    bool do_past = FALSE;
+    if (g_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls)) {
+        monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-		/* Attack -- only if we can see it OR it is not in a wall */
-		if (!is_hostile(m_ptr) &&
-		    !(creature_ptr->confused || creature_ptr->image || !m_ptr->ml || creature_ptr->stun ||
-		    ((creature_ptr->muta2 & MUT2_BERS_RAGE) && creature_ptr->shero)) &&
-		    pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls))
-		{
-			/* Disturb the monster */
-			(void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
+        /* Attack -- only if we can see it OR it is not in a wall */
+        if (!is_hostile(m_ptr)
+            && !(creature_ptr->confused || creature_ptr->image || !m_ptr->ml || creature_ptr->stun
+                || ((creature_ptr->muta2 & MUT2_BERS_RAGE) && creature_ptr->shero))
+            && pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
+            /* Disturb the monster */
+            (void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
 
-			monster_desc(creature_ptr, m_name, m_ptr, 0);
+            monster_desc(creature_ptr, m_name, m_ptr, 0);
 
-			if (m_ptr->ml)
-			{
-				/* Auto-Recall if possible and visible */
-				if (!creature_ptr->image) monster_race_track(creature_ptr, m_ptr->ap_r_idx);
-				health_track(creature_ptr, g_ptr->m_idx);
-			}
+            if (m_ptr->ml) {
+                /* Auto-Recall if possible and visible */
+                if (!creature_ptr->image)
+                    monster_race_track(creature_ptr, m_ptr->ap_r_idx);
+                health_track(creature_ptr, g_ptr->m_idx);
+            }
 
-			/* displace? */
-			if ((stormbringer && (randint1(1000) > 666)) || (creature_ptr->pclass == CLASS_BERSERKER))
-			{
-				do_cmd_attack(creature_ptr, y, x, 0);
-				can_move = FALSE;
-			}
-			else if (monster_can_cross_terrain(creature_ptr, floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0))
-			{
-				do_past = TRUE;
-			}
-			else
-			{
-				msg_format(_("%^sが邪魔だ！", "%^s is in your way!"), m_name);
-				free_turn(creature_ptr);
-				can_move = FALSE;
-			}
+            /* displace? */
+            if ((stormbringer && (randint1(1000) > 666)) || (creature_ptr->pclass == CLASS_BERSERKER)) {
+                do_cmd_attack(creature_ptr, y, x, 0);
+                can_move = FALSE;
+            } else if (monster_can_cross_terrain(creature_ptr, floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0)) {
+                do_past = TRUE;
+            } else {
+                msg_format(_("%^sが邪魔だ！", "%^s is in your way!"), m_name);
+                free_turn(creature_ptr);
+                can_move = FALSE;
+            }
 
-			/* now continue on to 'movement' */
-		}
-		else
-		{
-			do_cmd_attack(creature_ptr, y, x, 0);
-			can_move = FALSE;
-		}
-	}
+            /* now continue on to 'movement' */
+        } else {
+            do_cmd_attack(creature_ptr, y, x, 0);
+            can_move = FALSE;
+        }
+    }
 
-	monster_type *riding_m_ptr = &floor_ptr->m_list[creature_ptr->riding];
-	monster_race *riding_r_ptr = &r_info[creature_ptr->riding ? riding_m_ptr->r_idx : 0];
-	if (can_move && creature_ptr->riding)
-	{
-		if (riding_r_ptr->flags1 & RF1_NEVER_MOVE)
-		{
-			msg_print(_("動けない！", "Can't move!"));
-			free_turn(creature_ptr);
-			can_move = FALSE;
-			disturb(creature_ptr, FALSE, TRUE);
-		}
-		else if (monster_fear_remaining(riding_m_ptr))
-		{
-			GAME_TEXT steed_name[MAX_NLEN];
-			monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
-			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
-			can_move = FALSE;
-			disturb(creature_ptr, FALSE, TRUE);
-		}
-		else if (creature_ptr->riding_ryoute)
-		{
-			can_move = FALSE;
-			disturb(creature_ptr, FALSE, TRUE);
-		}
-		else if (have_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY))
-		{
-			/* Allow moving */
-		}
-		else if (have_flag(f_ptr->flags, FF_CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM))
-		{
-			/* Allow moving */
-		}
-		else if (have_flag(f_ptr->flags, FF_WATER) &&
-			!(riding_r_ptr->flags7 & RF7_AQUATIC) &&
-			(have_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE)))
-		{
-			msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(g_ptr)].name);
-			free_turn(creature_ptr);
-			can_move = FALSE;
-			disturb(creature_ptr, FALSE, TRUE);
-		}
-		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
-		{
-			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name);
-			free_turn(creature_ptr);
-			can_move = FALSE;
-			disturb(creature_ptr, FALSE, TRUE);
-		}
-		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
-		{
-			msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(g_ptr)].name);
-			free_turn(creature_ptr);
-			can_move = FALSE;
-			disturb(creature_ptr, FALSE, TRUE);
-		}
+    monster_type *riding_m_ptr = &floor_ptr->m_list[creature_ptr->riding];
+    monster_race *riding_r_ptr = &r_info[creature_ptr->riding ? riding_m_ptr->r_idx : 0];
+    if (can_move && creature_ptr->riding) {
+        if (riding_r_ptr->flags1 & RF1_NEVER_MOVE) {
+            msg_print(_("動けない！", "Can't move!"));
+            free_turn(creature_ptr);
+            can_move = FALSE;
+            disturb(creature_ptr, FALSE, TRUE);
+        } else if (monster_fear_remaining(riding_m_ptr)) {
+            GAME_TEXT steed_name[MAX_NLEN];
+            monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
+            msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
+            can_move = FALSE;
+            disturb(creature_ptr, FALSE, TRUE);
+        } else if (creature_ptr->riding_ryoute) {
+            can_move = FALSE;
+            disturb(creature_ptr, FALSE, TRUE);
+        } else if (have_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY)) {
+            /* Allow moving */
+        } else if (have_flag(f_ptr->flags, FF_CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM)) {
+            /* Allow moving */
+        } else if (have_flag(f_ptr->flags, FF_WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC)
+            && (have_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE))) {
+            msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+            free_turn(creature_ptr);
+            can_move = FALSE;
+            disturb(creature_ptr, FALSE, TRUE);
+        } else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC)) {
+            msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name);
+            free_turn(creature_ptr);
+            can_move = FALSE;
+            disturb(creature_ptr, FALSE, TRUE);
+        } else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
+            msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+            free_turn(creature_ptr);
+            can_move = FALSE;
+            disturb(creature_ptr, FALSE, TRUE);
+        }
 
-		if (can_move && monster_stunned_remaining(riding_m_ptr) && one_in_(2))
-		{
-			GAME_TEXT steed_name[MAX_NLEN];
-			monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
-			msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
-			can_move = FALSE;
-			disturb(creature_ptr, FALSE, TRUE);
-		}
-	}
+        if (can_move && monster_stunned_remaining(riding_m_ptr) && one_in_(2)) {
+            GAME_TEXT steed_name[MAX_NLEN];
+            monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
+            msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
+            can_move = FALSE;
+            disturb(creature_ptr, FALSE, TRUE);
+        }
+    }
 
-	if (!can_move)
-	{
-	}
+    if (!can_move) {
+    }
 
-	else if (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !creature_ptr->levitation)
-	{
-		msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_name + f_info[get_feat_mimic(g_ptr)].name);
-		free_turn(creature_ptr);
-		creature_ptr->running = 0;
-		can_move = FALSE;
-	}
+    else if (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !creature_ptr->levitation) {
+        msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+        free_turn(creature_ptr);
+        creature_ptr->running = 0;
+        can_move = FALSE;
+    }
 
-	/*
-	 * Player can move through trees and
-	 * has effective -10 speed
-	 * Rangers can move without penality
-	 */
-	else if (have_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls)
-	{
-		if ((creature_ptr->pclass != CLASS_RANGER) && !creature_ptr->levitation && (!creature_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) creature_ptr->energy_use *= 2;
-	}
+    /*
+     * Player can move through trees and
+     * has effective -10 speed
+     * Rangers can move without penality
+     */
+    else if (have_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls) {
+        if ((creature_ptr->pclass != CLASS_RANGER) && !creature_ptr->levitation && (!creature_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD)))
+            creature_ptr->energy_use *= 2;
+    }
 
-	/* Disarm a visible trap */
-	else if ((do_pickup != easy_disarm) && have_flag(f_ptr->flags, FF_DISARM) && !g_ptr->mimic)
-	{
-		if (!trap_can_be_ignored(creature_ptr, g_ptr->feat))
-		{
-			(void)exe_disarm(creature_ptr, y, x, dir);
-			return;
-		}
-	}
+    /* Disarm a visible trap */
+    else if ((do_pickup != easy_disarm) && have_flag(f_ptr->flags, FF_DISARM) && !g_ptr->mimic) {
+        if (!trap_can_be_ignored(creature_ptr, g_ptr->feat)) {
+            (void)exe_disarm(creature_ptr, y, x, dir);
+            return;
+        }
+    }
 
-	/* Player can not walk through "walls" unless in wraith form...*/
-	else if (!p_can_enter && !p_can_kill_walls)
-	{
-		/* Feature code (applying "mimic" field) */
-		FEAT_IDX feat = get_feat_mimic(g_ptr);
-		feature_type *mimic_f_ptr = &f_info[feat];
-		concptr name = f_name + mimic_f_ptr->name;
+    /* Player can not walk through "walls" unless in wraith form...*/
+    else if (!p_can_enter && !p_can_kill_walls) {
+        /* Feature code (applying "mimic" field) */
+        FEAT_IDX feat = get_feat_mimic(g_ptr);
+        feature_type *mimic_f_ptr = &f_info[feat];
+        concptr name = f_name + mimic_f_ptr->name;
 
-		can_move = FALSE;
+        can_move = FALSE;
 
-		/* Notice things in the dark */
-		if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(creature_ptr, y, x))
-		{
-			/* Boundary floor mimic */
-			if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
-			{
-				msg_print(_("それ以上先には進めないようだ。", "You feel you cannot go any more."));
-			}
+        /* Notice things in the dark */
+        if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(creature_ptr, y, x)) {
+            /* Boundary floor mimic */
+            if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) {
+                msg_print(_("それ以上先には進めないようだ。", "You feel you cannot go any more."));
+            }
 
-			/* Wall (or secret door) */
-			else
-			{
+            /* Wall (or secret door) */
+            else {
 #ifdef JP
-				msg_format("%sが行く手をはばんでいるようだ。", name);
+                msg_format("%sが行く手をはばんでいるようだ。", name);
 #else
-				msg_format("You feel %s %s blocking your way.",
-					is_a_vowel(name[0]) ? "an" : "a", name);
+                msg_format("You feel %s %s blocking your way.", is_a_vowel(name[0]) ? "an" : "a", name);
 #endif
 
-				g_ptr->info |= (CAVE_MARK);
-				lite_spot(creature_ptr, y, x);
-			}
-		}
+                g_ptr->info |= (CAVE_MARK);
+                lite_spot(creature_ptr, y, x);
+            }
+        }
 
-		/* Notice things */
-		else
-		{
-			/* Boundary floor mimic */
-			if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
-			{
-				msg_print(_("それ以上先には進めない。", "You cannot go any more."));
-				if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
-					free_turn(creature_ptr);
-			}
+        /* Notice things */
+        else {
+            /* Boundary floor mimic */
+            if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) {
+                msg_print(_("それ以上先には進めない。", "You cannot go any more."));
+                if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
+                    free_turn(creature_ptr);
+            }
 
-			/* Wall (or secret door) */
-			else
-			{
-				/* Closed doors */
-				if (easy_open && is_closed_door(creature_ptr, feat) && easy_open_door(creature_ptr, y, x)) return;
+            /* Wall (or secret door) */
+            else {
+                /* Closed doors */
+                if (easy_open && is_closed_door(creature_ptr, feat) && easy_open_door(creature_ptr, y, x))
+                    return;
 
 #ifdef JP
-				msg_format("%sが行く手をはばんでいる。", name);
+                msg_format("%sが行く手をはばんでいる。", name);
 #else
-				msg_format("There is %s %s blocking your way.",
-					is_a_vowel(name[0]) ? "an" : "a", name);
+                msg_format("There is %s %s blocking your way.", is_a_vowel(name[0]) ? "an" : "a", name);
 #endif
 
-				/*
-				 * Well, it makes sense that you lose time bumping into
-				 * a wall _if_ you are confused, stunned or blind; but
-				 * typing mistakes should not cost you a turn...
-				 */
-				if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
-					free_turn(creature_ptr);
-			}
-		}
+                /*
+                 * Well, it makes sense that you lose time bumping into
+                 * a wall _if_ you are confused, stunned or blind; but
+                 * typing mistakes should not cost you a turn...
+                 */
+                if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
+                    free_turn(creature_ptr);
+            }
+        }
 
-		disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, FALSE, TRUE);
 
-		if (!boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) sound(SOUND_HITWALL);
-	}
+        if (!boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
+            sound(SOUND_HITWALL);
+    }
 
-	/* Normal movement */
-	if (can_move && !pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x))
-	{
-		if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
-		{
-			free_turn(creature_ptr);
-		}
+    /* Normal movement */
+    if (can_move && !pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x)) {
+        if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image)) {
+            free_turn(creature_ptr);
+        }
 
-		/* To avoid a loop with running */
-		disturb(creature_ptr, FALSE, TRUE);
+        /* To avoid a loop with running */
+        disturb(creature_ptr, FALSE, TRUE);
 
-		can_move = FALSE;
-	}
+        can_move = FALSE;
+    }
 
-	if (!can_move) return;
+    if (!can_move)
+        return;
 
-	if (creature_ptr->warning)
-	{
-		if (!process_warning(creature_ptr, x, y))
-		{
-			creature_ptr->energy_use = 25;
-			return;
-		}
-	}
+    if (creature_ptr->warning) {
+        if (!process_warning(creature_ptr, x, y)) {
+            creature_ptr->energy_use = 25;
+            return;
+        }
+    }
 
-	if (do_past)
-	{
-		msg_format(_("%sを押し退けた。", "You push past %s."), m_name);
-	}
+    if (do_past) {
+        msg_format(_("%sを押し退けた。", "You push past %s."), m_name);
+    }
 
-	/* Change oldpx and oldpy to place the player well when going back to big mode */
-	if (creature_ptr->wild_mode)
-	{
-		if (ddy[dir] > 0)  creature_ptr->oldpy = 1;
-		if (ddy[dir] < 0)  creature_ptr->oldpy = MAX_HGT - 2;
-		if (ddy[dir] == 0) creature_ptr->oldpy = MAX_HGT / 2;
-		if (ddx[dir] > 0)  creature_ptr->oldpx = 1;
-		if (ddx[dir] < 0)  creature_ptr->oldpx = MAX_WID - 2;
-		if (ddx[dir] == 0) creature_ptr->oldpx = MAX_WID / 2;
-	}
+    /* Change oldpx and oldpy to place the player well when going back to big mode */
+    if (creature_ptr->wild_mode) {
+        if (ddy[dir] > 0)
+            creature_ptr->oldpy = 1;
+        if (ddy[dir] < 0)
+            creature_ptr->oldpy = MAX_HGT - 2;
+        if (ddy[dir] == 0)
+            creature_ptr->oldpy = MAX_HGT / 2;
+        if (ddx[dir] > 0)
+            creature_ptr->oldpx = 1;
+        if (ddx[dir] < 0)
+            creature_ptr->oldpx = MAX_WID - 2;
+        if (ddx[dir] == 0)
+            creature_ptr->oldpx = MAX_WID / 2;
+    }
 
-	if (p_can_kill_walls)
-	{
-		cave_alter_feat(creature_ptr, y, x, FF_HURT_DISI);
+    if (p_can_kill_walls) {
+        cave_alter_feat(creature_ptr, y, x, FF_HURT_DISI);
 
-		/* Update some things -- similar to GF_KILL_WALL */
-		creature_ptr->update |= (PU_FLOW);
-	}
+        /* Update some things -- similar to GF_KILL_WALL */
+        creature_ptr->update |= (PU_FLOW);
+    }
 
-	u32b mpe_mode = MPE_ENERGY_USE;
-	if (do_pickup != always_pickup) mpe_mode |= MPE_DO_PICKUP;
-	if (break_trap) mpe_mode |= MPE_BREAK_TRAP;
+    u32b mpe_mode = MPE_ENERGY_USE;
+    if (do_pickup != always_pickup)
+        mpe_mode |= MPE_DO_PICKUP;
+    if (break_trap)
+        mpe_mode |= MPE_BREAK_TRAP;
 
-	(void)move_player_effect(creature_ptr, y, x, mpe_mode);
+    (void)move_player_effect(creature_ptr, y, x, mpe_mode);
 }
-
 
 static bool ignore_avoid_run;
 
@@ -1285,39 +1182,40 @@ static bool ignore_avoid_run;
  */
 static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
-	/* Get the new location */
-	y += ddy[dir];
-	x += ddx[dir];
+    /* Get the new location */
+    y += ddy[dir];
+    x += ddx[dir];
 
-	/* Illegal grids are not known walls */
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	if (!in_bounds2(floor_ptr, y, x)) return FALSE;
+    /* Illegal grids are not known walls */
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    if (!in_bounds2(floor_ptr, y, x))
+        return FALSE;
 
-	grid_type *g_ptr;
-	g_ptr = &floor_ptr->grid_array[y][x];
+    grid_type *g_ptr;
+    g_ptr = &floor_ptr->grid_array[y][x];
 
-	/* Must be known to the player */
-	if (!(g_ptr->info & CAVE_MARK)) return FALSE;
+    /* Must be known to the player */
+    if (!(g_ptr->info & CAVE_MARK))
+        return FALSE;
 
-	/* Feature code (applying "mimic" field) */
-	s16b feat = get_feat_mimic(g_ptr);
-	feature_type *f_ptr = &f_info[feat];
+    /* Feature code (applying "mimic" field) */
+    s16b feat = get_feat_mimic(g_ptr);
+    feature_type *f_ptr = &f_info[feat];
 
-	/* Wall grids are known walls */
-	if (!player_can_enter(creature_ptr, feat, 0))
-		return !have_flag(f_ptr->flags, FF_DOOR);
+    /* Wall grids are known walls */
+    if (!player_can_enter(creature_ptr, feat, 0))
+        return !have_flag(f_ptr->flags, FF_DOOR);
 
-	/* Don't run on a tree unless explicitly requested */
-	if (have_flag(f_ptr->flags, FF_AVOID_RUN) && !ignore_avoid_run)
-		return TRUE;
+    /* Don't run on a tree unless explicitly requested */
+    if (have_flag(f_ptr->flags, FF_AVOID_RUN) && !ignore_avoid_run)
+        return TRUE;
 
-	/* Don't run in a wall */
-	if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
-		return !have_flag(f_ptr->flags, FF_DOOR);
+    /* Don't run in a wall */
+    if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
+        return !have_flag(f_ptr->flags, FF_DOOR);
 
-	return FALSE;
+    return FALSE;
 }
-
 
 /*!
  * @brief ダッシュ移動処理中、移動先のマスか未知の地形かどうかを判定する /
@@ -1330,24 +1228,26 @@ static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSIT
  */
 static bool see_nothing(player_type *creature_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
-	/* Get the new location */
-	y += ddy[dir];
-	x += ddx[dir];
+    /* Get the new location */
+    y += ddy[dir];
+    x += ddx[dir];
 
-	/* Illegal grids are unknown */
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	if (!in_bounds2(floor_ptr, y, x)) return TRUE;
+    /* Illegal grids are unknown */
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    if (!in_bounds2(floor_ptr, y, x))
+        return TRUE;
 
-	/* Memorized grids are always known */
-	if (floor_ptr->grid_array[y][x].info & (CAVE_MARK)) return FALSE;
+    /* Memorized grids are always known */
+    if (floor_ptr->grid_array[y][x].info & (CAVE_MARK))
+        return FALSE;
 
-	/* Viewable door/wall grids are known */
-	if (player_can_see_bold(creature_ptr, y, x)) return FALSE;
+    /* Viewable door/wall grids are known */
+    if (player_can_see_bold(creature_ptr, y, x))
+        return FALSE;
 
-	/* Default */
-	return TRUE;
+    /* Default */
+    return TRUE;
 }
-
 
 /*
  * Hack -- allow quick "cycling" through the legal directions
@@ -1399,94 +1299,82 @@ static bool find_breakleft;
  */
 static void run_init(player_type *creature_ptr, DIRECTION dir)
 {
-	/* Save the direction */
-	find_current = dir;
+    /* Save the direction */
+    find_current = dir;
 
-	/* Assume running straight */
-	find_prevdir = dir;
+    /* Assume running straight */
+    find_prevdir = dir;
 
-	/* Assume looking for open area */
-	find_openarea = TRUE;
+    /* Assume looking for open area */
+    find_openarea = TRUE;
 
-	/* Assume not looking for breaks */
-	find_breakright = find_breakleft = FALSE;
+    /* Assume not looking for breaks */
+    find_breakright = find_breakleft = FALSE;
 
-	/* Assume no nearby walls */
-	bool deepleft = FALSE;
-	bool deepright = FALSE;
-	bool shortright = FALSE;
-	bool shortleft = FALSE;
+    /* Assume no nearby walls */
+    bool deepleft = FALSE;
+    bool deepright = FALSE;
+    bool shortright = FALSE;
+    bool shortleft = FALSE;
 
-	creature_ptr->run_py = creature_ptr->y;
-	creature_ptr->run_px = creature_ptr->x;
+    creature_ptr->run_py = creature_ptr->y;
+    creature_ptr->run_px = creature_ptr->x;
 
-	/* Find the destination grid */
-	int row = creature_ptr->y + ddy[dir];
-	int col = creature_ptr->x + ddx[dir];
+    /* Find the destination grid */
+    int row = creature_ptr->y + ddy[dir];
+    int col = creature_ptr->x + ddx[dir];
 
-	ignore_avoid_run = cave_have_flag_bold(creature_ptr->current_floor_ptr, row, col, FF_AVOID_RUN);
+    ignore_avoid_run = cave_have_flag_bold(creature_ptr->current_floor_ptr, row, col, FF_AVOID_RUN);
 
-	/* Extract cycle index */
-	int i = chome[dir];
+    /* Extract cycle index */
+    int i = chome[dir];
 
-	/* Check for walls */
-	if (see_wall(creature_ptr, cycle[i+1], creature_ptr->y, creature_ptr->x))
-	{
-		find_breakleft = TRUE;
-		shortleft = TRUE;
-	}
-	else if (see_wall(creature_ptr, cycle[i+1], row, col))
-	{
-		find_breakleft = TRUE;
-		deepleft = TRUE;
-	}
+    /* Check for walls */
+    if (see_wall(creature_ptr, cycle[i + 1], creature_ptr->y, creature_ptr->x)) {
+        find_breakleft = TRUE;
+        shortleft = TRUE;
+    } else if (see_wall(creature_ptr, cycle[i + 1], row, col)) {
+        find_breakleft = TRUE;
+        deepleft = TRUE;
+    }
 
-	/* Check for walls */
-	if (see_wall(creature_ptr, cycle[i-1], creature_ptr->y, creature_ptr->x))
-	{
-		find_breakright = TRUE;
-		shortright = TRUE;
-	}
-	else if (see_wall(creature_ptr, cycle[i-1], row, col))
-	{
-		find_breakright = TRUE;
-		deepright = TRUE;
-	}
+    /* Check for walls */
+    if (see_wall(creature_ptr, cycle[i - 1], creature_ptr->y, creature_ptr->x)) {
+        find_breakright = TRUE;
+        shortright = TRUE;
+    } else if (see_wall(creature_ptr, cycle[i - 1], row, col)) {
+        find_breakright = TRUE;
+        deepright = TRUE;
+    }
 
-	/* Looking for a break */
-	if (!find_breakleft || !find_breakright) return;
+    /* Looking for a break */
+    if (!find_breakleft || !find_breakright)
+        return;
 
-	/* Not looking for open area */
-	find_openarea = FALSE;
+    /* Not looking for open area */
+    find_openarea = FALSE;
 
-	/* Hack -- allow angled corridor entry */
-	if (dir & 0x01)
-	{
-		if (deepleft && !deepright)
-		{
-			find_prevdir = cycle[i - 1];
-		}
-		else if (deepright && !deepleft)
-		{
-			find_prevdir = cycle[i + 1];
-		}
+    /* Hack -- allow angled corridor entry */
+    if (dir & 0x01) {
+        if (deepleft && !deepright) {
+            find_prevdir = cycle[i - 1];
+        } else if (deepright && !deepleft) {
+            find_prevdir = cycle[i + 1];
+        }
 
-		return;
-	}
+        return;
+    }
 
-	/* Hack -- allow blunt corridor entry */
-	if (!see_wall(creature_ptr, cycle[i], row, col)) return;
+    /* Hack -- allow blunt corridor entry */
+    if (!see_wall(creature_ptr, cycle[i], row, col))
+        return;
 
-	if (shortleft && !shortright)
-	{
-		find_prevdir = cycle[i - 2];
-	}
-	else if (shortright && !shortleft)
-	{
-		find_prevdir = cycle[i + 2];
-	}
+    if (shortleft && !shortright) {
+        find_prevdir = cycle[i - 2];
+    } else if (shortright && !shortleft) {
+        find_prevdir = cycle[i + 2];
+    }
 }
-
 
 /*!
  * @brief ダッシュ移動が継続できるかどうかの判定 /
@@ -1498,296 +1386,258 @@ static void run_init(player_type *creature_ptr, DIRECTION dir)
  */
 static bool run_test(player_type *creature_ptr)
 {
-	DIRECTION prev_dir = find_prevdir;
+    DIRECTION prev_dir = find_prevdir;
 
-	/* Range of newly adjacent grids */
-	int max = (prev_dir & 0x01) + 1;
+    /* Range of newly adjacent grids */
+    int max = (prev_dir & 0x01) + 1;
 
-	/* break run when leaving trap detected region */
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	if ((disturb_trap_detect || alert_trap_detect)
-	    && creature_ptr->dtrap && !(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_IN_DETECT))
-	{
-		/* No duplicate warning */
-		creature_ptr->dtrap = FALSE;
+    /* break run when leaving trap detected region */
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    if ((disturb_trap_detect || alert_trap_detect) && creature_ptr->dtrap && !(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_IN_DETECT)) {
+        /* No duplicate warning */
+        creature_ptr->dtrap = FALSE;
 
-		/* You are just on the edge */
-		if (!(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_UNSAFE))
-		{
-			if (alert_trap_detect)
-			{
-				msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
-			}
+        /* You are just on the edge */
+        if (!(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_UNSAFE)) {
+            if (alert_trap_detect) {
+                msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
+            }
 
-			if (disturb_trap_detect)
-			{
-				/* Break Run */
-				return TRUE;
-			}
-		}
-	}
+            if (disturb_trap_detect) {
+                /* Break Run */
+                return TRUE;
+            }
+        }
+    }
 
-	/* Look at every newly adjacent square. */
-	DIRECTION check_dir = 0;
-	int option = 0, option2 = 0;
-	for (int i = -max; i <= max; i++)
-	{
-		OBJECT_IDX this_o_idx, next_o_idx = 0;
+    /* Look at every newly adjacent square. */
+    DIRECTION check_dir = 0;
+    int option = 0, option2 = 0;
+    for (int i = -max; i <= max; i++) {
+        OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-		/* New direction */
-		DIRECTION new_dir = cycle[chome[prev_dir] + i];
+        /* New direction */
+        DIRECTION new_dir = cycle[chome[prev_dir] + i];
 
-		/* New location */
-		int row = creature_ptr->y + ddy[new_dir];
-		int col = creature_ptr->x + ddx[new_dir];
+        /* New location */
+        int row = creature_ptr->y + ddy[new_dir];
+        int col = creature_ptr->x + ddx[new_dir];
 
-		grid_type *g_ptr;
-		g_ptr = &floor_ptr->grid_array[row][col];
+        grid_type *g_ptr;
+        g_ptr = &floor_ptr->grid_array[row][col];
 
-		/* Feature code (applying "mimic" field) */
-		FEAT_IDX feat = get_feat_mimic(g_ptr);
-		feature_type *f_ptr;
-		f_ptr = &f_info[feat];
+        /* Feature code (applying "mimic" field) */
+        FEAT_IDX feat = get_feat_mimic(g_ptr);
+        feature_type *f_ptr;
+        f_ptr = &f_info[feat];
 
-		/* Visible monsters abort running */
-		if (g_ptr->m_idx)
-		{
-			monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+        /* Visible monsters abort running */
+        if (g_ptr->m_idx) {
+            monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
-			/* Visible monster */
-			if (m_ptr->ml) return TRUE;
-		}
+            /* Visible monster */
+            if (m_ptr->ml)
+                return TRUE;
+        }
 
-		/* Visible objects abort running */
-		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
-		{
-			object_type *o_ptr;
-			o_ptr = &floor_ptr->o_list[this_o_idx];
-			next_o_idx = o_ptr->next_o_idx;
+        /* Visible objects abort running */
+        for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+            object_type *o_ptr;
+            o_ptr = &floor_ptr->o_list[this_o_idx];
+            next_o_idx = o_ptr->next_o_idx;
 
-			/* Visible object */
-			if (o_ptr->marked & OM_FOUND) return TRUE;
-		}
+            /* Visible object */
+            if (o_ptr->marked & OM_FOUND)
+                return TRUE;
+        }
 
-		/* Assume unknown */
-		bool inv = TRUE;
+        /* Assume unknown */
+        bool inv = TRUE;
 
-		/* Check memorized grids */
-		if (g_ptr->info & (CAVE_MARK))
-		{
-			bool notice = have_flag(f_ptr->flags, FF_NOTICE);
+        /* Check memorized grids */
+        if (g_ptr->info & (CAVE_MARK)) {
+            bool notice = have_flag(f_ptr->flags, FF_NOTICE);
 
-			if (notice && have_flag(f_ptr->flags, FF_MOVE))
-			{
-				/* Open doors */
-				if (find_ignore_doors && have_flag(f_ptr->flags, FF_DOOR) && have_flag(f_ptr->flags, FF_CLOSE))
-				{
-					/* Option -- ignore */
-					notice = FALSE;
-				}
+            if (notice && have_flag(f_ptr->flags, FF_MOVE)) {
+                /* Open doors */
+                if (find_ignore_doors && have_flag(f_ptr->flags, FF_DOOR) && have_flag(f_ptr->flags, FF_CLOSE)) {
+                    /* Option -- ignore */
+                    notice = FALSE;
+                }
 
-				/* Stairs */
-				else if (find_ignore_stairs && have_flag(f_ptr->flags, FF_STAIRS))
-				{
-					/* Option -- ignore */
-					notice = FALSE;
-				}
+                /* Stairs */
+                else if (find_ignore_stairs && have_flag(f_ptr->flags, FF_STAIRS)) {
+                    /* Option -- ignore */
+                    notice = FALSE;
+                }
 
-				/* Lava */
-				else if (have_flag(f_ptr->flags, FF_LAVA) && (creature_ptr->immune_fire || is_invuln(creature_ptr)))
-				{
-					/* Ignore */
-					notice = FALSE;
-				}
+                /* Lava */
+                else if (have_flag(f_ptr->flags, FF_LAVA) && (creature_ptr->immune_fire || is_invuln(creature_ptr))) {
+                    /* Ignore */
+                    notice = FALSE;
+                }
 
-				/* Deep water */
-				else if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
-				         (creature_ptr->levitation || creature_ptr->can_swim || (creature_ptr->total_weight <= weight_limit(creature_ptr))))
-				{
-					/* Ignore */
-					notice = FALSE;
-				}
-			}
+                /* Deep water */
+                else if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP)
+                    && (creature_ptr->levitation || creature_ptr->can_swim || (creature_ptr->total_weight <= weight_limit(creature_ptr)))) {
+                    /* Ignore */
+                    notice = FALSE;
+                }
+            }
 
-			/* Interesting feature */
-			if (notice) return TRUE;
+            /* Interesting feature */
+            if (notice)
+                return TRUE;
 
-			/* The grid is "visible" */
-			inv = FALSE;
-		}
+            /* The grid is "visible" */
+            inv = FALSE;
+        }
 
-		/* Analyze unknown grids and floors considering mimic */
-		if (!inv && see_wall(creature_ptr, 0, row, col))
-		{
-			if (find_openarea)
-			{
-				if (i < 0)
-				{
-					/* Break to the right */
-					find_breakright = TRUE;
-				}
+        /* Analyze unknown grids and floors considering mimic */
+        if (!inv && see_wall(creature_ptr, 0, row, col)) {
+            if (find_openarea) {
+                if (i < 0) {
+                    /* Break to the right */
+                    find_breakright = TRUE;
+                }
 
-				else if (i > 0)
-				{
-					/* Break to the left */
-					find_breakleft = TRUE;
-				}
-			}
+                else if (i > 0) {
+                    /* Break to the left */
+                    find_breakleft = TRUE;
+                }
+            }
 
-			continue;
-		}
+            continue;
+        }
 
-		/* Looking for open area */
-		if (find_openarea) continue;
+        /* Looking for open area */
+        if (find_openarea)
+            continue;
 
-		/* The first new direction. */
-		if (!option)
-		{
-			option = new_dir;
-			continue;
-		}
+        /* The first new direction. */
+        if (!option) {
+            option = new_dir;
+            continue;
+        }
 
-		/* Three new directions. Stop running. */
-		if (option2)
-		{
-			return TRUE;
-		}
+        /* Three new directions. Stop running. */
+        if (option2) {
+            return TRUE;
+        }
 
-		/* Two non-adjacent new directions.  Stop running. */
-		if (option != cycle[chome[prev_dir] + i - 1])
-		{
-			return TRUE;
-		}
+        /* Two non-adjacent new directions.  Stop running. */
+        if (option != cycle[chome[prev_dir] + i - 1]) {
+            return TRUE;
+        }
 
-		/* Two new (adjacent) directions (case 1) */
-		if (new_dir & 0x01)
-		{
-			check_dir = cycle[chome[prev_dir] + i - 2];
-			option2 = new_dir;
-			continue;
-		}
+        /* Two new (adjacent) directions (case 1) */
+        if (new_dir & 0x01) {
+            check_dir = cycle[chome[prev_dir] + i - 2];
+            option2 = new_dir;
+            continue;
+        }
 
-		/* Two new (adjacent) directions (case 2) */
-		check_dir = cycle[chome[prev_dir] + i + 1];
-		option2 = option;
-		option = new_dir;
-	}
+        /* Two new (adjacent) directions (case 2) */
+        check_dir = cycle[chome[prev_dir] + i + 1];
+        option2 = option;
+        option = new_dir;
+    }
 
-	/* Looking for open area */
-	if (find_openarea)
-	{
-		/* Hack -- look again */
-		for (int i = -max; i < 0; i++)
-		{
-			/* Unknown grid or non-wall */
-			if (!see_wall(creature_ptr, cycle[chome[prev_dir] + i], creature_ptr->y, creature_ptr->x))
-			{
-				/* Looking to break right */
-				if (find_breakright)
-				{
-					return TRUE;
-				}
-			}
+    /* Looking for open area */
+    if (find_openarea) {
+        /* Hack -- look again */
+        for (int i = -max; i < 0; i++) {
+            /* Unknown grid or non-wall */
+            if (!see_wall(creature_ptr, cycle[chome[prev_dir] + i], creature_ptr->y, creature_ptr->x)) {
+                /* Looking to break right */
+                if (find_breakright) {
+                    return TRUE;
+                }
+            }
 
-			/* Obstacle */
-			else
-			{
-				/* Looking to break left */
-				if (find_breakleft)
-				{
-					return TRUE;
-				}
-			}
-		}
+            /* Obstacle */
+            else {
+                /* Looking to break left */
+                if (find_breakleft) {
+                    return TRUE;
+                }
+            }
+        }
 
-		/* Hack -- look again */
-		for (int i = max; i > 0; i--)
-		{
-			/* Unknown grid or non-wall */
-			if (!see_wall(creature_ptr, cycle[chome[prev_dir] + i], creature_ptr->y, creature_ptr->x))
-			{
-				/* Looking to break left */
-				if (find_breakleft)
-				{
-					return TRUE;
-				}
-			}
+        /* Hack -- look again */
+        for (int i = max; i > 0; i--) {
+            /* Unknown grid or non-wall */
+            if (!see_wall(creature_ptr, cycle[chome[prev_dir] + i], creature_ptr->y, creature_ptr->x)) {
+                /* Looking to break left */
+                if (find_breakleft) {
+                    return TRUE;
+                }
+            }
 
-			/* Obstacle */
-			else
-			{
-				/* Looking to break right */
-				if (find_breakright)
-				{
-					return TRUE;
-				}
-			}
-		}
+            /* Obstacle */
+            else {
+                /* Looking to break right */
+                if (find_breakright) {
+                    return TRUE;
+                }
+            }
+        }
 
-		return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
-	}
+        return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+    }
 
-	/* No options */
-	if (!option)
-	{
-		return TRUE;
-	}
+    /* No options */
+    if (!option) {
+        return TRUE;
+    }
 
-	/* One option */
-	if (!option2)
-	{
-		find_current = option;
-		find_prevdir = option;
-		return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
-	}
+    /* One option */
+    if (!option2) {
+        find_current = option;
+        find_prevdir = option;
+        return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+    }
 
-	/* Two options, examining corners */
-	else if (!find_cut)
-	{
-		find_current = option;
-		find_prevdir = option2;
-		return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
-	}
+    /* Two options, examining corners */
+    else if (!find_cut) {
+        find_current = option;
+        find_prevdir = option2;
+        return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+    }
 
-	/* Two options, pick one */
-	/* Get next location */
-	int row = creature_ptr->y + ddy[option];
-	int col = creature_ptr->x + ddx[option];
+    /* Two options, pick one */
+    /* Get next location */
+    int row = creature_ptr->y + ddy[option];
+    int col = creature_ptr->x + ddx[option];
 
-	/* Don't see that it is closed off. */
-	/* This could be a potential corner or an intersection. */
-	if (!see_wall(creature_ptr, option, row, col) ||
-		!see_wall(creature_ptr, check_dir, row, col))
-	{
-		/* Can not see anything ahead and in the direction we */
-		/* are turning, assume that it is a potential corner. */
-		if (see_nothing(creature_ptr, option, row, col) &&
-			see_nothing(creature_ptr, option2, row, col))
-		{
-			find_current = option;
-			find_prevdir = option2;
-			return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
-		}
+    /* Don't see that it is closed off. */
+    /* This could be a potential corner or an intersection. */
+    if (!see_wall(creature_ptr, option, row, col) || !see_wall(creature_ptr, check_dir, row, col)) {
+        /* Can not see anything ahead and in the direction we */
+        /* are turning, assume that it is a potential corner. */
+        if (see_nothing(creature_ptr, option, row, col) && see_nothing(creature_ptr, option2, row, col)) {
+            find_current = option;
+            find_prevdir = option2;
+            return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+        }
 
-		/* STOP: we are next to an intersection or a room */
-		return TRUE;
-	}
+        /* STOP: we are next to an intersection or a room */
+        return TRUE;
+    }
 
-	/* This corner is seen to be enclosed; we cut the corner. */
-	if (find_cut)
-	{
-		find_current = option2;
-		find_prevdir = option2;
-		return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
-	}
+    /* This corner is seen to be enclosed; we cut the corner. */
+    if (find_cut) {
+        find_current = option2;
+        find_prevdir = option2;
+        return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+    }
 
-	/* This corner is seen to be enclosed, and we */
-	/* deliberately go the long way. */
-	find_current = option;
-	find_prevdir = option2;
-	return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
+    /* This corner is seen to be enclosed, and we */
+    /* deliberately go the long way. */
+    find_current = option;
+    find_prevdir = option2;
+    return see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x);
 }
-
 
 /*!
  * @brief 継続的なダッシュ処理 /
@@ -1798,56 +1648,51 @@ static bool run_test(player_type *creature_ptr)
  */
 void run_step(player_type *creature_ptr, DIRECTION dir)
 {
-	/* Start running */
-	if (dir)
-	{
-		/* Ignore AVOID_RUN on a first step */
-		ignore_avoid_run = TRUE;
+    /* Start running */
+    if (dir) {
+        /* Ignore AVOID_RUN on a first step */
+        ignore_avoid_run = TRUE;
 
-		/* Hack -- do not start silly run */
-		if (see_wall(creature_ptr, dir, creature_ptr->y, creature_ptr->x))
-		{
-			sound(SOUND_HITWALL);
+        /* Hack -- do not start silly run */
+        if (see_wall(creature_ptr, dir, creature_ptr->y, creature_ptr->x)) {
+            sound(SOUND_HITWALL);
 
-			msg_print(_("その方向には走れません。", "You cannot run in that direction."));
+            msg_print(_("その方向には走れません。", "You cannot run in that direction."));
 
-			disturb(creature_ptr, FALSE, FALSE);
+            disturb(creature_ptr, FALSE, FALSE);
 
-			return;
-		}
+            return;
+        }
 
-		run_init(creature_ptr, dir);
-	}
+        run_init(creature_ptr, dir);
+    }
 
-	/* Keep running */
-	else
-	{
-		/* Update run */
-		if (run_test(creature_ptr))
-		{
-			disturb(creature_ptr, FALSE, FALSE);
+    /* Keep running */
+    else {
+        /* Update run */
+        if (run_test(creature_ptr)) {
+            disturb(creature_ptr, FALSE, FALSE);
 
-			return;
-		}
-	}
+            return;
+        }
+    }
 
-	/* Decrease the run counter */
-	if (--creature_ptr->running <= 0) return;
+    /* Decrease the run counter */
+    if (--creature_ptr->running <= 0)
+        return;
 
-	/* Take time */
-	take_turn(creature_ptr, 100);
+    /* Take time */
+    take_turn(creature_ptr, 100);
 
-	/* Move the player, using the "pickup" flag */
-	move_player(creature_ptr, find_current, FALSE, FALSE);
+    /* Move the player, using the "pickup" flag */
+    move_player(creature_ptr, find_current, FALSE, FALSE);
 
-	if (player_bold(creature_ptr, creature_ptr->run_py, creature_ptr->run_px))
-	{
-		creature_ptr->run_py = 0;
-		creature_ptr->run_px = 0;
-		disturb(creature_ptr, FALSE, FALSE);
-	}
+    if (player_bold(creature_ptr, creature_ptr->run_py, creature_ptr->run_px)) {
+        creature_ptr->run_py = 0;
+        creature_ptr->run_px = 0;
+        disturb(creature_ptr, FALSE, FALSE);
+    }
 }
-
 
 /*!
  * @brief トラベル機能の判定処理 /
@@ -1858,95 +1703,87 @@ void run_step(player_type *creature_ptr, DIRECTION dir)
  */
 static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 {
-	/* Cannot travel when blind */
-	if (creature_ptr->blind || no_lite(creature_ptr))
-	{
-		msg_print(_("目が見えない！", "You cannot see!"));
-		return 0;
-	}
+    /* Cannot travel when blind */
+    if (creature_ptr->blind || no_lite(creature_ptr)) {
+        msg_print(_("目が見えない！", "You cannot see!"));
+        return 0;
+    }
 
-	/* break run when leaving trap detected region */
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	if ((disturb_trap_detect || alert_trap_detect)
-	    && creature_ptr->dtrap && !(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_IN_DETECT))
-	{
-		/* No duplicate warning */
-		creature_ptr->dtrap = FALSE;
+    /* break run when leaving trap detected region */
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    if ((disturb_trap_detect || alert_trap_detect) && creature_ptr->dtrap && !(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_IN_DETECT)) {
+        /* No duplicate warning */
+        creature_ptr->dtrap = FALSE;
 
-		/* You are just on the edge */
-		if (!(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_UNSAFE))
-		{
-			if (alert_trap_detect)
-			{
-				msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
-			}
+        /* You are just on the edge */
+        if (!(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_UNSAFE)) {
+            if (alert_trap_detect) {
+                msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
+            }
 
-			if (disturb_trap_detect)
-			{
-				/* Break Run */
-				return 0;
-			}
-		}
-	}
+            if (disturb_trap_detect) {
+                /* Break Run */
+                return 0;
+            }
+        }
+    }
 
-	/* Range of newly adjacent grids */
-	int max = (prev_dir & 0x01) + 1;
+    /* Range of newly adjacent grids */
+    int max = (prev_dir & 0x01) + 1;
 
-	/* Look at every newly adjacent square. */
-	const grid_type *g_ptr;
-	for (int i = -max; i <= max; i++)
-	{
-		/* New direction */
-		DIRECTION dir = cycle[chome[prev_dir] + i];
+    /* Look at every newly adjacent square. */
+    const grid_type *g_ptr;
+    for (int i = -max; i <= max; i++) {
+        /* New direction */
+        DIRECTION dir = cycle[chome[prev_dir] + i];
 
-		/* New location */
-		POSITION row = creature_ptr->y + ddy[dir];
-		POSITION col = creature_ptr->x + ddx[dir];
+        /* New location */
+        POSITION row = creature_ptr->y + ddy[dir];
+        POSITION col = creature_ptr->x + ddx[dir];
 
-		g_ptr = &floor_ptr->grid_array[row][col];
+        g_ptr = &floor_ptr->grid_array[row][col];
 
-		/* Visible monsters abort running */
-		if (g_ptr->m_idx)
-		{
-			monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+        /* Visible monsters abort running */
+        if (g_ptr->m_idx) {
+            monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
-			/* Visible monster */
-			if (m_ptr->ml) return 0;
-		}
+            /* Visible monster */
+            if (m_ptr->ml)
+                return 0;
+        }
+    }
 
-	}
+    /* Travel cost of current grid */
+    int cost = travel.cost[creature_ptr->y][creature_ptr->x];
 
-	/* Travel cost of current grid */
-	int cost = travel.cost[creature_ptr->y][creature_ptr->x];
+    /* Determine travel direction */
+    DIRECTION new_dir = 0;
+    for (int i = 0; i < 8; ++i) {
+        int dir_cost = travel.cost[creature_ptr->y + ddy_ddd[i]][creature_ptr->x + ddx_ddd[i]];
 
-	/* Determine travel direction */
-	DIRECTION new_dir = 0;
-	for (int i = 0; i < 8; ++ i)
-	{
-		int dir_cost = travel.cost[creature_ptr->y+ddy_ddd[i]][creature_ptr->x+ddx_ddd[i]];
+        if (dir_cost < cost) {
+            new_dir = ddd[i];
+            cost = dir_cost;
+        }
+    }
 
-		if (dir_cost < cost)
-		{
-			new_dir = ddd[i];
-			cost = dir_cost;
-		}
-	}
+    if (!new_dir)
+        return 0;
 
-	if (!new_dir) return 0;
+    /* Access newly move grid */
+    g_ptr = &floor_ptr->grid_array[creature_ptr->y + ddy[new_dir]][creature_ptr->x + ddx[new_dir]];
 
-	/* Access newly move grid */
-	g_ptr = &floor_ptr->grid_array[creature_ptr->y+ddy[new_dir]][creature_ptr->x+ddx[new_dir]];
+    /* Close door abort traveling */
+    if (!easy_open && is_closed_door(creature_ptr, g_ptr->feat))
+        return 0;
 
-	/* Close door abort traveling */
-	if (!easy_open && is_closed_door(creature_ptr, g_ptr->feat)) return 0;
+    /* Visible and unignorable trap abort tarveling */
+    if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat))
+        return 0;
 
-	/* Visible and unignorable trap abort tarveling */
-	if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat)) return 0;
-
-	/* Move new grid */
-	return new_dir;
+    /* Move new grid */
+    return new_dir;
 }
-
 
 /*!
  * @brief トラベル機能の実装 /
@@ -1956,39 +1793,33 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
  */
 void travel_step(player_type *creature_ptr)
 {
-	/* Get travel direction */
-	travel.dir = travel_test(creature_ptr, travel.dir);
+    /* Get travel direction */
+    travel.dir = travel_test(creature_ptr, travel.dir);
 
-	if (!travel.dir)
-	{
-		if (travel.run == 255)
-		{
-			msg_print(_("道筋が見つかりません！", "No route is found!"));
-			travel.y = travel.x = 0;
-		}
+    if (!travel.dir) {
+        if (travel.run == 255) {
+            msg_print(_("道筋が見つかりません！", "No route is found!"));
+            travel.y = travel.x = 0;
+        }
 
-		disturb(creature_ptr, FALSE, TRUE);
-		return;
-	}
+        disturb(creature_ptr, FALSE, TRUE);
+        return;
+    }
 
-	take_turn(creature_ptr, 100);
+    take_turn(creature_ptr, 100);
 
-	move_player(creature_ptr, travel.dir, always_pickup, FALSE);
+    move_player(creature_ptr, travel.dir, always_pickup, FALSE);
 
-	if ((creature_ptr->y == travel.y) && (creature_ptr->x == travel.x))
-	{
-		travel.run = 0;
-		travel.y = travel.x = 0;
-	}
-	else if (travel.run > 0)
-	{
-		travel.run--;
-	}
+    if ((creature_ptr->y == travel.y) && (creature_ptr->x == travel.x)) {
+        travel.run = 0;
+        travel.y = travel.x = 0;
+    } else if (travel.run > 0) {
+        travel.run--;
+    }
 
-	/* Travel Delay */
-	Term_xtra(TERM_XTRA_DELAY, delay_factor);
+    /* Travel Delay */
+    Term_xtra(TERM_XTRA_DELAY, delay_factor);
 }
-
 
 #define TRAVEL_UNABLE 9999
 
@@ -2004,18 +1835,15 @@ static POSITION temp2_y[MAX_SHORT];
  */
 void forget_travel_flow(floor_type *floor_ptr)
 {
-	/* Check the entire dungeon / Forget the old data */
-	for (POSITION y = 0; y < floor_ptr->height; y++)
-	{
-		for (POSITION x = 0; x < floor_ptr->width; x++)
-		{
-			travel.cost[y][x] = MAX_SHORT;
-		}
-	}
+    /* Check the entire dungeon / Forget the old data */
+    for (POSITION y = 0; y < floor_ptr->height; y++) {
+        for (POSITION x = 0; x < floor_ptr->width; x++) {
+            travel.cost[y][x] = MAX_SHORT;
+        }
+    }
 
-	travel.y = travel.x = 0;
+    travel.y = travel.x = 0;
 }
-
 
 /*!
  * @brief トラベル処理中に地形に応じた移動コスト基準を返す
@@ -2026,38 +1854,41 @@ void forget_travel_flow(floor_type *floor_ptr)
  */
 static int travel_flow_cost(player_type *creature_ptr, POSITION y, POSITION x)
 {
-	/* Avoid obstacles (ex. trees) */
-	int cost = 1;
-	feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[y][x].feat];
-	if (have_flag(f_ptr->flags, FF_AVOID_RUN)) cost += 1;
+    /* Avoid obstacles (ex. trees) */
+    int cost = 1;
+    feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[y][x].feat];
+    if (have_flag(f_ptr->flags, FF_AVOID_RUN))
+        cost += 1;
 
-	/* Water */
-	if (have_flag(f_ptr->flags, FF_WATER))
-	{
-		if (have_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation) cost += 5;
-	}
+    /* Water */
+    if (have_flag(f_ptr->flags, FF_WATER)) {
+        if (have_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation)
+            cost += 5;
+    }
 
-	/* Lava */
-	if (have_flag(f_ptr->flags, FF_LAVA))
-	{
-		int lava = 2;
-		if (!creature_ptr->resist_fire) lava *= 2;
-		if (!creature_ptr->levitation) lava *= 2;
-		if (have_flag(f_ptr->flags, FF_DEEP)) lava *= 2;
+    /* Lava */
+    if (have_flag(f_ptr->flags, FF_LAVA)) {
+        int lava = 2;
+        if (!creature_ptr->resist_fire)
+            lava *= 2;
+        if (!creature_ptr->levitation)
+            lava *= 2;
+        if (have_flag(f_ptr->flags, FF_DEEP))
+            lava *= 2;
 
-		cost += lava;
-	}
+        cost += lava;
+    }
 
-	/* Detected traps and doors */
-	if (creature_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK))
-	{
-		if (have_flag(f_ptr->flags, FF_DOOR)) cost += 1;
-		if (have_flag(f_ptr->flags, FF_TRAP)) cost += 10;
-	}
+    /* Detected traps and doors */
+    if (creature_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK)) {
+        if (have_flag(f_ptr->flags, FF_DOOR))
+            cost += 1;
+        if (have_flag(f_ptr->flags, FF_TRAP))
+            cost += 10;
+    }
 
-	return cost;
+    return cost;
 }
-
 
 /*!
  * @brief トラベル処理の到達地点までの行程を得る処理のサブルーチン
@@ -2070,52 +1901,52 @@ static int travel_flow_cost(player_type *creature_ptr, POSITION y, POSITION x)
  */
 static void travel_flow_aux(player_type *creature_ptr, POSITION y, POSITION x, int n, bool wall)
 {
-	/* Ignore out of bounds */
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-	feature_type *f_ptr = &f_info[g_ptr->feat];
-	if (!in_bounds(floor_ptr, y, x)) return;
+    /* Ignore out of bounds */
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    feature_type *f_ptr = &f_info[g_ptr->feat];
+    if (!in_bounds(floor_ptr, y, x))
+        return;
 
-	/* Ignore unknown grid except in wilderness */
-	if (floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) return;
+    /* Ignore unknown grid except in wilderness */
+    if (floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN))
+        return;
 
-	/* Ignore "walls" and "rubble" (include "secret doors") */
-	int add_cost = 1;
-	int from_wall = (n / TRAVEL_UNABLE);
-	if (have_flag(f_ptr->flags, FF_WALL) ||
-		have_flag(f_ptr->flags, FF_CAN_DIG) ||
-		(have_flag(f_ptr->flags, FF_DOOR) && floor_ptr->grid_array[y][x].mimic) ||
-		(!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !creature_ptr->levitation))
-	{
-		if (!wall || !from_wall) return;
-		add_cost += TRAVEL_UNABLE;
-	}
-	else
-	{
-		add_cost = travel_flow_cost(creature_ptr, y, x);
-	}
+    /* Ignore "walls" and "rubble" (include "secret doors") */
+    int add_cost = 1;
+    int from_wall = (n / TRAVEL_UNABLE);
+    if (have_flag(f_ptr->flags, FF_WALL) || have_flag(f_ptr->flags, FF_CAN_DIG) || (have_flag(f_ptr->flags, FF_DOOR) && floor_ptr->grid_array[y][x].mimic)
+        || (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !creature_ptr->levitation)) {
+        if (!wall || !from_wall)
+            return;
+        add_cost += TRAVEL_UNABLE;
+    } else {
+        add_cost = travel_flow_cost(creature_ptr, y, x);
+    }
 
-	int base_cost = (n % TRAVEL_UNABLE);
-	int cost = base_cost + add_cost;
+    int base_cost = (n % TRAVEL_UNABLE);
+    int cost = base_cost + add_cost;
 
-	/* Ignore lower cost entries */
-	if (travel.cost[y][x] <= cost) return;
+    /* Ignore lower cost entries */
+    if (travel.cost[y][x] <= cost)
+        return;
 
-	/* Save the flow cost */
-	travel.cost[y][x] = cost;
+    /* Save the flow cost */
+    travel.cost[y][x] = cost;
 
-	/* Enqueue that entry */
-	int old_head = flow_head;
-	temp2_y[flow_head] = y;
-	temp2_x[flow_head] = x;
+    /* Enqueue that entry */
+    int old_head = flow_head;
+    temp2_y[flow_head] = y;
+    temp2_x[flow_head] = x;
 
-	/* Advance the queue */
-	if (++flow_head == MAX_SHORT) flow_head = 0;
+    /* Advance the queue */
+    if (++flow_head == MAX_SHORT)
+        flow_head = 0;
 
-	/* Hack -- notice overflow by forgetting new entry */
-	if (flow_head == flow_tail) flow_head = old_head;
+    /* Hack -- notice overflow by forgetting new entry */
+    if (flow_head == flow_tail)
+        flow_head = old_head;
 }
-
 
 /*!
  * @brief トラベル処理の到達地点までの行程を得る処理のメインルーチン
@@ -2126,38 +1957,37 @@ static void travel_flow_aux(player_type *creature_ptr, POSITION y, POSITION x, i
  */
 static void travel_flow(player_type *creature_ptr, POSITION ty, POSITION tx)
 {
-	flow_head = flow_tail = 0;
+    flow_head = flow_tail = 0;
 
-	/* is player in the wall? */
-	bool wall = FALSE;
-	feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
-	if (!have_flag(f_ptr->flags, FF_MOVE)) wall = TRUE;
+    /* is player in the wall? */
+    bool wall = FALSE;
+    feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
+    if (!have_flag(f_ptr->flags, FF_MOVE))
+        wall = TRUE;
 
-	/* Start at the target grid */
-	travel_flow_aux(creature_ptr, ty, tx, 0, wall);
+    /* Start at the target grid */
+    travel_flow_aux(creature_ptr, ty, tx, 0, wall);
 
-	/* Now process the queue */
-	POSITION x, y;
-	while (flow_head != flow_tail)
-	{
-		/* Extract the next entry */
-		y = temp2_y[flow_tail];
-		x = temp2_x[flow_tail];
+    /* Now process the queue */
+    POSITION x, y;
+    while (flow_head != flow_tail) {
+        /* Extract the next entry */
+        y = temp2_y[flow_tail];
+        x = temp2_x[flow_tail];
 
-		/* Forget that entry */
-		if (++flow_tail == MAX_SHORT) flow_tail = 0;
+        /* Forget that entry */
+        if (++flow_tail == MAX_SHORT)
+            flow_tail = 0;
 
-		/* Add the "children" */
-		for (DIRECTION d = 0; d < 8; d++)
-		{
-			/* Add that child if "legal" */
-			travel_flow_aux(creature_ptr, y + ddy_ddd[d], x + ddx_ddd[d], travel.cost[y][x], wall);
-		}
-	}
+        /* Add the "children" */
+        for (DIRECTION d = 0; d < 8; d++) {
+            /* Add that child if "legal" */
+            travel_flow_aux(creature_ptr, y + ddy_ddd[d], x + ddx_ddd[d], travel.cost[y][x], wall);
+        }
+    }
 
-	flow_head = flow_tail = 0;
+    flow_head = flow_tail = 0;
 }
-
 
 /*!
  * @brief トラベル処理のメインルーチン
@@ -2165,56 +1995,50 @@ static void travel_flow(player_type *creature_ptr, POSITION ty, POSITION tx)
  */
 void do_cmd_travel(player_type *creature_ptr)
 {
-	POSITION x, y;
-	if (travel.x != 0 && travel.y != 0 &&
-		get_check(_("トラベルを継続しますか？", "Do you continue to travel?")))
-	{
-		y = travel.y;
-		x = travel.x;
-	}
-	else if (!tgt_pt(creature_ptr, &x, &y)) return;
+    POSITION x, y;
+    if (travel.x != 0 && travel.y != 0 && get_check(_("トラベルを継続しますか？", "Do you continue to travel?"))) {
+        y = travel.y;
+        x = travel.x;
+    } else if (!tgt_pt(creature_ptr, &x, &y))
+        return;
 
-	if ((x == creature_ptr->x) && (y == creature_ptr->y))
-	{
-		msg_print(_("すでにそこにいます！", "You are already there!!"));
-		return;
-	}
+    if ((x == creature_ptr->x) && (y == creature_ptr->y)) {
+        msg_print(_("すでにそこにいます！", "You are already there!!"));
+        return;
+    }
 
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	feature_type *f_ptr;
-	f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    feature_type *f_ptr;
+    f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
 
-	if ((floor_ptr->grid_array[y][x].info & CAVE_MARK) &&
-		(have_flag(f_ptr->flags, FF_WALL) ||
-			have_flag(f_ptr->flags, FF_CAN_DIG) ||
-			(have_flag(f_ptr->flags, FF_DOOR) && floor_ptr->grid_array[y][x].mimic)))
-	{
-		msg_print(_("そこには行くことができません！", "You cannot travel there!"));
-		return;
-	}
+    if ((floor_ptr->grid_array[y][x].info & CAVE_MARK)
+        && (have_flag(f_ptr->flags, FF_WALL) || have_flag(f_ptr->flags, FF_CAN_DIG)
+            || (have_flag(f_ptr->flags, FF_DOOR) && floor_ptr->grid_array[y][x].mimic))) {
+        msg_print(_("そこには行くことができません！", "You cannot travel there!"));
+        return;
+    }
 
-	forget_travel_flow(creature_ptr->current_floor_ptr);
-	travel_flow(creature_ptr, y, x);
+    forget_travel_flow(creature_ptr->current_floor_ptr);
+    travel_flow(creature_ptr, y, x);
 
-	travel.x = x;
-	travel.y = y;
+    travel.x = x;
+    travel.y = y;
 
-	/* Travel till 255 steps */
-	travel.run = 255;
-	travel.dir = 0;
+    /* Travel till 255 steps */
+    travel.run = 255;
+    travel.dir = 0;
 
-	/* Decides first direction */
-	POSITION dx = abs(creature_ptr->x - x);
-	POSITION dy = abs(creature_ptr->y - y);
-	POSITION sx = ((x == creature_ptr->x) || (dx < dy)) ? 0 : ((x > creature_ptr->x) ? 1 : -1);
-	POSITION sy = ((y == creature_ptr->y) || (dy < dx)) ? 0 : ((y > creature_ptr->y) ? 1 : -1);
+    /* Decides first direction */
+    POSITION dx = abs(creature_ptr->x - x);
+    POSITION dy = abs(creature_ptr->y - y);
+    POSITION sx = ((x == creature_ptr->x) || (dx < dy)) ? 0 : ((x > creature_ptr->x) ? 1 : -1);
+    POSITION sy = ((y == creature_ptr->y) || (dy < dx)) ? 0 : ((y > creature_ptr->y) ? 1 : -1);
 
-	for (int i = 1; i <= 9; i++)
-	{
-		if ((sx == ddx[i]) && (sy == ddy[i])) travel.dir = i;
-	}
+    for (int i = 1; i <= 9; i++) {
+        if ((sx == ddx[i]) && (sy == ddy[i]))
+            travel.dir = i;
+    }
 }
-
 
 /*
  * Something has happened to disturb the player.
@@ -2224,50 +2048,49 @@ void do_cmd_travel(player_type *creature_ptr)
  */
 void disturb(player_type *creature_ptr, bool stop_search, bool stop_travel)
 {
-	/* Cancel repeated commands */
-	if (command_rep)
-	{
-		/* Cancel */
-		command_rep = 0;
+    /* Cancel repeated commands */
+    if (command_rep) {
+        /* Cancel */
+        command_rep = 0;
 
-		/* Redraw the state (later) */
-		creature_ptr->redraw |= (PR_STATE);
-	}
+        /* Redraw the state (later) */
+        creature_ptr->redraw |= (PR_STATE);
+    }
 
-	/* Cancel Resting */
-	if ((creature_ptr->action == ACTION_REST) || (creature_ptr->action == ACTION_FISH) || (stop_search && (creature_ptr->action == ACTION_SEARCH)))
-	{
-		/* Cancel */
-		set_action(creature_ptr, ACTION_NONE);
-	}
+    /* Cancel Resting */
+    if ((creature_ptr->action == ACTION_REST) || (creature_ptr->action == ACTION_FISH) || (stop_search && (creature_ptr->action == ACTION_SEARCH))) {
+        /* Cancel */
+        set_action(creature_ptr, ACTION_NONE);
+    }
 
-	/* Cancel running */
-	if (creature_ptr->running)
-	{
-		/* Cancel */
-		creature_ptr->running = 0;
+    /* Cancel running */
+    if (creature_ptr->running) {
+        /* Cancel */
+        creature_ptr->running = 0;
 
-		/* Check for new panel if appropriate */
-		if (center_player && !center_running) verify_panel(creature_ptr);
+        /* Check for new panel if appropriate */
+        if (center_player && !center_running)
+            verify_panel(creature_ptr);
 
-		/* Calculate torch radius */
-		creature_ptr->update |= (PU_TORCH);
+        /* Calculate torch radius */
+        creature_ptr->update |= (PU_TORCH);
 
-		/* Update monster flow */
-		creature_ptr->update |= (PU_FLOW);
-	}
+        /* Update monster flow */
+        creature_ptr->update |= (PU_FLOW);
+    }
 
-	if (stop_travel)
-	{
-		/* Cancel */
-		travel.run = 0;
+    if (stop_travel) {
+        /* Cancel */
+        travel.run = 0;
 
-		/* Check for new panel if appropriate */
-		if (center_player && !center_running) verify_panel(creature_ptr);
+        /* Check for new panel if appropriate */
+        if (center_player && !center_running)
+            verify_panel(creature_ptr);
 
-		/* Calculate torch radius */
-		creature_ptr->update |= (PU_TORCH);
-	}
+        /* Calculate torch radius */
+        creature_ptr->update |= (PU_TORCH);
+    }
 
-	if (flush_disturb) flush();
+    if (flush_disturb)
+        flush();
 }

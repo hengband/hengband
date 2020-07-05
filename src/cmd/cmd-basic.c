@@ -72,6 +72,7 @@
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "perception/object-perception.h"
+#include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
 #include "player/player-personalities-types.h"

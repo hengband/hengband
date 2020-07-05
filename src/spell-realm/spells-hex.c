@@ -2,6 +2,7 @@
 #include "core/asking-player.h"
 #include "floor/floor.h"
 #include "monster-race/monster-race.h"
+#include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell/spell-info.h"

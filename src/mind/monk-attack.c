@@ -20,6 +20,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
 #include "monster/monster-status.h"
+#include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"

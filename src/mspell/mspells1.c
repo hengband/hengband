@@ -40,6 +40,7 @@
 #include "mspell/mspells2.h"
 #include "mspell/mspells3.h"
 #include "object-enchant/object-curse.h"
+#include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/player-move.h"
 #include "player/player-race-types.h"

@@ -26,6 +26,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
+#include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"

@@ -708,6 +708,7 @@
     <ClInclude Include="..\..\src\object-hook\hook-quest.h" />
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
     <ClInclude Include="..\..\src\object-potion\quaff-execution.h" />
+    <ClInclude Include="..\..\src\player\attack-defense-types.h" />
     <ClInclude Include="..\..\src\savedata\angband-version-comparer.h" />
     <ClInclude Include="..\..\src\savedata\birth-loader.h" />
     <ClInclude Include="..\..\src\savedata\extra-loader.h" />

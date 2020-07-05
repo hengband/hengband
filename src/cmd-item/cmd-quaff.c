@@ -11,6 +11,7 @@
 #include "object-potion/quaff-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 

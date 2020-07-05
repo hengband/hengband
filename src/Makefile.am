@@ -461,6 +461,7 @@ hengband_SOURCES = \
 	pet/pet-fall-off.c pet/pet-fall-off.h \
 	pet/pet-util.c pet/pet-util.h \
 	\
+	player/attack-defense-types.h \
 	player/avatar.h player/avatar.c \
 	player/eldritch-horror.c player/eldritch-horror.h \
 	player/mimic-info-table.c player/mimic-info-table.h \

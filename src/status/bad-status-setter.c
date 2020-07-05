@@ -2,6 +2,7 @@
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "mind/mind-sniper.h"
+#include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
 #include "player/player-race.h"

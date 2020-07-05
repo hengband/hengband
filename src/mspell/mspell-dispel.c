@@ -8,6 +8,7 @@
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspells3.h"
+#include "player/attack-defense-types.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-craft.h"
 #include "spell-realm/spells-crusade.h"

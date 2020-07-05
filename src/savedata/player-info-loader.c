@@ -1,4 +1,5 @@
 ﻿#include "savedata/player-info-loader.h"
+#include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "savedata/angband-version-comparer.h"
 #include "savedata/birth-loader.h"

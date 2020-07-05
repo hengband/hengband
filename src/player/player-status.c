@@ -53,6 +53,7 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "pet/pet-util.h"
+#include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"

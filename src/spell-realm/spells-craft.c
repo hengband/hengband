@@ -3,6 +3,7 @@
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
+#include "player/attack-defense-types.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "term/screen-processor.h"

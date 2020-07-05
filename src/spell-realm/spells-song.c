@@ -2,6 +2,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
+#include "player/attack-defense-types.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "realm/realm-song-numbers.h"
