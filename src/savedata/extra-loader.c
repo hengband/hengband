@@ -1,4 +1,11 @@
-﻿#include "savedata/extra-loader.h"
+﻿/*!
+ * todo 「その他」が雑多すぎて肥大化している。今後の課題として分割を検討する
+ * @brief その他の情報を読み込む処理
+ * @date 2020/07/05
+ * @author Hourier
+ */
+
+#include "savedata/extra-loader.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
@@ -14,6 +21,7 @@
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"
 #include "savedata/angband-version-comparer.h"
+#include "savedata/load-zangband.h"
 #include "savedata/birth-loader.h"
 #include "savedata/load-util.h"
 #include "savedata/monster-loader.h"
@@ -57,16 +65,8 @@ void rd_extra(player_type *creature_ptr)
     creature_ptr->realm2 = (REALM_IDX)tmp8u;
 
     rd_byte(&tmp8u);
-    if (z_older_than(10, 4, 4)) {
-        if (creature_ptr->realm1 == 9)
-            creature_ptr->realm1 = REALM_MUSIC;
-        if (creature_ptr->realm2 == 9)
-            creature_ptr->realm2 = REALM_MUSIC;
-        if (creature_ptr->realm1 == 10)
-            creature_ptr->realm1 = REALM_HISSATSU;
-        if (creature_ptr->realm2 == 10)
-            creature_ptr->realm2 = REALM_HISSATSU;
-    }
+    if (z_older_than(10, 4, 4))
+        set_zangband_realm(creature_ptr);
 
     rd_byte(&tmp8u);
     creature_ptr->hitdie = tmp8u;
