@@ -241,6 +241,7 @@
     <ClCompile Include="..\..\src\savedata\load-util.c" />
     <ClCompile Include="..\..\src\savedata\load-v1-5-0.c" />
     <ClCompile Include="..\..\src\savedata\load-zangband.c" />
+    <ClCompile Include="..\..\src\savedata\lore-loader.c" />
     <ClCompile Include="..\..\src\savedata\monster-loader.c" />
     <ClCompile Include="..\..\src\savedata\store-loader.c" />
     <ClCompile Include="..\..\src\specific-object\death-crimson.c" />
@@ -706,6 +707,7 @@
     <ClInclude Include="..\..\src\savedata\load-util.h" />
     <ClInclude Include="..\..\src\savedata\load-v1-5-0.h" />
     <ClInclude Include="..\..\src\savedata\load-zangband.h" />
+    <ClInclude Include="..\..\src\savedata\lore-loader.h" />
     <ClInclude Include="..\..\src\savedata\monster-loader.h" />
     <ClInclude Include="..\..\src\savedata\old-feature-types.h" />
     <ClInclude Include="..\..\src\savedata\savedata-flag-types.h" />

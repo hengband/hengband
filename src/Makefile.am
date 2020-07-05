@@ -527,6 +527,7 @@ hengband_SOURCES = \
 	savedata/load-v1-5-0.c savedata/load-v1-5-0.h \
 	savedata/load-zangband.c savedata/load-zangband.h \
 	savedata/load.c savedata/load.h \
+	savedata/lore-loader.c savedata/lore-loader.h \
 	savedata/savedata-flag-types.h \
 	savedata/save.c savedata/save.h \
 	savedata/store-loader.c savedata/store-loader.h \
