@@ -304,6 +304,38 @@ static errr analyze_wilderness(void)
 }
 
 /*!
+ * @brief 変愚蛮怒 v2.1.3で追加された街とクエストについて読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return エラーコード
+ */
+static errr load_town_quest(player_type *creature_ptr)
+{
+    if (z_older_than(12, 1, 3))
+        return 0;
+
+    errr load_town_result = load_town();
+    if (load_town_result != 0)
+        return load_town_result;
+
+    u16b max_quests_load;
+    byte max_rquests_load;
+    errr load_quest_result = load_quest_info(&max_quests_load, &max_rquests_load);
+    if (load_quest_result != 0)
+        return load_quest_result;
+
+    analyze_quests(creature_ptr, max_quests_load, max_rquests_load);
+
+    /* Quest 18 was removed */
+    if (h_older_than(1, 7, 0, 6)) {
+        (void)WIPE(&quest[OLD_QUEST_WATER_CAVE], quest_type);
+        quest[OLD_QUEST_WATER_CAVE].status = QUEST_STATUS_UNTAKEN;
+    }
+
+    load_wilderness_info(creature_ptr);
+    return analyze_wilderness();
+}
+
+/*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
  */
@@ -321,30 +353,9 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (load_item_result != 0)
         return load_item_result;
 
-    if (!z_older_than(12, 1, 3)) {
-        errr load_town_result = load_town();
-        if (load_town_result != 0)
-            return load_town_result;
-
-        u16b max_quests_load;
-        byte max_rquests_load;
-        errr load_quest_result = load_quest_info(&max_quests_load, &max_rquests_load);
-        if (load_quest_result != 0)
-            return load_quest_result;
-
-        analyze_quests(creature_ptr, max_quests_load, max_rquests_load);
-
-        /* Quest 18 was removed */
-        if (h_older_than(1, 7, 0, 6)) {
-            (void)WIPE(&quest[OLD_QUEST_WATER_CAVE], quest_type);
-            quest[OLD_QUEST_WATER_CAVE].status = QUEST_STATUS_UNTAKEN;
-        }
-
-        load_wilderness_info(creature_ptr);
-        errr wilderness_analysis_result = analyze_wilderness();
-        if (wilderness_analysis_result != 0)
-            return wilderness_analysis_result;
-    }
+    errr load_town_quest_result = load_town_quest(creature_ptr);
+    if (load_town_quest_result != 0)
+        return load_town_quest_result;
 
     if (arg_fiddle)
         load_note(_("クエスト情報をロードしました", "Loaded Quests"));
