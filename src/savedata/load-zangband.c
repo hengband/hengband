@@ -138,3 +138,24 @@ void set_zangband_timed_effects(player_type *creature_ptr)
     creature_ptr->muta3 = 0;
     get_virtues(creature_ptr);
 }
+
+void set_zangband_mimic(player_type *creature_ptr)
+{
+    creature_ptr->tim_res_time = 0;
+    creature_ptr->mimic_form = 0;
+    creature_ptr->tim_mimic = 0;
+    creature_ptr->tim_sh_fire = 0;
+}
+
+void set_zangband_holy_aura(player_type *creature_ptr)
+{
+    creature_ptr->tim_sh_holy = 0;
+    creature_ptr->tim_eyeeye = 0;
+}
+
+void set_zangband_reflection(player_type *creature_ptr)
+{
+    creature_ptr->tim_reflect = 0;
+    creature_ptr->multishadow = 0;
+    creature_ptr->dustrobe = 0;
+}

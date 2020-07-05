@@ -385,13 +385,11 @@ void rd_extra(player_type *creature_ptr)
             creature_ptr->magicdef = 0;
         else
             rd_s16b(&creature_ptr->magicdef);
+
         rd_s16b(&creature_ptr->tim_res_nether);
-        if (z_older_than(10, 4, 11)) {
-            creature_ptr->tim_res_time = 0;
-            creature_ptr->mimic_form = 0;
-            creature_ptr->tim_mimic = 0;
-            creature_ptr->tim_sh_fire = 0;
-        } else {
+        if (z_older_than(10, 4, 11))
+            set_zangband_mimic(creature_ptr);
+        else {
             rd_s16b(&creature_ptr->tim_res_time);
             rd_byte(&tmp8u);
             creature_ptr->mimic_form = (IDX)tmp8u;
@@ -399,19 +397,16 @@ void rd_extra(player_type *creature_ptr)
             rd_s16b(&creature_ptr->tim_sh_fire);
         }
 
-        if (z_older_than(11, 0, 99)) {
-            creature_ptr->tim_sh_holy = 0;
-            creature_ptr->tim_eyeeye = 0;
-        } else {
+        if (z_older_than(11, 0, 99))
+            set_zangband_holy_aura(creature_ptr);
+        else {
             rd_s16b(&creature_ptr->tim_sh_holy);
             rd_s16b(&creature_ptr->tim_eyeeye);
         }
 
-        if (z_older_than(11, 0, 3)) {
-            creature_ptr->tim_reflect = 0;
-            creature_ptr->multishadow = 0;
-            creature_ptr->dustrobe = 0;
-        } else {
+        if (z_older_than(11, 0, 3))
+            set_zangband_reflection(creature_ptr);
+        else {
             rd_s16b(&creature_ptr->tim_reflect);
             rd_s16b(&creature_ptr->multishadow);
             rd_s16b(&creature_ptr->dustrobe);
@@ -424,6 +419,7 @@ void rd_extra(player_type *creature_ptr)
 
         for (int i = 0; i < 8; i++)
             rd_s16b(&creature_ptr->virtues[i]);
+
         for (int i = 0; i < 8; i++)
             rd_s16b(&creature_ptr->vir_types[i]);
     }
