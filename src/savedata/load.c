@@ -154,6 +154,17 @@ static void rd_unique_info(void)
     }
 }
 
+static errr load_town(void)
+{
+    u16b max_towns_load;
+    rd_u16b(&max_towns_load);
+    if (max_towns_load <= max_towns)
+        return 0;
+
+    load_note(format(_("町が多すぎる(%u)！", "Too many (%u) towns!"), max_towns_load));
+    return 23;
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -175,29 +186,25 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     byte tmp8u;
     if (!z_older_than(12, 1, 3))
     {
-        u16b max_towns_load;
+        errr load_town_result = load_town();
+        if (load_town_result != 0)
+            return load_town_result;
+        
         u16b max_quests_load;
-        byte max_rquests_load;
-        s16b old_inside_quest = creature_ptr->current_floor_ptr->inside_quest;
-
-        rd_u16b(&max_towns_load);
-        if (max_towns_load > max_towns) {
-            load_note(format(_("町が多すぎる(%u)！", "Too many (%u) towns!"), max_towns_load));
-            return (23);
-        }
-
         rd_u16b(&max_quests_load);
-        if (z_older_than(11, 0, 7)) {
-            max_rquests_load = 10;
-        } else {
-            rd_byte(&max_rquests_load);
-        }
 
+        byte max_rquests_load;
+        if (z_older_than(11, 0, 7))
+            max_rquests_load = 10;
+        else
+            rd_byte(&max_rquests_load);
+        
         if (max_quests_load > max_q_idx) {
             load_note(format(_("クエストが多すぎる(%u)！", "Too many (%u) quests!"), max_quests_load));
-            return (23);
+            return 23;
         }
 
+        QUEST_IDX old_inside_quest = creature_ptr->current_floor_ptr->inside_quest;
         for (int i = 0; i < max_quests_load; i++) {
             if (i >= max_q_idx) {
                 strip_bytes(2);
@@ -206,7 +213,6 @@ static errr exe_reading_savefile(player_type *creature_ptr)
             }
 
             quest_type *const q_ptr = &quest[i];
-
             rd_s16b(&q_ptr->status);
             s16b tmp16s;
             rd_s16b(&tmp16s);
@@ -285,6 +291,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
             creature_ptr->wild_mode = FALSE;
         else
             rd_byte((byte *)&creature_ptr->wild_mode);
+
         if (z_older_than(10, 3, 7))
             creature_ptr->ambush_flag = FALSE;
         else
