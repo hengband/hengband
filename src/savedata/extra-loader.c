@@ -237,6 +237,22 @@ static void rd_arena(player_type *creature_ptr)
 }
 
 /*!
+ * @brief ダミーバイトを読み込む
+ * @param なし
+ * @return なし
+ * @details もはや何に使われていたのか不明
+ */
+void rd_dummy1(void)
+{
+    s16b tmp16s;
+    rd_s16b(&tmp16s);
+    for (int i = 0; i < tmp16s; i++) {
+        s16b tmp16s2;
+        rd_s16b(&tmp16s2);
+    }
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -252,13 +268,7 @@ void rd_extra(player_type *creature_ptr)
     set_imitation(creature_ptr);
     rd_bounty_uniques(creature_ptr);
     rd_arena(creature_ptr);
-    s16b tmp16s;
-    rd_s16b(&tmp16s);
-    for (int i = 0; i < tmp16s; i++) {
-        s16b tmp16s2;
-        rd_s16b(&tmp16s2);
-    }
-
+    rd_dummy1();
     if (h_older_than(1, 7, 0, 3))
         set_hp_old(creature_ptr);
     else {
