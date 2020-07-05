@@ -410,7 +410,7 @@ static void load_spells(player_type *creature_ptr)
     rd_u32b(&creature_ptr->spell_forgotten2);
 
     if (z_older_than(10, 0, 5))
-        set_zangband_spells(creature_ptr);
+        set_zangband_learnt_spells(creature_ptr);
     else
         rd_s16b(&creature_ptr->learned_spells);
 
@@ -433,6 +433,20 @@ static errr load_inventory(player_type *creature_ptr)
 
     load_note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
     return 21;
+}
+
+static errr load_store(player_type *creature_ptr)
+{
+    u16b tmp16u;
+    rd_u16b(&tmp16u);
+    int town_count = tmp16u;
+    rd_u16b(&tmp16u);
+    for (int i = 1; i < town_count; i++)
+        for (int j = 0; j < tmp16u; j++)
+            if (rd_store(creature_ptr, i, j))
+                return 22;
+
+    return 0;
 }
 
 /*!
@@ -485,14 +499,9 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (load_inventory_result != 0)
         return load_inventory_result;
 
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-    int town_count = tmp16u;
-    rd_u16b(&tmp16u);
-    for (int i = 1; i < town_count; i++)
-        for (int j = 0; j < tmp16u; j++)
-            if (rd_store(creature_ptr, i, j))
-                return 22;
+    errr load_store_result = load_store(creature_ptr);
+    if (load_store_result != 0)
+        return load_store_result;
 
     rd_s16b(&creature_ptr->pet_follow_distance);
     byte tmp8u;
@@ -501,6 +510,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         rd_byte(&tmp8u);
         if (tmp8u)
             creature_ptr->pet_extra_flags |= PF_OPEN_DOORS;
+
         rd_byte(&tmp8u);
         if (tmp8u)
             creature_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;

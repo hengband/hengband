@@ -261,7 +261,7 @@ void set_zangband_class(player_type *creature_ptr)
     }
 }
 
-void set_zangband_spells(player_type *creature_ptr)
+void set_zangband_learnt_spells(player_type *creature_ptr)
 {
     creature_ptr->learned_spells = 0;
     for (int i = 0; i < 64; i++)
