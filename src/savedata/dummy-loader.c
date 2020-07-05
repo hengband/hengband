@@ -53,3 +53,16 @@ void rd_dummy_monsters(player_type *creature_ptr)
         rd_monster(creature_ptr, &dummy_mon);
     }
 }
+
+/*!
+ * @brief ダミー情報スキップ / Strip the "ghost" info
+ * @return なし
+ * @details
+ * This is such a nasty hack it hurts.
+ */
+void rd_ghost(void)
+{
+    char buf[64];
+    rd_string(buf, sizeof(buf));
+    strip_bytes(60);
+}

@@ -155,19 +155,6 @@ static void rd_randomizer(void)
 }
 
 /*!
- * @brief ダミー情報スキップ / Strip the "ghost" info
- * @return なし
- * @details
- * This is such a nasty hack it hurts.
- */
-static void rd_ghost(void)
-{
-    char buf[64];
-    rd_string(buf, sizeof(buf));
-    strip_bytes(60);
-}
-
-/*!
  * @brief ロード処理全体のサブ関数 / Actually read the savefile
  * @return エラーコード
  */
