@@ -400,6 +400,26 @@ static errr load_hp(player_type *creature_ptr)
     return 0;
 }
 
+static void load_spells(player_type *creature_ptr)
+{
+    rd_u32b(&creature_ptr->spell_learned1);
+    rd_u32b(&creature_ptr->spell_learned2);
+    rd_u32b(&creature_ptr->spell_worked1);
+    rd_u32b(&creature_ptr->spell_worked2);
+    rd_u32b(&creature_ptr->spell_forgotten1);
+    rd_u32b(&creature_ptr->spell_forgotten2);
+
+    if (z_older_than(10, 0, 5))
+        set_zangband_spells(creature_ptr);
+    else
+        rd_s16b(&creature_ptr->learned_spells);
+
+    if (z_older_than(10, 0, 6))
+        creature_ptr->add_spells = 0;
+    else
+        rd_s16b(&creature_ptr->add_spells);
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -442,23 +462,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     set_zangband_class(creature_ptr);
     mp_ptr = &m_info[creature_ptr->pclass];
 
-    rd_u32b(&creature_ptr->spell_learned1);
-    rd_u32b(&creature_ptr->spell_learned2);
-    rd_u32b(&creature_ptr->spell_worked1);
-    rd_u32b(&creature_ptr->spell_worked2);
-    rd_u32b(&creature_ptr->spell_forgotten1);
-    rd_u32b(&creature_ptr->spell_forgotten2);
-
-    if (z_older_than(10, 0, 5))
-        set_zangband_spells(creature_ptr);
-    else
-        rd_s16b(&creature_ptr->learned_spells);
-
-    if (z_older_than(10, 0, 6))
-        creature_ptr->add_spells = 0;
-    else
-        rd_s16b(&creature_ptr->add_spells);
-
+    load_spells(creature_ptr);
     if (creature_ptr->pclass == CLASS_MINDCRAFTER)
         creature_ptr->add_spells = 0;
 
@@ -470,7 +474,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
 
     if (rd_inventory(creature_ptr)) {
         load_note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
-        return (21);
+        return 21;
     }
 
     u16b tmp16u;
