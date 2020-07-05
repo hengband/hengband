@@ -82,3 +82,11 @@ void set_zangband_spells(player_type* creature_ptr)
     for (int i = 0; i < MAX_SPELLS; i++)
         creature_ptr->magic_num2[i] = 0;
 }
+
+void set_zangband_race(player_type *creature_ptr)
+{
+    creature_ptr->start_race = creature_ptr->prace;
+    creature_ptr->old_race1 = 0L;
+    creature_ptr->old_race2 = 0L;
+    creature_ptr->old_realm = 0;
+}

@@ -57,6 +57,19 @@ static void set_spells(player_type *creature_ptr)
         set_spells_old(creature_ptr);
 }
 
+static void set_race(player_type *creature_ptr)
+{
+    byte tmp8u; 
+    rd_byte(&tmp8u);
+    creature_ptr->start_race = (player_race_type)tmp8u;
+    s32b tmp32s;
+    rd_s32b(&tmp32s);
+    creature_ptr->old_race1 = (BIT_FLAGS)tmp32s;
+    rd_s32b(&tmp32s);
+    creature_ptr->old_race2 = (BIT_FLAGS)tmp32s;
+    rd_s16b(&creature_ptr->old_realm);
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -154,21 +167,10 @@ void rd_extra(player_type *creature_ptr)
     if (music_singing_any(creature_ptr))
         creature_ptr->action = ACTION_SING;
 
-    if (z_older_than(11, 0, 7)) {
-        creature_ptr->start_race = creature_ptr->prace;
-        creature_ptr->old_race1 = 0L;
-        creature_ptr->old_race2 = 0L;
-        creature_ptr->old_realm = 0;
-    } else {
-        rd_byte(&tmp8u);
-        creature_ptr->start_race = (player_race_type)tmp8u;
-        s32b tmp32s;
-        rd_s32b(&tmp32s);
-        creature_ptr->old_race1 = (BIT_FLAGS)tmp32s;
-        rd_s32b(&tmp32s);
-        creature_ptr->old_race2 = (BIT_FLAGS)tmp32s;
-        rd_s16b(&creature_ptr->old_realm);
-    }
+    if (z_older_than(11, 0, 7))
+        set_zangband_race(creature_ptr);
+    else
+        set_race(creature_ptr);
 
     if (z_older_than(10, 0, 1)) {
         for (int i = 0; i < MAX_MANE; i++) {
