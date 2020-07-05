@@ -190,6 +190,27 @@ static bool check_quest_index(int loading_quest_index)
     return TRUE;
 }
 
+static void load_quest_completion(quest_type *q_ptr)
+{
+    rd_s16b(&q_ptr->status);
+    s16b tmp16s;
+    rd_s16b(&tmp16s);
+    q_ptr->level = tmp16s;
+
+    if (z_older_than(11, 0, 6))
+        q_ptr->complev = 0;
+    else {
+        byte tmp8u;
+        rd_byte(&tmp8u);
+        q_ptr->complev = tmp8u;
+    }
+
+    if (h_older_than(2, 1, 2, 2))
+        q_ptr->comptime = 0;
+    else
+        rd_u32b(&q_ptr->comptime);
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -227,29 +248,14 @@ static errr exe_reading_savefile(player_type *creature_ptr)
                 continue;
 
             quest_type *const q_ptr = &quest[i];
-            rd_s16b(&q_ptr->status);
-            s16b tmp16s;
-            rd_s16b(&tmp16s);
-            q_ptr->level = tmp16s;
-
-            if (z_older_than(11, 0, 6)) {
-                q_ptr->complev = 0;
-            } else {
-                rd_byte(&tmp8u);
-                q_ptr->complev = tmp8u;
-            }
-            if (h_older_than(2, 1, 2, 2)) {
-                q_ptr->comptime = 0;
-            } else {
-                rd_u32b(&q_ptr->comptime);
-            }
-
+            load_quest_completion(q_ptr);
             bool is_quest_running = (q_ptr->status == QUEST_STATUS_TAKEN);
             is_quest_running |= (!z_older_than(10, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED));
             is_quest_running |= (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load)));
             if (!is_quest_running)
                 continue;
 
+            s16b tmp16s;
             rd_s16b(&tmp16s);
             q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
             rd_s16b(&tmp16s);
