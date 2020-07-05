@@ -70,6 +70,47 @@ static void set_race(player_type *creature_ptr)
     rd_s16b(&creature_ptr->old_realm);
 }
 
+static set_imitation(player_type *creature_ptr)
+{
+    if (z_older_than(10, 0, 1)) {
+        for (int i = 0; i < MAX_MANE; i++) {
+            creature_ptr->mane_spell[i] = -1;
+            creature_ptr->mane_dam[i] = 0;
+        }
+
+        creature_ptr->mane_num = 0;
+        return;
+    }
+    
+    if (z_older_than(10, 2, 3)) {
+        s16b tmp16s;
+        const int OLD_MAX_MANE = 22;
+        for (int i = 0; i < OLD_MAX_MANE; i++) {
+            rd_s16b(&tmp16s);
+            rd_s16b(&tmp16s);
+        }
+
+        for (int i = 0; i < MAX_MANE; i++) {
+            creature_ptr->mane_spell[i] = -1;
+            creature_ptr->mane_dam[i] = 0;
+        }
+
+        rd_s16b(&tmp16s);
+        creature_ptr->mane_num = 0;
+        return;
+    }
+
+    for (int i = 0; i < MAX_MANE; i++) {
+        s16b tmp16s;
+        rd_s16b(&tmp16s);
+        creature_ptr->mane_spell[i] = (SPELL_IDX)tmp16s;
+        rd_s16b(&tmp16s);
+        creature_ptr->mane_dam[i] = (SPELL_IDX)tmp16s;
+    }
+
+    rd_s16b(&creature_ptr->mane_num);
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -172,39 +213,7 @@ void rd_extra(player_type *creature_ptr)
     else
         set_race(creature_ptr);
 
-    if (z_older_than(10, 0, 1)) {
-        for (int i = 0; i < MAX_MANE; i++) {
-            creature_ptr->mane_spell[i] = -1;
-            creature_ptr->mane_dam[i] = 0;
-        }
-        creature_ptr->mane_num = 0;
-    } else if (z_older_than(10, 2, 3)) {
-        s16b tmp16s;
-        const int OLD_MAX_MANE = 22;
-        for (int i = 0; i < OLD_MAX_MANE; i++) {
-            rd_s16b(&tmp16s);
-            rd_s16b(&tmp16s);
-        }
-
-        for (int i = 0; i < MAX_MANE; i++) {
-            creature_ptr->mane_spell[i] = -1;
-            creature_ptr->mane_dam[i] = 0;
-        }
-
-        rd_s16b(&tmp16s);
-        creature_ptr->mane_num = 0;
-    } else {
-        for (int i = 0; i < MAX_MANE; i++) {
-            s16b tmp16s;
-            rd_s16b(&tmp16s);
-            creature_ptr->mane_spell[i] = (SPELL_IDX)tmp16s;
-            rd_s16b(&tmp16s);
-            creature_ptr->mane_dam[i] = (SPELL_IDX)tmp16s;
-        }
-
-        rd_s16b(&creature_ptr->mane_num);
-    }
-
+    set_imitation(creature_ptr);
     if (z_older_than(10, 0, 3)) {
         determine_bounty_uniques(creature_ptr);
 
