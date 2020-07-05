@@ -365,6 +365,23 @@ static errr load_artifact(void)
     return 0;
 }
 
+static void load_player_world(player_type *creature_ptr)
+{
+    rd_base_info(creature_ptr);
+    rd_player_info(creature_ptr);
+    rd_byte((byte *)&preserve_mode);
+    rd_byte((byte *)&creature_ptr->wait_report_score);
+    rd_dummy2();
+    rd_global_configurations(creature_ptr);
+    rd_extra(creature_ptr);
+
+    if (creature_ptr->energy_need < -999)
+        creature_ptr->timewalk = TRUE;
+
+    if (arg_fiddle)
+        load_note(_("特別情報をロードしました", "Loaded extra information"));
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -394,20 +411,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (load_artifact_result != 0)
         return load_artifact_result;
 
-    rd_base_info(creature_ptr);
-    rd_player_info(creature_ptr);
-    rd_byte((byte *)&preserve_mode);
-    rd_byte((byte *)&creature_ptr->wait_report_score);
-    rd_dummy2();
-    rd_global_configurations(creature_ptr);
-    rd_extra(creature_ptr);
-
-    if (creature_ptr->energy_need < -999)
-        creature_ptr->timewalk = TRUE;
-
-    if (arg_fiddle)
-        load_note(_("特別情報をロードしました", "Loaded extra information"));
-
+    load_player_world(creature_ptr);
     u16b tmp16u;
     rd_u16b(&tmp16u);
     if (tmp16u > PY_MAX_LEVEL) {
