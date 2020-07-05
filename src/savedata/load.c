@@ -73,21 +73,17 @@ static void rd_version_info(void)
     rd_u16b(&current_world_ptr->sf_saves);
 }
 
-static void rd_system_info(void)
+/*!
+ * @brief 乱数状態を読み込む / Read RNG state (added in 2.8.0)
+ * @return なし
+ */
+static void rd_randomizer(void)
 {
-    rd_byte(&kanji_code);
-
-    rd_randomizer();
-    if (arg_fiddle)
-        load_note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
-
-    rd_options();
-    if (arg_fiddle)
-        load_note(_("オプションをロードしました", "Loaded Option Flags"));
-
-    rd_messages();
-    if (arg_fiddle)
-        load_note(_("メッセージをロードしました", "Loaded Messages"));
+    u16b tmp16u;
+    rd_u16b(&tmp16u);
+    rd_u16b(&Rand_place);
+    for (int i = 0; i < RAND_DEG; i++)
+        rd_u32b(&Rand_state[i]);
 }
 
 /*!
@@ -121,17 +117,40 @@ static void rd_messages(void)
     }
 }
 
-/*!
- * @brief 乱数状態を読み込む / Read RNG state (added in 2.8.0)
- * @return なし
- */
-static void rd_randomizer(void)
+static void rd_system_info(void)
 {
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-    rd_u16b(&Rand_place);
-    for (int i = 0; i < RAND_DEG; i++)
-        rd_u32b(&Rand_state[i]);
+    rd_byte(&kanji_code);
+    rd_randomizer();
+    if (arg_fiddle)
+        load_note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
+
+    rd_options();
+    if (arg_fiddle)
+        load_note(_("オプションをロードしました", "Loaded Option Flags"));
+
+    rd_messages();
+    if (arg_fiddle)
+        load_note(_("メッセージをロードしました", "Loaded Messages"));
+}
+
+/*!
+ * @brief ランダムクエスト情報の読み込み
+ * @param なし
+ * @return なし
+ * @details MAX_TRIES: ランダムクエストのモンスターを確定するために試行する回数 /
+ * Maximum number of tries for selection of a proper quest monster
+ */
+static void rd_unique_info(void)
+{
+    const int MAX_TRIES = 100;
+    for (int i = 0; i < max_r_idx; i++) {
+        monster_race *r_ptr = &r_info[i];
+        r_ptr->max_num = MAX_TRIES;
+        if (r_ptr->flags1 & RF1_UNIQUE)
+            r_ptr->max_num = 1;
+        else if (r_ptr->flags7 & RF7_NAZGUL)
+            r_ptr->max_num = MAX_NAZGUL_NUM;
+    }
 }
 
 /*!
@@ -143,29 +162,17 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     rd_version_info();
     rd_dummy3();
     rd_system_info();
-
-    /* ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster */
-    const int MAX_TRIES = 100;
-    for (int i = 0; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        r_ptr->max_num = MAX_TRIES;
-
-        if (r_ptr->flags1 & RF1_UNIQUE)
-            r_ptr->max_num = 1;
-        else if (r_ptr->flags7 & RF7_NAZGUL)
-            r_ptr->max_num = MAX_NAZGUL_NUM;
-    }
+    rd_unique_info();
 
     u16b tmp16u;
     rd_u16b(&tmp16u);
     if (tmp16u > max_r_idx) {
         load_note(format(_("モンスターの種族が多すぎる(%u)！", "Too many (%u) monster races!"), tmp16u));
-        return (21);
+        return 21;
     }
 
-    for (int i = 0; i < tmp16u; i++) {
+    for (int i = 0; i < tmp16u; i++)
         rd_lore((MONRACE_IDX)i);
-    }
 
     if (arg_fiddle)
         load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
@@ -173,7 +180,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     rd_u16b(&tmp16u);
     if (tmp16u > max_k_idx) {
         load_note(format(_("アイテムの種類が多すぎる(%u)！", "Too many (%u) object kinds!"), tmp16u));
-        return (22);
+        return 22;
     }
 
     byte tmp8u;
