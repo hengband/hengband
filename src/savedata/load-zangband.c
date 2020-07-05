@@ -6,6 +6,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "market/bounty.h"
 #include "monster-race/monster-race.h"
+#include "pet/pet-util.h"
 #include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/patron.h"
@@ -267,4 +268,48 @@ void set_zangband_learnt_spells(player_type *creature_ptr)
     for (int i = 0; i < 64; i++)
         if ((i < 32) ? (creature_ptr->spell_learned1 & (1L << i)) : (creature_ptr->spell_learned2 & (1L << (i - 32))))
             creature_ptr->learned_spells++;
+}
+
+void set_zangband_pet(player_type *creature_ptr)
+{
+    creature_ptr->pet_extra_flags = 0;
+    byte tmp8u;
+    rd_byte(&tmp8u);
+    if (tmp8u)
+        creature_ptr->pet_extra_flags |= PF_OPEN_DOORS;
+
+    rd_byte(&tmp8u);
+    if (tmp8u)
+        creature_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;
+
+    if (z_older_than(10, 0, 4))
+        creature_ptr->pet_extra_flags |= PF_TELEPORT;
+    else {
+        rd_byte(&tmp8u);
+        if (tmp8u)
+            creature_ptr->pet_extra_flags |= PF_TELEPORT;
+    }
+
+    if (z_older_than(10, 0, 7))
+        creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
+    else {
+        rd_byte(&tmp8u);
+        if (tmp8u)
+            creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
+    }
+
+    if (z_older_than(10, 0, 8))
+        creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
+    else {
+        rd_byte(&tmp8u);
+        if (tmp8u)
+            creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
+    }
+
+    if (z_older_than(10, 0, 8))
+        return;
+
+    rd_byte(&tmp8u);
+    if (tmp8u)
+        creature_ptr->pet_extra_flags |= PF_BALL_SPELL;
 }

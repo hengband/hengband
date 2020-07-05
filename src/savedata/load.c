@@ -504,49 +504,10 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         return load_store_result;
 
     rd_s16b(&creature_ptr->pet_follow_distance);
-    byte tmp8u;
-    if (z_older_than(10, 4, 10)) {
-        creature_ptr->pet_extra_flags = 0;
-        rd_byte(&tmp8u);
-        if (tmp8u)
-            creature_ptr->pet_extra_flags |= PF_OPEN_DOORS;
-
-        rd_byte(&tmp8u);
-        if (tmp8u)
-            creature_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;
-
-        if (z_older_than(10, 0, 4))
-            creature_ptr->pet_extra_flags |= PF_TELEPORT;
-        else {
-            rd_byte(&tmp8u);
-            if (tmp8u)
-                creature_ptr->pet_extra_flags |= PF_TELEPORT;
-        }
-
-        if (z_older_than(10, 0, 7))
-            creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
-        else {
-            rd_byte(&tmp8u);
-            if (tmp8u)
-                creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
-        }
-
-        if (z_older_than(10, 0, 8))
-            creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
-        else {
-            rd_byte(&tmp8u);
-            if (tmp8u)
-                creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
-        }
-
-        if (!z_older_than(10, 0, 8)) {
-            rd_byte(&tmp8u);
-            if (tmp8u)
-                creature_ptr->pet_extra_flags |= PF_BALL_SPELL;
-        }
-    } else {
+    if (z_older_than(10, 4, 10))
+        set_zangband_pet(creature_ptr);
+    else
         rd_s16b(&creature_ptr->pet_extra_flags);
-    }
 
     if (!z_older_than(11, 0, 9)) {
         char buf[SCREEN_BUF_MAX_SIZE];

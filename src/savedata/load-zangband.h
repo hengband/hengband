@@ -23,3 +23,4 @@ void set_zangband_visited_towns(player_type *creature_ptr);
 void set_zangband_quest(player_type *creature_ptr, quest_type *const q_ptr, int loading_quest_index, const QUEST_IDX old_inside_quest);
 void set_zangband_class(player_type *creature_ptr);
 void set_zangband_learnt_spells(player_type *creature_ptr);
+void set_zangband_pet(player_type *creature_ptr);
