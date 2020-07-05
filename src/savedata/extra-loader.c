@@ -22,6 +22,7 @@
 #include "realm/realm-types.h"
 #include "savedata/angband-version-comparer.h"
 #include "savedata/load-v1-3-0.h"
+#include "savedata/load-v1-7-0.h"
 #include "savedata/load-zangband.h"
 #include "savedata/birth-loader.h"
 #include "savedata/load-util.h"
@@ -270,33 +271,17 @@ void rd_extra(player_type *creature_ptr)
         rd_s16b(&tmp16s2);
     }
 
-    if (h_older_than(1, 7, 0, 3)) {
-        rd_s16b(&tmp16s);
-        creature_ptr->mhp = tmp16s;
-
-        rd_s16b(&tmp16s);
-        creature_ptr->chp = tmp16s;
-
-        u16b tmp16u;
-        rd_u16b(&tmp16u);
-        creature_ptr->chp_frac = (u32b)tmp16u;
-    } else {
+    if (h_older_than(1, 7, 0, 3))
+        set_hp_old(creature_ptr);
+    else {
         rd_s32b(&creature_ptr->mhp);
         rd_s32b(&creature_ptr->chp);
         rd_u32b(&creature_ptr->chp_frac);
     }
 
-    if (h_older_than(1, 7, 0, 3)) {
-        rd_s16b(&tmp16s);
-        creature_ptr->msp = tmp16s;
-
-        rd_s16b(&tmp16s);
-        creature_ptr->csp = tmp16s;
-
-        u16b tmp16u;
-        rd_u16b(&tmp16u);
-        creature_ptr->csp_frac = (u32b)tmp16u;
-    } else {
+    if (h_older_than(1, 7, 0, 3))
+        set_mana_old(creature_ptr);
+    else {
         rd_s32b(&creature_ptr->msp);
         rd_s32b(&creature_ptr->csp);
         rd_u32b(&creature_ptr->csp_frac);
@@ -308,9 +293,7 @@ void rd_extra(player_type *creature_ptr)
         max_dlv[DUNGEON_ANGBAND] = tmp16s;
     } else {
         byte max = (byte)current_world_ptr->max_d_idx;
-
         rd_byte(&max);
-
         for (int i = 0; i < max; i++) {
             rd_s16b(&tmp16s);
             max_dlv[i] = tmp16s;
@@ -354,6 +337,7 @@ void rd_extra(player_type *creature_ptr)
         creature_ptr->ult_res = 0;
     else
         rd_s16b(&creature_ptr->ult_res);
+
     rd_s16b(&creature_ptr->hero);
     rd_s16b(&creature_ptr->shero);
     rd_s16b(&creature_ptr->shield);

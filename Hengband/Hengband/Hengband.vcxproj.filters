@@ -1637,6 +1637,9 @@
     <ClCompile Include="..\..\src\savedata\load-v1-3-0.c">
       <Filter>savedata</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\savedata\load-v1-7-0.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3575,6 +3578,9 @@
       <Filter>savedata</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\savedata\load-v1-3-0.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\load-v1-7-0.h">
       <Filter>savedata</Filter>
     </ClInclude>
   </ItemGroup>
