@@ -50,6 +50,29 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static void rd_version_info(void)
+{
+    strip_bytes(4);
+    load_xor_byte = current_world_ptr->sf_extra;
+    v_check = 0L;
+    x_check = 0L;
+
+    /* Old savefile will be version 0.0.0.3 */
+    rd_byte(&current_world_ptr->h_ver_extra);
+    rd_byte(&current_world_ptr->h_ver_patch);
+    rd_byte(&current_world_ptr->h_ver_minor);
+    rd_byte(&current_world_ptr->h_ver_major);
+
+    load_note(format(_("バージョン %d.%d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d.%d savefile..."),
+        (current_world_ptr->h_ver_major > 9) ? current_world_ptr->h_ver_major - 10 : current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor,
+        current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra));
+
+    rd_u32b(&current_world_ptr->sf_system);
+    rd_u32b(&current_world_ptr->sf_when);
+    rd_u16b(&current_world_ptr->sf_lives);
+    rd_u16b(&current_world_ptr->sf_saves);
+}
+
 /*!
  * @brief メッセージログを読み込む / Read the saved messages
  * @return なし
@@ -100,28 +123,7 @@ static void rd_randomizer(void)
  */
 static errr exe_reading_savefile(player_type *creature_ptr)
 {
-    u32b n_x_check, n_v_check;
-    u32b o_x_check, o_v_check;
-
-    strip_bytes(4);
-    load_xor_byte = current_world_ptr->sf_extra;
-    v_check = 0L;
-    x_check = 0L;
-
-    /* Old savefile will be version 0.0.0.3 */
-    rd_byte(&current_world_ptr->h_ver_extra);
-    rd_byte(&current_world_ptr->h_ver_patch);
-    rd_byte(&current_world_ptr->h_ver_minor);
-    rd_byte(&current_world_ptr->h_ver_major);
-
-    load_note(format(_("バージョン %d.%d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d.%d savefile..."),
-        (current_world_ptr->h_ver_major > 9) ? current_world_ptr->h_ver_major - 10 : current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor,
-        current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra));
-
-    rd_u32b(&current_world_ptr->sf_system);
-    rd_u32b(&current_world_ptr->sf_when);
-    rd_u16b(&current_world_ptr->sf_lives);
-    rd_u16b(&current_world_ptr->sf_saves);
+    rd_version_info();
 
     u32b tmp32u;
     rd_u32b(&tmp32u);
@@ -528,14 +530,16 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         }
     }
 
-    n_v_check = v_check;
+    u32b n_v_check = v_check;
+    u32b o_v_check;
     rd_u32b(&o_v_check);
     if (o_v_check != n_v_check) {
         load_note(_("チェックサムがおかしい", "Invalid checksum"));
         return 11;
     }
 
-    n_x_check = x_check;
+    u32b n_x_check = x_check;
+    u32b o_x_check;
     rd_u32b(&o_x_check);
     if (o_x_check != n_x_check) {
         load_note(_("エンコードされたチェックサムがおかしい", "Invalid encoded checksum"));
