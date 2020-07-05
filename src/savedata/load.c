@@ -450,28 +450,6 @@ static errr load_store(player_type *creature_ptr)
     return 0;
 }
 
-static errr restore_dungeon(player_type *creature_ptr)
-{
-    if (creature_ptr->is_dead) {
-        for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
-            r_info[quest[i].r_idx].flags1 &= ~(RF1_QUESTOR);
-
-        return 0;
-    }
-    
-    load_note(_("ダンジョン復元中...", "Restoring Dungeon..."));
-    if (rd_dungeon(creature_ptr)) {
-        load_note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
-        return 34;
-    }
-
-    rd_ghost();
-    s32b tmp32s;
-    rd_s32b(&tmp32s);
-    strip_bytes(tmp32s);
-    return 0;
-}
-
 static errr verify_checksum()
 {
     u32b n_v_check = v_check;

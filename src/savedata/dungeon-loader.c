@@ -1,7 +1,11 @@
 ﻿#include "savedata/dungeon-loader.h"
+#include "dungeon/quest.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
+#include "monster-race/monster-race.h"
+#include "monster-race/race-flags1.h"
 #include "savedata/angband-version-comparer.h"
+#include "savedata/dummy-loader.h"
 #include "savedata/floor-loader.h"
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
@@ -16,7 +20,7 @@
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-errr rd_dungeon(player_type *player_ptr)
+static errr rd_dungeon(player_type *player_ptr)
 {
     init_saved_floors(player_ptr, FALSE);
     errr err = 0;
@@ -113,4 +117,26 @@ errr rd_dungeon(player_type *player_ptr)
 
     current_world_ptr->character_dungeon = TRUE;
     return err;
+}
+
+errr restore_dungeon(player_type *creature_ptr)
+{
+    if (creature_ptr->is_dead) {
+        for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
+            r_info[quest[i].r_idx].flags1 &= ~RF1_QUESTOR;
+
+        return 0;
+    }
+
+    load_note(_("ダンジョン復元中...", "Restoring Dungeon..."));
+    if (rd_dungeon(creature_ptr)) {
+        load_note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
+        return 34;
+    }
+
+    rd_ghost();
+    s32b tmp32s;
+    rd_s32b(&tmp32s);
+    strip_bytes(tmp32s);
+    return 0;
 }
