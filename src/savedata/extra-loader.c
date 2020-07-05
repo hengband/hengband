@@ -559,6 +559,16 @@ static void rd_autopick(player_type *creature_ptr)
     creature_ptr->autopick_autoregister = tmp8u != 0;
 }
 
+static void rd_action(player_type *creature_ptr)
+{
+    byte tmp8u;
+    rd_byte(&tmp8u);
+    rd_byte(&tmp8u);
+    creature_ptr->action = (ACTION_IDX)tmp8u;
+    if (!z_older_than(10, 4, 3))
+        set_zangband_action(creature_ptr);
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -572,17 +582,11 @@ void rd_extra(player_type *creature_ptr)
     rd_special_defense(creature_ptr);
     rd_byte(&creature_ptr->knowledge);
     rd_autopick(creature_ptr);
-
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    rd_byte(&tmp8u);
-    creature_ptr->action = (ACTION_IDX)tmp8u;
-    if (!z_older_than(10, 4, 3))
-        set_zangband_action(creature_ptr);
-
+    rd_action(creature_ptr);
     rd_byte((byte *)&preserve_mode);
     rd_byte((byte *)&creature_ptr->wait_report_score);
 
+    byte tmp8u;
     for (int i = 0; i < 48; i++)
         rd_byte(&tmp8u);
 
