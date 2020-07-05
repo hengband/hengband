@@ -523,7 +523,9 @@ hengband_SOURCES = \
 	savedata/angband-version-comparer.c savedata/angband-version-comparer.h \
 	savedata/birth-loader.c savedata/birth-loader.h \
 	savedata/dummy-loader.c savedata/dummy-loader.h \
+	savedata/dungeon-loader.c savedata/dungeon-loader.h \
 	savedata/extra-loader.c savedata/extra-loader.h \
+	savedata/floor-loader.c savedata/floor-loader.h \
 	savedata/inventory-loader.c savedata/inventory-loader.h \
 	savedata/item-loader.c savedata/item-loader.h \
 	savedata/monster-loader.c savedata/monster-loader.h \

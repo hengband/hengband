@@ -239,6 +239,8 @@
     <ClCompile Include="..\..\src\savedata\angband-version-comparer.c" />
     <ClCompile Include="..\..\src\savedata\birth-loader.c" />
     <ClCompile Include="..\..\src\savedata\dummy-loader.c" />
+    <ClCompile Include="..\..\src\savedata\floor-loader.c" />
+    <ClCompile Include="..\..\src\savedata\dungeon-loader.c" />
     <ClCompile Include="..\..\src\savedata\extra-loader.c" />
     <ClCompile Include="..\..\src\savedata\inventory-loader.c" />
     <ClCompile Include="..\..\src\savedata\item-loader.c" />
@@ -716,6 +718,8 @@
     <ClInclude Include="..\..\src\savedata\angband-version-comparer.h" />
     <ClInclude Include="..\..\src\savedata\birth-loader.h" />
     <ClInclude Include="..\..\src\savedata\dummy-loader.h" />
+    <ClInclude Include="..\..\src\savedata\floor-loader.h" />
+    <ClInclude Include="..\..\src\savedata\dungeon-loader.h" />
     <ClInclude Include="..\..\src\savedata\extra-loader.h" />
     <ClInclude Include="..\..\src\savedata\inventory-loader.h" />
     <ClInclude Include="..\..\src\savedata\item-loader.h" />

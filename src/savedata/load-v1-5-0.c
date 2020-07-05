@@ -696,7 +696,7 @@ errr rd_dungeon_old(player_type *player_ptr)
     }
 
     /* Quest 18 was removed */
-    if (h_older_than(1, 7, 0, 6) && !vanilla_town) {
+    if (!vanilla_town) {
         for (int y = 0; y < ymax; y++) {
             for (int x = 0; x < xmax; x++) {
                 grid_type *g_ptr;
