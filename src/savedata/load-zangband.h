@@ -15,3 +15,4 @@ void set_zangband_reflection(player_type *creature_ptr);
 void rd_zangband_dungeon(void);
 void set_zangband_game_turns(player_type *creature_ptr);
 void set_zangband_gambling_monsters(int i);
+void set_zangband_special_attack(player_type *creature_ptr);

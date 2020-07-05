@@ -442,13 +442,9 @@ void rd_extra(player_type *creature_ptr)
     rd_timed_effects(creature_ptr);
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
     byte tmp8u;
-    if (z_older_than(10, 0, 9)) {
-        rd_byte(&tmp8u);
-        if (tmp8u)
-            creature_ptr->special_attack = ATTACK_CONFUSE;
-
-        creature_ptr->ele_attack = 0;
-    } else {
+    if (z_older_than(10, 0, 9))
+        set_zangband_special_attack(creature_ptr);
+    else {
         rd_s16b(&creature_ptr->ele_attack);
         rd_u32b(&creature_ptr->special_attack);
     }

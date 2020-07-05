@@ -5,6 +5,7 @@
 #include "game-option/option-flags.h"
 #include "market/bounty.h"
 #include "monster-race/monster-race.h"
+#include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/patron.h"
 #include "player/player-skill.h"
@@ -184,4 +185,14 @@ void set_zangband_gambling_monsters(int i)
     s16b tmp16s;
     rd_s16b(&tmp16s);
     mon_odds[i] = tmp16s;
+}
+
+void set_zangband_special_attack(player_type *creature_ptr)
+{
+    byte tmp8u;
+    rd_byte(&tmp8u);
+    if (tmp8u)
+        creature_ptr->special_attack = ATTACK_CONFUSE;
+
+    creature_ptr->ele_attack = 0;
 }
