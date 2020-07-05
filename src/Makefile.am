@@ -532,6 +532,7 @@ hengband_SOURCES = \
 	savedata/load.c savedata/load.h \
 	savedata/lore-loader.c savedata/lore-loader.h \
 	savedata/option-loader.c savedata/option-loader.h \
+	savedata/player-info-loader.c savedata/player-info-loader.h \
 	savedata/savedata-flag-types.h \
 	savedata/save.c savedata/save.h \
 	savedata/store-loader.c savedata/store-loader.h \

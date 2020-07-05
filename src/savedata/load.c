@@ -84,6 +84,7 @@
 #include "savedata/monster-loader.h"
 #include "savedata/old-feature-types.h"
 #include "savedata/option-loader.h"
+#include "savedata/player-info-loader.h"
 #include "savedata/save.h"
 #include "savedata/savedata-flag-types.h"
 #include "savedata/store-loader.h"
@@ -1051,6 +1052,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
     if (arg_fiddle)
         load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
 
+    rd_base_info(creature_ptr);
     rd_extra(creature_ptr);
     if (creature_ptr->energy_need < -999)
         creature_ptr->timewalk = TRUE;
