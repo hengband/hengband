@@ -174,6 +174,19 @@ static void set_timed_effects(player_type *creature_ptr)
     }
 }
 
+static void rd_dungeons(void)
+{
+    byte max = (byte)current_world_ptr->max_d_idx;
+    rd_byte(&max);
+    s16b tmp16s;
+    for (int i = 0; i < max; i++) {
+        rd_s16b(&tmp16s);
+        max_dlv[i] = tmp16s;
+        if (max_dlv[i] > d_info[i].maxdepth)
+            max_dlv[i] = d_info[i].maxdepth;
+    }
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -350,19 +363,10 @@ void rd_extra(player_type *creature_ptr)
     }
 
     rd_s16b(&creature_ptr->max_plv);
-    if (z_older_than(10, 3, 8)) {
-        rd_s16b(&tmp16s);
-        max_dlv[DUNGEON_ANGBAND] = tmp16s;
-    } else {
-        byte max = (byte)current_world_ptr->max_d_idx;
-        rd_byte(&max);
-        for (int i = 0; i < max; i++) {
-            rd_s16b(&tmp16s);
-            max_dlv[i] = tmp16s;
-            if (max_dlv[i] > d_info[i].maxdepth)
-                max_dlv[i] = d_info[i].maxdepth;
-        }
-    }
+    if (z_older_than(10, 3, 8))
+        rd_zangband_dungeon();
+    else
+        rd_dungeons();
 
     if (creature_ptr->max_plv < creature_ptr->lev)
         creature_ptr->max_plv = creature_ptr->lev;
@@ -381,6 +385,7 @@ void rd_extra(player_type *creature_ptr)
     rd_s16b(&creature_ptr->energy_need);
     if (z_older_than(11, 0, 13))
         creature_ptr->energy_need = 100 - creature_ptr->energy_need;
+
     if (h_older_than(2, 1, 2, 0))
         creature_ptr->enchant_energy_need = 0;
     else
@@ -444,6 +449,7 @@ void rd_extra(player_type *creature_ptr)
         rd_byte(&tmp8u);
         if (tmp8u)
             creature_ptr->special_attack = ATTACK_CONFUSE;
+
         creature_ptr->ele_attack = 0;
     } else {
         rd_s16b(&creature_ptr->ele_attack);
@@ -454,6 +460,7 @@ void rd_extra(player_type *creature_ptr)
         creature_ptr->action = ACTION_KAMAE;
     else if (creature_ptr->special_attack & KATA_MASK)
         creature_ptr->action = ACTION_KATA;
+
     if (z_older_than(10, 0, 12)) {
         creature_ptr->ele_immune = 0;
         creature_ptr->special_defense = 0;

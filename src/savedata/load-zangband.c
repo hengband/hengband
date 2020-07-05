@@ -1,4 +1,5 @@
 ﻿#include "savedata/load-zangband.h"
+#include "dungeon/dungeon.h"
 #include "game-option/option-flags.h"
 #include "market/bounty.h"
 #include "monster-race/monster-race.h"
@@ -6,6 +7,7 @@
 #include "player/patron.h"
 #include "player/player-skill.h"
 #include "realm/realm-types.h"
+#include "savedata/load-util.h"
 #include "world/world.h"
 
 void load_zangband_options(void)
@@ -158,4 +160,11 @@ void set_zangband_reflection(player_type *creature_ptr)
     creature_ptr->tim_reflect = 0;
     creature_ptr->multishadow = 0;
     creature_ptr->dustrobe = 0;
+}
+
+void rd_zangband_dungeon()
+{
+    s16b tmp16s;
+    rd_s16b(&tmp16s);
+    max_dlv[DUNGEON_ANGBAND] = tmp16s;
 }
