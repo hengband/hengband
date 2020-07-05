@@ -1,6 +1,8 @@
 ﻿#include "savedata/world-loader.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor.h"
+#include "market/bounty.h"
 #include "savedata/angband-version-comparer.h"
 #include "savedata/load-util.h"
 #include "savedata/load-zangband.h"
@@ -71,4 +73,85 @@ void rd_autopick(player_type *creature_ptr)
     byte tmp8u;
     rd_byte(&tmp8u);
     creature_ptr->autopick_autoregister = tmp8u != 0;
+}
+
+static void set_undead_turn_limit(player_type *creature_ptr)
+{
+    switch (creature_ptr->start_race) {
+    case RACE_VAMPIRE:
+    case RACE_SKELETON:
+    case RACE_ZOMBIE:
+    case RACE_SPECTRE:
+        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        break;
+    default:
+        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        break;
+    }
+}
+
+static void rd_world_info(player_type *creature_ptr)
+{
+    set_undead_turn_limit(creature_ptr);
+    current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+    rd_s32b(&creature_ptr->current_floor_ptr->generated_turn);
+    if (h_older_than(1, 7, 0, 4))
+        creature_ptr->feeling_turn = creature_ptr->current_floor_ptr->generated_turn;
+    else
+        rd_s32b(&creature_ptr->feeling_turn);
+
+    rd_s32b(&current_world_ptr->game_turn);
+    if (z_older_than(10, 3, 12))
+        current_world_ptr->dungeon_turn = current_world_ptr->game_turn;
+    else
+        rd_s32b(&current_world_ptr->dungeon_turn);
+
+    if (z_older_than(11, 0, 13))
+        set_zangband_game_turns(creature_ptr);
+
+    if (z_older_than(10, 3, 13))
+        current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
+    else
+        rd_s32b(&current_world_ptr->arena_start_turn);
+
+    if (z_older_than(10, 0, 3))
+        determine_daily_bounty(creature_ptr, TRUE);
+    else {
+        rd_s16b(&today_mon);
+        rd_s16b(&creature_ptr->today_mon);
+    }
+}
+
+void rd_visited_towns(player_type *creature_ptr)
+{
+    if (z_older_than(10, 3, 9)) {
+        creature_ptr->visit = 1L;
+        return;
+    }
+
+    if (z_older_than(10, 3, 10)) {
+        set_zangband_visited_towns(creature_ptr);
+        return;
+    }
+
+    s32b tmp32s;
+    rd_s32b(&tmp32s);
+    creature_ptr->visit = (BIT_FLAGS)tmp32s;
+}
+
+void rd_global_configurations(player_type *creature_ptr)
+{
+    rd_u32b(&current_world_ptr->seed_flavor);
+    rd_u32b(&current_world_ptr->seed_town);
+
+    rd_u16b(&creature_ptr->panic_save);
+    rd_u16b(&current_world_ptr->total_winner);
+    rd_u16b(&current_world_ptr->noscore);
+
+    byte tmp8u;
+    rd_byte(&tmp8u);
+    creature_ptr->is_dead = tmp8u;
+
+    rd_byte(&creature_ptr->feeling);
+    rd_world_info(creature_ptr);
 }

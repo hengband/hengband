@@ -75,6 +75,7 @@
 #include "player/special-defense-types.h"
 #include "savedata/angband-version-comparer.h"
 #include "savedata/birth-loader.h"
+#include "savedata/dummy-loader.h"
 #include "savedata/extra-loader.h"
 #include "savedata/item-loader.h"
 #include "savedata/load-util.h"
@@ -88,6 +89,7 @@
 #include "savedata/save.h"
 #include "savedata/savedata-flag-types.h"
 #include "savedata/store-loader.h"
+#include "savedata/world-loader.h"
 #include "spell/spells-status.h"
 #include "store/store-util.h"
 #include "store/store.h"
@@ -1054,7 +1056,12 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
     rd_base_info(creature_ptr);
     rd_player_info(creature_ptr);
+    rd_byte((byte *)&preserve_mode);
+    rd_byte((byte *)&creature_ptr->wait_report_score);
+    rd_dummy2();
+    rd_global_configurations(creature_ptr);
     rd_extra(creature_ptr);
+
     if (creature_ptr->energy_need < -999)
         creature_ptr->timewalk = TRUE;
 
