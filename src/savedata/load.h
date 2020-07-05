@@ -3,4 +3,4 @@
 #include "floor/floor-save.h"
 #include "system/angband.h"
 
-errr rd_savefile_new(player_type *player_ptr);
+errr rd_savefile(player_type *player_ptr);

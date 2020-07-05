@@ -1683,7 +1683,7 @@ bool load_player(player_type *player_ptr)
         Term_clear();
 
         /* Attempt to load */
-        err = rd_savefile_new(player_ptr);
+        err = rd_savefile(player_ptr);
 
         /* Message (below) */
         if (err)
