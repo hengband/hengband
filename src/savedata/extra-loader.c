@@ -494,12 +494,7 @@ static void rd_visited_towns(player_type *creature_ptr)
     creature_ptr->visit = (BIT_FLAGS)tmp32s;
 }
 
-/*!
- * @brief その他の情報を読み込む / Read the "extra" information
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void rd_extra(player_type *creature_ptr)
+static void rd_player_status(player_type *creature_ptr)
 {
     rd_base_status(creature_ptr);
     strip_bytes(24);
@@ -538,6 +533,16 @@ void rd_extra(player_type *creature_ptr)
     rd_tsuyoshi(creature_ptr);
     rd_timed_effects(creature_ptr);
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
+}
+
+/*!
+ * @brief その他の情報を読み込む / Read the "extra" information
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void rd_extra(player_type *creature_ptr)
+{
+    rd_player_status(creature_ptr);
     rd_special_attack(creature_ptr);
     rd_action(creature_ptr);
     rd_special_defense(creature_ptr);
