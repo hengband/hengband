@@ -472,6 +472,30 @@ static errr restore_dungeon(player_type *creature_ptr)
     return 0;
 }
 
+static errr verify_checksum()
+{
+    u32b n_v_check = v_check;
+    u32b o_v_check;
+    rd_u32b(&o_v_check);
+    if (o_v_check == n_v_check)
+        return 0;
+
+    load_note(_("チェックサムがおかしい", "Invalid checksum"));
+    return 11;
+}
+
+static errr verify_encoded_checksum()
+{
+    u32b n_x_check = x_check;
+    u32b o_x_check;
+    rd_u32b(&o_x_check);
+    if (o_x_check == n_x_check)
+        return 0;
+
+    load_note(_("エンコードされたチェックサムがおかしい", "Invalid encoded checksum"));
+    return 11;
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -546,23 +570,11 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (h_older_than(1, 7, 0, 6))
         remove_water_cave(creature_ptr);
 
-    u32b n_v_check = v_check;
-    u32b o_v_check;
-    rd_u32b(&o_v_check);
-    if (o_v_check != n_v_check) {
-        load_note(_("チェックサムがおかしい", "Invalid checksum"));
-        return 11;
-    }
+    errr checksum_result = verify_checksum();
+    if (checksum_result != 0)
+        return checksum_result;
 
-    u32b n_x_check = x_check;
-    u32b o_x_check;
-    rd_u32b(&o_x_check);
-    if (o_x_check != n_x_check) {
-        load_note(_("エンコードされたチェックサムがおかしい", "Invalid encoded checksum"));
-        return 11;
-    }
-
-    return 0;
+    return verify_encoded_checksum();
 }
 
 /*!
