@@ -313,6 +313,18 @@ static void rd_bad_status(player_type *creature_ptr)
     strip_bytes(4); /* Old "food_digested" / "protection" */
 }
 
+static void rd_energy(player_type *creature_ptr)
+{
+    rd_s16b(&creature_ptr->energy_need);
+    if (z_older_than(11, 0, 13))
+        creature_ptr->energy_need = 100 - creature_ptr->energy_need;
+
+    if (h_older_than(2, 1, 2, 0))
+        creature_ptr->enchant_energy_need = 0;
+    else
+        rd_s16b(&creature_ptr->enchant_energy_need);
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -338,15 +350,7 @@ void rd_extra(player_type *creature_ptr)
     rd_s16b(&creature_ptr->sc);
     rd_s16b(&creature_ptr->concent);
     rd_bad_status(creature_ptr);
-    rd_s16b(&creature_ptr->energy_need);
-    if (z_older_than(11, 0, 13))
-        creature_ptr->energy_need = 100 - creature_ptr->energy_need;
-
-    if (h_older_than(2, 1, 2, 0))
-        creature_ptr->enchant_energy_need = 0;
-    else
-        rd_s16b(&creature_ptr->enchant_energy_need);
-
+    rd_energy(creature_ptr);
     rd_s16b(&creature_ptr->fast);
     rd_s16b(&creature_ptr->slow);
     rd_s16b(&creature_ptr->afraid);
