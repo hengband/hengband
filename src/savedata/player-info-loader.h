@@ -5,3 +5,4 @@
 void rd_base_info(player_type *creature_ptr);
 void rd_experience(player_type *creature_ptr);
 void rd_skills(player_type *creature_ptr);
+void rd_race(player_type *creature_ptr);

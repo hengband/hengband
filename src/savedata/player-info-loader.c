@@ -109,3 +109,26 @@ void rd_skills(player_type *creature_ptr)
     if (music_singing_any(creature_ptr))
         creature_ptr->action = ACTION_SING;
 }
+
+static void set_race(player_type *creature_ptr)
+{
+    byte tmp8u;
+    rd_byte(&tmp8u);
+    creature_ptr->start_race = (player_race_type)tmp8u;
+    s32b tmp32s;
+    rd_s32b(&tmp32s);
+    creature_ptr->old_race1 = (BIT_FLAGS)tmp32s;
+    rd_s32b(&tmp32s);
+    creature_ptr->old_race2 = (BIT_FLAGS)tmp32s;
+    rd_s16b(&creature_ptr->old_realm);
+}
+
+void rd_race(player_type *creature_ptr)
+{
+    if (z_older_than(11, 0, 7)) {
+        set_zangband_race(creature_ptr);
+        return;
+    }
+    
+    set_race(creature_ptr);
+}

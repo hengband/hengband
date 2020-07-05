@@ -47,19 +47,6 @@ static void rd_base_status(player_type *creature_ptr)
         rd_s16b(&creature_ptr->stat_cur[i]);
 }
 
-static void set_race(player_type *creature_ptr)
-{
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    creature_ptr->start_race = (player_race_type)tmp8u;
-    s32b tmp32s;
-    rd_s32b(&tmp32s);
-    creature_ptr->old_race1 = (BIT_FLAGS)tmp32s;
-    rd_s32b(&tmp32s);
-    creature_ptr->old_race2 = (BIT_FLAGS)tmp32s;
-    rd_s16b(&creature_ptr->old_realm);
-}
-
 static void set_imitation(player_type *creature_ptr)
 {
     if (z_older_than(10, 0, 1)) {
@@ -206,11 +193,7 @@ void rd_extra(player_type *creature_ptr)
     rd_s32b(&creature_ptr->au);
     rd_experience(creature_ptr);
     rd_skills(creature_ptr);
-    if (z_older_than(11, 0, 7))
-        set_zangband_race(creature_ptr);
-    else
-        set_race(creature_ptr);
-
+    rd_race(creature_ptr);
     set_imitation(creature_ptr);
     if (z_older_than(10, 0, 3))
         set_zangband_bounty_uniques(creature_ptr);
