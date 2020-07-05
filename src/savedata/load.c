@@ -180,6 +180,16 @@ static errr load_quest(u16b *max_quests_load, byte *max_rquests_load)
     return 23;
 }
 
+static bool check_quest_index(int loading_quest_index)
+{
+    if (loading_quest_index < max_q_idx)
+        return FALSE;
+
+    strip_bytes(2);
+    strip_bytes(2);
+    return TRUE;
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -213,11 +223,8 @@ static errr exe_reading_savefile(player_type *creature_ptr)
 
         QUEST_IDX old_inside_quest = creature_ptr->current_floor_ptr->inside_quest;
         for (int i = 0; i < max_quests_load; i++) {
-            if (i >= max_q_idx) {
-                strip_bytes(2);
-                strip_bytes(2);
+            if (check_quest_index(i))
                 continue;
-            }
 
             quest_type *const q_ptr = &quest[i];
             rd_s16b(&q_ptr->status);
