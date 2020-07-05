@@ -163,20 +163,11 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     rd_dummy3();
     rd_system_info();
     rd_unique_info();
+    errr load_lore_result = load_lore();
+    if (load_lore_result != 0)
+        return load_lore_result;
 
     u16b tmp16u;
-    rd_u16b(&tmp16u);
-    if (tmp16u > max_r_idx) {
-        load_note(format(_("モンスターの種族が多すぎる(%u)！", "Too many (%u) monster races!"), tmp16u));
-        return 21;
-    }
-
-    for (int i = 0; i < tmp16u; i++)
-        rd_lore((MONRACE_IDX)i);
-
-    if (arg_fiddle)
-        load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
-
     rd_u16b(&tmp16u);
     if (tmp16u > max_k_idx) {
         load_note(format(_("アイテムの種類が多すぎる(%u)！", "Too many (%u) object kinds!"), tmp16u));

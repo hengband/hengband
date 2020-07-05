@@ -1,4 +1,5 @@
 ﻿#include "savedata/lore-loader.h"
+#include "game-option/runtime-arguments.h"
 #include "monster-race/monster-race.h"
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
@@ -76,4 +77,22 @@ void rd_lore(MONRACE_IDX r_idx)
     r_ptr->r_flags5 &= r_ptr->a_ability_flags1;
     r_ptr->r_flags6 &= r_ptr->a_ability_flags2;
     r_ptr->r_flagsr &= r_ptr->flagsr;
+}
+
+errr load_lore(void)
+{
+    u16b tmp16u;
+    rd_u16b(&tmp16u);
+    if (tmp16u > max_r_idx) {
+        load_note(format(_("モンスターの種族が多すぎる(%u)！", "Too many (%u) monster races!"), tmp16u));
+        return 21;
+    }
+
+    for (int i = 0; i < tmp16u; i++)
+        rd_lore((MONRACE_IDX)i);
+
+    if (arg_fiddle)
+        load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
+
+    return 0;
 }
