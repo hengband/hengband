@@ -529,6 +529,7 @@ hengband_SOURCES = \
 	savedata/load.c savedata/load.h \
 	savedata/savedata-flag-types.h \
 	savedata/save.c savedata/save.h \
+	savedata/store-loader.c savedata/store-loader.h \
 	\
 	specific-object/bow.c specific-object/bow.h \
 	specific-object/chest.c specific-object/chest.h \
