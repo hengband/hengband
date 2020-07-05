@@ -202,3 +202,11 @@ void set_zangband_special_defense(player_type *creature_ptr)
     creature_ptr->ele_immune = 0;
     creature_ptr->special_defense = 0;
 }
+
+void set_zangband_action(player_type *creature_ptr)
+{
+    byte tmp8u;
+    rd_byte(&tmp8u);
+    if (tmp8u)
+        creature_ptr->action = ACTION_LEARN;
+}

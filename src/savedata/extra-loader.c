@@ -480,16 +480,13 @@ void rd_extra(player_type *creature_ptr)
     rd_byte(&creature_ptr->knowledge);
     byte tmp8u;
     rd_byte(&tmp8u);
-    creature_ptr->autopick_autoregister = tmp8u ? TRUE : FALSE;
+    creature_ptr->autopick_autoregister = tmp8u != 0;
 
     rd_byte(&tmp8u);
     rd_byte(&tmp8u);
     creature_ptr->action = (ACTION_IDX)tmp8u;
-    if (!z_older_than(10, 4, 3)) {
-        rd_byte(&tmp8u);
-        if (tmp8u)
-            creature_ptr->action = ACTION_LEARN;
-    }
+    if (!z_older_than(10, 4, 3))
+        set_zangband_action(creature_ptr);
 
     rd_byte((byte *)&preserve_mode);
     rd_byte((byte *)&creature_ptr->wait_report_score);
