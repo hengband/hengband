@@ -8,3 +8,5 @@ void set_gambling_monsters(void);
 void rd_autopick(player_type *creature_ptr);
 void rd_visited_towns(player_type *creature_ptr);
 void rd_global_configurations(player_type *creature_ptr);
+void load_wilderness_info(player_type *creature_ptr);
+errr analyze_wilderness(void);

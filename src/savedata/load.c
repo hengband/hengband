@@ -265,45 +265,6 @@ static void analyze_quests(player_type *creature_ptr, const u16b max_quests_load
     }
 }
 
-static void load_wilderness_info(player_type *creature_ptr)
-{
-    rd_s32b(&creature_ptr->wilderness_x);
-    rd_s32b(&creature_ptr->wilderness_y);
-    if (z_older_than(10, 3, 13)) {
-        creature_ptr->wilderness_x = 5;
-        creature_ptr->wilderness_y = 48;
-    }
-
-    if (z_older_than(10, 3, 7))
-        creature_ptr->wild_mode = FALSE;
-    else
-        rd_byte((byte *)&creature_ptr->wild_mode);
-
-    if (z_older_than(10, 3, 7))
-        creature_ptr->ambush_flag = FALSE;
-    else
-        rd_byte((byte *)&creature_ptr->ambush_flag);
-}
-
-static errr analyze_wilderness(void)
-{
-    s32b wild_x_size;
-    s32b wild_y_size;
-    rd_s32b(&wild_x_size);
-    rd_s32b(&wild_y_size);
-
-    if ((wild_x_size > current_world_ptr->max_wild_x) || (wild_y_size > current_world_ptr->max_wild_y)) {
-        load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
-        return (23);
-    }
-
-    for (int i = 0; i < wild_x_size; i++)
-        for (int j = 0; j < wild_y_size; j++)
-            rd_u32b(&wilderness[j][i].seed);
-
-    return 0;
-}
-
 /*!
  * @brief 変愚蛮怒 v2.1.3で追加された街とクエストについて読み込む
  * @param creature_ptr プレーヤーへの参照ポインタ
