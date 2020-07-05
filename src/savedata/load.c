@@ -165,6 +165,21 @@ static errr load_town(void)
     return 23;
 }
 
+static errr load_quest(u16b *max_quests_load, byte *max_rquests_load)
+{
+    rd_u16b(max_quests_load);
+    if (z_older_than(11, 0, 7))
+        *max_rquests_load = 10;
+    else
+        rd_byte(max_rquests_load);
+
+    if (*max_quests_load <= max_q_idx)
+        return 0;
+
+    load_note(format(_("クエストが多すぎる(%u)！", "Too many (%u) quests!"), *max_quests_load));
+    return 23;
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -191,18 +206,10 @@ static errr exe_reading_savefile(player_type *creature_ptr)
             return load_town_result;
         
         u16b max_quests_load;
-        rd_u16b(&max_quests_load);
-
         byte max_rquests_load;
-        if (z_older_than(11, 0, 7))
-            max_rquests_load = 10;
-        else
-            rd_byte(&max_rquests_load);
-        
-        if (max_quests_load > max_q_idx) {
-            load_note(format(_("クエストが多すぎる(%u)！", "Too many (%u) quests!"), max_quests_load));
-            return 23;
-        }
+        errr load_quest_result = load_quest(&max_quests_load, &max_rquests_load);
+        if (load_quest_result != 0)
+            return load_quest_result;
 
         QUEST_IDX old_inside_quest = creature_ptr->current_floor_ptr->inside_quest;
         for (int i = 0; i < max_quests_load; i++) {
