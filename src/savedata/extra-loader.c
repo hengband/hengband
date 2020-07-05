@@ -584,12 +584,7 @@ static void rd_dummy2(void)
     strip_bytes(12);
 }
 
-/*!
- * @brief その他の情報を読み込む / Read the "extra" information
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void rd_extra(player_type *creature_ptr)
+static void rd_player_info(player_type *creature_ptr)
 {
     rd_player_status(creature_ptr);
     rd_special_attack(creature_ptr);
@@ -598,6 +593,16 @@ void rd_extra(player_type *creature_ptr)
     rd_byte(&creature_ptr->knowledge);
     rd_autopick(creature_ptr);
     rd_action(creature_ptr);
+}
+
+/*!
+ * @brief その他の情報を読み込む / Read the "extra" information
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void rd_extra(player_type *creature_ptr)
+{
+    rd_player_info(creature_ptr);
     rd_byte((byte *)&preserve_mode);
     rd_byte((byte *)&creature_ptr->wait_report_score);
     rd_dummy2();
