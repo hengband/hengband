@@ -27,6 +27,7 @@
 #include "savedata/load-v1-7-0.h"
 #include "savedata/load-zangband.h"
 #include "savedata/monster-loader.h"
+#include "savedata/player-info-loader.h"
 #include "world/world.h"
 
 /*!
@@ -215,36 +216,7 @@ void rd_extra(player_type *creature_ptr)
     rd_base_status(creature_ptr);
     strip_bytes(24);
     rd_s32b(&creature_ptr->au);
-    rd_s32b(&creature_ptr->max_exp);
-
-    if (h_older_than(1, 5, 4, 1))
-        creature_ptr->max_max_exp = creature_ptr->max_exp;
-    else
-        rd_s32b(&creature_ptr->max_max_exp);
-
-    rd_s32b(&creature_ptr->exp);
-
-    if (h_older_than(1, 7, 0, 3))
-        set_exp_frac_old(creature_ptr);
-    else
-        rd_u32b(&creature_ptr->exp_frac);
-
-    rd_s16b(&creature_ptr->lev);
-    for (int i = 0; i < 64; i++)
-        rd_s16b(&creature_ptr->spell_exp[i]);
-
-    if ((creature_ptr->pclass == CLASS_SORCERER) && z_older_than(10, 4, 2))
-        for (int i = 0; i < 64; i++)
-            creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
-
-    const int max_weapon_exp_size = z_older_than(10, 3, 6) ? 60 : 64;
-    for (int i = 0; i < 5; i++)
-        for (int j = 0; j < max_weapon_exp_size; j++)
-            rd_s16b(&creature_ptr->weapon_exp[i][j]);
-
-    for (int i = 0; i < GINOU_MAX; i++)
-        rd_s16b(&creature_ptr->skill_exp[i]);
-
+    rd_experience(creature_ptr);
     if (z_older_than(10, 4, 1))
         set_zangband_skill(creature_ptr);
 
