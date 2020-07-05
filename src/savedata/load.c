@@ -264,6 +264,26 @@ static void analyze_quests(player_type *creature_ptr, const u16b max_quests_load
     }
 }
 
+static void load_wilderness_info(player_type *creature_ptr)
+{
+    rd_s32b(&creature_ptr->wilderness_x);
+    rd_s32b(&creature_ptr->wilderness_y);
+    if (z_older_than(10, 3, 13)) {
+        creature_ptr->wilderness_x = 5;
+        creature_ptr->wilderness_y = 48;
+    }
+
+    if (z_older_than(10, 3, 7))
+        creature_ptr->wild_mode = FALSE;
+    else
+        rd_byte((byte *)&creature_ptr->wild_mode);
+
+    if (z_older_than(10, 3, 7))
+        creature_ptr->ambush_flag = FALSE;
+    else
+        rd_byte((byte *)&creature_ptr->ambush_flag);
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -302,23 +322,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
             quest[OLD_QUEST_WATER_CAVE].status = QUEST_STATUS_UNTAKEN;
         }
 
-        rd_s32b(&creature_ptr->wilderness_x);
-        rd_s32b(&creature_ptr->wilderness_y);
-        if (z_older_than(10, 3, 13)) {
-            creature_ptr->wilderness_x = 5;
-            creature_ptr->wilderness_y = 48;
-        }
-
-        if (z_older_than(10, 3, 7))
-            creature_ptr->wild_mode = FALSE;
-        else
-            rd_byte((byte *)&creature_ptr->wild_mode);
-
-        if (z_older_than(10, 3, 7))
-            creature_ptr->ambush_flag = FALSE;
-        else
-            rd_byte((byte *)&creature_ptr->ambush_flag);
-
+        load_wilderness_info(creature_ptr);
         s32b wild_x_size;
         s32b wild_y_size;
         rd_s32b(&wild_x_size);
