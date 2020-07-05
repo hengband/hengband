@@ -21,6 +21,7 @@
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"
 #include "savedata/angband-version-comparer.h"
+#include "savedata/load-v1-3-0.h"
 #include "savedata/load-zangband.h"
 #include "savedata/birth-loader.h"
 #include "savedata/load-util.h"
@@ -42,6 +43,18 @@ static void rd_base_status(player_type *creature_ptr)
 
     for (int i = 0; i < A_MAX; i++)
         rd_s16b(&creature_ptr->stat_cur[i]);
+}
+
+static void set_spells(player_type *creature_ptr)
+{
+    for (int i = 0; i < MAX_SPELLS; i++)
+        rd_s32b(&creature_ptr->magic_num1[i]);
+
+    for (int i = 0; i < MAX_SPELLS; i++)
+        rd_byte(&creature_ptr->magic_num2[i]);
+
+    if (h_older_than(1, 3, 0, 1))
+        set_spells_old(creature_ptr);
 }
 
 /*!
@@ -133,26 +146,10 @@ void rd_extra(player_type *creature_ptr)
     if (z_older_than(10, 4, 1))
         set_zangband_skill(creature_ptr);
 
-    if (z_older_than(10, 3, 14)) {
-        for (int i = 0; i < MAX_SPELLS; i++)
-            creature_ptr->magic_num1[i] = 0;
-
-        for (int i = 0; i < MAX_SPELLS; i++)
-            creature_ptr->magic_num2[i] = 0;
-    } else {
-        for (int i = 0; i < MAX_SPELLS; i++)
-            rd_s32b(&creature_ptr->magic_num1[i]);
-        for (int i = 0; i < MAX_SPELLS; i++)
-            rd_byte(&creature_ptr->magic_num2[i]);
-        if (h_older_than(1, 3, 0, 1)) {
-            if (creature_ptr->pclass == CLASS_SMITH) {
-                creature_ptr->magic_num1[TR_ES_ATTACK] = creature_ptr->magic_num1[96];
-                creature_ptr->magic_num1[96] = 0;
-                creature_ptr->magic_num1[TR_ES_AC] = creature_ptr->magic_num1[97];
-                creature_ptr->magic_num1[97] = 0;
-            }
-        }
-    }
+    if (z_older_than(10, 3, 14))
+        set_zangband_spells(creature_ptr);
+    else
+        set_spells(creature_ptr);
 
     if (music_singing_any(creature_ptr))
         creature_ptr->action = ACTION_SING;

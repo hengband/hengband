@@ -73,3 +73,12 @@ void set_zangband_skill(player_type *creature_ptr)
 
     creature_ptr->skill_exp[GINOU_RIDING] = MIN(creature_ptr->skill_exp[GINOU_RIDING], s_info[creature_ptr->pclass].s_max[GINOU_RIDING]);
 }
+
+void set_zangband_spells(player_type* creature_ptr)
+{
+    for (int i = 0; i < MAX_SPELLS; i++)
+        creature_ptr->magic_num1[i] = 0;
+
+    for (int i = 0; i < MAX_SPELLS; i++)
+        creature_ptr->magic_num2[i] = 0;
+}

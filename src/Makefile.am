@@ -526,6 +526,7 @@ hengband_SOURCES = \
 	savedata/monster-loader.c savedata/monster-loader.h \
 	savedata/old-feature-types.h \
 	savedata/load-util.c savedata/load-util.h \
+	savedata/load-v1-3-0.c savedata/load-v1-3-0.h \
 	savedata/load-v1-5-0.c savedata/load-v1-5-0.h \
 	savedata/load-zangband.c savedata/load-zangband.h \
 	savedata/load.c savedata/load.h \
