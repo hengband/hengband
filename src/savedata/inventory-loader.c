@@ -19,7 +19,7 @@
  *
  * Note that the inventory is "re-sorted" later by "dungeon()".
  */
-errr rd_inventory(player_type *player_ptr)
+static errr rd_inventory(player_type *player_ptr)
 {
     player_ptr->total_weight = 0;
     player_ptr->inven_cnt = 0;
@@ -66,4 +66,19 @@ errr rd_inventory(player_type *player_ptr)
     }
 
     return 0;
+}
+
+errr load_inventory(player_type *creature_ptr)
+{
+    byte tmp8u;
+    for (int i = 0; i < 64; i++) {
+        rd_byte(&tmp8u);
+        creature_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
+    }
+
+    if (!rd_inventory(creature_ptr))
+        return 0;
+
+    load_note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
+    return 21;
 }

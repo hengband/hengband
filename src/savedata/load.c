@@ -391,21 +391,6 @@ static void load_spells(player_type *creature_ptr)
         rd_s16b(&creature_ptr->add_spells);
 }
 
-static errr load_inventory(player_type *creature_ptr)
-{
-    byte tmp8u;
-    for (int i = 0; i < 64; i++) {
-        rd_byte(&tmp8u);
-        creature_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
-    }
-
-    if (!rd_inventory(creature_ptr))
-        return 0;
-
-    load_note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
-    return 21;
-}
-
 static errr load_store(player_type *creature_ptr)
 {
     u16b tmp16u;
