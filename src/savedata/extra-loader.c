@@ -134,14 +134,15 @@ void rd_extra(player_type *creature_ptr)
         set_zangband_skill(creature_ptr);
 
     if (z_older_than(10, 3, 14)) {
-        for (int i = 0; i < 108; i++)
+        for (int i = 0; i < MAX_SPELLS; i++)
             creature_ptr->magic_num1[i] = 0;
-        for (int i = 0; i < 108; i++)
+
+        for (int i = 0; i < MAX_SPELLS; i++)
             creature_ptr->magic_num2[i] = 0;
     } else {
-        for (int i = 0; i < 108; i++)
+        for (int i = 0; i < MAX_SPELLS; i++)
             rd_s32b(&creature_ptr->magic_num1[i]);
-        for (int i = 0; i < 108; i++)
+        for (int i = 0; i < MAX_SPELLS; i++)
             rd_byte(&creature_ptr->magic_num2[i]);
         if (h_older_than(1, 3, 0, 1)) {
             if (creature_ptr->pclass == CLASS_SMITH) {

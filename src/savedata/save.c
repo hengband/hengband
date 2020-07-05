@@ -725,9 +725,9 @@ static void wr_extra(player_type *creature_ptr)
 
     for (int i = 0; i < GINOU_MAX; i++)
         wr_s16b(creature_ptr->skill_exp[i]);
-    for (int i = 0; i < 108; i++)
+    for (int i = 0; i < MAX_SPELLS; i++)
         wr_s32b(creature_ptr->magic_num1[i]);
-    for (int i = 0; i < 108; i++)
+    for (int i = 0; i < MAX_SPELLS; i++)
         wr_byte(creature_ptr->magic_num2[i]);
 
     wr_byte((byte)creature_ptr->start_race);

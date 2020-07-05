@@ -71,7 +71,6 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-util.h"
 #include "status/experience.h"
 #include "system/alloc-entries.h"
 #include "system/angband-version.h"

@@ -36,7 +36,6 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
-#include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"

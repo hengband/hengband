@@ -137,7 +137,7 @@ void player_wipe_without_name(player_type *creature_ptr)
     creature_ptr->visit = 1;
     creature_ptr->wild_mode = FALSE;
 
-    for (int i = 0; i < 108; i++) {
+    for (int i = 0; i < MAX_SPELLS; i++) {
         creature_ptr->magic_num1[i] = 0;
         creature_ptr->magic_num2[i] = 0;
     }

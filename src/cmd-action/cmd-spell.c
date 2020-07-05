@@ -49,7 +49,6 @@
 #include "spell/spells-execution.h"
 #include "spell/spell-info.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
 #include "status/base-status.h"
 #include "status/experience.h"

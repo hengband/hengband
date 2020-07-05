@@ -152,7 +152,7 @@ static void charge_magic_eating_energy(player_type *customer_ptr)
 		customer_ptr->magic_num1[i] = customer_ptr->magic_num2[i] * EATER_CHARGE;
 	}
 
-	for (; i < 108; i++)
+	for (; i < MAX_SPELLS; i++)
 	{
 		customer_ptr->magic_num1[i] = 0;
 	}

@@ -1,9 +1,9 @@
 ﻿#pragma once 
 
-/* 人畜無害なenumヘッダを先に読み込む */
 #include "player/player-classes-types.h"
 #include "player/player-race-types.h"
 #include "player/player-personalities-types.h"
+#include "spell/spells-util.h"
 
 /*
  * Most of the "player" information goes here.
@@ -278,8 +278,8 @@ typedef struct player_type
 	SUB_EXP weapon_exp[5][64];    /* Proficiency of weapons */
 	SUB_EXP skill_exp[GINOU_MAX]; /* Proficiency of misc. skill */
 
-	MAGIC_NUM1 magic_num1[108];     /*!< Array for non-spellbook type magic */
-	MAGIC_NUM2 magic_num2[108];     /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
+	MAGIC_NUM1 magic_num1[MAX_SPELLS];     /*!< Array for non-spellbook type magic */
+	MAGIC_NUM2 magic_num2[MAX_SPELLS];     /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
 
 	SPELL_IDX mane_spell[MAX_MANE];
 	HIT_POINT mane_dam[MAX_MANE];

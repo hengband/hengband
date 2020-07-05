@@ -106,11 +106,12 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 			return sn;
 	}
 	
-	for (i = 0; i < 108; i++)
+	for (i = 0; i < MAX_SPELLS; i++)
 	{
 		if (creature_ptr->magic_num2[i]) break;
 	}
-	if (i == 108)
+
+	if (i == MAX_SPELLS)
 	{
 		msg_print(_("魔法を覚えていない！", "You don't have any magic!"));
 		return -1;
