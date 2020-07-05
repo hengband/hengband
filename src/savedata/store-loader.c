@@ -62,7 +62,7 @@ static void home_carry_load(player_type *player_ptr, store_type *store_ptr, obje
  * @param store_number 店舗ID
  * @return エラーID
  */
-errr rd_store(player_type *player_ptr, int town_number, int store_number)
+static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 {
     store_type *store_ptr;
     bool sort = FALSE;
@@ -113,6 +113,20 @@ errr rd_store(player_type *player_ptr, int town_number, int store_number)
             object_copy(&store_ptr->stock[k], q_ptr);
         }
     }
+
+    return 0;
+}
+
+errr load_store(player_type *creature_ptr)
+{
+    u16b tmp16u;
+    rd_u16b(&tmp16u);
+    int town_count = tmp16u;
+    rd_u16b(&tmp16u);
+    for (int i = 1; i < town_count; i++)
+        for (int j = 0; j < tmp16u; j++)
+            if (rd_store(creature_ptr, i, j))
+                return 22;
 
     return 0;
 }

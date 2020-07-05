@@ -391,20 +391,6 @@ static void load_spells(player_type *creature_ptr)
         rd_s16b(&creature_ptr->add_spells);
 }
 
-static errr load_store(player_type *creature_ptr)
-{
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-    int town_count = tmp16u;
-    rd_u16b(&tmp16u);
-    for (int i = 1; i < town_count; i++)
-        for (int j = 0; j < tmp16u; j++)
-            if (rd_store(creature_ptr, i, j))
-                return 22;
-
-    return 0;
-}
-
 static errr verify_checksum()
 {
     u32b n_v_check = v_check;
