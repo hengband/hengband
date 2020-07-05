@@ -124,15 +124,7 @@ static void rd_randomizer(void)
 static errr exe_reading_savefile(player_type *creature_ptr)
 {
     rd_version_info();
-
-    u32b tmp32u;
-    rd_u32b(&tmp32u);
-
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-
-    byte tmp8u;
-    rd_byte(&tmp8u);
+    rd_dummy3();
     rd_byte(&kanji_code);
 
     rd_randomizer();
@@ -159,6 +151,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
             r_ptr->max_num = MAX_NAZGUL_NUM;
     }
 
+    u16b tmp16u;
     rd_u16b(&tmp16u);
     if (tmp16u > max_r_idx) {
         load_note(format(_("モンスターの種族が多すぎる(%u)！", "Too many (%u) monster races!"), tmp16u));
@@ -178,12 +171,14 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         return (22);
     }
 
+    byte tmp8u;
     for (int i = 0; i < tmp16u; i++) {
         object_kind *k_ptr = &k_info[i];
         rd_byte(&tmp8u);
         k_ptr->aware = (tmp8u & 0x01) ? TRUE : FALSE;
         k_ptr->tried = (tmp8u & 0x02) ? TRUE : FALSE;
     }
+
     if (arg_fiddle)
         load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
 

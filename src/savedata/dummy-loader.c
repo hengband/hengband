@@ -66,3 +66,15 @@ void rd_ghost(void)
     rd_string(buf, sizeof(buf));
     strip_bytes(60);
 }
+
+void rd_dummy3(void)
+{
+    u32b tmp32u;
+    rd_u32b(&tmp32u);
+
+    u16b tmp16u;
+    rd_u16b(&tmp16u);
+
+    byte tmp8u;
+    rd_byte(&tmp8u);
+}
