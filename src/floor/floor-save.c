@@ -55,7 +55,7 @@
 #include "player/player-class.h"
 #include "player/player-personalities-types.h"
 #include "player/special-defense-types.h"
-#include "savedata/load.h"
+#include "savedata/floor-loader.h"
 #include "savedata/save.h"
 #include "spell-kind/spells-floor.h"
 #include "system/system-variables.h"

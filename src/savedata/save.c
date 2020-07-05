@@ -37,6 +37,7 @@
 #include "monster/monster-status.h"
 #include "object-enchant/artifact.h"
 #include "object/object-kind.h"
+#include "savedata/floor-loader.h"
 #include "savedata/load.h"
 #include "savedata/savedata-flag-types.h"
 #include "store/store-util.h"

@@ -5,7 +5,6 @@
 #include "savedata/floor-loader.h"
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
-#include "savedata/load.h" // 暫定、load_floor().
 #include "savedata/save.h"
 #include "world/world.h"
 
