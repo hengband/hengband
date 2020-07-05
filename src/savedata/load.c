@@ -40,6 +40,7 @@
 #include "savedata/item-loader.h"
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
+#include "savedata/load-v1-7-0.h"
 #include "savedata/lore-loader.h"
 #include "savedata/load-zangband.h"
 #include "savedata/option-loader.h"
@@ -542,14 +543,8 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (restore_dungeon_result != 0)
         return restore_dungeon_result;
 
-    /* Quest 18 was removed */
-    if (h_older_than(1, 7, 0, 6)) {
-        if (creature_ptr->current_floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE) {
-            creature_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
-            creature_ptr->current_floor_ptr->dun_level = 1;
-            creature_ptr->current_floor_ptr->inside_quest = 0;
-        }
-    }
+    if (h_older_than(1, 7, 0, 6))
+        remove_water_cave(creature_ptr);
 
     u32b n_v_check = v_check;
     u32b o_v_check;

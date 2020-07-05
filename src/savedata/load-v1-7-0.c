@@ -1,5 +1,9 @@
 ﻿#include "savedata/load-v1-7-0.h"
+#include "dungeon/dungeon.h"
+#include "floor/floor.h"
+#include "game-option/birth-options.h"
 #include "savedata/load-util.h"
+#include "savedata/load-v1-5-0.h"
 
 void set_hp_old(player_type *creature_ptr)
 {
@@ -34,4 +38,14 @@ void set_exp_frac_old(player_type *creature_ptr)
     u16b tmp16u;
     rd_u16b(&tmp16u);
     creature_ptr->exp_frac = (u32b)tmp16u;
+}
+
+void remove_water_cave(player_type* creature_ptr)
+{
+    if (creature_ptr->current_floor_ptr->inside_quest != OLD_QUEST_WATER_CAVE)
+        return;
+
+    creature_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
+    creature_ptr->current_floor_ptr->dun_level = 1;
+    creature_ptr->current_floor_ptr->inside_quest = 0;
 }
