@@ -449,6 +449,28 @@ static errr load_store(player_type *creature_ptr)
     return 0;
 }
 
+static errr restore_dungeon(player_type *creature_ptr)
+{
+    if (creature_ptr->is_dead) {
+        for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
+            r_info[quest[i].r_idx].flags1 &= ~(RF1_QUESTOR);
+
+        return 0;
+    }
+    
+    load_note(_("ダンジョン復元中...", "Restoring Dungeon..."));
+    if (rd_dungeon(creature_ptr)) {
+        load_note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
+        return 34;
+    }
+
+    rd_ghost();
+    s32b tmp32s;
+    rd_s32b(&tmp32s);
+    strip_bytes(tmp32s);
+    return 0;
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -516,27 +538,9 @@ static errr exe_reading_savefile(player_type *creature_ptr)
             screen_dump = string_make(buf);
     }
 
-    if (creature_ptr->is_dead) {
-        for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
-            r_info[quest[i].r_idx].flags1 &= ~(RF1_QUESTOR);
-        }
-    }
-
-    if (!creature_ptr->is_dead) {
-        load_note(_("ダンジョン復元中...", "Restoring Dungeon..."));
-        if (rd_dungeon(creature_ptr)) {
-            load_note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
-            return (34);
-        }
-
-        rd_ghost();
-        {
-            s32b tmp32s;
-
-            rd_s32b(&tmp32s);
-            strip_bytes(tmp32s);
-        }
-    }
+    errr restore_dungeon_result = restore_dungeon(creature_ptr);
+    if (restore_dungeon_result != 0)
+        return restore_dungeon_result;
 
     /* Quest 18 was removed */
     if (h_older_than(1, 7, 0, 6)) {
