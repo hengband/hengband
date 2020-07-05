@@ -1194,13 +1194,6 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->redraw |= (PR_SPEED);
     }
 
-    if (creature_ptr->yoiyami) {
-        if (creature_ptr->to_a > (0 - creature_ptr->ac))
-            creature_ptr->to_a = 0 - creature_ptr->ac;
-        if (creature_ptr->dis_to_a > (0 - creature_ptr->dis_ac))
-            creature_ptr->dis_to_a = 0 - creature_ptr->dis_ac;
-    }
-
     if ((creature_ptr->dis_ac != old_dis_ac) || (creature_ptr->dis_to_a != old_dis_to_a)) {
         creature_ptr->redraw |= (PR_ARMOR);
         creature_ptr->window |= (PW_PLAYER);
@@ -3013,6 +3006,8 @@ static void calc_to_magic_chance(player_type *creature_ptr)
 static void calc_base_ac(player_type *creature_ptr)
 {
     creature_ptr->ac = 0;
+    if (creature_ptr->yoiyami)
+        return;
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -3029,6 +3024,8 @@ static void calc_base_ac(player_type *creature_ptr)
 static void calc_to_ac(player_type *creature_ptr)
 {
     creature_ptr->to_a = 0;
+    if (creature_ptr->yoiyami)
+        return;
 
     creature_ptr->to_a += ((int)(adj_dex_ta[creature_ptr->stat_ind[A_DEX]]) - 128);
 
@@ -3155,6 +3152,8 @@ static void calc_to_ac(player_type *creature_ptr)
 static void calc_base_ac_display(player_type *creature_ptr)
 {
     creature_ptr->dis_ac = 0;
+    if (creature_ptr->yoiyami)
+        return;
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -3171,6 +3170,8 @@ static void calc_base_ac_display(player_type *creature_ptr)
 static void calc_to_ac_display(player_type *creature_ptr)
 {
     creature_ptr->dis_to_a = 0;
+    if (creature_ptr->yoiyami)
+        return;
 
     creature_ptr->dis_to_a += ((int)(adj_dex_ta[creature_ptr->stat_ind[A_DEX]]) - 128);
 
