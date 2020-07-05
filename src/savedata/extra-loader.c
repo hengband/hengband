@@ -207,24 +207,11 @@ static void rd_phase_out(player_type *creature_ptr)
     }
 }
 
-/*!
- * @brief その他の情報を読み込む / Read the "extra" information
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void rd_extra(player_type *creature_ptr)
+static void rd_arena(player_type *creature_ptr)
 {
-    rd_base_status(creature_ptr);
-    strip_bytes(24);
-    rd_s32b(&creature_ptr->au);
-    rd_experience(creature_ptr);
-    rd_skills(creature_ptr);
-    rd_race(creature_ptr);
-    set_imitation(creature_ptr);
-    rd_bounty_uniques(creature_ptr);
-    if (z_older_than(10, 0, 3)) {
+    if (z_older_than(10, 0, 3))
         update_gambling_monsters(creature_ptr);
-    } else
+    else
         set_gambling_monsters();
 
     rd_s16b(&creature_ptr->town_num);
@@ -247,7 +234,25 @@ void rd_extra(player_type *creature_ptr)
         creature_ptr->oldpy = 33;
         creature_ptr->oldpx = 131;
     }
+}
 
+/*!
+ * @brief その他の情報を読み込む / Read the "extra" information
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void rd_extra(player_type *creature_ptr)
+{
+    rd_base_status(creature_ptr);
+    strip_bytes(24);
+    rd_s32b(&creature_ptr->au);
+    rd_experience(creature_ptr);
+    rd_skills(creature_ptr);
+    rd_race(creature_ptr);
+    set_imitation(creature_ptr);
+    rd_bounty_uniques(creature_ptr);
+    rd_arena(creature_ptr);
+    s16b tmp16s;
     rd_s16b(&tmp16s);
     for (int i = 0; i < tmp16s; i++) {
         s16b tmp16s2;
@@ -353,6 +358,7 @@ void rd_extra(player_type *creature_ptr)
     }
 
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
+    byte tmp8u;
     if (z_older_than(10, 0, 9)) {
         rd_byte(&tmp8u);
         if (tmp8u)
