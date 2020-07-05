@@ -112,6 +112,63 @@ static void set_imitation(player_type *creature_ptr)
     rd_s16b(&creature_ptr->mane_num);
 }
 
+static void set_timed_effects(player_type *creature_ptr)
+{
+    rd_s16b(&creature_ptr->tim_esp);
+    rd_s16b(&creature_ptr->wraith_form);
+    rd_s16b(&creature_ptr->resist_magic);
+    rd_s16b(&creature_ptr->tim_regen);
+    rd_s16b(&creature_ptr->tim_pass_wall);
+    rd_s16b(&creature_ptr->tim_stealth);
+    rd_s16b(&creature_ptr->tim_levitation);
+    rd_s16b(&creature_ptr->tim_sh_touki);
+    rd_s16b(&creature_ptr->lightspeed);
+    rd_s16b(&creature_ptr->tsubureru);
+    if (z_older_than(10, 4, 7))
+        creature_ptr->magicdef = 0;
+    else
+        rd_s16b(&creature_ptr->magicdef);
+
+    rd_s16b(&creature_ptr->tim_res_nether);
+    if (z_older_than(10, 4, 11))
+        set_zangband_mimic(creature_ptr);
+    else {
+        rd_s16b(&creature_ptr->tim_res_time);
+
+        byte tmp8u;
+        rd_byte(&tmp8u);
+        creature_ptr->mimic_form = (IDX)tmp8u;
+        rd_s16b(&creature_ptr->tim_mimic);
+        rd_s16b(&creature_ptr->tim_sh_fire);
+    }
+
+    if (z_older_than(11, 0, 99))
+        set_zangband_holy_aura(creature_ptr);
+    else {
+        rd_s16b(&creature_ptr->tim_sh_holy);
+        rd_s16b(&creature_ptr->tim_eyeeye);
+    }
+
+    if (z_older_than(11, 0, 3))
+        set_zangband_reflection(creature_ptr);
+    else {
+        rd_s16b(&creature_ptr->tim_reflect);
+        rd_s16b(&creature_ptr->multishadow);
+        rd_s16b(&creature_ptr->dustrobe);
+    }
+
+    rd_s16b(&creature_ptr->chaos_patron);
+    rd_u32b(&creature_ptr->muta1);
+    rd_u32b(&creature_ptr->muta2);
+    rd_u32b(&creature_ptr->muta3);
+
+    for (int i = 0; i < 8; i++)
+        rd_s16b(&creature_ptr->virtues[i]);
+
+    for (int i = 0; i < 8; i++)
+        rd_s16b(&creature_ptr->vir_types[i]);
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -371,57 +428,7 @@ void rd_extra(player_type *creature_ptr)
     if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6))
         set_zangband_timed_effects(creature_ptr);
     else {
-        rd_s16b(&creature_ptr->tim_esp);
-        rd_s16b(&creature_ptr->wraith_form);
-        rd_s16b(&creature_ptr->resist_magic);
-        rd_s16b(&creature_ptr->tim_regen);
-        rd_s16b(&creature_ptr->tim_pass_wall);
-        rd_s16b(&creature_ptr->tim_stealth);
-        rd_s16b(&creature_ptr->tim_levitation);
-        rd_s16b(&creature_ptr->tim_sh_touki);
-        rd_s16b(&creature_ptr->lightspeed);
-        rd_s16b(&creature_ptr->tsubureru);
-        if (z_older_than(10, 4, 7))
-            creature_ptr->magicdef = 0;
-        else
-            rd_s16b(&creature_ptr->magicdef);
-
-        rd_s16b(&creature_ptr->tim_res_nether);
-        if (z_older_than(10, 4, 11))
-            set_zangband_mimic(creature_ptr);
-        else {
-            rd_s16b(&creature_ptr->tim_res_time);
-            rd_byte(&tmp8u);
-            creature_ptr->mimic_form = (IDX)tmp8u;
-            rd_s16b(&creature_ptr->tim_mimic);
-            rd_s16b(&creature_ptr->tim_sh_fire);
-        }
-
-        if (z_older_than(11, 0, 99))
-            set_zangband_holy_aura(creature_ptr);
-        else {
-            rd_s16b(&creature_ptr->tim_sh_holy);
-            rd_s16b(&creature_ptr->tim_eyeeye);
-        }
-
-        if (z_older_than(11, 0, 3))
-            set_zangband_reflection(creature_ptr);
-        else {
-            rd_s16b(&creature_ptr->tim_reflect);
-            rd_s16b(&creature_ptr->multishadow);
-            rd_s16b(&creature_ptr->dustrobe);
-        }
-
-        rd_s16b(&creature_ptr->chaos_patron);
-        rd_u32b(&creature_ptr->muta1);
-        rd_u32b(&creature_ptr->muta2);
-        rd_u32b(&creature_ptr->muta3);
-
-        for (int i = 0; i < 8; i++)
-            rd_s16b(&creature_ptr->virtues[i]);
-
-        for (int i = 0; i < 8; i++)
-            rd_s16b(&creature_ptr->vir_types[i]);
+        set_timed_effects(creature_ptr);
     }
 
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
