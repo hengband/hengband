@@ -1,4 +1,5 @@
 ﻿#include "savedata/load-zangband.h"
+#include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "game-option/option-flags.h"
@@ -176,4 +177,11 @@ void set_zangband_game_turns(player_type *creature_ptr)
     creature_ptr->feeling_turn /= 2;
     current_world_ptr->game_turn /= 2;
     current_world_ptr->dungeon_turn /= 2;
+}
+
+void set_zangband_gambling_monsters(int i)
+{
+    s16b tmp16s;
+    rd_s16b(&tmp16s);
+    mon_odds[i] = tmp16s;
 }
