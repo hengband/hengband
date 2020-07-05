@@ -234,6 +234,36 @@ static void load_quest_details(player_type *creature_ptr, quest_type *q_ptr, int
     q_ptr->flags = tmp8u;
 }
 
+static void analyze_quests(player_type *creature_ptr, const u16b max_quests_load, const byte max_rquests_load)
+{
+    QUEST_IDX old_inside_quest = creature_ptr->current_floor_ptr->inside_quest;
+    for (int i = 0; i < max_quests_load; i++) {
+        if (check_quest_index(i))
+            continue;
+
+        quest_type *const q_ptr = &quest[i];
+        load_quest_completion(q_ptr);
+        bool is_quest_running = (q_ptr->status == QUEST_STATUS_TAKEN);
+        is_quest_running |= (!z_older_than(10, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED));
+        is_quest_running |= (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load)));
+        if (!is_quest_running)
+            continue;
+
+        load_quest_details(creature_ptr, q_ptr, i);
+        if (z_older_than(10, 3, 11))
+            set_zangband_quest(creature_ptr, q_ptr, i, old_inside_quest);
+        else {
+            byte tmp8u;
+            rd_byte(&tmp8u);
+            q_ptr->dungeon = tmp8u;
+        }
+
+        if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_UNTAKEN)
+            if (r_info[q_ptr->r_idx].flags1 & RF1_UNIQUE)
+                r_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
+    }
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -264,31 +294,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         if (load_quest_result != 0)
             return load_quest_result;
 
-        QUEST_IDX old_inside_quest = creature_ptr->current_floor_ptr->inside_quest;
-        for (int i = 0; i < max_quests_load; i++) {
-            if (check_quest_index(i))
-                continue;
-
-            quest_type *const q_ptr = &quest[i];
-            load_quest_completion(q_ptr);
-            bool is_quest_running = (q_ptr->status == QUEST_STATUS_TAKEN);
-            is_quest_running |= (!z_older_than(10, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED));
-            is_quest_running |= (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load)));
-            if (!is_quest_running)
-                continue;
-
-            load_quest_details(creature_ptr, q_ptr, i);
-            if (z_older_than(10, 3, 11))
-                set_zangband_quest(creature_ptr, q_ptr, i, old_inside_quest);
-            else {
-                rd_byte(&tmp8u);
-                q_ptr->dungeon = tmp8u;
-            }
-
-            if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_UNTAKEN)
-                if (r_info[q_ptr->r_idx].flags1 & RF1_UNIQUE)
-                    r_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
-        }
+        analyze_quests(creature_ptr, max_quests_load, max_rquests_load);
 
         /* Quest 18 was removed */
         if (h_older_than(1, 7, 0, 6)) {

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "dungeon/quest.h"
 #include "system/angband.h"
 
 void load_zangband_options(void);
