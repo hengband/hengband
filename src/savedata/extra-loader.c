@@ -477,6 +477,23 @@ static void rd_world_info(player_type *creature_ptr)
     }
 }
 
+static void rd_visited_towns(player_type *creature_ptr)
+{
+    if (z_older_than(10, 3, 9)) {
+        creature_ptr->visit = 1L;
+        return;
+    }
+
+    if (z_older_than(10, 3, 10)) {
+        set_zangband_visited_towns(creature_ptr);
+        return;
+    }
+
+    s32b tmp32s;
+    rd_s32b(&tmp32s);
+    creature_ptr->visit = (BIT_FLAGS)tmp32s;
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -570,16 +587,7 @@ void rd_extra(player_type *creature_ptr)
     else
         rd_u32b(&current_world_ptr->play_time);
 
-    if (z_older_than(10, 3, 9))
-        creature_ptr->visit = 1L;
-    else if (z_older_than(10, 3, 10))
-        set_zangband_visited_towns(creature_ptr);
-    else {
-        s32b tmp32s;
-        rd_s32b(&tmp32s);
-        creature_ptr->visit = (BIT_FLAGS)tmp32s;
-    }
-
+    rd_visited_towns(creature_ptr);
     if (!z_older_than(11, 0, 5))
         rd_u32b(&creature_ptr->count);
 }
