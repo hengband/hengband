@@ -298,6 +298,22 @@ static void rd_dungeons(player_type *creature_ptr)
 }
 
 /*!
+ * todo 順番的に朦朧がない……
+ * @brief プレーヤーのバッドステータス (と空腹)を読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void rd_bad_status(player_type *creature_ptr)
+{
+    strip_bytes(2); /* Old "rest" */
+    rd_s16b(&creature_ptr->blind);
+    rd_s16b(&creature_ptr->paralyzed);
+    rd_s16b(&creature_ptr->confused);
+    rd_s16b(&creature_ptr->food);
+    strip_bytes(4); /* Old "food_digested" / "protection" */
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -321,14 +337,7 @@ void rd_extra(player_type *creature_ptr)
     strip_bytes(8);
     rd_s16b(&creature_ptr->sc);
     rd_s16b(&creature_ptr->concent);
-
-    strip_bytes(2); /* Old "rest" */
-    rd_s16b(&creature_ptr->blind);
-    rd_s16b(&creature_ptr->paralyzed);
-    rd_s16b(&creature_ptr->confused);
-    rd_s16b(&creature_ptr->food);
-    strip_bytes(4); /* Old "food_digested" / "protection" */
-
+    rd_bad_status(creature_ptr);
     rd_s16b(&creature_ptr->energy_need);
     if (z_older_than(11, 0, 13))
         creature_ptr->energy_need = 100 - creature_ptr->energy_need;
