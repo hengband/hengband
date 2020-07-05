@@ -535,6 +535,23 @@ static void rd_player_status(player_type *creature_ptr)
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
 }
 
+static void rd_global_configurations(player_type *creature_ptr)
+{
+    rd_u32b(&current_world_ptr->seed_flavor);
+    rd_u32b(&current_world_ptr->seed_town);
+
+    rd_u16b(&creature_ptr->panic_save);
+    rd_u16b(&current_world_ptr->total_winner);
+    rd_u16b(&current_world_ptr->noscore);
+
+    byte tmp8u;
+    rd_byte(&tmp8u);
+    creature_ptr->is_dead = tmp8u;
+
+    rd_byte(&creature_ptr->feeling);
+    rd_world_info(creature_ptr);
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -564,18 +581,7 @@ void rd_extra(player_type *creature_ptr)
         rd_byte(&tmp8u);
 
     strip_bytes(12);
-    rd_u32b(&current_world_ptr->seed_flavor);
-    rd_u32b(&current_world_ptr->seed_town);
-
-    rd_u16b(&creature_ptr->panic_save);
-    rd_u16b(&current_world_ptr->total_winner);
-    rd_u16b(&current_world_ptr->noscore);
-
-    rd_byte(&tmp8u);
-    creature_ptr->is_dead = tmp8u;
-
-    rd_byte(&creature_ptr->feeling);
-    rd_world_info(creature_ptr);
+    rd_global_configurations(creature_ptr);
     if (z_older_than(10, 0, 7))
         creature_ptr->riding = 0;
     else
