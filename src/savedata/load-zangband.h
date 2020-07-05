@@ -19,3 +19,4 @@ void set_zangband_special_attack(player_type *creature_ptr);
 void set_zangband_special_defense(player_type *creature_ptr);
 void set_zangband_action(player_type *creature_ptr);
 void set_zangband_visited_towns(player_type *creature_ptr);
+void set_zangband_quest(player_type *creature_ptr, quest_type *const q_ptr, int loading_quest_index, const QUEST_IDX old_inside_quest);

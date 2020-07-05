@@ -41,9 +41,10 @@
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
 #include "savedata/lore-loader.h"
+#include "savedata/load-zangband.h"
 #include "savedata/option-loader.h"
-#include "savedata/store-loader.h"
 #include "savedata/player-info-loader.h"
+#include "savedata/store-loader.h"
 #include "savedata/world-loader.h"
 #include "spell/spells-status.h"
 #include "system/system-variables.h"
@@ -252,12 +253,11 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         return load_item_result;
 
     byte tmp8u;
-    if (!z_older_than(12, 1, 3))
-    {
+    if (!z_older_than(12, 1, 3)) {
         errr load_town_result = load_town();
         if (load_town_result != 0)
             return load_town_result;
-        
+
         u16b max_quests_load;
         byte max_rquests_load;
         errr load_quest_result = load_quest_info(&max_quests_load, &max_rquests_load);
@@ -278,17 +278,9 @@ static errr exe_reading_savefile(player_type *creature_ptr)
                 continue;
 
             load_quest_details(creature_ptr, q_ptr, i);
-            if (z_older_than(10, 3, 11)) {
-                if (q_ptr->flags & QUEST_FLAG_PRESET) {
-                    q_ptr->dungeon = 0;
-                } else {
-                    init_flags = INIT_ASSIGN;
-                    creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)i;
-
-                    parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-                    creature_ptr->current_floor_ptr->inside_quest = old_inside_quest;
-                }
-            } else {
+            if (z_older_than(10, 3, 11))
+                set_zangband_quest(creature_ptr, q_ptr, i, old_inside_quest);
+            else {
                 rd_byte(&tmp8u);
                 q_ptr->dungeon = tmp8u;
             }

@@ -1,6 +1,7 @@
 ﻿#include "savedata/load-zangband.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
+#include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "game-option/option-flags.h"
 #include "market/bounty.h"
@@ -11,6 +12,7 @@
 #include "player/player-skill.h"
 #include "realm/realm-types.h"
 #include "savedata/load-util.h"
+#include "system/system-variables.h"
 #include "world/world.h"
 
 void load_zangband_options(void)
@@ -216,4 +218,17 @@ void set_zangband_visited_towns(player_type *creature_ptr)
     s32b tmp32s;
     rd_s32b(&tmp32s);
     creature_ptr->visit = 1L;
+}
+
+void set_zangband_quest(player_type *creature_ptr, quest_type *const q_ptr, int loading_quest_index, const QUEST_IDX old_inside_quest)
+{
+    if (q_ptr->flags & QUEST_FLAG_PRESET) {
+        q_ptr->dungeon = 0;
+        return;
+    }
+
+    init_flags = INIT_ASSIGN;
+    creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)loading_quest_index;
+    parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+    creature_ptr->current_floor_ptr->inside_quest = old_inside_quest;
 }
