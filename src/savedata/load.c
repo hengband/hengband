@@ -165,7 +165,7 @@ static errr load_town(void)
     return 23;
 }
 
-static errr load_quest(u16b *max_quests_load, byte *max_rquests_load)
+static errr load_quest_info(u16b *max_quests_load, byte *max_rquests_load)
 {
     rd_u16b(max_quests_load);
     if (z_older_than(11, 0, 7))
@@ -211,6 +211,28 @@ static void load_quest_completion(quest_type *q_ptr)
         rd_u32b(&q_ptr->comptime);
 }
 
+static void load_quest_details(player_type *creature_ptr, quest_type *q_ptr, int loading_quest_index)
+{
+    s16b tmp16s;
+    rd_s16b(&tmp16s);
+    q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
+    rd_s16b(&tmp16s);
+    q_ptr->max_num = (MONSTER_NUMBER)tmp16s;
+    rd_s16b(&q_ptr->type);
+
+    rd_s16b(&q_ptr->r_idx);
+    if ((q_ptr->type == QUEST_TYPE_RANDOM) && (!q_ptr->r_idx))
+        determine_random_questor(creature_ptr, &quest[loading_quest_index]);
+
+    rd_s16b(&q_ptr->k_idx);
+    if (q_ptr->k_idx)
+        a_info[q_ptr->k_idx].gen_flags |= TRG_QUESTITEM;
+
+    byte tmp8u;
+    rd_byte(&tmp8u);
+    q_ptr->flags = tmp8u;
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -238,7 +260,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         
         u16b max_quests_load;
         byte max_rquests_load;
-        errr load_quest_result = load_quest(&max_quests_load, &max_rquests_load);
+        errr load_quest_result = load_quest_info(&max_quests_load, &max_rquests_load);
         if (load_quest_result != 0)
             return load_quest_result;
 
@@ -255,25 +277,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
             if (!is_quest_running)
                 continue;
 
-            s16b tmp16s;
-            rd_s16b(&tmp16s);
-            q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
-            rd_s16b(&tmp16s);
-            q_ptr->max_num = (MONSTER_NUMBER)tmp16s;
-            rd_s16b(&q_ptr->type);
-
-            rd_s16b(&q_ptr->r_idx);
-            if ((q_ptr->type == QUEST_TYPE_RANDOM) && (!q_ptr->r_idx)) {
-                determine_random_questor(creature_ptr, &quest[i]);
-            }
-
-            rd_s16b(&q_ptr->k_idx);
-            if (q_ptr->k_idx)
-                a_info[q_ptr->k_idx].gen_flags |= TRG_QUESTITEM;
-
-            rd_byte(&tmp8u);
-            q_ptr->flags = tmp8u;
-
+            load_quest_details(creature_ptr, q_ptr, i);
             if (z_older_than(10, 3, 11)) {
                 if (q_ptr->flags & QUEST_FLAG_PRESET) {
                     q_ptr->dungeon = 0;
