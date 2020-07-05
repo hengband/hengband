@@ -122,24 +122,16 @@ void rd_extra(player_type *creature_ptr)
         for (int i = 0; i < 64; i++)
             creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
 
-    if (z_older_than(10, 3, 6))
-        for (int i = 0; i < 5; i++)
-            for (int j = 0; j < 60; j++)
-                rd_s16b(&creature_ptr->weapon_exp[i][j]);
-    else
-        for (int i = 0; i < 5; i++)
-            for (int j = 0; j < 64; j++)
-                rd_s16b(&creature_ptr->weapon_exp[i][j]);
+    const int max_weapon_exp_size = z_older_than(10, 3, 6) ? 60 : 64;
+    for (int i = 0; i < 5; i++)
+        for (int j = 0; j < max_weapon_exp_size; j++)
+            rd_s16b(&creature_ptr->weapon_exp[i][j]);
 
     for (int i = 0; i < GINOU_MAX; i++)
         rd_s16b(&creature_ptr->skill_exp[i]);
 
-    if (z_older_than(10, 4, 1)) {
-        if (creature_ptr->pclass != CLASS_BEASTMASTER)
-            creature_ptr->skill_exp[GINOU_RIDING] /= 2;
-
-        creature_ptr->skill_exp[GINOU_RIDING] = MIN(creature_ptr->skill_exp[GINOU_RIDING], s_info[creature_ptr->pclass].s_max[GINOU_RIDING]);
-    }
+    if (z_older_than(10, 4, 1))
+        set_zangband_skill(creature_ptr);
 
     if (z_older_than(10, 3, 14)) {
         for (int i = 0; i < 108; i++)

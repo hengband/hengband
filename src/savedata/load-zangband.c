@@ -1,5 +1,6 @@
 ﻿#include "savedata/load-zangband.h"
 #include "game-option/option-flags.h"
+#include "player/player-skill.h"
 #include "realm/realm-types.h"
 
 void load_zangband_options(void)
@@ -63,4 +64,12 @@ void set_zangband_realm(player_type* creature_ptr)
 
     if (creature_ptr->realm2 == 10)
         creature_ptr->realm2 = REALM_HISSATSU;
+}
+
+void set_zangband_skill(player_type *creature_ptr)
+{
+    if (creature_ptr->pclass != CLASS_BEASTMASTER)
+        creature_ptr->skill_exp[GINOU_RIDING] /= 2;
+
+    creature_ptr->skill_exp[GINOU_RIDING] = MIN(creature_ptr->skill_exp[GINOU_RIDING], s_info[creature_ptr->pclass].s_max[GINOU_RIDING]);
 }
