@@ -349,6 +349,27 @@ static void rd_status(player_type *creature_ptr)
 }
 
 /*!
+ * @brief 現実変容処理の有無及びその残りターン数を読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void rd_alter_reality(player_type *creature_ptr)
+{
+    s16b tmp16s;
+    if (z_older_than(10, 3, 8))
+        creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
+    else {
+        rd_s16b(&tmp16s);
+        creature_ptr->recall_dungeon = (byte)tmp16s;
+    }
+
+    if (h_older_than(1, 5, 0, 0))
+        creature_ptr->alter_reality = 0;
+    else
+        rd_s16b(&creature_ptr->alter_reality);
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -381,19 +402,7 @@ void rd_extra(player_type *creature_ptr)
     rd_s16b(&creature_ptr->blessed);
     rd_s16b(&creature_ptr->tim_invis);
     rd_s16b(&creature_ptr->word_recall);
-    s16b tmp16s;
-    if (z_older_than(10, 3, 8))
-        creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
-    else {
-        rd_s16b(&tmp16s);
-        creature_ptr->recall_dungeon = (byte)tmp16s;
-    }
-
-    if (h_older_than(1, 5, 0, 0))
-        creature_ptr->alter_reality = 0;
-    else
-        rd_s16b(&creature_ptr->alter_reality);
-
+    rd_alter_reality(creature_ptr);
     rd_s16b(&creature_ptr->see_infra);
     rd_s16b(&creature_ptr->tim_infra);
     rd_s16b(&creature_ptr->oppose_fire);
