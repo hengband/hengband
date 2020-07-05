@@ -336,36 +336,6 @@ static errr load_town_quest(player_type *creature_ptr)
     return analyze_wilderness();
 }
 
-static errr load_artifact(void)
-{
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-    if (tmp16u > max_a_idx) {
-        load_note(format(_("伝説のアイテムが多すぎる(%u)！", "Too many (%u) artifacts!"), tmp16u));
-        return 24;
-    }
-
-    byte tmp8u;
-    for (int i = 0; i < tmp16u; i++) {
-        artifact_type *a_ptr = &a_info[i];
-        rd_byte(&tmp8u);
-        a_ptr->cur_num = tmp8u;
-        if (h_older_than(1, 5, 0, 0)) {
-            a_ptr->floor_id = 0;
-            rd_byte(&tmp8u);
-            rd_byte(&tmp8u);
-            rd_byte(&tmp8u);
-        } else {
-            rd_s16b(&a_ptr->floor_id);
-        }
-    }
-
-    if (arg_fiddle)
-        load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
-
-    return 0;
-}
-
 static void load_player_world(player_type *creature_ptr)
 {
     rd_base_info(creature_ptr);

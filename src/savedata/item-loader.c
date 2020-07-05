@@ -1,6 +1,7 @@
 ﻿#include "savedata/item-loader.h"
 #include "art-definition/art-accessory-types.h"
 #include "game-option/runtime-arguments.h"
+#include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-enchant.h"
@@ -279,6 +280,36 @@ errr load_item(void)
 
     if (arg_fiddle)
         load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
+
+    return 0;
+}
+
+errr load_artifact(void)
+{
+    u16b tmp16u;
+    rd_u16b(&tmp16u);
+    if (tmp16u > max_a_idx) {
+        load_note(format(_("伝説のアイテムが多すぎる(%u)！", "Too many (%u) artifacts!"), tmp16u));
+        return 24;
+    }
+
+    byte tmp8u;
+    for (int i = 0; i < tmp16u; i++) {
+        artifact_type *a_ptr = &a_info[i];
+        rd_byte(&tmp8u);
+        a_ptr->cur_num = tmp8u;
+        if (h_older_than(1, 5, 0, 0)) {
+            a_ptr->floor_id = 0;
+            rd_byte(&tmp8u);
+            rd_byte(&tmp8u);
+            rd_byte(&tmp8u);
+        } else {
+            rd_s16b(&a_ptr->floor_id);
+        }
+    }
+
+    if (arg_fiddle)
+        load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
 
     return 0;
 }
