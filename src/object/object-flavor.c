@@ -2214,10 +2214,8 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 		}
 	}
 #else
-	if (object_is_smith(o_ptr))
-	{
+	if (object_is_smith(player_ptr, o_ptr))
 		t = object_desc_str(t, format(" of %s the Smith", player_ptr->name));
-	}
 
 	/* Hack -- Append "Artifact" or "Special" names */
 	if (known && !have_flag(flgs, TR_FULL_NAME))

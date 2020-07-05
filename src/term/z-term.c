@@ -1750,7 +1750,7 @@ errr Term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
         g_ptr = Term->old->c[i];
 
         /* Clear the section so it is redrawn */
-        for (j = x1; j <= x2; j++) {
+        for (int j = x1; j <= x2; j++) {
             /* Hack - set the old character to "none" */
             g_ptr[j] = 0;
         }

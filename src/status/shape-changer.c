@@ -6,6 +6,10 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "grid/grid.h"
+#ifdef JP
+#else
+#include "locale/vowel-checker.h"
+#endif
 #include "mutation/mutation.h"
 #include "player/avatar.h"
 #include "player/player-class.h"

@@ -1372,16 +1372,9 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	init_note(_("[変数を初期化しています...(その他)", "[Initializing values... (misc)]"));
 	if (init_misc(player_ptr)) quit(_("その他の変数を初期化できません", "Cannot initialize misc. values"));
 
-	/* Initialize feature info */
-#ifdef JP
-	init_note("[データの初期化中... (地形)]");
-	if (init_f_info(player_ptr)) quit("地形初期化不能");
-	if (init_feat_variables()) quit("地形初期化不能");
-#else
-	note("[Initializing arrays... (features)]");
-	if (init_f_info(player_ptr)) quit("Cannot initialize features");
-	if (init_feat_variables()) quit("Cannot initialize features");
-#endif
+	init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
+	if (init_f_info(player_ptr)) quit(_("地形初期化不能", "Cannot initialize features"));
+	if (init_feat_variables()) quit(_("地形初期化不能", "Cannot initialize features"));
 
 	/* Initialize object info */
 	init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
