@@ -18,3 +18,4 @@ void set_zangband_gambling_monsters(int i);
 void set_zangband_special_attack(player_type *creature_ptr);
 void set_zangband_special_defense(player_type *creature_ptr);
 void set_zangband_action(player_type *creature_ptr);
+void set_zangband_visited_towns(player_type *creature_ptr);

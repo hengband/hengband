@@ -210,3 +210,10 @@ void set_zangband_action(player_type *creature_ptr)
     if (tmp8u)
         creature_ptr->action = ACTION_LEARN;
 }
+
+void set_zangband_visited_towns(player_type *creature_ptr)
+{
+    s32b tmp32s;
+    rd_s32b(&tmp32s);
+    creature_ptr->visit = 1L;
+}
