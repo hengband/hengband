@@ -521,6 +521,7 @@ hengband_SOURCES = \
 	\
 	savedata/angband-version-comparer.c savedata/angband-version-comparer.h \
 	savedata/birth-loader.c savedata/birth-loader.h \
+	savedata/extra-loader.c savedata/extra-loader.h \
 	savedata/item-loader.c savedata/item-loader.h \
 	savedata/monster-loader.c savedata/monster-loader.h \
 	savedata/old-feature-types.h \
