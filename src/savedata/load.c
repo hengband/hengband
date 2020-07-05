@@ -284,6 +284,25 @@ static void load_wilderness_info(player_type *creature_ptr)
         rd_byte((byte *)&creature_ptr->ambush_flag);
 }
 
+static errr analyze_wilderness(void)
+{
+    s32b wild_x_size;
+    s32b wild_y_size;
+    rd_s32b(&wild_x_size);
+    rd_s32b(&wild_y_size);
+
+    if ((wild_x_size > current_world_ptr->max_wild_x) || (wild_y_size > current_world_ptr->max_wild_y)) {
+        load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
+        return (23);
+    }
+
+    for (int i = 0; i < wild_x_size; i++)
+        for (int j = 0; j < wild_y_size; j++)
+            rd_u32b(&wilderness[j][i].seed);
+
+    return 0;
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -302,7 +321,6 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (load_item_result != 0)
         return load_item_result;
 
-    byte tmp8u;
     if (!z_older_than(12, 1, 3)) {
         errr load_town_result = load_town();
         if (load_town_result != 0)
@@ -323,21 +341,9 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         }
 
         load_wilderness_info(creature_ptr);
-        s32b wild_x_size;
-        s32b wild_y_size;
-        rd_s32b(&wild_x_size);
-        rd_s32b(&wild_y_size);
-
-        if ((wild_x_size > current_world_ptr->max_wild_x) || (wild_y_size > current_world_ptr->max_wild_y)) {
-            load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
-            return (23);
-        }
-
-        for (int i = 0; i < wild_x_size; i++) {
-            for (int j = 0; j < wild_y_size; j++) {
-                rd_u32b(&wilderness[j][i].seed);
-            }
-        }
+        errr wilderness_analysis_result = analyze_wilderness();
+        if (wilderness_analysis_result != 0)
+            return wilderness_analysis_result;
     }
 
     if (arg_fiddle)
@@ -347,9 +353,10 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     rd_u16b(&tmp16u);
     if (tmp16u > max_a_idx) {
         load_note(format(_("伝説のアイテムが多すぎる(%u)！", "Too many (%u) artifacts!"), tmp16u));
-        return (24);
+        return 24;
     }
 
+    byte tmp8u;
     for (int i = 0; i < tmp16u; i++) {
         artifact_type *a_ptr = &a_info[i];
 
