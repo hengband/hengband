@@ -445,6 +445,38 @@ static void set_undead_turn_limit(player_type *creature_ptr)
     }
 }
 
+static void rd_world_info(player_type *creature_ptr)
+{
+    set_undead_turn_limit(creature_ptr);
+    current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+    rd_s32b(&creature_ptr->current_floor_ptr->generated_turn);
+    if (h_older_than(1, 7, 0, 4))
+        creature_ptr->feeling_turn = creature_ptr->current_floor_ptr->generated_turn;
+    else
+        rd_s32b(&creature_ptr->feeling_turn);
+
+    rd_s32b(&current_world_ptr->game_turn);
+    if (z_older_than(10, 3, 12))
+        current_world_ptr->dungeon_turn = current_world_ptr->game_turn;
+    else
+        rd_s32b(&current_world_ptr->dungeon_turn);
+
+    if (z_older_than(11, 0, 13))
+        set_zangband_game_turns(creature_ptr);
+
+    if (z_older_than(10, 3, 13))
+        current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
+    else
+        rd_s32b(&current_world_ptr->arena_start_turn);
+
+    if (z_older_than(10, 0, 3))
+        determine_daily_bounty(creature_ptr, TRUE);
+    else {
+        rd_s16b(&today_mon);
+        rd_s16b(&creature_ptr->today_mon);
+    }
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -521,36 +553,7 @@ void rd_extra(player_type *creature_ptr)
     creature_ptr->is_dead = tmp8u;
 
     rd_byte(&creature_ptr->feeling);
-    set_undead_turn_limit(creature_ptr);
-    current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-    rd_s32b(&creature_ptr->current_floor_ptr->generated_turn);
-    if (h_older_than(1, 7, 0, 4)) {
-        creature_ptr->feeling_turn = creature_ptr->current_floor_ptr->generated_turn;
-    } else {
-        rd_s32b(&creature_ptr->feeling_turn);
-    }
-
-    rd_s32b(&current_world_ptr->game_turn);
-    if (z_older_than(10, 3, 12))
-        current_world_ptr->dungeon_turn = current_world_ptr->game_turn;
-    else
-        rd_s32b(&current_world_ptr->dungeon_turn);
-
-    if (z_older_than(11, 0, 13))
-        set_zangband_game_turns(creature_ptr);
-
-    if (z_older_than(10, 3, 13))
-        current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
-    else
-        rd_s32b(&current_world_ptr->arena_start_turn);
-
-    if (z_older_than(10, 0, 3))
-        determine_daily_bounty(creature_ptr, TRUE);
-    else {
-        rd_s16b(&today_mon);
-        rd_s16b(&creature_ptr->today_mon);
-    }
-
+    rd_world_info(creature_ptr);
     if (z_older_than(10, 0, 7))
         creature_ptr->riding = 0;
     else
