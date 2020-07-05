@@ -3032,6 +3032,19 @@ static void calc_to_ac(player_type *creature_ptr)
 {
     creature_ptr->to_a = 0;
 
+    if (creature_ptr->mimic_form) {
+        switch (creature_ptr->mimic_form) {
+        case MIMIC_DEMON:
+            creature_ptr->to_a += 10;
+            break;
+        case MIMIC_DEMON_LORD:
+            creature_ptr->to_a += 20;
+            break;
+        case MIMIC_VAMPIRE:
+            creature_ptr->to_a += 10;
+        }
+    }
+	
 	if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->to_a += 10 + creature_ptr->lev / 2;
     }
@@ -3155,6 +3168,19 @@ static void calc_to_ac_display(player_type *creature_ptr)
 {
     creature_ptr->dis_to_a = 0;
 
+    if (creature_ptr->mimic_form) {
+        switch (creature_ptr->mimic_form) {
+        case MIMIC_DEMON:
+            creature_ptr->dis_to_a += 10;
+            break;
+        case MIMIC_DEMON_LORD:
+            creature_ptr->dis_to_a += 20;
+            break;
+        case MIMIC_VAMPIRE:
+            creature_ptr->dis_to_a += 10;
+        }
+    }
+	
 	if (creature_ptr->pclass == CLASS_BERSERKER) {
 		creature_ptr->dis_to_a += 10 + creature_ptr->lev / 2;
     }
