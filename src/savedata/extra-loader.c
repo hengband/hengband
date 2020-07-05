@@ -32,24 +32,6 @@
 #include "savedata/player-info-loader.h"
 #include "world/world.h"
 
-/*!
- * @brief 変愚蛮怒 v1.5.0より大きなバージョンにおいて、ダミーでモンスターを読み込む
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-static void rd_dummy_monsters(player_type *creature_ptr)
-{
-    if (h_older_than(1, 5, 0, 2))
-        return;
-
-    s16b tmp16s;
-    rd_s16b(&tmp16s);
-    for (int i = 0; i < tmp16s; i++) {
-        monster_type dummy_mon;
-        rd_monster(creature_ptr, &dummy_mon);
-    }
-}
-
 static void set_undead_turn_limit(player_type *creature_ptr)
 {
     switch (creature_ptr->start_race) {
