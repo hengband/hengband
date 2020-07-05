@@ -408,7 +408,7 @@ static void rd_special_attack(player_type *creature_ptr)
     rd_u32b(&creature_ptr->special_attack);
 }
 
-static void rd_action(player_type *creature_ptr)
+static void rd_special_action(player_type *creature_ptr)
 {
     if (creature_ptr->special_attack & KAMAE_MASK) {
         creature_ptr->action = ACTION_KAMAE;
@@ -552,6 +552,13 @@ static void rd_global_configurations(player_type *creature_ptr)
     rd_world_info(creature_ptr);
 }
 
+static void rd_autopick(player_type *creature_ptr)
+{
+    byte tmp8u;
+    rd_byte(&tmp8u);
+    creature_ptr->autopick_autoregister = tmp8u != 0;
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -561,13 +568,12 @@ void rd_extra(player_type *creature_ptr)
 {
     rd_player_status(creature_ptr);
     rd_special_attack(creature_ptr);
-    rd_action(creature_ptr);
+    rd_special_action(creature_ptr);
     rd_special_defense(creature_ptr);
     rd_byte(&creature_ptr->knowledge);
-    byte tmp8u;
-    rd_byte(&tmp8u);
-    creature_ptr->autopick_autoregister = tmp8u != 0;
+    rd_autopick(creature_ptr);
 
+    byte tmp8u;
     rd_byte(&tmp8u);
     rd_byte(&tmp8u);
     creature_ptr->action = (ACTION_IDX)tmp8u;
