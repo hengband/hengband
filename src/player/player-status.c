@@ -1467,11 +1467,6 @@ void calc_bonuses(player_type *creature_ptr)
 
 	if (creature_ptr->sh_fire) creature_ptr->lite = TRUE;
 
-	if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID))
-	{
-		creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
-	}
-
 	if (creature_ptr->realm1 == REALM_HEX)
 	{
 		if (hex_spelling(creature_ptr, HEX_DETECT_EVIL)) creature_ptr->esp_evil = TRUE;
@@ -1490,7 +1485,6 @@ void calc_bonuses(player_type *creature_ptr)
 		if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK))
 		{
 			creature_ptr->sh_elec = TRUE;
-			creature_ptr->pspeed += 3;
 		}
 	}
 
@@ -3911,6 +3905,10 @@ static void calc_to_ac(player_type *creature_ptr)
 {
     creature_ptr->to_a = 0;
 
+	if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
+        creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
+    }
+
     if (creature_ptr->muta3 & MUT3_WART_SKIN) {
         creature_ptr->to_a += 5;
     }
@@ -4003,6 +4001,10 @@ static void calc_to_ac_display(player_type *creature_ptr)
 {
     creature_ptr->dis_to_a = 0;
 
+	if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
+        creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
+    }
+
     if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && !heavy_armor(creature_ptr)) {
         if (!(creature_ptr->inventory_list[INVEN_BODY].k_idx)) {
             creature_ptr->dis_to_a += (creature_ptr->lev * 3) / 2;
@@ -4022,10 +4024,6 @@ static void calc_to_ac_display(player_type *creature_ptr)
         if (!(creature_ptr->inventory_list[INVEN_FEET].k_idx)) {
             creature_ptr->dis_to_a += (creature_ptr->lev / 3);
         }
-    }
-
-	if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
-        creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
     }
 
 	if (creature_ptr->realm1 == REALM_HEX) {
@@ -4149,6 +4147,12 @@ static void calc_speed(player_type *creature_ptr)
 
         if (creature_ptr->slow) {
             creature_ptr->pspeed -= 10;
+        }
+
+		if (creature_ptr->realm1 == REALM_HEX) {
+			if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK)) {
+				creature_ptr->pspeed += 3;
+			}
         }
 
 		if (creature_ptr->food >= PY_FOOD_MAX)
