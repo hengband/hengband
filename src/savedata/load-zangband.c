@@ -196,3 +196,9 @@ void set_zangband_special_attack(player_type *creature_ptr)
 
     creature_ptr->ele_attack = 0;
 }
+
+void set_zangband_special_defense(player_type *creature_ptr)
+{
+    creature_ptr->ele_immune = 0;
+    creature_ptr->special_defense = 0;
+}

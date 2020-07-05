@@ -454,10 +454,9 @@ void rd_extra(player_type *creature_ptr)
     else if (creature_ptr->special_attack & KATA_MASK)
         creature_ptr->action = ACTION_KATA;
 
-    if (z_older_than(10, 0, 12)) {
-        creature_ptr->ele_immune = 0;
-        creature_ptr->special_defense = 0;
-    } else {
+    if (z_older_than(10, 0, 12))
+        set_zangband_special_defense(creature_ptr);
+    else {
         rd_s16b(&creature_ptr->ele_immune);
         rd_u32b(&creature_ptr->special_defense);
     }
