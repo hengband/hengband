@@ -524,6 +524,7 @@ hengband_SOURCES = \
 	savedata/birth-loader.c savedata/birth-loader.h \
 	savedata/dummy-loader.c savedata/dummy-loader.h \
 	savedata/extra-loader.c savedata/extra-loader.h \
+	savedata/inventory-loader.c savedata/inventory-loader.h \
 	savedata/item-loader.c savedata/item-loader.h \
 	savedata/monster-loader.c savedata/monster-loader.h \
 	savedata/old-feature-types.h \

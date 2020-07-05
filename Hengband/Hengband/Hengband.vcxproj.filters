@@ -1652,6 +1652,9 @@
     <ClCompile Include="..\..\src\savedata\player-attack-loader.c">
       <Filter>savedata</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\savedata\inventory-loader.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3608,6 +3611,9 @@
       <Filter>savedata</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\savedata\player-attack-loader.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\inventory-loader.h">
       <Filter>savedata</Filter>
     </ClInclude>
   </ItemGroup>

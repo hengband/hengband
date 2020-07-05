@@ -240,6 +240,7 @@
     <ClCompile Include="..\..\src\savedata\birth-loader.c" />
     <ClCompile Include="..\..\src\savedata\dummy-loader.c" />
     <ClCompile Include="..\..\src\savedata\extra-loader.c" />
+    <ClCompile Include="..\..\src\savedata\inventory-loader.c" />
     <ClCompile Include="..\..\src\savedata\item-loader.c" />
     <ClCompile Include="..\..\src\savedata\load-util.c" />
     <ClCompile Include="..\..\src\savedata\load-v1-3-0.c" />
@@ -716,6 +717,7 @@
     <ClInclude Include="..\..\src\savedata\birth-loader.h" />
     <ClInclude Include="..\..\src\savedata\dummy-loader.h" />
     <ClInclude Include="..\..\src\savedata\extra-loader.h" />
+    <ClInclude Include="..\..\src\savedata\inventory-loader.h" />
     <ClInclude Include="..\..\src\savedata\item-loader.h" />
     <ClInclude Include="..\..\src\savedata\load-util.h" />
     <ClInclude Include="..\..\src\savedata\load-v1-7-0.h" />

@@ -32,6 +32,11 @@ typedef enum old_monster_breath_type {
 	RF4_BR_WALL = 0x04000000, /* Breathe Force */
 } old_monster_breath_type;
 
+extern const int OLD_QUEST_WATER_CAVE;
+extern const int QUEST_OLD_CASTLE;
+extern const int QUEST_ROYAL_CRYPT; 
+
 void rd_item_old(player_type *player_ptr, object_type *o_ptr);
 void rd_monster_old(player_type *player_ptr, monster_type *m_ptr);
 void set_old_lore(monster_race *r_ptr, const MONRACE_IDX r_idx);
+errr rd_dungeon_old(player_type *player_ptr);
