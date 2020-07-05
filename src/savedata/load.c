@@ -73,6 +73,23 @@ static void rd_version_info(void)
     rd_u16b(&current_world_ptr->sf_saves);
 }
 
+static void rd_system_info(void)
+{
+    rd_byte(&kanji_code);
+
+    rd_randomizer();
+    if (arg_fiddle)
+        load_note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
+
+    rd_options();
+    if (arg_fiddle)
+        load_note(_("オプションをロードしました", "Loaded Option Flags"));
+
+    rd_messages();
+    if (arg_fiddle)
+        load_note(_("メッセージをロードしました", "Loaded Messages"));
+}
+
 /*!
  * @brief メッセージログを読み込む / Read the saved messages
  * @return なし
@@ -125,19 +142,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
 {
     rd_version_info();
     rd_dummy3();
-    rd_byte(&kanji_code);
-
-    rd_randomizer();
-    if (arg_fiddle)
-        load_note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
-
-    rd_options();
-    if (arg_fiddle)
-        load_note(_("オプションをロードしました", "Loaded Option Flags"));
-
-    rd_messages();
-    if (arg_fiddle)
-        load_note(_("メッセージをロードしました", "Loaded Messages"));
+    rd_system_info();
 
     /* ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster */
     const int MAX_TRIES = 100;
