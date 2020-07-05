@@ -28,7 +28,25 @@
 #include "world/world.h"
 
 /*!
+ * @brief 腕力などの基本ステータス情報を読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void rd_base_status(player_type *creature_ptr)
+{
+    for (int i = 0; i < A_MAX; i++)
+        rd_s16b(&creature_ptr->stat_max[i]);
+
+    for (int i = 0; i < A_MAX; i++)
+        rd_s16b(&creature_ptr->stat_max_max[i]);
+
+    for (int i = 0; i < A_MAX; i++)
+        rd_s16b(&creature_ptr->stat_cur[i]);
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void rd_extra(player_type *creature_ptr)
@@ -75,14 +93,7 @@ void rd_extra(player_type *creature_ptr)
     rd_s16b(&creature_ptr->age);
     rd_s16b(&creature_ptr->ht);
     rd_s16b(&creature_ptr->wt);
-
-    for (int i = 0; i < A_MAX; i++)
-        rd_s16b(&creature_ptr->stat_max[i]);
-    for (int i = 0; i < A_MAX; i++)
-        rd_s16b(&creature_ptr->stat_max_max[i]);
-    for (int i = 0; i < A_MAX; i++)
-        rd_s16b(&creature_ptr->stat_cur[i]);
-
+    rd_base_status(creature_ptr);
     strip_bytes(24);
     rd_s32b(&creature_ptr->au);
 
@@ -91,6 +102,7 @@ void rd_extra(player_type *creature_ptr)
         creature_ptr->max_max_exp = creature_ptr->max_exp;
     else
         rd_s32b(&creature_ptr->max_max_exp);
+
     rd_s32b(&creature_ptr->exp);
 
     if (h_older_than(1, 7, 0, 3)) {
@@ -105,10 +117,10 @@ void rd_extra(player_type *creature_ptr)
 
     for (int i = 0; i < 64; i++)
         rd_s16b(&creature_ptr->spell_exp[i]);
-    if ((creature_ptr->pclass == CLASS_SORCERER) && z_older_than(10, 4, 2)) {
+
+    if ((creature_ptr->pclass == CLASS_SORCERER) && z_older_than(10, 4, 2))
         for (int i = 0; i < 64; i++)
             creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
-    }
 
     if (z_older_than(10, 3, 6))
         for (int i = 0; i < 5; i++)
@@ -118,11 +130,14 @@ void rd_extra(player_type *creature_ptr)
         for (int i = 0; i < 5; i++)
             for (int j = 0; j < 64; j++)
                 rd_s16b(&creature_ptr->weapon_exp[i][j]);
+
     for (int i = 0; i < GINOU_MAX; i++)
         rd_s16b(&creature_ptr->skill_exp[i]);
+
     if (z_older_than(10, 4, 1)) {
         if (creature_ptr->pclass != CLASS_BEASTMASTER)
             creature_ptr->skill_exp[GINOU_RIDING] /= 2;
+
         creature_ptr->skill_exp[GINOU_RIDING] = MIN(creature_ptr->skill_exp[GINOU_RIDING], s_info[creature_ptr->pclass].s_max[GINOU_RIDING]);
     }
 
