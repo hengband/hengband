@@ -253,6 +253,40 @@ void rd_dummy1(void)
 }
 
 /*!
+ * @brief プレーヤーの最大HP/現在HPを読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void rd_hp(player_type *creature_ptr)
+{
+    if (h_older_than(1, 7, 0, 3)) {
+        set_hp_old(creature_ptr);
+        return;
+    }
+
+    rd_s32b(&creature_ptr->mhp);
+    rd_s32b(&creature_ptr->chp);
+    rd_u32b(&creature_ptr->chp_frac);
+}
+
+/*!
+ * @brief プレーヤーの最大MP/現在MPを読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void rd_mana(player_type *creature_ptr)
+{
+    if (h_older_than(1, 7, 0, 3)) {
+        set_mana_old(creature_ptr);
+        return;
+    }
+
+    rd_s32b(&creature_ptr->msp);
+    rd_s32b(&creature_ptr->csp);
+    rd_u32b(&creature_ptr->csp_frac);
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -269,22 +303,8 @@ void rd_extra(player_type *creature_ptr)
     rd_bounty_uniques(creature_ptr);
     rd_arena(creature_ptr);
     rd_dummy1();
-    if (h_older_than(1, 7, 0, 3))
-        set_hp_old(creature_ptr);
-    else {
-        rd_s32b(&creature_ptr->mhp);
-        rd_s32b(&creature_ptr->chp);
-        rd_u32b(&creature_ptr->chp_frac);
-    }
-
-    if (h_older_than(1, 7, 0, 3))
-        set_mana_old(creature_ptr);
-    else {
-        rd_s32b(&creature_ptr->msp);
-        rd_s32b(&creature_ptr->csp);
-        rd_u32b(&creature_ptr->csp_frac);
-    }
-
+    rd_hp(creature_ptr);
+    rd_mana(creature_ptr);
     rd_s16b(&creature_ptr->max_plv);
     if (z_older_than(10, 3, 8))
         rd_zangband_dungeon();
@@ -334,6 +354,7 @@ void rd_extra(player_type *creature_ptr)
     rd_s16b(&creature_ptr->blessed);
     rd_s16b(&creature_ptr->tim_invis);
     rd_s16b(&creature_ptr->word_recall);
+    s16b tmp16s;
     if (z_older_than(10, 3, 8))
         creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
     else {
