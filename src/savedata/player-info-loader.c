@@ -6,6 +6,7 @@
 #include "savedata/load-v1-3-0.h"
 #include "savedata/load-v1-7-0.h"
 #include "savedata/load-zangband.h"
+#include "world/world.h"
 
 void rd_base_info(player_type *creature_ptr)
 {
@@ -131,4 +132,15 @@ void rd_race(player_type *creature_ptr)
     }
     
     set_race(creature_ptr);
+}
+
+void rd_bounty_uniques(player_type *creature_ptr)
+{
+    if (z_older_than(10, 0, 3)) {
+        set_zangband_bounty_uniques(creature_ptr);
+        return;
+    }
+
+    for (int i = 0; i < MAX_BOUNTY; i++)
+        rd_s16b(&current_world_ptr->bounty_r_idx[i]);
 }
