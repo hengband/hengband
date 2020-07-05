@@ -1,5 +1,7 @@
 ﻿#pragma once 
 
+#include "system/angband.h"
+
 /* 人畜無害なenumヘッダを先に読み込む */
 #include "player/player-classes-types.h"
 #include "player/player-race-types.h"
