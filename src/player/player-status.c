@@ -3146,6 +3146,10 @@ static void calc_to_ac(player_type *creature_ptr)
     if (is_blessed(creature_ptr)) {
         creature_ptr->to_a += 5;
     }
+
+    if (creature_ptr->shero) {
+        creature_ptr->to_a -= 10;
+    }
 }
 
 static void calc_base_ac_display(player_type *creature_ptr)
@@ -3286,6 +3290,10 @@ static void calc_to_ac_display(player_type *creature_ptr)
 
     if (is_blessed(creature_ptr)) {
         creature_ptr->dis_to_a += 5;
+    }
+
+    if (creature_ptr->shero) {
+        creature_ptr->dis_to_a -= 10;
     }
 }
 

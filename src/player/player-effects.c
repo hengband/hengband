@@ -3988,8 +3988,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->dis_to_h_b -= 12;
         creature_ptr->dis_to_d[0] += 3 + (creature_ptr->lev / 5);
         creature_ptr->dis_to_d[1] += 3 + (creature_ptr->lev / 5);
-        creature_ptr->to_a -= 10;
-        creature_ptr->dis_to_a -= 10;
         creature_ptr->skill_dig += 30;
     }
 
