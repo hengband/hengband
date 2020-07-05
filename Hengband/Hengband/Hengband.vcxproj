@@ -243,6 +243,7 @@
     <ClCompile Include="..\..\src\savedata\load-zangband.c" />
     <ClCompile Include="..\..\src\savedata\lore-loader.c" />
     <ClCompile Include="..\..\src\savedata\monster-loader.c" />
+    <ClCompile Include="..\..\src\savedata\option-loader.c" />
     <ClCompile Include="..\..\src\savedata\store-loader.c" />
     <ClCompile Include="..\..\src\specific-object\death-crimson.c" />
     <ClCompile Include="..\..\src\spell-kind\blood-curse.c" />
@@ -710,6 +711,7 @@
     <ClInclude Include="..\..\src\savedata\lore-loader.h" />
     <ClInclude Include="..\..\src\savedata\monster-loader.h" />
     <ClInclude Include="..\..\src\savedata\old-feature-types.h" />
+    <ClInclude Include="..\..\src\savedata\option-loader.h" />
     <ClInclude Include="..\..\src\savedata\savedata-flag-types.h" />
     <ClInclude Include="..\..\src\savedata\store-loader.h" />
     <ClInclude Include="..\..\src\specific-object\death-crimson.h" />
