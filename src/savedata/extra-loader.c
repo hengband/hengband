@@ -193,6 +193,20 @@ static void set_gambling_monsters(void)
     }
 }
 
+static void rd_phase_out(player_type *creature_ptr)
+{
+    s16b tmp16s;
+    rd_s16b(&tmp16s);
+    creature_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
+    rd_s16b(&creature_ptr->current_floor_ptr->inside_quest);
+    if (z_older_than(10, 3, 5))
+        creature_ptr->phase_out = FALSE;
+    else {
+        rd_s16b(&tmp16s);
+        creature_ptr->phase_out = (bool)tmp16s;
+    }
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -219,20 +233,12 @@ void rd_extra(player_type *creature_ptr)
         if (creature_ptr->arena_number >= 99)
             creature_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
 
-    s16b tmp16s;
-    rd_s16b(&tmp16s);
-    creature_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
-    rd_s16b(&creature_ptr->current_floor_ptr->inside_quest);
-    if (z_older_than(10, 3, 5))
-        creature_ptr->phase_out = FALSE;
-    else {
-        rd_s16b(&tmp16s);
-        creature_ptr->phase_out = (bool)tmp16s;
-    }
-
+    rd_phase_out(creature_ptr);
     byte tmp8u;
     rd_byte(&creature_ptr->exit_bldg);
     rd_byte(&tmp8u);
+
+    s16b tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->oldpx = (POSITION)tmp16s;
     rd_s16b(&tmp16s);
