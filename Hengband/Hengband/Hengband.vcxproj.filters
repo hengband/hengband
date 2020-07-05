@@ -1628,6 +1628,9 @@
     <ClCompile Include="..\..\src\savedata\option-loader.c">
       <Filter>savedata</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\savedata\birth-loader.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3557,6 +3560,9 @@
       <Filter>savedata</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\savedata\option-loader.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\birth-loader.h">
       <Filter>savedata</Filter>
     </ClInclude>
   </ItemGroup>

@@ -520,6 +520,7 @@ hengband_SOURCES = \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	\
 	savedata/angband-version-comparer.c savedata/angband-version-comparer.h \
+	savedata/birth-loader.c savedata/birth-loader.h \
 	savedata/item-loader.c savedata/item-loader.h \
 	savedata/monster-loader.c savedata/monster-loader.h \
 	savedata/old-feature-types.h \
