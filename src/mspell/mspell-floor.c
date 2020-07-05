@@ -5,6 +5,7 @@
  */
 
 #include "mspell/mspell-floor.h"
+#include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"

@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-sight.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"

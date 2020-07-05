@@ -1,5 +1,6 @@
 ﻿#include "cmd-item/cmd-usestaff.h"
 #include "cmd/cmd-basic.h"
+#include "core/player-update-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"

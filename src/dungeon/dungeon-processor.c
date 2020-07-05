@@ -3,6 +3,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "core/hp-mp-regenerator.h"
 #include "core/player-processor.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/turn-compensator.h"
 #include "dungeon/dungeon.h"

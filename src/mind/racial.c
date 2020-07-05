@@ -16,6 +16,7 @@
 #include "cmd-item/cmd-zapwand.h"
 #include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "game-option/disturbance-options.h"

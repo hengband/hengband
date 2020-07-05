@@ -1,4 +1,5 @@
 ﻿#include "object-enchant/object-curse.h"
+#include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/tr-types.h"

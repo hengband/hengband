@@ -18,6 +18,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-quaff.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"

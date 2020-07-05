@@ -1,6 +1,7 @@
 ﻿#include "market/building-craft-fix.h"
 #include "art-definition/art-sword-types.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"

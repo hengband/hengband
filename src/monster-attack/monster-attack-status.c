@@ -5,6 +5,7 @@
  */
 
 #include "monster-attack/monster-attack-status.h"
+#include "core/player-update-types.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"

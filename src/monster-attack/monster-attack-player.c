@@ -12,6 +12,7 @@
 #include "combat/aura-counterattack.h"
 #include "combat/combat-options-type.h"
 #include "combat/hallucination-attacks-table.h"
+#include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "inventory/inventory-slot-types.h"

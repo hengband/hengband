@@ -113,6 +113,7 @@ hengband_SOURCES = \
 	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
 	core/output-updater.c core/output-updater.h \
 	core/player-processor.c core/player-processor.h \
+	core/player-update-types.h \
 	core/scores.c core/scores.h \
 	core/show-file.c core/show-file.h \
 	core/special-internal-keys.h \

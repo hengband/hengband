@@ -1,5 +1,6 @@
 ﻿#include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"

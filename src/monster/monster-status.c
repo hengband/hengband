@@ -2,6 +2,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-visual/cmd-draw.h"
+#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

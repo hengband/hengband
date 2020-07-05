@@ -8,6 +8,7 @@
 #include "art-definition/art-accessory-types.h"
 #include "art-definition/art-armor-types.h"
 #include "cmd/cmd-basic.h"
+#include "core/player-update-types.h"
 #include "core/show-file.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"

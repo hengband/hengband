@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-equipment.h"
+#include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/racial-android.h"
 #include "object-hook/hook-enchant.h"

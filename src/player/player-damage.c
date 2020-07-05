@@ -3,6 +3,7 @@
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"

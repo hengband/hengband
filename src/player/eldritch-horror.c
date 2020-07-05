@@ -5,6 +5,7 @@
  */
 
 #include "player/eldritch-horror.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "locale/vowel-checker.h"

@@ -1,4 +1,5 @@
 ﻿#include "status/buff-setter.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "player/avatar.h"

@@ -30,6 +30,7 @@
 #include "cmd-visual/cmd-draw.h"
 #include "cmd-visual/cmd-visuals.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "mind/mind-sniper.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-events.h"

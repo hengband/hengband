@@ -1,4 +1,5 @@
 #include "spell-kind/spells-neighbor.h"
+#include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "grid/feature.h"

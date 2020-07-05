@@ -14,6 +14,7 @@
 #include "savedata/save.h"
 #include "birth/quick-start.h"
 #include "cmd-building/cmd-building.h"
+#include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-events.h"

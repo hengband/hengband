@@ -1,4 +1,5 @@
 ﻿#include "object/lite-processor.h"
+#include "core/player-update-types.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"

@@ -1,4 +1,5 @@
 ﻿#include "status/sight-setter.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "player/player-move.h"

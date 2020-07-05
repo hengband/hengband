@@ -5,6 +5,7 @@
  */
 
 #include "mspell/mspell-special.h"
+#include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"

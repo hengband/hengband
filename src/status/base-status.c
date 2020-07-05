@@ -1,4 +1,5 @@
 ﻿#include "status/base-status.h"
+#include "core/player-update-types.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/item-feeling.h"

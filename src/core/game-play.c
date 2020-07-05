@@ -19,6 +19,7 @@
 #include "core/game-closer.h"
 #include "core/output-updater.h"
 #include "core/player-processor.h"
+#include "core/player-update-types.h"
 #include "core/scores.h"
 #include "core/speed-table.h"
 #include "core/status-reseter.h"

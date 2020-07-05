@@ -16,6 +16,7 @@
 #include "cmd-io/cmd-save.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

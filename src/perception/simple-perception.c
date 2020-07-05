@@ -6,6 +6,7 @@
 
 #include "perception/simple-perception.h"
 #include "autopick/autopick.h"
+#include "core/player-update-types.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-describer.h"

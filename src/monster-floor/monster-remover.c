@@ -1,4 +1,5 @@
 ﻿#include "monster-floor/monster-remover.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"

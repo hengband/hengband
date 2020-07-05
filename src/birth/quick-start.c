@@ -2,6 +2,7 @@
 #include "birth/birth-stat.h"
 #include "birth/birth-util.h"
 #include "birth/game-play-initializer.h"
+#include "core/player-update-types.h"
 #include "io/input-key-acceptor.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"

@@ -1,4 +1,5 @@
 ﻿#include "floor/floor.h"
+#include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"

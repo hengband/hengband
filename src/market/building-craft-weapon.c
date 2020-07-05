@@ -2,6 +2,7 @@
 #include "art-definition/art-sword-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/shoot.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-slot-types.h"

@@ -361,24 +361,6 @@ typedef struct player_type
 	POSITION cur_lite;		/* Radius of lite (if any) */
 
 	BIT_FLAGS update;	/* Pending Updates */
-#define PU_BONUS        0x00000001L     /*!< ステータス更新フラグ: 能力値修正 / Calculate bonuses */
-#define PU_TORCH        0x00000002L     /*!< ステータス更新フラグ: 光源半径 / Calculate torch radius */
-#define PU_HP           0x00000010L     /*!< ステータス更新フラグ: HP / Calculate chp and mhp */
-#define PU_MANA         0x00000020L     /*!< ステータス更新フラグ: MP / Calculate csp and msp */
-#define PU_SPELLS       0x00000040L     /*!< ステータス更新フラグ: 魔法学習数 / Calculate spells */
-#define PU_COMBINE      0x00000100L     /*!< アイテム処理フラグ: アイテムの結合を要する / Combine the pack */
-#define PU_REORDER      0x00000200L     /*!< アイテム処理フラグ: アイテムの並び替えを要する / Reorder the pack */
-#define PU_AUTODESTROY  0x00000400L     /*!< アイテム処理フラグ: アイテムの自動破壊を要する / Auto-destroy marked item */
-#define PU_UN_VIEW      0x00010000L     /*!< ステータス更新フラグ: 地形の視界外化 / Forget view */
-#define PU_UN_LITE      0x00020000L     /*!< ステータス更新フラグ: 明暗範囲の視界外化 / Forget lite */
-#define PU_VIEW         0x00100000L     /*!< ステータス更新フラグ: 視界 / Update view */
-#define PU_LITE         0x00200000L     /*!< ステータス更新フラグ: 明暗範囲 / Update lite */
-#define PU_MON_LITE     0x00400000L     /*!< ステータス更新フラグ: モンスターの光源範囲 / Monster illumination */
-#define PU_DELAY_VIS    0x00800000L     /*!< ステータス更新フラグ: 視界の追加更新 / Mega-Hack -- Delayed visual update */
-#define PU_MONSTERS     0x01000000L     /*!< ステータス更新フラグ: モンスターのステータス / Update monsters */
-#define PU_DISTANCE     0x02000000L     /*!< ステータス更新フラグ: プレイヤーとモンスターの距離 / Update distances */
-#define PU_FLOW         0x10000000L     /*!< ステータス更新フラグ: プレイヤーから各マスへの到達距離 / Update flow */
-
 	BIT_FLAGS redraw;	/* Normal Redraws */
 #define PR_MISC         0x00000001L     /*!< 再描画フラグ: 種族と職業 / Display Race/Class */
 #define PR_TITLE        0x00000002L     /*!< 再描画フラグ: 称号 / Display Title */

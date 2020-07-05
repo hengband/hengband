@@ -1,5 +1,6 @@
 ﻿#include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
+#include "core/player-update-types.h"
 #include "game-option/input-options.h"
 #include "main/sound-of-music.h"
 #include "monster-race/race-indice-types.h"

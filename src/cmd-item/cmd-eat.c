@@ -6,6 +6,7 @@
 
 #include "cmd-item/cmd-eat.h"
 #include "core/hp-mp-processor.h"
+#include "core/player-update-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"

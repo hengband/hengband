@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-fetcher.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "grid/feature.h"

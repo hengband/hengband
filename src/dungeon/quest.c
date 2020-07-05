@@ -1,6 +1,7 @@
 ﻿#include "dungeon/quest.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"

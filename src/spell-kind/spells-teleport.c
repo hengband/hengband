@@ -6,6 +6,7 @@
 
 #include "spell-kind/spells-teleport.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"

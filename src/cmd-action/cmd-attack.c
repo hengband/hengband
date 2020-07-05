@@ -9,6 +9,7 @@
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
