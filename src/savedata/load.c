@@ -155,10 +155,10 @@ static void rd_randomizer(void)
 }
 
 /*!
- * @brief ロード処理全体のサブ関数 / Actually read the savefile
+ * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
  */
-static errr rd_savefile_new_aux(player_type *creature_ptr)
+static errr exe_reading_savefile(player_type *creature_ptr)
 {
     u32b n_x_check, n_v_check;
     u32b o_x_check, o_v_check;
@@ -606,11 +606,11 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 }
 
 /*!
- * @brief ロード処理全体のメイン関数 / Actually read the savefile
+ * @brief セーブファイル読み込み処理 (UIDチェック等含む) / Reading the savefile (including UID check)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  */
-errr rd_savefile_new(player_type *player_ptr)
+errr rd_savefile(player_type *player_ptr)
 {
     safe_setuid_grab(player_ptr);
     loading_savefile = angband_fopen(savefile, "rb");
@@ -618,7 +618,7 @@ errr rd_savefile_new(player_type *player_ptr)
     if (!loading_savefile)
         return -1;
 
-    errr err = rd_savefile_new_aux(player_ptr);
+    errr err = exe_reading_savefile(player_ptr);
     if (ferror(loading_savefile))
         err = -1;
 
