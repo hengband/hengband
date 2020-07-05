@@ -570,6 +570,21 @@ static void rd_action(player_type *creature_ptr)
 }
 
 /*!
+ * @brief ダミーバイトを読み込む
+ * @param なし
+ * @return なし
+ * @details もはや何に使われていたのか不明
+ */
+static void rd_dummy2(void)
+{
+    byte tmp8u;
+    for (int i = 0; i < 48; i++)
+        rd_byte(&tmp8u);
+
+    strip_bytes(12);
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -585,12 +600,7 @@ void rd_extra(player_type *creature_ptr)
     rd_action(creature_ptr);
     rd_byte((byte *)&preserve_mode);
     rd_byte((byte *)&creature_ptr->wait_report_score);
-
-    byte tmp8u;
-    for (int i = 0; i < 48; i++)
-        rd_byte(&tmp8u);
-
-    strip_bytes(12);
+    rd_dummy2();
     rd_global_configurations(creature_ptr);
     if (z_older_than(10, 0, 7))
         creature_ptr->riding = 0;
