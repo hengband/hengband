@@ -21,11 +21,11 @@
 #include "player/special-defense-types.h"
 #include "realm/realm-types.h"
 #include "savedata/angband-version-comparer.h"
+#include "savedata/birth-loader.h"
+#include "savedata/load-util.h"
 #include "savedata/load-v1-3-0.h"
 #include "savedata/load-v1-7-0.h"
 #include "savedata/load-zangband.h"
-#include "savedata/birth-loader.h"
-#include "savedata/load-util.h"
 #include "savedata/monster-loader.h"
 #include "world/world.h"
 
@@ -60,7 +60,7 @@ static void set_spells(player_type *creature_ptr)
 
 static void set_race(player_type *creature_ptr)
 {
-    byte tmp8u; 
+    byte tmp8u;
     rd_byte(&tmp8u);
     creature_ptr->start_race = (player_race_type)tmp8u;
     s32b tmp32s;
@@ -82,7 +82,7 @@ static void set_imitation(player_type *creature_ptr)
         creature_ptr->mane_num = 0;
         return;
     }
-    
+
     if (z_older_than(10, 2, 3)) {
         s16b tmp16s;
         const int OLD_MAX_MANE = 22;
@@ -188,6 +188,24 @@ static void rd_dungeons(void)
 }
 
 /*!
+ * @brief 変愚蛮怒 v1.5.0より大きなバージョンにおいて、ダミーでモンスターを読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void rd_dummy_monsters(player_type *creature_ptr)
+{
+    if (h_older_than(1, 5, 0, 2))
+        return;
+
+    s16b tmp16s;
+    rd_s16b(&tmp16s);
+    for (int i = 0; i < tmp16s; i++) {
+        monster_type dummy_mon;
+        rd_monster(creature_ptr, &dummy_mon);
+    }
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -204,9 +222,9 @@ void rd_extra(player_type *creature_ptr)
     }
 
     load_quick_start();
-    for (int i = 0; i < 4; i++) {
+    const int max_history_lines = 4;
+    for (int i = 0; i < max_history_lines; i++)
         rd_string(creature_ptr->history[i], sizeof(creature_ptr->history[i]));
-    }
 
     byte tmp8u;
     rd_byte(&tmp8u);
@@ -230,7 +248,7 @@ void rd_extra(player_type *creature_ptr)
         set_zangband_realm(creature_ptr);
 
     rd_byte(&tmp8u);
-    creature_ptr->hitdie = tmp8u;
+    creature_ptr->hitdie = (DICE_SID)tmp8u;
     rd_u16b(&creature_ptr->expfact);
 
     rd_s16b(&creature_ptr->age);
@@ -248,16 +266,12 @@ void rd_extra(player_type *creature_ptr)
 
     rd_s32b(&creature_ptr->exp);
 
-    if (h_older_than(1, 7, 0, 3)) {
-        u16b tmp16u;
-        rd_u16b(&tmp16u);
-        creature_ptr->exp_frac = (u32b)tmp16u;
-    } else {
+    if (h_older_than(1, 7, 0, 3))
+        set_exp_frac_old(creature_ptr);
+    else
         rd_u32b(&creature_ptr->exp_frac);
-    }
 
     rd_s16b(&creature_ptr->lev);
-
     for (int i = 0; i < 64; i++)
         rd_s16b(&creature_ptr->spell_exp[i]);
 
@@ -299,7 +313,8 @@ void rd_extra(player_type *creature_ptr)
     if (z_older_than(10, 0, 3)) {
         update_gambling_monsters(creature_ptr);
     } else {
-        for (int i = 0; i < 4; i++) {
+        const int max_gambling_monsters = 4;
+        for (int i = 0; i < max_gambling_monsters; i++) {
             rd_s16b(&battle_mon[i]);
             if (z_older_than(10, 3, 4)) {
                 s16b tmp16s;
@@ -522,9 +537,9 @@ void rd_extra(player_type *creature_ptr)
     }
 
     rd_s32b(&current_world_ptr->game_turn);
-    if (z_older_than(10, 3, 12)) {
+    if (z_older_than(10, 3, 12))
         current_world_ptr->dungeon_turn = current_world_ptr->game_turn;
-    } else
+    else
         rd_s32b(&current_world_ptr->dungeon_turn);
 
     if (z_older_than(11, 0, 13))
@@ -535,35 +550,24 @@ void rd_extra(player_type *creature_ptr)
     else
         rd_s32b(&current_world_ptr->arena_start_turn);
 
-    if (z_older_than(10, 0, 3)) {
+    if (z_older_than(10, 0, 3))
         determine_daily_bounty(creature_ptr, TRUE);
-    } else {
+    else {
         rd_s16b(&today_mon);
         rd_s16b(&creature_ptr->today_mon);
     }
 
-    if (z_older_than(10, 0, 7)) {
+    if (z_older_than(10, 0, 7))
         creature_ptr->riding = 0;
-    } else {
+    else
         rd_s16b(&creature_ptr->riding);
-    }
 
-    if (h_older_than(1, 5, 0, 0)) {
+    if (h_older_than(1, 5, 0, 0))
         creature_ptr->floor_id = 0;
-    } else {
+    else
         rd_s16b(&creature_ptr->floor_id);
-    }
 
-    if (h_older_than(1, 5, 0, 2)) {
-        /* Nothing to do */
-    } else {
-        rd_s16b(&tmp16s);
-        for (int i = 0; i < tmp16s; i++) {
-            monster_type dummy_mon;
-            rd_monster(creature_ptr, &dummy_mon);
-        }
-    }
-
+    rd_dummy_monsters(creature_ptr);
     if (z_older_than(10, 1, 2))
         current_world_ptr->play_time = 0;
     else

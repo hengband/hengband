@@ -1,5 +1,6 @@
 ﻿#include "savedata/load-zangband.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor.h"
 #include "game-option/option-flags.h"
 #include "market/bounty.h"
 #include "monster-race/monster-race.h"
