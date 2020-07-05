@@ -205,12 +205,7 @@ static void rd_dummy_monsters(player_type *creature_ptr)
     }
 }
 
-/*!
- * @brief その他の情報を読み込む / Read the "extra" information
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void rd_extra(player_type *creature_ptr)
+static void rd_base_info(player_type *creature_ptr)
 {
     rd_string(creature_ptr->name, sizeof(creature_ptr->name));
     rd_string(creature_ptr->died_from, sizeof(creature_ptr->died_from));
@@ -254,11 +249,21 @@ void rd_extra(player_type *creature_ptr)
     rd_s16b(&creature_ptr->age);
     rd_s16b(&creature_ptr->ht);
     rd_s16b(&creature_ptr->wt);
+}
+
+/*!
+ * @brief その他の情報を読み込む / Read the "extra" information
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void rd_extra(player_type *creature_ptr)
+{
+    rd_base_info(creature_ptr);
     rd_base_status(creature_ptr);
     strip_bytes(24);
     rd_s32b(&creature_ptr->au);
-
     rd_s32b(&creature_ptr->max_exp);
+
     if (h_older_than(1, 5, 4, 1))
         creature_ptr->max_max_exp = creature_ptr->max_exp;
     else
@@ -342,12 +347,11 @@ void rd_extra(player_type *creature_ptr)
         creature_ptr->phase_out = (bool)tmp16s;
     }
 
+    byte tmp8u;
     rd_byte(&creature_ptr->exit_bldg);
     rd_byte(&tmp8u);
-
     rd_s16b(&tmp16s);
     creature_ptr->oldpx = (POSITION)tmp16s;
-
     rd_s16b(&tmp16s);
     creature_ptr->oldpy = (POSITION)tmp16s;
     if (z_older_than(10, 3, 13) && !creature_ptr->current_floor_ptr->dun_level && !creature_ptr->current_floor_ptr->inside_arena) {
