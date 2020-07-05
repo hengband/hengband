@@ -272,18 +272,6 @@ void calc_equipment_status(player_type* creature_ptr) {
             }
         }
 
-        if (o_ptr->curse_flags & TRC_LOW_AC) {
-            if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-                creature_ptr->to_a -= 30;
-                if (object_is_fully_known(o_ptr))
-                    creature_ptr->dis_to_a -= 30;
-            } else {
-                creature_ptr->to_a -= 10;
-                if (object_is_fully_known(o_ptr))
-                    creature_ptr->dis_to_a -= 10;
-            }
-        }
-
         if (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
             continue;
         if (i == INVEN_LARM && has_melee_weapon(creature_ptr, i))

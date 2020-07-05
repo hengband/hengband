@@ -3038,7 +3038,16 @@ static void calc_to_ac(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         creature_ptr->to_a += o_ptr->to_a;
-    }
+
+        if (o_ptr->curse_flags & TRC_LOW_AC) {
+            if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+                creature_ptr->to_a -= 30;
+            } else {
+                creature_ptr->to_a -= 10;
+            }
+        }
+	
+	}
 
     if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
@@ -3146,7 +3155,17 @@ static void calc_to_ac_display(player_type *creature_ptr)
             continue;
         if (object_is_known(o_ptr))
             creature_ptr->dis_to_a += o_ptr->to_a;
-    }
+
+        if (o_ptr->curse_flags & TRC_LOW_AC) {
+            if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+                if (object_is_fully_known(o_ptr))
+                    creature_ptr->dis_to_a -= 30;
+            } else {
+                if (object_is_fully_known(o_ptr))
+                    creature_ptr->dis_to_a -= 10;
+            }
+        }	
+	}
 
     if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
