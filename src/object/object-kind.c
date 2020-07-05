@@ -247,10 +247,6 @@ void calc_equipment_status(player_type* creature_ptr) {
         if (o_ptr->tval == TV_CAPTURE)
             continue;
 
-        creature_ptr->to_a += o_ptr->to_a;
-        if (object_is_known(o_ptr))
-            creature_ptr->dis_to_a += o_ptr->to_a;
-
         if (o_ptr->curse_flags & TRC_LOW_MELEE) {
             int slot = i - INVEN_RARM;
             if (slot < 2) {

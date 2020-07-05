@@ -3032,6 +3032,14 @@ static void calc_to_ac(player_type *creature_ptr)
 {
     creature_ptr->to_a = 0;
 
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        creature_ptr->to_a += o_ptr->to_a;
+    }
+
     if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
     }
@@ -3105,6 +3113,10 @@ static void calc_to_ac(player_type *creature_ptr)
     } else if (creature_ptr->tsubureru || creature_ptr->shield || creature_ptr->magicdef) {
         creature_ptr->to_a += 50;
     }
+
+    if (is_blessed(creature_ptr)) {
+        creature_ptr->to_a += 5;
+    }
 }
 
 static void calc_base_ac_display(player_type *creature_ptr)
@@ -3126,6 +3138,15 @@ static void calc_base_ac_display(player_type *creature_ptr)
 static void calc_to_ac_display(player_type *creature_ptr)
 {
     creature_ptr->dis_to_a = 0;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        if (object_is_known(o_ptr))
+            creature_ptr->dis_to_a += o_ptr->to_a;
+    }
 
     if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
@@ -3201,6 +3222,10 @@ static void calc_to_ac_display(player_type *creature_ptr)
         creature_ptr->dis_to_a += 100;
     } else if (creature_ptr->tsubureru || creature_ptr->shield || creature_ptr->magicdef) {
         creature_ptr->dis_to_a += 50;
+    }
+
+    if (is_blessed(creature_ptr)) {
+        creature_ptr->dis_to_a += 5;
     }
 }
 
