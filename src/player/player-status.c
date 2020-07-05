@@ -891,7 +891,6 @@ void calc_bonuses(player_type *creature_ptr)
         }
     }
 
-    creature_ptr->to_a += ((int)(adj_dex_ta[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->to_d[0] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->to_d[1] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->to_d_m += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
@@ -903,7 +902,6 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->to_h[1] += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->to_h_m += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
-    creature_ptr->dis_to_a += ((int)(adj_dex_ta[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->dis_to_d[0] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->dis_to_d[1] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->dis_to_h[0] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
@@ -3032,6 +3030,8 @@ static void calc_to_ac(player_type *creature_ptr)
 {
     creature_ptr->to_a = 0;
 
+    creature_ptr->to_a += ((int)(adj_dex_ta[creature_ptr->stat_ind[A_DEX]]) - 128);
+
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
         case MIMIC_DEMON:
@@ -3171,6 +3171,8 @@ static void calc_base_ac_display(player_type *creature_ptr)
 static void calc_to_ac_display(player_type *creature_ptr)
 {
     creature_ptr->dis_to_a = 0;
+
+    creature_ptr->dis_to_a += ((int)(adj_dex_ta[creature_ptr->stat_ind[A_DEX]]) - 128);
 
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
