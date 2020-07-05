@@ -326,6 +326,29 @@ static void rd_energy(player_type *creature_ptr)
 }
 
 /*!
+ * todo 明らかに関数名がビッグワードだが他に思いつかなかった
+ * @brief プレーヤーのグッド/バッドステータスを読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void rd_status(player_type *creature_ptr)
+{
+    rd_s16b(&creature_ptr->fast);
+    rd_s16b(&creature_ptr->slow);
+    rd_s16b(&creature_ptr->afraid);
+    rd_s16b(&creature_ptr->cut);
+    rd_s16b(&creature_ptr->stun);
+    rd_s16b(&creature_ptr->poisoned);
+    rd_s16b(&creature_ptr->image);
+    rd_s16b(&creature_ptr->protevil);
+    rd_s16b(&creature_ptr->invuln);
+    if (z_older_than(10, 0, 0))
+        creature_ptr->ult_res = 0;
+    else
+        rd_s16b(&creature_ptr->ult_res);
+}
+
+/*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -351,20 +374,7 @@ void rd_extra(player_type *creature_ptr)
     rd_s16b(&creature_ptr->concent);
     rd_bad_status(creature_ptr);
     rd_energy(creature_ptr);
-    rd_s16b(&creature_ptr->fast);
-    rd_s16b(&creature_ptr->slow);
-    rd_s16b(&creature_ptr->afraid);
-    rd_s16b(&creature_ptr->cut);
-    rd_s16b(&creature_ptr->stun);
-    rd_s16b(&creature_ptr->poisoned);
-    rd_s16b(&creature_ptr->image);
-    rd_s16b(&creature_ptr->protevil);
-    rd_s16b(&creature_ptr->invuln);
-    if (z_older_than(10, 0, 0))
-        creature_ptr->ult_res = 0;
-    else
-        rd_s16b(&creature_ptr->ult_res);
-
+    rd_status(creature_ptr);
     rd_s16b(&creature_ptr->hero);
     rd_s16b(&creature_ptr->shero);
     rd_s16b(&creature_ptr->shield);
