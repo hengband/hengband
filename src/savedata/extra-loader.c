@@ -70,7 +70,7 @@ static void set_race(player_type *creature_ptr)
     rd_s16b(&creature_ptr->old_realm);
 }
 
-static set_imitation(player_type *creature_ptr)
+static void set_imitation(player_type *creature_ptr)
 {
     if (z_older_than(10, 0, 1)) {
         for (int i = 0; i < MAX_MANE; i++) {
@@ -214,19 +214,11 @@ void rd_extra(player_type *creature_ptr)
         set_race(creature_ptr);
 
     set_imitation(creature_ptr);
-    if (z_older_than(10, 0, 3)) {
-        determine_bounty_uniques(creature_ptr);
-
-        for (int i = 0; i < MAX_BOUNTY; i++) {
-            /* Is this bounty unique already dead? */
-            if (!r_info[current_world_ptr->bounty_r_idx[i]].max_num)
-                current_world_ptr->bounty_r_idx[i] += 10000;
-        }
-    } else {
-        for (int i = 0; i < MAX_BOUNTY; i++) {
+    if (z_older_than(10, 0, 3))
+        set_zangband_bounty_uniques(creature_ptr);
+    else
+        for (int i = 0; i < MAX_BOUNTY; i++)
             rd_s16b(&current_world_ptr->bounty_r_idx[i]);
-        }
-    }
 
     if (z_older_than(10, 0, 3)) {
         update_gambling_monsters(creature_ptr);
@@ -244,10 +236,9 @@ void rd_extra(player_type *creature_ptr)
 
     rd_s16b(&creature_ptr->town_num);
     rd_s16b(&creature_ptr->arena_number);
-    if (h_older_than(1, 5, 0, 1)) {
+    if (h_older_than(1, 5, 0, 1))
         if (creature_ptr->arena_number >= 99)
             creature_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
-    }
 
     s16b tmp16s;
     rd_s16b(&tmp16s);

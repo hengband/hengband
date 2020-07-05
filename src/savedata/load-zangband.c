@@ -1,7 +1,10 @@
 ﻿#include "savedata/load-zangband.h"
 #include "game-option/option-flags.h"
+#include "market/bounty.h"
+#include "monster-race/monster-race.h"
 #include "player/player-skill.h"
 #include "realm/realm-types.h"
+#include "world/world.h"
 
 void load_zangband_options(void)
 {
@@ -89,4 +92,14 @@ void set_zangband_race(player_type *creature_ptr)
     creature_ptr->old_race1 = 0L;
     creature_ptr->old_race2 = 0L;
     creature_ptr->old_realm = 0;
+}
+
+void set_zangband_bounty_uniques(player_type *creature_ptr)
+{
+    determine_bounty_uniques(creature_ptr);
+    for (int i = 0; i < MAX_BOUNTY; i++) {
+        /* Is this bounty unique already dead? */
+        if (!r_info[current_world_ptr->bounty_r_idx[i]].max_num)
+            current_world_ptr->bounty_r_idx[i] += 10000;
+    }
 }
