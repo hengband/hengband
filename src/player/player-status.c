@@ -1492,20 +1492,6 @@ void calc_bonuses(player_type *creature_ptr)
 			creature_ptr->sh_elec = TRUE;
 			creature_ptr->pspeed += 3;
 		}
-
-		for (int i = INVEN_RARM; i <= INVEN_FEET; i++)
-		{
-			ARMOUR_CLASS ac = 0;
-			o_ptr = &creature_ptr->inventory_list[i];
-			if (!o_ptr->k_idx) continue;
-			if (!object_is_armour(o_ptr)) continue;
-			if (!object_is_cursed(o_ptr)) continue;
-			ac += 5;
-			if (o_ptr->curse_flags & TRC_HEAVY_CURSE) ac += 7;
-			if (o_ptr->curse_flags & TRC_PERMA_CURSE) ac += 13;
-			creature_ptr->to_a += ac;
-			creature_ptr->dis_to_a += ac;
-		}
 	}
 
 	calc_strength_addition(creature_ptr);
@@ -3962,7 +3948,25 @@ static void calc_to_ac(player_type *creature_ptr)
         if (hex_spelling(creature_ptr, HEX_ICE_ARMOR)) {
             creature_ptr->to_a += 30;
         }
+
+        for (int i = INVEN_RARM; i <= INVEN_FEET; i++) {
+            ARMOUR_CLASS ac = 0;
+            object_type *o_ptr = &creature_ptr->inventory_list[i];
+            if (!o_ptr->k_idx)
+                continue;
+            if (!object_is_armour(o_ptr))
+                continue;
+            if (!object_is_cursed(o_ptr))
+                continue;
+            ac += 5;
+            if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
+                ac += 7;
+            if (o_ptr->curse_flags & TRC_PERMA_CURSE)
+                ac += 13;
+            creature_ptr->to_a += ac;
+        }
     }
+
 
 	if (creature_ptr->special_defense & KAMAE_BYAKKO) {
         creature_ptr->to_a -= 40;
@@ -4028,7 +4032,25 @@ static void calc_to_ac_display(player_type *creature_ptr)
         if (hex_spelling(creature_ptr, HEX_ICE_ARMOR)) {
             creature_ptr->dis_to_a += 30;
         }
-    }
+
+        for (int i = INVEN_RARM; i <= INVEN_FEET; i++) {
+            ARMOUR_CLASS ac = 0;
+            object_type *o_ptr = &creature_ptr->inventory_list[i];
+            if (!o_ptr->k_idx)
+                continue;
+            if (!object_is_armour(o_ptr))
+                continue;
+            if (!object_is_cursed(o_ptr))
+                continue;
+            ac += 5;
+            if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
+                ac += 7;
+            if (o_ptr->curse_flags & TRC_PERMA_CURSE)
+                ac += 13;
+            creature_ptr->dis_to_a += ac;
+        }
+		
+	}
 
     if (creature_ptr->muta3) {
         if (creature_ptr->muta3 & MUT3_WART_SKIN) {
