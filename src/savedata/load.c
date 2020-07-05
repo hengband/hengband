@@ -382,6 +382,24 @@ static void load_player_world(player_type *creature_ptr)
         load_note(_("特別情報をロードしました", "Loaded extra information"));
 }
 
+static errr load_hp(player_type *creature_ptr)
+{
+    u16b tmp16u;
+    rd_u16b(&tmp16u);
+    if (tmp16u > PY_MAX_LEVEL) {
+        load_note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
+        return 25;
+    }
+
+    for (int i = 0; i < tmp16u; i++) {
+        s16b tmp16s;
+        rd_s16b(&tmp16s);
+        creature_ptr->player_hp[i] = (HIT_POINT)tmp16s;
+    }
+
+    return 0;
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -412,18 +430,9 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         return load_artifact_result;
 
     load_player_world(creature_ptr);
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-    if (tmp16u > PY_MAX_LEVEL) {
-        load_note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
-        return (25);
-    }
-
-    for (int i = 0; i < tmp16u; i++) {
-        s16b tmp16s;
-        rd_s16b(&tmp16s);
-        creature_ptr->player_hp[i] = (HIT_POINT)tmp16s;
-    }
+    errr load_hp_result = load_hp(creature_ptr);
+    if (load_hp_result != 0)
+        return load_hp_result;
 
     sp_ptr = &sex_info[creature_ptr->psex];
     rp_ptr = &race_info[creature_ptr->prace];
@@ -488,6 +497,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         return (21);
     }
 
+    u16b tmp16u;
     rd_u16b(&tmp16u);
     int town_count = tmp16u;
 
