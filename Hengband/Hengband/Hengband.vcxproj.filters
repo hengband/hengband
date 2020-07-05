@@ -1661,6 +1661,9 @@
     <ClCompile Include="..\..\src\savedata\floor-loader.c">
       <Filter>savedata</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\savedata\quest-loader.c">
+      <Filter>savedata</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3626,6 +3629,9 @@
       <Filter>savedata</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\savedata\floor-loader.h">
+      <Filter>savedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\savedata\quest-loader.h">
       <Filter>savedata</Filter>
     </ClInclude>
   </ItemGroup>

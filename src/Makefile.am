@@ -534,6 +534,7 @@ hengband_SOURCES = \
 	savedata/load-v1-3-0.c savedata/load-v1-3-0.h \
 	savedata/load-v1-5-0.c savedata/load-v1-5-0.h \
 	savedata/load-zangband.c savedata/load-zangband.h \
+	savedata/quest-loader.c savedata/quest-loader.h \
 	savedata/load.c savedata/load.h \
 	savedata/lore-loader.c savedata/lore-loader.h \
 	savedata/option-loader.c savedata/option-loader.h \
