@@ -527,16 +527,12 @@ void rd_extra(player_type *creature_ptr)
     } else
         rd_s32b(&current_world_ptr->dungeon_turn);
 
-    if (z_older_than(11, 0, 13)) {
-        creature_ptr->current_floor_ptr->generated_turn /= 2;
-        creature_ptr->feeling_turn /= 2;
-        current_world_ptr->game_turn /= 2;
-        current_world_ptr->dungeon_turn /= 2;
-    }
+    if (z_older_than(11, 0, 13))
+        set_zangband_game_turns(creature_ptr);
 
-    if (z_older_than(10, 3, 13)) {
+    if (z_older_than(10, 3, 13))
         current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
-    } else
+    else
         rd_s32b(&current_world_ptr->arena_start_turn);
 
     if (z_older_than(10, 0, 3)) {
@@ -568,15 +564,14 @@ void rd_extra(player_type *creature_ptr)
         }
     }
 
-    if (z_older_than(10, 1, 2)) {
+    if (z_older_than(10, 1, 2))
         current_world_ptr->play_time = 0;
-    } else {
+    else
         rd_u32b(&current_world_ptr->play_time);
-    }
 
-    if (z_older_than(10, 3, 9)) {
+    if (z_older_than(10, 3, 9))
         creature_ptr->visit = 1L;
-    } else if (z_older_than(10, 3, 10)) {
+    else if (z_older_than(10, 3, 10)) {
         s32b tmp32s;
         rd_s32b(&tmp32s);
         creature_ptr->visit = 1L;
@@ -586,7 +581,6 @@ void rd_extra(player_type *creature_ptr)
         creature_ptr->visit = (BIT_FLAGS)tmp32s;
     }
 
-    if (!z_older_than(11, 0, 5)) {
+    if (!z_older_than(11, 0, 5))
         rd_u32b(&creature_ptr->count);
-    }
 }

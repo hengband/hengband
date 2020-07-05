@@ -13,3 +13,4 @@ void set_zangband_mimic(player_type *creature_ptr);
 void set_zangband_holy_aura(player_type *creature_ptr);
 void set_zangband_reflection(player_type *creature_ptr);
 void rd_zangband_dungeon(void);
+void set_zangband_game_turns(player_type *creature_ptr);

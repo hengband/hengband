@@ -168,3 +168,11 @@ void rd_zangband_dungeon()
     rd_s16b(&tmp16s);
     max_dlv[DUNGEON_ANGBAND] = tmp16s;
 }
+
+void set_zangband_game_turns(player_type *creature_ptr)
+{
+    creature_ptr->current_floor_ptr->generated_turn /= 2;
+    creature_ptr->feeling_turn /= 2;
+    current_world_ptr->game_turn /= 2;
+    current_world_ptr->dungeon_turn /= 2;
+}
