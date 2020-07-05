@@ -430,6 +430,21 @@ static void rd_special_defense(player_type *creature_ptr)
     rd_u32b(&creature_ptr->special_defense);
 }
 
+static void set_undead_turn_limit(player_type *creature_ptr)
+{
+    switch (creature_ptr->start_race) {
+    case RACE_VAMPIRE:
+    case RACE_SKELETON:
+    case RACE_ZOMBIE:
+    case RACE_SPECTRE:
+        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        break;
+    default:
+        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+        break;
+    }
+}
+
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -506,19 +521,7 @@ void rd_extra(player_type *creature_ptr)
     creature_ptr->is_dead = tmp8u;
 
     rd_byte(&creature_ptr->feeling);
-
-    switch (creature_ptr->start_race) {
-    case RACE_VAMPIRE:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_SPECTRE:
-        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-        break;
-    default:
-        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-        break;
-    }
-
+    set_undead_turn_limit(creature_ptr);
     current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     rd_s32b(&creature_ptr->current_floor_ptr->generated_turn);
     if (h_older_than(1, 7, 0, 4)) {
