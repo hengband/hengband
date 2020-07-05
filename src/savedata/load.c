@@ -37,6 +37,7 @@
 #include "savedata/dungeon-loader.h"
 #include "savedata/extra-loader.h"
 #include "savedata/inventory-loader.h"
+#include "savedata/item-loader.h"
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
 #include "savedata/lore-loader.h"
@@ -172,7 +173,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         return load_item_result;
 
     byte tmp8u;
-    /* 2.1.3 or newer version */
+    if (!z_older_than(12, 1, 3))
     {
         u16b max_towns_load;
         u16b max_quests_load;
