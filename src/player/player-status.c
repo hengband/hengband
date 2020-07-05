@@ -3032,6 +3032,13 @@ static void calc_to_ac(player_type *creature_ptr)
 {
     creature_ptr->to_a = 0;
 
+	if (creature_ptr->pclass == CLASS_BERSERKER) {
+        creature_ptr->to_a += 10 + creature_ptr->lev / 2;
+    }
+	if (creature_ptr->pclass == CLASS_SORCERER) {
+        creature_ptr->to_a -= 50;
+    }
+
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
@@ -3147,6 +3154,14 @@ static void calc_base_ac_display(player_type *creature_ptr)
 static void calc_to_ac_display(player_type *creature_ptr)
 {
     creature_ptr->dis_to_a = 0;
+
+	if (creature_ptr->pclass == CLASS_BERSERKER) {
+		creature_ptr->dis_to_a += 10 + creature_ptr->lev / 2;
+    }
+
+	if (creature_ptr->pclass == CLASS_SORCERER) {
+        creature_ptr->dis_to_a -= 50;
+    }
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;

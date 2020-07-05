@@ -1295,10 +1295,6 @@ void calc_class_status(player_type *creature_ptr)
         }
 
         break;
-    case CLASS_SORCERER:
-        creature_ptr->to_a -= 50;
-        creature_ptr->dis_to_a -= 50;
-        break;
     case CLASS_BARD:
         creature_ptr->resist_sound = TRUE;
         break;
@@ -1313,8 +1309,6 @@ void calc_class_status(player_type *creature_ptr)
         creature_ptr->sustain_con = TRUE;
         creature_ptr->regenerate = TRUE;
         creature_ptr->free_act = TRUE;
-        creature_ptr->to_a += 10 + creature_ptr->lev / 2;
-        creature_ptr->dis_to_a += 10 + creature_ptr->lev / 2;
         creature_ptr->skill_dig += (100 + creature_ptr->lev * 8);
         if (creature_ptr->lev > 39)
             creature_ptr->reflect = TRUE;
