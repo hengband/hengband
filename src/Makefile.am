@@ -454,7 +454,7 @@ hengband_SOURCES = \
 	object-hook/hook-quest.c object-hook/hook-quest.h \
 	object-hook/hook-weapon.c object-hook/hook-weapon.h \
 	\
-	object-potion/quaff-execution.c object-potion/quaff-execution.h \
+	object-use/quaff-execution.c object-use/quaff-execution.h \
 	\
 	perception/identification.c perception/identification.h \
 	perception/object-perception.c perception/object-perception.h \
@@ -714,7 +714,7 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Icombat -Icore -Idungeon -Ieffect -Ifloor -Igame-option -Igrid \
 	-Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge -Imarket -Imelee \
 	-Imind -Imonster -Imonster-attack -Imonster-floor -Imonster-race -Ilore \
-	-Imspell -Imutation -Iobject -Iobject-enchant -Iobject-hook -Iobject-potion \
+	-Imspell -Imutation -Iobject -Iobject-enchant -Iobject-hook -Iobject-use \
 	-Ipet -Iplayer -Iplayer-attack -Irealm -Iroom -Isavedata -Ispecific-object \
 	-Ispell -Ispell-kind -Ispell-realm -Istatus -Isv-definition -Isystem -Iterm \
 	-Iutil -Iview -Iwizard -Iworld

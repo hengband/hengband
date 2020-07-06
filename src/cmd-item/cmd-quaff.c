@@ -8,7 +8,7 @@
 #include "cmd/cmd-basic.h"
 #include "floor/floor-object.h"
 #include "object-hook/hook-expendable.h"
-#include "object-potion/quaff-execution.h"
+#include "object-use/quaff-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player/attack-defense-types.h"

@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "object-potion/quaff-execution.h"
+#include "object-use/quaff-execution.h"
 #include "birth/birth-stat.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"

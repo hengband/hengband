@@ -235,7 +235,7 @@
     <ClCompile Include="..\..\src\object-hook\hook-quest.c" />
     <ClCompile Include="..\..\src\object-hook\hook-weapon.c" />
     <ClCompile Include="..\..\src\object-hook\hook-armor.c" />
-    <ClCompile Include="..\..\src\object-potion\quaff-execution.c" />
+    <ClCompile Include="..\..\src\object-use\quaff-execution.c" />
     <ClCompile Include="..\..\src\savedata\angband-version-comparer.c" />
     <ClCompile Include="..\..\src\savedata\birth-loader.c" />
     <ClCompile Include="..\..\src\savedata\dummy-loader.c" />
@@ -715,7 +715,7 @@
     <ClInclude Include="..\..\src\object-hook\hook-perception.h" />
     <ClInclude Include="..\..\src\object-hook\hook-quest.h" />
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h" />
-    <ClInclude Include="..\..\src\object-potion\quaff-execution.h" />
+    <ClInclude Include="..\..\src\object-use\quaff-execution.h" />
     <ClInclude Include="..\..\src\player\attack-defense-types.h" />
     <ClInclude Include="..\..\src\core\player-update-types.h" />
     <ClInclude Include="..\..\src\savedata\angband-version-comparer.h" />
