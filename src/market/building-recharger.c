@@ -2,6 +2,7 @@
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "market/building-util.h"

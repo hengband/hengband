@@ -363,18 +363,6 @@ typedef struct player_type
 	BIT_FLAGS update;	/* Pending Updates */
 	BIT_FLAGS redraw;	/* Normal Redraws */
 	BIT_FLAGS window;	/* Window Redraws */
-#define PW_INVEN        0x00000001L     /*!<サブウィンドウ描画フラグ: 所持品-装備品 / Display inven/equip */
-#define PW_EQUIP        0x00000002L     /*!<サブウィンドウ描画フラグ: 装備品-所持品 / Display equip/inven */
-#define PW_SPELL        0x00000004L     /*!<サブウィンドウ描画フラグ: 魔法一覧 / Display spell list */
-#define PW_PLAYER       0x00000008L     /*!<サブウィンドウ描画フラグ: プレイヤーのステータス / Display character */
-#define PW_MONSTER_LIST 0x00000010L     /*!<サブウィンドウ描画フラグ: 視界内モンスターの一覧 / Display monster list */
-#define PW_MESSAGE      0x00000040L     /*!<サブウィンドウ描画フラグ: メッセージログ / Display messages */
-#define PW_OVERHEAD     0x00000080L     /*!<サブウィンドウ描画フラグ: 周辺の光景 / Display overhead view */
-#define PW_MONSTER      0x00000100L     /*!<サブウィンドウ描画フラグ: モンスターの思い出 / Display monster recall */
-#define PW_OBJECT       0x00000200L     /*!<サブウィンドウ描画フラグ: アイテムの知識 / Display object recall */
-#define PW_DUNGEON      0x00000400L     /*!<サブウィンドウ描画フラグ: ダンジョンの地形 / Display dungeon view */
-#define PW_SNAPSHOT     0x00000800L     /*!<サブウィンドウ描画フラグ: 記念写真 / Display snap-shot */
-
 	s16b stat_use[A_MAX];	/* Current modified stats */
 	s16b stat_top[A_MAX];	/* Maximal modified stats */
 

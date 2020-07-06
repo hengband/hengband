@@ -2,6 +2,7 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
+#include "core/window-redrawer.h"
 #include "floor/floor.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"

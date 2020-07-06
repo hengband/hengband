@@ -4,6 +4,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "core/player-redraw-types.h"
 #include "core/show-file.h"
+#include "core/window-redrawer.h"
 #include "game-option/game-play-options.h"
 #include "game-option/keymap-directory-getter.h"
 #include "game-option/option-flags.h"

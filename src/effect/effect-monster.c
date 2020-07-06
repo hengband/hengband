@@ -7,6 +7,7 @@
 #include "effect/effect-monster.h"
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-monster-switcher.h"
 #include "floor/floor-object.h"

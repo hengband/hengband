@@ -11,6 +11,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"

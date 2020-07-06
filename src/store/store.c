@@ -32,6 +32,7 @@
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
+#include "core/window-redrawer.h"
 #include "mind/mind-sniper.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-events.h"

@@ -2,6 +2,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
+#include "core/window-redrawer.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-magic-resistance.h"
 #include "mind/mind-mirror-master.h"

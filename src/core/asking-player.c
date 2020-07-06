@@ -1,6 +1,7 @@
 ﻿#include "core/asking-player.h"
 #include "cmd-io/macro-util.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"

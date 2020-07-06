@@ -2,6 +2,7 @@
 #include "cmd-action/cmd-pet.h"
 #include "core/hp-mp-regenerator.h"
 #include "core/player-redraw-types.h"
+#include "core/window-redrawer.h"
 #include "floor/floor.h"
 #include "floor/pattern-walk.h"
 #include "grid/feature.h"

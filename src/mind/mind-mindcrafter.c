@@ -1,6 +1,7 @@
 ﻿#include "mind/mind-mindcrafter.h"
 #include "autopick/autopick.h"
 #include "core/player-update-types.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
 #include "object-enchant/item-feeling.h"

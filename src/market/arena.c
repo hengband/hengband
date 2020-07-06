@@ -3,6 +3,7 @@
 #include "core/show-file.h"
 #include "core/status-reseter.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "io/input-key-acceptor.h"

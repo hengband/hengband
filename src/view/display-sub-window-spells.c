@@ -1,4 +1,5 @@
 ﻿#include "view/display-sub-window-spells.h"
+#include "core/window-redrawer.h"
 #include "game-option/option-flags.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind.h"

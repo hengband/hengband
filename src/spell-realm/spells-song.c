@@ -2,6 +2,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "player/attack-defense-types.h"

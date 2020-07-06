@@ -1,4 +1,5 @@
 ﻿#include "view/display-sub-windows.h"
+#include "core/window-redrawer.h"
 #include "floor/floor.h"
 #include "game-option/option-flags.h"
 #include "game-option/special-options.h"

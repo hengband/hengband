@@ -18,6 +18,7 @@
 #include "art-definition/random-art-effects.h"
 #include "cmd-item/cmd-smith.h"
 #include "core/asking-player.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/cheat-types.h"

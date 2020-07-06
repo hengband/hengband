@@ -14,6 +14,7 @@
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
 #include "core/player-update-types.h"
+#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"

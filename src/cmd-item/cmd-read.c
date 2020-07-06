@@ -11,6 +11,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/show-file.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"

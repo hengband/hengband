@@ -6,6 +6,7 @@
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"

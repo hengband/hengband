@@ -1,5 +1,6 @@
 ﻿#include "inventory/item-getter.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "floor/floor.h"
 #include "game-option/input-options.h"
 #include "game-option/option-flags.h"

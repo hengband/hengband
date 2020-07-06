@@ -15,6 +15,7 @@
 #include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"

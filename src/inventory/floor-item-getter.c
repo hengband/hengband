@@ -6,6 +6,7 @@
 
 #include "inventory/floor-item-getter.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "floor/object-scanner.h"

@@ -2,6 +2,7 @@
 #include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
+#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "player/attack-defense-types.h"

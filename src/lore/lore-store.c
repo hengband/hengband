@@ -5,6 +5,7 @@
  */
 
 #include "lore/lore-store.h"
+#include "core/window-redrawer.h"
 #include "floor/floor.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/monster-race.h"

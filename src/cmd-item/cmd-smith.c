@@ -9,6 +9,7 @@
 #include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "game-option/text-display-options.h"
 #include "io/command-repeater.h"

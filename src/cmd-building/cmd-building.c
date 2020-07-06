@@ -22,6 +22,7 @@
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"

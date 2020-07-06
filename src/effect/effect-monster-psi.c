@@ -1,5 +1,6 @@
 ﻿#include "effect/effect-monster-psi.h"
 #include "core/player-redraw-types.h"
+#include "core/window-redrawer.h"
 #include "floor/floor.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/monster-race.h"
