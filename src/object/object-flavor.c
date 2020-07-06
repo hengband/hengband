@@ -11,6 +11,7 @@
 
 #include "object/object-flavor.h"
 #include "cmd-item/cmd-smith.h"
+#include "flavor/object-flavor-types.h"
 #include "game-option/text-display-options.h"
 #include "grid/trap.h"
 #include "inventory/inventory-slot-types.h"

@@ -1,6 +1,7 @@
 ﻿#include "player/patron.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-io/cmd-dump.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"

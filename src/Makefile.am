@@ -152,6 +152,8 @@ hengband_SOURCES = \
 	effect/effect-player-switcher.c effect/effect-player-switcher.h \
 	effect/effect-characteristics.h \
 	\
+	flavor/object-flavor-types.h \
+	\
 	floor/fixed-map-generator.c floor/fixed-map-generator.h \
 	floor/floor.c floor/floor.h \
 	floor/floor-events.c floor/floor-events.h \
@@ -709,7 +711,7 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icmd-visual \
-	-Icombat -Icore -Idungeon -Ieffect -Ifloor -Igame-option -Igrid \
+	-Icombat -Icore -Idungeon -Ieffect -Iflavor -Ifloor -Igame-option -Igrid \
 	-Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge -Imarket -Imelee \
 	-Imind -Imonster -Imonster-attack -Imonster-floor -Imonster-race -Ilore \
 	-Imspell -Imutation -Iobject -Iobject-enchant -Iobject-hook -Iobject-use \

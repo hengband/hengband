@@ -4,6 +4,7 @@
 #include "combat/shoot.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"

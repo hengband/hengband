@@ -1,5 +1,6 @@
 ﻿#include "effect/effect-item.h"
 #include "autopick/autopick.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "monster-floor/monster-summon.h"

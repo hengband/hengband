@@ -5,6 +5,7 @@
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/cheat-types.h"
 #include "game-option/special-options.h"

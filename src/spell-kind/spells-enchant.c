@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-enchant.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/play-record-options.h"

@@ -1,5 +1,6 @@
 ﻿#include "view/object-describer.h"
 #include "cmd-action/cmd-spell.h"
+#include "flavor/object-flavor-types.h"
 #include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

@@ -8,6 +8,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"

@@ -1,4 +1,5 @@
 ﻿#include "view/main-window-util.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "floor/geometry.h"
 #include "game-option/map-screen-options.h"

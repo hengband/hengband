@@ -6,6 +6,7 @@
  */
 
 #include "floor/floor-object.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"

@@ -1,4 +1,5 @@
 ﻿#include "market/building-enchanter.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"

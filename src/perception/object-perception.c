@@ -1,4 +1,5 @@
 ﻿#include "perception/object-perception.h"
+#include "flavor/object-flavor-types.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "object-enchant/item-feeling.h"

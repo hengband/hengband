@@ -8,6 +8,7 @@
 #include "core/hp-mp-processor.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"

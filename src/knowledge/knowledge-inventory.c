@@ -6,6 +6,7 @@
 
 #include "knowledge/knowledge-inventory.h"
 #include "core/show-file.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-town.h"
 #include "inventory/inventory-slot-types.h"
 #include "io-dump/dump-util.h"

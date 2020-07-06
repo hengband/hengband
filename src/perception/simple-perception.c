@@ -8,6 +8,7 @@
 #include "autopick/autopick.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/object-flavor-types.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-describer.h"

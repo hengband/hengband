@@ -1,5 +1,6 @@
 ﻿#include "store/rumor.h"
 #include "dungeon/dungeon.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-town.h"
 #include "floor/wild.h"
 #include "io/files-util.h"

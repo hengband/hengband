@@ -643,6 +643,7 @@
     <ClInclude Include="..\..\src\core\status-reseter.h" />
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\core\window-redrawer.h" />
+    <ClInclude Include="..\..\src\flavor\object-flavor-types.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
     <ClInclude Include="..\..\src\floor\floor-util.h" />
     <ClInclude Include="..\..\src\floor\object-scanner.h" />

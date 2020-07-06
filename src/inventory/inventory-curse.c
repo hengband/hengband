@@ -3,6 +3,7 @@
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
+#include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "monster-floor/monster-summon.h"

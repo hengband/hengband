@@ -4,6 +4,7 @@
 #include "autopick/autopick-keys-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "core/show-file.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

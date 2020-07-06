@@ -6,6 +6,7 @@
 
 #include "knowledge-quests.h"
 #include "core/show-file.h"
+#include "flavor/object-flavor-types.h"
 #include "util/sort.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

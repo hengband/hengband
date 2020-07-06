@@ -10,6 +10,7 @@
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-matcher.h"
 #include "core/show-file.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"

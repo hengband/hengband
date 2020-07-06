@@ -7,6 +7,7 @@
 #include "knowledge/knowledge-items.h"
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"

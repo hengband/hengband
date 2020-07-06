@@ -3628,6 +3628,9 @@
     <ClInclude Include="..\..\src\object-use\quaff-execution.h">
       <Filter>object-use</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\flavor\object-flavor-types.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3804,6 +3807,9 @@
     </Filter>
     <Filter Include="object-use">
       <UniqueIdentifier>{3e8ea357-82a2-4978-a257-338b953d1469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="flavor">
+      <UniqueIdentifier>{64e5a4de-e0d4-4090-93b9-314234362569}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

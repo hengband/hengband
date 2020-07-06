@@ -15,6 +15,7 @@
 
 #include "floor/floor-streams.h"
 #include "dungeon/dungeon.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-generate.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"

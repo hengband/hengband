@@ -2,6 +2,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

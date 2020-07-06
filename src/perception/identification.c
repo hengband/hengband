@@ -1,5 +1,6 @@
 ﻿#include "perception/identification.h"
 #include "art-definition/art-protector-types.h"
+#include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
 #include "io/input-key-acceptor.h"
 #include "monster-race/monster-race.h"

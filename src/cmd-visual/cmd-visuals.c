@@ -2,6 +2,7 @@
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
 #include "core/visuals-reseter.h"
+#include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"

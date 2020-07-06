@@ -10,6 +10,7 @@
  */
 
 #include "wizard/wizard-spoiler.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/floor-town.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
