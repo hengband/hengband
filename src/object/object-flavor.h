@@ -2,8 +2,6 @@
 
 #include "system/angband.h"
 
-extern const concptr game_inscriptions[];
-
 void get_table_name_aux(char *out_string);
 void get_table_name(char *out_string);
 void get_table_sindarin_aux(char *out_string);

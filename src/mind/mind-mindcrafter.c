@@ -2,6 +2,7 @@
 #include "autopick/autopick.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/flag-inscriptions-table.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"

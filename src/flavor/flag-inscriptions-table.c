@@ -1,6 +1,20 @@
 ﻿#include "flavor/flag-inscriptions-table.h"
 #include "object-enchant/tr-types.h"
 
+/*! @brief アイテムの価値記述テーブル */
+const concptr game_inscriptions[MAX_GAME_INSCRIPTIONS] = {
+    NULL, /* FEEL_NONE */
+    _("壊れている", "broken"), /* FEEL_BROKEN */
+    _("恐ろしい", "terrible"), /* FEEL_TERRIBLE */
+    _("無価値", "worthless"), /* FEEL_WORTHLESS */
+    _("呪われている", "cursed"), /* FEEL_CURSED */
+    _("上質以上", "uncursed"), /* FEEL_UNCURSED */
+    _("並", "average"), /* FEEL_AVERAGE */
+    _("上質", "good"), /* FEEL_GOOD */
+    _("高級品", "excellent"), /* FEEL_EXCELLENT */
+    _("特別製", "special"), /* FEEL_SPECIAL */
+};
+
 #ifdef JP
 /*! オブジェクトの特性表示記号テーブルの定義(pval要素) */
 flag_insc_table flag_insc_plus[MAX_INSCRIPTIONS_PLUS]

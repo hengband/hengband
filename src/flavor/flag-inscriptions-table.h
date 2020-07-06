@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+#define MAX_GAME_INSCRIPTIONS 10
+
 #define MAX_INSCRIPTIONS_PLUS 14
 #define MAX_INSCRIPTIONS_IMMUNE 5
 #define MAX_INSCRIPTIONS_RESISTANCE 17
@@ -23,6 +25,8 @@ typedef struct flag_insc_table {
     int flag;
     int except_flag;
 } flag_insc_table;
+
+extern const concptr game_inscriptions[MAX_GAME_INSCRIPTIONS];
 
 extern flag_insc_table flag_insc_plus[MAX_INSCRIPTIONS_PLUS];
 extern flag_insc_table flag_insc_immune[MAX_INSCRIPTIONS_IMMUNE];
