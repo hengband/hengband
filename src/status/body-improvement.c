@@ -1,4 +1,5 @@
 ﻿#include "status/body-improvement.h"
+#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"

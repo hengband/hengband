@@ -5,6 +5,7 @@
  */
 
 #include "effect/effect-monster.h"
+#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-monster-switcher.h"

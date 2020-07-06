@@ -13,6 +13,7 @@
 #include "cmd-action/cmd-pet.h"
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

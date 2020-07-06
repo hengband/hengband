@@ -1,5 +1,6 @@
 ﻿#include "combat/slaying.h"
 #include "art-definition/art-sword-types.h"
+#include "core/player-redraw-types.h"
 #include "mind/mind-samurai.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"

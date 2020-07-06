@@ -19,6 +19,7 @@
 #include "combat/slaying.h"
 #include "core/asking-player.h"
 #include "core/output-updater.h"
+#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

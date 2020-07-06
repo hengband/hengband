@@ -1,5 +1,6 @@
 ﻿#include "world/world-movement-processor.h"
 #include "cmd-io/cmd-save.h"
+#include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"

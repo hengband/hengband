@@ -1,5 +1,6 @@
 ﻿#include "mind/mind-mirror-master.h"
 #include "cmd-action/cmd-pet.h"
+#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"

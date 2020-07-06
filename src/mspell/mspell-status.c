@@ -6,6 +6,7 @@
  */
 
 #include "mspell/mspell-status.h"
+#include "core/player-redraw-types.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

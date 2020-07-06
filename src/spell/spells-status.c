@@ -8,6 +8,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "core/hp-mp-processor.h"
+#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"

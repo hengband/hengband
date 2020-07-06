@@ -1,4 +1,5 @@
 ﻿#include "birth/birth-stat.h"
+#include "core/player-redraw-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"

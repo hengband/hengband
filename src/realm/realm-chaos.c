@@ -1,6 +1,7 @@
 ﻿#include "realm/realm-chaos.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "player/attack-defense-types.h"

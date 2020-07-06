@@ -641,6 +641,7 @@
     <ClInclude Include="..\..\src\cmd-io\macro-util.h" />
     <ClInclude Include="..\..\src\cmd-visual\cmd-map.h" />
     <ClInclude Include="..\..\src\core\asking-player.h" />
+    <ClInclude Include="..\..\src\core\player-redraw-types.h" />
     <ClInclude Include="..\..\src\core\status-reseter.h" />
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\core\window-redrawer.h" />

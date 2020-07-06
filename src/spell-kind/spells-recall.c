@@ -1,5 +1,6 @@
 ﻿#include "spell-kind/spells-recall.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"

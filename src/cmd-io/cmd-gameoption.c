@@ -2,6 +2,7 @@
 #include "autopick/autopick.h"
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/player-redraw-types.h"
 #include "core/show-file.h"
 #include "game-option/game-play-options.h"
 #include "game-option/keymap-directory-getter.h"

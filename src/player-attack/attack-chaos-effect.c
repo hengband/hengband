@@ -7,6 +7,7 @@
 
 #include "player-attack/attack-chaos-effect.h"
 #include "art-definition/art-weapon-types.h"
+#include "core/player-redraw-types.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"

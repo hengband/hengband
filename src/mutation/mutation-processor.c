@@ -1,5 +1,6 @@
 ﻿#include "mutation/mutation-processor.h"
 #include "core/hp-mp-processor.h"
+#include "core/player-redraw-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"

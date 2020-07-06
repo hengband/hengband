@@ -10,6 +10,7 @@
  */
 
 #include "mspell/mspells1.h"
+#include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"

@@ -1,5 +1,6 @@
 ﻿#include "spell-realm/spells-sorcery.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
 #include "floor/floor-object.h"
 #include "game-option/input-options.h"
 #include "inventory/inventory-object.h"

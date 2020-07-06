@@ -1,5 +1,6 @@
 ﻿#include "spell-realm/spells-hex.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "floor/floor.h"
 #include "monster-race/monster-race.h"

@@ -14,6 +14,7 @@
 #include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
+#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"

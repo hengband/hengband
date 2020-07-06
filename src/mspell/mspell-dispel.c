@@ -1,4 +1,5 @@
 ﻿#include "mspell/mspell-dispel.h"
+#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "mind/mind-force-trainer.h"

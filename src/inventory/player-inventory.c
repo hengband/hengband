@@ -1,5 +1,6 @@
 ﻿#include "inventory/player-inventory.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
 #include "floor/floor-object.h"
 #include "floor/object-scanner.h"
 #include "game-option/birth-options.h"

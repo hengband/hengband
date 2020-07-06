@@ -1,4 +1,5 @@
 ﻿#include "effect/effect-player-spirit.h"
+#include "core/player-redraw-types.h"
 #include "mind/mind-mirror-master.h"
 #include "mspell/mspells3.h"
 #include "status/bad-status-setter.h"

@@ -7,6 +7,7 @@
 #include "melee/monster-attack-monster.h"
 #include "combat/attack-accuracy.h"
 #include "combat/hallucination-attacks-table.h"
+#include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"

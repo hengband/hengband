@@ -1,6 +1,7 @@
 ﻿#include "mind/mind-ninja.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/combat-options-type.h"
+#include "core/player-redraw-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"

@@ -1,4 +1,5 @@
 ﻿#include "effect/effect-monster-oldies.h"
+#include "core/player-redraw-types.h"
 #include "floor/floor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

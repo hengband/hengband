@@ -9,6 +9,7 @@
 #include "autopick/autopick.h"
 #include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"

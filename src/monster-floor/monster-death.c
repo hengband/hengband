@@ -4,6 +4,7 @@
 #include "art-definition/art-protector-types.h"
 #include "art-definition/art-weapon-types.h"
 #include "art-definition/random-art-effects.h"
+#include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
