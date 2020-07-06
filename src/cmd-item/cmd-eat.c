@@ -8,6 +8,7 @@
 #include "core/hp-mp-processor.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
@@ -19,7 +20,6 @@
 #include "object-hook/hook-expendable.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
@@ -382,7 +382,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         && (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))) {
         /* Drain vitality of humanoids */
         GAME_TEXT o_name[MAX_NLEN];
-        object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
         (void)set_food(creature_ptr, PY_FOOD_MAX - 1);
     } else if (is_specific_player_race(creature_ptr, RACE_SKELETON)) {

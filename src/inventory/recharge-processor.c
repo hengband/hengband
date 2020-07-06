@@ -1,10 +1,10 @@
 ﻿#include "inventory/recharge-processor.h"
 #include "core/hp-mp-regenerator.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-checker.h"
-#include "object/object-flavor.h"
 #include "object/object-kind.h"
 #include "player/player-move.h"
 #include "util/quarks.h"
@@ -27,7 +27,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
     while (s) {
         if (s[1] == '!') {
             GAME_TEXT o_name[MAX_NLEN];
-            object_desc(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            describe_flavor(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
             msg_format("%sは再充填された。", o_name);
 #else

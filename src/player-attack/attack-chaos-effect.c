@@ -8,6 +8,7 @@
 #include "player-attack/attack-chaos-effect.h"
 #include "art-definition/art-weapon-types.h"
 #include "core/player-redraw-types.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
@@ -19,7 +20,6 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "player/attack-defense-types.h"
 #include "realm/realm-hex-numbers.h"
@@ -146,7 +146,7 @@ static void attack_golden_hammer(player_type *attacker_ptr, player_attack_type *
 
     object_type *q_ptr = &floor_ptr->o_list[target_ptr->hold_o_idx];
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(attacker_ptr, o_name, q_ptr, OD_NAME_ONLY);
+    describe_flavor(attacker_ptr, o_name, q_ptr, OD_NAME_ONLY);
     q_ptr->held_m_idx = 0;
     q_ptr->marked = OM_TOUCHED;
     target_ptr->hold_o_idx = q_ptr->next_o_idx;

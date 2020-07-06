@@ -153,6 +153,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/flavor-util.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -188,7 +189,6 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-tester-hooker.h"
-#include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "object/warning.h"
@@ -310,7 +310,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
     o_ptr = &owner_ptr->current_floor_ptr->o_list[o_idx];
 
 #ifdef JP
-    object_desc(owner_ptr, old_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(owner_ptr, old_name, o_ptr, OD_NAME_ONLY);
     object_desc_count_japanese(kazu_str, o_ptr);
     hirottakazu = o_ptr->number;
 #endif
@@ -334,7 +334,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
             return;
     }
 
-    object_desc(owner_ptr, o_name, o_ptr, 0);
+    describe_flavor(owner_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
     if ((o_ptr->name1 == ART_CRIMSON) && (owner_ptr->pseikaku == PERSONALITY_COMBAT)) {
@@ -397,7 +397,7 @@ void carry(player_type *creature_ptr, bool pickup)
         object_type *o_ptr;
         o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
         GAME_TEXT o_name[MAX_NLEN];
-        object_desc(creature_ptr, o_name, o_ptr, 0);
+        describe_flavor(creature_ptr, o_name, o_ptr, 0);
         next_o_idx = o_ptr->next_o_idx;
 
         disturb(creature_ptr, FALSE, FALSE);

@@ -21,6 +21,7 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save.h"
@@ -333,7 +334,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 
     prt_alloc(o_ptr->tval, o_ptr->sval, 1, 0);
     char buf[256];
-    object_desc(player_ptr, buf, o_ptr, OD_STORE);
+    describe_flavor(player_ptr, buf, o_ptr, OD_STORE);
     prt(buf, 2, j);
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->k_idx, k_info[o_ptr->k_idx].level, o_ptr->tval, o_ptr->sval), 4, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);

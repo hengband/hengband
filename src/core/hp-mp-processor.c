@@ -3,6 +3,7 @@
 #include "core/hp-mp-regenerator.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "floor/pattern-walk.h"
@@ -14,7 +15,6 @@
 #include "monster-race/race-flags3.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-flavor.h"
 #include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
@@ -77,11 +77,11 @@ void process_player_hp_mp(player_type *creature_ptr)
             object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
             GAME_TEXT o_name[MAX_NLEN];
             char ouch[MAX_NLEN + 40];
-            object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
             msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), o_name);
 
             cave_no_regen = TRUE;
-            object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
+            describe_flavor(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
             sprintf(ouch, _("%sを装備したダメージ", "wielding %s"), o_name);
 
             if (!is_invuln(creature_ptr))

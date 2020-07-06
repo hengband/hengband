@@ -2,17 +2,17 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
-#include "monster/monster-describer.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "object/object-flavor.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -98,7 +98,7 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
     o_ptr->iy = caster_ptr->y;
     o_ptr->ix = caster_ptr->x;
 
-    object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
     msg_format(_("%^sがあなたの足元に飛んできた。", "%^s flies through the air to your feet."), o_name);
 
     note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);

@@ -1,12 +1,12 @@
 ﻿#include "spell-kind/spells-equipment.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/racial-android.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "player/avatar.h"
 #include "system/object-type-definition.h"
@@ -63,7 +63,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
     }
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(target_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(target_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (object_is_artifact(o_ptr) && (randint0(100) < 71)) {
 #ifdef JP
         msg_format("%s(%c)は劣化を跳ね返した！", o_name, index_to_label(t));

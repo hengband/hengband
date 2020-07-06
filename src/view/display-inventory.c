@@ -1,4 +1,5 @@
 ﻿#include "view/display-inventory.h"
+#include "flavor/flavor-describer.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
@@ -6,7 +7,6 @@
 #include "io/input-key-requester.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "system/object-type-definition.h"
@@ -53,7 +53,7 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
         if (!item_tester_okay(owner_ptr, o_ptr, tval) && !(mode & USE_FULL))
             continue;
 
-        object_desc(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(owner_ptr, o_name, o_ptr, 0);
         out_index[k] = i;
         out_color[k] = tval_to_attr[o_ptr->tval % 128];
         if (o_ptr->timeout)
@@ -155,7 +155,7 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
         }
 
         Term_putstr(0, i, 3, TERM_WHITE, tmp_val);
-        object_desc(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(owner_ptr, o_name, o_ptr, 0);
         n = strlen(o_name);
         attr = tval_to_attr[o_ptr->tval % 128];
         if (o_ptr->timeout) {

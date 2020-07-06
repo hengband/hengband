@@ -10,6 +10,7 @@
  */
 
 #include "wizard/wizard-spoiler.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-town.h"
 #include "inventory/inventory-slot-types.h"
@@ -26,7 +27,6 @@
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
@@ -192,7 +192,7 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
     if (!buf || !dam || !chance || !wgt)
         return;
 
-    object_desc(player_ptr, buf, q_ptr, (OD_NAME_ONLY | OD_STORE));
+    describe_flavor(player_ptr, buf, q_ptr, (OD_NAME_ONLY | OD_STORE));
     strcpy(dam, "");
     switch (q_ptr->tval) {
     case TV_BOW: {
@@ -396,7 +396,7 @@ static concptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE], const 
  */
 static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *desc_ptr)
 {
-    object_desc(player_ptr, desc_ptr, o_ptr, (OD_NAME_AND_ENCHANT | OD_STORE));
+    describe_flavor(player_ptr, desc_ptr, o_ptr, (OD_NAME_AND_ENCHANT | OD_STORE));
 }
 
 /*!
@@ -1139,9 +1139,9 @@ static void spoil_mon_info(player_type *player_ptr, concptr fname)
         spoil_out(buf);
         if ((flags1 & (RF1_FORCE_MAXHP)) || (r_ptr->hside == 1))
             sprintf(buf, "Hp:%d  ", r_ptr->hdice * r_ptr->hside);
-         else
+        else
             sprintf(buf, "Hp:%dd%d  ", r_ptr->hdice, r_ptr->hside);
-        
+
         spoil_out(buf);
         sprintf(buf, "Ac:%d  ", r_ptr->ac);
         spoil_out(buf);
@@ -1358,7 +1358,8 @@ static void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr,
     analyze_sustains(player_ptr, o_ptr, desc_ptr->sustains);
     analyze_misc_magic(player_ptr, o_ptr, desc_ptr->misc_magic);
     desc_ptr->activation = activation_explanation(player_ptr, o_ptr);
-    sprintf(desc_ptr->misc_desc, _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lbtokg1(o_ptr->weight), o_ptr->weight / 10), _(lbtokg2(o_ptr->weight), o_ptr->weight % 10));
+    sprintf(desc_ptr->misc_desc, _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lbtokg1(o_ptr->weight), o_ptr->weight / 10),
+        _(lbtokg2(o_ptr->weight), o_ptr->weight % 10));
 }
 
 /*!

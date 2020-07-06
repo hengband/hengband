@@ -1,11 +1,11 @@
 ﻿#include "floor/object-scanner.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
 #include "object/item-tester-hooker.h"
-#include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "system/object-type-definition.h"
 #include "term/gameterm.h"
@@ -113,7 +113,7 @@ COMMAND_CODE show_floor_items(player_type *owner_ptr, int target_item, POSITION 
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
         o_ptr = &floor_ptr->o_list[floor_list[i]];
-        object_desc(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(owner_ptr, o_name, o_ptr, 0);
         out_index[k] = i;
         out_color[k] = tval_to_attr[o_ptr->tval & 0x7F];
         strcpy(out_desc[k], o_name);

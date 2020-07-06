@@ -5,27 +5,27 @@
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags9.h"
 #include "monster-race/race-indice-types.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/object-kind-hook.h"
 #include "object/object-info.h"
+#include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "sv-definition/sv-other-types.h"
@@ -49,7 +49,7 @@ bool exchange_cash(player_type *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO)) {
             char buf[MAX_NLEN + 20];
-            object_desc(player_ptr, o_name, o_ptr, 0);
+            describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
                 msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(1000000L * o_ptr->number));
@@ -66,7 +66,7 @@ bool exchange_cash(player_type *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO)) {
             char buf[MAX_NLEN + 20];
-            object_desc(player_ptr, o_name, o_ptr, 0);
+            describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
                 msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(200000L * o_ptr->number));
@@ -83,7 +83,7 @@ bool exchange_cash(player_type *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO)) {
             char buf[MAX_NLEN + 20];
-            object_desc(player_ptr, o_name, o_ptr, 0);
+            describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
                 msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(100000L * o_ptr->number));
@@ -100,7 +100,7 @@ bool exchange_cash(player_type *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name))) {
             char buf[MAX_NLEN + 20];
-            object_desc(player_ptr, o_name, o_ptr, 0);
+            describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
                 msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[today_mon].level * 50 + 100) * o_ptr->number));
@@ -118,7 +118,7 @@ bool exchange_cash(player_type *player_ptr)
 
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name))) {
             char buf[MAX_NLEN + 20];
-            object_desc(player_ptr, o_name, o_ptr, 0);
+            describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
                 msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[today_mon].level * 30 + 60) * o_ptr->number));
@@ -142,7 +142,7 @@ bool exchange_cash(player_type *player_ptr)
             INVENTORY_IDX item_new;
             object_type forge;
 
-            object_desc(player_ptr, o_name, o_ptr, 0);
+            describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
             if (!get_check(buf))
                 continue;
@@ -170,7 +170,7 @@ bool exchange_cash(player_type *player_ptr)
              * there is at least one empty slot.
              */
             item_new = store_item_to_inventory(player_ptr, &forge);
-            object_desc(player_ptr, o_name, &forge, 0);
+            describe_flavor(player_ptr, o_name, &forge, 0);
             msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
 
             autopick_alter_item(player_ptr, item_new, FALSE);

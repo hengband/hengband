@@ -34,6 +34,7 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"
@@ -66,7 +67,6 @@
 #include "object-hook/hook-enchant.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -498,7 +498,7 @@ static void display_entry(player_type *player_ptr, int pos)
             maxwid -= 10;
 
         GAME_TEXT o_name[MAX_NLEN];
-        object_desc(player_ptr, o_name, o_ptr, 0);
+        describe_flavor(player_ptr, o_name, o_ptr, 0);
         o_name[maxwid] = '\0';
         c_put_str(tval_to_attr[o_ptr->tval], o_name, i + 6, cur_col);
         if (show_weights) {
@@ -515,7 +515,7 @@ static void display_entry(player_type *player_ptr, int pos)
         maxwid -= 7;
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(player_ptr, o_name, o_ptr, 0);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
     o_name[maxwid] = '\0';
     c_put_str(tval_to_attr[o_ptr->tval], o_name, i + 6, cur_col);
 
@@ -1231,7 +1231,7 @@ static void store_purchase(player_type *player_ptr)
         distribute_charges(o_ptr, j_ptr, amt);
         item_new = store_item_to_inventory(player_ptr, j_ptr);
         GAME_TEXT o_name[MAX_NLEN];
-        object_desc(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
+        describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
 
         msg_format(_("%s(%c)を取った。", "You have %s (%c)."), o_name, index_to_label(item_new));
         handle_stuff(player_ptr);
@@ -1263,7 +1263,7 @@ static void store_purchase(player_type *player_ptr)
         price = (best * j_ptr->number);
     } else {
         GAME_TEXT o_name[MAX_NLEN];
-        object_desc(player_ptr, o_name, j_ptr, 0);
+        describe_flavor(player_ptr, o_name, j_ptr, 0);
         msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), o_name, I2A(item));
         msg_print(NULL);
         choice = purchase_haggle(player_ptr, j_ptr, &price);
@@ -1293,7 +1293,7 @@ static void store_purchase(player_type *player_ptr)
     object_aware(player_ptr, j_ptr);
     j_ptr->ident &= ~(IDENT_FIXED);
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(player_ptr, o_name, j_ptr, 0);
+    describe_flavor(player_ptr, o_name, j_ptr, 0);
 
     msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), o_name, (long)price);
 
@@ -1302,7 +1302,7 @@ static void store_purchase(player_type *player_ptr)
 
     if (record_buy)
         exe_write_diary(player_ptr, DIARY_BUY, 0, o_name);
-    object_desc(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
     if (record_rand_art && o_ptr->art_name)
         exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
 
@@ -1311,7 +1311,7 @@ static void store_purchase(player_type *player_ptr)
     j_ptr->ident &= ~(IDENT_STORE);
     item_new = store_item_to_inventory(player_ptr, j_ptr);
 
-    object_desc(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
+    describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
     autopick_alter_item(player_ptr, item_new, FALSE);
     if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND)) {
@@ -1413,7 +1413,7 @@ static void store_sell(player_type *owner_ptr)
     }
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(owner_ptr, o_name, q_ptr, 0);
+    describe_flavor(owner_ptr, o_name, q_ptr, 0);
 
     /* Remove any inscription, feeling for stores */
     if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM)) {
@@ -1474,7 +1474,7 @@ static void store_sell(player_type *owner_ptr)
             }
 
             value = object_value(owner_ptr, q_ptr) * q_ptr->number;
-            object_desc(owner_ptr, o_name, q_ptr, 0);
+            describe_flavor(owner_ptr, o_name, q_ptr, 0);
             msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, (long)price);
 
             if (record_sell)
@@ -1505,7 +1505,7 @@ static void store_sell(player_type *owner_ptr)
         }
     } else if (cur_store_num == STORE_MUSEUM) {
         char o2_name[MAX_NLEN];
-        object_desc(owner_ptr, o2_name, q_ptr, OD_NAME_ONLY);
+        describe_flavor(owner_ptr, o2_name, q_ptr, OD_NAME_ONLY);
 
         if (-1 == store_check_num(q_ptr)) {
             msg_print(_("それと同じ品物は既に博物館にあるようです。", "The Museum already has one of those items."));
@@ -1586,7 +1586,7 @@ static void store_examine(player_type *player_ptr)
     }
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(player_ptr, o_name, o_ptr, 0);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
     msg_format(_("%sを調べている...", "Examining %s..."), o_name);
 
     if (!screen_object(player_ptr, o_ptr, SCROBJ_FORCE_DETAIL))
@@ -1622,7 +1622,7 @@ static void museum_remove_object(player_type *player_ptr)
     o_ptr = &st_ptr->stock[item];
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(player_ptr, o_name, o_ptr, 0);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
 
     msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "Once removed from the Museum, an item will be gone forever!"));
     if (!get_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), o_name)))
@@ -2015,7 +2015,7 @@ void do_cmd_store(player_type *player_ptr)
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
                 q_ptr = &forge;
                 object_copy(q_ptr, o_ptr);
-                object_desc(player_ptr, o_name, q_ptr, 0);
+                describe_flavor(player_ptr, o_name, q_ptr, 0);
                 msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
                 vary_item(player_ptr, item, -255);
                 handle_stuff(player_ptr);

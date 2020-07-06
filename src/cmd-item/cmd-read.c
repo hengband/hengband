@@ -12,6 +12,7 @@
 #include "core/player-update-types.h"
 #include "core/show-file.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
@@ -25,7 +26,6 @@
 #include "object-hook/hook-expendable.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -531,7 +531,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         q = format("book-%d_jp.txt", o_ptr->sval);
 
         /* Display object description */
-        object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
+        describe_flavor(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q);
 
         /* Peruse the help file */

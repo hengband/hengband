@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-enchant.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
@@ -12,7 +13,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "player/avatar.h"
 #include "term/screen-processor.h"
@@ -36,7 +36,7 @@ bool artifact_scroll(player_type *caster_ptr)
         return FALSE;
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
     msg_format("%s は眩い光を発した！", o_name);
 #else
@@ -96,7 +96,7 @@ bool artifact_scroll(player_type *caster_ptr)
     }
 
     if (record_rand_art) {
-        object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+        describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
         exe_write_diary(caster_ptr, DIARY_ART_SCROLL, 0, o_name);
     }
 

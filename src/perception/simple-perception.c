@@ -9,6 +9,7 @@
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flag-inscriptions-table.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/disturbance-options.h"
@@ -18,7 +19,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
-#include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/avatar.h"
@@ -87,7 +87,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     if (disturb_minor)
         disturb(creature_ptr, FALSE, FALSE);
 
-    object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_RARM) {
 #ifdef JP
         msg_format("%s%s(%c)は%sという感じがする...", describe_use(creature_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);

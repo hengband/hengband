@@ -1,4 +1,5 @@
 ﻿#include "inventory/inventory-damage.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
@@ -7,9 +8,8 @@
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-expendable.h"
 #include "object/object-broken.h"
-#include "object/object-flavor.h"
-#include "object/object-stack.h"
 #include "object/object-info.h"
+#include "object/object-stack.h"
 #include "view/display-messages.h"
 
 /*!
@@ -58,7 +58,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
         if (!amt)
             continue;
 
-        object_desc(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
+        describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
         msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
 #ifdef JP

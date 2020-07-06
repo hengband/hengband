@@ -26,6 +26,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/spells-effect-util.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
@@ -70,7 +71,6 @@
 #include "object/item-use-flags.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -2279,7 +2279,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     /* Single object */
     q_ptr->number = 1;
 
-    object_desc(creature_ptr, o_name, q_ptr, OD_OMIT_PREFIX);
+    describe_flavor(creature_ptr, o_name, q_ptr, OD_OMIT_PREFIX);
 
     if (creature_ptr->mighty_throw)
         mult += 3;
@@ -2560,7 +2560,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
             back_chance += 4 + randint1(5);
         if (super_boomerang)
             back_chance += 100;
-        object_desc(creature_ptr, o2_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(creature_ptr, o2_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
         if ((back_chance > 30) && (!one_in_(100) || super_boomerang)) {
             for (i = cur_dis - 1; i > 0; i--) {

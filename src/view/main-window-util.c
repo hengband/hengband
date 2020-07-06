@@ -1,11 +1,11 @@
 ﻿#include "view/main-window-util.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
-#include "object/object-flavor.h"
 #include "monster-race/monster-race.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
@@ -114,7 +114,7 @@ void print_map(player_type *player_ptr)
 static void display_shortened_item_name(player_type *player_ptr, object_type *o_ptr, int y)
 {
     char buf[MAX_NLEN];
-    object_desc(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
     TERM_COLOR attr = tval_to_attr[o_ptr->tval % 128];
 
     if (player_ptr->image) {

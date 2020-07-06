@@ -1,4 +1,5 @@
 ﻿#include "market/building-enchanter.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
@@ -6,7 +7,6 @@
 #include "market/building-util.h"
 #include "mind/racial-android.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "spell/spells-object.h"
 #include "system/object-type-definition.h"
 #include "term/screen-processor.h"
@@ -39,7 +39,7 @@ bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, HIT_POIN
 
     char tmp_str[MAX_NLEN];
     if (player_ptr->au < (cost * o_ptr->number)) {
-        object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
+        describe_flavor(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
         msg_format(_("%sを改良するだけのゴールドがありません！", "You do not have the gold to improve %s!"), tmp_str);
         return FALSE;
     }
@@ -73,7 +73,7 @@ bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, HIT_POIN
         return FALSE;
     }
 
-    object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
+    describe_flavor(player_ptr, tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
     msg_format("＄%dで%sに改良しました。", cost * o_ptr->number, tmp_str);
 #else

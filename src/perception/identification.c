@@ -1,5 +1,6 @@
 ﻿#include "perception/identification.h"
 #include "art-definition/art-protector-types.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
 #include "io/input-key-acceptor.h"
@@ -13,7 +14,6 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-amulet-types.h"
@@ -690,9 +690,9 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     Term_get_size(&wid, &hgt);
 
     if (!(mode & SCROBJ_FAKE_OBJECT))
-        object_desc(player_ptr, o_name, o_ptr, 0);
+        describe_flavor(player_ptr, o_name, o_ptr, 0);
     else
-        object_desc(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+        describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 
     prt(o_name, 0, 0);
     for (int k = 1; k < hgt; k++) {

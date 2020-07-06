@@ -8,6 +8,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
@@ -15,10 +16,9 @@
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-status.h"
 #include "object-hook/hook-enchant.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/object-mark-types.h"
 #include "object/object-info.h"
+#include "object/object-mark-types.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "status/experience.h"
@@ -132,7 +132,7 @@ void process_eat_item(player_type *target_ptr, monap_type *monap_ptr)
         if (object_is_artifact(monap_ptr->o_ptr))
             continue;
 
-        object_desc(target_ptr, monap_ptr->o_name, monap_ptr->o_ptr, OD_OMIT_PREFIX);
+        describe_flavor(target_ptr, monap_ptr->o_name, monap_ptr->o_ptr, OD_OMIT_PREFIX);
 #ifdef JP
         msg_format("%s(%c)を%s盗まれた！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else
@@ -160,7 +160,7 @@ void process_eat_food(player_type *target_ptr, monap_type *monap_ptr)
         if ((monap_ptr->o_ptr->tval != TV_FOOD) && !((monap_ptr->o_ptr->tval == TV_CORPSE) && (monap_ptr->o_ptr->sval)))
             continue;
 
-        object_desc(target_ptr, monap_ptr->o_name, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(target_ptr, monap_ptr->o_name, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
         msg_format("%s(%c)を%s食べられてしまった！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else

@@ -2,6 +2,7 @@
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "floor/object-scanner.h"
 #include "game-option/birth-options.h"
@@ -16,7 +17,6 @@
 #include "io/input-key-requester.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
@@ -80,7 +80,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
     int can_pickup = 0;
     for (this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx) {
         o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
-        object_desc(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(owner_ptr, o_name, o_ptr, 0);
         next_o_idx = o_ptr->next_o_idx;
         disturb(owner_ptr, FALSE, FALSE);
         if (o_ptr->tval == TV_GOLD) {
@@ -108,7 +108,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
     if (!pickup) {
         if (floor_num == 1) {
             o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
-            object_desc(owner_ptr, o_name, o_ptr, 0);
+            describe_flavor(owner_ptr, o_name, o_ptr, 0);
             msg_format(_("%sがある。", "You see %s."), o_name);
         } else
             msg_format(_("%d 個のアイテムの山がある。", "You see a pile of %d items."), floor_num);
@@ -119,7 +119,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
     if (!can_pickup) {
         if (floor_num == 1) {
             o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
-            object_desc(owner_ptr, o_name, o_ptr, 0);
+            describe_flavor(owner_ptr, o_name, o_ptr, 0);
             msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
         } else
             msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
@@ -138,7 +138,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
     if (carry_query_flag) {
         char out_val[MAX_NLEN + 20];
         o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
-        object_desc(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(owner_ptr, o_name, o_ptr, 0);
         (void)sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
         if (!get_check(out_val))
             return;
@@ -177,7 +177,7 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
                 || (mode & IGNORE_BOTHHAND_SLOT)))
             continue;
 
-        object_desc(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(owner_ptr, o_name, o_ptr, 0);
         if ((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute) {
             (void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
             out_color[k] = TERM_WHITE;

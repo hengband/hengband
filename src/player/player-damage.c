@@ -8,6 +8,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
@@ -41,7 +42,6 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-move.h"
@@ -104,7 +104,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
     if (!object_is_armour(creature_ptr, o_ptr))
         return FALSE;
 
-    object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     object_flags(creature_ptr, o_ptr, flgs);
     /* No damage left to be done */
     if (o_ptr->ac + o_ptr->to_a <= 0) {

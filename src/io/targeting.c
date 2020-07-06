@@ -20,6 +20,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/spells-effect-util.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"
 #include "floor/floor-town.h"
@@ -52,7 +53,6 @@
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/object-curse.h"
-#include "object/object-flavor.h"
 #include "object/object-kind-hook.h"
 #include "object/object-mark-types.h"
 #include "player/player-move.h"
@@ -704,7 +704,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
             o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
             next_o_idx = o_ptr->next_o_idx;
 
-            object_desc(subject_ptr, o_name, o_ptr, 0);
+            describe_flavor(subject_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
             sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
@@ -747,7 +747,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
                 object_type *o_ptr;
                 o_ptr = &subject_ptr->current_floor_ptr->o_list[floor_list[0]];
 
-                object_desc(subject_ptr, o_name, o_ptr, 0);
+                describe_flavor(subject_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
                 sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
@@ -849,7 +849,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
             /* Not boring */
             boring = FALSE;
 
-            object_desc(subject_ptr, o_name, o_ptr, 0);
+            describe_flavor(subject_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
             sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);

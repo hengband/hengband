@@ -1,13 +1,13 @@
 ﻿#include "perception/object-perception.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-flavor.h"
-#include "object/object-generator.h"
 #include "object/item-tester-hooker.h" // 暫定、このファイルへ引っ越す.
+#include "object/object-generator.h"
 #include "object/object-kind.h"
 
 /*!
@@ -61,7 +61,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
     object_copy(q_ptr, o_ptr);
 
     q_ptr->number = 1;
-    object_desc(owner_ptr, o_name, q_ptr, OD_NAME_ONLY);
+    describe_flavor(owner_ptr, o_name, q_ptr, OD_NAME_ONLY);
 
     exe_write_diary(owner_ptr, DIARY_FOUND, 0, o_name);
 }

@@ -21,6 +21,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
@@ -38,7 +39,6 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
@@ -191,7 +191,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (!o_ptr)
                 return FALSE;
 
-            object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+            describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
             object_flags(caster_ptr, o_ptr, f);
 
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
@@ -499,7 +499,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return FALSE;
 
             o_ptr = &caster_ptr->inventory_list[item];
-            object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+            describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
             object_flags(caster_ptr, o_ptr, f);
 
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))

@@ -2,13 +2,13 @@
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "game-option/input-options.h"
 #include "inventory/inventory-object.h"
 #include "io/input-key-requester.h"
 #include "object-hook/hook-expendable.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-value.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
@@ -43,7 +43,7 @@ bool alchemy(player_type *caster_ptr)
     ITEM_NUMBER old_number = o_ptr->number;
     o_ptr->number = amt;
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(caster_ptr, o_name, o_ptr, 0);
+    describe_flavor(caster_ptr, o_name, o_ptr, 0);
     o_ptr->number = old_number;
 
     if (!force) {

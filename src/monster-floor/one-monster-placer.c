@@ -9,6 +9,7 @@
 #include "core/speed-table.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
@@ -30,7 +31,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "object/object-flavor.h"
 #include "object/warning.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
@@ -216,7 +216,7 @@ static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
 
     o_ptr = choose_warning_item(player_ptr);
     if (o_ptr != NULL) {
-        object_desc(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         msg_format(_("%sは%s光った。", "%s glows %s."), o_name, color);
     } else {
         msg_format(_("%s光る物が頭に浮かんだ。", "An %s image forms in your mind."), color);

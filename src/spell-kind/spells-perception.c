@@ -3,6 +3,7 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
@@ -15,9 +16,8 @@
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-perception.h"
 #include "object-hook/hook-weapon.h"
-#include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/item-tester-hooker.h"
+#include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/identification.h"
@@ -56,7 +56,7 @@ void identify_pack(player_type *target_ptr)
 bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 {
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(owner_ptr, o_name, o_ptr, 0);
+    describe_flavor(owner_ptr, o_name, o_ptr, 0);
 
     bool old_known = FALSE;
     if (o_ptr->ident & IDENT_KNOWN)
@@ -77,7 +77,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
     strcpy(record_o_name, o_name);
     record_turn = current_world_ptr->game_turn;
 
-    object_desc(owner_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(owner_ptr, o_name, o_ptr, OD_NAME_ONLY);
 
     if (record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
         exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
@@ -126,7 +126,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester
     bool old_known = identify_item(caster_ptr, o_ptr);
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(caster_ptr, o_name, o_ptr, 0);
+    describe_flavor(caster_ptr, o_name, o_ptr, 0);
     if (item >= INVEN_RARM) {
         msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
     } else if (item >= 0) {
@@ -182,7 +182,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tes
     handle_stuff(caster_ptr);
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(caster_ptr, o_name, o_ptr, 0);
+    describe_flavor(caster_ptr, o_name, o_ptr, 0);
     if (item >= INVEN_RARM) {
         msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
     } else if (item >= 0) {

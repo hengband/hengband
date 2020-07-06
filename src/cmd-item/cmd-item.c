@@ -28,6 +28,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
@@ -57,7 +58,6 @@
 #include "object-use/quaff-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
@@ -290,7 +290,7 @@ void do_cmd_wield(player_type *creature_ptr)
 
     /* Prevent wielding into a cursed slot */
     if (object_is_cursed(&creature_ptr->inventory_list[slot])) {
-        object_desc(creature_ptr, o_name, &creature_ptr->inventory_list[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
         msg_format("%s%sは呪われているようだ。", describe_use(creature_ptr, slot), o_name);
 #else
@@ -304,7 +304,7 @@ void do_cmd_wield(player_type *creature_ptr)
             || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
         char dummy[MAX_NLEN + 80];
 
-        object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy, _("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), o_name);
 
         if (!get_check(dummy))
@@ -314,7 +314,7 @@ void do_cmd_wield(player_type *creature_ptr)
     if ((o_ptr->name1 == ART_STONEMASK) && object_is_known(o_ptr) && (creature_ptr->prace != RACE_VAMPIRE) && (creature_ptr->prace != RACE_ANDROID)) {
         char dummy[MAX_NLEN + 100];
 
-        object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
         sprintf(dummy,
             _("%sを装備すると吸血鬼になります。よろしいですか？", "%s will transforms you into a vampire permanently when equiped. Do you become a vampire?"),
@@ -331,7 +331,7 @@ void do_cmd_wield(player_type *creature_ptr)
         object_type *otmp_ptr = &object_tmp;
         GAME_TEXT switch_name[MAX_NLEN];
 
-        object_desc(creature_ptr, switch_name, switch_o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(creature_ptr, switch_name, switch_o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
         object_copy(otmp_ptr, switch_o_ptr);
         object_copy(switch_o_ptr, slot_o_ptr);
@@ -423,7 +423,7 @@ void do_cmd_wield(player_type *creature_ptr)
         break;
     }
 
-    object_desc(creature_ptr, o_name, o_ptr, 0);
+    describe_flavor(creature_ptr, o_name, o_ptr, 0);
     msg_format(act, o_name, index_to_label(slot));
 
     /* Cursed! */
@@ -464,7 +464,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
             return;
 
         o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
-        object_desc(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(owner_ptr, o_name, o_ptr, 0);
 
         if (object_is_cursed(o_ptr)) {
             if (object_allow_two_hands_wielding(o_ptr) && can_two_hands_wielding(owner_ptr))
@@ -489,7 +489,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 
     o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
     if (o_ptr->k_idx)
-        object_desc(owner_ptr, o_name, o_ptr, 0);
+        describe_flavor(owner_ptr, o_name, o_ptr, 0);
 
     if (has_melee_weapon(owner_ptr, INVEN_RARM)) {
         if (object_allow_two_hands_wielding(o_ptr) && can_two_hands_wielding(owner_ptr))
@@ -652,7 +652,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 
     /* Verify unless quantity given beforehand */
     if (!force && (confirm_destroy || (object_value(creature_ptr, o_ptr) > 0))) {
-        object_desc(creature_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
+        describe_flavor(creature_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
         /* Make a verification */
         sprintf(out_val, _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), o_name);
@@ -703,7 +703,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 
     old_number = o_ptr->number;
     o_ptr->number = amt;
-    object_desc(creature_ptr, o_name, o_ptr, 0);
+    describe_flavor(creature_ptr, o_name, o_ptr, 0);
     o_ptr->number = old_number;
 
     take_turn(creature_ptr, 100);
@@ -803,7 +803,7 @@ void do_cmd_observe(player_type *creature_ptr)
         return;
     }
 
-    object_desc(creature_ptr, o_name, o_ptr, 0);
+    describe_flavor(creature_ptr, o_name, o_ptr, 0);
     msg_format(_("%sを調べている...", "Examining %s..."), o_name);
     if (!screen_object(creature_ptr, o_ptr, SCROBJ_FORCE_DETAIL))
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
@@ -865,7 +865,7 @@ void do_cmd_inscribe(player_type *creature_ptr)
         return;
 
     /* Describe the activity */
-    object_desc(creature_ptr, o_name, o_ptr, OD_OMIT_INSCRIPTION);
+    describe_flavor(creature_ptr, o_name, o_ptr, OD_OMIT_INSCRIPTION);
 
     msg_format(_("%sに銘を刻む。", "Inscribing %s."), o_name);
     msg_print(NULL);

@@ -4,6 +4,7 @@
 #include "combat/shoot.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-slot-types.h"
@@ -11,11 +12,10 @@
 #include "market/building-util.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-weapon.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/item-tester-hooker.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -306,7 +306,7 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
     DICE_SID eff_ds = o_ptr->ds + player_ptr->to_ds[0];
     HIT_RELIABILITY reli = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
 
-    object_desc(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
     c_put_str(TERM_YELLOW, o_name, row, col);
     sprintf(tmp_str, _("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]);
     put_str(tmp_str, row + 1, col);

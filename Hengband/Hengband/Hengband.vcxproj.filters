@@ -1664,6 +1664,9 @@
     <ClCompile Include="..\..\src\flavor\flavor-util.c">
       <Filter>flavor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\flavor\flavor-describer.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3641,6 +3644,9 @@
       <Filter>flavor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\flavor\flavor-util.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\flavor-describer.h">
       <Filter>flavor</Filter>
     </ClInclude>
   </ItemGroup>

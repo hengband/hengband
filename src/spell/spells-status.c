@@ -13,6 +13,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
@@ -23,7 +24,6 @@
 #include "io/targeting.h"
 #include "mind/mind-force-trainer.h"
 #include "monster/monster-describer.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
@@ -476,7 +476,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
     o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
     msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
 
     /* Get effects */

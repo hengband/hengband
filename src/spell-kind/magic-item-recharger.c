@@ -12,6 +12,7 @@
 
 #include "spell-kind/magic-item-recharger.h"
 #include "core/stuff-handler.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
@@ -20,7 +21,6 @@
 #include "object-hook/hook-magic.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-kind.h"
 #include "player/player-class.h"
 #include "view/display-messages.h"
@@ -116,7 +116,7 @@ bool recharge(player_type *caster_ptr, int power)
     byte fail_type = 1;
     GAME_TEXT o_name[MAX_NLEN];
     if (object_is_fixed_artifact(o_ptr)) {
-        object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
+        describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
         if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout < 10000))
             o_ptr->timeout = (o_ptr->timeout + 100) * 2;
@@ -125,7 +125,7 @@ bool recharge(player_type *caster_ptr, int power)
         return update_player(caster_ptr);
     }
 
-    object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     if (IS_WIZARD_CLASS(caster_ptr) || caster_ptr->pclass == CLASS_MAGIC_EATER || caster_ptr->pclass == CLASS_BLUE_MAGE) {
         /* 10% chance to blow up one rod, otherwise draining. */

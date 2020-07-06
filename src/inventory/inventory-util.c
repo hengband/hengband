@@ -7,12 +7,12 @@
 
 #include "inventory/inventory-util.h"
 #include "core/asking-player.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "system/object-type-definition.h"
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
@@ -272,7 +272,7 @@ bool verify(player_type *owner_ptr, concptr prompt, INVENTORY_IDX item)
     else
         o_ptr = &owner_ptr->current_floor_ptr->o_list[0 - item];
 
-    object_desc(owner_ptr, o_name, o_ptr, 0);
+    describe_flavor(owner_ptr, o_name, o_ptr, 0);
     (void)sprintf(out_val, _("%s%sですか? ", "%s %s? "), prompt, o_name);
     return get_check(out_val);
 }

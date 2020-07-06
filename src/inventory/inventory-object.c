@@ -1,15 +1,15 @@
 ﻿#include "inventory/inventory-object.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
+#include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "object/object-info.h"
 #include "spell-realm/spells-craft.h"
 #include "util/object-sort.h"
 #include "view/display-messages.h"
@@ -139,7 +139,7 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
     distribute_charges(o_ptr, q_ptr, amt);
 
     q_ptr->number = amt;
-    object_desc(owner_ptr, o_name, q_ptr, 0);
+    describe_flavor(owner_ptr, o_name, q_ptr, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
     (void)drop_near(owner_ptr, q_ptr, 0, owner_ptr->y, owner_ptr->x);
     vary_item(owner_ptr, item, -amt);
@@ -406,7 +406,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
     q_ptr = &forge;
     object_copy(q_ptr, o_ptr);
     q_ptr->number = amt;
-    object_desc(owner_ptr, o_name, q_ptr, 0);
+    describe_flavor(owner_ptr, o_name, q_ptr, 0);
     if (((item == INVEN_RARM) || (item == INVEN_LARM)) && object_is_melee_weapon(o_ptr)) {
         act = _("を装備からはずした", "You were wielding");
     } else if (item == INVEN_BOW) {

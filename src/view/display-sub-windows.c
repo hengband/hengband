@@ -1,5 +1,6 @@
 ﻿#include "view/display-sub-windows.h"
 #include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor.h"
 #include "game-option/option-flags.h"
 #include "game-option/special-options.h"
@@ -17,7 +18,6 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "object/item-tester-hooker.h"
-#include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "system/monster-type-definition.h"
@@ -218,7 +218,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
             strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
             attr = TERM_WHITE;
         } else {
-            object_desc(owner_ptr, o_name, o_ptr, 0);
+            describe_flavor(owner_ptr, o_name, o_ptr, 0);
             attr = tval_to_attr[o_ptr->tval % 128];
         }
 

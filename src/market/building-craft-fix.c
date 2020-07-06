@@ -3,6 +3,7 @@
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
@@ -14,10 +15,9 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
-#include "object/item-tester-hooker.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
@@ -115,7 +115,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     }
 
     char basenm[MAX_NLEN];
-    object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
+    describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
     prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row + 3, 2);
 
     q = _("材料となる武器は？", "Which weapon for material? ");
@@ -132,14 +132,14 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         return 0;
     }
 
-    object_desc(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
+    describe_flavor(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
     prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
     PRICE cost = bcost + object_value_real(player_ptr, o_ptr) * 2;
     if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost)))
         return 0;
 
     if (player_ptr->au < cost) {
-        object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
+        describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
         msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
         msg_print(NULL);
         return 0;
@@ -255,7 +255,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptional."));
     }
 
-    object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
+    describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
 #ifdef JP
     msg_format("＄%dで%sに修復しました。", cost, basenm);
 #else
