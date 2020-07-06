@@ -153,6 +153,7 @@ hengband_SOURCES = \
 	effect/effect-characteristics.h \
 	\
 	flavor/flag-inscriptions-table.c flavor/flag-inscriptions-table.h \
+	flavor/flavor-util.c flavor/flavor-util.h \
 	flavor/object-flavor-types.h \
 	\
 	floor/fixed-map-generator.c floor/fixed-map-generator.h \

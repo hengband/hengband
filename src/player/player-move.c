@@ -153,6 +153,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "flavor/flavor-util.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
@@ -310,7 +311,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 
 #ifdef JP
     object_desc(owner_ptr, old_name, o_ptr, OD_NAME_ONLY);
-    object_desc_kosuu(kazu_str, o_ptr);
+    object_desc_count_japanese(kazu_str, o_ptr);
     hirottakazu = o_ptr->number;
 #endif
 
