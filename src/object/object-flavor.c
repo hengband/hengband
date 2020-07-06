@@ -471,8 +471,13 @@ static char *object_desc_int(char *t, int v)
     return t;
 }
 
-/* オブジェクトフラグを追加するための簡易なマクロ / Simple macro for get_inscription() */
-#define ADD_INSC(STR) (void)(ptr = object_desc_str(ptr, (STR)))
+/*!
+ * @brief オブジェクトフラグを追加する
+ * @param str フレーバー表現 (アンチテレポの"[" 等)
+ * @param ptr 特性短縮表記を格納する文字列ポインタ
+ * @return なし
+ */
+static void add_inscription(char *ptr, concptr str) { ptr = object_desc_str(ptr, str); }
 
 /*!
  * @brief get_inscriptionのサブセットとしてオブジェクトの特性フラグを返す / Helper function for get_inscription()
@@ -495,7 +500,7 @@ static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_
 
     while (fi_ptr->english) {
         if (have_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !have_flag(flgs, fi_ptr->except_flag)))
-            ADD_INSC(_(kanji ? fi_ptr->japanese : fi_ptr->english, fi_ptr->english));
+            add_inscription(ptr, _(kanji ? fi_ptr->japanese : fi_ptr->english, fi_ptr->english));
 
         fi_ptr++;
     }
@@ -572,26 +577,26 @@ static char *get_ability_abbreviation(player_type *player_ptr, char *ptr, object
     }
 
     if (have_flag_of(flag_insc_plus, flgs) && kanji)
-        ADD_INSC("+");
+        add_inscription(ptr, "+");
 
     ptr = inscribe_flags_aux(flag_insc_plus, flgs, kanji, ptr);
 
     if (have_flag_of(flag_insc_immune, flgs)) {
         if (!kanji && ptr != prev_ptr) {
-            ADD_INSC(";");
+            add_inscription(ptr, ";");
             prev_ptr = ptr;
         }
 
-        ADD_INSC("*");
+        add_inscription(ptr, "*");
     }
 
     ptr = inscribe_flags_aux(flag_insc_immune, flgs, kanji, ptr);
 
     if (have_flag_of(flag_insc_resistance, flgs)) {
         if (kanji)
-            ADD_INSC("r");
+            add_inscription(ptr, "r");
         else if (ptr != prev_ptr) {
-            ADD_INSC(";");
+            add_inscription(ptr, ";");
             prev_ptr = ptr;
         }
     }
@@ -599,52 +604,52 @@ static char *get_ability_abbreviation(player_type *player_ptr, char *ptr, object
     ptr = inscribe_flags_aux(flag_insc_resistance, flgs, kanji, ptr);
 
     if (have_flag_of(flag_insc_misc, flgs) && (ptr != prev_ptr)) {
-        ADD_INSC(";");
+        add_inscription(ptr, ";");
         prev_ptr = ptr;
     }
 
     ptr = inscribe_flags_aux(flag_insc_misc, flgs, kanji, ptr);
 
     if (have_flag_of(flag_insc_aura, flgs))
-        ADD_INSC("[");
+        add_inscription(ptr, "[");
 
     ptr = inscribe_flags_aux(flag_insc_aura, flgs, kanji, ptr);
 
     if (have_flag_of(flag_insc_brand, flgs))
-        ADD_INSC("|");
+        add_inscription(ptr, "|");
 
     ptr = inscribe_flags_aux(flag_insc_brand, flgs, kanji, ptr);
 
     if (have_flag_of(flag_insc_kill, flgs))
-        ADD_INSC("/X");
+        add_inscription(ptr, "/X");
 
     ptr = inscribe_flags_aux(flag_insc_kill, flgs, kanji, ptr);
 
     if (have_flag_of(flag_insc_slay, flgs))
-        ADD_INSC("/");
+        add_inscription(ptr, "/");
 
     ptr = inscribe_flags_aux(flag_insc_slay, flgs, kanji, ptr);
 
     if (kanji) {
         if (have_flag_of(flag_insc_esp1, flgs) || have_flag_of(flag_insc_esp2, flgs))
-            ADD_INSC("~");
+            add_inscription(ptr, "~");
 
         ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
         ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
     } else {
         if (have_flag_of(flag_insc_esp1, flgs))
-            ADD_INSC("~");
+            add_inscription(ptr, "~");
 
         ptr = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, ptr);
 
         if (have_flag_of(flag_insc_esp2, flgs))
-            ADD_INSC("~");
+            add_inscription(ptr, "~");
 
         ptr = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, ptr);
     }
 
     if (have_flag_of(flag_insc_sust, flgs))
-        ADD_INSC("(");
+        add_inscription(ptr, "(");
 
     ptr = inscribe_flags_aux(flag_insc_sust, flgs, kanji, ptr);
     *ptr = '\0';
@@ -703,7 +708,7 @@ static void get_inscription(player_type *player_ptr, char *buff, object_type *o_
 
             ptr = get_ability_abbreviation(player_ptr, ptr, o_ptr, kanji, all);
             if (ptr == start)
-                ADD_INSC(" ");
+                add_inscription(ptr, " ");
         } else
             *ptr++ = *insc;
     }
