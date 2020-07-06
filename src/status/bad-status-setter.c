@@ -12,7 +12,7 @@
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/base-status.h"
-#include "status/form-changer.h"
+#include "status/shape-changer.h"
 #include "view/display-messages.h"
 
 /*!

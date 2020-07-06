@@ -35,7 +35,7 @@
 #include "status/action-setter.h"
 #include "status/buff-setter.h"
 #include "status/experience.h"
-#include "status/form-changer.h"
+#include "status/shape-changer.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
 #include "term/screen-processor.h"

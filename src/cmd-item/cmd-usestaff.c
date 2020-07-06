@@ -42,7 +42,7 @@
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "status/experience.h"
-#include "status/form-changer.h"
+#include "status/shape-changer.h"
 #include "sv-definition/sv-staff-types.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"

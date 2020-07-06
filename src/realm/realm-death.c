@@ -24,7 +24,7 @@
 #include "spell/spells-summon.h"
 #include "status/buff-setter.h"
 #include "status/experience.h"
-#include "status/form-changer.h"
+#include "status/shape-changer.h"
 #include "status/element-resistance.h"
 
 /*!

@@ -89,7 +89,7 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "status/experience.h"
-#include "status/form-changer.h"
+#include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "sv-definition/sv-lite-types.h"

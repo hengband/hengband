@@ -21,7 +21,7 @@
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
-#include "status/form-changer.h"
+#include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "view/display-messages.h"
