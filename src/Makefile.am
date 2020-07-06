@@ -586,7 +586,6 @@ hengband_SOURCES = \
 	spell-kind/spells-perception.c spell-kind/spells-perception.h \
 	spell-kind/spells-polymorph.c spell-kind/spells-polymorph.h \
 	spell-kind/spells-random.c spell-kind/spells-random.h \
-	spell-kind/spells-recall.c spell-kind/spells-recall.h \
 	spell-kind/spells-sight.c spell-kind/spells-sight.h \
 	spell-kind/spells-specific-bolt.c spell-kind/spells-specific-bolt.h \
 	spell-kind/spells-teleport.c spell-kind/spells-teleport.h \

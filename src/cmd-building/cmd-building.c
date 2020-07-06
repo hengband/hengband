@@ -59,7 +59,6 @@
 #include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-perception.h"
-#include "spell-kind/spells-recall.h"
 #include "spell-kind/spells-world.h"
 #include "spell/spells-status.h"
 #include "system/building-type-definition.h"

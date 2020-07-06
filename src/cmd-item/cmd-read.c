@@ -45,7 +45,6 @@
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-perception.h"
-#include "spell-kind/spells-recall.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"

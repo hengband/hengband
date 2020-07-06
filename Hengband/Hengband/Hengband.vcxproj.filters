@@ -1436,9 +1436,6 @@
     <ClCompile Include="..\..\src\wizard\wizard-spells.c">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-recall.c">
-      <Filter>spell-kind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell-realm\spells-chaos.c">
       <Filter>spell-realm</Filter>
     </ClCompile>
@@ -3390,9 +3387,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\wizard\wizard-spells.h">
       <Filter>wizard</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell-kind\spells-recall.h">
-      <Filter>spell-kind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-chaos.h">
       <Filter>spell-realm</Filter>
