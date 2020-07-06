@@ -176,6 +176,7 @@
     <ClCompile Include="..\..\src\core\status-reseter.c" />
     <ClCompile Include="..\..\src\core\visuals-reseter.c" />
     <ClCompile Include="..\..\src\core\window-redrawer.c" />
+    <ClCompile Include="..\..\src\flavor\flag-inscriptions-table.c" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
     <ClCompile Include="..\..\src\floor\floor-util.c" />
     <ClCompile Include="..\..\src\floor\object-scanner.c" />
@@ -643,6 +644,7 @@
     <ClInclude Include="..\..\src\core\status-reseter.h" />
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\core\window-redrawer.h" />
+    <ClInclude Include="..\..\src\flavor\flag-inscriptions-table.h" />
     <ClInclude Include="..\..\src\flavor\object-flavor-types.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
     <ClInclude Include="..\..\src\floor\floor-util.h" />

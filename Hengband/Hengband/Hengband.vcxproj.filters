@@ -1658,6 +1658,9 @@
     <ClCompile Include="..\..\src\object-use\quaff-execution.c">
       <Filter>object-use</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\flavor\flag-inscriptions-table.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3629,6 +3632,9 @@
       <Filter>object-use</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\flavor\object-flavor-types.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\flag-inscriptions-table.h">
       <Filter>flavor</Filter>
     </ClInclude>
   </ItemGroup>
