@@ -179,6 +179,7 @@
     <ClCompile Include="..\..\src\flavor\flag-inscriptions-table.c" />
     <ClCompile Include="..\..\src\flavor\flavor-describer.c" />
     <ClCompile Include="..\..\src\flavor\flavor-util.c" />
+    <ClCompile Include="..\..\src\flavor\tval-description-switcher.c" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
     <ClCompile Include="..\..\src\floor\floor-util.c" />
     <ClCompile Include="..\..\src\floor\object-scanner.c" />
@@ -649,6 +650,7 @@
     <ClInclude Include="..\..\src\flavor\flavor-describer.h" />
     <ClInclude Include="..\..\src\flavor\flavor-util.h" />
     <ClInclude Include="..\..\src\flavor\object-flavor-types.h" />
+    <ClInclude Include="..\..\src\flavor\tval-description-switcher.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
     <ClInclude Include="..\..\src\floor\floor-util.h" />
     <ClInclude Include="..\..\src\floor\object-scanner.h" />
