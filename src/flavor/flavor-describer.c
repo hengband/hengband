@@ -205,6 +205,20 @@ static void describe_potion(flavor_type *flavor_ptr)
         flavor_ptr->basenm = _("#薬", "& # Potion~");
 }
 
+static void describe_food(flavor_type *flavor_ptr)
+{
+    if (!flavor_ptr->k_ptr->flavor_name)
+        return;
+
+    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    if (!flavor_ptr->flavor)
+        flavor_ptr->basenm = _("%のキノコ", "& Mushroom~ of %");
+    else if (flavor_ptr->aware)
+        flavor_ptr->basenm = _("%の#キノコ", "& # Mushroom~ of %");
+    else
+        flavor_ptr->basenm = _("#キノコ", "& # Mushroom~");
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -283,20 +297,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_POTION:
         describe_potion(flavor_ptr);
         break;
-    case TV_FOOD: {
-        if (!flavor_ptr->k_ptr->flavor_name)
-            break;
-
-        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
-        if (!flavor_ptr->flavor)
-            flavor_ptr->basenm = _("%のキノコ", "& Mushroom~ of %");
-        else if (flavor_ptr->aware)
-            flavor_ptr->basenm = _("%の#キノコ", "& # Mushroom~ of %");
-        else
-            flavor_ptr->basenm = _("#キノコ", "& # Mushroom~");
-
+    case TV_FOOD:
+        describe_food(flavor_ptr);
         break;
-    }
     case TV_PARCHMENT: {
         flavor_ptr->basenm = _("羊皮紙 - %", "& Parchment~ - %");
         break;
