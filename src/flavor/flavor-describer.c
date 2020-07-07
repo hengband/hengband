@@ -119,6 +119,20 @@ static void describe_corpse(flavor_type *flavor_ptr)
 #endif
 }
 
+static void describe_amulet(flavor_type *flavor_ptr)
+{
+    if (flavor_ptr->aware && (object_is_fixed_artifact(flavor_ptr->o_ptr) || ((flavor_ptr->k_ptr->gen_flags & TRG_INSTA_ART) == 0)))
+        return;
+
+    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    if (!flavor_ptr->flavor)
+        flavor_ptr->basenm = _("%のアミュレット", "& Amulet~ of %");
+    else if (flavor_ptr->aware)
+        flavor_ptr->basenm = _("%の#アミュレット", "& # Amulet~ of %");
+    else
+        flavor_ptr->basenm = _("#アミュレット", "& # Amulet~");
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -158,10 +172,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_HAFTED:
     case TV_POLEARM:
     case TV_SWORD:
-    case TV_DIGGING: {
+    case TV_DIGGING:
         flavor_ptr->show_weapon = TRUE;
         break;
-    }
     case TV_BOOTS:
     case TV_GLOVES:
     case TV_CLOAK:
@@ -170,30 +183,14 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_SHIELD:
     case TV_SOFT_ARMOR:
     case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR: {
+    case TV_DRAG_ARMOR:
         flavor_ptr->show_armour = TRUE;
         break;
-    }
     case TV_LITE:
         break;
-    case TV_AMULET: {
-        if (flavor_ptr->aware) {
-            if (object_is_fixed_artifact(flavor_ptr->o_ptr))
-                break;
-            if (flavor_ptr->k_ptr->gen_flags & TRG_INSTA_ART)
-                break;
-        }
-
-        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
-        if (!flavor_ptr->flavor)
-            flavor_ptr->basenm = _("%のアミュレット", "& Amulet~ of %");
-        else if (flavor_ptr->aware)
-            flavor_ptr->basenm = _("%の#アミュレット", "& # Amulet~ of %");
-        else
-            flavor_ptr->basenm = _("#アミュレット", "& # Amulet~");
-
+    case TV_AMULET:
+        describe_amulet(flavor_ptr);
         break;
-    }
     case TV_RING: {
         if (flavor_ptr->aware) {
             if (object_is_fixed_artifact(flavor_ptr->o_ptr))
