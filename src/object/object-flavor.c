@@ -18,8 +18,6 @@
 #include "grid/trap.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
-#include "locale/japanese.h"
-#include "locale/vowel-checker.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-weaponsmith.h"
 #include "monster-race/monster-race.h"
@@ -45,6 +43,11 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "world/world.h"
+#ifdef JP
+#include "locale/japanese.h"
+#else
+#include "locale/english.h"
+#endif
 
 /*!
  * @brief 最初から簡易な名称が明らかになるベースアイテムの判定。 /  Certain items, if aware, are known instantly

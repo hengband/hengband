@@ -53,7 +53,6 @@
 #include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
-#include "locale/japanese.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -94,6 +93,9 @@
 #include "view/display-sub-windows.h"
 #include "view/object-describer.h"
 #include "world/world.h"
+#ifdef JP
+#include "locale/japanese.h"
+#endif
 
 #define MIN_STOCK 12
 

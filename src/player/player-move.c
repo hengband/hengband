@@ -172,7 +172,6 @@
 #include "inventory/player-inventory.h"
 #include "io/input-key-requester.h"
 #include "io/targeting.h"
-#include "locale/vowel-checker.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
@@ -208,6 +207,10 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 travel_type travel;
 

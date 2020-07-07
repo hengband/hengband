@@ -1,6 +1,8 @@
 ﻿#include "savedata/load-util.h"
-#include "locale/japanese.h"
 #include "term/screen-processor.h"
+#ifdef JP
+#include "locale/japanese.h"
+#endif
 
 FILE *loading_savefile;
 byte load_xor_byte; // Old "encryption" byte.

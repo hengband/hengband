@@ -9,10 +9,6 @@
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
-#ifdef JP
-#else
-#include "locale/vowel-checker.h"
-#endif
 #include "mutation/mutation.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
@@ -26,6 +22,10 @@
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "view/display-messages.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 void do_poly_wounds(player_type *creature_ptr)
 {

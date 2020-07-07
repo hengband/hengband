@@ -13,10 +13,12 @@
 #include "io/files-util.h"
 #include "io/inet.h"
 #include "io/signal-handlers.h"
-#include "locale/japanese.h"
 #include "term/gameterm.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
+#ifdef JP
+#include "locale/japanese.h"
+#endif
 
 #include <ctype.h>
 #include <stdarg.h>

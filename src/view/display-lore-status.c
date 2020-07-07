@@ -1,5 +1,4 @@
 ﻿#include "view/display-lore-status.h"
-#include "locale/japanese.h"
 #include "lore/lore-calculator.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
@@ -8,6 +7,9 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "term/term-color-types.h"
+#ifdef JP
+#include "locale/japanese.h"
+#endif
 
 void display_monster_hp_ac(lore_type *lore_ptr)
 {

@@ -1,7 +1,6 @@
 ﻿#include "monster/monster-describer.h"
 #include "floor/floor.h"
 #include "io/files-util.h"
-#include "locale/vowel-checker.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-description-types.h"
@@ -10,6 +9,10 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 /*!
  * @brief モンスターの呼称を作成する / Build a string describing a monster in some way.

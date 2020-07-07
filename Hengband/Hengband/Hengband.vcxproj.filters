@@ -1352,9 +1352,6 @@
     <ClCompile Include="..\..\src\io\command-repeater.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\locale\vowel-checker.c">
-      <Filter>locale</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\game-option\keymap-directory-getter.c">
       <Filter>game-option</Filter>
     </ClCompile>
@@ -3276,9 +3273,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\command-repeater.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\locale\vowel-checker.h">
-      <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\tag-sorter.h">
       <Filter>util</Filter>

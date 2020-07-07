@@ -40,7 +40,6 @@
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/screen-util.h"
-#include "locale/vowel-checker.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
@@ -71,6 +70,10 @@
 #include "view/display-monster-status.h"
 #include "view/main-window-util.h"
 #include "world/world.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /

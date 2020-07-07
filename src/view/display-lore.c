@@ -6,8 +6,6 @@
 
 #include "view/display-lore.h"
 #include "game-option/text-display-options.h"
-#include "locale/english.h"
-#include "locale/japanese.h"
 #include "lore/lore-calculator.h"
 #include "lore/monster-lore.h"
 #include "monster-race/monster-race.h"
@@ -22,6 +20,11 @@
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#ifdef JP
+#include "locale/japanese.h"
+#else
+#include "locale/english.h"
+#endif
 
 /*!
  * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)

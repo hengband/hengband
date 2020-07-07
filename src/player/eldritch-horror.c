@@ -8,7 +8,6 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
-#include "locale/vowel-checker.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -27,6 +26,10 @@
 #include "status/base-status.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める

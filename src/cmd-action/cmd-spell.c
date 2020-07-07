@@ -25,7 +25,6 @@
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
-#include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind.h"
@@ -60,6 +59,9 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#ifdef JP
+#include "locale/japanese.h"
+#endif
 
 /*!
  * 魔法領域フラグ管理テーブル /

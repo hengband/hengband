@@ -33,7 +33,7 @@
 #include "util/string-processor.h"
 #ifdef JP
 #else
-#include "locale/vowel-checker.h"
+#include "locale/english.h"
 #include "monster-race/race-flags1.h"
 #include "player/player-class.h"
 #endif

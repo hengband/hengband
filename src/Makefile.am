@@ -269,7 +269,6 @@ hengband_SOURCES = \
 	locale/english.c locale/english.h \
 	locale/japanese.c locale/japanese.h \
 	locale/language-switcher.h \
-	locale/vowel-checker.c locale/vowel-checker.h \
 	\
 	lore/combat-types-setter.c lore/combat-types-setter.h \
 	lore/lore-calculator.c lore/lore-calculator.h \

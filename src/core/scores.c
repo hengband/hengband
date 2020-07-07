@@ -23,7 +23,6 @@
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "io/write-diary.h"
-#include "locale/japanese.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"
@@ -37,6 +36,9 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#ifdef JP
+#include "locale/japanese.h"
+#endif
 
  /*
   * The "highscore" file descriptor, if available.
