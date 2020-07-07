@@ -183,6 +183,17 @@ static void describe_rod(flavor_type *flavor_ptr)
         flavor_ptr->basenm = _("#ロッド", "& # Rod~");
 }
 
+static void describe_scroll(flavor_type *flavor_ptr)
+{
+    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    if (!flavor_ptr->flavor)
+        flavor_ptr->basenm = _("%の巻物", "& Scroll~ of %");
+    else if (flavor_ptr->aware)
+        flavor_ptr->basenm = _("「#」と書かれた%の巻物", "& Scroll~ titled \"#\" of %");
+    else
+        flavor_ptr->basenm = _("「#」と書かれた巻物", "& Scroll~ titled \"#\"");
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -255,17 +266,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_ROD:
         describe_rod(flavor_ptr);
         break;
-    case TV_SCROLL: {
-        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
-        if (!flavor_ptr->flavor)
-            flavor_ptr->basenm = _("%の巻物", "& Scroll~ of %");
-        else if (flavor_ptr->aware)
-            flavor_ptr->basenm = _("「#」と書かれた%の巻物", "& Scroll~ titled \"#\" of %");
-        else
-            flavor_ptr->basenm = _("「#」と書かれた巻物", "& Scroll~ titled \"#\"");
-
+    case TV_SCROLL:
+        describe_scroll(flavor_ptr);
         break;
-    }
     case TV_POTION: {
         flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
         if (!flavor_ptr->flavor)
