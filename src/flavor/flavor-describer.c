@@ -31,6 +31,12 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
+#ifdef JP
+#else
+#include "locale/vowel-checker.h"
+#include "monster-race/race-flags1.h"
+#include "player/player-class.h"
+#endif
 
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
@@ -42,53 +48,32 @@
  */
 void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
 {
-    concptr kindname = k_name + k_info[o_ptr->k_idx].name;
-    concptr basenm = kindname;
-    concptr modstr = "";
-    int power;
-    int fire_rate;
-    bool aware = FALSE;
-    bool known = FALSE;
-    bool flavor = TRUE;
-    bool show_weapon = FALSE;
-    bool show_armour = FALSE;
-    concptr s, s0;
-    char *t;
-    char p1 = '(', p2 = ')';
-    char b1 = '[', b2 = ']';
-    char c1 = '{', c2 = '}';
-    char tmp_val[MAX_NLEN + 160];
-    char tmp_val2[MAX_NLEN + 10];
-    char fake_insc_buf[30];
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_type *bow_ptr;
-    object_kind *k_ptr = &k_info[o_ptr->k_idx];
-    object_kind *flavor_k_ptr = &k_info[k_ptr->flavor];
+    flavor_type tmp_flavor;
+    flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
+    object_flags(player_ptr, flavor_ptr->o_ptr, flavor_ptr->flags);
+    if (object_is_aware(flavor_ptr->o_ptr))
+        flavor_ptr->aware = TRUE;
 
-    object_flags(player_ptr, o_ptr, flgs);
-    if (object_is_aware(o_ptr))
-        aware = TRUE;
+    if (object_is_known(flavor_ptr->o_ptr))
+        flavor_ptr->known = TRUE;
 
-    if (object_is_known(o_ptr))
-        known = TRUE;
+    if (flavor_ptr->aware && ((flavor_ptr->mode & OD_NO_FLAVOR) || plain_descriptions))
+        flavor_ptr->flavor = FALSE;
 
-    if (aware && ((mode & OD_NO_FLAVOR) || plain_descriptions))
-        flavor = FALSE;
-
-    if ((mode & OD_STORE) || (o_ptr->ident & IDENT_STORE)) {
-        flavor = FALSE;
-        aware = TRUE;
-        known = TRUE;
+    if ((flavor_ptr->mode & OD_STORE) || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
+        flavor_ptr->flavor = FALSE;
+        flavor_ptr->aware = TRUE;
+        flavor_ptr->known = TRUE;
     }
 
-    if (mode & OD_FORCE_FLAVOR) {
-        aware = FALSE;
-        flavor = TRUE;
-        known = FALSE;
-        flavor_k_ptr = k_ptr;
+    if (flavor_ptr->mode & OD_FORCE_FLAVOR) {
+        flavor_ptr->aware = FALSE;
+        flavor_ptr->flavor = TRUE;
+        flavor_ptr->known = FALSE;
+        flavor_ptr->flavor_k_ptr = flavor_ptr->k_ptr;
     }
 
-    switch (o_ptr->tval) {
+    switch (flavor_ptr->o_ptr->tval) {
     case TV_SKELETON:
     case TV_BOTTLE:
     case TV_JUNK:
@@ -98,25 +83,25 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_WHISTLE:
         break;
     case TV_CAPTURE: {
-        monster_race *r_ptr = &r_info[o_ptr->pval];
-        if (known) {
-            if (!o_ptr->pval) {
-                modstr = _(" (空)", " (empty)");
+        monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+        if (flavor_ptr->known) {
+            if (!flavor_ptr->o_ptr->pval) {
+                flavor_ptr->modstr = _(" (空)", " (empty)");
             } else {
 #ifdef JP
-                sprintf(tmp_val2, " (%s)", r_name + r_ptr->name);
-                modstr = tmp_val2;
+                sprintf(flavor_ptr->tmp_val2, " (%s)", r_name + r_ptr->name);
+                flavor_ptr->modstr = flavor_ptr->tmp_val2;
 #else
-                t = r_name + r_ptr->name;
+                flavor_ptr->t = r_name + r_ptr->name;
 
                 if (!(r_ptr->flags1 & RF1_UNIQUE)) {
-                    sprintf(tmp_val2, " (%s%s)", (is_a_vowel(*t) ? "an " : "a "), t);
+                    sprintf(flavor_ptr->tmp_val2, " (%s%s)", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
 
-                    modstr = tmp_val2;
+                    flavor_ptr->modstr = flavor_ptr->tmp_val2;
                 } else {
-                    sprintf(tmp_val2, "(%s)", t);
+                    sprintf(flavor_ptr->tmp_val2, "(%s)", flavor_ptr->t);
 
-                    modstr = t;
+                    flavor_ptr->modstr = flavor_ptr->t;
                 }
 #endif
             }
@@ -126,31 +111,31 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     }
     case TV_FIGURINE:
     case TV_STATUE: {
-        monster_race *r_ptr = &r_info[o_ptr->pval];
+        monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
 #ifdef JP
-        modstr = r_name + r_ptr->name;
+        flavor_ptr->modstr = r_name + r_ptr->name;
 #else
-        t = r_name + r_ptr->name;
+        flavor_ptr->t = r_name + r_ptr->name;
 
         if (!(r_ptr->flags1 & RF1_UNIQUE)) {
-            sprintf(tmp_val2, "%s%s", (is_a_vowel(*t) ? "an " : "a "), t);
-            modstr = tmp_val2;
+            sprintf(flavor_ptr->tmp_val2, "%s%s", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
+            flavor_ptr->modstr = flavor_ptr->tmp_val2;
         } else
-            modstr = t;
+            flavor_ptr->modstr = flavor_ptr->t;
 #endif
 
         break;
     }
     case TV_CORPSE: {
-        monster_race *r_ptr = &r_info[o_ptr->pval];
-        modstr = r_name + r_ptr->name;
+        monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+        flavor_ptr->modstr = r_name + r_ptr->name;
 #ifdef JP
-        basenm = "#%";
+        flavor_ptr->basenm = "#%";
 #else
         if (r_ptr->flags1 & RF1_UNIQUE)
-            basenm = "& % of #";
+            flavor_ptr->basenm = "& % of #";
         else
-            basenm = "& # %";
+            flavor_ptr->basenm = "& # %";
 #endif
 
         break;
@@ -163,7 +148,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_POLEARM:
     case TV_SWORD:
     case TV_DIGGING: {
-        show_weapon = TRUE;
+        flavor_ptr->show_weapon = TRUE;
         break;
     }
     case TV_BOOTS:
@@ -175,441 +160,441 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_SOFT_ARMOR:
     case TV_HARD_ARMOR:
     case TV_DRAG_ARMOR: {
-        show_armour = TRUE;
+        flavor_ptr->show_armour = TRUE;
         break;
     }
     case TV_LITE:
         break;
     case TV_AMULET: {
-        if (aware) {
-            if (object_is_fixed_artifact(o_ptr))
+        if (flavor_ptr->aware) {
+            if (object_is_fixed_artifact(flavor_ptr->o_ptr))
                 break;
-            if (k_ptr->gen_flags & TRG_INSTA_ART)
+            if (flavor_ptr->k_ptr->gen_flags & TRG_INSTA_ART)
                 break;
         }
 
-        modstr = k_name + flavor_k_ptr->flavor_name;
-        if (!flavor)
-            basenm = _("%のアミュレット", "& Amulet~ of %");
-        else if (aware)
-            basenm = _("%の#アミュレット", "& # Amulet~ of %");
+        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+        if (!flavor_ptr->flavor)
+            flavor_ptr->basenm = _("%のアミュレット", "& Amulet~ of %");
+        else if (flavor_ptr->aware)
+            flavor_ptr->basenm = _("%の#アミュレット", "& # Amulet~ of %");
         else
-            basenm = _("#アミュレット", "& # Amulet~");
+            flavor_ptr->basenm = _("#アミュレット", "& # Amulet~");
 
         break;
     }
     case TV_RING: {
-        if (aware) {
-            if (object_is_fixed_artifact(o_ptr))
+        if (flavor_ptr->aware) {
+            if (object_is_fixed_artifact(flavor_ptr->o_ptr))
                 break;
-            if (k_ptr->gen_flags & TRG_INSTA_ART)
+            if (flavor_ptr->k_ptr->gen_flags & TRG_INSTA_ART)
                 break;
         }
 
-        modstr = k_name + flavor_k_ptr->flavor_name;
-        if (!flavor)
-            basenm = _("%の指輪", "& Ring~ of %");
-        else if (aware)
-            basenm = _("%の#指輪", "& # Ring~ of %");
+        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+        if (!flavor_ptr->flavor)
+            flavor_ptr->basenm = _("%の指輪", "& Ring~ of %");
+        else if (flavor_ptr->aware)
+            flavor_ptr->basenm = _("%の#指輪", "& # Ring~ of %");
         else
-            basenm = _("#指輪", "& # Ring~");
+            flavor_ptr->basenm = _("#指輪", "& # Ring~");
 
-        if (!k_ptr->to_h && !k_ptr->to_d && (o_ptr->to_h || o_ptr->to_d))
-            show_weapon = TRUE;
+        if (!flavor_ptr->k_ptr->to_h && !flavor_ptr->k_ptr->to_d && (flavor_ptr->o_ptr->to_h || flavor_ptr->o_ptr->to_d))
+            flavor_ptr->show_weapon = TRUE;
 
         break;
     }
     case TV_CARD:
         break;
     case TV_STAFF: {
-        modstr = k_name + flavor_k_ptr->flavor_name;
-        if (!flavor)
-            basenm = _("%の杖", "& Staff~ of %");
-        else if (aware)
-            basenm = _("%の#杖", "& # Staff~ of %");
+        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+        if (!flavor_ptr->flavor)
+            flavor_ptr->basenm = _("%の杖", "& Staff~ of %");
+        else if (flavor_ptr->aware)
+            flavor_ptr->basenm = _("%の#杖", "& # Staff~ of %");
         else
-            basenm = _("#杖", "& # Staff~");
+            flavor_ptr->basenm = _("#杖", "& # Staff~");
 
         break;
     }
     case TV_WAND: {
-        modstr = k_name + flavor_k_ptr->flavor_name;
-        if (!flavor)
-            basenm = _("%の魔法棒", "& Wand~ of %");
-        else if (aware)
-            basenm = _("%の#魔法棒", "& # Wand~ of %");
+        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+        if (!flavor_ptr->flavor)
+            flavor_ptr->basenm = _("%の魔法棒", "& Wand~ of %");
+        else if (flavor_ptr->aware)
+            flavor_ptr->basenm = _("%の#魔法棒", "& # Wand~ of %");
         else
-            basenm = _("#魔法棒", "& # Wand~");
+            flavor_ptr->basenm = _("#魔法棒", "& # Wand~");
 
         break;
     }
     case TV_ROD: {
-        modstr = k_name + flavor_k_ptr->flavor_name;
-        if (!flavor)
-            basenm = _("%のロッド", "& Rod~ of %");
-        else if (aware)
-            basenm = _("%の#ロッド", "& # Rod~ of %");
+        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+        if (!flavor_ptr->flavor)
+            flavor_ptr->basenm = _("%のロッド", "& Rod~ of %");
+        else if (flavor_ptr->aware)
+            flavor_ptr->basenm = _("%の#ロッド", "& # Rod~ of %");
         else
-            basenm = _("#ロッド", "& # Rod~");
+            flavor_ptr->basenm = _("#ロッド", "& # Rod~");
 
         break;
     }
     case TV_SCROLL: {
-        modstr = k_name + flavor_k_ptr->flavor_name;
-        if (!flavor)
-            basenm = _("%の巻物", "& Scroll~ of %");
-        else if (aware)
-            basenm = _("「#」と書かれた%の巻物", "& Scroll~ titled \"#\" of %");
+        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+        if (!flavor_ptr->flavor)
+            flavor_ptr->basenm = _("%の巻物", "& Scroll~ of %");
+        else if (flavor_ptr->aware)
+            flavor_ptr->basenm = _("「#」と書かれた%の巻物", "& Scroll~ titled \"#\" of %");
         else
-            basenm = _("「#」と書かれた巻物", "& Scroll~ titled \"#\"");
+            flavor_ptr->basenm = _("「#」と書かれた巻物", "& Scroll~ titled \"#\"");
 
         break;
     }
     case TV_POTION: {
-        modstr = k_name + flavor_k_ptr->flavor_name;
-        if (!flavor)
-            basenm = _("%の薬", "& Potion~ of %");
-        else if (aware)
-            basenm = _("%の#薬", "& # Potion~ of %");
+        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+        if (!flavor_ptr->flavor)
+            flavor_ptr->basenm = _("%の薬", "& Potion~ of %");
+        else if (flavor_ptr->aware)
+            flavor_ptr->basenm = _("%の#薬", "& # Potion~ of %");
         else
-            basenm = _("#薬", "& # Potion~");
+            flavor_ptr->basenm = _("#薬", "& # Potion~");
 
         break;
     }
     case TV_FOOD: {
-        if (!k_ptr->flavor_name)
+        if (!flavor_ptr->k_ptr->flavor_name)
             break;
 
-        modstr = k_name + flavor_k_ptr->flavor_name;
-        if (!flavor)
-            basenm = _("%のキノコ", "& Mushroom~ of %");
-        else if (aware)
-            basenm = _("%の#キノコ", "& # Mushroom~ of %");
+        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+        if (!flavor_ptr->flavor)
+            flavor_ptr->basenm = _("%のキノコ", "& Mushroom~ of %");
+        else if (flavor_ptr->aware)
+            flavor_ptr->basenm = _("%の#キノコ", "& # Mushroom~ of %");
         else
-            basenm = _("#キノコ", "& # Mushroom~");
+            flavor_ptr->basenm = _("#キノコ", "& # Mushroom~");
 
         break;
     }
     case TV_PARCHMENT: {
-        basenm = _("羊皮紙 - %", "& Parchment~ - %");
+        flavor_ptr->basenm = _("羊皮紙 - %", "& Parchment~ - %");
         break;
     }
     case TV_LIFE_BOOK: {
 #ifdef JP
-        basenm = "生命の魔法書%";
+        flavor_ptr->basenm = "生命の魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Life Magic %";
+            flavor_ptr->basenm = "& Book~ of Life Magic %";
         else
-            basenm = "& Life Spellbook~ %";
+            flavor_ptr->basenm = "& Life Spellbook~ %";
 #endif
 
         break;
     }
     case TV_SORCERY_BOOK: {
 #ifdef JP
-        basenm = "仙術の魔法書%";
+        flavor_ptr->basenm = "仙術の魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Sorcery %";
+            flavor_ptr->basenm = "& Book~ of Sorcery %";
         else
-            basenm = "& Sorcery Spellbook~ %";
+            flavor_ptr->basenm = "& Sorcery Spellbook~ %";
 #endif
 
         break;
     }
     case TV_NATURE_BOOK: {
 #ifdef JP
-        basenm = "自然の魔法書%";
+        flavor_ptr->basenm = "自然の魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Nature Magic %";
+            flavor_ptr->basenm = "& Book~ of Nature Magic %";
         else
-            basenm = "& Nature Spellbook~ %";
+            flavor_ptr->basenm = "& Nature Spellbook~ %";
 #endif
 
         break;
     }
     case TV_CHAOS_BOOK: {
 #ifdef JP
-        basenm = "カオスの魔法書%";
+        flavor_ptr->basenm = "カオスの魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Chaos Magic %";
+            flavor_ptr->basenm = "& Book~ of Chaos Magic %";
         else
-            basenm = "& Chaos Spellbook~ %";
+            flavor_ptr->basenm = "& Chaos Spellbook~ %";
 #endif
 
         break;
     }
     case TV_DEATH_BOOK: {
 #ifdef JP
-        basenm = "暗黒の魔法書%";
+        flavor_ptr->basenm = "暗黒の魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Death Magic %";
+            flavor_ptr->basenm = "& Book~ of Death Magic %";
         else
-            basenm = "& Death Spellbook~ %";
+            flavor_ptr->basenm = "& Death Spellbook~ %";
 #endif
 
         break;
     }
     case TV_TRUMP_BOOK: {
 #ifdef JP
-        basenm = "トランプの魔法書%";
+        flavor_ptr->basenm = "トランプの魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Trump Magic %";
+            flavor_ptr->basenm = "& Book~ of Trump Magic %";
         else
-            basenm = "& Trump Spellbook~ %";
+            flavor_ptr->basenm = "& Trump Spellbook~ %";
 #endif
 
         break;
     }
     case TV_ARCANE_BOOK: {
 #ifdef JP
-        basenm = "秘術の魔法書%";
+        flavor_ptr->basenm = "秘術の魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Arcane Magic %";
+            flavor_ptr->basenm = "& Book~ of Arcane Magic %";
         else
-            basenm = "& Arcane Spellbook~ %";
+            flavor_ptr->basenm = "& Arcane Spellbook~ %";
 #endif
 
         break;
     }
     case TV_CRAFT_BOOK: {
 #ifdef JP
-        basenm = "匠の魔法書%";
+        flavor_ptr->basenm = "匠の魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Craft Magic %";
+            flavor_ptr->basenm = "& Book~ of Craft Magic %";
         else
-            basenm = "& Craft Spellbook~ %";
+            flavor_ptr->basenm = "& Craft Spellbook~ %";
 #endif
 
         break;
     }
     case TV_DAEMON_BOOK: {
 #ifdef JP
-        basenm = "悪魔の魔法書%";
+        flavor_ptr->basenm = "悪魔の魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Daemon Magic %";
+            flavor_ptr->basenm = "& Book~ of Daemon Magic %";
         else
-            basenm = "& Daemon Spellbook~ %";
+            flavor_ptr->basenm = "& Daemon Spellbook~ %";
 #endif
 
         break;
     }
     case TV_CRUSADE_BOOK: {
 #ifdef JP
-        basenm = "破邪の魔法書%";
+        flavor_ptr->basenm = "破邪の魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Crusade Magic %";
+            flavor_ptr->basenm = "& Book~ of Crusade Magic %";
         else
-            basenm = "& Crusade Spellbook~ %";
+            flavor_ptr->basenm = "& Crusade Spellbook~ %";
 #endif
 
         break;
     }
     case TV_MUSIC_BOOK: {
-        basenm = _("歌集%", "& Song Book~ %");
+        flavor_ptr->basenm = _("歌集%", "& Song Book~ %");
         break;
     }
     case TV_HISSATSU_BOOK: {
-        basenm = _("& 武芸の書%", "Book~ of Kendo %");
+        flavor_ptr->basenm = _("& 武芸の書%", "Book~ of Kendo %");
         break;
     }
     case TV_HEX_BOOK: {
 #ifdef JP
-        basenm = "呪術の魔法書%";
+        flavor_ptr->basenm = "呪術の魔法書%";
 #else
         if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            basenm = "& Book~ of Hex Magic %";
+            flavor_ptr->basenm = "& Book~ of Hex Magic %";
         else
-            basenm = "& Hex Spellbook~ %";
+            flavor_ptr->basenm = "& Hex Spellbook~ %";
 #endif
 
         break;
     }
     case TV_GOLD: {
-        strcpy(buf, basenm);
+        strcpy(flavor_ptr->buf, flavor_ptr->basenm);
         return;
     }
     default: {
-        strcpy(buf, _("(なし)", "(nothing)"));
+        strcpy(flavor_ptr->buf, _("(なし)", "(nothing)"));
         return;
     }
     }
 
-    if (aware && have_flag(flgs, TR_FULL_NAME)) {
-        if (known && o_ptr->name1)
-            basenm = a_name + a_info[o_ptr->name1].name;
+    if (flavor_ptr->aware && have_flag(flavor_ptr->flags, TR_FULL_NAME)) {
+        if (flavor_ptr->known && flavor_ptr->o_ptr->name1)
+            flavor_ptr->basenm = a_name + a_info[flavor_ptr->o_ptr->name1].name;
         else
-            basenm = kindname;
+            flavor_ptr->basenm = flavor_ptr->kindname;
     }
 
-    t = tmp_val;
+    flavor_ptr->t = flavor_ptr->tmp_val;
 #ifdef JP
-    if (basenm[0] == '&')
-        s = basenm + 2;
+    if (flavor_ptr->basenm[0] == '&')
+        flavor_ptr->s = flavor_ptr->basenm + 2;
     else
-        s = basenm;
+        flavor_ptr->s = flavor_ptr->basenm;
 
     /* No prefix */
-    if (mode & OD_OMIT_PREFIX) {
+    if (flavor_ptr->mode & OD_OMIT_PREFIX) {
         /* Nothing */
-    } else if (o_ptr->number > 1) {
-        t = object_desc_count_japanese(t, o_ptr);
-        t = object_desc_str(t, "の ");
+    } else if (flavor_ptr->o_ptr->number > 1) {
+        flavor_ptr->t = object_desc_count_japanese(flavor_ptr->t, flavor_ptr->o_ptr);
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "の ");
     }
 
     // 英語の場合アーティファクトは The が付くので分かるが、日本語では分からないのでマークをつける.
-    if (known) {
-        if (object_is_fixed_artifact(o_ptr))
-            t = object_desc_str(t, "★");
-        else if (o_ptr->art_name)
-            t = object_desc_str(t, "☆");
+    if (flavor_ptr->known) {
+        if (object_is_fixed_artifact(flavor_ptr->o_ptr))
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, "★");
+        else if (flavor_ptr->o_ptr->art_name)
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, "☆");
     }
 #else
 
-    if (basenm[0] == '&') {
-        s = basenm + 2;
-        if (mode & OD_OMIT_PREFIX) {
+    if (flavor_ptr->basenm[0] == '&') {
+        flavor_ptr->s = flavor_ptr->basenm + 2;
+        if (flavor_ptr->mode & OD_OMIT_PREFIX) {
             /* Nothing */
-        } else if (o_ptr->number <= 0)
-            t = object_desc_str(t, "no more ");
-        else if (o_ptr->number > 1) {
-            t = object_desc_num(t, o_ptr->number);
-            t = object_desc_chr(t, ' ');
-        } else if ((known && object_is_artifact(o_ptr)) || ((o_ptr->tval == TV_CORPSE) && (r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
-            t = object_desc_str(t, "The ");
+        } else if (flavor_ptr->o_ptr->number <= 0)
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
+        else if (flavor_ptr->o_ptr->number > 1) {
+            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        } else if ((flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr)) || ((flavor_ptr->o_ptr->tval == TV_CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE)))
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
         else {
             bool vowel;
-            switch (*s) {
+            switch (*flavor_ptr->s) {
             case '#':
-                vowel = is_a_vowel(modstr[0]);
+                vowel = is_a_vowel(flavor_ptr->modstr[0]);
                 break;
             case '%':
-                vowel = is_a_vowel(*kindname);
+                vowel = is_a_vowel(*flavor_ptr->kindname);
                 break;
             default:
-                vowel = is_a_vowel(*s);
+                vowel = is_a_vowel(*flavor_ptr->s);
                 break;
             }
 
             if (vowel)
-                t = object_desc_str(t, "an ");
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, "an ");
             else
-                t = object_desc_str(t, "a ");
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, "a ");
         }
     } else {
-        s = basenm;
-        if (mode & OD_OMIT_PREFIX) {
+        flavor_ptr->s = flavor_ptr->basenm;
+        if (flavor_ptr->mode & OD_OMIT_PREFIX) {
             /* Nothing */
-        } else if (o_ptr->number <= 0)
-            t = object_desc_str(t, "no more ");
-        else if (o_ptr->number > 1) {
-            t = object_desc_num(t, o_ptr->number);
-            t = object_desc_chr(t, ' ');
-        } else if (known && object_is_artifact(o_ptr))
-            t = object_desc_str(t, "The ");
+        } else if (flavor_ptr->o_ptr->number <= 0)
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
+        else if (flavor_ptr->o_ptr->number > 1) {
+            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        } else if (flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
     }
 #endif
 
 #ifdef JP
-    if (object_is_smith(player_ptr, o_ptr))
-        t = object_desc_str(t, format("鍛冶師%sの", player_ptr->name));
+    if (object_is_smith(player_ptr, flavor_ptr->o_ptr))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, format("鍛冶師%flavor_ptr->sの", player_ptr->name));
 
     /* 伝説のアイテム、名のあるアイテムの名前を付加する */
-    if (known) {
+    if (flavor_ptr->known) {
         /* ランダム・アーティファクト */
-        if (o_ptr->art_name) {
-            concptr temp = quark_str(o_ptr->art_name);
+        if (flavor_ptr->o_ptr->art_name) {
+            concptr temp = quark_str(flavor_ptr->o_ptr->art_name);
 
             /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
             /* 英語版のセーブファイルから来た 'of XXX' は,「XXXの」と表示する */
             if (strncmp(temp, "of ", 3) == 0) {
-                t = object_desc_str(t, &temp[3]);
-                t = object_desc_str(t, "の");
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[3]);
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, "の");
             } else if ((strncmp(temp, "『", 2) != 0) && (strncmp(temp, "《", 2) != 0) && (temp[0] != '\''))
-                t = object_desc_str(t, temp);
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
         }
         /* 伝説のアイテム */
-        else if (o_ptr->name1 && !have_flag(flgs, TR_FULL_NAME)) {
-            artifact_type *a_ptr = &a_info[o_ptr->name1];
+        else if (flavor_ptr->o_ptr->name1 && !have_flag(flavor_ptr->flags, TR_FULL_NAME)) {
+            artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
             /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
             if (strncmp(a_name + a_ptr->name, "『", 2) != 0) {
-                t = object_desc_str(t, a_name + a_ptr->name);
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, a_name + a_ptr->name);
             }
         }
         /* 名のあるアイテム */
-        else if (object_is_ego(o_ptr)) {
-            ego_item_type *e_ptr = &e_info[o_ptr->name2];
-            t = object_desc_str(t, e_name + e_ptr->name);
+        else if (object_is_ego(flavor_ptr->o_ptr)) {
+            ego_item_type *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, e_name + e_ptr->name);
         }
     }
 #endif
 
-    for (s0 = NULL; *s || s0;) {
-        if (!*s) {
-            s = s0 + 1;
-            s0 = NULL;
-        } else if ((*s == '#') && !s0) {
-            s0 = s;
-            s = modstr;
-            modstr = "";
-        } else if ((*s == '%') && !s0) {
-            s0 = s;
-            s = kindname;
-            kindname = "";
+    for (flavor_ptr->s0 = NULL; *flavor_ptr->s || flavor_ptr->s0;) {
+        if (!*flavor_ptr->s) {
+            flavor_ptr->s = flavor_ptr->s0 + 1;
+            flavor_ptr->s0 = NULL;
+        } else if ((*flavor_ptr->s == '#') && !flavor_ptr->s0) {
+            flavor_ptr->s0 = flavor_ptr->s;
+            flavor_ptr->s = flavor_ptr->modstr;
+            flavor_ptr->modstr = "";
+        } else if ((*flavor_ptr->s == '%') && !flavor_ptr->s0) {
+            flavor_ptr->s0 = flavor_ptr->s;
+            flavor_ptr->s = flavor_ptr->kindname;
+            flavor_ptr->kindname = "";
         }
 
 #ifdef JP
 #else
-        else if (*s == '~') {
-            if (!(mode & OD_NO_PLURAL) && (o_ptr->number != 1)) {
-                char k = t[-1];
+        else if (*flavor_ptr->s == '~') {
+            if (!(flavor_ptr->mode & OD_NO_PLURAL) && (flavor_ptr->o_ptr->number != 1)) {
+                char k = flavor_ptr->t[-1];
                 if ((k == 's') || (k == 'h'))
-                    *t++ = 'e';
+                    *flavor_ptr->t++ = 'e';
 
-                *t++ = 's';
+                *flavor_ptr->t++ = 's';
             }
 
-            s++;
+            flavor_ptr->s++;
         }
 #endif
         else
-            *t++ = *s++;
+            *flavor_ptr->t++ = *flavor_ptr->s++;
     }
 
-    *t = '\0';
+    *flavor_ptr->t = '\0';
 
 #ifdef JP
     /* '『'から始まる伝説のアイテムの名前は最後に付加する */
-    if (known) {
+    if (flavor_ptr->known) {
         // ランダムアーティファクトの名前はセーブファイルに記録されるので、英語版の名前もそれらしく変換する.
-        if (o_ptr->art_name) {
+        if (flavor_ptr->o_ptr->art_name) {
             char temp[256];
             int itemp;
-            strcpy(temp, quark_str(o_ptr->art_name));
+            strcpy(temp, quark_str(flavor_ptr->o_ptr->art_name));
             if (strncmp(temp, "『", 2) == 0 || strncmp(temp, "《", 2) == 0)
-                t = object_desc_str(t, temp);
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
             else if (temp[0] == '\'') {
                 itemp = strlen(temp);
                 temp[itemp - 1] = 0;
-                t = object_desc_str(t, "『");
-                t = object_desc_str(t, &temp[1]);
-                t = object_desc_str(t, "』");
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[1]);
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
             }
-        } else if (object_is_fixed_artifact(o_ptr)) {
-            artifact_type *a_ptr = &a_info[o_ptr->name1];
+        } else if (object_is_fixed_artifact(flavor_ptr->o_ptr)) {
+            artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
             if (strncmp(a_name + a_ptr->name, "『", 2) == 0)
-                t = object_desc_str(t, a_name + a_ptr->name);
-        } else if (o_ptr->inscription) {
-            concptr str = quark_str(o_ptr->inscription);
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, a_name + a_ptr->name);
+        } else if (flavor_ptr->o_ptr->inscription) {
+            concptr str = quark_str(flavor_ptr->o_ptr->inscription);
             while (*str) {
                 if (iskanji(*str)) {
                     str += 2;
@@ -623,119 +608,119 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
             }
 
             if (*str) {
-                concptr str_aux = angband_strchr(quark_str(o_ptr->inscription), '#');
-                t = object_desc_str(t, "『");
-                t = object_desc_str(t, &str_aux[1]);
-                t = object_desc_str(t, "』");
+                concptr str_aux = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, &str_aux[1]);
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
             }
         }
     }
 #else
-    if (object_is_smith(player_ptr, o_ptr))
-        t = object_desc_str(t, format(" of %s the Smith", player_ptr->name));
+    if (object_is_smith(player_ptr, flavor_ptr->o_ptr))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, format(" of %s the Smith", player_ptr->name));
 
-    if (known && !have_flag(flgs, TR_FULL_NAME)) {
-        if (o_ptr->art_name) {
-            t = object_desc_chr(t, ' ');
-            t = object_desc_str(t, quark_str(o_ptr->art_name));
-        } else if (object_is_fixed_artifact(o_ptr)) {
-            artifact_type *a_ptr = &a_info[o_ptr->name1];
+    if (flavor_ptr->known && !have_flag(flavor_ptr->flags, TR_FULL_NAME)) {
+        if (flavor_ptr->o_ptr->art_name) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, quark_str(flavor_ptr->o_ptr->art_name));
+        } else if (object_is_fixed_artifact(flavor_ptr->o_ptr)) {
+            artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
 
-            t = object_desc_chr(t, ' ');
-            t = object_desc_str(t, a_name + a_ptr->name);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_name + a_ptr->name);
         } else {
-            if (object_is_ego(o_ptr)) {
-                ego_item_type *e_ptr = &e_info[o_ptr->name2];
-                t = object_desc_chr(t, ' ');
-                t = object_desc_str(t, e_name + e_ptr->name);
+            if (object_is_ego(flavor_ptr->o_ptr)) {
+                ego_item_type *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
+                flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, e_name + e_ptr->name);
             }
 
-            if (o_ptr->inscription && angband_strchr(quark_str(o_ptr->inscription), '#')) {
-                concptr str = angband_strchr(quark_str(o_ptr->inscription), '#');
-                t = object_desc_chr(t, ' ');
-                t = object_desc_str(t, &str[1]);
+            if (flavor_ptr->o_ptr->inscription && angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#')) {
+                concptr str = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
+                flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, &str[1]);
             }
         }
     }
 #endif
 
-    if (mode & OD_NAME_ONLY) {
-        angband_strcpy(buf, tmp_val, MAX_NLEN);
+    if (flavor_ptr->mode & OD_NAME_ONLY) {
+        angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
         return;
     }
 
-    if (o_ptr->tval == TV_CHEST) {
-        if (!known) {
+    if (flavor_ptr->o_ptr->tval == TV_CHEST) {
+        if (!flavor_ptr->known) {
             /* Nothing */
-        } else if (!o_ptr->pval)
-            t = object_desc_str(t, _("(空)", " (empty)"));
-        else if (o_ptr->pval < 0)
-            if (chest_traps[0 - o_ptr->pval])
-                t = object_desc_str(t, _("(解除済)", " (disarmed)"));
+        } else if (!flavor_ptr->o_ptr->pval)
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(空)", " (empty)"));
+        else if (flavor_ptr->o_ptr->pval < 0)
+            if (chest_traps[0 - flavor_ptr->o_ptr->pval])
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(解除済)", " (disarmed)"));
             else
-                t = object_desc_str(t, _("(非施錠)", " (unlocked)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(非施錠)", " (unlocked)"));
         else {
-            switch (chest_traps[o_ptr->pval]) {
+            switch (chest_traps[flavor_ptr->o_ptr->pval]) {
             case 0: {
-                t = object_desc_str(t, _("(施錠)", " (Locked)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(施錠)", " (Locked)"));
                 break;
             }
             case CHEST_LOSE_STR: {
-                t = object_desc_str(t, _("(毒針)", " (Poison Needle)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
                 break;
             }
             case CHEST_LOSE_CON: {
-                t = object_desc_str(t, _("(毒針)", " (Poison Needle)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
                 break;
             }
             case CHEST_POISON: {
-                t = object_desc_str(t, _("(ガス・トラップ)", " (Gas Trap)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
                 break;
             }
             case CHEST_PARALYZE: {
-                t = object_desc_str(t, _("(ガス・トラップ)", " (Gas Trap)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
                 break;
             }
             case CHEST_EXPLODE: {
-                t = object_desc_str(t, _("(爆発装置)", " (Explosion Device)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(爆発装置)", " (Explosion Device)"));
                 break;
             }
             case CHEST_SUMMON:
             case CHEST_BIRD_STORM:
             case CHEST_E_SUMMON:
             case CHEST_H_SUMMON: {
-                t = object_desc_str(t, _("(召喚のルーン)", " (Summoning Runes)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(召喚のルーン)", " (Summoning Runes)"));
                 break;
             }
             case CHEST_RUNES_OF_EVIL: {
-                t = object_desc_str(t, _("(邪悪なルーン)", " (Gleaming Black Runes)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(邪悪なルーン)", " (Gleaming Black Runes)"));
                 break;
             }
             case CHEST_ALARM: {
-                t = object_desc_str(t, _("(警報装置)", " (Alarm)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(警報装置)", " (Alarm)"));
                 break;
             }
             default: {
-                t = object_desc_str(t, _("(マルチ・トラップ)", " (Multiple Traps)"));
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(マルチ・トラップ)", " (Multiple Traps)"));
                 break;
             }
             }
         }
     }
 
-    if (have_flag(flgs, TR_SHOW_MODS))
-        show_weapon = TRUE;
+    if (have_flag(flavor_ptr->flags, TR_SHOW_MODS))
+        flavor_ptr->show_weapon = TRUE;
 
-    if (object_is_smith(player_ptr, o_ptr) && (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
-        show_weapon = TRUE;
+    if (object_is_smith(player_ptr, flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+        flavor_ptr->show_weapon = TRUE;
 
-    if (o_ptr->to_h && o_ptr->to_d)
-        show_weapon = TRUE;
+    if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
+        flavor_ptr->show_weapon = TRUE;
 
-    if (o_ptr->ac)
-        show_armour = TRUE;
+    if (flavor_ptr->o_ptr->ac)
+        flavor_ptr->show_armour = TRUE;
 
-    switch (o_ptr->tval) {
+    switch (flavor_ptr->o_ptr->tval) {
     case TV_SHOT:
     case TV_BOLT:
     case TV_ARROW:
@@ -743,74 +728,74 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_POLEARM:
     case TV_SWORD:
     case TV_DIGGING: {
-        if (object_is_quest_target(player_ptr, o_ptr) && !known)
+        if (object_is_quest_target(player_ptr, flavor_ptr->o_ptr) && !flavor_ptr->known)
             break;
 
-        t = object_desc_chr(t, ' ');
-        t = object_desc_chr(t, p1);
-        t = object_desc_num(t, o_ptr->dd);
-        t = object_desc_chr(t, 'd');
-        t = object_desc_num(t, o_ptr->ds);
-        t = object_desc_chr(t, p2);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, 'd');
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ds);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
         break;
     }
     case TV_BOW: {
-        power = bow_tmul(o_ptr->sval);
-        if (have_flag(flgs, TR_XTRA_MIGHT))
-            power++;
+        flavor_ptr->power = bow_tmul(flavor_ptr->o_ptr->sval);
+        if (have_flag(flavor_ptr->flags, TR_XTRA_MIGHT))
+            flavor_ptr->power++;
 
-        t = object_desc_chr(t, ' ');
-        t = object_desc_chr(t, p1);
-        t = object_desc_chr(t, 'x');
-        t = object_desc_num(t, power);
-        t = object_desc_chr(t, p2);
-        fire_rate = calc_num_fire(player_ptr, o_ptr);
-        if (fire_rate != 0 && power > 0 && known) {
-            fire_rate = bow_energy(o_ptr->sval) / fire_rate;
-            t = object_desc_chr(t, ' ');
-            t = object_desc_chr(t, p1);
-            t = object_desc_num(t, fire_rate / 100);
-            t = object_desc_chr(t, '.');
-            t = object_desc_num(t, fire_rate % 100);
-            t = object_desc_str(t, "turn");
-            t = object_desc_chr(t, p2);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, 'x');
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->power);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+        flavor_ptr->fire_rate = calc_num_fire(player_ptr, flavor_ptr->o_ptr);
+        if (flavor_ptr->fire_rate != 0 && flavor_ptr->power > 0 && flavor_ptr->known) {
+            flavor_ptr->fire_rate = bow_energy(flavor_ptr->o_ptr->sval) / flavor_ptr->fire_rate;
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->fire_rate / 100);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, '.');
+            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->fire_rate % 100);
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, "turn");
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
         }
 
         break;
     }
     }
 
-    if (known) {
-        if (show_weapon) {
-            t = object_desc_chr(t, ' ');
-            t = object_desc_chr(t, p1);
-            t = object_desc_int(t, o_ptr->to_h);
-            t = object_desc_chr(t, ',');
-            t = object_desc_int(t, o_ptr->to_d);
-            t = object_desc_chr(t, p2);
-        } else if (o_ptr->to_h) {
-            t = object_desc_chr(t, ' ');
-            t = object_desc_chr(t, p1);
-            t = object_desc_int(t, o_ptr->to_h);
-            t = object_desc_chr(t, p2);
-        } else if (o_ptr->to_d) {
-            t = object_desc_chr(t, ' ');
-            t = object_desc_chr(t, p1);
-            t = object_desc_int(t, o_ptr->to_d);
-            t = object_desc_chr(t, p2);
+    if (flavor_ptr->known) {
+        if (flavor_ptr->show_weapon) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
+            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_d);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+        } else if (flavor_ptr->o_ptr->to_h) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+        } else if (flavor_ptr->o_ptr->to_d) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_d);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
         }
     }
 
-    bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    if (bow_ptr->k_idx && (o_ptr->tval == player_ptr->tval_ammo)) {
-        int avgdam = o_ptr->dd * (o_ptr->ds + 1) * 10 / 2;
-        int tmul = bow_tmul(bow_ptr->sval);
-        ENERGY energy_fire = bow_energy(bow_ptr->sval);
-        if (object_is_known(bow_ptr))
-            avgdam += (bow_ptr->to_d * 10);
+    flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    if (flavor_ptr->bow_ptr->k_idx && (flavor_ptr->o_ptr->tval == player_ptr->tval_ammo)) {
+        int avgdam = flavor_ptr->o_ptr->dd * (flavor_ptr->o_ptr->ds + 1) * 10 / 2;
+        int tmul = bow_tmul(flavor_ptr->bow_ptr->sval);
+        ENERGY energy_fire = bow_energy(flavor_ptr->bow_ptr->sval);
+        if (object_is_known(flavor_ptr->bow_ptr))
+            avgdam += (flavor_ptr->bow_ptr->to_d * 10);
 
-        if (known)
-            avgdam += (o_ptr->to_d * 10);
+        if (flavor_ptr->known)
+            avgdam += (flavor_ptr->o_ptr->to_d * 10);
 
         if (player_ptr->xtra_might)
             tmul++;
@@ -824,216 +809,216 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         if (avgdam < 0)
             avgdam = 0;
 
-        t = object_desc_chr(t, ' ');
-        t = object_desc_chr(t, p1);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
         if (show_ammo_no_crit) {
-            t = object_desc_num(t, avgdam);
-            t = object_desc_str(t, show_ammo_detail ? "/shot " : "/");
+            flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
         }
 
-        avgdam = calc_expect_crit_shot(player_ptr, o_ptr->weight, o_ptr->to_h, bow_ptr->to_h, avgdam);
-        t = object_desc_num(t, avgdam);
-        t = show_ammo_no_crit ? object_desc_str(t, show_ammo_detail ? "/crit " : "/") : object_desc_str(t, show_ammo_detail ? "/shot " : "/");
+        avgdam = calc_expect_crit_shot(player_ptr, flavor_ptr->o_ptr->weight, flavor_ptr->o_ptr->to_h, flavor_ptr->bow_ptr->to_h, avgdam);
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
+        flavor_ptr->t = show_ammo_no_crit ? object_desc_str(flavor_ptr->t, show_ammo_detail ? "/crit " : "/") : object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
         if (player_ptr->num_fire == 0)
-            t = object_desc_chr(t, '0');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, '0');
         else {
             avgdam *= (player_ptr->num_fire * 100);
             avgdam /= energy_fire;
-            t = object_desc_num(t, avgdam);
-            t = object_desc_str(t, show_ammo_detail ? "/turn" : "");
+            flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, show_ammo_detail ? "/turn" : "");
             if (show_ammo_crit_ratio) {
-                int percent = calc_crit_ratio_shot(player_ptr, known ? o_ptr->to_h : 0, known ? bow_ptr->to_h : 0);
-                t = object_desc_chr(t, '/');
-                t = object_desc_num(t, percent / 100);
-                t = object_desc_chr(t, '.');
+                int percent = calc_crit_ratio_shot(player_ptr, flavor_ptr->known ? flavor_ptr->o_ptr->to_h : 0, flavor_ptr->known ? flavor_ptr->bow_ptr->to_h : 0);
+                flavor_ptr->t = object_desc_chr(flavor_ptr->t, '/');
+                flavor_ptr->t = object_desc_num(flavor_ptr->t, percent / 100);
+                flavor_ptr->t = object_desc_chr(flavor_ptr->t, '.');
                 if (percent % 100 < 10)
-                    t = object_desc_chr(t, '0');
+                    flavor_ptr->t = object_desc_chr(flavor_ptr->t, '0');
 
-                t = object_desc_num(t, percent % 100);
-                t = object_desc_str(t, show_ammo_detail ? "% crit" : "%");
+                flavor_ptr->t = object_desc_num(flavor_ptr->t, percent % 100);
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, show_ammo_detail ? "% crit" : "%");
             }
         }
 
-        t = object_desc_chr(t, p2);
-    } else if ((player_ptr->pclass == CLASS_NINJA) && (o_ptr->tval == TV_SPIKE)) {
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+    } else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE)) {
         int avgdam = player_ptr->mighty_throw ? (1 + 3) : 1;
         s16b energy_fire = 100 - player_ptr->lev;
         avgdam += ((player_ptr->lev + 30) * (player_ptr->lev + 30) - 900) / 55;
-        t = object_desc_chr(t, ' ');
-        t = object_desc_chr(t, p1);
-        t = object_desc_num(t, avgdam);
-        t = object_desc_chr(t, '/');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, '/');
         avgdam = 100 * avgdam / energy_fire;
-        t = object_desc_num(t, avgdam);
-        t = object_desc_chr(t, p2);
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
     }
 
-    if (known) {
-        if (show_armour) {
-            t = object_desc_chr(t, ' ');
-            t = object_desc_chr(t, b1);
-            t = object_desc_num(t, o_ptr->ac);
-            t = object_desc_chr(t, ',');
-            t = object_desc_int(t, o_ptr->to_a);
-            t = object_desc_chr(t, b2);
-        } else if (o_ptr->to_a) {
-            t = object_desc_chr(t, ' ');
-            t = object_desc_chr(t, b1);
-            t = object_desc_int(t, o_ptr->to_a);
-            t = object_desc_chr(t, b2);
+    if (flavor_ptr->known) {
+        if (flavor_ptr->show_armour) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
+            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
+            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
+        } else if (flavor_ptr->o_ptr->to_a) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
+            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
         }
-    } else if (show_armour) {
-        t = object_desc_chr(t, ' ');
-        t = object_desc_chr(t, b1);
-        t = object_desc_num(t, o_ptr->ac);
-        t = object_desc_chr(t, b2);
+    } else if (flavor_ptr->show_armour) {
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
     }
 
-    if (mode & OD_NAME_AND_ENCHANT) {
-        angband_strcpy(buf, tmp_val, MAX_NLEN);
+    if (flavor_ptr->mode & OD_NAME_AND_ENCHANT) {
+        angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
         return;
     }
 
-    if (known) {
-        if (((o_ptr->tval == TV_STAFF) || (o_ptr->tval == TV_WAND))) {
-            t = object_desc_chr(t, ' ');
-            t = object_desc_chr(t, p1);
-            if ((o_ptr->tval == TV_STAFF) && (o_ptr->number > 1)) {
-                t = object_desc_num(t, o_ptr->number);
-                t = object_desc_str(t, "x ");
+    if (flavor_ptr->known) {
+        if (((flavor_ptr->o_ptr->tval == TV_STAFF) || (flavor_ptr->o_ptr->tval == TV_WAND))) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+            if ((flavor_ptr->o_ptr->tval == TV_STAFF) && (flavor_ptr->o_ptr->number > 1)) {
+                flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, "x ");
             }
 
-            t = object_desc_num(t, o_ptr->pval);
-            t = object_desc_str(t, _("回分", " charge"));
+            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->pval);
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("回分", " charge"));
 #ifdef JP
 #else
-            if (o_ptr->pval != 1)
-                t = object_desc_chr(t, 's');
+            if (flavor_ptr->o_ptr->pval != 1)
+                flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
 #endif
 
-            t = object_desc_chr(t, p2);
-        } else if (o_ptr->tval == TV_ROD) {
-            if (o_ptr->timeout) {
-                if (o_ptr->number > 1) {
-                    if (k_ptr->pval == 0)
-                        k_ptr->pval = 1;
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+        } else if (flavor_ptr->o_ptr->tval == TV_ROD) {
+            if (flavor_ptr->o_ptr->timeout) {
+                if (flavor_ptr->o_ptr->number > 1) {
+                    if (flavor_ptr->k_ptr->pval == 0)
+                        flavor_ptr->k_ptr->pval = 1;
 
-                    power = (o_ptr->timeout + (k_ptr->pval - 1)) / k_ptr->pval;
-                    if (power > o_ptr->number)
-                        power = o_ptr->number;
+                    flavor_ptr->power = (flavor_ptr->o_ptr->timeout + (flavor_ptr->k_ptr->pval - 1)) / flavor_ptr->k_ptr->pval;
+                    if (flavor_ptr->power > flavor_ptr->o_ptr->number)
+                        flavor_ptr->power = flavor_ptr->o_ptr->number;
 
-                    t = object_desc_str(t, " (");
-                    t = object_desc_num(t, power);
-                    t = object_desc_str(t, _("本 充填中)", " charging)"));
+                    flavor_ptr->t = object_desc_str(flavor_ptr->t, " (");
+                    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->power);
+                    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("本 充填中)", " charging)"));
                 } else
-                    t = object_desc_str(t, _("(充填中)", " (charging)"));
+                    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
             }
         }
 
-        if (have_pval_flags(flgs)) {
-            t = object_desc_chr(t, ' ');
-            t = object_desc_chr(t, p1);
-            t = object_desc_int(t, o_ptr->pval);
-            if (have_flag(flgs, TR_HIDE_TYPE)) {
+        if (have_pval_flags(flavor_ptr->flags)) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->pval);
+            if (have_flag(flavor_ptr->flags, TR_HIDE_TYPE)) {
                 /* Nothing */
-            } else if (have_flag(flgs, TR_SPEED))
-                t = object_desc_str(t, _("加速", " to speed"));
-            else if (have_flag(flgs, TR_BLOWS)) {
-                t = object_desc_str(t, _("攻撃", " attack"));
+            } else if (have_flag(flavor_ptr->flags, TR_SPEED))
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("加速", " to speed"));
+            else if (have_flag(flavor_ptr->flags, TR_BLOWS)) {
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
 #ifdef JP
 #else
-                if (ABS(o_ptr->pval) != 1)
-                    t = object_desc_chr(t, 's');
+                if (ABS(flavor_ptr->o_ptr->pval) != 1)
+                    flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
 #endif
-            } else if (have_flag(flgs, TR_STEALTH))
-                t = object_desc_str(t, _("隠密", " to stealth"));
-            else if (have_flag(flgs, TR_SEARCH))
-                t = object_desc_str(t, _("探索", " to searching"));
-            else if (have_flag(flgs, TR_INFRA))
-                t = object_desc_str(t, _("赤外線視力", " to infravision"));
+            } else if (have_flag(flavor_ptr->flags, TR_STEALTH))
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("隠密", " to stealth"));
+            else if (have_flag(flavor_ptr->flags, TR_SEARCH))
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("探索", " to searching"));
+            else if (have_flag(flavor_ptr->flags, TR_INFRA))
+                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("赤外線視力", " to infravision"));
 
-            t = object_desc_chr(t, p2);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
         }
 
-        if ((o_ptr->tval == TV_LITE) && (!(object_is_fixed_artifact(o_ptr) || (o_ptr->sval == SV_LITE_FEANOR)))) {
-            t = object_desc_str(t, _("(", " (with "));
-            if (o_ptr->name2 == EGO_LITE_LONG)
-                t = object_desc_num(t, o_ptr->xtra4 * 2);
+        if ((flavor_ptr->o_ptr->tval == TV_LITE) && (!(object_is_fixed_artifact(flavor_ptr->o_ptr) || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))) {
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
+            if (flavor_ptr->o_ptr->name2 == EGO_LITE_LONG)
+                flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->xtra4 * 2);
             else
-                t = object_desc_num(t, o_ptr->xtra4);
+                flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->xtra4);
 
-            t = object_desc_str(t, _("ターンの寿命)", " turns of light)"));
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("ターンの寿命)", " turns of light)"));
         }
 
-        if (o_ptr->timeout && (o_ptr->tval != TV_ROD))
-            t = object_desc_str(t, _("(充填中)", " (charging)"));
+        if (flavor_ptr->o_ptr->timeout && (flavor_ptr->o_ptr->tval != TV_ROD))
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
     }
 
-    if (mode & OD_OMIT_INSCRIPTION) {
-        angband_strcpy(buf, tmp_val, MAX_NLEN);
+    if (flavor_ptr->mode & OD_OMIT_INSCRIPTION) {
+        angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
         return;
     }
 
-    tmp_val2[0] = '\0';
-    if ((abbrev_extra || abbrev_all) && object_is_fully_known(o_ptr)) {
-        if (!o_ptr->inscription || !angband_strchr(quark_str(o_ptr->inscription), '%')) {
+    flavor_ptr->tmp_val2[0] = '\0';
+    if ((abbrev_extra || abbrev_all) && object_is_fully_known(flavor_ptr->o_ptr)) {
+        if (!flavor_ptr->o_ptr->inscription || !angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '%')) {
             bool kanji, all;
             kanji = _(TRUE, FALSE);
             all = abbrev_all;
-            get_ability_abbreviation(player_ptr, tmp_val2, o_ptr, kanji, all);
+            get_ability_abbreviation(player_ptr, flavor_ptr->tmp_val2, flavor_ptr->o_ptr, kanji, all);
         }
     }
 
-    if (o_ptr->inscription) {
+    if (flavor_ptr->o_ptr->inscription) {
         char buff[1024];
-        if (tmp_val2[0])
-            strcat(tmp_val2, ", ");
+        if (flavor_ptr->tmp_val2[0])
+            strcat(flavor_ptr->tmp_val2, ", ");
 
-        get_inscription(player_ptr, buff, o_ptr);
-        angband_strcat(tmp_val2, buff, sizeof(tmp_val2));
+        get_inscription(player_ptr, buff, flavor_ptr->o_ptr);
+        angband_strcat(flavor_ptr->tmp_val2, buff, sizeof(flavor_ptr->tmp_val2));
     }
 
-    fake_insc_buf[0] = '\0';
-    if (o_ptr->feeling)
-        strcpy(fake_insc_buf, game_inscriptions[o_ptr->feeling]);
-    else if (object_is_cursed(o_ptr) && (known || (o_ptr->ident & IDENT_SENSE)))
-        strcpy(fake_insc_buf, _("呪われている", "cursed"));
-    else if (((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET) || (o_ptr->tval == TV_LITE) || (o_ptr->tval == TV_FIGURINE)) && aware && !known
-        && !(o_ptr->ident & IDENT_SENSE))
-        strcpy(fake_insc_buf, _("未鑑定", "unidentified"));
-    else if (!known && (o_ptr->ident & IDENT_EMPTY))
-        strcpy(fake_insc_buf, _("空", "empty"));
-    else if (!aware && object_is_tried(o_ptr))
-        strcpy(fake_insc_buf, _("未判明", "tried"));
+    flavor_ptr->fake_insc_buf[0] = '\0';
+    if (flavor_ptr->o_ptr->feeling)
+        strcpy(flavor_ptr->fake_insc_buf, game_inscriptions[flavor_ptr->o_ptr->feeling]);
+    else if (object_is_cursed(flavor_ptr->o_ptr) && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE)))
+        strcpy(flavor_ptr->fake_insc_buf, _("呪われている", "cursed"));
+    else if (((flavor_ptr->o_ptr->tval == TV_RING) || (flavor_ptr->o_ptr->tval == TV_AMULET) || (flavor_ptr->o_ptr->tval == TV_LITE) || (flavor_ptr->o_ptr->tval == TV_FIGURINE)) && flavor_ptr->aware && !flavor_ptr->known
+        && !(flavor_ptr->o_ptr->ident & IDENT_SENSE))
+        strcpy(flavor_ptr->fake_insc_buf, _("未鑑定", "unidentified"));
+    else if (!flavor_ptr->known && (flavor_ptr->o_ptr->ident & IDENT_EMPTY))
+        strcpy(flavor_ptr->fake_insc_buf, _("空", "empty"));
+    else if (!flavor_ptr->aware && object_is_tried(flavor_ptr->o_ptr))
+        strcpy(flavor_ptr->fake_insc_buf, _("未判明", "tried"));
 
-    if (o_ptr->discount) {
-        if (!tmp_val2[0] || (o_ptr->ident & IDENT_STORE)) {
+    if (flavor_ptr->o_ptr->discount) {
+        if (!flavor_ptr->tmp_val2[0] || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
             char discount_num_buf[4];
-            if (fake_insc_buf[0])
-                strcat(fake_insc_buf, ", ");
+            if (flavor_ptr->fake_insc_buf[0])
+                strcat(flavor_ptr->fake_insc_buf, ", ");
 
-            (void)object_desc_num(discount_num_buf, o_ptr->discount);
-            strcat(fake_insc_buf, discount_num_buf);
-            strcat(fake_insc_buf, _("%引き", "% off"));
+            (void)object_desc_num(discount_num_buf, flavor_ptr->o_ptr->discount);
+            strcat(flavor_ptr->fake_insc_buf, discount_num_buf);
+            strcat(flavor_ptr->fake_insc_buf, _("%引き", "% off"));
         }
     }
 
-    if (fake_insc_buf[0] || tmp_val2[0]) {
-        t = object_desc_chr(t, ' ');
-        t = object_desc_chr(t, c1);
-        if (fake_insc_buf[0])
-            t = object_desc_str(t, fake_insc_buf);
+    if (flavor_ptr->fake_insc_buf[0] || flavor_ptr->tmp_val2[0]) {
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->c1);
+        if (flavor_ptr->fake_insc_buf[0])
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, flavor_ptr->fake_insc_buf);
 
-        if (fake_insc_buf[0] && tmp_val2[0]) {
-            t = object_desc_chr(t, ',');
-            t = object_desc_chr(t, ' ');
+        if (flavor_ptr->fake_insc_buf[0] && flavor_ptr->tmp_val2[0]) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         }
 
-        if (tmp_val2[0])
-            t = object_desc_str(t, tmp_val2);
+        if (flavor_ptr->tmp_val2[0])
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, flavor_ptr->tmp_val2);
 
-        t = object_desc_chr(t, c2);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->c2);
     }
 
-    angband_strcpy(buf, tmp_val, MAX_NLEN);
+    angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
 }

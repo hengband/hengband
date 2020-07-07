@@ -13,6 +13,30 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 
+flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
+{
+    flavor_ptr->buf = buf;
+    flavor_ptr->o_ptr = o_ptr;
+    flavor_ptr->mode = mode;
+    flavor_ptr->kindname = k_name + k_info[o_ptr->k_idx].name;
+    flavor_ptr->basenm = flavor_ptr->kindname;
+    flavor_ptr->modstr = "";
+    flavor_ptr->aware = FALSE;
+    flavor_ptr->known = FALSE;
+    flavor_ptr->flavor = TRUE;
+    flavor_ptr->show_weapon = FALSE;
+    flavor_ptr->show_armour = FALSE;
+    flavor_ptr->p1 = '(';
+    flavor_ptr->p2 = ')';
+    flavor_ptr->b1 = '[';
+    flavor_ptr->b2 = ']';
+    flavor_ptr->c1 = '{';
+    flavor_ptr->c2 = '}';
+    flavor_ptr->k_ptr = &k_info[o_ptr->k_idx];
+    flavor_ptr->flavor_k_ptr = &k_info[flavor_ptr->k_ptr->flavor];
+    return flavor_ptr;
+}
+
 /*!
  * @brief 対象文字配列に一文字だけをコピーする。
  * @param t 保管先文字列ポインタ
