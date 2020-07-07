@@ -64,7 +64,7 @@ static void check_object_known_aware(player_type *player_ptr, flavor_type *flavo
     }
 }
 
-static void describe_monster_ball(player_type *player_ptr, flavor_type *flavor_ptr)
+static void describe_monster_ball(flavor_type *flavor_ptr)
 {
     monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
     if (flavor_ptr->known)
@@ -90,7 +90,7 @@ static void describe_monster_ball(player_type *player_ptr, flavor_type *flavor_p
 #endif
 }
 
-static void describe_statue(player_type *player_ptr, flavor_type *flavor_ptr)
+static void describe_statue(flavor_type *flavor_ptr)
 {
     monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
 #ifdef JP
@@ -102,6 +102,20 @@ static void describe_statue(player_type *player_ptr, flavor_type *flavor_ptr)
         flavor_ptr->modstr = flavor_ptr->tmp_val2;
     } else
         flavor_ptr->modstr = flavor_ptr->t;
+#endif
+}
+
+static void describe_corpse(flavor_type *flavor_ptr)
+{
+    monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+    flavor_ptr->modstr = r_name + r_ptr->name;
+#ifdef JP
+    flavor_ptr->basenm = "#%";
+#else
+    if (r_ptr->flags1 & RF1_UNIQUE)
+        flavor_ptr->basenm = "& % of #";
+    else
+        flavor_ptr->basenm = "& # %";
 #endif
 }
 
@@ -128,26 +142,15 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_WHISTLE:
         break;
     case TV_CAPTURE:
-        describe_monster_ball(player_ptr, flavor_ptr);
+        describe_monster_ball(flavor_ptr);
         break;
     case TV_FIGURINE:
     case TV_STATUE:
-        describe_statue(player_ptr, flavor_ptr);
+        describe_statue(flavor_ptr);
         break;
-    case TV_CORPSE: {
-        monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
-        flavor_ptr->modstr = r_name + r_ptr->name;
-#ifdef JP
-        flavor_ptr->basenm = "#%";
-#else
-        if (r_ptr->flags1 & RF1_UNIQUE)
-            flavor_ptr->basenm = "& % of #";
-        else
-            flavor_ptr->basenm = "& # %";
-#endif
-
+    case TV_CORPSE:
+        describe_corpse(flavor_ptr);
         break;
-    }
     case TV_SHOT:
     case TV_BOLT:
     case TV_ARROW:
