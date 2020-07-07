@@ -339,6 +339,18 @@ static void describe_book_crusade(flavor_type *flavor_ptr)
 #endif
 }
 
+static void describe_book_hex(flavor_type *flavor_ptr)
+{
+#ifdef JP
+    flavor_ptr->basenm = "呪術の魔法書%";
+#else
+    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+        flavor_ptr->basenm = "& Book~ of Hex Magic %";
+    else
+        flavor_ptr->basenm = "& Hex Spellbook~ %";
+#endif
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -453,26 +465,15 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_CRUSADE_BOOK:
         describe_book_crusade(flavor_ptr);
         break;
-    case TV_MUSIC_BOOK: {
+    case TV_MUSIC_BOOK:
         flavor_ptr->basenm = _("歌集%", "& Song Book~ %");
         break;
-    }
-    case TV_HISSATSU_BOOK: {
+    case TV_HISSATSU_BOOK:
         flavor_ptr->basenm = _("& 武芸の書%", "Book~ of Kendo %");
         break;
-    }
-    case TV_HEX_BOOK: {
-#ifdef JP
-        flavor_ptr->basenm = "呪術の魔法書%";
-#else
-        if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            flavor_ptr->basenm = "& Book~ of Hex Magic %";
-        else
-            flavor_ptr->basenm = "& Hex Spellbook~ %";
-#endif
-
+    case TV_HEX_BOOK:
+        describe_book_hex(flavor_ptr);
         break;
-    }
     case TV_GOLD: {
         strcpy(flavor_ptr->buf, flavor_ptr->basenm);
         return;
