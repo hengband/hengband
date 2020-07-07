@@ -351,19 +351,8 @@ static void describe_book_hex(flavor_type *flavor_ptr)
 #endif
 }
 
-/*!
- * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param buf 表記を返すための文字列参照ポインタ
- * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
- * @param mode 表記に関するオプション指定
- * @return 現在クエスト達成目的のアイテムならばTRUEを返す
- */
-void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
+void switch_tval_description(flavor_type *flavor_ptr)
 {
-    flavor_type tmp_flavor;
-    flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
-    check_object_known_aware(player_ptr, flavor_ptr);
     switch (flavor_ptr->o_ptr->tval) {
     case TV_SKELETON:
     case TV_BOTTLE:
@@ -474,16 +463,29 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_HEX_BOOK:
         describe_book_hex(flavor_ptr);
         break;
-    case TV_GOLD: {
+    case TV_GOLD:
         strcpy(flavor_ptr->buf, flavor_ptr->basenm);
         return;
-    }
-    default: {
+    default:
         strcpy(flavor_ptr->buf, _("(なし)", "(nothing)"));
         return;
     }
-    }
+}
 
+/*!
+ * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param buf 表記を返すための文字列参照ポインタ
+ * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
+ * @param mode 表記に関するオプション指定
+ * @return 現在クエスト達成目的のアイテムならばTRUEを返す
+ */
+void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
+{
+    flavor_type tmp_flavor;
+    flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
+    check_object_known_aware(player_ptr, flavor_ptr);
+    switch_tval_description(flavor_ptr);
     if (flavor_ptr->aware && have_flag(flavor_ptr->flags, TR_FULL_NAME)) {
         if (flavor_ptr->known && flavor_ptr->o_ptr->name1)
             flavor_ptr->basenm = a_name + a_info[flavor_ptr->o_ptr->name1].name;
