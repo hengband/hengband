@@ -510,10 +510,10 @@ byte store_table[MAX_STORES][STORE_CHOICES][2] =
 		{ TV_CRAFT_BOOK, 1 },
 		{ TV_CRAFT_BOOK, 1 },
 
-		{ TV_DAEMON_BOOK, 0 },
-		{ TV_DAEMON_BOOK, 0 },
-		{ TV_DAEMON_BOOK, 1 },
-		{ TV_DAEMON_BOOK, 1 },
+		{ TV_DEMON_BOOK, 0 },
+		{ TV_DEMON_BOOK, 0 },
+		{ TV_DEMON_BOOK, 1 },
+		{ TV_DEMON_BOOK, 1 },
 
 		{ TV_MUSIC_BOOK, 0 },
 		{ TV_MUSIC_BOOK, 0 },

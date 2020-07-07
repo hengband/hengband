@@ -14,7 +14,7 @@ grouper group_item[MAX_GROUPER_ITEM] = { { TV_SHOT, _("射撃物", "Ammo") }, { 
     { TV_NATURE_BOOK, _("魔法書 (自然)", "Books (Nature)") }, { TV_CHAOS_BOOK, _("魔法書 (カオス)", "Books (Chaos)") },
     { TV_DEATH_BOOK, _("魔法書 (暗黒)", "Books (Death)") }, { TV_TRUMP_BOOK, _("魔法書 (トランプ)", "Books (Trump)") },
     { TV_ARCANE_BOOK, _("魔法書 (秘術)", "Books (Arcane)") }, { TV_CRAFT_BOOK, _("魔法書 (匠)", "Books (Craft)") },
-    { TV_DAEMON_BOOK, _("魔法書 (悪魔)", "Books (Daemon)") }, { TV_CRUSADE_BOOK, _("魔法書 (破邪)", "Books (Crusade)") },
+    { TV_DEMON_BOOK, _("魔法書 (悪魔)", "Books (Daemon)") }, { TV_CRUSADE_BOOK, _("魔法書 (破邪)", "Books (Crusade)") },
     { TV_MUSIC_BOOK, _("歌集", "Song Books") }, { TV_HISSATSU_BOOK, _("武芸の書", "Books (Kendo)") }, { TV_HEX_BOOK, _("魔法書 (呪術)", "Books (Hex)") },
 
     { TV_WHISTLE, _("笛", "Whistle") }, { TV_CAPTURE, _("キャプチャー・ボール", "Capture Ball") }, { TV_CARD, _("エクスプレスカード", "Express Card") },

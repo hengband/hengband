@@ -224,7 +224,7 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
 	case TV_DEATH_BOOK:
 	case TV_TRUMP_BOOK:
 	case TV_CRAFT_BOOK:
-	case TV_DAEMON_BOOK:
+	case TV_DEMON_BOOK:
 	case TV_CRUSADE_BOOK:
 	case TV_MUSIC_BOOK:
 	case TV_HISSATSU_BOOK:

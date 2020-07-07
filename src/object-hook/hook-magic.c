@@ -124,7 +124,7 @@ bool item_tester_learn_spell(player_type *player_ptr, object_type *o_ptr)
 bool item_tester_high_level_book(object_type *o_ptr)
 {
     if ((o_ptr->tval == TV_LIFE_BOOK) || (o_ptr->tval == TV_SORCERY_BOOK) || (o_ptr->tval == TV_NATURE_BOOK) || (o_ptr->tval == TV_CHAOS_BOOK)
-        || (o_ptr->tval == TV_DEATH_BOOK) || (o_ptr->tval == TV_TRUMP_BOOK) || (o_ptr->tval == TV_CRAFT_BOOK) || (o_ptr->tval == TV_DAEMON_BOOK)
+        || (o_ptr->tval == TV_DEATH_BOOK) || (o_ptr->tval == TV_TRUMP_BOOK) || (o_ptr->tval == TV_CRAFT_BOOK) || (o_ptr->tval == TV_DEMON_BOOK)
         || (o_ptr->tval == TV_CRUSADE_BOOK) || (o_ptr->tval == TV_MUSIC_BOOK) || (o_ptr->tval == TV_HEX_BOOK)) {
         if (o_ptr->sval > 1)
             return TRUE;
