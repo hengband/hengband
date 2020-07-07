@@ -161,6 +161,17 @@ static void describe_staff(flavor_type *flavor_ptr)
         flavor_ptr->basenm = _("#杖", "& # Staff~");
 }
 
+static void describe_wand(flavor_type *flavor_ptr)
+{
+    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    if (!flavor_ptr->flavor)
+        flavor_ptr->basenm = _("%の魔法棒", "& Wand~ of %");
+    else if (flavor_ptr->aware)
+        flavor_ptr->basenm = _("%の#魔法棒", "& # Wand~ of %");
+    else
+        flavor_ptr->basenm = _("#魔法棒", "& # Wand~");
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -227,17 +238,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_STAFF:
         describe_staff(flavor_ptr);
         break;
-    case TV_WAND: {
-        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
-        if (!flavor_ptr->flavor)
-            flavor_ptr->basenm = _("%の魔法棒", "& Wand~ of %");
-        else if (flavor_ptr->aware)
-            flavor_ptr->basenm = _("%の#魔法棒", "& # Wand~ of %");
-        else
-            flavor_ptr->basenm = _("#魔法棒", "& # Wand~");
-
+    case TV_WAND:
+        describe_wand(flavor_ptr);
         break;
-    }
     case TV_ROD: {
         flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
         if (!flavor_ptr->flavor)
