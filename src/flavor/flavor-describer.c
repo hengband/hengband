@@ -219,6 +219,18 @@ static void describe_food(flavor_type *flavor_ptr)
         flavor_ptr->basenm = _("#キノコ", "& # Mushroom~");
 }
 
+static void describe_book_life(flavor_type *flavor_ptr)
+{
+#ifdef JP
+    flavor_ptr->basenm = "生命の魔法書%";
+#else
+    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+        flavor_ptr->basenm = "& Book~ of Life Magic %";
+    else
+        flavor_ptr->basenm = "& Life Spellbook~ %";
+#endif
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -300,22 +312,12 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_FOOD:
         describe_food(flavor_ptr);
         break;
-    case TV_PARCHMENT: {
+    case TV_PARCHMENT:
         flavor_ptr->basenm = _("羊皮紙 - %", "& Parchment~ - %");
         break;
-    }
-    case TV_LIFE_BOOK: {
-#ifdef JP
-        flavor_ptr->basenm = "生命の魔法書%";
-#else
-        if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            flavor_ptr->basenm = "& Book~ of Life Magic %";
-        else
-            flavor_ptr->basenm = "& Life Spellbook~ %";
-#endif
-
+    case TV_LIFE_BOOK:
+        describe_book_life(flavor_ptr);
         break;
-    }
     case TV_SORCERY_BOOK: {
 #ifdef JP
         flavor_ptr->basenm = "仙術の魔法書%";
