@@ -90,6 +90,21 @@ static void describe_monster_ball(player_type *player_ptr, flavor_type *flavor_p
 #endif
 }
 
+static void describe_statue(player_type *player_ptr, flavor_type *flavor_ptr)
+{
+    monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+#ifdef JP
+    flavor_ptr->modstr = r_name + r_ptr->name;
+#else
+    flavor_ptr->t = r_name + r_ptr->name;
+    if (!(r_ptr->flags1 & RF1_UNIQUE)) {
+        sprintf(flavor_ptr->tmp_val2, "%s%s", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
+        flavor_ptr->modstr = flavor_ptr->tmp_val2;
+    } else
+        flavor_ptr->modstr = flavor_ptr->t;
+#endif
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -116,22 +131,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         describe_monster_ball(player_ptr, flavor_ptr);
         break;
     case TV_FIGURINE:
-    case TV_STATUE: {
-        monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
-#ifdef JP
-        flavor_ptr->modstr = r_name + r_ptr->name;
-#else
-        flavor_ptr->t = r_name + r_ptr->name;
-
-        if (!(r_ptr->flags1 & RF1_UNIQUE)) {
-            sprintf(flavor_ptr->tmp_val2, "%s%s", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
-            flavor_ptr->modstr = flavor_ptr->tmp_val2;
-        } else
-            flavor_ptr->modstr = flavor_ptr->t;
-#endif
-
+    case TV_STATUE:
+        describe_statue(player_ptr, flavor_ptr);
         break;
-    }
     case TV_CORPSE: {
         monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
         flavor_ptr->modstr = r_name + r_ptr->name;
