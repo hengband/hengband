@@ -75,7 +75,9 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
 void object_tried(object_type *o_ptr) { k_info[o_ptr->k_idx].tried = TRUE; }
 
 /*
- * Determine if a given inventory item is "aware"
+ * @brief 与えられたオブジェクトのベースアイテムが鑑定済かを返す / Determine if a given inventory item is "aware"
+ * @param o_ptr オブジェクトへの参照ポインタ
+ * @return 鑑定済ならTRUE
  */
 bool object_is_aware(object_type *o_ptr) { return k_info[(o_ptr)->k_idx].aware; }
 

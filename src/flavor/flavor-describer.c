@@ -38,18 +38,8 @@
 #include "player/player-class.h"
 #endif
 
-/*!
- * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param buf 表記を返すための文字列参照ポインタ
- * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
- * @param mode 表記に関するオプション指定
- * @return 現在クエスト達成目的のアイテムならばTRUEを返す
- */
-void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
+static void check_object_known_aware(player_type *player_ptr, flavor_type *flavor_ptr)
 {
-    flavor_type tmp_flavor;
-    flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
     object_flags(player_ptr, flavor_ptr->o_ptr, flavor_ptr->flags);
     if (object_is_aware(flavor_ptr->o_ptr))
         flavor_ptr->aware = TRUE;
@@ -72,7 +62,21 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         flavor_ptr->known = FALSE;
         flavor_ptr->flavor_k_ptr = flavor_ptr->k_ptr;
     }
+}
 
+/*!
+ * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param buf 表記を返すための文字列参照ポインタ
+ * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
+ * @param mode 表記に関するオプション指定
+ * @return 現在クエスト達成目的のアイテムならばTRUEを返す
+ */
+void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
+{
+    flavor_type tmp_flavor;
+    flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
+    check_object_known_aware(player_ptr, flavor_ptr);
     switch (flavor_ptr->o_ptr->tval) {
     case TV_SKELETON:
     case TV_BOTTLE:
