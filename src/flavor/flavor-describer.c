@@ -243,6 +243,18 @@ static void describe_book_sorcery(flavor_type *flavor_ptr)
 #endif
 }
 
+static void describe_book_nature(flavor_type *flavor_ptr)
+{
+#ifdef JP
+    flavor_ptr->basenm = "自然の魔法書%";
+#else
+    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+        flavor_ptr->basenm = "& Book~ of Nature Magic %";
+    else
+        flavor_ptr->basenm = "& Nature Spellbook~ %";
+#endif
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -333,18 +345,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_SORCERY_BOOK:
         describe_book_sorcery(flavor_ptr);
         break;
-    case TV_NATURE_BOOK: {
-#ifdef JP
-        flavor_ptr->basenm = "自然の魔法書%";
-#else
-        if (mp_ptr->spell_book == TV_LIFE_BOOK)
-            flavor_ptr->basenm = "& Book~ of Nature Magic %";
-        else
-            flavor_ptr->basenm = "& Nature Spellbook~ %";
-#endif
-
+    case TV_NATURE_BOOK:
+        describe_book_nature(flavor_ptr);
         break;
-    }
     case TV_CHAOS_BOOK: {
 #ifdef JP
         flavor_ptr->basenm = "カオスの魔法書%";
