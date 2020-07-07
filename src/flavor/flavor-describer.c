@@ -64,6 +64,32 @@ static void check_object_known_aware(player_type *player_ptr, flavor_type *flavo
     }
 }
 
+static void describe_monster_ball(player_type *player_ptr, flavor_type *flavor_ptr)
+{
+    monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
+    if (flavor_ptr->known)
+        return;
+
+    if (!flavor_ptr->o_ptr->pval) {
+        flavor_ptr->modstr = _(" (空)", " (empty)");
+        return;
+    }
+
+#ifdef JP
+    sprintf(flavor_ptr->tmp_val2, " (%s)", r_name + r_ptr->name);
+    flavor_ptr->modstr = flavor_ptr->tmp_val2;
+#else
+    flavor_ptr->t = r_name + r_ptr->name;
+    if (!(r_ptr->flags1 & RF1_UNIQUE)) {
+        sprintf(flavor_ptr->tmp_val2, " (%s%s)", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
+        flavor_ptr->modstr = flavor_ptr->tmp_val2;
+    } else {
+        sprintf(flavor_ptr->tmp_val2, "(%s)", flavor_ptr->t);
+        flavor_ptr->modstr = flavor_ptr->t;
+    }
+#endif
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -86,33 +112,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_CHEST:
     case TV_WHISTLE:
         break;
-    case TV_CAPTURE: {
-        monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
-        if (flavor_ptr->known) {
-            if (!flavor_ptr->o_ptr->pval) {
-                flavor_ptr->modstr = _(" (空)", " (empty)");
-            } else {
-#ifdef JP
-                sprintf(flavor_ptr->tmp_val2, " (%s)", r_name + r_ptr->name);
-                flavor_ptr->modstr = flavor_ptr->tmp_val2;
-#else
-                flavor_ptr->t = r_name + r_ptr->name;
-
-                if (!(r_ptr->flags1 & RF1_UNIQUE)) {
-                    sprintf(flavor_ptr->tmp_val2, " (%s%s)", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
-
-                    flavor_ptr->modstr = flavor_ptr->tmp_val2;
-                } else {
-                    sprintf(flavor_ptr->tmp_val2, "(%s)", flavor_ptr->t);
-
-                    flavor_ptr->modstr = flavor_ptr->t;
-                }
-#endif
-            }
-        }
-
+    case TV_CAPTURE:
+        describe_monster_ball(player_ptr, flavor_ptr);
         break;
-    }
     case TV_FIGURINE:
     case TV_STATUE: {
         monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
