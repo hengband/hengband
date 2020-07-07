@@ -121,7 +121,7 @@ static void describe_corpse(flavor_type *flavor_ptr)
 
 static void describe_amulet(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->aware && (object_is_fixed_artifact(flavor_ptr->o_ptr) || ((flavor_ptr->k_ptr->gen_flags & TRG_INSTA_ART) == 0)))
+    if (flavor_ptr->aware && (object_is_fixed_artifact(flavor_ptr->o_ptr) || ((flavor_ptr->k_ptr->gen_flags & TRG_INSTA_ART) != 0)))
         return;
 
     flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
@@ -131,6 +131,23 @@ static void describe_amulet(flavor_type *flavor_ptr)
         flavor_ptr->basenm = _("%の#アミュレット", "& # Amulet~ of %");
     else
         flavor_ptr->basenm = _("#アミュレット", "& # Amulet~");
+}
+
+static void describe_ring(flavor_type *flavor_ptr)
+{
+    if (flavor_ptr->aware && (object_is_fixed_artifact(flavor_ptr->o_ptr) || (flavor_ptr->k_ptr->gen_flags & TRG_INSTA_ART) != 0))
+        return;
+
+    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    if (!flavor_ptr->flavor)
+        flavor_ptr->basenm = _("%の指輪", "& Ring~ of %");
+    else if (flavor_ptr->aware)
+        flavor_ptr->basenm = _("%の#指輪", "& # Ring~ of %");
+    else
+        flavor_ptr->basenm = _("#指輪", "& # Ring~");
+
+    if (!flavor_ptr->k_ptr->to_h && !flavor_ptr->k_ptr->to_d && (flavor_ptr->o_ptr->to_h || flavor_ptr->o_ptr->to_d))
+        flavor_ptr->show_weapon = TRUE;
 }
 
 /*!
@@ -191,27 +208,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     case TV_AMULET:
         describe_amulet(flavor_ptr);
         break;
-    case TV_RING: {
-        if (flavor_ptr->aware) {
-            if (object_is_fixed_artifact(flavor_ptr->o_ptr))
-                break;
-            if (flavor_ptr->k_ptr->gen_flags & TRG_INSTA_ART)
-                break;
-        }
-
-        flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
-        if (!flavor_ptr->flavor)
-            flavor_ptr->basenm = _("%の指輪", "& Ring~ of %");
-        else if (flavor_ptr->aware)
-            flavor_ptr->basenm = _("%の#指輪", "& # Ring~ of %");
-        else
-            flavor_ptr->basenm = _("#指輪", "& # Ring~");
-
-        if (!flavor_ptr->k_ptr->to_h && !flavor_ptr->k_ptr->to_d && (flavor_ptr->o_ptr->to_h || flavor_ptr->o_ptr->to_d))
-            flavor_ptr->show_weapon = TRUE;
-
+    case TV_RING:
+        describe_ring(flavor_ptr);
         break;
-    }
     case TV_CARD:
         break;
     case TV_STAFF: {
