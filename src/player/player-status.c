@@ -611,6 +611,7 @@ void calc_bonuses(player_type *creature_ptr)
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     bool omoi = FALSE;
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 
     bool have_sw = FALSE, have_kabe = FALSE;
     bool riding_levitation = FALSE;
@@ -633,9 +634,6 @@ void calc_bonuses(player_type *creature_ptr)
     bool old_see_inv = creature_ptr->see_inv;
     bool old_mighty_throw = creature_ptr->mighty_throw;
     s16b old_speed = creature_ptr->pspeed;
-
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    feature_type *f_ptr = &f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 
     ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
     ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
@@ -881,15 +879,6 @@ void calc_bonuses(player_type *creature_ptr)
 
     if (j > count)
         creature_ptr->pspeed -= ((j - count) / (count / 5));
-    if (creature_ptr->action == ACTION_SEARCH)
-        creature_ptr->pspeed -= 10;
-    if (creature_ptr->prace == RACE_MERFOLK) {
-        if (have_flag(f_ptr->flags, FF_WATER)) {
-            creature_ptr->pspeed += (2 + creature_ptr->lev / 10);
-        } else if (!creature_ptr->levitation) {
-            creature_ptr->pspeed -= 2;
-        }
-    }
 
     creature_ptr->to_d[0] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->to_d[1] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
@@ -3302,7 +3291,10 @@ static void calc_to_ac_display(player_type *creature_ptr)
 
 static void calc_speed(player_type *creature_ptr)
 {
-    creature_ptr->pspeed = 110;
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    feature_type *f_ptr = &f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
+
+	creature_ptr->pspeed = 110;
 
     if (!creature_ptr->riding) {
         const player_race *tmp_rp_ptr;
@@ -3395,6 +3387,15 @@ static void calc_speed(player_type *creature_ptr)
                 creature_ptr->pspeed -= 3;
             }
         }
+
+        if (creature_ptr->prace == RACE_MERFOLK) {
+            if (have_flag(f_ptr->flags, FF_WATER)) {
+                creature_ptr->pspeed += (2 + creature_ptr->lev / 10);
+            } else if (!creature_ptr->levitation) {
+                creature_ptr->pspeed -= 2;
+            }
+        }
+
     } else {
         monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
         SPEED speed = riding_m_ptr->mspeed;
@@ -3413,6 +3414,9 @@ static void calc_speed(player_type *creature_ptr)
         if (monster_slow_remaining(riding_m_ptr))
             creature_ptr->pspeed -= 10;
     }
+
+	if (creature_ptr->action == ACTION_SEARCH)
+        creature_ptr->pspeed -= 10;
 
     /* Maximum speed is (+99). (internally it's 110 + 99) */
     /* Temporary lightspeed forces to be maximum speed */
