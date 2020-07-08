@@ -73,6 +73,38 @@ static void set_base_name(flavor_type *flavor_ptr)
     flavor_ptr->basenm = (flavor_ptr->known && (flavor_ptr->o_ptr->name1 != 0)) ? a_name + a_info[flavor_ptr->o_ptr->name1].name : flavor_ptr->kindname;
 }
 
+#ifdef JP
+static void describe_prefix_ja(flavor_type *flavor_ptr)
+{
+    flavor_ptr->s = flavor_ptr->basenm[0] == '&' ? flavor_ptr->basenm : flavor_ptr->basenm + 2;
+    if (flavor_ptr->mode & OD_OMIT_PREFIX)
+        return;
+    
+    if (flavor_ptr->o_ptr->number > 1) {
+        flavor_ptr->t = object_desc_count_japanese(flavor_ptr->t, flavor_ptr->o_ptr);
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "の ");
+    }
+}
+
+/*!
+ * @brief アーティファクトの表記処理
+ * @param アイテム表記への参照ポインタ
+ * @return なし
+ * @details 英語の場合アーティファクトは The が付くので分かるが、日本語では分からないのでマークをつける.
+ */
+static void describe_artifact_ja(flavor_type *flavor_ptr)
+{
+    if (!flavor_ptr->known)
+        return;
+
+    if (object_is_fixed_artifact(flavor_ptr->o_ptr))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "★");
+    else if (flavor_ptr->o_ptr->art_name)
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "☆");
+}
+#else
+#endif
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -90,26 +122,8 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     set_base_name(flavor_ptr);
     flavor_ptr->t = flavor_ptr->tmp_val;
 #ifdef JP
-    if (flavor_ptr->basenm[0] == '&')
-        flavor_ptr->s = flavor_ptr->basenm + 2;
-    else
-        flavor_ptr->s = flavor_ptr->basenm;
-
-    /* No prefix */
-    if (flavor_ptr->mode & OD_OMIT_PREFIX) {
-        /* Nothing */
-    } else if (flavor_ptr->o_ptr->number > 1) {
-        flavor_ptr->t = object_desc_count_japanese(flavor_ptr->t, flavor_ptr->o_ptr);
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "の ");
-    }
-
-    // 英語の場合アーティファクトは The が付くので分かるが、日本語では分からないのでマークをつける.
-    if (flavor_ptr->known) {
-        if (object_is_fixed_artifact(flavor_ptr->o_ptr))
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, "★");
-        else if (flavor_ptr->o_ptr->art_name)
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, "☆");
-    }
+    describe_prefix_ja(flavor_ptr);
+    describe_artifact_ja(flavor_ptr);
 #else
 
     if (flavor_ptr->basenm[0] == '&') {
