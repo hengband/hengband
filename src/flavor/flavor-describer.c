@@ -65,6 +65,14 @@ static void check_object_known_aware(player_type *player_ptr, flavor_type *flavo
     }
 }
 
+static void set_base_name(flavor_type *flavor_ptr)
+{
+    if (!flavor_ptr->aware || !have_flag(flavor_ptr->flags, TR_FULL_NAME))
+        return;
+
+    flavor_ptr->basenm = (flavor_ptr->known && (flavor_ptr->o_ptr->name1 != 0)) ? a_name + a_info[flavor_ptr->o_ptr->name1].name : flavor_ptr->kindname;
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -79,13 +87,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
     check_object_known_aware(player_ptr, flavor_ptr);
     switch_tval_description(flavor_ptr);
-    if (flavor_ptr->aware && have_flag(flavor_ptr->flags, TR_FULL_NAME)) {
-        if (flavor_ptr->known && flavor_ptr->o_ptr->name1)
-            flavor_ptr->basenm = a_name + a_info[flavor_ptr->o_ptr->name1].name;
-        else
-            flavor_ptr->basenm = flavor_ptr->kindname;
-    }
-
+    set_base_name(flavor_ptr);
     flavor_ptr->t = flavor_ptr->tmp_val;
 #ifdef JP
     if (flavor_ptr->basenm[0] == '&')
@@ -119,7 +121,8 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         else if (flavor_ptr->o_ptr->number > 1) {
             flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
             flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        } else if ((flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr)) || ((flavor_ptr->o_ptr->tval == TV_CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE)))
+        } else if ((flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
+            || ((flavor_ptr->o_ptr->tval == TV_CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE)))
             flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
         else {
             bool vowel;
@@ -468,7 +471,8 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
 
         avgdam = calc_expect_crit_shot(player_ptr, flavor_ptr->o_ptr->weight, flavor_ptr->o_ptr->to_h, flavor_ptr->bow_ptr->to_h, avgdam);
         flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
-        flavor_ptr->t = show_ammo_no_crit ? object_desc_str(flavor_ptr->t, show_ammo_detail ? "/crit " : "/") : object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
+        flavor_ptr->t = show_ammo_no_crit ? object_desc_str(flavor_ptr->t, show_ammo_detail ? "/crit " : "/")
+                                          : object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
         if (player_ptr->num_fire == 0)
             flavor_ptr->t = object_desc_chr(flavor_ptr->t, '0');
         else {
@@ -477,7 +481,8 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
             flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
             flavor_ptr->t = object_desc_str(flavor_ptr->t, show_ammo_detail ? "/turn" : "");
             if (show_ammo_crit_ratio) {
-                int percent = calc_crit_ratio_shot(player_ptr, flavor_ptr->known ? flavor_ptr->o_ptr->to_h : 0, flavor_ptr->known ? flavor_ptr->bow_ptr->to_h : 0);
+                int percent
+                    = calc_crit_ratio_shot(player_ptr, flavor_ptr->known ? flavor_ptr->o_ptr->to_h : 0, flavor_ptr->known ? flavor_ptr->bow_ptr->to_h : 0);
                 flavor_ptr->t = object_desc_chr(flavor_ptr->t, '/');
                 flavor_ptr->t = object_desc_num(flavor_ptr->t, percent / 100);
                 flavor_ptr->t = object_desc_chr(flavor_ptr->t, '.');
@@ -633,8 +638,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         strcpy(flavor_ptr->fake_insc_buf, game_inscriptions[flavor_ptr->o_ptr->feeling]);
     else if (object_is_cursed(flavor_ptr->o_ptr) && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE)))
         strcpy(flavor_ptr->fake_insc_buf, _("呪われている", "cursed"));
-    else if (((flavor_ptr->o_ptr->tval == TV_RING) || (flavor_ptr->o_ptr->tval == TV_AMULET) || (flavor_ptr->o_ptr->tval == TV_LITE) || (flavor_ptr->o_ptr->tval == TV_FIGURINE)) && flavor_ptr->aware && !flavor_ptr->known
-        && !(flavor_ptr->o_ptr->ident & IDENT_SENSE))
+    else if (((flavor_ptr->o_ptr->tval == TV_RING) || (flavor_ptr->o_ptr->tval == TV_AMULET) || (flavor_ptr->o_ptr->tval == TV_LITE)
+                 || (flavor_ptr->o_ptr->tval == TV_FIGURINE))
+        && flavor_ptr->aware && !flavor_ptr->known && !(flavor_ptr->o_ptr->ident & IDENT_SENSE))
         strcpy(flavor_ptr->fake_insc_buf, _("未鑑定", "unidentified"));
     else if (!flavor_ptr->known && (flavor_ptr->o_ptr->ident & IDENT_EMPTY))
         strcpy(flavor_ptr->fake_insc_buf, _("空", "empty"));
