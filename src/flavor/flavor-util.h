@@ -14,7 +14,7 @@ typedef struct flavor_type {
     int power;
     int fire_rate;
     bool aware;
-    bool known;
+    bool known; // 鑑定 or *鑑定* 済.
     bool flavor;
     bool show_weapon;
     bool show_armour;

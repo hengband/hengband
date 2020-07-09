@@ -273,6 +273,35 @@ static void describe_spike_power(player_type *player_ptr, flavor_type *flavor_pt
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
 }
 
+static void describe_ac(flavor_type *flavor_ptr)
+{
+    if (flavor_ptr->known) {
+        if (flavor_ptr->show_armour) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
+            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
+            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
+        } else if (flavor_ptr->o_ptr->to_a) {
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
+            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
+        }
+
+        return;
+    }
+    
+    if (!flavor_ptr->show_armour)
+        return;
+
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
+    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -301,27 +330,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE))
         describe_spike_power(player_ptr, flavor_ptr);
 
-    if (flavor_ptr->known) {
-        if (flavor_ptr->show_armour) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
-            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
-            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
-        } else if (flavor_ptr->o_ptr->to_a) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
-            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
-        }
-    } else if (flavor_ptr->show_armour) {
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
-    }
-
+    describe_ac(flavor_ptr);
     if (flavor_ptr->mode & OD_NAME_AND_ENCHANT) {
         angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
         return;
