@@ -434,6 +434,27 @@ static void describe_remaining(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
 }
 
+void display_short_flavors(player_type *player_ptr, flavor_type *flavor_ptr)
+{
+    flavor_ptr->tmp_val2[0] = '\0';
+    if ((abbrev_extra || abbrev_all) && object_is_fully_known(flavor_ptr->o_ptr)) {
+        if (!flavor_ptr->o_ptr->inscription || !angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '%')) {
+            bool kanji = _(TRUE, FALSE);
+            get_ability_abbreviation(player_ptr, flavor_ptr->tmp_val2, flavor_ptr->o_ptr, kanji, abbrev_all);
+        }
+    }
+
+    if (flavor_ptr->o_ptr->inscription == 0)
+        return;
+
+    char buff[1024];
+    if (flavor_ptr->tmp_val2[0])
+        strcat(flavor_ptr->tmp_val2, ", ");
+
+    get_inscription(player_ptr, buff, flavor_ptr->o_ptr);
+    angband_strcat(flavor_ptr->tmp_val2, buff, sizeof(flavor_ptr->tmp_val2));
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -474,25 +495,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         return;
     }
 
-    flavor_ptr->tmp_val2[0] = '\0';
-    if ((abbrev_extra || abbrev_all) && object_is_fully_known(flavor_ptr->o_ptr)) {
-        if (!flavor_ptr->o_ptr->inscription || !angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '%')) {
-            bool kanji, all;
-            kanji = _(TRUE, FALSE);
-            all = abbrev_all;
-            get_ability_abbreviation(player_ptr, flavor_ptr->tmp_val2, flavor_ptr->o_ptr, kanji, all);
-        }
-    }
-
-    if (flavor_ptr->o_ptr->inscription) {
-        char buff[1024];
-        if (flavor_ptr->tmp_val2[0])
-            strcat(flavor_ptr->tmp_val2, ", ");
-
-        get_inscription(player_ptr, buff, flavor_ptr->o_ptr);
-        angband_strcat(flavor_ptr->tmp_val2, buff, sizeof(flavor_ptr->tmp_val2));
-    }
-
+    display_short_flavors(player_ptr, flavor_ptr);
     flavor_ptr->fake_insc_buf[0] = '\0';
     if (flavor_ptr->o_ptr->feeling)
         strcpy(flavor_ptr->fake_insc_buf, game_inscriptions[flavor_ptr->o_ptr->feeling]);
