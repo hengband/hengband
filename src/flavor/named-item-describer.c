@@ -58,7 +58,7 @@ static void set_base_name(flavor_type *flavor_ptr)
 #ifdef JP
 static void describe_prefix_ja(flavor_type *flavor_ptr)
 {
-    flavor_ptr->s = flavor_ptr->basenm[0] == '&' ? flavor_ptr->basenm : flavor_ptr->basenm + 2;
+    flavor_ptr->s = flavor_ptr->basenm[0] == '&' ? flavor_ptr->basenm + 2 : flavor_ptr->basenm;
     if (flavor_ptr->mode & OD_OMIT_PREFIX)
         return;
 
