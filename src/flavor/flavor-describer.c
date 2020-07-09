@@ -76,12 +76,12 @@ static void describe_chest(flavor_type *flavor_ptr)
 
     if (!flavor_ptr->known)
         return;
-    
+
     if (!flavor_ptr->o_ptr->pval) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(空)", " (empty)"));
         return;
     }
-    
+
     if (flavor_ptr->o_ptr->pval < 0) {
         if (chest_traps[0 - flavor_ptr->o_ptr->pval])
             flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(解除済)", " (disarmed)"));
@@ -179,7 +179,7 @@ static void describe_named_item_tval(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
         return;
     }
-    
+
     if (flavor_ptr->o_ptr->to_h != 0) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
@@ -187,7 +187,7 @@ static void describe_named_item_tval(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
         return;
     }
-    
+
     if (flavor_ptr->o_ptr->to_d != 0) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
@@ -339,7 +339,7 @@ static void describe_charges_rod(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
         return;
     }
-        
+
     if (flavor_ptr->k_ptr->pval == 0)
         flavor_ptr->k_ptr->pval = 1;
 
@@ -358,7 +358,7 @@ static void describe_specific_pval(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("加速", " to speed"));
         return;
     }
-    
+
     if (have_flag(flavor_ptr->tr_flags, TR_BLOWS)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
 #ifdef JP
@@ -372,12 +372,12 @@ static void describe_specific_pval(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("隠密", " to stealth"));
         return;
     }
-    
+
     if (have_flag(flavor_ptr->tr_flags, TR_SEARCH)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("探索", " to searching"));
         return;
     }
-    
+
     if (have_flag(flavor_ptr->tr_flags, TR_INFRA))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("赤外線視力", " to infravision"));
 }
@@ -394,9 +394,23 @@ static void describe_pval(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
         return;
     }
-    
+
     describe_specific_pval(flavor_ptr);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+}
+
+static void describe_lamp_life(flavor_type *flavor_ptr)
+{
+    if ((flavor_ptr->o_ptr->tval != TV_LITE) || ((object_is_fixed_artifact(flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->sval != SV_LITE_FEANOR))))
+        return;
+
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
+    if (flavor_ptr->o_ptr->name2 == EGO_LITE_LONG)
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->xtra4 * 2);
+    else
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->xtra4);
+
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("ターンの寿命)", " turns of light)"));
 }
 
 /*!
@@ -440,16 +454,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
             describe_charges_rod(flavor_ptr);
 
         describe_pval(flavor_ptr);
-        if ((flavor_ptr->o_ptr->tval == TV_LITE) && (!(object_is_fixed_artifact(flavor_ptr->o_ptr) || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))) {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
-            if (flavor_ptr->o_ptr->name2 == EGO_LITE_LONG)
-                flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->xtra4 * 2);
-            else
-                flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->xtra4);
-
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("ターンの寿命)", " turns of light)"));
-        }
-
+        describe_lamp_life(flavor_ptr);
         if (flavor_ptr->o_ptr->timeout && (flavor_ptr->o_ptr->tval != TV_ROD))
             flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
     }
