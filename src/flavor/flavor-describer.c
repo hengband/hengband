@@ -125,24 +125,36 @@ static void describe_vowel(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "a ");
 }
 
-// 処理が一部コピペ。移す.
+/*!
+ * @brief 0個、1個、2個以上の時に個数を書き分ける処理 / Process to write the number when there are 0, 1, or 2 or more.
+ * @param flavor_ptr アイテム表記への参照ポインタ / Reference pointer to item's flavor
+ * @return 1個ならFALSE、0または2個以上ならTRUE / If the number of items is 1, then FALE is returned, and if 0 or 2 or more, then TRUE is returned
+ * @details 1個なら後続処理実行 / If the number of items is 1, then the continuous process will be run.
+ */
+static bool describe_prefix_en(flavor_type *flavor_ptr)
+{
+    if (flavor_ptr->o_ptr->number <= 0) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
+        return TRUE;
+    }
+
+    if (flavor_ptr->o_ptr->number == 1)
+        return FALSE;
+
+    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+    return TRUE;
+}
+
 static void describe_artifact_en(flavor_type *flavor_ptr)
 {
     flavor_ptr->s = flavor_ptr->basenm + 2;
     if (flavor_ptr->mode & OD_OMIT_PREFIX)
         return;
 
-    if (flavor_ptr->o_ptr->number <= 0) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
+    if (describe_prefix_en(flavor_ptr))
         return;
-    }
-    
-    if (flavor_ptr->o_ptr->number > 1) {
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        return;
-    }
-    
+
     if ((flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
         || ((flavor_ptr->o_ptr->tval == TV_CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE))) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
@@ -152,24 +164,15 @@ static void describe_artifact_en(flavor_type *flavor_ptr)
     describe_vowel(flavor_ptr);
 }
 
-// 処理が一部コピペ。移す.
 static void describe_basename_en(flavor_type *flavor_ptr)
 {
     flavor_ptr->s = flavor_ptr->basenm;
     if (flavor_ptr->mode & OD_OMIT_PREFIX)
         return;
-    
-    if (flavor_ptr->o_ptr->number <= 0) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
+
+    if (describe_prefix_en(flavor_ptr))
         return;
-    }
-    
-    if (flavor_ptr->o_ptr->number > 1) {
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        return;
-    }
-    
+
     if (flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
 }
