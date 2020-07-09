@@ -273,26 +273,34 @@ static void describe_spike_power(player_type *player_ptr, flavor_type *flavor_pt
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
 }
 
+static void describe_known_item_ac(flavor_type *flavor_ptr)
+{
+    if (flavor_ptr->show_armour) {
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
+        flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
+        return;
+    }
+
+    if (flavor_ptr->o_ptr->to_a == 0)
+        return;
+
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
+    flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
+}
+
 static void describe_ac(flavor_type *flavor_ptr)
 {
     if (flavor_ptr->known) {
-        if (flavor_ptr->show_armour) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
-            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ac);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
-            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
-        } else if (flavor_ptr->o_ptr->to_a) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b1);
-            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_a);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->b2);
-        }
-
+        describe_known_item_ac(flavor_ptr);
         return;
     }
-    
+
     if (!flavor_ptr->show_armour)
         return;
 
