@@ -173,6 +173,33 @@ static bool describe_random_artifact_body_ja(flavor_type *flavor_ptr)
     return TRUE;
 }
 
+static void describe_ego_body_ja(flavor_type *flavor_ptr)
+{
+    if (!flavor_ptr->o_ptr->inscription)
+        return;
+
+    concptr str = quark_str(flavor_ptr->o_ptr->inscription);
+    while (*str) {
+        if (iskanji(*str)) {
+            str += 2;
+            continue;
+        }
+
+        if (*str == '#')
+            break;
+
+        str++;
+    }
+
+    if (*str == '\0')
+        return;
+
+    concptr str_aux = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, &str_aux[1]);
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
+}
+
 /*!
  * @brief アーティファクトのアイテム名を表記する
  * @param flavor_ptr アイテム表記への参照ポインタ
@@ -194,29 +221,8 @@ static void describe_artifact_body_ja(flavor_type *flavor_ptr)
 
         return;
     }
-    
-    if (flavor_ptr->o_ptr->inscription) {
-        concptr str = quark_str(flavor_ptr->o_ptr->inscription);
-        while (*str) {
-            if (iskanji(*str)) {
-                str += 2;
-                continue;
-            }
 
-            if (*str == '#')
-                break;
-
-            str++;
-        }
-
-        if (*str == '\0')
-            return;
-
-        concptr str_aux = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, &str_aux[1]);
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
-    }
+    describe_ego_body_ja(flavor_ptr);
 }
 #else
 
