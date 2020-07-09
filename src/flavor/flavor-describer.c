@@ -30,6 +30,65 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
+static void describe_chest(flavor_type *flavor_ptr)
+{
+    if (flavor_ptr->o_ptr->tval != TV_CHEST)
+        return;
+
+    if (!flavor_ptr->known)
+        return;
+    
+    if (!flavor_ptr->o_ptr->pval) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(空)", " (empty)"));
+        return;
+    }
+    
+    if (flavor_ptr->o_ptr->pval < 0) {
+        if (chest_traps[0 - flavor_ptr->o_ptr->pval])
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(解除済)", " (disarmed)"));
+        else
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(非施錠)", " (unlocked)"));
+
+        return;
+    }
+
+    switch (chest_traps[flavor_ptr->o_ptr->pval]) {
+    case 0:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(施錠)", " (Locked)"));
+        break;
+    case CHEST_LOSE_STR:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
+        break;
+    case CHEST_LOSE_CON:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
+        break;
+    case CHEST_POISON:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
+        break;
+    case CHEST_PARALYZE:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
+        break;
+    case CHEST_EXPLODE:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(爆発装置)", " (Explosion Device)"));
+        break;
+    case CHEST_SUMMON:
+    case CHEST_BIRD_STORM:
+    case CHEST_E_SUMMON:
+    case CHEST_H_SUMMON:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(召喚のルーン)", " (Summoning Runes)"));
+        break;
+    case CHEST_RUNES_OF_EVIL:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(邪悪なルーン)", " (Gleaming Black Runes)"));
+        break;
+    case CHEST_ALARM:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(警報装置)", " (Alarm)"));
+        break;
+    default:
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(マルチ・トラップ)", " (Multiple Traps)"));
+        break;
+    }
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -48,65 +107,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         return;
     }
 
-    if (flavor_ptr->o_ptr->tval == TV_CHEST) {
-        if (!flavor_ptr->known) {
-            /* Nothing */
-        } else if (!flavor_ptr->o_ptr->pval)
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(空)", " (empty)"));
-        else if (flavor_ptr->o_ptr->pval < 0)
-            if (chest_traps[0 - flavor_ptr->o_ptr->pval])
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(解除済)", " (disarmed)"));
-            else
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(非施錠)", " (unlocked)"));
-        else {
-            switch (chest_traps[flavor_ptr->o_ptr->pval]) {
-            case 0: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(施錠)", " (Locked)"));
-                break;
-            }
-            case CHEST_LOSE_STR: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
-                break;
-            }
-            case CHEST_LOSE_CON: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(毒針)", " (Poison Needle)"));
-                break;
-            }
-            case CHEST_POISON: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
-                break;
-            }
-            case CHEST_PARALYZE: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(ガス・トラップ)", " (Gas Trap)"));
-                break;
-            }
-            case CHEST_EXPLODE: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(爆発装置)", " (Explosion Device)"));
-                break;
-            }
-            case CHEST_SUMMON:
-            case CHEST_BIRD_STORM:
-            case CHEST_E_SUMMON:
-            case CHEST_H_SUMMON: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(召喚のルーン)", " (Summoning Runes)"));
-                break;
-            }
-            case CHEST_RUNES_OF_EVIL: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(邪悪なルーン)", " (Gleaming Black Runes)"));
-                break;
-            }
-            case CHEST_ALARM: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(警報装置)", " (Alarm)"));
-                break;
-            }
-            default: {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(マルチ・トラップ)", " (Multiple Traps)"));
-                break;
-            }
-            }
-        }
-    }
-
+    describe_chest(flavor_ptr);
     if (have_flag(flavor_ptr->flags, TR_SHOW_MODS))
         flavor_ptr->show_weapon = TRUE;
 
