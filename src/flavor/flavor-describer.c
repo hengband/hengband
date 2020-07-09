@@ -299,7 +299,7 @@ static void describe_basename_en(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
 }
 
-static void describe_artifact_en(flavor_type *flavor_ptr)
+static void describe_artifact_body_en(flavor_type *flavor_ptr)
 {
     if (!flavor_ptr->known || have_flag(flavor_ptr->flags, TR_FULL_NAME))
         return;
@@ -372,22 +372,8 @@ static void describe_inscription(flavor_type *flavor_ptr)
     }
 }
 
-/*!
- * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param buf 表記を返すための文字列参照ポインタ
- * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
- * @param mode 表記に関するオプション指定
- * @return 現在クエスト達成目的のアイテムならばTRUEを返す
- */
-void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
+void describe_named_item(player_type *player_ptr, flavor_type *flavor_ptr)
 {
-    flavor_type tmp_flavor;
-    flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
-    check_object_known_aware(player_ptr, flavor_ptr);
-    switch_tval_description(flavor_ptr);
-    set_base_name(flavor_ptr);
-    flavor_ptr->t = flavor_ptr->tmp_val;
 #ifdef JP
     describe_prefix_ja(flavor_ptr);
     describe_artifact_prefix_ja(flavor_ptr);
@@ -415,8 +401,27 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     if (object_is_smith(player_ptr, flavor_ptr->o_ptr))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, format(" of %s the Smith", player_ptr->name));
 
-    describe_artifact_en(flavor_ptr);
+    describe_artifact_body_en(flavor_ptr);
 #endif
+}
+
+/*!
+ * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param buf 表記を返すための文字列参照ポインタ
+ * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
+ * @param mode 表記に関するオプション指定
+ * @return 現在クエスト達成目的のアイテムならばTRUEを返す
+ */
+void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
+{
+    flavor_type tmp_flavor;
+    flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
+    check_object_known_aware(player_ptr, flavor_ptr);
+    switch_tval_description(flavor_ptr);
+    set_base_name(flavor_ptr);
+    flavor_ptr->t = flavor_ptr->tmp_val;
+    describe_named_item(player_ptr, flavor_ptr);
 
     if (flavor_ptr->mode & OD_NAME_ONLY) {
         angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
