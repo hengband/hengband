@@ -34,6 +34,7 @@ typedef struct flavor_type {
     object_type *bow_ptr;
     object_kind *k_ptr;
     object_kind *flavor_k_ptr;
+    int avgdam;
 } flavor_type;
 
 flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode);
