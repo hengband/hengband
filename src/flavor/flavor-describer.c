@@ -352,6 +352,36 @@ static void describe_charges_rod(flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("本 充填中)", " charging)"));
 }
 
+static void describe_specific_pval(flavor_type *flavor_ptr)
+{
+    if (have_flag(flavor_ptr->flags, TR_SPEED)) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("加速", " to speed"));
+        return;
+    }
+    
+    if (have_flag(flavor_ptr->flags, TR_BLOWS)) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
+#ifdef JP
+#else
+        if (ABS(flavor_ptr->o_ptr->pval) != 1)
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
+#endif
+    }
+
+    if (have_flag(flavor_ptr->flags, TR_STEALTH)) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("隠密", " to stealth"));
+        return;
+    }
+    
+    if (have_flag(flavor_ptr->flags, TR_SEARCH)) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("探索", " to searching"));
+        return;
+    }
+    
+    if (have_flag(flavor_ptr->flags, TR_INFRA))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("赤外線視力", " to infravision"));
+}
+
 static void describe_pval(flavor_type *flavor_ptr)
 {
     if (!have_pval_flags(flavor_ptr->flags))
@@ -361,23 +391,11 @@ static void describe_pval(flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
     flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->pval);
     if (have_flag(flavor_ptr->flags, TR_HIDE_TYPE)) {
-        /* Nothing */
-    } else if (have_flag(flavor_ptr->flags, TR_SPEED))
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("加速", " to speed"));
-    else if (have_flag(flavor_ptr->flags, TR_BLOWS)) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
-#ifdef JP
-#else
-        if (ABS(flavor_ptr->o_ptr->pval) != 1)
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
-#endif
-    } else if (have_flag(flavor_ptr->flags, TR_STEALTH))
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("隠密", " to stealth"));
-    else if (have_flag(flavor_ptr->flags, TR_SEARCH))
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("探索", " to searching"));
-    else if (have_flag(flavor_ptr->flags, TR_INFRA))
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("赤外線視力", " to infravision"));
-
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+        return;
+    }
+    
+    describe_specific_pval(flavor_ptr);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
 }
 
