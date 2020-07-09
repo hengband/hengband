@@ -69,55 +69,62 @@ flag_insc_table flag_insc_esp1[MAX_INSCRIPTIONS_ESP_1] = { { "感", "Tele", TR_T
     { "無", "Nolv", TR_ESP_NONLIVING, -1 }, { "個", "Uniq", TR_ESP_UNIQUE, -1 }, { NULL, NULL, 0, -1 } };
 
 /*! オブジェクトの特性表示記号テーブルの定義(ESP2) */
-flag_insc_table flag_insc_esp2[] = { { "人", "p", TR_ESP_HUMAN, -1 }, { "竜", "D", TR_ESP_DRAGON, -1 }, { "オ", "o", TR_ESP_ORC, -1 },
+flag_insc_table flag_insc_esp2[MAX_INSCRIPTIONS_ESP_2] = { { "人", "p", TR_ESP_HUMAN, -1 }, { "竜", "D", TR_ESP_DRAGON, -1 }, { "オ", "o", TR_ESP_ORC, -1 },
     { "ト", "T", TR_ESP_TROLL, -1 }, { "巨", "P", TR_ESP_GIANT, -1 }, { "デ", "U", TR_ESP_DEMON, -1 }, { "死", "L", TR_ESP_UNDEAD, -1 },
     { "動", "Z", TR_ESP_ANIMAL, -1 }, { NULL, NULL, 0, -1 } };
 
 /*! オブジェクトの特性表示記号テーブルの定義(能力維持) */
-flag_insc_table flag_insc_sust[] = { { "腕", "St", TR_SUST_STR, -1 }, { "知", "In", TR_SUST_INT, -1 }, { "賢", "Wi", TR_SUST_WIS, -1 },
+flag_insc_table flag_insc_sust[MAX_INSCRIPTIONS_SUSTAINER] = { { "腕", "St", TR_SUST_STR, -1 }, { "知", "In", TR_SUST_INT, -1 },
+    { "賢", "Wi", TR_SUST_WIS, -1 },
     { "器", "Dx", TR_SUST_DEX, -1 }, { "耐", "Cn", TR_SUST_CON, -1 }, { "魅", "Ch", TR_SUST_CHR, -1 }, { NULL, NULL, 0, -1 } };
 
 #else
-flag_insc_table flag_insc_plus[] = { { "At", TR_BLOWS, -1 }, { "Sp", TR_SPEED, -1 }, { "St", TR_STR, -1 }, { "In", TR_INT, -1 }, { "Wi", TR_WIS, -1 },
+flag_insc_table flag_insc_plus[MAX_INSCRIPTIONS_PLUS] = { { "At", TR_BLOWS, -1 }, { "Sp", TR_SPEED, -1 }, { "St", TR_STR, -1 }, { "In", TR_INT, -1 },
+    { "Wi", TR_WIS, -1 },
     { "Dx", TR_DEX, -1 }, { "Cn", TR_CON, -1 }, { "Ch", TR_CHR, -1 }, { "Md", TR_MAGIC_MASTERY, -1 }, { "Sl", TR_STEALTH, -1 }, { "Sr", TR_SEARCH, -1 },
     { "If", TR_INFRA, -1 }, { "Dg", TR_TUNNEL, -1 }, { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_immune[]
+flag_insc_table flag_insc_immune[MAX_INSCRIPTIONS_IMMUNE]
     = { { "Ac", TR_IM_ACID, -1 }, { "El", TR_IM_ELEC, -1 }, { "Fi", TR_IM_FIRE, -1 }, { "Co", TR_IM_COLD, -1 }, { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_resistance[] = { { "Ac", TR_RES_ACID, TR_IM_ACID }, { "El", TR_RES_ELEC, TR_IM_ELEC }, { "Fi", TR_RES_FIRE, TR_IM_FIRE },
+flag_insc_table flag_insc_resistance[MAX_INSCRIPTIONS_RESISTANCE] = { { "Ac", TR_RES_ACID, TR_IM_ACID }, { "El", TR_RES_ELEC, TR_IM_ELEC },
+    { "Fi", TR_RES_FIRE, TR_IM_FIRE },
     { "Co", TR_RES_COLD, TR_IM_COLD }, { "Po", TR_RES_POIS, -1 }, { "Li", TR_RES_LITE, -1 }, { "Dk", TR_RES_DARK, -1 }, { "Sh", TR_RES_SHARDS, -1 },
     { "Bl", TR_RES_BLIND, -1 }, { "Cf", TR_RES_CONF, -1 }, { "So", TR_RES_SOUND, -1 }, { "Nt", TR_RES_NETHER, -1 }, { "Nx", TR_RES_NEXUS, -1 },
     { "Ca", TR_RES_CHAOS, -1 }, { "Di", TR_RES_DISEN, -1 }, { "Fe", TR_RES_FEAR, -1 }, { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_misc[] = { { "Es", TR_EASY_SPELL, -1 }, { "Dm", TR_DEC_MANA, -1 }, { "Th", TR_THROW, -1 }, { "Rf", TR_REFLECT, -1 },
+flag_insc_table flag_insc_misc[MAX_INSCRIPTIONS_MISC] = { { "Es", TR_EASY_SPELL, -1 }, { "Dm", TR_DEC_MANA, -1 }, { "Th", TR_THROW, -1 },
+    { "Rf", TR_REFLECT, -1 },
     { "Fa", TR_FREE_ACT, -1 }, { "Si", TR_SEE_INVIS, -1 }, { "Hl", TR_HOLD_EXP, -1 }, { "Sd", TR_SLOW_DIGEST, -1 }, { "Rg", TR_REGEN, -1 },
     { "Lv", TR_LEVITATION, -1 }, { "Lu", TR_LITE_1, -1 }, { "Lu", TR_LITE_2, -1 }, { "Lu", TR_LITE_3, -1 }, { "Dl", TR_LITE_M1, -1 }, { "Dl", TR_LITE_M2, -1 },
     { "Dl", TR_LITE_M3, -1 }, { "Wr", TR_WARNING, -1 }, { "Xm", TR_XTRA_MIGHT, -1 }, { "Xs", TR_XTRA_SHOTS, -1 }, { "Te", TR_TELEPORT, -1 },
     { "Ag", TR_AGGRAVATE, -1 }, { "Bs", TR_BLESSED, -1 }, { "Ty", TR_TY_CURSE, -1 }, { "C-", TR_ADD_L_CURSE, -1 }, { "C+", TR_ADD_H_CURSE, -1 },
     { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_aura[]
+flag_insc_table flag_insc_aura[MAX_INSCRIPTIONS_AURA]
     = { { "F", TR_SH_FIRE, -1 }, { "E", TR_SH_ELEC, -1 }, { "C", TR_SH_COLD, -1 }, { "M", TR_NO_MAGIC, -1 }, { "T", TR_NO_TELE, -1 }, { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_brand[]
+flag_insc_table flag_insc_brand[MAX_INSCRIPTIONS_BRAND]
     = { { "A", TR_BRAND_ACID, -1 }, { "E", TR_BRAND_ELEC, -1 }, { "F", TR_BRAND_FIRE, -1 }, { "Co", TR_BRAND_COLD, -1 }, { "P", TR_BRAND_POIS, -1 },
           { "Ca", TR_CHAOTIC, -1 }, { "V", TR_VAMPIRIC, -1 }, { "Q", TR_IMPACT, -1 }, { "S", TR_VORPAL, -1 }, { "M", TR_FORCE_WEAPON, -1 }, { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_kill[]
+flag_insc_table flag_insc_kill[MAX_INSCRIPTIONS_KILL]
     = { { "*", TR_KILL_EVIL, -1 }, { "p", TR_KILL_HUMAN, -1 }, { "D", TR_KILL_DRAGON, -1 }, { "o", TR_KILL_ORC, -1 }, { "T", TR_KILL_TROLL, -1 },
           { "P", TR_KILL_GIANT, -1 }, { "U", TR_KILL_DEMON, -1 }, { "L", TR_KILL_UNDEAD, -1 }, { "Z", TR_KILL_ANIMAL, -1 }, { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_slay[] = { { "*", TR_SLAY_EVIL, TR_KILL_EVIL }, { "p", TR_SLAY_HUMAN, TR_KILL_HUMAN }, { "D", TR_SLAY_DRAGON, TR_KILL_DRAGON },
+flag_insc_table flag_insc_slay[MAX_INSCRIPTIONS_SLAY] = { { "*", TR_SLAY_EVIL, TR_KILL_EVIL }, { "p", TR_SLAY_HUMAN, TR_KILL_HUMAN },
+    { "D", TR_SLAY_DRAGON, TR_KILL_DRAGON },
     { "o", TR_SLAY_ORC, TR_KILL_ORC }, { "T", TR_SLAY_TROLL, TR_KILL_TROLL }, { "P", TR_SLAY_GIANT, TR_KILL_GIANT }, { "U", TR_SLAY_DEMON, TR_KILL_DEMON },
     { "L", TR_SLAY_UNDEAD, TR_KILL_UNDEAD }, { "Z", TR_SLAY_ANIMAL, TR_KILL_ANIMAL }, { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_esp1[] = { { "Tele", TR_TELEPATHY, -1 }, { "Evil", TR_ESP_EVIL, -1 }, { "Good", TR_ESP_GOOD, -1 },
+flag_insc_table flag_insc_esp1[MAX_INSCRIPTIONS_ESP_1] = { { "Tele", TR_TELEPATHY, -1 }, { "Evil", TR_ESP_EVIL, -1 }, { "Good", TR_ESP_GOOD, -1 },
     { "Nolv", TR_ESP_NONLIVING, -1 }, { "Uniq", TR_ESP_UNIQUE, -1 }, { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_esp2[] = { { "p", TR_ESP_HUMAN, -1 }, { "D", TR_ESP_DRAGON, -1 }, { "o", TR_ESP_ORC, -1 }, { "T", TR_ESP_TROLL, -1 },
+flag_insc_table flag_insc_esp2[MAX_INSCRIPTIONS_ESP_2] = { { "p", TR_ESP_HUMAN, -1 }, { "D", TR_ESP_DRAGON, -1 }, { "o", TR_ESP_ORC, -1 },
+    { "T", TR_ESP_TROLL, -1 },
     { "P", TR_ESP_GIANT, -1 }, { "U", TR_ESP_DEMON, -1 }, { "L", TR_ESP_UNDEAD, -1 }, { "Z", TR_ESP_ANIMAL, -1 }, { NULL, 0, -1 } };
 
-flag_insc_table flag_insc_sust[] = { { "St", TR_SUST_STR, -1 }, { "In", TR_SUST_INT, -1 }, { "Wi", TR_SUST_WIS, -1 }, { "Dx", TR_SUST_DEX, -1 },
+flag_insc_table flag_insc_sust[MAX_INSCRIPTIONS_SUSTAINER] = { { "St", TR_SUST_STR, -1 }, { "In", TR_SUST_INT, -1 }, { "Wi", TR_SUST_WIS, -1 },
+    { "Dx", TR_SUST_DEX, -1 },
     { "Cn", TR_SUST_CON, -1 }, { "Ch", TR_SUST_CHR, -1 }, { NULL, 0, -1 } };
 #endif
