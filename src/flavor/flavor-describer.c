@@ -30,28 +30,8 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
-static void describe_chest(flavor_type *flavor_ptr)
+static void describe_chest_trap(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->o_ptr->tval != TV_CHEST)
-        return;
-
-    if (!flavor_ptr->known)
-        return;
-    
-    if (!flavor_ptr->o_ptr->pval) {
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(空)", " (empty)"));
-        return;
-    }
-    
-    if (flavor_ptr->o_ptr->pval < 0) {
-        if (chest_traps[0 - flavor_ptr->o_ptr->pval])
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(解除済)", " (disarmed)"));
-        else
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(非施錠)", " (unlocked)"));
-
-        return;
-    }
-
     switch (chest_traps[flavor_ptr->o_ptr->pval]) {
     case 0:
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(施錠)", " (Locked)"));
@@ -87,6 +67,31 @@ static void describe_chest(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(マルチ・トラップ)", " (Multiple Traps)"));
         break;
     }
+}
+
+static void describe_chest(flavor_type *flavor_ptr)
+{
+    if (flavor_ptr->o_ptr->tval != TV_CHEST)
+        return;
+
+    if (!flavor_ptr->known)
+        return;
+    
+    if (!flavor_ptr->o_ptr->pval) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(空)", " (empty)"));
+        return;
+    }
+    
+    if (flavor_ptr->o_ptr->pval < 0) {
+        if (chest_traps[0 - flavor_ptr->o_ptr->pval])
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(解除済)", " (disarmed)"));
+        else
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(非施錠)", " (unlocked)"));
+
+        return;
+    }
+
+    describe_chest_trap(flavor_ptr);
 }
 
 /*!
