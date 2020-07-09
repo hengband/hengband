@@ -165,6 +165,37 @@ static void describe_tval(player_type *player_ptr, flavor_type *flavor_ptr)
     }
 }
 
+static void describe_named_item_tval(flavor_type *flavor_ptr)
+{
+    if (!flavor_ptr->known)
+        return;
+
+    if (flavor_ptr->show_weapon) {
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+        flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
+        flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_d);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+        return;
+    }
+    
+    if (flavor_ptr->o_ptr->to_h != 0) {
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+        flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+        return;
+    }
+    
+    if (flavor_ptr->o_ptr->to_d != 0) {
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+        flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_d);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+    }
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -186,27 +217,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     describe_chest(flavor_ptr);
     decide_tval_show(player_ptr, flavor_ptr);
     describe_tval(player_ptr, flavor_ptr);
-    if (flavor_ptr->known) {
-        if (flavor_ptr->show_weapon) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
-            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_d);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-        } else if (flavor_ptr->o_ptr->to_h) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_h);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-        } else if (flavor_ptr->o_ptr->to_d) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->to_d);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-        }
-    }
-
+    describe_named_item_tval(flavor_ptr);
     flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
     if (flavor_ptr->bow_ptr->k_idx && (flavor_ptr->o_ptr->tval == player_ptr->tval_ammo)) {
         int avgdam = flavor_ptr->o_ptr->dd * (flavor_ptr->o_ptr->ds + 1) * 10 / 2;
