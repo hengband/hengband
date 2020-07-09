@@ -222,6 +222,43 @@ static void describe_fire_energy(player_type *player_ptr, flavor_type *flavor_pt
     flavor_ptr->t = object_desc_str(flavor_ptr->t, show_ammo_detail ? "% crit" : "%");
 }
 
+static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
+{
+    flavor_ptr->avgdam = flavor_ptr->o_ptr->dd * (flavor_ptr->o_ptr->ds + 1) * 10 / 2;
+    int tmul = bow_tmul(flavor_ptr->bow_ptr->sval);
+    if (object_is_known(flavor_ptr->bow_ptr))
+        flavor_ptr->avgdam += (flavor_ptr->bow_ptr->to_d * 10);
+
+    if (flavor_ptr->known)
+        flavor_ptr->avgdam += (flavor_ptr->o_ptr->to_d * 10);
+
+    if (player_ptr->xtra_might)
+        tmul++;
+
+    tmul = tmul * (100 + (int)(adj_str_td[player_ptr->stat_ind[A_STR]]) - 128);
+    flavor_ptr->avgdam *= tmul;
+    flavor_ptr->avgdam /= (100 * 10);
+    if (player_ptr->concent)
+        flavor_ptr->avgdam = boost_concentration_damage(player_ptr, flavor_ptr->avgdam);
+
+    if (flavor_ptr->avgdam < 0)
+        flavor_ptr->avgdam = 0;
+
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+    if (show_ammo_no_crit) {
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->avgdam);
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
+    }
+
+    flavor_ptr->avgdam = calc_expect_crit_shot(player_ptr, flavor_ptr->o_ptr->weight, flavor_ptr->o_ptr->to_h, flavor_ptr->bow_ptr->to_h, flavor_ptr->avgdam);
+    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->avgdam);
+    flavor_ptr->t = show_ammo_no_crit ? object_desc_str(flavor_ptr->t, show_ammo_detail ? "/crit " : "/")
+                                      : object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
+    describe_fire_energy(player_ptr, flavor_ptr);
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -245,42 +282,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     describe_tval(player_ptr, flavor_ptr);
     describe_named_item_tval(flavor_ptr);
     flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    if (flavor_ptr->bow_ptr->k_idx && (flavor_ptr->o_ptr->tval == player_ptr->tval_ammo)) {
-        flavor_ptr->avgdam = flavor_ptr->o_ptr->dd * (flavor_ptr->o_ptr->ds + 1) * 10 / 2;
-        int tmul = bow_tmul(flavor_ptr->bow_ptr->sval);
-        if (object_is_known(flavor_ptr->bow_ptr))
-            flavor_ptr->avgdam += (flavor_ptr->bow_ptr->to_d * 10);
-
-        if (flavor_ptr->known)
-            flavor_ptr->avgdam += (flavor_ptr->o_ptr->to_d * 10);
-
-        if (player_ptr->xtra_might)
-            tmul++;
-
-        tmul = tmul * (100 + (int)(adj_str_td[player_ptr->stat_ind[A_STR]]) - 128);
-        flavor_ptr->avgdam *= tmul;
-        flavor_ptr->avgdam /= (100 * 10);
-        if (player_ptr->concent)
-            flavor_ptr->avgdam = boost_concentration_damage(player_ptr, flavor_ptr->avgdam);
-
-        if (flavor_ptr->avgdam < 0)
-            flavor_ptr->avgdam = 0;
-
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-        if (show_ammo_no_crit) {
-            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->avgdam);
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
-        }
-
-        flavor_ptr->avgdam
-            = calc_expect_crit_shot(player_ptr, flavor_ptr->o_ptr->weight, flavor_ptr->o_ptr->to_h, flavor_ptr->bow_ptr->to_h, flavor_ptr->avgdam);
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->avgdam);
-        flavor_ptr->t = show_ammo_no_crit ? object_desc_str(flavor_ptr->t, show_ammo_detail ? "/crit " : "/")
-                                          : object_desc_str(flavor_ptr->t, show_ammo_detail ? "/shot " : "/");
-        describe_fire_energy(player_ptr, flavor_ptr);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-    } else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE)) {
+    if ((flavor_ptr->bow_ptr->k_idx != 0) && (flavor_ptr->o_ptr->tval == player_ptr->tval_ammo))
+        describe_bow_power(player_ptr, flavor_ptr);
+    else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE)) {
         int avgdam = player_ptr->mighty_throw ? (1 + 3) : 1;
         s16b energy_fire = 100 - player_ptr->lev;
         avgdam += ((player_ptr->lev + 30) * (player_ptr->lev + 30) - 900) / 55;
