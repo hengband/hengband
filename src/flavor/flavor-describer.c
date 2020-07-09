@@ -330,6 +330,28 @@ static void describe_charges_staff_wand(flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
 }
 
+static void describe_charges_rod(flavor_type *flavor_ptr)
+{
+    if (flavor_ptr->o_ptr->timeout == 0)
+        return;
+
+    if (flavor_ptr->o_ptr->number <= 1) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
+        return;
+    }
+        
+    if (flavor_ptr->k_ptr->pval == 0)
+        flavor_ptr->k_ptr->pval = 1;
+
+    flavor_ptr->power = (flavor_ptr->o_ptr->timeout + (flavor_ptr->k_ptr->pval - 1)) / flavor_ptr->k_ptr->pval;
+    if (flavor_ptr->power > flavor_ptr->o_ptr->number)
+        flavor_ptr->power = flavor_ptr->o_ptr->number;
+
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, " (");
+    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->power);
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("本 充填中)", " charging)"));
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -367,23 +389,8 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     if (flavor_ptr->known) {
         if (((flavor_ptr->o_ptr->tval == TV_STAFF) || (flavor_ptr->o_ptr->tval == TV_WAND)))
             describe_charges_staff_wand(flavor_ptr);
-        else if (flavor_ptr->o_ptr->tval == TV_ROD) {
-            if (flavor_ptr->o_ptr->timeout) {
-                if (flavor_ptr->o_ptr->number > 1) {
-                    if (flavor_ptr->k_ptr->pval == 0)
-                        flavor_ptr->k_ptr->pval = 1;
-
-                    flavor_ptr->power = (flavor_ptr->o_ptr->timeout + (flavor_ptr->k_ptr->pval - 1)) / flavor_ptr->k_ptr->pval;
-                    if (flavor_ptr->power > flavor_ptr->o_ptr->number)
-                        flavor_ptr->power = flavor_ptr->o_ptr->number;
-
-                    flavor_ptr->t = object_desc_str(flavor_ptr->t, " (");
-                    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->power);
-                    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("本 充填中)", " charging)"));
-                } else
-                    flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
-            }
-        }
+        else if (flavor_ptr->o_ptr->tval == TV_ROD)
+            describe_charges_rod(flavor_ptr);
 
         if (have_pval_flags(flavor_ptr->flags)) {
             flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
