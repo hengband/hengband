@@ -484,6 +484,20 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         strcpy(flavor_ptr->fake_insc_buf, _("未判明", "tried"));
 }
 
+void display_item_discount(flavor_type *flavor_ptr)
+{
+    if ((flavor_ptr->o_ptr->discount == 0) || (flavor_ptr->tmp_val2[0] && ((flavor_ptr->o_ptr->ident & IDENT_STORE) == 0)))
+        return;
+
+    char discount_num_buf[4];
+    if (flavor_ptr->fake_insc_buf[0])
+        strcat(flavor_ptr->fake_insc_buf, ", ");
+
+    (void)object_desc_num(discount_num_buf, flavor_ptr->o_ptr->discount);
+    strcat(flavor_ptr->fake_insc_buf, discount_num_buf);
+    strcat(flavor_ptr->fake_insc_buf, _("%引き", "% off"));
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -526,18 +540,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
 
     display_short_flavors(player_ptr, flavor_ptr);
     decide_item_feeling(flavor_ptr);
-    if (flavor_ptr->o_ptr->discount) {
-        if (!flavor_ptr->tmp_val2[0] || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
-            char discount_num_buf[4];
-            if (flavor_ptr->fake_insc_buf[0])
-                strcat(flavor_ptr->fake_insc_buf, ", ");
-
-            (void)object_desc_num(discount_num_buf, flavor_ptr->o_ptr->discount);
-            strcat(flavor_ptr->fake_insc_buf, discount_num_buf);
-            strcat(flavor_ptr->fake_insc_buf, _("%引き", "% off"));
-        }
-    }
-
+    display_item_discount(flavor_ptr);
     if (flavor_ptr->fake_insc_buf[0] || flavor_ptr->tmp_val2[0]) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->c1);
