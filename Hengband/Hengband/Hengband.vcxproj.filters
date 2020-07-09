@@ -1667,6 +1667,9 @@
     <ClCompile Include="..\..\src\flavor\tval-description-switcher.c">
       <Filter>flavor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\flavor\named-item-describer.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3647,6 +3650,9 @@
       <Filter>flavor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\flavor\tval-description-switcher.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\named-item-describer.h">
       <Filter>flavor</Filter>
     </ClInclude>
   </ItemGroup>

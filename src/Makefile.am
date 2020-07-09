@@ -155,6 +155,7 @@ hengband_SOURCES = \
 	flavor/flag-inscriptions-table.c flavor/flag-inscriptions-table.h \
 	flavor/flavor-describer.c flavor/flavor-describer.h \
 	flavor/flavor-util.c flavor/flavor-util.h \
+	flavor/named-item-describer.c flavor/named-item-describer.h \
 	flavor/object-flavor-types.h \
 	flavor/tval-description-switcher.c flavor/tval-description-switcher.h \
 	\
