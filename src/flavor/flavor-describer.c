@@ -103,6 +103,76 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "☆");
 }
 #else
+
+static void describe_vowel(flavor_type *flavor_ptr)
+{
+    bool vowel;
+    switch (*flavor_ptr->s) {
+    case '#':
+        vowel = is_a_vowel(flavor_ptr->modstr[0]);
+        break;
+    case '%':
+        vowel = is_a_vowel(*flavor_ptr->kindname);
+        break;
+    default:
+        vowel = is_a_vowel(*flavor_ptr->s);
+        break;
+    }
+
+    if (vowel)
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "an ");
+    else
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "a ");
+}
+
+// 処理が一部コピペ。移す.
+static void describe_artifact_en(flavor_type *flavor_ptr)
+{
+    flavor_ptr->s = flavor_ptr->basenm + 2;
+    if (flavor_ptr->mode & OD_OMIT_PREFIX)
+        return;
+
+    if (flavor_ptr->o_ptr->number <= 0) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
+        return;
+    }
+    
+    if (flavor_ptr->o_ptr->number > 1) {
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        return;
+    }
+    
+    if ((flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
+        || ((flavor_ptr->o_ptr->tval == TV_CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE))) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
+        return;
+    }
+
+    describe_vowel(flavor_ptr);
+}
+
+// 処理が一部コピペ。移す.
+static void describe_basename_en(flavor_type *flavor_ptr)
+{
+    flavor_ptr->s = flavor_ptr->basenm;
+    if (flavor_ptr->mode & OD_OMIT_PREFIX)
+        return;
+    
+    if (flavor_ptr->o_ptr->number <= 0) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
+        return;
+    }
+    
+    if (flavor_ptr->o_ptr->number > 1) {
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        return;
+    }
+    
+    if (flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
+}
 #endif
 
 /*!
@@ -127,47 +197,9 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
 #else
 
     if (flavor_ptr->basenm[0] == '&') {
-        flavor_ptr->s = flavor_ptr->basenm + 2;
-        if (flavor_ptr->mode & OD_OMIT_PREFIX) {
-            /* Nothing */
-        } else if (flavor_ptr->o_ptr->number <= 0)
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
-        else if (flavor_ptr->o_ptr->number > 1) {
-            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        } else if ((flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
-            || ((flavor_ptr->o_ptr->tval == TV_CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE)))
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
-        else {
-            bool vowel;
-            switch (*flavor_ptr->s) {
-            case '#':
-                vowel = is_a_vowel(flavor_ptr->modstr[0]);
-                break;
-            case '%':
-                vowel = is_a_vowel(*flavor_ptr->kindname);
-                break;
-            default:
-                vowel = is_a_vowel(*flavor_ptr->s);
-                break;
-            }
-
-            if (vowel)
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, "an ");
-            else
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, "a ");
-        }
+        describe_artifact_en(flavor_ptr);
     } else {
-        flavor_ptr->s = flavor_ptr->basenm;
-        if (flavor_ptr->mode & OD_OMIT_PREFIX) {
-            /* Nothing */
-        } else if (flavor_ptr->o_ptr->number <= 0)
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
-        else if (flavor_ptr->o_ptr->number > 1) {
-            flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        } else if (flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
+        describe_basename_en(flavor_ptr);
     }
 #endif
 
