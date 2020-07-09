@@ -142,6 +142,70 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, e_name + e_ptr->name);
     }
 }
+
+/*!
+ * @brief アーティファクトのアイテム名を表記する
+ * @param flavor_ptr アイテム表記への参照ポインタ
+ * @return なし
+ * @details '『'から始まる伝説のアイテムの名前は最後に付加する
+ */
+static void describe_artifact_body_ja(flavor_type *flavor_ptr)
+{
+    if (!flavor_ptr->known)
+        return;
+
+    // ランダムアーティファクトの名前はセーブファイルに記録されるので、英語版の名前もそれらしく変換する.
+    if (flavor_ptr->o_ptr->art_name) {
+        char temp[256];
+        int itemp;
+        strcpy(temp, quark_str(flavor_ptr->o_ptr->art_name));
+        if (strncmp(temp, "『", 2) == 0 || strncmp(temp, "《", 2) == 0) {
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
+            return;
+        }
+        
+        if (temp[0] != '\'')
+            return;
+
+        itemp = strlen(temp);
+        temp[itemp - 1] = 0;
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[1]);
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
+        return;
+    }
+    
+    if (object_is_fixed_artifact(flavor_ptr->o_ptr)) {
+        artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
+        if (strncmp(a_name + a_ptr->name, "『", 2) == 0)
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_name + a_ptr->name);
+
+        return;
+    }
+    
+    if (flavor_ptr->o_ptr->inscription) {
+        concptr str = quark_str(flavor_ptr->o_ptr->inscription);
+        while (*str) {
+            if (iskanji(*str)) {
+                str += 2;
+                continue;
+            }
+
+            if (*str == '#')
+                break;
+
+            str++;
+        }
+
+        if (*str == '\0')
+            return;
+
+        concptr str_aux = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, &str_aux[1]);
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
+    }
+}
 #else
 
 static void describe_vowel(flavor_type *flavor_ptr)
@@ -297,48 +361,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     *flavor_ptr->t = '\0';
 
 #ifdef JP
-    /* '『'から始まる伝説のアイテムの名前は最後に付加する */
-    if (flavor_ptr->known) {
-        // ランダムアーティファクトの名前はセーブファイルに記録されるので、英語版の名前もそれらしく変換する.
-        if (flavor_ptr->o_ptr->art_name) {
-            char temp[256];
-            int itemp;
-            strcpy(temp, quark_str(flavor_ptr->o_ptr->art_name));
-            if (strncmp(temp, "『", 2) == 0 || strncmp(temp, "《", 2) == 0)
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
-            else if (temp[0] == '\'') {
-                itemp = strlen(temp);
-                temp[itemp - 1] = 0;
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[1]);
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
-            }
-        } else if (object_is_fixed_artifact(flavor_ptr->o_ptr)) {
-            artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
-            if (strncmp(a_name + a_ptr->name, "『", 2) == 0)
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, a_name + a_ptr->name);
-        } else if (flavor_ptr->o_ptr->inscription) {
-            concptr str = quark_str(flavor_ptr->o_ptr->inscription);
-            while (*str) {
-                if (iskanji(*str)) {
-                    str += 2;
-                    continue;
-                }
-
-                if (*str == '#')
-                    break;
-
-                str++;
-            }
-
-            if (*str) {
-                concptr str_aux = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, &str_aux[1]);
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
-            }
-        }
-    }
+    describe_artifact_body_ja(flavor_ptr);
 #else
     if (object_is_smith(player_ptr, flavor_ptr->o_ptr))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, format(" of %s the Smith", player_ptr->name));
