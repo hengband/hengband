@@ -219,6 +219,47 @@ static void describe_basename_en(flavor_type *flavor_ptr)
 #endif
 
 /*!
+ * @brief 銘を表記する
+ * @param flavor_ptr アイテム表記への参照ポインタ
+ * @return なし
+ * @details ランダムアーティファクト、固定アーティファクト、エゴの順に評価する
+ */
+static void describe_inscription(flavor_type *flavor_ptr)
+{
+    for (flavor_ptr->s0 = NULL; *flavor_ptr->s || flavor_ptr->s0;) {
+        if (!*flavor_ptr->s) {
+            flavor_ptr->s = flavor_ptr->s0 + 1;
+            flavor_ptr->s0 = NULL;
+        } else if ((*flavor_ptr->s == '#') && !flavor_ptr->s0) {
+            flavor_ptr->s0 = flavor_ptr->s;
+            flavor_ptr->s = flavor_ptr->modstr;
+            flavor_ptr->modstr = "";
+        } else if ((*flavor_ptr->s == '%') && !flavor_ptr->s0) {
+            flavor_ptr->s0 = flavor_ptr->s;
+            flavor_ptr->s = flavor_ptr->kindname;
+            flavor_ptr->kindname = "";
+        }
+
+#ifdef JP
+#else
+        else if (*flavor_ptr->s == '~') {
+            if (!(flavor_ptr->mode & OD_NO_PLURAL) && (flavor_ptr->o_ptr->number != 1)) {
+                char k = flavor_ptr->t[-1];
+                if ((k == 's') || (k == 'h'))
+                    *flavor_ptr->t++ = 'e';
+
+                *flavor_ptr->t++ = 's';
+            }
+
+            flavor_ptr->s++;
+        }
+#endif
+        else
+            *flavor_ptr->t++ = *flavor_ptr->s++;
+    }
+}
+
+/*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 表記を返すための文字列参照ポインタ
@@ -252,38 +293,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     describe_artifact_ja(flavor_ptr);
 #endif
 
-    for (flavor_ptr->s0 = NULL; *flavor_ptr->s || flavor_ptr->s0;) {
-        if (!*flavor_ptr->s) {
-            flavor_ptr->s = flavor_ptr->s0 + 1;
-            flavor_ptr->s0 = NULL;
-        } else if ((*flavor_ptr->s == '#') && !flavor_ptr->s0) {
-            flavor_ptr->s0 = flavor_ptr->s;
-            flavor_ptr->s = flavor_ptr->modstr;
-            flavor_ptr->modstr = "";
-        } else if ((*flavor_ptr->s == '%') && !flavor_ptr->s0) {
-            flavor_ptr->s0 = flavor_ptr->s;
-            flavor_ptr->s = flavor_ptr->kindname;
-            flavor_ptr->kindname = "";
-        }
-
-#ifdef JP
-#else
-        else if (*flavor_ptr->s == '~') {
-            if (!(flavor_ptr->mode & OD_NO_PLURAL) && (flavor_ptr->o_ptr->number != 1)) {
-                char k = flavor_ptr->t[-1];
-                if ((k == 's') || (k == 'h'))
-                    *flavor_ptr->t++ = 'e';
-
-                *flavor_ptr->t++ = 's';
-            }
-
-            flavor_ptr->s++;
-        }
-#endif
-        else
-            *flavor_ptr->t++ = *flavor_ptr->s++;
-    }
-
+    describe_inscription(flavor_ptr);
     *flavor_ptr->t = '\0';
 
 #ifdef JP
