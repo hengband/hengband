@@ -144,6 +144,36 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
 }
 
 /*!
+ * @brief ランダムあーファクトの表記
+ * @param flavor_ptr アイテム表記への参照ポインタ
+ * @return ランダムアーティファクトならTRUE、違うならFALSE
+ * @details ランダムアーティファクトの名前はセーブファイルに記録されるので、英語版の名前もそれらしく変換する.
+ */
+static bool describe_random_artifact_body_ja(flavor_type *flavor_ptr)
+{
+    if (flavor_ptr->o_ptr->art_name == 0)
+        return FALSE;
+
+    char temp[256];
+    int itemp;
+    strcpy(temp, quark_str(flavor_ptr->o_ptr->art_name));
+    if (strncmp(temp, "『", 2) == 0 || strncmp(temp, "《", 2) == 0) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
+        return TRUE;
+    }
+
+    if (temp[0] != '\'')
+        return TRUE;
+
+    itemp = strlen(temp);
+    temp[itemp - 1] = 0;
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[1]);
+    flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
+    return TRUE;
+}
+
+/*!
  * @brief アーティファクトのアイテム名を表記する
  * @param flavor_ptr アイテム表記への参照ポインタ
  * @return なし
@@ -154,27 +184,9 @@ static void describe_artifact_body_ja(flavor_type *flavor_ptr)
     if (!flavor_ptr->known)
         return;
 
-    // ランダムアーティファクトの名前はセーブファイルに記録されるので、英語版の名前もそれらしく変換する.
-    if (flavor_ptr->o_ptr->art_name) {
-        char temp[256];
-        int itemp;
-        strcpy(temp, quark_str(flavor_ptr->o_ptr->art_name));
-        if (strncmp(temp, "『", 2) == 0 || strncmp(temp, "《", 2) == 0) {
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
-            return;
-        }
-        
-        if (temp[0] != '\'')
-            return;
-
-        itemp = strlen(temp);
-        temp[itemp - 1] = 0;
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[1]);
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
+    if (describe_random_artifact_body_ja(flavor_ptr))
         return;
-    }
-    
+
     if (object_is_fixed_artifact(flavor_ptr->o_ptr)) {
         artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
         if (strncmp(a_name + a_ptr->name, "『", 2) == 0)
