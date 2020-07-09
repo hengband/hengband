@@ -259,6 +259,20 @@ static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
 }
 
+static void describe_spike_power(player_type *player_ptr, flavor_type *flavor_ptr)
+{
+    int avgdam = player_ptr->mighty_throw ? (1 + 3) : 1;
+    s16b energy_fire = 100 - player_ptr->lev;
+    avgdam += ((player_ptr->lev + 30) * (player_ptr->lev + 30) - 900) / 55;
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+    flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, '/');
+    avgdam = 100 * avgdam / energy_fire;
+    flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -284,18 +298,8 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
     if ((flavor_ptr->bow_ptr->k_idx != 0) && (flavor_ptr->o_ptr->tval == player_ptr->tval_ammo))
         describe_bow_power(player_ptr, flavor_ptr);
-    else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE)) {
-        int avgdam = player_ptr->mighty_throw ? (1 + 3) : 1;
-        s16b energy_fire = 100 - player_ptr->lev;
-        avgdam += ((player_ptr->lev + 30) * (player_ptr->lev + 30) - 900) / 55;
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, '/');
-        avgdam = 100 * avgdam / energy_fire;
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, avgdam);
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-    }
+    else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE))
+        describe_spike_power(player_ptr, flavor_ptr);
 
     if (flavor_ptr->known) {
         if (flavor_ptr->show_armour) {
