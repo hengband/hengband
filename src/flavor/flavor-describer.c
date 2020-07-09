@@ -92,7 +92,7 @@ static void describe_prefix_ja(flavor_type *flavor_ptr)
  * @return なし
  * @details 英語の場合アーティファクトは The が付くので分かるが、日本語では分からないのでマークをつける.
  */
-static void describe_artifact_ja(flavor_type *flavor_ptr)
+static void describe_artifact_prefix_ja(flavor_type *flavor_ptr)
 {
     if (!flavor_ptr->known)
         return;
@@ -101,6 +101,46 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "★");
     else if (flavor_ptr->o_ptr->art_name)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "☆");
+}
+
+/*!
+ * @brief アーティファクトの説明表記
+ * @param flavor_ptr アイテム表記への参照ポインタ
+ * @return なし
+ * @details ランダムアーティファクト、固定アーティファクト、エゴの順に評価する
+ */
+static void describe_artifact_ja(flavor_type *flavor_ptr)
+{
+    if (!flavor_ptr->known)
+        return;
+
+    if (flavor_ptr->o_ptr->art_name) {
+        concptr temp = quark_str(flavor_ptr->o_ptr->art_name);
+
+        /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
+        /* 英語版のセーブファイルから来た 'of XXX' は,「XXXの」と表示する */
+        if (strncmp(temp, "of ", 3) == 0) {
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[3]);
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, "の");
+        } else if ((strncmp(temp, "『", 2) != 0) && (strncmp(temp, "《", 2) != 0) && (temp[0] != '\''))
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
+
+        return;
+    }
+    
+    if (flavor_ptr->o_ptr->name1 && !have_flag(flavor_ptr->flags, TR_FULL_NAME)) {
+        artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
+        /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
+        if (strncmp(a_name + a_ptr->name, "『", 2) != 0)
+            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_name + a_ptr->name);
+
+        return;
+    }
+
+    if (object_is_ego(flavor_ptr->o_ptr)) {
+        ego_item_type *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, e_name + e_ptr->name);
+    }
 }
 #else
 
@@ -196,48 +236,20 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     flavor_ptr->t = flavor_ptr->tmp_val;
 #ifdef JP
     describe_prefix_ja(flavor_ptr);
-    describe_artifact_ja(flavor_ptr);
+    describe_artifact_prefix_ja(flavor_ptr);
 #else
 
-    if (flavor_ptr->basenm[0] == '&') {
+    if (flavor_ptr->basenm[0] == '&')
         describe_artifact_en(flavor_ptr);
-    } else {
+    else
         describe_basename_en(flavor_ptr);
-    }
 #endif
 
 #ifdef JP
     if (object_is_smith(player_ptr, flavor_ptr->o_ptr))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, format("鍛冶師%flavor_ptr->sの", player_ptr->name));
 
-    /* 伝説のアイテム、名のあるアイテムの名前を付加する */
-    if (flavor_ptr->known) {
-        /* ランダム・アーティファクト */
-        if (flavor_ptr->o_ptr->art_name) {
-            concptr temp = quark_str(flavor_ptr->o_ptr->art_name);
-
-            /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
-            /* 英語版のセーブファイルから来た 'of XXX' は,「XXXの」と表示する */
-            if (strncmp(temp, "of ", 3) == 0) {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[3]);
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, "の");
-            } else if ((strncmp(temp, "『", 2) != 0) && (strncmp(temp, "《", 2) != 0) && (temp[0] != '\''))
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
-        }
-        /* 伝説のアイテム */
-        else if (flavor_ptr->o_ptr->name1 && !have_flag(flavor_ptr->flags, TR_FULL_NAME)) {
-            artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
-            /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
-            if (strncmp(a_name + a_ptr->name, "『", 2) != 0) {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, a_name + a_ptr->name);
-            }
-        }
-        /* 名のあるアイテム */
-        else if (object_is_ego(flavor_ptr->o_ptr)) {
-            ego_item_type *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, e_name + e_ptr->name);
-        }
-    }
+    describe_artifact_ja(flavor_ptr);
 #endif
 
     for (flavor_ptr->s0 = NULL; *flavor_ptr->s || flavor_ptr->s0;) {
