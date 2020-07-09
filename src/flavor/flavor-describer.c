@@ -352,6 +352,35 @@ static void describe_charges_rod(flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("本 充填中)", " charging)"));
 }
 
+static void describe_pval(flavor_type *flavor_ptr)
+{
+    if (!have_pval_flags(flavor_ptr->flags))
+        return;
+
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
+    flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->pval);
+    if (have_flag(flavor_ptr->flags, TR_HIDE_TYPE)) {
+        /* Nothing */
+    } else if (have_flag(flavor_ptr->flags, TR_SPEED))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("加速", " to speed"));
+    else if (have_flag(flavor_ptr->flags, TR_BLOWS)) {
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
+#ifdef JP
+#else
+        if (ABS(flavor_ptr->o_ptr->pval) != 1)
+            flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
+#endif
+    } else if (have_flag(flavor_ptr->flags, TR_STEALTH))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("隠密", " to stealth"));
+    else if (have_flag(flavor_ptr->flags, TR_SEARCH))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("探索", " to searching"));
+    else if (have_flag(flavor_ptr->flags, TR_INFRA))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("赤外線視力", " to infravision"));
+
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -392,31 +421,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         else if (flavor_ptr->o_ptr->tval == TV_ROD)
             describe_charges_rod(flavor_ptr);
 
-        if (have_pval_flags(flavor_ptr->flags)) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-            flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->pval);
-            if (have_flag(flavor_ptr->flags, TR_HIDE_TYPE)) {
-                /* Nothing */
-            } else if (have_flag(flavor_ptr->flags, TR_SPEED))
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("加速", " to speed"));
-            else if (have_flag(flavor_ptr->flags, TR_BLOWS)) {
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
-#ifdef JP
-#else
-                if (ABS(flavor_ptr->o_ptr->pval) != 1)
-                    flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
-#endif
-            } else if (have_flag(flavor_ptr->flags, TR_STEALTH))
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("隠密", " to stealth"));
-            else if (have_flag(flavor_ptr->flags, TR_SEARCH))
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("探索", " to searching"));
-            else if (have_flag(flavor_ptr->flags, TR_INFRA))
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, _("赤外線視力", " to infravision"));
-
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-        }
-
+        describe_pval(flavor_ptr);
         if ((flavor_ptr->o_ptr->tval == TV_LITE) && (!(object_is_fixed_artifact(flavor_ptr->o_ptr) || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))) {
             flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
             if (flavor_ptr->o_ptr->name2 == EGO_LITE_LONG)
