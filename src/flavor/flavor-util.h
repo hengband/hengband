@@ -30,7 +30,7 @@ typedef struct flavor_type {
     char tmp_val[MAX_NLEN + 160];
     char tmp_val2[MAX_NLEN + 10];
     char fake_insc_buf[30];
-    BIT_FLAGS flags[TR_FLAG_SIZE];
+    BIT_FLAGS tr_flags[TR_FLAG_SIZE];
     object_type *bow_ptr;
     object_kind *k_ptr;
     object_kind *flavor_k_ptr;
