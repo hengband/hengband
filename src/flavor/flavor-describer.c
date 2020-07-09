@@ -94,6 +94,21 @@ static void describe_chest(flavor_type *flavor_ptr)
     describe_chest_trap(flavor_ptr);
 }
 
+static decide_tval_show(player_type *player_ptr, flavor_type *flavor_ptr)
+{
+    if (have_flag(flavor_ptr->flags, TR_SHOW_MODS))
+        flavor_ptr->show_weapon = TRUE;
+
+    if (object_is_smith(player_ptr, flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+        flavor_ptr->show_weapon = TRUE;
+
+    if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
+        flavor_ptr->show_weapon = TRUE;
+
+    if (flavor_ptr->o_ptr->ac)
+        flavor_ptr->show_armour = TRUE;
+}
+
 static void describe_digging(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     if (object_is_quest_target(player_ptr, flavor_ptr->o_ptr) && !flavor_ptr->known)
@@ -169,18 +184,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     }
 
     describe_chest(flavor_ptr);
-    if (have_flag(flavor_ptr->flags, TR_SHOW_MODS))
-        flavor_ptr->show_weapon = TRUE;
-
-    if (object_is_smith(player_ptr, flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
-        flavor_ptr->show_weapon = TRUE;
-
-    if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
-        flavor_ptr->show_weapon = TRUE;
-
-    if (flavor_ptr->o_ptr->ac)
-        flavor_ptr->show_armour = TRUE;
-
+    decide_tval_show(player_ptr, flavor_ptr);
     describe_tval(player_ptr, flavor_ptr);
     if (flavor_ptr->known) {
         if (flavor_ptr->show_weapon) {
