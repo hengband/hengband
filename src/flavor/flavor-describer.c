@@ -414,6 +414,27 @@ static void describe_lamp_life(flavor_type *flavor_ptr)
 }
 
 /*!
+ * @brief 杖や光源等、寿命のあるアイテムの残り回数やターン表記
+ * @param アイテム表記への参照ポインタ
+ * @return なし
+ */
+static void describe_remaining(flavor_type *flavor_ptr)
+{
+    if (!flavor_ptr->known)
+        return;
+
+    if (((flavor_ptr->o_ptr->tval == TV_STAFF) || (flavor_ptr->o_ptr->tval == TV_WAND)))
+        describe_charges_staff_wand(flavor_ptr);
+    else if (flavor_ptr->o_ptr->tval == TV_ROD)
+        describe_charges_rod(flavor_ptr);
+
+    describe_pval(flavor_ptr);
+    describe_lamp_life(flavor_ptr);
+    if (flavor_ptr->o_ptr->timeout && (flavor_ptr->o_ptr->tval != TV_ROD))
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
+}
+
+/*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 表記を返すための文字列参照ポインタ
@@ -447,18 +468,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         return;
     }
 
-    if (flavor_ptr->known) {
-        if (((flavor_ptr->o_ptr->tval == TV_STAFF) || (flavor_ptr->o_ptr->tval == TV_WAND)))
-            describe_charges_staff_wand(flavor_ptr);
-        else if (flavor_ptr->o_ptr->tval == TV_ROD)
-            describe_charges_rod(flavor_ptr);
-
-        describe_pval(flavor_ptr);
-        describe_lamp_life(flavor_ptr);
-        if (flavor_ptr->o_ptr->timeout && (flavor_ptr->o_ptr->tval != TV_ROD))
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(充填中)", " (charging)"));
-    }
-
+    describe_remaining(flavor_ptr);
     if (flavor_ptr->mode & OD_OMIT_INSCRIPTION) {
         angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
         return;
