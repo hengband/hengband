@@ -499,6 +499,32 @@ void display_item_discount(flavor_type *flavor_ptr)
 }
 
 /*!
+ * @brief 呪いの有無や割引率等を表示する
+ * @param flavor_ptr アイテム表記への参照ポインタ
+ * @return なし
+ */
+void display_item_fake_inscription(flavor_type *flavor_ptr)
+{
+    if ((flavor_ptr->fake_insc_buf[0] == '\0') && (flavor_ptr->tmp_val2[0] == '\0'))
+        return;
+
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->c1);
+    if (flavor_ptr->fake_insc_buf[0])
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, flavor_ptr->fake_insc_buf);
+
+    if ((flavor_ptr->fake_insc_buf[0] != '\0') && (flavor_ptr->tmp_val2[0] != '\0')) {
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+    }
+
+    if (flavor_ptr->tmp_val2[0])
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, flavor_ptr->tmp_val2);
+
+    flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->c2);
+}
+
+/*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 表記を返すための文字列参照ポインタ
@@ -541,22 +567,6 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     display_short_flavors(player_ptr, flavor_ptr);
     decide_item_feeling(flavor_ptr);
     display_item_discount(flavor_ptr);
-    if (flavor_ptr->fake_insc_buf[0] || flavor_ptr->tmp_val2[0]) {
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->c1);
-        if (flavor_ptr->fake_insc_buf[0])
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, flavor_ptr->fake_insc_buf);
-
-        if (flavor_ptr->fake_insc_buf[0] && flavor_ptr->tmp_val2[0]) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ',');
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-        }
-
-        if (flavor_ptr->tmp_val2[0])
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, flavor_ptr->tmp_val2);
-
-        flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->c2);
-    }
-
+    display_item_fake_inscription(flavor_ptr);
     angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
 }
