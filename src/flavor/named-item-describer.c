@@ -126,7 +126,7 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
 }
 
 /*!
- * @brief ランダムあーファクトの表記
+ * @brief ランダムアーティファクトの表記
  * @param flavor_ptr アイテム表記への参照ポインタ
  * @return ランダムアーティファクトならTRUE、違うならFALSE
  * @details ランダムアーティファクトの名前はセーブファイルに記録されるので、英語版の名前もそれらしく変換する.
