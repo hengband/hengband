@@ -455,6 +455,35 @@ void display_short_flavors(player_type *player_ptr, flavor_type *flavor_ptr)
     angband_strcat(flavor_ptr->tmp_val2, buff, sizeof(flavor_ptr->tmp_val2));
 }
 
+static void decide_item_feeling(flavor_type *flavor_ptr)
+{
+    flavor_ptr->fake_insc_buf[0] = '\0';
+    if (flavor_ptr->o_ptr->feeling) {
+        strcpy(flavor_ptr->fake_insc_buf, game_inscriptions[flavor_ptr->o_ptr->feeling]);
+        return;
+    }
+    
+    if (object_is_cursed(flavor_ptr->o_ptr) && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE))) {
+        strcpy(flavor_ptr->fake_insc_buf, _("呪われている", "cursed"));
+        return;
+    }
+    
+    if (((flavor_ptr->o_ptr->tval == TV_RING) || (flavor_ptr->o_ptr->tval == TV_AMULET) || (flavor_ptr->o_ptr->tval == TV_LITE)
+                 || (flavor_ptr->o_ptr->tval == TV_FIGURINE))
+        && flavor_ptr->aware && !flavor_ptr->known && !(flavor_ptr->o_ptr->ident & IDENT_SENSE)) {
+        strcpy(flavor_ptr->fake_insc_buf, _("未鑑定", "unidentified"));
+        return;
+    }
+    
+    if (!flavor_ptr->known && (flavor_ptr->o_ptr->ident & IDENT_EMPTY)) {
+        strcpy(flavor_ptr->fake_insc_buf, _("空", "empty"));
+        return;
+    }
+    
+    if (!flavor_ptr->aware && object_is_tried(flavor_ptr->o_ptr))
+        strcpy(flavor_ptr->fake_insc_buf, _("未判明", "tried"));
+}
+
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -496,20 +525,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     }
 
     display_short_flavors(player_ptr, flavor_ptr);
-    flavor_ptr->fake_insc_buf[0] = '\0';
-    if (flavor_ptr->o_ptr->feeling)
-        strcpy(flavor_ptr->fake_insc_buf, game_inscriptions[flavor_ptr->o_ptr->feeling]);
-    else if (object_is_cursed(flavor_ptr->o_ptr) && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE)))
-        strcpy(flavor_ptr->fake_insc_buf, _("呪われている", "cursed"));
-    else if (((flavor_ptr->o_ptr->tval == TV_RING) || (flavor_ptr->o_ptr->tval == TV_AMULET) || (flavor_ptr->o_ptr->tval == TV_LITE)
-                 || (flavor_ptr->o_ptr->tval == TV_FIGURINE))
-        && flavor_ptr->aware && !flavor_ptr->known && !(flavor_ptr->o_ptr->ident & IDENT_SENSE))
-        strcpy(flavor_ptr->fake_insc_buf, _("未鑑定", "unidentified"));
-    else if (!flavor_ptr->known && (flavor_ptr->o_ptr->ident & IDENT_EMPTY))
-        strcpy(flavor_ptr->fake_insc_buf, _("空", "empty"));
-    else if (!flavor_ptr->aware && object_is_tried(flavor_ptr->o_ptr))
-        strcpy(flavor_ptr->fake_insc_buf, _("未判明", "tried"));
-
+    decide_item_feeling(flavor_ptr);
     if (flavor_ptr->o_ptr->discount) {
         if (!flavor_ptr->tmp_val2[0] || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
             char discount_num_buf[4];
