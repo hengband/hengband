@@ -268,7 +268,7 @@ static bool describe_prefix_en(flavor_type *flavor_ptr)
     return TRUE;
 }
 
-static void describe_artifact_en(flavor_type *flavor_ptr)
+static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
 {
     flavor_ptr->s = flavor_ptr->basenm + 2;
     if (flavor_ptr->mode & OD_OMIT_PREFIX)
@@ -297,6 +297,37 @@ static void describe_basename_en(flavor_type *flavor_ptr)
 
     if (flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
+}
+
+static void describe_artifact_en(flavor_type *flavor_ptr)
+{
+    if (!flavor_ptr->known || have_flag(flavor_ptr->flags, TR_FULL_NAME))
+        return;
+
+    if (flavor_ptr->o_ptr->art_name) {
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, quark_str(flavor_ptr->o_ptr->art_name));
+        return;
+    }
+    
+    if (object_is_fixed_artifact(flavor_ptr->o_ptr)) {
+        artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, a_name + a_ptr->name);
+        return;
+    }
+
+    if (object_is_ego(flavor_ptr->o_ptr)) {
+        ego_item_type *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, e_name + e_ptr->name);
+    }
+
+    if (flavor_ptr->o_ptr->inscription && angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#')) {
+        concptr str = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
+        flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, &str[1]);
+    }
 }
 #endif
 
@@ -363,7 +394,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
 #else
 
     if (flavor_ptr->basenm[0] == '&')
-        describe_artifact_en(flavor_ptr);
+        describe_artifact_prefix_en(flavor_ptr);
     else
         describe_basename_en(flavor_ptr);
 #endif
@@ -384,29 +415,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     if (object_is_smith(player_ptr, flavor_ptr->o_ptr))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, format(" of %s the Smith", player_ptr->name));
 
-    if (flavor_ptr->known && !have_flag(flavor_ptr->flags, TR_FULL_NAME)) {
-        if (flavor_ptr->o_ptr->art_name) {
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, quark_str(flavor_ptr->o_ptr->art_name));
-        } else if (object_is_fixed_artifact(flavor_ptr->o_ptr)) {
-            artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
-
-            flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-            flavor_ptr->t = object_desc_str(flavor_ptr->t, a_name + a_ptr->name);
-        } else {
-            if (object_is_ego(flavor_ptr->o_ptr)) {
-                ego_item_type *e_ptr = &e_info[flavor_ptr->o_ptr->name2];
-                flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, e_name + e_ptr->name);
-            }
-
-            if (flavor_ptr->o_ptr->inscription && angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#')) {
-                concptr str = angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '#');
-                flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-                flavor_ptr->t = object_desc_str(flavor_ptr->t, &str[1]);
-            }
-        }
-    }
+    describe_artifact_en(flavor_ptr);
 #endif
 
     if (flavor_ptr->mode & OD_NAME_ONLY) {
