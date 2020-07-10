@@ -577,7 +577,7 @@
     <ClCompile Include="..\..\src\object-enchant\object-boost.c" />
     <ClCompile Include="..\..\src\object-enchant\object-curse.c" />
     <ClCompile Include="..\..\src\object-enchant\object-ego.c" />
-    <ClCompile Include="..\..\src\object\object-flavor.c" />
+    <ClCompile Include="..\..\src\flavor\object-flavor.c" />
     <ClCompile Include="..\..\src\object\item-tester-hooker.c" />
     <ClCompile Include="..\..\src\object\object-kind.c" />
     <ClCompile Include="..\..\src\object\object-kind-hook.c" />
@@ -1233,7 +1233,7 @@
     <ClInclude Include="..\..\src\monster\monster-processor-util.h" />
     <ClInclude Include="..\..\src\monster-floor\quantum-effect.h" />
     <ClInclude Include="..\..\src\mutation\mutation-processor.h" />
-    <ClInclude Include="..\..\src\object\object-flavor.h" />
+    <ClInclude Include="..\..\src\flavor\object-flavor.h" />
     <ClInclude Include="..\..\src\object\lite-processor.h" />
     <ClInclude Include="..\..\src\inventory\player-inventory.h" />
     <ClInclude Include="..\..\src\player\mimic-info-table.h" />

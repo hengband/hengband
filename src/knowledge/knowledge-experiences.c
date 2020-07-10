@@ -6,9 +6,9 @@
 
 #include "knowledge/knowledge-experiences.h"
 #include "core/show-file.h"
+#include "flavor/object-flavor.h"
 #include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
-#include "object/object-flavor.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-bow-types.h"
 #include "player/player-class.h"

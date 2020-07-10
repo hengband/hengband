@@ -401,9 +401,6 @@
     <ClCompile Include="..\..\src\object\object-broken.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-flavor.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\room\rooms.c">
       <Filter>room</Filter>
     </ClCompile>
@@ -1673,6 +1670,9 @@
     <ClCompile Include="..\..\src\view\display-sub-window-items.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\flavor\object-flavor.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2105,9 +2105,6 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-broken.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-flavor.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\room\rooms.h">
@@ -3660,6 +3657,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-sub-window-items.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\object-flavor.h">
+      <Filter>flavor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

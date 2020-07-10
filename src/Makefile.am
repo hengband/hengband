@@ -157,6 +157,7 @@ hengband_SOURCES = \
 	flavor/flavor-util.c flavor/flavor-util.h \
 	flavor/named-item-describer.c flavor/named-item-describer.h \
 	flavor/object-flavor-types.h \
+	flavor/object-flavor.c flavor/object-flavor.h \
 	flavor/tval-description-switcher.c flavor/tval-description-switcher.h \
 	\
 	floor/fixed-map-generator.c floor/fixed-map-generator.h \
@@ -418,7 +419,6 @@ hengband_SOURCES = \
 	object/item-tester-hooker.c object/item-tester-hooker.h \
 	object/object-broken.c object/object-broken.h \
 	object/object-flags.c object/object-flags.h \
-	object/object-flavor.c object/object-flavor.h \
 	object/object-generator.c object/object-generator.h \
 	object/object-info.c object/object-info.h \
 	object/object-kind.c object/object-kind.h \

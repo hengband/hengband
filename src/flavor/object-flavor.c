@@ -9,7 +9,7 @@
  * are included in all such copies.  Other copyrights may also apply.\n
  */
 
-#include "object/object-flavor.h"
+#include "flavor/object-flavor.h"
 #include "cmd-item/cmd-smith.h"
 #include "flavor/flag-inscriptions-table.h"
 #include "flavor/flavor-util.h"

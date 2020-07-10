@@ -31,7 +31,6 @@
 #include "object-enchant/vorpal-weapon.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
