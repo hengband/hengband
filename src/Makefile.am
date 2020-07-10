@@ -680,6 +680,7 @@ hengband_SOURCES = \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player-middle.c view/display-player-middle.h \
 	view/display-player.c view/display-player.h \
+	view/display-sub-items.c view/display-sub-items.h \
 	view/display-sub-window-spells.c view/display-sub-window-spells.h \
 	view/display-sub-windows.c view/display-sub-windows.h \
 	view/display-util.c view/display-util.h \

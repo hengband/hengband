@@ -1670,6 +1670,9 @@
     <ClCompile Include="..\..\src\flavor\named-item-describer.c">
       <Filter>flavor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-sub-window-items.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3654,6 +3657,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\flavor\named-item-describer.h">
       <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-sub-window-items.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

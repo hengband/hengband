@@ -286,6 +286,7 @@
     <ClCompile Include="..\..\src\status\temporary-resistance.c" />
     <ClCompile Include="..\..\src\view\display-inventory.c" />
     <ClCompile Include="..\..\src\view\display-map.c" />
+    <ClCompile Include="..\..\src\view\display-sub-window-items.c" />
     <ClCompile Include="..\..\src\view\display-sub-window-spells.c" />
     <ClCompile Include="..\..\src\view\display-sub-windows.c" />
     <ClCompile Include="..\..\src\view\main-window-left-frame.c" />
@@ -1187,6 +1188,7 @@
     <ClInclude Include="..\..\src\view\display-map.h" />
     <ClInclude Include="..\..\src\view\display-messages.h" />
     <ClInclude Include="..\..\src\view\display-monster-status.h" />
+    <ClInclude Include="..\..\src\view\display-sub-window-items.h" />
     <ClInclude Include="..\..\src\view\display-sub-window-spells.h" />
     <ClInclude Include="..\..\src\view\display-sub-windows.h" />
     <ClInclude Include="..\..\src\view\main-window-left-frame.h" />
