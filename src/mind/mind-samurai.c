@@ -5,9 +5,9 @@
  */
 
 #include "mind/mind-samurai.h"
+#include "action/action-limited.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-pet.h"
-#include "cmd/cmd-basic.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"

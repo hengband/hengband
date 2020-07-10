@@ -5,9 +5,9 @@
  */
 
 #include "spell/spells-object.h"
+#include "action/action-limited.h"
 #include "art-definition/art-weapon-types.h"
 #include "autopick/autopick.h"
-#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"

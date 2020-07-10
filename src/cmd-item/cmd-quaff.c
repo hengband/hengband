@@ -5,7 +5,7 @@
  */
 
 #include "cmd-item/cmd-quaff.h"
-#include "cmd/cmd-basic.h"
+#include "action/action-limited.h"
 #include "floor/floor-object.h"
 #include "object-hook/hook-expendable.h"
 #include "object-use/quaff-execution.h"

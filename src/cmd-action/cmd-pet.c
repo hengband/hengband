@@ -1,7 +1,7 @@
 ﻿#include "cmd-action/cmd-pet.h"
+#include "action/action-limited.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"

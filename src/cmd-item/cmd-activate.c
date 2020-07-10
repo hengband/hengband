@@ -5,12 +5,12 @@
  */
 
 #include "cmd-item/cmd-activate.h"
+#include "action/action-limited.h"
 #include "art-definition/art-bow-types.h"
 #include "art-definition/art-sword-types.h"
 #include "art-definition/art-weapon-types.h"
 #include "art-definition/random-art-effects.h"
 #include "cmd-io/cmd-save.h"
-#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
 #include "core/player-update-types.h"

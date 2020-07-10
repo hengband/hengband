@@ -6,9 +6,9 @@
  */
 
 #include "cmd-action/cmd-spell.h"
+#include "action/action-limited.h"
 #include "autopick/autopick-reader-writer.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"

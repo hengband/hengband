@@ -10,6 +10,7 @@
  */
 
 #include "cmd-item/cmd-item.h"
+#include "action/action-limited.h"
 #include "art-definition/art-protector-types.h"
 #include "autopick/autopick-registry.h"
 #include "autopick/autopick.h"

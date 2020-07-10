@@ -5,8 +5,8 @@
  */
 
 #include "cmd-item/cmd-smith.h"
+#include "action/action-limited.h"
 #include "autopick/autopick.h"
-#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"

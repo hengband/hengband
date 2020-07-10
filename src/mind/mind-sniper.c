@@ -6,6 +6,7 @@
  */
 
 #include "mind/mind-sniper.h"
+#include "action/action-limited.h"
 #include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"

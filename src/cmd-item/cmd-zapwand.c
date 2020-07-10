@@ -1,5 +1,5 @@
 ﻿#include "cmd-item/cmd-zapwand.h"
-#include "cmd/cmd-basic.h"
+#include "action/action-limited.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"

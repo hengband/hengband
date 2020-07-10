@@ -10,7 +10,7 @@
  */
 
 #include "cmd-action/cmd-spell.h"
-#include "cmd/cmd-basic.h"
+#include "action/action-limited.h"
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"

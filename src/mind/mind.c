@@ -15,6 +15,7 @@
  */
 
 #include "mind/mind.h"
+#include "action/action-limited.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"

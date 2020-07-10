@@ -52,10 +52,10 @@
  */
 
 #include "cmd-item/cmd-magiceat.h"
+#include "action/action-limited.h"
 #include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
-#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"

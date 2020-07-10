@@ -1673,6 +1673,9 @@
     <ClCompile Include="..\..\src\flavor\object-flavor.c">
       <Filter>flavor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\action\action-limited.c">
+      <Filter>action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3661,6 +3664,9 @@
     <ClInclude Include="..\..\src\flavor\object-flavor.h">
       <Filter>flavor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\action\action-limited.h">
+      <Filter>action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3840,6 +3846,9 @@
     </Filter>
     <Filter Include="flavor">
       <UniqueIdentifier>{64e5a4de-e0d4-4090-93b9-314234362569}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="action">
+      <UniqueIdentifier>{52768eef-323a-49a4-a895-f0030b35f667}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

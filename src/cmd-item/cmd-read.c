@@ -5,9 +5,9 @@
  */
 
 #include "cmd-item/cmd-read.h"
+#include "action/action-limited.h"
 #include "art-definition/art-accessory-types.h"
 #include "art-definition/art-armor-types.h"
-#include "cmd/cmd-basic.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/show-file.h"

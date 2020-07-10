@@ -10,11 +10,11 @@
  */
 
 #include "mind/racial.h"
+#include "action/action-limited.h"
 #include "cmd-action/cmd-mane.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-zapwand.h"
-#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
