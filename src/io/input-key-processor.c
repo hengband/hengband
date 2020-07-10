@@ -9,6 +9,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-action/cmd-hissatsu.h"
 #include "cmd-action/cmd-mane.h"
+#include "cmd-action/cmd-move.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-building/cmd-building.h"

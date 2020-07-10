@@ -1676,6 +1676,9 @@
     <ClCompile Include="..\..\src\action\action-limited.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-move.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3666,6 +3669,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\action\action-limited.h">
       <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-move.h">
+      <Filter>cmd-action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
