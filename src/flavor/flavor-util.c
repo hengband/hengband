@@ -5,7 +5,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-enchant.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h" // todo has_dark_flag().
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-food-types.h"
@@ -464,3 +463,7 @@ char *object_desc_count_japanese(char *t, object_type *o_ptr)
     return t;
 }
 #endif
+
+bool has_lite_flag(BIT_FLAGS *flags) { return have_flag(flags, TR_LITE_1) || have_flag(flags, TR_LITE_2) || have_flag(flags, TR_LITE_3); }
+
+bool has_dark_flag(BIT_FLAGS *flags) { return have_flag(flags, TR_LITE_M1) || have_flag(flags, TR_LITE_M2) || have_flag(flags, TR_LITE_M3); }

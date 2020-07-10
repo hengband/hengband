@@ -291,7 +291,3 @@ void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
 
     *t = '\0';
 }
-
-bool has_lite_flag(BIT_FLAGS *flags) { return have_flag(flags, TR_LITE_1) || have_flag(flags, TR_LITE_2) || have_flag(flags, TR_LITE_3); }
-
-bool has_dark_flag(BIT_FLAGS *flags) { return have_flag(flags, TR_LITE_M1) || have_flag(flags, TR_LITE_M2) || have_flag(flags, TR_LITE_M3); }
