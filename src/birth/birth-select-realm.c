@@ -3,7 +3,7 @@
 #include "birth/birth-util.h"
 #include "core/asking-player.h"
 #include "io/input-key-acceptor.h"
-#include "player/player-class.h"
+#include "player/player-realm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"

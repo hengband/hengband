@@ -5,9 +5,9 @@
 #include "io/targeting.h"
 #include "player/avatar.h"
 #include "player/digestion-processor.h"
-#include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-race.h"
+#include "player/player-realm.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-genocide.h"
@@ -223,7 +223,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
-			if (IS_WIZARD_CLASS(caster_ptr))
+			if (is_wizard_class(caster_ptr))
 				base = plev + plev / 2;
 			else
 				base = plev + plev / 4;

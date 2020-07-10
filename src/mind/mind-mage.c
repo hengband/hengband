@@ -17,7 +17,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-generator.h"
 #include "object/object-kind.h"
-#include "player/player-class.h"
+#include "player/player-realm.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
@@ -114,7 +114,7 @@ bool eat_magic(player_type *caster_ptr, int power)
     describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Mages recharge objects more safely. */
-    if (IS_WIZARD_CLASS(caster_ptr)) {
+    if (is_wizard_class(caster_ptr)) {
         /* 10% chance to blow up one rod, otherwise draining. */
         if (o_ptr->tval == TV_ROD) {
             if (one_in_(10))

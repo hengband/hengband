@@ -8,8 +8,8 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
-#include "player/player-class.h"
 #include "player/player-personality.h"
+#include "player/player-realm.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
@@ -32,7 +32,7 @@ static void display_diary(player_type *creature_ptr)
 
 	if (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_MONK || creature_ptr->pclass == CLASS_SAMURAI || creature_ptr->pclass == CLASS_BERSERKER)
 		strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1)]);
-	else if (IS_WIZARD_CLASS(creature_ptr))
+	else if (is_wizard_class(creature_ptr))
 		strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1) + 1]);
 	else strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 2) + 1]);
 

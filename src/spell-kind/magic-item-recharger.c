@@ -22,7 +22,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-kind.h"
-#include "player/player-class.h"
+#include "player/player-realm.h"
 #include "view/display-messages.h"
 
 /*!
@@ -127,7 +127,7 @@ bool recharge(player_type *caster_ptr, int power)
 
     describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
-    if (IS_WIZARD_CLASS(caster_ptr) || caster_ptr->pclass == CLASS_MAGIC_EATER || caster_ptr->pclass == CLASS_BLUE_MAGE) {
+    if (is_wizard_class(caster_ptr) || caster_ptr->pclass == CLASS_MAGIC_EATER || caster_ptr->pclass == CLASS_BLUE_MAGE) {
         /* 10% chance to blow up one rod, otherwise draining. */
         if (o_ptr->tval == TV_ROD) {
             if (one_in_(10))

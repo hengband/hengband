@@ -5,7 +5,7 @@
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "player/attack-defense-types.h"
-#include "player/player-class.h"
+#include "player/player-realm.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
@@ -131,7 +131,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             POSITION rad = (plev < 30) ? 2 : 3;
             int base;
 
-            if (IS_WIZARD_CLASS(caster_ptr))
+            if (is_wizard_class(caster_ptr))
                 base = plev + plev / 2;
             else
                 base = plev + plev / 4;
