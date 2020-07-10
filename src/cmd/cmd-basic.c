@@ -190,44 +190,6 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 }
 
 /*!
- * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す /
- * Attempt to open the given chest at the given location
- * @param y 該当する地形の中から1つのY座標を返す参照ポインタ
- * @param x 該当する地形の中から1つのX座標を返す参照ポインタ
- * @param test 地形条件を判定するための関数ポインタ
- * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
- * @return 該当する地形の数
- * @details Return the number of features around (or under) the character.
- * Usually look for doors and floor traps.
- */
-static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX feat), bool under)
-{
-    int count = 0;
-    for (DIRECTION d = 0; d < 9; d++) {
-        grid_type *g_ptr;
-        FEAT_IDX feat;
-        if ((d == 8) && !under)
-            continue;
-
-        POSITION yy = creature_ptr->y + ddy_ddd[d];
-        POSITION xx = creature_ptr->x + ddx_ddd[d];
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
-        if (!(g_ptr->info & (CAVE_MARK)))
-            continue;
-
-        feat = get_feat_mimic(g_ptr);
-        if (!((*test)(creature_ptr, feat)))
-            continue;
-
-        ++count;
-        *y = yy;
-        *x = xx;
-    }
-
-    return count;
-}
-
-/*!
  * @brief プレイヤーの周辺9マスに箱のあるマスがいくつあるかを返す /
  * Return the number of chests around (or under) the character.
  * @param y 該当するマスの中から1つのY座標を返す参照ポインタ

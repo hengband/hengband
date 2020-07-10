@@ -170,9 +170,6 @@ extern bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FL
  */
 #define feat_uses_special(F) (have_flag(f_info[(F)].flags, FF_SPECIAL))
 
-/*!
- * grids.c
- */
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);
 extern bool no_lite(player_type *creature_ptr);
@@ -263,3 +260,5 @@ FEAT_IDX get_feat_mimic(grid_type *g_ptr);
     (F)->view_x[(F)->view_n] = (X); \
     (F)->view_n++;}\
 }
+
+int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX), bool under);
