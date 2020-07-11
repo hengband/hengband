@@ -1691,6 +1691,9 @@
     <ClCompile Include="..\..\src\action\tunnel-execution.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3696,6 +3699,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\action\tunnel-execution.h">
       <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h">
+      <Filter>cmd-action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

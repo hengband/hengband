@@ -13,6 +13,7 @@
 #include "cmd-action/cmd-open-close.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-action/cmd-spell.h"
+#include "cmd-action/cmd-tunnel.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-diary.h"

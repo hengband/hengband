@@ -119,57 +119,6 @@ void do_cmd_search(player_type *creature_ptr)
 }
 
 /*!
- * @brief 「掘る」動作コマンドのメインルーチン /
- * Tunnels through "walls" (including rubble and closed doors)
- * @return なし
- * @details
- * <pre>
- * Note that you must tunnel in order to hit invisible monsters
- * in walls, though moving into walls still takes a turn anyway.
- *
- * Digging is very difficult without a "digger" weapon, but can be
- * accomplished by strong players using heavy weapons.
- * </pre>
- */
-void do_cmd_tunnel(player_type *creature_ptr)
-{
-    POSITION y, x;
-    DIRECTION dir;
-    grid_type *g_ptr;
-    FEAT_IDX feat;
-    bool more = FALSE;
-    if (creature_ptr->special_defense & KATA_MUSOU)
-        set_action(creature_ptr, ACTION_NONE);
-
-    if (command_arg) {
-        command_rep = command_arg - 1;
-        creature_ptr->redraw |= (PR_STATE);
-        command_arg = 0;
-    }
-
-    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
-        y = creature_ptr->y + ddy[dir];
-        x = creature_ptr->x + ddx[dir];
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-        feat = get_feat_mimic(g_ptr);
-        if (have_flag(f_info[feat].flags, FF_DOOR)) {
-            msg_print(_("ドアは掘れない。", "You cannot tunnel through doors."));
-        } else if (!have_flag(f_info[feat].flags, FF_TUNNEL)) {
-            msg_print(_("そこは掘れない。", "You can't tunnel through that."));
-        } else if (g_ptr->m_idx) {
-            take_turn(creature_ptr, 100);
-            msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(creature_ptr, y, x, 0);
-        } else {
-            more = exe_tunnel(creature_ptr, y, x);
-        }
-    }
-
-    if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
-}
-
-/*!
  * @brief 移動処理による簡易な「開く」処理 /
  * easy_open_door --
  * @return 開く処理が実際に試みられた場合TRUEを返す

@@ -68,6 +68,7 @@ hengband_SOURCES = \
 	cmd-action/cmd-open-close.c cmd-action/cmd-open-close.h \
 	cmd-action/cmd-pet.c cmd-action/cmd-pet.h \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
+	cmd-action/cmd-tunnel.c cmd-action/cmd-tunnel.h \
 	\
 	cmd-building/cmd-building.c cmd-building/cmd-building.h \
 	cmd-building/cmd-inn.c cmd-building/cmd-inn.h \
