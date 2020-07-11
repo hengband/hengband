@@ -1682,6 +1682,12 @@
     <ClCompile Include="..\..\src\action\open-util.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-open-close.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\open-close-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3677,6 +3683,12 @@
       <Filter>cmd-action</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\action\open-util.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-open-close.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\open-close-execution.h">
       <Filter>action</Filter>
     </ClInclude>
   </ItemGroup>

@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\action\action-limited.c" />
+    <ClCompile Include="..\..\src\action\open-close-execution.c" />
     <ClCompile Include="..\..\src\action\open-util.c" />
     <ClCompile Include="..\..\src\birth\auto-roller.c" />
     <ClCompile Include="..\..\src\birth\birth-body-spec.c" />
@@ -171,6 +172,7 @@
     <ClCompile Include="..\..\src\birth\quick-start.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-move.c" />
+    <ClCompile Include="..\..\src\cmd-action\cmd-open-close.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\cmd-io\macro-util.c" />
@@ -620,6 +622,7 @@
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c" />
     <ClCompile Include="..\..\src\savedata\quest-loader.c" />
     <ClInclude Include="..\..\src\action\action-limited.h" />
+    <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\art-definition\art-accessory-types.h" />
     <ClInclude Include="..\..\src\art-definition\art-armor-types.h" />
@@ -645,6 +648,7 @@
     <ClInclude Include="..\..\src\birth\quick-start.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-move.h" />
+    <ClInclude Include="..\..\src\cmd-action\cmd-open-close.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\cmd-io\macro-util.h" />
