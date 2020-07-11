@@ -4,7 +4,6 @@
 #include "floor/floor.h"
 
 void disturb(player_type *creature_ptr, bool stop_search, bool flush_output);
-void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool break_trap);
 void run_step(player_type *creature_ptr, DIRECTION dir);
 
 #define MPE_STAYING       0x00000001

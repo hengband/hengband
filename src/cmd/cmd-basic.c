@@ -11,6 +11,7 @@
 
 #include "cmd/cmd-basic.h"
 #include "action/action-limited.h"
+#include "action/movement-execution.h"
 #include "action/open-close-execution.h"
 #include "action/tunnel-execution.h"
 #include "action/open-util.h"
@@ -215,7 +216,7 @@ static bool do_cmd_bash_aux(player_type *creature_ptr, POSITION y, POSITION x, D
             cave_alter_feat(creature_ptr, y, x, FF_OPEN);
         }
 
-        move_player(creature_ptr, dir, FALSE, FALSE);
+        exe_movement(creature_ptr, dir, FALSE, FALSE);
     } else if (randint0(100) < adj_dex_safe[creature_ptr->stat_ind[A_DEX]] + creature_ptr->lev) {
         msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
         more = TRUE;
@@ -442,7 +443,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
         if (creature_ptr->action == ACTION_HAYAGAKE)
             creature_ptr->energy_use = creature_ptr->energy_use * (45 - (creature_ptr->lev / 2)) / 100;
 
-        move_player(creature_ptr, dir, pickup, FALSE);
+        exe_movement(creature_ptr, dir, pickup, FALSE);
         more = TRUE;
     }
 

@@ -16,6 +16,7 @@
 
 #include "mind/mind.h"
 #include "action/action-limited.h"
+#include "action/movement-execution.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
@@ -1556,7 +1557,7 @@ static bool cast_berserk_spell(player_type *caster_ptr, int spell)
 		if (!get_direction(caster_ptr, &dir, FALSE, FALSE)) return FALSE;
 		y = caster_ptr->y + ddy[dir];
 		x = caster_ptr->x + ddx[dir];
-		move_player(caster_ptr, dir, easy_disarm, TRUE);
+		exe_movement(caster_ptr, dir, easy_disarm, TRUE);
 		break;
 	}
 	case 3:

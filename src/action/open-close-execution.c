@@ -5,6 +5,7 @@
  */
 
 #include "action/open-close-execution.h"
+#include "action/movement-execution.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
@@ -14,7 +15,6 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "perception/object-perception.h"
-#include "player/player-move.h" // todo move_player() が相互依存している.
 #include "specific-object/chest.h"
 #include "status/experience.h"
 #include "system/object-type-definition.h"
@@ -262,7 +262,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
         msg_format(_("%sを解除した。", "You have disarmed the %s."), name);
         gain_exp(creature_ptr, power);
         cave_alter_feat(creature_ptr, y, x, FF_DISARM);
-        move_player(creature_ptr, dir, easy_disarm, FALSE);
+        exe_movement(creature_ptr, dir, easy_disarm, FALSE);
     } else if ((i > 5) && (randint1(i) > 5)) {
         if (flush_failure)
             flush();
@@ -271,7 +271,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
         more = TRUE;
     } else {
         msg_format(_("%sを作動させてしまった！", "You set off the %s!"), name);
-        move_player(creature_ptr, dir, easy_disarm, FALSE);
+        exe_movement(creature_ptr, dir, easy_disarm, FALSE);
     }
 
     return more;
