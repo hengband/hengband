@@ -6,6 +6,8 @@ bin_PROGRAMS = hengband
 
 hengband_SOURCES = \
 	action/action-limited.c action/action-limited.h \
+	action/open-util.c action/open-util.h \
+	\
 	art-definition/art-accessory-types.h \
 	art-definition/art-armor-types.h \
 	art-definition/art-bow-types.h \

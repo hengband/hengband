@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\action\action-limited.c" />
+    <ClCompile Include="..\..\src\action\open-util.c" />
     <ClCompile Include="..\..\src\birth\auto-roller.c" />
     <ClCompile Include="..\..\src\birth\birth-body-spec.c" />
     <ClCompile Include="..\..\src\birth\birth-select-class.c" />
@@ -619,6 +620,7 @@
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c" />
     <ClCompile Include="..\..\src\savedata\quest-loader.c" />
     <ClInclude Include="..\..\src\action\action-limited.h" />
+    <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\art-definition\art-accessory-types.h" />
     <ClInclude Include="..\..\src\art-definition\art-armor-types.h" />
     <ClInclude Include="..\..\src\art-definition\art-bow-types.h" />
