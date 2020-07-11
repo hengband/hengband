@@ -139,6 +139,7 @@
  */
 
 #include "player/player-move.h"
+#include "action/open-close-execution.h"
 #include "art-definition/art-bow-types.h"
 #include "art-definition/art-sword-types.h"
 #include "autopick/autopick.h"

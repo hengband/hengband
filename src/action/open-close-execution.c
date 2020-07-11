@@ -100,3 +100,59 @@ bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
 
     return more;
 }
+
+/*!
+ * @brief 移動処理による簡易な「開く」処理 /
+ * easy_open_door --
+ * @return 開く処理が実際に試みられた場合TRUEを返す
+ * @details
+ * <pre>
+ *	If there is a jammed/closed/locked door at the given location,
+ *	then attempt to unlock/open it. Return TRUE if an attempt was
+ *	made (successful or not), otherwise return FALSE.
+ *
+ *	The code here should be nearly identical to that in
+ *	do_cmd_open_test() and exe_open().
+ * </pre>
+ */
+bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
+{
+    int i, j;
+    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    feature_type *f_ptr = &f_info[g_ptr->feat];
+    if (!is_closed_door(creature_ptr, g_ptr->feat))
+        return FALSE;
+
+    if (!have_flag(f_ptr->flags, FF_OPEN)) {
+        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+    } else if (f_ptr->power) {
+        i = creature_ptr->skill_dis;
+        if (creature_ptr->blind || no_lite(creature_ptr))
+            i = i / 10;
+
+        if (creature_ptr->confused || creature_ptr->image)
+            i = i / 10;
+
+        j = f_ptr->power;
+        j = i - (j * 4);
+        if (j < 2)
+            j = 2;
+
+        if (randint0(100) < j) {
+            msg_print(_("鍵をはずした。", "You have picked the lock."));
+            cave_alter_feat(creature_ptr, y, x, FF_OPEN);
+            sound(SOUND_OPENDOOR);
+            gain_exp(creature_ptr, 1);
+        } else {
+            if (flush_failure)
+                flush();
+
+            msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
+        }
+    } else {
+        cave_alter_feat(creature_ptr, y, x, FF_OPEN);
+        sound(SOUND_OPENDOOR);
+    }
+
+    return TRUE;
+}
