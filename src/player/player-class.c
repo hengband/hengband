@@ -1320,14 +1320,9 @@ void calc_class_status(player_type *creature_ptr)
         break;
     case CLASS_NINJA:
         if (heavy_armor(creature_ptr)) {
-            creature_ptr->pspeed -= (creature_ptr->lev) / 10;
             creature_ptr->skill_stl -= (creature_ptr->lev) / 10;
         } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite)
             && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite)) {
-            creature_ptr->pspeed += 3;
-            if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
-                    || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
-                creature_ptr->pspeed += (creature_ptr->lev) / 10;
             creature_ptr->skill_stl += (creature_ptr->lev) / 10;
             if (creature_ptr->lev > 24)
                 creature_ptr->free_act = TRUE;
