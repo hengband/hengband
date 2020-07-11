@@ -3020,6 +3020,14 @@ static void calc_to_ac(player_type *creature_ptr)
         creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
     }
 
+    if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_TINYTHORN)) {
+        creature_ptr->to_a += 10;
+    }
+
+	if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_MUSASI_KATANA) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_MUSASI_WAKIZASI)) {
+        creature_ptr->to_a += 10;
+    }
+
     if (creature_ptr->muta3 & MUT3_WART_SKIN) {
         creature_ptr->to_a += 5;
     }
@@ -3167,6 +3175,13 @@ static void calc_to_ac_display(player_type *creature_ptr)
 
     if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
+    }
+
+    if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_TINYTHORN)) {
+        creature_ptr->dis_to_a += 10;
+    }
+    if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_MUSASI_KATANA) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_MUSASI_WAKIZASI)) {
+        creature_ptr->dis_to_a += 10;
     }
 
     if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && !heavy_armor(creature_ptr)) {
@@ -3417,8 +3432,6 @@ void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
         penalty = ((100 - creature_ptr->skill_exp[GINOU_NITOURYU] / 160) - (130 - creature_ptr->inventory_list[slot].weight) / 8);
         if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_TINYTHORN)) {
             penalty = penalty / 2 - 5;
-            creature_ptr->to_a += 10;
-            creature_ptr->dis_to_a += 10;
         }
         if (creature_ptr->easy_2weapon) {
             if (penalty > 0)
@@ -3429,8 +3442,6 @@ void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
         }
         if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_MUSASI_KATANA) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_MUSASI_WAKIZASI)) {
             penalty = MIN(0, penalty);
-            creature_ptr->to_a += 10;
-            creature_ptr->dis_to_a += 10;
         } else {
             if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_MUSASI_KATANA) && (penalty > 0))
                 penalty /= 2;
