@@ -1688,6 +1688,9 @@
     <ClCompile Include="..\..\src\action\open-close-execution.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\action\tunnel-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3689,6 +3692,9 @@
       <Filter>cmd-action</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\action\open-close-execution.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\tunnel-execution.h">
       <Filter>action</Filter>
     </ClInclude>
   </ItemGroup>

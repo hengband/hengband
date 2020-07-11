@@ -8,7 +8,7 @@ hengband_SOURCES = \
 	action/action-limited.c action/action-limited.h \
 	action/open-util.c action/open-util.h \
 	action/open-close-execution.c action/open-close-execution.h \
-	cmd-action/cmd-open-close.c cmd-action/cmd-open-close.h \
+	action/tunnel-execution.c action/tunnel-execution.h \
 	\
 	art-definition/art-accessory-types.h \
 	art-definition/art-armor-types.h \
@@ -65,6 +65,7 @@ hengband_SOURCES = \
 	cmd-action/cmd-hissatsu.c cmd-action/cmd-hissatsu.h \
 	cmd-action/cmd-mane.c cmd-action/cmd-mane.h \
 	cmd-action/cmd-move.c cmd-action/cmd-move.h \
+	cmd-action/cmd-open-close.c cmd-action/cmd-open-close.h \
 	cmd-action/cmd-pet.c cmd-action/cmd-pet.h \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
 	\
