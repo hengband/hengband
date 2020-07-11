@@ -820,7 +820,6 @@ void calc_bonuses(player_type *creature_ptr)
         if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_TINYTHORN)) {
             penalty1 = penalty1 / 2 - 5;
             penalty2 = penalty2 / 2 - 5;
-            creature_ptr->pspeed += 7;
             creature_ptr->to_a += 10;
             creature_ptr->dis_to_a += 10;
         }
@@ -3395,6 +3394,13 @@ static void calc_speed(player_type *creature_ptr)
                 creature_ptr->pspeed -= 2;
             }
         }
+
+		if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
+            if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_TINYTHORN)) {
+                creature_ptr->pspeed += 7;
+            }
+        }
+
 
     } else {
         monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
