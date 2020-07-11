@@ -817,29 +817,18 @@ void calc_bonuses(player_type *creature_ptr)
 	calc_weapon_penalty(creature_ptr, INVEN_RARM);
     calc_weapon_penalty(creature_ptr, INVEN_LARM);
 
-    int j = creature_ptr->total_weight;
-    if (!creature_ptr->riding) {
-        count = (int)weight_limit(creature_ptr);
-    } else {
+    if (creature_ptr->riding) {
         monster_type *riding_m_ptr = &floor_ptr->m_list[creature_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         riding_levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
         if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC))
-            creature_ptr->can_swim = TRUE;
+           creature_ptr->can_swim = TRUE;
 
         if (!(riding_r_ptr->flags2 & RF2_PASS_WALL))
             creature_ptr->pass_wall = FALSE;
         if (riding_r_ptr->flags2 & RF2_KILL_WALL)
             creature_ptr->kill_wall = TRUE;
-
-        if (creature_ptr->skill_exp[GINOU_RIDING] < RIDING_EXP_SKILLED)
-            j += (creature_ptr->wt * 3 * (RIDING_EXP_SKILLED - creature_ptr->skill_exp[GINOU_RIDING])) / RIDING_EXP_SKILLED;
-
-        count = 1500 + riding_r_ptr->level * 25;
-    }
-
-    if (j > count)
-        creature_ptr->pspeed -= ((j - count) / (count / 5));
+	}
 
     creature_ptr->to_d[0] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->to_d[1] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
@@ -3272,8 +3261,17 @@ static void calc_speed(player_type *creature_ptr)
 
 	creature_ptr->pspeed = 110;
 
+    int j = creature_ptr->total_weight;
+    int count;
     if (!creature_ptr->riding) {
-            const player_race *tmp_rp_ptr;
+    } else {
+    }
+
+
+    if (!creature_ptr->riding) {
+        count = (int)weight_limit(creature_ptr);
+
+		const player_race *tmp_rp_ptr;
             if (creature_ptr->mimic_form)
                 tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
             else
@@ -3390,9 +3388,9 @@ static void calc_speed(player_type *creature_ptr)
             }
         }
 
-
     } else {
         monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         SPEED speed = riding_m_ptr->mspeed;
 
         if (riding_m_ptr->mspeed > 110) {
@@ -3404,11 +3402,20 @@ static void calc_speed(player_type *creature_ptr)
         }
 
         creature_ptr->pspeed += (creature_ptr->skill_exp[GINOU_RIDING] + creature_ptr->lev * 160L) / 3200;
-        if (monster_fast_remaining(riding_m_ptr))
+
+		if (monster_fast_remaining(riding_m_ptr))
             creature_ptr->pspeed += 10;
         if (monster_slow_remaining(riding_m_ptr))
             creature_ptr->pspeed -= 10;
-    }
+
+        if (creature_ptr->skill_exp[GINOU_RIDING] < RIDING_EXP_SKILLED)
+            j += (creature_ptr->wt * 3 * (RIDING_EXP_SKILLED - creature_ptr->skill_exp[GINOU_RIDING])) / RIDING_EXP_SKILLED;
+
+        count = 1500 + riding_r_ptr->level * 25;
+	}
+
+    if (j > count)
+        creature_ptr->pspeed -= ((j - count) / (count / 5));
 
 	if (creature_ptr->action == ACTION_SEARCH)
         creature_ptr->pspeed -= 10;
