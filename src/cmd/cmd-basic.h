@@ -16,6 +16,5 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type);
 void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type);
 void do_cmd_suicide(player_type *creature_ptr);
 bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_IDX shuriken);
-bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir);
 
 void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item);
