@@ -112,6 +112,8 @@ static void calc_ind_status(player_type *creature_ptr, int status);
 static void calc_riding_weapon_penalty(player_type *creature_ptr);
 static void put_equipment_warning(player_type *creature_ptr);
 
+static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot);
+
 static void calc_to_damage_misc(player_type *creature_ptr);
 static void calc_to_hit_misc(player_type *creature_ptr);
 
@@ -499,8 +501,8 @@ static void clear_creature_bonuses(player_type *creature_ptr)
 {
     creature_ptr->dis_to_h[0] = creature_ptr->to_h[0] = 0;
     creature_ptr->dis_to_h[1] = creature_ptr->to_h[1] = 0;
-    creature_ptr->dis_to_d[0] = creature_ptr->to_d[0] = 0;
-    creature_ptr->dis_to_d[1] = creature_ptr->to_d[1] = 0;
+    creature_ptr->dis_to_d[0] = 0;
+    creature_ptr->dis_to_d[1] = 0;
     creature_ptr->dis_to_h_b = creature_ptr->to_h_b = 0;
     creature_ptr->to_dd[0] = creature_ptr->to_ds[0] = 0;
     creature_ptr->to_dd[1] = creature_ptr->to_ds[1] = 0;
@@ -786,8 +788,6 @@ void calc_bonuses(player_type *creature_ptr)
             creature_ptr->kill_wall = TRUE;
     }
 
-    creature_ptr->to_d[0] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
-    creature_ptr->to_d[1] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->to_h[0] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->to_h[1] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
@@ -825,7 +825,7 @@ void calc_bonuses(player_type *creature_ptr)
     if (creature_ptr->ryoute)
         hold *= 2;
 
-	for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
         object_flags(o_ptr, flgs);
 
@@ -1095,9 +1095,11 @@ void calc_bonuses(player_type *creature_ptr)
     calc_to_hit_melee(creature_ptr);
     calc_to_hit_shoot(creature_ptr);
     calc_to_hit_throw(creature_ptr);
+    calc_to_damage(creature_ptr, INVEN_RARM);
+    calc_to_damage(creature_ptr, INVEN_LARM);
     calc_to_damage_misc(creature_ptr);
     calc_to_hit_misc(creature_ptr);
-	calc_dig(creature_ptr);
+    calc_dig(creature_ptr);
 
     if (current_world_ptr->character_xtra)
         return;
@@ -3399,7 +3401,8 @@ static void calc_riding_weapon_penalty(player_type *creature_ptr)
     }
 }
 
-void put_equipment_warning(player_type *creature_ptr) {
+void put_equipment_warning(player_type *creature_ptr)
+{
     if (creature_ptr->old_heavy_shoot != creature_ptr->heavy_shoot) {
         if (creature_ptr->heavy_shoot) {
             msg_print(_("こんな重い弓を装備しているのは大変だ。", "You have trouble wielding such a heavy bow."));
@@ -3489,6 +3492,23 @@ void put_equipment_warning(player_type *creature_ptr) {
     }
 }
 
+static void calc_to_damage(player_type* creature_ptr, INVENTORY_IDX slot) {
+    int id = slot - INVEN_RARM;
+	creature_ptr->to_d[id] = 0;
+
+    creature_ptr->to_d[id] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
+
+	if (creature_ptr->shero) {
+        creature_ptr->to_d[id] += 3 + (creature_ptr->lev / 5);
+    }
+
+	if (creature_ptr->stun > 50) {
+        creature_ptr->to_d[id] -= 20;
+    } else if (creature_ptr->stun) {
+        creature_ptr->to_d[id] -= 5;
+    }
+}
+
 static void calc_to_damage_misc(player_type *creature_ptr)
 {
     object_type *o_ptr;
@@ -3518,22 +3538,23 @@ static void calc_to_damage_misc(player_type *creature_ptr)
     creature_ptr->to_d_m += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
 }
 
-static void calc_to_hit_misc(player_type* creature_ptr) {
+static void calc_to_hit_misc(player_type *creature_ptr)
+{
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-	creature_ptr->to_h_m = 0;
+    creature_ptr->to_h_m = 0;
 
-	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
         object_flags(o_ptr, flgs);
         creature_ptr->to_h_m += (s16b)o_ptr->to_h;
-	}
+    }
 
-	if (is_blessed(creature_ptr)) {
+    if (is_blessed(creature_ptr)) {
         creature_ptr->to_h_m += 10;
     }
 
@@ -3545,7 +3566,7 @@ static void calc_to_hit_misc(player_type* creature_ptr) {
         creature_ptr->to_h_m += 12;
     }
 
-	if (creature_ptr->stun > 50) {
+    if (creature_ptr->stun > 50) {
         creature_ptr->to_h_m -= 20;
     } else if (creature_ptr->stun) {
         creature_ptr->to_h_m -= 5;
