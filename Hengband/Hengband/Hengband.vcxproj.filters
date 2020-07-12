@@ -3727,6 +3727,9 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-others.h">
       <Filter>cmd-action</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\grid\feature-flag-types.h">
+      <Filter>grid</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -693,6 +693,7 @@
     <ClInclude Include="..\..\src\game-option\runtime-arguments.h" />
     <ClInclude Include="..\..\src\game-option\special-options.h" />
     <ClInclude Include="..\..\src\game-option\text-display-options.h" />
+    <ClInclude Include="..\..\src\grid\feature-flag-types.h" />
     <ClInclude Include="..\..\src\grid\lighting-colors-table.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />

@@ -201,6 +201,7 @@ hengband_SOURCES = \
 	game-option/special-options.c game-option/special-options.h \
 	game-option/text-display-options.c game-option/text-display-options.h \
 	\
+	grid/feature-flag-types.h \
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h \
 	grid/lighting-colors-table.c grid/lighting-colors-table.h \
