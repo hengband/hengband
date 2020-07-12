@@ -236,3 +236,60 @@ void do_cmd_disarm(player_type *creature_ptr)
     if (!more)
         disturb(creature_ptr, FALSE, FALSE);
 }
+
+/*!
+ * @brief 「打ち破る」動作コマンドのメインルーチン /
+ * Bash open a door, success based on character strength
+ * @return なし
+ * @details
+ * <pre>
+ * For a closed door, pval is positive if locked; negative if stuck.
+ *
+ * For an open door, pval is positive for a broken door.
+ *
+ * A closed door can be opened - harder if locked. Any door might be
+ * bashed open (and thereby broken). Bashing a door is (potentially)
+ * faster! You move into the door way. To open a stuck door, it must
+ * be bashed. A closed door can be jammed (see do_cmd_spike()).
+ *
+ * Creatures can also open or bash doors, see elsewhere.
+ * </pre>
+ */
+void do_cmd_bash(player_type *creature_ptr)
+{
+    POSITION y, x;
+    DIRECTION dir;
+    grid_type *g_ptr;
+    bool more = FALSE;
+    if (creature_ptr->wild_mode)
+        return;
+
+    if (creature_ptr->special_defense & KATA_MUSOU)
+        set_action(creature_ptr, ACTION_NONE);
+
+    if (command_arg) {
+        command_rep = command_arg - 1;
+        creature_ptr->redraw |= (PR_STATE);
+        command_arg = 0;
+    }
+
+    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+        FEAT_IDX feat;
+        y = creature_ptr->y + ddy[dir];
+        x = creature_ptr->x + ddx[dir];
+        g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+        feat = get_feat_mimic(g_ptr);
+        if (!have_flag(f_info[feat].flags, FF_BASH)) {
+            msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
+        } else if (g_ptr->m_idx) {
+            take_turn(creature_ptr, 100);
+            msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
+            do_cmd_attack(creature_ptr, y, x, 0);
+        } else {
+            more = exe_bash(creature_ptr, y, x, dir);
+        }
+    }
+
+    if (!more)
+        disturb(creature_ptr, FALSE, FALSE);
+}
