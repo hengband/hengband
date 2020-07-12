@@ -120,58 +120,6 @@ void do_cmd_search(player_type *creature_ptr)
 }
 
 /*!
- * @brief 「打ち破る」動作コマンドのサブルーチン /
- * Perform the basic "bash" command
- * @param y 対象を行うマスのY座標
- * @param x 対象を行うマスのX座標
- * @param dir プレイヤーから見たターゲットの方角ID
- * @return 実際に処理が行われた場合TRUEを返す。
- * @details
- * <pre>
- * Assume destination is a closed/locked/jammed door
- * Assume there is no monster blocking the destination
- * Returns TRUE if repeated commands may continue
- * </pre>
- */
-static bool do_cmd_bash_aux(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
-{
-    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[g_ptr->feat];
-    int bash = adj_str_blow[creature_ptr->stat_ind[A_STR]];
-    int temp = f_ptr->power;
-    bool more = FALSE;
-    concptr name = f_name + f_info[get_feat_mimic(g_ptr)].name;
-    take_turn(creature_ptr, 100);
-    msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
-    temp = (bash - (temp * 10));
-    if (creature_ptr->pclass == CLASS_BERSERKER)
-        temp *= 2;
-
-    if (temp < 1)
-        temp = 1;
-
-    if (randint0(100) < temp) {
-        msg_format(_("%sを壊した！", "The %s crashes open!"), name);
-        sound(have_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
-        if ((randint0(100) < 50) || (feat_state(creature_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)) {
-            cave_alter_feat(creature_ptr, y, x, FF_BASH);
-        } else {
-            cave_alter_feat(creature_ptr, y, x, FF_OPEN);
-        }
-
-        exe_movement(creature_ptr, dir, FALSE, FALSE);
-    } else if (randint0(100) < adj_dex_safe[creature_ptr->stat_ind[A_DEX]] + creature_ptr->lev) {
-        msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
-        more = TRUE;
-    } else {
-        msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
-        (void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 2 + randint0(2));
-    }
-
-    return more;
-}
-
-/*!
  * @brief 「打ち破る」動作コマンドのメインルーチン /
  * Bash open a door, success based on character strength
  * @return なし
@@ -220,7 +168,7 @@ void do_cmd_bash(player_type *creature_ptr)
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(creature_ptr, y, x, 0);
         } else {
-            more = do_cmd_bash_aux(creature_ptr, y, x, dir);
+            more = exe_bash(creature_ptr, y, x, dir);
         }
     }
 
@@ -272,7 +220,7 @@ void do_cmd_alter(player_type *creature_ptr)
         } else if (have_flag(f_ptr->flags, FF_OPEN)) {
             more = exe_open(creature_ptr, y, x);
         } else if (have_flag(f_ptr->flags, FF_BASH)) {
-            more = do_cmd_bash_aux(creature_ptr, y, x, dir);
+            more = exe_bash(creature_ptr, y, x, dir);
         } else if (have_flag(f_ptr->flags, FF_TUNNEL)) {
             more = exe_tunnel(creature_ptr, y, x);
         } else if (have_flag(f_ptr->flags, FF_CLOSE)) {

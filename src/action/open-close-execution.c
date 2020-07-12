@@ -6,6 +6,7 @@
 
 #include "action/open-close-execution.h"
 #include "action/movement-execution.h"
+#include "combat/attack-power-table.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
@@ -16,6 +17,7 @@
 #include "main/sound-of-music.h"
 #include "perception/object-perception.h"
 #include "specific-object/chest.h"
+#include "status/bad-status-setter.h"
 #include "status/experience.h"
 #include "system/object-type-definition.h"
 #include "term/screen-processor.h"
@@ -272,6 +274,58 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
     } else {
         msg_format(_("%sを作動させてしまった！", "You set off the %s!"), name);
         exe_movement(creature_ptr, dir, easy_disarm, FALSE);
+    }
+
+    return more;
+}
+
+/*!
+ * @brief 「打ち破る」動作コマンドのサブルーチン /
+ * Perform the basic "bash" command
+ * @param y 対象を行うマスのY座標
+ * @param x 対象を行うマスのX座標
+ * @param dir プレイヤーから見たターゲットの方角ID
+ * @return 実際に処理が行われた場合TRUEを返す。
+ * @details
+ * <pre>
+ * Assume destination is a closed/locked/jammed door
+ * Assume there is no monster blocking the destination
+ * Returns TRUE if repeated commands may continue
+ * </pre>
+ */
+bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
+{
+    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    feature_type *f_ptr = &f_info[g_ptr->feat];
+    int bash = adj_str_blow[creature_ptr->stat_ind[A_STR]];
+    int temp = f_ptr->power;
+    bool more = FALSE;
+    concptr name = f_name + f_info[get_feat_mimic(g_ptr)].name;
+    take_turn(creature_ptr, 100);
+    msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
+    temp = (bash - (temp * 10));
+    if (creature_ptr->pclass == CLASS_BERSERKER)
+        temp *= 2;
+
+    if (temp < 1)
+        temp = 1;
+
+    if (randint0(100) < temp) {
+        msg_format(_("%sを壊した！", "The %s crashes open!"), name);
+        sound(have_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
+        if ((randint0(100) < 50) || (feat_state(creature_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)) {
+            cave_alter_feat(creature_ptr, y, x, FF_BASH);
+        } else {
+            cave_alter_feat(creature_ptr, y, x, FF_OPEN);
+        }
+
+        exe_movement(creature_ptr, dir, FALSE, FALSE);
+    } else if (randint0(100) < adj_dex_safe[creature_ptr->stat_ind[A_DEX]] + creature_ptr->lev) {
+        msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
+        more = TRUE;
+    } else {
+        msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
+        (void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 2 + randint0(2));
     }
 
     return more;
