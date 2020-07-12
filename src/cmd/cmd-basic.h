@@ -5,10 +5,6 @@
 void forget_travel_flow(floor_type *floor_ptr);
 void do_cmd_search(player_type *creature_ptr);
 void do_cmd_alter(player_type *creature_ptr);
-void do_cmd_walk(player_type *creature_ptr, bool pickup);
-void do_cmd_stay(player_type *creature_ptr, bool pickup);
-void do_cmd_run(player_type *creature_ptr);
-void do_cmd_rest(player_type *creature_ptr);
 void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type);
 void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type);
 void do_cmd_suicide(player_type *creature_ptr);

@@ -1,9 +1,15 @@
 ﻿#include "cmd-action/cmd-move.h"
+#include "action/action-limited.h"
+#include "action/movement-execution.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
+#include "core/output-updater.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
+#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
 #include "game-option/play-record-options.h"
@@ -11,9 +17,15 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
+#include "io/input-key-requester.h"
+#include "io/targeting.h"
 #include "io/write-diary.h"
+#include "mind/mind-ninja.h"
 #include "player/attack-defense-types.h"
+#include "player/avatar.h"
+#include "player/player-move.h"
 #include "player/special-defense-types.h"
+#include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
@@ -259,4 +271,156 @@ void do_cmd_go_down(player_type *creature_ptr)
         prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
     else
         prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN);
+}
+
+/*!
+ * @brief 「歩く」動作コマンドのメインルーチン /
+ * Support code for the "Walk" and "Jump" commands
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param pickup アイテムの自動拾いを行うならTRUE
+ * @return なし
+ */
+void do_cmd_walk(player_type *creature_ptr, bool pickup)
+{
+    if (command_arg) {
+        command_rep = command_arg - 1;
+        creature_ptr->redraw |= PR_STATE;
+        command_arg = 0;
+    }
+
+    bool more = FALSE;
+    DIRECTION dir;
+    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+        take_turn(creature_ptr, 100);
+        if ((dir != 5) && (creature_ptr->special_defense & KATA_MUSOU))
+            set_action(creature_ptr, ACTION_NONE);
+
+        if (creature_ptr->wild_mode)
+            creature_ptr->energy_use *= ((MAX_HGT + MAX_WID) / 2);
+
+        if (creature_ptr->action == ACTION_HAYAGAKE)
+            creature_ptr->energy_use = creature_ptr->energy_use * (45 - (creature_ptr->lev / 2)) / 100;
+
+        exe_movement(creature_ptr, dir, pickup, FALSE);
+        more = TRUE;
+    }
+
+    if (creature_ptr->wild_mode && !cave_have_flag_bold(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, FF_TOWN)) {
+        int tmp = 120 + creature_ptr->lev * 10 - wilderness[creature_ptr->y][creature_ptr->x].level + 5;
+        if (tmp < 1)
+            tmp = 1;
+
+        if (((wilderness[creature_ptr->y][creature_ptr->x].level + 5) > (creature_ptr->lev / 2)) && randint0(tmp) < (21 - creature_ptr->skill_stl)) {
+            msg_print(_("襲撃だ！", "You are ambushed !"));
+            creature_ptr->oldpy = randint1(MAX_HGT - 2);
+            creature_ptr->oldpx = randint1(MAX_WID - 2);
+            change_wild_mode(creature_ptr, TRUE);
+            take_turn(creature_ptr, 100);
+        }
+    }
+
+    if (!more)
+        disturb(creature_ptr, FALSE, FALSE);
+}
+
+/*!
+ * @brief 「走る」動作コマンドのメインルーチン /
+ * Start running.
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void do_cmd_run(player_type *creature_ptr)
+{
+    DIRECTION dir;
+    if (cmd_limit_confused(creature_ptr))
+        return;
+
+    if (creature_ptr->special_defense & KATA_MUSOU)
+        set_action(creature_ptr, ACTION_NONE);
+
+    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+        creature_ptr->running = (command_arg ? command_arg : 1000);
+        run_step(creature_ptr, dir);
+    }
+}
+
+/*!
+ * @brief 「留まる」動作コマンドのメインルーチン /
+ * Stay still.  Search.  Enter stores.
+ * Pick up treasure if "pickup" is true.
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param pickup アイテムの自動拾いを行うならTRUE
+ * @return なし
+ */
+void do_cmd_stay(player_type *creature_ptr, bool pickup)
+{
+    u32b mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
+    if (command_arg) {
+        command_rep = command_arg - 1;
+        creature_ptr->redraw |= (PR_STATE);
+        command_arg = 0;
+    }
+
+    take_turn(creature_ptr, 100);
+    if (pickup)
+        mpe_mode |= MPE_DO_PICKUP;
+
+    (void)move_player_effect(creature_ptr, creature_ptr->y, creature_ptr->x, mpe_mode);
+}
+
+/*!
+ * @brief 「休む」動作コマンドのメインルーチン /
+ * Resting allows a player to safely restore his hp	-RAK-
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void do_cmd_rest(player_type *creature_ptr)
+{
+    set_action(creature_ptr, ACTION_NONE);
+    if ((creature_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(creature_ptr) || INTERUPTING_SONG_EFFECT(creature_ptr)))
+        stop_singing(creature_ptr);
+
+    if (hex_spelling_any(creature_ptr))
+        stop_hex_spell_all(creature_ptr);
+
+    if (command_arg <= 0) {
+        concptr p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
+        char out_val[80];
+        strcpy(out_val, "&");
+        if (!get_string(p, out_val, 4))
+            return;
+
+        if (out_val[0] == '&') {
+            command_arg = COMMAND_ARG_REST_UNTIL_DONE;
+        } else if (out_val[0] == '*') {
+            command_arg = COMMAND_ARG_REST_FULL_HEALING;
+        } else {
+            command_arg = (COMMAND_ARG)atoi(out_val);
+            if (command_arg <= 0)
+                return;
+        }
+    }
+
+    if (command_arg > 9999)
+        command_arg = 9999;
+
+    if (creature_ptr->special_defense & NINJA_S_STEALTH)
+        set_superstealth(creature_ptr, FALSE);
+
+    take_turn(creature_ptr, 100);
+    if (command_arg > 100)
+        chg_virtue(creature_ptr, V_DILIGENCE, -1);
+
+    if ((creature_ptr->chp == creature_ptr->mhp) && (creature_ptr->csp == creature_ptr->msp) && !creature_ptr->blind && !creature_ptr->confused
+        && !creature_ptr->poisoned && !creature_ptr->afraid && !creature_ptr->stun && !creature_ptr->cut && !creature_ptr->slow && !creature_ptr->paralyzed
+        && !creature_ptr->image && !creature_ptr->word_recall && !creature_ptr->alter_reality)
+        chg_virtue(creature_ptr, V_DILIGENCE, -1);
+
+    creature_ptr->resting = command_arg;
+    creature_ptr->action = ACTION_REST;
+    creature_ptr->update |= PU_BONUS;
+    update_creature(creature_ptr);
+    creature_ptr->redraw |= (PR_STATE);
+    update_output(creature_ptr);
+    Term_fresh();
 }
