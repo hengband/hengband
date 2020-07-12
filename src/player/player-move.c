@@ -12,7 +12,7 @@
 #include "art-definition/art-sword-types.h"
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-attack.h"
-#include "cmd/cmd-basic.h"
+#include "cmd-action/cmd-others.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"

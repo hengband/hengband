@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-basic.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\shoot.c">
       <Filter>combat</Filter>
     </ClCompile>
@@ -1706,11 +1703,11 @@
     <ClCompile Include="..\..\src\action\weapon-shield.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-others.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\cmd\cmd-basic.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\shoot.h">
       <Filter>combat</Filter>
     </ClInclude>
@@ -3726,6 +3723,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\action\weapon-shield.h">
       <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-others.h">
+      <Filter>cmd-action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

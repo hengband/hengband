@@ -477,7 +477,7 @@
     <ClCompile Include="..\..\src\specific-object\chest.c" />
     <ClCompile Include="..\..\src\io\chuukei.c" />
     <ClCompile Include="..\..\src\cmd-item\cmd-activate.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-basic.c" />
+    <ClCompile Include="..\..\src\cmd-action\cmd-others.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-diary.c" />
     <ClCompile Include="..\..\src\cmd-visual\cmd-draw.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-dump.c" />
@@ -1163,7 +1163,7 @@
     <ClCompile Include="..\..\src\term\z-util.c" />
     <ClCompile Include="..\..\src\term\z-virt.c" />
     <ClInclude Include="..\..\src\cmd-item\cmd-activate.h" />
-    <ClInclude Include="..\..\src\cmd\cmd-basic.h" />
+    <ClInclude Include="..\..\src\cmd-action\cmd-others.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-diary.h" />
     <ClInclude Include="..\..\src\cmd-visual\cmd-draw.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-dump.h" />

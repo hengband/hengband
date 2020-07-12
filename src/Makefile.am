@@ -61,13 +61,12 @@ hengband_SOURCES = \
 	birth/auto-roller.c birth/auto-roller.h \
 	birth/birth-wizard.c birth/birth-wizard.h \
 	\
-	cmd/cmd-basic.c cmd/cmd-basic.h \
-	\
 	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
 	cmd-action/cmd-hissatsu.c cmd-action/cmd-hissatsu.h \
 	cmd-action/cmd-mane.c cmd-action/cmd-mane.h \
 	cmd-action/cmd-move.c cmd-action/cmd-move.h \
 	cmd-action/cmd-open-close.c cmd-action/cmd-open-close.h \
+	cmd-action/cmd-others.c cmd-action/cmd-others.h \
 	cmd-action/cmd-pet.c cmd-action/cmd-pet.h \
 	cmd-action/cmd-shoot.c cmd-action/cmd-shoot.h \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \

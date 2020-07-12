@@ -9,7 +9,7 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-#include "cmd/cmd-basic.h"
+#include "cmd-action/cmd-others.h"
 #include "action/open-close-execution.h"
 #include "action/tunnel-execution.h"
 #include "cmd-action/cmd-attack.h"
