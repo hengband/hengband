@@ -260,11 +260,9 @@ void calc_equipment_status(player_type* creature_ptr) {
                 }
             } else {
                 if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-                    creature_ptr->to_h_b -= 15;
                     if (object_is_fully_known(o_ptr))
                         creature_ptr->dis_to_h_b -= 15;
                 } else {
-                    creature_ptr->to_h_b -= 5;
                     if (object_is_fully_known(o_ptr))
                         creature_ptr->dis_to_h_b -= 5;
                 }

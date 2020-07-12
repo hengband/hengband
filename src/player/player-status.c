@@ -795,9 +795,9 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->dis_to_d[1] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->dis_to_h[0] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->dis_to_h[1] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-    creature_ptr->dis_to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->dis_to_h[0] += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->dis_to_h[1] += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+    creature_ptr->dis_to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->dis_to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
 
     hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
@@ -3539,6 +3539,33 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
 static void calc_to_hit_bow(player_type *creature_ptr)
 {
 	creature_ptr->to_h_b = 0;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(o_ptr, flgs);
+
+        if (o_ptr->curse_flags & TRC_LOW_MELEE) {
+            int slot = i - INVEN_RARM;
+            if (slot >= 2) {
+                if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+                    creature_ptr->to_h_b -= 15;
+                } else {
+                    creature_ptr->to_h_b -= 5;
+                }
+            }
+        }
+
+        int bonus_to_h = o_ptr->to_h;
+        if (creature_ptr->pclass == CLASS_NINJA) {
+            if (o_ptr->to_h > 0)
+                bonus_to_h = (o_ptr->to_h + 1) / 2;
+        }
+        creature_ptr->to_h_b += (s16b)bonus_to_h;
+	}
 
 	if (creature_ptr->stun > 50) {
         creature_ptr->to_h_b -= 20;
