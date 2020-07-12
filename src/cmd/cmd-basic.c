@@ -10,97 +10,29 @@
  */
 
 #include "cmd/cmd-basic.h"
-#include "action/action-limited.h"
-#include "action/movement-execution.h"
 #include "action/open-close-execution.h"
 #include "action/tunnel-execution.h"
-#include "action/open-util.h"
-#include "art-definition/art-weapon-types.h"
 #include "cmd-action/cmd-attack.h"
-#include "cmd-io/cmd-dump.h"
-#include "cmd-io/cmd-save.h"
-#include "combat/attack-power-table.h"
-#include "combat/shoot.h"
-#include "combat/slaying.h"
 #include "core/asking-player.h"
-#include "core/output-updater.h"
 #include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
-#include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
-#include "dungeon/dungeon.h"
-#include "dungeon/quest.h"
-#include "effect/spells-effect-util.h"
-#include "flavor/flavor-describer.h"
-#include "flavor/object-flavor-types.h"
-#include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "floor/geometry.h"
-#include "floor/wild.h"
-#include "game-option/birth-options.h"
-#include "game-option/cheat-types.h"
-#include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
-#include "game-option/input-options.h"
-#include "game-option/play-record-options.h"
-#include "game-option/special-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/trap.h"
-#include "info-reader/fixed-map-parser.h"
-#include "inventory/inventory-object.h"
-#include "inventory/inventory-slot-types.h"
-#include "inventory/player-inventory.h"
-#include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
-#include "io/screen-util.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
-#include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "mind/mind-ninja.h"
-#include "mind/racial-android.h"
-#include "mind/snipe-types.h"
-#include "monster-floor/monster-death.h"
-#include "monster-floor/monster-summon.h"
-#include "monster-floor/place-monster-types.h"
-#include "monster/monster-describer.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "object-enchant/special-object-flags.h"
-#include "object-enchant/tr-types.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-expendable.h"
-#include "object-hook/hook-weapon.h"
-#include "object/item-tester-hooker.h"
-#include "object/item-use-flags.h"
-#include "object/object-broken.h"
-#include "object/object-flags.h"
-#include "object/object-generator.h"
-#include "object/object-info.h"
-#include "object/object-kind.h"
-#include "object/object-stack.h"
-#include "perception/object-perception.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
 #include "player/player-move.h"
-#include "player/player-personalities-types.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
-#include "specific-object/chest.h"
-#include "specific-object/torch.h"
-#include "spell-kind/spells-teleport.h"
-#include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
-#include "status/bad-status-setter.h"
-#include "status/experience.h"
-#include "sv-definition/sv-bow-types.h"
-#include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "view/object-describer.h"
-#include "wizard/wizard-messages.h"
 #include "world/world.h"
 
 /*!
@@ -111,7 +43,7 @@ void do_cmd_search(player_type *creature_ptr)
 {
     if (command_arg) {
         command_rep = command_arg - 1;
-        creature_ptr->redraw |= (PR_STATE);
+        creature_ptr->redraw |= PR_STATE;
         command_arg = 0;
     }
 
@@ -179,7 +111,7 @@ void do_cmd_alter(player_type *creature_ptr)
 
     if (command_arg) {
         command_rep = command_arg - 1;
-        creature_ptr->redraw |= (PR_STATE);
+        creature_ptr->redraw |= PR_STATE;
         command_arg = 0;
     }
 
