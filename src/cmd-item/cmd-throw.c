@@ -1,6 +1,6 @@
 ﻿#include "cmd-item/cmd-throw.h"
+#include "action/weapon-shield.h"
 #include "art-definition/art-weapon-types.h"
-#include "cmd/cmd-basic.h" // todo 暫定、verify_equip_slot() の移設.
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "combat/slaying.h"

@@ -10,6 +10,7 @@
  */
 
 #include "store/store.h"
+#include "action/weapon-shield.h"
 #include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-spell.h"
@@ -28,7 +29,6 @@
 #include "cmd-item/cmd-zapwand.h"
 #include "cmd-visual/cmd-draw.h"
 #include "cmd-visual/cmd-visuals.h"
-#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"

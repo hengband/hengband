@@ -1703,6 +1703,9 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-throw.c">
       <Filter>cmd-item</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\action\weapon-shield.c">
+      <Filter>action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3720,6 +3723,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-throw.h">
       <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\weapon-shield.h">
+      <Filter>action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

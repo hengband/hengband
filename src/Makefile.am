@@ -10,6 +10,7 @@ hengband_SOURCES = \
 	action/open-util.c action/open-util.h \
 	action/open-close-execution.c action/open-close-execution.h \
 	action/tunnel-execution.c action/tunnel-execution.h \
+	action/weapon-shield.c action/weapon-shield.h \
 	\
 	art-definition/art-accessory-types.h \
 	art-definition/art-armor-types.h \
