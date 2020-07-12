@@ -289,7 +289,6 @@ void calc_equipment_status(player_type* creature_ptr) {
         }
 
         creature_ptr->to_h_b += (s16b)bonus_to_h;
-        creature_ptr->to_d_m += (s16b)bonus_to_d;
 
         if (object_is_known(o_ptr))
             creature_ptr->dis_to_h_b += (s16b)bonus_to_h;
