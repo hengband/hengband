@@ -27,6 +27,10 @@
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 /*
  * todo 負論理なので反転させたい

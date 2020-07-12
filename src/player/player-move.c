@@ -79,10 +79,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#ifdef JP
-#else
-#include "locale/english.h"
-#endif
 
 /*!
  * @brief 地形やその上のアイテムの隠された要素を全て明かす /
