@@ -5,7 +5,6 @@
 void forget_travel_flow(floor_type *floor_ptr);
 void do_cmd_search(player_type *creature_ptr);
 void do_cmd_alter(player_type *creature_ptr);
-void do_cmd_spike(player_type *creature_ptr);
 void do_cmd_walk(player_type *creature_ptr, bool pickup);
 void do_cmd_stay(player_type *creature_ptr, bool pickup);
 void do_cmd_run(player_type *creature_ptr);

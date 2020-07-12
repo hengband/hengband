@@ -14,6 +14,7 @@
 #include "art-definition/art-protector-types.h"
 #include "autopick/autopick-registry.h"
 #include "autopick/autopick.h"
+#include "cmd-action/cmd-open-close.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-item/cmd-activate.h"
 #include "cmd-item/cmd-eat.h"
