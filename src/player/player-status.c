@@ -109,6 +109,7 @@ static void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_use_status(player_type *creature_ptr, int status);
 static void calc_top_status(player_type *creature_ptr, int status);
 static void calc_ind_status(player_type *creature_ptr, int status);
+static void calc_riding_weapon_penalty(player_type *creature_ptr);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -923,40 +924,7 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->riding_wield[i] = TRUE;
     }
 
-    if (creature_ptr->riding) {
-        int penalty = 0;
-
-        creature_ptr->riding_ryoute = FALSE;
-
-        if (creature_ptr->ryoute || (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE))
-            creature_ptr->riding_ryoute = TRUE;
-        else if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
-            switch (creature_ptr->pclass) {
-            case CLASS_MONK:
-            case CLASS_FORCETRAINER:
-            case CLASS_BERSERKER:
-                if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_RARM)
-                    && !has_melee_weapon(creature_ptr, INVEN_LARM))
-                    creature_ptr->riding_ryoute = TRUE;
-                break;
-            }
-        }
-
-        if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
-            if (creature_ptr->tval_ammo != TV_ARROW)
-                penalty = 5;
-        } else {
-            penalty = r_info[floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
-            penalty += 30;
-            if (penalty < 30)
-                penalty = 30;
-        }
-
-        if (creature_ptr->tval_ammo == TV_BOLT)
-            penalty *= 2;
-        creature_ptr->to_h_b -= (s16b)penalty;
-        creature_ptr->dis_to_h_b -= (s16b)penalty;
-    }
+	calc_riding_weapon_penalty(creature_ptr);
 
     /* Different calculation for monks with empty hands */
     if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_BERSERKER))
@@ -3471,6 +3439,46 @@ static void calc_top_status(player_type *creature_ptr, int status)
         creature_ptr->stat_top[status] = (s16b)top;
         creature_ptr->redraw |= (PR_STATS);
         creature_ptr->window |= (PW_PLAYER);
+    }
+}
+
+static void calc_riding_weapon_penalty(player_type *creature_ptr)
+{
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+
+    if (creature_ptr->riding) {
+        int penalty = 0;
+
+        creature_ptr->riding_ryoute = FALSE;
+
+        if (creature_ptr->ryoute || (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE))
+            creature_ptr->riding_ryoute = TRUE;
+        else if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
+            switch (creature_ptr->pclass) {
+            case CLASS_MONK:
+            case CLASS_FORCETRAINER:
+            case CLASS_BERSERKER:
+                if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_RARM)
+                    && !has_melee_weapon(creature_ptr, INVEN_LARM))
+                    creature_ptr->riding_ryoute = TRUE;
+                break;
+            }
+        }
+
+        if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
+            if (creature_ptr->tval_ammo != TV_ARROW)
+                penalty = 5;
+        } else {
+            penalty = r_info[floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+            penalty += 30;
+            if (penalty < 30)
+                penalty = 30;
+        }
+
+        if (creature_ptr->tval_ammo == TV_BOLT)
+            penalty *= 2;
+        creature_ptr->to_h_b -= (s16b)penalty;
+        creature_ptr->dis_to_h_b -= (s16b)penalty;
     }
 }
 
