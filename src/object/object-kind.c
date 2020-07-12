@@ -33,7 +33,6 @@ void calc_equipment_status(player_type* creature_ptr) {
             default_hand = 1;
     }
 
-
 	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         int bonus_to_h, bonus_to_d;
         o_ptr = &creature_ptr->inventory_list[i];
@@ -290,7 +289,6 @@ void calc_equipment_status(player_type* creature_ptr) {
         }
 
         creature_ptr->to_h_b += (s16b)bonus_to_h;
-        creature_ptr->to_h_m += (s16b)bonus_to_h;
         creature_ptr->to_d_m += (s16b)bonus_to_d;
 
         if (object_is_known(o_ptr))

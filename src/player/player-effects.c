@@ -3914,7 +3914,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->to_h[0] -= 20;
         creature_ptr->to_h[1] -= 20;
         creature_ptr->to_h_b -= 20;
-        creature_ptr->to_h_m -= 20;
         creature_ptr->dis_to_h[0] -= 20;
         creature_ptr->dis_to_h[1] -= 20;
         creature_ptr->dis_to_h_b -= 20;
@@ -3927,7 +3926,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->to_h[0] -= 5;
         creature_ptr->to_h[1] -= 5;
         creature_ptr->to_h_b -= 5;
-        creature_ptr->to_h_m -= 5;
         creature_ptr->dis_to_h[0] -= 5;
         creature_ptr->dis_to_h[1] -= 5;
         creature_ptr->dis_to_h_b -= 5;
@@ -3951,7 +3949,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->to_h[0] += 10;
         creature_ptr->to_h[1] += 10;
         creature_ptr->to_h_b += 10;
-        creature_ptr->to_h_m += 10;
         creature_ptr->dis_to_h[0] += 10;
         creature_ptr->dis_to_h[1] += 10;
         creature_ptr->dis_to_h_b += 10;
@@ -3969,7 +3966,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->to_h[0] += 12;
         creature_ptr->to_h[1] += 12;
         creature_ptr->to_h_b += 12;
-        creature_ptr->to_h_m += 12;
         creature_ptr->dis_to_h[0] += 12;
         creature_ptr->dis_to_h[1] += 12;
         creature_ptr->dis_to_h_b += 12;
@@ -3979,7 +3975,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->to_h[0] += 12;
         creature_ptr->to_h[1] += 12;
         creature_ptr->to_h_b -= 12;
-        creature_ptr->to_h_m += 12;
         creature_ptr->to_d[0] += 3 + (creature_ptr->lev / 5);
         creature_ptr->to_d[1] += 3 + (creature_ptr->lev / 5);
         creature_ptr->to_d_m += 3 + (creature_ptr->lev / 5);
