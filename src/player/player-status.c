@@ -3602,7 +3602,13 @@ static void calc_to_hit_bow(player_type *creature_ptr)
             continue;
 
         object_flags(o_ptr, flgs);
-        creature_ptr->to_d_m += (s16b)o_ptr->to_d;
+
+		int bonus_to_d = o_ptr->to_d;
+        if (creature_ptr->pclass == CLASS_NINJA) {
+            if (o_ptr->to_d > 0)
+                bonus_to_d = (o_ptr->to_d + 1) / 2;
+        }
+        creature_ptr->to_d_m += (s16b)bonus_to_d;
     }
 
     if (creature_ptr->shero) {
@@ -3631,7 +3637,13 @@ static void calc_to_hit_misc(player_type *creature_ptr)
             continue;
 
         object_flags(o_ptr, flgs);
-        creature_ptr->to_h_m += (s16b)o_ptr->to_h;
+
+		int bonus_to_h = o_ptr->to_h;
+        if (creature_ptr->pclass == CLASS_NINJA) {
+            if (o_ptr->to_h > 0)
+                bonus_to_h = (o_ptr->to_h + 1) / 2;
+        }
+		creature_ptr->to_h_m += (s16b)o_ptr->to_h;
     }
 
     if (is_blessed(creature_ptr)) {
