@@ -1697,6 +1697,9 @@
     <ClCompile Include="..\..\src\action\movement-execution.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-shoot.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -3708,6 +3711,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\action\movement-execution.h">
       <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-shoot.h">
+      <Filter>cmd-action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

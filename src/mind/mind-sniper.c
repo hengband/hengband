@@ -7,7 +7,7 @@
 
 #include "mind/mind-sniper.h"
 #include "action/action-limited.h"
-#include "cmd/cmd-basic.h"
+#include "cmd-action/cmd-shoot.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"

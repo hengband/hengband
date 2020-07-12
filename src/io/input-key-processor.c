@@ -12,6 +12,7 @@
 #include "cmd-action/cmd-move.h"
 #include "cmd-action/cmd-open-close.h"
 #include "cmd-action/cmd-pet.h"
+#include "cmd-action/cmd-shoot.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-action/cmd-tunnel.h"
 #include "cmd-building/cmd-building.h"
