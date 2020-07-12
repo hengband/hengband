@@ -208,10 +208,6 @@ extern floor_type floor_info;
 	((G) == &(C)->current_floor_ptr->grid_array[(C)->y][(C)->x])
 
 
-#define cave_have_flag_bold(F,Y,X,INDEX) \
-	(have_flag(f_info[(F)->grid_array[(Y)][(X)].feat].flags, (INDEX)))
-
-
 #define cave_have_flag_grid(C,INDEX) \
 	(have_flag(f_info[(C)->feat].flags, (INDEX)))
 
@@ -334,43 +330,37 @@ extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 #define GRID_X(G) \
 	((int)((G) % 256U))
 
-extern bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x);
-extern bool is_cave_empty_bold(player_type *player_ptr, POSITION x, POSITION y);
-extern bool is_cave_empty_bold2(player_type *player_ptr, POSITION x, POSITION y);
-extern void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
+bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x);
+bool is_cave_empty_bold(player_type *player_ptr, POSITION x, POSITION y);
+bool is_cave_empty_bold2(player_type *player_ptr, POSITION x, POSITION y);
+void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
+void add_door(player_type *player_ptr, POSITION x, POSITION y);
+void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type);
+void place_locked_door(player_type *player_ptr, POSITION y, POSITION x);
+void forget_flow(floor_type *floor_ptr);
+void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x);
+bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num);
+bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);
+void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat);
+void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room);
+void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type);
+void wipe_o_list(floor_type *floor_ptr);
+void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd);
+bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
+void try_door(player_type *player_ptr, POSITION y, POSITION x);
+FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
+void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num);
+int project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
+void set_floor(player_type *player_ptr, POSITION x, POSITION y);
+void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
+void place_gold(player_type *player_ptr, POSITION y, POSITION x);
+void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
+void compact_objects(player_type *owner_ptr, int size);
+void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
+void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
+bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x);
 
-extern void add_door(player_type *player_ptr, POSITION x, POSITION y);
-extern void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type);
-extern void place_locked_door(player_type *player_ptr, POSITION y, POSITION x);
-extern void forget_flow(floor_type *floor_ptr);
-extern void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x);
-
-extern bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-
-extern void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num);
-extern bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);
-extern void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat);
-extern void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room);
-extern void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type);
-
-extern void wipe_o_list(floor_type *floor_ptr);
-extern void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd);
-
-extern bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
-extern void try_door(player_type *player_ptr, POSITION y, POSITION x);
-
-extern FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
-extern void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num);
-
-extern int project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
-
-extern void set_floor(player_type *player_ptr, POSITION x, POSITION y);
-extern void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
-extern void place_gold(player_type *player_ptr, POSITION y, POSITION x);
-extern void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
-extern void compact_objects(player_type *owner_ptr, int size);
-extern void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
-extern void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
-
-extern bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x);
+typedef enum feature_flag_type feature_flag_type;
+bool cave_have_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, feature_flag_type f_idx);

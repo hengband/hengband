@@ -11,6 +11,7 @@
 #include "game-option/cheat-types.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"

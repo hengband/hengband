@@ -14,7 +14,6 @@
 #include "game-option/input-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"

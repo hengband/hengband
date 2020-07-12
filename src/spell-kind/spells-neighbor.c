@@ -3,7 +3,7 @@
 #include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
-#include "grid/feature.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "spell/process-effect.h"
 #include "spell-kind/earthquake.h"

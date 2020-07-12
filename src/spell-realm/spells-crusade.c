@@ -11,7 +11,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
-#include "grid/feature.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "player/player-move.h"

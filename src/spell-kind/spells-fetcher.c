@@ -5,7 +5,7 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
-#include "grid/feature.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"

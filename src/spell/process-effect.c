@@ -8,7 +8,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
+#include "grid/feature-flag-types.h"
 #include "io/cursor.h"
 #include "io/screen-util.h"
 #include "io/targeting.h"

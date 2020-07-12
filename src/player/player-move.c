@@ -33,7 +33,7 @@
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "inventory/inventory-object.h"

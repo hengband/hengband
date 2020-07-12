@@ -1695,3 +1695,8 @@ bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	return feat_supports_los(floor_ptr->grid_array[y][x].feat);
 }
+
+bool cave_have_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, feature_flag_type f_idx)
+{
+    return have_flag(f_info[floor_ptr->grid_array[y][x].feat].flags, f_idx);
+}

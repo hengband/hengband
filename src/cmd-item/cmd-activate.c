@@ -22,7 +22,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
