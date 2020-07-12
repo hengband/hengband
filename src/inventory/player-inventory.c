@@ -4,6 +4,7 @@
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "floor/object-scanner.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"

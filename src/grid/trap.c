@@ -5,6 +5,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-save.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"

@@ -10,6 +10,7 @@
  */
 
 #include "io/targeting.h"
+#include "action/travel-execution.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"

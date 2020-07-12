@@ -28,6 +28,7 @@
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
+#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/text-display-options.h"

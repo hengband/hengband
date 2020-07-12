@@ -9,6 +9,7 @@
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"

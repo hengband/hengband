@@ -3,6 +3,7 @@
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/floor.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-checker.h"
 #include "object/object-kind.h"

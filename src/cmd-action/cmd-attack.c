@@ -13,6 +13,7 @@
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor.h"
 #include "game-option/cheat-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"

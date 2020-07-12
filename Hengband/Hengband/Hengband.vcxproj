@@ -156,6 +156,7 @@
     <ClCompile Include="..\..\src\action\open-close-execution.c" />
     <ClCompile Include="..\..\src\action\open-util.c" />
     <ClCompile Include="..\..\src\action\run-execution.c" />
+    <ClCompile Include="..\..\src\action\travel-execution.c" />
     <ClCompile Include="..\..\src\action\tunnel-execution.c" />
     <ClCompile Include="..\..\src\action\weapon-shield.c" />
     <ClCompile Include="..\..\src\birth\auto-roller.c" />
@@ -632,6 +633,7 @@
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
+    <ClInclude Include="..\..\src\action\travel-execution.h" />
     <ClInclude Include="..\..\src\action\tunnel-execution.h" />
     <ClInclude Include="..\..\src\action\weapon-shield.h" />
     <ClInclude Include="..\..\src\art-definition\art-accessory-types.h" />

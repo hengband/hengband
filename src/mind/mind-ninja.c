@@ -5,6 +5,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"

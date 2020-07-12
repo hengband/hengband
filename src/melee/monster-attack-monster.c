@@ -10,6 +10,7 @@
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "melee/melee-postprocess.h"

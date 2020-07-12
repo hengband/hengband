@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "floor/floor.h"
 
 #define MPE_STAYING       0x00000001
 #define MPE_FORGET_FLOW   0x00000002
@@ -24,19 +23,6 @@
 #define PATTERN_TILE_TELEPORT 7
 #define PATTERN_TILE_WRECKED  8
 
- /*
-  *  A structure type for travel command
-  */
-typedef struct {
-	int run; /* Remaining grid number */
-	int cost[MAX_HGT][MAX_WID];
-	POSITION x; /* Target X */
-	POSITION y; /* Target Y */
-	DIRECTION dir; /* Running direction */
-} travel_type;
-
-extern travel_type travel;
-
 void disturb(player_type *creature_ptr, bool stop_search, bool flush_output);
 bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
 void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx);
@@ -45,5 +31,6 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat);
 void search(player_type *creature_ptr);
 void carry(player_type *creature_ptr, bool pickup);
 void do_cmd_travel(player_type *creature_ptr);
-void travel_step(player_type *creature_ptr);
+
+typedef struct floor_type floor_type;
 void forget_travel_flow(floor_type *floor_ptr);

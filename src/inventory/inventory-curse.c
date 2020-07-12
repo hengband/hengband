@@ -5,6 +5,7 @@
 #include "core/player-update-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/floor.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "monster-floor/monster-summon.h"

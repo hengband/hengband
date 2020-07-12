@@ -6,6 +6,7 @@
 
 #include "monster-floor/monster-runaway.h"
 #include "dungeon/quest.h"
+#include "floor/floor.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

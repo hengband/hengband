@@ -1,5 +1,6 @@
 ﻿#include "core/player-processor.h"
 #include "action/run-execution.h"
+#include "action/travel-execution.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
