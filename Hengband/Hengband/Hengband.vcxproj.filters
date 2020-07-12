@@ -1712,6 +1712,9 @@
     <ClCompile Include="..\..\src\action\travel-execution.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\disturbance.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3741,6 +3744,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\action\travel-execution.h">
       <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\disturbance.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

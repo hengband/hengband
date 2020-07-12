@@ -5,9 +5,9 @@
  */
 
 #include "melee/melee-switcher.h"
+#include "core/disturbance.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster/monster-status.h"
-#include "player/player-move.h"
 #include "spell-kind/earthquake.h"
 #include "view/display-messages.h"
 

@@ -1,4 +1,5 @@
 ﻿#include "mutation/mutation-processor.h"
+#include "core/disturbance.h"
 #include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "floor/floor.h"
@@ -17,7 +18,6 @@
 #include "object/lite-processor.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
-#include "player/player-move.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"

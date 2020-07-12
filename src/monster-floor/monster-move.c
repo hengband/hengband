@@ -5,6 +5,7 @@
  */
 
 #include "monster-floor/monster-move.h"
+#include "core/disturbance.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/window-redrawer.h"
@@ -27,7 +28,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
-#include "player/player-move.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "util/bit-flags-calculator.h"

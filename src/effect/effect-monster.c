@@ -5,6 +5,7 @@
  */
 
 #include "effect/effect-monster.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -34,7 +35,6 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "player/avatar.h"
-#include "player/player-move.h"
 #include "spell-kind/blood-curse.h"
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"

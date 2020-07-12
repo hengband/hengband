@@ -23,7 +23,6 @@
 #define PATTERN_TILE_TELEPORT 7
 #define PATTERN_TILE_WRECKED  8
 
-void disturb(player_type *creature_ptr, bool stop_search, bool flush_output);
 bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
 void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx);
 bool pattern_seq(player_type *creature_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);

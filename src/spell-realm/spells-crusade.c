@@ -5,6 +5,7 @@
  */
 
 #include "spell-realm/spells-crusade.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -14,7 +15,6 @@
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
-#include "player/player-move.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell/range-calc.h"
 #include "spell/process-effect.h"

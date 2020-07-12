@@ -2,6 +2,7 @@
 #include "action/open-close-execution.h"
 #include "art-definition/art-sword-types.h"
 #include "cmd-action/cmd-attack.h"
+#include "core/disturbance.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
@@ -22,7 +23,7 @@
 #include "monster/monster-status.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/warning.h"
-#include "player/player-move.h" // todo グローバル変数等が相互依存している.
+#include "player/player-move.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

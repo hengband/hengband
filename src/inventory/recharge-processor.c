@@ -1,4 +1,5 @@
 ﻿#include "inventory/recharge-processor.h"
+#include "core/disturbance.h"
 #include "core/hp-mp-regenerator.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -7,7 +8,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-checker.h"
 #include "object/object-kind.h"
-#include "player/player-move.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"

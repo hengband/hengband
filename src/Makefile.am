@@ -119,6 +119,7 @@ hengband_SOURCES = \
 	combat/shoot.c combat/shoot.h \
 	\
 	core/asking-player.c core/asking-player.h \
+	core/disturbance.c core/disturbance.h \
 	core/game-closer.c core/game-closer.h \
 	core/game-play.c core/game-play.h \
 	core/hp-mp-processor.c core/hp-mp-processor.h \
@@ -729,7 +730,7 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icmd-visual \
+	-Iart-definition -Iautopick -Ibirth -Icmd-io -Icmd-item -Icmd-visual \
 	-Icombat -Icore -Idungeon -Ieffect -Iflavor -Ifloor -Igame-option -Igrid \
 	-Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge -Imarket -Imelee \
 	-Imind -Imonster -Imonster-attack -Imonster-floor -Imonster-race -Ilore \

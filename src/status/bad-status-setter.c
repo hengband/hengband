@@ -1,4 +1,5 @@
 ﻿#include "status/bad-status-setter.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -7,7 +8,6 @@
 #include "mind/mind-sniper.h"
 #include "player/attack-defense-types.h"
 #include "player/avatar.h"
-#include "player/player-move.h"
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"

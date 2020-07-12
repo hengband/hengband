@@ -4,6 +4,7 @@
 #include "action/run-execution.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
+#include "core/disturbance.h"
 #include "core/output-updater.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"

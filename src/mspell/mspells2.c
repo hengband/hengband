@@ -10,6 +10,7 @@
  */
 
 #include "mspell/mspells2.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -37,7 +38,6 @@
 #include "mspell/mspells1.h"
 #include "pet/pet-util.h"
 #include "player/player-class.h"
-#include "player/player-move.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/range-calc.h"

@@ -5,6 +5,7 @@
  */
 
 #include "effect/effect-player.h"
+#include "core/disturbance.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-player-switcher.h"
 #include "effect/effect-player-util.h"
@@ -16,7 +17,6 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-crusade.h"

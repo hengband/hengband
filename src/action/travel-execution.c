@@ -1,6 +1,7 @@
 ﻿#include "action/travel-execution.h"
 #include "action/movement-execution.h"
 #include "action/run-execution.h"
+#include "core/disturbance.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"

@@ -14,6 +14,7 @@
 #include "action/tunnel-execution.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/asking-player.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "floor/floor.h"
 #include "floor/geometry.h"

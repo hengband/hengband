@@ -1,4 +1,5 @@
 ﻿#include "mspell/mspell-summon.h"
+#include "core/disturbance.h"
 #include "effect/effect-characteristics.h"
 #include "game-option/birth-options.h"
 #include "monster-floor/monster-summon.h"
@@ -12,7 +13,6 @@
 #include "monster/monster-status.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
-#include "player/player-move.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/process-effect.h"
 #include "spell/spells-summon.h"

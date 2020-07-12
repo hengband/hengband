@@ -10,6 +10,7 @@
  */
 
 #include "mspell/mspells1.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -43,7 +44,6 @@
 #include "object-enchant/object-curse.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
-#include "player/player-move.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/special-defense-types.h"

@@ -1,4 +1,5 @@
 ﻿#include "spell-realm/spells-craft.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -6,7 +7,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "player/attack-defense-types.h"
-#include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

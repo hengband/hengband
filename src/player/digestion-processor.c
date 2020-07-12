@@ -1,4 +1,5 @@
 ﻿#include "player/digestion-processor.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
@@ -8,7 +9,6 @@
 #include "object-enchant/trc-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
-#include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "view/display-messages.h"

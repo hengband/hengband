@@ -1,4 +1,5 @@
 ﻿#include "status/body-improvement.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
@@ -6,7 +7,6 @@
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "player/avatar.h"
-#include "player/player-move.h"
 #include "realm/realm-song-numbers.h"
 #include "view/display-messages.h"
 

@@ -5,6 +5,7 @@
  */
 
 #include "mspell/mspell-special.h"
+#include "core/disturbance.h"
 #include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
@@ -24,7 +25,6 @@
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
 #include "player/player-damage.h"
-#include "player/player-move.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell/process-effect.h"

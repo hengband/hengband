@@ -5,6 +5,7 @@
  */
 
 #include "monster-floor/monster-runaway.h"
+#include "core/disturbance.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
@@ -17,7 +18,6 @@
 #include "monster/monster-info.h"
 #include "monster-floor/monster-remover.h"
 #include "pet/pet-fall-off.h"
-#include "player/player-move.h"
 #include "view/display-messages.h"
 
  /*!

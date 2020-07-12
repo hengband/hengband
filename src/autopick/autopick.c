@@ -17,6 +17,7 @@
 #include "autopick/autopick-menu-data-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "core/asking-player.h"
+#include "core/disturbance.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor.h"
 #include "floor/floor-object.h"

@@ -6,6 +6,7 @@
 
 #include "perception/simple-perception.h"
 #include "autopick/autopick.h"
+#include "core/disturbance.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flag-inscriptions-table.h"
@@ -22,7 +23,6 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/avatar.h"
-#include "player/player-move.h"
 #include "view/display-messages.h"
 
 /*!

@@ -1,11 +1,11 @@
 ﻿#include "inventory/pack-overflow.h"
+#include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/object-info.h"
-#include "player/player-move.h"
 #include "view/display-messages.h"
 
 /*!

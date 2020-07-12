@@ -1,5 +1,6 @@
 ﻿#include "world/world-movement-processor.h"
 #include "cmd-io/cmd-save.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -12,7 +13,6 @@
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
-#include "player/player-move.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

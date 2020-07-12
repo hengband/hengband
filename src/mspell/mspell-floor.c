@@ -5,6 +5,7 @@
  */
 
 #include "mspell/mspell-floor.h"
+#include "core/disturbance.h"
 #include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
 #include "mind/drs-types.h"
@@ -21,7 +22,6 @@
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspells3.h"
-#include "player/player-move.h"
 #include "player/player-personalities-types.h"
 #include "spell/process-effect.h"
 #include "spell-realm/spells-hex.h"

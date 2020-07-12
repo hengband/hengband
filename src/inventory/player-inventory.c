@@ -1,5 +1,6 @@
 ﻿#include "inventory/player-inventory.h"
 #include "core/asking-player.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"

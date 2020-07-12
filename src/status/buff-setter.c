@@ -1,10 +1,10 @@
 ﻿#include "status/buff-setter.h"
+#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "player/avatar.h"
-#include "player/player-move.h"
 #include "realm/realm-song-numbers.h"
 #include "view/display-messages.h"
 
