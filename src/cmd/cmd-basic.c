@@ -204,6 +204,24 @@ static bool decide_suicide(void)
     return i == '@';
 }
 
+static void accept_winner_message(player_type *creature_ptr)
+{
+    if (!current_world_ptr->total_winner || !last_words)
+        return;
+
+    char buf[1024] = "";
+    play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
+    do {
+        while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf)))
+            ;
+    } while (!get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
+
+    if (buf[0]) {
+        creature_ptr->last_message = string_make(buf);
+        msg_print(creature_ptr->last_message);
+    }
+}
+
 /*!
  * @brief 自殺するコマンドのメインルーチン
  * commit suicide
@@ -228,20 +246,7 @@ void do_cmd_suicide(player_type *creature_ptr)
         string_free(creature_ptr->last_message);
 
     creature_ptr->last_message = NULL;
-    if (current_world_ptr->total_winner && last_words) {
-        char buf[1024] = "";
-        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
-        do {
-            while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf)))
-                ;
-        } while (!get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
-
-        if (buf[0]) {
-            creature_ptr->last_message = string_make(buf);
-            msg_print(creature_ptr->last_message);
-        }
-    }
-
+    accept_winner_message(creature_ptr);
     creature_ptr->playing = FALSE;
     creature_ptr->is_dead = TRUE;
     creature_ptr->leaving = TRUE;
