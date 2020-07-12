@@ -9,6 +9,7 @@ hengband_SOURCES = \
 	action/movement-execution.c action/movement-execution.h \
 	action/open-util.c action/open-util.h \
 	action/open-close-execution.c action/open-close-execution.h \
+	action/run-execution.c action/run-execution.h \
 	action/tunnel-execution.c action/tunnel-execution.h \
 	action/weapon-shield.c action/weapon-shield.h \
 	\

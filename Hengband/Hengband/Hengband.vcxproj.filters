@@ -1706,6 +1706,9 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-others.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\action\run-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3729,6 +3732,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\grid\feature-flag-types.h">
       <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\run-execution.h">
+      <Filter>action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿#include "cmd-action/cmd-move.h"
 #include "action/action-limited.h"
 #include "action/movement-execution.h"
+#include "action/run-execution.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/output-updater.h"
