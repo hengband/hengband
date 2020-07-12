@@ -2,7 +2,6 @@
 
 #include "system/angband.h"
 
-void forget_travel_flow(floor_type *floor_ptr);
 void do_cmd_search(player_type *creature_ptr);
 void do_cmd_alter(player_type *creature_ptr);
 void do_cmd_suicide(player_type *creature_ptr);

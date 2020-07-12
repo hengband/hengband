@@ -6,7 +6,6 @@
 
 #include "spell-kind/spells-floor.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-basic.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
@@ -40,6 +39,7 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
+#include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/process-effect.h"
