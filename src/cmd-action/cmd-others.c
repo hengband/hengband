@@ -1,7 +1,7 @@
 ﻿/*!
- *  @brief プレイヤーのコマンド処理2 / Movement commands (part 2)
- *  @date 2014/01/02
- *  @author
+ * @brief その他の小さなコマンド処理群 (探索、汎用グリッド処理、自殺/引退/切腹)
+ * @date 2014/01/02
+ * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
  * This software may be copied and distributed for educational, research,
@@ -90,19 +90,9 @@ static bool exe_alter(player_type *creature_ptr)
 }
 
 /*!
- * @brief 特定のマスに影響を及ぼすための汎用的コマンド
+ * @brief 特定のマスに影響を及ぼすための汎用的コマンド / Manipulate an adjacent grid in some way
  * @return なし
  * @details
- * <pre>
- * Manipulate an adjacent grid in some way
- *
- * Attack monsters, tunnel through walls, disarm traps, open doors.
- *
- * Consider confusion
- *
- * This command must always take a turn, to prevent free detection
- * of invisible monsters.
- * </pre>
  */
 void do_cmd_alter(player_type *creature_ptr)
 {

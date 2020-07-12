@@ -3733,9 +3733,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="cmd">
-      <UniqueIdentifier>{587cee92-bfe4-4674-9635-eed1992633f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="floor">
       <UniqueIdentifier>{c7e2056b-fda5-410a-8d23-03ba3f11c051}</UniqueIdentifier>
     </Filter>
