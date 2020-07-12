@@ -119,6 +119,44 @@ void do_cmd_search(player_type *creature_ptr)
     search(creature_ptr);
 }
 
+static bool exe_alter(player_type *creature_ptr)
+{
+    DIRECTION dir;
+    if (!get_rep_dir(creature_ptr, &dir, TRUE))
+        return FALSE;
+
+    POSITION y = creature_ptr->y + ddy[dir];
+    POSITION x = creature_ptr->x + ddx[dir];
+    grid_type *g_ptr;
+    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    FEAT_IDX feat = get_feat_mimic(g_ptr);
+    feature_type *f_ptr;
+    f_ptr = &f_info[feat];
+    take_turn(creature_ptr, 100);
+    if (g_ptr->m_idx) {
+        do_cmd_attack(creature_ptr, y, x, 0);
+        return FALSE;
+    }
+    
+    if (have_flag(f_ptr->flags, FF_OPEN))
+        return exe_open(creature_ptr, y, x);
+    
+    if (have_flag(f_ptr->flags, FF_BASH))
+        return exe_bash(creature_ptr, y, x, dir);
+    
+    if (have_flag(f_ptr->flags, FF_TUNNEL))
+        return exe_tunnel(creature_ptr, y, x);
+    
+    if (have_flag(f_ptr->flags, FF_CLOSE))
+        return exe_close(creature_ptr, y, x);
+    
+    if (have_flag(f_ptr->flags, FF_DISARM))
+        return exe_disarm(creature_ptr, y, x, dir);
+
+    msg_print(_("何もない空中を攻撃した。", "You attack the empty air."));
+    return FALSE;
+}
+
 /*!
  * @brief 特定のマスに影響を及ぼすための汎用的コマンド
  * @return なし
@@ -136,10 +174,6 @@ void do_cmd_search(player_type *creature_ptr)
  */
 void do_cmd_alter(player_type *creature_ptr)
 {
-    POSITION y, x;
-    DIRECTION dir;
-    grid_type *g_ptr;
-    bool more = FALSE;
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
@@ -149,33 +183,7 @@ void do_cmd_alter(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    if (get_rep_dir(creature_ptr, &dir, TRUE)) {
-        FEAT_IDX feat;
-        feature_type *f_ptr;
-        y = creature_ptr->y + ddy[dir];
-        x = creature_ptr->x + ddx[dir];
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-        feat = get_feat_mimic(g_ptr);
-        f_ptr = &f_info[feat];
-        take_turn(creature_ptr, 100);
-        if (g_ptr->m_idx) {
-            do_cmd_attack(creature_ptr, y, x, 0);
-        } else if (have_flag(f_ptr->flags, FF_OPEN)) {
-            more = exe_open(creature_ptr, y, x);
-        } else if (have_flag(f_ptr->flags, FF_BASH)) {
-            more = exe_bash(creature_ptr, y, x, dir);
-        } else if (have_flag(f_ptr->flags, FF_TUNNEL)) {
-            more = exe_tunnel(creature_ptr, y, x);
-        } else if (have_flag(f_ptr->flags, FF_CLOSE)) {
-            more = exe_close(creature_ptr, y, x);
-        } else if (have_flag(f_ptr->flags, FF_DISARM)) {
-            more = exe_disarm(creature_ptr, y, x, dir);
-        } else {
-            msg_print(_("何もない空中を攻撃した。", "You attack the empty air."));
-        }
-    }
-
-    if (!more)
+    if (!exe_alter(creature_ptr))
         disturb(creature_ptr, FALSE, FALSE);
 }
 
