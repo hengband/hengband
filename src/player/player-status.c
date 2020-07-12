@@ -113,6 +113,7 @@ static void calc_riding_weapon_penalty(player_type *creature_ptr);
 static void put_equipment_warning(player_type *creature_ptr);
 
 static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot);
+static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot);
 
 static void calc_to_damage_misc(player_type *creature_ptr);
 static void calc_to_hit_misc(player_type *creature_ptr);
@@ -499,8 +500,8 @@ int spell_exp_level(int spell_exp)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->dis_to_h[0] = creature_ptr->to_h[0] = 0;
-    creature_ptr->dis_to_h[1] = creature_ptr->to_h[1] = 0;
+    creature_ptr->dis_to_h[0] = 0;
+    creature_ptr->dis_to_h[1] = 0;
     creature_ptr->dis_to_d[0] = 0;
     creature_ptr->dis_to_d[1] = 0;
     creature_ptr->dis_to_h_b = creature_ptr->to_h_b = 0;
@@ -788,11 +789,7 @@ void calc_bonuses(player_type *creature_ptr)
             creature_ptr->kill_wall = TRUE;
     }
 
-    creature_ptr->to_h[0] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-    creature_ptr->to_h[1] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-    creature_ptr->to_h[0] += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
-    creature_ptr->to_h[1] += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->dis_to_d[0] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->dis_to_d[1] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
@@ -1097,6 +1094,8 @@ void calc_bonuses(player_type *creature_ptr)
     calc_to_hit_throw(creature_ptr);
     calc_to_damage(creature_ptr, INVEN_RARM);
     calc_to_damage(creature_ptr, INVEN_LARM);
+    calc_to_hit(creature_ptr, INVEN_RARM);
+    calc_to_hit(creature_ptr, INVEN_LARM);
     calc_to_damage_misc(creature_ptr);
     calc_to_hit_misc(creature_ptr);
     calc_dig(creature_ptr);
@@ -3506,6 +3505,33 @@ static void calc_to_damage(player_type* creature_ptr, INVENTORY_IDX slot) {
         creature_ptr->to_d[id] -= 20;
     } else if (creature_ptr->stun) {
         creature_ptr->to_d[id] -= 5;
+    }
+}
+
+static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
+{
+    int id = slot - INVEN_RARM;
+    creature_ptr->to_h[id] = 0;
+
+    creature_ptr->to_h[id] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
+    creature_ptr->to_h[id] += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+
+    if (is_blessed(creature_ptr)) {
+        creature_ptr->to_h[id] += 10;
+    }
+
+    if (IS_HERO(creature_ptr)) {
+        creature_ptr->to_h[id] += 12;
+    }
+
+    if (creature_ptr->shero) {
+        creature_ptr->to_h[id] += 12;
+    }
+
+	if (creature_ptr->stun > 50) {
+        creature_ptr->to_h[id] -= 20;
+    } else if (creature_ptr->stun) {
+        creature_ptr->to_h[id] -= 5;
     }
 }
 

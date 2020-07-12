@@ -3911,8 +3911,6 @@ void calc_timelimit_status(player_type *creature_ptr)
     }
 
 	if (creature_ptr->stun > 50) {
-        creature_ptr->to_h[0] -= 20;
-        creature_ptr->to_h[1] -= 20;
         creature_ptr->to_h_b -= 20;
         creature_ptr->dis_to_h[0] -= 20;
         creature_ptr->dis_to_h[1] -= 20;
@@ -3920,8 +3918,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->dis_to_d[0] -= 20;
         creature_ptr->dis_to_d[1] -= 20;
     } else if (creature_ptr->stun) {
-        creature_ptr->to_h[0] -= 5;
-        creature_ptr->to_h[1] -= 5;
         creature_ptr->to_h_b -= 5;
         creature_ptr->dis_to_h[0] -= 5;
         creature_ptr->dis_to_h[1] -= 5;
@@ -3940,8 +3936,6 @@ void calc_timelimit_status(player_type *creature_ptr)
     }
 
     if (is_blessed(creature_ptr)) {
-        creature_ptr->to_h[0] += 10;
-        creature_ptr->to_h[1] += 10;
         creature_ptr->to_h_b += 10;
         creature_ptr->dis_to_h[0] += 10;
         creature_ptr->dis_to_h[1] += 10;
@@ -3957,8 +3951,6 @@ void calc_timelimit_status(player_type *creature_ptr)
     }
 
     if (IS_HERO(creature_ptr)) {
-        creature_ptr->to_h[0] += 12;
-        creature_ptr->to_h[1] += 12;
         creature_ptr->to_h_b += 12;
         creature_ptr->dis_to_h[0] += 12;
         creature_ptr->dis_to_h[1] += 12;
@@ -3966,8 +3958,6 @@ void calc_timelimit_status(player_type *creature_ptr)
     }
 
     if (creature_ptr->shero) {
-        creature_ptr->to_h[0] += 12;
-        creature_ptr->to_h[1] += 12;
         creature_ptr->to_h_b -= 12;
         creature_ptr->dis_to_h[0] += 12;
         creature_ptr->dis_to_h[1] += 12;
