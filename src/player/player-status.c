@@ -110,6 +110,7 @@ static void calc_use_status(player_type *creature_ptr, int status);
 static void calc_top_status(player_type *creature_ptr, int status);
 static void calc_ind_status(player_type *creature_ptr, int status);
 static void calc_riding_weapon_penalty(player_type *creature_ptr);
+static void put_equipment_warning(player_type *creature_ptr);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -742,7 +743,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_base_ac_display(creature_ptr);
     calc_to_ac_display(creature_ptr);
 
-	for (int i = 0; i < A_MAX; i++) {
+    for (int i = 0; i < A_MAX; i++) {
         calc_top_status(creature_ptr, i);
         calc_use_status(creature_ptr, i);
         calc_ind_status(creature_ptr, i);
@@ -924,7 +925,7 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->riding_wield[i] = TRUE;
     }
 
-	calc_riding_weapon_penalty(creature_ptr);
+    calc_riding_weapon_penalty(creature_ptr);
 
     /* Different calculation for monks with empty hands */
     if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_BERSERKER))
@@ -1100,93 +1101,7 @@ void calc_bonuses(player_type *creature_ptr)
     if (current_world_ptr->character_xtra)
         return;
 
-    if (creature_ptr->old_heavy_shoot != creature_ptr->heavy_shoot) {
-        if (creature_ptr->heavy_shoot) {
-            msg_print(_("こんな重い弓を装備しているのは大変だ。", "You have trouble wielding such a heavy bow."));
-        } else if (creature_ptr->inventory_list[INVEN_BOW].k_idx) {
-            msg_print(_("この弓なら装備していても辛くない。", "You have no trouble wielding your bow."));
-        } else {
-            msg_print(_("重い弓を装備からはずして体が楽になった。", "You feel relieved to put down your heavy bow."));
-        }
-
-        creature_ptr->old_heavy_shoot = creature_ptr->heavy_shoot;
-    }
-
-    for (int i = 0; i < 2; i++) {
-        if (creature_ptr->old_heavy_wield[i] != creature_ptr->heavy_wield[i]) {
-            if (creature_ptr->heavy_wield[i]) {
-                msg_print(_("こんな重い武器を装備しているのは大変だ。", "You have trouble wielding such a heavy weapon."));
-            } else if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
-                msg_print(_("これなら装備していても辛くない。", "You have no trouble wielding your weapon."));
-            } else if (creature_ptr->heavy_wield[1 - i]) {
-                msg_print(_("まだ武器が重い。", "You have still trouble wielding a heavy weapon."));
-            } else {
-                msg_print(_("重い武器を装備からはずして体が楽になった。", "You feel relieved to put down your heavy weapon."));
-            }
-
-            creature_ptr->old_heavy_wield[i] = creature_ptr->heavy_wield[i];
-        }
-
-        if (creature_ptr->old_riding_wield[i] != creature_ptr->riding_wield[i]) {
-            if (creature_ptr->riding_wield[i]) {
-                msg_print(_("この武器は乗馬中に使うにはむかないようだ。", "This weapon is not suitable for use while riding."));
-            } else if (!creature_ptr->riding) {
-                msg_print(_("この武器は徒歩で使いやすい。", "This weapon is suitable for use on foot."));
-            } else if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
-                msg_print(_("これなら乗馬中にぴったりだ。", "This weapon is suitable for use while riding."));
-            }
-
-            creature_ptr->old_riding_wield[i] = creature_ptr->riding_wield[i];
-        }
-
-        if (creature_ptr->old_icky_wield[i] == creature_ptr->icky_wield[i])
-            continue;
-
-        if (creature_ptr->icky_wield[i]) {
-            msg_print(_("今の装備はどうも自分にふさわしくない気がする。", "You do not feel comfortable with your weapon."));
-            if (current_world_ptr->is_loading_now) {
-                chg_virtue(creature_ptr, V_FAITH, -1);
-            }
-        } else if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
-            msg_print(_("今の装備は自分にふさわしい気がする。", "You feel comfortable with your weapon."));
-        } else {
-            msg_print(_("装備をはずしたら随分と気が楽になった。", "You feel more comfortable after removing your weapon."));
-        }
-
-        creature_ptr->old_icky_wield[i] = creature_ptr->icky_wield[i];
-    }
-
-    if (creature_ptr->riding && (creature_ptr->old_riding_ryoute != creature_ptr->riding_ryoute)) {
-        if (creature_ptr->riding_ryoute) {
-#ifdef JP
-            msg_format("%s馬を操れない。", (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE) ? "両手がふさがっていて" : "");
-#else
-            msg_print("You are using both hand for fighting, and you can't control the pet you're riding.");
-#endif
-        } else {
-#ifdef JP
-            msg_format("%s馬を操れるようになった。", (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE) ? "手が空いて" : "");
-#else
-            msg_print("You began to control the pet you're riding with one hand.");
-#endif
-        }
-
-        creature_ptr->old_riding_ryoute = creature_ptr->riding_ryoute;
-    }
-
-    if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_NINJA))
-        && (creature_ptr->monk_armour_aux != creature_ptr->monk_notify_aux)) {
-        if (heavy_armor(creature_ptr)) {
-            msg_print(_("装備が重くてバランスを取れない。", "The weight of your armor disrupts your balance."));
-            if (current_world_ptr->is_loading_now) {
-                chg_virtue(creature_ptr, V_HARMONY, -1);
-            }
-        } else {
-            msg_print(_("バランスがとれるようになった。", "You regain your balance."));
-        }
-
-        creature_ptr->monk_notify_aux = creature_ptr->monk_armour_aux;
-    }
+    put_equipment_warning(creature_ptr);
 
     for (int i = 0; i < INVEN_PACK; i++) {
         if ((creature_ptr->inventory_list[i].tval == TV_NATURE_BOOK) && (creature_ptr->inventory_list[i].sval == 2))
@@ -3381,7 +3296,8 @@ void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
     }
 }
 
-static void calc_ind_status(player_type *creature_ptr, int status) {
+static void calc_ind_status(player_type *creature_ptr, int status)
+{
     int ind;
     if (creature_ptr->stat_use[status] <= 18)
         ind = (creature_ptr->stat_use[status] - 3);
@@ -3479,6 +3395,96 @@ static void calc_riding_weapon_penalty(player_type *creature_ptr)
             penalty *= 2;
         creature_ptr->to_h_b -= (s16b)penalty;
         creature_ptr->dis_to_h_b -= (s16b)penalty;
+    }
+}
+
+void put_equipment_warning(player_type *creature_ptr) {
+    if (creature_ptr->old_heavy_shoot != creature_ptr->heavy_shoot) {
+        if (creature_ptr->heavy_shoot) {
+            msg_print(_("こんな重い弓を装備しているのは大変だ。", "You have trouble wielding such a heavy bow."));
+        } else if (creature_ptr->inventory_list[INVEN_BOW].k_idx) {
+            msg_print(_("この弓なら装備していても辛くない。", "You have no trouble wielding your bow."));
+        } else {
+            msg_print(_("重い弓を装備からはずして体が楽になった。", "You feel relieved to put down your heavy bow."));
+        }
+
+        creature_ptr->old_heavy_shoot = creature_ptr->heavy_shoot;
+    }
+
+    for (int i = 0; i < 2; i++) {
+        if (creature_ptr->old_heavy_wield[i] != creature_ptr->heavy_wield[i]) {
+            if (creature_ptr->heavy_wield[i]) {
+                msg_print(_("こんな重い武器を装備しているのは大変だ。", "You have trouble wielding such a heavy weapon."));
+            } else if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
+                msg_print(_("これなら装備していても辛くない。", "You have no trouble wielding your weapon."));
+            } else if (creature_ptr->heavy_wield[1 - i]) {
+                msg_print(_("まだ武器が重い。", "You have still trouble wielding a heavy weapon."));
+            } else {
+                msg_print(_("重い武器を装備からはずして体が楽になった。", "You feel relieved to put down your heavy weapon."));
+            }
+
+            creature_ptr->old_heavy_wield[i] = creature_ptr->heavy_wield[i];
+        }
+
+        if (creature_ptr->old_riding_wield[i] != creature_ptr->riding_wield[i]) {
+            if (creature_ptr->riding_wield[i]) {
+                msg_print(_("この武器は乗馬中に使うにはむかないようだ。", "This weapon is not suitable for use while riding."));
+            } else if (!creature_ptr->riding) {
+                msg_print(_("この武器は徒歩で使いやすい。", "This weapon is suitable for use on foot."));
+            } else if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
+                msg_print(_("これなら乗馬中にぴったりだ。", "This weapon is suitable for use while riding."));
+            }
+
+            creature_ptr->old_riding_wield[i] = creature_ptr->riding_wield[i];
+        }
+
+        if (creature_ptr->old_icky_wield[i] == creature_ptr->icky_wield[i])
+            continue;
+
+        if (creature_ptr->icky_wield[i]) {
+            msg_print(_("今の装備はどうも自分にふさわしくない気がする。", "You do not feel comfortable with your weapon."));
+            if (current_world_ptr->is_loading_now) {
+                chg_virtue(creature_ptr, V_FAITH, -1);
+            }
+        } else if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
+            msg_print(_("今の装備は自分にふさわしい気がする。", "You feel comfortable with your weapon."));
+        } else {
+            msg_print(_("装備をはずしたら随分と気が楽になった。", "You feel more comfortable after removing your weapon."));
+        }
+
+        creature_ptr->old_icky_wield[i] = creature_ptr->icky_wield[i];
+    }
+
+    if (creature_ptr->riding && (creature_ptr->old_riding_ryoute != creature_ptr->riding_ryoute)) {
+        if (creature_ptr->riding_ryoute) {
+#ifdef JP
+            msg_format("%s馬を操れない。", (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE) ? "両手がふさがっていて" : "");
+#else
+            msg_print("You are using both hand for fighting, and you can't control the pet you're riding.");
+#endif
+        } else {
+#ifdef JP
+            msg_format("%s馬を操れるようになった。", (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE) ? "手が空いて" : "");
+#else
+            msg_print("You began to control the pet you're riding with one hand.");
+#endif
+        }
+
+        creature_ptr->old_riding_ryoute = creature_ptr->riding_ryoute;
+    }
+
+    if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_NINJA))
+        && (creature_ptr->monk_armour_aux != creature_ptr->monk_notify_aux)) {
+        if (heavy_armor(creature_ptr)) {
+            msg_print(_("装備が重くてバランスを取れない。", "The weight of your armor disrupts your balance."));
+            if (current_world_ptr->is_loading_now) {
+                chg_virtue(creature_ptr, V_HARMONY, -1);
+            }
+        } else {
+            msg_print(_("バランスがとれるようになった。", "You regain your balance."));
+        }
+
+        creature_ptr->monk_notify_aux = creature_ptr->monk_armour_aux;
     }
 }
 
