@@ -106,8 +106,11 @@ static void calc_to_ac(player_type *creature_ptr);
 static void calc_to_ac_display(player_type *creature_ptr);
 static void calc_speed(player_type *creature_ptr);
 static void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
+static void calc_use_status(player_type *creature_ptr, int status);
+static void calc_top_status(player_type *creature_ptr, int status);
+static void calc_ind_status(player_type *creature_ptr, int status);
 
-    /*!
+/*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
  */
 const concptr stat_names[6] = {
@@ -738,60 +741,10 @@ void calc_bonuses(player_type *creature_ptr)
     calc_base_ac_display(creature_ptr);
     calc_to_ac_display(creature_ptr);
 
-    int count = 0;
-    for (int i = 0; i < A_MAX; i++) {
-        int ind;
-        int top = modify_stat_value(creature_ptr->stat_max[i], creature_ptr->stat_add[i]);
-
-        if (creature_ptr->stat_top[i] != top) {
-            creature_ptr->stat_top[i] = (s16b)top;
-            creature_ptr->redraw |= (PR_STATS);
-            creature_ptr->window |= (PW_PLAYER);
-        }
-
-        int use = modify_stat_value(creature_ptr->stat_cur[i], creature_ptr->stat_add[i]);
-
-        if ((i == A_CHR) && (creature_ptr->muta3 & MUT3_ILL_NORM)) {
-            /* 10 to 18/90 charisma, guaranteed, based on level */
-            if (use < 8 + 2 * creature_ptr->lev) {
-                use = 8 + 2 * creature_ptr->lev;
-            }
-        }
-
-        if (creature_ptr->stat_use[i] != use) {
-            creature_ptr->stat_use[i] = (s16b)use;
-            creature_ptr->redraw |= (PR_STATS);
-            creature_ptr->window |= (PW_PLAYER);
-        }
-
-        if (use <= 18)
-            ind = (use - 3);
-        else if (use <= 18 + 219)
-            ind = (15 + (use - 18) / 10);
-        else
-            ind = (37);
-
-        if (creature_ptr->stat_ind[i] == ind)
-            continue;
-        creature_ptr->stat_ind[i] = (s16b)ind;
-        if (i == A_CON) {
-            creature_ptr->update |= (PU_HP);
-        } else if (i == A_INT) {
-            if (mp_ptr->spell_stat == A_INT) {
-                creature_ptr->update |= (PU_MANA | PU_SPELLS);
-            }
-        } else if (i == A_WIS) {
-            if (mp_ptr->spell_stat == A_WIS) {
-                creature_ptr->update |= (PU_MANA | PU_SPELLS);
-            }
-        } else if (i == A_CHR) {
-            if (mp_ptr->spell_stat == A_CHR) {
-                creature_ptr->update |= (PU_MANA | PU_SPELLS);
-            }
-        }
-
-        creature_ptr->window |= (PW_PLAYER);
-        count++;
+	for (int i = 0; i < A_MAX; i++) {
+        calc_top_status(creature_ptr, i);
+        calc_use_status(creature_ptr, i);
+        calc_ind_status(creature_ptr, i);
     }
 
     if (creature_ptr->telepathy != old_telepathy) {
@@ -814,7 +767,7 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->dis_to_h[default_hand] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
     }
 
-	calc_weapon_penalty(creature_ptr, INVEN_RARM);
+    calc_weapon_penalty(creature_ptr, INVEN_RARM);
     calc_weapon_penalty(creature_ptr, INVEN_LARM);
 
     if (creature_ptr->riding) {
@@ -822,13 +775,13 @@ void calc_bonuses(player_type *creature_ptr)
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         riding_levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
         if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC))
-           creature_ptr->can_swim = TRUE;
+            creature_ptr->can_swim = TRUE;
 
         if (!(riding_r_ptr->flags2 & RF2_PASS_WALL))
             creature_ptr->pass_wall = FALSE;
         if (riding_r_ptr->flags2 & RF2_KILL_WALL)
             creature_ptr->kill_wall = TRUE;
-	}
+    }
 
     creature_ptr->to_d[0] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->to_d[1] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
@@ -2980,11 +2933,11 @@ static void calc_to_ac(player_type *creature_ptr)
             creature_ptr->to_a += 10;
         }
     }
-	
-	if (creature_ptr->pclass == CLASS_BERSERKER) {
+
+    if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->to_a += 10 + creature_ptr->lev / 2;
     }
-	if (creature_ptr->pclass == CLASS_SORCERER) {
+    if (creature_ptr->pclass == CLASS_SORCERER) {
         creature_ptr->to_a -= 50;
     }
 
@@ -3002,8 +2955,7 @@ static void calc_to_ac(player_type *creature_ptr)
                 creature_ptr->to_a -= 10;
             }
         }
-	
-	}
+    }
 
     if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
@@ -3013,7 +2965,7 @@ static void calc_to_ac(player_type *creature_ptr)
         creature_ptr->to_a += 10;
     }
 
-	if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_MUSASI_KATANA) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_MUSASI_WAKIZASI)) {
+    if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_MUSASI_KATANA) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_MUSASI_WAKIZASI)) {
         creature_ptr->to_a += 10;
     }
 
@@ -3134,12 +3086,12 @@ static void calc_to_ac_display(player_type *creature_ptr)
             creature_ptr->dis_to_a += 10;
         }
     }
-	
-	if (creature_ptr->pclass == CLASS_BERSERKER) {
-		creature_ptr->dis_to_a += 10 + creature_ptr->lev / 2;
+
+    if (creature_ptr->pclass == CLASS_BERSERKER) {
+        creature_ptr->dis_to_a += 10 + creature_ptr->lev / 2;
     }
 
-	if (creature_ptr->pclass == CLASS_SORCERER) {
+    if (creature_ptr->pclass == CLASS_SORCERER) {
         creature_ptr->dis_to_a -= 50;
     }
 
@@ -3159,8 +3111,8 @@ static void calc_to_ac_display(player_type *creature_ptr)
                 if (object_is_fully_known(o_ptr))
                     creature_ptr->dis_to_a -= 10;
             }
-        }	
-	}
+        }
+    }
 
     if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->dis_to_a += 10 + (creature_ptr->lev * 2 / 5);
@@ -3259,7 +3211,7 @@ static void calc_speed(player_type *creature_ptr)
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     feature_type *f_ptr = &f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 
-	creature_ptr->pspeed = 110;
+    creature_ptr->pspeed = 110;
 
     int j = creature_ptr->total_weight;
     int count;
@@ -3267,43 +3219,42 @@ static void calc_speed(player_type *creature_ptr)
     } else {
     }
 
-
     if (!creature_ptr->riding) {
         count = (int)weight_limit(creature_ptr);
 
-		const player_race *tmp_rp_ptr;
-            if (creature_ptr->mimic_form)
-                tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
-            else
-                tmp_rp_ptr = &race_info[creature_ptr->prace];
+        const player_race *tmp_rp_ptr;
+        if (creature_ptr->mimic_form)
+            tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+        else
+            tmp_rp_ptr = &race_info[creature_ptr->prace];
 
-            if (is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE))
-                creature_ptr->pspeed += (creature_ptr->lev) / 10;
+        if (is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE))
+            creature_ptr->pspeed += (creature_ptr->lev) / 10;
 
-            for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-                object_type *o_ptr = &creature_ptr->inventory_list[i];
-                BIT_FLAGS flgs[TR_FLAG_SIZE];
-                object_flags(o_ptr, flgs);
+        for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+            object_type *o_ptr = &creature_ptr->inventory_list[i];
+            BIT_FLAGS flgs[TR_FLAG_SIZE];
+            object_flags(o_ptr, flgs);
 
-                if (!o_ptr->k_idx)
-                    continue;
-                if (have_flag(flgs, TR_SPEED))
-                    creature_ptr->pspeed += o_ptr->pval;
+            if (!o_ptr->k_idx)
+                continue;
+            if (have_flag(flgs, TR_SPEED))
+                creature_ptr->pspeed += o_ptr->pval;
+        }
+
+        if (creature_ptr->mimic_form) {
+            switch (creature_ptr->mimic_form) {
+            case MIMIC_DEMON:
+                creature_ptr->pspeed += 3;
+                break;
+            case MIMIC_DEMON_LORD:
+                creature_ptr->pspeed += 5;
+                break;
+            case MIMIC_VAMPIRE:
+                creature_ptr->pspeed += 3;
+                break;
             }
-
-            if (creature_ptr->mimic_form) {
-                switch (creature_ptr->mimic_form) {
-                case MIMIC_DEMON:
-                    creature_ptr->pspeed += 3;
-                    break;
-                case MIMIC_DEMON_LORD:
-                    creature_ptr->pspeed += 5;
-                    break;
-                case MIMIC_VAMPIRE:
-                    creature_ptr->pspeed += 3;
-                    break;
-                }
-            }
+        }
 
         if (creature_ptr->pclass == CLASS_NINJA) {
             if (heavy_armor(creature_ptr)) {
@@ -3382,7 +3333,7 @@ static void calc_speed(player_type *creature_ptr)
             }
         }
 
-		if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
             if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_TINYTHORN)) {
                 creature_ptr->pspeed += 7;
             }
@@ -3403,7 +3354,7 @@ static void calc_speed(player_type *creature_ptr)
 
         creature_ptr->pspeed += (creature_ptr->skill_exp[GINOU_RIDING] + creature_ptr->lev * 160L) / 3200;
 
-		if (monster_fast_remaining(riding_m_ptr))
+        if (monster_fast_remaining(riding_m_ptr))
             creature_ptr->pspeed += 10;
         if (monster_slow_remaining(riding_m_ptr))
             creature_ptr->pspeed -= 10;
@@ -3412,12 +3363,12 @@ static void calc_speed(player_type *creature_ptr)
             j += (creature_ptr->wt * 3 * (RIDING_EXP_SKILLED - creature_ptr->skill_exp[GINOU_RIDING])) / RIDING_EXP_SKILLED;
 
         count = 1500 + riding_r_ptr->level * 25;
-	}
+    }
 
     if (j > count)
         creature_ptr->pspeed -= ((j - count) / (count / 5));
 
-	if (creature_ptr->action == ACTION_SEARCH)
+    if (creature_ptr->action == ACTION_SEARCH)
         creature_ptr->pspeed -= 10;
 
     /* Maximum speed is (+99). (internally it's 110 + 99) */
@@ -3430,7 +3381,6 @@ static void calc_speed(player_type *creature_ptr)
     if (creature_ptr->pspeed < 11)
         creature_ptr->pspeed = 11;
 }
-
 
 void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
 {
@@ -3460,6 +3410,67 @@ void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
             penalty += 10;
         creature_ptr->to_h[slot - INVEN_RARM] -= (s16b)penalty;
         creature_ptr->dis_to_h[slot - INVEN_RARM] -= (s16b)penalty;
+    }
+}
+
+static void calc_ind_status(player_type *creature_ptr, int status) {
+    int ind;
+    if (creature_ptr->stat_use[status] <= 18)
+        ind = (creature_ptr->stat_use[status] - 3);
+    else if (creature_ptr->stat_use[status] <= 18 + 219)
+        ind = (15 + (creature_ptr->stat_use[status] - 18) / 10);
+    else
+        ind = (37);
+
+    if (creature_ptr->stat_ind[status] == ind)
+        return;
+
+    creature_ptr->stat_ind[status] = (s16b)ind;
+    if (status == A_CON) {
+        creature_ptr->update |= (PU_HP);
+    } else if (status == A_INT) {
+        if (mp_ptr->spell_stat == A_INT) {
+            creature_ptr->update |= (PU_MANA | PU_SPELLS);
+        }
+    } else if (status == A_WIS) {
+        if (mp_ptr->spell_stat == A_WIS) {
+            creature_ptr->update |= (PU_MANA | PU_SPELLS);
+        }
+    } else if (status == A_CHR) {
+        if (mp_ptr->spell_stat == A_CHR) {
+            creature_ptr->update |= (PU_MANA | PU_SPELLS);
+        }
+    }
+
+    creature_ptr->window |= (PW_PLAYER);
+}
+
+static void calc_use_status(player_type *creature_ptr, int status)
+{
+    int use = modify_stat_value(creature_ptr->stat_cur[status], creature_ptr->stat_add[status]);
+
+    if ((status == A_CHR) && (creature_ptr->muta3 & MUT3_ILL_NORM)) {
+        /* 10 to 18/90 charisma, guaranteed, based on level */
+        if (use < 8 + 2 * creature_ptr->lev) {
+            use = 8 + 2 * creature_ptr->lev;
+        }
+    }
+
+    if (creature_ptr->stat_use[status] != use) {
+        creature_ptr->stat_use[status] = (s16b)use;
+        creature_ptr->redraw |= (PR_STATS);
+        creature_ptr->window |= (PW_PLAYER);
+    }
+}
+
+static void calc_top_status(player_type *creature_ptr, int status)
+{
+    int top = modify_stat_value(creature_ptr->stat_max[status], creature_ptr->stat_add[status]);
+
+    if (creature_ptr->stat_top[status] != top) {
+        creature_ptr->stat_top[status] = (s16b)top;
+        creature_ptr->redraw |= (PR_STATS);
+        creature_ptr->window |= (PW_PLAYER);
     }
 }
 
