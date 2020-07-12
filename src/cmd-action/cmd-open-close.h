@@ -4,3 +4,4 @@
 
 void do_cmd_open(player_type *creature_ptr);
 void do_cmd_close(player_type *creature_ptr);
+void do_cmd_disarm(player_type *creature_ptr);

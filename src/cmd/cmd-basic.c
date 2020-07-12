@@ -120,63 +120,6 @@ void do_cmd_search(player_type *creature_ptr)
 }
 
 /*!
- * @brief 箱、床のトラップ解除処理双方の統合メインルーチン /
- * Disarms a trap, or chest
- * @return なし
- */
-void do_cmd_disarm(player_type *creature_ptr)
-{
-    POSITION y, x;
-    DIRECTION dir;
-    OBJECT_IDX o_idx;
-    bool more = FALSE;
-    if (creature_ptr->wild_mode)
-        return;
-
-    if (creature_ptr->special_defense & KATA_MUSOU)
-        set_action(creature_ptr, ACTION_NONE);
-
-    if (easy_disarm) {
-        int num_traps = count_dt(creature_ptr, &y, &x, is_trap, TRUE);
-        int num_chests = count_chests(creature_ptr, &y, &x, TRUE);
-        if (num_traps || num_chests) {
-            bool too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
-            if (!too_many)
-                command_dir = coords_to_dir(creature_ptr, y, x);
-        }
-    }
-
-    if (command_arg) {
-        command_rep = command_arg - 1;
-        creature_ptr->redraw |= (PR_STATE);
-        command_arg = 0;
-    }
-
-    if (get_rep_dir(creature_ptr, &dir, TRUE)) {
-        grid_type *g_ptr;
-        FEAT_IDX feat;
-        y = creature_ptr->y + ddy[dir];
-        x = creature_ptr->x + ddx[dir];
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-        feat = get_feat_mimic(g_ptr);
-        o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, TRUE);
-        if (!is_trap(creature_ptr, feat) && !o_idx) {
-            msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
-        } else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx) {
-            msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(creature_ptr, y, x, 0);
-        } else if (o_idx) {
-            more = exe_disarm_chest(creature_ptr, y, x, o_idx);
-        } else {
-            more = exe_disarm(creature_ptr, y, x, dir);
-        }
-    }
-
-    if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
-}
-
-/*!
  * @brief 「打ち破る」動作コマンドのサブルーチン /
  * Perform the basic "bash" command
  * @param y 対象を行うマスのY座標
