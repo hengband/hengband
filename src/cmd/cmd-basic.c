@@ -188,6 +188,23 @@ void do_cmd_alter(player_type *creature_ptr)
 }
 
 /*!
+ * @brief 自殺/引退/切腹の確認
+ * @param なし
+ * @return 自殺/引退/切腹を実施するならTRUE、キャンセルならFALSE
+ */
+static bool decide_suicide(void)
+{
+    if (current_world_ptr->noscore)
+        return TRUE;
+
+    prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
+    flush();
+    int i = inkey();
+    prt("", 0, 0);
+    return i == '@';
+}
+
+/*!
  * @brief 自殺するコマンドのメインルーチン
  * commit suicide
  * @return なし
@@ -204,16 +221,8 @@ void do_cmd_suicide(player_type *creature_ptr)
             return;
     }
 
-    if (!current_world_ptr->noscore) {
-        prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
-        flush();
-        int i = inkey();
-        prt("", 0, 0);
-        if (i != '@')
-            return;
-
-        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
-    }
+    if (!decide_suicide())
+        return;
 
     if (creature_ptr->last_message)
         string_free(creature_ptr->last_message);
@@ -223,7 +232,7 @@ void do_cmd_suicide(player_type *creature_ptr)
         char buf[1024] = "";
         play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
         do {
-            while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof buf))
+            while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof(buf)))
                 ;
         } while (!get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
 
