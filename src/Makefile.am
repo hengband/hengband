@@ -70,6 +70,7 @@ hengband_SOURCES = \
 	cmd-action/cmd-pet.c cmd-action/cmd-pet.h \
 	cmd-action/cmd-shoot.c cmd-action/cmd-shoot.h \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
+	cmd-action/cmd-throw.c cmd-action/cmd-throw.h \
 	cmd-action/cmd-tunnel.c cmd-action/cmd-tunnel.h \
 	\
 	cmd-building/cmd-building.c cmd-building/cmd-building.h \

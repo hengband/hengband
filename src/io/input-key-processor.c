@@ -33,6 +33,7 @@
 #include "cmd-item/cmd-quaff.h"
 #include "cmd-item/cmd-read.h"
 #include "cmd-item/cmd-smith.h"
+#include "cmd-item/cmd-throw.h"
 #include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"

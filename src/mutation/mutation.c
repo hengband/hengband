@@ -13,7 +13,7 @@
 
 #include "mutation/mutation.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-basic.h"
+#include "cmd-item/cmd-throw.h"
 #include "core/asking-player.h"
 #include "player/player-race-types.h"
 #include "core/show-file.h"

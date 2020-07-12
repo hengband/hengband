@@ -19,7 +19,7 @@
 #include "action/movement-execution.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-spell.h"
-#include "cmd/cmd-basic.h"
+#include "cmd-item/cmd-throw.h"
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
