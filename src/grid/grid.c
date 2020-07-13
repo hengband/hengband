@@ -876,8 +876,8 @@ void update_flow(player_type *subject_ptr)
 {
 	POSITION x, y;
 	DIRECTION d;
-	int flow_head = 1;
-	int flow_tail = 0;
+	int flow_head_grid = 1;
+	int flow_tail_grid = 0;
 
 	/* Paranoia -- make sure the array is empty */
 	if (tmp_pos.n) return;
@@ -908,21 +908,21 @@ void update_flow(player_type *subject_ptr)
 	tmp_pos.x[0] = subject_ptr->x;
 
 	/* Now process the queue */
-	while (flow_head != flow_tail)
+	while (flow_head_grid != flow_tail_grid)
 	{
 		int ty, tx;
 
 		/* Extract the next entry */
-		ty = tmp_pos.y[flow_tail];
-		tx = tmp_pos.x[flow_tail];
+		ty = tmp_pos.y[flow_tail_grid];
+		tx = tmp_pos.x[flow_tail_grid];
 
 		/* Forget that entry */
-		if (++flow_tail == TEMP_MAX) flow_tail = 0;
+		if (++flow_tail_grid == TEMP_MAX) flow_tail_grid = 0;
 
 		/* Add the "children" */
 		for (d = 0; d < 8; d++)
 		{
-			int old_head = flow_head;
+			int old_head = flow_head_grid;
 			byte m = subject_ptr->current_floor_ptr->grid_array[ty][tx].cost + 1;
 			byte n = subject_ptr->current_floor_ptr->grid_array[ty][tx].dist + 1;
 			grid_type *g_ptr;
@@ -952,14 +952,14 @@ void update_flow(player_type *subject_ptr)
 			if (n == MONSTER_FLOW_DEPTH) continue;
 
 			/* Enqueue that entry */
-			tmp_pos.y[flow_head] = y;
-			tmp_pos.x[flow_head] = x;
+			tmp_pos.y[flow_head_grid] = y;
+			tmp_pos.x[flow_head_grid] = x;
 
 			/* Advance the queue */
-			if (++flow_head == TEMP_MAX) flow_head = 0;
+			if (++flow_head_grid == TEMP_MAX) flow_head_grid = 0;
 
 			/* Hack -- notice overflow by forgetting new entry */
-			if (flow_head == flow_tail) flow_head = old_head;
+			if (flow_head_grid == flow_tail_grid) flow_head_grid = old_head;
 		}
 	}
 }

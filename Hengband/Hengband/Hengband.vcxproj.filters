@@ -1718,6 +1718,9 @@
     <ClCompile Include="..\..\src\window\main-window-util.c">
       <Filter>window</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-travel.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3753,6 +3756,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\window\main-window-util.h">
       <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-travel.h">
+      <Filter>cmd-action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

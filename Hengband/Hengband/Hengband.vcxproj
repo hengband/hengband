@@ -178,6 +178,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-move.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-open-close.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-shoot.c" />
+    <ClCompile Include="..\..\src\cmd-action\cmd-travel.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.c" />
     <ClCompile Include="..\..\src\action\movement-execution.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.c" />
@@ -664,6 +665,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-move.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-open-close.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-shoot.h" />
+    <ClInclude Include="..\..\src\cmd-action\cmd-travel.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h" />
     <ClInclude Include="..\..\src\action\movement-execution.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />

@@ -850,8 +850,8 @@ static void cave_fill(player_type *player_ptr, POSITION y, POSITION x)
 	int i, j, d;
 	POSITION ty, tx;
 
-	int flow_tail = 1;
-	int flow_head = 0;
+	int flow_tail_room = 1;
+	int flow_head_room = 0;
 
 
 	/*** Start Grid ***/
@@ -862,19 +862,19 @@ static void cave_fill(player_type *player_ptr, POSITION y, POSITION x)
 
 	/* Now process the queue */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	while (flow_head != flow_tail)
+	while (flow_head_room != flow_tail_room)
 	{
 		/* Extract the next entry */
-		ty = tmp_pos.y[flow_head];
-		tx = tmp_pos.x[flow_head];
+		ty = tmp_pos.y[flow_head_room];
+		tx = tmp_pos.x[flow_head_room];
 
 		/* Forget that entry */
-		if (++flow_head == TEMP_MAX) flow_head = 0;
+		if (++flow_head_room == TEMP_MAX) flow_head_room = 0;
 
 		/* Add the "children" */
 		for (d = 0; d < 8; d++)
 		{
-			int old_head = flow_tail;
+			int old_head = flow_tail_room;
 
 			/* Child location */
 			j = ty + ddy_ddd[d];
@@ -899,16 +899,16 @@ static void cave_fill(player_type *player_ptr, POSITION y, POSITION x)
 					fill_data.info1, fill_data.info2, fill_data.info3))
 				{
 					/* Enqueue that entry */
-					tmp_pos.y[flow_tail] = (byte)j;
-					tmp_pos.x[flow_tail] = (byte)i;
+					tmp_pos.y[flow_tail_room] = (byte)j;
+					tmp_pos.x[flow_tail_room] = (byte)i;
 
 					/* Advance the queue */
-					if (++flow_tail == TEMP_MAX) flow_tail = 0;
+					if (++flow_tail_room == TEMP_MAX) flow_tail_room = 0;
 
 					/* Hack -- Overflow by forgetting new entry */
-					if (flow_tail == flow_head)
+					if (flow_tail_room == flow_head_room)
 					{
-						flow_tail = old_head;
+						flow_tail_room = old_head;
 					}
 					else
 					{

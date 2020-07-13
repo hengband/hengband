@@ -15,6 +15,7 @@
 #include "cmd-action/cmd-pet.h"
 #include "cmd-action/cmd-shoot.h"
 #include "cmd-action/cmd-spell.h"
+#include "cmd-action/cmd-travel.h"
 #include "cmd-action/cmd-tunnel.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-autopick.h"
@@ -69,7 +70,6 @@
 #include "mspell/mspells3.h" // do_cmd_cast_learned() がある。後で移設する.
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
-#include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
 #include "player/special-defense-types.h"
 #include "spell/spells-object.h"
 #include "status/action-setter.h"
