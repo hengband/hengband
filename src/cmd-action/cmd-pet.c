@@ -9,6 +9,7 @@
 #include "core/window-redrawer.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
+#include "floor/pattern-walk.h"
 #include "game-option/input-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"

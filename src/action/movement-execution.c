@@ -6,6 +6,7 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "floor/pattern-walk.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

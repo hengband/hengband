@@ -29,7 +29,6 @@ extern POSITION temp2_x[MAX_SHORT];
 extern POSITION temp2_y[MAX_SHORT];
 
 bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
-bool pattern_seq(player_type *creature_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);
 bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat);
 void search(player_type *creature_ptr);
 
