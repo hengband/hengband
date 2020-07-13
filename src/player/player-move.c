@@ -343,17 +343,3 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
 
     return FALSE;
 }
-
-/*!
- * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
- * @param creature_ptr	プレーヤーへの参照ポインタ
- * @return なし
- */
-void forget_travel_flow(floor_type *floor_ptr)
-{
-    for (POSITION y = 0; y < floor_ptr->height; y++)
-        for (POSITION x = 0; x < floor_ptr->width; x++)
-            travel.cost[y][x] = MAX_SHORT;
-
-    travel.y = travel.x = 0;
-}

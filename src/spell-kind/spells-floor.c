@@ -5,6 +5,7 @@
  */
 
 #include "spell-kind/spells-floor.h"
+#include "action/travel-execution.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -38,7 +39,6 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
-#include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"

@@ -31,6 +31,3 @@ extern POSITION temp2_y[MAX_SHORT];
 bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
 bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat);
 void search(player_type *creature_ptr);
-
-typedef struct floor_type floor_type;
-void forget_travel_flow(floor_type *floor_ptr);

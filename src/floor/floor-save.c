@@ -10,6 +10,7 @@
  */
 
 #include "floor/floor-save.h"
+#include "action/travel-execution.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
@@ -52,7 +53,6 @@
 #include "object-hook/hook-enchant.h"
 #include "pet/pet-util.h"
 #include "player/player-class.h"
-#include "player/player-move.h"
 #include "player/player-personalities-types.h"
 #include "player/special-defense-types.h"
 #include "savedata/floor-loader.h"
