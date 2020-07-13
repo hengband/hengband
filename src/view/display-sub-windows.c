@@ -10,7 +10,6 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
-#include "inventory/player-inventory.h"
 #include "io/input-key-processor.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
@@ -30,6 +29,7 @@
 #include "view/display-player.h"
 #include "view/main-window-util.h"
 #include "view/object-describer.h"
+#include "window/main-window-equipments.h"
 #include "world/world.h"
 
 /*!

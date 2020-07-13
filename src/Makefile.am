@@ -707,6 +707,8 @@ hengband_SOURCES = \
 	view/status-first-page.c view/status-first-page.h \
 	view/status-bars-table.c view/status-bars-table.h \
 	\
+	window/main-window-equipment.c window/main-window-equipment.h \
+	\
 	wizard/spoiler-table.c wizard/spoiler-table.h \
 	wizard/tval-descriptions-table.c wizard/tval-descriptions-table.h \
 	wizard/wizard-messages.c wizard/wizard-messages.h \
@@ -737,7 +739,7 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Imspell -Imutation -Iobject -Iobject-enchant -Iobject-hook -Iobject-use \
 	-Ipet -Iplayer -Iplayer-attack -Irealm -Iroom -Isavedata -Ispecific-object \
 	-Ispell -Ispell-kind -Ispell-realm -Istatus -Isv-definition -Isystem -Iterm \
-	-Iutil -Iview -Iwizard -Iworld
+	-Iutil -Iview -Iwindow -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

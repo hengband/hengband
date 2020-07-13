@@ -1715,6 +1715,9 @@
     <ClCompile Include="..\..\src\core\disturbance.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\window\main-window-equipments.c">
+      <Filter>window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3748,6 +3751,9 @@
     <ClInclude Include="..\..\src\core\disturbance.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-equipments.h">
+      <Filter>window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3927,6 +3933,9 @@
     </Filter>
     <Filter Include="action">
       <UniqueIdentifier>{52768eef-323a-49a4-a895-f0030b35f667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window">
+      <UniqueIdentifier>{9e0105e8-8250-4ac4-8a1c-cefd30485ecc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
