@@ -90,7 +90,7 @@
 #include "util/object-sort.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
-#include "view/display-sub-windows.h"
+#include "window/display-sub-windows.h"
 #include "view/object-describer.h"
 #include "world/world.h"
 #ifdef JP

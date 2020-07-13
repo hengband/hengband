@@ -69,7 +69,7 @@
 #include "view/display-lore.h"
 #include "view/display-messages.h"
 #include "view/display-monster-status.h"
-#include "view/main-window-util.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 #ifdef JP
 #else

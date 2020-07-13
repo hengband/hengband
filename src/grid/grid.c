@@ -43,7 +43,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
-#include "view/main-window-util.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 
 #define MONSTER_FLOW_DEPTH 32 /*!< 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る) / OPTION: Maximum flow depth when using "MONSTER_FLOW" */

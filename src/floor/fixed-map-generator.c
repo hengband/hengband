@@ -29,7 +29,7 @@
 #include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/system-variables.h"
-#include "view/main-window-util.h"
+#include "window/main-window-util.h"
 #include "world/world-object.h"
 #include "world/world.h"
 

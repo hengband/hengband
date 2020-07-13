@@ -1,4 +1,4 @@
-﻿#include "view/main-window-left-frame.h"
+﻿#include "window/main-window-left-frame.h"
 #include "floor/floor.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
@@ -10,9 +10,9 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/string-processor.h"
-#include "view/main-window-row-column.h"
-#include "view/main-window-stat-poster.h"
-#include "view/main-window-util.h"
+#include "window/main-window-row-column.h"
+#include "window/main-window-stat-poster.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 
 /*!

@@ -1367,18 +1367,6 @@
     <ClCompile Include="..\..\src\view\status-bars-table.c">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\main-window-util.c">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\view\main-window-stat-poster.c">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\view\main-window-left-frame.c">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\view\display-sub-windows.c">
-      <Filter>view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\window-redrawer.c">
       <Filter>core</Filter>
     </ClCompile>
@@ -1553,9 +1541,6 @@
     <ClCompile Include="..\..\src\spell-kind\spells-equipment.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-sub-window-spells.c">
-      <Filter>view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell-kind\spells-polymorph.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
@@ -1664,9 +1649,6 @@
     <ClCompile Include="..\..\src\flavor\named-item-describer.c">
       <Filter>flavor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-sub-window-items.c">
-      <Filter>view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\flavor\object-flavor.c">
       <Filter>flavor</Filter>
     </ClCompile>
@@ -1716,6 +1698,24 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\window\main-window-equipments.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\display-sub-window-items.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\display-sub-windows.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\display-sub-window-spells.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\main-window-left-frame.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\main-window-stat-poster.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\main-window-util.c">
       <Filter>window</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3370,21 +3370,6 @@
     <ClInclude Include="..\..\src\view\status-bars-table.h">
       <Filter>view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\view\main-window-row-column.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view\main-window-util.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view\main-window-stat-poster.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view\main-window-left-frame.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view\display-sub-windows.h">
-      <Filter>view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\window-redrawer.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -3568,9 +3553,6 @@
     <ClInclude Include="..\..\src\spell-kind\spells-equipment.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\view\display-sub-window-spells.h">
-      <Filter>view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-polymorph.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
@@ -3697,9 +3679,6 @@
     <ClInclude Include="..\..\src\flavor\named-item-describer.h">
       <Filter>flavor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\view\display-sub-window-items.h">
-      <Filter>view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\flavor\object-flavor.h">
       <Filter>flavor</Filter>
     </ClInclude>
@@ -3752,6 +3731,27 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\window\main-window-equipments.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\display-sub-window-items.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\display-sub-windows.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\display-sub-window-spells.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-left-frame.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-row-column.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-stat-poster.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-util.h">
       <Filter>window</Filter>
     </ClInclude>
   </ItemGroup>

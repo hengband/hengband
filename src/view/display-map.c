@@ -14,7 +14,7 @@
 #include "object/object-mark-types.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
-#include "view/main-window-util.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 
 byte display_autopick; /*!< 自動拾い状態の設定フラグ */

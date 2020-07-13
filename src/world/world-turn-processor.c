@@ -32,7 +32,7 @@
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "view/main-window-row-column.h"
+#include "window/main-window-row-column.h"
 #include "world/world-movement-processor.h"
 #include "world/world.h"
 

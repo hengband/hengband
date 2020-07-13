@@ -28,7 +28,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
-#include "view/display-sub-window-items.h"
+#include "window/display-sub-window-items.h"
 
 static void describe_chest_trap(flavor_type *flavor_ptr)
 {

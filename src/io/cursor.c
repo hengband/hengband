@@ -14,7 +14,7 @@
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-map.h"
-#include "view/main-window-util.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 
 /*

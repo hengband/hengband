@@ -89,7 +89,7 @@
 #include "util/quarks.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
-#include "view/main-window-util.h"
+#include "window/main-window-util.h"
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list

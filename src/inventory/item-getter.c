@@ -23,7 +23,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
-#include "view/display-sub-windows.h"
+#include "window/display-sub-windows.h"
 
 /*!
  * @brief オブジェクト選択のモード設定

@@ -1,4 +1,4 @@
-﻿#include "view/main-window-stat-poster.h"
+﻿#include "window/main-window-stat-poster.h"
 #include "floor/floor.h"
 #include "io/input-key-requester.h"
 #include "mind/stances-table.h"
@@ -10,7 +10,7 @@
 #include "status/element-resistance.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "view/main-window-row-column.h"
+#include "window/main-window-row-column.h"
 #include "view/status-bars-table.h"
 #include "world/world.h"
 

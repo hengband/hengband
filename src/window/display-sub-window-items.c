@@ -1,4 +1,4 @@
-﻿#include "view/display-sub-window-items.h"
+﻿#include "window/display-sub-window-items.h"
 #include "flavor/flavor-util.h"
 #include "game-option/text-display-options.h"
 #include "object-enchant/special-object-flags.h"

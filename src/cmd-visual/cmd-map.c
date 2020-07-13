@@ -4,7 +4,7 @@
 #include "io/input-key-acceptor.h"
 #include "term/screen-processor.h"
 #include "view/display-map.h"
-#include "view/main-window-util.h"
+#include "window/main-window-util.h"
 
 /*
  * Display a "small-scale" map of the dungeon for the player

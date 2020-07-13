@@ -14,7 +14,7 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include "view/main-window-util.h"
+#include "window/main-window-util.h"
 
 /*
  * Keymaps for each "mode" associated with each keypress.

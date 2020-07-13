@@ -29,7 +29,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
-#include "view/display-sub-windows.h"
+#include "window/display-sub-windows.h"
 
 /*!
  * todo 適切な関数名をどうしても付けられなかったので暫定でauxとした

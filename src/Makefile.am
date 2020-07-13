@@ -695,18 +695,18 @@ hengband_SOURCES = \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player-middle.c view/display-player-middle.h \
 	view/display-player.c view/display-player.h \
-	view/display-sub-items.c view/display-sub-items.h \
-	view/display-sub-window-spells.c view/display-sub-window-spells.h \
-	view/display-sub-windows.c view/display-sub-windows.h \
 	view/display-util.c view/display-util.h \
-	view/main-window-left-frame.c view/main-window-left-frame.h \
-	view/main-window-row-column.h \
-	view/main-window-stat-poster.c view/main-window-stat-poster.h \
-	view/main-window-util.c view/main-window-util.h \
 	view/object-describer.c view/object-describer.h \
 	view/status-first-page.c view/status-first-page.h \
 	view/status-bars-table.c view/status-bars-table.h \
 	\
+	window/display-sub-window-items.c window/display-sub-window-items.h \
+	window/display-sub-window-spells.c window/display-sub-window-spells.h \
+	window/display-sub-windows.c window/display-sub-windows.h \
+	window/main-window-left-frame.c window/main-window-left-frame.h \
+	window/main-window-row-column.h \
+	window/main-window-stat-poster.c window/main-window-stat-poster.h \
+	window/main-window-util.c window/main-window-util.h \
 	window/main-window-equipment.c window/main-window-equipment.h \
 	\
 	wizard/spoiler-table.c wizard/spoiler-table.h \

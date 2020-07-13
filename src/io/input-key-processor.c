@@ -78,7 +78,7 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-#include "view/display-sub-windows.h"
+#include "window/display-sub-windows.h"
 #include "wizard/wizard-special-process.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
