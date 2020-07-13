@@ -11,7 +11,6 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
-#include "effect/effect-characteristics.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-events.h"
@@ -42,7 +41,6 @@
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "util/bit-flags-calculator.h"
@@ -471,46 +469,4 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
     }
 
     return TRUE;
-}
-
-/*!
- * @brief カオス魔法「流星群」の処理としてプレイヤーを中心に隕石落下処理を10+1d10回繰り返す。
- * / Drop 10+1d10 meteor ball at random places near the player
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param dam ダメージ
- * @param rad 効力の半径
- * @return なし
- */
-void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
-{
-    int b = 10 + randint1(10);
-    for (int i = 0; i < b; i++) {
-        POSITION y = 0, x = 0;
-        int count;
-
-        for (count = 0; count <= 20; count++) {
-            int dy, dx, d;
-
-            x = caster_ptr->x - 8 + randint0(17);
-            y = caster_ptr->y - 8 + randint0(17);
-            dx = (caster_ptr->x > x) ? (caster_ptr->x - x) : (x - caster_ptr->x);
-            dy = (caster_ptr->y > y) ? (caster_ptr->y - y) : (y - caster_ptr->y);
-            d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
-
-            if (d >= 9)
-                continue;
-
-            floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-            if (!in_bounds(floor_ptr, y, x) || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)
-                || !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT))
-                continue;
-
-            break;
-        }
-
-        if (count > 20)
-            continue;
-
-        project(caster_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
-    }
 }
