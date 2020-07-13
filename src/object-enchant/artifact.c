@@ -1,5 +1,4 @@
 ﻿/*!
- * @file artifact.c
  * @brief アーティファクトの生成と管理 / Artifact code
  * @date 2013/12/11
  * @author
@@ -73,59 +72,32 @@ ARTIFACT_IDX max_a_idx;
 static bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr);
 static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr);
 
-#ifdef JP
 /*!
  * @brief ランダムアーティファクトのバイアス名称テーブル
  */
 const concptr artifact_bias_name[MAX_BIAS] =
 {
-	"なし",
-	"電撃",
-	"毒",
-	"火炎",
-	"冷気",
-	"酸",
-	"腕力",
-	"知力",
-	"賢さ",
-	"器用さ",
-	"耐久",
-	"魅力",
-	"混沌",
-	"プリースト",
-	"死霊",
-	"法",
-	"盗賊",
-	"メイジ",
-	"戦士",
-	"レンジャー",
+	_("なし", "None"),
+	_("電撃", "Elec"),
+	_("毒", "Poison"),
+	_("火炎", "Fire"),
+	_("冷気", "Cold"),
+	_("酸", "Acid"),
+	_("腕力", "STR"),
+	_("知力", "INT"),
+	_("賢さ", "WIS"),
+	_("器用さ", "DEX"),
+	_("耐久", "CON"),
+	_("魅力", "CHA"),
+	_("混沌", "Chaos"),
+	_("プリースト", "Pristly"),
+	_("死霊", "Necromantic"),
+	_("法", "Law"),
+	_("盗賊", "Rogue"),
+	_("メイジ", "Mage"),
+	_("戦士", "Warrior"),
+	_("レンジャー", "Ranger"),
 };
-#else
-const concptr artifact_bias_name[MAX_BIAS] =
-{
-	"None",
-	"Elec",
-	"Poison",
-	"Fire",
-	"Cold",
-	"Acid",
-	"STR",
-	"INT",
-	"WIS",
-	"DEX",
-	"CON",
-	"CHA",
-	"Chaos",
-	"Pristly",
-	"Necromantic",
-	"Law",
-	"Rogue",
-	"Mage",
-	"Warrior",
-	"Ranger",
-};
-#endif
-
 
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトを呪いのアーティファクトにする経過処理。/ generation process of cursed artifact.
@@ -1652,13 +1624,9 @@ static void get_random_name(object_type *o_ptr, char *return_name, bool armour, 
  */
 bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_scroll)
 {
-	/* Reset artifact bias */
 	o_ptr->artifact_bias = 0;
-
-	/* Nuke enchantments */
 	o_ptr->name1 = 0;
 	o_ptr->name2 = 0;
-
 	for (int i = 0; i < TR_FLAG_SIZE; i++)
 		o_ptr->art_flags[i] |= k_info[o_ptr->k_idx].flags[i];
 
@@ -1822,8 +1790,6 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 			o_ptr->pval = 4;
 	}
 
-
-	/* give it some plusses... */
 	if (object_is_armour(player_ptr, o_ptr))
 		o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
 	else if (object_is_weapon_ammo(o_ptr))
@@ -1833,14 +1799,12 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 		if ((have_flag(o_ptr->art_flags, TR_WIS)) && (o_ptr->pval > 0)) add_flag(o_ptr->art_flags, TR_BLESSED);
 	}
 
-	/* Just to be sure */
 	add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
 	add_flag(o_ptr->art_flags, TR_IGNORE_ELEC);
 	add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
 	add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
 
 	s32b total_flags = flag_cost(player_ptr, o_ptr, o_ptr->pval);
-
 	if (a_cursed) curse_artifact(player_ptr, o_ptr);
 
 	if (!a_cursed &&
@@ -1895,54 +1859,35 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 	int power_level;
 	if (!object_is_weapon_ammo(o_ptr))
 	{
-		/* For armors */
 		if (a_cursed) power_level = 0;
 		else if (total_flags < 15000) power_level = 1;
 		else if (total_flags < 35000) power_level = 2;
 		else power_level = 3;
-	}
-
-	else
-	{
-		/* For weapons */
+	} else {
 		if (a_cursed) power_level = 0;
 		else if (total_flags < 20000) power_level = 1;
 		else if (total_flags < 45000) power_level = 2;
 		else power_level = 3;
 	}
 
-	/* ダメージ抑制処理を行う */
 	while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK))
-	{
 		weakening_artifact(player_ptr, o_ptr);
-	}
 
 	if (a_scroll)
 	{
 		GAME_TEXT dummy_name[MAX_NLEN] = "";
 		concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
-
 		object_aware(player_ptr, o_ptr);
 		object_known(o_ptr);
-
-		/* Mark the item as fully known */
 		o_ptr->ident |= (IDENT_FULL_KNOWN);
-
-		/* For being treated as random artifact in screen_object() */
 		o_ptr->art_name = quark_add("");
-
 		(void)screen_object(player_ptr, o_ptr, 0L);
-
 		if (!get_string(ask_msg, dummy_name, sizeof dummy_name)
-			|| !dummy_name[0])
-		{
+			|| !dummy_name[0]) {
 			/* Cancelled */
-			if (one_in_(2))
-			{
+			if (one_in_(2)) {
 				get_table_sindarin_aux(dummy_name);
-			}
-			else
-			{
+			} else {
 				get_table_name_aux(dummy_name);
 			}
 		}
@@ -1950,20 +1895,14 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 		sprintf(new_name, _("《%s》", "'%s'"), dummy_name);
 		chg_virtue(player_ptr, V_INDIVIDUALISM, 2);
 		chg_virtue(player_ptr, V_ENCHANT, 5);
-	}
-	else
-	{
+	} else {
 		get_random_name(o_ptr, new_name, object_is_armour(player_ptr, o_ptr), power_level);
 	}
 
-	/* Save the inscription */
 	o_ptr->art_name = quark_add(new_name);
-
 	msg_format_wizard(player_ptr, CHEAT_OBJECT, _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」",
 		"Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers, total_flags, artifact_bias_name[o_ptr->artifact_bias]);
-
-	player_ptr->window |= (PW_INVEN | PW_EQUIP);
-
+	player_ptr->window |= PW_INVEN | PW_EQUIP;
 	return TRUE;
 }
 
@@ -1977,7 +1916,6 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
  */
 int activation_index(player_type *player_ptr, object_type *o_ptr)
 {
-	/* Give priority to weaponsmith's essential activations */
 	if (object_is_smith(player_ptr, o_ptr))
 	{
 		switch (o_ptr->xtra3 - 1)
@@ -2056,7 +1994,7 @@ void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, art
 {
 	bool give_resistance = FALSE, give_power = FALSE;
 
-	if (o_ptr->name1 == ART_TERROR) /* Terror Mask is for warriors... */
+	if (o_ptr->name1 == ART_TERROR)
 	{
 		bool is_special_class = player_ptr->pclass == CLASS_WARRIOR;
 		is_special_class |= player_ptr->pclass == CLASS_ARCHER;
@@ -2164,11 +2102,8 @@ void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, art
 bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 {
 	artifact_type *a_ptr = &a_info[a_idx];
-
-	/* Ignore "empty" artifacts */
 	if (!a_ptr->name) return FALSE;
 
-	/* Acquire the "kind" index */
 	KIND_OBJECT_IDX i = lookup_kind(a_ptr->tval, a_ptr->sval);
 	if (i == 0) return FALSE;
 
@@ -2176,11 +2111,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 	object_type *q_ptr;
 	q_ptr = &forge;
 	object_prep(player_ptr, q_ptr, i);
-
-	/* Save the name */
 	q_ptr->name1 = a_idx;
-
-	/* Extract the fields */
 	q_ptr->pval = a_ptr->pval;
 	q_ptr->ac = a_ptr->ac;
 	q_ptr->dd = a_ptr->dd;
@@ -2189,8 +2120,6 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 	q_ptr->to_h = a_ptr->to_h;
 	q_ptr->to_d = a_ptr->to_d;
 	q_ptr->weight = a_ptr->weight;
-
-	/* Hack -- extract the "cursed" flag */
 	if (a_ptr->gen_flags & TRG_CURSED) q_ptr->curse_flags |= (TRC_CURSED);
 	if (a_ptr->gen_flags & TRG_HEAVY_CURSE) q_ptr->curse_flags |= (TRC_HEAVY_CURSE);
 	if (a_ptr->gen_flags & TRG_PERMA_CURSE) q_ptr->curse_flags |= (TRC_PERMA_CURSE);
@@ -2199,8 +2128,6 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2)) q_ptr->curse_flags |= get_curse(player_ptr, 2, q_ptr);
 
 	random_artifact_resistance(player_ptr, q_ptr, a_ptr);
-
-	/* Drop the artifact from heaven */
 	return drop_near(player_ptr, q_ptr, -1, y, x) ? TRUE : FALSE;
 }
 
@@ -2210,11 +2137,9 @@ static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(player_ptr, o_ptr, flgs);
-
 	HIT_POINT base, forced, vorpal;
 	HIT_POINT s_evil = forced = vorpal = 0;
 	HIT_POINT dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
-
 	if (have_flag(flgs, TR_KILL_EVIL))
 	{
 		dam = s_evil = dam * 7 / 2;
@@ -2238,9 +2163,7 @@ static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
 	else vorpal = dam;
 
 	dam = dam + o_ptr->to_d;
-
 	msg_format_wizard(player_ptr, CHEAT_OBJECT, "素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d", base, s_evil, forced, vorpal, dam);
-
 	return dam;
 }
 
@@ -2249,7 +2172,6 @@ static bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(player_ptr, o_ptr, flgs);
-
 	if (have_flag(flgs, TR_VAMPIRIC))
 	{
         if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52))
@@ -2356,47 +2278,33 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (floor_ptr->dun_level == 0) return FALSE;
 
-	/* Paranoia -- no "plural" artifacts */
 	if (o_ptr->number != 1) return FALSE;
 
-	/* Check the artifact list (skip the "specials") */
 	for (ARTIFACT_IDX i = 0; i < max_a_idx; i++)
 	{
 		artifact_type *a_ptr = &a_info[i];
-
-		/* Skip "empty" items */
 		if (!a_ptr->name) continue;
 
-		/* Cannot make an artifact twice */
 		if (a_ptr->cur_num) continue;
 
 		if (a_ptr->gen_flags & TRG_QUESTITEM) continue;
 
 		if (a_ptr->gen_flags & TRG_INSTA_ART) continue;
 
-		/* Must have the correct fields */
 		if (a_ptr->tval != o_ptr->tval) continue;
+
 		if (a_ptr->sval != o_ptr->sval) continue;
 
-		/* XXX XXX Enforce minimum "depth" (loosely) */
 		if (a_ptr->level > floor_ptr->dun_level)
 		{
-			/* Acquire the "out-of-depth factor" */
 			int d = (a_ptr->level - floor_ptr->dun_level) * 2;
-
-			/* Roll for out-of-depth creation */
 			if (!one_in_(d)) continue;
 		}
 
-		/* We must make the "rarity roll" */
 		if (!one_in_(a_ptr->rarity)) continue;
 
-		/* Hack -- mark the item as an artifact */
 		o_ptr->name1 = i;
-
-		/* Hack: Some artifacts get random extra powers */
 		random_artifact_resistance(player_ptr, o_ptr, a_ptr);
-
 		return TRUE;
 	}
 
