@@ -6,15 +6,6 @@
  */
 
 #include "player/player-move.h"
-#include "action/open-close-execution.h"
-#include "action/travel-execution.h"
-#include "action/run-execution.h"
-#include "art-definition/art-bow-types.h"
-#include "art-definition/art-sword-types.h"
-#include "autopick/autopick.h"
-#include "cmd-action/cmd-attack.h"
-#include "cmd-action/cmd-others.h"
-#include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -24,59 +15,26 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
-#include "flavor/flavor-describer.h"
-#include "flavor/flavor-util.h"
-#include "flavor/object-flavor-types.h"
-#include "floor/floor-object.h"
 #include "floor/floor.h"
-#include "game-option/auto-destruction-options.h"
 #include "game-option/disturbance-options.h"
-#include "game-option/input-options.h"
-#include "game-option/map-screen-options.h"
-#include "game-option/play-record-options.h"
-#include "game-option/special-options.h"
-#include "game-option/text-display-options.h"
-#include "grid/feature-flag-types.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
-#include "inventory/inventory-object.h"
-#include "inventory/inventory-slot-types.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "mind/mind-ninja.h"
-#include "monster-race/monster-race.h"
-#include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags7.h"
-#include "monster-race/race-flags8.h"
-#include "monster/monster-describer.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "mutation/mutation-flag-types.h"
-#include "object-enchant/special-object-flags.h"
-#include "object/item-tester-hooker.h"
-#include "object/object-info.h"
-#include "object/object-mark-types.h"
-#include "object/warning.h"
 #include "perception/object-perception.h"
 #include "player/attack-defense-types.h"
-#include "player/player-class.h"
-#include "player/player-personalities-types.h"
-#include "player/player-race-types.h"
-#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-floor.h"
-#include "spell-kind/spells-perception.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
-#include "term/screen-processor.h"
+#include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 
 int flow_head = 0;
 int flow_tail = 0;
@@ -190,12 +148,12 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         verify_panel(creature_ptr);
         if (mpe_mode & MPE_FORGET_FLOW) {
             forget_flow(floor_ptr);
-            creature_ptr->update |= (PU_UN_VIEW);
-            creature_ptr->redraw |= (PR_MAP);
+            creature_ptr->update |= PU_UN_VIEW;
+            creature_ptr->redraw |= PR_MAP;
         }
 
-        creature_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
-        creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+        creature_ptr->update |= PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE;
+        creature_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
         if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(creature_ptr, g_ptr->feat))
             g_ptr->info &= ~(CAVE_UNSAFE);
 
