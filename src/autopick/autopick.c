@@ -23,9 +23,9 @@
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
+#include "inventory/player-inventory.h"
 #include "object/object-mark-types.h"
 #include "object/object-info.h"
-#include "player/player-move.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
@@ -129,7 +129,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 
 		if (!(autopick_list[idx].action & DO_QUERY_AUTOPICK))
 		{
-			py_pickup_aux(player_ptr, this_o_idx);
+			describe_pickup_item(player_ptr, this_o_idx);
 			continue;
 		}
 
@@ -148,6 +148,6 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 			continue;
 		}
 
-		py_pickup_aux(player_ptr, this_o_idx);
+		describe_pickup_item(player_ptr, this_o_idx);
 	}
 }
