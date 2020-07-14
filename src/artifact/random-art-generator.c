@@ -146,6 +146,17 @@ static set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *warri
     }
 }
 
+static bool decide_random_art_cursed(const bool a_scroll, object_type *o_ptr)
+{
+    if (!a_scroll && one_in_(A_CURSED))
+        return TRUE;
+
+    if (((o_ptr->tval == TV_AMULET) || (o_ptr->tval == TV_RING)) && object_is_cursed(o_ptr))
+        return TRUE;
+
+    return FALSE;
+}
+
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
@@ -162,10 +173,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         o_ptr->art_flags[i] |= k_info[o_ptr->k_idx].flags[i];
 
-    bool has_pval = FALSE;
-    if (o_ptr->pval)
-        has_pval = TRUE;
-
+    bool has_pval = o_ptr->pval != 0;
     int warrior_artifact_bias = 0;
     if (a_scroll && one_in_(4))
         set_artifact_bias(player_ptr, o_ptr, &warrior_artifact_bias);
@@ -176,12 +184,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     GAME_TEXT new_name[1024];
     strcpy(new_name, "");
 
-    bool a_cursed = FALSE;
-    if (!a_scroll && one_in_(A_CURSED))
-        a_cursed = TRUE;
-    if (((o_ptr->tval == TV_AMULET) || (o_ptr->tval == TV_RING)) && object_is_cursed(o_ptr))
-        a_cursed = TRUE;
-
+    bool a_cursed = decide_random_art_cursed(a_scroll, o_ptr);
     int powers = randint1(5) + 1;
     while (one_in_(powers) || one_in_(7) || one_in_(10))
         powers++;
