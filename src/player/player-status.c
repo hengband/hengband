@@ -846,22 +846,6 @@ void calc_bonuses(player_type *creature_ptr)
         }
 
         if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
-            if (o_ptr->curse_flags & (TRC_CURSED)) {
-                creature_ptr->to_h[i] += 5;
-                creature_ptr->dis_to_h[i] += 5;
-            }
-            if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
-                creature_ptr->to_h[i] += 7;
-                creature_ptr->dis_to_h[i] += 7;
-            }
-            if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
-                creature_ptr->to_h[i] += 13;
-                creature_ptr->dis_to_h[i] += 13;
-            }
-            if (o_ptr->curse_flags & (TRC_TY_CURSE)) {
-                creature_ptr->to_h[i] += 5;
-                creature_ptr->dis_to_h[i] += 5;
-            }
             if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
                 if (o_ptr->curse_flags & (TRC_CURSED)) {
                     creature_ptr->to_d[i] += 5;
@@ -3523,6 +3507,21 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
         }
     }
 
+    if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
+        if (o_ptr->curse_flags & (TRC_CURSED)) {
+            creature_ptr->to_h[id] += 5;
+        }
+        if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
+            creature_ptr->to_h[id] += 7;
+        }
+        if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
+            creature_ptr->to_h[id] += 13;
+        }
+        if (o_ptr->curse_flags & (TRC_TY_CURSE)) {
+            creature_ptr->to_h[id] += 5;
+        }
+    }
+
     if (hold < o_ptr->weight / 10) {
         creature_ptr->to_h[id] += 2 * (hold - o_ptr->weight / 10);
     }
@@ -3571,6 +3570,21 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
             creature_ptr->dis_to_h[id] -= 200;
         } else {
             creature_ptr->dis_to_h[id] -= 30;
+        }
+    }
+
+    if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
+        if (o_ptr->curse_flags & (TRC_CURSED)) {
+            creature_ptr->dis_to_h[id] += 5;
+        }
+        if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
+            creature_ptr->dis_to_h[id] += 7;
+        }
+        if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
+            creature_ptr->dis_to_h[id] += 13;
+        }
+        if (o_ptr->curse_flags & (TRC_TY_CURSE)) {
+            creature_ptr->dis_to_h[id] += 5;
         }
     }
 
