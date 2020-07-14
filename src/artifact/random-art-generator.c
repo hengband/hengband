@@ -334,6 +334,33 @@ static int decide_random_art_power_level(object_type *o_ptr, const bool a_cursed
     return 3;
 }
 
+static void name_unnatural_random_artifact(player_type *player_ptr, object_type *o_ptr, const bool a_scroll, GAME_TEXT *new_name, const int power_level)
+{
+    if (!a_scroll) {
+        get_random_name(o_ptr, new_name, object_is_armour(player_ptr, o_ptr), power_level);
+        return;
+    }
+
+    GAME_TEXT dummy_name[MAX_NLEN] = "";
+    concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
+    object_aware(player_ptr, o_ptr);
+    object_known(o_ptr);
+    o_ptr->ident |= IDENT_FULL_KNOWN;
+    o_ptr->art_name = quark_add("");
+    (void)screen_object(player_ptr, o_ptr, 0L);
+    if (!get_string(ask_msg, dummy_name, sizeof dummy_name) || !dummy_name[0]) {
+        if (one_in_(2)) {
+            get_table_sindarin_aux(dummy_name);
+        } else {
+            get_table_name_aux(dummy_name);
+        }
+    }
+
+    sprintf(new_name, _("《%s》", "'%s'"), dummy_name);
+    chg_virtue(player_ptr, V_INDIVIDUALISM, 2);
+    chg_virtue(player_ptr, V_ENCHANT, 5);
+}
+
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
@@ -357,9 +384,6 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 
     if (a_scroll && (randint1(100) <= warrior_artifact_bias))
         o_ptr->artifact_bias = BIAS_WARRIOR;
-
-    GAME_TEXT new_name[1024];
-    strcpy(new_name, "");
 
     bool a_cursed = decide_random_art_cursed(a_scroll, o_ptr);
     int powers = decide_random_art_power(a_cursed);
@@ -392,30 +416,9 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK))
         weakening_artifact(player_ptr, o_ptr);
 
-    if (a_scroll) {
-        GAME_TEXT dummy_name[MAX_NLEN] = "";
-        concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
-        object_aware(player_ptr, o_ptr);
-        object_known(o_ptr);
-        o_ptr->ident |= IDENT_FULL_KNOWN;
-        o_ptr->art_name = quark_add("");
-        (void)screen_object(player_ptr, o_ptr, 0L);
-        if (!get_string(ask_msg, dummy_name, sizeof dummy_name) || !dummy_name[0]) {
-            /* Cancelled */
-            if (one_in_(2)) {
-                get_table_sindarin_aux(dummy_name);
-            } else {
-                get_table_name_aux(dummy_name);
-            }
-        }
-
-        sprintf(new_name, _("《%s》", "'%s'"), dummy_name);
-        chg_virtue(player_ptr, V_INDIVIDUALISM, 2);
-        chg_virtue(player_ptr, V_ENCHANT, 5);
-    } else {
-        get_random_name(o_ptr, new_name, object_is_armour(player_ptr, o_ptr), power_level);
-    }
-
+    GAME_TEXT new_name[1024];
+    strcpy(new_name, "");
+    name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, new_name, power_level);
     o_ptr->art_name = quark_add(new_name);
     msg_format_wizard(player_ptr, CHEAT_OBJECT,
         _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
