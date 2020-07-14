@@ -1,4 +1,5 @@
 ﻿#include "market/building-craft-fix.h"
+#include "artifact/artifact-info.h"
 #include "art-definition/art-sword-types.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
@@ -9,7 +10,6 @@
 #include "inventory/inventory-object.h"
 #include "market/building-util.h"
 #include "mind/racial-android.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"

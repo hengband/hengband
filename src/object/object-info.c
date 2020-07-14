@@ -11,13 +11,13 @@
  */
 
 #include "object/object-info.h"
+#include "artifact/artifact-info.h"
 #include "art-definition/art-weapon-types.h"
 #include "art-definition/random-art-effects.h"
 #include "floor/floor.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/activation-info-table.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-flags.h"

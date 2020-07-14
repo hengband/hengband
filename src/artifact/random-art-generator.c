@@ -1,4 +1,10 @@
-﻿#include "artifact/random-art-generator.h"
+﻿/*!
+ * @brief ランダムアーティファクトの生成 / Artifact code
+ * @date 2020/07/14
+ * @author Hourier
+ */
+
+#include "artifact/random-art-generator.h"
 #include "artifact/random-art-activation.h"
 #include "artifact/random-art-bias-types.h"
 #include "artifact/random-art-characteristics.h"

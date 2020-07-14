@@ -1748,6 +1748,9 @@
     <ClCompile Include="..\..\src\artifact\fixed-art-generator.c">
       <Filter>artifact</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\artifact\artifact-info.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3812,6 +3815,9 @@
       <Filter>artifact</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\artifact\fixed-art-generator.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\artifact-info.h">
       <Filter>artifact</Filter>
     </ClInclude>
   </ItemGroup>

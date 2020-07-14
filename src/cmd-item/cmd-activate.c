@@ -6,6 +6,7 @@
 
 #include "cmd-item/cmd-activate.h"
 #include "action/action-limited.h"
+#include "artifact/artifact-info.h"
 #include "art-definition/art-bow-types.h"
 #include "art-definition/art-sword-types.h"
 #include "art-definition/art-weapon-types.h"

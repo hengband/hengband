@@ -1,4 +1,16 @@
-﻿#include "artifact/fixed-art-generator.h"
+﻿/*!
+ * @brief 固定アーティファクトの生成 / Artifact code
+ * @date 2020/07/14
+ * @author
+ * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+ * This software may be copied and distributed for educational, research, and
+ * not for profit purposes provided that this copyright and statement are
+ * included in all such copies.
+ * 2013 Deskull rearranged comment for Doxygen.
+ * 2020 Hourier rearranged
+ */
+
+#include "artifact/fixed-art-generator.h"
 #include "art-definition/art-armor-types.h"
 #include "art-definition/art-protector-types.h"
 #include "art-definition/art-sword-types.h"

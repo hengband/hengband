@@ -1,4 +1,5 @@
 ﻿#include "object/object-value-calc.h"
+#include "artifact/artifact-info.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
