@@ -9,6 +9,21 @@
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
+static void pval_subtraction(object_type *o_ptr)
+{
+    if (o_ptr->pval > 0)
+        o_ptr->pval = 0 - (o_ptr->pval + randint1(4));
+
+    if (o_ptr->to_a > 0)
+        o_ptr->to_a = 0 - (o_ptr->to_a + randint1(4));
+
+    if (o_ptr->to_h > 0)
+        o_ptr->to_h = 0 - (o_ptr->to_h + randint1(4));
+
+    if (o_ptr->to_d > 0)
+        o_ptr->to_d = 0 - (o_ptr->to_d + randint1(4));
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトを呪いのアーティファクトにする経過処理。/ generation process of cursed artifact.
  * @details pval、AC、命中、ダメージが正の場合、符号反転の上1d4だけ悪化させ、重い呪い、呪いフラグを必ず付加。
@@ -21,15 +36,7 @@
  */
 void curse_artifact(player_type *player_ptr, object_type *o_ptr)
 {
-    if (o_ptr->pval > 0)
-        o_ptr->pval = 0 - (o_ptr->pval + randint1(4));
-    if (o_ptr->to_a > 0)
-        o_ptr->to_a = 0 - (o_ptr->to_a + randint1(4));
-    if (o_ptr->to_h > 0)
-        o_ptr->to_h = 0 - (o_ptr->to_h + randint1(4));
-    if (o_ptr->to_d > 0)
-        o_ptr->to_d = 0 - (o_ptr->to_d + randint1(4));
-
+    pval_subtraction(o_ptr);
     o_ptr->curse_flags |= (TRC_HEAVY_CURSE | TRC_CURSED);
     remove_flag(o_ptr->art_flags, TR_BLESSED);
 
