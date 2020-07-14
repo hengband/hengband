@@ -2218,7 +2218,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
     }
 
     if (hold < o_ptr->weight / 10) {
-        creature_ptr->to_h[i] += 2 * (hold - o_ptr->weight / 10);
         creature_ptr->dis_to_h[i] += 2 * (hold - o_ptr->weight / 10);
         creature_ptr->heavy_wield[i] = TRUE;
     } else if (creature_ptr->ryoute && (hold < o_ptr->weight / 5))
@@ -3512,10 +3511,17 @@ static void calc_to_damage(player_type* creature_ptr, INVENTORY_IDX slot) {
 static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
 {
     int id = slot - INVEN_RARM;
+    object_type *o_ptr = &creature_ptr->inventory_list[slot];
+    int hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
+
     creature_ptr->to_h[id] = 0;
 
     creature_ptr->to_h[id] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->to_h[id] += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+
+    if (hold < o_ptr->weight / 10) {
+        creature_ptr->to_h[id] += 2 * (hold - o_ptr->weight / 10);
+    }
 
     if (is_blessed(creature_ptr)) {
         creature_ptr->to_h[id] += 10;
