@@ -105,6 +105,17 @@ static int invest_activation_necromancy(void)
     return ACT_DRAIN_1;
 }
 
+static int invest_activation_law(void)
+{
+    if (one_in_(8))
+        return ACT_BANISH_EVIL;
+    
+    if (one_in_(4))
+        return ACT_DISP_EVIL;
+    
+    return ACT_PROT_EVIL;
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにバイアスに依存した発動を与える。/ Add one activaton of randam artifact depend on bias.
  * @details バイアスが無い場合、一部のバイアスの確率によっては one_ability() に処理が移行する。
@@ -146,15 +157,9 @@ void give_activation_power(object_type *o_ptr)
         chance = 101;
         break;
     case BIAS_LAW:
+        type = invest_activation_law();
         chance = 101;
-        if (one_in_(8))
-            type = ACT_BANISH_EVIL;
-        else if (one_in_(4))
-            type = ACT_DISP_EVIL;
-        else
-            type = ACT_PROT_EVIL;
         break;
-
     case BIAS_ROGUE:
         chance = 101;
         if (one_in_(50))
