@@ -157,6 +157,21 @@ static bool decide_random_art_cursed(const bool a_scroll, object_type *o_ptr)
     return FALSE;
 }
 
+static int decide_random_art_power(const bool a_cursed, object_type *o_ptr)
+{
+    int powers = randint1(5) + 1;
+    while (one_in_(powers) || one_in_(7) || one_in_(10))
+        powers++;
+
+    if (!a_cursed && one_in_(WEIRD_LUCK))
+        powers *= 2;
+
+    if (a_cursed)
+        powers /= 2;
+
+    return powers;
+}
+
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
@@ -185,16 +200,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     strcpy(new_name, "");
 
     bool a_cursed = decide_random_art_cursed(a_scroll, o_ptr);
-    int powers = randint1(5) + 1;
-    while (one_in_(powers) || one_in_(7) || one_in_(10))
-        powers++;
-
-    if (!a_cursed && one_in_(WEIRD_LUCK))
-        powers *= 2;
-
-    if (a_cursed)
-        powers /= 2;
-
+    int powers = decide_random_art_power(a_cursed, o_ptr);
     int max_powers = powers;
     int max_type = object_is_weapon_ammo(o_ptr) ? 7 : 5;
     while (powers--) {
