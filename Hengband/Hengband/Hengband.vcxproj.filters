@@ -1724,6 +1724,9 @@
     <ClCompile Include="..\..\src\object-enchant\artifact.c">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\wizard\artifact-bias-table.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3765,6 +3768,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\artifact.h">
       <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\artifact-bias-table.h">
+      <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

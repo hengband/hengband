@@ -712,6 +712,7 @@ hengband_SOURCES = \
 	window/main-window-util.c window/main-window-util.h \
 	window/main-window-equipment.c window/main-window-equipment.h \
 	\
+	wizard/artifact-bias-table.c wizard/artifact-bias-table.h \
 	wizard/spoiler-table.c wizard/spoiler-table.h \
 	wizard/tval-descriptions-table.c wizard/tval-descriptions-table.h \
 	wizard/wizard-messages.c wizard/wizard-messages.h \

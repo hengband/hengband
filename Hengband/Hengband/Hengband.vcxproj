@@ -630,6 +630,7 @@
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
     <ClCompile Include="..\..\src\combat\aura-counterattack.c" />
     <ClCompile Include="..\..\src\window\main-window-equipments.c" />
+    <ClCompile Include="..\..\src\wizard\artifact-bias-table.c" />
     <ClCompile Include="..\..\src\wizard\spoiler-table.c" />
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c" />
     <ClCompile Include="..\..\src\savedata\quest-loader.c" />
@@ -1232,6 +1233,7 @@
     <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\..\src\view\status-bars-table.h" />
     <ClInclude Include="..\..\src\window\main-window-equipments.h" />
+    <ClInclude Include="..\..\src\wizard\artifact-bias-table.h" />
     <ClInclude Include="..\..\src\wizard\spoiler-table.h" />
     <ClInclude Include="..\..\src\wizard\wizard-messages.h" />
     <ClInclude Include="..\..\src\wizard\wizard-spells.h" />
