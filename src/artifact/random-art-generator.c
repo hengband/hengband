@@ -71,6 +71,81 @@ static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
     return FALSE;
 }
 
+static set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *warrior_artifact_bias)
+{
+    switch (player_ptr->pclass) {
+    case CLASS_WARRIOR:
+    case CLASS_BERSERKER:
+    case CLASS_ARCHER:
+    case CLASS_SAMURAI:
+    case CLASS_CAVALRY:
+    case CLASS_SMITH:
+        o_ptr->artifact_bias = BIAS_WARRIOR;
+        break;
+    case CLASS_MAGE:
+    case CLASS_HIGH_MAGE:
+    case CLASS_SORCERER:
+    case CLASS_MAGIC_EATER:
+    case CLASS_BLUE_MAGE:
+        o_ptr->artifact_bias = BIAS_MAGE;
+        break;
+    case CLASS_PRIEST:
+        o_ptr->artifact_bias = BIAS_PRIESTLY;
+        break;
+    case CLASS_ROGUE:
+    case CLASS_NINJA:
+        o_ptr->artifact_bias = BIAS_ROGUE;
+        *warrior_artifact_bias = 25;
+        break;
+    case CLASS_RANGER:
+    case CLASS_SNIPER:
+        o_ptr->artifact_bias = BIAS_RANGER;
+        *warrior_artifact_bias = 30;
+        break;
+    case CLASS_PALADIN:
+        o_ptr->artifact_bias = BIAS_PRIESTLY;
+        *warrior_artifact_bias = 40;
+        break;
+    case CLASS_WARRIOR_MAGE:
+    case CLASS_RED_MAGE:
+        o_ptr->artifact_bias = BIAS_MAGE;
+        *warrior_artifact_bias = 40;
+        break;
+    case CLASS_CHAOS_WARRIOR:
+        o_ptr->artifact_bias = BIAS_CHAOS;
+        *warrior_artifact_bias = 40;
+        break;
+    case CLASS_MONK:
+    case CLASS_FORCETRAINER:
+        o_ptr->artifact_bias = BIAS_PRIESTLY;
+        break;
+    case CLASS_MINDCRAFTER:
+    case CLASS_BARD:
+        if (randint1(5) > 2)
+            o_ptr->artifact_bias = BIAS_PRIESTLY;
+        break;
+    case CLASS_TOURIST:
+        if (randint1(5) > 2)
+            o_ptr->artifact_bias = BIAS_WARRIOR;
+        break;
+    case CLASS_IMITATOR:
+        if (randint1(2) > 1)
+            o_ptr->artifact_bias = BIAS_RANGER;
+        break;
+    case CLASS_BEASTMASTER:
+        o_ptr->artifact_bias = BIAS_CHR;
+        *warrior_artifact_bias = 50;
+        break;
+    case CLASS_MIRROR_MASTER:
+        if (randint1(4) > 1)
+            o_ptr->artifact_bias = BIAS_MAGE;
+        else
+            o_ptr->artifact_bias = BIAS_ROGUE;
+        
+        break;
+    }
+}
+
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
@@ -92,80 +167,8 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
         has_pval = TRUE;
 
     int warrior_artifact_bias = 0;
-    if (a_scroll && one_in_(4)) {
-        switch (player_ptr->pclass) {
-        case CLASS_WARRIOR:
-        case CLASS_BERSERKER:
-        case CLASS_ARCHER:
-        case CLASS_SAMURAI:
-        case CLASS_CAVALRY:
-        case CLASS_SMITH:
-            o_ptr->artifact_bias = BIAS_WARRIOR;
-            break;
-        case CLASS_MAGE:
-        case CLASS_HIGH_MAGE:
-        case CLASS_SORCERER:
-        case CLASS_MAGIC_EATER:
-        case CLASS_BLUE_MAGE:
-            o_ptr->artifact_bias = BIAS_MAGE;
-            break;
-        case CLASS_PRIEST:
-            o_ptr->artifact_bias = BIAS_PRIESTLY;
-            break;
-        case CLASS_ROGUE:
-        case CLASS_NINJA:
-            o_ptr->artifact_bias = BIAS_ROGUE;
-            warrior_artifact_bias = 25;
-            break;
-        case CLASS_RANGER:
-        case CLASS_SNIPER:
-            o_ptr->artifact_bias = BIAS_RANGER;
-            warrior_artifact_bias = 30;
-            break;
-        case CLASS_PALADIN:
-            o_ptr->artifact_bias = BIAS_PRIESTLY;
-            warrior_artifact_bias = 40;
-            break;
-        case CLASS_WARRIOR_MAGE:
-        case CLASS_RED_MAGE:
-            o_ptr->artifact_bias = BIAS_MAGE;
-            warrior_artifact_bias = 40;
-            break;
-        case CLASS_CHAOS_WARRIOR:
-            o_ptr->artifact_bias = BIAS_CHAOS;
-            warrior_artifact_bias = 40;
-            break;
-        case CLASS_MONK:
-        case CLASS_FORCETRAINER:
-            o_ptr->artifact_bias = BIAS_PRIESTLY;
-            break;
-        case CLASS_MINDCRAFTER:
-        case CLASS_BARD:
-            if (randint1(5) > 2)
-                o_ptr->artifact_bias = BIAS_PRIESTLY;
-            break;
-        case CLASS_TOURIST:
-            if (randint1(5) > 2)
-                o_ptr->artifact_bias = BIAS_WARRIOR;
-            break;
-        case CLASS_IMITATOR:
-            if (randint1(2) > 1)
-                o_ptr->artifact_bias = BIAS_RANGER;
-            break;
-        case CLASS_BEASTMASTER:
-            o_ptr->artifact_bias = BIAS_CHR;
-            warrior_artifact_bias = 50;
-            break;
-        case CLASS_MIRROR_MASTER:
-            if (randint1(4) > 1) {
-                o_ptr->artifact_bias = BIAS_MAGE;
-            } else {
-                o_ptr->artifact_bias = BIAS_ROGUE;
-            }
-
-            break;
-        }
-    }
+    if (a_scroll && one_in_(4))
+        set_artifact_bias(player_ptr, o_ptr, &warrior_artifact_bias);
 
     if (a_scroll && (randint1(100) <= warrior_artifact_bias))
         o_ptr->artifact_bias = BIAS_WARRIOR;
