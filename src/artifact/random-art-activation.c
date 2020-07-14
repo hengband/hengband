@@ -116,6 +116,23 @@ static int invest_activation_law(void)
     return ACT_PROT_EVIL;
 }
 
+static int invest_activation_rogue(void)
+{
+    if (one_in_(50))
+        return ACT_SPEED;
+    
+    if (one_in_(4))
+        return ACT_SLEEP;
+    
+    if (one_in_(3))
+        return ACT_DETECT_ALL;
+
+    if (one_in_(8))
+        return ACT_ID_FULL;
+    
+    return ACT_ID_PLAIN;
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにバイアスに依存した発動を与える。/ Add one activaton of randam artifact depend on bias.
  * @details バイアスが無い場合、一部のバイアスの確率によっては one_ability() に処理が移行する。
@@ -162,18 +179,8 @@ void give_activation_power(object_type *o_ptr)
         break;
     case BIAS_ROGUE:
         chance = 101;
-        if (one_in_(50))
-            type = ACT_SPEED;
-        else if (one_in_(4))
-            type = ACT_SLEEP;
-        else if (one_in_(3))
-            type = ACT_DETECT_ALL;
-        else if (one_in_(8))
-            type = ACT_ID_FULL;
-        else
-            type = ACT_ID_PLAIN;
+        type = invest_activation_rogue();
         break;
-
     case BIAS_MAGE:
         chance = 66;
         if (one_in_(20))
