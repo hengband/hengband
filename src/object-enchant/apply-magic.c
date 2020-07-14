@@ -6,6 +6,7 @@
  */
 
 #include "object-enchant/apply-magic.h"
+#include "artifact/fixed-art-generator.h"
 #include "art-definition/art-armor-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"

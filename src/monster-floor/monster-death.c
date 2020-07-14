@@ -1,4 +1,5 @@
 ﻿#include "monster-floor/monster-death.h"
+#include "artifact/fixed-art-generator.h"
 #include "art-definition/art-armor-types.h"
 #include "art-definition/art-bow-types.h"
 #include "art-definition/art-protector-types.h"

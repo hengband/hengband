@@ -6,6 +6,7 @@
  */
 
 #include "floor/floor-object.h"
+#include "artifact/fixed-art-generator.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor.h"
