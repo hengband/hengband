@@ -146,6 +146,16 @@ static void set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *
     }
 }
 
+static void decide_warrior_bias(player_type *player_ptr, object_type *o_ptr, const bool a_scroll)
+{
+    int warrior_artifact_bias = 0;
+    if (a_scroll && one_in_(4))
+        set_artifact_bias(player_ptr, o_ptr, &warrior_artifact_bias);
+
+    if (a_scroll && (randint1(100) <= warrior_artifact_bias))
+        o_ptr->artifact_bias = BIAS_WARRIOR;
+}
+
 static bool decide_random_art_cursed(const bool a_scroll, object_type *o_ptr)
 {
     if (!a_scroll && one_in_(A_CURSED))
@@ -334,7 +344,7 @@ static int decide_random_art_power_level(object_type *o_ptr, const bool a_cursed
     return 3;
 }
 
-static void name_unnatural_random_artifact(player_type *player_ptr, object_type *o_ptr, const bool a_scroll, GAME_TEXT *new_name, const int power_level)
+static void name_unnatural_random_artifact(player_type *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, GAME_TEXT *new_name)
 {
     if (!a_scroll) {
         get_random_name(o_ptr, new_name, object_is_armour(player_ptr, o_ptr), power_level);
@@ -361,6 +371,18 @@ static void name_unnatural_random_artifact(player_type *player_ptr, object_type 
     chg_virtue(player_ptr, V_ENCHANT, 5);
 }
 
+static void generate_unnatural_random_artifact(player_type *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, const int max_powers, const int total_flags)
+{
+    GAME_TEXT new_name[1024];
+    strcpy(new_name, "");
+    name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, new_name);
+    o_ptr->art_name = quark_add(new_name);
+    msg_format_wizard(player_ptr, CHEAT_OBJECT,
+        _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
+        total_flags, artifact_bias_name[o_ptr->artifact_bias]);
+    player_ptr->window |= PW_INVEN | PW_EQUIP;
+}
+
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
@@ -378,12 +400,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
         o_ptr->art_flags[i] |= k_info[o_ptr->k_idx].flags[i];
 
     bool has_pval = o_ptr->pval != 0;
-    int warrior_artifact_bias = 0;
-    if (a_scroll && one_in_(4))
-        set_artifact_bias(player_ptr, o_ptr, &warrior_artifact_bias);
-
-    if (a_scroll && (randint1(100) <= warrior_artifact_bias))
-        o_ptr->artifact_bias = BIAS_WARRIOR;
+    decide_warrior_bias(player_ptr, o_ptr, a_scroll);
 
     bool a_cursed = decide_random_art_cursed(a_scroll, o_ptr);
     int powers = decide_random_art_power(a_cursed);
@@ -416,13 +433,6 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK))
         weakening_artifact(player_ptr, o_ptr);
 
-    GAME_TEXT new_name[1024];
-    strcpy(new_name, "");
-    name_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, new_name, power_level);
-    o_ptr->art_name = quark_add(new_name);
-    msg_format_wizard(player_ptr, CHEAT_OBJECT,
-        _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
-        total_flags, artifact_bias_name[o_ptr->artifact_bias]);
-    player_ptr->window |= PW_INVEN | PW_EQUIP;
+    generate_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, max_powers, total_flags);
     return TRUE;
 }
