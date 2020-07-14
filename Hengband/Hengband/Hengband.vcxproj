@@ -159,6 +159,7 @@
     <ClCompile Include="..\..\src\action\travel-execution.c" />
     <ClCompile Include="..\..\src\action\tunnel-execution.c" />
     <ClCompile Include="..\..\src\action\weapon-shield.c" />
+    <ClCompile Include="..\..\src\artifact\random-art-activation.c" />
     <ClCompile Include="..\..\src\artifact\random-art-misc.c" />
     <ClCompile Include="..\..\src\artifact\random-art-resistance.c" />
     <ClCompile Include="..\..\src\artifact\random-art-slay.c" />
@@ -651,6 +652,7 @@
     <ClInclude Include="..\..\src\art-definition\art-sword-types.h" />
     <ClInclude Include="..\..\src\art-definition\art-weapon-types.h" />
     <ClInclude Include="..\..\src\art-definition\random-art-effects.h" />
+    <ClInclude Include="..\..\src\artifact\random-art-activation.h" />
     <ClInclude Include="..\..\src\artifact\random-art-misc.h" />
     <ClInclude Include="..\..\src\artifact\random-art-resistance.h" />
     <ClInclude Include="..\..\src\artifact\random-art-slay.h" />

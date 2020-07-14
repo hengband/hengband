@@ -14,6 +14,7 @@ hengband_SOURCES = \
 	action/tunnel-execution.c action/tunnel-execution.h \
 	action/weapon-shield.c action/weapon-shield.h \
 	\
+	artifact/random-art-activation.c artifact/random-art-activation.h \
 	artifact/random-art-bias-types.h \
 	artifact/random-art-misc.c artifact/random-art-misc.h \
 	artifact/random-art-pval-investor.c artifact/random-art-pval-investor.h \
