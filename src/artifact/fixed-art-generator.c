@@ -116,7 +116,7 @@ static void random_artifact_resistance(player_type *player_ptr, object_type *o_p
     if ((o_ptr->name1 == ART_HEAVENLY_MAIDEN) && (player_ptr->psex != SEX_FEMALE))
         add_flag(o_ptr->art_flags, TR_AGGRAVATE);
 
-    milim_swimsuit();
+    milim_swimsuit(player_ptr, o_ptr);
     if (a_ptr->gen_flags & TRG_XTRA_POWER)
         give_power = TRUE;
 
@@ -134,6 +134,27 @@ static void random_artifact_resistance(player_type *player_ptr, object_type *o_p
 
     if (give_resistance)
         one_high_resistance(o_ptr);
+}
+
+static void invest_curse_to_fixed_artifact(player_type *player_ptr, artifact_type *a_ptr, object_type *q_ptr)
+{
+    if (a_ptr->gen_flags & TRG_CURSED)
+        q_ptr->curse_flags |= TRC_CURSED;
+
+    if (a_ptr->gen_flags & TRG_HEAVY_CURSE)
+        q_ptr->curse_flags |= TRC_HEAVY_CURSE;
+
+    if (a_ptr->gen_flags & TRG_PERMA_CURSE)
+        q_ptr->curse_flags |= TRC_PERMA_CURSE;
+
+    if (a_ptr->gen_flags & TRG_RANDOM_CURSE0)
+        q_ptr->curse_flags |= get_curse(player_ptr, 0, q_ptr);
+
+    if (a_ptr->gen_flags & TRG_RANDOM_CURSE1)
+        q_ptr->curse_flags |= get_curse(player_ptr, 1, q_ptr);
+
+    if (a_ptr->gen_flags & TRG_RANDOM_CURSE2)
+        q_ptr->curse_flags |= get_curse(player_ptr, 2, q_ptr);
 }
 
 /*!
@@ -171,24 +192,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
     q_ptr->to_h = a_ptr->to_h;
     q_ptr->to_d = a_ptr->to_d;
     q_ptr->weight = a_ptr->weight;
-    if (a_ptr->gen_flags & TRG_CURSED)
-        q_ptr->curse_flags |= TRC_CURSED;
-
-    if (a_ptr->gen_flags & TRG_HEAVY_CURSE)
-        q_ptr->curse_flags |= TRC_HEAVY_CURSE;
-
-    if (a_ptr->gen_flags & TRG_PERMA_CURSE)
-        q_ptr->curse_flags |= TRC_PERMA_CURSE;
-
-    if (a_ptr->gen_flags & TRG_RANDOM_CURSE0)
-        q_ptr->curse_flags |= get_curse(player_ptr, 0, q_ptr);
-
-    if (a_ptr->gen_flags & TRG_RANDOM_CURSE1)
-        q_ptr->curse_flags |= get_curse(player_ptr, 1, q_ptr);
-
-    if (a_ptr->gen_flags & TRG_RANDOM_CURSE2)
-        q_ptr->curse_flags |= get_curse(player_ptr, 2, q_ptr);
-
+    invest_curse_to_fixed_artifact(player_ptr, a_ptr, q_ptr);
     random_artifact_resistance(player_ptr, q_ptr, a_ptr);
     return drop_near(player_ptr, q_ptr, -1, y, x) ? TRUE : FALSE;
 }
