@@ -71,7 +71,7 @@ static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
     return FALSE;
 }
 
-static set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *warrior_artifact_bias)
+static void set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *warrior_artifact_bias)
 {
     switch (player_ptr->pclass) {
     case CLASS_WARRIOR:
@@ -157,7 +157,7 @@ static bool decide_random_art_cursed(const bool a_scroll, object_type *o_ptr)
     return FALSE;
 }
 
-static int decide_random_art_power(const bool a_cursed, object_type *o_ptr)
+static int decide_random_art_power(const bool a_cursed)
 {
     int powers = randint1(5) + 1;
     while (one_in_(powers) || one_in_(7) || one_in_(10))
@@ -214,6 +214,44 @@ static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powe
     };
 }
 
+static void strengthen_pval(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_BLOWS)) {
+        o_ptr->pval = randint1(2);
+        if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
+            o_ptr->pval++;
+    } else {
+        do {
+            o_ptr->pval++;
+        } while (o_ptr->pval < randint1(5) || one_in_(o_ptr->pval));
+    }
+
+    if ((o_ptr->pval > 4) && !one_in_(WEIRD_LUCK))
+        o_ptr->pval = 4;
+}
+
+/*!
+ * @brief 防具ならばAC修正、武具なら殺戮修正を付与する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
+ * @return なし
+ */
+static void invest_modified_value(player_type *player_ptr, object_type *o_ptr)
+{
+    if (object_is_armour(player_ptr, o_ptr)) {
+        o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
+        return;
+    }
+    
+    if (!object_is_weapon_ammo(o_ptr))
+        return;
+
+    o_ptr->to_h += randint1(o_ptr->to_h > 19 ? 1 : 20 - o_ptr->to_h);
+    o_ptr->to_d += randint1(o_ptr->to_d > 19 ? 1 : 20 - o_ptr->to_d);
+    if ((have_flag(o_ptr->art_flags, TR_WIS)) && (o_ptr->pval > 0))
+        add_flag(o_ptr->art_flags, TR_BLESSED);
+}
+
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
@@ -242,33 +280,13 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     strcpy(new_name, "");
 
     bool a_cursed = decide_random_art_cursed(a_scroll, o_ptr);
-    int powers = decide_random_art_power(a_cursed, o_ptr);
+    int powers = decide_random_art_power(a_cursed);
     int max_powers = powers;
     invest_powers(player_ptr, o_ptr, &powers, &has_pval, a_cursed);
-    if (has_pval) {
-        if (have_flag(o_ptr->art_flags, TR_BLOWS)) {
-            o_ptr->pval = randint1(2);
-            if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
-                o_ptr->pval++;
-        } else {
-            do {
-                o_ptr->pval++;
-            } while (o_ptr->pval < randint1(5) || one_in_(o_ptr->pval));
-        }
+    if (has_pval)
+        strengthen_pval(o_ptr);
 
-        if ((o_ptr->pval > 4) && !one_in_(WEIRD_LUCK))
-            o_ptr->pval = 4;
-    }
-
-    if (object_is_armour(player_ptr, o_ptr))
-        o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
-    else if (object_is_weapon_ammo(o_ptr)) {
-        o_ptr->to_h += randint1(o_ptr->to_h > 19 ? 1 : 20 - o_ptr->to_h);
-        o_ptr->to_d += randint1(o_ptr->to_d > 19 ? 1 : 20 - o_ptr->to_d);
-        if ((have_flag(o_ptr->art_flags, TR_WIS)) && (o_ptr->pval > 0))
-            add_flag(o_ptr->art_flags, TR_BLESSED);
-    }
-
+    invest_modified_value(player_ptr, o_ptr);
     add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
     add_flag(o_ptr->art_flags, TR_IGNORE_ELEC);
     add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);

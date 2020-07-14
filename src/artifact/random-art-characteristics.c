@@ -24,7 +24,7 @@ static void pval_subtraction(object_type *o_ptr)
         o_ptr->to_d = 0 - (o_ptr->to_d + randint1(4));
 }
 
-static add_negative_flags(object_type *o_ptr)
+static void add_negative_flags(object_type *o_ptr)
 {
     if (one_in_(4))
         o_ptr->curse_flags |= TRC_PERMA_CURSE;
@@ -118,6 +118,8 @@ static concptr get_random_art_filename(const bool armour, const int power)
             filename = _("w_high_j.txt", "w_high.txt");
         }
     }
+
+    return filename;
 }
 
 /*!
