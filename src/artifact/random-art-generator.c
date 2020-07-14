@@ -172,6 +172,48 @@ static int decide_random_art_power(const bool a_cursed, object_type *o_ptr)
     return powers;
 }
 
+static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powers, bool *has_pval, const bool a_cursed)
+{
+    int max_type = object_is_weapon_ammo(o_ptr) ? 7 : 5;
+    while ((*powers)--) {
+        switch (randint1(max_type)) {
+        case 1:
+        case 2:
+            random_plus(o_ptr);
+            *has_pval = TRUE;
+            break;
+        case 3:
+        case 4:
+            if (one_in_(2) && object_is_weapon_ammo(o_ptr) && (o_ptr->tval != TV_BOW)) {
+                if (a_cursed && !one_in_(13))
+                    break;
+                if (one_in_(13)) {
+                    if (one_in_(o_ptr->ds + 4))
+                        o_ptr->ds++;
+                } else {
+                    if (one_in_(o_ptr->dd + 1))
+                        o_ptr->dd++;
+                }
+            } else
+                random_resistance(o_ptr);
+
+            break;
+        case 5:
+            random_misc(player_ptr, o_ptr);
+            break;
+        case 6:
+        case 7:
+            random_slay(o_ptr);
+            break;
+        default:
+            if (current_world_ptr->wizard)
+                msg_print("Switch error in become_random_artifact!");
+
+            (*powers)++;
+        }
+    };
+}
+
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
@@ -202,43 +244,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     bool a_cursed = decide_random_art_cursed(a_scroll, o_ptr);
     int powers = decide_random_art_power(a_cursed, o_ptr);
     int max_powers = powers;
-    int max_type = object_is_weapon_ammo(o_ptr) ? 7 : 5;
-    while (powers--) {
-        switch (randint1(max_type)) {
-        case 1:
-        case 2:
-            random_plus(o_ptr);
-            has_pval = TRUE;
-            break;
-        case 3:
-        case 4:
-            if (one_in_(2) && object_is_weapon_ammo(o_ptr) && (o_ptr->tval != TV_BOW)) {
-                if (a_cursed && !one_in_(13))
-                    break;
-                if (one_in_(13)) {
-                    if (one_in_(o_ptr->ds + 4))
-                        o_ptr->ds++;
-                } else {
-                    if (one_in_(o_ptr->dd + 1))
-                        o_ptr->dd++;
-                }
-            } else
-                random_resistance(o_ptr);
-            break;
-        case 5:
-            random_misc(player_ptr, o_ptr);
-            break;
-        case 6:
-        case 7:
-            random_slay(o_ptr);
-            break;
-        default:
-            if (current_world_ptr->wizard)
-                msg_print("Switch error in become_random_artifact!");
-            powers++;
-        }
-    };
-
+    invest_powers(player_ptr, o_ptr, &powers, &has_pval, a_cursed);
     if (has_pval) {
         if (have_flag(o_ptr->art_flags, TR_BLOWS)) {
             o_ptr->pval = randint1(2);
