@@ -15,7 +15,7 @@
 #include "object-enchant/apply-magic-armor.h"
 #include "object-enchant/apply-magic-others.h"
 #include "object-enchant/apply-magic-weapon.h"
-#include "object-enchant/artifact.h"
+#include "system/artifact-type-definition.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"

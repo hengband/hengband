@@ -1,13 +1,13 @@
 ﻿#include "object/object-flags.h"
 #include "cmd-item/cmd-smith.h" // todo 相互参照している.
 #include "mind/mind-weaponsmith.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/artifact-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

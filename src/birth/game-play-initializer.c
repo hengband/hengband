@@ -10,11 +10,11 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "object-enchant/artifact.h"
 #include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
 #include "player/player-race-types.h"
+#include "system/artifact-type-definition.h"
 #include "system/system-variables.h"
 #include "world/world.h"
 

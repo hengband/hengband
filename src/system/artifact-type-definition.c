@@ -1,4 +1,4 @@
-﻿#include "object-enchant/artifact.h"
+﻿#include "system/artifact-type-definition.h"
 
 /*
  * The artifact arrays

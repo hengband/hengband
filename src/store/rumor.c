@@ -7,10 +7,11 @@
 #include "io/files-util.h"
 #include "io/tokenizer.h"
 #include "monster-race/monster-race.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
+#include "system/artifact-type-definition.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

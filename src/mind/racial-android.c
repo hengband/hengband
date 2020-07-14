@@ -1,7 +1,6 @@
 ﻿#include "mind/racial-android.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/targeting.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trg-types.h"
 #include "object-hook/hook-enchant.h"
@@ -15,6 +14,7 @@
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 

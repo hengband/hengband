@@ -1721,9 +1721,6 @@
     <ClCompile Include="..\..\src\artifact\random-art-pval-investor.c">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\artifact.c">
-      <Filter>object-enchant</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\wizard\artifact-bias-table.c">
       <Filter>wizard</Filter>
     </ClCompile>
@@ -1750,6 +1747,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\artifact\artifact-info.c">
       <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\artifact-type-definition.c">
+      <Filter>system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3790,9 +3790,6 @@
     <ClInclude Include="..\..\src\artifact\random-art-bias-types.h">
       <Filter>artifact</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\artifact.h">
-      <Filter>object-enchant</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\wizard\artifact-bias-table.h">
       <Filter>wizard</Filter>
     </ClInclude>
@@ -3819,6 +3816,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\artifact\artifact-info.h">
       <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\artifact-type-definition.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,5 @@
 ﻿#include "object/object-value-calc.h"
 #include "artifact/artifact-info.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -8,6 +7,7 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "system/artifact-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

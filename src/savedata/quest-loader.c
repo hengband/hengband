@@ -5,11 +5,11 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/trg-types.h"
 #include "savedata/angband-version-comparer.h"
 #include "savedata/load-util.h"
 #include "savedata/load-zangband.h"
+#include "system/artifact-type-definition.h"
 #include "system/system-variables.h"
 
 /*!

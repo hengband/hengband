@@ -2,11 +2,11 @@
 #include "art-definition/random-art-effects.h"
 #include "cmd-item/cmd-smith.h"
 #include "mind/mind-weaponsmith.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
+#include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 

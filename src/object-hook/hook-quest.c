@@ -5,7 +5,7 @@
 #include "game-option/birth-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
-#include "object-enchant/artifact.h"
+#include "system/artifact-type-definition.h"
 #include "object-enchant/trg-types.h"
 #include "system/object-type-definition.h"
 #include "world/world.h"

@@ -33,7 +33,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
@@ -43,6 +42,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
+#include "system/artifact-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

@@ -407,7 +407,7 @@
     <ClCompile Include="..\..\src\mspell\mspell-particularity.c" />
     <ClCompile Include="..\..\src\mspell\mspell-special.c" />
     <ClCompile Include="..\..\src\mspell\mspell-status.c" />
-    <ClCompile Include="..\..\src\object-enchant\artifact.c" />
+    <ClCompile Include="..\..\src\system\artifact-type-definition.c" />
     <ClCompile Include="..\..\src\autopick\autopick-command-menu.c" />
     <ClCompile Include="..\..\src\autopick\autopick-describer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-destroyer.c" />
@@ -945,7 +945,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-particularity.h" />
     <ClInclude Include="..\..\src\mspell\mspell-special.h" />
     <ClInclude Include="..\..\src\mspell\mspell-status.h" />
-    <ClInclude Include="..\..\src\object-enchant\artifact.h" />
+    <ClInclude Include="..\..\src\system\artifact-type-definition.h" />
     <ClInclude Include="..\..\src\autopick\autopick-command-menu.h" />
     <ClInclude Include="..\..\src\autopick\autopick-commands-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-describer.h" />

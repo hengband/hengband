@@ -15,10 +15,10 @@
 #include "io-dump/dump-util.h"
 #include "locale/english.h"
 #include "monster-race/monster-race.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
+#include "system/artifact-type-definition.h"
 #include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
 #include "term/screen-processor.h"
 #include "util/angband-files.h"

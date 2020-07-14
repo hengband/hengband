@@ -3,7 +3,6 @@
 #include "system/angband.h"
 #include "cmd-item/cmd-activate.h"
 #include "object-enchant/activation-info-table.h"
-#include "system/object-type-definition.h"
 
 /*!
  * @struct artifact_type

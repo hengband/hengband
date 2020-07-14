@@ -1,6 +1,5 @@
 ﻿#include "object/object-value.h"
 #include "monster-race/monster-race.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
@@ -12,6 +11,7 @@
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
 #include "perception/object-perception.h"
+#include "system/artifact-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

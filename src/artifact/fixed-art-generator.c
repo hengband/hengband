@@ -17,7 +17,6 @@
 #include "art-definition/art-weapon-types.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/tr-types.h"
@@ -27,6 +26,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "spell/spells-object.h"
+#include "system/artifact-type-definition.h"
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 

@@ -6,7 +6,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
-#include "object-enchant/artifact.h"
+#include "system/artifact-type-definition.h"
 
 /*
  * @brief クイックソートの実行 / Quick sort in place
