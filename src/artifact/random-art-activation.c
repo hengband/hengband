@@ -42,6 +42,69 @@ static int invest_activation_cold(void)
     return ACT_BA_COLD_3;
 }
 
+static int invest_activation_chaos(void)
+{
+    if (one_in_(6))
+        return ACT_SUMMON_DEMON;
+    
+    return ACT_CALL_CHAOS;
+}
+
+static int invest_activation_priest(void)
+{
+    if (one_in_(13))
+        return ACT_CHARM_UNDEAD;
+    
+    if (one_in_(12))
+        return ACT_BANISH_EVIL;
+    
+    if (one_in_(11))
+        return ACT_DISP_EVIL;
+    
+    if (one_in_(10))
+        return ACT_PROT_EVIL;
+    
+    if (one_in_(9))
+        return ACT_CURE_1000;
+    
+    if (one_in_(8))
+        return ACT_CURE_700;
+    
+    if (one_in_(7))
+        return ACT_REST_ALL;
+    
+    if (one_in_(6))
+        return ACT_REST_EXP;
+    
+    return ACT_CURE_MW;
+}
+
+static int invest_activation_necromancy(void)
+{
+    if (one_in_(66))
+        return ACT_WRAITH;
+    
+    if (one_in_(13))
+        return ACT_DISP_GOOD;
+    
+    if (one_in_(9))
+        return ACT_MASS_GENO;
+    
+    if (one_in_(8))
+        return ACT_GENOCIDE;
+    
+    if (one_in_(13))
+        return ACT_SUMMON_UNDEAD;
+    
+    if (one_in_(9))
+        return ACT_DRAIN_2;
+    
+    if (one_in_(6))
+        return ACT_CHARM_UNDEAD;
+    
+    return ACT_DRAIN_1;
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにバイアスに依存した発動を与える。/ Add one activaton of randam artifact depend on bias.
  * @details バイアスが無い場合、一部のバイアスの確率によっては one_ability() に処理が移行する。
@@ -71,56 +134,17 @@ void give_activation_power(object_type *o_ptr)
         chance = 101;
         break;
     case BIAS_CHAOS:
+        type = invest_activation_chaos();
         chance = 50;
-        if (one_in_(6))
-            type = ACT_SUMMON_DEMON;
-        else
-            type = ACT_CALL_CHAOS;
-
         break;
     case BIAS_PRIESTLY:
+        type = invest_activation_priest();
         chance = 101;
-
-        if (one_in_(13))
-            type = ACT_CHARM_UNDEAD;
-        else if (one_in_(12))
-            type = ACT_BANISH_EVIL;
-        else if (one_in_(11))
-            type = ACT_DISP_EVIL;
-        else if (one_in_(10))
-            type = ACT_PROT_EVIL;
-        else if (one_in_(9))
-            type = ACT_CURE_1000;
-        else if (one_in_(8))
-            type = ACT_CURE_700;
-        else if (one_in_(7))
-            type = ACT_REST_ALL;
-        else if (one_in_(6))
-            type = ACT_REST_EXP;
-        else
-            type = ACT_CURE_MW;
         break;
-
     case BIAS_NECROMANTIC:
+        type = invest_activation_necromancy();
         chance = 101;
-        if (one_in_(66))
-            type = ACT_WRAITH;
-        else if (one_in_(13))
-            type = ACT_DISP_GOOD;
-        else if (one_in_(9))
-            type = ACT_MASS_GENO;
-        else if (one_in_(8))
-            type = ACT_GENOCIDE;
-        else if (one_in_(13))
-            type = ACT_SUMMON_UNDEAD;
-        else if (one_in_(9))
-            type = ACT_DRAIN_2;
-        else if (one_in_(6))
-            type = ACT_CHARM_UNDEAD;
-        else
-            type = ACT_DRAIN_1;
         break;
-
     case BIAS_LAW:
         chance = 101;
         if (one_in_(8))
