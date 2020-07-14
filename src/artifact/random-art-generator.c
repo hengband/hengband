@@ -236,7 +236,7 @@ static void strengthen_pval(object_type *o_ptr)
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
  * @return なし
  */
-static void invest_modified_value(player_type *player_ptr, object_type *o_ptr)
+static void invest_positive_modified_value(player_type *player_ptr, object_type *o_ptr)
 {
     if (object_is_armour(player_ptr, o_ptr)) {
         o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
@@ -250,6 +250,34 @@ static void invest_modified_value(player_type *player_ptr, object_type *o_ptr)
     o_ptr->to_d += randint1(o_ptr->to_d > 19 ? 1 : 20 - o_ptr->to_d);
     if ((have_flag(o_ptr->art_flags, TR_WIS)) && (o_ptr->pval > 0))
         add_flag(o_ptr->art_flags, TR_BLESSED);
+}
+
+/*!
+ * @brief 防具のAC修正が高すぎた場合に弱化させる
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
+ * @return なし
+ */
+static void invest_negative_modified_value(player_type *player_ptr, object_type *o_ptr)
+{
+    if (!object_is_armour(player_ptr, o_ptr))
+        return;
+
+    while ((o_ptr->to_d + o_ptr->to_h) > 20) {
+        if (one_in_(o_ptr->to_d) && one_in_(o_ptr->to_h))
+            break;
+
+        o_ptr->to_d -= (HIT_POINT)randint0(3);
+        o_ptr->to_h -= (HIT_PROB)randint0(3);
+    }
+
+    while ((o_ptr->to_d + o_ptr->to_h) > 10) {
+        if (one_in_(o_ptr->to_d) || one_in_(o_ptr->to_h))
+            break;
+
+        o_ptr->to_d -= (HIT_POINT)randint0(3);
+        o_ptr->to_h -= (HIT_PROB)randint0(3);
+    }
 }
 
 /*!
@@ -286,7 +314,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     if (has_pval)
         strengthen_pval(o_ptr);
 
-    invest_modified_value(player_ptr, o_ptr);
+    invest_positive_modified_value(player_ptr, o_ptr);
     add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
     add_flag(o_ptr->art_flags, TR_IGNORE_ELEC);
     add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
@@ -301,21 +329,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
         give_activation_power(o_ptr);
     }
 
-    if (object_is_armour(player_ptr, o_ptr)) {
-        while ((o_ptr->to_d + o_ptr->to_h) > 20) {
-            if (one_in_(o_ptr->to_d) && one_in_(o_ptr->to_h))
-                break;
-            o_ptr->to_d -= (HIT_POINT)randint0(3);
-            o_ptr->to_h -= (HIT_PROB)randint0(3);
-        }
-        while ((o_ptr->to_d + o_ptr->to_h) > 10) {
-            if (one_in_(o_ptr->to_d) || one_in_(o_ptr->to_h))
-                break;
-            o_ptr->to_d -= (HIT_POINT)randint0(3);
-            o_ptr->to_h -= (HIT_PROB)randint0(3);
-        }
-    }
-
+    invest_negative_modified_value(player_ptr, o_ptr);
     if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == TV_GLOVES))
         add_flag(o_ptr->art_flags, TR_FREE_ACT);
 
