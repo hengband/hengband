@@ -143,6 +143,26 @@ static int invest_activation_mage(void)
 
 static int invest_activation_warrior(void) { return one_in_(100) ? ACT_INVULN : ACT_BERSERK; }
 
+static int invest_activation_ranger(void)
+{
+    if (one_in_(20))
+        return ACT_CHARM_ANIMALS;
+
+    if (one_in_(7))
+        return ACT_SUMMON_ANIMAL;
+
+    if (one_in_(6))
+        return ACT_CHARM_ANIMAL;
+
+    if (one_in_(4))
+        return ACT_RESIST_ALL;
+
+    if (one_in_(3))
+        return ACT_SATIATE;
+
+    return ACT_CURE_POISON;
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにバイアスに依存した発動を与える。/ Add one activaton of randam artifact depend on bias.
  * @details バイアスが無い場合、一部のバイアスの確率によっては one_ability() に処理が移行する。
@@ -153,7 +173,6 @@ void give_activation_power(object_type *o_ptr)
 {
     int type = 0;
     int chance = 0;
-
     switch (o_ptr->artifact_bias) {
     case BIAS_ELEC:
         type = invest_activation_elec();
@@ -200,19 +219,8 @@ void give_activation_power(object_type *o_ptr)
         chance = 80;
         break;
     case BIAS_RANGER:
+        type = invest_activation_ranger();
         chance = 101;
-        if (one_in_(20))
-            type = ACT_CHARM_ANIMALS;
-        else if (one_in_(7))
-            type = ACT_SUMMON_ANIMAL;
-        else if (one_in_(6))
-            type = ACT_CHARM_ANIMAL;
-        else if (one_in_(4))
-            type = ACT_RESIST_ALL;
-        else if (one_in_(3))
-            type = ACT_SATIATE;
-        else
-            type = ACT_CURE_POISON;
         break;
     }
 
