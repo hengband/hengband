@@ -307,6 +307,33 @@ static void reset_flags_poison_needle(object_type *o_ptr)
     remove_flag(o_ptr->art_flags, TR_BRAND_COLD);
 }
 
+static int decide_random_art_power_level(object_type *o_ptr, const bool a_cursed, const int total_flags)
+{
+    if (object_is_weapon_ammo(o_ptr)) {
+        if (a_cursed)
+            return 0;
+
+        if (total_flags < 20000)
+            return 1;
+
+        if (total_flags < 45000)
+            return 2;
+
+        return 3;
+    }
+
+    if (a_cursed)
+        return 0;
+
+    if (total_flags < 15000)
+        return 1;
+
+    if (total_flags < 35000)
+        return 2;
+
+    return 3;
+}
+
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
@@ -361,27 +388,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
         add_flag(o_ptr->art_flags, TR_FREE_ACT);
 
     reset_flags_poison_needle(o_ptr);
-    int power_level;
-    if (!object_is_weapon_ammo(o_ptr)) {
-        if (a_cursed)
-            power_level = 0;
-        else if (total_flags < 15000)
-            power_level = 1;
-        else if (total_flags < 35000)
-            power_level = 2;
-        else
-            power_level = 3;
-    } else {
-        if (a_cursed)
-            power_level = 0;
-        else if (total_flags < 20000)
-            power_level = 1;
-        else if (total_flags < 45000)
-            power_level = 2;
-        else
-            power_level = 3;
-    }
-
+    int power_level = decide_random_art_power_level(o_ptr, a_cursed, total_flags);
     while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK))
         weakening_artifact(player_ptr, o_ptr);
 
