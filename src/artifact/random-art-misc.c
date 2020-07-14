@@ -5,6 +5,16 @@
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+static bool invest_misc_ranger(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_SUST_CON)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SUST_CON);
+    if (one_in_(2))
+        return TRUE;
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにその他特性を付加する。/ Add one misc flag on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -18,14 +28,10 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
     case BIAS_RANGER:
-        if (!(have_flag(o_ptr->art_flags, TR_SUST_CON))) {
-            add_flag(o_ptr->art_flags, TR_SUST_CON);
-            if (one_in_(2))
-                return;
-        }
+        if (invest_misc_ranger(o_ptr))
+            return;
 
         break;
-
     case BIAS_STR:
         if (!(have_flag(o_ptr->art_flags, TR_SUST_STR))) {
             add_flag(o_ptr->art_flags, TR_SUST_STR);
