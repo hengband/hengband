@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-enchant.h"
+#include "artifact/random-art-generator.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -7,7 +8,6 @@
 #include "inventory/inventory-object.h"
 #include "io/write-diary.h"
 #include "mind/racial-android.h"
-#include "object-enchant/artifact.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-perception.h"
 #include "object-hook/hook-weapon.h"

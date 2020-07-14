@@ -6,7 +6,7 @@
  */
 
 #include "object-enchant/apply-magic-accessory.h"
-#include "object-enchant/artifact.h"
+#include "artifact/random-art-generator.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"

@@ -10,6 +10,7 @@
  */
 
 #include "wizard/wizard-special-process.h"
+#include "artifact/random-art-generator.h"
 #include "birth/inventory-initializer.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-help.h"
