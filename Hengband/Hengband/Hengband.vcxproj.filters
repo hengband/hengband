@@ -1730,6 +1730,9 @@
     <ClCompile Include="..\..\src\artifact\random-art-resistance.c">
       <Filter>artifact</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-misc.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3776,6 +3779,9 @@
       <Filter>wizard</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\artifact\random-art-resistance.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-misc.h">
       <Filter>artifact</Filter>
     </ClInclude>
   </ItemGroup>
