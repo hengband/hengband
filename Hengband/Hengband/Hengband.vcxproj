@@ -851,7 +851,7 @@
     <ClInclude Include="..\..\src\mspell\summon-checker.h" />
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h" />
     <ClInclude Include="..\..\src\object-enchant\dragon-breaths-table.h" />
-    <ClInclude Include="..\..\src\object-enchant\random-art-bias-types.h" />
+    <ClInclude Include="..\..\src\artifact\random-art-bias-types.h" />
     <ClInclude Include="..\..\src\object-enchant\trg-types.h" />
     <ClInclude Include="..\..\src\object\object-flags.h" />
     <ClInclude Include="..\..\src\perception\identification.h" />

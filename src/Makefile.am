@@ -14,6 +14,7 @@ hengband_SOURCES = \
 	action/tunnel-execution.c action/tunnel-execution.h \
 	action/weapon-shield.c action/weapon-shield.h \
 	\
+	artifact/random-art-bias-types.h \
 	artifact/random-art-pval-investor.c artifact/random-art-pval-investor.h \
 	\
 	art-definition/art-accessory-types.h \
@@ -463,7 +464,6 @@ hengband_SOURCES = \
 	object-enchant/object-ego.c object-enchant/object-ego.h \
 	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
 	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
-	object-enchant/random-art-bias-types.h \
 	object-enchant/tr-types.h object-enchant/trc-types.h \
 	object-enchant/trg-types.h \
 	object-enchant/vorpal-weapon.c object-enchant/vorpal-weapon.h \

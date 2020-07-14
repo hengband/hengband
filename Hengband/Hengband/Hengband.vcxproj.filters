@@ -878,9 +878,6 @@
     <ClCompile Include="..\..\src\object\object-generator.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\artifact.c">
-      <Filter>object-enchant</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\object-boost.c">
       <Filter>object-enchant</Filter>
     </ClCompile>
@@ -1723,6 +1720,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\artifact\random-art-pval-investor.c">
       <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\artifact.c">
+      <Filter>object-enchant</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2698,9 +2698,6 @@
     <ClInclude Include="..\..\src\sv-definition\sv-weapon-types.h">
       <Filter>sv-definition</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\artifact.h">
-      <Filter>object-enchant</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\item-apply-magic.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
@@ -3021,9 +3018,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\art-definition\art-bow-types.h">
       <Filter>art-definition</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\random-art-bias-types.h">
-      <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-flags.h">
       <Filter>object</Filter>
@@ -3765,6 +3759,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\artifact\random-art-pval-investor.h">
       <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-bias-types.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\artifact.h">
+      <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

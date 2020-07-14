@@ -10,6 +10,7 @@
  */
 
 #include "object-enchant/artifact.h"
+#include "artifact/random-art-bias-types.h"
 #include "artifact/random-art-pval-investor.h"
 #include "art-definition/art-armor-types.h"
 #include "art-definition/art-protector-types.h"
@@ -29,7 +30,6 @@
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
-#include "object-enchant/random-art-bias-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"

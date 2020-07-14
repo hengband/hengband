@@ -5,8 +5,8 @@
  */
 
 #include "artifact/random-art-pval-investor.h"
+#include "artifact/random-art-bias-types.h"
 #include "object-hook/hook-weapon.h"
-#include "object-enchant/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "system/object-type-definition.h"
