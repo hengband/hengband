@@ -75,9 +75,6 @@ char *a_text;
  */
 ARTIFACT_IDX max_a_idx;
 
-static bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr);
-static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr);
-
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトを呪いのアーティファクトにする経過処理。/ generation process of cursed artifact.
  * @details pval、AC、命中、ダメージが正の場合、符号反転の上1d4だけ悪化させ、重い呪い、呪いフラグを必ず付加。
@@ -189,6 +186,114 @@ static void get_random_name(object_type *o_ptr, char *return_name, bool armour, 
     if (return_name[0] == 0)
         get_table_name(return_name);
 #endif
+}
+
+/*対邪平均ダメージの計算処理*/
+static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
+{
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    object_flags(player_ptr, o_ptr, flgs);
+    HIT_POINT base, forced, vorpal;
+    HIT_POINT s_evil = forced = vorpal = 0;
+    HIT_POINT dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
+    if (have_flag(flgs, TR_KILL_EVIL)) {
+        dam = s_evil = dam * 7 / 2;
+    } else if (!have_flag(flgs, TR_KILL_EVIL) && have_flag(flgs, TR_SLAY_EVIL)) {
+        dam = s_evil = dam * 2;
+    } else
+        s_evil = dam;
+
+    if (have_flag(flgs, TR_FORCE_WEAPON)) {
+        dam = forced = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
+    } else
+        forced = dam;
+
+    if (have_flag(flgs, TR_VORPAL)) {
+        dam = vorpal = dam * 11 / 9;
+    } else
+        vorpal = dam;
+
+    dam = dam + o_ptr->to_d;
+    msg_format_wizard(player_ptr, CHEAT_OBJECT, "素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d", base, s_evil, forced, vorpal, dam);
+    return dam;
+}
+
+static bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr)
+{
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    object_flags(player_ptr, o_ptr, flgs);
+    if (have_flag(flgs, TR_VAMPIRIC)) {
+        if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
+            return TRUE;
+        }
+
+        if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 43)) {
+            return TRUE;
+        }
+
+        if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 33)) {
+            return TRUE;
+        }
+
+        if (calc_arm_avgdamage(player_ptr, o_ptr) > 63) {
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 65)) {
+        return TRUE;
+    }
+
+    if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
+        return TRUE;
+    }
+
+    if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 40)) {
+        return TRUE;
+    }
+
+    if (calc_arm_avgdamage(player_ptr, o_ptr) > 75) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
+{
+    KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
+    object_kind *k_ptr = &k_info[k_idx];
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    object_flags(player_ptr, o_ptr, flgs);
+
+    if (have_flag(flgs, TR_KILL_EVIL)) {
+        remove_flag(o_ptr->art_flags, TR_KILL_EVIL);
+        add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
+        return TRUE;
+    }
+
+    if (k_ptr->dd < o_ptr->dd) {
+        o_ptr->dd--;
+        return TRUE;
+    }
+
+    if (k_ptr->ds < o_ptr->ds) {
+        o_ptr->ds--;
+        return TRUE;
+    }
+
+    if (o_ptr->to_d > 10) {
+        o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
+        if (o_ptr->to_d < 10) {
+            o_ptr->to_d = 10;
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 /*!
@@ -690,114 +795,6 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 
     random_artifact_resistance(player_ptr, q_ptr, a_ptr);
     return drop_near(player_ptr, q_ptr, -1, y, x) ? TRUE : FALSE;
-}
-
-/*対邪平均ダメージの計算処理*/
-static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
-{
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(player_ptr, o_ptr, flgs);
-    HIT_POINT base, forced, vorpal;
-    HIT_POINT s_evil = forced = vorpal = 0;
-    HIT_POINT dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
-    if (have_flag(flgs, TR_KILL_EVIL)) {
-        dam = s_evil = dam * 7 / 2;
-    } else if (!have_flag(flgs, TR_KILL_EVIL) && have_flag(flgs, TR_SLAY_EVIL)) {
-        dam = s_evil = dam * 2;
-    } else
-        s_evil = dam;
-
-    if (have_flag(flgs, TR_FORCE_WEAPON)) {
-        dam = forced = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
-    } else
-        forced = dam;
-
-    if (have_flag(flgs, TR_VORPAL)) {
-        dam = vorpal = dam * 11 / 9;
-    } else
-        vorpal = dam;
-
-    dam = dam + o_ptr->to_d;
-    msg_format_wizard(player_ptr, CHEAT_OBJECT, "素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d", base, s_evil, forced, vorpal, dam);
-    return dam;
-}
-
-static bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr)
-{
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(player_ptr, o_ptr, flgs);
-    if (have_flag(flgs, TR_VAMPIRIC)) {
-        if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
-            return TRUE;
-        }
-
-        if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 43)) {
-            return TRUE;
-        }
-
-        if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 33)) {
-            return TRUE;
-        }
-
-        if (calc_arm_avgdamage(player_ptr, o_ptr) > 63) {
-            return TRUE;
-        }
-
-        return FALSE;
-    }
-
-    if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 65)) {
-        return TRUE;
-    }
-
-    if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
-        return TRUE;
-    }
-
-    if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 40)) {
-        return TRUE;
-    }
-
-    if (calc_arm_avgdamage(player_ptr, o_ptr) > 75) {
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
-{
-    KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
-    object_kind *k_ptr = &k_info[k_idx];
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(player_ptr, o_ptr, flgs);
-
-    if (have_flag(flgs, TR_KILL_EVIL)) {
-        remove_flag(o_ptr->art_flags, TR_KILL_EVIL);
-        add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
-        return TRUE;
-    }
-
-    if (k_ptr->dd < o_ptr->dd) {
-        o_ptr->dd--;
-        return TRUE;
-    }
-
-    if (k_ptr->ds < o_ptr->ds) {
-        o_ptr->ds--;
-        return TRUE;
-    }
-
-    if (o_ptr->to_d > 10) {
-        o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
-        if (o_ptr->to_d < 10) {
-            o_ptr->to_d = 10;
-        }
-
-        return TRUE;
-    }
-
-    return FALSE;
 }
 
 /*!
