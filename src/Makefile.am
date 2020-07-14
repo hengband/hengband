@@ -15,8 +15,10 @@ hengband_SOURCES = \
 	action/weapon-shield.c action/weapon-shield.h \
 	\
 	artifact/random-art-bias-types.h \
+	artifact/random-art-misc.c artifact/random-art-misc.h \
 	artifact/random-art-pval-investor.c artifact/random-art-pval-investor.h \
 	artifact/random-art-resistance.c artifact/random-art-resistance.h \
+	artifact/random-art-slay.c artifact/random-art-slay.h \
 	\
 	art-definition/art-accessory-types.h \
 	art-definition/art-armor-types.h \
