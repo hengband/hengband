@@ -14,6 +14,8 @@ hengband_SOURCES = \
 	action/tunnel-execution.c action/tunnel-execution.h \
 	action/weapon-shield.c action/weapon-shield.h \
 	\
+	artifact/random-art-pval-investor.c artifact/random-art-pval-investor.h \
+	\
 	art-definition/art-accessory-types.h \
 	art-definition/art-armor-types.h \
 	art-definition/art-bow-types.h \
@@ -733,14 +735,14 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iart-definition -Iautopick -Ibirth -Icmd-io -Icmd-item -Icmd-visual \
-	-Icombat -Icore -Idungeon -Ieffect -Iflavor -Ifloor -Igame-option -Igrid \
-	-Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge -Imarket -Imelee \
-	-Imind -Imonster -Imonster-attack -Imonster-floor -Imonster-race -Ilore \
-	-Imspell -Imutation -Iobject -Iobject-enchant -Iobject-hook -Iobject-use \
-	-Ipet -Iplayer -Iplayer-attack -Irealm -Iroom -Isavedata -Ispecific-object \
-	-Ispell -Ispell-kind -Ispell-realm -Istatus -Isv-definition -Isystem -Iterm \
-	-Iutil -Iview -Iwindow -Iwizard -Iworld
+	-Iartifact -Iart-definition -Iautopick -Ibirth -Icmd-io -Icmd-item \
+	-Icmd-visual -Icombat -Icore -Idungeon -Ieffect -Iflavor -Ifloor \
+	-Igame-option -Igrid -Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge \
+	-Imarket -Imelee -Imind -Imonster -Imonster-attack -Imonster-floor \
+	-Imonster-race -Ilore -Imspell -Imutation -Iobject -Iobject-enchant \
+	-Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack -Irealm -Iroom \
+	-Isavedata -Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Istatus \
+	-Isv-definition -Isystem -Iterm -Iutil -Iview -Iwindow -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

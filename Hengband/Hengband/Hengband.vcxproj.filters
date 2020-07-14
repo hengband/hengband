@@ -1721,6 +1721,9 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-travel.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-pval-investor.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3760,6 +3763,9 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-travel.h">
       <Filter>cmd-action</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-pval-investor.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -3942,6 +3948,9 @@
     </Filter>
     <Filter Include="window">
       <UniqueIdentifier>{9e0105e8-8250-4ac4-8a1c-cefd30485ecc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="artifact">
+      <UniqueIdentifier>{7554e8b1-1c3c-447b-8f1e-c18c09039419}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
