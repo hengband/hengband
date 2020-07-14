@@ -24,6 +24,38 @@ static void pval_subtraction(object_type *o_ptr)
         o_ptr->to_d = 0 - (o_ptr->to_d + randint1(4));
 }
 
+static add_negative_flags(object_type *o_ptr)
+{
+    if (one_in_(4))
+        o_ptr->curse_flags |= TRC_PERMA_CURSE;
+
+    if (one_in_(3))
+        add_flag(o_ptr->art_flags, TR_TY_CURSE);
+
+    if (one_in_(2))
+        add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+
+    if (one_in_(3))
+        add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
+
+    if (one_in_(6))
+        add_flag(o_ptr->art_flags, TR_ADD_L_CURSE);
+
+    if (one_in_(9))
+        add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
+
+    if (one_in_(9))
+        add_flag(o_ptr->art_flags, TR_DRAIN_HP);
+
+    if (one_in_(9))
+        add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+
+    if (one_in_(2))
+        add_flag(o_ptr->art_flags, TR_TELEPORT);
+    else if (one_in_(3))
+        add_flag(o_ptr->art_flags, TR_NO_TELE);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトを呪いのアーティファクトにする経過処理。/ generation process of cursed artifact.
  * @details pval、AC、命中、ダメージが正の場合、符号反転の上1d4だけ悪化させ、重い呪い、呪いフラグを必ず付加。
@@ -39,56 +71,21 @@ void curse_artifact(player_type *player_ptr, object_type *o_ptr)
     pval_subtraction(o_ptr);
     o_ptr->curse_flags |= (TRC_HEAVY_CURSE | TRC_CURSED);
     remove_flag(o_ptr->art_flags, TR_BLESSED);
-
-    if (one_in_(4))
-        o_ptr->curse_flags |= TRC_PERMA_CURSE;
-    if (one_in_(3))
-        add_flag(o_ptr->art_flags, TR_TY_CURSE);
-    if (one_in_(2))
-        add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-    if (one_in_(3))
-        add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
-    if (one_in_(6))
-        add_flag(o_ptr->art_flags, TR_ADD_L_CURSE);
-    if (one_in_(9))
-        add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
-    if (one_in_(9))
-        add_flag(o_ptr->art_flags, TR_DRAIN_HP);
-    if (one_in_(9))
-        add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
-    if (one_in_(2))
-        add_flag(o_ptr->art_flags, TR_TELEPORT);
-    else if (one_in_(3))
-        add_flag(o_ptr->art_flags, TR_NO_TELE);
-
+    add_negative_flags(o_ptr);
     if ((player_ptr->pclass != CLASS_WARRIOR) && (player_ptr->pclass != CLASS_ARCHER) && (player_ptr->pclass != CLASS_CAVALRY)
         && (player_ptr->pclass != CLASS_BERSERKER) && (player_ptr->pclass != CLASS_SMITH) && one_in_(3))
         add_flag(o_ptr->art_flags, TR_NO_MAGIC);
 }
 
 /*!
- * @brief ランダムアーティファクト生成中、対象のオブジェクトに名前を与える。/ Set name of randomartifact.
- * @details 確率によって、シンダリン銘、漢字銘、固定名のいずれか一つが与えられる。
- * @param o_ptr 処理中のアイテム参照ポインタ
- * @param return_name 名前を返すための文字列参照ポインタ
- * @param armour 対象のオブジェクトが防具が否か
- * @param power 銘の基準となるオブジェクトの価値レベル(0=呪い、1=低位、2=中位、3以上=高位)
- * @return なし
+ * @brief ランダムアーティファクトの名前リストをオブジェクト種別と生成パワーに応じて選択する
+ * @param armour 防具かどうか
+ * @param power 生成パワー
+ * @return ファイル名
+ * @details 二重switch文だが短いので執行猶予とする
  */
-void get_random_name(object_type *o_ptr, char *return_name, bool armour, int power)
+static concptr get_random_art_filename(const bool armour, const int power)
 {
-    PERCENTAGE prob = randint1(100);
-
-    if (prob <= SINDARIN_NAME) {
-        get_table_sindarin(return_name);
-        return;
-    }
-
-    if (prob <= TABLE_NAME) {
-        get_table_name(return_name);
-        return;
-    }
-
     concptr filename;
     switch (armour) {
     case 1:
@@ -121,7 +118,31 @@ void get_random_name(object_type *o_ptr, char *return_name, bool armour, int pow
             filename = _("w_high_j.txt", "w_high.txt");
         }
     }
+}
 
+/*!
+ * @brief ランダムアーティファクト生成中、対象のオブジェクトに名前を与える。/ Set name of randomartifact.
+ * @details 確率によって、シンダリン銘、漢字銘、固定名のいずれか一つが与えられる。
+ * @param o_ptr 処理中のアイテム参照ポインタ
+ * @param return_name 名前を返すための文字列参照ポインタ
+ * @param armour 対象のオブジェクトが防具が否か
+ * @param power 銘の基準となるオブジェクトの価値レベル(0=呪い、1=低位、2=中位、3以上=高位)
+ * @return なし
+ */
+void get_random_name(object_type *o_ptr, char *return_name, bool armour, int power)
+{
+    PERCENTAGE prob = randint1(100);
+    if (prob <= SINDARIN_NAME) {
+        get_table_sindarin(return_name);
+        return;
+    }
+
+    if (prob <= TABLE_NAME) {
+        get_table_name(return_name);
+        return;
+    }
+
+    concptr filename = get_random_art_filename(armour, power);
     (void)get_rnd_line(filename, o_ptr->artifact_bias, return_name);
 #ifdef JP
     if (return_name[0] == 0)
