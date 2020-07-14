@@ -824,31 +824,26 @@ void calc_bonuses(player_type *creature_ptr)
         calc_num_blow(creature_ptr, i);
 
         if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
-            creature_ptr->to_h[i] -= 2;
             creature_ptr->to_d[i] -= 2;
             creature_ptr->dis_to_h[i] -= 2;
             creature_ptr->dis_to_d[i] -= 2;
             creature_ptr->icky_wield[i] = TRUE;
         } else if (creature_ptr->pclass == CLASS_BERSERKER) {
-            creature_ptr->to_h[i] += creature_ptr->lev / 5;
             creature_ptr->to_d[i] += creature_ptr->lev / 6;
             creature_ptr->dis_to_h[i] += creature_ptr->lev / 5;
             creature_ptr->dis_to_d[i] += creature_ptr->lev / 6;
             if (((i == 0) && !creature_ptr->hidarite) || creature_ptr->ryoute) {
-                creature_ptr->to_h[i] += creature_ptr->lev / 5;
                 creature_ptr->to_d[i] += creature_ptr->lev / 6;
                 creature_ptr->dis_to_h[i] += creature_ptr->lev / 5;
                 creature_ptr->dis_to_d[i] += creature_ptr->lev / 6;
             }
         } else if (creature_ptr->pclass == CLASS_SORCERER) {
             if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
-                creature_ptr->to_h[i] -= 200;
                 creature_ptr->to_d[i] -= 200;
                 creature_ptr->dis_to_h[i] -= 200;
                 creature_ptr->dis_to_d[i] -= 200;
                 creature_ptr->icky_wield[i] = TRUE;
             } else {
-                creature_ptr->to_h[i] -= 30;
                 creature_ptr->to_d[i] -= 10;
                 creature_ptr->dis_to_h[i] -= 30;
                 creature_ptr->dis_to_d[i] -= 10;
@@ -3508,12 +3503,30 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
 {
     int id = slot - INVEN_RARM;
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    object_flags(o_ptr, flgs);
+
     int hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
 
     creature_ptr->to_h[id] = 0;
 
     creature_ptr->to_h[id] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->to_h[id] += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+
+    if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
+        creature_ptr->to_h[id] -= 2;
+    } else if (creature_ptr->pclass == CLASS_BERSERKER) {
+        creature_ptr->to_h[id] += creature_ptr->lev / 5;
+        if (((id == 0) && !creature_ptr->hidarite) || creature_ptr->ryoute) {
+            creature_ptr->to_h[id] += creature_ptr->lev / 5;
+        }
+    } else if (creature_ptr->pclass == CLASS_SORCERER) {
+        if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
+            creature_ptr->to_h[id] -= 200;
+        } else {
+            creature_ptr->to_h[id] -= 30;
+        }
+    }
 
     if (hold < o_ptr->weight / 10) {
         creature_ptr->to_h[id] += 2 * (hold - o_ptr->weight / 10);
