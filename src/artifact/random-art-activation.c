@@ -6,6 +6,42 @@
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+static int invest_activation_elec(void)
+{
+    if (!one_in_(3))
+        return ACT_BO_ELEC_1;
+    
+    if (!one_in_(5))
+        return ACT_BA_ELEC_2;
+    
+    return ACT_BA_ELEC_3;
+}
+
+static int invest_activation_fire(void)
+{
+    if (!one_in_(3))
+        return ACT_BO_FIRE_1;
+    
+    if (!one_in_(5))
+        return ACT_BA_FIRE_1;
+
+    return ACT_BA_FIRE_2;
+}
+
+static int invest_activation_cold(void)
+{
+    if (!one_in_(3))
+        return ACT_BO_COLD_1;
+    
+    if (!one_in_(3))
+        return ACT_BA_COLD_1;
+    
+    if (!one_in_(3))
+        return ACT_BA_COLD_2;
+    
+    return ACT_BA_COLD_3;
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにバイアスに依存した発動を与える。/ Add one activaton of randam artifact depend on bias.
  * @details バイアスが無い場合、一部のバイアスの確率によっては one_ability() に処理が移行する。
@@ -14,58 +50,34 @@
  */
 void give_activation_power(object_type *o_ptr)
 {
-    int type = 0, chance = 0;
+    int type = 0;
+    int chance = 0;
 
     switch (o_ptr->artifact_bias) {
     case BIAS_ELEC:
-        if (!one_in_(3)) {
-            type = ACT_BO_ELEC_1;
-        } else if (!one_in_(5)) {
-            type = ACT_BA_ELEC_2;
-        } else {
-            type = ACT_BA_ELEC_3;
-        }
-
+        type = invest_activation_elec();
         chance = 101;
         break;
-
     case BIAS_POIS:
         type = ACT_BA_POIS_1;
         chance = 101;
         break;
-
     case BIAS_FIRE:
-        if (!one_in_(3)) {
-            type = ACT_BO_FIRE_1;
-        } else if (!one_in_(5)) {
-            type = ACT_BA_FIRE_1;
-        } else {
-            type = ACT_BA_FIRE_2;
-        }
-
+        type = invest_activation_fire();
         chance = 101;
         break;
-
     case BIAS_COLD:
+        type = invest_activation_cold();
         chance = 101;
-        if (!one_in_(3))
-            type = ACT_BO_COLD_1;
-        else if (!one_in_(3))
-            type = ACT_BA_COLD_1;
-        else if (!one_in_(3))
-            type = ACT_BA_COLD_2;
-        else
-            type = ACT_BA_COLD_3;
         break;
-
     case BIAS_CHAOS:
         chance = 50;
         if (one_in_(6))
             type = ACT_SUMMON_DEMON;
         else
             type = ACT_CALL_CHAOS;
-        break;
 
+        break;
     case BIAS_PRIESTLY:
         chance = 101;
 
@@ -175,7 +187,6 @@ void give_activation_power(object_type *o_ptr)
         return;
     }
 
-    /* A type was chosen... */
     o_ptr->xtra2 = (byte)type;
     add_flag(o_ptr->art_flags, TR_ACTIVATE);
     o_ptr->timeout = 0;
