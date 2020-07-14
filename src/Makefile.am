@@ -16,6 +16,7 @@ hengband_SOURCES = \
 	\
 	artifact/random-art-bias-types.h \
 	artifact/random-art-pval-investor.c artifact/random-art-pval-investor.h \
+	artifact/random-art-resistance.c artifact/random-art-resistance.h \
 	\
 	art-definition/art-accessory-types.h \
 	art-definition/art-armor-types.h \
