@@ -280,6 +280,33 @@ static void invest_negative_modified_value(player_type *player_ptr, object_type 
     }
 }
 
+static void reset_flags_poison_needle(object_type *o_ptr)
+{
+    if ((o_ptr->tval != TV_SWORD) || (o_ptr->sval != SV_POISON_NEEDLE))
+        return;
+
+    o_ptr->to_h = 0;
+    o_ptr->to_d = 0;
+    remove_flag(o_ptr->art_flags, TR_BLOWS);
+    remove_flag(o_ptr->art_flags, TR_FORCE_WEAPON);
+    remove_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
+    remove_flag(o_ptr->art_flags, TR_SLAY_EVIL);
+    remove_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
+    remove_flag(o_ptr->art_flags, TR_SLAY_DEMON);
+    remove_flag(o_ptr->art_flags, TR_SLAY_ORC);
+    remove_flag(o_ptr->art_flags, TR_SLAY_TROLL);
+    remove_flag(o_ptr->art_flags, TR_SLAY_GIANT);
+    remove_flag(o_ptr->art_flags, TR_SLAY_DRAGON);
+    remove_flag(o_ptr->art_flags, TR_KILL_DRAGON);
+    remove_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
+    remove_flag(o_ptr->art_flags, TR_VORPAL);
+    remove_flag(o_ptr->art_flags, TR_BRAND_POIS);
+    remove_flag(o_ptr->art_flags, TR_BRAND_ACID);
+    remove_flag(o_ptr->art_flags, TR_BRAND_ELEC);
+    remove_flag(o_ptr->art_flags, TR_BRAND_FIRE);
+    remove_flag(o_ptr->art_flags, TR_BRAND_COLD);
+}
+
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
@@ -333,29 +360,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == TV_GLOVES))
         add_flag(o_ptr->art_flags, TR_FREE_ACT);
 
-    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
-        o_ptr->to_h = 0;
-        o_ptr->to_d = 0;
-        remove_flag(o_ptr->art_flags, TR_BLOWS);
-        remove_flag(o_ptr->art_flags, TR_FORCE_WEAPON);
-        remove_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
-        remove_flag(o_ptr->art_flags, TR_SLAY_EVIL);
-        remove_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
-        remove_flag(o_ptr->art_flags, TR_SLAY_DEMON);
-        remove_flag(o_ptr->art_flags, TR_SLAY_ORC);
-        remove_flag(o_ptr->art_flags, TR_SLAY_TROLL);
-        remove_flag(o_ptr->art_flags, TR_SLAY_GIANT);
-        remove_flag(o_ptr->art_flags, TR_SLAY_DRAGON);
-        remove_flag(o_ptr->art_flags, TR_KILL_DRAGON);
-        remove_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
-        remove_flag(o_ptr->art_flags, TR_VORPAL);
-        remove_flag(o_ptr->art_flags, TR_BRAND_POIS);
-        remove_flag(o_ptr->art_flags, TR_BRAND_ACID);
-        remove_flag(o_ptr->art_flags, TR_BRAND_ELEC);
-        remove_flag(o_ptr->art_flags, TR_BRAND_FIRE);
-        remove_flag(o_ptr->art_flags, TR_BRAND_COLD);
-    }
-
+    reset_flags_poison_needle(o_ptr);
     int power_level;
     if (!object_is_weapon_ammo(o_ptr)) {
         if (a_cursed)
