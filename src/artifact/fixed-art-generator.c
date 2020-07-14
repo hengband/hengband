@@ -31,6 +31,36 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
+ * @brief 恐怖の仮面への特殊処理 (一部職業のみ追加能力＆耐性、それ以外は反感＆太古の怨念)
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
+ * @param give_power 追加能力の有無
+ * @param give_resistance 追加耐性の有無
+ * @return そもそも対象のオブジェクトが恐怖の仮面ではないか、「その他の職業」であればTRUE
+ */
+static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr, bool *give_power, bool *give_resistance)
+{
+    if (o_ptr->name1 != ART_TERROR)
+        return FALSE;
+
+    bool is_special_class = player_ptr->pclass == CLASS_WARRIOR;
+    is_special_class |= player_ptr->pclass == CLASS_ARCHER;
+    is_special_class |= player_ptr->pclass == CLASS_CAVALRY;
+    is_special_class |= player_ptr->pclass == CLASS_BERSERKER;
+    if (is_special_class) {
+        *give_power = TRUE;
+        *give_resistance = TRUE;
+        return FALSE;
+    }
+
+    add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+    add_flag(o_ptr->art_flags, TR_TY_CURSE);
+    o_ptr->curse_flags |= (TRC_CURSED | TRC_HEAVY_CURSE);
+    o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
+    return TRUE;
+}
+
+/*!
  * @brief 固定アーティファクト生成時の特別なハードコーディング処理を行う。.
  * @details random_artifact_resistance()とあるが実際は固定アーティファクトである。
  * 対象は恐怖の仮面、村正、ロビントンのハープ、龍争虎鬪、ブラッディムーン、羽衣、天女の羽衣、ミリム、
@@ -44,24 +74,10 @@
  */
 static void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, artifact_type *a_ptr)
 {
-    bool give_resistance = FALSE;
     bool give_power = FALSE;
-    if (o_ptr->name1 == ART_TERROR) {
-        bool is_special_class = player_ptr->pclass == CLASS_WARRIOR;
-        is_special_class |= player_ptr->pclass == CLASS_ARCHER;
-        is_special_class |= player_ptr->pclass == CLASS_CAVALRY;
-        is_special_class |= player_ptr->pclass == CLASS_BERSERKER;
-        if (is_special_class) {
-            give_power = TRUE;
-            give_resistance = TRUE;
-        } else {
-            add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-            add_flag(o_ptr->art_flags, TR_TY_CURSE);
-            o_ptr->curse_flags |= (TRC_CURSED | TRC_HEAVY_CURSE);
-            o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
-            return;
-        }
-    }
+    bool give_resistance = FALSE;
+    if (invest_terror_mask(player_ptr, o_ptr, &give_power, &give_resistance))
+        return;
 
     if (o_ptr->name1 == ART_MURAMASA) {
         if (player_ptr->pclass != CLASS_SAMURAI) {
