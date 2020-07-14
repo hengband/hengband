@@ -1739,6 +1739,9 @@
     <ClCompile Include="..\..\src\artifact\random-art-activation.c">
       <Filter>artifact</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-characteristics.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3794,6 +3797,9 @@
       <Filter>artifact</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\artifact\random-art-activation.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-characteristics.h">
       <Filter>artifact</Filter>
     </ClInclude>
   </ItemGroup>

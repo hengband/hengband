@@ -160,6 +160,7 @@
     <ClCompile Include="..\..\src\action\tunnel-execution.c" />
     <ClCompile Include="..\..\src\action\weapon-shield.c" />
     <ClCompile Include="..\..\src\artifact\random-art-activation.c" />
+    <ClCompile Include="..\..\src\artifact\random-art-characteristics.c" />
     <ClCompile Include="..\..\src\artifact\random-art-misc.c" />
     <ClCompile Include="..\..\src\artifact\random-art-resistance.c" />
     <ClCompile Include="..\..\src\artifact\random-art-slay.c" />
@@ -656,6 +657,7 @@
     <ClInclude Include="..\..\src\artifact\random-art-misc.h" />
     <ClInclude Include="..\..\src\artifact\random-art-resistance.h" />
     <ClInclude Include="..\..\src\artifact\random-art-slay.h" />
+    <ClInclude Include="..\..\src\artifact\random-art-characteristics.h" />
     <ClInclude Include="..\..\src\birth\auto-roller.h" />
     <ClInclude Include="..\..\src\birth\birth-body-spec.h" />
     <ClInclude Include="..\..\src\birth\birth-select-class.h" />

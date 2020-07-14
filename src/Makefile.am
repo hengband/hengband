@@ -16,6 +16,7 @@ hengband_SOURCES = \
 	\
 	artifact/random-art-activation.c artifact/random-art-activation.h \
 	artifact/random-art-bias-types.h \
+	artifact/random-art-characteristics.c artifact/random-art-characteristics.h \
 	artifact/random-art-misc.c artifact/random-art-misc.h \
 	artifact/random-art-pval-investor.c artifact/random-art-pval-investor.h \
 	artifact/random-art-resistance.c artifact/random-art-resistance.h \
