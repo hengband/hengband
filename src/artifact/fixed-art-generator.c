@@ -61,6 +61,26 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr, bool
 }
 
 /*!
+ * @brief 戦乙女ミリムの危ない水着への特殊処理 (セクシーギャルのみpval追加)
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
+ * @return なし
+ */
+static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
+{
+    if ((o_ptr->name1 != ART_MILIM) || (player_ptr->pseikaku != PERSONALITY_SEXY))
+        return;
+
+    o_ptr->pval = 3;
+    add_flag(o_ptr->art_flags, TR_STR);
+    add_flag(o_ptr->art_flags, TR_INT);
+    add_flag(o_ptr->art_flags, TR_WIS);
+    add_flag(o_ptr->art_flags, TR_DEX);
+    add_flag(o_ptr->art_flags, TR_CON);
+    add_flag(o_ptr->art_flags, TR_CHR);
+}
+
+/*!
  * @brief 固定アーティファクト生成時の特別なハードコーディング処理を行う。.
  * @details random_artifact_resistance()とあるが実際は固定アーティファクトである。
  * 対象は恐怖の仮面、村正、ロビントンのハープ、龍争虎鬪、ブラッディムーン、羽衣、天女の羽衣、ミリム、
@@ -79,66 +99,41 @@ static void random_artifact_resistance(player_type *player_ptr, object_type *o_p
     if (invest_terror_mask(player_ptr, o_ptr, &give_power, &give_resistance))
         return;
 
-    if (o_ptr->name1 == ART_MURAMASA) {
-        if (player_ptr->pclass != CLASS_SAMURAI) {
-            add_flag(o_ptr->art_flags, TR_NO_MAGIC);
-            o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-        }
+    if ((o_ptr->name1 == ART_MURAMASA) && (player_ptr->pclass != CLASS_SAMURAI)) {
+        add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+        o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
     }
 
-    if (o_ptr->name1 == ART_ROBINTON) {
-        if (player_ptr->pclass == CLASS_BARD) {
-            add_flag(o_ptr->art_flags, TR_DEC_MANA);
-        }
-    }
+    if ((o_ptr->name1 == ART_ROBINTON) && (player_ptr->pclass == CLASS_BARD))
+        add_flag(o_ptr->art_flags, TR_DEC_MANA);
 
-    if (o_ptr->name1 == ART_XIAOLONG) {
-        if (player_ptr->pclass == CLASS_MONK)
-            add_flag(o_ptr->art_flags, TR_BLOWS);
-    }
+    if ((o_ptr->name1 == ART_XIAOLONG) && (player_ptr->pclass == CLASS_MONK))
+        add_flag(o_ptr->art_flags, TR_BLOWS);
 
-    if (o_ptr->name1 == ART_BLOOD) {
+    if (o_ptr->name1 == ART_BLOOD)
         get_bloody_moon_flags(o_ptr);
-    }
 
-    if (o_ptr->name1 == ART_HEAVENLY_MAIDEN) {
-        if (player_ptr->psex != SEX_FEMALE) {
-            add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-        }
-    }
+    if ((o_ptr->name1 == ART_HEAVENLY_MAIDEN) && (player_ptr->psex != SEX_FEMALE))
+        add_flag(o_ptr->art_flags, TR_AGGRAVATE);
 
-    if (o_ptr->name1 == ART_MILIM) {
-        if (player_ptr->pseikaku == PERSONALITY_SEXY) {
-            o_ptr->pval = 3;
-            add_flag(o_ptr->art_flags, TR_STR);
-            add_flag(o_ptr->art_flags, TR_INT);
-            add_flag(o_ptr->art_flags, TR_WIS);
-            add_flag(o_ptr->art_flags, TR_DEX);
-            add_flag(o_ptr->art_flags, TR_CON);
-            add_flag(o_ptr->art_flags, TR_CHR);
-        }
-    }
-
+    milim_swimsuit();
     if (a_ptr->gen_flags & TRG_XTRA_POWER)
         give_power = TRUE;
 
     if (a_ptr->gen_flags & TRG_XTRA_H_RES)
         give_resistance = TRUE;
 
-    if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) {
+    if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER)
         if (one_in_(2))
             give_resistance = TRUE;
         else
             give_power = TRUE;
-    }
 
-    if (give_power) {
+    if (give_power)
         one_ability(o_ptr);
-    }
 
-    if (give_resistance) {
+    if (give_resistance)
         one_high_resistance(o_ptr);
-    }
 }
 
 /*!
@@ -177,16 +172,21 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
     q_ptr->to_d = a_ptr->to_d;
     q_ptr->weight = a_ptr->weight;
     if (a_ptr->gen_flags & TRG_CURSED)
-        q_ptr->curse_flags |= (TRC_CURSED);
+        q_ptr->curse_flags |= TRC_CURSED;
+
     if (a_ptr->gen_flags & TRG_HEAVY_CURSE)
-        q_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+        q_ptr->curse_flags |= TRC_HEAVY_CURSE;
+
     if (a_ptr->gen_flags & TRG_PERMA_CURSE)
-        q_ptr->curse_flags |= (TRC_PERMA_CURSE);
-    if (a_ptr->gen_flags & (TRG_RANDOM_CURSE0))
+        q_ptr->curse_flags |= TRC_PERMA_CURSE;
+
+    if (a_ptr->gen_flags & TRG_RANDOM_CURSE0)
         q_ptr->curse_flags |= get_curse(player_ptr, 0, q_ptr);
-    if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1))
+
+    if (a_ptr->gen_flags & TRG_RANDOM_CURSE1)
         q_ptr->curse_flags |= get_curse(player_ptr, 1, q_ptr);
-    if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2))
+
+    if (a_ptr->gen_flags & TRG_RANDOM_CURSE2)
         q_ptr->curse_flags |= get_curse(player_ptr, 2, q_ptr);
 
     random_artifact_resistance(player_ptr, q_ptr, a_ptr);
