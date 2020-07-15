@@ -126,6 +126,30 @@ static void invest_misc_hit_dice(object_type *o_ptr)
     o_ptr->to_d += bonus_d;
 }
 
+static void invest_misc_string_esp(object_type *o_ptr)
+{
+    switch (randint1(3)) {
+    case 1:
+        add_flag(o_ptr->art_flags, TR_ESP_EVIL);
+        if (!o_ptr->artifact_bias && one_in_(3))
+            o_ptr->artifact_bias = BIAS_LAW;
+
+        return;
+    case 2:
+        add_flag(o_ptr->art_flags, TR_ESP_NONLIVING);
+        if (!o_ptr->artifact_bias && one_in_(3))
+            o_ptr->artifact_bias = BIAS_MAGE;
+
+        return;
+    case 3:
+        add_flag(o_ptr->art_flags, TR_TELEPATHY);
+        if (!o_ptr->artifact_bias && one_in_(9))
+            o_ptr->artifact_bias = BIAS_MAGE;
+
+        return;
+    }
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにその他特性を付加する。/ Add one misc flag on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -237,31 +261,9 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
     case 32:
         add_flag(o_ptr->art_flags, TR_WARNING);
         break;
-
     case 18:
-        switch (randint1(3)) {
-        case 1:
-            add_flag(o_ptr->art_flags, TR_ESP_EVIL);
-            if (!o_ptr->artifact_bias && one_in_(3))
-                o_ptr->artifact_bias = BIAS_LAW;
-
-            break;
-        case 2:
-            add_flag(o_ptr->art_flags, TR_ESP_NONLIVING);
-            if (!o_ptr->artifact_bias && one_in_(3))
-                o_ptr->artifact_bias = BIAS_MAGE;
-
-            break;
-        case 3:
-            add_flag(o_ptr->art_flags, TR_TELEPATHY);
-            if (!o_ptr->artifact_bias && one_in_(9))
-                o_ptr->artifact_bias = BIAS_MAGE;
-
-            break;
-        }
-
+        invest_misc_string_esp(o_ptr);
         break;
-
     case 33: {
         int idx[3];
         idx[0] = randint1(10);
