@@ -127,6 +127,15 @@ static bool random_art_immunity_cold(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_resistance_pois(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_RES_POIS))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_RES_POIS);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに耐性を付加する。/ Add one resistance on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -162,14 +171,10 @@ void random_resistance(object_type *o_ptr)
 
         break;
     case BIAS_POIS:
-        if (!(have_flag(o_ptr->art_flags, TR_RES_POIS))) {
-            add_flag(o_ptr->art_flags, TR_RES_POIS);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_resistance_pois(o_ptr))
+            return;
 
         break;
-
     case BIAS_WARRIOR:
         if (!one_in_(3) && (!(have_flag(o_ptr->art_flags, TR_RES_FEAR)))) {
             add_flag(o_ptr->art_flags, TR_RES_FEAR);
