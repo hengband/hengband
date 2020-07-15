@@ -218,7 +218,125 @@ static bool switch_random_art_resistance(object_type *o_ptr)
         return random_art_resistance_nether(o_ptr) || random_art_resistance_pois(o_ptr) || random_art_resistance_dark(o_ptr);
     case BIAS_CHAOS:
         return random_art_resistance_chaos(o_ptr) || random_art_resistance_confusion(o_ptr) || random_art_resistance_disenchant(o_ptr);
+    default:
+        return FALSE;
     }
+}
+
+/* 一定確率で再試行する */
+static void set_weird_bias_acid(object_type *o_ptr)
+{
+    if (!one_in_(WEIRD_LUCK)) {
+        random_resistance(o_ptr);
+        return;
+    }
+
+    add_flag(o_ptr->art_flags, TR_IM_ACID);
+    if (!o_ptr->artifact_bias)
+        o_ptr->artifact_bias = BIAS_ACID;
+}
+
+/* 一定確率で再試行する */
+static void set_weird_bias_elec(object_type *o_ptr)
+{
+    if (!one_in_(WEIRD_LUCK)) {
+        random_resistance(o_ptr);
+        return;
+    }
+
+    add_flag(o_ptr->art_flags, TR_IM_ELEC);
+    if (!o_ptr->artifact_bias)
+        o_ptr->artifact_bias = BIAS_ELEC;
+}
+
+/* 一定確率で再試行する */
+static void set_weird_bias_cold(object_type *o_ptr)
+{
+    if (!one_in_(WEIRD_LUCK)) {
+        random_resistance(o_ptr);
+        return;
+    }
+
+    add_flag(o_ptr->art_flags, TR_IM_COLD);
+    if (!o_ptr->artifact_bias)
+        o_ptr->artifact_bias = BIAS_COLD;
+}
+
+/* 一定確率で再試行する */
+static void set_weird_bias_fire(object_type *o_ptr)
+{
+    if (!one_in_(WEIRD_LUCK)) {
+        random_resistance(o_ptr);
+        return;
+    }
+
+    add_flag(o_ptr->art_flags, TR_IM_FIRE);
+    if (!o_ptr->artifact_bias)
+        o_ptr->artifact_bias = BIAS_FIRE;
+}
+
+static void set_bias_pois(object_type *o_ptr)
+{
+    add_flag(o_ptr->art_flags, TR_RES_POIS);
+    if (!o_ptr->artifact_bias && !one_in_(4)) {
+        o_ptr->artifact_bias = BIAS_POIS;
+        return;
+    }
+
+    if (!o_ptr->artifact_bias && one_in_(2)) {
+        o_ptr->artifact_bias = BIAS_NECROMANTIC;
+        return;
+    }
+
+    if (!o_ptr->artifact_bias && one_in_(2))
+        o_ptr->artifact_bias = BIAS_ROGUE;
+}
+
+/* 一定確率で再試行する */
+static void set_weird_bias_aura_elec(object_type *o_ptr)
+{
+    if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
+        add_flag(o_ptr->art_flags, TR_SH_ELEC);
+    else
+        random_resistance(o_ptr);
+
+    if (!o_ptr->artifact_bias)
+        o_ptr->artifact_bias = BIAS_ELEC;
+}
+
+/* 一定確率で再試行する */
+static void set_weird_bias_aura_fire(object_type *o_ptr)
+{
+    if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
+        add_flag(o_ptr->art_flags, TR_SH_FIRE);
+    else
+        random_resistance(o_ptr);
+
+    if (!o_ptr->artifact_bias)
+        o_ptr->artifact_bias = BIAS_FIRE;
+}
+
+/* 一定確率で再試行する */
+static void set_weird_bias_reflection(object_type *o_ptr)
+{
+    if (o_ptr->tval == TV_SHIELD || o_ptr->tval == TV_CLOAK || o_ptr->tval == TV_HELM || o_ptr->tval == TV_HARD_ARMOR) {
+        add_flag(o_ptr->art_flags, TR_REFLECT);
+        return;
+    }
+
+    random_resistance(o_ptr);
+}
+
+/* 一定確率で再試行する */
+static void set_weird_bias_aura_cold(object_type *o_ptr)
+{
+    if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
+        add_flag(o_ptr->art_flags, TR_SH_COLD);
+    else
+        random_resistance(o_ptr);
+
+    if (!o_ptr->artifact_bias)
+        o_ptr->artifact_bias = BIAS_COLD;
 }
 
 /*!
@@ -238,44 +356,16 @@ void random_resistance(object_type *o_ptr)
 
     switch (randint1(42)) {
     case 1:
-        if (!one_in_(WEIRD_LUCK))
-            random_resistance(o_ptr);
-        else {
-            add_flag(o_ptr->art_flags, TR_IM_ACID);
-            if (!o_ptr->artifact_bias)
-                o_ptr->artifact_bias = BIAS_ACID;
-        }
-
+        set_weird_bias_acid(o_ptr);
         break;
     case 2:
-        if (!one_in_(WEIRD_LUCK))
-            random_resistance(o_ptr);
-        else {
-            add_flag(o_ptr->art_flags, TR_IM_ELEC);
-            if (!o_ptr->artifact_bias)
-                o_ptr->artifact_bias = BIAS_ELEC;
-        }
-
+        set_weird_bias_elec(o_ptr);
         break;
     case 3:
-        if (!one_in_(WEIRD_LUCK))
-            random_resistance(o_ptr);
-        else {
-            add_flag(o_ptr->art_flags, TR_IM_COLD);
-            if (!o_ptr->artifact_bias)
-                o_ptr->artifact_bias = BIAS_COLD;
-        }
-
+        set_weird_bias_cold(o_ptr);
         break;
     case 4:
-        if (!one_in_(WEIRD_LUCK))
-            random_resistance(o_ptr);
-        else {
-            add_flag(o_ptr->art_flags, TR_IM_FIRE);
-            if (!o_ptr->artifact_bias)
-                o_ptr->artifact_bias = BIAS_FIRE;
-        }
-
+        set_weird_bias_fire(o_ptr);
         break;
     case 5:
     case 6:
@@ -283,6 +373,7 @@ void random_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_ACID);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_ACID;
+
         break;
     case 7:
     case 8:
@@ -290,6 +381,7 @@ void random_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_ELEC);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_ELEC;
+
         break;
     case 9:
     case 10:
@@ -297,6 +389,7 @@ void random_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_FIRE);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_FIRE;
+
         break;
     case 11:
     case 12:
@@ -304,22 +397,18 @@ void random_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_COLD);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_COLD;
+
         break;
     case 17:
     case 18:
-        add_flag(o_ptr->art_flags, TR_RES_POIS);
-        if (!o_ptr->artifact_bias && !one_in_(4))
-            o_ptr->artifact_bias = BIAS_POIS;
-        else if (!o_ptr->artifact_bias && one_in_(2))
-            o_ptr->artifact_bias = BIAS_NECROMANTIC;
-        else if (!o_ptr->artifact_bias && one_in_(2))
-            o_ptr->artifact_bias = BIAS_ROGUE;
+        set_bias_pois(o_ptr);
         break;
     case 19:
     case 20:
         add_flag(o_ptr->art_flags, TR_RES_FEAR);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_WARRIOR;
+
         break;
     case 21:
         add_flag(o_ptr->art_flags, TR_RES_LITE);
@@ -336,6 +425,7 @@ void random_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_CONF);
         if (!o_ptr->artifact_bias && one_in_(6))
             o_ptr->artifact_bias = BIAS_CHAOS;
+
         break;
     case 27:
     case 28:
@@ -350,6 +440,7 @@ void random_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_NETHER);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_NECROMANTIC;
+
         break;
     case 33:
     case 34:
@@ -360,40 +451,23 @@ void random_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_CHAOS);
         if (!o_ptr->artifact_bias && one_in_(2))
             o_ptr->artifact_bias = BIAS_CHAOS;
+
         break;
     case 37:
     case 38:
         add_flag(o_ptr->art_flags, TR_RES_DISEN);
         break;
     case 39:
-        if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
-            add_flag(o_ptr->art_flags, TR_SH_ELEC);
-        else
-            random_resistance(o_ptr);
-        if (!o_ptr->artifact_bias)
-            o_ptr->artifact_bias = BIAS_ELEC;
+        set_weird_bias_aura_elec(o_ptr);
         break;
     case 40:
-        if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
-            add_flag(o_ptr->art_flags, TR_SH_FIRE);
-        else
-            random_resistance(o_ptr);
-        if (!o_ptr->artifact_bias)
-            o_ptr->artifact_bias = BIAS_FIRE;
+        set_weird_bias_aura_fire(o_ptr);
         break;
     case 41:
-        if (o_ptr->tval == TV_SHIELD || o_ptr->tval == TV_CLOAK || o_ptr->tval == TV_HELM || o_ptr->tval == TV_HARD_ARMOR)
-            add_flag(o_ptr->art_flags, TR_REFLECT);
-        else
-            random_resistance(o_ptr);
+        set_weird_bias_reflection(o_ptr);
         break;
     case 42:
-        if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
-            add_flag(o_ptr->art_flags, TR_SH_COLD);
-        else
-            random_resistance(o_ptr);
-        if (!o_ptr->artifact_bias)
-            o_ptr->artifact_bias = BIAS_COLD;
+        set_weird_bias_aura_cold(o_ptr);
         break;
     }
 }
