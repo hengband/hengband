@@ -12,6 +12,33 @@
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+static bool bias_warrior_strength(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_STR)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_STR);
+    return one_in_(2);
+}
+
+static bool bias_warrior_constitution(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_CON)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_CON);
+    return one_in_(2);
+}
+
+static bool bias_warrior_dexterity(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_DEX)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_DEX);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにpval能力を付加する。/ Add one pval on generation of randam artifact.
  * @details 優先的に付加されるpvalがランダムアーティファクトバイアスに依存して存在する。
@@ -25,26 +52,10 @@ void random_plus(object_type *o_ptr)
     int this_type = object_is_weapon_ammo(o_ptr) ? 23 : 19;
     switch (o_ptr->artifact_bias) {
     case BIAS_WARRIOR:
-        if (!(have_flag(o_ptr->art_flags, TR_STR))) {
-            add_flag(o_ptr->art_flags, TR_STR);
-            if (one_in_(2))
-                return;
-        }
-
-        if (!(have_flag(o_ptr->art_flags, TR_CON))) {
-            add_flag(o_ptr->art_flags, TR_CON);
-            if (one_in_(2))
-                return;
-        }
-
-        if (!(have_flag(o_ptr->art_flags, TR_DEX))) {
-            add_flag(o_ptr->art_flags, TR_DEX);
-            if (one_in_(2))
-                return;
-        }
+        if (bias_warrior_strength(o_ptr) || bias_warrior_constitution(o_ptr) || bias_warrior_dexterity(o_ptr))
+            return;
 
         break;
-
     case BIAS_MAGE:
         if (!(have_flag(o_ptr->art_flags, TR_INT))) {
             add_flag(o_ptr->art_flags, TR_INT);
