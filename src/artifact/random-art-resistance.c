@@ -199,6 +199,28 @@ static bool random_art_resistance_disenchant(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool switch_random_art_resistance(object_type *o_ptr)
+{
+    switch (o_ptr->artifact_bias) {
+    case BIAS_ACID:
+        return random_art_resistance_acid(o_ptr) || random_art_immunity_acid(o_ptr);
+    case BIAS_ELEC:
+        return random_art_resistance_elec(o_ptr) || random_art_aura_elec(o_ptr) || random_art_immunity_elec(o_ptr);
+    case BIAS_FIRE:
+        return random_art_resistance_fire(o_ptr) || random_art_aura_fire(o_ptr) || random_art_immunity_fire(o_ptr);
+    case BIAS_COLD:
+        return random_art_resistance_cold(o_ptr) || random_art_aura_cold(o_ptr) || random_art_immunity_cold(o_ptr);
+    case BIAS_POIS:
+        return random_art_resistance_pois(o_ptr);
+    case BIAS_WARRIOR:
+        return random_art_resistance_fear(o_ptr) || random_art_resistance_no_magic(o_ptr);
+    case BIAS_NECROMANTIC:
+        return random_art_resistance_nether(o_ptr) || random_art_resistance_pois(o_ptr) || random_art_resistance_dark(o_ptr);
+    case BIAS_CHAOS:
+        return random_art_resistance_chaos(o_ptr) || random_art_resistance_confusion(o_ptr) || random_art_resistance_disenchant(o_ptr);
+    }
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに耐性を付加する。/ Add one resistance on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -211,49 +233,8 @@ static bool random_art_resistance_disenchant(object_type *o_ptr)
  */
 void random_resistance(object_type *o_ptr)
 {
-    switch (o_ptr->artifact_bias) {
-    case BIAS_ACID:
-        if (random_art_resistance_acid(o_ptr) || random_art_immunity_acid(o_ptr))
-            return;
-
-        break;
-    case BIAS_ELEC:
-        if (random_art_resistance_elec(o_ptr) || random_art_aura_elec(o_ptr) || random_art_immunity_elec(o_ptr))
-            return;
-
-        break;
-
-    case BIAS_FIRE:
-        if (random_art_resistance_fire(o_ptr) || random_art_aura_fire(o_ptr) || random_art_immunity_fire(o_ptr))
-            return;
-
-        break;
-    case BIAS_COLD:
-        if (random_art_resistance_cold(o_ptr) || random_art_aura_cold(o_ptr) || random_art_immunity_cold(o_ptr))
-            return;
-
-        break;
-    case BIAS_POIS:
-        if (random_art_resistance_pois(o_ptr))
-            return;
-
-        break;
-    case BIAS_WARRIOR:
-        if (random_art_resistance_fear(o_ptr) || random_art_resistance_no_magic(o_ptr))
-            return;
-
-        break;
-    case BIAS_NECROMANTIC:
-        if (random_art_resistance_nether(o_ptr) || random_art_resistance_pois(o_ptr) || random_art_resistance_dark(o_ptr))
-            return;
-
-        break;
-    case BIAS_CHAOS:
-        if (random_art_resistance_chaos(o_ptr) || random_art_resistance_confusion(o_ptr) || random_art_resistance_disenchant(o_ptr))
-            return;
-
-        break;
-    }
+    if (switch_random_art_resistance(o_ptr))
+        return;
 
     switch (randint1(42)) {
     case 1:
