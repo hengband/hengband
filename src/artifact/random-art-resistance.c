@@ -136,6 +136,24 @@ static bool random_art_resistance_pois(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_resistance_fear(object_type *o_ptr)
+{
+    if (one_in_(3) || have_flag(o_ptr->art_flags, TR_RES_FEAR))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_RES_FEAR);
+    return one_in_(2);
+}
+
+static bool random_art_resistance_no_magic(object_type *o_ptr)
+{
+    if (!one_in_(3) || have_flag(o_ptr->art_flags, TR_NO_MAGIC))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに耐性を付加する。/ Add one resistance on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -176,20 +194,10 @@ void random_resistance(object_type *o_ptr)
 
         break;
     case BIAS_WARRIOR:
-        if (!one_in_(3) && (!(have_flag(o_ptr->art_flags, TR_RES_FEAR)))) {
-            add_flag(o_ptr->art_flags, TR_RES_FEAR);
-            if (one_in_(2))
-                return;
-        }
-
-        if (one_in_(3) && (!(have_flag(o_ptr->art_flags, TR_NO_MAGIC)))) {
-            add_flag(o_ptr->art_flags, TR_NO_MAGIC);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_resistance_fear(o_ptr) || random_art_resistance_no_magic(o_ptr))
+            return;
 
         break;
-
     case BIAS_NECROMANTIC:
         if (!(have_flag(o_ptr->art_flags, TR_RES_NETHER))) {
             add_flag(o_ptr->art_flags, TR_RES_NETHER);
