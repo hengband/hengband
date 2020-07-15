@@ -111,6 +111,21 @@ static bool switch_misc_bias(object_type *o_ptr)
     }
 }
 
+static void invest_misc_hit_dice(object_type *o_ptr)
+{
+    add_flag(o_ptr->art_flags, TR_SHOW_MODS);
+    HIT_PROB bonus_h = 4 + (HIT_PROB)randint1(11);
+    HIT_POINT bonus_d = 4 + (HIT_POINT)randint1(11);
+    if ((o_ptr->tval != TV_SWORD) && (o_ptr->tval != TV_POLEARM) && (o_ptr->tval != TV_HAFTED) && (o_ptr->tval != TV_DIGGING) && (o_ptr->tval != TV_GLOVES)
+        && (o_ptr->tval != TV_RING)) {
+        bonus_h /= 2;
+        bonus_d /= 2;
+    }
+
+    o_ptr->to_h += bonus_h;
+    o_ptr->to_d += bonus_d;
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにその他特性を付加する。/ Add one misc flag on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -210,22 +225,9 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
         break;
     case 27:
     case 28:
-    case 29: {
-        HIT_PROB bonus_h;
-        HIT_POINT bonus_d;
-        add_flag(o_ptr->art_flags, TR_SHOW_MODS);
-        bonus_h = 4 + (HIT_PROB)(randint1(11));
-        bonus_d = 4 + (HIT_POINT)(randint1(11));
-        if ((o_ptr->tval != TV_SWORD) && (o_ptr->tval != TV_POLEARM) && (o_ptr->tval != TV_HAFTED) && (o_ptr->tval != TV_DIGGING) && (o_ptr->tval != TV_GLOVES)
-            && (o_ptr->tval != TV_RING)) {
-            bonus_h /= 2;
-            bonus_d /= 2;
-        }
-
-        o_ptr->to_h += bonus_h;
-        o_ptr->to_d += bonus_d;
+    case 29:
+        invest_misc_hit_dice(o_ptr);
         break;
-    }
     case 30:
         add_flag(o_ptr->art_flags, TR_NO_MAGIC);
         break;
