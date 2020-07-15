@@ -94,6 +94,39 @@ static bool random_art_immunity_fire(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_resistance_cold(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_RES_COLD))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_RES_COLD);
+    return one_in_(2);
+}
+
+static bool random_art_aura_cold(object_type *o_ptr)
+{
+    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || have_flag(o_ptr->art_flags, TR_SH_COLD))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SH_COLD);
+    return one_in_(2);
+}
+
+static bool random_art_immunity_cold(object_type *o_ptr)
+{
+    if (!one_in_(BIAS_LUCK) || have_flag(o_ptr->art_flags, TR_IM_COLD))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_IM_COLD);
+    if (one_in_(IM_LUCK))
+        return one_in_(2);
+
+    remove_flag(o_ptr->art_flags, TR_IM_ELEC);
+    remove_flag(o_ptr->art_flags, TR_IM_COLD);
+    remove_flag(o_ptr->art_flags, TR_IM_ACID);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに耐性を付加する。/ Add one resistance on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -124,31 +157,10 @@ void random_resistance(object_type *o_ptr)
 
         break;
     case BIAS_COLD:
-        if (!(have_flag(o_ptr->art_flags, TR_RES_COLD))) {
-            add_flag(o_ptr->art_flags, TR_RES_COLD);
-            if (one_in_(2))
-                return;
-        }
-
-        if ((o_ptr->tval >= TV_CLOAK) && (o_ptr->tval <= TV_HARD_ARMOR) && !(have_flag(o_ptr->art_flags, TR_SH_COLD))) {
-            add_flag(o_ptr->art_flags, TR_SH_COLD);
-            if (one_in_(2))
-                return;
-        }
-
-        if (one_in_(BIAS_LUCK) && !(have_flag(o_ptr->art_flags, TR_IM_COLD))) {
-            add_flag(o_ptr->art_flags, TR_IM_COLD);
-            if (!one_in_(IM_LUCK)) {
-                remove_flag(o_ptr->art_flags, TR_IM_ELEC);
-                remove_flag(o_ptr->art_flags, TR_IM_ACID);
-                remove_flag(o_ptr->art_flags, TR_IM_FIRE);
-            }
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_resistance_cold(o_ptr) || random_art_aura_cold(o_ptr) || random_art_immunity_cold(o_ptr))
+            return;
 
         break;
-
     case BIAS_POIS:
         if (!(have_flag(o_ptr->art_flags, TR_RES_POIS))) {
             add_flag(o_ptr->art_flags, TR_RES_POIS);
