@@ -14,7 +14,7 @@
 
 static bool bias_warrior_strength(object_type *o_ptr)
 {
-    if ((have_flag(o_ptr->art_flags, TR_STR)))
+    if (have_flag(o_ptr->art_flags, TR_STR))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_STR);
@@ -23,7 +23,7 @@ static bool bias_warrior_strength(object_type *o_ptr)
 
 static bool bias_warrior_constitution(object_type *o_ptr)
 {
-    if ((have_flag(o_ptr->art_flags, TR_CON)))
+    if (have_flag(o_ptr->art_flags, TR_CON))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_CON);
@@ -32,10 +32,28 @@ static bool bias_warrior_constitution(object_type *o_ptr)
 
 static bool bias_warrior_dexterity(object_type *o_ptr)
 {
-    if ((have_flag(o_ptr->art_flags, TR_DEX)))
+    if (have_flag(o_ptr->art_flags, TR_DEX))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_DEX);
+    return one_in_(2);
+}
+
+static bool bias_mage_intelligence(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_INT))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_INT);
+    return one_in_(2);
+}
+
+static bool bias_mage_mastery(object_type *o_ptr)
+{
+    if ((o_ptr->tval != TV_GLOVES) || have_flag(o_ptr->art_flags, TR_MAGIC_MASTERY))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_MAGIC_MASTERY);
     return one_in_(2);
 }
 
@@ -57,19 +75,10 @@ void random_plus(object_type *o_ptr)
 
         break;
     case BIAS_MAGE:
-        if (!(have_flag(o_ptr->art_flags, TR_INT))) {
-            add_flag(o_ptr->art_flags, TR_INT);
-            if (one_in_(2))
-                return;
-        }
-        if ((o_ptr->tval == TV_GLOVES) && !(have_flag(o_ptr->art_flags, TR_MAGIC_MASTERY))) {
-            add_flag(o_ptr->art_flags, TR_MAGIC_MASTERY);
-            if (one_in_(2))
-                return;
-        }
+        if (bias_mage_intelligence(o_ptr) || bias_mage_mastery(o_ptr))
+            return;
 
         break;
-
     case BIAS_PRIESTLY:
         if (!(have_flag(o_ptr->art_flags, TR_WIS))) {
             add_flag(o_ptr->art_flags, TR_WIS);
