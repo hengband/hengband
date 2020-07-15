@@ -172,6 +172,33 @@ static bool random_art_resistance_dark(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_resistance_chaos(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_RES_CHAOS))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_RES_CHAOS);
+    return one_in_(2);
+}
+
+static bool random_art_resistance_confusion(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_RES_CONF))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_RES_CONF);
+    return one_in_(2);
+}
+
+static bool random_art_resistance_disenchant(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_RES_DISEN))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_RES_DISEN);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに耐性を付加する。/ Add one resistance on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -222,23 +249,8 @@ void random_resistance(object_type *o_ptr)
 
         break;
     case BIAS_CHAOS:
-        if (!(have_flag(o_ptr->art_flags, TR_RES_CHAOS))) {
-            add_flag(o_ptr->art_flags, TR_RES_CHAOS);
-            if (one_in_(2))
-                return;
-        }
-
-        if (!(have_flag(o_ptr->art_flags, TR_RES_CONF))) {
-            add_flag(o_ptr->art_flags, TR_RES_CONF);
-            if (one_in_(2))
-                return;
-        }
-
-        if (!(have_flag(o_ptr->art_flags, TR_RES_DISEN))) {
-            add_flag(o_ptr->art_flags, TR_RES_DISEN);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_resistance_chaos(o_ptr) || random_art_resistance_confusion(o_ptr) || random_art_resistance_disenchant(o_ptr))
+            return;
 
         break;
     }
