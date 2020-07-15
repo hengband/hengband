@@ -66,6 +66,24 @@ static bool random_art_bias_magic_mastery(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_bias_stealth(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_STEALTH))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_STEALTH);
+    return one_in_(2);
+}
+
+static bool random_art_bias_search(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_SEARCH))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SEARCH);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにpval能力を付加する。/ Add one pval on generation of randam artifact.
  * @details 優先的に付加されるpvalがランダムアーティファクトバイアスに依存して存在する。
@@ -100,16 +118,8 @@ void random_plus(object_type *o_ptr)
         break;
 
     case BIAS_ROGUE:
-        if (!(have_flag(o_ptr->art_flags, TR_STEALTH))) {
-            add_flag(o_ptr->art_flags, TR_STEALTH);
-            if (one_in_(2))
-                return;
-        }
-        if (!(have_flag(o_ptr->art_flags, TR_SEARCH))) {
-            add_flag(o_ptr->art_flags, TR_SEARCH);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_bias_stealth(o_ptr) || random_art_bias_search(o_ptr))
+            return;
 
         break;
     case BIAS_STR:
