@@ -832,8 +832,6 @@ void calc_bonuses(player_type *creature_ptr)
             continue;
 
         if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
-            creature_ptr->to_h[i] += 15;
-            creature_ptr->dis_to_h[i] += 15;
             creature_ptr->to_dd[i] += 2;
             continue;
         }
@@ -3593,6 +3591,13 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
     } else if (creature_ptr->stun) {
         creature_ptr->to_h[id] -= 5;
     }
+
+	if (creature_ptr->riding) {
+        if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
+            creature_ptr->to_h[id] += 15;
+            creature_ptr->dis_to_h[id] += 15;
+        }
+    }
 }
 
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3658,6 +3663,12 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         creature_ptr->dis_to_h[id] -= 20;
     } else if (creature_ptr->stun) {
         creature_ptr->dis_to_h[id] -= 5;
+    }
+
+	if (creature_ptr->riding) {
+        if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
+            creature_ptr->dis_to_h[id] += 15;
+        }
     }
 }
 
