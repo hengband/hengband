@@ -5,6 +5,35 @@
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+static bool random_art_slay_bow(object_type *o_ptr)
+{
+    if (o_ptr->tval != TV_BOW)
+        return FALSE;
+
+    switch (randint1(6)) {
+    case 1:
+    case 2:
+    case 3:
+        add_flag(o_ptr->art_flags, TR_XTRA_MIGHT);
+        if (!one_in_(7))
+            remove_flag(o_ptr->art_flags, TR_XTRA_SHOTS);
+
+        if (!o_ptr->artifact_bias && one_in_(9))
+            o_ptr->artifact_bias = BIAS_RANGER;
+
+        return TRUE;
+    default:
+        add_flag(o_ptr->art_flags, TR_XTRA_SHOTS);
+        if (!one_in_(7))
+            remove_flag(o_ptr->art_flags, TR_XTRA_MIGHT);
+
+        if (!o_ptr->artifact_bias && one_in_(9))
+            o_ptr->artifact_bias = BIAS_RANGER;
+
+        return TRUE;
+    }
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにスレイ効果を付加する。/ Add one slaying on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -17,28 +46,8 @@
  */
 void random_slay(object_type *o_ptr)
 {
-    if (o_ptr->tval == TV_BOW) {
-        switch (randint1(6)) {
-        case 1:
-        case 2:
-        case 3:
-            add_flag(o_ptr->art_flags, TR_XTRA_MIGHT);
-            if (!one_in_(7))
-                remove_flag(o_ptr->art_flags, TR_XTRA_SHOTS);
-            if (!o_ptr->artifact_bias && one_in_(9))
-                o_ptr->artifact_bias = BIAS_RANGER;
-            break;
-        default:
-            add_flag(o_ptr->art_flags, TR_XTRA_SHOTS);
-            if (!one_in_(7))
-                remove_flag(o_ptr->art_flags, TR_XTRA_MIGHT);
-            if (!o_ptr->artifact_bias && one_in_(9))
-                o_ptr->artifact_bias = BIAS_RANGER;
-            break;
-        }
-
+    if (random_art_slay_bow(o_ptr))
         return;
-    }
 
     switch (o_ptr->artifact_bias) {
     case BIAS_CHAOS:
