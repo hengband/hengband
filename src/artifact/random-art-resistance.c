@@ -61,6 +61,39 @@ static bool random_art_immunity_elec(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_resistance_fire(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_RES_FIRE))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_RES_FIRE);
+    return one_in_(2);
+}
+
+static bool random_art_aura_fire(object_type *o_ptr)
+{
+    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || have_flag(o_ptr->art_flags, TR_SH_FIRE))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SH_FIRE);
+    return one_in_(2);
+}
+
+static bool random_art_immunity_fire(object_type *o_ptr)
+{
+    if (!one_in_(BIAS_LUCK) || have_flag(o_ptr->art_flags, TR_IM_FIRE))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_IM_FIRE);
+    if (one_in_(IM_LUCK))
+        return one_in_(2);
+
+    remove_flag(o_ptr->art_flags, TR_IM_ELEC);
+    remove_flag(o_ptr->art_flags, TR_IM_COLD);
+    remove_flag(o_ptr->art_flags, TR_IM_ACID);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに耐性を付加する。/ Add one resistance on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -86,28 +119,8 @@ void random_resistance(object_type *o_ptr)
         break;
 
     case BIAS_FIRE:
-        if (!(have_flag(o_ptr->art_flags, TR_RES_FIRE))) {
-            add_flag(o_ptr->art_flags, TR_RES_FIRE);
-            if (one_in_(2))
-                return;
-        }
-
-        if ((o_ptr->tval >= TV_CLOAK) && (o_ptr->tval <= TV_HARD_ARMOR) && !(have_flag(o_ptr->art_flags, TR_SH_FIRE))) {
-            add_flag(o_ptr->art_flags, TR_SH_FIRE);
-            if (one_in_(2))
-                return;
-        }
-
-        if (one_in_(BIAS_LUCK) && !(have_flag(o_ptr->art_flags, TR_IM_FIRE))) {
-            add_flag(o_ptr->art_flags, TR_IM_FIRE);
-            if (!one_in_(IM_LUCK)) {
-                remove_flag(o_ptr->art_flags, TR_IM_ELEC);
-                remove_flag(o_ptr->art_flags, TR_IM_COLD);
-                remove_flag(o_ptr->art_flags, TR_IM_ACID);
-            }
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_resistance_fire(o_ptr) || random_art_aura_fire(o_ptr) || random_art_immunity_fire(o_ptr))
+            return;
 
         break;
     case BIAS_COLD:
