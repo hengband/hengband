@@ -798,8 +798,8 @@ void calc_bonuses(player_type *creature_ptr)
     hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     creature_ptr->heavy_shoot = is_heavy_shoot(creature_ptr, o_ptr);
-    if (creature_ptr->heavy_shoot) {
-        creature_ptr->to_h_b += 2 * (hold - o_ptr->weight / 10);
+
+	if (creature_ptr->heavy_shoot) {
         creature_ptr->dis_to_h_b += 2 * (hold - o_ptr->weight / 10);
     }
 
@@ -3662,9 +3662,16 @@ static void calc_to_hit_bow(player_type *creature_ptr)
 
 	creature_ptr->to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+
+    int hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
+    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
+
+    if (is_heavy_shoot(creature_ptr, o_ptr)) {
+        creature_ptr->to_h_b += 2 * (hold - o_ptr->weight / 10);
+    }
 }
 
-    static void calc_to_damage_misc(player_type *creature_ptr)
+static void calc_to_damage_misc(player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
