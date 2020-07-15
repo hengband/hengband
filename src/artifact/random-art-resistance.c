@@ -4,6 +4,30 @@
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+static bool random_art_resistance_acid(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_RES_ACID))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_RES_ACID);
+    return one_in_(2);
+}
+
+static bool random_art_immunity_acid(object_type *o_ptr)
+{
+    if (!one_in_(BIAS_LUCK) || have_flag(o_ptr->art_flags, TR_IM_ACID))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_IM_ACID);
+    if (one_in_(IM_LUCK))
+        return one_in_(2);
+
+    remove_flag(o_ptr->art_flags, TR_IM_ELEC);
+    remove_flag(o_ptr->art_flags, TR_IM_COLD);
+    remove_flag(o_ptr->art_flags, TR_IM_FIRE);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに耐性を付加する。/ Add one resistance on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -18,25 +42,10 @@ void random_resistance(object_type *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
     case BIAS_ACID:
-        if (!(have_flag(o_ptr->art_flags, TR_RES_ACID))) {
-            add_flag(o_ptr->art_flags, TR_RES_ACID);
-            if (one_in_(2))
-                return;
-        }
-
-        if (one_in_(BIAS_LUCK) && !(have_flag(o_ptr->art_flags, TR_IM_ACID))) {
-            add_flag(o_ptr->art_flags, TR_IM_ACID);
-            if (!one_in_(IM_LUCK)) {
-                remove_flag(o_ptr->art_flags, TR_IM_ELEC);
-                remove_flag(o_ptr->art_flags, TR_IM_COLD);
-                remove_flag(o_ptr->art_flags, TR_IM_FIRE);
-            }
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_resistance_acid(o_ptr) || random_art_immunity_acid(o_ptr))
+            return;
 
         break;
-
     case BIAS_ELEC:
         if (!(have_flag(o_ptr->art_flags, TR_RES_ELEC))) {
             add_flag(o_ptr->art_flags, TR_RES_ELEC);
