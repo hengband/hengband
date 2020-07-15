@@ -130,31 +130,37 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_SUST_STR);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_STR;
+
         break;
     case 2:
         add_flag(o_ptr->art_flags, TR_SUST_INT);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_INT;
+
         break;
     case 3:
         add_flag(o_ptr->art_flags, TR_SUST_WIS);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_WIS;
+
         break;
     case 4:
         add_flag(o_ptr->art_flags, TR_SUST_DEX);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_DEX;
+
         break;
     case 5:
         add_flag(o_ptr->art_flags, TR_SUST_CON);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_CON;
+
         break;
     case 6:
         add_flag(o_ptr->art_flags, TR_SUST_CHR);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_CHR;
+
         break;
     case 7:
     case 8:
@@ -167,6 +173,7 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
             o_ptr->artifact_bias = BIAS_PRIESTLY;
         else if (!o_ptr->artifact_bias && one_in_(6))
             o_ptr->artifact_bias = BIAS_NECROMANTIC;
+
         break;
     case 10:
     case 11:
@@ -197,9 +204,8 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
     case 26:
         if (object_is_armour(player_ptr, o_ptr))
             random_misc(player_ptr, o_ptr);
-        else {
+        else
             o_ptr->to_a = 4 + randint1(11);
-        }
 
         break;
     case 27:
@@ -215,6 +221,7 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
             bonus_h /= 2;
             bonus_d /= 2;
         }
+
         o_ptr->to_h += bonus_h;
         o_ptr->to_d += bonus_d;
         break;
@@ -235,16 +242,19 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
             add_flag(o_ptr->art_flags, TR_ESP_EVIL);
             if (!o_ptr->artifact_bias && one_in_(3))
                 o_ptr->artifact_bias = BIAS_LAW;
+
             break;
         case 2:
             add_flag(o_ptr->art_flags, TR_ESP_NONLIVING);
             if (!o_ptr->artifact_bias && one_in_(3))
                 o_ptr->artifact_bias = BIAS_MAGE;
+
             break;
         case 3:
             add_flag(o_ptr->art_flags, TR_TELEPATHY);
             if (!o_ptr->artifact_bias && one_in_(9))
                 o_ptr->artifact_bias = BIAS_MAGE;
+
             break;
         }
 
@@ -252,10 +262,7 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
 
     case 33: {
         int idx[3];
-        int n = randint1(3);
-
         idx[0] = randint1(10);
-
         idx[1] = randint1(9);
         if (idx[1] >= idx[0])
             idx[1]++;
@@ -263,15 +270,18 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
         idx[2] = randint1(8);
         if (idx[2] >= idx[0])
             idx[2]++;
+
         if (idx[2] >= idx[1])
             idx[2]++;
 
+        int n = randint1(3);
         while (n--) {
             switch (idx[n]) {
             case 1:
                 add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
                 if (!o_ptr->artifact_bias && one_in_(4))
                     o_ptr->artifact_bias = BIAS_RANGER;
+
                 break;
             case 2:
                 add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
@@ -279,6 +289,7 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
                     o_ptr->artifact_bias = BIAS_PRIESTLY;
                 else if (!o_ptr->artifact_bias && one_in_(6))
                     o_ptr->artifact_bias = BIAS_NECROMANTIC;
+
                 break;
             case 3:
                 add_flag(o_ptr->art_flags, TR_ESP_DEMON);
@@ -299,16 +310,19 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
                 add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
                 if (!o_ptr->artifact_bias && one_in_(6))
                     o_ptr->artifact_bias = BIAS_ROGUE;
+
                 break;
             case 9:
                 add_flag(o_ptr->art_flags, TR_ESP_GOOD);
                 if (!o_ptr->artifact_bias && one_in_(3))
                     o_ptr->artifact_bias = BIAS_LAW;
+
                 break;
             case 10:
                 add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
                 if (!o_ptr->artifact_bias && one_in_(3))
                     o_ptr->artifact_bias = BIAS_LAW;
+
                 break;
             }
 
