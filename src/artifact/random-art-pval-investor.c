@@ -57,6 +57,15 @@ static bool bias_mage_mastery(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool bias_priest_wisdom(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_WIS))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_WIS);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにpval能力を付加する。/ Add one pval on generation of randam artifact.
  * @details 優先的に付加されるpvalがランダムアーティファクトバイアスに依存して存在する。
@@ -80,14 +89,10 @@ void random_plus(object_type *o_ptr)
 
         break;
     case BIAS_PRIESTLY:
-        if (!(have_flag(o_ptr->art_flags, TR_WIS))) {
-            add_flag(o_ptr->art_flags, TR_WIS);
-            if (one_in_(2))
-                return;
-        }
+        if (bias_priest_wisdom(o_ptr))
+            return;
 
         break;
-
     case BIAS_RANGER:
         if (!(have_flag(o_ptr->art_flags, TR_DEX))) {
             add_flag(o_ptr->art_flags, TR_DEX);
