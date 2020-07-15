@@ -93,6 +93,35 @@ static bool random_art_bias_search(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool switch_random_art_bias(object_type *o_ptr)
+{
+    switch (o_ptr->artifact_bias) {
+    case BIAS_WARRIOR:
+        return random_art_bias_strength(o_ptr) || random_art_bias_constitution(o_ptr) || random_art_bias_dexterity(o_ptr);
+    case BIAS_MAGE:
+        return random_art_bias_intelligence(o_ptr) || random_art_bias_magic_mastery(o_ptr);
+    case BIAS_RANGER:
+        return random_art_bias_dexterity(o_ptr) || random_art_bias_constitution(o_ptr) || random_art_bias_strength(o_ptr);
+    case BIAS_ROGUE:
+        return random_art_bias_stealth(o_ptr) || random_art_bias_search(o_ptr);
+    case BIAS_STR:
+        return random_art_bias_strength(o_ptr);
+    case BIAS_INT:
+        return random_art_bias_intelligence(o_ptr);
+    case BIAS_PRIESTLY:
+    case BIAS_WIS:
+        return random_art_bias_wisdom(o_ptr);
+    case BIAS_DEX:
+        return random_art_bias_dexterity(o_ptr);
+    case BIAS_CON:
+        return random_art_bias_constitution(o_ptr);
+    case BIAS_CHR:
+        return random_art_bias_charisma(o_ptr);
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにpval能力を付加する。/ Add one pval on generation of randam artifact.
  * @details 優先的に付加されるpvalがランダムアーティファクトバイアスに依存して存在する。
@@ -104,64 +133,8 @@ static bool random_art_bias_search(object_type *o_ptr)
 void random_plus(object_type *o_ptr)
 {
     int this_type = object_is_weapon_ammo(o_ptr) ? 23 : 19;
-    switch (o_ptr->artifact_bias) {
-    case BIAS_WARRIOR:
-        if (random_art_bias_strength(o_ptr) || random_art_bias_constitution(o_ptr) || random_art_bias_dexterity(o_ptr))
-            return;
-
-        break;
-    case BIAS_MAGE:
-        if (random_art_bias_intelligence(o_ptr) || random_art_bias_magic_mastery(o_ptr))
-            return;
-
-        break;
-    case BIAS_PRIESTLY:
-        if (random_art_bias_wisdom(o_ptr))
-            return;
-
-        break;
-    case BIAS_RANGER:
-        if (random_art_bias_dexterity(o_ptr) || random_art_bias_constitution(o_ptr) || random_art_bias_strength(o_ptr))
-            return;
-
-        break;
-
-    case BIAS_ROGUE:
-        if (random_art_bias_stealth(o_ptr) || random_art_bias_search(o_ptr))
-            return;
-
-        break;
-    case BIAS_STR:
-        if (random_art_bias_strength(o_ptr))
-            return;
-
-        break;
-    case BIAS_INT:
-        if (random_art_bias_intelligence(o_ptr))
-            return;
-
-        break;
-    case BIAS_WIS:
-        if (random_art_bias_wisdom(o_ptr))
-            return;
-
-        break;
-    case BIAS_DEX:
-        if (random_art_bias_dexterity(o_ptr))
-            return;
-
-        break;
-    case BIAS_CON:
-        if (random_art_bias_constitution(o_ptr))
-            return;
-
-        break;
-    case BIAS_CHR:
-        if (random_art_bias_charisma(o_ptr))
-            return;
-
-        break;
-    }
+    if (switch_random_art_bias(o_ptr))
+        return;
 
     if ((o_ptr->artifact_bias == BIAS_MAGE || o_ptr->artifact_bias == BIAS_PRIESTLY) && (o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ROBE)) {
         if (!(have_flag(o_ptr->art_flags, TR_DEC_MANA)) && one_in_(3)) {
