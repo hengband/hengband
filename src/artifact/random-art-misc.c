@@ -11,8 +11,70 @@ static bool invest_misc_ranger(object_type *o_ptr)
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_SUST_CON);
-    if (one_in_(2))
-        return TRUE;
+    return one_in_(2);
+}
+
+static bool invest_misc_strength(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_SUST_STR)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SUST_STR);
+    return one_in_(2);
+}
+
+static bool invest_misc_wisdom(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_SUST_WIS)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SUST_WIS);
+    return one_in_(2);
+}
+
+static bool invest_misc_intelligence(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_SUST_INT)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SUST_INT);
+    return one_in_(2);
+}
+
+static bool invest_misc_dexterity(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_SUST_DEX)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SUST_DEX);
+    return one_in_(2);
+}
+
+static bool invest_misc_constitution(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_SUST_CON)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SUST_CON);
+    return one_in_(2);
+}
+
+static bool invest_misc_charisma(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_SUST_CHR)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SUST_CHR);
+    return one_in_(2);
+}
+
+static bool invest_misc_chaos(object_type *o_ptr)
+{
+    if ((have_flag(o_ptr->art_flags, TR_TELEPORT)))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_TELEPORT);
+    return one_in_(2);
 }
 
 /*!
@@ -33,73 +95,46 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
 
         break;
     case BIAS_STR:
-        if (!(have_flag(o_ptr->art_flags, TR_SUST_STR))) {
-            add_flag(o_ptr->art_flags, TR_SUST_STR);
-            if (one_in_(2))
-                return;
-        }
+        if (invest_misc_strength(o_ptr))
+            return;
 
         break;
-
-    case BIAS_WIS:
-        if (!(have_flag(o_ptr->art_flags, TR_SUST_WIS))) {
-            add_flag(o_ptr->art_flags, TR_SUST_WIS);
-            if (one_in_(2))
-                return;
-        }
-
-        break;
-
     case BIAS_INT:
-        if (!(have_flag(o_ptr->art_flags, TR_SUST_INT))) {
-            add_flag(o_ptr->art_flags, TR_SUST_INT);
-            if (one_in_(2))
-                return;
-        }
+        if (invest_misc_intelligence(o_ptr))
+            return;
 
         break;
+    case BIAS_WIS:
+        if (invest_misc_wisdom(o_ptr))
+            return;
 
+        break;
     case BIAS_DEX:
-        if (!(have_flag(o_ptr->art_flags, TR_SUST_DEX))) {
-            add_flag(o_ptr->art_flags, TR_SUST_DEX);
-            if (one_in_(2))
-                return;
-        }
+        if (invest_misc_dexterity(o_ptr))
+            return;
 
         break;
-
     case BIAS_CON:
-        if (!(have_flag(o_ptr->art_flags, TR_SUST_CON))) {
-            add_flag(o_ptr->art_flags, TR_SUST_CON);
-            if (one_in_(2))
-                return;
-        }
+        if (invest_misc_constitution(o_ptr))
+            return;
 
         break;
-
     case BIAS_CHR:
-        if (!(have_flag(o_ptr->art_flags, TR_SUST_CHR))) {
-            add_flag(o_ptr->art_flags, TR_SUST_CHR);
-            if (one_in_(2))
-                return;
-        }
+        if (invest_misc_charisma(o_ptr))
+            return;
 
         break;
-
     case BIAS_CHAOS:
-        if (!(have_flag(o_ptr->art_flags, TR_TELEPORT))) {
-            add_flag(o_ptr->art_flags, TR_TELEPORT);
-            if (one_in_(2))
-                return;
-        }
+        if (invest_misc_chaos(o_ptr))
+            return;
 
         break;
-
     case BIAS_FIRE:
-        if (!(have_flag(o_ptr->art_flags, TR_LITE_1))) {
-            add_flag(o_ptr->art_flags, TR_LITE_1); /* Freebie */
-        }
+        if (!(have_flag(o_ptr->art_flags, TR_LITE_1)))
+            add_flag(o_ptr->art_flags, TR_LITE_1);
 
+        break;
+    default:
         break;
     }
 
