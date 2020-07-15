@@ -57,6 +57,15 @@ static bool random_art_bias_constitution(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_bias_charisma(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_CHR))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_CHR);
+    return one_in_(2);
+}
+
 static bool random_art_bias_magic_mastery(object_type *o_ptr)
 {
     if ((o_ptr->tval != TV_GLOVES) || have_flag(o_ptr->art_flags, TR_MAGIC_MASTERY))
@@ -123,51 +132,33 @@ void random_plus(object_type *o_ptr)
 
         break;
     case BIAS_STR:
-        if (!(have_flag(o_ptr->art_flags, TR_STR))) {
-            add_flag(o_ptr->art_flags, TR_STR);
-            if (one_in_(2))
-                return;
-        }
-
-        break;
-    case BIAS_WIS:
-        if (!(have_flag(o_ptr->art_flags, TR_WIS))) {
-            add_flag(o_ptr->art_flags, TR_WIS);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_bias_strength(o_ptr))
+            return;
 
         break;
     case BIAS_INT:
-        if (!(have_flag(o_ptr->art_flags, TR_INT))) {
-            add_flag(o_ptr->art_flags, TR_INT);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_bias_intelligence(o_ptr))
+            return;
+
+        break;
+    case BIAS_WIS:
+        if (random_art_bias_wisdom(o_ptr))
+            return;
 
         break;
     case BIAS_DEX:
-        if (!(have_flag(o_ptr->art_flags, TR_DEX))) {
-            add_flag(o_ptr->art_flags, TR_DEX);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_bias_dexterity(o_ptr))
+            return;
 
         break;
     case BIAS_CON:
-        if (!(have_flag(o_ptr->art_flags, TR_CON))) {
-            add_flag(o_ptr->art_flags, TR_CON);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_bias_constitution(o_ptr))
+            return;
 
         break;
     case BIAS_CHR:
-        if (!(have_flag(o_ptr->art_flags, TR_CHR))) {
-            add_flag(o_ptr->art_flags, TR_CHR);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_bias_charisma(o_ptr))
+            return;
 
         break;
     }
