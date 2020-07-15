@@ -150,6 +150,77 @@ static void invest_misc_string_esp(object_type *o_ptr)
     }
 }
 
+static void invest_misc_weak_esps(object_type *o_ptr)
+{
+    int idx[3];
+    idx[0] = randint1(10);
+    idx[1] = randint1(9);
+    if (idx[1] >= idx[0])
+        idx[1]++;
+
+    idx[2] = randint1(8);
+    if (idx[2] >= idx[0])
+        idx[2]++;
+
+    if (idx[2] >= idx[1])
+        idx[2]++;
+
+    int n = randint1(3);
+    while (n--) {
+        switch (idx[n]) {
+        case 1:
+            add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
+            if (!o_ptr->artifact_bias && one_in_(4))
+                o_ptr->artifact_bias = BIAS_RANGER;
+
+            break;
+        case 2:
+            add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
+            if (!o_ptr->artifact_bias && one_in_(3))
+                o_ptr->artifact_bias = BIAS_PRIESTLY;
+            else if (!o_ptr->artifact_bias && one_in_(6))
+                o_ptr->artifact_bias = BIAS_NECROMANTIC;
+
+            break;
+        case 3:
+            add_flag(o_ptr->art_flags, TR_ESP_DEMON);
+            break;
+        case 4:
+            add_flag(o_ptr->art_flags, TR_ESP_ORC);
+            break;
+        case 5:
+            add_flag(o_ptr->art_flags, TR_ESP_TROLL);
+            break;
+        case 6:
+            add_flag(o_ptr->art_flags, TR_ESP_GIANT);
+            break;
+        case 7:
+            add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
+            break;
+        case 8:
+            add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
+            if (!o_ptr->artifact_bias && one_in_(6))
+                o_ptr->artifact_bias = BIAS_ROGUE;
+
+            break;
+        case 9:
+            add_flag(o_ptr->art_flags, TR_ESP_GOOD);
+            if (!o_ptr->artifact_bias && one_in_(3))
+                o_ptr->artifact_bias = BIAS_LAW;
+
+            break;
+        case 10:
+            add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
+            if (!o_ptr->artifact_bias && one_in_(3))
+                o_ptr->artifact_bias = BIAS_LAW;
+
+            break;
+        }
+
+        break;
+    }
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにその他特性を付加する。/ Add one misc flag on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -264,74 +335,8 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
     case 18:
         invest_misc_string_esp(o_ptr);
         break;
-    case 33: {
-        int idx[3];
-        idx[0] = randint1(10);
-        idx[1] = randint1(9);
-        if (idx[1] >= idx[0])
-            idx[1]++;
-
-        idx[2] = randint1(8);
-        if (idx[2] >= idx[0])
-            idx[2]++;
-
-        if (idx[2] >= idx[1])
-            idx[2]++;
-
-        int n = randint1(3);
-        while (n--) {
-            switch (idx[n]) {
-            case 1:
-                add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
-                if (!o_ptr->artifact_bias && one_in_(4))
-                    o_ptr->artifact_bias = BIAS_RANGER;
-
-                break;
-            case 2:
-                add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
-                if (!o_ptr->artifact_bias && one_in_(3))
-                    o_ptr->artifact_bias = BIAS_PRIESTLY;
-                else if (!o_ptr->artifact_bias && one_in_(6))
-                    o_ptr->artifact_bias = BIAS_NECROMANTIC;
-
-                break;
-            case 3:
-                add_flag(o_ptr->art_flags, TR_ESP_DEMON);
-                break;
-            case 4:
-                add_flag(o_ptr->art_flags, TR_ESP_ORC);
-                break;
-            case 5:
-                add_flag(o_ptr->art_flags, TR_ESP_TROLL);
-                break;
-            case 6:
-                add_flag(o_ptr->art_flags, TR_ESP_GIANT);
-                break;
-            case 7:
-                add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
-                break;
-            case 8:
-                add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
-                if (!o_ptr->artifact_bias && one_in_(6))
-                    o_ptr->artifact_bias = BIAS_ROGUE;
-
-                break;
-            case 9:
-                add_flag(o_ptr->art_flags, TR_ESP_GOOD);
-                if (!o_ptr->artifact_bias && one_in_(3))
-                    o_ptr->artifact_bias = BIAS_LAW;
-
-                break;
-            case 10:
-                add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
-                if (!o_ptr->artifact_bias && one_in_(3))
-                    o_ptr->artifact_bias = BIAS_LAW;
-
-                break;
-            }
-
-            break;
-        }
-    }
+    case 33:
+        invest_misc_weak_esps(o_ptr);
+        break;
     }
 }
