@@ -150,6 +150,59 @@ static void invest_misc_string_esp(object_type *o_ptr)
     }
 }
 
+static void switch_investment_weak_esps(object_type *o_ptr, const int *idx, const int n)
+{
+    switch (idx[n]) {
+    case 1:
+        add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
+        if (!o_ptr->artifact_bias && one_in_(4))
+            o_ptr->artifact_bias = BIAS_RANGER;
+
+        break;
+    case 2:
+        add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
+        if (!o_ptr->artifact_bias && one_in_(3))
+            o_ptr->artifact_bias = BIAS_PRIESTLY;
+        else if (!o_ptr->artifact_bias && one_in_(6))
+            o_ptr->artifact_bias = BIAS_NECROMANTIC;
+
+        break;
+    case 3:
+        add_flag(o_ptr->art_flags, TR_ESP_DEMON);
+        break;
+    case 4:
+        add_flag(o_ptr->art_flags, TR_ESP_ORC);
+        break;
+    case 5:
+        add_flag(o_ptr->art_flags, TR_ESP_TROLL);
+        break;
+    case 6:
+        add_flag(o_ptr->art_flags, TR_ESP_GIANT);
+        break;
+    case 7:
+        add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
+        break;
+    case 8:
+        add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
+        if (!o_ptr->artifact_bias && one_in_(6))
+            o_ptr->artifact_bias = BIAS_ROGUE;
+
+        break;
+    case 9:
+        add_flag(o_ptr->art_flags, TR_ESP_GOOD);
+        if (!o_ptr->artifact_bias && one_in_(3))
+            o_ptr->artifact_bias = BIAS_LAW;
+
+        break;
+    case 10:
+        add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
+        if (!o_ptr->artifact_bias && one_in_(3))
+            o_ptr->artifact_bias = BIAS_LAW;
+
+        break;
+    }
+}
+
 static void invest_misc_weak_esps(object_type *o_ptr)
 {
     int idx[3];
@@ -166,57 +219,8 @@ static void invest_misc_weak_esps(object_type *o_ptr)
         idx[2]++;
 
     int n = randint1(3);
-    while (n--) {
-        switch (idx[n]) {
-        case 1:
-            add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
-            if (!o_ptr->artifact_bias && one_in_(4))
-                o_ptr->artifact_bias = BIAS_RANGER;
-
-            break;
-        case 2:
-            add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
-            if (!o_ptr->artifact_bias && one_in_(3))
-                o_ptr->artifact_bias = BIAS_PRIESTLY;
-            else if (!o_ptr->artifact_bias && one_in_(6))
-                o_ptr->artifact_bias = BIAS_NECROMANTIC;
-
-            break;
-        case 3:
-            add_flag(o_ptr->art_flags, TR_ESP_DEMON);
-            break;
-        case 4:
-            add_flag(o_ptr->art_flags, TR_ESP_ORC);
-            break;
-        case 5:
-            add_flag(o_ptr->art_flags, TR_ESP_TROLL);
-            break;
-        case 6:
-            add_flag(o_ptr->art_flags, TR_ESP_GIANT);
-            break;
-        case 7:
-            add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
-            break;
-        case 8:
-            add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
-            if (!o_ptr->artifact_bias && one_in_(6))
-                o_ptr->artifact_bias = BIAS_ROGUE;
-
-            break;
-        case 9:
-            add_flag(o_ptr->art_flags, TR_ESP_GOOD);
-            if (!o_ptr->artifact_bias && one_in_(3))
-                o_ptr->artifact_bias = BIAS_LAW;
-
-            break;
-        case 10:
-            add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
-            if (!o_ptr->artifact_bias && one_in_(3))
-                o_ptr->artifact_bias = BIAS_LAW;
-
-            break;
-        }
-    }
+    while (n--)
+        switch_investment_weak_esps(o_ptr, idx, n);
 }
 
 /*!
