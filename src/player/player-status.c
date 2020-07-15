@@ -113,6 +113,7 @@ static void calc_riding_weapon_penalty(player_type *creature_ptr);
 static void put_equipment_warning(player_type *creature_ptr);
 
 static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot);
+static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot);
 
@@ -503,8 +504,6 @@ int spell_exp_level(int spell_exp)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->dis_to_d[0] = 0;
-    creature_ptr->dis_to_d[1] = 0;
     creature_ptr->dis_to_h_b = 0;
     creature_ptr->to_dd[0] = creature_ptr->to_ds[0] = 0;
     creature_ptr->to_dd[1] = creature_ptr->to_ds[1] = 0;
@@ -790,8 +789,6 @@ void calc_bonuses(player_type *creature_ptr)
             creature_ptr->kill_wall = TRUE;
     }
 
-    creature_ptr->dis_to_d[0] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
-    creature_ptr->dis_to_d[1] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
     creature_ptr->dis_to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->dis_to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
 
@@ -842,20 +839,6 @@ void calc_bonuses(player_type *creature_ptr)
             } else {
                 creature_ptr->to_d[i] -= 10;
                 creature_ptr->dis_to_d[i] -= 10;
-            }
-        }
-
-        if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
-            if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
-                if (o_ptr->curse_flags & (TRC_CURSED)) {
-                    creature_ptr->dis_to_d[i] += 5;
-                }
-                if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
-                    creature_ptr->dis_to_d[i] += 7;
-                }
-                if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
-                    creature_ptr->dis_to_d[i] += 13;
-                }
             }
         }
 
@@ -1060,6 +1043,8 @@ void calc_bonuses(player_type *creature_ptr)
     calc_to_hit_throw(creature_ptr);
     calc_to_damage(creature_ptr, INVEN_RARM);
     calc_to_damage(creature_ptr, INVEN_LARM);
+    calc_to_damage_display(creature_ptr, INVEN_RARM);
+    calc_to_damage_display(creature_ptr, INVEN_LARM);
     calc_to_hit(creature_ptr, INVEN_RARM);
     calc_to_hit(creature_ptr, INVEN_LARM);
     calc_to_hit_display(creature_ptr, INVEN_RARM);
@@ -3485,6 +3470,41 @@ static void calc_to_damage(player_type* creature_ptr, INVENTORY_IDX slot) {
             }
             if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
                 creature_ptr->to_d[id] += 13;
+            }
+        }
+    }
+}
+
+static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot)
+{
+    int id = slot - INVEN_RARM;
+    object_type *o_ptr = &creature_ptr->inventory_list[slot];
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    object_flags(o_ptr, flgs);
+
+	creature_ptr->dis_to_d[id] = 0;
+    creature_ptr->dis_to_d[id] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
+
+    if (creature_ptr->shero) {
+        creature_ptr->dis_to_d[id] += 3 + (creature_ptr->lev / 5);
+    }
+
+	if (creature_ptr->stun > 50) {
+        creature_ptr->dis_to_d[id] -= 20;
+    } else if (creature_ptr->stun) {
+        creature_ptr->dis_to_d[id] -= 5;
+    }
+
+    if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
+        if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
+            if (o_ptr->curse_flags & (TRC_CURSED)) {
+                creature_ptr->dis_to_d[id] += 5;
+            }
+            if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
+                creature_ptr->dis_to_d[id] += 7;
+            }
+            if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
+                creature_ptr->dis_to_d[id] += 13;
             }
         }
     }
