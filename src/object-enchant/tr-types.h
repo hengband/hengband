@@ -76,7 +76,7 @@ typedef enum tr_type {
     TR_SH_COLD = 67, /* cold aura */
     TR_NO_TELE = 68, /* Anti-teleportation */
     TR_NO_MAGIC = 69, /* Anti-magic */
-    TR_DEC_MANA = 70, /* ??? */
+    TR_DEC_MANA = 70, /* 消費魔力減少 */
     TR_TY_CURSE = 71, /* The Ancient Curse */
     TR_WARNING = 72, /* Warning */
     TR_HIDE_TYPE = 73, /* Hide "pval" description */

@@ -6,8 +6,8 @@
 
 #include "artifact/random-art-pval-investor.h"
 #include "artifact/random-art-bias-types.h"
-#include "object-hook/hook-weapon.h"
 #include "object-enchant/tr-types.h"
+#include "object-hook/hook-weapon.h"
 #include "sv-definition/sv-armor-types.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -122,6 +122,16 @@ static bool switch_random_art_bias(object_type *o_ptr)
     }
 }
 
+static bool random_art_bias_decrease_mana(object_type *o_ptr)
+{
+    if (((o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY)) || (o_ptr->tval != TV_SOFT_ARMOR) || (o_ptr->sval != SV_ROBE)
+        || have_flag(o_ptr->art_flags, TR_DEC_MANA) || !one_in_(3))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_DEC_MANA);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにpval能力を付加する。/ Add one pval on generation of randam artifact.
  * @details 優先的に付加されるpvalがランダムアーティファクトバイアスに依存して存在する。
@@ -132,18 +142,10 @@ static bool switch_random_art_bias(object_type *o_ptr)
  */
 void random_plus(object_type *o_ptr)
 {
-    int this_type = object_is_weapon_ammo(o_ptr) ? 23 : 19;
-    if (switch_random_art_bias(o_ptr))
+    if (switch_random_art_bias(o_ptr) || random_art_bias_decrease_mana(o_ptr))
         return;
 
-    if ((o_ptr->artifact_bias == BIAS_MAGE || o_ptr->artifact_bias == BIAS_PRIESTLY) && (o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ROBE)) {
-        if (!(have_flag(o_ptr->art_flags, TR_DEC_MANA)) && one_in_(3)) {
-            add_flag(o_ptr->art_flags, TR_DEC_MANA);
-            if (one_in_(2))
-                return;
-        }
-    }
-
+    int this_type = object_is_weapon_ammo(o_ptr) ? 23 : 19;
     switch (randint1(this_type)) {
     case 1:
     case 2:
@@ -152,6 +154,7 @@ void random_plus(object_type *o_ptr)
             o_ptr->artifact_bias = BIAS_STR;
         else if (!o_ptr->artifact_bias && one_in_(7))
             o_ptr->artifact_bias = BIAS_WARRIOR;
+
         break;
     case 3:
     case 4:
@@ -160,6 +163,7 @@ void random_plus(object_type *o_ptr)
             o_ptr->artifact_bias = BIAS_INT;
         else if (!o_ptr->artifact_bias && one_in_(7))
             o_ptr->artifact_bias = BIAS_MAGE;
+
         break;
     case 5:
     case 6:
@@ -168,6 +172,7 @@ void random_plus(object_type *o_ptr)
             o_ptr->artifact_bias = BIAS_WIS;
         else if (!o_ptr->artifact_bias && one_in_(7))
             o_ptr->artifact_bias = BIAS_PRIESTLY;
+
         break;
     case 7:
     case 8:
@@ -176,6 +181,7 @@ void random_plus(object_type *o_ptr)
             o_ptr->artifact_bias = BIAS_DEX;
         else if (!o_ptr->artifact_bias && one_in_(7))
             o_ptr->artifact_bias = BIAS_ROGUE;
+
         break;
     case 9:
     case 10:
@@ -184,24 +190,28 @@ void random_plus(object_type *o_ptr)
             o_ptr->artifact_bias = BIAS_CON;
         else if (!o_ptr->artifact_bias && one_in_(9))
             o_ptr->artifact_bias = BIAS_RANGER;
+
         break;
     case 11:
     case 12:
         add_flag(o_ptr->art_flags, TR_CHR);
         if (!o_ptr->artifact_bias && !one_in_(13))
             o_ptr->artifact_bias = BIAS_CHR;
+
         break;
     case 13:
     case 14:
         add_flag(o_ptr->art_flags, TR_STEALTH);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_ROGUE;
+
         break;
     case 15:
     case 16:
         add_flag(o_ptr->art_flags, TR_SEARCH);
         if (!o_ptr->artifact_bias && one_in_(9))
             o_ptr->artifact_bias = BIAS_RANGER;
+
         break;
     case 17:
     case 18:
@@ -211,6 +221,7 @@ void random_plus(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_SPEED);
         if (!o_ptr->artifact_bias && one_in_(11))
             o_ptr->artifact_bias = BIAS_ROGUE;
+
         break;
     case 20:
     case 21:
@@ -218,13 +229,14 @@ void random_plus(object_type *o_ptr)
         break;
     case 22:
     case 23:
-        if (o_ptr->tval == TV_BOW)
+        if (o_ptr->tval == TV_BOW) {
             random_plus(o_ptr);
-        else {
-            add_flag(o_ptr->art_flags, TR_BLOWS);
-            if (!o_ptr->artifact_bias && one_in_(11))
-                o_ptr->artifact_bias = BIAS_WARRIOR;
+            break;
         }
+
+        add_flag(o_ptr->art_flags, TR_BLOWS);
+        if (!o_ptr->artifact_bias && one_in_(11))
+            o_ptr->artifact_bias = BIAS_WARRIOR;
 
         break;
     }
