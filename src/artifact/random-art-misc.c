@@ -78,6 +78,40 @@ static bool invest_misc_chaos(object_type *o_ptr)
 }
 
 /*!
+ * @brief アーティファクトのバイアス値に基づいて特性を付与する
+ * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
+ * @return 処理続行ならFALSE、打ち切るならTRUE
+ */
+static bool switch_misc_bias(object_type *o_ptr)
+{
+    switch (o_ptr->artifact_bias) {
+    case BIAS_RANGER:
+        return invest_misc_ranger(o_ptr);
+    case BIAS_STR:
+        return invest_misc_strength(o_ptr);
+    case BIAS_INT:
+        return invest_misc_intelligence(o_ptr);
+    case BIAS_WIS:
+        return invest_misc_wisdom(o_ptr);
+    case BIAS_DEX:
+        return invest_misc_dexterity(o_ptr);
+    case BIAS_CON:
+        return invest_misc_constitution(o_ptr);
+    case BIAS_CHR:
+        return invest_misc_charisma(o_ptr);
+    case BIAS_CHAOS:
+        return invest_misc_chaos(o_ptr);
+    case BIAS_FIRE:
+        if (!(have_flag(o_ptr->art_flags, TR_LITE_1)))
+            add_flag(o_ptr->art_flags, TR_LITE_1);
+
+        return FALSE;
+    default:
+        return FALSE;
+    }
+}
+
+/*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにその他特性を付加する。/ Add one misc flag on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
  * 原則的候補は各種能力維持、永久光源+1、麻痺知らず、経験値維持、浮遊、透明視、急回復、遅消化、
@@ -88,55 +122,8 @@ static bool invest_misc_chaos(object_type *o_ptr)
  */
 void random_misc(player_type *player_ptr, object_type *o_ptr)
 {
-    switch (o_ptr->artifact_bias) {
-    case BIAS_RANGER:
-        if (invest_misc_ranger(o_ptr))
-            return;
-
-        break;
-    case BIAS_STR:
-        if (invest_misc_strength(o_ptr))
-            return;
-
-        break;
-    case BIAS_INT:
-        if (invest_misc_intelligence(o_ptr))
-            return;
-
-        break;
-    case BIAS_WIS:
-        if (invest_misc_wisdom(o_ptr))
-            return;
-
-        break;
-    case BIAS_DEX:
-        if (invest_misc_dexterity(o_ptr))
-            return;
-
-        break;
-    case BIAS_CON:
-        if (invest_misc_constitution(o_ptr))
-            return;
-
-        break;
-    case BIAS_CHR:
-        if (invest_misc_charisma(o_ptr))
-            return;
-
-        break;
-    case BIAS_CHAOS:
-        if (invest_misc_chaos(o_ptr))
-            return;
-
-        break;
-    case BIAS_FIRE:
-        if (!(have_flag(o_ptr->art_flags, TR_LITE_1)))
-            add_flag(o_ptr->art_flags, TR_LITE_1);
-
-        break;
-    default:
-        break;
-    }
+    if (switch_misc_bias(o_ptr))
+        return;
 
     switch (randint1(33)) {
     case 1:
