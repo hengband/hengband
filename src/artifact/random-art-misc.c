@@ -216,8 +216,6 @@ static void invest_misc_weak_esps(object_type *o_ptr)
 
             break;
         }
-
-        break;
     }
 }
 
