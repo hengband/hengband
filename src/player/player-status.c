@@ -848,15 +848,12 @@ void calc_bonuses(player_type *creature_ptr)
         if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
             if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
                 if (o_ptr->curse_flags & (TRC_CURSED)) {
-                    creature_ptr->to_d[i] += 5;
                     creature_ptr->dis_to_d[i] += 5;
                 }
                 if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
-                    creature_ptr->to_d[i] += 7;
                     creature_ptr->dis_to_d[i] += 7;
                 }
                 if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
-                    creature_ptr->to_d[i] += 13;
                     creature_ptr->dis_to_d[i] += 13;
                 }
             }
@@ -3462,6 +3459,7 @@ void put_equipment_warning(player_type *creature_ptr)
 }
 
 static void calc_to_damage(player_type* creature_ptr, INVENTORY_IDX slot) {
+    object_type *o_ptr = &creature_ptr->inventory_list[slot];
     int id = slot - INVEN_RARM;
 	creature_ptr->to_d[id] = 0;
 
@@ -3475,6 +3473,20 @@ static void calc_to_damage(player_type* creature_ptr, INVENTORY_IDX slot) {
         creature_ptr->to_d[id] -= 20;
     } else if (creature_ptr->stun) {
         creature_ptr->to_d[id] -= 5;
+    }
+
+	if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
+        if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
+            if (o_ptr->curse_flags & (TRC_CURSED)) {
+                creature_ptr->to_d[id] += 5;
+            }
+            if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
+                creature_ptr->to_d[id] += 7;
+            }
+            if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
+                creature_ptr->to_d[id] += 13;
+            }
+        }
     }
 }
 
