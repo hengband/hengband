@@ -821,24 +821,10 @@ void calc_bonuses(player_type *creature_ptr)
         calc_num_blow(creature_ptr, i);
 
         if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
-            creature_ptr->to_d[i] -= 2;
-            creature_ptr->dis_to_d[i] -= 2;
             creature_ptr->icky_wield[i] = TRUE;
-        } else if (creature_ptr->pclass == CLASS_BERSERKER) {
-            creature_ptr->to_d[i] += creature_ptr->lev / 6;
-            creature_ptr->dis_to_d[i] += creature_ptr->lev / 6;
-            if (((i == 0) && !creature_ptr->hidarite) || creature_ptr->ryoute) {
-                creature_ptr->to_d[i] += creature_ptr->lev / 6;
-                creature_ptr->dis_to_d[i] += creature_ptr->lev / 6;
-            }
         } else if (creature_ptr->pclass == CLASS_SORCERER) {
             if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
-                creature_ptr->to_d[i] -= 200;
-                creature_ptr->dis_to_d[i] -= 200;
                 creature_ptr->icky_wield[i] = TRUE;
-            } else {
-                creature_ptr->to_d[i] -= 10;
-                creature_ptr->dis_to_d[i] -= 10;
             }
         }
 
@@ -3446,8 +3432,10 @@ void put_equipment_warning(player_type *creature_ptr)
 static void calc_to_damage(player_type* creature_ptr, INVENTORY_IDX slot) {
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     int id = slot - INVEN_RARM;
-	creature_ptr->to_d[id] = 0;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    object_flags(o_ptr, flgs);
 
+	creature_ptr->to_d[id] = 0;
     creature_ptr->to_d[id] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
 
 	if (creature_ptr->shero) {
@@ -3458,6 +3446,21 @@ static void calc_to_damage(player_type* creature_ptr, INVENTORY_IDX slot) {
         creature_ptr->to_d[id] -= 20;
     } else if (creature_ptr->stun) {
         creature_ptr->to_d[id] -= 5;
+    }
+
+    if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
+        creature_ptr->to_d[id] -= 2;
+    } else if (creature_ptr->pclass == CLASS_BERSERKER) {
+        creature_ptr->to_d[id] += creature_ptr->lev / 6;
+        if (((id == 0) && !creature_ptr->hidarite) || creature_ptr->ryoute) {
+            creature_ptr->to_d[id] += creature_ptr->lev / 6;
+        }
+    } else if (creature_ptr->pclass == CLASS_SORCERER) {
+        if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
+            creature_ptr->to_d[id] -= 200;
+        } else {
+            creature_ptr->to_d[id] -= 10;
+        }
     }
 
 	if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
@@ -3493,6 +3496,21 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
         creature_ptr->dis_to_d[id] -= 20;
     } else if (creature_ptr->stun) {
         creature_ptr->dis_to_d[id] -= 5;
+    }
+
+    if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
+        creature_ptr->dis_to_d[id] -= 2;
+    } else if (creature_ptr->pclass == CLASS_BERSERKER) {
+        creature_ptr->dis_to_d[id] += creature_ptr->lev / 6;
+        if (((id == 0) && !creature_ptr->hidarite) || creature_ptr->ryoute) {
+            creature_ptr->dis_to_d[id] += creature_ptr->lev / 6;
+        }
+    } else if (creature_ptr->pclass == CLASS_SORCERER) {
+        if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
+            creature_ptr->dis_to_d[id] -= 200;
+        } else {
+            creature_ptr->dis_to_d[id] -= 10;
+        }
     }
 
     if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
