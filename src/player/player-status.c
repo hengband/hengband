@@ -118,6 +118,7 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot);
 
 static void calc_to_hit_bow(player_type *creature_ptr);
+static void calc_to_hit_bow_display(player_type *creature_ptr);
 
 static void calc_to_damage_misc(player_type *creature_ptr);
 static void calc_to_hit_misc(player_type *creature_ptr);
@@ -504,7 +505,6 @@ int spell_exp_level(int spell_exp)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->dis_to_h_b = 0;
     creature_ptr->to_dd[0] = creature_ptr->to_ds[0] = 0;
     creature_ptr->to_dd[1] = creature_ptr->to_ds[1] = 0;
 
@@ -789,9 +789,6 @@ void calc_bonuses(player_type *creature_ptr)
             creature_ptr->kill_wall = TRUE;
     }
 
-    creature_ptr->dis_to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-    creature_ptr->dis_to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
-
     hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     creature_ptr->heavy_shoot = is_heavy_shoot(creature_ptr, o_ptr);
@@ -1034,6 +1031,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_to_hit_display(creature_ptr, INVEN_RARM);
     calc_to_hit_display(creature_ptr, INVEN_LARM);
     calc_to_hit_bow(creature_ptr);
+    calc_to_hit_bow_display(creature_ptr);
     calc_to_damage_misc(creature_ptr);
     calc_to_hit_misc(creature_ptr);
     calc_dig(creature_ptr);
@@ -3730,6 +3728,32 @@ static void calc_to_hit_bow(player_type *creature_ptr)
     if (is_heavy_shoot(creature_ptr, o_ptr)) {
         creature_ptr->to_h_b += 2 * (hold - o_ptr->weight / 10);
     }
+}
+
+static void calc_to_hit_bow_display(player_type *creature_ptr) {
+
+	creature_ptr->dis_to_h_b = 0;
+    creature_ptr->dis_to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
+    creature_ptr->dis_to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+
+	if (creature_ptr->stun > 50) {
+        creature_ptr->dis_to_h_b -= 20;
+    } else if (creature_ptr->stun) {
+        creature_ptr->dis_to_h_b -= 5;
+    }
+
+	if (is_blessed(creature_ptr)) {
+        creature_ptr->dis_to_h_b += 10;
+    }
+
+    if (IS_HERO(creature_ptr)) {
+        creature_ptr->dis_to_h_b += 12;
+    }
+
+    if (creature_ptr->shero) {
+        creature_ptr->dis_to_h_b -= 12;
+    }
+      
 }
 
 static void calc_to_damage_misc(player_type *creature_ptr)

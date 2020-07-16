@@ -3910,12 +3910,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->resist_time = TRUE;
     }
 
-	if (creature_ptr->stun > 50) {
-        creature_ptr->dis_to_h_b -= 20;
-    } else if (creature_ptr->stun) {
-        creature_ptr->dis_to_h_b -= 5;
-    }
-
     if (creature_ptr->wraith_form) {
         creature_ptr->reflect = TRUE;
         creature_ptr->pass_wall = TRUE;
@@ -3925,9 +3919,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->pass_wall = TRUE;
     }
 
-    if (is_blessed(creature_ptr)) {
-        creature_ptr->dis_to_h_b += 10;
-    }
 
     if (creature_ptr->magicdef) {
         creature_ptr->resist_blind = TRUE;
@@ -3937,12 +3928,7 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->levitation = TRUE;
     }
 
-    if (IS_HERO(creature_ptr)) {
-        creature_ptr->dis_to_h_b += 12;
-    }
-
     if (creature_ptr->shero) {
-        creature_ptr->dis_to_h_b -= 12;
         creature_ptr->skill_dig += 30;
     }
 
