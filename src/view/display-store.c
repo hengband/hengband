@@ -16,6 +16,21 @@
 #include "util/int-char-converter.h"
 
 /*!
+ * @brief プレイヤーの所持金を表示する /
+ * Displays players gold					-RAK-
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ * @details
+ */
+void store_prt_gold(player_type *player_ptr)
+{
+    prt(_("手持ちのお金: ", "Gold Remaining: "), 19 + xtra_stock, 53);
+    char out_val[64];
+    sprintf(out_val, "%9ld", (long)player_ptr->au);
+    prt(out_val, 19 + xtra_stock, 68);
+}
+
+/*!
  * @brief 店の商品リストを再表示する /
  * Re-displays a single store entry
  * @param player_ptr プレーヤーへの参照ポインタ
