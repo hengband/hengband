@@ -1754,6 +1754,9 @@
     <ClCompile Include="..\..\src\view\display-store.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\store\home.c">
+      <Filter>store</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3825,6 +3828,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-store.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\home.h">
+      <Filter>store</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

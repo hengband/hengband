@@ -73,6 +73,7 @@
 #include "player/special-defense-types.h"
 #include "spell/spells-object.h"
 #include "status/action-setter.h"
+#include "store/home.h"
 #include "store/store-util.h"
 #include "store/store.h" // do_cmd_store() がある。後で移設する.
 #include "term/screen-processor.h"

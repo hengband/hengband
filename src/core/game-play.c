@@ -68,6 +68,7 @@
 #include "savedata/save.h"
 #include "spell/spells-status.h"
 #include "spell/technic-info-table.h"
+#include "store/home.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "sv-definition/sv-weapon-types.h"

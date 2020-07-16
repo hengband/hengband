@@ -644,6 +644,7 @@ hengband_SOURCES = \
 	status/sight-setter.c status/sight-setter.h \
 	status/temporary-resistance.c status/temporary-resistance.h \
 	\
+	store/home.c store/home.h \
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \
 	store/rumor.c store/rumor.h \
