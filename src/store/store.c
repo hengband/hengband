@@ -110,7 +110,7 @@ static s16b inner_town_num = 0;
 /*
  * We store the current "store feat" here so everyone can access it
  */
-static int cur_store_feat;
+int cur_store_feat;
 
 /*!
  * @brief 店舗価格を決定する. 無料にはならない /
@@ -469,66 +469,12 @@ static void updatebargain(PRICE price, PRICE minprice, int num)
  * @return なし
  * @details
  */
-static void store_prt_gold(player_type *player_ptr)
+void store_prt_gold(player_type *player_ptr)
 {
     prt(_("手持ちのお金: ", "Gold Remaining: "), 19 + xtra_stock, 53);
     char out_val[64];
     sprintf(out_val, "%9ld", (long)player_ptr->au);
     prt(out_val, 19 + xtra_stock, 68);
-}
-
-/*!
- * @brief 店舗情報全体を表示するメインルーチン /
- * Displays store (after clearing screen)		-RAK-
- * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
- * @details
- */
-static void display_store(player_type *player_ptr)
-{
-    term_clear();
-    if (cur_store_num == STORE_HOME) {
-        put_str(_("我が家", "Your Home"), 3, 31);
-        put_str(_("アイテムの一覧", "Item Description"), 5, 4);
-        if (show_weights) {
-            put_str(_("  重さ", "Weight"), 5, 70);
-        }
-
-        store_prt_gold(player_ptr);
-        display_store_inventory(player_ptr);
-        return;
-    }
-
-    if (cur_store_num == STORE_MUSEUM) {
-        put_str(_("博物館", "Museum"), 3, 31);
-        put_str(_("アイテムの一覧", "Item Description"), 5, 4);
-        if (show_weights) {
-            put_str(_("  重さ", "Weight"), 5, 70);
-        }
-
-        store_prt_gold(player_ptr);
-        display_store_inventory(player_ptr);
-        return;
-    }
-
-    concptr store_name = (f_name + f_info[cur_store_feat].name);
-    concptr owner_name = (ot_ptr->owner_name);
-    concptr race_name = race_info[ot_ptr->owner_race].title;
-    char buf[80];
-    sprintf(buf, "%s (%s)", owner_name, race_name);
-    put_str(buf, 3, 10);
-
-    sprintf(buf, "%s (%ld)", store_name, (long)(ot_ptr->max_cost));
-    prt(buf, 3, 50);
-
-    put_str(_("商品の一覧", "Item Description"), 5, 5);
-    if (show_weights) {
-        put_str(_("  重さ", "Weight"), 5, 60);
-    }
-
-    put_str(_(" 価格", "Price"), 5, 72);
-    store_prt_gold(player_ptr);
-    display_store_inventory(player_ptr);
 }
 
 /*!

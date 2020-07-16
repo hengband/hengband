@@ -3,9 +3,11 @@
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/feature.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
+#include "player/race-info-table.h"
 #include "store/store-util.h"
 #include "store/store.h" // todo 相互依存している、こっちは残す？.
 #include "system/object-type-definition.h"
@@ -135,4 +137,57 @@ void display_store_inventory(player_type *player_ptr)
 
         put_str(format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), st_ptr->stock_num, k), 19 + xtra_stock, _(27, 30));
     }
+}
+
+/*!
+ * @brief 店舗情報全体を表示するメインルーチン /
+ * Displays store (after clearing screen)		-RAK-
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ * @details
+ */
+void display_store(player_type *player_ptr)
+{
+    term_clear();
+    if (cur_store_num == STORE_HOME) {
+        put_str(_("我が家", "Your Home"), 3, 31);
+        put_str(_("アイテムの一覧", "Item Description"), 5, 4);
+        if (show_weights) {
+            put_str(_("  重さ", "Weight"), 5, 70);
+        }
+
+        store_prt_gold(player_ptr);
+        display_store_inventory(player_ptr);
+        return;
+    }
+
+    if (cur_store_num == STORE_MUSEUM) {
+        put_str(_("博物館", "Museum"), 3, 31);
+        put_str(_("アイテムの一覧", "Item Description"), 5, 4);
+        if (show_weights) {
+            put_str(_("  重さ", "Weight"), 5, 70);
+        }
+
+        store_prt_gold(player_ptr);
+        display_store_inventory(player_ptr);
+        return;
+    }
+
+    concptr store_name = (f_name + f_info[cur_store_feat].name);
+    concptr owner_name = (ot_ptr->owner_name);
+    concptr race_name = race_info[ot_ptr->owner_race].title;
+    char buf[80];
+    sprintf(buf, "%s (%s)", owner_name, race_name);
+    put_str(buf, 3, 10);
+
+    sprintf(buf, "%s (%ld)", store_name, (long)(ot_ptr->max_cost));
+    prt(buf, 3, 50);
+
+    put_str(_("商品の一覧", "Item Description"), 5, 5);
+    if (show_weights)
+        put_str(_("  重さ", "Weight"), 5, 60);
+
+    put_str(_(" 価格", "Price"), 5, 72);
+    store_prt_gold(player_ptr);
+    display_store_inventory(player_ptr);
 }

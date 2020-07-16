@@ -16,9 +16,12 @@ extern int store_bottom;
 extern int xtra_stock;
 extern const owner_type *ot_ptr;
 
+extern int cur_store_feat;
+
 PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool flip);
 bool combine_and_reorder_home(player_type *player_ptr, int store_num);
 bool noneedtobargain(PRICE minprice);
+void store_prt_gold(player_type *player_ptr);
 void do_cmd_store(player_type *player_ptr);
 void store_shuffle(player_type *player_ptr, int which);
 void store_maintenance(player_type *player_ptr, int town_num, int store_num);
