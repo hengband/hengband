@@ -21,6 +21,7 @@
 #include "player/avatar.h"
 #include "player/race-info-table.h"
 #include "store/home.h"
+#include "store/owner-insults.h"
 #include "store/say-comments.h"
 #include "store/store-util.h"
 #include "store/store.h"
