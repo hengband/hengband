@@ -40,7 +40,7 @@
 void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
 {
     for (int j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         if (!angband_term[j])
             continue;
 
@@ -171,7 +171,7 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
 void fix_monster_list(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         if (!angband_term[j])
             continue;
         if (!(window_flag[j] & (PW_MONSTER_LIST)))
@@ -253,7 +253,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
 void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
 {
     for (int j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         if (!angband_term[j])
             continue;
         if (!(window_flag[j] & (PW_EQUIP)))
@@ -275,7 +275,7 @@ void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
 void fix_player(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         if (!angband_term[j])
             continue;
 
@@ -299,7 +299,7 @@ void fix_player(player_type *player_ptr)
 void fix_message(void)
 {
     for (int j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         if (!angband_term[j])
             continue;
 
@@ -333,7 +333,7 @@ void fix_message(void)
 void fix_overhead(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         TERM_LEN wid, hgt;
         if (!angband_term[j])
             continue;
@@ -395,7 +395,7 @@ static void display_dungeon(player_type *player_ptr)
 void fix_dungeon(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         if (!angband_term[j])
             continue;
 
@@ -418,7 +418,7 @@ void fix_dungeon(player_type *player_ptr)
 void fix_monster(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         if (!angband_term[j])
             continue;
 
@@ -443,7 +443,7 @@ void fix_monster(player_type *player_ptr)
 void fix_object(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         if (!angband_term[j])
             continue;
 

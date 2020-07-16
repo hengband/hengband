@@ -170,7 +170,7 @@ char inkey(void)
 {
     char ch = 0;
     bool done = FALSE;
-    term *old = Term;
+    term_type *old = Term;
 
     if (inkey_next && *inkey_next && !inkey_xtra) {
         ch = *inkey_next++;

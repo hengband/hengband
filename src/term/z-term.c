@@ -29,7 +29,7 @@
 #endif
 
 /* The current "term" */
-term *Term = NULL;
+term_type *Term = NULL;
 
 /*** Local routines ***/
 
@@ -416,7 +416,7 @@ void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM
  * a valid location, so the first "n" characters of "s" can all be added
  * starting at (x,y) without causing any illegal operations.
  */
-void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
+static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
 {
     TERM_LEN x1 = -1, x2 = -1;
 
@@ -1501,38 +1501,6 @@ errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
     return 0;
 }
 
-#ifdef JP
-/*
- * Move to a location and, using an attr, add a string vertically
- */
-errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
-{
-    errr res;
-    int y0 = y;
-
-    for (int i = 0; i < n && s[i] != 0; i++) {
-        /* Move first */
-        if ((res = term_gotoxy(x, y0)) != 0)
-            return (res);
-
-        if (iskanji(s[i])) {
-            if ((res = term_addstr(2, a, &s[i])) != 0)
-                return (res);
-            i++;
-            y0++;
-            if (s[i] == 0)
-                break;
-        } else {
-            if ((res = term_addstr(1, a, &s[i])) != 0)
-                return (res);
-            y0++;
-        }
-    }
-
-    return 0;
-}
-#endif
-
 /*
  * Place cursor at (x,y), and clear the next "n" chars
  */
@@ -1834,28 +1802,6 @@ errr term_flush(void)
     /* Forget all keypresses */
     Term->key_head = Term->key_tail = 0;
     return 0;
-}
-
-/*
- * Add a keypress to the "queue"
- */
-errr term_keypress(int k)
-{
-    /* Refuse to enqueue non-keys */
-    if (!k)
-        return -1;
-
-    /* Store the char, advance the queue */
-    Term->key_queue[Term->key_head++] = (char)k;
-
-    /* Circular queue, handle wrap */
-    if (Term->key_head == Term->key_size)
-        Term->key_head = 0;
-
-    if (Term->key_head != Term->key_tail)
-        return 0;
-
-    return 1;
 }
 
 /*
@@ -2222,7 +2168,7 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
  * To "create" a valid "term", one should do "term_init(t)", then
  * set the various flags and hooks, and then do "term_activate(t)".
  */
-errr term_activate(term *t)
+errr term_activate(term_type *t)
 {
     /* already done */
     if (Term == t)
@@ -2256,75 +2202,15 @@ errr term_activate(term *t)
 }
 
 /*
- * Nuke a term
- */
-errr term_nuke(term *t)
-{
-    TERM_LEN w = t->wid;
-    TERM_LEN h = t->hgt;
-
-    /* Call the special "nuke" hook */
-    if (t->active_flag) {
-        /* Call the "nuke" hook */
-        if (t->nuke_hook)
-            (*t->nuke_hook)(t);
-
-        /* Remember */
-        t->active_flag = FALSE;
-
-        /* Assume not mapped */
-        t->mapped_flag = FALSE;
-    }
-
-    /* Nuke "displayed" */
-    term_win_nuke(t->old, w, h);
-
-    /* Kill "displayed" */
-    KILL(t->old, term_win);
-
-    /* Nuke "requested" */
-    term_win_nuke(t->scr, w, h);
-
-    /* Kill "requested" */
-    KILL(t->scr, term_win);
-
-    /* If needed */
-    if (t->mem) {
-        /* Nuke "memorized" */
-        term_win_nuke(t->mem, w, h);
-
-        /* Kill "memorized" */
-        KILL(t->mem, term_win);
-    }
-
-    /* If needed */
-    if (t->tmp) {
-        /* Nuke "temporary" */
-        term_win_nuke(t->tmp, w, h);
-
-        /* Kill "temporary" */
-        KILL(t->tmp, term_win);
-    }
-
-    /* Free some arrays */
-    C_KILL(t->x1, h, TERM_LEN);
-    C_KILL(t->x2, h, TERM_LEN);
-
-    /* Free the input queue */
-    C_KILL(t->key_queue, t->key_size, char);
-    return 0;
-}
-
-/*
  * Initialize a term, using a window of the given size.
  * Also prepare the "input queue" for "k" keypresses
  * By default, the cursor starts out "invisible"
  * By default, we "erase" using "black spaces"
  */
-errr term_init(term *t, TERM_LEN w, TERM_LEN h, int k)
+errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
 {
     /* Wipe it */
-    (void)WIPE(t, term);
+    (void)WIPE(t, term_type);
 
     /* Prepare the input queue */
     t->key_head = t->key_tail = 0;

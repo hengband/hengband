@@ -37,7 +37,8 @@ typedef struct term_win {
 /*!
  * @brief term実装構造体 / An actual "term" structure
  */
-typedef struct term {
+typedef struct term_type term_type;
+typedef struct term_type {
 	vptr user; //!< Extra "user" info (used by application)
 	vptr data; //!< Extra "data" info (used by implementation)
 
@@ -81,8 +82,8 @@ typedef struct term {
 	term_win *tmp; //!< Temporary screen image
 	term_win *mem; //!< Memorized screen image
 
-	void (*init_hook)(term *t); //!< Hook for init - ing the term
-	void (*nuke_hook)(term *t); //!< Hook for nuke - ing the term
+	void (*init_hook)(term_type *t); //!< Hook for init - ing the term
+	void (*nuke_hook)(term_type *t); //!< Hook for nuke - ing the term
 
 	errr (*user_hook)(int n); //!< ユーザ設定項目実装部 / Hook for user actions
 	errr (*xtra_hook)(int n, int v); //!< 拡張機能実装部 / Hook for extra actions
@@ -92,7 +93,7 @@ typedef struct term {
 	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s); //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
 	void (*resize_hook)(void); //!< 画面リサイズ実装部
 	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
-} term;
+} term_type;
 
 /**** Available Constants ****/
 
@@ -133,7 +134,7 @@ typedef struct term {
 #define TERM_XTRA_MUSIC_MUTE 18
 
 /**** Available Variables ****/
-extern term *Term;
+extern term_type *Term;
 
 /**** Available Functions ****/
 extern errr term_user(int n);
@@ -144,8 +145,6 @@ extern void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TER
 
 extern void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
 
-extern void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
-
 extern errr term_fresh(void);
 extern errr term_set_cursor(int v);
 extern errr term_gotoxy(TERM_LEN x, TERM_LEN y);
@@ -155,9 +154,6 @@ extern errr term_add_bigch(TERM_COLOR a, char c);
 extern errr term_addstr(int n, TERM_COLOR a, concptr s);
 extern errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 extern errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
-#ifdef JP
-extern errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s);
-#endif
 extern errr term_erase(TERM_LEN x, TERM_LEN y, int n);
 extern errr term_clear(void);
 extern errr term_redraw(void);
@@ -168,7 +164,6 @@ extern errr term_locate(TERM_LEN *x, TERM_LEN *y);
 extern errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
 
 extern errr term_flush(void);
-extern errr term_keypress(int k);
 extern errr term_key_push(int k);
 extern errr term_inkey(char *ch, bool wait, bool take);
 
@@ -177,8 +172,7 @@ extern errr term_load(void);
 
 extern errr term_resize(TERM_LEN w, TERM_LEN h);
 
-extern errr term_activate(term *t);
+extern errr term_activate(term_type *t);
 
-extern errr term_nuke(term *t);
-extern errr term_init(term *t, TERM_LEN w, TERM_LEN h, int k);
+extern errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k);
 #endif

@@ -266,7 +266,7 @@ static void do_cmd_options_win(player_type *player_ptr)
     }
 
     for (j = 0; j < 8; j++) {
-        term *old = Term;
+        term_type *old = Term;
         if (!angband_term[j])
             continue;
 

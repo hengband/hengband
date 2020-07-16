@@ -19,7 +19,7 @@ extern const concptr color_names[16];
 extern const concptr window_flag_desc[32];
 extern const concptr ident_info[];
 
-extern term *angband_term[8];
+extern term_type *angband_term[8];
 #define term_screen (angband_term[0])
 
 extern TERM_COLOR misc_to_attr[256];

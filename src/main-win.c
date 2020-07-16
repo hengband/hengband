@@ -322,7 +322,7 @@
  * </p>
  */
 typedef struct {
-    term t;
+    term_type t;
     concptr s;
     HWND w;
     DWORD dwStyle;
@@ -1386,7 +1386,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
     }
 
     for (int i = 0; i < MAX_TERM_DATA; i++) {
-        term *old = Term;
+        term_type *old = Term;
         term_data *td = &data[i];
         if ((td->cols != td->t.wid) || (td->rows != td->t.hgt)) {
             term_activate(&td->t);
@@ -1965,7 +1965,7 @@ static void windows_map(player_type *player_ptr)
  */
 static void term_data_link(term_data *td)
 {
-    term *t = &td->t;
+    term_type *t = &td->t;
     term_init(t, td->cols, td->rows, td->keys);
     t->soft_cursor = TRUE;
     t->higher_pict = TRUE;
@@ -2723,6 +2723,28 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     }
 }
 
+/*
+ * Add a keypress to the "queue"
+ */
+static errr term_keypress(int k)
+{
+    /* Refuse to enqueue non-keys */
+    if (!k)
+        return -1;
+
+    /* Store the char, advance the queue */
+    Term->key_queue[Term->key_head++] = (char)k;
+
+    /* Circular queue, handle wrap */
+    if (Term->key_head == Term->key_size)
+        Term->key_head = 0;
+
+    if (Term->key_head != Term->key_tail)
+        return 0;
+
+    return 1;
+}
+
 static bool process_keydown(WPARAM wParam, LPARAM lParam)
 {
     bool mc = FALSE;
@@ -3162,7 +3184,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         TERM_LEN cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
         TERM_LEN rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
         if ((td->cols != cols) || (td->rows != rows)) {
-            term *old_term = Term;
+            term_type *old_term = Term;
             td->cols = cols;
             td->rows = rows;
             term_activate(&td->t);

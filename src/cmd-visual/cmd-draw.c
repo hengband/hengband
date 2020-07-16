@@ -55,7 +55,7 @@ void do_cmd_redraw(player_type *creature_ptr)
 	handle_stuff(creature_ptr);
 	if (creature_ptr->prace == RACE_ANDROID) calc_android_exp(creature_ptr);
 
-	term *old = Term;
+	term_type *old = Term;
 	for (int j = 0; j < 8; j++)
 	{
 		if (!angband_term[j]) continue;

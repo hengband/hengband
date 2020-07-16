@@ -106,7 +106,7 @@ static errr (*old_text_hook)(int x, int y, int n, TERM_COLOR a, concptr s);
 
 static void disable_chuukei_server(void)
 {
-    term *t = angband_term[0];
+    term_type *t = angband_term[0];
 #ifdef CHUUKEI
     chuukei_server = FALSE;
 #endif /* CHUUKEI */
@@ -469,7 +469,7 @@ static errr send_bigcurs_to_chuukei_server(int x, int y)
  */
 void prepare_chuukei_hooks(void)
 {
-    term *t0 = angband_term[0];
+    term_type *t0 = angband_term[0];
 
     /* Save original z-term hooks */
     old_xtra_hook = t0->xtra_hook;
