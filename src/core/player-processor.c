@@ -48,7 +48,7 @@ bool can_save = FALSE;
 
 static void process_fishing(player_type *creature_ptr)
 {
-    Term_xtra(TERM_XTRA_DELAY, 10);
+    term_xtra(TERM_XTRA_DELAY, 10);
     if (one_in_(1000)) {
         MONRACE_IDX r_idx;
         bool success = FALSE;
@@ -237,7 +237,7 @@ void process_player(player_type *creature_ptr)
         handle_stuff(creature_ptr);
         move_cursor_relative(creature_ptr->y, creature_ptr->x);
         if (fresh_before)
-            Term_fresh();
+            term_fresh();
 
         pack_overflow(creature_ptr);
         if (!command_new)

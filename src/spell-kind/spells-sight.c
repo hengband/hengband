@@ -376,7 +376,7 @@ bool probing(player_type *caster_ptr)
         handle_stuff(caster_ptr);
         move_cursor_relative(m_ptr->fy, m_ptr->fx);
         inkey();
-        Term_erase(0, 0, 255);
+        term_erase(0, 0, 255);
         if (lore_do_probe(caster_ptr, m_ptr->r_idx)) {
             strcpy(buf, (r_name + r_ptr->name));
 #ifdef JP
@@ -393,7 +393,7 @@ bool probing(player_type *caster_ptr)
 
     Term->scr->cu = cu;
     Term->scr->cv = cv;
-    Term_fresh();
+    term_fresh();
 
     if (probe) {
         chg_virtue(caster_ptr, V_KNOWLEDGE, 1);

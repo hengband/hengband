@@ -47,10 +47,10 @@ void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
         if (!(window_flag[j] & (PW_INVEN)))
             continue;
 
-        Term_activate(angband_term[j]);
+        term_activate(angband_term[j]);
         display_inventory(player_ptr, item_tester_tval);
-        Term_fresh();
-        Term_activate(old);
+        term_fresh();
+        term_activate(old);
     }
 }
 
@@ -76,7 +76,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     MONRACE_IDX r_idx = m_ptr->ap_r_idx;
     monster_race *r_ptr = &r_info[r_idx];
 
-    Term_gotoxy(x, y);
+    term_gotoxy(x, y);
     if (!r_ptr)
         return;
     if (r_ptr->flags1 & RF1_UNIQUE) {
@@ -88,14 +88,14 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
             }
         }
 
-        Term_addstr(-1, TERM_WHITE, is_bounty ? "  W" : "  U");
+        term_addstr(-1, TERM_WHITE, is_bounty ? "  W" : "  U");
     } else {
         sprintf(buf, "%3d", n_same);
-        Term_addstr(-1, TERM_WHITE, buf);
+        term_addstr(-1, TERM_WHITE, buf);
     }
 
-    Term_addstr(-1, TERM_WHITE, " ");
-    Term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
+    term_addstr(-1, TERM_WHITE, " ");
+    term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
 
     if (r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG2_KAGE)) {
         sprintf(buf, " %2d", (int)r_ptr->level);
@@ -103,10 +103,10 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
         strcpy(buf, " ??");
     }
 
-    Term_addstr(-1, TERM_WHITE, buf);
+    term_addstr(-1, TERM_WHITE, buf);
 
     sprintf(buf, " %s ", r_name + r_ptr->name);
-    Term_addstr(-1, TERM_WHITE, buf);
+    term_addstr(-1, TERM_WHITE, buf);
 }
 
 /*!
@@ -155,8 +155,8 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
     }
 
     if (line - y - 1 == max_lines && i != tmp_pos.n) {
-        Term_gotoxy(x, line);
-        Term_addstr(-1, TERM_WHITE, "-- and more --");
+        term_gotoxy(x, line);
+        term_addstr(-1, TERM_WHITE, "-- and more --");
     } else {
         if (last_mons)
             print_monster_line(x, line++, last_mons, n_same);
@@ -177,14 +177,14 @@ void fix_monster_list(player_type *player_ptr)
         if (!(window_flag[j] & (PW_MONSTER_LIST)))
             continue;
 
-        Term_activate(angband_term[j]);
+        term_activate(angband_term[j]);
         int w, h;
-        Term_get_size(&w, &h);
-        Term_clear();
+        term_get_size(&w, &h);
+        term_clear();
         target_set_prepare_look(player_ptr);
         print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
-        Term_fresh();
-        Term_activate(old);
+        term_fresh();
+        term_activate(old);
     }
 }
 
@@ -199,7 +199,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
         return;
 
     TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
 
     TERM_COLOR attr = TERM_WHITE;
     char tmp_val[80];
@@ -213,7 +213,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
             tmp_val[1] = ')';
         }
 
-        Term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
+        term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
         if ((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute) {
             strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
             attr = TERM_WHITE;
@@ -226,8 +226,8 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
         if (o_ptr->timeout)
             attr = TERM_L_DARK;
 
-        Term_putstr(3, i - INVEN_RARM, n, attr, o_name);
-        Term_erase(3 + n, i - INVEN_RARM, 255);
+        term_putstr(3, i - INVEN_RARM, n, attr, o_name);
+        term_erase(3 + n, i - INVEN_RARM, 255);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
             sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
@@ -235,13 +235,13 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
         }
 
         if (show_labels) {
-            Term_putstr(wid - 20, i - INVEN_RARM, -1, TERM_WHITE, " <-- ");
+            term_putstr(wid - 20, i - INVEN_RARM, -1, TERM_WHITE, " <-- ");
             prt(mention_use(owner_ptr, i), i - INVEN_RARM, wid - 15);
         }
     }
 
     for (int i = INVEN_TOTAL - INVEN_RARM; i < hgt; i++)
-        Term_erase(0, i, 255);
+        term_erase(0, i, 255);
 }
 
 /*!
@@ -259,10 +259,10 @@ void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
         if (!(window_flag[j] & (PW_EQUIP)))
             continue;
 
-        Term_activate(angband_term[j]);
+        term_activate(angband_term[j]);
         display_equipment(player_ptr, item_tester_tval);
-        Term_fresh();
-        Term_activate(old);
+        term_fresh();
+        term_activate(old);
     }
 }
 
@@ -282,11 +282,11 @@ void fix_player(player_type *player_ptr)
         if (!(window_flag[j] & (PW_PLAYER)))
             continue;
 
-        Term_activate(angband_term[j]);
+        term_activate(angband_term[j]);
         update_playtime();
         display_player(player_ptr, 0);
-        Term_fresh();
-        Term_activate(old);
+        term_fresh();
+        term_activate(old);
     }
 }
 
@@ -306,18 +306,18 @@ void fix_message(void)
         if (!(window_flag[j] & (PW_MESSAGE)))
             continue;
 
-        Term_activate(angband_term[j]);
+        term_activate(angband_term[j]);
         TERM_LEN w, h;
-        Term_get_size(&w, &h);
+        term_get_size(&w, &h);
         for (int i = 0; i < h; i++) {
-            Term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), message_str((s16b)i));
+            term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), message_str((s16b)i));
             TERM_LEN x, y;
-            Term_locate(&x, &y);
-            Term_erase(x, y, 255);
+            term_locate(&x, &y);
+            term_erase(x, y, 255);
         }
 
-        Term_fresh();
-        Term_activate(old);
+        term_fresh();
+        term_activate(old);
     }
 }
 
@@ -341,15 +341,15 @@ void fix_overhead(player_type *player_ptr)
         if (!(window_flag[j] & (PW_OVERHEAD)))
             continue;
 
-        Term_activate(angband_term[j]);
-        Term_get_size(&wid, &hgt);
+        term_activate(angband_term[j]);
+        term_get_size(&wid, &hgt);
         if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2) {
             int cy, cx;
             display_map(player_ptr, &cy, &cx);
-            Term_fresh();
+            term_fresh();
         }
 
-        Term_activate(old);
+        term_activate(old);
     }
 }
 
@@ -366,7 +366,7 @@ static void display_dungeon(player_type *player_ptr)
                 feature_type *f_ptr = &f_info[feat_none];
                 a = f_ptr->x_attr[F_LIT_STANDARD];
                 c = f_ptr->x_char[F_LIT_STANDARD];
-                Term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
+                term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
                 continue;
             }
 
@@ -381,7 +381,7 @@ static void display_dungeon(player_type *player_ptr)
                     a = TERM_L_DARK;
             }
 
-            Term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
+            term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
         }
     }
 }
@@ -402,10 +402,10 @@ void fix_dungeon(player_type *player_ptr)
         if (!(window_flag[j] & (PW_DUNGEON)))
             continue;
 
-        Term_activate(angband_term[j]);
+        term_activate(angband_term[j]);
         display_dungeon(player_ptr);
-        Term_fresh();
-        Term_activate(old);
+        term_fresh();
+        term_activate(old);
     }
 }
 
@@ -425,12 +425,12 @@ void fix_monster(player_type *player_ptr)
         if (!(window_flag[j] & (PW_MONSTER)))
             continue;
 
-        Term_activate(angband_term[j]);
+        term_activate(angband_term[j]);
         if (player_ptr->monster_race_idx)
             display_roff(player_ptr);
 
-        Term_fresh();
-        Term_activate(old);
+        term_fresh();
+        term_activate(old);
     }
 }
 
@@ -450,12 +450,12 @@ void fix_object(player_type *player_ptr)
         if (!(window_flag[j] & (PW_OBJECT)))
             continue;
 
-        Term_activate(angband_term[j]);
+        term_activate(angband_term[j]);
         if (player_ptr->object_kind_idx)
             display_koff(player_ptr, player_ptr->object_kind_idx);
 
-        Term_fresh();
-        Term_activate(old);
+        term_fresh();
+        term_activate(old);
     }
 }
 

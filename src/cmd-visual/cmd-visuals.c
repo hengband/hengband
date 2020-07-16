@@ -86,7 +86,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
 
     screen_save();
     while (TRUE) {
-        Term_clear();
+        term_clear();
         print_visuals_menu(NULL);
         int i = inkey();
         if (i == ESCAPE)
@@ -209,14 +209,14 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                 TERM_COLOR ca = r_ptr->x_attr;
                 byte cc = r_ptr->x_char;
 
-                Term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, (r_name + r_ptr->name)));
-                Term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), da, dc));
-                Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                Term_queue_bigchar(43, 19, da, dc, 0, 0);
-                Term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), ca, cc));
-                Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                Term_queue_bigchar(43, 20, ca, cc, 0, 0);
-                Term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
+                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, (r_name + r_ptr->name)));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), da, dc));
+                term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
+                term_queue_bigchar(43, 19, da, dc, 0, 0);
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3u / %3u", "Current attr/char = %3u / %3u"), ca, cc));
+                term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
+                term_queue_bigchar(43, 20, ca, cc, 0, 0);
+                term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
                 i = inkey();
                 if (i == ESCAPE)
                     break;
@@ -254,7 +254,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                     break;
                 case 'v':
                     do_cmd_knowledge_monsters(creature_ptr, &need_redraw, TRUE, r);
-                    Term_clear();
+                    term_clear();
                     print_visuals_menu(choice_msg);
                     break;
                 }
@@ -276,16 +276,16 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                 TERM_COLOR ca = k_ptr->x_attr;
                 SYMBOL_CODE cc = k_ptr->x_char;
 
-                Term_putstr(5, 17, -1, TERM_WHITE,
+                term_putstr(5, 17, -1, TERM_WHITE,
                     format(
                         _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), k, k_name + (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name)));
-                Term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
-                Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                Term_queue_bigchar(43, 19, da, dc, 0, 0);
-                Term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
-                Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                Term_queue_bigchar(43, 20, ca, cc, 0, 0);
-                Term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
+                term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
+                term_queue_bigchar(43, 19, da, dc, 0, 0);
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
+                term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
+                term_queue_bigchar(43, 20, ca, cc, 0, 0);
+                term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
                 i = inkey();
                 if (i == ESCAPE)
@@ -324,7 +324,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                     break;
                 case 'v':
                     do_cmd_knowledge_objects(creature_ptr, &need_redraw, TRUE, k);
-                    Term_clear();
+                    term_clear();
                     print_visuals_menu(choice_msg);
                     break;
                 }
@@ -348,16 +348,16 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                 byte cc = f_ptr->x_char[lighting_level];
 
                 prt("", 17, 5);
-                Term_putstr(5, 17, -1, TERM_WHITE,
+                term_putstr(5, 17, -1, TERM_WHITE,
                     format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), f, (f_name + f_ptr->name),
                         lighting_level_str[lighting_level]));
-                Term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
-                Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
-                Term_queue_bigchar(43, 19, da, dc, 0, 0);
-                Term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
-                Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                Term_queue_bigchar(43, 20, ca, cc, 0, 0);
-                Term_putstr(0, 22, -1, TERM_WHITE,
+                term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
+                term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
+                term_queue_bigchar(43, 19, da, dc, 0, 0);
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
+                term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
+                term_queue_bigchar(43, 20, ca, cc, 0, 0);
+                term_putstr(0, 22, -1, TERM_WHITE,
                     _("コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): "));
 
                 i = inkey();
@@ -404,7 +404,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                     break;
                 case 'v':
                     do_cmd_knowledge_features(&need_redraw, TRUE, f, &lighting_level);
-                    Term_clear();
+                    term_clear();
                     print_visuals_menu(choice_msg);
                     break;
                 }

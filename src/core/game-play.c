@@ -114,7 +114,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
     player_ptr->hack_mutation = FALSE;
     current_world_ptr->character_icky = TRUE;
-    Term_activate(angband_term[0]);
+    term_activate(angband_term[0]);
     angband_term[0]->resize_hook = resize_map;
     for (MONSTER_IDX i = 1; i < 8; i++) {
         if (angband_term[i]) {
@@ -122,7 +122,7 @@ void play_game(player_type *player_ptr, bool new_game)
         }
     }
 
-    (void)Term_set_cursor(0);
+    (void)term_set_cursor(0);
     if (!load_player(player_ptr)) {
         quit(_("セーブファイルが壊れています", "broken savefile"));
     }
@@ -243,7 +243,7 @@ void play_game(player_type *player_ptr, bool new_game)
     set_floor_and_wall(player_ptr->dungeon_idx);
     flavor_init();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
-    Term_fresh();
+    term_fresh();
 
     if (arg_wizard) {
         if (enter_wizard_mode(player_ptr)) {
@@ -298,7 +298,7 @@ void play_game(player_type *player_ptr, bool new_game)
         player_outfit(player_ptr);
     }
 
-    Term_xtra(TERM_XTRA_REACT, 0);
+    term_xtra(TERM_XTRA_REACT, 0);
 
     player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
     player_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);

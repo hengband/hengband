@@ -71,7 +71,7 @@ static void screen_dump_one_line(int wid, int y, FILE *fff)
 	for (TERM_LEN x = 0; x < wid - 1; x++)
 	{
 		concptr cc = NULL;
-		(void)(Term_what(x, y, &a, &c));
+		(void)(term_what(x, y, &a, &c));
 		switch (c)
 		{
 		case '&': cc = "&amp;"; break;
@@ -187,7 +187,7 @@ static void write_html_footer(FILE *tmpfff, FILE *fff, char buf[], size_t buf_si
 void do_cmd_save_screen_html_aux(char *filename, int message)
 {
 	TERM_LEN wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 	FILE *fff;
 	fff = angband_fopen(filename, "w");
 	if (!check_screen_html_can_open(fff, filename, message)) return;
@@ -302,7 +302,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 		TERM_LEN x;
 		for (x = 0; x < wid - 1; x++)
 		{
-			(void)(Term_what(x, y, &a, &c));
+			(void)(term_what(x, y, &a, &c));
 			buf[x] = c;
 		}
 
@@ -316,7 +316,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 		TERM_LEN x;
 		for (x = 0; x < wid - 1; x++)
 		{
-			(void)(Term_what(x, y, &a, &c));
+			(void)(term_what(x, y, &a, &c));
 			buf[x] = hack[a & 0x0F];
 		}
 
@@ -364,7 +364,7 @@ void do_cmd_save_screen(player_type *creature_ptr, void(*process_autopick_file_c
 	if (!ask_html_dump(&html_dump)) return;
 
 	int wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 
 	bool old_use_graphics = update_use_graphics(creature_ptr, process_autopick_file_command);
 
@@ -409,7 +409,7 @@ static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
 		{
 			if (buf[x] == '\n' || buf[x] == '\0') break;
 
-			Term_draw(x, y, TERM_WHITE, buf[x]);
+			term_draw(x, y, TERM_WHITE, buf[x]);
 		}
 	}
 
@@ -441,13 +441,13 @@ static void draw_colored_characters(char buf[], FILE *fff, int wid, int hgt, boo
 		{
 			if (buf[x] == '\n' || buf[x] == '\0') break;
 
-			(void)(Term_what(x, y, &a, &c));
+			(void)(term_what(x, y, &a, &c));
 			for (int i = 0; i < 16; i++)
 			{
 				if (hack[i] == buf[x]) a = (byte)i;
 			}
 
-			Term_draw(x, y, a, c);
+			term_draw(x, y, a, c);
 		}
 	}
 }
@@ -463,7 +463,7 @@ void do_cmd_load_screen(void)
 	FILE *fff;
 	char buf[1024];
 	TERM_LEN wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 	fff = angband_fopen(buf, "r");
 	if (!fff)
@@ -474,7 +474,7 @@ void do_cmd_load_screen(void)
 	}
 
 	screen_save();
-	Term_clear();
+	term_clear();
 	bool okay = draw_white_characters(buf, fff, wid, hgt);
 	draw_colored_characters(buf, fff, wid, hgt, okay);
 

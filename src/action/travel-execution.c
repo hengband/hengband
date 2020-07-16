@@ -103,7 +103,7 @@ void travel_step(player_type *creature_ptr)
     } else if (travel.run > 0)
         travel.run--;
 
-    Term_xtra(TERM_XTRA_DELAY, delay_factor);
+    term_xtra(TERM_XTRA_DELAY, delay_factor);
 }
 
 /*!

@@ -163,7 +163,7 @@ void get_name(player_type *creature_ptr)
 #endif
 	strcat(tmp, creature_ptr->name);
 
-	Term_erase(34, 1, 255);
+	term_erase(34, 1, 255);
 	c_put_str(TERM_L_BLUE, tmp, 1, 34);
 	clear_from(22);
 }

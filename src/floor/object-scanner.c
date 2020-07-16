@@ -107,7 +107,7 @@ COMMAND_CODE show_floor_items(player_type *owner_ptr, int target_item, POSITION 
     TERM_LEN wid, hgt;
     char floor_label[52 + 1];
     bool dont_need_to_show_weights = TRUE;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     int len = MAX((*min_width), 20);
     floor_num = scan_floor_items(owner_ptr, floor_list, y, x, 0x03, item_tester_tval);
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;

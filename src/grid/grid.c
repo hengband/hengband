@@ -481,7 +481,7 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y
 		}
 
 		/* Draw the char using the attr */
-		Term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, 0, 0);
+		term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, 0, 0);
 	}
 }
 
@@ -638,7 +638,7 @@ void lite_spot(player_type *player_ptr, POSITION y, POSITION x)
 		}
 
 		/* Hack -- Queue it */
-		Term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
+		term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
 
 		/* Update sub-windows */
 		player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

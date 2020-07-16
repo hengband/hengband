@@ -31,7 +31,7 @@ static void redraw_edit_command_menu(bool *redraw, int level, int start, char *l
 	int col0 = 5 + level * 7;
 	int row0 = 1 + level * 3;
 	int row1 = row0 + 1;
-	Term_putstr(col0, row0, -1, TERM_WHITE, linestr);
+	term_putstr(col0, row0, -1, TERM_WHITE, linestr);
 
 	*menu_key = 0;
 	for (int i = start; menu_data[i].level >= level; i++)
@@ -57,12 +57,12 @@ static void redraw_edit_command_menu(bool *redraw, int level, int start, char *l
 
 		str = format("| %c) %-*s %2s | ", *menu_key + 'a', max_len, menu_data[i].name, com_key_str);
 
-		Term_putstr(col0, row1++, -1, TERM_WHITE, str);
+		term_putstr(col0, row1++, -1, TERM_WHITE, str);
 
 		(*menu_key)++;
 	}
 
-	Term_putstr(col0, row1, -1, TERM_WHITE, linestr);
+	term_putstr(col0, row1, -1, TERM_WHITE, linestr);
 	*redraw = FALSE;
 }
 

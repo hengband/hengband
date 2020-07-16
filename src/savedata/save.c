@@ -1681,7 +1681,7 @@ bool load_player(player_type *player_ptr)
         current_world_ptr->z_patch = vvv[2];
         current_world_ptr->sf_extra = vvv[3];
 
-        Term_clear();
+        term_clear();
 
         /* Attempt to load */
         err = rd_savefile(player_ptr);

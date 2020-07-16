@@ -369,6 +369,6 @@ void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, B
 			a = TERM_DARK;
 		}
 
-		Term_putch(x + i - INVEN_RARM, y, a, c);
+		term_putch(x + i - INVEN_RARM, y, a, c);
 	}
 }

@@ -61,12 +61,12 @@ void resize_map()
     p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
     handle_stuff(p_ptr);
-    Term_redraw();
+    term_redraw();
 
     if (can_save)
         move_cursor_relative(p_ptr->y, p_ptr->x);
 
-    Term_fresh();
+    term_fresh();
 }
 
 /*!
@@ -78,7 +78,7 @@ void resize_map()
  */
 void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
 {
-    Term_get_size(wid_p, hgt_p);
+    term_get_size(wid_p, hgt_p);
     *hgt_p -= ROW_MAP + 2;
     *wid_p -= COL_MAP + 2;
     if (use_bigtile)

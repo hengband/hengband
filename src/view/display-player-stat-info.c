@@ -223,7 +223,7 @@ static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS
 				c = 's';
 			}
 
-			Term_putch(*col, row + stat + 1, a, c);
+			term_putch(*col, row + stat + 1, a, c);
 		}
 
 		(*col)++;
@@ -340,7 +340,7 @@ static void display_mutation_compensation(player_type *creature_ptr, BIT_FLAGS *
 			c = 's';
 		}
 
-		Term_putch(col, row + stat + 1, a, c);
+		term_putch(col, row + stat + 1, a, c);
 	}
 }
 

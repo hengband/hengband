@@ -35,7 +35,7 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
     TERM_LEN wid, hgt;
     char equip_label[52 + 1];
     int col = command_gap;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     int len = wid - col - 1;
     for (k = 0, i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
@@ -95,7 +95,7 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
         if (show_item_graph) {
             TERM_COLOR a = object_attr(o_ptr);
             SYMBOL_CODE c = object_char(o_ptr);
-            Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
+            term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
             if (use_bigtile)
                 cur_col++;
 

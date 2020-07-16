@@ -32,7 +32,7 @@ void load_note(concptr msg)
     if (++y >= 24)
         y = 2;
 
-    Term_fresh();
+    term_fresh();
 }
 
 /*!

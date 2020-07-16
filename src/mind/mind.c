@@ -2070,12 +2070,12 @@ void do_cmd_mind_browse(player_type *caster_ptr)
 		}
 
 		/* Clear lines, position cursor  (really should use strlen here) */
-		Term_erase(12, 21, 255);
-		Term_erase(12, 20, 255);
-		Term_erase(12, 19, 255);
-		Term_erase(12, 18, 255);
-		Term_erase(12, 17, 255);
-		Term_erase(12, 16, 255);
+		term_erase(12, 21, 255);
+		term_erase(12, 20, 255);
+		term_erase(12, 19, 255);
+		term_erase(12, 18, 255);
+		term_erase(12, 17, 255);
+		term_erase(12, 16, 255);
 
 		shape_buffer(mind_tips[use_mind][n], 62, temp, sizeof(temp));
 		for(j=0, line = 17;temp[j];j+=(1+strlen(&temp[j])))

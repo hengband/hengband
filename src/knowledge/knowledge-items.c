@@ -215,11 +215,11 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
         a = flavor_k_ptr->x_attr;
         c = flavor_k_ptr->x_char;
 
-        Term_queue_bigchar(use_bigtile ? 76 : 77, row + i, a, c, 0, 0);
+        term_queue_bigchar(use_bigtile ? 76 : 77, row + i, a, c, 0, 0);
     }
 
     for (; i < per_page; i++) {
-        Term_erase(col, row + i, 255);
+        term_erase(col, row + i, 255);
     }
 }
 
@@ -260,7 +260,7 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
     byte mode;
 
     TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
 
     int browser_rows = hgt - 8;
     C_MAKE(object_idx, max_k_idx, KIND_OBJECT_IDX);
@@ -334,12 +334,12 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
 #endif
 
             for (IDX i = 0; i < 78; i++) {
-                Term_putch(i, 5, TERM_WHITE, '=');
+                term_putch(i, 5, TERM_WHITE, '=');
             }
 
             if (direct_k_idx < 0) {
                 for (IDX i = 0; i < browser_rows; i++) {
-                    Term_putch(max + 1, 6 + i, TERM_WHITE, '|');
+                    term_putch(max + 1, 6 + i, TERM_WHITE, '|');
                 }
             }
 
@@ -403,9 +403,9 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
         if (visual_list) {
             place_visual_list_cursor(max + 3, 7, flavor_k_ptr->x_attr, flavor_k_ptr->x_char, attr_top, char_left);
         } else if (!column) {
-            Term_gotoxy(0, 6 + (grp_cur - grp_top));
+            term_gotoxy(0, 6 + (grp_cur - grp_top));
         } else {
-            Term_gotoxy(max + 3, 6 + (object_cur - object_top));
+            term_gotoxy(max + 3, 6 + (object_cur - object_top));
         }
 
         char ch = inkey();

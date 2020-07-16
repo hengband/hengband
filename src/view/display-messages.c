@@ -277,7 +277,7 @@ static void msg_flush(player_type *player_ptr, int x)
 
     player_ptr->now_damaged = FALSE;
     if (!player_ptr->playing || !nagasu) {
-        Term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
+        term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
         while (TRUE) {
             int cmd = inkey();
             if (cmd == ESCAPE) {
@@ -300,7 +300,7 @@ static void msg_flush(player_type *player_ptr, int x)
         }
     }
 
-    Term_erase(0, 0, 255);
+    term_erase(0, 0, 255);
 }
 
 void msg_erase(void) { msg_print(NULL); }
@@ -317,7 +317,7 @@ void msg_erase(void) { msg_print(NULL); }
  *
  * These messages are memorized for later reference (see above).
  *
- * We could do "Term_fresh()" to provide "flicker" if needed.
+ * We could do "term_fresh()" to provide "flicker" if needed.
  *
  * The global "msg_flag" variable can be cleared to tell us to
  * "erase" any "pending" messages still on the screen.
@@ -341,7 +341,7 @@ void msg_print(concptr msg)
         return;
 
     if (!msg_flag) {
-        Term_erase(0, 0, 255);
+        term_erase(0, 0, 255);
         p = 0;
     }
 
@@ -401,7 +401,7 @@ void msg_print(concptr msg)
 
         char oops = t[split];
         t[split] = '\0';
-        Term_putstr(0, 0, split, TERM_WHITE, t);
+        term_putstr(0, 0, split, TERM_WHITE, t);
         msg_flush(p_ptr, split + 1);
         t[split] = oops;
         t[--split] = ' ';
@@ -409,7 +409,7 @@ void msg_print(concptr msg)
         n -= split;
     }
 
-    Term_putstr(p, 0, n, TERM_WHITE, t);
+    term_putstr(p, 0, n, TERM_WHITE, t);
     p_ptr->window |= (PW_MESSAGE);
     update_output(p_ptr);
 
@@ -421,7 +421,7 @@ void msg_print(concptr msg)
 #endif
 
     if (fresh_message)
-        Term_fresh();
+        term_fresh();
 }
 
 /*

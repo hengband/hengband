@@ -409,7 +409,7 @@ void do_cmd_building(player_type *player_ptr)
 	if (reinit_wilderness) player_ptr->leaving = TRUE;
 
 	current_world_ptr->character_icky--;
-	Term_clear();
+	term_clear();
 
 	player_ptr->update |= (PU_VIEW | PU_MONSTERS | PU_BONUS | PU_LITE | PU_MON_LITE);
 	player_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);

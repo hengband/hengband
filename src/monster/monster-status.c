@@ -906,7 +906,7 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
 		reset_target(m_ptr);
 		handle_stuff(target_ptr);
 
-		if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
+		if (vs_player) term_xtra(TERM_XTRA_DELAY, 500);
 	}
 
 	target_ptr->redraw |= (PR_MAP);

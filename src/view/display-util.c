@@ -123,18 +123,18 @@ void display_player_one_line(int entry, concptr val, TERM_COLOR attr)
 	int row = disp_player_line[entry].row;
 	int col = disp_player_line[entry].col;
 	int len = disp_player_line[entry].len;
-	Term_putstr(col, row, -1, TERM_WHITE, head);
+	term_putstr(col, row, -1, TERM_WHITE, head);
 
 	if (!val) return;
 
 	if (len <= 0)
 	{
-		Term_putstr(col + head_len, row, -1, attr, val);
+		term_putstr(col + head_len, row, -1, attr, val);
 		return;
 	}
 
 	int val_len = len - head_len;
 	char buf[40];
 	sprintf(buf, "%*.*s", val_len, val_len, val);
-	Term_putstr(col + head_len, row, -1, attr, buf);
+	term_putstr(col + head_len, row, -1, attr, buf);
 }

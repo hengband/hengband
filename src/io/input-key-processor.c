@@ -509,7 +509,7 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case '!': {
-        (void)Term_user(0);
+        (void)term_user(0);
         break;
     }
     case '"': {

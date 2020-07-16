@@ -564,11 +564,11 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                     concptr str;
                     char *str2;
 
-                    Term_clear();
+                    term_clear();
 
                     /* 桜散る */
                     for (i = 0; i < 40; i++)
-                        Term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
+                        term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
 
                     str = death_message;
                     if (strncmp(str, "「", 2) == 0)
@@ -587,7 +587,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                             len = str2 - str;
 
                         if (len != 0) {
-                            Term_putstr_v(w * 3 / 4 - 2 - msg_pos_x[i] * 2, msg_pos_y[i], len, TERM_WHITE, str);
+                            term_putstr_v(w * 3 / 4 - 2 - msg_pos_x[i] * 2, msg_pos_y[i], len, TERM_WHITE, str);
                             if (str2 == NULL)
                                 break;
                             i++;
@@ -598,7 +598,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                     }
 
                     /* Hide cursor */
-                    Term_putstr(w - 1, h - 1, 1, TERM_WHITE, " ");
+                    term_putstr(w - 1, h - 1, 1, TERM_WHITE, " ");
 
                     flush();
 #ifdef WORLD_SCORE

@@ -24,7 +24,7 @@ static void dump_player_status_with_screen_num(
 		TERM_LEN x;
 		for (x = 0; x < 79; x++)
 		{
-			(void)(Term_what(x, y, &a, &c));
+			(void)(term_what(x, y, &a, &c));
 			if (!change_color)
 			{
 				buf[x] = c;

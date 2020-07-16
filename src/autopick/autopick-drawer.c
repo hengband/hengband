@@ -56,7 +56,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 {
 	int by1 = 0, by2 = 0;
 
-	Term_get_size(&tb->wid, &tb->hgt);
+	term_get_size(&tb->wid, &tb->hgt);
 
 	/*
 	 * Top line (-1), description line (-3), separator (-1)
@@ -99,7 +99,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 	if (tb->dirty_flags & DIRTY_SCREEN)
 	{
 		tb->dirty_flags |= (DIRTY_ALL | DIRTY_MODE);
-		Term_clear();
+		term_clear();
 	}
 
 	if (tb->dirty_flags & DIRTY_MODE)
@@ -110,7 +110,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 		for (; j < sepa_length; j++)
 			buf[j] = '-';
 		buf[j] = '\0';
-		Term_putstr(0, tb->hgt + 1, sepa_length, TERM_WHITE, buf);
+		term_putstr(0, tb->hgt + 1, sepa_length, TERM_WHITE, buf);
 	}
 
 	process_dirty_expression(player_ptr, tb);
@@ -153,7 +153,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 #endif
 		}
 
-		Term_erase(0, i + 1, tb->wid);
+		term_erase(0, i + 1, tb->wid);
 		if (tb->states[y] & LSTAT_AUTOREGISTER)
 		{
 			color = TERM_L_RED;
@@ -166,11 +166,11 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 
 		if (!tb->mark || (y < by1 || by2 < y))
 		{
-			Term_putstr(leftcol, i + 1, tb->wid - 1, color, msg);
+			term_putstr(leftcol, i + 1, tb->wid - 1, color, msg);
 		}
 		else if (by1 != by2)
 		{
-			Term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, msg);
+			term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, msg);
 		}
 		else
 		{
@@ -181,16 +181,16 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 
 			if (bx2 > len) bx2 = len;
 
-			Term_gotoxy(leftcol, i + 1);
-			if (x0 < bx1) Term_addstr(bx1 - x0, color, msg);
-			if (x0 < bx2) Term_addstr(bx2 - bx1, TERM_YELLOW, msg + (bx1 - x0));
-			Term_addstr(-1, color, msg + (bx2 - x0));
+			term_gotoxy(leftcol, i + 1);
+			if (x0 < bx1) term_addstr(bx1 - x0, color, msg);
+			if (x0 < bx2) term_addstr(bx2 - bx1, TERM_YELLOW, msg + (bx1 - x0));
+			term_addstr(-1, color, msg + (bx2 - x0));
 		}
 	}
 
 	for (; i < tb->hgt; i++)
 	{
-		Term_erase(0, i + 1, tb->wid);
+		term_erase(0, i + 1, tb->wid);
 	}
 
 	bool is_dirty_diary = (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) != 0;
@@ -201,7 +201,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 	concptr str1 = NULL, str2 = NULL;
 	for (int j = 0; j < DESCRIPT_HGT; j++)
 	{
-		Term_erase(0, tb->hgt + 2 + j, tb->wid);
+		term_erase(0, tb->hgt + 2 + j, tb->wid);
 	}
 
 	if (tb->dirty_flags & DIRTY_NOT_FOUND)

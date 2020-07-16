@@ -485,7 +485,7 @@ static void display_entry(player_type *player_ptr, int pos)
         TERM_COLOR a = object_attr(o_ptr);
         SYMBOL_CODE c = object_char(o_ptr);
 
-        Term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
+        term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
         if (use_bigtile)
             cur_col++;
 
@@ -610,7 +610,7 @@ static void store_prt_gold(player_type *player_ptr)
  */
 static void display_store(player_type *player_ptr)
 {
-    Term_clear();
+    term_clear();
     if (cur_store_num == STORE_HOME) {
         put_str(_("我が家", "Your Home"), 3, 31);
         put_str(_("アイテムの一覧", "Item Description"), 5, 4);
@@ -1800,7 +1800,7 @@ static void store_process_command(player_type *client_ptr)
         break;
     }
     case '!': {
-        (void)Term_user(0);
+        (void)term_user(0);
         break;
     }
     case '"': {
@@ -1902,7 +1902,7 @@ void do_cmd_store(player_type *player_ptr)
     if (player_ptr->wild_mode)
         return;
     TERM_LEN w, h;
-    Term_get_size(&w, &h);
+    term_get_size(&w, &h);
 
     xtra_stock = MIN(14 + 26, ((h > 24) ? (h - 24) : 0));
     store_bottom = MIN_STOCK + xtra_stock;
@@ -2046,7 +2046,7 @@ void do_cmd_store(player_type *player_ptr)
     get_com_no_macros = FALSE;
 
     msg_erase();
-    Term_clear();
+    term_clear();
 
     player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
     player_ptr->update |= (PU_MONSTERS);

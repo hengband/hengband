@@ -96,7 +96,7 @@ void close_game(player_type *player_ptr)
     print_tomb(player_ptr);
     flush();
     show_death_info(player_ptr, update_playtime, display_player);
-    Term_clear();
+    term_clear();
     if (check_score(player_ptr)) {
         send_world_score_on_closing(player_ptr, do_send);
         if (!player_ptr->wait_report_score)

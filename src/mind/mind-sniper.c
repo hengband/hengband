@@ -200,7 +200,7 @@ void display_snipe_list(player_type *sniper_ptr)
 		sprintf(psi_desc, "  %c) %-30s%2d %4d",
 			I2A(i), spell.name, spell.min_lev, spell.mana_cost);
 
-		Term_putstr(x, y + i + 1, -1, TERM_WHITE, psi_desc);
+		term_putstr(x, y + i + 1, -1, TERM_WHITE, psi_desc);
 	}
 	return;
 }
@@ -305,7 +305,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
 				/* Dump the spells */
 				for (i = 0; i < MAX_SNIPE_POWERS; i++)
 				{
-					Term_erase(x, y + i + 1, 255);
+					term_erase(x, y + i + 1, 255);
 
 					/* Access the spell */
 					spell = snipe_powers[i];
@@ -583,11 +583,11 @@ void do_cmd_snipe_browse(player_type *sniper_ptr)
 		}
 
 		/* Clear lines, position cursor  (really should use strlen here) */
-		Term_erase(12, 22, 255);
-		Term_erase(12, 21, 255);
-		Term_erase(12, 20, 255);
-		Term_erase(12, 19, 255);
-		Term_erase(12, 18, 255);
+		term_erase(12, 22, 255);
+		term_erase(12, 21, 255);
+		term_erase(12, 20, 255);
+		term_erase(12, 19, 255);
+		term_erase(12, 18, 255);
 
 		shape_buffer(snipe_tips[n], 62, temp, sizeof(temp));
 		for(j = 0, line = 19; temp[j]; j += (1 + strlen(&temp[j])))

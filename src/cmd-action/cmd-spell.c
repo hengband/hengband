@@ -643,10 +643,10 @@ void do_cmd_browse(player_type *caster_ptr)
         }
 
         /* Clear lines, position cursor  (really should use strlen here) */
-        Term_erase(14, 14, 255);
-        Term_erase(14, 13, 255);
-        Term_erase(14, 12, 255);
-        Term_erase(14, 11, 255);
+        term_erase(14, 14, 255);
+        term_erase(14, 13, 255);
+        term_erase(14, 12, 255);
+        term_erase(14, 11, 255);
 
         shape_buffer(exe_spell(caster_ptr, use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
 

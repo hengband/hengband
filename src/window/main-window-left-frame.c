@@ -183,7 +183,7 @@ void print_depth(player_type *creature_ptr)
     TERM_COLOR attr = TERM_WHITE;
 
     TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     TERM_LEN col_depth = wid + COL_DEPTH;
     TERM_LEN row_depth = hgt + ROW_DEPTH;
 
@@ -316,59 +316,59 @@ void health_redraw(player_type *creature_ptr, bool riding)
         row = ROW_INFO - 2;
         col = COL_INFO + 2;
 
-        Term_putstr(col - 2, row, 12, TERM_WHITE, "      /     ");
-        Term_putstr(col - 2, row + 1, 12, TERM_WHITE, "      /     ");
-        Term_putstr(col - 2, row + 2, 12, TERM_WHITE, "      /     ");
-        Term_putstr(col - 2, row + 3, 12, TERM_WHITE, "      /     ");
+        term_putstr(col - 2, row, 12, TERM_WHITE, "      /     ");
+        term_putstr(col - 2, row + 1, 12, TERM_WHITE, "      /     ");
+        term_putstr(col - 2, row + 2, 12, TERM_WHITE, "      /     ");
+        term_putstr(col - 2, row + 3, 12, TERM_WHITE, "      /     ");
 
         if (creature_ptr->current_floor_ptr->m_list[1].r_idx) {
-            Term_putstr(col - 2, row, 2, r_info[creature_ptr->current_floor_ptr->m_list[1].r_idx].x_attr,
+            term_putstr(col - 2, row, 2, r_info[creature_ptr->current_floor_ptr->m_list[1].r_idx].x_attr,
                 format("%c", r_info[creature_ptr->current_floor_ptr->m_list[1].r_idx].x_char));
-            Term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[1].hp));
-            Term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[1].max_maxhp));
+            term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[1].hp));
+            term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[1].max_maxhp));
         }
 
         if (creature_ptr->current_floor_ptr->m_list[2].r_idx) {
-            Term_putstr(col - 2, row + 1, 2, r_info[creature_ptr->current_floor_ptr->m_list[2].r_idx].x_attr,
+            term_putstr(col - 2, row + 1, 2, r_info[creature_ptr->current_floor_ptr->m_list[2].r_idx].x_attr,
                 format("%c", r_info[creature_ptr->current_floor_ptr->m_list[2].r_idx].x_char));
-            Term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[2].hp));
-            Term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[2].max_maxhp));
+            term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[2].hp));
+            term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[2].max_maxhp));
         }
 
         if (creature_ptr->current_floor_ptr->m_list[3].r_idx) {
-            Term_putstr(col - 2, row + 2, 2, r_info[creature_ptr->current_floor_ptr->m_list[3].r_idx].x_attr,
+            term_putstr(col - 2, row + 2, 2, r_info[creature_ptr->current_floor_ptr->m_list[3].r_idx].x_attr,
                 format("%c", r_info[creature_ptr->current_floor_ptr->m_list[3].r_idx].x_char));
-            Term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[3].hp));
-            Term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[3].max_maxhp));
+            term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[3].hp));
+            term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[3].max_maxhp));
         }
 
         if (creature_ptr->current_floor_ptr->m_list[4].r_idx) {
-            Term_putstr(col - 2, row + 3, 2, r_info[creature_ptr->current_floor_ptr->m_list[4].r_idx].x_attr,
+            term_putstr(col - 2, row + 3, 2, r_info[creature_ptr->current_floor_ptr->m_list[4].r_idx].x_attr,
                 format("%c", r_info[creature_ptr->current_floor_ptr->m_list[4].r_idx].x_char));
-            Term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[4].hp));
-            Term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[4].max_maxhp));
+            term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[4].hp));
+            term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[4].max_maxhp));
         }
 
         return;
     }
 
     if (!health_who) {
-        Term_erase(col, row, 12);
+        term_erase(col, row, 12);
         return;
     }
 
     if (!m_ptr->ml) {
-        Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+        term_putstr(col, row, 12, TERM_WHITE, "[----------]");
         return;
     }
 
     if (creature_ptr->image) {
-        Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+        term_putstr(col, row, 12, TERM_WHITE, "[----------]");
         return;
     }
 
     if (m_ptr->hp < 0) {
-        Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+        term_putstr(col, row, 12, TERM_WHITE, "[----------]");
         return;
     }
 
@@ -391,6 +391,6 @@ void health_redraw(player_type *creature_ptr, bool riding)
     else if (pct >= 10)
         attr = TERM_L_RED;
 
-    Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-    Term_putstr(col + 1, row, len, attr, "**********");
+    term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+    term_putstr(col + 1, row, len, attr, "**********");
 }

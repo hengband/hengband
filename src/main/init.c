@@ -1190,9 +1190,9 @@ static errr init_alloc(void)
  */
 static void init_note(concptr str)
 {
-	Term_erase(0, 23, 255);
-	Term_putstr(20, 23, -1, TERM_WHITE, str);
-	Term_fresh();
+	term_erase(0, 23, 255);
+	term_putstr(20, 23, -1, TERM_WHITE, str);
+	term_fresh();
 }
 
 
@@ -1257,7 +1257,7 @@ static void init_angband_aux(concptr why)
  * be available when this function is called is the "z-term.c"
  * package, and that may not be fully initialized until the
  * end of this function, when the default "user pref files"
- * are loaded and "Term_xtra(TERM_XTRA_REACT,0)" is called.
+ * are loaded and "term_xtra(TERM_XTRA_REACT,0)" is called.
  * Note that this function attempts to verify the "news" file,
  * and the game aborts (cleanly) on failure, since without the
  * "news" file, it is likely that the "lib" folder has not been
@@ -1309,7 +1309,7 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	(void)fd_close(fd);
 
 	/*** Display the "news" file ***/
-	Term_clear();
+	term_clear();
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
 	/* Open the News file */
@@ -1324,13 +1324,13 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 		while (0 == angband_fgets(fp, buf, sizeof(buf)))
 		{
 			/* Display and advance */
-			Term_putstr(0, i++, -1, TERM_WHITE, buf);
+			term_putstr(0, i++, -1, TERM_WHITE, buf);
 		}
 
 		angband_fclose(fp);
 	}
 
-	Term_flush();
+	term_flush();
 
 	/*** Verify (or create) the "high score" file ***/
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");

@@ -687,7 +687,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
     screen_save();
     int wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
 
     if (!(mode & SCROBJ_FAKE_OBJECT))
         describe_flavor(player_ptr, o_name, o_ptr, 0);
@@ -703,7 +703,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         monster_race *r_ptr = &r_info[o_ptr->pval];
         int namelen = strlen(r_name + r_ptr->name);
         prt(format("%s: '", r_name + r_ptr->name), 1, 15);
-        Term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);
+        term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
     } else {
         prt(_("     アイテムの能力:", "     Item Attributes:"), 1, 15);

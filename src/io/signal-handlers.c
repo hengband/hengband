@@ -32,12 +32,12 @@ static void handle_signal_suspend(int sig)
 {
     (void)signal(sig, SIG_IGN);
 #ifdef SIGSTOP
-    Term_fresh();
-    Term_xtra(TERM_XTRA_ALIVE, 0);
+    term_fresh();
+    term_xtra(TERM_XTRA_ALIVE, 0);
     (void)kill(0, SIGSTOP);
-    Term_xtra(TERM_XTRA_ALIVE, 1);
-    Term_redraw();
-    Term_fresh();
+    term_xtra(TERM_XTRA_ALIVE, 1);
+    term_redraw();
+    term_fresh();
 #endif
     (void)signal(sig, handle_signal_suspend);
 }
@@ -84,12 +84,12 @@ static void handle_signal_simple(int sig)
         close_game(p_ptr);
         quit(_("強制終了", "interrupt"));
     } else if (signal_count >= 4) {
-        Term_xtra(TERM_XTRA_NOISE, 0);
-        Term_erase(0, 0, 255);
-        Term_putstr(0, 0, -1, TERM_WHITE, _("熟慮の上の自殺！", "Contemplating suicide!"));
-        Term_fresh();
+        term_xtra(TERM_XTRA_NOISE, 0);
+        term_erase(0, 0, 255);
+        term_putstr(0, 0, -1, TERM_WHITE, _("熟慮の上の自殺！", "Contemplating suicide!"));
+        term_fresh();
     } else if (signal_count >= 2) {
-        Term_xtra(TERM_XTRA_NOISE, 0);
+        term_xtra(TERM_XTRA_NOISE, 0);
     }
 
     (void)signal(sig, handle_signal_simple);
@@ -116,7 +116,7 @@ static void handle_signal_simple(int sig)
 static void handle_signal_abort(int sig)
 {
     int wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
 
     (void)signal(sig, SIG_IGN);
     if (!current_world_ptr->character_generated || current_world_ptr->character_saved)
@@ -126,13 +126,13 @@ static void handle_signal_abort(int sig)
     forget_view(p_ptr->current_floor_ptr);
     clear_mon_lite(p_ptr->current_floor_ptr);
 
-    Term_erase(0, hgt - 1, 255);
-    Term_putstr(0, hgt - 1, -1, TERM_RED, _("恐ろしいソフトのバグが飛びかかってきた！", "A gruesome software bug LEAPS out at you!"));
+    term_erase(0, hgt - 1, 255);
+    term_putstr(0, hgt - 1, -1, TERM_RED, _("恐ろしいソフトのバグが飛びかかってきた！", "A gruesome software bug LEAPS out at you!"));
 
-    Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ...", "Panic save..."));
+    term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ...", "Panic save..."));
 
     exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ゲーム異常終了----", "-- Tried Panic Save and Aborted Game --"));
-    Term_fresh();
+    term_fresh();
 
     p_ptr->panic_save = 1;
     (void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
@@ -140,12 +140,12 @@ static void handle_signal_abort(int sig)
     signals_ignore_tstp();
 
     if (save_player(p_ptr)) {
-        Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ成功！", "Panic save succeeded!"));
+        term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ成功！", "Panic save succeeded!"));
     } else {
-        Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ失敗！", "Panic save failed!"));
+        term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ失敗！", "Panic save failed!"));
     }
 
-    Term_fresh();
+    term_fresh();
     quit(_("ソフトのバグ", "software bug"));
 }
 

@@ -83,7 +83,7 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
     REALM_IDX use_realm;
     GAME_TEXT o_name[MAX_NLEN];
     for (int y = 0; y < Term->hgt; y++) {
-        Term_erase(0, y, 255);
+        term_erase(0, y, 255);
     }
 
     if (!k_idx)
@@ -93,7 +93,7 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
     object_prep(owner_ptr, q_ptr, k_idx);
     describe_flavor(owner_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
-    Term_putstr(0, 0, -1, TERM_WHITE, o_name);
+    term_putstr(0, 0, -1, TERM_WHITE, o_name);
     sval = q_ptr->sval;
     use_realm = tval2realm(q_ptr->tval);
 

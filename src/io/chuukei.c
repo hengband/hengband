@@ -743,7 +743,7 @@ static void update_term_size(int x, int y, int len)
 {
     int ox, oy;
     int nx, ny;
-    Term_get_size(&ox, &oy);
+    term_get_size(&ox, &oy);
     nx = ox;
     ny = oy;
 
@@ -755,7 +755,7 @@ static void update_term_size(int x, int y, int len)
         ny = y + 1;
 
     if (nx != ox || ny != oy)
-        Term_resize(nx, ny);
+        term_resize(nx, ny);
 }
 
 static bool flush_ringbuf_client(void)
@@ -833,7 +833,7 @@ static bool flush_ringbuf_client(void)
 
         case 'x':
             if (x == TERM_XTRA_CLEAR)
-                Term_clear();
+                term_clear();
             (void)((*angband_term[0]->xtra_hook)(x, 0));
             break;
 
@@ -866,9 +866,9 @@ void browse_chuukei()
     FD_ZERO(&fdset);
     FD_SET(sd, &fdset);
 
-    Term_clear();
-    Term_fresh();
-    Term_xtra(TERM_XTRA_REACT, 0);
+    term_clear();
+    term_fresh();
+    term_xtra(TERM_XTRA_REACT, 0);
 
     while (TRUE) {
         fd_set tmp_fdset;
@@ -883,7 +883,7 @@ void browse_chuukei()
         /* ソケットにデータが来ているかどうか調べる */
         select(sd + 1, &tmp_fdset, (fd_set *)NULL, (fd_set *)NULL, &tmp_tv);
         if (FD_ISSET(sd, &tmp_fdset) == 0) {
-            Term_xtra(TERM_XTRA_FLUSH, 0);
+            term_xtra(TERM_XTRA_FLUSH, 0);
             continue;
         }
 
@@ -917,14 +917,14 @@ void prepare_browse_movie(concptr filename)
 
 void browse_movie(void)
 {
-    Term_clear();
-    Term_fresh();
-    Term_xtra(TERM_XTRA_REACT, 0);
+    term_clear();
+    term_fresh();
+    term_xtra(TERM_XTRA_REACT, 0);
 
     while (read_movie_file() == 0) {
         while (fresh_queue.next != fresh_queue.tail) {
             if (!flush_ringbuf_client()) {
-                Term_xtra(TERM_XTRA_FLUSH, 0);
+                term_xtra(TERM_XTRA_FLUSH, 0);
 
                 /* ソケットにデータが来ているかどうか調べる */
 #ifdef WINDOWS

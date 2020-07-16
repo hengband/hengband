@@ -213,7 +213,7 @@ static void show_tomb_detail(player_type *dead_ptr, char *buf)
  */
 void print_tomb(player_type *dead_ptr)
 {
-    Term_clear();
+    term_clear();
     char buf[1024];
     read_dead_file(buf, sizeof(buf));
     concptr p = (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL)) ? _("偉大なる者", "Magnificant")
@@ -293,7 +293,7 @@ static void home_aware(player_type *creature_ptr)
 static bool show_dead_player_items(player_type *creature_ptr)
 {
     if (creature_ptr->equip_cnt) {
-        Term_clear();
+        term_clear();
         (void)show_equipment(creature_ptr, 0, USE_FULL, 0);
         prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
         if (inkey() == ESCAPE)
@@ -301,7 +301,7 @@ static bool show_dead_player_items(player_type *creature_ptr)
     }
 
     if (creature_ptr->inven_cnt) {
-        Term_clear();
+        term_clear();
         (void)show_inventory(creature_ptr, 0, USE_FULL, 0);
         prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
@@ -326,7 +326,7 @@ static void show_dead_home_items(player_type *creature_ptr)
             continue;
 
         for (int i = 0, k = 0; i < store_ptr->stock_num; k++) {
-            Term_clear();
+            term_clear();
             for (int j = 0; (j < 12) && (i < store_ptr->stock_num); j++, i++) {
                 GAME_TEXT o_name[MAX_NLEN];
                 char tmp_val[80];

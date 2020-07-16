@@ -27,7 +27,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
     bool need_redraw = FALSE;
     screen_save();
     while (TRUE) {
-        Term_clear();
+        term_clear();
         prt(format(_("%d/2 ページ", "page %d/2"), (p + 1)), 2, 65);
         prt(_("現在の知識を確認する", "Display current knowledge"), 3, 0);
         if (p == 0) {

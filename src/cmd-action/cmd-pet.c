@@ -165,7 +165,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 
     Term->scr->cu = cu;
     Term->scr->cv = cv;
-    Term_fresh();
+    term_fresh();
 
     C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);
 

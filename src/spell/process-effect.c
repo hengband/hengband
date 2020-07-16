@@ -200,10 +200,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
                     SYMBOL_CODE c = PICT_C(p);
                     print_rel(caster_ptr, c, a, y, x);
                     move_cursor_relative(y, x);
-                    Term_fresh();
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_fresh();
+                    term_xtra(TERM_XTRA_DELAY, msec);
                     lite_spot(caster_ptr, y, x);
-                    Term_fresh();
+                    term_fresh();
                     if (flag & (PROJECT_BEAM)) {
                         p = bolt_pict(y, x, y, x, typ);
                         a = PICT_A(p);
@@ -213,7 +213,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
                     visual = TRUE;
                 } else if (visual) {
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_xtra(TERM_XTRA_DELAY, msec);
                 }
             }
 
@@ -295,10 +295,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
                     c = PICT_C(p);
                     print_rel(caster_ptr, c, a, y, x);
                     move_cursor_relative(y, x);
-                    Term_fresh();
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_fresh();
+                    term_xtra(TERM_XTRA_DELAY, msec);
                     lite_spot(caster_ptr, y, x);
-                    Term_fresh();
+                    term_fresh();
                     if (flag & (PROJECT_BEAM)) {
                         p = bolt_pict(y, x, y, x, typ);
                         a = PICT_A(p);
@@ -308,7 +308,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
                     visual = TRUE;
                 } else if (visual) {
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_xtra(TERM_XTRA_DELAY, msec);
                 }
             }
 
@@ -400,10 +400,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
                 c = PICT_C(p);
                 print_rel(caster_ptr, c, a, y, x);
                 move_cursor_relative(y, x);
-                Term_fresh();
-                Term_xtra(TERM_XTRA_DELAY, msec);
+                term_fresh();
+                term_xtra(TERM_XTRA_DELAY, msec);
                 lite_spot(caster_ptr, y, x);
-                Term_fresh();
+                term_fresh();
                 if (flag & (PROJECT_BEAM)) {
                     p = bolt_pict(y, x, y, x, typ);
                     a = PICT_A(p);
@@ -413,7 +413,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
                 visual = TRUE;
             } else if (visual) {
-                Term_xtra(TERM_XTRA_DELAY, msec);
+                term_xtra(TERM_XTRA_DELAY, msec);
             }
         }
     }
@@ -509,9 +509,9 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
             }
 
             move_cursor_relative(by, bx);
-            Term_fresh();
+            term_fresh();
             if (visual || drawn) {
-                Term_xtra(TERM_XTRA_DELAY, msec);
+                term_xtra(TERM_XTRA_DELAY, msec);
             }
         }
 
@@ -525,7 +525,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
             }
 
             move_cursor_relative(by, bx);
-            Term_fresh();
+            term_fresh();
         }
     }
 

@@ -23,7 +23,7 @@
 void move_cursor_relative(int row, int col)
 {
     row -= panel_row_prt;
-    Term_gotoxy(panel_col_of(col), row);
+    term_gotoxy(panel_col_of(col), row);
 }
 
 /*
@@ -77,7 +77,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
             }
 
             c = '*';
-            Term_queue_bigchar(panel_col_of(nx), ny - panel_row_prt, a, c, ta, tc);
+            term_queue_bigchar(panel_col_of(nx), ny - panel_row_prt, a, c, ta, tc);
         }
 
         if ((g_ptr->info & CAVE_MARK) && !cave_have_flag_grid(g_ptr, FF_PROJECT))

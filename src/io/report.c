@@ -269,7 +269,7 @@ concptr make_screen_dump(player_type *creature_ptr, void(*process_autopick_file_
 	};
 
 	int wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 
 	/* Alloc buffer */
 	BUF *screen_buf;
@@ -307,7 +307,7 @@ concptr make_screen_dump(player_type *creature_ptr, void(*process_autopick_file_
 			int rv, gv, bv;
 			concptr cc = NULL;
 			/* Get the attr/char */
-			(void)(Term_what(x, y, &a, &c));
+			(void)(term_what(x, y, &a, &c));
 
 			switch (c)
 			{
@@ -438,7 +438,7 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 	}
 #endif
 
-	Term_clear();
+	term_clear();
 
 	int sd;
 	while (TRUE)
@@ -449,7 +449,7 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 #else
 		prt("connecting...", 0, 0);
 #endif
-		Term_fresh();
+		term_fresh();
 
 		/* プロキシを設定する */
 		set_proxy(HTTP_PROXY, HTTP_PROXY_PORT);
@@ -487,7 +487,7 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 #else
 		prt("Sending the score...", 0, 0);
 #endif
-		Term_fresh();
+		term_fresh();
 
 		if (!http_post(sd, SCORE_PATH, score)) {
 			disconnect_server(sd);

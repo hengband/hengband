@@ -487,10 +487,10 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 			char temp[70 * 20];
 
 			/* Clear lines, position cursor  (really should use strlen here) */
-			Term_erase(7, 23, 255);
-			Term_erase(7, 22, 255);
-			Term_erase(7, 21, 255);
-			Term_erase(7, 20, 255);
+			term_erase(7, 23, 255);
+			term_erase(7, 22, 255);
+			term_erase(7, 21, 255);
+			term_erase(7, 20, 255);
 
 			shape_buffer(k_text + k_info[lookup_kind(tval, i)].text, 62, temp, sizeof(temp));
 			for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j]))

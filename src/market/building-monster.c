@@ -162,7 +162,7 @@ bool research_mon(player_type *player_ptr)
     while (notpicked) {
         r_idx = who[i];
         roff_top(r_idx);
-        Term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
+        term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (TRUE) {
             if (recall) {
                 lore_do_probe(player_ptr, r_idx);

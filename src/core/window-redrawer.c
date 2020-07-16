@@ -38,7 +38,7 @@ void redraw_window(void)
     p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
     handle_stuff(p_ptr);
-    Term_redraw();
+    term_redraw();
 }
 
 /*!
@@ -76,7 +76,7 @@ void redraw_stuff(player_type *creature_ptr)
     if (creature_ptr->redraw & (PR_WIPE)) {
         creature_ptr->redraw &= ~(PR_WIPE);
         msg_print(NULL);
-        Term_clear();
+        term_clear();
     }
 
     if (creature_ptr->redraw & (PR_MAP)) {

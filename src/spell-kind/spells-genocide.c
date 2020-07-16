@@ -99,10 +99,10 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
     caster_ptr->redraw |= (PR_HP);
     caster_ptr->window |= (PW_PLAYER);
     handle_stuff(caster_ptr);
-    Term_fresh();
+    term_fresh();
 
     int msec = delay_factor * delay_factor * delay_factor;
-    Term_xtra(TERM_XTRA_DELAY, msec);
+    term_xtra(TERM_XTRA_DELAY, msec);
 
     return !resist;
 }

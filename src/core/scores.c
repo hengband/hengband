@@ -178,7 +178,7 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 
 	TERM_LEN wid, hgt, per_screen;
 
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 	per_screen = (hgt - 4) / 4;
 
 	/* Paranoia -- it may not have opened */
@@ -210,7 +210,7 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 	/* Show per_screen per page, until "done" */
 	for (k = from, place = k+1; k < i; k += per_screen)
 	{
-		Term_clear();
+		term_clear();
 
 		/* Title */
 		put_str(_("                変愚蛮怒: 勇者の殿堂", "                Hengband Hall of Fame"), 0, 0);
@@ -415,7 +415,7 @@ void display_scores(int from, int to)
 
 	/* Paranoia -- No score file */
 	if (highscore_fd < 0) quit(_("スコア・ファイルが使用できません。", "Score file unavailable."));
-	Term_clear();
+	term_clear();
 
 	/* Display the scores */
 	display_scores_aux(from, to, -1, NULL);
@@ -457,7 +457,7 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, void(*updat
 		errr err;
 		prt("", 0, 0);
 		prt(_("送信中．．", "Sending..."), 0, 0);
-		Term_fresh();
+		term_fresh();
 		screen_save();
 		err = report_score(current_player_ptr, update_playtime, display_player);
 		screen_load();
@@ -845,13 +845,13 @@ void kingly(player_type *winner_ptr)
 	/* Restore the level */
 	winner_ptr->lev = winner_ptr->max_plv;
 
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 	cy = hgt / 2;
 	cx = wid / 2;
 
 	/* Hack -- Instant Gold */
 	winner_ptr->au += 10000000L;
-	Term_clear();
+	term_clear();
 
 	/* Display a crown */
 	put_str("#", cy - 11, cx - 1);
@@ -901,7 +901,7 @@ void kingly(player_type *winner_ptr)
  */
 bool check_score(player_type *current_player_ptr)
 {
-	Term_clear();
+	term_clear();
 
 	/* No score file */
 	if (highscore_fd < 0)

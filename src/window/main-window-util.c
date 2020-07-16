@@ -63,15 +63,15 @@ void print_field(concptr info, TERM_LEN row, TERM_LEN col)
 void print_map(player_type *player_ptr)
 {
     TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
 
     wid -= COL_MAP + 2;
     hgt -= ROW_MAP + 2;
 
     int v;
-    (void)Term_get_cursor(&v);
+    (void)term_get_cursor(&v);
 
-    (void)Term_set_cursor(0);
+    (void)term_set_cursor(0);
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     POSITION xmin = (0 < panel_col_min) ? panel_col_min : 0;
@@ -80,11 +80,11 @@ void print_map(player_type *player_ptr)
     POSITION ymax = (floor_ptr->height - 1 > panel_row_max) ? panel_row_max : floor_ptr->height - 1;
 
     for (POSITION y = 1; y <= ymin - panel_row_prt; y++) {
-        Term_erase(COL_MAP, y, wid);
+        term_erase(COL_MAP, y, wid);
     }
 
     for (POSITION y = ymax - panel_row_prt; y <= hgt; y++) {
-        Term_erase(COL_MAP, y, wid);
+        term_erase(COL_MAP, y, wid);
     }
 
     for (POSITION y = ymin; y <= ymax; y++) {
@@ -103,12 +103,12 @@ void print_map(player_type *player_ptr)
                     a = TERM_L_DARK;
             }
 
-            Term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
+            term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
         }
     }
 
     lite_spot(player_ptr, player_ptr->y, player_ptr->x);
-    (void)Term_set_cursor(v);
+    (void)term_set_cursor(v);
 }
 
 static void display_shortened_item_name(player_type *player_ptr, object_type *o_ptr, int y)
@@ -169,7 +169,7 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
     }
 
     *c = '\0';
-    Term_putstr(0, y, 12, attr, buf);
+    term_putstr(0, y, 12, attr, buf);
 }
 
 /*
@@ -197,7 +197,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
     TERM_LEN hgt, wid, yrat, xrat;
     int **match_autopick_yx;
     object_type ***object_autopick_yx;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     hgt -= 2;
     wid -= 14;
     if (use_bigtile)
@@ -304,7 +304,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
         mc[y][0] = mc[y][x] = '|';
 
     for (y = 0; y < hgt + 2; ++y) {
-        Term_gotoxy(COL_MAP, y);
+        term_gotoxy(COL_MAP, y);
         for (x = 0; x < wid + 2; ++x) {
             ta = ma[y][x];
             tc = mc[y][x];
@@ -317,7 +317,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
                     ta = TERM_L_DARK;
             }
 
-            Term_add_bigch(ta, tc);
+            term_add_bigch(ta, tc);
         }
     }
 
@@ -330,7 +330,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
             }
         }
 
-        Term_putstr(0, y, 12, 0, "            ");
+        term_putstr(0, y, 12, 0, "            ");
         if (match_autopick != -1)
             display_shortened_item_name(player_ptr, autopick_obj, y);
     }

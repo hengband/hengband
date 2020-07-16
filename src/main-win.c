@@ -1300,9 +1300,9 @@ static void term_data_redraw(player_type *player_ptr, term_data *td)
         return;
     }
 
-    Term_activate(&td->t);
-    Term_redraw();
-    Term_activate(term_screen);
+    term_activate(&td->t);
+    term_redraw();
+    term_activate(term_screen);
 }
 
 void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
@@ -1389,10 +1389,10 @@ static errr term_xtra_win_react(player_type *player_ptr)
         term *old = Term;
         term_data *td = &data[i];
         if ((td->cols != td->t.wid) || (td->rows != td->t.hgt)) {
-            Term_activate(&td->t);
-            Term_resize(td->cols, td->rows);
-            Term_redraw();
-            Term_activate(old);
+            term_activate(&td->t);
+            term_resize(td->cols, td->rows);
+            term_redraw();
+            term_activate(old);
         }
     }
 
@@ -1953,11 +1953,11 @@ static void windows_map(player_type *player_ptr)
     }
 
     term_curs_win(player_ptr->x - min_x, player_ptr->y - min_y);
-    Term_inkey(&c, TRUE, TRUE);
-    Term_flush();
+    term_inkey(&c, TRUE, TRUE);
+    term_flush();
     td->map_active = FALSE;
     term_xtra_win_clear();
-    Term_redraw();
+    term_redraw();
 }
 
 /*
@@ -2266,7 +2266,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             plog(_("プレイ中は新しいゲームを始めることができません！", "You can't start a new game while you're still playing!"));
         } else {
             game_in_progress = TRUE;
-            Term_flush();
+            term_flush();
             play_game(player_ptr, TRUE);
             quit(NULL);
         }
@@ -2292,7 +2292,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             if (GetOpenFileName(&ofn)) {
                 validate_file(savefile);
                 game_in_progress = TRUE;
-                Term_flush();
+                term_flush();
                 play_game(player_ptr, FALSE);
                 quit(NULL);
             }
@@ -2327,7 +2327,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             forget_view(player_ptr->current_floor_ptr);
             clear_mon_lite(player_ptr->current_floor_ptr);
 
-            Term_key_push(SPECIAL_KEY_QUIT);
+            term_key_push(SPECIAL_KEY_QUIT);
             break;
         }
 
@@ -2342,12 +2342,12 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             msg_print("Score file unavailable.");
         } else {
             screen_save();
-            Term_clear();
+            term_clear();
             display_scores_aux(0, MAX_HISCORES, -1, NULL);
             (void)fd_close(highscore_fd);
             highscore_fd = -1;
             screen_load();
-            Term_fresh();
+            term_fresh();
         }
 
         break;
@@ -2543,7 +2543,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         if (arg_graphics != GRAPHICS_NONE) {
             arg_graphics = GRAPHICS_NONE;
             term_xtra_win_react(player_ptr);
-            Term_key_push(KTRL('R'));
+            term_key_push(KTRL('R'));
         }
 
         break;
@@ -2557,7 +2557,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         if (arg_graphics != GRAPHICS_ORIGINAL) {
             arg_graphics = GRAPHICS_ORIGINAL;
             term_xtra_win_react(player_ptr);
-            Term_key_push(KTRL('R'));
+            term_key_push(KTRL('R'));
         }
 
         break;
@@ -2571,7 +2571,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         if (arg_graphics != GRAPHICS_ADAM_BOLT) {
             arg_graphics = GRAPHICS_ADAM_BOLT;
             term_xtra_win_react(player_ptr);
-            Term_key_push(KTRL('R'));
+            term_key_push(KTRL('R'));
         }
 
         break;
@@ -2585,7 +2585,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         if (arg_graphics != GRAPHICS_HENGBAND) {
             arg_graphics = GRAPHICS_HENGBAND;
             term_xtra_win_react(player_ptr);
-            Term_key_push(KTRL('R'));
+            term_key_push(KTRL('R'));
         }
 
         break;
@@ -2598,8 +2598,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         }
 
         arg_bigtile = !arg_bigtile;
-        Term_activate(&td->t);
-        Term_resize(td->cols, td->rows);
+        term_activate(&td->t);
+        term_resize(td->cols, td->rows);
         InvalidateRect(td->w, NULL, TRUE);
         break;
     }
@@ -2611,7 +2611,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         arg_music = !arg_music;
         term_xtra_win_react(player_ptr);
-        Term_key_push(KTRL('R'));
+        term_key_push(KTRL('R'));
         break;
     }
     case IDM_OPTIONS_SOUND: {
@@ -2622,7 +2622,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         arg_sound = !arg_sound;
         term_xtra_win_react(player_ptr);
-        Term_key_push(KTRL('R'));
+        term_key_push(KTRL('R'));
         break;
     }
     case IDM_OPTIONS_BG: {
@@ -2634,7 +2634,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         use_bg = !use_bg;
         init_bg();
         term_xtra_win_react(player_ptr);
-        Term_key_push(KTRL('R'));
+        term_key_push(KTRL('R'));
         break;
     }
     case IDM_OPTIONS_OPEN_BG: {
@@ -2660,7 +2660,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         }
 
         term_xtra_win_react(player_ptr);
-        Term_key_push(KTRL('R'));
+        term_key_push(KTRL('R'));
         break;
     }
     case IDM_DUMP_SCREEN_HTML: {
@@ -2741,16 +2741,16 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         bool ext_key = (lParam & 0x1000000L) ? TRUE : FALSE;
         bool numpad = FALSE;
 
-        Term_keypress(31);
+        term_keypress(31);
         if (mc)
-            Term_keypress('C');
+            term_keypress('C');
         if (ms)
-            Term_keypress('S');
+            term_keypress('S');
         if (ma)
-            Term_keypress('A');
+            term_keypress('A');
 
         int i = LOBYTE(HIWORD(lParam));
-        Term_keypress('x');
+        term_keypress('x');
         switch (wParam) {
         case VK_DIVIDE:
             term_no_press = TRUE;
@@ -2788,11 +2788,11 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         }
 
         if (numpad)
-            Term_keypress('K');
+            term_keypress('K');
 
-        Term_keypress(hexsym[i / 16]);
-        Term_keypress(hexsym[i % 16]);
-        Term_keypress(13);
+        term_keypress(hexsym[i / 16]);
+        term_keypress(hexsym[i % 16]);
+        term_keypress(13);
 
         return 1;
     }
@@ -2863,7 +2863,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         if (term_no_press)
             term_no_press = FALSE;
         else
-            Term_keypress(wParam);
+            term_keypress(wParam);
         return 0;
     }
     case WM_LBUTTONDOWN: {
@@ -2938,7 +2938,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         EmptyClipboard();
         SetClipboardData(CF_TEXT, hGlobal);
         CloseClipboard();
-        Term_redraw();
+        term_redraw();
         return 0;
     }
     case WM_MOUSEMOVE: {
@@ -2989,7 +2989,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         forget_lite(p_ptr->current_floor_ptr);
         forget_view(p_ptr->current_floor_ptr);
         clear_mon_lite(p_ptr->current_floor_ptr);
-        Term_key_push(SPECIAL_KEY_QUIT);
+        term_key_push(SPECIAL_KEY_QUIT);
         return 0;
     }
     case WM_QUERYENDSESSION: {
@@ -3048,8 +3048,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     normsize.y = td->rows;
                 }
 
-                Term_activate(&td->t);
-                Term_resize(td->cols, td->rows);
+                term_activate(&td->t);
+                term_resize(td->cols, td->rows);
                 InvalidateRect(td->w, NULL, TRUE);
             }
 
@@ -3165,9 +3165,9 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             term *old_term = Term;
             td->cols = cols;
             td->rows = rows;
-            Term_activate(&td->t);
-            Term_resize(td->cols, td->rows);
-            Term_activate(old_term);
+            term_activate(&td->t);
+            term_resize(td->cols, td->rows);
+            term_activate(old_term);
             InvalidateRect(td->w, NULL, TRUE);
             p_ptr->window = 0xFFFFFFFF;
             handle_stuff(p_ptr);
@@ -3194,7 +3194,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         if (term_no_press)
             term_no_press = FALSE;
         else
-            Term_keypress(wParam);
+            term_keypress(wParam);
         return 0;
     }
     case WM_PALETTECHANGED: {
@@ -3557,7 +3557,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
     }
 
     signals_init();
-    Term_activate(term_screen);
+    term_activate(term_screen);
     init_angband(p_ptr, process_autopick_file_command);
     initialized = TRUE;
 #ifdef CHUUKEI
@@ -3608,7 +3608,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
 #endif
 
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
-    Term_fresh();
+    term_fresh();
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);

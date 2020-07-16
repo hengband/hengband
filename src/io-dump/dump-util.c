@@ -171,7 +171,7 @@ void display_group_list(int col, int row, int wid, int per_page, IDX grp_idx[], 
 	{
 		int grp = grp_idx[grp_top + i];
 		TERM_COLOR attr = (grp_top + i == grp_cur) ? TERM_L_BLUE : TERM_WHITE;
-		Term_erase(col, row + i, wid);
+		term_erase(col, row + i, wid);
 		c_put_str(attr, group_text[grp], row + i, col);
 	}
 }
@@ -184,7 +184,7 @@ void display_visual_list(int col, int row, int height, int width, TERM_COLOR att
 {
 	for (int i = 0; i < height; i++)
 	{
-		Term_erase(col, row + i, width);
+		term_erase(col, row + i, width);
 	}
 
 	if (use_bigtile) width /= 2;
@@ -207,7 +207,7 @@ void display_visual_list(int col, int row, int height, int width, TERM_COLOR att
 			SYMBOL_CODE c = (SYMBOL_CODE)ic;
 			if (c & 0x80) a |= 0x80;
 
-			Term_queue_bigchar(x, y, a, c, 0, 0);
+			term_queue_bigchar(x, y, a, c, 0, 0);
 		}
 	}
 }
@@ -225,7 +225,7 @@ void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, byte c, 
 	TERM_LEN y = row + i;
 	if (use_bigtile) x += j;
 
-	Term_gotoxy(x, y);
+	term_gotoxy(x, y);
 }
 
 
@@ -251,7 +251,7 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
 	{
 		int browser_rows;
 		int wid, hgt;
-		Term_get_size(&wid, &hgt);
+		term_get_size(&wid, &hgt);
 		browser_rows = hgt - 8;
 		if (!col)
 		{

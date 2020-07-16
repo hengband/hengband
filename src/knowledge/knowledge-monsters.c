@@ -289,8 +289,8 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 			c_prt(attr, format("%d", r_idx), row + i, 62);
 		}
 
-		Term_erase(69, row + i, 255);
-		Term_queue_bigchar(use_bigtile ? 69 : 70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
+		term_erase(69, row + i, 255);
+		term_queue_bigchar(use_bigtile ? 69 : 70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
 		if (!visual_only)
 		{
 			if (!(r_ptr->flags1 & RF1_UNIQUE))
@@ -303,7 +303,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 
 	for (; i < per_page; i++)
 	{
-		Term_erase(col, row + i, 255);
+		term_erase(col, row + i, 255);
 	}
 }
 
@@ -320,7 +320,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)
 {
 	TERM_LEN wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 	IDX *mon_idx;
 	C_MAKE(mon_idx, max_r_idx, MONRACE_IDX);
 
@@ -384,14 +384,14 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
 
 			for (IDX i = 0; i < 78; i++)
 			{
-				Term_putch(i, 5, TERM_WHITE, '=');
+				term_putch(i, 5, TERM_WHITE, '=');
 			}
 
 			if (direct_r_idx < 0)
 			{
 				for (IDX i = 0; i < browser_rows; i++)
 				{
-					Term_putch(max + 1, 6 + i, TERM_WHITE, '|');
+					term_putch(max + 1, 6 + i, TERM_WHITE, '|');
 				}
 			}
 
@@ -448,11 +448,11 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
 		}
 		else if (!column)
 		{
-			Term_gotoxy(0, 6 + (grp_cur - grp_top));
+			term_gotoxy(0, 6 + (grp_cur - grp_top));
 		}
 		else
 		{
-			Term_gotoxy(max + 3, 6 + (mon_cur - mon_top));
+			term_gotoxy(max + 3, 6 + (mon_cur - mon_top));
 		}
 
 		char ch = inkey();

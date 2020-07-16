@@ -37,7 +37,7 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
 
     int col = command_gap;
     TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     int len = wid - col - 1;
     for (i = 0; i < INVEN_PACK; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
@@ -99,7 +99,7 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
         if (show_item_graph) {
             TERM_COLOR a = object_attr(o_ptr);
             SYMBOL_CODE c = object_char(o_ptr);
-            Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
+            term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
             if (use_bigtile)
                 cur_col++;
 
@@ -138,7 +138,7 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
     if (!owner_ptr || !owner_ptr->inventory_list)
         return;
 
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     for (i = 0; i < INVEN_PACK; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
@@ -154,7 +154,7 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
             tmp_val[1] = ')';
         }
 
-        Term_putstr(0, i, 3, TERM_WHITE, tmp_val);
+        term_putstr(0, i, 3, TERM_WHITE, tmp_val);
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
         n = strlen(o_name);
         attr = tval_to_attr[o_ptr->tval % 128];
@@ -162,8 +162,8 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
             attr = TERM_L_DARK;
         }
 
-        Term_putstr(3, i, n, attr, o_name);
-        Term_erase(3 + n, i, 255);
+        term_putstr(3, i, n, attr, o_name);
+        term_erase(3 + n, i, 255);
 
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
@@ -173,5 +173,5 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
     }
 
     for (i = z; i < hgt; i++)
-        Term_erase(0, i, 255);
+        term_erase(0, i, 255);
 }

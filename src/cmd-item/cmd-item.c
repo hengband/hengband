@@ -118,7 +118,7 @@ void do_cmd_inven(player_type *creature_ptr)
 
     if (command_new == ESCAPE) {
         TERM_LEN wid, hgt;
-        Term_get_size(&wid, &hgt);
+        term_get_size(&wid, &hgt);
         command_new = 0;
         command_gap = wid - 30;
     } else {
@@ -154,7 +154,7 @@ void do_cmd_equip(player_type *creature_ptr)
 
     if (command_new == ESCAPE) {
         TERM_LEN wid, hgt;
-        Term_get_size(&wid, &hgt);
+        term_get_size(&wid, &hgt);
         command_new = 0;
         command_gap = wid - 30;
     }

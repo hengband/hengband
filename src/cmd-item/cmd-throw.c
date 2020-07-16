@@ -238,12 +238,12 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
             TERM_COLOR a = object_attr(q_ptr);
             print_rel(creature_ptr, c, a, ny[cur_dis], nx[cur_dis]);
             move_cursor_relative(ny[cur_dis], nx[cur_dis]);
-            Term_fresh();
-            Term_xtra(TERM_XTRA_DELAY, msec);
+            term_fresh();
+            term_xtra(TERM_XTRA_DELAY, msec);
             lite_spot(creature_ptr, ny[cur_dis], nx[cur_dis]);
-            Term_fresh();
+            term_fresh();
         } else {
-            Term_xtra(TERM_XTRA_DELAY, msec);
+            term_xtra(TERM_XTRA_DELAY, msec);
         }
 
         prev_y = y;
@@ -369,12 +369,12 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
                     byte a = object_attr(q_ptr);
                     print_rel(creature_ptr, c, a, ny[i], nx[i]);
                     move_cursor_relative(ny[i], nx[i]);
-                    Term_fresh();
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_fresh();
+                    term_xtra(TERM_XTRA_DELAY, msec);
                     lite_spot(creature_ptr, ny[i], nx[i]);
-                    Term_fresh();
+                    term_fresh();
                 } else {
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_xtra(TERM_XTRA_DELAY, msec);
                 }
             }
 

@@ -174,7 +174,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
             }
 
             roff_top(r_idx);
-            Term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ESC]", " [(r)ecall, ESC]"));
+            term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ESC]", " [(r)ecall, ESC]"));
             query = inkey();
             if (recall) {
                 screen_load();

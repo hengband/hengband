@@ -124,9 +124,9 @@ static void prt_binary(BIT_FLAGS flags, int row, int col)
     u32b bitmask;
     for (int i = bitmask = 1; i <= 32; i++, bitmask *= 2) {
         if (flags & bitmask) {
-            Term_putch(col++, row, TERM_BLUE, '*');
+            term_putch(col++, row, TERM_BLUE, '*');
         } else {
-            Term_putch(col++, row, TERM_WHITE, '-');
+            term_putch(col++, row, TERM_WHITE, '-');
         }
     }
 }
@@ -185,7 +185,7 @@ static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, T
     }
 
     for (int i = 0; i < 22; i++) {
-        Term_putch(col, row + i + 1, TERM_WHITE, '|');
+        term_putch(col, row + i + 1, TERM_WHITE, '|');
         prt(format("%2dF", (i * 5)), row + i + 1, col);
         if ((i * K_MAX_DEPTH / 22 <= home) && (home < (i + 1) * K_MAX_DEPTH / 22))
             c_prt(TERM_RED, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
@@ -396,7 +396,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
     KIND_OBJECT_IDX choice[80];
     char buf[160];
 
-    Term_clear();
+    term_clear();
     for (num = 0; (num < 80) && tvals[num].tval; num++) {
         row = 2 + (num % 20);
         col = 20 * (num / 20);
@@ -418,7 +418,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 
     tval_type tval = tvals[num].tval;
     concptr tval_desc = tvals[num].desc;
-    Term_clear();
+    term_clear();
     for (num = 0, i = 1; (num < 80) && (i < max_k_idx); i++) {
         object_kind *k_ptr = &k_info[i];
         if (k_ptr->tval != tval)
@@ -656,7 +656,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
                 }
 
                 prt(format(q, i, correct, matches, better, worse, other), 0, 0);
-                Term_fresh();
+                term_fresh();
             }
 
             q_ptr = &forge;

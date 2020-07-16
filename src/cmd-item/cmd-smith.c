@@ -1154,12 +1154,12 @@ void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
                 int line, j;
 
                 /* Clear lines, position cursor  (really should use strlen here) */
-                Term_erase(14, 21, 255);
-                Term_erase(14, 20, 255);
-                Term_erase(14, 19, 255);
-                Term_erase(14, 18, 255);
-                Term_erase(14, 17, 255);
-                Term_erase(14, 16, 255);
+                term_erase(14, 21, 255);
+                term_erase(14, 20, 255);
+                term_erase(14, 19, 255);
+                term_erase(14, 18, 255);
+                term_erase(14, 17, 255);
+                term_erase(14, 16, 255);
 
                 shape_buffer(kaji_tips[mode - 1], 62, temp, sizeof(temp));
                 for (j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j]))) {

@@ -1303,7 +1303,7 @@ void do_cmd_spoilers(player_type *player_ptr)
 {
     screen_save();
     while (TRUE) {
-        Term_clear();
+        term_clear();
         prt("Create a spoiler file.", 2, 0);
         prt("(1) Brief Object Info (obj-desc.txt)", 5, 5);
         prt("(2) Brief Artifact Info (artifact.txt)", 6, 5);

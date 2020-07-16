@@ -72,7 +72,7 @@ static void do_cmd_macro_aux(char *buf)
 	flush();
 	char tmp[1024];
 	ascii_to_text(tmp, buf);
-	Term_addstr(-1, TERM_WHITE, tmp);
+	term_addstr(-1, TERM_WHITE, tmp);
 }
 
 
@@ -94,7 +94,7 @@ static void do_cmd_macro_aux_keymap(char *buf)
 	buf[0] = inkey();
 	buf[1] = '\0';
 	ascii_to_text(tmp, buf);
-	Term_addstr(-1, TERM_WHITE, tmp);
+	term_addstr(-1, TERM_WHITE, tmp);
 	flush();
 }
 
@@ -165,7 +165,7 @@ void do_cmd_macros(player_type *creature_ptr, void(*process_autopick_file_comman
 	screen_save();
 	while (TRUE)
 	{
-		Term_clear();
+		term_clear();
 		prt(_("[ マクロの設定 ]", "Interact with Macros"), 2, 0);
 		prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
 		ascii_to_text(buf, macro__buf);

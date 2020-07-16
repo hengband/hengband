@@ -277,7 +277,7 @@ void print_state(player_type *player_ptr)
 void print_speed(player_type *player_ptr)
 {
     TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     TERM_LEN col_speed = wid + COL_SPEED;
     TERM_LEN row_speed = hgt + ROW_SPEED;
 
@@ -337,7 +337,7 @@ void print_speed(player_type *player_ptr)
 void print_study(player_type *player_ptr)
 {
     TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     TERM_LEN col_study = wid + COL_STUDY;
     TERM_LEN row_study = hgt + ROW_STUDY;
 
@@ -356,7 +356,7 @@ void print_study(player_type *player_ptr)
 void print_imitation(player_type *player_ptr)
 {
     TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     TERM_LEN col_study = wid + COL_STUDY;
     TERM_LEN row_study = hgt + ROW_STUDY;
 
@@ -383,11 +383,11 @@ void print_imitation(player_type *player_ptr)
 void print_status(player_type *creature_ptr)
 {
     TERM_LEN wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
     TERM_LEN row_statbar = hgt + ROW_STATBAR;
     TERM_LEN max_col_statbar = wid + MAX_COL_STATBAR;
 
-    Term_erase(0, row_statbar, max_col_statbar);
+    term_erase(0, row_statbar, max_col_statbar);
 
     BIT_FLAGS bar_flags[3];
     bar_flags[0] = bar_flags[1] = bar_flags[2] = 0L;

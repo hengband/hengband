@@ -51,7 +51,7 @@ void edit_history(player_type *creature_ptr, void (*process_autopick_file_comman
 #endif
             c_put_str(TERM_L_BLUE, format("%c", creature_ptr->history[y][x]), y + 12, x + 10);
 
-        Term_gotoxy(x + 10, y + 12);
+        term_gotoxy(x + 10, y + 12);
         int skey = inkey_special(TRUE);
         if (!(skey & SKEY_MASK))
             c = (char)skey;
@@ -100,8 +100,8 @@ void edit_history(player_type *creature_ptr, void (*process_autopick_file_comman
                 x--;
 #endif
         } else if (c == '\r' || c == '\n') {
-            Term_erase(0, 11, 255);
-            Term_erase(0, 17, 255);
+            term_erase(0, 11, 255);
+            term_erase(0, 17, 255);
             put_str(_("(キャラクターの生い立ち - 編集済み)", "(Character Background - Edited)"), 11, 20);
             break;
         } else if (c == ESCAPE) {

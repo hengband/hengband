@@ -122,7 +122,7 @@ void do_cmd_diary(player_type *creature_ptr)
 	int i;
 	while (TRUE)
 	{
-		Term_clear();
+		term_clear();
 		prt(_("[ 記録の設定 ]", "[ Play Record ]"), 2, 0);
 		prt(_("(1) 記録を見る", "(1) Display your record"), 4, 5);
 		prt(_("(2) 文章を記録する", "(2) Add record"), 5, 5);

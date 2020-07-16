@@ -37,7 +37,7 @@
  */
 void do_cmd_redraw(player_type *creature_ptr)
 {
-	Term_xtra(TERM_XTRA_REACT, 0);
+	term_xtra(TERM_XTRA_REACT, 0);
 
 	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 	creature_ptr->update |= (PU_TORCH);
@@ -60,10 +60,10 @@ void do_cmd_redraw(player_type *creature_ptr)
 	{
 		if (!angband_term[j]) continue;
 
-		Term_activate(angband_term[j]);
-		Term_redraw();
-		Term_fresh();
-		Term_activate(old);
+		term_activate(angband_term[j]);
+		term_redraw();
+		term_fresh();
+		term_activate(old);
 	}
 }
 
@@ -88,7 +88,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 			display_player(creature_ptr, mode);
 		}
 
-		Term_putstr(2, 23, -1, TERM_WHITE,
+		term_putstr(2, 23, -1, TERM_WHITE,
 			_("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]"));
 		char c = inkey();
 		if (c == ESCAPE) break;
@@ -166,14 +166,14 @@ void do_cmd_messages(int num_now)
 	char back_str[81];
 	concptr shower = NULL;
 	int wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 	int num_lines = hgt - 4;
 	strcpy(finder_str, "");
 	strcpy(shower_str, "");
 	int n = message_num();
 	int i = 0;
 	screen_save();
-	Term_clear();
+	term_clear();
 	while (TRUE)
 	{
 		int j;
@@ -188,13 +188,13 @@ void do_cmd_messages(int num_now)
 			while ((str = angband_strstr(str, shower)) != NULL)
 			{
 				int len = strlen(shower);
-				Term_putstr(str - msg, num_lines + 1 - j, len, TERM_YELLOW, shower);
+				term_putstr(str - msg, num_lines + 1 - j, len, TERM_YELLOW, shower);
 				str += len;
 			}
 		}
 
 		for (; j < num_lines; j++)
-			Term_erase(0, num_lines + 1 - j, 255);
+			term_erase(0, num_lines + 1 - j, 255);
 
 		prt(format(_("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)"),
 			i, i + j - 1, n), 0, 0);

@@ -99,7 +99,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     handle_stuff(player_ptr);
-    Term_fresh();
+    term_fresh();
 
     if (quest_num
         && (is_fixed_quest_idx(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
@@ -167,7 +167,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after)
-            Term_fresh();
+            term_fresh();
 
         if (!player_ptr->playing || player_ptr->is_dead)
             break;
@@ -177,7 +177,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after)
-            Term_fresh();
+            term_fresh();
 
         if (!player_ptr->playing || player_ptr->is_dead)
             break;
@@ -187,7 +187,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after)
-            Term_fresh();
+            term_fresh();
 
         if (!player_ptr->playing || player_ptr->is_dead)
             break;

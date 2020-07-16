@@ -118,7 +118,7 @@ static void display_spell_list(player_type *caster_ptr)
             mindcraft_info(caster_ptr, comment, use_mind, i);
             sprintf(psi_desc, "  %c) %-30s%2d %4d %3d%%%s", I2A(i), spell.name, spell.min_lev, spell.mana_cost, chance, comment);
 
-            Term_putstr(x, y + i + 1, -1, a, psi_desc);
+            term_putstr(x, y + i + 1, -1, a, psi_desc);
         }
 
         return;
@@ -157,7 +157,7 @@ static void display_spell_list(player_type *caster_ptr)
             sprintf(out_val, "%c/%c) %-20.20s", I2A(n / 8), I2A(n % 8), name);
 
             m[j] = y + n;
-            Term_putstr(x, m[j], -1, a, out_val);
+            term_putstr(x, m[j], -1, a, out_val);
             n++;
         }
     }
@@ -179,9 +179,9 @@ void fix_spell(player_type *player_ptr)
         if (!(window_flag[j] & (PW_SPELL)))
             continue;
 
-        Term_activate(angband_term[j]);
+        term_activate(angband_term[j]);
         display_spell_list(player_ptr);
-        Term_fresh();
-        Term_activate(old);
+        term_fresh();
+        term_activate(old);
     }
 }

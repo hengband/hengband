@@ -73,11 +73,11 @@ bool stop_hex_spell(player_type *caster_ptr)
 
         while (!flag) {
             int n = 0;
-            Term_erase(x, y, 255);
+            term_erase(x, y, 255);
             prt(_("     名前", "     Name"), y, x + 5);
             for (spell = 0; spell < 32; spell++) {
                 if (hex_spelling(caster_ptr, spell)) {
-                    Term_erase(x, y + n + 1, 255);
+                    term_erase(x, y + n + 1, 255);
                     put_str(format("%c)  %s", I2A(n), exe_spell(caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
                     sp[n++] = spell;
                 }

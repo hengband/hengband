@@ -110,9 +110,9 @@ byte get_string_for_search(player_type *player_ptr, object_type **o_handle, conc
     int pos = 0;
     while (TRUE) {
         bool back = FALSE;
-        Term_erase(col, 0, 255);
-        Term_putstr(col, 0, -1, color, buf);
-        Term_gotoxy(col + pos, 0);
+        term_erase(col, 0, 255);
+        term_putstr(col, 0, -1, color, buf);
+        term_gotoxy(col + pos, 0);
 
         int skey = inkey_special(TRUE);
         switch (skey) {
