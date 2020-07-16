@@ -21,6 +21,7 @@
 #include "mind/mind-sniper.h"
 #include "mind/mind.h"
 #include "store/home.h"
+#include "store/museum.h"
 #include "store/purchase-order.h"
 #include "store/sell-order.h"
 #include "store/store-util.h"

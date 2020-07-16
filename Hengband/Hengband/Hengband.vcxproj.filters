@@ -1772,6 +1772,9 @@
     <ClCompile Include="..\..\src\store\sell-order.c">
       <Filter>store</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\store\museum.c">
+      <Filter>store</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3860,6 +3863,9 @@
       <Filter>store</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\store\sell-order.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\museum.h">
       <Filter>store</Filter>
     </ClInclude>
   </ItemGroup>

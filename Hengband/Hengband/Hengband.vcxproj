@@ -311,6 +311,7 @@
     <ClCompile Include="..\..\src\status\experience.c" />
     <ClCompile Include="..\..\src\status\temporary-resistance.c" />
     <ClCompile Include="..\..\src\store\home.c" />
+    <ClCompile Include="..\..\src\store\museum.c" />
     <ClCompile Include="..\..\src\store\owner-insults.c" />
     <ClCompile Include="..\..\src\store\purchase-order.c" />
     <ClCompile Include="..\..\src\store\sell-order.c" />
@@ -834,6 +835,7 @@
     <ClInclude Include="..\..\src\status\experience.h" />
     <ClInclude Include="..\..\src\status\temporary-resistance.h" />
     <ClInclude Include="..\..\src\store\home.h" />
+    <ClInclude Include="..\..\src\store\museum.h" />
     <ClInclude Include="..\..\src\store\owner-insults.h" />
     <ClInclude Include="..\..\src\store\purchase-order.h" />
     <ClInclude Include="..\..\src\store\sell-order.h" />
