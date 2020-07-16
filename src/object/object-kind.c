@@ -246,19 +246,6 @@ void calc_equipment_status(player_type* creature_ptr) {
         if (o_ptr->tval == TV_CAPTURE)
             continue;
 
-        if (o_ptr->curse_flags & TRC_LOW_MELEE) {
-            int slot = i - INVEN_RARM;
-            if (slot >= 2) {
-                if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-                    if (object_is_fully_known(o_ptr))
-                        creature_ptr->dis_to_h_b -= 15;
-                } else {
-                    if (object_is_fully_known(o_ptr))
-                        creature_ptr->dis_to_h_b -= 5;
-                }
-            }
-        }
-
         if (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
             continue;
         if (i == INVEN_LARM && has_melee_weapon(creature_ptr, i))

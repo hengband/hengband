@@ -3752,6 +3752,25 @@ static void calc_to_hit_bow_display(player_type *creature_ptr) {
     creature_ptr->dis_to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->dis_to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
 
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(o_ptr, flgs);
+
+        if (object_is_fully_known(o_ptr)) {
+            if (o_ptr->curse_flags & TRC_LOW_MELEE) {
+                if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+                    creature_ptr->dis_to_h_b -= 15;
+                } else {
+                    creature_ptr->dis_to_h_b -= 5;
+                }
+            }
+        }
+    }
+
 	if (creature_ptr->stun > 50) {
         creature_ptr->dis_to_h_b -= 20;
     } else if (creature_ptr->stun) {
@@ -3769,7 +3788,8 @@ static void calc_to_hit_bow_display(player_type *creature_ptr) {
     if (creature_ptr->shero) {
         creature_ptr->dis_to_h_b -= 12;
     }
-      
+
+
 }
 
 static void calc_to_damage_misc(player_type *creature_ptr)
