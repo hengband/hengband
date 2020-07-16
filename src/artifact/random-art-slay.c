@@ -106,6 +106,33 @@ static bool random_art_slay_animal(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_slay_evil(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_SLAY_EVIL))
+        return FALSE;
+    
+    add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
+    return one_in_(2);
+}
+
+static bool random_art_slay_undead(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_SLAY_UNDEAD))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
+    return one_in_(2);
+}
+
+static bool random_art_slay_demon(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_SLAY_DEMON))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SLAY_DEMON);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにスレイ効果を付加する。/ Add one slaying on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -177,23 +204,8 @@ void random_slay(object_type *o_ptr)
 
         break;
     case BIAS_LAW:
-        if (!(have_flag(o_ptr->art_flags, TR_SLAY_EVIL))) {
-            add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
-            if (one_in_(2))
-                return;
-        }
-
-        if (!(have_flag(o_ptr->art_flags, TR_SLAY_UNDEAD))) {
-            add_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
-            if (one_in_(2))
-                return;
-        }
-
-        if (!(have_flag(o_ptr->art_flags, TR_SLAY_DEMON))) {
-            add_flag(o_ptr->art_flags, TR_SLAY_DEMON);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_slay_evil(o_ptr) || random_art_slay_undead(o_ptr) || random_art_slay_demon(o_ptr))
+            return;
 
         break;
     }
