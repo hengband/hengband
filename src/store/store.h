@@ -21,8 +21,6 @@ extern s16b inner_town_num;
 extern int cur_store_feat;
 extern bool allow_inc;
 
-PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool flip);
-bool noneedtobargain(PRICE minprice);
 void store_shuffle(player_type *player_ptr, int which);
 void store_maintenance(player_type *player_ptr, int town_num, int store_num);
 void store_init(int town_num, int store_num);

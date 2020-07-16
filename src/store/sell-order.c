@@ -27,6 +27,7 @@
 #include "spell-kind/spells-perception.h"
 #include "store/home.h"
 #include "store/owner-insults.h"
+#include "store/pricing.h"
 #include "store/say-comments.h"
 #include "store/store-util.h"
 #include "store/store.h"

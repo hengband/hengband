@@ -8,6 +8,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "player/race-info-table.h"
+#include "store/pricing.h"
 #include "store/store-util.h"
 #include "store/store.h" // todo 相互依存している、こっちは残す？.
 #include "system/object-type-definition.h"
