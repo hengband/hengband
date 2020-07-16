@@ -327,10 +327,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_conf = TRUE;
             creature_ptr->resist_sound = TRUE;
             break;
-        case RACE_ENT:
-            if (!creature_ptr->inventory_list[INVEN_RARM].k_idx)
-                creature_ptr->skill_dig += creature_ptr->lev * 10;
-            break;
         case RACE_ARCHON:
             creature_ptr->levitation = TRUE;
             creature_ptr->see_inv = TRUE;

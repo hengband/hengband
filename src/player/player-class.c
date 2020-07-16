@@ -1309,7 +1309,6 @@ void calc_class_status(player_type *creature_ptr)
         creature_ptr->sustain_con = TRUE;
         creature_ptr->regenerate = TRUE;
         creature_ptr->free_act = TRUE;
-        creature_ptr->skill_dig += (100 + creature_ptr->lev * 8);
         if (creature_ptr->lev > 39)
             creature_ptr->reflect = TRUE;
         creature_ptr->redraw |= PR_STATUS;

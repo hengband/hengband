@@ -3928,10 +3928,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->levitation = TRUE;
     }
 
-    if (creature_ptr->shero) {
-        creature_ptr->skill_dig += 30;
-    }
-
     if (is_time_limit_esp(creature_ptr)) {
         creature_ptr->telepathy = TRUE;
     }
