@@ -90,6 +90,7 @@ hengband_SOURCES = \
 	\
 	cmd-building/cmd-building.c cmd-building/cmd-building.h \
 	cmd-building/cmd-inn.c cmd-building/cmd-inn.h \
+	cmd-building/cmd-store.c cmd-building/cmd-store.h \
 	\
 	cmd-io/cmd-autopick.c cmd-io/cmd-autopick.h \
 	cmd-io/cmd-diary.c cmd-io/cmd-diary.h \

@@ -18,6 +18,7 @@
 #include "cmd-action/cmd-travel.h"
 #include "cmd-action/cmd-tunnel.h"
 #include "cmd-building/cmd-building.h"
+#include "cmd-building/cmd-store.h"
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-diary.h"
 #include "cmd-io/cmd-dump.h"
@@ -75,7 +76,6 @@
 #include "status/action-setter.h"
 #include "store/home.h"
 #include "store/store-util.h"
-#include "store/store.h" // do_cmd_store() がある。後で移設する.
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
