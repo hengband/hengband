@@ -133,6 +133,44 @@ static bool random_art_slay_demon(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool switch_random_art_slay(object_type *o_ptr)
+{
+    switch (o_ptr->artifact_bias) {
+    case BIAS_CHAOS:
+        return random_art_slay_chaos(o_ptr);
+    case BIAS_PRIESTLY:
+        if (((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM)) && !have_flag(o_ptr->art_flags, TR_BLESSED))
+            add_flag(o_ptr->art_flags, TR_BLESSED);
+
+        return FALSE;
+    case BIAS_NECROMANTIC:
+        return random_art_slay_vampiric(o_ptr) || random_art_slay_brand_pois(o_ptr);
+    case BIAS_RANGER:
+        return random_art_slay_animal(o_ptr);
+    case BIAS_ROGUE:
+        if ((((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DAGGER)) || ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_SPEAR)))
+            && !(have_flag(o_ptr->art_flags, TR_THROW))) {
+            add_flag(o_ptr->art_flags, TR_THROW);
+        }
+
+        return random_art_slay_brand_pois(o_ptr);
+    case BIAS_POIS:
+        return random_art_slay_brand_pois(o_ptr);
+    case BIAS_ACID:
+        return random_art_slay_brand_acid(o_ptr);
+    case BIAS_ELEC:
+        return random_art_slay_brand_elec(o_ptr);
+    case BIAS_FIRE:
+        return random_art_slay_brand_fire(o_ptr);
+    case BIAS_COLD:
+        return random_art_slay_brand_cold(o_ptr);
+    case BIAS_LAW:
+        return random_art_slay_evil(o_ptr) || random_art_slay_undead(o_ptr) || random_art_slay_demon(o_ptr);
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにスレイ効果を付加する。/ Add one slaying on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -145,70 +183,8 @@ static bool random_art_slay_demon(object_type *o_ptr)
  */
 void random_slay(object_type *o_ptr)
 {
-    if (random_art_slay_bow(o_ptr))
+    if (random_art_slay_bow(o_ptr) || switch_random_art_slay(o_ptr))
         return;
-
-    switch (o_ptr->artifact_bias) {
-    case BIAS_CHAOS:
-        random_art_slay_chaos(o_ptr);
-        break;
-    case BIAS_PRIESTLY:
-        if (((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM)) && !have_flag(o_ptr->art_flags, TR_BLESSED))
-            add_flag(o_ptr->art_flags, TR_BLESSED);
-
-        break;
-
-    case BIAS_NECROMANTIC:
-        if (random_art_slay_vampiric(o_ptr) || random_art_slay_brand_pois(o_ptr))
-            return;
-
-        break;
-    case BIAS_RANGER:
-        if (random_art_slay_animal(o_ptr))
-            return;
-
-        break;
-    case BIAS_ROGUE:
-        if ((((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DAGGER)) || ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_SPEAR)))
-            && !(have_flag(o_ptr->art_flags, TR_THROW))) {
-            add_flag(o_ptr->art_flags, TR_THROW);
-        }
-
-        if (random_art_slay_brand_pois(o_ptr))
-            return;
-
-        break;
-    case BIAS_POIS:
-        if (random_art_slay_brand_pois(o_ptr))
-            return;
-
-        break;
-    case BIAS_ACID:
-        if (random_art_slay_brand_acid(o_ptr))
-            return;
-
-        break;
-    case BIAS_ELEC:
-        if (random_art_slay_brand_elec(o_ptr))
-            return;
-
-        break;
-    case BIAS_FIRE:
-        if (random_art_slay_brand_fire(o_ptr))
-            return;
-
-        break;
-    case BIAS_COLD:
-        if (random_art_slay_brand_cold(o_ptr))
-            return;
-
-        break;
-    case BIAS_LAW:
-        if (random_art_slay_evil(o_ptr) || random_art_slay_undead(o_ptr) || random_art_slay_demon(o_ptr))
-            return;
-
-        break;
-    }
 
     switch (randint1(36)) {
     case 1:
