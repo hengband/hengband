@@ -1751,6 +1751,9 @@
     <ClCompile Include="..\..\src\system\artifact-type-definition.c">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-store.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3819,6 +3822,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\artifact-type-definition.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-store.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

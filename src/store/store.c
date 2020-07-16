@@ -91,6 +91,7 @@
 #include "util/quarks.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
+#include "view/display-store.h" // todo 暫定、後で消す.
 #include "view/object-describer.h"
 #include "world/world.h"
 #ifdef JP
@@ -100,9 +101,9 @@
 #define MIN_STOCK 12
 
 static int store_top = 0;
-static int store_bottom = 0;
+int store_bottom = 0;
 static int xtra_stock = 0;
-static const owner_type *ot_ptr = NULL;
+const owner_type *ot_ptr = NULL;
 static s16b old_town_num = 0;
 static s16b inner_town_num = 0;
 
@@ -133,7 +134,7 @@ static int cur_store_feat;
  * "greed" value is always something (?).
  * </pre>
  */
-static PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool flip)
+PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool flip)
 {
     PRICE price = object_value(player_ptr, o_ptr);
     if (price <= 0)
@@ -162,7 +163,7 @@ static PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, 
 
     if (price <= 0L)
         return (1L);
-    return (price);
+    return price;
 }
 
 /*!
@@ -186,7 +187,6 @@ static int store_check_num(object_type *o_ptr)
     if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) {
         bool old_stack_force_notes = stack_force_notes;
         bool old_stack_force_costs = stack_force_costs;
-
         if (cur_store_num != STORE_HOME) {
             stack_force_notes = FALSE;
             stack_force_costs = FALSE;
@@ -423,7 +423,7 @@ static int home_carry(player_type *player_ptr, object_type *o_ptr)
  * @param minprice アイテムの最低販売価格
  * @return 割引を禁止するならTRUEを返す。
  */
-static bool noneedtobargain(PRICE minprice)
+bool noneedtobargain(PRICE minprice)
 {
     PRICE good = st_ptr->good_buy;
     PRICE bad = st_ptr->bad_buy;
@@ -460,94 +460,6 @@ static void updatebargain(PRICE price, PRICE minprice, int num)
             st_ptr->bad_buy++;
         }
     }
-}
-
-/*!
- * @brief 店の商品リストを再表示する /
- * Re-displays a single store entry
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param pos 表示行
- * @return なし
- */
-static void display_entry(player_type *player_ptr, int pos)
-{
-    object_type *o_ptr;
-    o_ptr = &st_ptr->stock[pos];
-    int i = (pos % store_bottom);
-
-    /* Label it, clear the line --(-- */
-    char out_val[160];
-    (void)sprintf(out_val, "%c) ", ((i > 25) ? toupper(I2A(i - 26)) : I2A(i)));
-    prt(out_val, i + 6, 0);
-
-    int cur_col = 3;
-    if (show_item_graph) {
-        TERM_COLOR a = object_attr(o_ptr);
-        SYMBOL_CODE c = object_char(o_ptr);
-
-        term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
-        if (use_bigtile)
-            cur_col++;
-
-        cur_col += 2;
-    }
-
-    /* Describe an item in the home */
-    int maxwid = 75;
-    if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) {
-        maxwid = 75;
-        if (show_weights)
-            maxwid -= 10;
-
-        GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(player_ptr, o_name, o_ptr, 0);
-        o_name[maxwid] = '\0';
-        c_put_str(tval_to_attr[o_ptr->tval], o_name, i + 6, cur_col);
-        if (show_weights) {
-            WEIGHT wgt = o_ptr->weight;
-            sprintf(out_val, _("%3d.%1d kg", "%3d.%d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
-            put_str(out_val, i + 6, _(67, 68));
-        }
-
-        return;
-    }
-
-    maxwid = 65;
-    if (show_weights)
-        maxwid -= 7;
-
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(player_ptr, o_name, o_ptr, 0);
-    o_name[maxwid] = '\0';
-    c_put_str(tval_to_attr[o_ptr->tval], o_name, i + 6, cur_col);
-
-    if (show_weights) {
-        int wgt = o_ptr->weight;
-        sprintf(out_val, "%3d.%1d", _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
-        put_str(out_val, i + 6, _(60, 61));
-    }
-
-    s32b x;
-    if (o_ptr->ident & (IDENT_FIXED)) {
-        x = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
-        (void)sprintf(out_val, _("%9ld固", "%9ld F"), (long)x);
-        put_str(out_val, i + 6, 68);
-        return;
-    }
-
-    if (!manual_haggle) {
-        x = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
-        if (!noneedtobargain(x))
-            x += x / 10;
-
-        (void)sprintf(out_val, "%9ld  ", (long)x);
-        put_str(out_val, i + 6, 68);
-        return;
-    }
-
-    x = price_item(player_ptr, o_ptr, ot_ptr->max_inflate, FALSE);
-    (void)sprintf(out_val, "%9ld  ", (long)x);
-    put_str(out_val, i + 6, 68);
 }
 
 /*!
@@ -1340,7 +1252,7 @@ static void store_purchase(player_type *player_ptr)
         }
 
         for (i = 0; i < 10; i++) {
-            store_maint(player_ptr, player_ptr->town_num, cur_store_num);
+            store_maintenance(player_ptr, player_ptr->town_num, cur_store_num);
         }
 
         store_top = 0;
@@ -1934,7 +1846,7 @@ void do_cmd_store(player_type *player_ptr)
         maintain_num = 10;
     if (maintain_num) {
         for (int i = 0; i < maintain_num; i++)
-            store_maint(player_ptr, player_ptr->town_num, which);
+            store_maintenance(player_ptr, player_ptr->town_num, which);
 
         town_info[player_ptr->town_num].store[which].last_visit = current_world_ptr->game_turn;
     }
@@ -2112,12 +2024,10 @@ void store_shuffle(player_type *player_ptr, int which)
  * @param store_num 店舗種類のID
  * @return なし
  */
-void store_maint(player_type *player_ptr, int town_num, int store_num)
+void store_maintenance(player_type *player_ptr, int town_num, int store_num)
 {
     cur_store_num = store_num;
-    if (store_num == STORE_HOME)
-        return;
-    if (store_num == STORE_MUSEUM)
+    if ((store_num == STORE_HOME) || (store_num == STORE_MUSEUM))
         return;
 
     st_ptr = &town_info[town_num].store[store_num];

@@ -642,6 +642,7 @@
     <ClCompile Include="..\..\src\wizard\spoiler-table.c" />
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c" />
     <ClCompile Include="..\..\src\savedata\quest-loader.c" />
+    <ClCompile Include="..\..\src\view\display-store.c" />
     <ClInclude Include="..\..\src\action\action-limited.h" />
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
@@ -1323,6 +1324,7 @@
     <ClInclude Include="..\..\src\combat\aura-counterattack.h" />
     <ClInclude Include="..\..\src\wizard\tval-descriptions-table.h" />
     <ClInclude Include="..\..\src\savedata\quest-loader.h" />
+    <ClInclude Include="..\..\src\view\display-store.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\system\angband.h" />
