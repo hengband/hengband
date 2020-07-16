@@ -100,3 +100,39 @@ void display_entry(player_type *player_ptr, int pos)
     (void)sprintf(out_val, "%9ld  ", (long)x);
     put_str(out_val, i + 6, 68);
 }
+
+/*!
+ * @brief 店の商品リストを表示する /
+ * Displays a store's inventory -RAK-
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ * @details
+ * All prices are listed as "per individual object".  -BEN-
+ */
+void display_store_inventory(player_type *player_ptr)
+{
+    int k;
+    for (k = 0; k < store_bottom; k++) {
+        if (store_top + k >= st_ptr->stock_num)
+            break;
+
+        display_entry(player_ptr, store_top + k);
+    }
+
+    for (int i = k; i < store_bottom + 1; i++)
+        prt("", i + 6, 0);
+
+    put_str(_("          ", "        "), 5, _(20, 22));
+    if (st_ptr->stock_num > store_bottom) {
+        prt(_("-続く-", "-more-"), k + 6, 3);
+        put_str(format(_("(%dページ)  ", "(Page %d)  "), store_top / store_bottom + 1), 5, _(20, 22));
+    }
+
+    if (cur_store_num == STORE_HOME || cur_store_num == STORE_MUSEUM) {
+        k = st_ptr->stock_size;
+        if (cur_store_num == STORE_HOME && !powerup_home)
+            k /= 10;
+
+        put_str(format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), st_ptr->stock_num, k), 19 + xtra_stock, _(27, 30));
+    }
+}
