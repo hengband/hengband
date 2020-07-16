@@ -313,6 +313,7 @@
     <ClCompile Include="..\..\src\store\home.c" />
     <ClCompile Include="..\..\src\store\owner-insults.c" />
     <ClCompile Include="..\..\src\store\purchase-order.c" />
+    <ClCompile Include="..\..\src\store\sell-order.c" />
     <ClCompile Include="..\..\src\view\display-inventory.c" />
     <ClCompile Include="..\..\src\view\display-map.c" />
     <ClCompile Include="..\..\src\window\display-sub-window-items.c" />
@@ -835,6 +836,7 @@
     <ClInclude Include="..\..\src\store\home.h" />
     <ClInclude Include="..\..\src\store\owner-insults.h" />
     <ClInclude Include="..\..\src\store\purchase-order.h" />
+    <ClInclude Include="..\..\src\store\sell-order.h" />
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />

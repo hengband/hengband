@@ -27,7 +27,6 @@ void store_prt_gold(player_type *player_ptr);
 void store_shuffle(player_type *player_ptr, int which);
 void store_maintenance(player_type *player_ptr, int town_num, int store_num);
 void store_init(int town_num, int store_num);
-void store_sell(player_type *owner_ptr);
 void store_examine(player_type *player_ptr);
 void museum_remove_object(player_type *player_ptr);
 int store_check_num(object_type *o_ptr);
