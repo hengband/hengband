@@ -10,91 +10,25 @@
  */
 
 #include "store/store.h"
-#include "action/weapon-shield.h"
-#include "autopick/autopick-pref-processor.h"
-#include "autopick/autopick.h"
-#include "cmd-action/cmd-spell.h"
-#include "cmd-io/cmd-diary.h"
-#include "cmd-io/cmd-dump.h"
-#include "cmd-io/cmd-gameoption.h"
-#include "cmd-io/cmd-help.h"
-#include "cmd-io/cmd-knowledge.h"
-#include "cmd-io/cmd-lore.h"
-#include "cmd-io/cmd-macro.h"
-#include "cmd-io/cmd-process-screen.h"
-#include "cmd-io/macro-util.h"
-#include "cmd-item/cmd-item.h"
-#include "cmd-item/cmd-magiceat.h"
-#include "cmd-item/cmd-smith.h"
-#include "cmd-item/cmd-zapwand.h"
-#include "cmd-visual/cmd-draw.h"
-#include "cmd-visual/cmd-visuals.h"
 #include "core/asking-player.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
-#include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
-#include "flavor/object-flavor-types.h"
-#include "floor/floor-events.h"
-#include "floor/floor-object.h"
 #include "floor/floor-town.h"
-#include "floor/floor.h"
-#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
-#include "game-option/input-options.h"
-#include "game-option/play-record-options.h"
-#include "game-option/special-options.h"
-#include "game-option/text-display-options.h"
-#include "grid/feature.h"
-#include "inventory/inventory-object.h"
-#include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
-#include "io/input-key-requester.h"
-#include "io/write-diary.h"
-#include "main/music-definitions-table.h"
-#include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "market/gold-magnification-table.h"
-#include "mind/mind-sniper.h"
-#include "mind/mind.h"
-#include "mind/racial-android.h"
-#include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
-#include "object/item-tester-hooker.h"
-#include "object/item-use-flags.h"
 #include "object/object-generator.h"
-#include "object/object-info.h"
-#include "object/object-kind.h"
 #include "object/object-stack.h"
-#include "object/object-value.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
-#include "player/avatar.h"
-#include "player/player-class.h"
-#include "player/player-status.h"
-#include "player/race-info-table.h"
-#include "spell-kind/spells-perception.h"
 #include "store/black-market.h"
-#include "store/home.h"
-#include "store/rumor.h"
-#include "store/say-comments.h"
-#include "store/store-owners.h"
 #include "store/store-util.h"
-#include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "util/object-sort.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
-#include "window/display-sub-windows.h"
-#include "view/display-store.h" // todo 暫定、後で消す.
-#include "view/object-describer.h"
-#include "world/world.h"
 #ifdef JP
 #include "locale/japanese.h"
 #endif
@@ -167,7 +101,7 @@ int store_check_num(object_type *o_ptr)
      * オプション powerup_home が設定されていると
      * 我が家が 20 ページまで使える
      */
-    if ((cur_store_num == STORE_HOME) && (powerup_home == FALSE)) {
+    if ((cur_store_num == STORE_HOME) && !powerup_home) {
         if (st_ptr->stock_num < ((st_ptr->stock_size) / 10)) {
             return 1;
         }
@@ -412,7 +346,6 @@ void store_init(int town_num, int store_num)
     st_ptr->bad_buy = 0;
     st_ptr->stock_num = 0;
     st_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
-    for (int k = 0; k < st_ptr->stock_size; k++) {
+    for (int k = 0; k < st_ptr->stock_size; k++)
         object_wipe(&st_ptr->stock[k]);
-    }
 }
