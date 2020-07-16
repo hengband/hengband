@@ -272,6 +272,7 @@ hengband_SOURCES = \
 	io/report.c io/report.h \
 	io/screen-util.c io/screen-util.h \
 	io/signal-handlers.c io/signal-handlers.h \
+	io/store-key-processor.c io/store-key-processor.h \
 	io/targeting.c io/targeting.h \
 	io/tokenizer.c io/tokenizer.h \
 	io/uid-checker.c io/uid-checker.h \

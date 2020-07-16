@@ -1757,6 +1757,9 @@
     <ClCompile Include="..\..\src\store\home.c">
       <Filter>store</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\store-key-processor.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3831,6 +3834,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\store\home.h">
       <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\store-key-processor.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

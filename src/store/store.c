@@ -105,8 +105,8 @@ int store_top = 0;
 int store_bottom = 0;
 int xtra_stock = 0;
 const owner_type *ot_ptr = NULL;
-static s16b old_town_num = 0;
-static s16b inner_town_num = 0;
+s16b old_town_num = 0;
+s16b inner_town_num = 0;
 
 /*
  * We store the current "store feat" here so everyone can access it
@@ -775,7 +775,7 @@ static bool sell_haggle(player_type *player_ptr, object_type *o_ptr, s32b *price
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void store_purchase(player_type *player_ptr)
+void store_purchase(player_type *player_ptr)
 {
     if (cur_store_num == STORE_MUSEUM) {
         msg_print(_("博物館から取り出すことはできません。", "Museum."));
@@ -1000,7 +1000,7 @@ static void store_purchase(player_type *player_ptr)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void store_sell(player_type *owner_ptr)
+void store_sell(player_type *owner_ptr)
 {
     concptr q;
     if (cur_store_num == STORE_HOME)
@@ -1197,7 +1197,7 @@ static void store_sell(player_type *owner_ptr)
  * Examine an item in a store			   -JDL-
  * @return なし
  */
-static void store_examine(player_type *player_ptr)
+void store_examine(player_type *player_ptr)
 {
     if (st_ptr->stock_num <= 0) {
         if (cur_store_num == STORE_HOME)
@@ -1241,7 +1241,7 @@ static void store_examine(player_type *player_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void museum_remove_object(player_type *player_ptr)
+void museum_remove_object(player_type *player_ptr)
 {
     if (st_ptr->stock_num <= 0) {
         msg_print(_("博物館には何も置いてありません。", "Museum is empty."));
@@ -1284,243 +1284,8 @@ static void museum_remove_object(player_type *player_ptr)
     display_store_inventory(player_ptr);
 }
 
-/*
- * Hack -- set this to leave the store
- */
-static bool leave_store = FALSE;
-
-/*!
- * @brief 店舗処理コマンド選択のメインルーチン /
- * Process a command in a store
- * @param client_ptr 顧客となるクリーチャーの参照ポインタ
- * @return なし
- * @note
- * <pre>
- * Note that we must allow the use of a few "special" commands
- * in the stores which are not allowed in the dungeon, and we
- * must disable some commands which are allowed in the dungeon
- * but not in the stores, to prevent chaos.
- * </pre>
- */
-static void store_process_command(player_type *client_ptr)
-{
-    repeat_check();
-    if (rogue_like_commands && command_cmd == 'l') {
-        command_cmd = 'x';
-    }
-
-    switch (command_cmd) {
-    case ESCAPE: {
-        leave_store = TRUE;
-        break;
-    }
-    case '-': {
-        /* 日本語版追加 */
-        /* 1 ページ戻るコマンド: 我が家のページ数が多いので重宝するはず By BUG */
-        if (st_ptr->stock_num <= store_bottom) {
-            msg_print(_("これで全部です。", "Entire inventory is shown."));
-        } else {
-            store_top -= store_bottom;
-            if (store_top < 0)
-                store_top = ((st_ptr->stock_num - 1) / store_bottom) * store_bottom;
-            if ((cur_store_num == STORE_HOME) && (powerup_home == FALSE))
-                if (store_top >= store_bottom)
-                    store_top = store_bottom;
-            display_store_inventory(client_ptr);
-        }
-
-        break;
-    }
-    case ' ': {
-        if (st_ptr->stock_num <= store_bottom) {
-            msg_print(_("これで全部です。", "Entire inventory is shown."));
-        } else {
-            store_top += store_bottom;
-            /*
-             * 隠しオプション(powerup_home)がセットされていないときは
-             * 我が家では 2 ページまでしか表示しない
-             */
-            if ((cur_store_num == STORE_HOME) && (powerup_home == FALSE) && (st_ptr->stock_num >= STORE_INVEN_MAX)) {
-                if (store_top >= (STORE_INVEN_MAX - 1)) {
-                    store_top = 0;
-                }
-            } else {
-                if (store_top >= st_ptr->stock_num)
-                    store_top = 0;
-            }
-
-            display_store_inventory(client_ptr);
-        }
-
-        break;
-    }
-    case KTRL('R'): {
-        do_cmd_redraw(client_ptr);
-        display_store(client_ptr);
-        break;
-    }
-    case 'g': {
-        store_purchase(client_ptr);
-        break;
-    }
-    case 'd': {
-        store_sell(client_ptr);
-        break;
-    }
-    case 'x': {
-        store_examine(client_ptr);
-        break;
-    }
-    case '\r': {
-        break;
-    }
-    case 'w': {
-        do_cmd_wield(client_ptr);
-        break;
-    }
-    case 't': {
-        do_cmd_takeoff(client_ptr);
-        break;
-    }
-    case 'k': {
-        do_cmd_destroy(client_ptr);
-        break;
-    }
-    case 'e': {
-        do_cmd_equip(client_ptr);
-        break;
-    }
-    case 'i': {
-        do_cmd_inven(client_ptr);
-        break;
-    }
-    case 'I': {
-        do_cmd_observe(client_ptr);
-        break;
-    }
-    case KTRL('I'): {
-        toggle_inventory_equipment(client_ptr);
-        break;
-    }
-    case 'b': {
-        if ((client_ptr->pclass == CLASS_MINDCRAFTER) || (client_ptr->pclass == CLASS_BERSERKER) || (client_ptr->pclass == CLASS_NINJA)
-            || (client_ptr->pclass == CLASS_MIRROR_MASTER))
-            do_cmd_mind_browse(client_ptr);
-        else if (client_ptr->pclass == CLASS_SMITH)
-            do_cmd_kaji(client_ptr, TRUE);
-        else if (client_ptr->pclass == CLASS_MAGIC_EATER)
-            do_cmd_magic_eater(client_ptr, TRUE, FALSE);
-        else if (client_ptr->pclass == CLASS_SNIPER)
-            do_cmd_snipe_browse(client_ptr);
-        else
-            do_cmd_browse(client_ptr);
-        break;
-    }
-    case '{': {
-        do_cmd_inscribe(client_ptr);
-        break;
-    }
-    case '}': {
-        do_cmd_uninscribe(client_ptr);
-        break;
-    }
-    case '?': {
-        do_cmd_help(client_ptr);
-        break;
-    }
-    case '/': {
-        do_cmd_query_symbol(client_ptr);
-        break;
-    }
-    case 'C': {
-        client_ptr->town_num = old_town_num;
-        do_cmd_player_status(client_ptr);
-        client_ptr->town_num = inner_town_num;
-        display_store(client_ptr);
-        break;
-    }
-    case '!': {
-        (void)term_user(0);
-        break;
-    }
-    case '"': {
-        client_ptr->town_num = old_town_num;
-        do_cmd_pref(client_ptr);
-        client_ptr->town_num = inner_town_num;
-        break;
-    }
-    case '@': {
-        client_ptr->town_num = old_town_num;
-        do_cmd_macros(client_ptr, process_autopick_file_command);
-        client_ptr->town_num = inner_town_num;
-        break;
-    }
-    case '%': {
-        client_ptr->town_num = old_town_num;
-        do_cmd_visuals(client_ptr, process_autopick_file_command);
-        client_ptr->town_num = inner_town_num;
-        break;
-    }
-    case '&': {
-        client_ptr->town_num = old_town_num;
-        do_cmd_colors(client_ptr, process_autopick_file_command);
-        client_ptr->town_num = inner_town_num;
-        break;
-    }
-    case '=': {
-        do_cmd_options(client_ptr);
-        (void)combine_and_reorder_home(client_ptr, STORE_HOME);
-        do_cmd_redraw(client_ptr);
-        display_store(client_ptr);
-        break;
-    }
-    case ':': {
-        do_cmd_note();
-        break;
-    }
-    case 'V': {
-        do_cmd_version();
-        break;
-    }
-    case KTRL('F'): {
-        do_cmd_feeling(client_ptr);
-        break;
-    }
-    case KTRL('O'): {
-        do_cmd_message_one();
-        break;
-    }
-    case KTRL('P'): {
-        do_cmd_messages(0);
-        break;
-    }
-    case '|': {
-        do_cmd_diary(client_ptr);
-        break;
-    }
-    case '~': {
-        do_cmd_knowledge(client_ptr);
-        break;
-    }
-    case '(': {
-        do_cmd_load_screen();
-        break;
-    }
-    case ')': {
-        do_cmd_save_screen(client_ptr, process_autopick_file_command);
-        break;
-    }
-    default: {
-        if ((cur_store_num == STORE_MUSEUM) && (command_cmd == 'r')) {
-            museum_remove_object(client_ptr);
-        } else {
-            msg_print(_("そのコマンドは店の中では使えません。", "That command does not work in stores."));
-        }
-
-        break;
-    }
-    }
-}
+// すぐに移設するので敢えてここに置く.
+#include "io/store-key-processor.h"
 
 /*!
  * @brief 店舗処理全体のメインルーチン /
