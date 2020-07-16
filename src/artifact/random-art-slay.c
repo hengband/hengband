@@ -52,12 +52,57 @@ static bool random_art_slay_vampiric(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_slay_brand_acid(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_BRAND_ACID))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_BRAND_ACID);
+    return one_in_(2);
+}
+
+static bool random_art_slay_brand_elec(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_BRAND_ELEC))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_BRAND_ELEC);
+    return one_in_(2);
+}
+
+static bool random_art_slay_brand_fire(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_BRAND_FIRE))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_BRAND_FIRE);
+    return one_in_(2);
+}
+
+static bool random_art_slay_brand_cold(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_BRAND_COLD))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_BRAND_COLD);
+    return one_in_(2);
+}
+
 static bool random_art_slay_brand_pois(object_type *o_ptr)
 {
     if (have_flag(o_ptr->art_flags, TR_BRAND_POIS) || one_in_(2))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_BRAND_POIS);
+    return one_in_(2);
+}
+
+static bool random_art_slay_animal(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_SLAY_ANIMAL))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
     return one_in_(2);
 }
 
@@ -92,74 +137,45 @@ void random_slay(object_type *o_ptr)
 
         break;
     case BIAS_RANGER:
-        if (!(have_flag(o_ptr->art_flags, TR_SLAY_ANIMAL))) {
-            add_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_slay_animal(o_ptr))
+            return;
 
         break;
-
     case BIAS_ROGUE:
         if ((((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DAGGER)) || ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_SPEAR)))
             && !(have_flag(o_ptr->art_flags, TR_THROW))) {
-            /* Free power for rogues... */
             add_flag(o_ptr->art_flags, TR_THROW);
         }
 
-        if (!(have_flag(o_ptr->art_flags, TR_BRAND_POIS))) {
-            add_flag(o_ptr->art_flags, TR_BRAND_POIS);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_slay_brand_pois(o_ptr))
+            return;
 
         break;
-
     case BIAS_POIS:
-        if (!(have_flag(o_ptr->art_flags, TR_BRAND_POIS))) {
-            add_flag(o_ptr->art_flags, TR_BRAND_POIS);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_slay_brand_pois(o_ptr))
+            return;
 
         break;
-
-    case BIAS_FIRE:
-        if (!(have_flag(o_ptr->art_flags, TR_BRAND_FIRE))) {
-            add_flag(o_ptr->art_flags, TR_BRAND_FIRE);
-            if (one_in_(2))
-                return;
-        }
-
-        break;
-
-    case BIAS_COLD:
-        if (!(have_flag(o_ptr->art_flags, TR_BRAND_COLD))) {
-            add_flag(o_ptr->art_flags, TR_BRAND_COLD);
-            if (one_in_(2))
-                return;
-        }
-
-        break;
-
-    case BIAS_ELEC:
-        if (!(have_flag(o_ptr->art_flags, TR_BRAND_ELEC))) {
-            add_flag(o_ptr->art_flags, TR_BRAND_ELEC);
-            if (one_in_(2))
-                return;
-        }
-
-        break;
-
     case BIAS_ACID:
-        if (!(have_flag(o_ptr->art_flags, TR_BRAND_ACID))) {
-            add_flag(o_ptr->art_flags, TR_BRAND_ACID);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_slay_brand_acid(o_ptr))
+            return;
 
         break;
+    case BIAS_ELEC:
+        if (random_art_slay_brand_elec(o_ptr))
+            return;
 
+        break;
+    case BIAS_FIRE:
+        if (random_art_slay_brand_fire(o_ptr))
+            return;
+
+        break;
+    case BIAS_COLD:
+        if (random_art_slay_brand_cold(o_ptr))
+            return;
+
+        break;
     case BIAS_LAW:
         if (!(have_flag(o_ptr->art_flags, TR_SLAY_EVIL))) {
             add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
