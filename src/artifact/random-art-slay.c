@@ -34,6 +34,33 @@ static bool random_art_slay_bow(object_type *o_ptr)
     }
 }
 
+static bool random_art_slay_chaos(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_CHAOTIC))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_CHAOTIC);
+    return one_in_(2);
+}
+
+static bool random_art_slay_vampiric(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_VAMPIRIC))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_VAMPIRIC);
+    return one_in_(2);
+}
+
+static bool random_art_slay_brand_pois(object_type *o_ptr)
+{
+    if (have_flag(o_ptr->art_flags, TR_BRAND_POIS) || one_in_(2))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_BRAND_POIS);
+    return one_in_(2);
+}
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにスレイ効果を付加する。/ Add one slaying on generation of randam artifact.
  * @details 優先的に付加される耐性がランダムアーティファクトバイアスに依存して存在する。
@@ -51,37 +78,19 @@ void random_slay(object_type *o_ptr)
 
     switch (o_ptr->artifact_bias) {
     case BIAS_CHAOS:
-        if (!(have_flag(o_ptr->art_flags, TR_CHAOTIC))) {
-            add_flag(o_ptr->art_flags, TR_CHAOTIC);
-            if (one_in_(2))
-                return;
-        }
-
+        random_art_slay_chaos(o_ptr);
         break;
-
     case BIAS_PRIESTLY:
-        if ((o_ptr->tval == TV_SWORD || o_ptr->tval == TV_POLEARM) && !(have_flag(o_ptr->art_flags, TR_BLESSED))) {
-            /* A free power for "priestly" random artifacts */
+        if (((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM)) && !have_flag(o_ptr->art_flags, TR_BLESSED))
             add_flag(o_ptr->art_flags, TR_BLESSED);
-        }
 
         break;
 
     case BIAS_NECROMANTIC:
-        if (!(have_flag(o_ptr->art_flags, TR_VAMPIRIC))) {
-            add_flag(o_ptr->art_flags, TR_VAMPIRIC);
-            if (one_in_(2))
-                return;
-        }
-
-        if (!(have_flag(o_ptr->art_flags, TR_BRAND_POIS)) && one_in_(2)) {
-            add_flag(o_ptr->art_flags, TR_BRAND_POIS);
-            if (one_in_(2))
-                return;
-        }
+        if (random_art_slay_vampiric(o_ptr) || random_art_slay_brand_pois(o_ptr))
+            return;
 
         break;
-
     case BIAS_RANGER:
         if (!(have_flag(o_ptr->art_flags, TR_SLAY_ANIMAL))) {
             add_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
