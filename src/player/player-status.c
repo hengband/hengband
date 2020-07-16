@@ -3553,6 +3553,14 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
         }
     }
 
+	if (o_ptr->curse_flags & TRC_LOW_MELEE) {
+        if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+            creature_ptr->to_h[id] -= 15;
+        } else {
+            creature_ptr->to_h[id] -= 5;
+        }
+    }
+
     if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
         if (o_ptr->curse_flags & (TRC_CURSED)) {
             creature_ptr->to_h[id] += 5;
@@ -3638,6 +3646,14 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
         if (o_ptr->curse_flags & (TRC_TY_CURSE)) {
             creature_ptr->dis_to_h[id] += 5;
+        }
+    }
+
+	if (object_is_fully_known(o_ptr) && o_ptr->curse_flags & TRC_LOW_MELEE) {
+        if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+            creature_ptr->dis_to_h[id] -= 15;
+        } else {
+            creature_ptr->dis_to_h[id] -= 5;
         }
     }
 

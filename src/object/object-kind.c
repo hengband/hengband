@@ -248,17 +248,7 @@ void calc_equipment_status(player_type* creature_ptr) {
 
         if (o_ptr->curse_flags & TRC_LOW_MELEE) {
             int slot = i - INVEN_RARM;
-            if (slot < 2) {
-                if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-                    creature_ptr->to_h[slot] -= 15;
-                    if (object_is_fully_known(o_ptr))
-                        creature_ptr->dis_to_h[slot] -= 15;
-                } else {
-                    creature_ptr->to_h[slot] -= 5;
-                    if (object_is_fully_known(o_ptr))
-                        creature_ptr->dis_to_h[slot] -= 5;
-                }
-            } else {
+            if (slot >= 2) {
                 if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
                     if (object_is_fully_known(o_ptr))
                         creature_ptr->dis_to_h_b -= 15;
