@@ -1763,6 +1763,9 @@
     <ClCompile Include="..\..\src\cmd-building\cmd-store.c">
       <Filter>cmd-building</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\store\purchase-order.c">
+      <Filter>store</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3843,6 +3846,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-building\cmd-store.h">
       <Filter>cmd-building</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\purchase-order.h">
+      <Filter>store</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

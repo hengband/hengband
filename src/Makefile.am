@@ -649,6 +649,7 @@ hengband_SOURCES = \
 	store/home.c store/home.h \
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \
+	store/purchase-order.c store/purchase-order.h \
 	store/rumor.c store/rumor.h \
 	store/say-comments.c store/say-comments.h \
 	store/store-util.c store/store-util.h \
