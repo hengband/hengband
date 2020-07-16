@@ -31,4 +31,3 @@ void store_examine(player_type *player_ptr);
 void museum_remove_object(player_type *player_ptr);
 int store_check_num(object_type *o_ptr);
 int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j);
-bool receive_offer(concptr pmt, s32b *poffer, s32b last_offer, int factor, PRICE price, int final);
