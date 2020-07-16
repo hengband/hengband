@@ -18,7 +18,7 @@ static bool random_art_slay_bow(object_type *o_ptr)
         if (!one_in_(7))
             remove_flag(o_ptr->art_flags, TR_XTRA_SHOTS);
 
-        if (!o_ptr->artifact_bias && one_in_(9))
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
             o_ptr->artifact_bias = BIAS_RANGER;
 
         return TRUE;
@@ -27,7 +27,7 @@ static bool random_art_slay_bow(object_type *o_ptr)
         if (!one_in_(7))
             remove_flag(o_ptr->art_flags, TR_XTRA_MIGHT);
 
-        if (!o_ptr->artifact_bias && one_in_(9))
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
             o_ptr->artifact_bias = BIAS_RANGER;
 
         return TRUE;
@@ -189,68 +189,73 @@ void random_slay(object_type *o_ptr)
     switch (randint1(36)) {
     case 1:
     case 2:
-        if (one_in_(4)) {
+        if (one_in_(4))
             add_flag(o_ptr->art_flags, TR_KILL_ANIMAL);
-        } else {
+        else
             add_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
-        }
+        
         break;
     case 3:
     case 4:
-        if (one_in_(8)) {
+        if (one_in_(8))
             add_flag(o_ptr->art_flags, TR_KILL_EVIL);
-        } else {
+        else
             add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
-        }
-        if (!o_ptr->artifact_bias && one_in_(2))
+        
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(2)) {
             o_ptr->artifact_bias = BIAS_LAW;
-        else if (!o_ptr->artifact_bias && one_in_(9))
+            break;
+        }
+        
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
             o_ptr->artifact_bias = BIAS_PRIESTLY;
+
         break;
     case 5:
     case 6:
-        if (one_in_(4)) {
+        if (one_in_(4))
             add_flag(o_ptr->art_flags, TR_KILL_UNDEAD);
-        } else {
+        else
             add_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
-        }
-        if (!o_ptr->artifact_bias && one_in_(9))
+        
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
             o_ptr->artifact_bias = BIAS_PRIESTLY;
+
         break;
     case 7:
     case 8:
-        if (one_in_(4)) {
+        if (one_in_(4))
             add_flag(o_ptr->art_flags, TR_KILL_DEMON);
-        } else {
+        else
             add_flag(o_ptr->art_flags, TR_SLAY_DEMON);
-        }
-        if (!o_ptr->artifact_bias && one_in_(9))
+        
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
             o_ptr->artifact_bias = BIAS_PRIESTLY;
+
         break;
     case 9:
     case 10:
-        if (one_in_(4)) {
+        if (one_in_(4))
             add_flag(o_ptr->art_flags, TR_KILL_ORC);
-        } else {
+        else
             add_flag(o_ptr->art_flags, TR_SLAY_ORC);
-        }
+        
         break;
     case 11:
     case 12:
-        if (one_in_(4)) {
+        if (one_in_(4))
             add_flag(o_ptr->art_flags, TR_KILL_TROLL);
-        } else {
+        else
             add_flag(o_ptr->art_flags, TR_SLAY_TROLL);
-        }
+        
         break;
     case 13:
     case 14:
-        if (one_in_(4)) {
+        if (one_in_(4))
             add_flag(o_ptr->art_flags, TR_KILL_GIANT);
-        } else {
+        else
             add_flag(o_ptr->art_flags, TR_SLAY_GIANT);
-        }
-
+        
         break;
     case 15:
     case 16:
@@ -261,12 +266,15 @@ void random_slay(object_type *o_ptr)
         break;
     case 18:
     case 19:
-        if (o_ptr->tval == TV_SWORD) {
-            add_flag(o_ptr->art_flags, TR_VORPAL);
-            if (!o_ptr->artifact_bias && one_in_(9))
-                o_ptr->artifact_bias = BIAS_WARRIOR;
-        } else
+        if (o_ptr->tval != TV_SWORD) {
             random_slay(o_ptr);
+            break;
+        }
+
+        add_flag(o_ptr->art_flags, TR_VORPAL);
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
+            o_ptr->artifact_bias = BIAS_WARRIOR;
+
         break;
     case 20:
         add_flag(o_ptr->art_flags, TR_IMPACT);
@@ -274,60 +282,73 @@ void random_slay(object_type *o_ptr)
     case 21:
     case 22:
         add_flag(o_ptr->art_flags, TR_BRAND_FIRE);
-        if (!o_ptr->artifact_bias)
+        if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_FIRE;
+
         break;
     case 23:
     case 24:
         add_flag(o_ptr->art_flags, TR_BRAND_COLD);
-        if (!o_ptr->artifact_bias)
+        if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_COLD;
+
         break;
     case 25:
     case 26:
         add_flag(o_ptr->art_flags, TR_BRAND_ELEC);
-        if (!o_ptr->artifact_bias)
+        if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_ELEC;
+
         break;
     case 27:
     case 28:
         add_flag(o_ptr->art_flags, TR_BRAND_ACID);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_ACID;
+
         break;
     case 29:
     case 30:
         add_flag(o_ptr->art_flags, TR_BRAND_POIS);
-        if (!o_ptr->artifact_bias && !one_in_(3))
+        if ((o_ptr->artifact_bias == BIAS_NONE) && !one_in_(3)) {
             o_ptr->artifact_bias = BIAS_POIS;
-        else if (!o_ptr->artifact_bias && one_in_(6))
+            break;
+        }
+        
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(6)) {
             o_ptr->artifact_bias = BIAS_NECROMANTIC;
-        else if (!o_ptr->artifact_bias)
+            break;
+        }
+        
+        if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_ROGUE;
+
         break;
     case 31:
         add_flag(o_ptr->art_flags, TR_VAMPIRIC);
-        if (!o_ptr->artifact_bias)
+        if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_NECROMANTIC;
+
         break;
     case 32:
         add_flag(o_ptr->art_flags, TR_FORCE_WEAPON);
-        if (!o_ptr->artifact_bias)
+        if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = (one_in_(2) ? BIAS_MAGE : BIAS_PRIESTLY);
+
         break;
     case 33:
     case 34:
-        if (one_in_(4)) {
+        if (one_in_(4))
             add_flag(o_ptr->art_flags, TR_KILL_HUMAN);
-        } else {
+        else
             add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
-        }
-
+        
         break;
     default:
         add_flag(o_ptr->art_flags, TR_CHAOTIC);
-        if (!o_ptr->artifact_bias)
+        if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_CHAOS;
+
         break;
     }
 }
