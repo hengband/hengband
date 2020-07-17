@@ -114,6 +114,20 @@ static void suggest_haggle_offer(haggle_type *haggle_ptr)
     }
 }
 
+static void final_haggle_offer(haggle_type *haggle_ptr)
+{
+    haggle_ptr->final = TRUE;
+    haggle_ptr->cur_ask = haggle_ptr->final_ask;
+    haggle_ptr->pmt = _("最終提示価格", "What do you offer? ");
+    haggle_ptr->annoyed++;
+    if (haggle_ptr->annoyed <= 3)
+        return;
+
+    (void)increase_insults();
+    haggle_ptr->cancel = TRUE;
+    haggle_ptr->flag = TRUE;
+}
+
 /*!
  * @brief プレイヤーが購入する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
@@ -159,17 +173,9 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
             x3 = 0;
         haggle_ptr->cur_ask -= x3;
 
-        if (haggle_ptr->cur_ask < haggle_ptr->final_ask) {
-            haggle_ptr->final = TRUE;
-            haggle_ptr->cur_ask = haggle_ptr->final_ask;
-            haggle_ptr->pmt = _("最終提示価格", "What do you offer? ");
-            haggle_ptr->annoyed++;
-            if (haggle_ptr->annoyed > 3) {
-                (void)increase_insults();
-                haggle_ptr->cancel = TRUE;
-                haggle_ptr->flag = TRUE;
-            }
-        } else if (haggle_ptr->offer >= haggle_ptr->cur_ask) {
+        if (haggle_ptr->cur_ask < haggle_ptr->final_ask)
+            final_haggle_offer(haggle_ptr);
+        else if (haggle_ptr->offer >= haggle_ptr->cur_ask) {
             haggle_ptr->flag = TRUE;
             haggle_ptr->price = haggle_ptr->offer;
         }
