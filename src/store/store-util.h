@@ -36,8 +36,11 @@ typedef struct store_type {
 extern int cur_store_num;
 extern store_type *st_ptr;
 
+typedef bool (*black_market_crap_pf)(player_type *, object_type *);
+typedef bool (*store_will_buy_pf)(player_type *, object_type *);
+typedef void (*mass_produce_pf)(player_type *, object_type *);
 void store_delete(void);
-void store_create(player_type *player_ptr, bool (*black_market_crap)(player_type *, object_type *), bool (*store_will_buy)(player_type *, object_type *));
+void store_create(player_type *player_ptr, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce);
 void store_item_increase(INVENTORY_IDX item, int num);
 void store_item_optimize(INVENTORY_IDX item);
 int store_carry(player_type *player_ptr, object_type *o_ptr);

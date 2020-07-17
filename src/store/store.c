@@ -317,7 +317,7 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num)
         j = st_ptr->stock_size - 1;
 
     while (st_ptr->stock_num < j)
-        store_create(player_ptr, black_market_crap, store_will_buy);
+        store_create(player_ptr, black_market_crap, store_will_buy, mass_produce);
 }
 
 /*!

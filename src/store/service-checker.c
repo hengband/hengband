@@ -2,10 +2,12 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
 #include "object-enchant/tr-types.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-flags.h"
 #include "object/object-value.h"
 #include "store/store-util.h"
 #include "sv-definition/sv-potion-types.h"
+#include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -215,4 +217,161 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
         return FALSE;
 
     return !object_value(player_ptr, o_ptr) <= 0;
+}
+
+/*!
+ * @brief 安価な消耗品の販売数を増やし、低確率で割引にする /
+ * Certain "cheap" objects should be created in "piles"
+ * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
+ * @return なし
+ * @details
+ * <pre>
+ * Some objects can be sold at a "discount" (in small piles)
+ * </pre>
+ */
+void mass_produce(player_type *player_ptr, object_type *o_ptr)
+{
+    int size = 1;
+    PRICE cost = object_value(player_ptr, o_ptr);
+    switch (o_ptr->tval) {
+    case TV_FOOD:
+    case TV_FLASK:
+    case TV_LITE: {
+        if (cost <= 5L)
+            size += damroll(3, 5);
+
+        if (cost <= 20L)
+            size += damroll(3, 5);
+
+        if (cost <= 50L)
+            size += damroll(2, 2);
+
+        break;
+    }
+    case TV_POTION:
+    case TV_SCROLL: {
+        if (cost <= 60L)
+            size += damroll(3, 5);
+
+        if (cost <= 240L)
+            size += damroll(1, 5);
+
+        if (o_ptr->sval == SV_SCROLL_STAR_IDENTIFY)
+            size += damroll(3, 5);
+
+        if (o_ptr->sval == SV_SCROLL_STAR_REMOVE_CURSE)
+            size += damroll(1, 4);
+
+        break;
+    }
+    case TV_LIFE_BOOK:
+    case TV_SORCERY_BOOK:
+    case TV_NATURE_BOOK:
+    case TV_CHAOS_BOOK:
+    case TV_DEATH_BOOK:
+    case TV_TRUMP_BOOK:
+    case TV_ARCANE_BOOK:
+    case TV_CRAFT_BOOK:
+    case TV_DEMON_BOOK:
+    case TV_CRUSADE_BOOK:
+    case TV_MUSIC_BOOK:
+    case TV_HISSATSU_BOOK:
+    case TV_HEX_BOOK: {
+        if (cost <= 50L)
+            size += damroll(2, 3);
+
+        if (cost <= 500L)
+            size += damroll(1, 3);
+
+        break;
+    }
+    case TV_SOFT_ARMOR:
+    case TV_HARD_ARMOR:
+    case TV_SHIELD:
+    case TV_GLOVES:
+    case TV_BOOTS:
+    case TV_CLOAK:
+    case TV_HELM:
+    case TV_CROWN:
+    case TV_SWORD:
+    case TV_POLEARM:
+    case TV_HAFTED:
+    case TV_DIGGING:
+    case TV_BOW: {
+        if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
+            break;
+
+        if (cost <= 10L)
+            size += damroll(3, 5);
+
+        if (cost <= 100L)
+            size += damroll(3, 5);
+
+        break;
+    }
+    case TV_SPIKE:
+    case TV_SHOT:
+    case TV_ARROW:
+    case TV_BOLT: {
+        if (cost <= 5L)
+            size += damroll(5, 5);
+
+        if (cost <= 50L)
+            size += damroll(5, 5);
+
+        if (cost <= 500L)
+            size += damroll(5, 5);
+
+        break;
+    }
+    case TV_FIGURINE: {
+        if (cost <= 100L)
+            size += damroll(2, 2);
+
+        if (cost <= 1000L)
+            size += damroll(2, 2);
+
+        break;
+    }
+    case TV_CAPTURE:
+    case TV_STATUE:
+    case TV_CARD: {
+        size = 1;
+        break;
+    }
+    case TV_ROD:
+    case TV_WAND:
+    case TV_STAFF: {
+        if ((cur_store_num != STORE_BLACK) || !one_in_(3))
+            break;
+
+        if (cost < 1601L)
+            size += damroll(1, 5);
+        else if (cost < 3201L)
+            size += damroll(1, 3);
+
+        break;
+    }
+    }
+
+    DISCOUNT_RATE discount = 0;
+    if (cost < 5) {
+        discount = 0;
+    } else if (one_in_(25)) {
+        discount = 25;
+    } else if (one_in_(150)) {
+        discount = 50;
+    } else if (one_in_(300)) {
+        discount = 75;
+    } else if (one_in_(500)) {
+        discount = 90;
+    }
+
+    if (o_ptr->art_name)
+        discount = 0;
+
+    o_ptr->discount = discount;
+    o_ptr->number = size - (size * discount / 100);
+    if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
+        o_ptr->pval *= (PARAMETER_VALUE)o_ptr->number;
 }
