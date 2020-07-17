@@ -155,6 +155,27 @@ static bool check_store_magic(object_type *o_ptr)
     }
 }
 
+static bool check_store_book(object_type *o_ptr)
+{
+    switch (o_ptr->tval) {
+    case TV_SORCERY_BOOK:
+    case TV_NATURE_BOOK:
+    case TV_CHAOS_BOOK:
+    case TV_DEATH_BOOK:
+    case TV_LIFE_BOOK:
+    case TV_TRUMP_BOOK:
+    case TV_ARCANE_BOOK:
+    case TV_CRAFT_BOOK:
+    case TV_DEMON_BOOK:
+    case TV_CRUSADE_BOOK:
+    case TV_MUSIC_BOOK:
+    case TV_HEX_BOOK:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief オブジェクトが所定の店舗で引き取れるかどうかを返す /
  * Determine if the current store will purchase the given item
@@ -201,27 +222,11 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
             return FALSE;
 
         break;
-    case STORE_BOOK: {
-        switch (o_ptr->tval) {
-        case TV_SORCERY_BOOK:
-        case TV_NATURE_BOOK:
-        case TV_CHAOS_BOOK:
-        case TV_DEATH_BOOK:
-        case TV_LIFE_BOOK:
-        case TV_TRUMP_BOOK:
-        case TV_ARCANE_BOOK:
-        case TV_CRAFT_BOOK:
-        case TV_DEMON_BOOK:
-        case TV_CRUSADE_BOOK:
-        case TV_MUSIC_BOOK:
-        case TV_HEX_BOOK:
-            break;
-        default:
+    case STORE_BOOK:
+        if (!check_store_book(o_ptr))
             return FALSE;
-        }
 
         break;
-    }
     }
 
     return !object_value(player_ptr, o_ptr) <= 0;
