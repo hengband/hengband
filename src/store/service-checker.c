@@ -126,6 +126,35 @@ static bool check_store_alchemist(object_type *o_ptr)
     }
 }
 
+static bool check_store_magic(object_type *o_ptr)
+{
+    switch (o_ptr->tval) {
+    case TV_SORCERY_BOOK:
+    case TV_NATURE_BOOK:
+    case TV_CHAOS_BOOK:
+    case TV_DEATH_BOOK:
+    case TV_TRUMP_BOOK:
+    case TV_ARCANE_BOOK:
+    case TV_CRAFT_BOOK:
+    case TV_DEMON_BOOK:
+    case TV_MUSIC_BOOK:
+    case TV_HEX_BOOK:
+    case TV_AMULET:
+    case TV_RING:
+    case TV_STAFF:
+    case TV_WAND:
+    case TV_ROD:
+    case TV_SCROLL:
+    case TV_POTION:
+    case TV_FIGURINE:
+        return TRUE;
+    case TV_HAFTED:
+        return o_ptr->sval == SV_WIZSTAFF;
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief オブジェクトが所定の店舗で引き取れるかどうかを返す /
  * Determine if the current store will purchase the given item
@@ -167,39 +196,11 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
             return FALSE;
 
         break;
-    case STORE_MAGIC: {
-        switch (o_ptr->tval) {
-        case TV_SORCERY_BOOK:
-        case TV_NATURE_BOOK:
-        case TV_CHAOS_BOOK:
-        case TV_DEATH_BOOK:
-        case TV_TRUMP_BOOK:
-        case TV_ARCANE_BOOK:
-        case TV_CRAFT_BOOK:
-        case TV_DEMON_BOOK:
-        case TV_MUSIC_BOOK:
-        case TV_HEX_BOOK:
-        case TV_AMULET:
-        case TV_RING:
-        case TV_STAFF:
-        case TV_WAND:
-        case TV_ROD:
-        case TV_SCROLL:
-        case TV_POTION:
-        case TV_FIGURINE:
-            break;
-        case TV_HAFTED: {
-            if (o_ptr->sval == SV_WIZSTAFF)
-                break;
-            else
-                return FALSE;
-        }
-        default:
+    case STORE_MAGIC:
+        if (!check_store_magic(o_ptr))
             return FALSE;
-        }
 
         break;
-    }
     case STORE_BOOK: {
         switch (o_ptr->tval) {
         case TV_SORCERY_BOOK:
