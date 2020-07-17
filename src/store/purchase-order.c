@@ -32,6 +32,27 @@
 #include "view/display-store.h"
 #include "world/world.h"
 
+typedef struct haggle_type {
+    object_type *o_ptr;
+    s32b *price;
+    s32b cur_ask;
+    s32b final_ask;
+    int noneed;
+    bool final;
+    concptr pmt;
+} haggle_type;
+
+static haggle_type *initialize_haggle_type(player_type *player_ptr, haggle_type *haggle_ptr, object_type *o_ptr, s32b *price)
+{
+    haggle_ptr->o_ptr = o_ptr;
+    haggle_ptr->price = price;
+    haggle_ptr->cur_ask = price_item(player_ptr, o_ptr, ot_ptr->max_inflate, FALSE);
+    haggle_ptr->final_ask = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
+    haggle_ptr->noneed = noneedtobargain(haggle_ptr->final_ask);
+    haggle_ptr->final = FALSE;
+    haggle_ptr->pmt = _("提示価格", "Asking");
+}
+
 /*!
  * @brief プレイヤーが購入する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
@@ -43,28 +64,25 @@
  */
 static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *price)
 {
-    s32b cur_ask = price_item(player_ptr, o_ptr, ot_ptr->max_inflate, FALSE);
-    s32b final_ask = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
-    int noneed = noneedtobargain(final_ask);
-    bool final = FALSE;
-    concptr pmt = _("提示価格", "Asking");
-    if (noneed || !manual_haggle) {
-        if (noneed) {
+    haggle_type tmp_haggle;
+    haggle_type *haggle_ptr = initialize_haggle_type(player_ptr, &tmp_haggle, o_ptr, price);
+    if (haggle_ptr->noneed || !manual_haggle) {
+        if (haggle_ptr->noneed) {
             msg_print(_("結局この金額にまとまった。", "You eventually agree upon the price."));
             msg_print(NULL);
         } else {
             msg_print(_("すんなりとこの金額にまとまった。", "You quickly agree upon the price."));
             msg_print(NULL);
-            final_ask += final_ask / 10;
+            haggle_ptr->final_ask += haggle_ptr->final_ask / 10;
         }
 
-        cur_ask = final_ask;
-        pmt = _("最終提示価格", "Final Offer");
-        final = TRUE;
+        haggle_ptr->cur_ask = haggle_ptr->final_ask;
+        haggle_ptr->pmt = _("最終提示価格", "Final Offer");
+        haggle_ptr->final = TRUE;
     }
 
-    cur_ask *= o_ptr->number;
-    final_ask *= o_ptr->number;
+    haggle_ptr->cur_ask *= o_ptr->number;
+    haggle_ptr->final_ask *= o_ptr->number;
     s32b min_per = ot_ptr->haggle_per;
     s32b max_per = min_per * 3;
     s32b last_offer = object_value(player_ptr, o_ptr) * o_ptr->number;
@@ -83,15 +101,15 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
 
         while (!flag && loop_flag) {
             char out_val[160];
-            (void)sprintf(out_val, "%s :  %ld", pmt, (long)cur_ask);
+            (void)sprintf(out_val, "%s :  %ld", haggle_ptr->pmt, (long)haggle_ptr->cur_ask);
             put_str(out_val, 1, 0);
-            cancel = receive_offer(_("提示する金額? ", "What do you offer? "), &offer, last_offer, 1, cur_ask, final);
+            cancel = receive_offer(_("提示する金額? ", "What do you offer? "), &offer, last_offer, 1, haggle_ptr->cur_ask, haggle_ptr->final);
             if (cancel) {
                 flag = TRUE;
-            } else if (offer > cur_ask) {
+            } else if (offer > haggle_ptr->cur_ask) {
                 say_comment_6();
                 offer = last_offer;
-            } else if (offer == cur_ask) {
+            } else if (offer == haggle_ptr->cur_ask) {
                 flag = TRUE;
                 *price = offer;
             } else {
@@ -102,7 +120,7 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
         if (flag)
             continue;
 
-        s32b x1 = 100 * (offer - last_offer) / (cur_ask - last_offer);
+        s32b x1 = 100 * (offer - last_offer) / (haggle_ptr->cur_ask - last_offer);
         if (x1 < min_per) {
             if (haggle_insults()) {
                 flag = TRUE;
@@ -115,22 +133,22 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
         }
 
         s32b x2 = rand_range(x1 - 2, x1 + 2);
-        s32b x3 = ((cur_ask - offer) * x2 / 100L) + 1;
+        s32b x3 = ((haggle_ptr->cur_ask - offer) * x2 / 100L) + 1;
         if (x3 < 0)
             x3 = 0;
-        cur_ask -= x3;
+        haggle_ptr->cur_ask -= x3;
 
-        if (cur_ask < final_ask) {
-            final = TRUE;
-            cur_ask = final_ask;
-            pmt = _("最終提示価格", "What do you offer? ");
+        if (haggle_ptr->cur_ask < haggle_ptr->final_ask) {
+            haggle_ptr->final = TRUE;
+            haggle_ptr->cur_ask = haggle_ptr->final_ask;
+            haggle_ptr->pmt = _("最終提示価格", "What do you offer? ");
             annoyed++;
             if (annoyed > 3) {
                 (void)increase_insults();
                 cancel = TRUE;
                 flag = TRUE;
             }
-        } else if (offer >= cur_ask) {
+        } else if (offer >= haggle_ptr->cur_ask) {
             flag = TRUE;
             *price = offer;
         }
@@ -144,13 +162,13 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
         char out_val[160];
         (void)sprintf(out_val, _("前回の提示金額: $%ld", "Your last offer: %ld"), (long)last_offer);
         put_str(out_val, 1, 39);
-        say_comment_2(cur_ask, annoyed);
+        say_comment_2(haggle_ptr->cur_ask, annoyed);
     }
 
     if (cancel)
         return TRUE;
 
-    updatebargain(*price, final_ask, o_ptr->number);
+    updatebargain(*price, haggle_ptr->final_ask, o_ptr->number);
     return FALSE;
 }
 
