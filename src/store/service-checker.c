@@ -378,6 +378,26 @@ static int switch_mass_production(object_type *o_ptr, const PRICE cost)
     }
 }
 
+static DISCOUNT_RATE decide_discount_rate(const PRICE cost)
+{
+    if (cost < 5)
+        return 0;
+    
+    if (one_in_(25))
+        return 25;
+    
+    if (one_in_(150))
+        return 50;
+    
+    if (one_in_(300))
+        return 75;
+    
+    if (one_in_(500))
+        return 90;
+
+    return 0;
+}
+
 /*!
  * @brief 安価な消耗品の販売数を増やし、低確率で割引にする /
  * Certain "cheap" objects should be created in "piles"
@@ -392,19 +412,7 @@ void mass_produce(player_type *player_ptr, object_type *o_ptr)
 {
     const PRICE cost = object_value(player_ptr, o_ptr);
     int size = switch_mass_production(o_ptr, cost);
-    DISCOUNT_RATE discount = 0;
-    if (cost < 5) {
-        discount = 0;
-    } else if (one_in_(25)) {
-        discount = 25;
-    } else if (one_in_(150)) {
-        discount = 50;
-    } else if (one_in_(300)) {
-        discount = 75;
-    } else if (one_in_(500)) {
-        discount = 90;
-    }
-
+    DISCOUNT_RATE discount = decide_discount_rate(cost);
     if (o_ptr->art_name)
         discount = 0;
 
