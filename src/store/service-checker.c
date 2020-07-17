@@ -87,6 +87,34 @@ static bool check_store_weapon(object_type *o_ptr)
     }
 }
 
+static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
+{
+    switch (o_ptr->tval) {
+    case TV_LIFE_BOOK:
+    case TV_CRUSADE_BOOK:
+    case TV_SCROLL:
+    case TV_POTION:
+    case TV_HAFTED:
+        return TRUE;
+    case TV_FIGURINE:
+    case TV_STATUE: {
+        monster_race *r_ptr = &r_info[o_ptr->pval];
+        if (!(r_ptr->flags3 & RF3_EVIL))
+            if (((r_ptr->flags3 & RF3_GOOD) != 0) || ((r_ptr->flags3 & RF3_ANIMAL) != 0) || (angband_strchr("?!", r_ptr->d_char) != '\0'))
+                return TRUE;
+    }
+        /* Fall through */
+    case TV_POLEARM:
+    case TV_SWORD:
+        if (is_blessed_item(player_ptr, o_ptr))
+            return TRUE;
+
+        /* Fall through */
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief オブジェクトが所定の店舗で引き取れるかどうかを返す /
  * Determine if the current store will purchase the given item
@@ -118,34 +146,11 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
             return FALSE;
 
         break;
-    case STORE_TEMPLE: {
-        switch (o_ptr->tval) {
-        case TV_LIFE_BOOK:
-        case TV_CRUSADE_BOOK:
-        case TV_SCROLL:
-        case TV_POTION:
-        case TV_HAFTED:
-            break;
-        case TV_FIGURINE:
-        case TV_STATUE: {
-            monster_race *r_ptr = &r_info[o_ptr->pval];
-            if (!(r_ptr->flags3 & RF3_EVIL))
-                if (((r_ptr->flags3 & RF3_GOOD) != 0) || ((r_ptr->flags3 & RF3_ANIMAL) != 0) || (angband_strchr("?!", r_ptr->d_char) != '\0'))
-                    break;
-        }
-            /* Fall through */
-        case TV_POLEARM:
-        case TV_SWORD: {
-            if (is_blessed_item(player_ptr, o_ptr))
-                break;
-        }
-            /* Fall through */
-        default:
+    case STORE_TEMPLE:
+        if (!check_store_temple(player_ptr, o_ptr))
             return FALSE;
-        }
 
         break;
-    }
     case STORE_ALCHEMIST: {
         switch (o_ptr->tval) {
         case TV_SCROLL:
