@@ -81,7 +81,7 @@ int home_carry(player_type *player_ptr, object_type *o_ptr)
     return slot;
 }
 
-static bool exe_reorder_store_items(object_type *o_ptr, object_type *j_ptr, const int max_num, const int i, bool *combined)
+static bool exe_combine_store_items(object_type *o_ptr, object_type *j_ptr, const int max_num, const int i, bool *combined)
 {
     if (o_ptr->number + j_ptr->number <= max_num)
         return FALSE;
@@ -95,6 +95,37 @@ static bool exe_reorder_store_items(object_type *o_ptr, object_type *j_ptr, cons
     object_wipe(&st_ptr->stock[k]);
     *combined = TRUE;
     return TRUE;
+}
+
+static void exe_reorder_store_item(object_type *o_ptr, const int i, bool *combined)
+{
+    for (int j = 0; j < i; j++) {
+        object_type *j_ptr;
+        j_ptr = &st_ptr->stock[j];
+        if (!j_ptr->k_idx)
+            continue;
+
+        int max_num = object_similar_part(j_ptr, o_ptr);
+        if (max_num == 0 || j_ptr->number >= max_num)
+            continue;
+
+        if (exe_combine_store_items(o_ptr, j_ptr, max_num, i, combined))
+            break;
+
+        ITEM_NUMBER old_num = o_ptr->number;
+        ITEM_NUMBER remain = j_ptr->number + o_ptr->number - max_num;
+        object_absorb(j_ptr, o_ptr);
+        o_ptr->number = remain;
+        if (o_ptr->tval == TV_ROD) {
+            o_ptr->pval = o_ptr->pval * remain / old_num;
+            o_ptr->timeout = o_ptr->timeout * remain / old_num;
+        } else if (o_ptr->tval == TV_WAND) {
+            o_ptr->pval = o_ptr->pval * remain / old_num;
+        }
+
+        *combined = TRUE;
+        break;
+    }
 }
 
 /*!
@@ -124,33 +155,7 @@ bool combine_and_reorder_home(player_type *player_ptr, const int store_num)
             if (!o_ptr->k_idx)
                 continue;
 
-            for (int j = 0; j < i; j++) {
-                object_type *j_ptr;
-                j_ptr = &st_ptr->stock[j];
-                if (!j_ptr->k_idx)
-                    continue;
-
-                int max_num = object_similar_part(j_ptr, o_ptr);
-                if (max_num == 0 || j_ptr->number >= max_num)
-                    continue;
-
-                if (exe_reorder_store_items(o_ptr, j_ptr, max_num, i, &combined))
-                    break;
-
-                ITEM_NUMBER old_num = o_ptr->number;
-                ITEM_NUMBER remain = j_ptr->number + o_ptr->number - max_num;
-                object_absorb(j_ptr, o_ptr);
-                o_ptr->number = remain;
-                if (o_ptr->tval == TV_ROD) {
-                    o_ptr->pval = o_ptr->pval * remain / old_num;
-                    o_ptr->timeout = o_ptr->timeout * remain / old_num;
-                } else if (o_ptr->tval == TV_WAND) {
-                    o_ptr->pval = o_ptr->pval * remain / old_num;
-                }
-
-                combined = TRUE;
-                break;
-            }
+            exe_reorder_store_item(o_ptr, i, &combined);
         }
 
         flag |= combined;
