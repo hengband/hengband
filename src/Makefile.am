@@ -656,6 +656,7 @@ hengband_SOURCES = \
 	store/rumor.c store/rumor.h \
 	store/say-comments.c store/say-comments.h \
 	store/sell-order.c store/sell-order.h \
+	store/service-checker.c store/service-checker.h \
 	store/store-util.c store/store-util.h \
 	store/store-owners.c store/store-owners.h \
 	store/store-owner-comments.c store/store-owner-comments.h \

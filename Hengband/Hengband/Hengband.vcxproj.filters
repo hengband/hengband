@@ -1778,6 +1778,9 @@
     <ClCompile Include="..\..\src\store\pricing.c">
       <Filter>store</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\store\service-checker.c">
+      <Filter>store</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3872,6 +3875,9 @@
       <Filter>store</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\store\pricing.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\service-checker.h">
       <Filter>store</Filter>
     </ClInclude>
   </ItemGroup>

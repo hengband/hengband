@@ -20,6 +20,7 @@
 #include "player/player-class.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/object-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"

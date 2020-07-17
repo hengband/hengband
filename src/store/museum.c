@@ -1,10 +1,11 @@
 ﻿#include "store/museum.h"
-#include "store/store.h"
-#include "store/store-util.h"
-#include "view/display-messages.h"
-#include "flavor/flavor-describer.h"
 #include "core/asking-player.h"
+#include "flavor/flavor-describer.h"
 #include "store/home.h"
+#include "store/store-util.h"
+#include "store/store.h"
+#include "system/object-type-definition.h"
+#include "view/display-messages.h"
 #include "view/display-store.h"
 
 /*!

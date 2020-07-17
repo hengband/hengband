@@ -24,6 +24,7 @@
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "store/black-market.h"
+#include "store/service-checker.h"
 #include "store/store-util.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
@@ -316,7 +317,7 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num)
         j = st_ptr->stock_size - 1;
 
     while (st_ptr->stock_num < j)
-        store_create(player_ptr, black_market_crap);
+        store_create(player_ptr, black_market_crap, store_will_buy);
 }
 
 /*!
