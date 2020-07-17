@@ -128,6 +128,17 @@ static void final_haggle_offer(haggle_type *haggle_ptr)
     haggle_ptr->flag = TRUE;
 }
 
+static void show_last_haggle_offer(haggle_type *haggle_ptr)
+{
+    haggle_ptr->last_offer = haggle_ptr->offer;
+    allow_inc = TRUE;
+    prt("", 1, 0);
+    char out_val[160];
+    (void)sprintf(out_val, _("前回の提示金額: $%ld", "Your last offer: %ld"), (long)haggle_ptr->last_offer);
+    put_str(out_val, 1, 39);
+    say_comment_2(haggle_ptr->cur_ask, haggle_ptr->annoyed);
+}
+
 /*!
  * @brief プレイヤーが購入する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
@@ -183,13 +194,7 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
         if (haggle_ptr->flag)
             continue;
 
-        haggle_ptr->last_offer = haggle_ptr->offer;
-        allow_inc = TRUE;
-        prt("", 1, 0);
-        char out_val[160];
-        (void)sprintf(out_val, _("前回の提示金額: $%ld", "Your last offer: %ld"), (long)haggle_ptr->last_offer);
-        put_str(out_val, 1, 39);
-        say_comment_2(haggle_ptr->cur_ask, haggle_ptr->annoyed);
+        show_last_haggle_offer();
     }
 
     if (haggle_ptr->cancel)
