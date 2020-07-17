@@ -224,24 +224,16 @@ void store_sell(player_type *owner_ptr)
     q_ptr = &forge;
     object_copy(q_ptr, o_ptr);
     q_ptr->number = amt;
-
-    /*
-     * Hack -- If a rod or wand, allocate total maximum
-     * timeouts or charges to those being sold. -LM-
-     */
     if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
         q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(owner_ptr, o_name, q_ptr, 0);
-
-    /* Remove any inscription, feeling for stores */
     if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM)) {
         q_ptr->inscription = 0;
         q_ptr->feeling = FEEL_NONE;
     }
 
-    /* Is there room in the store (or the home?) */
     if (!store_check_num(q_ptr)) {
         if (cur_store_num == STORE_HOME)
             msg_print(_("我が家にはもう置く場所がない。", "Your home is full."));
@@ -284,14 +276,8 @@ void store_sell(player_type *owner_ptr)
             object_copy(q_ptr, o_ptr);
             q_ptr->number = amt;
             q_ptr->ident |= IDENT_STORE;
-
-            /*
-             * Hack -- If a rod or wand, let the shopkeeper know just
-             * how many charges he really paid for. -LM-
-             */
-            if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND)) {
+            if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
                 q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
-            }
 
             value = object_value(owner_ptr, q_ptr) * q_ptr->number;
             describe_flavor(owner_ptr, o_name, q_ptr, 0);
@@ -300,14 +286,9 @@ void store_sell(player_type *owner_ptr)
             if (record_sell)
                 exe_write_diary(owner_ptr, DIARY_SELL, 0, o_name);
 
-            if (!((o_ptr->tval == TV_FIGURINE) && (value > 0))) {
+            if (!((o_ptr->tval == TV_FIGURINE) && (value > 0)))
                 purchase_analyze(owner_ptr, price, value, dummy);
-            }
 
-            /*
-             * Hack -- Allocate charges between those wands or rods sold
-             * and retained, unless all are being sold. -LM-
-             */
             distribute_charges(o_ptr, q_ptr, amt);
             q_ptr->timeout = 0;
             inven_item_increase(owner_ptr, item, -amt);
@@ -327,12 +308,11 @@ void store_sell(player_type *owner_ptr)
         char o2_name[MAX_NLEN];
         describe_flavor(owner_ptr, o2_name, q_ptr, OD_NAME_ONLY);
 
-        if (-1 == store_check_num(q_ptr)) {
+        if (-1 == store_check_num(q_ptr))
             msg_print(_("それと同じ品物は既に博物館にあるようです。", "The Museum already has one of those items."));
-        } else {
+        else
             msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take back items which have been donated to the Museum!!"));
-        }
-
+        
         if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name)))
             return;
 
