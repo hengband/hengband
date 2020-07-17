@@ -97,7 +97,7 @@ static bool exe_combine_store_items(object_type *o_ptr, object_type *j_ptr, cons
     return TRUE;
 }
 
-static void exe_reorder_store_item(object_type *o_ptr, const int i, bool *combined)
+static void sweep_reorder_store_item(object_type *o_ptr, const int i, bool *combined)
 {
     for (int j = 0; j < i; j++) {
         object_type *j_ptr;
@@ -128,6 +128,35 @@ static void exe_reorder_store_item(object_type *o_ptr, const int i, bool *combin
     }
 }
 
+static void exe_reorder_store_item(player_type *player_ptr, bool *flag)
+{
+    for (int i = 0; i < st_ptr->stock_num; i++) {
+        object_type *o_ptr;
+        o_ptr = &st_ptr->stock[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        s32b o_value = object_value(player_ptr, o_ptr);
+        int j;
+        for (j = 0; j < st_ptr->stock_num; j++)
+            if (object_sort_comp(player_ptr, o_ptr, o_value, &st_ptr->stock[j]))
+                break;
+
+        if (j >= i)
+            continue;
+
+        *flag = TRUE;
+        object_type *j_ptr;
+        object_type forge;
+        j_ptr = &forge;
+        object_copy(j_ptr, &st_ptr->stock[i]);
+        for (int k = i; k > j; k--)
+            object_copy(&st_ptr->stock[k], &st_ptr->stock[k - 1]);
+
+        object_copy(&st_ptr->stock[j], j_ptr);
+    }
+}
+
 /*!
  * @brief 現在の町の指定された店舗のアイテムを整理する /
  * Combine and reorder items in store.
@@ -155,38 +184,13 @@ bool combine_and_reorder_home(player_type *player_ptr, const int store_num)
             if (!o_ptr->k_idx)
                 continue;
 
-            exe_reorder_store_item(o_ptr, i, &combined);
+            sweep_reorder_store_item(o_ptr, i, &combined);
         }
 
         flag |= combined;
     }
 
-    for (int i = 0; i < st_ptr->stock_num; i++) {
-        object_type *o_ptr;
-        o_ptr = &st_ptr->stock[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        s32b o_value = object_value(player_ptr, o_ptr);
-        int j;
-        for (j = 0; j < st_ptr->stock_num; j++)
-            if (object_sort_comp(player_ptr, o_ptr, o_value, &st_ptr->stock[j]))
-                break;
-
-        if (j >= i)
-            continue;
-
-        flag = TRUE;
-        object_type *j_ptr;
-        object_type forge;
-        j_ptr = &forge;
-        object_copy(j_ptr, &st_ptr->stock[i]);
-        for (int k = i; k > j; k--)
-            object_copy(&st_ptr->stock[k], &st_ptr->stock[k - 1]);
-
-        object_copy(&st_ptr->stock[j], j_ptr);
-    }
-
+    exe_reorder_store_item(player_ptr, &flag);
     st_ptr = old_st_ptr;
     if (store_num != STORE_HOME) {
         stack_force_notes = old_stack_force_notes;
