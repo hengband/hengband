@@ -58,6 +58,7 @@ static haggle_type *initialize_haggle_type(player_type *player_ptr, haggle_type 
     haggle_ptr->noneed = noneedtobargain(haggle_ptr->final_ask);
     haggle_ptr->final = FALSE;
     haggle_ptr->pmt = _("提示価格", "Asking");
+    return haggle_ptr;
 }
 
 static void settle_haggle_result(haggle_type *haggle_ptr)
@@ -117,7 +118,7 @@ static void suggest_haggle_offer(haggle_type *haggle_ptr)
             haggle_ptr->offer = haggle_ptr->last_offer;
         } else if (haggle_ptr->offer == haggle_ptr->cur_ask) {
             haggle_ptr->flag = TRUE;
-            haggle_ptr->price = haggle_ptr->offer;
+            *haggle_ptr->price = haggle_ptr->offer;
         } else {
             loop_flag = FALSE;
         }
@@ -192,7 +193,7 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
             final_haggle_offer(haggle_ptr);
         else if (haggle_ptr->offer >= haggle_ptr->cur_ask) {
             haggle_ptr->flag = TRUE;
-            haggle_ptr->price = haggle_ptr->offer;
+            *haggle_ptr->price = haggle_ptr->offer;
         }
 
         if (haggle_ptr->flag)
@@ -232,7 +233,7 @@ static bool show_store_select_item(COMMAND_CODE *item, const int i)
     }
 #endif
 
-    return get_stock(item, out_val, 0, i - 1);
+    return get_stock(item, out_val, 0, i - 1) != 0;
 }
 
 static bool process_purchase_result(player_type *player_ptr, object_type *o_ptr, object_type *j_ptr, COMMAND_CODE *item_new,const int amt, int *i, const COMMAND_CODE item)
@@ -268,6 +269,23 @@ static bool process_purchase_result(player_type *player_ptr, object_type *o_ptr,
     display_store_inventory(player_ptr);
     chg_virtue(player_ptr, V_SACRIFICE, 1);
     return TRUE;
+}
+
+static void shuffle_store(player_type *player_ptr)
+{
+    if (!one_in_(STORE_SHUFFLE)) {
+        msg_print(_("店主は新たな在庫を取り出した。", "The shopkeeper brings out some new stock."));
+        return;
+    }
+
+    char buf[80];
+    msg_print(_("店主は引退した。", "The shopkeeper retires."));
+    store_shuffle(player_ptr, cur_store_num);
+    prt("", 3, 0);
+    sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[ot_ptr->owner_race].title);
+    put_str(buf, 3, 10);
+    sprintf(buf, "%s (%ld)", (f_name + f_info[cur_store_feat].name), (long)(ot_ptr->max_cost));
+    prt(buf, 3, 50);
 }
 
 /*!
@@ -408,32 +426,17 @@ void store_purchase(player_type *player_ptr)
     describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
     autopick_alter_item(player_ptr, item_new, FALSE);
-    if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND)) {
+    if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
         o_ptr->pval -= j_ptr->pval;
-    }
 
     handle_stuff(player_ptr);
     i = st_ptr->stock_num;
     store_item_increase(item, -amt);
     store_item_optimize(item);
     if (st_ptr->stock_num == 0) {
-        if (one_in_(STORE_SHUFFLE)) {
-            char buf[80];
-            msg_print(_("店主は引退した。", "The shopkeeper retires."));
-            store_shuffle(player_ptr, cur_store_num);
-
-            prt("", 3, 0);
-            sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[ot_ptr->owner_race].title);
-            put_str(buf, 3, 10);
-            sprintf(buf, "%s (%ld)", (f_name + f_info[cur_store_feat].name), (long)(ot_ptr->max_cost));
-            prt(buf, 3, 50);
-        } else {
-            msg_print(_("店主は新たな在庫を取り出した。", "The shopkeeper brings out some new stock."));
-        }
-
-        for (i = 0; i < 10; i++) {
+        shuffle_store(player_ptr);
+        for (int j = 0; j < 10; j++)
             store_maintenance(player_ptr, player_ptr->town_num, cur_store_num);
-        }
 
         store_top = 0;
         display_store_inventory(player_ptr);
