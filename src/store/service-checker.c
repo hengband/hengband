@@ -176,6 +176,28 @@ static bool check_store_book(object_type *o_ptr)
     }
 }
 
+static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
+{
+    switch (cur_store_num) {
+    case STORE_GENERAL:
+        return check_store_general(o_ptr);
+    case STORE_ARMOURY:
+        return check_store_armoury(o_ptr);
+    case STORE_WEAPON:
+        return check_store_weapon(o_ptr);
+    case STORE_TEMPLE:
+        return check_store_temple(player_ptr, o_ptr);
+    case STORE_ALCHEMIST:
+        return check_store_alchemist(o_ptr);
+    case STORE_MAGIC:
+        return check_store_magic(o_ptr);
+    case STORE_BOOK:
+        return check_store_book(o_ptr);
+    default:
+        return TRUE;
+    }
+}
+
 /*!
  * @brief オブジェクトが所定の店舗で引き取れるかどうかを返す /
  * Determine if the current store will purchase the given item
@@ -186,48 +208,11 @@ static bool check_store_book(object_type *o_ptr)
  */
 bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
     if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM))
         return TRUE;
 
-    switch (cur_store_num) {
-    case STORE_GENERAL:
-        if (!check_store_general(o_ptr))
-            return FALSE;
-
-        break;
-    case STORE_ARMOURY:
-        if (!check_store_armoury(o_ptr))
-            return FALSE;
-
-        break;
-    case STORE_WEAPON:
-        if (!check_store_weapon(o_ptr))
-            return FALSE;
-
-        break;
-    case STORE_TEMPLE:
-        if (!check_store_temple(player_ptr, o_ptr))
-            return FALSE;
-
-        break;
-    case STORE_ALCHEMIST:
-        if (!check_store_alchemist(o_ptr))
-            return FALSE;
-
-        break;
-    case STORE_MAGIC:
-        if (!check_store_magic(o_ptr))
-            return FALSE;
-
-        break;
-    case STORE_BOOK:
-        if (!check_store_book(o_ptr))
-            return FALSE;
-
-        break;
-    }
+    if (!switch_store_check(player_ptr, o_ptr))
+        return FALSE;
 
     return !object_value(player_ptr, o_ptr) <= 0;
 }
