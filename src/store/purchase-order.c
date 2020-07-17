@@ -43,6 +43,10 @@ typedef struct haggle_type {
     s32b min_per;
     s32b max_per;
     s32b last_offer;
+    s32b offer;
+    bool flag;
+    int annoyed;
+    bool cancel;
 } haggle_type;
 
 static haggle_type *initialize_haggle_type(player_type *player_ptr, haggle_type *haggle_ptr, object_type *o_ptr, s32b *price)
@@ -87,6 +91,29 @@ static void decide_haggle_offer(player_type *player_ptr, haggle_type *haggle_ptr
         haggle_ptr->last_offer = 1;
 }
 
+static void suggest_haggle_offer(haggle_type *haggle_ptr)
+{
+    bool loop_flag = TRUE;
+    while (!haggle_ptr->flag && loop_flag) {
+        char out_val[160];
+        (void)sprintf(out_val, "%s :  %ld", haggle_ptr->pmt, (long)haggle_ptr->cur_ask);
+        put_str(out_val, 1, 0);
+        haggle_ptr->cancel
+            = receive_offer(_("提示する金額? ", "What do you offer? "), &haggle_ptr->offer, haggle_ptr->last_offer, 1, haggle_ptr->cur_ask, haggle_ptr->final);
+        if (haggle_ptr->cancel) {
+            haggle_ptr->flag = TRUE;
+        } else if (haggle_ptr->offer > haggle_ptr->cur_ask) {
+            say_comment_6();
+            haggle_ptr->offer = haggle_ptr->last_offer;
+        } else if (haggle_ptr->offer == haggle_ptr->cur_ask) {
+            haggle_ptr->flag = TRUE;
+            haggle_ptr->price = haggle_ptr->offer;
+        } else {
+            loop_flag = FALSE;
+        }
+    }
+}
+
 /*!
  * @brief プレイヤーが購入する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
@@ -103,41 +130,22 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
     settle_haggle_result(haggle_ptr);
     decide_haggle_offer(player_ptr, haggle_ptr);
 
-    s32b offer = 0;
+    haggle_ptr->offer = 0;
     allow_inc = FALSE;
-    bool flag = FALSE;
-    int annoyed = 0;
-    bool cancel = FALSE;
-    *price = 0;
-    while (!flag) {
-        bool loop_flag = TRUE;
-
-        while (!flag && loop_flag) {
-            char out_val[160];
-            (void)sprintf(out_val, "%s :  %ld", haggle_ptr->pmt, (long)haggle_ptr->cur_ask);
-            put_str(out_val, 1, 0);
-            cancel = receive_offer(_("提示する金額? ", "What do you offer? "), &offer, haggle_ptr->last_offer, 1, haggle_ptr->cur_ask, haggle_ptr->final);
-            if (cancel) {
-                flag = TRUE;
-            } else if (offer > haggle_ptr->cur_ask) {
-                say_comment_6();
-                offer = haggle_ptr->last_offer;
-            } else if (offer == haggle_ptr->cur_ask) {
-                flag = TRUE;
-                *price = offer;
-            } else {
-                loop_flag = FALSE;
-            }
-        }
-
-        if (flag)
+    haggle_ptr->flag = FALSE;
+    haggle_ptr->annoyed = 0;
+    haggle_ptr->cancel = FALSE;
+    haggle_ptr->price = 0;
+    while (!haggle_ptr->flag) {
+        suggest_haggle_offer(haggle_ptr);
+        if (haggle_ptr->flag)
             continue;
 
-        s32b x1 = 100 * (offer - haggle_ptr->last_offer) / (haggle_ptr->cur_ask - haggle_ptr->last_offer);
+        s32b x1 = 100 * (haggle_ptr->offer - haggle_ptr->last_offer) / (haggle_ptr->cur_ask - haggle_ptr->last_offer);
         if (x1 < haggle_ptr->min_per) {
             if (haggle_insults()) {
-                flag = TRUE;
-                cancel = TRUE;
+                haggle_ptr->flag = TRUE;
+                haggle_ptr->cancel = TRUE;
             }
         } else if (x1 > haggle_ptr->max_per) {
             x1 = x1 * 3 / 4;
@@ -146,7 +154,7 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
         }
 
         s32b x2 = rand_range(x1 - 2, x1 + 2);
-        s32b x3 = ((haggle_ptr->cur_ask - offer) * x2 / 100L) + 1;
+        s32b x3 = ((haggle_ptr->cur_ask - haggle_ptr->offer) * x2 / 100L) + 1;
         if (x3 < 0)
             x3 = 0;
         haggle_ptr->cur_ask -= x3;
@@ -155,30 +163,30 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
             haggle_ptr->final = TRUE;
             haggle_ptr->cur_ask = haggle_ptr->final_ask;
             haggle_ptr->pmt = _("最終提示価格", "What do you offer? ");
-            annoyed++;
-            if (annoyed > 3) {
+            haggle_ptr->annoyed++;
+            if (haggle_ptr->annoyed > 3) {
                 (void)increase_insults();
-                cancel = TRUE;
-                flag = TRUE;
+                haggle_ptr->cancel = TRUE;
+                haggle_ptr->flag = TRUE;
             }
-        } else if (offer >= haggle_ptr->cur_ask) {
-            flag = TRUE;
-            *price = offer;
+        } else if (haggle_ptr->offer >= haggle_ptr->cur_ask) {
+            haggle_ptr->flag = TRUE;
+            haggle_ptr->price = haggle_ptr->offer;
         }
 
-        if (flag)
+        if (haggle_ptr->flag)
             continue;
 
-        haggle_ptr->last_offer = offer;
+        haggle_ptr->last_offer = haggle_ptr->offer;
         allow_inc = TRUE;
         prt("", 1, 0);
         char out_val[160];
         (void)sprintf(out_val, _("前回の提示金額: $%ld", "Your last offer: %ld"), (long)haggle_ptr->last_offer);
         put_str(out_val, 1, 39);
-        say_comment_2(haggle_ptr->cur_ask, annoyed);
+        say_comment_2(haggle_ptr->cur_ask, haggle_ptr->annoyed);
     }
 
-    if (cancel)
+    if (haggle_ptr->cancel)
         return TRUE;
 
     updatebargain(*price, haggle_ptr->final_ask, o_ptr->number);
