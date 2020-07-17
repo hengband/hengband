@@ -176,12 +176,14 @@ bool receive_offer(concptr pmt, s32b *poffer, s32b last_offer, int factor, PRICE
     while (TRUE) {
         if (!get_haggle(pmt, poffer, price, final))
             return TRUE;
+
         if (((*poffer) * factor) >= (last_offer * factor))
             break;
+
         if (haggle_insults())
             return TRUE;
 
-        (*poffer) = last_offer;
+        *poffer = last_offer;
     }
 
     return FALSE;
