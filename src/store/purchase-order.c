@@ -1,6 +1,4 @@
 ﻿#include "store/purchase-order.h"
-#include "object/object-info.h"
-#include "object/object-value.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
@@ -15,9 +13,11 @@
 #include "main/sound-of-music.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
-#include "perception/object-perception.h"
 #include "object/object-generator.h"
+#include "object/object-info.h"
 #include "object/object-stack.h"
+#include "object/object-value.h"
+#include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "player/race-info-table.h"
 #include "store/home.h"
@@ -235,6 +235,41 @@ static bool show_store_select_item(COMMAND_CODE *item, const int i)
     return get_stock(item, out_val, 0, i - 1);
 }
 
+static bool process_purchase_result(player_type *player_ptr, object_type *o_ptr, object_type *j_ptr, COMMAND_CODE *item_new,const int amt, int *i, const COMMAND_CODE item)
+{
+    if (cur_store_num == STORE_HOME)
+        return FALSE;
+
+    bool combined_or_reordered;
+    distribute_charges(o_ptr, j_ptr, amt);
+    *item_new = store_item_to_inventory(player_ptr, j_ptr);
+    GAME_TEXT o_name[MAX_NLEN];
+    describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[*item_new], 0);
+    msg_format(_("%s(%c)を取った。", "You have %s (%c)."), o_name, index_to_label(*item_new));
+    handle_stuff(player_ptr);
+    *i = st_ptr->stock_num;
+    store_item_increase(item, -amt);
+    store_item_optimize(item);
+    combined_or_reordered = combine_and_reorder_home(player_ptr, STORE_HOME);
+    if (*i == st_ptr->stock_num) {
+        if (combined_or_reordered)
+            display_store_inventory(player_ptr);
+        else
+            display_entry(player_ptr, item);
+
+        return TRUE;
+    }
+
+    if (st_ptr->stock_num == 0)
+        store_top = 0;
+    else if (store_top >= st_ptr->stock_num)
+        store_top -= store_bottom;
+
+    display_store_inventory(player_ptr);
+    chg_virtue(player_ptr, V_SACRIFICE, 1);
+    return TRUE;
+}
+
 /*!
  * @brief 店からの購入処理のメインルーチン /
  * Buy an item from a store 			-RAK-
@@ -309,40 +344,11 @@ void store_purchase(player_type *player_ptr)
         return;
     }
 
-    int choice;
     COMMAND_CODE item_new;
-    if (cur_store_num == STORE_HOME) {
-        bool combined_or_reordered;
-        distribute_charges(o_ptr, j_ptr, amt);
-        item_new = store_item_to_inventory(player_ptr, j_ptr);
-        GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
-
-        msg_format(_("%s(%c)を取った。", "You have %s (%c)."), o_name, index_to_label(item_new));
-        handle_stuff(player_ptr);
-
-        i = st_ptr->stock_num;
-        store_item_increase(item, -amt);
-        store_item_optimize(item);
-        combined_or_reordered = combine_and_reorder_home(player_ptr, STORE_HOME);
-        if (i == st_ptr->stock_num) {
-            if (combined_or_reordered)
-                display_store_inventory(player_ptr);
-            else
-                display_entry(player_ptr, item);
-        } else {
-            if (st_ptr->stock_num == 0)
-                store_top = 0;
-            else if (store_top >= st_ptr->stock_num)
-                store_top -= store_bottom;
-            display_store_inventory(player_ptr);
-
-            chg_virtue(player_ptr, V_SACRIFICE, 1);
-        }
-
+    if (process_purchase_result(player_ptr, o_ptr, j_ptr, &item_new, amt, &i, item))
         return;
-    }
 
+    int choice;
     PRICE price;
     if (o_ptr->ident & (IDENT_FIXED)) {
         choice = 0;
