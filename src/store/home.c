@@ -81,13 +81,29 @@ int home_carry(player_type *player_ptr, object_type *o_ptr)
     return slot;
 }
 
+static bool exe_reorder_store_items(object_type *o_ptr, object_type *j_ptr, const int max_num, const int i, bool *combined)
+{
+    if (o_ptr->number + j_ptr->number <= max_num)
+        return FALSE;
+
+    object_absorb(j_ptr, o_ptr);
+    st_ptr->stock_num--;
+    int k;
+    for (k = i; k < st_ptr->stock_num; k++)
+        st_ptr->stock[k] = st_ptr->stock[k + 1];
+
+    object_wipe(&st_ptr->stock[k]);
+    *combined = TRUE;
+    return TRUE;
+}
+
 /*!
  * @brief 現在の町の指定された店舗のアイテムを整理する /
  * Combine and reorder items in store.
  * @param store_num 店舗ID
  * @return 実際に整理が行われたならばTRUEを返す。
  */
-bool combine_and_reorder_home(player_type *player_ptr, int store_num)
+bool combine_and_reorder_home(player_type *player_ptr, const int store_num)
 {
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
@@ -114,26 +130,12 @@ bool combine_and_reorder_home(player_type *player_ptr, int store_num)
                 if (!j_ptr->k_idx)
                     continue;
 
-                /*
-                 * Get maximum number of the stack if these
-                 * are similar, get zero otherwise.
-                 */
                 int max_num = object_similar_part(j_ptr, o_ptr);
                 if (max_num == 0 || j_ptr->number >= max_num)
                     continue;
 
-                if (o_ptr->number + j_ptr->number <= max_num) {
-                    object_absorb(j_ptr, o_ptr);
-                    st_ptr->stock_num--;
-                    int k;
-                    for (k = i; k < st_ptr->stock_num; k++) {
-                        st_ptr->stock[k] = st_ptr->stock[k + 1];
-                    }
-
-                    object_wipe(&st_ptr->stock[k]);
-                    combined = TRUE;
+                if (exe_reorder_store_items(o_ptr, j_ptr, max_num, i, &combined))
                     break;
-                }
 
                 ITEM_NUMBER old_num = o_ptr->number;
                 ITEM_NUMBER remain = j_ptr->number + o_ptr->number - max_num;
