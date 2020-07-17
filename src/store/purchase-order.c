@@ -288,6 +288,29 @@ static void shuffle_store(player_type *player_ptr)
     prt(buf, 3, 50);
 }
 
+static void switch_store_stock(player_type *player_ptr, const int i, const COMMAND_CODE item)
+{
+    if (st_ptr->stock_num == 0) {
+        shuffle_store(player_ptr);
+        for (int j = 0; j < 10; j++)
+            store_maintenance(player_ptr, player_ptr->town_num, cur_store_num);
+
+        store_top = 0;
+        display_store_inventory(player_ptr);
+        return;
+    }
+    
+    if (st_ptr->stock_num != i) {
+        if (store_top >= st_ptr->stock_num)
+            store_top -= store_bottom;
+
+        display_store_inventory(player_ptr);
+        return;
+    }
+
+    display_entry(player_ptr, item);
+}
+
 /*!
  * @brief 店からの購入処理のメインルーチン /
  * Buy an item from a store 			-RAK-
@@ -433,18 +456,5 @@ void store_purchase(player_type *player_ptr)
     i = st_ptr->stock_num;
     store_item_increase(item, -amt);
     store_item_optimize(item);
-    if (st_ptr->stock_num == 0) {
-        shuffle_store(player_ptr);
-        for (int j = 0; j < 10; j++)
-            store_maintenance(player_ptr, player_ptr->town_num, cur_store_num);
-
-        store_top = 0;
-        display_store_inventory(player_ptr);
-    } else if (st_ptr->stock_num != i) {
-        if (store_top >= st_ptr->stock_num)
-            store_top -= store_bottom;
-        display_store_inventory(player_ptr);
-    } else {
-        display_entry(player_ptr, item);
-    }
+    switch_store_stock(player_ptr, i, item);
 }
