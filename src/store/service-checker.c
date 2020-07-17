@@ -219,6 +219,107 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
     return !object_value(player_ptr, o_ptr) <= 0;
 }
 
+static int mass_lite_produce(const PRICE cost)
+{
+    int size = 1;
+    if (cost <= 5L)
+        size += damroll(3, 5);
+
+    if (cost <= 20L)
+        size += damroll(3, 5);
+
+    if (cost <= 50L)
+        size += damroll(2, 2);
+
+    return size;
+}
+
+static int mass_scroll_produce(object_type *o_ptr, const PRICE cost)
+{
+    int size = 1;
+    if (cost <= 60L)
+        size += damroll(3, 5);
+
+    if (cost <= 240L)
+        size += damroll(1, 5);
+
+    if (o_ptr->sval == SV_SCROLL_STAR_IDENTIFY)
+        size += damroll(3, 5);
+
+    if (o_ptr->sval == SV_SCROLL_STAR_REMOVE_CURSE)
+        size += damroll(1, 4);
+
+    return size;
+}
+
+static int mass_book_produce(const PRICE cost)
+{
+    int size = 1;
+    if (cost <= 50L)
+        size += damroll(2, 3);
+
+    if (cost <= 500L)
+        size += damroll(1, 3);
+
+    return size;
+}
+
+static int mass_equipment_produce(object_type *o_ptr, const PRICE cost)
+{
+    int size = 1;
+    if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
+        return size;
+
+    if (cost <= 10L)
+        size += damroll(3, 5);
+
+    if (cost <= 100L)
+        size += damroll(3, 5);
+
+    return size;
+}
+
+static int mass_arrow_produce(const PRICE cost)
+{
+    int size = 1;
+    if (cost <= 5L)
+        size += damroll(5, 5);
+
+    if (cost <= 50L)
+        size += damroll(5, 5);
+
+    if (cost <= 500L)
+        size += damroll(5, 5);
+
+    return size;
+}
+
+static int mass_figurine_produce(const PRICE cost)
+{
+    int size = 1;
+    if (cost <= 100L)
+        size += damroll(2, 2);
+
+    if (cost <= 1000L)
+        size += damroll(2, 2);
+
+    return size;
+}
+
+static int mass_magic_produce(const PRICE cost)
+{
+    int size = 1;
+    if ((cur_store_num != STORE_BLACK) || !one_in_(3))
+        return size;
+
+    if (cost < 1601L)
+        size += damroll(1, 5);
+    else if (cost < 3201L)
+        size += damroll(1, 3);
+
+    return size;
+}
+
 /*!
  * @brief 安価な消耗品の販売数を増やし、低確率で割引にする /
  * Certain "cheap" objects should be created in "piles"
@@ -231,39 +332,18 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
  */
 void mass_produce(player_type *player_ptr, object_type *o_ptr)
 {
-    int size = 1;
-    PRICE cost = object_value(player_ptr, o_ptr);
+    int size;
+    const PRICE cost = object_value(player_ptr, o_ptr);
     switch (o_ptr->tval) {
     case TV_FOOD:
     case TV_FLASK:
-    case TV_LITE: {
-        if (cost <= 5L)
-            size += damroll(3, 5);
-
-        if (cost <= 20L)
-            size += damroll(3, 5);
-
-        if (cost <= 50L)
-            size += damroll(2, 2);
-
+    case TV_LITE:
+        size = mass_lite_produce(cost);
         break;
-    }
     case TV_POTION:
-    case TV_SCROLL: {
-        if (cost <= 60L)
-            size += damroll(3, 5);
-
-        if (cost <= 240L)
-            size += damroll(1, 5);
-
-        if (o_ptr->sval == SV_SCROLL_STAR_IDENTIFY)
-            size += damroll(3, 5);
-
-        if (o_ptr->sval == SV_SCROLL_STAR_REMOVE_CURSE)
-            size += damroll(1, 4);
-
+    case TV_SCROLL:
+        size = mass_scroll_produce(o_ptr, cost);
         break;
-    }
     case TV_LIFE_BOOK:
     case TV_SORCERY_BOOK:
     case TV_NATURE_BOOK:
@@ -276,15 +356,9 @@ void mass_produce(player_type *player_ptr, object_type *o_ptr)
     case TV_CRUSADE_BOOK:
     case TV_MUSIC_BOOK:
     case TV_HISSATSU_BOOK:
-    case TV_HEX_BOOK: {
-        if (cost <= 50L)
-            size += damroll(2, 3);
-
-        if (cost <= 500L)
-            size += damroll(1, 3);
-
+    case TV_HEX_BOOK:
+        size = mass_book_produce(cost);
         break;
-    }
     case TV_SOFT_ARMOR:
     case TV_HARD_ARMOR:
     case TV_SHIELD:
@@ -297,42 +371,18 @@ void mass_produce(player_type *player_ptr, object_type *o_ptr)
     case TV_POLEARM:
     case TV_HAFTED:
     case TV_DIGGING:
-    case TV_BOW: {
-        if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
-            break;
-
-        if (cost <= 10L)
-            size += damroll(3, 5);
-
-        if (cost <= 100L)
-            size += damroll(3, 5);
-
+    case TV_BOW:
+        size = mass_equipment_produce(o_ptr, cost);
         break;
-    }
     case TV_SPIKE:
     case TV_SHOT:
     case TV_ARROW:
-    case TV_BOLT: {
-        if (cost <= 5L)
-            size += damroll(5, 5);
-
-        if (cost <= 50L)
-            size += damroll(5, 5);
-
-        if (cost <= 500L)
-            size += damroll(5, 5);
-
+    case TV_BOLT:
+        size = mass_arrow_produce(cost);
         break;
-    }
-    case TV_FIGURINE: {
-        if (cost <= 100L)
-            size += damroll(2, 2);
-
-        if (cost <= 1000L)
-            size += damroll(2, 2);
-
+    case TV_FIGURINE:
+        size = mass_figurine_produce(cost);
         break;
-    }
     case TV_CAPTURE:
     case TV_STATUE:
     case TV_CARD: {
@@ -341,17 +391,12 @@ void mass_produce(player_type *player_ptr, object_type *o_ptr)
     }
     case TV_ROD:
     case TV_WAND:
-    case TV_STAFF: {
-        if ((cur_store_num != STORE_BLACK) || !one_in_(3))
-            break;
-
-        if (cost < 1601L)
-            size += damroll(1, 5);
-        else if (cost < 3201L)
-            size += damroll(1, 3);
-
+    case TV_STAFF:
+        size = mass_magic_produce(cost);
         break;
-    }
+    default:
+        size = 1;
+        break;
     }
 
     DISCOUNT_RATE discount = 0;
