@@ -115,6 +115,17 @@ static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
     }
 }
 
+static bool check_store_alchemist(object_type *o_ptr)
+{
+    switch (o_ptr->tval) {
+    case TV_SCROLL:
+    case TV_POTION:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief オブジェクトが所定の店舗で引き取れるかどうかを返す /
  * Determine if the current store will purchase the given item
@@ -151,17 +162,11 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
             return FALSE;
 
         break;
-    case STORE_ALCHEMIST: {
-        switch (o_ptr->tval) {
-        case TV_SCROLL:
-        case TV_POTION:
-            break;
-        default:
+    case STORE_ALCHEMIST:
+        if (!check_store_alchemist(o_ptr))
             return FALSE;
-        }
 
         break;
-    }
     case STORE_MAGIC: {
         switch (o_ptr->tval) {
         case TV_SORCERY_BOOK:
