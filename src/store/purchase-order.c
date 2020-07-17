@@ -91,6 +91,16 @@ static void decide_haggle_offer(player_type *player_ptr, haggle_type *haggle_ptr
         haggle_ptr->last_offer = 1;
 }
 
+static void initialize_haggle_offer(haggle_type *haggle_ptr)
+{
+    haggle_ptr->offer = 0;
+    allow_inc = FALSE;
+    haggle_ptr->flag = FALSE;
+    haggle_ptr->annoyed = 0;
+    haggle_ptr->cancel = FALSE;
+    haggle_ptr->price = 0;
+}
+
 static void suggest_haggle_offer(haggle_type *haggle_ptr)
 {
     bool loop_flag = TRUE;
@@ -154,13 +164,7 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
     haggle_type *haggle_ptr = initialize_haggle_type(player_ptr, &tmp_haggle, o_ptr, price);
     settle_haggle_result(haggle_ptr);
     decide_haggle_offer(player_ptr, haggle_ptr);
-
-    haggle_ptr->offer = 0;
-    allow_inc = FALSE;
-    haggle_ptr->flag = FALSE;
-    haggle_ptr->annoyed = 0;
-    haggle_ptr->cancel = FALSE;
-    haggle_ptr->price = 0;
+    initialize_haggle_offer(haggle_ptr);
     while (!haggle_ptr->flag) {
         suggest_haggle_offer(haggle_ptr);
         if (haggle_ptr->flag)
@@ -194,7 +198,7 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
         if (haggle_ptr->flag)
             continue;
 
-        show_last_haggle_offer();
+        show_last_haggle_offer(haggle_ptr);
     }
 
     if (haggle_ptr->cancel)
@@ -202,6 +206,33 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
 
     updatebargain(*price, haggle_ptr->final_ask, o_ptr->number);
     return FALSE;
+}
+
+static bool show_store_select_item(COMMAND_CODE *item, const int i)
+{
+    char out_val[160];
+#ifdef JP
+    /* ブラックマーケットの時は別のメッセージ */
+    switch (cur_store_num) {
+    case 7:
+        sprintf(out_val, "どのアイテムを取りますか? ");
+        break;
+    case 6:
+        sprintf(out_val, "どれ? ");
+        break;
+    default:
+        sprintf(out_val, "どの品物が欲しいんだい? ");
+        break;
+    }
+#else
+    if (cur_store_num == STORE_HOME) {
+        sprintf(out_val, "Which item do you want to take? ");
+    } else {
+        sprintf(out_val, "Which item are you interested in? ");
+    }
+#endif
+
+    return get_stock(item, out_val, 0, i - 1);
 }
 
 /*!
@@ -229,30 +260,8 @@ void store_purchase(player_type *player_ptr)
     if (i > store_bottom)
         i = store_bottom;
 
-    char out_val[160];
-#ifdef JP
-    /* ブラックマーケットの時は別のメッセージ */
-    switch (cur_store_num) {
-    case 7:
-        sprintf(out_val, "どのアイテムを取りますか? ");
-        break;
-    case 6:
-        sprintf(out_val, "どれ? ");
-        break;
-    default:
-        sprintf(out_val, "どの品物が欲しいんだい? ");
-        break;
-    }
-#else
-    if (cur_store_num == STORE_HOME) {
-        sprintf(out_val, "Which item do you want to take? ");
-    } else {
-        sprintf(out_val, "Which item are you interested in? ");
-    }
-#endif
-
     COMMAND_CODE item;
-    if (!get_stock(&item, out_val, 0, i - 1))
+    if (!show_store_select_item(&item, i))
         return;
 
     item = item + store_top;
@@ -302,7 +311,6 @@ void store_purchase(player_type *player_ptr)
 
     int choice;
     COMMAND_CODE item_new;
-    PRICE price;
     if (cur_store_num == STORE_HOME) {
         bool combined_or_reordered;
         distribute_charges(o_ptr, j_ptr, amt);
@@ -335,6 +343,7 @@ void store_purchase(player_type *player_ptr)
         return;
     }
 
+    PRICE price;
     if (o_ptr->ident & (IDENT_FIXED)) {
         choice = 0;
         price = (best * j_ptr->number);
