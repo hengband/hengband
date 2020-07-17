@@ -320,30 +320,16 @@ static int mass_magic_produce(const PRICE cost)
     return size;
 }
 
-/*!
- * @brief 安価な消耗品の販売数を増やし、低確率で割引にする /
- * Certain "cheap" objects should be created in "piles"
- * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
- * @return なし
- * @details
- * <pre>
- * Some objects can be sold at a "discount" (in small piles)
- * </pre>
- */
-void mass_produce(player_type *player_ptr, object_type *o_ptr)
+static int switch_mass_production(object_type *o_ptr, const PRICE cost)
 {
-    int size;
-    const PRICE cost = object_value(player_ptr, o_ptr);
     switch (o_ptr->tval) {
     case TV_FOOD:
     case TV_FLASK:
     case TV_LITE:
-        size = mass_lite_produce(cost);
-        break;
+        return mass_lite_produce(cost);
     case TV_POTION:
     case TV_SCROLL:
-        size = mass_scroll_produce(o_ptr, cost);
-        break;
+        return mass_scroll_produce(o_ptr, cost);
     case TV_LIFE_BOOK:
     case TV_SORCERY_BOOK:
     case TV_NATURE_BOOK:
@@ -357,8 +343,7 @@ void mass_produce(player_type *player_ptr, object_type *o_ptr)
     case TV_MUSIC_BOOK:
     case TV_HISSATSU_BOOK:
     case TV_HEX_BOOK:
-        size = mass_book_produce(cost);
-        break;
+        return mass_book_produce(cost);
     case TV_SOFT_ARMOR:
     case TV_HARD_ARMOR:
     case TV_SHIELD:
@@ -372,33 +357,41 @@ void mass_produce(player_type *player_ptr, object_type *o_ptr)
     case TV_HAFTED:
     case TV_DIGGING:
     case TV_BOW:
-        size = mass_equipment_produce(o_ptr, cost);
-        break;
+        return mass_equipment_produce(o_ptr, cost);
     case TV_SPIKE:
     case TV_SHOT:
     case TV_ARROW:
     case TV_BOLT:
-        size = mass_arrow_produce(cost);
-        break;
+        return mass_arrow_produce(cost);
     case TV_FIGURINE:
-        size = mass_figurine_produce(cost);
-        break;
+        return mass_figurine_produce(cost);
     case TV_CAPTURE:
     case TV_STATUE:
-    case TV_CARD: {
-        size = 1;
-        break;
-    }
+    case TV_CARD:
+        return 1;
     case TV_ROD:
     case TV_WAND:
     case TV_STAFF:
-        size = mass_magic_produce(cost);
-        break;
+        return mass_magic_produce(cost);
     default:
-        size = 1;
-        break;
+        return 1;
     }
+}
 
+/*!
+ * @brief 安価な消耗品の販売数を増やし、低確率で割引にする /
+ * Certain "cheap" objects should be created in "piles"
+ * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
+ * @return なし
+ * @details
+ * <pre>
+ * Some objects can be sold at a "discount" (in small piles)
+ * </pre>
+ */
+void mass_produce(player_type *player_ptr, object_type *o_ptr)
+{
+    const PRICE cost = object_value(player_ptr, o_ptr);
+    int size = switch_mass_production(o_ptr, cost);
     DISCOUNT_RATE discount = 0;
     if (cost < 5) {
         discount = 0;
