@@ -23,6 +23,33 @@ static bool is_blessed_item(player_type *player_ptr, object_type *o_ptr)
     return have_flag(flgs, TR_BLESSED);
 }
 
+static bool check_store_general(object_type *o_ptr)
+{
+    switch (o_ptr->tval) {
+    case TV_POTION:
+        if (o_ptr->sval != SV_POTION_WATER)
+            return FALSE;
+    case TV_WHISTLE:
+    case TV_FOOD:
+    case TV_LITE:
+    case TV_FLASK:
+    case TV_SPIKE:
+    case TV_SHOT:
+    case TV_ARROW:
+    case TV_BOLT:
+    case TV_DIGGING:
+    case TV_CLOAK:
+    case TV_BOTTLE:
+    case TV_FIGURINE:
+    case TV_STATUE:
+    case TV_CAPTURE:
+    case TV_CARD:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief オブジェクトが所定の店舗で引き取れるかどうかを返す /
  * Determine if the current store will purchase the given item
@@ -39,34 +66,11 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
         return TRUE;
 
     switch (cur_store_num) {
-    case STORE_GENERAL: {
-        switch (o_ptr->tval) {
-        case TV_POTION:
-            if (o_ptr->sval != SV_POTION_WATER)
-                return FALSE;
-
-        case TV_WHISTLE:
-        case TV_FOOD:
-        case TV_LITE:
-        case TV_FLASK:
-        case TV_SPIKE:
-        case TV_SHOT:
-        case TV_ARROW:
-        case TV_BOLT:
-        case TV_DIGGING:
-        case TV_CLOAK:
-        case TV_BOTTLE:
-        case TV_FIGURINE:
-        case TV_STATUE:
-        case TV_CAPTURE:
-        case TV_CARD:
-            break;
-        default:
+    case STORE_GENERAL:
+        if (!check_store_general(o_ptr))
             return FALSE;
-        }
 
         break;
-    }
     case STORE_ARMOURY: {
         switch (o_ptr->tval) {
         case TV_BOOTS:
