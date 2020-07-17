@@ -50,6 +50,43 @@ static bool check_store_general(object_type *o_ptr)
     }
 }
 
+static bool check_store_armoury(object_type *o_ptr)
+{
+    switch (o_ptr->tval) {
+    case TV_BOOTS:
+    case TV_GLOVES:
+    case TV_CROWN:
+    case TV_HELM:
+    case TV_SHIELD:
+    case TV_CLOAK:
+    case TV_SOFT_ARMOR:
+    case TV_HARD_ARMOR:
+    case TV_DRAG_ARMOR:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+static bool check_store_weapon(object_type *o_ptr)
+{
+    switch (o_ptr->tval) {
+    case TV_SHOT:
+    case TV_BOLT:
+    case TV_ARROW:
+    case TV_BOW:
+    case TV_DIGGING:
+    case TV_POLEARM:
+    case TV_SWORD:
+    case TV_HISSATSU_BOOK:
+        return TRUE;
+    case TV_HAFTED:
+        return o_ptr->sval != SV_WIZSTAFF;
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief オブジェクトが所定の店舗で引き取れるかどうかを返す /
  * Determine if the current store will purchase the given item
@@ -71,46 +108,16 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
             return FALSE;
 
         break;
-    case STORE_ARMOURY: {
-        switch (o_ptr->tval) {
-        case TV_BOOTS:
-        case TV_GLOVES:
-        case TV_CROWN:
-        case TV_HELM:
-        case TV_SHIELD:
-        case TV_CLOAK:
-        case TV_SOFT_ARMOR:
-        case TV_HARD_ARMOR:
-        case TV_DRAG_ARMOR:
-            break;
-        default:
+    case STORE_ARMOURY:
+        if (!check_store_armoury(o_ptr))
             return FALSE;
-        }
 
         break;
-    }
-    case STORE_WEAPON: {
-        switch (o_ptr->tval) {
-        case TV_SHOT:
-        case TV_BOLT:
-        case TV_ARROW:
-        case TV_BOW:
-        case TV_DIGGING:
-        case TV_POLEARM:
-        case TV_SWORD:
-        case TV_HISSATSU_BOOK:
-            break;
-        case TV_HAFTED:
-            if (o_ptr->sval == SV_WIZSTAFF)
-                return FALSE;
-
-            break;
-        default:
+    case STORE_WEAPON:
+        if (!check_store_weapon(o_ptr))
             return FALSE;
-        }
 
         break;
-    }
     case STORE_TEMPLE: {
         switch (o_ptr->tval) {
         case TV_LIFE_BOOK:
