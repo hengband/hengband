@@ -55,11 +55,11 @@ bool allow_inc = FALSE;
  */
 static errr check_free_space(void)
 {
-    if ((cur_store_num == STORE_HOME) && !powerup_home)
-        if (st_ptr->stock_num < ((st_ptr->stock_size) / 10))
-            return 1;
-        else if (st_ptr->stock_num < st_ptr->stock_size)
-            return 1;
+    if ((cur_store_num != STORE_HOME) || powerup_home)
+        return 0;
+
+    if ((st_ptr->stock_num < ((st_ptr->stock_size) / 10)) || (st_ptr->stock_num < st_ptr->stock_size)) 
+        return 1;
 
     return 0;
 }
@@ -92,14 +92,15 @@ int store_check_num(object_type *o_ptr)
 
         for (int i = 0; i < st_ptr->stock_num; i++) {
             j_ptr = &st_ptr->stock[i];
-            if (object_similar(j_ptr, o_ptr)) {
-                if (cur_store_num != STORE_HOME) {
-                    stack_force_notes = old_stack_force_notes;
-                    stack_force_costs = old_stack_force_costs;
-                }
+            if (!object_similar(j_ptr, o_ptr))
+                continue;
 
-                return -1;
+            if (cur_store_num != STORE_HOME) {
+                stack_force_notes = old_stack_force_notes;
+                stack_force_costs = old_stack_force_costs;
             }
+
+            return -1;
         }
 
         if (cur_store_num != STORE_HOME) {
@@ -128,9 +129,8 @@ int store_check_num(object_type *o_ptr)
  */
 int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 {
-    if (repeat_pull(com_val) && (*com_val >= i) && (*com_val <= j)) {
+    if (repeat_pull(com_val) && (*com_val >= i) && (*com_val <= j))
         return TRUE;
-    }
 
     msg_print(NULL);
     *com_val = (-1);
@@ -210,7 +210,6 @@ void store_examine(player_type *player_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, o_ptr, 0);
     msg_format(_("%sを調べている...", "Examining %s..."), o_name);
-
     if (!screen_object(player_ptr, o_ptr, SCROBJ_FORCE_DETAIL))
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
 }
@@ -223,9 +222,7 @@ void store_examine(player_type *player_ptr)
  */
 void store_shuffle(player_type *player_ptr, int which)
 {
-    if (which == STORE_HOME)
-        return;
-    if (which == STORE_MUSEUM)
+    if ((which == STORE_HOME) || (which == STORE_MUSEUM))
         return;
 
     cur_store_num = which;
@@ -235,10 +232,12 @@ void store_shuffle(player_type *player_ptr, int which)
         st_ptr->owner = (byte)randint0(MAX_OWNERS);
         if (j == st_ptr->owner)
             continue;
+
         int i;
         for (i = 1; i < max_towns; i++) {
             if (i == player_ptr->town_num)
                 continue;
+
             if (st_ptr->owner == town_info[i].store[cur_store_num].owner)
                 break;
         }
@@ -295,8 +294,10 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num)
     j = j - randint1(STORE_TURNOVER);
     if (j > STORE_MAX_KEEP)
         j = STORE_MAX_KEEP;
+
     if (j < STORE_MIN_KEEP)
         j = STORE_MIN_KEEP;
+
     if (j < 0)
         j = 0;
 
@@ -307,8 +308,10 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num)
     j = j + randint1(STORE_TURNOVER);
     if (j > STORE_MAX_KEEP)
         j = STORE_MAX_KEEP;
+
     if (j < STORE_MIN_KEEP)
         j = STORE_MIN_KEEP;
+
     if (j >= st_ptr->stock_size)
         j = st_ptr->stock_size - 1;
 
@@ -342,7 +345,6 @@ void store_init(int town_num, int store_num)
     }
 
     ot_ptr = &owners[store_num][st_ptr->owner];
-
     st_ptr->store_open = 0;
     st_ptr->insult_cur = 0;
     st_ptr->good_buy = 0;
