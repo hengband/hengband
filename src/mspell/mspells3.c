@@ -78,24 +78,17 @@
  * @param success TRUEは成功時、FALSEは失敗時の処理を行う
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
+bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = get_pseudo_monstetr_level(caster_ptr);
     PLAYER_LEVEL summon_lev = caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2);
     HIT_POINT damage = 0;
-    bool pet = success;
+    bool pet = success; // read-only.
     bool no_trump = FALSE;
-    BIT_FLAGS p_mode, u_mode = 0L, g_mode;
-
-    if (pet) {
-        p_mode = PM_FORCE_PET;
-        g_mode = 0;
-    } else {
-        p_mode = PM_NO_PET;
-        g_mode = PM_ALLOW_GROUP;
-    }
-
+    BIT_FLAGS p_mode = pet ? PM_FORCE_PET : PM_NO_PET;
+    BIT_FLAGS u_mode = 0L;
+    BIT_FLAGS g_mode = pet ? 0 : PM_ALLOW_GROUP;
     if (!success || (randint1(50 + plev) < plev / 10))
         u_mode = PM_ALLOW_UNIQUE;
 
@@ -108,17 +101,19 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
     case MS_XXX1:
         break;
     case MS_DISPEL: {
-        MONSTER_IDX m_idx;
-
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
-        m_idx = floor_ptr->grid_array[target_row][target_col].m_idx;
+
+        MONSTER_IDX m_idx = floor_ptr->grid_array[target_row][target_col].m_idx;
         if (!m_idx)
             break;
+
         if (!player_has_los_bold(caster_ptr, target_row, target_col))
             break;
+
         if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
             break;
+
         dispel_monster_status(caster_ptr, m_idx);
         break;
     }
@@ -614,12 +609,16 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
+
         if (!floor_ptr->grid_array[target_row][target_col].m_idx)
             break;
+
         if (!player_has_los_bold(caster_ptr, target_row, target_col))
             break;
+
         if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
             break;
+
         m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[target_row][target_col].m_idx];
         r_ptr = &r_info[m_ptr->r_idx];
         monster_desc(caster_ptr, m_name, m_ptr, 0);
@@ -647,11 +646,9 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 
         (void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, 100);
         break;
-
     case MS_TELE_LEVEL:
         return teleport_level_other(caster_ptr);
         break;
-
     case MS_PSY_SPEAR:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
@@ -738,6 +735,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
         } else {
             no_trump = TRUE;
         }
+
         break;
     }
     case MS_S_SPIDER: {
@@ -781,6 +779,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
         } else {
             no_trump = TRUE;
         }
+
         break;
     }
     case MS_S_DEMON: {
@@ -791,6 +790,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
         } else {
             no_trump = TRUE;
         }
+
         break;
     }
     case MS_S_UNDEAD: {
@@ -801,6 +801,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
         } else {
             no_trump = TRUE;
         }
+
         break;
     }
     case MS_S_DRAGON: {
@@ -811,6 +812,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
         } else {
             no_trump = TRUE;
         }
+
         break;
     }
     case MS_S_HI_UNDEAD: {
@@ -821,6 +823,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
         } else {
             no_trump = TRUE;
         }
+
         break;
     }
     case MS_S_HI_DRAGON: {
@@ -831,6 +834,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
         } else {
             no_trump = TRUE;
         }
+
         break;
     }
     case MS_S_AMBERITE: {
@@ -841,6 +845,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
         } else {
             no_trump = TRUE;
         }
+
         break;
     }
     case MS_S_UNIQUE: {
@@ -862,9 +867,8 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
             }
         }
 
-        if (!count) {
+        if (!count)
             no_trump = TRUE;
-        }
 
         break;
     }
@@ -872,9 +876,8 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
         msg_print("hoge?");
     }
 
-    if (no_trump) {
+    if (no_trump)
         msg_print(_("何も現れなかった。", "No one appeared."));
-    }
 
     return TRUE;
 }
