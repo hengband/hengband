@@ -21,6 +21,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-object.h"

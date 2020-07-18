@@ -11,6 +11,7 @@
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
+#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"

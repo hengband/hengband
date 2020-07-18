@@ -17,6 +17,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
+#include "floor/floor.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
