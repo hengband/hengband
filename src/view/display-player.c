@@ -9,7 +9,6 @@
 #include "view/display-player.h"
 #include "dungeon/quest.h"
 #include "floor/floor-util.h"
-#include "floor/floor.h"
 #include "game-option/text-display-options.h"
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
@@ -25,6 +24,7 @@
 #include "realm/realm-names-table.h"
 #include "status-first-page.h"
 #include "system/system-variables.h" // 暫定。後で消す
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"

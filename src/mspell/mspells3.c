@@ -64,6 +64,7 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/experience.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"

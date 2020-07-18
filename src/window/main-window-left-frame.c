@@ -1,5 +1,4 @@
 ﻿#include "window/main-window-left-frame.h"
-#include "floor/floor.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "market/arena-info-table.h"
@@ -7,6 +6,7 @@
 #include "monster/monster-status.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/string-processor.h"

@@ -10,7 +10,6 @@
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
@@ -22,6 +21,7 @@
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "status/experience.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
 

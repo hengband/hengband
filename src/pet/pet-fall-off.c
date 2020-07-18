@@ -18,6 +18,7 @@
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

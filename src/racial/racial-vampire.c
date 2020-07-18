@@ -6,6 +6,7 @@
 #include "io/targeting.h"
 #include "player/digestion-processor.h"
 #include "spell-kind/spells-specific-bolt.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 bool vampirism(player_type *caster_ptr)

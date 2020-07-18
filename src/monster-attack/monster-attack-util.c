@@ -5,7 +5,7 @@
  */
 
 #include "monster-attack/monster-attack-util.h"
-#include "floor/floor.h"
+#include "system/floor-type-definition.h"
 
 monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx)
 {

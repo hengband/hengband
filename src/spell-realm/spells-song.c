@@ -4,7 +4,6 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
@@ -12,6 +11,7 @@
 #include "spell/spell-info.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

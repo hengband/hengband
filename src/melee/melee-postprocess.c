@@ -35,6 +35,7 @@
 #include "player/player-class.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 // Melee-post-process-type

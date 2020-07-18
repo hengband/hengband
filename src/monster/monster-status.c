@@ -8,7 +8,6 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
@@ -54,6 +53,7 @@
 #include "spell-kind/spells-random.h"
 #include "spell/spells-summon.h"
 #include "status/experience.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

@@ -11,6 +11,7 @@
 #include "grid/grid.h"
 #include "io/screen-util.h"
 #include "io/targeting.h"
+#include "system/floor-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-map.h"

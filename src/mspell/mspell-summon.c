@@ -17,6 +17,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /* summoning number */

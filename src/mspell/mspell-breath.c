@@ -10,6 +10,7 @@
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

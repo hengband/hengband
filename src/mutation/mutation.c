@@ -19,7 +19,6 @@
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
-#include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -64,6 +63,7 @@
 #include "spell/spell-types.h"
 #include "status/element-resistance.h"
 #include "status/shape-changer.h"
+#include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 

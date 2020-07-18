@@ -1,12 +1,12 @@
 ﻿#include "savedata/world-loader.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
 #include "floor/wild.h"
 #include "market/bounty.h"
 #include "savedata/angband-version-comparer.h"
 #include "savedata/load-util.h"
 #include "savedata/load-zangband.h"
+#include "system/floor-type-definition.h"
 #include "world/world.h"
 
 static void rd_hengband_dungeons(void)

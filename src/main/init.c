@@ -72,6 +72,7 @@
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
 #include "system/building-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"

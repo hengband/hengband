@@ -3,7 +3,6 @@
 #include "cmd-action/cmd-attack.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "floor/floor.h"
 #include "floor/geometry.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -12,6 +11,7 @@
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

@@ -15,6 +15,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
 #include "grid/feature.h"
@@ -36,6 +37,7 @@
 #include "realm/realm-names-table.h"
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -50,6 +52,17 @@
 wilderness_type **wilderness;
 
 bool generate_encounter;
+
+typedef struct border_type {
+    s16b north[MAX_WID];
+    s16b south[MAX_WID];
+    s16b east[MAX_HGT];
+    s16b west[MAX_HGT];
+    s16b north_west;
+    s16b north_east;
+    s16b south_west;
+    s16b south_east;
+} border_type;
 
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する

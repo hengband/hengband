@@ -10,7 +10,6 @@
 #include "core/player-redraw-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
@@ -26,6 +25,7 @@
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

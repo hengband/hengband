@@ -32,6 +32,7 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
+#include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

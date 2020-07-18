@@ -2,13 +2,13 @@
 #include "action/movement-execution.h"
 #include "action/run-execution.h"
 #include "core/disturbance.h"
-#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "player/player-move.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 travel_type travel;

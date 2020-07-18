@@ -15,6 +15,7 @@
 #include "pet/pet-util.h"
 #include "player/player-race-types.h"
 #include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "world/world.h"
 

@@ -7,6 +7,7 @@
 #include "io/input-key-requester.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
+#include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"

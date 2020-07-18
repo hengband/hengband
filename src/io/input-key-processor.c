@@ -49,6 +49,7 @@
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
+#include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
@@ -76,6 +77,7 @@
 #include "status/action-setter.h"
 #include "store/home.h"
 #include "store/store-util.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"

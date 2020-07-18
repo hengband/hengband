@@ -5,6 +5,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/rooms.h"
+#include "system/floor-type-definition.h"
 #include "wizard/wizard-messages.h"
 
 /*!

@@ -1,8 +1,8 @@
 ﻿#include "main/sound-of-music.h"
-#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/special-options.h"
 #include "main/music-definitions-table.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 
 /*

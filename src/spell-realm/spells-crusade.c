@@ -10,7 +10,6 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
-#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
@@ -19,6 +18,7 @@
 #include "spell/range-calc.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

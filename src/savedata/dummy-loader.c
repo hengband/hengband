@@ -2,6 +2,7 @@
 #include "savedata/angband-version-comparer.h"
 #include "savedata/load-util.h"
 #include "savedata/monster-loader.h"
+#include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 
 /*!

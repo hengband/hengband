@@ -1,10 +1,10 @@
 ﻿#include "core/turn-compensator.h"
 #include "floor/floor-town.h"
-#include "floor/floor.h"
 #include "player/player-race-types.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/floor-type-definition.h"
 #include "world/world.h"
 
 /*!

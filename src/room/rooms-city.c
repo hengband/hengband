@@ -8,6 +8,7 @@
 #include "room/rooms.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 

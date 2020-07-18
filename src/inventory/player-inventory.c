@@ -10,7 +10,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "floor/object-scanner.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/birth-options.h"
@@ -29,6 +28,7 @@
 #include "object/object-mark-types.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-perception.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP

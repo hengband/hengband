@@ -22,6 +22,7 @@
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 typedef enum effect_player_check_result {

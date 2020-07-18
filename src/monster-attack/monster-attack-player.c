@@ -49,6 +49,7 @@
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)

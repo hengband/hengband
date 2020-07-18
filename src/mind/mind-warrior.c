@@ -1,8 +1,8 @@
 ﻿#include "mind/mind-warrior.h"
 #include "cmd-action/cmd-attack.h"
-#include "floor/floor.h"
 #include "io/targeting.h"
 #include "spell-kind/spells-teleport.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

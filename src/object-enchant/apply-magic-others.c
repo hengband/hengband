@@ -7,7 +7,6 @@
 
 #include "object-enchant/apply-magic-others.h"
 #include "artifact/random-art-generator.h"
-#include "floor/floor.h"
 #include "game-option/cheat-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
@@ -23,6 +22,7 @@
 #include "object/object-kind.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

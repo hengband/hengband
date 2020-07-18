@@ -1,5 +1,4 @@
 ﻿#include "spell-realm/spells-trump.h"
-#include "floor/floor.h"
 #include "io/targeting.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
@@ -18,6 +17,7 @@
 #include "spell/spells-summon.h"
 #include "status/base-status.h"
 #include "status/experience.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

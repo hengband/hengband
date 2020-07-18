@@ -6,7 +6,6 @@
 #include "dungeon/quest.h"
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
@@ -25,6 +24,7 @@
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

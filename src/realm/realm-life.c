@@ -1,6 +1,5 @@
 ﻿#include "realm/realm-life.h"
 #include "cmd-action/cmd-spell.h"
-#include "floor/floor.h"
 #include "io/targeting.h"
 #include "player/digestion-processor.h"
 #include "spell-kind/spells-curse-removal.h"
@@ -21,6 +20,7 @@
 #include "status/element-resistance.h"
 #include "status/experience.h"
 #include "status/temporary-resistance.h"
+#include "system/floor-type-definition.h"
 
 /*!
 * @brief 生命領域魔法の各処理を行う

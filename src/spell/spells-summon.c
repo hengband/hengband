@@ -27,6 +27,7 @@
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/floor-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 

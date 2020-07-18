@@ -37,6 +37,7 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 

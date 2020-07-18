@@ -2,6 +2,7 @@
 #include "core/disturbance.h"
 #include "grid/grid.h"
 #include "monster/monster-info.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

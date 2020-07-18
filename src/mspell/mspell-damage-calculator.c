@@ -1,10 +1,10 @@
 ﻿#include "mspell/mspell-damage-calculator.h"
-#include "floor/floor.h"
 #include "inventory/inventory-slot-types.h"
 #include "game-option/birth-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
+#include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 
 /*!

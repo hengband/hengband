@@ -1,7 +1,6 @@
 ﻿#include "inventory/inventory-damage.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
@@ -10,6 +9,7 @@
 #include "object/object-broken.h"
 #include "object/object-info.h"
 #include "object/object-stack.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

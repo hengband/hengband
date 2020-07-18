@@ -1,5 +1,4 @@
 ﻿#include "spell/spell-info.h"
-#include "floor/floor.h"
 #include "io/input-key-requester.h"
 #include "monster-race/monster-race.h"
 #include "player/player-class.h"
@@ -7,6 +6,7 @@
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
 #include "spell/spells-execution.h"
+#include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

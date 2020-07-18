@@ -3886,6 +3886,9 @@
     <ClInclude Include="..\..\src\floor\sight-definitions.h">
       <Filter>floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\floor-type-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

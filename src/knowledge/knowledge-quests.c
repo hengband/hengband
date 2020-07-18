@@ -10,7 +10,6 @@
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/floor.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
 #include "locale/english.h"
@@ -19,6 +18,7 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
 #include "term/screen-processor.h"
 #include "util/angband-files.h"

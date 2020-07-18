@@ -1,7 +1,6 @@
 ﻿#include "savedata/dungeon-loader.h"
 #include "dungeon/quest.h"
 #include "floor/floor-save.h"
-#include "floor/floor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "savedata/angband-version-comparer.h"
@@ -10,6 +9,7 @@
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
 #include "savedata/save.h"
+#include "system/floor-type-definition.h"
 #include "world/world.h"
 
 /*!

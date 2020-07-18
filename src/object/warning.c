@@ -31,6 +31,7 @@
 #include "player/special-defense-types.h"
 #include "spell/spell-types.h"
 #include "status/element-resistance.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

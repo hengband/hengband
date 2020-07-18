@@ -1,7 +1,6 @@
 ﻿#include "savedata/load-zangband.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
 #include "game-option/option-flags.h"
 #include "info-reader/fixed-map-parser.h"
 #include "market/bounty.h"
@@ -18,6 +17,7 @@
 #include "savedata/angband-version-comparer.h"
 #include "savedata/load-util.h"
 #include "spell/spells-status.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "world/world.h"
 

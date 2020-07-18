@@ -55,6 +55,7 @@
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-summon.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);

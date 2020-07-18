@@ -13,6 +13,7 @@
 #include "room/rooms.h"
 #include "spell/process-effect.h" // 暫定、後で消す.
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"

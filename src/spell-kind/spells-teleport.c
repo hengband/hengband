@@ -31,6 +31,7 @@
 #include "player/player-move.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"

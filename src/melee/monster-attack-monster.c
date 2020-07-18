@@ -31,6 +31,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /* todo モンスター共通なので、monster-attack-player.cでも使うはず */

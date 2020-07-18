@@ -79,6 +79,7 @@
 #include "status/element-resistance.h"
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"

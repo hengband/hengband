@@ -7,6 +7,7 @@
 #include "main/sound-of-music.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

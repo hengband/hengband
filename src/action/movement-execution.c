@@ -25,6 +25,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/warning.h"
 #include "player/player-move.h"
+#include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

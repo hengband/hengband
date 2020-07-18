@@ -26,6 +26,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster-floor/monster-remover.h"
+#include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"

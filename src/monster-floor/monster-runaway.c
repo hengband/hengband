@@ -18,6 +18,7 @@
 #include "monster/monster-info.h"
 #include "monster-floor/monster-remover.h"
 #include "pet/pet-fall-off.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
  /*!

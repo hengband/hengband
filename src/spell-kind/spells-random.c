@@ -7,7 +7,6 @@
 #include "spell-kind/spells-random.h"
 #include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
-#include "floor/floor.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -34,6 +33,7 @@
 #include "spell/spell-types.h"
 #include "status/base-status.h"
 #include "status/experience.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

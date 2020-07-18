@@ -1,12 +1,12 @@
 ﻿#include "object-hook/hook-quest.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/quest.h"
-#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "system/artifact-type-definition.h"
 #include "object-enchant/trg-types.h"
+#include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "world/world.h"
 

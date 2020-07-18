@@ -12,6 +12,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "mspell/mspells1.h"
+#include "system/floor-type-definition.h"
 
  /*!
   * @brief モンスターが逃げ込める地点を走査する

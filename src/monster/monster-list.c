@@ -31,6 +31,7 @@
 #include "object/object-generator.h"
 #include "pet/pet-fall-off.h"
 #include "system/alloc-entries.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

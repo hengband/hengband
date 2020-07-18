@@ -1,7 +1,6 @@
 ﻿#include "savedata/quest-loader.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
-#include "floor/floor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
@@ -10,6 +9,7 @@
 #include "savedata/load-util.h"
 #include "savedata/load-zangband.h"
 #include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 
 /*!

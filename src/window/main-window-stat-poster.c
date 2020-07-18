@@ -1,5 +1,4 @@
 ﻿#include "window/main-window-stat-poster.h"
-#include "floor/floor.h"
 #include "io/input-key-requester.h"
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
@@ -8,6 +7,7 @@
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/element-resistance.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "window/main-window-row-column.h"

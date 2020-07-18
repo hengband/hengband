@@ -2,7 +2,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
-#include "floor/floor.h"
+#include "system/floor-type-definition.h"
 
 /*!
  * @brief 現在のマップ名を返す /

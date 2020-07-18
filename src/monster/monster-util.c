@@ -15,6 +15,7 @@
 #include "mspell/mspell-mask-definitions.h"
 #include "spell/spells-summon.h"
 #include "system/alloc-entries.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 MONSTER_IDX hack_m_idx = 0; /* Hack -- see "process_monsters()" */

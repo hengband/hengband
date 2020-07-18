@@ -48,6 +48,7 @@
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
 #include "status/action-setter.h"
+#include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"

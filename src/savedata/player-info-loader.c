@@ -1,6 +1,5 @@
 ﻿#include "savedata/player-info-loader.h"
 #include "cmd-building/cmd-building.h"
-#include "floor/floor.h"
 #include "market/arena.h"
 #include "mutation/mutation.h"
 #include "player/attack-defense-types.h"
@@ -14,6 +13,7 @@
 #include "savedata/load-zangband.h"
 #include "savedata/player-attack-loader.h"
 #include "savedata/world-loader.h"
+#include "system/floor-type-definition.h"
 #include "world/world.h"
 
 void rd_base_info(player_type *creature_ptr)

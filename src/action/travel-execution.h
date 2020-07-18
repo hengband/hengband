@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "floor/floor.h"
+#include "floor/floor-base-definitions.h"
 
  /*  A structure type for travel command  */
 typedef struct travel_type {

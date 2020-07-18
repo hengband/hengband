@@ -29,6 +29,7 @@
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "status/element-resistance.h"
+#include "system/floor-type-definition.h"
 
 /*!
  * @brief 騎乗中のモンスター情報を更新する

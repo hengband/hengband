@@ -7,13 +7,13 @@
 
 #include "object-enchant/apply-magic-weapon.h"
 #include "artifact/random-art-generator.h"
-#include "floor/floor.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

@@ -3,6 +3,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind.h"
 #include "system/alloc-entries.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

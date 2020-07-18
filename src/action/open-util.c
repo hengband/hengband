@@ -1,9 +1,9 @@
 ﻿#include "action/open-util.h"
-#include "floor/floor.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "perception/object-perception.h"
+#include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 
 /*!

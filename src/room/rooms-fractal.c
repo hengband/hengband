@@ -5,6 +5,7 @@
 #include "grid/grid.h"
 #include "room/rooms-normal.h"
 #include "room/rooms.h"
+#include "system/floor-type-definition.h"
 
 /*!
 * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal grid

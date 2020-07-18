@@ -1,5 +1,4 @@
 ﻿#include "spell/spells-diceroll.h"
-#include "floor/floor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
@@ -11,6 +10,7 @@
 #include "mutation/mutation.h"
 #include "player/player-class.h"
 #include "room/rooms.h"
+#include "system/floor-type-definition.h"
 
 /*!
  * @brief モンスター魅了用セービングスロー共通部(汎用系)

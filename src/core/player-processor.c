@@ -39,6 +39,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"

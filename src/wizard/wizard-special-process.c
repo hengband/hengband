@@ -80,6 +80,7 @@
 #include "system/alloc-entries.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"

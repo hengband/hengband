@@ -25,6 +25,7 @@
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

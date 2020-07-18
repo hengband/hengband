@@ -4,7 +4,6 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
-#include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
@@ -22,6 +21,7 @@
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

@@ -9,7 +9,6 @@
 #include "artifact/fixed-art-generator.h"
 #include "art-definition/art-armor-types.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/apply-magic-accessory.h"
 #include "object-enchant/apply-magic-armor.h"
@@ -30,6 +29,7 @@
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
