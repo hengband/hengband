@@ -154,7 +154,7 @@ static bool select_blue_magic_kind_command(learnt_magic_type *lm_ptr)
 static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
 {
     if (!use_menu)
-        return select_blue_magic_kind_command(lm_ptr));
+        return select_blue_magic_kind_command(lm_ptr);
 
     screen_save();
     if (!select_blue_magic_kind_menu(lm_ptr))
@@ -164,36 +164,9 @@ static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
     return TRUE;
 }
 
-/*!
- * @brief 使用可能な青魔法を選択する /
- * Allow user to choose a imitation.
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param sn 選択したモンスター攻撃ID、キャンセルの場合-1、不正な選択の場合-2を返す
- * @return 発動可能な魔法を選択した場合TRUE、キャンセル処理か不正な選択が行われた場合FALSEを返す。
- * @details
- * If a valid spell is chosen, saves it in '*sn' and returns TRUE\n
- * If the user hits escape, returns FALSE, and set '*sn' to -1\n
- * If there are no legal choices, returns FALSE, and sets '*sn' to -2\n
- *\n
- * The "prompt" should be "cast", "recite", or "study"\n
- * The "known" should be TRUE for cast/pray, FALSE for study\n
- *\n
- * nb: This function has a (trivial) display bug which will be obvious\n
- * when you run it. It's probably easy to fix but I haven't tried,\n
- * sorry.\n
- */
-bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
+static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_ptr)
 {
-    learnt_magic_type tmp_magic;
-    learnt_magic_type *lm_ptr = initialize_lenat_magic_type(caster_ptr, &tmp_magic);
-    if (check_blue_magic_cancel(sn))
-        return TRUE;
-
-    if (!check_blue_magic_kind(lm_ptr))
-        return FALSE;
-
     set_rf_masks(&lm_ptr->f4, &lm_ptr->f5, &lm_ptr->f6, lm_ptr->mode);
-
     for (lm_ptr->blue_magic_num = 0, lm_ptr->count = 0; lm_ptr->blue_magic_num < 32; lm_ptr->blue_magic_num++)
         if ((0x00000001 << lm_ptr->blue_magic_num) & lm_ptr->f4)
             lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
@@ -221,8 +194,39 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
         return FALSE;
     }
 
-    (void)strnfmt(
-        lm_ptr->out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0), I2A(lm_ptr->count - 1), _("魔法", "magic"));
+    (void)strnfmt(lm_ptr->out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0),
+        I2A(lm_ptr->count - 1), _("魔法", "magic"));
+    return TRUE;
+}
+
+
+/*!
+ * @brief 使用可能な青魔法を選択する /
+ * Allow user to choose a imitation.
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param sn 選択したモンスター攻撃ID、キャンセルの場合-1、不正な選択の場合-2を返す
+ * @return 発動可能な魔法を選択した場合TRUE、キャンセル処理か不正な選択が行われた場合FALSEを返す。
+ * @details
+ * If a valid spell is chosen, saves it in '*sn' and returns TRUE\n
+ * If the user hits escape, returns FALSE, and set '*sn' to -1\n
+ * If there are no legal choices, returns FALSE, and sets '*sn' to -2\n
+ *\n
+ * The "prompt" should be "cast", "recite", or "study"\n
+ * The "known" should be TRUE for cast/pray, FALSE for study\n
+ *\n
+ * nb: This function has a (trivial) display bug which will be obvious\n
+ * when you run it. It's probably easy to fix but I haven't tried,\n
+ * sorry.\n
+ */
+bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
+{
+    learnt_magic_type tmp_magic;
+    learnt_magic_type *lm_ptr = initialize_lenat_magic_type(caster_ptr, &tmp_magic);
+    if (check_blue_magic_cancel(sn))
+        return TRUE;
+
+    if (!check_blue_magic_kind(lm_ptr) || !sweep_learnt_spells(caster_ptr, lm_ptr))
+        return FALSE;
 
     if (use_menu)
         screen_save();
