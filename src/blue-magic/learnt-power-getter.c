@@ -294,6 +294,25 @@ static void close_blue_magic_name(learnt_magic_type *lm_ptr)
         strcpy(lm_ptr->psi_desc, "    ");
 }
 
+static void describe_blue_magic_name(player_type *caster_ptr, learnt_magic_type *lm_ptr)
+{
+    prt("", lm_ptr->y, lm_ptr->x);
+    put_str(_("名前", "Name"), lm_ptr->y, lm_ptr->x + 5);
+    put_str(_("MP 失率 効果", "SP Fail Info"), lm_ptr->y, lm_ptr->x + 33);
+    for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
+        prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
+        if (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]])
+            continue;
+
+        lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
+        calculate_blue_magic_success_probability(caster_ptr, lm_ptr);
+        learnt_info(caster_ptr, lm_ptr->comment, lm_ptr->blue_magics[lm_ptr->blue_magic_num]);
+        close_blue_magic_name(lm_ptr);
+        strcat(lm_ptr->psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, lm_ptr->need_mana, lm_ptr->chance, lm_ptr->comment));
+        prt(lm_ptr->psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
+    }
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -341,22 +360,7 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
                 if (!use_menu)
                     screen_save();
 
-                prt("", lm_ptr->y, lm_ptr->x);
-                put_str(_("名前", "Name"), lm_ptr->y, lm_ptr->x + 5);
-                put_str(_("MP 失率 効果", "SP Fail Info"), lm_ptr->y, lm_ptr->x + 33);
-                for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
-                    prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
-                    if (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]])
-                        continue;
-
-                    lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
-                    calculate_blue_magic_success_probability(caster_ptr, lm_ptr);
-                    learnt_info(caster_ptr, lm_ptr->comment, lm_ptr->blue_magics[lm_ptr->blue_magic_num]);
-                    close_blue_magic_name(lm_ptr);
-                    strcat(lm_ptr->psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, lm_ptr->need_mana, lm_ptr->chance, lm_ptr->comment));
-                    prt(lm_ptr->psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
-                }
-
+                describe_blue_magic_name(caster_ptr, lm_ptr);
                 if (lm_ptr->y < 22)
                     prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
             } else {
