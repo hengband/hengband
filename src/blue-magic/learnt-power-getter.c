@@ -36,31 +36,28 @@
  */
 bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 {
-    int i = 0;
-    int num = 0;
+    int blue_magic_num = 0;
+    int count = 0;
     TERM_LEN y = 1;
     TERM_LEN x = 18;
-    PERCENTAGE minfail = 0;
     PLAYER_LEVEL plev = caster_ptr->lev;
     PERCENTAGE chance = 0;
-    int ask = TRUE, mode = 0;
-    int spellnum[MAX_MONSPELLS];
-    char ch;
+    int ask = TRUE;
+    int mode = 0;
+    int blue_magics[MAX_MONSPELLS];
     char choice;
     char out_val[160];
     char comment[80];
-    BIT_FLAGS f4 = 0L, f5 = 0L, f6 = 0L;
-    concptr p = _("魔法", "magic");
-    COMMAND_CODE code;
+    BIT_FLAGS f4 = 0L;
+    BIT_FLAGS f5 = 0L;
+    BIT_FLAGS f6 = 0L;
     monster_power spell;
-    bool flag, redraw;
     int menu_line = use_menu ? 1 : 0;
+    bool flag = FALSE;
+    bool redraw = FALSE;
 
-    *sn = (-1);
-
-    flag = FALSE;
-    redraw = FALSE;
-
+    *sn = -1;
+    COMMAND_CODE code;
     if (repeat_pull(&code)) {
         *sn = (SPELL_IDX)code;
         return TRUE;
@@ -107,25 +104,30 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
     } else {
         sprintf(comment, _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:"));
         while (TRUE) {
-            if (!get_com(comment, &ch, TRUE)) {
+            char ch;
+            if (!get_com(comment, &ch, TRUE))
                 return FALSE;
-            }
+
             if (ch == 'A' || ch == 'a') {
                 mode = 1;
                 break;
             }
+
             if (ch == 'B' || ch == 'b') {
                 mode = 2;
                 break;
             }
+
             if (ch == 'C' || ch == 'c') {
                 mode = 3;
                 break;
             }
+
             if (ch == 'D' || ch == 'd') {
                 mode = 4;
                 break;
             }
+
             if (ch == 'E' || ch == 'e') {
                 mode = 5;
                 break;
@@ -135,31 +137,35 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 
     set_rf_masks(&f4, &f5, &f6, mode);
 
-    for (i = 0, num = 0; i < 32; i++) {
-        if ((0x00000001 << i) & f4)
-            spellnum[num++] = i;
+    for (blue_magic_num = 0, count = 0; blue_magic_num < 32; blue_magic_num++)
+        if ((0x00000001 << blue_magic_num) & f4)
+            blue_magics[count++] = blue_magic_num;
+
+    for (; blue_magic_num < 64; blue_magic_num++)
+        if ((0x00000001 << (blue_magic_num - 32)) & f5)
+            blue_magics[count++] = blue_magic_num;
+
+    for (; blue_magic_num < 96; blue_magic_num++)
+        if ((0x00000001 << (blue_magic_num - 64)) & f6)
+            blue_magics[count++] = blue_magic_num;
+
+    for (blue_magic_num = 0; blue_magic_num < count; blue_magic_num++) {
+        if (caster_ptr->magic_num2[blue_magics[blue_magic_num]] == 0)
+            continue;
+
+        if (use_menu)
+            menu_line = blue_magic_num + 1;
+
+        break;
     }
-    for (; i < 64; i++) {
-        if ((0x00000001 << (i - 32)) & f5)
-            spellnum[num++] = i;
-    }
-    for (; i < 96; i++) {
-        if ((0x00000001 << (i - 64)) & f6)
-            spellnum[num++] = i;
-    }
-    for (i = 0; i < num; i++) {
-        if (caster_ptr->magic_num2[spellnum[i]]) {
-            if (use_menu)
-                menu_line = i + 1;
-            break;
-        }
-    }
-    if (i == num) {
+
+    if (blue_magic_num == count) {
         msg_print(_("その種類の魔法は覚えていない！", "You don't know any spell of this type."));
         return FALSE;
     }
 
-    (void)strnfmt(out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0), I2A(num - 1), p);
+    (void)strnfmt(
+        out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0), I2A(count - 1), _("魔法", "magic"));
 
     if (use_menu)
         screen_save();
@@ -182,10 +188,10 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
             case 'k':
             case 'K': {
                 do {
-                    menu_line += (num - 1);
-                    if (menu_line > num)
-                        menu_line -= num;
-                } while (!caster_ptr->magic_num2[spellnum[menu_line - 1]]);
+                    menu_line += (count - 1);
+                    if (menu_line > count)
+                        menu_line -= count;
+                } while (!caster_ptr->magic_num2[blue_magics[menu_line - 1]]);
                 break;
             }
 
@@ -194,17 +200,17 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
             case 'J': {
                 do {
                     menu_line++;
-                    if (menu_line > num)
-                        menu_line -= num;
-                } while (!caster_ptr->magic_num2[spellnum[menu_line - 1]]);
+                    if (menu_line > count)
+                        menu_line -= count;
+                } while (!caster_ptr->magic_num2[blue_magics[menu_line - 1]]);
                 break;
             }
 
             case '6':
             case 'l':
             case 'L': {
-                menu_line = num;
-                while (!caster_ptr->magic_num2[spellnum[menu_line - 1]])
+                menu_line = count;
+                while (!caster_ptr->magic_num2[blue_magics[menu_line - 1]])
                     menu_line--;
                 break;
             }
@@ -213,7 +219,7 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
             case 'h':
             case 'H': {
                 menu_line = 1;
-                while (!caster_ptr->magic_num2[spellnum[menu_line - 1]])
+                while (!caster_ptr->magic_num2[blue_magics[menu_line - 1]])
                     menu_line++;
                 break;
             }
@@ -221,7 +227,7 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
             case 'x':
             case 'X':
             case '\r': {
-                i = menu_line - 1;
+                blue_magic_num = menu_line - 1;
                 ask = FALSE;
                 break;
             }
@@ -239,13 +245,13 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
                 put_str(_("名前", "Name"), y, x + 5);
                 put_str(_("MP 失率 効果", "SP Fail Info"), y, x + 33);
 
-                for (i = 0; i < num; i++) {
+                for (blue_magic_num = 0; blue_magic_num < count; blue_magic_num++) {
                     int need_mana;
-                    prt("", y + i + 1, x);
-                    if (!caster_ptr->magic_num2[spellnum[i]])
+                    prt("", y + blue_magic_num + 1, x);
+                    if (!caster_ptr->magic_num2[blue_magics[blue_magic_num]])
                         continue;
 
-                    spell = monster_powers[spellnum[i]];
+                    spell = monster_powers[blue_magics[blue_magic_num]];
                     chance = spell.fail;
                     if (plev > spell.level)
                         chance -= 3 * (plev - spell.level);
@@ -254,12 +260,12 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 
                     chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
                     chance = mod_spell_chance_1(caster_ptr, chance);
-                    need_mana = mod_need_mana(caster_ptr, monster_powers[spellnum[i]].smana, 0, REALM_NONE);
+                    need_mana = mod_need_mana(caster_ptr, monster_powers[blue_magics[blue_magic_num]].smana, 0, REALM_NONE);
                     if (need_mana > caster_ptr->csp) {
                         chance += 5 * (need_mana - caster_ptr->csp);
                     }
 
-                    minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
+                    PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
                     if (chance < minfail)
                         chance = minfail;
 
@@ -272,21 +278,21 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
                         chance = 95;
 
                     chance = mod_spell_chance_2(caster_ptr, chance);
-                    learnt_info(caster_ptr, comment, spellnum[i]);
+                    learnt_info(caster_ptr, comment, blue_magics[blue_magic_num]);
                     if (use_menu) {
-                        if (i == (menu_line - 1))
+                        if (blue_magic_num == (menu_line - 1))
                             strcpy(psi_desc, _("  》", "  > "));
                         else
                             strcpy(psi_desc, "    ");
                     } else
-                        sprintf(psi_desc, "  %c)", I2A(i));
+                        sprintf(psi_desc, "  %c)", I2A(blue_magic_num));
 
                     strcat(psi_desc, format(" %-26s %3d %3d%%%s", spell.name, need_mana, chance, comment));
-                    prt(psi_desc, y + i + 1, x);
+                    prt(psi_desc, y + blue_magic_num + 1, x);
                 }
 
                 if (y < 22)
-                    prt("", y + i + 1, x);
+                    prt("", y + blue_magic_num + 1, x);
             } else {
                 redraw = FALSE;
                 screen_load();
@@ -300,18 +306,18 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
             if (ask)
                 choice = (char)tolower(choice);
 
-            i = (islower(choice) ? A2I(choice) : -1);
+            blue_magic_num = (islower(choice) ? A2I(choice) : -1);
         }
 
-        if ((i < 0) || (i >= num) || !caster_ptr->magic_num2[spellnum[i]]) {
+        if ((blue_magic_num < 0) || (blue_magic_num >= count) || !caster_ptr->magic_num2[blue_magics[blue_magic_num]]) {
             bell();
             continue;
         }
 
-        spell = monster_powers[spellnum[i]];
+        spell = monster_powers[blue_magics[blue_magic_num]];
         if (ask) {
             char tmp_val[160];
-            (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[spellnum[i]].name);
+            (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[blue_magics[blue_magic_num]].name);
             if (!get_check(tmp_val))
                 continue;
         }
@@ -328,6 +334,6 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
     if (!flag)
         return FALSE;
 
-    (*sn) = spellnum[i];
+    *sn = blue_magics[blue_magic_num];
     return TRUE;
 }
