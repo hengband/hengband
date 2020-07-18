@@ -7,6 +7,59 @@
 #include "system/monster-type-definition.h"
 #include "util/quarks.h"
 
+static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
+{
+    if (!is_original_ap(m_ptr))
+        *flags |= SAVE_MON_AP_R_IDX;
+
+    if (m_ptr->sub_align)
+        *flags |= SAVE_MON_SUB_ALIGN;
+
+    if (monster_csleep_remaining(m_ptr))
+        *flags |= SAVE_MON_CSLEEP;
+
+    if (monster_fast_remaining(m_ptr))
+        *flags |= SAVE_MON_FAST;
+
+    if (monster_slow_remaining(m_ptr))
+        *flags |= SAVE_MON_SLOW;
+
+    if (monster_stunned_remaining(m_ptr))
+        *flags |= SAVE_MON_STUNNED;
+
+    if (monster_confused_remaining(m_ptr))
+        *flags |= SAVE_MON_CONFUSED;
+
+    if (monster_fear_remaining(m_ptr))
+        *flags |= SAVE_MON_MONFEAR;
+
+    if (m_ptr->target_y)
+        *flags |= SAVE_MON_TARGET_Y;
+
+    if (m_ptr->target_x)
+        *flags |= SAVE_MON_TARGET_X;
+
+    if (monster_invulner_remaining(m_ptr))
+        *flags |= SAVE_MON_INVULNER;
+
+    if (m_ptr->smart)
+        *flags |= SAVE_MON_SMART;
+
+    if (m_ptr->exp)
+        *flags |= SAVE_MON_EXP;
+
+    if (m_ptr->mflag2)
+        *flags |= SAVE_MON_MFLAG2;
+
+    if (m_ptr->nickname)
+        *flags |= SAVE_MON_NICKNAME;
+
+    if (m_ptr->parent_m_idx)
+        *flags |= SAVE_MON_PARENT;
+
+    wr_u32b(*flags);
+}
+
 /*!
  * @brief モンスター情報を書き込む / Write a "monster" record
  * @param m_ptr モンスター情報保存元ポインタ
@@ -15,56 +68,7 @@
 void wr_monster(monster_type *m_ptr)
 {
     BIT_FLAGS flags = 0x00000000;
-    if (!is_original_ap(m_ptr))
-        flags |= SAVE_MON_AP_R_IDX;
-
-    if (m_ptr->sub_align)
-        flags |= SAVE_MON_SUB_ALIGN;
-
-    if (monster_csleep_remaining(m_ptr))
-        flags |= SAVE_MON_CSLEEP;
-
-    if (monster_fast_remaining(m_ptr))
-        flags |= SAVE_MON_FAST;
-
-    if (monster_slow_remaining(m_ptr))
-        flags |= SAVE_MON_SLOW;
-
-    if (monster_stunned_remaining(m_ptr))
-        flags |= SAVE_MON_STUNNED;
-
-    if (monster_confused_remaining(m_ptr))
-        flags |= SAVE_MON_CONFUSED;
-
-    if (monster_fear_remaining(m_ptr))
-        flags |= SAVE_MON_MONFEAR;
-
-    if (m_ptr->target_y)
-        flags |= SAVE_MON_TARGET_Y;
-
-    if (m_ptr->target_x)
-        flags |= SAVE_MON_TARGET_X;
-
-    if (monster_invulner_remaining(m_ptr))
-        flags |= SAVE_MON_INVULNER;
-
-    if (m_ptr->smart)
-        flags |= SAVE_MON_SMART;
-
-    if (m_ptr->exp)
-        flags |= SAVE_MON_EXP;
-
-    if (m_ptr->mflag2)
-        flags |= SAVE_MON_MFLAG2;
-
-    if (m_ptr->nickname)
-        flags |= SAVE_MON_NICKNAME;
-
-    if (m_ptr->parent_m_idx)
-        flags |= SAVE_MON_PARENT;
-
-    /*** Monster save flags ***/
-    wr_u32b(flags);
+    write_monster_flags();
 
     /*** Write only un-obvious elements ***/
     wr_s16b(m_ptr->r_idx);
