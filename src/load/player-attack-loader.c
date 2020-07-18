@@ -1,9 +1,9 @@
-﻿#include "savedata/player-attack-loader.h"
+﻿#include "load/player-attack-loader.h"
+#include "load/angband-version-comparer.h"
+#include "load/load-util.h"
+#include "load/load-zangband.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
-#include "savedata/angband-version-comparer.h"
-#include "savedata/load-util.h"
-#include "savedata/load-zangband.h"
 
 void rd_special_attack(player_type *creature_ptr)
 {

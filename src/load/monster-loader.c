@@ -1,8 +1,8 @@
-﻿#include "savedata/monster-loader.h"
-#include "savedata/angband-version-comparer.h"
-#include "savedata/load-v1-5-0.h"
-#include "savedata/load-util.h"
-#include "savedata/savedata-flag-types.h"
+﻿#include "load/monster-loader.h"
+#include "load/angband-version-comparer.h"
+#include "load/load-v1-5-0.h"
+#include "load/load-util.h"
+#include "load/savedata-flag-types.h"
 #include "util/quarks.h"
 
 /*!

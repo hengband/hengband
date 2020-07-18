@@ -1,4 +1,4 @@
-﻿#include "savedata/load-v1-3-0.h"
+﻿#include "load/load-v1-3-0.h"
 #include "object-enchant/tr-types.h"
 
 void set_spells_old(player_type *creature_ptr)

@@ -1,8 +1,8 @@
-﻿#include "savedata/load-v1-7-0.h"
+﻿#include "load/load-v1-7-0.h"
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
-#include "savedata/load-util.h"
-#include "savedata/load-v1-5-0.h"
+#include "load/load-util.h"
+#include "load/load-v1-5-0.h"
 #include "system/floor-type-definition.h"
 
 void set_hp_old(player_type *creature_ptr)

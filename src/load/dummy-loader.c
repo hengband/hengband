@@ -1,7 +1,7 @@
-﻿#include "savedata/dummy-loader.h"
-#include "savedata/angband-version-comparer.h"
-#include "savedata/load-util.h"
-#include "savedata/monster-loader.h"
+﻿#include "load/dummy-loader.h"
+#include "load/angband-version-comparer.h"
+#include "load/load-util.h"
+#include "load/monster-loader.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 

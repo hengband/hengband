@@ -1,4 +1,4 @@
-﻿#include "savedata/load-util.h"
+﻿#include "load/load-util.h"
 #include "term/screen-processor.h"
 #ifdef JP
 #include "locale/japanese.h"

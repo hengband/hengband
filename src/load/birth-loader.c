@@ -1,7 +1,7 @@
 ﻿#include "birth-loader.h"
 #include "birth/quick-start.h"
-#include "savedata/angband-version-comparer.h"
-#include "savedata/load-util.h"
+#include "load/angband-version-comparer.h"
+#include "load/load-util.h"
 #include "system/angband.h"
 
 /*!

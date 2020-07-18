@@ -5,11 +5,11 @@
  * @author Hourier
  */
 
-#include "savedata/extra-loader.h"
-#include "savedata/angband-version-comparer.h"
-#include "savedata/dummy-loader.h"
-#include "savedata/load-util.h"
-#include "savedata/world-loader.h"
+#include "load/extra-loader.h"
+#include "load/angband-version-comparer.h"
+#include "load/dummy-loader.h"
+#include "load/load-util.h"
+#include "load/world-loader.h"
 #include "world/world.h"
 
 /*!

@@ -1,9 +1,9 @@
-﻿#include "savedata/lore-loader.h"
+﻿#include "load/lore-loader.h"
 #include "game-option/runtime-arguments.h"
 #include "monster-race/monster-race.h"
-#include "savedata/load-util.h"
-#include "savedata/load-v1-5-0.h"
-#include "savedata/angband-version-comparer.h"
+#include "load/load-util.h"
+#include "load/load-v1-5-0.h"
+#include "load/angband-version-comparer.h"
 
 /*!
  * @brief モンスターの思い出を読み込む / Read the monster lore

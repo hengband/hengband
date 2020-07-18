@@ -303,6 +303,30 @@ hengband_SOURCES = \
 	knowledge/monster-group-table.c knowledge/monster-group-table.h \
 	knowledge/object-group-table.c knowledge/object-group-table.h \
 	\
+	load/angband-version-comparer.c load/angband-version-comparer.h \
+	load/birth-loader.c load/birth-loader.h \
+	load/dummy-loader.c load/dummy-loader.h \
+	load/dungeon-loader.c load/dungeon-loader.h \
+	load/extra-loader.c load/extra-loader.h \
+	load/floor-loader.c load/floor-loader.h \
+	load/inventory-loader.c load/inventory-loader.h \
+	load/item-loader.c load/item-loader.h \
+	load/monster-loader.c load/monster-loader.h \
+	load/old-feature-types.h \
+	load/load-util.c load/load-util.h \
+	load/load-v1-3-0.c load/load-v1-3-0.h \
+	load/load-v1-5-0.c load/load-v1-5-0.h \
+	load/load-zangband.c load/load-zangband.h \
+	load/quest-loader.c load/quest-loader.h \
+	load/load.c load/load.h \
+	load/lore-loader.c load/lore-loader.h \
+	load/option-loader.c load/option-loader.h \
+	load/player-attack-loader.c load/player-attack-loader. \
+	load/player-info-loader.c load/player-info-loader.h \
+	load/savedata-flag-types.h \
+	load/store-loader.c load/store-loader.h \
+	load/world-loader.c load/world-loader.h \
+	\
 	locale/english.c locale/english.h \
 	locale/japanese.c locale/japanese.h \
 	locale/language-switcher.h \
@@ -564,30 +588,6 @@ hengband_SOURCES = \
 	\
 	save/save.c save/save.h \
 	\
-	savedata/angband-version-comparer.c savedata/angband-version-comparer.h \
-	savedata/birth-loader.c savedata/birth-loader.h \
-	savedata/dummy-loader.c savedata/dummy-loader.h \
-	savedata/dungeon-loader.c savedata/dungeon-loader.h \
-	savedata/extra-loader.c savedata/extra-loader.h \
-	savedata/floor-loader.c savedata/floor-loader.h \
-	savedata/inventory-loader.c savedata/inventory-loader.h \
-	savedata/item-loader.c savedata/item-loader.h \
-	savedata/monster-loader.c savedata/monster-loader.h \
-	savedata/old-feature-types.h \
-	savedata/load-util.c savedata/load-util.h \
-	savedata/load-v1-3-0.c savedata/load-v1-3-0.h \
-	savedata/load-v1-5-0.c savedata/load-v1-5-0.h \
-	savedata/load-zangband.c savedata/load-zangband.h \
-	savedata/quest-loader.c savedata/quest-loader.h \
-	savedata/load.c savedata/load.h \
-	savedata/lore-loader.c savedata/lore-loader.h \
-	savedata/option-loader.c savedata/option-loader.h \
-	savedata/player-attack-loader.c savedata/player-attack-loader. \
-	savedata/player-info-loader.c savedata/player-info-loader.h \
-	savedata/savedata-flag-types.h \
-	savedata/store-loader.c savedata/store-loader.h \
-	savedata/world-loader.c savedata/world-loader.h \
-	\
 	specific-object/bow.c specific-object/bow.h \
 	specific-object/chest.c specific-object/chest.h \
 	specific-object/death-crimson.c specific-object/death-crimson.h \
@@ -765,10 +765,10 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iartifact -Iart-definition -Iautopick -Ibirth -Icmd-io -Icmd-item \
 	-Icmd-visual -Icombat -Icore -Idungeon -Ieffect -Iflavor -Ifloor \
 	-Igame-option -Igrid -Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge \
-	-Imarket -Imelee -Imind -Imonster -Imonster-attack -Imonster-floor \
+	-Iload -Imarket -Imelee -Imind -Imonster -Imonster-attack -Imonster-floor \
 	-Imonster-race -Ilore -Imspell -Imutation -Iobject -Iobject-enchant \
 	-Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack -Iracial -Irealm \
-	-Iroom -Isave -Isavedata -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
+	-Iroom -Isave -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
 	-Istatus -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwindow -Iwizard \
 	-Iworld
 

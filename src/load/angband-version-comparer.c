@@ -1,4 +1,4 @@
-﻿#include "savedata/angband-version-comparer.h"
+﻿#include "load/angband-version-comparer.h"
 #include "world/world.h"
 
 /*!
