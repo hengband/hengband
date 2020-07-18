@@ -155,6 +155,50 @@ static bool cast_blue_breath_dark(player_type *caster_ptr, blue_magic_type *bm_p
     return TRUE;
 }
 
+static bool cast_blue_breath_conf(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_CONF), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_CONFUSION, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_sound(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_SOUND), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_SOUND, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_chaos(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_CHAOS), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_CHAOS, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_disenchant(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_DISEN), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_DISENCHANT, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -233,36 +277,24 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_BR_CONF:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_conf(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_CONF), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_CONFUSION, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_SOUND:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_sound(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_SOUND), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_SOUND, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_CHAOS:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_chaos(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_CHAOS), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_CHAOS, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_DISEN:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_disenchant(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_DISEN), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_DISENCHANT, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_NEXUS:
         if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
