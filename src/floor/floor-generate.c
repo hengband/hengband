@@ -498,6 +498,10 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_
 	if (quest_number(owner_ptr, floor_ptr->dun_level)) dun->destroyed = FALSE;
 }
 
+static bool has_river_flag(dungeon_type *dungeon_ptr)
+{
+    return dungeon_ptr->flags1 & (DF1_WATER_RIVER | DF1_LAVA_RIVER | DF1_ACID_RIVER | DF1_POISONOUS_RIVER);
+}
 
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
@@ -651,7 +655,7 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
 			destroy_level(player_ptr);
 		}
 
-		if (HAS_RIVER_FLAG(dungeon_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
+		if (has_river_flag(dungeon_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
 		{
 			add_river(floor_ptr);
 		}
