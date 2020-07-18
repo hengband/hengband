@@ -16,6 +16,47 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
+typedef struct learnt_magic_type {
+    int blue_magic_num;
+    int count;
+    TERM_LEN y;
+    TERM_LEN x;
+    PLAYER_LEVEL plev;
+    PERCENTAGE chance;
+    int ask;
+    int mode;
+    int blue_magics[MAX_MONSPELLS];
+    char choice;
+    char out_val[160];
+    char comment[80];
+    BIT_FLAGS f4;
+    BIT_FLAGS f5;
+    BIT_FLAGS f6;
+    monster_power spell;
+    int menu_line;
+    bool flag;
+    bool redraw;
+} learnt_magic_type;
+
+static learnt_magic_type *initialize_lenat_magic_type(player_type *caster_ptr, learnt_magic_type *lm_ptr)
+{
+    lm_ptr->blue_magic_num = 0;
+    lm_ptr->count = 0;
+    lm_ptr->y = 1;
+    lm_ptr->x = 18;
+    lm_ptr->plev = caster_ptr->lev;
+    lm_ptr->chance = 0;
+    lm_ptr->ask = TRUE;
+    lm_ptr->mode = 0;
+    lm_ptr->f4 = 0L;
+    lm_ptr->f5 = 0L;
+    lm_ptr->f6 = 0L;
+    lm_ptr->menu_line = use_menu ? 1 : 0;
+    lm_ptr->flag = FALSE;
+    lm_ptr->redraw = FALSE;
+    return lm_ptr;
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -36,26 +77,8 @@
  */
 bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 {
-    int blue_magic_num = 0;
-    int count = 0;
-    TERM_LEN y = 1;
-    TERM_LEN x = 18;
-    PLAYER_LEVEL plev = caster_ptr->lev;
-    PERCENTAGE chance = 0;
-    int ask = TRUE;
-    int mode = 0;
-    int blue_magics[MAX_MONSPELLS];
-    char choice;
-    char out_val[160];
-    char comment[80];
-    BIT_FLAGS f4 = 0L;
-    BIT_FLAGS f5 = 0L;
-    BIT_FLAGS f6 = 0L;
-    monster_power spell;
-    int menu_line = use_menu ? 1 : 0;
-    bool flag = FALSE;
-    bool redraw = FALSE;
-
+    learnt_magic_type tmp_magic;
+    learnt_magic_type *lm_ptr = initialize_lenat_magic_type(caster_ptr, &tmp_magic);
     *sn = -1;
     COMMAND_CODE code;
     if (repeat_pull(&code)) {
@@ -65,16 +88,16 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 
     if (use_menu) {
         screen_save();
-        while (!mode) {
-            prt(format(_(" %s ボルト", " %s bolt"), (menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
-            prt(format(_(" %s ボール", " %s ball"), (menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
-            prt(format(_(" %s ブレス", " %s breath"), (menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
-            prt(format(_(" %s 召喚", " %s sommoning"), (menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
-            prt(format(_(" %s その他", " %s others"), (menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
+        while (!lm_ptr->mode) {
+            prt(format(_(" %s ボルト", " %s bolt"), (lm_ptr->menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
+            prt(format(_(" %s ボール", " %s ball"), (lm_ptr->menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
+            prt(format(_(" %s ブレス", " %s breath"), (lm_ptr->menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
+            prt(format(_(" %s 召喚", " %s sommoning"), (lm_ptr->menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
+            prt(format(_(" %s その他", " %s others"), (lm_ptr->menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
             prt(_("どの種類の魔法を使いますか？", "use which type of magic? "), 0, 0);
 
-            choice = inkey();
-            switch (choice) {
+            lm_ptr->choice = inkey();
+            switch (lm_ptr->choice) {
             case ESCAPE:
             case 'z':
             case 'Z':
@@ -83,102 +106,102 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
             case '2':
             case 'j':
             case 'J':
-                menu_line++;
+                lm_ptr->menu_line++;
                 break;
             case '8':
             case 'k':
             case 'K':
-                menu_line += 4;
+                lm_ptr->menu_line += 4;
                 break;
             case '\r':
             case 'x':
             case 'X':
-                mode = menu_line;
+                lm_ptr->mode = lm_ptr->menu_line;
                 break;
             }
-            if (menu_line > 5)
-                menu_line -= 5;
+            if (lm_ptr->menu_line > 5)
+                lm_ptr->menu_line -= 5;
         }
 
         screen_load();
     } else {
-        sprintf(comment, _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:"));
+        sprintf(lm_ptr->comment, _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:"));
         while (TRUE) {
             char ch;
-            if (!get_com(comment, &ch, TRUE))
+            if (!get_com(lm_ptr->comment, &ch, TRUE))
                 return FALSE;
 
             if (ch == 'A' || ch == 'a') {
-                mode = 1;
+                lm_ptr->mode = 1;
                 break;
             }
 
             if (ch == 'B' || ch == 'b') {
-                mode = 2;
+                lm_ptr->mode = 2;
                 break;
             }
 
             if (ch == 'C' || ch == 'c') {
-                mode = 3;
+                lm_ptr->mode = 3;
                 break;
             }
 
             if (ch == 'D' || ch == 'd') {
-                mode = 4;
+                lm_ptr->mode = 4;
                 break;
             }
 
             if (ch == 'E' || ch == 'e') {
-                mode = 5;
+                lm_ptr->mode = 5;
                 break;
             }
         }
     }
 
-    set_rf_masks(&f4, &f5, &f6, mode);
+    set_rf_masks(&lm_ptr->f4, &lm_ptr->f5, &lm_ptr->f6, lm_ptr->mode);
 
-    for (blue_magic_num = 0, count = 0; blue_magic_num < 32; blue_magic_num++)
-        if ((0x00000001 << blue_magic_num) & f4)
-            blue_magics[count++] = blue_magic_num;
+    for (lm_ptr->blue_magic_num = 0, lm_ptr->count = 0; lm_ptr->blue_magic_num < 32; lm_ptr->blue_magic_num++)
+        if ((0x00000001 << lm_ptr->blue_magic_num) & lm_ptr->f4)
+            lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
 
-    for (; blue_magic_num < 64; blue_magic_num++)
-        if ((0x00000001 << (blue_magic_num - 32)) & f5)
-            blue_magics[count++] = blue_magic_num;
+    for (; lm_ptr->blue_magic_num < 64; lm_ptr->blue_magic_num++)
+        if ((0x00000001 << (lm_ptr->blue_magic_num - 32)) & lm_ptr->f5)
+            lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
 
-    for (; blue_magic_num < 96; blue_magic_num++)
-        if ((0x00000001 << (blue_magic_num - 64)) & f6)
-            blue_magics[count++] = blue_magic_num;
+    for (; lm_ptr->blue_magic_num < 96; lm_ptr->blue_magic_num++)
+        if ((0x00000001 << (lm_ptr->blue_magic_num - 64)) & lm_ptr->f6)
+            lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
 
-    for (blue_magic_num = 0; blue_magic_num < count; blue_magic_num++) {
-        if (caster_ptr->magic_num2[blue_magics[blue_magic_num]] == 0)
+    for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
+        if (caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]] == 0)
             continue;
 
         if (use_menu)
-            menu_line = blue_magic_num + 1;
+            lm_ptr->menu_line = lm_ptr->blue_magic_num + 1;
 
         break;
     }
 
-    if (blue_magic_num == count) {
+    if (lm_ptr->blue_magic_num == lm_ptr->count) {
         msg_print(_("その種類の魔法は覚えていない！", "You don't know any spell of this type."));
         return FALSE;
     }
 
     (void)strnfmt(
-        out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0), I2A(count - 1), _("魔法", "magic"));
+        lm_ptr->out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0), I2A(lm_ptr->count - 1), _("魔法", "magic"));
 
     if (use_menu)
         screen_save();
 
-    choice = (always_show_list || use_menu) ? ESCAPE : 1;
-    while (!flag) {
-        if (choice == ESCAPE)
-            choice = ' ';
-        else if (!get_com(out_val, &choice, TRUE))
+    lm_ptr->choice = (always_show_list || use_menu) ? ESCAPE : 1;
+    while (!lm_ptr->flag) {
+        if (lm_ptr->choice == ESCAPE)
+            lm_ptr->choice = ' ';
+        else if (!get_com(lm_ptr->out_val, &lm_ptr->choice, TRUE))
             break;
 
-        if (use_menu && choice != ' ') {
-            switch (choice) {
+        if (use_menu && lm_ptr->choice != ' ') {
+            switch (lm_ptr->choice) {
             case '0': {
                 screen_load();
                 return FALSE;
@@ -188,10 +211,10 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
             case 'k':
             case 'K': {
                 do {
-                    menu_line += (count - 1);
-                    if (menu_line > count)
-                        menu_line -= count;
-                } while (!caster_ptr->magic_num2[blue_magics[menu_line - 1]]);
+                    lm_ptr->menu_line += (lm_ptr->count - 1);
+                    if (lm_ptr->menu_line > lm_ptr->count)
+                        lm_ptr->menu_line -= lm_ptr->count;
+                } while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
                 break;
             }
 
@@ -199,102 +222,102 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
             case 'j':
             case 'J': {
                 do {
-                    menu_line++;
-                    if (menu_line > count)
-                        menu_line -= count;
-                } while (!caster_ptr->magic_num2[blue_magics[menu_line - 1]]);
+                    lm_ptr->menu_line++;
+                    if (lm_ptr->menu_line > lm_ptr->count)
+                        lm_ptr->menu_line -= lm_ptr->count;
+                } while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
                 break;
             }
 
             case '6':
             case 'l':
             case 'L': {
-                menu_line = count;
-                while (!caster_ptr->magic_num2[blue_magics[menu_line - 1]])
-                    menu_line--;
+                lm_ptr->menu_line = lm_ptr->count;
+                while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
+                    lm_ptr->menu_line--;
                 break;
             }
 
             case '4':
             case 'h':
             case 'H': {
-                menu_line = 1;
-                while (!caster_ptr->magic_num2[blue_magics[menu_line - 1]])
-                    menu_line++;
+                lm_ptr->menu_line = 1;
+                while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
+                    lm_ptr->menu_line++;
                 break;
             }
 
             case 'x':
             case 'X':
             case '\r': {
-                blue_magic_num = menu_line - 1;
-                ask = FALSE;
+                lm_ptr->blue_magic_num = lm_ptr->menu_line - 1;
+                lm_ptr->ask = FALSE;
                 break;
             }
             }
         }
 
-        if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
-            if (!redraw || use_menu) {
+        if ((lm_ptr->choice == ' ') || (lm_ptr->choice == '*') || (lm_ptr->choice == '?') || (use_menu && lm_ptr->ask)) {
+            if (!lm_ptr->redraw || use_menu) {
                 char psi_desc[80];
-                redraw = TRUE;
+                lm_ptr->redraw = TRUE;
                 if (!use_menu)
                     screen_save();
 
-                prt("", y, x);
-                put_str(_("名前", "Name"), y, x + 5);
-                put_str(_("MP 失率 効果", "SP Fail Info"), y, x + 33);
+                prt("", lm_ptr->y, lm_ptr->x);
+                put_str(_("名前", "Name"), lm_ptr->y, lm_ptr->x + 5);
+                put_str(_("MP 失率 効果", "SP Fail Info"), lm_ptr->y, lm_ptr->x + 33);
 
-                for (blue_magic_num = 0; blue_magic_num < count; blue_magic_num++) {
+                for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
                     int need_mana;
-                    prt("", y + blue_magic_num + 1, x);
-                    if (!caster_ptr->magic_num2[blue_magics[blue_magic_num]])
+                    prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
+                    if (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]])
                         continue;
 
-                    spell = monster_powers[blue_magics[blue_magic_num]];
-                    chance = spell.fail;
-                    if (plev > spell.level)
-                        chance -= 3 * (plev - spell.level);
+                    lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
+                    lm_ptr->chance = lm_ptr->spell.fail;
+                    if (lm_ptr->plev > lm_ptr->spell.level)
+                        lm_ptr->chance -= 3 * (lm_ptr->plev - lm_ptr->spell.level);
                     else
-                        chance += (spell.level - plev);
+                        lm_ptr->chance += (lm_ptr->spell.level - lm_ptr->plev);
 
-                    chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
-                    chance = mod_spell_chance_1(caster_ptr, chance);
-                    need_mana = mod_need_mana(caster_ptr, monster_powers[blue_magics[blue_magic_num]].smana, 0, REALM_NONE);
+                    lm_ptr->chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
+                    lm_ptr->chance = mod_spell_chance_1(caster_ptr, lm_ptr->chance);
+                    need_mana = mod_need_mana(caster_ptr, monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].smana, 0, REALM_NONE);
                     if (need_mana > caster_ptr->csp) {
-                        chance += 5 * (need_mana - caster_ptr->csp);
+                        lm_ptr->chance += 5 * (need_mana - caster_ptr->csp);
                     }
 
                     PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
-                    if (chance < minfail)
-                        chance = minfail;
+                    if (lm_ptr->chance < minfail)
+                        lm_ptr->chance = minfail;
 
                     if (caster_ptr->stun > 50)
-                        chance += 25;
+                        lm_ptr->chance += 25;
                     else if (caster_ptr->stun)
-                        chance += 15;
+                        lm_ptr->chance += 15;
 
-                    if (chance > 95)
-                        chance = 95;
+                    if (lm_ptr->chance > 95)
+                        lm_ptr->chance = 95;
 
-                    chance = mod_spell_chance_2(caster_ptr, chance);
-                    learnt_info(caster_ptr, comment, blue_magics[blue_magic_num]);
+                    lm_ptr->chance = mod_spell_chance_2(caster_ptr, lm_ptr->chance);
+                    learnt_info(caster_ptr, lm_ptr->comment, lm_ptr->blue_magics[lm_ptr->blue_magic_num]);
                     if (use_menu) {
-                        if (blue_magic_num == (menu_line - 1))
+                        if (lm_ptr->blue_magic_num == (lm_ptr->menu_line - 1))
                             strcpy(psi_desc, _("  》", "  > "));
                         else
                             strcpy(psi_desc, "    ");
                     } else
-                        sprintf(psi_desc, "  %c)", I2A(blue_magic_num));
+                        sprintf(psi_desc, "  %c)", I2A(lm_ptr->blue_magic_num));
 
-                    strcat(psi_desc, format(" %-26s %3d %3d%%%s", spell.name, need_mana, chance, comment));
-                    prt(psi_desc, y + blue_magic_num + 1, x);
+                    strcat(psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, need_mana, lm_ptr->chance, lm_ptr->comment));
+                    prt(psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
                 }
 
-                if (y < 22)
-                    prt("", y + blue_magic_num + 1, x);
+                if (lm_ptr->y < 22)
+                    prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
             } else {
-                redraw = FALSE;
+                lm_ptr->redraw = FALSE;
                 screen_load();
             }
 
@@ -302,38 +325,38 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
         }
 
         if (!use_menu) {
-            ask = isupper(choice);
-            if (ask)
-                choice = (char)tolower(choice);
+            lm_ptr->ask = isupper(lm_ptr->choice);
+            if (lm_ptr->ask)
+                lm_ptr->choice = (char)tolower(lm_ptr->choice);
 
-            blue_magic_num = (islower(choice) ? A2I(choice) : -1);
+            lm_ptr->blue_magic_num = (islower(lm_ptr->choice) ? A2I(lm_ptr->choice) : -1);
         }
 
-        if ((blue_magic_num < 0) || (blue_magic_num >= count) || !caster_ptr->magic_num2[blue_magics[blue_magic_num]]) {
+        if ((lm_ptr->blue_magic_num < 0) || (lm_ptr->blue_magic_num >= lm_ptr->count) || !caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]]) {
             bell();
             continue;
         }
 
-        spell = monster_powers[blue_magics[blue_magic_num]];
-        if (ask) {
+        lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
+        if (lm_ptr->ask) {
             char tmp_val[160];
-            (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[blue_magics[blue_magic_num]].name);
+            (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].name);
             if (!get_check(tmp_val))
                 continue;
         }
 
-        flag = TRUE;
+        lm_ptr->flag = TRUE;
     }
 
-    if (redraw)
+    if (lm_ptr->redraw)
         screen_load();
 
     caster_ptr->window |= PW_SPELL;
     handle_stuff(caster_ptr);
 
-    if (!flag)
+    if (!lm_ptr->flag)
         return FALSE;
 
-    *sn = blue_magics[blue_magic_num];
+    *sn = lm_ptr->blue_magics[lm_ptr->blue_magic_num];
     return TRUE;
 }
