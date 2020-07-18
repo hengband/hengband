@@ -347,6 +347,16 @@ static void convert_lower_blue_magic_selection(learnt_magic_type *lm_ptr)
     lm_ptr->blue_magic_num = (islower(lm_ptr->choice) ? A2I(lm_ptr->choice) : -1);
 }
 
+static bool ask_cast_blue_magic(learnt_magic_type *lm_ptr)
+{
+    if (lm_ptr->ask)
+        return TRUE;
+
+    char tmp_val[160];
+    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].name);
+    return get_check(tmp_val);
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -398,12 +408,8 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
         }
 
         lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
-        if (lm_ptr->ask) {
-            char tmp_val[160];
-            (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].name);
-            if (!get_check(tmp_val))
-                continue;
-        }
+        if (!ask_cast_blue_magic(lm_ptr))
+            continue;
 
         lm_ptr->flag = TRUE;
     }
