@@ -124,6 +124,7 @@ static void calc_to_damage_misc(player_type *creature_ptr);
 static void calc_to_hit_misc(player_type *creature_ptr);
 
 static void calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
+static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -816,7 +817,8 @@ void calc_bonuses(player_type *creature_ptr)
             }
         }
 
-		calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
+        calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
+        calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
 
         if (creature_ptr->riding == 0)
             continue;
@@ -3912,14 +3914,19 @@ static void calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slo
 {
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     int id = slot - INVEN_RARM;
-	creature_ptr->to_dd[id] = creature_ptr->to_ds[id] = 0;
+    creature_ptr->to_dd[id] = 0;
 
-	if (creature_ptr->riding) {
+    if (creature_ptr->riding) {
 
         if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
             creature_ptr->to_dd[id] += 2;
         }
-	}
+    }
+}
+
+static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot) {
+    int id = slot - INVEN_RARM;
+    creature_ptr->to_ds[id] = 0;
 }
 
 /*!
