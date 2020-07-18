@@ -55,11 +55,11 @@
 #include "world/world.h"
 
 /*!
- * @brief その他のゲーム情報を書き込む(実質はアイテムの鑑定情報のみ) / Write an "xtra" record
+ * @brief セーブデータにアイテムの鑑定情報を書き込む / Write an "perception" record
  * @param k_idx ベースアイテムのID
  * @return なし
  */
-static void wr_xtra(KIND_OBJECT_IDX k_idx)
+static void wr_perception(KIND_OBJECT_IDX k_idx)
 {
     byte tmp8u = 0;
     object_kind *k_ptr = &k_info[k_idx];
@@ -740,7 +740,7 @@ static bool wr_savefile_new(player_type *player_ptr)
     tmp16u = max_k_idx;
     wr_u16b(tmp16u);
     for (KIND_OBJECT_IDX k_idx = 0; k_idx < tmp16u; k_idx++)
-        wr_xtra(k_idx);
+        wr_perception(k_idx);
 
     tmp16u = max_towns;
     wr_u16b(tmp16u);
