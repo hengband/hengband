@@ -357,6 +357,36 @@ static bool ask_cast_blue_magic(learnt_magic_type *lm_ptr)
     return get_check(tmp_val);
 }
 
+static bool select_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_ptr)
+{
+    while (!lm_ptr->flag) {
+        if (lm_ptr->choice == ESCAPE)
+            lm_ptr->choice = ' ';
+        else if (!get_com(lm_ptr->out_val, &lm_ptr->choice, TRUE))
+            break;
+
+        if (use_menu && (lm_ptr->choice != ' ') && !switch_blue_magic_choice(caster_ptr, lm_ptr))
+            return FALSE;
+
+        if (blue_magic_key_input(caster_ptr, lm_ptr))
+            continue;
+
+        convert_lower_blue_magic_selection(lm_ptr);
+        if ((lm_ptr->blue_magic_num < 0) || (lm_ptr->blue_magic_num >= lm_ptr->count) || !caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]]) {
+            bell();
+            continue;
+        }
+
+        lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
+        if (!ask_cast_blue_magic(lm_ptr))
+            continue;
+
+        lm_ptr->flag = TRUE;
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -389,30 +419,8 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
         screen_save();
 
     lm_ptr->choice = (always_show_list || use_menu) ? ESCAPE : 1;
-    while (!lm_ptr->flag) {
-        if (lm_ptr->choice == ESCAPE)
-            lm_ptr->choice = ' ';
-        else if (!get_com(lm_ptr->out_val, &lm_ptr->choice, TRUE))
-            break;
-
-        if (use_menu && (lm_ptr->choice != ' ') && !switch_blue_magic_choice(caster_ptr, lm_ptr))
-            return FALSE;
-
-        if (blue_magic_key_input(caster_ptr, lm_ptr))
-            continue;
-
-        convert_lower_blue_magic_selection(lm_ptr);
-        if ((lm_ptr->blue_magic_num < 0) || (lm_ptr->blue_magic_num >= lm_ptr->count) || !caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]]) {
-            bell();
-            continue;
-        }
-
-        lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
-        if (!ask_cast_blue_magic(lm_ptr))
-            continue;
-
-        lm_ptr->flag = TRUE;
-    }
+    if (!select_learnt_spells(caster_ptr, lm_ptr))
+        return FALSE;
 
     if (lm_ptr->redraw)
         screen_load();
