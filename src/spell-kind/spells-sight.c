@@ -3,6 +3,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"

@@ -104,15 +104,6 @@ extern floor_type floor_info;
     (((C)->info & (CAVE_VIEW)) != 0)
 
 /*
- * Determine if a "legal" grid is within "los" of the player
- *
- * Note the use of comparison to zero to force a "boolean" result
- */
-#define player_has_los_bold(C,Y,X) \
-    ((((C)->current_floor_ptr->grid_array[Y][X].info & (CAVE_VIEW)) != 0) || (C)->phase_out)
-
-
-/*
  * Determine if a "feature" is "permanent wall"
  */
 #define permanent_wall(F) \

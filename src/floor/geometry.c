@@ -1,4 +1,5 @@
 ﻿#include "floor/geometry.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"

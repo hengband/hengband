@@ -1,5 +1,5 @@
 ﻿#include "mspell-learn-checker.h"
-#include "floor/floor.h"
+#include "floor/cave.h"
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"
 #include "world/world.h"

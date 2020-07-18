@@ -32,3 +32,11 @@ bool cave_have_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, feature_
 {
     return have_flag(f_info[floor_ptr->grid_array[y][x].feat].flags, f_idx);
 }
+
+/*
+ * Determine if a "legal" grid is within "los" of the player
+ */
+bool player_has_los_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+    return ((player_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_VIEW) != 0) || player_ptr->phase_out;
+}

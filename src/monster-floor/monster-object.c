@@ -7,7 +7,7 @@
 #include "monster-floor/monster-object.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
+#include "floor/cave.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
