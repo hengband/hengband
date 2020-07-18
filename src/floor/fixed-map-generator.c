@@ -3,6 +3,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "floor/floor-town.h"
+#include "floor/floor.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

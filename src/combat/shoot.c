@@ -9,6 +9,7 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "game-option/cheat-types.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
