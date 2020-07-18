@@ -36,6 +36,7 @@ typedef struct learnt_magic_type {
     int menu_line;
     bool flag;
     bool redraw;
+    int need_mana;
 } learnt_magic_type;
 
 static learnt_magic_type *initialize_lenat_magic_type(player_type *caster_ptr, learnt_magic_type *lm_ptr)
@@ -250,6 +251,35 @@ static bool switch_blue_magic_choice(player_type *caster_ptr, learnt_magic_type 
     }
 }
 
+static void calculate_blue_magic_success_probability(player_type *caster_ptr, learnt_magic_type *lm_ptr)
+{
+    lm_ptr->chance = lm_ptr->spell.fail;
+    if (lm_ptr->plev > lm_ptr->spell.level)
+        lm_ptr->chance -= 3 * (lm_ptr->plev - lm_ptr->spell.level);
+    else
+        lm_ptr->chance += (lm_ptr->spell.level - lm_ptr->plev);
+
+    lm_ptr->chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
+    lm_ptr->chance = mod_spell_chance_1(caster_ptr, lm_ptr->chance);
+    lm_ptr->need_mana = mod_need_mana(caster_ptr, monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].smana, 0, REALM_NONE);
+    if (lm_ptr->need_mana > caster_ptr->csp)
+        lm_ptr->chance += 5 * (lm_ptr->need_mana - caster_ptr->csp);
+
+    PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
+    if (lm_ptr->chance < minfail)
+        lm_ptr->chance = minfail;
+
+    if (caster_ptr->stun > 50)
+        lm_ptr->chance += 25;
+    else if (caster_ptr->stun)
+        lm_ptr->chance += 15;
+
+    if (lm_ptr->chance > 95)
+        lm_ptr->chance = 95;
+
+    lm_ptr->chance = mod_spell_chance_2(caster_ptr, lm_ptr->chance);
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -303,38 +333,12 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
                 put_str(_("MP 失率 効果", "SP Fail Info"), lm_ptr->y, lm_ptr->x + 33);
 
                 for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
-                    int need_mana;
                     prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
                     if (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]])
                         continue;
 
                     lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
-                    lm_ptr->chance = lm_ptr->spell.fail;
-                    if (lm_ptr->plev > lm_ptr->spell.level)
-                        lm_ptr->chance -= 3 * (lm_ptr->plev - lm_ptr->spell.level);
-                    else
-                        lm_ptr->chance += (lm_ptr->spell.level - lm_ptr->plev);
-
-                    lm_ptr->chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
-                    lm_ptr->chance = mod_spell_chance_1(caster_ptr, lm_ptr->chance);
-                    need_mana = mod_need_mana(caster_ptr, monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].smana, 0, REALM_NONE);
-                    if (need_mana > caster_ptr->csp) {
-                        lm_ptr->chance += 5 * (need_mana - caster_ptr->csp);
-                    }
-
-                    PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
-                    if (lm_ptr->chance < minfail)
-                        lm_ptr->chance = minfail;
-
-                    if (caster_ptr->stun > 50)
-                        lm_ptr->chance += 25;
-                    else if (caster_ptr->stun)
-                        lm_ptr->chance += 15;
-
-                    if (lm_ptr->chance > 95)
-                        lm_ptr->chance = 95;
-
-                    lm_ptr->chance = mod_spell_chance_2(caster_ptr, lm_ptr->chance);
+                    calculate_blue_magic_success_probability(caster_ptr, lm_ptr);
                     learnt_info(caster_ptr, lm_ptr->comment, lm_ptr->blue_magics[lm_ptr->blue_magic_num]);
                     if (use_menu) {
                         if (lm_ptr->blue_magic_num == (lm_ptr->menu_line - 1))
@@ -344,7 +348,7 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
                     } else
                         sprintf(psi_desc, "  %c)", I2A(lm_ptr->blue_magic_num));
 
-                    strcat(psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, need_mana, lm_ptr->chance, lm_ptr->comment));
+                    strcat(psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, lm_ptr->need_mana, lm_ptr->chance, lm_ptr->comment));
                     prt(psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
                 }
 
