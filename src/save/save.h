@@ -4,4 +4,3 @@
 #include "system/angband.h"
 
 bool save_player(player_type *player_ptr);
-bool load_player(player_type *player_ptr);

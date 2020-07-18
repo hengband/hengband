@@ -49,6 +49,7 @@
 #include "io/signal-handlers.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
+#include "load/load.h"
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "market/bounty.h"
@@ -125,7 +126,7 @@ void play_game(player_type *player_ptr, bool new_game)
     }
 
     (void)term_set_cursor(0);
-    if (!load_player(player_ptr)) {
+    if (!load_savedata(player_ptr)) {
         quit(_("セーブファイルが壊れています", "broken savefile"));
     }
 

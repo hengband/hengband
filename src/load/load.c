@@ -37,6 +37,7 @@
 #include "player/player-race.h"
 #include "player/player-sex.h"
 #include "player/race-info-table.h"
+#include "system/angband-version.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
@@ -322,7 +323,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  */
-errr rd_savefile(player_type *player_ptr)
+static errr rd_savefile(player_type *player_ptr)
 {
     safe_setuid_grab(player_ptr);
     loading_savefile = angband_fopen(savefile, "rb");
@@ -336,4 +337,112 @@ errr rd_savefile(player_type *player_ptr)
 
     angband_fclose(loading_savefile);
     return err;
+}
+
+/*!
+ * @brief セーブデータ読み込みのメインルーチン /
+ * Attempt to Load a "savefile"
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 成功すればtrue
+ */
+bool load_savedata(player_type *player_ptr)
+{
+    concptr what = "generic";
+    current_world_ptr->game_turn = 0;
+    player_ptr->is_dead = FALSE;
+    if (!savefile[0])
+        return TRUE;
+
+#ifndef WINDOWS
+    if (access(savefile, 0) < 0) {
+        msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
+        msg_print(NULL);
+        return TRUE;
+    }
+#endif
+
+    errr err = 0;
+    int fd = -1;
+    byte vvv[4];
+    if (!err) {
+        fd = fd_open(savefile, O_RDONLY);
+        if (fd < 0)
+            err = -1;
+
+        if (err)
+            what = _("セーブファイルを開けません。", "Cannot open savefile");
+    }
+
+    if (!err) {
+        if (fd_read(fd, (char *)(vvv), 4))
+            err = -1;
+
+        if (err)
+            what = _("セーブファイルを読めません。", "Cannot read savefile");
+
+        (void)fd_close(fd);
+    }
+
+    if (!err) {
+        current_world_ptr->z_major = vvv[0];
+        current_world_ptr->z_minor = vvv[1];
+        current_world_ptr->z_patch = vvv[2];
+        current_world_ptr->sf_extra = vvv[3];
+        term_clear();
+        err = rd_savefile(player_ptr);
+        if (err)
+            what = _("セーブファイルを解析出来ません。", "Cannot parse savefile");
+    }
+
+    if (!err) {
+        if (!current_world_ptr->game_turn)
+            err = -1;
+
+        if (err)
+            what = _("セーブファイルが壊れています", "Broken savefile");
+    }
+
+    if (!err) {
+        if ((FAKE_VER_MAJOR != current_world_ptr->z_major) || (FAKE_VER_MINOR != current_world_ptr->z_minor)
+            || (FAKE_VER_PATCH != current_world_ptr->z_patch)) {
+            if (current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6) {
+                msg_print(_("バージョン 2.0.* 用のセーブファイルを変換しました。", "Converted a 2.0.* savefile."));
+            } else {
+                msg_format(_("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。", "Converted a %d.%d.%d savefile."),
+                    (current_world_ptr->z_major > 9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor,
+                    current_world_ptr->z_patch);
+            }
+
+            msg_print(NULL);
+        }
+
+        if (player_ptr->is_dead) {
+            if (arg_wizard) {
+                current_world_ptr->character_loaded = TRUE;
+                return TRUE;
+            }
+
+            player_ptr->is_dead = FALSE;
+            current_world_ptr->sf_lives++;
+            return TRUE;
+        }
+
+        current_world_ptr->character_loaded = TRUE;
+        u32b tmp = counts_read(player_ptr, 2);
+        if (tmp > player_ptr->count)
+            player_ptr->count = tmp;
+
+        if (counts_read(player_ptr, 0) > current_world_ptr->play_time || counts_read(player_ptr, 1) == current_world_ptr->play_time)
+            counts_write(player_ptr, 2, ++player_ptr->count);
+
+        counts_write(player_ptr, 1, current_world_ptr->play_time);
+        return TRUE;
+    }
+
+    msg_format(_("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d savefile."), what,
+        (current_world_ptr->z_major > 9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor,
+        current_world_ptr->z_patch);
+
+    msg_print(NULL);
+    return FALSE;
 }
