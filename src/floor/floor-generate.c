@@ -21,6 +21,7 @@
 #include "floor/floor-generate.h"
 #include "floor/floor-save.h"
 #include "floor/floor-streams.h"
+#include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
