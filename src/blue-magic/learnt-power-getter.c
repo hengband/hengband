@@ -199,6 +199,56 @@ static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_p
     return TRUE;
 }
 
+static bool switch_blue_magic_choice(player_type *caster_ptr, learnt_magic_type *lm_ptr)
+{
+    switch (lm_ptr->choice) {
+    case '0':
+        screen_load();
+        return FALSE;
+    case '8':
+    case 'k':
+    case 'K':
+        do {
+            lm_ptr->menu_line += (lm_ptr->count - 1);
+            if (lm_ptr->menu_line > lm_ptr->count)
+                lm_ptr->menu_line -= lm_ptr->count;
+        } while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
+        return TRUE;
+    case '2':
+    case 'j':
+    case 'J':
+        do {
+            lm_ptr->menu_line++;
+            if (lm_ptr->menu_line > lm_ptr->count)
+                lm_ptr->menu_line -= lm_ptr->count;
+        } while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
+        return TRUE;
+    case '6':
+    case 'l':
+    case 'L':
+        lm_ptr->menu_line = lm_ptr->count;
+        while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
+            lm_ptr->menu_line--;
+
+        return TRUE;
+    case '4':
+    case 'h':
+    case 'H':
+        lm_ptr->menu_line = 1;
+        while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
+            lm_ptr->menu_line++;
+
+        return TRUE;
+    case 'x':
+    case 'X':
+    case '\r':
+        lm_ptr->blue_magic_num = lm_ptr->menu_line - 1;
+        lm_ptr->ask = FALSE;
+        return TRUE;
+    default:
+        return TRUE;
+    }
+}
 
 /*!
  * @brief 使用可能な青魔法を選択する /
@@ -238,62 +288,8 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
         else if (!get_com(lm_ptr->out_val, &lm_ptr->choice, TRUE))
             break;
 
-        if (use_menu && lm_ptr->choice != ' ') {
-            switch (lm_ptr->choice) {
-            case '0': {
-                screen_load();
-                return FALSE;
-            }
-
-            case '8':
-            case 'k':
-            case 'K': {
-                do {
-                    lm_ptr->menu_line += (lm_ptr->count - 1);
-                    if (lm_ptr->menu_line > lm_ptr->count)
-                        lm_ptr->menu_line -= lm_ptr->count;
-                } while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
-                break;
-            }
-
-            case '2':
-            case 'j':
-            case 'J': {
-                do {
-                    lm_ptr->menu_line++;
-                    if (lm_ptr->menu_line > lm_ptr->count)
-                        lm_ptr->menu_line -= lm_ptr->count;
-                } while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
-                break;
-            }
-
-            case '6':
-            case 'l':
-            case 'L': {
-                lm_ptr->menu_line = lm_ptr->count;
-                while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
-                    lm_ptr->menu_line--;
-                break;
-            }
-
-            case '4':
-            case 'h':
-            case 'H': {
-                lm_ptr->menu_line = 1;
-                while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
-                    lm_ptr->menu_line++;
-                break;
-            }
-
-            case 'x':
-            case 'X':
-            case '\r': {
-                lm_ptr->blue_magic_num = lm_ptr->menu_line - 1;
-                lm_ptr->ask = FALSE;
-                break;
-            }
-            }
-        }
+        if (use_menu && (lm_ptr->choice != ' ') && !switch_blue_magic_choice(caster_ptr, lm_ptr))
+            return FALSE;
 
         if ((lm_ptr->choice == ' ') || (lm_ptr->choice == '*') || (lm_ptr->choice == '?') || (use_menu && lm_ptr->ask)) {
             if (!lm_ptr->redraw || use_menu) {
