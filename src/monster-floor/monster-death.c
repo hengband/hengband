@@ -11,6 +11,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"

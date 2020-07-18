@@ -8,6 +8,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
@@ -1001,7 +1002,7 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
 	m_ptr->dealt_damage = 0;
 
 	/* Extract the monster base speed */
-	m_ptr->mspeed = get_mspeed(target_ptr, r_ptr);
+	m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
 	/* Sub-alignment of a monster */
 	if (!is_pet(m_ptr) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))

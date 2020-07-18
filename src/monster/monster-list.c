@@ -14,6 +14,7 @@
 #include "core/speed-table.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
@@ -364,7 +365,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
                 msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
     }
 
-    m_ptr->mspeed = get_mspeed(player_ptr, r_ptr);
+    m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
     int oldmaxhp = m_ptr->max_maxhp;
     if (r_ptr->flags1 & RF1_FORCE_MAXHP) {
@@ -386,15 +387,14 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 }
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief モンスターの個体加速を設定する / Get initial monster speed
  * @param r_ptr モンスター種族の参照ポインタ
  * @return 加速値
  */
-SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr)
+SPEED get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
 {
     SPEED mspeed = r_ptr->speed;
-    if (!(r_ptr->flags1 & RF1_UNIQUE) && !player_ptr->current_floor_ptr->inside_arena) {
+    if (!(r_ptr->flags1 & RF1_UNIQUE) && !floor_ptr->inside_arena) {
         /* Allow some small variation per monster */
         int i = SPEED_TO_ENERGY(r_ptr->speed) / (one_in_(4) ? 3 : 10);
         if (i)

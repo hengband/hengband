@@ -12,6 +12,7 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-save.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/grid.h"
@@ -364,7 +365,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 
     m_ptr->dealt_damage = 0;
 
-    m_ptr->mspeed = get_mspeed(player_ptr, r_ptr);
+    m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
     if (mode & PM_HASTE)
         (void)set_monster_fast(player_ptr, g_ptr->m_idx, 100);
