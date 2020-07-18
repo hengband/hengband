@@ -313,7 +313,7 @@ static void describe_blue_magic_name(player_type *caster_ptr, learnt_magic_type 
     }
 }
 
-static bool blue_mage_key_input(player_type *caster_ptr, learnt_magic_type *lm_ptr)
+static bool blue_magic_key_input(player_type *caster_ptr, learnt_magic_type *lm_ptr)
 {
     if ((lm_ptr->choice != ' ') && (lm_ptr->choice != '*') && (lm_ptr->choice != '?') && (use_menu || (lm_ptr->ask == 0)))
         return FALSE;
@@ -333,6 +333,18 @@ static bool blue_mage_key_input(player_type *caster_ptr, learnt_magic_type *lm_p
         prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
 
     return TRUE;
+}
+
+static void convert_lower_blue_magic_selection(learnt_magic_type *lm_ptr)
+{
+    if (use_menu)
+        return;
+
+    lm_ptr->ask = isupper(lm_ptr->choice);
+    if (lm_ptr->ask)
+        lm_ptr->choice = (char)tolower(lm_ptr->choice);
+
+    lm_ptr->blue_magic_num = (islower(lm_ptr->choice) ? A2I(lm_ptr->choice) : -1);
 }
 
 /*!
@@ -376,17 +388,10 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
         if (use_menu && (lm_ptr->choice != ' ') && !switch_blue_magic_choice(caster_ptr, lm_ptr))
             return FALSE;
 
-        if (blue_mage_key_input(caster_ptr, lm_ptr))
+        if (blue_magic_key_input(caster_ptr, lm_ptr))
             continue;
 
-        if (!use_menu) {
-            lm_ptr->ask = isupper(lm_ptr->choice);
-            if (lm_ptr->ask)
-                lm_ptr->choice = (char)tolower(lm_ptr->choice);
-
-            lm_ptr->blue_magic_num = (islower(lm_ptr->choice) ? A2I(lm_ptr->choice) : -1);
-        }
-
+        convert_lower_blue_magic_selection(lm_ptr);
         if ((lm_ptr->blue_magic_num < 0) || (lm_ptr->blue_magic_num >= lm_ptr->count) || !caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]]) {
             bell();
             continue;
