@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "floor/floor.h"
 
 /* Spell Type flag */
 #define MONSTER_TO_PLAYER 0x01

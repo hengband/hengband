@@ -8,6 +8,7 @@
 #include "core/disturbance.h"
 #include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

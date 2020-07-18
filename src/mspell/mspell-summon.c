@@ -1,6 +1,7 @@
 ﻿#include "mspell/mspell-summon.h"
 #include "core/disturbance.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
