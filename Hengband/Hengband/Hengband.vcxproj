@@ -287,6 +287,7 @@
     <ClCompile Include="..\..\src\load\player-info-loader.c" />
     <ClCompile Include="..\..\src\load\store-loader.c" />
     <ClCompile Include="..\..\src\load\world-loader.c" />
+    <ClCompile Include="..\..\src\save\info-writer.c" />
     <ClCompile Include="..\..\src\save\item-writer.c" />
     <ClCompile Include="..\..\src\save\monster-writer.c" />
     <ClCompile Include="..\..\src\save\save-util.c" />
@@ -819,6 +820,7 @@
     <ClInclude Include="..\..\src\load\savedata-flag-types.h" />
     <ClInclude Include="..\..\src\load\store-loader.h" />
     <ClInclude Include="..\..\src\load\world-loader.h" />
+    <ClInclude Include="..\..\src\save\info-writer.h" />
     <ClInclude Include="..\..\src\save\item-writer.h" />
     <ClInclude Include="..\..\src\save\monster-writer.h" />
     <ClInclude Include="..\..\src\save\save-util.h" />
