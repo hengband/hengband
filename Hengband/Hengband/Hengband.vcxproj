@@ -249,6 +249,7 @@
     <ClCompile Include="..\..\src\io\input-key-acceptor.c" />
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\io\store-key-processor.c" />
+    <ClCompile Include="..\..\src\load\info-loader.c" />
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-magic-resistance.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
@@ -772,6 +773,7 @@
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
     <ClInclude Include="..\..\src\io\store-key-processor.h" />
+    <ClInclude Include="..\..\src\load\info-loader.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-mage.h" />

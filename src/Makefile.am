@@ -309,6 +309,7 @@ hengband_SOURCES = \
 	load/dungeon-loader.c load/dungeon-loader.h \
 	load/extra-loader.c load/extra-loader.h \
 	load/floor-loader.c load/floor-loader.h \
+	load/info-loader.c load/info-loader.h \
 	load/inventory-loader.c load/inventory-loader.h \
 	load/item-loader.c load/item-loader.h \
 	load/monster-loader.c load/monster-loader.h \
