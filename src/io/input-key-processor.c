@@ -65,10 +65,10 @@
 #include "knowledge/knowledge-quests.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-blue-mage.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-switcher.h" // do_cmd_mind_browse() がある。後で移設する.
 #include "mind/snipe-types.h"
-#include "mspell/mspells3.h" // do_cmd_cast_learned() がある。後で移設する.
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/special-defense-types.h"

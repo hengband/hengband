@@ -1811,6 +1811,9 @@
     <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.c">
       <Filter>blue-magic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-blue-mage.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">

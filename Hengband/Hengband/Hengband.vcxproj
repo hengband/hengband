@@ -252,6 +252,7 @@
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\io\store-key-processor.c" />
     <ClCompile Include="..\..\src\load\info-loader.c" />
+    <ClCompile Include="..\..\src\mind\mind-blue-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-magic-resistance.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
