@@ -9,6 +9,7 @@
 #include "effect/effect-item.h"
 #include "effect/effect-monster.h"
 #include "effect/spells-effect-util.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/special-options.h"

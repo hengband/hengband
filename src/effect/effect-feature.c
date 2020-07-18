@@ -3,6 +3,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"

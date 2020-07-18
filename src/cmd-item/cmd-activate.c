@@ -18,6 +18,7 @@
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
+#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"

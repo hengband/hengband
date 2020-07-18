@@ -1,6 +1,7 @@
 ﻿#include "action/run-execution.h"
 #include "action/movement-execution.h"
 #include "core/disturbance.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"

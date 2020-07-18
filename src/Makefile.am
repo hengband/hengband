@@ -189,6 +189,7 @@ hengband_SOURCES = \
 	flavor/object-flavor.c flavor/object-flavor.h \
 	flavor/tval-description-switcher.c flavor/tval-description-switcher.h \
 	\
+	floor/cave.c floor/cave.h \
 	floor/fixed-map-generator.c floor/fixed-map-generator.h \
 	floor/floor.c floor/floor.h \
 	floor/floor-base-definitions.h \

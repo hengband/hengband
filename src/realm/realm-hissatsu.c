@@ -12,6 +12,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"

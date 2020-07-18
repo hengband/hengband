@@ -4,6 +4,7 @@
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"

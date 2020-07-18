@@ -5,6 +5,7 @@
  */
 
 #include "spell/range-calc.h"
+#include "floor/cave.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "spell/spell-types.h"

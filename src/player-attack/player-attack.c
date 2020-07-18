@@ -12,7 +12,7 @@
 #include "combat/martial-arts-table.h"
 #include "combat/slaying.h"
 #include "core/player-update-types.h"
-#include "floor/floor.h"
+#include "floor/cave.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature-flag-types.h"
 #include "inventory/inventory-slot-types.h"

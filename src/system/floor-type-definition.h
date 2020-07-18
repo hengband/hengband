@@ -3,7 +3,6 @@
 #include "floor/floor-base-definitions.h"
 #include "floor/sight-definitions.h"
 #include "monster/monster-timed-effect-types.h"
-#include "system/angband.h"
 
 typedef struct grid_type grid_type;
 typedef struct object_type object_type;

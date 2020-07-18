@@ -3,6 +3,7 @@
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save.h"

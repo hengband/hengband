@@ -6,6 +6,7 @@
 #include "effect/effect-monster.h"
 #include "effect/effect-player.h"
 #include "effect/spells-effect-util.h"
+#include "floor/cave.h"
 #include "game-option/special-options.h"
 #include "grid/feature-flag-types.h"
 #include "io/cursor.h"

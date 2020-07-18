@@ -23,6 +23,7 @@
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
 #include "floor/wild.h"

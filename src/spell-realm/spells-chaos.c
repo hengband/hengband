@@ -4,6 +4,7 @@
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

@@ -2,7 +2,6 @@
 
 #include "system/angband.h"
 
-typedef struct floor_type floor_type;
 extern floor_type floor_info;
 
 /*
@@ -189,6 +188,3 @@ void compact_objects(player_type *owner_ptr, int size);
 void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
 void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
 bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x);
-
-typedef enum feature_flag_type feature_flag_type;
-bool cave_have_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, feature_flag_type f_idx);

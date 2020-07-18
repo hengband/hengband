@@ -2,6 +2,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"

@@ -1781,6 +1781,9 @@
     <ClCompile Include="..\..\src\mind\mind-switcher.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\cave.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3891,6 +3894,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h">
       <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\cave.h">
+      <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
