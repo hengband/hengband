@@ -151,6 +151,19 @@ static bool select_blue_magic_kind_command(learnt_magic_type *lm_ptr)
     return TRUE;
 }
 
+static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
+{
+    if (!use_menu)
+        return select_blue_magic_kind_command(lm_ptr));
+
+    screen_save();
+    if (!select_blue_magic_kind_menu(lm_ptr))
+        return FALSE;
+
+    screen_load();
+    return TRUE;
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -176,16 +189,8 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
     if (check_blue_magic_cancel(sn))
         return TRUE;
 
-    if (use_menu) {
-        screen_save();
-        if (!select_blue_magic_kind_menu(lm_ptr))
-            return FALSE;
-
-        screen_load();
-    } else {
-        if (!select_blue_magic_kind_command(lm_ptr))
-            return FALSE;
-    }
+    if (!check_blue_magic_kind(lm_ptr))
+        return FALSE;
 
     set_rf_masks(&lm_ptr->f4, &lm_ptr->f5, &lm_ptr->f6, lm_ptr->mode);
 
