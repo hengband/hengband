@@ -801,10 +801,6 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->tval_ammo = (byte)bow_tval_ammo(o_ptr);
         if (o_ptr->k_idx && !creature_ptr->heavy_shoot) {
             creature_ptr->num_fire = calc_num_fire(creature_ptr, o_ptr);
-            if ((creature_ptr->pclass == CLASS_SNIPER) && (creature_ptr->tval_ammo == TV_BOLT)) {
-                creature_ptr->to_h_b += (10 + (creature_ptr->lev / 5));
-                creature_ptr->dis_to_h_b += (10 + (creature_ptr->lev / 5));
-            }
         }
     }
 
@@ -3635,7 +3631,7 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
 {
     int id = slot - INVEN_RARM;
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
-    int hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
+    creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(o_ptr, flgs);
 
@@ -3769,11 +3765,18 @@ static void calc_to_hit_bow(player_type *creature_ptr)
     if (is_heavy_shoot(creature_ptr, o_ptr)) {
         creature_ptr->to_h_b += 2 * (creature_ptr->hold - o_ptr->weight / 10);
     }
+
+    if (o_ptr->k_idx) {
+        if (o_ptr->k_idx && !creature_ptr->heavy_shoot) {
+            if ((creature_ptr->pclass == CLASS_SNIPER) && (creature_ptr->tval_ammo == TV_BOLT)) {
+                creature_ptr->to_h_b += (10 + (creature_ptr->lev / 5));
+            }
+        }
+    }
 }
 
 static void calc_to_hit_bow_display(player_type *creature_ptr)
 {
-
     creature_ptr->dis_to_h_b = 0;
     creature_ptr->dis_to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->dis_to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
@@ -3813,6 +3816,16 @@ static void calc_to_hit_bow_display(player_type *creature_ptr)
 
     if (creature_ptr->shero) {
         creature_ptr->dis_to_h_b -= 12;
+    }
+
+	object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
+
+    if (o_ptr->k_idx) {
+        if (o_ptr->k_idx && !creature_ptr->heavy_shoot) {
+            if ((creature_ptr->pclass == CLASS_SNIPER) && (creature_ptr->tval_ammo == TV_BOLT)) {
+                creature_ptr->dis_to_h_b += (10 + (creature_ptr->lev / 5));
+            }
+        }
     }
 }
 
