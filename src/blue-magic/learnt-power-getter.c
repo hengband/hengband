@@ -58,6 +58,22 @@ static learnt_magic_type *initialize_lenat_magic_type(player_type *caster_ptr, l
 }
 
 /*!
+ * @brief コマンド反復チェック
+ * @param sn 選択したモンスター攻撃ID
+ * @return 発動可能な魔法を選択した場合TRUE、処理続行の場合FALSE
+ */
+static bool check_blue_magic_cancel(SPELL_IDX *sn)
+{
+    *sn = -1;
+    COMMAND_CODE code;
+    if (!repeat_pull(&code))
+        return FALSE;
+
+    *sn = (SPELL_IDX)code;
+    return TRUE;
+}
+
+/*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -79,12 +95,8 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 {
     learnt_magic_type tmp_magic;
     learnt_magic_type *lm_ptr = initialize_lenat_magic_type(caster_ptr, &tmp_magic);
-    *sn = -1;
-    COMMAND_CODE code;
-    if (repeat_pull(&code)) {
-        *sn = (SPELL_IDX)code;
+    if (check_blue_magic_cancel(sn))
         return TRUE;
-    }
 
     if (use_menu) {
         screen_save();
@@ -119,6 +131,7 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
                 lm_ptr->mode = lm_ptr->menu_line;
                 break;
             }
+
             if (lm_ptr->menu_line > 5)
                 lm_ptr->menu_line -= 5;
         }
