@@ -10,6 +10,7 @@
 #include "effect/effect-player-switcher.h"
 #include "effect/effect-player-util.h"
 #include "effect/spells-effect-util.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

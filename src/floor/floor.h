@@ -5,14 +5,6 @@
 extern floor_type floor_info;
 
 /*
- * Determines if a map location is on or inside the outer walls
- * (unsigned version)
- */
-#define in_bounds2u(F,Y,X) \
-   (((Y) < (F)->height) && ((X) < (F)->width))
-
-
-/*
  * Determine if player is on this grid
  */
 #define player_bold(C,Y,X) \
