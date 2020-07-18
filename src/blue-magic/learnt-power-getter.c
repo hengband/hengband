@@ -73,6 +73,47 @@ static bool check_blue_magic_cancel(SPELL_IDX *sn)
     return TRUE;
 }
 
+static bool select_blue_magic_kind_menu(learnt_magic_type *lm_ptr)
+{
+    while (lm_ptr->mode == 0) {
+        prt(format(_(" %s ボルト", " %s bolt"), (lm_ptr->menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
+        prt(format(_(" %s ボール", " %s ball"), (lm_ptr->menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
+        prt(format(_(" %s ブレス", " %s breath"), (lm_ptr->menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
+        prt(format(_(" %s 召喚", " %s sommoning"), (lm_ptr->menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
+        prt(format(_(" %s その他", " %s others"), (lm_ptr->menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
+        prt(_("どの種類の魔法を使いますか？", "use which type of magic? "), 0, 0);
+
+        lm_ptr->choice = inkey();
+        switch (lm_ptr->choice) {
+        case ESCAPE:
+        case 'z':
+        case 'Z':
+            screen_load();
+            return FALSE;
+        case '2':
+        case 'j':
+        case 'J':
+            lm_ptr->menu_line++;
+            break;
+        case '8':
+        case 'k':
+        case 'K':
+            lm_ptr->menu_line += 4;
+            break;
+        case '\r':
+        case 'x':
+        case 'X':
+            lm_ptr->mode = lm_ptr->menu_line;
+            break;
+        }
+
+        if (lm_ptr->menu_line > 5)
+            lm_ptr->menu_line -= 5;
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -100,41 +141,8 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 
     if (use_menu) {
         screen_save();
-        while (!lm_ptr->mode) {
-            prt(format(_(" %s ボルト", " %s bolt"), (lm_ptr->menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
-            prt(format(_(" %s ボール", " %s ball"), (lm_ptr->menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
-            prt(format(_(" %s ブレス", " %s breath"), (lm_ptr->menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
-            prt(format(_(" %s 召喚", " %s sommoning"), (lm_ptr->menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
-            prt(format(_(" %s その他", " %s others"), (lm_ptr->menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
-            prt(_("どの種類の魔法を使いますか？", "use which type of magic? "), 0, 0);
-
-            lm_ptr->choice = inkey();
-            switch (lm_ptr->choice) {
-            case ESCAPE:
-            case 'z':
-            case 'Z':
-                screen_load();
-                return FALSE;
-            case '2':
-            case 'j':
-            case 'J':
-                lm_ptr->menu_line++;
-                break;
-            case '8':
-            case 'k':
-            case 'K':
-                lm_ptr->menu_line += 4;
-                break;
-            case '\r':
-            case 'x':
-            case 'X':
-                lm_ptr->mode = lm_ptr->menu_line;
-                break;
-            }
-
-            if (lm_ptr->menu_line > 5)
-                lm_ptr->menu_line -= 5;
-        }
+        if (!select_blue_magic_kind_menu(lm_ptr))
+            return FALSE;
 
         screen_load();
     } else {
