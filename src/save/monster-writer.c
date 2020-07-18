@@ -60,37 +60,8 @@ static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
     wr_u32b(*flags);
 }
 
-/*!
- * @brief モンスター情報を書き込む / Write a "monster" record
- * @param m_ptr モンスター情報保存元ポインタ
- * @return なし
- */
-void wr_monster(monster_type *m_ptr)
+static void write_monster_info(monster_type *m_ptr, const BIT_FLAGS flags)
 {
-    BIT_FLAGS flags = 0x00000000;
-    write_monster_flags();
-
-    /*** Write only un-obvious elements ***/
-    wr_s16b(m_ptr->r_idx);
-    wr_byte((byte)m_ptr->fy);
-    wr_byte((byte)m_ptr->fx);
-    wr_s16b((s16b)m_ptr->hp);
-    wr_s16b((s16b)m_ptr->maxhp);
-    wr_s16b((s16b)m_ptr->max_maxhp);
-    wr_u32b(m_ptr->dealt_damage);
-
-    /* Monster race index of its appearance */
-    if (flags & SAVE_MON_AP_R_IDX)
-        wr_s16b(m_ptr->ap_r_idx);
-
-    if (flags & SAVE_MON_SUB_ALIGN)
-        wr_byte(m_ptr->sub_align);
-    if (flags & SAVE_MON_CSLEEP)
-        wr_s16b(m_ptr->mtimed[MTIMED_CSLEEP]);
-
-    wr_byte((byte)m_ptr->mspeed);
-    wr_s16b(m_ptr->energy_need);
-
     byte tmp8u;
     if (flags & SAVE_MON_FAST) {
         tmp8u = (byte)m_ptr->mtimed[MTIMED_FAST];
@@ -142,6 +113,38 @@ void wr_monster(monster_type *m_ptr)
 
     if (flags & SAVE_MON_PARENT)
         wr_s16b(m_ptr->parent_m_idx);
+}
+
+/*!
+ * @brief モンスター情報を書き込む / Write a "monster" record
+ * @param m_ptr モンスター情報保存元ポインタ
+ * @return なし
+ */
+void wr_monster(monster_type *m_ptr)
+{
+    BIT_FLAGS flags = 0x00000000;
+    write_monster_flags(m_ptr, &flags);
+
+    wr_s16b(m_ptr->r_idx);
+    wr_byte((byte)m_ptr->fy);
+    wr_byte((byte)m_ptr->fx);
+    wr_s16b((s16b)m_ptr->hp);
+    wr_s16b((s16b)m_ptr->maxhp);
+    wr_s16b((s16b)m_ptr->max_maxhp);
+    wr_u32b(m_ptr->dealt_damage);
+
+    if (flags & SAVE_MON_AP_R_IDX)
+        wr_s16b(m_ptr->ap_r_idx);
+
+    if (flags & SAVE_MON_SUB_ALIGN)
+        wr_byte(m_ptr->sub_align);
+
+    if (flags & SAVE_MON_CSLEEP)
+        wr_s16b(m_ptr->mtimed[MTIMED_CSLEEP]);
+
+    wr_byte((byte)m_ptr->mspeed);
+    wr_s16b(m_ptr->energy_need);
+    write_monster_info(m_ptr, flags);
 }
 
 /*!
