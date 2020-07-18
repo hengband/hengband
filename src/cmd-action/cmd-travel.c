@@ -1,7 +1,7 @@
 ﻿#include "cmd-action/cmd-travel.h"
 #include "action/travel-execution.h"
 #include "core/asking-player.h"
-#include "floor/floor.h"
+#include "floor/cave.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/targeting.h"

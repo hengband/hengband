@@ -12,6 +12,11 @@
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+/*
+ * Determines if a map location is fully inside the outer walls
+ */
+bool in_bounds(floor_type *floor_ptr, POSITION y, POSITION x) { return (y > 0) && (x > 0) && (y < floor_ptr->height - 1) && (x < floor_ptr->width - 1); }
+
 bool cave_have_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, feature_flag_type f_idx)
 {
     return have_flag(f_info[floor_ptr->grid_array[y][x].feat].flags, f_idx);

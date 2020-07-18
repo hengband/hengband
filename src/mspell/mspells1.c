@@ -16,6 +16,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
 #include "io/targeting.h"

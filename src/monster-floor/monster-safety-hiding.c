@@ -5,6 +5,7 @@
  */
 
 #include "monster-floor/monster-safety-hiding.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-dist-offsets.h"

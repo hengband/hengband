@@ -16,6 +16,7 @@
 #include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-generate.h"
 #include "floor/floor-object.h"

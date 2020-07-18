@@ -6,6 +6,7 @@
 #include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"

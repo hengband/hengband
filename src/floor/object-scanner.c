@@ -1,6 +1,6 @@
 ﻿#include "floor/object-scanner.h"
+#include "floor/cave.h"
 #include "flavor/flavor-describer.h"
-#include "floor/floor.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-util.h"
