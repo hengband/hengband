@@ -55,24 +55,6 @@
 #include "world/world.h"
 
 /*!
- * @brief セーブデータにアイテムの鑑定情報を書き込む / Write an "perception" record
- * @param k_idx ベースアイテムのID
- * @return なし
- */
-static void wr_perception(KIND_OBJECT_IDX k_idx)
-{
-    byte tmp8u = 0;
-    object_kind *k_ptr = &k_info[k_idx];
-    if (k_ptr->aware)
-        tmp8u |= 0x01;
-
-    if (k_ptr->tried)
-        tmp8u |= 0x02;
-
-    wr_byte(tmp8u);
-}
-
-/*!
  * @brief セーブデータに店舗情報を書き込む / Write a "store" record
  * @param store_ptr 店舗情報の参照ポインタ
  * @return なし
