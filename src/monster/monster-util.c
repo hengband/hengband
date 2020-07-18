@@ -18,6 +18,13 @@
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+typedef enum dungeon_mode_type {
+    DUNGEON_MODE_AND = 1,
+    DUNGEON_MODE_NAND = 2,
+    DUNGEON_MODE_OR = 3,
+    DUNGEON_MODE_NOR = 4,
+} dungeon_mode_type;
+
 MONSTER_IDX hack_m_idx = 0; /* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;
 

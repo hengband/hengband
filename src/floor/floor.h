@@ -5,12 +5,6 @@
 typedef struct floor_type floor_type;
 extern floor_type floor_info;
 
-#define DUNGEON_MODE_NONE       0
-#define DUNGEON_MODE_AND        1
-#define DUNGEON_MODE_NAND       2
-#define DUNGEON_MODE_OR         3
-#define DUNGEON_MODE_NOR        4
-
 /*** Dungeon type flags -- DG ***/
 #define DF1_WINNER              0x00000001L
 #define DF1_MAZE                0x00000002L
