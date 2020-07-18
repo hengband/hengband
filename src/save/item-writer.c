@@ -4,7 +4,7 @@
 #include "system/object-type-definition.h"
 #include "util/quarks.h"
 
-static void write_item_flags(BIT_FLAGS *flags, object_type *o_ptr)
+static void write_item_flags(object_type *o_ptr, BIT_FLAGS *flags)
 {
     if (o_ptr->pval)
         *flags |= SAVE_ITEM_PVAL;
@@ -96,49 +96,33 @@ static void write_item_flags(BIT_FLAGS *flags, object_type *o_ptr)
     wr_u32b(*flags);
 }
 
-/*!
- * @brief アイテムオブジェクトを書き込む / Write an "item" record
- * @param o_ptr アイテムオブジェクト保存元ポインタ
- * @return なし
- */
-void wr_item(object_type *o_ptr)
+static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
 {
-    BIT_FLAGS flags = 0x00000000;
-    write_item_flags(o_ptr, &flags);
-
-    /*** Write only un-obvious elements ***/
-    wr_s16b(o_ptr->k_idx);
-
-    wr_byte((byte)o_ptr->iy);
-    wr_byte((byte)o_ptr->ix);
-
-    if (flags & SAVE_ITEM_PVAL)
-        wr_s16b(o_ptr->pval);
-
-    if (flags & SAVE_ITEM_DISCOUNT)
-        wr_byte(o_ptr->discount);
-    if (flags & SAVE_ITEM_NUMBER)
-        wr_byte((byte)o_ptr->number);
-
     wr_s16b((s16b)o_ptr->weight);
-
     if (flags & SAVE_ITEM_NAME1)
         wr_byte((byte)o_ptr->name1);
+
     if (flags & SAVE_ITEM_NAME2)
         wr_byte((byte)o_ptr->name2);
+
     if (flags & SAVE_ITEM_TIMEOUT)
         wr_s16b(o_ptr->timeout);
 
     if (flags & SAVE_ITEM_TO_H)
         wr_s16b(o_ptr->to_h);
+
     if (flags & SAVE_ITEM_TO_D)
         wr_s16b((s16b)o_ptr->to_d);
+
     if (flags & SAVE_ITEM_TO_A)
         wr_s16b(o_ptr->to_a);
+
     if (flags & SAVE_ITEM_AC)
         wr_s16b(o_ptr->ac);
+
     if (flags & SAVE_ITEM_DD)
         wr_byte((byte)o_ptr->dd);
+
     if (flags & SAVE_ITEM_DS)
         wr_byte((byte)o_ptr->ds);
 
@@ -150,40 +134,70 @@ void wr_item(object_type *o_ptr)
 
     if (flags & SAVE_ITEM_ART_FLAGS0)
         wr_u32b(o_ptr->art_flags[0]);
+
     if (flags & SAVE_ITEM_ART_FLAGS1)
         wr_u32b(o_ptr->art_flags[1]);
+
     if (flags & SAVE_ITEM_ART_FLAGS2)
         wr_u32b(o_ptr->art_flags[2]);
+
     if (flags & SAVE_ITEM_ART_FLAGS3)
         wr_u32b(o_ptr->art_flags[3]);
+
     if (flags & SAVE_ITEM_ART_FLAGS4)
         wr_u32b(o_ptr->art_flags[4]);
 
     if (flags & SAVE_ITEM_CURSE_FLAGS)
         wr_u32b(o_ptr->curse_flags);
 
-    /* Held by monster index */
     if (flags & SAVE_ITEM_HELD_M_IDX)
         wr_s16b(o_ptr->held_m_idx);
 
-    /* Extra information */
     if (flags & SAVE_ITEM_XTRA1)
         wr_byte(o_ptr->xtra1);
+
     if (flags & SAVE_ITEM_XTRA2)
         wr_byte(o_ptr->xtra2);
+
     if (flags & SAVE_ITEM_XTRA3)
         wr_byte(o_ptr->xtra3);
+
     if (flags & SAVE_ITEM_XTRA4)
         wr_s16b(o_ptr->xtra4);
+
     if (flags & SAVE_ITEM_XTRA5)
         wr_s16b(o_ptr->xtra5);
 
-    /* Feelings */
     if (flags & SAVE_ITEM_FEELING)
         wr_byte(o_ptr->feeling);
+}
 
+/*!
+ * @brief アイテムオブジェクトを書き込む / Write an "item" record
+ * @param o_ptr アイテムオブジェクト保存元ポインタ
+ * @return なし
+ */
+void wr_item(object_type *o_ptr)
+{
+    BIT_FLAGS flags = 0x00000000;
+    write_item_flags(o_ptr, &flags);
+
+    wr_s16b(o_ptr->k_idx);
+    wr_byte((byte)o_ptr->iy);
+    wr_byte((byte)o_ptr->ix);
+    if (flags & SAVE_ITEM_PVAL)
+        wr_s16b(o_ptr->pval);
+
+    if (flags & SAVE_ITEM_DISCOUNT)
+        wr_byte(o_ptr->discount);
+
+    if (flags & SAVE_ITEM_NUMBER)
+        wr_byte((byte)o_ptr->number);
+
+    write_item_info(o_ptr, flags);
     if (flags & SAVE_ITEM_INSCRIPTION)
         wr_string(quark_str(o_ptr->inscription));
+
     if (flags & SAVE_ITEM_ART_NAME)
         wr_string(quark_str(o_ptr->art_name));
 }
