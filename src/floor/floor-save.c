@@ -56,7 +56,7 @@
 #include "player/player-class.h"
 #include "player/player-personalities-types.h"
 #include "player/special-defense-types.h"
-#include "save/save.h"
+#include "save/floor-writer.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"

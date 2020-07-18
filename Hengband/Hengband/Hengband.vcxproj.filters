@@ -1799,6 +1799,9 @@
     <ClCompile Include="..\..\src\save\player-writer.c">
       <Filter>save</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\save\floor-writer.c">
+      <Filter>save</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3926,6 +3929,9 @@
       <Filter>save</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\save\player-writer.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\save\floor-writer.h">
       <Filter>save</Filter>
     </ClInclude>
   </ItemGroup>

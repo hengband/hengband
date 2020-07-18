@@ -8,7 +8,7 @@
 #include "load/load-v1-5-0.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
-#include "save/save.h"
+#include "save/floor-writer.h"
 #include "system/floor-type-definition.h"
 #include "world/world.h"
 
