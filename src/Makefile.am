@@ -75,6 +75,7 @@ hengband_SOURCES = \
 	birth/auto-roller.c birth/auto-roller.h \
 	birth/birth-wizard.c birth/birth-wizard.h \
 	\
+	blue-magic/blue-magic-caster.c blue-magic/blue-magic-caster.h \
 	blue-magic/learnt-info.c blue-magic/learnt-info.h \
 	blue-magic/learnt-power-getter.c blue-magic/learnt-power-getter.h \
 	\

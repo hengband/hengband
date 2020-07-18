@@ -1814,6 +1814,9 @@
     <ClCompile Include="..\..\src\mind\mind-blue-mage.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-casterc.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3953,6 +3956,9 @@
       <Filter>blue-magic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\blue-magic\learnt-power-getter.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-caster.h">
       <Filter>blue-magic</Filter>
     </ClInclude>
   </ItemGroup>
