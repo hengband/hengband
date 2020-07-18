@@ -20,6 +20,7 @@
 #include "floor/floor-events.h"
 #include "floor/floor-generate.h"
 #include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"

@@ -8,6 +8,7 @@
 #include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"
+#include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"

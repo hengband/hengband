@@ -7,6 +7,7 @@
 #include "flavor/flavor-describer.h"
 #include "floor/floor-events.h"
 #include "floor/floor-town.h"
+#include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"

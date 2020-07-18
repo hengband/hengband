@@ -19,6 +19,7 @@
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
