@@ -30,18 +30,6 @@
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
-/*!
- * @brief 青魔法の叫び
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @return 常にTRUE
- */
-static bool cast_blue_shriek(player_type *caster_ptr)
-{
-    msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
-    aggravate_monsters(caster_ptr, 0);
-    return TRUE;
-}
-
 static bool cast_blue_dispel(player_type *caster_ptr)
 {
     if (!target_set(caster_ptr, TARGET_KILL))
@@ -147,8 +135,9 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     switch (spell) {
     case MS_SHRIEK:
-        (void)cast_blue_shriek(caster_ptr);
-        break;
+        msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
+        aggravate_monsters(caster_ptr, 0);
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_XXX1:
     case MS_XXX2:
     case MS_XXX3:
@@ -565,6 +554,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
     case MS_BLIND:
         if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
             return FALSE;
+
         confuse_monster(caster_ptr, bm_ptr->dir, bm_ptr->plev * 2);
         break;
     case MS_CONF:
@@ -577,11 +567,13 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
     case MS_SLOW:
         if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
             return FALSE;
+
         slow_monster(caster_ptr, bm_ptr->dir, bm_ptr->plev);
         break;
     case MS_SLEEP:
         if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
             return FALSE;
+
         sleep_monster(caster_ptr, bm_ptr->dir, bm_ptr->plev);
         break;
     case MS_SPEED:
@@ -713,6 +705,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
                 bm_ptr->no_trump = TRUE;
             }
         }
+
         break;
     }
     case MS_S_MONSTER: {
@@ -874,9 +867,9 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         break;
     }
     case MS_S_UNIQUE: {
-        int k, count = 0;
+        int count = 0;
         msg_print(_("特別な強敵を召喚した！", "You summon a special opponent!"));
-        for (k = 0; k < 1; k++) {
+        for (int k = 0; k < 1; k++) {
             if (summon_specific(caster_ptr, (bm_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bm_ptr->summon_lev, SUMMON_UNIQUE,
                     (bm_ptr->g_mode | bm_ptr->p_mode | PM_ALLOW_UNIQUE))) {
                 count++;
@@ -885,7 +878,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             }
         }
 
-        for (k = count; k < 1; k++) {
+        for (int k = count; k < 1; k++) {
             if (summon_specific(caster_ptr, (bm_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bm_ptr->summon_lev, SUMMON_HI_UNDEAD,
                     (bm_ptr->g_mode | bm_ptr->p_mode | PM_ALLOW_UNIQUE))) {
                 count++;
