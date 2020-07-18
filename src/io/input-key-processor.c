@@ -86,9 +86,6 @@
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 
-// todo command-processor.h と util.h が相互依存している。後で別な場所に移す.
-COMMAND_CODE now_message;
-
 /*!
  * @brief ウィザードモードへの導入処理
  * / Verify use of "wizard" mode

@@ -10,7 +10,6 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
-#include "io/input-key-processor.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

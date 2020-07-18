@@ -23,6 +23,7 @@ extern u32b *message__ptr;
 extern char *message__buf;
 
 extern bool msg_flag;
+extern COMMAND_CODE now_message;
 
 s32b message_num(void);
 concptr message_str(int age);

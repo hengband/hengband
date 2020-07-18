@@ -6,7 +6,6 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/option-flags.h"
 #include "io/input-key-acceptor.h"
-#include "io/input-key-processor.h"
 #include "main/sound-of-music.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
@@ -33,6 +32,8 @@ char *message__buf;
 
 /* Used in msg_print() for "buffering" */
 bool msg_flag;
+
+COMMAND_CODE now_message;
 
 /*!
  * @brief 保存中の過去ゲームメッセージの数を返す。 / How many messages are "available"?
