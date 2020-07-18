@@ -521,9 +521,6 @@
     <ClCompile Include="..\..\src\io\targeting.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player\selfinfo.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -1763,9 +1760,6 @@
     <ClCompile Include="..\..\src\mind\stances-table.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\racial.c">
-      <Filter>racial</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\racial\racial-android.c">
       <Filter>racial</Filter>
     </ClCompile>
@@ -1780,6 +1774,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\racial\racial-vampire.c">
       <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-switcher.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-switcher.c">
+      <Filter>mind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2349,9 +2349,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\targeting.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\mind.h">
-      <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\selfinfo.h">
       <Filter>player</Filter>
@@ -3859,9 +3856,6 @@
     <ClInclude Include="..\..\src\mind\stances-table.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\racial\racial.h">
-      <Filter>racial</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\racial\racial-android.h">
       <Filter>racial</Filter>
     </ClInclude>
@@ -3878,6 +3872,12 @@
       <Filter>racial</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\snipe-types.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-switcher.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-switcher.h">
       <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>

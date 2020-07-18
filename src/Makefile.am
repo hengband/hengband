@@ -344,7 +344,6 @@ hengband_SOURCES = \
 	melee/melee-util.c melee/melee-util.h \
 	\
 	mind/drs-types.h \
-	mind/mind.c mind/mind.h \
 	mind/mind-blue-mage.h \
 	mind/mind-cavalry.c mind/mind-cavalry.h \
 	mind/mind-force-trainer.c mind/mind-force-trainer.h \
@@ -355,6 +354,7 @@ hengband_SOURCES = \
 	mind/mind-ninja.c mind/mind-ninja.h \
 	mind/mind-samurai.c mind/mind-samurai.h \
 	mind/mind-sniper.c mind/mind-sniper.h \
+	mind/mind-switcher.c mind/mind-switcher.h \
 	mind/mind-warrior.c mind/mind-warrior.h \
 	mind/mind-warrior-mage.c mind/mind-warrior-mage.h \
 	mind/mind-weaponsmith.c mind/mind-weaponsmith.h \
@@ -524,11 +524,11 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.c player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.c player-attack/player-attack.h \
 	\
-	racial/racial.c racial/racial.h \
 	racial/racial-android.c racial/racial-android.h \
 	racial/racial-balrog.c racial/racial-balrog.h \
 	racial/racial-draconian.c racial/racial-draconian.h \
 	racial/racial-kutar.c racial/racial-kutar.h \
+	racial/racial-switcher.c racial/racial-switcher.h \
 	racial/racial-vampire.c racial/racial-vampire.h \
 	\
 	realm/realm-arcane.c realm/realm-arcane.h \

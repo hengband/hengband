@@ -19,7 +19,7 @@
 #include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "mind/mind-sniper.h"
-#include "mind/mind.h"
+#include "mind/mind-switcher.h"
 #include "store/home.h"
 #include "store/museum.h"
 #include "store/purchase-order.h"

@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen. \n
  */
 
-#include "racial/racial.h"
+#include "racial/racial-switcher.h"
 #include "action/action-limited.h"
 #include "cmd-action/cmd-mane.h"
 #include "cmd-action/cmd-spell.h"

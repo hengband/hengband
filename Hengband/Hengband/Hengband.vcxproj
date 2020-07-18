@@ -1123,7 +1123,7 @@
     <ClCompile Include="..\..\src\locale\japanese.c" />
     <ClCompile Include="..\..\src\savedata\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\mind\mind.c" />
+    <ClCompile Include="..\..\src\mind\mind-switcher.c" />
     <ClCompile Include="..\..\src\monster\monster-info.c" />
     <ClCompile Include="..\..\src\monster\monster-list.c" />
     <ClCompile Include="..\..\src\mspell\mspells1.c" />
@@ -1132,7 +1132,7 @@
     <ClCompile Include="..\..\src\mspell\assign-monster-spell.c" />
     <ClCompile Include="..\..\src\mutation\mutation.c" />
     <ClCompile Include="..\..\src\object\object-info.c" />
-    <ClCompile Include="..\..\src\racial\racial.c" />
+    <ClCompile Include="..\..\src\racial\racial-switcher.c" />
     <ClCompile Include="..\..\src\term\readdib.c" />
     <ClCompile Include="..\..\src\realm\realm-arcane.c" />
     <ClCompile Include="..\..\src\realm\realm-chaos.c" />
@@ -1369,7 +1369,7 @@
     <ClInclude Include="..\..\src\io\inet.h" />
     <ClInclude Include="..\..\src\main\init.h" />
     <ClInclude Include="..\..\src\savedata\load.h" />
-    <ClInclude Include="..\..\src\mind\mind.h" />
+    <ClInclude Include="..\..\src\mind\mind-switcher.h" />
     <ClInclude Include="..\..\src\monster\monster-processor.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
     <ClInclude Include="..\..\src\system\monster-type-definition.h" />
@@ -1395,7 +1395,7 @@
     <ClInclude Include="..\..\src\player\player-skill.h" />
     <ClInclude Include="..\..\src\player\player-status.h" />
     <ClInclude Include="..\..\src\dungeon\quest.h" />
-    <ClInclude Include="..\..\src\racial\racial.h" />
+    <ClInclude Include="..\..\src\racial\racial-switcher.h" />
     <ClInclude Include="..\..\src\term\readdib.h" />
     <ClInclude Include="..\..\src\realm\realm-arcane.h" />
     <ClInclude Include="..\..\src\realm\realm-chaos.h" />
