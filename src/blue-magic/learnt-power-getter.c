@@ -37,6 +37,7 @@ typedef struct learnt_magic_type {
     bool flag;
     bool redraw;
     int need_mana;
+    char psi_desc[80];
 } learnt_magic_type;
 
 static learnt_magic_type *initialize_lenat_magic_type(player_type *caster_ptr, learnt_magic_type *lm_ptr)
@@ -280,6 +281,19 @@ static void calculate_blue_magic_success_probability(player_type *caster_ptr, le
     lm_ptr->chance = mod_spell_chance_2(caster_ptr, lm_ptr->chance);
 }
 
+static void close_blue_magic_name(learnt_magic_type *lm_ptr)
+{
+    if (!use_menu) {
+        sprintf(lm_ptr->psi_desc, "  %c)", I2A(lm_ptr->blue_magic_num));
+        return;
+    }
+
+    if (lm_ptr->blue_magic_num == (lm_ptr->menu_line - 1))
+        strcpy(lm_ptr->psi_desc, _("  》", "  > "));
+    else
+        strcpy(lm_ptr->psi_desc, "    ");
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -323,7 +337,6 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 
         if ((lm_ptr->choice == ' ') || (lm_ptr->choice == '*') || (lm_ptr->choice == '?') || (use_menu && lm_ptr->ask)) {
             if (!lm_ptr->redraw || use_menu) {
-                char psi_desc[80];
                 lm_ptr->redraw = TRUE;
                 if (!use_menu)
                     screen_save();
@@ -331,7 +344,6 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
                 prt("", lm_ptr->y, lm_ptr->x);
                 put_str(_("名前", "Name"), lm_ptr->y, lm_ptr->x + 5);
                 put_str(_("MP 失率 効果", "SP Fail Info"), lm_ptr->y, lm_ptr->x + 33);
-
                 for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
                     prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
                     if (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]])
@@ -340,16 +352,9 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
                     lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
                     calculate_blue_magic_success_probability(caster_ptr, lm_ptr);
                     learnt_info(caster_ptr, lm_ptr->comment, lm_ptr->blue_magics[lm_ptr->blue_magic_num]);
-                    if (use_menu) {
-                        if (lm_ptr->blue_magic_num == (lm_ptr->menu_line - 1))
-                            strcpy(psi_desc, _("  》", "  > "));
-                        else
-                            strcpy(psi_desc, "    ");
-                    } else
-                        sprintf(psi_desc, "  %c)", I2A(lm_ptr->blue_magic_num));
-
-                    strcat(psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, lm_ptr->need_mana, lm_ptr->chance, lm_ptr->comment));
-                    prt(psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
+                    close_blue_magic_name(lm_ptr);
+                    strcat(lm_ptr->psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, lm_ptr->need_mana, lm_ptr->chance, lm_ptr->comment));
+                    prt(lm_ptr->psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
                 }
 
                 if (lm_ptr->y < 22)
