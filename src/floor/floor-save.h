@@ -21,8 +21,7 @@
 /*
  *  A structure type for the saved floor
  */
-typedef struct
-{
+typedef struct saved_floor_type {
 	FLOOR_IDX floor_id;        /* No recycle until 65536 IDs are all used */
 	s16b savefile_id;     /* ID for savefile (from 0 to MAX_SAVED_FLOOR) */
 	DEPTH dun_level;
