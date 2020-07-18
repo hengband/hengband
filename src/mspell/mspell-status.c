@@ -6,6 +6,7 @@
  */
 
 #include "mspell/mspell-status.h"
+#include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "mind/drs-types.h"
@@ -20,7 +21,6 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
-#include "mspell/mspells3.h"
 #include "player/player-personalities-types.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"

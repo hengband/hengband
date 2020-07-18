@@ -10,6 +10,7 @@
  */
 
 #include "mspell/mspells1.h"
+#include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon-flag-types.h"
@@ -43,7 +44,6 @@
 #include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspells2.h"
-#include "mspell/mspells3.h"
 #include "object-enchant/object-curse.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"

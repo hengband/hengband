@@ -1,4 +1,5 @@
 ﻿#include "mspell/mspell-dispel.h"
+#include "blue-magic/blue-magic-checker.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
@@ -10,7 +11,6 @@
 #include "monster/monster-status.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspells3.h"
 #include "player/attack-defense-types.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-craft.h"

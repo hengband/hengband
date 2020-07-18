@@ -1,4 +1,5 @@
 ﻿#include "blue-magic/learnt-power-getter.h"
+#include "blue-magic/blue-magic-checker.h"
 #include "blue-magic/learnt-info.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
@@ -9,7 +10,6 @@
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "mspell/monster-power-table.h"
-#include "mspell/mspells3.h" // todo set_rf_masks() が依存している、後で消す.
 #include "realm/realm-types.h"
 #include "spell/spell-info.h"
 #include "term/screen-processor.h"

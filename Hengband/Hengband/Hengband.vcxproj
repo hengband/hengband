@@ -182,7 +182,7 @@
     <ClCompile Include="..\..\src\birth\initial-equipments-table.c" />
     <ClCompile Include="..\..\src\birth\inventory-initializer.c" />
     <ClCompile Include="..\..\src\birth\quick-start.c" />
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-casterc.c" />
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-caster.c" />
     <ClCompile Include="..\..\src\blue-magic\learnt-info.c" />
     <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.c" />
@@ -793,7 +793,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-mask-definitions.h" />
     <ClInclude Include="..\..\src\mspell\mspells1.h" />
     <ClInclude Include="..\..\src\mspell\mspells2.h" />
-    <ClInclude Include="..\..\src\mspell\mspells3.h" />
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-checker.h" />
     <ClInclude Include="..\..\src\mutation\mutation-flag-types.h" />
     <ClInclude Include="..\..\src\mutation\mutation-techniques.h" />
     <ClInclude Include="..\..\src\artifact\random-art-pval-investor.h" />
@@ -1155,7 +1155,7 @@
     <ClCompile Include="..\..\src\monster\monster-list.c" />
     <ClCompile Include="..\..\src\mspell\mspells1.c" />
     <ClCompile Include="..\..\src\mspell\mspells2.c" />
-    <ClCompile Include="..\..\src\mspell\mspells3.c" />
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-checker.c" />
     <ClCompile Include="..\..\src\mspell\assign-monster-spell.c" />
     <ClCompile Include="..\..\src\mutation\mutation.c" />
     <ClCompile Include="..\..\src\object\object-info.c" />

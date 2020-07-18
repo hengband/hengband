@@ -5,6 +5,7 @@
  */
 
 #include "wizard/wizard-spells.h"
+#include "blue-magic/blue-magic-checker.h"
 #include "core/asking-player.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
@@ -12,7 +13,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation-processor.h"
-#include "mspell/mspells3.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-chaos.h"
 #include "spell/spells-status.h"

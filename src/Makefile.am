@@ -76,6 +76,7 @@ hengband_SOURCES = \
 	birth/birth-wizard.c birth/birth-wizard.h \
 	\
 	blue-magic/blue-magic-caster.c blue-magic/blue-magic-caster.h \
+	blue-magic/blue-magic-checker.c blue-magic/blue-magic-checker.h \
 	blue-magic/learnt-info.c blue-magic/learnt-info.h \
 	blue-magic/learnt-power-getter.c blue-magic/learnt-power-getter.h \
 	\
@@ -450,7 +451,6 @@ hengband_SOURCES = \
 	mspell/monster-power-table.c mspell/monster-power-table.h \
 	mspell/mspells1.c mspell/mspells1.h \
 	mspell/mspells2.c mspell/mspells2.h \
-	mspell/mspells3.c mspell/mspells3.h \
 	mspell/mspell-breath.c mspell/mspell-breath.h \
 	mspell/mspell-ball.c mspell/mspell-ball.h \
 	mspell/mspell-bolt.c mspell/mspell-bolt.h \

@@ -569,9 +569,6 @@
     <ClCompile Include="..\..\src\mspell\mspells2.c">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspells3.c">
-      <Filter>mspell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-ball.c">
       <Filter>mspell</Filter>
     </ClCompile>
@@ -1814,7 +1811,10 @@
     <ClCompile Include="..\..\src\mind\mind-blue-mage.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-casterc.c">
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-checker.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-caster.c">
       <Filter>blue-magic</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3436,9 +3436,6 @@
     <ClInclude Include="..\..\src\mspell\mspells2.h">
       <Filter>mspell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspells3.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\view\status-bars-table.h">
       <Filter>view</Filter>
     </ClInclude>
@@ -3959,6 +3956,9 @@
       <Filter>blue-magic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\blue-magic\blue-magic-caster.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-checker.h">
       <Filter>blue-magic</Filter>
     </ClInclude>
   </ItemGroup>

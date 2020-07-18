@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "mspell/mspells3.h"
+#include "blue-magic/blue-magic-checker.h"
 #include "core/player-redraw-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
