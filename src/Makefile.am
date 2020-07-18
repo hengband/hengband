@@ -589,6 +589,7 @@ hengband_SOURCES = \
 	save/info-writer.c save/info-writer.h \
 	save/item-writer.c save/item-writer.h \
 	save/monster-writer.c save/monster-writer.h \
+	save/player-writer.c save/player-writer.h \
 	save/save.c save/save.h \
 	save/save-util.c save/save-util.h \
 	\
