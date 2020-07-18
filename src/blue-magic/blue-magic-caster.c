@@ -78,6 +78,61 @@ static bool cast_blue_shoot(player_type *caster_ptr, blue_magic_type *bm_ptr)
     return TRUE;
 }
 
+static bool cast_blue_breath_acid(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_ACID), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_ACID, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_elec(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_ELEC), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_ELEC, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_fire(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_FIRE), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_FIRE, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_cold(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_COLD), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_COLD, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_pois(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_POIS), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_POIS, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -115,44 +170,29 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_BR_ACID:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_acid(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_ACID), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_ACID, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_ELEC:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_elec(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_ELEC), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_ELEC, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_FIRE:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_fire(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_FIRE), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_FIRE, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_COLD:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_cold(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_COLD), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_COLD, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_POIS:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_pois(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_POIS), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_POIS, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_NETHER:
         if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
