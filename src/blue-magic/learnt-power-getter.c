@@ -114,6 +114,43 @@ static bool select_blue_magic_kind_menu(learnt_magic_type *lm_ptr)
     return TRUE;
 }
 
+static bool select_blue_magic_kind_command(learnt_magic_type *lm_ptr)
+{
+    sprintf(lm_ptr->comment, _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:"));
+    while (TRUE) {
+        char ch;
+        if (!get_com(lm_ptr->comment, &ch, TRUE))
+            return FALSE;
+
+        if (ch == 'A' || ch == 'a') {
+            lm_ptr->mode = 1;
+            break;
+        }
+
+        if (ch == 'B' || ch == 'b') {
+            lm_ptr->mode = 2;
+            break;
+        }
+
+        if (ch == 'C' || ch == 'c') {
+            lm_ptr->mode = 3;
+            break;
+        }
+
+        if (ch == 'D' || ch == 'd') {
+            lm_ptr->mode = 4;
+            break;
+        }
+
+        if (ch == 'E' || ch == 'e') {
+            lm_ptr->mode = 5;
+            break;
+        }
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -146,37 +183,8 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 
         screen_load();
     } else {
-        sprintf(lm_ptr->comment, _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:"));
-        while (TRUE) {
-            char ch;
-            if (!get_com(lm_ptr->comment, &ch, TRUE))
-                return FALSE;
-
-            if (ch == 'A' || ch == 'a') {
-                lm_ptr->mode = 1;
-                break;
-            }
-
-            if (ch == 'B' || ch == 'b') {
-                lm_ptr->mode = 2;
-                break;
-            }
-
-            if (ch == 'C' || ch == 'c') {
-                lm_ptr->mode = 3;
-                break;
-            }
-
-            if (ch == 'D' || ch == 'd') {
-                lm_ptr->mode = 4;
-                break;
-            }
-
-            if (ch == 'E' || ch == 'e') {
-                lm_ptr->mode = 5;
-                break;
-            }
-        }
+        if (!select_blue_magic_kind_command(lm_ptr))
+            return FALSE;
     }
 
     set_rf_masks(&lm_ptr->f4, &lm_ptr->f5, &lm_ptr->f6, lm_ptr->mode);
