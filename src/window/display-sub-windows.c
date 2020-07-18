@@ -1,7 +1,7 @@
 ﻿#include "window/display-sub-windows.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
-#include "floor/floor.h"
+#include "floor/cave.h"
 #include "game-option/option-flags.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"

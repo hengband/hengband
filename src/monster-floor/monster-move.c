@@ -10,6 +10,7 @@
 #include "core/speed-table.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"

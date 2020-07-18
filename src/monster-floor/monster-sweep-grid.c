@@ -5,6 +5,7 @@
  */
 
 #include "monster-floor/monster-sweep-grid.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
