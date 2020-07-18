@@ -3,7 +3,7 @@
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-magic-resistance.h"
 #include "mind/mind-mirror-master.h"
-#include "mind/racial-kutar.h"
+#include "racial/racial-kutar.h"
 #include "spell-realm/spells-craft.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-demon.h"

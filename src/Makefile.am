@@ -360,12 +360,6 @@ hengband_SOURCES = \
 	mind/mind-weaponsmith.c mind/mind-weaponsmith.h \
 	mind/monk-attack.c mind/monk-attack.h \
 	mind/snipe-types.h \
-	mind/racial.c mind/racial.h \
-	mind/racial-android.c mind/racial-android.h \
-	mind/racial-balrog.c mind/racial-balrog.h \
-	mind/racial-draconian.c mind/racial-draconian.h \
-	mind/racial-kutar.c mind/racial-kutar.h \
-	mind/racial-vampire.c mind/racial-vampire.h \
 	mind/stances-table.c mind/stances-table.h \
 	\
 	monster/horror-descriptions.c monster/horror-descriptions.h \
@@ -529,6 +523,13 @@ hengband_SOURCES = \
 	player-attack/attack-chaos-effect.c player-attack/attack-chaos-effect.h \
 	player-attack/blood-sucking-processor.c player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.c player-attack/player-attack.h \
+	\
+	racial/racial.c racial/racial.h \
+	racial/racial-android.c racial/racial-android.h \
+	racial/racial-balrog.c racial/racial-balrog.h \
+	racial/racial-draconian.c racial/racial-draconian.h \
+	racial/racial-kutar.c racial/racial-kutar.h \
+	racial/racial-vampire.c racial/racial-vampire.h \
 	\
 	realm/realm-arcane.c realm/realm-arcane.h \
 	realm/realm-chaos.c realm/realm-chaos.h \
@@ -760,9 +761,10 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Igame-option -Igrid -Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge \
 	-Imarket -Imelee -Imind -Imonster -Imonster-attack -Imonster-floor \
 	-Imonster-race -Ilore -Imspell -Imutation -Iobject -Iobject-enchant \
-	-Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack -Irealm -Iroom \
-	-Isavedata -Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Istatus \
-	-Isv-definition -Isystem -Iterm -Iutil -Iview -Iwindow -Iwizard -Iworld
+	-Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack -Iracial -Irealm \
+	-Iroom -Isavedata -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
+	-Istatus -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwindow -Iwizard \
+	-Iworld
 
 install-exec-hook:
 if SET_GID

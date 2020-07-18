@@ -66,12 +66,12 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind.h" // do_cmd_mind_browse() がある。後で移設する.
-#include "mind/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
 #include "mind/snipe-types.h"
 #include "mspell/mspells3.h" // do_cmd_cast_learned() がある。後で移設する.
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/special-defense-types.h"
+#include "racial/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
 #include "spell/spells-object.h"
 #include "status/action-setter.h"
 #include "store/home.h"

@@ -1,4 +1,4 @@
-﻿#include "mind/racial-balrog.h"
+﻿#include "racial/racial-balrog.h"
 #include "io/targeting.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"

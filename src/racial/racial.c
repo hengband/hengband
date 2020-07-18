@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen. \n
  */
 
-#include "mind/racial.h"
+#include "racial/racial.h"
 #include "action/action-limited.h"
 #include "cmd-action/cmd-mane.h"
 #include "cmd-action/cmd-spell.h"
@@ -39,11 +39,6 @@
 #include "mind/mind-warrior-mage.h"
 #include "mind/mind-warrior.h"
 #include "mind/monk-attack.h"
-#include "mind/racial-android.h"
-#include "mind/racial-balrog.h"
-#include "mind/racial-draconian.h"
-#include "mind/racial-kutar.h"
-#include "mind/racial-vampire.h"
 #include "mind/stances-table.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation.h"
@@ -54,6 +49,11 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-status.h"
+#include "racial/racial-android.h"
+#include "racial/racial-balrog.h"
+#include "racial/racial-draconian.h"
+#include "racial/racial-kutar.h"
+#include "racial/racial-vampire.h"
 #include "realm/realm-names-table.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-detection.h"

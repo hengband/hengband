@@ -251,7 +251,7 @@
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-magic-resistance.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
-    <ClCompile Include="..\..\src\mind\racial-kutar.c" />
+    <ClCompile Include="..\..\src\racial\racial-kutar.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
     <ClCompile Include="..\..\src\mspell\mspell-dispel.c" />
     <ClCompile Include="..\..\src\mutation\mutation-techniques.c" />
@@ -387,10 +387,10 @@
     <ClCompile Include="..\..\src\market\building-recharger.c" />
     <ClCompile Include="..\..\src\market\building-service.c" />
     <ClCompile Include="..\..\src\mind\mind-warrior-mage.c" />
-    <ClCompile Include="..\..\src\mind\racial-android.c" />
-    <ClCompile Include="..\..\src\mind\racial-balrog.c" />
+    <ClCompile Include="..\..\src\racial\racial-android.c" />
+    <ClCompile Include="..\..\src\racial\racial-balrog.c" />
     <ClCompile Include="..\..\src\mind\mind-cavalry.c" />
-    <ClCompile Include="..\..\src\mind\racial-draconian.c" />
+    <ClCompile Include="..\..\src\racial\racial-draconian.c" />
     <ClCompile Include="..\..\src\mind\mind-force-trainer.c" />
     <ClCompile Include="..\..\src\mind\mind-mindcrafter.c" />
     <ClCompile Include="..\..\src\mind\mind-mirror-master.c" />
@@ -398,7 +398,7 @@
     <ClCompile Include="..\..\src\mind\mind-ninja.c" />
     <ClCompile Include="..\..\src\mind\mind-samurai.c" />
     <ClCompile Include="..\..\src\mind\mind-warrior.c" />
-    <ClCompile Include="..\..\src\mind\racial-vampire.c" />
+    <ClCompile Include="..\..\src\racial\racial-vampire.c" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-accessory.c" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.c" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-others.c" />
@@ -766,7 +766,7 @@
     <ClInclude Include="..\..\src\mind\mind-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-magic-resistance.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
-    <ClInclude Include="..\..\src\mind\racial-kutar.h" />
+    <ClInclude Include="..\..\src\racial\racial-kutar.h" />
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />
     <ClInclude Include="..\..\src\mspell\mspell-dispel.h" />
@@ -932,10 +932,10 @@
     <ClInclude Include="..\..\src\market\building-recharger.h" />
     <ClInclude Include="..\..\src\market\building-service.h" />
     <ClInclude Include="..\..\src\mind\mind-warrior-mage.h" />
-    <ClInclude Include="..\..\src\mind\racial-android.h" />
-    <ClInclude Include="..\..\src\mind\racial-balrog.h" />
+    <ClInclude Include="..\..\src\racial\racial-android.h" />
+    <ClInclude Include="..\..\src\racial\racial-balrog.h" />
     <ClInclude Include="..\..\src\mind\mind-cavalry.h" />
-    <ClInclude Include="..\..\src\mind\racial-draconian.h" />
+    <ClInclude Include="..\..\src\racial\racial-draconian.h" />
     <ClInclude Include="..\..\src\mind\mind-force-trainer.h" />
     <ClInclude Include="..\..\src\mind\mind-mindcrafter.h" />
     <ClInclude Include="..\..\src\mind\mind-mirror-master.h" />
@@ -943,7 +943,7 @@
     <ClInclude Include="..\..\src\mind\mind-ninja.h" />
     <ClInclude Include="..\..\src\mind\mind-samurai.h" />
     <ClInclude Include="..\..\src\mind\mind-warrior.h" />
-    <ClInclude Include="..\..\src\mind\racial-vampire.h" />
+    <ClInclude Include="..\..\src\racial\racial-vampire.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-accessory.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-others.h" />
@@ -1132,7 +1132,7 @@
     <ClCompile Include="..\..\src\mspell\assign-monster-spell.c" />
     <ClCompile Include="..\..\src\mutation\mutation.c" />
     <ClCompile Include="..\..\src\object\object-info.c" />
-    <ClCompile Include="..\..\src\mind\racial.c" />
+    <ClCompile Include="..\..\src\racial\racial.c" />
     <ClCompile Include="..\..\src\term\readdib.c" />
     <ClCompile Include="..\..\src\realm\realm-arcane.c" />
     <ClCompile Include="..\..\src\realm\realm-chaos.c" />
@@ -1395,7 +1395,7 @@
     <ClInclude Include="..\..\src\player\player-skill.h" />
     <ClInclude Include="..\..\src\player\player-status.h" />
     <ClInclude Include="..\..\src\dungeon\quest.h" />
-    <ClInclude Include="..\..\src\mind\racial.h" />
+    <ClInclude Include="..\..\src\racial\racial.h" />
     <ClInclude Include="..\..\src\term\readdib.h" />
     <ClInclude Include="..\..\src\realm\realm-arcane.h" />
     <ClInclude Include="..\..\src\realm\realm-chaos.h" />

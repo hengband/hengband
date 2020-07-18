@@ -530,9 +530,6 @@
     <ClCompile Include="..\..\src\birth\history.c">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\main\init.c">
       <Filter>main</Filter>
     </ClCompile>
@@ -935,12 +932,6 @@
     <ClCompile Include="..\..\src\specific-object\torch.c">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-draconian.c">
-      <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-balrog.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell\spells-staff-only.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -1002,12 +993,6 @@
       <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-warrior-mage.c">
-      <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-vampire.c">
-      <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-android.c">
       <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\spell-realm\spells-crusade.c">
@@ -1391,14 +1376,8 @@
     <ClCompile Include="..\..\src\io\screen-util.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\stances-table.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\status-reseter.c">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-kutar.c">
-      <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\realm\realm-demon.c">
       <Filter>realm</Filter>
@@ -1780,6 +1759,27 @@
     </ClCompile>
     <ClCompile Include="..\..\src\store\service-checker.c">
       <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\stances-table.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-android.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-balrog.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-draconian.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-kutar.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-vampire.c">
+      <Filter>racial</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2356,9 +2356,6 @@
     <ClInclude Include="..\..\src\player\selfinfo.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\main\init.h">
       <Filter>main</Filter>
     </ClInclude>
@@ -2842,12 +2839,6 @@
     <ClInclude Include="..\..\src\specific-object\torch.h">
       <Filter>specific-object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-draconian.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-balrog.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-staff-only.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -2909,12 +2900,6 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-warrior-mage.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-vampire.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-android.h">
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-crusade.h">
@@ -3107,9 +3092,6 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-sniper.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\snipe-types.h">
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\smart-learn-types.h">
@@ -3454,17 +3436,11 @@
     <ClInclude Include="..\..\src\io\screen-util.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\stances-table.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player\special-defense-types.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\status-reseter.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-kutar.h">
-      <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-demon.h">
       <Filter>realm</Filter>
@@ -3880,6 +3856,30 @@
     <ClInclude Include="..\..\src\store\service-checker.h">
       <Filter>store</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mind\stances-table.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-android.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-balrog.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-draconian.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-kutar.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-vampire.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\snipe-types.h">
+      <Filter>mind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -4065,6 +4065,9 @@
     </Filter>
     <Filter Include="artifact">
       <UniqueIdentifier>{7554e8b1-1c3c-447b-8f1e-c18c09039419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="racial">
+      <UniqueIdentifier>{aaa1b0db-fb73-43df-b204-45c07a934cd5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

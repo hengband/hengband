@@ -7,7 +7,6 @@
 #include "game-option/play-record-options.h"
 #include "inventory/inventory-object.h"
 #include "io/write-diary.h"
-#include "mind/racial-android.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-perception.h"
 #include "object-hook/hook-weapon.h"
@@ -15,6 +14,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-generator.h"
 #include "player/avatar.h"
+#include "racial/racial-android.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 

@@ -4,11 +4,11 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"
-#include "mind/racial-android.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
 #include "player/avatar.h"
+#include "racial/racial-android.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 

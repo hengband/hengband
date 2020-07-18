@@ -1,4 +1,4 @@
-﻿#include "mind/racial-vampire.h"
+﻿#include "racial/racial-vampire.h"
 #include "core/hp-mp-processor.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"

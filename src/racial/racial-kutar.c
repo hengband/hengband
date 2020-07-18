@@ -1,4 +1,4 @@
-﻿#include "mind/racial-kutar.h"
+﻿#include "racial/racial-kutar.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
