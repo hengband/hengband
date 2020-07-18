@@ -39,7 +39,6 @@ static monsterrace_hook_type get_mon_num_hook;
 static monsterrace_hook_type get_mon_num2_hook;
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param r_idx チェックするモンスター種族ID

@@ -81,7 +81,6 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
 }
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief プレイヤーのフロア離脱に伴う全モンスター配列の消去 / Delete/Remove all the monsters when the player leaves the level
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
