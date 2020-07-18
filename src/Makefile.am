@@ -587,6 +587,7 @@ hengband_SOURCES = \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	\
 	save/item-writer.c save/item-writer.h \
+	save/monster-writer.c save/monster-writer.h \
 	save/save.c save/save.h \
 	save/save-util.c save/save-util.h \
 	\
