@@ -10,7 +10,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player/process-death.h"
-#include "savedata/save.h"
+#include "save/save.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"

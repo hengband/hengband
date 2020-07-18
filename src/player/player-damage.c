@@ -48,7 +48,7 @@
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
-#include "savedata/save.h"
+#include "save/save.h"
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"

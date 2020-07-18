@@ -10,7 +10,7 @@
 #include "core/game-closer.h"
 #include "floor/floor-events.h"
 #include "io/write-diary.h"
-#include "savedata/save.h"
+#include "save/save.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
 #include "world/world.h"

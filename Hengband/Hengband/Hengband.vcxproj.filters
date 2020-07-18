@@ -1535,9 +1535,6 @@
     <ClCompile Include="..\..\src\spell-kind\magic-item-recharger.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\savedata\save.c">
-      <Filter>savedata</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\savedata\load.c">
       <Filter>savedata</Filter>
     </ClCompile>
@@ -1783,6 +1780,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\floor\cave.c">
       <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\save.c">
+      <Filter>save</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3607,9 +3607,6 @@
     <ClInclude Include="..\..\src\spell-kind\magic-item-recharger.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\savedata\save.h">
-      <Filter>savedata</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\savedata\load.h">
       <Filter>savedata</Filter>
     </ClInclude>
@@ -3898,6 +3895,9 @@
     <ClInclude Include="..\..\src\floor\cave.h">
       <Filter>floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\save\save.h">
+      <Filter>save</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -4086,6 +4086,9 @@
     </Filter>
     <Filter Include="racial">
       <UniqueIdentifier>{aaa1b0db-fb73-43df-b204-45c07a934cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="save">
+      <UniqueIdentifier>{beb4a41a-dee4-4bdd-ac20-78da62c44fdf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

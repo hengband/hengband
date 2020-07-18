@@ -15,7 +15,7 @@
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
 #include "savedata/old-feature-types.h"
-#include "savedata/save.h"
+#include "save/save.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"

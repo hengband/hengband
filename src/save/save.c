@@ -11,7 +11,7 @@
  * </pre>
  */
 
-#include "savedata/save.h"
+#include "save/save.h"
 #include "birth/quick-start.h"
 #include "cmd-building/cmd-building.h"
 #include "core/player-update-types.h"

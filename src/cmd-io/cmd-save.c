@@ -5,7 +5,7 @@
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
 #include "monster/monster-status.h" // 違和感。要調査.
-#include "savedata/save.h"
+#include "save/save.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"

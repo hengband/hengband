@@ -8,7 +8,7 @@
 #include "savedata/floor-loader.h"
 #include "savedata/load-util.h"
 #include "savedata/load-v1-5-0.h"
-#include "savedata/save.h"
+#include "save/save.h"
 #include "system/floor-type-definition.h"
 #include "world/world.h"
 

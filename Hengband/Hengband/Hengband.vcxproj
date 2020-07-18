@@ -1157,7 +1157,7 @@
     <ClCompile Include="..\..\src\room\rooms.c" />
     <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c" />
     <ClCompile Include="..\..\src\store\rumor.c" />
-    <ClCompile Include="..\..\src\savedata\save.c" />
+    <ClCompile Include="..\..\src\save\save.c" />
     <ClCompile Include="..\..\src\core\scores.c" />
     <ClCompile Include="..\..\src\player\selfinfo.c" />
     <ClCompile Include="..\..\src\io\signal-handlers.c" />
@@ -1427,7 +1427,7 @@
     <ClInclude Include="..\..\src\room\rooms-vault.h" />
     <ClInclude Include="..\..\src\room\rooms.h" />
     <ClInclude Include="..\..\src\store\rumor.h" />
-    <ClInclude Include="..\..\src\savedata\save.h" />
+    <ClInclude Include="..\..\src\save\save.h" />
     <ClInclude Include="..\..\src\core\scores.h" />
     <ClInclude Include="..\..\src\player\selfinfo.h" />
     <ClInclude Include="..\..\src\mind\mind-sniper.h" />

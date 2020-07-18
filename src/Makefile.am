@@ -562,6 +562,8 @@ hengband_SOURCES = \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	\
+	save/save.c save/save.h \
+	\
 	savedata/angband-version-comparer.c savedata/angband-version-comparer.h \
 	savedata/birth-loader.c savedata/birth-loader.h \
 	savedata/dummy-loader.c savedata/dummy-loader.h \
@@ -583,7 +585,6 @@ hengband_SOURCES = \
 	savedata/player-attack-loader.c savedata/player-attack-loader. \
 	savedata/player-info-loader.c savedata/player-info-loader.h \
 	savedata/savedata-flag-types.h \
-	savedata/save.c savedata/save.h \
 	savedata/store-loader.c savedata/store-loader.h \
 	savedata/world-loader.c savedata/world-loader.h \
 	\
@@ -767,7 +768,7 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Imarket -Imelee -Imind -Imonster -Imonster-attack -Imonster-floor \
 	-Imonster-race -Ilore -Imspell -Imutation -Iobject -Iobject-enchant \
 	-Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack -Iracial -Irealm \
-	-Iroom -Isavedata -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
+	-Iroom -Isave -Isavedata -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
 	-Istatus -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwindow -Iwizard \
 	-Iworld
 

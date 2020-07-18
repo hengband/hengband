@@ -65,7 +65,7 @@
 #include "player/process-name.h"
 #include "racial/racial-android.h"
 #include "realm/realm-names-table.h"
-#include "savedata/save.h"
+#include "save/save.h"
 #include "spell/spells-status.h"
 #include "spell/technic-info-table.h"
 #include "store/home.h"

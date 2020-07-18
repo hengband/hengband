@@ -129,8 +129,7 @@
 
 #ifdef WINDOWS
 #include "dungeon/dungeon.h"
-#include "savedata/save.h"
-#include "term/z-term.h"
+#include "save/save.h"
 #include <direct.h>
 #include <locale.h>
 #include <windows.h>
