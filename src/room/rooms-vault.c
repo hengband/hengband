@@ -5,6 +5,7 @@
  */
 
 #include "room/rooms-vault.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"

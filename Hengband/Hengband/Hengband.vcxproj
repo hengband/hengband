@@ -708,6 +708,7 @@
     <ClInclude Include="..\..\src\core\status-reseter.h" />
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\core\window-redrawer.h" />
+    <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h" />
     <ClInclude Include="..\..\src\flavor\flag-inscriptions-table.h" />
     <ClInclude Include="..\..\src\flavor\flavor-describer.h" />
     <ClInclude Include="..\..\src\flavor\flavor-util.h" />

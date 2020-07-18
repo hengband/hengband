@@ -1,4 +1,5 @@
 ﻿#include "world/world-object.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind.h"

@@ -153,6 +153,7 @@ hengband_SOURCES = \
 	core/visuals-reseter.c core/visuals-reseter.h \
 	core/window-redrawer.c core/window-redrawer.h \
 	\
+	dungeon/dungeon-flag-types.h \
 	dungeon/dungeon.c dungeon/dungeon.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	dungeon/quest.h dungeon/quest.c \

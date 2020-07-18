@@ -1,7 +1,7 @@
 ﻿#include "racial/racial-vampire.h"
 #include "core/hp-mp-processor.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "player/digestion-processor.h"

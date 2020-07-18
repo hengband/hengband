@@ -12,6 +12,7 @@
 
 #include "floor/wild.h"
 #include "core/asking-player.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"

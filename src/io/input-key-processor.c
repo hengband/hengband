@@ -47,9 +47,9 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
-#include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"

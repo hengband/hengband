@@ -1,5 +1,6 @@
 ﻿#include "effect/effect-feature.h"
 #include "core/player-update-types.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"

@@ -1,5 +1,6 @@
 ﻿#include "spell-kind/spells-detection.h"
 #include "core/window-redrawer.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"

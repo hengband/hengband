@@ -1,6 +1,6 @@
 ﻿#include "action/action-limited.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"

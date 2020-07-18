@@ -12,6 +12,7 @@
 #include "monster/monster-list.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"

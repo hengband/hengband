@@ -13,6 +13,7 @@
 #include "floor/floor-generate.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-events.h"

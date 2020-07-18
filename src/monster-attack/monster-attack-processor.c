@@ -5,6 +5,7 @@
  */
 
 #include "monster-attack/monster-attack-processor.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "floor/floor.h"
 #include "monster/monster-status.h"
 #include "dungeon/dungeon.h"

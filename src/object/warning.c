@@ -2,6 +2,7 @@
 #include "art-definition/art-sword-types.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
