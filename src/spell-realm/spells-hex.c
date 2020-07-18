@@ -12,6 +12,7 @@
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
+#include "system/monster-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"

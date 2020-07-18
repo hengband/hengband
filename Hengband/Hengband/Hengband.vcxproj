@@ -715,6 +715,7 @@
     <ClInclude Include="..\..\src\flavor\object-flavor-types.h" />
     <ClInclude Include="..\..\src\flavor\tval-description-switcher.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
+    <ClInclude Include="..\..\src\floor\floor-base-definitions.h" />
     <ClInclude Include="..\..\src\floor\floor-util.h" />
     <ClInclude Include="..\..\src\floor\object-scanner.h" />
     <ClInclude Include="..\..\src\game-option\auto-destruction-options.h" />

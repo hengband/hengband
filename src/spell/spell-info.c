@@ -7,6 +7,7 @@
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
 #include "spell/spells-execution.h"
+#include "system/monster-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"

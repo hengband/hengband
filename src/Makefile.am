@@ -190,6 +190,7 @@ hengband_SOURCES = \
 	\
 	floor/fixed-map-generator.c floor/fixed-map-generator.h \
 	floor/floor.c floor/floor.h \
+	floor/floor-base-definitions.h \
 	floor/floor-events.c floor/floor-events.h \
 	floor/floor-generate.c floor/floor-generate.h \
 	floor/floor-object.c floor/floor-object.h \

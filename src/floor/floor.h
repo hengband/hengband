@@ -1,55 +1,9 @@
 ﻿#pragma once
 
+#include "floor-base-definitions.h"
+#include "monster/monster-timed-effect-types.h"
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
 #include "floor/floor-save.h"
-
-
-/*!
- * @brief ダンジョンの最深層 / Maximum dungeon level.
- * @details
- * The player can never reach this level
- * in the dungeon, and this value is used for various calculations
- * involving object and monster creation.  It must be at least 100.
- * Setting it below 128 may prevent the creation of some objects.
- */
-#define MAX_DEPTH       128 
-
-/*!
- * @brief generate.cで用いられる基本的なブロック数単位(垂直方向)
- * Number of grids in each block (vertically) Probably hard-coded to 11, see "generate.c"
- */
-#define BLOCK_HGT 11
-
-/*!
- * @brief generate.cで用いられる基本的なブロック数単位(水平方向)
- * Number of grids in each block (horizontally) Probably hard-coded to 11, see "generate.c"
- */
-#define BLOCK_WID 11
-
-/*!
- * @brief 表示上の基本的なブロック単位(垂直方向、PANEL_HGTの倍数で設定すること)
- * Number of grids used to display the dungeon (vertically). Must be a multiple of 11, probably hard-coded to 22.
- */
-#define SCREEN_HGT 22
-
-/*!
- * @brief 表示上の基本的なブロック単位(水平方向、PANEL_WIDの倍数で設定すること)
- * Number of grids used to display the dungeon (horizontally). Must be a multiple of 33, probably hard-coded to 66.
- */
-#define SCREEN_WID 66
-
-/*!
- * @brief 表示上のダンジョンの最大垂直サイズ(SCREEN_HGTの3倍が望ましい)
- * Maximum dungeon height in grids, must be a multiple of SCREEN_HGT, probably hard-coded to SCREEN_HGT * 3.
- */
-#define MAX_HGT 66
-
-/*!
- * @brief 表示上のダンジョンの最大水平サイズ(SCREEN_WIDの3倍が望ましい)
- * Maximum dungeon width in grids, must be a multiple of SCREEN_WID, probably hard-coded to SCREEN_WID * 3.
- */
-#define MAX_WID 198
 
 /*!
  * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "grid.c")
@@ -83,6 +37,7 @@
 
 typedef struct grid_type grid_type;
 typedef struct object_type object_type;
+typedef struct monster_type monster_type;
 typedef struct floor_type {
 	DUNGEON_IDX dungeon_idx;
 	grid_type *grid_array[MAX_HGT];
