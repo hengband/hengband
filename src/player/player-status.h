@@ -770,6 +770,8 @@ typedef struct player_type
 	POSITION x;	/* Player location in dungeon */
 	GAME_TEXT name[32]; /*!< 現在のプレイヤー名 / Current player's character name */
 	char base_name[32]; /*!< Stripped version of "player_name" */
+
+	int hold; /*!< 現在装備可能な武器重量 / Weapon weight limit */
 } player_type;
 
 extern player_type *p_ptr;
