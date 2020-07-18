@@ -41,11 +41,6 @@
 floor_type floor_info;
 
 /*
- * The array of saved floors
- */
-saved_floor_type saved_floors[MAX_SAVED_FLOORS];
-
-/*
  * Grid based version of "cave_empty_bold()"
  */
 bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)

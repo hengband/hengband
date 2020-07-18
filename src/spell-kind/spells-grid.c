@@ -2,6 +2,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
+#include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"

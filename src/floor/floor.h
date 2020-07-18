@@ -4,7 +4,6 @@
 #include "floor/sight-definitions.h"
 #include "monster/monster-timed-effect-types.h"
 #include "system/angband.h"
-#include "floor/floor-save.h"
 
 typedef struct grid_type grid_type;
 typedef struct object_type object_type;
@@ -235,8 +234,6 @@ extern floor_type floor_info;
 #define permanent_wall(F) \
 	(have_flag((F)->flags, FF_WALL) && \
 	 have_flag((F)->flags, FF_PERMANENT))
-
-extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
 /*
  * Convert a "location" (Y,X) into a "grid" (G)

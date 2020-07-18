@@ -7,6 +7,7 @@
 #include "core/magic-effects-timeout-reducer.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-events.h"
+#include "floor/floor-save.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"

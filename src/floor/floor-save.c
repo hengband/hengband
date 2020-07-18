@@ -83,6 +83,8 @@ FLOOR_IDX max_floor_id;
  */
 u32b saved_floor_file_sign;
 
+saved_floor_type saved_floors[MAX_SAVED_FLOORS];
+
 /*!
  * @brief 保存フロア配列を初期化する / Initialize saved_floors array.
  * @param creature_ptr プレーヤーへの参照ポインタ
