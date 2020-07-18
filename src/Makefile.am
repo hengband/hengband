@@ -75,6 +75,7 @@ hengband_SOURCES = \
 	birth/auto-roller.c birth/auto-roller.h \
 	birth/birth-wizard.c birth/birth-wizard.h \
 	\
+	blue-magic/learnt-info.c blue-magic/learnt-info.h \
 	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
 	cmd-action/cmd-hissatsu.c cmd-action/cmd-hissatsu.h \
 	cmd-action/cmd-mane.c cmd-action/cmd-mane.h \
@@ -769,15 +770,15 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iartifact -Iart-definition -Iautopick -Ibirth -Icmd-io -Icmd-item \
-	-Icmd-visual -Icombat -Icore -Idungeon -Ieffect -Iflavor -Ifloor \
-	-Igame-option -Igrid -Iinfo-reader -Iinventory -Iio -Iio-dump -Iknowledge \
-	-Iload -Imarket -Imelee -Imind -Imonster -Imonster-attack -Imonster-floor \
-	-Imonster-race -Ilore -Imspell -Imutation -Iobject -Iobject-enchant \
-	-Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack -Iracial -Irealm \
-	-Iroom -Isave -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
-	-Istatus -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwindow -Iwizard \
-	-Iworld
+	-Iartifact -Iart-definition -Iautopick -Ibirth -Iblue-magic -Icmd-io \
+	-Icmd-item -Icmd-visual -Icombat -Icore -Idungeon -Ieffect -Iflavor \
+	-Ifloor -Igame-option -Igrid -Iinfo-reader -Iinventory -Iio -Iio-dump \
+	-Iknowledge -Iload -Imarket -Imelee -Imind -Imonster -Imonster-attack \
+	-Imonster-floor -Imonster-race -Ilore -Imspell -Imutation -Iobject \
+	-Iobject-enchant -Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack \
+	-Iracial -Irealm -Iroom -Isave -Ispecific-object -Ispell -Ispell-kind \
+	-Ispell-realm -Istatus -Isv-definition -Isystem -Iterm -Iutil -Iview \
+	-Iwindow -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

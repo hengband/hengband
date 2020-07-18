@@ -1805,6 +1805,9 @@
     <ClCompile Include="..\..\src\load\info-loader.c">
       <Filter>load</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\learnt-info.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3940,6 +3943,9 @@
     <ClInclude Include="..\..\src\load\info-loader.h">
       <Filter>load</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\learnt-info.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -4131,6 +4137,9 @@
     </Filter>
     <Filter Include="load">
       <UniqueIdentifier>{2bfe9405-f65a-4dac-afde-56800ae04b9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="blue-magic">
+      <UniqueIdentifier>{6b429e6d-e548-430e-9413-8bc2e0bda1ed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
