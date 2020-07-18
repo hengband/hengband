@@ -287,6 +287,7 @@
     <ClCompile Include="..\..\src\load\player-info-loader.c" />
     <ClCompile Include="..\..\src\load\store-loader.c" />
     <ClCompile Include="..\..\src\load\world-loader.c" />
+    <ClCompile Include="..\..\src\save\save-util.c" />
     <ClCompile Include="..\..\src\specific-object\death-crimson.c" />
     <ClCompile Include="..\..\src\spell-kind\blood-curse.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-enchant.c" />
@@ -816,6 +817,7 @@
     <ClInclude Include="..\..\src\load\savedata-flag-types.h" />
     <ClInclude Include="..\..\src\load\store-loader.h" />
     <ClInclude Include="..\..\src\load\world-loader.h" />
+    <ClInclude Include="..\..\src\save\save-util.h" />
     <ClInclude Include="..\..\src\specific-object\death-crimson.h" />
     <ClInclude Include="..\..\src\spell-kind\blood-curse.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-enchant.h" />
