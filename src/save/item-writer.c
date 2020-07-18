@@ -4,6 +4,98 @@
 #include "system/object-type-definition.h"
 #include "util/quarks.h"
 
+static void write_item_flags(BIT_FLAGS *flags, object_type *o_ptr)
+{
+    if (o_ptr->pval)
+        *flags |= SAVE_ITEM_PVAL;
+
+    if (o_ptr->discount)
+        *flags |= SAVE_ITEM_DISCOUNT;
+
+    if (o_ptr->number != 1)
+        *flags |= SAVE_ITEM_NUMBER;
+
+    if (o_ptr->name1)
+        *flags |= SAVE_ITEM_NAME1;
+
+    if (o_ptr->name2)
+        *flags |= SAVE_ITEM_NAME2;
+
+    if (o_ptr->timeout)
+        *flags |= SAVE_ITEM_TIMEOUT;
+
+    if (o_ptr->to_h)
+        *flags |= SAVE_ITEM_TO_H;
+
+    if (o_ptr->to_d)
+        *flags |= SAVE_ITEM_TO_D;
+
+    if (o_ptr->to_a)
+        *flags |= SAVE_ITEM_TO_A;
+
+    if (o_ptr->ac)
+        *flags |= SAVE_ITEM_AC;
+
+    if (o_ptr->dd)
+        *flags |= SAVE_ITEM_DD;
+
+    if (o_ptr->ds)
+        *flags |= SAVE_ITEM_DS;
+
+    if (o_ptr->ident)
+        *flags |= SAVE_ITEM_IDENT;
+
+    if (o_ptr->marked)
+        *flags |= SAVE_ITEM_MARKED;
+
+    if (o_ptr->art_flags[0])
+        *flags |= SAVE_ITEM_ART_FLAGS0;
+
+    if (o_ptr->art_flags[1])
+        *flags |= SAVE_ITEM_ART_FLAGS1;
+
+    if (o_ptr->art_flags[2])
+        *flags |= SAVE_ITEM_ART_FLAGS2;
+
+    if (o_ptr->art_flags[3])
+        *flags |= SAVE_ITEM_ART_FLAGS3;
+
+    if (o_ptr->art_flags[4])
+        *flags |= SAVE_ITEM_ART_FLAGS4;
+
+    if (o_ptr->curse_flags)
+        *flags |= SAVE_ITEM_CURSE_FLAGS;
+
+    if (o_ptr->held_m_idx)
+        *flags |= SAVE_ITEM_HELD_M_IDX;
+
+    if (o_ptr->xtra1)
+        *flags |= SAVE_ITEM_XTRA1;
+
+    if (o_ptr->xtra2)
+        *flags |= SAVE_ITEM_XTRA2;
+
+    if (o_ptr->xtra3)
+        *flags |= SAVE_ITEM_XTRA3;
+
+    if (o_ptr->xtra4)
+        *flags |= SAVE_ITEM_XTRA4;
+
+    if (o_ptr->xtra5)
+        *flags |= SAVE_ITEM_XTRA5;
+
+    if (o_ptr->feeling)
+        *flags |= SAVE_ITEM_FEELING;
+
+    if (o_ptr->inscription)
+        *flags |= SAVE_ITEM_INSCRIPTION;
+
+    if (o_ptr->art_name)
+        *flags |= SAVE_ITEM_ART_NAME;
+
+    wr_u32b(*flags);
+}
+
 /*!
  * @brief アイテムオブジェクトを書き込む / Write an "item" record
  * @param o_ptr アイテムオブジェクト保存元ポインタ
@@ -12,68 +104,7 @@
 void wr_item(object_type *o_ptr)
 {
     BIT_FLAGS flags = 0x00000000;
-
-    if (o_ptr->pval)
-        flags |= SAVE_ITEM_PVAL;
-    if (o_ptr->discount)
-        flags |= SAVE_ITEM_DISCOUNT;
-    if (o_ptr->number != 1)
-        flags |= SAVE_ITEM_NUMBER;
-    if (o_ptr->name1)
-        flags |= SAVE_ITEM_NAME1;
-    if (o_ptr->name2)
-        flags |= SAVE_ITEM_NAME2;
-    if (o_ptr->timeout)
-        flags |= SAVE_ITEM_TIMEOUT;
-    if (o_ptr->to_h)
-        flags |= SAVE_ITEM_TO_H;
-    if (o_ptr->to_d)
-        flags |= SAVE_ITEM_TO_D;
-    if (o_ptr->to_a)
-        flags |= SAVE_ITEM_TO_A;
-    if (o_ptr->ac)
-        flags |= SAVE_ITEM_AC;
-    if (o_ptr->dd)
-        flags |= SAVE_ITEM_DD;
-    if (o_ptr->ds)
-        flags |= SAVE_ITEM_DS;
-    if (o_ptr->ident)
-        flags |= SAVE_ITEM_IDENT;
-    if (o_ptr->marked)
-        flags |= SAVE_ITEM_MARKED;
-    if (o_ptr->art_flags[0])
-        flags |= SAVE_ITEM_ART_FLAGS0;
-    if (o_ptr->art_flags[1])
-        flags |= SAVE_ITEM_ART_FLAGS1;
-    if (o_ptr->art_flags[2])
-        flags |= SAVE_ITEM_ART_FLAGS2;
-    if (o_ptr->art_flags[3])
-        flags |= SAVE_ITEM_ART_FLAGS3;
-    if (o_ptr->art_flags[4])
-        flags |= SAVE_ITEM_ART_FLAGS4;
-    if (o_ptr->curse_flags)
-        flags |= SAVE_ITEM_CURSE_FLAGS;
-    if (o_ptr->held_m_idx)
-        flags |= SAVE_ITEM_HELD_M_IDX;
-    if (o_ptr->xtra1)
-        flags |= SAVE_ITEM_XTRA1;
-    if (o_ptr->xtra2)
-        flags |= SAVE_ITEM_XTRA2;
-    if (o_ptr->xtra3)
-        flags |= SAVE_ITEM_XTRA3;
-    if (o_ptr->xtra4)
-        flags |= SAVE_ITEM_XTRA4;
-    if (o_ptr->xtra5)
-        flags |= SAVE_ITEM_XTRA5;
-    if (o_ptr->feeling)
-        flags |= SAVE_ITEM_FEELING;
-    if (o_ptr->inscription)
-        flags |= SAVE_ITEM_INSCRIPTION;
-    if (o_ptr->art_name)
-        flags |= SAVE_ITEM_ART_NAME;
-
-    /*** Item save flags ***/
-    wr_u32b(flags);
+    write_item_flags(o_ptr, &flags);
 
     /*** Write only un-obvious elements ***/
     wr_s16b(o_ptr->k_idx);
