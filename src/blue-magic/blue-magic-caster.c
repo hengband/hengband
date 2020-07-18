@@ -56,6 +56,17 @@ static bool cast_blue_dispel(player_type *caster_ptr)
     return TRUE;
 }
 
+static bool cast_blue_rocket(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("ロケットを発射した。", "You fire a rocket."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_ROCKET), bm_ptr->plev, DAM_ROLL);
+    fire_rocket(caster_ptr, GF_ROCKET, bm_ptr->dir, bm_ptr->damage, 2);
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -73,6 +84,9 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         (void)cast_blue_shriek(caster_ptr);
         break;
     case MS_XXX1:
+    case MS_XXX2:
+    case MS_XXX3:
+    case MS_XXX4:
         break;
     case MS_DISPEL:
         if (!cast_blue_dispel(caster_ptr))
@@ -80,12 +94,9 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_ROCKET:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_rocket(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("ロケットを発射した。", "You fire a rocket."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_ROCKET), bm_ptr->plev, DAM_ROLL);
-        fire_rocket(caster_ptr, GF_ROCKET, bm_ptr->dir, bm_ptr->damage, 2);
         break;
     case MS_SHOOT: {
         if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
@@ -96,12 +107,6 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         fire_bolt(caster_ptr, GF_ARROW, bm_ptr->dir, bm_ptr->damage);
         break;
     }
-    case MS_XXX2:
-        break;
-    case MS_XXX3:
-        break;
-    case MS_XXX4:
-        break;
     case MS_BR_ACID:
         if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
             return FALSE;
