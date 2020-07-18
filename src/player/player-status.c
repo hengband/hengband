@@ -793,9 +793,6 @@ void calc_bonuses(player_type *creature_ptr)
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     creature_ptr->heavy_shoot = is_heavy_shoot(creature_ptr, o_ptr);
 
-    if (creature_ptr->heavy_shoot) {
-        creature_ptr->dis_to_h_b += 2 * (creature_ptr->hold - o_ptr->weight / 10);
-    }
 
     if (o_ptr->k_idx) {
         creature_ptr->tval_ammo = (byte)bow_tval_ammo(o_ptr);
@@ -3819,6 +3816,10 @@ static void calc_to_hit_bow_display(player_type *creature_ptr)
     }
 
 	object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
+
+	if (creature_ptr->heavy_shoot) {
+        creature_ptr->dis_to_h_b += 2 * (creature_ptr->hold - o_ptr->weight / 10);
+    }
 
     if (o_ptr->k_idx) {
         if (o_ptr->k_idx && !creature_ptr->heavy_shoot) {
