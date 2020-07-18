@@ -76,6 +76,8 @@ hengband_SOURCES = \
 	birth/birth-wizard.c birth/birth-wizard.h \
 	\
 	blue-magic/learnt-info.c blue-magic/learnt-info.h \
+	blue-magic/learnt-power-getter.c blue-magic/learnt-power-getter.h \
+	\
 	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
 	cmd-action/cmd-hissatsu.c cmd-action/cmd-hissatsu.h \
 	cmd-action/cmd-mane.c cmd-action/cmd-mane.h \

@@ -1808,6 +1808,9 @@
     <ClCompile Include="..\..\src\blue-magic\learnt-info.c">
       <Filter>blue-magic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3944,6 +3947,9 @@
       <Filter>load</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\blue-magic\learnt-info.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\learnt-power-getter.h">
       <Filter>blue-magic</Filter>
     </ClInclude>
   </ItemGroup>

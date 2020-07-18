@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\src\birth\inventory-initializer.c" />
     <ClCompile Include="..\..\src\birth\quick-start.c" />
     <ClCompile Include="..\..\src\blue-magic\learnt-info.c" />
+    <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-move.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-open-close.c" />
@@ -699,6 +700,7 @@
     <ClInclude Include="..\..\src\birth\inventory-initializer.h" />
     <ClInclude Include="..\..\src\birth\quick-start.h" />
     <ClInclude Include="..\..\src\blue-magic\learnt-info.h" />
+    <ClInclude Include="..\..\src\blue-magic\learnt-power-getter.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-move.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-open-close.h" />
