@@ -313,6 +313,28 @@ static void describe_blue_magic_name(player_type *caster_ptr, learnt_magic_type 
     }
 }
 
+static bool blue_mage_key_input(player_type *caster_ptr, learnt_magic_type *lm_ptr)
+{
+    if ((lm_ptr->choice != ' ') && (lm_ptr->choice != '*') && (lm_ptr->choice != '?') && (use_menu || (lm_ptr->ask == 0)))
+        return FALSE;
+
+    if (lm_ptr->redraw && !use_menu) {
+        lm_ptr->redraw = FALSE;
+        screen_load();
+        return TRUE;
+    }
+
+    lm_ptr->redraw = TRUE;
+    if (!use_menu)
+        screen_save();
+
+    describe_blue_magic_name(caster_ptr, lm_ptr);
+    if (lm_ptr->y < 22)
+        prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
+
+    return TRUE;
+}
+
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
@@ -354,22 +376,8 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
         if (use_menu && (lm_ptr->choice != ' ') && !switch_blue_magic_choice(caster_ptr, lm_ptr))
             return FALSE;
 
-        if ((lm_ptr->choice == ' ') || (lm_ptr->choice == '*') || (lm_ptr->choice == '?') || (use_menu && lm_ptr->ask)) {
-            if (!lm_ptr->redraw || use_menu) {
-                lm_ptr->redraw = TRUE;
-                if (!use_menu)
-                    screen_save();
-
-                describe_blue_magic_name(caster_ptr, lm_ptr);
-                if (lm_ptr->y < 22)
-                    prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
-            } else {
-                lm_ptr->redraw = FALSE;
-                screen_load();
-            }
-
+        if (blue_mage_key_input(caster_ptr, lm_ptr))
             continue;
-        }
 
         if (!use_menu) {
             lm_ptr->ask = isupper(lm_ptr->choice);
