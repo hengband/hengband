@@ -210,6 +210,83 @@ static bool cast_blue_breath_nexus(player_type *caster_ptr, blue_magic_type *bm_
     return TRUE;
 }
 
+static bool cast_blue_breath_time(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_TIME), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_TIME, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_inertia(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_INERTIA), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_INERTIAL, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_gravity(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_GRAVITY), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_GRAVITY, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_shards(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_SHARDS), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_SHARDS, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_plasma(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_PLASMA), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_PLASMA, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_force(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_FORCE), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_FORCE, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+static bool cast_blue_breath_mana(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_MANA), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_MANA, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -313,60 +390,39 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_BR_TIME:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_time(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_TIME), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_TIME, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_INERTIA:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_inertia(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_INERTIA), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_INERTIAL, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_GRAVITY:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_gravity(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_GRAVITY), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_GRAVITY, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_SHARDS:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_shards(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_SHARDS), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_SHARDS, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_PLASMA:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_plasma(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_PLASMA), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_PLASMA, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_FORCE:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_force(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_FORCE), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_FORCE, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_MANA:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_mana(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_MANA), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_MANA, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BALL_NUKE:
         if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
