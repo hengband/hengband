@@ -432,5 +432,6 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
         return FALSE;
 
     *sn = lm_ptr->blue_magics[lm_ptr->blue_magic_num];
+    repeat_push((COMMAND_CODE)lm_ptr->blue_magics[lm_ptr->blue_magic_num]);
     return TRUE;
 }
