@@ -344,12 +344,12 @@ static void convert_lower_blue_magic_selection(learnt_magic_type *lm_ptr)
     if (lm_ptr->ask)
         lm_ptr->choice = (char)tolower(lm_ptr->choice);
 
-    lm_ptr->blue_magic_num = (islower(lm_ptr->choice) ? A2I(lm_ptr->choice) : -1);
+    lm_ptr->blue_magic_num = islower(lm_ptr->choice) ? A2I(lm_ptr->choice) : -1;
 }
 
 static bool ask_cast_blue_magic(learnt_magic_type *lm_ptr)
 {
-    if (lm_ptr->ask)
+    if (lm_ptr->ask == 0)
         return TRUE;
 
     char tmp_val[160];
