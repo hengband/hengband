@@ -23449,3 +23449,34 @@ F:DROP_90 | DROP_1D2 | DROP_GOOD | RES_SOUN | NO_STUN
 D:$He is the eldest son of the three brothers,
 D:$ and be aware the shot by his cross bow!
 D:三兄弟の長男で、クロスボウからの一撃に要注意だ！
+
+N:1169:怪物の太母『エキドナ』
+E:Echidna, Great mother of monsters
+G:n:u
+I:130:60d100:40:125:30
+W:75:3:0:23500:0:0
+B:CRUSH:SUPERHURT:12d15
+B:CRUSH:SUPERHURT:12d15
+B:CRUSH:SUPERHURT:12d15
+B:BITE:POISON:12d15
+F:FORCE_SLEEP | FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_GREAT | MOVE_BODY |
+F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL
+F:EVIL | FEMALE | UNIQUE | RES_LITE | RES_TIME | RES_DARK | RES_NETH
+F:IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | RES_TELE
+S:1_IN_5 | 
+S:S_MONSTERS | SCARE | BA_DARK | BA_NETH | BR_POIS
+D:$This sacred and untouchable female monster is half a nymph and half a snake, becoming the mother of many monsters.
+D:この半分がニンフで半分は蛇の神聖にして手の付けられない女怪は、数々のモンスターの母となった。
+
+N:1170:ハリモグラ
+E:Echidna
+G:r:u
+I:110:1d2:30:1:10
+W:1:3:0:6:0:0
+B:CRUSH:HURT:3d1
+F:RAND_50 | WILD_GRASS | WILD_WOOD |
+F:ANIMAL | DROP_SKELETON | DROP_CORPSE
+D:$It is relative of platypus and was thought to be a composite of reptiles and mammals, 
+D:$ so it was named after the Greek monster.
+D:それはカモノハシの類縁で、爬虫類と哺乳類の合成と考えられたためギリシアの怪物にちなんで英名を名付けられた。
