@@ -23201,7 +23201,7 @@ D:それはあらゆる生き物を餌食にしようと待ち構えている。
 N:1151:小さな泡
 E:Small aqua illusion
 G:j:B
-I:110:12d12:10:50:10
+I:110:12d12:10:30:10
 W:15:1:0:50:0:0
 B:CRUSH:HURT:6d6
 B:CRUSH:HURT:6d6
@@ -23215,7 +23215,7 @@ D:不気味な動きをする小さな泡だ。ぷちぷちと潰れる。
 N:1152:やや大きな泡
 E:Middle aqua illusion
 G:j:B
-I:110:12d12:10:60:10
+I:110:12d12:10:30:10
 W:18:1:0:100:0:0
 B:CRUSH:HURT:7d7
 B:CRUSH:HURT:7d7
@@ -23229,7 +23229,7 @@ D:不気味な動きをする、やや大きな泡だ。潰すと小さな泡に
 N:1153:大きな泡
 E:Large aqua illusion
 G:j:B
-I:110:18d18:10:70:10
+I:110:18d18:10:30:10
 W:21:1:0:250:0:0
 B:CRUSH:HURT:8d8
 B:CRUSH:HURT:8d8
@@ -23243,7 +23243,7 @@ D:不気味な動きをする大きな泡だ。潰しても中々なくならな
 N:1154:特大の泡
 E:Extra large aqua illusion
 G:j:B
-I:110:18d18:10:80:10
+I:110:18d18:10:30:10
 W:24:1:0:500:0:0
 B:CRUSH:HURT:9d9
 B:CRUSH:HURT:9d9
@@ -23263,7 +23263,7 @@ B:CRUSH:HURT:6d6
 B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
-S:1_IN_3 | MISSILE
+S:1_IN_4 | MISSILE
 D:$Holy shit! It will shoot you back at this bubble!
 D:なんてこった、こいつ泡のくせに撃ち返してくるぞ！
 
@@ -23272,14 +23272,14 @@ D:なんてこった、こいつ泡のくせに撃ち返してくるぞ！
 N:1156:二周目のやや大きな泡
 E:Middle aqua illusion in 2nd lap
 G:j:b
-I:120:20d20:10:60:10
+I:120:20d20:10:50:10
 W:28:1:0:240:0:0
 B:CRUSH:HURT:7d7
 B:CRUSH:HURT:7d7
 B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
-S:1_IN_3 | MISSILE
+S:1_IN_4 | MISSILE
 D:$It is a middle bubble that makes an weird movement and shoots you back.
 D:$  When it is crushed, it becomes a small bubble.
 D:不気味な動きをして撃ち返してくる、やや大きな泡だ。潰すと小さな泡になる。
@@ -23288,14 +23288,14 @@ D:不気味な動きをして撃ち返してくる、やや大きな泡だ。潰
 N:1157:二周目の大きな泡
 E:Large aqua illusion in 2nd lap
 G:j:b
-I:120:25d25:10:70:10
+I:120:25d25:10:50:10
 W:31:1:0:600:0:0
 B:CRUSH:HURT:8d8
 B:CRUSH:HURT:8d8
 B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
-S:1_IN_3 | MISSILE
+S:1_IN_4 | MISSILE
 D:$It is a large bubble that makes an weird movement and shoots you back.
 D:$  When it is crushed, it becomes a middle bubble.
 D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
@@ -23304,14 +23304,14 @@ D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても
 N:1158:二週目の特大の泡
 E:Extra large aqua illusion in 2nd lap
 G:j:b
-I:120:25d25:10:80:10
+I:120:25d25:10:50:10
 W:34:1:0:1200:0:0
 B:CRUSH:HURT:9d9
 B:CRUSH:HURT:9d9
 B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
-S:1_IN_3 | MISSILE
+S:1_IN_4 | MISSILE
 D:$It is a extra large bubble that makes an weird movement and shoots you back!
 D:$  You must decide whether running away or squashing them all!
 D:不気味な動きをして撃ち返してくる巨大な泡だ。逃げるか潰すか二つに一つだ！
