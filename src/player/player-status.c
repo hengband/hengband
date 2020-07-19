@@ -3038,9 +3038,6 @@ static void calc_speed(player_type *creature_ptr)
 
     int j = creature_ptr->total_weight;
     int count;
-    if (!creature_ptr->riding) {
-    } else {
-    }
 
     if (!creature_ptr->riding) {
         count = (int)weight_limit(creature_ptr);
