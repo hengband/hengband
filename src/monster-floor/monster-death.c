@@ -379,10 +379,40 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
         break;
     }
-
     case MON_ROLENTO: {
         BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
         (void)project(player_ptr, m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
+        break;
+    }
+    case MON_MIDDLE_AQUA_FIRST:
+    case MON_LARGE_AQUA_FIRST:
+    case MON_EXTRA_LARGE_AQUA_FIRST: 
+    case MON_MIDDLE_AQUA_SECOND: 
+    case MON_LARGE_AQUA_SECOND: 
+    case MON_EXTRA_LARGE_AQUA_SECOND: {
+        if (floor_ptr->inside_arena || player_ptr->phase_out)
+            break;
+
+        bool notice = FALSE;
+        const int popped_bubbles = 4;
+        for (int i = 0; i < popped_bubbles; i++) {
+            POSITION wy = y, wx = x;
+            bool pet = is_pet(m_ptr);
+            BIT_FLAGS mode = PM_NONE;
+
+            if (pet)
+                mode |= PM_FORCE_PET;
+
+            MONSTER_IDX smaller_bubblle = m_ptr->r_idx - 1;
+            bool test = summon_named_creature(player_ptr, (pet ? -1 : m_idx), wy, wx, smaller_bubblle, mode);
+            test &= player_can_see_bold(player_ptr, wy, wx);
+            if (test)
+                notice = TRUE;
+        }
+
+        if (notice)
+            msg_print(_("泡が弾けた！", "The bubble pops!"));
+
         break;
     }
     default: {
