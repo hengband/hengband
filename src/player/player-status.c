@@ -820,28 +820,10 @@ void calc_bonuses(player_type *creature_ptr)
         calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
         calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
 
-        if (creature_ptr->riding == 0)
-            continue;
-
-        if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
-            continue;
+        if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
+            && !have_flag(flgs, TR_RIDING)) {
+			creature_ptr->riding_wield[i] = TRUE;
         }
-
-        if (have_flag(flgs, TR_RIDING))
-            continue;
-
-        int penalty;
-        if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
-            penalty = 5;
-        } else {
-            penalty = r_info[floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
-            penalty += 30;
-            if (penalty < 30)
-                penalty = 30;
-        }
-        creature_ptr->to_h[i] -= (s16b)penalty;
-        creature_ptr->dis_to_h[i] -= (s16b)penalty;
-        creature_ptr->riding_wield[i] = TRUE;
     }
 
     calc_riding_weapon_penalty(creature_ptr);
@@ -3624,10 +3606,26 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
     if (creature_ptr->riding) {
         if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
             creature_ptr->to_h[id] += 15;
-            creature_ptr->dis_to_h[id] += 15;
         }
     }
+
+    if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
+        && !have_flag(flgs, TR_RIDING)) {
+
+        int penalty;
+        if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
+            penalty = 5;
+        } else {
+            penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+            penalty += 30;
+            if (penalty < 30)
+                penalty = 30;
+        }
+        creature_ptr->to_h[id] -= (s16b)penalty;
+    }
 }
+
+
 
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
 {
@@ -3707,6 +3705,22 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
             creature_ptr->dis_to_h[id] += 15;
         }
     }
+
+    if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
+        && !have_flag(flgs, TR_RIDING)) {
+
+        int penalty;
+        if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
+            penalty = 5;
+        } else {
+            penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+            penalty += 30;
+            if (penalty < 30)
+                penalty = 30;
+        }
+        creature_ptr->dis_to_h[id] -= (s16b)penalty;
+    }
+
 }
 
 static void calc_to_hit_bow(player_type *creature_ptr)
