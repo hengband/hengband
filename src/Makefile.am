@@ -468,6 +468,7 @@ hengband_SOURCES = \
 	mspell/mspell-special.c mspell/mspell-special.h \
 	mspell/mspell-status.c mspell/mspell-status.h \
 	mspell/mspell-particularity.c mspell/mspell-particularity.h \
+	mspell/specified-summon.c mspell/specified-summon.h \
 	mspell/summon-checker.c mspell/summon-checker.h \
 	\
 	mutation/mutation.c mutation/mutation.h \

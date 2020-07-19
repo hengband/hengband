@@ -1823,6 +1823,9 @@
     <ClCompile Include="..\..\src\blue-magic\blue-magic-breath.c">
       <Filter>blue-magic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\specified-summon.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3972,6 +3975,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\blue-magic\blue-magic-breath.h">
       <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\specified-summon.h">
+      <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

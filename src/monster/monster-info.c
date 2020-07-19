@@ -11,7 +11,7 @@
 
 #include "monster/monster-info.h"
 #include "dungeon/quest.h"
-#include "floor/floor.h"
+#include "floor/cave.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

@@ -28,6 +28,7 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-processor.h"
 #include "flavor/object-flavor.h"
+#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
 #include "floor/floor-util.h"

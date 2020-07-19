@@ -5,6 +5,7 @@
  */
 
 #include "monster-floor/monster-direction.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"

@@ -7,6 +7,7 @@
 #include "wizard/wizard-spells.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/asking-player.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "monster-floor/monster-generator.h"

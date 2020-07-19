@@ -2,6 +2,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "monster-floor/monster-summon.h"

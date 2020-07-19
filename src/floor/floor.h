@@ -5,12 +5,6 @@
 extern floor_type floor_info;
 
 /*
- * Determine if player is on this grid
- */
-#define player_bold(C,Y,X) \
-	(((Y) == (C)->y) && ((X) == (C)->x))
-
-/*
  * Grid based version of "creature_bold()"
  */
 #define player_grid(C, G) \
@@ -129,8 +123,6 @@ extern floor_type floor_info;
 	((int)((G) % 256U))
 
 bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x);
-bool is_cave_empty_bold(player_type *player_ptr, POSITION x, POSITION y);
-bool is_cave_empty_bold2(player_type *player_ptr, POSITION x, POSITION y);
 void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
 void add_door(player_type *player_ptr, POSITION x, POSITION y);
 void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type);

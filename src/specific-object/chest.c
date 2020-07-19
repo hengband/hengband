@@ -1,6 +1,6 @@
 ﻿#include "specific-object/chest.h"
+#include "floor/cave.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
