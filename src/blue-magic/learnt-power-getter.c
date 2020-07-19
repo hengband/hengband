@@ -315,7 +315,7 @@ static void describe_blue_magic_name(player_type *caster_ptr, learnt_magic_type 
 
 static bool blue_magic_key_input(player_type *caster_ptr, learnt_magic_type *lm_ptr)
 {
-    if ((lm_ptr->choice != ' ') && (lm_ptr->choice != '*') && (lm_ptr->choice != '?') && (use_menu || (lm_ptr->ask == 0)))
+    if ((lm_ptr->choice != ' ') && (lm_ptr->choice != '*') && (lm_ptr->choice != '?') && (!use_menu || (lm_ptr->ask == 0)))
         return FALSE;
 
     if (lm_ptr->redraw && !use_menu) {
