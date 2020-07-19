@@ -29,7 +29,7 @@ void calc_equipment_status(player_type* creature_ptr) {
     int default_hand = 0;
 
 	if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-        if (!creature_ptr->migite)
+        if (!creature_ptr->right_hand_weapon)
             default_hand = 1;
     }
 
@@ -48,9 +48,9 @@ void calc_equipment_status(player_type* creature_ptr) {
         if (have_flag(flgs, TR_INFRA))
             creature_ptr->see_infra += o_ptr->pval;
         if (have_flag(flgs, TR_BLOWS)) {
-            if ((i == INVEN_RARM || i == INVEN_RIGHT) && !creature_ptr->ryoute)
+            if ((i == INVEN_RARM || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon)
                 creature_ptr->extra_blows[0] += o_ptr->pval;
-            else if ((i == INVEN_LARM || i == INVEN_LEFT) && !creature_ptr->ryoute)
+            else if ((i == INVEN_LARM || i == INVEN_LEFT) && !creature_ptr->two_handed_weapon)
                 creature_ptr->extra_blows[1] += o_ptr->pval;
             else {
                 creature_ptr->extra_blows[0] += o_ptr->pval;
@@ -266,7 +266,7 @@ void calc_equipment_status(player_type* creature_ptr) {
         if (object_is_known(o_ptr))
             creature_ptr->dis_to_h_b += (s16b)bonus_to_h;
 
-        if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !creature_ptr->ryoute) {
+        if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon) {
             creature_ptr->to_h[i - INVEN_RIGHT] += (s16b)bonus_to_h;
             creature_ptr->to_d[i - INVEN_RIGHT] += (s16b)bonus_to_d;
             if (object_is_known(o_ptr)) {
@@ -277,7 +277,7 @@ void calc_equipment_status(player_type* creature_ptr) {
             continue;
         }
 
-        if (creature_ptr->migite && creature_ptr->hidarite) {
+        if (creature_ptr->right_hand_weapon && creature_ptr->left_hand_weapon) {
             creature_ptr->to_h[0] += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
             creature_ptr->to_h[1] += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
             creature_ptr->to_d[0] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;

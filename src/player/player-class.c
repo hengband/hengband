@@ -1348,15 +1348,15 @@ void calc_class_status(player_type *creature_ptr)
     case CLASS_NINJA:
         if (heavy_armor(creature_ptr)) {
             creature_ptr->skill_stl -= (creature_ptr->lev) / 10;
-        } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite)
-            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite)) {
+        } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
+            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
             creature_ptr->skill_stl += (creature_ptr->lev) / 10;
             if (creature_ptr->lev > 24)
                 creature_ptr->free_act = TRUE;
         }
 
-        if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite)
-            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite)) {
+        if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
+            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
             creature_ptr->to_a += creature_ptr->lev / 2 + 5;
             creature_ptr->dis_to_a += creature_ptr->lev / 2 + 5;
         }

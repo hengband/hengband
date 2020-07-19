@@ -483,7 +483,7 @@ static void dump_aux_equipment_inventory(player_type *creature_ptr, FILE *fff)
 		for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
 			object_desc(creature_ptr, o_name, &creature_ptr->inventory_list[i], 0);
-			if ((((i == INVEN_RARM) && creature_ptr->hidarite) || ((i == INVEN_LARM) && creature_ptr->migite)) && creature_ptr->ryoute)
+			if ((((i == INVEN_RARM) && creature_ptr->left_hand_weapon) || ((i == INVEN_LARM) && creature_ptr->right_hand_weapon)) && creature_ptr->two_handed_weapon)
 				strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 
 			fprintf(fff, "%c) %s\n",

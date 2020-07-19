@@ -308,8 +308,8 @@ static void display_first_page(player_type *creature_ptr, int xthb, int *damage,
 	if (creature_ptr->muta2 & MUT2_TRUNK) muta_att++;
 	if (creature_ptr->muta2 & MUT2_TENTACLES) muta_att++;
 
-	int blows1 = creature_ptr->migite ? creature_ptr->num_blow[0] : 0;
-	int blows2 = creature_ptr->hidarite ? creature_ptr->num_blow[1] : 0;
+	int blows1 = creature_ptr->right_hand_weapon ? creature_ptr->num_blow[0] : 0;
+	int blows2 = creature_ptr->left_hand_weapon ? creature_ptr->num_blow[1] : 0;
 	int xdis = creature_ptr->skill_dis;
 	int xdev = creature_ptr->skill_dev;
 	int xsav = creature_ptr->skill_sav;

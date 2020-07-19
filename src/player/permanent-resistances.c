@@ -66,8 +66,8 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		}
 		else
 		{
-			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite) &&
-				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite))
+			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon) &&
+				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon))
 				add_flag(flags, TR_SPEED);
 			if (creature_ptr->lev > 24)
 				add_flag(flags, TR_FREE_ACT);

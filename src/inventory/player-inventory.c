@@ -105,15 +105,15 @@ static concptr mention_use(player_type *owner_ptr, int i)
 	switch (i)
 	{
 #ifdef JP
-	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "運搬中" : ((owner_ptr->ryoute && owner_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手")); break;
+	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "運搬中" : ((owner_ptr->two_handed_weapon && owner_ptr->right_hand_weapon) ? " 両手" : (left_hander ? " 左手" : " 右手")); break;
 #else
-	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "Just lifting" : (owner_ptr->migite ? "Wielding" : "On arm"); break;
+	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "Just lifting" : (owner_ptr->right_hand_weapon ? "Wielding" : "On arm"); break;
 #endif
 
 #ifdef JP
-	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "運搬中" : ((owner_ptr->ryoute && owner_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手")); break;
+	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "運搬中" : ((owner_ptr->two_handed_weapon && owner_ptr->left_hand_weapon) ? " 両手" : (left_hander ? " 右手" : " 左手")); break;
 #else
-	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "Just lifting" : (owner_ptr->hidarite ? "Wielding" : "On arm"); break;
+	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "Just lifting" : (owner_ptr->left_hand_weapon ? "Wielding" : "On arm"); break;
 #endif
 
 	case INVEN_BOW:   p = (adj_str_hold[owner_ptr->stat_ind[A_STR]] < owner_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
@@ -160,7 +160,7 @@ void display_equipment(player_type *owner_ptr, tval_type tval)
 		}
 
 		Term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
-		if ((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute)
+		if ((((i == INVEN_RARM) && owner_ptr->left_hand_weapon) || ((i == INVEN_LARM) && owner_ptr->right_hand_weapon)) && owner_ptr->two_handed_weapon)
 		{
 			strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 			attr = TERM_WHITE;
@@ -1003,20 +1003,20 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
 			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
-		if (owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
+		if (owner_ptr->two_handed_weapon && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
 	/* Restrict equipment indexes */
 	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e1, tval))) e1++;
 	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e2, tval))) e2--;
 
-	if (equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
+	if (equip && owner_ptr->two_handed_weapon && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
-		if (owner_ptr->migite)
+		if (owner_ptr->right_hand_weapon)
 		{
 			if (e2 < INVEN_LARM) e2 = INVEN_LARM;
 		}
-		else if (owner_ptr->hidarite) e1 = INVEN_RARM;
+		else if (owner_ptr->left_hand_weapon) e1 = INVEN_RARM;
 	}
 
 	/* Restrict floor usage */
@@ -1935,20 +1935,20 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
 			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
-		if (owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
+		if (owner_ptr->two_handed_weapon && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
 	/* Restrict equipment indexes */
 	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e1, tval))) e1++;
 	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e2, tval))) e2--;
 
-	if (equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
+	if (equip && owner_ptr->two_handed_weapon && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
-		if (owner_ptr->migite)
+		if (owner_ptr->right_hand_weapon)
 		{
 			if (e2 < INVEN_LARM) e2 = INVEN_LARM;
 		}
-		else if (owner_ptr->hidarite) e1 = INVEN_RARM;
+		else if (owner_ptr->left_hand_weapon) e1 = INVEN_RARM;
 	}
 
 	/* Count "okay" floor items */
@@ -3127,12 +3127,12 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
 
 		/* Is this item acceptable? */
 		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval) || (mode & USE_FULL)) &&
-			(!((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute) ||
+			(!((((i == INVEN_RARM) && owner_ptr->left_hand_weapon) || ((i == INVEN_LARM) && owner_ptr->right_hand_weapon)) && owner_ptr->two_handed_weapon) ||
 			(mode & IGNORE_BOTHHAND_SLOT))) continue;
 
 		object_desc(owner_ptr, o_name, o_ptr, 0);
 
-		if ((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute)
+		if ((((i == INVEN_RARM) && owner_ptr->left_hand_weapon) || ((i == INVEN_LARM) && owner_ptr->right_hand_weapon)) && owner_ptr->two_handed_weapon)
 		{
 			(void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
 			out_color[k] = TERM_WHITE;
@@ -3288,15 +3288,15 @@ concptr describe_use(player_type *owner_ptr, int i)
 	switch (i)
 	{
 #ifdef JP
-	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "運搬中の" : ((owner_ptr->ryoute && owner_ptr->migite) ? "両手に装備している" : (left_hander ? "左手に装備している" : "右手に装備している")); break;
+	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "運搬中の" : ((owner_ptr->two_handed_weapon && owner_ptr->right_hand_weapon) ? "両手に装備している" : (left_hander ? "左手に装備している" : "右手に装備している")); break;
 #else
-	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "just lifting" : (owner_ptr->migite ? "attacking monsters with" : "wearing on your arm"); break;
+	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "just lifting" : (owner_ptr->right_hand_weapon ? "attacking monsters with" : "wearing on your arm"); break;
 #endif
 
 #ifdef JP
-	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "運搬中の" : ((owner_ptr->ryoute && owner_ptr->hidarite) ? "両手に装備している" : (left_hander ? "右手に装備している" : "左手に装備している")); break;
+	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "運搬中の" : ((owner_ptr->two_handed_weapon && owner_ptr->left_hand_weapon) ? "両手に装備している" : (left_hander ? "右手に装備している" : "左手に装備している")); break;
 #else
-	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "just lifting" : (owner_ptr->hidarite ? "attacking monsters with" : "wearing on your arm"); break;
+	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "just lifting" : (owner_ptr->left_hand_weapon ? "attacking monsters with" : "wearing on your arm"); break;
 #endif
 
 	case INVEN_BOW:   p = (adj_str_hold[owner_ptr->stat_ind[A_STR]] < owner_ptr->inventory_list[i].weight / 10) ? _("持つだけで精一杯の", "just holding") : _("射撃用に装備している", "shooting missiles with"); break;

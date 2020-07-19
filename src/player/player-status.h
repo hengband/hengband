@@ -729,9 +729,9 @@ typedef struct player_type
 
 	s16b to_m_chance;		/* Minusses to cast chance */
 
-	bool ryoute;
-	bool migite;
-	bool hidarite;
+	bool two_handed_weapon;
+	bool right_hand_weapon;
+	bool left_hand_weapon;
 	bool no_flowed;
 
 	ARMOUR_CLASS ac;	/*!< 装備無しの基本AC / Base ac */

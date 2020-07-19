@@ -81,6 +81,8 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static bool is_martial_arts_mode(player_type *creature_ptr);
+
 static void calc_intra_vision(player_type *creature_ptr);
 static void calc_stealth(player_type *creature_ptr);
 static void calc_disarming(player_type *creature_ptr);
@@ -580,9 +582,9 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->immune_elec = FALSE;
     creature_ptr->immune_fire = FALSE;
     creature_ptr->immune_cold = FALSE;
-    creature_ptr->ryoute = FALSE;
-    creature_ptr->migite = FALSE;
-    creature_ptr->hidarite = FALSE;
+    creature_ptr->two_handed_weapon = FALSE;
+    creature_ptr->right_hand_weapon = FALSE;
+    creature_ptr->left_hand_weapon = FALSE;
     creature_ptr->no_flowed = FALSE;
     creature_ptr->yoiyami = FALSE;
     creature_ptr->easy_2weapon = FALSE;
@@ -652,39 +654,39 @@ void calc_bonuses(player_type *creature_ptr)
     calc_race_status(creature_ptr);
 
     if (has_melee_weapon(creature_ptr, INVEN_RARM))
-        creature_ptr->migite = TRUE;
+        creature_ptr->right_hand_weapon = TRUE;
     if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-        creature_ptr->hidarite = TRUE;
-        if (!creature_ptr->migite)
+        creature_ptr->left_hand_weapon = TRUE;
+        if (!creature_ptr->right_hand_weapon)
             default_hand = 1;
     }
 
     if (can_two_hands_wielding(creature_ptr)) {
-        if (creature_ptr->migite && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
+        if (creature_ptr->right_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM])) {
-            creature_ptr->ryoute = TRUE;
-        } else if (creature_ptr->hidarite && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
+            creature_ptr->two_handed_weapon = TRUE;
+        } else if (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
-            creature_ptr->ryoute = TRUE;
+            creature_ptr->two_handed_weapon = TRUE;
         } else {
             switch (creature_ptr->pclass) {
             case CLASS_MONK:
             case CLASS_FORCETRAINER:
             case CLASS_BERSERKER:
                 if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
-                    creature_ptr->migite = TRUE;
-                    creature_ptr->ryoute = TRUE;
+                    creature_ptr->right_hand_weapon = TRUE;
+                    creature_ptr->two_handed_weapon = TRUE;
                 }
                 break;
             }
         }
     }
 
-    if (!creature_ptr->migite && !creature_ptr->hidarite) {
+    if (!creature_ptr->right_hand_weapon && !creature_ptr->left_hand_weapon) {
         if (empty_hands_status & EMPTY_HAND_RARM)
-            creature_ptr->migite = TRUE;
+            creature_ptr->right_hand_weapon = TRUE;
         else if (empty_hands_status == EMPTY_HAND_LARM) {
-            creature_ptr->hidarite = TRUE;
+            creature_ptr->left_hand_weapon = TRUE;
             default_hand = 1;
         }
     }
@@ -768,7 +770,7 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->update |= (PU_MONSTERS);
     }
 
-    if ((creature_ptr->migite && (empty_hands_status & EMPTY_HAND_RARM)) || (creature_ptr->hidarite && (empty_hands_status & EMPTY_HAND_LARM))) {
+    if ((creature_ptr->right_hand_weapon && (empty_hands_status & EMPTY_HAND_RARM)) || (creature_ptr->left_hand_weapon && (empty_hands_status & EMPTY_HAND_LARM))) {
         creature_ptr->to_h[default_hand] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
         creature_ptr->dis_to_h[default_hand] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
     }
@@ -800,7 +802,7 @@ void calc_bonuses(player_type *creature_ptr)
         }
     }
 
-    if (creature_ptr->ryoute)
+    if (creature_ptr->two_handed_weapon)
         creature_ptr->hold *= 2;
 
     for (int i = 0; i < 2; i++) {
@@ -822,12 +824,11 @@ void calc_bonuses(player_type *creature_ptr)
 
         if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
             && !have_flag(flgs, TR_RIDING)) {
-			creature_ptr->riding_wield[i] = TRUE;
+            creature_ptr->riding_wield[i] = TRUE;
         }
     }
 
     calc_riding_weapon_penalty(creature_ptr);
-
 
     if (creature_ptr->riding)
         creature_ptr->levitation = riding_levitation;
@@ -882,7 +883,7 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->window |= (PW_PLAYER);
     }
 
-    if (creature_ptr->ryoute && !omoi) {
+    if (creature_ptr->two_handed_weapon && !omoi) {
         int bonus_to_h = 0, bonus_to_d = 0;
         bonus_to_d = ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128) / 2;
         bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
@@ -897,7 +898,7 @@ void calc_bonuses(player_type *creature_ptr)
     is_special_class |= creature_ptr->pclass == CLASS_FORCETRAINER;
     is_special_class |= creature_ptr->pclass == CLASS_BERSERKER;
     if (is_special_class && (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)))
-        creature_ptr->ryoute = FALSE;
+        creature_ptr->two_handed_weapon = FALSE;
 
     if (creature_ptr->immune_acid)
         creature_ptr->resist_acid = TRUE;
@@ -2053,13 +2054,18 @@ static void calc_dig(player_type *creature_ptr)
         creature_ptr->skill_dig = 1;
 }
 
+static bool is_martial_arts_mode(player_type* creature_ptr) {
+    return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_BERSERKER))
+        && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) && !creature_ptr->left_hand_weapon;
+}
+
 static void calc_num_blow(player_type *creature_ptr, int i)
 {
     creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     bool omoi = FALSE;
-    if (creature_ptr->ryoute)
+    if (creature_ptr->two_handed_weapon)
         creature_ptr->hold *= 2;
 
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
@@ -2069,11 +2075,10 @@ static void calc_num_blow(player_type *creature_ptr, int i)
     creature_ptr->riding_wield[i] = FALSE;
     if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
         creature_ptr->num_blow[i] = 1;
-    }
-	else {
+    } else {
         if (creature_ptr->hold < o_ptr->weight / 10) {
             creature_ptr->heavy_wield[i] = TRUE;
-        } else if (creature_ptr->ryoute && (creature_ptr->hold < o_ptr->weight / 5))
+        } else if (creature_ptr->two_handed_weapon && (creature_ptr->hold < o_ptr->weight / 5))
             omoi = TRUE;
 
         if ((i == 1) && (o_ptr->tval == TV_SWORD) && ((o_ptr->sval == SV_MAIN_GAUCHE) || (o_ptr->sval == SV_WAKIZASHI))) {
@@ -2085,9 +2090,9 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             int str_index, dex_index;
             int num = 0, wgt = 0, mul = 0, div = 0;
 
-			num = class_info[creature_ptr->pclass].num;
+            num = class_info[creature_ptr->pclass].num;
             wgt = class_info[creature_ptr->pclass].wgt;
-			mul = class_info[creature_ptr->pclass].mul;
+            mul = class_info[creature_ptr->pclass].mul;
 
             if (creature_ptr->pclass == CLASS_CAVALRY && (creature_ptr->riding) && (have_flag(flgs, TR_RIDING))) {
                 num = 5;
@@ -2104,7 +2109,7 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             div = ((o_ptr->weight < wgt) ? wgt : o_ptr->weight);
             str_index = (adj_str_blow[creature_ptr->stat_ind[A_STR]] * mul / div);
 
-            if (creature_ptr->ryoute && !omoi)
+            if (creature_ptr->two_handed_weapon && !omoi)
                 str_index++;
             if (creature_ptr->pclass == CLASS_NINJA)
                 str_index = MAX(0, str_index - 1);
@@ -2136,15 +2141,11 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             if (creature_ptr->num_blow[i] < 1)
                 creature_ptr->num_blow[i] = 1;
         }
+    }
 
-	}
-
-	if (i != 0)
-        return;
-	int empty_hands_status = empty_hands(creature_ptr, TRUE);
+    if (i != 0) return;
     /* Different calculation for monks with empty hands */
-    if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_BERSERKER))
-        && (empty_hands_status & EMPTY_HAND_RARM) && !creature_ptr->hidarite) {
+    if (is_martial_arts_mode(creature_ptr)) {
         int blow_base = creature_ptr->lev + adj_dex_blow[creature_ptr->stat_ind[A_DEX]];
         creature_ptr->num_blow[i] = 0;
 
@@ -2954,8 +2955,8 @@ static void calc_speed(player_type *creature_ptr)
         if (creature_ptr->pclass == CLASS_NINJA) {
             if (heavy_armor(creature_ptr)) {
                 creature_ptr->pspeed -= (creature_ptr->lev) / 10;
-            } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite)
-                && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite)) {
+            } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
+                && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
                 creature_ptr->pspeed += 3;
                 if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
                         || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
@@ -3179,7 +3180,7 @@ static void calc_riding_weapon_penalty(player_type *creature_ptr)
 
         creature_ptr->riding_ryoute = FALSE;
 
-        if (creature_ptr->ryoute || (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE))
+        if (creature_ptr->two_handed_weapon || (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE))
             creature_ptr->riding_ryoute = TRUE;
         else if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
             switch (creature_ptr->pclass) {
@@ -3325,7 +3326,7 @@ static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot)
         creature_ptr->to_d[id] -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->to_d[id] += creature_ptr->lev / 6;
-        if (((id == 0) && !creature_ptr->hidarite) || creature_ptr->ryoute) {
+        if (((id == 0) && !creature_ptr->left_hand_weapon) || creature_ptr->two_handed_weapon) {
             creature_ptr->to_d[id] += creature_ptr->lev / 6;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
@@ -3375,7 +3376,7 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
         creature_ptr->dis_to_d[id] -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->dis_to_d[id] += creature_ptr->lev / 6;
-        if (((id == 0) && !creature_ptr->hidarite) || creature_ptr->ryoute) {
+        if (((id == 0) && !creature_ptr->left_hand_weapon) || creature_ptr->two_handed_weapon) {
             creature_ptr->dis_to_d[id] += creature_ptr->lev / 6;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
@@ -3419,7 +3420,7 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
         creature_ptr->to_h[id] -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->to_h[id] += creature_ptr->lev / 5;
-        if (((id == 0) && !creature_ptr->hidarite) || creature_ptr->ryoute) {
+        if (((id == 0) && !creature_ptr->left_hand_weapon) || creature_ptr->two_handed_weapon) {
             creature_ptr->to_h[id] += creature_ptr->lev / 5;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
@@ -3497,8 +3498,6 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
     }
 }
 
-
-
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
 {
     int id = slot - INVEN_RARM;
@@ -3516,7 +3515,7 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         creature_ptr->dis_to_h[id] -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->dis_to_h[id] += creature_ptr->lev / 5;
-        if (((id == 0) && !creature_ptr->hidarite) || creature_ptr->ryoute) {
+        if (((id == 0) && !creature_ptr->left_hand_weapon) || creature_ptr->two_handed_weapon) {
             creature_ptr->dis_to_h[id] += creature_ptr->lev / 5;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
@@ -3592,7 +3591,6 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
         creature_ptr->dis_to_h[id] -= (s16b)penalty;
     }
-
 }
 
 static void calc_to_hit_bow(player_type *creature_ptr)
@@ -3814,7 +3812,8 @@ static void calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slo
     }
 }
 
-static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot) {
+static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot)
+{
     int id = slot - INVEN_RARM;
     creature_ptr->to_ds[id] = 0;
 }
