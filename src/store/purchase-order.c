@@ -99,7 +99,7 @@ static void initialize_haggle_offer(haggle_type *haggle_ptr)
     haggle_ptr->flag = FALSE;
     haggle_ptr->annoyed = 0;
     haggle_ptr->cancel = FALSE;
-    haggle_ptr->price = 0;
+    *haggle_ptr->price = 0;
 }
 
 static void suggest_haggle_offer(haggle_type *haggle_ptr)
@@ -238,7 +238,7 @@ static bool show_store_select_item(COMMAND_CODE *item, const int i)
 
 static bool process_purchase_result(player_type *player_ptr, object_type *o_ptr, object_type *j_ptr, COMMAND_CODE *item_new,const int amt, int *i, const COMMAND_CODE item)
 {
-    if (cur_store_num == STORE_HOME)
+    if (cur_store_num != STORE_HOME)
         return FALSE;
 
     bool combined_or_reordered;
