@@ -199,6 +199,17 @@ static bool cast_blue_breath_disenchant(player_type *caster_ptr, blue_magic_type
     return TRUE;
 }
 
+static bool cast_blue_breath_nexus(player_type *caster_ptr, blue_magic_type *bm_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        return FALSE;
+
+    msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
+    bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_NEXUS), bm_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_NEXUS, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -297,12 +308,9 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_BR_NEXUS:
-        if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
+        if (!cast_blue_breath_nexus(caster_ptr, bm_ptr))
             return FALSE;
 
-        msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
-        bm_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_NEXUS), bm_ptr->plev, DAM_ROLL);
-        fire_breath(caster_ptr, GF_NEXUS, bm_ptr->dir, bm_ptr->damage, (bm_ptr->plev > 40 ? 3 : 2));
         break;
     case MS_BR_TIME:
         if (!get_aim_dir(caster_ptr, &bm_ptr->dir))
