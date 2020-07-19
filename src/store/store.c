@@ -50,16 +50,18 @@ bool allow_inc = FALSE;
 /*
  * @brief アイテムが格納可能な数より多いかをチェックする
  * @param なし
- * @return エラーコード
- * オプション powerup_home が設定されていると我が家が 20 ページまで使える /
+ * @return 
+ * 0 : No space
+ * 1 : Cannot be combined but there are empty spaces.
+ * @details オプション powerup_home が設定されていると我が家が 20 ページまで使える /
  * Free space is always usable
  */
-static errr check_free_space(void)
+static int check_free_space(void)
 {
-    if ((cur_store_num != STORE_HOME) || powerup_home)
-        return 0;
-
-    if ((st_ptr->stock_num < ((st_ptr->stock_size) / 10)) || (st_ptr->stock_num < st_ptr->stock_size)) 
+    if ((cur_store_num == STORE_HOME) && !powerup_home) {
+        if (st_ptr->stock_num < ((st_ptr->stock_size) / 10))
+            return 1;
+    } else if (st_ptr->stock_num < st_ptr->stock_size)
         return 1;
 
     return 0;
