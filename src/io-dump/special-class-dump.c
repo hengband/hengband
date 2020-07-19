@@ -119,7 +119,7 @@ static void dump_smith(player_type *creature_ptr, FILE *fff)
  * @param learnt_spell_ptr 学習済魔法のテーブル
  * @return なし
  */
-static void add_monster_spell_type(char p[][80], int col, int spell_type, learnt_spell_table *learnt_spell_ptr)
+static void add_monster_spell_type(char p[][80], int col, blue_magic_type spell_type, learnt_spell_table *learnt_spell_ptr)
 {
     learnt_spell_ptr->f4 = 0;
     learnt_spell_ptr->f5 = 0;

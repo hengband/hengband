@@ -2,7 +2,8 @@
 
 #include "system/angband.h"
 
-typedef struct blue_magic_type {
+// Blue Magic Cast.
+typedef struct bmc_type {
     DIRECTION dir;
     PLAYER_LEVEL plev;
     PLAYER_LEVEL summon_lev;
@@ -12,8 +13,8 @@ typedef struct blue_magic_type {
     BIT_FLAGS p_mode;
     BIT_FLAGS u_mode;
     BIT_FLAGS g_mode;
-} blue_magic_type;
+} bmc_type;
 
 typedef PLAYER_LEVEL (*get_pseudo_monstetr_level_pf)(player_type *caster_ptr);
-blue_magic_type *initialize_blue_magic_type(
-    player_type *caster_ptr, blue_magic_type *bm_ptr, const bool success, get_pseudo_monstetr_level_pf get_pseudo_monstetr_level);
+bmc_type *initialize_blue_magic_type(
+    player_type *caster_ptr, bmc_type *bmc_ptr, const bool success, get_pseudo_monstetr_level_pf get_pseudo_monstetr_level);
