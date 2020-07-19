@@ -4,6 +4,7 @@
  * Bit flags for the place_monster_???() (etc)
  */
 typedef enum place_monster_type {
+    PM_NONE = 0x00000000, /*!< 特になし*/
 	PM_ALLOW_SLEEP = 0x00000001, /*!< モンスター生成フラグ: 眠っている状態で生成されても良い */
     PM_ALLOW_GROUP = 0x00000002, /*!< モンスター生成フラグ: 集団生成されても良い */
     PM_FORCE_FRIENDLY = 0x00000004, /*!< モンスター生成フラグ: 必ず友好的に生成される */

@@ -72,11 +72,10 @@ MONSTER_NUMBER summon_EAGLE(player_type *target_ptr, POSITION y, POSITION x, int
  */
 MONSTER_NUMBER summon_IE(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
-    BIT_FLAGS mode = 0L;
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(target_ptr, m_idx, y, x, MON_IE, mode);
+        count += summon_named_creature(target_ptr, m_idx, y, x, MON_IE, PM_NONE);
     }
 
     return count;
@@ -127,11 +126,10 @@ MONSTER_NUMBER summon_guardian(player_type *target_ptr, POSITION y, POSITION x, 
  */
 MONSTER_NUMBER summon_LOCKE_CLONE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    BIT_FLAGS mode = 0L;
     int count = 0;
     int num = randint1(3);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(target_ptr, m_idx, y, x, MON_LOCKE_CLONE, mode);
+        count += summon_named_creature(target_ptr, m_idx, y, x, MON_LOCKE_CLONE, PM_NONE);
     }
 
     return count;
@@ -153,6 +151,26 @@ MONSTER_NUMBER summon_LOUSE(player_type *target_ptr, POSITION y, POSITION x, int
     for (int k = 0; k < num; k++) {
         count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
     }
+
+    return count;
+}
+
+MONSTER_NUMBER summon_MOAI(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 3 + randint1(3);
+    for (int k = 0; k < num; k++)
+        count += summon_named_creature(target_ptr, m_idx, y, x, MON_SMALL_MOAI, PM_NONE);
+
+    return count;
+}
+
+MONSTER_NUMBER summon_DEMON_SLAYER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    const int num = 5;
+    for (int k = 0; k < num; k++)
+        count += summon_named_creature(target_ptr, m_idx, y, x, MON_DEMON_SLAYER_MEMBER, PM_NONE);
 
     return count;
 }
@@ -231,24 +249,25 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
     case MON_THORONDOR:
         count += summon_EAGLE(target_ptr, y, x, rlev, m_idx);
         break;
-
     case MON_BULLGATES:
         count += summon_IE(target_ptr, y, x, rlev, m_idx);
         break;
-
     case MON_SERPENT:
     case MON_ZOMBI_SERPENT:
         count += summon_guardian(target_ptr, y, x, rlev, m_idx, t_idx, TARGET_TYPE);
         break;
-
     case MON_CALDARM:
         count += summon_LOCKE_CLONE(target_ptr, y, x, m_idx);
         break;
-
     case MON_LOUSY:
         count += summon_LOUSE(target_ptr, y, x, rlev, m_idx);
         break;
-
+    case MON_VAIF:
+        count += summon_MOAI(target_ptr, y, x, m_idx);
+        break;
+    case MON_DEMON_SLAYER_SENIOR:
+        count += summon_DEMON_SLAYER(target_ptr, y, x, m_idx);
+        break;
     default:
         count += summon_Kin(target_ptr, y, x, rlev, m_idx);
         break;
