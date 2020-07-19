@@ -2084,140 +2084,15 @@ static void calc_num_blow(player_type *creature_ptr, int i)
         if (o_ptr->k_idx && !creature_ptr->heavy_wield[i]) {
             int str_index, dex_index;
             int num = 0, wgt = 0, mul = 0, div = 0;
-            switch (creature_ptr->pclass) {
-            case CLASS_WARRIOR:
-                num = 6;
-                wgt = 70;
-                mul = 5;
-                break;
 
-            case CLASS_BERSERKER:
-                num = 6;
-                wgt = 70;
-                mul = 7;
-                break;
+			num = class_info[creature_ptr->pclass].num;
+            wgt = class_info[creature_ptr->pclass].wgt;
+			mul = class_info[creature_ptr->pclass].mul;
 
-            case CLASS_MAGE:
-            case CLASS_HIGH_MAGE:
-            case CLASS_BLUE_MAGE:
-                num = 3;
-                wgt = 100;
-                mul = 2;
-                break;
-
-            case CLASS_PRIEST:
-            case CLASS_MAGIC_EATER:
-            case CLASS_MINDCRAFTER:
-                num = 5;
-                wgt = 100;
-                mul = 3;
-                break;
-
-            case CLASS_ROGUE:
-                num = 5;
-                wgt = 40;
-                mul = 3;
-                break;
-
-            case CLASS_RANGER:
+            if (creature_ptr->pclass == CLASS_CAVALRY && (creature_ptr->riding) && (have_flag(flgs, TR_RIDING))) {
                 num = 5;
                 wgt = 70;
                 mul = 4;
-                break;
-
-            case CLASS_PALADIN:
-            case CLASS_SAMURAI:
-                num = 5;
-                wgt = 70;
-                mul = 4;
-                break;
-
-            case CLASS_SMITH:
-                num = 5;
-                wgt = 150;
-                mul = 5;
-                break;
-
-            case CLASS_WARRIOR_MAGE:
-            case CLASS_RED_MAGE:
-                num = 5;
-                wgt = 70;
-                mul = 3;
-                break;
-
-            case CLASS_CHAOS_WARRIOR:
-                num = 5;
-                wgt = 70;
-                mul = 4;
-                break;
-
-            case CLASS_MONK:
-                num = 5;
-                wgt = 60;
-                mul = 3;
-                break;
-
-            case CLASS_TOURIST:
-                num = 4;
-                wgt = 100;
-                mul = 3;
-                break;
-
-            case CLASS_IMITATOR:
-                num = 5;
-                wgt = 70;
-                mul = 4;
-                break;
-
-            case CLASS_BEASTMASTER:
-                num = 5;
-                wgt = 70;
-                mul = 3;
-                break;
-
-            case CLASS_CAVALRY:
-                if ((creature_ptr->riding) && (have_flag(flgs, TR_RIDING))) {
-                    num = 5;
-                    wgt = 70;
-                    mul = 4;
-                } else {
-                    num = 5;
-                    wgt = 100;
-                    mul = 3;
-                }
-                break;
-
-            case CLASS_SORCERER:
-                num = 1;
-                wgt = 1;
-                mul = 1;
-                break;
-
-            case CLASS_ARCHER:
-            case CLASS_BARD:
-            case CLASS_SNIPER:
-                num = 4;
-                wgt = 70;
-                mul = 2;
-                break;
-
-            case CLASS_FORCETRAINER:
-                num = 4;
-                wgt = 60;
-                mul = 2;
-                break;
-
-            case CLASS_MIRROR_MASTER:
-                num = 3;
-                wgt = 100;
-                mul = 3;
-                break;
-
-            case CLASS_NINJA:
-                num = 4;
-                wgt = 20;
-                mul = 1;
-                break;
             }
 
             if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT) || hex_spelling(creature_ptr, HEX_BUILDING)) {

@@ -91,6 +91,10 @@ struct player_class
 	s16b c_exp;			/* Class experience factor */
 
 	byte pet_upkeep_div; /* Pet upkeep divider */
+
+    int num;
+    int wgt;
+    int mul;
 };
 
 extern const player_class *cp_ptr;
