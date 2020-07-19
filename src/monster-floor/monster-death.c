@@ -1,10 +1,10 @@
 ﻿#include "monster-floor/monster-death.h"
-#include "artifact/fixed-art-generator.h"
 #include "art-definition/art-armor-types.h"
 #include "art-definition/art-bow-types.h"
 #include "art-definition/art-protector-types.h"
 #include "art-definition/art-weapon-types.h"
 #include "art-definition/random-art-effects.h"
+#include "artifact/fixed-art-generator.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
@@ -44,8 +44,8 @@
 #include "pet/pet-fall-off.h"
 #include "player/patron.h"
 #include "spell/process-effect.h"
-#include "spell/spells-summon.h"
 #include "spell/spell-types.h"
+#include "spell/spells-summon.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-scroll-types.h"
@@ -386,9 +386,9 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     }
     case MON_MIDDLE_AQUA_FIRST:
     case MON_LARGE_AQUA_FIRST:
-    case MON_EXTRA_LARGE_AQUA_FIRST: 
-    case MON_MIDDLE_AQUA_SECOND: 
-    case MON_LARGE_AQUA_SECOND: 
+    case MON_EXTRA_LARGE_AQUA_FIRST:
+    case MON_MIDDLE_AQUA_SECOND:
+    case MON_LARGE_AQUA_SECOND:
     case MON_EXTRA_LARGE_AQUA_SECOND: {
         if (floor_ptr->inside_arena || player_ptr->phase_out)
             break;
@@ -404,9 +404,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
                 mode |= PM_FORCE_PET;
 
             MONSTER_IDX smaller_bubblle = m_ptr->r_idx - 1;
-            bool test = summon_named_creature(player_ptr, (pet ? -1 : m_idx), wy, wx, smaller_bubblle, mode);
-            test &= player_can_see_bold(player_ptr, wy, wx);
-            if (test)
+            if (summon_named_creature(player_ptr, (pet ? -1 : m_idx), wy, wx, smaller_bubblle, mode) && player_can_see_bold(player_ptr, wy, wx))
                 notice = TRUE;
         }
 
