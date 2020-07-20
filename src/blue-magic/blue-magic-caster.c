@@ -99,6 +99,46 @@ bool cast_blue_brain_smash(player_type *caster_ptr, bmc_type *bmc_ptr)
     return TRUE;
 }
 
+bool cast_blue_curse_1(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_1), bmc_ptr->plev, DAM_ROLL);
+    fire_ball_hide(caster_ptr, GF_CAUSE_1, bmc_ptr->dir, bmc_ptr->damage, 0);
+    return TRUE;
+}
+
+bool cast_blue_curse_2(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_2), bmc_ptr->plev, DAM_ROLL);
+    fire_ball_hide(caster_ptr, GF_CAUSE_2, bmc_ptr->dir, bmc_ptr->damage, 0);
+    return TRUE;
+}
+
+bool cast_blue_curse_3(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_3), bmc_ptr->plev, DAM_ROLL);
+    fire_ball_hide(caster_ptr, GF_CAUSE_3, bmc_ptr->dir, bmc_ptr->damage, 0);
+    return TRUE;
+}
+
+bool cast_blue_curse_4(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_4), bmc_ptr->plev, DAM_ROLL);
+    fire_ball_hide(caster_ptr, GF_CAUSE_4, bmc_ptr->dir, bmc_ptr->damage, 0);
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -322,32 +362,24 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_CAUSE_1:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_curse_1(caster_ptr, bmc_ptr))
             return FALSE;
 
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_1), bmc_ptr->plev, DAM_ROLL);
-        fire_ball_hide(caster_ptr, GF_CAUSE_1, bmc_ptr->dir, bmc_ptr->damage, 0);
         break;
     case MS_CAUSE_2:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_curse_2(caster_ptr, bmc_ptr))
             return FALSE;
 
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_2), bmc_ptr->plev, DAM_ROLL);
-        fire_ball_hide(caster_ptr, GF_CAUSE_2, bmc_ptr->dir, bmc_ptr->damage, 0);
         break;
     case MS_CAUSE_3:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_curse_3(caster_ptr, bmc_ptr))
             return FALSE;
 
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_3), bmc_ptr->plev, DAM_ROLL);
-        fire_ball_hide(caster_ptr, GF_CAUSE_3, bmc_ptr->dir, bmc_ptr->damage, 0);
         break;
     case MS_CAUSE_4:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_curse_4(caster_ptr, bmc_ptr))
             return FALSE;
 
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_4), bmc_ptr->plev, DAM_ROLL);
-        fire_ball_hide(caster_ptr, GF_CAUSE_4, bmc_ptr->dir, bmc_ptr->damage, 0);
         break;
     case MS_BOLT_ACID:
         if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
