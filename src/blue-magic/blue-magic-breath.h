@@ -23,3 +23,5 @@ bool cast_blue_breath_shards(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_breath_plasma(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_breath_force(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_breath_mana(player_type *caster_ptr, bmc_type *bmc_ptr);
+bool cast_blue_breath_nuke(player_type *caster_ptr, bmc_type *bmc_ptr);
+bool cast_blue_breath_disintegration(player_type *caster_ptr, bmc_type *bmc_ptr);

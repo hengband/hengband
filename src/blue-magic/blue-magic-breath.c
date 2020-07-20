@@ -227,3 +227,31 @@ bool cast_blue_breath_mana(player_type *caster_ptr, bmc_type *bmc_ptr)
     fire_breath(caster_ptr, GF_MANA, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
     return TRUE;
 }
+
+bool cast_blue_breath_nuke(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_NUKE), bmc_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_NUKE, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
+
+/*!
+ * @brief 
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param bmc_ptr 青魔法詠唱への参照ポインタ
+ * @details 永久の刻は過ぎ去れリ.
+ */
+bool cast_blue_breath_disintegration(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BR_DISI), bmc_ptr->plev, DAM_ROLL);
+    fire_breath(caster_ptr, GF_DISINTEGRATE, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
+    return TRUE;
+}
