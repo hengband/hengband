@@ -157,6 +157,57 @@ bool cast_blue_ball_chaos(player_type *caster_ptr, bmc_type *bmc_ptr)
 }
 
 /*!
+ * @brief ウォーター・ボールの青魔法
+ * @brief 分解のブレスの青魔法
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param bmc_ptr 青魔法詠唱への参照ポインタ
+ * @details All my worries are blown away.
+ */
+bool cast_blue_ball_water(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_WATER), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_WATER, bmc_ptr->dir, bmc_ptr->damage, 4);
+    return TRUE;
+}
+
+bool cast_blue_ball_star_burst(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_STARBURST), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_LITE, bmc_ptr->dir, bmc_ptr->damage, 4);
+    return TRUE;
+}
+
+bool cast_blue_ball_dark_storm(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_DARK), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_DARK, bmc_ptr->dir, bmc_ptr->damage, 4);
+    return TRUE;
+}
+
+bool cast_blue_ball_mana_storm(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_MANA), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_MANA, bmc_ptr->dir, bmc_ptr->damage, 4);
+    return TRUE;
+}
+
+/*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
  * @param spell 発動するモンスター攻撃のID
@@ -344,36 +395,24 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_BALL_WATER:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_water(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_WATER), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_WATER, bmc_ptr->dir, bmc_ptr->damage, 4);
         break;
     case MS_STARBURST:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_star_burst(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_STARBURST), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_LITE, bmc_ptr->dir, bmc_ptr->damage, 4);
         break;
     case MS_BALL_DARK:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_dark_storm(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_DARK), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_DARK, bmc_ptr->dir, bmc_ptr->damage, 4);
         break;
     case MS_BALL_MANA:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_mana(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_MANA), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_MANA, bmc_ptr->dir, bmc_ptr->damage, 4);
         break;
     case MS_DRAIN_MANA:
         if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
