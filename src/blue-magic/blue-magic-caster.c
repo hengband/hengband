@@ -69,6 +69,36 @@ static bool cast_blue_shoot(player_type *caster_ptr, bmc_type *bmc_ptr)
     return TRUE;
 }
 
+bool cast_blue_drain_mana(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_DRAIN_MANA), bmc_ptr->plev, DAM_ROLL);
+    fire_ball_hide(caster_ptr, GF_DRAIN_MANA, bmc_ptr->dir, bmc_ptr->damage, 0);
+    return TRUE;
+}
+
+bool cast_blue_mind_blast(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_MIND_BLAST), bmc_ptr->plev, DAM_ROLL);
+    fire_ball_hide(caster_ptr, GF_MIND_BLAST, bmc_ptr->dir, bmc_ptr->damage, 0);
+    return TRUE;
+}
+
+bool cast_blue_brain_smash(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BRAIN_SMASH), bmc_ptr->plev, DAM_ROLL);
+    fire_ball_hide(caster_ptr, GF_BRAIN_SMASH, bmc_ptr->dir, bmc_ptr->damage, 0);
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -277,25 +307,19 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_DRAIN_MANA:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_drain_mana(caster_ptr, bmc_ptr))
             return FALSE;
 
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_DRAIN_MANA), bmc_ptr->plev, DAM_ROLL);
-        fire_ball_hide(caster_ptr, GF_DRAIN_MANA, bmc_ptr->dir, bmc_ptr->damage, 0);
         break;
     case MS_MIND_BLAST:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_mind_blast(caster_ptr, bmc_ptr))
             return FALSE;
 
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_MIND_BLAST), bmc_ptr->plev, DAM_ROLL);
-        fire_ball_hide(caster_ptr, GF_MIND_BLAST, bmc_ptr->dir, bmc_ptr->damage, 0);
         break;
     case MS_BRAIN_SMASH:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_brain_smash(caster_ptr, bmc_ptr))
             return FALSE;
 
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BRAIN_SMASH), bmc_ptr->plev, DAM_ROLL);
-        fire_ball_hide(caster_ptr, GF_BRAIN_SMASH, bmc_ptr->dir, bmc_ptr->damage, 0);
         break;
     case MS_CAUSE_1:
         if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
