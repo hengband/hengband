@@ -68,6 +68,61 @@ static bool cast_blue_shoot(player_type *caster_ptr, bmc_type *bmc_ptr)
     return TRUE;
 }
 
+bool cast_blue_ball_acid(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_ACID), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_ACID, bmc_ptr->dir, bmc_ptr->damage, 2);
+    return TRUE;
+}
+
+bool cast_blue_ball_elec(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_ELEC), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_ELEC, bmc_ptr->dir, bmc_ptr->damage, 2);
+    return TRUE;
+}
+
+bool cast_blue_ball_fire(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_FIRE), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_FIRE, bmc_ptr->dir, bmc_ptr->damage, 2);
+    return TRUE;
+}
+
+bool cast_blue_ball_cold(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_COLD), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_COLD, bmc_ptr->dir, bmc_ptr->damage, 2);
+    return TRUE;
+}
+
+bool cast_blue_ball_pois(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_POIS), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_POIS, bmc_ptr->dir, bmc_ptr->damage, 2);
+    return TRUE;
+}
+
 bool cast_blue_ball_nuke(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
@@ -76,6 +131,17 @@ bool cast_blue_ball_nuke(player_type *caster_ptr, bmc_type *bmc_ptr)
     msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
     bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_NUKE), bmc_ptr->plev, DAM_ROLL);
     fire_ball(caster_ptr, GF_NUKE, bmc_ptr->dir, bmc_ptr->damage, 2);
+    return TRUE;
+}
+
+bool cast_blue_ball_nether(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_NETHER), bmc_ptr->plev, DAM_ROLL);
+    fire_ball(caster_ptr, GF_NETHER, bmc_ptr->dir, bmc_ptr->damage, 2);
     return TRUE;
 }
 
@@ -238,44 +304,29 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_BALL_ACID:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_acid(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_ACID), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_ACID, bmc_ptr->dir, bmc_ptr->damage, 2);
         break;
     case MS_BALL_ELEC:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_elec(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_ELEC), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_ELEC, bmc_ptr->dir, bmc_ptr->damage, 2);
         break;
     case MS_BALL_FIRE:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_fire(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_FIRE), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_FIRE, bmc_ptr->dir, bmc_ptr->damage, 2);
         break;
     case MS_BALL_COLD:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_cold(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_COLD), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_COLD, bmc_ptr->dir, bmc_ptr->damage, 2);
         break;
     case MS_BALL_POIS:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_pois(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_POIS), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_POIS, bmc_ptr->dir, bmc_ptr->damage, 2);
         break;
     case MS_BALL_NUKE:
         if (!cast_blue_ball_nuke(caster_ptr, bmc_ptr))
@@ -283,12 +334,9 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_BALL_NETHER:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_ball_nether(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BALL_NETHER), bmc_ptr->plev, DAM_ROLL);
-        fire_ball(caster_ptr, GF_NETHER, bmc_ptr->dir, bmc_ptr->damage, 2);
         break;
     case MS_BALL_CHAOS:
         if (!cast_blue_ball_chaos(caster_ptr, bmc_ptr))
