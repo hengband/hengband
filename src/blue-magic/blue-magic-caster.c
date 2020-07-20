@@ -1,6 +1,7 @@
 ﻿#include "blue-magic/blue-magic-caster.h"
 #include "blue-magic/blue-magic-ball-bolt.h"
 #include "blue-magic/blue-magic-breath.h"
+#include "blue-magic/blue-magic-spirit-curse.h"
 #include "blue-magic/blue-magic-util.h"
 #include "blue-magic/learnt-info.h"
 #include "core/hp-mp-processor.h"
@@ -69,76 +70,6 @@ static bool cast_blue_shoot(player_type *caster_ptr, bmc_type *bmc_ptr)
     return TRUE;
 }
 
-bool cast_blue_drain_mana(player_type *caster_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
-
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_DRAIN_MANA), bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(caster_ptr, GF_DRAIN_MANA, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return TRUE;
-}
-
-bool cast_blue_mind_blast(player_type *caster_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
-
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_MIND_BLAST), bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(caster_ptr, GF_MIND_BLAST, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return TRUE;
-}
-
-bool cast_blue_brain_smash(player_type *caster_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
-
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BRAIN_SMASH), bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(caster_ptr, GF_BRAIN_SMASH, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return TRUE;
-}
-
-bool cast_blue_curse_1(player_type *caster_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
-
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_1), bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(caster_ptr, GF_CAUSE_1, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return TRUE;
-}
-
-bool cast_blue_curse_2(player_type *caster_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
-
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_2), bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(caster_ptr, GF_CAUSE_2, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return TRUE;
-}
-
-bool cast_blue_curse_3(player_type *caster_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
-
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_3), bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(caster_ptr, GF_CAUSE_3, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return TRUE;
-}
-
-bool cast_blue_curse_4(player_type *caster_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
-
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_CAUSE_4), bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(caster_ptr, GF_CAUSE_4, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return TRUE;
-}
-
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -155,12 +86,12 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
     case MS_SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
         aggravate_monsters(caster_ptr, 0);
-        break; // 関数分割後に'return TRUE;' に差し替え
+        break; // 関数分割後に'return TRUE;' に差し替え.
     case MS_XXX1:
     case MS_XXX2:
     case MS_XXX3:
     case MS_XXX4:
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え.
     case MS_DISPEL:
         if (!cast_blue_dispel(caster_ptr))
             return FALSE;
@@ -495,7 +426,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         break;
     case MS_SPEED:
         (void)set_fast(caster_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, FALSE);
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_HAND_DOOM: {
         if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
             return FALSE;
@@ -516,15 +447,15 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         break;
     case MS_BLINK:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_TELEPORT:
         teleport_player(caster_ptr, bmc_ptr->plev * 5, TELEPORT_SPONTANEOUS);
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_WORLD:
         (void)time_walk(caster_ptr);
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_SPECIAL:
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_TELE_TO: {
         monster_type *m_ptr;
         monster_race *r_ptr;
@@ -571,7 +502,6 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         break;
     case MS_TELE_LEVEL:
         return teleport_level_other(caster_ptr);
-        break;
     case MS_PSY_SPEAR:
         if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
             return FALSE;
@@ -594,11 +524,11 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         break;
     case MS_FORGET:
         msg_print(_("しかし何も起きなかった。", "Nothing happen."));
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You animate the dead."));
         (void)animate_dead(caster_ptr, 0, caster_ptr->y, caster_ptr->x);
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_S_KIN: {
         msg_print(_("援軍を召喚した。", "You summon one of your kin."));
         for (int k = 0; k < 1; k++) {
