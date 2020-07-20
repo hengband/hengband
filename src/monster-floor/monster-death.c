@@ -413,6 +413,29 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
         break;
     }
+    case MON_TOTEM_MOAI: {
+        if (floor_ptr->inside_arena || player_ptr->phase_out || one_in_(8))
+            break;
+
+        POSITION wy = y, wx = x;
+        int attempts = 100;
+        bool pet = is_pet(m_ptr);
+        do {
+            scatter(player_ptr, &wy, &wx, y, x, 20, 0);
+        } while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
+
+        if (attempts <= 0)
+            break;
+
+        BIT_FLAGS mode = PM_NONE;
+        if (pet)
+            mode |= PM_FORCE_PET;
+
+        if (summon_named_creature(player_ptr, (pet ? -1 : m_idx), wy, wx, MON_TOTEM_MOAI, mode) && player_can_see_bold(player_ptr, wy, wx))
+            msg_print(_("新たなモアイが現れた！", "A new moai steps forth!"));
+
+        break;
+    }
     default: {
         if (!drop_chosen_item)
             break;
