@@ -15,3 +15,8 @@ bool cast_blue_ball_water(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_ball_star_burst(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_ball_dark_storm(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_ball_mana_storm(player_type *caster_ptr, bmc_type *bmc_ptr);
+
+bool cast_blue_bolt_acid(player_type *caster_ptr, bmc_type *bmc_ptr);
+bool cast_blue_bolt_elec(player_type *caster_ptr, bmc_type *bmc_ptr);
+bool cast_blue_bolt_fire(player_type *caster_ptr, bmc_type *bmc_ptr);
+bool cast_blue_bolt_cold(player_type *caster_ptr, bmc_type *bmc_ptr);

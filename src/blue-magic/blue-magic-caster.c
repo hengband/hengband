@@ -313,36 +313,24 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_BOLT_ACID:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_acid(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BOLT_ACID), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_ACID, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_BOLT_ELEC:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_elec(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BOLT_ELEC), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_ELEC, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_BOLT_FIRE:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_fire(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BOLT_FIRE), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_FIRE, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_BOLT_COLD:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_cold(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BOLT_COLD), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_COLD, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_BOLT_NETHER:
         if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
