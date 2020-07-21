@@ -149,6 +149,16 @@ bool cast_blue_psi_spear(player_type *caster_ptr, bmc_type *bmc_ptr)
     return TRUE;
 }
 
+bool cast_blue_make_trap(player_type *caster_ptr)
+{
+    if (!target_set(caster_ptr, TARGET_KILL))
+        return FALSE;
+
+    msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
+    trap_creation(caster_ptr, target_row, target_col);
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -516,11 +526,9 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         (void)unlite_area(caster_ptr, 10, 3);
         break;
     case MS_MAKE_TRAP:
-        if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+        if (!cast_blue_make_trap(caster_ptr))
+            return;
 
-        msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
-        trap_creation(caster_ptr, target_row, target_col);
         break;
     case MS_FORGET:
         msg_print(_("しかし何も起きなかった。", "Nothing happen."));
