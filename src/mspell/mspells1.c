@@ -907,6 +907,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     if (r_ptr->flags4 & RF4_BR_ACID) {
         if (!creature_ptr->immune_acid && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
+
         if (creature_ptr->special_defense & DEFENSE_ACID)
             return TRUE;
     }
@@ -915,6 +916,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
         if (!((creature_ptr->prace == RACE_BALROG) && creature_ptr->lev > 44)) {
             if (!creature_ptr->immune_fire && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
                 return TRUE;
+
             if (creature_ptr->special_defense & DEFENSE_FIRE)
                 return TRUE;
         }
@@ -923,6 +925,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     if (r_ptr->flags4 & RF4_BR_ELEC) {
         if (!creature_ptr->immune_elec && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
+
         if (creature_ptr->special_defense & DEFENSE_ELEC)
             return TRUE;
     }
@@ -930,17 +933,17 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     if (r_ptr->flags4 & RF4_BR_COLD) {
         if (!creature_ptr->immune_cold && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
+
         if (creature_ptr->special_defense & DEFENSE_COLD)
             return TRUE;
     }
 
-    if (r_ptr->flags4 & (RF4_BR_POIS | RF4_BR_NUKE)) {
-        if (!((creature_ptr->pclass == CLASS_NINJA) && creature_ptr->lev > 44)) {
-            if (creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST))
-                return TRUE;
-            if (creature_ptr->special_defense & DEFENSE_POIS)
-                return TRUE;
-        }
+    if (((r_ptr->flags4 & (RF4_BR_POIS | RF4_BR_NUKE)) != 0) && !((creature_ptr->pclass == CLASS_NINJA) && (creature_ptr->lev > 44))) {
+        if (creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST))
+            return TRUE;
+
+        if (creature_ptr->special_defense & DEFENSE_POIS)
+            return TRUE;
     }
 
     if (creature_ptr->ult_res)
@@ -951,27 +954,27 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 
     if ((creature_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
         return TRUE;
+
     if ((creature_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
         return TRUE;
+
     if ((creature_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
         return TRUE;
+
     if ((creature_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
         return TRUE;
+
     if ((creature_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
         return TRUE;
 
-    if (creature_ptr->pspeed < 145) {
-        if (is_fast(creature_ptr))
-            return TRUE;
-    }
+    if ((creature_ptr->pspeed < 145) && is_fast(creature_ptr))
+        return TRUE;
 
     if (creature_ptr->lightspeed && (m_ptr->mspeed < 136))
         return TRUE;
 
-    if (creature_ptr->riding && (creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].mspeed < 135)) {
-        if (monster_fast_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding]))
-            return TRUE;
-    }
+    if (creature_ptr->riding && (creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].mspeed < 135) && monster_fast_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding]))
+        return TRUE;
 
     return FALSE;
 }
