@@ -862,9 +862,6 @@ void calc_bonuses(player_type *creature_ptr)
 
         if (is_not_ninja_weapon(creature_ptr, i)) {
             creature_ptr->icky_wield[i] = TRUE;
-            creature_ptr->num_blow[i] /= 2;
-            if (creature_ptr->num_blow[i] < 1)
-                creature_ptr->num_blow[i] = 1;
         }
     }
 
@@ -2226,6 +2223,12 @@ static void calc_num_blow(player_type *creature_ptr, int i)
         }
 
         creature_ptr->num_blow[i] += 1 + creature_ptr->extra_blows[0];
+    }
+
+	if (is_not_ninja_weapon(creature_ptr, i)) {
+        creature_ptr->num_blow[i] /= 2;
+        if (creature_ptr->num_blow[i] < 1)
+            creature_ptr->num_blow[i] = 1;
     }
 }
 
