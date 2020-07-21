@@ -159,6 +159,80 @@ bool cast_blue_make_trap(player_type *caster_ptr)
     return TRUE;
 }
 
+bool cast_blue_summon_kin(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    msg_print(_("援軍を召喚した。", "You summon one of your kin."));
+    for (int k = 0; k < 1; k++) {
+        if (summon_kin_player(caster_ptr, bmc_ptr->summon_lev, caster_ptr->y, caster_ptr->x, (bmc_ptr->pet ? PM_FORCE_PET : 0L))) {
+            if (!bmc_ptr->pet)
+                msg_print(_("召喚された仲間は怒っている！", "The summoned companion is angry!"));
+        } else {
+            bmc_ptr->no_trump = TRUE;
+        }
+    }
+
+    return TRUE;
+}
+
+bool cast_blue_summon_cyber(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    msg_print(_("サイバーデーモンを召喚した！", "You summon a Cyberdemon!"));
+    for (int k = 0; k < 1; k++) {
+        if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_CYBER, bmc_ptr->p_mode)) {
+            if (!bmc_ptr->pet)
+                msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon are angry!"));
+        } else {
+            bmc_ptr->no_trump = TRUE;
+        }
+    }
+
+    return TRUE;
+}
+
+bool cast_blue_summon_monster(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    msg_print(_("仲間を召喚した。", "You summon help."));
+    for (int k = 0; k < 1; k++) {
+        if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, 0, bmc_ptr->p_mode)) {
+            if (!bmc_ptr->pet)
+                msg_print(_("召喚されたモンスターは怒っている！", "The summoned monster is angry!"));
+        } else {
+            bmc_ptr->no_trump = TRUE;
+        }
+    }
+
+    return TRUE;
+}
+
+bool cast_blue_summon_monsters(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    msg_print(_("モンスターを召喚した！", "You summon monsters!"));
+    for (int k = 0; k < bmc_ptr->plev / 15 + 2; k++) {
+        if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, 0, (bmc_ptr->p_mode | bmc_ptr->u_mode))) {
+            if (!bmc_ptr->pet)
+                msg_print(_("召喚されたモンスターは怒っている！", "The summoned monsters are angry!"));
+        } else {
+            bmc_ptr->no_trump = TRUE;
+        }
+    }
+
+    return TRUE;
+}
+
+bool cast_blue_summon_ant(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    msg_print(_("アリを召喚した。", "You summon ants."));
+    if (summon_specific(
+            caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | bmc_ptr->p_mode))) {
+        if (!bmc_ptr->pet)
+            msg_print(_("召喚されたアリは怒っている！", "The summoned ants are angry!"));
+    } else {
+        bmc_ptr->no_trump = TRUE;
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -532,75 +606,26 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         break;
     case MS_FORGET:
         msg_print(_("しかし何も起きなかった。", "Nothing happen."));
-        break; // 関数分割後に'return TRUE;' に差し替え
+        break; // 関数分割後に'return TRUE;' に差し替え.
     case MS_RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You animate the dead."));
         (void)animate_dead(caster_ptr, 0, caster_ptr->y, caster_ptr->x);
-        break; // 関数分割後に'return TRUE;' に差し替え
-    case MS_S_KIN: {
-        msg_print(_("援軍を召喚した。", "You summon one of your kin."));
-        for (int k = 0; k < 1; k++) {
-            if (summon_kin_player(caster_ptr, bmc_ptr->summon_lev, caster_ptr->y, caster_ptr->x, (bmc_ptr->pet ? PM_FORCE_PET : 0L))) {
-                if (!bmc_ptr->pet)
-                    msg_print(_("召喚された仲間は怒っている！", "The summoned companion is angry!"));
-            } else {
-                bmc_ptr->no_trump = TRUE;
-            }
-        }
-
+        break; // 関数分割後に'return TRUE;' に差し替え.
+    case MS_S_KIN:
+        (void)cast_blue_summon_kin(caster_ptr, bmc_ptr);
+        break; // 関数分割後に'return cast_...();' に差し替え.
+    case MS_S_CYBER:
+        (void)cast_blue_summon_cyber(caster_ptr, bmc_ptr);
         break;
-    }
-    case MS_S_CYBER: {
-        msg_print(_("サイバーデーモンを召喚した！", "You summon a Cyberdemon!"));
-        for (int k = 0; k < 1; k++) {
-            if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_CYBER, bmc_ptr->p_mode)) {
-                if (!bmc_ptr->pet)
-                    msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon are angry!"));
-            } else {
-                bmc_ptr->no_trump = TRUE;
-            }
-        }
-
-        break;
-    }
-    case MS_S_MONSTER: {
-        msg_print(_("仲間を召喚した。", "You summon help."));
-        for (int k = 0; k < 1; k++) {
-            if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, 0, bmc_ptr->p_mode)) {
-                if (!bmc_ptr->pet)
-                    msg_print(_("召喚されたモンスターは怒っている！", "The summoned monster is angry!"));
-            } else {
-                bmc_ptr->no_trump = TRUE;
-            }
-        }
-
-        break;
-    }
-    case MS_S_MONSTERS: {
-        msg_print(_("モンスターを召喚した！", "You summon monsters!"));
-        for (int k = 0; k < bmc_ptr->plev / 15 + 2; k++) {
-            if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, 0, (bmc_ptr->p_mode | bmc_ptr->u_mode))) {
-                if (!bmc_ptr->pet)
-                    msg_print(_("召喚されたモンスターは怒っている！", "The summoned monsters are angry!"));
-            } else {
-                bmc_ptr->no_trump = TRUE;
-            }
-        }
-
-        break;
-    }
-    case MS_S_ANT: {
-        msg_print(_("アリを召喚した。", "You summon ants."));
-        if (summon_specific(
-                caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | bmc_ptr->p_mode))) {
-            if (!bmc_ptr->pet)
-                msg_print(_("召喚されたアリは怒っている！", "The summoned ants are angry!"));
-        } else {
-            bmc_ptr->no_trump = TRUE;
-        }
-
-        break;
-    }
+    case MS_S_MONSTER:
+        (void)cast_blue_summon_monster(caster_ptr, bmc_ptr);
+        break; // 関数分割後に'return cast_...();' に差し替え.
+    case MS_S_MONSTERS:
+        (void)cast_blue_summon_monsters(caster_ptr, bmc_ptr);
+        break; // 関数分割後に'return cast_...();' に差し替え.
+    case MS_S_ANT:
+        (void)cast_blue_summon_ant(caster_ptr, bmc_ptr);
+        break; // 関数分割後に'return cast_...();' に差し替え.
     case MS_S_SPIDER: {
         msg_print(_("蜘蛛を召喚した。", "You summon spiders."));
         if (summon_specific(
@@ -611,7 +636,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_HOUND: {
         msg_print(_("ハウンドを召喚した。", "You summon hounds."));
@@ -623,7 +648,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_HYDRA: {
         msg_print(_("ヒドラを召喚した。", "You summon a hydras."));
@@ -635,7 +660,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_ANGEL: {
         msg_print(_("天使を召喚した！", "You summon an angel!"));
@@ -647,7 +672,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_DEMON: {
         msg_print(_("混沌の宮廷から悪魔を召喚した！", "You summon a demon from the Courts of Chaos!"));
@@ -659,7 +684,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_UNDEAD: {
         msg_print(_("アンデッドの強敵を召喚した！", "You summon an undead adversary!"));
@@ -671,7 +696,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_DRAGON: {
         msg_print(_("ドラゴンを召喚した！", "You summon a dragon!"));
@@ -683,7 +708,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_HI_UNDEAD: {
         msg_print(_("強力なアンデッドを召喚した！", "You summon a greater undead!"));
@@ -695,7 +720,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_HI_DRAGON: {
         msg_print(_("古代ドラゴンを召喚した！", "You summon an ancient dragon!"));
@@ -707,7 +732,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_AMBERITE: {
         msg_print(_("アンバーの王族を召喚した！", "You summon a Lord of Amber!"));
@@ -719,7 +744,7 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
             bmc_ptr->no_trump = TRUE;
         }
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     case MS_S_UNIQUE: {
         int count = 0;
@@ -745,10 +770,11 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         if (!count)
             bmc_ptr->no_trump = TRUE;
 
-        break;
+        break; // 関数分割後に'return cast_...();' に差し替え.
     }
     default:
         msg_print("hoge?");
+        break; // 関数分割後に'return TRUE;' に差し替え.
     }
 
     if (bmc_ptr->no_trump)
