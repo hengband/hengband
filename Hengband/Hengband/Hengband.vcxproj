@@ -187,6 +187,7 @@
     <ClCompile Include="..\..\src\blue-magic\blue-magic-caster.c" />
     <ClCompile Include="..\..\src\blue-magic\blue-magic-spirit-curse.c" />
     <ClCompile Include="..\..\src\blue-magic\blue-magic-status.c" />
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-summon.c" />
     <ClCompile Include="..\..\src\blue-magic\blue-magic-util.c" />
     <ClCompile Include="..\..\src\blue-magic\learnt-info.c" />
     <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.c" />
@@ -712,6 +713,7 @@
     <ClInclude Include="..\..\src\blue-magic\blue-magic-caster.h" />
     <ClInclude Include="..\..\src\blue-magic\blue-magic-spirit-curse.h" />
     <ClInclude Include="..\..\src\blue-magic\blue-magic-status.h" />
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-summon.h" />
     <ClInclude Include="..\..\src\blue-magic\blue-magic-util.h" />
     <ClInclude Include="..\..\src\blue-magic\learnt-info.h" />
     <ClInclude Include="..\..\src\blue-magic\learnt-power-getter.h" />

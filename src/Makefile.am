@@ -81,6 +81,7 @@ hengband_SOURCES = \
 	blue-magic/blue-magic-checker.c blue-magic/blue-magic-checker.h \
 	blue-magic/blue-magic-spirit-curse.c blue-magic/blue-magic-spirit-curse.h \
 	blue-magic/blue-magic-status.c blue-magic/blue-magic-status.h \
+	blue-magic/blue-magic-summon.c blue-magic/blue-magic-summon.h \
 	blue-magic/blue-magic-util.c blue-magic/blue-magic-util.h \
 	blue-magic/learnt-info.c blue-magic/learnt-info.h \
 	blue-magic/learnt-power-getter.c blue-magic/learnt-power-getter.h \

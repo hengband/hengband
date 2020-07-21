@@ -1835,6 +1835,9 @@
     <ClCompile Include="..\..\src\blue-magic\blue-magic-status.c">
       <Filter>blue-magic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-summon.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3995,6 +3998,9 @@
       <Filter>blue-magic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\blue-magic\blue-magic-status.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-summon.h">
       <Filter>blue-magic</Filter>
     </ClInclude>
   </ItemGroup>
