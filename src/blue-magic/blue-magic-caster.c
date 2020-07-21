@@ -333,52 +333,34 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_BOLT_NETHER:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_nether(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("地獄の矢の呪文を唱えた。", "You cast a nether bolt."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BOLT_NETHER), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_NETHER, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_BOLT_WATER:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_water(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BOLT_WATER), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_WATER, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_BOLT_MANA:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_mana(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("魔力の矢の呪文を唱えた。", "You cast a mana bolt."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BOLT_MANA), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_MANA, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_BOLT_PLASMA:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_plasma(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BOLT_PLASMA), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_PLASMA, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_BOLT_ICE:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_icee(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_BOLT_ICE), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_ICE, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_MAGIC_MISSILE:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_bolt_missile(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_MAGIC_MISSILE), bmc_ptr->plev, DAM_ROLL);
-        fire_bolt(caster_ptr, GF_MISSILE, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_SCARE:
         if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
