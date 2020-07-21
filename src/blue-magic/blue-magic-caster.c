@@ -2,6 +2,7 @@
 #include "blue-magic/blue-magic-ball-bolt.h"
 #include "blue-magic/blue-magic-breath.h"
 #include "blue-magic/blue-magic-spirit-curse.h"
+#include "blue-magic/blue-magic-status.h"
 #include "blue-magic/blue-magic-util.h"
 #include "blue-magic/learnt-info.h"
 #include "core/hp-mp-processor.h"
@@ -363,36 +364,29 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 
         break;
     case MS_SCARE:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_scare(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("恐ろしげな幻覚を作り出した。", "You cast a fearful illusion."));
-        fear_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev + 10);
         break;
     case MS_BLIND:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_blind(caster_ptr, bmc_ptr))
             return FALSE;
 
-        confuse_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev * 2);
         break;
     case MS_CONF:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_confusion(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("誘惑的な幻覚をつくり出した。", "You cast a mesmerizing illusion."));
-        confuse_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev * 2);
         break;
     case MS_SLOW:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_slow(caster_ptr, bmc_ptr))
             return FALSE;
 
-        slow_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev);
         break;
     case MS_SLEEP:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_sleep(caster_ptr, bmc_ptr))
             return FALSE;
 
-        sleep_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev);
         break;
     case MS_SPEED:
         (void)set_fast(caster_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, FALSE);
