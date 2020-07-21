@@ -138,6 +138,17 @@ bool cast_blue_teleport_away(player_type *caster_ptr, bmc_type *bmc_ptr)
     return TRUE;
 }
 
+bool cast_blue_psi_spear(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_PSY_SPEAR), bmc_ptr->plev, DAM_ROLL);
+    (void)fire_beam(caster_ptr, GF_PSY_SPEAR, bmc_ptr->dir, bmc_ptr->damage);
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -496,12 +507,9 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
     case MS_TELE_LEVEL:
         return teleport_level_other(caster_ptr);
     case MS_PSY_SPEAR:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_psy_spear(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
-        bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_PSY_SPEAR), bmc_ptr->plev, DAM_ROLL);
-        (void)fire_beam(caster_ptr, GF_PSY_SPEAR, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_DARKNESS:
         msg_print(_("暗闇の中で手を振った。", "You gesture in shadow."));
