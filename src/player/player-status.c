@@ -82,6 +82,7 @@
 #include "world/world.h"
 
 static bool is_martial_arts_mode(player_type *creature_ptr);
+static bool is_not_ninja_weapon(player_type *creature_ptr, int i);
 
 static void calc_intra_vision(player_type *creature_ptr);
 static void calc_stealth(player_type *creature_ptr);
@@ -770,7 +771,8 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->update |= (PU_MONSTERS);
     }
 
-    if ((creature_ptr->right_hand_weapon && (empty_hands_status & EMPTY_HAND_RARM)) || (creature_ptr->left_hand_weapon && (empty_hands_status & EMPTY_HAND_LARM))) {
+    if ((creature_ptr->right_hand_weapon && (empty_hands_status & EMPTY_HAND_RARM))
+        || (creature_ptr->left_hand_weapon && (empty_hands_status & EMPTY_HAND_LARM))) {
         creature_ptr->to_h[default_hand] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
         creature_ptr->dis_to_h[default_hand] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
     }
@@ -858,18 +860,14 @@ void calc_bonuses(player_type *creature_ptr)
             continue;
         }
 
-        if (creature_ptr->pclass != CLASS_NINJA)
-            continue;
-
-        if ((s_info[CLASS_NINJA].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (creature_ptr->inventory_list[INVEN_LARM - i].tval != TV_SHIELD))
-            continue;
-
-        creature_ptr->to_h[i] -= 40;
-        creature_ptr->dis_to_h[i] -= 40;
-        creature_ptr->icky_wield[i] = TRUE;
-        creature_ptr->num_blow[i] /= 2;
-        if (creature_ptr->num_blow[i] < 1)
-            creature_ptr->num_blow[i] = 1;
+        if (is_not_ninja_weapon(creature_ptr, i)) {
+            creature_ptr->to_h[i] -= 40;
+            creature_ptr->dis_to_h[i] -= 40;
+            creature_ptr->icky_wield[i] = TRUE;
+            creature_ptr->num_blow[i] /= 2;
+            if (creature_ptr->num_blow[i] < 1)
+                creature_ptr->num_blow[i] = 1;
+        }
     }
 
     calc_speed(creature_ptr);
@@ -2054,9 +2052,17 @@ static void calc_dig(player_type *creature_ptr)
         creature_ptr->skill_dig = 1;
 }
 
-static bool is_martial_arts_mode(player_type* creature_ptr) {
+static bool is_martial_arts_mode(player_type *creature_ptr)
+{
     return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_BERSERKER))
         && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) && !creature_ptr->left_hand_weapon;
+}
+
+static bool is_not_ninja_weapon(player_type *creature_ptr, int i) {
+    tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
+    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
+    return creature_ptr->pclass == CLASS_NINJA
+        && !((s_info[CLASS_NINJA].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (creature_ptr->inventory_list[INVEN_LARM - i].tval != TV_SHIELD));
 }
 
 static void calc_num_blow(player_type *creature_ptr, int i)
@@ -2143,7 +2149,8 @@ static void calc_num_blow(player_type *creature_ptr, int i)
         }
     }
 
-    if (i != 0) return;
+    if (i != 0)
+        return;
     /* Different calculation for monks with empty hands */
     if (is_martial_arts_mode(creature_ptr)) {
         int blow_base = creature_ptr->lev + adj_dex_blow[creature_ptr->stat_ind[A_DEX]];
