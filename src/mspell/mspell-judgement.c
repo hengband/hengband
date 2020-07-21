@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "mspell/mspells2.h"
+#include "mspell/mspell-judgement.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"

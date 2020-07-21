@@ -457,12 +457,12 @@ hengband_SOURCES = \
 	mspell/assign-monster-spell.c mspell/assign-monster-spell.h \
 	mspell/monster-power-table.c mspell/monster-power-table.h \
 	mspell/mspells1.c mspell/mspells1.h \
-	mspell/mspells2.c mspell/mspells2.h \
 	mspell/mspell-breath.c mspell/mspell-breath.h \
 	mspell/mspell-ball.c mspell/mspell-ball.h \
 	mspell/mspell-bolt.c mspell/mspell-bolt.h \
 	mspell/mspell-curse.c mspell/mspell-curse.h \
 	mspell/mspell-dispel.c mspell/mspell-dispel.h \
+	mspell/mspell-judgement.c mspell/mspell-judgement.h \
 	mspell/mspell-summon.c mspell/mspell-summon.h \
 	mspell/mspell-util.c mspell/mspell-util.h \
 	mspell/mspell-type.h \

@@ -42,7 +42,7 @@
 #include "mspell/mspell-learn-checker.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspells2.h"
+#include "mspell/mspell-judgement.h"
 #include "object-enchant/object-curse.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
