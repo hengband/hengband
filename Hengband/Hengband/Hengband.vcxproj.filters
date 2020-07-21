@@ -1838,6 +1838,9 @@
     <ClCompile Include="..\..\src\blue-magic\blue-magic-summon.c">
       <Filter>blue-magic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-spell.c">
+      <Filter>melee</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4002,6 +4005,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\blue-magic\blue-magic-summon.h">
       <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-spell.h">
+      <Filter>melee</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1647,16 +1647,3 @@ void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, PO
 	*yp = ny;
 	*xp = nx;
 }
-
-
-/*
- * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
- * @param floor_ptr 配置するフロアの参照ポインタ
- * @param y 指定Y座標
- * @param x 指定X座標
- * @return 光を通すならばtrueを返す。
- */
-bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x)
-{
-	return feat_supports_los(floor_ptr->grid_array[y][x].feat);
-}

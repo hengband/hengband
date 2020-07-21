@@ -77,3 +77,28 @@ bool player_has_los_bold(player_type *player_ptr, POSITION y, POSITION x)
  * Determine if player is on this grid
  */
 bool player_bold(player_type *player_ptr, POSITION y, POSITION x) { return (y == player_ptr->y) && (x == player_ptr->x); }
+
+/*
+ * Does the grid stop disintegration?
+ */
+bool cave_stop_disintegration(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+    return !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT)
+        && (!cave_have_flag_bold(floor_ptr, y, x, FF_HURT_DISI) || cave_have_flag_bold(floor_ptr, y, x, FF_PERMANENT));
+}
+
+/*
+ * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
+ * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param y 指定Y座標
+ * @param x 指定X座標
+ * @return 光を通すならばtrueを返す。
+ */
+bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x) { return feat_supports_los(floor_ptr->grid_array[y][x].feat); }
+
+/*
+ * Determine if a "feature" supports "los"
+ */
+bool feat_supports_los(FEAT_IDX f_idx) { return have_flag(f_info[f_idx].flags, FF_LOS); }
+
+bool cave_los_grid(grid_type *grid_ptr) { return feat_supports_los(grid_ptr->feat); }

@@ -24,6 +24,7 @@
 #include "grid/grid.h"
 #include "io/write-diary.h"
 #include "melee/melee-postprocess.h"
+#include "melee/melee-spell.h"
 #include "monster-floor/monster-direction.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-move.h"
@@ -58,6 +59,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-summon.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
 #include "view/display-messages.h"
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);

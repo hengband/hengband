@@ -16,17 +16,6 @@ extern floor_type floor_info;
 
 
 /*
- * Determine if a "feature" supports "los"
- */
-#define feat_supports_los(F) \
-	(have_flag(f_info[(F)].flags, FF_LOS))
-
-
-#define cave_los_grid(C) \
-	(feat_supports_los((C)->feat))
-
-
-/*
  * Determine if a "legal" grid is a "clean" floor grid
  * Determine if terrain-change spells are allowed in a grid.
  *
@@ -78,15 +67,6 @@ extern floor_type floor_info;
  */
 #define cave_perma_grid(C) \
 	(cave_have_flag_grid((C), FF_PERMANENT))
-
-
-/*
- * Does the grid stop disintegration?
- */
-#define cave_stop_disintegration(F,Y,X) \
-	(!cave_have_flag_bold((F), (Y), (X), FF_PROJECT) && \
-	 (!cave_have_flag_bold((F), (Y), (X), FF_HURT_DISI) || \
-	  cave_have_flag_bold((F), (Y), (X), FF_PERMANENT)))
 
 
 /*
@@ -150,4 +130,3 @@ void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
 void compact_objects(player_type *owner_ptr, int size);
 void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
 void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
-bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x);
