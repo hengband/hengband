@@ -71,6 +71,45 @@ static bool cast_blue_shoot(player_type *caster_ptr, bmc_type *bmc_ptr)
     return TRUE;
 }
 
+static bool cast_blue_hand_doom(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
+    fire_ball_hide(caster_ptr, GF_HAND_DOOM, bmc_ptr->dir, bmc_ptr->plev * 3, 0);
+    return TRUE;
+}
+
+static bool exe_blue_teleport_back(player_type *caster_ptr, GAME_TEXT *m_name)
+{
+    monster_type *m_ptr;
+    monster_race *r_ptr;
+    floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+    if ((floor_ptr->grid_array[target_row][target_col].m_idx == 0) || !player_has_los_bold(caster_ptr, target_row, target_col)
+        || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
+        return TRUE;
+
+    m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[target_row][target_col].m_idx];
+    r_ptr = &r_info[m_ptr->r_idx];
+    monster_desc(caster_ptr, m_name, m_ptr, 0);
+    if (r_ptr->flagsr & RFR_RES_TELE) {
+        if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flagsr & RFR_RES_ALL)) {
+            if (is_original_ap_and_seen(caster_ptr, m_ptr))
+                r_ptr->r_flagsr |= RFR_RES_TELE;
+            msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name);
+            return TRUE;
+        } else if (r_ptr->level > randint1(100)) {
+            if (is_original_ap_and_seen(caster_ptr, m_ptr))
+                r_ptr->r_flagsr |= RFR_RES_TELE;
+            msg_format(_("%sには耐性がある！", "%s resists!"), m_name);
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -391,24 +430,21 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
     case MS_SPEED:
         (void)set_fast(caster_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, FALSE);
         break; // 関数分割後に'return TRUE;' に差し替え
-    case MS_HAND_DOOM: {
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+    case MS_HAND_DOOM:
+        if (!cast_blue_hand_doom(caster_ptr, bmc_ptr))
             return FALSE;
 
-        msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
-        fire_ball_hide(caster_ptr, GF_HAND_DOOM, bmc_ptr->dir, bmc_ptr->plev * 3, 0);
         break;
-    }
     case MS_HEAL:
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
         (void)hp_player(caster_ptr, bmc_ptr->plev * 4);
         (void)set_stun(caster_ptr, 0);
         (void)set_cut(caster_ptr, 0);
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
         (void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
-        break;
+        break; // 関数分割後に'return TRUE;' に差し替え
     case MS_BLINK:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
         break; // 関数分割後に'return TRUE;' に差し替え
@@ -421,38 +457,12 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
     case MS_SPECIAL:
         break; // 関数分割後に'return TRUE;' に差し替え
     case MS_TELE_TO: {
-        monster_type *m_ptr;
-        monster_race *r_ptr;
-        GAME_TEXT m_name[MAX_NLEN];
-
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
 
-        if (!floor_ptr->grid_array[target_row][target_col].m_idx)
+        GAME_TEXT m_name[MAX_NLEN];
+        if (exe_blue_teleport_back(caster_ptr, m_name))
             break;
-
-        if (!player_has_los_bold(caster_ptr, target_row, target_col))
-            break;
-
-        if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
-            break;
-
-        m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[target_row][target_col].m_idx];
-        r_ptr = &r_info[m_ptr->r_idx];
-        monster_desc(caster_ptr, m_name, m_ptr, 0);
-        if (r_ptr->flagsr & RFR_RES_TELE) {
-            if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flagsr & RFR_RES_ALL)) {
-                if (is_original_ap_and_seen(caster_ptr, m_ptr))
-                    r_ptr->r_flagsr |= RFR_RES_TELE;
-                msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name);
-                break;
-            } else if (r_ptr->level > randint1(100)) {
-                if (is_original_ap_and_seen(caster_ptr, m_ptr))
-                    r_ptr->r_flagsr |= RFR_RES_TELE;
-                msg_format(_("%sには耐性がある！", "%s resists!"), m_name);
-                break;
-            }
-        }
 
         msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
         teleport_monster_to(caster_ptr, floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
