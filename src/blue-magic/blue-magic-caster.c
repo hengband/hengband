@@ -129,6 +129,15 @@ bool cast_blue_teleport_back(player_type *caster_ptr)
     return TRUE;
 }
 
+bool cast_blue_teleport_away(player_type *caster_ptr, bmc_type *bmc_ptr)
+{
+    if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        return FALSE;
+
+    (void)fire_beam(caster_ptr, GF_AWAY_ALL, bmc_ptr->dir, 100);
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -140,7 +149,6 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
 {
     bmc_type tmp_bm;
     bmc_type *bmc_ptr = initialize_blue_magic_type(caster_ptr, &tmp_bm, success, get_pseudo_monstetr_level);
-    floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     switch (spell) {
     case MS_SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
@@ -476,15 +484,14 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
     case MS_SPECIAL:
         break; // 関数分割後に'return TRUE;' に差し替え
     case MS_TELE_TO:
-        if (!cast_blue_teleport_back(caster_ptr, bmc_ptr))
+        if (!cast_blue_teleport_back(caster_ptr))
             return FALSE;
 
         break;
     case MS_TELE_AWAY:
-        if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
+        if (!cast_blue_teleport_away(caster_ptr, bmc_ptr))
             return FALSE;
 
-        (void)fire_beam(caster_ptr, GF_AWAY_ALL, bmc_ptr->dir, 100);
         break;
     case MS_TELE_LEVEL:
         return teleport_level_other(caster_ptr);
@@ -497,7 +504,6 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         (void)fire_beam(caster_ptr, GF_PSY_SPEAR, bmc_ptr->dir, bmc_ptr->damage);
         break;
     case MS_DARKNESS:
-
         msg_print(_("暗闇の中で手を振った。", "You gesture in shadow."));
         (void)unlite_area(caster_ptr, 10, 3);
         break;
