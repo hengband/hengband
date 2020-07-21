@@ -114,6 +114,21 @@ static bool exe_blue_teleport_back(player_type *caster_ptr, GAME_TEXT *m_name)
     return TRUE;
 }
 
+bool cast_blue_teleport_back(player_type *caster_ptr)
+{
+    if (!target_set(caster_ptr, TARGET_KILL))
+        return FALSE;
+
+    GAME_TEXT m_name[MAX_NLEN];
+    if (exe_blue_teleport_back(caster_ptr, m_name))
+        return TRUE;
+
+    msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
+    teleport_monster_to(
+        caster_ptr, caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
+    return TRUE;
+}
+
 /*!
  * @brief 青魔法の発動 /
  * do_cmd_cast calls this function if the player's class is 'blue-mage'.
@@ -460,18 +475,11 @@ bool cast_learned_spell(player_type *caster_ptr, int spell, const bool success)
         break; // 関数分割後に'return TRUE;' に差し替え
     case MS_SPECIAL:
         break; // 関数分割後に'return TRUE;' に差し替え
-    case MS_TELE_TO: {
-        if (!target_set(caster_ptr, TARGET_KILL))
+    case MS_TELE_TO:
+        if (!cast_blue_teleport_back(caster_ptr, bmc_ptr))
             return FALSE;
 
-        GAME_TEXT m_name[MAX_NLEN];
-        if (exe_blue_teleport_back(caster_ptr, m_name))
-            break;
-
-        msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
-        teleport_monster_to(caster_ptr, floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
         break;
-    }
     case MS_TELE_AWAY:
         if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
             return FALSE;
