@@ -861,8 +861,6 @@ void calc_bonuses(player_type *creature_ptr)
         }
 
         if (is_not_ninja_weapon(creature_ptr, i)) {
-            creature_ptr->to_h[i] -= 40;
-            creature_ptr->dis_to_h[i] -= 40;
             creature_ptr->icky_wield[i] = TRUE;
             creature_ptr->num_blow[i] /= 2;
             if (creature_ptr->num_blow[i] < 1)
@@ -3503,6 +3501,10 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
         }
         creature_ptr->to_h[id] -= (s16b)penalty;
     }
+
+    if (is_not_ninja_weapon(creature_ptr, id)) {
+        creature_ptr->to_h[id] -= 40;
+    }
 }
 
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3597,6 +3599,10 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
                 penalty = 30;
         }
         creature_ptr->dis_to_h[id] -= (s16b)penalty;
+    }
+
+    if (is_not_ninja_weapon(creature_ptr, id)) {
+        creature_ptr->dis_to_h[id] -= 40;
     }
 }
 
