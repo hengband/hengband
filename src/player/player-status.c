@@ -848,8 +848,6 @@ void calc_bonuses(player_type *creature_ptr)
         tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
         OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
 
-        creature_ptr->to_h[i] += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
-        creature_ptr->dis_to_h[i] += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
         if ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) {
             if (!s_info[creature_ptr->pclass].w_max[tval][sval]) {
                 creature_ptr->to_h[i] -= 40;
@@ -3416,6 +3414,8 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(o_ptr, flgs);
+    tval_type tval = creature_ptr->inventory_list[INVEN_RARM + id].tval - TV_WEAPON_BEGIN;
+    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + id].sval;
 
     creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
 
@@ -3505,6 +3505,8 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
         creature_ptr->to_h[id] -= (s16b)penalty;
     }
 
+	creature_ptr->to_h[id] += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
+
     if (is_not_ninja_weapon(creature_ptr, id)) {
         creature_ptr->to_h[id] -= 40;
     }
@@ -3517,6 +3519,8 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
     creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(o_ptr, flgs);
+    tval_type tval = creature_ptr->inventory_list[INVEN_RARM + id].tval - TV_WEAPON_BEGIN;
+    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + id].sval;
 
     creature_ptr->dis_to_h[id] = 0;
 
@@ -3603,6 +3607,8 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
         creature_ptr->dis_to_h[id] -= (s16b)penalty;
     }
+
+	creature_ptr->dis_to_h[id] += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
 
     if (is_not_ninja_weapon(creature_ptr, id)) {
         creature_ptr->dis_to_h[id] -= 40;
