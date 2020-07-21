@@ -26,7 +26,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
-#include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags4.h"
@@ -49,8 +48,6 @@
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
-#include "player/special-defense-types.h"
-#include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
@@ -867,115 +864,6 @@ static bool spell_dispel(byte spell)
         return TRUE;
 
     /* No dispel */
-    return FALSE;
-}
-
-/*!
- * @brief モンスターがプレイヤーに魔力消去を与えるべきかを判定するルーチン
- * Check should monster cast dispel spell.
- * @param m_idx モンスターの構造体配列ID
- * @return 魔力消去をかけるべきならTRUEを返す。
- */
-bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
-{
-    if (is_invuln(creature_ptr))
-        return TRUE;
-
-    if (creature_ptr->wraith_form)
-        return TRUE;
-
-    if (creature_ptr->shield)
-        return TRUE;
-
-    if (creature_ptr->magicdef)
-        return TRUE;
-
-    if (creature_ptr->multishadow)
-        return TRUE;
-
-    if (creature_ptr->dustrobe)
-        return TRUE;
-
-    if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER))
-        return TRUE;
-
-    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD)
-        return TRUE;
-
-    monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->flags4 & RF4_BR_ACID) {
-        if (!creature_ptr->immune_acid && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST)))
-            return TRUE;
-
-        if (creature_ptr->special_defense & DEFENSE_ACID)
-            return TRUE;
-    }
-
-    if (r_ptr->flags4 & RF4_BR_FIRE) {
-        if (!((creature_ptr->prace == RACE_BALROG) && creature_ptr->lev > 44)) {
-            if (!creature_ptr->immune_fire && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
-                return TRUE;
-
-            if (creature_ptr->special_defense & DEFENSE_FIRE)
-                return TRUE;
-        }
-    }
-
-    if (r_ptr->flags4 & RF4_BR_ELEC) {
-        if (!creature_ptr->immune_elec && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST)))
-            return TRUE;
-
-        if (creature_ptr->special_defense & DEFENSE_ELEC)
-            return TRUE;
-    }
-
-    if (r_ptr->flags4 & RF4_BR_COLD) {
-        if (!creature_ptr->immune_cold && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
-            return TRUE;
-
-        if (creature_ptr->special_defense & DEFENSE_COLD)
-            return TRUE;
-    }
-
-    if (((r_ptr->flags4 & (RF4_BR_POIS | RF4_BR_NUKE)) != 0) && !((creature_ptr->pclass == CLASS_NINJA) && (creature_ptr->lev > 44))) {
-        if (creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST))
-            return TRUE;
-
-        if (creature_ptr->special_defense & DEFENSE_POIS)
-            return TRUE;
-    }
-
-    if (creature_ptr->ult_res)
-        return TRUE;
-
-    if (creature_ptr->tsuyoshi)
-        return TRUE;
-
-    if ((creature_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
-        return TRUE;
-
-    if ((creature_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
-        return TRUE;
-
-    if ((creature_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
-        return TRUE;
-
-    if ((creature_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
-        return TRUE;
-
-    if ((creature_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
-        return TRUE;
-
-    if ((creature_ptr->pspeed < 145) && is_fast(creature_ptr))
-        return TRUE;
-
-    if (creature_ptr->lightspeed && (m_ptr->mspeed < 136))
-        return TRUE;
-
-    if (creature_ptr->riding && (creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].mspeed < 135) && monster_fast_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding]))
-        return TRUE;
-
     return FALSE;
 }
 
