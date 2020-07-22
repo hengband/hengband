@@ -66,6 +66,33 @@ static bool disturb_melee_spell(player_type *target_ptr, melee_spell_type *ms_pt
     return TRUE;
 }
 
+static void process_special_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    bool is_special_magic = ms_ptr->m_ptr->ml;
+    is_special_magic &= ms_ptr->maneable;
+    is_special_magic &= current_world_ptr->timewalk_m_idx == 0;
+    is_special_magic &= !target_ptr->blind;
+    is_special_magic &= target_ptr->pclass == CLASS_IMITATOR;
+    is_special_magic &= ms_ptr->thrown_spell != 167; /* Not RF6_SPECIAL */
+    if (!is_special_magic)
+        return;
+
+    if (target_ptr->mane_num == MAX_MANE) {
+        target_ptr->mane_num--;
+        for (int i = 0; i < target_ptr->mane_num - 1; i++) {
+            target_ptr->mane_spell[i] = target_ptr->mane_spell[i + 1];
+            target_ptr->mane_dam[i] = target_ptr->mane_dam[i + 1];
+        }
+    }
+
+    target_ptr->mane_spell[target_ptr->mane_num] = ms_ptr->thrown_spell - RF4_SPELL_START;
+    target_ptr->mane_dam[target_ptr->mane_num] = ms_ptr->dam;
+    target_ptr->mane_num++;
+    target_ptr->new_mane = TRUE;
+
+    target_ptr->redraw |= PR_IMITATION;
+}
+
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -105,29 +132,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     if (ms_ptr->dam < 0)
         return FALSE;
 
-    bool is_special_magic = ms_ptr->m_ptr->ml;
-    is_special_magic &= ms_ptr->maneable;
-    is_special_magic &= current_world_ptr->timewalk_m_idx == 0;
-    is_special_magic &= !target_ptr->blind;
-    is_special_magic &= target_ptr->pclass == CLASS_IMITATOR;
-    is_special_magic &= ms_ptr->thrown_spell != 167; /* Not RF6_SPECIAL */
-    if (is_special_magic) {
-        if (target_ptr->mane_num == MAX_MANE) {
-            target_ptr->mane_num--;
-            for (int i = 0; i < target_ptr->mane_num - 1; i++) {
-                target_ptr->mane_spell[i] = target_ptr->mane_spell[i + 1];
-                target_ptr->mane_dam[i] = target_ptr->mane_dam[i + 1];
-            }
-        }
-
-        target_ptr->mane_spell[target_ptr->mane_num] = ms_ptr->thrown_spell - RF4_SPELL_START;
-        target_ptr->mane_dam[target_ptr->mane_num] = ms_ptr->dam;
-        target_ptr->mane_num++;
-        target_ptr->new_mane = TRUE;
-
-        target_ptr->redraw |= PR_IMITATION;
-    }
-
+    process_special_melee_spell(target_ptr, ms_ptr);
     if (ms_ptr->can_remember) {
         if (ms_ptr->thrown_spell < RF4_SPELL_START + RF4_SPELL_SIZE) {
             ms_ptr->r_ptr->r_flags4 |= (1L << (ms_ptr->thrown_spell - RF4_SPELL_START));
