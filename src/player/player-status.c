@@ -628,7 +628,6 @@ void calc_bonuses(player_type *creature_ptr)
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 
     bool have_sw = FALSE, have_kabe = FALSE;
-    bool riding_levitation = FALSE;
     OBJECT_IDX this_o_idx, next_o_idx = 0;
 
     /* Save the old vision stuff */
@@ -784,7 +783,6 @@ void calc_bonuses(player_type *creature_ptr)
     if (creature_ptr->riding) {
         monster_type *riding_m_ptr = &floor_ptr->m_list[creature_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        riding_levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
         if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC))
             creature_ptr->can_swim = TRUE;
 
@@ -792,7 +790,9 @@ void calc_bonuses(player_type *creature_ptr)
             creature_ptr->pass_wall = FALSE;
         if (riding_r_ptr->flags2 & RF2_KILL_WALL)
             creature_ptr->kill_wall = TRUE;
-    }
+
+        creature_ptr->levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;	
+	}
 
     creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
@@ -829,27 +829,17 @@ void calc_bonuses(player_type *creature_ptr)
             && !have_flag(flgs, TR_RIDING)) {
             creature_ptr->riding_wield[i] = TRUE;
         }
-    }
-
-    calc_riding_weapon_penalty(creature_ptr);
-
-    if (creature_ptr->riding)
-        creature_ptr->levitation = riding_levitation;
-
-    creature_ptr->monk_armour_aux = FALSE;
-
-    if (heavy_armor(creature_ptr)) {
-        creature_ptr->monk_armour_aux = TRUE;
-    }
-
-    for (int i = 0; i < 2; i++) {
-        if (!has_melee_weapon(creature_ptr, INVEN_RARM + i))
-            continue;
 
         if (is_not_monk_weapon(creature_ptr, i) || is_not_ninja_weapon(creature_ptr, i)) {
             creature_ptr->icky_wield[i] = TRUE;
         }
-    }
+
+	}
+
+    calc_riding_weapon_penalty(creature_ptr);
+
+
+    creature_ptr->monk_armour_aux = heavy_armor(creature_ptr);
 
     calc_speed(creature_ptr);
 
