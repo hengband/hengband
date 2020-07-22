@@ -49,19 +49,17 @@
  */
 bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-    POSITION y = 0, x = 0;
-    int k;
+    POSITION y = 0;
+    POSITION x = 0;
     MONSTER_IDX target_idx = 0;
     int thrown_spell;
     HIT_POINT dam = 0;
     int start;
     int plus = 1;
-
-    byte spell[96], num = 0;
-
+    byte spell[96];
+    byte num = 0;
     GAME_TEXT m_name[160];
     GAME_TEXT t_name[160];
-
 #ifdef JP
 #else
     char m_poss[160];
@@ -76,7 +74,6 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     bool pet = is_pet(m_ptr);
     bool in_no_magic_dungeon = (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && floor_ptr->dun_level
         && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest));
-    bool can_use_lite_area = FALSE;
     bool can_remember;
 
     if (monster_confused_remaining(m_ptr))
@@ -156,9 +153,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 
     if (f6 & RF6_DARKNESS) {
         bool vs_ninja = (target_ptr->pclass == CLASS_NINJA) && !is_hostile(t_ptr);
-        if (vs_ninja && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
-            can_use_lite_area = TRUE;
-
+        bool can_use_lite_area = vs_ninja && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK);
         if (!(r_ptr->flags2 & RF2_STUPID)) {
             if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
                 f6 &= ~(RF6_DARKNESS);
@@ -322,17 +317,17 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!f4 && !f5 && !f6)
         return FALSE;
 
-    for (k = 0; k < 32; k++) {
+    for (int k = 0; k < 32; k++) {
         if (f4 & (1L << k))
             spell[num++] = k + RF4_SPELL_START;
     }
 
-    for (k = 0; k < 32; k++) {
+    for (int k = 0; k < 32; k++) {
         if (f5 & (1L << k))
             spell[num++] = k + RF5_SPELL_START;
     }
 
-    for (k = 0; k < 32; k++) {
+    for (int k = 0; k < 32; k++) {
         if (f6 & (1L << k))
             spell[num++] = k + RF6_SPELL_START;
     }
