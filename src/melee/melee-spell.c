@@ -229,6 +229,60 @@ static void check_melee_spell_breath(player_type *target_ptr, melee_spell_type *
     }
 }
 
+static void check_melee_spell_special(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if ((ms_ptr->f6 & RF6_SPECIAL) == 0)
+        return;
+
+    if (ms_ptr->m_ptr->r_idx == MON_ROLENTO) {
+        if ((target_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_SUMMON_SPELL)) != (PF_ATTACK_SPELL | PF_SUMMON_SPELL))
+            ms_ptr->f6 &= ~(RF6_SPECIAL);
+
+        return;
+    }
+    
+    if (ms_ptr->r_ptr->d_char == 'B') {
+        if ((target_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_TELEPORT)) != (PF_ATTACK_SPELL | PF_TELEPORT))
+            ms_ptr->f6 &= ~(RF6_SPECIAL);
+
+        return;
+    }
+
+    ms_ptr->f6 &= ~(RF6_SPECIAL);
+}
+
+static void check_pet(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if (!ms_ptr->pet)
+        return;
+
+    ms_ptr->f4 &= ~(RF4_SHRIEK);
+    ms_ptr->f6 &= ~(RF6_DARKNESS | RF6_TRAPS);
+    if (!(target_ptr->pet_extra_flags & PF_TELEPORT))
+        ms_ptr->f6 &= ~(RF6_BLINK | RF6_TPORT | RF6_TELE_TO | RF6_TELE_AWAY | RF6_TELE_LEVEL);
+
+    if (!(target_ptr->pet_extra_flags & PF_ATTACK_SPELL)) {
+        ms_ptr->f4 &= ~(RF4_ATTACK_MASK);
+        ms_ptr->f5 &= ~(RF5_ATTACK_MASK);
+        ms_ptr->f6 &= ~(RF6_ATTACK_MASK);
+    }
+
+    if (!(target_ptr->pet_extra_flags & PF_SUMMON_SPELL)) {
+        ms_ptr->f4 &= ~(RF4_SUMMON_MASK);
+        ms_ptr->f5 &= ~(RF5_SUMMON_MASK);
+        ms_ptr->f6 &= ~(RF6_SUMMON_MASK);
+    }
+
+    if (!(target_ptr->pet_extra_flags & PF_BALL_SPELL) && (ms_ptr->m_idx != target_ptr->riding)) {
+        check_melee_spell_distance(target_ptr, ms_ptr);
+        check_melee_spell_rocket(target_ptr, ms_ptr);
+        check_melee_spell_beam(target_ptr, ms_ptr);
+        check_melee_spell_breath(target_ptr, ms_ptr);
+    }
+
+    check_melee_spell_special(target_ptr, ms_ptr);
+}
+
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -264,7 +318,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         ms_ptr->f6 &= ~(RF6_SPECIAL);
 
     check_darkness(target_ptr, ms_ptr);
-    check_stupid(target_ptr, ms_ptr);
+    check_stupid(ms_ptr);
     check_arena(target_ptr, ms_ptr);
     if (target_ptr->phase_out && !one_in_(3))
         ms_ptr->f6 &= ~(RF6_HEAL);
@@ -275,45 +329,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         ms_ptr->f6 &= ~(RF6_RIDING_MASK);
     }
 
-    if (ms_ptr->pet) {
-        ms_ptr->f4 &= ~(RF4_SHRIEK);
-        ms_ptr->f6 &= ~(RF6_DARKNESS | RF6_TRAPS);
-
-        if (!(target_ptr->pet_extra_flags & PF_TELEPORT)) {
-            ms_ptr->f6 &= ~(RF6_BLINK | RF6_TPORT | RF6_TELE_TO | RF6_TELE_AWAY | RF6_TELE_LEVEL);
-        }
-
-        if (!(target_ptr->pet_extra_flags & PF_ATTACK_SPELL)) {
-            ms_ptr->f4 &= ~(RF4_ATTACK_MASK);
-            ms_ptr->f5 &= ~(RF5_ATTACK_MASK);
-            ms_ptr->f6 &= ~(RF6_ATTACK_MASK);
-        }
-
-        if (!(target_ptr->pet_extra_flags & PF_SUMMON_SPELL)) {
-            ms_ptr->f4 &= ~(RF4_SUMMON_MASK);
-            ms_ptr->f5 &= ~(RF5_SUMMON_MASK);
-            ms_ptr->f6 &= ~(RF6_SUMMON_MASK);
-        }
-
-        if (!(target_ptr->pet_extra_flags & PF_BALL_SPELL) && (m_idx != target_ptr->riding)) {
-            check_melee_spell_distance(target_ptr, ms_ptr);
-            check_melee_spell_rocket(target_ptr, ms_ptr);
-            check_melee_spell_beam(target_ptr, ms_ptr);
-            check_melee_spell_breath(target_ptr, ms_ptr);
-        }
-
-        if (ms_ptr->f6 & RF6_SPECIAL) {
-            if (ms_ptr->m_ptr->r_idx == MON_ROLENTO) {
-                if ((target_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_SUMMON_SPELL)) != (PF_ATTACK_SPELL | PF_SUMMON_SPELL))
-                    ms_ptr->f6 &= ~(RF6_SPECIAL);
-            } else if (ms_ptr->r_ptr->d_char == 'B') {
-                if ((target_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_TELEPORT)) != (PF_ATTACK_SPELL | PF_TELEPORT))
-                    ms_ptr->f6 &= ~(RF6_SPECIAL);
-            } else
-                ms_ptr->f6 &= ~(RF6_SPECIAL);
-        }
-    }
-
+    check_pet(target_ptr, ms_ptr);
     if (!(ms_ptr->r_ptr->flags2 & RF2_STUPID)) {
         if (((ms_ptr->f4 & RF4_BOLT_MASK) || (ms_ptr->f5 & RF5_BOLT_MASK) || (ms_ptr->f6 & RF6_BOLT_MASK))
             && !clean_shot(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->pet)) {
