@@ -312,6 +312,21 @@ static void check_non_stupid(player_type *target_ptr, melee_spell_type *ms_ptr)
         ms_ptr->f6 &= ~(RF6_SPECIAL);
 }
 
+static void check_smart(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if ((ms_ptr->r_ptr->flags2 & RF2_SMART) == 0)
+        return;
+
+    if ((ms_ptr->m_ptr->hp < ms_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
+        ms_ptr->f4 &= (RF4_INT_MASK);
+        ms_ptr->f5 &= (RF5_INT_MASK);
+        ms_ptr->f6 &= (RF6_INT_MASK);
+    }
+
+    if ((ms_ptr->f6 & RF6_TELE_LEVEL) && is_teleport_level_ineffective(target_ptr, (ms_ptr->target_idx == target_ptr->riding) ? 0 : ms_ptr->target_idx))
+        ms_ptr->f6 &= ~(RF6_TELE_LEVEL);
+}
+
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -360,18 +375,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 
     check_pet(target_ptr, ms_ptr);
     check_non_stupid(target_ptr, ms_ptr);
-    if (ms_ptr->r_ptr->flags2 & RF2_SMART) {
-        if ((ms_ptr->m_ptr->hp < ms_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
-            ms_ptr->f4 &= (RF4_INT_MASK);
-            ms_ptr->f5 &= (RF5_INT_MASK);
-            ms_ptr->f6 &= (RF6_INT_MASK);
-        }
-
-        if ((ms_ptr->f6 & RF6_TELE_LEVEL) && is_teleport_level_ineffective(target_ptr, (ms_ptr->target_idx == target_ptr->riding) ? 0 : ms_ptr->target_idx)) {
-            ms_ptr->f6 &= ~(RF6_TELE_LEVEL);
-        }
-    }
-
+    check_smart(target_ptr, ms_ptr);
     if (!ms_ptr->f4 && !ms_ptr->f5 && !ms_ptr->f6)
         return FALSE;
 
