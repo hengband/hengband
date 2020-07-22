@@ -42,6 +42,17 @@
 #define RF5_SPELL_SIZE 32
 #define RF6_SPELL_SIZE 32
 
+static void decide_melee_spell_target(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if ((target_ptr->pet_t_m_idx == 0) || !ms_ptr->pet)
+        return;
+
+    ms_ptr->target_idx = target_ptr->pet_t_m_idx;
+    ms_ptr->t_ptr = &target_ptr->current_floor_ptr->m_list[ms_ptr->target_idx];
+    if ((ms_ptr->m_idx == ms_ptr->target_idx) || !projectable(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
+        ms_ptr->target_idx = 0;
+}
+
 /*!
  * todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
@@ -62,15 +73,8 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     ms_ptr->f4 = ms_ptr->r_ptr->flags4;
     ms_ptr->f5 = ms_ptr->r_ptr->a_ability_flags1;
     ms_ptr->f6 = ms_ptr->r_ptr->a_ability_flags2;
+    decide_melee_spell_target(target_ptr, ms_ptr);
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    if (target_ptr->pet_t_m_idx && ms_ptr->pet) {
-        ms_ptr->target_idx = target_ptr->pet_t_m_idx;
-        ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-        if ((m_idx == ms_ptr->target_idx) || !projectable(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx)) {
-            ms_ptr->target_idx = 0;
-        }
-    }
-
     if (!ms_ptr->target_idx && ms_ptr->m_ptr->target_y) {
         ms_ptr->target_idx = floor_ptr->grid_array[ms_ptr->m_ptr->target_y][ms_ptr->m_ptr->target_x].m_idx;
         if (ms_ptr->target_idx) {

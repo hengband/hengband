@@ -4,6 +4,7 @@
 #include "system/monster-type-definition.h"
 
 typedef struct melee_spell_type {
+    MONSTER_IDX m_idx;
     POSITION y;
     POSITION x;
     MONSTER_IDX target_idx;

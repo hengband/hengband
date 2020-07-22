@@ -10,6 +10,7 @@
 
 melee_spell_type *initialize_melee_spell_type(player_type *target_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx)
 {
+    ms_ptr->m_idx = m_idx;
     ms_ptr->y = 0;
     ms_ptr->x = 0;
     ms_ptr->target_idx = 0;
