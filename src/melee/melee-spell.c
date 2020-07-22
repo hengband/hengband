@@ -109,6 +109,25 @@ static bool check_melee_spell_projection(player_type *target_ptr, melee_spell_ty
     return FALSE;
 }
 
+static void check_darkness(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if ((ms_ptr->f6 & RF6_DARKNESS) == 0)
+        return;
+
+    bool vs_ninja = (target_ptr->pclass == CLASS_NINJA) && !is_hostile(ms_ptr->t_ptr);
+    bool can_use_lite_area = vs_ninja && !(ms_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(ms_ptr->r_ptr->flags7 & RF7_DARK_MASK);
+    if ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
+        return;
+
+    if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS) {
+        ms_ptr->f6 &= ~(RF6_DARKNESS);
+        return;
+    }
+    
+    if (vs_ninja && !can_use_lite_area)
+        ms_ptr->f6 &= ~(RF6_DARKNESS);
+}
+
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -143,17 +162,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     if (((ms_ptr->f6 & RF6_SPECIAL) != 0) && (ms_ptr->m_ptr->r_idx != MON_ROLENTO) && (ms_ptr->r_ptr->d_char != 'B'))
         ms_ptr->f6 &= ~(RF6_SPECIAL);
 
-    if ((ms_ptr->f6 & RF6_DARKNESS) != 0) {
-        bool vs_ninja = (target_ptr->pclass == CLASS_NINJA) && !is_hostile(ms_ptr->t_ptr);
-        bool can_use_lite_area = vs_ninja && !(ms_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(ms_ptr->r_ptr->flags7 & RF7_DARK_MASK);
-        if (!(ms_ptr->r_ptr->flags2 & RF2_STUPID)) {
-            if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
-                ms_ptr->f6 &= ~(RF6_DARKNESS);
-            else if (vs_ninja && !can_use_lite_area)
-                ms_ptr->f6 &= ~(RF6_DARKNESS);
-        }
-    }
-
+    check_darkness(target_ptr, ms_ptr);
     if (ms_ptr->in_no_magic_dungeon && !(ms_ptr->r_ptr->flags2 & RF2_STUPID)) {
         ms_ptr->f4 &= (RF4_NOMAGIC_MASK);
         ms_ptr->f5 &= (RF5_NOMAGIC_MASK);
