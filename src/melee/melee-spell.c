@@ -283,6 +283,35 @@ static void check_pet(player_type *target_ptr, melee_spell_type *ms_ptr)
     check_melee_spell_special(target_ptr, ms_ptr);
 }
 
+static void check_non_stupid(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
+        return;
+
+    if (((ms_ptr->f4 & RF4_BOLT_MASK) || (ms_ptr->f5 & RF5_BOLT_MASK) || (ms_ptr->f6 & RF6_BOLT_MASK))
+        && !clean_shot(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->pet)) {
+        ms_ptr->f4 &= ~(RF4_BOLT_MASK);
+        ms_ptr->f5 &= ~(RF5_BOLT_MASK);
+        ms_ptr->f6 &= ~(RF6_BOLT_MASK);
+    }
+
+    if (((ms_ptr->f4 & RF4_SUMMON_MASK) || (ms_ptr->f5 & RF5_SUMMON_MASK) || (ms_ptr->f6 & RF6_SUMMON_MASK))
+        && !(summon_possible(target_ptr, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))) {
+        ms_ptr->f4 &= ~(RF4_SUMMON_MASK);
+        ms_ptr->f5 &= ~(RF5_SUMMON_MASK);
+        ms_ptr->f6 &= ~(RF6_SUMMON_MASK);
+    }
+
+    if ((ms_ptr->f4 & RF4_DISPEL) && !dispel_check_monster(target_ptr, ms_ptr->m_idx, ms_ptr->target_idx))
+        ms_ptr->f4 &= ~(RF4_DISPEL);
+
+    if ((ms_ptr->f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, ms_ptr->m_ptr))
+        ms_ptr->f6 &= ~(RF6_RAISE_DEAD);
+
+    if (((ms_ptr->f6 & RF6_SPECIAL) != 0) && (ms_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
+        ms_ptr->f6 &= ~(RF6_SPECIAL);
+}
+
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -330,36 +359,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     check_pet(target_ptr, ms_ptr);
-    if (!(ms_ptr->r_ptr->flags2 & RF2_STUPID)) {
-        if (((ms_ptr->f4 & RF4_BOLT_MASK) || (ms_ptr->f5 & RF5_BOLT_MASK) || (ms_ptr->f6 & RF6_BOLT_MASK))
-            && !clean_shot(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->pet)) {
-            ms_ptr->f4 &= ~(RF4_BOLT_MASK);
-            ms_ptr->f5 &= ~(RF5_BOLT_MASK);
-            ms_ptr->f6 &= ~(RF6_BOLT_MASK);
-        }
-
-        if (((ms_ptr->f4 & RF4_SUMMON_MASK) || (ms_ptr->f5 & RF5_SUMMON_MASK) || (ms_ptr->f6 & RF6_SUMMON_MASK))
-            && !(summon_possible(target_ptr, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))) {
-            ms_ptr->f4 &= ~(RF4_SUMMON_MASK);
-            ms_ptr->f5 &= ~(RF5_SUMMON_MASK);
-            ms_ptr->f6 &= ~(RF6_SUMMON_MASK);
-        }
-
-        if ((ms_ptr->f4 & RF4_DISPEL) && !dispel_check_monster(target_ptr, m_idx, ms_ptr->target_idx)) {
-            ms_ptr->f4 &= ~(RF4_DISPEL);
-        }
-
-        if ((ms_ptr->f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, ms_ptr->m_ptr)) {
-            ms_ptr->f6 &= ~(RF6_RAISE_DEAD);
-        }
-
-        if (ms_ptr->f6 & RF6_SPECIAL) {
-            if ((ms_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx)) {
-                ms_ptr->f6 &= ~(RF6_SPECIAL);
-            }
-        }
-    }
-
+    check_non_stupid(target_ptr, ms_ptr);
     if (ms_ptr->r_ptr->flags2 & RF2_SMART) {
         if ((ms_ptr->m_ptr->hp < ms_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
             ms_ptr->f4 &= (RF4_INT_MASK);
