@@ -327,6 +327,26 @@ static void check_smart(player_type *target_ptr, melee_spell_type *ms_ptr)
         ms_ptr->f6 &= ~(RF6_TELE_LEVEL);
 }
 
+static bool set_melee_spell_set(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if (!ms_ptr->f4 && !ms_ptr->f5 && !ms_ptr->f6)
+        return FALSE;
+
+    for (int k = 0; k < 32; k++)
+        if (ms_ptr->f4 & (1L << k))
+            ms_ptr->spell[ms_ptr->num++] = k + RF4_SPELL_START;
+
+    for (int k = 0; k < 32; k++)
+        if (ms_ptr->f5 & (1L << k))
+            ms_ptr->spell[ms_ptr->num++] = k + RF5_SPELL_START;
+
+    for (int k = 0; k < 32; k++)
+        if (ms_ptr->f6 & (1L << k))
+            ms_ptr->spell[ms_ptr->num++] = k + RF6_SPELL_START;
+
+    return (ms_ptr->num != 0) && target_ptr->playing && !target_ptr->is_dead && !target_ptr->leaving;
+}
+
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -376,31 +396,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     check_pet(target_ptr, ms_ptr);
     check_non_stupid(target_ptr, ms_ptr);
     check_smart(target_ptr, ms_ptr);
-    if (!ms_ptr->f4 && !ms_ptr->f5 && !ms_ptr->f6)
-        return FALSE;
-
-    for (int k = 0; k < 32; k++) {
-        if (ms_ptr->f4 & (1L << k))
-            ms_ptr->spell[ms_ptr->num++] = k + RF4_SPELL_START;
-    }
-
-    for (int k = 0; k < 32; k++) {
-        if (ms_ptr->f5 & (1L << k))
-            ms_ptr->spell[ms_ptr->num++] = k + RF5_SPELL_START;
-    }
-
-    for (int k = 0; k < 32; k++) {
-        if (ms_ptr->f6 & (1L << k))
-            ms_ptr->spell[ms_ptr->num++] = k + RF6_SPELL_START;
-    }
-
-    if (!ms_ptr->num)
-        return FALSE;
-
-    if (!target_ptr->playing || target_ptr->is_dead)
-        return FALSE;
-
-    if (target_ptr->leaving)
+    if (!set_melee_spell_set(target_ptr, ms_ptr))
         return FALSE;
 
     /* Get the monster name (or "it") */
