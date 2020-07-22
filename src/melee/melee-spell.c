@@ -21,9 +21,9 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/assign-monster-spell.h"
+#include "mspell/mspell-judgement.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspell-judgement.h"
 #include "mspell/mspells1.h"
 #include "pet/pet-util.h"
 #include "spell-kind/spells-world.h"
@@ -68,7 +68,7 @@ static void decide_indirection_melee_spell(player_type *target_ptr, melee_spell_
         ms_ptr->target_idx = 0;
         return;
     }
-    
+
     if (projectable(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
         return;
 
@@ -77,8 +77,39 @@ static void decide_indirection_melee_spell(player_type *target_ptr, melee_spell_
     ms_ptr->f6 &= RF6_INDIRECT_MASK;
 }
 
+static bool check_melee_spell_projection(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if (ms_ptr->target_idx != 0)
+        return TRUE;
+
+    int start;
+    int plus = 1;
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    if (target_ptr->phase_out) {
+        start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
+        if (randint0(2))
+            plus = -1;
+    } else
+        start = floor_ptr->m_max + 1;
+
+    for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
+        MONSTER_IDX dummy = (i % floor_ptr->m_max);
+        if (!dummy)
+            continue;
+
+        ms_ptr->target_idx = dummy;
+        ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
+        if (!monster_is_valid(ms_ptr->t_ptr) || (ms_ptr->m_idx == ms_ptr->target_idx) || !are_enemies(target_ptr, ms_ptr->m_ptr, ms_ptr->t_ptr)
+            || !projectable(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
+            continue;
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 /*!
- * todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -99,39 +130,8 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     ms_ptr->f6 = ms_ptr->r_ptr->a_ability_flags2;
     decide_melee_spell_target(target_ptr, ms_ptr);
     decide_indirection_melee_spell(target_ptr, ms_ptr);
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    if (!ms_ptr->target_idx) {
-        bool success = FALSE;
-        if (target_ptr->phase_out) {
-            ms_ptr->start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
-            if (randint0(2))
-                ms_ptr->plus = -1;
-        } else
-            ms_ptr->start = floor_ptr->m_max + 1;
-
-        for (int i = ms_ptr->start; ((i < ms_ptr->start + floor_ptr->m_max) && (i > ms_ptr->start - floor_ptr->m_max)); i += ms_ptr->plus) {
-            MONSTER_IDX dummy = (i % floor_ptr->m_max);
-            if (!dummy)
-                continue;
-
-            ms_ptr->target_idx = dummy;
-            ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-            if (!monster_is_valid(ms_ptr->t_ptr))
-                continue;
-
-            if ((m_idx == ms_ptr->target_idx) || !are_enemies(target_ptr, ms_ptr->m_ptr, ms_ptr->t_ptr))
-                continue;
-
-            if (!projectable(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
-                continue;
-
-            success = TRUE;
-            break;
-        }
-
-        if (!success)
-            return FALSE;
-    }
+    if (!check_melee_spell_projection(target_ptr, ms_ptr))
+        return FALSE;
 
     ms_ptr->y = ms_ptr->t_ptr->fy;
     ms_ptr->x = ms_ptr->t_ptr->fx;
@@ -164,6 +164,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         ms_ptr->f6 &= (RF6_NOMAGIC_MASK);
     }
 
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena || target_ptr->phase_out) {
         ms_ptr->f4 &= ~(RF4_SUMMON_MASK);
         ms_ptr->f5 &= ~(RF5_SUMMON_MASK);
@@ -413,9 +414,8 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (target_ptr->is_dead && (ms_ptr->r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena) {
+    if (target_ptr->is_dead && (ms_ptr->r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena)
         ms_ptr->r_ptr->r_deaths++;
-    }
 
     return TRUE;
 }

@@ -10,8 +10,6 @@ typedef struct melee_spell_type {
     MONSTER_IDX target_idx;
     int thrown_spell;
     HIT_POINT dam;
-    int start;
-    int plus;
     byte spell[96];
     byte num;
     GAME_TEXT m_name[160];
