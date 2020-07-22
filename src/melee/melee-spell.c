@@ -1,37 +1,17 @@
 ﻿#include "melee/melee-spell.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "dungeon/dungeon.h"
-#include "dungeon/quest.h"
-#include "effect/effect-characteristics.h"
-#include "floor/cave.h"
-#include "floor/floor.h"
 #include "melee/melee-spell-flags-checker.h"
 #include "melee/melee-spell-util.h"
-#include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability1.h"
-#include "monster-race/race-flags-ability2.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
-#include "monster-race/race-flags7.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/assign-monster-spell.h"
-#include "mspell/mspell-judgement.h"
-#include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
-#include "pet/pet-util.h"
-#include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
@@ -166,7 +146,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     process_special_melee_spell(target_ptr, ms_ptr);
-    process_rememberance(target_ptr, ms_ptr);
+    process_rememberance(ms_ptr);
     if (target_ptr->is_dead && (ms_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         ms_ptr->r_ptr->r_deaths++;
 
