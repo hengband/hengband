@@ -93,6 +93,49 @@ static void process_special_melee_spell(player_type *target_ptr, melee_spell_typ
     target_ptr->redraw |= PR_IMITATION;
 }
 
+static void process_rememberance(melee_spell_type *ms_ptr)
+{
+    if (!ms_ptr->can_remember)
+        return;
+
+    if (ms_ptr->thrown_spell < RF4_SPELL_START + RF4_SPELL_SIZE) {
+        ms_ptr->r_ptr->r_flags4 |= (1L << (ms_ptr->thrown_spell - RF4_SPELL_START));
+        if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+            ms_ptr->r_ptr->r_cast_spell++;
+
+        return;
+    }
+    
+    if (ms_ptr->thrown_spell < RF5_SPELL_START + RF5_SPELL_SIZE) {
+        ms_ptr->r_ptr->r_flags5 |= (1L << (ms_ptr->thrown_spell - RF5_SPELL_START));
+        if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+            ms_ptr->r_ptr->r_cast_spell++;
+
+        return;
+    }
+    
+    if (ms_ptr->thrown_spell < RF6_SPELL_START + RF6_SPELL_SIZE) {
+        ms_ptr->r_ptr->r_flags6 |= (1L << (ms_ptr->thrown_spell - RF6_SPELL_START));
+        if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+            ms_ptr->r_ptr->r_cast_spell++;
+    }
+}
+
+static void describe_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    /* Get the monster name (or "it") */
+    monster_desc(target_ptr, ms_ptr->m_name, ms_ptr->m_ptr, 0x00);
+#ifdef JP
+#else
+    /* Get the monster possessive ("his"/"her"/"its") */
+    monster_desc(target_ptr, ms_ptr->m_poss, ms_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+#endif
+
+    /* Get the target's name (or "it") */
+    GAME_TEXT t_name[160];
+    monster_desc(target_ptr, t_name, ms_ptr->t_ptr, 0x00);
+}
+
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -109,17 +152,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!check_melee_spell_set(target_ptr, ms_ptr))
         return FALSE;
 
-    /* Get the monster name (or "it") */
-    monster_desc(target_ptr, ms_ptr->m_name, ms_ptr->m_ptr, 0x00);
-#ifdef JP
-#else
-    /* Get the monster possessive ("his"/"her"/"its") */
-    monster_desc(target_ptr, ms_ptr->m_poss, ms_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
-#endif
-
-    /* Get the target's name (or "it") */
-    GAME_TEXT t_name[160];
-    monster_desc(target_ptr, t_name, ms_ptr->t_ptr, 0x00);
+    describe_melee_spell(target_ptr, ms_ptr);
     ms_ptr->thrown_spell = ms_ptr->spell[randint0(ms_ptr->num)];
     if (target_ptr->riding && (m_idx == target_ptr->riding))
         disturb(target_ptr, TRUE, TRUE);
@@ -133,22 +166,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     process_special_melee_spell(target_ptr, ms_ptr);
-    if (ms_ptr->can_remember) {
-        if (ms_ptr->thrown_spell < RF4_SPELL_START + RF4_SPELL_SIZE) {
-            ms_ptr->r_ptr->r_flags4 |= (1L << (ms_ptr->thrown_spell - RF4_SPELL_START));
-            if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
-                ms_ptr->r_ptr->r_cast_spell++;
-        } else if (ms_ptr->thrown_spell < RF5_SPELL_START + RF5_SPELL_SIZE) {
-            ms_ptr->r_ptr->r_flags5 |= (1L << (ms_ptr->thrown_spell - RF5_SPELL_START));
-            if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
-                ms_ptr->r_ptr->r_cast_spell++;
-        } else if (ms_ptr->thrown_spell < RF6_SPELL_START + RF6_SPELL_SIZE) {
-            ms_ptr->r_ptr->r_flags6 |= (1L << (ms_ptr->thrown_spell - RF6_SPELL_START));
-            if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
-                ms_ptr->r_ptr->r_cast_spell++;
-        }
-    }
-
+    process_rememberance(target_ptr, ms_ptr);
     if (target_ptr->is_dead && (ms_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         ms_ptr->r_ptr->r_deaths++;
 
