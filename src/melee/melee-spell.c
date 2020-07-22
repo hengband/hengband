@@ -128,6 +128,16 @@ static void check_darkness(player_type *target_ptr, melee_spell_type *ms_ptr)
         ms_ptr->f6 &= ~(RF6_DARKNESS);
 }
 
+static void check_stupid(melee_spell_type *ms_ptr)
+{
+    if (!ms_ptr->in_no_magic_dungeon || ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0))
+        return;
+
+    ms_ptr->f4 &= (RF4_NOMAGIC_MASK);
+    ms_ptr->f5 &= (RF5_NOMAGIC_MASK);
+    ms_ptr->f6 &= (RF6_NOMAGIC_MASK);
+}
+
 static void check_arena(player_type *target_ptr, melee_spell_type *ms_ptr)
 {
     if (!target_ptr->current_floor_ptr->inside_arena && !target_ptr->phase_out)
@@ -254,12 +264,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         ms_ptr->f6 &= ~(RF6_SPECIAL);
 
     check_darkness(target_ptr, ms_ptr);
-    if (ms_ptr->in_no_magic_dungeon && !(ms_ptr->r_ptr->flags2 & RF2_STUPID)) {
-        ms_ptr->f4 &= (RF4_NOMAGIC_MASK);
-        ms_ptr->f5 &= (RF5_NOMAGIC_MASK);
-        ms_ptr->f6 &= (RF6_NOMAGIC_MASK);
-    }
-
+    check_stupid(target_ptr, ms_ptr);
     check_arena(target_ptr, ms_ptr);
     if (target_ptr->phase_out && !one_in_(3))
         ms_ptr->f6 &= ~(RF6_HEAL);
