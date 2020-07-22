@@ -53,6 +53,30 @@ static void decide_melee_spell_target(player_type *target_ptr, melee_spell_type 
         ms_ptr->target_idx = 0;
 }
 
+static void decide_indirection_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if ((ms_ptr->target_idx != 0) || (ms_ptr->m_ptr->target_y == 0))
+        return;
+
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    ms_ptr->target_idx = floor_ptr->grid_array[ms_ptr->m_ptr->target_y][ms_ptr->m_ptr->target_x].m_idx;
+    if (ms_ptr->target_idx == 0)
+        return;
+
+    ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
+    if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != target_ptr->pet_t_m_idx) && !are_enemies(target_ptr, ms_ptr->m_ptr, ms_ptr->t_ptr))) {
+        ms_ptr->target_idx = 0;
+        return;
+    }
+    
+    if (projectable(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
+        return;
+
+    ms_ptr->f4 &= RF4_INDIRECT_MASK;
+    ms_ptr->f5 &= RF5_INDIRECT_MASK;
+    ms_ptr->f6 &= RF6_INDIRECT_MASK;
+}
+
 /*!
  * todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
@@ -74,21 +98,8 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     ms_ptr->f5 = ms_ptr->r_ptr->a_ability_flags1;
     ms_ptr->f6 = ms_ptr->r_ptr->a_ability_flags2;
     decide_melee_spell_target(target_ptr, ms_ptr);
+    decide_indirection_melee_spell(target_ptr, ms_ptr);
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    if (!ms_ptr->target_idx && ms_ptr->m_ptr->target_y) {
-        ms_ptr->target_idx = floor_ptr->grid_array[ms_ptr->m_ptr->target_y][ms_ptr->m_ptr->target_x].m_idx;
-        if (ms_ptr->target_idx) {
-            ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
-            if ((m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != target_ptr->pet_t_m_idx) && !are_enemies(target_ptr, ms_ptr->m_ptr, ms_ptr->t_ptr))) {
-                ms_ptr->target_idx = 0;
-            } else if (!projectable(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx)) {
-                ms_ptr->f4 &= RF4_INDIRECT_MASK;
-                ms_ptr->f5 &= RF5_INDIRECT_MASK;
-                ms_ptr->f6 &= RF6_INDIRECT_MASK;
-            }
-        }
-    }
-
     if (!ms_ptr->target_idx) {
         bool success = FALSE;
         if (target_ptr->phase_out) {
