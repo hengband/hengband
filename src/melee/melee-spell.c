@@ -183,6 +183,17 @@ static void check_melee_spell_rocket(player_type *target_ptr, melee_spell_type *
         ms_ptr->f4 &= ~(RF4_ROCKET);
 }
 
+static void check_melee_spell_beam(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if ((((ms_ptr->f4 & RF4_BEAM_MASK) == 0) && ((ms_ptr->f5 & RF5_BEAM_MASK) == 0) && ((ms_ptr->f6 & RF6_BEAM_MASK) == 0))
+        || direct_beam(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->m_ptr))
+        return;
+
+    ms_ptr->f4 &= ~(RF4_BEAM_MASK);
+    ms_ptr->f5 &= ~(RF5_BEAM_MASK);
+    ms_ptr->f6 &= ~(RF6_BEAM_MASK);
+}
+
 static void check_melee_spell_breath(player_type *target_ptr, melee_spell_type *ms_ptr)
 {
     if (((ms_ptr->f4 & RF4_BREATH_MASK) == 0) && ((ms_ptr->f5 & RF5_BREATH_MASK) == 0) && ((ms_ptr->f6 & RF6_BREATH_MASK) == 0))
@@ -282,13 +293,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         if (!(target_ptr->pet_extra_flags & PF_BALL_SPELL) && (m_idx != target_ptr->riding)) {
             check_melee_spell_distance(target_ptr, ms_ptr);
             check_melee_spell_rocket(target_ptr, ms_ptr);
-            if (((ms_ptr->f4 & RF4_BEAM_MASK) || (ms_ptr->f5 & RF5_BEAM_MASK) || (ms_ptr->f6 & RF6_BEAM_MASK))
-                && !direct_beam(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->m_ptr)) {
-                ms_ptr->f4 &= ~(RF4_BEAM_MASK);
-                ms_ptr->f5 &= ~(RF5_BEAM_MASK);
-                ms_ptr->f6 &= ~(RF6_BEAM_MASK);
-            }
-
+            check_melee_spell_beam(target_ptr, ms_ptr);
             check_melee_spell_breath(target_ptr, ms_ptr);
         }
 
