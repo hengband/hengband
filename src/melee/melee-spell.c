@@ -43,6 +43,29 @@
 #define RF5_SPELL_SIZE 32
 #define RF6_SPELL_SIZE 32
 
+static bool try_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if (spell_is_inate(ms_ptr->thrown_spell) || (!ms_ptr->in_no_magic_dungeon && (!monster_stunned_remaining(ms_ptr->m_ptr) || one_in_(2))))
+        return FALSE;
+
+    disturb(target_ptr, TRUE, TRUE);
+    if (ms_ptr->see_m)
+        msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), ms_ptr->m_name);
+
+    return TRUE;
+}
+
+static bool disturb_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if (spell_is_inate(ms_ptr->thrown_spell) || !magic_barrier(target_ptr, ms_ptr->m_idx))
+        return FALSE;
+
+    if (ms_ptr->see_m)
+        msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), ms_ptr->m_name);
+
+    return TRUE;
+}
+
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -74,20 +97,8 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     if (target_ptr->riding && (m_idx == target_ptr->riding))
         disturb(target_ptr, TRUE, TRUE);
 
-    if (!spell_is_inate(ms_ptr->thrown_spell) && (ms_ptr->in_no_magic_dungeon || (monster_stunned_remaining(ms_ptr->m_ptr) && one_in_(2)))) {
-        disturb(target_ptr, TRUE, TRUE);
-        if (ms_ptr->see_m)
-            msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), ms_ptr->m_name);
-
+    if (try_melee_spell(target_ptr, ms_ptr) || disturb_melee_spell(target_ptr, ms_ptr))
         return TRUE;
-    }
-
-    if (!spell_is_inate(ms_ptr->thrown_spell) && magic_barrier(target_ptr, m_idx)) {
-        if (ms_ptr->see_m)
-            msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), ms_ptr->m_name);
-
-        return TRUE;
-    }
 
     ms_ptr->can_remember = is_original_ap_and_seen(target_ptr, ms_ptr->m_ptr);
     ms_ptr->dam = monspell_to_monster(target_ptr, ms_ptr->thrown_spell, ms_ptr->y, ms_ptr->x, m_idx, ms_ptr->target_idx, FALSE);
