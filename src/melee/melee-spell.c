@@ -162,13 +162,38 @@ static void check_melee_spell_distance(player_type *target_ptr, melee_spell_type
         ms_ptr->f6 &= ~(RF6_BALL_MASK);
         return;
     }
-    
+
     if (dist > 4)
         return;
 
     ms_ptr->f4 &= ~(RF4_BIG_BALL_MASK);
     ms_ptr->f5 &= ~(RF5_BIG_BALL_MASK);
     ms_ptr->f6 &= ~(RF6_BIG_BALL_MASK);
+}
+
+static void check_melee_spell_breath(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if (((ms_ptr->f4 & RF4_BREATH_MASK) == 0) && ((ms_ptr->f5 & RF5_BREATH_MASK) == 0) && ((ms_ptr->f6 & RF6_BREATH_MASK) == 0))
+        return;
+
+    POSITION rad = (ms_ptr->r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
+    if (!breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, 0, TRUE)) {
+        ms_ptr->f4 &= ~(RF4_BREATH_MASK);
+        ms_ptr->f5 &= ~(RF5_BREATH_MASK);
+        ms_ptr->f6 &= ~(RF6_BREATH_MASK);
+        return;
+    }
+
+    if ((ms_ptr->f4 & RF4_BR_LITE)
+        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_LITE, TRUE)) {
+        ms_ptr->f4 &= ~(RF4_BR_LITE);
+        return;
+    }
+
+    if ((ms_ptr->f4 & RF4_BR_DISI)
+        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_DISINTEGRATE, TRUE)) {
+        ms_ptr->f4 &= ~(RF4_BR_DISI);
+    }
 }
 
 /*!
@@ -259,20 +284,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
                 ms_ptr->f6 &= ~(RF6_BEAM_MASK);
             }
 
-            if ((ms_ptr->f4 & RF4_BREATH_MASK) || (ms_ptr->f5 & RF5_BREATH_MASK) || (ms_ptr->f6 & RF6_BREATH_MASK)) {
-                POSITION rad = (ms_ptr->r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
-                if (!breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, 0, TRUE)) {
-                    ms_ptr->f4 &= ~(RF4_BREATH_MASK);
-                    ms_ptr->f5 &= ~(RF5_BREATH_MASK);
-                    ms_ptr->f6 &= ~(RF6_BREATH_MASK);
-                } else if ((ms_ptr->f4 & RF4_BR_LITE)
-                    && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_LITE, TRUE)) {
-                    ms_ptr->f4 &= ~(RF4_BR_LITE);
-                } else if ((ms_ptr->f4 & RF4_BR_DISI)
-                    && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_DISINTEGRATE, TRUE)) {
-                    ms_ptr->f4 &= ~(RF4_BR_DISI);
-                }
-            }
+            check_melee_spell_breath(target_ptr, ms_ptr);
         }
 
         if (ms_ptr->f6 & RF6_SPECIAL) {
