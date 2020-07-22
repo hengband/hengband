@@ -347,19 +347,8 @@ static bool set_melee_spell_set(player_type *target_ptr, melee_spell_type *ms_pt
     return (ms_ptr->num != 0) && target_ptr->playing && !target_ptr->is_dead && !target_ptr->leaving;
 }
 
-/*!
- * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
- * Monster tries to 'cast a spell' (or breath, etc) at another monster.
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx 術者のモンスターID
- * @return 実際に特殊能力を使った場合TRUEを返す
- * @details
- * The player is only disturbed if able to be affected by the spell.
- */
-bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
+static bool check_melee_spell_set(player_type *target_ptr, melee_spell_type *ms_ptr)
 {
-    melee_spell_type tmp_ms;
-    melee_spell_type *ms_ptr = initialize_melee_spell_type(target_ptr, &tmp_ms, m_idx);
     if (monster_confused_remaining(ms_ptr->m_ptr))
         return FALSE;
 
@@ -387,7 +376,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     if (target_ptr->phase_out && !one_in_(3))
         ms_ptr->f6 &= ~(RF6_HEAL);
 
-    if (m_idx == target_ptr->riding) {
+    if (ms_ptr->m_idx == target_ptr->riding) {
         ms_ptr->f4 &= ~(RF4_RIDING_MASK);
         ms_ptr->f5 &= ~(RF5_RIDING_MASK);
         ms_ptr->f6 &= ~(RF6_RIDING_MASK);
@@ -396,7 +385,23 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     check_pet(target_ptr, ms_ptr);
     check_non_stupid(target_ptr, ms_ptr);
     check_smart(target_ptr, ms_ptr);
-    if (!set_melee_spell_set(target_ptr, ms_ptr))
+    return set_melee_spell_set(target_ptr, ms_ptr);
+}
+
+/*!
+ * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
+ * Monster tries to 'cast a spell' (or breath, etc) at another monster.
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx 術者のモンスターID
+ * @return 実際に特殊能力を使った場合TRUEを返す
+ * @details
+ * The player is only disturbed if able to be affected by the spell.
+ */
+bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
+{
+    melee_spell_type tmp_ms;
+    melee_spell_type *ms_ptr = initialize_melee_spell_type(target_ptr, &tmp_ms, m_idx);
+    if (!check_melee_spell_set(target_ptr, ms_ptr))
         return FALSE;
 
     /* Get the monster name (or "it") */
