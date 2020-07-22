@@ -259,6 +259,7 @@
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\io\store-key-processor.c" />
     <ClCompile Include="..\..\src\load\info-loader.c" />
+    <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.c" />
     <ClCompile Include="..\..\src\melee\melee-spell-util.c" />
     <ClCompile Include="..\..\src\melee\melee-spell.c" />
     <ClCompile Include="..\..\src\mind\mind-blue-mage.c" />
@@ -797,6 +798,7 @@
     <ClInclude Include="..\..\src\io\store-key-processor.h" />
     <ClInclude Include="..\..\src\load\info-loader.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
+    <ClInclude Include="..\..\src\melee\melee-spell-flags-checker.h" />
     <ClInclude Include="..\..\src\melee\melee-spell-util.h" />
     <ClInclude Include="..\..\src\melee\melee-spell.h" />
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h" />
