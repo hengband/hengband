@@ -1,9 +1,13 @@
 ﻿#include "inventory/recharge-processor.h"
+#include "core/disturbance.h"
 #include "core/hp-mp-regenerator.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
+#include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
+#include "inventory/inventory-slot-types.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-kind.h"
-#include "player/player-move.h"
+#include "system/floor-type-definition.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -24,7 +28,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
     while (s) {
         if (s[1] == '!') {
             GAME_TEXT o_name[MAX_NLEN];
-            object_desc(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            describe_flavor(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
             msg_format("%sは再充填された。", o_name);
 #else
@@ -106,7 +110,7 @@ void recharge_magic_items(player_type *creature_ptr)
 
     for (i = 1; i < creature_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
-        if (!OBJECT_IS_VALID(o_ptr))
+        if (!object_is_valid(o_ptr))
             continue;
 
         if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout)) {

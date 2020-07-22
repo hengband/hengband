@@ -9,7 +9,6 @@
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 angband_header f_head; /*!< 地形情報のヘッダ構造体 */

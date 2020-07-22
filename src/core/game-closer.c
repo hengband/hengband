@@ -5,16 +5,15 @@
 #include "core/stuff-handler.h"
 #include "game-option/cheat-options.h"
 #include "io/input-key-acceptor.h"
-#include "io/save.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player/process-death.h"
+#include "save/save.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "world/world.h"
@@ -29,7 +28,7 @@ static void clear_floor(player_type *player_ptr)
 
 static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
 {
-    if (send_world_score(player_ptr, do_send, update_playtime, display_player, map_name))
+    if (send_world_score(player_ptr, do_send, update_playtime, display_player))
         return;
 
     if (!get_check_strict(
@@ -78,7 +77,7 @@ void close_game(player_type *player_ptr)
     current_world_ptr->character_icky = TRUE;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-    safe_setuid_grab();
+    safe_setuid_grab(player_ptr);
     highscore_fd = fd_open(buf, O_RDWR);
     safe_setuid_drop();
 
@@ -96,8 +95,8 @@ void close_game(player_type *player_ptr)
 
     print_tomb(player_ptr);
     flush();
-    show_death_info(player_ptr, update_playtime, display_player, map_name);
-    Term_clear();
+    show_death_info(player_ptr, update_playtime, display_player);
+    term_clear();
     if (check_score(player_ptr)) {
         send_world_score_on_closing(player_ptr, do_send);
         if (!player_ptr->wait_report_score)

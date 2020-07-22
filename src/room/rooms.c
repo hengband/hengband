@@ -37,12 +37,14 @@
  */
 
 #include "room/rooms.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
-#include "grid/feature.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
@@ -55,8 +57,10 @@
 #include "room/rooms-special.h"
 #include "room/rooms-trap.h"
 #include "room/rooms-vault.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
  /*!
   * 各部屋タイプの生成比定義
@@ -849,8 +853,8 @@ static void cave_fill(player_type *player_ptr, POSITION y, POSITION x)
 	int i, j, d;
 	POSITION ty, tx;
 
-	int flow_tail = 1;
-	int flow_head = 0;
+	int flow_tail_room = 1;
+	int flow_head_room = 0;
 
 
 	/*** Start Grid ***/
@@ -861,19 +865,19 @@ static void cave_fill(player_type *player_ptr, POSITION y, POSITION x)
 
 	/* Now process the queue */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	while (flow_head != flow_tail)
+	while (flow_head_room != flow_tail_room)
 	{
 		/* Extract the next entry */
-		ty = tmp_pos.y[flow_head];
-		tx = tmp_pos.x[flow_head];
+		ty = tmp_pos.y[flow_head_room];
+		tx = tmp_pos.x[flow_head_room];
 
 		/* Forget that entry */
-		if (++flow_head == TEMP_MAX) flow_head = 0;
+		if (++flow_head_room == TEMP_MAX) flow_head_room = 0;
 
 		/* Add the "children" */
 		for (d = 0; d < 8; d++)
 		{
-			int old_head = flow_tail;
+			int old_head = flow_tail_room;
 
 			/* Child location */
 			j = ty + ddy_ddd[d];
@@ -898,16 +902,16 @@ static void cave_fill(player_type *player_ptr, POSITION y, POSITION x)
 					fill_data.info1, fill_data.info2, fill_data.info3))
 				{
 					/* Enqueue that entry */
-					tmp_pos.y[flow_tail] = (byte)j;
-					tmp_pos.x[flow_tail] = (byte)i;
+					tmp_pos.y[flow_tail_room] = (byte)j;
+					tmp_pos.x[flow_tail_room] = (byte)i;
 
 					/* Advance the queue */
-					if (++flow_tail == TEMP_MAX) flow_tail = 0;
+					if (++flow_tail_room == TEMP_MAX) flow_tail_room = 0;
 
 					/* Hack -- Overflow by forgetting new entry */
-					if (flow_tail == flow_head)
+					if (flow_tail_room == flow_head_room)
 					{
-						flow_tail = old_head;
+						flow_tail_room = old_head;
 					}
 					else
 					{
@@ -1674,7 +1678,7 @@ void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITIO
 	bool light;
 	grid_type *g_ptr;
 
-	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
 	/* Choose lite or dark */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -2308,11 +2312,10 @@ bool generate_rooms(player_type *player_ptr)
 	/*! @details 部屋生成数が2未満の場合生成失敗を返す */
 	if (rooms_built < 2)
 	{
-		msg_format_wizard(CHEAT_DUNGEON, _("部屋数が2未満でした。生成を再試行します。", "Number of rooms was under 2. Retry."), rooms_built);
+		msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("部屋数が2未満でした。生成を再試行します。", "Number of rooms was under 2. Retry."), rooms_built);
 		return FALSE;
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("このダンジョンの部屋数は %d です。", "Number of Rooms: %d"), rooms_built);
-
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("このダンジョンの部屋数は %d です。", "Number of Rooms: %d"), rooms_built);
 	return TRUE;
 }

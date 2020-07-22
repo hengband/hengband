@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "birth/history-generator.h"
+﻿#include "birth/history-generator.h"
 #include "birth/history.h"
 #include "player/player-race-types.h"
 #include "util/buffer-shaper.h"

@@ -1,5 +1,4 @@
 ﻿#include "mspell/mspell-ball.h"
-#include "floor/floor.h"
 #include "main/sound-of-music.h"
 #include "mind/drs-types.h"
 #include "monster-race/race-indice-types.h"
@@ -11,6 +10,7 @@
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

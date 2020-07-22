@@ -49,7 +49,7 @@ static void forget_macro_action(void)
 
     while (TRUE) {
         char ch;
-        if (Term_inkey(&ch, FALSE, TRUE))
+        if (term_inkey(&ch, FALSE, TRUE))
             break;
         if (ch == 0)
             break;
@@ -65,7 +65,7 @@ static void forget_macro_action(void)
  *
  * This function does almost all of the "macro" processing.
  *
- * We use the "Term_key_push()" function to handle "failed" macros, as well
+ * We use the "term_key_push()" function to handle "failed" macros, as well
  * as "extra" keys read in while choosing the proper macro, and also to hold
  * the action for the macro, plus a special "ascii 30" character indicating
  * that any macro action in progress is complete.  Embedded macros are thus
@@ -86,11 +86,11 @@ static char inkey_aux(void)
     num_more = 0;
 
     if (parse_macro) {
-        if (Term_inkey(&ch, FALSE, TRUE)) {
+        if (term_inkey(&ch, FALSE, TRUE)) {
             parse_macro = FALSE;
         }
     } else {
-        (void)(Term_inkey(&ch, TRUE, TRUE));
+        (void)(term_inkey(&ch, TRUE, TRUE));
     }
 
     if (ch == 30)
@@ -115,7 +115,7 @@ static char inkey_aux(void)
         if (k < 0)
             break;
 
-        if (0 == Term_inkey(&ch, FALSE, TRUE)) {
+        if (0 == term_inkey(&ch, FALSE, TRUE)) {
             buf[p++] = ch;
             buf[p] = '\0';
             w = 0;
@@ -124,37 +124,37 @@ static char inkey_aux(void)
             if (w >= 10)
                 break;
 
-            Term_xtra(TERM_XTRA_DELAY, w);
+            term_xtra(TERM_XTRA_DELAY, w);
         }
     }
 
     k = macro_find_ready(buf);
     if (k < 0) {
         while (p > 0) {
-            if (Term_key_push(buf[--p]))
+            if (term_key_push(buf[--p]))
                 return 0;
         }
 
-        (void)Term_inkey(&ch, TRUE, TRUE);
+        (void)term_inkey(&ch, TRUE, TRUE);
         return (ch);
     }
 
     concptr pat = macro__pat[k];
     n = strlen(pat);
     while (p > n) {
-        if (Term_key_push(buf[--p]))
+        if (term_key_push(buf[--p]))
             return 0;
     }
 
     parse_macro = TRUE;
-    if (Term_key_push(30))
+    if (term_key_push(30))
         return 0;
 
     concptr act = macro__act[k];
 
     n = strlen(act);
     while (n > 0) {
-        if (Term_key_push(act[--n]))
+        if (term_key_push(act[--n]))
             return 0;
     }
 
@@ -170,7 +170,7 @@ char inkey(void)
 {
     char ch = 0;
     bool done = FALSE;
-    term *old = Term;
+    term_type *old = Term;
 
     if (inkey_next && *inkey_next && !inkey_xtra) {
         ch = *inkey_next++;
@@ -182,28 +182,28 @@ char inkey(void)
     if (inkey_xtra) {
         parse_macro = FALSE;
         parse_under = FALSE;
-        Term_flush();
+        term_flush();
     }
 
     int v;
-    (void)Term_get_cursor(&v);
+    (void)term_get_cursor(&v);
 
     /* Show the cursor if waiting, except sometimes in "command" mode */
     if (!inkey_scan && (!inkey_flag || hilite_player || current_world_ptr->character_icky)) {
-        (void)Term_set_cursor(1);
+        (void)term_set_cursor(1);
     }
 
-    Term_activate(angband_term[0]);
+    term_activate(angband_term[0]);
     char kk;
     while (!ch) {
-        if (!inkey_base && inkey_scan && (0 != Term_inkey(&kk, FALSE, FALSE))) {
+        if (!inkey_base && inkey_scan && (0 != term_inkey(&kk, FALSE, FALSE))) {
             break;
         }
 
-        if (!done && (0 != Term_inkey(&kk, FALSE, FALSE))) {
-            Term_activate(old);
-            Term_fresh();
-            Term_activate(angband_term[0]);
+        if (!done && (0 != term_inkey(&kk, FALSE, FALSE))) {
+            term_activate(old);
+            term_fresh();
+            term_activate(angband_term[0]);
             current_world_ptr->character_saved = FALSE;
 
             signal_count = 0;
@@ -213,7 +213,7 @@ char inkey(void)
         if (inkey_base) {
             int w = 0;
             if (!inkey_scan) {
-                if (0 == Term_inkey(&ch, TRUE, TRUE)) {
+                if (0 == term_inkey(&ch, TRUE, TRUE)) {
                     break;
                 }
 
@@ -221,14 +221,14 @@ char inkey(void)
             }
 
             while (TRUE) {
-                if (0 == Term_inkey(&ch, FALSE, TRUE)) {
+                if (0 == term_inkey(&ch, FALSE, TRUE)) {
                     break;
                 } else {
                     w += 10;
                     if (w >= 100)
                         break;
 
-                    Term_xtra(TERM_XTRA_DELAY, w);
+                    term_xtra(TERM_XTRA_DELAY, w);
                 }
             }
 
@@ -256,8 +256,8 @@ char inkey(void)
         }
     }
 
-    Term_activate(old);
-    Term_set_cursor(v);
+    term_activate(old);
+    term_set_cursor(v);
     inkey_base = inkey_xtra = inkey_flag = inkey_scan = FALSE;
     return (ch);
 }

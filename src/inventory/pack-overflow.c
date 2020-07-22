@@ -1,11 +1,11 @@
-﻿#include "system/angband.h"
-#include "inventory/pack-overflow.h"
+﻿#include "inventory/pack-overflow.h"
+#include "core/disturbance.h"
 #include "core/stuff-handler.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
-#include "object/object-flavor.h"
+#include "inventory/inventory-slot-types.h"
 #include "object/object-info.h"
-#include "player/player-move.h"
 #include "view/display-messages.h"
 
 /*!
@@ -27,7 +27,7 @@ void pack_overflow(player_type *owner_ptr)
     disturb(owner_ptr, FALSE, TRUE);
     msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
 
-    object_desc(owner_ptr, o_name, o_ptr, 0);
+    describe_flavor(owner_ptr, o_name, o_ptr, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
     (void)drop_near(owner_ptr, o_ptr, 0, owner_ptr->y, owner_ptr->x);
 

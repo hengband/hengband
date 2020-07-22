@@ -5,9 +5,8 @@
  */
 
 #include "player/eldritch-horror.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
-#include "floor/floor.h"
-#include "locale/vowel-checker.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -19,11 +18,18 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
-#include "player/player-effects.h"
+#include "mutation/mutation-flag-types.h"
+#include "status/bad-status-setter.h"
 #include "player/player-status.h"
 #include "player/mimic-info-table.h"
+#include "status/base-status.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める

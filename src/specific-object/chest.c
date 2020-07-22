@@ -1,6 +1,6 @@
 ﻿#include "specific-object/chest.h"
+#include "floor/cave.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
@@ -12,14 +12,17 @@
 #include "perception/object-perception.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
-#include "player/player-status.h"
+#include "spell-kind/spells-equipment.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
-#include "spell/spells3.h"
+#include "status/bad-status-setter.h"
+#include "status/base-status.h"
+#include "status/element-resistance.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
@@ -90,7 +93,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 		if (small && (randint0(100) < 25))
 		{
 			/* Make some gold */
-			if (!make_gold(floor_ptr, q_ptr)) continue;
+			if (!make_gold(owner_ptr, q_ptr)) continue;
 		}
 
 		/* Otherwise drop an item */

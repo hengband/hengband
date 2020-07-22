@@ -1,4 +1,6 @@
 ﻿#include "effect/effect-monster-spirit.h"
+#include "core/hp-mp-processor.h"
+#include "core/player-redraw-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -10,7 +12,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
 #include "mspell/mspell-mask-definitions.h"
-#include "player/player-effects.h"
 #include "view/display-messages.h"
 
 gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)

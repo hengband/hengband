@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "world/world.h"
+﻿#include "world/world.h"
 #include "player/player-race-types.h"
 
 world_type world;
@@ -46,4 +45,16 @@ void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min
 	}
 	*hour = (24 * turn_in_today / A_DAY) % 24;
 	*min = (1440 * turn_in_today / A_DAY) % 60;
+}
+
+/*!
+ * @brief 実ゲームプレイ時間を更新する
+ */
+void update_playtime(void)
+{
+    if (current_world_ptr->start_time != 0) {
+        u32b tmp = (u32b)time(NULL);
+        current_world_ptr->play_time += (tmp - current_world_ptr->start_time);
+        current_world_ptr->start_time = tmp;
+    }
 }

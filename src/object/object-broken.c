@@ -132,7 +132,7 @@ bool hates_fire(object_type *o_ptr)
 	case TV_TRUMP_BOOK:
 	case TV_ARCANE_BOOK:
 	case TV_CRAFT_BOOK:
-	case TV_DAEMON_BOOK:
+	case TV_DEMON_BOOK:
 	case TV_CRUSADE_BOOK:
 	case TV_MUSIC_BOOK:
 	case TV_HISSATSU_BOOK:
@@ -188,11 +188,11 @@ bool hates_cold(object_type *o_ptr)
 * @return 破損するならばTRUEを返す
 * @todo 統合を検討
 */
-int set_acid_destroy(object_type *o_ptr)
+int set_acid_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	if (!hates_acid(o_ptr)) return FALSE;
-	object_flags(o_ptr, flgs);
+	object_flags(owner_ptr, o_ptr, flgs);
 	if (have_flag(flgs, TR_IGNORE_ACID)) return FALSE;
 	return TRUE;
 }
@@ -205,11 +205,11 @@ int set_acid_destroy(object_type *o_ptr)
 * @return 破損するならばTRUEを返す
 * @todo 統合を検討
 */
-int set_elec_destroy(object_type *o_ptr)
+int set_elec_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	if (!hates_elec(o_ptr)) return FALSE;
-	object_flags(o_ptr, flgs);
+	object_flags(owner_ptr, o_ptr, flgs);
 	if (have_flag(flgs, TR_IGNORE_ELEC)) return FALSE;
 	return TRUE;
 }
@@ -222,11 +222,11 @@ int set_elec_destroy(object_type *o_ptr)
 * @return 破損するならばTRUEを返す
 * @todo 統合を検討
 */
-int set_fire_destroy(object_type *o_ptr)
+int set_fire_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	if (!hates_fire(o_ptr)) return FALSE;
-	object_flags(o_ptr, flgs);
+	object_flags(owner_ptr, o_ptr, flgs);
 	if (have_flag(flgs, TR_IGNORE_FIRE)) return FALSE;
 	return TRUE;
 }
@@ -239,11 +239,11 @@ int set_fire_destroy(object_type *o_ptr)
 * @return 破損するならばTRUEを返す
 * @todo 統合を検討
 */
-int set_cold_destroy(object_type *o_ptr)
+int set_cold_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	if (!hates_cold(o_ptr)) return FALSE;
-	object_flags(o_ptr, flgs);
+	object_flags(owner_ptr, o_ptr, flgs);
 	if (have_flag(flgs, TR_IGNORE_COLD)) return FALSE;
 	return TRUE;
 }

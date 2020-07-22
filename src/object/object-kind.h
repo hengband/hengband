@@ -3,30 +3,7 @@
 #include "system/angband.h"
 #include "system/object-type-definition.h"
 
-/*!
- * @struct object_kind
- * @brief ベースアイテム情報の構造体 / Information about object "kinds", including player knowledge.
- * @details
- * ゲーム進行用のセーブファイル上では aware と tried のみ保存対象とすること。と英文ではあるが実際はもっとある様子である。 /
- * Only "aware" and "tried" are saved in the savefile
- */
-
-
- /*
-  * Return the "char" for a given item.
-  * Use "flavor" if available.
-  * Default to user definitions.
-  */
-#define object_char(T) \
-	((k_info[(T)->k_idx].flavor) ? \
-	 (k_info[k_info[(T)->k_idx].flavor].x_char) : \
-	 (k_info[(T)->k_idx].x_char))
-
-
-typedef struct object_kind object_kind;
-
-struct object_kind
-{
+typedef struct object_kind {
 	STR_OFFSET name;			/*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
 	STR_OFFSET text;			/*!< 解説テキスト参照のためのネームバッファオフセット値 / Text (offset) */
 	STR_OFFSET flavor_name;	/*!< 未確定名参照のためのネームバッファオフセット値 / Flavor name (offset) */
@@ -74,7 +51,7 @@ struct object_kind
 	bool tried;			/*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 
 	ACTIVATION_IDX act_idx;		/*!< 発動能力のID /  Activative ability index */
-};
+} object_kind;
 
 extern object_kind *k_info;
 extern char *k_name;
@@ -82,3 +59,4 @@ extern char *k_text;
 extern KIND_OBJECT_IDX max_k_idx;
 
 void calc_equipment_status(player_type *creature_ptr);
+SYMBOL_CODE object_char(object_type *o_ptr);

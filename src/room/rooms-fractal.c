@@ -1,10 +1,11 @@
-﻿#include "system/angband.h"
-#include "grid/grid.h"
-#include "floor/floor-generate.h"
-#include "room/rooms.h"
-#include "room/rooms-normal.h"
-#include "floor/floor.h"
+﻿#include "room/rooms-fractal.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor-generate.h"
+#include "grid/grid.h"
+#include "room/rooms-normal.h"
+#include "room/rooms.h"
+#include "system/floor-type-definition.h"
 
 /*!
 * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal grid

@@ -1,29 +1,41 @@
 ﻿#include "mutation/mutation-processor.h"
+#include "core/disturbance.h"
+#include "core/hp-mp-processor.h"
+#include "core/player-redraw-types.h"
 #include "grid/grid.h"
+#include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/targeting.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
+#include "mutation/mutation-flag-types.h"
 #include "mutation/mutation.h"
+#include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
 #include "object/lite-processor.h"
-#include "object/object-hook.h"
+#include "player/digestion-processor.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
-#include "realm/realm-types.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spells-summon.h"
 #include "spell/spell-types.h"
-#include "spell/spells3.h"
+#include "spell/spells-summon.h"
+#include "status/bad-status-setter.h"
+#include "status/base-status.h"
+#include "status/body-improvement.h"
+#include "status/buff-setter.h"
+#include "status/shape-changer.h"
+#include "status/sight-setter.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
@@ -34,11 +46,7 @@
  */
 void process_world_aux_mutation(player_type *creature_ptr)
 {
-    if (!creature_ptr->muta2)
-        return;
-    if (creature_ptr->phase_out)
-        return;
-    if (creature_ptr->wild_mode)
+    if (!creature_ptr->muta2 || creature_ptr->phase_out || creature_ptr->wild_mode)
         return;
 
     if ((creature_ptr->muta2 & MUT2_BERS_RAGE) && one_in_(3000)) {
@@ -395,4 +403,35 @@ void process_world_aux_mutation(player_type *creature_ptr)
         take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->wt / 6), _("転倒", "tripping"), -1);
         drop_weapons(creature_ptr);
     }
+}
+
+bool drop_weapons(player_type *creature_ptr)
+{
+    INVENTORY_IDX slot = 0;
+    object_type *o_ptr = NULL;
+
+    if (creature_ptr->wild_mode)
+        return FALSE;
+
+    msg_print(NULL);
+    if (has_melee_weapon(creature_ptr, INVEN_RARM)) {
+        slot = INVEN_RARM;
+        o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
+
+        if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2)) {
+            o_ptr = &creature_ptr->inventory_list[INVEN_LARM];
+            slot = INVEN_LARM;
+        }
+    } else if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        o_ptr = &creature_ptr->inventory_list[INVEN_LARM];
+        slot = INVEN_LARM;
+    }
+
+    if (slot && !object_is_cursed(o_ptr)) {
+        msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
+        drop_from_inventory(creature_ptr, slot, 1);
+        return TRUE;
+    }
+
+    return FALSE;
 }

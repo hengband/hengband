@@ -1,5 +1,5 @@
 ﻿#include "effect/effect-monster-oldies.h"
-#include "floor/floor.h"
+#include "core/player-redraw-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
@@ -9,6 +9,7 @@
 #include "monster-floor/monster-generator.h"
 #include "monster/monster-info.h"
 #include "player/avatar.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 // Powerful monsters can resist.

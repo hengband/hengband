@@ -1,9 +1,13 @@
 ﻿#include "spell-kind/spells-sight.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
+#include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "locale/english.h"
 #include "lore/lore-store.h"
@@ -18,8 +22,8 @@
 #include "player/avatar.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 /*!
@@ -374,7 +378,7 @@ bool probing(player_type *caster_ptr)
         handle_stuff(caster_ptr);
         move_cursor_relative(m_ptr->fy, m_ptr->fx);
         inkey();
-        Term_erase(0, 0, 255);
+        term_erase(0, 0, 255);
         if (lore_do_probe(caster_ptr, m_ptr->r_idx)) {
             strcpy(buf, (r_name + r_ptr->name));
 #ifdef JP
@@ -391,7 +395,7 @@ bool probing(player_type *caster_ptr)
 
     Term->scr->cu = cu;
     Term->scr->cv = cv;
-    Term_fresh();
+    term_fresh();
 
     if (probe) {
         chg_virtue(caster_ptr, V_KNOWLEDGE, 1);

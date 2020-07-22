@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 typedef enum monster_race_type {
-	MON_BEGGAR = 12,
+    MON_BEGGAR = 12,
     MON_LEPER = 13,
     MON_LION_HEART = 19,
     MON_NOV_PRIEST = 45,
@@ -140,4 +140,15 @@ typedef enum monster_race_type {
     MON_JIZOTAKO = 1065,
     MON_TANUKI = 1067,
     MON_ALIEN_JURAL = 1082,
+    MON_MIDDLE_AQUA_FIRST = 1152,
+    MON_LARGE_AQUA_FIRST = 1153,
+    MON_EXTRA_LARGE_AQUA_FIRST = 1154,
+    MON_MIDDLE_AQUA_SECOND = 1156,
+    MON_LARGE_AQUA_SECOND = 1157,
+    MON_EXTRA_LARGE_AQUA_SECOND = 1158,
+    MON_SMALL_MOAI = 1159,
+    MON_TOTEM_MOAI = 1161,
+    MON_VAIF = 1162,
+    MON_DEMON_SLAYER_SENIOR = 1164,
+    MON_DEMON_SLAYER_MEMBER = 1165,
 } monster_race_type;

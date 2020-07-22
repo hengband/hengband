@@ -16,34 +16,38 @@
  */
 
 #include "grid/grid.h"
+#include "core/window-redrawer.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor-generate.h"
+#include "floor/floor.h"
 #include "game-option/game-play-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
+#include "io/screen-util.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
 #include "player/player-class.h"
-#include "player/player-effects.h"
 #include "player/player-status.h"
-#include "realm/realm-song-numbers.h"
 #include "room/rooms.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h"
+#include "view/display-map.h"
 #include "view/display-messages.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 
 #define MONSTER_FLOW_DEPTH 32 /*!< 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る) / OPTION: Maximum flow depth when using "MONSTER_FLOW" */
@@ -476,12 +480,12 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y
 		if (!use_graphics)
 		{
 			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-			else if (IS_INVULN(subject_ptr) || subject_ptr->timewalk) a = TERM_WHITE;
+			else if (is_invuln(subject_ptr) || subject_ptr->timewalk) a = TERM_WHITE;
 			else if (subject_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
 		/* Draw the char using the attr */
-		Term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, 0, 0);
+		term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, 0, 0);
 	}
 }
 
@@ -633,12 +637,12 @@ void lite_spot(player_type *player_ptr, POSITION y, POSITION x)
 		if (!use_graphics)
 		{
 			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-			else if (IS_INVULN(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
+			else if (is_invuln(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
 			else if (player_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
 		/* Hack -- Queue it */
-		Term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
+		term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
 
 		/* Update sub-windows */
 		player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -876,8 +880,8 @@ void update_flow(player_type *subject_ptr)
 {
 	POSITION x, y;
 	DIRECTION d;
-	int flow_head = 1;
-	int flow_tail = 0;
+	int flow_head_grid = 1;
+	int flow_tail_grid = 0;
 
 	/* Paranoia -- make sure the array is empty */
 	if (tmp_pos.n) return;
@@ -908,21 +912,21 @@ void update_flow(player_type *subject_ptr)
 	tmp_pos.x[0] = subject_ptr->x;
 
 	/* Now process the queue */
-	while (flow_head != flow_tail)
+	while (flow_head_grid != flow_tail_grid)
 	{
 		int ty, tx;
 
 		/* Extract the next entry */
-		ty = tmp_pos.y[flow_tail];
-		tx = tmp_pos.x[flow_tail];
+		ty = tmp_pos.y[flow_tail_grid];
+		tx = tmp_pos.x[flow_tail_grid];
 
 		/* Forget that entry */
-		if (++flow_tail == TEMP_MAX) flow_tail = 0;
+		if (++flow_tail_grid == TEMP_MAX) flow_tail_grid = 0;
 
 		/* Add the "children" */
 		for (d = 0; d < 8; d++)
 		{
-			int old_head = flow_head;
+			int old_head = flow_head_grid;
 			byte m = subject_ptr->current_floor_ptr->grid_array[ty][tx].cost + 1;
 			byte n = subject_ptr->current_floor_ptr->grid_array[ty][tx].dist + 1;
 			grid_type *g_ptr;
@@ -952,14 +956,14 @@ void update_flow(player_type *subject_ptr)
 			if (n == MONSTER_FLOW_DEPTH) continue;
 
 			/* Enqueue that entry */
-			tmp_pos.y[flow_head] = y;
-			tmp_pos.x[flow_head] = x;
+			tmp_pos.y[flow_head_grid] = y;
+			tmp_pos.x[flow_head_grid] = x;
 
 			/* Advance the queue */
-			if (++flow_head == TEMP_MAX) flow_head = 0;
+			if (++flow_head_grid == TEMP_MAX) flow_head_grid = 0;
 
 			/* Hack -- notice overflow by forgetting new entry */
-			if (flow_head == flow_tail) flow_head = old_head;
+			if (flow_head_grid == flow_tail_grid) flow_head_grid = old_head;
 		}
 	}
 }
@@ -1170,7 +1174,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
 			if (!player_ptr->levitation && !player_ptr->can_swim) return FALSE;
 		}
 
-		if (have_flag(f_ptr->flags, FF_LAVA) && !player_ptr->immune_fire && !IS_INVULN(player_ptr))
+		if (have_flag(f_ptr->flags, FF_LAVA) && !player_ptr->immune_fire && !is_invuln(player_ptr))
 		{
 			/* Always forbid deep lava */
 			if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;
@@ -1422,4 +1426,49 @@ void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX featu
 void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask)
 {
     floor_ptr->grid_array[y][x].info |= cave_mask;
+}
+
+/*
+ * @brief Get feature mimic from f_info[] (applying "mimic" field)
+ * @param g_ptr グリッドへの参照ポインタ
+ * @return 地形情報
+ */
+FEAT_IDX get_feat_mimic(grid_type *g_ptr) { return (f_info[g_ptr->mimic ? g_ptr->mimic : g_ptr->feat].mimic); }
+
+/*!
+ * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す /
+ * Attempt to open the given chest at the given location
+ * @param y 該当する地形の中から1つのY座標を返す参照ポインタ
+ * @param x 該当する地形の中から1つのX座標を返す参照ポインタ
+ * @param test 地形条件を判定するための関数ポインタ
+ * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
+ * @return 該当する地形の数
+ * @details Return the number of features around (or under) the character.
+ * Usually look for doors and floor traps.
+ */
+int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX), bool under)
+{
+    int count = 0;
+    for (DIRECTION d = 0; d < 9; d++) {
+        grid_type *g_ptr;
+        FEAT_IDX feat;
+        if ((d == 8) && !under)
+            continue;
+
+        POSITION yy = creature_ptr->y + ddy_ddd[d];
+        POSITION xx = creature_ptr->x + ddx_ddd[d];
+        g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
+        if (!(g_ptr->info & (CAVE_MARK)))
+            continue;
+
+        feat = get_feat_mimic(g_ptr);
+        if (!((*test)(creature_ptr, feat)))
+            continue;
+
+        ++count;
+        *y = yy;
+        *x = xx;
+    }
+
+    return count;
 }

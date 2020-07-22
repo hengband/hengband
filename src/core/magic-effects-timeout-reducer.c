@@ -1,14 +1,27 @@
-﻿#include "system/angband.h"
-#include "core/magic-effects-timeout-reducer.h"
+﻿#include "core/magic-effects-timeout-reducer.h"
 #include "game-option/birth-options.h"
-#include "player/player-effects.h"
+#include "mind/mind-force-trainer.h"
+#include "mind/mind-magic-resistance.h"
+#include "mind/mind-mirror-master.h"
+#include "racial/racial-kutar.h"
+#include "spell-realm/spells-craft.h"
+#include "spell-realm/spells-crusade.h"
+#include "spell-realm/spells-demon.h"
+#include "spell-realm/spells-song.h"
+#include "status/bad-status-setter.h"
+#include "status/body-improvement.h"
+#include "status/buff-setter.h"
+#include "status/element-resistance.h"
+#include "status/shape-changer.h"
+#include "status/sight-setter.h"
+#include "status/temporary-resistance.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとに魔法効果の残りターンを減らしていく処理
  * / Handle timeout every 10 game turns
  * @return なし
  */
-void reduce_magic_effects_timeout(player_type* creature_ptr)
+void reduce_magic_effects_timeout(player_type *creature_ptr)
 {
     const int dec_count = (easy_band ? 2 : 1);
     if (creature_ptr->tim_mimic) {
@@ -60,7 +73,7 @@ void reduce_magic_effects_timeout(player_type* creature_ptr)
     }
 
     if (creature_ptr->tim_sh_touki) {
-        (void)set_tim_sh_touki(creature_ptr, creature_ptr->tim_sh_touki - 1, TRUE);
+        (void)set_tim_sh_force(creature_ptr, creature_ptr->tim_sh_touki - 1, TRUE);
     }
 
     if (creature_ptr->tim_sh_fire) {
@@ -103,8 +116,8 @@ void reduce_magic_effects_timeout(player_type* creature_ptr)
         (void)set_dustrobe(creature_ptr, creature_ptr->dustrobe - 1, TRUE);
     }
 
-    if (creature_ptr->kabenuke) {
-        (void)set_kabenuke(creature_ptr, creature_ptr->kabenuke - 1, TRUE);
+    if (creature_ptr->tim_pass_wall) {
+        (void)set_pass_wall(creature_ptr, creature_ptr->tim_pass_wall - 1, TRUE);
     }
 
     if (creature_ptr->paralyzed) {
@@ -156,7 +169,7 @@ void reduce_magic_effects_timeout(player_type* creature_ptr)
     }
 
     if (creature_ptr->tsubureru) {
-        (void)set_tsubureru(creature_ptr, creature_ptr->tsubureru - 1, TRUE);
+        (void)set_leveling(creature_ptr, creature_ptr->tsubureru - 1, TRUE);
     }
 
     if (creature_ptr->magicdef) {

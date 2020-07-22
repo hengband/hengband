@@ -59,9 +59,7 @@
  * @struct quest_type
  * @brief クエスト情報の構造体 / Structure for the "quests".
  */
-
-struct quest_type
-{
+typedef struct quest_type {
 	QUEST_STATUS status;          /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
 	QUEST_TYPE type;              /*!< クエストの種別 / The quest type */
 
@@ -80,9 +78,8 @@ struct quest_type
 
 	PLAYER_LEVEL complev;           /*!< クリア時プレイヤーレベル / player level (complete) */
 	REAL_TIME comptime;          /*!< クリア時ゲーム時間 /  quest clear time*/
-};
+} quest_type;
 
-typedef struct quest_type quest_type;
 extern quest_type *quest;
 extern QUEST_IDX max_q_idx;
 extern char quest_text[10][80];

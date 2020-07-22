@@ -1,5 +1,6 @@
 ﻿#include "realm/realm-nature.h"
 #include "cmd-action/cmd-spell.h"
+#include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"
@@ -8,9 +9,9 @@
 #include "monster-floor/place-monster-types.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
+#include "player-attack/player-attack.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "spell-kind/earthquake.h"
@@ -22,6 +23,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
+#include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/process-effect.h"
 #include "spell/spells-diceroll.h"
@@ -29,7 +31,9 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
-#include "spell/spells3.h"
+#include "status/bad-status-setter.h"
+#include "status/buff-setter.h"
+#include "status/element-resistance.h"
 #include "sv-definition/sv-food-types.h"
 #include "view/display-messages.h"
 
@@ -119,7 +123,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 				msg_print(_("食料を生成した。", "A food ration is produced."));
 
 				/* Create the food ration */
-				object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+				object_prep(caster_ptr, q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
 
 				/* Drop the object from heaven */
 				(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);

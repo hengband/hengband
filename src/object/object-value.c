@@ -1,16 +1,17 @@
 ﻿#include "object/object-value.h"
-#include "object-enchant/artifact.h"
-#include "object-enchant/tr-types.h"
-#include "perception/object-perception.h"
-#include "object/object-broken.h"
+#include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/special-object-flags.h"
+#include "object-enchant/tr-types.h"
+#include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
+#include "object/object-broken.h"
 #include "object/object-flags.h"
-#include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
-#include "object-enchant/special-object-flags.h"
-#include "monster-race/monster-race.h"
+#include "perception/object-perception.h"
+#include "system/artifact-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -78,7 +79,7 @@ static PRICE object_value_base(object_type *o_ptr)
  * Note that discounted items stay discounted forever, even if\n
  * the discount is "forgotten" by the player via memory loss.\n
  */
-PRICE object_value(object_type *o_ptr)
+PRICE object_value(player_type *player_ptr, object_type *o_ptr)
 {
     PRICE value;
 
@@ -88,7 +89,7 @@ PRICE object_value(object_type *o_ptr)
         if (object_is_cursed(o_ptr))
             return (0L);
 
-        value = object_value_real(o_ptr);
+        value = object_value_real(player_ptr, o_ptr);
     } else {
         if ((o_ptr->ident & (IDENT_SENSE)) && object_is_broken(o_ptr))
             return (0L);
@@ -130,7 +131,7 @@ PRICE object_value(object_type *o_ptr)
  *\n
  * Every wearable item with a "pval" bonus is worth extra (see below).\n
  */
-PRICE object_value_real(object_type *o_ptr)
+PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
@@ -139,14 +140,14 @@ PRICE object_value_real(object_type *o_ptr)
         return (0L);
 
     PRICE value = k_info[o_ptr->k_idx].cost;
-    object_flags(o_ptr, flgs);
+    object_flags(player_ptr, o_ptr, flgs);
     if (object_is_fixed_artifact(o_ptr)) {
         artifact_type *a_ptr = &a_info[o_ptr->name1];
         if (!a_ptr->cost)
             return (0L);
 
         value = a_ptr->cost;
-        value += flag_cost(o_ptr, o_ptr->pval);
+        value += flag_cost(player_ptr, o_ptr, o_ptr->pval);
         return (value);
     } else if (object_is_ego(o_ptr)) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
@@ -154,7 +155,7 @@ PRICE object_value_real(object_type *o_ptr)
             return (0L);
 
         value += e_ptr->cost;
-        value += flag_cost(o_ptr, o_ptr->pval);
+        value += flag_cost(player_ptr, o_ptr, o_ptr->pval);
     } else {
         bool flag = FALSE;
         for (int i = 0; i < TR_FLAG_SIZE; i++)
@@ -162,7 +163,7 @@ PRICE object_value_real(object_type *o_ptr)
                 flag = TRUE;
 
         if (flag)
-            value += flag_cost(o_ptr, o_ptr->pval);
+            value += flag_cost(player_ptr, o_ptr, o_ptr->pval);
     }
 
     /* Analyze pval bonus for normal object */

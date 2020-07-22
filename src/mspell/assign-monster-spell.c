@@ -9,6 +9,7 @@
 #include "mspell/mspell-bolt.h"
 #include "mspell/mspell-breath.h"
 #include "mspell/mspell-curse.h"
+#include "mspell/mspell-dispel.h"
 #include "mspell/mspell-floor.h"
 #include "mspell/mspell-particularity.h"
 #include "mspell/mspell-special.h"

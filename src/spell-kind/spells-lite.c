@@ -1,18 +1,23 @@
 ﻿#include "spell-kind/spells-lite.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
+#include "io/targeting.h"
+#include "mind/mind-ninja.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "player/player-effects.h"
-#include "spell/process-effect.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-launcher.h"
+#include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -207,7 +212,7 @@ static void cave_temp_room_aux(player_type *caster_ptr, POSITION y, POSITION x, 
             return;
         if (!in_bounds2(floor_ptr, y, x))
             return;
-        if (distance(caster_ptr->y, caster_ptr->x, y, x) > MAX_RANGE)
+        if (distance(caster_ptr->y, caster_ptr->x, y, x) > get_max_range(caster_ptr))
             return;
 
         /* Verify this grid */

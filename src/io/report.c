@@ -7,11 +7,11 @@
 
 #include "io/report.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/turn-compensator.h"
 #include "core/visuals-reseter.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
 #include "io/inet.h"
@@ -21,6 +21,7 @@
 #include "player/player-race.h"
 #include "realm/realm-names-table.h"
 #include "system/angband-version.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -212,7 +213,7 @@ static bool http_post(int sd, concptr url, BUF *buf)
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
-static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
+static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_playtime)(void), display_player_pf display_player)
 {
 	char		buf[1024];
 	FILE *fff;
@@ -232,7 +233,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_play
 	}
 
 	/* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
-	make_character_dump(creature_ptr, fff, update_playtime, display_player, map_name);
+	make_character_dump(creature_ptr, fff, update_playtime, display_player);
 	angband_fclose(fff);
 
 	/* Open for read */
@@ -268,7 +269,7 @@ concptr make_screen_dump(player_type *creature_ptr, void(*process_autopick_file_
 	};
 
 	int wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 
 	/* Alloc buffer */
 	BUF *screen_buf;
@@ -306,7 +307,7 @@ concptr make_screen_dump(player_type *creature_ptr, void(*process_autopick_file_
 			int rv, gv, bv;
 			concptr cc = NULL;
 			/* Get the attr/char */
-			(void)(Term_what(x, y, &a, &c));
+			(void)(term_what(x, y, &a, &c));
 
 			switch (c)
 			{
@@ -377,7 +378,7 @@ concptr make_screen_dump(player_type *creature_ptr, void(*process_autopick_file_
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return 正常終了の時0、異常があったら1
  */
-errr report_score(player_type *creature_ptr, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
+errr report_score(player_type *creature_ptr, void(*update_playtime)(void), display_player_pf display_player)
 {
 #ifdef WINDOWS
 	WSADATA wsaData;
@@ -418,7 +419,7 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 	buf_sprintf(score, "killer: %s\n", creature_ptr->died_from);
 	buf_sprintf(score, "-----charcter dump-----\n");
 
-	make_dump(creature_ptr, score, update_playtime, display_player, map_name);
+	make_dump(creature_ptr, score, update_playtime, display_player);
 
 	if (screen_dump)
 	{
@@ -437,7 +438,7 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 	}
 #endif
 
-	Term_clear();
+	term_clear();
 
 	int sd;
 	while (TRUE)
@@ -448,7 +449,7 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 #else
 		prt("connecting...", 0, 0);
 #endif
-		Term_fresh();
+		term_fresh();
 
 		/* プロキシを設定する */
 		set_proxy(HTTP_PROXY, HTTP_PROXY_PORT);
@@ -486,7 +487,7 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 #else
 		prt("Sending the score...", 0, 0);
 #endif
-		Term_fresh();
+		term_fresh();
 
 		if (!http_post(sd, SCORE_PATH, score)) {
 			disconnect_server(sd);

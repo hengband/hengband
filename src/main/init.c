@@ -60,7 +60,6 @@
 #include "market/articles-on-sale.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-kind.h"
 #include "player/player-class.h"
@@ -71,7 +70,9 @@
 #include "store/store.h"
 #include "system/alloc-entries.h"
 #include "system/angband-version.h"
+#include "system/artifact-type-definition.h"
 #include "system/building-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -425,7 +426,7 @@ static void update_header(angband_header *head, void **info, char **name, char *
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-static errr init_info(concptr filename, angband_header *head, void **info, char **name, char **text, char **tag)
+static errr init_info(player_type *player_ptr, concptr filename, angband_header *head, void **info, char **name, char **text, char **tag)
 {
 	/* General buffer */
 	char buf[1024];
@@ -521,7 +522,7 @@ static errr init_info(concptr filename, angband_header *head, void **info, char 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
 
 	/* Grab permissions */
-	safe_setuid_grab();
+	safe_setuid_grab(player_ptr);
 
 	/* Kill the old file */
 	(void)fd_kill(buf);
@@ -590,7 +591,7 @@ static errr init_info(concptr filename, angband_header *head, void **info, char 
  * Initialize the "f_info" array
  * @return エラーコード
  */
-static errr init_f_info(void)
+static errr init_f_info(player_type *player_ptr)
 {
 	/* Init the header */
 	init_header(&f_head, max_f_idx, sizeof(feature_type));
@@ -601,7 +602,7 @@ static errr init_f_info(void)
 	/* Save a pointer to the retouch fake tags */
 	f_head.retouch = retouch_f_info;
 
-	return init_info("f_info", &f_head,
+	return init_info(player_ptr, "f_info", &f_head,
 		(void*)&f_info, &f_name, NULL, &f_tag);
 }
 
@@ -611,7 +612,7 @@ static errr init_f_info(void)
  * Initialize the "k_info" array
  * @return エラーコード
  */
-static errr init_k_info(void)
+static errr init_k_info(player_type *player_ptr)
 {
 	/* Init the header */
 	init_header(&k_head, max_k_idx, sizeof(object_kind));
@@ -619,7 +620,7 @@ static errr init_k_info(void)
 	/* Save a pointer to the parsing function */
 	k_head.parse_info_txt = parse_k_info;
 
-	return init_info("k_info", &k_head,
+	return init_info(player_ptr, "k_info", &k_head,
 		(void*)&k_info, &k_name, &k_text, NULL);
 }
 
@@ -629,7 +630,7 @@ static errr init_k_info(void)
  * Initialize the "a_info" array
  * @return エラーコード
  */
-static errr init_a_info(void)
+static errr init_a_info(player_type *player_ptr)
 {
 	/* Init the header */
 	init_header(&a_head, max_a_idx, sizeof(artifact_type));
@@ -637,7 +638,7 @@ static errr init_a_info(void)
 	/* Save a pointer to the parsing function */
 	a_head.parse_info_txt = parse_a_info;
 
-	return init_info("a_info", &a_head,
+	return init_info(player_ptr, "a_info", &a_head,
 		(void*)&a_info, &a_name, &a_text, NULL);
 }
 
@@ -647,7 +648,7 @@ static errr init_a_info(void)
  * Initialize the "e_info" array
  * @return エラーコード
  */
-static errr init_e_info(void)
+static errr init_e_info(player_type *player_ptr)
 {
 	/* Init the header */
 	init_header(&e_head, max_e_idx, sizeof(ego_item_type));
@@ -655,7 +656,7 @@ static errr init_e_info(void)
 	/* Save a pointer to the parsing function */
 	e_head.parse_info_txt = parse_e_info;
 
-	return init_info("e_info", &e_head,
+	return init_info(player_ptr, "e_info", &e_head,
 		(void*)&e_info, &e_name, &e_text, NULL);
 }
 
@@ -665,7 +666,7 @@ static errr init_e_info(void)
  * Initialize the "r_info" array
  * @return エラーコード
  */
-static errr init_r_info(void)
+static errr init_r_info(player_type *player_ptr)
 {
 	/* Init the header */
 	init_header(&r_head, max_r_idx, sizeof(monster_race));
@@ -673,7 +674,7 @@ static errr init_r_info(void)
 	/* Save a pointer to the parsing function */
 	r_head.parse_info_txt = parse_r_info;
 
-	return init_info("r_info", &r_head,
+	return init_info(player_ptr, "r_info", &r_head,
 		(void*)&r_info, &r_name, &r_text, NULL);
 }
 
@@ -683,7 +684,7 @@ static errr init_r_info(void)
  * Initialize the "d_info" array
  * @return エラーコード
  */
-static errr init_d_info(void)
+static errr init_d_info(player_type *player_ptr)
 {
 	/* Init the header */
 	init_header(&d_head, current_world_ptr->max_d_idx, sizeof(dungeon_type));
@@ -691,7 +692,7 @@ static errr init_d_info(void)
 	/* Save a pointer to the parsing function */
 	d_head.parse_info_txt = parse_d_info;
 
-	return init_info("d_info", &d_head,
+	return init_info(player_ptr, "d_info", &d_head,
 		(void*)&d_info, &d_name, &d_text, NULL);
 }
 
@@ -704,7 +705,7 @@ static errr init_d_info(void)
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-errr init_v_info(void)
+errr init_v_info(player_type *player_ptr)
 {
 	/* Init the header */
 	init_header(&v_head, max_v_idx, sizeof(vault_type));
@@ -712,7 +713,7 @@ errr init_v_info(void)
 	/* Save a pointer to the parsing function */
 	v_head.parse_info_txt = parse_v_info;
 
-	return init_info("v_info", &v_head,
+	return init_info(player_ptr, "v_info", &v_head,
 		(void*)&v_info, &v_name, &v_text, NULL);
 }
 
@@ -722,7 +723,7 @@ errr init_v_info(void)
  * Initialize the "s_info" array
  * @return エラーコード
  */
-static errr init_s_info(void)
+static errr init_s_info(player_type *player_ptr)
 {
 	/* Init the header */
 	init_header(&s_head, MAX_CLASS, sizeof(skill_table));
@@ -730,7 +731,7 @@ static errr init_s_info(void)
 	/* Save a pointer to the parsing function */
 	s_head.parse_info_txt = parse_s_info;
 
-	return init_info("s_info", &s_head,
+	return init_info(player_ptr, "s_info", &s_head,
 		(void*)&s_info, NULL, NULL, NULL);
 }
 
@@ -740,7 +741,7 @@ static errr init_s_info(void)
  * Initialize the "m_info" array
  * @return エラーコード
  */
-static errr init_m_info(void)
+static errr init_m_info(player_type *player_ptr)
 {
 	/* Init the header */
 	init_header(&m_head, MAX_CLASS, sizeof(player_magic));
@@ -748,7 +749,7 @@ static errr init_m_info(void)
 	/* Save a pointer to the parsing function */
 	m_head.parse_info_txt = parse_m_info;
 
-	return init_info("m_info", &m_head,
+	return init_info(player_ptr, "m_info", &m_head,
 		(void*)&m_info, NULL, NULL, NULL);
 }
 
@@ -1188,11 +1189,11 @@ static errr init_alloc(void)
  * Hack -- take notes on line 23
  * @return なし
  */
-static void note(concptr str)
+static void init_note(concptr str)
 {
-	Term_erase(0, 23, 255);
-	Term_putstr(20, 23, -1, TERM_WHITE, str);
-	Term_fresh();
+	term_erase(0, 23, 255);
+	term_putstr(20, 23, -1, TERM_WHITE, str);
+	term_fresh();
 }
 
 
@@ -1257,7 +1258,7 @@ static void init_angband_aux(concptr why)
  * be available when this function is called is the "z-term.c"
  * package, and that may not be fully initialized until the
  * end of this function, when the default "user pref files"
- * are loaded and "Term_xtra(TERM_XTRA_REACT,0)" is called.
+ * are loaded and "term_xtra(TERM_XTRA_REACT,0)" is called.
  * Note that this function attempts to verify the "news" file,
  * and the game aborts (cleanly) on failure, since without the
  * "news" file, it is likely that the "lib" folder has not been
@@ -1309,7 +1310,7 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	(void)fd_close(fd);
 
 	/*** Display the "news" file ***/
-	Term_clear();
+	term_clear();
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
 	/* Open the News file */
@@ -1324,13 +1325,13 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 		while (0 == angband_fgets(fp, buf, sizeof(buf)))
 		{
 			/* Display and advance */
-			Term_putstr(0, i++, -1, TERM_WHITE, buf);
+			term_putstr(0, i++, -1, TERM_WHITE, buf);
 		}
 
 		angband_fclose(fp);
 	}
 
-	Term_flush();
+	term_flush();
 
 	/*** Verify (or create) the "high score" file ***/
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
@@ -1342,7 +1343,7 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	if (fd < 0)
 	{
 		/* Grab permissions */
-		safe_setuid_grab();
+		safe_setuid_grab(player_ptr);
 
 		/* Create a new high score file */
 		fd = fd_make(buf, file_permission);
@@ -1369,42 +1370,35 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	/*** Initialize some arrays ***/
 
 	/* Initialize misc. values */
-	note(_("[変数を初期化しています...(その他)", "[Initializing values... (misc)]"));
+	init_note(_("[変数を初期化しています...(その他)", "[Initializing values... (misc)]"));
 	if (init_misc(player_ptr)) quit(_("その他の変数を初期化できません", "Cannot initialize misc. values"));
 
-	/* Initialize feature info */
-#ifdef JP
-	note("[データの初期化中... (地形)]");
-	if (init_f_info()) quit("地形初期化不能");
-	if (init_feat_variables()) quit("地形初期化不能");
-#else
-	note("[Initializing arrays... (features)]");
-	if (init_f_info()) quit("Cannot initialize features");
-	if (init_feat_variables()) quit("Cannot initialize features");
-#endif
+	init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
+	if (init_f_info(player_ptr)) quit(_("地形初期化不能", "Cannot initialize features"));
+	if (init_feat_variables()) quit(_("地形初期化不能", "Cannot initialize features"));
 
 	/* Initialize object info */
-	note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
-	if (init_k_info()) quit(_("アイテム初期化不能", "Cannot initialize objects"));
+	init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
+	if (init_k_info(player_ptr)) quit(_("アイテム初期化不能", "Cannot initialize objects"));
 
 	/* Initialize artifact info */
-	note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
-	if (init_a_info()) quit(_("伝説のアイテム初期化不能", "Cannot initialize artifacts"));
+	init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
+	if (init_a_info(player_ptr)) quit(_("伝説のアイテム初期化不能", "Cannot initialize artifacts"));
 
 
 	/* Initialize ego-item info */
-	note(_("[データの初期化中... (名のあるアイテム)]", "[Initializing arrays... (ego-items)]"));
-	if (init_e_info()) quit(_("名のあるアイテム初期化不能", "Cannot initialize ego-items"));
+	init_note(_("[データの初期化中... (名のあるアイテム)]", "[Initializing arrays... (ego-items)]"));
+	if (init_e_info(player_ptr)) quit(_("名のあるアイテム初期化不能", "Cannot initialize ego-items"));
 
 
 	/* Initialize monster info */
-	note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
-	if (init_r_info()) quit(_("モンスター初期化不能", "Cannot initialize monsters"));
+	init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
+	if (init_r_info(player_ptr)) quit(_("モンスター初期化不能", "Cannot initialize monsters"));
 
 
 	/* Initialize dungeon info */
-	note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
-	if (init_d_info()) quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
+	init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
+	if (init_d_info(player_ptr)) quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
 	{
 		for (int i = 1; i < current_world_ptr->max_d_idx; i++)
 			if (d_info[i].final_guardian)
@@ -1412,45 +1406,45 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	}
 
 	/* Initialize magic info */
-	note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
-	if (init_m_info()) quit(_("魔法初期化不能", "Cannot initialize magic"));
+	init_note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
+	if (init_m_info(player_ptr)) quit(_("魔法初期化不能", "Cannot initialize magic"));
 
 	/* Initialize weapon_exp info */
-	note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
-	if (init_s_info()) quit(_("熟練度初期化不能", "Cannot initialize skill"));
+	init_note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
+	if (init_s_info(player_ptr)) quit(_("熟練度初期化不能", "Cannot initialize skill"));
 
 	/* Initialize wilderness array */
-	note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
+	init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
 
 	if (init_wilderness()) quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
 
 	/* Initialize town array */
-	note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
+	init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
 	if (init_towns()) quit(_("街を初期化できません", "Cannot initialize towns"));
 
 	/* Initialize building array */
-	note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
+	init_note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
 	if (init_buildings()) quit(_("建物を初期化できません", "Cannot initialize buildings"));
 
 	/* Initialize quest array */
-	note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
+	init_note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
 	if (init_quests()) quit(_("クエストを初期化できません", "Cannot initialize quests"));
 
 	/* Initialize vault info */
-	if (init_v_info()) quit(_("vault 初期化不能", "Cannot initialize vaults"));
+	if (init_v_info(player_ptr)) quit(_("vault 初期化不能", "Cannot initialize vaults"));
 
 	/* Initialize some other arrays */
-	note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));
+	init_note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));
 	if (init_other(player_ptr)) quit(_("その他のデータ初期化不能", "Cannot initialize other stuff"));
 
 	/* Initialize some other arrays */
-	note(_("[データの初期化中... (アロケーション)]", "[Initializing arrays... (alloc)]"));
+	init_note(_("[データの初期化中... (アロケーション)]", "[Initializing arrays... (alloc)]"));
 	if (init_alloc()) quit(_("アロケーション・スタッフ初期化不能", "Cannot initialize alloc stuff"));
 
 	/*** Load default user pref files ***/
 
 	/* Initialize feature info */
-	note(_("[ユーザー設定ファイルを初期化しています...]", "[Initializing user pref files...]"));
+	init_note(_("[ユーザー設定ファイルを初期化しています...]", "[Initializing user pref files...]"));
 
 	/* Access the "basic" pref file */
 	strcpy(buf, "pref.prf");
@@ -1464,7 +1458,7 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	/* Process that file */
 	process_pref_file(player_ptr, buf, process_autopick_file_command);
 
-	note(_("[初期化終了]", "[Initialization complete]"));
+	init_note(_("[初期化終了]", "[Initialization complete]"));
 }
 
 

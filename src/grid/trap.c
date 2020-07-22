@@ -1,11 +1,13 @@
 ﻿#include "grid/trap.h"
-#include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-save.h"
+#include "core/disturbance.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor-save.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
@@ -20,10 +22,9 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-util.h"
 #include "player/eldritch-horror.h"
+#include "status/bad-status-setter.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
 #include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
@@ -33,6 +34,9 @@
 #include "spell/process-effect.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
+#include "status/base-status.h"
+#include "status/element-resistance.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -440,7 +444,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 		else
 		{
 			msg_print(_("落とし戸に落ちた！", "You have fallen through a trap door!"));
-			if (IS_ECHIZEN(trapped_ptr))
+			if (is_echizen(trapped_ptr))
 				msg_print(_("くっそ～！", ""));
 			else if((trapped_ptr->pseikaku == PERSONALITY_CHARGEMAN))
 				msg_print(_("ジュラル星人の仕業に違いない！", ""));

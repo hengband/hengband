@@ -6,13 +6,13 @@
  */
 
 #include "object-enchant/apply-magic-accessory.h"
-#include "object-enchant/artifact.h"
+#include "artifact/random-art-generator.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-ring-types.h"

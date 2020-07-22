@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "combat/hallucination-attacks-table.h"
+﻿#include "combat/hallucination-attacks-table.h"
 
 /*!
   * @brief 幻覚時の打撃記述テーブル / Weird melee attack types when hallucinating

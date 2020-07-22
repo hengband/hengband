@@ -7,6 +7,9 @@
 #include "melee/monster-attack-monster.h"
 #include "combat/attack-accuracy.h"
 #include "combat/hallucination-attacks-table.h"
+#include "core/disturbance.h"
+#include "core/player-redraw-types.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
@@ -24,11 +27,11 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
-#include "player/player-move.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /* todo モンスター共通なので、monster-attack-player.cでも使うはず */

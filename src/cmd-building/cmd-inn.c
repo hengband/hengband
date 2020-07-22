@@ -4,8 +4,9 @@
 #include "game-option/birth-options.h"
 #include "io/write-diary.h"
 #include "market/building-actions-table.h"
+#include "status/bad-status-setter.h"
+#include "player/digestion-processor.h"
 #include "player/eldritch-horror.h"
-#include "player/player-effects.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "store/rumor.h"
@@ -151,7 +152,7 @@ static void charge_magic_eating_energy(player_type *customer_ptr)
 		customer_ptr->magic_num1[i] = customer_ptr->magic_num2[i] * EATER_CHARGE;
 	}
 
-	for (; i < 108; i++)
+	for (; i < MAX_SPELLS; i++)
 	{
 		customer_ptr->magic_num1[i] = 0;
 	}

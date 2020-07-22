@@ -12,8 +12,12 @@
 #include "combat/aura-counterattack.h"
 #include "combat/combat-options-type.h"
 #include "combat/hallucination-attacks-table.h"
+#include "core/disturbance.h"
+#include "core/player-update-types.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
+#include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
@@ -25,22 +29,27 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
-#include "monster/monster-description-types.h"
 #include "monster/monster-describer.h"
-#include "monster/monster-status.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-armor.h"
+#include "object/item-tester-hooker.h"
 #include "pet/pet-fall-off.h"
+#include "player/attack-defense-types.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
 #include "player/player-skill.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "status/action-setter.h"
+#include "status/bad-status-setter.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
@@ -264,7 +273,7 @@ static void describe_attack_evasion(player_type *target_ptr, monap_type *monap_p
 
 static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (!object_is_armour(&target_ptr->inventory_list[INVEN_RARM]) && !object_is_armour(&target_ptr->inventory_list[INVEN_LARM]))
+    if (!object_is_armour(target_ptr, &target_ptr->inventory_list[INVEN_RARM]) && !object_is_armour(target_ptr, &target_ptr->inventory_list[INVEN_LARM]))
         return;
 
     int cur = target_ptr->skill_exp[GINOU_SHIELD];

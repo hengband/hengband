@@ -1,6 +1,7 @@
 ﻿#include "core/asking-player.h"
 #include "cmd-io/macro-util.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
@@ -39,7 +40,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
     byte color = TERM_YELLOW;
 
     int y, x;
-    Term_locate(&x, &y);
+    term_locate(&x, &y);
     if (len < 1)
         len = 1;
     if ((x < 0) || (x >= 80))
@@ -51,10 +52,10 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 
     int pos = 0;
     while (TRUE) {
-        Term_erase(x, y, len);
-        Term_putstr(x, y, -1, color, buf);
+        term_erase(x, y, len);
+        term_putstr(x, y, -1, color, buf);
 
-        Term_gotoxy(x + pos, y);
+        term_gotoxy(x + pos, y);
         int skey = inkey_special(numpad_cursor);
 
         switch (skey) {

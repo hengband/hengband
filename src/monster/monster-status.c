@@ -1,11 +1,15 @@
 ﻿#include "monster/monster-status.h"
-#include "art-definition/art-bow-types.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-draw.h"
+#include "cmd-visual/cmd-draw.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
@@ -16,6 +20,7 @@
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-ninja.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-floor/monster-death.h"
@@ -46,11 +51,12 @@
 #include "mspell/mspell-mask-definitions.h"
 #include "object-enchant/object-curse.h"
 #include "player/avatar.h"
-#include "player/player-effects.h"
 #include "player/player-personalities-types.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell/spells-summon.h"
-#include "view/display-main-window.h"
+#include "status/experience.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -903,7 +909,7 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
 		reset_target(m_ptr);
 		handle_stuff(target_ptr);
 
-		if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
+		if (vs_player) term_xtra(TERM_XTRA_DELAY, 500);
 	}
 
 	target_ptr->redraw |= (PR_MAP);
@@ -998,7 +1004,7 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
 	m_ptr->dealt_damage = 0;
 
 	/* Extract the monster base speed */
-	m_ptr->mspeed = get_mspeed(target_ptr, r_ptr);
+	m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
 	/* Sub-alignment of a monster */
 	if (!is_pet(m_ptr) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
@@ -1349,7 +1355,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		else if (!m_ptr->ml)
 		{
 #ifdef JP
-			if (IS_ECHIZEN(target_ptr))
+			if (is_echizen(target_ptr))
 				msg_format("せっかくだから%sを殺した。", m_name);
 			else
 				msg_format("%sを殺した。", m_name);
@@ -1375,7 +1381,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 			else
 			{
 #ifdef JP
-				if (IS_ECHIZEN(target_ptr))
+				if (is_echizen(target_ptr))
 					msg_format("せっかくだから%sを倒した。", m_name);
 				else
 					msg_format("%sを倒した。", m_name);
@@ -1389,7 +1395,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		else
 		{
 #ifdef JP
-			if (IS_ECHIZEN(target_ptr))
+			if (is_echizen(target_ptr))
 				msg_format("せっかくだから%sを葬り去った。", m_name);
 			else
 				msg_format("%sを葬り去った。", m_name);

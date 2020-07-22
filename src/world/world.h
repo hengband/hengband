@@ -1,8 +1,10 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define MAX_BOUNTY 20
 
-typedef struct {
+typedef struct world_type {
 
 	POSITION max_wild_x; /*!< Maximum size of the wilderness */
 	POSITION max_wild_y; /*!< Maximum size of the wilderness */
@@ -67,6 +69,8 @@ typedef struct {
 
 } world_type;
 
-extern bool is_daytime(void);
-extern void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min);
 extern world_type *current_world_ptr;
+
+bool is_daytime(void);
+void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min);
+void update_playtime(void);

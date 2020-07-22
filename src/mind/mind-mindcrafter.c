@@ -1,11 +1,15 @@
 ﻿#include "mind/mind-mindcrafter.h"
 #include "autopick/autopick.h"
+#include "core/player-update-types.h"
+#include "core/window-redrawer.h"
+#include "flavor/flag-inscriptions-table.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
+#include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
-#include "inventory/player-inventory.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "perception/simple-perception.h"
@@ -42,7 +46,7 @@ bool psychometry(player_type *caster_ptr)
 
     item_feel_type feel = pseudo_value_check_heavy(o_ptr);
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     if (!feel) {
         msg_format(_("%sからは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the %s."), o_name);

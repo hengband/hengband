@@ -1,4 +1,6 @@
 ﻿#include "effect/effect-monster-psi.h"
+#include "core/player-redraw-types.h"
+#include "core/window-redrawer.h"
 #include "floor/floor.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/monster-race.h"
@@ -8,8 +10,8 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
+#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

@@ -6,8 +6,13 @@
 #include "effect/effect-monster.h"
 #include "effect/effect-player.h"
 #include "effect/spells-effect-util.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/special-options.h"
+#include "grid/feature-flag-types.h"
+#include "io/cursor.h"
+#include "io/screen-util.h"
+#include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
@@ -19,9 +24,9 @@
 #include "pet/pet-fall-off.h"
 #include "spell/spell-types.h"
 #include "spell/range-calc.h"
+#include "system/floor-type-definition.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h" // 暫定、後で消すかも.
 #include "view/display-messages.h"
 
 /*!
@@ -170,7 +175,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
     }
 
     /* Calculate the projection path */
-    path_n = project_path(caster_ptr, path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flag);
+    path_n = project_path(caster_ptr, path_g, (project_length ? project_length : get_max_range(caster_ptr)), y1, x1, y2, x2, flag);
     handle_stuff(caster_ptr);
 
     if (typ == GF_SEEKER) {
@@ -197,10 +202,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
                     SYMBOL_CODE c = PICT_C(p);
                     print_rel(caster_ptr, c, a, y, x);
                     move_cursor_relative(y, x);
-                    Term_fresh();
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_fresh();
+                    term_xtra(TERM_XTRA_DELAY, msec);
                     lite_spot(caster_ptr, y, x);
-                    Term_fresh();
+                    term_fresh();
                     if (flag & (PROJECT_BEAM)) {
                         p = bolt_pict(y, x, y, x, typ);
                         a = PICT_A(p);
@@ -210,7 +215,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
                     visual = TRUE;
                 } else if (visual) {
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_xtra(TERM_XTRA_DELAY, msec);
                 }
             }
 
@@ -223,7 +228,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
             monster_target_x = x;
             remove_mirror(caster_ptr, y, x);
             next_mirror(caster_ptr, &oy, &ox, y, x);
-            path_n = i + project_path(caster_ptr, &(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flag);
+            path_n = i + project_path(caster_ptr, &(path_g[i + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, oy, ox, flag);
             for (j = last_i; j <= i; j++) {
                 y = GRID_Y(path_g[j]);
                 x = GRID_X(path_g[j]);
@@ -292,10 +297,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
                     c = PICT_C(p);
                     print_rel(caster_ptr, c, a, y, x);
                     move_cursor_relative(y, x);
-                    Term_fresh();
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_fresh();
+                    term_xtra(TERM_XTRA_DELAY, msec);
                     lite_spot(caster_ptr, y, x);
-                    Term_fresh();
+                    term_fresh();
                     if (flag & (PROJECT_BEAM)) {
                         p = bolt_pict(y, x, y, x, typ);
                         a = PICT_A(p);
@@ -305,7 +310,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
                     visual = TRUE;
                 } else if (visual) {
-                    Term_xtra(TERM_XTRA_DELAY, msec);
+                    term_xtra(TERM_XTRA_DELAY, msec);
                 }
             }
 
@@ -329,14 +334,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
                 path_n = i;
                 second_step = i + 1;
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x - 1, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x + 1, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x - 1, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x + 1, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x - 1, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x + 1, flag);
+                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x - 1, flag);
+                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x, flag);
+                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x + 1, flag);
+                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x - 1, flag);
+                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x + 1, flag);
+                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x - 1, flag);
+                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x, flag);
+                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x + 1, flag);
             }
         }
 
@@ -397,10 +402,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
                 c = PICT_C(p);
                 print_rel(caster_ptr, c, a, y, x);
                 move_cursor_relative(y, x);
-                Term_fresh();
-                Term_xtra(TERM_XTRA_DELAY, msec);
+                term_fresh();
+                term_xtra(TERM_XTRA_DELAY, msec);
                 lite_spot(caster_ptr, y, x);
-                Term_fresh();
+                term_fresh();
                 if (flag & (PROJECT_BEAM)) {
                     p = bolt_pict(y, x, y, x, typ);
                     a = PICT_A(p);
@@ -410,7 +415,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
                 visual = TRUE;
             } else if (visual) {
-                Term_xtra(TERM_XTRA_DELAY, msec);
+                term_xtra(TERM_XTRA_DELAY, msec);
             }
         }
     }
@@ -433,7 +438,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
     project_length = 0;
 
     /* If we found a "target", explode there */
-    if (dist <= MAX_RANGE) {
+    if (dist <= get_max_range(caster_ptr)) {
         if ((flag & (PROJECT_BEAM)) && (grids > 0))
             grids--;
 
@@ -506,9 +511,9 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
             }
 
             move_cursor_relative(by, bx);
-            Term_fresh();
+            term_fresh();
             if (visual || drawn) {
-                Term_xtra(TERM_XTRA_DELAY, msec);
+                term_xtra(TERM_XTRA_DELAY, msec);
             }
         }
 
@@ -522,7 +527,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
             }
 
             move_cursor_relative(by, bx);
-            Term_fresh();
+            term_fresh();
         }
     }
 

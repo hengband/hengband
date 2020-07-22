@@ -594,8 +594,8 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 	case EC_INSERT_MACRO:
 	{
 		draw_text_editor(player_ptr, tb);
-		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
-		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, _("P:<トリガーキー>: ", "P:<Trigger key>: "));
+		term_erase(0, tb->cy - tb->upper + 1, tb->wid);
+		term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, _("P:<トリガーキー>: ", "P:<Trigger key>: "));
 		if (!insert_macro_line(tb)) break;
 
 		tb->cx = 2;
@@ -606,8 +606,8 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 	case EC_INSERT_KEYMAP:
 	{
 		draw_text_editor(player_ptr, tb);
-		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
-		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW,
+		term_erase(0, tb->cy - tb->upper + 1, tb->wid);
+		term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW,
 			format(_("C:%d:<コマンドキー>: ", "C:%d:<Keypress>: "), (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
 
 		if (!insert_keymap_line(tb)) break;

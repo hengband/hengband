@@ -4,9 +4,13 @@
 #include "art-definition/art-protector-types.h"
 #include "art-definition/art-weapon-types.h"
 #include "art-definition/random-art-effects.h"
+#include "artifact/fixed-art-generator.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
@@ -34,19 +38,20 @@
 #include "monster/monster-list.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/apply-magic.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "pet/pet-fall-off.h"
 #include "player/patron.h"
 #include "spell/process-effect.h"
-#include "spell/spells-summon.h"
 #include "spell/spell-types.h"
+#include "spell/spells-summon.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/system-variables.h"
 #include "view/display-messages.h"
@@ -161,7 +166,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
         if (arena_info[player_ptr->arena_number].tval) {
             q_ptr = &forge;
-            object_prep(q_ptr, lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
+            object_prep(player_ptr, q_ptr, lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
             apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
             (void)drop_near(player_ptr, q_ptr, -1, y, x);
         }
@@ -201,7 +206,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         }
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
         apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
         q_ptr->pval = m_ptr->r_idx;
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
@@ -247,7 +252,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
             break;
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
         apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | mo_mode);
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
         break;
@@ -339,12 +344,12 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
             break;
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
         q_ptr->name1 = ART_GROND;
         apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
         q_ptr->name1 = ART_CHAOS;
         apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
@@ -355,7 +360,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
             break;
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_SWORD, randint1(2)));
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
         break;
     }
@@ -369,15 +374,66 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
             break;
 
         q_ptr = &forge;
-        object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
+        object_prep(player_ptr, q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
         apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
         (void)drop_near(player_ptr, q_ptr, -1, y, x);
         break;
     }
-
     case MON_ROLENTO: {
         BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
         (void)project(player_ptr, m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
+        break;
+    }
+    case MON_MIDDLE_AQUA_FIRST:
+    case MON_LARGE_AQUA_FIRST:
+    case MON_EXTRA_LARGE_AQUA_FIRST:
+    case MON_MIDDLE_AQUA_SECOND:
+    case MON_LARGE_AQUA_SECOND:
+    case MON_EXTRA_LARGE_AQUA_SECOND: {
+        if (floor_ptr->inside_arena || player_ptr->phase_out)
+            break;
+
+        bool notice = FALSE;
+        const int popped_bubbles = 4;
+        for (int i = 0; i < popped_bubbles; i++) {
+            POSITION wy = y, wx = x;
+            bool pet = is_pet(m_ptr);
+            BIT_FLAGS mode = PM_NONE;
+
+            if (pet)
+                mode |= PM_FORCE_PET;
+
+            MONSTER_IDX smaller_bubblle = m_ptr->r_idx - 1;
+            if (summon_named_creature(player_ptr, (pet ? -1 : m_idx), wy, wx, smaller_bubblle, mode) && player_can_see_bold(player_ptr, wy, wx))
+                notice = TRUE;
+        }
+
+        if (notice)
+            msg_print(_("泡が弾けた！", "The bubble pops!"));
+
+        break;
+    }
+    case MON_TOTEM_MOAI: {
+        if (floor_ptr->inside_arena || player_ptr->phase_out || one_in_(8))
+            break;
+
+        POSITION wy = y, wx = x;
+        int attempts = 100;
+        bool pet = is_pet(m_ptr);
+        do {
+            scatter(player_ptr, &wy, &wx, y, x, 20, 0);
+        } while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
+
+        if (attempts <= 0)
+            break;
+
+        BIT_FLAGS mode = PM_NONE;
+        if (pet)
+            mode |= PM_FORCE_PET;
+
+        if (summon_named_creature(player_ptr, (pet ? -1 : m_idx), wy, wx, MON_TOTEM_MOAI, mode) && player_can_see_bold(player_ptr, wy, wx))
+            msg_print(_("新たなモアイが現れた！", "A new moai steps forth!"));
+
         break;
     }
     default: {
@@ -488,7 +544,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
             if (k_idx != 0) {
                 q_ptr = &forge;
-                object_prep(q_ptr, k_idx);
+                object_prep(player_ptr, q_ptr, k_idx);
                 apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
                 (void)drop_near(player_ptr, q_ptr, -1, y, x);
             }
@@ -533,7 +589,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         object_wipe(q_ptr);
 
         if (do_gold && (!do_item || (randint0(100) < 50))) {
-            if (!make_gold(floor_ptr, q_ptr))
+            if (!make_gold(player_ptr, q_ptr))
                 continue;
             dump_gold++;
         } else {

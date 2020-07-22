@@ -12,7 +12,6 @@
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-lore.h"
 
 /*!
@@ -150,7 +149,7 @@ bool research_mon(player_type *player_ptr)
     char query = 'y';
 
     if (why) {
-        ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+        ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     }
 
     if (old_sym == sym && old_i < n)
@@ -163,7 +162,7 @@ bool research_mon(player_type *player_ptr)
     while (notpicked) {
         r_idx = who[i];
         roff_top(r_idx);
-        Term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
+        term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
         while (TRUE) {
             if (recall) {
                 lore_do_probe(player_ptr, r_idx);

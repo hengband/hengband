@@ -1,13 +1,22 @@
 ﻿#include "floor/floor-events.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/disturbance.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
+#include "core/window-redrawer.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "floor/cave.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-ninja.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
@@ -16,18 +25,18 @@
 #include "monster/monster-status.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "object-enchant/special-object-flags.h"
+#include "player/special-defense-types.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -154,9 +163,9 @@ MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
   * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
   * @return 算出されたダンジョンの雰囲気ランク
   */
-byte get_dungeon_feeling(floor_type *floor_ptr)
+static byte get_dungeon_feeling(player_type *subject_ptr)
 {
-	/* Hack -- no feeling in the town */
+    floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	if (!floor_ptr->dun_level) return 0;
 
 	/* Examine each monster */
@@ -213,7 +222,7 @@ byte get_dungeon_feeling(floor_type *floor_ptr)
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];
 		int delta = 0;
 
-		if (!OBJECT_IS_VALID(o_ptr)) continue;
+		if (!object_is_valid(o_ptr)) continue;
 
 		/* Skip known objects */
 		if (object_is_known(o_ptr))
@@ -236,7 +245,7 @@ byte get_dungeon_feeling(floor_type *floor_ptr)
 		/* Artifacts */
 		if (object_is_artifact(o_ptr))
 		{
-			PRICE cost = object_value_real(o_ptr);
+			PRICE cost = object_value_real(subject_ptr, o_ptr);
 
 			delta += 10 * base;
 			if (cost > 10000L) delta += 10 * base;
@@ -309,7 +318,7 @@ void update_dungeon_feeling(player_type *subject_ptr)
 
 
 	/* Get new dungeon feeling */
-	byte new_feeling = get_dungeon_feeling(floor_ptr);
+	byte new_feeling = get_dungeon_feeling(subject_ptr);
 
 	/* Remember last time updated */
 	subject_ptr->feeling_turn = current_world_ptr->game_turn;

@@ -6,19 +6,22 @@
 
 #include "combat/aura-counterattack.h"
 #include "effect/effect-characteristics.h"
-#include "floor/floor.h"
 #include "grid/grid.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-armor.h"
+#include "object-hook/hook-checker.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
 static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
@@ -198,7 +201,7 @@ static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *m
     /* Some cursed armours gives an extra effect */
     for (int j = 0; j < 4; j++) {
         o_armed_ptr = &target_ptr->inventory_list[typ[j][0]];
-        if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr) && object_is_armour(o_armed_ptr))
+        if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr) && object_is_armour(target_ptr, o_armed_ptr))
             project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (target_ptr->lev * 2), typ[j][1], flg, -1);
     }
 }

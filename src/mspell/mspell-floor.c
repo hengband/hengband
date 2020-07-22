@@ -5,7 +5,9 @@
  */
 
 #include "mspell/mspell-floor.h"
-#include "art-definition/art-bow-types.h"
+#include "blue-magic/blue-magic-checker.h"
+#include "core/disturbance.h"
+#include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
@@ -20,16 +22,16 @@
 #include "mspell/mspell-status.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspells3.h"
-#include "player/player-move.h"
 #include "player/player-personalities-types.h"
-#include "spell/process-effect.h"
-#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
+#include "spell-realm/spells-hex.h"
+#include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
@@ -210,7 +212,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         _("%^sは%sをテレポートさせた。", "%^s teleports %s away."), TARGET_TYPE);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        if (IS_ECHIZEN(target_ptr))
+        if (is_echizen(target_ptr))
             msg_print(_("くっそ～", ""));
         else if ((target_ptr->pseikaku == PERSONALITY_CHARGEMAN)) {
             if (randint0(2) == 0)

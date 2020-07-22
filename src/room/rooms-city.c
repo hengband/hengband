@@ -8,8 +8,9 @@
 #include "room/rooms.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
 /*
 * Precalculate buildings' location of underground arcade
@@ -255,7 +256,7 @@ bool build_type16(player_type *player_ptr)
 	/* Build stores */
 	build_stores(player_ptr, y1, x1, stores, n);
 
-	msg_print_wizard(CHEAT_DUNGEON, _("地下街を生成しました", "Underground arcade was generated."));
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("地下街を生成しました", "Underground arcade was generated."));
 
 	/* Free buildings array */
 	C_KILL(ugbldg, n, ugbldg_type);

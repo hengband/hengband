@@ -1,8 +1,10 @@
 ﻿#include "view/display-lore-attacks.h"
-#include "locale/japanese.h"
 #include "lore/combat-types-setter.h"
 #include "lore/lore-calculator.h"
 #include "monster-race/race-flags1.h"
+#ifdef JP
+#include "locale/japanese.h"
+#endif
 
 #ifdef JP
 static void display_monster_blows_jp(lore_type *lore_ptr, int attack_numbers, int d1, int d2, int m)

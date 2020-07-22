@@ -5,15 +5,17 @@
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "market/arena.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "object-enchant/artifact.h"
 #include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
 #include "player/player-race-types.h"
+#include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "world/world.h"
 
@@ -136,7 +138,7 @@ void player_wipe_without_name(player_type *creature_ptr)
     creature_ptr->visit = 1;
     creature_ptr->wild_mode = FALSE;
 
-    for (int i = 0; i < 108; i++) {
+    for (int i = 0; i < MAX_SPELLS; i++) {
         creature_ptr->magic_num1[i] = 0;
         creature_ptr->magic_num2[i] = 0;
     }

@@ -13,7 +13,6 @@
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-lore.h"
 
 /*!
@@ -148,7 +147,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     query = inkey();
     prt(buf, 0, 0);
     why = 2;
-    ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     if (query == 'k') {
         why = 4;
         query = 'y';
@@ -160,7 +159,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     }
 
     if (why == 4) {
-        ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+        ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     }
 
     i = n - 1;
@@ -175,7 +174,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
             }
 
             roff_top(r_idx);
-            Term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ESC]", " [(r)ecall, ESC]"));
+            term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ESC]", " [(r)ecall, ESC]"));
             query = inkey();
             if (recall) {
                 screen_load();

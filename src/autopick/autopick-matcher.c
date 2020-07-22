@@ -8,16 +8,23 @@
 #include "autopick/autopick-matcher.h"
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-key-flag-process.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "perception/object-perception.h"
-#include "object/object-hook.h"
 #include "object-enchant/item-feeling.h"
+#include "object-hook/hook-armor.h"
+#include "object-hook/hook-bow.h"
+#include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
+#include "object-hook/hook-quest.h"
+#include "object-hook/hook-weapon.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "object/object-info.h"
 #include "object-enchant/special-object-flags.h"
+#include "player/player-realm.h"
 #include "util/string-processor.h"
 
 /*
@@ -50,7 +57,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 		if ((o_ptr->dd == k_ptr->dd) && (o_ptr->ds == k_ptr->ds))
 			return FALSE;
 
-		if (!object_is_known(o_ptr) && object_is_quest_target(o_ptr))
+		if (!object_is_known(o_ptr) && object_is_quest_target(player_ptr, o_ptr))
 		{
 			return FALSE;
 		}
@@ -80,7 +87,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 		}
 	}
 
-	if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0)
+	if (IS_FLG(FLG_WORTHLESS) && object_value(player_ptr, o_ptr) > 0)
 		return FALSE;
 
 	if (IS_FLG(FLG_ARTIFACT))
@@ -102,7 +109,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 		if (!object_is_equipment(o_ptr)) return FALSE;
 		if (object_is_known(o_ptr))
 		{
-			if (!object_is_nameless(o_ptr))
+			if (!object_is_nameless(player_ptr, o_ptr))
 				return FALSE;
 
 			if (o_ptr->to_a <= 0 && (o_ptr->to_h + o_ptr->to_d) <= 0)
@@ -130,7 +137,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 		if (!object_is_equipment(o_ptr)) return FALSE;
 		if (object_is_known(o_ptr))
 		{
-			if (!object_is_nameless(o_ptr))
+			if (!object_is_nameless(player_ptr, o_ptr))
 				return FALSE;
 		}
 		else if (o_ptr->ident & IDENT_SENSE)
@@ -158,7 +165,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 		if (!object_is_equipment(o_ptr)) return FALSE;
 		if (object_is_known(o_ptr))
 		{
-			if (!object_is_nameless(o_ptr))
+			if (!object_is_nameless(player_ptr, o_ptr))
 				return FALSE;
 
 			if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
@@ -190,7 +197,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 	if (IS_FLG(FLG_COMMON) && object_is_rare(o_ptr))
 		return FALSE;
 
-	if (IS_FLG(FLG_WANTED) && !object_is_bounty(o_ptr))
+	if (IS_FLG(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr))
 		return FALSE;
 
 	if (IS_FLG(FLG_UNIQUE) &&
@@ -208,14 +215,12 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 			check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)))
 		return FALSE;
 
-	if (IS_FLG(FLG_REALM1) &&
-		(REALM1_BOOK != o_ptr->tval ||
+	if (IS_FLG(FLG_REALM1) && (get_realm1_book(player_ptr) != o_ptr->tval ||
 			player_ptr->pclass == CLASS_SORCERER ||
 			player_ptr->pclass == CLASS_RED_MAGE))
 		return FALSE;
 
-	if (IS_FLG(FLG_REALM2) &&
-		(REALM2_BOOK != o_ptr->tval ||
+	if (IS_FLG(FLG_REALM2) && (get_realm2_book(player_ptr) != o_ptr->tval ||
 			player_ptr->pclass == CLASS_SORCERER ||
 			player_ptr->pclass == CLASS_RED_MAGE))
 		return FALSE;
@@ -238,17 +243,17 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 
 	if (IS_FLG(FLG_WEAPONS))
 	{
-		if (!object_is_weapon(o_ptr))
+		if (!object_is_weapon(player_ptr, o_ptr))
 			return FALSE;
 	}
 	else if (IS_FLG(FLG_FAVORITE_WEAPONS))
 	{
-		if (!object_is_favorite(o_ptr))
+		if (!object_is_favorite(player_ptr, o_ptr))
 			return FALSE;
 	}
 	else if (IS_FLG(FLG_ARMORS))
 	{
-		if (!object_is_armour(o_ptr))
+		if (!object_is_armour(player_ptr, o_ptr))
 			return FALSE;
 	}
 	else if (IS_FLG(FLG_MISSILES))

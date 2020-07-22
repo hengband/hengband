@@ -5,11 +5,11 @@
  */
 
 #include "effect/effect-monster-util.h"
-#include "floor/floor.h"
 #include "monster-floor/monster-death.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "system/floor-type-definition.h"
 
 /*!
  * @brief affect_monster() に亘ってきた引数をeffect_monster_type構造体に代入する

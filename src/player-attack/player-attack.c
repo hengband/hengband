@@ -6,12 +6,16 @@
 
 #include "player-attack/player-attack.h"
 #include "art-definition/art-sword-types.h"
+#include "cmd-action/cmd-attack.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "combat/martial-arts-table.h"
 #include "combat/slaying.h"
-#include "floor/floor.h"
+#include "core/player-update-types.h"
+#include "floor/cave.h"
 #include "game-option/cheat-types.h"
+#include "grid/feature-flag-types.h"
+#include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
@@ -25,9 +29,8 @@
 #include "monster/monster-info.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/vorpal-weapon.h"
+#include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
@@ -38,8 +41,10 @@
 #include "spell-kind/earthquake.h"
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 #include "world/world.h"
 
 static player_attack_type *initialize_player_attack_type(
@@ -366,7 +371,7 @@ static void apply_actual_attack(
     sound(SOUND_HIT);
     print_surprise_attack(pa_ptr);
 
-    object_flags(o_ptr, pa_ptr->flags);
+    object_flags(attacker_ptr, o_ptr, pa_ptr->flags);
     pa_ptr->chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
     decide_blood_sucking(attacker_ptr, pa_ptr);
 
@@ -381,7 +386,7 @@ static void apply_actual_attack(
     pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage,
         (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
     critical_attack(attacker_ptr, pa_ptr);
-    msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
+    msg_format_wizard(attacker_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
         pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);
 }
 
@@ -475,4 +480,23 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         chg_virtue(attacker_ptr, V_UNLIFE, 1);
 
     cause_earthquake(attacker_ptr, pa_ptr, do_quake, y, x);
+}
+
+/*!
+ * @brief 皆殺し(全方向攻撃)処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void massacre(player_type *caster_ptr)
+{
+    grid_type *g_ptr;
+    monster_type *m_ptr;
+    for (DIRECTION dir = 0; dir < 8; dir++) {
+        POSITION y = caster_ptr->y + ddy_ddd[dir];
+        POSITION x = caster_ptr->x + ddx_ddd[dir];
+        g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
+        m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+        if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
+            do_cmd_attack(caster_ptr, y, x, 0);
+    }
 }

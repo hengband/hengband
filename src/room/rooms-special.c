@@ -1,4 +1,5 @@
 ﻿#include "room/rooms-special.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
@@ -13,8 +14,9 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind-hook.h"
 #include "room/rooms.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
-#include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
 /*!
 * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms
@@ -252,7 +254,6 @@ bool build_type15(player_type *player_ptr)
 	break;
 	}
 
-	msg_print_wizard(CHEAT_DUNGEON, _("ガラスの部屋が生成されました。", "Glass room was generated."));
-
+	msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("ガラスの部屋が生成されました。", "Glass room was generated."));
 	return TRUE;
 }

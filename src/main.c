@@ -45,6 +45,66 @@
 #if !defined(WINDOWS)
 
 /*
+ * Nuke a term
+ */
+static errr term_nuke(term_type *t)
+{
+    TERM_LEN w = t->wid;
+    TERM_LEN h = t->hgt;
+
+    /* Call the special "nuke" hook */
+    if (t->active_flag) {
+        /* Call the "nuke" hook */
+        if (t->nuke_hook)
+            (*t->nuke_hook)(t);
+
+        /* Remember */
+        t->active_flag = FALSE;
+
+        /* Assume not mapped */
+        t->mapped_flag = FALSE;
+    }
+
+    /* Nuke "displayed" */
+    term_win_nuke(t->old, w, h);
+
+    /* Kill "displayed" */
+    KILL(t->old, term_win);
+
+    /* Nuke "requested" */
+    term_win_nuke(t->scr, w, h);
+
+    /* Kill "requested" */
+    KILL(t->scr, term_win);
+
+    /* If needed */
+    if (t->mem) {
+        /* Nuke "memorized" */
+        term_win_nuke(t->mem, w, h);
+
+        /* Kill "memorized" */
+        KILL(t->mem, term_win);
+    }
+
+    /* If needed */
+    if (t->tmp) {
+        /* Nuke "temporary" */
+        term_win_nuke(t->tmp, w, h);
+
+        /* Kill "temporary" */
+        KILL(t->tmp, term_win);
+    }
+
+    /* Free some arrays */
+    C_KILL(t->x1, h, TERM_LEN);
+    C_KILL(t->x2, h, TERM_LEN);
+
+    /* Free the input queue */
+    C_KILL(t->key_queue, t->key_size, char);
+    return 0;
+}
+
+/*
  * A hook for "quit()".
  *
  * Close down, then fall back into "quit()".

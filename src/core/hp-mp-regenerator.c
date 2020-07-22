@@ -1,9 +1,16 @@
 ﻿#include "core/hp-mp-regenerator.h"
 #include "cmd-item/cmd-magiceat.h"
-#include "floor/floor.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
+#include "core/window-redrawer.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
+#include "player/attack-defense-types.h"
+#include "player/special-defense-types.h"
+#include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
 
 /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
 int wild_regen = 20;
@@ -13,7 +20,7 @@ int wild_regen = 20;
  * @param percent 回復比率
  * @return なし
  */
-void regenhp(player_type* creature_ptr, int percent)
+void regenhp(player_type *creature_ptr, int percent)
 {
     if (creature_ptr->special_defense & KATA_KOUKIJIN)
         return;
@@ -23,10 +30,10 @@ void regenhp(player_type* creature_ptr, int percent)
     HIT_POINT old_chp = creature_ptr->chp;
 
     /*
-	 * Extract the new hitpoints
-	 *
-	 * 'percent' is the Regen factor in unit (1/2^16)
-	 */
+     * Extract the new hitpoints
+     *
+     * 'percent' is the Regen factor in unit (1/2^16)
+     */
     HIT_POINT new_chp = 0;
     u32b new_chp_frac = (creature_ptr->mhp * percent + PY_REGEN_HPBASE);
     s64b_LSHIFT(new_chp, new_chp_frac, 16);
@@ -49,15 +56,15 @@ void regenhp(player_type* creature_ptr, int percent)
  * @param regen_amount 回復量
  * @return なし
  */
-void regenmana(player_type* creature_ptr, MANA_POINT upkeep_factor, MANA_POINT regen_amount)
+void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT regen_amount)
 {
     MANA_POINT old_csp = creature_ptr->csp;
     s32b regen_rate = regen_amount * 100 - upkeep_factor * PY_REGEN_NORMAL;
 
     /*
-	 * Excess mana will decay 32 times faster than normal
-	 * regeneration rate.
-	 */
+     * Excess mana will decay 32 times faster than normal
+     * regeneration rate.
+     */
     if (creature_ptr->csp > creature_ptr->msp) {
         s32b decay = 0;
         u32b decay_frac = (creature_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
@@ -106,7 +113,7 @@ void regenmana(player_type* creature_ptr, MANA_POINT upkeep_factor, MANA_POINT r
  * @param regen_amount 回復量
  * @return なし
  */
-void regenmagic(player_type* creature_ptr, int regen_amount)
+void regenmagic(player_type *creature_ptr, int regen_amount)
 {
     MANA_POINT new_mana;
     int dev = 30;
@@ -137,8 +144,7 @@ void regenmagic(player_type* creature_ptr, int regen_amount)
             continue;
 
         /* Decrease remaining period for charging */
-        new_mana = (regen_amount * mult * ((long)creature_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE)
-            / (dev * 16 * PY_REGEN_NORMAL);
+        new_mana = (regen_amount * mult * ((long)creature_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) / (dev * 16 * PY_REGEN_NORMAL);
         creature_ptr->magic_num1[i] -= new_mana;
 
         /* Check minimum remaining period for charging */
@@ -154,11 +160,11 @@ void regenmagic(player_type* creature_ptr, int regen_amount)
  * @return なし
  * @note Should probably be done during monster turns.
  */
-void regenerate_monsters(player_type* player_ptr)
+void regenerate_monsters(player_type *player_ptr)
 {
     for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        monster_type* m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        monster_race* r_ptr = &r_info[m_ptr->r_idx];
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
         if (!monster_is_valid(m_ptr))
             continue;
@@ -190,12 +196,12 @@ void regenerate_monsters(player_type* player_ptr)
  * @return なし
  * @note Should probably be done during monster turns.
  */
-void regenerate_captured_monsters(player_type* creature_ptr)
+void regenerate_captured_monsters(player_type *creature_ptr)
 {
     bool heal = FALSE;
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        monster_race* r_ptr;
-        object_type* o_ptr = &creature_ptr->inventory_list[i];
+        monster_race *r_ptr;
+        object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         if (o_ptr->tval != TV_CAPTURE)

@@ -10,22 +10,24 @@
  */
 
 #include "cmd-io/cmd-dump.h"
-#include "art-definition/art-bow-types.h"
 #include "cmd-io/feeling-table.h"
 #include "core/asking-player.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
-#include "floor/floor.h"
 #include "io-dump/dump-remover.h"
 #include "io-dump/dump-util.h"
 #include "io/chuukei.h"
+#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/interpret-pref-file.h"
 #include "io/read-pref-file.h"
-#include "main/sound-of-music.h"
 #include "locale/english.h"
+#include "main/sound-of-music.h"
+#include "mutation/mutation-flag-types.h"
+#include "mutation/mutation.h"
 #include "player/player-personalities-types.h"
 #include "system/angband-version.h"
+#include "system/floor-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -65,7 +67,7 @@ void do_cmd_colors(player_type *creature_ptr, void(*process_autopick_file_comman
 	screen_save();
 	while (TRUE)
 	{
-		Term_clear();
+		term_clear();
 		prt(_("[ カラーの設定 ]", "Interact with Colors"), 2, 0);
 		prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
 		prt(_("(2) カラーの設定をファイルに書き出す", "(2) Dump colors"), 5, 5);
@@ -82,8 +84,8 @@ void do_cmd_colors(player_type *creature_ptr, void(*process_autopick_file_comman
 			if (!askfor(tmp, 70)) continue;
 
 			(void)process_pref_file(creature_ptr, tmp, process_autopick_file_command);
-			Term_xtra(TERM_XTRA_REACT, 0);
-			Term_redraw();
+			term_xtra(TERM_XTRA_REACT, 0);
+			term_redraw();
 		}
 		else if (i == '2')
 		{
@@ -127,20 +129,20 @@ void do_cmd_colors(player_type *creature_ptr, void(*process_autopick_file_comman
 				clear_from(10);
 				for (byte j = 0; j < 16; j++)
 				{
-					Term_putstr(j * 4, 20, -1, a, "###");
-					Term_putstr(j * 4, 22, -1, j, format("%3d", j));
+					term_putstr(j * 4, 20, -1, a, "###");
+					term_putstr(j * 4, 22, -1, j, format("%3d", j));
 				}
 
 				name = ((a < 16) ? color_names[a] : _("未定義", "undefined"));
-				Term_putstr(5, 10, -1, TERM_WHITE,
+				term_putstr(5, 10, -1, TERM_WHITE,
 					format(_("カラー = %d, 名前 = %s", "Color = %d, Name = %s"), a, name));
-				Term_putstr(5, 12, -1, TERM_WHITE,
+				term_putstr(5, 12, -1, TERM_WHITE,
 					format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x",
 						angband_color_table[a][0],
 						angband_color_table[a][1],
 						angband_color_table[a][2],
 						angband_color_table[a][3]));
-				Term_putstr(0, 14, -1, TERM_WHITE,
+				term_putstr(0, 14, -1, TERM_WHITE,
 					_("コマンド (n/N/k/K/r/R/g/G/b/B): ", "Command (n/N/k/K/r/R/g/G/b/B): "));
 				i = inkey();
 				if (i == ESCAPE) break;
@@ -156,8 +158,8 @@ void do_cmd_colors(player_type *creature_ptr, void(*process_autopick_file_comman
 				if (i == 'b') angband_color_table[a][3] = (byte)(angband_color_table[a][3] + 1);
 				if (i == 'B') angband_color_table[a][3] = (byte)(angband_color_table[a][3] - 1);
 
-				Term_xtra(TERM_XTRA_REACT, 0);
-				Term_redraw();
+				term_xtra(TERM_XTRA_REACT, 0);
+				term_redraw();
 			}
 		}
 		else
@@ -235,7 +237,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 
 	if (creature_ptr->muta3 & MUT3_GOOD_LUCK)
 		msg_print(do_cmd_feeling_text_lucky[creature_ptr->feeling]);
-	else if (IS_ECHIZEN(creature_ptr))
+	else if (is_echizen(creature_ptr))
 		msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);
 	else
 		msg_print(do_cmd_feeling_text[creature_ptr->feeling]);

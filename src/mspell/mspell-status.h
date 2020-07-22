@@ -3,7 +3,6 @@
 #include "system/angband.h"
 
 void spell_badstatus_message(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool resist, bool saving_throw, int TARGET_TYPE);
-void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type* target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE);
 HIT_POINT spell_RF5_DRAIN_MANA(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE);
 HIT_POINT spell_RF5_MIND_BLAST(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE);
 HIT_POINT spell_RF5_BRAIN_SMASH(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE);

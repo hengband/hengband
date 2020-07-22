@@ -1,5 +1,4 @@
 ﻿/*!
- * @file hissatsu.c
  * @brief 剣術の実装 / Blade arts
  * @date 2014/01/17
  * @author
@@ -11,27 +10,31 @@
  */
 
 #include "cmd-action/cmd-spell.h"
-#include "cmd/cmd-basic.h"
+#include "action/action-limited.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
+#include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
-#include "inventory/player-inventory.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
 #include "object/item-use-flags.h"
-#include "player/player-effects.h"
+#include "player/attack-defense-types.h"
 #include "player/player-status.h"
+#include "player/special-defense-types.h"
 #include "spell/spells-execution.h"
-#include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
+#include "status/action-setter.h"
 #include "system/object-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
@@ -55,266 +58,247 @@
  */
 static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 {
-	SPELL_IDX i;
-	int j = 0;
-	int num = 0;
-	POSITION y = 1;
-	POSITION x = 15;
-	PLAYER_LEVEL plev = creature_ptr->lev;
-	int ask = TRUE;
-	char choice;
-	char out_val[160];
-	SPELL_IDX sentaku[32];
-	concptr p = _("必殺剣", "special attack");
-	COMMAND_CODE code;
-	magic_type spell;
-	bool flag, redraw;
-	int menu_line = (use_menu ? 1 : 0);
+    SPELL_IDX i;
+    int j = 0;
+    int num = 0;
+    POSITION y = 1;
+    POSITION x = 15;
+    PLAYER_LEVEL plev = creature_ptr->lev;
+    int ask = TRUE;
+    char choice;
+    char out_val[160];
+    SPELL_IDX sentaku[32];
+    concptr p = _("必殺剣", "special attack");
+    COMMAND_CODE code;
+    magic_type spell;
+    bool flag, redraw;
+    int menu_line = (use_menu ? 1 : 0);
 
-	/* Assume cancelled */
-	*sn = (-1);
+    /* Assume cancelled */
+    *sn = (-1);
 
-	/* Get the spell, if available */
-	if (repeat_pull(&code))
-	{
-		*sn = (SPELL_IDX)code;
-		/* Verify the spell */
-		if (technic_info[TECHNIC_HISSATSU][*sn].slevel <= plev)
-		{
-			/* Success */
-			return TRUE;
-		}
-	}
+    /* Get the spell, if available */
+    if (repeat_pull(&code)) {
+        *sn = (SPELL_IDX)code;
+        /* Verify the spell */
+        if (technic_info[TECHNIC_HISSATSU][*sn].slevel <= plev) {
+            /* Success */
+            return TRUE;
+        }
+    }
 
-	flag = FALSE;
-	redraw = FALSE;
+    flag = FALSE;
+    redraw = FALSE;
 
-	for (i = 0; i < 32; i++)
-	{
-		if (technic_info[TECHNIC_HISSATSU][i].slevel <= PY_MAX_LEVEL)
-		{
-			sentaku[num] = i;
-			num++;
-		}
-	}
+    for (i = 0; i < 32; i++) {
+        if (technic_info[TECHNIC_HISSATSU][i].slevel <= PY_MAX_LEVEL) {
+            sentaku[num] = i;
+            num++;
+        }
+    }
 
-	/* Build a prompt (accept all spells) */
-	(void)strnfmt(out_val, 78,
-		_("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
-		p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num - 1], p);
+    /* Build a prompt (accept all spells) */
+    (void)strnfmt(out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), p, I2A(0),
+        "abcdefghijklmnopqrstuvwxyz012345"[num - 1], p);
 
-	if (use_menu) screen_save();
-	choice = always_show_list ? ESCAPE : 1;
+    if (use_menu)
+        screen_save();
+    choice = always_show_list ? ESCAPE : 1;
 
-	while (!flag)
-	{
-		if(choice==ESCAPE) choice = ' '; 
-		else if( !get_com(out_val, &choice, FALSE) )break;
+    while (!flag) {
+        if (choice == ESCAPE)
+            choice = ' ';
+        else if (!get_com(out_val, &choice, FALSE))
+            break;
 
-		if (use_menu && choice != ' ')
-		{
-			switch(choice)
-			{
-				case '0':
-				{
-					screen_load();
-					return FALSE;
-				}
+        if (use_menu && choice != ' ') {
+            switch (choice) {
+            case '0': {
+                screen_load();
+                return FALSE;
+            }
 
-				case '8':
-				case 'k':
-				case 'K':
-				{
-					do
-					{
-						menu_line += 31;
-						if (menu_line > 32) menu_line -= 32;
-					} while(!(creature_ptr->spell_learned1 & (1L << (menu_line-1))));
-					break;
-				}
+            case '8':
+            case 'k':
+            case 'K': {
+                do {
+                    menu_line += 31;
+                    if (menu_line > 32)
+                        menu_line -= 32;
+                } while (!(creature_ptr->spell_learned1 & (1L << (menu_line - 1))));
+                break;
+            }
 
-				case '2':
-				case 'j':
-				case 'J':
-				{
-					do
-					{
-						menu_line++;
-						if (menu_line > 32) menu_line -= 32;
-					} while(!(creature_ptr->spell_learned1 & (1L << (menu_line-1))));
-					break;
-				}
+            case '2':
+            case 'j':
+            case 'J': {
+                do {
+                    menu_line++;
+                    if (menu_line > 32)
+                        menu_line -= 32;
+                } while (!(creature_ptr->spell_learned1 & (1L << (menu_line - 1))));
+                break;
+            }
 
-				case '4':
-				case 'h':
-				case 'H':
-				case '6':
-				case 'l':
-				case 'L':
-				{
-					bool reverse = FALSE;
-					if ((choice == '4') || (choice == 'h') || (choice == 'H')) reverse = TRUE;
-					if (menu_line > 16)
-					{
-						menu_line -= 16;
-						reverse = TRUE;
-					}
-					else menu_line+=16;
-					while(!(creature_ptr->spell_learned1 & (1L << (menu_line-1))))
-					{
-						if (reverse)
-						{
-							menu_line--;
-							if (menu_line < 2) reverse = FALSE;
-						}
-						else
-						{
-							menu_line++;
-							if (menu_line > 31) reverse = TRUE;
-						}
-					}
-					break;
-				}
+            case '4':
+            case 'h':
+            case 'H':
+            case '6':
+            case 'l':
+            case 'L': {
+                bool reverse = FALSE;
+                if ((choice == '4') || (choice == 'h') || (choice == 'H'))
+                    reverse = TRUE;
+                if (menu_line > 16) {
+                    menu_line -= 16;
+                    reverse = TRUE;
+                } else
+                    menu_line += 16;
+                while (!(creature_ptr->spell_learned1 & (1L << (menu_line - 1)))) {
+                    if (reverse) {
+                        menu_line--;
+                        if (menu_line < 2)
+                            reverse = FALSE;
+                    } else {
+                        menu_line++;
+                        if (menu_line > 31)
+                            reverse = TRUE;
+                    }
+                }
+                break;
+            }
 
-				case 'x':
-				case 'X':
-				case '\r':
-				case '\n':
-				{
-					i = menu_line - 1;
-					ask = FALSE;
-					break;
-				}
-			}
-		}
-		/* Request redraw */
-		if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask))
-		{
-			/* Show the list */
-			if (!redraw || use_menu)
-			{
-				char psi_desc[80];
-				int line;
-				redraw = TRUE;
-				if (!use_menu) screen_save();
+            case 'x':
+            case 'X':
+            case '\r':
+            case '\n': {
+                i = menu_line - 1;
+                ask = FALSE;
+                break;
+            }
+            }
+        }
+        /* Request redraw */
+        if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
+            /* Show the list */
+            if (!redraw || use_menu) {
+                char psi_desc[80];
+                int line;
+                redraw = TRUE;
+                if (!use_menu)
+                    screen_save();
 
-				/* Display a list of spells */
-				prt("", y, x);
-				put_str(_("名前              Lv  MP      名前              Lv  MP ", 
-						  "name              Lv  SP      name              Lv  SP "), y, x + 5);
-				prt("", y+1, x);
-				/* Dump the spells */
-				for (i = 0, line = 0; i < 32; i++)
-				{
-					spell = technic_info[TECHNIC_HISSATSU][i];
+                /* Display a list of spells */
+                prt("", y, x);
+                put_str(_("名前              Lv  MP      名前              Lv  MP ", "name              Lv  SP      name              Lv  SP "), y, x + 5);
+                prt("", y + 1, x);
+                /* Dump the spells */
+                for (i = 0, line = 0; i < 32; i++) {
+                    spell = technic_info[TECHNIC_HISSATSU][i];
 
-					if (spell.slevel > PY_MAX_LEVEL) continue;
-					line++;
-					if (!(creature_ptr->spell_learned1 >> i)) break;
+                    if (spell.slevel > PY_MAX_LEVEL)
+                        continue;
+                    line++;
+                    if (!(creature_ptr->spell_learned1 >> i))
+                        break;
 
-					/* Access the spell */
-					if (spell.slevel > plev)   continue;
-					if (!(creature_ptr->spell_learned1 & (1L << i))) continue;
-					if (use_menu)
-					{
-						if (i == (menu_line-1))
-							strcpy(psi_desc, _("  》", "  > "));
-						else strcpy(psi_desc, "    ");
-						
-					}
-					else
-					{
-						char letter;
-						if (line <= 26)
-							letter = I2A(line-1);
-						else
-							letter = '0' + line - 27;
-						sprintf(psi_desc, "  %c)",letter);
-					}
+                    /* Access the spell */
+                    if (spell.slevel > plev)
+                        continue;
+                    if (!(creature_ptr->spell_learned1 & (1L << i)))
+                        continue;
+                    if (use_menu) {
+                        if (i == (menu_line - 1))
+                            strcpy(psi_desc, _("  》", "  > "));
+                        else
+                            strcpy(psi_desc, "    ");
 
-					/* Dump the spell --(-- */
-					strcat(psi_desc, format(" %-18s%2d %3d",
-						exe_spell(creature_ptr, REALM_HISSATSU, i, SPELL_NAME),
-						spell.slevel, spell.smana));
-					prt(psi_desc, y + (line%17) + (line >= 17), x+(line/17)*30);
-					prt("", y + (line%17) + (line >= 17) + 1, x+(line/17)*30);
-				}
-			}
+                    } else {
+                        char letter;
+                        if (line <= 26)
+                            letter = I2A(line - 1);
+                        else
+                            letter = '0' + line - 27;
+                        sprintf(psi_desc, "  %c)", letter);
+                    }
 
-			/* Hide the list */
-			else
-			{
-				/* Hide list */
-				redraw = FALSE;
-				screen_load();
-			}
+                    /* Dump the spell --(-- */
+                    strcat(psi_desc, format(" %-18s%2d %3d", exe_spell(creature_ptr, REALM_HISSATSU, i, SPELL_NAME), spell.slevel, spell.smana));
+                    prt(psi_desc, y + (line % 17) + (line >= 17), x + (line / 17) * 30);
+                    prt("", y + (line % 17) + (line >= 17) + 1, x + (line / 17) * 30);
+                }
+            }
 
-			/* Redo asking */
-			continue;
-		}
+            /* Hide the list */
+            else {
+                /* Hide list */
+                redraw = FALSE;
+                screen_load();
+            }
 
-		if (!use_menu)
-		{
-			if (isalpha(choice))
-			{
-				/* Note verify */
-				ask = (isupper(choice));
+            /* Redo asking */
+            continue;
+        }
 
-				/* Lowercase */
-				if (ask) choice = (char)tolower(choice);
+        if (!use_menu) {
+            if (isalpha(choice)) {
+                /* Note verify */
+                ask = (isupper(choice));
 
-				/* Extract request */
-				i = (islower(choice) ? A2I(choice) : -1);
-			}
-			else
-			{
-				ask = FALSE; /* Can't uppercase digits */
+                /* Lowercase */
+                if (ask)
+                    choice = (char)tolower(choice);
 
-				i = choice - '0' + 26;
-			}
-		}
+                /* Extract request */
+                i = (islower(choice) ? A2I(choice) : -1);
+            } else {
+                ask = FALSE; /* Can't uppercase digits */
 
-		/* Totally Illegal */
-		if ((i < 0) || (i >= 32) || !(creature_ptr->spell_learned1 & (1 << sentaku[i])))
-		{
-			bell();
-			continue;
-		}
+                i = choice - '0' + 26;
+            }
+        }
 
-		j = sentaku[i];
+        /* Totally Illegal */
+        if ((i < 0) || (i >= 32) || !(creature_ptr->spell_learned1 & (1 << sentaku[i]))) {
+            bell();
+            continue;
+        }
 
-		/* Verify it */
-		if (ask)
-		{
-			char tmp_val[160];
+        j = sentaku[i];
 
-			/* Prompt */
-			(void) strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), exe_spell(creature_ptr, REALM_HISSATSU, j, SPELL_NAME));
+        /* Verify it */
+        if (ask) {
+            char tmp_val[160];
 
-			/* Belay that order */
-			if (!get_check(tmp_val)) continue;
-		}
+            /* Prompt */
+            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), exe_spell(creature_ptr, REALM_HISSATSU, j, SPELL_NAME));
 
-		/* Stop the loop */
-		flag = TRUE;
-	}
-	if (redraw) screen_load();
+            /* Belay that order */
+            if (!get_check(tmp_val))
+                continue;
+        }
 
-	creature_ptr->window |= (PW_SPELL);
-	handle_stuff(creature_ptr);
+        /* Stop the loop */
+        flag = TRUE;
+    }
+    if (redraw)
+        screen_load();
 
-	/* Abort if needed */
-	if (!flag) return FALSE;
+    creature_ptr->window |= (PW_SPELL);
+    handle_stuff(creature_ptr);
 
-	/* Save the choice */
-	(*sn) = j;
+    /* Abort if needed */
+    if (!flag)
+        return FALSE;
 
-	repeat_push((COMMAND_CODE)j);
+    /* Save the choice */
+    (*sn) = j;
 
-	/* Success */
-	return TRUE;
+    repeat_push((COMMAND_CODE)j);
+
+    /* Success */
+    return TRUE;
 }
-
 
 /*!
  * @brief 剣術コマンドのメインルーチン
@@ -322,56 +306,57 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
  */
 void do_cmd_hissatsu(player_type *creature_ptr)
 {
-	SPELL_IDX       n = 0;
-	magic_type      spell;
+    SPELL_IDX n = 0;
+    magic_type spell;
 
-	if (cmd_limit_confused(creature_ptr)) return;
-	if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
-	{
-		if (flush_failure) flush();
-		msg_print(_("武器を持たないと必殺技は使えない！", "You need to wield a weapon!"));
-		return;
-	}
-	if (!creature_ptr->spell_learned1)
-	{
-		msg_print(_("何も技を知らない。", "You don't know any special attacks."));
-		return;
-	}
+    if (cmd_limit_confused(creature_ptr))
+        return;
+    if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        if (flush_failure)
+            flush();
+        msg_print(_("武器を持たないと必殺技は使えない！", "You need to wield a weapon!"));
+        return;
+    }
+    if (!creature_ptr->spell_learned1) {
+        msg_print(_("何も技を知らない。", "You don't know any special attacks."));
+        return;
+    }
 
-	if (creature_ptr->special_defense & KATA_MASK)
-	{
-		set_action(creature_ptr, ACTION_NONE);
-	}
+    if (creature_ptr->special_defense & KATA_MASK) {
+        set_action(creature_ptr, ACTION_NONE);
+    }
 
-	if (!get_hissatsu_power(creature_ptr, &n)) return;
+    if (!get_hissatsu_power(creature_ptr, &n))
+        return;
 
-	spell = technic_info[TECHNIC_HISSATSU][n];
+    spell = technic_info[TECHNIC_HISSATSU][n];
 
-	/* Verify "dangerous" spells */
-	if (spell.smana > creature_ptr->csp)
-	{
-		if (flush_failure) flush();
-		/* Warning */
-		msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
-		msg_print(NULL);
-		return;
-	}
+    /* Verify "dangerous" spells */
+    if (spell.smana > creature_ptr->csp) {
+        if (flush_failure)
+            flush();
+        /* Warning */
+        msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
+        msg_print(NULL);
+        return;
+    }
 
-	sound(SOUND_ZAP);
+    sound(SOUND_ZAP);
 
-	if (!exe_spell(creature_ptr, REALM_HISSATSU, n, SPELL_CAST)) return;
+    if (!exe_spell(creature_ptr, REALM_HISSATSU, n, SPELL_CAST))
+        return;
 
-	take_turn(creature_ptr, 100);
+    take_turn(creature_ptr, 100);
 
-	/* Use some mana */
-	creature_ptr->csp -= spell.smana;
+    /* Use some mana */
+    creature_ptr->csp -= spell.smana;
 
-	/* Limit */
-	if (creature_ptr->csp < 0) creature_ptr->csp = 0;
-	creature_ptr->redraw |= (PR_MANA);
-	creature_ptr->window |= (PW_PLAYER | PW_SPELL);
+    /* Limit */
+    if (creature_ptr->csp < 0)
+        creature_ptr->csp = 0;
+    creature_ptr->redraw |= (PR_MANA);
+    creature_ptr->window |= (PW_PLAYER | PW_SPELL);
 }
-
 
 /*!
  * @brief 剣術コマンドの学習
@@ -379,67 +364,64 @@ void do_cmd_hissatsu(player_type *creature_ptr)
  */
 void do_cmd_gain_hissatsu(player_type *creature_ptr)
 {
-	OBJECT_IDX item;
-	int i, j;
+    OBJECT_IDX item;
+    int i, j;
 
-	object_type *o_ptr;
-	concptr q, s;
+    object_type *o_ptr;
+    concptr q, s;
 
-	bool gain = FALSE;
+    bool gain = FALSE;
 
-	if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-	{
-		set_action(creature_ptr, ACTION_NONE);
-	}
+    if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN)) {
+        set_action(creature_ptr, ACTION_NONE);
+    }
 
-	if (cmd_limit_blind(creature_ptr)) return;
-	if (cmd_limit_confused(creature_ptr)) return;
+    if (cmd_limit_blind(creature_ptr))
+        return;
+    if (cmd_limit_confused(creature_ptr))
+        return;
 
-	if (!(creature_ptr->new_spells))
-	{
-		msg_print(_("新しい必殺技を覚えることはできない！", "You cannot learn any new special attacks!"));
-		return;
-	}
+    if (!(creature_ptr->new_spells)) {
+        msg_print(_("新しい必殺技を覚えることはできない！", "You cannot learn any new special attacks!"));
+        return;
+    }
 
 #ifdef JP
-	msg_format("あと %d 種の必殺技を学べる。", creature_ptr->new_spells);
+    msg_format("あと %d 種の必殺技を学べる。", creature_ptr->new_spells);
 #else
-	msg_format("You can learn %d new special attack%s.", creature_ptr->new_spells, (creature_ptr->new_spells == 1?"":"s"));
+    msg_format("You can learn %d new special attack%s.", creature_ptr->new_spells, (creature_ptr->new_spells == 1 ? "" : "s"));
 #endif
 
-	q = _("どの書から学びますか? ", "Study which book? ");
-	s = _("読める書がない。", "You have no books that you can read.");
+    q = _("どの書から学びますか? ", "Study which book? ");
+    s = _("読める書がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_HISSATSU_BOOK);
-	if (!o_ptr) return;
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_HISSATSU_BOOK);
+    if (!o_ptr)
+        return;
 
-	for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++)
-	{
-		if (creature_ptr->spell_learned1 & (1L << i)) continue;
-		if (technic_info[TECHNIC_HISSATSU][i].slevel > creature_ptr->lev) continue;
+    for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++) {
+        if (creature_ptr->spell_learned1 & (1L << i))
+            continue;
+        if (technic_info[TECHNIC_HISSATSU][i].slevel > creature_ptr->lev)
+            continue;
 
-		creature_ptr->spell_learned1 |= (1L << i);
-		creature_ptr->spell_worked1 |= (1L << i);
-		msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), exe_spell(creature_ptr, REALM_HISSATSU, i, SPELL_NAME));
-		for (j = 0; j < 64; j++)
-		{
-			/* Stop at the first empty space */
-			if (creature_ptr->spell_order[j] == 99) break;
-		}
-		creature_ptr->spell_order[j] = i;
-		gain = TRUE;
-	}
+        creature_ptr->spell_learned1 |= (1L << i);
+        creature_ptr->spell_worked1 |= (1L << i);
+        msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), exe_spell(creature_ptr, REALM_HISSATSU, i, SPELL_NAME));
+        for (j = 0; j < 64; j++) {
+            /* Stop at the first empty space */
+            if (creature_ptr->spell_order[j] == 99)
+                break;
+        }
+        creature_ptr->spell_order[j] = i;
+        gain = TRUE;
+    }
 
-	if (!gain)
-	{
-		msg_print(_("何も覚えられなかった。", "You were not able to learn any special attacks."));
-	}
-	else
-	{
-		take_turn(creature_ptr, 100);
-	}
+    if (!gain) {
+        msg_print(_("何も覚えられなかった。", "You were not able to learn any special attacks."));
+    } else {
+        take_turn(creature_ptr, 100);
+    }
 
-	creature_ptr->update |= (PU_SPELLS);
+    creature_ptr->update |= (PU_SPELLS);
 }
-
-

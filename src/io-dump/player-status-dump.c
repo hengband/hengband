@@ -5,7 +5,6 @@
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @param display_player 画面表示へのコールバック
- * @param map_name マップ名へのコールバック
  * @param screen_num 画面番号
  * @param start_y
  * @param end_y
@@ -13,19 +12,19 @@
  * @return なし
  */
 static void dump_player_status_with_screen_num(
-	player_type *creature_ptr, FILE *fff, display_player_pf display_player, map_name_pf map_name,
+	player_type *creature_ptr, FILE *fff, display_player_pf display_player,
 	int screen_num, TERM_LEN start_y, TERM_LEN end_y, bool change_color)
 {
 	TERM_COLOR a;
 	char c;
 	char buf[1024];
-	display_player(creature_ptr, screen_num, map_name);
+	display_player(creature_ptr, screen_num);
 	for (TERM_LEN y = start_y; y < end_y; y++)
 	{
 		TERM_LEN x;
 		for (x = 0; x < 79; x++)
 		{
-			(void)(Term_what(x, y, &a, &c));
+			(void)(term_what(x, y, &a, &c));
 			if (!change_color)
 			{
 				buf[x] = c;
@@ -52,16 +51,15 @@ static void dump_player_status_with_screen_num(
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @param display_player 画面表示へのコールバック
- * @param map_name マップ名へのコールバック
  * @return なし
  */
-void dump_aux_player_status(player_type *creature_ptr, FILE *fff, display_player_pf display_player, map_name_pf map_name)
+void dump_aux_player_status(player_type *creature_ptr, FILE *fff, display_player_pf display_player)
 {
-	dump_player_status_with_screen_num(creature_ptr, fff, display_player, map_name, 0, 1, 22, FALSE);
-	dump_player_status_with_screen_num(creature_ptr, fff, display_player, map_name, 1, 10, 19, FALSE);
+	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 0, 1, 22, FALSE);
+	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 1, 10, 19, FALSE);
 	fprintf(fff, "\n");
-	dump_player_status_with_screen_num(creature_ptr, fff, display_player, map_name, 2, 2, 22, TRUE);
+	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 2, 2, 22, TRUE);
 	fprintf(fff, "\n");
-	dump_player_status_with_screen_num(creature_ptr, fff, display_player, map_name, 3, 1, 22, TRUE);
+	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 3, 1, 22, TRUE);
 	fprintf(fff, "\n");
 }

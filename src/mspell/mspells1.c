@@ -10,16 +10,22 @@
  */
 
 #include "mspell/mspells1.h"
+#include "blue-magic/blue-magic-checker.h"
+#include "core/disturbance.h"
+#include "core/player-redraw-types.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
+#include "io/targeting.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
-#include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags4.h"
@@ -36,22 +42,20 @@
 #include "mspell/mspell-learn-checker.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspells2.h"
-#include "mspell/mspells3.h"
+#include "mspell/mspell-judgement.h"
 #include "object-enchant/object-curse.h"
+#include "player/attack-defense-types.h"
 #include "player/player-class.h"
-#include "player/player-move.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
-#include "player/player-status.h"
-#include "realm/realm-song-numbers.h"
-#include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/process-effect.h"
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"
+#include "status/element-resistance.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -476,7 +480,7 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     u16b grid_g[512];
-    int grid_n = project_path(target_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
+    int grid_n = project_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, 0);
     if (!grid_n)
         return FALSE;
 
@@ -864,112 +868,6 @@ static bool spell_dispel(byte spell)
 }
 
 /*!
- * @brief モンスターがプレイヤーに魔力消去を与えるべきかを判定するルーチン
- * Check should monster cast dispel spell.
- * @param m_idx モンスターの構造体配列ID
- * @return 魔力消去をかけるべきならTRUEを返す。
- */
-bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
-{
-    if (IS_INVULN(creature_ptr))
-        return TRUE;
-
-    if (creature_ptr->wraith_form)
-        return TRUE;
-
-    if (creature_ptr->shield)
-        return TRUE;
-
-    if (creature_ptr->magicdef)
-        return TRUE;
-
-    if (creature_ptr->multishadow)
-        return TRUE;
-
-    if (creature_ptr->dustrobe)
-        return TRUE;
-
-    if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER))
-        return TRUE;
-
-    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD)
-        return TRUE;
-
-    monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->flags4 & RF4_BR_ACID) {
-        if (!creature_ptr->immune_acid && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST)))
-            return TRUE;
-        if (creature_ptr->special_defense & DEFENSE_ACID)
-            return TRUE;
-    }
-
-    if (r_ptr->flags4 & RF4_BR_FIRE) {
-        if (!((creature_ptr->prace == RACE_BALROG) && creature_ptr->lev > 44)) {
-            if (!creature_ptr->immune_fire && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
-                return TRUE;
-            if (creature_ptr->special_defense & DEFENSE_FIRE)
-                return TRUE;
-        }
-    }
-
-    if (r_ptr->flags4 & RF4_BR_ELEC) {
-        if (!creature_ptr->immune_elec && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST)))
-            return TRUE;
-        if (creature_ptr->special_defense & DEFENSE_ELEC)
-            return TRUE;
-    }
-
-    if (r_ptr->flags4 & RF4_BR_COLD) {
-        if (!creature_ptr->immune_cold && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
-            return TRUE;
-        if (creature_ptr->special_defense & DEFENSE_COLD)
-            return TRUE;
-    }
-
-    if (r_ptr->flags4 & (RF4_BR_POIS | RF4_BR_NUKE)) {
-        if (!((creature_ptr->pclass == CLASS_NINJA) && creature_ptr->lev > 44)) {
-            if (creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST))
-                return TRUE;
-            if (creature_ptr->special_defense & DEFENSE_POIS)
-                return TRUE;
-        }
-    }
-
-    if (creature_ptr->ult_res)
-        return TRUE;
-
-    if (creature_ptr->tsuyoshi)
-        return TRUE;
-
-    if ((creature_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
-        return TRUE;
-    if ((creature_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
-        return TRUE;
-    if ((creature_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
-        return TRUE;
-    if ((creature_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
-        return TRUE;
-    if ((creature_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
-        return TRUE;
-
-    if (creature_ptr->pspeed < 145) {
-        if (IS_FAST(creature_ptr))
-            return TRUE;
-    }
-
-    if (creature_ptr->lightspeed && (m_ptr->mspeed < 136))
-        return TRUE;
-
-    if (creature_ptr->riding && (creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].mspeed < 135)) {
-        if (monster_fast_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding]))
-            return TRUE;
-    }
-
-    return FALSE;
-}
-
-/*!
  * todo 長過ぎる。切り分けが必要
  * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
@@ -1126,7 +1024,7 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
         return (raise[randint0(raise_num)]);
     }
 
-    if (IS_INVULN(target_ptr)) {
+    if (is_invuln(target_ptr)) {
         if (psy_spe_num && (randint0(100) < 50)) {
             return (psy_spe[randint0(psy_spe_num)]);
         } else if (attack_num && (randint0(100) < 40)) {
@@ -1271,7 +1169,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
     BIT_FLAGS f5 = r_ptr->a_ability_flags1;
     BIT_FLAGS f6 = r_ptr->a_ability_flags2;
 
-    if ((m_ptr->cdis > MAX_RANGE) && !m_ptr->target_y)
+    if ((m_ptr->cdis > get_max_range(target_ptr)) && !m_ptr->target_y)
         return FALSE;
 
     POSITION x = target_ptr->x;
@@ -1309,14 +1207,14 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
         }
     } else {
         bool success = FALSE;
-        if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE / 2) && in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, y, x)
+        if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < get_max_range(target_ptr) / 2) && in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, y, x)
             && (one_in_(10) || (projectable(target_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2)))) {
             do_spell = DO_SPELL_BR_DISI;
             success = TRUE;
-        } else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < MAX_RANGE / 2) && los(target_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5)) {
+        } else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < get_max_range(target_ptr) / 2) && los(target_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5)) {
             do_spell = DO_SPELL_BR_LITE;
             success = TRUE;
-        } else if ((f5 & RF5_BA_LITE) && (m_ptr->cdis <= MAX_RANGE)) {
+        } else if ((f5 & RF5_BA_LITE) && (m_ptr->cdis <= get_max_range(target_ptr))) {
             POSITION by = y, bx = x;
             get_project_point(target_ptr, m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
             if ((distance(by, bx, y, x) <= 3) && los(target_ptr, by, bx, y, x) && one_in_(5)) {
@@ -1338,7 +1236,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
                 success = TRUE;
             }
 
-            if (y_br_lite && x_br_lite && (m_ptr->cdis < MAX_RANGE / 2) && one_in_(5)) {
+            if (y_br_lite && x_br_lite && (m_ptr->cdis < get_max_range(target_ptr) / 2) && one_in_(5)) {
                 if (!success) {
                     y = y_br_lite;
                     x = x_br_lite;

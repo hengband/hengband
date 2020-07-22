@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-basic.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\shoot.c">
       <Filter>combat</Filter>
     </ClCompile>
@@ -64,9 +61,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\io\write-diary.c">
       <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-visuals.c">
-      <Filter>cmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\market\poker.c">
       <Filter>market</Filter>
@@ -167,9 +161,6 @@
     <ClCompile Include="..\..\src\io\uid-checker.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-main-window.c">
-      <Filter>view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\autopick\autopick-destroyer.c">
       <Filter>autopick</Filter>
     </ClCompile>
@@ -219,9 +210,6 @@
       <Filter>realm</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\realm\realm-crusade.c">
-      <Filter>realm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-daemon.c">
       <Filter>realm</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\realm\realm-death.c">
@@ -313,9 +301,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\core\stuff-handler.c">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells3.c">
-      <Filter>spell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\birth\birth-explanations-table.c">
       <Filter>birth</Filter>
@@ -413,12 +398,6 @@
     <ClCompile Include="..\..\src\object\object-broken.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-flavor.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\object-hook.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\room\rooms.c">
       <Filter>room</Filter>
     </ClCompile>
@@ -447,9 +426,6 @@
       <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\player-damage.c">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\player\player-effects.c">
       <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\player-move.c">
@@ -493,12 +469,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\locale\japanese.c">
       <Filter>locale</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\io\save.c">
-      <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\io\load.c">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\grid\grid.c">
       <Filter>grid</Filter>
@@ -551,17 +521,11 @@
     <ClCompile Include="..\..\src\io\targeting.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player\selfinfo.c">
       <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\birth\history.c">
       <Filter>birth</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial.c">
-      <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\main\init.c">
       <Filter>main</Filter>
@@ -600,12 +564,6 @@
       <Filter>mspell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspells1.c">
-      <Filter>mspell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspells2.c">
-      <Filter>mspell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspells3.c">
       <Filter>mspell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-ball.c">
@@ -803,9 +761,6 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-zapwand.c">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-draw.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-io\cmd-diary.c">
       <Filter>cmd-io</Filter>
     </ClCompile>
@@ -911,9 +866,6 @@
     <ClCompile Include="..\..\src\object\object-generator.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\artifact.c">
-      <Filter>object-enchant</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\object-boost.c">
       <Filter>object-enchant</Filter>
     </ClCompile>
@@ -971,12 +923,6 @@
     <ClCompile Include="..\..\src\specific-object\torch.c">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-draconian.c">
-      <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-balrog.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell\spells-staff-only.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -1013,9 +959,6 @@
     <ClCompile Include="..\..\src\spell-kind\spells-teleport.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-world.c">
-      <Filter>spell-kind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell-kind\spells-charm.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
@@ -1041,12 +984,6 @@
       <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-warrior-mage.c">
-      <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-vampire.c">
-      <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-android.c">
       <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\spell-realm\spells-crusade.c">
@@ -1382,9 +1319,6 @@
     <ClCompile Include="..\..\src\io\command-repeater.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\locale\vowel-checker.c">
-      <Filter>locale</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\game-option\keymap-directory-getter.c">
       <Filter>game-option</Filter>
     </ClCompile>
@@ -1406,11 +1340,515 @@
     <ClCompile Include="..\..\src\view\status-bars-table.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\window-redrawer.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-visual\cmd-map.c">
+      <Filter>cmd-visual</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-map.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-visual\cmd-draw.c">
+      <Filter>cmd-visual</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-visual\cmd-visuals.c">
+      <Filter>cmd-visual</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-util.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\grid\lighting-colors-table.c">
+      <Filter>grid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\cursor.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\screen-util.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\status-reseter.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-demon.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\spoiler-table.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-spells.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-chaos.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-curse-removal.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-perception.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-mage.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spell-info.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-perception.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-weapon.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-bow.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-armor.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-checker.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-expendable.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-magic.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-quest.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook\hook-enchant.c">
+      <Filter>object-hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-weaponsmith.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\item-tester-hooker.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\player-realm.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\sight-setter.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\buff-setter.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\bad-status-setter.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-messages.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-craft.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\element-resistance.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\temporary-resistance.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\experience.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-demon.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-magic-resistance.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\base-status.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\body-improvement.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-dispel.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\shape-changer.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\status\action-setter.c">
+      <Filter>status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\inventory\inventory-util.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\inventory\floor-item-getter.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\inventory\item-getter.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\object-scanner.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\inventory\inventory-describer.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-inventory.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\inventory\item-selection-util.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-fetcher.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-sorcery.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-equipment.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-polymorph.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-techniques.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\death-crimson.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\blood-curse.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-world.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-enchant.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\magic-item-recharger.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\load.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\angband-version-comparer.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\load-util.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\load-v1-5-0.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\item-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\monster-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\load-zangband.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\store-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\lore-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\option-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\birth-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\extra-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\load-v1-3-0.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\load-v1-7-0.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\player-info-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\dummy-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\world-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\player-attack-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\inventory-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\dungeon-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\floor-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\quest-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\quaff-execution.c">
+      <Filter>object-use</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\flavor\flag-inscriptions-table.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\flavor\flavor-util.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\flavor\flavor-describer.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\flavor\tval-description-switcher.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\flavor\named-item-describer.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\flavor\object-flavor.c">
+      <Filter>flavor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\action-limited.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-move.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\open-util.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-open-close.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\open-close-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\tunnel-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\movement-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-shoot.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-throw.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\weapon-shield.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-others.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\run-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\travel-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\disturbance.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\main-window-equipments.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\display-sub-window-items.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\display-sub-windows.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\display-sub-window-spells.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\main-window-left-frame.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\main-window-stat-poster.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\window\main-window-util.c">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-travel.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-pval-investor.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\artifact-bias-table.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-resistance.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-misc.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-slay.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-activation.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-characteristics.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact\random-art-generator.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact\fixed-art-generator.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact\artifact-info.c">
+      <Filter>artifact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\artifact-type-definition.c">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-store.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\home.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\store-key-processor.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-building\cmd-store.c">
+      <Filter>cmd-building</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\purchase-order.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\owner-insults.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\sell-order.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\museum.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\pricing.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\service-checker.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\stances-table.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-android.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-balrog.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-draconian.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-kutar.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-vampire.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-switcher.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-switcher.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\cave.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\save.c">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\save-util.c">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\item-writer.c">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\monster-writer.c">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\info-writer.c">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\player-writer.c">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\save\floor-writer.c">
+      <Filter>save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\load\info-loader.c">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\learnt-info.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-blue-mage.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-checker.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-caster.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-util.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-breath.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\specified-summon.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-ball-bolt.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-spirit-curse.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-status.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-summon.c">
+      <Filter>blue-magic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-spell.c">
+      <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-judgement.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-spell-util.c">
+      <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.c">
+      <Filter>melee</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\cmd\cmd-basic.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\shoot.h">
       <Filter>combat</Filter>
     </ClInclude>
@@ -1470,12 +1908,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\write-diary.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-draw.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-visuals.h">
-      <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\poker.h">
       <Filter>market</Filter>
@@ -1600,9 +2032,6 @@
     <ClInclude Include="..\..\src\io\uid-checker.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\view\display-main-window.h">
-      <Filter>view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-destroyer.h">
       <Filter>autopick</Filter>
     </ClInclude>
@@ -1649,9 +2078,6 @@
       <Filter>realm</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-crusade.h">
-      <Filter>realm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm\realm-daemon.h">
       <Filter>realm</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-death.h">
@@ -1756,9 +2182,6 @@
     <ClInclude Include="..\..\src\core\special-internal-keys.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells3.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h">
       <Filter>birth</Filter>
     </ClInclude>
@@ -1855,12 +2278,6 @@
     <ClInclude Include="..\..\src\object\object-broken.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\object-flavor.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-hook.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\room\rooms.h">
       <Filter>room</Filter>
     </ClInclude>
@@ -1886,9 +2303,6 @@
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-damage.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\player-effects.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-move.h">
@@ -1944,12 +2358,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-summon.h">
       <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\save.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\load.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\grid\feature.h">
       <Filter>grid</Filter>
@@ -2008,14 +2416,8 @@
     <ClInclude Include="..\..\src\io\targeting.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\mind.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player\selfinfo.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial.h">
-      <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\init.h">
       <Filter>main</Filter>
@@ -2413,9 +2815,6 @@
     <ClInclude Include="..\..\src\sv-definition\sv-weapon-types.h">
       <Filter>sv-definition</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\artifact.h">
-      <Filter>object-enchant</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\item-apply-magic.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
@@ -2503,12 +2902,6 @@
     <ClInclude Include="..\..\src\specific-object\torch.h">
       <Filter>specific-object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-draconian.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-balrog.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-staff-only.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -2545,9 +2938,6 @@
     <ClInclude Include="..\..\src\spell-kind\spells-teleport.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell-kind\spells-world.h">
-      <Filter>spell-kind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-charm.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
@@ -2573,12 +2963,6 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-warrior-mage.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-vampire.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-android.h">
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-crusade.h">
@@ -2740,9 +3124,6 @@
     <ClInclude Include="..\..\src\art-definition\art-bow-types.h">
       <Filter>art-definition</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\random-art-bias-types.h">
-      <Filter>object-enchant</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\object-flags.h">
       <Filter>object</Filter>
     </ClInclude>
@@ -2774,9 +3155,6 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-sniper.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\snipe-types.h">
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\smart-learn-types.h">
@@ -3046,9 +3424,6 @@
     <ClInclude Include="..\..\src\io\command-repeater.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\locale\vowel-checker.h">
-      <Filter>locale</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\util\tag-sorter.h">
       <Filter>util</Filter>
     </ClInclude>
@@ -3088,17 +3463,563 @@
     <ClInclude Include="..\..\src\mspell\mspells1.h">
       <Filter>mspell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspells2.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspells3.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\view\status-bars-table.h">
       <Filter>view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\view\main-window-row-column.h">
+    <ClInclude Include="..\..\src\core\window-redrawer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-visual\cmd-map.h">
+      <Filter>cmd-visual</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-map.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-visual\cmd-draw.h">
+      <Filter>cmd-visual</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-visual\cmd-visuals.h">
+      <Filter>cmd-visual</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-util.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\lighting-colors-table.h">
+      <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\cursor.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\screen-util.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\special-defense-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\status-reseter.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-demon.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\tval-descriptions-table.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\spoiler-table.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-spells.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-chaos.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-curse-removal.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-perception.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-mage.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spell-info.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-perception.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-weapon.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-bow.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-armor.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-checker.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-expendable.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-magic.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-quest.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook\hook-enchant.h">
+      <Filter>object-hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-weaponsmith.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\item-tester-hooker.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-realm.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\sight-setter.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\buff-setter.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\bad-status-setter.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-messages.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-craft.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\element-resistance.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\temporary-resistance.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\experience.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-demon.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-magic-resistance.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\base-status.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\body-improvement.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-dispel.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\shape-changer.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\status\action-setter.h">
+      <Filter>status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\inventory-util.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\floor-item-getter.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\item-getter.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\object-scanner.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\inventory-describer.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-inventory.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\item-selection-util.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\inventory-slot-types.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-flag-types.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-fetcher.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-sorcery.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-equipment.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-polymorph.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-techniques.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\death-crimson.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\blood-curse.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-world.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-enchant.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\magic-item-recharger.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\load.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\old-feature-types.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\angband-version-comparer.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\load-util.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\load-v1-5-0.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\item-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\savedata-flag-types.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\monster-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\load-zangband.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\store-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\lore-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\option-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\birth-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\extra-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\load-v1-3-0.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\load-v1-7-0.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\player-info-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\attack-defense-types.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\dummy-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\world-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\player-attack-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\inventory-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\dungeon-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\floor-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\quest-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\player-update-types.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\player-redraw-types.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\quaff-execution.h">
+      <Filter>object-use</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\object-flavor-types.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\flag-inscriptions-table.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\flavor-util.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\flavor-describer.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\tval-description-switcher.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\named-item-describer.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\flavor\object-flavor.h">
+      <Filter>flavor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\action-limited.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-move.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\open-util.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-open-close.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\open-close-execution.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\tunnel-execution.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\movement-execution.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-shoot.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-throw.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\weapon-shield.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-others.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\feature-flag-types.h">
+      <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\run-execution.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\travel-execution.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\disturbance.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-equipments.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\display-sub-window-items.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\display-sub-windows.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\display-sub-window-spells.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-left-frame.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-row-column.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-stat-poster.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\main-window-util.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-travel.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-pval-investor.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-bias-types.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\artifact-bias-table.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-resistance.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-misc.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-slay.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-activation.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-characteristics.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-generator.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\fixed-art-generator.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\artifact-info.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\artifact-type-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-store.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\home.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\store-key-processor.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-building\cmd-store.h">
+      <Filter>cmd-building</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\purchase-order.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\owner-insults.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\sell-order.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\museum.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\pricing.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\service-checker.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\stances-table.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-android.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-balrog.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-draconian.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-kutar.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-vampire.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\snipe-types.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-switcher.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-switcher.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-base-definitions.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\sight-definitions.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor-type-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\cave.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\save\save.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\save\save-util.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\save\item-writer.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\save\monster-writer.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\save\info-writer.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\save\player-writer.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\save\floor-writer.h">
+      <Filter>save</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\load\info-loader.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\learnt-info.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\learnt-power-getter.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-caster.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-checker.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-util.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-breath.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\specified-summon.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-ball-bolt.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-spirit-curse.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-status.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\blue-magic\blue-magic-summon.h">
+      <Filter>blue-magic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-spell.h">
+      <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-judgement.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-spell-util.h">
+      <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-spell-flags-checker.h">
+      <Filter>melee</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3106,9 +4027,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="cmd">
-      <UniqueIdentifier>{587cee92-bfe4-4674-9635-eed1992633f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="floor">
       <UniqueIdentifier>{c7e2056b-fda5-410a-8d23-03ba3f11c051}</UniqueIdentifier>
     </Filter>
@@ -3214,9 +4132,6 @@
     <Filter Include="io-dump">
       <UniqueIdentifier>{739c9774-e51a-46eb-87c1-cd7cd332e97c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="cmd-building">
-      <UniqueIdentifier>{6982e0e0-d2db-422e-8e92-77b1276e4030}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sv-definition">
       <UniqueIdentifier>{9e020507-fdf0-4cfb-9d60-d9c26cbcf325}</UniqueIdentifier>
     </Filter>
@@ -3244,9 +4159,6 @@
     <Filter Include="melee">
       <UniqueIdentifier>{642ec95b-f054-4958-a614-49ccf88cfc25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="info-reader">
-      <UniqueIdentifier>{149ff96c-b8c9-4df9-845d-d0618427d100}</UniqueIdentifier>
-    </Filter>
     <Filter Include="art-definition">
       <UniqueIdentifier>{fffcb35e-069c-4a97-ab60-0010a4d5d488}</UniqueIdentifier>
     </Filter>
@@ -3261,6 +4173,48 @@
     </Filter>
     <Filter Include="game-option">
       <UniqueIdentifier>{14acbc0e-8760-48c6-860f-4c9fd993feef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="info-reader">
+      <UniqueIdentifier>{149ff96c-b8c9-4df9-845d-d0618427d100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd-visual">
+      <UniqueIdentifier>{30be068e-64fc-431f-a90b-07f12e2539a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd-building">
+      <UniqueIdentifier>{6982e0e0-d2db-422e-8e92-77b1276e4030}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-hook">
+      <UniqueIdentifier>{e466c69b-eaf4-4110-bc9d-e865b36cc732}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="status">
+      <UniqueIdentifier>{c2656391-c200-4334-8150-88f4691c6079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-use">
+      <UniqueIdentifier>{3e8ea357-82a2-4978-a257-338b953d1469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="flavor">
+      <UniqueIdentifier>{64e5a4de-e0d4-4090-93b9-314234362569}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="action">
+      <UniqueIdentifier>{52768eef-323a-49a4-a895-f0030b35f667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window">
+      <UniqueIdentifier>{9e0105e8-8250-4ac4-8a1c-cefd30485ecc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="artifact">
+      <UniqueIdentifier>{7554e8b1-1c3c-447b-8f1e-c18c09039419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="racial">
+      <UniqueIdentifier>{aaa1b0db-fb73-43df-b204-45c07a934cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="save">
+      <UniqueIdentifier>{beb4a41a-dee4-4bdd-ac20-78da62c44fdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="load">
+      <UniqueIdentifier>{2bfe9405-f65a-4dac-afde-56800ae04b9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="blue-magic">
+      <UniqueIdentifier>{6b429e6d-e548-430e-9413-8bc2e0bda1ed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

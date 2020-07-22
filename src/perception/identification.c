@@ -1,23 +1,25 @@
 ﻿#include "perception/identification.h"
 #include "art-definition/art-protector-types.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
 #include "io/input-key-acceptor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object-hook/hook-checker.h"
+#include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
-#include "object/object-kind.h"
 #include "object/object-info.h"
+#include "object/object-kind.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/artifact-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
@@ -39,7 +41,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     char desc[256];
 
     int trivial_info = 0;
-    object_flags(o_ptr, flgs);
+    object_flags(player_ptr, o_ptr, flgs);
 
     shape_buffer(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) : (k_text + k_info[o_ptr->k_idx].text), 77 - 15, temp, sizeof(temp));
 
@@ -55,7 +57,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
     if (have_flag(flgs, TR_ACTIVATE)) {
         info[i++] = _("始動したときの効果...", "It can be activated for...");
-        info[i++] = activation_explanation(o_ptr);
+        info[i++] = activation_explanation(player_ptr, o_ptr);
         info[i++] = _("...ただし装備していなければならない。", "...if it is being worn.");
     }
 
@@ -685,12 +687,12 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
     screen_save();
     int wid, hgt;
-    Term_get_size(&wid, &hgt);
+    term_get_size(&wid, &hgt);
 
     if (!(mode & SCROBJ_FAKE_OBJECT))
-        object_desc(player_ptr, o_name, o_ptr, 0);
+        describe_flavor(player_ptr, o_name, o_ptr, 0);
     else
-        object_desc(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+        describe_flavor(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 
     prt(o_name, 0, 0);
     for (int k = 1; k < hgt; k++) {
@@ -701,7 +703,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         monster_race *r_ptr = &r_info[o_ptr->pval];
         int namelen = strlen(r_name + r_ptr->name);
         prt(format("%s: '", r_name + r_ptr->name), 1, 15);
-        Term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);
+        term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
     } else {
         prt(_("     アイテムの能力:", "     Item Attributes:"), 1, 15);

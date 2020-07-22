@@ -1,14 +1,18 @@
 ﻿#include "spell-realm/spells-hex.h"
 #include "core/asking-player.h"
-#include "floor/floor.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
+#include "core/window-redrawer.h"
 #include "monster-race/monster-race.h"
-#include "player/player-effects.h" // todo 相互参照している.
+#include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
-#include "realm/realm-types.h"
-#include "spell/spells3.h"
+#include "spell/spell-info.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
+#include "status/action-setter.h"
+#include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -70,11 +74,11 @@ bool stop_hex_spell(player_type *caster_ptr)
 
         while (!flag) {
             int n = 0;
-            Term_erase(x, y, 255);
+            term_erase(x, y, 255);
             prt(_("     名前", "     Name"), y, x + 5);
             for (spell = 0; spell < 32; spell++) {
                 if (hex_spelling(caster_ptr, spell)) {
-                    Term_erase(x, y + n + 1, 255);
+                    term_erase(x, y + n + 1, 255);
                     put_str(format("%c)  %s", I2A(n), exe_spell(caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
                     sp[n++] = spell;
                 }
@@ -316,3 +320,5 @@ bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
 }
 
 bool hex_spelling(player_type *caster_ptr, int hex) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1L << (hex))); }
+
+bool hex_spelling_any(player_type *caster_ptr) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0); }

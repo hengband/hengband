@@ -1,12 +1,13 @@
 ﻿#include "perception/object-perception.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-flavor.h"
+#include "object/item-tester-hooker.h" // 暫定、このファイルへ引っ越す.
 #include "object/object-generator.h"
-#include "object/object-hook.h" // 暫定、このファイルへ引っ越す.
 #include "object/object-kind.h"
 
 /*!
@@ -60,7 +61,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
     object_copy(q_ptr, o_ptr);
 
     q_ptr->number = 1;
-    object_desc(owner_ptr, o_name, q_ptr, OD_NAME_ONLY);
+    describe_flavor(owner_ptr, o_name, q_ptr, OD_NAME_ONLY);
 
     exe_write_diary(owner_ptr, DIARY_FOUND, 0, o_name);
 }
@@ -74,7 +75,9 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
 void object_tried(object_type *o_ptr) { k_info[o_ptr->k_idx].tried = TRUE; }
 
 /*
- * Determine if a given inventory item is "aware"
+ * @brief 与えられたオブジェクトのベースアイテムが鑑定済かを返す / Determine if a given inventory item is "aware"
+ * @param o_ptr オブジェクトへの参照ポインタ
+ * @return 鑑定済ならTRUE
  */
 bool object_is_aware(object_type *o_ptr) { return k_info[(o_ptr)->k_idx].aware; }
 

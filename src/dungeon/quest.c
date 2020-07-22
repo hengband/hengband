@@ -1,8 +1,9 @@
 ﻿#include "dungeon/quest.h"
-#include "art-definition/art-bow-types.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save.h"
@@ -23,15 +24,15 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-generator.h"
 #include "player/player-personalities-types.h"
 #include "player/player-status.h"
+#include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -539,7 +540,7 @@ void do_cmd_quest(player_type *player_ptr)
 
 	msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
 	if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
-	if (IS_ECHIZEN(player_ptr))
+	if (is_echizen(player_ptr))
 		msg_print(_("『とにかく入ってみようぜぇ。』", ""));
 	else if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN) msg_print("『全滅してやるぞ！』");
 

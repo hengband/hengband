@@ -1,9 +1,10 @@
 ﻿#include "spell/spells-summon.h"
+#include "core/hp-mp-processor.h"
 #include "effect/spells-effect-util.h"
+#include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-object.h"
-#include "inventory/player-inventory.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
@@ -12,9 +13,8 @@
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "object/item-use-flags.h"
-#include "object/object-hook.h"
+#include "object/item-tester-hooker.h"
 #include "player/avatar.h"
-#include "player/player-effects.h"
 #include "spell/spells-diceroll.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-floor.h"
@@ -25,7 +25,9 @@
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
+#include "status/bad-status-setter.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/floor-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -200,8 +202,11 @@ bool cast_summon_octopus(player_type *creature_ptr)
 * @param o_ptr オブジェクト構造体の参照ポインタ
 * @return 生贄に使用可能な死体ならばTRUEを返す。
 */
-bool item_tester_offer(object_type *o_ptr)
+bool item_tester_offer(player_type *creature_ptr, object_type *o_ptr)
 {
+    /* Unused */
+    (void)creature_ptr;
+
 	if (o_ptr->tval != TV_CORPSE) return FALSE;
 	if (o_ptr->sval != SV_CORPSE) return FALSE;
 	if (angband_strchr("pht", r_info[o_ptr->pval].d_char)) return TRUE;

@@ -39,7 +39,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 	}
 
 	int cx = 0;
-	Term_gotoxy(cx, cy);
+	term_gotoxy(cx, cy);
 
 	static const char tag_str[] = "[[[[";
 	byte color = TERM_WHITE;
@@ -62,14 +62,14 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 		if (bracketcol < endcol) endcol = bracketcol;
 		if (showercol < endcol) endcol = showercol;
 
-		Term_addstr(endcol, color, &str[i]);
+		term_addstr(endcol, color, &str[i]);
 		cx += endcol;
 		i += endcol;
 
 		if (shower && endcol == showercol)
 		{
 			int showerlen = strlen(shower);
-			Term_addstr(showerlen, TERM_YELLOW, &str[i]);
+			term_addstr(showerlen, TERM_YELLOW, &str[i]);
 			cx += showerlen;
 			i += showerlen;
 			continue;
@@ -90,7 +90,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 		if (color == 255 || str[i + 1] == '\0')
 		{
 			color = TERM_WHITE;
-			Term_addstr(-1, TERM_WHITE, tag_str);
+			term_addstr(-1, TERM_WHITE, tag_str);
 			cx += sizeof(tag_str) - 1;
 			continue;
 		}
@@ -100,7 +100,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 		i++;
 	}
 
-	Term_erase(cx, cy, 255);
+	term_erase(cx, cy, 255);
 }
 
 
@@ -125,7 +125,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 bool show_file(player_type *creature_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
 {
 	int wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 
 	char finder_str[81];
 	strcpy(finder_str, "");
@@ -246,7 +246,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 	if (line == -1)
 		line = ((size - 1) / rows)*rows;
 
-	Term_clear();
+	term_clear();
 
 	concptr find = NULL;
 	while (TRUE)
@@ -295,7 +295,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
 		while (row_count < rows)
 		{
-			Term_erase(0, row_count + 2, 255);
+			term_erase(0, row_count + 2, 255);
 			row_count++;
 		}
 

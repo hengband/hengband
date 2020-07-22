@@ -7,10 +7,10 @@
 #include "knowledge-self.h"
 #include "birth/birth-explanations-table.h"
 #include "core/show-file.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor-town.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
-#include "object/object-flavor.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/race-info-table.h"
@@ -178,7 +178,7 @@ void do_cmd_knowledge_home(player_type *player_ptr)
 #ifdef JP
             if ((i % 12) == 0)
                 fprintf(fff, "\n ( %d ページ )\n", x++);
-            object_desc(player_ptr, o_name, &store_ptr->stock[i], 0);
+            describe_flavor(player_ptr, o_name, &store_ptr->stock[i], 0);
             if (strlen(o_name) <= 80 - 3) {
                 fprintf(fff, "%c%s %s\n", I2A(i % 12), paren, o_name);
             } else {
@@ -196,7 +196,7 @@ void do_cmd_knowledge_home(player_type *player_ptr)
                 fprintf(fff, "   %.77s\n", o_name + n);
             }
 #else
-            object_desc(player_ptr, o_name, &store_ptr->stock[i], 0);
+            describe_flavor(player_ptr, o_name, &store_ptr->stock[i], 0);
             fprintf(fff, "%c%s %s\n", I2A(i % 12), paren, o_name);
 #endif
         }

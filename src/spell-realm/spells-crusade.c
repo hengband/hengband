@@ -5,15 +5,23 @@
  */
 
 #include "spell-realm/spells-crusade.h"
+#include "core/disturbance.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
+#include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
-#include "floor/floor.h"
-#include "grid/feature.h"
+#include "floor/cave.h"
+#include "game-option/disturbance-options.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
+#include "spell-realm/spells-crusade.h"
 #include "spell/range-calc.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
 * @brief 破邪魔法「神の怒り」の処理としてターゲットを指定した後分解のボールを最大20回発生させる。
@@ -45,7 +53,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 		ny = y;
 		nx = x;
 		mmove2(&ny, &nx, caster_ptr->y, caster_ptr->x, ty, tx);
-		if (MAX_RANGE <= distance(caster_ptr->y, caster_ptr->x, ny, nx)) break;
+		if (get_max_range(caster_ptr) <= distance(caster_ptr->y, caster_ptr->x, ny, nx)) break;
 		if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, ny, nx, FF_PROJECT)) break;
 		if ((dir != 5) && caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0) break;
 
@@ -86,4 +94,89 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 	}
 
 	return TRUE;
+}
+
+/*!
+ * @brief 一時的聖なるのオーラの継続時間をセットする / Set "tim_sh_holy", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
+bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+{
+    bool notice = FALSE;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+    if (creature_ptr->is_dead)
+        return FALSE;
+
+    if (v) {
+        if (creature_ptr->tim_sh_holy && !do_dec) {
+            if (creature_ptr->tim_sh_holy > v)
+                return FALSE;
+        } else if (!creature_ptr->tim_sh_holy) {
+            msg_print(_("体が聖なるオーラで覆われた。", "You are enveloped by a holy aura!"));
+            notice = TRUE;
+        }
+    } else {
+        if (creature_ptr->tim_sh_holy) {
+            msg_print(_("聖なるオーラが消えた。", "The holy aura disappeared."));
+            notice = TRUE;
+        }
+    }
+
+    creature_ptr->tim_sh_holy = v;
+    creature_ptr->redraw |= (PR_STATUS);
+
+    if (!notice)
+        return FALSE;
+
+    if (disturb_state)
+        disturb(creature_ptr, FALSE, FALSE);
+    creature_ptr->update |= (PU_BONUS);
+    handle_stuff(creature_ptr);
+    return TRUE;
+}
+
+/*!
+ * @brief 目には目をの残り時間をセットする / Set "tim_eyeeye", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す
+ * @details 呪術領域でも使えるが、汎用性と行数の兼ね合いを考えて破邪側に入れた
+ */
+bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+{
+    bool notice = FALSE;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+    if (creature_ptr->is_dead)
+        return FALSE;
+
+    if (v) {
+        if (creature_ptr->tim_eyeeye && !do_dec) {
+            if (creature_ptr->tim_eyeeye > v)
+                return FALSE;
+        } else if (!creature_ptr->tim_eyeeye) {
+            msg_print(_("法の守り手になった気がした！", "You feel like a keeper of commandments!"));
+            notice = TRUE;
+        }
+    } else {
+        if (creature_ptr->tim_eyeeye) {
+            msg_print(_("懲罰を執行することができなくなった。", "You no longer feel like a keeper."));
+            notice = TRUE;
+        }
+    }
+
+    creature_ptr->tim_eyeeye = v;
+    creature_ptr->redraw |= (PR_STATUS);
+
+    if (!notice)
+        return FALSE;
+
+    if (disturb_state)
+        disturb(creature_ptr, FALSE, FALSE);
+    creature_ptr->update |= (PU_BONUS);
+    handle_stuff(creature_ptr);
+    return TRUE;
 }

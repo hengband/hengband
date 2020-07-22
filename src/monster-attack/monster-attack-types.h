@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 /*!
  * @note モンスターの打撃方法 / New monster blow methods
  * 打撃の種別に応じて傷と朦朧が発生するかがコメントの通りに決まる

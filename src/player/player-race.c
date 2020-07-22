@@ -1,4 +1,6 @@
 ﻿#include "player/player-race.h"
+#include "core/player-redraw-types.h"
+#include "inventory/inventory-slot-types.h"
 #include "player/player-race-types.h"
 #include "system/object-type-definition.h"
 #include "mimic-info-table.h"

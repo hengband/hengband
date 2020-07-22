@@ -1,6 +1,7 @@
 ﻿#include "monster-floor/monster-remover.h"
+#include "core/player-update-types.h"
+#include "core/stuff-handler.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
@@ -9,8 +10,9 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
-#include "view/display-main-window.h"
+#include "system/object-type-definition.h"
 
 /*!
  * @brief モンスター配列からモンスターを消去する / Delete a monster by index.
@@ -79,7 +81,6 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
 }
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief プレイヤーのフロア離脱に伴う全モンスター配列の消去 / Delete/Remove all the monsters when the player leaves the level
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし

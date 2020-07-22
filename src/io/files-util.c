@@ -53,7 +53,7 @@ char savefile_base[40];
  * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(player_type *creature_ptr, concptr name, update_playtime_pf update_playtime, display_player_pf display_player, map_name_pf map_name)
+errr file_character(player_type *creature_ptr, concptr name, update_playtime_pf update_playtime, display_player_pf display_player)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
@@ -76,7 +76,7 @@ errr file_character(player_type *creature_ptr, concptr name, update_playtime_pf 
         return -1;
     }
 
-    make_character_dump(creature_ptr, fff, update_playtime, display_player, map_name);
+    make_character_dump(creature_ptr, fff, update_playtime, display_player);
     angband_fclose(fff);
     msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
     msg_print(NULL);
@@ -267,16 +267,16 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
 
-    safe_setuid_grab();
+    safe_setuid_grab(creature_ptr);
     int fd = fd_open(buf, O_RDWR);
     safe_setuid_drop();
     if (fd < 0) {
-        safe_setuid_grab();
+        safe_setuid_grab(creature_ptr);
         fd = fd_make(buf, 0644);
         safe_setuid_drop();
     }
 
-    safe_setuid_grab();
+    safe_setuid_grab(creature_ptr);
     errr err = fd_lock(fd, F_WRLCK);
     safe_setuid_drop();
     if (err)
@@ -284,7 +284,7 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
 
     counts_seek(creature_ptr, fd, where, TRUE);
     fd_write(fd, (char *)(&count), sizeof(u32b));
-    safe_setuid_grab();
+    safe_setuid_grab(creature_ptr);
     err = fd_lock(fd, F_UNLCK);
     safe_setuid_drop();
 

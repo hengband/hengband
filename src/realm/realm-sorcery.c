@@ -3,19 +3,25 @@
 #include "core/asking-player.h"
 #include "io/targeting.h"
 #include "player/avatar.h"
-#include "player/player-effects.h"
 #include "player/selfinfo.h"
+#include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
+#include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
+#include "spell-realm/spells-sorcery.h"
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
-#include "spell/spells3.h"
+#include "status/body-improvement.h"
+#include "status/buff-setter.h"
+#include "status/sight-setter.h"
 #include "view/display-messages.h"
 
 /*!
@@ -470,7 +476,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 			{
 				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
-				fetch(caster_ptr, dir, weight, FALSE);
+				fetch_item(caster_ptr, dir, weight, FALSE);
 			}
 		}
 		break;

@@ -5,10 +5,13 @@
  */
 
 #include "monster-attack/monster-attack-status.h"
+#include "core/player-update-types.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
-#include "player/player-effects.h"
+#include "status/bad-status-setter.h"
+#include "status/base-status.h"
+#include "status/experience.h"
 #include "view/display-messages.h"
 
 void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)

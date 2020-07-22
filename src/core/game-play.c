@@ -19,13 +19,19 @@
 #include "core/game-closer.h"
 #include "core/output-updater.h"
 #include "core/player-processor.h"
+#include "core/player-update-types.h"
 #include "core/scores.h"
 #include "core/speed-table.h"
+#include "core/status-reseter.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
+#include "core/window-redrawer.h"
 #include "dungeon/dungeon-processor.h"
+#include "flavor/object-flavor.h"
+#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
+#include "floor/floor-util.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
@@ -40,10 +46,11 @@
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
 #include "io/read-pref-file.h"
-#include "io/save.h"
+#include "io/screen-util.h"
 #include "io/signal-handlers.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
+#include "load/load.h"
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "market/bounty.h"
@@ -53,27 +60,29 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
-#include "object/object-flavor.h"
 #include "player/player-class.h"
-#include "player/player-effects.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/process-name.h"
+#include "racial/racial-android.h"
 #include "realm/realm-names-table.h"
+#include "save/save.h"
 #include "spell/spells-status.h"
 #include "spell/technic-info-table.h"
+#include "store/home.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-version.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 
 /*!
@@ -109,7 +118,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
     player_ptr->hack_mutation = FALSE;
     current_world_ptr->character_icky = TRUE;
-    Term_activate(angband_term[0]);
+    term_activate(angband_term[0]);
     angband_term[0]->resize_hook = resize_map;
     for (MONSTER_IDX i = 1; i < 8; i++) {
         if (angband_term[i]) {
@@ -117,8 +126,8 @@ void play_game(player_type *player_ptr, bool new_game)
         }
     }
 
-    (void)Term_set_cursor(0);
-    if (!load_player(player_ptr)) {
+    (void)term_set_cursor(0);
+    if (!load_savedata(player_ptr)) {
         quit(_("セーブファイルが壊れています", "broken savefile"));
     }
 
@@ -141,7 +150,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
         /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
         parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-        success = send_world_score(player_ptr, TRUE, update_playtime, display_player, map_name);
+        success = send_world_score(player_ptr, TRUE, update_playtime, display_player);
 
         if (!success && !get_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
             prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
@@ -238,7 +247,7 @@ void play_game(player_type *player_ptr, bool new_game)
     set_floor_and_wall(player_ptr->dungeon_idx);
     flavor_init();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
-    Term_fresh();
+    term_fresh();
 
     if (arg_wizard) {
         if (enter_wizard_mode(player_ptr)) {
@@ -293,7 +302,7 @@ void play_game(player_type *player_ptr, bool new_game)
         player_outfit(player_ptr);
     }
 
-    Term_xtra(TERM_XTRA_REACT, 0);
+    term_xtra(TERM_XTRA_REACT, 0);
 
     player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
     player_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
@@ -324,8 +333,8 @@ void play_game(player_type *player_ptr, bool new_game)
         m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
     }
 
-    (void)combine_and_reorder_home(STORE_HOME);
-    (void)combine_and_reorder_home(STORE_MUSEUM);
+    (void)combine_and_reorder_home(player_ptr, STORE_HOME);
+    (void)combine_and_reorder_home(player_ptr, STORE_MUSEUM);
     select_floor_music(player_ptr);
 
     while (TRUE) {

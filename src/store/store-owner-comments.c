@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "store/store-owner-comments.h"
+﻿#include "store/store-owner-comments.h"
 
 /*!
  * todo _() でまとめる

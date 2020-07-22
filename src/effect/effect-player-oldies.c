@@ -1,8 +1,10 @@
 ﻿#include "effect/effect-player-oldies.h"
+#include "core/hp-mp-processor.h"
 #include "game-option/birth-options.h"
 #include "monster-race/race-indice-types.h"
 #include "player/eldritch-horror.h"
-#include "player/player-effects.h"
+#include "status/bad-status-setter.h"
+#include "status/buff-setter.h"
 #include "view/display-messages.h"
 
 void effect_player_old_heal(player_type *target_ptr, effect_player_type *ep_ptr)

@@ -352,7 +352,7 @@ const concptr ident_info[] =
 /*
  * The array of window pointers
  */
-term *angband_term[8];
+term_type *angband_term[8];
 
 /*!
  * スクリーン表示色キャラクタ /

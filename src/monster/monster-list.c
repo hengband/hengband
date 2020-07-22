@@ -10,8 +10,11 @@
  */
 
 #include "monster/monster-list.h"
+#include "core/player-update-types.h"
 #include "core/speed-table.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
@@ -30,6 +33,7 @@
 #include "object/object-generator.h"
 #include "pet/pet-fall-off.h"
 #include "system/alloc-entries.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -201,15 +205,14 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option)
 }
 
 /*!
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @param player_ptr プレーヤーへの参照ポインタ
  * @brief カメレオンの王の変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
+static bool monster_hook_chameleon_lord(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-    floor_type *floor_ptr = p_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];
     monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
@@ -226,14 +229,14 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
         || (r_ptr->blow[3].method == RBM_EXPLODE))
         return FALSE;
 
-    if (!monster_can_cross_terrain(p_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
+    if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
         return FALSE;
 
     if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
-        if (monster_has_hostile_align(p_ptr, m_ptr, 0, 0, r_ptr))
+        if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
             return FALSE;
     } else if (summon_specific_who > 0) {
-        if (monster_has_hostile_align(p_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
+        if (monster_has_hostile_align(player_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
             return FALSE;
     }
 
@@ -241,15 +244,14 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 }
 
 /*!
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief カメレオンの変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_chameleon(MONRACE_IDX r_idx)
+static bool monster_hook_chameleon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-    floor_type *floor_ptr = p_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];
     monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
@@ -265,7 +267,7 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
         || (r_ptr->blow[3].method == RBM_EXPLODE))
         return FALSE;
 
-    if (!monster_can_cross_terrain(p_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
+    if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
         return FALSE;
 
     if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
@@ -276,11 +278,11 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
         if (!(old_r_ptr->flags3 & (RF3_GOOD | RF3_EVIL)) && (r_ptr->flags3 & (RF3_GOOD | RF3_EVIL)))
             return FALSE;
     } else if (summon_specific_who > 0) {
-        if (monster_has_hostile_align(p_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
+        if (monster_has_hostile_align(player_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
             return FALSE;
     }
 
-    return (*(get_monster_hook(p_ptr)))(r_idx);
+    return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);
 }
 
 /*!
@@ -364,7 +366,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
                 msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
     }
 
-    m_ptr->mspeed = get_mspeed(player_ptr, r_ptr);
+    m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
     int oldmaxhp = m_ptr->max_maxhp;
     if (r_ptr->flags1 & RF1_FORCE_MAXHP) {
@@ -386,15 +388,14 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 }
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief モンスターの個体加速を設定する / Get initial monster speed
  * @param r_ptr モンスター種族の参照ポインタ
  * @return 加速値
  */
-SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr)
+SPEED get_mspeed(floor_type *floor_ptr, monster_race *r_ptr)
 {
     SPEED mspeed = r_ptr->speed;
-    if (!(r_ptr->flags1 & RF1_UNIQUE) && !player_ptr->current_floor_ptr->inside_arena) {
+    if (!(r_ptr->flags1 & RF1_UNIQUE) && !floor_ptr->inside_arena) {
         /* Allow some small variation per monster */
         int i = SPEED_TO_ENERGY(r_ptr->speed) / (one_in_(4) ? 3 : 10);
         if (i)

@@ -1,13 +1,13 @@
 ﻿#include "birth/history-editor.h"
-#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
-#include "locale/japanese.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-player.h" // 暫定。後で消す.
+#ifdef  JP
+#include "locale/japanese.h"
+#endif
 
 /*!
  * @brief 生い立ちメッセージを編集する。/Character background edit-mode
@@ -33,7 +33,7 @@ void edit_history(player_type *creature_ptr, void (*process_autopick_file_comman
         creature_ptr->history[i][59] = '\0';
     }
 
-    display_player(creature_ptr, 1, map_name);
+    display_player(creature_ptr, 1);
     c_put_str(TERM_L_GREEN, _("(キャラクターの生い立ち - 編集モード)", "(Character Background - Edit Mode)"), 11, 20);
     put_str(_("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", "[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]"), 17, 10);
     TERM_LEN y = 0;
@@ -51,7 +51,7 @@ void edit_history(player_type *creature_ptr, void (*process_autopick_file_comman
 #endif
             c_put_str(TERM_L_BLUE, format("%c", creature_ptr->history[y][x]), y + 12, x + 10);
 
-        Term_gotoxy(x + 10, y + 12);
+        term_gotoxy(x + 10, y + 12);
         int skey = inkey_special(TRUE);
         if (!(skey & SKEY_MASK))
             c = (char)skey;
@@ -100,8 +100,8 @@ void edit_history(player_type *creature_ptr, void (*process_autopick_file_comman
                 x--;
 #endif
         } else if (c == '\r' || c == '\n') {
-            Term_erase(0, 11, 255);
-            Term_erase(0, 17, 255);
+            term_erase(0, 11, 255);
+            term_erase(0, 17, 255);
             put_str(_("(キャラクターの生い立ち - 編集済み)", "(Character Background - Edited)"), 11, 20);
             break;
         } else if (c == ESCAPE) {

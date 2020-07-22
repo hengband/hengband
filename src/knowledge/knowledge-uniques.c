@@ -153,7 +153,7 @@ void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
         unique_list_ptr->who[unique_list_ptr->n++] = i;
     }
 
-    ang_sort(unique_list_ptr->who, &unique_list_ptr->why, unique_list_ptr->n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(creature_ptr, unique_list_ptr->who, &unique_list_ptr->why, unique_list_ptr->n, ang_sort_comp_hook, ang_sort_swap_hook);
     display_uniques(unique_list_ptr, fff);
     C_KILL(unique_list_ptr->who, max_r_idx, s16b);
     angband_fclose(fff);

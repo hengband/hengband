@@ -2,16 +2,20 @@
 #include "art-definition/art-sword-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/shoot.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
-#include "inventory/player-inventory.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
+#include "floor/floor-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "market/building-util.h"
 #include "object-enchant/tr-types.h"
+#include "object-hook/hook-weapon.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
-#include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -130,7 +134,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
     int vorpal_div = 1;
     int dmg_bonus = o_ptr->to_d + owner_ptr->to_d[0];
 
-    object_flags(o_ptr, flgs);
+    object_flags(owner_ptr, o_ptr, flgs);
     if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         dokubari = TRUE;
 
@@ -302,7 +306,7 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
     DICE_SID eff_ds = o_ptr->ds + player_ptr->to_ds[0];
     HIT_RELIABILITY reli = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
 
-    object_desc(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
     c_put_str(TERM_YELLOW, o_name, row, col);
     sprintf(tmp_str, _("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]);
     put_str(tmp_str, row + 1, col);

@@ -1,9 +1,11 @@
 ﻿#include "floor/fixed-map-generator.h"
+#include "artifact/fixed-art-generator.h"
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "info-reader/general-parser.h"
@@ -17,7 +19,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/apply-magic.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trg-types.h"
@@ -27,8 +28,10 @@
 #include "object/object-info.h"
 #include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
-#include "view/display-main-window.h"
+#include "window/main-window-util.h"
 #include "world/world-object.h"
 #include "world/world.h"
 
@@ -83,7 +86,7 @@ static void generate_artifact(player_type *player_ptr, qtwg_type *qtwg_ptr, cons
     KIND_OBJECT_IDX k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
     object_type forge;
     object_type *q_ptr = &forge;
-    object_prep(q_ptr, k_idx);
+    object_prep(player_ptr, q_ptr, k_idx);
     drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
@@ -171,10 +174,10 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
         } else if (object_index) {
             object_type tmp_object;
             object_type *o_ptr = &tmp_object;
-            object_prep(o_ptr, object_index);
+            object_prep(player_ptr, o_ptr, object_index);
             if (o_ptr->tval == TV_GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;
-                make_gold(floor_ptr, o_ptr);
+                make_gold(player_ptr, o_ptr);
                 coin_type = 0;
             }
 

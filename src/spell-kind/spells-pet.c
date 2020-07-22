@@ -1,7 +1,6 @@
 ﻿#include "spell-kind/spells-pet.h"
 #include "core/asking-player.h"
 #include "effect/effect-characteristics.h"
-#include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "monster-race/monster-race.h"
@@ -13,6 +12,7 @@
 #include "monster/smart-learn-types.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

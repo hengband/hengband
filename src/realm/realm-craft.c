@@ -3,14 +3,20 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
-#include "player/player-effects.h"
-#include "player/player-status.h"
+#include "player/digestion-processor.h"
 #include "player/selfinfo.h"
+#include "spell-kind/spells-curse-removal.h"
+#include "spell-kind/spells-enchant.h"
+#include "spell-kind/spells-perception.h"
+#include "spell-realm/spells-craft.h"
 #include "spell/range-calc.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spells3.h"
+#include "status/body-improvement.h"
+#include "status/buff-setter.h"
+#include "status/element-resistance.h"
+#include "status/sight-setter.h"
 #include "view/display-messages.h"
 
 /*!
@@ -358,7 +364,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
 			if (cast)
 			{
-				set_kabenuke(caster_ptr, randint1(base) + base, FALSE);
+				set_pass_wall(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;

@@ -1,27 +1,31 @@
 ﻿#include "realm/realm-death.h"
 #include "cmd-action/cmd-spell.h"
+#include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "player/avatar.h"
-#include "player/player-class.h"
+#include "player/digestion-processor.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "player/player-race.h"
-#include "player/player-status.h"
+#include "player/player-realm.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-neighbor.h"
+#include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell/process-effect.h"
+#include "spell/spell-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell/spell-types.h"
-#include "spell/spells3.h"
+#include "status/buff-setter.h"
+#include "status/experience.h"
+#include "status/shape-changer.h"
+#include "status/element-resistance.h"
 
 /*!
 * @brief 暗黒領域魔法の各処理を行う
@@ -219,7 +223,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
-			if (IS_WIZARD_CLASS(caster_ptr))
+			if (is_wizard_class(caster_ptr))
 				base = plev + plev / 2;
 			else
 				base = plev + plev / 4;

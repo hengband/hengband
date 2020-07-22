@@ -6,15 +6,15 @@
  */
 
 #include "object-enchant/apply-magic-others.h"
-#include "floor/floor.h"
+#include "artifact/random-art-generator.h"
 #include "game-option/cheat-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags9.h"
 #include "monster-race/race-indice-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -22,6 +22,7 @@
 #include "object/object-kind.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -126,7 +127,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
         while (TRUE) {
             i = randint1(max_r_idx - 1);
 
-            if (!item_monster_okay(i))
+            if (!item_monster_okay(owner_ptr, i))
                 continue;
             if (i == MON_TSUCHINOKO)
                 continue;

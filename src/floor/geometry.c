@@ -1,58 +1,51 @@
-﻿#include "floor/floor.h"
-#include "floor/geometry.h"
+﻿#include "floor/geometry.h"
+#include "floor/cave.h"
+#include "floor/floor.h"
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
  * キーパッドの方向を南から反時計回り順に列挙 / Global array for looping through the "keypad directions"
  */
-const POSITION ddd[9] =
-{ 2, 8, 6, 4, 3, 1, 9, 7, 5 };
+const POSITION ddd[9] = { 2, 8, 6, 4, 3, 1, 9, 7, 5 };
 
 /*!
  * dddで定義した順にベクトルのX軸成分を定義 / Global arrays for converting "keypad direction" into offsets
  */
-const POSITION ddx[10] =
-{ 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 };
+const POSITION ddx[10] = { 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 };
 
 /*!
  * dddで定義した順にベクトルのY軸成分を定義 / Global arrays for converting "keypad direction" into offsets
  */
-const POSITION ddy[10] =
-{ 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 };
+const POSITION ddy[10] = { 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 };
 
 /*!
  * ddd越しにベクトルのX軸成分を定義 / Global arrays for optimizing "ddx[ddd[i]]" and "ddy[ddd[i]]"
  */
-const POSITION ddx_ddd[9] =
-{ 0, 0, 1, -1, 1, -1, 1, -1, 0 };
+const POSITION ddx_ddd[9] = { 0, 0, 1, -1, 1, -1, 1, -1, 0 };
 
 /*!
  * ddd越しにベクトルのY軸成分を定義 / Global arrays for optimizing "ddx[ddd[i]]" and "ddy[ddd[i]]"
  */
-const POSITION ddy_ddd[9] =
-{ 1, -1, 0, 0, 1, 1, -1, -1, 0 };
+const POSITION ddy_ddd[9] = { 1, -1, 0, 0, 1, 1, -1, -1, 0 };
 
 /*!
  * キーパッドの円環状方向配列 / Circular keypad direction array
  */
-const POSITION cdd[8] =
-{ 2, 3, 6, 9, 8, 7, 4, 1 };
+const POSITION cdd[8] = { 2, 3, 6, 9, 8, 7, 4, 1 };
 
 /*!
  * cdd越しにベクトルのX軸成分を定義 / Global arrays for optimizing "ddx[cdd[i]]" and "ddy[cdd[i]]"
  */
-const POSITION ddx_cdd[8] =
-{ 0, 1, 1, 1, 0, -1, -1, -1 };
+const POSITION ddx_cdd[8] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
 /*!
  * cdd越しにベクトルのY軸成分を定義 / Global arrays for optimizing "ddx[cdd[i]]" and "ddy[cdd[i]]"
  */
-const POSITION ddy_cdd[8] =
-{ 1, 1, 0, -1, -1, -1, 0, 1 };
-
+const POSITION ddy_cdd[8] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 
 /*!
  * @brief 2点間の距離をニュートン・ラプソン法で算出する / Distance between two points via Newton-Raphson technique
@@ -64,35 +57,35 @@ const POSITION ddy_cdd[8] =
  */
 POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	POSITION dy = (y1 > y2) ? (y1 - y2) : (y2 - y1);
-	POSITION dx = (x1 > x2) ? (x1 - x2) : (x2 - x1);
+    POSITION dy = (y1 > y2) ? (y1 - y2) : (y2 - y1);
+    POSITION dx = (x1 > x2) ? (x1 - x2) : (x2 - x1);
 
-	/* Squared distance */
-	POSITION target = (dy * dy) + (dx * dx);
+    /* Squared distance */
+    POSITION target = (dy * dy) + (dx * dx);
 
-	/* Approximate distance: hypot(dy,dx) = max(dy,dx) + min(dy,dx) / 2 */
-	POSITION d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
+    /* Approximate distance: hypot(dy,dx) = max(dy,dx) + min(dy,dx) / 2 */
+    POSITION d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
 
-	POSITION err;
+    POSITION err;
 
-	/* Simple case */
-	if (!dy || !dx) return d;
+    /* Simple case */
+    if (!dy || !dx)
+        return d;
 
-	while (TRUE)
-	{
-		/* Approximate error */
-		err = (target - d * d) / (2 * d);
+    while (TRUE) {
+        /* Approximate error */
+        err = (target - d * d) / (2 * d);
 
-		/* No error - we are done */
-		if (!err) break;
+        /* No error - we are done */
+        if (!err)
+            break;
 
-		/* Adjust distance */
-		d += err;
-	}
+        /* Adjust distance */
+        d += err;
+    }
 
-	return d;
+    return d;
 }
-
 
 /*!
  * @brief プレイヤーから指定の座標がどの方角にあるかを返す /
@@ -103,16 +96,16 @@ POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
  */
 DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x)
 {
-	DIRECTION d[3][3] = { {7, 4, 1}, {8, 5, 2}, {9, 6, 3} };
-	POSITION dy, dx;
+    DIRECTION d[3][3] = { { 7, 4, 1 }, { 8, 5, 2 }, { 9, 6, 3 } };
+    POSITION dy, dx;
 
-	dy = y - creature_ptr->y;
-	dx = x - creature_ptr->x;
-	if (ABS(dx) > 1 || ABS(dy) > 1) return 0;
+    dy = y - creature_ptr->y;
+    dx = x - creature_ptr->x;
+    if (ABS(dx) > 1 || ABS(dy) > 1)
+        return 0;
 
-	return d[dx + 1][dy + 1];
+    return d[dx + 1][dy + 1];
 }
-
 
 /*!
  * @brief 指定された座標をプレイヤーが視覚に収められるかを返す。 / Can the player "see" the given grid in detail?
@@ -151,33 +144,38 @@ DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x)
  */
 bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr;
+    grid_type *g_ptr;
 
-	/* Blind players see nothing */
-	if (creature_ptr->blind) return FALSE;
+    /* Blind players see nothing */
+    if (creature_ptr->blind)
+        return FALSE;
 
-	g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
-	/* Note that "torch-lite" yields "illumination" */
-	if (g_ptr->info & (CAVE_LITE | CAVE_MNLT)) return TRUE;
+    /* Note that "torch-lite" yields "illumination" */
+    if (g_ptr->info & (CAVE_LITE | CAVE_MNLT))
+        return TRUE;
 
-	/* Require line of sight to the grid */
-	if (!player_has_los_bold(creature_ptr, y, x)) return FALSE;
+    /* Require line of sight to the grid */
+    if (!player_has_los_bold(creature_ptr, y, x))
+        return FALSE;
 
-	/* Noctovision of Ninja */
-	if (creature_ptr->see_nocto) return TRUE;
+    /* Noctovision of Ninja */
+    if (creature_ptr->see_nocto)
+        return TRUE;
 
-	/* Require "perma-lite" of the grid */
-	if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) return FALSE;
+    /* Require "perma-lite" of the grid */
+    if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
+        return FALSE;
 
-	/* Feature code (applying "mimic" field) */
-	/* Floors are simple */
-	if (feat_supports_los(get_feat_mimic(g_ptr))) return TRUE;
+    /* Feature code (applying "mimic" field) */
+    /* Floors are simple */
+    if (feat_supports_los(get_feat_mimic(g_ptr)))
+        return TRUE;
 
-	/* Check for "local" illumination */
-	return check_local_illumination(creature_ptr, y, x);
+    /* Check for "local" illumination */
+    return check_local_illumination(creature_ptr, y, x);
 }
-
 
 /*
  * Calculate "incremental motion". Used by project() and shoot().
@@ -185,51 +183,49 @@ bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x)
  */
 void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	POSITION dy, dx, dist, shift;
+    POSITION dy, dx, dist, shift;
 
-	/* Extract the distance travelled */
-	dy = (*y < y1) ? y1 - *y : *y - y1;
-	dx = (*x < x1) ? x1 - *x : *x - x1;
+    /* Extract the distance travelled */
+    dy = (*y < y1) ? y1 - *y : *y - y1;
+    dx = (*x < x1) ? x1 - *x : *x - x1;
 
-	/* Number of steps */
-	dist = (dy > dx) ? dy : dx;
+    /* Number of steps */
+    dist = (dy > dx) ? dy : dx;
 
-	/* We are calculating the next location */
-	dist++;
+    /* We are calculating the next location */
+    dist++;
 
-	/* Calculate the total distance along each axis */
-	dy = (y2 < y1) ? (y1 - y2) : (y2 - y1);
-	dx = (x2 < x1) ? (x1 - x2) : (x2 - x1);
+    /* Calculate the total distance along each axis */
+    dy = (y2 < y1) ? (y1 - y2) : (y2 - y1);
+    dx = (x2 < x1) ? (x1 - x2) : (x2 - x1);
 
-	/* Paranoia -- Hack -- no motion */
-	if (!dy && !dx) return;
+    /* Paranoia -- Hack -- no motion */
+    if (!dy && !dx)
+        return;
 
+    /* Move mostly vertically */
+    if (dy > dx) {
+        /* Extract a shift factor */
+        shift = (dist * dx + (dy - 1) / 2) / dy;
 
-	/* Move mostly vertically */
-	if (dy > dx)
-	{
-		/* Extract a shift factor */
-		shift = (dist * dx + (dy - 1) / 2) / dy;
+        /* Sometimes move along the minor axis */
+        (*x) = (x2 < x1) ? (x1 - shift) : (x1 + shift);
 
-		/* Sometimes move along the minor axis */
-		(*x) = (x2 < x1) ? (x1 - shift) : (x1 + shift);
+        /* Always move along major axis */
+        (*y) = (y2 < y1) ? (y1 - dist) : (y1 + dist);
+    }
 
-		/* Always move along major axis */
-		(*y) = (y2 < y1) ? (y1 - dist) : (y1 + dist);
-	}
+    /* Move mostly horizontally */
+    else {
+        /* Extract a shift factor */
+        shift = (dist * dy + (dx - 1) / 2) / dx;
 
-	/* Move mostly horizontally */
-	else
-	{
-		/* Extract a shift factor */
-		shift = (dist * dy + (dx - 1) / 2) / dx;
+        /* Sometimes move along the minor axis */
+        (*y) = (y2 < y1) ? (y1 - shift) : (y1 + shift);
 
-		/* Sometimes move along the minor axis */
-		(*y) = (y2 < y1) ? (y1 - shift) : (y1 + shift);
-
-		/* Always move along major axis */
-		(*x) = (x2 < x1) ? (x1 - dist) : (x1 + dist);
-	}
+        /* Always move along major axis */
+        (*x) = (x2 < x1) ? (x1 - dist) : (x1 + dist);
+    }
 }
 
 /*

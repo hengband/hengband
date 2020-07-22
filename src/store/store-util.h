@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/object-type-definition.h"
 
 #define STORE_OBJ_LEVEL 5 /* Magic Level for normal stores */
 
@@ -16,26 +15,19 @@
 #define STORE_BOOK      8 /*!< 店舗の種類: 書店 */
 #define STORE_MUSEUM    9 /*!< 店舗の種類: 博物館 */
 
-typedef struct store_type
-{
+typedef struct object_type object_type;
+typedef struct store_type {
 	byte type;				/* Store type */
-
 	byte owner;				/* Owner index */
 	byte extra;				/* Unused for now */
-
 	s16b insult_cur;		/* Insult counter */
-
 	s16b good_buy;			/* Number of "good" buys */
 	s16b bad_buy;			/* Number of "bad" buys */
-
 	s32b store_open;		/* Closed until this turn */
-
 	s32b last_visit;		/* Last visited on this turn */
-
 	s16b table_num;			/* Table -- Number of entries */
 	s16b table_size;		/* Table -- Total Size of Array */
 	s16b *table;			/* Table -- Legal item kinds */
-
 	s16b stock_num;			/* Stock -- Number of entries */
 	s16b stock_size;		/* Stock -- Total Size of Array */
 	object_type *stock;		/* Stock -- Actual stock items */
@@ -44,10 +36,12 @@ typedef struct store_type
 extern int cur_store_num;
 extern store_type *st_ptr;
 
+typedef bool (*black_market_crap_pf)(player_type *, object_type *);
+typedef bool (*store_will_buy_pf)(player_type *, object_type *);
+typedef void (*mass_produce_pf)(player_type *, object_type *);
 void store_delete(void);
-void store_create(player_type *player_ptr, bool(*black_market_crap)(player_type*, object_type*));
+void store_create(player_type *player_ptr, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce);
 void store_item_increase(INVENTORY_IDX item, int num);
 void store_item_optimize(INVENTORY_IDX item);
-bool store_will_buy(object_type *o_ptr);
-int store_carry(object_type *o_ptr);
+int store_carry(player_type *player_ptr, object_type *o_ptr);
 bool store_object_similar(object_type *o_ptr, object_type *j_ptr);

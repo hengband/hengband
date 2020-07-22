@@ -1,12 +1,13 @@
 ﻿#include "object/object-flags.h"
-#include "cmd-item/cmd-smith.h"
-#include "object-enchant/artifact.h"
+#include "cmd-item/cmd-smith.h" // todo 相互参照している.
+#include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/artifact-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -16,7 +17,7 @@
  * @param flgs フラグ情報を受け取る配列
  * @return なし
  */
-void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
+void object_flags(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -53,7 +54,7 @@ void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
         flgs[i] |= o_ptr->art_flags[i];
     }
 
-    if (object_is_smith(o_ptr)) {
+    if (object_is_smith(player_ptr, o_ptr)) {
         int add = o_ptr->xtra3 - 1;
         if (add < TR_FLAG_MAX) {
             add_flag(flgs, add);
@@ -96,7 +97,7 @@ void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
  * @param flgs フラグ情報を受け取る配列
  * @return なし
  */
-void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
+void object_flags_known(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
     bool spoil = FALSE;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
@@ -146,7 +147,7 @@ void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
         }
     }
 
-    if (!object_is_smith(o_ptr))
+    if (!object_is_smith(player_ptr, o_ptr))
         return;
 
     int add = o_ptr->xtra3 - 1;

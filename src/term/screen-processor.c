@@ -12,7 +12,7 @@ static int screen_depth = 0;
 /*
  * Move the cursor
  */
-void move_cursor(int row, int col) { Term_gotoxy(col, row); }
+void move_cursor(int row, int col) { term_gotoxy(col, row); }
 
 /*
  * Flush all input chars.  Actually, remember the flush,
@@ -32,7 +32,7 @@ void screen_save()
 {
     msg_print(NULL);
     if (screen_depth++ == 0)
-        Term_save();
+        term_save();
 
     current_world_ptr->character_icky++;
 }
@@ -46,7 +46,7 @@ void screen_load()
 {
     msg_print(NULL);
     if (--screen_depth == 0)
-        Term_load();
+        term_load();
 
     current_world_ptr->character_icky--;
 }
@@ -57,12 +57,12 @@ void screen_load()
  * At the given location, using the given attribute, if allowed,
  * add the given string.  Do not clear the line.
  */
-void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col) { Term_putstr(col, row, -1, attr, str); }
+void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col) { term_putstr(col, row, -1, attr, str); }
 
 /*
  * As above, but in "white"
  */
-void put_str(concptr str, TERM_LEN row, TERM_LEN col) { Term_putstr(col, row, -1, TERM_WHITE, str); }
+void put_str(concptr str, TERM_LEN row, TERM_LEN col) { term_putstr(col, row, -1, TERM_WHITE, str); }
 
 /*
  * Display a string on the screen using an attribute, and clear
@@ -70,8 +70,8 @@ void put_str(concptr str, TERM_LEN row, TERM_LEN col) { Term_putstr(col, row, -1
  */
 void c_prt(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col)
 {
-    Term_erase(col, row, 255);
-    Term_addstr(-1, attr, str);
+    term_erase(col, row, 255);
+    term_addstr(-1, attr, str);
 }
 
 /*
@@ -100,10 +100,10 @@ void prt(concptr str, TERM_LEN row, TERM_LEN col)
 void c_roff(TERM_COLOR a, concptr str)
 {
     int w, h;
-    (void)Term_get_size(&w, &h);
+    (void)term_get_size(&w, &h);
 
     int x, y;
-    (void)Term_locate(&x, &y);
+    (void)term_locate(&x, &y);
 
     if (y == h - 1 && x > w - 3)
         return;
@@ -119,7 +119,7 @@ void c_roff(TERM_COLOR a, concptr str)
             if (y == h)
                 break;
 
-            Term_erase(x, y, 255);
+            term_erase(x, y, 255);
             break;
         }
 
@@ -147,7 +147,7 @@ void c_roff(TERM_COLOR a, concptr str)
 #endif
                 {
                     for (i = w - 2; i >= 0; i--) {
-                        Term_what(i, y, &av[i], &cv[i]);
+                        term_what(i, y, &av[i], &cv[i]);
                         if (cv[i] == ' ')
                             break;
 
@@ -163,9 +163,9 @@ void c_roff(TERM_COLOR a, concptr str)
                     /* 現在が全角文字のとき */
                     /* 文頭が「。」「、」等になるときは、その１つ前の語で改行 */
                     if (strncmp(s, "。", 2) == 0 || strncmp(s, "、", 2) == 0) {
-                        Term_what(x, y, &av[x], &cv[x]);
-                        Term_what(x - 1, y, &av[x - 1], &cv[x - 1]);
-                        Term_what(x - 2, y, &av[x - 2], &cv[x - 2]);
+                        term_what(x, y, &av[x], &cv[x]);
+                        term_what(x - 1, y, &av[x - 1], &cv[x - 1]);
+                        term_what(x - 2, y, &av[x - 2], &cv[x - 2]);
                         n = x - 2;
                         cv[x] = '\0';
                     }
@@ -175,28 +175,28 @@ void c_roff(TERM_COLOR a, concptr str)
             if (n == 0)
                 n = w;
 
-            Term_erase(n, y, 255);
+            term_erase(n, y, 255);
             x = 0;
             y++;
             if (y == h)
                 break;
 
-            Term_erase(x, y, 255);
+            term_erase(x, y, 255);
             for (i = n; i < w - 1; i++) {
 #ifdef JP
                 if (cv[i] == '\0')
                     break;
 #endif
-                Term_addch(av[i], cv[i]);
+                term_addch(av[i], cv[i]);
                 if (++x > w)
                     x = w;
             }
         }
 
 #ifdef JP
-        Term_addch((byte)(a | 0x10), ch);
+        term_addch((byte)(a | 0x10), ch);
 #else
-        Term_addch(a, ch);
+        term_addch(a, ch);
 #endif
 
 #ifdef JP
@@ -204,7 +204,7 @@ void c_roff(TERM_COLOR a, concptr str)
             s++;
             x++;
             ch = *s;
-            Term_addch((byte)(a | 0x20), ch);
+            term_addch((byte)(a | 0x20), ch);
         }
 #endif
 
@@ -228,6 +228,6 @@ void roff(concptr str)
 void clear_from(int row)
 {
     for (int y = row; y < Term->hgt; y++) {
-        Term_erase(0, y, 255);
+        term_erase(0, y, 255);
     }
 }

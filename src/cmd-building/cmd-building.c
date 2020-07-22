@@ -11,23 +11,24 @@
  * Changed for ZAngband by Robert Ruehlmann
  */
 
-#include "system/angband.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-action/cmd-spell.h"
-#include "cmd-io/cmd-dump.h"
 #include "cmd-building/cmd-inn.h"
+#include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "core/scores.h"
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
+#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
-#include "floor/floor.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/music-definitions-table.h"
@@ -47,16 +48,20 @@
 #include "market/play-gamble.h"
 #include "market/poker.h"
 #include "monster-race/monster-race.h"
+#include "mutation/mutation-flag-types.h"
 #include "mutation/mutation.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-armor.h"
+#include "object-hook/hook-bow.h"
+#include "object-hook/hook-weapon.h"
+#include "object/item-tester-hooker.h"
 #include "player/avatar.h"
 #include "player/player-personalities-types.h"
 #include "player/player-status.h"
+#include "spell-kind/spells-perception.h"
+#include "spell-kind/spells-world.h"
 #include "spell/spells-status.h"
-#include "spell-kind/spells-teleport.h"
-#include "spell/spells3.h"
 #include "system/building-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -405,7 +410,7 @@ void do_cmd_building(player_type *player_ptr)
 	if (reinit_wilderness) player_ptr->leaving = TRUE;
 
 	current_world_ptr->character_icky--;
-	Term_clear();
+	term_clear();
 
 	player_ptr->update |= (PU_VIEW | PU_MONSTERS | PU_BONUS | PU_LITE | PU_MON_LITE);
 	player_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);

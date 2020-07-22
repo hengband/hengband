@@ -7,6 +7,8 @@
  */
 
 #include "display-player-stat-info.h"
+#include "inventory/inventory-slot-types.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/mimic-info-table.h"
@@ -206,7 +208,7 @@ static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS
 	{
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[i];
-		object_flags_known(o_ptr, flags);
+		object_flags_known(creature_ptr, o_ptr, flags);
 		for (int stat = 0; stat < A_MAX; stat++)
 		{
 			TERM_COLOR a = TERM_SLATE;
@@ -221,7 +223,7 @@ static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS
 				c = 's';
 			}
 
-			Term_putch(*col, row + stat + 1, a, c);
+			term_putch(*col, row + stat + 1, a, c);
 		}
 
 		(*col)++;
@@ -338,7 +340,7 @@ static void display_mutation_compensation(player_type *creature_ptr, BIT_FLAGS *
 			c = 's';
 		}
 
-		Term_putch(col, row + stat + 1, a, c);
+		term_putch(col, row + stat + 1, a, c);
 	}
 }
 

@@ -7,18 +7,20 @@
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/player-class.h"
-#include "player/player-effects.h"
 #include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/spells-object.h"
+#include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
+#include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
+#include "spell-realm/spells-chaos.h"
+#include "spell-realm/spells-trump.h"
+#include "spell/spell-types.h"
+#include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "spell-kind/spells-floor.h"
-#include "spell-realm/spells-trump.h"
-#include "spell-kind/spells-teleport.h"
-#include "spell/spell-types.h"
-#include "spell/spells3.h"
+#include "status/sight-setter.h"
 #include "view/display-messages.h"
 
 /*!
@@ -186,7 +188,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 			{
 				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
-				fetch(caster_ptr, dir, weight, FALSE);
+				fetch_item(caster_ptr, dir, weight, FALSE);
 			}
 		}
 		break;

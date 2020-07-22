@@ -15,6 +15,7 @@
 #include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/cmd-help.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "game-option/birth-options.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-definitions-table.h"
@@ -31,7 +32,6 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
-#include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-player.h" // 暫定。後で消す.
 #include "world/world.h"
 
@@ -47,7 +47,7 @@
 
 static void display_initial_birth_message(player_type *creature_ptr)
 {
-    Term_clear();
+    term_clear();
     put_str(_("名前  :", "Name  :"), 1, 26);
     put_str(_("性別        :", "Sex         :"), 3, 1);
     put_str(_("種族        :", "Race        :"), 4, 1);
@@ -352,7 +352,7 @@ static bool display_auto_roller_count(player_type *creature_ptr, const int col)
 
     birth_put_stats(creature_ptr);
     put_str(format("%10ld", auto_round), 10, col + 20);
-    Term_fresh();
+    term_fresh();
     inkey_scan = TRUE;
     if (inkey()) {
         get_ahw(creature_ptr);
@@ -386,22 +386,22 @@ static bool display_auto_roller_result(player_type *creature_ptr, bool prev, cha
         update_creature(creature_ptr);
         creature_ptr->chp = creature_ptr->mhp;
         creature_ptr->csp = creature_ptr->msp;
-        display_player(creature_ptr, mode, map_name);
-        Term_gotoxy(2, 23);
+        display_player(creature_ptr, mode);
+        term_gotoxy(2, 23);
         const char b1 = '[';
-        Term_addch(TERM_WHITE, b1);
-        Term_addstr(-1, TERM_WHITE, _("'r' 次の数値", "'r'eroll"));
+        term_addch(TERM_WHITE, b1);
+        term_addstr(-1, TERM_WHITE, _("'r' 次の数値", "'r'eroll"));
         if (prev)
-            Term_addstr(-1, TERM_WHITE, _(", 'p' 前の数値", "'p'previous"));
+            term_addstr(-1, TERM_WHITE, _(", 'p' 前の数値", "'p'previous"));
 
         if (mode)
-            Term_addstr(-1, TERM_WHITE, _(", 'h' その他の情報", ", 'h' Misc."));
+            term_addstr(-1, TERM_WHITE, _(", 'h' その他の情報", ", 'h' Misc."));
         else
-            Term_addstr(-1, TERM_WHITE, _(", 'h' 生い立ちを表示", ", 'h'istory"));
+            term_addstr(-1, TERM_WHITE, _(", 'h' 生い立ちを表示", ", 'h'istory"));
 
-        Term_addstr(-1, TERM_WHITE, _(", Enter この数値に決定", ", or Enter to accept"));
+        term_addstr(-1, TERM_WHITE, _(", Enter この数値に決定", ", or Enter to accept"));
         const char b2 = ']';
-        Term_addch(TERM_WHITE, b2);
+        term_addch(TERM_WHITE, b2);
         *c = inkey();
         if (*c == 'Q')
             birth_quit();
@@ -437,7 +437,7 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
     while (TRUE) {
         int col = 42;
         if (autoroller || autochara) {
-            Term_clear();
+            term_clear();
             put_str(_("回数 :", "Round:"), 10, col + 13);
             put_str(_("(ESCで停止)", "(Hit ESC to stop)"), 12, col + 13);
         } else {

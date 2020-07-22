@@ -6,30 +6,38 @@
  */
 
 #include "floor/floor-object.h"
+#include "artifact/fixed-art-generator.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
+#include "floor/cave.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "inventory/inventory-slot-types.h"
+#include "inventory/item-getter.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/apply-magic.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-flavor.h"
+#include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "perception/object-perception.h"
 #include "system/alloc-entries.h"
+#include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "view/object-describer.h"
+#include "wizard/wizard-messages.h"
 #include "world/world-object.h"
 #include "world/world.h"
 
@@ -68,8 +76,8 @@ static void object_mention(player_type *owner_ptr, object_type *o_ptr)
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(owner_ptr, o_name, o_ptr, 0);
-    msg_format_wizard(CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
+    describe_flavor(owner_ptr, o_name, o_ptr, 0);
+    msg_format_wizard(owner_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
 /*!
@@ -107,7 +115,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
         if (!k_idx)
             return FALSE;
 
-        object_prep(j_ptr, k_idx);
+        object_prep(owner_ptr, j_ptr, k_idx);
     }
 
     apply_magic(owner_ptr, j_ptr, floor_ptr->object_level, mode);
@@ -136,8 +144,9 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
  * @details
  * The location must be a legal, clean, floor grid.
  */
-bool make_gold(floor_type *floor_ptr, object_type *j_ptr)
+bool make_gold(player_type *player_ptr, object_type *j_ptr)
 {
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int i = ((randint1(floor_ptr->object_level + 2) + 2) / 2) - 1;
     if (one_in_(GREAT_OBJ)) {
         i += randint1(floor_ptr->object_level + 1);
@@ -147,7 +156,7 @@ bool make_gold(floor_type *floor_ptr, object_type *j_ptr)
         i = coin_type;
     if (i >= MAX_GOLD)
         i = MAX_GOLD - 1;
-    object_prep(j_ptr, OBJ_GOLD_LIST + i);
+    object_prep(player_ptr, j_ptr, OBJ_GOLD_LIST + i);
 
     s32b base = k_info[OBJ_GOLD_LIST + i].cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
@@ -238,7 +247,7 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     excise_object_idx(floor_ptr, o_idx);
     j_ptr = &floor_ptr->o_list[o_idx];
-    if (!OBJECT_IS_HELD_MONSTER(j_ptr)) {
+    if (!object_is_held_monster(j_ptr)) {
         POSITION y, x;
         y = j_ptr->iy;
         x = j_ptr->ix;
@@ -262,7 +271,7 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
     object_type *j_ptr;
     j_ptr = &floor_ptr->o_list[o_idx];
 
-    if (OBJECT_IS_HELD_MONSTER(j_ptr)) {
+    if (object_is_held_monster(j_ptr)) {
         monster_type *m_ptr;
         m_ptr = &floor_ptr->m_list[j_ptr->held_m_idx];
         for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {
@@ -353,7 +362,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 #else
     bool plural = (j_ptr->number != 1);
 #endif
-    object_desc(owner_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(owner_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (!object_is_artifact(j_ptr) && (randint0(100) < chance)) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
@@ -593,7 +602,7 @@ void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[item];
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(owner_ptr, o_name, o_ptr, 0);
+    describe_flavor(owner_ptr, o_name, o_ptr, 0);
 #ifdef JP
     if (o_ptr->number <= 0) {
         msg_format("床上には、もう%sはない。", o_name);
@@ -603,4 +612,22 @@ void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 #else
     msg_format("You see %s.", o_name);
 #endif
+}
+
+/*
+ * Choose an item and get auto-picker entry from it.
+ */
+object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, tval_type tval)
+{
+    OBJECT_IDX item;
+    if (!get_item(owner_ptr, &item, q, s, option, tval))
+        return NULL;
+
+    if (idx)
+        *idx = item;
+
+    if (item == INVEN_FORCE)
+        return NULL;
+
+    return ref_item(owner_ptr, item);
 }

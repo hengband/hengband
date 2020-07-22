@@ -7,6 +7,7 @@
 
 #include "monster-floor/monster-generator.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "game-option/cheat-options.h"
 #include "grid/grid.h"
@@ -24,6 +25,7 @@
 #include "monster/smart-learn-types.h"
 #include "mspell/summon-checker.h"
 #include "spell/spells-summon.h"
+#include "system/floor-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -203,19 +205,17 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
 }
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief モンスター種族が召喚主の護衛となれるかどうかをチェックする / Hack -- help pick an escort type
  * @param r_idx チェックするモンスター種族のID
  * @return 護衛にできるならばtrue
  */
-static bool place_monster_can_escort(MONRACE_IDX r_idx)
+static bool place_monster_can_escort(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[place_monster_idx];
-    monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[place_monster_m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];
     monster_race *z_ptr = &r_info[r_idx];
 
-    if (mon_hook_dungeon(place_monster_idx) != mon_hook_dungeon(r_idx))
+    if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx))
         return FALSE;
     if (z_ptr->d_char != r_ptr->d_char)
         return FALSE;
@@ -225,11 +225,11 @@ static bool place_monster_can_escort(MONRACE_IDX r_idx)
         return FALSE;
     if (place_monster_idx == r_idx)
         return FALSE;
-    if (monster_has_hostile_align(p_ptr, m_ptr, 0, 0, z_ptr))
+    if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, z_ptr))
         return FALSE;
 
     if (r_ptr->flags7 & RF7_FRIENDLY) {
-        if (monster_has_hostile_align(p_ptr, NULL, 1, -1, z_ptr))
+        if (monster_has_hostile_align(player_ptr, NULL, 1, -1, z_ptr))
             return FALSE;
     }
 

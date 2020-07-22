@@ -6,9 +6,10 @@
 
 #include "util/object-sort.h"
 #include "monster-race/monster-race.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
+#include "player/player-realm.h"
 
 /*!
  * @brief オブジェクトを定義された基準に従いソートするための関数 /
@@ -18,20 +19,20 @@
  * @param j_ptr 比較対象オブジェクトの構造体参照ポインタ2
  * @return o_ptrの方が上位ならばTRUEを返す。
  */
-bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
+bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, s32b o_value, object_type *j_ptr)
 {
     int o_type, j_type;
     if (!j_ptr->k_idx)
         return TRUE;
 
-    if ((o_ptr->tval == REALM1_BOOK) && (j_ptr->tval != REALM1_BOOK))
+    if ((o_ptr->tval == get_realm1_book(player_ptr)) && (j_ptr->tval != get_realm1_book(player_ptr)))
         return TRUE;
-    if ((j_ptr->tval == REALM1_BOOK) && (o_ptr->tval != REALM1_BOOK))
+    if ((j_ptr->tval == get_realm1_book(player_ptr)) && (o_ptr->tval != get_realm1_book(player_ptr)))
         return FALSE;
 
-    if ((o_ptr->tval == REALM2_BOOK) && (j_ptr->tval != REALM2_BOOK))
+    if ((o_ptr->tval == get_realm2_book(player_ptr)) && (j_ptr->tval != get_realm2_book(player_ptr)))
         return TRUE;
-    if ((j_ptr->tval == REALM2_BOOK) && (o_ptr->tval != REALM2_BOOK))
+    if ((j_ptr->tval == get_realm2_book(player_ptr)) && (o_ptr->tval != get_realm2_book(player_ptr)))
         return FALSE;
 
     if (o_ptr->tval > j_ptr->tval)
@@ -105,5 +106,5 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
         break;
     }
 
-    return o_value > object_value(j_ptr);
+    return o_value > object_value(player_ptr, j_ptr);
 }

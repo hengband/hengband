@@ -13,19 +13,19 @@
 
 #include "mutation/mutation.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-basic.h"
+#include "cmd-item/cmd-throw.h"
 #include "core/asking-player.h"
+#include "player/player-race-types.h"
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
-#include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"
-#include "io/files-util.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
+#include "mind/mind-mage.h"
 #include "mind/mind-warrior.h"
-#include "mind/racial-vampire.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
@@ -37,27 +37,34 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
+#include "mutation/mutation-flag-types.h"
+#include "mutation/mutation-techniques.h"
 #include "object-enchant/item-feeling.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-checker.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "player/player-personalities-types.h"
-#include "player/player-race-types.h"
-#include "player/player-status.h"
+#include "core/player-update-types.h"
 #include "player/selfinfo.h"
+#include "racial/racial-vampire.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-kind/spells-world.h"
+#include "spell-realm/spells-sorcery.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
-#include "spell/spells3.h"
+#include "status/element-resistance.h"
+#include "status/shape-changer.h"
+#include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
@@ -70,7 +77,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 	int attempts_left = 20;
 	concptr muta_desc = "";
 	bool muta_chosen = FALSE;
-	BIT_FLAGS muta_which = 0;
+	int muta_which = 0; // mutation_flag_type_1 とmutation_flag_type_2 の両対応とするため、敢えてint型で定義する
 	BIT_FLAGS *muta_class = NULL;
 
 	if (choose_mut) attempts_left = 1;
@@ -907,7 +914,7 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 	int attempts_left = 20;
 	concptr muta_desc = "";
 	bool muta_chosen = FALSE;
-	BIT_FLAGS muta_which = 0;
+	int muta_which = 0; // mutation_flag_type_1 とmutation_flag_type_2 の両対応とするため、敢えてint型で定義する
 	BIT_FLAGS *muta_class = NULL;
 
 	if (choose_mut) attempts_left = 1;
@@ -1620,7 +1627,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 		case MUT1_TELEKINES:
 			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			msg_print(_("集中している...", "You concentrate..."));
-			fetch(creature_ptr, dir, lvl * 10, TRUE);
+			fetch_item(creature_ptr, dir, lvl * 10, TRUE);
 			break;
 
 		case MUT1_VTELEPORT:

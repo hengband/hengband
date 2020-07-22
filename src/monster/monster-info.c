@@ -11,6 +11,7 @@
 
 #include "monster/monster-info.h"
 #include "dungeon/quest.h"
+#include "floor/cave.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -26,6 +27,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/smart-learn-types.h"
 #include "player/avatar.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

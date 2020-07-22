@@ -1,5 +1,6 @@
 ﻿#include "market/building-service.h"
 #include "cmd-building/cmd-building.h"
+#include "realm/realm-names-table.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
@@ -79,7 +80,7 @@ void display_buikding_service(player_type *player_ptr, building_type *bldg)
     byte action_color;
     char tmp_str[80];
 
-    Term_clear();
+    term_clear();
     sprintf(tmp_str, "%s (%s) %35s", bldg->owner_name, bldg->owner_race, bldg->name);
     prt(tmp_str, 2, 1);
 

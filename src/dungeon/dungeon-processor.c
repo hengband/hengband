@@ -1,30 +1,36 @@
 ﻿#include "dungeon/dungeon-processor.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/disturbance.h"
 #include "core/hp-mp-regenerator.h"
 #include "core/player-processor.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/turn-compensator.h"
+#include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-save.h"
+#include "floor/floor.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
+#include "io/cursor.h"
 #include "io/input-key-requester.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
 #include "market/arena.h"
+#include "mind/mind-ninja.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
-#include "view/display-main-window.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
@@ -94,7 +100,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     handle_stuff(player_ptr);
-    Term_fresh();
+    term_fresh();
 
     if (quest_num
         && (is_fixed_quest_idx(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
@@ -162,7 +168,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after)
-            Term_fresh();
+            term_fresh();
 
         if (!player_ptr->playing || player_ptr->is_dead)
             break;
@@ -172,7 +178,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after)
-            Term_fresh();
+            term_fresh();
 
         if (!player_ptr->playing || player_ptr->is_dead)
             break;
@@ -182,7 +188,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after)
-            Term_fresh();
+            term_fresh();
 
         if (!player_ptr->playing || player_ptr->is_dead)
             break;

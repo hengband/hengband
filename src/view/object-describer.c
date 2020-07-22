@@ -1,11 +1,12 @@
 ﻿#include "view/object-describer.h"
 #include "cmd-action/cmd-spell.h"
-#include "perception/object-perception.h"
-#include "object/object-flavor.h"
-#include "object/object-generator.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/object-generator.h"
+#include "perception/object-perception.h"
 #include "realm/realm-names-table.h"
-#include "spell/spells3.h"
+#include "spell/spell-info.h"
 #include "system/object-type-definition.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
@@ -53,7 +54,7 @@ void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 {
     object_type *o_ptr = &owner_ptr->inventory_list[item];
     GAME_TEXT o_name[MAX_NLEN];
-    object_desc(owner_ptr, o_name, o_ptr, 0);
+    describe_flavor(owner_ptr, o_name, o_ptr, 0);
 #ifdef JP
     if (o_ptr->number <= 0) {
         msg_format("もう%sを持っていない。", o_name);
@@ -82,17 +83,17 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
     REALM_IDX use_realm;
     GAME_TEXT o_name[MAX_NLEN];
     for (int y = 0; y < Term->hgt; y++) {
-        Term_erase(0, y, 255);
+        term_erase(0, y, 255);
     }
 
     if (!k_idx)
         return;
     q_ptr = &forge;
 
-    object_prep(q_ptr, k_idx);
-    object_desc(owner_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+    object_prep(owner_ptr, q_ptr, k_idx);
+    describe_flavor(owner_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
-    Term_putstr(0, 0, -1, TERM_WHITE, o_name);
+    term_putstr(0, 0, -1, TERM_WHITE, o_name);
     sval = q_ptr->sval;
     use_realm = tval2realm(q_ptr->tval);
 

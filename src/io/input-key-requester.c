@@ -2,16 +2,19 @@
 #include "cmd-io/cmd-menu-content-table.h"
 #include "cmd-io/macro-util.h"
 #include "core/asking-player.h" // todo 相互依存している、後で何とかする.
-#include "floor/floor.h"
 #include "game-option/input-options.h"
+#include "inventory/inventory-slot-types.h"
+#include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "system/floor-type-definition.h" // todo 違和感、後で調査する.
+#include "system/object-type-definition.h"
 #include "term/screen-processor.h" // todo 相互依存している、後で何とかする.
 #include "util/int-char-converter.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h" // todo panel_row_min が依存している。後で移設を検討する.
 #include "view/display-messages.h"
+#include "window/main-window-util.h"
 
 /*
  * Keymaps for each "mode" associated with each keypress.

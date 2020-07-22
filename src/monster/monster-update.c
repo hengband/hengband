@@ -5,7 +5,14 @@
  */
 
 #include "monster/monster-update.h"
+#include "core/disturbance.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
+#include "core/window-redrawer.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
+#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
@@ -22,6 +29,9 @@
 #include "monster/smart-learn-types.h"
 #include "player/eldritch-horror.h"
 #include "player/player-move.h"
+#include "player/special-defense-types.h"
+#include "status/element-resistance.h"
+#include "system/floor-type-definition.h"
 
 /*!
  * @brief 騎乗中のモンスター情報を更新する

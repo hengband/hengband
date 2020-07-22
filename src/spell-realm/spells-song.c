@@ -1,10 +1,17 @@
 ﻿#include "spell-realm/spells-song.h"
-#include "floor/floor.h"
+#include "core/disturbance.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
+#include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
+#include "game-option/disturbance-options.h"
+#include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "realm/realm-song-numbers.h"
+#include "spell/spell-info.h"
 #include "spell/spells-execution.h"
-#include "spell/spells3.h"
 #include "spell/technic-info-table.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
@@ -64,4 +71,46 @@ void check_music(player_type *caster_ptr)
     }
 
     exe_spell(caster_ptr, REALM_MUSIC, spell, SPELL_CONT);
+}
+
+/*!
+ * @brief 隠遁の歌の継続時間をセットする / Set "tim_stealth", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
+bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
+{
+    bool notice = FALSE;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
+
+    if (creature_ptr->is_dead)
+        return FALSE;
+
+    if (v) {
+        if (creature_ptr->tim_stealth && !do_dec) {
+            if (creature_ptr->tim_stealth > v)
+                return FALSE;
+        } else if (!is_time_limit_stealth(creature_ptr)) {
+            msg_print(_("足音が小さくなった！", "You begin to walk silently!"));
+            notice = TRUE;
+        }
+    } else {
+        if (creature_ptr->tim_stealth && !music_singing(creature_ptr, MUSIC_STEALTH)) {
+            msg_print(_("足音が大きくなった。", "You no longer walk silently."));
+            notice = TRUE;
+        }
+    }
+
+    creature_ptr->tim_stealth = v;
+    creature_ptr->redraw |= (PR_STATUS);
+
+    if (!notice)
+        return FALSE;
+
+    if (disturb_state)
+        disturb(creature_ptr, FALSE, FALSE);
+    creature_ptr->update |= (PU_BONUS);
+    handle_stuff(creature_ptr);
+    return TRUE;
 }

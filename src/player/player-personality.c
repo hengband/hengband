@@ -1,5 +1,6 @@
 ﻿#include "player/player-personality.h"
 #include "object-enchant/trc-types.h"
+#include "mutation/mutation-flag-types.h"
 
 /*!
  * @brief 性格情報 /

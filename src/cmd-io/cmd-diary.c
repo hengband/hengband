@@ -8,8 +8,8 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
-#include "player/player-class.h"
 #include "player/player-personality.h"
+#include "player/player-realm.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
@@ -32,7 +32,7 @@ static void display_diary(player_type *creature_ptr)
 
 	if (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_MONK || creature_ptr->pclass == CLASS_SAMURAI || creature_ptr->pclass == CLASS_BERSERKER)
 		strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1)]);
-	else if (IS_WIZARD_CLASS(creature_ptr))
+	else if (is_wizard_class(creature_ptr))
 		strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1) + 1]);
 	else strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 2) + 1]);
 
@@ -122,7 +122,7 @@ void do_cmd_diary(player_type *creature_ptr)
 	int i;
 	while (TRUE)
 	{
-		Term_clear();
+		term_clear();
 		prt(_("[ 記録の設定 ]", "[ Play Record ]"), 2, 0);
 		prt(_("(1) 記録を見る", "(1) Display your record"), 4, 5);
 		prt(_("(2) 文章を記録する", "(2) Add record"), 5, 5);
@@ -149,7 +149,7 @@ void do_cmd_diary(player_type *creature_ptr)
 			break;
 		case 'r': case 'R':
 			screen_load();
-			prepare_movie_hooks();
+			prepare_movie_hooks(creature_ptr);
 			return;
 		default:
 			bell();

@@ -7,13 +7,15 @@
  */
 
 #include "view/display-player.h"
-#include "info-reader/fixed-map-parser.h"
 #include "dungeon/quest.h"
-#include "floor/floor.h"
+#include "floor/floor-util.h"
 #include "game-option/text-display-options.h"
+#include "info-reader/fixed-map-parser.h"
+#include "inventory/inventory-slot-types.h"
 #include "knowledge/knowledge-mutations.h"
-#include "object/object-kind.h"
+#include "mutation/mutation-flag-types.h"
 #include "object/object-info.h"
+#include "object/object-kind.h"
 #include "player/mimic-info-table.h"
 #include "player/patron.h"
 #include "player/player-class.h"
@@ -22,6 +24,7 @@
 #include "realm/realm-names-table.h"
 #include "status-first-page.h"
 #include "system/system-variables.h" // 暫定。後で消す
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"
@@ -163,10 +166,9 @@ static void display_player_stats(player_type *creature_ptr)
  * @brief ゲームオーバーの原因を探る (生きていたら何もしない)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
- * @param map_name マップ名へのコールバック
  * @return 生きていたらFALSE、死んでいたらTRUE
  */
-static bool search_death_cause(player_type *creature_ptr, char *statmsg, map_name_pf map_name)
+static bool search_death_cause(player_type *creature_ptr, char *statmsg)
 {
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (!creature_ptr->is_dead) return FALSE;
@@ -182,7 +184,7 @@ static bool search_death_cause(player_type *creature_ptr, char *statmsg, map_nam
 	if (!floor_ptr->dun_level)
 	{
 #ifdef JP
-		sprintf(statmsg, "…あなたは%sで%sに殺された。", (*map_name)(creature_ptr), creature_ptr->died_from);
+		sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(creature_ptr), creature_ptr->died_from);
 #else
 		sprintf(statmsg, "...You were killed by %s in %s.", creature_ptr->died_from, map_name(creature_ptr));
 #endif
@@ -204,7 +206,7 @@ static bool search_death_cause(player_type *creature_ptr, char *statmsg, map_nam
 	}
 
 #ifdef JP
-	sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", (*map_name)(creature_ptr), (int)floor_ptr->dun_level, creature_ptr->died_from);
+	sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(creature_ptr), (int)floor_ptr->dun_level, creature_ptr->died_from);
 #else
 	sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, floor_ptr->dun_level, map_name(creature_ptr));
 #endif
@@ -240,12 +242,11 @@ static bool decide_death_in_quest(player_type *creature_ptr, char *statmsg)
  * @brief 現在いるフロアを、または死んでいたらどこでどう死んだかをバッファに詰める
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
- * @param map_name マップ名へのコールバック
  * @return なし
  */
-static void decide_current_floor(player_type *creature_ptr, char *statmsg, map_name_pf map_name)
+static void decide_current_floor(player_type *creature_ptr, char *statmsg)
 {
-	if (search_death_cause(creature_ptr, statmsg, map_name)) return;
+	if (search_death_cause(creature_ptr, statmsg)) return;
 	if (!current_world_ptr->character_dungeon) return;
 
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
@@ -302,7 +303,7 @@ static void display_current_floor(char *statmsg)
  * Mode 4 = mutations
  * </pre>
  */
-void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
+void display_player(player_type *creature_ptr, int mode)
 {
 	if ((creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3) && display_mutations)
 		mode = (mode % 5);
@@ -334,7 +335,7 @@ void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
 		put_str(creature_ptr->history[i], i + 12, 10);
 
 	*statmsg = '\0';
-	decide_current_floor(creature_ptr, statmsg, map_name);
+	decide_current_floor(creature_ptr, statmsg);
 	if (!*statmsg) return;
 
 	display_current_floor(statmsg);
@@ -360,7 +361,7 @@ void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, B
 		o_ptr = &creature_ptr->inventory_list[i];
 
 		TERM_COLOR a = object_attr(o_ptr);
-		char c = object_char(o_ptr);
+		SYMBOL_CODE c = object_char(o_ptr);
 
 		if (!equippy_chars || !o_ptr->k_idx)
 		{
@@ -368,6 +369,6 @@ void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, B
 			a = TERM_DARK;
 		}
 
-		Term_putch(x + i - INVEN_RARM, y, a, c);
+		term_putch(x + i - INVEN_RARM, y, a, c);
 	}
 }

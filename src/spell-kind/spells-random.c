@@ -5,8 +5,8 @@
  */
 
 #include "spell-kind/spells-random.h"
+#include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
-#include "floor/floor.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -14,9 +14,10 @@
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/avatar.h"
+#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "spell-kind/earthquake.h"
+#include "spell-kind/spells-equipment.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-launcher.h"
@@ -30,7 +31,9 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spell-types.h"
-#include "spell/spells3.h"
+#include "status/base-status.h"
+#include "status/experience.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

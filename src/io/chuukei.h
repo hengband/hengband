@@ -6,13 +6,13 @@
 extern bool chuukei_server;
 extern bool chuukei_client;
 
-extern int connect_chuukei_server(char *server_string);
-extern void browse_chuukei(void);
-extern void flush_ringbuf(void);
-extern void prepare_chuukei_hooks(void);
+int connect_chuukei_server(char *server_string);
+void browse_chuukei(void);
+void flush_ringbuf(void);
+void prepare_chuukei_hooks(void);
 #endif
 
-extern void prepare_movie_hooks(void);
-extern void prepare_browse_movie_aux(concptr filename);
-extern void prepare_browse_movie(concptr filename);
-extern void browse_movie(void);
+void prepare_movie_hooks(player_type *player_ptr);
+void prepare_browse_movie_aux(concptr filename);
+void prepare_browse_movie(concptr filename);
+void browse_movie(void);

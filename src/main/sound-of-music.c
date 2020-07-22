@@ -1,8 +1,8 @@
 ﻿#include "main/sound-of-music.h"
-#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/special-options.h"
 #include "main/music-definitions-table.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 
 /*
@@ -10,9 +10,9 @@
  */
 void bell(void)
 {
-    Term_fresh();
+    term_fresh();
     if (ring_bell)
-        Term_xtra(TERM_XTRA_NOISE, 0);
+        term_xtra(TERM_XTRA_NOISE, 0);
 
     flush();
 }
@@ -26,7 +26,7 @@ void sound(int val)
     if (!use_sound)
         return;
 
-    Term_xtra(TERM_XTRA_SOUND, val);
+    term_xtra(TERM_XTRA_SOUND, val);
 }
 
 /*
@@ -37,7 +37,7 @@ errr play_music(int type, int val)
     if (!use_music)
         return 1;
 
-    return Term_xtra(type, val);
+    return term_xtra(type, val);
 }
 
 /*

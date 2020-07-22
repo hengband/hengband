@@ -1,46 +1,56 @@
 ﻿#include "core/player-processor.h"
-#include "mind/mind-sniper.h"
+#include "action/run-execution.h"
+#include "action/travel-execution.h"
+#include "core/disturbance.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
+#include "core/speed-table.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-save.h"
+#include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "inventory/pack-overflow.h"
+#include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
 #include "io/input-key-requester.h"
 #include "mind/mind-force-trainer.h"
-#include "core/speed-table.h"
+#include "mind/mind-sniper.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/place-monster-types.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
-#include "monster-floor/monster-generator.h"
 #include "monster/monster-list.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
+#include "player/attack-defense-types.h"
 #include "player/player-skill.h"
-#include "spell-realm/spells-song.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
+#include "status/action-setter.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
+#include "world/world-turn-processor.h"
 
 bool load = TRUE;
 bool can_save = FALSE;
 
 static void process_fishing(player_type *creature_ptr)
 {
-    Term_xtra(TERM_XTRA_DELAY, 10);
+    term_xtra(TERM_XTRA_DELAY, 10);
     if (one_in_(1000)) {
         MONRACE_IDX r_idx;
         bool success = FALSE;
@@ -152,8 +162,8 @@ void process_player(player_type *creature_ptr)
         }
 
         if (monster_stunned_remaining(m_ptr)) {
-            if (set_monster_stunned(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
+            if (set_monster_stunned(creature_ptr, creature_ptr->riding,
+                    (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_stunned_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
@@ -161,8 +171,8 @@ void process_player(player_type *creature_ptr)
         }
 
         if (monster_confused_remaining(m_ptr)) {
-            if (set_monster_confused(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_confused_remaining(m_ptr) - 1))) {
+            if (set_monster_confused(creature_ptr, creature_ptr->riding,
+                    (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_confused_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
@@ -170,8 +180,8 @@ void process_player(player_type *creature_ptr)
         }
 
         if (monster_fear_remaining(m_ptr)) {
-            if (set_monster_monfear(
-                    creature_ptr, creature_ptr->riding, (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_fear_remaining(m_ptr) - 1))) {
+            if (set_monster_monfear(creature_ptr, creature_ptr->riding,
+                    (randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (monster_fear_remaining(m_ptr) - 1))) {
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, m_ptr, 0);
                 msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer afraid."), m_name);
@@ -182,9 +192,8 @@ void process_player(player_type *creature_ptr)
     }
 
     load = FALSE;
-    if (creature_ptr->lightspeed) {
-        (void)set_lightspeed(creature_ptr, creature_ptr->lightspeed - 1, TRUE);
-    }
+    if (creature_ptr->lightspeed)
+        set_lightspeed(creature_ptr, creature_ptr->lightspeed - 1, TRUE);
 
     if ((creature_ptr->pclass == CLASS_FORCETRAINER) && get_current_ki(creature_ptr)) {
         if (get_current_ki(creature_ptr) < 40)
@@ -230,7 +239,7 @@ void process_player(player_type *creature_ptr)
         handle_stuff(creature_ptr);
         move_cursor_relative(creature_ptr->y, creature_ptr->x);
         if (fresh_before)
-            Term_fresh();
+            term_fresh();
 
         pack_overflow(creature_ptr);
         if (!command_new)

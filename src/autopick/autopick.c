@@ -17,13 +17,15 @@
 #include "autopick/autopick-menu-data-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "core/asking-player.h"
-#include "floor/floor.h"
+#include "core/disturbance.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
-#include "object/object-flavor.h"
+#include "inventory/inventory-slot-types.h"
+#include "inventory/player-inventory.h"
 #include "object/object-mark-types.h"
 #include "object/object-info.h"
-#include "player/player-move.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
@@ -38,7 +40,7 @@ static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX it
 	if (o_ptr->k_idx == 0 || !(o_ptr->marked & OM_AUTODESTROY)) return;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(player_ptr, o_name, o_ptr, 0);
+	describe_flavor(player_ptr, o_name, o_ptr, 0);
 	if (item >= 0)
 	{
 		inven_item_increase(player_ptr, item, -(o_ptr->number));
@@ -116,10 +118,10 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 		}
 
 		disturb(player_ptr, FALSE, FALSE);
-		if (!check_store_item_to_inventory(o_ptr))
+		if (!check_store_item_to_inventory(player_ptr, o_ptr))
 		{
 			GAME_TEXT o_name[MAX_NLEN];
-			object_desc(player_ptr, o_name, o_ptr, 0);
+			describe_flavor(player_ptr, o_name, o_ptr, 0);
 			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 			o_ptr->marked |= OM_NOMSG;
 			continue;
@@ -127,7 +129,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 
 		if (!(autopick_list[idx].action & DO_QUERY_AUTOPICK))
 		{
-			py_pickup_aux(player_ptr, this_o_idx);
+			describe_pickup_item(player_ptr, this_o_idx);
 			continue;
 		}
 
@@ -138,7 +140,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 			continue;
 		}
 
-		object_desc(player_ptr, o_name, o_ptr, 0);
+		describe_flavor(player_ptr, o_name, o_ptr, 0);
 		sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
 		if (!get_check(out_val))
 		{
@@ -146,6 +148,6 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 			continue;
 		}
 
-		py_pickup_aux(player_ptr, this_o_idx);
+		describe_pickup_item(player_ptr, this_o_idx);
 	}
 }

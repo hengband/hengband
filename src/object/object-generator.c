@@ -29,7 +29,7 @@ void object_copy(object_type *o_ptr, object_type *j_ptr) { (void)COPY(o_ptr, j_p
  * @param k_idx 新たに作成したいベースアイテム情報のID
  * @return なし
  */
-void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx)
+void object_prep(player_type *player_ptr, object_type *o_ptr, KIND_OBJECT_IDX k_idx)
 {
     object_kind *k_ptr = &k_info[k_idx];
     object_wipe(o_ptr);
@@ -58,9 +58,9 @@ void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx)
     if (k_ptr->gen_flags & (TRG_PERMA_CURSE))
         o_ptr->curse_flags |= (TRC_PERMA_CURSE);
     if (k_ptr->gen_flags & (TRG_RANDOM_CURSE0))
-        o_ptr->curse_flags |= get_curse(0, o_ptr);
+        o_ptr->curse_flags |= get_curse(player_ptr, 0, o_ptr);
     if (k_ptr->gen_flags & (TRG_RANDOM_CURSE1))
-        o_ptr->curse_flags |= get_curse(1, o_ptr);
+        o_ptr->curse_flags |= get_curse(player_ptr, 1, o_ptr);
     if (k_ptr->gen_flags & (TRG_RANDOM_CURSE2))
-        o_ptr->curse_flags |= get_curse(2, o_ptr);
+        o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
 }

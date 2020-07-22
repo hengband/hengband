@@ -1,8 +1,11 @@
 ﻿#include "permanent-resistances.h"
+#include "inventory/inventory-slot-types.h"
+#include "mutation/mutation-flag-types.h"
+#include "object-enchant/tr-types.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
-#include "object-enchant/tr-types.h"
+#include "player/special-defense-types.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 

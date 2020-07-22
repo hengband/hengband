@@ -1,6 +1,7 @@
 ﻿#include "mind/mind-warrior-mage.h"
+#include "core/hp-mp-processor.h"
+#include "core/player-redraw-types.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "view/display-messages.h"
 
 bool comvert_hp_to_mp(player_type *creature_ptr)

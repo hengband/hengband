@@ -1,8 +1,11 @@
 ﻿#include "effect/effect-player-spirit.h"
+#include "blue-magic/blue-magic-checker.h"
+#include "core/player-redraw-types.h"
+#include "core/window-redrawer.h"
 #include "mind/mind-mirror-master.h"
-#include "mspell/mspells3.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
+#include "status/bad-status-setter.h"
+#include "status/base-status.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

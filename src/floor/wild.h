@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "floor/floor.h"
+#include "floor/floor-base-definitions.h"
 
 #define NO_TOWN 6
 #define SECRET_TOWN 5
@@ -24,7 +24,6 @@
 
 #define MAX_WILDERNESS          12 /* Maximum wilderness index */
 
-/* wild.c */
 extern void set_floor_and_wall(DUNGEON_IDX type);
 extern void wilderness_gen(player_type *creature_ptr);
 extern void wilderness_gen_small(player_type *creature_ptr);
@@ -34,26 +33,11 @@ extern void seed_wilderness(void);
 extern errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x);
 extern bool change_wild_mode(player_type *creature_ptr, bool encount);
 
-/* Border */
-typedef struct border_type border_type;
-struct border_type
-{
-	s16b north[MAX_WID];
-	s16b south[MAX_WID];
-	s16b east[MAX_HGT];
-	s16b west[MAX_HGT];
-	s16b north_west;
-	s16b north_east;
-	s16b south_west;
-	s16b south_east;
-};
-
 /*
  * A structure describing a wilderness area
  * with a terrain or a town
  */
-typedef struct 
-{
+typedef struct wilderness_type {
 	int terrain;
 	TOWN_IDX town;
 	int road;

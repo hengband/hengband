@@ -9,7 +9,6 @@
 #include "core/show-file.h"
 #include "util/sort.h"
 #include "core/stuff-handler.h"
-#include "floor/floor.h"
 #include "game-option/cheat-options.h"
 #include "game-option/special-options.h"
 #include "io-dump/dump-util.h"
@@ -25,12 +24,12 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/display-main-window.h" // 暫定、後で消す.
 #include "view/display-lore.h"
 #include "view/display-monster-status.h"
 #include "world/world.h"
@@ -101,7 +100,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
 
 	mon_idx[mon_cnt] = -1;
 	int dummy_why;
-	ang_sort(mon_idx, &dummy_why, mon_cnt, ang_sort_comp_monster_level, ang_sort_swap_hook);
+	ang_sort(creature_ptr, mon_idx, &dummy_why, mon_cnt, ang_sort_comp_monster_level, ang_sort_swap_hook);
 	return mon_cnt;
 }
 
@@ -206,7 +205,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 	}
 
 	u16b why = 2;
-	ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+	ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
 	for (int k = 0; k < n; k++)
 	{
 		monster_race *r_ptr = &r_info[who[k]];
@@ -290,8 +289,8 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 			c_prt(attr, format("%d", r_idx), row + i, 62);
 		}
 
-		Term_erase(69, row + i, 255);
-		Term_queue_bigchar(use_bigtile ? 69 : 70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
+		term_erase(69, row + i, 255);
+		term_queue_bigchar(use_bigtile ? 69 : 70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
 		if (!visual_only)
 		{
 			if (!(r_ptr->flags1 & RF1_UNIQUE))
@@ -304,7 +303,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 
 	for (; i < per_page; i++)
 	{
-		Term_erase(col, row + i, 255);
+		term_erase(col, row + i, 255);
 	}
 }
 
@@ -321,7 +320,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)
 {
 	TERM_LEN wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 	IDX *mon_idx;
 	C_MAKE(mon_idx, max_r_idx, MONRACE_IDX);
 
@@ -385,14 +384,14 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
 
 			for (IDX i = 0; i < 78; i++)
 			{
-				Term_putch(i, 5, TERM_WHITE, '=');
+				term_putch(i, 5, TERM_WHITE, '=');
 			}
 
 			if (direct_r_idx < 0)
 			{
 				for (IDX i = 0; i < browser_rows; i++)
 				{
-					Term_putch(max + 1, 6 + i, TERM_WHITE, '|');
+					term_putch(max + 1, 6 + i, TERM_WHITE, '|');
 				}
 			}
 
@@ -449,11 +448,11 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
 		}
 		else if (!column)
 		{
-			Term_gotoxy(0, 6 + (grp_cur - grp_top));
+			term_gotoxy(0, 6 + (grp_cur - grp_top));
 		}
 		else
 		{
-			Term_gotoxy(max + 3, 6 + (mon_cur - mon_top));
+			term_gotoxy(max + 3, 6 + (mon_cur - mon_top));
 		}
 
 		char ch = inkey();

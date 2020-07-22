@@ -1,10 +1,10 @@
 ﻿#include "effect/effect-player-curse.h"
+#include "blue-magic/blue-magic-checker.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/race-indice-types.h"
-#include "mspell/mspells3.h"
 #include "object-enchant/object-curse.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
+#include "status/bad-status-setter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

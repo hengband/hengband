@@ -16,7 +16,6 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h" // 暫定、後で消す.
 #include "world/world.h"
 
  /*
@@ -74,23 +73,23 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 			c_prt(attr, format("%d", f_idx), row_i, f_idx_col);
 		}
 
-		Term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, f_ptr->x_attr[F_LIT_STANDARD], f_ptr->x_char[F_LIT_STANDARD], 0, 0);
-		Term_putch(lit_col[F_LIT_NS_BEGIN], row_i, TERM_SLATE, '(');
+		term_queue_bigchar(lit_col[F_LIT_STANDARD], row_i, f_ptr->x_attr[F_LIT_STANDARD], f_ptr->x_char[F_LIT_STANDARD], 0, 0);
+		term_putch(lit_col[F_LIT_NS_BEGIN], row_i, TERM_SLATE, '(');
 		for (int j = F_LIT_NS_BEGIN + 1; j < F_LIT_MAX; j++)
 		{
-			Term_putch(lit_col[j], row_i, TERM_SLATE, '/');
+			term_putch(lit_col[j], row_i, TERM_SLATE, '/');
 		}
 
-		Term_putch(lit_col[F_LIT_MAX - 1] + (use_bigtile ? 3 : 2), row_i, TERM_SLATE, ')');
+		term_putch(lit_col[F_LIT_MAX - 1] + (use_bigtile ? 3 : 2), row_i, TERM_SLATE, ')');
 		for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
 		{
-			Term_queue_bigchar(lit_col[j] + 1, row_i, f_ptr->x_attr[j], f_ptr->x_char[j], 0, 0);
+			term_queue_bigchar(lit_col[j] + 1, row_i, f_ptr->x_attr[j], f_ptr->x_char[j], 0, 0);
 		}
 	}
 
 	for (; i < per_page; i++)
 	{
-		Term_erase(col, row + i, 255);
+		term_erase(col, row + i, 255);
 	}
 }
 
@@ -106,7 +105,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 	(void)C_WIPE(char_old, F_LIT_MAX, SYMBOL_CODE);
 
 	TERM_LEN wid, hgt;
-	Term_get_size(&wid, &hgt);
+	term_get_size(&wid, &hgt);
 
 	FEAT_IDX *feat_idx;
 	C_MAKE(feat_idx, max_f_idx, FEAT_IDX);
@@ -191,14 +190,14 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
 			for (FEAT_IDX i = 0; i < 78; i++)
 			{
-				Term_putch(i, 5, TERM_WHITE, '=');
+				term_putch(i, 5, TERM_WHITE, '=');
 			}
 
 			if (direct_f_idx < 0)
 			{
 				for (FEAT_IDX i = 0; i < browser_rows; i++)
 				{
-					Term_putch(max + 1, 6 + i, TERM_WHITE, '|');
+					term_putch(max + 1, 6 + i, TERM_WHITE, '|');
 				}
 			}
 
@@ -249,11 +248,11 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 		}
 		else if (!column)
 		{
-			Term_gotoxy(0, 6 + (grp_cur - grp_top));
+			term_gotoxy(0, 6 + (grp_cur - grp_top));
 		}
 		else
 		{
-			Term_gotoxy(max + 3, 6 + (feat_cur - feat_top));
+			term_gotoxy(max + 3, 6 + (feat_cur - feat_top));
 		}
 
 		ch = inkey();

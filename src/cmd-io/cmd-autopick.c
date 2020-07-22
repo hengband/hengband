@@ -17,7 +17,6 @@
 #include "util/int-char-converter.h"
 #include "term/screen-processor.h"
 #include "world/world.h"
-#include "view/display-main-window.h" // 暫定。後で消す.
 
 /*
  * Check special key code and get a movement command id
@@ -156,7 +155,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 			prt(format("(%d,%d)-(%d,%d)", tb->mx, tb->my, tb->cx, tb->cy), 0, 60);
 		}
 
-		Term_gotoxy(tb->cx - tb->left, tb->cy - tb->upper + 1);
+		term_gotoxy(tb->cx - tb->left, tb->cy - tb->upper + 1);
 		tb->dirty_flags = 0;
 		tb->dirty_line = -1;
 		tb->old_cy = tb->cy;

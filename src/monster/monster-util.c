@@ -1,21 +1,29 @@
 ﻿#include "monster/monster-util.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
-#include "floor/floor.h"
-#include "grid/grid.h"
 #include "floor/wild.h"
+#include "grid/grid.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags4.h"
 #include "monster-race/race-flags7.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster-race/race-indice-types.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "spell/spells-summon.h"
 #include "system/alloc-entries.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
+
+typedef enum dungeon_mode_type {
+    DUNGEON_MODE_AND = 1,
+    DUNGEON_MODE_NAND = 2,
+    DUNGEON_MODE_OR = 3,
+    DUNGEON_MODE_NOR = 4,
+} dungeon_mode_type;
 
 MONSTER_IDX hack_m_idx = 0; /* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;
@@ -38,7 +46,6 @@ static monsterrace_hook_type get_mon_num_hook;
 static monsterrace_hook_type get_mon_num2_hook;
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param r_idx チェックするモンスター種族ID
@@ -334,7 +341,7 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
         entry->prob2 = 0;
         r_ptr = &r_info[entry->index];
 
-        if ((get_mon_num_hook && !((*get_mon_num_hook)(entry->index))) || (get_mon_num2_hook && !((*get_mon_num2_hook)(entry->index))))
+        if ((get_mon_num_hook && !((*get_mon_num_hook)(player_ptr, entry->index))) || (get_mon_num2_hook && !((*get_mon_num2_hook)(player_ptr, entry->index))))
             continue;
 
         if (!player_ptr->phase_out && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define MAX_FEELING_TEXT 11
 
 extern concptr do_cmd_feeling_text[MAX_FEELING_TEXT];

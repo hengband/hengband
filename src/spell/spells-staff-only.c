@@ -1,10 +1,12 @@
 ﻿#include "spell/spells-staff-only.h"
+#include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "spell/process-effect.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/spell-types.h"
+#include "status/bad-status-setter.h"
+#include "status/body-improvement.h"
 #include "view/display-messages.h"
 
 /*!

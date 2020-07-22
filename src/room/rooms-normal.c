@@ -1,11 +1,11 @@
-﻿#include "system/angband.h"
+﻿#include "room/rooms-normal.h"
+#include "dungeon/dungeon-flag-types.h"
+#include "dungeon/dungeon.h"
+#include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
-
-#include "floor/floor.h"
-#include "dungeon/dungeon.h"
 #include "room/rooms.h"
-
+#include "system/floor-type-definition.h"
 
 /*!
 * @brief タイプ1の部屋…通常可変長方形の部屋を生成する / Type 1 -- normal rectangular rooms

@@ -1,5 +1,4 @@
 ﻿#include "room/rooms-pit-nest.h"
-#include "util/sort.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
@@ -7,19 +6,25 @@
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/place-monster-types.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-flags-resistance.h"
+#include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags4.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster-floor/monster-generator.h"
+#include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "monster-floor/place-monster-types.h"
 #include "room/pit-nest-kinds-table.h"
-#include "rooms.h"
+#include "room/rooms.h"
+#include "system/floor-type-definition.h"
+#include "util/sort.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
 /*!
 * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める
@@ -140,17 +145,18 @@ static concptr pit_subtype_string(int type, bool nest)
 *  @param b 比較対象参照ID2
 *  TODO: to sort.c
 */
-static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
+static bool ang_sort_comp_nest_mon_info(player_type *player_ptr, vptr u, vptr v, int a, int b)
 {
-	nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
+    /* Unused */
+    (void)player_ptr;
+    (void)v;
+
+    nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
 	MONSTER_IDX w1 = nest_mon_info[a].r_idx;
 	MONSTER_IDX w2 = nest_mon_info[b].r_idx;
 	monster_race *r1_ptr = &r_info[w1];
 	monster_race *r2_ptr = &r_info[w2];
 	int z1, z2;
-
-	/* Unused */
-	(void)v;
 
 	/* Extract used info */
 	z1 = nest_mon_info[a].used;
@@ -182,13 +188,14 @@ static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 * @param b スワップ対象参照ID2
 * TODO: to sort.c
 */
-static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
+static void ang_sort_swap_nest_mon_info(player_type *player_ptr, vptr u, vptr v, int a, int b)
 {
-	nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
-	nest_mon_info_type holder;
+    /* Unused */
+    (void)player_ptr;
+    (void)v;
 
-	/* Unused */
-	(void)v;
+    nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
+	nest_mon_info_type holder;
 
 	/* Swap */
 	holder = nest_mon_info[a];
@@ -350,7 +357,8 @@ bool build_type5(player_type *player_ptr)
 	case 4: place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name,
+            pit_subtype_string(cur_nest_type, TRUE));
 
 	/* Place some monsters */
 	for (y = yval - 2; y <= yval + 2; y++)
@@ -371,7 +379,7 @@ bool build_type5(player_type *player_ptr)
 
 	if (cheat_room)
 	{
-		ang_sort(nest_mon_info, NULL, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
+		ang_sort(player_ptr, nest_mon_info, NULL, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
 
 		/* Dump the entries (prevent multi-printing) */
 		for (i = 0; i < NUM_NEST_MON_TYPE; i++)
@@ -382,7 +390,8 @@ bool build_type5(player_type *player_ptr)
 				if (nest_mon_info[i].r_idx != nest_mon_info[i + 1].r_idx) break;
 				if (!nest_mon_info[i + 1].used) break;
 			}
-			msg_format_wizard(CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
+
+			msg_format_wizard(player_ptr, CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
 		}
 	}
 
@@ -579,14 +588,15 @@ bool build_type6(player_type *player_ptr)
 		}
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name,
+            pit_subtype_string(cur_pit_type, FALSE));
 
 	/* Select the entries */
 	for (i = 0; i < 8; i++)
 	{
 		/* Every other entry */
 		what[i] = what[i * 2];
-		msg_format_wizard(CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, r_name + r_info[what[i]].name);
+		msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, r_name + r_info[what[i]].name);
 	}
 
 	/* Top and bottom rows */
@@ -641,16 +651,17 @@ bool build_type6(player_type *player_ptr)
 	return TRUE;
 }
 
-
 /*
-* todo vault_monster_okay() をmonsterrace-hook以外から呼んでいるのはここだけなので、何とかしたい
-* Helper function for "trapped monster pit"
-*/
-static bool vault_aux_trapped_pit(MONRACE_IDX r_idx)
+ * Helper function for "trapped monster pit"
+ */
+static bool vault_aux_trapped_pit(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-	monster_race *r_ptr = &r_info[r_idx];
+    /* Unused */
+    (void)player_ptr;
 
-	if (!vault_monster_okay(r_idx)) return FALSE;
+    monster_race *r_ptr = &r_info[r_idx];
+
+	if (!vault_monster_okay(player_ptr, r_idx)) return FALSE;
 
 	/* No wall passing monster */
 	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return FALSE;
@@ -888,7 +899,7 @@ bool build_type13(player_type *player_ptr)
 		}
 	}
 
-	msg_format_wizard(CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"),
+	msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"),
 		n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
 
 	/* Select the entries */

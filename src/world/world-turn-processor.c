@@ -1,11 +1,13 @@
 ﻿#include "world/world-turn-processor.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-save.h"
+#include "core/disturbance.h"
 #include "core/hp-mp-processor.h"
 #include "core/hp-mp-regenerator.h"
 #include "core/magic-effects-timeout-reducer.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-events.h"
+#include "floor/floor-save.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
@@ -25,11 +27,14 @@
 #include "object/lite-processor.h"
 #include "perception/simple-perception.h"
 #include "player/digestion-processor.h"
-#include "player/player-move.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/floor-type-definition.h"
+#include "term/screen-processor.h"
+#include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "window/main-window-row-column.h"
 #include "world/world-movement-processor.h"
 #include "world/world.h"
 
@@ -227,4 +232,22 @@ void process_world(player_type *player_ptr)
     sense_inventory2(player_ptr);
     execute_recall(player_ptr);
     execute_floor_reset(player_ptr);
+}
+
+/*!
+ * @brief ゲーム時刻を表示する /
+ * Print time
+ * @return なし
+ */
+void print_time(player_type *player_ptr)
+{
+    int day, hour, min;
+    c_put_str(TERM_WHITE, "             ", ROW_DAY, COL_DAY);
+    extract_day_hour_min(player_ptr, &day, &hour, &min);
+    if (day < 1000)
+        c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), ROW_DAY, COL_DAY);
+    else
+        c_put_str(TERM_WHITE, _("***日目", "Day***"), ROW_DAY, COL_DAY);
+
+    c_put_str(TERM_WHITE, format("%2d:%02d", hour, min), ROW_DAY, COL_DAY + 7);
 }

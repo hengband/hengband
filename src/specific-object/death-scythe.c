@@ -7,13 +7,16 @@
 
 #include "specific-object/death-scythe.h"
 #include "combat/attack-criticality.h"
+#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
+#include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/player-damage.h"
 #include "player/player-race.h"
+#include "status/element-resistance.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -137,7 +140,7 @@ void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_ty
     msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
 
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
-    object_flags(o_ptr, death_scythe_flags);
+    object_flags(attacker_ptr, o_ptr, death_scythe_flags);
     pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand], o_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
     int magnification = calc_death_scythe_reflection_magnification(attacker_ptr);
     compensate_death_scythe_reflection_magnification(attacker_ptr, &magnification, death_scythe_flags);

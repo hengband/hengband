@@ -1,4 +1,5 @@
 ﻿#include "mspell/mspell-breath.h"
+#include "core/disturbance.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/drs-types.h"
@@ -8,8 +9,8 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
-#include "player/player-move.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

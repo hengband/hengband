@@ -1,21 +1,28 @@
 ﻿#include "core/hp-mp-processor.h"
 #include "cmd-action/cmd-pet.h"
 #include "core/hp-mp-regenerator.h"
-#include "floor/floor.h"
+#include "core/player-redraw-types.h"
+#include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
 #include "floor/pattern-walk.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-flavor.h"
+#include "player/attack-defense-types.h"
+#include "player/avatar.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
-#include "realm/realm-song-numbers.h"
+#include "player/special-defense-types.h"
+#include "status/bad-status-setter.h"
+#include "status/element-resistance.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -31,11 +38,11 @@ void process_player_hp_mp(player_type *creature_ptr)
     bool cave_no_regen = FALSE;
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
-    if (creature_ptr->poisoned && !IS_INVULN(creature_ptr)) {
+    if (creature_ptr->poisoned && !is_invuln(creature_ptr)) {
         take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison"), -1);
     }
 
-    if (creature_ptr->cut && !IS_INVULN(creature_ptr)) {
+    if (creature_ptr->cut && !is_invuln(creature_ptr)) {
         HIT_POINT dam;
         if (creature_ptr->cut > 1000) {
             dam = 200;
@@ -57,7 +64,7 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
-        if (!creature_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !IS_INVULN(creature_ptr) && is_daytime()) {
+        if (!creature_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !is_invuln(creature_ptr) && is_daytime()) {
             if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
@@ -70,19 +77,19 @@ void process_player_hp_mp(player_type *creature_ptr)
             object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
             GAME_TEXT o_name[MAX_NLEN];
             char ouch[MAX_NLEN + 40];
-            object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+            describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
             msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), o_name);
 
             cave_no_regen = TRUE;
-            object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
+            describe_flavor(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
             sprintf(ouch, _("%sを装備したダメージ", "wielding %s"), o_name);
 
-            if (!IS_INVULN(creature_ptr))
+            if (!is_invuln(creature_ptr))
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, ouch, -1);
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_LAVA) && !IS_INVULN(creature_ptr) && !creature_ptr->immune_fire) {
+    if (have_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !creature_ptr->immune_fire) {
         int damage = 0;
 
         if (have_flag(f_ptr->flags, FF_DEEP)) {
@@ -119,7 +126,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_COLD_PUDDLE) && !IS_INVULN(creature_ptr) && !creature_ptr->immune_cold) {
+    if (have_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_cold) {
         int damage = 0;
 
         if (have_flag(f_ptr->flags, FF_DEEP)) {
@@ -154,7 +161,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !IS_INVULN(creature_ptr) && !creature_ptr->immune_elec) {
+    if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_elec) {
         int damage = 0;
 
         if (have_flag(f_ptr->flags, FF_DEEP)) {
@@ -189,7 +196,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_ACID_PUDDLE) && !IS_INVULN(creature_ptr) && !creature_ptr->immune_acid) {
+    if (have_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_acid) {
         int damage = 0;
 
         if (have_flag(f_ptr->flags, FF_DEEP)) {
@@ -224,7 +231,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_POISON_PUDDLE) && !IS_INVULN(creature_ptr)) {
+    if (have_flag(f_ptr->flags, FF_POISON_PUDDLE) && !is_invuln(creature_ptr)) {
         int damage = 0;
 
         if (have_flag(f_ptr->flags, FF_DEEP)) {
@@ -315,7 +322,7 @@ void process_player_hp_mp(player_type *creature_ptr)
      * WILL BE!
      */
     if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) {
-        if (!IS_INVULN(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->kabenuke
+        if (!is_invuln(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->tim_pass_wall
             && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall)) {
             concptr dam_desc;
             cave_no_regen = TRUE;
@@ -394,4 +401,47 @@ void process_player_hp_mp(player_type *creature_ptr)
     if ((creature_ptr->chp < creature_ptr->mhp) && !cave_no_regen) {
         regenhp(creature_ptr, regen_amount);
     }
+}
+
+/*
+ * Increase players hit points, notice effects
+ */
+bool hp_player(player_type *creature_ptr, int num)
+{
+    int vir;
+    vir = virtue_number(creature_ptr, V_VITALITY);
+
+    if (num <= 0)
+        return FALSE;
+
+    if (vir) {
+        num = num * (creature_ptr->virtues[vir - 1] + 1250) / 1250;
+    }
+
+    if (creature_ptr->chp < creature_ptr->mhp) {
+        if ((num > 0) && (creature_ptr->chp < (creature_ptr->mhp / 3)))
+            chg_virtue(creature_ptr, V_TEMPERANCE, 1);
+
+        creature_ptr->chp += num;
+        if (creature_ptr->chp >= creature_ptr->mhp) {
+            creature_ptr->chp = creature_ptr->mhp;
+            creature_ptr->chp_frac = 0;
+        }
+
+        creature_ptr->redraw |= (PR_HP);
+        creature_ptr->window |= (PW_PLAYER);
+        if (num < 5) {
+            msg_print(_("少し気分が良くなった。", "You feel a little better."));
+        } else if (num < 15) {
+            msg_print(_("気分が良くなった。", "You feel better."));
+        } else if (num < 35) {
+            msg_print(_("とても気分が良くなった。", "You feel much better."));
+        } else {
+            msg_print(_("ひじょうに気分が良くなった。", "You feel very good."));
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
 }

@@ -1,11 +1,13 @@
 ﻿#include "spell-kind/spells-genocide.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "dungeon/quest.h"
-#include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
+#include "io/cursor.h"
 #include "io/write-diary.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -19,7 +21,7 @@
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
-#include "view/display-main-window.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
@@ -97,10 +99,10 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
     caster_ptr->redraw |= (PR_HP);
     caster_ptr->window |= (PW_PLAYER);
     handle_stuff(caster_ptr);
-    Term_fresh();
+    term_fresh();
 
     int msec = delay_factor * delay_factor * delay_factor;
-    Term_xtra(TERM_XTRA_DELAY, msec);
+    term_xtra(TERM_XTRA_DELAY, msec);
 
     return !resist;
 }

@@ -9,9 +9,16 @@
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-action/cmd-hissatsu.h"
 #include "cmd-action/cmd-mane.h"
+#include "cmd-action/cmd-move.h"
+#include "cmd-action/cmd-open-close.h"
+#include "cmd-action/cmd-others.h"
 #include "cmd-action/cmd-pet.h"
+#include "cmd-action/cmd-shoot.h"
 #include "cmd-action/cmd-spell.h"
+#include "cmd-action/cmd-travel.h"
+#include "cmd-action/cmd-tunnel.h"
 #include "cmd-building/cmd-building.h"
+#include "cmd-building/cmd-store.h"
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-diary.h"
 #include "cmd-io/cmd-dump.h"
@@ -29,14 +36,18 @@
 #include "cmd-item/cmd-quaff.h"
 #include "cmd-item/cmd-read.h"
 #include "cmd-item/cmd-smith.h"
+#include "cmd-item/cmd-throw.h"
 #include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
-#include "cmd/cmd-basic.h"
-#include "cmd/cmd-draw.h"
-#include "cmd/cmd-visuals.h"
+#include "cmd-visual/cmd-draw.h"
+#include "cmd-visual/cmd-map.h"
+#include "cmd-visual/cmd-visuals.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "core/special-internal-keys.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
 #include "floor/wild.h"
@@ -45,7 +56,6 @@
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/runtime-arguments.h"
-#include "inventory/player-inventory.h"
 #include "io/chuukei.h"
 #include "io/command-repeater.h"
 #include "io/files-util.h"
@@ -55,26 +65,26 @@
 #include "knowledge/knowledge-quests.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-blue-mage.h"
 #include "mind/mind-sniper.h"
-#include "mind/mind.h" // do_cmd_mind_browse() がある。後で移設する.
-#include "mind/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
+#include "mind/mind-switcher.h" // do_cmd_mind_browse() がある。後で移設する.
 #include "mind/snipe-types.h"
-#include "mspell/mspells3.h" // do_cmd_cast_learned() がある。後で移設する.
-#include "player/player-effects.h"
-#include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
+#include "player/attack-defense-types.h"
+#include "player/player-class.h"
+#include "player/special-defense-types.h"
+#include "racial/racial-switcher.h" // do_cmd_racial_power() がある。ファイル名変更？.
 #include "spell/spells-object.h"
+#include "status/action-setter.h"
+#include "store/home.h"
 #include "store/store-util.h"
-#include "store/store.h" // do_cmd_store() がある。後で移設する.
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
+#include "window/display-sub-windows.h"
 #include "wizard/wizard-special-process.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
-
-// todo command-processor.h と util.h が相互依存している。後で別な場所に移す.
-COMMAND_CODE now_message;
 
 /*!
  * @brief ウィザードモードへの導入処理
@@ -499,7 +509,7 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case '!': {
-        (void)Term_user(0);
+        (void)term_user(0);
         break;
     }
     case '"': {
@@ -530,7 +540,7 @@ void process_command(player_type *creature_ptr)
     }
     case '=': {
         do_cmd_options(creature_ptr);
-        (void)combine_and_reorder_home(STORE_HOME);
+        (void)combine_and_reorder_home(creature_ptr, STORE_HOME);
         do_cmd_redraw(creature_ptr);
         break;
     }
@@ -597,7 +607,7 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case ']': {
-        prepare_movie_hooks();
+        prepare_movie_hooks(creature_ptr);
         break;
     }
     case KTRL('V'): {

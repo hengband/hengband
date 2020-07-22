@@ -1,13 +1,16 @@
 ﻿#include "inventory/inventory-object.h"
+#include "core/player-update-types.h"
+#include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
-#include "object/object-flavor.h"
+#include "inventory/inventory-slot-types.h"
+#include "object-hook/hook-weapon.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h"
+#include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "object/object-info.h"
-#include "player/player-effects.h" // 暫定、相互参照している.
+#include "spell-realm/spells-craft.h"
 #include "util/object-sort.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
@@ -136,7 +139,7 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
     distribute_charges(o_ptr, q_ptr, amt);
 
     q_ptr->number = amt;
-    object_desc(owner_ptr, o_name, q_ptr, 0);
+    describe_flavor(owner_ptr, o_name, q_ptr, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
     (void)drop_near(owner_ptr, q_ptr, 0, owner_ptr->y, owner_ptr->x);
     vary_item(owner_ptr, item, -amt);
@@ -240,9 +243,9 @@ void reorder_pack(player_type *owner_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        o_value = object_value(o_ptr);
+        o_value = object_value(owner_ptr, o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(o_ptr, o_value, &owner_ptr->inventory_list[j]))
+            if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
                 break;
         }
 
@@ -317,9 +320,9 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 
     i = j;
     if (i < INVEN_PACK) {
-        s32b o_value = object_value(o_ptr);
+        s32b o_value = object_value(owner_ptr, o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(o_ptr, o_value, &owner_ptr->inventory_list[j]))
+            if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
                 break;
         }
 
@@ -347,20 +350,22 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 }
 
 /*!
- * todo ここのp_ptrだけは抜けない……関数ポインタの嵐でにっちもさっちもいかない
  * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
  * Check if we have space for an item in the pack without overflow
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
  * @return 溢れずに済むならTRUEを返す
  */
-bool check_store_item_to_inventory(object_type *o_ptr)
+bool check_store_item_to_inventory(player_type *player_ptr, object_type *o_ptr)
 {
-    if (p_ptr->inven_cnt < INVEN_PACK)
+    /* Unused */
+    (void)player_ptr;
+
+    if (player_ptr->inven_cnt < INVEN_PACK)
         return TRUE;
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        object_type *j_ptr = &p_ptr->inventory_list[j];
+        object_type *j_ptr = &player_ptr->inventory_list[j];
         if (!j_ptr->k_idx)
             continue;
 
@@ -401,7 +406,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
     q_ptr = &forge;
     object_copy(q_ptr, o_ptr);
     q_ptr->number = amt;
-    object_desc(owner_ptr, o_name, q_ptr, 0);
+    describe_flavor(owner_ptr, o_name, q_ptr, 0);
     if (((item == INVEN_RARM) || (item == INVEN_LARM)) && object_is_melee_weapon(o_ptr)) {
         act = _("を装備からはずした", "You were wielding");
     } else if (item == INVEN_BOW) {

@@ -5,7 +5,8 @@
  */
 
 #include "monster-attack/monster-attack-processor.h"
-#include "floor/floor.h"
+#include "dungeon/dungeon-flag-types.h"
+#include "floor/cave.h"
 #include "monster/monster-status.h"
 #include "dungeon/dungeon.h"
 #include "monster-attack/monster-attack-player.h"
@@ -14,6 +15,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster/monster-info.h"
 #include "melee/monster-attack-monster.h"
+#include "system/floor-type-definition.h"
 
  /*!
   * @brief モンスターが移動した結果、そこにプレーヤーがいたら直接攻撃を行う

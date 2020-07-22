@@ -1,12 +1,13 @@
 ﻿#include "mspell/mspell-curse.h"
+#include "core/disturbance.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
-#include "player/player-move.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

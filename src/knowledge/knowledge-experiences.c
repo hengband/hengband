@@ -6,16 +6,15 @@
 
 #include "knowledge/knowledge-experiences.h"
 #include "core/show-file.h"
+#include "flavor/object-flavor.h"
 #include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
-#include "object/object-flavor.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-bow-types.h"
 #include "player/player-class.h"
 #include "player/player-skill.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
-#include "spell/spells-util.h"
 #include "spell/technic-info-table.h"
 #include "util/angband-files.h"
 

@@ -1,8 +1,11 @@
 ﻿#include "world/world-object.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind.h"
 #include "system/alloc-entries.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

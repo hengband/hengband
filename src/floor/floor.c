@@ -1,8 +1,13 @@
 ﻿#include "floor/floor.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
+#include "core/window-redrawer.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
+#include "floor/cave.h"
 #include "floor/floor-generate.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
@@ -10,18 +15,22 @@
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "io/targeting.h"
+#include "mind/mind-ninja.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-update.h"
 #include "monster-floor/place-monster-types.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-generator.h"
-#include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player/player-effects.h"
+#include "player/special-defense-types.h"
 #include "room/rooms.h"
+#include "system/artifact-type-definition.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
@@ -33,11 +42,6 @@
  * Not completely hardcoded, that would overflow memory
  */
 floor_type floor_info;
-
-/*
- * The array of saved floors
- */
-saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
 /*
  * Grid based version of "cave_empty_bold()"
@@ -54,39 +58,6 @@ bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
 bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	return cave_have_flag_bold(floor_ptr, y, x, FF_PATTERN);
-}
-
-
-/*
- * Determine if a "legal" grid is an "empty" floor grid
- * Determine if monsters are allowed to move into a grid
- *
- * Line 1 -- forbid non-placement grids
- * Line 2 -- forbid normal monsters
- * Line 3 -- forbid the player
- */
-bool is_cave_empty_bold(player_type *player_ptr, POSITION y, POSITION x)
-{
-	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	bool is_empty_grid = cave_have_flag_bold(floor_ptr, y, x, FF_PLACE);
-	is_empty_grid &= !(floor_ptr->grid_array[y][x].m_idx);
-	is_empty_grid &= !player_bold(player_ptr, y, x);
-	return is_empty_grid;
-}
-
-
-/*
-  * Determine if a "legal" grid is an "empty" floor grid
-  * Determine if monster generation is allowed in a grid
-  *
-  * Line 1 -- forbid non-empty grids
-  * Line 2 -- forbid trees while dungeon generation
-  */
-bool is_cave_empty_bold2(player_type *player_ptr, POSITION y, POSITION x)
-{
-	bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
-	is_empty_grid &= current_world_ptr->character_dungeon || !cave_have_flag_bold(player_ptr->current_floor_ptr, y, x, FF_TREE);
-	return is_empty_grid;
 }
 
 
@@ -540,7 +511,7 @@ bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITIO
 bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	u16b grid_g[512];
-	int grid_n = project_path(player_ptr, grid_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, 0);
+    int grid_n = project_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
 	if (!grid_n) return TRUE;
 
 	POSITION y = GRID_Y(grid_g[grid_n - 1]);
@@ -789,7 +760,7 @@ void wipe_o_list(floor_type *floor_ptr)
 	for (int i = 1; i < floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &floor_ptr->o_list[i];
-		if (!OBJECT_IS_VALID(o_ptr)) continue;
+		if (!object_is_valid(o_ptr)) continue;
 
 		if (!current_world_ptr->character_dungeon || preserve_mode)
 		{
@@ -799,7 +770,7 @@ void wipe_o_list(floor_type *floor_ptr)
 			}
 		}
 
-		if (OBJECT_IS_HELD_MONSTER(o_ptr))
+		if (object_is_held_monster(o_ptr))
 		{
 			monster_type *m_ptr;
 			m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
@@ -1453,7 +1424,7 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 	object_type *q_ptr;
 	q_ptr = &forge;
 	object_wipe(q_ptr);
-	if (!make_gold(floor_ptr, q_ptr)) return;
+	if (!make_gold(player_ptr, q_ptr)) return;
 
 	OBJECT_IDX o_idx = o_pop(floor_ptr);
 	if (o_idx == 0) return;
@@ -1515,7 +1486,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 
 	o_ptr = &floor_ptr->o_list[i1];
 
-	if (OBJECT_IS_HELD_MONSTER(o_ptr))
+	if (object_is_held_monster(o_ptr))
 	{
 		monster_type *m_ptr;
 		m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
@@ -1578,11 +1549,11 @@ void compact_objects(player_type *player_ptr, int size)
 		{
 			o_ptr = &floor_ptr->o_list[i];
 
-			if (!OBJECT_IS_VALID(o_ptr)) continue;
+			if (!object_is_valid(o_ptr)) continue;
 			if (k_info[o_ptr->k_idx].level > cur_lev) continue;
 
 			POSITION y, x;
-			if (OBJECT_IS_HELD_MONSTER(o_ptr))
+			if (object_is_held_monster(o_ptr))
 			{
 				monster_type *m_ptr;
 				m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
@@ -1675,17 +1646,4 @@ void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, PO
 
 	*yp = ny;
 	*xp = nx;
-}
-
-
-/*
- * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
- * @param floor_ptr 配置するフロアの参照ポインタ
- * @param y 指定Y座標
- * @param x 指定X座標
- * @return 光を通すならばtrueを返す。
- */
-bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x)
-{
-	return feat_supports_los(floor_ptr->grid_array[y][x].feat);
 }

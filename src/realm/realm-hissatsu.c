@@ -2,15 +2,21 @@
 #include "art-definition/art-sword-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-spell.h"
-#include "cmd/cmd-basic.h"
+#include "cmd-item/cmd-throw.h"
 #include "combat/combat-options-type.h"
 #include "core/asking-player.h"
+#include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
-#include "grid/feature.h"
+#include "floor/cave.h"
+#include "floor/floor.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "io/targeting.h"
@@ -23,23 +29,22 @@
 #include "monster/monster-update.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell/process-effect.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-launcher.h"
+#include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
-#include "spell/spells-util.h"
-#include "spell/spells3.h"
 #include "spell/technic-info-table.h"
+#include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
-#include "view/display-main-window.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -619,7 +624,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 				o_ptr = &caster_ptr->inventory_list[INVEN_RARM + i];
 				basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
 				damage = o_ptr->to_d * 100;
-				object_flags(o_ptr, flgs);
+				object_flags(caster_ptr, o_ptr, flgs);
 				if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
 				{
 					/* vorpal blade */
@@ -898,7 +903,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 				o_ptr = &caster_ptr->inventory_list[INVEN_RARM + i];
 				basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
 				damage = o_ptr->to_d * 100;
-				object_flags(o_ptr, flgs);
+				object_flags(caster_ptr, o_ptr, flgs);
 				if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
 				{
 					/* vorpal blade */

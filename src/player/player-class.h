@@ -1,36 +1,11 @@
 ﻿#pragma once
 
 /* 人畜無害なenumヘッダを先に読み込む */
-#include "player/player-personalities-types.h"
+#include "player/player-classes-types.h"
+#include "object/tval-types.h"
 #include "realm/realm-types.h"
 #include "system/angband.h"
-#include "object/tval-types.h"
 #include "spell/technic-info-table.h"
-#include "player/player-status.h"
-
-/*
- * 職業ごとの選択可能な魔法領域現在の所 bitrh.c でのみ使用。
- * Possible realms that can be chosen currently used only by birth.c.
- */
-#define CH_NONE         0x00
-#define CH_LIFE         0x01
-#define CH_SORCERY      0x02
-#define CH_NATURE       0x04
-#define CH_CHAOS        0x08
-#define CH_DEATH        0x10
-#define CH_TRUMP        0x20
-#define CH_ARCANE       0x40
-#define CH_ENCHANT      0x80
-#define CH_DAEMON       0x100
-#define CH_CRUSADE      0x200
-
-#define CH_MUSIC        0x08000	/* This is 16th bit */
-#define CH_HISSATSU     0x10000
-#define CH_HEX          0x20000
-
-#define IS_WIZARD_CLASS(C) \
-	((C)->pclass == CLASS_MAGE || (C)->pclass == CLASS_HIGH_MAGE || (C)->pclass == CLASS_SORCERER || \
-	(C)->pclass == CLASS_MAGIC_EATER || (C)->pclass == CLASS_BLUE_MAGE)
 
 /*
  * Information about the player's "magic"
@@ -100,8 +75,6 @@ struct player_class
 extern const player_class *cp_ptr;
 extern const player_class class_info[MAX_CLASS];
 
-extern const s32b realm_choices1[];
-extern const s32b realm_choices2[];
 extern const concptr player_title[MAX_CLASS][10];
 
 void calc_class_status(player_type *creature_ptr);

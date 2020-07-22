@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "floor/floor.h"
+#include "floor/floor-base-definitions.h"
 #include "floor/geometry.h"
 
 /*!
@@ -13,8 +13,6 @@
  */
 
 #define SAFE_MAX_ATTEMPTS 5000 /*!< 生成処理基本試行回数 */
-
-
 
 extern int dun_tun_rnd; /*!< ダンジョンの通路方向を掻き回す頻度(一回の試行ごとに%で判定している) */
 extern int dun_tun_chg; /*!< ダンジョンの通路をクランクさせる頻度(一回の試行ごとに%で判定している) */
@@ -29,9 +27,9 @@ extern int dun_tun_jct; /*!< ダンジョンの通路交差地点付近にドア
 #define ALLOC_SET_ROOM		2	/* Room */
 #define ALLOC_SET_BOTH		3	/* Anywhere */
 
- /*
-  * Hack -- Dungeon allocation "types"
-  */
+/*
+ * Hack -- Dungeon allocation "types"
+ */
 #define ALLOC_TYP_RUBBLE	1	/* Rubble */
 #define ALLOC_TYP_TRAP		3	/* Trap */
 #define ALLOC_TYP_GOLD		4	/* Gold */
@@ -40,37 +38,33 @@ extern int dun_tun_jct; /*!< ダンジョンの通路交差地点付近にドア
 
 
 
-  /*
-   * The "size" of a "generation block" in grids
-   */
+/*
+ * The "size" of a "generation block" in grids
+ */
 #define BLOCK_HGT	11
 #define BLOCK_WID	11
 
-   /*
-	* Maximum numbers of rooms along each axis (currently 6x6)
-	*/
+/*
+ * Maximum numbers of rooms along each axis (currently 6x6)
+ */
 #define MAX_ROOMS_ROW	(MAX_HGT / BLOCK_HGT)
 #define MAX_ROOMS_COL	(MAX_WID / BLOCK_WID)
 
 
-	/*
-	 * Bounds on some arrays used in the "dun_data" structure.
-	 * These bounds are checked, though usually this is a formality.
-	 */
+/*
+ * Bounds on some arrays used in the "dun_data" structure.
+ * These bounds are checked, though usually this is a formality.
+ */
 #define CENT_MAX	100
 #define DOOR_MAX	200
 #define WALL_MAX	500
 #define TUNN_MAX	900
 
 
-	 /*
-	  * Structure to hold all "dungeon generation" data
-	  */
-
-typedef struct dun_data dun_data;
-
-struct dun_data
-{
+/*
+ * Structure to hold all "dungeon generation" data
+ */
+typedef struct dun_data {
 	/* Array of centers of rooms */
 	int cent_n;
 	coord cent[CENT_MAX];
@@ -99,7 +93,7 @@ struct dun_data
 	bool empty_level;
 	bool cavern;
 	int laketype;
-};
+} dun_data;
 
 extern dun_data *dun;
 

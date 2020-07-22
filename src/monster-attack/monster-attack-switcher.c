@@ -6,6 +6,7 @@
  */
 
 #include "monster-attack/monster-attack-switcher.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-attack/monster-attack-status.h"
 #include "monster-attack/monster-eating.h"
 #include "mind/drs-types.h"
@@ -13,9 +14,12 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
 #include "spell-kind/earthquake.h"
-#include "spell/spells3.h"
+#include "spell-kind/spells-equipment.h"
+#include "status/bad-status-setter.h"
+#include "status/base-status.h"
+#include "status/element-resistance.h"
+#include "status/experience.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 

@@ -11,19 +11,21 @@
  */
 
 #include "object/object-info.h"
+#include "artifact/artifact-info.h"
 #include "art-definition/art-weapon-types.h"
 #include "art-definition/random-art-effects.h"
-#include "floor/floor.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/activation-info-table.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
+#include "player/player-realm.h"
 #include "realm/realm-names-table.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-ring-types.h"
+#include "system/floor-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
@@ -33,13 +35,13 @@
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_dragon_breath(object_type *o_ptr)
+static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type *o_ptr)
 {
     static char desc[256];
     BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
     int n = 0;
 
-    object_flags(o_ptr, flgs);
+    object_flags(owner_ptr, o_ptr, flgs);
     strcpy(desc, _("", "breath "));
 
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
@@ -61,11 +63,11 @@ static concptr item_activation_dragon_breath(object_type *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_aux(object_type *o_ptr)
+static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
 {
     static char activation_detail[256];
     char timeout[32];
-    const activation_type *const act_ptr = find_activation_info(o_ptr);
+    const activation_type *const act_ptr = find_activation_info(owner_ptr, o_ptr);
 
     if (!act_ptr)
         return _("未定義", "something undefined");
@@ -81,7 +83,7 @@ static concptr item_activation_aux(object_type *o_ptr)
             desc = _("冷気のブレス (200) と冷気への耐性", "breath of cold (200) and resist cold");
         break;
     case ACT_BR_DRAGON:
-        desc = item_activation_dragon_breath(o_ptr);
+        desc = item_activation_dragon_breath(owner_ptr, o_ptr);
         break;
     case ACT_AGGRAVATE:
         if (o_ptr->name1 == ART_HYOUSIGI)
@@ -152,15 +154,15 @@ static concptr item_activation_aux(object_type *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-concptr activation_explanation(object_type *o_ptr)
+concptr activation_explanation(player_type *owner_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(o_ptr, flgs);
+    object_flags(owner_ptr, o_ptr, flgs);
     if (!(have_flag(flgs, TR_ACTIVATE)))
         return (_("なし", "nothing"));
 
-    if (activation_index(o_ptr)) {
-        return item_activation_aux(o_ptr);
+    if (activation_index(owner_ptr, o_ptr)) {
+        return item_activation_aux(owner_ptr, o_ptr);
     }
 
     if (o_ptr->tval == TV_WHISTLE) {
@@ -268,7 +270,7 @@ bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const O
             return ((book_tval == TV_ARCANE_BOOK) || (book_sval < 2));
     }
 
-    return (REALM1_BOOK == book_tval || REALM2_BOOK == book_tval);
+    return (get_realm1_book(owner_ptr) == book_tval || get_realm2_book(owner_ptr) == book_tval);
 }
 
 object_type *ref_item(player_type *owner_ptr, INVENTORY_IDX item)

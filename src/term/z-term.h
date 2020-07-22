@@ -14,12 +14,10 @@
 #include "system/angband.h"
 #include "system/h-basic.h"
 
-typedef struct term_win term_win;
  /*!
  * @brief A term_win is a "window" for a Term
  */
- struct term_win
-{
+typedef struct term_win {
 	bool cu, cv; //!< Cursor Useless / Visible codes
 	TERM_LEN cx, cy; //!< Cursor Location (see "Useless")
 
@@ -34,16 +32,13 @@ typedef struct term_win term_win;
 
 	TERM_COLOR *vta; //!< Note that the row of attr at(0, y) is a[y]
 	char *vtc;  //!< Note that the row of chars at(0, y) is c[y]
-};
-
-
+} term_win;
 
 /*!
  * @brief term実装構造体 / An actual "term" structure
  */
-typedef struct term term;
-struct term
-{
+typedef struct term_type term_type;
+typedef struct term_type {
 	vptr user; //!< Extra "user" info (used by application)
 	vptr data; //!< Extra "data" info (used by implementation)
 
@@ -87,8 +82,8 @@ struct term
 	term_win *tmp; //!< Temporary screen image
 	term_win *mem; //!< Memorized screen image
 
-	void (*init_hook)(term *t); //!< Hook for init - ing the term
-	void (*nuke_hook)(term *t); //!< Hook for nuke - ing the term
+	void (*init_hook)(term_type *t); //!< Hook for init - ing the term
+	void (*nuke_hook)(term_type *t); //!< Hook for nuke - ing the term
 
 	errr (*user_hook)(int n); //!< ユーザ設定項目実装部 / Hook for user actions
 	errr (*xtra_hook)(int n, int v); //!< 拡張機能実装部 / Hook for extra actions
@@ -98,21 +93,14 @@ struct term
 	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s); //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
 	void (*resize_hook)(void); //!< 画面リサイズ実装部
 	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
-};
-
-
-
-
-
-
+} term_type;
 
 /**** Available Constants ****/
 
-
 /*
- * Definitions for the "actions" of "Term_xtra()"
+ * Definitions for the "actions" of "term_xtra()"
  *
- * These values may be used as the first parameter of "Term_xtra()",
+ * These values may be used as the first parameter of "term_xtra()",
  * with the second parameter depending on the "action" itself.  Many
  * of the actions shown below are optional on at least one platform.
  *
@@ -146,62 +134,45 @@ struct term
 #define TERM_XTRA_MUSIC_MUTE 18
 
 /**** Available Variables ****/
-
-extern term *Term;
-
+extern term_type *Term;
 
 /**** Available Functions ****/
+extern errr term_user(int n);
+extern errr term_xtra(int n, int v);
 
-extern errr Term_user(int n);
-extern errr Term_xtra(int n, int v);
+extern void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
+extern void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
 
-extern void Term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
-extern void Term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
+extern void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
 
-extern void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
+extern errr term_fresh(void);
+extern errr term_set_cursor(int v);
+extern errr term_gotoxy(TERM_LEN x, TERM_LEN y);
+extern errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
+extern errr term_addch(TERM_COLOR a, char c);
+extern errr term_add_bigch(TERM_COLOR a, char c);
+extern errr term_addstr(int n, TERM_COLOR a, concptr s);
+extern errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
+extern errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
+extern errr term_erase(TERM_LEN x, TERM_LEN y, int n);
+extern errr term_clear(void);
+extern errr term_redraw(void);
 
-extern void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
+extern errr term_get_cursor(int *v);
+extern errr term_get_size(TERM_LEN *w, TERM_LEN *h);
+extern errr term_locate(TERM_LEN *x, TERM_LEN *y);
+extern errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
 
-extern errr Term_fresh(void);
-extern errr Term_set_cursor(int v);
-extern errr Term_gotoxy(TERM_LEN x, TERM_LEN y);
-extern errr Term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
-extern errr Term_addch(TERM_COLOR a, char c);
-extern errr Term_add_bigch(TERM_COLOR a, char c);
-extern errr Term_addstr(int n, TERM_COLOR a, concptr s);
-extern errr Term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
-extern errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
-#ifdef JP
-extern errr Term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s);
+extern errr term_flush(void);
+extern errr term_key_push(int k);
+extern errr term_inkey(char *ch, bool wait, bool take);
+
+extern errr term_save(void);
+extern errr term_load(void);
+
+extern errr term_resize(TERM_LEN w, TERM_LEN h);
+
+extern errr term_activate(term_type *t);
+
+extern errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k);
 #endif
-extern errr Term_erase(TERM_LEN x, TERM_LEN y, int n);
-extern errr Term_clear(void);
-extern errr Term_redraw(void);
-extern errr Term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
-
-extern errr Term_get_cursor(int *v);
-extern errr Term_get_size(TERM_LEN *w, TERM_LEN *h);
-extern errr Term_locate(TERM_LEN *x, TERM_LEN *y);
-extern errr Term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
-
-extern errr Term_flush(void);
-extern errr Term_keypress(int k);
-extern errr Term_key_push(int k);
-extern errr Term_inkey(char *ch, bool wait, bool take);
-
-extern errr Term_save(void);
-extern errr Term_load(void);
-
-extern errr Term_exchange(void);
-
-extern errr Term_resize(TERM_LEN w, TERM_LEN h);
-
-extern errr Term_activate(term *t);
-
-extern errr term_nuke(term *t);
-extern errr term_init(term *t, TERM_LEN w, TERM_LEN h, int k);
-
-
-#endif
-
-

@@ -52,10 +52,10 @@
  */
 
 #include "cmd-item/cmd-magiceat.h"
+#include "action/action-limited.h"
 #include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
-#include "cmd/cmd-basic.h"
 #include "core/asking-player.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
@@ -72,7 +72,7 @@
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
-#include "spell/spells3.h"
+#include "spell/spell-info.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"
@@ -106,11 +106,12 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 			return sn;
 	}
 	
-	for (i = 0; i < 108; i++)
+	for (i = 0; i < MAX_SPELLS; i++)
 	{
 		if (creature_ptr->magic_num2[i]) break;
 	}
-	if (i == 108)
+
+	if (i == MAX_SPELLS)
 	{
 		msg_print(_("魔法を覚えていない！", "You don't have any magic!"));
 		return -1;
@@ -486,10 +487,10 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 			char temp[70 * 20];
 
 			/* Clear lines, position cursor  (really should use strlen here) */
-			Term_erase(7, 23, 255);
-			Term_erase(7, 22, 255);
-			Term_erase(7, 21, 255);
-			Term_erase(7, 20, 255);
+			term_erase(7, 23, 255);
+			term_erase(7, 22, 255);
+			term_erase(7, 21, 255);
+			term_erase(7, 20, 255);
 
 			shape_buffer(k_text + k_info[lookup_kind(tval, i)].text, 62, temp, sizeof(temp));
 			for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j]))

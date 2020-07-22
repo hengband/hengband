@@ -5,9 +5,13 @@
  */
 
 #include "monster-floor/one-monster-placer.h"
+#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
+#include "floor/cave.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
@@ -28,23 +32,23 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "object/object-flavor.h"
 #include "object/warning.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 #include "world/world.h"
 
 static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx) { return m_idx > 0 && is_friendly(&player_ptr->current_floor_ptr->m_list[(m_idx)]); }
 
 /*!
- * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief たぬきの変身対象となるモンスターかどうか判定する / Hook for Tanuki
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_tanuki(MONRACE_IDX r_idx)
+static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
 
@@ -61,7 +65,7 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
         || (r_ptr->blow[3].method == RBM_EXPLODE))
         return FALSE;
 
-    return (*(get_monster_hook(p_ptr)))(r_idx);
+    return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);
 }
 
 /*!
@@ -214,7 +218,7 @@ static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
 
     o_ptr = choose_warning_item(player_ptr);
     if (o_ptr != NULL) {
-        object_desc(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         msg_format(_("%sは%s光った。", "%s glows %s."), o_name, color);
     } else {
         msg_format(_("%s光る物が頭に浮かんだ。", "An %s image forms in your mind."), color);
@@ -263,7 +267,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (!check_procection_rune(player_ptr, r_idx, y, x))
         return FALSE;
 
-    msg_format_wizard(CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
+    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
     if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10))
         mode &= ~PM_KAGE;
 
@@ -362,7 +366,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 
     m_ptr->dealt_damage = 0;
 
-    m_ptr->mspeed = get_mspeed(player_ptr, r_ptr);
+    m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
     if (mode & PM_HASTE)
         (void)set_monster_fast(player_ptr, g_ptr->m_idx, 100);

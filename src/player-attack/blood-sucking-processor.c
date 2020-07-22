@@ -6,10 +6,11 @@
 
 #include "player-attack/blood-sucking-processor.h"
 #include "art-definition/art-sword-types.h"
+#include "core/hp-mp-processor.h"
 #include "game-option/cheat-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "object-enchant/tr-types.h"
-#include "player/player-effects.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "util/bit-flags-calculator.h"

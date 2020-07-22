@@ -1,7 +1,7 @@
 ﻿#include "info-reader/artifact-reader.h"
 #include "info-reader/kind-info-tokens-table.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
+#include "system/artifact-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"

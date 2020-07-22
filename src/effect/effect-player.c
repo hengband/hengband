@@ -5,21 +5,25 @@
  */
 
 #include "effect/effect-player.h"
+#include "core/disturbance.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-player-switcher.h"
 #include "effect/effect-player-util.h"
 #include "effect/spells-effect-util.h"
+#include "floor/cave.h"
+#include "floor/floor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
+#include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 typedef enum effect_player_check_result {

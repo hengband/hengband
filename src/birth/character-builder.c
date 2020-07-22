@@ -16,6 +16,7 @@
 #include "birth/birth-wizard.h"
 #include "birth/game-play-initializer.h"
 #include "birth/quick-start.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-town.h"
 #include "floor/wild.h"
 #include "game-option/option-flags.h"

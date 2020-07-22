@@ -4,7 +4,7 @@
 #include "realm/realm-chaos.h"
 #include "realm/realm-craft.h"
 #include "realm/realm-crusade.h"
-#include "realm/realm-daemon.h"
+#include "realm/realm-demon.h"
 #include "realm/realm-death.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-hissatsu.h"

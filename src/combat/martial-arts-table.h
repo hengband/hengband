@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
 #define MA_KNEE 1 /*!< 金的効果ID */
 #define MA_SLOW 2 /*!< 膝蹴り効果ID */

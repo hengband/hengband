@@ -1,7 +1,8 @@
 ﻿#include "object-enchant/object-boost.h"
 #include "art-definition/random-art-effects.h"
-#include "floor/floor.h"
 #include "object-enchant/tr-types.h"
+#include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

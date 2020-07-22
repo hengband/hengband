@@ -6,14 +6,15 @@
  */
 
 #include "object-enchant/apply-magic.h"
+#include "artifact/fixed-art-generator.h"
 #include "art-definition/art-armor-types.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/apply-magic-accessory.h"
 #include "object-enchant/apply-magic-armor.h"
 #include "object-enchant/apply-magic-others.h"
 #include "object-enchant/apply-magic-weapon.h"
-#include "object-enchant/artifact.h"
+#include "system/artifact-type-definition.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
@@ -22,11 +23,13 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
@@ -134,11 +137,11 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
         if (a_ptr->gen_flags & TRG_PERMA_CURSE)
             o_ptr->curse_flags |= (TRC_PERMA_CURSE);
         if (a_ptr->gen_flags & (TRG_RANDOM_CURSE0))
-            o_ptr->curse_flags |= get_curse(0, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 0, o_ptr);
         if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1))
-            o_ptr->curse_flags |= get_curse(1, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 1, o_ptr);
         if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2))
-            o_ptr->curse_flags |= get_curse(2, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 2, o_ptr);
 
         return;
     }
@@ -218,11 +221,11 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
         if (e_ptr->gen_flags & TRG_PERMA_CURSE)
             o_ptr->curse_flags |= (TRC_PERMA_CURSE);
         if (e_ptr->gen_flags & (TRG_RANDOM_CURSE0))
-            o_ptr->curse_flags |= get_curse(0, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 0, o_ptr);
         if (e_ptr->gen_flags & (TRG_RANDOM_CURSE1))
-            o_ptr->curse_flags |= get_curse(1, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 1, o_ptr);
         if (e_ptr->gen_flags & (TRG_RANDOM_CURSE2))
-            o_ptr->curse_flags |= get_curse(2, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 2, o_ptr);
 
         if (e_ptr->gen_flags & (TRG_ONE_SUSTAIN))
             one_sustain(o_ptr);
@@ -352,10 +355,10 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
         if (k_ptr->gen_flags & (TRG_PERMA_CURSE))
             o_ptr->curse_flags |= TRC_PERMA_CURSE;
         if (k_ptr->gen_flags & (TRG_RANDOM_CURSE0))
-            o_ptr->curse_flags |= get_curse(0, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 0, o_ptr);
         if (k_ptr->gen_flags & (TRG_RANDOM_CURSE1))
-            o_ptr->curse_flags |= get_curse(1, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 1, o_ptr);
         if (k_ptr->gen_flags & (TRG_RANDOM_CURSE2))
-            o_ptr->curse_flags |= get_curse(2, o_ptr);
+            o_ptr->curse_flags |= get_curse(owner_ptr, 2, o_ptr);
     }
 }

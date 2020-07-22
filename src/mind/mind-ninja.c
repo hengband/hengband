@@ -1,10 +1,16 @@
 ﻿#include "mind/mind-ninja.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/combat-options-type.h"
+#include "core/disturbance.h"
+#include "core/player-redraw-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
+#include "floor/cave.h"
 #include "floor/floor-object.h"
+#include "floor/floor.h"
+#include "game-option/disturbance-options.h"
 #include "grid/feature.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
@@ -15,8 +21,11 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
-#include "player/player-effects.h"
+#include "player/attack-defense-types.h"
+#include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
+#include "status/action-setter.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -51,7 +60,7 @@ bool kawarimi(player_type *caster_ptr, bool success)
     teleport_player(caster_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
     object_wipe(q_ptr);
     const int SV_WOODEN_STATUE = 0;
-    object_prep(q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
+    object_prep(caster_ptr, q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
     q_ptr->pval = MON_NINJA;
     (void)drop_near(caster_ptr, q_ptr, -1, y, x);
@@ -242,4 +251,46 @@ void hayagake(player_type *creature_ptr)
     }
 
     creature_ptr->energy_use = 0;
+}
+
+/*!
+ * @brief 超隠密状態をセットする
+ * @param set TRUEならば超隠密状態になる。
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
+bool set_superstealth(player_type *creature_ptr, bool set)
+{
+    bool notice = FALSE;
+
+    if (creature_ptr->is_dead)
+        return FALSE;
+
+    if (set) {
+        if (!(creature_ptr->special_defense & NINJA_S_STEALTH)) {
+            if (creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_MNLT) {
+                msg_print(_("敵の目から薄い影の中に覆い隠された。", "You are mantled in weak shadow from ordinary eyes."));
+                creature_ptr->monlite = creature_ptr->old_monlite = TRUE;
+            } else {
+                msg_print(_("敵の目から影の中に覆い隠された！", "You are mantled in shadow from ordinary eyes!"));
+                creature_ptr->monlite = creature_ptr->old_monlite = FALSE;
+            }
+
+            notice = TRUE;
+            creature_ptr->special_defense |= NINJA_S_STEALTH;
+        }
+    } else {
+        if (creature_ptr->special_defense & NINJA_S_STEALTH) {
+            msg_print(_("再び敵の目にさらされるようになった。", "You are exposed to common sight once more."));
+            notice = TRUE;
+            creature_ptr->special_defense &= ~(NINJA_S_STEALTH);
+        }
+    }
+
+    if (!notice)
+        return FALSE;
+    creature_ptr->redraw |= (PR_STATUS);
+
+    if (disturb_state)
+        disturb(creature_ptr, FALSE, FALSE);
+    return TRUE;
 }

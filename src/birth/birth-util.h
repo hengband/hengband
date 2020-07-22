@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 typedef enum birth_kind
 {
 	BK_REALM,

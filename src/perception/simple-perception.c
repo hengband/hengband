@@ -6,16 +6,23 @@
 
 #include "perception/simple-perception.h"
 #include "autopick/autopick.h"
+#include "core/disturbance.h"
+#include "core/player-update-types.h"
+#include "core/window-redrawer.h"
+#include "flavor/flag-inscriptions-table.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
 #include "game-option/auto-destruction-options.h"
 #include "game-option/disturbance-options.h"
-#include "inventory/player-inventory.h"
+#include "inventory/inventory-describer.h"
+#include "inventory/inventory-slot-types.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
+#include "object-hook/hook-checker.h"
+#include "object-hook/hook-enchant.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/avatar.h"
-#include "player/player-move.h"
 #include "view/display-messages.h"
 
 /*!
@@ -80,7 +87,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     if (disturb_minor)
         disturb(creature_ptr, FALSE, FALSE);
 
-    object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_RARM) {
 #ifdef JP
         msg_format("%s%s(%c)は%sという感じがする...", describe_use(creature_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);

@@ -9,9 +9,14 @@
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "core/asking-player.h"
+#include "core/disturbance.h"
+#include "core/player-update-types.h"
+#include "core/stuff-handler.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "game-option/cheat-types.h"
+#include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
@@ -21,17 +26,20 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
+#include "mutation/mutation-flag-types.h"
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
+#include "player/attack-defense-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
 #include "player/player-skill.h"
+#include "player/special-defense-types.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
-#include "view/display-main-window.h"
+#include "status/action-setter.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
 
 /*!
  * @brief プレイヤーの変異要素による打撃処理
@@ -110,8 +118,8 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
         k = 0;
 
     k = mon_damage_mod(attacker_ptr, m_ptr, k, FALSE);
-    msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, m_ptr->hp - k, m_ptr->maxhp,
-        m_ptr->max_maxhp);
+    msg_format_wizard(attacker_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, m_ptr->hp - k,
+        m_ptr->maxhp, m_ptr->max_maxhp);
     if (k > 0)
         anger_monster(attacker_ptr, m_ptr);
 

@@ -12,11 +12,6 @@
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
 
-/*!
- * ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster
- */
-#define MAX_TRIES 100
-
 /*! オートローラの能力値的要求水準 / Autoroll limit */
 s16b stat_limit[6];
 

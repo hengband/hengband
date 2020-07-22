@@ -6,8 +6,6 @@
 
 #include "view/display-lore.h"
 #include "game-option/text-display-options.h"
-#include "locale/english.h"
-#include "locale/japanese.h"
 #include "lore/lore-calculator.h"
 #include "lore/monster-lore.h"
 #include "monster-race/monster-race.h"
@@ -22,6 +20,11 @@
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#ifdef JP
+#include "locale/japanese.h"
+#else
+#include "locale/english.h"
+#endif
 
 /*!
  * 英語の複数系記述用マクロ / Pluralizer.  Args(count, singular, plural)
@@ -43,34 +46,34 @@ void roff_top(MONRACE_IDX r_idx)
     TERM_COLOR a1 = r_ptr->d_attr;
     TERM_COLOR a2 = r_ptr->x_attr;
 
-    Term_erase(0, 0, 255);
-    Term_gotoxy(0, 0);
+    term_erase(0, 0, 255);
+    term_gotoxy(0, 0);
 
 #ifdef JP
 #else
     if (!(r_ptr->flags1 & RF1_UNIQUE)) {
-        Term_addstr(-1, TERM_WHITE, "The ");
+        term_addstr(-1, TERM_WHITE, "The ");
     }
 #endif
 
-    Term_addstr(-1, TERM_WHITE, (r_name + r_ptr->name));
+    term_addstr(-1, TERM_WHITE, (r_name + r_ptr->name));
 
-    Term_addstr(-1, TERM_WHITE, " ('");
-    Term_add_bigch(a1, c1);
-    Term_addstr(-1, TERM_WHITE, "')");
+    term_addstr(-1, TERM_WHITE, " ('");
+    term_add_bigch(a1, c1);
+    term_addstr(-1, TERM_WHITE, "')");
 
-    Term_addstr(-1, TERM_WHITE, "/('");
-    Term_add_bigch(a2, c2);
-    Term_addstr(-1, TERM_WHITE, "'):");
+    term_addstr(-1, TERM_WHITE, "/('");
+    term_add_bigch(a2, c2);
+    term_addstr(-1, TERM_WHITE, "'):");
 
     if (!current_world_ptr->wizard)
         return;
 
     char buf[16];
     sprintf(buf, "%d", r_idx);
-    Term_addstr(-1, TERM_WHITE, " (");
-    Term_addstr(-1, TERM_L_BLUE, buf);
-    Term_addch(TERM_WHITE, ')');
+    term_addstr(-1, TERM_WHITE, " (");
+    term_addstr(-1, TERM_L_BLUE, buf);
+    term_addch(TERM_WHITE, ')');
 }
 
 /*!
@@ -83,7 +86,7 @@ void roff_top(MONRACE_IDX r_idx)
 void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
     msg_erase();
-    Term_erase(0, 1, 255);
+    term_erase(0, 1, 255);
     hook_c_roff = c_roff;
     process_monster_lore(player_ptr, r_idx, mode);
     roff_top(r_idx);
@@ -98,10 +101,10 @@ void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 void display_roff(player_type *player_ptr)
 {
     for (int y = 0; y < Term->hgt; y++) {
-        Term_erase(0, y, 255);
+        term_erase(0, y, 255);
     }
 
-    Term_gotoxy(0, 1);
+    term_gotoxy(0, 1);
     hook_c_roff = c_roff;
     MONRACE_IDX r_idx = player_ptr->monster_race_idx;
     process_monster_lore(player_ptr, r_idx, 0);

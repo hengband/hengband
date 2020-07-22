@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "floor/floor.h"
 #include "system/angband.h"
 
 void day_break(player_type *subject_ptr);

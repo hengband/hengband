@@ -6,7 +6,9 @@
  */
 
 #include "mspell/mspell-status.h"
-#include "art-definition/art-bow-types.h"
+#include "blue-magic/blue-magic-checker.h"
+#include "core/disturbance.h"
+#include "core/player-redraw-types.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -19,11 +21,11 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
-#include "mspell/mspells3.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
 #include "player/player-personalities-types.h"
 #include "spell/spell-types.h"
+#include "status/bad-status-setter.h"
+#include "status/base-status.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
@@ -89,48 +91,6 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
     }
 
     set_monster_csleep(target_ptr, t_idx, 0);
-}
-
-/*!
- * @brief RF4_DISPELの処理。魔力消去。 /
- * @param m_idx 呪文を唱えるモンスターID
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- */
-void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
-{
-    GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-    monster_name(target_ptr, m_idx, m_name);
-    monster_name(target_ptr, t_idx, t_name);
-
-    monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
-        _("%^sが魔力消去の呪文を念じた。", "%^s invokes a dispel magic."), _("%^sが%sに対して魔力消去の呪文を念じた。", "%^s invokes a dispel magic at %s."),
-        TARGET_TYPE);
-
-    if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        dispel_player(target_ptr);
-        if (target_ptr->riding)
-            dispel_monster_status(target_ptr, target_ptr->riding);
-
-        if (IS_ECHIZEN(target_ptr))
-            msg_print(_("やりやがったな！", ""));
-        else if ((target_ptr->pseikaku == PERSONALITY_CHARGEMAN)) {
-            if (randint0(2) == 0)
-                msg_print(_("ジュラル星人め！", ""));
-            else
-                msg_print(_("弱い者いじめは止めるんだ！", ""));
-        }
-
-        learn_spell(target_ptr, MS_DISPEL);
-        return;
-    }
-
-    if (TARGET_TYPE == MONSTER_TO_MONSTER) {
-        if (t_idx == target_ptr->riding)
-            dispel_player(target_ptr);
-        dispel_monster_status(target_ptr, t_idx);
-    }
 }
 
 /*!

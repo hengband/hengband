@@ -21,8 +21,7 @@
 /*
  *  A structure type for the saved floor
  */
-typedef struct
-{
+typedef struct saved_floor_type {
 	FLOOR_IDX floor_id;        /* No recycle until 65536 IDs are all used */
 	s16b savefile_id;     /* ID for savefile (from 0 to MAX_SAVED_FLOOR) */
 	DEPTH dun_level;
@@ -34,6 +33,7 @@ typedef struct
 
 extern u32b saved_floor_file_sign;
 extern bool repair_monsters;
+extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
 void init_saved_floors(player_type *creature_ptr, bool force);
 void change_floor(player_type *creature_ptr);

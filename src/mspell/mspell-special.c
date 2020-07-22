@@ -5,7 +5,10 @@
  */
 
 #include "mspell/mspell-special.h"
+#include "core/disturbance.h"
+#include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
+#include "floor/cave.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -23,11 +26,11 @@
 #include "mspell/mspell-util.h"
 #include "mspell/mspells1.h"
 #include "player/player-damage.h"
-#include "player/player-effects.h"
-#include "player/player-move.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-crusade.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

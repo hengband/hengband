@@ -23121,3 +23121,362 @@ R:1131:1d3
 R:1132:1d3
 D:$It is a too huge towering mass of filth that looks vaguely like Hydras, crocodilians or frogs.
 D:それはあまりにも高くそびえ立つような汚物の塊で、漠然とヒドラやワニやカエルのように見える。
+
+# 紫電は航続距離が短いので鉄獄に入れませんでした
+# Storing cherry-blossom
+N:1146:ハヤブサ
+E:Betty G4M 'Falcon'
+G:B:g
+I:115:40d25:100:50:50
+W:45:2:0:2000:0:0
+B:CRUSH:HURT:5d10
+B:CRUSH:HURT:5d10
+F:FORCE_MAXHP | COLD_BLOOD | CAN_FLY | GOOD | UNDEAD
+F:NO_CONF | NO_SLEEP | NO_FEAR
+S:1_IN_5 | ROCKET
+R:1147:5d5
+D:$It is a ghost of those who made human life a part,
+D:$ ran on the battlefield with iron wings, 
+D:$ and continued to shed a lot of blood on both sides.
+D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
+
+N:1147:ハヤブサ
+E:Betty G4M 'Falcon'
+G:B:g
+I:120:25d25:100:50:50
+W:45:2:0:2000:0:0
+B:CRUSH:HURT:5d10
+B:EXPLODE:SUPERHURT:10d10
+F:COLD_BLOOD | CAN_FLY | GOOD | UNDEAD
+F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_60 | ONLY_ITEM
+S:1_IN_6 | BO_MANA | MISSILE | BLINK
+D:$It is a ghost of those who made human life a part,
+D:$ ran on the battlefield with iron wings,
+D:$ and continued to shed a lot of blood on both sides.
+D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
+
+N:1148:放火魔『雄一』
+E:Yu'uichi, the Arsonist
+G:t:U
+I:109:7d5:5:15:100
+W:3:1:0:30:0:0
+B:WAIL:HURT:2d5
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | DROP_CORPSE | DROP_SKELETON
+F:DROP_90 | ONLY_ITEM | DROP_GOOD
+S:1_IN_12 | BA_FIRE
+D:$He puts a laughing home into misery every day to eradicate his happy family.
+D:$  He has no intention of compensating for what he does.
+D:彼は幸せな家族を根絶やしにするため、日々笑い声の聞こえてくる家庭を不幸の底に沈めている。
+D:彼は自分の行いを償うつもりはない。
+
+N:1149:全開装甲『カバード・コア』
+E:Opened core, the uncovered fortress
+G:#:G
+I:110:9d5:35:1:10
+W:4:1:0:40:0:0
+B:SHOOT:HURT:2d6
+B:CRUSH:HURT:4d4
+F:UNIQUE | FORCE_MAXHP | EVIL | NONLIVING
+F:DROP_90 | DROP_4D2 | ONLY_GOLD
+S:1_IN_8 | MISSILE | ROCKET
+D:$This aircraft protects the home of the Bacterian army
+D:$ with the power reactor exposed.
+D:$  Recently this unit was fired.
+D:この機体は動力炉を剥き出しにしたままバクテリアン軍の本拠地を守っていた。
+D:最近暇を出されたようだ。
+
+N:1150:蜘蛛地獄『ゴライアス』
+E:Goliath, the king of ant-lion
+G:S:r
+I:110:20d10:30:30:20
+W:10:1:0:50:0:0
+B:BITE:HURT:2d10
+B:STING:HURT:2d10
+F:UNIQUE | FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD | NO_SLEEP | ANIMAL
+S:1_IN_8 | S_KIN | BLIND
+D:$It waits to prey on all living things.
+D:それはあらゆる生き物を餌食にしようと待ち構えている。
+
+N:1151:小さな泡
+E:Small aqua illusion
+G:j:B
+I:110:12d12:10:30:10
+W:15:1:0:50:0:0
+B:CRUSH:HURT:6d6
+B:CRUSH:HURT:6d6
+F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+D:$It is a small bubble that makes an weird movement.
+D:$  It collapses suddenly.
+D:不気味な動きをする小さな泡だ。ぷちぷちと潰れる。
+
+# 倒すと小さな泡×4に分裂する
+N:1152:やや大きな泡
+E:Middle aqua illusion
+G:j:B
+I:110:12d12:10:30:10
+W:18:1:0:100:0:0
+B:CRUSH:HURT:7d7
+B:CRUSH:HURT:7d7
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+D:$It is a middle bubble that makes an weird movement.
+D:$  When it is crushed, it becomes a small bubble.
+D:不気味な動きをする、やや大きな泡だ。潰すと小さな泡になる。
+
+# 倒すとやや大きな泡×4に分裂する
+N:1153:大きな泡
+E:Large aqua illusion
+G:j:B
+I:110:18d18:10:30:10
+W:21:1:0:250:0:0
+B:CRUSH:HURT:8d8
+B:CRUSH:HURT:8d8
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+D:$It is a large bubble that makes an weird movement.
+D:$  When it is crushed, it becomes a middle bubble.
+D:不気味な動きをする大きな泡だ。潰しても中々なくならない。
+
+# 倒すと大きな泡×4に分裂する
+N:1154:特大の泡
+E:Extra large aqua illusion
+G:j:B
+I:110:18d18:10:30:10
+W:24:1:0:500:0:0
+B:CRUSH:HURT:9d9
+B:CRUSH:HURT:9d9
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+D:$It is a extra large bubble that makes an weird movement.
+D:$  You must decide whether running away or squashing them all!
+D:不気味な動きをする巨大な泡だ。逃げるか潰すか二つに一つだ！
+
+N:1155:二週目の小さな泡
+E:Small aqua illusion in 2nd lap
+G:j:b
+I:120:20d20:10:50:10
+W:25:1:0:120:0:0
+B:CRUSH:HURT:6d6
+B:CRUSH:HURT:6d6
+B:CRUSH:HURT:6d6
+F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
+S:1_IN_4 | MISSILE
+D:$Holy shit! It will shoot you back at this bubble!
+D:なんてこった、こいつ泡のくせに撃ち返してくるぞ！
+
+# 倒すと小さな泡×4に分裂する
+# 実際の2周目では一番小さいのしか撃ち返してこないが変愚向けに調整
+N:1156:二周目のやや大きな泡
+E:Middle aqua illusion in 2nd lap
+G:j:b
+I:120:20d20:10:50:10
+W:28:1:0:240:0:0
+B:CRUSH:HURT:7d7
+B:CRUSH:HURT:7d7
+B:CRUSH:HURT:7d7
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
+S:1_IN_4 | MISSILE
+D:$It is a middle bubble that makes an weird movement and shoots you back.
+D:$  When it is crushed, it becomes a small bubble.
+D:不気味な動きをして撃ち返してくる、やや大きな泡だ。潰すと小さな泡になる。
+
+# 倒すとやや大きな泡×4に分裂する
+N:1157:二周目の大きな泡
+E:Large aqua illusion in 2nd lap
+G:j:b
+I:120:25d25:10:50:10
+W:31:1:0:600:0:0
+B:CRUSH:HURT:8d8
+B:CRUSH:HURT:8d8
+B:CRUSH:HURT:8d8
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
+S:1_IN_4 | MISSILE
+D:$It is a large bubble that makes an weird movement and shoots you back.
+D:$  When it is crushed, it becomes a middle bubble.
+D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
+
+# 倒すと大きな泡×4に分裂する
+N:1158:二週目の特大の泡
+E:Extra large aqua illusion in 2nd lap
+G:j:b
+I:120:25d25:10:50:10
+W:34:1:0:1200:0:0
+B:CRUSH:HURT:9d9
+B:CRUSH:HURT:9d9
+B:CRUSH:HURT:9d9
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
+S:1_IN_4 | MISSILE
+D:$It is a extra large bubble that makes an weird movement and shoots you back!
+D:$  You must decide whether running away or squashing them all!
+D:不気味な動きをして撃ち返してくる巨大な泡だ。逃げるか潰すか二つに一つだ！
+
+# 実質召喚専用にしたいのでRarはかなり高め
+N:1159:プチモアイ
+E:Small Moai
+G:g:s
+I:120:15d15:10:50:10
+W:34:50:0:250:0:0
+B:CRUSH:HURT:8d8
+F:IM_ELEC | HURT_ROCK | RES_GRAV | DROP_60 | DROP_1D2 | ONLY_GOLD
+F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+S:1_IN_2 | BR_ELEC | BR_PLAS
+D:$ Do NOT get behind this Moai!
+D:こいつの背後には近寄るな！
+
+N:1160:モアイ
+E:Moai
+G:g:U
+I:105:30d25:10:85:50
+W:40:1:0:700:0:0
+F:IM_ELEC | HURT_ROCK | RES_TELE | RES_GRAV | FRIENDS | FORCE_SLEEP | DROP_90
+F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:NEVER_MOVE | NEVER_BLOW
+S:1_IN_2 | BR_ELEC | BR_PLAS
+D:$It is Moai who landed in Angband. You can not destroy this ion ring.
+D:鉄獄に降り立ったモアイだ。こいつの吐き出すイオンリングは破壊できない。
+
+# 死に際に7/8の確率で自分自身を召喚する
+N:1161:トーテムモアイ
+E:Totem Moai
+G:g:U
+I:110:20d20:10:90:30
+W:40:1:0:750:0:0
+F:IM_ELEC | HURT_ROCK | RES_TELE | RES_GRAV | DROP_90
+F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:NEVER_MOVE | NEVER_BLOW
+S:1_IN_2 | BR_ELEC | BR_PLAS
+D:$It is a Moai piled up like a totem pole. There is no end in destroying it.
+D:トーテムポール状に積み上がったモアイだ。倒してもきりがない。
+
+# プチモアイのみ召喚
+N:1162:モアイの総大将『ヴァイフ』
+E:Vaif, the general of Moais
+G:g:D
+I:120:60d50:25:100:20
+W:49:1:0:11000:0:0
+B:CRUSH:SUPERHURT:12d15
+F:UNIQUE | FORCE_MAXHP | NEVER_MOVE
+F:IM_ELEC | RES_GRAV | RES_TELE | ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT
+F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+S:1_IN_2 | S_KIN | HOLD | CONF | BLIND | HEAL
+D:$It is a mighty thug from the Bacterian army. It summons many small Moais.
+D:バクテリアン軍が放った強大な刺客だ。それは大量のプチモアイを生み出す。
+
+# テストプレイした結果、戦士なら毒針なしでもギリギリ刺さった
+# メイジ系は塔2F＆クローン地獄に毒針必須かも
+N:1163:クリスタル・キューブ
+E:Crystal cube
+G:g:B
+I:140:2d2:10:200:30
+W:50:2:0:1500:0:0
+B:CRUSH:SHATTER:10d6
+B:CRUSH:SHATTER:10d8
+B:CRUSH:SHATTER:10d10
+B:CRUSH:SHATTER:10d12
+F:RES_ALL | FRIENDS | NONLIVING | RAND_25 | RAND_50
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+D:$If you can dodge them, you are an expert!
+D:避けきれたら君も上級者だ！
+
+N:1164:鬼滅隊の『先輩』
+E:Senior, the nameless member of Demon Slayer Corps
+G:p:g
+I:110:25d10:10:35:100
+W:14:1:0:300:0:0
+B:SLASH:HURT:2d13
+B:HIT:HURT:2d15
+B:TOUCH:TERRIFY
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL
+F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD
+S:1_IN_8 | S_KIN
+D:$This stupid man can not determine his enemy's ability.
+D:この愚かな男は敵の力量を見極めることができない。
+
+N:1165:鬼滅隊の隊士
+E:Members of Demon Slayer Corps
+G:p:U
+I:110:15d10:10:30:100
+W:14:50:0:200:0:0
+F:NAZGUL | FORCE_MAXHP | HUMAN | MALE | UNDEAD
+F:DROP_60
+B:SHOOT:HURT:8d7
+B:SLASH:HURT:2d10
+B:HIT:HURT:2d12
+S:1_IN_6
+D:$These corps are the ghosts killed by Rui.
+D:累に殺された者たちの亡霊だ。
+
+N:1166:チーターマン『アリエス』 
+E:Aries, the youngest cheetahmen
+G:h:y
+I:110:15d15:20:30:25
+W:12:1:0:200:0:0
+B:CLAW:HURT:4d6
+B:BITE:HURT:4d6
+F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
+F:DROP_60 | DROP_90 | DROP_GOOD | RES_SOUN | NO_STUN
+D:$He is the youngest of three brothers and swings a club.
+D:三兄弟の末っ子で、棍棒を振り回している。
+
+N:1167:チーターマン『ヘラクレス』
+G:h:y
+E:Hercules, the second eldest cheetahmen
+I:110:15d16:20:35:25
+W:13:1:0:250:0:0
+B:PUNCH:HURT:4d6
+B:KICK:HURT:4d6
+F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
+F:DROP_60 | DROP_90 | DROP_GOOD | RES_SOUN | NO_STUN
+D:$He is the second son of three brothers and is good at karate.
+D:三兄弟の次男で、空手が得意だ。
+
+N:1168:チーターマン『アポロ』
+G:h:y
+E:Apollo, the eldest cheetahmen
+I:110:15d18:25:40:30
+W:14:1:0:300:0:0
+B:SHOOT:HURT:8d8
+B:STING:HURT:5d6
+B:STING:HURT:5d6
+F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
+F:DROP_90 | DROP_1D2 | DROP_GOOD | RES_SOUN | NO_STUN
+D:$He is the eldest son of the three brothers,
+D:$ and be aware the shot by his cross bow!
+D:三兄弟の長男で、クロスボウからの一撃に要注意だ！
+
+N:1169:怪物の太母『エキドナ』
+E:Echidna, Great mother of monsters
+G:n:u
+I:130:60d100:40:125:30
+W:75:3:0:23500:0:0
+B:CRUSH:SUPERHURT:12d15
+B:CRUSH:SUPERHURT:12d15
+B:CRUSH:SUPERHURT:12d15
+B:BITE:POISON:12d15
+F:FORCE_SLEEP | FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_GREAT | MOVE_BODY |
+F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL
+F:EVIL | FEMALE | UNIQUE | RES_LITE | RES_TIME | RES_DARK | RES_NETH
+F:IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | RES_TELE
+S:1_IN_5 | 
+S:S_MONSTERS | SCARE | BA_DARK | BA_NETH | BR_POIS
+D:$This sacred and untouchable female monster is half a nymph and half a snake, becoming the mother of many monsters.
+D:この半分がニンフで半分は蛇の神聖にして手の付けられない女怪は、数々のモンスターの母となった。
+
+N:1170:ハリモグラ
+E:Echidna
+G:r:u
+I:110:1d2:30:1:10
+W:1:3:0:6:0:0
+B:CRUSH:HURT:3d1
+F:RAND_50 | WILD_GRASS | WILD_WOOD |
+F:ANIMAL | DROP_SKELETON | DROP_CORPSE
+D:$It is relative of platypus and was thought to be a composite of reptiles and mammals, 
+D:$ so it was named after the Greek monster.
+D:それはカモノハシの類縁で、爬虫類と哺乳類の合成と考えられたためギリシアの怪物にちなんで英名を名付けられた。

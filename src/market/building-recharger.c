@@ -1,15 +1,20 @@
 ﻿#include "market/building-recharger.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
-#include "inventory/player-inventory.h"
+#include "core/player-update-types.h"
+#include "core/window-redrawer.h"
+#include "flavor/flavor-describer.h"
+#include "flavor/object-flavor-types.h"
+#include "floor/floor-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "market/building-util.h"
-#include "object/item-use-flags.h"
-#include "perception/object-perception.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
-#include "object/object-kind.h"
 #include "object-enchant/special-object-flags.h"
-#include "spell/spells3.h"
+#include "object-hook/hook-magic.h"
+#include "object/item-tester-hooker.h"
+#include "object/item-use-flags.h"
+#include "object/object-kind.h"
+#include "perception/object-perception.h"
+#include "spell-kind/spells-perception.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
@@ -59,7 +64,7 @@ void building_recharge(player_type *player_ptr)
         {
             player_ptr->au -= 50;
             identify_item(player_ptr, o_ptr);
-            object_desc(player_ptr, tmp_str, o_ptr, 0);
+            describe_flavor(player_ptr, tmp_str, o_ptr, 0);
             msg_format(_("%s です。", "You have: %s."), tmp_str);
 
             autopick_alter_item(player_ptr, item, FALSE);
@@ -106,7 +111,7 @@ void building_recharge(player_type *player_ptr)
     }
 
     if (player_ptr->au < price) {
-        object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
+        describe_flavor(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
 #ifdef JP
         msg_format("%sを再充填するには＄%d 必要です！", tmp_str, price);
 #else
@@ -146,7 +151,7 @@ void building_recharge(player_type *player_ptr)
         o_ptr->ident &= ~(IDENT_EMPTY);
     }
 
-    object_desc(player_ptr, tmp_str, o_ptr, 0);
+    describe_flavor(player_ptr, tmp_str, o_ptr, 0);
 #ifdef JP
     msg_format("%sを＄%d で再充填しました。", tmp_str, price);
 #else
