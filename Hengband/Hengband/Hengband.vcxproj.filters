@@ -1841,6 +1841,9 @@
     <ClCompile Include="..\..\src\mspell\mspell-judgement.c">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-spell-util.c">
+      <Filter>melee</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4008,6 +4011,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-judgement.h">
       <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-spell-util.h">
+      <Filter>melee</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

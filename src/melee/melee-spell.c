@@ -7,6 +7,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor.h"
+#include "melee/melee-spell-util.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"
@@ -40,56 +41,6 @@
 #define RF4_SPELL_SIZE 32
 #define RF5_SPELL_SIZE 32
 #define RF6_SPELL_SIZE 32
-
-typedef struct melee_spell_type {
-    POSITION y;
-    POSITION x;
-    MONSTER_IDX target_idx;
-    int thrown_spell;
-    HIT_POINT dam;
-    int start;
-    int plus;
-    byte spell[96];
-    byte num;
-    GAME_TEXT m_name[160];
-#ifdef JP
-#else
-    char m_poss[160];
-#endif
-
-    monster_type *m_ptr;
-    monster_type *t_ptr;
-    monster_race *r_ptr;
-    bool see_m;
-    bool maneable;
-    bool pet;
-    bool in_no_magic_dungeon;
-    bool can_remember;
-    BIT_FLAGS f4;
-    BIT_FLAGS f5;
-    BIT_FLAGS f6;
-} melee_spell_type;
-
-melee_spell_type *initialize_melee_spell_type(player_type *target_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx)
-{
-    ms_ptr->y = 0;
-    ms_ptr->x = 0;
-    ms_ptr->target_idx = 0;
-    ms_ptr->thrown_spell;
-    ms_ptr->dam = 0;
-    ms_ptr->plus = 1;
-    ms_ptr->num = 0;
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    ms_ptr->m_ptr = &floor_ptr->m_list[m_idx];
-    ms_ptr->t_ptr = NULL;
-    ms_ptr->r_ptr = &r_info[ms_ptr->m_ptr->r_idx];
-    ms_ptr->see_m = is_seen(target_ptr, ms_ptr->m_ptr);
-    ms_ptr->maneable = player_has_los_bold(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx);
-    ms_ptr->pet = is_pet(ms_ptr->m_ptr);
-    ms_ptr->in_no_magic_dungeon = (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && floor_ptr->dun_level
-        && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest));
-    return ms_ptr;
-}
 
 /*!
  * todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……

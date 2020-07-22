@@ -381,6 +381,7 @@ hengband_SOURCES = \
 	melee/monster-attack-monster.c melee/monster-attack-monster.h \
 	melee/melee-postprocess.c melee/melee-postprocess.h \
 	melee/melee-spell.c melee/melee-spell.h \
+	melee/melee-spell-util.c melee/melee-spell-util.h \
 	melee/melee-switcher.c melee/melee-switcher.h \
 	melee/melee-util.c melee/melee-util.h \
 	\
