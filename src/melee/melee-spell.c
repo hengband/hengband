@@ -128,6 +128,18 @@ static void check_darkness(player_type *target_ptr, melee_spell_type *ms_ptr)
         ms_ptr->f6 &= ~(RF6_DARKNESS);
 }
 
+static void check_arena(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if (!target_ptr->current_floor_ptr->inside_arena && !target_ptr->phase_out)
+        return;
+
+    ms_ptr->f4 &= ~(RF4_SUMMON_MASK);
+    ms_ptr->f5 &= ~(RF5_SUMMON_MASK);
+    ms_ptr->f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
+    if (ms_ptr->m_ptr->r_idx == MON_ROLENTO)
+        ms_ptr->f6 &= ~(RF6_SPECIAL);
+}
+
 /*!
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
@@ -169,16 +181,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         ms_ptr->f6 &= (RF6_NOMAGIC_MASK);
     }
 
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    if (floor_ptr->inside_arena || target_ptr->phase_out) {
-        ms_ptr->f4 &= ~(RF4_SUMMON_MASK);
-        ms_ptr->f5 &= ~(RF5_SUMMON_MASK);
-        ms_ptr->f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
-
-        if (ms_ptr->m_ptr->r_idx == MON_ROLENTO)
-            ms_ptr->f6 &= ~(RF6_SPECIAL);
-    }
-
+    check_arena(target_ptr, ms_ptr);
     if (target_ptr->phase_out && !one_in_(3))
         ms_ptr->f6 &= ~(RF6_HEAL);
 
@@ -419,7 +422,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (target_ptr->is_dead && (ms_ptr->r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena)
+    if (target_ptr->is_dead && (ms_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         ms_ptr->r_ptr->r_deaths++;
 
     return TRUE;
