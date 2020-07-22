@@ -251,6 +251,16 @@ static void check_melee_spell_special(player_type *target_ptr, melee_spell_type 
     ms_ptr->f6 &= ~(RF6_SPECIAL);
 }
 
+static void check_riding(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if (ms_ptr->m_idx != target_ptr->riding)
+        return;
+
+    ms_ptr->f4 &= ~(RF4_RIDING_MASK);
+    ms_ptr->f5 &= ~(RF5_RIDING_MASK);
+    ms_ptr->f6 &= ~(RF6_RIDING_MASK);
+}
+
 static void check_pet(player_type *target_ptr, melee_spell_type *ms_ptr)
 {
     if (!ms_ptr->pet)
@@ -376,12 +386,7 @@ static bool check_melee_spell_set(player_type *target_ptr, melee_spell_type *ms_
     if (target_ptr->phase_out && !one_in_(3))
         ms_ptr->f6 &= ~(RF6_HEAL);
 
-    if (ms_ptr->m_idx == target_ptr->riding) {
-        ms_ptr->f4 &= ~(RF4_RIDING_MASK);
-        ms_ptr->f5 &= ~(RF5_RIDING_MASK);
-        ms_ptr->f6 &= ~(RF6_RIDING_MASK);
-    }
-
+    check_riding(target_ptr, ms_ptr);
     check_pet(target_ptr, ms_ptr);
     check_non_stupid(target_ptr, ms_ptr);
     check_smart(target_ptr, ms_ptr);
