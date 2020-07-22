@@ -846,13 +846,7 @@ void calc_bonuses(player_type *creature_ptr)
         if (!has_melee_weapon(creature_ptr, INVEN_RARM + i))
             continue;
 
-        if (is_not_monk_weapon(creature_ptr, i)) {
-            creature_ptr->to_h[i] -= 40;
-            creature_ptr->dis_to_h[i] -= 40;
-            creature_ptr->icky_wield[i] = TRUE;
-        }
-
-        if (is_not_ninja_weapon(creature_ptr, i)) {
+        if (is_not_monk_weapon(creature_ptr, i) || is_not_ninja_weapon(creature_ptr, i)) {
             creature_ptr->icky_wield[i] = TRUE;
         }
     }
@@ -3509,7 +3503,7 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
 
     creature_ptr->to_h[id] += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
 
-    if (is_not_ninja_weapon(creature_ptr, id)) {
+    if (is_not_ninja_weapon(creature_ptr, id) || is_not_monk_weapon(creature_ptr, id)) {
         creature_ptr->to_h[id] -= 40;
     }
 }
@@ -3612,7 +3606,7 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
 
     creature_ptr->dis_to_h[id] += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
 
-    if (is_not_ninja_weapon(creature_ptr, id)) {
+    if (is_not_ninja_weapon(creature_ptr, id) || is_not_monk_weapon(creature_ptr, id)) {
         creature_ptr->dis_to_h[id] -= 40;
     }
 }
