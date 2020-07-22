@@ -123,7 +123,7 @@ static void check_darkness(player_type *target_ptr, melee_spell_type *ms_ptr)
         ms_ptr->f6 &= ~(RF6_DARKNESS);
         return;
     }
-    
+
     if (vs_ninja && !can_use_lite_area)
         ms_ptr->f6 &= ~(RF6_DARKNESS);
 }
@@ -138,6 +138,37 @@ static void check_arena(player_type *target_ptr, melee_spell_type *ms_ptr)
     ms_ptr->f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
     if (ms_ptr->m_ptr->r_idx == MON_ROLENTO)
         ms_ptr->f6 &= ~(RF6_SPECIAL);
+}
+
+static void check_melee_spell_distance(player_type *target_ptr, melee_spell_type *ms_ptr)
+{
+    if (((ms_ptr->f4 & (RF4_BALL_MASK & ~(RF4_ROCKET))) == 0) && ((ms_ptr->f5 & RF5_BALL_MASK) == 0) && ((ms_ptr->f6 & RF6_BALL_MASK) == 0))
+        return;
+
+    POSITION real_y = ms_ptr->y;
+    POSITION real_x = ms_ptr->x;
+    get_project_point(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, &real_y, &real_x, 0L);
+    if (!projectable(target_ptr, real_y, real_x, target_ptr->y, target_ptr->x) && ((ms_ptr->f5 & RF5_BA_LITE) != 0)
+        && (distance(real_y, real_x, target_ptr->y, target_ptr->x) <= 4) && los(target_ptr, real_y, real_x, target_ptr->y, target_ptr->x)) {
+        ms_ptr->f5 &= ~(RF5_BA_LITE);
+
+        return;
+    }
+
+    int dist = distance(real_y, real_x, target_ptr->y, target_ptr->x);
+    if (dist <= 2) {
+        ms_ptr->f4 &= ~(RF4_BALL_MASK & ~(RF4_ROCKET));
+        ms_ptr->f5 &= ~(RF5_BALL_MASK);
+        ms_ptr->f6 &= ~(RF6_BALL_MASK);
+        return;
+    }
+    
+    if (dist > 4)
+        return;
+
+    ms_ptr->f4 &= ~(RF4_BIG_BALL_MASK);
+    ms_ptr->f5 &= ~(RF5_BIG_BALL_MASK);
+    ms_ptr->f6 &= ~(RF6_BIG_BALL_MASK);
 }
 
 /*!
@@ -212,30 +243,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         }
 
         if (!(target_ptr->pet_extra_flags & PF_BALL_SPELL) && (m_idx != target_ptr->riding)) {
-            if ((ms_ptr->f4 & (RF4_BALL_MASK & ~(RF4_ROCKET))) || (ms_ptr->f5 & RF5_BALL_MASK) || (ms_ptr->f6 & RF6_BALL_MASK)) {
-                POSITION real_y = ms_ptr->y;
-                POSITION real_x = ms_ptr->x;
-
-                get_project_point(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, &real_y, &real_x, 0L);
-
-                if (projectable(target_ptr, real_y, real_x, target_ptr->y, target_ptr->x)) {
-                    int dist = distance(real_y, real_x, target_ptr->y, target_ptr->x);
-
-                    if (dist <= 2) {
-                        ms_ptr->f4 &= ~(RF4_BALL_MASK & ~(RF4_ROCKET));
-                        ms_ptr->f5 &= ~(RF5_BALL_MASK);
-                        ms_ptr->f6 &= ~(RF6_BALL_MASK);
-                    } else if (dist <= 4) {
-                        ms_ptr->f4 &= ~(RF4_BIG_BALL_MASK);
-                        ms_ptr->f5 &= ~(RF5_BIG_BALL_MASK);
-                        ms_ptr->f6 &= ~(RF6_BIG_BALL_MASK);
-                    }
-                } else if (ms_ptr->f5 & RF5_BA_LITE) {
-                    if ((distance(real_y, real_x, target_ptr->y, target_ptr->x) <= 4) && los(target_ptr, real_y, real_x, target_ptr->y, target_ptr->x))
-                        ms_ptr->f5 &= ~(RF5_BA_LITE);
-                }
-            }
-
+            check_melee_spell_distance(target_ptr, ms_ptr);
             if (ms_ptr->f4 & RF4_ROCKET) {
                 POSITION real_y = ms_ptr->y;
                 POSITION real_x = ms_ptr->x;
