@@ -299,6 +299,38 @@ static void check_mspell_arena(player_type *target_ptr, msa_type *msa_ptr)
         msa_ptr->f6 &= ~(RF6_SPECIAL);
 }
 
+static bool check_mspell_non_stupid(player_type *target_ptr, msa_type *msa_ptr)
+{
+    if ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
+        return TRUE;
+
+    if (!target_ptr->csp)
+        msa_ptr->f5 &= ~(RF5_DRAIN_MANA);
+
+    if (((msa_ptr->f4 & RF4_BOLT_MASK) || (msa_ptr->f5 & RF5_BOLT_MASK) || (msa_ptr->f6 & RF6_BOLT_MASK))
+        && !clean_shot(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, target_ptr->y, target_ptr->x, FALSE)) {
+        msa_ptr->f4 &= ~(RF4_BOLT_MASK);
+        msa_ptr->f5 &= ~(RF5_BOLT_MASK);
+        msa_ptr->f6 &= ~(RF6_BOLT_MASK);
+    }
+
+    if (((msa_ptr->f4 & RF4_SUMMON_MASK) || (msa_ptr->f5 & RF5_SUMMON_MASK) || (msa_ptr->f6 & RF6_SUMMON_MASK))
+        && !(summon_possible(target_ptr, msa_ptr->y, msa_ptr->x))) {
+        msa_ptr->f4 &= ~(RF4_SUMMON_MASK);
+        msa_ptr->f5 &= ~(RF5_SUMMON_MASK);
+        msa_ptr->f6 &= ~(RF6_SUMMON_MASK);
+    }
+
+    if ((msa_ptr->f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, msa_ptr->m_ptr))
+        msa_ptr->f6 &= ~(RF6_RAISE_DEAD);
+
+    if (((msa_ptr->f6 & RF6_SPECIAL) != 0) && (msa_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, msa_ptr->y, msa_ptr->x))
+        msa_ptr->f6 &= ~(RF6_SPECIAL);
+
+    if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
+        return FALSE;
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -342,41 +374,9 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     remove_bad_spells(m_idx, target_ptr, &msa_ptr->f4, &msa_ptr->f5, &msa_ptr->f6);
-    check_mspell_arena(target_ptr,, msa_ptr);
-    if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
+    check_mspell_arena(target_ptr, msa_ptr);
+    if ((msa_ptr->f4 == 0) && (msa_ptr->f5 == 0) && (msa_ptr->f6 == 0) || !check_mspell_non_stupid(target_ptr, msa_ptr))
         return FALSE;
-
-    if (!(msa_ptr->r_ptr->flags2 & RF2_STUPID)) {
-        if (!target_ptr->csp)
-            msa_ptr->f5 &= ~(RF5_DRAIN_MANA);
-
-        if (((msa_ptr->f4 & RF4_BOLT_MASK) || (msa_ptr->f5 & RF5_BOLT_MASK) || (msa_ptr->f6 & RF6_BOLT_MASK))
-            && !clean_shot(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, target_ptr->y, target_ptr->x, FALSE)) {
-            msa_ptr->f4 &= ~(RF4_BOLT_MASK);
-            msa_ptr->f5 &= ~(RF5_BOLT_MASK);
-            msa_ptr->f6 &= ~(RF6_BOLT_MASK);
-        }
-
-        if (((msa_ptr->f4 & RF4_SUMMON_MASK) || (msa_ptr->f5 & RF5_SUMMON_MASK) || (msa_ptr->f6 & RF6_SUMMON_MASK))
-            && !(summon_possible(target_ptr, msa_ptr->y, msa_ptr->x))) {
-            msa_ptr->f4 &= ~(RF4_SUMMON_MASK);
-            msa_ptr->f5 &= ~(RF5_SUMMON_MASK);
-            msa_ptr->f6 &= ~(RF6_SUMMON_MASK);
-        }
-
-        if ((msa_ptr->f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, msa_ptr->m_ptr)) {
-            msa_ptr->f6 &= ~(RF6_RAISE_DEAD);
-        }
-
-        if (msa_ptr->f6 & RF6_SPECIAL) {
-            if ((msa_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, msa_ptr->y, msa_ptr->x)) {
-                msa_ptr->f6 &= ~(RF6_SPECIAL);
-            }
-        }
-
-        if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
-            return FALSE;
-    }
 
     byte spell[96], num = 0;
     for (int k = 0; k < 32; k++)
