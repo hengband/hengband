@@ -376,6 +376,16 @@ static void check_dark_resistance(player_type *target_ptr, msr_type *msr_ptr)
         msr_ptr->f5 &= ~(RF5_BA_DARK);
 }
 
+static void check_conf_resistance(msr_type *msr_ptr)
+{
+    if ((msr_ptr->smart & SM_RES_CONF) == 0)
+        return;
+
+    msr_ptr->f5 &= ~(RF5_CONF);
+    if (int_outof(msr_ptr->r_ptr, 50))
+        msr_ptr->f4 &= ~(RF4_BR_CONF);
+}
+
 /*!
  * @brief モンスターの魔法一覧から戦術的に適さない魔法を除外する /
  * Remove the "bad" spells from a spell list
@@ -410,16 +420,11 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
     check_element_resistance(msr_ptr);
     check_nether_resistance(target_ptr, msr_ptr);
     check_lite_resistance(msr_ptr);
-    check_dark_resistance(target_ptr, msr_ptr);
+    check_dark_resistance(msr_ptr);
     if (msr_ptr->smart & SM_RES_FEAR)
         msr_ptr->f5 &= ~(RF5_SCARE);
 
-    if (msr_ptr->smart & SM_RES_CONF) {
-        msr_ptr->f5 &= ~(RF5_CONF);
-        if (int_outof(msr_ptr->r_ptr, 50))
-            msr_ptr->f4 &= ~(RF4_BR_CONF);
-    }
-
+    check_conf_resistance(target_ptr, msr_ptr);
     if (msr_ptr->smart & SM_RES_CHAOS) {
         if (int_outof(msr_ptr->r_ptr, 20))
             msr_ptr->f4 &= ~(RF4_BR_CHAO);
