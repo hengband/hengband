@@ -1762,7 +1762,7 @@ static void have_pass_wall(player_type *creature_ptr)
 
 static void have_xtra_might(player_type *creature_ptr)
 {
-	object_type *o_ptr;
+    object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
     creature_ptr->xtra_might = FALSE;
