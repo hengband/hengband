@@ -1,5 +1,4 @@
 ﻿/*!
- * @file rooms.c
  * @brief ダンジョンフロアの部屋生成処理 / make rooms. Used by generate.c when creating dungeons.
  * @date 2014/01/06
  * @author
