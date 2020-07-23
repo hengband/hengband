@@ -461,11 +461,11 @@ hengband_SOURCES = \
 	mspell/high-resistance-checker.c mspell/high-resistance-checker.h \
 	mspell/improper-mspell-remover.c mspell/improper-mspell-remover.h \
 	mspell/monster-power-table.c mspell/monster-power-table.h \
-	mspell/mspells1.c mspell/mspells1.h \
 	mspell/mspell-attack.c mspell/mspell-attack.h \
 	mspell/mspell-breath.c mspell/mspell-breath.h \
 	mspell/mspell-ball.c mspell/mspell-ball.h \
 	mspell/mspell-bolt.c mspell/mspell-bolt.h \
+	mspell/mspell-checker.c mspell/mspell-checker.h \
 	mspell/mspell-curse.c mspell/mspell-curse.h \
 	mspell/mspell-dispel.c mspell/mspell-dispel.h \
 	mspell/mspell-judgement.c mspell/mspell-judgement.h \

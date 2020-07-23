@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "mspell/mspells1.h"
+#include "mspell/mspell-checker.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"

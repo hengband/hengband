@@ -563,9 +563,6 @@
     <ClCompile Include="..\..\src\mspell\mspell-learn-checker.c">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspells1.c">
-      <Filter>mspell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-ball.c">
       <Filter>mspell</Filter>
     </ClCompile>
@@ -1863,6 +1860,9 @@
       <Filter>mspell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-attack.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-checker.c">
       <Filter>mspell</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3478,9 +3478,6 @@
     <ClInclude Include="..\..\src\mspell\monster-power-table.h">
       <Filter>mspell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspells1.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\view\status-bars-table.h">
       <Filter>view</Filter>
     </ClInclude>
@@ -4055,6 +4052,9 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-attack.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-checker.h">
       <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>

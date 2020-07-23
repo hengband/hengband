@@ -50,7 +50,6 @@
 #include "monster/monster-util.h"
 #include "mspell/mspell-attack.h"
 #include "mspell/mspell-judgement.h"
-#include "mspell/mspells1.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "player/avatar.h"
