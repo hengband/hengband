@@ -58,6 +58,7 @@
 #include "object-hook/hook-magic.h"
 #include "object-hook/hook-weapon.h"
 #include "object-use/quaff-execution.h"
+#include "object-use/read-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-generator.h"

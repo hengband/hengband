@@ -535,6 +535,7 @@ hengband_SOURCES = \
 	object-hook/hook-weapon.c object-hook/hook-weapon.h \
 	\
 	object-use/quaff-execution.c object-use/quaff-execution.h \
+	object-use/read-execution.c object-use/read-execution.h \
 	\
 	perception/identification.c perception/identification.h \
 	perception/object-perception.c perception/object-perception.h \
