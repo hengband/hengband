@@ -68,6 +68,7 @@ typedef struct msa_type {
     byte spell[96];
     byte num;
     SPELL_IDX thrown_spell;
+    GAME_TEXT m_name[MAX_NLEN];
 } msa_type;
 
 msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
@@ -350,6 +351,18 @@ static void set_mspell_list(msa_type *msa_ptr)
             msa_ptr->spell[msa_ptr->num++] = k + RF6_SPELL_START;
 }
 
+static void describe_mspell_monster(player_type *target_ptr, msa_type *msa_ptr)
+{
+    monster_desc(target_ptr, msa_ptr->m_name, msa_ptr->m_ptr, 0x00);
+
+#ifdef JP
+#else
+    /* Get the monster possessive ("his"/"her"/"its") */
+    char m_poss[80];
+    monster_desc(target_ptr, m_poss, msa_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+#endif
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -397,16 +410,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if ((msa_ptr->num == 0) || !target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
         return FALSE;
 
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(target_ptr, m_name, msa_ptr->m_ptr, 0x00);
-
-#ifdef JP
-#else
-    /* Get the monster possessive ("his"/"her"/"its") */
-    char m_poss[80];
-    monster_desc(target_ptr, m_poss, msa_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
-#endif
-
+    describe_mspell_monster(target_ptr, msa_ptr);
     switch (msa_ptr->do_spell) {
     case DO_SPELL_NONE: {
         int attempt = 10;
@@ -434,19 +438,18 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (msa_ptr->thrown_spell == 0)
         return FALSE;
 
-    PERCENTAGE failrate = 25 - (rlev + 3) / 4;
-
+    PERCENTAGE fail_rate = 25 - (rlev + 3) / 4;
     if (msa_ptr->r_ptr->flags2 & RF2_STUPID)
-        failrate = 0;
+        fail_rate = 0;
 
-    if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < failrate))) {
+    if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
         disturb(target_ptr, TRUE, TRUE);
-        msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);
+        msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), msa_ptr->m_name);
         return TRUE;
     }
 
     if (!spell_is_inate(msa_ptr->thrown_spell) && magic_barrier(target_ptr, m_idx)) {
-        msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), m_name);
+        msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), msa_ptr->m_name);
         return TRUE;
     }
 
