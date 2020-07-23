@@ -12,6 +12,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
+#include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
 #include "system/monster-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -213,7 +214,7 @@ static bool spell_dispel(byte spell) { return spell == 96 + 2; }
  *\n
  * This function may well be an efficiency bottleneck.\n
  */
-int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte spells[], byte num)
+int choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
 {
     byte escape[96], escape_num = 0;
     byte attack[96], attack_num = 0;
@@ -229,50 +230,50 @@ int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte spells[
     byte heal[96], heal_num = 0;
     byte dispel[96], dispel_num = 0;
 
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->flags2 & RF2_STUPID)
-        return (spells[randint0(num)]);
+        return (msa_ptr->mspells[randint0(msa_ptr->num)]);
 
-    for (int i = 0; i < num; i++) {
-        if (spell_escape(spells[i]))
-            escape[escape_num++] = spells[i];
+    for (int i = 0; i < msa_ptr->num; i++) {
+        if (spell_escape(msa_ptr->mspells[i]))
+            escape[escape_num++] = msa_ptr->mspells[i];
 
-        if (spell_attack(spells[i]))
-            attack[attack_num++] = spells[i];
+        if (spell_attack(msa_ptr->mspells[i]))
+            attack[attack_num++] = msa_ptr->mspells[i];
 
-        if (spell_summon(spells[i]))
-            summon[summon_num++] = spells[i];
+        if (spell_summon(msa_ptr->mspells[i]))
+            summon[summon_num++] = msa_ptr->mspells[i];
 
-        if (spell_tactic(spells[i]))
-            tactic[tactic_num++] = spells[i];
+        if (spell_tactic(msa_ptr->mspells[i]))
+            tactic[tactic_num++] = msa_ptr->mspells[i];
 
-        if (spell_annoy(spells[i]))
-            annoy[annoy_num++] = spells[i];
+        if (spell_annoy(msa_ptr->mspells[i]))
+            annoy[annoy_num++] = msa_ptr->mspells[i];
 
-        if (spell_invulner(spells[i]))
-            invul[invul_num++] = spells[i];
+        if (spell_invulner(msa_ptr->mspells[i]))
+            invul[invul_num++] = msa_ptr->mspells[i];
 
-        if (spell_haste(spells[i]))
-            haste[haste_num++] = spells[i];
+        if (spell_haste(msa_ptr->mspells[i]))
+            haste[haste_num++] = msa_ptr->mspells[i];
 
-        if (spell_world(spells[i]))
-            world[world_num++] = spells[i];
+        if (spell_world(msa_ptr->mspells[i]))
+            world[world_num++] = msa_ptr->mspells[i];
 
-        if (spell_special(target_ptr, spells[i]))
-            special[special_num++] = spells[i];
+        if (spell_special(target_ptr, msa_ptr->mspells[i]))
+            special[special_num++] = msa_ptr->mspells[i];
 
-        if (spell_psy_spe(spells[i]))
-            psy_spe[psy_spe_num++] = spells[i];
+        if (spell_psy_spe(msa_ptr->mspells[i]))
+            psy_spe[psy_spe_num++] = msa_ptr->mspells[i];
 
-        if (spell_raise(spells[i]))
-            raise[raise_num++] = spells[i];
+        if (spell_raise(msa_ptr->mspells[i]))
+            raise[raise_num++] = msa_ptr->mspells[i];
 
-        if (spell_heal(spells[i]))
-            heal[heal_num++] = spells[i];
+        if (spell_heal(msa_ptr->mspells[i]))
+            heal[heal_num++] = msa_ptr->mspells[i];
 
-        if (spell_dispel(spells[i]))
-            dispel[dispel_num++] = spells[i];
+        if (spell_dispel(msa_ptr->mspells[i]))
+            dispel[dispel_num++] = msa_ptr->mspells[i];
     }
 
     if (world_num && (randint0(100) < 15) && !current_world_ptr->timewalk_m_idx)
@@ -338,7 +339,7 @@ int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte spells[
         return (summon[randint0(summon_num)]);
 
     if (dispel_num && one_in_(2)) {
-        if (dispel_check(target_ptr, m_idx)) {
+        if (dispel_check(target_ptr, msa_ptr->m_idx)) {
             return (dispel[randint0(dispel_num)]);
         }
     }

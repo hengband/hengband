@@ -305,15 +305,15 @@ static void set_mspell_list(msa_type *msa_ptr)
 {
     for (int k = 0; k < 32; k++)
         if (msa_ptr->f4 & (1L << k))
-            msa_ptr->spell[msa_ptr->num++] = k + RF4_SPELL_START;
+            msa_ptr->mspells[msa_ptr->num++] = k + RF4_SPELL_START;
 
     for (int k = 0; k < 32; k++)
         if (msa_ptr->f5 & (1L << k))
-            msa_ptr->spell[msa_ptr->num++] = k + RF5_SPELL_START;
+            msa_ptr->mspells[msa_ptr->num++] = k + RF5_SPELL_START;
 
     for (int k = 0; k < 32; k++)
         if (msa_ptr->f6 & (1L << k))
-            msa_ptr->spell[msa_ptr->num++] = k + RF6_SPELL_START;
+            msa_ptr->mspells[msa_ptr->num++] = k + RF6_SPELL_START;
 }
 
 static void describe_mspell_monster(player_type *target_ptr, msa_type *msa_ptr)
@@ -334,7 +334,7 @@ static bool switch_do_spell(player_type *target_ptr, msa_type *msa_ptr)
     case DO_SPELL_NONE: {
         int attempt = 10;
         while (attempt--) {
-            msa_ptr->thrown_spell = choose_attack_spell(target_ptr, msa_ptr->m_idx, msa_ptr->spell, msa_ptr->num);
+            msa_ptr->thrown_spell = choose_attack_spell(target_ptr, msa_ptr);
             if (msa_ptr->thrown_spell)
                 break;
         }

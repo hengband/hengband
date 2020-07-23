@@ -27,7 +27,7 @@ typedef struct msa_type {
     bool do_spell;
     bool in_no_magic_dungeon;
     bool success;
-    byte spell[96];
+    byte mspells[96];
     byte num;
     SPELL_IDX thrown_spell;
     GAME_TEXT m_name[MAX_NLEN];
