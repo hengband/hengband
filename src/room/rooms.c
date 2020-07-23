@@ -61,6 +61,8 @@
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 
+door_type feat_door[MAX_DOOR_TYPES];
+
 /*!
  * 各部屋タイプの生成比定義
  *[from SAngband (originally from OAngband)]\n
@@ -77,7 +79,6 @@
  * appear above their minimum depth.  Tiny levels will not have space\n
  * for all the rooms you ask for.\n
  */
-
 static room_info_type room_info_normal[ROOM_T_MAX] = {
     /* Depth */
     /*  0  10  20  30  40  50  60  70  80  90 100  min limit */
