@@ -63,6 +63,7 @@ typedef struct msa_type {
     POSITION x_br_lite;
     POSITION y_br_lite;
     bool do_spell;
+    bool in_no_magic_dungeon;
     bool success;
 } msa_type;
 
@@ -236,6 +237,39 @@ static bool decide_lite_projection(player_type *target_ptr, msa_type *msa_ptr)
     return msa_ptr->success;
 }
 
+static void decide_lite_area(player_type *target_ptr, msa_type *msa_ptr)
+{
+    if ((msa_ptr->f6 & RF6_DARKNESS) == 0)
+        return;
+
+    bool can_use_lite_area = (target_ptr->pclass == CLASS_NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0)
+        && ((msa_ptr->r_ptr->flags7 & RF7_DARK_MASK) == 0);
+
+    if ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
+        return;
+
+    if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS) {
+        msa_ptr->f6 &= ~(RF6_DARKNESS);
+        return;
+    }
+
+    if ((target_ptr->pclass == CLASS_NINJA) && !can_use_lite_area)
+        msa_ptr->f6 &= ~(RF6_DARKNESS);
+}
+
+static void check_mspell_stupid(player_type *target_ptr, msa_type *msa_ptr)
+{
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    msa_ptr->in_no_magic_dungeon = (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && floor_ptr->dun_level
+        && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest));
+    if (!msa_ptr->in_no_magic_dungeon || ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0))
+        return;
+
+    msa_ptr->f4 &= RF4_NOMAGIC_MASK;
+    msa_ptr->f5 &= RF5_NOMAGIC_MASK;
+    msa_ptr->f6 &= RF6_NOMAGIC_MASK;
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -260,7 +294,6 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         || ((msa_ptr->m_ptr->cdis > get_max_range(target_ptr)) && !msa_ptr->m_ptr->target_y))
         return FALSE;
 
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     decide_lite_range(target_ptr, msa_ptr);
     if (!decide_lite_projection(target_ptr, msa_ptr))
         return FALSE;
@@ -273,27 +306,8 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         msa_ptr->f6 &= ~(RF6_NOMAGIC_MASK);
     }
 
-    bool can_use_lite_area = FALSE;
-    if (msa_ptr->f6 & RF6_DARKNESS) {
-        if ((target_ptr->pclass == CLASS_NINJA) && !(msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(msa_ptr->r_ptr->flags7 & RF7_DARK_MASK))
-            can_use_lite_area = TRUE;
-
-        if (!(msa_ptr->r_ptr->flags2 & RF2_STUPID)) {
-            if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
-                msa_ptr->f6 &= ~(RF6_DARKNESS);
-            else if ((target_ptr->pclass == CLASS_NINJA) && !can_use_lite_area)
-                msa_ptr->f6 &= ~(RF6_DARKNESS);
-        }
-    }
-
-    bool in_no_magic_dungeon = (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && floor_ptr->dun_level
-        && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest));
-    if (in_no_magic_dungeon && !(msa_ptr->r_ptr->flags2 & RF2_STUPID)) {
-        msa_ptr->f4 &= (RF4_NOMAGIC_MASK);
-        msa_ptr->f5 &= (RF5_NOMAGIC_MASK);
-        msa_ptr->f6 &= (RF6_NOMAGIC_MASK);
-    }
-
+    decide_lite_area(target_ptr, msa_ptr);
+    check_mspell_stupid(target_ptr, msa_ptr);
     if (msa_ptr->r_ptr->flags2 & RF2_SMART) {
         if ((msa_ptr->m_ptr->hp < msa_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
             msa_ptr->f4 &= (RF4_INT_MASK);
@@ -310,6 +324,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     remove_bad_spells(m_idx, target_ptr, &msa_ptr->f4, &msa_ptr->f5, &msa_ptr->f6);
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena || target_ptr->phase_out) {
         msa_ptr->f4 &= ~(RF4_SUMMON_MASK);
         msa_ptr->f5 &= ~(RF5_SUMMON_MASK);
@@ -411,7 +426,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (msa_ptr->r_ptr->flags2 & RF2_STUPID)
         failrate = 0;
 
-    if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < failrate))) {
+    if (!spell_is_inate(thrown_spell) && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < failrate))) {
         disturb(target_ptr, TRUE, TRUE);
         msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);
 
