@@ -166,12 +166,8 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
     }
 
-    if (msa_ptr->m_ptr->mflag & MFLAG_NICE)
-        return FALSE;
-    if (!is_hostile(msa_ptr->m_ptr))
-        return FALSE;
-
-    if ((msa_ptr->m_ptr->cdis > get_max_range(target_ptr)) && !msa_ptr->m_ptr->target_y)
+    if (((msa_ptr->m_ptr->mflag & MFLAG_NICE) != 0) || !is_hostile(msa_ptr->m_ptr)
+        || ((msa_ptr->m_ptr->cdis > get_max_range(target_ptr)) && !msa_ptr->m_ptr->target_y))
         return FALSE;
 
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
