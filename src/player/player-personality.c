@@ -1,4 +1,6 @@
 ﻿#include "player/player-personality.h"
+#include "object-enchant/trc-types.h"
+#include "mutation/mutation-flag-types.h"
 
 /*!
  * @brief 性格情報 /
@@ -139,3 +141,22 @@ const player_personality personality_info[MAX_PERSONALITIES] =
 };
 
 const player_personality *ap_ptr;
+
+void set_personality_flags(player_type *creature_ptr)
+{
+    if (creature_ptr->pseikaku == PERSONALITY_SEXY)
+        creature_ptr->cursed |= (TRC_AGGRAVATE);
+    if (creature_ptr->pseikaku == PERSONALITY_CHARGEMAN) {
+        creature_ptr->resist_conf = TRUE;
+    }
+
+    if (creature_ptr->pseikaku == PERSONALITY_LUCKY)
+        creature_ptr->muta3 |= MUT3_GOOD_LUCK;
+    if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+        creature_ptr->resist_blind = TRUE;
+        creature_ptr->resist_conf = TRUE;
+        creature_ptr->hold_exp = TRUE;
+        if (creature_ptr->pclass != CLASS_NINJA)
+            creature_ptr->lite = TRUE;
+    }
+}

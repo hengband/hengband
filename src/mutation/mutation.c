@@ -1893,3 +1893,42 @@ void become_living_trump(player_type *creature_ptr)
 		msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
 	}
 }
+
+void set_mutation_flags(player_type *creature_ptr)
+{
+    if (creature_ptr->muta3) {
+
+        if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
+            creature_ptr->regenerate = FALSE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_ELEC_TOUC) {
+            creature_ptr->sh_elec = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
+            creature_ptr->sh_fire = TRUE;
+            creature_ptr->lite = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_WINGS) {
+            creature_ptr->levitation = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_FEARLESS) {
+            creature_ptr->resist_fear = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_REGEN) {
+            creature_ptr->regenerate = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_ESP) {
+            creature_ptr->telepathy = TRUE;
+        }
+
+        if (creature_ptr->muta3 & MUT3_MOTION) {
+            creature_ptr->free_act = TRUE;
+        }
+    }
+}

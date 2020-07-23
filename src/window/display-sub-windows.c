@@ -214,7 +214,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
         }
 
         term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
-        if ((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute) {
+        if ((((i == INVEN_RARM) && owner_ptr->left_hand_weapon) || ((i == INVEN_LARM) && owner_ptr->right_hand_weapon)) && owner_ptr->two_handed_weapon) {
             strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
             attr = TERM_WHITE;
         } else {

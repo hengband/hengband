@@ -217,7 +217,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     fis_ptr->e1 = INVEN_RARM;
     fis_ptr->e2 = INVEN_TOTAL - 1;
     test_equipment_floor(owner_ptr, fis_ptr);
-    if (owner_ptr->ryoute && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
+    if (owner_ptr->two_handed_weapon && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
         fis_ptr->max_equip++;
 
     while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e1, fis_ptr->tval)))
@@ -226,11 +226,11 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e2, fis_ptr->tval)))
         fis_ptr->e2--;
 
-    if (fis_ptr->equip && owner_ptr->ryoute && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        if (owner_ptr->migite) {
+    if (fis_ptr->equip && owner_ptr->two_handed_weapon && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
+        if (owner_ptr->right_hand_weapon) {
             if (fis_ptr->e2 < INVEN_LARM)
                 fis_ptr->e2 = INVEN_LARM;
-        } else if (owner_ptr->hidarite)
+        } else if (owner_ptr->left_hand_weapon)
             fis_ptr->e1 = INVEN_RARM;
     }
 

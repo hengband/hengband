@@ -18,21 +18,21 @@ concptr mention_use(player_type *owner_ptr, int i)
     switch (i) {
 #ifdef JP
     case INVEN_RARM:
-        p = owner_ptr->heavy_wield[0] ? "運搬中" : ((owner_ptr->ryoute && owner_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手"));
+        p = owner_ptr->heavy_wield[0] ? "運搬中" : ((owner_ptr->two_handed_weapon && owner_ptr->right_hand_weapon) ? " 両手" : (left_hander ? " 左手" : " 右手"));
         break;
 #else
     case INVEN_RARM:
-        p = owner_ptr->heavy_wield[0] ? "Just lifting" : (owner_ptr->migite ? "Wielding" : "On arm");
+        p = owner_ptr->heavy_wield[0] ? "Just lifting" : (owner_ptr->right_hand_weapon ? "Wielding" : "On arm");
         break;
 #endif
 
 #ifdef JP
     case INVEN_LARM:
-        p = owner_ptr->heavy_wield[1] ? "運搬中" : ((owner_ptr->ryoute && owner_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手"));
+        p = owner_ptr->heavy_wield[1] ? "運搬中" : ((owner_ptr->two_handed_weapon && owner_ptr->left_hand_weapon) ? " 両手" : (left_hander ? " 右手" : " 左手"));
         break;
 #else
     case INVEN_LARM:
-        p = owner_ptr->heavy_wield[1] ? "Just lifting" : (owner_ptr->hidarite ? "Wielding" : "On arm");
+        p = owner_ptr->heavy_wield[1] ? "Just lifting" : (owner_ptr->left_hand_weapon ? "Wielding" : "On arm");
         break;
 #endif
 
@@ -90,11 +90,11 @@ concptr describe_use(player_type *owner_ptr, int i)
     case INVEN_RARM:
         p = owner_ptr->heavy_wield[0]
             ? "運搬中の"
-            : ((owner_ptr->ryoute && owner_ptr->migite) ? "両手に装備している" : (left_hander ? "左手に装備している" : "右手に装備している"));
+            : ((owner_ptr->two_handed_weapon && owner_ptr->right_hand_weapon) ? "両手に装備している" : (left_hander ? "左手に装備している" : "右手に装備している"));
         break;
 #else
     case INVEN_RARM:
-        p = owner_ptr->heavy_wield[0] ? "just lifting" : (owner_ptr->migite ? "attacking monsters with" : "wearing on your arm");
+        p = owner_ptr->heavy_wield[0] ? "just lifting" : (owner_ptr->right_hand_weapon ? "attacking monsters with" : "wearing on your arm");
         break;
 #endif
 
@@ -102,11 +102,11 @@ concptr describe_use(player_type *owner_ptr, int i)
     case INVEN_LARM:
         p = owner_ptr->heavy_wield[1]
             ? "運搬中の"
-            : ((owner_ptr->ryoute && owner_ptr->hidarite) ? "両手に装備している" : (left_hander ? "右手に装備している" : "左手に装備している"));
+            : ((owner_ptr->two_handed_weapon && owner_ptr->left_hand_weapon) ? "両手に装備している" : (left_hander ? "右手に装備している" : "左手に装備している"));
         break;
 #else
     case INVEN_LARM:
-        p = owner_ptr->heavy_wield[1] ? "just lifting" : (owner_ptr->hidarite ? "attacking monsters with" : "wearing on your arm");
+        p = owner_ptr->heavy_wield[1] ? "just lifting" : (owner_ptr->left_hand_weapon ? "attacking monsters with" : "wearing on your arm");
         break;
 #endif
 

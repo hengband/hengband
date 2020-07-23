@@ -121,29 +121,12 @@ SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr)
 bool is_specific_player_race(player_type *creature_ptr, player_race_type prace) { return (!creature_ptr->mimic_form && (creature_ptr->prace == prace)); }
 
 void calc_race_status(player_type *creature_ptr)
-{
-    const player_race *tmp_rp_ptr;
-	
+{	
+	const player_race *tmp_rp_ptr;
 	if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
         tmp_rp_ptr = &race_info[creature_ptr->prace];
-
-    creature_ptr->see_infra += tmp_rp_ptr->infra;
-    creature_ptr->skill_dis += tmp_rp_ptr->r_dis;
-    creature_ptr->skill_dev += tmp_rp_ptr->r_dev;
-    creature_ptr->skill_sav += tmp_rp_ptr->r_sav;
-    creature_ptr->skill_stl += tmp_rp_ptr->r_stl;
-    creature_ptr->skill_srh += tmp_rp_ptr->r_srh;
-    creature_ptr->skill_fos += tmp_rp_ptr->r_fos;
-    creature_ptr->skill_thn += tmp_rp_ptr->r_thn;
-    creature_ptr->skill_thb += tmp_rp_ptr->r_thb;
-    creature_ptr->skill_tht += tmp_rp_ptr->r_thb;
-
-	for (int i = 0; i < A_MAX; i++) {
-        creature_ptr->stat_add[i] += tmp_rp_ptr->r_adj[i];
-    }
-
 
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
@@ -154,10 +137,7 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_fire = TRUE;
             creature_ptr->oppose_fire = 1;
             creature_ptr->see_inv = TRUE;
-            creature_ptr->pspeed += 3;
             creature_ptr->redraw |= PR_STATUS;
-            creature_ptr->to_a += 10;
-            creature_ptr->dis_to_a += 10;
             break;
         case MIMIC_DEMON_LORD:
             creature_ptr->hold_exp = TRUE;
@@ -177,10 +157,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->see_inv = TRUE;
             creature_ptr->telepathy = TRUE;
             creature_ptr->levitation = TRUE;
-            creature_ptr->kill_wall = TRUE;
-            creature_ptr->pspeed += 5;
-            creature_ptr->to_a += 20;
-            creature_ptr->dis_to_a += 20;
             break;
         case MIMIC_VAMPIRE:
             creature_ptr->resist_dark = TRUE;
@@ -189,9 +165,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
             creature_ptr->see_inv = TRUE;
-            creature_ptr->pspeed += 3;
-            creature_ptr->to_a += 10;
-            creature_ptr->dis_to_a += 10;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
             break;
@@ -261,7 +234,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_KLACKON:
             creature_ptr->resist_conf = TRUE;
             creature_ptr->resist_acid = TRUE;
-            creature_ptr->pspeed += (creature_ptr->lev) / 10;
             break;
         case RACE_KOBOLD:
             creature_ptr->resist_pois = TRUE;
@@ -351,37 +323,10 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_SPRITE:
             creature_ptr->levitation = TRUE;
             creature_ptr->resist_lite = TRUE;
-
-            creature_ptr->pspeed += (creature_ptr->lev) / 10;
             break;
         case RACE_BEASTMAN:
             creature_ptr->resist_conf = TRUE;
             creature_ptr->resist_sound = TRUE;
-            break;
-        case RACE_ENT:
-            if (!creature_ptr->inventory_list[INVEN_RARM].k_idx)
-                creature_ptr->skill_dig += creature_ptr->lev * 10;
-
-            if (creature_ptr->lev > 25)
-                creature_ptr->stat_add[A_STR]++;
-            if (creature_ptr->lev > 40)
-                creature_ptr->stat_add[A_STR]++;
-            if (creature_ptr->lev > 45)
-                creature_ptr->stat_add[A_STR]++;
-
-            if (creature_ptr->lev > 25)
-                creature_ptr->stat_add[A_DEX]--;
-            if (creature_ptr->lev > 40)
-                creature_ptr->stat_add[A_DEX]--;
-            if (creature_ptr->lev > 45)
-                creature_ptr->stat_add[A_DEX]--;
-
-            if (creature_ptr->lev > 25)
-                creature_ptr->stat_add[A_CON]++;
-            if (creature_ptr->lev > 40)
-                creature_ptr->stat_add[A_CON]++;
-            if (creature_ptr->lev > 45)
-                creature_ptr->stat_add[A_CON]++;
             break;
         case RACE_ARCHON:
             creature_ptr->levitation = TRUE;
