@@ -330,8 +330,7 @@ static bool check_mspell_non_stupid(player_type *target_ptr, msa_type *msa_ptr)
     if (((msa_ptr->f6 & RF6_SPECIAL) != 0) && (msa_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, msa_ptr->y, msa_ptr->x))
         msa_ptr->f6 &= ~(RF6_SPECIAL);
 
-    if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
-        return FALSE;
+    return (msa_ptr->f4 != 0) || (msa_ptr->f5 != 0) || (msa_ptr->f6 != 0);
 }
 
 static void set_mspell_list(msa_type *msa_ptr)
@@ -358,10 +357,6 @@ static void set_mspell_list(msa_type *msa_ptr)
  */
 bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-#ifdef JP
-#else
-    char m_poss[80];
-#endif
     msa_type tmp_msa;
     msa_type *msa_ptr = initialize_msa_type(target_ptr, &tmp_msa, m_idx);
     if (monster_confused_remaining(msa_ptr->m_ptr)) {
@@ -406,6 +401,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 #ifdef JP
 #else
     /* Get the monster possessive ("his"/"her"/"its") */
+    char m_poss[80];
     monster_desc(target_ptr, m_poss, msa_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 
