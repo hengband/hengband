@@ -463,6 +463,34 @@ static void check_mspell_imitation(player_type *target_ptr, msa_type *msa_ptr)
     target_ptr->redraw |= PR_IMITATION;
 }
 
+static void remember_mspell(msa_type *msa_ptr)
+{
+    if (!msa_ptr->can_remember)
+        return;
+
+    if (msa_ptr->thrown_spell < 32 * 4) {
+        msa_ptr->r_ptr->r_flags4 |= (1L << (msa_ptr->thrown_spell - 32 * 3));
+        if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+            msa_ptr->r_ptr->r_cast_spell++;
+
+        return;
+    }
+    
+    if (msa_ptr->thrown_spell < 32 * 5) {
+        msa_ptr->r_ptr->r_flags5 |= (1L << (msa_ptr->thrown_spell - 32 * 4));
+        if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+            msa_ptr->r_ptr->r_cast_spell++;
+
+        return;
+    }
+    
+    if (msa_ptr->thrown_spell < 32 * 6) {
+        msa_ptr->r_ptr->r_flags6 |= (1L << (msa_ptr->thrown_spell - 32 * 5));
+        if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+            msa_ptr->r_ptr->r_cast_spell++;
+    }
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -511,7 +539,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     describe_mspell_monster(target_ptr, msa_ptr);
-    if (switch_do_spell(target_ptr, msa_ptr) || (msa_ptr->thrown_spell == 0))
+    if (!switch_do_spell(target_ptr, msa_ptr) || (msa_ptr->thrown_spell == 0))
         return FALSE;
 
     PERCENTAGE fail_rate = 25 - (rlev + 3) / 4;
@@ -541,25 +569,9 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         learn_spell(target_ptr, msa_ptr->thrown_spell - 96);
 
     check_mspell_imitation(target_ptr, msa_ptr);
-    if (msa_ptr->can_remember) {
-        if (msa_ptr->thrown_spell < 32 * 4) {
-            msa_ptr->r_ptr->r_flags4 |= (1L << (msa_ptr->thrown_spell - 32 * 3));
-            if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
-                msa_ptr->r_ptr->r_cast_spell++;
-        } else if (msa_ptr->thrown_spell < 32 * 5) {
-            msa_ptr->r_ptr->r_flags5 |= (1L << (msa_ptr->thrown_spell - 32 * 4));
-            if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
-                msa_ptr->r_ptr->r_cast_spell++;
-        } else if (msa_ptr->thrown_spell < 32 * 6) {
-            msa_ptr->r_ptr->r_flags6 |= (1L << (msa_ptr->thrown_spell - 32 * 5));
-            if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
-                msa_ptr->r_ptr->r_cast_spell++;
-        }
-    }
-
-    if (target_ptr->is_dead && (msa_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena) {
+    remember_mspell(target_ptr, msa_ptr);
+    if (target_ptr->is_dead && (msa_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         msa_ptr->r_ptr->r_deaths++;
-    }
 
     return TRUE;
 }
