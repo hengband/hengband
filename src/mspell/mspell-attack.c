@@ -402,6 +402,27 @@ static bool switch_do_spell(player_type *target_ptr, msa_type *msa_ptr)
     }
 }
 
+static bool check_mspell_continuation(player_type *target_ptr, msa_type *msa_ptr)
+{
+    if ((msa_ptr->f4 == 0) && (msa_ptr->f5 == 0) && (msa_ptr->f6 == 0))
+        return FALSE;
+
+    remove_bad_spells(msa_ptr->m_idx, target_ptr, &msa_ptr->f4, &msa_ptr->f5, &msa_ptr->f6);
+    check_mspell_arena(target_ptr, msa_ptr);
+    if ((msa_ptr->f4 == 0) && (msa_ptr->f5 == 0) && (msa_ptr->f6 == 0) || !check_mspell_non_stupid(target_ptr, msa_ptr))
+        return FALSE;
+
+    set_mspell_list(msa_ptr);
+    if ((msa_ptr->num == 0) || !target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
+        return FALSE;
+
+    describe_mspell_monster(target_ptr, msa_ptr);
+    if (!switch_do_spell(target_ptr, msa_ptr) || (msa_ptr->thrown_spell == 0))
+        return FALSE;
+
+    return TRUE;
+}
+
 static bool check_thrown_mspell(player_type *target_ptr, msa_type *msa_ptr)
 {
     bool direct = player_bold(target_ptr, msa_ptr->y, msa_ptr->x);
@@ -531,20 +552,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     decide_lite_area(target_ptr, msa_ptr);
     check_mspell_stupid(target_ptr, msa_ptr);
     check_mspell_smart(target_ptr, msa_ptr);
-    if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
-        return FALSE;
-
-    remove_bad_spells(m_idx, target_ptr, &msa_ptr->f4, &msa_ptr->f5, &msa_ptr->f6);
-    check_mspell_arena(target_ptr, msa_ptr);
-    if ((msa_ptr->f4 == 0) && (msa_ptr->f5 == 0) && (msa_ptr->f6 == 0) || !check_mspell_non_stupid(target_ptr, msa_ptr))
-        return FALSE;
-
-    set_mspell_list(msa_ptr);
-    if ((msa_ptr->num == 0) || !target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
-        return FALSE;
-
-    describe_mspell_monster(target_ptr, msa_ptr);
-    if (!switch_do_spell(target_ptr, msa_ptr) || (msa_ptr->thrown_spell == 0))
+    if (!check_mspell_continuation(target_ptr, msa_ptr))
         return FALSE;
 
     PERCENTAGE fail_rate = 25 - (rlev + 3) / 4;
