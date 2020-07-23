@@ -71,6 +71,7 @@ typedef struct msa_type {
     GAME_TEXT m_name[MAX_NLEN];
     bool can_remember;
     int dam;
+    DEPTH rlev;
 } msa_type;
 
 msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
@@ -423,6 +424,27 @@ static bool check_mspell_continuation(player_type *target_ptr, msa_type *msa_ptr
     return TRUE;
 }
 
+static bool check_mspell_unexploded(player_type *target_ptr, msa_type *msa_ptr)
+{
+    PERCENTAGE fail_rate = 25 - (msa_ptr->rlev + 3) / 4;
+    if (msa_ptr->r_ptr->flags2 & RF2_STUPID)
+        fail_rate = 0;
+
+    if (!spell_is_inate(msa_ptr->thrown_spell)
+        && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
+        disturb(target_ptr, TRUE, TRUE);
+        msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), msa_ptr->m_name);
+        return TRUE;
+    }
+
+    if (!spell_is_inate(msa_ptr->thrown_spell) && magic_barrier(target_ptr, msa_ptr->m_idx)) {
+        msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), msa_ptr->m_name);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 static bool check_thrown_mspell(player_type *target_ptr, msa_type *msa_ptr)
 {
     bool direct = player_bold(target_ptr, msa_ptr->y, msa_ptr->x);
@@ -547,7 +569,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     reset_target(msa_ptr->m_ptr);
-    DEPTH rlev = ((msa_ptr->r_ptr->level >= 1) ? msa_ptr->r_ptr->level : 1);
+    msa_ptr->rlev = ((msa_ptr->r_ptr->level >= 1) ? msa_ptr->r_ptr->level : 1);
     set_no_magic_mask(msa_ptr);
     decide_lite_area(target_ptr, msa_ptr);
     check_mspell_stupid(target_ptr, msa_ptr);
@@ -555,21 +577,8 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!check_mspell_continuation(target_ptr, msa_ptr))
         return FALSE;
 
-    PERCENTAGE fail_rate = 25 - (rlev + 3) / 4;
-    if (msa_ptr->r_ptr->flags2 & RF2_STUPID)
-        fail_rate = 0;
-
-    if (!spell_is_inate(msa_ptr->thrown_spell)
-        && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
-        disturb(target_ptr, TRUE, TRUE);
-        msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), msa_ptr->m_name);
+    if (check_mspell_unexploded(target_ptr, msa_ptr))
         return TRUE;
-    }
-
-    if (!spell_is_inate(msa_ptr->thrown_spell) && magic_barrier(target_ptr, m_idx)) {
-        msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), msa_ptr->m_name);
-        return TRUE;
-    }
 
     if (!check_thrown_mspell(target_ptr, msa_ptr))
         return FALSE;
