@@ -65,6 +65,8 @@ typedef struct msa_type {
     bool do_spell;
     bool in_no_magic_dungeon;
     bool success;
+    byte spell[96];
+    byte num;
 } msa_type;
 
 msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
@@ -81,6 +83,7 @@ msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTE
     msa_ptr->x_br_lite = 0;
     msa_ptr->y_br_lite = 0;
     msa_ptr->do_spell = DO_SPELL_NONE;
+    msa_ptr->num;
     return msa_ptr;
 }
 
@@ -331,6 +334,21 @@ static bool check_mspell_non_stupid(player_type *target_ptr, msa_type *msa_ptr)
         return FALSE;
 }
 
+static void set_mspell_list(msa_type *msa_ptr)
+{
+    for (int k = 0; k < 32; k++)
+        if (msa_ptr->f4 & (1L << k))
+            msa_ptr->spell[msa_ptr->num++] = k + RF4_SPELL_START;
+
+    for (int k = 0; k < 32; k++)
+        if (msa_ptr->f5 & (1L << k))
+            msa_ptr->spell[msa_ptr->num++] = k + RF5_SPELL_START;
+
+    for (int k = 0; k < 32; k++)
+        if (msa_ptr->f6 & (1L << k))
+            msa_ptr->spell[msa_ptr->num++] = k + RF6_SPELL_START;
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -378,20 +396,8 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if ((msa_ptr->f4 == 0) && (msa_ptr->f5 == 0) && (msa_ptr->f6 == 0) || !check_mspell_non_stupid(target_ptr, msa_ptr))
         return FALSE;
 
-    byte spell[96], num = 0;
-    for (int k = 0; k < 32; k++)
-        if (msa_ptr->f4 & (1L << k))
-            spell[num++] = k + RF4_SPELL_START;
-
-    for (int k = 0; k < 32; k++)
-        if (msa_ptr->f5 & (1L << k))
-            spell[num++] = k + RF5_SPELL_START;
-
-    for (int k = 0; k < 32; k++)
-        if (msa_ptr->f6 & (1L << k))
-            spell[num++] = k + RF6_SPELL_START;
-
-    if (!num || !target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
+    set_mspell_list(msa_ptr);
+    if ((msa_ptr->num == 0) || !target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
         return FALSE;
 
     GAME_TEXT m_name[MAX_NLEN];
@@ -408,10 +414,11 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     case DO_SPELL_NONE: {
         int attempt = 10;
         while (attempt--) {
-            thrown_spell = choose_attack_spell(target_ptr, m_idx, spell, num);
+            thrown_spell = choose_attack_spell(target_ptr, m_idx, msa_ptr->spell, msa_ptr->num);
             if (thrown_spell)
                 break;
         }
+
         break;
     }
     case DO_SPELL_BR_LITE:
@@ -427,7 +434,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
     }
 
-    if (!thrown_spell)
+    if (thrown_spell == 0)
         return FALSE;
 
     PERCENTAGE failrate = 25 - (rlev + 3) / 4;
