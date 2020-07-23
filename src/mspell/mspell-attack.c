@@ -62,6 +62,8 @@ typedef struct msa_type {
     POSITION y;
     POSITION x_br_lite;
     POSITION y_br_lite;
+    bool do_spell;
+    bool success;
 } msa_type;
 
 msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
@@ -77,6 +79,7 @@ msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTE
     msa_ptr->y = target_ptr->y;
     msa_ptr->x_br_lite = 0;
     msa_ptr->y_br_lite = 0;
+    msa_ptr->do_spell = DO_SPELL_NONE;
     return msa_ptr;
 }
 
@@ -172,60 +175,59 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     decide_lite_range(target_ptr, msa_ptr);
-    bool do_spell = DO_SPELL_NONE;
     if (projectable(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
         feature_type *f_ptr = &f_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
         if (!have_flag(f_ptr->flags, FF_PROJECT)) {
             if ((msa_ptr->f4 & RF4_BR_DISI) && have_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2))
-                do_spell = DO_SPELL_BR_DISI;
+                msa_ptr->do_spell = DO_SPELL_BR_DISI;
             else if ((msa_ptr->f4 & RF4_BR_LITE) && have_flag(f_ptr->flags, FF_LOS) && one_in_(2))
-                do_spell = DO_SPELL_BR_LITE;
+                msa_ptr->do_spell = DO_SPELL_BR_LITE;
         }
     } else {
-        bool success = FALSE;
+        msa_ptr->success = FALSE;
         if ((msa_ptr->f4 & RF4_BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
             && in_disintegration_range(floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
             && (one_in_(10) || (projectable(target_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
-            do_spell = DO_SPELL_BR_DISI;
-            success = TRUE;
+            msa_ptr->do_spell = DO_SPELL_BR_DISI;
+            msa_ptr->success = TRUE;
         } else if ((msa_ptr->f4 & RF4_BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
             && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
-            do_spell = DO_SPELL_BR_LITE;
-            success = TRUE;
+            msa_ptr->do_spell = DO_SPELL_BR_LITE;
+            msa_ptr->success = TRUE;
         } else if ((msa_ptr->f5 & RF5_BA_LITE) && (msa_ptr->m_ptr->cdis <= get_max_range(target_ptr))) {
             POSITION by = msa_ptr->y, bx = msa_ptr->x;
             get_project_point(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
             if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(target_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
-                do_spell = DO_SPELL_BA_LITE;
-                success = TRUE;
+                msa_ptr->do_spell = DO_SPELL_BA_LITE;
+                msa_ptr->success = TRUE;
             }
         }
 
-        if (!success)
-            success = adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, FF_PROJECT, projectable);
+        if (!msa_ptr->success)
+            msa_ptr->success = adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, FF_PROJECT, projectable);
 
-        if (!success) {
+        if (!msa_ptr->success) {
             if (msa_ptr->m_ptr->target_y && msa_ptr->m_ptr->target_x) {
                 msa_ptr->y = msa_ptr->m_ptr->target_y;
                 msa_ptr->x = msa_ptr->m_ptr->target_x;
                 msa_ptr->f4 &= RF4_INDIRECT_MASK;
                 msa_ptr->f5 &= RF5_INDIRECT_MASK;
                 msa_ptr->f6 &= RF6_INDIRECT_MASK;
-                success = TRUE;
+                msa_ptr->success = TRUE;
             }
 
             if (msa_ptr->y_br_lite && msa_ptr->x_br_lite && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2) && one_in_(5)) {
-                if (!success) {
+                if (!msa_ptr->success) {
                     msa_ptr->y = msa_ptr->y_br_lite;
                     msa_ptr->x = msa_ptr->x_br_lite;
-                    do_spell = DO_SPELL_BR_LITE;
-                    success = TRUE;
+                    msa_ptr->do_spell = DO_SPELL_BR_LITE;
+                    msa_ptr->success = TRUE;
                 } else
                     msa_ptr->f4 |= (RF4_BR_LITE);
             }
         }
 
-        if (!success)
+        if (!msa_ptr->success)
             return FALSE;
     }
 
@@ -344,7 +346,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 #endif
 
     SPELL_IDX thrown_spell = 0;
-    switch (do_spell) {
+    switch (msa_ptr->do_spell) {
     case DO_SPELL_NONE: {
         int attempt = 10;
         while (attempt--) {
