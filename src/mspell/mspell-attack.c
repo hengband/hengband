@@ -270,6 +270,22 @@ static void check_mspell_stupid(player_type *target_ptr, msa_type *msa_ptr)
     msa_ptr->f6 &= RF6_NOMAGIC_MASK;
 }
 
+static void check_mspell_smart(player_type *target_ptr, msa_type *msa_ptr)
+{
+    if ((msa_ptr->r_ptr->flags2 & RF2_SMART) == 0)
+        return;
+
+    if ((msa_ptr->m_ptr->hp < msa_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
+        msa_ptr->f4 &= (RF4_INT_MASK);
+        msa_ptr->f5 &= (RF5_INT_MASK);
+        msa_ptr->f6 &= (RF6_INT_MASK);
+    }
+
+    if ((msa_ptr->f6 & RF6_TELE_LEVEL) && is_teleport_level_ineffective(target_ptr, 0)) {
+        msa_ptr->f6 &= ~(RF6_TELE_LEVEL);
+    }
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -308,24 +324,12 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 
     decide_lite_area(target_ptr, msa_ptr);
     check_mspell_stupid(target_ptr, msa_ptr);
-    if (msa_ptr->r_ptr->flags2 & RF2_SMART) {
-        if ((msa_ptr->m_ptr->hp < msa_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
-            msa_ptr->f4 &= (RF4_INT_MASK);
-            msa_ptr->f5 &= (RF5_INT_MASK);
-            msa_ptr->f6 &= (RF6_INT_MASK);
-        }
-
-        if ((msa_ptr->f6 & RF6_TELE_LEVEL) && is_teleport_level_ineffective(target_ptr, 0)) {
-            msa_ptr->f6 &= ~(RF6_TELE_LEVEL);
-        }
-    }
-
+    check_mspell_smart(target_ptr, msa_ptr);
     if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
         return FALSE;
 
     remove_bad_spells(m_idx, target_ptr, &msa_ptr->f4, &msa_ptr->f5, &msa_ptr->f6);
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    if (floor_ptr->inside_arena || target_ptr->phase_out) {
+    if (target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out) {
         msa_ptr->f4 &= ~(RF4_SUMMON_MASK);
         msa_ptr->f5 &= ~(RF5_SUMMON_MASK);
         msa_ptr->f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
@@ -523,7 +527,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (target_ptr->is_dead && (msa_ptr->r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena) {
+    if (target_ptr->is_dead && (msa_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena) {
         msa_ptr->r_ptr->r_deaths++;
     }
 
