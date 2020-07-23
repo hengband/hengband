@@ -363,6 +363,33 @@ static void describe_mspell_monster(player_type *target_ptr, msa_type *msa_ptr)
 #endif
 }
 
+static bool switch_do_spell(player_type *target_ptr, msa_type *msa_ptr)
+{
+    switch (msa_ptr->do_spell) {
+    case DO_SPELL_NONE: {
+        int attempt = 10;
+        while (attempt--) {
+            msa_ptr->thrown_spell = choose_attack_spell(target_ptr, msa_ptr->m_idx, msa_ptr->spell, msa_ptr->num);
+            if (msa_ptr->thrown_spell)
+                break;
+        }
+
+        return TRUE;
+    }
+    case DO_SPELL_BR_LITE:
+        msa_ptr->thrown_spell = 96 + 14; /* RF4_BR_LITE */
+        return TRUE;
+    case DO_SPELL_BR_DISI:
+        msa_ptr->thrown_spell = 96 + 31; /* RF4_BR_DISI */
+        return TRUE;
+    case DO_SPELL_BA_LITE:
+        msa_ptr->thrown_spell = 128 + 20; /* RF5_BA_LITE */
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -411,31 +438,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     describe_mspell_monster(target_ptr, msa_ptr);
-    switch (msa_ptr->do_spell) {
-    case DO_SPELL_NONE: {
-        int attempt = 10;
-        while (attempt--) {
-            msa_ptr->thrown_spell = choose_attack_spell(target_ptr, m_idx, msa_ptr->spell, msa_ptr->num);
-            if (msa_ptr->thrown_spell)
-                break;
-        }
-
-        break;
-    }
-    case DO_SPELL_BR_LITE:
-        msa_ptr->thrown_spell = 96 + 14; /* RF4_BR_LITE */
-        break;
-    case DO_SPELL_BR_DISI:
-        msa_ptr->thrown_spell = 96 + 31; /* RF4_BR_DISI */
-        break;
-    case DO_SPELL_BA_LITE:
-        msa_ptr->thrown_spell = 128 + 20; /* RF5_BA_LITE */
-        break;
-    default:
-        return FALSE;
-    }
-
-    if (msa_ptr->thrown_spell == 0)
+    if (switch_do_spell(target_ptr, msa_ptr) || (msa_ptr->thrown_spell == 0))
         return FALSE;
 
     PERCENTAGE fail_rate = 25 - (rlev + 3) / 4;
