@@ -266,6 +266,7 @@
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-magic-resistance.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
+    <ClCompile Include="..\..\src\mspell\improper-mspell-remover.c" />
     <ClCompile Include="..\..\src\mspell\specified-summon.c" />
     <ClCompile Include="..\..\src\racial\racial-kutar.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
@@ -805,6 +806,7 @@
     <ClInclude Include="..\..\src\mind\mind-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-magic-resistance.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
+    <ClInclude Include="..\..\src\mspell\improper-mspell-remover.h" />
     <ClInclude Include="..\..\src\mspell\specified-summon.h" />
     <ClInclude Include="..\..\src\racial\racial-kutar.h" />
     <ClInclude Include="..\..\src\mind\stances-table.h" />

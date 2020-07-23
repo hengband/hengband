@@ -457,6 +457,7 @@ hengband_SOURCES = \
 	monster-race/race-indice-types.h \
 	\
 	mspell/assign-monster-spell.c mspell/assign-monster-spell.h \
+	mspell/improper-mspell-remover.c mspell/improper-mspell-remover.h \
 	mspell/monster-power-table.c mspell/monster-power-table.h \
 	mspell/mspells1.c mspell/mspells1.h \
 	mspell/mspell-breath.c mspell/mspell-breath.h \
