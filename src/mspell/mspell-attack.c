@@ -70,6 +70,7 @@ typedef struct msa_type {
     SPELL_IDX thrown_spell;
     GAME_TEXT m_name[MAX_NLEN];
     bool can_remember;
+    int dam;
 } msa_type;
 
 msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
@@ -436,6 +437,32 @@ static bool check_thrown_mspell(player_type *target_ptr, msa_type *msa_ptr)
     }
 }
 
+static void check_mspell_imitation(player_type *target_ptr, msa_type *msa_ptr)
+{
+    bool seen = (!target_ptr->blind && msa_ptr->m_ptr->ml);
+    bool can_imitate = player_has_los_bold(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx);
+    if (!seen || !can_imitate || (current_world_ptr->timewalk_m_idx != 0) || (target_ptr->pclass != CLASS_IMITATOR))
+        return;
+
+    /* Not RF6_SPECIAL */
+    if (msa_ptr->thrown_spell == 167)
+        return;
+
+    if (target_ptr->mane_num == MAX_MANE) {
+        target_ptr->mane_num--;
+        for (int i = 0; i < target_ptr->mane_num; i++) {
+            target_ptr->mane_spell[i] = target_ptr->mane_spell[i + 1];
+            target_ptr->mane_dam[i] = target_ptr->mane_dam[i + 1];
+        }
+    }
+
+    target_ptr->mane_spell[target_ptr->mane_num] = msa_ptr->thrown_spell - 96;
+    target_ptr->mane_dam[target_ptr->mane_num] = msa_ptr->dam;
+    target_ptr->mane_num++;
+    target_ptr->new_mane = TRUE;
+    target_ptr->redraw |= PR_IMITATION;
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -491,7 +518,8 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (msa_ptr->r_ptr->flags2 & RF2_STUPID)
         fail_rate = 0;
 
-    if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
+    if (!spell_is_inate(msa_ptr->thrown_spell)
+        && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
         disturb(target_ptr, TRUE, TRUE);
         msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), msa_ptr->m_name);
         return TRUE;
@@ -505,34 +533,14 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!check_thrown_mspell(target_ptr, msa_ptr))
         return FALSE;
 
-    int dam = monspell_to_player(target_ptr, msa_ptr->thrown_spell, msa_ptr->y, msa_ptr->x, m_idx);
-    if (dam < 0)
+    msa_ptr->dam = monspell_to_player(target_ptr, msa_ptr->thrown_spell, msa_ptr->y, msa_ptr->x, m_idx);
+    if (msa_ptr->dam < 0)
         return FALSE;
 
     if ((target_ptr->action == ACTION_LEARN) && msa_ptr->thrown_spell > 175)
         learn_spell(target_ptr, msa_ptr->thrown_spell - 96);
 
-    bool seen = (!target_ptr->blind && msa_ptr->m_ptr->ml);
-    bool maneable = player_has_los_bold(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx);
-    if (seen && maneable && !current_world_ptr->timewalk_m_idx && (target_ptr->pclass == CLASS_IMITATOR)) {
-        if (msa_ptr->thrown_spell != 167) /* Not RF6_SPECIAL */
-        {
-            if (target_ptr->mane_num == MAX_MANE) {
-                target_ptr->mane_num--;
-                for (int i = 0; i < target_ptr->mane_num; i++) {
-                    target_ptr->mane_spell[i] = target_ptr->mane_spell[i + 1];
-                    target_ptr->mane_dam[i] = target_ptr->mane_dam[i + 1];
-                }
-            }
-
-            target_ptr->mane_spell[target_ptr->mane_num] = msa_ptr->thrown_spell - 96;
-            target_ptr->mane_dam[target_ptr->mane_num] = dam;
-            target_ptr->mane_num++;
-            target_ptr->new_mane = TRUE;
-            target_ptr->redraw |= PR_IMITATION;
-        }
-    }
-
+    check_mspell_imitation(target_ptr, msa_ptr);
     if (msa_ptr->can_remember) {
         if (msa_ptr->thrown_spell < 32 * 4) {
             msa_ptr->r_ptr->r_flags4 |= (1L << (msa_ptr->thrown_spell - 32 * 3));
