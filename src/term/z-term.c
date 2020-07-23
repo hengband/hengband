@@ -36,7 +36,7 @@ term_type *Term = NULL;
 /*
  * Nuke a term_win (see below)
  */
-static errr term_win_nuke(term_win *s, TERM_LEN w, TERM_LEN h)
+errr term_win_nuke(term_win *s, TERM_LEN w, TERM_LEN h)
 {
     /* Free the window access arrays */
     C_KILL(s->a, h, TERM_COLOR *);
