@@ -159,7 +159,7 @@ static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         return;
     }
-    
+
     if ((msa_ptr->f4 & RF4_BR_LITE) && have_flag(f_ptr->flags, FF_LOS) && one_in_(2))
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
 }
@@ -173,14 +173,14 @@ static void check_lite_area_by_mspell(player_type *target_ptr, msa_type *msa_ptr
         msa_ptr->success = TRUE;
         return;
     }
-    
+
     if ((msa_ptr->f4 & RF4_BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
         && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
         msa_ptr->success = TRUE;
         return;
     }
-    
+
     if (((msa_ptr->f5 & RF5_BA_LITE) == 0) || (msa_ptr->m_ptr->cdis > get_max_range(target_ptr)))
         return;
 
@@ -190,6 +190,34 @@ static void check_lite_area_by_mspell(player_type *target_ptr, msa_type *msa_ptr
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = TRUE;
     }
+}
+
+static void decide_lite_breath(player_type *target_ptr, msa_type *msa_ptr)
+{
+    if (msa_ptr->success)
+        return;
+
+    if (msa_ptr->m_ptr->target_y && msa_ptr->m_ptr->target_x) {
+        msa_ptr->y = msa_ptr->m_ptr->target_y;
+        msa_ptr->x = msa_ptr->m_ptr->target_x;
+        msa_ptr->f4 &= RF4_INDIRECT_MASK;
+        msa_ptr->f5 &= RF5_INDIRECT_MASK;
+        msa_ptr->f6 &= RF6_INDIRECT_MASK;
+        msa_ptr->success = TRUE;
+    }
+
+    if ((msa_ptr->y_br_lite == 0) || (msa_ptr->x_br_lite == 0) || (msa_ptr->m_ptr->cdis > get_max_range(target_ptr) / 2) || !one_in_(5))
+        return;
+
+    if (msa_ptr->success) {
+        msa_ptr->f4 |= RF4_BR_LITE;
+        return;
+    }
+
+    msa_ptr->y = msa_ptr->y_br_lite;
+    msa_ptr->x = msa_ptr->x_br_lite;
+    msa_ptr->do_spell = DO_SPELL_BR_LITE;
+    msa_ptr->success = TRUE;
 }
 
 /*!
@@ -226,27 +254,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         if (!msa_ptr->success)
             msa_ptr->success = adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, FF_PROJECT, projectable);
 
-        if (!msa_ptr->success) {
-            if (msa_ptr->m_ptr->target_y && msa_ptr->m_ptr->target_x) {
-                msa_ptr->y = msa_ptr->m_ptr->target_y;
-                msa_ptr->x = msa_ptr->m_ptr->target_x;
-                msa_ptr->f4 &= RF4_INDIRECT_MASK;
-                msa_ptr->f5 &= RF5_INDIRECT_MASK;
-                msa_ptr->f6 &= RF6_INDIRECT_MASK;
-                msa_ptr->success = TRUE;
-            }
-
-            if (msa_ptr->y_br_lite && msa_ptr->x_br_lite && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2) && one_in_(5)) {
-                if (!msa_ptr->success) {
-                    msa_ptr->y = msa_ptr->y_br_lite;
-                    msa_ptr->x = msa_ptr->x_br_lite;
-                    msa_ptr->do_spell = DO_SPELL_BR_LITE;
-                    msa_ptr->success = TRUE;
-                } else
-                    msa_ptr->f4 |= (RF4_BR_LITE);
-            }
-        }
-
+        decide_lite_breath(target_ptr, msa_ptr);
         if (!msa_ptr->success)
             return FALSE;
     }
