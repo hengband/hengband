@@ -324,6 +324,28 @@ void check_element_resistance(msr_type *msr_ptr)
     check_pois_resistance(msr_ptr);
 }
 
+static void check_nether_resistance(player_type *target_ptr, msr_type *msr_ptr)
+{
+    if ((msr_ptr->smart & SM_RES_NETH) == 0)
+        return;
+
+    if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
+        msr_ptr->f4 &= ~(RF4_BR_NETH);
+        msr_ptr->f5 &= ~(RF5_BA_NETH);
+        msr_ptr->f5 &= ~(RF5_BO_NETH);
+        return;
+    }
+
+    if (int_outof(msr_ptr->r_ptr, 20))
+        msr_ptr->f4 &= ~(RF4_BR_NETH);
+
+    if (int_outof(msr_ptr->r_ptr, 50))
+        msr_ptr->f5 &= ~(RF5_BA_NETH);
+
+    if (int_outof(msr_ptr->r_ptr, 50))
+        msr_ptr->f5 &= ~(RF5_BO_NETH);
+}
+
 /*!
  * @brief モンスターの魔法一覧から戦術的に適さない魔法を除外する /
  * Remove the "bad" spells from a spell list
@@ -356,23 +378,7 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
         return;
 
     check_element_resistance(msr_ptr);
-    if (msr_ptr->smart & SM_RES_NETH) {
-        if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
-            msr_ptr->f4 &= ~(RF4_BR_NETH);
-            msr_ptr->f5 &= ~(RF5_BA_NETH);
-            msr_ptr->f5 &= ~(RF5_BO_NETH);
-        } else {
-            if (int_outof(msr_ptr->r_ptr, 20))
-                msr_ptr->f4 &= ~(RF4_BR_NETH);
-
-            if (int_outof(msr_ptr->r_ptr, 50))
-                msr_ptr->f5 &= ~(RF5_BA_NETH);
-
-            if (int_outof(msr_ptr->r_ptr, 50))
-                msr_ptr->f5 &= ~(RF5_BO_NETH);
-        }
-    }
-
+    check_nether_resistance(target_ptr, msr_ptr);
     if (msr_ptr->smart & SM_RES_LITE) {
         if (int_outof(msr_ptr->r_ptr, 50))
             msr_ptr->f4 &= ~(RF4_BR_LITE);
