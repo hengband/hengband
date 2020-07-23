@@ -164,6 +164,34 @@ static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
 }
 
+static void check_lite_area_by_mspell(player_type *target_ptr, msa_type *msa_ptr)
+{
+    if ((msa_ptr->f4 & RF4_BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
+        && in_disintegration_range(target_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
+        && (one_in_(10) || (projectable(target_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
+        msa_ptr->do_spell = DO_SPELL_BR_DISI;
+        msa_ptr->success = TRUE;
+        return;
+    }
+    
+    if ((msa_ptr->f4 & RF4_BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
+        && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
+        msa_ptr->do_spell = DO_SPELL_BR_LITE;
+        msa_ptr->success = TRUE;
+        return;
+    }
+    
+    if (((msa_ptr->f5 & RF5_BA_LITE) == 0) || (msa_ptr->m_ptr->cdis > get_max_range(target_ptr)))
+        return;
+
+    POSITION by = msa_ptr->y, bx = msa_ptr->x;
+    get_project_point(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
+    if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(target_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
+        msa_ptr->do_spell = DO_SPELL_BA_LITE;
+        msa_ptr->success = TRUE;
+    }
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -194,24 +222,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         feature_projection(floor_ptr, msa_ptr);
     } else {
         msa_ptr->success = FALSE;
-        if ((msa_ptr->f4 & RF4_BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
-            && in_disintegration_range(floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
-            && (one_in_(10) || (projectable(target_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
-            msa_ptr->do_spell = DO_SPELL_BR_DISI;
-            msa_ptr->success = TRUE;
-        } else if ((msa_ptr->f4 & RF4_BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
-            && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
-            msa_ptr->do_spell = DO_SPELL_BR_LITE;
-            msa_ptr->success = TRUE;
-        } else if ((msa_ptr->f5 & RF5_BA_LITE) && (msa_ptr->m_ptr->cdis <= get_max_range(target_ptr))) {
-            POSITION by = msa_ptr->y, bx = msa_ptr->x;
-            get_project_point(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
-            if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(target_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
-                msa_ptr->do_spell = DO_SPELL_BA_LITE;
-                msa_ptr->success = TRUE;
-            }
-        }
-
+        check_lite_area_by_mspell(target_ptr, msa_ptr);
         if (!msa_ptr->success)
             msa_ptr->success = adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, FF_PROJECT, projectable);
 
