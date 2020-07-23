@@ -64,11 +64,13 @@
 #include "player/patron.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
+#include "player/player-status-flags.h"
 #include "player/player-move.h"
 #include "player/player-personalities-types.h"
 #include "player/player-personality.h"
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
+#include "player/player-status-flags.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
@@ -97,10 +99,6 @@
 static bool is_martial_arts_mode(player_type *creature_ptr);
 static bool is_not_ninja_weapon(player_type *creature_ptr, int i);
 static bool is_not_monk_weapon(player_type *creature_ptr, int i);
-
-static void have_pass_wall(player_type *creature_ptr);
-static void have_kill_wall(player_type *creature_ptr);
-static void have_xtra_might(player_type *creature_ptr);
 
 static void calc_intra_vision(player_type *creature_ptr);
 static void calc_stealth(player_type *creature_ptr);
@@ -1720,64 +1718,6 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
     return (s16b)num;
 }
 
-static void have_kill_wall(player_type *creature_ptr)
-{
-    creature_ptr->kill_wall = FALSE;
-
-    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
-        creature_ptr->kill_wall = TRUE;
-    }
-
-    if (music_singing(creature_ptr, MUSIC_WALL)) {
-        creature_ptr->kill_wall = TRUE;
-    }
-
-    if (creature_ptr->riding) {
-        monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
-        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        if (riding_r_ptr->flags2 & RF2_KILL_WALL)
-            creature_ptr->kill_wall = TRUE;
-    }
-}
-
-static void have_pass_wall(player_type *creature_ptr)
-{
-    creature_ptr->pass_wall = FALSE;
-
-    if (creature_ptr->wraith_form) {
-        creature_ptr->pass_wall = TRUE;
-    }
-
-    if (creature_ptr->tim_pass_wall) {
-        creature_ptr->pass_wall = TRUE;
-    }
-
-    if (creature_ptr->riding) {
-        monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
-        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        if (!(riding_r_ptr->flags2 & RF2_PASS_WALL))
-            creature_ptr->pass_wall = FALSE;
-    }
-}
-
-static void have_xtra_might(player_type *creature_ptr)
-{
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-    creature_ptr->xtra_might = FALSE;
-
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_XTRA_MIGHT))
-            creature_ptr->xtra_might = TRUE;
-    }
-}
 
 /*!
  * @brief プレイヤーの赤外線視力値を計算する
