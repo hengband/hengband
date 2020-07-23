@@ -46,11 +46,8 @@ static bool int_outof(monster_race *r_ptr, PERCENTAGE prob)
     return (randint0(100) < prob);
 }
 
-static void add_cheat_remove_flags(player_type *target_ptr, msr_type *msr_ptr)
+static void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
 {
-    if (!smart_cheat)
-        return;
-
     if (target_ptr->resist_acid)
         msr_ptr->smart |= SM_RES_ACID;
 
@@ -80,6 +77,7 @@ static void add_cheat_remove_flags(player_type *target_ptr, msr_type *msr_ptr)
 
     if (target_ptr->resist_cold)
         msr_ptr->smart |= SM_RES_COLD;
+
     if (is_oppose_cold(target_ptr))
         msr_ptr->smart |= SM_OPP_COLD;
 
@@ -91,7 +89,10 @@ static void add_cheat_remove_flags(player_type *target_ptr, msr_type *msr_ptr)
 
     if (is_oppose_pois(target_ptr))
         msr_ptr->smart |= SM_OPP_POIS;
+}
 
+static void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
+{
     if (target_ptr->resist_neth)
         msr_ptr->smart |= SM_RES_NETH;
 
@@ -133,6 +134,15 @@ static void add_cheat_remove_flags(player_type *target_ptr, msr_type *msr_ptr)
 
     if (!target_ptr->msp)
         msr_ptr->smart |= SM_IMM_MANA;
+}
+
+static void add_cheat_remove_flags(player_type *target_ptr, msr_type *msr_ptr)
+{
+    if (!smart_cheat)
+        return;
+
+    add_cheat_remove_flags_element(target_ptr, msr_ptr);
+    add_cheat_remove_flags_others(target_ptr, msr_ptr);
 }
 
 /*!
