@@ -157,7 +157,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->see_inv = TRUE;
             creature_ptr->telepathy = TRUE;
             creature_ptr->levitation = TRUE;
-            creature_ptr->kill_wall = TRUE;
             break;
         case MIMIC_VAMPIRE:
             creature_ptr->resist_dark = TRUE;
