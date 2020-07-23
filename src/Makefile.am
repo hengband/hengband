@@ -458,6 +458,7 @@ hengband_SOURCES = \
 	\
 	mspell/assign-monster-spell.c mspell/assign-monster-spell.h \
 	mspell/element-resistance-checker.c mspell/element-resistance-checker.h \
+	mspell/high-resistance-checker.c mspell/high-resistance-checker.h \
 	mspell/improper-mspell-remover.c mspell/improper-mspell-remover.h \
 	mspell/monster-power-table.c mspell/monster-power-table.h \
 	mspell/mspells1.c mspell/mspells1.h \

@@ -1856,6 +1856,9 @@
     <ClCompile Include="..\..\src\mspell\element-resistance-checker.c">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\high-resistance-checker.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4037,6 +4040,9 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\element-resistance-checker.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\high-resistance-checker.h">
       <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>
