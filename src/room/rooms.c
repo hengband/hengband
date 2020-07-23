@@ -396,10 +396,6 @@ static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX
 
 void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
 {
-    POSITION xhstep, yhstep;
-    POSITION xstep2, xhstep2, ystep2, yhstep2;
-    POSITION i, j, ii, jj;
-    POSITION xm, xp, ym, yp;
     POSITION xsize = xsiz;
     POSITION ysize = ysiz;
 
@@ -427,8 +423,8 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
     fill_data.c1 = cutoff;
     POSITION diagsize = 362;
     POSITION maxsize = (xsize > ysize) ? xsize : ysize;
-    for (i = 0; i <= xsize; i++) {
-        for (j = 0; j <= ysize; j++) {
+    for (POSITION i = 0; i <= xsize; i++) {
+        for (POSITION j = 0; j <= ysize; j++) {
             floor_ptr->grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].feat = -1;
             floor_ptr->grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].info &= ~(CAVE_ICKY);
         }
@@ -439,8 +435,10 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
     floor_ptr->grid_array[fill_data.ymin][fill_data.xmax].feat = (s16b)maxsize;
     floor_ptr->grid_array[fill_data.ymax][fill_data.xmax].feat = (s16b)maxsize;
     floor_ptr->grid_array[y0][x0].feat = 0;
-    POSITION xstep = xhstep = xsize * 256;
-    POSITION ystep = yhstep = ysize * 256;
+    POSITION xstep = xsize * 256;
+    POSITION xhstep = xsize * 256;
+    POSITION ystep = ysize * 256;
+    POSITION yhstep = ysize * 256;
     POSITION xxsize = xsize * 256;
     POSITION yysize = ysize * 256;
     while ((xhstep > 256) || (yhstep > 256)) {
@@ -448,14 +446,14 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
         xhstep /= 2;
         ystep = yhstep;
         yhstep /= 2;
-        xstep2 = xstep / 256;
-        ystep2 = ystep / 256;
-        xhstep2 = xhstep / 256;
-        yhstep2 = yhstep / 256;
-        for (i = xhstep; i <= xxsize - xhstep; i += xstep) {
-            for (j = 0; j <= yysize; j += ystep) {
-                ii = i / 256 + fill_data.xmin;
-                jj = j / 256 + fill_data.ymin;
+        POSITION xstep2 = xstep / 256;
+        POSITION ystep2 = ystep / 256;
+        POSITION xhstep2 = xhstep / 256;
+        POSITION yhstep2 = yhstep / 256;
+        for (POSITION i = xhstep; i <= xxsize - xhstep; i += xstep) {
+            for (POSITION j = 0; j <= yysize; j += ystep) {
+                POSITION ii = i / 256 + fill_data.xmin;
+                POSITION jj = j / 256 + fill_data.ymin;
                 if (floor_ptr->grid_array[jj][ii].feat != -1)
                     continue;
 
@@ -471,10 +469,10 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
             }
         }
 
-        for (j = yhstep; j <= yysize - yhstep; j += ystep) {
-            for (i = 0; i <= xxsize; i += xstep) {
-                ii = i / 256 + fill_data.xmin;
-                jj = j / 256 + fill_data.ymin;
+        for (POSITION j = yhstep; j <= yysize - yhstep; j += ystep) {
+            for (POSITION i = 0; i <= xxsize; i += xstep) {
+                POSITION ii = i / 256 + fill_data.xmin;
+                POSITION jj = j / 256 + fill_data.ymin;
                 if (floor_ptr->grid_array[jj][ii].feat != -1)
                     continue;
 
@@ -490,10 +488,10 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
             }
         }
 
-        for (i = xhstep; i <= xxsize - xhstep; i += xstep) {
-            for (j = yhstep; j <= yysize - yhstep; j += ystep) {
-                ii = i / 256 + fill_data.xmin;
-                jj = j / 256 + fill_data.ymin;
+        for (POSITION i = xhstep; i <= xxsize - xhstep; i += xstep) {
+            for (POSITION j = yhstep; j <= yysize - yhstep; j += ystep) {
+                POSITION ii = i / 256 + fill_data.xmin;
+                POSITION jj = j / 256 + fill_data.ymin;
                 if (floor_ptr->grid_array[jj][ii].feat != -1)
                     continue;
 
@@ -502,10 +500,10 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
                     continue;
                 }
 
-                xm = fill_data.xmin + (i - xhstep) / 256;
-                xp = fill_data.xmin + (i + xhstep) / 256;
-                ym = fill_data.ymin + (j - yhstep) / 256;
-                yp = fill_data.ymin + (j + yhstep) / 256;
+                POSITION xm = fill_data.xmin + (i - xhstep) / 256;
+                POSITION xp = fill_data.xmin + (i + xhstep) / 256;
+                POSITION ym = fill_data.ymin + (j - yhstep) / 256;
+                POSITION yp = fill_data.ymin + (j + yhstep) / 256;
                 store_height(floor_ptr, ii, jj,
                     (floor_ptr->grid_array[ym][xm].feat + floor_ptr->grid_array[yp][xm].feat + floor_ptr->grid_array[ym][xp].feat
                         + floor_ptr->grid_array[yp][xp].feat)
@@ -745,8 +743,6 @@ void build_cavern(player_type *player_ptr)
     POSITION ysize = floor_ptr->height - 1;
     POSITION x0 = xsize / 2;
     POSITION y0 = ysize / 2;
-
-    /* Paranoia: make size even */
     xsize = x0 * 2;
     ysize = y0 * 2;
 
@@ -764,7 +760,6 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
     FEAT_IDX feat1, feat2, feat3;
     POSITION xhsize = xsize / 2;
     POSITION yhsize = ysize / 2;
-
     switch (type) {
     case LAKE_T_LAVA: /* Lava */
         feat1 = feat_deep_lava;
@@ -896,7 +891,6 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
     POSITION cx = (x1 + x2) / 2;
     POSITION cy = (y1 + y2) / 2;
     POSITION size = abs(x2 - x1) + abs(y2 - y1);
-
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION x = x1; x <= x2; x++) {
         for (POSITION y = y1; y <= y2; y++) {
@@ -990,7 +984,6 @@ void build_room(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, 
 
     POSITION xsize = x2 - x1;
     POSITION ysize = y2 - y1;
-
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i <= xsize; i++) {
         place_bold(player_ptr, y1, x1 + i, GB_OUTER_NOPERM);
@@ -1106,7 +1099,6 @@ void r_visit(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POS
 
 void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault)
 {
-    grid_type *g_ptr;
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
@@ -1118,6 +1110,7 @@ void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITIO
     POSITION x2 = x0 + dx;
     for (POSITION y = y1 - 1; y <= y2 + 1; y++) {
         for (POSITION x = x1 - 1; x <= x2 + 1; x++) {
+            grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->info |= CAVE_ROOM;
             if (is_vault)
@@ -1296,17 +1289,17 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
  */
 void add_outer_wall(player_type *player_ptr, POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
-    grid_type *g_ptr;
-    feature_type *f_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
         return;
 
+    grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->info & CAVE_ROOM)
         return;
 
     g_ptr->info |= CAVE_ROOM;
+    feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->feat];
     if (is_floor_bold(floor_ptr, y, x)) {
         for (int i = -1; i <= 1; i++) {
@@ -1440,7 +1433,6 @@ static bool room_build(player_type *player_ptr, EFFECT_ID typ)
 bool generate_rooms(player_type *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    bool remain;
     int crowded = 0;
     int prob_list[ROOM_T_MAX];
     int rooms_built = 0;
@@ -1538,6 +1530,7 @@ bool generate_rooms(player_type *player_ptr)
         }
     }
 
+    bool remain;
     while (TRUE) {
         remain = FALSE;
         for (int i = 0; i < ROOM_T_MAX; i++) {
