@@ -215,7 +215,7 @@ static void check_elec_resistance(msr_type *msr_ptr)
 
 static void check_fire_resistance(msr_type *msr_ptr)
 {
-    if (msr_ptr->smart & (SM_IMM_FIRE)) {
+    if (msr_ptr->smart & SM_IMM_FIRE) {
         msr_ptr->f4 &= ~(RF4_BR_FIRE);
         msr_ptr->f5 &= ~(RF5_BA_FIRE);
         msr_ptr->f5 &= ~(RF5_BO_FIRE);
@@ -346,6 +346,36 @@ static void check_nether_resistance(player_type *target_ptr, msr_type *msr_ptr)
         msr_ptr->f5 &= ~(RF5_BO_NETH);
 }
 
+static void check_lite_resistance(msr_type *msr_ptr)
+{
+    if ((msr_ptr->smart & SM_RES_LITE) == 0)
+        return;
+
+    if (int_outof(msr_ptr->r_ptr, 50))
+        msr_ptr->f4 &= ~(RF4_BR_LITE);
+
+    if (int_outof(msr_ptr->r_ptr, 50))
+        msr_ptr->f5 &= ~(RF5_BA_LITE);
+}
+
+static void check_dark_resistance(player_type *target_ptr, msr_type *msr_ptr)
+{
+    if ((msr_ptr->smart & SM_RES_DARK) == 0)
+        return;
+
+    if (is_specific_player_race(target_ptr, RACE_VAMPIRE)) {
+        msr_ptr->f4 &= ~(RF4_BR_DARK);
+        msr_ptr->f5 &= ~(RF5_BA_DARK);
+        return;
+    }
+
+    if (int_outof(msr_ptr->r_ptr, 50))
+        msr_ptr->f4 &= ~(RF4_BR_DARK);
+
+    if (int_outof(msr_ptr->r_ptr, 50))
+        msr_ptr->f5 &= ~(RF5_BA_DARK);
+}
+
 /*!
  * @brief モンスターの魔法一覧から戦術的に適さない魔法を除外する /
  * Remove the "bad" spells from a spell list
@@ -379,30 +409,10 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
 
     check_element_resistance(msr_ptr);
     check_nether_resistance(target_ptr, msr_ptr);
-    if (msr_ptr->smart & SM_RES_LITE) {
-        if (int_outof(msr_ptr->r_ptr, 50))
-            msr_ptr->f4 &= ~(RF4_BR_LITE);
-
-        if (int_outof(msr_ptr->r_ptr, 50))
-            msr_ptr->f5 &= ~(RF5_BA_LITE);
-    }
-
-    if (msr_ptr->smart & SM_RES_DARK) {
-        if (is_specific_player_race(target_ptr, RACE_VAMPIRE)) {
-            msr_ptr->f4 &= ~(RF4_BR_DARK);
-            msr_ptr->f5 &= ~(RF5_BA_DARK);
-        } else {
-            if (int_outof(msr_ptr->r_ptr, 50))
-                msr_ptr->f4 &= ~(RF4_BR_DARK);
-
-            if (int_outof(msr_ptr->r_ptr, 50))
-                msr_ptr->f5 &= ~(RF5_BA_DARK);
-        }
-    }
-
-    if (msr_ptr->smart & SM_RES_FEAR) {
+    check_lite_resistance(msr_ptr);
+    check_dark_resistance(target_ptr, msr_ptr);
+    if (msr_ptr->smart & SM_RES_FEAR)
         msr_ptr->f5 &= ~(RF5_SCARE);
-    }
 
     if (msr_ptr->smart & SM_RES_CONF) {
         msr_ptr->f5 &= ~(RF5_CONF);
