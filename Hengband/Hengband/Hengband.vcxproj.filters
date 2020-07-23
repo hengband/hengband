@@ -1874,6 +1874,9 @@
     <ClCompile Include="..\..\src\object-use\read-execution.c">
       <Filter>object-use</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\player-status-flags.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4074,6 +4077,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-use\read-execution.h">
       <Filter>object-use</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-status-flags.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
