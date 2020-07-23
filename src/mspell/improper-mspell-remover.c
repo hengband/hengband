@@ -315,6 +315,15 @@ static void check_pois_resistance(msr_type *msr_ptr)
     }
 }
 
+void check_element_resistance(msr_type *msr_ptr)
+{
+    check_acid_resistance(msr_ptr);
+    check_elec_resistance(msr_ptr);
+    check_fire_resistance(msr_ptr);
+    check_cold_resistance(msr_ptr);
+    check_pois_resistance(msr_ptr);
+}
+
 /*!
  * @brief モンスターの魔法一覧から戦術的に適さない魔法を除外する /
  * Remove the "bad" spells from a spell list
@@ -346,11 +355,7 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
     if (!msr_ptr->smart)
         return;
 
-    check_acid_resistance(msr_ptr);
-    check_elec_resistance(msr_ptr);
-    check_fire_resistance(msr_ptr);
-    check_cold_resistance(msr_ptr);
-    check_pois_resistance(msr_ptr);
+    check_element_resistance(msr_ptr);
     if (msr_ptr->smart & SM_RES_NETH) {
         if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
             msr_ptr->f4 &= ~(RF4_BR_NETH);
