@@ -67,6 +67,7 @@ typedef struct msa_type {
     bool success;
     byte spell[96];
     byte num;
+    SPELL_IDX thrown_spell;
 } msa_type;
 
 msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
@@ -84,6 +85,7 @@ msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTE
     msa_ptr->y_br_lite = 0;
     msa_ptr->do_spell = DO_SPELL_NONE;
     msa_ptr->num;
+    msa_ptr->thrown_spell = 0;
     return msa_ptr;
 }
 
@@ -405,32 +407,31 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     monster_desc(target_ptr, m_poss, msa_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 
-    SPELL_IDX thrown_spell = 0;
     switch (msa_ptr->do_spell) {
     case DO_SPELL_NONE: {
         int attempt = 10;
         while (attempt--) {
-            thrown_spell = choose_attack_spell(target_ptr, m_idx, msa_ptr->spell, msa_ptr->num);
-            if (thrown_spell)
+            msa_ptr->thrown_spell = choose_attack_spell(target_ptr, m_idx, msa_ptr->spell, msa_ptr->num);
+            if (msa_ptr->thrown_spell)
                 break;
         }
 
         break;
     }
     case DO_SPELL_BR_LITE:
-        thrown_spell = 96 + 14; /* RF4_BR_LITE */
+        msa_ptr->thrown_spell = 96 + 14; /* RF4_BR_LITE */
         break;
     case DO_SPELL_BR_DISI:
-        thrown_spell = 96 + 31; /* RF4_BR_DISI */
+        msa_ptr->thrown_spell = 96 + 31; /* RF4_BR_DISI */
         break;
     case DO_SPELL_BA_LITE:
-        thrown_spell = 128 + 20; /* RF5_BA_LITE */
+        msa_ptr->thrown_spell = 128 + 20; /* RF5_BA_LITE */
         break;
     default:
         return FALSE;
     }
 
-    if (thrown_spell == 0)
+    if (msa_ptr->thrown_spell == 0)
         return FALSE;
 
     PERCENTAGE failrate = 25 - (rlev + 3) / 4;
@@ -438,14 +439,13 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (msa_ptr->r_ptr->flags2 & RF2_STUPID)
         failrate = 0;
 
-    if (!spell_is_inate(thrown_spell) && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < failrate))) {
+    if (!spell_is_inate(msa_ptr->thrown_spell) && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < failrate))) {
         disturb(target_ptr, TRUE, TRUE);
         msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);
-
         return TRUE;
     }
 
-    if (!spell_is_inate(thrown_spell) && magic_barrier(target_ptr, m_idx)) {
+    if (!spell_is_inate(msa_ptr->thrown_spell) && magic_barrier(target_ptr, m_idx)) {
         msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), m_name);
         return TRUE;
     }
@@ -453,7 +453,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     bool direct = player_bold(target_ptr, msa_ptr->y, msa_ptr->x);
     bool can_remember = is_original_ap_and_seen(target_ptr, msa_ptr->m_ptr);
     if (!direct) {
-        switch (thrown_spell) {
+        switch (msa_ptr->thrown_spell) {
         case 96 + 2: /* RF4_DISPEL */
         case 96 + 4: /* RF4_SHOOT */
         case 128 + 9: /* RF5_DRAIN_MANA */
@@ -489,18 +489,18 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    int dam = monspell_to_player(target_ptr, thrown_spell, msa_ptr->y, msa_ptr->x, m_idx);
+    int dam = monspell_to_player(target_ptr, msa_ptr->thrown_spell, msa_ptr->y, msa_ptr->x, m_idx);
     if (dam < 0)
         return FALSE;
 
-    if ((target_ptr->action == ACTION_LEARN) && thrown_spell > 175) {
-        learn_spell(target_ptr, thrown_spell - 96);
+    if ((target_ptr->action == ACTION_LEARN) && msa_ptr->thrown_spell > 175) {
+        learn_spell(target_ptr, msa_ptr->thrown_spell - 96);
     }
 
     bool seen = (!target_ptr->blind && msa_ptr->m_ptr->ml);
     bool maneable = player_has_los_bold(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx);
     if (seen && maneable && !current_world_ptr->timewalk_m_idx && (target_ptr->pclass == CLASS_IMITATOR)) {
-        if (thrown_spell != 167) /* Not RF6_SPECIAL */
+        if (msa_ptr->thrown_spell != 167) /* Not RF6_SPECIAL */
         {
             if (target_ptr->mane_num == MAX_MANE) {
                 int i;
@@ -511,7 +511,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
                 }
             }
 
-            target_ptr->mane_spell[target_ptr->mane_num] = thrown_spell - 96;
+            target_ptr->mane_spell[target_ptr->mane_num] = msa_ptr->thrown_spell - 96;
             target_ptr->mane_dam[target_ptr->mane_num] = dam;
             target_ptr->mane_num++;
             target_ptr->new_mane = TRUE;
@@ -520,16 +520,16 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     if (can_remember) {
-        if (thrown_spell < 32 * 4) {
-            msa_ptr->r_ptr->r_flags4 |= (1L << (thrown_spell - 32 * 3));
+        if (msa_ptr->thrown_spell < 32 * 4) {
+            msa_ptr->r_ptr->r_flags4 |= (1L << (msa_ptr->thrown_spell - 32 * 3));
             if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
                 msa_ptr->r_ptr->r_cast_spell++;
-        } else if (thrown_spell < 32 * 5) {
-            msa_ptr->r_ptr->r_flags5 |= (1L << (thrown_spell - 32 * 4));
+        } else if (msa_ptr->thrown_spell < 32 * 5) {
+            msa_ptr->r_ptr->r_flags5 |= (1L << (msa_ptr->thrown_spell - 32 * 4));
             if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
                 msa_ptr->r_ptr->r_cast_spell++;
-        } else if (thrown_spell < 32 * 6) {
-            msa_ptr->r_ptr->r_flags6 |= (1L << (thrown_spell - 32 * 5));
+        } else if (msa_ptr->thrown_spell < 32 * 6) {
+            msa_ptr->r_ptr->r_flags6 |= (1L << (msa_ptr->thrown_spell - 32 * 5));
             if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
                 msa_ptr->r_ptr->r_cast_spell++;
         }
