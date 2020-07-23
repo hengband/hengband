@@ -70,10 +70,9 @@
  */
 bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1)
 {
-    POSITION y, x;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    for (y = y1 - 2; y <= y1 + 2; y++) {
-        for (x = x1 - 2; x <= x1 + 2; x++) {
+    for (POSITION y = y1 - 2; y <= y1 + 2; y++) {
+        for (POSITION x = x1 - 2; x <= x1 + 2; x++) {
             if (!in_bounds(floor_ptr, y, x))
                 continue;
 
@@ -207,6 +206,7 @@ void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
 
     if (typ != GF_ARROW)
         flg |= PROJECT_REFLECTABLE;
+
     bool learnable = spell_learnable(target_ptr, m_idx);
     (void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
@@ -391,12 +391,7 @@ static bool spell_annoy(byte spell)
  */
 static bool spell_summon(byte spell)
 {
-    /* All summon spells */
-    if (spell >= 160 + 16)
-        return TRUE;
-
-    /* Doesn't summon */
-    return FALSE;
+    return spell >= 160 + 16;
 }
 
 /*!
@@ -407,12 +402,7 @@ static bool spell_summon(byte spell)
  */
 static bool spell_raise(byte spell)
 {
-    /* All raise-dead spells */
-    if (spell == 160 + 15)
-        return TRUE;
-
-    /* Doesn't summon */
-    return FALSE;
+    return spell == 160 + 15;
 }
 
 /*!
@@ -423,12 +413,7 @@ static bool spell_raise(byte spell)
  */
 static bool spell_tactic(byte spell)
 {
-    /* Blink */
-    if (spell == 160 + 4)
-        return TRUE;
-
-    /* Not good */
-    return FALSE;
+    return spell == 160 + 4;
 }
 
 /*!
@@ -439,12 +424,7 @@ static bool spell_tactic(byte spell)
  */
 static bool spell_invulner(byte spell)
 {
-    /* Invulnerability */
-    if (spell == 160 + 3)
-        return TRUE;
-
-    /* No invulnerability */
-    return FALSE;
+    return spell == 160 + 3;
 }
 
 /*!
@@ -455,12 +435,7 @@ static bool spell_invulner(byte spell)
  */
 static bool spell_haste(byte spell)
 {
-    /* Haste self */
-    if (spell == 160 + 0)
-        return TRUE;
-
-    /* Not a haste spell */
-    return FALSE;
+    return spell == 160 + 0;
 }
 
 /*!
@@ -471,9 +446,7 @@ static bool spell_haste(byte spell)
  */
 static bool spell_world(byte spell)
 {
-    if (spell == 160 + 6)
-        return TRUE;
-    return FALSE;
+    return spell == 160 + 6;
 }
 
 /*!
@@ -487,9 +460,8 @@ static bool spell_special(player_type *target_ptr, byte spell)
 {
     if (target_ptr->phase_out)
         return FALSE;
-    if (spell == 160 + 7)
-        return TRUE;
-    return FALSE;
+
+    return spell == 160 + 7;
 }
 
 /*!
@@ -500,12 +472,7 @@ static bool spell_special(player_type *target_ptr, byte spell)
  */
 static bool spell_psy_spe(byte spell)
 {
-    /* world */
-    if (spell == 160 + 11)
-        return TRUE;
-
-    /* Not a haste spell */
-    return FALSE;
+    return spell == 160 + 11;
 }
 
 /*!
@@ -516,12 +483,7 @@ static bool spell_psy_spe(byte spell)
  */
 static bool spell_heal(byte spell)
 {
-    /* Heal */
-    if (spell == 160 + 2)
-        return TRUE;
-
-    /* No healing */
-    return FALSE;
+    return spell == 160 + 2;
 }
 
 /*!
@@ -532,12 +494,7 @@ static bool spell_heal(byte spell)
  */
 static bool spell_dispel(byte spell)
 {
-    /* Dispel */
-    if (spell == 96 + 2)
-        return TRUE;
-
-    /* No dispel */
-    return FALSE;
+    return spell == 96 + 2;
 }
 
 /*!
