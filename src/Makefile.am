@@ -462,6 +462,7 @@ hengband_SOURCES = \
 	mspell/improper-mspell-remover.c mspell/improper-mspell-remover.h \
 	mspell/monster-power-table.c mspell/monster-power-table.h \
 	mspell/mspells1.c mspell/mspells1.h \
+	mspell/mspell-attack.c mspell/mspell-attack.h \
 	mspell/mspell-breath.c mspell/mspell-breath.h \
 	mspell/mspell-ball.c mspell/mspell-ball.h \
 	mspell/mspell-bolt.c mspell/mspell-bolt.h \

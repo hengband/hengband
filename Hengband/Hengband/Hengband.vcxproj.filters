@@ -1862,6 +1862,9 @@
     <ClCompile Include="..\..\src\mspell\mspell-selector.c">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-attack.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4049,6 +4052,9 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-selector.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-attack.h">
       <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>
