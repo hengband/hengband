@@ -149,6 +149,21 @@ static void decide_lite_range(player_type *target_ptr, msa_type *msa_ptr)
     msa_ptr->x_br_lite = 0;
 }
 
+static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
+{
+    feature_type *f_ptr = &f_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
+    if (have_flag(f_ptr->flags, FF_PROJECT))
+        return;
+
+    if ((msa_ptr->f4 & RF4_BR_DISI) && have_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2)) {
+        msa_ptr->do_spell = DO_SPELL_BR_DISI;
+        return;
+    }
+    
+    if ((msa_ptr->f4 & RF4_BR_LITE) && have_flag(f_ptr->flags, FF_LOS) && one_in_(2))
+        msa_ptr->do_spell = DO_SPELL_BR_LITE;
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -176,13 +191,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     decide_lite_range(target_ptr, msa_ptr);
     if (projectable(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
-        feature_type *f_ptr = &f_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
-        if (!have_flag(f_ptr->flags, FF_PROJECT)) {
-            if ((msa_ptr->f4 & RF4_BR_DISI) && have_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2))
-                msa_ptr->do_spell = DO_SPELL_BR_DISI;
-            else if ((msa_ptr->f4 & RF4_BR_LITE) && have_flag(f_ptr->flags, FF_LOS) && one_in_(2))
-                msa_ptr->do_spell = DO_SPELL_BR_LITE;
-        }
+        feature_projection(floor_ptr, msa_ptr);
     } else {
         msa_ptr->success = FALSE;
         if ((msa_ptr->f4 & RF4_BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
