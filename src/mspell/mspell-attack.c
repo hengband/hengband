@@ -69,6 +69,7 @@ typedef struct msa_type {
     byte num;
     SPELL_IDX thrown_spell;
     GAME_TEXT m_name[MAX_NLEN];
+    bool can_remember;
 } msa_type;
 
 msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
@@ -390,6 +391,51 @@ static bool switch_do_spell(player_type *target_ptr, msa_type *msa_ptr)
     }
 }
 
+static bool check_thrown_mspell(player_type *target_ptr, msa_type *msa_ptr)
+{
+    bool direct = player_bold(target_ptr, msa_ptr->y, msa_ptr->x);
+    msa_ptr->can_remember = is_original_ap_and_seen(target_ptr, msa_ptr->m_ptr);
+    if (direct)
+        return TRUE;
+
+    switch (msa_ptr->thrown_spell) {
+    case 96 + 2: /* RF4_DISPEL */
+    case 96 + 4: /* RF4_SHOOT */
+    case 128 + 9: /* RF5_DRAIN_MANA */
+    case 128 + 10: /* RF5_MIND_BLAST */
+    case 128 + 11: /* RF5_BRAIN_SMASH */
+    case 128 + 12: /* RF5_CAUSE_1 */
+    case 128 + 13: /* RF5_CAUSE_2 */
+    case 128 + 14: /* RF5_CAUSE_3 */
+    case 128 + 15: /* RF5_CAUSE_4 */
+    case 128 + 16: /* RF5_BO_ACID */
+    case 128 + 17: /* RF5_BO_ELEC */
+    case 128 + 18: /* RF5_BO_FIRE */
+    case 128 + 19: /* RF5_BO_COLD */
+    case 128 + 21: /* RF5_BO_NETH */
+    case 128 + 22: /* RF5_BO_WATE */
+    case 128 + 23: /* RF5_BO_MANA */
+    case 128 + 24: /* RF5_BO_PLAS */
+    case 128 + 25: /* RF5_BO_ICEE */
+    case 128 + 26: /* RF5_MISSILE */
+    case 128 + 27: /* RF5_SCARE */
+    case 128 + 28: /* RF5_BLIND */
+    case 128 + 29: /* RF5_CONF */
+    case 128 + 30: /* RF5_SLOW */
+    case 128 + 31: /* RF5_HOLD */
+    case 160 + 1: /* RF6_HAND_DOOM */
+    case 160 + 8: /* RF6_TELE_TO */
+    case 160 + 9: /* RF6_TELE_AWAY */
+    case 160 + 10: /* RF6_TELE_LEVEL */
+    case 160 + 11: /* RF6_PSY_SPEAR */
+    case 160 + 12: /* RF6_DARKNESS */
+    case 160 + 14: /* RF6_FORGET */
+        return FALSE;
+    default:
+        return TRUE;
+    }
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -456,52 +502,15 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return TRUE;
     }
 
-    bool direct = player_bold(target_ptr, msa_ptr->y, msa_ptr->x);
-    bool can_remember = is_original_ap_and_seen(target_ptr, msa_ptr->m_ptr);
-    if (!direct) {
-        switch (msa_ptr->thrown_spell) {
-        case 96 + 2: /* RF4_DISPEL */
-        case 96 + 4: /* RF4_SHOOT */
-        case 128 + 9: /* RF5_DRAIN_MANA */
-        case 128 + 10: /* RF5_MIND_BLAST */
-        case 128 + 11: /* RF5_BRAIN_SMASH */
-        case 128 + 12: /* RF5_CAUSE_1 */
-        case 128 + 13: /* RF5_CAUSE_2 */
-        case 128 + 14: /* RF5_CAUSE_3 */
-        case 128 + 15: /* RF5_CAUSE_4 */
-        case 128 + 16: /* RF5_BO_ACID */
-        case 128 + 17: /* RF5_BO_ELEC */
-        case 128 + 18: /* RF5_BO_FIRE */
-        case 128 + 19: /* RF5_BO_COLD */
-        case 128 + 21: /* RF5_BO_NETH */
-        case 128 + 22: /* RF5_BO_WATE */
-        case 128 + 23: /* RF5_BO_MANA */
-        case 128 + 24: /* RF5_BO_PLAS */
-        case 128 + 25: /* RF5_BO_ICEE */
-        case 128 + 26: /* RF5_MISSILE */
-        case 128 + 27: /* RF5_SCARE */
-        case 128 + 28: /* RF5_BLIND */
-        case 128 + 29: /* RF5_CONF */
-        case 128 + 30: /* RF5_SLOW */
-        case 128 + 31: /* RF5_HOLD */
-        case 160 + 1: /* RF6_HAND_DOOM */
-        case 160 + 8: /* RF6_TELE_TO */
-        case 160 + 9: /* RF6_TELE_AWAY */
-        case 160 + 10: /* RF6_TELE_LEVEL */
-        case 160 + 11: /* RF6_PSY_SPEAR */
-        case 160 + 12: /* RF6_DARKNESS */
-        case 160 + 14: /* RF6_FORGET */
-            return FALSE;
-        }
-    }
+    if (!check_thrown_mspell(target_ptr, msa_ptr))
+        return FALSE;
 
     int dam = monspell_to_player(target_ptr, msa_ptr->thrown_spell, msa_ptr->y, msa_ptr->x, m_idx);
     if (dam < 0)
         return FALSE;
 
-    if ((target_ptr->action == ACTION_LEARN) && msa_ptr->thrown_spell > 175) {
+    if ((target_ptr->action == ACTION_LEARN) && msa_ptr->thrown_spell > 175)
         learn_spell(target_ptr, msa_ptr->thrown_spell - 96);
-    }
 
     bool seen = (!target_ptr->blind && msa_ptr->m_ptr->ml);
     bool maneable = player_has_los_bold(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx);
@@ -509,9 +518,8 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         if (msa_ptr->thrown_spell != 167) /* Not RF6_SPECIAL */
         {
             if (target_ptr->mane_num == MAX_MANE) {
-                int i;
                 target_ptr->mane_num--;
-                for (i = 0; i < target_ptr->mane_num; i++) {
+                for (int i = 0; i < target_ptr->mane_num; i++) {
                     target_ptr->mane_spell[i] = target_ptr->mane_spell[i + 1];
                     target_ptr->mane_dam[i] = target_ptr->mane_dam[i + 1];
                 }
@@ -525,7 +533,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (can_remember) {
+    if (msa_ptr->can_remember) {
         if (msa_ptr->thrown_spell < 32 * 4) {
             msa_ptr->r_ptr->r_flags4 |= (1L << (msa_ptr->thrown_spell - 32 * 3));
             if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
