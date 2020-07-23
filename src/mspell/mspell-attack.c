@@ -286,6 +286,19 @@ static void check_mspell_smart(player_type *target_ptr, msa_type *msa_ptr)
     }
 }
 
+static void check_mspell_arena(player_type *target_ptr, msa_type *msa_ptr)
+{
+    if (!target_ptr->current_floor_ptr->inside_arena && !target_ptr->phase_out)
+        return;
+
+    msa_ptr->f4 &= ~(RF4_SUMMON_MASK);
+    msa_ptr->f5 &= ~(RF5_SUMMON_MASK);
+    msa_ptr->f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
+
+    if (msa_ptr->m_ptr->r_idx == MON_ROLENTO)
+        msa_ptr->f6 &= ~(RF6_SPECIAL);
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -329,15 +342,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     remove_bad_spells(m_idx, target_ptr, &msa_ptr->f4, &msa_ptr->f5, &msa_ptr->f6);
-    if (target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out) {
-        msa_ptr->f4 &= ~(RF4_SUMMON_MASK);
-        msa_ptr->f5 &= ~(RF5_SUMMON_MASK);
-        msa_ptr->f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
-
-        if (msa_ptr->m_ptr->r_idx == MON_ROLENTO)
-            msa_ptr->f6 &= ~(RF6_SPECIAL);
-    }
-
+    check_mspell_arena(target_ptr,, msa_ptr);
     if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
         return FALSE;
 
