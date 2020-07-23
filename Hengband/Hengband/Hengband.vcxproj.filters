@@ -1850,6 +1850,9 @@
     <ClCompile Include="..\..\src\mspell\improper-mspell-remover.c">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\smart-mspell-util.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4025,6 +4028,9 @@
       <Filter>melee</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\improper-mspell-remover.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\smart-mspell-util.h">
       <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>
