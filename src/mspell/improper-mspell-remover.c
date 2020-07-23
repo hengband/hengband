@@ -386,6 +386,65 @@ static void check_conf_resistance(msr_type *msr_ptr)
         msr_ptr->f4 &= ~(RF4_BR_CONF);
 }
 
+static void check_chaos_resistance(msr_type *msr_ptr)
+{
+    if ((msr_ptr->smart & SM_RES_CHAOS) == 0)
+        return;
+
+    if (int_outof(msr_ptr->r_ptr, 20))
+        msr_ptr->f4 &= ~(RF4_BR_CHAO);
+
+    if (int_outof(msr_ptr->r_ptr, 50))
+        msr_ptr->f4 &= ~(RF4_BA_CHAO);
+}
+
+static void check_nexus_resistance(msr_type *msr_ptr)
+{
+    if ((msr_ptr->smart & SM_RES_NEXUS) == 0)
+        return;
+
+    if (int_outof(msr_ptr->r_ptr, 50))
+        msr_ptr->f4 &= ~(RF4_BR_NEXU);
+
+    msr_ptr->f6 &= ~(RF6_TELE_LEVEL);
+}
+
+static void check_reflection(msr_type *msr_ptr)
+{
+    if ((msr_ptr->smart & SM_IMM_REFLECT) == 0)
+        return;
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_BO_COLD);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_BO_FIRE);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_BO_ACID);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_BO_ELEC);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_BO_NETH);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_BO_WATE);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_BO_MANA);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_BO_PLAS);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_BO_ICEE);
+
+    if (int_outof(msr_ptr->r_ptr, 150))
+        msr_ptr->f5 &= ~(RF5_MISSILE);
+}
+
 /*!
  * @brief モンスターの魔法一覧から戦術的に適さない魔法を除外する /
  * Remove the "bad" spells from a spell list
@@ -420,70 +479,26 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
     check_element_resistance(msr_ptr);
     check_nether_resistance(target_ptr, msr_ptr);
     check_lite_resistance(msr_ptr);
-    check_dark_resistance(msr_ptr);
+    check_dark_resistance(target_ptr, msr_ptr);
     if (msr_ptr->smart & SM_RES_FEAR)
         msr_ptr->f5 &= ~(RF5_SCARE);
 
-    check_conf_resistance(target_ptr, msr_ptr);
-    if (msr_ptr->smart & SM_RES_CHAOS) {
-        if (int_outof(msr_ptr->r_ptr, 20))
-            msr_ptr->f4 &= ~(RF4_BR_CHAO);
-
-        if (int_outof(msr_ptr->r_ptr, 50))
-            msr_ptr->f4 &= ~(RF4_BA_CHAO);
-    }
-
+    check_conf_resistance(msr_ptr);
+    check_chaos_resistance(msr_ptr);
     if (((msr_ptr->smart & SM_RES_DISEN) != 0) && int_outof(msr_ptr->r_ptr, 40))
         msr_ptr->f4 &= ~(RF4_BR_DISE);
 
     if (msr_ptr->smart & SM_RES_BLIND)
         msr_ptr->f5 &= ~(RF5_BLIND);
 
-    if (msr_ptr->smart & SM_RES_NEXUS) {
-        if (int_outof(msr_ptr->r_ptr, 50))
-            msr_ptr->f4 &= ~(RF4_BR_NEXU);
-
-        msr_ptr->f6 &= ~(RF6_TELE_LEVEL);
-    }
-
+    check_nexus_resistance(msr_ptr);
     if (((msr_ptr->smart & SM_RES_SOUND) != 0) && int_outof(msr_ptr->r_ptr, 50))
         msr_ptr->f4 &= ~(RF4_BR_SOUN);
 
     if (((msr_ptr->smart & SM_RES_SHARD) != 0) && int_outof(msr_ptr->r_ptr, 40))
         msr_ptr->f4 &= ~(RF4_BR_SHAR);
 
-    if (msr_ptr->smart & SM_IMM_REFLECT) {
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_BO_COLD);
-
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_BO_FIRE);
-
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_BO_ACID);
-
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_BO_ELEC);
-
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_BO_NETH);
-
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_BO_WATE);
-
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_BO_MANA);
-
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_BO_PLAS);
-
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_BO_ICEE);
-
-        if (int_outof(msr_ptr->r_ptr, 150))
-            msr_ptr->f5 &= ~(RF5_MISSILE);
-    }
-
+    check_reflection(msr_ptr);
     if (msr_ptr->smart & SM_IMM_FREE) {
         msr_ptr->f5 &= ~(RF5_HOLD);
         msr_ptr->f5 &= ~(RF5_SLOW);
