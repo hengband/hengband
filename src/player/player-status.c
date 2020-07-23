@@ -100,6 +100,7 @@ static bool is_not_monk_weapon(player_type *creature_ptr, int i);
 
 static void have_pass_wall(player_type *creature_ptr);
 static void have_kill_wall(player_type *creature_ptr);
+static void have_xtra_might(player_type *creature_ptr);
 
 static void calc_intra_vision(player_type *creature_ptr);
 static void calc_stealth(player_type *creature_ptr);
@@ -565,7 +566,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->tval_ammo = 0;
     creature_ptr->cursed = 0L;
     creature_ptr->bless_blade = FALSE;
-    creature_ptr->xtra_might = FALSE;
     creature_ptr->impact[0] = FALSE;
     creature_ptr->impact[1] = FALSE;
     creature_ptr->dec_mana = FALSE;
@@ -709,10 +709,10 @@ void calc_bonuses(player_type *creature_ptr)
 
     clear_creature_bonuses(creature_ptr);
 
-	have_pass_wall(creature_ptr);
+    have_pass_wall(creature_ptr);
     have_kill_wall(creature_ptr);
-	
-	calc_race_status(creature_ptr);
+
+    calc_race_status(creature_ptr);
 
     if (has_melee_weapon(creature_ptr, INVEN_RARM))
         creature_ptr->right_hand_weapon = TRUE;
@@ -1740,22 +1740,42 @@ static void have_kill_wall(player_type *creature_ptr)
     }
 }
 
-static void have_pass_wall(player_type *creature_ptr) {
+static void have_pass_wall(player_type *creature_ptr)
+{
     creature_ptr->pass_wall = FALSE;
 
     if (creature_ptr->wraith_form) {
         creature_ptr->pass_wall = TRUE;
     }
 
-	if (creature_ptr->tim_pass_wall) {
-		creature_ptr->pass_wall = TRUE;
-	}
+    if (creature_ptr->tim_pass_wall) {
+        creature_ptr->pass_wall = TRUE;
+    }
 
-	if (creature_ptr->riding) {
+    if (creature_ptr->riding) {
         monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         if (!(riding_r_ptr->flags2 & RF2_PASS_WALL))
             creature_ptr->pass_wall = FALSE;
+    }
+}
+
+static void have_xtra_might(player_type *creature_ptr)
+{
+	object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+
+    creature_ptr->xtra_might = FALSE;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (have_flag(flgs, TR_XTRA_MIGHT))
+            creature_ptr->xtra_might = TRUE;
     }
 }
 
@@ -4805,8 +4825,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->dec_mana = TRUE;
         if (have_flag(flgs, TR_BLESSED))
             creature_ptr->bless_blade = TRUE;
-        if (have_flag(flgs, TR_XTRA_MIGHT))
-            creature_ptr->xtra_might = TRUE;
         if (have_flag(flgs, TR_SLOW_DIGEST))
             creature_ptr->slow_digest = TRUE;
         if (have_flag(flgs, TR_REGEN))
