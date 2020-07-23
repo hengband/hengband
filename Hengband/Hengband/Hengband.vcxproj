@@ -266,6 +266,7 @@
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-magic-resistance.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
+    <ClCompile Include="..\..\src\mspell\element-resistance-checker.c" />
     <ClCompile Include="..\..\src\mspell\improper-mspell-remover.c" />
     <ClCompile Include="..\..\src\mspell\smart-mspell-util.c" />
     <ClCompile Include="..\..\src\mspell\specified-summon.c" />
@@ -807,6 +808,7 @@
     <ClInclude Include="..\..\src\mind\mind-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-magic-resistance.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
+    <ClInclude Include="..\..\src\mspell\element-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\improper-mspell-remover.h" />
     <ClInclude Include="..\..\src\mspell\smart-mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\specified-summon.h" />
