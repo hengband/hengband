@@ -91,7 +91,6 @@ static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, PO
 }
 
 /*!
- * todo メインルーチンの割に長過ぎる。要分割
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -118,10 +117,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!is_hostile(m_ptr))
         return FALSE;
 
-    bool no_inate = FALSE;
-    if (randint0(100) >= (r_ptr->freq_spell * 2))
-        no_inate = TRUE;
-
+    bool no_inate = randint0(100) >= (r_ptr->freq_spell * 2);
     BIT_FLAGS f4 = r_ptr->flags4;
     BIT_FLAGS f5 = r_ptr->a_ability_flags1;
     BIT_FLAGS f6 = r_ptr->a_ability_flags2;
@@ -136,14 +132,10 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (f4 & RF4_BR_LITE) {
         y_br_lite = y;
         x_br_lite = x;
-
         if (los(target_ptr, m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite)) {
             feature_type *f_ptr = &f_info[floor_ptr->grid_array[y_br_lite][x_br_lite].feat];
-
-            if (!have_flag(f_ptr->flags, FF_LOS)) {
-                if (have_flag(f_ptr->flags, FF_PROJECT) && one_in_(2))
-                    f4 &= ~(RF4_BR_LITE);
-            }
+            if (!have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT) && one_in_(2))
+                f4 &= ~(RF4_BR_LITE);
         } else if (!adjacent_grid_check(target_ptr, m_ptr, &y_br_lite, &x_br_lite, FF_LOS, los))
             f4 &= ~(RF4_BR_LITE);
 
@@ -297,28 +289,19 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     byte spell[96], num = 0;
-    for (int k = 0; k < 32; k++) {
+    for (int k = 0; k < 32; k++)
         if (f4 & (1L << k))
             spell[num++] = k + RF4_SPELL_START;
-    }
 
-    for (int k = 0; k < 32; k++) {
+    for (int k = 0; k < 32; k++)
         if (f5 & (1L << k))
             spell[num++] = k + RF5_SPELL_START;
-    }
 
-    for (int k = 0; k < 32; k++) {
+    for (int k = 0; k < 32; k++)
         if (f6 & (1L << k))
             spell[num++] = k + RF6_SPELL_START;
-    }
 
-    if (!num)
-        return FALSE;
-
-    if (!target_ptr->playing || target_ptr->is_dead)
-        return FALSE;
-
-    if (target_ptr->leaving)
+    if (!num || !target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
         return FALSE;
 
     GAME_TEXT m_name[MAX_NLEN];
@@ -434,11 +417,11 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
                     target_ptr->mane_dam[i] = target_ptr->mane_dam[i + 1];
                 }
             }
+
             target_ptr->mane_spell[target_ptr->mane_num] = thrown_spell - 96;
             target_ptr->mane_dam[target_ptr->mane_num] = dam;
             target_ptr->mane_num++;
             target_ptr->new_mane = TRUE;
-
             target_ptr->redraw |= PR_IMITATION;
         }
     }
