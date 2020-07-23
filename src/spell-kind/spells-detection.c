@@ -2,8 +2,8 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
 #include "floor/floor-save.h"
-#include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "monster-race/monster-race.h"
@@ -22,7 +22,6 @@
 #include "realm/realm-song.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 

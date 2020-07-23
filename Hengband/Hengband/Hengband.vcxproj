@@ -271,6 +271,7 @@
     <ClCompile Include="..\..\src\mspell\improper-mspell-remover.c" />
     <ClCompile Include="..\..\src\mspell\mspell-attack-util.c" />
     <ClCompile Include="..\..\src\mspell\mspell-attack.c" />
+    <ClCompile Include="..\..\src\mspell\mspell-lite.c" />
     <ClCompile Include="..\..\src\mspell\mspell-selector.c" />
     <ClCompile Include="..\..\src\mspell\smart-mspell-util.c" />
     <ClCompile Include="..\..\src\mspell\specified-summon.c" />
@@ -817,6 +818,7 @@
     <ClInclude Include="..\..\src\mspell\improper-mspell-remover.h" />
     <ClInclude Include="..\..\src\mspell\mspell-attack-util.h" />
     <ClInclude Include="..\..\src\mspell\mspell-attack.h" />
+    <ClInclude Include="..\..\src\mspell\mspell-lite.h" />
     <ClInclude Include="..\..\src\mspell\mspell-selector.h" />
     <ClInclude Include="..\..\src\mspell\smart-mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\specified-summon.h" />

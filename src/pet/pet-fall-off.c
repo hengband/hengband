@@ -9,7 +9,7 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "floor/floor.h"
+#include "floor/cave.h"
 #include "grid/feature.h"
 #include "io/targeting.h"
 #include "monster-race/monster-race.h"
@@ -19,7 +19,6 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "system/floor-type-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

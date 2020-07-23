@@ -470,6 +470,7 @@ hengband_SOURCES = \
 	mspell/mspell-curse.c mspell/mspell-curse.h \
 	mspell/mspell-dispel.c mspell/mspell-dispel.h \
 	mspell/mspell-judgement.c mspell/mspell-judgement.h \
+	mspell/mspell-lite.c mspell/mspell-lite.h \
 	mspell/mspell-summon.c mspell/mspell-summon.h \
 	mspell/mspell-util.c mspell/mspell-util.h \
 	mspell/mspell-type.h \
