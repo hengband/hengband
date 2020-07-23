@@ -54,6 +54,14 @@ typedef struct msa_type {
     MONSTER_IDX m_idx;
     monster_type *m_ptr;
     monster_race *r_ptr;
+    bool no_inate;
+    BIT_FLAGS f4;
+    BIT_FLAGS f5;
+    BIT_FLAGS f6;
+    POSITION x;
+    POSITION y;
+    POSITION x_br_lite;
+    POSITION y_br_lite;
 } msa_type;
 
 msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
@@ -61,6 +69,14 @@ msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTE
     msa_ptr->m_idx = m_idx;
     msa_ptr->m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     msa_ptr->r_ptr = &r_info[msa_ptr->m_ptr->r_idx];
+    msa_ptr->no_inate = randint0(100) >= (msa_ptr->r_ptr->freq_spell * 2);
+    msa_ptr->f4 = msa_ptr->r_ptr->flags4;
+    msa_ptr->f5 = msa_ptr->r_ptr->a_ability_flags1;
+    msa_ptr->f6 = msa_ptr->r_ptr->a_ability_flags2;
+    msa_ptr->x = target_ptr->x;
+    msa_ptr->y = target_ptr->y;
+    msa_ptr->x_br_lite = 0;
+    msa_ptr->y_br_lite = 0;
     return msa_ptr;
 }
 
@@ -109,6 +125,27 @@ static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, PO
     return FALSE;
 }
 
+static void decide_lite_range(player_type *target_ptr, msa_type *msa_ptr)
+{
+    if ((msa_ptr->f4 & RF4_BR_LITE) == 0)
+        return;
+
+    msa_ptr->y_br_lite = msa_ptr->y;
+    msa_ptr->x_br_lite = msa_ptr->x;
+    if (los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
+        feature_type *f_ptr = &f_info[target_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
+        if (!have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT) && one_in_(2))
+            msa_ptr->f4 &= ~(RF4_BR_LITE);
+    } else if (!adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, FF_LOS, los))
+        msa_ptr->f4 &= ~(RF4_BR_LITE);
+
+    if ((msa_ptr->f4 & RF4_BR_LITE) != 0)
+        return;
+
+    msa_ptr->y_br_lite = 0;
+    msa_ptr->x_br_lite = 0;
+}
+
 /*!
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
@@ -134,83 +171,61 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!is_hostile(msa_ptr->m_ptr))
         return FALSE;
 
-    bool no_inate = randint0(100) >= (msa_ptr->r_ptr->freq_spell * 2);
-    BIT_FLAGS f4 = msa_ptr->r_ptr->flags4;
-    BIT_FLAGS f5 = msa_ptr->r_ptr->a_ability_flags1;
-    BIT_FLAGS f6 = msa_ptr->r_ptr->a_ability_flags2;
-
     if ((msa_ptr->m_ptr->cdis > get_max_range(target_ptr)) && !msa_ptr->m_ptr->target_y)
         return FALSE;
 
-    POSITION x = target_ptr->x;
-    POSITION y = target_ptr->y;
-    POSITION x_br_lite = 0;
-    POSITION y_br_lite = 0;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    if (f4 & RF4_BR_LITE) {
-        y_br_lite = y;
-        x_br_lite = x;
-        if (los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, y_br_lite, x_br_lite)) {
-            feature_type *f_ptr = &f_info[floor_ptr->grid_array[y_br_lite][x_br_lite].feat];
-            if (!have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT) && one_in_(2))
-                f4 &= ~(RF4_BR_LITE);
-        } else if (!adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &y_br_lite, &x_br_lite, FF_LOS, los))
-            f4 &= ~(RF4_BR_LITE);
-
-        if (!(f4 & RF4_BR_LITE)) {
-            y_br_lite = 0;
-            x_br_lite = 0;
-        }
-    }
-
+    decide_lite_range(target_ptr, msa_ptr);
     bool do_spell = DO_SPELL_NONE;
-    if (projectable(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, y, x)) {
-        feature_type *f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
+    if (projectable(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
+        feature_type *f_ptr = &f_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
         if (!have_flag(f_ptr->flags, FF_PROJECT)) {
-            if ((f4 & RF4_BR_DISI) && have_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2))
+            if ((msa_ptr->f4 & RF4_BR_DISI) && have_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2))
                 do_spell = DO_SPELL_BR_DISI;
-            else if ((f4 & RF4_BR_LITE) && have_flag(f_ptr->flags, FF_LOS) && one_in_(2))
+            else if ((msa_ptr->f4 & RF4_BR_LITE) && have_flag(f_ptr->flags, FF_LOS) && one_in_(2))
                 do_spell = DO_SPELL_BR_LITE;
         }
     } else {
         bool success = FALSE;
-        if ((f4 & RF4_BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2) && in_disintegration_range(floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, y, x)
-            && (one_in_(10) || (projectable(target_ptr, y, x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
+        if ((msa_ptr->f4 & RF4_BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
+            && in_disintegration_range(floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
+            && (one_in_(10) || (projectable(target_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
             do_spell = DO_SPELL_BR_DISI;
             success = TRUE;
-        } else if ((f4 & RF4_BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2) && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, y, x) && one_in_(5)) {
+        } else if ((msa_ptr->f4 & RF4_BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
+            && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
             do_spell = DO_SPELL_BR_LITE;
             success = TRUE;
-        } else if ((f5 & RF5_BA_LITE) && (msa_ptr->m_ptr->cdis <= get_max_range(target_ptr))) {
-            POSITION by = y, bx = x;
+        } else if ((msa_ptr->f5 & RF5_BA_LITE) && (msa_ptr->m_ptr->cdis <= get_max_range(target_ptr))) {
+            POSITION by = msa_ptr->y, bx = msa_ptr->x;
             get_project_point(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
-            if ((distance(by, bx, y, x) <= 3) && los(target_ptr, by, bx, y, x) && one_in_(5)) {
+            if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(target_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
                 do_spell = DO_SPELL_BA_LITE;
                 success = TRUE;
             }
         }
 
         if (!success)
-            success = adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &y, &x, FF_PROJECT, projectable);
+            success = adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, FF_PROJECT, projectable);
 
         if (!success) {
             if (msa_ptr->m_ptr->target_y && msa_ptr->m_ptr->target_x) {
-                y = msa_ptr->m_ptr->target_y;
-                x = msa_ptr->m_ptr->target_x;
-                f4 &= RF4_INDIRECT_MASK;
-                f5 &= RF5_INDIRECT_MASK;
-                f6 &= RF6_INDIRECT_MASK;
+                msa_ptr->y = msa_ptr->m_ptr->target_y;
+                msa_ptr->x = msa_ptr->m_ptr->target_x;
+                msa_ptr->f4 &= RF4_INDIRECT_MASK;
+                msa_ptr->f5 &= RF5_INDIRECT_MASK;
+                msa_ptr->f6 &= RF6_INDIRECT_MASK;
                 success = TRUE;
             }
 
-            if (y_br_lite && x_br_lite && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2) && one_in_(5)) {
+            if (msa_ptr->y_br_lite && msa_ptr->x_br_lite && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2) && one_in_(5)) {
                 if (!success) {
-                    y = y_br_lite;
-                    x = x_br_lite;
+                    msa_ptr->y = msa_ptr->y_br_lite;
+                    msa_ptr->x = msa_ptr->x_br_lite;
                     do_spell = DO_SPELL_BR_LITE;
                     success = TRUE;
                 } else
-                    f4 |= (RF4_BR_LITE);
+                    msa_ptr->f4 |= (RF4_BR_LITE);
             }
         }
 
@@ -220,103 +235,104 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 
     reset_target(msa_ptr->m_ptr);
     DEPTH rlev = ((msa_ptr->r_ptr->level >= 1) ? msa_ptr->r_ptr->level : 1);
-    if (no_inate) {
-        f4 &= ~(RF4_NOMAGIC_MASK);
-        f5 &= ~(RF5_NOMAGIC_MASK);
-        f6 &= ~(RF6_NOMAGIC_MASK);
+    if (msa_ptr->no_inate) {
+        msa_ptr->f4 &= ~(RF4_NOMAGIC_MASK);
+        msa_ptr->f5 &= ~(RF5_NOMAGIC_MASK);
+        msa_ptr->f6 &= ~(RF6_NOMAGIC_MASK);
     }
 
     bool can_use_lite_area = FALSE;
-    if (f6 & RF6_DARKNESS) {
+    if (msa_ptr->f6 & RF6_DARKNESS) {
         if ((target_ptr->pclass == CLASS_NINJA) && !(msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(msa_ptr->r_ptr->flags7 & RF7_DARK_MASK))
             can_use_lite_area = TRUE;
 
         if (!(msa_ptr->r_ptr->flags2 & RF2_STUPID)) {
             if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
-                f6 &= ~(RF6_DARKNESS);
+                msa_ptr->f6 &= ~(RF6_DARKNESS);
             else if ((target_ptr->pclass == CLASS_NINJA) && !can_use_lite_area)
-                f6 &= ~(RF6_DARKNESS);
+                msa_ptr->f6 &= ~(RF6_DARKNESS);
         }
     }
 
     bool in_no_magic_dungeon = (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && floor_ptr->dun_level
         && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest));
     if (in_no_magic_dungeon && !(msa_ptr->r_ptr->flags2 & RF2_STUPID)) {
-        f4 &= (RF4_NOMAGIC_MASK);
-        f5 &= (RF5_NOMAGIC_MASK);
-        f6 &= (RF6_NOMAGIC_MASK);
+        msa_ptr->f4 &= (RF4_NOMAGIC_MASK);
+        msa_ptr->f5 &= (RF5_NOMAGIC_MASK);
+        msa_ptr->f6 &= (RF6_NOMAGIC_MASK);
     }
 
     if (msa_ptr->r_ptr->flags2 & RF2_SMART) {
         if ((msa_ptr->m_ptr->hp < msa_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
-            f4 &= (RF4_INT_MASK);
-            f5 &= (RF5_INT_MASK);
-            f6 &= (RF6_INT_MASK);
+            msa_ptr->f4 &= (RF4_INT_MASK);
+            msa_ptr->f5 &= (RF5_INT_MASK);
+            msa_ptr->f6 &= (RF6_INT_MASK);
         }
 
-        if ((f6 & RF6_TELE_LEVEL) && is_teleport_level_ineffective(target_ptr, 0)) {
-            f6 &= ~(RF6_TELE_LEVEL);
+        if ((msa_ptr->f6 & RF6_TELE_LEVEL) && is_teleport_level_ineffective(target_ptr, 0)) {
+            msa_ptr->f6 &= ~(RF6_TELE_LEVEL);
         }
     }
 
-    if (!f4 && !f5 && !f6)
+    if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
         return FALSE;
 
-    remove_bad_spells(m_idx, target_ptr, &f4, &f5, &f6);
+    remove_bad_spells(m_idx, target_ptr, &msa_ptr->f4, &msa_ptr->f5, &msa_ptr->f6);
     if (floor_ptr->inside_arena || target_ptr->phase_out) {
-        f4 &= ~(RF4_SUMMON_MASK);
-        f5 &= ~(RF5_SUMMON_MASK);
-        f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
+        msa_ptr->f4 &= ~(RF4_SUMMON_MASK);
+        msa_ptr->f5 &= ~(RF5_SUMMON_MASK);
+        msa_ptr->f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
 
         if (msa_ptr->m_ptr->r_idx == MON_ROLENTO)
-            f6 &= ~(RF6_SPECIAL);
+            msa_ptr->f6 &= ~(RF6_SPECIAL);
     }
 
-    if (!f4 && !f5 && !f6)
+    if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
         return FALSE;
 
     if (!(msa_ptr->r_ptr->flags2 & RF2_STUPID)) {
         if (!target_ptr->csp)
-            f5 &= ~(RF5_DRAIN_MANA);
+            msa_ptr->f5 &= ~(RF5_DRAIN_MANA);
 
-        if (((f4 & RF4_BOLT_MASK) || (f5 & RF5_BOLT_MASK) || (f6 & RF6_BOLT_MASK))
+        if (((msa_ptr->f4 & RF4_BOLT_MASK) || (msa_ptr->f5 & RF5_BOLT_MASK) || (msa_ptr->f6 & RF6_BOLT_MASK))
             && !clean_shot(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, target_ptr->y, target_ptr->x, FALSE)) {
-            f4 &= ~(RF4_BOLT_MASK);
-            f5 &= ~(RF5_BOLT_MASK);
-            f6 &= ~(RF6_BOLT_MASK);
+            msa_ptr->f4 &= ~(RF4_BOLT_MASK);
+            msa_ptr->f5 &= ~(RF5_BOLT_MASK);
+            msa_ptr->f6 &= ~(RF6_BOLT_MASK);
         }
 
-        if (((f4 & RF4_SUMMON_MASK) || (f5 & RF5_SUMMON_MASK) || (f6 & RF6_SUMMON_MASK)) && !(summon_possible(target_ptr, y, x))) {
-            f4 &= ~(RF4_SUMMON_MASK);
-            f5 &= ~(RF5_SUMMON_MASK);
-            f6 &= ~(RF6_SUMMON_MASK);
+        if (((msa_ptr->f4 & RF4_SUMMON_MASK) || (msa_ptr->f5 & RF5_SUMMON_MASK) || (msa_ptr->f6 & RF6_SUMMON_MASK))
+            && !(summon_possible(target_ptr, msa_ptr->y, msa_ptr->x))) {
+            msa_ptr->f4 &= ~(RF4_SUMMON_MASK);
+            msa_ptr->f5 &= ~(RF5_SUMMON_MASK);
+            msa_ptr->f6 &= ~(RF6_SUMMON_MASK);
         }
 
-        if ((f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, msa_ptr->m_ptr)) {
-            f6 &= ~(RF6_RAISE_DEAD);
+        if ((msa_ptr->f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, msa_ptr->m_ptr)) {
+            msa_ptr->f6 &= ~(RF6_RAISE_DEAD);
         }
 
-        if (f6 & RF6_SPECIAL) {
-            if ((msa_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, y, x)) {
-                f6 &= ~(RF6_SPECIAL);
+        if (msa_ptr->f6 & RF6_SPECIAL) {
+            if ((msa_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, msa_ptr->y, msa_ptr->x)) {
+                msa_ptr->f6 &= ~(RF6_SPECIAL);
             }
         }
 
-        if (!f4 && !f5 && !f6)
+        if (!msa_ptr->f4 && !msa_ptr->f5 && !msa_ptr->f6)
             return FALSE;
     }
 
     byte spell[96], num = 0;
     for (int k = 0; k < 32; k++)
-        if (f4 & (1L << k))
+        if (msa_ptr->f4 & (1L << k))
             spell[num++] = k + RF4_SPELL_START;
 
     for (int k = 0; k < 32; k++)
-        if (f5 & (1L << k))
+        if (msa_ptr->f5 & (1L << k))
             spell[num++] = k + RF5_SPELL_START;
 
     for (int k = 0; k < 32; k++)
-        if (f6 & (1L << k))
+        if (msa_ptr->f6 & (1L << k))
             spell[num++] = k + RF6_SPELL_START;
 
     if (!num || !target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
@@ -375,7 +391,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return TRUE;
     }
 
-    bool direct = player_bold(target_ptr, y, x);
+    bool direct = player_bold(target_ptr, msa_ptr->y, msa_ptr->x);
     bool can_remember = is_original_ap_and_seen(target_ptr, msa_ptr->m_ptr);
     if (!direct) {
         switch (thrown_spell) {
@@ -414,7 +430,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    int dam = monspell_to_player(target_ptr, thrown_spell, y, x, m_idx);
+    int dam = monspell_to_player(target_ptr, thrown_spell, msa_ptr->y, msa_ptr->x, m_idx);
     if (dam < 0)
         return FALSE;
 
