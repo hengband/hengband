@@ -39,11 +39,30 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#ifdef JP
+#else
+#include "monster/monster-description-types.h"
+#endif
 
 #define DO_SPELL_NONE 0
 #define DO_SPELL_BR_LITE 1
 #define DO_SPELL_BR_DISI 2
 #define DO_SPELL_BA_LITE 3
+
+// Monster Spell Attack.
+typedef struct msa_type {
+    MONSTER_IDX m_idx;
+    monster_type *m_ptr;
+    monster_race *r_ptr;
+} msa_type;
+
+msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTER_IDX m_idx)
+{
+    msa_ptr->m_idx = m_idx;
+    msa_ptr->m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    msa_ptr->r_ptr = &r_info[msa_ptr->m_ptr->r_idx];
+    return msa_ptr;
+}
 
 /*!
  * @brief モンスターがプレイヤーにダメージを与えるための最適な座標を算出する /
@@ -103,40 +122,39 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 #else
     char m_poss[80];
 #endif
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    if (monster_confused_remaining(m_ptr)) {
-        reset_target(m_ptr);
+    msa_type tmp_msa;
+    msa_type *msa_ptr = initialize_msa_type(target_ptr, &tmp_msa, m_idx);
+    if (monster_confused_remaining(msa_ptr->m_ptr)) {
+        reset_target(msa_ptr->m_ptr);
         return FALSE;
     }
 
-    if (m_ptr->mflag & MFLAG_NICE)
+    if (msa_ptr->m_ptr->mflag & MFLAG_NICE)
         return FALSE;
-    if (!is_hostile(m_ptr))
+    if (!is_hostile(msa_ptr->m_ptr))
         return FALSE;
 
-    bool no_inate = randint0(100) >= (r_ptr->freq_spell * 2);
-    BIT_FLAGS f4 = r_ptr->flags4;
-    BIT_FLAGS f5 = r_ptr->a_ability_flags1;
-    BIT_FLAGS f6 = r_ptr->a_ability_flags2;
+    bool no_inate = randint0(100) >= (msa_ptr->r_ptr->freq_spell * 2);
+    BIT_FLAGS f4 = msa_ptr->r_ptr->flags4;
+    BIT_FLAGS f5 = msa_ptr->r_ptr->a_ability_flags1;
+    BIT_FLAGS f6 = msa_ptr->r_ptr->a_ability_flags2;
 
-    if ((m_ptr->cdis > get_max_range(target_ptr)) && !m_ptr->target_y)
+    if ((msa_ptr->m_ptr->cdis > get_max_range(target_ptr)) && !msa_ptr->m_ptr->target_y)
         return FALSE;
 
     POSITION x = target_ptr->x;
     POSITION y = target_ptr->y;
     POSITION x_br_lite = 0;
     POSITION y_br_lite = 0;
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     if (f4 & RF4_BR_LITE) {
         y_br_lite = y;
         x_br_lite = x;
-        if (los(target_ptr, m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite)) {
+        if (los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, y_br_lite, x_br_lite)) {
             feature_type *f_ptr = &f_info[floor_ptr->grid_array[y_br_lite][x_br_lite].feat];
             if (!have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT) && one_in_(2))
                 f4 &= ~(RF4_BR_LITE);
-        } else if (!adjacent_grid_check(target_ptr, m_ptr, &y_br_lite, &x_br_lite, FF_LOS, los))
+        } else if (!adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &y_br_lite, &x_br_lite, FF_LOS, los))
             f4 &= ~(RF4_BR_LITE);
 
         if (!(f4 & RF4_BR_LITE)) {
@@ -146,7 +164,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     bool do_spell = DO_SPELL_NONE;
-    if (projectable(target_ptr, m_ptr->fy, m_ptr->fx, y, x)) {
+    if (projectable(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, y, x)) {
         feature_type *f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
         if (!have_flag(f_ptr->flags, FF_PROJECT)) {
             if ((f4 & RF4_BR_DISI) && have_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2))
@@ -156,16 +174,16 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         }
     } else {
         bool success = FALSE;
-        if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < get_max_range(target_ptr) / 2) && in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, y, x)
-            && (one_in_(10) || (projectable(target_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2)))) {
+        if ((f4 & RF4_BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2) && in_disintegration_range(floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, y, x)
+            && (one_in_(10) || (projectable(target_ptr, y, x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
             do_spell = DO_SPELL_BR_DISI;
             success = TRUE;
-        } else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < get_max_range(target_ptr) / 2) && los(target_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5)) {
+        } else if ((f4 & RF4_BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2) && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, y, x) && one_in_(5)) {
             do_spell = DO_SPELL_BR_LITE;
             success = TRUE;
-        } else if ((f5 & RF5_BA_LITE) && (m_ptr->cdis <= get_max_range(target_ptr))) {
+        } else if ((f5 & RF5_BA_LITE) && (msa_ptr->m_ptr->cdis <= get_max_range(target_ptr))) {
             POSITION by = y, bx = x;
-            get_project_point(target_ptr, m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
+            get_project_point(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
             if ((distance(by, bx, y, x) <= 3) && los(target_ptr, by, bx, y, x) && one_in_(5)) {
                 do_spell = DO_SPELL_BA_LITE;
                 success = TRUE;
@@ -173,19 +191,19 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         }
 
         if (!success)
-            success = adjacent_grid_check(target_ptr, m_ptr, &y, &x, FF_PROJECT, projectable);
+            success = adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &y, &x, FF_PROJECT, projectable);
 
         if (!success) {
-            if (m_ptr->target_y && m_ptr->target_x) {
-                y = m_ptr->target_y;
-                x = m_ptr->target_x;
+            if (msa_ptr->m_ptr->target_y && msa_ptr->m_ptr->target_x) {
+                y = msa_ptr->m_ptr->target_y;
+                x = msa_ptr->m_ptr->target_x;
                 f4 &= RF4_INDIRECT_MASK;
                 f5 &= RF5_INDIRECT_MASK;
                 f6 &= RF6_INDIRECT_MASK;
                 success = TRUE;
             }
 
-            if (y_br_lite && x_br_lite && (m_ptr->cdis < get_max_range(target_ptr) / 2) && one_in_(5)) {
+            if (y_br_lite && x_br_lite && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2) && one_in_(5)) {
                 if (!success) {
                     y = y_br_lite;
                     x = x_br_lite;
@@ -200,8 +218,8 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
             return FALSE;
     }
 
-    reset_target(m_ptr);
-    DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    reset_target(msa_ptr->m_ptr);
+    DEPTH rlev = ((msa_ptr->r_ptr->level >= 1) ? msa_ptr->r_ptr->level : 1);
     if (no_inate) {
         f4 &= ~(RF4_NOMAGIC_MASK);
         f5 &= ~(RF5_NOMAGIC_MASK);
@@ -210,10 +228,10 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 
     bool can_use_lite_area = FALSE;
     if (f6 & RF6_DARKNESS) {
-        if ((target_ptr->pclass == CLASS_NINJA) && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
+        if ((target_ptr->pclass == CLASS_NINJA) && !(msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(msa_ptr->r_ptr->flags7 & RF7_DARK_MASK))
             can_use_lite_area = TRUE;
 
-        if (!(r_ptr->flags2 & RF2_STUPID)) {
+        if (!(msa_ptr->r_ptr->flags2 & RF2_STUPID)) {
             if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
                 f6 &= ~(RF6_DARKNESS);
             else if ((target_ptr->pclass == CLASS_NINJA) && !can_use_lite_area)
@@ -223,14 +241,14 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 
     bool in_no_magic_dungeon = (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && floor_ptr->dun_level
         && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest));
-    if (in_no_magic_dungeon && !(r_ptr->flags2 & RF2_STUPID)) {
+    if (in_no_magic_dungeon && !(msa_ptr->r_ptr->flags2 & RF2_STUPID)) {
         f4 &= (RF4_NOMAGIC_MASK);
         f5 &= (RF5_NOMAGIC_MASK);
         f6 &= (RF6_NOMAGIC_MASK);
     }
 
-    if (r_ptr->flags2 & RF2_SMART) {
-        if ((m_ptr->hp < m_ptr->maxhp / 10) && (randint0(100) < 50)) {
+    if (msa_ptr->r_ptr->flags2 & RF2_SMART) {
+        if ((msa_ptr->m_ptr->hp < msa_ptr->m_ptr->maxhp / 10) && (randint0(100) < 50)) {
             f4 &= (RF4_INT_MASK);
             f5 &= (RF5_INT_MASK);
             f6 &= (RF6_INT_MASK);
@@ -250,19 +268,19 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         f5 &= ~(RF5_SUMMON_MASK);
         f6 &= ~(RF6_SUMMON_MASK | RF6_TELE_LEVEL);
 
-        if (m_ptr->r_idx == MON_ROLENTO)
+        if (msa_ptr->m_ptr->r_idx == MON_ROLENTO)
             f6 &= ~(RF6_SPECIAL);
     }
 
     if (!f4 && !f5 && !f6)
         return FALSE;
 
-    if (!(r_ptr->flags2 & RF2_STUPID)) {
+    if (!(msa_ptr->r_ptr->flags2 & RF2_STUPID)) {
         if (!target_ptr->csp)
             f5 &= ~(RF5_DRAIN_MANA);
 
         if (((f4 & RF4_BOLT_MASK) || (f5 & RF5_BOLT_MASK) || (f6 & RF6_BOLT_MASK))
-            && !clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x, FALSE)) {
+            && !clean_shot(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, target_ptr->y, target_ptr->x, FALSE)) {
             f4 &= ~(RF4_BOLT_MASK);
             f5 &= ~(RF5_BOLT_MASK);
             f6 &= ~(RF6_BOLT_MASK);
@@ -274,12 +292,12 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
             f6 &= ~(RF6_SUMMON_MASK);
         }
 
-        if ((f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, m_ptr)) {
+        if ((f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, msa_ptr->m_ptr)) {
             f6 &= ~(RF6_RAISE_DEAD);
         }
 
         if (f6 & RF6_SPECIAL) {
-            if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, y, x)) {
+            if ((msa_ptr->m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, y, x)) {
                 f6 &= ~(RF6_SPECIAL);
             }
         }
@@ -305,12 +323,12 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(target_ptr, m_name, m_ptr, 0x00);
+    monster_desc(target_ptr, m_name, msa_ptr->m_ptr, 0x00);
 
 #ifdef JP
 #else
     /* Get the monster possessive ("his"/"her"/"its") */
-    monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+    monster_desc(target_ptr, m_poss, msa_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 
     SPELL_IDX thrown_spell = 0;
@@ -342,10 +360,10 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 
     PERCENTAGE failrate = 25 - (rlev + 3) / 4;
 
-    if (r_ptr->flags2 & RF2_STUPID)
+    if (msa_ptr->r_ptr->flags2 & RF2_STUPID)
         failrate = 0;
 
-    if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (monster_stunned_remaining(m_ptr) && one_in_(2)) || (randint0(100) < failrate))) {
+    if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < failrate))) {
         disturb(target_ptr, TRUE, TRUE);
         msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);
 
@@ -358,7 +376,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     bool direct = player_bold(target_ptr, y, x);
-    bool can_remember = is_original_ap_and_seen(target_ptr, m_ptr);
+    bool can_remember = is_original_ap_and_seen(target_ptr, msa_ptr->m_ptr);
     if (!direct) {
         switch (thrown_spell) {
         case 96 + 2: /* RF4_DISPEL */
@@ -404,8 +422,8 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         learn_spell(target_ptr, thrown_spell - 96);
     }
 
-    bool seen = (!target_ptr->blind && m_ptr->ml);
-    bool maneable = player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx);
+    bool seen = (!target_ptr->blind && msa_ptr->m_ptr->ml);
+    bool maneable = player_has_los_bold(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx);
     if (seen && maneable && !current_world_ptr->timewalk_m_idx && (target_ptr->pclass == CLASS_IMITATOR)) {
         if (thrown_spell != 167) /* Not RF6_SPECIAL */
         {
@@ -428,22 +446,22 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 
     if (can_remember) {
         if (thrown_spell < 32 * 4) {
-            r_ptr->r_flags4 |= (1L << (thrown_spell - 32 * 3));
-            if (r_ptr->r_cast_spell < MAX_UCHAR)
-                r_ptr->r_cast_spell++;
+            msa_ptr->r_ptr->r_flags4 |= (1L << (thrown_spell - 32 * 3));
+            if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+                msa_ptr->r_ptr->r_cast_spell++;
         } else if (thrown_spell < 32 * 5) {
-            r_ptr->r_flags5 |= (1L << (thrown_spell - 32 * 4));
-            if (r_ptr->r_cast_spell < MAX_UCHAR)
-                r_ptr->r_cast_spell++;
+            msa_ptr->r_ptr->r_flags5 |= (1L << (thrown_spell - 32 * 4));
+            if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+                msa_ptr->r_ptr->r_cast_spell++;
         } else if (thrown_spell < 32 * 6) {
-            r_ptr->r_flags6 |= (1L << (thrown_spell - 32 * 5));
-            if (r_ptr->r_cast_spell < MAX_UCHAR)
-                r_ptr->r_cast_spell++;
+            msa_ptr->r_ptr->r_flags6 |= (1L << (thrown_spell - 32 * 5));
+            if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+                msa_ptr->r_ptr->r_cast_spell++;
         }
     }
 
-    if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena) {
-        r_ptr->r_deaths++;
+    if (target_ptr->is_dead && (msa_ptr->r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena) {
+        msa_ptr->r_ptr->r_deaths++;
     }
 
     return TRUE;
