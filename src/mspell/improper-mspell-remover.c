@@ -39,9 +39,9 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    u32b f4 = (*f4p);
-    u32b f5 = (*f5p);
-    u32b f6 = (*f6p);
+    u32b f4 = *f4p;
+    u32b f5 = *f5p;
+    u32b f6 = *f6p;
     u32b smart = 0L;
     if (r_ptr->flags2 & RF2_STUPID)
         return;
@@ -51,70 +51,70 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
 
     if (smart_learn) {
         if (m_ptr->smart && (randint0(100) < 1))
-            m_ptr->smart &= (SM_FRIENDLY | SM_PET | SM_CLONED);
+            m_ptr->smart &= SM_FRIENDLY | SM_PET | SM_CLONED;
 
         smart = m_ptr->smart;
     }
 
     if (smart_cheat) {
         if (target_ptr->resist_acid)
-            smart |= (SM_RES_ACID);
+            smart |= SM_RES_ACID;
         if (is_oppose_acid(target_ptr))
-            smart |= (SM_OPP_ACID);
+            smart |= SM_OPP_ACID;
         if (target_ptr->immune_acid)
-            smart |= (SM_IMM_ACID);
+            smart |= SM_IMM_ACID;
         if (target_ptr->resist_elec)
-            smart |= (SM_RES_ELEC);
+            smart |= SM_RES_ELEC;
         if (is_oppose_elec(target_ptr))
-            smart |= (SM_OPP_ELEC);
+            smart |= SM_OPP_ELEC;
         if (target_ptr->immune_elec)
-            smart |= (SM_IMM_ELEC);
+            smart |= SM_IMM_ELEC;
         if (target_ptr->resist_fire)
-            smart |= (SM_RES_FIRE);
+            smart |= SM_RES_FIRE;
         if (is_oppose_fire(target_ptr))
-            smart |= (SM_OPP_FIRE);
+            smart |= SM_OPP_FIRE;
         if (target_ptr->immune_fire)
-            smart |= (SM_IMM_FIRE);
+            smart |= SM_IMM_FIRE;
         if (target_ptr->resist_cold)
-            smart |= (SM_RES_COLD);
+            smart |= SM_RES_COLD;
         if (is_oppose_cold(target_ptr))
-            smart |= (SM_OPP_COLD);
+            smart |= SM_OPP_COLD;
         if (target_ptr->immune_cold)
-            smart |= (SM_IMM_COLD);
+            smart |= SM_IMM_COLD;
         if (target_ptr->resist_pois)
-            smart |= (SM_RES_POIS);
+            smart |= SM_RES_POIS;
         if (is_oppose_pois(target_ptr))
-            smart |= (SM_OPP_POIS);
+            smart |= SM_OPP_POIS;
 
         if (target_ptr->resist_neth)
-            smart |= (SM_RES_NETH);
+            smart |= SM_RES_NETH;
         if (target_ptr->resist_lite)
-            smart |= (SM_RES_LITE);
+            smart |= SM_RES_LITE;
         if (target_ptr->resist_dark)
-            smart |= (SM_RES_DARK);
+            smart |= SM_RES_DARK;
         if (target_ptr->resist_fear)
-            smart |= (SM_RES_FEAR);
+            smart |= SM_RES_FEAR;
         if (target_ptr->resist_conf)
-            smart |= (SM_RES_CONF);
+            smart |= SM_RES_CONF;
         if (target_ptr->resist_chaos)
-            smart |= (SM_RES_CHAOS);
+            smart |= SM_RES_CHAOS;
         if (target_ptr->resist_disen)
-            smart |= (SM_RES_DISEN);
+            smart |= SM_RES_DISEN;
         if (target_ptr->resist_blind)
-            smart |= (SM_RES_BLIND);
+            smart |= SM_RES_BLIND;
         if (target_ptr->resist_nexus)
-            smart |= (SM_RES_NEXUS);
+            smart |= SM_RES_NEXUS;
         if (target_ptr->resist_sound)
-            smart |= (SM_RES_SOUND);
+            smart |= SM_RES_SOUND;
         if (target_ptr->resist_shard)
-            smart |= (SM_RES_SHARD);
+            smart |= SM_RES_SHARD;
         if (target_ptr->reflect)
-            smart |= (SM_IMM_REFLECT);
+            smart |= SM_IMM_REFLECT;
 
         if (target_ptr->free_act)
-            smart |= (SM_IMM_FREE);
+            smart |= SM_IMM_FREE;
         if (!target_ptr->msp)
-            smart |= (SM_IMM_MANA);
+            smart |= SM_IMM_MANA;
     }
 
     if (!smart)
@@ -124,14 +124,14 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
         f4 &= ~(RF4_BR_ACID);
         f5 &= ~(RF5_BA_ACID);
         f5 &= ~(RF5_BO_ACID);
-    } else if ((smart & (SM_OPP_ACID)) && (smart & (SM_RES_ACID))) {
+    } else if ((smart & SM_OPP_ACID) && (smart & SM_RES_ACID)) {
         if (int_outof(r_ptr, 80))
             f4 &= ~(RF4_BR_ACID);
         if (int_outof(r_ptr, 80))
             f5 &= ~(RF5_BA_ACID);
         if (int_outof(r_ptr, 80))
             f5 &= ~(RF5_BO_ACID);
-    } else if ((smart & (SM_OPP_ACID)) || (smart & (SM_RES_ACID))) {
+    } else if ((smart & SM_OPP_ACID) || (smart & SM_RES_ACID)) {
         if (int_outof(r_ptr, 30))
             f4 &= ~(RF4_BR_ACID);
         if (int_outof(r_ptr, 30))
@@ -140,18 +140,18 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
             f5 &= ~(RF5_BO_ACID);
     }
 
-    if (smart & (SM_IMM_ELEC)) {
+    if (smart & SM_IMM_ELEC) {
         f4 &= ~(RF4_BR_ELEC);
         f5 &= ~(RF5_BA_ELEC);
         f5 &= ~(RF5_BO_ELEC);
-    } else if ((smart & (SM_OPP_ELEC)) && (smart & (SM_RES_ELEC))) {
+    } else if ((smart & SM_OPP_ELEC) && (smart & SM_RES_ELEC)) {
         if (int_outof(r_ptr, 80))
             f4 &= ~(RF4_BR_ELEC);
         if (int_outof(r_ptr, 80))
             f5 &= ~(RF5_BA_ELEC);
         if (int_outof(r_ptr, 80))
             f5 &= ~(RF5_BO_ELEC);
-    } else if ((smart & (SM_OPP_ELEC)) || (smart & (SM_RES_ELEC))) {
+    } else if ((smart & SM_OPP_ELEC) || (smart & SM_RES_ELEC)) {
         if (int_outof(r_ptr, 30))
             f4 &= ~(RF4_BR_ELEC);
         if (int_outof(r_ptr, 30))
@@ -164,14 +164,14 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
         f4 &= ~(RF4_BR_FIRE);
         f5 &= ~(RF5_BA_FIRE);
         f5 &= ~(RF5_BO_FIRE);
-    } else if ((smart & (SM_OPP_FIRE)) && (smart & (SM_RES_FIRE))) {
+    } else if ((smart & SM_OPP_FIRE) && (smart & SM_RES_FIRE)) {
         if (int_outof(r_ptr, 80))
             f4 &= ~(RF4_BR_FIRE);
         if (int_outof(r_ptr, 80))
             f5 &= ~(RF5_BA_FIRE);
         if (int_outof(r_ptr, 80))
             f5 &= ~(RF5_BO_FIRE);
-    } else if ((smart & (SM_OPP_FIRE)) || (smart & (SM_RES_FIRE))) {
+    } else if ((smart & SM_OPP_FIRE) || (smart & SM_RES_FIRE)) {
         if (int_outof(r_ptr, 30))
             f4 &= ~(RF4_BR_FIRE);
         if (int_outof(r_ptr, 30))
@@ -185,7 +185,7 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
         f5 &= ~(RF5_BA_COLD);
         f5 &= ~(RF5_BO_COLD);
         f5 &= ~(RF5_BO_ICEE);
-    } else if ((smart & (SM_OPP_COLD)) && (smart & (SM_RES_COLD))) {
+    } else if ((smart & SM_OPP_COLD) && (smart & SM_RES_COLD)) {
         if (int_outof(r_ptr, 80))
             f4 &= ~(RF4_BR_COLD);
         if (int_outof(r_ptr, 80))
@@ -194,7 +194,7 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
             f5 &= ~(RF5_BO_COLD);
         if (int_outof(r_ptr, 80))
             f5 &= ~(RF5_BO_ICEE);
-    } else if ((smart & (SM_OPP_COLD)) || (smart & (SM_RES_COLD))) {
+    } else if ((smart & SM_OPP_COLD) || (smart & SM_RES_COLD)) {
         if (int_outof(r_ptr, 30))
             f4 &= ~(RF4_BR_COLD);
         if (int_outof(r_ptr, 30))
@@ -205,7 +205,7 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
             f5 &= ~(RF5_BO_ICEE);
     }
 
-    if ((smart & (SM_OPP_POIS)) && (smart & (SM_RES_POIS))) {
+    if ((smart & SM_OPP_POIS) && (smart & SM_RES_POIS)) {
         if (int_outof(r_ptr, 80))
             f4 &= ~(RF4_BR_POIS);
         if (int_outof(r_ptr, 80))
@@ -214,14 +214,14 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
             f4 &= ~(RF4_BA_NUKE);
         if (int_outof(r_ptr, 60))
             f4 &= ~(RF4_BR_NUKE);
-    } else if ((smart & (SM_OPP_POIS)) || (smart & (SM_RES_POIS))) {
+    } else if ((smart & SM_OPP_POIS) || (smart & SM_RES_POIS)) {
         if (int_outof(r_ptr, 30))
             f4 &= ~(RF4_BR_POIS);
         if (int_outof(r_ptr, 30))
             f5 &= ~(RF5_BA_POIS);
     }
 
-    if (smart & (SM_RES_NETH)) {
+    if (smart & SM_RES_NETH) {
         if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
             f4 &= ~(RF4_BR_NETH);
             f5 &= ~(RF5_BA_NETH);
@@ -236,14 +236,14 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
         }
     }
 
-    if (smart & (SM_RES_LITE)) {
+    if (smart & SM_RES_LITE) {
         if (int_outof(r_ptr, 50))
             f4 &= ~(RF4_BR_LITE);
         if (int_outof(r_ptr, 50))
             f5 &= ~(RF5_BA_LITE);
     }
 
-    if (smart & (SM_RES_DARK)) {
+    if (smart & SM_RES_DARK) {
         if (is_specific_player_race(target_ptr, RACE_VAMPIRE)) {
             f4 &= ~(RF4_BR_DARK);
             f5 &= ~(RF5_BA_DARK);
@@ -255,39 +255,39 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
         }
     }
 
-    if (smart & (SM_RES_FEAR)) {
+    if (smart & SM_RES_FEAR) {
         f5 &= ~(RF5_SCARE);
     }
 
-    if (smart & (SM_RES_CONF)) {
+    if (smart & SM_RES_CONF) {
         f5 &= ~(RF5_CONF);
         if (int_outof(r_ptr, 50))
             f4 &= ~(RF4_BR_CONF);
     }
 
-    if (smart & (SM_RES_CHAOS)) {
+    if (smart & SM_RES_CHAOS) {
         if (int_outof(r_ptr, 20))
             f4 &= ~(RF4_BR_CHAO);
         if (int_outof(r_ptr, 50))
             f4 &= ~(RF4_BA_CHAO);
     }
 
-    if (smart & (SM_RES_DISEN)) {
+    if (smart & SM_RES_DISEN) {
         if (int_outof(r_ptr, 40))
             f4 &= ~(RF4_BR_DISE);
     }
 
-    if (smart & (SM_RES_BLIND)) {
+    if (smart & SM_RES_BLIND) {
         f5 &= ~(RF5_BLIND);
     }
 
-    if (smart & (SM_RES_NEXUS)) {
+    if (smart & SM_RES_NEXUS) {
         if (int_outof(r_ptr, 50))
             f4 &= ~(RF4_BR_NEXU);
         f6 &= ~(RF6_TELE_LEVEL);
     }
 
-    if (smart & (SM_RES_SOUND)) {
+    if (smart & SM_RES_SOUND) {
         if (int_outof(r_ptr, 50))
             f4 &= ~(RF4_BR_SOUN);
     }
@@ -297,7 +297,7 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
             f4 &= ~(RF4_BR_SHAR);
     }
 
-    if (smart & (SM_IMM_REFLECT)) {
+    if (smart & SM_IMM_REFLECT) {
         if (int_outof(r_ptr, 150))
             f5 &= ~(RF5_BO_COLD);
         if (int_outof(r_ptr, 150))
@@ -320,16 +320,15 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
             f5 &= ~(RF5_MISSILE);
     }
 
-    if (smart & (SM_IMM_FREE)) {
+    if (smart & SM_IMM_FREE) {
         f5 &= ~(RF5_HOLD);
         f5 &= ~(RF5_SLOW);
     }
 
-    if (smart & (SM_IMM_MANA)) {
+    if (smart & SM_IMM_MANA)
         f5 &= ~(RF5_DRAIN_MANA);
-    }
 
-    (*f4p) = f4;
-    (*f5p) = f5;
-    (*f6p) = f6;
+    *f4p = f4;
+    *f5p = f5;
+    *f6p = f6;
 }
