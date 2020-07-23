@@ -13,7 +13,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspells1.h"
 #include "mspell/specified-summon.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/process-effect.h"

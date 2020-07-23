@@ -12,7 +12,7 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
-#include "mspell/mspells1.h"
+#include "mspell/mspell-checker.h"
 #include "system/floor-type-definition.h"
 
  /*!

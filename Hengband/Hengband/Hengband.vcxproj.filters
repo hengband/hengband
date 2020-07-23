@@ -563,9 +563,6 @@
     <ClCompile Include="..\..\src\mspell\mspell-learn-checker.c">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspells1.c">
-      <Filter>mspell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-ball.c">
       <Filter>mspell</Filter>
     </ClCompile>
@@ -1846,6 +1843,36 @@
     </ClCompile>
     <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.c">
       <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\improper-mspell-remover.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\smart-mspell-util.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\element-resistance-checker.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\high-resistance-checker.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-selector.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-attack.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-checker.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-attack-util.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-lite.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\read-execution.c">
+      <Filter>object-use</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\player-status-flags.c">
       <Filter>player</Filter>
@@ -3463,9 +3490,6 @@
     <ClInclude Include="..\..\src\mspell\monster-power-table.h">
       <Filter>mspell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspells1.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\view\status-bars-table.h">
       <Filter>view</Filter>
     </ClInclude>
@@ -4023,6 +4047,36 @@
     </ClInclude>
     <ClInclude Include="..\..\src\melee\melee-spell-flags-checker.h">
       <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\improper-mspell-remover.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\smart-mspell-util.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\element-resistance-checker.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\high-resistance-checker.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-selector.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-attack.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-checker.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-attack-util.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-lite.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\read-execution.h">
+      <Filter>object-use</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-status-flags.h">
       <Filter>player</Filter>

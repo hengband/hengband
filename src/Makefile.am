@@ -457,14 +457,20 @@ hengband_SOURCES = \
 	monster-race/race-indice-types.h \
 	\
 	mspell/assign-monster-spell.c mspell/assign-monster-spell.h \
+	mspell/element-resistance-checker.c mspell/element-resistance-checker.h \
+	mspell/high-resistance-checker.c mspell/high-resistance-checker.h \
+	mspell/improper-mspell-remover.c mspell/improper-mspell-remover.h \
 	mspell/monster-power-table.c mspell/monster-power-table.h \
-	mspell/mspells1.c mspell/mspells1.h \
+	mspell/mspell-attack.c mspell/mspell-attack.h \
+	mspell/mspell-attack-util.c mspell/mspell-attack-util.h \
 	mspell/mspell-breath.c mspell/mspell-breath.h \
 	mspell/mspell-ball.c mspell/mspell-ball.h \
 	mspell/mspell-bolt.c mspell/mspell-bolt.h \
+	mspell/mspell-checker.c mspell/mspell-checker.h \
 	mspell/mspell-curse.c mspell/mspell-curse.h \
 	mspell/mspell-dispel.c mspell/mspell-dispel.h \
 	mspell/mspell-judgement.c mspell/mspell-judgement.h \
+	mspell/mspell-lite.c mspell/mspell-lite.h \
 	mspell/mspell-summon.c mspell/mspell-summon.h \
 	mspell/mspell-util.c mspell/mspell-util.h \
 	mspell/mspell-type.h \
@@ -475,6 +481,8 @@ hengband_SOURCES = \
 	mspell/mspell-special.c mspell/mspell-special.h \
 	mspell/mspell-status.c mspell/mspell-status.h \
 	mspell/mspell-particularity.c mspell/mspell-particularity.h \
+	mspell/mspell-selector.hmspell/mspell-selector.h \
+	mspell/smart-mspell-util.c mspell/smart-mspell-util.h \
 	mspell/specified-summon.c mspell/specified-summon.h \
 	mspell/summon-checker.c mspell/summon-checker.h \
 	\
@@ -527,6 +535,7 @@ hengband_SOURCES = \
 	object-hook/hook-weapon.c object-hook/hook-weapon.h \
 	\
 	object-use/quaff-execution.c object-use/quaff-execution.h \
+	object-use/read-execution.c object-use/read-execution.h \
 	\
 	perception/identification.c perception/identification.h \
 	perception/object-perception.c perception/object-perception.h \

@@ -4,10 +4,10 @@
 #include "mind/drs-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
+#include "mspell/mspell-checker.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
-#include "mspell/mspells1.h"
 #include "spell/spell-types.h"
 
 /*!

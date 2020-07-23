@@ -136,7 +136,7 @@ typedef struct term_type {
 /**** Available Variables ****/
 extern term_type *Term;
 
-/**** Available Functions ****/
+errr term_win_nuke(term_win *s, TERM_LEN w, TERM_LEN h);
 extern errr term_user(int n);
 extern errr term_xtra(int n, int v);
 

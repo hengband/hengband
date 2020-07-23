@@ -1,5 +1,4 @@
 ﻿/*!
- * @file monster-process.c
  * @brief モンスターの特殊技能とターン経過処理 (移動等)/ Monster spells and movement for passaging a turn
  * @date 2014/01/17
  * @author
@@ -49,8 +48,8 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
+#include "mspell/mspell-attack.h"
 #include "mspell/mspell-judgement.h"
-#include "mspell/mspells1.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "player/avatar.h"
@@ -109,78 +108,85 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr);
  */
 void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	turn_flags tmp_flags;
-	turn_flags *turn_flags_ptr = init_turn_flags(target_ptr->riding, m_idx, &tmp_flags);
-	turn_flags_ptr->see_m = is_seen(target_ptr, m_ptr);
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    turn_flags tmp_flags;
+    turn_flags *turn_flags_ptr = init_turn_flags(target_ptr->riding, m_idx, &tmp_flags);
+    turn_flags_ptr->see_m = is_seen(target_ptr, m_ptr);
 
-	decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
-	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !monster_csleep_remaining(m_ptr))
-	{
-		choose_new_monster(target_ptr, m_idx, FALSE, 0);
-		r_ptr = &r_info[m_ptr->r_idx];
-	}
+    decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
+    if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !monster_csleep_remaining(m_ptr)) {
+        choose_new_monster(target_ptr, m_idx, FALSE, 0);
+        r_ptr = &r_info[m_ptr->r_idx];
+    }
 
-	turn_flags_ptr->aware = process_stealth(target_ptr, m_idx);
-	if (vanish_summoned_children(target_ptr, m_idx, turn_flags_ptr->see_m)) return;
-	if (process_quantum_effect(target_ptr, m_idx, turn_flags_ptr->see_m)) return;
-	if (explode_grenade(target_ptr, m_idx)) return;
-	if (runaway_monster(target_ptr, turn_flags_ptr, m_idx)) return;
-	if (!awake_monster(target_ptr, m_idx)) return;
+    turn_flags_ptr->aware = process_stealth(target_ptr, m_idx);
+    if (vanish_summoned_children(target_ptr, m_idx, turn_flags_ptr->see_m))
+        return;
+    if (process_quantum_effect(target_ptr, m_idx, turn_flags_ptr->see_m))
+        return;
+    if (explode_grenade(target_ptr, m_idx))
+        return;
+    if (runaway_monster(target_ptr, turn_flags_ptr, m_idx))
+        return;
+    if (!awake_monster(target_ptr, m_idx))
+        return;
 
-	if (monster_stunned_remaining(m_ptr))
-	{
-		if (one_in_(2)) return;
-	}
+    if (monster_stunned_remaining(m_ptr)) {
+        if (one_in_(2))
+            return;
+    }
 
-	if (turn_flags_ptr->is_riding_mon)
-	{
-		target_ptr->update |= (PU_BONUS);
-	}
+    if (turn_flags_ptr->is_riding_mon) {
+        target_ptr->update |= (PU_BONUS);
+    }
 
-	process_angar(target_ptr, m_idx, turn_flags_ptr->see_m);
+    process_angar(target_ptr, m_idx, turn_flags_ptr->see_m);
 
-	POSITION oy = m_ptr->fy;
-	POSITION ox = m_ptr->fx;
-	if (decide_monster_multiplication(target_ptr, m_idx, oy, ox)) return;
+    POSITION oy = m_ptr->fy;
+    POSITION ox = m_ptr->fx;
+    if (decide_monster_multiplication(target_ptr, m_idx, oy, ox))
+        return;
 
-	process_special(target_ptr, m_idx);
-	process_speak_sound(target_ptr, m_idx, oy, ox, turn_flags_ptr->aware);
-	if (cast_spell(target_ptr, m_idx, turn_flags_ptr->aware)) return;
+    process_special(target_ptr, m_idx);
+    process_speak_sound(target_ptr, m_idx, oy, ox, turn_flags_ptr->aware);
+    if (cast_spell(target_ptr, m_idx, turn_flags_ptr->aware))
+        return;
 
-	DIRECTION mm[8];
-	mm[0] = mm[1] = mm[2] = mm[3] = 0;
-	mm[4] = mm[5] = mm[6] = mm[7] = 0;
+    DIRECTION mm[8];
+    mm[0] = mm[1] = mm[2] = mm[3] = 0;
+    mm[4] = mm[5] = mm[6] = mm[7] = 0;
 
-	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, turn_flags_ptr->aware)) return;
+    if (!decide_monster_movement_direction(target_ptr, mm, m_idx, turn_flags_ptr->aware))
+        return;
 
-	int count = 0;
-	if (!process_monster_movement(target_ptr, turn_flags_ptr, m_idx, mm, oy, ox, &count)) return;
+    int count = 0;
+    if (!process_monster_movement(target_ptr, turn_flags_ptr, m_idx, mm, oy, ox, &count))
+        return;
 
-	/*
-	 *  Forward movements failed, but now received LOS attack!
-	 *  Try to flow by smell.
-	 */
-	if (target_ptr->no_flowed && count > 2 && m_ptr->target_y)
-		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
+    /*
+     *  Forward movements failed, but now received LOS attack!
+     *  Try to flow by smell.
+     */
+    if (target_ptr->no_flowed && count > 2 && m_ptr->target_y)
+        m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
-	if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !monster_fear_remaining(m_ptr) && !turn_flags_ptr->is_riding_mon && turn_flags_ptr->aware)
-	{
-		if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
-		{
-			if (make_attack_spell(m_idx, target_ptr)) return;
-		}
-	}
+    if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !monster_fear_remaining(m_ptr) && !turn_flags_ptr->is_riding_mon && turn_flags_ptr->aware) {
+        if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell) {
+            if (make_attack_spell(target_ptr, m_idx))
+                return;
+        }
+    }
 
-	update_player_type(target_ptr, turn_flags_ptr, r_ptr);
-	update_monster_race_flags(target_ptr, turn_flags_ptr, m_ptr);
+    update_player_type(target_ptr, turn_flags_ptr, r_ptr);
+    update_monster_race_flags(target_ptr, turn_flags_ptr, m_ptr);
 
-	if (!process_monster_fear(target_ptr, turn_flags_ptr, m_idx)) return;
+    if (!process_monster_fear(target_ptr, turn_flags_ptr, m_idx))
+        return;
 
-	if (m_ptr->ml) chg_virtue(target_ptr, V_COMPASSION, -1);
+    if (m_ptr->ml)
+        chg_virtue(target_ptr, V_COMPASSION, -1);
 }
-
 
 /*!
  * @brief 超隠密処理
@@ -190,17 +196,20 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
  */
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	if ((target_ptr->special_defense & NINJA_S_STEALTH) == 0) return TRUE;
+    if ((target_ptr->special_defense & NINJA_S_STEALTH) == 0)
+        return TRUE;
 
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	int tmp = target_ptr->lev * 6 + (target_ptr->skill_stl + 10) * 4;
-	if (target_ptr->monlite) tmp /= 3;
-	if (target_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
-	if (r_ptr->level > (target_ptr->lev * target_ptr->lev / 20 + 10)) tmp /= 3;
-	return (randint0(tmp) <= (r_ptr->level + 20));
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    int tmp = target_ptr->lev * 6 + (target_ptr->skill_stl + 10) * 4;
+    if (target_ptr->monlite)
+        tmp /= 3;
+    if (target_ptr->cursed & TRC_AGGRAVATE)
+        tmp /= 2;
+    if (r_ptr->level > (target_ptr->lev * target_ptr->lev / 20 + 10))
+        tmp /= 3;
+    return (randint0(tmp) <= (r_ptr->level + 20));
 }
-
 
 /*!
  * @brief 死亡したモンスターが乗馬中のモンスターだった場合に落馬処理を行う
@@ -211,22 +220,21 @@ bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx)
  */
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (!is_riding_mon || ((r_ptr->flags7 & RF7_RIDING) != 0)) return;
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    if (!is_riding_mon || ((r_ptr->flags7 & RF7_RIDING) != 0))
+        return;
 
-	if (process_fall_off_horse(target_ptr, 0, TRUE))
-	{
+    if (process_fall_off_horse(target_ptr, 0, TRUE)) {
 #ifdef JP
-		msg_print("地面に落とされた。");
+        msg_print("地面に落とされた。");
 #else
-		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(target_ptr, m_name, &target_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
-		msg_format("You have fallen from %s.", m_name);
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(target_ptr, m_name, &target_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
+        msg_format("You have fallen from %s.", m_name);
 #endif
-	}
+    }
 }
-
 
 /*!
  * @brief 召喚の親元が消滅した時、子供も消滅させる
@@ -237,28 +245,25 @@ void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool i
  */
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	if ((m_ptr->parent_m_idx == 0) || (target_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx > 0))
-		return FALSE;
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    if ((m_ptr->parent_m_idx == 0) || (target_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx > 0))
+        return FALSE;
 
-	if (see_m)
-	{
-		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(target_ptr, m_name, m_ptr, 0);
-		msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
-	}
+    if (see_m) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(target_ptr, m_name, m_ptr, 0);
+        msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
+    }
 
-	if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
-	{
-		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-		exe_write_diary(target_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
-	}
+    if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+        exe_write_diary(target_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
+    }
 
-	delete_monster_idx(target_ptr, m_idx);
-	return TRUE;
+    delete_monster_idx(target_ptr, m_idx);
+    return TRUE;
 }
-
 
 /*!
  * @brief 寝ているモンスターの起床を判定する
@@ -268,27 +273,26 @@ bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool s
  */
 bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (!monster_csleep_remaining(m_ptr)) return TRUE;
-	if (!(target_ptr->cursed & TRC_AGGRAVATE)) return FALSE;
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    if (!monster_csleep_remaining(m_ptr))
+        return TRUE;
+    if (!(target_ptr->cursed & TRC_AGGRAVATE))
+        return FALSE;
 
-	(void)set_monster_csleep(target_ptr, m_idx, 0);
-	if (m_ptr->ml)
-	{
-		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(target_ptr, m_name, m_ptr, 0);
-		msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
-	}
+    (void)set_monster_csleep(target_ptr, m_idx, 0);
+    if (m_ptr->ml) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(target_ptr, m_name, m_ptr, 0);
+        msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
+    }
 
-	if (is_original_ap_and_seen(target_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR))
-	{
-		r_ptr->r_wake++;
-	}
+    if (is_original_ap_and_seen(target_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR)) {
+        r_ptr->r_wake++;
+    }
 
-	return TRUE;
+    return TRUE;
 }
-
 
 /*!
  * @brief モンスターの怒り状態を判定する (起こっていたら敵に回す)
@@ -299,30 +303,29 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
  */
 void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	bool gets_angry = FALSE;
-	if (is_friendly(m_ptr) && (target_ptr->cursed & TRC_AGGRAVATE))
-		gets_angry = TRUE;
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    bool gets_angry = FALSE;
+    if (is_friendly(m_ptr) && (target_ptr->cursed & TRC_AGGRAVATE))
+        gets_angry = TRUE;
 
-	if (is_pet(m_ptr) && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
-		monster_has_hostile_align(target_ptr, NULL, 10, -10, r_ptr)) || (r_ptr->flagsr & RFR_RES_ALL)))
-	{
-		gets_angry = TRUE;
-	}
+    if (is_pet(m_ptr)
+        && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(target_ptr, NULL, 10, -10, r_ptr))
+            || (r_ptr->flagsr & RFR_RES_ALL))) {
+        gets_angry = TRUE;
+    }
 
-	if (target_ptr->phase_out || !gets_angry) return;
+    if (target_ptr->phase_out || !gets_angry)
+        return;
 
-	if (is_pet(m_ptr) || see_m)
-	{
-		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(target_ptr, m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
-		msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
-	}
+    if (is_pet(m_ptr) || see_m) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(target_ptr, m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
+        msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
+    }
 
-	set_hostile(target_ptr, m_ptr);
+    set_hostile(target_ptr, m_ptr);
 }
-
 
 /*!
  * @brief 手榴弾の爆発処理
@@ -332,14 +335,14 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
  */
 bool explode_grenade(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	if (m_ptr->r_idx != MON_GRENADE) return FALSE;
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    if (m_ptr->r_idx != MON_GRENADE)
+        return FALSE;
 
-	bool fear, dead;
-	mon_take_hit_mon(target_ptr, m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
-	return dead;
+    bool fear, dead;
+    mon_take_hit_mon(target_ptr, m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+    return dead;
 }
-
 
 /*!
  * @brief モンスター依存の特別な行動を取らせる
@@ -349,28 +352,31 @@ bool explode_grenade(player_type *target_ptr, MONSTER_IDX m_idx)
  */
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if ((r_ptr->a_ability_flags2 & RF6_SPECIAL) == 0) return;
-	if (m_ptr->r_idx != MON_OHMU) return;
-	if (target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out) return;
-	if ((r_ptr->freq_spell == 0) || !(randint1(100) <= r_ptr->freq_spell)) return;
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    if ((r_ptr->a_ability_flags2 & RF6_SPECIAL) == 0)
+        return;
+    if (m_ptr->r_idx != MON_OHMU)
+        return;
+    if (target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out)
+        return;
+    if ((r_ptr->freq_spell == 0) || !(randint1(100) <= r_ptr->freq_spell))
+        return;
 
-	int count = 0;
-	DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-	BIT_FLAGS p_mode = is_pet(m_ptr) ? PM_FORCE_PET : 0L;
+    int count = 0;
+    DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    BIT_FLAGS p_mode = is_pet(m_ptr) ? PM_FORCE_PET : 0L;
 
-	for (int k = 0; k < A_MAX; k++)
-	{
-		if (summon_specific(target_ptr, m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode)))
-		{
-			if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml) count++;
-		}
-	}
+    for (int k = 0; k < A_MAX; k++) {
+        if (summon_specific(target_ptr, m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode))) {
+            if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml)
+                count++;
+        }
+    }
 
-	if (count && is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags6 |= (RF6_SPECIAL);
+    if (count && is_original_ap_and_seen(target_ptr, m_ptr))
+        r_ptr->r_flags6 |= (RF6_SPECIAL);
 }
-
 
 /*!
  * @brief モンスターを分裂させるかどうかを決定する (分裂もさせる)
@@ -382,39 +388,36 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
  */
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) || (target_ptr->current_floor_ptr->num_repro >= MAX_REPRO))
-		return FALSE;
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) || (target_ptr->current_floor_ptr->num_repro >= MAX_REPRO))
+        return FALSE;
 
-	int k = 0;
-	for (POSITION y = oy - 1; y <= oy + 1; y++)
-	{
-		for (POSITION x = ox - 1; x <= ox + 1; x++)
-		{
-			if (!in_bounds2(target_ptr->current_floor_ptr, y, x)) continue;
-			if (target_ptr->current_floor_ptr->grid_array[y][x].m_idx) k++;
-		}
-	}
+    int k = 0;
+    for (POSITION y = oy - 1; y <= oy + 1; y++) {
+        for (POSITION x = ox - 1; x <= ox + 1; x++) {
+            if (!in_bounds2(target_ptr->current_floor_ptr, y, x))
+                continue;
+            if (target_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+                k++;
+        }
+    }
 
-	if (multiply_barrier(target_ptr, m_idx)) k = 8;
+    if (multiply_barrier(target_ptr, m_idx))
+        k = 8;
 
-	if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ)))
-	{
-		if (multiply_monster(target_ptr, m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
-		{
-			if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(target_ptr, m_ptr))
-			{
-				r_ptr->r_flags2 |= (RF2_MULTIPLY);
-			}
+    if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ))) {
+        if (multiply_monster(target_ptr, m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0))) {
+            if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(target_ptr, m_ptr)) {
+                r_ptr->r_flags2 |= (RF2_MULTIPLY);
+            }
 
-			return TRUE;
-		}
-	}
+            return TRUE;
+        }
+    }
 
-	return FALSE;
+    return FALSE;
 }
-
 
 /*!
  * @brief モンスターに魔法を試行させる
@@ -425,36 +428,34 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
  */
 bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if ((r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell))
-		return FALSE;
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    if ((r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell))
+        return FALSE;
 
-	bool counterattack = FALSE;
-	if (m_ptr->target_y)
-	{
-		MONSTER_IDX t_m_idx = target_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
-		if (t_m_idx && are_enemies(target_ptr, m_ptr, &target_ptr->current_floor_ptr->m_list[t_m_idx]) &&
-			projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
-		{
-			counterattack = TRUE;
-		}
-	}
+    bool counterattack = FALSE;
+    if (m_ptr->target_y) {
+        MONSTER_IDX t_m_idx = target_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
+        if (t_m_idx && are_enemies(target_ptr, m_ptr, &target_ptr->current_floor_ptr->m_list[t_m_idx])
+            && projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x)) {
+            counterattack = TRUE;
+        }
+    }
 
-	if (counterattack)
-	{
-		if (monst_spell_monst(target_ptr, m_idx)) return TRUE;
-		if (aware && make_attack_spell(m_idx, target_ptr)) return TRUE;
-	}
-	else
-	{
-		if (aware && make_attack_spell(m_idx, target_ptr)) return TRUE;
-		if (monst_spell_monst(target_ptr, m_idx)) return TRUE;
-	}
+    if (counterattack) {
+        if (monst_spell_monst(target_ptr, m_idx))
+            return TRUE;
+        if (aware && make_attack_spell(target_ptr, m_idx))
+            return TRUE;
+    } else {
+        if (aware && make_attack_spell(target_ptr, m_idx))
+            return TRUE;
+        if (monst_spell_monst(target_ptr, m_idx))
+            return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }
-
 
 /*!
  * @brief モンスターの恐怖状態を処理する
@@ -466,19 +467,20 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
  */
 bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && monster_fear_remaining(m_ptr) && turn_flags_ptr->aware;
-	if (!is_battle_determined) return FALSE;
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && monster_fear_remaining(m_ptr) && turn_flags_ptr->aware;
+    if (!is_battle_determined)
+        return FALSE;
 
-	(void)set_monster_monfear(target_ptr, m_idx, 0);
-	if (!turn_flags_ptr->see_m) return TRUE;
+    (void)set_monster_monfear(target_ptr, m_idx, 0);
+    if (!turn_flags_ptr->see_m)
+        return TRUE;
 
-	GAME_TEXT m_name[MAX_NLEN];
-	monster_desc(target_ptr, m_name, m_ptr, 0);
-	msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
-	return TRUE;
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(target_ptr, m_name, m_ptr, 0);
+    msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
+    return TRUE;
 }
-
 
 /*!
  * @brief 全モンスターのターン管理メインルーチン /
@@ -516,23 +518,22 @@ bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, M
  */
 void process_monsters(player_type *target_ptr)
 {
-	old_race_flags tmp_flags;
-	old_race_flags *old_race_flags_ptr = init_old_race_flags(&tmp_flags);
+    old_race_flags tmp_flags;
+    old_race_flags *old_race_flags_ptr = init_old_race_flags(&tmp_flags);
 
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	floor_ptr->monster_noise = FALSE;
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    floor_ptr->monster_noise = FALSE;
 
-	MONRACE_IDX old_monster_race_idx = target_ptr->monster_race_idx;
-	save_old_race_flags(target_ptr->monster_race_idx, old_race_flags_ptr);
-	sweep_monster_process(target_ptr);
+    MONRACE_IDX old_monster_race_idx = target_ptr->monster_race_idx;
+    save_old_race_flags(target_ptr->monster_race_idx, old_race_flags_ptr);
+    sweep_monster_process(target_ptr);
 
-	hack_m_idx = 0;
-	if (!target_ptr->monster_race_idx || (target_ptr->monster_race_idx != old_monster_race_idx))
-		return;
+    hack_m_idx = 0;
+    if (!target_ptr->monster_race_idx || (target_ptr->monster_race_idx != old_monster_race_idx))
+        return;
 
-	update_player_window(target_ptr, old_race_flags_ptr);
+    update_player_window(target_ptr, old_race_flags_ptr);
 }
-
 
 /*!
  * @brief フロア内のモンスターについてターン終了時の処理を繰り返す
@@ -540,42 +541,47 @@ void process_monsters(player_type *target_ptr)
  */
 void sweep_monster_process(player_type *target_ptr)
 {
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--)
-	{
-		monster_type *m_ptr;
-		m_ptr = &floor_ptr->m_list[i];
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--) {
+        monster_type *m_ptr;
+        m_ptr = &floor_ptr->m_list[i];
 
-		if (target_ptr->leaving) return;
-		if (!monster_is_valid(m_ptr)) continue;
-		if (target_ptr->wild_mode) continue;
+        if (target_ptr->leaving)
+            return;
+        if (!monster_is_valid(m_ptr))
+            continue;
+        if (target_ptr->wild_mode)
+            continue;
 
-		if (m_ptr->mflag & MFLAG_BORN)
-		{
-			m_ptr->mflag &= ~(MFLAG_BORN);
-			continue;
-		}
+        if (m_ptr->mflag & MFLAG_BORN) {
+            m_ptr->mflag &= ~(MFLAG_BORN);
+            continue;
+        }
 
-		if (m_ptr->cdis >= AAF_LIMIT) continue;
-		if (!decide_process_continue(target_ptr, m_ptr)) continue;
+        if (m_ptr->cdis >= AAF_LIMIT)
+            continue;
+        if (!decide_process_continue(target_ptr, m_ptr))
+            continue;
 
-		SPEED speed = (target_ptr->riding == i) ? target_ptr->pspeed : decide_monster_speed(m_ptr);
-		m_ptr->energy_need -= SPEED_TO_ENERGY(speed);
-		if (m_ptr->energy_need > 0) continue;
+        SPEED speed = (target_ptr->riding == i) ? target_ptr->pspeed : decide_monster_speed(m_ptr);
+        m_ptr->energy_need -= SPEED_TO_ENERGY(speed);
+        if (m_ptr->energy_need > 0)
+            continue;
 
-		m_ptr->energy_need += ENERGY_NEED();
-		hack_m_idx = i;
-		process_monster(target_ptr, i);
-		reset_target(m_ptr);
+        m_ptr->energy_need += ENERGY_NEED();
+        hack_m_idx = i;
+        process_monster(target_ptr, i);
+        reset_target(m_ptr);
 
-		if (target_ptr->no_flowed && one_in_(3))
-			m_ptr->mflag2 |= MFLAG2_NOFLOW;
+        if (target_ptr->no_flowed && one_in_(3))
+            m_ptr->mflag2 |= MFLAG2_NOFLOW;
 
-		if (!target_ptr->playing || target_ptr->is_dead) return;
-		if (target_ptr->leaving) return;
-	}
+        if (!target_ptr->playing || target_ptr->is_dead)
+            return;
+        if (target_ptr->leaving)
+            return;
+    }
 }
-
 
 /*!
  * @brief 後続のモンスター処理が必要かどうか判定する (要調査)
@@ -585,22 +591,20 @@ void sweep_monster_process(player_type *target_ptr)
  */
 bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
 {
-	monster_race *r_ptr;
-	r_ptr = &r_info[m_ptr->r_idx];
-	if (!target_ptr->no_flowed)
-	{
-		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
-	}
+    monster_race *r_ptr;
+    r_ptr = &r_info[m_ptr->r_idx];
+    if (!target_ptr->no_flowed) {
+        m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
+    }
 
-	if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
-		return TRUE;
+    if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
+        return TRUE;
 
-	if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) &&
-		(player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) || (target_ptr->cursed & TRC_AGGRAVATE)))
-		return TRUE;
+    if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) && (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) || (target_ptr->cursed & TRC_AGGRAVATE)))
+        return TRUE;
 
-	if (m_ptr->target_y)
-		return TRUE;
+    if (m_ptr->target_y)
+        return TRUE;
 
-	return FALSE;
+    return FALSE;
 }

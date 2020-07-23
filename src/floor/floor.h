@@ -11,10 +11,6 @@ extern floor_type floor_info;
 	((G) == &(C)->current_floor_ptr->grid_array[(C)->y][(C)->x])
 
 
-#define cave_have_flag_grid(C,INDEX) \
-	(have_flag(f_info[(C)->feat].flags, (INDEX)))
-
-
 /*
  * Determine if a "legal" grid is a "clean" floor grid
  * Determine if terrain-change spells are allowed in a grid.
