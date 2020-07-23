@@ -245,6 +245,16 @@ static bool decide_lite_projection(player_type *target_ptr, msa_type *msa_ptr)
     return msa_ptr->success;
 }
 
+static void set_no_magic_mask(msa_type *msa_ptr)
+{
+    if (!msa_ptr->no_inate)
+        return;
+
+    msa_ptr->f4 &= ~(RF4_NOMAGIC_MASK);
+    msa_ptr->f5 &= ~(RF5_NOMAGIC_MASK);
+    msa_ptr->f6 &= ~(RF6_NOMAGIC_MASK);
+}
+
 static void decide_lite_area(player_type *target_ptr, msa_type *msa_ptr)
 {
     if ((msa_ptr->f6 & RF6_DARKNESS) == 0)
@@ -517,12 +527,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
 
     reset_target(msa_ptr->m_ptr);
     DEPTH rlev = ((msa_ptr->r_ptr->level >= 1) ? msa_ptr->r_ptr->level : 1);
-    if (msa_ptr->no_inate) {
-        msa_ptr->f4 &= ~(RF4_NOMAGIC_MASK);
-        msa_ptr->f5 &= ~(RF5_NOMAGIC_MASK);
-        msa_ptr->f6 &= ~(RF6_NOMAGIC_MASK);
-    }
-
+    set_no_magic_mask(msa_ptr);
     decide_lite_area(target_ptr, msa_ptr);
     check_mspell_stupid(target_ptr, msa_ptr);
     check_mspell_smart(target_ptr, msa_ptr);
@@ -569,7 +574,7 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
         learn_spell(target_ptr, msa_ptr->thrown_spell - 96);
 
     check_mspell_imitation(target_ptr, msa_ptr);
-    remember_mspell(target_ptr, msa_ptr);
+    remember_mspell(msa_ptr);
     if (target_ptr->is_dead && (msa_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         msa_ptr->r_ptr->r_deaths++;
 
