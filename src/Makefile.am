@@ -611,10 +611,11 @@ hengband_SOURCES = \
 	room/rooms-fractal.c room/rooms-fractal.h \
 	room/rooms-maze-vault.c room/rooms-maze-vault.h \
 	room/rooms-normal.c room/rooms-normal.h \
+	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/rooms-special.c room/rooms-special.h \
 	room/rooms-trap.c room/rooms-trap.h \
 	room/rooms-vault.c room/rooms-vault.h \
-	room/rooms-pit-nest.c room/rooms-pit-nest.h \
+	room/space-finder.c room/space-finder.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	room/treasure-deployment.c room/treasure-deployment.h \
 	\

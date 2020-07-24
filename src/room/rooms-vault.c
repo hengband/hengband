@@ -21,7 +21,8 @@
 #include "room/cave-filler.h"
 #include "room/lake-types.h"
 #include "room/rooms-maze-vault.h"
-#include "room/rooms.h"
+#include "room/rooms.h" // todo 相互依存.
+#include "room/space-finder.h"
 #include "room/treasure-deployment.h"
 #include "store/store-util.h"
 #include "store/store.h"

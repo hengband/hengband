@@ -5,7 +5,7 @@
 #include "grid/grid.h"
 #include "room/cave-filler.h"
 #include "room/rooms-normal.h"
-#include "room/rooms.h"
+#include "room/space-finder.h"
 #include "system/floor-type-definition.h"
 
 /*!

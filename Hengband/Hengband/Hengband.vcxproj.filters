@@ -1895,6 +1895,9 @@
     <ClCompile Include="..\..\src\room\rooms-maze-vault.c">
       <Filter>room</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\space-finder.c">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4121,6 +4124,9 @@
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\room\rooms-maze-vault.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\space-finder.h">
       <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>
