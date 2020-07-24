@@ -46,6 +46,7 @@
 #include "monster/monster-info.h"
 #include "monster-floor/place-monster-types.h"
 #include "player/player-status.h"
+#include "room/lake-types.h"
 #include "room/rooms.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"

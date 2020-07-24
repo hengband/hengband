@@ -49,6 +49,7 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
+#include "room/lake-types.h"
 #include "room/rooms-city.h"
 #include "room/rooms-fractal.h"
 #include "room/rooms-normal.h"

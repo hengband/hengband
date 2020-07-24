@@ -602,7 +602,9 @@ hengband_SOURCES = \
 	realm/realm-trump.c realm/realm-trump.h \
 	realm/realm-types.h \
 	\
-	room/rooms.c room/rooms.h room/rooms-city.c room/rooms-city.h \
+	room/lake-types.h room/room-types.h \
+	room/rooms.c room/rooms.h \
+	room/rooms-city.c room/rooms-city.h \
 	room/rooms-fractal.c room/rooms-fractal.h \
 	room/rooms-normal.c room/rooms-normal.h \
 	room/rooms-special.c room/rooms-special.h \

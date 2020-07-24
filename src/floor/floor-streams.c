@@ -30,6 +30,7 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "object-hook/hook-enchant.h"
+#include "room/lake-types.h"
 #include "room/rooms.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
