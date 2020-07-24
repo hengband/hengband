@@ -603,6 +603,7 @@ hengband_SOURCES = \
 	realm/realm-types.h \
 	\
 	room/cave-filler.c room/cave-filler.h \
+	room/door-definition.c room/door-definition.h \
 	room/lake-types.h room/room-types.h \
 	room/room-generator.c room/room-generator.h \
 	room/room-info-table.c room/room-info-table.h \
