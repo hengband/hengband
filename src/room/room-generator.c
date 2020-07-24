@@ -6,7 +6,7 @@
 #include "grid/grid.h"
 #include "room/room-info-table.h"
 #include "room/room-types.h"
-#include "room/rooms-city.h" // 相互依存、後で消す.
+#include "room/rooms-city.h"
 #include "room/rooms-fractal.h"
 #include "room/rooms-normal.h"
 #include "room/rooms-pit-nest.h"
@@ -17,28 +17,6 @@
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
 #include "wizard/wizard-messages.h"
-
-/* Create a new floor room with optional light */
-void generate_room_floor(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
-{
-    grid_type *g_ptr;
-    for (POSITION y = y1; y <= y2; y++) {
-        for (POSITION x = x1; x <= x2; x++) {
-            g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-            place_grid(player_ptr, g_ptr, GB_FLOOR);
-            g_ptr->info |= (CAVE_ROOM);
-            if (light)
-                g_ptr->info |= (CAVE_GLOW);
-        }
-    }
-}
-
-void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
-{
-    for (POSITION y = y1; y <= y2; y++)
-        for (POSITION x = x1; x <= x2; x++)
-            place_bold(player_ptr, y, x, GB_INNER_PERM);
-}
 
 /*!
  * @brief 与えられた部屋型IDに応じて部屋の生成処理分岐を行い結果を返す / Attempt to build a room of the given type at the given block

@@ -5,7 +5,6 @@
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "room/room-generator.h" // 相互依存、後で消す.
 #include "room/rooms.h"
 #include "store/store-util.h"
 #include "store/store.h"
@@ -68,6 +67,28 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
     C_KILL(*ugarcade_used, town_hgt * town_wid, bool);
     C_KILL(ugarcade_used, town_hgt, bool *);
     return i == n;
+}
+
+/* Create a new floor room with optional light */
+static void generate_room_floor(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
+{
+    grid_type *g_ptr;
+    for (POSITION y = y1; y <= y2; y++) {
+        for (POSITION x = x1; x <= x2; x++) {
+            g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            place_grid(player_ptr, g_ptr, GB_FLOOR);
+            g_ptr->info |= (CAVE_ROOM);
+            if (light)
+                g_ptr->info |= (CAVE_GLOW);
+        }
+    }
+}
+
+static void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+{
+    for (POSITION y = y1; y <= y2; y++)
+        for (POSITION x = x1; x <= x2; x++)
+            place_bold(player_ptr, y, x, GB_INNER_PERM);
 }
 
 /*!
