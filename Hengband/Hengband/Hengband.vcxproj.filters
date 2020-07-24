@@ -1880,6 +1880,9 @@
     <ClCompile Include="..\..\src\room\room-info-table.c">
       <Filter>room</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\cave-filler.c">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4091,6 +4094,9 @@
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\room\room-info-table.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\cave-filler.h">
       <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>

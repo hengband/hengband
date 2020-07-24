@@ -602,6 +602,7 @@ hengband_SOURCES = \
 	realm/realm-trump.c realm/realm-trump.h \
 	realm/realm-types.h \
 	\
+	room/cave-filler.c room/cave-filler.h \
 	room/lake-types.h room/room-types.h \
 	room/room-info-table.c room/room-info-table.h \
 	room/rooms.c room/rooms.h \
