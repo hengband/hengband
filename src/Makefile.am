@@ -615,6 +615,7 @@ hengband_SOURCES = \
 	room/rooms-vault.c room/rooms-vault.h \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
+	room/treasure-deployment.c room/treasure-deployment.h \
 	\
 	save/floor-writer.c save/floor-writer.h \
 	save/info-writer.c save/info-writer.h \

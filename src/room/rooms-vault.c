@@ -21,6 +21,7 @@
 #include "room/cave-filler.h"
 #include "room/lake-types.h"
 #include "room/rooms.h"
+#include "room/treasure-deployment.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/dungeon-data-definition.h"

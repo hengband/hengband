@@ -315,6 +315,7 @@
     <ClCompile Include="..\..\src\room\cave-filler.c" />
     <ClCompile Include="..\..\src\room\room-generator.c" />
     <ClCompile Include="..\..\src\room\room-info-table.c" />
+    <ClCompile Include="..\..\src\room\treasure-deployment.c" />
     <ClCompile Include="..\..\src\save\floor-writer.c" />
     <ClCompile Include="..\..\src\save\info-writer.c" />
     <ClCompile Include="..\..\src\save\item-writer.c" />
@@ -880,6 +881,7 @@
     <ClInclude Include="..\..\src\room\room-generator.h" />
     <ClInclude Include="..\..\src\room\room-info-table.h" />
     <ClInclude Include="..\..\src\room\room-types.h" />
+    <ClInclude Include="..\..\src\room\treasure-deployment.h" />
     <ClInclude Include="..\..\src\save\floor-writer.h" />
     <ClInclude Include="..\..\src\save\info-writer.h" />
     <ClInclude Include="..\..\src\save\item-writer.h" />
