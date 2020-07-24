@@ -31,9 +31,9 @@
 #include "monster/monster-info.h"
 #include "object-hook/hook-enchant.h"
 #include "room/lake-types.h"
-#include "room/rooms.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -209,8 +209,8 @@ void add_river(floor_type *floor_ptr)
         feature_type *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dun->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA)) || ((dun->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER))
-                || !dun->laketype)) {
+        if (!(((dun_data->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA)) || ((dun_data->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER))
+                || !dun_data->laketype)) {
             return;
         }
     }
@@ -251,10 +251,10 @@ void add_river(floor_type *floor_ptr)
     recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
 
     /* Hack - Save the location as a "room" */
-    if (dun->cent_n < CENT_MAX) {
-        dun->cent[dun->cent_n].y = y2;
-        dun->cent[dun->cent_n].x = x2;
-        dun->cent_n++;
+    if (dun_data->cent_n < CENT_MAX) {
+        dun_data->cent[dun_data->cent_n].y = y2;
+        dun_data->cent[dun_data->cent_n].x = x2;
+        dun_data->cent_n++;
     }
 }
 

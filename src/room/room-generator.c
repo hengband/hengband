@@ -1,7 +1,6 @@
 ﻿#include "room/room-generator.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor-generate.h" // 相互依存、後で消す.
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/grid.h"
@@ -15,6 +14,7 @@
 #include "room/rooms-trap.h"
 #include "room/rooms-vault.h"
 #include "room/rooms.h"
+#include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
 #include "wizard/wizard-messages.h"
 
@@ -155,7 +155,7 @@ bool generate_rooms(player_type *player_ptr)
     } else if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_CAVE) {
         /*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc floor_ptr->grid_array etc.) */
         move_prob_list(ROOM_T_FRACAVE, ROOM_T_NORMAL, prob_list);
-    } else if (dun->cavern || dun->empty_level) {
+    } else if (dun_data->cavern || dun_data->empty_level) {
         /*! @details ダンジョンの基本地形が最初から渓谷かアリーナ型の場合 FRACAVE は生成から除外。 /  No caves when a (random) cavern exists: they look bad */
         prob_list[ROOM_T_FRACAVE] = 0;
     }

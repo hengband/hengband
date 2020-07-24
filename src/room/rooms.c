@@ -51,6 +51,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "room/cave-filler.h"
 #include "room/lake-types.h"
+#include "room/room-generator.h"
 #include "room/room-info-table.h"
 #include "room/rooms-city.h"
 #include "room/rooms-fractal.h"
@@ -59,6 +60,7 @@
 #include "room/rooms-special.h"
 #include "room/rooms-trap.h"
 #include "room/rooms-vault.h"
+#include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -188,7 +190,7 @@ static bool find_space_aux(POSITION blocks_high, POSITION blocks_wide, POSITION 
         if ((block_x % 3) != 0)
             return FALSE;
     } else {
-        if (block_x + (blocks_wide / 2) <= dun->col_rooms / 2) {
+        if (block_x + (blocks_wide / 2) <= dun_data->col_rooms / 2) {
             if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
                 return FALSE;
             if ((block_x % 3) == 1)
@@ -206,12 +208,12 @@ static bool find_space_aux(POSITION blocks_high, POSITION blocks_wide, POSITION 
     POSITION by2 = block_y + blocks_high;
     POSITION bx2 = block_x + blocks_wide;
 
-    if ((by1 < 0) || (by2 > dun->row_rooms) || (bx1 < 0) || (bx2 > dun->col_rooms))
+    if ((by1 < 0) || (by2 > dun_data->row_rooms) || (bx1 < 0) || (bx2 > dun_data->col_rooms))
         return FALSE;
 
     for (POSITION by = by1; by < by2; by++)
         for (POSITION bx = bx1; bx < bx2; bx++)
-            if (dun->room_map[by][bx])
+            if (dun_data->room_map[by][bx])
                 return FALSE;
 
     return TRUE;
@@ -245,12 +247,12 @@ bool find_space(player_type *player_ptr, POSITION *y, POSITION *x, POSITION heig
     POSITION block_x = 0;
     POSITION blocks_high = 1 + ((height - 1) / BLOCK_HGT);
     POSITION blocks_wide = 1 + ((width - 1) / BLOCK_WID);
-    if ((dun->row_rooms < blocks_high) || (dun->col_rooms < blocks_wide))
+    if ((dun_data->row_rooms < blocks_high) || (dun_data->col_rooms < blocks_wide))
         return FALSE;
 
     int candidates = 0;
-    for (block_y = dun->row_rooms - blocks_high; block_y >= 0; block_y--) {
-        for (block_x = dun->col_rooms - blocks_wide; block_x >= 0; block_x--) {
+    for (block_y = dun_data->row_rooms - blocks_high; block_y >= 0; block_y--) {
+        for (block_x = dun_data->col_rooms - blocks_wide; block_x >= 0; block_x--) {
             if (find_space_aux(blocks_high, blocks_wide, block_y, block_x)) {
                 /* Find a valid place */
                 candidates++;
@@ -266,8 +268,8 @@ bool find_space(player_type *player_ptr, POSITION *y, POSITION *x, POSITION heig
     else
         pick = candidates / 2 + 1;
 
-    for (block_y = dun->row_rooms - blocks_high; block_y >= 0; block_y--) {
-        for (block_x = dun->col_rooms - blocks_wide; block_x >= 0; block_x--) {
+    for (block_y = dun_data->row_rooms - blocks_high; block_y >= 0; block_y--) {
+        for (block_x = dun_data->col_rooms - blocks_wide; block_x >= 0; block_x--) {
             if (find_space_aux(blocks_high, blocks_wide, block_y, block_x)) {
                 pick--;
                 if (!pick)
@@ -285,15 +287,15 @@ bool find_space(player_type *player_ptr, POSITION *y, POSITION *x, POSITION heig
     POSITION bx2 = block_x + blocks_wide;
     *y = ((by1 + by2) * BLOCK_HGT) / 2;
     *x = ((bx1 + bx2) * BLOCK_WID) / 2;
-    if (dun->cent_n < CENT_MAX) {
-        dun->cent[dun->cent_n].y = (byte)*y;
-        dun->cent[dun->cent_n].x = (byte)*x;
-        dun->cent_n++;
+    if (dun_data->cent_n < CENT_MAX) {
+        dun_data->cent[dun_data->cent_n].y = (byte)*y;
+        dun_data->cent[dun_data->cent_n].x = (byte)*x;
+        dun_data->cent_n++;
     }
 
     for (POSITION by = by1; by < by2; by++)
         for (POSITION bx = bx1; bx < bx2; bx++)
-            dun->room_map[by][bx] = TRUE;
+            dun_data->room_map[by][bx] = TRUE;
 
     check_room_boundary(player_ptr, *x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
     return TRUE;
