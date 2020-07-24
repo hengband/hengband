@@ -24,14 +24,11 @@ extern door_type feat_door[MAX_DOOR_TYPES];
 
 void build_lake(player_type *player_ptr, int type);
 void build_cavern(player_type *player_ptr);
-bool generate_rooms(player_type *player_ptr);
 void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault);
 bool find_space(player_type *player_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width);
 void build_small_room(player_type *player_ptr, POSITION x0, POSITION y0);
 void add_outer_wall(player_type *player_ptr, POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2);
 POSITION dist2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION h1, POSITION h2, POSITION h3, POSITION h4);
-void generate_room_floor(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light);
-void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty);
 void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int power);
 void build_room(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2);
