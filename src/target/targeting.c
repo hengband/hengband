@@ -415,27 +415,16 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
 }
 
 /*
- * Examine a grid, return a keypress.
- *
- * The "mode" argument contains the "TARGET_LOOK" bit flag, which
- * indicates that the "space" key should scan through the contents
- * of the grid, instead of simply returning immediately.  This lets
- * the "look" command get complete information, without making the
- * "target" command annoying.
- *
- * The "info" argument contains the "commands" which should be shown
- * inside the "[xxx]" text.  This string must never be empty, or grids
- * containing monsters will be displayed with an extra comma.
- *
- * Note that if a monster is in the grid, we update both the monster
- * recall info and the health bar info to track that monster.
- *
- * Eventually, we may allow multiple objects per grid, or objects
- * and terrain features in the same grid.
- *
- * This function must handle blindness/hallucination.
+ * todo xとlで処理を分ける？
+ * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
+ * @param subject_ptr プレーヤーへの参照ポインタ
+ * @param y 指定グリッドのY座標
+ * @param x 指定グリッドのX座標
+ * @param mode x (KILL)かl (LOOK)
+ * @param info 記述用文字列
+ * @return 入力キー
  */
-static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
+static char examine_grid(player_type *subject_ptr, POSITION y, POSITION x, target_type mode, concptr info)
 {
     OBJECT_IDX next_o_idx = 0;
     concptr s1 = "";
@@ -527,7 +516,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
         if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x'))
             return query;
 
-        if ((query == ' ') && !(mode & (TARGET_LOOK)))
+        if ((query == ' ') && !(mode & TARGET_LOOK))
             return query;
 
         s1 = _("それは", "It is ");
@@ -560,7 +549,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
             if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x'))
                 return query;
 
-            if ((query == ' ') && !(mode & (TARGET_LOOK)))
+            if ((query == ' ') && !(mode & TARGET_LOOK))
                 return query;
 
             s2 = _("をまた", "also carrying ");
@@ -795,7 +784,7 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 /*
  * Handle "target" and "look".
  */
-bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
+bool target_set(player_type *creature_ptr, target_type mode)
 {
     int i, d, t, bd;
     POSITION y = creature_ptr->y;
@@ -834,7 +823,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
             }
 
             while (TRUE) {
-                query = target_set_aux(creature_ptr, y, x, mode, info);
+                query = examine_grid(creature_ptr, y, x, mode, info);
                 if (query)
                     break;
             }
@@ -992,7 +981,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
         }
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
-        while ((query = target_set_aux(creature_ptr, y, x, mode | TARGET_LOOK, info)) == 0)
+        while ((query = examine_grid(creature_ptr, y, x, mode | TARGET_LOOK, info)) == 0)
             ;
 
         d = 0;
