@@ -19,6 +19,7 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
+#include "room/cave-filler.h"
 #include "room/lake-types.h"
 #include "room/rooms.h"
 #include "store/store-util.h"
