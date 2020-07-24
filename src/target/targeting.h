@@ -5,7 +5,6 @@
 extern MONSTER_IDX target_who;
 extern POSITION target_col;
 extern POSITION target_row;
-extern bool show_gold_on_floor;
 
 typedef enum target_type target_type;
 bool target_set(player_type *creature_ptr, target_type mode);
