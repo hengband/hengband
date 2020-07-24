@@ -1889,6 +1889,9 @@
     <ClCompile Include="..\..\src\system\dungeon-data-definition.c">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\treasure-deployment.c">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4110,6 +4113,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\dungeon-data-definition.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\treasure-deployment.h">
+      <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
