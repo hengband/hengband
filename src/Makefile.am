@@ -730,6 +730,7 @@ hengband_SOURCES = \
 	system/system-variables.c system/system-variables.h \
 	system/gamevalue.h \
 	\
+	target/target-types.h \
 	target/targeting.c target/targeting.h \
 	\
 	term/gameterm.c term/gameterm.h \

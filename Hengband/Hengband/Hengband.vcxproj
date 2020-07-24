@@ -929,6 +929,7 @@
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\system\dungeon-data-definition.h" />
     <ClInclude Include="..\..\src\system\floor-type-definition.h" />
+    <ClInclude Include="..\..\src\target\target-types.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />

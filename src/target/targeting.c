@@ -63,6 +63,7 @@
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
+#include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"

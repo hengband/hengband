@@ -29,6 +29,7 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
+#include "target/target-types.h"
 #include "target/targeting.h"
 #include "view/display-messages.h"
 
