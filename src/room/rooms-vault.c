@@ -20,6 +20,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "room/cave-filler.h"
 #include "room/lake-types.h"
+#include "room/rooms-maze-vault.h"
 #include "room/rooms.h"
 #include "room/treasure-deployment.h"
 #include "store/store-util.h"
