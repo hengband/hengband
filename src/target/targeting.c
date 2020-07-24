@@ -1512,62 +1512,6 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
     return success;
 }
 
-bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
-{
-    *dp = 0;
-    char command;
-    DIRECTION dir = 0;
-    while (!dir) {
-        concptr p = target_okay(creature_ptr)
-            ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
-            : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
-        if (!get_com(p, &command, TRUE))
-            break;
-
-        if (use_menu && (command == '\r'))
-            command = 't';
-
-        switch (command) {
-        case 'T':
-        case 't':
-        case '.':
-        case '5':
-        case '0':
-            dir = 5;
-            break;
-        case '*':
-        case ' ':
-        case '\r':
-            if (target_set(creature_ptr, TARGET_KILL))
-                dir = 5;
-
-            break;
-        default:
-            dir = get_keymap_dir(command);
-            break;
-        }
-
-        if ((dir == 5) && !target_okay(creature_ptr))
-            dir = 0;
-
-        if (!dir)
-            bell();
-    }
-
-    if (!dir)
-        return FALSE;
-
-    command_dir = dir;
-    if (creature_ptr->confused)
-        dir = ddd[randint0(8)];
-
-    if (command_dir != dir)
-        msg_print(_("あなたは混乱している。", "You are confused."));
-
-    *dp = dir;
-    return TRUE;
-}
-
 /*!
  * @briefプレイヤーの攻撃射程(マス) / Maximum range (spells, etc)
  * @param creature_ptr プレーヤーへの参照ポインタ
