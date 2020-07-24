@@ -10,7 +10,6 @@
 #include "floor/cave.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
-#include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
@@ -24,6 +23,7 @@
 #include "room/rooms.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
 #include "wizard/wizard-messages.h"
 

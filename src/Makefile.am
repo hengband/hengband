@@ -716,6 +716,7 @@ hengband_SOURCES = \
 	system/alloc-entry-definition.h \
 	system/angband.h system/angband-version.h \
 	system/building-type-definition.c system/building-type-definition.h \
+	system/dungeon-data-definition.c system/dungeon-data-definition.h \
 	system/floor-type-definition.h \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
