@@ -5,6 +5,7 @@
 extern MONSTER_IDX target_who;
 extern POSITION target_col;
 extern POSITION target_row;
+extern bool show_gold_on_floor;
 
 void panel_bounds_center(void);
 void verify_panel(player_type *creature_ptr);
