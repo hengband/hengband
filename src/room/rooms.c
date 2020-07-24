@@ -894,7 +894,11 @@ static bool room_build(player_type *player_ptr, EFFECT_ID typ)
  * @param dst 確率を移す先の部屋種ID
  * @param src 確率を与える元の部屋種ID
  */
-#define MOVE_PLIST(dst, src) (prob_list[dst] += prob_list[src], prob_list[src] = 0)
+static void move_prob_list(room_type dst, room_type src, int *prob_list)
+{
+    prob_list[dst] += prob_list[src];
+    prob_list[src] = 0;
+}
 
 /*!
  * @brief 部屋生成処理のメインルーチン(Sangbandを経由してOangbandからの実装を引用) / Generate rooms in dungeon.  Build bigger rooms at first.　[from SAngband
@@ -945,12 +949,12 @@ bool generate_rooms(player_type *player_ptr)
 
     /*! @details ダンジョンにNO_CAVEフラグがある場合、FRACAVEの生成枠がNORMALに与えられる。CRIPT、OVALの生成枠がINNER_Fに与えられる。/ NO_CAVE dungeon */
     if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) {
-        MOVE_PLIST(ROOM_T_NORMAL, ROOM_T_FRACAVE);
-        MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_CRYPT);
-        MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_OVAL);
+        move_prob_list(ROOM_T_NORMAL, ROOM_T_FRACAVE, prob_list);
+        move_prob_list(ROOM_T_INNER_FEAT, ROOM_T_CRYPT, prob_list);
+        move_prob_list(ROOM_T_INNER_FEAT, ROOM_T_OVAL, prob_list);
     } else if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_CAVE) {
         /*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc floor_ptr->grid_array etc.) */
-        MOVE_PLIST(ROOM_T_FRACAVE, ROOM_T_NORMAL);
+        move_prob_list(ROOM_T_FRACAVE, ROOM_T_NORMAL, prob_list);
     } else if (dun->cavern || dun->empty_level) {
         /*! @details ダンジョンの基本地形が最初から渓谷かアリーナ型の場合 FRACAVE は生成から除外。 /  No caves when a (random) cavern exists: they look bad */
         prob_list[ROOM_T_FRACAVE] = 0;
