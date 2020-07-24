@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "room/room-types.h"
 #include "system/angband.h"
 
 #define DUN_ROOMS_MAX 40 /*!< 部屋生成処理の最大試行数 / Number of rooms to attempt (was 50) */
@@ -9,12 +8,6 @@
 #define MAX_LJ_DOORS 8
 
 #define MAX_DOOR_TYPES 3
-
-/* Room type information */
-typedef struct room_info_type {
-    s16b prob[ROOM_T_MAX]; /* Allocation information. */
-    byte min_level; /* Minimum level on which room can appear. */
-} room_info_type;
 
 /* A structure type for doors */
 typedef struct door_type {

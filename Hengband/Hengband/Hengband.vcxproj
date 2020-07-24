@@ -312,6 +312,7 @@
     <ClCompile Include="..\..\src\load\player-info-loader.c" />
     <ClCompile Include="..\..\src\load\store-loader.c" />
     <ClCompile Include="..\..\src\load\world-loader.c" />
+    <ClCompile Include="..\..\src\room\room-info-table.c" />
     <ClCompile Include="..\..\src\save\floor-writer.c" />
     <ClCompile Include="..\..\src\save\info-writer.c" />
     <ClCompile Include="..\..\src\save\item-writer.c" />
@@ -872,6 +873,7 @@
     <ClInclude Include="..\..\src\load\store-loader.h" />
     <ClInclude Include="..\..\src\load\world-loader.h" />
     <ClInclude Include="..\..\src\room\lake-types.h" />
+    <ClInclude Include="..\..\src\room\room-info-table.h" />
     <ClInclude Include="..\..\src\room\room-types.h" />
     <ClInclude Include="..\..\src\save\floor-writer.h" />
     <ClInclude Include="..\..\src\save\info-writer.h" />

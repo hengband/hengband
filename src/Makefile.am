@@ -603,6 +603,7 @@ hengband_SOURCES = \
 	realm/realm-types.h \
 	\
 	room/lake-types.h room/room-types.h \
+	room/room-info-table.c room/room-info-table.h \
 	room/rooms.c room/rooms.h \
 	room/rooms-city.c room/rooms-city.h \
 	room/rooms-fractal.c room/rooms-fractal.h \
