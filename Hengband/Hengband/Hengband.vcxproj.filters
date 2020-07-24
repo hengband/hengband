@@ -1877,6 +1877,9 @@
     <ClCompile Include="..\..\src\player\player-status-flags.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\room-info-table.c">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4085,6 +4088,9 @@
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\room\lake-types.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\room-info-table.h">
       <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>
