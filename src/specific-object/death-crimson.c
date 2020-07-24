@@ -1,9 +1,9 @@
 ﻿#include "specific-object/death-crimson.h"
 #include "effect/effect-characteristics.h"
 #include "floor/geometry.h"
-#include "io/targeting.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "target/targeting.h"
 
 /*!
  * @brief クリムゾンを発射する / Fire Crimson, evoluting gun.

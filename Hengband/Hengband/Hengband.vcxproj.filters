@@ -515,9 +515,6 @@
     <ClCompile Include="..\..\src\player\patron.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\targeting.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player\selfinfo.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -1901,6 +1898,9 @@
     <ClCompile Include="..\..\src\room\rooms-builder.c">
       <Filter>room</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\target\targeting.c">
+      <Filter>target</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2463,9 +2463,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\patron.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\targeting.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\selfinfo.h">
       <Filter>player</Filter>
@@ -4135,6 +4132,9 @@
     <ClInclude Include="..\..\src\room\rooms-builder.h">
       <Filter>room</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\target\targeting.h">
+      <Filter>target</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -4329,6 +4329,9 @@
     </Filter>
     <Filter Include="blue-magic">
       <UniqueIdentifier>{6b429e6d-e548-430e-9413-8bc2e0bda1ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="target">
+      <UniqueIdentifier>{1789a1b0-5c89-4dfc-a4ba-1c3b711705b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

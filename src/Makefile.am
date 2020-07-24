@@ -289,7 +289,6 @@ hengband_SOURCES = \
 	io/screen-util.c io/screen-util.h \
 	io/signal-handlers.c io/signal-handlers.h \
 	io/store-key-processor.c io/store-key-processor.h \
-	io/targeting.c io/targeting.h \
 	io/tokenizer.c io/tokenizer.h \
 	io/uid-checker.c io/uid-checker.h \
 	io/write-diary.c io/write-diary.h \
@@ -731,6 +730,8 @@ hengband_SOURCES = \
 	system/system-variables.c system/system-variables.h \
 	system/gamevalue.h \
 	\
+	target/targeting.c target/targeting.h \
+	\
 	term/gameterm.c term/gameterm.h \
 	term/screen-processor.c term/screen-processor.h \
 	term/term-color-types.h \
@@ -810,8 +811,8 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Imonster-floor -Imonster-race -Ilore -Imspell -Imutation -Iobject \
 	-Iobject-enchant -Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack \
 	-Iracial -Irealm -Iroom -Isave -Ispecific-object -Ispell -Ispell-kind \
-	-Ispell-realm -Istatus -Isv-definition -Isystem -Iterm -Iutil -Iview \
-	-Iwindow -Iwizard -Iworld
+	-Ispell-realm -Istatus -Isv-definition -Isystem -Itarget -Iterm -Iutil \
+	-Iview -Iwindow -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

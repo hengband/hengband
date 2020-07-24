@@ -10,7 +10,6 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
-#include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
@@ -20,6 +19,7 @@
 #include "spell-kind/magic-item-recharger.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "target/targeting.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -27,9 +27,9 @@
 #include "view/display-map.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
-#include "window/main-window-util.h"
 #include "view/object-describer.h"
 #include "window/main-window-equipments.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 
 /*!
