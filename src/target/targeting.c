@@ -79,6 +79,8 @@
 #include "locale/english.h"
 #endif
 
+bool show_gold_on_floor = FALSE;
+
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /
  * Calculates current boundaries Called below and from "do_cmd_locate()".
@@ -447,8 +449,6 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
     u32b num = MIN(999, exp_adv_frac);
     sprintf(buf, "%03ld", (long int)num);
 }
-
-bool show_gold_on_floor = FALSE;
 
 /*
  * Examine a grid, return a keypress.
