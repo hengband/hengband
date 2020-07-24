@@ -20,7 +20,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "room/pit-nest-kinds-table.h"
-#include "room/rooms.h"
+#include "room/space-finder.h"
 #include "system/floor-type-definition.h"
 #include "util/sort.h"
 #include "view/display-messages.h"

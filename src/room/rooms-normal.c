@@ -4,7 +4,8 @@
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
-#include "room/rooms.h"
+#include "room/rooms.h" // todo 相互依存.
+#include "room/space-finder.h"
 #include "system/floor-type-definition.h"
 
 /*!
