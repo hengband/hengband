@@ -357,6 +357,7 @@
     <ClCompile Include="..\..\src\store\sell-order.c" />
     <ClCompile Include="..\..\src\store\service-checker.c" />
     <ClCompile Include="..\..\src\system\dungeon-data-definition.c" />
+    <ClCompile Include="..\..\src\target\target-describer.c" />
     <ClCompile Include="..\..\src\view\display-inventory.c" />
     <ClCompile Include="..\..\src\view\display-map.c" />
     <ClCompile Include="..\..\src\window\display-sub-window-items.c" />
@@ -929,6 +930,7 @@
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\system\dungeon-data-definition.h" />
     <ClInclude Include="..\..\src\system\floor-type-definition.h" />
+    <ClInclude Include="..\..\src\target\target-describer.h" />
     <ClInclude Include="..\..\src\target\target-types.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />

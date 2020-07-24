@@ -6,7 +6,7 @@
 
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
-#include "target/targeting.h"
+#include "target/target-describer.h"
 
 /*
  * Used during calls to "get_item()" and "show_inven()" and "show_equip()", and the choice window routines.
