@@ -55,19 +55,15 @@
 #include "room/room-info-table.h"
 #include "room/rooms-city.h"
 #include "room/rooms-fractal.h"
-#include "room/rooms-normal.h" // todo 相互依存.
 #include "room/rooms-pit-nest.h"
 #include "room/rooms-special.h"
 #include "room/rooms-trap.h"
-#include "room/rooms-vault.h" // todo 相互依存.
 #include "room/treasure-deployment.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
-
-door_type feat_door[MAX_DOOR_TYPES];
 
 /*!
  * @brief 1マスだけの部屋を作成し、上下左右いずれか一つに隠しドアを配置する。

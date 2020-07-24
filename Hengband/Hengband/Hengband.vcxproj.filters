@@ -1898,6 +1898,9 @@
     <ClCompile Include="..\..\src\room\space-finder.c">
       <Filter>room</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\door-definition.c">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4127,6 +4130,9 @@
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\room\space-finder.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\door-definition.h">
       <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>

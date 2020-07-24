@@ -12,7 +12,7 @@
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
-#include "room/rooms.h"
+#include "room/door-definition.h"
 #include "spell/process-effect.h" // 暫定、後で消す.
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"

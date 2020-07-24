@@ -5,7 +5,7 @@
 #include "grid/trap.h"
 #include "info-reader/feature-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"
-#include "room/rooms.h"
+#include "room/door-definition.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"

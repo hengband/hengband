@@ -28,7 +28,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player/special-defense-types.h"
-#include "room/rooms.h"
+#include "room/door-definition.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
