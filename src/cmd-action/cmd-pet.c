@@ -42,6 +42,7 @@
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "target/target-types.h"
 #include "target/targeting.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"

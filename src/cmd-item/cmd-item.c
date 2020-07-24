@@ -84,6 +84,7 @@
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "sv-definition/sv-lite-types.h"
+#include "target/target-types.h"
 #include "target/targeting.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"

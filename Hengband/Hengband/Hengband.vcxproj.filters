@@ -4135,6 +4135,9 @@
     <ClInclude Include="..\..\src\target\targeting.h">
       <Filter>target</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\target\target-types.h">
+      <Filter>target</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
