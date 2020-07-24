@@ -276,42 +276,6 @@ bool target_okay(player_type *creature_ptr)
 }
 
 /*
- * Help "select" a location (see below)
- */
-static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION dx)
-{
-    POSITION_IDX b_i = -1, b_v = 9999;
-    for (POSITION_IDX i = 0; i < tmp_pos.n; i++) {
-        POSITION x2 = tmp_pos.x[i];
-        POSITION y2 = tmp_pos.y[i];
-        POSITION x3 = (x2 - x1);
-        POSITION y3 = (y2 - y1);
-        if (dx && (x3 * dx <= 0))
-            continue;
-
-        if (dy && (y3 * dy <= 0))
-            continue;
-
-        POSITION x4 = ABS(x3);
-        POSITION y4 = ABS(y3);
-        if (dy && !dx && (x4 > y4))
-            continue;
-
-        if (dx && !dy && (y4 > x4))
-            continue;
-
-        POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
-        if ((b_i >= 0) && (v >= b_v))
-            continue;
-
-        b_i = i;
-        b_v = v;
-    }
-
-    return b_i;
-}
-
-/*
  * Determine if a given location is "interesting"
  */
 static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
@@ -474,7 +438,10 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
 static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 {
     OBJECT_IDX next_o_idx = 0;
-    concptr s1 = "", s2 = "", s3 = "", x_info = "";
+    concptr s1 = "";
+    concptr s2 = "";
+    concptr s3 = "";
+    concptr x_info = "";
     bool boring = TRUE;
     FEAT_IDX feat;
     feature_type *f_ptr;
@@ -484,10 +451,8 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
     ITEM_NUMBER floor_num = 0;
     if (easy_floor) {
         floor_num = scan_floor_items(subject_ptr, floor_list, y, x, 0x02, 0);
-
-        if (floor_num) {
+        if (floor_num)
             x_info = _("x物 ", "x,");
-        }
     }
 
     if (player_bold(subject_ptr, y, x)) {
@@ -789,6 +754,42 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
         return query;
 
     return 0;
+}
+
+/*
+ * Help "select" a location (see below)
+ */
+static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION dx)
+{
+    POSITION_IDX b_i = -1, b_v = 9999;
+    for (POSITION_IDX i = 0; i < tmp_pos.n; i++) {
+        POSITION x2 = tmp_pos.x[i];
+        POSITION y2 = tmp_pos.y[i];
+        POSITION x3 = (x2 - x1);
+        POSITION y3 = (y2 - y1);
+        if (dx && (x3 * dx <= 0))
+            continue;
+
+        if (dy && (y3 * dy <= 0))
+            continue;
+
+        POSITION x4 = ABS(x3);
+        POSITION y4 = ABS(y3);
+        if (dy && !dx && (x4 > y4))
+            continue;
+
+        if (dx && !dy && (y4 > x4))
+            continue;
+
+        POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
+        if ((b_i >= 0) && (v >= b_v))
+            continue;
+
+        b_i = i;
+        b_v = v;
+    }
+
+    return b_i;
 }
 
 /*
