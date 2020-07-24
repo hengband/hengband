@@ -5,6 +5,7 @@
 #include "core/disturbance.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
 #include "floor/pattern-walk.h"
 #include "game-option/input-options.h"

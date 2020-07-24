@@ -74,13 +74,6 @@ extern floor_type floor_info;
     (((C)->info & (CAVE_VIEW)) != 0)
 
 /*
- * Determine if a "feature" is "permanent wall"
- */
-#define permanent_wall(F) \
-	(have_flag((F)->flags, FF_WALL) && \
-	 have_flag((F)->flags, FF_PERMANENT))
-
-/*
  * Convert a "location" (Y,X) into a "grid" (G)
  */
 #define GRID(Y,X) \

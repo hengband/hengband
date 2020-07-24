@@ -104,3 +104,8 @@ bool feat_supports_los(FEAT_IDX f_idx) { return have_flag(f_info[f_idx].flags, F
 bool cave_los_grid(grid_type *grid_ptr) { return feat_supports_los(grid_ptr->feat); }
 
 bool cave_have_flag_grid(grid_type *grid_ptr, int feature_flags) { return have_flag(f_info[grid_ptr->feat].flags, feature_flags); }
+
+/*
+ * Determine if a "feature" is "permanent wall"
+ */
+bool permanent_wall(feature_type *f_ptr) { return have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT); }
