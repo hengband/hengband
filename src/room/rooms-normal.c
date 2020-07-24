@@ -5,7 +5,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "room/door-definition.h"
-#include "room/rooms.h"
+#include "room/rooms-builder.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
 

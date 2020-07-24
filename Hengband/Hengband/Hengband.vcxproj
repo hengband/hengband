@@ -1233,7 +1233,7 @@
     <ClCompile Include="..\..\src\room\rooms-special.c" />
     <ClCompile Include="..\..\src\room\rooms-trap.c" />
     <ClCompile Include="..\..\src\room\rooms-vault.c" />
-    <ClCompile Include="..\..\src\room\rooms.c" />
+    <ClCompile Include="..\..\src\room\rooms-builder.c" />
     <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c" />
     <ClCompile Include="..\..\src\store\rumor.c" />
     <ClCompile Include="..\..\src\save\save.c" />
@@ -1504,7 +1504,7 @@
     <ClInclude Include="..\..\src\room\rooms-special.h" />
     <ClInclude Include="..\..\src\room\rooms-trap.h" />
     <ClInclude Include="..\..\src\room\rooms-vault.h" />
-    <ClInclude Include="..\..\src\room\rooms.h" />
+    <ClInclude Include="..\..\src\room\rooms-builder.h" />
     <ClInclude Include="..\..\src\store\rumor.h" />
     <ClInclude Include="..\..\src\save\save.h" />
     <ClInclude Include="..\..\src\core\scores.h" />
