@@ -4081,6 +4081,12 @@
     <ClInclude Include="..\..\src\player\player-status-flags.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\room\room-types.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\lake-types.h">
+      <Filter>room</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
