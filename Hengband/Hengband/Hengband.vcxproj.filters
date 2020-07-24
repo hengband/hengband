@@ -398,9 +398,6 @@
     <ClCompile Include="..\..\src\object\object-broken.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms.c">
-      <Filter>room</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\room\rooms-city.c">
       <Filter>room</Filter>
     </ClCompile>
@@ -1901,6 +1898,9 @@
     <ClCompile Include="..\..\src\room\door-definition.c">
       <Filter>room</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-builder.c">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2331,9 +2331,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-broken.h">
       <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\room\rooms.h">
-      <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\room\rooms-city.h">
       <Filter>room</Filter>
@@ -4133,6 +4130,9 @@
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\room\door-definition.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-builder.h">
       <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>

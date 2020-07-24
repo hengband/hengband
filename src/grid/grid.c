@@ -39,7 +39,7 @@
 #include "object/object-mark-types.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
-#include "room/rooms.h"
+#include "room/rooms-builder.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"

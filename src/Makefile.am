@@ -607,7 +607,7 @@ hengband_SOURCES = \
 	room/lake-types.h room/room-types.h \
 	room/room-generator.c room/room-generator.h \
 	room/room-info-table.c room/room-info-table.h \
-	room/rooms.c room/rooms.h \
+	room/rooms-builder.c room/rooms-builder.h \
 	room/rooms-city.c room/rooms-city.h \
 	room/rooms-fractal.c room/rooms-fractal.h \
 	room/rooms-maze-vault.c room/rooms-maze-vault.h \

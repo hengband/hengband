@@ -35,7 +35,7 @@
  * None of the pits/nests are allowed to include "unique" monsters.\n
  */
 
-#include "room/rooms.h"
+#include "room/rooms-builder.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
