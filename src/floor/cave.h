@@ -3,6 +3,7 @@
 #include "system/angband.h"
 
 typedef enum feature_flag_type feature_flag_type;
+typedef struct feature_type feature_type;
 typedef struct grid_type grid_type;
 bool in_bounds(floor_type *floor_ptr, POSITION y, POSITION x);
 bool in_bounds2(floor_type *floor_ptr, POSITION y, POSITION x);
@@ -17,3 +18,4 @@ bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x);
 bool feat_supports_los(FEAT_IDX f_idx);
 bool cave_los_grid(grid_type *grid_ptr);
 bool cave_have_flag_grid(grid_type *grid_ptr, int feature_flags);
+bool permanent_wall(feature_type *f_ptr);
