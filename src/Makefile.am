@@ -604,6 +604,7 @@ hengband_SOURCES = \
 	\
 	room/cave-filler.c room/cave-filler.h \
 	room/lake-types.h room/room-types.h \
+	room/room-generator.c room/room-generator.h \
 	room/room-info-table.c room/room-info-table.h \
 	room/rooms.c room/rooms.h \
 	room/rooms-city.c room/rooms-city.h \
