@@ -48,6 +48,7 @@
 #include "player/player-status.h"
 #include "room/lake-types.h"
 #include "room/room-generator.h"
+#include "room/rooms-maze-vault.h"
 #include "room/rooms.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"

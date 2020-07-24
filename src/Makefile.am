@@ -609,6 +609,7 @@ hengband_SOURCES = \
 	room/rooms.c room/rooms.h \
 	room/rooms-city.c room/rooms-city.h \
 	room/rooms-fractal.c room/rooms-fractal.h \
+	room/rooms-maze-vault.c room/rooms-maze-vault.h \
 	room/rooms-normal.c room/rooms-normal.h \
 	room/rooms-special.c room/rooms-special.h \
 	room/rooms-trap.c room/rooms-trap.h \
