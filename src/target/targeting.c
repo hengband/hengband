@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "io/targeting.h"
+#include "target/targeting.h"
 #include "action/travel-execution.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-building/cmd-building.h"

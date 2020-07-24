@@ -11,7 +11,6 @@
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-indice-types.h"
@@ -26,6 +25,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "target/targeting.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
