@@ -152,3 +152,8 @@ void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char)
  * Not using graphical tiles for this feature?
  */
 bool is_ascii_graphics(char x) { return (x & 0x80) == 0; }
+
+/*
+ * Determine if a "feature" is "permanent wall"
+ */
+bool permanent_wall(feature_type *f_ptr) { return have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT); }
