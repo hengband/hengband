@@ -32,6 +32,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "target/grid-selector.h"
 #include "target/targeting.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

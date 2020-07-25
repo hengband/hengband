@@ -17,6 +17,7 @@
 #include "spell-realm/spells-chaos.h"
 #include "spell/spells-status.h"
 #include "system/floor-type-definition.h"
+#include "target/grid-selector.h"
 #include "target/targeting.h"
 #include "view/display-messages.h"
 

@@ -730,6 +730,7 @@ hengband_SOURCES = \
 	system/system-variables.c system/system-variables.h \
 	system/gamevalue.h \
 	\
+	target/grid-selector.c target/grid-selector.h \
 	target/target-describer.c target/target-describer.h \
 	target/target-preparation.c target/target-preparation.h \
 	target/target-types.h \

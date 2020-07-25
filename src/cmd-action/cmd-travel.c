@@ -6,7 +6,7 @@
 #include "grid/grid.h"
 #include "player/player-move.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/grid-selector.h"
 #include "view/display-messages.h"
 #include "util/bit-flags-calculator.h"
 
