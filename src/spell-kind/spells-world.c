@@ -28,6 +28,7 @@
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "target/target-setter.h"
 #include "target/target-types.h"
 #include "target/targeting.h"
 #include "term/screen-processor.h"
