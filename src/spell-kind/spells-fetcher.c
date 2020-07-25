@@ -16,7 +16,6 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "target/target-checker.h"
-#include "target/target-preparation.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "util/bit-flags-calculator.h"

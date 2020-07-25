@@ -30,7 +30,6 @@
 #include "room/door-definition.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "target/target-preparation.h" // todo get_max_range() が相互依存.
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
@@ -469,6 +468,13 @@ bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITIO
 
     return TRUE;
 }
+
+/*!
+ * @briefプレイヤーの攻撃射程(マス) / Maximum range (spells, etc)
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 射程
+ */
+int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 36 : 18; }
 
 /*
  * Determine if a bolt spell cast from (y1,x1) to (y2,x2) will arrive

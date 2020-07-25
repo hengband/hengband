@@ -1,6 +1,6 @@
 ﻿#include "target/target-preparation.h"
 #include "floor/cave.h"
-#include "floor/floor.h" // todo projectable() が相互依存.
+#include "floor/floor.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -49,13 +49,6 @@ bool target_able(player_type *creature_ptr, MONSTER_IDX m_idx)
 
     return TRUE;
 }
-
-/*!
- * @briefプレイヤーの攻撃射程(マス) / Maximum range (spells, etc)
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return 射程
- */
-int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 36 : 18; }
 
 /*
  * Determine if a given location is "interesting"
