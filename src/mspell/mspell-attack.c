@@ -29,7 +29,7 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-preparation.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP

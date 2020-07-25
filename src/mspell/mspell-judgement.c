@@ -28,7 +28,7 @@
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-preparation.h"
 
 /*!
  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
