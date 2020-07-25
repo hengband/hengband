@@ -24,7 +24,7 @@
 #include "spell/range-calc.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-preparation.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

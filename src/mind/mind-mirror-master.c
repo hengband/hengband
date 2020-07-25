@@ -21,6 +21,7 @@
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "target/target-preparation.h"
 #include "target/targeting.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"

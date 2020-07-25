@@ -12,6 +12,7 @@
 #include "grid/grid.h"
 #include "io/screen-util.h"
 #include "system/floor-type-definition.h"
+#include "target/target-preparation.h"
 #include "target/targeting.h"
 #include "term/term-color-types.h"
 #include "view/display-map.h"
@@ -43,7 +44,8 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
         return;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    int path_n = project_path(player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
+    int path_n = project_path(
+        player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
     player_ptr->redraw |= (PR_MAP);
     handle_stuff(player_ptr);
     for (int i = 0; i < path_n; i++) {

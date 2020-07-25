@@ -731,6 +731,7 @@ hengband_SOURCES = \
 	system/gamevalue.h \
 	\
 	target/target-describer.c target/target-describer.h \
+	target/target-preparation.c target/target-preparation.h \
 	target/target-types.h \
 	target/targeting.c target/targeting.h \
 	\
