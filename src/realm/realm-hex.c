@@ -55,6 +55,7 @@
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "target/grid-selector.h"
 #include "target/targeting.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"

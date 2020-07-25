@@ -1907,6 +1907,9 @@
     <ClCompile Include="..\..\src\target\target-preparation.c">
       <Filter>target</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\target\grid-selector.c">
+      <Filter>target</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4148,6 +4151,9 @@
       <Filter>target</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\target\target-preparation.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\grid-selector.h">
       <Filter>target</Filter>
     </ClInclude>
   </ItemGroup>
