@@ -42,17 +42,6 @@
  */
 floor_type floor_info;
 
-/*
- * Grid based version of "cave_empty_bold()"
- */
-bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
-{
-    bool is_empty_grid = cave_have_flag_grid(g_ptr, FF_PLACE);
-    is_empty_grid &= g_ptr->m_idx == 0;
-    is_empty_grid &= !player_grid(player_ptr, g_ptr);
-    return is_empty_grid;
-}
-
 bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_have_flag_bold(floor_ptr, y, x, FF_PATTERN); }
 
 /*!
@@ -497,8 +486,19 @@ bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
     return TRUE;
 }
 
+/*
+ * Grid based version of "cave_empty_bold()"
+ */
+static bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
+{
+    bool is_empty_grid = cave_have_flag_grid(g_ptr, FF_PLACE);
+    is_empty_grid &= g_ptr->m_idx == 0;
+    is_empty_grid &= !player_grid(player_ptr, g_ptr);
+    return is_empty_grid;
+}
+
 /*!
- * @brief 特殊な部屋地形向けにモンスターを配置する / Hack -- Place some sleeping monsters near the given location
+ * @brief 特殊な部屋地形向けにモンスターを配置する / Place some sleeping monsters near the given location
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y1 モンスターを配置したいマスの中心Y座標
  * @param x1 モンスターを配置したいマスの中心X座標
@@ -778,45 +778,6 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 
     cave_set_feat(player_ptr, y, x, feat);
     floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-}
-
-/*!
- * @brief 特殊な部屋向けに各種アイテムを配置する(vault_trapのサブセット) / Place a trap with a given displacement of point
- * @param y トラップを配置したいマスの中心Y座標
- * @param x トラップを配置したいマスの中心X座標
- * @param yd Y方向の配置分散マス数
- * @param xd X方向の配置分散マス数
- * @return なし
- * @details
- * Only really called by some of the "vault" routines.
- */
-void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
-{
-    grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    int y1 = y, x1 = x;
-    int dummy = 0;
-    for (int count = 0; count <= 5; count++) {
-        while (dummy < SAFE_MAX_ATTEMPTS) {
-            y1 = rand_spread(y, yd);
-            x1 = rand_spread(x, xd);
-            dummy++;
-            if (!in_bounds(floor_ptr, y1, x1))
-                continue;
-            break;
-        }
-
-        if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room) {
-            msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
-        }
-
-        g_ptr = &floor_ptr->grid_array[y1][x1];
-        if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx)
-            continue;
-
-        place_trap(player_ptr, y1, x1);
-        break;
-    }
 }
 
 /*!
@@ -1495,6 +1456,46 @@ void compact_objects(player_type *player_ptr, int size)
 }
 
 /*!
+ * @brief 特殊な部屋向けに各種アイテムを配置する(vault_trapのサブセット) / Place a trap with a given displacement of point
+ * @param y トラップを配置したいマスの中心Y座標
+ * @param x トラップを配置したいマスの中心X座標
+ * @param yd Y方向の配置分散マス数
+ * @param xd X方向の配置分散マス数
+ * @return なし
+ * @details
+ * Only really called by some of the "vault" routines.
+ */
+static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
+{
+    grid_type *g_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    int y1 = y, x1 = x;
+    int dummy = 0;
+    for (int count = 0; count <= 5; count++) {
+        while (dummy < SAFE_MAX_ATTEMPTS) {
+            y1 = rand_spread(y, yd);
+            x1 = rand_spread(x, xd);
+            dummy++;
+            if (!in_bounds(floor_ptr, y1, x1))
+                continue;
+            break;
+        }
+
+        if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room) {
+            msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
+        }
+
+        g_ptr = &floor_ptr->grid_array[y1][x1];
+        if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx)
+            continue;
+
+        place_trap(player_ptr, y1, x1);
+        break;
+    }
+}
+
+/*!
+ * todo rooms-normal からしか呼ばれていない、要調整
  * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y トラップを配置したいマスの中心Y座標
