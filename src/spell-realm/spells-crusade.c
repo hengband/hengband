@@ -19,9 +19,9 @@
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "target/target-checker.h"
 #include "target/target-preparation.h"
 #include "target/target-getter.h"
-#include "target/targeting.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

@@ -731,12 +731,12 @@ hengband_SOURCES = \
 	system/gamevalue.h \
 	\
 	target/grid-selector.c target/grid-selector.h \
+	target/target-checker.c target/target-checker.h \
 	target/target-describer.c target/target-describer.h \
 	target/target-getter.c target/target-getter.h \
 	target/target-preparation.c target/target-preparation.h \
 	target/target-setter.c target/target-setter.h \
 	target/target-types.h \
-	target/targeting.c target/targeting.h \
 	\
 	term/gameterm.c term/gameterm.h \
 	term/screen-processor.c term/screen-processor.h \

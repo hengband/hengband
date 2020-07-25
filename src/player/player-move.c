@@ -35,7 +35,7 @@
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

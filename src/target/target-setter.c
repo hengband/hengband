@@ -13,10 +13,10 @@
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
 #include "system/floor-type-definition.h"
+#include "target/target-checker.h"
 #include "target/target-describer.h"
 #include "target/target-preparation.h"
 #include "target/target-types.h"
-#include "target/targeting.h" // todo 相互依存.
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "window/main-window-util.h"

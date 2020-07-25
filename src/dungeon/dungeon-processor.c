@@ -30,7 +30,7 @@
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-checker.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"

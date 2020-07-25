@@ -3,7 +3,7 @@
 #include "floor/geometry.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
-#include "target/targeting.h"
+#include "target/target-checker.h"
 
 /*!
  * @brief ボール系スペルの発動 / Cast a ball spell

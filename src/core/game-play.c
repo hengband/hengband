@@ -76,7 +76,7 @@
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
-#include "target/targeting.h"
+#include "target/target-checker.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"

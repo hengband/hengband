@@ -1898,9 +1898,6 @@
     <ClCompile Include="..\..\src\room\rooms-builder.c">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\target\targeting.c">
-      <Filter>target</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\target\target-describer.c">
       <Filter>target</Filter>
     </ClCompile>
@@ -1914,6 +1911,9 @@
       <Filter>target</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\target\target-getter.c">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\target\target-checker.c">
       <Filter>target</Filter>
     </ClCompile>
   </ItemGroup>
@@ -4147,9 +4147,6 @@
     <ClInclude Include="..\..\src\room\rooms-builder.h">
       <Filter>room</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\target\targeting.h">
-      <Filter>target</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\target\target-types.h">
       <Filter>target</Filter>
     </ClInclude>
@@ -4166,6 +4163,9 @@
       <Filter>target</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\target\target-getter.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\target-checker.h">
       <Filter>target</Filter>
     </ClInclude>
   </ItemGroup>
