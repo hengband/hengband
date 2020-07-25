@@ -92,40 +92,6 @@ void panel_bounds_center(void)
 }
 
 /*!
- * @brief フォーカスを当てるべきマップ描画の基準座標を指定する
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param y 変更先のフロアY座標
- * @param x 変更先のフロアX座標
- * @details
- * Handle a request to change the current panel
- * Return TRUE if the panel was changed.
- * Also used in do_cmd_locate
- * @return 実際に再描画が必要だった場合TRUEを返す
- */
-static bool change_panel_xy(player_type *creature_ptr, POSITION y, POSITION x)
-{
-    POSITION dy = 0, dx = 0;
-    TERM_LEN wid, hgt;
-    get_screen_size(&wid, &hgt);
-    if (y < panel_row_min)
-        dy = -1;
-
-    if (y > panel_row_max)
-        dy = 1;
-
-    if (x < panel_col_min)
-        dx = -1;
-
-    if (x > panel_col_max)
-        dx = 1;
-
-    if (!dy && !dx)
-        return FALSE;
-
-    return change_panel(creature_ptr, dy, dx);
-}
-
-/*!
  * @brief マップ描画のフォーカスを当てるべき座標を更新する
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @details
@@ -371,6 +337,40 @@ static void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
 }
 
 void target_set_prepare_look(player_type *creature_ptr) { target_set_prepare(creature_ptr, TARGET_LOOK); }
+
+/*!
+ * @brief フォーカスを当てるべきマップ描画の基準座標を指定する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param y 変更先のフロアY座標
+ * @param x 変更先のフロアX座標
+ * @details
+ * Handle a request to change the current panel
+ * Return TRUE if the panel was changed.
+ * Also used in do_cmd_locate
+ * @return 実際に再描画が必要だった場合TRUEを返す
+ */
+static bool change_panel_xy(player_type *creature_ptr, POSITION y, POSITION x)
+{
+    POSITION dy = 0, dx = 0;
+    TERM_LEN wid, hgt;
+    get_screen_size(&wid, &hgt);
+    if (y < panel_row_min)
+        dy = -1;
+
+    if (y > panel_row_max)
+        dy = 1;
+
+    if (x < panel_col_min)
+        dx = -1;
+
+    if (x > panel_col_max)
+        dx = 1;
+
+    if (!dy && !dx)
+        return FALSE;
+
+    return change_panel(creature_ptr, dy, dx);
+}
 
 /*
  * Help "select" a location (see below)
