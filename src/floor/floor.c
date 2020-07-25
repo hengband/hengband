@@ -539,7 +539,7 @@ void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    if (cave_perma_grid(g_ptr))
+    if (cave_have_flag_grid(g_ptr, FF_PERMANENT))
         return FALSE;
 
     OBJECT_IDX next_o_idx = 0;
