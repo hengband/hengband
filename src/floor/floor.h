@@ -12,33 +12,6 @@ extern floor_type floor_info;
 
 
 /*
- * Determine if an object can be dropped on a "legal" grid
- *
- * Line 1 -- forbid non-drops
- * Line 2 -- forbid object terrains
- */
-#define cave_drop_bold(F,Y,X) \
-	(cave_have_flag_bold((F), (Y), (X), FF_DROP) && \
-	 !((F)->grid_array[Y][X].info & CAVE_OBJECT))
-
-
-/*
- * Determine if a "legal" grid is "permanent"
- *
- * Line 1 -- permanent flag
- */
-#define cave_perma_bold(F,Y,X) \
-	(cave_have_flag_bold((F), (Y), (X), FF_PERMANENT))
-
-
-/*
- * Grid based version of "cave_perma_bold()"
- */
-#define cave_perma_grid(C) \
-	(cave_have_flag_grid((C), FF_PERMANENT))
-
-
-/*
  * Determine if a "legal" grid is within "los" of the player
  *
  * Note the use of comparison to zero to force a "boolean" result
