@@ -78,21 +78,6 @@
 #include "world/world.h"
 
 /*!
- * @brief コンソール上におけるマップ表示の左上位置を返す /
- * Calculates current boundaries Called below and from "do_cmd_locate()".
- * @return なし
- */
-void panel_bounds_center(void)
-{
-    TERM_LEN wid, hgt;
-    get_screen_size(&wid, &hgt);
-    panel_row_max = panel_row_min + hgt - 1;
-    panel_row_prt = panel_row_min - 1;
-    panel_col_max = panel_col_min + wid - 1;
-    panel_col_prt = panel_col_min - 13;
-}
-
-/*!
  * @brief マップ描画のフォーカスを当てるべき座標を更新する
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @details
