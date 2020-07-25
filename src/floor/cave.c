@@ -109,3 +109,16 @@ bool cave_have_flag_grid(grid_type *grid_ptr, int feature_flags) { return have_f
  * Determine if a "feature" is "permanent wall"
  */
 bool permanent_wall(feature_type *f_ptr) { return have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT); }
+
+/*
+ * Determine if a "legal" grid is a "clean" floor grid
+ * Determine if terrain-change spells are allowed in a grid.
+ *
+ * Line 1 -- forbid non-floors
+ * Line 2 -- forbid object terrains
+ * Line 3 -- forbid normal objects
+ */
+bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+    return cave_have_flag_bold(floor_ptr, y, x, FF_FLOOR) && ((floor_ptr->grid_array[y][x].info & CAVE_OBJECT) == 0) && (floor_ptr->grid_array[y][x].o_idx == 0);
+}

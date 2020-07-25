@@ -19,3 +19,4 @@ bool feat_supports_los(FEAT_IDX f_idx);
 bool cave_los_grid(grid_type *grid_ptr);
 bool cave_have_flag_grid(grid_type *grid_ptr, int feature_flags);
 bool permanent_wall(feature_type *f_ptr);
+bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x);

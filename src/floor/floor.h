@@ -12,20 +12,6 @@ extern floor_type floor_info;
 
 
 /*
- * Determine if a "legal" grid is a "clean" floor grid
- * Determine if terrain-change spells are allowed in a grid.
- *
- * Line 1 -- forbid non-floors
- * Line 2 -- forbid object terrains
- * Line 3 -- forbid normal objects
- */
-#define cave_clean_bold(F,Y,X) \
-	(cave_have_flag_bold((F), (Y), (X), FF_FLOOR) && \
-	 !((F)->grid_array[Y][X].info & CAVE_OBJECT) && \
-	  ((F)->grid_array[Y][X].o_idx == 0))
-
-
-/*
  * Determine if an object can be dropped on a "legal" grid
  *
  * Line 1 -- forbid non-drops
@@ -34,19 +20,6 @@ extern floor_type floor_info;
 #define cave_drop_bold(F,Y,X) \
 	(cave_have_flag_bold((F), (Y), (X), FF_DROP) && \
 	 !((F)->grid_array[Y][X].info & CAVE_OBJECT))
-
-
-/*
- * Determine if a "legal" grid is an "naked" floor grid
- *
- * Line 1 -- forbid non-clean gird
- * Line 2 -- forbid monsters
- * Line 3 -- forbid the player
- */
-#define cave_naked_bold(C,F,Y,X) \
-	(cave_clean_bold(F,Y,X) && \
-	 !((F)->grid_array[Y][X].m_idx) && \
-	 !player_bold(C,Y,X))
 
 
 /*
