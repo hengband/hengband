@@ -6,9 +6,6 @@ extern MONSTER_IDX target_who;
 extern POSITION target_col;
 extern POSITION target_row;
 
-typedef enum target_type target_type;
-bool target_set(player_type *creature_ptr, target_type mode);
-
 void verify_panel(player_type *creature_ptr);
 bool target_okay(player_type *creature_ptr);
 bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp);
