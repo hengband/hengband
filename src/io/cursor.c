@@ -13,7 +13,6 @@
 #include "io/screen-util.h"
 #include "system/floor-type-definition.h"
 #include "target/target-preparation.h"
-#include "target/targeting.h"
 #include "term/term-color-types.h"
 #include "view/display-map.h"
 #include "window/main-window-util.h"
@@ -131,4 +130,19 @@ bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
     player_ptr->redraw |= (PR_MAP);
     handle_stuff(player_ptr);
     return TRUE;
+}
+
+/*!
+ * @brief コンソール上におけるマップ表示の左上位置を返す /
+ * Calculates current boundaries Called below and from "do_cmd_locate()".
+ * @return なし
+ */
+void panel_bounds_center(void)
+{
+    TERM_LEN wid, hgt;
+    get_screen_size(&wid, &hgt);
+    panel_row_max = panel_row_min + hgt - 1;
+    panel_row_prt = panel_row_min - 1;
+    panel_col_max = panel_col_min + wid - 1;
+    panel_col_prt = panel_col_min - 13;
 }
