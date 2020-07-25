@@ -261,7 +261,6 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
  */
 bool target_set(player_type *creature_ptr, target_type mode)
 {
-    int i, d, t, bd;
     POSITION y = creature_ptr->y;
     POSITION x = creature_ptr->x;
     bool done = FALSE;
@@ -303,7 +302,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
                     break;
             }
 
-            d = 0;
+            int d = 0;
             if (use_menu) {
                 if (query == '\r')
                     query = 't';
@@ -387,7 +386,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
             if (d) {
                 POSITION y2 = panel_row_min;
                 POSITION x2 = panel_col_min;
-                i = target_pick(tmp_pos.y[m], tmp_pos.x[m], ddy[d], ddx[d]);
+                int i = target_pick(tmp_pos.y[m], tmp_pos.x[m], ddy[d], ddx[d]);
                 while (flag && (i < 0)) {
                     if (change_panel(creature_ptr, ddy[d], ddx[d])) {
                         int v = tmp_pos.y[m];
@@ -459,7 +458,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
         while ((query = examine_grid(creature_ptr, y, x, mode | TARGET_LOOK, info)) == 0)
             ;
 
-        d = 0;
+        int d = 0;
         if (use_menu && (query == '\r'))
             query = 't';
 
@@ -495,9 +494,9 @@ bool target_set(player_type *creature_ptr, target_type mode)
         case 'm': {
             flag = TRUE;
             m = 0;
-            bd = 999;
-            for (i = 0; i < tmp_pos.n; i++) {
-                t = distance(y, x, tmp_pos.y[i], tmp_pos.x[i]);
+            int bd = 999;
+            for (int i = 0; i < tmp_pos.n; i++) {
+                int t = distance(y, x, tmp_pos.y[i], tmp_pos.x[i]);
                 if (t < bd) {
                     m = i;
                     bd = t;
