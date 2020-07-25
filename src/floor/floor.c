@@ -487,6 +487,11 @@ bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
 }
 
 /*
+ * Grid based version of "creature_bold()"
+ */
+static bool player_grid(player_type *player_ptr, grid_type *g_ptr) { return g_ptr == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x]; }
+
+/*
  * Grid based version of "cave_empty_bold()"
  */
 static bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
@@ -553,6 +558,12 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 
     return TRUE;
 }
+
+/*
+ * Determine if a "legal" grid is within "los" of the player *
+ * Note the use of comparison to zero to force a "boolean" result
+ */
+static bool player_has_los_grid(grid_type *g_ptr) { return (g_ptr->info & CAVE_VIEW) != 0; }
 
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid

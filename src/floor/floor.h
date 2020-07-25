@@ -5,21 +5,6 @@
 extern floor_type floor_info;
 
 /*
- * Grid based version of "creature_bold()"
- */
-#define player_grid(C, G) \
-	((G) == &(C)->current_floor_ptr->grid_array[(C)->y][(C)->x])
-
-
-/*
- * Determine if a "legal" grid is within "los" of the player
- *
- * Note the use of comparison to zero to force a "boolean" result
- */
-#define player_has_los_grid(C) \
-    (((C)->info & (CAVE_VIEW)) != 0)
-
-/*
  * Convert a "location" (Y,X) into a "grid" (G)
  */
 #define GRID(Y,X) \
