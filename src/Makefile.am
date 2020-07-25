@@ -732,6 +732,7 @@ hengband_SOURCES = \
 	\
 	target/grid-selector.c target/grid-selector.h \
 	target/target-describer.c target/target-describer.h \
+	target/target-getter.c target/target-getter.h \
 	target/target-preparation.c target/target-preparation.h \
 	target/target-setter.c target/target-setter.h \
 	target/target-types.h \

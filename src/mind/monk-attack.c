@@ -21,7 +21,7 @@
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"

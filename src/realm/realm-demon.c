@@ -23,7 +23,7 @@
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

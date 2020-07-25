@@ -21,7 +21,7 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

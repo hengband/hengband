@@ -31,7 +31,7 @@
 #include "status/action-setter.h"
 #include "status/experience.h"
 #include "sv-definition/sv-wand-types.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"

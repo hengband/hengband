@@ -4,7 +4,7 @@
 #include "mspell/mspell-type.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 bool cast_blue_ball_acid(player_type *caster_ptr, bmc_type *bmc_ptr)

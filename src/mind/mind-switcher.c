@@ -79,6 +79,7 @@
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
+#include "target/target-getter.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "target/targeting.h"

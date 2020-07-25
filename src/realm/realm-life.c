@@ -20,7 +20,7 @@
 #include "status/experience.h"
 #include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 
 /*!
  * @brief 生命領域魔法の各処理を行う

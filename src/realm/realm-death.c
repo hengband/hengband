@@ -25,7 +25,7 @@
 #include "status/element-resistance.h"
 #include "status/experience.h"
 #include "status/shape-changer.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 
 /*!
  * @brief 暗黒領域魔法の各処理を行う

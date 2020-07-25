@@ -11,7 +11,7 @@
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

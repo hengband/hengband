@@ -33,7 +33,7 @@
 #include "status/base-status.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

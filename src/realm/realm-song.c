@@ -22,7 +22,7 @@
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

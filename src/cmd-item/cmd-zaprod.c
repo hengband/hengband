@@ -37,7 +37,7 @@
 #include "status/shape-changer.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
