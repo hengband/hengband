@@ -20,6 +20,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "status/sight-setter.h"
+#include "target/target-getter.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "target/targeting.h"

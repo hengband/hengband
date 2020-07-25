@@ -2,7 +2,7 @@
 #include "cmd-action/cmd-attack.h"
 #include "spell-kind/spells-teleport.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

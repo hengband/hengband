@@ -15,7 +15,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 bool android_inside_weapon(player_type *creature_ptr)

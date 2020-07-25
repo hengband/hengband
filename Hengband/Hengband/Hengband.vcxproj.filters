@@ -1913,6 +1913,9 @@
     <ClCompile Include="..\..\src\target\target-setter.c">
       <Filter>target</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\target\target-getter.c">
+      <Filter>target</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4160,6 +4163,9 @@
       <Filter>target</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\target\target-setter.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\target-getter.h">
       <Filter>target</Filter>
     </ClInclude>
   </ItemGroup>

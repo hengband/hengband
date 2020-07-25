@@ -34,7 +34,7 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "sv-definition/sv-food-types.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

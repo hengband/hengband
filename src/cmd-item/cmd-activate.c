@@ -96,7 +96,7 @@
 #include "sv-definition/sv-ring-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"

@@ -21,7 +21,7 @@
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
 #include "status/sight-setter.h"
-#include "target/targeting.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

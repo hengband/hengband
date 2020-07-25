@@ -359,6 +359,7 @@
     <ClCompile Include="..\..\src\system\dungeon-data-definition.c" />
     <ClCompile Include="..\..\src\target\grid-selector.c" />
     <ClCompile Include="..\..\src\target\target-describer.c" />
+    <ClCompile Include="..\..\src\target\target-getter.c" />
     <ClCompile Include="..\..\src\target\target-preparation.c" />
     <ClCompile Include="..\..\src\target\target-setter.c" />
     <ClCompile Include="..\..\src\view\display-inventory.c" />
@@ -935,6 +936,7 @@
     <ClInclude Include="..\..\src\system\floor-type-definition.h" />
     <ClInclude Include="..\..\src\target\grid-selector.h" />
     <ClInclude Include="..\..\src\target\target-describer.h" />
+    <ClInclude Include="..\..\src\target\target-getter.h" />
     <ClInclude Include="..\..\src\target\target-preparation.h" />
     <ClInclude Include="..\..\src\target\target-setter.h" />
     <ClInclude Include="..\..\src\target\target-types.h" />
