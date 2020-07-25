@@ -99,6 +99,7 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x);
 void forget_flow(floor_type *floor_ptr);
 void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x);
 bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+int get_max_range(player_type *creature_ptr);
 bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num);
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);

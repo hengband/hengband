@@ -6,6 +6,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/floor.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"
@@ -29,7 +30,6 @@
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "system/floor-type-definition.h"
-#include "target/target-preparation.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
