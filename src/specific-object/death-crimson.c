@@ -3,8 +3,8 @@
 #include "floor/geometry.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "target/target-checker.h"
 #include "target/target-getter.h"
-#include "target/targeting.h"
 
 /*!
  * @brief クリムゾンを発射する / Fire Crimson, evoluting gun.

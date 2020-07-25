@@ -12,7 +12,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-checker.h"
 
 /*!
  * @brief モンスター配列からモンスターを消去する / Delete a monster by index.

@@ -18,7 +18,7 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-checker.h"
 #include "view/display-messages.h"
 
 /*!

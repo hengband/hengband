@@ -12,7 +12,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
 #include "system/floor-type-definition.h"
-#include "target/targeting.h"
+#include "target/target-checker.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"

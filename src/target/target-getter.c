@@ -11,9 +11,9 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "system/floor-type-definition.h"
+#include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
-#include "target/targeting.h"
 #include "view/display-messages.h"
 
 /*

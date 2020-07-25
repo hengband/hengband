@@ -9,7 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "target/targeting.h"
+#include "target/target-checker.h"
 #include "action/travel-execution.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-building/cmd-building.h"
@@ -65,8 +65,7 @@
 #include "system/system-variables.h"
 #include "target/target-describer.h"
 #include "target/target-preparation.h"
-#include "target/target-setter.h"
-#include "target/target-types.h" // todo 相互依存.
+#include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"

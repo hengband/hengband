@@ -1286,7 +1286,7 @@
     <ClCompile Include="..\..\src\view\status-first-page.c" />
     <ClCompile Include="..\..\src\store\store.c" />
     <ClCompile Include="..\..\src\floor\floor-streams.c" />
-    <ClCompile Include="..\..\src\target\targeting.c" />
+    <ClCompile Include="..\..\src\target\target-checker.c" />
     <ClCompile Include="..\..\src\term\gameterm.c" />
     <ClCompile Include="..\..\src\grid\trap.c" />
     <ClCompile Include="..\..\src\io\screen-util.c" />
@@ -1530,7 +1530,7 @@
     <ClInclude Include="..\..\src\floor\floor-streams.h" />
     <ClInclude Include="..\..\src\spell\range-calc.h" />
     <ClInclude Include="..\..\src\store\store.h" />
-    <ClInclude Include="..\..\src\target\targeting.h" />
+    <ClInclude Include="..\..\src\target\target-checker.h" />
     <ClInclude Include="..\..\src\term\gameterm.h" />
     <ClInclude Include="..\..\src\grid\trap.h" />
     <ClInclude Include="..\..\src\system\alloc-entry-definition.h" />

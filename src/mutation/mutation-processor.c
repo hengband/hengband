@@ -38,9 +38,9 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
+#include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
-#include "target/targeting.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
