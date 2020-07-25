@@ -30,7 +30,7 @@
 #include "room/door-definition.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "target/target-preparation.h" // todo 相互依存.
+#include "target/target-preparation.h" // todo get_max_range() が相互依存.
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"

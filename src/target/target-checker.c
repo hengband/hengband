@@ -10,72 +10,19 @@
  */
 
 #include "target/target-checker.h"
-#include "action/travel-execution.h"
-#include "cmd-action/cmd-pet.h"
-#include "cmd-building/cmd-building.h"
-#include "core/asking-player.h"
-#include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "dungeon/dungeon.h"
-#include "dungeon/quest.h"
-#include "effect/spells-effect-util.h"
-#include "flavor/flavor-describer.h"
-#include "floor/cave.h"
-#include "floor/floor-events.h"
-#include "floor/floor-object.h"
-#include "floor/floor-town.h"
-#include "floor/floor.h"
-#include "floor/object-scanner.h"
-#include "game-option/cheat-options.h"
+#include "core/disturbance.h"
 #include "game-option/disturbance-options.h"
-#include "game-option/game-play-options.h"
-#include "game-option/input-options.h"
-#include "game-option/keymap-directory-getter.h"
 #include "game-option/map-screen-options.h"
-#include "grid/feature.h"
-#include "grid/grid.h"
-#include "info-reader/fixed-map-parser.h"
-#include "io/command-repeater.h"
 #include "io/cursor.h"
-#include "io/input-key-acceptor.h"
-#include "io/input-key-requester.h"
 #include "io/screen-util.h"
-#include "main/sound-of-music.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster/monster-describer.h"
-#include "monster/monster-description-types.h"
-#include "monster/monster-flag-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "monster/monster-update.h"
-#include "monster/smart-learn-types.h"
-#include "object-enchant/object-curse.h"
-#include "object/object-kind-hook.h"
-#include "object/object-mark-types.h"
-#include "player/player-race-types.h"
-#include "player/player-status.h"
-#include "spell/spells-summon.h"
-#include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "system/system-variables.h"
-#include "target/target-describer.h"
+#include "system/monster-type-definition.h"
 #include "target/target-preparation.h"
 #include "target/target-types.h"
-#include "term/screen-processor.h"
-#include "term/term-color-types.h"
-#include "util/bit-flags-calculator.h"
-#include "util/int-char-converter.h"
-#include "util/sort.h"
-#include "view/display-lore.h"
-#include "view/display-messages.h"
-#include "view/display-monster-status.h"
 #include "window/main-window-util.h"
-#include "world/world.h"
 
 /* Targetting variables */
 MONSTER_IDX target_who;
@@ -160,9 +107,9 @@ void verify_panel(player_type *creature_ptr)
         disturb(creature_ptr, FALSE, FALSE);
 
     panel_bounds_center();
-    creature_ptr->update |= (PU_MONSTERS);
-    creature_ptr->redraw |= (PR_MAP);
-    creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    creature_ptr->update |= PU_MONSTERS;
+    creature_ptr->redraw |= PR_MAP;
+    creature_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
 }
 
 /*

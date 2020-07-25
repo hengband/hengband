@@ -1,6 +1,6 @@
 ﻿#include "target/target-preparation.h"
 #include "floor/cave.h"
-#include "floor/floor.h" // todo 相互依存.
+#include "floor/floor.h" // todo projectable() が相互依存.
 #include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
