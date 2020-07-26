@@ -586,7 +586,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->esp_giant = FALSE;
     creature_ptr->esp_dragon = FALSE;
     creature_ptr->esp_human = FALSE;
-    creature_ptr->esp_evil = FALSE;
     creature_ptr->esp_good = FALSE;
     creature_ptr->esp_nonliving = FALSE;
     creature_ptr->esp_unique = FALSE;
@@ -710,6 +709,8 @@ void calc_bonuses(player_type *creature_ptr)
 
     have_pass_wall(creature_ptr);
     have_kill_wall(creature_ptr);
+    have_xtra_might(creature_ptr);
+    have_esp_evil(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -768,8 +769,6 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->lite = TRUE;
 
     if (creature_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling(creature_ptr, HEX_DETECT_EVIL))
-            creature_ptr->esp_evil = TRUE;
 
         if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
             creature_ptr->sh_fire = TRUE;
@@ -4721,8 +4720,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->esp_dragon = TRUE;
         if (have_flag(flgs, TR_ESP_HUMAN))
             creature_ptr->esp_human = TRUE;
-        if (have_flag(flgs, TR_ESP_EVIL))
-            creature_ptr->esp_evil = TRUE;
         if (have_flag(flgs, TR_ESP_GOOD))
             creature_ptr->esp_good = TRUE;
         if (have_flag(flgs, TR_ESP_NONLIVING))

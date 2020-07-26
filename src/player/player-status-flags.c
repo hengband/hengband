@@ -1,7 +1,10 @@
 ﻿#include "player/player-status.h"
 #include "player/player-race.h"
 #include "player/player-race-types.h"
+#include "realm/realm-hex-numbers.h"
+#include "realm/realm-types.h"
 #include "realm/realm-song-numbers.h"
+#include "spell-realm/spells-hex.h"
 #include "system/monster-type-definition.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/monster-race.h"
@@ -70,5 +73,29 @@ void have_xtra_might(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_XTRA_MIGHT))
             creature_ptr->xtra_might = TRUE;
+    }
+}
+
+void have_esp_evil(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+
+    creature_ptr->esp_evil = FALSE;
+
+    if (creature_ptr->realm1 == REALM_HEX) {
+        if (hex_spelling(creature_ptr, HEX_DETECT_EVIL))
+            creature_ptr->esp_evil = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (have_flag(flgs, TR_ESP_EVIL))
+            creature_ptr->esp_evil = TRUE;
     }
 }
