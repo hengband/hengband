@@ -159,7 +159,7 @@ static bool describe_hallucinated_target(player_type *subject_ptr, eg_type *eg_p
     return TRUE;
 }
 
-static bool describe_recall(player_type *subject_ptr, eg_type *eg_ptr)
+static bool describe_grid_lore(player_type *subject_ptr, eg_type *eg_ptr)
 {
     screen_save();
     screen_roff(subject_ptr, eg_ptr->m_ptr->ap_r_idx, 0);
@@ -167,6 +167,38 @@ static bool describe_recall(player_type *subject_ptr, eg_type *eg_ptr)
     eg_ptr->query = inkey();
     screen_load();
     return eg_ptr->query != 'r';
+}
+
+static void describe_grid_monster(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    bool recall = FALSE;
+    while (TRUE) {
+        char acount[10];
+        if (recall) {
+            if (describe_grid_lore(subject_ptr, eg_ptr))
+                return;
+
+            recall = FALSE;
+            continue;
+        }
+
+        evaluate_monster_exp(subject_ptr, acount, eg_ptr->m_ptr);
+        GAME_TEXT m_name[MAX_NLEN];
+#ifdef JP
+        sprintf(eg_ptr->out_val, "[%s]%s%s(%s)%s%s [r思 %s%s]", acount, eg_ptr->s1, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3,
+            eg_ptr->x_info, eg_ptr->info);
+#else
+        sprintf(eg_ptr->out_val, "[%s]%s%s%s%s(%s) [r, %s%s]", acount, eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01),
+            eg_ptr->x_info, eg_ptr->info);
+#endif
+        prt(eg_ptr->out_val, 0, 0);
+        move_cursor_relative(eg_ptr->y, eg_ptr->x);
+        eg_ptr->query = inkey();
+        if (eg_ptr->query != 'r')
+            return;
+
+        recall = TRUE;
+    }
 }
 
 /*
@@ -193,39 +225,11 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
 
     if (eg_ptr->g_ptr->m_idx && subject_ptr->current_floor_ptr->m_list[eg_ptr->g_ptr->m_idx].ml) {
         monster_race *ap_r_ptr = &r_info[eg_ptr->m_ptr->ap_r_idx];
-        GAME_TEXT m_name[MAX_NLEN];
-        bool recall = FALSE;
         boring = FALSE;
         monster_race_track(subject_ptr, eg_ptr->m_ptr->ap_r_idx);
         health_track(subject_ptr, eg_ptr->g_ptr->m_idx);
         handle_stuff(subject_ptr);
-        while (TRUE) {
-            char acount[10];
-            if (recall) {
-                if (describe_recall(subject_ptr, eg_ptr))
-                    break;
-
-                recall = FALSE;
-                continue;
-            }
-
-            evaluate_monster_exp(subject_ptr, acount, eg_ptr->m_ptr);
-#ifdef JP
-            sprintf(eg_ptr->out_val, "[%s]%s%s(%s)%s%s [r思 %s%s]", acount, eg_ptr->s1, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3,
-                eg_ptr->x_info, info);
-#else
-            sprintf(eg_ptr->out_val, "[%s]%s%s%s%s(%s) [r, %s%s]", acount, eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01),
-                eg_ptr->x_info, info);
-#endif
-            prt(eg_ptr->out_val, 0, 0);
-            move_cursor_relative(y, x);
-            eg_ptr->query = inkey();
-            if (eg_ptr->query != 'r')
-                break;
-
-            recall = TRUE;
-        }
-
+        describe_grid_monster(subject_ptr, eg_ptr);
         if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
             return eg_ptr->query;
 
