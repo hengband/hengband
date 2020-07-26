@@ -15,5 +15,6 @@ void have_esp_human(player_type *creature_ptr);
 void have_esp_good(player_type *creature_ptr);
 void have_esp_nonliving(player_type *creature_ptr);
 void have_esp_unique(player_type *creature_ptr);
+void have_esp_telepathy(player_type *creature_ptr);
 
 

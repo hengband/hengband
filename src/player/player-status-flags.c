@@ -1,21 +1,21 @@
-﻿#include "player/player-status.h"
-#include "player/player-race.h"
-#include "player/player-race-types.h"
-#include "realm/realm-hex-numbers.h"
-#include "realm/realm-types.h"
-#include "realm/realm-song-numbers.h"
-#include "spell-realm/spells-hex.h"
-#include "system/monster-type-definition.h"
-#include "monster-race/race-flags2.h"
+﻿#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
-#include "system/monster-type-definition.h"
-#include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
-#include "inventory/inventory-slot-types.h"
+#include "monster-race/race-flags2.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player/player-race-types.h"
+#include "player/player-race.h"
+#include "player/player-status.h"
+#include "player/special-defense-types.h"
+#include "realm/realm-hex-numbers.h"
+#include "realm/realm-song-numbers.h"
+#include "realm/realm-types.h"
+#include "spell-realm/spells-hex.h"
+#include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
-
 
 void have_kill_wall(player_type *creature_ptr)
 {
@@ -307,4 +307,49 @@ void have_esp_unique(player_type *creature_ptr)
         if (have_flag(flgs, TR_ESP_UNIQUE))
             creature_ptr->esp_unique = TRUE;
     }
+}
+
+void have_esp_telepathy(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+
+    creature_ptr->telepathy = FALSE;
+
+    if (is_time_limit_esp(creature_ptr)) {
+        creature_ptr->telepathy = TRUE;
+    }
+
+	if (creature_ptr->muta3 & MUT3_ESP) {
+        creature_ptr->telepathy = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_MIND_FLAYER && creature_ptr->lev > 29)
+        creature_ptr->telepathy = TRUE;
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_SPECTRE && creature_ptr->lev > 34)
+        creature_ptr->telepathy = TRUE;
+
+	if (creature_ptr->pclass == CLASS_MINDCRAFTER && creature_ptr->lev > 39)
+        creature_ptr->telepathy = TRUE;
+
+	if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
+            creature_ptr->telepathy = TRUE;
+    }
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->telepathy = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	{
+		o_ptr = &creature_ptr->inventory_list[i];
+		if (!o_ptr->k_idx)
+			continue;
+
+		object_flags(creature_ptr, o_ptr, flgs);
+
+		if (have_flag(flgs, TR_TELEPATHY))
+			creature_ptr->telepathy = TRUE;
+	}
 }

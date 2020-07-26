@@ -577,7 +577,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->can_swim = FALSE;
     creature_ptr->levitation = FALSE;
     creature_ptr->hold_exp = FALSE;
-    creature_ptr->telepathy = FALSE;
     creature_ptr->lite = FALSE;
     creature_ptr->sustain_str = FALSE;
     creature_ptr->sustain_int = FALSE;
@@ -711,6 +710,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_esp_good(creature_ptr);
     have_esp_nonliving(creature_ptr);
     have_esp_unique(creature_ptr);
+    have_esp_telepathy(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4532,7 +4532,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->regenerate = TRUE;
         creature_ptr->levitation = TRUE;
         creature_ptr->hold_exp = TRUE;
-        creature_ptr->telepathy = TRUE;
         creature_ptr->lite = TRUE;
         creature_ptr->sustain_str = TRUE;
         creature_ptr->sustain_int = TRUE;
@@ -4586,9 +4585,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->levitation = TRUE;
     }
 
-    if (is_time_limit_esp(creature_ptr)) {
-        creature_ptr->telepathy = TRUE;
-    }
 
     if (creature_ptr->ele_immune) {
         if (creature_ptr->special_defense & DEFENSE_ACID)
@@ -4702,8 +4698,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->slow_digest = TRUE;
         if (have_flag(flgs, TR_REGEN))
             creature_ptr->regenerate = TRUE;
-        if (have_flag(flgs, TR_TELEPATHY))
-            creature_ptr->telepathy = TRUE;
 
         if (have_flag(flgs, TR_SEE_INVIS))
             creature_ptr->see_inv = TRUE;

@@ -155,7 +155,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_fear = TRUE;
             creature_ptr->sh_fire = TRUE;
             creature_ptr->see_inv = TRUE;
-            creature_ptr->telepathy = TRUE;
             creature_ptr->levitation = TRUE;
             break;
         case MIMIC_VAMPIRE:
@@ -265,8 +264,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->sustain_wis = TRUE;
             if (creature_ptr->lev > 14)
                 creature_ptr->see_inv = TRUE;
-            if (creature_ptr->lev > 29)
-                creature_ptr->telepathy = TRUE;
             break;
         case RACE_IMP:
             creature_ptr->resist_fire = TRUE;
@@ -317,8 +314,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->slow_digest = TRUE;
             creature_ptr->resist_cold = TRUE;
             creature_ptr->pass_wall = TRUE;
-            if (creature_ptr->lev > 34)
-                creature_ptr->telepathy = TRUE;
             break;
         case RACE_SPRITE:
             creature_ptr->levitation = TRUE;

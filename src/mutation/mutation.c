@@ -1923,10 +1923,6 @@ void set_mutation_flags(player_type *creature_ptr)
             creature_ptr->regenerate = TRUE;
         }
 
-        if (creature_ptr->muta3 & MUT3_ESP) {
-            creature_ptr->telepathy = TRUE;
-        }
-
         if (creature_ptr->muta3 & MUT3_MOTION) {
             creature_ptr->free_act = TRUE;
         }

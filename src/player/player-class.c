@@ -1224,8 +1224,6 @@ void calc_class_status(player_type *creature_ptr)
             creature_ptr->sustain_wis = TRUE;
         if (creature_ptr->lev > 29)
             creature_ptr->resist_conf = TRUE;
-        if (creature_ptr->lev > 39)
-            creature_ptr->telepathy = TRUE;
         break;
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
