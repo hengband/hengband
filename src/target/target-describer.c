@@ -42,23 +42,28 @@ bool show_gold_on_floor = FALSE;
 typedef struct eg_type {
     POSITION y;
     POSITION x;
+    concptr info;
     concptr s1;
     concptr s2;
     concptr s3;
     concptr x_info;
+    char query;
+    char out_val[MAX_NLEN + 80];
     OBJECT_IDX floor_list[23];
     ITEM_NUMBER floor_num;
     OBJECT_IDX next_o_idx;
 } eg_type;
 
-static eg_type *initialize_eg_type(eg_type *eg_ptr, POSITION y, POSITION x)
+static eg_type *initialize_eg_type(eg_type *eg_ptr, POSITION y, POSITION x, concptr info)
 {
     eg_ptr->y = y;
     eg_ptr->x = x;
+    eg_ptr->info = info;
     eg_ptr->s1 = "";
     eg_ptr->s2 = "";
     eg_ptr->s3 = "";
     eg_ptr->x_info = "";
+    eg_ptr->query = '\001';
     eg_ptr->floor_num = 0;
     eg_ptr->next_o_idx = 0;
     return eg_ptr;
@@ -128,6 +133,26 @@ static void describe_target(player_type *subject_ptr, eg_type *eg_ptr)
 #endif
 }
 
+static bool describe_hallucinated_target(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    if (!subject_ptr->image)
+        return FALSE;
+
+    concptr name = _("何か奇妙な物", "something strange");
+#ifdef JP
+    sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+#else
+    sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, eg_ptr->info);
+#endif
+    prt(eg_ptr->out_val, 0, 0);
+    move_cursor_relative(eg_ptr->y, eg_ptr->x);
+    eg_ptr->query = inkey();
+    if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n'))
+        return eg_ptr->query;
+
+    return TRUE;
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -141,29 +166,14 @@ static void describe_target(player_type *subject_ptr, eg_type *eg_ptr)
 char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, target_type mode, concptr info)
 {
     eg_type tmp_eg;
-    eg_type *eg_ptr = initialize_eg_type(&tmp_eg, y, x);
+    eg_type *eg_ptr = initialize_eg_type(&tmp_eg, y, x, info);
     bool boring = TRUE;
     FEAT_IDX feat;
     feature_type *f_ptr;
-    char query = '\001';
-    char out_val[MAX_NLEN + 80];
     describe_scan_result(subject_ptr, eg_ptr);
     describe_target(subject_ptr, eg_ptr);
-    if (subject_ptr->image) {
-        concptr name = _("何か奇妙な物", "something strange");
-#ifdef JP
-        sprintf(out_val, "%s%s%s%s [%s]", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, info);
-#else
-        sprintf(out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, info);
-#endif
-        prt(out_val, 0, 0);
-        move_cursor_relative(y, x);
-        query = inkey();
-        if ((query != '\r') && (query != '\n'))
-            return query;
-
+    if (describe_hallucinated_target(subject_ptr, eg_ptr))
         return 0;
-    }
 
     grid_type *g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
     if (g_ptr->m_idx && subject_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml) {
@@ -181,9 +191,9 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
                 screen_save();
                 screen_roff(subject_ptr, m_ptr->ap_r_idx, 0);
                 term_addstr(-1, TERM_WHITE, format(_("  [r思 %s%s]", "  [r,%s%s]"), eg_ptr->x_info, info));
-                query = inkey();
+                eg_ptr->query = inkey();
                 screen_load();
-                if (query != 'r')
+                if (eg_ptr->query != 'r')
                     break;
 
                 recall = FALSE;
@@ -192,26 +202,26 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
 
             evaluate_monster_exp(subject_ptr, acount, m_ptr);
 #ifdef JP
-            sprintf(
-                out_val, "[%s]%s%s(%s)%s%s [r思 %s%s]", acount, eg_ptr->s1, m_name, look_mon_desc(m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3, eg_ptr->x_info, info);
+            sprintf(eg_ptr->out_val, "[%s]%s%s(%s)%s%s [r思 %s%s]", acount, eg_ptr->s1, m_name, look_mon_desc(m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3,
+                eg_ptr->x_info, info);
 #else
-            sprintf(
-                out_val, "[%s]%s%s%s%s(%s) [r, %s%s]", acount, eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, look_mon_desc(m_ptr, 0x01), eg_ptr->x_info, info);
+            sprintf(eg_ptr->out_val, "[%s]%s%s%s%s(%s) [r, %s%s]", acount, eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, look_mon_desc(m_ptr, 0x01),
+                eg_ptr->x_info, info);
 #endif
-            prt(out_val, 0, 0);
+            prt(eg_ptr->out_val, 0, 0);
             move_cursor_relative(y, x);
-            query = inkey();
-            if (query != 'r')
+            eg_ptr->query = inkey();
+            if (eg_ptr->query != 'r')
                 break;
 
             recall = TRUE;
         }
 
-        if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x'))
-            return query;
+        if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
+            return eg_ptr->query;
 
-        if ((query == ' ') && !(mode & TARGET_LOOK))
-            return query;
+        if ((eg_ptr->query == ' ') && !(mode & TARGET_LOOK))
+            return eg_ptr->query;
 
         eg_ptr->s1 = _("それは", "It is ");
         if (ap_r_ptr->flags1 & RF1_FEMALE)
@@ -233,18 +243,18 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
             eg_ptr->next_o_idx = o_ptr->next_o_idx;
             describe_flavor(subject_ptr, o_name, o_ptr, 0);
 #ifdef JP
-            sprintf(out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, info);
+            sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-            sprintf(out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, info);
+            sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
 #endif
-            prt(out_val, 0, 0);
+            prt(eg_ptr->out_val, 0, 0);
             move_cursor_relative(y, x);
-            query = inkey();
-            if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x'))
-                return query;
+            eg_ptr->query = inkey();
+            if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
+                return eg_ptr->query;
 
-            if ((query == ' ') && !(mode & TARGET_LOOK))
-                return query;
+            if ((eg_ptr->query == ' ') && !(mode & TARGET_LOOK))
+                return eg_ptr->query;
 
             eg_ptr->s2 = _("をまた", "also carrying ");
         }
@@ -266,27 +276,27 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
                 o_ptr = &subject_ptr->current_floor_ptr->o_list[eg_ptr->floor_list[0]];
                 describe_flavor(subject_ptr, o_name, o_ptr, 0);
 #ifdef JP
-                sprintf(out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, info);
+                sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-                sprintf(out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, info);
+                sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
 #endif
-                prt(out_val, 0, 0);
+                prt(eg_ptr->out_val, 0, 0);
                 move_cursor_relative(y, x);
-                query = inkey();
-                return query;
+                eg_ptr->query = inkey();
+                return eg_ptr->query;
             }
 
             if (boring) {
 #ifdef JP
-                sprintf(out_val, "%s %d個のアイテム%s%s ['x'で一覧, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, info);
+                sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s ['x'で一覧, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-                sprintf(out_val, "%s%s%sa pile of %d items [x,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, info);
+                sprintf(eg_ptr->out_val, "%s%s%sa pile of %d items [x,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
 #endif
-                prt(out_val, 0, 0);
+                prt(eg_ptr->out_val, 0, 0);
                 move_cursor_relative(y, x);
-                query = inkey();
-                if (query != 'x' && query != ' ')
-                    return query;
+                eg_ptr->query = inkey();
+                if (eg_ptr->query != 'x' && eg_ptr->query != ' ')
+                    return eg_ptr->query;
             }
 
             while (TRUE) {
@@ -297,15 +307,15 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
                 (void)show_floor_items(subject_ptr, 0, y, x, &min_width, 0);
                 show_gold_on_floor = FALSE;
 #ifdef JP
-                sprintf(out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, info);
+                sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-                sprintf(out_val, "%s%s%sa pile of %d items [Enter,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, info);
+                sprintf(eg_ptr->out_val, "%s%s%sa pile of %d items [Enter,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
 #endif
-                prt(out_val, 0, 0);
-                query = inkey();
+                prt(eg_ptr->out_val, 0, 0);
+                eg_ptr->query = inkey();
                 screen_load();
-                if (query != '\n' && query != '\r')
-                    return query;
+                if (eg_ptr->query != '\n' && eg_ptr->query != '\r')
+                    return eg_ptr->query;
 
                 o_idx = g_ptr->o_idx;
                 if (!(o_idx && subject_ptr->current_floor_ptr->o_list[o_idx].next_o_idx))
@@ -330,18 +340,18 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
             boring = FALSE;
             describe_flavor(subject_ptr, o_name, o_ptr, 0);
 #ifdef JP
-            sprintf(out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, info);
+            sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-            sprintf(out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, info);
+            sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
 #endif
-            prt(out_val, 0, 0);
+            prt(eg_ptr->out_val, 0, 0);
             move_cursor_relative(y, x);
-            query = inkey();
-            if ((query != '\r') && (query != '\n') && (query != ' ') && (query != 'x'))
-                return query;
+            eg_ptr->query = inkey();
+            if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
+                return eg_ptr->query;
 
-            if ((query == ' ') && !(mode & TARGET_LOOK))
-                return query;
+            if ((eg_ptr->query == ' ') && !(mode & TARGET_LOOK))
+                return eg_ptr->query;
 
             eg_ptr->s1 = _("それは", "It is ");
             if (o_ptr->number != 1)
@@ -362,8 +372,8 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
 
     f_ptr = &f_info[feat];
     if (!boring && !have_flag(f_ptr->flags, FF_REMEMBER)) {
-        if ((query != '\r') && (query != '\n'))
-            return query;
+        if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n'))
+            return eg_ptr->query;
 
         return 0;
     }
@@ -417,24 +427,24 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
             sprintf(f_idx_str, "%d", g_ptr->feat);
 
 #ifdef JP
-        sprintf(out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, info, (unsigned int)g_ptr->info, f_idx_str,
+        sprintf(eg_ptr->out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, info, (unsigned int)g_ptr->info, f_idx_str,
             g_ptr->dist, g_ptr->cost, g_ptr->when, (int)y, (int)x, travel.cost[y][x]);
 #else
-        sprintf(out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, info, g_ptr->info, f_idx_str, g_ptr->dist,
+        sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, info, g_ptr->info, f_idx_str, g_ptr->dist,
             g_ptr->cost, g_ptr->when, (int)y, (int)x);
 #endif
     } else
 #ifdef JP
-        sprintf(out_val, "%s%s%s%s[%s]", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, info);
+        sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-        sprintf(out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, info);
+        sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, eg_ptr->info);
 #endif
 
-    prt(out_val, 0, 0);
+    prt(eg_ptr->out_val, 0, 0);
     move_cursor_relative(y, x);
-    query = inkey();
-    if ((query != '\r') && (query != '\n') && (query != ' '))
-        return query;
+    eg_ptr->query = inkey();
+    if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' '))
+        return eg_ptr->query;
 
     return 0;
 }
