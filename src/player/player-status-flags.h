@@ -13,5 +13,6 @@ void have_esp_giant(player_type *creature_ptr);
 void have_esp_dragon(player_type *creature_ptr);
 void have_esp_human(player_type *creature_ptr);
 void have_esp_good(player_type *creature_ptr);
+void have_esp_nonliving(player_type *creature_ptr);
 
 

@@ -578,7 +578,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->levitation = FALSE;
     creature_ptr->hold_exp = FALSE;
     creature_ptr->telepathy = FALSE;
-    creature_ptr->esp_nonliving = FALSE;
     creature_ptr->esp_unique = FALSE;
     creature_ptr->lite = FALSE;
     creature_ptr->sustain_str = FALSE;
@@ -711,6 +710,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_esp_dragon(creature_ptr);
     have_esp_human(creature_ptr);
     have_esp_good(creature_ptr);
+    have_esp_nonliving(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4704,8 +4704,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->regenerate = TRUE;
         if (have_flag(flgs, TR_TELEPATHY))
             creature_ptr->telepathy = TRUE;
-        if (have_flag(flgs, TR_ESP_NONLIVING))
-            creature_ptr->esp_nonliving = TRUE;
         if (have_flag(flgs, TR_ESP_UNIQUE))
             creature_ptr->esp_unique = TRUE;
 
