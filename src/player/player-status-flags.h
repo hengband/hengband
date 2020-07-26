@@ -11,5 +11,6 @@ void have_esp_orc(player_type *creature_ptr);
 void have_esp_troll(player_type *creature_ptr);
 void have_esp_giant(player_type *creature_ptr);
 void have_esp_dragon(player_type *creature_ptr);
+void have_esp_human(player_type *creature_ptr);
 
 
