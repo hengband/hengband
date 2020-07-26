@@ -40,6 +40,8 @@ bool show_gold_on_floor = FALSE;
 
 // Examine grid
 typedef struct eg_type {
+    POSITION y;
+    POSITION x;
     concptr s1;
     concptr s2;
     concptr s3;
@@ -49,8 +51,10 @@ typedef struct eg_type {
     OBJECT_IDX next_o_idx;
 } eg_type;
 
-static eg_type *initialize_eg_type(eg_type *eg_ptr)
+static eg_type *initialize_eg_type(eg_type *eg_ptr, POSITION y, POSITION x)
 {
+    eg_ptr->y = y;
+    eg_ptr->x = x;
     eg_ptr->s1 = "";
     eg_ptr->s2 = "";
     eg_ptr->s3 = "";
@@ -97,6 +101,33 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
     sprintf(buf, "%03ld", (long int)num);
 }
 
+static void describe_scan_result(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    if (!easy_floor)
+        return;
+
+    eg_ptr->floor_num = scan_floor_items(subject_ptr, eg_ptr->floor_list, eg_ptr->y, eg_ptr->x, 0x02, 0);
+    if (eg_ptr->floor_num > 0)
+        eg_ptr->x_info = _("x物 ", "x,");
+}
+
+static void describe_target(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    if (!player_bold(subject_ptr, eg_ptr->y, eg_ptr->x)) {
+        eg_ptr->s1 = _("ターゲット:", "Target:");
+        return;
+    }
+
+#ifdef JP
+    eg_ptr->s1 = "あなたは";
+    eg_ptr->s2 = "の上";
+    eg_ptr->s3 = "にいる";
+#else
+    eg_ptr->s1 = "You are ";
+    eg_ptr->s2 = "on ";
+#endif
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -107,34 +138,17 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
  * @param info 記述用文字列
  * @return 入力キー
  */
-char examine_grid(player_type *subject_ptr, POSITION y, POSITION x, target_type mode, concptr info)
+char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, target_type mode, concptr info)
 {
     eg_type tmp_eg;
-    eg_type *eg_ptr = initialize_eg_type(&tmp_eg);
+    eg_type *eg_ptr = initialize_eg_type(&tmp_eg, y, x);
     bool boring = TRUE;
     FEAT_IDX feat;
     feature_type *f_ptr;
     char query = '\001';
     char out_val[MAX_NLEN + 80];
-    if (easy_floor) {
-        eg_ptr->floor_num = scan_floor_items(subject_ptr, eg_ptr->floor_list, y, x, 0x02, 0);
-        if (eg_ptr->floor_num)
-            eg_ptr->x_info = _("x物 ", "x,");
-    }
-
-    if (player_bold(subject_ptr, y, x)) {
-#ifdef JP
-        eg_ptr->s1 = "あなたは";
-        eg_ptr->s2 = "の上";
-        eg_ptr->s3 = "にいる";
-#else
-        eg_ptr->s1 = "You are ";
-        eg_ptr->s2 = "on ";
-#endif
-    } else {
-        eg_ptr->s1 = _("ターゲット:", "Target:");
-    }
-
+    describe_scan_result(subject_ptr, eg_ptr);
+    describe_target(subject_ptr, eg_ptr);
     if (subject_ptr->image) {
         concptr name = _("何か奇妙な物", "something strange");
 #ifdef JP
