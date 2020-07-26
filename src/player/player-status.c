@@ -578,7 +578,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->levitation = FALSE;
     creature_ptr->hold_exp = FALSE;
     creature_ptr->telepathy = FALSE;
-    creature_ptr->esp_giant = FALSE;
     creature_ptr->esp_dragon = FALSE;
     creature_ptr->esp_human = FALSE;
     creature_ptr->esp_good = FALSE;
@@ -711,6 +710,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_esp_demon(creature_ptr);
     have_esp_orc(creature_ptr);
     have_esp_troll(creature_ptr);
+    have_esp_giant(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4704,8 +4704,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->regenerate = TRUE;
         if (have_flag(flgs, TR_TELEPATHY))
             creature_ptr->telepathy = TRUE;
-        if (have_flag(flgs, TR_ESP_GIANT))
-            creature_ptr->esp_giant = TRUE;
         if (have_flag(flgs, TR_ESP_DRAGON))
             creature_ptr->esp_dragon = TRUE;
         if (have_flag(flgs, TR_ESP_HUMAN))
