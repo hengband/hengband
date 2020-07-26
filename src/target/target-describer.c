@@ -51,10 +51,12 @@ typedef struct eg_type {
     char out_val[MAX_NLEN + 80];
     OBJECT_IDX floor_list[23];
     ITEM_NUMBER floor_num;
+    grid_type *g_ptr;
+    monster_type *m_ptr;
     OBJECT_IDX next_o_idx;
 } eg_type;
 
-static eg_type *initialize_eg_type(eg_type *eg_ptr, POSITION y, POSITION x, concptr info)
+static eg_type *initialize_eg_type(player_type *subject_ptr, eg_type *eg_ptr, POSITION y, POSITION x, concptr info)
 {
     eg_ptr->y = y;
     eg_ptr->x = x;
@@ -65,6 +67,10 @@ static eg_type *initialize_eg_type(eg_type *eg_ptr, POSITION y, POSITION x, conc
     eg_ptr->x_info = "";
     eg_ptr->query = '\001';
     eg_ptr->floor_num = 0;
+
+    floor_type *floor_ptr = subject_ptr->current_floor_ptr;
+    eg_ptr->g_ptr = &floor_ptr->grid_array[y][x];
+    eg_ptr->m_ptr = &floor_ptr->m_list[eg_ptr->g_ptr->m_idx];
     eg_ptr->next_o_idx = 0;
     return eg_ptr;
 }
@@ -153,6 +159,16 @@ static bool describe_hallucinated_target(player_type *subject_ptr, eg_type *eg_p
     return TRUE;
 }
 
+static bool describe_recall(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    screen_save();
+    screen_roff(subject_ptr, eg_ptr->m_ptr->ap_r_idx, 0);
+    term_addstr(-1, TERM_WHITE, format(_("  [r思 %s%s]", "  [r,%s%s]"), eg_ptr->x_info, eg_ptr->info));
+    eg_ptr->query = inkey();
+    screen_load();
+    return eg_ptr->query != 'r';
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -166,7 +182,7 @@ static bool describe_hallucinated_target(player_type *subject_ptr, eg_type *eg_p
 char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, target_type mode, concptr info)
 {
     eg_type tmp_eg;
-    eg_type *eg_ptr = initialize_eg_type(&tmp_eg, y, x, info);
+    eg_type *eg_ptr = initialize_eg_type(subject_ptr, &tmp_eg, y, x, info);
     bool boring = TRUE;
     FEAT_IDX feat;
     feature_type *f_ptr;
@@ -175,37 +191,30 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     if (describe_hallucinated_target(subject_ptr, eg_ptr))
         return 0;
 
-    grid_type *g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
-    if (g_ptr->m_idx && subject_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml) {
-        monster_type *m_ptr = &subject_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+    if (eg_ptr->g_ptr->m_idx && subject_ptr->current_floor_ptr->m_list[eg_ptr->g_ptr->m_idx].ml) {
+        monster_race *ap_r_ptr = &r_info[eg_ptr->m_ptr->ap_r_idx];
         GAME_TEXT m_name[MAX_NLEN];
         bool recall = FALSE;
         boring = FALSE;
-        monster_race_track(subject_ptr, m_ptr->ap_r_idx);
-        health_track(subject_ptr, g_ptr->m_idx);
+        monster_race_track(subject_ptr, eg_ptr->m_ptr->ap_r_idx);
+        health_track(subject_ptr, eg_ptr->g_ptr->m_idx);
         handle_stuff(subject_ptr);
         while (TRUE) {
             char acount[10];
             if (recall) {
-                screen_save();
-                screen_roff(subject_ptr, m_ptr->ap_r_idx, 0);
-                term_addstr(-1, TERM_WHITE, format(_("  [r思 %s%s]", "  [r,%s%s]"), eg_ptr->x_info, info));
-                eg_ptr->query = inkey();
-                screen_load();
-                if (eg_ptr->query != 'r')
+                if (describe_recall(subject_ptr, eg_ptr))
                     break;
 
                 recall = FALSE;
                 continue;
             }
 
-            evaluate_monster_exp(subject_ptr, acount, m_ptr);
+            evaluate_monster_exp(subject_ptr, acount, eg_ptr->m_ptr);
 #ifdef JP
-            sprintf(eg_ptr->out_val, "[%s]%s%s(%s)%s%s [r思 %s%s]", acount, eg_ptr->s1, m_name, look_mon_desc(m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3,
+            sprintf(eg_ptr->out_val, "[%s]%s%s(%s)%s%s [r思 %s%s]", acount, eg_ptr->s1, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3,
                 eg_ptr->x_info, info);
 #else
-            sprintf(eg_ptr->out_val, "[%s]%s%s%s%s(%s) [r, %s%s]", acount, eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, look_mon_desc(m_ptr, 0x01),
+            sprintf(eg_ptr->out_val, "[%s]%s%s%s%s(%s) [r, %s%s]", acount, eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01),
                 eg_ptr->x_info, info);
 #endif
             prt(eg_ptr->out_val, 0, 0);
@@ -236,7 +245,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         eg_ptr->s2 = "carrying ";
 #endif
 
-        for (OBJECT_IDX this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
+        for (OBJECT_IDX this_o_idx = eg_ptr->m_ptr->hold_o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
             GAME_TEXT o_name[MAX_NLEN];
             object_type *o_ptr;
             o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
@@ -317,12 +326,12 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
                 if (eg_ptr->query != '\n' && eg_ptr->query != '\r')
                     return eg_ptr->query;
 
-                o_idx = g_ptr->o_idx;
+                o_idx = eg_ptr->g_ptr->o_idx;
                 if (!(o_idx && subject_ptr->current_floor_ptr->o_list[o_idx].next_o_idx))
                     continue;
 
                 excise_object_idx(subject_ptr->current_floor_ptr, o_idx);
-                i = g_ptr->o_idx;
+                i = eg_ptr->g_ptr->o_idx;
                 while (subject_ptr->current_floor_ptr->o_list[i].next_o_idx)
                     i = subject_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
@@ -331,7 +340,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         }
     }
 
-    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
+    for (OBJECT_IDX this_o_idx = eg_ptr->g_ptr->o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
         object_type *o_ptr;
         o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
         eg_ptr->next_o_idx = o_ptr->next_o_idx;
@@ -366,8 +375,8 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         }
     }
 
-    feat = get_feat_mimic(g_ptr);
-    if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(subject_ptr, y, x))
+    feat = get_feat_mimic(eg_ptr->g_ptr);
+    if (!(eg_ptr->g_ptr->info & CAVE_MARK) && !player_can_see_bold(subject_ptr, y, x))
         feat = feat_none;
 
     f_ptr = &f_info[feat];
@@ -385,17 +394,18 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
             quest_text[j][0] = '\0';
 
         quest_text_line = 0;
-        subject_ptr->current_floor_ptr->inside_quest = g_ptr->special;
+        subject_ptr->current_floor_ptr->inside_quest = eg_ptr->g_ptr->special;
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(subject_ptr, "q_info.txt", 0, 0, 0, 0);
-        name = format(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), quest[g_ptr->special].name, quest[g_ptr->special].level);
+        name = format(
+            _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), quest[eg_ptr->g_ptr->special].name, quest[eg_ptr->g_ptr->special].level);
         subject_ptr->current_floor_ptr->inside_quest = old_quest;
     } else if (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena) {
         name = building[f_ptr->subtype].name;
     } else if (have_flag(f_ptr->flags, FF_ENTRANCE)) {
-        name = format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[g_ptr->special].text, d_info[g_ptr->special].mindepth);
+        name = format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[eg_ptr->g_ptr->special].text, d_info[eg_ptr->g_ptr->special].mindepth);
     } else if (have_flag(f_ptr->flags, FF_TOWN)) {
-        name = town_info[g_ptr->special].name;
+        name = town_info[eg_ptr->g_ptr->special].name;
     } else if (subject_ptr->wild_mode && (feat == feat_floor)) {
         name = _("道", "road");
     } else {
@@ -421,17 +431,17 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
 
     if (current_world_ptr->wizard) {
         char f_idx_str[32];
-        if (g_ptr->mimic)
-            sprintf(f_idx_str, "%d/%d", g_ptr->feat, g_ptr->mimic);
+        if (eg_ptr->g_ptr->mimic)
+            sprintf(f_idx_str, "%d/%d", eg_ptr->g_ptr->feat, eg_ptr->g_ptr->mimic);
         else
-            sprintf(f_idx_str, "%d", g_ptr->feat);
+            sprintf(f_idx_str, "%d", eg_ptr->g_ptr->feat);
 
 #ifdef JP
-        sprintf(eg_ptr->out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, info, (unsigned int)g_ptr->info, f_idx_str,
-            g_ptr->dist, g_ptr->cost, g_ptr->when, (int)y, (int)x, travel.cost[y][x]);
+        sprintf(eg_ptr->out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, info, (unsigned int)eg_ptr->g_ptr->info,
+            f_idx_str, eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)y, (int)x, travel.cost[y][x]);
 #else
-        sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, info, g_ptr->info, f_idx_str, g_ptr->dist,
-            g_ptr->cost, g_ptr->when, (int)y, (int)x);
+        sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, info, eg_ptr->g_ptr->info, f_idx_str,
+            eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)y, (int)x);
 #endif
     } else
 #ifdef JP
