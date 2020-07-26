@@ -290,3 +290,21 @@ void have_esp_nonliving(player_type *creature_ptr)
     }
 }
 
+void have_esp_unique(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+
+    creature_ptr->esp_unique = FALSE;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (have_flag(flgs, TR_ESP_UNIQUE))
+            creature_ptr->esp_unique = TRUE;
+    }
+}
