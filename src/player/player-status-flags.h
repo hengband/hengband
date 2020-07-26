@@ -8,5 +8,6 @@ void have_esp_animal(player_type *creature_ptr);
 void have_esp_undead(player_type *creature_ptr);
 void have_esp_demon(player_type *creature_ptr);
 void have_esp_orc(player_type *creature_ptr);
+void have_esp_troll(player_type *creature_ptr);
 
 
