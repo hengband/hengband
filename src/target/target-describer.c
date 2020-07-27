@@ -376,6 +376,41 @@ static s16b loop_describing_grid(player_type *subject_ptr, eg_type *eg_ptr)
     }
 }
 
+static s16b describe_footing_sight(player_type *subject_ptr, eg_type *eg_ptr, object_type *o_ptr)
+{
+    if ((o_ptr->marked & OM_FOUND) == 0)
+        return CONTINUOUS_DESCRIPTION;
+
+    GAME_TEXT o_name[MAX_NLEN];
+    eg_ptr->boring = FALSE;
+    describe_flavor(subject_ptr, o_name, o_ptr, 0);
+#ifdef JP
+    sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+#else
+    sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
+#endif
+    prt(eg_ptr->out_val, 0, 0);
+    move_cursor_relative(eg_ptr->y, eg_ptr->x);
+    eg_ptr->query = inkey();
+    if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
+        return eg_ptr->query;
+
+    if ((eg_ptr->query == ' ') && !(eg_ptr->mode & TARGET_LOOK))
+        return eg_ptr->query;
+
+    eg_ptr->s1 = _("それは", "It is ");
+    if (o_ptr->number != 1)
+        eg_ptr->s1 = _("それらは", "They are ");
+
+#ifdef JP
+    eg_ptr->s2 = "の上";
+    eg_ptr->s3 = "に見える";
+#else
+    eg_ptr->s2 = "on ";
+#endif
+    return CONTINUOUS_DESCRIPTION;
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -409,35 +444,9 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         object_type *o_ptr;
         o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
         eg_ptr->next_o_idx = o_ptr->next_o_idx;
-        if (o_ptr->marked & OM_FOUND) {
-            GAME_TEXT o_name[MAX_NLEN];
-            eg_ptr->boring = FALSE;
-            describe_flavor(subject_ptr, o_name, o_ptr, 0);
-#ifdef JP
-            sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
-#else
-            sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
-#endif
-            prt(eg_ptr->out_val, 0, 0);
-            move_cursor_relative(y, x);
-            eg_ptr->query = inkey();
-            if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
-                return eg_ptr->query;
-
-            if ((eg_ptr->query == ' ') && !(mode & TARGET_LOOK))
-                return eg_ptr->query;
-
-            eg_ptr->s1 = _("それは", "It is ");
-            if (o_ptr->number != 1)
-                eg_ptr->s1 = _("それらは", "They are ");
-
-#ifdef JP
-            eg_ptr->s2 = "の上";
-            eg_ptr->s3 = "に見える";
-#else
-            eg_ptr->s2 = "on ";
-#endif
-        }
+        s16b ret = describe_footing_sight(subject_ptr, eg_ptr, o_ptr);
+        if (within_char_util(ret))
+            return (char)ret;
     }
 
     feat = get_feat_mimic(eg_ptr->g_ptr);
