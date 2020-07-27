@@ -16,6 +16,7 @@
 #include "io/input-key-acceptor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "object/object-mark-types.h"
@@ -37,6 +38,8 @@
 #include "locale/english.h"
 #endif
 
+static const s16b CONTINUOUS_DESCRIPTION = 256;
+
 bool show_gold_on_floor = FALSE;
 
 // Examine grid
@@ -44,6 +47,7 @@ typedef struct eg_type {
     POSITION y;
     POSITION x;
     target_type mode;
+    bool boring;
     concptr info;
     concptr s1;
     concptr s2;
@@ -62,6 +66,7 @@ static eg_type *initialize_eg_type(player_type *subject_ptr, eg_type *eg_ptr, PO
 {
     eg_ptr->y = y;
     eg_ptr->x = x;
+    eg_ptr->boring = TRUE;
     eg_ptr->mode = mode;
     eg_ptr->info = info;
     eg_ptr->s1 = "";
@@ -247,7 +252,39 @@ static u16b describe_monster_item(player_type *subject_ptr, eg_type *eg_ptr)
         eg_ptr->s2 = _("をまた", "also carrying ");
     }
 
-    return 256;
+    return CONTINUOUS_DESCRIPTION;
+}
+
+static bool within_char_util(u16b input) { return (input > -127) && (input < 128); }
+
+static s16b describe_grid(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    if ((eg_ptr->g_ptr->m_idx == 0) || !subject_ptr->current_floor_ptr->m_list[eg_ptr->g_ptr->m_idx].ml)
+        return CONTINUOUS_DESCRIPTION;
+
+    eg_ptr->boring = FALSE;
+    monster_race_track(subject_ptr, eg_ptr->m_ptr->ap_r_idx);
+    health_track(subject_ptr, eg_ptr->g_ptr->m_idx);
+    handle_stuff(subject_ptr);
+    describe_grid_monster(subject_ptr, eg_ptr);
+    if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
+        return eg_ptr->query;
+
+    if ((eg_ptr->query == ' ') && !(eg_ptr->mode & TARGET_LOOK))
+        return eg_ptr->query;
+
+    describe_monster_person(eg_ptr);
+    u16b monster_item_description = describe_monster_item(subject_ptr, eg_ptr);
+    if (within_char_util(monster_item_description))
+        return (char)monster_item_description;
+
+#ifdef JP
+    eg_ptr->s2 = "の上";
+    eg_ptr->s3 = "にいる";
+#else
+    eg_ptr->s2 = "on ";
+#endif
+    return CONTINUOUS_DESCRIPTION;
 }
 
 /*
@@ -264,7 +301,6 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
 {
     eg_type tmp_eg;
     eg_type *eg_ptr = initialize_eg_type(subject_ptr, &tmp_eg, y, x, mode, info);
-    bool boring = TRUE;
     FEAT_IDX feat;
     feature_type *f_ptr;
     describe_scan_result(subject_ptr, eg_ptr);
@@ -272,30 +308,9 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     if (describe_hallucinated_target(subject_ptr, eg_ptr))
         return 0;
 
-    if (eg_ptr->g_ptr->m_idx && subject_ptr->current_floor_ptr->m_list[eg_ptr->g_ptr->m_idx].ml) {
-        boring = FALSE;
-        monster_race_track(subject_ptr, eg_ptr->m_ptr->ap_r_idx);
-        health_track(subject_ptr, eg_ptr->g_ptr->m_idx);
-        handle_stuff(subject_ptr);
-        describe_grid_monster(subject_ptr, eg_ptr);
-        if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
-            return eg_ptr->query;
-
-        if ((eg_ptr->query == ' ') && !(mode & TARGET_LOOK))
-            return eg_ptr->query;
-
-        describe_monster_person(eg_ptr);
-        u16b monster_item_description = describe_monster_item(subject_ptr, eg_ptr);
-        if ((monster_item_description > -127) && (monster_item_description < 128))
-            return (char)monster_item_description;
-
-#ifdef JP
-        eg_ptr->s2 = "の上";
-        eg_ptr->s3 = "にいる";
-#else
-        eg_ptr->s2 = "on ";
-#endif
-    }
+    u16b description_grid = describe_grid(subject_ptr, eg_ptr);
+    if (within_char_util(description_grid))
+        return (char)description_grid;
 
     if (eg_ptr->floor_num != 0) {
         int min_width = 0;
@@ -316,7 +331,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
                 return eg_ptr->query;
             }
 
-            if (boring) {
+            if (eg_ptr->boring) {
 #ifdef JP
                 sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s ['x'で一覧, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
@@ -367,7 +382,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         eg_ptr->next_o_idx = o_ptr->next_o_idx;
         if (o_ptr->marked & OM_FOUND) {
             GAME_TEXT o_name[MAX_NLEN];
-            boring = FALSE;
+            eg_ptr->boring = FALSE;
             describe_flavor(subject_ptr, o_name, o_ptr, 0);
 #ifdef JP
             sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
@@ -401,7 +416,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         feat = feat_none;
 
     f_ptr = &f_info[feat];
-    if (!boring && !have_flag(f_ptr->flags, FF_REMEMBER)) {
+    if (!eg_ptr->boring && !have_flag(f_ptr->flags, FF_REMEMBER)) {
         if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n'))
             return eg_ptr->query;
 
