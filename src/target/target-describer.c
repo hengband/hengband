@@ -357,6 +357,25 @@ static char describe_footing_many_items(player_type *subject_ptr, eg_type *eg_pt
     }
 }
 
+static s16b loop_describing_grid(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    if (eg_ptr->floor_num == 0)
+        return CONTINUOUS_DESCRIPTION;
+
+    int min_width = 0;
+    while (TRUE) {
+        s16b footing_description = describe_footing(subject_ptr, eg_ptr);
+        if (within_char_util(footing_description))
+            return (char)footing_description;
+
+        s16b footing_descriptions = describe_footing_items(eg_ptr);
+        if (within_char_util(footing_descriptions))
+            return (char)footing_descriptions;
+
+        return describe_footing_many_items(subject_ptr, eg_ptr, &min_width);
+    }
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -378,24 +397,13 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     if (describe_hallucinated_target(subject_ptr, eg_ptr))
         return 0;
 
-    u16b description_grid = describe_grid(subject_ptr, eg_ptr);
+    s16b description_grid = describe_grid(subject_ptr, eg_ptr);
     if (within_char_util(description_grid))
         return (char)description_grid;
 
-    if (eg_ptr->floor_num != 0) {
-        int min_width = 0;
-        while (TRUE) {
-            s16b footing_description = describe_footing(subject_ptr, eg_ptr);
-            if (within_char_util(footing_description))
-                return (char)footing_description;
-
-            s16b footing_descriptions = describe_footing_items(eg_ptr);
-            if (within_char_util(footing_descriptions))
-                return (char)footing_descriptions;
-
-            return describe_footing_many_items(subject_ptr, eg_ptr, &min_width);
-        }
-    }
+    s16b loop_description = loop_describing_grid(subject_ptr, eg_ptr);
+    if (within_char_util(loop_description))
+        return (char)loop_description;
 
     for (OBJECT_IDX this_o_idx = eg_ptr->g_ptr->o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
         object_type *o_ptr;
