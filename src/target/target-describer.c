@@ -60,6 +60,9 @@ typedef struct eg_type {
     grid_type *g_ptr;
     monster_type *m_ptr;
     OBJECT_IDX next_o_idx;
+    FEAT_IDX feat;
+    feature_type *f_ptr;
+    concptr name;
 } eg_type;
 
 static eg_type *initialize_eg_type(player_type *subject_ptr, eg_type *eg_ptr, POSITION y, POSITION x, target_type mode, concptr info)
@@ -425,6 +428,37 @@ static s16b sweep_footing_items(player_type *subject_ptr, eg_type *eg_ptr)
     return CONTINUOUS_DESCRIPTION;
 }
 
+static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    if (have_flag(eg_ptr->f_ptr->flags, FF_QUEST_ENTER)) {
+        IDX old_quest = subject_ptr->current_floor_ptr->inside_quest;
+        for (int j = 0; j < 10; j++)
+            quest_text[j][0] = '\0';
+
+        quest_text_line = 0;
+        subject_ptr->current_floor_ptr->inside_quest = eg_ptr->g_ptr->special;
+        init_flags = INIT_NAME_ONLY;
+        parse_fixed_map(subject_ptr, "q_info.txt", 0, 0, 0, 0);
+        subject_ptr->current_floor_ptr->inside_quest = old_quest;
+        return format(
+            _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), quest[eg_ptr->g_ptr->special].name, quest[eg_ptr->g_ptr->special].level);
+    }
+    
+    if (have_flag(eg_ptr->f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena)
+        return building[eg_ptr->f_ptr->subtype].name;
+    
+    if (have_flag(eg_ptr->f_ptr->flags, FF_ENTRANCE))
+        return format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[eg_ptr->g_ptr->special].text, d_info[eg_ptr->g_ptr->special].mindepth);
+    
+    if (have_flag(eg_ptr->f_ptr->flags, FF_TOWN))
+        return town_info[eg_ptr->g_ptr->special].name;
+    
+    if (subject_ptr->wild_mode && (eg_ptr->feat == feat_floor))
+        return _("道", "road");
+
+    return f_name + eg_ptr->f_ptr->name;
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -439,8 +473,6 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
 {
     eg_type tmp_eg;
     eg_type *eg_ptr = initialize_eg_type(subject_ptr, &tmp_eg, y, x, mode, info);
-    FEAT_IDX feat;
-    feature_type *f_ptr;
     describe_scan_result(subject_ptr, eg_ptr);
     describe_target(subject_ptr, eg_ptr);
     if (describe_hallucinated_target(subject_ptr, eg_ptr))
@@ -458,55 +490,32 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     if (within_char_util(footing_items_description))
         return (char)footing_items_description;
 
-    feat = get_feat_mimic(eg_ptr->g_ptr);
+    eg_ptr->feat = get_feat_mimic(eg_ptr->g_ptr);
     if (!(eg_ptr->g_ptr->info & CAVE_MARK) && !player_can_see_bold(subject_ptr, y, x))
-        feat = feat_none;
+        eg_ptr->feat = feat_none;
 
-    f_ptr = &f_info[feat];
-    if (!eg_ptr->boring && !have_flag(f_ptr->flags, FF_REMEMBER)) {
-        if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n'))
-            return eg_ptr->query;
+    eg_ptr->f_ptr = &f_info[eg_ptr->feat];
+    if (!eg_ptr->boring && !have_flag(eg_ptr->f_ptr->flags, FF_REMEMBER))
+        return (eg_ptr->query != '\r') && (eg_ptr->query != '\n') ? eg_ptr->query : 0;
 
-        return 0;
-    }
-
-    concptr name;
-    if (have_flag(f_ptr->flags, FF_QUEST_ENTER)) {
-        IDX old_quest = subject_ptr->current_floor_ptr->inside_quest;
-        for (int j = 0; j < 10; j++)
-            quest_text[j][0] = '\0';
-
-        quest_text_line = 0;
-        subject_ptr->current_floor_ptr->inside_quest = eg_ptr->g_ptr->special;
-        init_flags = INIT_NAME_ONLY;
-        parse_fixed_map(subject_ptr, "q_info.txt", 0, 0, 0, 0);
-        name = format(
-            _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), quest[eg_ptr->g_ptr->special].name, quest[eg_ptr->g_ptr->special].level);
-        subject_ptr->current_floor_ptr->inside_quest = old_quest;
-    } else if (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena) {
-        name = building[f_ptr->subtype].name;
-    } else if (have_flag(f_ptr->flags, FF_ENTRANCE)) {
-        name = format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[eg_ptr->g_ptr->special].text, d_info[eg_ptr->g_ptr->special].mindepth);
-    } else if (have_flag(f_ptr->flags, FF_TOWN)) {
-        name = town_info[eg_ptr->g_ptr->special].name;
-    } else if (subject_ptr->wild_mode && (feat == feat_floor)) {
-        name = _("道", "road");
-    } else {
-        name = f_name + f_ptr->name;
-    }
-
+    /*
+     * グローバル変数への代入をここで行っているので動かしたくない
+     * 安全を確保できたら構造体から外すことも検討する
+     */
+    eg_ptr->name = decide_target_floor(subject_ptr, eg_ptr);
     if (*eg_ptr->s2
-        && ((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
-            || (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE)) || have_flag(f_ptr->flags, FF_TOWN))) {
+        && ((!have_flag(eg_ptr->f_ptr->flags, FF_MOVE) && !have_flag(eg_ptr->f_ptr->flags, FF_CAN_FLY))
+            || (!have_flag(eg_ptr->f_ptr->flags, FF_LOS) && !have_flag(eg_ptr->f_ptr->flags, FF_TREE)) || have_flag(eg_ptr->f_ptr->flags, FF_TOWN))) {
         eg_ptr->s2 = _("の中", "in ");
     }
 
-    if (have_flag(f_ptr->flags, FF_STORE) || have_flag(f_ptr->flags, FF_QUEST_ENTER)
-        || (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena) || have_flag(f_ptr->flags, FF_ENTRANCE))
+    if (have_flag(eg_ptr->f_ptr->flags, FF_STORE) || have_flag(eg_ptr->f_ptr->flags, FF_QUEST_ENTER)
+        || (have_flag(eg_ptr->f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena) || have_flag(eg_ptr->f_ptr->flags, FF_ENTRANCE))
         eg_ptr->s2 = _("の入口", "");
 #ifdef JP
 #else
-    else if (have_flag(f_ptr->flags, FF_FLOOR) || have_flag(f_ptr->flags, FF_TOWN) || have_flag(f_ptr->flags, FF_SHALLOW) || have_flag(f_ptr->flags, FF_DEEP))
+    else if (have_flag(eg_ptr->f_ptr->flags, FF_FLOOR) || have_flag(eg_ptr->f_ptr->flags, FF_TOWN) || have_flag(eg_ptr->f_ptr->flags, FF_SHALLOW)
+        || have_flag(eg_ptr->f_ptr->flags, FF_DEEP))
         eg_ptr->s3 = "";
     else
         eg_ptr->s3 = (is_a_vowel(name[0])) ? "an " : "a ";
@@ -520,17 +529,18 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
             sprintf(f_idx_str, "%d", eg_ptr->g_ptr->feat);
 
 #ifdef JP
-        sprintf(eg_ptr->out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, info, (unsigned int)eg_ptr->g_ptr->info,
+        sprintf(eg_ptr->out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, info,
+            (unsigned int)eg_ptr->g_ptr->info,
             f_idx_str, eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)y, (int)x, travel.cost[y][x]);
 #else
-        sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, info, eg_ptr->g_ptr->info, f_idx_str,
+        sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, info, eg_ptr->g_ptr->info, f_idx_str,
             eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)y, (int)x);
 #endif
     } else
 #ifdef JP
-        sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+        sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
-        sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, name, eg_ptr->info);
+        sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info);
 #endif
 
     prt(eg_ptr->out_val, 0, 0);
