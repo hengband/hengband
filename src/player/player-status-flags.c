@@ -3,6 +3,7 @@
 #include "monster-race/race-flags2.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
+#include "object-enchant/object-ego.h"
 #include "object/object-flags.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
@@ -352,4 +353,24 @@ void have_esp_telepathy(player_type *creature_ptr)
 		if (have_flag(flgs, TR_TELEPATHY))
 			creature_ptr->telepathy = TRUE;
 	}
+}
+
+void have_easy2_weapon(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+
+	creature_ptr->easy_2weapon = FALSE;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (o_ptr->name2 == EGO_2WEAPON)
+            creature_ptr->easy_2weapon = TRUE;
+    }
+
 }
