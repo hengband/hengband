@@ -618,7 +618,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->right_hand_weapon = FALSE;
     creature_ptr->left_hand_weapon = FALSE;
     creature_ptr->no_flowed = FALSE;
-    creature_ptr->yoiyami = FALSE;
 }
 
 /*!
@@ -711,6 +710,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_bless_blade(creature_ptr);
     have_easy2_weapon(creature_ptr);
     have_down_saving(creature_ptr);
+    have_no_ac(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4792,8 +4792,6 @@ void calc_equipment_status(player_type *creature_ptr)
         if (have_flag(flgs, TR_SUST_CHR))
             creature_ptr->sustain_chr = TRUE;
 
-        if (o_ptr->name2 == EGO_YOIYAMI)
-            creature_ptr->yoiyami = TRUE;
         if (o_ptr->name2 == EGO_RING_RES_TIME)
             creature_ptr->resist_time = TRUE;
         if (o_ptr->name2 == EGO_RING_THROW)
