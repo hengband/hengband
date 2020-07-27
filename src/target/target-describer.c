@@ -411,6 +411,20 @@ static s16b describe_footing_sight(player_type *subject_ptr, eg_type *eg_ptr, ob
     return CONTINUOUS_DESCRIPTION;
 }
 
+static s16b sweep_footing_items(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    for (OBJECT_IDX this_o_idx = eg_ptr->g_ptr->o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
+        object_type *o_ptr;
+        o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
+        eg_ptr->next_o_idx = o_ptr->next_o_idx;
+        s16b ret = describe_footing_sight(subject_ptr, eg_ptr, o_ptr);
+        if (within_char_util(ret))
+            return (char)ret;
+    }
+
+    return CONTINUOUS_DESCRIPTION;
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -440,14 +454,9 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     if (within_char_util(loop_description))
         return (char)loop_description;
 
-    for (OBJECT_IDX this_o_idx = eg_ptr->g_ptr->o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
-        object_type *o_ptr;
-        o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
-        eg_ptr->next_o_idx = o_ptr->next_o_idx;
-        s16b ret = describe_footing_sight(subject_ptr, eg_ptr, o_ptr);
-        if (within_char_util(ret))
-            return (char)ret;
-    }
+    s16b footing_items_description = sweep_footing_items(subject_ptr, eg_ptr);
+    if (within_char_util(footing_items_description))
+        return (char)footing_items_description;
 
     feat = get_feat_mimic(eg_ptr->g_ptr);
     if (!(eg_ptr->g_ptr->info & CAVE_MARK) && !player_can_see_bold(subject_ptr, y, x))
