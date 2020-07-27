@@ -564,7 +564,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->tval_xtra = 0;
     creature_ptr->tval_ammo = 0;
     creature_ptr->cursed = 0L;
-    creature_ptr->bless_blade = FALSE;
     creature_ptr->impact[0] = FALSE;
     creature_ptr->impact[1] = FALSE;
     creature_ptr->dec_mana = FALSE;
@@ -710,6 +709,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_esp_nonliving(creature_ptr);
     have_esp_unique(creature_ptr);
     have_esp_telepathy(creature_ptr);
+    have_bless_blade(creature_ptr);
     have_easy2_weapon(creature_ptr);
 
     calc_race_status(creature_ptr);
@@ -4692,8 +4692,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->cursed |= TRC_SLOW_REGEN;
         if (have_flag(flgs, TR_DEC_MANA))
             creature_ptr->dec_mana = TRUE;
-        if (have_flag(flgs, TR_BLESSED))
-            creature_ptr->bless_blade = TRUE;
         if (have_flag(flgs, TR_SLOW_DIGEST))
             creature_ptr->slow_digest = TRUE;
         if (have_flag(flgs, TR_REGEN))

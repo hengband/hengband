@@ -16,6 +16,7 @@ void have_esp_good(player_type *creature_ptr);
 void have_esp_nonliving(player_type *creature_ptr);
 void have_esp_unique(player_type *creature_ptr);
 void have_esp_telepathy(player_type *creature_ptr);
+void have_bless_blade(player_type *creature_ptr);
 void have_easy2_weapon(player_type *creature_ptr);
 
 
