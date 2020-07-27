@@ -326,6 +326,37 @@ static s16b describe_footing_items(eg_type *eg_ptr)
     return CONTINUOUS_DESCRIPTION;
 }
 
+static char describe_footing_many_items(player_type *subject_ptr, eg_type *eg_ptr, int *min_width)
+{
+    while (TRUE) {
+        screen_save();
+        show_gold_on_floor = TRUE;
+        (void)show_floor_items(subject_ptr, 0, eg_ptr->y, eg_ptr->x, min_width, 0);
+        show_gold_on_floor = FALSE;
+#ifdef JP
+        sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+#else
+        sprintf(eg_ptr->out_val, "%s%s%sa pile of %d items [Enter,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
+#endif
+        prt(eg_ptr->out_val, 0, 0);
+        eg_ptr->query = inkey();
+        screen_load();
+        if (eg_ptr->query != '\n' && eg_ptr->query != '\r')
+            return eg_ptr->query;
+
+        OBJECT_IDX o_idx = eg_ptr->g_ptr->o_idx;
+        if (!(o_idx && subject_ptr->current_floor_ptr->o_list[o_idx].next_o_idx))
+            continue;
+
+        excise_object_idx(subject_ptr->current_floor_ptr, o_idx);
+        int i = eg_ptr->g_ptr->o_idx;
+        while (subject_ptr->current_floor_ptr->o_list[i].next_o_idx)
+            i = subject_ptr->current_floor_ptr->o_list[i].next_o_idx;
+
+        subject_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
+    }
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -362,33 +393,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
             if (within_char_util(footing_descriptions))
                 return (char)footing_descriptions;
 
-            while (TRUE) {
-                screen_save();
-                show_gold_on_floor = TRUE;
-                (void)show_floor_items(subject_ptr, 0, y, x, &min_width, 0);
-                show_gold_on_floor = FALSE;
-#ifdef JP
-                sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
-#else
-                sprintf(eg_ptr->out_val, "%s%s%sa pile of %d items [Enter,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
-#endif
-                prt(eg_ptr->out_val, 0, 0);
-                eg_ptr->query = inkey();
-                screen_load();
-                if (eg_ptr->query != '\n' && eg_ptr->query != '\r')
-                    return eg_ptr->query;
-
-                OBJECT_IDX o_idx = eg_ptr->g_ptr->o_idx;
-                if (!(o_idx && subject_ptr->current_floor_ptr->o_list[o_idx].next_o_idx))
-                    continue;
-
-                excise_object_idx(subject_ptr->current_floor_ptr, o_idx);
-                int i = eg_ptr->g_ptr->o_idx;
-                while (subject_ptr->current_floor_ptr->o_list[i].next_o_idx)
-                    i = subject_ptr->current_floor_ptr->o_list[i].next_o_idx;
-
-                subject_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
-            }
+            return describe_footing_many_items(subject_ptr, eg_ptr, &min_width);
         }
     }
 
