@@ -42,6 +42,7 @@ bool show_gold_on_floor = FALSE;
 typedef struct eg_type {
     POSITION y;
     POSITION x;
+    target_type mode;
     concptr info;
     concptr s1;
     concptr s2;
@@ -56,10 +57,11 @@ typedef struct eg_type {
     OBJECT_IDX next_o_idx;
 } eg_type;
 
-static eg_type *initialize_eg_type(player_type *subject_ptr, eg_type *eg_ptr, POSITION y, POSITION x, concptr info)
+static eg_type *initialize_eg_type(player_type *subject_ptr, eg_type *eg_ptr, POSITION y, POSITION x, target_type mode, concptr info)
 {
     eg_ptr->y = y;
     eg_ptr->x = x;
+    eg_ptr->mode = mode;
     eg_ptr->info = info;
     eg_ptr->s1 = "";
     eg_ptr->s2 = "";
@@ -218,6 +220,34 @@ static void describe_monster_person(eg_type *eg_ptr)
 #endif
 }
 
+static u16b describe_monster_item(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    for (OBJECT_IDX this_o_idx = eg_ptr->m_ptr->hold_o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
+        GAME_TEXT o_name[MAX_NLEN];
+        object_type *o_ptr;
+        o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
+        eg_ptr->next_o_idx = o_ptr->next_o_idx;
+        describe_flavor(subject_ptr, o_name, o_ptr, 0);
+#ifdef JP
+        sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+#else
+        sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
+#endif
+        prt(eg_ptr->out_val, 0, 0);
+        move_cursor_relative(eg_ptr->y, eg_ptr->x);
+        eg_ptr->query = inkey();
+        if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
+            return eg_ptr->query;
+
+        if ((eg_ptr->query == ' ') && !(eg_ptr->mode & TARGET_LOOK))
+            return eg_ptr->query;
+
+        eg_ptr->s2 = _("をまた", "also carrying ");
+    }
+
+    return 256;
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -231,7 +261,7 @@ static void describe_monster_person(eg_type *eg_ptr)
 char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, target_type mode, concptr info)
 {
     eg_type tmp_eg;
-    eg_type *eg_ptr = initialize_eg_type(subject_ptr, &tmp_eg, y, x, info);
+    eg_type *eg_ptr = initialize_eg_type(subject_ptr, &tmp_eg, y, x, mode, info);
     bool boring = TRUE;
     FEAT_IDX feat;
     feature_type *f_ptr;
@@ -253,29 +283,9 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
             return eg_ptr->query;
 
         describe_monster_person(eg_ptr);
-        for (OBJECT_IDX this_o_idx = eg_ptr->m_ptr->hold_o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
-            GAME_TEXT o_name[MAX_NLEN];
-            object_type *o_ptr;
-            o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
-            eg_ptr->next_o_idx = o_ptr->next_o_idx;
-            describe_flavor(subject_ptr, o_name, o_ptr, 0);
-#ifdef JP
-            sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
-#else
-            sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
-#endif
-            prt(eg_ptr->out_val, 0, 0);
-            move_cursor_relative(y, x);
-            eg_ptr->query = inkey();
-            if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' ') && (eg_ptr->query != 'x'))
-                return eg_ptr->query;
-
-            if ((eg_ptr->query == ' ') && !(mode & TARGET_LOOK))
-                return eg_ptr->query;
-
-            eg_ptr->s2 = _("をまた", "also carrying ");
-        }
-
+        u16b monster_item_description = describe_monster_item(subject_ptr, eg_ptr);
+        if ((monster_item_description > -127) && (monster_item_description < 128))
+            return (char)monster_item_description;
 #ifdef JP
         eg_ptr->s2 = "の上";
         eg_ptr->s3 = "にいる";
