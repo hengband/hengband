@@ -617,7 +617,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->two_handed_weapon = FALSE;
     creature_ptr->right_hand_weapon = FALSE;
     creature_ptr->left_hand_weapon = FALSE;
-    creature_ptr->no_flowed = FALSE;
 }
 
 /*!
@@ -664,9 +663,6 @@ void calc_bonuses(player_type *creature_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     bool omoi = FALSE;
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-
-    bool have_sw = FALSE, have_kabe = FALSE;
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
 
     /* Save the old vision stuff */
     bool old_telepathy = creature_ptr->telepathy;
@@ -943,37 +939,6 @@ void calc_bonuses(player_type *creature_ptr)
 
     put_equipment_warning(creature_ptr);
 
-    for (int i = 0; i < INVEN_PACK; i++) {
-        if ((creature_ptr->inventory_list[i].tval == TV_NATURE_BOOK) && (creature_ptr->inventory_list[i].sval == 2))
-            have_sw = TRUE;
-        if ((creature_ptr->inventory_list[i].tval == TV_CRAFT_BOOK) && (creature_ptr->inventory_list[i].sval == 2))
-            have_kabe = TRUE;
-    }
-
-    for (this_o_idx = floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx) {
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
-
-        if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2))
-            have_sw = TRUE;
-        if ((o_ptr->tval == TV_CRAFT_BOOK) && (o_ptr->sval == 2))
-            have_kabe = TRUE;
-    }
-
-    if (creature_ptr->pass_wall && !creature_ptr->kill_wall)
-        creature_ptr->no_flowed = TRUE;
-
-    if (have_sw && ((creature_ptr->realm1 == REALM_NATURE) || (creature_ptr->realm2 == REALM_NATURE) || (creature_ptr->pclass == CLASS_SORCERER))) {
-        const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE - 1][SPELL_SW];
-        if (creature_ptr->lev >= s_ptr->slevel)
-            creature_ptr->no_flowed = TRUE;
-    }
-
-    if (have_kabe && ((creature_ptr->realm1 == REALM_CRAFT) || (creature_ptr->realm2 == REALM_CRAFT) || (creature_ptr->pclass == CLASS_SORCERER))) {
-        const magic_type *s_ptr = &mp_ptr->info[REALM_CRAFT - 1][SPELL_WALL];
-        if (creature_ptr->lev >= s_ptr->slevel)
-            creature_ptr->no_flowed = TRUE;
-    }
 }
 
 static void calc_alignment(player_type *creature_ptr)
