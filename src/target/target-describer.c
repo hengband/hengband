@@ -286,6 +286,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         u16b monster_item_description = describe_monster_item(subject_ptr, eg_ptr);
         if ((monster_item_description > -127) && (monster_item_description < 128))
             return (char)monster_item_description;
+
 #ifdef JP
         eg_ptr->s2 = "の上";
         eg_ptr->s3 = "にいる";
