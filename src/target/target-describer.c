@@ -287,6 +287,26 @@ static s16b describe_grid(player_type *subject_ptr, eg_type *eg_ptr)
     return CONTINUOUS_DESCRIPTION;
 }
 
+static s16b describe_footing(player_type *subject_ptr, eg_type *eg_ptr)
+{
+    if (eg_ptr->floor_num != 1)
+        return CONTINUOUS_DESCRIPTION;
+
+    GAME_TEXT o_name[MAX_NLEN];
+    object_type *o_ptr;
+    o_ptr = &subject_ptr->current_floor_ptr->o_list[eg_ptr->floor_list[0]];
+    describe_flavor(subject_ptr, o_name, o_ptr, 0);
+#ifdef JP
+    sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+#else
+    sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
+#endif
+    prt(eg_ptr->out_val, 0, 0);
+    move_cursor_relative(eg_ptr->y, eg_ptr->x);
+    eg_ptr->query = inkey();
+    return eg_ptr->query;
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -315,21 +335,9 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     if (eg_ptr->floor_num != 0) {
         int min_width = 0;
         while (TRUE) {
-            if (eg_ptr->floor_num == 1) {
-                GAME_TEXT o_name[MAX_NLEN];
-                object_type *o_ptr;
-                o_ptr = &subject_ptr->current_floor_ptr->o_list[eg_ptr->floor_list[0]];
-                describe_flavor(subject_ptr, o_name, o_ptr, 0);
-#ifdef JP
-                sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
-#else
-                sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, o_name, eg_ptr->info);
-#endif
-                prt(eg_ptr->out_val, 0, 0);
-                move_cursor_relative(y, x);
-                eg_ptr->query = inkey();
-                return eg_ptr->query;
-            }
+            s16b footing_description = describe_footing(subject_ptr, eg_ptr);
+            if (within_char_util(footing_description))
+                return (char)footing_description;
 
             if (eg_ptr->boring) {
 #ifdef JP
@@ -345,8 +353,6 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
             }
 
             while (TRUE) {
-                int i;
-                OBJECT_IDX o_idx;
                 screen_save();
                 show_gold_on_floor = TRUE;
                 (void)show_floor_items(subject_ptr, 0, y, x, &min_width, 0);
@@ -362,12 +368,12 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
                 if (eg_ptr->query != '\n' && eg_ptr->query != '\r')
                     return eg_ptr->query;
 
-                o_idx = eg_ptr->g_ptr->o_idx;
+                OBJECT_IDX o_idx = eg_ptr->g_ptr->o_idx;
                 if (!(o_idx && subject_ptr->current_floor_ptr->o_list[o_idx].next_o_idx))
                     continue;
 
                 excise_object_idx(subject_ptr->current_floor_ptr, o_idx);
-                i = eg_ptr->g_ptr->o_idx;
+                int i = eg_ptr->g_ptr->o_idx;
                 while (subject_ptr->current_floor_ptr->o_list[i].next_o_idx)
                     i = subject_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
