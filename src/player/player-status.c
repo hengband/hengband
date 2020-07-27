@@ -619,7 +619,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->left_hand_weapon = FALSE;
     creature_ptr->no_flowed = FALSE;
     creature_ptr->yoiyami = FALSE;
-    creature_ptr->down_saving = FALSE;
 }
 
 /*!
@@ -711,6 +710,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_esp_telepathy(creature_ptr);
     have_bless_blade(creature_ptr);
     have_easy2_weapon(creature_ptr);
+    have_down_saving(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4802,8 +4802,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->easy_spell = TRUE;
         if (o_ptr->name2 == EGO_AMU_FOOL)
             creature_ptr->heavy_spell = TRUE;
-        if (o_ptr->name2 == EGO_AMU_NAIVETY)
-            creature_ptr->down_saving = TRUE;
 
         if (o_ptr->tval == TV_CAPTURE)
             continue;
