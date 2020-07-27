@@ -201,6 +201,23 @@ static void describe_grid_monster(player_type *subject_ptr, eg_type *eg_ptr)
     }
 }
 
+static void describe_monster_person(eg_type *eg_ptr)
+{
+    monster_race *ap_r_ptr = &r_info[eg_ptr->m_ptr->ap_r_idx];
+    eg_ptr->s1 = _("それは", "It is ");
+    if (ap_r_ptr->flags1 & RF1_FEMALE)
+        eg_ptr->s1 = _("彼女は", "She is ");
+    else if (ap_r_ptr->flags1 & RF1_MALE)
+        eg_ptr->s1 = _("彼は", "He is ");
+
+#ifdef JP
+    eg_ptr->s2 = "を";
+    eg_ptr->s3 = "持っている";
+#else
+    eg_ptr->s2 = "carrying ";
+#endif
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -224,7 +241,6 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         return 0;
 
     if (eg_ptr->g_ptr->m_idx && subject_ptr->current_floor_ptr->m_list[eg_ptr->g_ptr->m_idx].ml) {
-        monster_race *ap_r_ptr = &r_info[eg_ptr->m_ptr->ap_r_idx];
         boring = FALSE;
         monster_race_track(subject_ptr, eg_ptr->m_ptr->ap_r_idx);
         health_track(subject_ptr, eg_ptr->g_ptr->m_idx);
@@ -236,19 +252,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         if ((eg_ptr->query == ' ') && !(mode & TARGET_LOOK))
             return eg_ptr->query;
 
-        eg_ptr->s1 = _("それは", "It is ");
-        if (ap_r_ptr->flags1 & RF1_FEMALE)
-            eg_ptr->s1 = _("彼女は", "She is ");
-        else if (ap_r_ptr->flags1 & RF1_MALE)
-            eg_ptr->s1 = _("彼は", "He is ");
-
-#ifdef JP
-        eg_ptr->s2 = "を";
-        eg_ptr->s3 = "持っている";
-#else
-        eg_ptr->s2 = "carrying ";
-#endif
-
+        describe_monster_person(eg_ptr);
         for (OBJECT_IDX this_o_idx = eg_ptr->m_ptr->hold_o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
             GAME_TEXT o_name[MAX_NLEN];
             object_type *o_ptr;
