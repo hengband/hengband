@@ -16,6 +16,7 @@
 #include "io/input-key-acceptor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "object/object-mark-types.h"
 #include "system/building-type-definition.h"
@@ -174,6 +175,8 @@ static bool describe_grid_lore(player_type *subject_ptr, eg_type *eg_ptr)
 static void describe_grid_monster(player_type *subject_ptr, eg_type *eg_ptr)
 {
     bool recall = FALSE;
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(subject_ptr, m_name, eg_ptr->m_ptr, MD_INDEF_VISIBLE);
     while (TRUE) {
         char acount[10];
         if (recall) {
@@ -185,7 +188,6 @@ static void describe_grid_monster(player_type *subject_ptr, eg_type *eg_ptr)
         }
 
         evaluate_monster_exp(subject_ptr, acount, eg_ptr->m_ptr);
-        GAME_TEXT m_name[MAX_NLEN];
 #ifdef JP
         sprintf(eg_ptr->out_val, "[%s]%s%s(%s)%s%s [r思 %s%s]", acount, eg_ptr->s1, m_name, look_mon_desc(eg_ptr->m_ptr, 0x01), eg_ptr->s2, eg_ptr->s3,
             eg_ptr->x_info, eg_ptr->info);
