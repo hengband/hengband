@@ -307,6 +307,25 @@ static s16b describe_footing(player_type *subject_ptr, eg_type *eg_ptr)
     return eg_ptr->query;
 }
 
+static s16b describe_footing_items(eg_type *eg_ptr)
+{
+    if (!eg_ptr->boring)
+        return CONTINUOUS_DESCRIPTION;
+
+#ifdef JP
+    sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s ['x'で一覧, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+#else
+    sprintf(eg_ptr->out_val, "%s%s%sa pile of %d items [x,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
+#endif
+    prt(eg_ptr->out_val, 0, 0);
+    move_cursor_relative(eg_ptr->y, eg_ptr->x);
+    eg_ptr->query = inkey();
+    if (eg_ptr->query != 'x' && eg_ptr->query != ' ')
+        return eg_ptr->query;
+
+    return CONTINUOUS_DESCRIPTION;
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -339,18 +358,9 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
             if (within_char_util(footing_description))
                 return (char)footing_description;
 
-            if (eg_ptr->boring) {
-#ifdef JP
-                sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s ['x'で一覧, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
-#else
-                sprintf(eg_ptr->out_val, "%s%s%sa pile of %d items [x,%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, (int)eg_ptr->floor_num, eg_ptr->info);
-#endif
-                prt(eg_ptr->out_val, 0, 0);
-                move_cursor_relative(y, x);
-                eg_ptr->query = inkey();
-                if (eg_ptr->query != 'x' && eg_ptr->query != ' ')
-                    return eg_ptr->query;
-            }
+            s16b footing_descriptions = describe_footing_items(eg_ptr);
+            if (within_char_util(footing_descriptions))
+                return (char)footing_descriptions;
 
             while (TRUE) {
                 screen_save();
