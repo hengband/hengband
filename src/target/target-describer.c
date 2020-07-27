@@ -459,6 +459,34 @@ static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
     return f_name + eg_ptr->f_ptr->name;
 }
 
+static void describe_grid_monster_all(eg_type *eg_ptr)
+{
+    if (!current_world_ptr->wizard) {
+#ifdef JP
+        sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
+#else
+        sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info);
+#endif
+        return;
+    }
+
+    char f_idx_str[32];
+    if (eg_ptr->g_ptr->mimic)
+        sprintf(f_idx_str, "%d/%d", eg_ptr->g_ptr->feat, eg_ptr->g_ptr->mimic);
+    else
+        sprintf(f_idx_str, "%d", eg_ptr->g_ptr->feat);
+
+#ifdef JP
+    sprintf(eg_ptr->out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info,
+        (unsigned int)eg_ptr->g_ptr->info, f_idx_str, eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x,
+        travel.cost[eg_ptr->y][eg_ptr->x]);
+#else
+    sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info, eg_ptr->g_ptr->info,
+        f_idx_str,
+        eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x);
+#endif
+}
+
 /*
  * todo xとlで処理を分ける？
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
@@ -518,31 +546,10 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         || have_flag(eg_ptr->f_ptr->flags, FF_DEEP))
         eg_ptr->s3 = "";
     else
-        eg_ptr->s3 = (is_a_vowel(name[0])) ? "an " : "a ";
+        eg_ptr->s3 = (is_a_vowel(eg_ptr->name[0])) ? "an " : "a ";
 #endif
 
-    if (current_world_ptr->wizard) {
-        char f_idx_str[32];
-        if (eg_ptr->g_ptr->mimic)
-            sprintf(f_idx_str, "%d/%d", eg_ptr->g_ptr->feat, eg_ptr->g_ptr->mimic);
-        else
-            sprintf(f_idx_str, "%d", eg_ptr->g_ptr->feat);
-
-#ifdef JP
-        sprintf(eg_ptr->out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, info,
-            (unsigned int)eg_ptr->g_ptr->info,
-            f_idx_str, eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)y, (int)x, travel.cost[y][x]);
-#else
-        sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, info, eg_ptr->g_ptr->info, f_idx_str,
-            eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)y, (int)x);
-#endif
-    } else
-#ifdef JP
-        sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
-#else
-        sprintf(eg_ptr->out_val, "%s%s%s%s [%s]", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info);
-#endif
-
+    describe_grid_monster_all(eg_ptr);
     prt(eg_ptr->out_val, 0, 0);
     move_cursor_relative(y, x);
     eg_ptr->query = inkey();
