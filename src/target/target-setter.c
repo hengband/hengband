@@ -34,6 +34,7 @@ typedef struct ts_type {
     TERM_LEN wid, hgt;
     int m;
     int distance;
+    int target_num;
 } ts_type;
 
 static ts_type *initialize_target_set_type(player_type *creature_ptr, ts_type *ts_ptr, target_type mode)
@@ -229,6 +230,22 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
     }
 }
 
+static bool check_panel_changed(player_type *creature_ptr, ts_type *ts_ptr)
+{
+    if (!change_panel(creature_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance]))
+        return FALSE;
+
+    int v = tmp_pos.y[ts_ptr->m];
+    int u = tmp_pos.x[ts_ptr->m];
+    target_set_prepare(creature_ptr, ts_ptr->mode);
+    ts_ptr->flag = TRUE;
+    ts_ptr->target_num = target_pick(v, u, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
+    if (ts_ptr->target_num >= 0)
+        ts_ptr->m = ts_ptr->target_num;
+
+    return TRUE;
+}
+
 /*
  * Handle "target" and "look".
  */
@@ -253,19 +270,10 @@ bool target_set(player_type *creature_ptr, target_type mode)
             if (ts_ptr->distance != 0) {
                 POSITION y2 = panel_row_min;
                 POSITION x2 = panel_col_min;
-                int i = target_pick(tmp_pos.y[ts_ptr->m], tmp_pos.x[ts_ptr->m], ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
-                while (ts_ptr->flag && (i < 0)) {
-                    if (change_panel(creature_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance])) {
-                        int v = tmp_pos.y[ts_ptr->m];
-                        int u = tmp_pos.x[ts_ptr->m];
-                        target_set_prepare(creature_ptr, mode);
-                        ts_ptr->flag = TRUE;
-                        i = target_pick(v, u, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
-                        if (i >= 0)
-                            ts_ptr->m = i;
-
+                ts_ptr->target_num = target_pick(tmp_pos.y[ts_ptr->m], tmp_pos.x[ts_ptr->m], ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
+                while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
+                    if (check_panel_changed(creature_ptr, ts_ptr))
                         continue;
-                    }
 
                     POSITION dx = ddx[ts_ptr->distance];
                     POSITION dy = ddy[ts_ptr->distance];
@@ -302,7 +310,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
                         ts_ptr->y = 1;
                 }
 
-                ts_ptr->m = i;
+                ts_ptr->m = ts_ptr->target_num;
             }
 
             continue;
