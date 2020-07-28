@@ -26,6 +26,8 @@ typedef struct ts_type {
     target_type mode;
     POSITION y;
     POSITION x;
+    POSITION y2;
+    POSITION x2;
     bool done;
     bool flag;
     char query;
@@ -246,6 +248,50 @@ static bool check_panel_changed(player_type *creature_ptr, ts_type *ts_ptr)
     return TRUE;
 }
 
+static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
+{
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
+        if (check_panel_changed(creature_ptr, ts_ptr))
+            continue;
+
+        POSITION dx = ddx[ts_ptr->distance];
+        POSITION dy = ddy[ts_ptr->distance];
+        panel_row_min = ts_ptr->y2;
+        panel_col_min = ts_ptr->x2;
+        panel_bounds_center();
+        creature_ptr->update |= PU_MONSTERS;
+        creature_ptr->redraw |= PR_MAP;
+        creature_ptr->window |= PW_OVERHEAD;
+        handle_stuff(creature_ptr);
+        target_set_prepare(creature_ptr, ts_ptr->mode);
+        ts_ptr->flag = FALSE;
+        ts_ptr->x += dx;
+        ts_ptr->y += dy;
+        if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0)))
+            dx = 0;
+
+        if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0)))
+            dy = 0;
+
+        if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid)
+            || (ts_ptr->x < panel_col_min)) {
+            if (change_panel(creature_ptr, dy, dx))
+                target_set_prepare(creature_ptr, ts_ptr->mode);
+        }
+
+        if (ts_ptr->x >= floor_ptr->width - 1)
+            ts_ptr->x = floor_ptr->width - 2;
+        else if (ts_ptr->x <= 0)
+            ts_ptr->x = 1;
+
+        if (ts_ptr->y >= floor_ptr->height - 1)
+            ts_ptr->y = floor_ptr->height - 2;
+        else if (ts_ptr->y <= 0)
+            ts_ptr->y = 1;
+    }
+}
+
 /*
  * Handle "target" and "look".
  */
@@ -268,48 +314,10 @@ bool target_set(player_type *creature_ptr, target_type mode)
             menu_target(ts_ptr);
             switch_target_input(creature_ptr, ts_ptr);
             if (ts_ptr->distance != 0) {
-                POSITION y2 = panel_row_min;
-                POSITION x2 = panel_col_min;
+                ts_ptr->y2 = panel_row_min;
+                ts_ptr->x2 = panel_col_min;
                 ts_ptr->target_num = target_pick(tmp_pos.y[ts_ptr->m], tmp_pos.x[ts_ptr->m], ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
-                while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
-                    if (check_panel_changed(creature_ptr, ts_ptr))
-                        continue;
-
-                    POSITION dx = ddx[ts_ptr->distance];
-                    POSITION dy = ddy[ts_ptr->distance];
-                    panel_row_min = y2;
-                    panel_col_min = x2;
-                    panel_bounds_center();
-                    creature_ptr->update |= (PU_MONSTERS);
-                    creature_ptr->redraw |= (PR_MAP);
-                    creature_ptr->window |= (PW_OVERHEAD);
-                    handle_stuff(creature_ptr);
-                    target_set_prepare(creature_ptr, mode);
-                    ts_ptr->flag = FALSE;
-                    ts_ptr->x += dx;
-                    ts_ptr->y += dy;
-                    if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0)))
-                        dx = 0;
-
-                    if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0)))
-                        dy = 0;
-
-                    if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid) || (ts_ptr->x < panel_col_min)) {
-                        if (change_panel(creature_ptr, dy, dx))
-                            target_set_prepare(creature_ptr, mode);
-                    }
-
-                    if (ts_ptr->x >= floor_ptr->width - 1)
-                        ts_ptr->x = floor_ptr->width - 2;
-                    else if (ts_ptr->x <= 0)
-                        ts_ptr->x = 1;
-
-                    if (ts_ptr->y >= floor_ptr->height - 1)
-                        ts_ptr->y = floor_ptr->height - 2;
-                    else if (ts_ptr->y <= 0)
-                        ts_ptr->y = 1;
-                }
-
+                sweep_targets(creature_ptr, ts_ptr);
                 ts_ptr->m = ts_ptr->target_num;
             }
 
