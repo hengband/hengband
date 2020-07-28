@@ -140,6 +140,15 @@ static void describe_projectablity(player_type *creature_ptr, ts_type *ts_ptr)
     strcat(ts_ptr->info, cheatinfo);
 }
 
+static void menu_target(ts_type *ts_ptr)
+{
+    if (!use_menu)
+        return;
+
+    if (ts_ptr->query == '\r')
+        ts_ptr->query = 't';
+}
+
 /*
  * Handle "target" and "look".
  */
@@ -159,12 +168,8 @@ bool target_set(player_type *creature_ptr, target_type mode)
                     break;
             }
 
+            menu_target(ts_ptr);
             int d = 0;
-            if (use_menu) {
-                if (ts_ptr->query == '\r')
-                    ts_ptr->query = 't';
-            }
-
             switch (ts_ptr->query) {
             case ESCAPE:
             case 'q': {
