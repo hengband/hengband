@@ -317,6 +317,17 @@ static bool set_target_grid(player_type *creature_ptr, ts_type *ts_ptr)
     return TRUE;
 }
 
+static void describe_grid_wizard(player_type *creature_ptr, ts_type *ts_ptr)
+{
+    if (!cheat_sight)
+        return;
+
+    char cheatinfo[100];
+    sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
+        projectable(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x), ts_ptr->g_ptr->special);
+    strcat(ts_ptr->info, cheatinfo);
+}
+
 /*
  * Handle "target" and "look".
  */
@@ -337,12 +348,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
 
         ts_ptr->g_ptr = &floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
         strcpy(ts_ptr->info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
-        if (cheat_sight) {
-            char cheatinfo[100];
-            sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
-                projectable(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x), ts_ptr->g_ptr->special);
-            strcat(ts_ptr->info, cheatinfo);
-        }
+        describe_grid_wizard();
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
         while ((ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, mode | TARGET_LOOK, ts_ptr->info)) == 0)
