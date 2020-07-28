@@ -37,6 +37,7 @@ typedef struct ts_type {
     int m;
     int distance;
     int target_num;
+    bool move_fast;
 } ts_type;
 
 static ts_type *initialize_target_set_type(player_type *creature_ptr, ts_type *ts_ptr, target_type mode)
@@ -328,6 +329,67 @@ static void describe_grid_wizard(player_type *creature_ptr, ts_type *ts_ptr)
     strcat(ts_ptr->info, cheatinfo);
 }
 
+static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
+{
+    switch (ts_ptr->query) {
+    case ESCAPE:
+    case 'q':
+        ts_ptr->done = TRUE;
+        break;
+    case 't':
+    case '.':
+    case '5':
+    case '0':
+        target_who = -1;
+        target_row = ts_ptr->y;
+        target_col = ts_ptr->x;
+        ts_ptr->done = TRUE;
+        break;
+    case 'p':
+        verify_panel(creature_ptr);
+        creature_ptr->update |= PU_MONSTERS;
+        creature_ptr->redraw |= PR_MAP;
+        creature_ptr->window |= PW_OVERHEAD;
+        handle_stuff(creature_ptr);
+        target_set_prepare(creature_ptr, ts_ptr->mode);
+        ts_ptr->y = creature_ptr->y;
+        ts_ptr->x = creature_ptr->x;
+    case 'o':
+        // todo ↑元からbreakしていないがFall Throughを付けてよいか不明なので保留
+        break;
+    case ' ':
+    case '*':
+    case '+':
+    case '-':
+    case 'm': {
+        ts_ptr->flag = TRUE;
+        ts_ptr->m = 0;
+        int bd = 999;
+        for (int i = 0; i < tmp_pos.n; i++) {
+            int t = distance(ts_ptr->y, ts_ptr->x, tmp_pos.y[i], tmp_pos.x[i]);
+            if (t < bd) {
+                ts_ptr->m = i;
+                bd = t;
+            }
+        }
+
+        if (bd == 999)
+            ts_ptr->flag = FALSE;
+
+        break;
+    }
+    default:
+        ts_ptr->distance = get_keymap_dir(ts_ptr->query);
+        if (isupper(ts_ptr->query))
+            ts_ptr->move_fast = TRUE;
+
+        if (!ts_ptr->distance)
+            bell();
+
+        break;
+    }
+}
+
 /*
  * Handle "target" and "look".
  */
@@ -342,7 +404,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
         if (set_target_grid(creature_ptr, ts_ptr))
             continue;
 
-        bool move_fast = FALSE;
+        ts_ptr->move_fast = FALSE;
         if (!(mode & TARGET_LOOK))
             print_path(creature_ptr, ts_ptr->y, ts_ptr->x);
 
@@ -358,67 +420,11 @@ bool target_set(player_type *creature_ptr, target_type mode)
         if (use_menu && (ts_ptr->query == '\r'))
             ts_ptr->query = 't';
 
-        switch (ts_ptr->query) {
-        case ESCAPE:
-        case 'q':
-            ts_ptr->done = TRUE;
-            break;
-        case 't':
-        case '.':
-        case '5':
-        case '0':
-            target_who = -1;
-            target_row = ts_ptr->y;
-            target_col = ts_ptr->x;
-            ts_ptr->done = TRUE;
-            break;
-        case 'p':
-            verify_panel(creature_ptr);
-            creature_ptr->update |= (PU_MONSTERS);
-            creature_ptr->redraw |= (PR_MAP);
-            creature_ptr->window |= (PW_OVERHEAD);
-            handle_stuff(creature_ptr);
-            target_set_prepare(creature_ptr, mode);
-            ts_ptr->y = creature_ptr->y;
-            ts_ptr->x = creature_ptr->x;
-        case 'o':
-            break;
-        case ' ':
-        case '*':
-        case '+':
-        case '-':
-        case 'm': {
-            ts_ptr->flag = TRUE;
-            ts_ptr->m = 0;
-            int bd = 999;
-            for (int i = 0; i < tmp_pos.n; i++) {
-                int t = distance(ts_ptr->y, ts_ptr->x, tmp_pos.y[i], tmp_pos.x[i]);
-                if (t < bd) {
-                    ts_ptr->m = i;
-                    bd = t;
-                }
-            }
-
-            if (bd == 999)
-                ts_ptr->flag = FALSE;
-
-            break;
-        }
-        default: {
-            ts_ptr->distance = get_keymap_dir(ts_ptr->query);
-            if (isupper(ts_ptr->query))
-                move_fast = TRUE;
-
-            if (!ts_ptr->distance)
-                bell();
-            break;
-        }
-        }
-
+        switch_next_grid_command(creature_ptr, ts_ptr);
         if (ts_ptr->distance) {
             POSITION dx = ddx[ts_ptr->distance];
             POSITION dy = ddy[ts_ptr->distance];
-            if (move_fast) {
+            if (ts_ptr->move_fast) {
                 int mag = MIN(ts_ptr->wid / 2, ts_ptr->hgt / 2);
                 ts_ptr->x += dx * mag;
                 ts_ptr->y += dy * mag;
