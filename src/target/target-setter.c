@@ -155,17 +155,16 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
     ts_ptr->distance = 0;
     switch (ts_ptr->query) {
     case ESCAPE:
-    case 'q': {
+    case 'q':
         ts_ptr->done = TRUE;
-        break;
-    }
+        return;
     case 't':
     case '.':
     case '5':
-    case '0': {
+    case '0':
         if (!target_able(creature_ptr, ts_ptr->g_ptr->m_idx)) {
             bell();
-            break;
+            return;
         }
 
         health_track(creature_ptr, ts_ptr->g_ptr->m_idx);
@@ -173,28 +172,27 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
         target_row = ts_ptr->y;
         target_col = ts_ptr->x;
         ts_ptr->done = TRUE;
-        break;
-    }
+        return;
     case ' ':
     case '*':
-    case '+': {
-        if (++ts_ptr->m == tmp_pos.n) {
-            ts_ptr->m = 0;
-            if (!expand_list)
-                ts_ptr->done = TRUE;
-        }
+    case '+':
+        if (++ts_ptr->m != tmp_pos.n)
+            return;
 
-        break;
-    }
-    case '-': {
-        if (ts_ptr->m-- == 0) {
-            ts_ptr->m = tmp_pos.n - 1;
-            if (!expand_list)
-                ts_ptr->done = TRUE;
-        }
+        ts_ptr->m = 0;
+        if (!expand_list)
+            ts_ptr->done = TRUE;
 
-        break;
-    }
+        return;
+    case '-':
+        if (ts_ptr->m-- != 0)
+            return;
+
+        ts_ptr->m = tmp_pos.n - 1;
+        if (!expand_list)
+            ts_ptr->done = TRUE;
+
+        return;
     case 'p': {
         verify_panel(creature_ptr);
         creature_ptr->update |= PU_MONSTERS;
@@ -208,24 +206,26 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
         /* Fall through */
     case 'o':
         ts_ptr->flag = FALSE;
-        break;
+        return;
     case 'm':
-        break;
-    default: {
-        if (ts_ptr->query == rogue_like_commands ? 'x' : 'l') {
-            if (++ts_ptr->m == tmp_pos.n) {
-                ts_ptr->m = 0;
-                if (!expand_list)
-                    ts_ptr->done = TRUE;
-            }
-        } else {
+        return;
+    default:
+        if (ts_ptr->query != rogue_like_commands ? 'x' : 'l') {
             ts_ptr->distance = get_keymap_dir(ts_ptr->query);
             if (ts_ptr->distance == 0)
                 bell();
 
-            break;
+            return;
         }
-    }
+
+        if (++ts_ptr->m != tmp_pos.n)
+            return;
+
+        ts_ptr->m = 0;
+        if (!expand_list)
+            ts_ptr->done = TRUE;
+
+        return;
     }
 }
 
