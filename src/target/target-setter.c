@@ -348,13 +348,13 @@ bool target_set(player_type *creature_ptr, target_type mode)
 
         ts_ptr->g_ptr = &floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
         strcpy(ts_ptr->info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
-        describe_grid_wizard();
+        describe_grid_wizard(creature_ptr, ts_ptr);
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
         while ((ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, mode | TARGET_LOOK, ts_ptr->info)) == 0)
             ;
 
-        int d = 0;
+        ts_ptr->distance = 0;
         if (use_menu && (ts_ptr->query == '\r'))
             ts_ptr->query = 't';
 
@@ -405,19 +405,19 @@ bool target_set(player_type *creature_ptr, target_type mode)
             break;
         }
         default: {
-            d = get_keymap_dir(ts_ptr->query);
+            ts_ptr->distance = get_keymap_dir(ts_ptr->query);
             if (isupper(ts_ptr->query))
                 move_fast = TRUE;
 
-            if (!d)
+            if (!ts_ptr->distance)
                 bell();
             break;
         }
         }
 
-        if (d) {
-            POSITION dx = ddx[d];
-            POSITION dy = ddy[d];
+        if (ts_ptr->distance) {
+            POSITION dx = ddx[ts_ptr->distance];
+            POSITION dy = ddy[ts_ptr->distance];
             if (move_fast) {
                 int mag = MIN(ts_ptr->wid / 2, ts_ptr->hgt / 2);
                 ts_ptr->x += dx * mag;
