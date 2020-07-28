@@ -608,7 +608,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->anti_magic = FALSE;
     creature_ptr->anti_tele = FALSE;
     creature_ptr->warning = FALSE;
-    creature_ptr->mighty_throw = FALSE;
     creature_ptr->see_nocto = FALSE;
     creature_ptr->immune_acid = FALSE;
     creature_ptr->immune_elec = FALSE;
@@ -707,6 +706,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_easy2_weapon(creature_ptr);
     have_down_saving(creature_ptr);
     have_no_ac(creature_ptr);
+    have_mighty_throw(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4759,8 +4759,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (o_ptr->name2 == EGO_RING_RES_TIME)
             creature_ptr->resist_time = TRUE;
-        if (o_ptr->name2 == EGO_RING_THROW)
-            creature_ptr->mighty_throw = TRUE;
         if (have_flag(flgs, TR_EASY_SPELL))
             creature_ptr->easy_spell = TRUE;
         if (o_ptr->name2 == EGO_AMU_FOOL)

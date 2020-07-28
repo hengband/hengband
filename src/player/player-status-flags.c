@@ -473,3 +473,19 @@ void have_no_flowed(player_type *creature_ptr)
             creature_ptr->no_flowed = TRUE;
     }
 }
+
+void have_mighty_throw(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+
+    creature_ptr->mighty_throw = FALSE;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+	    if (o_ptr->name2 == EGO_RING_THROW)
+            creature_ptr->mighty_throw = TRUE;
+    }
+}
