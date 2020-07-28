@@ -1,8 +1,8 @@
 ﻿#include "target/target-setter.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
-#include "core/window-redrawer.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "floor/floor.h"
 #include "game-option/cheat-options.h"
 #include "game-option/game-play-options.h"
@@ -292,6 +292,31 @@ static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
     }
 }
 
+static bool set_target_grid(player_type *creature_ptr, ts_type *ts_ptr)
+{
+    if (!ts_ptr->flag || (tmp_pos.n == 0))
+        return FALSE;
+
+    describe_projectablity(creature_ptr, ts_ptr);
+    while (TRUE) {
+        ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, ts_ptr->mode, ts_ptr->info);
+        if (ts_ptr->query)
+            break;
+    }
+
+    menu_target(ts_ptr);
+    switch_target_input(creature_ptr, ts_ptr);
+    if (ts_ptr->distance == 0)
+        return TRUE;
+
+    ts_ptr->y2 = panel_row_min;
+    ts_ptr->x2 = panel_col_min;
+    ts_ptr->target_num = target_pick(tmp_pos.y[ts_ptr->m], tmp_pos.x[ts_ptr->m], ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
+    sweep_targets(creature_ptr, ts_ptr);
+    ts_ptr->m = ts_ptr->target_num;
+    return TRUE;
+}
+
 /*
  * Handle "target" and "look".
  */
@@ -303,26 +328,8 @@ bool target_set(player_type *creature_ptr, target_type mode)
     target_set_prepare(creature_ptr, mode);
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     while (!ts_ptr->done) {
-        if (ts_ptr->flag && tmp_pos.n) {
-            describe_projectablity(creature_ptr, ts_ptr);
-            while (TRUE) {
-                ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, mode, ts_ptr->info);
-                if (ts_ptr->query)
-                    break;
-            }
-
-            menu_target(ts_ptr);
-            switch_target_input(creature_ptr, ts_ptr);
-            if (ts_ptr->distance != 0) {
-                ts_ptr->y2 = panel_row_min;
-                ts_ptr->x2 = panel_col_min;
-                ts_ptr->target_num = target_pick(tmp_pos.y[ts_ptr->m], tmp_pos.x[ts_ptr->m], ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
-                sweep_targets(creature_ptr, ts_ptr);
-                ts_ptr->m = ts_ptr->target_num;
-            }
-
+        if (set_target_grid(creature_ptr, ts_ptr))
             continue;
-        }
 
         bool move_fast = FALSE;
         if (!(mode & TARGET_LOOK))
@@ -420,7 +427,8 @@ bool target_set(player_type *creature_ptr, target_type mode)
             if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0)))
                 dy = 0;
 
-            if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid) || (ts_ptr->x < panel_col_min)) {
+            if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid)
+                || (ts_ptr->x < panel_col_min)) {
                 if (change_panel(creature_ptr, dy, dx))
                     target_set_prepare(creature_ptr, mode);
             }
