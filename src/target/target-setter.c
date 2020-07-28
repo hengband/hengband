@@ -213,8 +213,9 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
         return;
     case 'm':
         return;
-    default:
-        if (ts_ptr->query != rogue_like_commands ? 'x' : 'l') {
+    default: {
+        const char queried_command = rogue_like_commands ? 'x' : 'l';
+        if (ts_ptr->query != queried_command) {
             ts_ptr->distance = get_keymap_dir(ts_ptr->query);
             if (ts_ptr->distance == 0)
                 bell();
@@ -230,6 +231,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
             ts_ptr->done = TRUE;
 
         return;
+    }
     }
 }
 
