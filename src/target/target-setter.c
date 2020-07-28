@@ -150,6 +150,85 @@ static void menu_target(ts_type *ts_ptr)
         ts_ptr->query = 't';
 }
 
+static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
+{
+    ts_ptr->distance = 0;
+    switch (ts_ptr->query) {
+    case ESCAPE:
+    case 'q': {
+        ts_ptr->done = TRUE;
+        break;
+    }
+    case 't':
+    case '.':
+    case '5':
+    case '0': {
+        if (!target_able(creature_ptr, ts_ptr->g_ptr->m_idx)) {
+            bell();
+            break;
+        }
+
+        health_track(creature_ptr, ts_ptr->g_ptr->m_idx);
+        target_who = ts_ptr->g_ptr->m_idx;
+        target_row = ts_ptr->y;
+        target_col = ts_ptr->x;
+        ts_ptr->done = TRUE;
+        break;
+    }
+    case ' ':
+    case '*':
+    case '+': {
+        if (++ts_ptr->m == tmp_pos.n) {
+            ts_ptr->m = 0;
+            if (!expand_list)
+                ts_ptr->done = TRUE;
+        }
+
+        break;
+    }
+    case '-': {
+        if (ts_ptr->m-- == 0) {
+            ts_ptr->m = tmp_pos.n - 1;
+            if (!expand_list)
+                ts_ptr->done = TRUE;
+        }
+
+        break;
+    }
+    case 'p': {
+        verify_panel(creature_ptr);
+        creature_ptr->update |= PU_MONSTERS;
+        creature_ptr->redraw |= PR_MAP;
+        creature_ptr->window |= PW_OVERHEAD;
+        handle_stuff(creature_ptr);
+        target_set_prepare(creature_ptr, ts_ptr->mode);
+        ts_ptr->y = creature_ptr->y;
+        ts_ptr->x = creature_ptr->x;
+    }
+        /* Fall through */
+    case 'o':
+        ts_ptr->flag = FALSE;
+        break;
+    case 'm':
+        break;
+    default: {
+        if (ts_ptr->query == rogue_like_commands ? 'x' : 'l') {
+            if (++ts_ptr->m == tmp_pos.n) {
+                ts_ptr->m = 0;
+                if (!expand_list)
+                    ts_ptr->done = TRUE;
+            }
+        } else {
+            ts_ptr->distance = get_keymap_dir(ts_ptr->query);
+            if (ts_ptr->distance == 0)
+                bell();
+
+            break;
+        }
+    }
+    }
+}
+
 /*
  * Handle "target" and "look".
  */
@@ -170,82 +249,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
             }
 
             menu_target(ts_ptr);
-            ts_ptr->distance = 0;
-            switch (ts_ptr->query) {
-            case ESCAPE:
-            case 'q': {
-                ts_ptr->done = TRUE;
-                break;
-            }
-            case 't':
-            case '.':
-            case '5':
-            case '0': {
-                if (!target_able(creature_ptr, ts_ptr->g_ptr->m_idx)) {
-                    bell();
-                    break;
-                }
-
-                health_track(creature_ptr, ts_ptr->g_ptr->m_idx);
-                target_who = ts_ptr->g_ptr->m_idx;
-                target_row = ts_ptr->y;
-                target_col = ts_ptr->x;
-                ts_ptr->done = TRUE;
-                break;
-            }
-            case ' ':
-            case '*':
-            case '+': {
-                if (++ts_ptr->m == tmp_pos.n) {
-                    ts_ptr->m = 0;
-                    if (!expand_list)
-                        ts_ptr->done = TRUE;
-                }
-
-                break;
-            }
-            case '-': {
-                if (ts_ptr->m-- == 0) {
-                    ts_ptr->m = tmp_pos.n - 1;
-                    if (!expand_list)
-                        ts_ptr->done = TRUE;
-                }
-
-                break;
-            }
-            case 'p': {
-                verify_panel(creature_ptr);
-                creature_ptr->update |= PU_MONSTERS;
-                creature_ptr->redraw |= PR_MAP;
-                creature_ptr->window |= PW_OVERHEAD;
-                handle_stuff(creature_ptr);
-                target_set_prepare(creature_ptr, mode);
-                ts_ptr->y = creature_ptr->y;
-                ts_ptr->x = creature_ptr->x;
-            }
-                /* Fall through */
-            case 'o':
-                ts_ptr->flag = FALSE;
-                break;
-            case 'm':
-                break;
-            default: {
-                if (ts_ptr->query == rogue_like_commands ? 'x' : 'l') {
-                    if (++ts_ptr->m == tmp_pos.n) {
-                        ts_ptr->m = 0;
-                        if (!expand_list)
-                            ts_ptr->done = TRUE;
-                    }
-                } else {
-                    ts_ptr->distance = get_keymap_dir(ts_ptr->query);
-                    if (ts_ptr->distance == 0)
-                        bell();
-
-                    break;
-                }
-            }
-            }
-
+            switch_target_input(creature_ptr, ts_ptr);
             if (ts_ptr->distance != 0) {
                 POSITION y2 = panel_row_min;
                 POSITION x2 = panel_col_min;
