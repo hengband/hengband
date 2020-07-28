@@ -33,6 +33,7 @@ typedef struct ts_type {
     grid_type *g_ptr;
     TERM_LEN wid, hgt;
     int m;
+    int distance;
 } ts_type;
 
 static ts_type *initialize_target_set_type(player_type *creature_ptr, ts_type *ts_ptr, target_type mode)
@@ -169,7 +170,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
             }
 
             menu_target(ts_ptr);
-            int d = 0;
+            ts_ptr->distance = 0;
             switch (ts_ptr->query) {
             case ESCAPE:
             case 'q': {
@@ -236,8 +237,8 @@ bool target_set(player_type *creature_ptr, target_type mode)
                             ts_ptr->done = TRUE;
                     }
                 } else {
-                    d = get_keymap_dir(ts_ptr->query);
-                    if (!d)
+                    ts_ptr->distance = get_keymap_dir(ts_ptr->query);
+                    if (ts_ptr->distance == 0)
                         bell();
 
                     break;
@@ -245,25 +246,25 @@ bool target_set(player_type *creature_ptr, target_type mode)
             }
             }
 
-            if (d) {
+            if (ts_ptr->distance != 0) {
                 POSITION y2 = panel_row_min;
                 POSITION x2 = panel_col_min;
-                int i = target_pick(tmp_pos.y[ts_ptr->m], tmp_pos.x[ts_ptr->m], ddy[d], ddx[d]);
+                int i = target_pick(tmp_pos.y[ts_ptr->m], tmp_pos.x[ts_ptr->m], ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
                 while (ts_ptr->flag && (i < 0)) {
-                    if (change_panel(creature_ptr, ddy[d], ddx[d])) {
+                    if (change_panel(creature_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance])) {
                         int v = tmp_pos.y[ts_ptr->m];
                         int u = tmp_pos.x[ts_ptr->m];
                         target_set_prepare(creature_ptr, mode);
                         ts_ptr->flag = TRUE;
-                        i = target_pick(v, u, ddy[d], ddx[d]);
+                        i = target_pick(v, u, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
                         if (i >= 0)
                             ts_ptr->m = i;
 
                         continue;
                     }
 
-                    POSITION dx = ddx[d];
-                    POSITION dy = ddy[d];
+                    POSITION dx = ddx[ts_ptr->distance];
+                    POSITION dy = ddy[ts_ptr->distance];
                     panel_row_min = y2;
                     panel_col_min = x2;
                     panel_bounds_center();
