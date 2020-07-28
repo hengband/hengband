@@ -430,30 +430,22 @@ static void decide_change_panel(player_type *creature_ptr, ts_type *ts_ptr)
         ts_ptr->y = 1;
 }
 
-/*
- * Handle "target" and "look".
- */
-bool target_set(player_type *creature_ptr, target_type mode)
+static void sweep_target_grids(player_type *creature_ptr, ts_type *ts_ptr)
 {
-    ts_type tmp_ts;
-    ts_type *ts_ptr = initialize_target_set_type(creature_ptr, &tmp_ts, mode);
-    target_who = 0;
-    target_set_prepare(creature_ptr, mode);
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     while (!ts_ptr->done) {
         if (set_target_grid(creature_ptr, ts_ptr))
             continue;
 
         ts_ptr->move_fast = FALSE;
-        if (!(mode & TARGET_LOOK))
+        if ((ts_ptr->mode & TARGET_LOOK) == 0)
             print_path(creature_ptr, ts_ptr->y, ts_ptr->x);
 
-        ts_ptr->g_ptr = &floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
+        ts_ptr->g_ptr = &creature_ptr->current_floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
         strcpy(ts_ptr->info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
         describe_grid_wizard(creature_ptr, ts_ptr);
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
-        while ((ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, mode | TARGET_LOOK, ts_ptr->info)) == 0)
+        while ((ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, ts_ptr->mode | TARGET_LOOK, ts_ptr->info)) == 0)
             ;
 
         ts_ptr->distance = 0;
@@ -463,7 +455,18 @@ bool target_set(player_type *creature_ptr, target_type mode)
         switch_next_grid_command(creature_ptr, ts_ptr);
         decide_change_panel(creature_ptr, ts_ptr);
     }
+}
 
+/*
+ * Handle "target" and "look".
+ */
+bool target_set(player_type *creature_ptr, target_type mode)
+{
+    ts_type tmp_ts;
+    ts_type *ts_ptr = initialize_target_set_type(creature_ptr, &tmp_ts, mode);
+    target_who = 0;
+    target_set_prepare(creature_ptr, mode);
+    sweep_target_grids(creature_ptr, ts_ptr);
     tmp_pos.n = 0;
     prt("", 0, 0);
     verify_panel(creature_ptr);
