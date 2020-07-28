@@ -117,6 +117,29 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
     return b_i;
 }
 
+static void describe_projectablity(player_type *creature_ptr, ts_type *ts_ptr)
+{
+    ts_ptr->y = tmp_pos.y[ts_ptr->m];
+    ts_ptr->x = tmp_pos.x[ts_ptr->m];
+    change_panel_xy(creature_ptr, ts_ptr->y, ts_ptr->x);
+    if ((ts_ptr->mode & TARGET_LOOK) == 0)
+        print_path(creature_ptr, ts_ptr->y, ts_ptr->x);
+
+    ts_ptr->g_ptr = &creature_ptr->current_floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
+    if (target_able(creature_ptr, ts_ptr->g_ptr->m_idx))
+        strcpy(ts_ptr->info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"));
+    else
+        strcpy(ts_ptr->info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"));
+
+    if (!cheat_sight)
+        return;
+
+    char cheatinfo[30];
+    sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
+        projectable(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x));
+    strcat(ts_ptr->info, cheatinfo);
+}
+
 /*
  * Handle "target" and "look".
  */
@@ -129,25 +152,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     while (!ts_ptr->done) {
         if (ts_ptr->flag && tmp_pos.n) {
-            ts_ptr->y = tmp_pos.y[ts_ptr->m];
-            ts_ptr->x = tmp_pos.x[ts_ptr->m];
-            change_panel_xy(creature_ptr, ts_ptr->y, ts_ptr->x);
-            if (!(mode & TARGET_LOOK))
-                print_path(creature_ptr, ts_ptr->y, ts_ptr->x);
-
-            ts_ptr->g_ptr = &floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
-            if (target_able(creature_ptr, ts_ptr->g_ptr->m_idx))
-                strcpy(ts_ptr->info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"));
-            else
-                strcpy(ts_ptr->info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"));
-
-            if (cheat_sight) {
-                char cheatinfo[30];
-                sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
-                    projectable(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x));
-                strcat(ts_ptr->info, cheatinfo);
-            }
-
+            describe_projectablity(creature_ptr, ts_ptr);
             while (TRUE) {
                 ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, mode, ts_ptr->info);
                 if (ts_ptr->query)
