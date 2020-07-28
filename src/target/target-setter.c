@@ -21,6 +21,32 @@
 #include "util/int-char-converter.h"
 #include "window/main-window-util.h"
 
+// Target Setter.
+typedef struct ts_type {
+    target_type mode;
+    POSITION y;
+    POSITION x;
+    bool done;
+    bool flag;
+    char query;
+    char info[80];
+    grid_type *g_ptr;
+    TERM_LEN wid, hgt;
+    int m;
+} ts_type;
+
+static ts_type *initialize_target_set_type(player_type *creature_ptr, ts_type *ts_ptr, target_type mode)
+{
+    ts_ptr->mode = mode;
+    ts_ptr->y = creature_ptr->y;
+    ts_ptr->x = creature_ptr->x;
+    ts_ptr->done = FALSE;
+    ts_ptr->flag = TRUE;
+    get_screen_size(&ts_ptr->wid, &ts_ptr->hgt);
+    ts_ptr->m = 0;
+    return ts_ptr;
+}
+
 /*!
  * @brief フォーカスを当てるべきマップ描画の基準座標を指定する
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -96,91 +122,82 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
  */
 bool target_set(player_type *creature_ptr, target_type mode)
 {
-    POSITION y = creature_ptr->y;
-    POSITION x = creature_ptr->x;
-    bool done = FALSE;
-    bool flag = TRUE;
-    char query;
-    char info[80];
-    grid_type *g_ptr;
-    TERM_LEN wid, hgt;
-    get_screen_size(&wid, &hgt);
+    ts_type tmp_ts;
+    ts_type *ts_ptr = initialize_target_set_type(creature_ptr, &tmp_ts, mode);
     target_who = 0;
-    const char same_key = rogue_like_commands ? 'x' : 'l';
     target_set_prepare(creature_ptr, mode);
-    int m = 0;
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    while (!done) {
-        if (flag && tmp_pos.n) {
-            y = tmp_pos.y[m];
-            x = tmp_pos.x[m];
-            change_panel_xy(creature_ptr, y, x);
+    while (!ts_ptr->done) {
+        if (ts_ptr->flag && tmp_pos.n) {
+            ts_ptr->y = tmp_pos.y[ts_ptr->m];
+            ts_ptr->x = tmp_pos.x[ts_ptr->m];
+            change_panel_xy(creature_ptr, ts_ptr->y, ts_ptr->x);
             if (!(mode & TARGET_LOOK))
-                print_path(creature_ptr, y, x);
+                print_path(creature_ptr, ts_ptr->y, ts_ptr->x);
 
-            g_ptr = &floor_ptr->grid_array[y][x];
-            if (target_able(creature_ptr, g_ptr->m_idx))
-                strcpy(info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"));
+            ts_ptr->g_ptr = &floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
+            if (target_able(creature_ptr, ts_ptr->g_ptr->m_idx))
+                strcpy(ts_ptr->info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"));
             else
-                strcpy(info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"));
+                strcpy(ts_ptr->info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"));
 
             if (cheat_sight) {
                 char cheatinfo[30];
-                sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, y, x),
-                    projectable(creature_ptr, creature_ptr->y, creature_ptr->x, y, x));
-                strcat(info, cheatinfo);
+                sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
+                    projectable(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x));
+                strcat(ts_ptr->info, cheatinfo);
             }
 
             while (TRUE) {
-                query = examine_grid(creature_ptr, y, x, mode, info);
-                if (query)
+                ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, mode, ts_ptr->info);
+                if (ts_ptr->query)
                     break;
             }
 
             int d = 0;
             if (use_menu) {
-                if (query == '\r')
-                    query = 't';
+                if (ts_ptr->query == '\r')
+                    ts_ptr->query = 't';
             }
 
-            switch (query) {
+            switch (ts_ptr->query) {
             case ESCAPE:
             case 'q': {
-                done = TRUE;
+                ts_ptr->done = TRUE;
                 break;
             }
             case 't':
             case '.':
             case '5':
             case '0': {
-                if (!target_able(creature_ptr, g_ptr->m_idx)) {
+                if (!target_able(creature_ptr, ts_ptr->g_ptr->m_idx)) {
                     bell();
                     break;
                 }
 
-                health_track(creature_ptr, g_ptr->m_idx);
-                target_who = g_ptr->m_idx;
-                target_row = y;
-                target_col = x;
-                done = TRUE;
+                health_track(creature_ptr, ts_ptr->g_ptr->m_idx);
+                target_who = ts_ptr->g_ptr->m_idx;
+                target_row = ts_ptr->y;
+                target_col = ts_ptr->x;
+                ts_ptr->done = TRUE;
                 break;
             }
             case ' ':
             case '*':
             case '+': {
-                if (++m == tmp_pos.n) {
-                    m = 0;
+                if (++ts_ptr->m == tmp_pos.n) {
+                    ts_ptr->m = 0;
                     if (!expand_list)
-                        done = TRUE;
+                        ts_ptr->done = TRUE;
                 }
 
                 break;
             }
             case '-': {
-                if (m-- == 0) {
-                    m = tmp_pos.n - 1;
+                if (ts_ptr->m-- == 0) {
+                    ts_ptr->m = tmp_pos.n - 1;
                     if (!expand_list)
-                        done = TRUE;
+                        ts_ptr->done = TRUE;
                 }
 
                 break;
@@ -192,24 +209,24 @@ bool target_set(player_type *creature_ptr, target_type mode)
                 creature_ptr->window |= PW_OVERHEAD;
                 handle_stuff(creature_ptr);
                 target_set_prepare(creature_ptr, mode);
-                y = creature_ptr->y;
-                x = creature_ptr->x;
+                ts_ptr->y = creature_ptr->y;
+                ts_ptr->x = creature_ptr->x;
             }
                 /* Fall through */
             case 'o':
-                flag = FALSE;
+                ts_ptr->flag = FALSE;
                 break;
             case 'm':
                 break;
             default: {
-                if (query == same_key) {
-                    if (++m == tmp_pos.n) {
-                        m = 0;
+                if (ts_ptr->query == rogue_like_commands ? 'x' : 'l') {
+                    if (++ts_ptr->m == tmp_pos.n) {
+                        ts_ptr->m = 0;
                         if (!expand_list)
-                            done = TRUE;
+                            ts_ptr->done = TRUE;
                     }
                 } else {
-                    d = get_keymap_dir(query);
+                    d = get_keymap_dir(ts_ptr->query);
                     if (!d)
                         bell();
 
@@ -221,16 +238,16 @@ bool target_set(player_type *creature_ptr, target_type mode)
             if (d) {
                 POSITION y2 = panel_row_min;
                 POSITION x2 = panel_col_min;
-                int i = target_pick(tmp_pos.y[m], tmp_pos.x[m], ddy[d], ddx[d]);
-                while (flag && (i < 0)) {
+                int i = target_pick(tmp_pos.y[ts_ptr->m], tmp_pos.x[ts_ptr->m], ddy[d], ddx[d]);
+                while (ts_ptr->flag && (i < 0)) {
                     if (change_panel(creature_ptr, ddy[d], ddx[d])) {
-                        int v = tmp_pos.y[m];
-                        int u = tmp_pos.x[m];
+                        int v = tmp_pos.y[ts_ptr->m];
+                        int u = tmp_pos.x[ts_ptr->m];
                         target_set_prepare(creature_ptr, mode);
-                        flag = TRUE;
+                        ts_ptr->flag = TRUE;
                         i = target_pick(v, u, ddy[d], ddx[d]);
                         if (i >= 0)
-                            m = i;
+                            ts_ptr->m = i;
 
                         continue;
                     }
@@ -245,32 +262,32 @@ bool target_set(player_type *creature_ptr, target_type mode)
                     creature_ptr->window |= (PW_OVERHEAD);
                     handle_stuff(creature_ptr);
                     target_set_prepare(creature_ptr, mode);
-                    flag = FALSE;
-                    x += dx;
-                    y += dy;
-                    if (((x < panel_col_min + wid / 2) && (dx > 0)) || ((x > panel_col_min + wid / 2) && (dx < 0)))
+                    ts_ptr->flag = FALSE;
+                    ts_ptr->x += dx;
+                    ts_ptr->y += dy;
+                    if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0)))
                         dx = 0;
 
-                    if (((y < panel_row_min + hgt / 2) && (dy > 0)) || ((y > panel_row_min + hgt / 2) && (dy < 0)))
+                    if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0)))
                         dy = 0;
 
-                    if ((y >= panel_row_min + hgt) || (y < panel_row_min) || (x >= panel_col_min + wid) || (x < panel_col_min)) {
+                    if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid) || (ts_ptr->x < panel_col_min)) {
                         if (change_panel(creature_ptr, dy, dx))
                             target_set_prepare(creature_ptr, mode);
                     }
 
-                    if (x >= floor_ptr->width - 1)
-                        x = floor_ptr->width - 2;
-                    else if (x <= 0)
-                        x = 1;
+                    if (ts_ptr->x >= floor_ptr->width - 1)
+                        ts_ptr->x = floor_ptr->width - 2;
+                    else if (ts_ptr->x <= 0)
+                        ts_ptr->x = 1;
 
-                    if (y >= floor_ptr->height - 1)
-                        y = floor_ptr->height - 2;
-                    else if (y <= 0)
-                        y = 1;
+                    if (ts_ptr->y >= floor_ptr->height - 1)
+                        ts_ptr->y = floor_ptr->height - 2;
+                    else if (ts_ptr->y <= 0)
+                        ts_ptr->y = 1;
                 }
 
-                m = i;
+                ts_ptr->m = i;
             }
 
             continue;
@@ -278,38 +295,38 @@ bool target_set(player_type *creature_ptr, target_type mode)
 
         bool move_fast = FALSE;
         if (!(mode & TARGET_LOOK))
-            print_path(creature_ptr, y, x);
+            print_path(creature_ptr, ts_ptr->y, ts_ptr->x);
 
-        g_ptr = &floor_ptr->grid_array[y][x];
-        strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
+        ts_ptr->g_ptr = &floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
+        strcpy(ts_ptr->info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
         if (cheat_sight) {
             char cheatinfo[100];
-            sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, y, x),
-                projectable(creature_ptr, creature_ptr->y, creature_ptr->x, y, x), g_ptr->special);
-            strcat(info, cheatinfo);
+            sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
+                projectable(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x), ts_ptr->g_ptr->special);
+            strcat(ts_ptr->info, cheatinfo);
         }
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
-        while ((query = examine_grid(creature_ptr, y, x, mode | TARGET_LOOK, info)) == 0)
+        while ((ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, mode | TARGET_LOOK, ts_ptr->info)) == 0)
             ;
 
         int d = 0;
-        if (use_menu && (query == '\r'))
-            query = 't';
+        if (use_menu && (ts_ptr->query == '\r'))
+            ts_ptr->query = 't';
 
-        switch (query) {
+        switch (ts_ptr->query) {
         case ESCAPE:
         case 'q':
-            done = TRUE;
+            ts_ptr->done = TRUE;
             break;
         case 't':
         case '.':
         case '5':
         case '0':
             target_who = -1;
-            target_row = y;
-            target_col = x;
-            done = TRUE;
+            target_row = ts_ptr->y;
+            target_col = ts_ptr->x;
+            ts_ptr->done = TRUE;
             break;
         case 'p':
             verify_panel(creature_ptr);
@@ -318,8 +335,8 @@ bool target_set(player_type *creature_ptr, target_type mode)
             creature_ptr->window |= (PW_OVERHEAD);
             handle_stuff(creature_ptr);
             target_set_prepare(creature_ptr, mode);
-            y = creature_ptr->y;
-            x = creature_ptr->x;
+            ts_ptr->y = creature_ptr->y;
+            ts_ptr->x = creature_ptr->x;
         case 'o':
             break;
         case ' ':
@@ -327,25 +344,25 @@ bool target_set(player_type *creature_ptr, target_type mode)
         case '+':
         case '-':
         case 'm': {
-            flag = TRUE;
-            m = 0;
+            ts_ptr->flag = TRUE;
+            ts_ptr->m = 0;
             int bd = 999;
             for (int i = 0; i < tmp_pos.n; i++) {
-                int t = distance(y, x, tmp_pos.y[i], tmp_pos.x[i]);
+                int t = distance(ts_ptr->y, ts_ptr->x, tmp_pos.y[i], tmp_pos.x[i]);
                 if (t < bd) {
-                    m = i;
+                    ts_ptr->m = i;
                     bd = t;
                 }
             }
 
             if (bd == 999)
-                flag = FALSE;
+                ts_ptr->flag = FALSE;
 
             break;
         }
         default: {
-            d = get_keymap_dir(query);
-            if (isupper(query))
+            d = get_keymap_dir(ts_ptr->query);
+            if (isupper(ts_ptr->query))
                 move_fast = TRUE;
 
             if (!d)
@@ -358,34 +375,34 @@ bool target_set(player_type *creature_ptr, target_type mode)
             POSITION dx = ddx[d];
             POSITION dy = ddy[d];
             if (move_fast) {
-                int mag = MIN(wid / 2, hgt / 2);
-                x += dx * mag;
-                y += dy * mag;
+                int mag = MIN(ts_ptr->wid / 2, ts_ptr->hgt / 2);
+                ts_ptr->x += dx * mag;
+                ts_ptr->y += dy * mag;
             } else {
-                x += dx;
-                y += dy;
+                ts_ptr->x += dx;
+                ts_ptr->y += dy;
             }
 
-            if (((x < panel_col_min + wid / 2) && (dx > 0)) || ((x > panel_col_min + wid / 2) && (dx < 0)))
+            if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0)))
                 dx = 0;
 
-            if (((y < panel_row_min + hgt / 2) && (dy > 0)) || ((y > panel_row_min + hgt / 2) && (dy < 0)))
+            if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0)))
                 dy = 0;
 
-            if ((y >= panel_row_min + hgt) || (y < panel_row_min) || (x >= panel_col_min + wid) || (x < panel_col_min)) {
+            if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid) || (ts_ptr->x < panel_col_min)) {
                 if (change_panel(creature_ptr, dy, dx))
                     target_set_prepare(creature_ptr, mode);
             }
 
-            if (x >= floor_ptr->width - 1)
-                x = floor_ptr->width - 2;
-            else if (x <= 0)
-                x = 1;
+            if (ts_ptr->x >= floor_ptr->width - 1)
+                ts_ptr->x = floor_ptr->width - 2;
+            else if (ts_ptr->x <= 0)
+                ts_ptr->x = 1;
 
-            if (y >= floor_ptr->height - 1)
-                y = floor_ptr->height - 2;
-            else if (y <= 0)
-                y = 1;
+            if (ts_ptr->y >= floor_ptr->height - 1)
+                ts_ptr->y = floor_ptr->height - 2;
+            else if (ts_ptr->y <= 0)
+                ts_ptr->y = 1;
         }
     }
 
