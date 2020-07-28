@@ -390,6 +390,46 @@ static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
     }
 }
 
+static void decide_change_panel(player_type *creature_ptr, ts_type *ts_ptr)
+{
+    if (ts_ptr->distance == 0)
+        return;
+
+    POSITION dx = ddx[ts_ptr->distance];
+    POSITION dy = ddy[ts_ptr->distance];
+    if (ts_ptr->move_fast) {
+        int mag = MIN(ts_ptr->wid / 2, ts_ptr->hgt / 2);
+        ts_ptr->x += dx * mag;
+        ts_ptr->y += dy * mag;
+    } else {
+        ts_ptr->x += dx;
+        ts_ptr->y += dy;
+    }
+
+    if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0)))
+        dx = 0;
+
+    if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0)))
+        dy = 0;
+
+    if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid)
+        || (ts_ptr->x < panel_col_min)) {
+        if (change_panel(creature_ptr, dy, dx))
+            target_set_prepare(creature_ptr, ts_ptr->mode);
+    }
+
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    if (ts_ptr->x >= floor_ptr->width - 1)
+        ts_ptr->x = floor_ptr->width - 2;
+    else if (ts_ptr->x <= 0)
+        ts_ptr->x = 1;
+
+    if (ts_ptr->y >= floor_ptr->height - 1)
+        ts_ptr->y = floor_ptr->height - 2;
+    else if (ts_ptr->y <= 0)
+        ts_ptr->y = 1;
+}
+
 /*
  * Handle "target" and "look".
  */
@@ -421,40 +461,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
             ts_ptr->query = 't';
 
         switch_next_grid_command(creature_ptr, ts_ptr);
-        if (ts_ptr->distance) {
-            POSITION dx = ddx[ts_ptr->distance];
-            POSITION dy = ddy[ts_ptr->distance];
-            if (ts_ptr->move_fast) {
-                int mag = MIN(ts_ptr->wid / 2, ts_ptr->hgt / 2);
-                ts_ptr->x += dx * mag;
-                ts_ptr->y += dy * mag;
-            } else {
-                ts_ptr->x += dx;
-                ts_ptr->y += dy;
-            }
-
-            if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0)))
-                dx = 0;
-
-            if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0)))
-                dy = 0;
-
-            if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid)
-                || (ts_ptr->x < panel_col_min)) {
-                if (change_panel(creature_ptr, dy, dx))
-                    target_set_prepare(creature_ptr, mode);
-            }
-
-            if (ts_ptr->x >= floor_ptr->width - 1)
-                ts_ptr->x = floor_ptr->width - 2;
-            else if (ts_ptr->x <= 0)
-                ts_ptr->x = 1;
-
-            if (ts_ptr->y >= floor_ptr->height - 1)
-                ts_ptr->y = floor_ptr->height - 2;
-            else if (ts_ptr->y <= 0)
-                ts_ptr->y = 1;
-        }
+        decide_change_panel(creature_ptr, ts_ptr);
     }
 
     tmp_pos.n = 0;
