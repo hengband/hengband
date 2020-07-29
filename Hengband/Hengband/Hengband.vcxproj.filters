@@ -1760,9 +1760,6 @@
     <ClCompile Include="..\..\src\racial\racial-switcher.c">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-switcher.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\floor\cave.c">
       <Filter>floor</Filter>
     </ClCompile>
@@ -1927,6 +1924,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-berserker.c">
       <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-mind.c">
+      <Filter>cmd-action</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4006,9 +4006,6 @@
     <ClInclude Include="..\..\src\racial\racial-switcher.h">
       <Filter>racial</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\mind-switcher.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-base-definitions.h">
       <Filter>floor</Filter>
     </ClInclude>
@@ -4194,6 +4191,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-berserker.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-mind.h">
+      <Filter>cmd-action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

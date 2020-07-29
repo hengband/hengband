@@ -1228,7 +1228,7 @@
     <ClCompile Include="..\..\src\locale\japanese.c" />
     <ClCompile Include="..\..\src\load\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\mind\mind-switcher.c" />
+    <ClCompile Include="..\..\src\cmd-action\cmd-mind.c" />
     <ClCompile Include="..\..\src\monster\monster-info.c" />
     <ClCompile Include="..\..\src\monster\monster-list.c" />
     <ClCompile Include="..\..\src\mspell\mspell-checker.c" />
@@ -1474,7 +1474,7 @@
     <ClInclude Include="..\..\src\io\inet.h" />
     <ClInclude Include="..\..\src\main\init.h" />
     <ClInclude Include="..\..\src\load\load.h" />
-    <ClInclude Include="..\..\src\mind\mind-switcher.h" />
+    <ClInclude Include="..\..\src\cmd-action\cmd-mind.h" />
     <ClInclude Include="..\..\src\monster\monster-processor.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
     <ClInclude Include="..\..\src\system\monster-type-definition.h" />

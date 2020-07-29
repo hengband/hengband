@@ -13,7 +13,7 @@
  * 特殊技能を揃えて実装している。
  */
 
-#include "mind/mind-switcher.h"
+#include "cmd-action/cmd-mind.h"
 #include "action/action-limited.h"
 #include "action/movement-execution.h"
 #include "cmd-action/cmd-attack.h"

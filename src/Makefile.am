@@ -89,6 +89,7 @@ hengband_SOURCES = \
 	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
 	cmd-action/cmd-hissatsu.c cmd-action/cmd-hissatsu.h \
 	cmd-action/cmd-mane.c cmd-action/cmd-mane.h \
+	cmd-action/cmd-mind.c cmd-action/cmd-mind.h \
 	cmd-action/cmd-move.c cmd-action/cmd-move.h \
 	cmd-action/cmd-open-close.c cmd-action/cmd-open-close.h \
 	cmd-action/cmd-others.c cmd-action/cmd-others.h \
@@ -400,7 +401,6 @@ hengband_SOURCES = \
 	mind/mind-power-getter.c mind/mind-power-getter.h \
 	mind/mind-samurai.c mind/mind-samurai.h \
 	mind/mind-sniper.c mind/mind-sniper.h \
-	mind/mind-switcher.c mind/mind-switcher.h \
 	mind/mind-types.h \
 	mind/mind-warrior.c mind/mind-warrior.h \
 	mind/mind-warrior-mage.c mind/mind-warrior-mage.h \
