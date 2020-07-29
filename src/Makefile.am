@@ -388,6 +388,7 @@ hengband_SOURCES = \
 	mind/drs-types.h \
 	mind/mind-blue-mage.c mind/mind-blue-mage.h \
 	mind/mind-cavalry.c mind/mind-cavalry.h \
+	mind/mind-explanations-table.c mind/mind-explanations-table.h \
 	mind/mind-force-trainer.c mind/mind-force-trainer.h \
 	mind/mind-mage.c mind/mind-mage.h \
 	mind/mind-magic-resistance.c mind/mind-magic-resistance.h \

@@ -2,6 +2,7 @@
 #include "core/window-redrawer.h"
 #include "game-option/option-flags.h"
 #include "mind/mind-sniper.h"
+#include "mind/mind-explanations-table.h"
 #include "mind/mind-switcher.h"
 #include "player/player-class.h"
 #include "realm/realm-names-table.h"

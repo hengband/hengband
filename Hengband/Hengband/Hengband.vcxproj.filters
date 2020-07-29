@@ -1916,6 +1916,9 @@
     <ClCompile Include="..\..\src\target\target-checker.c">
       <Filter>target</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-explanations-table.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4167,6 +4170,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\target\target-checker.h">
       <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-explanations-table.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
