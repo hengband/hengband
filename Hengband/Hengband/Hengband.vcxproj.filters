@@ -1925,6 +1925,9 @@
     <ClCompile Include="..\..\src\mind\mind-power-getter.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-berserker.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4187,6 +4190,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-power-getter.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-berserker.h">
       <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>

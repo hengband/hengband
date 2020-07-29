@@ -386,6 +386,7 @@ hengband_SOURCES = \
 	melee/melee-util.c melee/melee-util.h \
 	\
 	mind/drs-types.h \
+	mind/mind-berserker.c mind/mind-berserker.h \
 	mind/mind-blue-mage.c mind/mind-blue-mage.h \
 	mind/mind-cavalry.c mind/mind-cavalry.h \
 	mind/mind-explanations-table.c mind/mind-explanations-table.h \

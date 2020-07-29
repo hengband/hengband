@@ -262,6 +262,7 @@
     <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.c" />
     <ClCompile Include="..\..\src\melee\melee-spell-util.c" />
     <ClCompile Include="..\..\src\melee\melee-spell.c" />
+    <ClCompile Include="..\..\src\mind\mind-berserker.c" />
     <ClCompile Include="..\..\src\mind\mind-blue-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-explanations-table.c" />
     <ClCompile Include="..\..\src\mind\mind-info.c" />
@@ -827,6 +828,7 @@
     <ClInclude Include="..\..\src\melee\melee-spell-flags-checker.h" />
     <ClInclude Include="..\..\src\melee\melee-spell-util.h" />
     <ClInclude Include="..\..\src\melee\melee-spell.h" />
+    <ClInclude Include="..\..\src\mind\mind-berserker.h" />
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-explanations-table.h" />
     <ClInclude Include="..\..\src\mind\mind-info.h" />
