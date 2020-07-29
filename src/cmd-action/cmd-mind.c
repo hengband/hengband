@@ -12,15 +12,15 @@
 
 #include "cmd-action/cmd-mind.h"
 #include "action/action-limited.h"
-#include "effect/effect-characteristics.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
+#include "effect/effect-characteristics.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "grid/grid.h"
-#include "io/input-key-acceptor.h"
 #include "inventory/inventory-slot-types.h"
+#include "io/input-key-acceptor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-berserker.h"
@@ -276,6 +276,24 @@ void do_cmd_mind(player_type *caster_ptr)
     caster_ptr->window |= PW_SPELL;
 }
 
+static mind_kind_type decide_use_mind_browse(player_type *caster_ptr)
+{
+    switch (caster_ptr->pclass) {
+    case CLASS_MINDCRAFTER:
+        return MIND_MINDCRAFTER;
+    case CLASS_FORCETRAINER:
+        return MIND_KI;
+    case CLASS_BERSERKER:
+        return MIND_BERSERKER;
+    case CLASS_NINJA:
+        return MIND_NINJUTSU;
+    case CLASS_MIRROR_MASTER:
+        return MIND_MIRROR_MASTER;
+    default:
+        return (mind_kind_type)0; // 実質CLASS_MINDCRAFTERと同じ.
+    }
+}
+
 /*!
  * @brief 現在プレイヤーが使用可能な特殊技能の一覧表示 /
  * @return なし
@@ -284,18 +302,7 @@ void do_cmd_mind_browse(player_type *caster_ptr)
 {
     SPELL_IDX n = 0;
     char temp[62 * 5];
-    int use_mind = 0;
-    if (caster_ptr->pclass == CLASS_MINDCRAFTER)
-        use_mind = MIND_MINDCRAFTER;
-    else if (caster_ptr->pclass == CLASS_FORCETRAINER)
-        use_mind = MIND_KI;
-    else if (caster_ptr->pclass == CLASS_BERSERKER)
-        use_mind = MIND_BERSERKER;
-    else if (caster_ptr->pclass == CLASS_NINJA)
-        use_mind = MIND_NINJUTSU;
-    else if (caster_ptr->pclass == CLASS_MIRROR_MASTER)
-        use_mind = MIND_MIRROR_MASTER;
-
+    mind_kind_type use_mind = decide_use_mind_browse(caster_ptr);
     screen_save();
     while (TRUE) {
         if (!get_mind_power(caster_ptr, &n, TRUE)) {
