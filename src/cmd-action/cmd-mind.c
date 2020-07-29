@@ -99,6 +99,29 @@ static void switch_mind_kind(player_type *caster_ptr, cm_type *cm_ptr)
     }
 }
 
+static void decide_mind_ki_chance(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    if (cm_ptr->use_mind != MIND_KI)
+        return;
+
+    if (heavy_armor(caster_ptr))
+        cm_ptr->chance += 20;
+
+    if (caster_ptr->icky_wield[0])
+        cm_ptr->chance += 20;
+    else if (has_melee_weapon(caster_ptr, INVEN_RARM))
+        cm_ptr->chance += 10;
+
+    if (caster_ptr->icky_wield[1])
+        cm_ptr->chance += 20;
+    else if (has_melee_weapon(caster_ptr, INVEN_LARM))
+        cm_ptr->chance += 10;
+
+    if (cm_ptr->n == 5)
+        for (int j = 0; j < get_current_ki(caster_ptr) / 50; j++)
+            cm_ptr->mana_cost += (j + 1) * 3 / 2;
+}
+
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
@@ -114,26 +137,7 @@ void do_cmd_mind(player_type *caster_ptr)
     cm_ptr->spell = mind_powers[cm_ptr->use_mind].info[cm_ptr->n];
     cm_ptr->chance = cm_ptr->spell.fail;
     cm_ptr->mana_cost = cm_ptr->spell.mana_cost;
-    if (cm_ptr->use_mind == MIND_KI) {
-        if (heavy_armor(caster_ptr))
-            cm_ptr->chance += 20;
-
-        if (caster_ptr->icky_wield[0])
-            cm_ptr->chance += 20;
-        else if (has_melee_weapon(caster_ptr, INVEN_RARM))
-            cm_ptr->chance += 10;
-
-        if (caster_ptr->icky_wield[1])
-            cm_ptr->chance += 20;
-        else if (has_melee_weapon(caster_ptr, INVEN_LARM))
-            cm_ptr->chance += 10;
-
-        if (cm_ptr->n == 5) {
-            for (int j = 0; j < get_current_ki(caster_ptr) / 50; j++)
-                cm_ptr->mana_cost += (j + 1) * 3 / 2;
-        }
-    }
-
+    decide_mind_ki_chance(caster_ptr, cm_ptr);
     if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
         if (cm_ptr->mana_cost > caster_ptr->chp) {
             msg_print(_("ＨＰが足りません。", "You do not have enough hp to use this power."));
