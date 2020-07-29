@@ -396,6 +396,7 @@ hengband_SOURCES = \
 	mind/mind-mindcrafter.c mind/mind-mindcrafter.h \
 	mind/mind-mirror-master.c mind/mind-mirror-master.h \
 	mind/mind-ninja.c mind/mind-ninja.h \
+	mind/mind-power-getter.c mind/mind-power-getter.h \
 	mind/mind-samurai.c mind/mind-samurai.h \
 	mind/mind-sniper.c mind/mind-sniper.h \
 	mind/mind-switcher.c mind/mind-switcher.h \
