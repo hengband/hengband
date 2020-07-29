@@ -264,6 +264,7 @@
     <ClCompile Include="..\..\src\melee\melee-spell.c" />
     <ClCompile Include="..\..\src\mind\mind-blue-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-explanations-table.c" />
+    <ClCompile Include="..\..\src\mind\mind-info.c" />
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-magic-resistance.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
@@ -827,8 +828,10 @@
     <ClInclude Include="..\..\src\melee\melee-spell.h" />
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-explanations-table.h" />
+    <ClInclude Include="..\..\src\mind\mind-info.h" />
     <ClInclude Include="..\..\src\mind\mind-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-magic-resistance.h" />
+    <ClInclude Include="..\..\src\mind\mind-types.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
     <ClInclude Include="..\..\src\mspell\element-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\high-resistance-checker.h" />

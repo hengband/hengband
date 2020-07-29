@@ -390,6 +390,7 @@ hengband_SOURCES = \
 	mind/mind-cavalry.c mind/mind-cavalry.h \
 	mind/mind-explanations-table.c mind/mind-explanations-table.h \
 	mind/mind-force-trainer.c mind/mind-force-trainer.h \
+	mind/mind-info.c mind/mind-info.h \
 	mind/mind-mage.c mind/mind-mage.h \
 	mind/mind-magic-resistance.c mind/mind-magic-resistance.h \
 	mind/mind-mindcrafter.c mind/mind-mindcrafter.h \
@@ -398,6 +399,7 @@ hengband_SOURCES = \
 	mind/mind-samurai.c mind/mind-samurai.h \
 	mind/mind-sniper.c mind/mind-sniper.h \
 	mind/mind-switcher.c mind/mind-switcher.h \
+	mind/mind-types.h \
 	mind/mind-warrior.c mind/mind-warrior.h \
 	mind/mind-warrior-mage.c mind/mind-warrior-mage.h \
 	mind/mind-weaponsmith.c mind/mind-weaponsmith.h \
