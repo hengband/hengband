@@ -324,7 +324,7 @@ bool cast_ninja_spell(player_type *caster_ptr, int spell)
     POSITION x = 0, y = 0;
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
-
+    // todo enum化する！
     switch (spell) {
     case 0:
         (void)unlite_area(caster_ptr, 0, 3);

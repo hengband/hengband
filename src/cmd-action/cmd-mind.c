@@ -8,88 +8,39 @@
  * are included in all such copies.  Other copyrights may also apply.\n
  * 2005 henkma \n
  * 2014 Deskull rearranged comment for Doxygen.\n
- * @details
- * mind.cとあるが実際には超能力者、練気術師、狂戦士、鏡使い、忍者までの
- * 特殊技能を揃えて実装している。
  */
 
 #include "cmd-action/cmd-mind.h"
 #include "action/action-limited.h"
-#include "action/movement-execution.h"
-#include "cmd-action/cmd-attack.h"
-#include "cmd-action/cmd-spell.h"
-#include "cmd-item/cmd-throw.h"
-#include "core/asking-player.h"
-#include "core/hp-mp-processor.h"
-#include "core/player-redraw-types.h"
-#include "core/player-update-types.h"
-#include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
-#include "effect/spells-effect-util.h"
-#include "floor/cave.h"
-#include "floor/floor.h"
+#include "core/asking-player.h"
+#include "core/player-redraw-types.h"
+#include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
-#include "game-option/text-display-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
-#include "inventory/inventory-slot-types.h"
-#include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
-#include "io/input-key-requester.h"
+#include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-berserker.h"
 #include "mind/mind-explanations-table.h"
 #include "mind/mind-force-trainer.h"
-#include "mind/mind-info.h"
-#include "mind/mind-magic-resistance.h"
 #include "mind/mind-mindcrafter.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-ninja.h"
 #include "mind/mind-power-getter.h"
 #include "mind/mind-types.h"
-#include "mind/mind-warrior.h"
-#include "monster-floor/monster-summon.h"
-#include "monster-floor/place-monster-types.h"
-#include "monster/monster-status.h"
-#include "player-attack/player-attack.h"
-#include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-move.h"
-#include "player/special-defense-types.h"
-#include "spell-kind/earthquake.h"
-#include "spell-kind/spells-detection.h"
-#include "spell-kind/spells-fetcher.h"
-#include "spell-kind/spells-floor.h"
-#include "spell-kind/spells-grid.h"
-#include "spell-kind/spells-launcher.h"
-#include "spell-kind/spells-lite.h"
-#include "spell-kind/spells-perception.h"
-#include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell-kind/spells-world.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
-#include "spell/spells-status.h"
-#include "spell/spells-summon.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
-#include "status/body-improvement.h"
-#include "status/buff-setter.h"
-#include "status/element-resistance.h"
-#include "status/sight-setter.h"
-#include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
-#include "target/target-checker.h"
-#include "target/target-getter.h"
-#include "target/target-setter.h"
-#include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
-#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
 /*!
@@ -295,7 +246,7 @@ void do_cmd_mind(player_type *caster_ptr)
 
     if ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU)) {
         take_hit(caster_ptr, DAMAGE_USELIFE, mana_cost, _("過度の集中", "concentrating too hard"), -1);
-        caster_ptr->redraw |= (PR_HP);
+        caster_ptr->redraw |= PR_HP;
     } else if (mana_cost <= old_csp) {
         caster_ptr->csp -= mana_cost;
         if (caster_ptr->csp < 0)
@@ -320,9 +271,9 @@ void do_cmd_mind(player_type *caster_ptr)
         }
     }
 
-    caster_ptr->redraw |= (PR_MANA);
-    caster_ptr->window |= (PW_PLAYER);
-    caster_ptr->window |= (PW_SPELL);
+    caster_ptr->redraw |= PR_MANA;
+    caster_ptr->window |= PW_PLAYER;
+    caster_ptr->window |= PW_SPELL;
 }
 
 /*!

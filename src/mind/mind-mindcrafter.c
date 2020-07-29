@@ -9,7 +9,6 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
-#include "mind/mind-caster.h"
 #include "mind/mind-mindcrafter.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
