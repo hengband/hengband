@@ -292,6 +292,22 @@ static void mind_turn_passing(player_type *caster_ptr, cm_type *cm_ptr)
         take_turn(caster_ptr, 50);
 }
 
+static bool judge_mind_chance(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    if (randint0(100) >= cm_ptr->chance) {
+        sound(SOUND_ZAP);
+        return switch_mind_class(caster_ptr, cm_ptr) && cm_ptr->cast;
+    }
+
+    if (flush_failure)
+        flush();
+
+    msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough for %s!"), cm_ptr->mind_explanation);
+    sound(SOUND_FAIL);
+    check_mind_class(caster_ptr, cm_ptr);
+    return TRUE;
+}
+
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
@@ -315,18 +331,8 @@ void do_cmd_mind(player_type *caster_ptr)
     if (cm_ptr->chance > 95)
         cm_ptr->chance = 95;
 
-    if (randint0(100) < cm_ptr->chance) {
-        if (flush_failure)
-            flush();
-
-        msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough for %s!"), cm_ptr->mind_explanation);
-        sound(SOUND_FAIL);
-        check_mind_class(caster_ptr, cm_ptr);
-    } else {
-        sound(SOUND_ZAP);
-        if (!switch_mind_class(caster_ptr, cm_ptr) || !cm_ptr->cast)
-            return;
-    }
+    if (!judge_mind_chance(caster_ptr, cm_ptr))
+        return;
 
     mind_turn_passing(caster_ptr, cm_ptr);
     if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
