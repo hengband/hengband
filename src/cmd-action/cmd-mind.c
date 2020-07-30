@@ -308,6 +308,23 @@ static bool judge_mind_chance(player_type *caster_ptr, cm_type *cm_ptr)
     return TRUE;
 }
 
+static void mind_reflection(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    int oops = cm_ptr->mana_cost - cm_ptr->old_csp;
+    if ((caster_ptr->csp - cm_ptr->mana_cost) < 0)
+        caster_ptr->csp_frac = 0;
+
+    caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->mana_cost);
+    msg_format(_("%sを集中しすぎて気を失ってしまった！", "You faint from the effort!"), cm_ptr->mind_explanation);
+    (void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(5 * oops + 1));
+    if (randint0(100) >= 50)
+        return;
+
+    bool perm = randint0(100) < 25;
+    msg_print(_("自分の精神を攻撃してしまった！", "You have damaged your mind!"));
+    (void)dec_stat(caster_ptr, A_WIS, 15 + randint1(10), perm);
+}
+
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
@@ -348,18 +365,7 @@ void do_cmd_mind(player_type *caster_ptr)
             caster_ptr->csp_frac = 0;
         }
     } else {
-        int oops = cm_ptr->mana_cost - cm_ptr->old_csp;
-        if ((caster_ptr->csp - cm_ptr->mana_cost) < 0)
-            caster_ptr->csp_frac = 0;
-
-        caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->mana_cost);
-        msg_format(_("%sを集中しすぎて気を失ってしまった！", "You faint from the effort!"), cm_ptr->mind_explanation);
-        (void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(5 * oops + 1));
-        if (randint0(100) < 50) {
-            bool perm = (randint0(100) < 25);
-            msg_print(_("自分の精神を攻撃してしまった！", "You have damaged your mind!"));
-            (void)dec_stat(caster_ptr, A_WIS, 15 + randint1(10), perm);
-        }
+        mind_reflection(caster_ptr, cm_ptr);
     }
 
     caster_ptr->redraw |= PR_MANA;
