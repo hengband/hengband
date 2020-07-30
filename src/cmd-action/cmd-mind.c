@@ -236,6 +236,24 @@ static void check_mind_mirror_master(player_type *caster_ptr, cm_type *cm_ptr)
     caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->plev * MAX(1, cm_ptr->plev / 10));
 }
 
+static void check_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU))
+        return;
+
+    if ((cm_ptr->use_mind == MIND_KI) && (cm_ptr->n != 5) && get_current_ki(caster_ptr)) {
+        msg_print(_("気が散ってしまった．．．", "Your improved Force has gone away..."));
+        set_current_ki(caster_ptr, TRUE, 0);
+    }
+
+    if (randint1(100) >= (cm_ptr->chance / 2))
+        return;
+
+    cm_ptr->b = randint1(100);
+    check_mind_mindcrafter(caster_ptr, cm_ptr);
+    check_mind_mirror_master(caster_ptr, cm_ptr);
+}
+
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
@@ -265,18 +283,7 @@ void do_cmd_mind(player_type *caster_ptr)
 
         msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough for %s!"), cm_ptr->mind_explanation);
         sound(SOUND_FAIL);
-        if ((cm_ptr->use_mind != MIND_BERSERKER) && (cm_ptr->use_mind != MIND_NINJUTSU)) {
-            if ((cm_ptr->use_mind == MIND_KI) && (cm_ptr->n != 5) && get_current_ki(caster_ptr)) {
-                msg_print(_("気が散ってしまった．．．", "Your improved Force has gone away..."));
-                set_current_ki(caster_ptr, TRUE, 0);
-            }
-
-            if (randint1(100) < (cm_ptr->chance / 2)) {
-                cm_ptr->b = randint1(100);
-                check_mind_mindcrafter(caster_ptr, cm_ptr);
-                check_mind_mirror_master(caster_ptr, cm_ptr);
-            }
-        }
+        check_mind_class(caster_ptr, cm_ptr);
     } else {
         sound(SOUND_ZAP);
         switch (cm_ptr->use_mind) {
