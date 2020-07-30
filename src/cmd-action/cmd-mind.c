@@ -176,6 +176,66 @@ static void decide_mind_chance(player_type *caster_ptr, cm_type *cm_ptr)
         cm_ptr->chance += 5;
 }
 
+static void check_mind_mindcrafter(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    if (cm_ptr->use_mind != MIND_MINDCRAFTER)
+        return;
+
+    if (cm_ptr->b < 5) {
+        msg_print(_("なんてこった！頭の中が真っ白になった！", "Oh, no! Your mind has gone blank!"));
+        lose_all_info(caster_ptr);
+        return;
+    }
+    
+    if (cm_ptr->b < 15) {
+        msg_print(_("奇妙な光景が目の前で踊っている...", "Weird visions seem to dance before your eyes..."));
+        set_image(caster_ptr, caster_ptr->image + 5 + randint1(10));
+        return;
+    }
+    
+    if (cm_ptr->b < 45) {
+        msg_print(_("あなたの頭は混乱した！", "Your brain is addled!"));
+        set_confused(caster_ptr, caster_ptr->confused + randint1(8));
+        return;
+    }
+    
+    if (cm_ptr->b < 90) {
+        set_stun(caster_ptr, caster_ptr->stun + randint1(8));
+        return;
+    }
+
+    msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
+    project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, caster_ptr->y, caster_ptr->x, cm_ptr->plev * 2, GF_MANA,
+        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
+    caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->plev * MAX(1, cm_ptr->plev / 10));
+}
+
+static void check_mind_mirror_master(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    if (cm_ptr->use_mind != MIND_MIRROR_MASTER)
+        return;
+
+    if (cm_ptr->b < 51)
+        return;
+    
+    if (cm_ptr->b < 81) {
+        msg_print(_("鏡の世界の干渉を受けた！", "Weird visions seem to dance before your eyes..."));
+        teleport_player(caster_ptr, 10, TELEPORT_PASSIVE);
+        return;
+    }
+    
+    if (cm_ptr->b < 96) {
+        msg_print(_("まわりのものがキラキラ輝いている！", "Your brain is addled!"));
+        set_image(caster_ptr, caster_ptr->image + 5 + randint1(10));
+        return;
+    }
+
+    msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
+    project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, caster_ptr->y, caster_ptr->x, cm_ptr->plev * 2, GF_MANA,
+        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
+    caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->plev * MAX(1, cm_ptr->plev / 10));
+}
+
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
@@ -213,41 +273,8 @@ void do_cmd_mind(player_type *caster_ptr)
 
             if (randint1(100) < (cm_ptr->chance / 2)) {
                 cm_ptr->b = randint1(100);
-                if (cm_ptr->use_mind == MIND_MINDCRAFTER) {
-                    if (cm_ptr->b < 5) {
-                        msg_print(_("なんてこった！頭の中が真っ白になった！", "Oh, no! Your mind has gone blank!"));
-                        lose_all_info(caster_ptr);
-                    } else if (cm_ptr->b < 15) {
-                        msg_print(_("奇妙な光景が目の前で踊っている...", "Weird visions seem to dance before your eyes..."));
-                        set_image(caster_ptr, caster_ptr->image + 5 + randint1(10));
-                    } else if (cm_ptr->b < 45) {
-                        msg_print(_("あなたの頭は混乱した！", "Your brain is addled!"));
-                        set_confused(caster_ptr, caster_ptr->confused + randint1(8));
-                    } else if (cm_ptr->b < 90) {
-                        set_stun(caster_ptr, caster_ptr->stun + randint1(8));
-                    } else {
-                        msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
-                        project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, caster_ptr->y, caster_ptr->x, cm_ptr->plev * 2, GF_MANA,
-                            PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
-                        caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->plev * MAX(1, cm_ptr->plev / 10));
-                    }
-                }
-
-                if (cm_ptr->use_mind == MIND_MIRROR_MASTER) {
-                    if (cm_ptr->b < 51) {
-                    } else if (cm_ptr->b < 81) {
-                        msg_print(_("鏡の世界の干渉を受けた！", "Weird visions seem to dance before your eyes..."));
-                        teleport_player(caster_ptr, 10, TELEPORT_PASSIVE);
-                    } else if (cm_ptr->b < 96) {
-                        msg_print(_("まわりのものがキラキラ輝いている！", "Your brain is addled!"));
-                        set_image(caster_ptr, caster_ptr->image + 5 + randint1(10));
-                    } else {
-                        msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
-                        project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, caster_ptr->y, caster_ptr->x, cm_ptr->plev * 2, GF_MANA,
-                            PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
-                        caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->plev * MAX(1, cm_ptr->plev / 10));
-                    }
-                }
+                check_mind_mindcrafter(caster_ptr, cm_ptr);
+                check_mind_mirror_master(caster_ptr, cm_ptr);
             }
         }
     } else {
