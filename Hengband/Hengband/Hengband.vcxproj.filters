@@ -4195,6 +4195,9 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-mind.h">
       <Filter>cmd-action</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-numbers.h">
+      <Filter>mind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

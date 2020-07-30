@@ -13,6 +13,7 @@
 #include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
+#include "mind/mind-numbers.h"
 #include "mind/mind-warrior.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
@@ -319,17 +320,16 @@ bool set_superstealth(player_type *creature_ptr, bool set)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_ninja_spell(player_type *caster_ptr, int spell)
+bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
 {
     POSITION x = 0, y = 0;
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
-    // todo enum化する！
     switch (spell) {
-    case 0:
+    case DARKNESS_CREATION:
         (void)unlite_area(caster_ptr, 0, 3);
         break;
-    case 1:
+    case DETECT_NEAR:
         if (plev > 44)
             wiz_lite(caster_ptr, TRUE);
 
@@ -344,10 +344,10 @@ bool cast_ninja_spell(player_type *caster_ptr, int spell)
             detect_objects_normal(caster_ptr, DETECT_RAD_DEFAULT);
 
         break;
-    case 2:
+    case HIDE_LEAVES:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-    case 3:
+    case KAWARIMI:
         if (!(caster_ptr->special_defense & NINJA_KAWARIMI)) {
             msg_print(_("敵の攻撃に対して敏感になった。", "You are now prepared to evade any attacks."));
             caster_ptr->special_defense |= NINJA_KAWARIMI;
@@ -355,33 +355,33 @@ bool cast_ninja_spell(player_type *caster_ptr, int spell)
         }
 
         break;
-    case 4:
+    case ABSCONDING:
         teleport_player(caster_ptr, caster_ptr->lev * 5, TELEPORT_SPONTANEOUS);
         break;
-    case 5:
+    case HIT_AND_AWAY:
         if (!hit_and_away(caster_ptr))
             return FALSE;
 
         break;
-    case 6:
+    case BIND_MONSTER:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         (void)stasis_monster(caster_ptr, dir);
         break;
-    case 7:
+    case ANCIENT_KNOWLEDGE:
         return ident_spell(caster_ptr, FALSE, 0);
-    case 8:
+    case FLOATING:
         set_tim_levitation(caster_ptr, randint1(20) + 20, FALSE);
         break;
-    case 9:
+    case HIDE_FLAMES:
         fire_ball(caster_ptr, GF_FIRE, 0, 50 + plev, plev / 10 + 2);
         teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
         set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
         break;
-    case 10:
+    case NYUSIN:
         return rush_attack(caster_ptr, NULL);
-    case 11: {
+    case SYURIKEN_SPREADING: {
         for (int i = 0; i < 8; i++) {
             OBJECT_IDX slot;
 
@@ -405,16 +405,16 @@ bool cast_ninja_spell(player_type *caster_ptr, int spell)
 
         break;
     }
-    case 12:
+    case CHAIN_HOOK:
         (void)fetch_monster(caster_ptr);
         break;
-    case 13:
+    case SMOKE_BALL:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_ball(caster_ptr, GF_OLD_CONF, dir, plev * 3, 3);
         break;
-    case 14:
+    case SWAP_POSITION:
         project_length = -1;
         if (!get_aim_dir(caster_ptr, &dir)) {
             project_length = 0;
@@ -424,20 +424,20 @@ bool cast_ninja_spell(player_type *caster_ptr, int spell)
         project_length = 0;
         (void)teleport_swap(caster_ptr, dir);
         break;
-    case 15:
+    case EXPLOSION_GLYPH:
         explosive_rune(caster_ptr, caster_ptr->y, caster_ptr->x);
         break;
-    case 16:
+    case HIDE_MUD:
         (void)set_pass_wall(caster_ptr, randint1(plev / 2) + plev / 2, FALSE);
         set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
         break;
-    case 17:
+    case HIDE_MIST:
         fire_ball(caster_ptr, GF_POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         fire_ball(caster_ptr, GF_HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         fire_ball(caster_ptr, GF_CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
         teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
         break;
-    case 18: {
+    case PURGATORY_FLAME: {
         int num = damroll(3, 9);
         for (int k = 0; k < num; k++) {
             EFFECT_ID typ = one_in_(2) ? GF_FIRE : one_in_(3) ? GF_NETHER : GF_PLASMA;
@@ -453,7 +453,7 @@ bool cast_ninja_spell(player_type *caster_ptr, int spell)
 
         break;
     }
-    case 19:
+    case ALTER_EGO:
         set_multishadow(caster_ptr, 6 + randint1(6), FALSE);
         break;
     default:

@@ -10,6 +10,7 @@
 #include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
 #include "mind/mind-mindcrafter.h"
+#include "mind/mind-numbers.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
@@ -123,15 +124,14 @@ bool psychometry(player_type *caster_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
+bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell)
 {
     int b = 0;
     DIRECTION dir;
     TIME_EFFECT t;
     PLAYER_LEVEL plev = caster_ptr->lev;
-    // todo enum化する！
     switch (spell) {
-    case 0: /* Precog */
+    case PRECOGNITION:
         if (plev > 44) {
             chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
             chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
@@ -158,8 +158,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
             msg_print(_("安全な気がする。", "You feel safe."));
 
         break;
-    case 1:
-        /* Mindblast */
+    case NEURAL_BLAST:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
@@ -168,16 +167,13 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
         else
             fire_ball(caster_ptr, GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
         break;
-    case 2:
-        /* Minor displace */
+    case MINOR_DISPLACEMENT:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-    case 3:
-        /* Major displace */
+    case MAJOR_DISPLACEMENT:
         teleport_player(caster_ptr, plev * 5, TELEPORT_SPONTANEOUS);
         break;
-    case 4:
-        /* Domination */
+    case DOMINATION:
         if (plev < 30) {
             if (!get_aim_dir(caster_ptr, &dir))
                 return FALSE;
@@ -186,16 +182,15 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
         } else {
             charm_monsters(caster_ptr, plev * 2);
         }
+
         break;
-    case 5:
-        /* Fist of Force  ---  not 'true' TK  */
+    case PLUVERISE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_ball(caster_ptr, GF_TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
-    case 6:
-        /* Character Armour */
+    case CHARACTER_ARMOR:
         set_shield(caster_ptr, (TIME_EFFECT)plev, FALSE);
         if (plev > 14)
             set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
@@ -207,24 +202,22 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
             set_oppose_elec(caster_ptr, (TIME_EFFECT)plev, FALSE);
         if (plev > 34)
             set_oppose_pois(caster_ptr, (TIME_EFFECT)plev, FALSE);
+
         break;
-    case 7:
-        /* Psychometry */
+    case PSYCHOMETRY:
         if (plev < 25)
             return psychometry(caster_ptr);
         else
             return ident_spell(caster_ptr, FALSE, 0);
-    case 8:
-        /* Mindwave */
+    case MIND_WAVE:
         msg_print(_("精神を捻じ曲げる波動を発生させた！", "Mind-warping forces emanate from your brain!"));
-
         if (plev < 25)
             project(caster_ptr, 0, 2 + plev / 10, caster_ptr->y, caster_ptr->x, (plev * 3), GF_PSI, PROJECT_KILL, -1);
         else
             (void)mindblast_monsters(caster_ptr, randint1(plev * ((plev - 5) / 10 + 1)));
+
         break;
-    case 9:
-        /* Adrenaline */
+    case ADRENALINE_CHANNELING:
         set_afraid(caster_ptr, 0);
         set_stun(caster_ptr, 0);
         if (!is_fast(caster_ptr) || !is_hero(caster_ptr))
@@ -234,15 +227,13 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
         set_hero(caster_ptr, t, FALSE);
         (void)set_fast(caster_ptr, t, FALSE);
         break;
-    case 10:
-        /* Telekinesis */
+    case TELEKINESIS:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fetch_item(caster_ptr, dir, plev * 15, FALSE);
         break;
-    case 11:
-        /* Psychic Drain */
+    case PSYCHIC_DRAIN:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
@@ -251,17 +242,15 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
             caster_ptr->energy_need += randint1(150);
 
         break;
-    case 12:
-        /* psycho-spear */
+    case PSYCHO_SPEAR:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_beam(caster_ptr, GF_PSY_SPEAR, dir, randint1(plev * 3) + plev * 3);
         break;
-    case 13: {
+    case THE_WORLD:
         time_walk(caster_ptr);
         break;
-    }
     default:
         msg_print(_("なに？", "Zap?"));
     }

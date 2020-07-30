@@ -2,4 +2,5 @@
 
 #include "system/angband.h"
 
-bool cast_berserk_spell(player_type *caster_ptr, int spell);
+typedef enum mind_berserker_type mind_berserker_type;
+bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell);

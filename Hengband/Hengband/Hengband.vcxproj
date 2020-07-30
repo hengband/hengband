@@ -834,6 +834,7 @@
     <ClInclude Include="..\..\src\mind\mind-info.h" />
     <ClInclude Include="..\..\src\mind\mind-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-magic-resistance.h" />
+    <ClInclude Include="..\..\src\mind\mind-numbers.h" />
     <ClInclude Include="..\..\src\mind\mind-power-getter.h" />
     <ClInclude Include="..\..\src\mind\mind-types.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />

@@ -5,6 +5,7 @@
 #include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "mind/mind-numbers.h"
 #include "player-attack/player-attack.h"
 #include "player/player-move.h"
 #include "spell-kind/earthquake.h"
@@ -19,17 +20,15 @@
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_berserk_spell(player_type *caster_ptr, int spell)
+bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell)
 {
     POSITION y, x;
     DIRECTION dir;
-
-    // todo enum化する！
     switch (spell) {
-    case 0:
+    case DETECT_MANACE:
         detect_monsters_mind(caster_ptr, DETECT_RAD_DEFAULT);
         break;
-    case 1: {
+    case CHARGE: {
         if (caster_ptr->riding) {
             msg_print(_("乗馬中には無理だ。", "You cannot do it when riding."));
             return FALSE;
@@ -60,7 +59,7 @@ bool cast_berserk_spell(player_type *caster_ptr, int spell)
 
         break;
     }
-    case 2: {
+    case SMASH_TRAP: {
         if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
             return FALSE;
 
@@ -69,10 +68,10 @@ bool cast_berserk_spell(player_type *caster_ptr, int spell)
         exe_movement(caster_ptr, dir, easy_disarm, TRUE);
         break;
     }
-    case 3:
+    case QUAKE:
         earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 8 + randint0(5), 0);
         break;
-    case 4:
+    case MASSACRE:
         massacre(caster_ptr);
         break;
     default:

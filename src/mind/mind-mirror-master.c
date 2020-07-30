@@ -17,6 +17,7 @@
 #include "io/cursor.h"
 #include "io/screen-util.h"
 #include "mind/mind-magic-resistance.h"
+#include "mind/mind-numbers.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
@@ -404,17 +405,15 @@ static int number_of_mirrors(floor_type *floor_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_mirror_spell(player_type *caster_ptr, int spell)
+bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
     int tmp;
     TIME_EFFECT t;
     POSITION x, y;
-    // todo enum化する！
     switch (spell) {
-        /* mirror of seeing */
-    case 0:
+    case MIRROR_SEEING:
         tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 0;
         if (plev + tmp > 4)
             detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
@@ -428,15 +427,14 @@ bool cast_mirror_spell(player_type *caster_ptr, int spell)
             msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
         }
         break;
-        /* drip of light */
-    case 1:
+    case MAKE_MIRROR:
         if (number_of_mirrors(caster_ptr->current_floor_ptr) < 4 + plev / 10)
             place_mirror(caster_ptr);
         else
             msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
 
         break;
-    case 2:
+    case DRIP_LIGHT:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
@@ -446,58 +444,48 @@ bool cast_mirror_spell(player_type *caster_ptr, int spell)
             fire_bolt(caster_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
 
         break;
-        /* warped mirror */
-    case 3:
+    case WRAPPED_MIRROR:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-        /* mirror of light */
-    case 4:
+    case MIRROR_LIGHT:
         (void)lite_area(caster_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
         break;
-        /* mirror of wandering */
-    case 5:
+    case WANDERING_MIRROR:
         teleport_player(caster_ptr, plev * 5, TELEPORT_SPONTANEOUS);
         break;
-        /* robe of dust */
-    case 6:
+    case ROBE_DUST:
         set_dustrobe(caster_ptr, 20 + randint1(20), FALSE);
         break;
-        /* banishing mirror */
-    case 7:
+    case BANISHING_MIRROR:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         (void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, plev);
         break;
-        /* mirror clashing */
-    case 8:
+    case MIRROR_CRASHING:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_ball(caster_ptr, GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
-        /* mirror sleeping */
-    case 9:
+    case SLEEPING_MIRROR:
         for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
             for (y = 0; y < caster_ptr->current_floor_ptr->height; y++)
                 if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
                     project(caster_ptr, 0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP,
                         (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 
-        break;
-        /* seeker ray */
-    case 10:
+        break;        
+    case SEEKER_RAY:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_beam(caster_ptr, GF_SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
         break;
-        /* seal of mirror */
-    case 11:
+    case SEALING_MIRROR:
         seal_of_mirror(caster_ptr, plev * 4 + 100);
         break;
-        /* shield of water */
-    case 12:
+    case WATER_SHIELD:
         t = 20 + randint1(20);
         set_shield(caster_ptr, t, FALSE);
         if (plev > 31)
@@ -507,15 +495,13 @@ bool cast_mirror_spell(player_type *caster_ptr, int spell)
             set_resist_magic(caster_ptr, t, FALSE);
 
         break;
-        /* super ray */
-    case 13:
+    case SUPER_RAY:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_beam(caster_ptr, GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
         break;
-        /* illusion light */
-    case 14:
+    case ILLUSION_LIGHT:
         tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 3;
         slow_monsters(caster_ptr, plev);
         stun_monsters(caster_ptr, plev * tmp);
@@ -524,8 +510,7 @@ bool cast_mirror_spell(player_type *caster_ptr, int spell)
         stun_monsters(caster_ptr, plev * tmp);
         stasis_monsters(caster_ptr, plev * tmp);
         break;
-        /* mirror shift */
-    case 15:
+    case MIRROR_SHIFT:
         if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x])) {
             msg_print(_("鏡の国の場所がわからない！", "You cannot find out where the mirror is!"));
             break;
@@ -533,30 +518,25 @@ bool cast_mirror_spell(player_type *caster_ptr, int spell)
 
         reserve_alter_reality(caster_ptr);
         break;
-        /* mirror tunnel */
-    case 16:
+    case MIRROR_TUNNEL:
         msg_print(_("鏡の世界を通り抜け…  ", "You try to enter the mirror..."));
         return mirror_tunnel(caster_ptr);
-
-        /* mirror of recall */
-    case 17:
+    case RECALL_MIRROR:
         return recall_player(caster_ptr, randint0(21) + 15);
-        /* multi-shadow */
-    case 18:
+    case MULTI_SHADOW:
         set_multishadow(caster_ptr, 6 + randint1(6), FALSE);
         break;
-        /* binding field */
-    case 19:
+    case BINDING_FIELD:
         if (!binding_field(caster_ptr, plev * 11 + 5))
             msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
 
         break;
-        /* mirror of Ruffnor */
-    case 20:
+    case RUFFNOR_MIRROR:
         (void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
         break;
     default:
         msg_print(_("なに？", "Zap?"));
+        break;
     }
 
     caster_ptr->magic_num1[0] = 0;

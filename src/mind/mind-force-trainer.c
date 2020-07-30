@@ -11,6 +11,7 @@
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "mind/mind-magic-resistance.h"
+#include "mind/mind-numbers.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
@@ -236,7 +237,7 @@ bool shock_power(player_type *caster_ptr)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_force_spell(player_type *caster_ptr, int spell)
+bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -245,29 +246,29 @@ bool cast_force_spell(player_type *caster_ptr, int spell)
         boost /= 2;
 
     switch (spell) {
-    case 0:
+    case SMALL_FORCE_BALL:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_ball(caster_ptr, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
         break;
-    case 1:
+    case FLASH_LIGHT:
         (void)lite_area(caster_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
         break;
-    case 2:
+    case FLYING_TECHNIQUE:
         set_tim_levitation(caster_ptr, randint1(30) + 30 + boost / 5, FALSE);
         break;
-    case 3:
+    case KAMEHAMEHA:
         project_length = plev / 8 + 3;
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_beam(caster_ptr, GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
         break;
-    case 4:
+    case MAGIC_RESISTANCE:
         set_resist_magic(caster_ptr, randint1(20) + 20 + boost / 5, FALSE);
         break;
-    case 5:
+    case IMPROVE_FORCE:
         msg_print(_("気を練った。", "You improved the Force."));
         set_current_ki(caster_ptr, FALSE, 70 + plev);
         caster_ptr->update |= (PU_BONUS);
@@ -279,19 +280,19 @@ bool cast_force_spell(player_type *caster_ptr, int spell)
             return TRUE;
 
         break;
-    case 6:
+    case AURA_OF_FORCE:
         set_tim_sh_force(caster_ptr, randint1(plev / 2) + 15 + boost / 7, FALSE);
         break;
-    case 7:
+    case SHOCK_POWER:
         return shock_power(caster_ptr);
         break;
-    case 8:
+    case LARGE_FORCE_BALL:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_ball(caster_ptr, GF_MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
         break;
-    case 9: {
+    case DISPEL_MAGIC: {
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
 
@@ -303,7 +304,7 @@ bool cast_force_spell(player_type *caster_ptr, int spell)
         dispel_monster_status(caster_ptr, m_idx);
         break;
     }
-    case 10: {
+    case SUMMON_GHOST: {
         bool success = FALSE;
         for (int i = 0; i < 1 + boost / 100; i++)
             if (summon_specific(caster_ptr, -1, caster_ptr->y, caster_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET))
@@ -316,16 +317,16 @@ bool cast_force_spell(player_type *caster_ptr, int spell)
 
         break;
     }
-    case 11:
+    case EXPLODING_FLAME:
         fire_ball(caster_ptr, GF_FIRE, 0, 200 + (2 * plev) + boost * 2, 10);
         break;
-    case 12:
+    case SUPER_KAMEHAMEHA:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         fire_beam(caster_ptr, GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
         break;
-    case 13:
+    case LIGHT_SPEED:
         set_lightspeed(caster_ptr, randint1(16) + 16 + boost / 20, FALSE);
         break;
     default:

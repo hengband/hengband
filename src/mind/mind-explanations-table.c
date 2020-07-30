@@ -9,11 +9,13 @@ mind_power const mind_powers[MAX_MIND_KINDS] = {
         { 3, 2, 25, _("次元の瞬き", "Minor Displacement") },
         { 7, 6, 35, _("虚空の幻影", "Major Displacement") },
         { 9, 7, 50, _("精神支配", "Domination") },
+
         { 11, 7, 30, _("念動衝撃弾", "Pulverise") },
         { 13, 12, 50, _("鎧化", "Character Armour") },
         { 15, 12, 60, _("サイコメトリー", "Psychometry") },
         { 18, 10, 45, _("精神波動", "Mind Wave") },
         { 23, 15, 50, _("アドレナリン・ドーピング", "Adrenaline Channeling") },
+
         { 26, 28, 60, _("テレキネシス", "Telekinesis") },
         { 28, 10, 40, _("サイキック・ドレイン", "Psychic Drain") },
         { 35, 35, 75, _("光の剣", "Psycho-Spear") },
@@ -34,13 +36,15 @@ mind_power const mind_powers[MAX_MIND_KINDS] = {
         { 5, 6, 35, _("舞空術", "Flying Technique") },
         { 8, 5, 40, _("カメハメ波", "Kamehameha") },
         { 10, 7, 45, _("対魔法防御", "Magic Resistance") },
+
         { 13, 5, 60, _("練気", "Improve Force") },
         { 17, 17, 50, _("纏闘気", "Aura of Force") },
         { 20, 20, 50, _("衝波", "Shock Power") },
         { 23, 18, 55, _("彗龍", "Large Force Ball") },
         { 25, 30, 70, _("いてつく波動", "Dispel Magic") },
+
         { 28, 26, 50, _("幻霊召喚", "Summon Ghost") },
-        { 32, 35, 65, _("煉獄火炎", "Exploding Frame") },
+        { 32, 35, 65, _("煉獄火炎", "Exploding Flame") },
         { 38, 42, 75, _("超カメハメ波", "Super Kamehameha") },
         { 44, 50, 80, _("光速移動", "Light Speed") },
         { 99, 0, 0, "" },
@@ -84,24 +88,25 @@ mind_power const mind_powers[MAX_MIND_KINDS] = {
         { 2, 2, 20, _("光のしずく", "Drip of Light") },
         { 3, 2, 20, _("歪んだ鏡", "Warped Mirror") },
         { 5, 3, 35, _("閃光鏡", "Mirror of Light") },
-        { 6, 5, 35, _("彷える鏡", "Mirror of Wandering") },
 
+        { 6, 5, 35, _("彷える鏡", "Mirror of Wandering") },
         { 10, 5, 30, _("微塵隠れ", "Robe of Dust") },
         { 12, 12, 30, _("追放の鏡", "Banishing Mirror") },
         { 15, 15, 30, _("鏡砕き", "Mirror Clashing") },
         { 19, 13, 30, _("催眠鏡", "Mirror Sleeping") },
-        { 23, 18, 50, _("シーカーレイ", "Seeker Ray") },
 
+        { 23, 18, 50, _("シーカーレイ", "Seeker Ray") },
         { 25, 20, 40, _("鏡の封印", "Seal of Mirror") },
         { 27, 30, 60, _("水鏡の盾", "Shield of Water") },
         { 29, 30, 60, _("スーパーレイ", "Super Ray") },
         { 31, 35, 60, _("幻惑の光", "Illusion Light") },
-        { 33, 50, 80, _("鏡の国", "Mirror Shift") },
 
+        { 33, 50, 80, _("鏡の国", "Mirror Shift") },
         { 36, 30, 80, _("鏡抜け", "Mirror Tunnel") },
         { 38, 40, 70, _("帰還の鏡", "Mirror of Recall") },
         { 40, 50, 55, _("影分身", "Multi-Shadow") },
         { 43, 55, 70, _("封魔結界", "Binding Field") },
+
         { 46, 70, 75, _("ラフノールの鏡", "Mirror of Ruffnor") },
     } },
 
@@ -109,19 +114,22 @@ mind_power const mind_powers[MAX_MIND_KINDS] = {
         /* Level gained,  cost,  %fail,  name */
         { 1, 1, 20, _("暗闇生成", "Create Darkness") },
         { 2, 2, 25, _("周辺調査", "Detect Near") },
-        { 3, 3, 25, _("葉隠れ", "Hide in Leafs") },
+        { 3, 3, 25, _("葉隠れ", "Hide in Leaves") },
         { 5, 3, 30, _("変わり身", "Kawarimi") },
         { 7, 8, 35, _("高飛び", "Absconding") },
+
         { 8, 10, 35, _("一撃離脱", "Hit and Away") },
         { 10, 10, 40, _("金縛り", "Bind Monster") },
         { 12, 12, 70, _("古の口伝", "Ancient Knowledge") },
         { 15, 10, 50, _("浮雲", "Floating") },
         { 17, 12, 45, _("火遁", "Hide in Flame") },
+
         { 18, 20, 40, _("入身", "Nyusin") },
         { 20, 5, 50, _("八方手裏剣", "Syuriken Spreading") },
         { 22, 15, 55, _("鎖鎌", "Chain Hook") },
         { 25, 32, 60, _("煙玉", "Smoke Ball") },
         { 28, 32, 60, _("転身", "Swap Position") },
+
         { 30, 30, 70, _("爆発の紋章", "Glyph of Explosion") },
         { 32, 40, 40, _("土遁", "Hide in Mud") },
         { 34, 35, 50, _("霧隠れ", "Hide in Mist") },
