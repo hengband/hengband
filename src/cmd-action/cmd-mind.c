@@ -122,6 +122,27 @@ static void decide_mind_ki_chance(player_type *caster_ptr, cm_type *cm_ptr)
             cm_ptr->mana_cost += (j + 1) * 3 / 2;
 }
 
+static bool check_mind_hp_mp_sufficiency(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
+        if (cm_ptr->mana_cost > caster_ptr->chp) {
+            msg_print(_("ＨＰが足りません。", "You do not have enough hp to use this power."));
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+    
+    if (cm_ptr->mana_cost <= caster_ptr->csp)
+        return TRUE;
+
+    msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
+    if (!over_exert)
+        return FALSE;
+
+    return get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "));
+}
+
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
@@ -138,19 +159,8 @@ void do_cmd_mind(player_type *caster_ptr)
     cm_ptr->chance = cm_ptr->spell.fail;
     cm_ptr->mana_cost = cm_ptr->spell.mana_cost;
     decide_mind_ki_chance(caster_ptr, cm_ptr);
-    if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
-        if (cm_ptr->mana_cost > caster_ptr->chp) {
-            msg_print(_("ＨＰが足りません。", "You do not have enough hp to use this power."));
-            return;
-        }
-    } else if (cm_ptr->mana_cost > caster_ptr->csp) {
-        msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
-        if (!over_exert)
-            return;
-
-        if (!get_check(_("それでも挑戦しますか? ", "Attempt it anyway? ")))
-            return;
-    }
+    if (!check_mind_hp_mp_sufficiency(caster_ptr, cm_ptr))
+        return;
 
     if (cm_ptr->chance) {
         cm_ptr->chance -= 3 * (cm_ptr->plev - cm_ptr->spell.min_lev);
@@ -171,8 +181,10 @@ void do_cmd_mind(player_type *caster_ptr)
         if (cm_ptr->use_mind == MIND_KI) {
             if (heavy_armor(caster_ptr))
                 cm_ptr->chance += 5;
+
             if (caster_ptr->icky_wield[0])
                 cm_ptr->chance += 5;
+
             if (caster_ptr->icky_wield[1])
                 cm_ptr->chance += 5;
         }
