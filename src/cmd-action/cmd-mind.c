@@ -254,6 +254,33 @@ static void check_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
     check_mind_mirror_master(caster_ptr, cm_ptr);
 }
 
+static bool switch_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    switch (cm_ptr->use_mind) {
+    case MIND_MINDCRAFTER:
+        cm_ptr->cast = cast_mindcrafter_spell(caster_ptr, cm_ptr->n);
+        return TRUE;
+    case MIND_KI:
+        cm_ptr->cast = cast_force_spell(caster_ptr, cm_ptr->n);
+        return TRUE;
+    case MIND_BERSERKER:
+        cm_ptr->cast = cast_berserk_spell(caster_ptr, cm_ptr->n);
+        return TRUE;
+    case MIND_MIRROR_MASTER:
+        if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]))
+            cm_ptr->on_mirror = TRUE;
+
+        cm_ptr->cast = cast_mirror_spell(caster_ptr, cm_ptr->n);
+        return TRUE;
+    case MIND_NINJUTSU:
+        cm_ptr->cast = cast_ninja_spell(caster_ptr, cm_ptr->n);
+        return TRUE;
+    default:
+        msg_format(_("謎の能力:%d, %d", "Mystery power:%d, %d"), cm_ptr->use_mind, cm_ptr->n);
+        return FALSE;
+    }
+}
+
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
@@ -286,31 +313,7 @@ void do_cmd_mind(player_type *caster_ptr)
         check_mind_class(caster_ptr, cm_ptr);
     } else {
         sound(SOUND_ZAP);
-        switch (cm_ptr->use_mind) {
-        case MIND_MINDCRAFTER:
-            cm_ptr->cast = cast_mindcrafter_spell(caster_ptr, cm_ptr->n);
-            break;
-        case MIND_KI:
-            cm_ptr->cast = cast_force_spell(caster_ptr, cm_ptr->n);
-            break;
-        case MIND_BERSERKER:
-            cm_ptr->cast = cast_berserk_spell(caster_ptr, cm_ptr->n);
-            break;
-        case MIND_MIRROR_MASTER:
-            if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]))
-                cm_ptr->on_mirror = TRUE;
-
-            cm_ptr->cast = cast_mirror_spell(caster_ptr, cm_ptr->n);
-            break;
-        case MIND_NINJUTSU:
-            cm_ptr->cast = cast_ninja_spell(caster_ptr, cm_ptr->n);
-            break;
-        default:
-            msg_format(_("謎の能力:%d, %d", "Mystery power:%d, %d"), cm_ptr->use_mind, cm_ptr->n);
-            return;
-        }
-
-        if (!cm_ptr->cast)
+        if (!switch_mind_class(caster_ptr, cm_ptr) || !cm_ptr->cast)
             return;
     }
 
