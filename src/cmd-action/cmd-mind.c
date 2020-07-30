@@ -281,6 +281,17 @@ static bool switch_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
     }
 }
 
+static void mind_turn_passing(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    if (!cm_ptr->on_mirror || (caster_ptr->pclass != CLASS_MIRROR_MASTER)) {
+        take_turn(caster_ptr, 100);
+        return;    
+    }
+        
+    if (cm_ptr->n == 3 || cm_ptr->n == 5 || cm_ptr->n == 7 || cm_ptr->n == 16)
+        take_turn(caster_ptr, 50);
+}
+
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
@@ -317,12 +328,7 @@ void do_cmd_mind(player_type *caster_ptr)
             return;
     }
 
-    if (cm_ptr->on_mirror && caster_ptr->pclass == CLASS_MIRROR_MASTER) {
-        if (cm_ptr->n == 3 || cm_ptr->n == 5 || cm_ptr->n == 7 || cm_ptr->n == 16)
-            take_turn(caster_ptr, 50);
-    } else
-        take_turn(caster_ptr, 100);
-
+    mind_turn_passing(caster_ptr, cm_ptr);
     if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
         take_hit(caster_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"), -1);
         caster_ptr->redraw |= PR_HP;
