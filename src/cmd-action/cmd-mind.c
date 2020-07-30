@@ -325,6 +325,29 @@ static void mind_reflection(player_type *caster_ptr, cm_type *cm_ptr)
     (void)dec_stat(caster_ptr, A_WIS, 15 + randint1(10), perm);
 }
 
+static void process_hard_concentration(player_type *caster_ptr, cm_type *cm_ptr)
+{
+    if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
+        take_hit(caster_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"), -1);
+        caster_ptr->redraw |= PR_HP;
+        return;
+    }
+    
+    if (cm_ptr->mana_cost > cm_ptr->old_csp) {
+        mind_reflection(caster_ptr, cm_ptr);
+        return;    
+    }
+
+    caster_ptr->csp -= cm_ptr->mana_cost;
+    if (caster_ptr->csp < 0)
+        caster_ptr->csp = 0;
+
+    if ((cm_ptr->use_mind == MIND_MINDCRAFTER) && (cm_ptr->n == 13)) {
+        caster_ptr->csp = 0;
+        caster_ptr->csp_frac = 0;
+    }
+}
+
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
@@ -352,22 +375,7 @@ void do_cmd_mind(player_type *caster_ptr)
         return;
 
     mind_turn_passing(caster_ptr, cm_ptr);
-    if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
-        take_hit(caster_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"), -1);
-        caster_ptr->redraw |= PR_HP;
-    } else if (cm_ptr->mana_cost <= cm_ptr->old_csp) {
-        caster_ptr->csp -= cm_ptr->mana_cost;
-        if (caster_ptr->csp < 0)
-            caster_ptr->csp = 0;
-
-        if ((cm_ptr->use_mind == MIND_MINDCRAFTER) && (cm_ptr->n == 13)) {
-            caster_ptr->csp = 0;
-            caster_ptr->csp_frac = 0;
-        }
-    } else {
-        mind_reflection(caster_ptr, cm_ptr);
-    }
-
+    process_hard_concentration(caster_ptr, cm_ptr);
     caster_ptr->redraw |= PR_MANA;
     caster_ptr->window |= PW_PLAYER;
     caster_ptr->window |= PW_SPELL;
