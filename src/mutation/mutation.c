@@ -69,6 +69,46 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
+static void race_dependent_mutation(player_type *creature_ptr, gm_type *gm_ptr)
+{
+    if (gm_ptr->choose_mut != 0)
+        return;
+
+    if (creature_ptr->prace == RACE_VAMPIRE && !(creature_ptr->muta1 & MUT1_HYPN_GAZE) && (randint1(10) < 7)) {
+        gm_ptr->muta_class = &(creature_ptr->muta1);
+        gm_ptr->muta_which = MUT1_HYPN_GAZE;
+        gm_ptr->muta_desc = _("眼が幻惑的になった...", "Your eyes look mesmerizing...");
+        return;
+    }
+    
+    if (creature_ptr->prace == RACE_IMP && !(creature_ptr->muta2 & MUT2_HORNS) && (randint1(10) < 7)) {
+        gm_ptr->muta_class = &(creature_ptr->muta2);
+        gm_ptr->muta_which = MUT2_HORNS;
+        gm_ptr->muta_desc = _("角が額から生えてきた！", "Horns pop forth into your forehead!");
+        return;
+    }
+    
+    if (creature_ptr->prace == RACE_YEEK && !(creature_ptr->muta1 & MUT1_SHRIEK) && (randint1(10) < 7)) {
+        gm_ptr->muta_class = &(creature_ptr->muta1);
+        gm_ptr->muta_which = MUT1_SHRIEK;
+        gm_ptr->muta_desc = _("声質がかなり強くなった。", "Your vocal cords get much tougher.");
+        return;
+    }
+    
+    if (creature_ptr->prace == RACE_BEASTMAN && !(creature_ptr->muta1 & MUT1_POLYMORPH) && (randint1(10) < 2)) {
+        gm_ptr->muta_class = &(creature_ptr->muta1);
+        gm_ptr->muta_which = MUT1_POLYMORPH;
+        gm_ptr->muta_desc = _("あなたの肉体は変化できるようになった、", "Your body seems mutable.");
+        return;
+    }
+    
+    if (creature_ptr->prace == RACE_MIND_FLAYER && !(creature_ptr->muta2 & MUT2_TENTACLES) && (randint1(10) < 7)) {
+        gm_ptr->muta_class = &(creature_ptr->muta2);
+        gm_ptr->muta_which = MUT2_TENTACLES;
+        gm_ptr->muta_desc = _("邪悪な触手が口の周りに生えた。", "Evil-looking tentacles sprout from your mouth.");
+    }
+}
+
 /*!
  * @brief プレイヤーに突然変異を与える
  * @param choose_mut 与えたい突然変異のID、0ならばランダムに選択
@@ -97,30 +137,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     }
 
     chg_virtue(creature_ptr, V_CHANCE, 1);
-    if (!choose_mut) {
-        if (creature_ptr->prace == RACE_VAMPIRE && !(creature_ptr->muta1 & MUT1_HYPN_GAZE) && (randint1(10) < 7)) {
-            gm_ptr->muta_class = &(creature_ptr->muta1);
-            gm_ptr->muta_which = MUT1_HYPN_GAZE;
-            gm_ptr->muta_desc = _("眼が幻惑的になった...", "Your eyes look mesmerizing...");
-        } else if (creature_ptr->prace == RACE_IMP && !(creature_ptr->muta2 & MUT2_HORNS) && (randint1(10) < 7)) {
-            gm_ptr->muta_class = &(creature_ptr->muta2);
-            gm_ptr->muta_which = MUT2_HORNS;
-            gm_ptr->muta_desc = _("角が額から生えてきた！", "Horns pop forth into your forehead!");
-        } else if (creature_ptr->prace == RACE_YEEK && !(creature_ptr->muta1 & MUT1_SHRIEK) && (randint1(10) < 7)) {
-            gm_ptr->muta_class = &(creature_ptr->muta1);
-            gm_ptr->muta_which = MUT1_SHRIEK;
-            gm_ptr->muta_desc = _("声質がかなり強くなった。", "Your vocal cords get much tougher.");
-        } else if (creature_ptr->prace == RACE_BEASTMAN && !(creature_ptr->muta1 & MUT1_POLYMORPH) && (randint1(10) < 2)) {
-            gm_ptr->muta_class = &(creature_ptr->muta1);
-            gm_ptr->muta_which = MUT1_POLYMORPH;
-            gm_ptr->muta_desc = _("あなたの肉体は変化できるようになった、", "Your body seems mutable.");
-        } else if (creature_ptr->prace == RACE_MIND_FLAYER && !(creature_ptr->muta2 & MUT2_TENTACLES) && (randint1(10) < 7)) {
-            gm_ptr->muta_class = &(creature_ptr->muta2);
-            gm_ptr->muta_which = MUT2_TENTACLES;
-            gm_ptr->muta_desc = _("邪悪な触手が口の周りに生えた。", "Evil-looking tentacles sprout from your mouth.");
-        }
-    }
-
+    race_dependent_mutation(creature_ptr, gm_ptr);
     msg_print(_("突然変異した！", "You mutate!"));
     msg_print(gm_ptr->muta_desc);
     *gm_ptr->muta_class |= gm_ptr->muta_which;
