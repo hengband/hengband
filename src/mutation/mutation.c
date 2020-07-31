@@ -145,77 +145,64 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
         if (gm_ptr->muta_which == MUT3_PUNY) {
             if (creature_ptr->muta3 & MUT3_HYPER_STR) {
                 msg_print(_("あなたはもう超人的に強くはない！", "You no longer feel super-strong!"));
-
                 creature_ptr->muta3 &= ~(MUT3_HYPER_STR);
             }
         } else if (gm_ptr->muta_which == MUT3_HYPER_STR) {
             if (creature_ptr->muta3 & MUT3_PUNY) {
                 msg_print(_("あなたはもう虚弱ではない！", "You no longer feel puny!"));
-
                 creature_ptr->muta3 &= ~(MUT3_PUNY);
             }
         } else if (gm_ptr->muta_which == MUT3_MORONIC) {
             if (creature_ptr->muta3 & MUT3_HYPER_INT) {
                 msg_print(_("あなたの脳はもう生体コンピュータではない。", "Your brain is no longer a living computer."));
-
                 creature_ptr->muta3 &= ~(MUT3_HYPER_INT);
             }
         } else if (gm_ptr->muta_which == MUT3_HYPER_INT) {
             if (creature_ptr->muta3 & MUT3_MORONIC) {
                 msg_print(_("あなたはもう精神薄弱ではない。", "You are no longer moronic."));
-
                 creature_ptr->muta3 &= ~(MUT3_MORONIC);
             }
         } else if (gm_ptr->muta_which == MUT3_IRON_SKIN) {
             if (creature_ptr->muta3 & MUT3_SCALES) {
                 msg_print(_("鱗がなくなった。", "You lose your scales."));
-
                 creature_ptr->muta3 &= ~(MUT3_SCALES);
             }
             if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
                 msg_print(_("肉体が腐乱しなくなった。", "Your flesh rots no longer."));
-
                 creature_ptr->muta3 &= ~(MUT3_FLESH_ROT);
             }
             if (creature_ptr->muta3 & MUT3_WART_SKIN) {
                 msg_print(_("肌のイボイボがなくなった。", "You lose your warts."));
-
                 creature_ptr->muta3 &= ~(MUT3_WART_SKIN);
             }
         } else if (gm_ptr->muta_which == MUT3_WART_SKIN || gm_ptr->muta_which == MUT3_SCALES || gm_ptr->muta_which == MUT3_FLESH_ROT) {
             if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
                 msg_print(_("あなたの肌はもう鉄ではない。", "Your skin is no longer made of steel."));
-
                 creature_ptr->muta3 &= ~(MUT3_IRON_SKIN);
             }
         } else if (gm_ptr->muta_which == MUT3_FEARLESS) {
             if (creature_ptr->muta2 & MUT2_COWARDICE) {
                 msg_print(_("臆病でなくなった。", "You are no longer cowardly."));
-
                 creature_ptr->muta2 &= ~(MUT2_COWARDICE);
             }
         } else if (gm_ptr->muta_which == MUT3_FLESH_ROT) {
             if (creature_ptr->muta3 & MUT3_REGEN) {
                 msg_print(_("急速に回復しなくなった。", "You stop regenerating."));
-
                 creature_ptr->muta3 &= ~(MUT3_REGEN);
             }
         } else if (gm_ptr->muta_which == MUT3_REGEN) {
             if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
                 msg_print(_("肉体が腐乱しなくなった。", "Your flesh stops rotting."));
-
                 creature_ptr->muta3 &= ~(MUT3_FLESH_ROT);
             }
         } else if (gm_ptr->muta_which == MUT3_LIMBER) {
             if (creature_ptr->muta3 & MUT3_ARTHRITIS) {
                 msg_print(_("関節が痛くなくなった。", "Your joints stop hurting."));
-
                 creature_ptr->muta3 &= ~(MUT3_ARTHRITIS);
             }
         } else if (gm_ptr->muta_which == MUT3_ARTHRITIS) {
             if (creature_ptr->muta3 & MUT3_LIMBER) {
                 msg_print(_("あなたはしなやかでなくなった。", "You no longer feel limber."));
-
                 creature_ptr->muta3 &= ~(MUT3_LIMBER);
             }
         }
@@ -223,7 +210,6 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
         if (gm_ptr->muta_which == MUT2_COWARDICE) {
             if (creature_ptr->muta3 & MUT3_FEARLESS) {
                 msg_print(_("恐れ知らずでなくなった。", "You no longer feel fearless."));
-
                 creature_ptr->muta3 &= ~(MUT3_FEARLESS);
             }
         }
@@ -231,7 +217,6 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
         if (gm_ptr->muta_which == MUT2_BEAK) {
             if (creature_ptr->muta2 & MUT2_TRUNK) {
                 msg_print(_("あなたの鼻はもう象の鼻のようではなくなった。", "Your nose is no longer elephantine."));
-
                 creature_ptr->muta2 &= ~(MUT2_TRUNK);
             }
         }
@@ -239,7 +224,6 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
         if (gm_ptr->muta_which == MUT2_TRUNK) {
             if (creature_ptr->muta2 & MUT2_BEAK) {
                 msg_print(_("硬いクチバシがなくなった。", "You no longer have a hard beak."));
-
                 creature_ptr->muta2 &= ~(MUT2_BEAK);
             }
         }
