@@ -279,6 +279,7 @@
     <ClCompile Include="..\..\src\mspell\mspell-selector.c" />
     <ClCompile Include="..\..\src\mspell\smart-mspell-util.c" />
     <ClCompile Include="..\..\src\mspell\specified-summon.c" />
+    <ClCompile Include="..\..\src\mutation\gain-mutation-util.c" />
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
     <ClCompile Include="..\..\src\racial\racial-kutar.c" />
@@ -847,6 +848,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-selector.h" />
     <ClInclude Include="..\..\src\mspell\smart-mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\specified-summon.h" />
+    <ClInclude Include="..\..\src\mutation\gain-mutation-util.h" />
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
     <ClInclude Include="..\..\src\racial\racial-kutar.h" />

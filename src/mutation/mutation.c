@@ -36,6 +36,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
+#include "mutation/gain-mutation-util.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-techniques.h"
 #include "object-enchant/item-feeling.h"
@@ -66,23 +67,6 @@
 #include "system/object-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
-
-// Gain Mutation.
-typedef struct gm_type {
-    BIT_FLAGS *muta_class;
-    int muta_which; // mutation_flag_type_1 とmutation_flag_type_2 の両対応とするため、敢えてint型で定義する
-    concptr muta_desc;
-    bool muta_chosen;
-} gm_type;
-
-gm_type *initialize_gm_type(gm_type *gm_ptr)
-{
-    gm_ptr->muta_class = NULL;
-    gm_ptr->muta_which = 0;
-    gm_ptr->muta_desc = "";
-    gm_ptr->muta_chosen = FALSE;
-    return gm_ptr;
-}
 
 /*!
  * @brief プレイヤーに突然変異を与える
