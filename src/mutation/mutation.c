@@ -221,6 +221,30 @@ static void neutralize_base_status(player_type *creature_ptr, gm_type *gm_ptr)
     }
 }
 
+static void neutralize_other_status(player_type *creature_ptr, gm_type *gm_ptr)
+{
+    if (gm_ptr->muta_which == MUT2_COWARDICE) {
+        if (creature_ptr->muta3 & MUT3_FEARLESS) {
+            msg_print(_("恐れ知らずでなくなった。", "You no longer feel fearless."));
+            creature_ptr->muta3 &= ~(MUT3_FEARLESS);
+        }
+    }
+
+    if (gm_ptr->muta_which == MUT2_BEAK) {
+        if (creature_ptr->muta2 & MUT2_TRUNK) {
+            msg_print(_("あなたの鼻はもう象の鼻のようではなくなった。", "Your nose is no longer elephantine."));
+            creature_ptr->muta2 &= ~(MUT2_TRUNK);
+        }
+    }
+
+    if (gm_ptr->muta_which == MUT2_TRUNK) {
+        if (creature_ptr->muta2 & MUT2_BEAK) {
+            msg_print(_("硬いクチバシがなくなった。", "You no longer have a hard beak."));
+            creature_ptr->muta2 &= ~(MUT2_BEAK);
+        }
+    }
+}
+
 /*!
  * @brief プレイヤーに突然変異を与える
  * @param choose_mut 与えたい突然変異のID、0ならばランダムに選択
@@ -258,26 +282,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     if (gm_ptr->muta_class == &(creature_ptr->muta3)) {
         neutralize_base_status(creature_ptr, gm_ptr);
     } else if (gm_ptr->muta_class == &(creature_ptr->muta2)) {
-        if (gm_ptr->muta_which == MUT2_COWARDICE) {
-            if (creature_ptr->muta3 & MUT3_FEARLESS) {
-                msg_print(_("恐れ知らずでなくなった。", "You no longer feel fearless."));
-                creature_ptr->muta3 &= ~(MUT3_FEARLESS);
-            }
-        }
-
-        if (gm_ptr->muta_which == MUT2_BEAK) {
-            if (creature_ptr->muta2 & MUT2_TRUNK) {
-                msg_print(_("あなたの鼻はもう象の鼻のようではなくなった。", "Your nose is no longer elephantine."));
-                creature_ptr->muta2 &= ~(MUT2_TRUNK);
-            }
-        }
-
-        if (gm_ptr->muta_which == MUT2_TRUNK) {
-            if (creature_ptr->muta2 & MUT2_BEAK) {
-                msg_print(_("硬いクチバシがなくなった。", "You no longer have a hard beak."));
-                creature_ptr->muta2 &= ~(MUT2_BEAK);
-            }
-        }
+        neutralize_other_status(creature_ptr, gm_ptr);
     }
 
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
