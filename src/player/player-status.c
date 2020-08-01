@@ -566,7 +566,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->cursed = 0L;
     creature_ptr->impact[0] = FALSE;
     creature_ptr->impact[1] = FALSE;
-    creature_ptr->dec_mana = FALSE;
     creature_ptr->easy_spell = FALSE;
     creature_ptr->heavy_spell = FALSE;
     creature_ptr->see_inv = FALSE;
@@ -707,6 +706,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_down_saving(creature_ptr);
     have_no_ac(creature_ptr);
     have_mighty_throw(creature_ptr);
+    have_dec_mana(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4655,8 +4655,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->cursed |= TRC_FAST_DIGEST;
         if (have_flag(flgs, TR_SLOW_REGEN))
             creature_ptr->cursed |= TRC_SLOW_REGEN;
-        if (have_flag(flgs, TR_DEC_MANA))
-            creature_ptr->dec_mana = TRUE;
         if (have_flag(flgs, TR_SLOW_DIGEST))
             creature_ptr->slow_digest = TRUE;
         if (have_flag(flgs, TR_REGEN))
