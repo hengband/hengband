@@ -30,6 +30,7 @@
 #include "system/floor-type-definition.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-item-modifier.h"
 #include "wizard/wizard-special-process.h"
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"

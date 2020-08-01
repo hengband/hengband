@@ -1314,6 +1314,7 @@
     <ClCompile Include="..\..\src\object\warning.c" />
     <ClCompile Include="..\..\src\floor\wild.c" />
     <ClCompile Include="..\..\src\view\display-messages.c" />
+    <ClCompile Include="..\..\src\wizard\wizard-item-modifier.c" />
     <ClCompile Include="..\..\src\wizard\wizard-messages.c" />
     <ClCompile Include="..\..\src\wizard\wizard-spells.c" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.c" />
@@ -1388,6 +1389,7 @@
     <ClInclude Include="..\..\src\wizard\artifact-bias-table.h" />
     <ClInclude Include="..\..\src\wizard\cmd-wizard.h" />
     <ClInclude Include="..\..\src\wizard\spoiler-table.h" />
+    <ClInclude Include="..\..\src\wizard\wizard-item-modifier.h" />
     <ClInclude Include="..\..\src\wizard\wizard-messages.h" />
     <ClInclude Include="..\..\src\wizard\wizard-spells.h" />
     <ClInclude Include="..\..\src\world\world-object.h" />

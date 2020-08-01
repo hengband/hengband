@@ -801,6 +801,7 @@ hengband_SOURCES = \
 	wizard/cmd-wizard.c wizard/cmd-wizard.h \
 	wizard/spoiler-table.c wizard/spoiler-table.h \
 	wizard/tval-descriptions-table.c wizard/tval-descriptions-table.h \
+	wizard/wizard-item-modifier.c wizard/wizard-item-modifier.h \
 	wizard/wizard-messages.c wizard/wizard-messages.h \
 	wizard/wizard-spells.c wizard/wizard-spells.h \
 	wizard/wizard-spoiler.c wizard/wizard-spoiler.h\
