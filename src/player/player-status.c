@@ -600,7 +600,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->resist_time = FALSE;
     creature_ptr->resist_water = FALSE;
     creature_ptr->resist_fear = FALSE;
-    creature_ptr->sh_elec = FALSE;
     creature_ptr->sh_cold = FALSE;
     creature_ptr->immune_acid = FALSE;
     creature_ptr->immune_elec = FALSE;
@@ -707,6 +706,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_anti_magic(creature_ptr);
     have_anti_tele(creature_ptr);
     have_sh_fire(creature_ptr);
+    have_sh_elec(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -774,9 +774,6 @@ void calc_bonuses(player_type *creature_ptr)
             creature_ptr->sh_cold = TRUE;
         }
 
-        if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK)) {
-            creature_ptr->sh_elec = TRUE;
-        }
     }
 
     calc_strength_addition(creature_ptr);
@@ -2117,7 +2114,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             creature_ptr->resist_elec = TRUE;
             creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
-            creature_ptr->sh_elec = TRUE;
             creature_ptr->sh_cold = TRUE;
             creature_ptr->levitation = TRUE;
         } else if (creature_ptr->special_defense & KAMAE_GENBU) {
@@ -4517,7 +4513,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->resist_blind = TRUE;
         creature_ptr->resist_neth = TRUE;
         creature_ptr->resist_fear = TRUE;
-        creature_ptr->sh_elec = TRUE;
         creature_ptr->sh_cold = TRUE;
     }
 
@@ -4708,8 +4703,6 @@ void calc_equipment_status(player_type *creature_ptr)
         if (have_flag(flgs, TR_RES_NETHER))
             creature_ptr->resist_neth = TRUE;
 
-        if (have_flag(flgs, TR_SH_ELEC))
-            creature_ptr->sh_elec = TRUE;
         if (have_flag(flgs, TR_SH_COLD))
             creature_ptr->sh_cold = TRUE;
 

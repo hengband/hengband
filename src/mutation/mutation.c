@@ -1162,9 +1162,6 @@ void set_mutation_flags(player_type *creature_ptr)
     if (creature_ptr->muta3 & MUT3_FLESH_ROT)
         creature_ptr->regenerate = FALSE;
 
-    if (creature_ptr->muta3 & MUT3_ELEC_TOUC)
-        creature_ptr->sh_elec = TRUE;
-
     if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
         creature_ptr->lite = TRUE;
     }
