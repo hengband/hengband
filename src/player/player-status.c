@@ -566,8 +566,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->cursed = 0L;
     creature_ptr->impact[0] = FALSE;
     creature_ptr->impact[1] = FALSE;
-    creature_ptr->easy_spell = FALSE;
-    creature_ptr->heavy_spell = FALSE;
     creature_ptr->see_inv = FALSE;
     creature_ptr->free_act = FALSE;
     creature_ptr->slow_digest = FALSE;
@@ -707,6 +705,8 @@ void calc_bonuses(player_type *creature_ptr)
     have_sh_fire(creature_ptr);
     have_sh_elec(creature_ptr);
     have_sh_cold(creature_ptr);
+    have_easy_spell(creature_ptr);
+    have_heavy_spell(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4711,10 +4711,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (o_ptr->name2 == EGO_RING_RES_TIME)
             creature_ptr->resist_time = TRUE;
-        if (have_flag(flgs, TR_EASY_SPELL))
-            creature_ptr->easy_spell = TRUE;
-        if (o_ptr->name2 == EGO_AMU_FOOL)
-            creature_ptr->heavy_spell = TRUE;
 
         if (o_ptr->tval == TV_CAPTURE)
             continue;

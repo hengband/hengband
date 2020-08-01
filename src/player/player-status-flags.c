@@ -731,3 +731,34 @@ void have_sh_cold(player_type *creature_ptr)
     }
 }
 
+void have_easy_spell(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->easy_spell = FALSE;
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_EASY_SPELL))
+            creature_ptr->easy_spell = TRUE;
+    }
+}
+
+void have_heavy_spell(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->heavy_spell = FALSE;
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (o_ptr->name2 == EGO_AMU_FOOL)
+            creature_ptr->heavy_spell = TRUE;
+    }
+}
