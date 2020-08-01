@@ -98,11 +98,130 @@
 #define NUM_O_BIT 32
 
 /*!
+ * @brief プレイヤーを完全回復する /
+ * Cure everything instantly
+ * @return なし
+ */
+void wiz_cure_all(player_type *creature_ptr)
+{
+    (void)life_stream(creature_ptr, FALSE, FALSE);
+    (void)restore_mana(creature_ptr, TRUE);
+    (void)set_food(creature_ptr, PY_FOOD_MAX - 1);
+}
+
+/*!
+ * @brief ベースアイテムのウィザード生成のために大項目IDと小項目IDを取得する /
+ * Specify tval and sval (type and subtype of object) originally
+ * @return ベースアイテムID
+ * @details
+ * by RAK, heavily modified by -Bernd-
+ * This function returns the k_idx of an object type, or zero if failed
+ * List up to 50 choices in three columns
+ */
+KIND_OBJECT_IDX wiz_create_itemtype(void)
+{
+    term_clear();
+    int num;
+    TERM_LEN col, row;
+    char ch;
+    for (num = 0; (num < 80) && tvals[num].tval; num++) {
+        row = 2 + (num % 20);
+        col = 20 * (num / 20);
+        ch = listsym[num];
+        prt(format("[%c] %s", ch, tvals[num].desc), row, col);
+    }
+
+    int max_num = num;
+    if (!get_com("Get what type of object? ", &ch, FALSE))
+        return 0;
+
+    for (num = 0; num < max_num; num++)
+        if (listsym[num] == ch)
+            break;
+
+    if ((num < 0) || (num >= max_num))
+        return 0;
+
+    tval_type tval = tvals[num].tval;
+    concptr tval_desc = tvals[num].desc;
+    term_clear();
+    num = 0;
+    KIND_OBJECT_IDX choice[80];
+    char buf[160];
+    for (KIND_OBJECT_IDX i = 1; (num < 80) && (i < max_k_idx); i++) {
+        object_kind *k_ptr = &k_info[i];
+        if (k_ptr->tval != tval)
+            continue;
+
+        row = 2 + (num % 20);
+        col = 20 * (num / 20);
+        ch = listsym[num];
+        strcpy(buf, "                    ");
+        strip_name(buf, i);
+        prt(format("[%c] %s", ch, buf), row, col);
+        choice[num++] = i;
+    }
+
+    max_num = num;
+    if (!get_com(format("What Kind of %s? ", tval_desc), &ch, FALSE))
+        return 0;
+
+    for (num = 0; num < max_num; num++)
+        if (listsym[num] == ch)
+            break;
+
+    if ((num < 0) || (num >= max_num))
+        return 0;
+
+    return choice[num];
+}
+
+/*!
+ * @brief 任意のベースアイテム生成のメインルーチン /
+ * Wizard routine for creating objects		-RAK-
+ * @return なし
+ * @details
+ * Heavily modified to allow magification and artifactification  -Bernd-
+ *
+ * Note that wizards cannot create objects on top of other objects.
+ *
+ * Hack -- this routine always makes a "dungeon object", and applies
+ * magic to it, and attempts to decline cursed items.
+ */
+void wiz_create_item(player_type *caster_ptr)
+{
+    screen_save(caster_ptr);
+    OBJECT_IDX k_idx = wiz_create_itemtype();
+    screen_load(caster_ptr);
+    if (!k_idx)
+        return;
+
+    if (k_info[k_idx].gen_flags & TRG_INSTA_ART) {
+        for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
+            if ((a_info[i].tval != k_info[k_idx].tval) || (a_info[i].sval != k_info[k_idx].sval))
+                continue;
+
+            (void)create_named_art(caster_ptr, i, caster_ptr->y, caster_ptr->x);
+            msg_print("Allocated(INSTA_ART).");
+            return;
+        }
+    }
+
+    object_type forge;
+    object_type *q_ptr;
+    q_ptr = &forge;
+    object_prep(caster_ptr, q_ptr, k_idx);
+    apply_magic(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+    (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
+    msg_print("Allocated.");
+}
+
+/*!
  * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void wiz_create_named_art(player_type *caster_ptr)
+void wiz_create_named_art(player_type *caster_ptr)
 {
     char tmp_val[10] = "";
     if (!get_string("Artifact ID:", tmp_val, 3))
@@ -117,117 +236,11 @@ static void wiz_create_named_art(player_type *caster_ptr)
 }
 
 /*!
- * @brief 32ビット変数のビット配列を並べて描画する / Output a long int in binary format.
+ * @brief プレイヤーの現能力値を調整する / Change various "permanent" player variables.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void prt_binary(BIT_FLAGS flags, const int row, int col)
-{
-    u32b bitmask;
-    for (int i = bitmask = 1; i <= 32; i++, bitmask *= 2)
-        if (flags & bitmask)
-            term_putch(col++, row, TERM_BLUE, '*');
-        else
-            term_putch(col++, row, TERM_WHITE, '-');
-}
-
-/*!
- * @brief アイテムの階層毎生成率を表示する / Output a rarity graph for a type of object.
- * @param tval ベースアイテムの大項目ID
- * @param sval ベースアイテムの小項目ID
- * @param row 表示列
- * @param col 表示行
- * @return なし
- */
-static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
-{
-    u32b rarity[K_MAX_DEPTH];
-    (void)C_WIPE(rarity, K_MAX_DEPTH, u32b);
-    u32b total[K_MAX_DEPTH];
-    (void)C_WIPE(total, K_MAX_DEPTH, u32b);
-    s32b display[22];
-    (void)C_WIPE(display, 22, s32b);
-
-    int home = 0;
-    for (int i = 0; i < K_MAX_DEPTH; i++) {
-        int total_frac = 0;
-        object_kind *k_ptr;
-        alloc_entry *table = alloc_kind_table;
-        for (int j = 0; j < alloc_kind_size; j++) {
-            PERCENTAGE prob = 0;
-
-            if (table[j].level <= i) {
-                prob = table[j].prob1 * GREAT_OBJ * K_MAX_DEPTH;
-            } else if (table[j].level - 1 > 0) {
-                prob = table[j].prob1 * i * K_MAX_DEPTH / (table[j].level - 1);
-            }
-
-            k_ptr = &k_info[table[j].index];
-
-            total[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
-            total_frac += prob % (GREAT_OBJ * K_MAX_DEPTH);
-
-            if ((k_ptr->tval == tval) && (k_ptr->sval == sval)) {
-                home = k_ptr->level;
-                rarity[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
-            }
-        }
-
-        total[i] += total_frac / (GREAT_OBJ * K_MAX_DEPTH);
-    }
-
-    for (int i = 0; i < 22; i++) {
-        int possibility = 0;
-        for (int j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++)
-            possibility += rarity[j] * 100000 / total[j];
-
-        display[i] = possibility / 5;
-    }
-
-    for (int i = 0; i < 22; i++) {
-        term_putch(col, row + i + 1, TERM_WHITE, '|');
-        prt(format("%2dF", (i * 5)), row + i + 1, col);
-        if ((i * K_MAX_DEPTH / 22 <= home) && (home < (i + 1) * K_MAX_DEPTH / 22))
-            c_prt(TERM_RED, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
-        else
-            c_prt(TERM_WHITE, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
-    }
-
-    concptr r = "+---Rate---+";
-    prt(r, row, col);
-}
-
-/*!
- * @brief プレイヤーの職業を変更する
- * @return なし
- * @todo 魔法領域の再選択などがまだ不完全、要実装。
- */
-static void wiz_reset_class(player_type *creature_ptr)
-{
-    char ppp[80];
-    sprintf(ppp, "Class (0-%d): ", MAX_CLASS - 1);
-
-    char tmp_val[160];
-    sprintf(tmp_val, "%d", creature_ptr->pclass);
-
-    if (!get_string(ppp, tmp_val, 2))
-        return;
-
-    int tmp_int = atoi(tmp_val);
-    if (tmp_int < 0 || tmp_int >= MAX_CLASS)
-        return;
-
-    creature_ptr->pclass = (byte)tmp_int;
-    creature_ptr->window |= PW_PLAYER;
-    creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    handle_stuff(creature_ptr);
-}
-
-/*!
- * @brief プレイヤーの現能力値を調整する
- * Aux function for "wiz_change_status()".	-RAK-
- * @return なし
- */
-static void do_cmd_wiz_change_aux(player_type *creature_ptr)
+void wiz_change_status(player_type *creature_ptr)
 {
     int tmp_int;
     char tmp_val[160];
@@ -302,17 +315,298 @@ static void do_cmd_wiz_change_aux(player_type *creature_ptr)
     creature_ptr->max_exp = tmp_long;
     creature_ptr->exp = tmp_long;
     check_experience(creature_ptr);
+    do_cmd_redraw(creature_ptr);
 }
 
 /*!
- * @brief プレイヤーの現能力値を調整する(メインルーチン)
- * Change various "permanent" player variables.
+ * @brief 指定された地点の地形IDを変更する /
+ * Create desired feature
+ * @param creaturer_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void wiz_change_status(player_type *creature_ptr)
+void wiz_create_feature(player_type *creature_ptr)
 {
-    do_cmd_wiz_change_aux(creature_ptr);
-    do_cmd_redraw(creature_ptr);
+    POSITION y, x;
+    if (!tgt_pt(creature_ptr, &x, &y))
+        return;
+
+    grid_type *g_ptr;
+    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    static int prev_feat = 0;
+    char tmp_val[160];
+    sprintf(tmp_val, "%d", prev_feat);
+
+    if (!get_string(_("地形: ", "Feature: "), tmp_val, 3))
+        return;
+
+    FEAT_IDX tmp_feat = (FEAT_IDX)atoi(tmp_val);
+    if (tmp_feat < 0)
+        tmp_feat = 0;
+    else if (tmp_feat >= max_f_idx)
+        tmp_feat = max_f_idx - 1;
+
+    static int prev_mimic = 0;
+    sprintf(tmp_val, "%d", prev_mimic);
+
+    if (!get_string(_("地形 (mimic): ", "Feature (mimic): "), tmp_val, 3))
+        return;
+
+    FEAT_IDX tmp_mimic = (FEAT_IDX)atoi(tmp_val);
+    if (tmp_mimic < 0)
+        tmp_mimic = 0;
+    else if (tmp_mimic >= max_f_idx)
+        tmp_mimic = max_f_idx - 1;
+
+    cave_set_feat(creature_ptr, y, x, tmp_feat);
+    g_ptr->mimic = (s16b)tmp_mimic;
+    feature_type *f_ptr;
+    f_ptr = &f_info[get_feat_mimic(g_ptr)];
+
+    if (have_flag(f_ptr->flags, FF_GLYPH) || have_flag(f_ptr->flags, FF_MINOR_GLYPH))
+        g_ptr->info |= CAVE_OBJECT;
+    else if (have_flag(f_ptr->flags, FF_MIRROR))
+        g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
+
+    note_spot(creature_ptr, y, x);
+    lite_spot(creature_ptr, y, x);
+    creature_ptr->update |= PU_FLOW;
+    prev_feat = tmp_feat;
+    prev_mimic = tmp_mimic;
+}
+
+/*!
+ * @brief 任意のダンジョン及び階層に飛ぶ /
+ * Go to any level
+ * @return なし
+ */
+void wiz_jump_to_dungeon(player_type *creature_ptr)
+{
+    if (command_arg <= 0) {
+        char ppp[80];
+        char tmp_val[160];
+        DUNGEON_IDX tmp_dungeon_type;
+        sprintf(ppp, "Jump which dungeon : ");
+        sprintf(tmp_val, "%d", creature_ptr->dungeon_idx);
+        if (!get_string(ppp, tmp_val, 2))
+            return;
+
+        tmp_dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
+        if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > current_world_ptr->max_d_idx))
+            tmp_dungeon_type = DUNGEON_ANGBAND;
+
+        sprintf(ppp, "Jump to level (0, %d-%d): ", (int)d_info[tmp_dungeon_type].mindepth, (int)d_info[tmp_dungeon_type].maxdepth);
+        sprintf(tmp_val, "%d", (int)creature_ptr->current_floor_ptr->dun_level);
+        if (!get_string(ppp, tmp_val, 10))
+            return;
+
+        command_arg = (COMMAND_ARG)atoi(tmp_val);
+        creature_ptr->dungeon_idx = tmp_dungeon_type;
+    }
+
+    if (command_arg < d_info[creature_ptr->dungeon_idx].mindepth)
+        command_arg = 0;
+
+    if (command_arg > d_info[creature_ptr->dungeon_idx].maxdepth)
+        command_arg = (COMMAND_ARG)d_info[creature_ptr->dungeon_idx].maxdepth;
+
+    msg_format("You jump to dungeon level %d.", command_arg);
+    if (autosave_l)
+        do_cmd_save_game(creature_ptr, TRUE);
+
+    creature_ptr->current_floor_ptr->dun_level = command_arg;
+    prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
+    if (!creature_ptr->current_floor_ptr->dun_level)
+        creature_ptr->dungeon_idx = 0;
+
+    creature_ptr->current_floor_ptr->inside_arena = FALSE;
+    creature_ptr->wild_mode = FALSE;
+    leave_quest_check(creature_ptr);
+    if (record_stair)
+        exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
+
+    creature_ptr->current_floor_ptr->inside_quest = 0;
+    free_turn(creature_ptr);
+    creature_ptr->energy_need = 0;
+    prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
+    creature_ptr->leaving = TRUE;
+}
+
+/*!
+ * @brief 全ベースアイテムを鑑定済みにする /
+ * Become aware of a lot of objects
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void wiz_learn_items_all(player_type *caster_ptr)
+{
+    object_type forge;
+    object_type *q_ptr;
+    for (KIND_OBJECT_IDX i = 1; i < max_k_idx; i++) {
+        object_kind *k_ptr = &k_info[i];
+        if (k_ptr->level <= command_arg) {
+            q_ptr = &forge;
+            object_prep(caster_ptr, q_ptr, i);
+            object_aware(caster_ptr, q_ptr);
+        }
+    }
+}
+
+/*!
+ * @brief プレイヤーの職業を変更する
+ * @return なし
+ * @todo 魔法領域の再選択などがまだ不完全、要実装。
+ */
+void wiz_reset_class(player_type *creature_ptr)
+{
+    char ppp[80];
+    sprintf(ppp, "Class (0-%d): ", MAX_CLASS - 1);
+
+    char tmp_val[160];
+    sprintf(tmp_val, "%d", creature_ptr->pclass);
+
+    if (!get_string(ppp, tmp_val, 2))
+        return;
+
+    int tmp_int = atoi(tmp_val);
+    if (tmp_int < 0 || tmp_int >= MAX_CLASS)
+        return;
+
+    creature_ptr->pclass = (byte)tmp_int;
+    creature_ptr->window |= PW_PLAYER;
+    creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    handle_stuff(creature_ptr);
+}
+
+/*!
+ * @brief 現在のオプション設定をダンプ出力する /
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * Hack -- Dump option bits usage
+ * @return なし
+ */
+void wiz_dump_options(void)
+{
+    char buf[1024];
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "opt_info.txt");
+    FILE *fff;
+    fff = angband_fopen(buf, "a");
+    if (fff == NULL) {
+        msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
+        msg_print(NULL);
+        return;
+    }
+
+    int **exist;
+    C_MAKE(exist, NUM_O_SET, int *);
+    C_MAKE(*exist, NUM_O_BIT * NUM_O_SET, int);
+    for (int i = 1; i < NUM_O_SET; i++)
+        exist[i] = *exist + i * NUM_O_BIT;
+
+    for (int i = 0; option_info[i].o_desc; i++) {
+        const option_type *ot_ptr = &option_info[i];
+        if (ot_ptr->o_var)
+            exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
+    }
+
+    fprintf(fff, "[Option bits usage on Hengband %d.%d.%d]\n\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+    fputs("Set - Bit (Page) Option Name\n", fff);
+    fputs("------------------------------------------------\n", fff);
+    for (int i = 0; i < NUM_O_SET; i++) {
+        for (int j = 0; j < NUM_O_BIT; j++) {
+            if (exist[i][j]) {
+                const option_type *ot_ptr = &option_info[exist[i][j] - 1];
+                fprintf(fff, "  %d -  %02d (%4d) %s\n", i, j, ot_ptr->o_page, ot_ptr->o_text);
+            } else {
+                fprintf(fff, "  %d -  %02d\n", i, j);
+            }
+        }
+
+        fputc('\n', fff);
+    }
+
+    C_KILL(*exist, NUM_O_BIT * NUM_O_SET, int);
+    C_KILL(exist, NUM_O_SET, int *);
+    angband_fclose(fff);
+    msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);
+}
+
+/*!
+ * @brief アイテムの階層毎生成率を表示する / Output a rarity graph for a type of object.
+ * @param tval ベースアイテムの大項目ID
+ * @param sval ベースアイテムの小項目ID
+ * @param row 表示列
+ * @param col 表示行
+ * @return なし
+ */
+static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
+{
+    u32b rarity[K_MAX_DEPTH];
+    (void)C_WIPE(rarity, K_MAX_DEPTH, u32b);
+    u32b total[K_MAX_DEPTH];
+    (void)C_WIPE(total, K_MAX_DEPTH, u32b);
+    s32b display[22];
+    (void)C_WIPE(display, 22, s32b);
+
+    int home = 0;
+    for (int i = 0; i < K_MAX_DEPTH; i++) {
+        int total_frac = 0;
+        object_kind *k_ptr;
+        alloc_entry *table = alloc_kind_table;
+        for (int j = 0; j < alloc_kind_size; j++) {
+            PERCENTAGE prob = 0;
+
+            if (table[j].level <= i) {
+                prob = table[j].prob1 * GREAT_OBJ * K_MAX_DEPTH;
+            } else if (table[j].level - 1 > 0) {
+                prob = table[j].prob1 * i * K_MAX_DEPTH / (table[j].level - 1);
+            }
+
+            k_ptr = &k_info[table[j].index];
+
+            total[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
+            total_frac += prob % (GREAT_OBJ * K_MAX_DEPTH);
+
+            if ((k_ptr->tval == tval) && (k_ptr->sval == sval)) {
+                home = k_ptr->level;
+                rarity[i] += prob / (GREAT_OBJ * K_MAX_DEPTH);
+            }
+        }
+
+        total[i] += total_frac / (GREAT_OBJ * K_MAX_DEPTH);
+    }
+
+    for (int i = 0; i < 22; i++) {
+        int possibility = 0;
+        for (int j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++)
+            possibility += rarity[j] * 100000 / total[j];
+
+        display[i] = possibility / 5;
+    }
+
+    for (int i = 0; i < 22; i++) {
+        term_putch(col, row + i + 1, TERM_WHITE, '|');
+        prt(format("%2dF", (i * 5)), row + i + 1, col);
+        if ((i * K_MAX_DEPTH / 22 <= home) && (home < (i + 1) * K_MAX_DEPTH / 22))
+            c_prt(TERM_RED, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
+        else
+            c_prt(TERM_WHITE, format("%3d.%04d%%", display[i] / 1000, display[i] % 1000), row + i + 1, col + 3);
+    }
+
+    concptr r = "+---Rate---+";
+    prt(r, row, col);
+}
+
+/*!
+ * @brief 32ビット変数のビット配列を並べて描画する / Output a long int in binary format.
+ * @return なし
+ */
+static void prt_binary(BIT_FLAGS flags, const int row, int col)
+{
+    u32b bitmask;
+    for (int i = bitmask = 1; i <= 32; i++, bitmask *= 2)
+        if (flags & bitmask)
+            term_putch(col++, row, TERM_BLUE, '*');
+        else
+            term_putch(col++, row, TERM_WHITE, '-');
 }
 
 /*!
@@ -372,208 +666,6 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
     prt("iidmroamidmroagmionq            ", 21, j + 32);
     prt("mlenclnmmenclnnnldlu            ", 22, j + 32);
     prt_binary(flgs[3], 23, j + 32);
-}
-
-/*!
- * @brief ベースアイテムのウィザード生成のために大項目IDと小項目IDを取得する /
- * Specify tval and sval (type and subtype of object) originally
- * @return ベースアイテムID
- * @details
- * by RAK, heavily modified by -Bernd-
- * This function returns the k_idx of an object type, or zero if failed
- * List up to 50 choices in three columns
- */
-static KIND_OBJECT_IDX wiz_create_itemtype(void)
-{
-    term_clear();
-    int num;
-    TERM_LEN col, row;
-    char ch;
-    for (num = 0; (num < 80) && tvals[num].tval; num++) {
-        row = 2 + (num % 20);
-        col = 20 * (num / 20);
-        ch = listsym[num];
-        prt(format("[%c] %s", ch, tvals[num].desc), row, col);
-    }
-
-    int max_num = num;
-    if (!get_com("Get what type of object? ", &ch, FALSE))
-        return 0;
-
-    for (num = 0; num < max_num; num++)
-        if (listsym[num] == ch)
-            break;
-
-    if ((num < 0) || (num >= max_num))
-        return 0;
-
-    tval_type tval = tvals[num].tval;
-    concptr tval_desc = tvals[num].desc;
-    term_clear();
-    num = 0;
-    KIND_OBJECT_IDX choice[80];
-    char buf[160];
-    for (KIND_OBJECT_IDX i = 1; (num < 80) && (i < max_k_idx); i++) {
-        object_kind *k_ptr = &k_info[i];
-        if (k_ptr->tval != tval)
-            continue;
-
-        row = 2 + (num % 20);
-        col = 20 * (num / 20);
-        ch = listsym[num];
-        strcpy(buf, "                    ");
-        strip_name(buf, i);
-        prt(format("[%c] %s", ch, buf), row, col);
-        choice[num++] = i;
-    }
-
-    max_num = num;
-    if (!get_com(format("What Kind of %s? ", tval_desc), &ch, FALSE))
-        return 0;
-
-    for (num = 0; num < max_num; num++)
-        if (listsym[num] == ch)
-            break;
-
-    if ((num < 0) || (num >= max_num))
-        return 0;
-
-    return choice[num];
-}
-
-/*!
- * @briefアイテムの基礎能力値を調整する / Tweak an item
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param o_ptr 調整するアイテムの参照ポインタ
- * @return なし
- */
-static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
-{
-    if (object_is_artifact(o_ptr))
-        return;
-
-    concptr p = "Enter new 'pval' setting: ";
-    char tmp_val[80];
-    sprintf(tmp_val, "%d", o_ptr->pval);
-    if (!get_string(p, tmp_val, 5))
-        return;
-
-    o_ptr->pval = (s16b)atoi(tmp_val);
-    wiz_display_item(player_ptr, o_ptr);
-    p = "Enter new 'to_a' setting: ";
-    sprintf(tmp_val, "%d", o_ptr->to_a);
-    if (!get_string(p, tmp_val, 5))
-        return;
-
-    o_ptr->to_a = (s16b)atoi(tmp_val);
-    wiz_display_item(player_ptr, o_ptr);
-    p = "Enter new 'to_h' setting: ";
-    sprintf(tmp_val, "%d", o_ptr->to_h);
-    if (!get_string(p, tmp_val, 5))
-        return;
-
-    o_ptr->to_h = (s16b)atoi(tmp_val);
-    wiz_display_item(player_ptr, o_ptr);
-    p = "Enter new 'to_d' setting: ";
-    sprintf(tmp_val, "%d", (int)o_ptr->to_d);
-    if (!get_string(p, tmp_val, 5))
-        return;
-
-    o_ptr->to_d = (s16b)atoi(tmp_val);
-    wiz_display_item(player_ptr, o_ptr);
-}
-
-/*!
- * @brief アイテムの質を選択して再生成する /
- * Apply magic to an item or turn it into an artifact. -Bernd-
- * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
- * @return なし
- */
-static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
-{
-    if (object_is_artifact(o_ptr))
-        return;
-
-    object_type forge;
-    object_type *q_ptr;
-    q_ptr = &forge;
-    object_copy(q_ptr, o_ptr);
-
-    char ch;
-    bool changed = FALSE;
-    while (TRUE) {
-        wiz_display_item(owner_ptr, q_ptr);
-        if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, FALSE)) {
-            if (object_is_fixed_artifact(q_ptr)) {
-                a_info[q_ptr->name1].cur_num = 0;
-                q_ptr->name1 = 0;
-            }
-
-            changed = FALSE;
-            break;
-        }
-
-        if (ch == 'A' || ch == 'a') {
-            changed = TRUE;
-            break;
-        }
-
-        if (object_is_fixed_artifact(q_ptr)) {
-            a_info[q_ptr->name1].cur_num = 0;
-            q_ptr->name1 = 0;
-        }
-
-        switch (tolower(ch)) {
-        /* Apply bad magic, but first clear object */
-        case 'w':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
-            break;
-        /* Apply bad magic, but first clear object */
-        case 'c':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
-            break;
-        /* Apply normal magic, but first clear object */
-        case 'n':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
-            break;
-        /* Apply good magic, but first clear object */
-        case 'g':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
-            break;
-        /* Apply great magic, but first clear object */
-        case 'e':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
-            break;
-        /* Apply special magic, but first clear object */
-        case 's':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
-            if (!object_is_artifact(q_ptr))
-                become_random_artifact(owner_ptr, q_ptr, FALSE);
-
-            break;
-        default:
-            break;
-        }
-
-        q_ptr->iy = o_ptr->iy;
-        q_ptr->ix = o_ptr->ix;
-        q_ptr->next_o_idx = o_ptr->next_o_idx;
-        q_ptr->marked = o_ptr->marked;
-    }
-
-    if (!changed)
-        return;
-
-    object_copy(o_ptr, q_ptr);
-    owner_ptr->update |= PU_BONUS;
-    owner_ptr->update |= PU_COMBINE | PU_REORDER;
-    owner_ptr->window |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER;
 }
 
 /*!
@@ -673,6 +765,141 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
 }
 
 /*!
+ * @brief アイテムの質を選択して再生成する /
+ * Apply magic to an item or turn it into an artifact. -Bernd-
+ * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
+ * @return なし
+ */
+static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
+{
+    if (object_is_artifact(o_ptr))
+        return;
+
+    object_type forge;
+    object_type *q_ptr;
+    q_ptr = &forge;
+    object_copy(q_ptr, o_ptr);
+
+    char ch;
+    bool changed = FALSE;
+    while (TRUE) {
+        wiz_display_item(owner_ptr, q_ptr);
+        if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, FALSE)) {
+            if (object_is_fixed_artifact(q_ptr)) {
+                a_info[q_ptr->name1].cur_num = 0;
+                q_ptr->name1 = 0;
+            }
+
+            changed = FALSE;
+            break;
+        }
+
+        if (ch == 'A' || ch == 'a') {
+            changed = TRUE;
+            break;
+        }
+
+        if (object_is_fixed_artifact(q_ptr)) {
+            a_info[q_ptr->name1].cur_num = 0;
+            q_ptr->name1 = 0;
+        }
+
+        switch (tolower(ch)) {
+        /* Apply bad magic, but first clear object */
+        case 'w':
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
+            break;
+        /* Apply bad magic, but first clear object */
+        case 'c':
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
+            break;
+        /* Apply normal magic, but first clear object */
+        case 'n':
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+            break;
+        /* Apply good magic, but first clear object */
+        case 'g':
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
+            break;
+        /* Apply great magic, but first clear object */
+        case 'e':
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
+            break;
+        /* Apply special magic, but first clear object */
+        case 's':
+            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
+            if (!object_is_artifact(q_ptr))
+                become_random_artifact(owner_ptr, q_ptr, FALSE);
+
+            break;
+        default:
+            break;
+        }
+
+        q_ptr->iy = o_ptr->iy;
+        q_ptr->ix = o_ptr->ix;
+        q_ptr->next_o_idx = o_ptr->next_o_idx;
+        q_ptr->marked = o_ptr->marked;
+    }
+
+    if (!changed)
+        return;
+
+    object_copy(o_ptr, q_ptr);
+    owner_ptr->update |= PU_BONUS;
+    owner_ptr->update |= PU_COMBINE | PU_REORDER;
+    owner_ptr->window |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER;
+}
+
+/*!
+ * @briefアイテムの基礎能力値を調整する / Tweak an item
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 調整するアイテムの参照ポインタ
+ * @return なし
+ */
+static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
+{
+    if (object_is_artifact(o_ptr))
+        return;
+
+    concptr p = "Enter new 'pval' setting: ";
+    char tmp_val[80];
+    sprintf(tmp_val, "%d", o_ptr->pval);
+    if (!get_string(p, tmp_val, 5))
+        return;
+
+    o_ptr->pval = (s16b)atoi(tmp_val);
+    wiz_display_item(player_ptr, o_ptr);
+    p = "Enter new 'to_a' setting: ";
+    sprintf(tmp_val, "%d", o_ptr->to_a);
+    if (!get_string(p, tmp_val, 5))
+        return;
+
+    o_ptr->to_a = (s16b)atoi(tmp_val);
+    wiz_display_item(player_ptr, o_ptr);
+    p = "Enter new 'to_h' setting: ";
+    sprintf(tmp_val, "%d", o_ptr->to_h);
+    if (!get_string(p, tmp_val, 5))
+        return;
+
+    o_ptr->to_h = (s16b)atoi(tmp_val);
+    wiz_display_item(player_ptr, o_ptr);
+    p = "Enter new 'to_d' setting: ";
+    sprintf(tmp_val, "%d", (int)o_ptr->to_d);
+    if (!get_string(p, tmp_val, 5))
+        return;
+
+    o_ptr->to_d = (s16b)atoi(tmp_val);
+    wiz_display_item(player_ptr, o_ptr);
+}
+
+/*!
  * @brief 検査対象のアイテムの数を変更する /
  * Change the quantity of a the item
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -712,11 +939,10 @@ static void wiz_quantity_item(object_type *o_ptr)
  *   - Change properties (via wiz_tweak_item)<br>
  *   - Change the number of items (via wiz_quantity_item)<br>
  */
-static void wiz_modify_item(player_type *creature_ptr)
+void wiz_modify_item(player_type *creature_ptr)
 {
     concptr q = "Play with which object? ";
     concptr s = "You have nothing to play with.";
-
     OBJECT_IDX item;
     object_type *o_ptr;
     o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
@@ -777,293 +1003,10 @@ static void wiz_modify_item(player_type *creature_ptr)
 }
 
 /*!
- * @brief 任意のベースアイテム生成のメインルーチン /
- * Wizard routine for creating objects		-RAK-
- * @return なし
- * @details
- * Heavily modified to allow magification and artifactification  -Bernd-
- *
- * Note that wizards cannot create objects on top of other objects.
- *
- * Hack -- this routine always makes a "dungeon object", and applies
- * magic to it, and attempts to decline cursed items.
- */
-static void wiz_create_item(player_type *caster_ptr)
-{
-    screen_save(caster_ptr);
-    OBJECT_IDX k_idx = wiz_create_itemtype();
-    screen_load(caster_ptr);
-    if (!k_idx)
-        return;
-
-    if (k_info[k_idx].gen_flags & TRG_INSTA_ART) {
-        for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
-            if ((a_info[i].tval != k_info[k_idx].tval) || (a_info[i].sval != k_info[k_idx].sval))
-                continue;
-
-            (void)create_named_art(caster_ptr, i, caster_ptr->y, caster_ptr->x);
-            msg_print("Allocated(INSTA_ART).");
-            return;
-        }
-    }
-
-    object_type forge;
-    object_type *q_ptr;
-    q_ptr = &forge;
-    object_prep(caster_ptr, q_ptr, k_idx);
-    apply_magic(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
-    (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
-    msg_print("Allocated.");
-}
-
-/*!
- * @brief プレイヤーを完全回復する /
- * Cure everything instantly
- * @return なし
- */
-static void wiz_cure_all(player_type *creature_ptr)
-{
-    (void)life_stream(creature_ptr, FALSE, FALSE);
-    (void)restore_mana(creature_ptr, TRUE);
-    (void)set_food(creature_ptr, PY_FOOD_MAX - 1);
-}
-
-/*!
- * @brief 任意のダンジョン及び階層に飛ぶ /
- * Go to any level
- * @return なし
- */
-static void wiz_jump_to_dungeon(player_type *creature_ptr)
-{
-    if (command_arg <= 0) {
-        char ppp[80];
-        char tmp_val[160];
-        DUNGEON_IDX tmp_dungeon_type;
-        sprintf(ppp, "Jump which dungeon : ");
-        sprintf(tmp_val, "%d", creature_ptr->dungeon_idx);
-        if (!get_string(ppp, tmp_val, 2))
-            return;
-
-        tmp_dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
-        if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > current_world_ptr->max_d_idx))
-            tmp_dungeon_type = DUNGEON_ANGBAND;
-
-        sprintf(ppp, "Jump to level (0, %d-%d): ", (int)d_info[tmp_dungeon_type].mindepth, (int)d_info[tmp_dungeon_type].maxdepth);
-        sprintf(tmp_val, "%d", (int)creature_ptr->current_floor_ptr->dun_level);
-        if (!get_string(ppp, tmp_val, 10))
-            return;
-
-        command_arg = (COMMAND_ARG)atoi(tmp_val);
-        creature_ptr->dungeon_idx = tmp_dungeon_type;
-    }
-
-    if (command_arg < d_info[creature_ptr->dungeon_idx].mindepth)
-        command_arg = 0;
-
-    if (command_arg > d_info[creature_ptr->dungeon_idx].maxdepth)
-        command_arg = (COMMAND_ARG)d_info[creature_ptr->dungeon_idx].maxdepth;
-
-    msg_format("You jump to dungeon level %d.", command_arg);
-    if (autosave_l)
-        do_cmd_save_game(creature_ptr, TRUE);
-
-    creature_ptr->current_floor_ptr->dun_level = command_arg;
-    prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
-    if (!creature_ptr->current_floor_ptr->dun_level)
-        creature_ptr->dungeon_idx = 0;
-
-    creature_ptr->current_floor_ptr->inside_arena = FALSE;
-    creature_ptr->wild_mode = FALSE;
-    leave_quest_check(creature_ptr);
-    if (record_stair)
-        exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
-
-    creature_ptr->current_floor_ptr->inside_quest = 0;
-    free_turn(creature_ptr);
-    creature_ptr->energy_need = 0;
-    prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-    creature_ptr->leaving = TRUE;
-}
-
-/*!
- * @brief 全ベースアイテムを鑑定済みにする /
- * Become aware of a lot of objects
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-static void wiz_learn_items_all(player_type *caster_ptr)
-{
-    object_type forge;
-    object_type *q_ptr;
-    for (KIND_OBJECT_IDX i = 1; i < max_k_idx; i++) {
-        object_kind *k_ptr = &k_info[i];
-        if (k_ptr->level <= command_arg) {
-            q_ptr = &forge;
-            object_prep(caster_ptr, q_ptr, i);
-            object_aware(caster_ptr, q_ptr);
-        }
-    }
-}
-
-/*!
- * @brief プレイヤー近辺の全モンスターを消去する /
- * Hack -- Delete all nearby monsters
- * @return なし
- */
-static void wiz_zap_surrounding_monsters(player_type *caster_ptr)
-{
-    for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || (i == caster_ptr->riding) || (m_ptr->cdis > MAX_SIGHT))
-            continue;
-
-        if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
-            GAME_TEXT m_name[MAX_NLEN];
-
-            monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
-        }
-
-        delete_monster_idx(caster_ptr, i);
-    }
-}
-
-/*!
- * @brief フロアに存在する全モンスターを消去する /
- * Hack -- Delete all monsters
- * @param caster_ptr 術者の参照ポインタ
- * @return なし
- */
-static void wiz_zap_floor_monsters(player_type *caster_ptr)
-{
-    for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || (i == caster_ptr->riding))
-            continue;
-
-        if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
-        }
-
-        delete_monster_idx(caster_ptr, i);
-    }
-}
-
-/*!
- * @brief 指定された地点の地形IDを変更する /
- * Create desired feature
- * @param creaturer_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-static void wiz_create_feature(player_type *creature_ptr)
-{
-    POSITION y, x;
-    if (!tgt_pt(creature_ptr, &x, &y))
-        return;
-
-    grid_type *g_ptr;
-    g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-    static int prev_feat = 0;
-    char tmp_val[160];
-    sprintf(tmp_val, "%d", prev_feat);
-
-    if (!get_string(_("地形: ", "Feature: "), tmp_val, 3))
-        return;
-
-    FEAT_IDX tmp_feat = (FEAT_IDX)atoi(tmp_val);
-    if (tmp_feat < 0)
-        tmp_feat = 0;
-    else if (tmp_feat >= max_f_idx)
-        tmp_feat = max_f_idx - 1;
-
-    static int prev_mimic = 0;
-    sprintf(tmp_val, "%d", prev_mimic);
-
-    if (!get_string(_("地形 (mimic): ", "Feature (mimic): "), tmp_val, 3))
-        return;
-
-    FEAT_IDX tmp_mimic = (FEAT_IDX)atoi(tmp_val);
-    if (tmp_mimic < 0)
-        tmp_mimic = 0;
-    else if (tmp_mimic >= max_f_idx)
-        tmp_mimic = max_f_idx - 1;
-
-    cave_set_feat(creature_ptr, y, x, tmp_feat);
-    g_ptr->mimic = (s16b)tmp_mimic;
-    feature_type *f_ptr;
-    f_ptr = &f_info[get_feat_mimic(g_ptr)];
-
-    if (have_flag(f_ptr->flags, FF_GLYPH) || have_flag(f_ptr->flags, FF_MINOR_GLYPH))
-        g_ptr->info |= CAVE_OBJECT;
-    else if (have_flag(f_ptr->flags, FF_MIRROR))
-        g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
-
-    note_spot(creature_ptr, y, x);
-    lite_spot(creature_ptr, y, x);
-    creature_ptr->update |= PU_FLOW;
-    prev_feat = tmp_feat;
-    prev_mimic = tmp_mimic;
-}
-
-/*!
- * @brief 現在のオプション設定をダンプ出力する /
- * @param creature_ptr プレーヤーへの参照ポインタ
- * Hack -- Dump option bits usage
- * @return なし
- */
-static void wiz_dump_options()
-{
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "opt_info.txt");
-    FILE *fff;
-    fff = angband_fopen(buf, "a");
-    if (fff == NULL) {
-        msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
-        msg_print(NULL);
-        return;
-    }
-
-    int **exist;
-    C_MAKE(exist, NUM_O_SET, int *);
-    C_MAKE(*exist, NUM_O_BIT * NUM_O_SET, int);
-    for (int i = 1; i < NUM_O_SET; i++)
-        exist[i] = *exist + i * NUM_O_BIT;
-
-    for (int i = 0; option_info[i].o_desc; i++) {
-        const option_type *ot_ptr = &option_info[i];
-        if (ot_ptr->o_var)
-            exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
-    }
-
-    fprintf(fff, "[Option bits usage on Hengband %d.%d.%d]\n\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-    fputs("Set - Bit (Page) Option Name\n", fff);
-    fputs("------------------------------------------------\n", fff);
-    for (int i = 0; i < NUM_O_SET; i++) {
-        for (int j = 0; j < NUM_O_BIT; j++) {
-            if (exist[i][j]) {
-                const option_type *ot_ptr = &option_info[exist[i][j] - 1];
-                fprintf(fff, "  %d -  %02d (%4d) %s\n", i, j, ot_ptr->o_page, ot_ptr->o_text);
-            } else {
-                fprintf(fff, "  %d -  %02d\n", i, j);
-            }
-        }
-
-        fputc('\n', fff);
-    }
-
-    C_KILL(*exist, NUM_O_BIT * NUM_O_SET, int);
-    C_KILL(exist, NUM_O_SET, int *);
-    angband_fclose(fff);
-    msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);
-}
-
-/*!
  * @brief プレイ日数を変更する / Set gametime.
  * @return 実際に変更を行ったらTRUEを返す
  */
-static void set_gametime(void)
+void set_gametime(void)
 {
     int tmp_int = 0;
     char ppp[80], tmp_val[40];
@@ -1082,266 +1025,45 @@ static void set_gametime(void)
 }
 
 /*!
- * @brief デバッグコマンドを選択する処理のメインルーチン /
- * Ask for and parse a "debug command"
- * The "command_arg" may have been set.
- * @param creature_ptr プレーヤーへの参照ポインタ
+ * @brief プレイヤー近辺の全モンスターを消去する / Delete all nearby monsters
  * @return なし
- * @details
- * 番号を指定するには、それをN及びデバッグコマンドをXとしてとして「0N^aX」とする
- * a：全状態回復 / Cure all maladies
- * A：善悪の属性表示 / Know alignment
- * b：相手をテレポバック / Teleport to target
- * B：モンスター闘技場のモンスターを更新する / Update gambling monster
- * c：アイテム生成 / Create any object
- * C：指定番号の固定アーティファクトを生成する / Create a named artifact
- * d：全感知 / Detect everything
- * D：次元の扉 / Dimension_door
- * e：能力変更 / Edit character
- * E：全てのスペルをラーニング状態にする / Blue Mage Only
- * f：*鑑定* / Fully identification
- * F：地形ID変更 / Create desired feature
- * g：上質なアイテムを生成 / Good Objects
- * G：なし / Nothing
- * h：新生 / Hitpoint rerating
- * H：モンスターの群れ生成 / Generate monster group
- * i：鑑定 / Identification
- * I：なし / Nothing
- * j：ダンジョンの指定フロアへテレポート (ウィザードあり) / Jump to dungeon
- * J：なし / Nothing
- * k：自己分析 / Self info
- * K：なし / Nothing
- * l：番号指定したアイテムまで鑑定済にする / Learn about objects
- * L：なし / Nothing
- * m：魔法の地図 / Magic Mapping
- * M：突然変異 / Mutation / TODO: 指定した突然変異の除外機能を追加したい
- * n：番号指定したモンスターを生成 / Generate a monster
- * N：番号指定したペットを生成 / Generate a pet
- * o：アイテムのtval等を編集する / Edit object
- * O：現在のオプション設定をダンプ出力 / Output option settings
- * p：ショートテレポ / Blink
- * P：なし / Nothing
- * q：クエストを完了させる / Finish quest
- * Q：クエストに突入する (ウィザードあり) / Jump to quest
- * r：カオスパトロンから報酬を貰う / Gain reward from chaos patron
- * R：クラス変更 / Change class
- * s：フロア相応のモンスター召喚 / Summon a monster
- * S：高級品獲得ドロップ / Get a great item
- * t：テレポート / Teleport
- * T：プレイ日時変更 / Change time
- * u：啓蒙 (強制的に忍者以外) / Lite floor without ninja classified
- * U：なし / Nothing
- * v：特別品獲得ドロップ / Get a special item
- * V：クラス変更 / Change class / TODO: Rと同じなので何か変えたい
- * w：啓蒙 (忍者かどうか考慮) / Lite floor with ninja classified
- * W：なし / Nothing
- * x：経験値を得る / Gain experience
- * X：アイテムを初期状態に戻す / Return items to the initial ones
- * y：なし / Nothing
- * Y：なし / Nothing
- * z：近隣のモンスター消去 / Zap monsters around
- * Z：フロア中のモンスター消去 / Zap all monsters in the floor
- * @：特殊スペルの発動 / Special spell
- * "：スポイラーのダンプ / Dump spoiler
- * ?：ヘルプ表示 (通常の？と同じ) / Show help (same as normal help)
  */
-void do_cmd_debug(player_type *creature_ptr)
+void wiz_zap_surrounding_monsters(player_type *caster_ptr)
 {
-    char cmd;
-    get_com("Debug Command: ", &cmd, FALSE);
-    switch (cmd) {
-    case ESCAPE:
-    case ' ':
-    case '\n':
-    case '\r':
-        break;
-    case 'a':
-        wiz_cure_all(creature_ptr);
-        break;
-    case 'A':
-        msg_format("Your alignment is %d.", creature_ptr->align);
-        break;
-    case 'b':
-        wiz_teleport_back(creature_ptr);
-        break;
-    case 'B':
-        update_gambling_monsters(creature_ptr);
-        break;
-    case 'c':
-        wiz_create_item(creature_ptr);
-        break;
-    case 'C':
-        wiz_create_named_art(creature_ptr);
-        break;
-    case 'd':
-        detect_all(creature_ptr, DETECT_RAD_ALL * 3);
-        break;
-    case 'D':
-        wiz_dimension_door(creature_ptr);
-        break;
-    case 'e':
-        wiz_change_status(creature_ptr);
-        break;
-    case 'E':
-        if (creature_ptr->pclass == CLASS_BLUE_MAGE)
-            wiz_learn_blue_magic_all(creature_ptr);
+    for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr) || (i == caster_ptr->riding) || (m_ptr->cdis > MAX_SIGHT))
+            continue;
 
-        break;
-    case 'f':
-        identify_fully(creature_ptr, FALSE, 0);
-        break;
-    case 'F':
-        wiz_create_feature(creature_ptr);
-        break;
-    case 'g':
-        if (command_arg <= 0)
-            command_arg = 1;
+        if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
+            GAME_TEXT m_name[MAX_NLEN];
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
-        break;
-    case 'h':
-        roll_hitdice(creature_ptr, SPOP_DISPLAY_MES | SPOP_DEBUG);
-        break;
-    case 'H':
-        wiz_summon_horde(creature_ptr);
-        break;
-    case 'i':
-        (void)ident_spell(creature_ptr, FALSE, 0);
-        break;
-    case 'j':
-        wiz_jump_to_dungeon(creature_ptr);
-        break;
-    case 'k':
-        self_knowledge(creature_ptr);
-        break;
-    case 'l':
-        wiz_learn_items_all(creature_ptr);
-        break;
-    case 'm':
-        map_area(creature_ptr, DETECT_RAD_ALL * 3);
-        break;
-    case 'M':
-        (void)gain_mutation(creature_ptr, command_arg);
-        break;
-    case 'R':
-        wiz_reset_class(creature_ptr);
-        break;
-    case 'r':
-        gain_level_reward(creature_ptr, command_arg);
-        break;
-    case 'N':
-        wiz_summon_pet(creature_ptr, command_arg);
-        break;
-    case 'n':
-        wiz_summon_specific_enemy(creature_ptr, command_arg);
-        break;
-    case 'O':
-        wiz_dump_options();
-        break;
-    case 'o':
-        wiz_modify_item(creature_ptr);
-        break;
-    case 'p':
-        teleport_player(creature_ptr, 10, TELEPORT_SPONTANEOUS);
-        break;
-    case 'Q': {
-        char ppp[30];
-        char tmp_val[5];
-        int tmp_int;
-        sprintf(ppp, "QuestID (0-%d):", max_q_idx - 1);
-        sprintf(tmp_val, "%d", 0);
-
-        if (!get_string(ppp, tmp_val, 3))
-            return;
-
-        tmp_int = atoi(tmp_val);
-        if ((tmp_int < 0) || (tmp_int >= max_q_idx))
-            break;
-
-        creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
-        parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-        quest[tmp_int].status = QUEST_STATUS_TAKEN;
-        creature_ptr->current_floor_ptr->inside_quest = 0;
-        break;
-    }
-    case 'q':
-        if (!creature_ptr->current_floor_ptr->inside_quest) {
-            msg_print("No current quest");
-            msg_print(NULL);
-            break;
+            monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+            exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
-        if (quest[creature_ptr->current_floor_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
-            complete_quest(creature_ptr, creature_ptr->current_floor_ptr->inside_quest);
+        delete_monster_idx(caster_ptr, i);
+    }
+}
 
-        break;
-    case 's':
-        if (command_arg <= 0)
-            command_arg = 1;
-        
-        wiz_summon_random_enemy(creature_ptr, command_arg);
-        break;
-    case 'S':
-        if (command_arg <= 0)
-            command_arg = 1;
+/*!
+ * @brief フロアに存在する全モンスターを消去する / Delete all monsters
+ * @param caster_ptr 術者の参照ポインタ
+ * @return なし
+ */
+void wiz_zap_floor_monsters(player_type *caster_ptr)
+{
+    for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr) || (i == caster_ptr->riding))
+            continue;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, TRUE);
-        break;
-    case 't':
-        teleport_player(creature_ptr, 100, TELEPORT_SPONTANEOUS);
-        break;
-    case 'T':
-        set_gametime();
-        break;
-    case 'u':
-        for (int y = 0; y < creature_ptr->current_floor_ptr->height; y++)
-            for (int x = 0; x < creature_ptr->current_floor_ptr->width; x++)
-                creature_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_GLOW | CAVE_MARK;
+        if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
+            GAME_TEXT m_name[MAX_NLEN];
+            monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+            exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+        }
 
-        wiz_lite(creature_ptr, FALSE);
-        break;
-    case 'v':
-        if (command_arg <= 0)
-            command_arg = 1;
-
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
-        break;
-    case 'V':
-        wiz_reset_class(creature_ptr);
-        break;
-    case 'w':
-        wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
-        break;
-    case 'x':
-        gain_exp(creature_ptr, command_arg ? command_arg : (creature_ptr->exp + 1));
-        break;
-    case 'X':
-        for (INVENTORY_IDX i = INVEN_TOTAL - 1; i >= 0; i--)
-            if (creature_ptr->inventory_list[i].k_idx)
-                drop_from_inventory(creature_ptr, i, 999);
-
-        player_outfit(creature_ptr);
-        break;
-    case 'z':
-        wiz_zap_surrounding_monsters(creature_ptr);
-        break;
-    case 'Z':
-        wiz_zap_floor_monsters(creature_ptr);
-        break;
-    case '_':
-        probing(creature_ptr);
-        break;
-    case '@':
-        wiz_debug_spell(creature_ptr);
-        break;
-    case '"':
-        exe_output_spoilers(creature_ptr);
-        break;
-    case '?':
-        do_cmd_help(creature_ptr);
-        break;
-    default:
-        msg_print("That is not a valid debug command.");
-        break;
+        delete_monster_idx(caster_ptr, i);
     }
 }
