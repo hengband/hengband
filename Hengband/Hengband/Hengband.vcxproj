@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\action\action-limited.c" />
+    <ClCompile Include="..\..\src\action\mutation-execution.c" />
     <ClCompile Include="..\..\src\action\open-close-execution.c" />
     <ClCompile Include="..\..\src\action\open-util.c" />
     <ClCompile Include="..\..\src\action\run-execution.c" />
@@ -706,6 +707,7 @@
     <ClCompile Include="..\..\src\load\quest-loader.c" />
     <ClCompile Include="..\..\src\view\display-store.c" />
     <ClInclude Include="..\..\src\action\action-limited.h" />
+    <ClInclude Include="..\..\src\action\mutation-execution.h" />
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />

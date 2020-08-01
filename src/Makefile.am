@@ -7,6 +7,7 @@ bin_PROGRAMS = hengband
 hengband_SOURCES = \
 	action/action-limited.c action/action-limited.h \
 	action/movement-execution.c action/movement-execution.h \
+	action/mutation-execution.c action/mutation-execution.h \
 	action/open-util.c action/open-util.h \
 	action/open-close-execution.c action/open-close-execution.h \
 	action/run-execution.c action/run-execution.h \

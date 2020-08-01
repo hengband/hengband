@@ -1940,6 +1940,9 @@
     <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c">
       <Filter>mutation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\action\mutation-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4221,6 +4224,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h">
       <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\mutation-execution.h">
+      <Filter>action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
