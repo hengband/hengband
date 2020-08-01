@@ -27,11 +27,11 @@ typedef struct debug_spell_command {
 
 extern debug_spell_command debug_spell_commands_list[SPELL_MAX];
 
-bool do_cmd_debug_spell(player_type *creature_ptr);
+bool wiz_debug_spell(player_type *creature_ptr);
 void wiz_dimension_door(player_type *caster_ptr);
-void do_cmd_summon_horde(player_type *caster_ptr);
-void do_cmd_wiz_bamf(player_type *caster_ptr);
-void do_cmd_wiz_blue_mage(player_type *caster_ptr);
-void do_cmd_wiz_summon(player_type *caster_ptr, int num);
-void do_cmd_wiz_named(player_type *summoner_ptr, MONRACE_IDX r_idx);
-void do_cmd_wiz_named_friendly(player_type *summoner_ptr, MONRACE_IDX r_idx);
+void wiz_summon_horde(player_type *caster_ptr);
+void wiz_teleport_back(player_type *caster_ptr);
+void wiz_learn_blue_magic_all(player_type *caster_ptr);
+void wiz_summon_random_enemy(player_type *caster_ptr, int num);
+void wiz_summon_specific_enemy(player_type *summoner_ptr, MONRACE_IDX r_idx);
+void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx);

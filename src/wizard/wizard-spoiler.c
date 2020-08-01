@@ -1299,7 +1299,7 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
  * Create Spoiler files -BEN-
  * @return なし
  */
-void do_cmd_spoilers(player_type *player_ptr)
+void exe_output_spoilers(player_type *player_ptr)
 {
     screen_save();
     while (TRUE) {
