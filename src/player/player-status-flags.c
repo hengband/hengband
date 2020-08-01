@@ -604,3 +604,22 @@ void have_anti_magic(player_type *creature_ptr)
             creature_ptr->anti_magic = TRUE;
     }
 }
+
+void have_anti_tele(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+
+    creature_ptr->anti_tele = FALSE;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (have_flag(flgs, TR_NO_TELE))
+            creature_ptr->anti_tele = TRUE;
+    }
+}
