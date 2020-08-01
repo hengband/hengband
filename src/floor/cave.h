@@ -17,3 +17,5 @@ bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x);
 bool feat_supports_los(FEAT_IDX f_idx);
 bool cave_los_grid(grid_type *grid_ptr);
 bool cave_have_flag_grid(grid_type *grid_ptr, int feature_flags);
+bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x);
+bool cave_drop_bold(floor_type *floor_ptr, POSITION y, POSITION x);

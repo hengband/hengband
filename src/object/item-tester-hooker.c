@@ -6,6 +6,7 @@
 
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
+#include "target/target-describer.h"
 
 /*
  * Used during calls to "get_item()" and "show_inven()" and "show_equip()", and the choice window routines.
@@ -24,7 +25,6 @@ bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tva
         return FALSE;
 
     if (o_ptr->tval == TV_GOLD) {
-        extern bool show_gold_on_floor;
         if (!show_gold_on_floor)
             return FALSE;
     }

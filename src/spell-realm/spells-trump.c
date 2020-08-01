@@ -1,10 +1,8 @@
 ﻿#include "spell-realm/spells-trump.h"
-#include "io/targeting.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation.h"
 #include "player/avatar.h"
-#include "status/buff-setter.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-floor.h"
@@ -16,8 +14,10 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "status/base-status.h"
+#include "status/buff-setter.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

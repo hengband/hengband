@@ -2,7 +2,6 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
-#include "io/targeting.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
@@ -15,6 +14,7 @@
 #include "monster/monster-util.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "target/target-checker.h"
 
 /*!
  * @brief 変身処理向けにモンスターの近隣レベル帯モンスターを返す /

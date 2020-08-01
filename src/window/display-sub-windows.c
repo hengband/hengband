@@ -10,7 +10,6 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
-#include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
@@ -20,6 +19,8 @@
 #include "spell-kind/magic-item-recharger.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "target/target-preparation.h"
+#include "target/target-types.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -27,9 +28,9 @@
 #include "view/display-map.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
-#include "window/main-window-util.h"
 #include "view/object-describer.h"
 #include "window/main-window-equipments.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 
 /*!
@@ -174,14 +175,14 @@ void fix_monster_list(player_type *player_ptr)
         term_type *old = Term;
         if (!angband_term[j])
             continue;
-        if (!(window_flag[j] & (PW_MONSTER_LIST)))
+        if (!(window_flag[j] & PW_MONSTER_LIST))
             continue;
 
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
         term_clear();
-        target_set_prepare_look(player_ptr);
+        target_set_prepare(player_ptr, TARGET_LOOK);
         print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
         term_fresh();
         term_activate(old);

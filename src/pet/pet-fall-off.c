@@ -11,7 +11,6 @@
 #include "core/window-redrawer.h"
 #include "floor/cave.h"
 #include "grid/feature.h"
-#include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "pet/pet-util.h"
@@ -19,6 +18,7 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "system/floor-type-definition.h"
+#include "target/target-checker.h"
 #include "view/display-messages.h"
 
 /*!
@@ -102,7 +102,7 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
 
     if (dam >= 0 || force) {
         calc_fall_off_possibility(creature_ptr, dam, force, r_ptr);
-        
+
         /* Check around the player */
         for (DIRECTION i = 0; i < 8; i++) {
             POSITION y = creature_ptr->y + ddy_ddd[i];

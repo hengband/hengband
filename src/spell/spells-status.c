@@ -21,7 +21,6 @@
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/targeting.h"
 #include "mind/mind-force-trainer.h"
 #include "monster/monster-describer.h"
 #include "object/object-generator.h"
@@ -44,6 +43,7 @@
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "system/floor-type-definition.h"
+#include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

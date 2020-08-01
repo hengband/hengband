@@ -13,7 +13,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind-hook.h"
-#include "room/rooms.h"
+#include "room/space-finder.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "wizard/wizard-messages.h"

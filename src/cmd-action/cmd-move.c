@@ -20,7 +20,6 @@
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
-#include "io/targeting.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "player/attack-defense-types.h"
@@ -31,6 +30,7 @@
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
+#include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

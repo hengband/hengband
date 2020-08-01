@@ -6,18 +6,31 @@
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
+#include "floor/floor.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
-#include "io/targeting.h"
+#include "mind/mind-magic-resistance.h"
+#include "mind/mind-numbers.h"
+#include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
+#include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "player/avatar.h"
+#include "player/player-damage.h"
 #include "spell-kind/spells-launcher.h"
+#include "spell-kind/spells-lite.h"
+#include "spell/spells-summon.h"
 #include "spell/spell-types.h"
+#include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
+#include "target/target-checker.h"
+#include "target/target-getter.h"
+#include "target/target-setter.h"
+#include "target/target-types.h"
 #include "view/display-messages.h"
 
 /*!
@@ -215,5 +228,112 @@ bool shock_power(player_type *caster_ptr)
     if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
         caster_ptr->update |= (PU_MON_LITE);
 
+    return TRUE;
+}
+
+/*!
+ * @brief 練気術の発動 /
+ * do_cmd_cast calls this function if the player's class is 'ForceTrainer'.
+ * @param spell 発動する特殊技能のID
+ * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
+ */
+bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
+{
+    DIRECTION dir;
+    PLAYER_LEVEL plev = caster_ptr->lev;
+    int boost = get_current_ki(caster_ptr);
+    if (heavy_armor(caster_ptr))
+        boost /= 2;
+
+    switch (spell) {
+    case SMALL_FORCE_BALL:
+        if (!get_aim_dir(caster_ptr, &dir))
+            return FALSE;
+
+        fire_ball(caster_ptr, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
+        break;
+    case FLASH_LIGHT:
+        (void)lite_area(caster_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
+        break;
+    case FLYING_TECHNIQUE:
+        set_tim_levitation(caster_ptr, randint1(30) + 30 + boost / 5, FALSE);
+        break;
+    case KAMEHAMEHA:
+        project_length = plev / 8 + 3;
+        if (!get_aim_dir(caster_ptr, &dir))
+            return FALSE;
+
+        fire_beam(caster_ptr, GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
+        break;
+    case MAGIC_RESISTANCE:
+        set_resist_magic(caster_ptr, randint1(20) + 20 + boost / 5, FALSE);
+        break;
+    case IMPROVE_FORCE:
+        msg_print(_("気を練った。", "You improved the Force."));
+        set_current_ki(caster_ptr, FALSE, 70 + plev);
+        caster_ptr->update |= (PU_BONUS);
+        if (randint1(get_current_ki(caster_ptr)) > (plev * 4 + 120)) {
+            msg_print(_("気が暴走した！", "The Force exploded!"));
+            fire_ball(caster_ptr, GF_MANA, 0, get_current_ki(caster_ptr) / 2, 10);
+            take_hit(caster_ptr, DAMAGE_LOSELIFE, caster_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"), -1);
+        } else
+            return TRUE;
+
+        break;
+    case AURA_OF_FORCE:
+        set_tim_sh_force(caster_ptr, randint1(plev / 2) + 15 + boost / 7, FALSE);
+        break;
+    case SHOCK_POWER:
+        return shock_power(caster_ptr);
+        break;
+    case LARGE_FORCE_BALL:
+        if (!get_aim_dir(caster_ptr, &dir))
+            return FALSE;
+
+        fire_ball(caster_ptr, GF_MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
+        break;
+    case DISPEL_MAGIC: {
+        if (!target_set(caster_ptr, TARGET_KILL))
+            return FALSE;
+
+        MONSTER_IDX m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+        if ((m_idx == 0) || !player_has_los_bold(caster_ptr, target_row, target_col)
+            || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
+            break;
+
+        dispel_monster_status(caster_ptr, m_idx);
+        break;
+    }
+    case SUMMON_GHOST: {
+        bool success = FALSE;
+        for (int i = 0; i < 1 + boost / 100; i++)
+            if (summon_specific(caster_ptr, -1, caster_ptr->y, caster_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET))
+                success = TRUE;
+
+        if (success)
+            msg_print(_("御用でございますが、御主人様？", "'Your wish, master?'"));
+        else
+            msg_print(_("何も現れなかった。", "Nothing happen."));
+
+        break;
+    }
+    case EXPLODING_FLAME:
+        fire_ball(caster_ptr, GF_FIRE, 0, 200 + (2 * plev) + boost * 2, 10);
+        break;
+    case SUPER_KAMEHAMEHA:
+        if (!get_aim_dir(caster_ptr, &dir))
+            return FALSE;
+
+        fire_beam(caster_ptr, GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
+        break;
+    case LIGHT_SPEED:
+        set_lightspeed(caster_ptr, randint1(16) + 16 + boost / 20, FALSE);
+        break;
+    default:
+        msg_print(_("なに？", "Zap?"));
+    }
+
+    set_current_ki(caster_ptr, TRUE, 0);
+    caster_ptr->update |= PU_BONUS;
     return TRUE;
 }

@@ -1,11 +1,13 @@
 ﻿#include "mutation/mutation-processor.h"
+#include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/targeting.h"
+#include "io/input-key-requester.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
@@ -36,8 +38,67 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
+#include "target/target-checker.h"
+#include "target/target-setter.h"
+#include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
+
+static bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
+{
+    *dp = 0;
+    char command;
+    DIRECTION dir = 0;
+    while (!dir) {
+        concptr p = target_okay(creature_ptr)
+            ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
+            : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
+        if (!get_com(p, &command, TRUE))
+            break;
+
+        if (use_menu && (command == '\r'))
+            command = 't';
+
+        switch (command) {
+        case 'T':
+        case 't':
+        case '.':
+        case '5':
+        case '0':
+            dir = 5;
+            break;
+        case '*':
+        case ' ':
+        case '\r':
+            if (target_set(creature_ptr, TARGET_KILL))
+                dir = 5;
+
+            break;
+        default:
+            dir = get_keymap_dir(command);
+            break;
+        }
+
+        if ((dir == 5) && !target_okay(creature_ptr))
+            dir = 0;
+
+        if (!dir)
+            bell();
+    }
+
+    if (!dir)
+        return FALSE;
+
+    command_dir = dir;
+    if (creature_ptr->confused)
+        dir = ddd[randint0(8)];
+
+    if (command_dir != dir)
+        msg_print(_("あなたは混乱している。", "You are confused."));
+
+    *dp = dir;
+    return TRUE;
+}
 
 /*!
  * @brief 10ゲームターンが進行するごとに突然変異の発動判定を行う処理
@@ -166,8 +227,10 @@ void process_world_aux_mutation(player_type *creature_ptr)
                 set_fast(creature_ptr, randint1(30) + 10, FALSE);
             }
         }
+
         msg_print(NULL);
     }
+
     if ((creature_ptr->muta2 & MUT2_BANISH_ALL) && one_in_(9000)) {
         disturb(creature_ptr, FALSE, TRUE);
         msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
@@ -231,7 +294,6 @@ void process_world_aux_mutation(player_type *creature_ptr)
     if ((creature_ptr->muta2 & MUT2_RAW_CHAOS) && !creature_ptr->anti_magic && one_in_(8000)) {
         disturb(creature_ptr, FALSE, TRUE);
         msg_print(_("周りの空間が歪んでいる気がする！", "You feel the world warping around you!"));
-
         msg_print(NULL);
         fire_ball(creature_ptr, GF_CHAOS, 0, creature_ptr->lev, 8);
     }
@@ -244,14 +306,12 @@ void process_world_aux_mutation(player_type *creature_ptr)
     if ((creature_ptr->muta2 & MUT2_WRAITH) && !creature_ptr->anti_magic && one_in_(3000)) {
         disturb(creature_ptr, FALSE, TRUE);
         msg_print(_("非物質化した！", "You feel insubstantial!"));
-
         msg_print(NULL);
         set_wraith_form(creature_ptr, randint1(creature_ptr->lev / 2) + (creature_ptr->lev / 2), FALSE);
     }
 
-    if ((creature_ptr->muta2 & MUT2_POLY_WOUND) && one_in_(3000)) {
+    if ((creature_ptr->muta2 & MUT2_POLY_WOUND) && one_in_(3000))
         do_poly_wounds(creature_ptr);
-    }
 
     if ((creature_ptr->muta2 & MUT2_WASTING) && one_in_(3000)) {
         int which_stat = randint0(A_MAX);
@@ -298,7 +358,6 @@ void process_world_aux_mutation(player_type *creature_ptr)
     if ((creature_ptr->muta2 & MUT2_ATT_DRAGON) && !creature_ptr->anti_magic && one_in_(3000)) {
         bool pet = one_in_(5);
         BIT_FLAGS mode = PM_ALLOW_GROUP;
-
         if (pet)
             mode |= PM_FORCE_PET;
         else
@@ -327,13 +386,13 @@ void process_world_aux_mutation(player_type *creature_ptr)
         set_food(creature_ptr, PY_FOOD_WEAK);
         if (music_singing_any(creature_ptr))
             stop_singing(creature_ptr);
+
         if (hex_spelling_any(creature_ptr))
             stop_hex_spell_all(creature_ptr);
     }
 
-    if ((creature_ptr->muta2 & MUT2_WALK_SHAD) && !creature_ptr->anti_magic && one_in_(12000) && !creature_ptr->current_floor_ptr->inside_arena) {
+    if ((creature_ptr->muta2 & MUT2_WALK_SHAD) && !creature_ptr->anti_magic && one_in_(12000) && !creature_ptr->current_floor_ptr->inside_arena)
         reserve_alter_reality(creature_ptr);
-    }
 
     if ((creature_ptr->muta2 & MUT2_WARNING) && one_in_(1000)) {
         int danger_amount = 0;
@@ -371,7 +430,6 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
     if ((creature_ptr->muta2 & MUT2_SP_TO_HP) && one_in_(2000)) {
         MANA_POINT wounds = (MANA_POINT)(creature_ptr->mhp - creature_ptr->chp);
-
         if (wounds > 0) {
             HIT_POINT healing = creature_ptr->csp;
             if (healing > wounds)
@@ -385,7 +443,6 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
     if ((creature_ptr->muta2 & MUT2_HP_TO_SP) && !creature_ptr->anti_magic && one_in_(4000)) {
         HIT_POINT wounds = (HIT_POINT)(creature_ptr->msp - creature_ptr->csp);
-
         if (wounds > 0) {
             HIT_POINT healing = creature_ptr->chp;
             if (healing > wounds)
@@ -427,11 +484,10 @@ bool drop_weapons(player_type *creature_ptr)
         slot = INVEN_LARM;
     }
 
-    if (slot && !object_is_cursed(o_ptr)) {
-        msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
-        drop_from_inventory(creature_ptr, slot, 1);
-        return TRUE;
-    }
+    if ((slot == 0) || object_is_cursed(o_ptr))
+        return FALSE;
 
-    return FALSE;
+    msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
+    drop_from_inventory(creature_ptr, slot, 1);
+    return TRUE;
 }

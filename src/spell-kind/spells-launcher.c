@@ -1,9 +1,9 @@
 ﻿#include "spell-kind/spells-launcher.h"
 #include "effect/effect-characteristics.h"
 #include "floor/geometry.h"
-#include "io/targeting.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
+#include "target/target-checker.h"
 
 /*!
  * @brief ボール系スペルの発動 / Cast a ball spell

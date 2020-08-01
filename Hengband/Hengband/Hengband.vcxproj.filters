@@ -398,9 +398,6 @@
     <ClCompile Include="..\..\src\object\object-broken.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms.c">
-      <Filter>room</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\room\rooms-city.c">
       <Filter>room</Filter>
     </ClCompile>
@@ -517,9 +514,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\player\patron.c">
       <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\io\targeting.c">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\selfinfo.c">
       <Filter>player</Filter>
@@ -1766,9 +1760,6 @@
     <ClCompile Include="..\..\src\racial\racial-switcher.c">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-switcher.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\floor\cave.c">
       <Filter>floor</Filter>
     </ClCompile>
@@ -1876,6 +1867,72 @@
     </ClCompile>
     <ClCompile Include="..\..\src\player\player-status-flags.c">
       <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\room-info-table.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\cave-filler.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\room-generator.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\dungeon-data-definition.c">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\treasure-deployment.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-maze-vault.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\space-finder.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\door-definition.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-builder.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\target\target-describer.c">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\target\target-preparation.c">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\target\grid-selector.c">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\target\target-setter.c">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\target\target-getter.c">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\target\target-checker.c">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-explanations-table.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-info.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-power-getter.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-berserker.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-mind.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\gain-mutation-util.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.c">
+      <Filter>mutation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2308,9 +2365,6 @@
     <ClInclude Include="..\..\src\object\object-broken.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\room\rooms.h">
-      <Filter>room</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\room\rooms-city.h">
       <Filter>room</Filter>
     </ClInclude>
@@ -2442,9 +2496,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\patron.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\targeting.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\selfinfo.h">
       <Filter>player</Filter>
@@ -3961,9 +4012,6 @@
     <ClInclude Include="..\..\src\racial\racial-switcher.h">
       <Filter>racial</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\mind-switcher.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-base-definitions.h">
       <Filter>floor</Filter>
     </ClInclude>
@@ -4080,6 +4128,87 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-status-flags.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\room-types.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\lake-types.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\room-info-table.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\cave-filler.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\room-generator.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\dungeon-data-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\treasure-deployment.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-maze-vault.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\space-finder.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\door-definition.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-builder.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\target-types.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\target-describer.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\target-preparation.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\grid-selector.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\target-setter.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\target-getter.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\target-checker.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-explanations-table.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-info.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-types.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-power-getter.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-berserker.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-mind.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-numbers.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\gain-mutation-util.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\gain-mutation-switcher.h">
+      <Filter>mutation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -4275,6 +4404,9 @@
     </Filter>
     <Filter Include="blue-magic">
       <UniqueIdentifier>{6b429e6d-e548-430e-9413-8bc2e0bda1ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="target">
+      <UniqueIdentifier>{1789a1b0-5c89-4dfc-a4ba-1c3b711705b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,5 @@
 ﻿#include "racial/racial-android.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/targeting.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trg-types.h"
 #include "object-hook/hook-enchant.h"
@@ -16,6 +15,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 bool android_inside_weapon(player_type *creature_ptr)

@@ -3,7 +3,6 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
-#include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
@@ -13,6 +12,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
+#include "target/target-checker.h"
 
 /*!
  * @brief モンスター配列からモンスターを消去する / Delete a monster by index.

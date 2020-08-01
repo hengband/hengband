@@ -17,7 +17,6 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-generate.h"
@@ -30,9 +29,10 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "object-hook/hook-enchant.h"
-#include "room/rooms.h"
+#include "room/lake-types.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
+#include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -120,7 +120,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                             continue;
 
                         /* Do not convert permanent features */
-                        if (cave_perma_grid(g_ptr))
+                        if (cave_have_flag_grid(g_ptr, FF_PERMANENT))
                             continue;
 
                         /*
@@ -208,8 +208,8 @@ void add_river(floor_type *floor_ptr)
         feature_type *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dun->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA)) || ((dun->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER))
-                || !dun->laketype)) {
+        if (!(((dun_data->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA)) || ((dun_data->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER))
+                || !dun_data->laketype)) {
             return;
         }
     }
@@ -250,10 +250,10 @@ void add_river(floor_type *floor_ptr)
     recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
 
     /* Hack - Save the location as a "room" */
-    if (dun->cent_n < CENT_MAX) {
-        dun->cent[dun->cent_n].y = y2;
-        dun->cent[dun->cent_n].x = x2;
-        dun->cent_n++;
+    if (dun_data->cent_n < CENT_MAX) {
+        dun_data->cent[dun_data->cent_n].y = y2;
+        dun_data->cent[dun_data->cent_n].x = x2;
+        dun_data->cent_n++;
     }
 }
 
@@ -434,7 +434,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
                 continue;
 
             /* Want square to be in the circle and accessable. */
-            if ((distance(j, i, y, x) < 4) && !cave_perma_grid(g_ptr)) {
+            if ((distance(j, i, y, x) < 4) && !cave_have_flag_grid(g_ptr, FF_PERMANENT)) {
                 /*
                  * Clear previous contents, add feature
                  * The border mainly gets trees, while the center gets rubble

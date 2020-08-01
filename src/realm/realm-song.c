@@ -4,7 +4,6 @@
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
-#include "io/targeting.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "realm/realm-song-numbers.h"
@@ -23,6 +22,7 @@
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

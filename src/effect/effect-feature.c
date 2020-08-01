@@ -12,7 +12,7 @@
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
-#include "room/rooms.h"
+#include "room/door-definition.h"
 #include "spell/process-effect.h" // 暫定、後で消す.
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
@@ -20,7 +20,20 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-/*!
+/*
+ * Determine if a "legal" grid is an "naked" floor grid
+ *
+ * Line 1 -- forbid non-clean gird
+ * Line 2 -- forbid monsters
+ * Line 3 -- forbid the player
+ */
+static bool cave_naked_bold(player_type *caster_ptr, POSITION y, POSITION x)
+{
+    floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+    return cave_clean_bold(floor_ptr, y, x) && (floor_ptr->grid_array[y][x].m_idx == 0) && !player_bold(caster_ptr, y, x);
+}
+
+    /*!
  * @brief 汎用的なビーム/ボルト/ボール系による地形効果処理 / We are called from "project()" to "damage" terrain features
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -236,7 +249,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	}
 	case GF_MAKE_DOOR:
 	{
-		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+		if (!cave_naked_bold(caster_ptr, y, x)) break;
 		if (player_bold(caster_ptr, y, x)) break;
 		cave_set_feat(caster_ptr, y, x, feat_door[DOOR_DOOR].closed);
 		if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -249,7 +262,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	}
 	case GF_MAKE_TREE:
 	{
-		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+		if (!cave_naked_bold(caster_ptr, y, x)) break;
 		if (player_bold(caster_ptr, y, x)) break;
 		cave_set_feat(caster_ptr, y, x, feat_tree);
 		if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -257,7 +270,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	}
 	case GF_MAKE_GLYPH:
 	{
-		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+		if (!cave_naked_bold(caster_ptr, y, x)) break;
 		g_ptr->info |= CAVE_OBJECT;
 		g_ptr->mimic = feat_glyph;
 		note_spot(caster_ptr, y, x);
@@ -266,7 +279,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	}
 	case GF_STONE_WALL:
 	{
-		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+		if (!cave_naked_bold(caster_ptr, y, x)) break;
 		if (player_bold(caster_ptr, y, x)) break;
 		cave_set_feat(caster_ptr, y, x, feat_granite);
 		break;

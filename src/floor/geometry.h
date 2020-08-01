@@ -39,12 +39,4 @@ typedef struct pos_list {
 	POSITION x[TEMP_MAX];
 } pos_list;
 
-/*
- * Simple structure to hold a map location
- */
-typedef struct coord {
-	POSITION y;
-	POSITION x;
-} coord;
-
 bool is_seen(player_type *creature_ptr, monster_type *m_ptr);

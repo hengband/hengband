@@ -89,6 +89,7 @@ hengband_SOURCES = \
 	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
 	cmd-action/cmd-hissatsu.c cmd-action/cmd-hissatsu.h \
 	cmd-action/cmd-mane.c cmd-action/cmd-mane.h \
+	cmd-action/cmd-mind.c cmd-action/cmd-mind.h \
 	cmd-action/cmd-move.c cmd-action/cmd-move.h \
 	cmd-action/cmd-open-close.c cmd-action/cmd-open-close.h \
 	cmd-action/cmd-others.c cmd-action/cmd-others.h \
@@ -289,7 +290,6 @@ hengband_SOURCES = \
 	io/screen-util.c io/screen-util.h \
 	io/signal-handlers.c io/signal-handlers.h \
 	io/store-key-processor.c io/store-key-processor.h \
-	io/targeting.c io/targeting.h \
 	io/tokenizer.c io/tokenizer.h \
 	io/uid-checker.c io/uid-checker.h \
 	io/write-diary.c io/write-diary.h \
@@ -387,17 +387,22 @@ hengband_SOURCES = \
 	melee/melee-util.c melee/melee-util.h \
 	\
 	mind/drs-types.h \
+	mind/mind-berserker.c mind/mind-berserker.h \
 	mind/mind-blue-mage.c mind/mind-blue-mage.h \
 	mind/mind-cavalry.c mind/mind-cavalry.h \
+	mind/mind-explanations-table.c mind/mind-explanations-table.h \
 	mind/mind-force-trainer.c mind/mind-force-trainer.h \
+	mind/mind-info.c mind/mind-info.h \
 	mind/mind-mage.c mind/mind-mage.h \
 	mind/mind-magic-resistance.c mind/mind-magic-resistance.h \
 	mind/mind-mindcrafter.c mind/mind-mindcrafter.h \
 	mind/mind-mirror-master.c mind/mind-mirror-master.h \
 	mind/mind-ninja.c mind/mind-ninja.h \
+	mind/mind-numbers.h \
+	mind/mind-power-getter.c mind/mind-power-getter.h \
 	mind/mind-samurai.c mind/mind-samurai.h \
 	mind/mind-sniper.c mind/mind-sniper.h \
-	mind/mind-switcher.c mind/mind-switcher.h \
+	mind/mind-types.h \
 	mind/mind-warrior.c mind/mind-warrior.h \
 	mind/mind-warrior-mage.c mind/mind-warrior-mage.h \
 	mind/mind-weaponsmith.c mind/mind-weaponsmith.h \
@@ -486,6 +491,8 @@ hengband_SOURCES = \
 	mspell/specified-summon.c mspell/specified-summon.h \
 	mspell/summon-checker.c mspell/summon-checker.h \
 	\
+	mutation/gain-mutation-switcher.c mutation/gain-mutation-switcher.h \
+	mutation/gain-mutation-util.c mutation/gain-mutation-util.h \
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-flag-types.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
@@ -602,14 +609,23 @@ hengband_SOURCES = \
 	realm/realm-trump.c realm/realm-trump.h \
 	realm/realm-types.h \
 	\
-	room/rooms.c room/rooms.h room/rooms-city.c room/rooms-city.h \
+	room/cave-filler.c room/cave-filler.h \
+	room/door-definition.c room/door-definition.h \
+	room/lake-types.h room/room-types.h \
+	room/room-generator.c room/room-generator.h \
+	room/room-info-table.c room/room-info-table.h \
+	room/rooms-builder.c room/rooms-builder.h \
+	room/rooms-city.c room/rooms-city.h \
 	room/rooms-fractal.c room/rooms-fractal.h \
+	room/rooms-maze-vault.c room/rooms-maze-vault.h \
 	room/rooms-normal.c room/rooms-normal.h \
+	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/rooms-special.c room/rooms-special.h \
 	room/rooms-trap.c room/rooms-trap.h \
 	room/rooms-vault.c room/rooms-vault.h \
-	room/rooms-pit-nest.c room/rooms-pit-nest.h \
+	room/space-finder.c room/space-finder.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
+	room/treasure-deployment.c room/treasure-deployment.h \
 	\
 	save/floor-writer.c save/floor-writer.h \
 	save/info-writer.c save/info-writer.h \
@@ -711,6 +727,7 @@ hengband_SOURCES = \
 	system/alloc-entry-definition.h \
 	system/angband.h system/angband-version.h \
 	system/building-type-definition.c system/building-type-definition.h \
+	system/dungeon-data-definition.c system/dungeon-data-definition.h \
 	system/floor-type-definition.h \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
@@ -720,6 +737,14 @@ hengband_SOURCES = \
 	system/object-type-definition.h \
 	system/system-variables.c system/system-variables.h \
 	system/gamevalue.h \
+	\
+	target/grid-selector.c target/grid-selector.h \
+	target/target-checker.c target/target-checker.h \
+	target/target-describer.c target/target-describer.h \
+	target/target-getter.c target/target-getter.h \
+	target/target-preparation.c target/target-preparation.h \
+	target/target-setter.c target/target-setter.h \
+	target/target-types.h \
 	\
 	term/gameterm.c term/gameterm.h \
 	term/screen-processor.c term/screen-processor.h \
@@ -800,8 +825,8 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Imonster-floor -Imonster-race -Ilore -Imspell -Imutation -Iobject \
 	-Iobject-enchant -Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack \
 	-Iracial -Irealm -Iroom -Isave -Ispecific-object -Ispell -Ispell-kind \
-	-Ispell-realm -Istatus -Isv-definition -Isystem -Iterm -Iutil -Iview \
-	-Iwindow -Iwizard -Iworld
+	-Ispell-realm -Istatus -Isv-definition -Isystem -Itarget -Iterm -Iutil \
+	-Iview -Iwindow -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

@@ -19,7 +19,6 @@
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object/item-tester-hooker.h"
@@ -29,6 +28,7 @@
 #include "player/player-move.h"
 #include "spell-kind/spells-perception.h"
 #include "system/floor-type-definition.h"
+#include "target/target-checker.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP

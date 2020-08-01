@@ -11,7 +11,6 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/screen-util.h"
-#include "io/targeting.h"
 #include "system/floor-type-definition.h"
 #include "term/term-color-types.h"
 #include "view/display-map.h"
@@ -43,7 +42,8 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
         return;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    int path_n = project_path(player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
+    int path_n = project_path(
+        player_ptr, path_g, (project_length ? project_length : get_max_range(player_ptr)), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
     player_ptr->redraw |= (PR_MAP);
     handle_stuff(player_ptr);
     for (int i = 0; i < path_n; i++) {
@@ -129,4 +129,19 @@ bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
     player_ptr->redraw |= (PR_MAP);
     handle_stuff(player_ptr);
     return TRUE;
+}
+
+/*!
+ * @brief コンソール上におけるマップ表示の左上位置を返す /
+ * Calculates current boundaries Called below and from "do_cmd_locate()".
+ * @return なし
+ */
+void panel_bounds_center(void)
+{
+    TERM_LEN wid, hgt;
+    get_screen_size(&wid, &hgt);
+    panel_row_max = panel_row_min + hgt - 1;
+    panel_row_prt = panel_row_min - 1;
+    panel_col_max = panel_col_min + wid - 1;
+    panel_col_prt = panel_col_min - 13;
 }

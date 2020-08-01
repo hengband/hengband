@@ -8,11 +8,11 @@
 #include "cmd-action/cmd-attack.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "io/targeting.h"
 #include "monster/monster-info.h"
 #include "player/digestion-processor.h"
 #include "player/player-move.h"
 #include "system/floor-type-definition.h"
+#include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

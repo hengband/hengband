@@ -1,7 +1,7 @@
 ﻿#include "blue-magic/blue-magic-status.h"
 #include "blue-magic/blue-magic-util.h"
-#include "io/targeting.h"
 #include "spell/spells-status.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 bool cast_blue_scare(player_type *caster_ptr, bmc_type *bmc_ptr)

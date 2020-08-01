@@ -1,10 +1,10 @@
 ﻿#include "blue-magic/blue-magic-ball-bolt.h"
 #include "blue-magic/blue-magic-util.h"
-#include "io/targeting.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 bool cast_blue_ball_acid(player_type *caster_ptr, bmc_type *bmc_ptr)

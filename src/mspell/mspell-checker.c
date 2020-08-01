@@ -20,7 +20,6 @@
 #include "floor/cave.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
-#include "io/targeting.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"

@@ -3,7 +3,6 @@
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "effect/effect-characteristics.h"
-#include "io/targeting.h"
 #include "player/attack-defense-types.h"
 #include "player/player-realm.h"
 #include "spell-kind/magic-item-recharger.h"
@@ -22,6 +21,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "status/shape-changer.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!

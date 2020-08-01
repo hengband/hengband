@@ -5,9 +5,9 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "io/input-key-requester.h"
-#include "io/targeting.h"
 #include "player/attack-defense-types.h"
 #include "status/action-setter.h"
+#include "target/target-checker.h"
 #include "term/screen-processor.h"
 
 /*

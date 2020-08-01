@@ -24,7 +24,6 @@
 #include "grid/trap.h"
 #include "inventory/player-inventory.h"
 #include "io/input-key-requester.h"
-#include "io/targeting.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
 #include "perception/object-perception.h"
@@ -36,6 +35,7 @@
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

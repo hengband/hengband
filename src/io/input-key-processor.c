@@ -9,6 +9,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-action/cmd-hissatsu.h"
 #include "cmd-action/cmd-mane.h"
+#include "cmd-action/cmd-mind.h"
 #include "cmd-action/cmd-move.h"
 #include "cmd-action/cmd-open-close.h"
 #include "cmd-action/cmd-others.h"
@@ -67,7 +68,6 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-blue-mage.h"
 #include "mind/mind-sniper.h"
-#include "mind/mind-switcher.h" // do_cmd_mind_browse() がある。後で移設する.
 #include "mind/snipe-types.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"

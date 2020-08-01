@@ -5,7 +5,6 @@
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "game-option/disturbance-options.h"
-#include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
@@ -38,6 +37,7 @@
 #include "status/shape-changer.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
+#include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 

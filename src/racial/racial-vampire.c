@@ -3,10 +3,10 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "grid/grid.h"
-#include "io/targeting.h"
 #include "player/digestion-processor.h"
 #include "spell-kind/spells-specific-bolt.h"
 #include "system/floor-type-definition.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 bool vampirism(player_type *caster_ptr)

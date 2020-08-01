@@ -8,7 +8,6 @@
 #include "floor/floor.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
-#include "io/targeting.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
@@ -16,6 +15,9 @@
 #include "monster/monster-update.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "target/target-checker.h"
+#include "target/target-setter.h"
+#include "target/target-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

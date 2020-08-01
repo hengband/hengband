@@ -14,8 +14,6 @@
 #define EGO_PERMANENCE          11
 #define EGO_YOIYAMI             12
 #define EGO_URUKISH             13
-/* xxx */
-/* xxx */
 
 /* Shields */
 #define EGO_ENDURE_ACID         16
@@ -84,7 +82,6 @@
 #define EGO_HA                  64
 #define EGO_DF                  65
 #define EGO_BLESS_BLADE         66
-/* xxx */
 #define EGO_WEST                68
 #define EGO_ATTACKS             69
 #define EGO_SLAYING_WEAPON      70
@@ -97,13 +94,6 @@
 #define EGO_CHAOTIC             77
 #define EGO_SHARPNESS           78
 #define EGO_EARTHQUAKES         79
-#define EGO_XXX_1               80
-#define EGO_XXX_2               81
-#define EGO_XXX_3               82
-#define EGO_XXX_4               83
-#define EGO_XXX_5               84
-#define EGO_XXX_6               85
-#define EGO_XXX_7               86
 #define EGO_WEIRD               87
 #define EGO_KILL_ANIMAL         88
 #define EGO_KILL_EVIL           89
@@ -125,21 +115,12 @@
 /* Bows */
 #define EGO_ACCURACY            104
 #define EGO_VELOCITY            105
-/* xxx */
-/* xxx */
 #define EGO_EXTRA_MIGHT         108
 #define EGO_EXTRA_SHOTS         109
-/* xxx */
-/* xxx */
 
 /* Ammo */
 #define EGO_HURT_ANIMAL         112
 #define EGO_HURT_EVIL           113
-/* xxx */
-/* xxx */
-/* xxx */
-/* xxx */
-/* xxx */
 #define EGO_HURT_DRAGON         119
 #define EGO_SLAYING_BOLT        120
 #define EGO_LIGHTNING_BOLT      121
@@ -150,6 +131,7 @@
 #define EGO_SHATTERED           126
 #define EGO_BLASTED             127
 
+/* Lite */
 #define EGO_LITE_SHINE          140
 #define EGO_LITE_ILLUMINATION   141
 #define EGO_LITE_AURA_FIRE      142
@@ -158,6 +140,7 @@
 #define EGO_LITE_DARKNESS       145
 #define EGO_LITE_EYE            146
 
+/* Ring */
 #define EGO_RING_HERO           150
 #define EGO_RING_SLAY           151
 #define EGO_RING_SUPER_AC       152
@@ -197,6 +180,7 @@
 #define EGO_RING_TELEPORT       186
 #define EGO_RING_ALBINO         187
 
+/* Amulet */
 #define EGO_AMU_SLOW_D          210
 #define EGO_AMU_INFRA           211
 #define EGO_AMU_SEE_INVIS       212
@@ -230,11 +214,7 @@
 /*
  * Information about "ego-items".
  */
-
-typedef struct ego_item_type ego_item_type;
-
-struct ego_item_type
-{
+typedef struct ego_item_type {
 	STR_OFFSET name;			/* Name (offset) */
 	STR_OFFSET text;			/* Text (offset) */
 
@@ -256,7 +236,7 @@ struct ego_item_type
 	BIT_FLAGS gen_flags;		/* flags for generate */
 
 	IDX act_idx;		/* Activative ability index */
-};
+} ego_item_type;
 
 extern EGO_IDX max_e_idx;
 extern ego_item_type *e_info;
