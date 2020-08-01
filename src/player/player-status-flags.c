@@ -19,6 +19,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
+#include "util/quarks.h"
 
 void have_kill_wall(player_type *creature_ptr)
 {
