@@ -153,7 +153,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_disen = TRUE;
             creature_ptr->resist_nexus = TRUE;
             creature_ptr->resist_fear = TRUE;
-            creature_ptr->sh_fire = TRUE;
             creature_ptr->see_inv = TRUE;
             creature_ptr->levitation = TRUE;
             break;

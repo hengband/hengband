@@ -28,5 +28,6 @@ void have_see_nocto(player_type *creature_ptr);
 void have_warning(player_type *creature_ptr);
 void have_anti_magic(player_type *creature_ptr);
 void have_anti_tele(player_type *creature_ptr);
+void have_sh_fire(player_type *creature_ptr);
 
 

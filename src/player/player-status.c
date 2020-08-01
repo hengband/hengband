@@ -600,7 +600,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->resist_time = FALSE;
     creature_ptr->resist_water = FALSE;
     creature_ptr->resist_fear = FALSE;
-    creature_ptr->sh_fire = FALSE;
     creature_ptr->sh_elec = FALSE;
     creature_ptr->sh_cold = FALSE;
     creature_ptr->immune_acid = FALSE;
@@ -707,6 +706,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_warning(creature_ptr);
     have_anti_magic(creature_ptr);
     have_anti_tele(creature_ptr);
+    have_sh_fire(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -767,7 +767,6 @@ void calc_bonuses(player_type *creature_ptr)
     if (creature_ptr->realm1 == REALM_HEX) {
 
         if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
-            creature_ptr->sh_fire = TRUE;
             creature_ptr->regenerate = TRUE;
         }
 
@@ -2118,7 +2117,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             creature_ptr->resist_elec = TRUE;
             creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
-            creature_ptr->sh_fire = TRUE;
             creature_ptr->sh_elec = TRUE;
             creature_ptr->sh_cold = TRUE;
             creature_ptr->levitation = TRUE;
@@ -4519,17 +4517,12 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->resist_blind = TRUE;
         creature_ptr->resist_neth = TRUE;
         creature_ptr->resist_fear = TRUE;
-        creature_ptr->sh_fire = TRUE;
         creature_ptr->sh_elec = TRUE;
         creature_ptr->sh_cold = TRUE;
     }
 
     if (creature_ptr->tim_res_nether) {
         creature_ptr->resist_neth = TRUE;
-    }
-
-    if (creature_ptr->tim_sh_fire) {
-        creature_ptr->sh_fire = TRUE;
     }
 
     if (creature_ptr->tim_res_time) {
@@ -4715,8 +4708,6 @@ void calc_equipment_status(player_type *creature_ptr)
         if (have_flag(flgs, TR_RES_NETHER))
             creature_ptr->resist_neth = TRUE;
 
-        if (have_flag(flgs, TR_SH_FIRE))
-            creature_ptr->sh_fire = TRUE;
         if (have_flag(flgs, TR_SH_ELEC))
             creature_ptr->sh_elec = TRUE;
         if (have_flag(flgs, TR_SH_COLD))

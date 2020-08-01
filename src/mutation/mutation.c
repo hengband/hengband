@@ -1166,7 +1166,6 @@ void set_mutation_flags(player_type *creature_ptr)
         creature_ptr->sh_elec = TRUE;
 
     if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
-        creature_ptr->sh_fire = TRUE;
         creature_ptr->lite = TRUE;
     }
 

@@ -3,8 +3,8 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "mutation/mutation-flag-types.h"
-#include "object-enchant/tr-types.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
@@ -19,8 +19,8 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
-#include "util/string-processor.h"
 #include "util/quarks.h"
+#include "util/string-processor.h"
 
 void have_kill_wall(player_type *creature_ptr)
 {
@@ -325,7 +325,7 @@ void have_esp_telepathy(player_type *creature_ptr)
         creature_ptr->telepathy = TRUE;
     }
 
-	if (creature_ptr->muta3 & MUT3_ESP) {
+    if (creature_ptr->muta3 & MUT3_ESP) {
         creature_ptr->telepathy = TRUE;
     }
 
@@ -335,28 +335,27 @@ void have_esp_telepathy(player_type *creature_ptr)
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_SPECTRE && creature_ptr->lev > 34)
         creature_ptr->telepathy = TRUE;
 
-	if (creature_ptr->pclass == CLASS_MINDCRAFTER && creature_ptr->lev > 39)
+    if (creature_ptr->pclass == CLASS_MINDCRAFTER && creature_ptr->lev > 39)
         creature_ptr->telepathy = TRUE;
 
-	if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
-            creature_ptr->telepathy = TRUE;
+    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
+        creature_ptr->telepathy = TRUE;
     }
 
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->telepathy = TRUE;
     }
 
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
-	{
-		o_ptr = &creature_ptr->inventory_list[i];
-		if (!o_ptr->k_idx)
-			continue;
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
 
-		object_flags(creature_ptr, o_ptr, flgs);
+        object_flags(creature_ptr, o_ptr, flgs);
 
-		if (have_flag(flgs, TR_TELEPATHY))
-			creature_ptr->telepathy = TRUE;
-	}
+        if (have_flag(flgs, TR_TELEPATHY))
+            creature_ptr->telepathy = TRUE;
+    }
 }
 
 void have_bless_blade(player_type *creature_ptr)
@@ -383,7 +382,7 @@ void have_easy2_weapon(player_type *creature_ptr)
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-	creature_ptr->easy_2weapon = FALSE;
+    creature_ptr->easy_2weapon = FALSE;
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -463,7 +462,7 @@ void have_no_flowed(player_type *creature_ptr)
             have_kabe = TRUE;
     }
 
-	if (have_sw && ((creature_ptr->realm1 == REALM_NATURE) || (creature_ptr->realm2 == REALM_NATURE) || (creature_ptr->pclass == CLASS_SORCERER))) {
+    if (have_sw && ((creature_ptr->realm1 == REALM_NATURE) || (creature_ptr->realm2 == REALM_NATURE) || (creature_ptr->pclass == CLASS_SORCERER))) {
         const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE - 1][SPELL_SW];
         if (creature_ptr->lev >= s_ptr->slevel)
             creature_ptr->no_flowed = TRUE;
@@ -487,7 +486,7 @@ void have_mighty_throw(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-	    if (o_ptr->name2 == EGO_RING_THROW)
+        if (o_ptr->name2 == EGO_RING_THROW)
             creature_ptr->mighty_throw = TRUE;
     }
 }
@@ -498,7 +497,6 @@ void have_dec_mana(player_type *creature_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
     creature_ptr->xtra_might = FALSE;
-
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -519,17 +517,17 @@ void have_reflect(player_type *creature_ptr)
 
     creature_ptr->reflect = FALSE;
 
-	if (creature_ptr->pclass == CLASS_BERSERKER && creature_ptr->lev > 39)
+    if (creature_ptr->pclass == CLASS_BERSERKER && creature_ptr->lev > 39)
         creature_ptr->reflect = TRUE;
 
-	if (creature_ptr->pclass == CLASS_MIRROR_MASTER && creature_ptr->lev > 39)
+    if (creature_ptr->pclass == CLASS_MIRROR_MASTER && creature_ptr->lev > 39)
         creature_ptr->reflect = TRUE;
 
-	if (creature_ptr->special_defense & KAMAE_GENBU) {
+    if (creature_ptr->special_defense & KAMAE_GENBU) {
         creature_ptr->reflect = TRUE;
     }
 
-	if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->reflect = TRUE;
     }
 
@@ -541,7 +539,7 @@ void have_reflect(player_type *creature_ptr)
         creature_ptr->reflect = TRUE;
     }
 
-	if (creature_ptr->tim_reflect) {
+    if (creature_ptr->tim_reflect) {
         creature_ptr->reflect = TRUE;
     }
 
@@ -561,7 +559,7 @@ void have_see_nocto(player_type *creature_ptr)
 {
     creature_ptr->see_nocto = FALSE;
 
-	if (creature_ptr->pclass == CLASS_NINJA)
+    if (creature_ptr->pclass == CLASS_NINJA)
         creature_ptr->see_nocto = TRUE;
 }
 
@@ -570,7 +568,7 @@ void have_warning(player_type *creature_ptr)
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-	creature_ptr->warning = FALSE;
+    creature_ptr->warning = FALSE;
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -591,7 +589,7 @@ void have_anti_magic(player_type *creature_ptr)
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-	creature_ptr->anti_magic = FALSE;
+    creature_ptr->anti_magic = FALSE;
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -600,7 +598,7 @@ void have_anti_magic(player_type *creature_ptr)
 
         object_flags(creature_ptr, o_ptr, flgs);
 
-	    if (have_flag(flgs, TR_NO_MAGIC))
+        if (have_flag(flgs, TR_NO_MAGIC))
             creature_ptr->anti_magic = TRUE;
     }
 }
@@ -622,4 +620,49 @@ void have_anti_tele(player_type *creature_ptr)
         if (have_flag(flgs, TR_NO_TELE))
             creature_ptr->anti_tele = TRUE;
     }
+}
+
+void have_sh_fire(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->sh_fire = FALSE;
+
+    if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
+        creature_ptr->sh_fire = TRUE;
+    }
+
+    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
+        creature_ptr->sh_fire = TRUE;
+    }
+
+    if (creature_ptr->realm1 == REALM_HEX) {
+        if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
+            creature_ptr->sh_fire = TRUE;
+        }
+    }
+
+    if (creature_ptr->special_defense & KAMAE_SEIRYU) {
+        creature_ptr->sh_fire = TRUE;
+    }
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->sh_fire = TRUE;
+    }
+
+	if (creature_ptr->tim_sh_fire) {
+        creature_ptr->sh_fire = TRUE;
+    }
+
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_SH_FIRE))
+            creature_ptr->sh_fire = TRUE;
+    }
+
 }
