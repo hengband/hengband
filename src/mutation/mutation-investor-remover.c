@@ -235,15 +235,8 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     return TRUE;
 }
 
-/*!
- * @brief プレイヤーから突然変異を取り除く
- * @param choose_mut 取り除きたい突然変異のID、0ならばランダムに消去
- * @return なし
- */
-bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
+static void sweep_lose_mutation(player_type *creature_ptr, glm_type *glm_ptr)
 {
-    glm_type tmp_glm;
-    glm_type *glm_ptr = initialize_glm_type(&tmp_glm, choose_mut);
     int attempts_left = 20;
     if (glm_ptr->choose_mut)
         attempts_left = 1;
@@ -259,7 +252,18 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
         if (glm_ptr->muta_chosen)
             break;
     }
+}
 
+/*!
+ * @brief プレイヤーから突然変異を取り除く
+ * @param choose_mut 取り除きたい突然変異のID、0ならばランダムに消去
+ * @return なし
+ */
+bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
+{
+    glm_type tmp_glm;
+    glm_type *glm_ptr = initialize_glm_type(&tmp_glm, choose_mut);
+    sweep_lose_mutation(creature_ptr, glm_ptr);
     if (!glm_ptr->muta_chosen)
         return FALSE;
 
