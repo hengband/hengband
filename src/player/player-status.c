@@ -606,7 +606,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->anti_magic = FALSE;
     creature_ptr->anti_tele = FALSE;
     creature_ptr->warning = FALSE;
-    creature_ptr->see_nocto = FALSE;
     creature_ptr->immune_acid = FALSE;
     creature_ptr->immune_elec = FALSE;
     creature_ptr->immune_fire = FALSE;
@@ -707,6 +706,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_mighty_throw(creature_ptr);
     have_dec_mana(creature_ptr);
     have_reflect(creature_ptr);
+    have_see_nocto(creature_ptr);
 
     calc_race_status(creature_ptr);
 

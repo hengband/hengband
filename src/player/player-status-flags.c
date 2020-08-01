@@ -554,3 +554,11 @@ void have_reflect(player_type *creature_ptr)
             creature_ptr->reflect = TRUE;
     }
 }
+
+void have_see_nocto(player_type *creature_ptr)
+{
+    creature_ptr->see_nocto = FALSE;
+
+	if (creature_ptr->pclass == CLASS_NINJA)
+        creature_ptr->see_nocto = TRUE;
+}

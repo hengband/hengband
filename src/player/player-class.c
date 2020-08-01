@@ -1278,7 +1278,6 @@ void calc_class_status(player_type *creature_ptr)
             creature_ptr->redraw |= PR_STATUS;
         }
 
-        creature_ptr->see_nocto = TRUE;
         break;
     }
 }
