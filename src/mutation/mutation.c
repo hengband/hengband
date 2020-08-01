@@ -37,10 +37,10 @@
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/gain-mutation-switcher.h"
-#include "mutation/gain-mutation-util.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-investor.h" // todo 相互依存している、このファイルからの依存はOK.
 #include "mutation/mutation-techniques.h"
+#include "mutation/mutation-util.h"
 #include "object-enchant/item-feeling.h"
 #include "object-hook/hook-checker.h"
 #include "player/avatar.h"

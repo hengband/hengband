@@ -1928,13 +1928,13 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-mind.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\gain-mutation-util.c">
-      <Filter>mutation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.c">
       <Filter>mutation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mutation\mutation-investor.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-util.c">
       <Filter>mutation</Filter>
     </ClCompile>
   </ItemGroup>
@@ -4207,13 +4207,13 @@
     <ClInclude Include="..\..\src\mind\mind-numbers.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mutation\gain-mutation-util.h">
-      <Filter>mutation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mutation\gain-mutation-switcher.h">
       <Filter>mutation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-investor.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-util.h">
       <Filter>mutation</Filter>
     </ClInclude>
   </ItemGroup>
