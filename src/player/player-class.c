@@ -1247,13 +1247,7 @@ void calc_class_status(player_type *creature_ptr)
         creature_ptr->sustain_con = TRUE;
         creature_ptr->regenerate = TRUE;
         creature_ptr->free_act = TRUE;
-        if (creature_ptr->lev > 39)
-            creature_ptr->reflect = TRUE;
         creature_ptr->redraw |= PR_STATUS;
-        break;
-    case CLASS_MIRROR_MASTER:
-        if (creature_ptr->lev > 39)
-            creature_ptr->reflect = TRUE;
         break;
     case CLASS_NINJA:
         if (heavy_armor(creature_ptr)) {

@@ -600,7 +600,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->resist_time = FALSE;
     creature_ptr->resist_water = FALSE;
     creature_ptr->resist_fear = FALSE;
-    creature_ptr->reflect = FALSE;
     creature_ptr->sh_fire = FALSE;
     creature_ptr->sh_elec = FALSE;
     creature_ptr->sh_cold = FALSE;
@@ -707,6 +706,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_no_ac(creature_ptr);
     have_mighty_throw(creature_ptr);
     have_dec_mana(creature_ptr);
+    have_reflect(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -2125,7 +2125,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
         } else if (creature_ptr->special_defense & KAMAE_GENBU) {
             creature_ptr->to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
             creature_ptr->dis_to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
-            creature_ptr->reflect = TRUE;
             creature_ptr->num_blow[i] -= 2;
             if ((creature_ptr->pclass == CLASS_MONK) && (creature_ptr->lev > 42))
                 creature_ptr->num_blow[i]--;
@@ -4520,7 +4519,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->resist_blind = TRUE;
         creature_ptr->resist_neth = TRUE;
         creature_ptr->resist_fear = TRUE;
-        creature_ptr->reflect = TRUE;
         creature_ptr->sh_fire = TRUE;
         creature_ptr->sh_elec = TRUE;
         creature_ptr->sh_cold = TRUE;
@@ -4538,14 +4536,10 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->resist_time = TRUE;
     }
 
-    if (creature_ptr->wraith_form) {
-        creature_ptr->reflect = TRUE;
-    }
 
     if (creature_ptr->magicdef) {
         creature_ptr->resist_blind = TRUE;
         creature_ptr->resist_conf = TRUE;
-        creature_ptr->reflect = TRUE;
         creature_ptr->free_act = TRUE;
         creature_ptr->levitation = TRUE;
     }
@@ -4572,10 +4566,6 @@ void calc_timelimit_status(player_type *creature_ptr)
 
     if (creature_ptr->tim_levitation) {
         creature_ptr->levitation = TRUE;
-    }
-
-    if (creature_ptr->tim_reflect) {
-        creature_ptr->reflect = TRUE;
     }
 
     if (is_hero(creature_ptr) || creature_ptr->shero) {
@@ -4729,8 +4719,6 @@ void calc_equipment_status(player_type *creature_ptr)
         if (have_flag(flgs, TR_RES_NETHER))
             creature_ptr->resist_neth = TRUE;
 
-        if (have_flag(flgs, TR_REFLECT))
-            creature_ptr->reflect = TRUE;
         if (have_flag(flgs, TR_SH_FIRE))
             creature_ptr->sh_fire = TRUE;
         if (have_flag(flgs, TR_SH_ELEC))

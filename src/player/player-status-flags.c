@@ -509,3 +509,48 @@ void have_dec_mana(player_type *creature_ptr)
             creature_ptr->dec_mana = TRUE;
     }
 }
+
+void have_reflect(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+
+    creature_ptr->reflect = FALSE;
+
+	if (creature_ptr->pclass == CLASS_BERSERKER && creature_ptr->lev > 39)
+        creature_ptr->reflect = TRUE;
+
+	if (creature_ptr->pclass == CLASS_MIRROR_MASTER && creature_ptr->lev > 39)
+        creature_ptr->reflect = TRUE;
+
+	if (creature_ptr->special_defense & KAMAE_GENBU) {
+        creature_ptr->reflect = TRUE;
+    }
+
+	if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->reflect = TRUE;
+    }
+
+    if (creature_ptr->wraith_form) {
+        creature_ptr->reflect = TRUE;
+    }
+
+    if (creature_ptr->magicdef) {
+        creature_ptr->reflect = TRUE;
+    }
+
+	if (creature_ptr->tim_reflect) {
+        creature_ptr->reflect = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (have_flag(flgs, TR_REFLECT))
+            creature_ptr->reflect = TRUE;
+    }
+}
