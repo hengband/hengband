@@ -108,14 +108,6 @@ int calc_mutant_regenerate_mod(player_type *creature_ptr)
     return (regen);
 }
 
-void become_living_trump(player_type *creature_ptr)
-{
-    /* 1/7 Teleport control and 6/7 Random teleportation (uncontrolled) */
-    MUTATION_IDX mutation = one_in_(7) ? 12 : 77;
-    if (gain_mutation(creature_ptr, mutation))
-        msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
-}
-
 void set_mutation_flags(player_type *creature_ptr)
 {
     if (creature_ptr->muta3 == 0)

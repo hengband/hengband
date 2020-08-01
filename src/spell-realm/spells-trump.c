@@ -218,3 +218,11 @@ void cast_shuffle(player_type *caster_ptr)
     msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
     gain_exp(caster_ptr, ee);
 }
+
+void become_living_trump(player_type *creature_ptr)
+{
+    /* 1/7 Teleport control and 6/7 Random teleportation (uncontrolled) */
+    MUTATION_IDX mutation = one_in_(7) ? 12 : 77;
+    if (gain_mutation(creature_ptr, mutation))
+        msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
+}
