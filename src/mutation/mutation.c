@@ -39,7 +39,7 @@
 #include "mutation/gain-mutation-switcher.h"
 #include "mutation/lose-mutation-switcher.h"
 #include "mutation/mutation-flag-types.h"
-#include "mutation/mutation-investor.h" // todo 相互依存している、このファイルからの依存はOK.
+#include "mutation/mutation-investor-remover.h" // todo 相互依存している、このファイルからの依存はOK.
 #include "mutation/mutation-techniques.h"
 #include "mutation/mutation-util.h"
 #include "object-enchant/item-feeling.h"

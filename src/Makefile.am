@@ -493,7 +493,7 @@ hengband_SOURCES = \
 	\
 	mutation/gain-mutation-switcher.c mutation/gain-mutation-switcher.h \
 	mutation/lose-mutation-switcher.c mutation/lose-mutation-switcher.h \
-	mutation/mutation-investor.c mutation/mutation-investor.h \
+	mutation/mutation-investor-remover.c mutation/mutation-investor-remover.h \
 	mutation/mutation-util.c mutation/mutation-util.h \
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-flag-types.h \

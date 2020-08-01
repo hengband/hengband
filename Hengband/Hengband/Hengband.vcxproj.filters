@@ -1931,13 +1931,13 @@
     <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.c">
       <Filter>mutation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\mutation-investor.c">
-      <Filter>mutation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mutation\mutation-util.c">
       <Filter>mutation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c">
       <Filter>mutation</Filter>
     </ClCompile>
   </ItemGroup>
@@ -4213,13 +4213,13 @@
     <ClInclude Include="..\..\src\mutation\gain-mutation-switcher.h">
       <Filter>mutation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mutation\mutation-investor.h">
-      <Filter>mutation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-util.h">
       <Filter>mutation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\lose-mutation-switcher.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h">
       <Filter>mutation</Filter>
     </ClInclude>
   </ItemGroup>

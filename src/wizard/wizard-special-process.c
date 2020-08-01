@@ -48,7 +48,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
-#include "mutation/mutation-investor.h"
+#include "mutation/mutation-investor-remover.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/trc-types.h"

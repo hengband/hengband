@@ -282,7 +282,7 @@
     <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.c" />
     <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.c" />
     <ClCompile Include="..\..\src\mutation\mutation-util.c" />
-    <ClCompile Include="..\..\src\mutation\mutation-investor.c" />
+    <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c" />
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
     <ClCompile Include="..\..\src\racial\racial-kutar.c" />
@@ -854,7 +854,7 @@
     <ClInclude Include="..\..\src\mutation\gain-mutation-switcher.h" />
     <ClInclude Include="..\..\src\mutation\lose-mutation-switcher.h" />
     <ClInclude Include="..\..\src\mutation\mutation-util.h" />
-    <ClInclude Include="..\..\src\mutation\mutation-investor.h" />
+    <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h" />
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
     <ClInclude Include="..\..\src\racial\racial-kutar.h" />
