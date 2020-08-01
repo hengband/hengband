@@ -8,7 +8,7 @@
 #include "player/avatar.h"
 #include "view/display-messages.h"
 
-static void sweep_gain_mutation(player_type *creature_ptr, gm_type *gm_ptr)
+static void sweep_gain_mutation(player_type *creature_ptr, glm_type *gm_ptr)
 {
     int attempts_left = 20;
     if (gm_ptr->choose_mut)
@@ -24,7 +24,7 @@ static void sweep_gain_mutation(player_type *creature_ptr, gm_type *gm_ptr)
     }
 }
 
-static void race_dependent_mutation(player_type *creature_ptr, gm_type *gm_ptr)
+static void race_dependent_mutation(player_type *creature_ptr, glm_type *gm_ptr)
 {
     if (gm_ptr->choose_mut != 0)
         return;
@@ -64,7 +64,7 @@ static void race_dependent_mutation(player_type *creature_ptr, gm_type *gm_ptr)
     }
 }
 
-static void neutralize_base_status(player_type *creature_ptr, gm_type *gm_ptr)
+static void neutralize_base_status(player_type *creature_ptr, glm_type *gm_ptr)
 {
     if (gm_ptr->muta_which == MUT3_PUNY) {
         if (creature_ptr->muta3 & MUT3_HYPER_STR) {
@@ -176,7 +176,7 @@ static void neutralize_base_status(player_type *creature_ptr, gm_type *gm_ptr)
     }
 }
 
-static void neutralize_other_status(player_type *creature_ptr, gm_type *gm_ptr)
+static void neutralize_other_status(player_type *creature_ptr, glm_type *gm_ptr)
 {
     if (gm_ptr->muta_which == MUT2_COWARDICE) {
         if (creature_ptr->muta3 & MUT3_FEARLESS) {
@@ -207,8 +207,8 @@ static void neutralize_other_status(player_type *creature_ptr, gm_type *gm_ptr)
  */
 bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 {
-    gm_type tmp_gm;
-    gm_type *gm_ptr = initialize_gm_type(&tmp_gm, choose_mut);
+    glm_type tmp_gm;
+    glm_type *gm_ptr = initialize_gm_type(&tmp_gm, choose_mut);
     sweep_gain_mutation(creature_ptr, gm_ptr);
     if (!gm_ptr->muta_chosen) {
         msg_print(_("普通になった気がする。", "You feel normal."));

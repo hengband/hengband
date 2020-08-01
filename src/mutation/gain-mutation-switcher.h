@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-typedef struct gm_type gm_type;
-void switch_gain_mutation(player_type *creature_ptr, gm_type *gm_ptr);
+typedef struct glm_type glm_type;
+void switch_gain_mutation(player_type *creature_ptr, glm_type *gm_ptr);

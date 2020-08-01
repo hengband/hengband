@@ -2,7 +2,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
 
-void switch_gain_mutation(player_type *creature_ptr, gm_type *gm_ptr)
+void switch_gain_mutation(player_type *creature_ptr, glm_type *gm_ptr)
 {
     switch (gm_ptr->choose_mut ? gm_ptr->choose_mut : (creature_ptr->pclass == CLASS_BERSERKER ? 74 + randint1(119) : randint1(193))) {
     case 1:
