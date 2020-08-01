@@ -492,6 +492,7 @@ hengband_SOURCES = \
 	mspell/summon-checker.c mspell/summon-checker.h \
 	\
 	mutation/gain-mutation-switcher.c mutation/gain-mutation-switcher.h \
+	mutation/lose-mutation-switcher.c mutation/lose-mutation-switcher.h \
 	mutation/mutation-investor.c mutation/mutation-investor.h \
 	mutation/mutation-util.c mutation/mutation-util.h \
 	mutation/mutation.c mutation/mutation.h \

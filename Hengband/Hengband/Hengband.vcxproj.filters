@@ -1937,6 +1937,9 @@
     <ClCompile Include="..\..\src\mutation\mutation-util.c">
       <Filter>mutation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4214,6 +4217,9 @@
       <Filter>mutation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-util.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\lose-mutation-switcher.h">
       <Filter>mutation</Filter>
     </ClInclude>
   </ItemGroup>

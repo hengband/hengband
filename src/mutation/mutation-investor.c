@@ -208,7 +208,7 @@ static void neutralize_other_status(player_type *creature_ptr, glm_type *gm_ptr)
 bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 {
     glm_type tmp_gm;
-    glm_type *gm_ptr = initialize_gm_type(&tmp_gm, choose_mut);
+    glm_type *gm_ptr = initialize_glm_type(&tmp_gm, choose_mut);
     sweep_gain_mutation(creature_ptr, gm_ptr);
     if (!gm_ptr->muta_chosen) {
         msg_print(_("普通になった気がする。", "You feel normal."));

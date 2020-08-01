@@ -11,4 +11,4 @@ typedef struct glm_type {
     MUTATION_IDX choose_mut;
 } glm_type;
 
-glm_type *initialize_gm_type(glm_type *gm_ptr, MUTATION_IDX choose_mut);
+glm_type *initialize_glm_type(glm_type *gm_ptr, MUTATION_IDX choose_mut);
