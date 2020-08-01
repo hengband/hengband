@@ -48,61 +48,6 @@
 #include "wizard/spoiler-util.h"
 
 /*!
- * @brief シンボル職の記述名を返す /
- * Extract a textual representation of an attribute
- * @param r_ptr モンスター種族の構造体ポインタ
- * @return シンボル職の記述名
- */
-static concptr attr_to_text(monster_race *r_ptr)
-{
-    if (r_ptr->flags1 & RF1_ATTR_CLEAR)
-        return _("透明な", "Clear");
-
-    if (r_ptr->flags1 & RF1_ATTR_MULTI)
-        return _("万色の", "Multi");
-
-    if (r_ptr->flags1 & RF1_ATTR_SEMIRAND)
-        return _("準ランダムな", "S.Rand");
-
-    switch (r_ptr->d_attr) {
-    case TERM_DARK:
-        return _("黒い", "Dark");
-    case TERM_WHITE:
-        return _("白い", "White");
-    case TERM_SLATE:
-        return _("青灰色の", "Slate");
-    case TERM_ORANGE:
-        return _("オレンジの", "Orange");
-    case TERM_RED:
-        return _("赤い", "Red");
-    case TERM_GREEN:
-        return _("緑の", "Green");
-    case TERM_BLUE:
-        return _("青い", "Blue");
-    case TERM_UMBER:
-        return _("琥珀色の", "Umber");
-    case TERM_L_DARK:
-        return _("灰色の", "L.Dark");
-    case TERM_L_WHITE:
-        return _("明るい青灰色の", "L.Slate");
-    case TERM_VIOLET:
-        return _("紫の", "Violet");
-    case TERM_YELLOW:
-        return _("黄色の", "Yellow");
-    case TERM_L_RED:
-        return _("明るい赤の", "L.Red");
-    case TERM_L_GREEN:
-        return _("明るい緑の", "L.Green");
-    case TERM_L_BLUE:
-        return _("明るい青の", "L.Blue");
-    case TERM_L_UMBER:
-        return _("明るい琥珀色の", "L.Umber");
-    }
-
-    return _("変な色の", "Icky");
-}
-
-/*!
  * @brief ベースアイテムの各情報を文字列化する /
  * Describe the kind
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -756,6 +701,61 @@ static void spoil_artifact(player_type *player_ptr, concptr fname)
     }
 
     msg_print("Successfully created a spoiler file.");
+}
+
+/*!
+ * @brief シンボル職の記述名を返す /
+ * Extract a textual representation of an attribute
+ * @param r_ptr モンスター種族の構造体ポインタ
+ * @return シンボル職の記述名
+ */
+static concptr attr_to_text(monster_race *r_ptr)
+{
+    if (r_ptr->flags1 & RF1_ATTR_CLEAR)
+        return _("透明な", "Clear");
+
+    if (r_ptr->flags1 & RF1_ATTR_MULTI)
+        return _("万色の", "Multi");
+
+    if (r_ptr->flags1 & RF1_ATTR_SEMIRAND)
+        return _("準ランダムな", "S.Rand");
+
+    switch (r_ptr->d_attr) {
+    case TERM_DARK:
+        return _("黒い", "Dark");
+    case TERM_WHITE:
+        return _("白い", "White");
+    case TERM_SLATE:
+        return _("青灰色の", "Slate");
+    case TERM_ORANGE:
+        return _("オレンジの", "Orange");
+    case TERM_RED:
+        return _("赤い", "Red");
+    case TERM_GREEN:
+        return _("緑の", "Green");
+    case TERM_BLUE:
+        return _("青い", "Blue");
+    case TERM_UMBER:
+        return _("琥珀色の", "Umber");
+    case TERM_L_DARK:
+        return _("灰色の", "L.Dark");
+    case TERM_L_WHITE:
+        return _("明るい青灰色の", "L.Slate");
+    case TERM_VIOLET:
+        return _("紫の", "Violet");
+    case TERM_YELLOW:
+        return _("黄色の", "Yellow");
+    case TERM_L_RED:
+        return _("明るい赤の", "L.Red");
+    case TERM_L_GREEN:
+        return _("明るい緑の", "L.Green");
+    case TERM_L_BLUE:
+        return _("明るい青の", "L.Blue");
+    case TERM_L_UMBER:
+        return _("明るい琥珀色の", "L.Umber");
+    }
+
+    return _("変な色の", "Icky");
 }
 
 /*!
