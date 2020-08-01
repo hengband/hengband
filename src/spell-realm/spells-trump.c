@@ -1,7 +1,7 @@
 ﻿#include "spell-realm/spells-trump.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "mutation/mutation.h"
+#include "mutation/mutation-investor-remover.h"
 #include "player/avatar.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"

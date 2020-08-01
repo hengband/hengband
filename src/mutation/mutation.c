@@ -36,8 +36,6 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
-#include "mutation/gain-mutation-switcher.h"
-#include "mutation/lose-mutation-switcher.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-investor-remover.h" // todo 相互依存している、このファイルからの依存はOK.
 #include "mutation/mutation-techniques.h"
@@ -70,57 +68,6 @@
 #include "system/object-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
-
-/*!
- * @brief プレイヤーから突然変異を取り除く
- * @param choose_mut 取り除きたい突然変異のID、0ならばランダムに消去
- * @return なし
- */
-bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
-{
-    glm_type tmp_glm;
-    glm_type *glm_ptr = initialize_glm_type(&tmp_glm, choose_mut);
-    int attempts_left = 20;
-    if (glm_ptr->choose_mut)
-        attempts_left = 1;
-
-    while (attempts_left--) {
-        switch_lose_mutation(creature_ptr, glm_ptr);
-        if (glm_ptr->muta_class && glm_ptr->muta_which) {
-            if (*(glm_ptr->muta_class)&glm_ptr->muta_which) {
-                glm_ptr->muta_chosen = TRUE;
-            }
-        }
-
-        if (glm_ptr->muta_chosen)
-            break;
-    }
-
-    if (!glm_ptr->muta_chosen)
-        return FALSE;
-
-    msg_print(glm_ptr->muta_desc);
-    if (glm_ptr->muta_class != NULL)
-        *glm_ptr->muta_class &= ~(glm_ptr->muta_which);
-
-    creature_ptr->update |= PU_BONUS;
-    handle_stuff(creature_ptr);
-    creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
-    return TRUE;
-}
-
-void lose_all_mutations(player_type *creature_ptr)
-{
-    if (creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3) {
-        chg_virtue(creature_ptr, V_CHANCE, -5);
-        msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
-        creature_ptr->muta1 = creature_ptr->muta2 = creature_ptr->muta3 = 0;
-        creature_ptr->update |= PU_BONUS;
-        handle_stuff(creature_ptr);
-        creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
-    }
-}
-
 /*!
  * @brief 現在プレイヤー得ている突然変異の数を返す。
  * @return 現在得ている突然変異の数

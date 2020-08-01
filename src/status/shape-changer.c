@@ -11,7 +11,6 @@
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "mutation/mutation-investor-remover.h"
-#include "mutation/mutation.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
