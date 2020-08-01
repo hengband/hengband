@@ -47,30 +47,19 @@
 #include "view/display-messages.h"
 #include "wizard/spoiler-table.h"
 
-/* ITEM_SEP separates items within a list */
-#define ITEM_SEP ','
-
-/* LIST_SEP separates lists */
-#define LIST_SEP _(',', ';')
-
-#define MAX_EVOL_DEPTH 64
-
-/*
- * These are used to format the artifact spoiler file. INDENT1 is used
- * to indent all but the first line of an artifact spoiler. INDENT2 is
- * used when a line "wraps". (Bladeturner's resistances cause this.)
- */
-#define INDENT1 "    "
-#define INDENT2 "      "
-
 /* MAX_LINE_LEN specifies when a line should wrap. */
 #define MAX_LINE_LEN 75
 
-/* Returns a "+" string if a number is non-negative and an empty string if negative */
-#define POSITIZE(v) (((v) >= 0) ? "+" : "")
-
 /* Given an array, determine how many elements are in the array */
 #define N_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
+
+const char item_separator = ',';
+const char list_separator = _(',', ';');
+const int max_evolution_depth = 64;
+concptr spoiler_indent = "    ";
+
+/* The spoiler file being created */
+FILE *spoiler_file = NULL;
 
 /* A special type used just for deailing with pvals */
 typedef struct pval_info_type {
@@ -99,11 +88,6 @@ typedef struct obj_desc_list {
     concptr activation; /* A string describing an artifact's activation */
     char misc_desc[80]; /* "Level 20, Rarity 30, 3.0 lbs, 20000 Gold" */
 } obj_desc_list;
-
-/*
- * The spoiler file being created
- */
-static FILE *spoiler_file = NULL;
 
 /*!
  * @brief シンボル職の記述名を返す /
@@ -176,41 +160,32 @@ static concptr attr_to_text(monster_race *r_ptr)
 static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, OBJECT_IDX k)
 {
     object_type forge;
-    object_type *q_ptr;
-    int i;
-    q_ptr = &forge;
-
+    object_type *q_ptr = &forge;
     object_prep(player_ptr, q_ptr, k);
     q_ptr->ident |= (IDENT_KNOWN);
     q_ptr->pval = 0;
     q_ptr->to_a = 0;
     q_ptr->to_h = 0;
     q_ptr->to_d = 0;
-
-    (*lev) = k_info[q_ptr->k_idx].level;
-    (*val) = object_value(player_ptr, q_ptr);
+    *lev = k_info[q_ptr->k_idx].level;
+    *val = object_value(player_ptr, q_ptr);
     if (!buf || !dam || !chance || !wgt)
         return;
 
     describe_flavor(player_ptr, buf, q_ptr, (OD_NAME_ONLY | OD_STORE));
     strcpy(dam, "");
     switch (q_ptr->tval) {
-    case TV_BOW: {
-        break;
-    }
     case TV_SHOT:
     case TV_BOLT:
-    case TV_ARROW: {
+    case TV_ARROW:
         sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
         break;
-    }
     case TV_HAFTED:
     case TV_POLEARM:
     case TV_SWORD:
-    case TV_DIGGING: {
+    case TV_DIGGING:
         sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
         break;
-    }
     case TV_BOOTS:
     case TV_GLOVES:
     case TV_CLOAK:
@@ -219,14 +194,15 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
     case TV_SHIELD:
     case TV_SOFT_ARMOR:
     case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR: {
+    case TV_DRAG_ARMOR:
         sprintf(dam, "%d", q_ptr->ac);
         break;
-    }
+    default:
+        break;
     }
 
     strcpy(chance, "");
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         char chance_aux[20] = "";
         if (k_info[q_ptr->k_idx].chance[i] > 0) {
             sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)k_info[q_ptr->k_idx].locale[i], 100 / k_info[q_ptr->k_idx].chance[i]);
@@ -246,16 +222,9 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
  */
 static void spoil_obj_desc(player_type *player_ptr, concptr fname)
 {
-    int i, k, s, t, n = 0, group_start = 0;
-    OBJECT_IDX who[200];
     char buf[1024];
-    char wgt[80];
-    char chance[80];
-    char dam[80];
-
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
-
     if (!spoiler_file) {
         msg_print("Cannot create spoiler file.");
         return;
@@ -264,11 +233,14 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
     fprintf(spoiler_file, "Spoiler File -- Basic Items (Hengband %d.%d.%d.%d)\n\n\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
-    for (i = 0; TRUE; i++) {
+    int n = 0;
+    int group_start = 0;
+    for (int i = 0; TRUE; i++) {
+        OBJECT_IDX who[200];
         if (group_item[i].name) {
             if (n) {
-                for (s = 0; s < n - 1; s++) {
-                    for (t = 0; t < n - 1; t++) {
+                for (int s = 0; s < n - 1; s++) {
+                    for (int t = 0; t < n - 1; t++) {
                         int i1 = t;
                         int i2 = t + 1;
 
@@ -290,9 +262,12 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
                 }
 
                 fprintf(spoiler_file, "\n\n%s\n\n", group_item[group_start].name);
-                for (s = 0; s < n; s++) {
+                for (int s = 0; s < n; s++) {
                     DEPTH e;
                     PRICE v;
+                    char wgt[80];
+                    char chance[80];
+                    char dam[80];
                     kind_info(player_ptr, buf, dam, wgt, chance, &e, &v, who[s]);
                     fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, (int)e, chance, (long)(v));
                 }
@@ -306,7 +281,7 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
             group_start = i;
         }
 
-        for (k = 1; k < max_k_idx; k++) {
+        for (int k = 1; k < max_k_idx; k++) {
             object_kind *k_ptr = &k_info[k];
             if ((k_ptr->tval != group_item[i].tval) || (k_ptr->gen_flags & TRG_INSTA_ART))
                 continue;
@@ -418,7 +393,7 @@ static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_
 
     object_flags(player_ptr, o_ptr, flgs);
     affects_list = pi_ptr->pval_affects;
-    sprintf(pi_ptr->pval_desc, "%s%d", POSITIZE(o_ptr->pval), o_ptr->pval);
+    sprintf(pi_ptr->pval_desc, "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
     if (have_flag(flgs, TR_STR) && have_flag(flgs, TR_INT) && have_flag(flgs, TR_WIS) && have_flag(flgs, TR_DEX) && have_flag(flgs, TR_CON)
         && have_flag(flgs, TR_CHR)) {
         *affects_list++ = _("全能力", "All stats");
@@ -669,7 +644,7 @@ static void spoiler_outlist(concptr header, concptr *list, char separator)
     if (*list == NULL)
         return;
 
-    strcpy(line, INDENT1);
+    strcpy(line, spoiler_indent);
     if (header && (header[0])) {
         strcat(line, header);
         strcat(line, " ");
@@ -688,13 +663,14 @@ static void spoiler_outlist(concptr header, concptr *list, char separator)
             strcat(line, buf);
             line_len += buf_len;
         } else {
-            if (line_len > 1 && line[line_len - 1] == ' ' && line[line_len - 2] == LIST_SEP) {
+            if (line_len > 1 && line[line_len - 1] == ' ' && line[line_len - 2] == list_separator) {
                 line[line_len - 2] = '\0';
                 fprintf(spoiler_file, "%s\n", line);
-                sprintf(line, "%s%s", INDENT1, buf);
+                sprintf(line, "%s%s", spoiler_indent, buf);
             } else {
                 fprintf(spoiler_file, "%s\n", line);
-                sprintf(line, "%s%s", INDENT2, buf);
+                concptr ident2 = "      ";
+                sprintf(line, "%s%s", ident2, buf);
             }
 
             line_len = strlen(line);
@@ -720,23 +696,23 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
     fprintf(spoiler_file, "%s\n", art_ptr->description);
     if (pval_ptr->pval_desc[0]) {
         sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
-        spoiler_outlist(buf, pval_ptr->pval_affects, ITEM_SEP);
+        spoiler_outlist(buf, pval_ptr->pval_affects, item_separator);
     }
 
-    spoiler_outlist(_("対:", "Slay"), art_ptr->slays, ITEM_SEP);
-    spoiler_outlist(_("武器属性:", ""), art_ptr->brands, LIST_SEP);
-    spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, ITEM_SEP);
-    spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, ITEM_SEP);
-    spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, ITEM_SEP);
-    spoiler_outlist("", art_ptr->misc_magic, LIST_SEP);
+    spoiler_outlist(_("対:", "Slay"), art_ptr->slays, item_separator);
+    spoiler_outlist(_("武器属性:", ""), art_ptr->brands, list_separator);
+    spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, item_separator);
+    spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, item_separator);
+    spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, item_separator);
+    spoiler_outlist("", art_ptr->misc_magic, list_separator);
 
     if (art_ptr->addition[0])
-        fprintf(spoiler_file, _("%s追加: %s\n", "%sAdditional %s\n"), INDENT1, art_ptr->addition);
+        fprintf(spoiler_file, _("%s追加: %s\n", "%sAdditional %s\n"), spoiler_indent, art_ptr->addition);
 
     if (art_ptr->activation)
-        fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
+        fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent, art_ptr->activation);
 
-    fprintf(spoiler_file, "%s%s\n\n", INDENT1, art_ptr->misc_desc);
+    fprintf(spoiler_file, "%s%s\n\n", spoiler_indent, art_ptr->misc_desc);
 }
 
 /*!
@@ -1230,9 +1206,9 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
     spoil_out(buf);
     spoil_out("------------------------------------------\n\n");
     C_MAKE(evol_tree, max_r_idx, int *);
-    C_MAKE(*evol_tree, max_r_idx * (MAX_EVOL_DEPTH + 1), int);
+    C_MAKE(*evol_tree, max_r_idx * (max_evolution_depth + 1), int);
     for (i = 1; i < max_r_idx; i++)
-        evol_tree[i] = *evol_tree + i * (MAX_EVOL_DEPTH + 1);
+        evol_tree[i] = *evol_tree + i * (max_evolution_depth + 1);
 
     evol_tree_zero = *evol_tree;
     for (i = 1; i < max_r_idx; i++) {
@@ -1245,7 +1221,7 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
         do {
             evol_tree[i][n++] = r_ptr->next_r_idx;
             r_ptr = &r_info[r_ptr->next_r_idx];
-        } while (r_ptr->next_exp && (n < MAX_EVOL_DEPTH));
+        } while (r_ptr->next_exp && (n < max_evolution_depth));
     }
 
     for (i = 1; i < max_r_idx; i++) {
@@ -1284,7 +1260,7 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
         fputc('\n', spoiler_file);
     }
 
-    C_KILL(evol_tree_zero, max_r_idx * (MAX_EVOL_DEPTH + 1), int);
+    C_KILL(evol_tree_zero, max_r_idx * (max_evolution_depth + 1), int);
     C_KILL(evol_tree, max_r_idx, int *);
     if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
         msg_print("Cannot close spoiler file.");
@@ -1376,25 +1352,25 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
     char buf[80];
     fprintf(spoiler_file, "%s\n", art_ptr->description);
     if (!object_is_fully_known(o_ptr)) {
-        fprintf(spoiler_file, _("%s不明\n", "%sUnknown\n"), INDENT1);
+        fprintf(spoiler_file, _("%s不明\n", "%sUnknown\n"), spoiler_indent);
     } else {
         if (pval_ptr->pval_desc[0]) {
             sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
-            spoiler_outlist(buf, pval_ptr->pval_affects, ITEM_SEP);
+            spoiler_outlist(buf, pval_ptr->pval_affects, item_separator);
         }
 
-        spoiler_outlist(_("対:", "Slay"), art_ptr->slays, ITEM_SEP);
-        spoiler_outlist(_("武器属性:", ""), art_ptr->brands, LIST_SEP);
-        spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, ITEM_SEP);
-        spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, ITEM_SEP);
-        spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, ITEM_SEP);
-        spoiler_outlist("", art_ptr->misc_magic, LIST_SEP);
+        spoiler_outlist(_("対:", "Slay"), art_ptr->slays, item_separator);
+        spoiler_outlist(_("武器属性:", ""), art_ptr->brands, list_separator);
+        spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, item_separator);
+        spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, item_separator);
+        spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, item_separator);
+        spoiler_outlist("", art_ptr->misc_magic, list_separator);
         if (art_ptr->activation) {
-            fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
+            fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent, art_ptr->activation);
         }
     }
 
-    fprintf(spoiler_file, "%s%s\n\n", INDENT1, art_ptr->misc_desc);
+    fprintf(spoiler_file, "%s%s\n\n", spoiler_indent, art_ptr->misc_desc);
 }
 
 /*!
