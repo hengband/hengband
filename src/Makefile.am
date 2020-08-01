@@ -800,6 +800,7 @@ hengband_SOURCES = \
 	wizard/artifact-bias-table.c wizard/artifact-bias-table.h \
 	wizard/cmd-wizard.c wizard/cmd-wizard.h \
 	wizard/spoiler-table.c wizard/spoiler-table.h \
+	wizard/spoiler-util.c wizard/spoiler-util.h \
 	wizard/tval-descriptions-table.c wizard/tval-descriptions-table.h \
 	wizard/wizard-item-modifier.c wizard/wizard-item-modifier.h \
 	wizard/wizard-messages.c wizard/wizard-messages.h \

@@ -704,6 +704,7 @@
     <ClCompile Include="..\..\src\wizard\artifact-bias-table.c" />
     <ClCompile Include="..\..\src\wizard\cmd-wizard.c" />
     <ClCompile Include="..\..\src\wizard\spoiler-table.c" />
+    <ClCompile Include="..\..\src\wizard\spoiler-util.c" />
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c" />
     <ClCompile Include="..\..\src\load\quest-loader.c" />
     <ClCompile Include="..\..\src\view\display-store.c" />
@@ -1389,6 +1390,7 @@
     <ClInclude Include="..\..\src\wizard\artifact-bias-table.h" />
     <ClInclude Include="..\..\src\wizard\cmd-wizard.h" />
     <ClInclude Include="..\..\src\wizard\spoiler-table.h" />
+    <ClInclude Include="..\..\src\wizard\spoiler-util.h" />
     <ClInclude Include="..\..\src\wizard\wizard-item-modifier.h" />
     <ClInclude Include="..\..\src\wizard\wizard-messages.h" />
     <ClInclude Include="..\..\src\wizard\wizard-spells.h" />
