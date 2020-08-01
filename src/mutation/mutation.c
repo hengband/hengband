@@ -69,6 +69,22 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
+static void sweep_gain_mutation(player_type *creature_ptr, gm_type *gm_ptr)
+{
+    int attempts_left = 20;
+    if (gm_ptr->choose_mut)
+        attempts_left = 1;
+
+    while (attempts_left--) {
+        switch_gain_mutation(creature_ptr, gm_ptr);
+        if ((gm_ptr->muta_class != NULL) && (gm_ptr->muta_which != 0) && ((*gm_ptr->muta_class & gm_ptr->muta_which) == 0))
+            gm_ptr->muta_chosen = TRUE;
+
+        if (gm_ptr->muta_chosen)
+            break;
+    }
+}
+
 static void race_dependent_mutation(player_type *creature_ptr, gm_type *gm_ptr)
 {
     if (gm_ptr->choose_mut != 0)
@@ -252,21 +268,9 @@ static void neutralize_other_status(player_type *creature_ptr, gm_type *gm_ptr)
  */
 bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 {
-    int attempts_left = 20;
-    if (choose_mut)
-        attempts_left = 1;
-
     gm_type tmp_gm;
     gm_type *gm_ptr = initialize_gm_type(&tmp_gm, choose_mut);
-    while (attempts_left--) {
-        switch_gain_mutation(creature_ptr, gm_ptr);
-        if ((gm_ptr->muta_class != NULL) && (gm_ptr->muta_which != 0) && ((*gm_ptr->muta_class & gm_ptr->muta_which) == 0))
-            gm_ptr->muta_chosen = TRUE;
-
-        if (gm_ptr->muta_chosen)
-            break;
-    }
-
+    sweep_gain_mutation(creature_ptr, gm_ptr);
     if (!gm_ptr->muta_chosen) {
         msg_print(_("普通になった気がする。", "You feel normal."));
         return FALSE;
