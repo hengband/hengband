@@ -603,7 +603,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->sh_fire = FALSE;
     creature_ptr->sh_elec = FALSE;
     creature_ptr->sh_cold = FALSE;
-    creature_ptr->anti_magic = FALSE;
     creature_ptr->anti_tele = FALSE;
     creature_ptr->immune_acid = FALSE;
     creature_ptr->immune_elec = FALSE;
@@ -707,6 +706,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_reflect(creature_ptr);
     have_see_nocto(creature_ptr);
     have_warning(creature_ptr);
+    have_anti_magic(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4721,8 +4721,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->sh_elec = TRUE;
         if (have_flag(flgs, TR_SH_COLD))
             creature_ptr->sh_cold = TRUE;
-        if (have_flag(flgs, TR_NO_MAGIC))
-            creature_ptr->anti_magic = TRUE;
         if (have_flag(flgs, TR_NO_TELE))
             creature_ptr->anti_tele = TRUE;
 
