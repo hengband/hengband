@@ -5,7 +5,7 @@
 #include "mutation/lose-mutation-switcher.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
-#include "mutation/mutation.h" // todo calc_mutant_regenerate_mod() が相互依存している、後で消す.
+#include "mutation/mutation-calculator.h" // todo calc_mutant_regenerate_mod() が相互依存している、後で消す.
 #include "player/avatar.h"
 #include "view/display-messages.h"
 

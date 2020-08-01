@@ -323,9 +323,6 @@
     <ClCompile Include="..\..\src\core\hp-mp-processor.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\mutation.c">
-      <Filter>mutation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mutation\mutation-processor.c">
       <Filter>mutation</Filter>
     </ClCompile>
@@ -1943,6 +1940,9 @@
     <ClCompile Include="..\..\src\action\mutation-execution.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-calculator.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2298,9 +2298,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\hp-mp-processor.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mutation\mutation.h">
-      <Filter>mutation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-processor.h">
       <Filter>mutation</Filter>
@@ -4227,6 +4224,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\action\mutation-execution.h">
       <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-calculator.h">
+      <Filter>mutation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

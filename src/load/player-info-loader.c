@@ -10,7 +10,7 @@
 #include "load/player-attack-loader.h"
 #include "load/world-loader.h"
 #include "market/arena.h"
-#include "mutation/mutation.h"
+#include "mutation/mutation-calculator.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "system/floor-type-definition.h"

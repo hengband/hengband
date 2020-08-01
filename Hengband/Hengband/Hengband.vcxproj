@@ -1246,7 +1246,7 @@
     <ClCompile Include="..\..\src\mspell\mspell-judgement.c" />
     <ClCompile Include="..\..\src\blue-magic\blue-magic-checker.c" />
     <ClCompile Include="..\..\src\mspell\assign-monster-spell.c" />
-    <ClCompile Include="..\..\src\mutation\mutation.c" />
+    <ClCompile Include="..\..\src\mutation\mutation-calculator.c" />
     <ClCompile Include="..\..\src\object\object-info.c" />
     <ClCompile Include="..\..\src\racial\racial-switcher.c" />
     <ClCompile Include="..\..\src\term\readdib.c" />
@@ -1491,7 +1491,7 @@
     <ClInclude Include="..\..\src\system\monster-type-definition.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race.h" />
-    <ClInclude Include="..\..\src\mutation\mutation.h" />
+    <ClInclude Include="..\..\src\mutation\mutation-calculator.h" />
     <ClInclude Include="..\..\src\object-enchant\object-boost.h" />
     <ClInclude Include="..\..\src\object-enchant\object-curse.h" />
     <ClInclude Include="..\..\src\object-enchant\object-ego.h" />
