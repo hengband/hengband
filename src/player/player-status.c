@@ -605,7 +605,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->sh_cold = FALSE;
     creature_ptr->anti_magic = FALSE;
     creature_ptr->anti_tele = FALSE;
-    creature_ptr->warning = FALSE;
     creature_ptr->immune_acid = FALSE;
     creature_ptr->immune_elec = FALSE;
     creature_ptr->immune_fire = FALSE;
@@ -707,6 +706,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_dec_mana(creature_ptr);
     have_reflect(creature_ptr);
     have_see_nocto(creature_ptr);
+    have_warning(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4658,10 +4658,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->free_act = TRUE;
         if (have_flag(flgs, TR_HOLD_EXP))
             creature_ptr->hold_exp = TRUE;
-        if (have_flag(flgs, TR_WARNING)) {
-            if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
-                creature_ptr->warning = TRUE;
-        }
 
         if (have_flag(flgs, TR_TELEPORT)) {
             if (object_is_cursed(o_ptr))

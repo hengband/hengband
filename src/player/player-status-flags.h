@@ -25,5 +25,6 @@ void have_mighty_throw(player_type *creature_ptr);
 void have_dec_mana(player_type *creature_ptr);
 void have_reflect(player_type *creature_ptr);
 void have_see_nocto(player_type *creature_ptr);
+void have_warning(player_type *creature_ptr);
 
 
