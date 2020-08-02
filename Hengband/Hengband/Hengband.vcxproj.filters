@@ -1961,7 +1961,7 @@
     <ClCompile Include="..\..\src\wizard\fixed-artifact-spoiler.c">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\monster-spoiler.c">
+    <ClCompile Include="..\..\src\wizard\monster-info-spoiler.c">
       <Filter>wizard</Filter>
     </ClCompile>
   </ItemGroup>
@@ -4267,7 +4267,7 @@
     <ClInclude Include="..\..\src\wizard\fixed-artifact-spoiler.h">
       <Filter>wizard</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\wizard\monster-spoiler.h">
+    <ClInclude Include="..\..\src\wizard\monster-info-spoiler.h">
       <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>

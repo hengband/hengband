@@ -48,7 +48,7 @@
 #include "wizard/artifact-analyzer.h"
 #include "wizard/fixed-artifact-spoiler.h"
 #include "wizard/items-spoiler.h"
-#include "wizard/monster-spoiler.h"
+#include "wizard/monster-info-spoiler.h"
 #include "wizard/spoiler-util.h"
 
 /*!

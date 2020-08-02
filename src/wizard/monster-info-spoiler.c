@@ -1,4 +1,4 @@
-﻿#include "wizard/monster-spoiler.h"
+﻿#include "wizard/monster-info-spoiler.h"
 #include "io/files-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
