@@ -797,6 +797,7 @@ hengband_SOURCES = \
 	window/main-window-util.c window/main-window-util.h \
 	window/main-window-equipment.c window/main-window-equipment.h \
 	\
+	wizard/artifact-analyzer.c wizard/artifact-analyzer.h \
 	wizard/artifact-bias-table.c wizard/artifact-bias-table.h \
 	wizard/cmd-wizard.c wizard/cmd-wizard.h \
 	wizard/items-spoiler.c wizard/items-spoiler.h \
