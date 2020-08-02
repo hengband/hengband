@@ -1958,6 +1958,9 @@
     <ClCompile Include="..\..\src\wizard\artifact-analyzer.c">
       <Filter>wizard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\wizard\fixed-artifact-spoiler.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4256,6 +4259,9 @@
       <Filter>wizard</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\wizard\artifact-analyzer.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\fixed-artifact-spoiler.h">
       <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>
