@@ -45,3 +45,4 @@ extern FILE *spoiler_file;
 
 void spoiler_blanklines(int n);
 void spoiler_underline(concptr str);
+void spoil_out(concptr str);
