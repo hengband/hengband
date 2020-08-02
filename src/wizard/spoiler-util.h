@@ -42,3 +42,6 @@ extern const char list_separator;
 extern const int max_evolution_depth;
 extern concptr spoiler_indent;
 extern FILE *spoiler_file;
+
+void spoiler_blanklines(int n);
+void spoiler_underline(concptr str);
