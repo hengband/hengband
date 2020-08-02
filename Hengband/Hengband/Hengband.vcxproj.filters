@@ -1964,6 +1964,9 @@
     <ClCompile Include="..\..\src\wizard\monster-info-spoiler.c">
       <Filter>wizard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io-dump\random-art-info-dumper.c">
+      <Filter>io-dump</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4269,6 +4272,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\wizard\monster-info-spoiler.h">
       <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io-dump\random-art-info-dumper.h">
+      <Filter>io-dump</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

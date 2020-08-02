@@ -254,6 +254,7 @@
     <ClCompile Include="..\..\src\inventory\inventory-describer.c" />
     <ClCompile Include="..\..\src\inventory\inventory-util.c" />
     <ClCompile Include="..\..\src\inventory\item-getter.c" />
+    <ClCompile Include="..\..\src\io-dump\random-art-info-dumper.c" />
     <ClCompile Include="..\..\src\io\command-repeater.c" />
     <ClCompile Include="..\..\src\io\cursor.c" />
     <ClCompile Include="..\..\src\io\input-key-acceptor.c" />
@@ -830,6 +831,7 @@
     <ClInclude Include="..\..\src\inventory\inventory-describer.h" />
     <ClInclude Include="..\..\src\inventory\inventory-util.h" />
     <ClInclude Include="..\..\src\inventory\item-getter.h" />
+    <ClInclude Include="..\..\src\io-dump\random-art-info-dumper.h" />
     <ClInclude Include="..\..\src\io\command-repeater.h" />
     <ClInclude Include="..\..\src\io\cursor.h" />
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />

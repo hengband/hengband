@@ -299,6 +299,7 @@ hengband_SOURCES = \
 	io-dump/dump-remover.c io-dump/dump-remover.h \
 	io-dump/dump-util.c io-dump/dump-util.h \
 	io-dump/player-status-dump.c io-dump/player-status-dump.h \
+	io-dump/random-art-info-dumper.c io-dump/random-art-info-dumper.h \
 	io-dump/special-class-dump.c io-dump/special-class-dump.h \
 	\
 	knowledge/knowledge-autopick.c knowledge/knowledge-autopick.h \
