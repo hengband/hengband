@@ -1,7 +1,7 @@
 ﻿#include "spell-realm/spells-trump.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "mutation/mutation.h"
+#include "mutation/mutation-investor-remover.h"
 #include "player/avatar.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"
@@ -217,4 +217,12 @@ void cast_shuffle(player_type *caster_ptr)
         ee = 5000;
     msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
     gain_exp(caster_ptr, ee);
+}
+
+void become_living_trump(player_type *creature_ptr)
+{
+    /* 1/7 Teleport control and 6/7 Random teleportation (uncontrolled) */
+    MUTATION_IDX mutation = one_in_(7) ? 12 : 77;
+    if (gain_mutation(creature_ptr, mutation))
+        msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
 }

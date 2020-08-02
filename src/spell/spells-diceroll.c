@@ -7,7 +7,6 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
-#include "mutation/mutation.h"
 #include "player/player-class.h"
 #include "room/rooms-builder.h"
 #include "system/floor-type-definition.h"

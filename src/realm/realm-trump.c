@@ -4,7 +4,7 @@
 #include "effect/spells-effect-util.h"
 #include "game-option/input-options.h"
 #include "monster-floor/place-monster-types.h"
-#include "mutation/mutation.h"
+#include "mutation/mutation-calculator.h"
 #include "player/player-class.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-fetcher.h"

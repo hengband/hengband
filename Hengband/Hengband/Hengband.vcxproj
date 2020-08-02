@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\action\action-limited.c" />
+    <ClCompile Include="..\..\src\action\mutation-execution.c" />
     <ClCompile Include="..\..\src\action\open-close-execution.c" />
     <ClCompile Include="..\..\src\action\open-util.c" />
     <ClCompile Include="..\..\src\action\run-execution.c" />
@@ -280,7 +281,9 @@
     <ClCompile Include="..\..\src\mspell\smart-mspell-util.c" />
     <ClCompile Include="..\..\src\mspell\specified-summon.c" />
     <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.c" />
-    <ClCompile Include="..\..\src\mutation\gain-mutation-util.c" />
+    <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.c" />
+    <ClCompile Include="..\..\src\mutation\mutation-util.c" />
+    <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c" />
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
     <ClCompile Include="..\..\src\racial\racial-kutar.c" />
@@ -698,12 +701,18 @@
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
     <ClCompile Include="..\..\src\combat\aura-counterattack.c" />
     <ClCompile Include="..\..\src\window\main-window-equipments.c" />
+    <ClCompile Include="..\..\src\wizard\artifact-analyzer.c" />
     <ClCompile Include="..\..\src\wizard\artifact-bias-table.c" />
+    <ClCompile Include="..\..\src\wizard\cmd-wizard.c" />
+    <ClCompile Include="..\..\src\wizard\fixed-artifact-spoiler.c" />
+    <ClCompile Include="..\..\src\wizard\items-spoiler.c" />
     <ClCompile Include="..\..\src\wizard\spoiler-table.c" />
+    <ClCompile Include="..\..\src\wizard\spoiler-util.c" />
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c" />
     <ClCompile Include="..\..\src\load\quest-loader.c" />
     <ClCompile Include="..\..\src\view\display-store.c" />
     <ClInclude Include="..\..\src\action\action-limited.h" />
+    <ClInclude Include="..\..\src\action\mutation-execution.h" />
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
@@ -850,7 +859,9 @@
     <ClInclude Include="..\..\src\mspell\smart-mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\specified-summon.h" />
     <ClInclude Include="..\..\src\mutation\gain-mutation-switcher.h" />
-    <ClInclude Include="..\..\src\mutation\gain-mutation-util.h" />
+    <ClInclude Include="..\..\src\mutation\lose-mutation-switcher.h" />
+    <ClInclude Include="..\..\src\mutation\mutation-util.h" />
+    <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h" />
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
     <ClInclude Include="..\..\src\racial\racial-kutar.h" />
@@ -1240,7 +1251,7 @@
     <ClCompile Include="..\..\src\mspell\mspell-judgement.c" />
     <ClCompile Include="..\..\src\blue-magic\blue-magic-checker.c" />
     <ClCompile Include="..\..\src\mspell\assign-monster-spell.c" />
-    <ClCompile Include="..\..\src\mutation\mutation.c" />
+    <ClCompile Include="..\..\src\mutation\mutation-calculator.c" />
     <ClCompile Include="..\..\src\object\object-info.c" />
     <ClCompile Include="..\..\src\racial\racial-switcher.c" />
     <ClCompile Include="..\..\src\term\readdib.c" />
@@ -1307,6 +1318,7 @@
     <ClCompile Include="..\..\src\object\warning.c" />
     <ClCompile Include="..\..\src\floor\wild.c" />
     <ClCompile Include="..\..\src\view\display-messages.c" />
+    <ClCompile Include="..\..\src\wizard\wizard-item-modifier.c" />
     <ClCompile Include="..\..\src\wizard\wizard-messages.c" />
     <ClCompile Include="..\..\src\wizard\wizard-spells.c" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.c" />
@@ -1378,8 +1390,14 @@
     <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\..\src\view\status-bars-table.h" />
     <ClInclude Include="..\..\src\window\main-window-equipments.h" />
+    <ClInclude Include="..\..\src\wizard\artifact-analyzer.h" />
     <ClInclude Include="..\..\src\wizard\artifact-bias-table.h" />
+    <ClInclude Include="..\..\src\wizard\cmd-wizard.h" />
+    <ClInclude Include="..\..\src\wizard\fixed-artifact-spoiler.h" />
+    <ClInclude Include="..\..\src\wizard\items-spoiler.h" />
     <ClInclude Include="..\..\src\wizard\spoiler-table.h" />
+    <ClInclude Include="..\..\src\wizard\spoiler-util.h" />
+    <ClInclude Include="..\..\src\wizard\wizard-item-modifier.h" />
     <ClInclude Include="..\..\src\wizard\wizard-messages.h" />
     <ClInclude Include="..\..\src\wizard\wizard-spells.h" />
     <ClInclude Include="..\..\src\world\world-object.h" />
@@ -1485,7 +1503,7 @@
     <ClInclude Include="..\..\src\system\monster-type-definition.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race-hook.h" />
     <ClInclude Include="..\..\src\monster-race\monster-race.h" />
-    <ClInclude Include="..\..\src\mutation\mutation.h" />
+    <ClInclude Include="..\..\src\mutation\mutation-calculator.h" />
     <ClInclude Include="..\..\src\object-enchant\object-boost.h" />
     <ClInclude Include="..\..\src\object-enchant\object-curse.h" />
     <ClInclude Include="..\..\src\object-enchant\object-ego.h" />

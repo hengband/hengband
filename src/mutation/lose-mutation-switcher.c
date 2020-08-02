@@ -1,68 +1,68 @@
-﻿#include "mutation/gain-mutation-switcher.h"
+﻿#include "mutation/lose-mutation-switcher.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
 
-void switch_gain_mutation(player_type *creature_ptr, glm_type *glm_ptr)
+void switch_lose_mutation(player_type *creature_ptr, glm_type *glm_ptr)
 {
-    switch (glm_ptr->choose_mut ? glm_ptr->choose_mut : (creature_ptr->pclass == CLASS_BERSERKER ? 74 + randint1(119) : randint1(193))) {
+    switch ((glm_ptr->choose_mut != 0) ? glm_ptr->choose_mut : randint1(193)) {
     case 1:
     case 2:
     case 3:
     case 4:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_SPIT_ACID;
-        glm_ptr->muta_desc = _("酸を吐く能力を得た。", "You gain the ability to spit acid.");
+        glm_ptr->muta_desc = _("酸を吹きかける能力を失った。", "You lose the ability to spit acid.");
         break;
     case 5:
     case 6:
     case 7:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_BR_FIRE;
-        glm_ptr->muta_desc = _("火を吐く能力を得た。", "You gain the ability to breathe fire.");
+        glm_ptr->muta_desc = _("炎のブレスを吐く能力を失った。", "You lose the ability to breathe fire.");
         break;
     case 8:
     case 9:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_HYPN_GAZE;
-        glm_ptr->muta_desc = _("催眠眼の能力を得た。", "Your eyes look mesmerizing...");
+        glm_ptr->muta_desc = _("あなたの目はつまらない目になった。", "Your eyes look uninteresting.");
         break;
     case 10:
     case 11:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_TELEKINES;
-        glm_ptr->muta_desc = _("物体を念動力で動かす能力を得た。", "You gain the ability to move objects telekinetically.");
+        glm_ptr->muta_desc = _("念動力で物を動かす能力を失った。", "You lose the ability to move objects telekinetically.");
         break;
     case 12:
     case 13:
     case 14:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_VTELEPORT;
-        glm_ptr->muta_desc = _("自分の意思でテレポートする能力を得た。", "You gain the power of teleportation at will.");
+        glm_ptr->muta_desc = _("自分の意思でテレポートする能力を失った。", "You lose the power of teleportation at will.");
         break;
     case 15:
     case 16:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_MIND_BLST;
-        glm_ptr->muta_desc = _("精神攻撃の能力を得た。", "You gain the power of Mind Blast.");
+        glm_ptr->muta_desc = _("精神攻撃の能力を失った。", "You lose the power of Mind Blast.");
         break;
     case 17:
     case 18:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_RADIATION;
-        glm_ptr->muta_desc = _("あなたは強い放射線を発生し始めた。", "You start emitting hard radiation.");
+        glm_ptr->muta_desc = _("あなたは放射能を発生しなくなった。", "You stop emitting hard radiation.");
         break;
     case 19:
     case 20:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_VAMPIRISM;
-        glm_ptr->muta_desc = _("生命力を吸収できるようになった。", "You become vampiric.");
+        glm_ptr->muta_desc = _("吸血の能力を失った。", "You are no longer vampiric.");
         break;
     case 21:
     case 22:
     case 23:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_SMELL_MET;
-        glm_ptr->muta_desc = _("金属の匂いを嗅ぎ分けられるようになった。", "You smell a metallic odor.");
+        glm_ptr->muta_desc = _("金属の臭いを嗅げなくなった。", "You no longer smell a metallic odor.");
         break;
     case 24:
     case 25:
@@ -70,523 +70,520 @@ void switch_gain_mutation(player_type *creature_ptr, glm_type *glm_ptr)
     case 27:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_SMELL_MON;
-        glm_ptr->muta_desc = _("モンスターの臭いを嗅ぎ分けられるようになった。", "You smell filthy monsters.");
+        glm_ptr->muta_desc = _("不潔なモンスターの臭いを嗅げなくなった。", "You no longer smell filthy monsters.");
         break;
     case 28:
     case 29:
     case 30:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_BLINK;
-        glm_ptr->muta_desc = _("近距離テレポートの能力を得た。", "You gain the power of minor teleportation.");
+        glm_ptr->muta_desc = _("近距離テレポートの能力を失った。", "You lose the power of minor teleportation.");
         break;
     case 31:
     case 32:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_EAT_ROCK;
-        glm_ptr->muta_desc = _("壁が美味しそうに見える。", "The walls look delicious.");
+        glm_ptr->muta_desc = _("壁は美味しそうに見えなくなった。", "The walls look unappetizing.");
         break;
     case 33:
     case 34:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_SWAP_POS;
-        glm_ptr->muta_desc = _("他人の靴で一マイル歩くような気分がする。", "You feel like walking a mile in someone else's shoes.");
+        glm_ptr->muta_desc = _("あなたは自分の靴に留まる感じがする。", "You feel like staying in your own shoes.");
         break;
     case 35:
     case 36:
     case 37:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_SHRIEK;
-        glm_ptr->muta_desc = _("あなたの声は相当強くなった。", "Your vocal cords get much tougher.");
+        glm_ptr->muta_desc = _("あなたの声質は弱くなった。", "Your vocal cords get much weaker.");
         break;
     case 38:
     case 39:
     case 40:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_ILLUMINE;
-        glm_ptr->muta_desc = _("あなたは光り輝いて部屋を明るくするようになった。", "You can light up rooms with your presence.");
+        glm_ptr->muta_desc = _("部屋を明るく照らすことが出来なくなった。", "You can no longer light up rooms with your presence.");
         break;
     case 41:
     case 42:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_DET_CURSE;
-        glm_ptr->muta_desc = _("邪悪な魔法を感知できるようになった。", "You can feel evil magics.");
+        glm_ptr->muta_desc = _("邪悪な魔法を感じられなくなった。", "You can no longer feel evil magics.");
         break;
     case 43:
     case 44:
     case 45:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_BERSERK;
-        glm_ptr->muta_desc = _("制御できる激情を感じる。", "You feel a controlled rage.");
+        glm_ptr->muta_desc = _("制御できる激情を感じなくなった。", "You no longer feel a controlled rage.");
         break;
     case 46:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_POLYMORPH;
-        glm_ptr->muta_desc = _("体が変異しやすくなった。", "Your body seems mutable.");
+        glm_ptr->muta_desc = _("あなたの体は安定したように見える。", "Your body seems stable.");
         break;
     case 47:
     case 48:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_MIDAS_TCH;
-        glm_ptr->muta_desc = _("「ミダス王の手」の能力を得た。", "You gain the Midas touch."); /*トゥームレイダースにありましたね。 */
+        glm_ptr->muta_desc = _("ミダスの手の能力を失った。", "You lose the Midas touch.");
         break;
     case 49:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_GROW_MOLD;
-        glm_ptr->muta_desc = _("突然カビに親しみを覚えた。", "You feel a sudden affinity for mold.");
+        glm_ptr->muta_desc = _("突然カビが嫌いになった。", "You feel a sudden dislike for mold.");
         break;
     case 50:
     case 51:
     case 52:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_RESIST;
-        glm_ptr->muta_desc = _("あなたは自分自身を守れる気がする。", "You feel like you can protect yourself.");
+        glm_ptr->muta_desc = _("傷つき易くなった気がする。", "You feel like you might be vulnerable.");
         break;
     case 53:
     case 54:
     case 55:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_EARTHQUAKE;
-        glm_ptr->muta_desc = _("ダンジョンを破壊する能力を得た。", "You gain the ability to wreck the dungeon.");
+        glm_ptr->muta_desc = _("ダンジョンを壊す能力を失った。", "You lose the ability to wreck the dungeon.");
         break;
     case 56:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_EAT_MAGIC;
-        glm_ptr->muta_desc = _("魔法のアイテムが美味そうに見える。", "Your magic items look delicious.");
+        glm_ptr->muta_desc = _("魔法のアイテムはもう美味しそうに見えなくなった。", "Your magic items no longer look delicious.");
         break;
     case 57:
     case 58:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_WEIGH_MAG;
-        glm_ptr->muta_desc = _("あなたは周囲にある魔法をより良く理解できる気がする。", "You feel you can better understand the magic around you.");
+        glm_ptr->muta_desc = _("魔力を感じられなくなった。", "You no longer sense magic.");
         break;
     case 59:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_STERILITY;
-        glm_ptr->muta_desc = _("周りの全ての者に頭痛を起こすことができる。", "You can give everything around you a headache.");
+        glm_ptr->muta_desc = _("たくさんの安堵の吐息が聞こえた。", "You hear a massed sigh of relief.");
         break;
     case 60:
     case 61:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_HIT_AND_AWAY;
-        glm_ptr->muta_desc = _("突然、泥棒の気分が分かるようになった。", "You suddenly understand how thieves feel.");
+        glm_ptr->muta_desc = _("あちこちへ跳べる気分がなくなった。", "You no longer feel jumpy.");
         break;
     case 62:
     case 63:
     case 64:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_DAZZLE;
-        glm_ptr->muta_desc = _("眩い閃光を発する能力を得た。", "You gain the ability to emit dazzling lights.");
+        glm_ptr->muta_desc = _("まばゆい閃光を発する能力を失った。", "You lose the ability to emit dazzling lights.");
         break;
     case 65:
     case 66:
     case 67:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_LASER_EYE;
-        glm_ptr->muta_desc = _("あなたの目は一瞬焼け付いた。", "Your eyes burn for a moment.");
+        glm_ptr->muta_desc = _("眼が少しの間焼き付いて、痛みが和らいだ。", "Your eyes burn for a moment, then feel soothed.");
         break;
     case 68:
     case 69:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_RECALL;
-        glm_ptr->muta_desc = _("少しだけホームシックになったが、すぐ直った。", "You feel briefly homesick, but it passes.");
+        glm_ptr->muta_desc = _("少しの間ホームシックになった。", "You feel briefly homesick.");
         break;
     case 70:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_BANISH;
-        glm_ptr->muta_desc = _("神聖な怒りの力に満たされた。", "You feel a holy wrath fill you.");
+        glm_ptr->muta_desc = _("神聖な怒りの力を感じなくなった。", "You no longer feel a holy wrath.");
         break;
     case 71:
     case 72:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_COLD_TOUCH;
-        glm_ptr->muta_desc = _("あなたの両手はとても冷たくなった。", "Your hands get very cold.");
+        glm_ptr->muta_desc = _("手が暖かくなった。", "Your hands warm up.");
         break;
     case 73:
     case 74:
         glm_ptr->muta_class = &(creature_ptr->muta1);
         glm_ptr->muta_which = MUT1_LAUNCHER;
-        glm_ptr->muta_desc = _("あなたの物を投げる手はかなり強くなった気がする。", "Your throwing arm feels much stronger.");
+        glm_ptr->muta_desc = _("物を投げる手が弱くなった気がする。", "Your throwing arm feels much weaker.");
         break;
     case 75:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_BERS_RAGE;
-        glm_ptr->muta_desc = _("あなたは狂暴化の発作を起こすようになった！", "You become subject to fits of berserk rage!");
+        glm_ptr->muta_desc = _("凶暴化の発作にさらされなくなった！", "You are no longer subject to fits of berserk rage!");
         break;
     case 76:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_COWARDICE;
-        glm_ptr->muta_desc = _("信じられないくらい臆病になった！", "You become an incredible coward!");
+        glm_ptr->muta_desc = _("もう信じがたいほど臆病ではなくなった！", "You are no longer an incredible coward!");
         break;
     case 77:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_RTELEPORT;
-        glm_ptr->muta_desc = _("あなたの位置は非常に不確定になった。", "Your position seems very uncertain...");
+        glm_ptr->muta_desc = _("あなたの位置はより確定的になった。", "Your position seems more certain.");
         break;
     case 78:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_ALCOHOL;
-        glm_ptr->muta_desc = _("あなたはアルコールを分泌するようになった。", "Your body starts producing alcohol!");
+        glm_ptr->muta_desc = _("あなたはアルコールを分泌しなくなった！", "Your body stops producing alcohol!");
         break;
     case 79:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_HALLU;
-        glm_ptr->muta_desc = _("あなたは幻覚を引き起こす精神錯乱に侵された。", "You are afflicted by a hallucinatory insanity!");
+        glm_ptr->muta_desc = _("幻覚をひき起こす精神障害を起こさなくなった！", "You are no longer afflicted by a hallucinatory insanity!");
         break;
     case 80:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_FLATULENT;
-        glm_ptr->muta_desc = _("あなたは制御不能な強烈な屁をこくようになった。", "You become subject to uncontrollable flatulence.");
+        glm_ptr->muta_desc = _("もう強烈な屁はこかなくなった。", "You are no longer subject to uncontrollable flatulence.");
         break;
     case 81:
     case 82:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_SCOR_TAIL;
-        glm_ptr->muta_desc = _("サソリの尻尾が生えてきた！", "You grow a scorpion tail!");
+        glm_ptr->muta_desc = _("サソリの尻尾がなくなった！", "You lose your scorpion tail!");
         break;
     case 83:
     case 84:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_HORNS;
-        glm_ptr->muta_desc = _("額に角が生えた！", "Horns pop forth into your forehead!");
+        glm_ptr->muta_desc = _("額から角が消えた！", "Your horns vanish from your forehead!");
         break;
     case 85:
     case 86:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_BEAK;
-        glm_ptr->muta_desc = _("口が鋭く強いクチバシに変化した！", "Your mouth turns into a sharp, powerful beak!");
+        glm_ptr->muta_desc = _("口が普通に戻った！", "Your mouth reverts to normal!");
         break;
     case 87:
     case 88:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_ATT_DEMON;
-        glm_ptr->muta_desc = _("悪魔を引き付けるようになった。", "You start attracting demons.");
+        glm_ptr->muta_desc = _("デーモンを引き寄せなくなった。", "You stop attracting demons.");
         break;
     case 89:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_PROD_MANA;
-        glm_ptr->muta_desc = _("あなたは制御不能な魔法のエネルギーを発生するようになった。", "You start producing magical energy uncontrollably.");
+        glm_ptr->muta_desc = _("制御不能な魔法のエネルギーを発生しなくなった。", "You stop producing magical energy uncontrollably.");
         break;
     case 90:
     case 91:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_SPEED_FLUX;
-        glm_ptr->muta_desc = _("あなたは躁鬱質になった。", "You become manic-depressive.");
+        glm_ptr->muta_desc = _("躁鬱質でなくなった。", "You are no longer manic-depressive.");
         break;
     case 92:
     case 93:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_BANISH_ALL;
-        glm_ptr->muta_desc = _("恐ろしい力があなたの背後に潜んでいる気がする。", "You feel a terrifying power lurking behind you.");
+        glm_ptr->muta_desc = _("背後に恐ろしい力を感じなくなった。", "You no longer feel a terrifying power lurking behind you.");
         break;
     case 94:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_EAT_LIGHT;
-        glm_ptr->muta_desc = _("あなたはウンゴリアントに奇妙な親しみを覚えるようになった。", "You feel a strange kinship with Ungoliant.");
+        glm_ptr->muta_desc = _("世界が明るいと感じる。", "You feel the world's a brighter place.");
         break;
     case 95:
     case 96:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_TRUNK;
-        glm_ptr->muta_desc = _("あなたの鼻は伸びて象の鼻のようになった。", "Your nose grows into an elephant-like trunk.");
+        glm_ptr->muta_desc = _("鼻が普通の長さに戻った。", "Your nose returns to a normal length.");
         break;
     case 97:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_ATT_ANIMAL;
-        glm_ptr->muta_desc = _("動物を引き付けるようになった。", "You start attracting animals.");
+        glm_ptr->muta_desc = _("動物を引き寄せなくなった。", "You stop attracting animals.");
         break;
     case 98:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_TENTACLES;
-        glm_ptr->muta_desc = _("邪悪な触手が体の両側に生えてきた。", "Evil-looking tentacles sprout from your sides.");
+        glm_ptr->muta_desc = _("触手が消えた。", "Your tentacles vanish from your sides.");
         break;
     case 99:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_RAW_CHAOS;
-        glm_ptr->muta_desc = _("周囲の空間が不安定になった気がする。", "You feel the universe is less stable around you.");
+        glm_ptr->muta_desc = _("周囲の空間が安定した気がする。", "You feel the universe is more stable around you.");
         break;
     case 100:
     case 101:
     case 102:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_NORMALITY;
-        glm_ptr->muta_desc = _("あなたは奇妙なほど普通になった気がする。", "You feel strangely normal.");
+        glm_ptr->muta_desc = _("普通に奇妙な感じがする。", "You feel normally strange.");
         break;
     case 103:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_WRAITH;
-        glm_ptr->muta_desc = _("あなたは幽体化したり実体化したりするようになった。", "You start to fade in and out of the physical world.");
+        glm_ptr->muta_desc = _("あなたは物質世界にしっかり存在している。", "You are firmly in the physical world.");
         break;
     case 104:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_POLY_WOUND;
-        glm_ptr->muta_desc = _("あなたはカオスの力が古い傷に入り込んでくるのを感じた。", "You feel forces of chaos entering your old scars.");
+        glm_ptr->muta_desc = _("古い傷からカオスの力が去っていった。", "You feel forces of chaos departing your old scars.");
         break;
     case 105:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_WASTING;
-        glm_ptr->muta_desc = _("あなたは突然おぞましい衰弱病にかかった。", "You suddenly contract a horrible wasting disease.");
+        glm_ptr->muta_desc = _("おぞましい衰弱病が治った！", "You are cured of the horrible wasting disease!");
         break;
     case 106:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_ATT_DRAGON;
-        glm_ptr->muta_desc = _("あなたはドラゴンを引きつけるようになった。", "You start attracting dragons.");
+        glm_ptr->muta_desc = _("ドラゴンを引き寄せなくなった。", "You stop attracting dragons.");
         break;
     case 107:
     case 108:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_WEIRD_MIND;
-        glm_ptr->muta_desc = _("あなたの思考は突然おかしな方向に向き始めた。", "Your thoughts suddenly take off in strange directions.");
+        glm_ptr->muta_desc = _("思考が退屈な方向に戻った。", "Your thoughts return to boring paths.");
         break;
     case 109:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_NAUSEA;
-        glm_ptr->muta_desc = _("胃袋がピクピクしはじめた。", "Your stomach starts to roil nauseously.");
+        glm_ptr->muta_desc = _("胃が痙攣しなくなった。", "Your stomach stops roiling.");
         break;
     case 110:
     case 111:
-        if (creature_ptr->pclass == CLASS_CHAOS_WARRIOR)
-            break;
-
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_CHAOS_GIFT;
-        glm_ptr->muta_desc = _("あなたはカオスの守護悪魔の注意を惹くようになった。", "You attract the notice of a chaos deity!");
+        glm_ptr->muta_desc = _("混沌の神々の興味を惹かなくなった。", "You lose the attention of the chaos deities.");
         break;
     case 112:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_WALK_SHAD;
-        glm_ptr->muta_desc = _("あなたは現実が紙のように薄いと感じるようになった。", "You feel like reality is as thin as paper.");
+        glm_ptr->muta_desc = _("物質世界に捕らわれている気がする。", "You feel like you're trapped in reality.");
         break;
     case 113:
     case 114:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_WARNING;
-        glm_ptr->muta_desc = _("あなたは突然パラノイアになった気がする。", "You suddenly feel paranoid.");
+        glm_ptr->muta_desc = _("パラノイアでなくなった。", "You no longer feel paranoid.");
         break;
     case 115:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_INVULN;
-        glm_ptr->muta_desc = _("あなたは祝福され、無敵状態になる発作を起こすようになった。", "You are blessed with fits of invulnerability.");
+        glm_ptr->muta_desc = _("無敵状態の発作を起こさなくなった。", "You are no longer blessed with fits of invulnerability.");
         break;
     case 116:
     case 117:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_SP_TO_HP;
-        glm_ptr->muta_desc = _("魔法の治癒の発作を起こすようになった。", "You are subject to fits of magical healing.");
+        glm_ptr->muta_desc = _("魔法の治癒の発作に襲われなくなった。", "You are no longer subject to fits of magical healing.");
         break;
     case 118:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_HP_TO_SP;
-        glm_ptr->muta_desc = _("痛みを伴う精神明瞭化の発作を起こすようになった。", "You are subject to fits of painful clarity.");
+        glm_ptr->muta_desc = _("痛みを伴う精神明瞭化の発作に襲われなくなった。", "You are no longer subject to fits of painful clarity.");
         break;
     case 119:
         glm_ptr->muta_class = &(creature_ptr->muta2);
         glm_ptr->muta_which = MUT2_DISARM;
-        glm_ptr->muta_desc = _("あなたの脚は長さが四倍になった。", "Your feet grow to four times their former size.");
+        glm_ptr->muta_desc = _("脚が元の大きさに戻った。", "Your feet shrink to their former size.");
         break;
     case 120:
     case 121:
     case 122:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_HYPER_STR;
-        glm_ptr->muta_desc = _("超人的に強くなった！", "You turn into a superhuman he-man!");
+        glm_ptr->muta_desc = _("筋肉が普通に戻った。", "Your muscles revert to normal.");
         break;
     case 123:
     case 124:
     case 125:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_PUNY;
-        glm_ptr->muta_desc = _("筋肉が弱ってしまった...", "Your muscles wither away...");
+        glm_ptr->muta_desc = _("筋肉が普通に戻った。", "Your muscles revert to normal.");
         break;
     case 126:
     case 127:
     case 128:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_HYPER_INT;
-        glm_ptr->muta_desc = _("あなたの脳は生体コンピュータに進化した！", "Your brain evolves into a living computer!");
+        glm_ptr->muta_desc = _("脳が普通に戻った。", "Your brain reverts to normal.");
         break;
     case 129:
     case 130:
     case 131:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_MORONIC;
-        glm_ptr->muta_desc = _("脳が萎縮してしまった...", "Your brain withers away...");
+        glm_ptr->muta_desc = _("脳が普通に戻った。", "Your brain reverts to normal.");
         break;
     case 132:
     case 133:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_RESILIENT;
-        glm_ptr->muta_desc = _("並外れてタフになった。", "You become extraordinarily resilient.");
+        glm_ptr->muta_desc = _("普通の丈夫さに戻った。", "You become ordinarily resilient again.");
         break;
     case 134:
     case 135:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_XTRA_FAT;
-        glm_ptr->muta_desc = _("あなたは気持ち悪いくらい太った！", "You become sickeningly fat!");
+        glm_ptr->muta_desc = _("奇跡的なダイエットに成功した！", "You benefit from a miracle diet!");
         break;
     case 136:
     case 137:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_ALBINO;
-        glm_ptr->muta_desc = _("アルビノになった！弱くなった気がする...", "You turn into an albino! You feel frail...");
+        glm_ptr->muta_desc = _("アルビノでなくなった！", "You are no longer an albino!");
         break;
     case 138:
     case 139:
     case 140:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_FLESH_ROT;
-        glm_ptr->muta_desc = _("あなたの肉体は腐敗する病気に侵された！", "Your flesh is afflicted by a rotting disease!");
+        glm_ptr->muta_desc = _("肉体を腐敗させる病気が治った！", "Your flesh is no longer afflicted by a rotting disease!");
         break;
     case 141:
     case 142:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_SILLY_VOI;
-        glm_ptr->muta_desc = _("声が間抜けなキーキー声になった！", "Your voice turns into a ridiculous squeak!");
+        glm_ptr->muta_desc = _("声質が普通に戻った。", "Your voice returns to normal.");
         break;
     case 143:
     case 144:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_BLANK_FAC;
-        glm_ptr->muta_desc = _("のっぺらぼうになった！", "Your face becomes completely featureless!");
+        glm_ptr->muta_desc = _("顔に目鼻が戻った。", "Your facial features return.");
         break;
     case 145:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_ILL_NORM;
-        glm_ptr->muta_desc = _("心の安らぐ幻影を映し出すようになった。", "You start projecting a reassuring image.");
+        glm_ptr->muta_desc = _("心が安らぐ幻影を映し出さなくなった。", "You stop projecting a reassuring image.");
         break;
     case 146:
     case 147:
     case 148:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_XTRA_EYES;
-        glm_ptr->muta_desc = _("新たに二つの目が出来た！", "You grow an extra pair of eyes!");
+        glm_ptr->muta_desc = _("余分な目が消えてしまった！", "Your extra eyes vanish!");
         break;
     case 149:
     case 150:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_MAGIC_RES;
-        glm_ptr->muta_desc = _("魔法への耐性がついた。", "You become resistant to magic.");
+        glm_ptr->muta_desc = _("魔法に弱くなった。", "You become susceptible to magic again.");
         break;
     case 151:
     case 152:
     case 153:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_XTRA_NOIS;
-        glm_ptr->muta_desc = _("あなたは奇妙な音を立て始めた！", "You start making strange noise!");
+        glm_ptr->muta_desc = _("奇妙な音を立てなくなった！", "You stop making strange noise!");
         break;
     case 154:
     case 155:
     case 156:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_INFRAVIS;
-        glm_ptr->muta_desc = _("赤外線視力が増した。", "Your infravision is improved.");
+        glm_ptr->muta_desc = _("赤外線視力が落ちた。", "Your infravision is degraded.");
         break;
     case 157:
     case 158:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_XTRA_LEGS;
-        glm_ptr->muta_desc = _("新たに二本の足が生えてきた！", "You grow an extra pair of legs!");
+        glm_ptr->muta_desc = _("余分な脚が消えてしまった！", "Your extra legs disappear!");
         break;
     case 159:
     case 160:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_SHORT_LEG;
-        glm_ptr->muta_desc = _("足が短い突起になってしまった！", "Your legs turn into short stubs!");
+        glm_ptr->muta_desc = _("脚の長さが普通に戻った。", "Your legs lengthen to normal.");
         break;
     case 161:
     case 162:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_ELEC_TOUC;
-        glm_ptr->muta_desc = _("血管を電流が流れ始めた！", "Electricity starts running through you!");
+        glm_ptr->muta_desc = _("体を電流が流れなくなった。", "Electricity stops running through you.");
         break;
     case 163:
     case 164:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_FIRE_BODY;
-        glm_ptr->muta_desc = _("あなたの体は炎につつまれている。", "Your body is enveloped in flames!");
+        glm_ptr->muta_desc = _("体が炎に包まれなくなった。", "Your body is no longer enveloped in flames.");
         break;
     case 165:
     case 166:
     case 167:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_WART_SKIN;
-        glm_ptr->muta_desc = _("気持ち悪いイボイボが体中にできた！", "Disgusting warts appear everywhere on you!");
+        glm_ptr->muta_desc = _("イボイボが消えた！", "Your warts disappear!");
         break;
     case 168:
     case 169:
     case 170:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_SCALES;
-        glm_ptr->muta_desc = _("肌が黒い鱗に変わった！", "Your skin turns into black scales!");
+        glm_ptr->muta_desc = _("鱗が消えた！", "Your scales vanish!");
         break;
     case 171:
     case 172:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_IRON_SKIN;
-        glm_ptr->muta_desc = _("あなたの肌は鉄になった！", "Your skin turns to steel!");
+        glm_ptr->muta_desc = _("肌が肉にもどった！", "Your skin reverts to flesh!");
         break;
     case 173:
     case 174:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_WINGS;
-        glm_ptr->muta_desc = _("背中に羽が生えた。", "You grow a pair of wings.");
+        glm_ptr->muta_desc = _("背中の羽根が取れ落ちた。", "Your wings fall off.");
         break;
     case 175:
     case 176:
     case 177:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_FEARLESS;
-        glm_ptr->muta_desc = _("完全に怖れ知らずになった。", "You become completely fearless.");
+        glm_ptr->muta_desc = _("再び恐怖を感じるようになった。", "You begin to feel fear again.");
         break;
     case 178:
     case 179:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_REGEN;
-        glm_ptr->muta_desc = _("急速に回復し始めた。", "You start regenerating.");
+        glm_ptr->muta_desc = _("急速回復しなくなった。", "You stop regenerating.");
         break;
     case 180:
     case 181:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_ESP;
-        glm_ptr->muta_desc = _("テレパシーの能力を得た！", "You develop a telepathic ability!");
+        glm_ptr->muta_desc = _("テレパシーの能力を失った！", "You lose your telepathic ability!");
         break;
     case 182:
     case 183:
     case 184:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_LIMBER;
-        glm_ptr->muta_desc = _("筋肉がしなやかになった。", "Your muscles become limber.");
+        glm_ptr->muta_desc = _("筋肉が硬くなった。", "Your muscles stiffen.");
         break;
     case 185:
     case 186:
     case 187:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_ARTHRITIS;
-        glm_ptr->muta_desc = _("関節が突然痛み出した。", "Your joints suddenly hurt.");
+        glm_ptr->muta_desc = _("関節が痛くなくなった。", "Your joints stop hurting.");
         break;
     case 188:
-        if (creature_ptr->pseikaku == PERSONALITY_LUCKY)
-            break;
-
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_BAD_LUCK;
-        glm_ptr->muta_desc = _("悪意に満ちた黒いオーラがあなたをとりまいた...", "There is a malignant black aura surrounding you...");
+        glm_ptr->muta_desc = _("黒いオーラは渦巻いて消えた。", "Your black aura swirls and fades.");
         break;
     case 189:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_VULN_ELEM;
-        glm_ptr->muta_desc = _("妙に無防備になった気がする。", "You feel strangely exposed.");
+        glm_ptr->muta_desc = _("無防備な感じはなくなった。", "You feel less exposed.");
         break;
     case 190:
     case 191:
     case 192:
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_MOTION;
-        glm_ptr->muta_desc = _("体の動作がより正確になった。", "You move with new assurance.");
+        glm_ptr->muta_desc = _("動作の正確さがなくなった。", "You move with less assurance.");
         break;
     case 193:
+        if (creature_ptr->pseikaku == PERSONALITY_LUCKY)
+            break;
+
         glm_ptr->muta_class = &(creature_ptr->muta3);
         glm_ptr->muta_which = MUT3_GOOD_LUCK;
-        glm_ptr->muta_desc = _("慈悲深い白いオーラがあなたをとりまいた...", "There is a benevolent white aura surrounding you...");
+        glm_ptr->muta_desc = _("白いオーラは輝いて消えた。", "Your white aura shimmers and fades.");
         break;
     default:
         glm_ptr->muta_class = NULL;

@@ -49,7 +49,7 @@
 #include "market/poker.h"
 #include "monster-race/monster-race.h"
 #include "mutation/mutation-flag-types.h"
-#include "mutation/mutation.h"
+#include "mutation/mutation-investor-remover.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-bow.h"
 #include "object-hook/hook-weapon.h"

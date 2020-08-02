@@ -45,65 +45,10 @@
 #include "util/sort.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
-#include "wizard/spoiler-table.h"
-
-/* ITEM_SEP separates items within a list */
-#define ITEM_SEP ','
-
-/* LIST_SEP separates lists */
-#define LIST_SEP _(',', ';')
-
-#define MAX_EVOL_DEPTH 64
-
-/*
- * These are used to format the artifact spoiler file. INDENT1 is used
- * to indent all but the first line of an artifact spoiler. INDENT2 is
- * used when a line "wraps". (Bladeturner's resistances cause this.)
- */
-#define INDENT1 "    "
-#define INDENT2 "      "
-
-/* MAX_LINE_LEN specifies when a line should wrap. */
-#define MAX_LINE_LEN 75
-
-/* Returns a "+" string if a number is non-negative and an empty string if negative */
-#define POSITIZE(v) (((v) >= 0) ? "+" : "")
-
-/* Given an array, determine how many elements are in the array */
-#define N_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
-
-/* A special type used just for deailing with pvals */
-typedef struct pval_info_type {
-    char pval_desc[12]; /* This will contain a string such as "+2", "-10", etc. */
-
-    /* A list of various player traits affected by an object's pval such as stats, speed, stealth, etc. */
-    concptr pval_affects[N_ELEMENTS(stat_flags_desc) - 1 + N_ELEMENTS(pval_flags1_desc) + 1];
-} pval_info_type;
-
-typedef struct obj_desc_list {
-    char description[MAX_NLEN]; /* "The Longsword Dragonsmiter (6d4) (+20, +25)" */
-    pval_info_type pval_info; /* Description of what is affected by an object's pval */
-    concptr slays[N_ELEMENTS(slay_flags_desc) + 1]; /* A list of an object's slaying preferences */
-    concptr brands[N_ELEMENTS(brand_flags_desc) + 1]; /* A list if an object's elemental brands */
-    concptr immunities[N_ELEMENTS(immune_flags_desc) + 1]; /* A list of immunities granted by an object */
-    concptr resistances[N_ELEMENTS(resist_flags_desc) + 1]; /* A list of resistances granted by an object */
-    concptr sustains[N_ELEMENTS(sustain_flags_desc) - 1 + 1]; /* A list of stats sustained by an object */
-
-    /* A list of various magical qualities an object may have */
-    concptr misc_magic[N_ELEMENTS(misc_flags2_desc) + N_ELEMENTS(misc_flags3_desc) + 1 /* Permanent Light */
-        + 1 /* TY curse */
-        + 1 /* type of curse */
-        + 1]; /* sentinel NULL */
-
-    char addition[80]; /* Additional ability or resistance */
-    concptr activation; /* A string describing an artifact's activation */
-    char misc_desc[80]; /* "Level 20, Rarity 30, 3.0 lbs, 20000 Gold" */
-} obj_desc_list;
-
-/*
- * The spoiler file being created
- */
-static FILE *spoiler_file = NULL;
+#include "wizard/artifact-analyzer.h"
+#include "wizard/fixed-artifact-spoiler.h"
+#include "wizard/items-spoiler.h"
+#include "wizard/spoiler-util.h"
 
 /*!
  * @brief シンボル職の記述名を返す /
@@ -158,670 +103,6 @@ static concptr attr_to_text(monster_race *r_ptr)
     }
 
     return _("変な色の", "Icky");
-}
-
-/*!
- * @brief ベースアイテムの各情報を文字列化する /
- * Describe the kind
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param buf 名称を返すバッファ参照ポインタ
- * @param dam ダメージダイス記述を返すバッファ参照ポインタ
- * @param wgt 重量記述を返すバッファ参照ポインタ
- * @param lev 生成階記述を返すバッファ参照ポインタ
- * @param chance 生成機会を返すバッファ参照ポインタ
- * @param val 価値を返すバッファ参照ポインタ
- * @param k ベースアイテムID
- * @return なし
- */
-static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, OBJECT_IDX k)
-{
-    object_type forge;
-    object_type *q_ptr;
-    int i;
-    q_ptr = &forge;
-
-    object_prep(player_ptr, q_ptr, k);
-    q_ptr->ident |= (IDENT_KNOWN);
-    q_ptr->pval = 0;
-    q_ptr->to_a = 0;
-    q_ptr->to_h = 0;
-    q_ptr->to_d = 0;
-
-    (*lev) = k_info[q_ptr->k_idx].level;
-    (*val) = object_value(player_ptr, q_ptr);
-    if (!buf || !dam || !chance || !wgt)
-        return;
-
-    describe_flavor(player_ptr, buf, q_ptr, (OD_NAME_ONLY | OD_STORE));
-    strcpy(dam, "");
-    switch (q_ptr->tval) {
-    case TV_BOW: {
-        break;
-    }
-    case TV_SHOT:
-    case TV_BOLT:
-    case TV_ARROW: {
-        sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
-        break;
-    }
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_SWORD:
-    case TV_DIGGING: {
-        sprintf(dam, "%dd%d", q_ptr->dd, q_ptr->ds);
-        break;
-    }
-    case TV_BOOTS:
-    case TV_GLOVES:
-    case TV_CLOAK:
-    case TV_CROWN:
-    case TV_HELM:
-    case TV_SHIELD:
-    case TV_SOFT_ARMOR:
-    case TV_HARD_ARMOR:
-    case TV_DRAG_ARMOR: {
-        sprintf(dam, "%d", q_ptr->ac);
-        break;
-    }
-    }
-
-    strcpy(chance, "");
-    for (i = 0; i < 4; i++) {
-        char chance_aux[20] = "";
-        if (k_info[q_ptr->k_idx].chance[i] > 0) {
-            sprintf(chance_aux, "%s%3dF:%+4d", (i != 0 ? "/" : ""), (int)k_info[q_ptr->k_idx].locale[i], 100 / k_info[q_ptr->k_idx].chance[i]);
-            strcat(chance, chance_aux);
-        }
-    }
-
-    sprintf(wgt, "%3d.%d", (int)(q_ptr->weight / 10), (int)(q_ptr->weight % 10));
-}
-
-/*!
- * @brief 各ベースアイテムの情報を一行毎に記述する /
- * @param player_ptr プレーヤーへの参照ポインタ
- * Create a spoiler file for items
- * @param fname ファイル名
- * @return なし
- */
-static void spoil_obj_desc(player_type *player_ptr, concptr fname)
-{
-    int i, k, s, t, n = 0, group_start = 0;
-    OBJECT_IDX who[200];
-    char buf[1024];
-    char wgt[80];
-    char chance[80];
-    char dam[80];
-
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-    spoiler_file = angband_fopen(buf, "w");
-
-    if (!spoiler_file) {
-        msg_print("Cannot create spoiler file.");
-        return;
-    }
-
-    fprintf(spoiler_file, "Spoiler File -- Basic Items (Hengband %d.%d.%d.%d)\n\n\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
-    fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
-    fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
-    for (i = 0; TRUE; i++) {
-        if (group_item[i].name) {
-            if (n) {
-                for (s = 0; s < n - 1; s++) {
-                    for (t = 0; t < n - 1; t++) {
-                        int i1 = t;
-                        int i2 = t + 1;
-
-                        DEPTH e1;
-                        DEPTH e2;
-
-                        PRICE t1;
-                        PRICE t2;
-
-                        kind_info(player_ptr, NULL, NULL, NULL, NULL, &e1, &t1, who[i1]);
-                        kind_info(player_ptr, NULL, NULL, NULL, NULL, &e2, &t2, who[i2]);
-
-                        if ((t1 > t2) || ((t1 == t2) && (e1 > e2))) {
-                            u16b tmp = who[i1];
-                            who[i1] = who[i2];
-                            who[i2] = tmp;
-                        }
-                    }
-                }
-
-                fprintf(spoiler_file, "\n\n%s\n\n", group_item[group_start].name);
-                for (s = 0; s < n; s++) {
-                    DEPTH e;
-                    PRICE v;
-                    kind_info(player_ptr, buf, dam, wgt, chance, &e, &v, who[s]);
-                    fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, (int)e, chance, (long)(v));
-                }
-
-                n = 0;
-            }
-
-            if (!group_item[i].tval)
-                break;
-
-            group_start = i;
-        }
-
-        for (k = 1; k < max_k_idx; k++) {
-            object_kind *k_ptr = &k_info[k];
-            if ((k_ptr->tval != group_item[i].tval) || (k_ptr->gen_flags & TRG_INSTA_ART))
-                continue;
-
-            who[n++] = (u16b)k;
-        }
-    }
-
-    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        msg_print("Cannot close spoiler file.");
-        return;
-    }
-
-    msg_print("Successfully created a spoiler file.");
-}
-
-/*!
- * @brief ファイルポインタ先に同じ文字を複数出力する /
- * Write out `n' of the character `c' to the spoiler file
- * @param n 出力する数
- * @param c 出力するキャラクタ
- * @return なし
- */
-static void spoiler_out_n_chars(int n, char c)
-{
-    while (--n >= 0)
-        fputc(c, spoiler_file);
-}
-
-/*!
- * @brief ファイルポインタ先に改行を複数出力する /
- * Write out `n' blank lines to the spoiler file
- * @param n 改行を出力する数
- * @return なし
- */
-static void spoiler_blanklines(int n) { spoiler_out_n_chars(n, '\n'); }
-
-/*!
- * @brief ファイルポインタ先に複数のハイフンで装飾した文字列を出力する /
- * Write a line to the spoiler file and then "underline" it with hypens
- * @param str 出力したい文字列
- * @return なし
- */
-static void spoiler_underline(concptr str)
-{
-    fprintf(spoiler_file, "%s\n", str);
-    spoiler_out_n_chars(strlen(str), '-');
-    fprintf(spoiler_file, "\n");
-}
-
-/*!
- * @brief アーティファクトの特性一覧を出力する /
- * Write a line to the spoiler file and then "underline" it with hypens
- * @param art_flags アーティファクトのフラグ群
- * @param flag_ptr フラグ記述情報の参照ポインタ
- * @param desc_ptr 記述内容を返すための文字列参照ポインタ
- * @param n_elmnts フラグの要素数
- * @return desc_ptrと同じアドレス
- * @details
- * <pre>
- * This function does most of the actual "analysis". Given a set of bit flags
- * (which will be from one of the flags fields from the object in question),
- * a "flag description structure", a "description list", and the number of
- * elements in the "flag description structure", this function sets the
- * "description list" members to the appropriate descriptions contained in
- * the "flag description structure".
- * The possibly updated description pointer is returned.
- * </pre>
- */
-static concptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE], const flag_desc *flag_ptr, concptr *desc_ptr, const int n_elmnts)
-{
-    for (int i = 0; i < n_elmnts; ++i) {
-        if (have_flag(art_flags, flag_ptr[i].flag)) {
-            *desc_ptr++ = flag_ptr[i].desc;
-        }
-    }
-
-    return desc_ptr;
-}
-
-/*!
- * @brief アイテムの特定記述内容を返す /
- * Acquire a "basic" description "The Cloak of Death [1,+10]"
- * @param o_ptr 記述を得たいオブジェクトの参照ポインタ
- * @param desc_ptr 記述内容を返すための文字列参照ポインタ
- * @return なし
- */
-static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *desc_ptr)
-{
-    describe_flavor(player_ptr, desc_ptr, o_ptr, (OD_NAME_AND_ENCHANT | OD_STORE));
-}
-
-/*!
- * @brief アーティファクトがプレイヤーに与えるpval修正を構造体に収める /
- * List "player traits" altered by an artifact's pval. These include stats,
- * speed, infravision, tunneling, stealth, searching, and extra attacks.
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param pi_ptr pval修正構造体の参照ポインタ
- * @return なし
- */
-static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_type *pi_ptr)
-{
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    concptr *affects_list;
-    if (!o_ptr->pval) {
-        pi_ptr->pval_desc[0] = '\0';
-        return;
-    }
-
-    object_flags(player_ptr, o_ptr, flgs);
-    affects_list = pi_ptr->pval_affects;
-    sprintf(pi_ptr->pval_desc, "%s%d", POSITIZE(o_ptr->pval), o_ptr->pval);
-    if (have_flag(flgs, TR_STR) && have_flag(flgs, TR_INT) && have_flag(flgs, TR_WIS) && have_flag(flgs, TR_DEX) && have_flag(flgs, TR_CON)
-        && have_flag(flgs, TR_CHR)) {
-        *affects_list++ = _("全能力", "All stats");
-    } else if (have_flag(flgs, TR_STR) || have_flag(flgs, TR_INT) || have_flag(flgs, TR_WIS) || have_flag(flgs, TR_DEX) || have_flag(flgs, TR_CON)
-        || have_flag(flgs, TR_CHR)) {
-        affects_list = spoiler_flag_aux(flgs, stat_flags_desc, affects_list, N_ELEMENTS(stat_flags_desc));
-    }
-
-    affects_list = spoiler_flag_aux(flgs, pval_flags1_desc, affects_list, N_ELEMENTS(pval_flags1_desc));
-    *affects_list = NULL;
-}
-
-/*!
- * @brief アーティファクトの種族スレイ特性を構造体に収める /
- * Note the slaying specialties of a weapon
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param slay_list 種族スレイ構造体の参照ポインタ
- * @return なし
- */
-static void analyze_slay(player_type *player_ptr, object_type *o_ptr, concptr *slay_list)
-{
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(player_ptr, o_ptr, flgs);
-    slay_list = spoiler_flag_aux(flgs, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
-    *slay_list = NULL;
-}
-
-/*!
- * @brief アーティファクトの属性ブランド特性を構造体に収める /
- * Note an object's elemental brands
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param brand_list 属性ブランド構造体の参照ポインタ
- * @return なし
- */
-static void analyze_brand(player_type *player_ptr, object_type *o_ptr, concptr *brand_list)
-{
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(player_ptr, o_ptr, flgs);
-    brand_list = spoiler_flag_aux(flgs, brand_flags_desc, brand_list, N_ELEMENTS(brand_flags_desc));
-    *brand_list = NULL;
-}
-
-/*!
- * @brief アーティファクトの通常耐性を構造体に収める /
- * Note an object's elemental brands
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param resist_list 通常耐性構造体の参照ポインタ
- * @return なし
- */
-static void analyze_resist(player_type *player_ptr, object_type *o_ptr, concptr *resist_list)
-{
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(player_ptr, o_ptr, flgs);
-    resist_list = spoiler_flag_aux(flgs, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
-    *resist_list = NULL;
-}
-
-/*!
- * @brief アーティファクトの免疫特性を構造体に収める /
- * Note the immunities granted by an object
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param immune_list 免疫構造体の参照ポインタ
- * @return なし
- */
-static void analyze_immune(player_type *player_ptr, object_type *o_ptr, concptr *immune_list)
-{
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(player_ptr, o_ptr, flgs);
-    immune_list = spoiler_flag_aux(flgs, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
-    *immune_list = NULL;
-}
-
-/*!
- * @brief アーティファクトの維持特性を構造体に収める /
- * Note which stats an object sustains
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param sustain_list 維持特性構造体の参照ポインタ
- * @return なし
- */
-static void analyze_sustains(player_type *player_ptr, object_type *o_ptr, concptr *sustain_list)
-{
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(player_ptr, o_ptr, flgs);
-    if (have_flag(flgs, TR_SUST_STR) && have_flag(flgs, TR_SUST_INT) && have_flag(flgs, TR_SUST_WIS) && have_flag(flgs, TR_SUST_DEX)
-        && have_flag(flgs, TR_SUST_CON) && have_flag(flgs, TR_SUST_CHR)) {
-        *sustain_list++ = _("全能力", "All stats");
-    } else if (have_flag(flgs, TR_SUST_STR) || have_flag(flgs, TR_SUST_INT) || have_flag(flgs, TR_SUST_WIS) || have_flag(flgs, TR_SUST_DEX)
-        || have_flag(flgs, TR_SUST_CON) || have_flag(flgs, TR_SUST_CHR)) {
-        sustain_list = spoiler_flag_aux(flgs, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
-    }
-
-    *sustain_list = NULL;
-}
-
-/*!
- * @brief アーティファクトのその他の特性を構造体に収める /
- * Note miscellaneous powers bestowed by an artifact such as see invisible,
- * free action, permanent light, etc.
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param misc_list その他の特性構造体の参照ポインタ
- * @return なし
- */
-static void analyze_misc_magic(player_type *player_ptr, object_type *o_ptr, concptr *misc_list)
-{
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    char desc[256];
-
-    object_flags(player_ptr, o_ptr, flgs);
-    misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
-    misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
-    POSITION rad = 0;
-    if (have_flag(flgs, TR_LITE_1))
-        rad += 1;
-    if (have_flag(flgs, TR_LITE_2))
-        rad += 2;
-    if (have_flag(flgs, TR_LITE_3))
-        rad += 3;
-    if (have_flag(flgs, TR_LITE_M1))
-        rad -= 1;
-    if (have_flag(flgs, TR_LITE_M2))
-        rad -= 2;
-    if (have_flag(flgs, TR_LITE_M3))
-        rad -= 3;
-
-    if (o_ptr->name2 == EGO_LITE_SHINE)
-        rad++;
-
-    if (have_flag(flgs, TR_LITE_FUEL)) {
-        if (rad > 0)
-            sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
-    } else {
-        if (rad > 0)
-            sprintf(desc, _("永久光源(半径 %d)", "Permanent Light(radius %d)"), (int)rad);
-        if (rad < 0)
-            sprintf(desc, _("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), (int)-rad);
-    }
-
-    if (rad != 0)
-        *misc_list++ = quark_str(quark_add(desc));
-
-    if (have_flag(flgs, TR_TY_CURSE))
-        *misc_list++ = _("太古の怨念", "Ancient Curse");
-
-    if (o_ptr->curse_flags & TRC_PERMA_CURSE)
-        *misc_list++ = _("永遠の呪い", "Permanently Cursed");
-    else if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
-        *misc_list++ = _("強力な呪い", "Heavily Cursed");
-    else if (o_ptr->curse_flags & TRC_CURSED)
-        *misc_list++ = _("呪い", "Cursed");
-
-    if (have_flag(flgs, TR_ADD_L_CURSE))
-        *misc_list++ = _("呪いを増やす", "Cursing");
-
-    if (have_flag(flgs, TR_ADD_H_CURSE))
-        *misc_list++ = _("強力な呪いを増やす", "Heavily Cursing");
-
-    *misc_list = NULL;
-}
-
-/*!
- * @brief アーティファクトの追加ランダム特性を構造体に収める /
- * Note additional ability and/or resistance of fixed artifacts
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param addition 追加ランダム耐性構造体の参照ポインタ
- * @return なし
- */
-static void analyze_addition(object_type *o_ptr, char *addition)
-{
-    artifact_type *a_ptr = &a_info[o_ptr->name1];
-    strcpy(addition, "");
-    if ((a_ptr->gen_flags & TRG_XTRA_POWER) && (a_ptr->gen_flags & TRG_XTRA_H_RES))
-        strcat(addition, _("能力and耐性", "Ability and Resistance"));
-    else if (a_ptr->gen_flags & TRG_XTRA_POWER) {
-        strcat(addition, _("能力", "Ability"));
-        if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER)
-            strcat(addition, _("(1/2でand耐性)", "(plus Resistance about 1/2)"));
-    } else if (a_ptr->gen_flags & TRG_XTRA_H_RES) {
-        strcat(addition, _("耐性", "Resistance"));
-        if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER)
-            strcat(addition, _("(1/2でand能力)", "(plus Ability about 1/2)"));
-    } else if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER)
-        strcat(addition, _("能力or耐性", "Ability or Resistance"));
-}
-
-/*!
- * @brief アーティファクトの基本情報を文字列に収める /
- * Determine the minimum depth an artifact can appear, its rarity, its weight,
- * and its value in gold pieces
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param misc_desc 基本情報を収める文字列参照ポインタ
- * @return なし
- */
-static void analyze_misc(object_type *o_ptr, char *misc_desc)
-{
-    artifact_type *a_ptr = &a_info[o_ptr->name1];
-    sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ptr->level, a_ptr->rarity,
-        _(lbtokg1(a_ptr->weight), a_ptr->weight / 10), _(lbtokg2(a_ptr->weight), a_ptr->weight % 10), (long int)a_ptr->cost);
-}
-
-/*!
- * @brief アーティファクトの情報全体を構造体に収める /
- * Fill in an object description structure for a given object
- * and its value in gold pieces
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
- * @return なし
- */
-static void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
-{
-    analyze_general(player_ptr, o_ptr, desc_ptr->description);
-    analyze_pval(player_ptr, o_ptr, &desc_ptr->pval_info);
-    analyze_brand(player_ptr, o_ptr, desc_ptr->brands);
-    analyze_slay(player_ptr, o_ptr, desc_ptr->slays);
-    analyze_immune(player_ptr, o_ptr, desc_ptr->immunities);
-    analyze_resist(player_ptr, o_ptr, desc_ptr->resistances);
-    analyze_sustains(player_ptr, o_ptr, desc_ptr->sustains);
-    analyze_misc_magic(player_ptr, o_ptr, desc_ptr->misc_magic);
-    analyze_addition(o_ptr, desc_ptr->addition);
-    analyze_misc(o_ptr, desc_ptr->misc_desc);
-    desc_ptr->activation = activation_explanation(player_ptr, o_ptr);
-}
-
-/*!
- * @brief バッファにアーティファクト出力情報ヘッダを収める /
- * @return なし
- */
-static void print_header(void)
-{
-    char buf[80];
-
-    sprintf(buf, "Artifact Spoilers for Hengband Version %d.%d.%d", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-    spoiler_underline(buf);
-}
-
-/*!
- * @brief フラグ名称を出力する汎用関数
- * @param header ヘッダに出力するフラグ群の名前
- * @param list フラグ名リスト
- * @param separator フラグ表示の区切り記号
- * @return なし
- */
-static void spoiler_outlist(concptr header, concptr *list, char separator)
-{
-    int buf_len;
-    char line[MAX_LINE_LEN + 1], buf[80];
-
-    if (*list == NULL)
-        return;
-
-    strcpy(line, INDENT1);
-    if (header && (header[0])) {
-        strcat(line, header);
-        strcat(line, " ");
-    }
-
-    int line_len = strlen(line);
-    while (TRUE) {
-        strcpy(buf, *list);
-        buf_len = strlen(buf);
-        if (list[1]) {
-            sprintf(buf + buf_len, "%c ", separator);
-            buf_len += 2;
-        }
-
-        if (line_len + buf_len <= MAX_LINE_LEN) {
-            strcat(line, buf);
-            line_len += buf_len;
-        } else {
-            if (line_len > 1 && line[line_len - 1] == ' ' && line[line_len - 2] == LIST_SEP) {
-                line[line_len - 2] = '\0';
-                fprintf(spoiler_file, "%s\n", line);
-                sprintf(line, "%s%s", INDENT1, buf);
-            } else {
-                fprintf(spoiler_file, "%s\n", line);
-                sprintf(line, "%s%s", INDENT2, buf);
-            }
-
-            line_len = strlen(line);
-        }
-
-        if (!*++list)
-            break;
-    }
-
-    fprintf(spoiler_file, "%s\n", line);
-}
-
-/*!
- * @brief アーティファクト一件をスポイラー出力する /
- * Create a spoiler file entry for an artifact
- * @param art_ptr アーティファクト情報をまとめた構造体の参照ポインタ
- * @return なし
- */
-static void spoiler_print_art(obj_desc_list *art_ptr)
-{
-    pval_info_type *pval_ptr = &art_ptr->pval_info;
-    char buf[80];
-    fprintf(spoiler_file, "%s\n", art_ptr->description);
-    if (pval_ptr->pval_desc[0]) {
-        sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
-        spoiler_outlist(buf, pval_ptr->pval_affects, ITEM_SEP);
-    }
-
-    spoiler_outlist(_("対:", "Slay"), art_ptr->slays, ITEM_SEP);
-    spoiler_outlist(_("武器属性:", ""), art_ptr->brands, LIST_SEP);
-    spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, ITEM_SEP);
-    spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, ITEM_SEP);
-    spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, ITEM_SEP);
-    spoiler_outlist("", art_ptr->misc_magic, LIST_SEP);
-
-    if (art_ptr->addition[0])
-        fprintf(spoiler_file, _("%s追加: %s\n", "%sAdditional %s\n"), INDENT1, art_ptr->addition);
-
-    if (art_ptr->activation)
-        fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
-
-    fprintf(spoiler_file, "%s%s\n\n", INDENT1, art_ptr->misc_desc);
-}
-
-/*!
- * @brief アーティファクト情報を出力するためにダミー生成を行う /
- * Hack -- Create a "forged" artifact
- * @param o_ptr 一時生成先を保管するオブジェクト構造体
- * @param name1 生成するアーティファクトID
- * @return 生成が成功した場合TRUEを返す
- */
-static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, IDX name1)
-{
-    artifact_type *a_ptr = &a_info[name1];
-    if (!a_ptr->name)
-        return FALSE;
-
-    OBJECT_IDX i = lookup_kind(a_ptr->tval, a_ptr->sval);
-    if (!i)
-        return FALSE;
-
-    object_prep(player_ptr, o_ptr, i);
-    o_ptr->name1 = (byte)name1;
-    o_ptr->pval = a_ptr->pval;
-    o_ptr->ac = a_ptr->ac;
-    o_ptr->dd = a_ptr->dd;
-    o_ptr->ds = a_ptr->ds;
-    o_ptr->to_a = a_ptr->to_a;
-    o_ptr->to_h = a_ptr->to_h;
-    o_ptr->to_d = a_ptr->to_d;
-    o_ptr->weight = a_ptr->weight;
-    return TRUE;
-}
-
-/*!
- * @brief アーティファクト情報のスポイラー出力を行うメインルーチン /
- * Create a spoiler file for artifacts
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param fname 生成ファイル名
- * @return なし
- */
-static void spoil_artifact(player_type *player_ptr, concptr fname)
-{
-    int i;
-    IDX j;
-    object_type forge;
-    object_type *q_ptr;
-    obj_desc_list artifact;
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-
-    spoiler_file = angband_fopen(buf, "w");
-
-    if (!spoiler_file) {
-        msg_print("Cannot create spoiler file.");
-        return;
-    }
-
-    print_header();
-    for (i = 0; group_artifact[i].tval; i++) {
-        if (group_artifact[i].name) {
-            spoiler_blanklines(2);
-            spoiler_underline(group_artifact[i].name);
-            spoiler_blanklines(1);
-        }
-
-        for (j = 1; j < max_a_idx; ++j) {
-            artifact_type *a_ptr = &a_info[j];
-            if (a_ptr->tval != group_artifact[i].tval)
-                continue;
-
-            q_ptr = &forge;
-            object_wipe(q_ptr);
-            if (!make_fake_artifact(player_ptr, q_ptr, j))
-                continue;
-
-            object_analyze(player_ptr, q_ptr, &artifact);
-            spoiler_print_art(&artifact);
-        }
-    }
-
-    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        msg_print("Cannot close spoiler file.");
-        return;
-    }
-
-    msg_print("Successfully created a spoiler file.");
 }
 
 /*!
@@ -1230,9 +511,9 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
     spoil_out(buf);
     spoil_out("------------------------------------------\n\n");
     C_MAKE(evol_tree, max_r_idx, int *);
-    C_MAKE(*evol_tree, max_r_idx * (MAX_EVOL_DEPTH + 1), int);
+    C_MAKE(*evol_tree, max_r_idx * (max_evolution_depth + 1), int);
     for (i = 1; i < max_r_idx; i++)
-        evol_tree[i] = *evol_tree + i * (MAX_EVOL_DEPTH + 1);
+        evol_tree[i] = *evol_tree + i * (max_evolution_depth + 1);
 
     evol_tree_zero = *evol_tree;
     for (i = 1; i < max_r_idx; i++) {
@@ -1245,7 +526,7 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
         do {
             evol_tree[i][n++] = r_ptr->next_r_idx;
             r_ptr = &r_info[r_ptr->next_r_idx];
-        } while (r_ptr->next_exp && (n < MAX_EVOL_DEPTH));
+        } while (r_ptr->next_exp && (n < max_evolution_depth));
     }
 
     for (i = 1; i < max_r_idx; i++) {
@@ -1284,7 +565,7 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
         fputc('\n', spoiler_file);
     }
 
-    C_KILL(evol_tree_zero, max_r_idx * (MAX_EVOL_DEPTH + 1), int);
+    C_KILL(evol_tree_zero, max_r_idx * (max_evolution_depth + 1), int);
     C_KILL(evol_tree, max_r_idx, int *);
     if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
         msg_print("Cannot close spoiler file.");
@@ -1299,7 +580,7 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
  * Create Spoiler files -BEN-
  * @return なし
  */
-void do_cmd_spoilers(player_type *player_ptr)
+void exe_output_spoilers(player_type *player_ptr)
 {
     screen_save();
     while (TRUE) {
@@ -1319,7 +600,7 @@ void do_cmd_spoilers(player_type *player_ptr)
             spoil_obj_desc(player_ptr, "obj-desc.txt");
             break;
         case '2':
-            spoil_artifact(player_ptr, "artifact.txt");
+            spoil_fixed_artifact(player_ptr, "artifact.txt");
             break;
         case '3':
             spoil_mon_desc(player_ptr, "mon-desc.txt");
@@ -1340,29 +621,6 @@ void do_cmd_spoilers(player_type *player_ptr)
 }
 
 /*!
- * @brief ランダムアーティファクト１件を解析する /
- * Fill in an object description structure for a given object
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
- * @param desc_ptr 記述内容を収める構造体参照ポインタ
- * @return なし
- */
-static void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
-{
-    analyze_general(player_ptr, o_ptr, desc_ptr->description);
-    analyze_pval(player_ptr, o_ptr, &desc_ptr->pval_info);
-    analyze_brand(player_ptr, o_ptr, desc_ptr->brands);
-    analyze_slay(player_ptr, o_ptr, desc_ptr->slays);
-    analyze_immune(player_ptr, o_ptr, desc_ptr->immunities);
-    analyze_resist(player_ptr, o_ptr, desc_ptr->resistances);
-    analyze_sustains(player_ptr, o_ptr, desc_ptr->sustains);
-    analyze_misc_magic(player_ptr, o_ptr, desc_ptr->misc_magic);
-    desc_ptr->activation = activation_explanation(player_ptr, o_ptr);
-    sprintf(desc_ptr->misc_desc, _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lbtokg1(o_ptr->weight), o_ptr->weight / 10),
-        _(lbtokg2(o_ptr->weight), o_ptr->weight % 10));
-}
-
-/*!
  * @brief ランダムアーティファクト１件をスポイラー出力する /
  * Create a spoiler file entry for an artifact
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
@@ -1376,25 +634,25 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
     char buf[80];
     fprintf(spoiler_file, "%s\n", art_ptr->description);
     if (!object_is_fully_known(o_ptr)) {
-        fprintf(spoiler_file, _("%s不明\n", "%sUnknown\n"), INDENT1);
+        fprintf(spoiler_file, _("%s不明\n", "%sUnknown\n"), spoiler_indent);
     } else {
         if (pval_ptr->pval_desc[0]) {
             sprintf(buf, _("%sの修正:", "%s to"), pval_ptr->pval_desc);
-            spoiler_outlist(buf, pval_ptr->pval_affects, ITEM_SEP);
+            spoiler_outlist(buf, pval_ptr->pval_affects, item_separator);
         }
 
-        spoiler_outlist(_("対:", "Slay"), art_ptr->slays, ITEM_SEP);
-        spoiler_outlist(_("武器属性:", ""), art_ptr->brands, LIST_SEP);
-        spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, ITEM_SEP);
-        spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, ITEM_SEP);
-        spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, ITEM_SEP);
-        spoiler_outlist("", art_ptr->misc_magic, LIST_SEP);
+        spoiler_outlist(_("対:", "Slay"), art_ptr->slays, item_separator);
+        spoiler_outlist(_("武器属性:", ""), art_ptr->brands, list_separator);
+        spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, item_separator);
+        spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, item_separator);
+        spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, item_separator);
+        spoiler_outlist("", art_ptr->misc_magic, list_separator);
         if (art_ptr->activation) {
-            fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), INDENT1, art_ptr->activation);
+            fprintf(spoiler_file, _("%s発動: %s\n", "%sActivates for %s\n"), spoiler_indent, art_ptr->activation);
         }
     }
 
-    fprintf(spoiler_file, "%s%s\n\n", INDENT1, art_ptr->misc_desc);
+    fprintf(spoiler_file, "%s%s\n\n", spoiler_indent, art_ptr->misc_desc);
 }
 
 /*!

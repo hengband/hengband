@@ -9,7 +9,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/race-indice-types.h"
-#include "mutation/mutation.h"
+#include "mutation/mutation-investor-remover.h"
 #include "object/object-broken.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"

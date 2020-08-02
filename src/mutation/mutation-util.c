@@ -1,6 +1,6 @@
-﻿#include "mutation/gain-mutation-util.h"
+﻿#include "mutation/mutation-util.h"
 
-gm_type *initialize_gm_type(gm_type *gm_ptr, MUTATION_IDX choose_mut)
+glm_type *initialize_glm_type(glm_type *gm_ptr, MUTATION_IDX choose_mut)
 {
     gm_ptr->muta_class = NULL;
     gm_ptr->muta_which = 0;

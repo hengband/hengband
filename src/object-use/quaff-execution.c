@@ -14,7 +14,7 @@
 #include "inventory/inventory-object.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "mutation/mutation.h"
+#include "mutation/mutation-investor-remover.h"
 #include "object/object-broken.h"
 #include "object/object-generator.h"
 #include "object/object-info.h"

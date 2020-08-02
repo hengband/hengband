@@ -11,7 +11,7 @@
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "mutation/mutation.h"
+#include "mutation/mutation-investor-remover.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "spell-kind/earthquake.h"

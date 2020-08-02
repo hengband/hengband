@@ -7,6 +7,7 @@ bin_PROGRAMS = hengband
 hengband_SOURCES = \
 	action/action-limited.c action/action-limited.h \
 	action/movement-execution.c action/movement-execution.h \
+	action/mutation-execution.c action/mutation-execution.h \
 	action/open-util.c action/open-util.h \
 	action/open-close-execution.c action/open-close-execution.h \
 	action/run-execution.c action/run-execution.h \
@@ -492,8 +493,10 @@ hengband_SOURCES = \
 	mspell/summon-checker.c mspell/summon-checker.h \
 	\
 	mutation/gain-mutation-switcher.c mutation/gain-mutation-switcher.h \
-	mutation/gain-mutation-util.c mutation/gain-mutation-util.h \
-	mutation/mutation.c mutation/mutation.h \
+	mutation/lose-mutation-switcher.c mutation/lose-mutation-switcher.h \
+	mutation/mutation-calculator.c mutation/mutation-calculator.h \
+	mutation/mutation-investor-remover.c mutation/mutation-investor-remover.h \
+	mutation/mutation-util.c mutation/mutation-util.h \
 	mutation/mutation-flag-types.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	mutation/mutation-techniques.c mutation/mutation-techniques.h \
@@ -794,9 +797,15 @@ hengband_SOURCES = \
 	window/main-window-util.c window/main-window-util.h \
 	window/main-window-equipment.c window/main-window-equipment.h \
 	\
+	wizard/artifact-analyzer.c wizard/artifact-analyzer.h \
 	wizard/artifact-bias-table.c wizard/artifact-bias-table.h \
+	wizard/cmd-wizard.c wizard/cmd-wizard.h \
+	wizard/fixed-artifact-spoiler.c wizard/fixed-artifact-spoiler.h \
+	wizard/items-spoiler.c wizard/items-spoiler.h \
 	wizard/spoiler-table.c wizard/spoiler-table.h \
+	wizard/spoiler-util.c wizard/spoiler-util.h \
 	wizard/tval-descriptions-table.c wizard/tval-descriptions-table.h \
+	wizard/wizard-item-modifier.c wizard/wizard-item-modifier.h \
 	wizard/wizard-messages.c wizard/wizard-messages.h \
 	wizard/wizard-spells.c wizard/wizard-spells.h \
 	wizard/wizard-spoiler.c wizard/wizard-spoiler.h\

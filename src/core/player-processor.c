@@ -32,7 +32,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "mutation/mutation.h"
+#include "mutation/mutation-investor-remover.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "player/special-defense-types.h"

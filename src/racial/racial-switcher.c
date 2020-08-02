@@ -11,6 +11,7 @@
 
 #include "racial/racial-switcher.h"
 #include "action/action-limited.h"
+#include "action/mutation-execution.h"
 #include "cmd-action/cmd-mane.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-magiceat.h"
@@ -40,7 +41,6 @@
 #include "mind/monk-attack.h"
 #include "mind/stances-table.h"
 #include "mutation/mutation-flag-types.h"
-#include "mutation/mutation.h"
 #include "object/item-tester-hooker.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"

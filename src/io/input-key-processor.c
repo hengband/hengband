@@ -82,7 +82,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
-#include "wizard/wizard-special-process.h"
+#include "wizard/cmd-wizard.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 

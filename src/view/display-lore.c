@@ -112,6 +112,7 @@ void display_roff(player_type *player_ptr)
 }
 
 /*!
+ * todo ここのroff_funcの引数にFILE* を追加しないとspoiler_file をローカル関数化することができないと判明した、保留.
  * @brief モンスター詳細情報を自動スポイラー向けに出力する /
  * Hack -- output description of the given monster race
  * @param r_idx モンスターの種族ID

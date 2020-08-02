@@ -323,9 +323,6 @@
     <ClCompile Include="..\..\src\core\hp-mp-processor.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\mutation.c">
-      <Filter>mutation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mutation\mutation-processor.c">
       <Filter>mutation</Filter>
     </ClCompile>
@@ -1928,11 +1925,41 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-mind.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\gain-mutation-util.c">
-      <Filter>mutation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.c">
       <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-util.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\mutation-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-calculator.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\cmd-wizard.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-item-modifier.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\spoiler-util.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\items-spoiler.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\artifact-analyzer.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\fixed-artifact-spoiler.c">
+      <Filter>wizard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2289,9 +2316,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\hp-mp-processor.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mutation\mutation.h">
-      <Filter>mutation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-processor.h">
       <Filter>mutation</Filter>
@@ -4204,11 +4228,41 @@
     <ClInclude Include="..\..\src\mind\mind-numbers.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mutation\gain-mutation-util.h">
-      <Filter>mutation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mutation\gain-mutation-switcher.h">
       <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-util.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\lose-mutation-switcher.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\mutation-execution.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-calculator.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\cmd-wizard.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-item-modifier.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\spoiler-util.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\items-spoiler.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\artifact-analyzer.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\fixed-artifact-spoiler.h">
+      <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

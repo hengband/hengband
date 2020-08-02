@@ -24,7 +24,6 @@
 #include "locale/english.h"
 #include "main/sound-of-music.h"
 #include "mutation/mutation-flag-types.h"
-#include "mutation/mutation.h"
 #include "player/player-personalities-types.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
