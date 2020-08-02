@@ -166,9 +166,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_ELF:
             creature_ptr->resist_lite = TRUE;
             break;
-        case RACE_GNOME:
-            creature_ptr->free_act = TRUE;
-            break;
         case RACE_DWARF:
             creature_ptr->resist_blind = TRUE;
             break;
@@ -255,7 +252,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_GOLEM:
             creature_ptr->slow_digest = TRUE;
-            creature_ptr->free_act = TRUE;
             creature_ptr->resist_pois = TRUE;
             break;
         case RACE_SKELETON:
@@ -281,7 +277,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_SPECTRE:
             creature_ptr->levitation = TRUE;
-            creature_ptr->free_act = TRUE;
             creature_ptr->resist_neth = TRUE;
             creature_ptr->resist_pois = TRUE;
             creature_ptr->slow_digest = TRUE;
@@ -319,7 +314,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_ANDROID:
             creature_ptr->slow_digest = TRUE;
-            creature_ptr->free_act = TRUE;
             creature_ptr->resist_pois = TRUE;
             break;
         case RACE_MERFOLK:

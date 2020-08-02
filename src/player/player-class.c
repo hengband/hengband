@@ -1225,14 +1225,6 @@ void calc_class_status(player_type *creature_ptr)
         if (creature_ptr->lev > 29)
             creature_ptr->resist_conf = TRUE;
         break;
-    case CLASS_MONK:
-    case CLASS_FORCETRAINER:
-        if (!(heavy_armor(creature_ptr))) {
-            if (creature_ptr->lev > 24)
-                creature_ptr->free_act = TRUE;
-        }
-
-        break;
     case CLASS_BARD:
         creature_ptr->resist_sound = TRUE;
         break;
@@ -1246,7 +1238,6 @@ void calc_class_status(player_type *creature_ptr)
         creature_ptr->sustain_dex = TRUE;
         creature_ptr->sustain_con = TRUE;
         creature_ptr->regenerate = TRUE;
-        creature_ptr->free_act = TRUE;
         creature_ptr->redraw |= PR_STATUS;
         break;
     case CLASS_NINJA:
@@ -1255,8 +1246,6 @@ void calc_class_status(player_type *creature_ptr)
         } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
             && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
             creature_ptr->skill_stl += (creature_ptr->lev) / 10;
-            if (creature_ptr->lev > 24)
-                creature_ptr->free_act = TRUE;
         }
 
         if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)

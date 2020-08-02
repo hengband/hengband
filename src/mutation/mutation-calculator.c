@@ -75,6 +75,4 @@ void set_mutation_flags(player_type *creature_ptr)
     if (creature_ptr->muta3 & MUT3_REGEN)
         creature_ptr->regenerate = TRUE;
 
-    if (creature_ptr->muta3 & MUT3_MOTION)
-        creature_ptr->free_act = TRUE;
 }

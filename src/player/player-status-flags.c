@@ -859,3 +859,65 @@ void have_see_inv(player_type *creature_ptr)
             creature_ptr->see_inv = TRUE;
     }
 }
+
+void have_free_act(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->free_act = FALSE;
+	
+	if (creature_ptr->muta3 & MUT3_MOTION)
+        creature_ptr->free_act = TRUE;
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_GNOME) {
+		creature_ptr->free_act = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_GOLEM) {
+        creature_ptr->free_act = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_SPECTRE) {
+        creature_ptr->free_act = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_ANDROID) {
+        creature_ptr->free_act = TRUE;
+    }
+
+    if (heavy_armor(creature_ptr) && (!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
+        && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
+        if (creature_ptr->lev > 24)
+            creature_ptr->free_act = TRUE;
+    }
+
+    if (creature_ptr->pclass == CLASS_MONK || creature_ptr->pclass == CLASS_FORCETRAINER) {
+        if (!(heavy_armor(creature_ptr))) {
+            if (creature_ptr->lev > 24)
+                creature_ptr->free_act = TRUE;
+        }
+    }
+
+    if (creature_ptr->pclass == CLASS_BERSERKER) {
+        creature_ptr->free_act = TRUE;
+    }
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->free_act = TRUE;
+    }
+
+    if (creature_ptr->magicdef) {
+        creature_ptr->free_act = TRUE;
+    }
+
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_FREE_ACT))
+            creature_ptr->free_act = TRUE;
+    }
+}

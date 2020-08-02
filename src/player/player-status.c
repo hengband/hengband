@@ -567,7 +567,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->cursed = 0L;
     creature_ptr->impact[0] = FALSE;
     creature_ptr->impact[1] = FALSE;
-    creature_ptr->free_act = FALSE;
     creature_ptr->slow_digest = FALSE;
     creature_ptr->regenerate = FALSE;
     creature_ptr->can_swim = FALSE;
@@ -674,6 +673,36 @@ void calc_bonuses(player_type *creature_ptr)
 
     clear_creature_bonuses(creature_ptr);
 
+    if (has_melee_weapon(creature_ptr, INVEN_RARM))
+        creature_ptr->right_hand_weapon = TRUE;
+    if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        creature_ptr->left_hand_weapon = TRUE;
+        if (!creature_ptr->right_hand_weapon)
+            default_hand = 1;
+    }
+
+    if (can_two_hands_wielding(creature_ptr)) {
+        if (creature_ptr->right_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
+            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM])) {
+            creature_ptr->two_handed_weapon = TRUE;
+        } else if (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
+            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
+            creature_ptr->two_handed_weapon = TRUE;
+        } else {
+            switch (creature_ptr->pclass) {
+            case CLASS_MONK:
+            case CLASS_FORCETRAINER:
+            case CLASS_BERSERKER:
+                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
+                    creature_ptr->right_hand_weapon = TRUE;
+                    creature_ptr->two_handed_weapon = TRUE;
+                }
+            }
+
+            default_hand = 1;
+        }
+    }
+
     have_pass_wall(creature_ptr);
     have_kill_wall(creature_ptr);
     have_xtra_might(creature_ptr);
@@ -708,38 +737,10 @@ void calc_bonuses(player_type *creature_ptr)
     have_heavy_spell(creature_ptr);
     have_hold_exp(creature_ptr);
     have_see_inv(creature_ptr);
+    have_free_act(creature_ptr);
 
     calc_race_status(creature_ptr);
 
-    if (has_melee_weapon(creature_ptr, INVEN_RARM))
-        creature_ptr->right_hand_weapon = TRUE;
-    if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-        creature_ptr->left_hand_weapon = TRUE;
-        if (!creature_ptr->right_hand_weapon)
-            default_hand = 1;
-    }
-
-    if (can_two_hands_wielding(creature_ptr)) {
-        if (creature_ptr->right_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
-            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM])) {
-            creature_ptr->two_handed_weapon = TRUE;
-        } else if (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
-            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
-            creature_ptr->two_handed_weapon = TRUE;
-        } else {
-            switch (creature_ptr->pclass) {
-            case CLASS_MONK:
-            case CLASS_FORCETRAINER:
-            case CLASS_BERSERKER:
-                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
-                    creature_ptr->right_hand_weapon = TRUE;
-                    creature_ptr->two_handed_weapon = TRUE;
-                }
-            }
-
-            default_hand = 1;
-        }
-    }
 
     if (creature_ptr->special_defense & KAMAE_MASK) {
         if (!(empty_hands_status & EMPTY_HAND_RARM)) {
@@ -4479,7 +4480,6 @@ bool is_echizen(player_type *creature_ptr)
 void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->free_act = TRUE;
         creature_ptr->slow_digest = TRUE;
         creature_ptr->regenerate = TRUE;
         creature_ptr->levitation = TRUE;
@@ -4520,7 +4520,6 @@ void calc_timelimit_status(player_type *creature_ptr)
     if (creature_ptr->magicdef) {
         creature_ptr->resist_blind = TRUE;
         creature_ptr->resist_conf = TRUE;
-        creature_ptr->free_act = TRUE;
         creature_ptr->levitation = TRUE;
     }
 
@@ -4628,8 +4627,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_LEVITATION))
             creature_ptr->levitation = TRUE;
-        if (have_flag(flgs, TR_FREE_ACT))
-            creature_ptr->free_act = TRUE;
 
         if (have_flag(flgs, TR_TELEPORT)) {
             if (object_is_cursed(o_ptr))
