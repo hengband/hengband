@@ -1952,6 +1952,9 @@
     <ClCompile Include="..\..\src\wizard\spoiler-util.c">
       <Filter>wizard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\wizard\items-spoiler.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4244,6 +4247,9 @@
       <Filter>wizard</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\wizard\spoiler-util.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\items-spoiler.h">
       <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>
