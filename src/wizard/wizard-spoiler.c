@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief ウィザードモードの処理(スポイラー出力中心) / Spoiler generation -BEN-
+ * @brief スポイラー出力処理 (行数の都合でモンスター進化ツリーもここに入っている)
  * @date 2014/02/17
  * @author
  * Copyright (c) 1997 Ben Harrison, and others
@@ -7,46 +7,21 @@
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
  * 2013 Deskull rearranged comment for Doxygen.
+ * 2020 Hourier rearranged for decreasing lines.
  */
 
 #include "wizard/wizard-spoiler.h"
-#include "flavor/flavor-describer.h"
-#include "flavor/object-flavor-types.h"
-#include "floor/floor-town.h"
-#include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster-race/race-flags7.h"
-#include "object-enchant/object-ego.h"
-#include "object-enchant/special-object-flags.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
-#include "object-enchant/trg-types.h"
-#include "object/object-flags.h"
-#include "object/object-generator.h"
-#include "object/object-info.h"
-#include "object/object-kind-hook.h"
-#include "object/object-kind.h"
-#include "object/object-value.h"
-#include "perception/object-perception.h"
-#include "store/store-util.h"
-#include "store/store.h"
 #include "system/angband-version.h"
-#include "system/artifact-type-definition.h"
 #include "term/screen-processor.h"
-#include "term/term-color-types.h"
 #include "util/angband-files.h"
-#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
-#include "util/quarks.h"
 #include "util/sort.h"
-#include "view/display-lore.h"
 #include "view/display-messages.h"
-#include "wizard/artifact-analyzer.h"
-#include "wizard/fixed-artifact-spoiler.h"
+#include "wizard/fixed-artifacts-spoiler.h"
 #include "wizard/items-spoiler.h"
 #include "wizard/monster-info-spoiler.h"
 #include "wizard/spoiler-util.h"

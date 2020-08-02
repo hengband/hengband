@@ -1,4 +1,4 @@
-﻿#include "wizard/fixed-artifact-spoiler.h"
+﻿#include "wizard/fixed-artifacts-spoiler.h"
 #include "io/files-util.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"

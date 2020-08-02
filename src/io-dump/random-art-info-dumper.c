@@ -8,7 +8,7 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "wizard/artifact-analyzer.h"
-#include "wizard/fixed-artifact-spoiler.h"
+#include "wizard/fixed-artifacts-spoiler.h"
 #include "wizard/spoiler-util.h"
 
 /*!
