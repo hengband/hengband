@@ -566,13 +566,11 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->cursed = 0L;
     creature_ptr->impact[0] = FALSE;
     creature_ptr->impact[1] = FALSE;
-    creature_ptr->see_inv = FALSE;
     creature_ptr->free_act = FALSE;
     creature_ptr->slow_digest = FALSE;
     creature_ptr->regenerate = FALSE;
     creature_ptr->can_swim = FALSE;
     creature_ptr->levitation = FALSE;
-    creature_ptr->hold_exp = FALSE;
     creature_ptr->lite = FALSE;
     creature_ptr->sustain_str = FALSE;
     creature_ptr->sustain_int = FALSE;
@@ -707,6 +705,8 @@ void calc_bonuses(player_type *creature_ptr)
     have_sh_cold(creature_ptr);
     have_easy_spell(creature_ptr);
     have_heavy_spell(creature_ptr);
+    have_hold_exp(creature_ptr);
+    have_see_inv(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4478,12 +4478,10 @@ bool is_echizen(player_type *creature_ptr)
 void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->see_inv = TRUE;
         creature_ptr->free_act = TRUE;
         creature_ptr->slow_digest = TRUE;
         creature_ptr->regenerate = TRUE;
         creature_ptr->levitation = TRUE;
-        creature_ptr->hold_exp = TRUE;
         creature_ptr->lite = TRUE;
         creature_ptr->sustain_str = TRUE;
         creature_ptr->sustain_int = TRUE;
@@ -4535,10 +4533,6 @@ void calc_timelimit_status(player_type *creature_ptr)
             creature_ptr->immune_fire = TRUE;
         else if (creature_ptr->special_defense & DEFENSE_COLD)
             creature_ptr->immune_cold = TRUE;
-    }
-
-    if (creature_ptr->tim_invis) {
-        creature_ptr->see_inv = TRUE;
     }
 
     if (creature_ptr->tim_regen) {
@@ -4631,14 +4625,10 @@ void calc_equipment_status(player_type *creature_ptr)
         if (have_flag(flgs, TR_REGEN))
             creature_ptr->regenerate = TRUE;
 
-        if (have_flag(flgs, TR_SEE_INVIS))
-            creature_ptr->see_inv = TRUE;
         if (have_flag(flgs, TR_LEVITATION))
             creature_ptr->levitation = TRUE;
         if (have_flag(flgs, TR_FREE_ACT))
             creature_ptr->free_act = TRUE;
-        if (have_flag(flgs, TR_HOLD_EXP))
-            creature_ptr->hold_exp = TRUE;
 
         if (have_flag(flgs, TR_TELEPORT)) {
             if (object_is_cursed(o_ptr))

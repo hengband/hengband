@@ -1271,8 +1271,6 @@ void calc_class_status(player_type *creature_ptr)
             creature_ptr->resist_pois = TRUE;
         if (creature_ptr->lev > 24)
             creature_ptr->sustain_dex = TRUE;
-        if (creature_ptr->lev > 29)
-            creature_ptr->see_inv = TRUE;
         if (creature_ptr->lev > 44) {
             creature_ptr->oppose_pois = 1;
             creature_ptr->redraw |= PR_STATUS;

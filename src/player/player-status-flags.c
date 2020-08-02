@@ -650,7 +650,7 @@ void have_sh_fire(player_type *creature_ptr)
         creature_ptr->sh_fire = TRUE;
     }
 
-	if (creature_ptr->tim_sh_fire) {
+    if (creature_ptr->tim_sh_fire) {
         creature_ptr->sh_fire = TRUE;
     }
 
@@ -663,7 +663,6 @@ void have_sh_fire(player_type *creature_ptr)
         if (have_flag(flgs, TR_SH_FIRE))
             creature_ptr->sh_fire = TRUE;
     }
-
 }
 
 void have_sh_elec(player_type *creature_ptr)
@@ -760,5 +759,103 @@ void have_heavy_spell(player_type *creature_ptr)
         object_flags(creature_ptr, o_ptr, flgs);
         if (o_ptr->name2 == EGO_AMU_FOOL)
             creature_ptr->heavy_spell = TRUE;
+    }
+}
+
+void have_hold_exp(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+
+    creature_ptr->hold_exp = FALSE;
+
+    if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+        creature_ptr->hold_exp = TRUE;
+    }
+
+    if (creature_ptr->mimic_form == MIMIC_DEMON || creature_ptr->mimic_form == MIMIC_DEMON_LORD || creature_ptr->mimic_form == MIMIC_VAMPIRE) {
+        creature_ptr->hold_exp = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_HOBBIT) {
+        creature_ptr->hold_exp = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_GOLEM) {
+        if (creature_ptr->lev > 34)
+            creature_ptr->hold_exp = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form
+        && (creature_ptr->prace == RACE_SKELETON || creature_ptr->prace == RACE_ZOMBIE || creature_ptr->prace == RACE_VAMPIRE
+            || creature_ptr->prace == RACE_SPECTRE || creature_ptr->prace == RACE_BALROG || creature_ptr->prace == RACE_ANDROID)) {
+        creature_ptr->hold_exp = TRUE;    
+	}
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->hold_exp = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_HOLD_EXP))
+            creature_ptr->hold_exp = TRUE;
+    }
+}
+
+void have_see_inv(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->see_inv = FALSE;
+
+    if (creature_ptr->pclass == CLASS_NINJA || creature_ptr->lev > 29)
+        creature_ptr->see_inv = TRUE;
+
+    if (creature_ptr->mimic_form == MIMIC_DEMON || creature_ptr->mimic_form == MIMIC_DEMON_LORD || creature_ptr->mimic_form == MIMIC_VAMPIRE) {
+        creature_ptr->see_inv = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form
+        && (creature_ptr->prace == RACE_HIGH_ELF || creature_ptr->prace == RACE_GOLEM || creature_ptr->prace == RACE_SKELETON
+            || creature_ptr->prace == RACE_ZOMBIE || creature_ptr->prace == RACE_SPECTRE || creature_ptr->prace == RACE_ARCHON)) {
+        creature_ptr->see_inv = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_DARK_ELF) {
+        if (creature_ptr->lev > 19)
+            creature_ptr->see_inv = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_MIND_FLAYER) {
+        if (creature_ptr->lev > 14)
+            creature_ptr->see_inv = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && (creature_ptr->prace == RACE_IMP || creature_ptr->prace == RACE_BALROG)) {
+        if (creature_ptr->lev > 9)
+            creature_ptr->see_inv = TRUE;
+    }
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->see_inv = TRUE;
+    }
+
+	if (creature_ptr->tim_invis) {
+        creature_ptr->see_inv = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_SEE_INVIS))
+            creature_ptr->see_inv = TRUE;
     }
 }

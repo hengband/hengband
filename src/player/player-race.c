@@ -131,16 +131,13 @@ void calc_race_status(player_type *creature_ptr)
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
         case MIMIC_DEMON:
-            creature_ptr->hold_exp = TRUE;
             creature_ptr->resist_chaos = TRUE;
             creature_ptr->resist_neth = TRUE;
             creature_ptr->resist_fire = TRUE;
             creature_ptr->oppose_fire = 1;
-            creature_ptr->see_inv = TRUE;
             creature_ptr->redraw |= PR_STATUS;
             break;
         case MIMIC_DEMON_LORD:
-            creature_ptr->hold_exp = TRUE;
             creature_ptr->resist_chaos = TRUE;
             creature_ptr->resist_neth = TRUE;
             creature_ptr->immune_fire = TRUE;
@@ -153,16 +150,13 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_disen = TRUE;
             creature_ptr->resist_nexus = TRUE;
             creature_ptr->resist_fear = TRUE;
-            creature_ptr->see_inv = TRUE;
             creature_ptr->levitation = TRUE;
             break;
         case MIMIC_VAMPIRE:
             creature_ptr->resist_dark = TRUE;
-            creature_ptr->hold_exp = TRUE;
             creature_ptr->resist_neth = TRUE;
             creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
-            creature_ptr->see_inv = TRUE;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
             break;
@@ -171,9 +165,6 @@ void calc_race_status(player_type *creature_ptr)
         switch (creature_ptr->prace) {
         case RACE_ELF:
             creature_ptr->resist_lite = TRUE;
-            break;
-        case RACE_HOBBIT:
-            creature_ptr->hold_exp = TRUE;
             break;
         case RACE_GNOME:
             creature_ptr->free_act = TRUE;
@@ -205,7 +196,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_HIGH_ELF:
             creature_ptr->resist_lite = TRUE;
-            creature_ptr->see_inv = TRUE;
             break;
         case RACE_BARBARIAN:
             creature_ptr->resist_fear = TRUE;
@@ -242,8 +232,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_DARK_ELF:
             creature_ptr->resist_dark = TRUE;
-            if (creature_ptr->lev > 19)
-                creature_ptr->see_inv = TRUE;
             break;
         case RACE_DRACONIAN:
             creature_ptr->levitation = TRUE;
@@ -261,34 +249,23 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_MIND_FLAYER:
             creature_ptr->sustain_int = TRUE;
             creature_ptr->sustain_wis = TRUE;
-            if (creature_ptr->lev > 14)
-                creature_ptr->see_inv = TRUE;
             break;
         case RACE_IMP:
             creature_ptr->resist_fire = TRUE;
-            if (creature_ptr->lev > 9)
-                creature_ptr->see_inv = TRUE;
             break;
         case RACE_GOLEM:
             creature_ptr->slow_digest = TRUE;
             creature_ptr->free_act = TRUE;
-            creature_ptr->see_inv = TRUE;
             creature_ptr->resist_pois = TRUE;
-            if (creature_ptr->lev > 34)
-                creature_ptr->hold_exp = TRUE;
             break;
         case RACE_SKELETON:
             creature_ptr->resist_shard = TRUE;
-            creature_ptr->hold_exp = TRUE;
-            creature_ptr->see_inv = TRUE;
             creature_ptr->resist_pois = TRUE;
             if (creature_ptr->lev > 9)
                 creature_ptr->resist_cold = TRUE;
             break;
         case RACE_ZOMBIE:
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->hold_exp = TRUE;
-            creature_ptr->see_inv = TRUE;
             creature_ptr->resist_pois = TRUE;
             creature_ptr->slow_digest = TRUE;
             if (creature_ptr->lev > 4)
@@ -296,7 +273,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_VAMPIRE:
             creature_ptr->resist_dark = TRUE;
-            creature_ptr->hold_exp = TRUE;
             creature_ptr->resist_neth = TRUE;
             creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
@@ -307,8 +283,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->levitation = TRUE;
             creature_ptr->free_act = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->hold_exp = TRUE;
-            creature_ptr->see_inv = TRUE;
             creature_ptr->resist_pois = TRUE;
             creature_ptr->slow_digest = TRUE;
             creature_ptr->resist_cold = TRUE;
@@ -324,14 +298,10 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_ARCHON:
             creature_ptr->levitation = TRUE;
-            creature_ptr->see_inv = TRUE;
             break;
         case RACE_BALROG:
             creature_ptr->resist_fire = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->hold_exp = TRUE;
-            if (creature_ptr->lev > 9)
-                creature_ptr->see_inv = TRUE;
             if (creature_ptr->lev > 44) {
                 creature_ptr->oppose_fire = 1;
                 creature_ptr->redraw |= PR_STATUS;
@@ -351,7 +321,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->slow_digest = TRUE;
             creature_ptr->free_act = TRUE;
             creature_ptr->resist_pois = TRUE;
-            creature_ptr->hold_exp = TRUE;
             break;
         case RACE_MERFOLK:
             creature_ptr->resist_water = TRUE;
