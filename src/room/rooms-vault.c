@@ -8,6 +8,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
+#include "floor/floor-generator-util.h"
 #include "floor/floor-generate.h"
 #include "floor/floor.h"
 #include "floor/wild.h"

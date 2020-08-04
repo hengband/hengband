@@ -2,8 +2,6 @@
 
 #include "system/angband.h"
 
-#define SAFE_MAX_ATTEMPTS 5000 /*!< 生成処理基本試行回数 */
-
 bool place_quest_monsters(player_type *creature_ptr);
 void wipe_generate_random_floor_flags(floor_type *floor_ptr);
 void clear_cave(player_type *player_ptr);

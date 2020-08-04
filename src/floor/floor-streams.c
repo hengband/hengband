@@ -19,6 +19,7 @@
 #include "floor/cave.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/floor-generator-util.h"
 #include "floor/floor-generate.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"

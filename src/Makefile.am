@@ -209,6 +209,7 @@ hengband_SOURCES = \
 	floor/floor-allocation-types.h \
 	floor/floor-base-definitions.h \
 	floor/floor-events.c floor/floor-events.h \
+	floor/floor-generator-util.h \
 	floor/floor-generate.c floor/floor-generate.h \
 	floor/floor-object.c floor/floor-object.h \
 	floor/floor-save.h floor/floor-save.c \
@@ -216,6 +217,7 @@ hengband_SOURCES = \
 	floor/floor-town.h floor/floor-town.c \
 	floor/floor-util.c floor/floor-util.h \
 	floor/geometry.c floor/geometry.h \
+	floor/object-allocator.c floor/object-allocator.h \
 	floor/object-scanner.c floor/object-scanner.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	floor/sight-definitions.h \

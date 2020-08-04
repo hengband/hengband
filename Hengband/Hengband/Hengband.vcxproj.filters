@@ -1970,6 +1970,9 @@
     <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\object-allocator.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4283,6 +4286,12 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\dungeon-tunnel-util.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\object-allocator.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-generator-util.h">
       <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
