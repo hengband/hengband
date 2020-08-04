@@ -10,22 +10,6 @@ extern int dun_tun_con; /*!< ダンジョンの通路を継続して引き延ば
 extern int dun_tun_pen; /*!< ダンジョンの部屋入口にドアを設置する頻度(一回の試行ごとに%で判定している) */
 extern int dun_tun_jct; /*!< ダンジョンの通路交差地点付近にドアを設置する頻度(一回の試行ごとに%で判定している) */
 
-/*
- * Hack -- Dungeon allocation "places"
- */
-#define ALLOC_SET_CORR		1	/* Hallway */
-#define ALLOC_SET_ROOM		2	/* Room */
-#define ALLOC_SET_BOTH		3	/* Anywhere */
-
-/*
- * Hack -- Dungeon allocation "types"
- */
-#define ALLOC_TYP_RUBBLE	1	/* Rubble */
-#define ALLOC_TYP_TRAP		3	/* Trap */
-#define ALLOC_TYP_GOLD		4	/* Gold */
-#define ALLOC_TYP_OBJECT	5	/* Object */
-#define ALLOC_TYP_INVIS		6	/* Invisible wall */
-
 bool place_quest_monsters(player_type *creature_ptr);
 void wipe_generate_random_floor_flags(floor_type *floor_ptr);
 void clear_cave(player_type *player_ptr);

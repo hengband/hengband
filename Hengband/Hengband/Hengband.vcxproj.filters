@@ -4276,6 +4276,9 @@
     <ClInclude Include="..\..\src\wizard\fixed-artifacts-spoiler.h">
       <Filter>wizard</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-allocation-types.h">
+      <Filter>floor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

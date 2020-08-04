@@ -205,6 +205,7 @@ hengband_SOURCES = \
 	floor/cave.c floor/cave.h \
 	floor/fixed-map-generator.c floor/fixed-map-generator.h \
 	floor/floor.c floor/floor.h \
+	floor/floor-allocation-types.h \
 	floor/floor-base-definitions.h \
 	floor/floor-events.c floor/floor-events.h \
 	floor/floor-generate.c floor/floor-generate.h \
