@@ -1,5 +1,4 @@
 ﻿/*!
- * @file generate.c
  * @brief ダンジョンの生成 / Dungeon generation
  * @date 2014/01/04
  * @author
@@ -11,22 +10,13 @@
  */
 
 #include "floor/floor-generator.h"
-#include "cmd-building/cmd-building.h"
-#include "cmd-io/cmd-dump.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
-#include "floor/dungeon-tunnel-util.h"
 #include "floor/cave-generator.h"
-#include "floor/floor-allocation-types.h"
 #include "floor/floor-events.h"
-#include "floor/floor-generator-util.h"
-#include "floor/floor-save.h"
-#include "floor/floor-streams.h"
-#include "floor/floor.h" // todo 相互依存している、後で消す.
-#include "floor/object-allocator.h"
-#include "floor/tunnel-generator.h"
+#include "floor/floor-save.h" // todo precalc_cur_num_of_pet() が依存している、違和感.
+#include "floor/floor.h" // todo wipe_o_list() が依存している、違和感.
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
@@ -34,31 +24,21 @@
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/trap.h"
 #include "info-reader/feature-reader.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
 #include "market/arena-info-table.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "player/player-status.h"
-#include "room/lake-types.h"
-#include "room/room-generator.h"
-#include "room/rooms-builder.h"
-#include "room/rooms-maze-vault.h"
-#include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "wizard/wizard-messages.h"
@@ -243,7 +223,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
         if (!monster_is_valid(m_ptr))
             continue;
 
-        m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+        m_ptr->mflag2 |= MFLAG2_MARK | MFLAG2_SHOW;
         update_monster(creature_ptr, i, FALSE);
     }
 }
@@ -308,8 +288,6 @@ static bool level_gen(player_type *player_ptr, concptr *why)
 
         floor_ptr->height = level_height * SCREEN_HGT;
         floor_ptr->width = level_width * SCREEN_WID;
-
-        /* Assume illegal panel */
         panel_row_min = floor_ptr->height;
         panel_col_min = floor_ptr->width;
 
