@@ -1982,6 +1982,9 @@
     <ClCompile Include="..\..\src\dungeon\quest-monster-placer.c">
       <Filter>dungeon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\grid\feature-generator.c">
+      <Filter>grid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4311,6 +4314,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\quest-monster-placer.h">
       <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\feature-generator.h">
+      <Filter>grid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
