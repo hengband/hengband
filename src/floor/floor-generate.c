@@ -17,12 +17,13 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/dungeon-tunnel-util.h"
 #include "floor/floor-allocation-types.h"
 #include "floor/floor-events.h"
 #include "floor/floor-generate.h"
 #include "floor/floor-save.h"
 #include "floor/floor-streams.h"
-#include "floor/floor.h"
+#include "floor/floor.h" // todo 相互依存している、後で消す.
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
@@ -59,12 +60,6 @@
 #include "window/main-window-util.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
-
-int dun_tun_rnd;
-int dun_tun_chg;
-int dun_tun_con;
-int dun_tun_pen;
-int dun_tun_jct;
 
 /*!
  * @brief 上下左右の外壁数をカウントする / Count the number of walls adjacent to the given grid.
@@ -458,13 +453,13 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
  * @param x 設置を行いたいマスのX座標
  * @return なし
  */
-static void try_door(player_type *player_ptr, POSITION y, POSITION x)
+static void try_door(player_type *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x) || cave_have_flag_bold(floor_ptr, y, x, FF_WALL) || ((floor_ptr->grid_array[y][x].info & CAVE_ROOM) != 0))
         return;
 
-    bool can_place_door = randint0(100) < dun_tun_jct;
+    bool can_place_door = randint0(100) < dt_ptr->dun_tun_jct;
     can_place_door &= possible_doorway(floor_ptr, y, x);
     can_place_door &= (d_info[player_ptr->dungeon_idx].flags1 & DF1_NO_DOORS) == 0;
     if (can_place_door)
@@ -496,11 +491,8 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
     set_floor_and_wall(floor_ptr->dungeon_idx);
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), NULL);
 
-    dun_tun_rnd = rand_range(DUN_TUN_RND_MIN, DUN_TUN_RND_MAX);
-    dun_tun_chg = rand_range(DUN_TUN_CHG_MIN, DUN_TUN_CHG_MAX);
-    dun_tun_con = rand_range(DUN_TUN_CON_MIN, DUN_TUN_CON_MAX);
-    dun_tun_pen = rand_range(DUN_TUN_PEN_MIN, DUN_TUN_PEN_MAX);
-    dun_tun_jct = rand_range(DUN_TUN_JCT_MIN, DUN_TUN_JCT_MAX);
+    dt_type tmp_dt;
+    dt_type *dt_ptr = initialize_dt_type(&tmp_dt);
 
     dun_data->row_rooms = floor_ptr->height / BLOCK_HGT;
     dun_data->col_rooms = floor_ptr->width / BLOCK_WID;
@@ -583,7 +575,7 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
             dun_data->wall_n = 0;
             if (randint1(floor_ptr->dun_level) > dungeon_ptr->tunnel_percent)
                 (void)build_tunnel2(player_ptr, dun_data->cent[i].x, dun_data->cent[i].y, x, y, 2, 2);
-            else if (!build_tunnel(player_ptr, dun_data->cent[i].y, dun_data->cent[i].x, y, x))
+            else if (!build_tunnel(player_ptr, dt_ptr, dun_data->cent[i].y, dun_data->cent[i].x, y, x))
                 tunnel_fail_count++;
 
             if (tunnel_fail_count >= 2) {
@@ -612,7 +604,7 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
                 g_ptr = &floor_ptr->grid_array[y][x];
                 g_ptr->mimic = 0;
                 place_grid(player_ptr, g_ptr, GB_FLOOR);
-                if ((randint0(100) < dun_tun_pen) && !(dungeon_ptr->flags1 & DF1_NO_DOORS))
+                if ((randint0(100) < dt_ptr->dun_tun_pen) && !(dungeon_ptr->flags1 & DF1_NO_DOORS))
                     place_random_door(player_ptr, y, x, TRUE);
             }
 
@@ -623,10 +615,10 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
         for (i = 0; i < dun_data->door_n; i++) {
             y = dun_data->door[i].y;
             x = dun_data->door[i].x;
-            try_door(player_ptr, y, x - 1);
-            try_door(player_ptr, y, x + 1);
-            try_door(player_ptr, y - 1, x);
-            try_door(player_ptr, y + 1, x);
+            try_door(player_ptr, dt_ptr, y, x - 1);
+            try_door(player_ptr, dt_ptr, y, x + 1);
+            try_door(player_ptr, dt_ptr, y - 1, x);
+            try_door(player_ptr, dt_ptr, y + 1, x);
         }
 
         if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(3, 4), 3)) {
@@ -1168,7 +1160,7 @@ static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1
  *   outer -- outer room walls\n
  *   solid -- solid room walls\n
  */
-bool build_tunnel(player_type *player_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2)
+bool build_tunnel(player_type *player_ptr, dt_type *dt_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
     POSITION tmp_row, tmp_col;
     POSITION row_dir, col_dir;
@@ -1184,9 +1176,9 @@ bool build_tunnel(player_type *player_ptr, POSITION row1, POSITION col1, POSITIO
         if (main_loop_count++ > 2000)
             return FALSE;
 
-        if (randint0(100) < dun_tun_chg) {
+        if (randint0(100) < dt_ptr->dun_tun_chg) {
             correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-            if (randint0(100) < dun_tun_rnd)
+            if (randint0(100) < dt_ptr->dun_tun_rnd)
                 rand_dir(&row_dir, &col_dir);
         }
 
@@ -1194,7 +1186,7 @@ bool build_tunnel(player_type *player_ptr, POSITION row1, POSITION col1, POSITIO
         tmp_col = col1 + col_dir;
         while (!in_bounds(floor_ptr, tmp_row, tmp_col)) {
             correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
-            if (randint0(100) < dun_tun_rnd)
+            if (randint0(100) < dt_ptr->dun_tun_rnd)
                 rand_dir(&row_dir, &col_dir);
 
             tmp_row = row1 + row_dir;
@@ -1250,7 +1242,7 @@ bool build_tunnel(player_type *player_ptr, POSITION row1, POSITION col1, POSITIO
                 door_flag = TRUE;
             }
 
-            if (randint0(100) >= dun_tun_con) {
+            if (randint0(100) >= dt_ptr->dun_tun_con) {
                 tmp_row = row1 - start_row;
                 if (tmp_row < 0)
                     tmp_row = (-tmp_row);

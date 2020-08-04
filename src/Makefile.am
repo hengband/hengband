@@ -203,6 +203,7 @@ hengband_SOURCES = \
 	flavor/tval-description-switcher.c flavor/tval-description-switcher.h \
 	\
 	floor/cave.c floor/cave.h \
+	floor/dungeon-tunnel-util.c floor/dungeon-tunnel-util.h \
 	floor/fixed-map-generator.c floor/fixed-map-generator.h \
 	floor/floor.c floor/floor.h \
 	floor/floor-allocation-types.h \

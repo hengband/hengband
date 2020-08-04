@@ -1967,6 +1967,9 @@
     <ClCompile Include="..\..\src\wizard\fixed-artifacts-spoiler.c">
       <Filter>wizard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4277,6 +4280,9 @@
       <Filter>wizard</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-allocation-types.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\dungeon-tunnel-util.h">
       <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
