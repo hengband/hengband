@@ -10,7 +10,7 @@
  * 2014 Deskull rearranged comment for Doxygen. \n
  */
 
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
 #include "dungeon/dungeon-flag-types.h"
@@ -21,7 +21,6 @@
 #include "floor/floor-allocation-types.h"
 #include "floor/floor-events.h"
 #include "floor/floor-generator-util.h"
-#include "floor/floor-generate.h"
 #include "floor/floor-save.h"
 #include "floor/floor-streams.h"
 #include "floor/floor.h" // todo 相互依存している、後で消す.

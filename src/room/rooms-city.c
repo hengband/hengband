@@ -1,5 +1,5 @@
 ﻿#include "room/rooms-city.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/cheat-types.h"

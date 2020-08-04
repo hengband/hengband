@@ -622,7 +622,7 @@
     <ClCompile Include="..\..\src\locale\english.c" />
     <ClCompile Include="..\..\src\grid\feature.c" />
     <ClCompile Include="..\..\src\floor\floor-events.c" />
-    <ClCompile Include="..\..\src\floor\floor-generate.c" />
+    <ClCompile Include="..\..\src\floor\floor-generator.c" />
     <ClCompile Include="..\..\src\floor\floor-save.c" />
     <ClCompile Include="..\..\src\floor\floor-town.c" />
     <ClCompile Include="..\..\src\floor\floor.c" />
@@ -1491,7 +1491,7 @@
     <ClInclude Include="..\..\src\grid\feature.h" />
     <ClInclude Include="..\..\src\io\files-util.h" />
     <ClInclude Include="..\..\src\floor\floor-events.h" />
-    <ClInclude Include="..\..\src\floor\floor-generate.h" />
+    <ClInclude Include="..\..\src\floor\floor-generator.h" />
     <ClInclude Include="..\..\src\floor\floor-save.h" />
     <ClInclude Include="..\..\src\floor\floor-town.h" />
     <ClInclude Include="..\..\src\floor\floor.h" />

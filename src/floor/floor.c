@@ -9,7 +9,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
-#include "floor/floor-generate.h" // todo 相互依存している、後で消す.
+#include "floor/floor-generator.h" // todo 相互依存している、後で消す.
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"

@@ -9,7 +9,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/cheat-types.h"

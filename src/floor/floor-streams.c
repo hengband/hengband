@@ -1,5 +1,4 @@
 ﻿/*!
- * @file streams.c
  * @brief ダンジョン生成に利用する関数群 / Used by dungeon generation.
  * @date 2014/07/15
  * @author
@@ -20,7 +19,7 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-generator-util.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"

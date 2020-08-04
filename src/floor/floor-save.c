@@ -18,7 +18,7 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "floor/geometry.h"

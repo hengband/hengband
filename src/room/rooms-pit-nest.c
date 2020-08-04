@@ -1,6 +1,6 @@
 ﻿#include "room/rooms-pit-nest.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "floor/floor.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"

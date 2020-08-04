@@ -380,9 +380,6 @@
     <ClCompile Include="..\..\src\floor\floor-events.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-generate.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\floor\floor-save.c">
       <Filter>floor</Filter>
     </ClCompile>
@@ -1973,6 +1970,9 @@
     <ClCompile Include="..\..\src\floor\object-allocator.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-generator.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2384,9 +2384,6 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-events.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor\floor-generate.h">
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-save.h">
@@ -4292,6 +4289,9 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-generator-util.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-generator.h">
       <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
