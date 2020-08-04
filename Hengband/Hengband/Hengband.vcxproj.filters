@@ -1976,6 +1976,9 @@
     <ClCompile Include="..\..\src\floor\cave-generator.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\tunnel-generator.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4298,6 +4301,9 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\cave-generator.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\tunnel-generator.h">
       <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,8 +5,9 @@
 #include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
 #include "floor/floor-allocation-types.h"
-#include "floor/floor-generator.h" // todo build_tunnel()、build_tunnel2()、place_quest_monsters() が相互依存している、このファイルからの依存性を消す.
+#include "floor/floor-generator.h" // todo place_quest_monsters() が相互依存している、このファイルからの依存性を消す.
 #include "floor/floor-streams.h"
+#include "floor/tunnel-generator.h"
 #include "floor/floor.h"
 #include "floor/geometry.h"
 #include "floor/object-allocator.h"

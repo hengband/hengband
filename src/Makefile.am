@@ -222,6 +222,7 @@ hengband_SOURCES = \
 	floor/object-scanner.c floor/object-scanner.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	floor/sight-definitions.h \
+	floor/tunnel-generator.c floor/tunnel-generator.h \
 	floor/wild.h floor/wild.c \
 	\
 	game-option/auto-destruction-options.c game-option/auto-destruction-options.h \
