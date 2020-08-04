@@ -215,6 +215,7 @@
     <ClCompile Include="..\..\src\flavor\flavor-util.c" />
     <ClCompile Include="..\..\src\flavor\named-item-describer.c" />
     <ClCompile Include="..\..\src\flavor\tval-description-switcher.c" />
+    <ClCompile Include="..\..\src\floor\cave-generator.c" />
     <ClCompile Include="..\..\src\floor\cave.c" />
     <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.c" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
@@ -788,6 +789,7 @@
     <ClInclude Include="..\..\src\flavor\named-item-describer.h" />
     <ClInclude Include="..\..\src\flavor\object-flavor-types.h" />
     <ClInclude Include="..\..\src\flavor\tval-description-switcher.h" />
+    <ClInclude Include="..\..\src\floor\cave-generator.h" />
     <ClInclude Include="..\..\src\floor\cave.h" />
     <ClInclude Include="..\..\src\floor\dungeon-tunnel-util.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
