@@ -1,11 +1,11 @@
 ﻿#include "floor/cave-generator.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
 #include "floor/floor-allocation-types.h"
-#include "floor/floor-generator.h" // todo place_quest_monsters() が相互依存している、このファイルからの依存性を消す.
 #include "floor/floor-streams.h"
 #include "floor/tunnel-generator.h"
 #include "floor/floor.h"

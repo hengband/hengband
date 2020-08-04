@@ -1979,6 +1979,9 @@
     <ClCompile Include="..\..\src\floor\tunnel-generator.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\dungeon\quest-monster-placer.c">
+      <Filter>dungeon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4305,6 +4308,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\floor\tunnel-generator.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\quest-monster-placer.h">
+      <Filter>dungeon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -210,6 +210,7 @@
     <ClCompile Include="..\..\src\core\status-reseter.c" />
     <ClCompile Include="..\..\src\core\visuals-reseter.c" />
     <ClCompile Include="..\..\src\core\window-redrawer.c" />
+    <ClCompile Include="..\..\src\dungeon\quest-monster-placer.c" />
     <ClCompile Include="..\..\src\flavor\flag-inscriptions-table.c" />
     <ClCompile Include="..\..\src\flavor\flavor-describer.c" />
     <ClCompile Include="..\..\src\flavor\flavor-util.c" />
@@ -784,6 +785,7 @@
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\core\window-redrawer.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h" />
+    <ClInclude Include="..\..\src\dungeon\quest-monster-placer.h" />
     <ClInclude Include="..\..\src\flavor\flag-inscriptions-table.h" />
     <ClInclude Include="..\..\src\flavor\flavor-describer.h" />
     <ClInclude Include="..\..\src\flavor\flavor-util.h" />
