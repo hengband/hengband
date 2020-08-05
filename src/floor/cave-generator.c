@@ -5,10 +5,10 @@
 #include "floor/dungeon-tunnel-util.h"
 #include "floor/floor-allocation-types.h"
 #include "floor/floor-streams.h"
-#include "floor/tunnel-generator.h"
 #include "floor/floor.h"
 #include "floor/geometry.h"
 #include "floor/object-allocator.h"
+#include "floor/tunnel-generator.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
@@ -44,6 +44,32 @@ static dun_data_type *initialize_dun_data_type(dun_data_type *dd_ptr)
     return dd_ptr;
 }
 
+static void check_arena_floor(player_type *player_ptr, dun_data_type *dd_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (!dd_ptr->empty_level) {
+        for (POSITION y = 0; y < floor_ptr->height; y++)
+            for (POSITION x = 0; x < floor_ptr->width; x++)
+                place_bold(player_ptr, y, x, GB_EXTRA);
+
+        return;
+    }
+
+    for (POSITION y = 0; y < floor_ptr->height; y++)
+        for (POSITION x = 0; x < floor_ptr->width; x++)
+            place_bold(player_ptr, y, x, GB_FLOOR);
+
+    for (POSITION x = 0; x < floor_ptr->width; x++) {
+        place_bold(player_ptr, 0, x, GB_EXTRA);
+        place_bold(player_ptr, floor_ptr->height - 1, x, GB_EXTRA);
+    }
+
+    for (POSITION y = 1; y < (floor_ptr->height - 1); y++) {
+        place_bold(player_ptr, y, 0, GB_EXTRA);
+        place_bold(player_ptr, y, floor_ptr->width - 1, GB_EXTRA);
+    }
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -73,26 +99,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("アリーナレベルを生成。", "Arena level."));
     }
 
-    if (dd_ptr->empty_level) {
-        for (POSITION y = 0; y < floor_ptr->height; y++)
-            for (POSITION x = 0; x < floor_ptr->width; x++)
-                place_bold(player_ptr, y, x, GB_FLOOR);
-
-        for (POSITION x = 0; x < floor_ptr->width; x++) {
-            place_bold(player_ptr, 0, x, GB_EXTRA);
-            place_bold(player_ptr, floor_ptr->height - 1, x, GB_EXTRA);
-        }
-
-        for (POSITION y = 1; y < (floor_ptr->height - 1); y++) {
-            place_bold(player_ptr, y, 0, GB_EXTRA);
-            place_bold(player_ptr, y, floor_ptr->width - 1, GB_EXTRA);
-        }
-    } else {
-        for (POSITION y = 0; y < floor_ptr->height; y++)
-            for (POSITION x = 0; x < floor_ptr->width; x++)
-                place_bold(player_ptr, y, x, GB_EXTRA);
-    }
-
+    check_arena_floor(player_ptr, dd_ptr);
     gen_caverns_and_lakes(player_ptr, d_ptr, dd_ptr);
     dt_type tmp_dt;
     dt_type *dt_ptr = initialize_dt_type(&tmp_dt);
@@ -248,8 +255,8 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         if (alloc_monster_num > small_tester)
             alloc_monster_num = small_tester;
         else
-            msg_format_wizard(
-                player_ptr, CHEAT_DUNGEON, _("モンスター数基本値を %d から %d に減らします", "Reduced monsters base from %d to %d"), small_tester, alloc_monster_num);
+            msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("モンスター数基本値を %d から %d に減らします", "Reduced monsters base from %d to %d"), small_tester,
+                alloc_monster_num);
     }
 
     alloc_monster_num += randint1(8);
