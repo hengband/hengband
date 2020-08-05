@@ -1232,7 +1232,6 @@ void calc_class_status(player_type *creature_ptr)
         break;
     case CLASS_BERSERKER:
         creature_ptr->shero = 1;
-        creature_ptr->sustain_dex = TRUE;
         creature_ptr->sustain_con = TRUE;
         creature_ptr->regenerate = TRUE;
         creature_ptr->redraw |= PR_STATUS;
@@ -1255,8 +1254,6 @@ void calc_class_status(player_type *creature_ptr)
         creature_ptr->resist_fear = TRUE;
         if (creature_ptr->lev > 19)
             creature_ptr->resist_pois = TRUE;
-        if (creature_ptr->lev > 24)
-            creature_ptr->sustain_dex = TRUE;
         if (creature_ptr->lev > 44) {
             creature_ptr->oppose_pois = 1;
             creature_ptr->redraw |= PR_STATUS;

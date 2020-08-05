@@ -573,7 +573,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->levitation = FALSE;
     creature_ptr->lite = FALSE;
     creature_ptr->sustain_con = FALSE;
-    creature_ptr->sustain_dex = FALSE;
     creature_ptr->sustain_chr = FALSE;
     creature_ptr->resist_acid = FALSE;
     creature_ptr->resist_elec = FALSE;
@@ -738,6 +737,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_sustain_str(creature_ptr);
     have_sustain_int(creature_ptr);
     have_sustain_wis(creature_ptr);
+    have_sustain_dex(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4485,7 +4485,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->levitation = TRUE;
         creature_ptr->lite = TRUE;
         creature_ptr->sustain_con = TRUE;
-        creature_ptr->sustain_dex = TRUE;
         creature_ptr->sustain_chr = TRUE;
         creature_ptr->resist_acid = TRUE;
         creature_ptr->resist_elec = TRUE;
@@ -4681,8 +4680,6 @@ void calc_equipment_status(player_type *creature_ptr)
         if (have_flag(flgs, TR_RES_NETHER))
             creature_ptr->resist_neth = TRUE;
 
-        if (have_flag(flgs, TR_SUST_DEX))
-            creature_ptr->sustain_dex = TRUE;
         if (have_flag(flgs, TR_SUST_CON))
             creature_ptr->sustain_con = TRUE;
         if (have_flag(flgs, TR_SUST_CHR))
