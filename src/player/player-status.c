@@ -572,7 +572,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->can_swim = FALSE;
     creature_ptr->levitation = FALSE;
     creature_ptr->lite = FALSE;
-    creature_ptr->sustain_chr = FALSE;
     creature_ptr->resist_acid = FALSE;
     creature_ptr->resist_elec = FALSE;
     creature_ptr->resist_fire = FALSE;
@@ -738,6 +737,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_sustain_wis(creature_ptr);
     have_sustain_dex(creature_ptr);
     have_sustain_con(creature_ptr);
+    have_sustain_chr(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4484,7 +4484,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->regenerate = TRUE;
         creature_ptr->levitation = TRUE;
         creature_ptr->lite = TRUE;
-        creature_ptr->sustain_chr = TRUE;
         creature_ptr->resist_acid = TRUE;
         creature_ptr->resist_elec = TRUE;
         creature_ptr->resist_fire = TRUE;
@@ -4678,9 +4677,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->resist_blind = TRUE;
         if (have_flag(flgs, TR_RES_NETHER))
             creature_ptr->resist_neth = TRUE;
-
-        if (have_flag(flgs, TR_SUST_CHR))
-            creature_ptr->sustain_chr = TRUE;
 
         if (o_ptr->name2 == EGO_RING_RES_TIME)
             creature_ptr->resist_time = TRUE;
