@@ -173,8 +173,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_dark = TRUE;
             break;
         case RACE_HALF_TROLL:
-            creature_ptr->sustain_str = TRUE;
-
             if (creature_ptr->lev > 14) {
                 creature_ptr->regenerate = TRUE;
                 if (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_BERSERKER) {
@@ -199,10 +197,8 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_HALF_OGRE:
             creature_ptr->resist_dark = TRUE;
-            creature_ptr->sustain_str = TRUE;
             break;
         case RACE_HALF_GIANT:
-            creature_ptr->sustain_str = TRUE;
             creature_ptr->resist_shard = TRUE;
             break;
         case RACE_HALF_TITAN:

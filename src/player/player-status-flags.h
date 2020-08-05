@@ -36,5 +36,6 @@ void have_heavy_spell(player_type *creature_ptr);
 void have_hold_exp(player_type *creature_ptr);
 void have_see_inv(player_type *creature_ptr);
 void have_free_act(player_type *creature_ptr);
+void have_sustain_str(player_type *creature_ptr);
 
 
