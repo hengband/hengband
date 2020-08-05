@@ -1232,7 +1232,6 @@ void calc_class_status(player_type *creature_ptr)
         break;
     case CLASS_BERSERKER:
         creature_ptr->shero = 1;
-        creature_ptr->sustain_con = TRUE;
         creature_ptr->regenerate = TRUE;
         creature_ptr->redraw |= PR_STATUS;
         break;

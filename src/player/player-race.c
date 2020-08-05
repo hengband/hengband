@@ -186,7 +186,6 @@ void calc_race_status(player_type *creature_ptr)
             }
             break;
         case RACE_AMBERITE:
-            creature_ptr->sustain_con = TRUE;
             creature_ptr->regenerate = TRUE;
             break;
         case RACE_HIGH_ELF:
@@ -294,9 +293,6 @@ void calc_race_status(player_type *creature_ptr)
                 creature_ptr->redraw |= PR_STATUS;
             }
 
-            break;
-        case RACE_DUNADAN:
-            creature_ptr->sustain_con = TRUE;
             break;
         case RACE_S_FAIRY:
             creature_ptr->levitation = TRUE;
