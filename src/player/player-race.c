@@ -240,7 +240,6 @@ void calc_race_status(player_type *creature_ptr)
                 creature_ptr->resist_pois = TRUE;
             break;
         case RACE_MIND_FLAYER:
-            creature_ptr->sustain_int = TRUE;
             creature_ptr->sustain_wis = TRUE;
             break;
         case RACE_IMP:
