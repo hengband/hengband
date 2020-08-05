@@ -70,6 +70,31 @@ static void check_arena_floor(player_type *player_ptr, dun_data_type *dd_ptr)
     }
 }
 
+static void place_cave_contents(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (floor_ptr->dun_level == 1)
+        while (one_in_(DUN_MOS_DEN))
+            place_trees(player_ptr, randint1(floor_ptr->width - 2), randint1(floor_ptr->height - 2));
+
+    if (dd_ptr->destroyed)
+        destroy_level(player_ptr);
+
+    if (has_river_flag(d_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
+        add_river(floor_ptr, dd_ptr);
+
+    for (int i = 0; i < dd_ptr->cent_n; i++) {
+        POSITION ty, tx;
+        int pick = rand_range(0, i);
+        ty = dd_ptr->cent[i].y;
+        tx = dd_ptr->cent[i].x;
+        dd_ptr->cent[i].y = dd_ptr->cent[pick].y;
+        dd_ptr->cent[i].x = dd_ptr->cent[pick].x;
+        dd_ptr->cent[pick].y = ty;
+        dd_ptr->cent[pick].x = tx;
+    }
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -121,27 +146,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
             return FALSE;
         }
 
-        if (floor_ptr->dun_level == 1)
-            while (one_in_(DUN_MOS_DEN))
-                place_trees(player_ptr, randint1(floor_ptr->width - 2), randint1(floor_ptr->height - 2));
-
-        if (dd_ptr->destroyed)
-            destroy_level(player_ptr);
-
-        if (has_river_flag(d_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
-            add_river(floor_ptr, dd_ptr);
-
-        for (int i = 0; i < dd_ptr->cent_n; i++) {
-            POSITION ty, tx;
-            int pick = rand_range(0, i);
-            ty = dd_ptr->cent[i].y;
-            tx = dd_ptr->cent[i].x;
-            dd_ptr->cent[i].y = dd_ptr->cent[pick].y;
-            dd_ptr->cent[i].x = dd_ptr->cent[pick].x;
-            dd_ptr->cent[pick].y = ty;
-            dd_ptr->cent[pick].x = tx;
-        }
-
+        place_cave_contents(player_ptr, dd_ptr, d_ptr);
         dd_ptr->door_n = 0;
         POSITION y = dd_ptr->cent[dd_ptr->cent_n - 1].y;
         POSITION x = dd_ptr->cent[dd_ptr->cent_n - 1].x;
