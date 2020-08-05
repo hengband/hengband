@@ -1,5 +1,5 @@
 ﻿#include "load/floor-loader.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

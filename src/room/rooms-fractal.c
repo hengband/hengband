@@ -1,7 +1,7 @@
 ﻿#include "room/rooms-fractal.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "grid/grid.h"
 #include "room/cave-filler.h"
 #include "room/rooms-normal.h"
@@ -12,7 +12,7 @@
 * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal grid
 * @return なし
 */
-bool build_type9(player_type *player_ptr)
+bool build_type9(player_type *player_ptr, dun_data_type *dd_ptr)
 {
 	int grd, roug, cutoff;
 	POSITION xsize, ysize, y0, x0;
@@ -25,20 +25,20 @@ bool build_type9(player_type *player_ptr)
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	if (!find_space(player_ptr, &y0, &x0, ysize + 1, xsize + 1))
+        if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1))
 	{
 		/* Limit to the minimum room size, and retry */
 		xsize = 8;
 		ysize = 8;
 
 		/* Find and reserve some space in the dungeon.  Get center of room. */
-		if (!find_space(player_ptr, &y0, &x0, ysize + 1, xsize + 1))
+                if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1))
 		{
 			/*
 			* Still no space?!
 			* Try normal room
 			*/
-			return build_type1(player_ptr);
+			return build_type1(player_ptr, dd_ptr);
 		}
 	}
 

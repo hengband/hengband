@@ -39,7 +39,6 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type);
 void wipe_o_list(floor_type *floor_ptr);
 bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
-void try_door(player_type *player_ptr, POSITION y, POSITION x);
 FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
 void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num);
 int project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);

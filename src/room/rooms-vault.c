@@ -8,7 +8,8 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator-util.h"
+#include "floor/floor-generator.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/cheat-types.h"
@@ -605,7 +606,7 @@ static void build_vault(
  * @brief タイプ7の部屋…v_info.txtより小型vaultを生成する / Type 7 -- simple vaults (see "v_info.txt")
  * @return なし
  */
-bool build_type7(player_type *player_ptr)
+bool build_type7(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     vault_type *v_ptr = NULL;
     int dummy;
@@ -659,7 +660,7 @@ bool build_type7(player_type *player_ptr)
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, &yval, &xval, abs(y), abs(x)))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, abs(y), abs(x)))
         return FALSE;
 
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
@@ -674,7 +675,7 @@ bool build_type7(player_type *player_ptr)
  * @brief タイプ8の部屋…v_info.txtより大型vaultを生成する / Type 8 -- greater vaults (see "v_info.txt")
  * @return なし
  */
-bool build_type8(player_type *player_ptr)
+bool build_type8(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     vault_type *v_ptr;
     int dummy;
@@ -734,7 +735,7 @@ bool build_type8(player_type *player_ptr)
      * prevent generation of vaults with no-entrance.
      */
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, &yval, &xval, (POSITION)(abs(y) + 2), (POSITION)(abs(x) + 2)))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, (POSITION)(abs(y) + 2), (POSITION)(abs(x) + 2)))
         return FALSE;
 
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_name + v_ptr->name);
@@ -1086,7 +1087,7 @@ static void build_castle_vault(player_type *player_ptr, POSITION x0, POSITION y0
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-bool build_type10(player_type *player_ptr)
+bool build_type10(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y0, x0, xsize, ysize, vtype;
 
@@ -1096,7 +1097,7 @@ bool build_type10(player_type *player_ptr)
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!find_space(player_ptr, &y0, &x0, ysize + 1, xsize + 1))
+    if (!find_space(player_ptr, dd_ptr, &y0, &x0, ysize + 1, xsize + 1))
         return FALSE;
 
     /* Select type of vault */
@@ -1149,7 +1150,7 @@ bool build_type10(player_type *player_ptr)
  * @brief タイプ17の部屋…v_info.txtより固定特殊部屋を生成する / Type 17 -- fixed special room (see "v_info.txt")
  * @return なし
  */
-bool build_type17(player_type *player_ptr)
+bool build_type17(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     vault_type *v_ptr = NULL;
     int dummy;
@@ -1203,7 +1204,7 @@ bool build_type17(player_type *player_ptr)
     }
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, &yval, &xval, abs(y), abs(x)))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, abs(y), abs(x)))
         return FALSE;
 
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);

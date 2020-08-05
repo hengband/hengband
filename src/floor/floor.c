@@ -8,7 +8,8 @@
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator-util.h"
+#include "floor/floor-generator.h" // todo 相互依存している、後で消す.
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
@@ -807,93 +808,6 @@ bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
         return TRUE;
 
     return FALSE;
-}
-
-/*!
- * @brief 隣接4マスに存在する通路の数を返す / Count the number of "corridor" grids adjacent to the given grid.
- * @param y1 基準となるマスのY座標
- * @param x1 基準となるマスのX座標
- * @return 通路の数
- * @note Assumes "in_bounds(y1, x1)"
- * @details
- * XXX XXX This routine currently only counts actual "empty floor"\n
- * grids which are not in rooms.  We might want to also count stairs,\n
- * open doors, closed doors, etc.
- */
-static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
-{
-    int k = 0;
-    for (int i = 0; i < 4; i++) {
-        POSITION y = y1 + ddy_ddd[i];
-        POSITION x = x1 + ddx_ddd[i];
-        grid_type *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
-
-        if (cave_have_flag_grid(g_ptr, FF_WALL))
-            continue;
-        if (!is_floor_grid(g_ptr))
-            continue;
-        if (g_ptr->info & (CAVE_ROOM))
-            continue;
-
-        k++;
-    }
-
-    return k;
-}
-
-/*!
- * @brief ドアを設置可能な地形かを返す / Determine if the given location is "between" two walls, and "next to" two corridor spaces.
- * @param y 判定を行いたいマスのY座標
- * @param x 判定を行いたいマスのX座標
- * @return ドアを設置可能ならばTRUEを返す
- * @note Assumes "in_bounds()"
- * @details
- * \n
- * Assumes "in_bounds()"\n
- */
-static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
-{
-    if (next_to_corr(floor_ptr, y, x) < 2)
-        return FALSE;
-
-    /* Check Vertical */
-    if (cave_have_flag_bold(floor_ptr, y - 1, x, FF_WALL) && cave_have_flag_bold(floor_ptr, y + 1, x, FF_WALL)) {
-        return TRUE;
-    }
-
-    /* Check Horizontal */
-    if (cave_have_flag_bold(floor_ptr, y, x - 1, FF_WALL) && cave_have_flag_bold(floor_ptr, y, x + 1, FF_WALL)) {
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-/*!
- * @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param y 設置を行いたいマスのY座標
- * @param x 設置を行いたいマスのX座標
- * @return なし
- */
-void try_door(player_type *player_ptr, POSITION y, POSITION x)
-{
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x))
-        return;
-
-    if (cave_have_flag_bold(floor_ptr, y, x, FF_WALL))
-        return;
-    if (floor_ptr->grid_array[y][x].info & (CAVE_ROOM))
-        return;
-
-    bool can_place_door = randint0(100) < dun_tun_jct;
-    can_place_door &= possible_doorway(floor_ptr, y, x);
-    can_place_door &= (d_info[player_ptr->dungeon_idx].flags1 & DF1_NO_DOORS) == 0;
-    if (can_place_door) {
-        place_random_door(player_ptr, y, x, FALSE);
-    }
 }
 
 FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)

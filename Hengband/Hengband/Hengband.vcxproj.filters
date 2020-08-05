@@ -380,9 +380,6 @@
     <ClCompile Include="..\..\src\floor\floor-events.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-generate.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\floor\floor-save.c">
       <Filter>floor</Filter>
     </ClCompile>
@@ -1874,9 +1871,6 @@
     <ClCompile Include="..\..\src\room\room-generator.c">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\dungeon-data-definition.c">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\room\treasure-deployment.c">
       <Filter>room</Filter>
     </ClCompile>
@@ -1958,8 +1952,35 @@
     <ClCompile Include="..\..\src\wizard\artifact-analyzer.c">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\fixed-artifact-spoiler.c">
+    <ClCompile Include="..\..\src\wizard\monster-info-spoiler.c">
       <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io-dump\random-art-info-dumper.c">
+      <Filter>io-dump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\fixed-artifacts-spoiler.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\object-allocator.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-generator.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\cave-generator.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\tunnel-generator.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dungeon\quest-monster-placer.c">
+      <Filter>dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\grid\feature-generator.c">
+      <Filter>grid</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2372,9 +2393,6 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-events.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor\floor-generate.h">
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-save.h">
@@ -4261,8 +4279,41 @@
     <ClInclude Include="..\..\src\wizard\artifact-analyzer.h">
       <Filter>wizard</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\wizard\fixed-artifact-spoiler.h">
+    <ClInclude Include="..\..\src\wizard\monster-info-spoiler.h">
       <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io-dump\random-art-info-dumper.h">
+      <Filter>io-dump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\fixed-artifacts-spoiler.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-allocation-types.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\dungeon-tunnel-util.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\object-allocator.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-generator-util.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-generator.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\cave-generator.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\tunnel-generator.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\quest-monster-placer.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\feature-generator.h">
+      <Filter>grid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

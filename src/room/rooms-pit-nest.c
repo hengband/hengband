@@ -1,6 +1,6 @@
 ﻿#include "room/rooms-pit-nest.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "floor/floor.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
@@ -225,7 +225,7 @@ static void ang_sort_swap_nest_mon_info(player_type *player_ptr, vptr u, vptr v,
 *\n
 * Note that "monster nests" will never contain "unique" monsters.\n
 */
-bool build_type5(player_type *player_ptr)
+bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
 {
 	POSITION y, x, y1, x1, y2, x2, xval, yval;
 	int i;
@@ -282,7 +282,7 @@ bool build_type5(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(player_ptr, &yval, &xval, 11, 25)) return FALSE;
+	if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -436,7 +436,7 @@ bool build_type5(player_type *player_ptr)
 *\n
 * Note that "monster pits" will never contain "unique" monsters.\n
 */
-bool build_type6(player_type *player_ptr)
+bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
 {
 	POSITION y, x, y1, x1, y2, x2, xval, yval;
 	int i, j;
@@ -493,7 +493,7 @@ bool build_type6(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(player_ptr, &yval, &xval, 11, 25)) return FALSE;
+	if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -715,7 +715,7 @@ static bool vault_aux_trapped_pit(player_type *player_ptr, MONRACE_IDX r_idx)
 *\n
 * Note that "monster pits" will never contain "unique" monsters.\n
 */
-bool build_type13(player_type *player_ptr)
+bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr)
 {
 	POSITION y, x, y1, x1, y2, x2, xval, yval;
 	int i, j;
@@ -775,7 +775,7 @@ bool build_type13(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(player_ptr, &yval, &xval, 13, 25)) return FALSE;
+	if (!find_space(player_ptr, dd_ptr, &yval, &xval, 13, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 5;

@@ -57,6 +57,7 @@
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/runtime-arguments.h"
+#include "io-dump/random-art-info-dumper.h"
 #include "io/chuukei.h"
 #include "io/command-repeater.h"
 #include "io/files-util.h"
@@ -83,7 +84,6 @@
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
 #include "wizard/cmd-wizard.h"
-#include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 
 /*!

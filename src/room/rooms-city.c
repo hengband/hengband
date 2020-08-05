@@ -1,5 +1,5 @@
 ﻿#include "room/rooms-city.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/cheat-types.h"
@@ -173,7 +173,7 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
  * This function does NOT do anything about the owners of the stores,\n
  * nor the contents thereof.  It only handles the physical layout.\n
  */
-bool build_type16(player_type *player_ptr)
+bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     int stores[] = {
         STORE_GENERAL,
@@ -213,7 +213,7 @@ bool build_type16(player_type *player_ptr)
         return FALSE;
     }
 
-    if (!find_space(player_ptr, &yval, &xval, town_hgt + 4, town_wid + 4)) {
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, town_hgt + 4, town_wid + 4)) {
         C_KILL(ugbldg, n, ugbldg_type);
         return FALSE;
     }

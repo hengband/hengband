@@ -25,43 +25,43 @@
  * @note that we restrict the number of "crowded" rooms to reduce the chance of overflowing the monster list during level creation.
  * @return 部屋の生成に成功した場合 TRUE を返す。
  */
-static bool room_build(player_type *player_ptr, EFFECT_ID typ)
+static bool room_build(player_type *player_ptr, dun_data_type *dd_ptr, EFFECT_ID typ)
 {
     switch (typ) {
     case ROOM_T_NORMAL:
-        return build_type1(player_ptr);
+        return build_type1(player_ptr, dd_ptr);
     case ROOM_T_OVERLAP:
-        return build_type2(player_ptr);
+        return build_type2(player_ptr, dd_ptr);
     case ROOM_T_CROSS:
-        return build_type3(player_ptr);
+        return build_type3(player_ptr, dd_ptr);
     case ROOM_T_INNER_FEAT:
-        return build_type4(player_ptr);
+        return build_type4(player_ptr, dd_ptr);
     case ROOM_T_NEST:
-        return build_type5(player_ptr);
+        return build_type5(player_ptr, dd_ptr);
     case ROOM_T_PIT:
-        return build_type6(player_ptr);
+        return build_type6(player_ptr, dd_ptr);
     case ROOM_T_LESSER_VAULT:
-        return build_type7(player_ptr);
+        return build_type7(player_ptr, dd_ptr);
     case ROOM_T_GREATER_VAULT:
-        return build_type8(player_ptr);
+        return build_type8(player_ptr, dd_ptr);
     case ROOM_T_FRACAVE:
-        return build_type9(player_ptr);
+        return build_type9(player_ptr, dd_ptr);
     case ROOM_T_RANDOM_VAULT:
-        return build_type10(player_ptr);
+        return build_type10(player_ptr, dd_ptr);
     case ROOM_T_OVAL:
-        return build_type11(player_ptr);
+        return build_type11(player_ptr, dd_ptr);
     case ROOM_T_CRYPT:
-        return build_type12(player_ptr);
+        return build_type12(player_ptr, dd_ptr);
     case ROOM_T_TRAP_PIT:
-        return build_type13(player_ptr);
+        return build_type13(player_ptr, dd_ptr);
     case ROOM_T_TRAP:
-        return build_type14(player_ptr);
+        return build_type14(player_ptr, dd_ptr);
     case ROOM_T_GLASS:
-        return build_type15(player_ptr);
+        return build_type15(player_ptr, dd_ptr);
     case ROOM_T_ARCADE:
-        return build_type16(player_ptr);
+        return build_type16(player_ptr, dd_ptr);
     case ROOM_T_FIXED:
-        return build_type17(player_ptr);
+        return build_type17(player_ptr, dd_ptr);
     default:
         return FALSE;
     }
@@ -84,7 +84,7 @@ static void move_prob_list(room_type dst, room_type src, int *prob_list)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return 部屋生成に成功した場合 TRUE を返す。
  */
-bool generate_rooms(player_type *player_ptr)
+bool generate_rooms(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int crowded = 0;
@@ -133,7 +133,7 @@ bool generate_rooms(player_type *player_ptr)
     } else if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_CAVE) {
         /*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc floor_ptr->grid_array etc.) */
         move_prob_list(ROOM_T_FRACAVE, ROOM_T_NORMAL, prob_list);
-    } else if (dun_data->cavern || dun_data->empty_level) {
+    } else if (dd_ptr->cavern || dd_ptr->empty_level) {
         /*! @details ダンジョンの基本地形が最初から渓谷かアリーナ型の場合 FRACAVE は生成から除外。 /  No caves when a (random) cavern exists: they look bad */
         prob_list[ROOM_T_FRACAVE] = 0;
     }
@@ -193,7 +193,7 @@ bool generate_rooms(player_type *player_ptr)
                 continue;
 
             room_num[room_type]--;
-            if (!room_build(player_ptr, room_type))
+            if (!room_build(player_ptr, dd_ptr, room_type))
                 continue;
 
             rooms_built++;

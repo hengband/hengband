@@ -166,10 +166,11 @@ hengband_SOURCES = \
 	core/visuals-reseter.c core/visuals-reseter.h \
 	core/window-redrawer.c core/window-redrawer.h \
 	\
-	dungeon/dungeon-flag-types.h \
 	dungeon/dungeon.c dungeon/dungeon.h \
+	dungeon/dungeon-flag-types.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	dungeon/quest.h dungeon/quest.c \
+	dungeon/quest-monster-placer.c dungeon/quest-monster-placer.h \
 	\
 	effect/effect-feature.c effect/effect-feature.h \
 	effect/effect-item.c effect/effect-item.h \
@@ -203,20 +204,26 @@ hengband_SOURCES = \
 	flavor/tval-description-switcher.c flavor/tval-description-switcher.h \
 	\
 	floor/cave.c floor/cave.h \
+	floor/cave-generator.c floor/cave-generator.h \
+	floor/dungeon-tunnel-util.c floor/dungeon-tunnel-util.h \
 	floor/fixed-map-generator.c floor/fixed-map-generator.h \
 	floor/floor.c floor/floor.h \
+	floor/floor-allocation-types.h \
 	floor/floor-base-definitions.h \
 	floor/floor-events.c floor/floor-events.h \
-	floor/floor-generate.c floor/floor-generate.h \
+	floor/floor-generator-util.h \
+	floor/floor-generator.c floor/floor-generator.h \
 	floor/floor-object.c floor/floor-object.h \
 	floor/floor-save.h floor/floor-save.c \
 	floor/floor-streams.c floor/floor-streams.h \
 	floor/floor-town.h floor/floor-town.c \
 	floor/floor-util.c floor/floor-util.h \
 	floor/geometry.c floor/geometry.h \
+	floor/object-allocator.c floor/object-allocator.h \
 	floor/object-scanner.c floor/object-scanner.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	floor/sight-definitions.h \
+	floor/tunnel-generator.c floor/tunnel-generator.h \
 	floor/wild.h floor/wild.c \
 	\
 	game-option/auto-destruction-options.c game-option/auto-destruction-options.h \
@@ -236,6 +243,7 @@ hengband_SOURCES = \
 	game-option/text-display-options.c game-option/text-display-options.h \
 	\
 	grid/feature-flag-types.h \
+	grid/feature-generator.c grid/feature-generator.h \
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h \
 	grid/lighting-colors-table.c grid/lighting-colors-table.h \
@@ -299,6 +307,7 @@ hengband_SOURCES = \
 	io-dump/dump-remover.c io-dump/dump-remover.h \
 	io-dump/dump-util.c io-dump/dump-util.h \
 	io-dump/player-status-dump.c io-dump/player-status-dump.h \
+	io-dump/random-art-info-dumper.c io-dump/random-art-info-dumper.h \
 	io-dump/special-class-dump.c io-dump/special-class-dump.h \
 	\
 	knowledge/knowledge-autopick.c knowledge/knowledge-autopick.h \
@@ -800,8 +809,9 @@ hengband_SOURCES = \
 	wizard/artifact-analyzer.c wizard/artifact-analyzer.h \
 	wizard/artifact-bias-table.c wizard/artifact-bias-table.h \
 	wizard/cmd-wizard.c wizard/cmd-wizard.h \
-	wizard/fixed-artifact-spoiler.c wizard/fixed-artifact-spoiler.h \
+	wizard/fixed-artifacts-spoiler.c wizard/fixed-artifacts-spoiler.h \
 	wizard/items-spoiler.c wizard/items-spoiler.h \
+	wizard/monster-info-spoiler.c wizard/monster-info-spoiler.h \
 	wizard/spoiler-table.c wizard/spoiler-table.h \
 	wizard/spoiler-util.c wizard/spoiler-util.h \
 	wizard/tval-descriptions-table.c wizard/tval-descriptions-table.h \

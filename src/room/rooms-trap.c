@@ -1,6 +1,6 @@
 ﻿#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor-generate.h"
+#include "floor/floor-generator.h"
 #include "floor/floor.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
@@ -16,7 +16,7 @@
  * @details
  * A special trap is placed at center of the room
  */
-bool build_type14(player_type *player_ptr)
+bool build_type14(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y2, x2, yval, xval;
     POSITION y1, x1, xsize, ysize;
@@ -36,7 +36,7 @@ bool build_type14(player_type *player_ptr)
     ysize = y1 + y2 + 1;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, &yval, &xval, ysize + 2, xsize + 2))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2))
         return FALSE;
 
     /* Choose lite or dark */

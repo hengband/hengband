@@ -65,5 +65,3 @@ typedef struct dun_data_type {
     bool cavern;
     int laketype;
 } dun_data_type;
-
-extern dun_data_type *dun_data;
