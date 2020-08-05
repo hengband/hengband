@@ -27,6 +27,23 @@
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
+static void reset_lite_area(floor_type *floor_ptr)
+{
+    floor_ptr->lite_n = 0;
+    floor_ptr->mon_lite_n = 0;
+    floor_ptr->redraw_n = 0;
+    floor_ptr->view_n = 0;
+}
+
+static dun_data_type *initialize_dun_data_type(dun_data_type *dd_ptr)
+{
+    dd_ptr->destroyed = FALSE;
+    dd_ptr->empty_level = FALSE;
+    dd_ptr->cavern = FALSE;
+    dd_ptr->laketype = 0;
+    return dd_ptr;
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -37,23 +54,12 @@
 bool cave_gen(player_type *player_ptr, concptr *why)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    dungeon_type *dungeon_ptr = &d_info[floor_ptr->dungeon_idx];
-    floor_ptr->lite_n = 0;
-    floor_ptr->mon_lite_n = 0;
-    floor_ptr->redraw_n = 0;
-    floor_ptr->view_n = 0;
-    dun_data_type tmp_dd;
-    dun_data_type *dd_ptr = &tmp_dd;
-    dd_ptr->destroyed = FALSE;
-    dd_ptr->empty_level = FALSE;
-    dd_ptr->cavern = FALSE;
-    dd_ptr->laketype = 0;
+    reset_lite_area(floor_ptr);
     set_floor_and_wall(floor_ptr->dungeon_idx);
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), NULL);
 
-    dt_type tmp_dt;
-    dt_type *dt_ptr = initialize_dt_type(&tmp_dt);
-
+    dun_data_type tmp_dd;
+    dun_data_type *dd_ptr = initialize_dun_data_type(&tmp_dd);
     dd_ptr->row_rooms = floor_ptr->height / BLOCK_HGT;
     dd_ptr->col_rooms = floor_ptr->width / BLOCK_WID;
     for (POSITION y = 0; y < dd_ptr->row_rooms; y++)
@@ -61,7 +67,8 @@ bool cave_gen(player_type *player_ptr, concptr *why)
             dd_ptr->room_map[y][x] = FALSE;
 
     dd_ptr->cent_n = 0;
-    if (ironman_empty_levels || ((dungeon_ptr->flags1 & DF1_ARENA) && (empty_levels && one_in_(EMPTY_LEVEL)))) {
+    dungeon_type *d_ptr = &d_info[floor_ptr->dungeon_idx];
+    if (ironman_empty_levels || ((d_ptr->flags1 & DF1_ARENA) && (empty_levels && one_in_(EMPTY_LEVEL)))) {
         dd_ptr->empty_level = TRUE;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("アリーナレベルを生成。", "Arena level."));
     }
@@ -86,8 +93,10 @@ bool cave_gen(player_type *player_ptr, concptr *why)
                 place_bold(player_ptr, y, x, GB_EXTRA);
     }
 
-    gen_caverns_and_lakes(player_ptr, dungeon_ptr, dd_ptr);
-    if (dungeon_ptr->flags1 & DF1_MAZE) {
+    gen_caverns_and_lakes(player_ptr, d_ptr, dd_ptr);
+    dt_type tmp_dt;
+    dt_type *dt_ptr = initialize_dt_type(&tmp_dt);
+    if (d_ptr->flags1 & DF1_MAZE) {
         build_maze_vault(player_ptr, floor_ptr->width / 2 - 1, floor_ptr->height / 2 - 1, floor_ptr->width - 4, floor_ptr->height - 4, FALSE);
         if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) {
             *why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
@@ -112,7 +121,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         if (dd_ptr->destroyed)
             destroy_level(player_ptr);
 
-        if (has_river_flag(dungeon_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
+        if (has_river_flag(d_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
             add_river(floor_ptr, dd_ptr);
 
         for (int i = 0; i < dd_ptr->cent_n; i++) {
@@ -133,7 +142,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         for (int i = 0; i < dd_ptr->cent_n; i++) {
             dd_ptr->tunn_n = 0;
             dd_ptr->wall_n = 0;
-            if (randint1(floor_ptr->dun_level) > dungeon_ptr->tunnel_percent)
+            if (randint1(floor_ptr->dun_level) > d_ptr->tunnel_percent)
                 (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->cent[i].x, dd_ptr->cent[i].y, x, y, 2, 2);
             else if (!build_tunnel(player_ptr, dd_ptr, dt_ptr, dd_ptr->cent[i].y, dd_ptr->cent[i].x, y, x))
                 tunnel_fail_count++;
@@ -164,7 +173,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
                 g_ptr = &floor_ptr->grid_array[y][x];
                 g_ptr->mimic = 0;
                 place_grid(player_ptr, g_ptr, GB_FLOOR);
-                if ((randint0(100) < dt_ptr->dun_tun_pen) && !(dungeon_ptr->flags1 & DF1_NO_DOORS))
+                if ((randint0(100) < dt_ptr->dun_tun_pen) && !(d_ptr->flags1 & DF1_NO_DOORS))
                     place_random_door(player_ptr, y, x, TRUE);
             }
 
@@ -193,13 +202,13 @@ bool cave_gen(player_type *player_ptr, concptr *why)
     }
 
     if (!dd_ptr->laketype) {
-        if (dungeon_ptr->stream2)
+        if (d_ptr->stream2)
             for (int i = 0; i < DUN_STR_QUA; i++)
-                build_streamer(player_ptr, dungeon_ptr->stream2, DUN_STR_QC);
+                build_streamer(player_ptr, d_ptr->stream2, DUN_STR_QC);
 
-        if (dungeon_ptr->stream1)
+        if (d_ptr->stream1)
             for (int i = 0; i < DUN_STR_MAG; i++)
-                build_streamer(player_ptr, dungeon_ptr->stream1, DUN_STR_MC);
+                build_streamer(player_ptr, d_ptr->stream1, DUN_STR_MC);
     }
 
     for (POSITION x = 0; x < floor_ptr->width; x++) {
@@ -228,7 +237,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
     if (alloc_object_num < 2)
         alloc_object_num = 2;
 
-    int alloc_monster_num = dungeon_ptr->min_m_alloc_level;
+    int alloc_monster_num = d_ptr->min_m_alloc_level;
     if (floor_ptr->height < MAX_HGT || floor_ptr->width < MAX_WID) {
         int small_tester = alloc_monster_num;
 
@@ -248,7 +257,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         (void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP, summon_specific);
 
     alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint1(alloc_object_num));
-    if (!(dungeon_ptr->flags1 & DF1_NO_CAVE))
+    if (!(d_ptr->flags1 & DF1_NO_CAVE))
         alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(alloc_object_num));
 
     if (player_ptr->enter_dungeon && floor_ptr->dun_level > 1)
@@ -265,7 +274,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
 
     bool is_empty_or_dark = dd_ptr->empty_level;
     is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
-    is_empty_or_dark &= (dungeon_ptr->flags1 & DF1_DARKNESS) == 0;
+    is_empty_or_dark &= (d_ptr->flags1 & DF1_DARKNESS) == 0;
     if (!is_empty_or_dark)
         return TRUE;
 
