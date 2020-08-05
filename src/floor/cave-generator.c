@@ -36,37 +36,37 @@
  */
 bool cave_gen(player_type *player_ptr, concptr *why)
 {
-    dun_data_type dun_body;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     dungeon_type *dungeon_ptr = &d_info[floor_ptr->dungeon_idx];
     floor_ptr->lite_n = 0;
     floor_ptr->mon_lite_n = 0;
     floor_ptr->redraw_n = 0;
     floor_ptr->view_n = 0;
-    dun_data = &dun_body;
-    dun_data->destroyed = FALSE;
-    dun_data->empty_level = FALSE;
-    dun_data->cavern = FALSE;
-    dun_data->laketype = 0;
+    dun_data_type tmp_dd;
+    dun_data_type *dd_ptr = &tmp_dd;
+    dd_ptr->destroyed = FALSE;
+    dd_ptr->empty_level = FALSE;
+    dd_ptr->cavern = FALSE;
+    dd_ptr->laketype = 0;
     set_floor_and_wall(floor_ptr->dungeon_idx);
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), NULL);
 
     dt_type tmp_dt;
     dt_type *dt_ptr = initialize_dt_type(&tmp_dt);
 
-    dun_data->row_rooms = floor_ptr->height / BLOCK_HGT;
-    dun_data->col_rooms = floor_ptr->width / BLOCK_WID;
-    for (POSITION y = 0; y < dun_data->row_rooms; y++)
-        for (POSITION x = 0; x < dun_data->col_rooms; x++)
-            dun_data->room_map[y][x] = FALSE;
+    dd_ptr->row_rooms = floor_ptr->height / BLOCK_HGT;
+    dd_ptr->col_rooms = floor_ptr->width / BLOCK_WID;
+    for (POSITION y = 0; y < dd_ptr->row_rooms; y++)
+        for (POSITION x = 0; x < dd_ptr->col_rooms; x++)
+            dd_ptr->room_map[y][x] = FALSE;
 
-    dun_data->cent_n = 0;
+    dd_ptr->cent_n = 0;
     if (ironman_empty_levels || ((dungeon_ptr->flags1 & DF1_ARENA) && (empty_levels && one_in_(EMPTY_LEVEL)))) {
-        dun_data->empty_level = TRUE;
+        dd_ptr->empty_level = TRUE;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("アリーナレベルを生成。", "Arena level."));
     }
 
-    if (dun_data->empty_level) {
+    if (dd_ptr->empty_level) {
         for (POSITION y = 0; y < floor_ptr->height; y++)
             for (POSITION x = 0; x < floor_ptr->width; x++)
                 place_bold(player_ptr, y, x, GB_FLOOR);
@@ -86,7 +86,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
                 place_bold(player_ptr, y, x, GB_EXTRA);
     }
 
-    gen_caverns_and_lakes(dungeon_ptr, player_ptr);
+    gen_caverns_and_lakes(player_ptr, dungeon_ptr, dd_ptr);
     if (dungeon_ptr->flags1 & DF1_MAZE) {
         build_maze_vault(player_ptr, floor_ptr->width / 2 - 1, floor_ptr->height / 2 - 1, floor_ptr->width - 4, floor_ptr->height - 4, FALSE);
         if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) {
@@ -100,7 +100,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         }
     } else {
         int tunnel_fail_count = 0;
-        if (!generate_rooms(player_ptr)) {
+        if (!generate_rooms(player_ptr, dd_ptr)) {
             *why = _("部屋群の生成に失敗", "Failed to generate rooms");
             return FALSE;
         }
@@ -109,33 +109,33 @@ bool cave_gen(player_type *player_ptr, concptr *why)
             while (one_in_(DUN_MOS_DEN))
                 place_trees(player_ptr, randint1(floor_ptr->width - 2), randint1(floor_ptr->height - 2));
 
-        if (dun_data->destroyed)
+        if (dd_ptr->destroyed)
             destroy_level(player_ptr);
 
         if (has_river_flag(dungeon_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
-            add_river(floor_ptr);
+            add_river(floor_ptr, dd_ptr);
 
-        for (int i = 0; i < dun_data->cent_n; i++) {
+        for (int i = 0; i < dd_ptr->cent_n; i++) {
             POSITION ty, tx;
             int pick = rand_range(0, i);
-            ty = dun_data->cent[i].y;
-            tx = dun_data->cent[i].x;
-            dun_data->cent[i].y = dun_data->cent[pick].y;
-            dun_data->cent[i].x = dun_data->cent[pick].x;
-            dun_data->cent[pick].y = ty;
-            dun_data->cent[pick].x = tx;
+            ty = dd_ptr->cent[i].y;
+            tx = dd_ptr->cent[i].x;
+            dd_ptr->cent[i].y = dd_ptr->cent[pick].y;
+            dd_ptr->cent[i].x = dd_ptr->cent[pick].x;
+            dd_ptr->cent[pick].y = ty;
+            dd_ptr->cent[pick].x = tx;
         }
 
-        dun_data->door_n = 0;
-        POSITION y = dun_data->cent[dun_data->cent_n - 1].y;
-        POSITION x = dun_data->cent[dun_data->cent_n - 1].x;
+        dd_ptr->door_n = 0;
+        POSITION y = dd_ptr->cent[dd_ptr->cent_n - 1].y;
+        POSITION x = dd_ptr->cent[dd_ptr->cent_n - 1].x;
 
-        for (int i = 0; i < dun_data->cent_n; i++) {
-            dun_data->tunn_n = 0;
-            dun_data->wall_n = 0;
+        for (int i = 0; i < dd_ptr->cent_n; i++) {
+            dd_ptr->tunn_n = 0;
+            dd_ptr->wall_n = 0;
             if (randint1(floor_ptr->dun_level) > dungeon_ptr->tunnel_percent)
-                (void)build_tunnel2(player_ptr, dun_data->cent[i].x, dun_data->cent[i].y, x, y, 2, 2);
-            else if (!build_tunnel(player_ptr, dt_ptr, dun_data->cent[i].y, dun_data->cent[i].x, y, x))
+                (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->cent[i].x, dd_ptr->cent[i].y, x, y, 2, 2);
+            else if (!build_tunnel(player_ptr, dd_ptr, dt_ptr, dd_ptr->cent[i].y, dd_ptr->cent[i].x, y, x))
                 tunnel_fail_count++;
 
             if (tunnel_fail_count >= 2) {
@@ -143,11 +143,11 @@ bool cave_gen(player_type *player_ptr, concptr *why)
                 return FALSE;
             }
 
-            for (int j = 0; j < dun_data->tunn_n; j++) {
+            for (int j = 0; j < dd_ptr->tunn_n; j++) {
                 grid_type *g_ptr;
                 feature_type *f_ptr;
-                y = dun_data->tunn[j].y;
-                x = dun_data->tunn[j].x;
+                y = dd_ptr->tunn[j].y;
+                x = dd_ptr->tunn[j].x;
                 g_ptr = &floor_ptr->grid_array[y][x];
                 f_ptr = &f_info[g_ptr->feat];
 
@@ -157,10 +157,10 @@ bool cave_gen(player_type *player_ptr, concptr *why)
                 }
             }
 
-            for (int j = 0; j < dun_data->wall_n; j++) {
+            for (int j = 0; j < dd_ptr->wall_n; j++) {
                 grid_type *g_ptr;
-                y = dun_data->wall[j].y;
-                x = dun_data->wall[j].x;
+                y = dd_ptr->wall[j].y;
+                x = dd_ptr->wall[j].x;
                 g_ptr = &floor_ptr->grid_array[y][x];
                 g_ptr->mimic = 0;
                 place_grid(player_ptr, g_ptr, GB_FLOOR);
@@ -168,13 +168,13 @@ bool cave_gen(player_type *player_ptr, concptr *why)
                     place_random_door(player_ptr, y, x, TRUE);
             }
 
-            y = dun_data->cent[i].y;
-            x = dun_data->cent[i].x;
+            y = dd_ptr->cent[i].y;
+            x = dd_ptr->cent[i].x;
         }
 
-        for (int i = 0; i < dun_data->door_n; i++) {
-            y = dun_data->door[i].y;
-            x = dun_data->door[i].x;
+        for (int i = 0; i < dd_ptr->door_n; i++) {
+            y = dd_ptr->door[i].y;
+            x = dd_ptr->door[i].x;
             try_door(player_ptr, dt_ptr, y, x - 1);
             try_door(player_ptr, dt_ptr, y, x + 1);
             try_door(player_ptr, dt_ptr, y - 1, x);
@@ -192,7 +192,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         }
     }
 
-    if (!dun_data->laketype) {
+    if (!dd_ptr->laketype) {
         if (dungeon_ptr->stream2)
             for (int i = 0; i < DUN_STR_QUA; i++)
                 build_streamer(player_ptr, dungeon_ptr->stream2, DUN_STR_QC);
@@ -263,7 +263,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         return FALSE;
     }
 
-    bool is_empty_or_dark = dun_data->empty_level;
+    bool is_empty_or_dark = dd_ptr->empty_level;
     is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
     is_empty_or_dark &= (dungeon_ptr->flags1 & DF1_DARKNESS) == 0;
     if (!is_empty_or_dark)

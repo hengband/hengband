@@ -1871,9 +1871,6 @@
     <ClCompile Include="..\..\src\room\room-generator.c">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\dungeon-data-definition.c">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\room\treasure-deployment.c">
       <Filter>room</Filter>
     </ClCompile>

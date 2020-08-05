@@ -75,7 +75,7 @@ static void check_room_boundary(player_type *player_ptr, POSITION x1, POSITION y
  * @param block_x 範囲の左端
  * @return なし
  */
-static bool find_space_aux(POSITION blocks_high, POSITION blocks_wide, POSITION block_y, POSITION block_x)
+static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION blocks_wide, POSITION block_y, POSITION block_x)
 {
     if (blocks_wide < 3) {
         if ((blocks_wide == 2) && (block_x % 3) == 2)
@@ -84,7 +84,7 @@ static bool find_space_aux(POSITION blocks_high, POSITION blocks_wide, POSITION 
         if ((block_x % 3) != 0)
             return FALSE;
     } else {
-        if (block_x + (blocks_wide / 2) <= dun_data->col_rooms / 2) {
+        if (block_x + (blocks_wide / 2) <= dd_ptr->col_rooms / 2) {
             if (((block_x % 3) == 2) && ((blocks_wide % 3) == 2))
                 return FALSE;
             if ((block_x % 3) == 1)
@@ -102,12 +102,12 @@ static bool find_space_aux(POSITION blocks_high, POSITION blocks_wide, POSITION 
     POSITION by2 = block_y + blocks_high;
     POSITION bx2 = block_x + blocks_wide;
 
-    if ((by1 < 0) || (by2 > dun_data->row_rooms) || (bx1 < 0) || (bx2 > dun_data->col_rooms))
+    if ((by1 < 0) || (by2 > dd_ptr->row_rooms) || (bx1 < 0) || (bx2 > dd_ptr->col_rooms))
         return FALSE;
 
     for (POSITION by = by1; by < by2; by++)
         for (POSITION bx = bx1; bx < bx2; bx++)
-            if (dun_data->room_map[by][bx])
+            if (dd_ptr->room_map[by][bx])
                 return FALSE;
 
     return TRUE;
@@ -134,20 +134,20 @@ static bool find_space_aux(POSITION blocks_high, POSITION blocks_wide, POSITION 
  * Return TRUE and values for the center of the room if all went well.\n
  * Otherwise, return FALSE.\n
  */
-bool find_space(player_type *player_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width)
+bool find_space(player_type *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width)
 {
     int pick;
     POSITION block_y = 0;
     POSITION block_x = 0;
     POSITION blocks_high = 1 + ((height - 1) / BLOCK_HGT);
     POSITION blocks_wide = 1 + ((width - 1) / BLOCK_WID);
-    if ((dun_data->row_rooms < blocks_high) || (dun_data->col_rooms < blocks_wide))
+    if ((dd_ptr->row_rooms < blocks_high) || (dd_ptr->col_rooms < blocks_wide))
         return FALSE;
 
     int candidates = 0;
-    for (block_y = dun_data->row_rooms - blocks_high; block_y >= 0; block_y--) {
-        for (block_x = dun_data->col_rooms - blocks_wide; block_x >= 0; block_x--) {
-            if (find_space_aux(blocks_high, blocks_wide, block_y, block_x)) {
+    for (block_y = dd_ptr->row_rooms - blocks_high; block_y >= 0; block_y--) {
+        for (block_x = dd_ptr->col_rooms - blocks_wide; block_x >= 0; block_x--) {
+            if (find_space_aux(dd_ptr, blocks_high, blocks_wide, block_y, block_x)) {
                 /* Find a valid place */
                 candidates++;
             }
@@ -162,9 +162,9 @@ bool find_space(player_type *player_ptr, POSITION *y, POSITION *x, POSITION heig
     else
         pick = candidates / 2 + 1;
 
-    for (block_y = dun_data->row_rooms - blocks_high; block_y >= 0; block_y--) {
-        for (block_x = dun_data->col_rooms - blocks_wide; block_x >= 0; block_x--) {
-            if (find_space_aux(blocks_high, blocks_wide, block_y, block_x)) {
+    for (block_y = dd_ptr->row_rooms - blocks_high; block_y >= 0; block_y--) {
+        for (block_x = dd_ptr->col_rooms - blocks_wide; block_x >= 0; block_x--) {
+            if (find_space_aux(dd_ptr, blocks_high, blocks_wide, block_y, block_x)) {
                 pick--;
                 if (!pick)
                     break;
@@ -181,15 +181,15 @@ bool find_space(player_type *player_ptr, POSITION *y, POSITION *x, POSITION heig
     POSITION bx2 = block_x + blocks_wide;
     *y = ((by1 + by2) * BLOCK_HGT) / 2;
     *x = ((bx1 + bx2) * BLOCK_WID) / 2;
-    if (dun_data->cent_n < CENT_MAX) {
-        dun_data->cent[dun_data->cent_n].y = (byte)*y;
-        dun_data->cent[dun_data->cent_n].x = (byte)*x;
-        dun_data->cent_n++;
+    if (dd_ptr->cent_n < CENT_MAX) {
+        dd_ptr->cent[dd_ptr->cent_n].y = (byte)*y;
+        dd_ptr->cent[dd_ptr->cent_n].x = (byte)*x;
+        dd_ptr->cent_n++;
     }
 
     for (POSITION by = by1; by < by2; by++)
         for (POSITION bx = bx1; bx < bx2; bx++)
-            dun_data->room_map[by][bx] = TRUE;
+            dd_ptr->room_map[by][bx] = TRUE;
 
     check_room_boundary(player_ptr, *x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
     return TRUE;

@@ -19,15 +19,15 @@
  * @details There were moved from cave_gen().
  * @return なし
  */
-void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_ptr)
+void gen_caverns_and_lakes(player_type *owner_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr)
 {
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
     if ((floor_ptr->dun_level > 30) && one_in_(DUN_DEST * 2) && small_levels && (dungeon_ptr->flags1 & DF1_DESTROY)) {
-        dun_data->destroyed = TRUE;
+        dd_ptr->destroyed = TRUE;
         build_lake(owner_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
     }
 
-    if (one_in_(LAKE_LEVEL) && !dun_data->empty_level && !dun_data->destroyed && (dungeon_ptr->flags1 & DF1_LAKE_MASK)) {
+    if (one_in_(LAKE_LEVEL) && !dd_ptr->empty_level && !dd_ptr->destroyed && (dungeon_ptr->flags1 & DF1_LAKE_MASK)) {
         int count = 0;
         if (dungeon_ptr->flags1 & DF1_LAKE_WATER)
             count += 3;
@@ -43,55 +43,55 @@ void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_ptr)
 
         if (dungeon_ptr->flags1 & DF1_LAKE_LAVA) {
             if ((floor_ptr->dun_level > 80) && (randint0(count) < 2))
-                dun_data->laketype = LAKE_T_LAVA;
+                dd_ptr->laketype = LAKE_T_LAVA;
 
             count -= 2;
-            if (!dun_data->laketype && (floor_ptr->dun_level > 80) && one_in_(count))
-                dun_data->laketype = LAKE_T_FIRE_VAULT;
+            if (!dd_ptr->laketype && (floor_ptr->dun_level > 80) && one_in_(count))
+                dd_ptr->laketype = LAKE_T_FIRE_VAULT;
 
             count--;
         }
 
-        if ((dungeon_ptr->flags1 & DF1_LAKE_WATER) && !dun_data->laketype) {
+        if ((dungeon_ptr->flags1 & DF1_LAKE_WATER) && !dd_ptr->laketype) {
             if ((floor_ptr->dun_level > 50) && randint0(count) < 2)
-                dun_data->laketype = LAKE_T_WATER;
+                dd_ptr->laketype = LAKE_T_WATER;
 
             count -= 2;
-            if (!dun_data->laketype && (floor_ptr->dun_level > 50) && one_in_(count))
-                dun_data->laketype = LAKE_T_WATER_VAULT;
+            if (!dd_ptr->laketype && (floor_ptr->dun_level > 50) && one_in_(count))
+                dd_ptr->laketype = LAKE_T_WATER_VAULT;
 
             count--;
         }
 
-        if ((dungeon_ptr->flags1 & DF1_LAKE_RUBBLE) && !dun_data->laketype) {
+        if ((dungeon_ptr->flags1 & DF1_LAKE_RUBBLE) && !dd_ptr->laketype) {
             if ((floor_ptr->dun_level > 35) && (randint0(count) < 2))
-                dun_data->laketype = LAKE_T_CAVE;
+                dd_ptr->laketype = LAKE_T_CAVE;
 
             count -= 2;
-            if (!dun_data->laketype && (floor_ptr->dun_level > 35) && one_in_(count))
-                dun_data->laketype = LAKE_T_EARTH_VAULT;
+            if (!dd_ptr->laketype && (floor_ptr->dun_level > 35) && one_in_(count))
+                dd_ptr->laketype = LAKE_T_EARTH_VAULT;
 
             count--;
         }
 
-        if ((floor_ptr->dun_level > 5) && (dungeon_ptr->flags1 & DF1_LAKE_TREE) && !dun_data->laketype)
-            dun_data->laketype = LAKE_T_AIR_VAULT;
+        if ((floor_ptr->dun_level > 5) && (dungeon_ptr->flags1 & DF1_LAKE_TREE) && !dd_ptr->laketype)
+            dd_ptr->laketype = LAKE_T_AIR_VAULT;
 
-        if (dun_data->laketype) {
+        if (dd_ptr->laketype) {
             msg_print_wizard(owner_ptr, CHEAT_DUNGEON, _("湖を生成します。", "Lake on the level."));
-            build_lake(owner_ptr, dun_data->laketype);
+            build_lake(owner_ptr, dd_ptr->laketype);
         }
     }
 
-    if ((floor_ptr->dun_level > DUN_CAVERN) && !dun_data->empty_level && (dungeon_ptr->flags1 & DF1_CAVERN) && !dun_data->laketype && !dun_data->destroyed
+    if ((floor_ptr->dun_level > DUN_CAVERN) && !dd_ptr->empty_level && (dungeon_ptr->flags1 & DF1_CAVERN) && !dd_ptr->laketype && !dd_ptr->destroyed
         && (randint1(1000) < floor_ptr->dun_level)) {
-        dun_data->cavern = TRUE;
+        dd_ptr->cavern = TRUE;
         msg_print_wizard(owner_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
         build_cavern(owner_ptr);
     }
 
     if (quest_number(owner_ptr, floor_ptr->dun_level))
-        dun_data->destroyed = FALSE;
+        dd_ptr->destroyed = FALSE;
 }
 
 bool has_river_flag(dungeon_type *dungeon_ptr)

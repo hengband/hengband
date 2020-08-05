@@ -17,7 +17,8 @@ extern char *v_name;
 extern char *v_text;
 extern VAULT_IDX max_v_idx;
 
-bool build_type7(player_type *player_ptr);
-bool build_type8(player_type *player_ptr);
-bool build_type10(player_type *player_ptr);
-bool build_type17(player_type *player_ptr);
+typedef struct dun_data_type dun_data_type;
+bool build_type7(player_type *player_ptr, dun_data_type *dd_ptr);
+bool build_type8(player_type *player_ptr, dun_data_type *dd_ptr);
+bool build_type10(player_type *player_ptr, dun_data_type *dd_ptr);
+bool build_type17(player_type *player_ptr, dun_data_type *dd_ptr);

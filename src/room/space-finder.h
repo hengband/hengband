@@ -2,4 +2,5 @@
 
 #include "system/angband.h"
 
-bool find_space(player_type *player_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width);
+typedef struct dun_data_type dun_data_type;
+bool find_space(player_type *player_ptr, dun_data_type *dd_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width);

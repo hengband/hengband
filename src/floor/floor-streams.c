@@ -159,7 +159,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
  * @param feat2 境界部地形ID
  * @return なし
  */
-void add_river(floor_type *floor_ptr)
+void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
 {
     dungeon_type *dungeon_ptr;
     POSITION y2, x2;
@@ -208,8 +208,8 @@ void add_river(floor_type *floor_ptr)
         feature_type *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dun_data->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA)) || ((dun_data->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER))
-                || !dun_data->laketype)) {
+        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER))
+                || !dd_ptr->laketype)) {
             return;
         }
     }
@@ -250,10 +250,10 @@ void add_river(floor_type *floor_ptr)
     recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
 
     /* Hack - Save the location as a "room" */
-    if (dun_data->cent_n < CENT_MAX) {
-        dun_data->cent[dun_data->cent_n].y = y2;
-        dun_data->cent[dun_data->cent_n].x = x2;
-        dun_data->cent_n++;
+    if (dd_ptr->cent_n < CENT_MAX) {
+        dd_ptr->cent[dd_ptr->cent_n].y = y2;
+        dd_ptr->cent[dd_ptr->cent_n].x = x2;
+        dd_ptr->cent_n++;
     }
 }
 

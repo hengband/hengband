@@ -14,7 +14,7 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-bool build_type1(player_type *player_ptr)
+bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y2, x2, yval, xval;
     POSITION y1, x1, xsize, ysize;
@@ -36,7 +36,7 @@ bool build_type1(player_type *player_ptr)
     ysize = y1 + y2 + 1;
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, &yval, &xval, ysize + 2, xsize + 2)) {
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2)) {
         /* Limit to the minimum room size, and retry */
         y1 = 1;
         x1 = 1;
@@ -47,7 +47,7 @@ bool build_type1(player_type *player_ptr)
         ysize = y1 + y2 + 1;
 
         /* Find and reserve some space in the dungeon.  Get center of room. */
-        if (!find_space(player_ptr, &yval, &xval, ysize + 2, xsize + 2))
+        if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2))
             return FALSE;
     }
 
@@ -188,7 +188,7 @@ bool build_type1(player_type *player_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-bool build_type2(player_type *player_ptr)
+bool build_type2(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, xval, yval;
     POSITION y1a, x1a, y2a, x2a;
@@ -198,7 +198,7 @@ bool build_type2(player_type *player_ptr)
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!find_space(player_ptr, &yval, &xval, 11, 25))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
         return FALSE;
 
     /* Choose lite or dark */
@@ -299,7 +299,7 @@ bool build_type2(player_type *player_ptr)
  * the code below will work (with "bounds checking") for 5x5, or even\n
  * for unsymetric values like 4x3 or 5x3 or 3x4 or 3x5, or even larger.\n
  */
-bool build_type3(player_type *player_ptr)
+bool build_type3(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, dy, dx, wy, wx;
     POSITION y1a, x1a, y2a, x2a;
@@ -310,7 +310,7 @@ bool build_type3(player_type *player_ptr)
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!find_space(player_ptr, &yval, &xval, 11, 25))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
         return FALSE;
 
     /* Choose lite or dark */
@@ -537,7 +537,7 @@ bool build_type3(player_type *player_ptr)
  *	4 - Inner room has a maze\n
  *	5 - A set of four inner rooms\n
  */
-bool build_type4(player_type *player_ptr)
+bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION y, x, y1, x1;
     POSITION y2, x2, tmp, yval, xval;
@@ -546,7 +546,7 @@ bool build_type4(player_type *player_ptr)
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!find_space(player_ptr, &yval, &xval, 11, 25))
+    if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
         return FALSE;
 
     /* Choose lite or dark */
@@ -870,7 +870,7 @@ bool build_type4(player_type *player_ptr)
  *\n
  * When done fill from the inside to find the walls,\n
  */
-bool build_type11(player_type *player_ptr)
+bool build_type11(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION rad, x, y, x0, y0;
     int light = FALSE;
@@ -883,7 +883,7 @@ bool build_type11(player_type *player_ptr)
     rad = randint0(9);
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, &y0, &x0, rad * 2 + 1, rad * 2 + 1))
+    if (!find_space(player_ptr, dd_ptr, &y0, &x0, rad * 2 + 1, rad * 2 + 1))
         return FALSE;
 
     /* Make circular floor */
@@ -915,7 +915,7 @@ bool build_type11(player_type *player_ptr)
  *\n
  * When done fill from the inside to find the walls,\n
  */
-bool build_type12(player_type *player_ptr)
+bool build_type12(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION rad, x, y, x0, y0;
     int light = FALSE;
@@ -936,7 +936,7 @@ bool build_type12(player_type *player_ptr)
     rad = randint1(9);
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
-    if (!find_space(player_ptr, &y0, &x0, rad * 2 + 3, rad * 2 + 3))
+    if (!find_space(player_ptr, dd_ptr, &y0, &x0, rad * 2 + 3, rad * 2 + 3))
         return FALSE;
 
     /* Make floor */
