@@ -1220,8 +1220,6 @@ void calc_class_status(player_type *creature_ptr)
     case CLASS_MINDCRAFTER:
         if (creature_ptr->lev > 9)
             creature_ptr->resist_fear = TRUE;
-        if (creature_ptr->lev > 19)
-            creature_ptr->sustain_wis = TRUE;
         if (creature_ptr->lev > 29)
             creature_ptr->resist_conf = TRUE;
         break;

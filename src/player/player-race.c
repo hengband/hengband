@@ -239,9 +239,6 @@ void calc_race_status(player_type *creature_ptr)
             if (creature_ptr->lev > 34)
                 creature_ptr->resist_pois = TRUE;
             break;
-        case RACE_MIND_FLAYER:
-            creature_ptr->sustain_wis = TRUE;
-            break;
         case RACE_IMP:
             creature_ptr->resist_fire = TRUE;
             break;
