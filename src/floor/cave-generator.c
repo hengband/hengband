@@ -36,7 +36,6 @@
  */
 bool cave_gen(player_type *player_ptr, concptr *why)
 {
-    int i, k;
     dun_data_type dun_body;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     dungeon_type *dungeon_ptr = &d_info[floor_ptr->dungeon_idx];
@@ -116,7 +115,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         if (has_river_flag(dungeon_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
             add_river(floor_ptr);
 
-        for (i = 0; i < dun_data->cent_n; i++) {
+        for (int i = 0; i < dun_data->cent_n; i++) {
             POSITION ty, tx;
             int pick = rand_range(0, i);
             ty = dun_data->cent[i].y;
@@ -131,7 +130,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         POSITION y = dun_data->cent[dun_data->cent_n - 1].y;
         POSITION x = dun_data->cent[dun_data->cent_n - 1].x;
 
-        for (i = 0; i < dun_data->cent_n; i++) {
+        for (int i = 0; i < dun_data->cent_n; i++) {
             dun_data->tunn_n = 0;
             dun_data->wall_n = 0;
             if (randint1(floor_ptr->dun_level) > dungeon_ptr->tunnel_percent)
@@ -173,7 +172,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
             x = dun_data->cent[i].x;
         }
 
-        for (i = 0; i < dun_data->door_n; i++) {
+        for (int i = 0; i < dun_data->door_n; i++) {
             y = dun_data->door[i].y;
             x = dun_data->door[i].x;
             try_door(player_ptr, dt_ptr, y, x - 1);
@@ -195,11 +194,11 @@ bool cave_gen(player_type *player_ptr, concptr *why)
 
     if (!dun_data->laketype) {
         if (dungeon_ptr->stream2)
-            for (i = 0; i < DUN_STR_QUA; i++)
+            for (int i = 0; i < DUN_STR_QUA; i++)
                 build_streamer(player_ptr, dungeon_ptr->stream2, DUN_STR_QC);
 
         if (dungeon_ptr->stream1)
-            for (i = 0; i < DUN_STR_MAG; i++)
+            for (int i = 0; i < DUN_STR_MAG; i++)
                 build_streamer(player_ptr, dungeon_ptr->stream1, DUN_STR_MC);
     }
 
@@ -223,35 +222,34 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         return FALSE;
     }
 
-    k = (floor_ptr->dun_level / 3);
-    if (k > 10)
-        k = 10;
-    if (k < 2)
-        k = 2;
+    int alloc_object_num = floor_ptr->dun_level / 3;
+    if (alloc_object_num > 10)
+        alloc_object_num = 10;
+    if (alloc_object_num < 2)
+        alloc_object_num = 2;
 
-    i = dungeon_ptr->min_m_alloc_level;
+    int alloc_monster_num = dungeon_ptr->min_m_alloc_level;
     if (floor_ptr->height < MAX_HGT || floor_ptr->width < MAX_WID) {
-        int small_tester = i;
+        int small_tester = alloc_monster_num;
 
-        i = (i * floor_ptr->height) / MAX_HGT;
-        i = (i * floor_ptr->width) / MAX_WID;
-        i += 1;
+        alloc_monster_num = (alloc_monster_num * floor_ptr->height) / MAX_HGT;
+        alloc_monster_num = (alloc_monster_num * floor_ptr->width) / MAX_WID;
+        alloc_monster_num += 1;
 
-        if (i > small_tester)
-            i = small_tester;
+        if (alloc_monster_num > small_tester)
+            alloc_monster_num = small_tester;
         else
             msg_format_wizard(
-                player_ptr, CHEAT_DUNGEON, _("モンスター数基本値を %d から %d に減らします", "Reduced monsters base from %d to %d"), small_tester, i);
+                player_ptr, CHEAT_DUNGEON, _("モンスター数基本値を %d から %d に減らします", "Reduced monsters base from %d to %d"), small_tester, alloc_monster_num);
     }
 
-    i += randint1(8);
-
-    for (i = i + k; i > 0; i--)
+    alloc_monster_num += randint1(8);
+    for (alloc_monster_num = alloc_monster_num + alloc_object_num; alloc_monster_num > 0; alloc_monster_num--)
         (void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP, summon_specific);
 
-    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint1(k));
+    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint1(alloc_object_num));
     if (!(dungeon_ptr->flags1 & DF1_NO_CAVE))
-        alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(k));
+        alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(alloc_object_num));
 
     if (player_ptr->enter_dungeon && floor_ptr->dun_level > 1)
         floor_ptr->object_level = 1;
