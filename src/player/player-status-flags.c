@@ -1126,3 +1126,14 @@ void have_levitation(player_type *creature_ptr)
             creature_ptr->levitation = TRUE;
     }
 }
+
+void have_can_swim(player_type *creature_ptr)
+{
+	creature_ptr->can_swim = FALSE;
+    if (creature_ptr->riding) {
+        monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
+        if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC))
+            creature_ptr->can_swim = TRUE;
+    }
+}
