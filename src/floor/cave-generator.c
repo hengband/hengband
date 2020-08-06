@@ -96,6 +96,23 @@ static void place_cave_contents(player_type *player_ptr, dun_data_type *dd_ptr, 
     }
 }
 
+static bool decide_tunnel_planned_site(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr, int i)
+{
+    dd_ptr->tunn_n = 0;
+    dd_ptr->wall_n = 0;
+    if (randint1(player_ptr->current_floor_ptr->dun_level) > d_ptr->tunnel_percent)
+        (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->cent[i].x, dd_ptr->cent[i].y, dd_ptr->tunnel_x, dd_ptr->tunnel_y, 2, 2);
+    else if (!build_tunnel(player_ptr, dd_ptr, dt_ptr, dd_ptr->cent[i].y, dd_ptr->cent[i].x, dd_ptr->tunnel_y, dd_ptr->tunnel_x))
+        dd_ptr->tunnel_fail_count++;
+
+    if (dd_ptr->tunnel_fail_count >= 2) {
+        *dd_ptr->why = _("トンネル接続に失敗", "Failed to generate tunnels");
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -152,17 +169,8 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         dd_ptr->tunnel_y = dd_ptr->cent[dd_ptr->cent_n - 1].y;
         dd_ptr->tunnel_x = dd_ptr->cent[dd_ptr->cent_n - 1].x;
         for (int i = 0; i < dd_ptr->cent_n; i++) {
-            dd_ptr->tunn_n = 0;
-            dd_ptr->wall_n = 0;
-            if (randint1(floor_ptr->dun_level) > d_ptr->tunnel_percent)
-                (void)build_tunnel2(player_ptr, dd_ptr, dd_ptr->cent[i].x, dd_ptr->cent[i].y, dd_ptr->tunnel_x, dd_ptr->tunnel_y, 2, 2);
-            else if (!build_tunnel(player_ptr, dd_ptr, dt_ptr, dd_ptr->cent[i].y, dd_ptr->cent[i].x, dd_ptr->tunnel_y, dd_ptr->tunnel_x))
-                dd_ptr->tunnel_fail_count++;
-
-            if (dd_ptr->tunnel_fail_count >= 2) {
-                *dd_ptr->why = _("トンネル接続に失敗", "Failed to generate tunnels");
+            if (!decide_tunnel_planned_site(player_ptr, dd_ptr, d_ptr, dt_ptr, i))
                 return FALSE;
-            }
 
             for (int j = 0; j < dd_ptr->tunn_n; j++) {
                 grid_type *g_ptr;
@@ -171,7 +179,6 @@ bool cave_gen(player_type *player_ptr, concptr *why)
                 dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
                 g_ptr = &floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
                 f_ptr = &f_info[g_ptr->feat];
-
                 if (!have_flag(f_ptr->flags, FF_MOVE) || (!have_flag(f_ptr->flags, FF_WATER) && !have_flag(f_ptr->flags, FF_LAVA))) {
                     g_ptr->mimic = 0;
                     place_grid(player_ptr, g_ptr, GB_FLOOR);
