@@ -143,6 +143,25 @@ static void make_walls(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_t
     }
 }
 
+static bool make_centers(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
+{
+    dd_ptr->tunnel_fail_count = 0;
+    dd_ptr->door_n = 0;
+    dd_ptr->tunnel_y = dd_ptr->cent[dd_ptr->cent_n - 1].y;
+    dd_ptr->tunnel_x = dd_ptr->cent[dd_ptr->cent_n - 1].x;
+    for (int i = 0; i < dd_ptr->cent_n; i++) {
+        if (!decide_tunnel_planned_site(player_ptr, dd_ptr, d_ptr, dt_ptr, i))
+            return FALSE;
+
+        make_tunnels(player_ptr, dd_ptr);
+        make_walls(player_ptr, dd_ptr, d_ptr, dt_ptr);
+        dd_ptr->tunnel_y = dd_ptr->cent[i].y;
+        dd_ptr->tunnel_x = dd_ptr->cent[i].x;
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -194,19 +213,8 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         }
 
         place_cave_contents(player_ptr, dd_ptr, d_ptr);
-        dd_ptr->tunnel_fail_count = 0;
-        dd_ptr->door_n = 0;
-        dd_ptr->tunnel_y = dd_ptr->cent[dd_ptr->cent_n - 1].y;
-        dd_ptr->tunnel_x = dd_ptr->cent[dd_ptr->cent_n - 1].x;
-        for (int i = 0; i < dd_ptr->cent_n; i++) {
-            if (!decide_tunnel_planned_site(player_ptr, dd_ptr, d_ptr, dt_ptr, i))
-                return FALSE;
-
-            make_tunnels(player_ptr, dd_ptr);
-            make_walls(player_ptr, dd_ptr, d_ptr, dt_ptr);
-            dd_ptr->tunnel_y = dd_ptr->cent[i].y;
-            dd_ptr->tunnel_x = dd_ptr->cent[i].x;
-        }
+        if (make_centers(player_ptr, dd_ptr, d_ptr, dt_ptr))
+            return FALSE;
 
         for (int i = 0; i < dd_ptr->door_n; i++) {
             dd_ptr->tunnel_y = dd_ptr->door[i].y;
