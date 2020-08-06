@@ -174,7 +174,7 @@ static void make_doors(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *
     }
 }
 
-static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
+static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     if (!generate_rooms(player_ptr, dd_ptr)) {
         *dd_ptr->why = _("部屋群の生成に失敗", "Failed to generate rooms");
@@ -182,6 +182,8 @@ static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dunge
     }
 
     place_cave_contents(player_ptr, dd_ptr, d_ptr);
+    dt_type tmp_dt;
+    dt_type *dt_ptr = initialize_dt_type(&tmp_dt);
     if (make_centers(player_ptr, dd_ptr, d_ptr, dt_ptr))
         return FALSE;
 
@@ -199,7 +201,7 @@ static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dunge
     return TRUE;
 }
 
-static bool switch_making_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
+static bool switch_making_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     if (d_ptr->flags1 & DF1_MAZE) {
         floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -217,7 +219,7 @@ static bool switch_making_floor(player_type *player_ptr, dun_data_type *dd_ptr, 
         return TRUE;
     }
     
-    if (!make_one_floor(player_ptr, dd_ptr, d_ptr, dt_ptr))
+    if (!make_one_floor(player_ptr, dd_ptr, d_ptr))
         return FALSE;
 
     return TRUE;
@@ -291,6 +293,30 @@ static void decide_dungeon_data_allocation(player_type *player_ptr, dun_data_typ
             dd_ptr->alloc_monster_num);
 }
 
+static void allocate_dungeon_data(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+{
+    dd_ptr->alloc_monster_num += randint1(8);
+    for (dd_ptr->alloc_monster_num = dd_ptr->alloc_monster_num + dd_ptr->alloc_object_num; dd_ptr->alloc_monster_num > 0; dd_ptr->alloc_monster_num--)
+        (void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP, summon_specific);
+
+    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint1(dd_ptr->alloc_object_num));
+    if (!(d_ptr->flags1 & DF1_NO_CAVE))
+        alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(dd_ptr->alloc_object_num));
+
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (player_ptr->enter_dungeon && floor_ptr->dun_level > 1)
+        floor_ptr->object_level = 1;
+
+    alloc_object(player_ptr, ALLOC_SET_ROOM, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ROOM, 3));
+    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ITEM, 3));
+    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
+    floor_ptr->object_level = floor_ptr->base_level;
+    if (!alloc_guardian(player_ptr, TRUE)) {
+        *dd_ptr->why = _("ダンジョンの主配置に失敗", "Failed to place a dungeon guardian");
+        return FALSE;
+    }
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -322,9 +348,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
 
     check_arena_floor(player_ptr, dd_ptr);
     gen_caverns_and_lakes(player_ptr, d_ptr, dd_ptr);
-    dt_type tmp_dt;
-    dt_type *dt_ptr = initialize_dt_type(&tmp_dt);
-    if (!switch_making_floor(player_ptr, dd_ptr, d_ptr, dt_ptr))
+    if (!switch_making_floor(player_ptr, dd_ptr, d_ptr))
         return FALSE;
 
     make_aqua_streams(player_ptr, dd_ptr, d_ptr);
@@ -333,26 +357,8 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         return FALSE;
 
     decide_dungeon_data_allocation(player_ptr, dd_ptr, d_ptr);
-    dd_ptr->alloc_monster_num += randint1(8);
-    for (dd_ptr->alloc_monster_num = dd_ptr->alloc_monster_num + dd_ptr->alloc_object_num; dd_ptr->alloc_monster_num > 0; dd_ptr->alloc_monster_num--)
-        (void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP, summon_specific);
-
-    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint1(dd_ptr->alloc_object_num));
-    if (!(d_ptr->flags1 & DF1_NO_CAVE))
-        alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(dd_ptr->alloc_object_num));
-
-    if (player_ptr->enter_dungeon && floor_ptr->dun_level > 1)
-        floor_ptr->object_level = 1;
-
-    alloc_object(player_ptr, ALLOC_SET_ROOM, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ROOM, 3));
-    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ITEM, 3));
-    alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
-    floor_ptr->object_level = floor_ptr->base_level;
-    if (!alloc_guardian(player_ptr, TRUE)) {
-        *dd_ptr->why = _("ダンジョンの主配置に失敗", "Failed to place a dungeon guardian");
-        return FALSE;
-    }
-
+    allocate_dungeon_data(player_ptr, dd_ptr, d_ptr);
+    
     bool is_empty_or_dark = dd_ptr->empty_level;
     is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
     is_empty_or_dark &= (d_ptr->flags1 & DF1_DARKNESS) == 0;
@@ -361,7 +367,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
 
     for (POSITION y = 0; y < floor_ptr->height; y++)
         for (POSITION x = 0; x < floor_ptr->width; x++)
-            floor_ptr->grid_array[y][x].info |= (CAVE_GLOW);
+            floor_ptr->grid_array[y][x].info |= CAVE_GLOW;
 
     return TRUE;
 }
