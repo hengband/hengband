@@ -569,7 +569,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->impact[1] = FALSE;
     creature_ptr->slow_digest = FALSE;
     creature_ptr->regenerate = FALSE;
-    creature_ptr->can_swim = FALSE;
     creature_ptr->resist_acid = FALSE;
     creature_ptr->resist_elec = FALSE;
     creature_ptr->resist_fire = FALSE;
@@ -640,7 +639,6 @@ void calc_bonuses(player_type *creature_ptr)
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     bool omoi = FALSE;
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 
     /* Save the old vision stuff */
     bool old_telepathy = creature_ptr->telepathy;
@@ -737,6 +735,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_sustain_con(creature_ptr);
     have_sustain_chr(creature_ptr);
     have_levitation(creature_ptr);
+    have_can_swim(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -813,13 +812,6 @@ void calc_bonuses(player_type *creature_ptr)
 
     calc_weapon_penalty(creature_ptr, INVEN_RARM);
     calc_weapon_penalty(creature_ptr, INVEN_LARM);
-
-    if (creature_ptr->riding) {
-        monster_type *riding_m_ptr = &floor_ptr->m_list[creature_ptr->riding];
-        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC))
-            creature_ptr->can_swim = TRUE;
-    }
 
     creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
