@@ -195,6 +195,8 @@ static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dunge
         *dd_ptr->why = _("上り階段生成に失敗", "Failed to generate up stairs.");
         return FALSE;
     }
+
+    return TRUE;
 }
 
 static bool switch_making_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
@@ -219,6 +221,20 @@ static bool switch_making_floor(player_type *player_ptr, dun_data_type *dd_ptr, 
         return FALSE;
 
     return TRUE;
+}
+
+static void make_aqua_streams(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+{
+    if (dd_ptr->laketype != 0)
+        return;
+
+    if (d_ptr->stream2)
+        for (int i = 0; i < DUN_STR_QUA; i++)
+            build_streamer(player_ptr, d_ptr->stream2, DUN_STR_QC);
+
+    if (d_ptr->stream1)
+        for (int i = 0; i < DUN_STR_MAG; i++)
+            build_streamer(player_ptr, d_ptr->stream1, DUN_STR_MC);
 }
 
 /*!
@@ -257,16 +273,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
     if (!switch_making_floor(player_ptr, dd_ptr, d_ptr, dt_ptr))
         return FALSE;
 
-    if (dd_ptr->laketype == 0) {
-        if (d_ptr->stream2)
-            for (int i = 0; i < DUN_STR_QUA; i++)
-                build_streamer(player_ptr, d_ptr->stream2, DUN_STR_QC);
-
-        if (d_ptr->stream1)
-            for (int i = 0; i < DUN_STR_MAG; i++)
-                build_streamer(player_ptr, d_ptr->stream1, DUN_STR_MC);
-    }
-
+    make_aqua_streams(player_ptr, dd_ptr, d_ptr);
     for (POSITION x = 0; x < floor_ptr->width; x++) {
         place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[0][x]);
         place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[floor_ptr->height - 1][x]);
@@ -290,6 +297,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
     dd_ptr->alloc_object_num = floor_ptr->dun_level / 3;
     if (dd_ptr->alloc_object_num > 10)
         dd_ptr->alloc_object_num = 10;
+
     if (dd_ptr->alloc_object_num < 2)
         dd_ptr->alloc_object_num = 2;
 
