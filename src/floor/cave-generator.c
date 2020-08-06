@@ -251,6 +251,21 @@ static void make_perm_walls(player_type *player_ptr)
     }
 }
 
+static bool check_place_necessary_objects(player_type *player_ptr, dun_data_type *dd_ptr)
+{
+    if (!new_player_spot(player_ptr)) {
+        *dd_ptr->why = _("プレイヤー配置に失敗", "Failed to place a player");
+        return FALSE;
+    }
+
+    if (!place_quest_monsters(player_ptr)) {
+        *dd_ptr->why = _("クエストモンスター配置に失敗", "Failed to place a quest monster");
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -289,15 +304,8 @@ bool cave_gen(player_type *player_ptr, concptr *why)
 
     make_aqua_streams(player_ptr, dd_ptr, d_ptr);
     make_perm_walls(player_ptr);
-    if (!new_player_spot(player_ptr)) {
-        *dd_ptr->why = _("プレイヤー配置に失敗", "Failed to place a player");
+    if (!check_place_necessary_objects(player_ptr, dd_ptr))
         return FALSE;
-    }
-
-    if (!place_quest_monsters(player_ptr)) {
-        *dd_ptr->why = _("クエストモンスター配置に失敗", "Failed to place a quest monster");
-        return FALSE;
-    }
 
     dd_ptr->alloc_object_num = floor_ptr->dun_level / 3;
     if (dd_ptr->alloc_object_num > 10)
