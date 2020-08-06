@@ -570,8 +570,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->slow_digest = FALSE;
     creature_ptr->regenerate = FALSE;
     creature_ptr->can_swim = FALSE;
-    creature_ptr->levitation = FALSE;
-    creature_ptr->lite = FALSE;
     creature_ptr->resist_acid = FALSE;
     creature_ptr->resist_elec = FALSE;
     creature_ptr->resist_fire = FALSE;
@@ -738,6 +736,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_sustain_dex(creature_ptr);
     have_sustain_con(creature_ptr);
     have_sustain_chr(creature_ptr);
+    have_levitation(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -820,8 +819,6 @@ void calc_bonuses(player_type *creature_ptr)
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC))
             creature_ptr->can_swim = TRUE;
-
-        creature_ptr->levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
     }
 
     creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
@@ -2111,7 +2108,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             creature_ptr->resist_elec = TRUE;
             creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
-            creature_ptr->levitation = TRUE;
         } else if (creature_ptr->special_defense & KAMAE_GENBU) {
             creature_ptr->to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
             creature_ptr->dis_to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
@@ -2127,7 +2123,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             creature_ptr->dis_to_h[i] -= (creature_ptr->lev / 3);
             creature_ptr->dis_to_d[i] -= (creature_ptr->lev / 6);
             creature_ptr->num_blow[i] /= 2;
-            creature_ptr->levitation = TRUE;
         }
 
         creature_ptr->num_blow[i] += 1 + creature_ptr->extra_blows[0];
@@ -4482,7 +4477,6 @@ void calc_timelimit_status(player_type *creature_ptr)
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->slow_digest = TRUE;
         creature_ptr->regenerate = TRUE;
-        creature_ptr->levitation = TRUE;
         creature_ptr->lite = TRUE;
         creature_ptr->resist_acid = TRUE;
         creature_ptr->resist_elec = TRUE;
@@ -4510,13 +4504,10 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->resist_time = TRUE;
     }
 
-
     if (creature_ptr->magicdef) {
         creature_ptr->resist_blind = TRUE;
         creature_ptr->resist_conf = TRUE;
-        creature_ptr->levitation = TRUE;
     }
-
 
     if (creature_ptr->ele_immune) {
         if (creature_ptr->special_defense & DEFENSE_ACID)
@@ -4531,10 +4522,6 @@ void calc_timelimit_status(player_type *creature_ptr)
 
     if (creature_ptr->tim_regen) {
         creature_ptr->regenerate = TRUE;
-    }
-
-    if (creature_ptr->tim_levitation) {
-        creature_ptr->levitation = TRUE;
     }
 
     if (is_hero(creature_ptr) || creature_ptr->shero) {
@@ -4618,9 +4605,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->slow_digest = TRUE;
         if (have_flag(flgs, TR_REGEN))
             creature_ptr->regenerate = TRUE;
-
-        if (have_flag(flgs, TR_LEVITATION))
-            creature_ptr->levitation = TRUE;
 
         if (have_flag(flgs, TR_TELEPORT)) {
             if (object_is_cursed(o_ptr))

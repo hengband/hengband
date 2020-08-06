@@ -42,5 +42,6 @@ void have_sustain_wis(player_type *creature_ptr);
 void have_sustain_dex(player_type *creature_ptr);
 void have_sustain_con(player_type *creature_ptr);
 void have_sustain_chr(player_type *creature_ptr);
+void have_levitation(player_type *creature_ptr);
 
 
