@@ -162,6 +162,18 @@ static bool make_centers(player_type *player_ptr, dun_data_type *dd_ptr, dungeon
     return TRUE;
 }
 
+static void make_doors(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr)
+{
+    for (int i = 0; i < dd_ptr->door_n; i++) {
+        dd_ptr->tunnel_y = dd_ptr->door[i].y;
+        dd_ptr->tunnel_x = dd_ptr->door[i].x;
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x - 1);
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x + 1);
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y - 1, dd_ptr->tunnel_x);
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y + 1, dd_ptr->tunnel_x);
+    }
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -216,15 +228,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         if (make_centers(player_ptr, dd_ptr, d_ptr, dt_ptr))
             return FALSE;
 
-        for (int i = 0; i < dd_ptr->door_n; i++) {
-            dd_ptr->tunnel_y = dd_ptr->door[i].y;
-            dd_ptr->tunnel_x = dd_ptr->door[i].x;
-            try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x - 1);
-            try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x + 1);
-            try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y - 1, dd_ptr->tunnel_x);
-            try_door(player_ptr, dt_ptr, dd_ptr->tunnel_y + 1, dd_ptr->tunnel_x);
-        }
-
+        make_doors(player_ptr, dd_ptr, dt_ptr);
         if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(3, 4), 3)) {
             *dd_ptr->why = _("下り階段生成に失敗", "Failed to generate down stairs.");
             return FALSE;
