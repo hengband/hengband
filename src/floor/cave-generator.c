@@ -174,6 +174,29 @@ static void make_doors(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *
     }
 }
 
+static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
+{
+    if (!generate_rooms(player_ptr, dd_ptr)) {
+        *dd_ptr->why = _("部屋群の生成に失敗", "Failed to generate rooms");
+        return FALSE;
+    }
+
+    place_cave_contents(player_ptr, dd_ptr, d_ptr);
+    if (make_centers(player_ptr, dd_ptr, d_ptr, dt_ptr))
+        return FALSE;
+
+    make_doors(player_ptr, dd_ptr, dt_ptr);
+    if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(3, 4), 3)) {
+        *dd_ptr->why = _("下り階段生成に失敗", "Failed to generate down stairs.");
+        return FALSE;
+    }
+
+    if (!alloc_stairs(player_ptr, feat_up_stair, rand_range(1, 2), 3)) {
+        *dd_ptr->why = _("上り階段生成に失敗", "Failed to generate up stairs.");
+        return FALSE;
+    }
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -218,27 +241,8 @@ bool cave_gen(player_type *player_ptr, concptr *why)
             *dd_ptr->why = _("迷宮ダンジョンの上り階段生成に失敗", "Failed to alloc down stairs in maze dungeon.");
             return FALSE;
         }
-    } else {
-        if (!generate_rooms(player_ptr, dd_ptr)) {
-            *dd_ptr->why = _("部屋群の生成に失敗", "Failed to generate rooms");
-            return FALSE;
-        }
-
-        place_cave_contents(player_ptr, dd_ptr, d_ptr);
-        if (make_centers(player_ptr, dd_ptr, d_ptr, dt_ptr))
-            return FALSE;
-
-        make_doors(player_ptr, dd_ptr, dt_ptr);
-        if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(3, 4), 3)) {
-            *dd_ptr->why = _("下り階段生成に失敗", "Failed to generate down stairs.");
-            return FALSE;
-        }
-
-        if (!alloc_stairs(player_ptr, feat_up_stair, rand_range(1, 2), 3)) {
-            *dd_ptr->why = _("上り階段生成に失敗", "Failed to generate up stairs.");
-            return FALSE;
-        }
-    }
+    } else if (!make_one_floor(player_ptr, dd_ptr, d_ptr, dt_ptr))
+        return FALSE;
 
     if (!dd_ptr->laketype) {
         if (d_ptr->stream2)
