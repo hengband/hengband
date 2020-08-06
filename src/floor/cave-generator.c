@@ -113,6 +113,36 @@ static bool decide_tunnel_planned_site(player_type *player_ptr, dun_data_type *d
     return TRUE;
 }
 
+static void make_tunnels(player_type *player_ptr, dun_data_type *dd_ptr)
+{
+    for (int j = 0; j < dd_ptr->tunn_n; j++) {
+        grid_type *g_ptr;
+        feature_type *f_ptr;
+        dd_ptr->tunnel_y = dd_ptr->tunn[j].y;
+        dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
+        f_ptr = &f_info[g_ptr->feat];
+        if (!have_flag(f_ptr->flags, FF_MOVE) || (!have_flag(f_ptr->flags, FF_WATER) && !have_flag(f_ptr->flags, FF_LAVA))) {
+            g_ptr->mimic = 0;
+            place_grid(player_ptr, g_ptr, GB_FLOOR);
+        }
+    }
+}
+
+static void make_walls(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
+{
+    for (int j = 0; j < dd_ptr->wall_n; j++) {
+        grid_type *g_ptr;
+        dd_ptr->tunnel_y = dd_ptr->wall[j].y;
+        dd_ptr->tunnel_x = dd_ptr->wall[j].x;
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
+        g_ptr->mimic = 0;
+        place_grid(player_ptr, g_ptr, GB_FLOOR);
+        if ((randint0(100) < dt_ptr->dun_tun_pen) && !(d_ptr->flags1 & DF1_NO_DOORS))
+            place_random_door(player_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x, TRUE);
+    }
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -172,30 +202,8 @@ bool cave_gen(player_type *player_ptr, concptr *why)
             if (!decide_tunnel_planned_site(player_ptr, dd_ptr, d_ptr, dt_ptr, i))
                 return FALSE;
 
-            for (int j = 0; j < dd_ptr->tunn_n; j++) {
-                grid_type *g_ptr;
-                feature_type *f_ptr;
-                dd_ptr->tunnel_y = dd_ptr->tunn[j].y;
-                dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
-                g_ptr = &floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
-                f_ptr = &f_info[g_ptr->feat];
-                if (!have_flag(f_ptr->flags, FF_MOVE) || (!have_flag(f_ptr->flags, FF_WATER) && !have_flag(f_ptr->flags, FF_LAVA))) {
-                    g_ptr->mimic = 0;
-                    place_grid(player_ptr, g_ptr, GB_FLOOR);
-                }
-            }
-
-            for (int j = 0; j < dd_ptr->wall_n; j++) {
-                grid_type *g_ptr;
-                dd_ptr->tunnel_y = dd_ptr->wall[j].y;
-                dd_ptr->tunnel_x = dd_ptr->wall[j].x;
-                g_ptr = &floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
-                g_ptr->mimic = 0;
-                place_grid(player_ptr, g_ptr, GB_FLOOR);
-                if ((randint0(100) < dt_ptr->dun_tun_pen) && !(d_ptr->flags1 & DF1_NO_DOORS))
-                    place_random_door(player_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x, TRUE);
-            }
-
+            make_tunnels(player_ptr, dd_ptr);
+            make_walls(player_ptr, dd_ptr, d_ptr, dt_ptr);
             dd_ptr->tunnel_y = dd_ptr->cent[i].y;
             dd_ptr->tunnel_x = dd_ptr->cent[i].x;
         }
