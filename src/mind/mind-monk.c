@@ -11,6 +11,21 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
+static void set_stance(player_type *creature_ptr, const int new_stance)
+{
+    set_action(creature_ptr, ACTION_KAMAE);
+    if (creature_ptr->special_defense & (KAMAE_GENBU << new_stance)) {
+        msg_print(_("構え直した。", "You reassume a stance."));
+        return;
+    }
+
+    creature_ptr->special_defense &= ~(KAMAE_MASK);
+    creature_ptr->update |= PU_BONUS;
+    creature_ptr->redraw |= PR_STATE;
+    msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[new_stance].desc);
+    creature_ptr->special_defense |= (KAMAE_GENBU << new_stance);
+}
+
 /*!
  * @brief 修行僧の構え設定処理
  * @return 構えを変化させたらTRUE、構え不能かキャンセルしたらFALSEを返す。
@@ -65,17 +80,7 @@ bool choose_monk_stance(player_type *creature_ptr)
         }
     }
 
-    set_action(creature_ptr, ACTION_KAMAE);
-    if (creature_ptr->special_defense & (KAMAE_GENBU << new_stance)) {
-        msg_print(_("構え直した。", "You reassume a stance."));
-    } else {
-        creature_ptr->special_defense &= ~(KAMAE_MASK);
-        creature_ptr->update |= PU_BONUS;
-        creature_ptr->redraw |= PR_STATE;
-        msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[new_stance].desc);
-        creature_ptr->special_defense |= (KAMAE_GENBU << new_stance);
-    }
-
+    set_stance(creature_ptr, new_stance);
     creature_ptr->redraw |= PR_STATE;
     screen_load();
     return TRUE;
