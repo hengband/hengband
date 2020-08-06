@@ -197,6 +197,30 @@ static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dunge
     }
 }
 
+static bool switch_making_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr, dt_type *dt_ptr)
+{
+    if (d_ptr->flags1 & DF1_MAZE) {
+        floor_type *floor_ptr = player_ptr->current_floor_ptr;
+        build_maze_vault(player_ptr, floor_ptr->width / 2 - 1, floor_ptr->height / 2 - 1, floor_ptr->width - 4, floor_ptr->height - 4, FALSE);
+        if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) {
+            *dd_ptr->why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
+            return FALSE;
+        }
+
+        if (!alloc_stairs(player_ptr, feat_up_stair, 1, 3)) {
+            *dd_ptr->why = _("迷宮ダンジョンの上り階段生成に失敗", "Failed to alloc down stairs in maze dungeon.");
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+    
+    if (!make_one_floor(player_ptr, dd_ptr, d_ptr, dt_ptr))
+        return FALSE;
+
+    return TRUE;
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -230,21 +254,10 @@ bool cave_gen(player_type *player_ptr, concptr *why)
     gen_caverns_and_lakes(player_ptr, d_ptr, dd_ptr);
     dt_type tmp_dt;
     dt_type *dt_ptr = initialize_dt_type(&tmp_dt);
-    if (d_ptr->flags1 & DF1_MAZE) {
-        build_maze_vault(player_ptr, floor_ptr->width / 2 - 1, floor_ptr->height / 2 - 1, floor_ptr->width - 4, floor_ptr->height - 4, FALSE);
-        if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) {
-            *dd_ptr->why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
-            return FALSE;
-        }
-
-        if (!alloc_stairs(player_ptr, feat_up_stair, 1, 3)) {
-            *dd_ptr->why = _("迷宮ダンジョンの上り階段生成に失敗", "Failed to alloc down stairs in maze dungeon.");
-            return FALSE;
-        }
-    } else if (!make_one_floor(player_ptr, dd_ptr, d_ptr, dt_ptr))
+    if (!switch_making_floor(player_ptr, dd_ptr, d_ptr, dt_ptr))
         return FALSE;
 
-    if (!dd_ptr->laketype) {
+    if (dd_ptr->laketype == 0) {
         if (d_ptr->stream2)
             for (int i = 0; i < DUN_STR_QUA; i++)
                 build_streamer(player_ptr, d_ptr->stream2, DUN_STR_QC);
