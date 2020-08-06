@@ -17,18 +17,14 @@
  */
 bool choose_monk_stance(player_type *creature_ptr)
 {
-    char choice;
-    int new_kamae = 0;
-    int i;
-    char buf[80];
-
     if (cmd_limit_confused(creature_ptr))
         return FALSE;
+
     screen_save();
     prt(_(" a) 構えをとく", " a) No form"), 2, 20);
-
-    for (i = 0; i < MAX_KAMAE; i++) {
+    for (int i = 0; i < MAX_KAMAE; i++) {
         if (creature_ptr->lev >= monk_stances[i].min_level) {
+            char buf[80];
             sprintf(buf, " %c) %-12s  %s", I2A(i + 1), monk_stances[i].desc, monk_stances[i].info);
             prt(buf, 3 + i, 20);
         }
@@ -37,43 +33,47 @@ bool choose_monk_stance(player_type *creature_ptr)
     prt("", 1, 0);
     prt(_("        どの構えをとりますか？", "        Choose Stance: "), 1, 14);
 
+    int new_stance = 0;
     while (TRUE) {
-        choice = inkey();
-
+        char choice = inkey();
         if (choice == ESCAPE) {
             screen_load();
             return FALSE;
-        } else if ((choice == 'a') || (choice == 'A')) {
+        }
+        
+        if ((choice == 'a') || (choice == 'A')) {
             if (creature_ptr->action == ACTION_KAMAE) {
                 set_action(creature_ptr, ACTION_NONE);
             } else
                 msg_print(_("もともと構えていない。", "You are not in a special stance."));
             screen_load();
             return TRUE;
-        } else if ((choice == 'b') || (choice == 'B')) {
-            new_kamae = 0;
+        }
+        
+        if ((choice == 'b') || (choice == 'B')) {
+            new_stance = 0;
             break;
         } else if (((choice == 'c') || (choice == 'C')) && (creature_ptr->lev > 29)) {
-            new_kamae = 1;
+            new_stance = 1;
             break;
         } else if (((choice == 'd') || (choice == 'D')) && (creature_ptr->lev > 34)) {
-            new_kamae = 2;
+            new_stance = 2;
             break;
         } else if (((choice == 'e') || (choice == 'E')) && (creature_ptr->lev > 39)) {
-            new_kamae = 3;
+            new_stance = 3;
             break;
         }
     }
 
     set_action(creature_ptr, ACTION_KAMAE);
-    if (creature_ptr->special_defense & (KAMAE_GENBU << new_kamae)) {
+    if (creature_ptr->special_defense & (KAMAE_GENBU << new_stance)) {
         msg_print(_("構え直した。", "You reassume a stance."));
     } else {
         creature_ptr->special_defense &= ~(KAMAE_MASK);
         creature_ptr->update |= PU_BONUS;
         creature_ptr->redraw |= PR_STATE;
-        msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[new_kamae].desc);
-        creature_ptr->special_defense |= (KAMAE_GENBU << new_kamae);
+        msg_format(_("%sの構えをとった。", "You assume the %s stance."), monk_stances[new_stance].desc);
+        creature_ptr->special_defense |= (KAMAE_GENBU << new_stance);
     }
 
     creature_ptr->redraw |= PR_STATE;
