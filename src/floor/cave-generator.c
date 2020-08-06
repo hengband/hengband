@@ -317,6 +317,19 @@ static void allocate_dungeon_data(player_type *player_ptr, dun_data_type *dd_ptr
     }
 }
 
+static void decide_grid_glowing(floor_type *floor_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+{
+    bool is_empty_or_dark = dd_ptr->empty_level;
+    is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
+    is_empty_or_dark &= (d_ptr->flags1 & DF1_DARKNESS) == 0;
+    if (!is_empty_or_dark)
+        return;
+
+    for (POSITION y = 0; y < floor_ptr->height; y++)
+        for (POSITION x = 0; x < floor_ptr->width; x++)
+            floor_ptr->grid_array[y][x].info |= CAVE_GLOW;
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -357,17 +370,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         return FALSE;
 
     decide_dungeon_data_allocation(player_ptr, dd_ptr, d_ptr);
-    allocate_dungeon_data(player_ptr, dd_ptr, d_ptr);
-    
-    bool is_empty_or_dark = dd_ptr->empty_level;
-    is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
-    is_empty_or_dark &= (d_ptr->flags1 & DF1_DARKNESS) == 0;
-    if (!is_empty_or_dark)
-        return TRUE;
-
-    for (POSITION y = 0; y < floor_ptr->height; y++)
-        for (POSITION x = 0; x < floor_ptr->width; x++)
-            floor_ptr->grid_array[y][x].info |= CAVE_GLOW;
-
+    allocate_dungeon_data(player_ptr, dd_ptr, d_ptr);    
+    decide_grid_glowing(floor_ptr, dd_ptr, d_ptr);
     return TRUE;
 }
