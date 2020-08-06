@@ -266,6 +266,31 @@ static bool check_place_necessary_objects(player_type *player_ptr, dun_data_type
     return TRUE;
 }
 
+static void decide_dungeon_data_allocation(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    dd_ptr->alloc_object_num = floor_ptr->dun_level / 3;
+    if (dd_ptr->alloc_object_num > 10)
+        dd_ptr->alloc_object_num = 10;
+
+    if (dd_ptr->alloc_object_num < 2)
+        dd_ptr->alloc_object_num = 2;
+
+    dd_ptr->alloc_monster_num = d_ptr->min_m_alloc_level;
+    if (floor_ptr->height >= MAX_HGT && floor_ptr->width >= MAX_WID)
+        return;
+
+    int small_tester = dd_ptr->alloc_monster_num;
+    dd_ptr->alloc_monster_num = (dd_ptr->alloc_monster_num * floor_ptr->height) / MAX_HGT;
+    dd_ptr->alloc_monster_num = (dd_ptr->alloc_monster_num * floor_ptr->width) / MAX_WID;
+    dd_ptr->alloc_monster_num += 1;
+    if (dd_ptr->alloc_monster_num > small_tester)
+        dd_ptr->alloc_monster_num = small_tester;
+    else
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("モンスター数基本値を %d から %d に減らします", "Reduced monsters base from %d to %d"), small_tester,
+            dd_ptr->alloc_monster_num);
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -307,28 +332,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
     if (!check_place_necessary_objects(player_ptr, dd_ptr))
         return FALSE;
 
-    dd_ptr->alloc_object_num = floor_ptr->dun_level / 3;
-    if (dd_ptr->alloc_object_num > 10)
-        dd_ptr->alloc_object_num = 10;
-
-    if (dd_ptr->alloc_object_num < 2)
-        dd_ptr->alloc_object_num = 2;
-
-    dd_ptr->alloc_monster_num = d_ptr->min_m_alloc_level;
-    if (floor_ptr->height < MAX_HGT || floor_ptr->width < MAX_WID) {
-        int small_tester = dd_ptr->alloc_monster_num;
-
-        dd_ptr->alloc_monster_num = (dd_ptr->alloc_monster_num * floor_ptr->height) / MAX_HGT;
-        dd_ptr->alloc_monster_num = (dd_ptr->alloc_monster_num * floor_ptr->width) / MAX_WID;
-        dd_ptr->alloc_monster_num += 1;
-
-        if (dd_ptr->alloc_monster_num > small_tester)
-            dd_ptr->alloc_monster_num = small_tester;
-        else
-            msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("モンスター数基本値を %d から %d に減らします", "Reduced monsters base from %d to %d"), small_tester,
-                dd_ptr->alloc_monster_num);
-    }
-
+    decide_dungeon_data_allocation(player_ptr, dd_ptr, d_ptr);
     dd_ptr->alloc_monster_num += randint1(8);
     for (dd_ptr->alloc_monster_num = dd_ptr->alloc_monster_num + dd_ptr->alloc_object_num; dd_ptr->alloc_monster_num > 0; dd_ptr->alloc_monster_num--)
         (void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP, summon_specific);
