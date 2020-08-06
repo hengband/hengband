@@ -1982,6 +1982,9 @@
     <ClCompile Include="..\..\src\grid\feature-generator.c">
       <Filter>grid</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-monk.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4314,6 +4317,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\grid\feature-generator.h">
       <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-monk.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

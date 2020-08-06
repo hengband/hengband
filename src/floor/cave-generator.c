@@ -293,7 +293,7 @@ static void decide_dungeon_data_allocation(player_type *player_ptr, dun_data_typ
             dd_ptr->alloc_monster_num);
 }
 
-static void allocate_dungeon_data(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
+static bool allocate_dungeon_data(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
     dd_ptr->alloc_monster_num += randint1(8);
     for (dd_ptr->alloc_monster_num = dd_ptr->alloc_monster_num + dd_ptr->alloc_object_num; dd_ptr->alloc_monster_num > 0; dd_ptr->alloc_monster_num--)
@@ -311,10 +311,11 @@ static void allocate_dungeon_data(player_type *player_ptr, dun_data_type *dd_ptr
     alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ITEM, 3));
     alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
     floor_ptr->object_level = floor_ptr->base_level;
-    if (!alloc_guardian(player_ptr, TRUE)) {
-        *dd_ptr->why = _("ダンジョンの主配置に失敗", "Failed to place a dungeon guardian");
-        return FALSE;
-    }
+    if (alloc_guardian(player_ptr, TRUE))
+        return TRUE;
+
+    *dd_ptr->why = _("ダンジョンの主配置に失敗", "Failed to place a dungeon guardian");
+    return FALSE;
 }
 
 static void decide_grid_glowing(floor_type *floor_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
@@ -370,7 +371,9 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         return FALSE;
 
     decide_dungeon_data_allocation(player_ptr, dd_ptr, d_ptr);
-    allocate_dungeon_data(player_ptr, dd_ptr, d_ptr);    
+    if (!allocate_dungeon_data(player_ptr, dd_ptr, d_ptr))
+        return FALSE;
+
     decide_grid_glowing(floor_ptr, dd_ptr, d_ptr);
     return TRUE;
 }
