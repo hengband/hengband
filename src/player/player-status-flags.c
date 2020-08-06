@@ -21,6 +21,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
+#include "monster-race/race-flags7.h"
 
 void have_kill_wall(player_type *creature_ptr)
 {
@@ -1073,5 +1074,55 @@ void have_sustain_chr(player_type *creature_ptr)
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_SUST_CHR))
             creature_ptr->sustain_chr = TRUE;
+    }
+}
+
+void have_levitation(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->levitation = FALSE;
+
+    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
+        creature_ptr->levitation = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form
+        && (creature_ptr->prace == RACE_DRACONIAN || creature_ptr->prace == RACE_SPECTRE || creature_ptr->prace == RACE_SPRITE
+            || creature_ptr->prace == RACE_ARCHON || creature_ptr->prace == RACE_S_FAIRY)) {
+        creature_ptr->levitation = TRUE;
+    }
+
+    if (creature_ptr->special_defense & KAMAE_SEIRYU || creature_ptr->special_defense & KAMAE_SUZAKU) {
+        creature_ptr->levitation = TRUE;
+    }
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->slow_digest = TRUE;
+        creature_ptr->regenerate = TRUE;
+	}
+
+    if (creature_ptr->magicdef) {
+        creature_ptr->levitation = TRUE;
+    }
+
+    if (creature_ptr->riding) {
+        monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
+        creature_ptr->levitation = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? TRUE : FALSE;
+    }
+
+    if (creature_ptr->tim_levitation) {
+        creature_ptr->levitation = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_LEVITATION))
+            creature_ptr->levitation = TRUE;
     }
 }
