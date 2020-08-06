@@ -1249,7 +1249,6 @@ void calc_class_status(player_type *creature_ptr)
             creature_ptr->dis_to_a += creature_ptr->lev / 2 + 5;
         }
 
-        creature_ptr->slow_digest = TRUE;
         creature_ptr->resist_fear = TRUE;
         if (creature_ptr->lev > 19)
             creature_ptr->resist_pois = TRUE;

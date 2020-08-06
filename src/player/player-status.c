@@ -567,7 +567,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->cursed = 0L;
     creature_ptr->impact[0] = FALSE;
     creature_ptr->impact[1] = FALSE;
-    creature_ptr->slow_digest = FALSE;
     creature_ptr->regenerate = FALSE;
     creature_ptr->resist_acid = FALSE;
     creature_ptr->resist_elec = FALSE;
@@ -736,6 +735,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_sustain_chr(creature_ptr);
     have_levitation(creature_ptr);
     have_can_swim(creature_ptr);
+    have_slow_digest(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4467,7 +4467,6 @@ bool is_echizen(player_type *creature_ptr)
 void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->slow_digest = TRUE;
         creature_ptr->regenerate = TRUE;
         creature_ptr->lite = TRUE;
         creature_ptr->resist_acid = TRUE;
@@ -4593,8 +4592,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->cursed |= TRC_FAST_DIGEST;
         if (have_flag(flgs, TR_SLOW_REGEN))
             creature_ptr->cursed |= TRC_SLOW_REGEN;
-        if (have_flag(flgs, TR_SLOW_DIGEST))
-            creature_ptr->slow_digest = TRUE;
         if (have_flag(flgs, TR_REGEN))
             creature_ptr->regenerate = TRUE;
 

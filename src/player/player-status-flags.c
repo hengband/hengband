@@ -1098,12 +1098,10 @@ void have_levitation(player_type *creature_ptr)
     }
 
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->slow_digest = TRUE;
-        creature_ptr->regenerate = TRUE;
+        creature_ptr->levitation = TRUE;
 	}
 
     if (creature_ptr->magicdef) {
-        creature_ptr->levitation = TRUE;
     }
 
     if (creature_ptr->riding) {
@@ -1120,7 +1118,6 @@ void have_levitation(player_type *creature_ptr)
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_LEVITATION))
             creature_ptr->levitation = TRUE;
@@ -1135,5 +1132,46 @@ void have_can_swim(player_type *creature_ptr)
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         if (riding_r_ptr->flags7 & (RF7_CAN_SWIM | RF7_AQUATIC))
             creature_ptr->can_swim = TRUE;
+    }
+}
+
+void have_slow_digest(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->slow_digest = FALSE;
+
+    if (creature_ptr->pclass == CLASS_NINJA) {
+        creature_ptr->slow_digest = TRUE;
+    }
+
+	if (creature_ptr->lev > 14 && !creature_ptr->mimic_form && creature_ptr->prace == RACE_HALF_TROLL) {
+        if (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_BERSERKER) {
+            creature_ptr->slow_digest = TRUE;
+            /* Let's not make Regeneration
+             * a disadvantage for the poor warriors who can
+             * never learn a spell that satisfies hunger (actually
+             * neither can rogues, but half-trolls are not
+             * supposed to play rogues) */
+        }
+    }
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->slow_digest = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form
+        && (creature_ptr->prace == RACE_GOLEM || creature_ptr->prace == RACE_ZOMBIE || creature_ptr->prace == RACE_SPECTRE
+            || creature_ptr->prace == RACE_ANDROID)) {
+        creature_ptr->slow_digest = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_SLOW_DIGEST))
+            creature_ptr->slow_digest = TRUE;
     }
 }
