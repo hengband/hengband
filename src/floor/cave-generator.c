@@ -237,6 +237,20 @@ static void make_aqua_streams(player_type *player_ptr, dun_data_type *dd_ptr, du
             build_streamer(player_ptr, d_ptr->stream1, DUN_STR_MC);
 }
 
+static void make_perm_walls(player_type *player_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    for (POSITION x = 0; x < floor_ptr->width; x++) {
+        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[0][x]);
+        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[floor_ptr->height - 1][x]);
+    }
+
+    for (POSITION y = 1; y < (floor_ptr->height - 1); y++) {
+        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[y][0]);
+        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[y][floor_ptr->width - 1]);
+    }
+}
+
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
@@ -274,16 +288,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
         return FALSE;
 
     make_aqua_streams(player_ptr, dd_ptr, d_ptr);
-    for (POSITION x = 0; x < floor_ptr->width; x++) {
-        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[0][x]);
-        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[floor_ptr->height - 1][x]);
-    }
-
-    for (POSITION y = 1; y < (floor_ptr->height - 1); y++) {
-        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[y][0]);
-        place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[y][floor_ptr->width - 1]);
-    }
-
+    make_perm_walls(player_ptr);
     if (!new_player_spot(player_ptr)) {
         *dd_ptr->why = _("プレイヤー配置に失敗", "Failed to place a player");
         return FALSE;
