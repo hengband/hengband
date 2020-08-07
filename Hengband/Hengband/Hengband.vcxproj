@@ -332,6 +332,7 @@
     <ClCompile Include="..\..\src\load\store-loader.c" />
     <ClCompile Include="..\..\src\load\world-loader.c" />
     <ClCompile Include="..\..\src\racial\racial-util.c" />
+    <ClCompile Include="..\..\src\racial\race-racial-switcher.c" />
     <ClCompile Include="..\..\src\room\cave-filler.c" />
     <ClCompile Include="..\..\src\room\door-definition.c" />
     <ClCompile Include="..\..\src\room\room-generator.c" />
@@ -887,6 +888,7 @@
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
     <ClInclude Include="..\..\src\racial\class-racial-switcher.h" />
+    <ClInclude Include="..\..\src\racial\race-racial-switcher.h" />
     <ClInclude Include="..\..\src\racial\racial-kutar.h" />
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />
