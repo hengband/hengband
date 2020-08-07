@@ -1,5 +1,29 @@
 ﻿#include "racial/race-racial-switcher.h"
+#include "player/player-race.h"
 #include "racial/racial-util.h"
+
+void switch_mimic_racial(player_type *creature_ptr, rc_type *rc_ptr)
+{
+    switch (creature_ptr->mimic_form) {
+    case MIMIC_DEMON:
+    case MIMIC_DEMON_LORD:
+        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("地獄/火炎のブレス (ダメージ %d)", "Nether or Fire Breath (dam %d)"), rc_ptr->lvl * 3);
+        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
+        rc_ptr->power_desc[rc_ptr->num].cost = 10 + rc_ptr->lvl / 3;
+        rc_ptr->power_desc[rc_ptr->num].stat = A_CON;
+        rc_ptr->power_desc[rc_ptr->num].fail = 20;
+        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        break;
+    case MIMIC_VAMPIRE:
+        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("吸血", "Vampiric Drain"));
+        rc_ptr->power_desc[rc_ptr->num].min_level = 2;
+        rc_ptr->power_desc[rc_ptr->num].cost = 1 + (rc_ptr->lvl / 3);
+        rc_ptr->power_desc[rc_ptr->num].stat = A_CON;
+        rc_ptr->power_desc[rc_ptr->num].fail = 9;
+        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        break;
+    }
+}
 
 void switch_race_racial(player_type *creature_ptr, rc_type *rc_ptr)
 {
