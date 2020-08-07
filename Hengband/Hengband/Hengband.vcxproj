@@ -330,6 +330,7 @@
     <ClCompile Include="..\..\src\load\player-info-loader.c" />
     <ClCompile Include="..\..\src\load\store-loader.c" />
     <ClCompile Include="..\..\src\load\world-loader.c" />
+    <ClCompile Include="..\..\src\racial\racial-util.c" />
     <ClCompile Include="..\..\src\room\cave-filler.c" />
     <ClCompile Include="..\..\src\room\door-definition.c" />
     <ClCompile Include="..\..\src\room\room-generator.c" />
@@ -929,6 +930,7 @@
     <ClInclude Include="..\..\src\load\savedata-flag-types.h" />
     <ClInclude Include="..\..\src\load\store-loader.h" />
     <ClInclude Include="..\..\src\load\world-loader.h" />
+    <ClInclude Include="..\..\src\racial\racial-util.h" />
     <ClInclude Include="..\..\src\room\cave-filler.h" />
     <ClInclude Include="..\..\src\room\door-definition.h" />
     <ClInclude Include="..\..\src\room\lake-types.h" />

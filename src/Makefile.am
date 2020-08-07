@@ -603,6 +603,7 @@ hengband_SOURCES = \
 	racial/racial-draconian.c racial/racial-draconian.h \
 	racial/racial-kutar.c racial/racial-kutar.h \
 	racial/racial-switcher.c racial/racial-switcher.h \
+	racial/racial-util.c racial/racial-util.h \
 	racial/racial-vampire.c racial/racial-vampire.h \
 	\
 	realm/realm-arcane.c realm/realm-arcane.h \

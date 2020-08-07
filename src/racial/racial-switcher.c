@@ -53,6 +53,7 @@
 #include "racial/racial-balrog.h"
 #include "racial/racial-draconian.h"
 #include "racial/racial-kutar.h"
+#include "racial/racial-util.h"
 #include "racial/racial-vampire.h"
 #include "realm/realm-names-table.h"
 #include "spell-kind/spells-beam.h"

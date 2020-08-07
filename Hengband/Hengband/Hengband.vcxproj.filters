@@ -1988,6 +1988,9 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-racial.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-util.c">
+      <Filter>racial</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4326,6 +4329,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-action\cmd-racial.h">
       <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-util.h">
+      <Filter>racial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
