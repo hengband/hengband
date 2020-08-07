@@ -1997,6 +1997,9 @@
     <ClCompile Include="..\..\src\racial\race-racial-switcher.c">
       <Filter>racial</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\racial\mutation-racial-selector.c">
+      <Filter>racial</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4343,6 +4346,9 @@
       <Filter>racial</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\racial\race-racial-switcher.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\mutation-racial-selector.h">
       <Filter>racial</Filter>
     </ClInclude>
   </ItemGroup>

@@ -599,6 +599,7 @@ hengband_SOURCES = \
 	player-attack/player-attack.c player-attack/player-attack.h \
 	\
 	racial/class-racial-switcher.c racial/class-racial-switcher.h \
+	racial/mutation-racial-selector.c racial/mutation-racial-selector.h \
 	racial/race-racial-switcher.c racial/race-racial-switcher.h \
 	racial/racial-android.c racial/racial-android.h \
 	racial/racial-balrog.c racial/racial-balrog.h \
