@@ -227,7 +227,7 @@ static bool repeat_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
 
 static void check_cast_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
 {
-    switch (racial_aux(creature_ptr, &rc_ptr->power_desc[rc_ptr->command_code])) {
+    switch (check_racial_level(creature_ptr, &rc_ptr->power_desc[rc_ptr->command_code])) {
     case 1:
         if (rc_ptr->power_desc[rc_ptr->command_code].number < 0)
             rc_ptr->cast = exe_racial_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);

@@ -127,7 +127,7 @@ PERCENTAGE racial_chance(player_type *creature_ptr, rpi_type *rpi_ptr)
  * 発動成功ならば1、発動失敗ならば-1、キャンセルならば0を返す。
  * return value indicates that we have succesfully used the power 1: Succeeded, 0: Cancelled, -1: Failed
  */
-int racial_aux(player_type *creature_ptr, rpi_type *rpi_ptr)
+int check_racial_level(player_type *creature_ptr, rpi_type *rpi_ptr)
 {
     PLAYER_LEVEL min_level = rpi_ptr->min_level;
     int use_stat = rpi_ptr->stat;
