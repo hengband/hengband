@@ -62,6 +62,23 @@ static bool input_racial_technique_selection(player_type *creature_ptr, rc_type 
     }
 }
 
+static void display_racial_list(rc_type *rc_ptr, char *dummy)
+{
+    strcpy(dummy, "");
+    rc_ptr->redraw = TRUE;
+    if (!use_menu)
+        screen_save();
+
+    if (rc_ptr->num < 18) {
+        prt(_("                            Lv   MP 失率", "                            Lv Cost Fail"), 1, 0);
+        return;
+    }
+
+    prt(_("                            Lv   MP 失率                            Lv   MP 失率",
+            "                            Lv Cost Fail                            Lv Cost Fail"),
+        1, 0);
+}
+
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -118,18 +135,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
             if ((rc_ptr->choice == ' ') || (rc_ptr->choice == '*') || (rc_ptr->choice == '?') || (use_menu && rc_ptr->ask)) {
                 if (!rc_ptr->redraw || use_menu) {
                     char dummy[80];
-                    strcpy(dummy, "");
-                    rc_ptr->redraw = TRUE;
-                    if (!use_menu)
-                        screen_save();
-
-                    if (rc_ptr->num < 18)
-                        prt(_("                            Lv   MP 失率", "                            Lv Cost Fail"), 1, 0);
-                    else
-                        prt(_("                            Lv   MP 失率                            Lv   MP 失率",
-                                "                            Lv Cost Fail                            Lv Cost Fail"),
-                            1, 0);
-
+                    display_racial_list(rc_ptr, dummy);
                     byte y = 2;
                     byte x = 0;
                     int ctr = 0;
