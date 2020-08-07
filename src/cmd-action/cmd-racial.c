@@ -93,8 +93,8 @@ void do_cmd_racial_power(player_type *creature_ptr)
     rc_ptr->redraw = FALSE;
 
     (void)strnfmt(rc_ptr->out_val, 78,
-        _("(特殊能力 %c-%c, *'で一覧, ESCで中断) どの特殊能力を使いますか？", "(Powers %c-%c, *=List, ESC=exit) Use which power? "),
-        I2A(0), (rc_ptr->num <= 26) ? I2A(rc_ptr->num - 1) : '0' + rc_ptr->num - 27);
+        _("(特殊能力 %c-%c, *'で一覧, ESCで中断) どの特殊能力を使いますか？", "(Powers %c-%c, *=List, ESC=exit) Use which power? "), I2A(0),
+        (rc_ptr->num <= 26) ? I2A(rc_ptr->num - 1) : '0' + rc_ptr->num - 27);
 
     if (!repeat_pull(&rc_ptr->command_code) || rc_ptr->command_code < 0 || rc_ptr->command_code >= rc_ptr->num) {
         if (use_menu)
@@ -117,9 +117,6 @@ void do_cmd_racial_power(player_type *creature_ptr)
 
             if ((rc_ptr->choice == ' ') || (rc_ptr->choice == '*') || (rc_ptr->choice == '?') || (use_menu && rc_ptr->ask)) {
                 if (!rc_ptr->redraw || use_menu) {
-                    byte y = 1;
-                    byte x = 0;
-                    int ctr = 0;
                     char dummy[80];
                     strcpy(dummy, "");
                     rc_ptr->redraw = TRUE;
@@ -127,12 +124,15 @@ void do_cmd_racial_power(player_type *creature_ptr)
                         screen_save();
 
                     if (rc_ptr->num < 18)
-                        prt(_("                            Lv   MP 失率", "                            Lv Cost Fail"), y++, x);
+                        prt(_("                            Lv   MP 失率", "                            Lv Cost Fail"), 1, 0);
                     else
                         prt(_("                            Lv   MP 失率                            Lv   MP 失率",
                                 "                            Lv Cost Fail                            Lv Cost Fail"),
-                            y++, x);
+                            1, 0);
 
+                    byte y = 2;
+                    byte x = 0;
+                    int ctr = 0;
                     while (ctr < rc_ptr->num) {
                         TERM_LEN x1 = ((ctr < 18) ? x : x + 40);
                         TERM_LEN y1 = ((ctr < 18) ? y + ctr : y + ctr - 18);
@@ -151,8 +151,8 @@ void do_cmd_racial_power(player_type *creature_ptr)
                         }
 
                         strcat(dummy,
-                            format("%-23.23s %2d %4d %3d%%", rc_ptr->power_desc[ctr].racial_name, rc_ptr->power_desc[ctr].min_level, rc_ptr->power_desc[ctr].cost,
-                                100 - racial_chance(creature_ptr, &rc_ptr->power_desc[ctr])));
+                            format("%-23.23s %2d %4d %3d%%", rc_ptr->power_desc[ctr].racial_name, rc_ptr->power_desc[ctr].min_level,
+                                rc_ptr->power_desc[ctr].cost, 100 - racial_chance(creature_ptr, &rc_ptr->power_desc[ctr])));
                         prt(dummy, y1, x1);
                         ctr++;
                     }
