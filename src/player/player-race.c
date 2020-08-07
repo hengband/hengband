@@ -171,14 +171,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_HALF_ORC:
             creature_ptr->resist_dark = TRUE;
             break;
-        case RACE_HALF_TROLL:
-            if (creature_ptr->lev > 14) {
-                creature_ptr->regenerate = TRUE;
-            }
-            break;
-        case RACE_AMBERITE:
-            creature_ptr->regenerate = TRUE;
-            break;
         case RACE_HIGH_ELF:
             creature_ptr->resist_lite = TRUE;
             break;

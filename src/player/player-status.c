@@ -567,7 +567,6 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->cursed = 0L;
     creature_ptr->impact[0] = FALSE;
     creature_ptr->impact[1] = FALSE;
-    creature_ptr->regenerate = FALSE;
     creature_ptr->resist_acid = FALSE;
     creature_ptr->resist_elec = FALSE;
     creature_ptr->resist_fire = FALSE;
@@ -736,6 +735,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_levitation(creature_ptr);
     have_can_swim(creature_ptr);
     have_slow_digest(creature_ptr);
+    have_regenerate(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -763,13 +763,6 @@ void calc_bonuses(player_type *creature_ptr)
 
     if (creature_ptr->sh_fire)
         creature_ptr->lite = TRUE;
-
-    if (creature_ptr->realm1 == REALM_HEX) {
-
-        if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
-            creature_ptr->regenerate = TRUE;
-        }
-    }
 
     calc_strength_addition(creature_ptr);
     calc_intelligence_addition(creature_ptr);
@@ -4467,7 +4460,6 @@ bool is_echizen(player_type *creature_ptr)
 void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->regenerate = TRUE;
         creature_ptr->lite = TRUE;
         creature_ptr->resist_acid = TRUE;
         creature_ptr->resist_elec = TRUE;
@@ -4509,10 +4501,6 @@ void calc_timelimit_status(player_type *creature_ptr)
             creature_ptr->immune_fire = TRUE;
         else if (creature_ptr->special_defense & DEFENSE_COLD)
             creature_ptr->immune_cold = TRUE;
-    }
-
-    if (creature_ptr->tim_regen) {
-        creature_ptr->regenerate = TRUE;
     }
 
     if (is_hero(creature_ptr) || creature_ptr->shero) {
@@ -4592,8 +4580,7 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->cursed |= TRC_FAST_DIGEST;
         if (have_flag(flgs, TR_SLOW_REGEN))
             creature_ptr->cursed |= TRC_SLOW_REGEN;
-        if (have_flag(flgs, TR_REGEN))
-            creature_ptr->regenerate = TRUE;
+
 
         if (have_flag(flgs, TR_TELEPORT)) {
             if (object_is_cursed(o_ptr))

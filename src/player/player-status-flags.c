@@ -1175,3 +1175,62 @@ void have_slow_digest(player_type *creature_ptr)
             creature_ptr->slow_digest = TRUE;
     }
 }
+
+void have_regenerate(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->regenerate = FALSE;
+
+    if (!creature_ptr->mimic_form) {
+        switch (creature_ptr->prace) {
+        case RACE_HALF_TROLL:
+            if (creature_ptr->lev > 14) {
+                creature_ptr->regenerate = TRUE;
+            }
+            break;
+        case RACE_AMBERITE:
+            creature_ptr->regenerate = TRUE;
+            break;
+        }
+    }
+
+    switch (creature_ptr->pclass) {
+    case CLASS_WARRIOR:
+        if (creature_ptr->lev > 44)
+            creature_ptr->regenerate = TRUE;
+        break;
+    case CLASS_BERSERKER:
+        creature_ptr->regenerate = TRUE;
+        break;
+    }
+
+    if (creature_ptr->muta3 & MUT3_FLESH_ROT)
+        creature_ptr->regenerate = FALSE;
+
+    if (creature_ptr->muta3 & MUT3_REGEN)
+        creature_ptr->regenerate = TRUE;
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->regenerate = TRUE;
+    }
+
+    if (creature_ptr->realm1 == REALM_HEX) {
+        if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
+            creature_ptr->regenerate = TRUE;
+        }
+    }
+
+	if (creature_ptr->tim_regen) {
+        creature_ptr->regenerate = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_REGEN))
+            creature_ptr->regenerate = TRUE;
+    }
+}

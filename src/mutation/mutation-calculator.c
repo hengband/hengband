@@ -59,9 +59,6 @@ void set_mutation_flags(player_type *creature_ptr)
     if (creature_ptr->muta3 == 0)
         return;
 
-    if (creature_ptr->muta3 & MUT3_FLESH_ROT)
-        creature_ptr->regenerate = FALSE;
-
     if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
         creature_ptr->lite = TRUE;
     }
@@ -72,7 +69,5 @@ void set_mutation_flags(player_type *creature_ptr)
     if (creature_ptr->muta3 & MUT3_FEARLESS)
         creature_ptr->resist_fear = TRUE;
 
-    if (creature_ptr->muta3 & MUT3_REGEN)
-        creature_ptr->regenerate = TRUE;
 
 }
