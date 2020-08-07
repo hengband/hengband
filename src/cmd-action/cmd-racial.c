@@ -126,6 +126,21 @@ static void select_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
     }
 }
 
+static bool check_racial_power_choice(player_type *creature_ptr, rc_type *rc_ptr)
+{
+    if ((rc_ptr->choice != ' ') && (rc_ptr->choice != '*') && (rc_ptr->choice != '?') && (!use_menu || !rc_ptr->ask))
+        return FALSE;
+
+    if (!rc_ptr->redraw || use_menu) {
+        select_racial_power(creature_ptr, rc_ptr);
+        return TRUE;
+    }
+
+    rc_ptr->redraw = FALSE;
+    screen_load();
+    return TRUE;
+}
+
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -174,16 +189,8 @@ void do_cmd_racial_power(player_type *creature_ptr)
             if (check_input_racial_power(creature_ptr, rc_ptr))
                 return;
 
-            if ((rc_ptr->choice == ' ') || (rc_ptr->choice == '*') || (rc_ptr->choice == '?') || (use_menu && rc_ptr->ask)) {
-                if (!rc_ptr->redraw || use_menu) {
-                    select_racial_power(creature_ptr, rc_ptr);
-                } else {
-                    rc_ptr->redraw = FALSE;
-                    screen_load();
-                }
-
+            if (check_racial_power_choice(creature_ptr, rc_ptr))
                 continue;
-            }
 
             if (!use_menu) {
                 if (rc_ptr->choice == '\r' && rc_ptr->num == 1)
@@ -254,7 +261,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
 
     int actual_racial_cost = racial_cost / 2 + randint1(racial_cost / 2);
     if (creature_ptr->csp >= actual_racial_cost) {
-        creature_ptr->csp -= actual_racial_cost;    
+        creature_ptr->csp -= actual_racial_cost;
     } else {
         actual_racial_cost -= creature_ptr->csp;
         creature_ptr->csp = 0;
