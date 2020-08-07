@@ -573,6 +573,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_racial_power(player_type *creature_ptr)
@@ -1470,7 +1471,6 @@ void do_cmd_racial_power(player_type *creature_ptr)
             power_desc[num].cost = lvl;
             power_desc[num].stat = A_STR;
             power_desc[num].fail = 6;
-            /* XXX_XXX_XXX Hack! MUT1_LAUNCHER counts as negative... */
             power_desc[num++].number = 3;
         }
     }
@@ -1538,22 +1538,19 @@ void do_cmd_racial_power(player_type *creature_ptr)
                 if (menu_line > num)
                     menu_line -= num;
             }
-            /* Request redraw */
+
             if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
-                /* Show the list */
                 if (!redraw || use_menu) {
                     byte y = 1, x = 0;
                     int ctr = 0;
                     char dummy[80];
                     char letter;
                     TERM_LEN x1, y1;
-
                     strcpy(dummy, "");
                     redraw = TRUE;
                     if (!use_menu)
                         screen_save();
 
-                    /* Print header(s) */
                     if (num < 18)
                         prt(_("                            Lv   MP 失率", "                            Lv Cost Fail"), y++, x);
                     else
@@ -1561,94 +1558,75 @@ void do_cmd_racial_power(player_type *creature_ptr)
                                 "                            Lv Cost Fail                            Lv Cost Fail"),
                             y++, x);
 
-                    /* Print list */
                     while (ctr < num) {
                         x1 = ((ctr < 18) ? x : x + 40);
                         y1 = ((ctr < 18) ? y + ctr : y + ctr - 18);
-
                         if (use_menu) {
                             if (ctr == (menu_line - 1))
                                 strcpy(dummy, _(" 》 ", " >  "));
                             else
                                 strcpy(dummy, "    ");
                         } else {
-                            /* letter/number for power selection */
                             if (ctr < 26)
                                 letter = I2A(ctr);
                             else
                                 letter = '0' + ctr - 26;
                             sprintf(dummy, " %c) ", letter);
                         }
+
                         strcat(dummy,
                             format("%-23.23s %2d %4d %3d%%", power_desc[ctr].racial_name, power_desc[ctr].min_level, power_desc[ctr].cost,
                                 100 - racial_chance(creature_ptr, &power_desc[ctr])));
                         prt(dummy, y1, x1);
                         ctr++;
                     }
-                }
-
-                /* Hide the list */
-                else {
-                    /* Hide list */
+                } else {
                     redraw = FALSE;
                     screen_load();
                 }
 
-                /* Redo asking */
                 continue;
             }
 
             if (!use_menu) {
-                if (choice == '\r' && num == 1) {
+                if (choice == '\r' && num == 1)
                     choice = 'a';
-                }
 
                 if (isalpha(choice)) {
-                    /* Note verify */
                     ask = (isupper(choice));
-
-                    /* Lowercase */
                     if (ask)
                         choice = (char)tolower(choice);
 
-                    /* Extract request */
                     command_code = (islower(choice) ? A2I(choice) : -1);
                 } else {
-                    ask = FALSE; /* Can't uppercase digits */
-
+                    ask = FALSE;
                     command_code = choice - '0' + 26;
                 }
             }
 
-            /* Totally Illegal */
             if ((command_code < 0) || (command_code >= num)) {
                 bell();
                 continue;
             }
 
-            /* Verify it */
             if (ask) {
                 char tmp_val[160];
-
-                /* Prompt */
                 (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), power_desc[command_code].racial_name);
-
-                /* Belay that order */
                 if (!get_check(tmp_val))
                     continue;
             }
 
-            /* Stop the loop */
             flag = TRUE;
         }
+
         if (redraw)
             screen_load();
 
-        /* Abort if needed */
         if (!flag) {
             free_turn(creature_ptr);
             return;
         }
+
         repeat_push(command_code);
     }
 
@@ -1667,22 +1645,23 @@ void do_cmd_racial_power(player_type *creature_ptr)
         break;
     }
 
-    if (cast) {
-        int racial_cost = power_desc[command_code].racial_cost;
-        if (racial_cost != 0) {
-            int actual_racial_cost = racial_cost / 2 + randint1(racial_cost / 2);
-            if (creature_ptr->csp < actual_racial_cost) {
-                actual_racial_cost -= creature_ptr->csp;
-                creature_ptr->csp = 0;
-                take_hit(creature_ptr, DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"), -1);
-            } else
-                creature_ptr->csp -= actual_racial_cost;
-
-            creature_ptr->redraw |= (PR_HP | PR_MANA);
-            creature_ptr->window |= (PW_PLAYER | PW_SPELL);
-        }
-    } else
+    if (!cast) {
         free_turn(creature_ptr);
+        return;    
+    }
+        
+    int racial_cost = power_desc[command_code].racial_cost;
+    if (racial_cost == 0)
+        return;
 
-    return;
+    int actual_racial_cost = racial_cost / 2 + randint1(racial_cost / 2);
+    if (creature_ptr->csp < actual_racial_cost) {
+        actual_racial_cost -= creature_ptr->csp;
+        creature_ptr->csp = 0;
+        take_hit(creature_ptr, DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"), -1);
+    } else
+        creature_ptr->csp -= actual_racial_cost;
+
+    creature_ptr->redraw |= (PR_HP | PR_MANA);
+    creature_ptr->window |= (PW_PLAYER | PW_SPELL);
 }
