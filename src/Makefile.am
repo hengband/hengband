@@ -598,6 +598,7 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.c player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.c player-attack/player-attack.h \
 	\
+	racial/class-racial-switcher.c racial/class-racial-switcher.h \
 	racial/racial-android.c racial/racial-android.h \
 	racial/racial-balrog.c racial/racial-balrog.h \
 	racial/racial-draconian.c racial/racial-draconian.h \

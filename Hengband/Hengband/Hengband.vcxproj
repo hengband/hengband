@@ -295,6 +295,7 @@
     <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c" />
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
+    <ClCompile Include="..\..\src\racial\class-racial-switcher.c" />
     <ClCompile Include="..\..\src\racial\racial-kutar.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
     <ClCompile Include="..\..\src\mspell\mspell-dispel.c" />
@@ -885,6 +886,7 @@
     <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h" />
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
+    <ClInclude Include="..\..\src\racial\class-racial-switcher.h" />
     <ClInclude Include="..\..\src\racial\racial-kutar.h" />
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />
