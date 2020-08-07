@@ -244,6 +244,24 @@ static void check_cast_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
     }
 }
 
+static bool reduce_mana_by_racial(player_type *creature_ptr, rc_type *rc_ptr)
+{
+    int racial_cost = rc_ptr->power_desc[rc_ptr->command_code].racial_cost;
+    if (racial_cost == 0)
+        return FALSE;
+
+    int actual_racial_cost = racial_cost / 2 + randint1(racial_cost / 2);
+    if (creature_ptr->csp >= actual_racial_cost) {
+        creature_ptr->csp -= actual_racial_cost;
+        return TRUE;
+    }
+
+    actual_racial_cost -= creature_ptr->csp;
+    creature_ptr->csp = 0;
+    take_hit(creature_ptr, DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"), -1);
+    return TRUE;
+}
+
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -287,18 +305,8 @@ void do_cmd_racial_power(player_type *creature_ptr)
         return;
     }
 
-    int racial_cost = rc_ptr->power_desc[rc_ptr->command_code].racial_cost;
-    if (racial_cost == 0)
+    if (!reduce_mana_by_racial(creature_ptr, rc_ptr))
         return;
-
-    int actual_racial_cost = racial_cost / 2 + randint1(racial_cost / 2);
-    if (creature_ptr->csp >= actual_racial_cost) {
-        creature_ptr->csp -= actual_racial_cost;
-    } else {
-        actual_racial_cost -= creature_ptr->csp;
-        creature_ptr->csp = 0;
-        take_hit(creature_ptr, DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"), -1);
-    }
 
     creature_ptr->redraw |= PR_HP | PR_MANA;
     creature_ptr->window |= PW_PLAYER | PW_SPELL;
