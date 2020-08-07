@@ -152,7 +152,7 @@ static void decide_racial_command(rc_type *rc_ptr)
     if (!isalpha(rc_ptr->choice)) {
         rc_ptr->ask = FALSE;
         rc_ptr->command_code = rc_ptr->choice - '0' + 26;
-        return;    
+        return;
     }
 
     rc_ptr->ask = (isupper(rc_ptr->choice));
@@ -160,6 +160,21 @@ static void decide_racial_command(rc_type *rc_ptr)
         rc_ptr->choice = (char)tolower(rc_ptr->choice);
 
     rc_ptr->command_code = (islower(rc_ptr->choice) ? A2I(rc_ptr->choice) : -1);
+}
+
+static bool ask_invoke_racial_power(rc_type *rc_ptr)
+{
+    if ((rc_ptr->command_code < 0) || (rc_ptr->command_code >= rc_ptr->num)) {
+        bell();
+        return FALSE;
+    }
+
+    if (!rc_ptr->ask)
+        return TRUE;
+
+    char tmp_val[160];
+    (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name);
+    return get_check(tmp_val);
 }
 
 /*!
@@ -214,17 +229,8 @@ void do_cmd_racial_power(player_type *creature_ptr)
                 continue;
 
             decide_racial_command(rc_ptr);
-            if ((rc_ptr->command_code < 0) || (rc_ptr->command_code >= rc_ptr->num)) {
-                bell();
+            if (!ask_invoke_racial_power(rc_ptr))
                 continue;
-            }
-
-            if (rc_ptr->ask) {
-                char tmp_val[160];
-                (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name);
-                if (!get_check(tmp_val))
-                    continue;
-            }
 
             rc_ptr->flag = TRUE;
         }
