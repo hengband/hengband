@@ -22,7 +22,7 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 
-static bool input_racial_technique_selection(player_type *creature_ptr, rc_type *rc_ptr)
+static bool input_racial_power_selection(player_type *creature_ptr, rc_type *rc_ptr)
 {
     switch (rc_ptr->choice) {
     case '0':
@@ -60,6 +60,20 @@ static bool input_racial_technique_selection(player_type *creature_ptr, rc_type 
     default:
         return FALSE;
     }
+}
+
+static bool check_input_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
+{
+    if (!use_menu || rc_ptr->choice == ' ')
+        return FALSE;
+
+    if (input_racial_power_selection(creature_ptr, rc_ptr))
+        return TRUE;
+
+    if (rc_ptr->menu_line > rc_ptr->num)
+        rc_ptr->menu_line -= rc_ptr->num;
+
+    return FALSE;
 }
 
 static void display_racial_list(rc_type *rc_ptr, char *dummy)
@@ -157,13 +171,8 @@ void do_cmd_racial_power(player_type *creature_ptr)
             else if (!get_com(rc_ptr->out_val, &rc_ptr->choice, FALSE))
                 break;
 
-            if (use_menu && rc_ptr->choice != ' ') {
-                if (input_racial_technique_selection(creature_ptr, rc_ptr))
-                    return;
-
-                if (rc_ptr->menu_line > rc_ptr->num)
-                    rc_ptr->menu_line -= rc_ptr->num;
-            }
+            if (check_input_racial_power(creature_ptr, rc_ptr))
+                return;
 
             if ((rc_ptr->choice == ' ') || (rc_ptr->choice == '*') || (rc_ptr->choice == '?') || (use_menu && rc_ptr->ask)) {
                 if (!rc_ptr->redraw || use_menu) {
