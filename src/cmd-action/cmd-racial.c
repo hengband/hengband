@@ -69,58 +69,50 @@ void do_cmd_racial_power(player_type *creature_ptr)
 
             if (use_menu && rc_ptr->choice != ' ') {
                 switch (rc_ptr->choice) {
-                case '0': {
+                case '0':
                     screen_load();
                     free_turn(creature_ptr);
-                    return;
-                }
-
+                    return; // todo return TRUEに変える.
                 case '8':
                 case 'k':
-                case 'K': {
+                case 'K':
                     rc_ptr->menu_line += (rc_ptr->num - 1);
                     break;
-                }
-
                 case '2':
                 case 'j':
-                case 'J': {
+                case 'J':
                     rc_ptr->menu_line++;
-                    break;
-                }
-
+                    break; // todo return FALSEに変える.
                 case '6':
                 case 'l':
                 case 'L':
                 case '4':
                 case 'h':
-                case 'H': {
+                case 'H':
                     if (rc_ptr->menu_line > 18)
                         rc_ptr->menu_line -= 18;
                     else if (rc_ptr->menu_line + 18 <= rc_ptr->num)
                         rc_ptr->menu_line += 18;
-                    break;
-                }
 
+                    break; // todo return FALSEに変える.
                 case 'x':
                 case 'X':
-                case '\r': {
+                case '\r':
                     rc_ptr->command_code = rc_ptr->menu_line - 1;
                     rc_ptr->ask = FALSE;
-                    break;
+                    break; // todo return FALSEに変える.
                 }
-                }
+
                 if (rc_ptr->menu_line > rc_ptr->num)
                     rc_ptr->menu_line -= rc_ptr->num;
             }
 
             if ((rc_ptr->choice == ' ') || (rc_ptr->choice == '*') || (rc_ptr->choice == '?') || (use_menu && rc_ptr->ask)) {
                 if (!rc_ptr->redraw || use_menu) {
-                    byte y = 1, x = 0;
+                    byte y = 1;
+                    byte x = 0;
                     int ctr = 0;
                     char dummy[80];
-                    char letter;
-                    TERM_LEN x1, y1;
                     strcpy(dummy, "");
                     rc_ptr->redraw = TRUE;
                     if (!use_menu)
@@ -134,14 +126,15 @@ void do_cmd_racial_power(player_type *creature_ptr)
                             y++, x);
 
                     while (ctr < rc_ptr->num) {
-                        x1 = ((ctr < 18) ? x : x + 40);
-                        y1 = ((ctr < 18) ? y + ctr : y + ctr - 18);
+                        TERM_LEN x1 = ((ctr < 18) ? x : x + 40);
+                        TERM_LEN y1 = ((ctr < 18) ? y + ctr : y + ctr - 18);
                         if (use_menu) {
                             if (ctr == (rc_ptr->menu_line - 1))
                                 strcpy(dummy, _(" 》 ", " >  "));
                             else
                                 strcpy(dummy, "    ");
                         } else {
+                            char letter;
                             if (ctr < 26)
                                 letter = I2A(ctr);
                             else
