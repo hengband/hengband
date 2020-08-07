@@ -195,6 +195,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-move.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-open-close.c" />
+    <ClCompile Include="..\..\src\cmd-action\cmd-racial.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-shoot.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-travel.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.c" />
@@ -769,6 +770,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-move.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-open-close.h" />
+    <ClInclude Include="..\..\src\cmd-action\cmd-racial.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-shoot.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-travel.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h" />
