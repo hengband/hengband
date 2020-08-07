@@ -22,6 +22,46 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 
+static bool input_racial_technique_selection(player_type *creature_ptr, rc_type *rc_ptr)
+{
+    switch (rc_ptr->choice) {
+    case '0':
+        screen_load();
+        free_turn(creature_ptr);
+        return TRUE;
+    case '8':
+    case 'k':
+    case 'K':
+        rc_ptr->menu_line += (rc_ptr->num - 1);
+        return FALSE;
+    case '2':
+    case 'j':
+    case 'J':
+        rc_ptr->menu_line++;
+        return FALSE;
+    case '6':
+    case 'l':
+    case 'L':
+    case '4':
+    case 'h':
+    case 'H':
+        if (rc_ptr->menu_line > 18)
+            rc_ptr->menu_line -= 18;
+        else if (rc_ptr->menu_line + 18 <= rc_ptr->num)
+            rc_ptr->menu_line += 18;
+
+        return FALSE;
+    case 'x':
+    case 'X':
+    case '\r':
+        rc_ptr->command_code = rc_ptr->menu_line - 1;
+        rc_ptr->ask = FALSE;
+        return FALSE;
+    default:
+        return FALSE;
+    }
+}
+
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -68,40 +108,8 @@ void do_cmd_racial_power(player_type *creature_ptr)
                 break;
 
             if (use_menu && rc_ptr->choice != ' ') {
-                switch (rc_ptr->choice) {
-                case '0':
-                    screen_load();
-                    free_turn(creature_ptr);
-                    return; // todo return TRUEに変える.
-                case '8':
-                case 'k':
-                case 'K':
-                    rc_ptr->menu_line += (rc_ptr->num - 1);
-                    break;
-                case '2':
-                case 'j':
-                case 'J':
-                    rc_ptr->menu_line++;
-                    break; // todo return FALSEに変える.
-                case '6':
-                case 'l':
-                case 'L':
-                case '4':
-                case 'h':
-                case 'H':
-                    if (rc_ptr->menu_line > 18)
-                        rc_ptr->menu_line -= 18;
-                    else if (rc_ptr->menu_line + 18 <= rc_ptr->num)
-                        rc_ptr->menu_line += 18;
-
-                    break; // todo return FALSEに変える.
-                case 'x':
-                case 'X':
-                case '\r':
-                    rc_ptr->command_code = rc_ptr->menu_line - 1;
-                    rc_ptr->ask = FALSE;
-                    break; // todo return FALSEに変える.
-                }
+                if (input_racial_technique_selection(creature_ptr, rc_ptr))
+                    return;
 
                 if (rc_ptr->menu_line > rc_ptr->num)
                     rc_ptr->menu_line -= rc_ptr->num;

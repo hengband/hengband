@@ -14,4 +14,6 @@ rc_type *initialize_rc_type(player_type *creature_ptr, rc_type *rc_ptr)
         strcpy(rc_ptr->power_desc[i].racial_name, "");
         rc_ptr->power_desc[i].number = 0;
     }
+
+    return rc_ptr;
 }
