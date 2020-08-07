@@ -184,7 +184,7 @@ static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dunge
     place_cave_contents(player_ptr, dd_ptr, d_ptr);
     dt_type tmp_dt;
     dt_type *dt_ptr = initialize_dt_type(&tmp_dt);
-    if (make_centers(player_ptr, dd_ptr, d_ptr, dt_ptr))
+    if (!make_centers(player_ptr, dd_ptr, d_ptr, dt_ptr))
         return FALSE;
 
     make_doors(player_ptr, dd_ptr, dt_ptr);
