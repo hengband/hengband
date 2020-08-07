@@ -225,6 +225,25 @@ static bool repeat_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
     return FALSE;
 }
 
+static void check_cast_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
+{
+    switch (racial_aux(creature_ptr, &rc_ptr->power_desc[rc_ptr->command_code])) {
+    case 1:
+        if (rc_ptr->power_desc[rc_ptr->command_code].number < 0)
+            rc_ptr->cast = exe_racial_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
+        else
+            rc_ptr->cast = exe_mutation_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
+
+        break;
+    case 0:
+        rc_ptr->cast = FALSE;
+        break;
+    case -1:
+        rc_ptr->cast = TRUE;
+        break;
+    }
+}
+
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -262,22 +281,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
     if (repeat_racial_power(creature_ptr, rc_ptr))
         return;
 
-    switch (racial_aux(creature_ptr, &rc_ptr->power_desc[rc_ptr->command_code])) {
-    case 1:
-        if (rc_ptr->power_desc[rc_ptr->command_code].number < 0)
-            rc_ptr->cast = exe_racial_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
-        else
-            rc_ptr->cast = exe_mutation_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
-
-        break;
-    case 0:
-        rc_ptr->cast = FALSE;
-        break;
-    case -1:
-        rc_ptr->cast = TRUE;
-        break;
-    }
-
+    check_cast_racial_power(creature_ptr, rc_ptr);
     if (!rc_ptr->cast) {
         free_turn(creature_ptr);
         return;
