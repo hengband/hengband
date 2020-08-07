@@ -1204,8 +1204,6 @@ void calc_class_status(player_type *creature_ptr)
     case CLASS_WARRIOR:
         if (creature_ptr->lev > 29)
             creature_ptr->resist_fear = TRUE;
-        if (creature_ptr->lev > 44)
-            creature_ptr->regenerate = TRUE;
         break;
     case CLASS_PALADIN:
         if (creature_ptr->lev > 39)
@@ -1232,7 +1230,6 @@ void calc_class_status(player_type *creature_ptr)
         break;
     case CLASS_BERSERKER:
         creature_ptr->shero = 1;
-        creature_ptr->regenerate = TRUE;
         creature_ptr->redraw |= PR_STATUS;
         break;
     case CLASS_NINJA:
