@@ -79,6 +79,39 @@ static void display_racial_list(rc_type *rc_ptr, char *dummy)
         1, 0);
 }
 
+static void select_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
+{
+    char dummy[80];
+    display_racial_list(rc_ptr, dummy);
+    byte y = 2;
+    byte x = 0;
+    int ctr = 0;
+    while (ctr < rc_ptr->num) {
+        TERM_LEN x1 = ((ctr < 18) ? x : x + 40);
+        TERM_LEN y1 = ((ctr < 18) ? y + ctr : y + ctr - 18);
+        if (use_menu) {
+            if (ctr == (rc_ptr->menu_line - 1))
+                strcpy(dummy, _(" 》 ", " >  "));
+            else
+                strcpy(dummy, "    ");
+        } else {
+            char letter;
+            if (ctr < 26)
+                letter = I2A(ctr);
+            else
+                letter = '0' + ctr - 26;
+
+            sprintf(dummy, " %c) ", letter);
+        }
+
+        strcat(dummy,
+            format("%-23.23s %2d %4d %3d%%", rc_ptr->power_desc[ctr].racial_name, rc_ptr->power_desc[ctr].min_level, rc_ptr->power_desc[ctr].cost,
+                100 - racial_chance(creature_ptr, &rc_ptr->power_desc[ctr])));
+        prt(dummy, y1, x1);
+        ctr++;
+    }
+}
+
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -134,34 +167,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
 
             if ((rc_ptr->choice == ' ') || (rc_ptr->choice == '*') || (rc_ptr->choice == '?') || (use_menu && rc_ptr->ask)) {
                 if (!rc_ptr->redraw || use_menu) {
-                    char dummy[80];
-                    display_racial_list(rc_ptr, dummy);
-                    byte y = 2;
-                    byte x = 0;
-                    int ctr = 0;
-                    while (ctr < rc_ptr->num) {
-                        TERM_LEN x1 = ((ctr < 18) ? x : x + 40);
-                        TERM_LEN y1 = ((ctr < 18) ? y + ctr : y + ctr - 18);
-                        if (use_menu) {
-                            if (ctr == (rc_ptr->menu_line - 1))
-                                strcpy(dummy, _(" 》 ", " >  "));
-                            else
-                                strcpy(dummy, "    ");
-                        } else {
-                            char letter;
-                            if (ctr < 26)
-                                letter = I2A(ctr);
-                            else
-                                letter = '0' + ctr - 26;
-                            sprintf(dummy, " %c) ", letter);
-                        }
-
-                        strcat(dummy,
-                            format("%-23.23s %2d %4d %3d%%", rc_ptr->power_desc[ctr].racial_name, rc_ptr->power_desc[ctr].min_level,
-                                rc_ptr->power_desc[ctr].cost, 100 - racial_chance(creature_ptr, &rc_ptr->power_desc[ctr])));
-                        prt(dummy, y1, x1);
-                        ctr++;
-                    }
+                    select_racial_power(creature_ptr, rc_ptr);
                 } else {
                     rc_ptr->redraw = FALSE;
                     screen_load();
@@ -218,6 +224,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
             rc_ptr->cast = exe_racial_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
         else
             rc_ptr->cast = exe_mutation_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
+
         break;
     case 0:
         rc_ptr->cast = FALSE;
@@ -237,12 +244,13 @@ void do_cmd_racial_power(player_type *creature_ptr)
         return;
 
     int actual_racial_cost = racial_cost / 2 + randint1(racial_cost / 2);
-    if (creature_ptr->csp < actual_racial_cost) {
+    if (creature_ptr->csp >= actual_racial_cost) {
+        creature_ptr->csp -= actual_racial_cost;    
+    } else {
         actual_racial_cost -= creature_ptr->csp;
         creature_ptr->csp = 0;
         take_hit(creature_ptr, DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"), -1);
-    } else
-        creature_ptr->csp -= actual_racial_cost;
+    }
 
     creature_ptr->redraw |= PR_HP | PR_MANA;
     creature_ptr->window |= PW_PLAYER | PW_SPELL;
