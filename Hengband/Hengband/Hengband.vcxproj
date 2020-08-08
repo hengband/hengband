@@ -725,11 +725,13 @@
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c" />
     <ClCompile Include="..\..\src\load\quest-loader.c" />
     <ClCompile Include="..\..\src\view\display-store.c" />
+    <ClCompile Include="..\..\src\action\throw-util.c" />
     <ClInclude Include="..\..\src\action\action-limited.h" />
     <ClInclude Include="..\..\src\action\mutation-execution.h" />
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
+    <ClInclude Include="..\..\src\action\throw-util.h" />
     <ClInclude Include="..\..\src\action\travel-execution.h" />
     <ClInclude Include="..\..\src\action\tunnel-execution.h" />
     <ClInclude Include="..\..\src\action\weapon-shield.h" />
