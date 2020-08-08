@@ -229,6 +229,24 @@ static bool check_racial_target_bold(player_type *creature_ptr, it_type *it_ptr)
         || (creature_ptr->current_floor_ptr->grid_array[it_ptr->ny[it_ptr->cur_dis]][it_ptr->nx[it_ptr->cur_dis]].m_idx == 0);
 }
 
+static void check_racial_target_seen(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (!panel_contains(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis])
+        || !player_can_see_bold(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis])) {
+        term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
+        return;
+    }
+
+    SYMBOL_CODE c = object_char(it_ptr->q_ptr);
+    TERM_COLOR a = object_attr(it_ptr->q_ptr);
+    print_rel(creature_ptr, c, a, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
+    move_cursor_relative(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
+    term_fresh();
+    term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
+    lite_spot(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
+    term_fresh();
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -281,20 +299,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         if (check_racial_target_bold(creature_ptr, it_ptr))
             break;
 
-        if (panel_contains(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis])
-            && player_can_see_bold(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis])) {
-            SYMBOL_CODE c = object_char(it_ptr->q_ptr);
-            TERM_COLOR a = object_attr(it_ptr->q_ptr);
-            print_rel(creature_ptr, c, a, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
-            move_cursor_relative(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
-            term_fresh();
-            term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
-            lite_spot(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
-            term_fresh();
-        } else {
-            term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
-        }
-
+        check_racial_target_seen(creature_ptr, it_ptr);
         it_ptr->prev_y = it_ptr->y;
         it_ptr->prev_x = it_ptr->x;
         it_ptr->x = it_ptr->nx[it_ptr->cur_dis];
