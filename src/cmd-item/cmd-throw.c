@@ -67,7 +67,7 @@ static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, co
         item_tester_hook = item_tester_hook_boomerang;
         *q = _("どの武器を投げますか? ", "Throw which it_ptr->item? ");
         *s = _("投げる武器がない。", "You have nothing to throw.");
-        it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_EQUIP, 0);
+        it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, *q, *s, USE_EQUIP, 0);
         if (!it_ptr->o_ptr) {
             flush();
             return FALSE;
@@ -212,15 +212,15 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     if ((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG) || it_ptr->boomerang)
         it_ptr->return_when_thrown = TRUE;
 
-    if (it_ptr->item >= 0) {
+    if (it_ptr->item < 0) {
+        floor_item_increase(creature_ptr->current_floor_ptr, 0 - it_ptr->item, -1);
+        floor_item_optimize(creature_ptr, 0 - it_ptr->item);    
+    } else {
         inven_item_increase(creature_ptr, it_ptr->item, -1);
         if (!it_ptr->return_when_thrown)
             inven_item_describe(creature_ptr, it_ptr->item);
 
         inven_item_optimize(creature_ptr, it_ptr->item);
-    } else {
-        floor_item_increase(creature_ptr->current_floor_ptr, 0 - it_ptr->item, -1);
-        floor_item_optimize(creature_ptr, 0 - it_ptr->item);
     }
 
     if (it_ptr->item >= INVEN_RARM) {
