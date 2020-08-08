@@ -205,6 +205,17 @@ static void set_class_specific_throw_params(player_type *creature_ptr, it_type *
         && ((it_ptr->q_ptr->tval == TV_SPIKE) || ((have_flag(it_ptr->obj_flags, TR_THROW)) && (it_ptr->q_ptr->tval == TV_SWORD)));
 }
 
+static void set_racial_chance(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (have_flag(it_ptr->obj_flags, TR_THROW))
+        it_ptr->chance = ((creature_ptr->skill_tht) + ((creature_ptr->to_h_b + it_ptr->q_ptr->to_h) * BTH_PLUS_ADJ));
+    else
+        it_ptr->chance = (creature_ptr->skill_tht + (creature_ptr->to_h_b * BTH_PLUS_ADJ));
+
+    if (it_ptr->shuriken != 0)
+        it_ptr->chance *= 2;
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -247,14 +258,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     }
 
     set_class_specific_throw_params(creature_ptr, it_ptr);
-    if (have_flag(it_ptr->obj_flags, TR_THROW))
-        it_ptr->chance = ((creature_ptr->skill_tht) + ((creature_ptr->to_h_b + it_ptr->q_ptr->to_h) * BTH_PLUS_ADJ));
-    else
-        it_ptr->chance = (creature_ptr->skill_tht + (creature_ptr->to_h_b * BTH_PLUS_ADJ));
-
-    if (it_ptr->shuriken != 0)
-        it_ptr->chance *= 2;
-
+    set_racial_chance(creature_ptr, it_ptr);
     it_ptr->prev_y = it_ptr->y;
     it_ptr->prev_x = it_ptr->x;
     for (it_ptr->cur_dis = 0; it_ptr->cur_dis <= it_ptr->tdis;) {
