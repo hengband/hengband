@@ -251,12 +251,17 @@ void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *
         pa_ptr->attack_damage = (3 * pa_ptr->attack_damage) / 2;
 }
 
-void hayagake(player_type *creature_ptr)
+/*!
+ * @brief 速駆け処理
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 常にTRUE
+ */
+bool hayagake(player_type *creature_ptr)
 {
     if (creature_ptr->action == ACTION_HAYAGAKE) {
         set_action(creature_ptr, ACTION_NONE);
         creature_ptr->energy_use = 0;
-        return;
+        return TRUE;
     }
 
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
@@ -269,6 +274,7 @@ void hayagake(player_type *creature_ptr)
     }
 
     creature_ptr->energy_use = 0;
+    return TRUE;
 }
 
 /*!

@@ -195,45 +195,36 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         /* Fall through */
     case CLASS_MAGE:
     case CLASS_SORCERER:
-        if (!eat_magic(creature_ptr, creature_ptr->lev * 2))
-            return FALSE;
-
-        break;
+        return eat_magic(creature_ptr, creature_ptr->lev * 2);
     case CLASS_PRIEST:
-        if (is_good_realm(creature_ptr->realm1)) {
-            if (!bless_weapon(creature_ptr))
-                return FALSE;
-        } else {
+        if (!is_good_realm(creature_ptr->realm1)) {
             (void)dispel_monsters(creature_ptr, creature_ptr->lev * 4);
             turn_monsters(creature_ptr, creature_ptr->lev * 4);
             banish_monsters(creature_ptr, creature_ptr->lev * 4);
+            return TRUE;
         }
 
-        break;
+        return bless_weapon(creature_ptr);
     case CLASS_ROGUE:
-        if (!hit_and_away(creature_ptr))
-            return FALSE;
-
-        break;
+        return hit_and_away(creature_ptr);
     case CLASS_RANGER:
     case CLASS_SNIPER:
         msg_print(_("敵を調査した...", "You examine your foes..."));
         probing(creature_ptr);
-        break;
+        return TRUE;
     case CLASS_PALADIN:
         if (!get_aim_dir(creature_ptr, dir))
             return FALSE;
 
         fire_beam(creature_ptr, is_good_realm(creature_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE, *dir, creature_ptr->lev * 3);
-        break;
+        return TRUE;
     case CLASS_WARRIOR_MAGE:
-        if (command == -3) {
+        if (command == -3)
             return comvert_hp_to_mp(creature_ptr);
-        } else if (command == -4) {
+        else if (command == -4)
             return comvert_mp_to_hp(creature_ptr);
-        }
 
-        break;
+        return TRUE;
     case CLASS_CHAOS_WARRIOR:
         return confusing_light(creature_ptr);
     case CLASS_MONK:
@@ -250,12 +241,15 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         if (command == -3) {
             if (!choose_monk_stance(creature_ptr))
                 return FALSE;
-            creature_ptr->update |= (PU_BONUS);
-        } else if (command == -4) {
-            return double_attack(creature_ptr);
+
+            creature_ptr->update |= PU_BONUS;
+            return TRUE;
         }
 
-        break;
+        if (command == -4)
+            return double_attack(creature_ptr);
+
+        return TRUE;
     case CLASS_MINDCRAFTER:
     case CLASS_FORCETRAINER:
         return clear_mind(creature_ptr);
@@ -266,50 +260,40 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
 
             project_length = 1;
             fire_beam(creature_ptr, GF_PHOTO, *dir, 1);
-        } else if (command == -4) {
-            if (!identify_fully(creature_ptr, FALSE, 0))
-                return FALSE;
+            return TRUE;
         }
 
-        break;
+        return (command != -4) || identify_fully(creature_ptr, FALSE, 0);
     case CLASS_IMITATOR:
         handle_stuff(creature_ptr);
-        if (!do_cmd_mane(creature_ptr, TRUE))
-            return FALSE;
-
-        break;
+        return do_cmd_mane(creature_ptr, TRUE);
     case CLASS_BEASTMASTER:
         if (command == -3) {
             if (!get_aim_dir(creature_ptr, dir))
                 return FALSE;
 
             (void)fire_ball_hide(creature_ptr, GF_CHARM_LIVING, *dir, creature_ptr->lev, 0);
-        } else if (command == -4)
-            project_all_los(creature_ptr, GF_CHARM_LIVING, creature_ptr->lev);
-
-        break;
-    case CLASS_ARCHER:
-        if (!create_ammo(creature_ptr))
-            return FALSE;
-
-        break;
-    case CLASS_MAGIC_EATER:
-        if (command == -3) {
-            if (!import_magic_device(creature_ptr))
-                return FALSE;
-        } else if (command == -4) {
-            if (cmd_limit_cast(creature_ptr) || !do_cmd_magic_eater(creature_ptr, FALSE, TRUE))
-                return FALSE;
+            return TRUE;
         }
 
-        break;
+        if (command == -4)
+            project_all_los(creature_ptr, GF_CHARM_LIVING, creature_ptr->lev);
+
+        return TRUE;
+    case CLASS_ARCHER:
+        return create_ammo(creature_ptr);
+    case CLASS_MAGIC_EATER:
+        if (command == -3)
+            return import_magic_device(creature_ptr);
+
+        return (command != -4) || (!cmd_limit_cast(creature_ptr) && do_cmd_magic_eater(creature_ptr, FALSE, TRUE));
     case CLASS_BARD:
         if (!SINGING_SONG_EFFECT(creature_ptr) && !INTERUPTING_SONG_EFFECT(creature_ptr))
             return FALSE;
 
         stop_singing(creature_ptr);
         creature_ptr->energy_use = 10;
-        break;
+        return TRUE;
     case CLASS_RED_MAGE:
         if (cmd_limit_cast(creature_ptr))
             return FALSE;
@@ -320,59 +304,54 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         if (!creature_ptr->paralyzed && !cmd_limit_cast(creature_ptr))
             do_cmd_cast(creature_ptr);
 
-        break;
+        return TRUE;
     case CLASS_SAMURAI:
         if (command == -3) {
             concentration(creature_ptr);
-        } else if (command == -4) {
-            if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM)) {
-                msg_print(_("武器を持たないといけません。", "You need to wield a weapon."));
-                return FALSE;
-            }
-
-            if (!choose_kata(creature_ptr))
-                return FALSE;
-
-            creature_ptr->update |= (PU_BONUS);
+            return TRUE;
         }
 
-        break;
-    case CLASS_BLUE_MAGE:
-        if (creature_ptr->action == ACTION_LEARN)
-            set_action(creature_ptr, ACTION_NONE);
-        else
-            set_action(creature_ptr, ACTION_LEARN);
+        if (command != -4)
+            return TRUE;
 
+        if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM)) {
+            msg_print(_("武器を持たないといけません。", "You need to wield a weapon."));
+            return FALSE;
+        }
+
+        if (!choose_kata(creature_ptr))
+            return FALSE;
+
+        creature_ptr->update |= PU_BONUS;
+        return TRUE;
+    case CLASS_BLUE_MAGE:
+        set_action(creature_ptr, creature_ptr->action == ACTION_LEARN ? ACTION_NONE : ACTION_LEARN);
         free_turn(creature_ptr);
-        break;
+        return TRUE;
     case CLASS_CAVALRY:
         return rodeo(creature_ptr);
     case CLASS_BERSERKER:
-        if (!recall_player(creature_ptr, randint0(21) + 15))
-            return FALSE;
-
-        break;
+        return recall_player(creature_ptr, randint0(21) + 15);
     case CLASS_SMITH:
-        if (creature_ptr->lev > 29) {
-            if (!identify_fully(creature_ptr, TRUE, 0))
-                return FALSE;
-        } else if (!ident_spell(creature_ptr, TRUE, 0))
-            return FALSE;
+        if (creature_ptr->lev <= 29)
+            return ident_spell(creature_ptr, TRUE, 0);
 
-        break;
+        return identify_fully(creature_ptr, TRUE, 0);
     case CLASS_MIRROR_MASTER:
-        if (command == -3)
+        if (command == -3) {
             remove_all_mirrors(creature_ptr, TRUE);
-        else if (command == -4)
+            return TRUE;
+        }
+
+        if (command == -4)
             return mirror_concentration(creature_ptr);
 
-        break;
+        return TRUE;
     case CLASS_NINJA:
-        hayagake(creature_ptr);
-        break;
+        return hayagake(creature_ptr);
+    default:
+        return TRUE;
     }
-
-    return TRUE;
 }
 
 /*!
