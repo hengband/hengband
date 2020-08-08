@@ -313,21 +313,21 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         if (check_racial_target_monster(creature_ptr, it_ptr))
             continue;
 
-        grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x];
-        monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_name(creature_ptr, g_ptr->m_idx, m_name);
-        it_ptr->visible = m_ptr->ml;
+        it_ptr->g_ptr = &creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x];
+        it_ptr->m_ptr = &creature_ptr->current_floor_ptr->m_list[it_ptr->g_ptr->m_idx];
+        monster_name(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->m_name);
+        it_ptr->visible = it_ptr->m_ptr->ml;
         it_ptr->hit_body = TRUE;
-        if (test_hit_fire(creature_ptr, it_ptr->chance - it_ptr->cur_dis, m_ptr, m_ptr->ml, it_ptr->o_name)) {
+        if (test_hit_fire(creature_ptr, it_ptr->chance - it_ptr->cur_dis, it_ptr->m_ptr, it_ptr->m_ptr->ml, it_ptr->o_name)) {
             if (!it_ptr->visible) {
                 msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), it_ptr->o_name);
             } else {
-                msg_format(_("%sが%sに命中した。", "The %s hits %s."), it_ptr->o_name, m_name);
-                if (m_ptr->ml) {
+                msg_format(_("%sが%sに命中した。", "The %s hits %s."), it_ptr->o_name, it_ptr->m_name);
+                if (it_ptr->m_ptr->ml) {
                     if (!creature_ptr->image)
-                        monster_race_track(creature_ptr, m_ptr->ap_r_idx);
-                    health_track(creature_ptr, g_ptr->m_idx);
+                        monster_race_track(creature_ptr, it_ptr->m_ptr->ap_r_idx);
+
+                    health_track(creature_ptr, it_ptr->g_ptr->m_idx);
                 }
             }
 
@@ -335,7 +335,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
             int ds = it_ptr->q_ptr->ds;
             torch_dice(it_ptr->q_ptr, &dd, &ds);
             it_ptr->tdam = damroll(dd, ds);
-            it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, m_ptr, 0, TRUE);
+            it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, it_ptr->m_ptr, 0, TRUE);
             it_ptr->tdam = critical_shot(creature_ptr, it_ptr->q_ptr->weight, it_ptr->q_ptr->to_h, 0, it_ptr->tdam);
             if (it_ptr->q_ptr->to_d > 0)
                 it_ptr->tdam += it_ptr->q_ptr->to_d;
@@ -358,21 +358,21 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
             if (it_ptr->tdam < 0)
                 it_ptr->tdam = 0;
 
-            it_ptr->tdam = mon_damage_mod(creature_ptr, m_ptr, it_ptr->tdam, FALSE);
+            it_ptr->tdam = mon_damage_mod(creature_ptr, it_ptr->m_ptr, it_ptr->tdam, FALSE);
             msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), it_ptr->tdam,
-                m_ptr->hp - it_ptr->tdam, m_ptr->maxhp, m_ptr->max_maxhp);
+                it_ptr->m_ptr->hp - it_ptr->tdam, it_ptr->m_ptr->maxhp, it_ptr->m_ptr->max_maxhp);
 
             bool fear = FALSE;
-            if (mon_take_hit(creature_ptr, g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
+            if (mon_take_hit(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(it_ptr->m_ptr))))
                 break;
 
-            message_pain(creature_ptr, g_ptr->m_idx, it_ptr->tdam);
+            message_pain(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam);
             if ((it_ptr->tdam > 0) && !object_is_potion(it_ptr->q_ptr))
-                anger_monster(creature_ptr, m_ptr);
+                anger_monster(creature_ptr, it_ptr->m_ptr);
 
-            if (fear && m_ptr->ml) {
+            if (fear && it_ptr->m_ptr->ml) {
                 sound(SOUND_FLEE);
-                msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
+                msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), it_ptr->m_name);
             }
         }
 

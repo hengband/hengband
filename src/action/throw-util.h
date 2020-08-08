@@ -34,6 +34,9 @@ typedef struct it_type {
     BIT_FLAGS obj_flags[TR_FLAG_SIZE];
     bool come_back;
     bool do_drop;
+    grid_type *g_ptr;
+    monster_type *m_ptr;
+    GAME_TEXT m_name[MAX_NLEN];
 } it_type;
 
 it_type *initialize_it_type(
