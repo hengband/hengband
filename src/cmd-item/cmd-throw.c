@@ -247,6 +247,16 @@ static void check_racial_target_seen(player_type *creature_ptr, it_type *it_ptr)
     term_fresh();
 }
 
+static bool check_racial_target_monster(player_type *creature_ptr, it_type *it_ptr)
+{
+    it_ptr->prev_y = it_ptr->y;
+    it_ptr->prev_x = it_ptr->x;
+    it_ptr->x = it_ptr->nx[it_ptr->cur_dis];
+    it_ptr->y = it_ptr->ny[it_ptr->cur_dis];
+    it_ptr->cur_dis++;
+    return creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx == 0;
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -300,12 +310,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
             break;
 
         check_racial_target_seen(creature_ptr, it_ptr);
-        it_ptr->prev_y = it_ptr->y;
-        it_ptr->prev_x = it_ptr->x;
-        it_ptr->x = it_ptr->nx[it_ptr->cur_dis];
-        it_ptr->y = it_ptr->ny[it_ptr->cur_dis];
-        it_ptr->cur_dis++;
-        if (creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx == 0)
+        if (check_racial_target_monster(creature_ptr, it_ptr))
             continue;
 
         grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x];
