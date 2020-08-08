@@ -94,7 +94,7 @@ static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
         it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
         return TRUE;
     }
-    
+
     concptr q, s;
     if (!check_throw_boomerang(creature_ptr, it_ptr, &q, &s))
         return FALSE;
@@ -129,6 +129,27 @@ static bool check_can_throw(player_type *creature_ptr, it_type *it_ptr)
     return TRUE;
 }
 
+static void calc_throw_range(player_type *creature_ptr, it_type *it_ptr)
+{
+    object_copy(it_ptr->q_ptr, it_ptr->o_ptr);
+    object_flags(creature_ptr, it_ptr->q_ptr, it_ptr->obj_flags);
+    torch_flags(it_ptr->q_ptr, it_ptr->obj_flags);
+    distribute_charges(it_ptr->o_ptr, it_ptr->q_ptr, 1);
+    it_ptr->q_ptr->number = 1;
+    describe_flavor(creature_ptr, it_ptr->o_name, it_ptr->q_ptr, OD_OMIT_PREFIX);
+    if (creature_ptr->mighty_throw)
+        it_ptr->mult += 3;
+
+    int mul = 10 + 2 * (it_ptr->mult - 1);
+    int div = ((it_ptr->q_ptr->weight > 10) ? it_ptr->q_ptr->weight : 10);
+    if ((have_flag(it_ptr->obj_flags, TR_THROW)) || it_ptr->boomerang)
+        div /= 2;
+
+    it_ptr->tdis = (adj_str_blow[creature_ptr->stat_ind[A_STR]] + 20) * mul / div;
+    if (it_ptr->tdis > mul)
+        it_ptr->tdis = mul;
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -160,25 +181,8 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     if (!check_can_throw(creature_ptr, it_ptr))
         return FALSE;
 
-    object_copy(it_ptr->q_ptr, it_ptr->o_ptr);
-    object_flags(creature_ptr, it_ptr->q_ptr, it_ptr->obj_flags);
-    torch_flags(it_ptr->q_ptr, it_ptr->obj_flags);
-    distribute_charges(it_ptr->o_ptr, it_ptr->q_ptr, 1);
-    it_ptr->q_ptr->number = 1;
-    describe_flavor(creature_ptr, it_ptr->o_name, it_ptr->q_ptr, OD_OMIT_PREFIX);
-    if (creature_ptr->mighty_throw)
-        mult += 3;
-
-    int mul = 10 + 2 * (mult - 1);
-    int div = ((it_ptr->q_ptr->weight > 10) ? it_ptr->q_ptr->weight : 10);
-    if ((have_flag(it_ptr->obj_flags, TR_THROW)) || boomerang)
-        div /= 2;
-
-    it_ptr->tdis = (adj_str_blow[creature_ptr->stat_ind[A_STR]] + 20) * mul / div;
-    if (it_ptr->tdis > mul)
-        it_ptr->tdis = mul;
-
-    if (shuriken >= 0) {
+    calc_throw_range(creature_ptr, it_ptr);
+    if (it_ptr->shuriken >= 0) {
         it_ptr->ty = randint0(101) - 50 + creature_ptr->y;
         it_ptr->tx = randint0(101) - 50 + creature_ptr->x;
     } else {
@@ -197,13 +201,14 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         project_length = 0; /* reset to default */
     }
 
-    if ((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG) || boomerang)
+    if ((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG) || it_ptr->boomerang)
         it_ptr->return_when_thrown = TRUE;
 
     if (it_ptr->item >= 0) {
         inven_item_increase(creature_ptr, it_ptr->item, -1);
         if (!it_ptr->return_when_thrown)
             inven_item_describe(creature_ptr, it_ptr->item);
+
         inven_item_optimize(creature_ptr, it_ptr->item);
     } else {
         floor_item_increase(creature_ptr->current_floor_ptr, 0 - it_ptr->item, -1);
@@ -222,17 +227,18 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     it_ptr->y = creature_ptr->y;
     it_ptr->x = creature_ptr->x;
     handle_stuff(creature_ptr);
-    if ((creature_ptr->pclass == CLASS_NINJA) && ((it_ptr->q_ptr->tval == TV_SPIKE) || ((have_flag(it_ptr->obj_flags, TR_THROW)) && (it_ptr->q_ptr->tval == TV_SWORD))))
-        shuriken = TRUE;
+    if ((creature_ptr->pclass == CLASS_NINJA)
+        && ((it_ptr->q_ptr->tval == TV_SPIKE) || ((have_flag(it_ptr->obj_flags, TR_THROW)) && (it_ptr->q_ptr->tval == TV_SWORD))))
+        it_ptr->shuriken = TRUE;
     else
-        shuriken = FALSE;
+        it_ptr->shuriken = FALSE;
 
     if (have_flag(it_ptr->obj_flags, TR_THROW))
         it_ptr->chance = ((creature_ptr->skill_tht) + ((creature_ptr->to_h_b + it_ptr->q_ptr->to_h) * BTH_PLUS_ADJ));
     else
         it_ptr->chance = (creature_ptr->skill_tht + (creature_ptr->to_h_b * BTH_PLUS_ADJ));
 
-    if (shuriken)
+    if (it_ptr->shuriken != 0)
         it_ptr->chance *= 2;
 
     it_ptr->prev_y = it_ptr->y;
@@ -246,11 +252,13 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         mmove2(&it_ptr->ny[it_ptr->cur_dis], &it_ptr->nx[it_ptr->cur_dis], creature_ptr->y, creature_ptr->x, it_ptr->ty, it_ptr->tx);
         if (!cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT)) {
             it_ptr->hit_wall = TRUE;
-            if ((it_ptr->q_ptr->tval == TV_FIGURINE) || object_is_potion(it_ptr->q_ptr) || !creature_ptr->current_floor_ptr->grid_array[it_ptr->ny[it_ptr->cur_dis]][it_ptr->nx[it_ptr->cur_dis]].m_idx)
+            if ((it_ptr->q_ptr->tval == TV_FIGURINE) || object_is_potion(it_ptr->q_ptr)
+                || !creature_ptr->current_floor_ptr->grid_array[it_ptr->ny[it_ptr->cur_dis]][it_ptr->nx[it_ptr->cur_dis]].m_idx)
                 break;
         }
 
-        if (panel_contains(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]) && player_can_see_bold(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis])) {
+        if (panel_contains(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis])
+            && player_can_see_bold(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis])) {
             SYMBOL_CODE c = object_char(it_ptr->q_ptr);
             TERM_COLOR a = object_attr(it_ptr->q_ptr);
             print_rel(creature_ptr, c, a, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
@@ -299,25 +307,25 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
                 else
                     it_ptr->tdam += -it_ptr->q_ptr->to_d;
 
-                if (boomerang) {
-                    it_ptr->tdam *= (mult + creature_ptr->num_blow[it_ptr->item - INVEN_RARM]);
+                if (it_ptr->boomerang) {
+                    it_ptr->tdam *= (it_ptr->mult + creature_ptr->num_blow[it_ptr->item - INVEN_RARM]);
                     it_ptr->tdam += creature_ptr->to_d_m;
                 } else if (have_flag(it_ptr->obj_flags, TR_THROW)) {
-                    it_ptr->tdam *= (3 + mult);
+                    it_ptr->tdam *= (3 + it_ptr->mult);
                     it_ptr->tdam += creature_ptr->to_d_m;
                 } else {
-                    it_ptr->tdam *= mult;
+                    it_ptr->tdam *= it_ptr->mult;
                 }
 
-                if (shuriken)
+                if (it_ptr->shuriken != 0)
                     it_ptr->tdam += ((creature_ptr->lev + 30) * (creature_ptr->lev + 30) - 900) / 55;
 
                 if (it_ptr->tdam < 0)
                     it_ptr->tdam = 0;
 
                 it_ptr->tdam = mon_damage_mod(creature_ptr, m_ptr, it_ptr->tdam, FALSE);
-                msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), it_ptr->tdam,
-                    m_ptr->hp - it_ptr->tdam, m_ptr->maxhp, m_ptr->max_maxhp);
+                msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
+                    it_ptr->tdam, m_ptr->hp - it_ptr->tdam, m_ptr->maxhp, m_ptr->max_maxhp);
 
                 if (mon_take_hit(creature_ptr, g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(m_ptr)))) {
                     /* Dead monster */
@@ -359,7 +367,8 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
                     GAME_TEXT m_name[MAX_NLEN];
                     monster_desc(creature_ptr, m_name, m_ptr, 0);
                     msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
-                    set_hostile(creature_ptr, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx]);
+                    set_hostile(
+                        creature_ptr, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx]);
                 }
             }
 
@@ -378,7 +387,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
             back_chance += 4 + randint1(5);
         if (super_boomerang)
             back_chance += 100;
-        describe_flavor(creature_ptr, o2_name, it_ptr->q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        describe_flavor(creature_ptr, o2_name, it_ptr->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
         if ((back_chance > 30) && (!one_in_(100) || super_boomerang)) {
             for (int i = it_ptr->cur_dis - 1; i > 0; i--) {
                 if (panel_contains(it_ptr->ny[i], it_ptr->nx[i]) && player_can_see_bold(creature_ptr, it_ptr->ny[i], it_ptr->nx[i])) {
@@ -399,11 +408,11 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
                 msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), o2_name);
                 it_ptr->come_back = TRUE;
             } else {
-                if (it_ptr->item >= 0) {
+                if (it_ptr->item >= 0)
                     msg_format(_("%sを受け損ねた！", "%s comes back, but you can't catch!"), o2_name);
-                } else {
+                else
                     msg_format(_("%sが返ってきた。", "%s comes back."), o2_name);
-                }
+
                 it_ptr->y = creature_ptr->y;
                 it_ptr->x = creature_ptr->x;
             }
