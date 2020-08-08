@@ -379,58 +379,61 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         (void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
         (void)detect_doors(creature_ptr, DETECT_RAD_DEFAULT);
         (void)detect_stairs(creature_ptr, DETECT_RAD_DEFAULT);
-        break;
+        return TRUE;
     case RACE_HOBBIT:
         return create_ration(creature_ptr);
     case RACE_GNOME:
         msg_print(_("パッ！", "Blink!"));
         teleport_player(creature_ptr, 10, TELEPORT_SPONTANEOUS);
-        break;
+        return TRUE;
     case RACE_HALF_ORC:
         msg_print(_("勇気を出した。", "You play tough."));
         (void)set_afraid(creature_ptr, 0);
-        break;
+        return TRUE;
     case RACE_HALF_TROLL:
         msg_print(_("うがぁぁ！", "RAAAGH!"));
         (void)berserk(creature_ptr, 10 + randint1(creature_ptr->lev));
-        break;
+        return TRUE;
     case RACE_AMBERITE:
         if (command == -1) {
             msg_print(_("あなたは歩き周り始めた。", "You start walking around. "));
             reserve_alter_reality(creature_ptr);
-        } else if (command == -2) {
-            msg_print(_("あなたは「パターン」を心に描いてその上を歩いた...", "You picture the Pattern in your mind and walk it..."));
-            (void)true_healing(creature_ptr, 0);
-            (void)restore_all_status(creature_ptr);
-            (void)restore_level(creature_ptr);
+            return TRUE;
         }
+        
+        if (command != -2)
+            return TRUE;
 
-        break;
+        msg_print(_("あなたは「パターン」を心に描いてその上を歩いた...", "You picture the Pattern in your mind and walk it..."));
+        (void)true_healing(creature_ptr, 0);
+        (void)restore_all_status(creature_ptr);
+        (void)restore_level(creature_ptr);
+        return TRUE;
     case RACE_BARBARIAN:
         msg_print(_("うぉぉおお！", "Raaagh!"));
         (void)berserk(creature_ptr, 10 + randint1(creature_ptr->lev));
-        break;
+        return TRUE;
     case RACE_HALF_OGRE:
         msg_print(_("爆発のルーンを慎重に仕掛けた...", "You carefully set an explosive rune..."));
-        explosive_rune(creature_ptr, creature_ptr->y, creature_ptr->x);
-        break;
+        (void)explosive_rune(creature_ptr, creature_ptr->y, creature_ptr->x);
+        return TRUE;
     case RACE_HALF_GIANT:
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
 
         (void)wall_to_mud(creature_ptr, dir, 20 + randint1(30));
-        break;
+        return TRUE;
     case RACE_HALF_TITAN:
         msg_print(_("敵を調査した...", "You examine your foes..."));
-        probing(creature_ptr);
-        break;
+        (void)probing(creature_ptr);
+        return TRUE;
     case RACE_CYCLOPS:
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
 
         msg_print(_("巨大な岩を投げた。", "You throw a huge boulder."));
-        fire_bolt(creature_ptr, GF_MISSILE, dir, (3 * creature_ptr->lev) / 2);
-        break;
+        (void)fire_bolt(creature_ptr, GF_MISSILE, dir, (3 * creature_ptr->lev) / 2);
+        return TRUE;
     case RACE_YEEK:
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
@@ -438,7 +441,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         stop_mouth(creature_ptr);
         msg_print(_("身の毛もよだつ叫び声を上げた！", "You make a horrible scream!"));
         (void)fear_monster(creature_ptr, dir, creature_ptr->lev);
-        break;
+        return TRUE;
     case RACE_KLACKON:
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
@@ -446,31 +449,31 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         stop_mouth(creature_ptr);
         msg_print(_("酸を吐いた。", "You spit acid."));
         if (creature_ptr->lev < 25)
-            fire_bolt(creature_ptr, GF_ACID, dir, creature_ptr->lev);
+            (void)fire_bolt(creature_ptr, GF_ACID, dir, creature_ptr->lev);
         else
-            fire_ball(creature_ptr, GF_ACID, dir, creature_ptr->lev, 2);
+            (void)fire_ball(creature_ptr, GF_ACID, dir, creature_ptr->lev, 2);
 
-        break;
+        return TRUE;
     case RACE_KOBOLD:
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
 
         msg_print(_("毒のダーツを投げた。", "You throw a dart of poison."));
-        fire_bolt(creature_ptr, GF_POIS, dir, creature_ptr->lev);
-        break;
+        (void)fire_bolt(creature_ptr, GF_POIS, dir, creature_ptr->lev);
+        return TRUE;
     case RACE_NIBELUNG:
         msg_print(_("周囲を調査した。", "You examine your surroundings."));
         (void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
         (void)detect_doors(creature_ptr, DETECT_RAD_DEFAULT);
         (void)detect_stairs(creature_ptr, DETECT_RAD_DEFAULT);
-        break;
+        return TRUE;
     case RACE_DARK_ELF:
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
 
         msg_print(_("マジック・ミサイルを放った。", "You cast a magic missile."));
-        fire_bolt_or_beam(creature_ptr, 10, GF_MISSILE, dir, damroll(3 + ((creature_ptr->lev - 1) / 5), 4));
-        break;
+        (void)fire_bolt_or_beam(creature_ptr, 10, GF_MISSILE, dir, damroll(3 + ((creature_ptr->lev - 1) / 5), 4));
+        return TRUE;
     case RACE_DRACONIAN:
         return draconian_breath(creature_ptr);
     case RACE_MIND_FLAYER:
@@ -478,32 +481,32 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
             return FALSE;
 
         msg_print(_("あなたは集中し、目が赤く輝いた...", "You concentrate and your eyes glow red..."));
-        fire_bolt(creature_ptr, GF_PSI, dir, creature_ptr->lev);
-        break;
+        (void)fire_bolt(creature_ptr, GF_PSI, dir, creature_ptr->lev);
+        return TRUE;
     case RACE_IMP:
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
 
         if (creature_ptr->lev >= 30) {
             msg_print(_("ファイア・ボールを放った。", "You cast a ball of fire."));
-            fire_ball(creature_ptr, GF_FIRE, dir, creature_ptr->lev, 2);
+            (void)fire_ball(creature_ptr, GF_FIRE, dir, creature_ptr->lev, 2);
         } else {
             msg_print(_("ファイア・ボルトを放った。", "You cast a bolt of fire."));
-            fire_bolt(creature_ptr, GF_FIRE, dir, creature_ptr->lev);
+            (void)fire_bolt(creature_ptr, GF_FIRE, dir, creature_ptr->lev);
         }
 
-        break;
+        return TRUE;
     case RACE_GOLEM:
         (void)set_shield(creature_ptr, randint1(20) + 30, FALSE);
-        break;
+        return TRUE;
     case RACE_SKELETON:
     case RACE_ZOMBIE:
         msg_print(_("あなたは失ったエネルギーを取り戻そうと試みた。", "You attempt to restore your lost energies."));
         (void)restore_level(creature_ptr);
-        break;
+        return TRUE;
     case RACE_VAMPIRE:
-        vampirism(creature_ptr);
-        break;
+        (void)vampirism(creature_ptr);
+        return TRUE;
     case RACE_SPECTRE:
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
@@ -511,29 +514,27 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         stop_mouth(creature_ptr);
         msg_print(_("あなたはおどろおどろしい叫び声をあげた！", "You emit an eldritch howl!"));
         (void)fear_monster(creature_ptr, dir, creature_ptr->lev);
-        break;
+        return TRUE;
     case RACE_SPRITE:
         msg_print(_("あなたは魔法の粉を投げつけた...", "You throw some magic dust..."));
         if (creature_ptr->lev < 25)
-            sleep_monsters_touch(creature_ptr);
+            (void)sleep_monsters_touch(creature_ptr);
         else
             (void)sleep_monsters(creature_ptr, creature_ptr->lev);
 
-        break;
+        return TRUE;
     case RACE_BALROG:
         return demonic_breath(creature_ptr);
     case RACE_KUTAR:
         (void)set_leveling(creature_ptr, randint1(20) + 30, FALSE);
-        break;
+        return TRUE;
     case RACE_ANDROID:
         return android_inside_weapon(creature_ptr);
     default:
         msg_print(_("この種族は特殊な能力を持っていません。", "This race has no bonus power."));
         free_turn(creature_ptr);
-        break;
+        return TRUE;
     }
-
-    return TRUE;
 }
 
 /*!
