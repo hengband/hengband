@@ -522,7 +522,7 @@ typedef struct player_type {
     s16b num_blow[2]; /* Number of blows */
     s16b num_fire; /* Number of shots */
 
-    byte tval_xtra; /* Correct xtra tval */
+    byte tval_xtra; /* (Unused)Correct xtra tval */
     byte tval_ammo; /* Correct ammo tval */
 
     s16b pspeed; /* Current speed */

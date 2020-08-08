@@ -560,9 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->tval_xtra = 0;
-    creature_ptr->tval_ammo = 0;
-
     creature_ptr->resist_acid = FALSE;
     creature_ptr->resist_elec = FALSE;
     creature_ptr->resist_fire = FALSE;
