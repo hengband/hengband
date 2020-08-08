@@ -144,8 +144,7 @@ const player_personality *ap_ptr;
 
 void set_personality_flags(player_type *creature_ptr)
 {
-    if (creature_ptr->pseikaku == PERSONALITY_SEXY)
-        creature_ptr->cursed |= (TRC_AGGRAVATE);
+
     if (creature_ptr->pseikaku == PERSONALITY_CHARGEMAN) {
         creature_ptr->resist_conf = TRUE;
     }
