@@ -228,18 +228,18 @@ static bool repeat_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
 static void check_cast_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
 {
     switch (check_racial_level(creature_ptr, &rc_ptr->power_desc[rc_ptr->command_code])) {
-    case 1:
+    case RACIAL_SUCCESS:
         if (rc_ptr->power_desc[rc_ptr->command_code].number < 0)
             rc_ptr->cast = exe_racial_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
         else
             rc_ptr->cast = exe_mutation_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
 
         break;
-    case 0:
-        rc_ptr->cast = FALSE;
-        break;
-    case -1:
+    case RACIAL_FAILURE:
         rc_ptr->cast = TRUE;
+        break;
+    case RACIAL_CANCEL:
+        rc_ptr->cast = FALSE;
         break;
     }
 }
