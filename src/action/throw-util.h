@@ -5,6 +5,9 @@
 
 // Item Throw.
 typedef struct it_type {
+    int mult;
+    bool boomerang;
+    OBJECT_IDX shuriken;
     OBJECT_IDX item;
     POSITION y;
     POSITION x;
@@ -33,4 +36,5 @@ typedef struct it_type {
     bool do_drop;
 } it_type;
 
-it_type *initialize_it_type(it_type *item_throw_ptr, object_type *q_ptr, const int delay_factor_val);
+it_type *initialize_it_type(
+    it_type *item_throw_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);

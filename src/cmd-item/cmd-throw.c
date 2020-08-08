@@ -58,6 +58,51 @@
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
 
+static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (it_ptr->shuriken >= 0) {
+        it_ptr->item = it_ptr->shuriken;
+        it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
+        return TRUE;
+    }
+    
+    concptr q, s;
+    if (it_ptr->boomerang) {
+        if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
+            item_tester_hook = item_tester_hook_boomerang;
+            q = _("どの武器を投げますか? ", "Throw which it_ptr->item? ");
+            s = _("投げる武器がない。", "You have nothing to throw.");
+            it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_EQUIP, 0);
+            if (!it_ptr->o_ptr) {
+                flush();
+                return FALSE;
+            }
+
+            return TRUE;
+        }
+        
+        if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
+            it_ptr->item = INVEN_LARM;
+            it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
+            return TRUE;
+        }
+
+        it_ptr->item = INVEN_RARM;
+        it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
+        return TRUE;
+    }
+
+    q = _("どのアイテムを投げますか? ", "Throw which it_ptr->item? ");
+    s = _("投げるアイテムがない。", "You have nothing to throw.");
+    it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
+    if (!it_ptr->o_ptr) {
+        flush();
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -85,38 +130,9 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
     it_type tmp_it;
     object_type tmp_object;
-    it_type *it_ptr = initialize_it_type(&tmp_it, &tmp_object, delay_factor);
-
-    concptr q, s;
-    if (shuriken >= 0) {
-        it_ptr->item = shuriken;
-        it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-    } else if (boomerang) {
-        if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
-            item_tester_hook = item_tester_hook_boomerang;
-            q = _("どの武器を投げますか? ", "Throw which it_ptr->item? ");
-            s = _("投げる武器がない。", "You have nothing to throw.");
-            it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_EQUIP, 0);
-            if (!it_ptr->o_ptr) {
-                flush();
-                return FALSE;
-            }
-        } else if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-            it_ptr->item = INVEN_LARM;
-            it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-        } else {
-            it_ptr->item = INVEN_RARM;
-            it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-        }
-    } else {
-        q = _("どのアイテムを投げますか? ", "Throw which it_ptr->item? ");
-        s = _("投げるアイテムがない。", "You have nothing to throw.");
-        it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
-        if (!it_ptr->o_ptr) {
-            flush();
-            return FALSE;
-        }
-    }
+    it_type *it_ptr = initialize_it_type(&tmp_it, &tmp_object, delay_factor, mult, boomerang, shuriken);
+    if (!check_what_throw(creature_ptr, it_ptr))
+        return FALSE;
 
     if (object_is_cursed(it_ptr->o_ptr) && (it_ptr->item >= INVEN_RARM)) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));

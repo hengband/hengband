@@ -1,7 +1,11 @@
 ﻿#include "action/throw-util.h"
 
-it_type *initialize_it_type(it_type *item_throw_ptr, object_type *q_ptr, const int delay_factor_val)
+it_type *initialize_it_type(
+    it_type *item_throw_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
 {
+    item_throw_ptr->mult = mult;
+    item_throw_ptr->boomerang = boomerang;
+    item_throw_ptr->shuriken = shuriken;
     item_throw_ptr->q_ptr = q_ptr;
     item_throw_ptr->hit_body = FALSE;
     item_throw_ptr->hit_wall = FALSE;
