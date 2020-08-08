@@ -16,7 +16,7 @@
 #include "racial/class-racial-switcher.h"
 #include "racial/mutation-racial-selector.h"
 #include "action/racial-execution.h"
-#include "racial/race-racial-switcher.h"
+#include "racial/race-racial-command-setter.h"
 #include "racial/racial-util.h"
 #include "status/action-setter.h"
 #include "term/screen-processor.h"
@@ -284,9 +284,9 @@ void do_cmd_racial_power(player_type *creature_ptr)
     rc_type *rc_ptr = initialize_rc_type(creature_ptr, &tmp_rc);
     switch_class_racial(creature_ptr, rc_ptr);
     if (creature_ptr->mimic_form)
-        switch_mimic_racial(creature_ptr, rc_ptr);
+        set_mimic_racial_command(creature_ptr, rc_ptr);
     else
-        switch_race_racial(creature_ptr, rc_ptr);
+        set_race_racial_command(creature_ptr, rc_ptr);
 
     select_mutation_racial(creature_ptr, rc_ptr);
     rc_ptr->flag = FALSE;

@@ -601,7 +601,7 @@ hengband_SOURCES = \
 	\
 	racial/class-racial-switcher.c racial/class-racial-switcher.h \
 	racial/mutation-racial-selector.c racial/mutation-racial-selector.h \
-	racial/race-racial-switcher.c racial/race-racial-switcher.h \
+	racial/race-racial-command-setter.c racial/race-racial-command-setter.h \
 	racial/racial-android.c racial/racial-android.h \
 	racial/racial-balrog.c racial/racial-balrog.h \
 	racial/racial-draconian.c racial/racial-draconian.h \

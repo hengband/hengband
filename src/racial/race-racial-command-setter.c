@@ -1,8 +1,8 @@
-﻿#include "racial/race-racial-switcher.h"
+﻿#include "racial/race-racial-command-setter.h"
 #include "player/player-race.h"
 #include "racial/racial-util.h"
 
-void switch_mimic_racial(player_type *creature_ptr, rc_type *rc_ptr)
+void set_mimic_racial_command(player_type *creature_ptr, rc_type *rc_ptr)
 {
     switch (creature_ptr->mimic_form) {
     case MIMIC_DEMON:
@@ -25,7 +25,7 @@ void switch_mimic_racial(player_type *creature_ptr, rc_type *rc_ptr)
     }
 }
 
-void switch_race_racial(player_type *creature_ptr, rc_type *rc_ptr)
+void set_race_racial_command(player_type *creature_ptr, rc_type *rc_ptr)
 {
     switch (creature_ptr->prace) {
     case RACE_DWARF:
