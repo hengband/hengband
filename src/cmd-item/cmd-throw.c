@@ -110,6 +110,25 @@ static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
     return TRUE;
 }
 
+static bool check_can_throw(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (!check_what_throw(creature_ptr, it_ptr))
+        return FALSE;
+
+    if (object_is_cursed(it_ptr->o_ptr) && (it_ptr->item >= INVEN_RARM)) {
+        msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
+        return FALSE;
+    }
+
+    if (creature_ptr->current_floor_ptr->inside_arena && !it_ptr->boomerang && (it_ptr->o_ptr->tval != TV_SPIKE)) {
+        msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
+        msg_print(NULL);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -138,19 +157,8 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     it_type tmp_it;
     object_type tmp_object;
     it_type *it_ptr = initialize_it_type(&tmp_it, &tmp_object, delay_factor, mult, boomerang, shuriken);
-    if (!check_what_throw(creature_ptr, it_ptr))
+    if (!check_can_throw(creature_ptr, it_ptr))
         return FALSE;
-
-    if (object_is_cursed(it_ptr->o_ptr) && (it_ptr->item >= INVEN_RARM)) {
-        msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
-        return FALSE;
-    }
-
-    if (creature_ptr->current_floor_ptr->inside_arena && !boomerang && (it_ptr->o_ptr->tval != TV_SPIKE)) {
-        msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
-        msg_print(NULL);
-        return FALSE;
-    }
 
     object_copy(it_ptr->q_ptr, it_ptr->o_ptr);
     object_flags(creature_ptr, it_ptr->q_ptr, it_ptr->obj_flags);
