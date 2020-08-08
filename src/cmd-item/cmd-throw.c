@@ -150,6 +150,30 @@ static void calc_throw_range(player_type *creature_ptr, it_type *it_ptr)
         it_ptr->tdis = mul;
 }
 
+static bool calc_throw_grid(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (it_ptr->shuriken >= 0) {
+        it_ptr->ty = randint0(101) - 50 + creature_ptr->y;
+        it_ptr->tx = randint0(101) - 50 + creature_ptr->x;
+        return TRUE;
+    }
+
+    project_length = it_ptr->tdis + 1;
+    DIRECTION dir;
+    if (!get_aim_dir(creature_ptr, &dir))
+        return FALSE;
+
+    it_ptr->tx = creature_ptr->x + 99 * ddx[dir];
+    it_ptr->ty = creature_ptr->y + 99 * ddy[dir];
+    if ((dir == 5) && target_okay(creature_ptr)) {
+        it_ptr->tx = target_col;
+        it_ptr->ty = target_row;
+    }
+
+    project_length = 0;
+    return TRUE;
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -182,24 +206,8 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         return FALSE;
 
     calc_throw_range(creature_ptr, it_ptr);
-    if (it_ptr->shuriken >= 0) {
-        it_ptr->ty = randint0(101) - 50 + creature_ptr->y;
-        it_ptr->tx = randint0(101) - 50 + creature_ptr->x;
-    } else {
-        project_length = it_ptr->tdis + 1;
-        DIRECTION dir;
-        if (!get_aim_dir(creature_ptr, &dir))
-            return FALSE;
-
-        it_ptr->tx = creature_ptr->x + 99 * ddx[dir];
-        it_ptr->ty = creature_ptr->y + 99 * ddy[dir];
-        if ((dir == 5) && target_okay(creature_ptr)) {
-            it_ptr->tx = target_col;
-            it_ptr->ty = target_row;
-        }
-
-        project_length = 0; /* reset to default */
-    }
+    if (!calc_throw_grid(creature_ptr, it_ptr))
+        return FALSE;
 
     if ((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG) || it_ptr->boomerang)
         it_ptr->return_when_thrown = TRUE;
@@ -286,7 +294,6 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         it_ptr->visible = m_ptr->ml;
         it_ptr->hit_body = TRUE;
         if (test_hit_fire(creature_ptr, it_ptr->chance - it_ptr->cur_dis, m_ptr, m_ptr->ml, it_ptr->o_name)) {
-            bool fear = FALSE;
             if (!it_ptr->visible) {
                 msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), it_ptr->o_name);
             } else {
@@ -329,6 +336,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
             msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), it_ptr->tdam,
                 m_ptr->hp - it_ptr->tdam, m_ptr->maxhp, m_ptr->max_maxhp);
 
+            bool fear = FALSE;
             if (mon_take_hit(creature_ptr, g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
                 break;
 
