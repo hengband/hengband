@@ -58,6 +58,35 @@
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
 
+static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, concptr *q, concptr *s)
+{
+    if (!it_ptr->boomerang)
+        return TRUE;
+
+    if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        item_tester_hook = item_tester_hook_boomerang;
+        *q = _("どの武器を投げますか? ", "Throw which it_ptr->item? ");
+        *s = _("投げる武器がない。", "You have nothing to throw.");
+        it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_EQUIP, 0);
+        if (!it_ptr->o_ptr) {
+            flush();
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        it_ptr->item = INVEN_LARM;
+        it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
+        return TRUE;
+    }
+
+    it_ptr->item = INVEN_RARM;
+    it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
+    return TRUE;
+}
+
 static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
 {
     if (it_ptr->shuriken >= 0) {
@@ -67,30 +96,8 @@ static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
     }
     
     concptr q, s;
-    if (it_ptr->boomerang) {
-        if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
-            item_tester_hook = item_tester_hook_boomerang;
-            q = _("どの武器を投げますか? ", "Throw which it_ptr->item? ");
-            s = _("投げる武器がない。", "You have nothing to throw.");
-            it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_EQUIP, 0);
-            if (!it_ptr->o_ptr) {
-                flush();
-                return FALSE;
-            }
-
-            return TRUE;
-        }
-        
-        if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-            it_ptr->item = INVEN_LARM;
-            it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-            return TRUE;
-        }
-
-        it_ptr->item = INVEN_RARM;
-        it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-        return TRUE;
-    }
+    if (!check_throw_boomerang(creature_ptr, it_ptr, &q, &s))
+        return FALSE;
 
     q = _("どのアイテムを投げますか? ", "Throw which it_ptr->item? ");
     s = _("投げるアイテムがない。", "You have nothing to throw.");
