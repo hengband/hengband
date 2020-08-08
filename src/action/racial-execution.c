@@ -66,6 +66,24 @@ PERCENTAGE racial_chance(player_type *creature_ptr, rpi_type *rpi_ptr)
         return ((sum * 100) / difficulty) / stat;
 }
 
+static void adjust_racial_power_difficulty(player_type *creature_ptr, rpi_type *rpi_ptr, int *difficulty)
+{
+    if (*difficulty == 0)
+        return;
+
+    if (creature_ptr->stun) {
+        *difficulty += creature_ptr->stun;
+    } else if (creature_ptr->lev > rpi_ptr->min_level) {
+        int lev_adj = ((creature_ptr->lev - rpi_ptr->min_level) / 3);
+        if (lev_adj > 10)
+            lev_adj = 10;
+        *difficulty -= lev_adj;
+    }
+
+    if (*difficulty < 5)
+        *difficulty = 5;
+}
+
 /*!
  * @brief レイシャル・パワーの発動の判定処理
  * @param rpi_ptr 発動したいレイシャル・パワー情報の構造体参照ポインタ
@@ -86,33 +104,20 @@ int check_racial_level(player_type *creature_ptr, rpi_type *rpi_ptr)
     if (creature_ptr->lev < min_level) {
         msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", "You need to attain level %d to use this power."), min_level);
         free_turn(creature_ptr);
-        return FALSE;
+        return 0;
     }
 
     if (cmd_limit_confused(creature_ptr)) {
         free_turn(creature_ptr);
-        return FALSE;
+        return 0;
     } else if (creature_ptr->chp < use_hp) {
         if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? "))) {
             free_turn(creature_ptr);
-            return FALSE;
+            return 0;
         }
     }
 
-    if (difficulty) {
-        if (creature_ptr->stun) {
-            difficulty += creature_ptr->stun;
-        } else if (creature_ptr->lev > min_level) {
-            int lev_adj = ((creature_ptr->lev - min_level) / 3);
-            if (lev_adj > 10)
-                lev_adj = 10;
-            difficulty -= lev_adj;
-        }
-
-        if (difficulty < 5)
-            difficulty = 5;
-    }
-
+    adjust_racial_power_difficulty(creature_ptr, rpi_ptr, &difficulty);
     take_turn(creature_ptr, 100);
     if (randint1(creature_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
         return 1;
