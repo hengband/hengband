@@ -257,6 +257,23 @@ static bool check_racial_target_monster(player_type *creature_ptr, it_type *it_p
     return creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx == 0;
 }
 
+static void display_attack_racial_power(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (!it_ptr->visible) {
+        msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), it_ptr->o_name);
+        return;
+    }
+
+    msg_format(_("%sが%sに命中した。", "The %s hits %s."), it_ptr->o_name, it_ptr->m_name);
+    if (!it_ptr->m_ptr->ml)
+        return;
+
+    if (!creature_ptr->image)
+        monster_race_track(creature_ptr, it_ptr->m_ptr->ap_r_idx);
+
+    health_track(creature_ptr, it_ptr->g_ptr->m_idx);
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -319,18 +336,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         it_ptr->visible = it_ptr->m_ptr->ml;
         it_ptr->hit_body = TRUE;
         if (test_hit_fire(creature_ptr, it_ptr->chance - it_ptr->cur_dis, it_ptr->m_ptr, it_ptr->m_ptr->ml, it_ptr->o_name)) {
-            if (!it_ptr->visible) {
-                msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), it_ptr->o_name);
-            } else {
-                msg_format(_("%sが%sに命中した。", "The %s hits %s."), it_ptr->o_name, it_ptr->m_name);
-                if (it_ptr->m_ptr->ml) {
-                    if (!creature_ptr->image)
-                        monster_race_track(creature_ptr, it_ptr->m_ptr->ap_r_idx);
-
-                    health_track(creature_ptr, it_ptr->g_ptr->m_idx);
-                }
-            }
-
+            display_attack_racial_power(creature_ptr, it_ptr);
             int dd = it_ptr->q_ptr->dd;
             int ds = it_ptr->q_ptr->ds;
             torch_dice(it_ptr->q_ptr, &dd, &ds);
