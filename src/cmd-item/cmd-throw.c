@@ -306,6 +306,30 @@ static void calc_racial_power_damage(player_type *creature_ptr, it_type *it_ptr)
     it_ptr->tdam = mon_damage_mod(creature_ptr, it_ptr->m_ptr, it_ptr->tdam, FALSE);
 }
 
+static void attack_racial_power(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (!test_hit_fire(creature_ptr, it_ptr->chance - it_ptr->cur_dis, it_ptr->m_ptr, it_ptr->m_ptr->ml, it_ptr->o_name))
+        return;
+
+    display_attack_racial_power(creature_ptr, it_ptr);
+    calc_racial_power_damage(creature_ptr, it_ptr);
+    msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), it_ptr->tdam,
+        it_ptr->m_ptr->hp - it_ptr->tdam, it_ptr->m_ptr->maxhp, it_ptr->m_ptr->max_maxhp);
+
+    bool fear = FALSE;
+    if (mon_take_hit(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(it_ptr->m_ptr))))
+        return;
+
+    message_pain(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam);
+    if ((it_ptr->tdam > 0) && !object_is_potion(it_ptr->q_ptr))
+        anger_monster(creature_ptr, it_ptr->m_ptr);
+
+    if (fear && it_ptr->m_ptr->ml) {
+        sound(SOUND_FLEE);
+        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), it_ptr->m_name);
+    }
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -367,26 +391,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         monster_name(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->m_name);
         it_ptr->visible = it_ptr->m_ptr->ml;
         it_ptr->hit_body = TRUE;
-        if (test_hit_fire(creature_ptr, it_ptr->chance - it_ptr->cur_dis, it_ptr->m_ptr, it_ptr->m_ptr->ml, it_ptr->o_name)) {
-            display_attack_racial_power(creature_ptr, it_ptr);
-            calc_racial_power_damage(creature_ptr, it_ptr);
-            msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), it_ptr->tdam,
-                it_ptr->m_ptr->hp - it_ptr->tdam, it_ptr->m_ptr->maxhp, it_ptr->m_ptr->max_maxhp);
-
-            bool fear = FALSE;
-            if (mon_take_hit(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(it_ptr->m_ptr))))
-                break;
-
-            message_pain(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam);
-            if ((it_ptr->tdam > 0) && !object_is_potion(it_ptr->q_ptr))
-                anger_monster(creature_ptr, it_ptr->m_ptr);
-
-            if (fear && it_ptr->m_ptr->ml) {
-                sound(SOUND_FLEE);
-                msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), it_ptr->m_name);
-            }
-        }
-
+        attack_racial_power(creature_ptr, it_ptr);
         break;
     }
 
