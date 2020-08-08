@@ -297,6 +297,7 @@
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
     <ClCompile Include="..\..\src\racial\class-racial-switcher.c" />
     <ClCompile Include="..\..\src\racial\mutation-racial-selector.c" />
+    <ClCompile Include="..\..\src\action\racial-execution.c" />
     <ClCompile Include="..\..\src\racial\racial-kutar.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
     <ClCompile Include="..\..\src\mspell\mspell-dispel.c" />
@@ -891,6 +892,7 @@
     <ClInclude Include="..\..\src\racial\class-racial-switcher.h" />
     <ClInclude Include="..\..\src\racial\mutation-racial-selector.h" />
     <ClInclude Include="..\..\src\racial\race-racial-switcher.h" />
+    <ClInclude Include="..\..\src\action\racial-execution.h" />
     <ClInclude Include="..\..\src\racial\racial-kutar.h" />
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />

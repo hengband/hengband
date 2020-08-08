@@ -2000,6 +2000,9 @@
     <ClCompile Include="..\..\src\racial\mutation-racial-selector.c">
       <Filter>racial</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\action\racial-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4350,6 +4353,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\racial\mutation-racial-selector.h">
       <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\racial-execution.h">
+      <Filter>action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

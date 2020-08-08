@@ -10,6 +10,7 @@ hengband_SOURCES = \
 	action/mutation-execution.c action/mutation-execution.h \
 	action/open-util.c action/open-util.h \
 	action/open-close-execution.c action/open-close-execution.h \
+	action/racial-execution.c action/racial-execution.h \
 	action/run-execution.c action/run-execution.h \
 	action/travel-execution.c action/travel-execution.h \
 	action/tunnel-execution.c action/tunnel-execution.h \
