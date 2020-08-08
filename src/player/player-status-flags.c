@@ -1332,3 +1332,30 @@ void have_impact(player_type *creature_ptr)
 
 }
 
+void have_extra_blow(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->extra_blows[0] = creature_ptr->extra_blows[1] = 0;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (have_flag(flgs, TR_INFRA))
+            creature_ptr->see_infra += o_ptr->pval;
+        if (have_flag(flgs, TR_BLOWS)) {
+            if ((i == INVEN_RARM || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon)
+                creature_ptr->extra_blows[0] += o_ptr->pval;
+            else if ((i == INVEN_LARM || i == INVEN_LEFT) && !creature_ptr->two_handed_weapon)
+                creature_ptr->extra_blows[1] += o_ptr->pval;
+            else {
+                creature_ptr->extra_blows[0] += o_ptr->pval;
+                creature_ptr->extra_blows[1] += o_ptr->pval;
+            }
+        }
+    }
+}

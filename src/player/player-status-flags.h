@@ -48,5 +48,6 @@ void have_slow_digest(player_type *creature_ptr);
 void have_regenerate(player_type *creature_ptr);
 void have_curses(player_type *creature_ptr);
 void have_impact(player_type *creature_ptr);
+void have_extra_blow(player_type *creature_ptr);
 
 

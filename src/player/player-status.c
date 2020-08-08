@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->extra_blows[0] = creature_ptr->extra_blows[1] = 0;
     creature_ptr->tval_xtra = 0;
     creature_ptr->tval_ammo = 0;
 
@@ -735,6 +734,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_regenerate(creature_ptr);
     have_curses(creature_ptr);
     have_impact(creature_ptr);
+    have_extra_blow(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4525,16 +4525,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_INFRA))
             creature_ptr->see_infra += o_ptr->pval;
-        if (have_flag(flgs, TR_BLOWS)) {
-            if ((i == INVEN_RARM || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon)
-                creature_ptr->extra_blows[0] += o_ptr->pval;
-            else if ((i == INVEN_LARM || i == INVEN_LEFT) && !creature_ptr->two_handed_weapon)
-                creature_ptr->extra_blows[1] += o_ptr->pval;
-            else {
-                creature_ptr->extra_blows[0] += o_ptr->pval;
-                creature_ptr->extra_blows[1] += o_ptr->pval;
-            }
-        }
 
         if (have_flag(flgs, TR_IM_FIRE))
             creature_ptr->immune_fire = TRUE;
