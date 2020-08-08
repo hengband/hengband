@@ -192,6 +192,19 @@ static void reflect_inventory_by_throw(player_type *creature_ptr, it_type *it_pt
     inven_item_optimize(creature_ptr, it_ptr->item);
 }
 
+static void set_class_specific_throw_params(player_type *creature_ptr, it_type *it_ptr)
+{
+    take_turn(creature_ptr, 100);
+    if ((creature_ptr->pclass == CLASS_ROGUE) || (creature_ptr->pclass == CLASS_NINJA))
+        creature_ptr->energy_use -= creature_ptr->lev;
+
+    it_ptr->y = creature_ptr->y;
+    it_ptr->x = creature_ptr->x;
+    handle_stuff(creature_ptr);
+    it_ptr->shuriken = (creature_ptr->pclass == CLASS_NINJA)
+        && ((it_ptr->q_ptr->tval == TV_SPIKE) || ((have_flag(it_ptr->obj_flags, TR_THROW)) && (it_ptr->q_ptr->tval == TV_SWORD)));
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -233,19 +246,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         creature_ptr->redraw |= PR_EQUIPPY;
     }
 
-    take_turn(creature_ptr, 100);
-    if ((creature_ptr->pclass == CLASS_ROGUE) || (creature_ptr->pclass == CLASS_NINJA))
-        creature_ptr->energy_use -= creature_ptr->lev;
-
-    it_ptr->y = creature_ptr->y;
-    it_ptr->x = creature_ptr->x;
-    handle_stuff(creature_ptr);
-    if ((creature_ptr->pclass == CLASS_NINJA)
-        && ((it_ptr->q_ptr->tval == TV_SPIKE) || ((have_flag(it_ptr->obj_flags, TR_THROW)) && (it_ptr->q_ptr->tval == TV_SWORD))))
-        it_ptr->shuriken = TRUE;
-    else
-        it_ptr->shuriken = FALSE;
-
+    set_class_specific_throw_params(creature_ptr, it_ptr);
     if (have_flag(it_ptr->obj_flags, TR_THROW))
         it_ptr->chance = ((creature_ptr->skill_tht) + ((creature_ptr->to_h_b + it_ptr->q_ptr->to_h) * BTH_PLUS_ADJ));
     else
