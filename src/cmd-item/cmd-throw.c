@@ -76,17 +76,23 @@
  */
 bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_IDX shuriken)
 {
-    DIRECTION dir;
     OBJECT_IDX item;
-    int i;
-    POSITION y, x, ty, tx, prev_y, prev_x;
-    POSITION ny[19], nx[19];
-    int chance, tdam, tdis;
-    int mul, div, dd, ds;
-    int cur_dis, visible;
-    PERCENTAGE j;
+    POSITION y;
+    POSITION x;
+    POSITION ty;
+    POSITION tx;
+    POSITION prev_y;
+    POSITION prev_x;
+    POSITION ny[19];
+    POSITION nx[19];
+    int chance;
+    int tdam;
+    int tdis;
+    int cur_dis;
+    int visible;
+    PERCENTAGE corruption_possibility;
     object_type forge;
-    object_type *q_ptr;
+    object_type *q_ptr = &forge;
     object_type *o_ptr;
     bool hit_body = FALSE;
     bool hit_wall = FALSE;
@@ -94,8 +100,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     bool return_when_thrown = FALSE;
     GAME_TEXT o_name[MAX_NLEN];
     int msec = delay_factor * delay_factor * delay_factor;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    concptr q, s;
+    BIT_FLAGS obj_flags[TR_FLAG_SIZE];
     bool come_back = FALSE;
     bool do_drop = TRUE;
     if (creature_ptr->wild_mode)
@@ -104,6 +109,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
+    concptr q, s;
     if (shuriken >= 0) {
         item = shuriken;
         o_ptr = &creature_ptr->inventory_list[item];
@@ -145,19 +151,18 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         return FALSE;
     }
 
-    q_ptr = &forge;
     object_copy(q_ptr, o_ptr);
-    object_flags(creature_ptr, q_ptr, flgs);
-    torch_flags(q_ptr, flgs);
+    object_flags(creature_ptr, q_ptr, obj_flags);
+    torch_flags(q_ptr, obj_flags);
     distribute_charges(o_ptr, q_ptr, 1);
     q_ptr->number = 1;
     describe_flavor(creature_ptr, o_name, q_ptr, OD_OMIT_PREFIX);
     if (creature_ptr->mighty_throw)
         mult += 3;
 
-    mul = 10 + 2 * (mult - 1);
-    div = ((q_ptr->weight > 10) ? q_ptr->weight : 10);
-    if ((have_flag(flgs, TR_THROW)) || boomerang)
+    int mul = 10 + 2 * (mult - 1);
+    int div = ((q_ptr->weight > 10) ? q_ptr->weight : 10);
+    if ((have_flag(obj_flags, TR_THROW)) || boomerang)
         div /= 2;
 
     tdis = (adj_str_blow[creature_ptr->stat_ind[A_STR]] + 20) * mul / div;
@@ -169,6 +174,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         tx = randint0(101) - 50 + creature_ptr->x;
     } else {
         project_length = tdis + 1;
+        DIRECTION dir;
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
 
@@ -207,12 +213,12 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     y = creature_ptr->y;
     x = creature_ptr->x;
     handle_stuff(creature_ptr);
-    if ((creature_ptr->pclass == CLASS_NINJA) && ((q_ptr->tval == TV_SPIKE) || ((have_flag(flgs, TR_THROW)) && (q_ptr->tval == TV_SWORD))))
+    if ((creature_ptr->pclass == CLASS_NINJA) && ((q_ptr->tval == TV_SPIKE) || ((have_flag(obj_flags, TR_THROW)) && (q_ptr->tval == TV_SWORD))))
         shuriken = TRUE;
     else
         shuriken = FALSE;
 
-    if (have_flag(flgs, TR_THROW))
+    if (have_flag(obj_flags, TR_THROW))
         chance = ((creature_ptr->skill_tht) + ((creature_ptr->to_h_b + q_ptr->to_h) * BTH_PLUS_ADJ));
     else
         chance = (creature_ptr->skill_tht + (creature_ptr->to_h_b * BTH_PLUS_ADJ));
@@ -273,8 +279,8 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
                     }
                 }
 
-                dd = q_ptr->dd;
-                ds = q_ptr->ds;
+                int dd = q_ptr->dd;
+                int ds = q_ptr->ds;
                 torch_dice(q_ptr, &dd, &ds);
                 tdam = damroll(dd, ds);
                 tdam = calc_attack_damage_with_slay(creature_ptr, q_ptr, tdam, m_ptr, 0, TRUE);
@@ -287,7 +293,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
                 if (boomerang) {
                     tdam *= (mult + creature_ptr->num_blow[item - INVEN_RARM]);
                     tdam += creature_ptr->to_d_m;
-                } else if (have_flag(flgs, TR_THROW)) {
+                } else if (have_flag(obj_flags, TR_THROW)) {
                     tdam *= (3 + mult);
                     tdam += creature_ptr->to_d_m;
                 } else {
@@ -325,10 +331,10 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     if (hit_body)
         torch_lost_fuel(q_ptr);
 
-    j = (hit_body ? breakage_chance(creature_ptr, q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
+    corruption_possibility = (hit_body ? breakage_chance(creature_ptr, q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
 
     if ((q_ptr->tval == TV_FIGURINE) && !(creature_ptr->current_floor_ptr->inside_arena)) {
-        j = 100;
+        corruption_possibility = 100;
         if (!(summon_named_creature(creature_ptr, 0, y, x, q_ptr->pval, !(object_is_cursed(q_ptr)) ? PM_FORCE_PET : 0L)))
             msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
         else if (object_is_cursed(q_ptr))
@@ -336,7 +342,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     }
 
     if (object_is_potion(q_ptr)) {
-        if (hit_body || hit_wall || (randint1(100) < j)) {
+        if (hit_body || hit_wall || (randint1(100) < corruption_possibility)) {
             msg_format(_("%sは砕け散った！", "The %s shatters!"), o_name);
             if (potion_smash_effect(creature_ptr, 0, y, x, q_ptr->k_idx)) {
                 monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx];
@@ -350,7 +356,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
             do_drop = FALSE;
         } else {
-            j = 0;
+            corruption_possibility = 0;
         }
     }
 
@@ -358,14 +364,14 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         int back_chance = randint1(30) + 20 + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
         char o2_name[MAX_NLEN];
         bool super_boomerang = (((q_ptr->name1 == ART_MJOLLNIR) || (q_ptr->name1 == ART_AEGISFANG)) && boomerang);
-        j = -1;
+        corruption_possibility = -1;
         if (boomerang)
             back_chance += 4 + randint1(5);
         if (super_boomerang)
             back_chance += 100;
         describe_flavor(creature_ptr, o2_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         if ((back_chance > 30) && (!one_in_(100) || super_boomerang)) {
-            for (i = cur_dis - 1; i > 0; i--) {
+            for (int i = cur_dis - 1; i > 0; i--) {
                 if (panel_contains(ny[i], nx[i]) && player_can_see_bold(creature_ptr, ny[i], nx[i])) {
                     SYMBOL_CODE c = object_char(q_ptr);
                     byte a = object_attr(q_ptr);
@@ -417,9 +423,9 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
     if (do_drop) {
         if (cave_have_flag_bold(creature_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
-            (void)drop_near(creature_ptr, q_ptr, j, y, x);
+            (void)drop_near(creature_ptr, q_ptr, corruption_possibility, y, x);
         } else {
-            (void)drop_near(creature_ptr, q_ptr, j, prev_y, prev_x);
+            (void)drop_near(creature_ptr, q_ptr, corruption_possibility, prev_y, prev_x);
         }
     }
 
