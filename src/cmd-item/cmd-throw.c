@@ -276,73 +276,73 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         it_ptr->x = it_ptr->nx[it_ptr->cur_dis];
         it_ptr->y = it_ptr->ny[it_ptr->cur_dis];
         it_ptr->cur_dis++;
-        if (creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx) {
-            grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x];
-            monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_name(creature_ptr, g_ptr->m_idx, m_name);
-            it_ptr->visible = m_ptr->ml;
-            it_ptr->hit_body = TRUE;
-            if (test_hit_fire(creature_ptr, it_ptr->chance - it_ptr->cur_dis, m_ptr, m_ptr->ml, it_ptr->o_name)) {
-                bool fear = FALSE;
-                if (!it_ptr->visible) {
-                    msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), it_ptr->o_name);
-                } else {
-                    msg_format(_("%sが%sに命中した。", "The %s hits %s."), it_ptr->o_name, m_name);
-                    if (m_ptr->ml) {
-                        if (!creature_ptr->image)
-                            monster_race_track(creature_ptr, m_ptr->ap_r_idx);
-                        health_track(creature_ptr, g_ptr->m_idx);
-                    }
-                }
+        if (creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx == 0)
+            continue;
 
-                int dd = it_ptr->q_ptr->dd;
-                int ds = it_ptr->q_ptr->ds;
-                torch_dice(it_ptr->q_ptr, &dd, &ds);
-                it_ptr->tdam = damroll(dd, ds);
-                it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, m_ptr, 0, TRUE);
-                it_ptr->tdam = critical_shot(creature_ptr, it_ptr->q_ptr->weight, it_ptr->q_ptr->to_h, 0, it_ptr->tdam);
-                if (it_ptr->q_ptr->to_d > 0)
-                    it_ptr->tdam += it_ptr->q_ptr->to_d;
-                else
-                    it_ptr->tdam += -it_ptr->q_ptr->to_d;
-
-                if (it_ptr->boomerang) {
-                    it_ptr->tdam *= (it_ptr->mult + creature_ptr->num_blow[it_ptr->item - INVEN_RARM]);
-                    it_ptr->tdam += creature_ptr->to_d_m;
-                } else if (have_flag(it_ptr->obj_flags, TR_THROW)) {
-                    it_ptr->tdam *= (3 + it_ptr->mult);
-                    it_ptr->tdam += creature_ptr->to_d_m;
-                } else {
-                    it_ptr->tdam *= it_ptr->mult;
-                }
-
-                if (it_ptr->shuriken != 0)
-                    it_ptr->tdam += ((creature_ptr->lev + 30) * (creature_ptr->lev + 30) - 900) / 55;
-
-                if (it_ptr->tdam < 0)
-                    it_ptr->tdam = 0;
-
-                it_ptr->tdam = mon_damage_mod(creature_ptr, m_ptr, it_ptr->tdam, FALSE);
-                msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
-                    it_ptr->tdam, m_ptr->hp - it_ptr->tdam, m_ptr->maxhp, m_ptr->max_maxhp);
-
-                if (mon_take_hit(creature_ptr, g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(m_ptr)))) {
-                    /* Dead monster */
-                } else {
-                    message_pain(creature_ptr, g_ptr->m_idx, it_ptr->tdam);
-                    if ((it_ptr->tdam > 0) && !object_is_potion(it_ptr->q_ptr))
-                        anger_monster(creature_ptr, m_ptr);
-
-                    if (fear && m_ptr->ml) {
-                        sound(SOUND_FLEE);
-                        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
-                    }
+        grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x];
+        monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_name(creature_ptr, g_ptr->m_idx, m_name);
+        it_ptr->visible = m_ptr->ml;
+        it_ptr->hit_body = TRUE;
+        if (test_hit_fire(creature_ptr, it_ptr->chance - it_ptr->cur_dis, m_ptr, m_ptr->ml, it_ptr->o_name)) {
+            bool fear = FALSE;
+            if (!it_ptr->visible) {
+                msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), it_ptr->o_name);
+            } else {
+                msg_format(_("%sが%sに命中した。", "The %s hits %s."), it_ptr->o_name, m_name);
+                if (m_ptr->ml) {
+                    if (!creature_ptr->image)
+                        monster_race_track(creature_ptr, m_ptr->ap_r_idx);
+                    health_track(creature_ptr, g_ptr->m_idx);
                 }
             }
 
-            break;
+            int dd = it_ptr->q_ptr->dd;
+            int ds = it_ptr->q_ptr->ds;
+            torch_dice(it_ptr->q_ptr, &dd, &ds);
+            it_ptr->tdam = damroll(dd, ds);
+            it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, m_ptr, 0, TRUE);
+            it_ptr->tdam = critical_shot(creature_ptr, it_ptr->q_ptr->weight, it_ptr->q_ptr->to_h, 0, it_ptr->tdam);
+            if (it_ptr->q_ptr->to_d > 0)
+                it_ptr->tdam += it_ptr->q_ptr->to_d;
+            else
+                it_ptr->tdam += -it_ptr->q_ptr->to_d;
+
+            if (it_ptr->boomerang) {
+                it_ptr->tdam *= (it_ptr->mult + creature_ptr->num_blow[it_ptr->item - INVEN_RARM]);
+                it_ptr->tdam += creature_ptr->to_d_m;
+            } else if (have_flag(it_ptr->obj_flags, TR_THROW)) {
+                it_ptr->tdam *= (3 + it_ptr->mult);
+                it_ptr->tdam += creature_ptr->to_d_m;
+            } else {
+                it_ptr->tdam *= it_ptr->mult;
+            }
+
+            if (it_ptr->shuriken != 0)
+                it_ptr->tdam += ((creature_ptr->lev + 30) * (creature_ptr->lev + 30) - 900) / 55;
+
+            if (it_ptr->tdam < 0)
+                it_ptr->tdam = 0;
+
+            it_ptr->tdam = mon_damage_mod(creature_ptr, m_ptr, it_ptr->tdam, FALSE);
+            msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), it_ptr->tdam,
+                m_ptr->hp - it_ptr->tdam, m_ptr->maxhp, m_ptr->max_maxhp);
+
+            if (mon_take_hit(creature_ptr, g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
+                break;
+
+            message_pain(creature_ptr, g_ptr->m_idx, it_ptr->tdam);
+            if ((it_ptr->tdam > 0) && !object_is_potion(it_ptr->q_ptr))
+                anger_monster(creature_ptr, m_ptr);
+
+            if (fear && m_ptr->ml) {
+                sound(SOUND_FLEE);
+                msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
+            }
         }
+
+        break;
     }
 
     if (it_ptr->hit_body)
@@ -359,7 +359,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     }
 
     if (object_is_potion(it_ptr->q_ptr)) {
-        if (it_ptr->hit_body || it_ptr->hit_wall || (randint1(100) < it_ptr->corruption_possibility)) {
+        if (!it_ptr->hit_body && !it_ptr->hit_wall && (randint1(100) >= it_ptr->corruption_possibility)) {
             msg_format(_("%sは砕け散った！", "The %s shatters!"), it_ptr->o_name);
             if (potion_smash_effect(creature_ptr, 0, it_ptr->y, it_ptr->x, it_ptr->q_ptr->k_idx)) {
                 monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx];
@@ -388,20 +388,23 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         if (super_boomerang)
             back_chance += 100;
         describe_flavor(creature_ptr, o2_name, it_ptr->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-        if ((back_chance > 30) && (!one_in_(100) || super_boomerang)) {
+        if ((back_chance <= 30) || (one_in_(100) && !super_boomerang)) {
+            msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), o2_name);
+        } else {
             for (int i = it_ptr->cur_dis - 1; i > 0; i--) {
-                if (panel_contains(it_ptr->ny[i], it_ptr->nx[i]) && player_can_see_bold(creature_ptr, it_ptr->ny[i], it_ptr->nx[i])) {
-                    SYMBOL_CODE c = object_char(it_ptr->q_ptr);
-                    byte a = object_attr(it_ptr->q_ptr);
-                    print_rel(creature_ptr, c, a, it_ptr->ny[i], it_ptr->nx[i]);
-                    move_cursor_relative(it_ptr->ny[i], it_ptr->nx[i]);
-                    term_fresh();
+                if (!panel_contains(it_ptr->ny[i], it_ptr->nx[i]) || !player_can_see_bold(creature_ptr, it_ptr->ny[i], it_ptr->nx[i])) {
                     term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
-                    lite_spot(creature_ptr, it_ptr->ny[i], it_ptr->nx[i]);
-                    term_fresh();
-                } else {
-                    term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
+                    continue;
                 }
+
+                SYMBOL_CODE c = object_char(it_ptr->q_ptr);
+                byte a = object_attr(it_ptr->q_ptr);
+                print_rel(creature_ptr, c, a, it_ptr->ny[i], it_ptr->nx[i]);
+                move_cursor_relative(it_ptr->ny[i], it_ptr->nx[i]);
+                term_fresh();
+                term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
+                lite_spot(creature_ptr, it_ptr->ny[i], it_ptr->nx[i]);
+                term_fresh();
             }
 
             if ((back_chance > 37) && !creature_ptr->blind && (it_ptr->item >= 0)) {
@@ -416,21 +419,19 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
                 it_ptr->y = creature_ptr->y;
                 it_ptr->x = creature_ptr->x;
             }
-        } else {
-            msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), o2_name);
         }
     }
 
     if (it_ptr->come_back) {
-        if (it_ptr->item == INVEN_RARM || it_ptr->item == INVEN_LARM) {
+        if ((it_ptr->item != INVEN_RARM) && (it_ptr->item != INVEN_LARM)) {
+            store_item_to_inventory(creature_ptr, it_ptr->q_ptr);
+        } else {
             it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
             object_copy(it_ptr->o_ptr, it_ptr->q_ptr);
             creature_ptr->total_weight += it_ptr->q_ptr->weight;
             creature_ptr->equip_cnt++;
             creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
             creature_ptr->window |= PW_EQUIP;
-        } else {
-            store_item_to_inventory(creature_ptr, it_ptr->q_ptr);
         }
 
         it_ptr->do_drop = FALSE;
@@ -440,11 +441,10 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     }
 
     if (it_ptr->do_drop) {
-        if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT)) {
+        if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
             (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->y, it_ptr->x);
-        } else {
+        else
             (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->prev_y, it_ptr->prev_x);
-        }
     }
 
     return TRUE;
