@@ -564,8 +564,7 @@ static void clear_creature_bonuses(player_type *creature_ptr)
     creature_ptr->num_fire = 100;
     creature_ptr->tval_xtra = 0;
     creature_ptr->tval_ammo = 0;
-    creature_ptr->impact[0] = FALSE;
-    creature_ptr->impact[1] = FALSE;
+
     creature_ptr->resist_acid = FALSE;
     creature_ptr->resist_elec = FALSE;
     creature_ptr->resist_fire = FALSE;
@@ -736,6 +735,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_slow_digest(creature_ptr);
     have_regenerate(creature_ptr);
     have_curses(creature_ptr);
+    have_impact(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4535,9 +4535,6 @@ void calc_equipment_status(player_type *creature_ptr)
                 creature_ptr->extra_blows[1] += o_ptr->pval;
             }
         }
-
-        if (have_flag(flgs, TR_IMPACT))
-            creature_ptr->impact[(i == INVEN_RARM) ? 0 : 1] = TRUE;
 
         if (have_flag(flgs, TR_IM_FIRE))
             creature_ptr->immune_fire = TRUE;

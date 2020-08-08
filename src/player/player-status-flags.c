@@ -1313,3 +1313,22 @@ void have_curses(player_type *creature_ptr)
         creature_ptr->cursed &= ~(TRC_AGGRAVATE);
     }
 }
+
+void have_impact(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->impact[0] = FALSE;
+    creature_ptr->impact[1] = FALSE;
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_IMPACT))
+            creature_ptr->impact[(i == INVEN_RARM) ? 0 : 1] = TRUE;
+    }
+
+}
+
