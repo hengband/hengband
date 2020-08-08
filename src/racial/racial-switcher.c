@@ -355,6 +355,21 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
     }
 }
 
+bool switch_mimic_racial_execution(player_type *creature_ptr)
+{
+    switch (creature_ptr->mimic_form) {
+    case MIMIC_DEMON:
+    case MIMIC_DEMON_LORD: {
+        return demonic_breath(creature_ptr);
+    }
+    case MIMIC_VAMPIRE:
+        vampirism(creature_ptr);
+        return TRUE;
+    default:
+        return TRUE;
+    }
+}
+
 bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
 {
     DIRECTION dir = 0;
@@ -532,19 +547,8 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
     if (command <= -3)
         return switch_class_racial_execution(creature_ptr, command);
 
-    if (creature_ptr->mimic_form) {
-        switch (creature_ptr->mimic_form) {
-        case MIMIC_DEMON:
-        case MIMIC_DEMON_LORD: {
-            return demonic_breath(creature_ptr);
-        }
-        case MIMIC_VAMPIRE:
-            vampirism(creature_ptr);
-            break;
-        }
-
-        return TRUE;
-    }
+    if (creature_ptr->mimic_form)
+        return switch_mimic_racial_execution(creature_ptr);
 
     return switch_race_racial_execution(creature_ptr, command);
 }
