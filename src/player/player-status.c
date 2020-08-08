@@ -561,7 +561,6 @@ static void delayed_visual_update(player_type *player_ptr)
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
     creature_ptr->extra_blows[0] = creature_ptr->extra_blows[1] = 0;
-    creature_ptr->num_fire = 100;
     creature_ptr->tval_xtra = 0;
     creature_ptr->tval_ammo = 0;
 
@@ -1536,6 +1535,7 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 {
     int extra_shots = 0;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->num_fire = 100;
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *q_ptr;
         q_ptr = &creature_ptr->inventory_list[i];
