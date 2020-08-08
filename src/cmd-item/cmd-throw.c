@@ -274,6 +274,38 @@ static void display_attack_racial_power(player_type *creature_ptr, it_type *it_p
     health_track(creature_ptr, it_ptr->g_ptr->m_idx);
 }
 
+static void calc_racial_power_damage(player_type *creature_ptr, it_type *it_ptr)
+{
+    int dd = it_ptr->q_ptr->dd;
+    int ds = it_ptr->q_ptr->ds;
+    torch_dice(it_ptr->q_ptr, &dd, &ds);
+    it_ptr->tdam = damroll(dd, ds);
+    it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, it_ptr->m_ptr, 0, TRUE);
+    it_ptr->tdam = critical_shot(creature_ptr, it_ptr->q_ptr->weight, it_ptr->q_ptr->to_h, 0, it_ptr->tdam);
+    if (it_ptr->q_ptr->to_d > 0)
+        it_ptr->tdam += it_ptr->q_ptr->to_d;
+    else
+        it_ptr->tdam += -it_ptr->q_ptr->to_d;
+
+    if (it_ptr->boomerang) {
+        it_ptr->tdam *= (it_ptr->mult + creature_ptr->num_blow[it_ptr->item - INVEN_RARM]);
+        it_ptr->tdam += creature_ptr->to_d_m;
+    } else if (have_flag(it_ptr->obj_flags, TR_THROW)) {
+        it_ptr->tdam *= (3 + it_ptr->mult);
+        it_ptr->tdam += creature_ptr->to_d_m;
+    } else {
+        it_ptr->tdam *= it_ptr->mult;
+    }
+
+    if (it_ptr->shuriken != 0)
+        it_ptr->tdam += ((creature_ptr->lev + 30) * (creature_ptr->lev + 30) - 900) / 55;
+
+    if (it_ptr->tdam < 0)
+        it_ptr->tdam = 0;
+
+    it_ptr->tdam = mon_damage_mod(creature_ptr, it_ptr->m_ptr, it_ptr->tdam, FALSE);
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -337,34 +369,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         it_ptr->hit_body = TRUE;
         if (test_hit_fire(creature_ptr, it_ptr->chance - it_ptr->cur_dis, it_ptr->m_ptr, it_ptr->m_ptr->ml, it_ptr->o_name)) {
             display_attack_racial_power(creature_ptr, it_ptr);
-            int dd = it_ptr->q_ptr->dd;
-            int ds = it_ptr->q_ptr->ds;
-            torch_dice(it_ptr->q_ptr, &dd, &ds);
-            it_ptr->tdam = damroll(dd, ds);
-            it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, it_ptr->m_ptr, 0, TRUE);
-            it_ptr->tdam = critical_shot(creature_ptr, it_ptr->q_ptr->weight, it_ptr->q_ptr->to_h, 0, it_ptr->tdam);
-            if (it_ptr->q_ptr->to_d > 0)
-                it_ptr->tdam += it_ptr->q_ptr->to_d;
-            else
-                it_ptr->tdam += -it_ptr->q_ptr->to_d;
-
-            if (it_ptr->boomerang) {
-                it_ptr->tdam *= (it_ptr->mult + creature_ptr->num_blow[it_ptr->item - INVEN_RARM]);
-                it_ptr->tdam += creature_ptr->to_d_m;
-            } else if (have_flag(it_ptr->obj_flags, TR_THROW)) {
-                it_ptr->tdam *= (3 + it_ptr->mult);
-                it_ptr->tdam += creature_ptr->to_d_m;
-            } else {
-                it_ptr->tdam *= it_ptr->mult;
-            }
-
-            if (it_ptr->shuriken != 0)
-                it_ptr->tdam += ((creature_ptr->lev + 30) * (creature_ptr->lev + 30) - 900) / 55;
-
-            if (it_ptr->tdam < 0)
-                it_ptr->tdam = 0;
-
-            it_ptr->tdam = mon_damage_mod(creature_ptr, it_ptr->m_ptr, it_ptr->tdam, FALSE);
+            calc_racial_power_damage(creature_ptr, it_ptr);
             msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), it_ptr->tdam,
                 it_ptr->m_ptr->hp - it_ptr->tdam, it_ptr->m_ptr->maxhp, it_ptr->m_ptr->max_maxhp);
 
