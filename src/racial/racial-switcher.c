@@ -178,8 +178,9 @@ int check_racial_level(player_type *creature_ptr, rpi_type *rpi_ptr)
     return -1;
 }
 
-bool switch_class_racial_execution(player_type *creature_ptr, const s32b command, DIRECTION *dir)
+bool switch_class_racial_execution(player_type *creature_ptr, const s32b command)
 {
+    DIRECTION dir = 0;
     switch (creature_ptr->pclass) {
     case CLASS_WARRIOR:
         return sword_dancing(creature_ptr);
@@ -213,10 +214,10 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         probing(creature_ptr);
         return TRUE;
     case CLASS_PALADIN:
-        if (!get_aim_dir(creature_ptr, dir))
+        if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
 
-        fire_beam(creature_ptr, is_good_realm(creature_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE, *dir, creature_ptr->lev * 3);
+        fire_beam(creature_ptr, is_good_realm(creature_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE, dir, creature_ptr->lev * 3);
         return TRUE;
     case CLASS_WARRIOR_MAGE:
         if (command == -3)
@@ -255,11 +256,11 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         return clear_mind(creature_ptr);
     case CLASS_TOURIST:
         if (command == -3) {
-            if (!get_aim_dir(creature_ptr, dir))
+            if (!get_aim_dir(creature_ptr, &dir))
                 return FALSE;
 
             project_length = 1;
-            fire_beam(creature_ptr, GF_PHOTO, *dir, 1);
+            fire_beam(creature_ptr, GF_PHOTO, dir, 1);
             return TRUE;
         }
 
@@ -269,10 +270,10 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         return do_cmd_mane(creature_ptr, TRUE);
     case CLASS_BEASTMASTER:
         if (command == -3) {
-            if (!get_aim_dir(creature_ptr, dir))
+            if (!get_aim_dir(creature_ptr, &dir))
                 return FALSE;
 
-            (void)fire_ball_hide(creature_ptr, GF_CHARM_LIVING, *dir, creature_ptr->lev, 0);
+            (void)fire_ball_hide(creature_ptr, GF_CHARM_LIVING, dir, creature_ptr->lev, 0);
             return TRUE;
         }
 
@@ -528,9 +529,8 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
  */
 bool exe_racial_power(player_type *creature_ptr, const s32b command)
 {
-    DIRECTION dir = 0;
     if (command <= -3)
-        return switch_class_racial_execution(creature_ptr, command, &dir);
+        return switch_class_racial_execution(creature_ptr, command);
 
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
