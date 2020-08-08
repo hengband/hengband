@@ -13,7 +13,7 @@
 #include "view/display-messages.h"
 
 // Powerful monsters can resist.
-gf_switch_result effect_monster_old_poly(effect_monster_type *em_ptr)
+switch_result effect_monster_old_poly(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	em_ptr->do_polymorph = TRUE;
@@ -28,11 +28,11 @@ gf_switch_result effect_monster_old_poly(effect_monster_type *em_ptr)
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_old_clone(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_old_clone(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -43,7 +43,7 @@ gf_switch_result effect_monster_old_clone(player_type *caster_ptr, effect_monste
 	{
 		em_ptr->note = _("には効果がなかった。", " is unaffected.");
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	em_ptr->m_ptr->hp = em_ptr->m_ptr->maxhp;
@@ -51,11 +51,11 @@ gf_switch_result effect_monster_old_clone(player_type *caster_ptr, effect_monste
 		em_ptr->note = _("が分裂した！", " spawns!");
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_star_heal(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_star_heal(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -75,10 +75,10 @@ gf_switch_result effect_monster_star_heal(player_type *caster_ptr, effect_monste
 		if (caster_ptr->riding == em_ptr->g_ptr->m_idx)
 			caster_ptr->redraw |= (PR_UHEALTH);
 
-		return GF_SWITCH_FALSE;
+		return SWITCH_FALSE;
 	}
 
-	return GF_SWITCH_TRUE;
+	return SWITCH_TRUE;
 }
 
 
@@ -135,7 +135,7 @@ static void effect_monster_old_heal_recovery(player_type *caster_ptr, effect_mon
 
 
 // todo サーペントのHPがマジックナンバー扱いになっている
-gf_switch_result effect_monster_old_heal(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_old_heal(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -157,11 +157,11 @@ gf_switch_result effect_monster_old_heal(player_type *caster_ptr, effect_monster
 
 	em_ptr->note = _("は体力を回復したようだ。", " looks healthier.");
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_old_speed(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_old_speed(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -179,11 +179,11 @@ gf_switch_result effect_monster_old_speed(player_type *caster_ptr, effect_monste
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_old_slow(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_old_slow(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -194,14 +194,14 @@ gf_switch_result effect_monster_old_slow(player_type *caster_ptr, effect_monster
 		em_ptr->note = _("には効果がなかった。", " is unaffected.");
 		em_ptr->obvious = FALSE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50))
 		em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
@@ -209,7 +209,7 @@ gf_switch_result effect_monster_old_slow(player_type *caster_ptr, effect_monster
  * todo 「ユニークは (魔法では)常に眠らない」はr_infoの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
-gf_switch_result effect_monster_old_sleep(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_old_sleep(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -232,7 +232,7 @@ gf_switch_result effect_monster_old_sleep(player_type *caster_ptr, effect_monste
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
@@ -240,7 +240,7 @@ gf_switch_result effect_monster_old_sleep(player_type *caster_ptr, effect_monste
  * todo 「ユニークは (魔法では)常に混乱しない」はr_infoの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
-gf_switch_result effect_monster_old_conf(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_old_conf(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -260,11 +260,11 @@ gf_switch_result effect_monster_old_conf(player_type *caster_ptr, effect_monster
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
+switch_result effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -285,11 +285,11 @@ gf_switch_result effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_stun(effect_monster_type *em_ptr)
+switch_result effect_monster_stun(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -303,5 +303,5 @@ gf_switch_result effect_monster_stun(effect_monster_type *em_ptr)
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }

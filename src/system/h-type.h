@@ -246,4 +246,11 @@ typedef uint	(*func_hsh)(vptr, uint);
 
 /* A key extractor takes a thing and returns (a pointer to) some key */
 typedef vptr	(*func_key)(vptr);
+
+typedef enum switch_result {
+    SWITCH_FALSE = 0,
+    SWITCH_TRUE = 1,
+    SWITCH_CONTINUE = 2,
+} switch_result;
+
 #endif

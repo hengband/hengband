@@ -28,13 +28,13 @@ static bool effect_monster_away_resist(player_type *caster_ptr, effect_monster_t
 }
 
 
-gf_switch_result effect_monster_away_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_away_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	bool resists_tele = effect_monster_away_resist(caster_ptr, em_ptr);
@@ -48,17 +48,17 @@ gf_switch_result effect_monster_away_undead(player_type *caster_ptr, effect_mons
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_away_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_away_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_EVIL)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	bool resists_tele = effect_monster_away_resist(caster_ptr, em_ptr);
@@ -72,11 +72,11 @@ gf_switch_result effect_monster_away_evil(player_type *caster_ptr, effect_monste
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_away_all(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_away_all(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	bool resists_tele = effect_monster_away_resist(caster_ptr, em_ptr);
 	if (!resists_tele)
@@ -87,17 +87,17 @@ gf_switch_result effect_monster_away_all(player_type *caster_ptr, effect_monster
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_turn_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_turn_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -113,17 +113,17 @@ gf_switch_result effect_monster_turn_undead(player_type *caster_ptr, effect_mons
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_turn_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_turn_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_EVIL)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -139,11 +139,11 @@ gf_switch_result effect_monster_turn_evil(player_type *caster_ptr, effect_monste
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_turn_all(effect_monster_type *em_ptr)
+switch_result effect_monster_turn_all(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -158,17 +158,17 @@ gf_switch_result effect_monster_turn_all(effect_monster_type *em_ptr)
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_disp_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_disp_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -178,17 +178,17 @@ gf_switch_result effect_monster_disp_undead(player_type *caster_ptr, effect_mons
 
 	em_ptr->note = _("は身震いした。", " shudders.");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_disp_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_disp_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_EVIL)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -197,17 +197,17 @@ gf_switch_result effect_monster_disp_evil(player_type *caster_ptr, effect_monste
 
 	em_ptr->note = _("は身震いした。", " shudders.");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_disp_good(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_disp_good(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_GOOD)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -216,34 +216,34 @@ gf_switch_result effect_monster_disp_good(player_type *caster_ptr, effect_monste
 
 	em_ptr->note = _("は身震いした。", " shudders.");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_disp_living(effect_monster_type *em_ptr)
+switch_result effect_monster_disp_living(effect_monster_type *em_ptr)
 {
 	if (!monster_living(em_ptr->m_ptr->r_idx))
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
 	em_ptr->note = _("は身震いした。", " shudders.");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_disp_demon(player_type *caster_ptr, effect_monster_type *em_ptr)
+switch_result effect_monster_disp_demon(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_DEMON)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return SWITCH_CONTINUE;
 	}
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -252,15 +252,15 @@ gf_switch_result effect_monster_disp_demon(player_type *caster_ptr, effect_monst
 
 	em_ptr->note = _("は身震いした。", " shudders.");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_disp_all(effect_monster_type *em_ptr)
+switch_result effect_monster_disp_all(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
 	em_ptr->note = _("は身震いした。", " shudders.");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }

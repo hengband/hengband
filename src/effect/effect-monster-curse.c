@@ -3,7 +3,7 @@
 #include "monster-race/race-indice-types.h"
 #include "view/display-messages.h"
 
-gf_switch_result effect_monster_curse_1(effect_monster_type *em_ptr)
+switch_result effect_monster_curse_1(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (!em_ptr->who) msg_format(_("%sを指差して呪いをかけた。", "You point at %s and curse."), em_ptr->m_name);
@@ -13,11 +13,11 @@ gf_switch_result effect_monster_curse_1(effect_monster_type *em_ptr)
 		em_ptr->dam = 0;
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_curse_2(effect_monster_type *em_ptr)
+switch_result effect_monster_curse_2(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (!em_ptr->who) msg_format(_("%sを指差して恐ろしげに呪いをかけた。", "You point at %s and curse horribly."), em_ptr->m_name);
@@ -28,11 +28,11 @@ gf_switch_result effect_monster_curse_2(effect_monster_type *em_ptr)
 		em_ptr->dam = 0;
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_curse_3(effect_monster_type *em_ptr)
+switch_result effect_monster_curse_3(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (!em_ptr->who) msg_format(_("%sを指差し、恐ろしげに呪文を唱えた！", "You point at %s, incanting terribly!"), em_ptr->m_name);
@@ -43,11 +43,11 @@ gf_switch_result effect_monster_curse_3(effect_monster_type *em_ptr)
 		em_ptr->dam = 0;
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_curse_4(effect_monster_type *em_ptr)
+switch_result effect_monster_curse_4(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (!em_ptr->who)
@@ -60,5 +60,5 @@ gf_switch_result effect_monster_curse_4(effect_monster_type *em_ptr)
 		em_ptr->dam = 0;
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return SWITCH_CONTINUE;
 }
