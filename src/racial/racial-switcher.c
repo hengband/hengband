@@ -354,33 +354,9 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
     }
 }
 
-/*!
- * @brief レイシャル・パワー発動処理
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param command 発動するレイシャルのID
- * @return 処理を実際に実行した場合はTRUE、キャンセルした場合FALSEを返す。
- */
-bool exe_racial_power(player_type *creature_ptr, const s32b command)
+bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
 {
-    PLAYER_LEVEL plev = creature_ptr->lev;
     DIRECTION dir = 0;
-    if (command <= -3)
-        return switch_class_racial_execution(creature_ptr, command, &dir);
-
-    if (creature_ptr->mimic_form) {
-        switch (creature_ptr->mimic_form) {
-        case MIMIC_DEMON:
-        case MIMIC_DEMON_LORD: {
-            return demonic_breath(creature_ptr);
-        }
-        case MIMIC_VAMPIRE:
-            vampirism(creature_ptr);
-            break;
-        }
-
-        return TRUE;
-    }
-
     switch (creature_ptr->prace) {
     case RACE_DWARF:
         msg_print(_("周囲を調べた。", "You examine your surroundings."));
@@ -400,7 +376,7 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
         break;
     case RACE_HALF_TROLL:
         msg_print(_("うがぁぁ！", "RAAAGH!"));
-        (void)berserk(creature_ptr, 10 + randint1(plev));
+        (void)berserk(creature_ptr, 10 + randint1(creature_ptr->lev));
         break;
     case RACE_AMBERITE:
         if (command == -1) {
@@ -416,7 +392,7 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
         break;
     case RACE_BARBARIAN:
         msg_print(_("うぉぉおお！", "Raaagh!"));
-        (void)berserk(creature_ptr, 10 + randint1(plev));
+        (void)berserk(creature_ptr, 10 + randint1(creature_ptr->lev));
         break;
     case RACE_HALF_OGRE:
         msg_print(_("爆発のルーンを慎重に仕掛けた...", "You carefully set an explosive rune..."));
@@ -437,7 +413,7 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
             return FALSE;
 
         msg_print(_("巨大な岩を投げた。", "You throw a huge boulder."));
-        fire_bolt(creature_ptr, GF_MISSILE, dir, (3 * plev) / 2);
+        fire_bolt(creature_ptr, GF_MISSILE, dir, (3 * creature_ptr->lev) / 2);
         break;
     case RACE_YEEK:
         if (!get_aim_dir(creature_ptr, &dir))
@@ -445,7 +421,7 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
 
         stop_mouth(creature_ptr);
         msg_print(_("身の毛もよだつ叫び声を上げた！", "You make a horrible scream!"));
-        (void)fear_monster(creature_ptr, dir, plev);
+        (void)fear_monster(creature_ptr, dir, creature_ptr->lev);
         break;
     case RACE_KLACKON:
         if (!get_aim_dir(creature_ptr, &dir))
@@ -453,10 +429,10 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
 
         stop_mouth(creature_ptr);
         msg_print(_("酸を吐いた。", "You spit acid."));
-        if (plev < 25)
-            fire_bolt(creature_ptr, GF_ACID, dir, plev);
+        if (creature_ptr->lev < 25)
+            fire_bolt(creature_ptr, GF_ACID, dir, creature_ptr->lev);
         else
-            fire_ball(creature_ptr, GF_ACID, dir, plev, 2);
+            fire_ball(creature_ptr, GF_ACID, dir, creature_ptr->lev, 2);
 
         break;
     case RACE_KOBOLD:
@@ -464,7 +440,7 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
             return FALSE;
 
         msg_print(_("毒のダーツを投げた。", "You throw a dart of poison."));
-        fire_bolt(creature_ptr, GF_POIS, dir, plev);
+        fire_bolt(creature_ptr, GF_POIS, dir, creature_ptr->lev);
         break;
     case RACE_NIBELUNG:
         msg_print(_("周囲を調査した。", "You examine your surroundings."));
@@ -477,7 +453,7 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
             return FALSE;
 
         msg_print(_("マジック・ミサイルを放った。", "You cast a magic missile."));
-        fire_bolt_or_beam(creature_ptr, 10, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5), 4));
+        fire_bolt_or_beam(creature_ptr, 10, GF_MISSILE, dir, damroll(3 + ((creature_ptr->lev - 1) / 5), 4));
         break;
     case RACE_DRACONIAN:
         return draconian_breath(creature_ptr);
@@ -486,18 +462,18 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
             return FALSE;
 
         msg_print(_("あなたは集中し、目が赤く輝いた...", "You concentrate and your eyes glow red..."));
-        fire_bolt(creature_ptr, GF_PSI, dir, plev);
+        fire_bolt(creature_ptr, GF_PSI, dir, creature_ptr->lev);
         break;
     case RACE_IMP:
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
 
-        if (plev >= 30) {
+        if (creature_ptr->lev >= 30) {
             msg_print(_("ファイア・ボールを放った。", "You cast a ball of fire."));
-            fire_ball(creature_ptr, GF_FIRE, dir, plev, 2);
+            fire_ball(creature_ptr, GF_FIRE, dir, creature_ptr->lev, 2);
         } else {
             msg_print(_("ファイア・ボルトを放った。", "You cast a bolt of fire."));
-            fire_bolt(creature_ptr, GF_FIRE, dir, plev);
+            fire_bolt(creature_ptr, GF_FIRE, dir, creature_ptr->lev);
         }
 
         break;
@@ -518,14 +494,14 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
 
         stop_mouth(creature_ptr);
         msg_print(_("あなたはおどろおどろしい叫び声をあげた！", "You emit an eldritch howl!"));
-        (void)fear_monster(creature_ptr, dir, plev);
+        (void)fear_monster(creature_ptr, dir, creature_ptr->lev);
         break;
     case RACE_SPRITE:
         msg_print(_("あなたは魔法の粉を投げつけた...", "You throw some magic dust..."));
-        if (plev < 25)
+        if (creature_ptr->lev < 25)
             sleep_monsters_touch(creature_ptr);
         else
-            (void)sleep_monsters(creature_ptr, plev);
+            (void)sleep_monsters(creature_ptr, creature_ptr->lev);
 
         break;
     case RACE_BALROG:
@@ -542,4 +518,33 @@ bool exe_racial_power(player_type *creature_ptr, const s32b command)
     }
 
     return TRUE;
+}
+
+/*!
+ * @brief レイシャル・パワー発動処理
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param command 発動するレイシャルのID
+ * @return 処理を実際に実行した場合はTRUE、キャンセルした場合FALSEを返す。
+ */
+bool exe_racial_power(player_type *creature_ptr, const s32b command)
+{
+    DIRECTION dir = 0;
+    if (command <= -3)
+        return switch_class_racial_execution(creature_ptr, command, &dir);
+
+    if (creature_ptr->mimic_form) {
+        switch (creature_ptr->mimic_form) {
+        case MIMIC_DEMON:
+        case MIMIC_DEMON_LORD: {
+            return demonic_breath(creature_ptr);
+        }
+        case MIMIC_VAMPIRE:
+            vampirism(creature_ptr);
+            break;
+        }
+
+        return TRUE;
+    }
+
+    return switch_race_racial_execution(creature_ptr, command);
 }
