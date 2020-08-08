@@ -174,6 +174,24 @@ static bool calc_throw_grid(player_type *creature_ptr, it_type *it_ptr)
     return TRUE;
 }
 
+static void reflect_inventory_by_throw(player_type *creature_ptr, it_type *it_ptr)
+{
+    if ((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG) || it_ptr->boomerang)
+        it_ptr->return_when_thrown = TRUE;
+
+    if (it_ptr->item < 0) {
+        floor_item_increase(creature_ptr->current_floor_ptr, 0 - it_ptr->item, -1);
+        floor_item_optimize(creature_ptr, 0 - it_ptr->item);
+        return;
+    }
+
+    inven_item_increase(creature_ptr, it_ptr->item, -1);
+    if (!it_ptr->return_when_thrown)
+        inven_item_describe(creature_ptr, it_ptr->item);
+
+    inven_item_optimize(creature_ptr, it_ptr->item);
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -209,20 +227,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     if (!calc_throw_grid(creature_ptr, it_ptr))
         return FALSE;
 
-    if ((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG) || it_ptr->boomerang)
-        it_ptr->return_when_thrown = TRUE;
-
-    if (it_ptr->item < 0) {
-        floor_item_increase(creature_ptr->current_floor_ptr, 0 - it_ptr->item, -1);
-        floor_item_optimize(creature_ptr, 0 - it_ptr->item);    
-    } else {
-        inven_item_increase(creature_ptr, it_ptr->item, -1);
-        if (!it_ptr->return_when_thrown)
-            inven_item_describe(creature_ptr, it_ptr->item);
-
-        inven_item_optimize(creature_ptr, it_ptr->item);
-    }
-
+    reflect_inventory_by_throw(creature_ptr, it_ptr);
     if (it_ptr->item >= INVEN_RARM) {
         it_ptr->equiped_item = TRUE;
         creature_ptr->redraw |= PR_EQUIPPY;
