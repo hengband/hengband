@@ -216,6 +216,19 @@ static void set_racial_chance(player_type *creature_ptr, it_type *it_ptr)
         it_ptr->chance *= 2;
 }
 
+static bool check_racial_target_bold(player_type *creature_ptr, it_type *it_ptr)
+{
+    it_ptr->ny[it_ptr->cur_dis] = it_ptr->y;
+    it_ptr->nx[it_ptr->cur_dis] = it_ptr->x;
+    mmove2(&it_ptr->ny[it_ptr->cur_dis], &it_ptr->nx[it_ptr->cur_dis], creature_ptr->y, creature_ptr->x, it_ptr->ty, it_ptr->tx);
+    if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT))
+        return FALSE;
+
+    it_ptr->hit_wall = TRUE;
+    return (it_ptr->q_ptr->tval == TV_FIGURINE) || object_is_potion(it_ptr->q_ptr)
+        || (creature_ptr->current_floor_ptr->grid_array[it_ptr->ny[it_ptr->cur_dis]][it_ptr->nx[it_ptr->cur_dis]].m_idx == 0);
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -265,15 +278,8 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         if ((it_ptr->y == it_ptr->ty) && (it_ptr->x == it_ptr->tx))
             break;
 
-        it_ptr->ny[it_ptr->cur_dis] = it_ptr->y;
-        it_ptr->nx[it_ptr->cur_dis] = it_ptr->x;
-        mmove2(&it_ptr->ny[it_ptr->cur_dis], &it_ptr->nx[it_ptr->cur_dis], creature_ptr->y, creature_ptr->x, it_ptr->ty, it_ptr->tx);
-        if (!cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT)) {
-            it_ptr->hit_wall = TRUE;
-            if ((it_ptr->q_ptr->tval == TV_FIGURINE) || object_is_potion(it_ptr->q_ptr)
-                || !creature_ptr->current_floor_ptr->grid_array[it_ptr->ny[it_ptr->cur_dis]][it_ptr->nx[it_ptr->cur_dis]].m_idx)
-                break;
-        }
+        if (check_racial_target_bold(creature_ptr, it_ptr))
+            break;
 
         if (panel_contains(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis])
             && player_can_see_bold(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis])) {
