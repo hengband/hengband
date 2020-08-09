@@ -354,6 +354,21 @@ static exe_throw(player_type *creature_ptr, it_type *it_ptr)
     }
 }
 
+void display_figurine_throw(player_type *creature_ptr, it_type *it_ptr)
+{
+    if ((it_ptr->q_ptr->tval != TV_FIGURINE) || creature_ptr->current_floor_ptr->inside_arena)
+        return;
+
+    it_ptr->corruption_possibility = 100;
+    if (!(summon_named_creature(creature_ptr, 0, it_ptr->y, it_ptr->x, it_ptr->q_ptr->pval, !(object_is_cursed(it_ptr->q_ptr)) ? PM_FORCE_PET : 0L))) {
+        msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
+        return;
+    }
+    
+    if (object_is_cursed(it_ptr->q_ptr))
+        msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -404,15 +419,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         torch_lost_fuel(it_ptr->q_ptr);
 
     it_ptr->corruption_possibility = (it_ptr->hit_body ? breakage_chance(creature_ptr, it_ptr->q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
-
-    if ((it_ptr->q_ptr->tval == TV_FIGURINE) && !(creature_ptr->current_floor_ptr->inside_arena)) {
-        it_ptr->corruption_possibility = 100;
-        if (!(summon_named_creature(creature_ptr, 0, it_ptr->y, it_ptr->x, it_ptr->q_ptr->pval, !(object_is_cursed(it_ptr->q_ptr)) ? PM_FORCE_PET : 0L)))
-            msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
-        else if (object_is_cursed(it_ptr->q_ptr))
-            msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
-    }
-
+    display_figurine_throw(creature_ptr, it_ptr);
     if (object_is_potion(it_ptr->q_ptr)) {
         if (!it_ptr->hit_body && !it_ptr->hit_wall && (randint1(100) >= it_ptr->corruption_possibility)) {
             msg_format(_("%sは砕け散った！", "The %s shatters!"), it_ptr->o_name);
