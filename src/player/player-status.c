@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_nexus = FALSE;
     creature_ptr->resist_blind = FALSE;
     creature_ptr->resist_neth = FALSE;
     creature_ptr->resist_time = FALSE;
@@ -732,6 +731,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_chaos(creature_ptr);
     have_resist_disen(creature_ptr);
     have_resist_shard(creature_ptr);
+    have_resist_nexus(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4439,7 +4439,6 @@ void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->lite = TRUE;
-        creature_ptr->resist_nexus = TRUE;
         creature_ptr->resist_blind = TRUE;
         creature_ptr->resist_neth = TRUE;
         creature_ptr->resist_fear = TRUE;
@@ -4506,8 +4505,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_RES_FEAR))
             creature_ptr->resist_fear = TRUE;
-        if (have_flag(flgs, TR_RES_NEXUS))
-            creature_ptr->resist_nexus = TRUE;
         if (have_flag(flgs, TR_RES_BLIND))
             creature_ptr->resist_blind = TRUE;
         if (have_flag(flgs, TR_RES_NETHER))

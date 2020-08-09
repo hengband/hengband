@@ -137,7 +137,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case MIMIC_DEMON_LORD:
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_nexus = TRUE;
             creature_ptr->resist_fear = TRUE;
             break;
         case MIMIC_VAMPIRE:

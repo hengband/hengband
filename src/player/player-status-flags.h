@@ -61,5 +61,6 @@ void have_resist_dark(player_type *creature_ptr);
 void have_resist_chaos(player_type *creature_ptr);
 void have_resist_disen(player_type *creature_ptr);
 void have_resist_shard(player_type *creature_ptr);
+void have_resist_nexus(player_type *creature_ptr);
 
 
