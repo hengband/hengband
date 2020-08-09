@@ -17,6 +17,7 @@
 #include "grid/grid.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
+#include "monster-floor/monster-lite-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
@@ -39,19 +40,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-typedef struct monster_lite_type {
-    bool mon_invis;
-    POSITION mon_fy, mon_fx;
-} monster_lite_type;
-
-monster_lite_type *initialize_monster_lite_type(floor_type *floor_ptr, monster_lite_type *ml_ptr, monster_type *m_ptr)
-{
-    ml_ptr->mon_fx = m_ptr->fx;
-    ml_ptr->mon_fy = m_ptr->fy;
-    ml_ptr->mon_invis = !(floor_ptr->grid_array[ml_ptr->mon_fy][ml_ptr->mon_fx].info & CAVE_VIEW);
-    return ml_ptr;
-}
 
 void day_break(player_type *subject_ptr)
 {

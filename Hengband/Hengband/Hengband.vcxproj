@@ -280,6 +280,7 @@
     <ClCompile Include="..\..\src\mind\mind-monk.c" />
     <ClCompile Include="..\..\src\mind\mind-power-getter.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
+    <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c" />
     <ClCompile Include="..\..\src\mspell\element-resistance-checker.c" />
     <ClCompile Include="..\..\src\mspell\high-resistance-checker.c" />
     <ClCompile Include="..\..\src\mspell\improper-mspell-remover.c" />
@@ -876,6 +877,7 @@
     <ClInclude Include="..\..\src\mind\mind-power-getter.h" />
     <ClInclude Include="..\..\src\mind\mind-types.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
+    <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h" />
     <ClInclude Include="..\..\src\mspell\element-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\high-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\improper-mspell-remover.h" />
