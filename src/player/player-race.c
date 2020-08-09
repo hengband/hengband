@@ -176,9 +176,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_HALF_TITAN:
             creature_ptr->resist_chaos = TRUE;
             break;
-        case RACE_CYCLOPS:
-            creature_ptr->resist_sound = TRUE;
-            break;
         case RACE_YEEK:
             if (creature_ptr->lev > 19)
                 creature_ptr->immune_acid = TRUE;
@@ -213,9 +210,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_SPRITE:
             creature_ptr->resist_lite = TRUE;
-            break;
-        case RACE_BEASTMAN:
-            creature_ptr->resist_sound = TRUE;
             break;
         case RACE_BALROG:
             creature_ptr->resist_neth = TRUE;

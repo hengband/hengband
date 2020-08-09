@@ -1607,3 +1607,33 @@ void have_resist_conf(player_type *creature_ptr)
 				creature_ptr->resist_conf = TRUE;
     }
 }
+
+void have_resist_sound(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->resist_sound = FALSE;
+
+	if (creature_ptr->pclass == CLASS_BARD) {
+        creature_ptr->resist_sound = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && (creature_ptr->prace == RACE_CYCLOPS || creature_ptr->prace == RACE_BEASTMAN)) {
+        creature_ptr->resist_conf = TRUE;
+    }
+
+	if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->lite = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+		if (have_flag(flgs, TR_RES_SOUND))
+				creature_ptr->resist_sound = TRUE;
+    }
+}

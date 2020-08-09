@@ -1219,9 +1219,6 @@ void calc_class_status(player_type *creature_ptr)
         if (creature_ptr->lev > 9)
             creature_ptr->resist_fear = TRUE;
         break;
-    case CLASS_BARD:
-        creature_ptr->resist_sound = TRUE;
-        break;
     case CLASS_SAMURAI:
         if (creature_ptr->lev > 29)
             creature_ptr->resist_fear = TRUE;
