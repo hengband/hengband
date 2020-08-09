@@ -1727,3 +1727,32 @@ void have_resist_chaos(player_type *creature_ptr)
 				creature_ptr->resist_chaos = TRUE;
     }
 }
+
+void have_resist_disen(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->resist_disen = FALSE;
+
+    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
+        creature_ptr->resist_disen = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_NIBELUNG)
+        creature_ptr->resist_disen = TRUE;
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->resist_disen = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+		if (have_flag(flgs, TR_RES_DISEN))
+			creature_ptr->resist_disen = TRUE;
+    }
+}

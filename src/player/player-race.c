@@ -137,7 +137,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case MIMIC_DEMON_LORD:
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_disen = TRUE;
             creature_ptr->resist_nexus = TRUE;
             creature_ptr->resist_fear = TRUE;
             break;
@@ -165,9 +164,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_KOBOLD:
             creature_ptr->resist_pois = TRUE;
-            break;
-        case RACE_NIBELUNG:
-            creature_ptr->resist_disen = TRUE;
             break;
         case RACE_SKELETON:
             creature_ptr->resist_shard = TRUE;

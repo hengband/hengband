@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_disen = FALSE;
     creature_ptr->resist_shard = FALSE;
     creature_ptr->resist_nexus = FALSE;
     creature_ptr->resist_blind = FALSE;
@@ -731,6 +730,8 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_sound(creature_ptr);
     have_resist_lite(creature_ptr);
     have_resist_dark(creature_ptr);
+    have_resist_chaos(creature_ptr);
+    have_resist_disen(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4507,8 +4508,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_RES_FEAR))
             creature_ptr->resist_fear = TRUE;
-        if (have_flag(flgs, TR_RES_DISEN))
-            creature_ptr->resist_disen = TRUE;
         if (have_flag(flgs, TR_RES_SHARDS))
             creature_ptr->resist_shard = TRUE;
         if (have_flag(flgs, TR_RES_NEXUS))
