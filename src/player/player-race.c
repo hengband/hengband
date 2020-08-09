@@ -155,18 +155,12 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_BARBARIAN:
             creature_ptr->resist_fear = TRUE;
             break;
-        case RACE_HALF_GIANT:
-            creature_ptr->resist_shard = TRUE;
-            break;
         case RACE_YEEK:
             if (creature_ptr->lev > 19)
                 creature_ptr->immune_acid = TRUE;
             break;
         case RACE_KOBOLD:
             creature_ptr->resist_pois = TRUE;
-            break;
-        case RACE_SKELETON:
-            creature_ptr->resist_shard = TRUE;
             break;
         case RACE_ZOMBIE:
             creature_ptr->resist_neth = TRUE;
