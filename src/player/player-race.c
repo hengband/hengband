@@ -131,16 +131,13 @@ void calc_race_status(player_type *creature_ptr)
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
         case MIMIC_DEMON:
-            creature_ptr->resist_neth = TRUE;
             creature_ptr->oppose_fire = 1;
             creature_ptr->redraw |= PR_STATUS;
             break;
         case MIMIC_DEMON_LORD:
-            creature_ptr->resist_neth = TRUE;
             creature_ptr->resist_fear = TRUE;
             break;
         case MIMIC_VAMPIRE:
-            creature_ptr->resist_neth = TRUE;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
             break;
@@ -155,21 +152,17 @@ void calc_race_status(player_type *creature_ptr)
                 creature_ptr->immune_acid = TRUE;
             break;
         case RACE_ZOMBIE:
-            creature_ptr->resist_neth = TRUE;
             creature_ptr->slow_digest = TRUE;
             break;
         case RACE_VAMPIRE:
-            creature_ptr->resist_neth = TRUE;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
             break;
         case RACE_SPECTRE:
-            creature_ptr->resist_neth = TRUE;
             creature_ptr->pass_wall = TRUE;
             break;
 
         case RACE_BALROG:
-            creature_ptr->resist_neth = TRUE;
             if (creature_ptr->lev > 44) {
                 creature_ptr->oppose_fire = 1;
                 creature_ptr->redraw |= PR_STATUS;

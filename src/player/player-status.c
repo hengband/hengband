@@ -731,6 +731,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_shard(creature_ptr);
     have_resist_nexus(creature_ptr);
     have_resist_blind(creature_ptr);
+    have_resist_neth(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4438,12 +4439,7 @@ void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->lite = TRUE;
-        creature_ptr->resist_neth = TRUE;
         creature_ptr->resist_fear = TRUE;
-    }
-
-    if (creature_ptr->tim_res_nether) {
-        creature_ptr->resist_neth = TRUE;
     }
 
     if (creature_ptr->tim_res_time) {
@@ -4499,8 +4495,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_RES_FEAR))
             creature_ptr->resist_fear = TRUE;
-        if (have_flag(flgs, TR_RES_NETHER))
-            creature_ptr->resist_neth = TRUE;
 
         if (o_ptr->name2 == EGO_RING_RES_TIME)
             creature_ptr->resist_time = TRUE;
