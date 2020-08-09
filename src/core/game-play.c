@@ -55,6 +55,7 @@
 #include "market/bounty.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
+#include "monster-floor/monster-lite.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"

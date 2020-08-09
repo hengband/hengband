@@ -32,6 +32,7 @@
 #include "market/arena-info-table.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-ninja.h"
+#include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
