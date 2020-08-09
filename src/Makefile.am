@@ -461,6 +461,7 @@ hengband_SOURCES = \
 	monster-floor/monster-safety-hiding.c monster-floor/monster-safety-hiding.h \
 	monster-floor/monster-summon.c monster-floor/monster-summon.h \
 	monster-floor/monster-sweep-grid.c monster-floor/monster-sweep-grid.h \
+	monster-floor/monster-lite.c monster-floor/monster-lite.h \
 	monster-floor/monster-lite-util.c monster-floor/monster-lite-util.h \
 	monster-floor/one-monster-placer.c monster-floor/one-monster-placer.h \
 	monster-floor/place-monster-types.h \

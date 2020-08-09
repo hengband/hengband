@@ -7,6 +7,7 @@
 #include "io/files-util.h"
 #include "io/uid-checker.h"
 #include "load/floor-loader.h"
+#include "monster-floor/monster-lite.h"
 #include "monster/monster-compaction.h"
 #include "save/item-writer.h"
 #include "save/monster-writer.h"

@@ -113,6 +113,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "monster-floor/monster-lite.h"
 #include "system/angband-version.h"
 #include "system/angband.h"
 #include "system/floor-type-definition.h"

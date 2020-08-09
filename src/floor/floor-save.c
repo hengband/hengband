@@ -37,6 +37,7 @@
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-race/monster-race.h"

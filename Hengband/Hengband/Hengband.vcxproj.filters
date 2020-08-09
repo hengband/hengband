@@ -2009,6 +2009,9 @@
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c">
       <Filter>monster-floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-lite.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4367,6 +4370,9 @@
       <Filter>action</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-lite.h">
       <Filter>monster-floor</Filter>
     </ClInclude>
   </ItemGroup>
