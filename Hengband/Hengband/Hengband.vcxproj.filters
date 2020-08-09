@@ -2006,6 +2006,9 @@
     <ClCompile Include="..\..\src\action\throw-util.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4362,6 +4365,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\action\throw-util.h">
       <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h">
+      <Filter>monster-floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
