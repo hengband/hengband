@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_conf = FALSE;
     creature_ptr->resist_sound = FALSE;
     creature_ptr->resist_lite = FALSE;
     creature_ptr->resist_dark = FALSE;
@@ -732,6 +731,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_fire(creature_ptr);
     have_resist_cold(creature_ptr);
     have_resist_pois(creature_ptr);
+    have_resist_conf(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4439,7 +4439,6 @@ void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->lite = TRUE;
-        creature_ptr->resist_conf = TRUE;
         creature_ptr->resist_sound = TRUE;
         creature_ptr->resist_lite = TRUE;
         creature_ptr->resist_dark = TRUE;
@@ -4462,7 +4461,6 @@ void calc_timelimit_status(player_type *creature_ptr)
 
     if (creature_ptr->magicdef) {
         creature_ptr->resist_blind = TRUE;
-        creature_ptr->resist_conf = TRUE;
     }
 
     if (creature_ptr->ele_immune) {
@@ -4514,8 +4512,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_RES_FEAR))
             creature_ptr->resist_fear = TRUE;
-        if (have_flag(flgs, TR_RES_CONF))
-            creature_ptr->resist_conf = TRUE;
         if (have_flag(flgs, TR_RES_SOUND))
             creature_ptr->resist_sound = TRUE;
         if (have_flag(flgs, TR_RES_LITE))

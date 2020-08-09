@@ -139,7 +139,6 @@ void calc_race_status(player_type *creature_ptr)
         case MIMIC_DEMON_LORD:
             creature_ptr->resist_chaos = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_conf = TRUE;
             creature_ptr->resist_disen = TRUE;
             creature_ptr->resist_nexus = TRUE;
             creature_ptr->resist_fear = TRUE;
@@ -184,9 +183,6 @@ void calc_race_status(player_type *creature_ptr)
             if (creature_ptr->lev > 19)
                 creature_ptr->immune_acid = TRUE;
             break;
-        case RACE_KLACKON:
-            creature_ptr->resist_conf = TRUE;
-            break;
         case RACE_KOBOLD:
             creature_ptr->resist_pois = TRUE;
             break;
@@ -219,7 +215,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_lite = TRUE;
             break;
         case RACE_BEASTMAN:
-            creature_ptr->resist_conf = TRUE;
             creature_ptr->resist_sound = TRUE;
             break;
         case RACE_BALROG:
@@ -228,10 +223,6 @@ void calc_race_status(player_type *creature_ptr)
                 creature_ptr->oppose_fire = 1;
                 creature_ptr->redraw |= PR_STATUS;
             }
-
-            break;
-        case RACE_KUTAR:
-            creature_ptr->resist_conf = TRUE;
             break;
         case RACE_MERFOLK:
             creature_ptr->resist_water = TRUE;
