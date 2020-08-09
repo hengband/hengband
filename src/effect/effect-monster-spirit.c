@@ -1,6 +1,7 @@
 ﻿#include "effect/effect-monster-spirit.h"
 #include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
+#include "effect/effect-monster-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -14,7 +15,7 @@
 #include "mspell/mspell-mask-definitions.h"
 #include "view/display-messages.h"
 
-gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	bool has_mana = ((em_ptr->r_ptr->flags4 & ~(RF4_NOMAGIC_MASK))) != 0;
@@ -26,7 +27,7 @@ gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monst
 			msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
 
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	if (em_ptr->who <= 0)
@@ -34,13 +35,13 @@ gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monst
 		msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), em_ptr->m_name);
 		(void)hp_player(caster_ptr, em_ptr->dam);
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	if (em_ptr->m_caster_ptr->hp >= em_ptr->m_caster_ptr->maxhp)
 	{
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	em_ptr->m_caster_ptr->hp += em_ptr->dam;
@@ -60,11 +61,11 @@ gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monst
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_mind_blast(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_mind_blast(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (!em_ptr->who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
@@ -102,11 +103,11 @@ gf_switch_result effect_monster_mind_blast(player_type *caster_ptr, effect_monst
 		else em_ptr->do_conf = randint0(8) + 8;
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_brain_smash(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_brain_smash(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (!em_ptr->who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), em_ptr->m_name);
@@ -158,5 +159,5 @@ gf_switch_result effect_monster_brain_smash(player_type *caster_ptr, effect_mons
 		(void)set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 10);
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }

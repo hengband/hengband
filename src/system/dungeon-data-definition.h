@@ -64,4 +64,13 @@ typedef struct dun_data_type {
     bool empty_level;
     bool cavern;
     int laketype;
+    int tunnel_fail_count;
+
+    POSITION tunnel_y;
+    POSITION tunnel_x;
+
+    int alloc_object_num;
+    int alloc_monster_num;
+
+    concptr *why;
 } dun_data_type;

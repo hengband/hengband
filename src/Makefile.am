@@ -10,7 +10,9 @@ hengband_SOURCES = \
 	action/mutation-execution.c action/mutation-execution.h \
 	action/open-util.c action/open-util.h \
 	action/open-close-execution.c action/open-close-execution.h \
+	action/racial-execution.c action/racial-execution.h \
 	action/run-execution.c action/run-execution.h \
+	action/throw-util.c action/throw-util.h \
 	action/travel-execution.c action/travel-execution.h \
 	action/tunnel-execution.c action/tunnel-execution.h \
 	action/weapon-shield.c action/weapon-shield.h \
@@ -95,6 +97,7 @@ hengband_SOURCES = \
 	cmd-action/cmd-open-close.c cmd-action/cmd-open-close.h \
 	cmd-action/cmd-others.c cmd-action/cmd-others.h \
 	cmd-action/cmd-pet.c cmd-action/cmd-pet.h \
+	cmd-action/cmd-racial.c cmd-action/cmd-racial.h \
 	cmd-action/cmd-shoot.c cmd-action/cmd-shoot.h \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
 	cmd-action/cmd-throw.c cmd-action/cmd-throw.h \
@@ -407,6 +410,7 @@ hengband_SOURCES = \
 	mind/mind-magic-resistance.c mind/mind-magic-resistance.h \
 	mind/mind-mindcrafter.c mind/mind-mindcrafter.h \
 	mind/mind-mirror-master.c mind/mind-mirror-master.h \
+	mind/mind-monk.c mind/mind-monk.h \
 	mind/mind-ninja.c mind/mind-ninja.h \
 	mind/mind-numbers.h \
 	mind/mind-power-getter.c mind/mind-power-getter.h \
@@ -596,11 +600,15 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.c player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.c player-attack/player-attack.h \
 	\
+	racial/class-racial-switcher.c racial/class-racial-switcher.h \
+	racial/mutation-racial-selector.c racial/mutation-racial-selector.h \
+	racial/race-racial-command-setter.c racial/race-racial-command-setter.h \
 	racial/racial-android.c racial/racial-android.h \
 	racial/racial-balrog.c racial/racial-balrog.h \
 	racial/racial-draconian.c racial/racial-draconian.h \
 	racial/racial-kutar.c racial/racial-kutar.h \
 	racial/racial-switcher.c racial/racial-switcher.h \
+	racial/racial-util.c racial/racial-util.h \
 	racial/racial-vampire.c racial/racial-vampire.h \
 	\
 	realm/realm-arcane.c realm/realm-arcane.h \

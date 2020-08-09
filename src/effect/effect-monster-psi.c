@@ -1,6 +1,7 @@
 ﻿#include "effect/effect-monster-psi.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
+#include "effect/effect-monster-util.h"
 #include "floor/floor.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/monster-race.h"
@@ -135,7 +136,7 @@ static void effect_monster_psi_addition(effect_monster_type *em_ptr)
 }
 
 
-gf_switch_result effect_monster_psi(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_psi(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (!(los(caster_ptr, em_ptr->m_ptr->fy, em_ptr->m_ptr->fx, caster_ptr->y, caster_ptr->x)))
@@ -144,13 +145,13 @@ gf_switch_result effect_monster_psi(player_type *caster_ptr, effect_monster_type
 			msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), em_ptr->m_name);
 
 		em_ptr->skipped = TRUE;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	effect_monster_psi_resist(caster_ptr, em_ptr);
 	effect_monster_psi_addition(em_ptr);
 	em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
@@ -217,7 +218,7 @@ static void effect_monster_psi_drain_change_power(player_type *caster_ptr, effec
 }
 
 
-gf_switch_result effect_monster_psi_drain(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_psi_drain(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -238,11 +239,11 @@ gf_switch_result effect_monster_psi_drain(player_type *caster_ptr, effect_monste
 	}
 
 	em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_telekinesis(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_telekinesis(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (one_in_(4))
@@ -259,5 +260,5 @@ gf_switch_result effect_monster_telekinesis(player_type *caster_ptr, effect_mons
 		em_ptr->obvious = FALSE;
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }

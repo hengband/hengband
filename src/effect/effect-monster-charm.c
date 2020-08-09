@@ -1,5 +1,6 @@
 ﻿#include "effect/effect-monster-charm.h"
 #include "dungeon/quest.h"
+#include "effect/effect-monster-util.h"
 #include "effect/spells-effect-util.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
@@ -42,7 +43,7 @@ static void effect_monster_charm_resist(player_type *caster_ptr, effect_monster_
     }
 }
 
-gf_switch_result effect_monster_charm(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_charm(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     int vir = virtue_number(caster_ptr, V_HARMONY);
     if (vir) {
@@ -59,10 +60,10 @@ gf_switch_result effect_monster_charm(player_type *caster_ptr, effect_monster_ty
 
     effect_monster_charm_resist(caster_ptr, em_ptr);
     em_ptr->dam = 0;
-    return GF_SWITCH_CONTINUE;
+    return PROCESS_CONTINUE;
 }
 
-gf_switch_result effect_monster_control_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_control_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
@@ -92,10 +93,10 @@ gf_switch_result effect_monster_control_undead(player_type *caster_ptr, effect_m
     }
 
     em_ptr->dam = 0;
-    return GF_SWITCH_CONTINUE;
+    return PROCESS_CONTINUE;
 }
 
-gf_switch_result effect_monster_control_demon(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_control_demon(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
@@ -125,10 +126,10 @@ gf_switch_result effect_monster_control_demon(player_type *caster_ptr, effect_mo
     }
 
     em_ptr->dam = 0;
-    return GF_SWITCH_CONTINUE;
+    return PROCESS_CONTINUE;
 }
 
-gf_switch_result effect_monster_control_animal(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_control_animal(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
@@ -160,10 +161,10 @@ gf_switch_result effect_monster_control_animal(player_type *caster_ptr, effect_m
     }
 
     em_ptr->dam = 0;
-    return GF_SWITCH_CONTINUE;
+    return PROCESS_CONTINUE;
 }
 
-gf_switch_result effect_monster_charm_living(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_charm_living(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     int vir = virtue_number(caster_ptr, V_UNLIFE);
     if (em_ptr->seen)
@@ -198,7 +199,7 @@ gf_switch_result effect_monster_charm_living(player_type *caster_ptr, effect_mon
     }
 
     em_ptr->dam = 0;
-    return GF_SWITCH_CONTINUE;
+    return PROCESS_CONTINUE;
 }
 
 static void effect_monster_domination_corrupted_addition(player_type *caster_ptr, effect_monster_type *em_ptr)
@@ -255,10 +256,10 @@ static void effect_monster_domination_addition(effect_monster_type *em_ptr)
     }
 }
 
-gf_switch_result effect_monster_domination(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_domination(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (!is_hostile(em_ptr->m_ptr))
-        return GF_SWITCH_CONTINUE;
+        return PROCESS_CONTINUE;
 
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
@@ -271,19 +272,19 @@ gf_switch_result effect_monster_domination(player_type *caster_ptr, effect_monst
         em_ptr->do_conf = 0;
         effect_monster_domination_corrupted(caster_ptr, em_ptr);
         em_ptr->dam = 0;
-        return GF_SWITCH_CONTINUE;
+        return PROCESS_CONTINUE;
     }
 
     if (!common_saving_throw_charm(caster_ptr, em_ptr->dam, em_ptr->m_ptr)) {
         em_ptr->note = _("があなたに隷属した。", " is in your thrall!");
         set_pet(caster_ptr, em_ptr->m_ptr);
         em_ptr->dam = 0;
-        return GF_SWITCH_CONTINUE;
+        return PROCESS_CONTINUE;
     }
 
     effect_monster_domination_addition(em_ptr);
     em_ptr->dam = 0;
-    return GF_SWITCH_CONTINUE;
+    return PROCESS_CONTINUE;
 }
 
 static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_monster_type *em_ptr)
@@ -319,14 +320,14 @@ static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_mo
     return TRUE;
 }
 
-gf_switch_result effect_monster_crusade(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_crusade(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
     bool success = effect_monster_crusade_domination(caster_ptr, em_ptr);
     if (success) {
         em_ptr->dam = 0;
-        return GF_SWITCH_CONTINUE;
+        return PROCESS_CONTINUE;
     }
 
     if ((em_ptr->r_ptr->flags3 & RF3_NO_FEAR) == 0)
@@ -335,7 +336,7 @@ gf_switch_result effect_monster_crusade(player_type *caster_ptr, effect_monster_
         em_ptr->r_ptr->r_flags3 |= RF3_NO_FEAR;
 
     em_ptr->dam = 0;
-    return GF_SWITCH_CONTINUE;
+    return PROCESS_CONTINUE;
 }
 
 static bool effect_monster_capture_attemption(player_type *caster_ptr, effect_monster_type *em_ptr, int capturable_hp)
@@ -359,7 +360,7 @@ static bool effect_monster_capture_attemption(player_type *caster_ptr, effect_mo
     return TRUE;
 }
 
-gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_capture(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     int capturable_hp;
@@ -368,7 +369,7 @@ gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_
         || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || em_ptr->m_ptr->parent_m_idx) {
         msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
         em_ptr->skipped = TRUE;
-        return GF_SWITCH_CONTINUE;
+        return PROCESS_CONTINUE;
     }
 
     if (is_pet(em_ptr->m_ptr))
@@ -381,13 +382,13 @@ gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_
     if (em_ptr->m_ptr->hp >= capturable_hp) {
         msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
         em_ptr->skipped = TRUE;
-        return GF_SWITCH_CONTINUE;
+        return PROCESS_CONTINUE;
     }
 
     if (effect_monster_capture_attemption(caster_ptr, em_ptr, capturable_hp))
-        return GF_SWITCH_TRUE;
+        return PROCESS_TRUE;
 
     msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
     em_ptr->skipped = TRUE;
-    return GF_SWITCH_CONTINUE;
+    return PROCESS_CONTINUE;
 }

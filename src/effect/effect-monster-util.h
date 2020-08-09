@@ -42,11 +42,4 @@ typedef struct effect_monster_type {
 	bool see_s_msg;
 } effect_monster_type;
 
-typedef enum gf_switch_result
-{
-	GF_SWITCH_FALSE = 0,
-	GF_SWITCH_TRUE = 1,
-	GF_SWITCH_CONTINUE = 2,
-} gf_switch_result;
-
 effect_monster_type *initialize_effect_monster(player_type *caster_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg);

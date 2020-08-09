@@ -1982,6 +1982,30 @@
     <ClCompile Include="..\..\src\grid\feature-generator.c">
       <Filter>grid</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-monk.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-action\cmd-racial.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\racial-util.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\class-racial-switcher.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\mutation-racial-selector.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\racial-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial\race-racial-command-setter.c">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\action\throw-util.c">
+      <Filter>action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4314,6 +4338,30 @@
     </ClInclude>
     <ClInclude Include="..\..\src\grid\feature-generator.h">
       <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-monk.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-action\cmd-racial.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\racial-util.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\class-racial-switcher.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\mutation-racial-selector.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\racial-execution.h">
+      <Filter>action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial\race-racial-command-setter.h">
+      <Filter>racial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\throw-util.h">
+      <Filter>action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

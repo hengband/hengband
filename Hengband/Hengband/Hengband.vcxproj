@@ -195,6 +195,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-move.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-open-close.c" />
+    <ClCompile Include="..\..\src\cmd-action\cmd-racial.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-shoot.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-travel.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.c" />
@@ -276,6 +277,7 @@
     <ClCompile Include="..\..\src\mind\mind-info.c" />
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-magic-resistance.c" />
+    <ClCompile Include="..\..\src\mind\mind-monk.c" />
     <ClCompile Include="..\..\src\mind\mind-power-getter.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
     <ClCompile Include="..\..\src\mspell\element-resistance-checker.c" />
@@ -293,6 +295,9 @@
     <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c" />
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
+    <ClCompile Include="..\..\src\racial\class-racial-switcher.c" />
+    <ClCompile Include="..\..\src\racial\mutation-racial-selector.c" />
+    <ClCompile Include="..\..\src\action\racial-execution.c" />
     <ClCompile Include="..\..\src\racial\racial-kutar.c" />
     <ClCompile Include="..\..\src\mind\stances-table.c" />
     <ClCompile Include="..\..\src\mspell\mspell-dispel.c" />
@@ -328,6 +333,8 @@
     <ClCompile Include="..\..\src\load\player-info-loader.c" />
     <ClCompile Include="..\..\src\load\store-loader.c" />
     <ClCompile Include="..\..\src\load\world-loader.c" />
+    <ClCompile Include="..\..\src\racial\racial-util.c" />
+    <ClCompile Include="..\..\src\racial\race-racial-command-setter.c" />
     <ClCompile Include="..\..\src\room\cave-filler.c" />
     <ClCompile Include="..\..\src\room\door-definition.c" />
     <ClCompile Include="..\..\src\room\room-generator.c" />
@@ -718,11 +725,13 @@
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c" />
     <ClCompile Include="..\..\src\load\quest-loader.c" />
     <ClCompile Include="..\..\src\view\display-store.c" />
+    <ClCompile Include="..\..\src\action\throw-util.c" />
     <ClInclude Include="..\..\src\action\action-limited.h" />
     <ClInclude Include="..\..\src\action\mutation-execution.h" />
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
+    <ClInclude Include="..\..\src\action\throw-util.h" />
     <ClInclude Include="..\..\src\action\travel-execution.h" />
     <ClInclude Include="..\..\src\action\tunnel-execution.h" />
     <ClInclude Include="..\..\src\action\weapon-shield.h" />
@@ -768,6 +777,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-move.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-open-close.h" />
+    <ClInclude Include="..\..\src\cmd-action\cmd-racial.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-shoot.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-travel.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h" />
@@ -861,6 +871,7 @@
     <ClInclude Include="..\..\src\mind\mind-info.h" />
     <ClInclude Include="..\..\src\mind\mind-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-magic-resistance.h" />
+    <ClInclude Include="..\..\src\mind\mind-monk.h" />
     <ClInclude Include="..\..\src\mind\mind-numbers.h" />
     <ClInclude Include="..\..\src\mind\mind-power-getter.h" />
     <ClInclude Include="..\..\src\mind\mind-types.h" />
@@ -880,6 +891,10 @@
     <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h" />
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
+    <ClInclude Include="..\..\src\racial\class-racial-switcher.h" />
+    <ClInclude Include="..\..\src\racial\mutation-racial-selector.h" />
+    <ClInclude Include="..\..\src\racial\race-racial-command-setter.h" />
+    <ClInclude Include="..\..\src\action\racial-execution.h" />
     <ClInclude Include="..\..\src\racial\racial-kutar.h" />
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />
@@ -925,6 +940,7 @@
     <ClInclude Include="..\..\src\load\savedata-flag-types.h" />
     <ClInclude Include="..\..\src\load\store-loader.h" />
     <ClInclude Include="..\..\src\load\world-loader.h" />
+    <ClInclude Include="..\..\src\racial\racial-util.h" />
     <ClInclude Include="..\..\src\room\cave-filler.h" />
     <ClInclude Include="..\..\src\room\door-definition.h" />
     <ClInclude Include="..\..\src\room\lake-types.h" />

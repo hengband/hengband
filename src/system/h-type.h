@@ -246,4 +246,11 @@ typedef uint	(*func_hsh)(vptr, uint);
 
 /* A key extractor takes a thing and returns (a pointer to) some key */
 typedef vptr	(*func_key)(vptr);
+
+typedef enum process_result {
+    PROCESS_FALSE = 0,
+    PROCESS_TRUE = 1,
+    PROCESS_CONTINUE = 2,
+} process_result;
+
 #endif

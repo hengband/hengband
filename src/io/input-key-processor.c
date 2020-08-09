@@ -14,6 +14,7 @@
 #include "cmd-action/cmd-open-close.h"
 #include "cmd-action/cmd-others.h"
 #include "cmd-action/cmd-pet.h"
+#include "cmd-action/cmd-racial.h"
 #include "cmd-action/cmd-shoot.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-action/cmd-travel.h"
@@ -73,7 +74,6 @@
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/special-defense-types.h"
-#include "racial/racial-switcher.h" // do_cmd_racial_power() がある。ファイル名変更？.
 #include "spell/spells-object.h"
 #include "status/action-setter.h"
 #include "store/home.h"

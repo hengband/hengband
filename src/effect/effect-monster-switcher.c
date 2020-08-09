@@ -16,6 +16,7 @@
 #include "effect/effect-monster-psi.h"
 #include "effect/effect-monster-resist-hurt.h"
 #include "effect/effect-monster-spirit.h"
+#include "effect/effect-monster-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -30,14 +31,14 @@
 #include "spell/spell-types.h"
 #include "view/display-messages.h"
 
-gf_switch_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
 	if (monster_living(em_ptr->m_ptr->r_idx))
 	{
 		em_ptr->do_time = (em_ptr->dam + 7) / 8;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
@@ -50,12 +51,12 @@ gf_switch_result effect_monster_hypodynamia(player_type *caster_ptr, effect_mons
 	em_ptr->note = _("には効果がなかった。", " is unaffected.");
 	em_ptr->obvious = FALSE;
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
 // todo リファクタリング前のコード時点で、単に耐性があるだけでもダメージ0だった.
-gf_switch_result effect_monster_death_ray(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_death_ray(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -71,7 +72,7 @@ gf_switch_result effect_monster_death_ray(player_type *caster_ptr, effect_monste
 		em_ptr->note = _("には完全な耐性がある！", " is immune.");
 		em_ptr->obvious = FALSE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	if (((em_ptr->r_ptr->flags1 & RF1_UNIQUE) &&
@@ -84,16 +85,16 @@ gf_switch_result effect_monster_death_ray(player_type *caster_ptr, effect_monste
 		em_ptr->dam = 0;
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_kill_wall(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_kill_wall(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->r_ptr->flags3 & (RF3_HURT_ROCK)) == 0)
 	{
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -102,11 +103,11 @@ gf_switch_result effect_monster_kill_wall(player_type *caster_ptr, effect_monste
 
 	em_ptr->note = _("の皮膚がただれた！", " loses some skin!");
 	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_hand_doom(effect_monster_type *em_ptr)
+process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -114,7 +115,7 @@ gf_switch_result effect_monster_hand_doom(effect_monster_type *em_ptr)
 	{
 		em_ptr->note = _("には効果がなかった。", " is unaffected.");
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	if ((em_ptr->who > 0) ? ((em_ptr->caster_lev + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + 10 + randint1(20))) :
@@ -130,11 +131,11 @@ gf_switch_result effect_monster_hand_doom(effect_monster_type *em_ptr)
 		em_ptr->dam = 0;
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	int effect = 0;
 	bool done = TRUE;
@@ -146,7 +147,7 @@ gf_switch_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_
 		em_ptr->dam = 0;
 		em_ptr->skipped = TRUE;
 		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	if (monster_csleep_remaining(em_ptr->m_ptr))
@@ -154,7 +155,7 @@ gf_switch_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_
 		em_ptr->note = _("には効果がなかった。", " is unaffected.");
 		em_ptr->dam = 0;
 		em_ptr->skipped = TRUE;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 
 	if (one_in_(5)) effect = 1;
@@ -217,26 +218,26 @@ gf_switch_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_
 	}
 
 	em_ptr->dam = 0;
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_genocide(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_genocide(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (genocide_aux(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
 	{
 		if (em_ptr->seen_msg) msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
 		chg_virtue(caster_ptr, V_VITALITY, -1);
-		return GF_SWITCH_TRUE;
+		return PROCESS_TRUE;
 	}
 
 	em_ptr->skipped = TRUE;
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_photo(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_photo(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (!em_ptr->who)
 		msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
@@ -256,11 +257,11 @@ gf_switch_result effect_monster_photo(player_type *caster_ptr, effect_monster_ty
 	}
 
 	em_ptr->photo = em_ptr->m_ptr->r_idx;
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
-gf_switch_result effect_monster_wounds(effect_monster_type *em_ptr)
+process_result effect_monster_wounds(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -270,7 +271,7 @@ gf_switch_result effect_monster_wounds(effect_monster_type *em_ptr)
 		em_ptr->dam = 0;
 	}
 
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
@@ -279,7 +280,7 @@ gf_switch_result effect_monster_wounds(effect_monster_type *em_ptr)
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return ここのスイッチングで終るならTRUEかFALSE、後続処理を実行するならCONTINUE
  */
-gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result switch_effects_monster(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	switch (em_ptr->effect_type)
 	{
@@ -357,8 +358,8 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_OLD_CLONE:
 		return effect_monster_old_clone(caster_ptr, em_ptr);
 	case GF_STAR_HEAL:
-		if (effect_monster_old_clone(caster_ptr, em_ptr) == GF_SWITCH_TRUE)
-			return GF_SWITCH_CONTINUE;
+		if (effect_monster_old_clone(caster_ptr, em_ptr) == PROCESS_TRUE)
+			return PROCESS_CONTINUE;
 	/* Fall through */
 	case GF_OLD_HEAL:
 		return effect_monster_old_heal(caster_ptr, em_ptr);
@@ -437,7 +438,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_CAPTURE:
 		return effect_monster_capture(caster_ptr, em_ptr);
 	case GF_ATTACK:
-		return (gf_switch_result)do_cmd_attack(caster_ptr, em_ptr->y, em_ptr->x, em_ptr->dam);
+		return (process_result)do_cmd_attack(caster_ptr, em_ptr->y, em_ptr->x, em_ptr->dam);
 	case GF_ENGETSU:
 		return effect_monster_engetsu(caster_ptr, em_ptr);
 	case GF_GENOCIDE:
@@ -452,7 +453,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		return GF_SWITCH_CONTINUE;
+		return PROCESS_CONTINUE;
 	}
 	}
 }

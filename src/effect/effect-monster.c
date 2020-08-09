@@ -90,7 +90,7 @@ static void decide_spell_result_description(player_type *caster_ptr, effect_mons
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return 完全耐性ならCONTINUE、そうでないなら効果処理の結果
  */
-static gf_switch_result process_monster_perfect_resistance(player_type *caster_ptr, effect_monster_type *em_ptr)
+static process_result process_monster_perfect_resistance(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (((em_ptr->r_ptr->flagsr & RFR_RES_ALL) == 0) ||
 		em_ptr->effect_type == GF_OLD_CLONE ||
@@ -109,7 +109,7 @@ static gf_switch_result process_monster_perfect_resistance(player_type *caster_p
 	if (em_ptr->effect_type == GF_LITE_WEAK || em_ptr->effect_type == GF_KILL_WALL)
 		em_ptr->skipped = TRUE;
 
-	return GF_SWITCH_CONTINUE;
+	return PROCESS_CONTINUE;
 }
 
 
@@ -592,8 +592,8 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	if (!is_never_effect(caster_ptr, em_ptr)) return FALSE;
 
 	decide_spell_result_description(caster_ptr, em_ptr);
-	gf_switch_result result = process_monster_perfect_resistance(caster_ptr, em_ptr);
-	if (result != GF_SWITCH_CONTINUE) return (bool)result;
+	process_result result = process_monster_perfect_resistance(caster_ptr, em_ptr);
+	if (result != PROCESS_CONTINUE) return (bool)result;
 
 	if (em_ptr->skipped) return FALSE;
 
