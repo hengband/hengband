@@ -330,7 +330,7 @@ static void attack_racial_power(player_type *creature_ptr, it_type *it_ptr)
     }
 }
 
-static exe_throw(player_type *creature_ptr, it_type *it_ptr)
+static void exe_throw(player_type *creature_ptr, it_type *it_ptr)
 {
     it_ptr->cur_dis = 0;
     while (it_ptr->cur_dis <= it_ptr->tdis) {
