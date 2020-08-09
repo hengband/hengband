@@ -119,11 +119,8 @@ static void update_monster_dark(player_type *subject_ptr, const POSITION y, cons
 }
 
 /*
+ * todo player-status からのみ呼ばれている。しかしあちらは行数が酷いので要調整
  * Update squares illuminated or darkened by monsters.
- *
- * Hack - use the CAVE_ROOM flag (renamed to be CAVE_MNLT) to
- * denote squares illuminated by monsters.
- *
  * The CAVE_TEMP and CAVE_XTRA flag are used to store the state during the
  * updating.  Only squares in view of the player, whos state
  * changes are drawn via lite_spot().
@@ -324,6 +321,11 @@ void update_mon_lite(player_type *subject_ptr)
     subject_ptr->old_monlite = subject_ptr->monlite;
 }
 
+/*!
+ * @brief 画面切り替え等でモンスターの灯りを消去する
+ * @param floor_ptr 現在フロアへの参照ポインタ
+ * @return なし
+ */
 void clear_mon_lite(floor_type *floor_ptr)
 {
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
