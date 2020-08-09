@@ -1359,3 +1359,43 @@ void have_extra_blow(player_type *creature_ptr)
         }
     }
 }
+
+void have_resist_acid(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->resist_acid = FALSE;
+
+    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
+        creature_ptr->resist_acid = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && (creature_ptr->prace == RACE_YEEK || creature_ptr->prace == RACE_KLACKON)) {
+        creature_ptr->resist_acid = TRUE;
+    }
+
+	if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_DRACONIAN && creature_ptr->lev > 14) {
+        creature_ptr->resist_acid = TRUE;
+	}
+
+	if (creature_ptr->special_defense & KAMAE_SEIRYU) {
+        creature_ptr->resist_acid = TRUE;
+	}
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->resist_acid = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_RES_ACID))
+            creature_ptr->resist_acid = TRUE;
+    }
+
+	if (creature_ptr->immune_acid)
+        creature_ptr->resist_acid = TRUE;
+}
