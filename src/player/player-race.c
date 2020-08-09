@@ -133,15 +133,12 @@ void calc_race_status(player_type *creature_ptr)
         case MIMIC_DEMON:
             creature_ptr->resist_chaos = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_fire = TRUE;
             creature_ptr->oppose_fire = 1;
             creature_ptr->redraw |= PR_STATUS;
             break;
         case MIMIC_DEMON_LORD:
             creature_ptr->resist_chaos = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->immune_fire = TRUE;
-            creature_ptr->resist_fire = TRUE;
             creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
             creature_ptr->resist_conf = TRUE;
@@ -205,15 +202,10 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_dark = TRUE;
             break;
         case RACE_DRACONIAN:
-            if (creature_ptr->lev > 4)
-                creature_ptr->resist_fire = TRUE;
             if (creature_ptr->lev > 9)
                 creature_ptr->resist_cold = TRUE;
             if (creature_ptr->lev > 34)
                 creature_ptr->resist_pois = TRUE;
-            break;
-        case RACE_IMP:
-            creature_ptr->resist_fire = TRUE;
             break;
         case RACE_GOLEM:
             creature_ptr->resist_pois = TRUE;
@@ -252,7 +244,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_sound = TRUE;
             break;
         case RACE_BALROG:
-            creature_ptr->resist_fire = TRUE;
             creature_ptr->resist_neth = TRUE;
             if (creature_ptr->lev > 44) {
                 creature_ptr->oppose_fire = 1;

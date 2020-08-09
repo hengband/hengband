@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_fire = FALSE;
     creature_ptr->resist_cold = FALSE;
     creature_ptr->resist_pois = FALSE;
     creature_ptr->resist_conf = FALSE;
@@ -732,6 +731,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_extra_blow(creature_ptr);
     have_resist_acid(creature_ptr);
     have_resist_elec(creature_ptr);
+    have_resist_fire(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -869,8 +869,6 @@ void calc_bonuses(player_type *creature_ptr)
     if (is_special_class && (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)))
         creature_ptr->two_handed_weapon = FALSE;
 
-    if (creature_ptr->immune_fire)
-        creature_ptr->resist_fire = TRUE;
     if (creature_ptr->immune_cold)
         creature_ptr->resist_cold = TRUE;
 
@@ -2077,7 +2075,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
         }
 
         if (creature_ptr->special_defense & KAMAE_SEIRYU) {
-            creature_ptr->resist_fire = TRUE;
             creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
         } else if (creature_ptr->special_defense & KAMAE_GENBU) {
@@ -4448,7 +4445,6 @@ void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->lite = TRUE;
-        creature_ptr->resist_fire = TRUE;
         creature_ptr->resist_cold = TRUE;
         creature_ptr->resist_pois = TRUE;
         creature_ptr->resist_conf = TRUE;
@@ -4524,8 +4520,6 @@ void calc_equipment_status(player_type *creature_ptr)
         if (have_flag(flgs, TR_IM_ELEC))
             creature_ptr->immune_elec = TRUE;
 
-        if (have_flag(flgs, TR_RES_FIRE))
-            creature_ptr->resist_fire = TRUE;
         if (have_flag(flgs, TR_RES_COLD))
             creature_ptr->resist_cold = TRUE;
         if (have_flag(flgs, TR_RES_POIS))
