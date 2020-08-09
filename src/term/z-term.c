@@ -1667,7 +1667,7 @@ errr term_redraw(void)
 /*
  * Redraw part of a window.
  */
-static errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
+errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 {
     char *g_ptr;
 
