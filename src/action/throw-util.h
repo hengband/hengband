@@ -41,6 +41,7 @@ typedef struct it_type {
     GAME_TEXT m_name[MAX_NLEN];
     int back_chance;
     char o2_name[MAX_NLEN];
+    bool super_boomerang;
 } it_type;
 
 it_type *initialize_it_type(
