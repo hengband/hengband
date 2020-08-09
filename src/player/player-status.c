@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_cold = FALSE;
     creature_ptr->resist_pois = FALSE;
     creature_ptr->resist_conf = FALSE;
     creature_ptr->resist_sound = FALSE;
@@ -732,6 +731,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_acid(creature_ptr);
     have_resist_elec(creature_ptr);
     have_resist_fire(creature_ptr);
+    have_resist_cold(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -868,9 +868,6 @@ void calc_bonuses(player_type *creature_ptr)
     is_special_class |= creature_ptr->pclass == CLASS_BERSERKER;
     if (is_special_class && (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)))
         creature_ptr->two_handed_weapon = FALSE;
-
-    if (creature_ptr->immune_cold)
-        creature_ptr->resist_cold = TRUE;
 
     calc_intra_vision(creature_ptr);
     calc_stealth(creature_ptr);
@@ -4520,8 +4517,6 @@ void calc_equipment_status(player_type *creature_ptr)
         if (have_flag(flgs, TR_IM_ELEC))
             creature_ptr->immune_elec = TRUE;
 
-        if (have_flag(flgs, TR_RES_COLD))
-            creature_ptr->resist_cold = TRUE;
         if (have_flag(flgs, TR_RES_POIS))
             creature_ptr->resist_pois = TRUE;
         if (have_flag(flgs, TR_RES_FEAR))

@@ -139,7 +139,6 @@ void calc_race_status(player_type *creature_ptr)
         case MIMIC_DEMON_LORD:
             creature_ptr->resist_chaos = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
             creature_ptr->resist_conf = TRUE;
             creature_ptr->resist_disen = TRUE;
@@ -149,7 +148,6 @@ void calc_race_status(player_type *creature_ptr)
         case MIMIC_VAMPIRE:
             creature_ptr->resist_dark = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
@@ -202,8 +200,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_dark = TRUE;
             break;
         case RACE_DRACONIAN:
-            if (creature_ptr->lev > 9)
-                creature_ptr->resist_cold = TRUE;
             if (creature_ptr->lev > 34)
                 creature_ptr->resist_pois = TRUE;
             break;
@@ -213,19 +209,14 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_SKELETON:
             creature_ptr->resist_shard = TRUE;
             creature_ptr->resist_pois = TRUE;
-            if (creature_ptr->lev > 9)
-                creature_ptr->resist_cold = TRUE;
             break;
         case RACE_ZOMBIE:
             creature_ptr->resist_neth = TRUE;
             creature_ptr->slow_digest = TRUE;
-            if (creature_ptr->lev > 4)
-                creature_ptr->resist_cold = TRUE;
             break;
         case RACE_VAMPIRE:
             creature_ptr->resist_dark = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_cold = TRUE;
             creature_ptr->resist_pois = TRUE;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
@@ -233,7 +224,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_SPECTRE:
             creature_ptr->resist_neth = TRUE;
             creature_ptr->resist_pois = TRUE;
-            creature_ptr->resist_cold = TRUE;
             creature_ptr->pass_wall = TRUE;
             break;
         case RACE_SPRITE:
