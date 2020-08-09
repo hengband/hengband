@@ -369,6 +369,35 @@ void display_figurine_throw(player_type *creature_ptr, it_type *it_ptr)
         msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
 }
 
+void display_potion_throw(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (!object_is_potion(it_ptr->q_ptr))
+        return;
+
+    if (it_ptr->hit_body || it_ptr->hit_wall || (randint1(100) < it_ptr->corruption_possibility)) {
+        it_ptr->corruption_possibility = 0;
+        return;    
+    }
+
+    msg_format(_("%sは砕け散った！", "The %s shatters!"), it_ptr->o_name);
+    if (!potion_smash_effect(creature_ptr, 0, it_ptr->y, it_ptr->x, it_ptr->q_ptr->k_idx)) {
+        it_ptr->do_drop = FALSE;
+        return;
+    }
+    
+    monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx];
+    if ((creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx == 0) || !is_friendly(m_ptr) || monster_invulner_remaining(m_ptr)) {
+        it_ptr->do_drop = FALSE;
+        return;
+    }
+    
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(creature_ptr, m_name, m_ptr, 0);
+    msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
+    set_hostile(creature_ptr, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx]);
+    it_ptr->do_drop = FALSE;
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -420,26 +449,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
     it_ptr->corruption_possibility = (it_ptr->hit_body ? breakage_chance(creature_ptr, it_ptr->q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
     display_figurine_throw(creature_ptr, it_ptr);
-    if (object_is_potion(it_ptr->q_ptr)) {
-        if (!it_ptr->hit_body && !it_ptr->hit_wall && (randint1(100) >= it_ptr->corruption_possibility)) {
-            msg_format(_("%sは砕け散った！", "The %s shatters!"), it_ptr->o_name);
-            if (potion_smash_effect(creature_ptr, 0, it_ptr->y, it_ptr->x, it_ptr->q_ptr->k_idx)) {
-                monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx];
-                if (creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx && is_friendly(m_ptr) && !monster_invulner_remaining(m_ptr)) {
-                    GAME_TEXT m_name[MAX_NLEN];
-                    monster_desc(creature_ptr, m_name, m_ptr, 0);
-                    msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
-                    set_hostile(
-                        creature_ptr, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx]);
-                }
-            }
-
-            it_ptr->do_drop = FALSE;
-        } else {
-            it_ptr->corruption_possibility = 0;
-        }
-    }
-
+    display_potion_throw(creature_ptr, it_ptr);
     if (it_ptr->return_when_thrown) {
         int back_chance = randint1(30) + 20 + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
         char o2_name[MAX_NLEN];
