@@ -144,7 +144,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_fear = TRUE;
             break;
         case MIMIC_VAMPIRE:
-            creature_ptr->resist_dark = TRUE;
             creature_ptr->resist_neth = TRUE;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
@@ -156,14 +155,8 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_DWARF:
             creature_ptr->resist_blind = TRUE;
             break;
-        case RACE_HALF_ORC:
-            creature_ptr->resist_dark = TRUE;
-            break;
         case RACE_BARBARIAN:
             creature_ptr->resist_fear = TRUE;
-            break;
-        case RACE_HALF_OGRE:
-            creature_ptr->resist_dark = TRUE;
             break;
         case RACE_HALF_GIANT:
             creature_ptr->resist_shard = TRUE;
@@ -180,10 +173,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_NIBELUNG:
             creature_ptr->resist_disen = TRUE;
-            creature_ptr->resist_dark = TRUE;
-            break;
-        case RACE_DARK_ELF:
-            creature_ptr->resist_dark = TRUE;
             break;
         case RACE_SKELETON:
             creature_ptr->resist_shard = TRUE;
@@ -193,7 +182,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->slow_digest = TRUE;
             break;
         case RACE_VAMPIRE:
-            creature_ptr->resist_dark = TRUE;
             creature_ptr->resist_neth = TRUE;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;

@@ -1663,3 +1663,35 @@ void have_resist_lite(player_type *creature_ptr)
 			creature_ptr->resist_lite = TRUE;
     }
 }
+
+void have_resist_dark(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->resist_dark = FALSE;
+
+    if (creature_ptr->mimic_form == MIMIC_VAMPIRE) {
+        creature_ptr->resist_dark = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form
+        && (creature_ptr->prace == RACE_HALF_ORC || creature_ptr->prace == RACE_HALF_OGRE || creature_ptr->prace == RACE_NIBELUNG
+            || creature_ptr->prace == RACE_DARK_ELF || creature_ptr->prace == RACE_VAMPIRE)) {
+        creature_ptr->resist_lite = TRUE;
+    }
+
+	if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        creature_ptr->resist_dark = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+		if (have_flag(flgs, TR_RES_DARK))
+				creature_ptr->resist_dark = TRUE;
+    }
+}

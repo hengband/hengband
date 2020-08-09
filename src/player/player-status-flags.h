@@ -57,5 +57,6 @@ void have_resist_pois(player_type *creature_ptr);
 void have_resist_conf(player_type *creature_ptr);
 void have_resist_sound(player_type *creature_ptr);
 void have_resist_lite(player_type *creature_ptr);
+void have_resist_dark(player_type *creature_ptr);
 
 
