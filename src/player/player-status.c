@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_pois = FALSE;
     creature_ptr->resist_conf = FALSE;
     creature_ptr->resist_sound = FALSE;
     creature_ptr->resist_lite = FALSE;
@@ -732,6 +731,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_elec(creature_ptr);
     have_resist_fire(creature_ptr);
     have_resist_cold(creature_ptr);
+    have_resist_pois(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -2071,10 +2071,7 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             creature_ptr->dis_to_d[i] += (creature_ptr->lev / 6);
         }
 
-        if (creature_ptr->special_defense & KAMAE_SEIRYU) {
-            creature_ptr->resist_cold = TRUE;
-            creature_ptr->resist_pois = TRUE;
-        } else if (creature_ptr->special_defense & KAMAE_GENBU) {
+        if (creature_ptr->special_defense & KAMAE_GENBU) {
             creature_ptr->to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
             creature_ptr->dis_to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
             creature_ptr->num_blow[i] -= 2;
@@ -4442,8 +4439,6 @@ void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->lite = TRUE;
-        creature_ptr->resist_cold = TRUE;
-        creature_ptr->resist_pois = TRUE;
         creature_ptr->resist_conf = TRUE;
         creature_ptr->resist_sound = TRUE;
         creature_ptr->resist_lite = TRUE;
@@ -4517,8 +4512,6 @@ void calc_equipment_status(player_type *creature_ptr)
         if (have_flag(flgs, TR_IM_ELEC))
             creature_ptr->immune_elec = TRUE;
 
-        if (have_flag(flgs, TR_RES_POIS))
-            creature_ptr->resist_pois = TRUE;
         if (have_flag(flgs, TR_RES_FEAR))
             creature_ptr->resist_fear = TRUE;
         if (have_flag(flgs, TR_RES_CONF))

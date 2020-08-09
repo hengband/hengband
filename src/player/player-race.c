@@ -139,7 +139,6 @@ void calc_race_status(player_type *creature_ptr)
         case MIMIC_DEMON_LORD:
             creature_ptr->resist_chaos = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_pois = TRUE;
             creature_ptr->resist_conf = TRUE;
             creature_ptr->resist_disen = TRUE;
             creature_ptr->resist_nexus = TRUE;
@@ -148,7 +147,6 @@ void calc_race_status(player_type *creature_ptr)
         case MIMIC_VAMPIRE:
             creature_ptr->resist_dark = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_pois = TRUE;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
             break;
@@ -199,16 +197,8 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_DARK_ELF:
             creature_ptr->resist_dark = TRUE;
             break;
-        case RACE_DRACONIAN:
-            if (creature_ptr->lev > 34)
-                creature_ptr->resist_pois = TRUE;
-            break;
-        case RACE_GOLEM:
-            creature_ptr->resist_pois = TRUE;
-            break;
         case RACE_SKELETON:
             creature_ptr->resist_shard = TRUE;
-            creature_ptr->resist_pois = TRUE;
             break;
         case RACE_ZOMBIE:
             creature_ptr->resist_neth = TRUE;
@@ -217,7 +207,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_VAMPIRE:
             creature_ptr->resist_dark = TRUE;
             creature_ptr->resist_neth = TRUE;
-            creature_ptr->resist_pois = TRUE;
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
             break;
@@ -243,9 +232,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_KUTAR:
             creature_ptr->resist_conf = TRUE;
-            break;
-        case RACE_ANDROID:
-            creature_ptr->resist_pois = TRUE;
             break;
         case RACE_MERFOLK:
             creature_ptr->resist_water = TRUE;
