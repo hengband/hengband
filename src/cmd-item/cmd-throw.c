@@ -441,6 +441,24 @@ static void process_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
     display_boomerang_throw(creature_ptr, it_ptr);
 }
 
+static void check_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (!it_ptr->return_when_thrown)
+        return;
+
+    it_ptr->back_chance = randint1(30) + 20 + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
+    it_ptr->super_boomerang = (((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG)) && it_ptr->boomerang);
+    it_ptr->corruption_possibility = -1;
+    if (it_ptr->boomerang)
+        it_ptr->back_chance += 4 + randint1(5);
+
+    if (it_ptr->super_boomerang)
+        it_ptr->back_chance += 100;
+
+    describe_flavor(creature_ptr, it_ptr->o2_name, it_ptr->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    process_boomerang_throw(creature_ptr, it_ptr);
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -493,18 +511,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     it_ptr->corruption_possibility = (it_ptr->hit_body ? breakage_chance(creature_ptr, it_ptr->q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
     display_figurine_throw(creature_ptr, it_ptr);
     display_potion_throw(creature_ptr, it_ptr);
-    if (it_ptr->return_when_thrown) {
-        it_ptr->back_chance = randint1(30) + 20 + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-        it_ptr->super_boomerang = (((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG)) && boomerang);
-        it_ptr->corruption_possibility = -1;
-        if (boomerang)
-            it_ptr->back_chance += 4 + randint1(5);
-        if (it_ptr->super_boomerang)
-            it_ptr->back_chance += 100;
-        describe_flavor(creature_ptr, it_ptr->o2_name, it_ptr->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-        process_boomerang_throw(creature_ptr, it_ptr);
-    }
-
+    check_boomerang_throw(creature_ptr, it_ptr);
     if (it_ptr->come_back) {
         if ((it_ptr->item != INVEN_RARM) && (it_ptr->item != INVEN_LARM)) {
             store_item_to_inventory(creature_ptr, it_ptr->q_ptr);
