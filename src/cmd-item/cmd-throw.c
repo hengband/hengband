@@ -484,13 +484,24 @@ static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
     }
 }
 
+static void drop_thrown_item(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (!it_ptr->do_drop)
+        return;
+
+    if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
+        (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->y, it_ptr->x);
+    else
+        (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->prev_y, it_ptr->prev_x);
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
  * @param mult 威力の倍率
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param boomerang ブーメラン処理ならばTRUE
- * @param shuriken 忍者の手裏剣処理ならばTRUE
+ * @param shuriken 忍者の手裏剣処理ならばTRUE ← 間違い、-1が渡されてくることがある。要調査.
  * @return ターンを消費した場合TRUEを返す
  * @details
  * <pre>
@@ -538,12 +549,6 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     display_potion_throw(creature_ptr, it_ptr);
     check_boomerang_throw(creature_ptr, it_ptr);
     process_boomerang_back(creature_ptr, it_ptr);
-    if (it_ptr->do_drop) {
-        if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
-            (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->y, it_ptr->x);
-        else
-            (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->prev_y, it_ptr->prev_x);
-    }
-
+    drop_thrown_item(creature_ptr, it_ptr);
     return TRUE;
 }
