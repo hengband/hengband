@@ -152,17 +152,12 @@ void calc_race_status(player_type *creature_ptr)
         }
     } else {
         switch (creature_ptr->prace) {
-        case RACE_ELF:
-            creature_ptr->resist_lite = TRUE;
-            break;
+
         case RACE_DWARF:
             creature_ptr->resist_blind = TRUE;
             break;
         case RACE_HALF_ORC:
             creature_ptr->resist_dark = TRUE;
-            break;
-        case RACE_HIGH_ELF:
-            creature_ptr->resist_lite = TRUE;
             break;
         case RACE_BARBARIAN:
             creature_ptr->resist_fear = TRUE;
@@ -208,9 +203,7 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->resist_pois = TRUE;
             creature_ptr->pass_wall = TRUE;
             break;
-        case RACE_SPRITE:
-            creature_ptr->resist_lite = TRUE;
-            break;
+
         case RACE_BALROG:
             creature_ptr->resist_neth = TRUE;
             if (creature_ptr->lev > 44) {
