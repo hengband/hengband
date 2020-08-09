@@ -459,6 +459,31 @@ static void check_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
     process_boomerang_throw(creature_ptr, it_ptr);
 }
 
+static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
+{
+    if (it_ptr->come_back) {
+        if ((it_ptr->item != INVEN_RARM) && (it_ptr->item != INVEN_LARM)) {
+            store_item_to_inventory(creature_ptr, it_ptr->q_ptr);
+            it_ptr->do_drop = FALSE;
+            return;
+        }
+
+        it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
+        object_copy(it_ptr->o_ptr, it_ptr->q_ptr);
+        creature_ptr->total_weight += it_ptr->q_ptr->weight;
+        creature_ptr->equip_cnt++;
+        creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
+        creature_ptr->window |= PW_EQUIP;
+        it_ptr->do_drop = FALSE;
+        return;
+    }
+    
+    if (it_ptr->equiped_item) {
+        verify_equip_slot(creature_ptr, it_ptr->item);
+        calc_android_exp(creature_ptr);
+    }
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -512,24 +537,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     display_figurine_throw(creature_ptr, it_ptr);
     display_potion_throw(creature_ptr, it_ptr);
     check_boomerang_throw(creature_ptr, it_ptr);
-    if (it_ptr->come_back) {
-        if ((it_ptr->item != INVEN_RARM) && (it_ptr->item != INVEN_LARM)) {
-            store_item_to_inventory(creature_ptr, it_ptr->q_ptr);
-        } else {
-            it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-            object_copy(it_ptr->o_ptr, it_ptr->q_ptr);
-            creature_ptr->total_weight += it_ptr->q_ptr->weight;
-            creature_ptr->equip_cnt++;
-            creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
-            creature_ptr->window |= PW_EQUIP;
-        }
-
-        it_ptr->do_drop = FALSE;
-    } else if (it_ptr->equiped_item) {
-        verify_equip_slot(creature_ptr, it_ptr->item);
-        calc_android_exp(creature_ptr);
-    }
-
+    process_boomerang_back(creature_ptr, it_ptr);
     if (it_ptr->do_drop) {
         if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
             (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->y, it_ptr->x);
