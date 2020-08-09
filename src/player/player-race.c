@@ -143,7 +143,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->immune_fire = TRUE;
             creature_ptr->resist_fire = TRUE;
             creature_ptr->resist_cold = TRUE;
-            creature_ptr->resist_elec = TRUE;
             creature_ptr->resist_pois = TRUE;
             creature_ptr->resist_conf = TRUE;
             creature_ptr->resist_disen = TRUE;
@@ -210,8 +209,6 @@ void calc_race_status(player_type *creature_ptr)
                 creature_ptr->resist_fire = TRUE;
             if (creature_ptr->lev > 9)
                 creature_ptr->resist_cold = TRUE;
-            if (creature_ptr->lev > 19)
-                creature_ptr->resist_elec = TRUE;
             if (creature_ptr->lev > 34)
                 creature_ptr->resist_pois = TRUE;
             break;

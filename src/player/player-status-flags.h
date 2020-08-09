@@ -50,5 +50,6 @@ void have_curses(player_type *creature_ptr);
 void have_impact(player_type *creature_ptr);
 void have_extra_blow(player_type *creature_ptr);
 void have_resist_acid(player_type *creature_ptr);
+void have_resist_elec(player_type *creature_ptr);
 
 
