@@ -39,6 +39,8 @@ typedef struct it_type {
     grid_type *g_ptr;
     monster_type *m_ptr;
     GAME_TEXT m_name[MAX_NLEN];
+    int back_chance;
+    char o2_name[MAX_NLEN];
 } it_type;
 
 it_type *initialize_it_type(

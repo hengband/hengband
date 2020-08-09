@@ -398,6 +398,23 @@ void display_potion_throw(player_type *creature_ptr, it_type *it_ptr)
     it_ptr->do_drop = FALSE;
 }
 
+static void display_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
+{
+    if ((it_ptr->back_chance > 37) && !creature_ptr->blind && (it_ptr->item >= 0)) {
+        msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), it_ptr->o2_name);
+        it_ptr->come_back = TRUE;
+        return;
+    }
+
+    if (it_ptr->item >= 0)
+        msg_format(_("%sを受け損ねた！", "%s comes back, but you can't catch!"), it_ptr->o2_name);
+    else
+        msg_format(_("%sが返ってきた。", "%s comes back."), it_ptr->o2_name);
+
+    it_ptr->y = creature_ptr->y;
+    it_ptr->x = creature_ptr->x;
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -451,17 +468,16 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     display_figurine_throw(creature_ptr, it_ptr);
     display_potion_throw(creature_ptr, it_ptr);
     if (it_ptr->return_when_thrown) {
-        int back_chance = randint1(30) + 20 + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-        char o2_name[MAX_NLEN];
+        it_ptr->back_chance = randint1(30) + 20 + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
         bool super_boomerang = (((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG)) && boomerang);
         it_ptr->corruption_possibility = -1;
         if (boomerang)
-            back_chance += 4 + randint1(5);
+            it_ptr->back_chance += 4 + randint1(5);
         if (super_boomerang)
-            back_chance += 100;
-        describe_flavor(creature_ptr, o2_name, it_ptr->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-        if ((back_chance <= 30) || (one_in_(100) && !super_boomerang)) {
-            msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), o2_name);
+            it_ptr->back_chance += 100;
+        describe_flavor(creature_ptr, it_ptr->o2_name, it_ptr->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+        if ((it_ptr->back_chance <= 30) || (one_in_(100) && !super_boomerang)) {
+            msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), it_ptr->o2_name);
         } else {
             for (int i = it_ptr->cur_dis - 1; i > 0; i--) {
                 if (!panel_contains(it_ptr->ny[i], it_ptr->nx[i]) || !player_can_see_bold(creature_ptr, it_ptr->ny[i], it_ptr->nx[i])) {
@@ -479,18 +495,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
                 term_fresh();
             }
 
-            if ((back_chance > 37) && !creature_ptr->blind && (it_ptr->item >= 0)) {
-                msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), o2_name);
-                it_ptr->come_back = TRUE;
-            } else {
-                if (it_ptr->item >= 0)
-                    msg_format(_("%sを受け損ねた！", "%s comes back, but you can't catch!"), o2_name);
-                else
-                    msg_format(_("%sが返ってきた。", "%s comes back."), o2_name);
-
-                it_ptr->y = creature_ptr->y;
-                it_ptr->x = creature_ptr->x;
-            }
+            display_boomerang_throw(creature_ptr, it_ptr);
         }
     }
 
