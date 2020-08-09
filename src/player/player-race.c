@@ -131,13 +131,11 @@ void calc_race_status(player_type *creature_ptr)
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
         case MIMIC_DEMON:
-            creature_ptr->resist_chaos = TRUE;
             creature_ptr->resist_neth = TRUE;
             creature_ptr->oppose_fire = 1;
             creature_ptr->redraw |= PR_STATUS;
             break;
         case MIMIC_DEMON_LORD:
-            creature_ptr->resist_chaos = TRUE;
             creature_ptr->resist_neth = TRUE;
             creature_ptr->resist_disen = TRUE;
             creature_ptr->resist_nexus = TRUE;
@@ -160,9 +158,6 @@ void calc_race_status(player_type *creature_ptr)
             break;
         case RACE_HALF_GIANT:
             creature_ptr->resist_shard = TRUE;
-            break;
-        case RACE_HALF_TITAN:
-            creature_ptr->resist_chaos = TRUE;
             break;
         case RACE_YEEK:
             if (creature_ptr->lev > 19)

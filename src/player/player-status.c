@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_chaos = FALSE;
     creature_ptr->resist_disen = FALSE;
     creature_ptr->resist_shard = FALSE;
     creature_ptr->resist_nexus = FALSE;
@@ -4439,7 +4438,6 @@ void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->lite = TRUE;
-        creature_ptr->resist_chaos = TRUE;
         creature_ptr->resist_disen = TRUE;
         creature_ptr->resist_shard = TRUE;
         creature_ptr->resist_nexus = TRUE;
@@ -4509,8 +4507,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_RES_FEAR))
             creature_ptr->resist_fear = TRUE;
-        if (have_flag(flgs, TR_RES_CHAOS))
-            creature_ptr->resist_chaos = TRUE;
         if (have_flag(flgs, TR_RES_DISEN))
             creature_ptr->resist_disen = TRUE;
         if (have_flag(flgs, TR_RES_SHARDS))
