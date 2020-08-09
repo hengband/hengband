@@ -184,7 +184,7 @@ typedef struct term_data term_data;
 
 struct term_data
 {
-   term t;
+   term_type t;
 
    WINDOW *win;
 };
@@ -518,7 +518,7 @@ static errr Term_xtra_gcu_alive(int v)
       nl();
 
       /* Hack -- make sure the cursor is visible */
-      Term_xtra(TERM_XTRA_SHAPE, 1);
+      term_xtra(TERM_XTRA_SHAPE, 1);
 
       /* Flush the curses buffer */
       (void)refresh();
@@ -595,7 +595,7 @@ static bool init_sound(void)
 /*
  * Init the "curses" system
  */
-static void Term_init_gcu(term *t)
+static void Term_init_gcu(term_type *t)
 {
    term_data *td = (term_data *)(t->data);
 
@@ -619,7 +619,7 @@ static void Term_init_gcu(term *t)
 /*
  * Nuke the "curses" system
  */
-static void Term_nuke_gcu(term *t)
+static void Term_nuke_gcu(term_type *t)
 {
    term_data *td = (term_data *)(t->data);
 
@@ -630,7 +630,7 @@ static void Term_nuke_gcu(term *t)
    if (--active != 0) return;
 
    /* Hack -- make sure the cursor is visible */
-   Term_xtra(TERM_XTRA_SHAPE, 1);
+   term_xtra(TERM_XTRA_SHAPE, 1);
 
 #ifdef A_COLOR
   /* Reset colors to defaults */
@@ -697,7 +697,7 @@ static errr Term_xtra_gcu_event(int v)
    }
 
    /* Enqueue the keypress */
-   Term_keypress(i);
+   term_key_push(i);
 
    /* Success */
    return (0);
@@ -747,7 +747,7 @@ static errr Term_xtra_gcu_event(int v)
    if ((i != 1) || (!buf[0])) return (1);
 
    /* Enqueue the keypress */
-   Term_keypress(buf[0]);
+   term_key_push(buf[0]);
 
    /* Success */
    return (0);
@@ -995,7 +995,7 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
 
 static errr term_data_init(term_data *td, int rows, int cols, int y, int x)
 {
-   term *t = &td->t;
+   term_type *t = &td->t;
 
    /* Make sure the window has a positive size */
    if (rows <= 0 || cols <= 0) return (0);
@@ -1034,7 +1034,7 @@ static errr term_data_init(term_data *td, int rows, int cols, int y, int x)
    t->data = td;
 
    /* Activate it */
-   Term_activate(t);
+   term_activate(t);
 
 
    /* Success */
@@ -1256,7 +1256,7 @@ errr init_gcu(int argc, char *argv[])
    }
 
    /* Activate the "Angband" window screen */
-   Term_activate(&data[0].t);
+   term_activate(&data[0].t);
 
    /* Store */
    term_screen = &data[0].t;
