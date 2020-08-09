@@ -147,10 +147,6 @@ void calc_race_status(player_type *creature_ptr)
         }
     } else {
         switch (creature_ptr->prace) {
-
-        case RACE_DWARF:
-            creature_ptr->resist_blind = TRUE;
-            break;
         case RACE_BARBARIAN:
             creature_ptr->resist_fear = TRUE;
             break;

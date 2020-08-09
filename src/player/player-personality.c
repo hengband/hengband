@@ -148,7 +148,6 @@ void set_personality_flags(player_type *creature_ptr)
     if (creature_ptr->pseikaku == PERSONALITY_LUCKY)
         creature_ptr->muta3 |= MUT3_GOOD_LUCK;
     if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
-        creature_ptr->resist_blind = TRUE;
         if (creature_ptr->pclass != CLASS_NINJA)
             creature_ptr->lite = TRUE;
     }
