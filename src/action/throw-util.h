@@ -4,6 +4,8 @@
 #include "system/object-type-definition.h"
 
 // Item Throw.
+typedef struct grid_type grid_type;
+typedef struct monster_type monster_type;
 typedef struct it_type {
     int mult;
     bool boomerang;

@@ -330,6 +330,30 @@ static void attack_racial_power(player_type *creature_ptr, it_type *it_ptr)
     }
 }
 
+static exe_throw(player_type *creature_ptr, it_type *it_ptr)
+{
+    it_ptr->cur_dis = 0;
+    while (it_ptr->cur_dis <= it_ptr->tdis) {
+        if ((it_ptr->y == it_ptr->ty) && (it_ptr->x == it_ptr->tx))
+            break;
+
+        if (check_racial_target_bold(creature_ptr, it_ptr))
+            break;
+
+        check_racial_target_seen(creature_ptr, it_ptr);
+        if (check_racial_target_monster(creature_ptr, it_ptr))
+            continue;
+
+        it_ptr->g_ptr = &creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x];
+        it_ptr->m_ptr = &creature_ptr->current_floor_ptr->m_list[it_ptr->g_ptr->m_idx];
+        monster_name(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->m_name);
+        it_ptr->visible = it_ptr->m_ptr->ml;
+        it_ptr->hit_body = TRUE;
+        attack_racial_power(creature_ptr, it_ptr);
+        break;
+    }
+}
+
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -375,26 +399,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     set_racial_chance(creature_ptr, it_ptr);
     it_ptr->prev_y = it_ptr->y;
     it_ptr->prev_x = it_ptr->x;
-    for (it_ptr->cur_dis = 0; it_ptr->cur_dis <= it_ptr->tdis;) {
-        if ((it_ptr->y == it_ptr->ty) && (it_ptr->x == it_ptr->tx))
-            break;
-
-        if (check_racial_target_bold(creature_ptr, it_ptr))
-            break;
-
-        check_racial_target_seen(creature_ptr, it_ptr);
-        if (check_racial_target_monster(creature_ptr, it_ptr))
-            continue;
-
-        it_ptr->g_ptr = &creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x];
-        it_ptr->m_ptr = &creature_ptr->current_floor_ptr->m_list[it_ptr->g_ptr->m_idx];
-        monster_name(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->m_name);
-        it_ptr->visible = it_ptr->m_ptr->ml;
-        it_ptr->hit_body = TRUE;
-        attack_racial_power(creature_ptr, it_ptr);
-        break;
-    }
-
+    exe_throw(creature_ptr, it_ptr);
     if (it_ptr->hit_body)
         torch_lost_fuel(it_ptr->q_ptr);
 
