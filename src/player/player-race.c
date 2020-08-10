@@ -134,9 +134,6 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->oppose_fire = 1;
             creature_ptr->redraw |= PR_STATUS;
             break;
-        case MIMIC_DEMON_LORD:
-            creature_ptr->resist_fear = TRUE;
-            break;
         case MIMIC_VAMPIRE:
             if (creature_ptr->pclass != CLASS_NINJA)
                 creature_ptr->lite = TRUE;
@@ -144,9 +141,6 @@ void calc_race_status(player_type *creature_ptr)
         }
     } else {
         switch (creature_ptr->prace) {
-        case RACE_BARBARIAN:
-            creature_ptr->resist_fear = TRUE;
-            break;
         case RACE_YEEK:
             if (creature_ptr->lev > 19)
                 creature_ptr->immune_acid = TRUE;

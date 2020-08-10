@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_fear = FALSE;
     creature_ptr->immune_acid = FALSE;
     creature_ptr->immune_elec = FALSE;
     creature_ptr->immune_fire = FALSE;
@@ -731,6 +730,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_blind(creature_ptr);
     have_resist_neth(creature_ptr);
     have_resist_time(creature_ptr);
+    have_resist_fear(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4438,7 +4438,6 @@ void calc_timelimit_status(player_type *creature_ptr)
 {
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
         creature_ptr->lite = TRUE;
-        creature_ptr->resist_fear = TRUE;
     }
 
     if (creature_ptr->ele_immune) {
@@ -4452,9 +4451,6 @@ void calc_timelimit_status(player_type *creature_ptr)
             creature_ptr->immune_cold = TRUE;
     }
 
-    if (is_hero(creature_ptr) || creature_ptr->shero) {
-        creature_ptr->resist_fear = TRUE;
-    }
 }
 
 void calc_equipment_status(player_type *creature_ptr)
@@ -4487,9 +4483,6 @@ void calc_equipment_status(player_type *creature_ptr)
             creature_ptr->immune_cold = TRUE;
         if (have_flag(flgs, TR_IM_ELEC))
             creature_ptr->immune_elec = TRUE;
-
-        if (have_flag(flgs, TR_RES_FEAR))
-            creature_ptr->resist_fear = TRUE;
 
         if (o_ptr->tval == TV_CAPTURE)
             continue;

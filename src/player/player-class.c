@@ -1201,27 +1201,7 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 void calc_class_status(player_type *creature_ptr)
 {
     switch (creature_ptr->pclass) {
-    case CLASS_WARRIOR:
-        if (creature_ptr->lev > 29)
-            creature_ptr->resist_fear = TRUE;
-        break;
-    case CLASS_PALADIN:
-        if (creature_ptr->lev > 39)
-            creature_ptr->resist_fear = TRUE;
-        break;
-    case CLASS_CHAOS_WARRIOR:
 
-        if (creature_ptr->lev > 39)
-            creature_ptr->resist_fear = TRUE;
-        break;
-    case CLASS_MINDCRAFTER:
-        if (creature_ptr->lev > 9)
-            creature_ptr->resist_fear = TRUE;
-        break;
-    case CLASS_SAMURAI:
-        if (creature_ptr->lev > 29)
-            creature_ptr->resist_fear = TRUE;
-        break;
     case CLASS_BERSERKER:
         creature_ptr->shero = 1;
         creature_ptr->redraw |= PR_STATUS;
@@ -1240,7 +1220,6 @@ void calc_class_status(player_type *creature_ptr)
             creature_ptr->dis_to_a += creature_ptr->lev / 2 + 5;
         }
 
-        creature_ptr->resist_fear = TRUE;
         if (creature_ptr->lev > 44) {
             creature_ptr->oppose_pois = 1;
             creature_ptr->redraw |= PR_STATUS;
