@@ -2024,3 +2024,24 @@ void have_immune_fire(player_type *creature_ptr)
             creature_ptr->immune_fire = TRUE;
     }
 }
+
+void have_immune_cold(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->immune_cold = FALSE;
+    if (creature_ptr->ele_immune) {
+        if (creature_ptr->special_defense & DEFENSE_COLD)
+            creature_ptr->immune_cold = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_IM_COLD))
+            creature_ptr->immune_cold = TRUE;
+    }
+}

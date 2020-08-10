@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->immune_cold = FALSE;
     creature_ptr->two_handed_weapon = FALSE;
     creature_ptr->right_hand_weapon = FALSE;
     creature_ptr->left_hand_weapon = FALSE;
@@ -711,6 +710,10 @@ void calc_bonuses(player_type *creature_ptr)
     have_curses(creature_ptr);
     have_impact(creature_ptr);
     have_extra_blow(creature_ptr);
+    have_immune_acid(creature_ptr);
+    have_immune_elec(creature_ptr);
+    have_immune_fire(creature_ptr);
+    have_immune_cold(creature_ptr);
     have_resist_acid(creature_ptr);
     have_resist_elec(creature_ptr);
     have_resist_fire(creature_ptr);
@@ -728,9 +731,6 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_neth(creature_ptr);
     have_resist_time(creature_ptr);
     have_resist_fear(creature_ptr);
-    have_immune_acid(creature_ptr);
-    have_immune_elec(creature_ptr);
-    have_immune_fire(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4440,11 +4440,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->lite = TRUE;
     }
 
-    if (creature_ptr->ele_immune) {
-        if (creature_ptr->special_defense & DEFENSE_COLD)
-            creature_ptr->immune_cold = TRUE;
-    }
-
 }
 
 void calc_equipment_status(player_type *creature_ptr)
@@ -4468,8 +4463,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_INFRA))
             creature_ptr->see_infra += o_ptr->pval;
-        if (have_flag(flgs, TR_IM_COLD))
-            creature_ptr->immune_cold = TRUE;
 
 
         if (o_ptr->tval == TV_CAPTURE)

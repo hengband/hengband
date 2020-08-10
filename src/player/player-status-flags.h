@@ -70,5 +70,6 @@ void have_resist_fear(player_type *creature_ptr);
 void have_immune_acid(player_type *creature_ptr);
 void have_immune_elec(player_type *creature_ptr);
 void have_immune_fire(player_type *creature_ptr);
+void have_immune_cold(player_type *creature_ptr);
 
 
