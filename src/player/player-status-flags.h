@@ -68,5 +68,6 @@ void have_resist_time(player_type *creature_ptr);
 void have_resist_water(player_type *creature_ptr);
 void have_resist_fear(player_type *creature_ptr);
 void have_immune_acid(player_type *creature_ptr);
+void have_immune_elec(player_type *creature_ptr);
 
 

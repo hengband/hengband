@@ -1982,3 +1982,24 @@ void have_immune_acid(player_type *creature_ptr)
             creature_ptr->immune_acid = TRUE;
     }
 }
+
+void have_immune_elec(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->immune_elec = FALSE;
+    if (creature_ptr->ele_immune) {
+        if (creature_ptr->special_defense & DEFENSE_ELEC)
+            creature_ptr->immune_elec = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_IM_ELEC))
+            creature_ptr->immune_elec = TRUE;
+    }
+}
