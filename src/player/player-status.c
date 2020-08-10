@@ -561,7 +561,6 @@ static void delayed_visual_update(player_type *player_ptr)
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
     creature_ptr->two_handed_weapon = FALSE;
-    creature_ptr->right_hand_weapon = FALSE;
     creature_ptr->left_hand_weapon = FALSE;
 }
 
@@ -632,8 +631,8 @@ void calc_bonuses(player_type *creature_ptr)
 
     clear_creature_bonuses(creature_ptr);
 
-    if (has_melee_weapon(creature_ptr, INVEN_RARM))
-        creature_ptr->right_hand_weapon = TRUE;
+	have_right_hand_weapon(creature_ptr);
+
     if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
         creature_ptr->left_hand_weapon = TRUE;
         if (!creature_ptr->right_hand_weapon)
@@ -653,7 +652,6 @@ void calc_bonuses(player_type *creature_ptr)
             case CLASS_FORCETRAINER:
             case CLASS_BERSERKER:
                 if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
-                    creature_ptr->right_hand_weapon = TRUE;
                     creature_ptr->two_handed_weapon = TRUE;
                 }
             }

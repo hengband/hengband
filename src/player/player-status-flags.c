@@ -2045,3 +2045,23 @@ void have_immune_cold(player_type *creature_ptr)
             creature_ptr->immune_cold = TRUE;
     }
 }
+
+void have_right_hand_weapon(player_type *creature_ptr)
+{
+	creature_ptr->right_hand_weapon = FALSE;
+    if (has_melee_weapon(creature_ptr, INVEN_RARM))
+        creature_ptr->right_hand_weapon = TRUE;
+
+    if (can_two_hands_wielding(creature_ptr)) {
+        switch (creature_ptr->pclass) {
+            case CLASS_MONK:
+            case CLASS_FORCETRAINER:
+            case CLASS_BERSERKER:
+                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
+                    creature_ptr->right_hand_weapon = TRUE;
+                }
+                break;
+        }
+    }
+
+}
