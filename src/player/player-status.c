@@ -708,6 +708,8 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_time(creature_ptr);
     have_resist_fear(creature_ptr);
 
+    have_lite(creature_ptr);
+
     calc_race_status(creature_ptr);
 
 
