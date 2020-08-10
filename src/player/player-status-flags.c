@@ -2065,3 +2065,11 @@ void have_right_hand_weapon(player_type *creature_ptr)
     }
 
 }
+
+void have_left_hand_weapon(player_type *creature_ptr)
+{
+    creature_ptr->left_hand_weapon = FALSE;
+    if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        creature_ptr->left_hand_weapon = TRUE;
+    }
+}
