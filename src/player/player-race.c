@@ -168,9 +168,7 @@ void calc_race_status(player_type *creature_ptr)
                 creature_ptr->redraw |= PR_STATUS;
             }
             break;
-        case RACE_MERFOLK:
-            creature_ptr->resist_water = TRUE;
-            break;
+
         default:
             break;
         }

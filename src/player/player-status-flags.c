@@ -1895,3 +1895,13 @@ void have_resist_time(player_type *creature_ptr)
             creature_ptr->resist_time = TRUE;
     }
 }
+
+void have_resist_water(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->resist_water = FALSE;
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_MERFOLK)
+		creature_ptr->resist_water = TRUE;
+}

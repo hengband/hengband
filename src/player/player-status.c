@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_water = FALSE;
     creature_ptr->resist_fear = FALSE;
     creature_ptr->immune_acid = FALSE;
     creature_ptr->immune_elec = FALSE;
