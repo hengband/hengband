@@ -141,10 +141,6 @@ void calc_race_status(player_type *creature_ptr)
         }
     } else {
         switch (creature_ptr->prace) {
-        case RACE_YEEK:
-            if (creature_ptr->lev > 19)
-                creature_ptr->immune_acid = TRUE;
-            break;
         case RACE_ZOMBIE:
             creature_ptr->slow_digest = TRUE;
             break;

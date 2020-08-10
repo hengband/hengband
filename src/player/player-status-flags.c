@@ -1957,3 +1957,28 @@ void have_resist_fear(player_type *creature_ptr)
             creature_ptr->resist_fear = TRUE;
     }
 }
+
+void have_immune_acid(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->immune_acid = FALSE;
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_YEEK && creature_ptr->lev > 19)
+        creature_ptr->immune_acid = TRUE;
+
+    if (creature_ptr->ele_immune) {
+        if (creature_ptr->special_defense & DEFENSE_ACID)
+            creature_ptr->immune_acid = TRUE;
+    }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_IM_ACID))
+            creature_ptr->immune_acid = TRUE;
+    }
+}
