@@ -556,14 +556,6 @@ static void delayed_visual_update(player_type *player_ptr)
 }
 
 /*!
- * @brief プレイヤー構造体の全ステータスを初期化する
- */
-static void clear_creature_bonuses(player_type *creature_ptr)
-{
-    creature_ptr->two_handed_weapon = FALSE;
-}
-
-/*!
  * @brief 射撃武器がプレイヤーにとって重すぎるかどうかの判定 /
  * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
  * @return 重すぎるならばTRUE
@@ -628,10 +620,9 @@ void calc_bonuses(player_type *creature_ptr)
     ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
     ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
 
-    clear_creature_bonuses(creature_ptr);
-
 	have_right_hand_weapon(creature_ptr);
     have_left_hand_weapon(creature_ptr);
+    have_two_handed_weapons(creature_ptr);
 
     if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
         if (!creature_ptr->right_hand_weapon)
@@ -641,20 +632,9 @@ void calc_bonuses(player_type *creature_ptr)
     if (can_two_hands_wielding(creature_ptr)) {
         if (creature_ptr->right_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM])) {
-            creature_ptr->two_handed_weapon = TRUE;
         } else if (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
-            creature_ptr->two_handed_weapon = TRUE;
         } else {
-            switch (creature_ptr->pclass) {
-            case CLASS_MONK:
-            case CLASS_FORCETRAINER:
-            case CLASS_BERSERKER:
-                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
-                    creature_ptr->two_handed_weapon = TRUE;
-                }
-            }
-
             default_hand = 1;
         }
     }

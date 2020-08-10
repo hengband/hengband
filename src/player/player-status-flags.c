@@ -8,6 +8,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object-hook/hook-weapon.h"
 #include "object-hook/hook-checker.h"
 #include "object/object-flags.h"
 #include "player/player-class.h"
@@ -2071,5 +2072,28 @@ void have_left_hand_weapon(player_type *creature_ptr)
     creature_ptr->left_hand_weapon = FALSE;
     if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
         creature_ptr->left_hand_weapon = TRUE;
+    }
+}
+
+void have_two_handed_weapons(player_type *creature_ptr)
+{ 
+	creature_ptr->two_handed_weapon = FALSE;
+    if (can_two_hands_wielding(creature_ptr)) {
+        if (creature_ptr->right_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
+            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM])) {
+            creature_ptr->two_handed_weapon = TRUE;
+        } else if (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
+            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
+            creature_ptr->two_handed_weapon = TRUE;
+        } else {
+            switch (creature_ptr->pclass) {
+            case CLASS_MONK:
+            case CLASS_FORCETRAINER:
+            case CLASS_BERSERKER:
+                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
+                    creature_ptr->two_handed_weapon = TRUE;
+                }
+            }
+        }
     }
 }
