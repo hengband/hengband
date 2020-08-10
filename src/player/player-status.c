@@ -147,7 +147,6 @@ static void calc_to_hit_misc(player_type *creature_ptr);
 static void calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
 
-static void calc_timelimit_status(player_type *creature_ptr);
 static void calc_equipment_status(player_type *creature_ptr);
 
 /*!
@@ -719,7 +718,6 @@ void calc_bonuses(player_type *creature_ptr)
     }
 
     calc_class_status(creature_ptr);
-    calc_timelimit_status(creature_ptr);
     set_personality_flags(creature_ptr);
 
     set_mutation_flags(creature_ptr);
@@ -729,9 +727,6 @@ void calc_bonuses(player_type *creature_ptr)
     if (old_mighty_throw != creature_ptr->mighty_throw) {
         creature_ptr->window |= PW_INVEN;
     }
-
-    if (creature_ptr->sh_fire)
-        creature_ptr->lite = TRUE;
 
     calc_strength_addition(creature_ptr);
     calc_intelligence_addition(creature_ptr);
@@ -4409,14 +4404,6 @@ bool is_hero(player_type *creature_ptr) { return creature_ptr->hero || music_sin
 bool is_echizen(player_type *creature_ptr)
 {
     return (creature_ptr->pseikaku == PERSONALITY_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
-}
-
-void calc_timelimit_status(player_type *creature_ptr)
-{
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->lite = TRUE;
-    }
-
 }
 
 void calc_equipment_status(player_type *creature_ptr)

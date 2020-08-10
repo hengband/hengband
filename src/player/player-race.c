@@ -134,19 +134,11 @@ void calc_race_status(player_type *creature_ptr)
             creature_ptr->oppose_fire = 1;
             creature_ptr->redraw |= PR_STATUS;
             break;
-        case MIMIC_VAMPIRE:
-            if (creature_ptr->pclass != CLASS_NINJA)
-                creature_ptr->lite = TRUE;
-            break;
         }
     } else {
         switch (creature_ptr->prace) {
         case RACE_ZOMBIE:
             creature_ptr->slow_digest = TRUE;
-            break;
-        case RACE_VAMPIRE:
-            if (creature_ptr->pclass != CLASS_NINJA)
-                creature_ptr->lite = TRUE;
             break;
         case RACE_SPECTRE:
             creature_ptr->pass_wall = TRUE;

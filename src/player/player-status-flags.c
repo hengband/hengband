@@ -1616,11 +1616,11 @@ void have_resist_sound(player_type *creature_ptr)
     }
 
     if (!creature_ptr->mimic_form && (creature_ptr->prace == RACE_CYCLOPS || creature_ptr->prace == RACE_BEASTMAN)) {
-        creature_ptr->resist_conf = TRUE;
+        creature_ptr->resist_sound = TRUE;
     }
 
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->lite = TRUE;
+        creature_ptr->resist_sound = TRUE;
     }
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
@@ -2095,5 +2095,26 @@ void have_two_handed_weapons(player_type *creature_ptr)
                 }
             }
         }
+    }
+}
+
+void have_lite(player_type *creature_ptr)
+{
+    creature_ptr->lite = FALSE;
+    if (creature_ptr->pclass == CLASS_NINJA)
+        return;
+
+	if (creature_ptr->mimic_form == MIMIC_VAMPIRE) {
+		creature_ptr->lite = TRUE;
+    }
+
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_VAMPIRE)
+        creature_ptr->lite = TRUE;
+
+	if (creature_ptr->sh_fire)
+        creature_ptr->lite = TRUE;
+
+    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+		creature_ptr->lite = TRUE;
     }
 }
