@@ -560,7 +560,6 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static void clear_creature_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->resist_time = FALSE;
     creature_ptr->resist_water = FALSE;
     creature_ptr->resist_fear = FALSE;
     creature_ptr->immune_acid = FALSE;
@@ -732,6 +731,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_resist_nexus(creature_ptr);
     have_resist_blind(creature_ptr);
     have_resist_neth(creature_ptr);
+    have_resist_time(creature_ptr);
 
     calc_race_status(creature_ptr);
 
@@ -4442,10 +4442,6 @@ void calc_timelimit_status(player_type *creature_ptr)
         creature_ptr->resist_fear = TRUE;
     }
 
-    if (creature_ptr->tim_res_time) {
-        creature_ptr->resist_time = TRUE;
-    }
-
     if (creature_ptr->ele_immune) {
         if (creature_ptr->special_defense & DEFENSE_ACID)
             creature_ptr->immune_acid = TRUE;
@@ -4495,9 +4491,6 @@ void calc_equipment_status(player_type *creature_ptr)
 
         if (have_flag(flgs, TR_RES_FEAR))
             creature_ptr->resist_fear = TRUE;
-
-        if (o_ptr->name2 == EGO_RING_RES_TIME)
-            creature_ptr->resist_time = TRUE;
 
         if (o_ptr->tval == TV_CAPTURE)
             continue;

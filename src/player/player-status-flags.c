@@ -1874,3 +1874,24 @@ void have_resist_neth(player_type *creature_ptr)
             creature_ptr->resist_neth = TRUE;
     }
 }
+
+void have_resist_time(player_type *creature_ptr)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    creature_ptr->resist_time = FALSE;
+
+    if (creature_ptr->tim_res_time) {
+        creature_ptr->resist_time = TRUE;
+    }
+
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (o_ptr->name2 == EGO_RING_RES_TIME)
+            creature_ptr->resist_time = TRUE;
+    }
+}

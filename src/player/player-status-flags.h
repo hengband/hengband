@@ -64,5 +64,6 @@ void have_resist_shard(player_type *creature_ptr);
 void have_resist_nexus(player_type *creature_ptr);
 void have_resist_blind(player_type *creature_ptr);
 void have_resist_neth(player_type *creature_ptr);
+void have_resist_time(player_type *creature_ptr);
 
 
