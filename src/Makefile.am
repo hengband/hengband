@@ -173,6 +173,7 @@ hengband_SOURCES = \
 	dungeon/dungeon-flag-types.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	dungeon/quest.h dungeon/quest.c \
+	dungeon/quest-completion-checker.c dungeon/quest-completion-checker.h \
 	dungeon/quest-monster-placer.c dungeon/quest-monster-placer.h \
 	\
 	effect/effect-feature.c effect/effect-feature.h \

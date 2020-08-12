@@ -97,24 +97,6 @@ void night_falls(player_type *subject_ptr)
 }
 
 /*!
- * @brief 現在フロアに残っている敵モンスターの数を返す /
- * @return 現在の敵モンスターの数
- */
-MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
-{
-    MONSTER_NUMBER number_mon = 0;
-    for (POSITION x = 0; x < floor_ptr->width; ++x) {
-        for (POSITION y = 0; y < floor_ptr->height; ++y) {
-            MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
-            if (m_idx > 0 && is_hostile(&floor_ptr->m_list[m_idx]))
-                ++number_mon;
-        }
-    }
-
-    return number_mon;
-}
-
-/*!
  * ダンジョンの雰囲気を計算するための非線形基準値 / Dungeon rating is no longer linear
  */
 static int rating_boost(int delta) { return delta * delta + 50 * delta; }

@@ -10,7 +10,7 @@
  */
 
 #include "monster/monster-info.h"
-#include "dungeon/quest.h"
+#include "dungeon/quest-completion-checker.h" // todo 相互依存.
 #include "floor/cave.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
@@ -43,6 +43,7 @@ void set_friendly(monster_type *m_ptr)
 
 
 /*!
+ * todo ここがcheck_quest_completion() を呼んでいるのが相互依存の原因。infoなのにsetしているのがおかしい、後で修正する.
  * @brief モンスターをペットにする
  * @param player_type プレーヤーへの参照ポインタ
  * @param m_ptr モンスター情報構造体の参照ポインタ

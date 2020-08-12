@@ -6,7 +6,7 @@
 
 #include "monster-floor/monster-runaway.h"
 #include "core/disturbance.h"
-#include "dungeon/quest.h"
+#include "dungeon/quest-completion-checker.h"
 #include "floor/cave.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
