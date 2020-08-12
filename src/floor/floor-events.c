@@ -58,9 +58,9 @@ void day_break(player_type *subject_ptr)
         }
     }
 
-    subject_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
-    subject_ptr->redraw |= (PR_MAP);
-    subject_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    subject_ptr->update |= PU_MONSTERS | PU_MON_LITE;
+    subject_ptr->redraw |= PR_MAP;
+    subject_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
     if (((subject_ptr->special_defense & NINJA_S_STEALTH) != 0) && ((floor_ptr->grid_array[subject_ptr->y][subject_ptr->x].info & CAVE_GLOW) != 0))
         set_superstealth(subject_ptr, FALSE);
 }
@@ -271,7 +271,7 @@ void update_dungeon_feeling(player_type *subject_ptr)
     subject_ptr->feeling = new_feeling;
     do_cmd_feeling(subject_ptr);
     select_floor_music(subject_ptr);
-    subject_ptr->redraw |= (PR_DEPTH);
+    subject_ptr->redraw |= PR_DEPTH;
     if (disturb_minor)
         disturb(subject_ptr, FALSE, FALSE);
 }
@@ -303,8 +303,8 @@ void glow_deep_lava_and_bldg(player_type *subject_ptr)
         }
     }
 
-    subject_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-    subject_ptr->redraw |= (PR_MAP);
+    subject_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE;
+    subject_ptr->redraw |= PR_MAP;
 }
 
 /*
@@ -474,7 +474,7 @@ void update_lite(player_type *subject_ptr)
     }
 
     tmp_pos.n = 0;
-    subject_ptr->update |= (PU_DELAY_VIS);
+    subject_ptr->update |= PU_DELAY_VIS;
 }
 
 /*
