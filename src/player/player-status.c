@@ -593,7 +593,6 @@ void calc_bonuses(player_type *creature_ptr)
     int default_hand = 0;
     int empty_hands_status = empty_hands(creature_ptr, TRUE);
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
 
     /* Save the old vision stuff */
     bool old_telepathy = creature_ptr->telepathy;
@@ -777,14 +776,10 @@ void calc_bonuses(player_type *creature_ptr)
 
     for (int i = 0; i < 2; i++) {
         is_icky_wield_weapon(creature_ptr, i);
+        is_riding_wield_weapon(creature_ptr, i);
         calc_num_blow(creature_ptr, i);
         calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
         calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
-
-        if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
-            && !have_flag(flgs, TR_RIDING)) {
-            creature_ptr->riding_wield[i] = TRUE;
-        }
     }
 
     calc_riding_weapon_penalty(creature_ptr);
@@ -1873,7 +1868,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     object_flags(creature_ptr, o_ptr, flgs);
     creature_ptr->heavy_wield[i] = FALSE;
-    creature_ptr->riding_wield[i] = FALSE;
     if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
         creature_ptr->num_blow[i] = 1;
     } else {

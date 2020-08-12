@@ -2143,7 +2143,6 @@ bool is_disable_two_handed_bonus(player_type *creature_ptr, int i)
 
 void is_icky_wield_weapon(player_type* creature_ptr, int i)
 {
-
 	object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
@@ -2162,7 +2161,20 @@ void is_icky_wield_weapon(player_type* creature_ptr, int i)
     }
 }
 
-bool is_not_ninja_weapon(player_type *creature_ptr, int i)
+void is_riding_wield_weapon(player_type *creature_ptr, int i)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
+    object_flags(creature_ptr, o_ptr, flgs);
+    creature_ptr->riding_wield[i] = FALSE;
+    if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
+        && !have_flag(flgs, TR_RIDING)) {
+        creature_ptr->riding_wield[i] = TRUE;
+    }
+}
+
+    bool is_not_ninja_weapon(player_type *creature_ptr, int i)
 {
     tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
