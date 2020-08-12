@@ -2018,6 +2018,9 @@
     <ClCompile Include="..\..\src\monster\monster-status-setter.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\player-view.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4386,6 +4389,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-status-setter.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-view.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

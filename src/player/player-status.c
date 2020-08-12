@@ -75,6 +75,7 @@
 #include "player/player-status-flags.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
+#include "player/player-view.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-song-numbers.h"
