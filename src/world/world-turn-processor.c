@@ -103,7 +103,7 @@ void process_world(player_type *player_ptr)
             player_ptr->energy_need = 0;
             update_gambling_monsters(player_ptr);
         } else if (current_world_ptr->game_turn - floor_ptr->generated_turn == 150 * TURNS_PER_TICK) {
-            msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle ended in a draw."));
+            msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
             player_ptr->au += kakekin;
             msg_print(NULL);
             player_ptr->energy_need = 0;
