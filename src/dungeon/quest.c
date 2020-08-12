@@ -143,37 +143,27 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 {
     POSITION y = m_ptr->fy;
     POSITION x = m_ptr->fx;
-
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     QUEST_IDX quest_num = floor_ptr->inside_quest;
-
-    /* Search for an active quest on this dungeon level */
     if (!quest_num) {
         QUEST_IDX i;
         for (i = max_q_idx - 1; i > 0; i--) {
             quest_type *const q_ptr = &quest[i];
-
-            /* Quest is not active */
             if (q_ptr->status != QUEST_STATUS_TAKEN)
                 continue;
 
-            /* Quest is not a dungeon quest */
             if (q_ptr->flags & QUEST_FLAG_PRESET)
                 continue;
 
-            /* Quest is not on this level */
             if ((q_ptr->level != floor_ptr->dun_level) && (q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL))
                 continue;
 
-            /* Not a "kill monster" quest */
             if ((q_ptr->type == QUEST_TYPE_FIND_ARTIFACT) || (q_ptr->type == QUEST_TYPE_FIND_EXIT))
                 continue;
 
-            /* Interesting quest */
             if ((q_ptr->type == QUEST_TYPE_KILL_NUMBER) || (q_ptr->type == QUEST_TYPE_TOWER) || (q_ptr->type == QUEST_TYPE_KILL_ALL))
                 break;
 
-            /* Interesting quest */
             if (((q_ptr->type == QUEST_TYPE_KILL_LEVEL) || (q_ptr->type == QUEST_TYPE_KILL_ANY_LEVEL) || (q_ptr->type == QUEST_TYPE_RANDOM))
                 && (q_ptr->r_idx == m_ptr->r_idx))
                 break;
@@ -182,17 +172,13 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
         quest_num = i;
     }
 
-    /* Handle the current quest */
     bool create_stairs = FALSE;
     bool reward = FALSE;
     if (quest_num && (quest[quest_num].status == QUEST_STATUS_TAKEN)) {
-        /* Current quest */
         quest_type *const q_ptr = &quest[quest_num];
-
         switch (q_ptr->type) {
         case QUEST_TYPE_KILL_NUMBER: {
             q_ptr->cur_num++;
-
             if (q_ptr->cur_num >= q_ptr->num_mon) {
                 complete_quest(player_ptr, quest_num);
                 q_ptr->cur_num = 0;
@@ -201,10 +187,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
             break;
         }
         case QUEST_TYPE_KILL_ALL: {
-            if (!is_hostile(m_ptr))
-                break;
-
-            if (count_all_hostile_monsters(floor_ptr) != 1)
+            if (!is_hostile(m_ptr) || count_all_hostile_monsters(floor_ptr) != 1)
                 break;
 
             if (q_ptr->flags & QUEST_FLAG_SILENT) {
@@ -217,26 +200,21 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
         }
         case QUEST_TYPE_KILL_LEVEL:
         case QUEST_TYPE_RANDOM: {
-            /* Only count valid monsters */
             if (q_ptr->r_idx != m_ptr->r_idx)
                 break;
 
             q_ptr->cur_num++;
-
             if (q_ptr->cur_num < q_ptr->max_num)
                 break;
 
             complete_quest(player_ptr, quest_num);
-
             if (!(q_ptr->flags & QUEST_FLAG_PRESET)) {
                 create_stairs = TRUE;
                 floor_ptr->inside_quest = 0;
             }
 
-            /* Finish the two main quests without rewarding */
-            if ((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT)) {
+            if ((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT))
                 q_ptr->status = QUEST_STATUS_FINISHED;
-            }
 
             if (q_ptr->type == QUEST_TYPE_RANDOM) {
                 reward = TRUE;
@@ -273,27 +251,16 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
         }
     }
 
-    /* Create a magical staircase */
     if (create_stairs) {
         POSITION ny, nx;
-
-        /* Stagger around */
         while (cave_have_flag_bold(floor_ptr, y, x, FF_PERMANENT) || floor_ptr->grid_array[y][x].o_idx || (floor_ptr->grid_array[y][x].info & CAVE_OBJECT)) {
-            /* Pick a location */
             scatter(player_ptr, &ny, &nx, y, x, 1, 0);
-
-            /* Stagger */
             y = ny;
             x = nx;
         }
 
-        /* Explain the staircase */
         msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
-
-        /* Create stairs down */
         cave_set_feat(player_ptr, y, x, feat_down_stair);
-
-        /* Remember to update everything */
         player_ptr->update |= (PU_FLOW);
     }
 
@@ -305,8 +272,6 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
     for (int i = 0; i < (floor_ptr->dun_level / 15) + 1; i++) {
         o_ptr = &forge;
         object_wipe(o_ptr);
-
-        /* Make a great object */
         make_object(player_ptr, o_ptr, AM_GOOD | AM_GREAT);
         (void)drop_near(player_ptr, o_ptr, -1, y, x);
     }
