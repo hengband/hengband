@@ -32,6 +32,8 @@
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
+#include "player/player-status-flags.h"
+
 
 /*!
  * @brief 生成されたベースアイテムに魔法的な強化を与えるメインルーチン
@@ -59,7 +61,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     if ((owner_ptr->pseikaku != PERSONALITY_MUNCHKIN) && (f2 > d_info[owner_ptr->dungeon_idx].obj_great))
         f2 = d_info[owner_ptr->dungeon_idx].obj_great;
 
-    if (owner_ptr->muta3 & MUT3_GOOD_LUCK) {
+    if (have_good_luck(owner_ptr)) {
         f1 += 5;
         f2 += 2;
     } else if (owner_ptr->muta3 & MUT3_BAD_LUCK) {
@@ -100,7 +102,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     for (int i = 0; i < rolls; i++) {
         if (make_artifact(owner_ptr, o_ptr))
             break;
-        if ((owner_ptr->muta3 & MUT3_GOOD_LUCK) && one_in_(77)) {
+        if (have_good_luck(owner_ptr) && one_in_(77)) {
             if (make_artifact(owner_ptr, o_ptr))
                 break;
         }

@@ -717,7 +717,6 @@ void calc_bonuses(player_type *creature_ptr)
     }
 
     calc_class_status(creature_ptr);
-    set_personality_flags(creature_ptr);
     calc_equipment_status(creature_ptr);
 
     if (old_mighty_throw != creature_ptr->mighty_throw) {

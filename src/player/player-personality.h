@@ -29,5 +29,3 @@ typedef struct player_personality {
 
 extern const player_personality personality_info[MAX_PERSONALITIES];
 extern const player_personality *ap_ptr;
-
-extern void set_personality_flags(player_type *creature_ptr);

@@ -141,9 +141,3 @@ const player_personality personality_info[MAX_PERSONALITIES] =
 };
 
 const player_personality *ap_ptr;
-
-void set_personality_flags(player_type *creature_ptr)
-{
-    if (creature_ptr->pseikaku == PERSONALITY_LUCKY)
-        creature_ptr->muta3 |= MUT3_GOOD_LUCK;
-}

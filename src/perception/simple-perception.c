@@ -24,6 +24,7 @@
 #include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "view/display-messages.h"
+#include "player/player-status-flags.h"
 
 /*!
  * @brief 擬似鑑定を実際に行い判定を反映する
@@ -279,7 +280,7 @@ void sense_inventory1(player_type *creature_ptr)
         if ((i < INVEN_RARM) && (0 != randint0(5)))
             continue;
 
-        if ((creature_ptr->muta3 & MUT3_GOOD_LUCK) && !randint0(13)) {
+        if (have_good_luck(creature_ptr) && !randint0(13)) {
             heavy = TRUE;
         }
 

@@ -6,6 +6,7 @@
 
 #include "io/mutations-dump.h"
 #include "mutation/mutation-flag-types.h"
+#include "player/player-status-flags.h"
 
 /*!
  * @brief ファイルポインタを通じて突然変異の一覧を出力する
@@ -304,7 +305,7 @@ void dump_mutations(player_type *creature_ptr, FILE *out_file)
         if (creature_ptr->muta3 & MUT3_MOTION)
             fprintf(out_file, _(" あなたの動作は正確で力強い。(隠密+1)\n", " Your movements are precise and forceful (+1 STL).\n"));
 
-        if (creature_ptr->muta3 & MUT3_GOOD_LUCK)
+        if (have_good_luck(creature_ptr))
             fprintf(out_file, _(" あなたは白いオーラにつつまれている。\n", " There is a white aura surrounding you.\n"));
 
         if (creature_ptr->muta3 & MUT3_BAD_LUCK)

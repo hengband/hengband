@@ -35,6 +35,7 @@
 #include "view/display-messages.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "world/world.h"
+#include "player/player-status-flags.h"
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン
@@ -234,7 +235,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 		return;
 	}
 
-	if (creature_ptr->muta3 & MUT3_GOOD_LUCK)
+	if (have_good_luck(creature_ptr))
 		msg_print(do_cmd_feeling_text_lucky[creature_ptr->feeling]);
 	else if (is_echizen(creature_ptr))
 		msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);
