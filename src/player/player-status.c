@@ -148,6 +148,8 @@ static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX sl
 static void calc_equipment_status(player_type *creature_ptr);
 static void calc_weapon_weight_limit(player_type *creature_ptr);
 
+static int get_default_hand(player_type *creature_ptr);
+
     /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
  */
@@ -590,7 +592,7 @@ static bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
  */
 void calc_bonuses(player_type *creature_ptr)
 {
-    int default_hand = 0;
+    int default_hand = get_default_hand(creature_ptr);
     int empty_hands_status = empty_hands(creature_ptr, TRUE);
     object_type *o_ptr;
 
@@ -619,21 +621,6 @@ void calc_bonuses(player_type *creature_ptr)
     have_left_hand_weapon(creature_ptr);
     have_two_handed_weapons(creature_ptr);
     calc_weapon_weight_limit(creature_ptr);
-
-    if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-        if (!creature_ptr->right_hand_weapon)
-            default_hand = 1;
-    }
-
-    if (can_two_hands_wielding(creature_ptr)) {
-        if (creature_ptr->right_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
-            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM])) {
-        } else if (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
-            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
-        } else {
-            default_hand = 1;
-        }
-    }
 
     have_pass_wall(creature_ptr);
     have_kill_wall(creature_ptr);
@@ -4344,12 +4331,7 @@ void calc_equipment_status(player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    int default_hand = 0;
-
-    if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-        if (!creature_ptr->right_hand_weapon)
-            default_hand = 1;
-    }
+    int default_hand = get_default_hand(creature_ptr);
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         int bonus_to_h, bonus_to_d;
@@ -4432,4 +4414,26 @@ void calc_weapon_weight_limit(player_type *creature_ptr)
 
     if (creature_ptr->two_handed_weapon)
 		creature_ptr->hold *= 2;
+}
+
+static int get_default_hand(player_type *creature_ptr)
+{
+    int default_hand = 0;
+
+    if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        if (!creature_ptr->right_hand_weapon)
+            default_hand = 1;
+    }
+
+    if (can_two_hands_wielding(creature_ptr)) {
+        if (creature_ptr->right_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
+            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM])) {
+        } else if (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
+            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
+        } else {
+            default_hand = 1;
+        }
+    }
+
+	return default_hand;
 }
