@@ -17,6 +17,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "player/avatar.h"

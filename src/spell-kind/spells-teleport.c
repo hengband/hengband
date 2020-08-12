@@ -21,6 +21,7 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "mutation/mutation-flag-types.h"
