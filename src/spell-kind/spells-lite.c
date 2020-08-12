@@ -10,6 +10,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-describer.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"

@@ -10,6 +10,7 @@
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster/monster-describer.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
 #include "mspell/mspell-mask-definitions.h"

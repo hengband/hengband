@@ -1,16 +1,13 @@
 ﻿#include "monster/monster-status.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd-visual/cmd-draw.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
@@ -24,7 +21,6 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-floor/monster-death.h"
-#include "monster-floor/monster-move.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
@@ -44,9 +40,8 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
-#include "monster/monster-processor.h"
+#include "monster/monster-status-setter.h" // todo 相互依存. 後で何とかする.
 #include "monster/monster-update.h"
-#include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "object-enchant/object-curse.h"
@@ -235,25 +230,10 @@ int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
  * @return mproc_type 追加したいモンスターの時限ステータスID
  * @return なし
  */
-static void mproc_add(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
+void mproc_add(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
     if (floor_ptr->mproc_max[mproc_type] < current_world_ptr->max_m_idx) {
         floor_ptr->mproc_list[mproc_type][floor_ptr->mproc_max[mproc_type]++] = (s16b)m_idx;
-    }
-}
-
-/*!
- * @brief モンスターの時限ステータスリストを削除
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return m_idx モンスターの参照ID
- * @return mproc_type 削除したいモンスターの時限ステータスID
- * @return なし
- */
-static void mproc_remove(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
-{
-    int mproc_idx = get_mproc_idx(floor_ptr, m_idx, mproc_type);
-    if (mproc_idx >= 0) {
-        floor_ptr->mproc_list[mproc_type][mproc_idx] = floor_ptr->mproc_list[mproc_type][--floor_ptr->mproc_max[mproc_type]];
     }
 }
 
@@ -283,297 +263,6 @@ void mproc_init(floor_type *floor_ptr)
                 mproc_add(floor_ptr, i, cmi);
         }
     }
-}
-
-/*!
- * @brief モンスターの睡眠状態値をセットする。0で起きる。 /
- * Set "m_ptr->mtimed[MTIMED_CSLEEP]", notice observable changes
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスター参照ID
- * @param v セットする値
- * @return 別途更新処理が必要な場合TRUEを返す
- */
-bool set_monster_csleep(player_type *target_ptr, MONSTER_IDX m_idx, int v)
-{
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
-    if (v) {
-        if (!monster_csleep_remaining(m_ptr)) {
-            mproc_add(floor_ptr, m_idx, MTIMED_CSLEEP);
-            notice = TRUE;
-        }
-    }
-
-    else {
-        if (monster_csleep_remaining(m_ptr)) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_CSLEEP);
-            notice = TRUE;
-        }
-    }
-
-    /* Use the value */
-    m_ptr->mtimed[MTIMED_CSLEEP] = (s16b)v;
-
-    if (!notice)
-        return FALSE;
-
-    if (m_ptr->ml) {
-        /* Update health bar as needed */
-        if (target_ptr->health_who == m_idx)
-            target_ptr->redraw |= (PR_HEALTH);
-        if (target_ptr->riding == m_idx)
-            target_ptr->redraw |= (PR_UHEALTH);
-    }
-
-    if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK)
-        target_ptr->update |= (PU_MON_LITE);
-
-    return TRUE;
-}
-
-/*!
- * @brief モンスターの加速状態値をセット /
- * Set "m_ptr->mtimed[MTIMED_FAST]", notice observable changes
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスター参照ID
- * @param v セットする値
- * @return 別途更新処理が必要な場合TRUEを返す
- */
-bool set_monster_fast(player_type *target_ptr, MONSTER_IDX m_idx, int v)
-{
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    if (v) {
-        if (!monster_fast_remaining(m_ptr)) {
-            mproc_add(floor_ptr, m_idx, MTIMED_FAST);
-            notice = TRUE;
-        }
-    }
-
-    else {
-        if (monster_fast_remaining(m_ptr)) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_FAST);
-            notice = TRUE;
-        }
-    }
-
-    /* Use the value */
-    m_ptr->mtimed[MTIMED_FAST] = (s16b)v;
-
-    if (!notice)
-        return FALSE;
-
-    if ((target_ptr->riding == m_idx) && !target_ptr->leaving)
-        target_ptr->update |= (PU_BONUS);
-
-    return TRUE;
-}
-
-/*
- * Set "m_ptr->mtimed[MTIMED_SLOW]", notice observable changes
- */
-bool set_monster_slow(player_type *target_ptr, MONSTER_IDX m_idx, int v)
-{
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    if (v) {
-        if (!monster_slow_remaining(m_ptr)) {
-            mproc_add(floor_ptr, m_idx, MTIMED_SLOW);
-            notice = TRUE;
-        }
-    }
-
-    else {
-        if (monster_slow_remaining(m_ptr)) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_SLOW);
-            notice = TRUE;
-        }
-    }
-
-    /* Use the value */
-    m_ptr->mtimed[MTIMED_SLOW] = (s16b)v;
-
-    if (!notice)
-        return FALSE;
-
-    if ((target_ptr->riding == m_idx) && !target_ptr->leaving)
-        target_ptr->update |= (PU_BONUS);
-
-    return TRUE;
-}
-
-/*!
- * @brief モンスターの朦朧状態値をセット /
- * Set "m_ptr->mtimed[MTIMED_STUNNED]", notice observable changes
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスター参照ID
- * @param v セットする値
- * @return 別途更新処理が必要な場合TRUEを返す
- */
-bool set_monster_stunned(player_type *target_ptr, MONSTER_IDX m_idx, int v)
-{
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    if (v) {
-        if (!monster_stunned_remaining(m_ptr)) {
-            mproc_add(floor_ptr, m_idx, MTIMED_STUNNED);
-            notice = TRUE;
-        }
-    }
-
-    else {
-        if (monster_stunned_remaining(m_ptr)) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_STUNNED);
-            notice = TRUE;
-        }
-    }
-
-    /* Use the value */
-    m_ptr->mtimed[MTIMED_STUNNED] = (s16b)v;
-
-    return notice;
-}
-
-/*!
- * @brief モンスターの混乱状態値をセット /
- * Set "m_ptr->mtimed[MTIMED_CONFUSED]", notice observable changes
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスター参照ID
- * @param v セットする値
- * @return 別途更新処理が必要な場合TRUEを返す
- */
-bool set_monster_confused(player_type *target_ptr, MONSTER_IDX m_idx, int v)
-{
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    if (v) {
-        if (!monster_confused_remaining(m_ptr)) {
-            mproc_add(floor_ptr, m_idx, MTIMED_CONFUSED);
-            notice = TRUE;
-        }
-    }
-
-    else {
-        if (monster_confused_remaining(m_ptr)) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_CONFUSED);
-            notice = TRUE;
-        }
-    }
-
-    /* Use the value */
-    m_ptr->mtimed[MTIMED_CONFUSED] = (s16b)v;
-
-    return notice;
-}
-
-/*!
- * @brief モンスターの恐慌状態値をセット /
- * Set "m_ptr->mtimed[MTIMED_MONFEAR]", notice observable changes
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスター参照ID
- * @param v セットする値
- * @return 別途更新処理が必要な場合TRUEを返す
- */
-bool set_monster_monfear(player_type *target_ptr, MONSTER_IDX m_idx, int v)
-{
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    if (v) {
-        if (!monster_fear_remaining(m_ptr)) {
-            mproc_add(floor_ptr, m_idx, MTIMED_MONFEAR);
-            notice = TRUE;
-        }
-    }
-
-    else {
-        if (monster_fear_remaining(m_ptr)) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_MONFEAR);
-            notice = TRUE;
-        }
-    }
-
-    /* Use the value */
-    m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)v;
-
-    if (!notice)
-        return FALSE;
-
-    if (m_ptr->ml) {
-        /* Update health bar as needed */
-        if (target_ptr->health_who == m_idx)
-            target_ptr->redraw |= (PR_HEALTH);
-        if (target_ptr->riding == m_idx)
-            target_ptr->redraw |= (PR_UHEALTH);
-    }
-
-    return TRUE;
-}
-
-/*!
- * @brief モンスターの無敵状態値をセット /
- * Set "m_ptr->mtimed[MTIMED_INVULNER]", notice observable changes
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスター参照ID
- * @param v セットする値
- * @param energy_need TRUEならば無敵解除時に行動ターン消費を行う
- * @return 別途更新処理が必要な場合TRUEを返す
- */
-bool set_monster_invulner(player_type *target_ptr, MONSTER_IDX m_idx, int v, bool energy_need)
-{
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
-    v = (v > 200) ? 200 : (v < 0) ? 0 : v;
-
-    if (v) {
-        if (!monster_invulner_remaining(m_ptr)) {
-            mproc_add(floor_ptr, m_idx, MTIMED_INVULNER);
-            notice = TRUE;
-        }
-    }
-
-    else {
-        if (monster_invulner_remaining(m_ptr)) {
-            mproc_remove(floor_ptr, m_idx, MTIMED_INVULNER);
-            if (energy_need && !target_ptr->wild_mode)
-                m_ptr->energy_need += ENERGY_NEED();
-            notice = TRUE;
-        }
-    }
-
-    /* Use the value */
-    m_ptr->mtimed[MTIMED_INVULNER] = (s16b)v;
-
-    if (!notice)
-        return FALSE;
-
-    if (m_ptr->ml) {
-        /* Update health bar as needed */
-        if (target_ptr->health_who == m_idx)
-            target_ptr->redraw |= (PR_HEALTH);
-        if (target_ptr->riding == m_idx)
-            target_ptr->redraw |= (PR_UHEALTH);
-    }
-
-    return TRUE;
 }
 
 static u32b csleep_noise;
@@ -809,66 +498,6 @@ void dispel_monster_status(player_type *target_ptr, MONSTER_IDX m_idx)
         if (m_ptr->ml)
             msg_format(_("%sはもう減速されていない。", "%^s is no longer slow."), m_name);
     }
-}
-
-/*!
- * @brief モンスターの時間停止処理
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param num 時間停止を行った敵が行動できる回数
- * @param who 時間停止処理の主体ID
- * @param vs_player TRUEならば時間停止開始処理を行う
- * @return 時間停止が行われている状態ならばTRUEを返す
- */
-bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, bool vs_player)
-{
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[hack_m_idx]; /* the world monster */
-
-    if (current_world_ptr->timewalk_m_idx)
-        return FALSE;
-
-    if (vs_player) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(target_ptr, m_name, m_ptr, 0);
-
-        if (who == 1)
-            msg_format(_("「『ザ・ワールド』！時は止まった！」", "%s yells 'The World! Time has stopped!'"), m_name);
-        else if (who == 3)
-            msg_format(_("「時よ！」", "%s yells 'Time!'"), m_name);
-        else
-            msg_print("hek!");
-
-        msg_print(NULL);
-    }
-
-    /* This monster cast spells */
-    current_world_ptr->timewalk_m_idx = hack_m_idx;
-
-    if (vs_player)
-        do_cmd_redraw(target_ptr);
-
-    while (num--) {
-        if (!monster_is_valid(m_ptr))
-            break;
-        process_monster(target_ptr, current_world_ptr->timewalk_m_idx);
-        reset_target(m_ptr);
-        handle_stuff(target_ptr);
-
-        if (vs_player)
-            term_xtra(TERM_XTRA_DELAY, 500);
-    }
-
-    target_ptr->redraw |= (PR_MAP);
-    target_ptr->update |= (PU_MONSTERS);
-    target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-    current_world_ptr->timewalk_m_idx = 0;
-    if (vs_player || (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) && projectable(target_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx))) {
-        msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
-        msg_print(NULL);
-    }
-
-    handle_stuff(target_ptr);
-    return TRUE;
 }
 
 /*!

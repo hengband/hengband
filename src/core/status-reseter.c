@@ -1,6 +1,6 @@
 ﻿#include "core/status-reseter.h"
 #include "core/speed-table.h"
-#include "monster/monster-status.h"
+#include "monster/monster-status-setter.h"
 #include "player/attack-defense-types.h"
 #include "player/player-race.h"
 
