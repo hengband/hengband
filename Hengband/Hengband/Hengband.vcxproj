@@ -283,6 +283,7 @@
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite.c" />
+    <ClCompile Include="..\..\src\monster\monster-status-setter.c" />
     <ClCompile Include="..\..\src\mspell\element-resistance-checker.c" />
     <ClCompile Include="..\..\src\mspell\high-resistance-checker.c" />
     <ClCompile Include="..\..\src\mspell\improper-mspell-remover.c" />
@@ -882,6 +883,7 @@
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite.h" />
+    <ClInclude Include="..\..\src\monster\monster-status-setter.h" />
     <ClInclude Include="..\..\src\mspell\element-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\high-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\improper-mspell-remover.h" />

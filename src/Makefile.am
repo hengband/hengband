@@ -437,6 +437,7 @@ hengband_SOURCES = \
 	monster/monster-timed-effect-types.h \
 	monster/smart-learn-types.h \
 	monster/monster-status.c monster/monster-status.h \
+	monster/monster-status-setter.c monster/monster-status-setter.h \
 	monster/monster-update.c monster/monster-update.h \
 	monster/monster-util.c monster/monster-util.h \
 	\

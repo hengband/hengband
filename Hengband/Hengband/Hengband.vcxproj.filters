@@ -2015,6 +2015,9 @@
     <ClCompile Include="..\..\src\dungeon\quest-completion-checker.c">
       <Filter>dungeon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-status-setter.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4380,6 +4383,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\quest-completion-checker.h">
       <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-status-setter.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,11 +3,6 @@
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
 
-void set_friendly(monster_type *m_ptr);
-void set_pet(player_type *player_ptr, monster_type *m_ptr);
-void set_hostile(player_type *player_ptr, monster_type *m_ptr);
-void anger_monster(player_type *player_ptr, monster_type *m_ptr);
-
 /*
  * Bit flags for the *_can_enter() and monster_can_cross_terrain()
  */

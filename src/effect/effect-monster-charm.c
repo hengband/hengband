@@ -12,6 +12,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster-floor/monster-remover.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
