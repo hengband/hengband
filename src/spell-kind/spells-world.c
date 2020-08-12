@@ -3,6 +3,7 @@
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
+#include "dungeon/quest-completion-checker.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-save.h"

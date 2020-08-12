@@ -2012,6 +2012,9 @@
     <ClCompile Include="..\..\src\monster-floor\monster-lite.c">
       <Filter>monster-floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\dungeon\quest-completion-checker.c">
+      <Filter>dungeon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4374,6 +4377,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-floor\monster-lite.h">
       <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\quest-completion-checker.h">
+      <Filter>dungeon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
