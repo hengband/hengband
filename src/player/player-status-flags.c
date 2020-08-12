@@ -1173,7 +1173,7 @@ void have_slow_digest(player_type *creature_ptr)
         creature_ptr->slow_digest = TRUE;
     }
 
-    if (!creature_ptr->mimic_form
+	if (!creature_ptr->mimic_form
         && (creature_ptr->prace == RACE_GOLEM || creature_ptr->prace == RACE_ZOMBIE || creature_ptr->prace == RACE_SPECTRE
             || creature_ptr->prace == RACE_ANDROID)) {
         creature_ptr->slow_digest = TRUE;

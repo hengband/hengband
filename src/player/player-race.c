@@ -137,9 +137,6 @@ void calc_race_status(player_type *creature_ptr)
         }
     } else {
         switch (creature_ptr->prace) {
-        case RACE_ZOMBIE:
-            creature_ptr->slow_digest = TRUE;
-            break;
 
         case RACE_BALROG:
             if (creature_ptr->lev > 44) {
