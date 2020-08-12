@@ -2,12 +2,14 @@
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-ninja.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/special-defense-types.h"
+#include "system/floor-type-definition.h"
 #include "sv-definition/sv-lite-types.h"
 #include "util/bit-flags-calculator.h"
 
@@ -134,4 +136,157 @@ void calc_lite_radius(player_type *creature_ptr)
 
     if ((creature_ptr->cur_lite > 0) && (creature_ptr->special_defense & NINJA_S_STEALTH))
         set_superstealth(creature_ptr, FALSE);
+}
+
+/*
+ * Update the set of grids "illuminated" by the player's lite.
+ *
+ * This routine needs to use the results of "update_view()"
+ *
+ * Note that "blindness" does NOT affect "torch lite".  Be careful!
+ *
+ * We optimize most lites (all non-artifact lites) by using "obvious"
+ * facts about the results of "small" lite radius, and we attempt to
+ * list the "nearby" grids before the more "distant" ones in the
+ * array of torch-lit grids.
+ *
+ * We assume that "radius zero" lite is in fact no lite at all.
+ *
+ *     Torch     Lantern     Artifacts
+ *     (etc)
+ *                              ***
+ *                 ***         *****
+ *      ***       *****       *******
+ *      *@*       **@**       ***@***
+ *      ***       *****       *******
+ *                 ***         *****
+ *                              ***
+ */
+void update_lite(player_type *subject_ptr)
+{
+    POSITION p = subject_ptr->cur_lite;
+    grid_type *g_ptr;
+    floor_type *floor_ptr = subject_ptr->current_floor_ptr;
+    for (int i = 0; i < floor_ptr->lite_n; i++) {
+        POSITION y = floor_ptr->lite_y[i];
+        POSITION x = floor_ptr->lite_x[i];
+        floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
+        floor_ptr->grid_array[y][x].info |= CAVE_TEMP;
+        tmp_pos.y[tmp_pos.n] = y;
+        tmp_pos.x[tmp_pos.n] = x;
+        tmp_pos.n++;
+    }
+
+    floor_ptr->lite_n = 0;
+    if (p >= 1) {
+        cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x);
+        cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x);
+        cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x);
+        cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x + 1);
+        cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x - 1);
+        cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x + 1);
+        cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x - 1);
+        cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x + 1);
+        cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x - 1);
+    }
+
+    if (p >= 2) {
+        if (cave_los_bold(floor_ptr, subject_ptr->y + 1, subject_ptr->x)) {
+            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x);
+            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x + 1);
+            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x - 1);
+        }
+
+        if (cave_los_bold(floor_ptr, subject_ptr->y - 1, subject_ptr->x)) {
+            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x);
+            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x + 1);
+            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x - 1);
+        }
+
+        if (cave_los_bold(floor_ptr, subject_ptr->y, subject_ptr->x + 1)) {
+            cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x + 2);
+            cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x + 2);
+            cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x + 2);
+        }
+
+        if (cave_los_bold(floor_ptr, subject_ptr->y, subject_ptr->x - 1)) {
+            cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x - 2);
+            cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x - 2);
+            cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x - 2);
+        }
+    }
+
+    if (p >= 3) {
+        int d;
+        if (p > 14)
+            p = 14;
+
+        if (cave_los_bold(floor_ptr, subject_ptr->y + 1, subject_ptr->x + 1))
+            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x + 2);
+
+        if (cave_los_bold(floor_ptr, subject_ptr->y + 1, subject_ptr->x - 1))
+            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x - 2);
+
+        if (cave_los_bold(floor_ptr, subject_ptr->y - 1, subject_ptr->x + 1))
+            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x + 2);
+
+        if (cave_los_bold(floor_ptr, subject_ptr->y - 1, subject_ptr->x - 1))
+            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x - 2);
+
+        POSITION min_y = subject_ptr->y - p;
+        if (min_y < 0)
+            min_y = 0;
+
+        POSITION max_y = subject_ptr->y + p;
+        if (max_y > floor_ptr->height - 1)
+            max_y = floor_ptr->height - 1;
+
+        POSITION min_x = subject_ptr->x - p;
+        if (min_x < 0)
+            min_x = 0;
+
+        POSITION max_x = subject_ptr->x + p;
+        if (max_x > floor_ptr->width - 1)
+            max_x = floor_ptr->width - 1;
+
+        for (POSITION y = min_y; y <= max_y; y++) {
+            for (POSITION x = min_x; x <= max_x; x++) {
+                int dy = (subject_ptr->y > y) ? (subject_ptr->y - y) : (y - subject_ptr->y);
+                int dx = (subject_ptr->x > x) ? (subject_ptr->x - x) : (x - subject_ptr->x);
+                if ((dy <= 2) && (dx <= 2))
+                    continue;
+
+                d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
+                if (d > p)
+                    continue;
+
+                if (floor_ptr->grid_array[y][x].info & CAVE_VIEW)
+                    cave_lite_hack(floor_ptr, y, x);
+            }
+        }
+    }
+
+    for (int i = 0; i < floor_ptr->lite_n; i++) {
+        POSITION y = floor_ptr->lite_y[i];
+        POSITION x = floor_ptr->lite_x[i];
+        g_ptr = &floor_ptr->grid_array[y][x];
+        if (g_ptr->info & CAVE_TEMP)
+            continue;
+
+        cave_note_and_redraw_later(floor_ptr, g_ptr, y, x);
+    }
+
+    for (int i = 0; i < tmp_pos.n; i++) {
+        POSITION y = tmp_pos.y[i];
+        POSITION x = tmp_pos.x[i];
+        g_ptr = &floor_ptr->grid_array[y][x];
+        g_ptr->info &= ~(CAVE_TEMP);
+        if (g_ptr->info & CAVE_LITE)
+            continue;
+
+        cave_redraw_later(floor_ptr, g_ptr, y, x);
+    }
+
+    tmp_pos.n = 0;
+    subject_ptr->update |= PU_DELAY_VIS;
 }

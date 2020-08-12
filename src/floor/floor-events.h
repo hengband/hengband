@@ -7,5 +7,4 @@ void night_falls(player_type *subject_ptr);
 void update_dungeon_feeling(player_type *subject_ptr);
 void glow_deep_lava_and_bldg(player_type *subject_ptr);
 void forget_lite(floor_type *floor_ptr);
-void update_lite(player_type *subject_ptr); // todo player-statusからだけ呼ばれている.
 void forget_view(floor_type *floor_ptr);
