@@ -33,7 +33,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"
-#include "monster/monster-info.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
