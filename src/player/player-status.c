@@ -4210,19 +4210,9 @@ void cheat_death(player_type *creature_ptr)
     msg_print(NULL);
 
     (void)life_stream(creature_ptr, FALSE, FALSE);
-    if (creature_ptr->pclass == CLASS_MAGIC_EATER) {
-        int magic_idx;
-        for (magic_idx = 0; magic_idx < EATER_EXT * 2; magic_idx++) {
-            creature_ptr->magic_num1[magic_idx] = creature_ptr->magic_num2[magic_idx] * EATER_CHARGE;
-        }
-        for (; magic_idx < EATER_EXT * 3; magic_idx++) {
-            creature_ptr->magic_num1[magic_idx] = 0;
-        }
-    }
-
-    creature_ptr->csp = creature_ptr->msp;
-    creature_ptr->csp_frac = 0;
-    if (creature_ptr->word_recall) {
+    (void)restore_mana(creature_ptr, TRUE);
+	
+	if (creature_ptr->word_recall) {
         msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
         msg_print(NULL);
         creature_ptr->word_recall = 0;
