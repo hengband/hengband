@@ -59,7 +59,11 @@ void have_pass_wall(player_type *creature_ptr)
         creature_ptr->pass_wall = TRUE;
     }
 
-    if (creature_ptr->riding) {
+    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_SPECTRE) {
+        creature_ptr->pass_wall = TRUE;
+    }
+
+	if (creature_ptr->riding) {
         monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         if (!(riding_r_ptr->flags2 & RF2_PASS_WALL))

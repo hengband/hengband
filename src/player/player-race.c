@@ -140,9 +140,6 @@ void calc_race_status(player_type *creature_ptr)
         case RACE_ZOMBIE:
             creature_ptr->slow_digest = TRUE;
             break;
-        case RACE_SPECTRE:
-            creature_ptr->pass_wall = TRUE;
-            break;
 
         case RACE_BALROG:
             if (creature_ptr->lev > 44) {
