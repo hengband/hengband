@@ -2116,7 +2116,11 @@ void have_lite(player_type *creature_ptr)
     if (creature_ptr->pclass == CLASS_NINJA)
         return;
 
-    if (creature_ptr->mimic_form == MIMIC_VAMPIRE) {
+    if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
+        creature_ptr->lite = TRUE;
+    }
+
+	if (creature_ptr->mimic_form == MIMIC_VAMPIRE) {
         creature_ptr->lite = TRUE;
     }
 

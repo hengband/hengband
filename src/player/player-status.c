@@ -710,7 +710,6 @@ void calc_bonuses(player_type *creature_ptr)
 
     calc_race_status(creature_ptr);
 
-
     if (creature_ptr->special_defense & KAMAE_MASK) {
         if (!(empty_hands_status & EMPTY_HAND_RARM)) {
             set_action(creature_ptr, ACTION_NONE);
