@@ -8,19 +8,17 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "grid/feature-flag-types.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
-#include "monster-floor/monster-lite.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
-#include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-status.h"
@@ -122,7 +120,7 @@ static byte get_dungeon_feeling(player_type *subject_ptr)
             continue;
 
         r_ptr = &r_info[m_ptr->r_idx];
-        if (r_ptr->flags1 & (RF1_UNIQUE)) {
+        if (r_ptr->flags1 & RF1_UNIQUE) {
             if (r_ptr->level + 10 > floor_ptr->dun_level)
                 delta += (r_ptr->level + 10 - floor_ptr->dun_level) * 2 * base;
         } else if (r_ptr->level > floor_ptr->dun_level)
