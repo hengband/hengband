@@ -2097,15 +2097,6 @@ void have_two_handed_weapons(player_type *creature_ptr)
         } else if (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
             creature_ptr->two_handed_weapon = TRUE;
-        } else {
-            switch (creature_ptr->pclass) {
-            case CLASS_MONK:
-            case CLASS_FORCETRAINER:
-            case CLASS_BERSERKER:
-                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
-                    creature_ptr->two_handed_weapon = TRUE;
-                }
-            }
         }
     }
 }
