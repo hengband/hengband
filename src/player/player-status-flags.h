@@ -75,5 +75,6 @@ void have_right_hand_weapon(player_type *creature_ptr);
 void have_left_hand_weapon(player_type *creature_ptr);
 void have_two_handed_weapons(player_type *creature_ptr);
 void have_lite(player_type *creature_ptr);
+bool is_disable_two_handed_bonus(player_type *creature_ptr, int i);
 
 

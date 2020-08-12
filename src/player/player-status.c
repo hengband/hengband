@@ -596,7 +596,6 @@ void calc_bonuses(player_type *creature_ptr)
     int empty_hands_status = empty_hands(creature_ptr, TRUE);
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    bool omoi = FALSE;
 
     /* Save the old vision stuff */
     bool old_telepathy = creature_ptr->telepathy;
@@ -828,7 +827,7 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->window |= (PW_PLAYER);
     }
 
-    if (creature_ptr->two_handed_weapon && !omoi) {
+    if (creature_ptr->two_handed_weapon && !is_disable_two_handed_bonus(creature_ptr, 0)) {
         int bonus_to_h = 0, bonus_to_d = 0;
         bonus_to_d = ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128) / 2;
         bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
@@ -1916,7 +1915,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
     creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    bool omoi = FALSE;
     if (creature_ptr->two_handed_weapon)
         creature_ptr->hold *= 2;
 
@@ -1930,8 +1928,7 @@ static void calc_num_blow(player_type *creature_ptr, int i)
     } else {
         if (creature_ptr->hold < o_ptr->weight / 10) {
             creature_ptr->heavy_wield[i] = TRUE;
-        } else if (creature_ptr->two_handed_weapon && (creature_ptr->hold < o_ptr->weight / 5))
-            omoi = TRUE;
+        }
 
         if ((i == 1) && (o_ptr->tval == TV_SWORD) && ((o_ptr->sval == SV_MAIN_GAUCHE) || (o_ptr->sval == SV_WAKIZASHI))) {
             creature_ptr->to_a += 5;
@@ -1961,7 +1958,7 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             div = ((o_ptr->weight < wgt) ? wgt : o_ptr->weight);
             str_index = (adj_str_blow[creature_ptr->stat_ind[A_STR]] * mul / div);
 
-            if (creature_ptr->two_handed_weapon && !omoi)
+            if (creature_ptr->two_handed_weapon && !is_disable_two_handed_bonus(creature_ptr, 0))
                 str_index++;
             if (creature_ptr->pclass == CLASS_NINJA)
                 str_index = MAX(0, str_index - 1);
