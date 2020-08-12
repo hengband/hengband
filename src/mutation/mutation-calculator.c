@@ -53,21 +53,3 @@ int calc_mutant_regenerate_mod(player_type *creature_ptr)
 
     return (regen);
 }
-
-void set_mutation_flags(player_type *creature_ptr)
-{
-    if (creature_ptr->muta3 == 0)
-        return;
-
-    if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
-        creature_ptr->lite = TRUE;
-    }
-
-    if (creature_ptr->muta3 & MUT3_WINGS)
-        creature_ptr->levitation = TRUE;
-
-    if (creature_ptr->muta3 & MUT3_FEARLESS)
-        creature_ptr->resist_fear = TRUE;
-
-
-}

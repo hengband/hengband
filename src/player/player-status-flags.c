@@ -1097,6 +1097,9 @@ void have_levitation(player_type *creature_ptr)
         creature_ptr->levitation = TRUE;
     }
 
+    if (creature_ptr->muta3 & MUT3_WINGS)
+        creature_ptr->levitation = TRUE;
+
     if (!creature_ptr->mimic_form
         && (creature_ptr->prace == RACE_DRACONIAN || creature_ptr->prace == RACE_SPECTRE || creature_ptr->prace == RACE_SPRITE
             || creature_ptr->prace == RACE_ARCHON || creature_ptr->prace == RACE_S_FAIRY)) {
@@ -1914,7 +1917,10 @@ void have_resist_fear(player_type *creature_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     creature_ptr->resist_fear = FALSE;
 
-    switch (creature_ptr->pclass) {
+	if (creature_ptr->muta3 & MUT3_FEARLESS)
+        creature_ptr->resist_fear = TRUE;
+
+	switch (creature_ptr->pclass) {
     case CLASS_WARRIOR:
         if (creature_ptr->lev > 29)
             creature_ptr->resist_fear = TRUE;
@@ -2114,7 +2120,11 @@ void have_lite(player_type *creature_ptr)
         creature_ptr->lite = TRUE;
     }
 
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_VAMPIRE)
+    if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
+        creature_ptr->lite = TRUE;
+    }
+
+	if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_VAMPIRE)
         creature_ptr->lite = TRUE;
 
     if (creature_ptr->sh_fire)
