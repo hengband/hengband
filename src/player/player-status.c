@@ -148,8 +148,9 @@ static void calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slo
 static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
 
 static void calc_equipment_status(player_type *creature_ptr);
+static void calc_weapon_weight_limit(player_type *creature_ptr);
 
-/*!
+    /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
  */
 const concptr stat_names[6] = {
@@ -591,7 +592,6 @@ static bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
  */
 void calc_bonuses(player_type *creature_ptr)
 {
-    creature_ptr->hold = 0;
     int default_hand = 0;
     int empty_hands_status = empty_hands(creature_ptr, TRUE);
     object_type *o_ptr;
@@ -621,6 +621,7 @@ void calc_bonuses(player_type *creature_ptr)
 	have_right_hand_weapon(creature_ptr);
     have_left_hand_weapon(creature_ptr);
     have_two_handed_weapons(creature_ptr);
+    calc_weapon_weight_limit(creature_ptr);
 
     if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
         if (!creature_ptr->right_hand_weapon)
@@ -771,7 +772,6 @@ void calc_bonuses(player_type *creature_ptr)
     calc_weapon_penalty(creature_ptr, INVEN_RARM);
     calc_weapon_penalty(creature_ptr, INVEN_LARM);
 
-    creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     creature_ptr->heavy_shoot = is_heavy_shoot(creature_ptr, o_ptr);
 
@@ -781,9 +781,6 @@ void calc_bonuses(player_type *creature_ptr)
             creature_ptr->num_fire = calc_num_fire(creature_ptr, o_ptr);
         }
     }
-
-    if (creature_ptr->two_handed_weapon)
-        creature_ptr->hold *= 2;
 
     for (int i = 0; i < 2; i++) {
         o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
@@ -1912,11 +1909,8 @@ static bool is_not_monk_weapon(player_type *creature_ptr, int i)
 
 static void calc_num_blow(player_type *creature_ptr, int i)
 {
-    creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    if (creature_ptr->two_handed_weapon)
-        creature_ptr->hold *= 2;
 
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     object_flags(creature_ptr, o_ptr, flgs);
@@ -4478,4 +4472,13 @@ void calc_equipment_status(player_type *creature_ptr)
         creature_ptr->dis_to_h[default_hand] += (s16b)bonus_to_h;
         creature_ptr->dis_to_d[default_hand] += (s16b)bonus_to_d;
     }
+}
+
+void calc_weapon_weight_limit(player_type *creature_ptr)
+{
+	creature_ptr->hold = 0;
+    creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
+
+    if (creature_ptr->two_handed_weapon)
+		creature_ptr->hold *= 2;
 }
