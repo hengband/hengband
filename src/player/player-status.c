@@ -99,8 +99,6 @@
 #include "world/world.h"
 
 static bool is_martial_arts_mode(player_type *creature_ptr);
-static bool is_not_ninja_weapon(player_type *creature_ptr, int i);
-static bool is_not_monk_weapon(player_type *creature_ptr, int i);
 
 static void calc_intra_vision(player_type *creature_ptr);
 static void calc_stealth(player_type *creature_ptr);
@@ -783,29 +781,14 @@ void calc_bonuses(player_type *creature_ptr)
     }
 
     for (int i = 0; i < 2; i++) {
-        o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
-        object_flags(creature_ptr, o_ptr, flgs);
-
+        is_icky_wield_weapon(creature_ptr, i);
         calc_num_blow(creature_ptr, i);
-
-        if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
-            creature_ptr->icky_wield[i] = TRUE;
-        } else if (creature_ptr->pclass == CLASS_SORCERER) {
-            if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
-                creature_ptr->icky_wield[i] = TRUE;
-            }
-        }
-
         calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
         calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
 
         if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
             && !have_flag(flgs, TR_RIDING)) {
             creature_ptr->riding_wield[i] = TRUE;
-        }
-
-        if (is_not_monk_weapon(creature_ptr, i) || is_not_ninja_weapon(creature_ptr, i)) {
-            creature_ptr->icky_wield[i] = TRUE;
         }
     }
 
@@ -1892,21 +1875,6 @@ static bool is_martial_arts_mode(player_type *creature_ptr)
         && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) && !creature_ptr->left_hand_weapon;
 }
 
-static bool is_not_ninja_weapon(player_type *creature_ptr, int i)
-{
-    tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
-    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
-    return creature_ptr->pclass == CLASS_NINJA
-        && !((s_info[CLASS_NINJA].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (creature_ptr->inventory_list[INVEN_LARM - i].tval != TV_SHIELD));
-}
-
-static bool is_not_monk_weapon(player_type *creature_ptr, int i)
-{
-    tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
-    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
-    return (creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) && (!s_info[creature_ptr->pclass].w_max[tval][sval]);
-}
-
 static void calc_num_blow(player_type *creature_ptr, int i)
 {
     object_type *o_ptr;
@@ -1915,7 +1883,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     object_flags(creature_ptr, o_ptr, flgs);
     creature_ptr->heavy_wield[i] = FALSE;
-    creature_ptr->icky_wield[i] = FALSE;
     creature_ptr->riding_wield[i] = FALSE;
     if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
         creature_ptr->num_blow[i] = 1;
