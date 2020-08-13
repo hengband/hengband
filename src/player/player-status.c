@@ -592,7 +592,6 @@ static bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
  */
 void calc_bonuses(player_type *creature_ptr)
 {
-    int default_hand = get_default_hand(creature_ptr);
     int empty_hands_status = empty_hands(creature_ptr, TRUE);
     object_type *o_ptr;
 
@@ -740,12 +739,6 @@ void calc_bonuses(player_type *creature_ptr)
 
     if (creature_ptr->see_inv != old_see_inv) {
         creature_ptr->update |= (PU_MONSTERS);
-    }
-
-    if ((creature_ptr->right_hand_weapon && (empty_hands_status & EMPTY_HAND_RARM))
-        || (creature_ptr->left_hand_weapon && (empty_hands_status & EMPTY_HAND_LARM))) {
-        creature_ptr->to_h[default_hand] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
-        creature_ptr->dis_to_h[default_hand] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
     }
 
     calc_weapon_penalty(creature_ptr, INVEN_RARM);
@@ -3284,7 +3277,12 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
     }
 
 	if (get_default_hand(creature_ptr) == id) {
-        if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
+        if ((creature_ptr->right_hand_weapon && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
+                || (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_LARM))) {
+            creature_ptr->to_h[id] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
+        }
+
+		if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
             || !is_disable_two_handed_bonus(creature_ptr, 0)) {
             int bonus_to_h = 0;
             bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
@@ -3394,6 +3392,15 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
     if (is_not_ninja_weapon(creature_ptr, id) || is_not_monk_weapon(creature_ptr, id)) {
         creature_ptr->dis_to_h[id] -= 40;
     }
+
+	if (get_default_hand(creature_ptr) == id) {
+        if ((creature_ptr->right_hand_weapon && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
+            || (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_LARM))) {
+            creature_ptr->dis_to_h[id] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
+        }
+    }
+
+
 }
 
 static void calc_to_hit_bow(player_type *creature_ptr)
