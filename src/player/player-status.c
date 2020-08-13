@@ -105,7 +105,7 @@ static void calc_stealth(player_type *creature_ptr);
 static void calc_disarming(player_type *creature_ptr);
 static void calc_device_ability(player_type *creature_ptr);
 static void calc_saving_throw(player_type *creature_ptr);
-static void calc_search(player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_search(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *creature_ptr);
@@ -789,7 +789,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_disarming(creature_ptr);
     calc_device_ability(creature_ptr);
     calc_saving_throw(creature_ptr);
-    calc_search(creature_ptr);
+    creature_ptr->skill_srh = calc_search(creature_ptr);
     creature_ptr->skill_fos = calc_search_freq(creature_ptr);
     creature_ptr->skill_thn = calc_to_hit_melee(creature_ptr);
     creature_ptr->skill_thb = calc_to_hit_shoot(creature_ptr);
@@ -1716,8 +1716,20 @@ static void calc_saving_throw(player_type *creature_ptr)
         creature_ptr->skill_sav /= 2;
 }
 
-static void calc_search(player_type *creature_ptr)
+/*!
+ * @brief 探索深度計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 探索深度
+ * @details
+ * * 種族/職業/性格による加算
+ * * 職業とレベルによる追加加算
+ * * 各装備による加算(TR_SEARCHがあれば+pval*5)
+ * * 狂戦士化による減算(-15)
+ * * 変異(MUT3_XTRA_EYES)による加算(+15)
+ */
+static ACTION_SKILL_POWER calc_search(player_type *creature_ptr)
 {
+    ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
 
     if (creature_ptr->mimic_form)
@@ -1727,7 +1739,8 @@ static void calc_search(player_type *creature_ptr)
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
-    creature_ptr->skill_srh = tmp_rp_ptr->r_srh + c_ptr->c_srh + a_ptr->a_srh;
+    pow = tmp_rp_ptr->r_srh + c_ptr->c_srh + a_ptr->a_srh;
+    pow += (c_ptr->x_srh * creature_ptr->lev / 10);
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -1737,17 +1750,18 @@ static void calc_search(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_SEARCH))
-            creature_ptr->skill_srh += (o_ptr->pval * 5);
+            pow += (o_ptr->pval * 5);
     }
 
     if (creature_ptr->muta3 & MUT3_XTRA_EYES) {
-        creature_ptr->skill_srh += 15;
+        pow += 15;
     }
-    creature_ptr->skill_srh += (cp_ptr->x_srh * creature_ptr->lev / 10);
 
     if (creature_ptr->shero) {
-        creature_ptr->skill_srh -= 15;
+        pow -= 15;
     }
+
+	return pow;
 }
 
 /*!
@@ -1757,6 +1771,7 @@ static void calc_search(player_type *creature_ptr)
  * @details
  * * 種族/職業/性格による加算
  * * 職業とレベルによる追加加算
+ * * 各装備による加算(TR_SEARCHがあれば+pval*5)
  * * 狂戦士化による減算(-15)
  * * 変異(MUT3_XTRA_EYES)による加算(+15)
  */
