@@ -1207,17 +1207,10 @@ void calc_class_status(player_type *creature_ptr)
         creature_ptr->redraw |= PR_STATUS;
         break;
     case CLASS_NINJA:
-        if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
-            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
-            creature_ptr->to_a += creature_ptr->lev / 2 + 5;
-            creature_ptr->dis_to_a += creature_ptr->lev / 2 + 5;
-        }
-
         if (creature_ptr->lev > 44) {
             creature_ptr->oppose_pois = 1;
             creature_ptr->redraw |= PR_STATUS;
         }
-
         break;
     }
 }

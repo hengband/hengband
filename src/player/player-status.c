@@ -2524,6 +2524,13 @@ static void calc_to_ac(player_type *creature_ptr)
     if (creature_ptr->shero) {
         creature_ptr->to_a -= 10;
     }
+
+	if (creature_ptr->pclass == CLASS_NINJA) {
+        if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
+            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
+            creature_ptr->to_a += creature_ptr->lev / 2 + 5;
+        }
+    }
 }
 
 static void calc_base_ac_display(player_type *creature_ptr)
@@ -2682,6 +2689,13 @@ static void calc_to_ac_display(player_type *creature_ptr)
 
     if (creature_ptr->shero) {
         creature_ptr->dis_to_a -= 10;
+    }
+
+	if (creature_ptr->pclass == CLASS_NINJA) {
+        if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
+            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
+            creature_ptr->dis_to_a += creature_ptr->lev / 2 + 5;
+        }
     }
 }
 
@@ -4364,7 +4378,6 @@ bool is_echizen(player_type *creature_ptr)
 void calc_equipment_status(player_type *creature_ptr)
 {
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     int default_hand = get_default_hand(creature_ptr);
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
