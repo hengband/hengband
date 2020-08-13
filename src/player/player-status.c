@@ -784,15 +784,6 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->window |= (PW_PLAYER);
     }
 
-    if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) || !is_disable_two_handed_bonus(creature_ptr, 0)) {
-        int bonus_to_h = 0, bonus_to_d = 0;
-        bonus_to_d = ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128) / 2;
-        bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-
-        creature_ptr->to_h[default_hand] += MAX(bonus_to_h, 1);
-        creature_ptr->to_d[default_hand] += MAX(bonus_to_d, 1);
-    }
-
     calc_intra_vision(creature_ptr);
     calc_stealth(creature_ptr);
     calc_disarming(creature_ptr);
@@ -3128,6 +3119,15 @@ static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot)
             }
         }
     }
+
+	if (get_default_hand(creature_ptr) == id) {
+        if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
+            || !is_disable_two_handed_bonus(creature_ptr, 0)) {
+            int bonus_to_d = 0;
+            bonus_to_d = ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128) / 2;
+            creature_ptr->to_d[id] += MAX(bonus_to_d, 1);
+        }
+    }
 }
 
 static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3281,6 +3281,15 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
 
     if (is_not_ninja_weapon(creature_ptr, id) || is_not_monk_weapon(creature_ptr, id)) {
         creature_ptr->to_h[id] -= 40;
+    }
+
+	if (get_default_hand(creature_ptr) == id) {
+        if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
+            || !is_disable_two_handed_bonus(creature_ptr, 0)) {
+            int bonus_to_h = 0;
+            bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
+            creature_ptr->to_h[id] += MAX(bonus_to_h, 1);
+        }
     }
 }
 
