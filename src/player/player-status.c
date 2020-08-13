@@ -104,7 +104,7 @@ static void calc_intra_vision(player_type *creature_ptr);
 static void calc_stealth(player_type *creature_ptr);
 static void calc_disarming(player_type *creature_ptr);
 static void calc_device_ability(player_type *creature_ptr);
-static void calc_saving_throw(player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_search(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr);
@@ -788,7 +788,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_stealth(creature_ptr);
     calc_disarming(creature_ptr);
     calc_device_ability(creature_ptr);
-    calc_saving_throw(creature_ptr);
+    creature_ptr->skill_sav = calc_saving_throw(creature_ptr);
     creature_ptr->skill_srh = calc_search(creature_ptr);
     creature_ptr->skill_fos = calc_search_freq(creature_ptr);
     creature_ptr->skill_thn = calc_to_hit_melee(creature_ptr);
@@ -1685,8 +1685,24 @@ static void calc_device_ability(player_type *creature_ptr)
     }
 }
 
-static void calc_saving_throw(player_type *creature_ptr)
+/*!
+ * @brief 魔法防御計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 魔法防御
+ * @details
+ * * 種族/職業/性格による加算
+ * * 職業と性格とレベルによる追加加算
+ * * 変異MUT3_MAGIC_RESによる加算(15 + レベル / 5)
+ * * 賢さによるadj_wis_savテーブル加算
+ * * 狂戦士化による減算(-30)
+ * * 反魔法持ちで大なり上書き(90+レベル未満ならその値に上書き) 
+ * * クターのつぶれ状態なら(10に上書き) 
+ * * 生命の「究極の耐性」や regist_magic,magicdef持ちなら大なり上書き(95+レベル未満ならその値に上書き) 
+ * * 呪いのdown_savingがかかっているなら半減 
+ */
+static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
 {
+    ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
 
     if (creature_ptr->mimic_form)
@@ -1696,24 +1712,30 @@ static void calc_saving_throw(player_type *creature_ptr)
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
-    creature_ptr->skill_sav = tmp_rp_ptr->r_sav + c_ptr->c_sav + a_ptr->a_sav;
-    if (creature_ptr->shero)
-        creature_ptr->skill_sav -= 30;
-    if (creature_ptr->muta3 & MUT3_MAGIC_RES)
-        creature_ptr->skill_sav += (15 + (creature_ptr->lev / 5));
-    creature_ptr->skill_sav += adj_wis_sav[creature_ptr->stat_ind[A_WIS]];
-    creature_ptr->skill_sav += ((cp_ptr->x_sav * creature_ptr->lev / 10) + (ap_ptr->a_sav * creature_ptr->lev / 50));
-    if (creature_ptr->anti_magic && (creature_ptr->skill_sav < (90 + creature_ptr->lev)))
-        creature_ptr->skill_sav = 90 + creature_ptr->lev;
+    pow = tmp_rp_ptr->r_sav + c_ptr->c_sav + a_ptr->a_sav;
+    pow += ((cp_ptr->x_sav * creature_ptr->lev / 10) + (ap_ptr->a_sav * creature_ptr->lev / 50));
+
+	if (creature_ptr->muta3 & MUT3_MAGIC_RES)
+        pow += (15 + (creature_ptr->lev / 5));
+
+	pow += adj_wis_sav[creature_ptr->stat_ind[A_WIS]];
+
+	if (creature_ptr->shero)
+        pow -= 30;
+
+	if (creature_ptr->anti_magic && (pow < (90 + creature_ptr->lev)))
+        pow = 90 + creature_ptr->lev;
 
     if (creature_ptr->tsubureru)
-        creature_ptr->skill_sav = 10;
+        pow = 10;
 
-    if ((creature_ptr->ult_res || creature_ptr->resist_magic || creature_ptr->magicdef) && (creature_ptr->skill_sav < (95 + creature_ptr->lev)))
-        creature_ptr->skill_sav = 95 + creature_ptr->lev;
+    if ((creature_ptr->ult_res || creature_ptr->resist_magic || creature_ptr->magicdef) && (pow < (95 + creature_ptr->lev)))
+        pow = 95 + creature_ptr->lev;
 
     if (creature_ptr->down_saving)
-        creature_ptr->skill_sav /= 2;
+        pow /= 2;
+
+	return pow;
 }
 
 /*!
