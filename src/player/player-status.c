@@ -110,7 +110,7 @@ static void calc_search_freq(player_type *creature_ptr);
 static void calc_to_hit_melee(player_type *creature_ptr);
 static void calc_to_hit_shoot(player_type *creature_ptr);
 static void calc_to_hit_throw(player_type *creature_ptr);
-static void calc_dig(player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr);
 static void calc_num_blow(player_type *creature_ptr, int i);
 static void calc_strength_addition(player_type *creature_ptr);
 static void calc_intelligence_addition(player_type *creature_ptr);
@@ -806,7 +806,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_to_hit_bow_display(creature_ptr);
     calc_to_damage_misc(creature_ptr);
     calc_to_hit_misc(creature_ptr);
-    calc_dig(creature_ptr);
+    creature_ptr->skill_dig = calc_skill_dig(creature_ptr);
 
     if (old_mighty_throw != creature_ptr->mighty_throw) {
         creature_ptr->window |= PW_INVEN;
@@ -1834,24 +1834,39 @@ static void calc_to_hit_throw(player_type *creature_ptr)
     creature_ptr->skill_tht += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));
 }
 
-static void calc_dig(player_type *creature_ptr)
+/*!
+ * @brief 掘削能力計算 
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 掘削能力値
+ * @details
+ * * エントが素手の場合のプラス修正
+ * * 狂戦士化時のプラス修正
+ * * 腕力によるテーブルプラス修正
+ * * 職業狂戦士のプラス修正
+ * * 装備の特性によるプラス修正
+ * * 武器重量によるプラス修正
+ * * 最終算出値に1を保証
+ */
+static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-    creature_ptr->skill_dig = 0;
+	ACTION_SKILL_POWER pow;
+
+    pow = 0;
 
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_ENT && !creature_ptr->inventory_list[INVEN_RARM].k_idx) {
-        creature_ptr->skill_dig += creature_ptr->lev * 10;
+        pow += creature_ptr->lev * 10;
     }
 
     if (creature_ptr->shero)
-        creature_ptr->skill_dig += 30;
+        pow += 30;
 
-    creature_ptr->skill_dig += adj_str_dig[creature_ptr->stat_ind[A_STR]];
+    pow += adj_str_dig[creature_ptr->stat_ind[A_STR]];
 
     if (creature_ptr->pclass == CLASS_BERSERKER)
-        creature_ptr->skill_dig += (100 + creature_ptr->lev * 8);
+        pow += (100 + creature_ptr->lev * 8);
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -1859,23 +1874,24 @@ static void calc_dig(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_TUNNEL))
-            creature_ptr->skill_dig += (o_ptr->pval * 20);
+            pow += (o_ptr->pval * 20);
     }
 
     for (int i = 0; i < 2; i++) {
         o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
-
         if (has_melee_weapon(creature_ptr, INVEN_RARM + i) && !creature_ptr->heavy_wield[i]) {
-            creature_ptr->skill_dig += (o_ptr->weight / 10);
+            pow += (o_ptr->weight / 10);
         }
     }
 
     if (creature_ptr->shero) {
-        creature_ptr->skill_dig += 30;
+        pow += 30;
     }
 
-    if (creature_ptr->skill_dig < 1)
-        creature_ptr->skill_dig = 1;
+    if (pow < 1)
+        pow = 1;
+
+	return pow;
 }
 
 static bool is_martial_arts_mode(player_type *creature_ptr)
