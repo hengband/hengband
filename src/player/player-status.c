@@ -1510,6 +1510,17 @@ static void calc_intra_vision(player_type *creature_ptr)
     if (creature_ptr->tim_infra) {
         creature_ptr->see_infra += 3;
     }
+
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        object_flags(creature_ptr, o_ptr, flgs);
+        if (have_flag(flgs, TR_INFRA))
+            creature_ptr->see_infra += o_ptr->pval;
+    }
 }
 
 /*!
@@ -4361,12 +4372,6 @@ void calc_equipment_status(player_type *creature_ptr)
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_INFRA))
-            creature_ptr->see_infra += o_ptr->pval;
-
 
         if (o_ptr->tval == TV_CAPTURE)
             continue;
