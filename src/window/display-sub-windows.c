@@ -68,8 +68,8 @@ void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
  *  X   : symbol of monster
  *  LV  : monster lv if known
  *  name: name of monster
- * @return なし
  * </pre>
+ * @return なし
  */
 static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int n_same)
 {
