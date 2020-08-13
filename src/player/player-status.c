@@ -103,7 +103,7 @@ static bool is_martial_arts_mode(player_type *creature_ptr);
 static void calc_intra_vision(player_type *creature_ptr);
 static void calc_stealth(player_type *creature_ptr);
 static void calc_disarming(player_type *creature_ptr);
-static void calc_device_ability(player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_search(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr);
@@ -787,7 +787,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_intra_vision(creature_ptr);
     calc_stealth(creature_ptr);
     calc_disarming(creature_ptr);
-    calc_device_ability(creature_ptr);
+    creature_ptr->skill_dev = calc_device_ability(creature_ptr);
     creature_ptr->skill_sav = calc_saving_throw(creature_ptr);
     creature_ptr->skill_srh = calc_search(creature_ptr);
     creature_ptr->skill_fos = calc_search_freq(creature_ptr);
@@ -1648,13 +1648,19 @@ static void calc_disarming(player_type *creature_ptr)
 }
 
 /*!
- * @brief プレイヤーの魔道具使用能力値を計算する
- * @return なし
+ * @brief 魔法防御計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 魔法防御
  * @details
- * This function induces status messages.
+ * * 種族/職業/性格による加算
+ * * 職業と性格とレベルによる追加加算
+ * * 装備による加算(TR_MAGIC_MASTERYを持っていたら+pval*8)
+ * * 知力に応じたadj_int_devテーブルによる加算
+ * * 狂戦士化による減算(-20)
  */
-static void calc_device_ability(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr)
 {
+    ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
 
     if (creature_ptr->mimic_form)
@@ -1664,7 +1670,8 @@ static void calc_device_ability(player_type *creature_ptr)
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
-    creature_ptr->skill_dev = tmp_rp_ptr->r_dev + c_ptr->c_dev + a_ptr->a_dev;
+    pow = tmp_rp_ptr->r_dev + c_ptr->c_dev + a_ptr->a_dev;
+    pow += ((c_ptr->x_dev * creature_ptr->lev / 10) + (ap_ptr->a_dev * creature_ptr->lev / 50));
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -1674,15 +1681,15 @@ static void calc_device_ability(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_MAGIC_MASTERY))
-            creature_ptr->skill_dev += 8 * o_ptr->pval;
+            pow += 8 * o_ptr->pval;
     }
 
-    creature_ptr->skill_dev += adj_int_dev[creature_ptr->stat_ind[A_INT]];
-    creature_ptr->skill_dev += ((cp_ptr->x_dev * creature_ptr->lev / 10) + (ap_ptr->a_dev * creature_ptr->lev / 50));
+    pow += adj_int_dev[creature_ptr->stat_ind[A_INT]];
 
     if (creature_ptr->shero) {
-        creature_ptr->skill_dev -= 20;
+        pow -= 20;
     }
+    return pow;
 }
 
 /*!
