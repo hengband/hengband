@@ -1,8 +1,8 @@
-#pragma once
+ï»¿#pragma once
 
 #include "system/angband.h"
 
-/*! ƒI[ƒgƒ[ƒ‰‚Ì”N—îAg’·A‘ÌdAĞ‰ï“I’nˆÊ‚Ì—v‹…€ */
+/*! ã‚ªãƒ¼ãƒˆãƒ­ãƒ¼ãƒ©ã®å¹´é½¢ã€èº«é•·ã€ä½“é‡ã€ç¤¾ä¼šçš„åœ°ä½ã®è¦æ±‚æ°´æº– */
 typedef struct {
     s16b agemin, agemax;
     s16b htmin, htmax;
