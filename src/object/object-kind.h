@@ -58,5 +58,4 @@ extern char *k_name;
 extern char *k_text;
 extern KIND_OBJECT_IDX max_k_idx;
 
-void calc_equipment_status(player_type *creature_ptr);
 SYMBOL_CODE object_char(object_type *o_ptr);

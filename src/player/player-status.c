@@ -145,7 +145,6 @@ static void calc_to_hit_misc(player_type *creature_ptr);
 static void calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
 
-static void calc_equipment_status(player_type *creature_ptr);
 static void calc_weapon_weight_limit(player_type *creature_ptr);
 
 static int get_default_hand(player_type *creature_ptr);
@@ -702,7 +701,6 @@ void calc_bonuses(player_type *creature_ptr)
     }
 
     calc_class_status(creature_ptr);
-    calc_equipment_status(creature_ptr);
 
     if (old_mighty_throw != creature_ptr->mighty_throw) {
         creature_ptr->window |= PW_INVEN;
@@ -3153,6 +3151,41 @@ static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot)
             creature_ptr->to_d[id] += MAX(bonus_to_d, 1);
         }
     }
+
+	// 武器以外の装備による修正
+    int default_hand = get_default_hand(creature_ptr);
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        int bonus_to_d;
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
+            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
+            continue;
+
+        bonus_to_d = o_ptr->to_d;
+
+        if (creature_ptr->pclass == CLASS_NINJA) {
+            if (o_ptr->to_d > 0)
+                bonus_to_d = (o_ptr->to_d + 1) / 2;
+        }
+
+        if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon) {
+            creature_ptr->to_d[i - INVEN_RIGHT] += (s16b)bonus_to_d;
+            if (object_is_known(o_ptr)) {
+                creature_ptr->dis_to_d[i - INVEN_RIGHT] += (s16b)bonus_to_d;
+            }
+            continue;
+        }
+
+        if (creature_ptr->right_hand_weapon && creature_ptr->left_hand_weapon) {
+            creature_ptr->to_d[0] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
+            creature_ptr->to_d[1] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
+            continue;
+        }
+
+        creature_ptr->to_d[default_hand] += (s16b)bonus_to_d;
+    }
+
+
 }
 
 static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3203,6 +3236,44 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
             }
         }
     }
+
+	// 武器以外の装備による修正
+    int default_hand = get_default_hand(creature_ptr);
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        int bonus_to_d;
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
+            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
+            continue;
+
+        bonus_to_d = o_ptr->to_d;
+
+        if (creature_ptr->pclass == CLASS_NINJA) {
+            if (o_ptr->to_d > 0)
+                bonus_to_d = (o_ptr->to_d + 1) / 2;
+        }
+
+        if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon) {
+            if (object_is_known(o_ptr)) {
+                creature_ptr->dis_to_d[i - INVEN_RIGHT] += (s16b)bonus_to_d;
+            }
+            continue;
+        }
+
+        if (creature_ptr->right_hand_weapon && creature_ptr->left_hand_weapon) {
+            if (!object_is_known(o_ptr))
+                continue;
+
+            creature_ptr->dis_to_d[0] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
+            creature_ptr->dis_to_d[1] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
+            continue;
+        }
+
+        if (!object_is_known(o_ptr))
+            continue;
+
+		creature_ptr->dis_to_d[default_hand] += (s16b)bonus_to_d;
+    }
 }
 
 static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3220,6 +3291,7 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
 
     creature_ptr->to_h[id] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     creature_ptr->to_h[id] += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+
 
     if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
         creature_ptr->to_h[id] -= 2;
@@ -3321,6 +3393,41 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
             creature_ptr->to_h[id] += MAX(bonus_to_h, 1);
         }
     }
+
+	// 武器以外の装備による修正
+    int default_hand = get_default_hand(creature_ptr);
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        int bonus_to_h;
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
+            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
+            continue;
+
+		bonus_to_h = o_ptr->to_h;
+
+		if (creature_ptr->pclass == CLASS_NINJA) {
+            if (o_ptr->to_h > 0)
+                bonus_to_h = (o_ptr->to_h + 1) / 2;
+        }
+
+        if (object_is_known(o_ptr))
+            creature_ptr->dis_to_h_b += (s16b)bonus_to_h;
+
+        if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon) {
+            creature_ptr->to_h[i - INVEN_RIGHT] += (s16b)bonus_to_h;
+            continue;
+        }
+
+        if (creature_ptr->right_hand_weapon && creature_ptr->left_hand_weapon) {
+            creature_ptr->to_h[0] += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
+            creature_ptr->to_h[1] += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
+            continue;
+        }
+        creature_ptr->to_h[default_hand] += (s16b)bonus_to_h;
+
+    }
+
+
 }
 
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3432,7 +3539,44 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
     }
 
+	// 武器以外の装備による修正
+    int default_hand = get_default_hand(creature_ptr);
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        int bonus_to_h;
+        o_ptr = &creature_ptr->inventory_list[i];
 
+		if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
+            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
+            continue;
+
+		bonus_to_h = o_ptr->to_h;
+
+        if (creature_ptr->pclass == CLASS_NINJA) {
+            if (o_ptr->to_h > 0)
+                bonus_to_h = (o_ptr->to_h + 1) / 2;
+        }
+
+        if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon) {
+            if (object_is_known(o_ptr)) {
+                creature_ptr->dis_to_h[i - INVEN_RIGHT] += (s16b)bonus_to_h;
+            }
+            continue;
+        }
+
+        if (creature_ptr->right_hand_weapon && creature_ptr->left_hand_weapon) {
+            if (!object_is_known(o_ptr))
+                continue;
+
+            creature_ptr->dis_to_h[0] += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
+            creature_ptr->dis_to_h[1] += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
+            continue;
+        }
+
+        if (!object_is_known(o_ptr))
+            continue;
+
+        creature_ptr->dis_to_h[default_hand] += (s16b)bonus_to_h;
+    }
 }
 
 static void calc_to_hit_bow(player_type *creature_ptr)
@@ -3501,6 +3645,24 @@ static void calc_to_hit_bow(player_type *creature_ptr)
             }
         }
     }
+
+	// 武器以外の装備による修正
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        int bonus_to_h;
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
+            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
+            continue;
+
+        bonus_to_h = o_ptr->to_h;
+
+        if (creature_ptr->pclass == CLASS_NINJA) {
+            if (o_ptr->to_h > 0)
+                bonus_to_h = (o_ptr->to_h + 1) / 2;
+        }
+
+        creature_ptr->to_h_b += (s16b)bonus_to_h;
+    }
 }
 
 static void calc_to_hit_bow_display(player_type *creature_ptr)
@@ -3558,6 +3720,25 @@ static void calc_to_hit_bow_display(player_type *creature_ptr)
                 creature_ptr->dis_to_h_b += (10 + (creature_ptr->lev / 5));
             }
         }
+    }
+
+	// 武器以外の装備による修正
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        int bonus_to_h;
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
+            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
+            continue;
+
+        bonus_to_h = o_ptr->to_h;
+
+        if (creature_ptr->pclass == CLASS_NINJA) {
+            if (o_ptr->to_h > 0)
+                bonus_to_h = (o_ptr->to_h + 1) / 2;
+        }
+
+        if (object_is_known(o_ptr))
+            creature_ptr->dis_to_h_b += (s16b)bonus_to_h;
     }
 }
 
@@ -4373,79 +4554,6 @@ bool is_hero(player_type *creature_ptr) { return creature_ptr->hero || music_sin
 bool is_echizen(player_type *creature_ptr)
 {
     return (creature_ptr->pseikaku == PERSONALITY_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
-}
-
-void calc_equipment_status(player_type *creature_ptr)
-{
-    object_type *o_ptr;
-    int default_hand = get_default_hand(creature_ptr);
-
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        int bonus_to_h, bonus_to_d;
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        if (o_ptr->tval == TV_CAPTURE)
-            continue;
-
-        if (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
-            continue;
-        if (i == INVEN_LARM && has_melee_weapon(creature_ptr, i))
-            continue;
-        if (i == INVEN_BOW)
-            continue;
-
-        bonus_to_h = o_ptr->to_h;
-        bonus_to_d = o_ptr->to_d;
-
-        if (creature_ptr->pclass == CLASS_NINJA) {
-            if (o_ptr->to_h > 0)
-                bonus_to_h = (o_ptr->to_h + 1) / 2;
-            if (o_ptr->to_d > 0)
-                bonus_to_d = (o_ptr->to_d + 1) / 2;
-        }
-
-        creature_ptr->to_h_b += (s16b)bonus_to_h;
-
-        if (object_is_known(o_ptr))
-            creature_ptr->dis_to_h_b += (s16b)bonus_to_h;
-
-        if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon) {
-            creature_ptr->to_h[i - INVEN_RIGHT] += (s16b)bonus_to_h;
-            creature_ptr->to_d[i - INVEN_RIGHT] += (s16b)bonus_to_d;
-            if (object_is_known(o_ptr)) {
-                creature_ptr->dis_to_h[i - INVEN_RIGHT] += (s16b)bonus_to_h;
-                creature_ptr->dis_to_d[i - INVEN_RIGHT] += (s16b)bonus_to_d;
-            }
-
-            continue;
-        }
-
-        if (creature_ptr->right_hand_weapon && creature_ptr->left_hand_weapon) {
-            creature_ptr->to_h[0] += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
-            creature_ptr->to_h[1] += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
-            creature_ptr->to_d[0] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
-            creature_ptr->to_d[1] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
-            if (!object_is_known(o_ptr))
-                continue;
-
-            creature_ptr->dis_to_h[0] += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
-            creature_ptr->dis_to_h[1] += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
-            creature_ptr->dis_to_d[0] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
-            creature_ptr->dis_to_d[1] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
-            continue;
-        }
-
-        creature_ptr->to_h[default_hand] += (s16b)bonus_to_h;
-        creature_ptr->to_d[default_hand] += (s16b)bonus_to_d;
-
-        if (!object_is_known(o_ptr))
-            continue;
-
-        creature_ptr->dis_to_h[default_hand] += (s16b)bonus_to_h;
-        creature_ptr->dis_to_d[default_hand] += (s16b)bonus_to_d;
-    }
 }
 
 void calc_weapon_weight_limit(player_type *creature_ptr)
