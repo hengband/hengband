@@ -102,7 +102,7 @@ static bool is_martial_arts_mode(player_type *creature_ptr);
 
 static void calc_intra_vision(player_type *creature_ptr);
 static void calc_stealth(player_type *creature_ptr);
-static void calc_disarming(player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_search(player_type *creature_ptr);
@@ -786,7 +786,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_speed(creature_ptr);
     calc_intra_vision(creature_ptr);
     calc_stealth(creature_ptr);
-    calc_disarming(creature_ptr);
+    creature_ptr->skill_dis = calc_disarming(creature_ptr);
     creature_ptr->skill_dev = calc_device_ability(creature_ptr);
     creature_ptr->skill_sav = calc_saving_throw(creature_ptr);
     creature_ptr->skill_srh = calc_search(creature_ptr);
@@ -1625,13 +1625,18 @@ static void calc_stealth(player_type *creature_ptr)
 }
 
 /*!
- * @brief プレイヤーの解除能力値を計算する
- * @return なし
+ * @brief 解除能力計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 解除能力
  * @details
- * This function induces status messages.
+ * * 種族/職業/性格による加算
+ * * 職業と性格とレベルによる追加加算
+ * * 器用さに応じたadj_dex_disテーブルによる加算
+ * * 知力に応じたadj_int_disテーブルによる加算
  */
-static void calc_disarming(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr)
 {
+    ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
 
     if (creature_ptr->mimic_form)
@@ -1641,10 +1646,11 @@ static void calc_disarming(player_type *creature_ptr)
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
-    creature_ptr->skill_dis = tmp_rp_ptr->r_dis + c_ptr->c_dis + a_ptr->a_dis;
-    creature_ptr->skill_dis += adj_dex_dis[creature_ptr->stat_ind[A_DEX]];
-    creature_ptr->skill_dis += adj_int_dis[creature_ptr->stat_ind[A_INT]];
-    creature_ptr->skill_dis += ((cp_ptr->x_dis * creature_ptr->lev / 10) + (ap_ptr->a_dis * creature_ptr->lev / 50));
+    pow = tmp_rp_ptr->r_dis + c_ptr->c_dis + a_ptr->a_dis;
+    pow += ((cp_ptr->x_dis * creature_ptr->lev / 10) + (ap_ptr->a_dis * creature_ptr->lev / 50));
+    pow += adj_dex_dis[creature_ptr->stat_ind[A_DEX]];
+    pow += adj_int_dis[creature_ptr->stat_ind[A_INT]];
+    return pow;
 }
 
 /*!
