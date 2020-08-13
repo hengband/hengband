@@ -1197,20 +1197,3 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 	},
 };
 #endif
-
-void calc_class_status(player_type *creature_ptr)
-{
-    switch (creature_ptr->pclass) {
-
-    case CLASS_BERSERKER:
-        creature_ptr->shero = 1;
-        creature_ptr->redraw |= PR_STATUS;
-        break;
-    case CLASS_NINJA:
-        if (creature_ptr->lev > 44) {
-            creature_ptr->oppose_pois = 1;
-            creature_ptr->redraw |= PR_STATUS;
-        }
-        break;
-    }
-}

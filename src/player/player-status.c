@@ -692,18 +692,52 @@ void calc_bonuses(player_type *creature_ptr)
 
     have_lite(creature_ptr);
 
-    calc_race_status(creature_ptr);
+	const player_race *tmp_rp_ptr;
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+
+    if (creature_ptr->mimic_form) {
+        switch (creature_ptr->mimic_form) {
+        case MIMIC_DEMON:
+            creature_ptr->oppose_fire = 1;
+            creature_ptr->redraw |= PR_STATUS;
+            break;
+        }
+    } else {
+        switch (creature_ptr->prace) {
+
+        case RACE_BALROG:
+            if (creature_ptr->lev > 44) {
+                creature_ptr->oppose_fire = 1;
+                creature_ptr->redraw |= PR_STATUS;
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    switch (creature_ptr->pclass) {
+
+    case CLASS_BERSERKER:
+        creature_ptr->shero = 1;
+        creature_ptr->redraw |= PR_STATUS;
+        break;
+    case CLASS_NINJA:
+        if (creature_ptr->lev > 44) {
+            creature_ptr->oppose_pois = 1;
+            creature_ptr->redraw |= PR_STATUS;
+        }
+        break;
+    }
 
     if (creature_ptr->special_defense & KAMAE_MASK) {
         if (!(empty_hands_status & EMPTY_HAND_RARM)) {
             set_action(creature_ptr, ACTION_NONE);
         }
-    }
-
-    calc_class_status(creature_ptr);
-
-    if (old_mighty_throw != creature_ptr->mighty_throw) {
-        creature_ptr->window |= PW_INVEN;
     }
 
     calc_strength_addition(creature_ptr);
@@ -722,21 +756,6 @@ void calc_bonuses(player_type *creature_ptr)
         calc_top_status(creature_ptr, i);
         calc_use_status(creature_ptr, i);
         calc_ind_status(creature_ptr, i);
-    }
-
-    if (creature_ptr->telepathy != old_telepathy) {
-        creature_ptr->update |= (PU_MONSTERS);
-    }
-
-    if ((creature_ptr->esp_animal != old_esp_animal) || (creature_ptr->esp_undead != old_esp_undead) || (creature_ptr->esp_demon != old_esp_demon)
-        || (creature_ptr->esp_orc != old_esp_orc) || (creature_ptr->esp_troll != old_esp_troll) || (creature_ptr->esp_giant != old_esp_giant)
-        || (creature_ptr->esp_dragon != old_esp_dragon) || (creature_ptr->esp_human != old_esp_human) || (creature_ptr->esp_evil != old_esp_evil)
-        || (creature_ptr->esp_good != old_esp_good) || (creature_ptr->esp_nonliving != old_esp_nonliving) || (creature_ptr->esp_unique != old_esp_unique)) {
-        creature_ptr->update |= (PU_MONSTERS);
-    }
-
-    if (creature_ptr->see_inv != old_see_inv) {
-        creature_ptr->update |= (PU_MONSTERS);
     }
 
     calc_weapon_penalty(creature_ptr, INVEN_RARM);
@@ -765,16 +784,6 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->monk_armour_aux = heavy_armor(creature_ptr);
 
     calc_speed(creature_ptr);
-
-    if (creature_ptr->pspeed != old_speed) {
-        creature_ptr->redraw |= (PR_SPEED);
-    }
-
-    if ((creature_ptr->dis_ac != old_dis_ac) || (creature_ptr->dis_to_a != old_dis_to_a)) {
-        creature_ptr->redraw |= (PR_ARMOR);
-        creature_ptr->window |= (PW_PLAYER);
-    }
-
     calc_intra_vision(creature_ptr);
     calc_stealth(creature_ptr);
     calc_disarming(creature_ptr);
@@ -798,6 +807,34 @@ void calc_bonuses(player_type *creature_ptr)
     calc_to_damage_misc(creature_ptr);
     calc_to_hit_misc(creature_ptr);
     calc_dig(creature_ptr);
+
+    if (old_mighty_throw != creature_ptr->mighty_throw) {
+        creature_ptr->window |= PW_INVEN;
+    }
+
+    if (creature_ptr->telepathy != old_telepathy) {
+        creature_ptr->update |= (PU_MONSTERS);
+    }
+
+    if ((creature_ptr->esp_animal != old_esp_animal) || (creature_ptr->esp_undead != old_esp_undead) || (creature_ptr->esp_demon != old_esp_demon)
+        || (creature_ptr->esp_orc != old_esp_orc) || (creature_ptr->esp_troll != old_esp_troll) || (creature_ptr->esp_giant != old_esp_giant)
+        || (creature_ptr->esp_dragon != old_esp_dragon) || (creature_ptr->esp_human != old_esp_human) || (creature_ptr->esp_evil != old_esp_evil)
+        || (creature_ptr->esp_good != old_esp_good) || (creature_ptr->esp_nonliving != old_esp_nonliving) || (creature_ptr->esp_unique != old_esp_unique)) {
+        creature_ptr->update |= (PU_MONSTERS);
+    }
+
+    if (creature_ptr->see_inv != old_see_inv) {
+        creature_ptr->update |= (PU_MONSTERS);
+    }
+
+    if (creature_ptr->pspeed != old_speed) {
+        creature_ptr->redraw |= (PR_SPEED);
+    }
+
+    if ((creature_ptr->dis_ac != old_dis_ac) || (creature_ptr->dis_to_a != old_dis_to_a)) {
+        creature_ptr->redraw |= (PR_ARMOR);
+        creature_ptr->window |= (PW_PLAYER);
+    }
 
     if (current_world_ptr->character_xtra)
         return;

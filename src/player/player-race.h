@@ -65,5 +65,4 @@ extern const player_race *rp_ptr;
 
 typedef struct player_type player_type;
 SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr);
-void calc_race_status(player_type *creature_ptr);
 bool is_specific_player_race(player_type *creature_ptr, player_race_type prace);

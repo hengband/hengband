@@ -119,34 +119,3 @@ SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr)
 }
 
 bool is_specific_player_race(player_type *creature_ptr, player_race_type prace) { return (!creature_ptr->mimic_form && (creature_ptr->prace == prace)); }
-
-void calc_race_status(player_type *creature_ptr)
-{	
-	const player_race *tmp_rp_ptr;
-	if (creature_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
-    else
-        tmp_rp_ptr = &race_info[creature_ptr->prace];
-
-    if (creature_ptr->mimic_form) {
-        switch (creature_ptr->mimic_form) {
-        case MIMIC_DEMON:
-            creature_ptr->oppose_fire = 1;
-            creature_ptr->redraw |= PR_STATUS;
-            break;
-        }
-    } else {
-        switch (creature_ptr->prace) {
-
-        case RACE_BALROG:
-            if (creature_ptr->lev > 44) {
-                creature_ptr->oppose_fire = 1;
-                creature_ptr->redraw |= PR_STATUS;
-            }
-            break;
-
-        default:
-            break;
-        }
-    }
-}

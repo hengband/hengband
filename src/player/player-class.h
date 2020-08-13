@@ -76,5 +76,3 @@ extern const player_class *cp_ptr;
 extern const player_class class_info[MAX_CLASS];
 
 extern const concptr player_title[MAX_CLASS][10];
-
-void calc_class_status(player_type *creature_ptr);
