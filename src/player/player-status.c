@@ -109,7 +109,7 @@ static void calc_search(player_type *creature_ptr);
 static void calc_search_freq(player_type *creature_ptr);
 static void calc_to_hit_melee(player_type *creature_ptr);
 static void calc_to_hit_shoot(player_type *creature_ptr);
-static void calc_to_hit_throw(player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr);
 static void calc_num_blow(player_type *creature_ptr, int i);
 static void calc_strength_addition(player_type *creature_ptr);
@@ -793,7 +793,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_search_freq(creature_ptr);
     calc_to_hit_melee(creature_ptr);
     calc_to_hit_shoot(creature_ptr);
-    calc_to_hit_throw(creature_ptr);
+    creature_ptr->skill_tht = calc_to_hit_throw(creature_ptr);
     calc_to_damage(creature_ptr, INVEN_RARM);
     calc_to_damage(creature_ptr, INVEN_LARM);
     calc_to_damage_display(creature_ptr, INVEN_RARM);
@@ -1815,8 +1815,17 @@ static void calc_to_hit_shoot(player_type *creature_ptr)
     creature_ptr->skill_thb += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));
 }
 
-static void calc_to_hit_throw(player_type *creature_ptr)
+/*!
+ * @brief 投擲命中能力計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 投擲命中能力
+ * @details
+ * * 種族/職業/性格による加算とレベルによる追加加算
+ * * 狂戦士による減算(-20)
+ */
+static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr)
 {
+    ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
@@ -1826,12 +1835,14 @@ static void calc_to_hit_throw(player_type *creature_ptr)
     else
         tmp_rp_ptr = &race_info[creature_ptr->prace];
 
+	pow = tmp_rp_ptr->r_thb + c_ptr->c_thb + a_ptr->a_thb;
+    pow += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));
+
     if (creature_ptr->shero) {
-        creature_ptr->skill_tht -= 20;
+        pow -= 20;
     }
 
-    creature_ptr->skill_tht = tmp_rp_ptr->r_thb + c_ptr->c_thb + a_ptr->a_thb;
-    creature_ptr->skill_tht += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));
+	return pow;
 }
 
 /*!
