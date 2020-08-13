@@ -4,7 +4,7 @@
  * @brief Windows版固有実装(メインエントリポイント含む)
  * @date 2018/03/16
  * @author Hengband Team
- * @detail
+ * @details
  *
  * <h3>概要</h3>
  * Windows98かその前後の頃を起点としたAPI実装。
