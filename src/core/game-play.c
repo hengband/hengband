@@ -29,6 +29,7 @@
 #include "dungeon/dungeon-processor.h"
 #include "flavor/object-flavor.h"
 #include "floor/cave.h"
+#include "floor/floor-changer.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-util.h"

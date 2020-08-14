@@ -2027,6 +2027,9 @@
     <ClCompile Include="..\..\src\floor\floor-save-util.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-changer.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4403,6 +4406,9 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-save-util.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-changer.h">
       <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>

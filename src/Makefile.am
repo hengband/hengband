@@ -214,6 +214,7 @@ hengband_SOURCES = \
 	floor/floor.c floor/floor.h \
 	floor/floor-allocation-types.h \
 	floor/floor-base-definitions.h \
+	floor/floor-changer.c floor/floor-changer.h \
 	floor/floor-events.c floor/floor-events.h \
 	floor/floor-generator-util.h \
 	floor/floor-generator.c floor/floor-generator.h \

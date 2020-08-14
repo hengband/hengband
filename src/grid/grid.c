@@ -1472,3 +1472,5 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
 
     return count;
 }
+
+bool feat_uses_special(FEAT_IDX f_idx) { return have_flag(f_info[(f_idx)].flags, FF_SPECIAL); }
