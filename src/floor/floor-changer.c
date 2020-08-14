@@ -1,8 +1,8 @@
 ﻿#include "floor/floor-changer.h"
 #include "action/travel-execution.h"
 #include "dungeon/dungeon.h"
-#include "dungeon/quest.h"
 #include "dungeon/quest-monster-placer.h"
+#include "dungeon/quest.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
@@ -212,18 +212,18 @@ static void update_floor_id(player_type *creature_ptr, saved_floor_type *sf_ptr)
             sf_ptr->lower_floor_id = 0;
         else if (creature_ptr->change_floor_mode & CFM_DOWN)
             sf_ptr->upper_floor_id = 0;
-        
-        return;        
+
+        return;
     }
 
     saved_floor_type *cur_sf_ptr = get_sf_ptr(creature_ptr->floor_id);
     if (creature_ptr->change_floor_mode & CFM_UP) {
         if (cur_sf_ptr->upper_floor_id == new_floor_id)
             sf_ptr->lower_floor_id = creature_ptr->floor_id;
-        
+
         return;
     }
-    
+
     if (((creature_ptr->change_floor_mode & CFM_DOWN) != 0) && (cur_sf_ptr->lower_floor_id == new_floor_id))
         sf_ptr->upper_floor_id = creature_ptr->floor_id;
 }
@@ -285,6 +285,21 @@ static void new_floor_allocation(player_type *creature_ptr, saved_floor_type *sf
         (void)alloc_monster(creature_ptr, 0, 0, summon_specific);
 }
 
+static void check_dead_end(player_type *creature_ptr, saved_floor_type *sf_ptr)
+{
+    if (sf_ptr->last_visit == 0) {
+        generate_floor(creature_ptr);
+        return;
+    }
+
+    msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
+    build_dead_end(creature_ptr);
+    if (creature_ptr->change_floor_mode & CFM_UP)
+        sf_ptr->upper_floor_id = 0;
+    else if (creature_ptr->change_floor_mode & CFM_DOWN)
+        sf_ptr->lower_floor_id = 0;
+}
+
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -318,16 +333,7 @@ void change_floor(player_type *creature_ptr)
         if (loaded) {
             new_floor_allocation(creature_ptr, sf_ptr);
         } else {
-            if (sf_ptr->last_visit) {
-                msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
-                build_dead_end(creature_ptr);
-                if (creature_ptr->change_floor_mode & CFM_UP)
-                    sf_ptr->upper_floor_id = 0;
-                else if (creature_ptr->change_floor_mode & CFM_DOWN)
-                    sf_ptr->lower_floor_id = 0;
-            } else
-                generate_floor(creature_ptr);
-
+            check_dead_end(creature_ptr, sf_ptr);
             sf_ptr->last_visit = current_world_ptr->game_turn;
             sf_ptr->dun_level = creature_ptr->current_floor_ptr->dun_level;
             if (!(creature_ptr->change_floor_mode & CFM_NO_RETURN)) {
