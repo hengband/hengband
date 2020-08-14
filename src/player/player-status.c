@@ -101,7 +101,7 @@
 static bool is_martial_arts_mode(player_type *creature_ptr);
 
 static void calc_intra_vision(player_type *creature_ptr);
-static void calc_stealth(player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr);
@@ -785,7 +785,7 @@ void calc_bonuses(player_type *creature_ptr)
 
     calc_speed(creature_ptr);
     calc_intra_vision(creature_ptr);
-    calc_stealth(creature_ptr);
+    creature_ptr->skill_stl = calc_stealth(creature_ptr);
     creature_ptr->skill_dis = calc_disarming(creature_ptr);
     creature_ptr->skill_dev = calc_device_ability(creature_ptr);
     creature_ptr->skill_sav = calc_saving_throw(creature_ptr);
@@ -1559,13 +1559,27 @@ static void calc_intra_vision(player_type *creature_ptr)
 }
 
 /*!
- * @brief プレイヤーの隠密値を計算する
- * @return なし
+ * @brief 隠密能力計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 隠密能力
  * @details
- * This function induces status messages.
+ * * 初期値1
+ * * 種族/職業/性格による加算
+ * * 職業による追加加算
+ * * 装備による修正(TR_STEALTHがあれば+pval*1)
+ * * 変異MUT3_XTRA_NOISで減算(-3)
+ * * 変異MUT3_MOTIONで加算(+1)
+ * * 呪術を唱えていると減算(-(詠唱数+1))
+ * * セクシーギャルでない影フェアリーがTRC_AGGRAVATE持ちの時、別処理でTRC_AGGRAVATEを無効にする代わりに減算(-3か3未満なら(現在値+2)/2)
+ * * 狂戦士化で減算(-7)
+ * * 忍者がheavy_armorならば減算(-レベル/10)
+ * * 忍者がheavy_armorでなく適正な武器を持っていれば加算(+レベル/10)
+ * * 隠密の歌で加算(+99)
+ * * 最大30、最低0に補正
  */
-static void calc_stealth(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
 {
+    ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
 
     if (creature_ptr->mimic_form)
@@ -1575,7 +1589,8 @@ static void calc_stealth(player_type *creature_ptr)
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
-    creature_ptr->skill_stl = tmp_rp_ptr->r_stl + c_ptr->c_stl + a_ptr->a_stl;
+    pow = 1 + tmp_rp_ptr->r_stl + c_ptr->c_stl + a_ptr->a_stl;
+    pow += (c_ptr->x_stl * creature_ptr->lev / 10);
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -1585,43 +1600,43 @@ static void calc_stealth(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_STEALTH))
-            creature_ptr->skill_stl += o_ptr->pval;
+            pow += o_ptr->pval;
     }
 
     if (creature_ptr->muta3 & MUT3_XTRA_NOIS) {
-        creature_ptr->skill_stl -= 3;
+        pow -= 3;
     }
     if (creature_ptr->muta3 & MUT3_MOTION) {
-        creature_ptr->skill_stl += 1;
+        pow += 1;
     }
     if (creature_ptr->realm1 == REALM_HEX) {
         if (hex_spelling_any(creature_ptr))
-            creature_ptr->skill_stl -= (1 + casting_hex_num(creature_ptr));
+            pow -= (1 + casting_hex_num(creature_ptr));
     }
-    creature_ptr->skill_stl += 1;
-    creature_ptr->skill_stl += (c_ptr->x_stl * creature_ptr->lev / 10);
     if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE)) {
-        creature_ptr->skill_stl = MIN(creature_ptr->skill_stl - 3, (creature_ptr->skill_stl + 2) / 2);
+        pow = MIN(pow - 3, (pow + 2) / 2);
     }
 
     if (creature_ptr->shero) {
-        creature_ptr->skill_stl -= 7;
+        pow -= 7;
     }
 
 	if (creature_ptr->pclass == CLASS_NINJA && heavy_armor(creature_ptr)) {
-        creature_ptr->skill_stl -= (creature_ptr->lev) / 10;
+        pow -= (creature_ptr->lev) / 10;
     } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
         && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
-        creature_ptr->skill_stl += (creature_ptr->lev) / 10;
+        pow += (creature_ptr->lev) / 10;
     }
 
     if (is_time_limit_stealth(creature_ptr))
-        creature_ptr->skill_stl += 99;
+        pow += 99;
 
-    if (creature_ptr->skill_stl > 30)
-        creature_ptr->skill_stl = 30;
-    if (creature_ptr->skill_stl < 0)
-        creature_ptr->skill_stl = 0;
+    if (pow > 30)
+        pow = 30;
+    if (pow < 0)
+        pow = 0;
+
+	return pow;
 }
 
 /*!
