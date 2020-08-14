@@ -89,6 +89,22 @@ static void sweep_preserving_pet(player_type *master_ptr)
     }
 }
 
+static void record_pet_diary(player_type *master_ptr)
+{
+    if (!record_named_pet)
+        return;
+
+    for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
+        monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
+        GAME_TEXT m_name[MAX_NLEN];
+        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || !m_ptr->nickname || (master_ptr->riding == i))
+            continue;
+
+        monster_desc(master_ptr, m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+        exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
+    }
+}
+
 /*!
  * @brief フロア移動時のペット保存処理 / Preserve_pets
  * @param master_ptr プレーヤーへの参照ポインタ
@@ -101,18 +117,7 @@ static void preserve_pet(player_type *master_ptr)
 
     check_riding_preservation(master_ptr);
     sweep_preserving_pet(master_ptr);
-    if (record_named_pet) {
-        for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-            monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
-            GAME_TEXT m_name[MAX_NLEN];
-            if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || !m_ptr->nickname || (master_ptr->riding == i))
-                continue;
-
-            monster_desc(master_ptr, m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-            exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
-        }
-    }
-
+    record_pet_diary(master_ptr);
     for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
         if ((m_ptr->parent_m_idx == 0) || (master_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx != 0))
