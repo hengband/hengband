@@ -128,7 +128,7 @@ static void calc_base_ac_display(player_type *creature_ptr);
 static void calc_to_ac(player_type *creature_ptr);
 static void calc_to_ac_display(player_type *creature_ptr);
 static void calc_speed(player_type *creature_ptr);
-static void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
+static s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_use_status(player_type *creature_ptr, int status);
 static void calc_top_status(player_type *creature_ptr, int status);
 static void calc_ind_status(player_type *creature_ptr, int status);
@@ -469,8 +469,13 @@ void calc_bonuses(player_type *creature_ptr)
         calc_ind_status(creature_ptr, i);
     }
 
-    calc_weapon_penalty(creature_ptr, INVEN_RARM);
-    calc_weapon_penalty(creature_ptr, INVEN_LARM);
+    s16b r_pena = calc_double_weapon_penalty(creature_ptr, INVEN_RARM);
+    s16b l_pena = calc_double_weapon_penalty(creature_ptr, INVEN_LARM);
+
+	creature_ptr->to_h[0] -= r_pena;
+    creature_ptr->dis_to_h[0] -= r_pena;
+    creature_ptr->to_h[1] -= l_pena;
+    creature_ptr->dis_to_h[1] -= l_pena;
 
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     creature_ptr->heavy_shoot = is_heavy_shoot(creature_ptr, o_ptr);
@@ -2873,10 +2878,23 @@ static void calc_speed(player_type *creature_ptr)
         creature_ptr->pspeed = 11;
 }
 
-void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
+/*!
+ * @brief 二刀流ペナルティ量計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @param slot ペナルティ量を計算する武器スロット
+ * @return 二刀流ペナルティ量
+ * @details
+ * * 二刀流にしていなければ0
+ * * 棘セットによる軽減
+ * * 源氏エゴによる軽減
+ * * マンゴーシュ/脇差を左に装備した場合の軽減
+ * * 武蔵セットによる軽減
+ * * 竿上武器による増加
+ */
+s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
 {
+    int penalty = 0;
     if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
-        int penalty;
         penalty = ((100 - creature_ptr->skill_exp[GINOU_NITOURYU] / 160) - (130 - creature_ptr->inventory_list[slot].weight) / 8);
         if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_TINYTHORN)) {
             penalty = penalty / 2 - 5;
@@ -2899,9 +2917,8 @@ void calc_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
 
         if (creature_ptr->inventory_list[slot].tval == TV_POLEARM)
             penalty += 10;
-        creature_ptr->to_h[slot - INVEN_RARM] -= (s16b)penalty;
-        creature_ptr->dis_to_h[slot - INVEN_RARM] -= (s16b)penalty;
     }
+    return (s16b)penalty;
 }
 
 static void calc_ind_status(player_type *creature_ptr, int status)
