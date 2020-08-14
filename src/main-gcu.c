@@ -200,7 +200,7 @@ static term_data data[MAX_TERM_DATA];
  * Mega-Hack -- try to guess when "POSIX" is available.
  * If the user defines two of these, we will probably crash.
  */
-#if !defined(USE_TERMIO) && !defined(USE_TCHARS)
+#if !defined(USE_TCHARS)
 # if defined(_POSIX_VERSION)
 #  define USE_TPOSIX
 # else
