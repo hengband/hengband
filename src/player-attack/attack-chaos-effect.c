@@ -18,6 +18,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object/object-mark-types.h"
 #include "player/attack-defense-types.h"

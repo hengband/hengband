@@ -1,5 +1,6 @@
 ﻿#include "load/dungeon-loader.h"
 #include "dungeon/quest.h"
+#include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "load/angband-version-comparer.h"
 #include "load/dummy-loader.h"

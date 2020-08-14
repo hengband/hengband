@@ -168,7 +168,7 @@ extern bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FL
 /*!
  * マス構造体のspecial要素を利用する地形かどうかを判定するマクロ / Is this feature has special meaning (except floor_id) with g_ptr->special?
  */
-#define feat_uses_special(F) (have_flag(f_info[(F)].flags, FF_SPECIAL))
+bool feat_uses_special(FEAT_IDX f_idx);
 
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);

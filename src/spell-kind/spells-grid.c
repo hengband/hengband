@@ -3,6 +3,7 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
+#include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"

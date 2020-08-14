@@ -990,7 +990,7 @@ typedef struct term_data term_data;
  */
 struct term_data
 {
-	term t;
+	term_type t;
 	infofnt *fnt;
 	infowin *win;
 #ifndef USE_XFT
@@ -1031,7 +1031,7 @@ struct x11_selection_type
 {
 	bool select; /* The selection is currently in use. */
 	bool drawn; /* The selection is currently displayed. */
-	term *t; /* The window where the selection is found. */
+	term_type *t; /* The window where the selection is found. */
 	co_ord init; /* The starting co-ordinates. */
 	co_ord cur; /* The end co-ordinates (the current ones if still copying). */
 	co_ord old; /* The previous end co-ordinates. */
@@ -1080,7 +1080,7 @@ static void react_keypress(XKeyEvent *xev)
 
 #ifdef USE_XIM
 	if(!valid_keysym){
-		for (i = 0; buf[i]; i++) Term_keypress(buf[i]);
+		for (i = 0; buf[i]; i++) term_key_push(buf[i]);
 
 		return;
 	}
@@ -1095,7 +1095,7 @@ static void react_keypress(XKeyEvent *xev)
 	mx = (ev->state & Mod2Mask) ? TRUE : FALSE;
 	if (n && !mo && !mx && !IsSpecialKey(ks))
 	{
-		for (i = 0; buf[i]; i++) Term_keypress(buf[i]);
+		for (i = 0; buf[i]; i++) term_key_push(buf[i]);
 
 		return;
 	}
@@ -1104,30 +1104,30 @@ static void react_keypress(XKeyEvent *xev)
 	{
 		case XK_Escape:
 		{
-			Term_keypress(ESCAPE);
+			term_key_push(ESCAPE);
 			return;
 		}
 
 		case XK_Return:
 		{
-			Term_keypress('\r');
+			term_key_push('\r');
 			return;
 		}
 
 		case XK_Tab:
 		{
-			Term_keypress('\t');
+			term_key_push('\t');
 			return;
 		}
 
 		case XK_Delete:
 		{
-			Term_keypress(0x7f);
+			term_key_push(0x7f);
 			return;
 		}
 		case XK_BackSpace:
 		{
-			Term_keypress('\010');
+			term_key_push('\010');
 			return;
 		}
 	}
@@ -1147,7 +1147,7 @@ static void react_keypress(XKeyEvent *xev)
 			ev->keycode, 13);
 	}
 
-	for (i = 0; msg[i]; i++) Term_keypress(msg[i]);
+	for (i = 0; msg[i]; i++) term_key_push(msg[i]);
 
 	if (n && (macro_find_exact(msg) < 0))
 	{
@@ -1192,7 +1192,7 @@ static void sort_co_ord(co_ord *min, co_ord *max,
  */
 static void mark_selection_clear(int x1, int y1, int x2, int y2)
 {
-	Term_redraw_section(x1,y1,x2,y2);
+	term_redraw_section(x1,y1,x2,y2);
 }
 
 /*
@@ -1218,10 +1218,10 @@ static void mark_selection_mark(int x1, int y1, int x2, int y2)
 static void mark_selection(void)
 {
 	co_ord min, max;
-	term *old = Term;
+	term_type *old = Term;
 	bool draw = s_ptr->select;
 	bool clear = s_ptr->drawn;
-	if (s_ptr->t != old) Term_activate(s_ptr->t);
+	if (s_ptr->t != old) term_activate(s_ptr->t);
 
 	if (clear)
 	{
@@ -1234,7 +1234,7 @@ static void mark_selection(void)
 		mark_selection_mark(min.x, min.y, max.x, max.y);
 	}
 
-	if (s_ptr->t != old) Term_activate(old);
+	if (s_ptr->t != old) term_activate(old);
 
 	s_ptr->old.x = s_ptr->cur.x;
 	s_ptr->old.y = s_ptr->cur.y;
@@ -1454,7 +1454,7 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 #ifdef JP
 			if (x > max.x) break;
 
-			Term_what(x, y, &a, &c);
+			term_what(x, y, &a, &c);
 			if (1 == kanji) kanji = 2;
 			else if (iskanji(c)) kanji = 1;
 			else kanji = 0;
@@ -1472,7 +1472,7 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 			if (x > max.x) break;
 			if (x < min.x) continue;
 
-			Term_what(x, y, &a, &c);
+			term_what(x, y, &a, &c);
 #endif
 
 			buf[l] = c;
@@ -1648,7 +1648,7 @@ static errr CheckEvent(bool wait)
 
 	if (!td || !iwin) return (0);
 
-	Term_activate(&td->t);
+	term_activate(&td->t);
 	Infowin_set(iwin);
 	switch (xev->type)
 	{
@@ -1705,7 +1705,7 @@ static errr CheckEvent(bool wait)
 		}
 		case KeyPress:
 		{
-			Term_activate(&old_td->t);
+			term_activate(&old_td->t);
 			react_keypress(&(xev->xkey));
 			break;
 		}
@@ -1720,7 +1720,7 @@ static errr CheckEvent(bool wait)
 			y2 = (xev->xexpose.y + xev->xexpose.height -
 				 Infowin->oy)/Infofnt->hgt;
 			
-			Term_redraw_section(x1, y1, x2, y2);
+			term_redraw_section(x1, y1, x2, y2);
 			break;
 		}
 		case MapNotify:
@@ -1757,7 +1757,7 @@ static errr CheckEvent(bool wait)
 
 			wid = cols * td->fnt->wid + (ox + ox);
 			hgt = rows * td->fnt->hgt + (oy + oy);
-			Term_resize(cols, rows);
+			term_resize(cols, rows);
 			if ((Infowin->w != wid) || (Infowin->h != hgt))
 			{
 				Infowin_set(td->win);
@@ -1787,7 +1787,7 @@ static errr CheckEvent(bool wait)
 #endif
 	}
 
-	Term_activate(&old_td->t);
+	term_activate(&old_td->t);
 	Infowin_set(old_td->win);
 	return (0);
 }
@@ -2198,7 +2198,7 @@ static char force_lower(char a)
  */
 static errr term_data_init(term_data *td, int i)
 {
-	term *t = &td->t;
+	term_type *t = &td->t;
 
 	concptr name = angband_term_name[i];
 
@@ -2401,7 +2401,7 @@ static errr term_data_init(term_data *td, int i)
 	t->wipe_hook = Term_wipe_x11;
 	t->text_hook = Term_text_x11;
 	t->data = td;
-	Term_activate(t);
+	term_activate(t);
 	return (0);
 }
 
@@ -2536,7 +2536,7 @@ errr init_x11(int argc, char *argv[])
 
 	Infowin_set(data[0].win);
 	Infowin_raise();
-	Term_activate(&data[0].t);
+	term_activate(&data[0].t);
 
 #ifdef USE_XIM
 	{
@@ -2582,7 +2582,7 @@ errr init_x11(int argc, char *argv[])
 		for (i = 0; i < num_term; i++)
 		{
 			term_data *td = &data[i];
-			term *t = &td->t;
+			term_type *t = &td->t;
 			t->pict_hook = Term_pict_x11;
 			t->higher_pict = TRUE;
 			td->tiles =

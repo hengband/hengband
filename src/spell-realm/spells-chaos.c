@@ -9,6 +9,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-describer.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "player/player-damage.h"
 #include "player/player-class.h"

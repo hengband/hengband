@@ -8,7 +8,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon.h"
-#include "dungeon/quest.h"
+#include "dungeon/quest-completion-checker.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"

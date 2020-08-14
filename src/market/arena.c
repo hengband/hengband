@@ -5,7 +5,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor-save.h"
+#include "floor/floor-mode-changer.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"

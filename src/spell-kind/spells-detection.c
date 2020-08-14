@@ -3,7 +3,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
-#include "floor/floor-save.h"
+#include "floor/floor-save-util.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "monster-race/monster-race.h"

@@ -11,6 +11,8 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "floor/floor-leaver.h"
+#include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "game-option/map-screen-options.h"

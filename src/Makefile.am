@@ -173,6 +173,7 @@ hengband_SOURCES = \
 	dungeon/dungeon-flag-types.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	dungeon/quest.h dungeon/quest.c \
+	dungeon/quest-completion-checker.c dungeon/quest-completion-checker.h \
 	dungeon/quest-monster-placer.c dungeon/quest-monster-placer.h \
 	\
 	effect/effect-feature.c effect/effect-feature.h \
@@ -213,11 +214,15 @@ hengband_SOURCES = \
 	floor/floor.c floor/floor.h \
 	floor/floor-allocation-types.h \
 	floor/floor-base-definitions.h \
+	floor/floor-changer.c floor/floor-changer.h \
 	floor/floor-events.c floor/floor-events.h \
 	floor/floor-generator-util.h \
 	floor/floor-generator.c floor/floor-generator.h \
+	floor/floor-leaver.c floor/floor-leaver.h \
+	floor/floor-mode-changer.c floor/floor-mode-changer.h \
 	floor/floor-object.c floor/floor-object.h \
-	floor/floor-save.h floor/floor-save.c \
+	floor/floor-save.c floor/floor-save.h \
+	floor/floor-save-util.c floor/floor-save-util.h \
 	floor/floor-streams.c floor/floor-streams.h \
 	floor/floor-town.h floor/floor-town.c \
 	floor/floor-util.c floor/floor-util.h \
@@ -436,6 +441,7 @@ hengband_SOURCES = \
 	monster/monster-timed-effect-types.h \
 	monster/smart-learn-types.h \
 	monster/monster-status.c monster/monster-status.h \
+	monster/monster-status-setter.c monster/monster-status-setter.h \
 	monster/monster-update.c monster/monster-update.h \
 	monster/monster-util.c monster/monster-util.h \
 	\
@@ -461,6 +467,8 @@ hengband_SOURCES = \
 	monster-floor/monster-safety-hiding.c monster-floor/monster-safety-hiding.h \
 	monster-floor/monster-summon.c monster-floor/monster-summon.h \
 	monster-floor/monster-sweep-grid.c monster-floor/monster-sweep-grid.h \
+	monster-floor/monster-lite.c monster-floor/monster-lite.h \
+	monster-floor/monster-lite-util.c monster-floor/monster-lite-util.h \
 	monster-floor/one-monster-placer.c monster-floor/one-monster-placer.h \
 	monster-floor/place-monster-types.h \
 	monster-floor/quantum-effect.c monster-floor/quantum-effect.h \
@@ -593,6 +601,7 @@ hengband_SOURCES = \
 	player/player-status-table.c player/player-status-table.h \
 	player/player-personalities-types.h \
 	player/player-sex.c player/player-sex.h \
+	player/player-view.c player/player-view.h \
 	player/selfinfo.c player/selfinfo.h \
 	player/special-defense-types.h \
 	\

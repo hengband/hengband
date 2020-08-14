@@ -4,7 +4,7 @@
 #include "core/player-redraw-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
-#include "floor/floor-save.h"
+#include "floor/floor-mode-changer.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"

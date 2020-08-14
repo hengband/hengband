@@ -211,6 +211,7 @@
     <ClCompile Include="..\..\src\core\status-reseter.c" />
     <ClCompile Include="..\..\src\core\visuals-reseter.c" />
     <ClCompile Include="..\..\src\core\window-redrawer.c" />
+    <ClCompile Include="..\..\src\dungeon\quest-completion-checker.c" />
     <ClCompile Include="..\..\src\dungeon\quest-monster-placer.c" />
     <ClCompile Include="..\..\src\flavor\flag-inscriptions-table.c" />
     <ClCompile Include="..\..\src\flavor\flavor-describer.c" />
@@ -221,6 +222,10 @@
     <ClCompile Include="..\..\src\floor\cave.c" />
     <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.c" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
+    <ClCompile Include="..\..\src\floor\floor-changer.c" />
+    <ClCompile Include="..\..\src\floor\floor-leaver.c" />
+    <ClCompile Include="..\..\src\floor\floor-mode-changer.c" />
+    <ClCompile Include="..\..\src\floor\floor-save-util.c" />
     <ClCompile Include="..\..\src\floor\floor-util.c" />
     <ClCompile Include="..\..\src\floor\object-allocator.c" />
     <ClCompile Include="..\..\src\floor\object-scanner.c" />
@@ -280,6 +285,9 @@
     <ClCompile Include="..\..\src\mind\mind-monk.c" />
     <ClCompile Include="..\..\src\mind\mind-power-getter.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
+    <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c" />
+    <ClCompile Include="..\..\src\monster-floor\monster-lite.c" />
+    <ClCompile Include="..\..\src\monster\monster-status-setter.c" />
     <ClCompile Include="..\..\src\mspell\element-resistance-checker.c" />
     <ClCompile Include="..\..\src\mspell\high-resistance-checker.c" />
     <ClCompile Include="..\..\src\mspell\improper-mspell-remover.c" />
@@ -296,6 +304,7 @@
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
     <ClCompile Include="..\..\src\player\player-status-table.c" />
+    <ClCompile Include="..\..\src\player\player-view.c" />
     <ClCompile Include="..\..\src\racial\class-racial-switcher.c" />
     <ClCompile Include="..\..\src\racial\mutation-racial-selector.c" />
     <ClCompile Include="..\..\src\action\racial-execution.c" />
@@ -796,6 +805,7 @@
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\core\window-redrawer.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h" />
+    <ClInclude Include="..\..\src\dungeon\quest-completion-checker.h" />
     <ClInclude Include="..\..\src\dungeon\quest-monster-placer.h" />
     <ClInclude Include="..\..\src\flavor\flag-inscriptions-table.h" />
     <ClInclude Include="..\..\src\flavor\flavor-describer.h" />
@@ -805,11 +815,15 @@
     <ClInclude Include="..\..\src\flavor\tval-description-switcher.h" />
     <ClInclude Include="..\..\src\floor\cave-generator.h" />
     <ClInclude Include="..\..\src\floor\cave.h" />
+    <ClInclude Include="..\..\src\floor\floor-changer.h" />
+    <ClInclude Include="..\..\src\floor\floor-leaver.h" />
+    <ClInclude Include="..\..\src\floor\floor-mode-changer.h" />
     <ClInclude Include="..\..\src\floor\dungeon-tunnel-util.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
     <ClInclude Include="..\..\src\floor\floor-allocation-types.h" />
     <ClInclude Include="..\..\src\floor\floor-base-definitions.h" />
     <ClInclude Include="..\..\src\floor\floor-generator-util.h" />
+    <ClInclude Include="..\..\src\floor\floor-save-util.h" />
     <ClInclude Include="..\..\src\floor\floor-util.h" />
     <ClInclude Include="..\..\src\floor\object-allocator.h" />
     <ClInclude Include="..\..\src\floor\object-scanner.h" />
@@ -877,6 +891,9 @@
     <ClInclude Include="..\..\src\mind\mind-power-getter.h" />
     <ClInclude Include="..\..\src\mind\mind-types.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
+    <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h" />
+    <ClInclude Include="..\..\src\monster-floor\monster-lite.h" />
+    <ClInclude Include="..\..\src\monster\monster-status-setter.h" />
     <ClInclude Include="..\..\src\mspell\element-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\high-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\improper-mspell-remover.h" />
@@ -893,6 +910,7 @@
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
     <ClInclude Include="..\..\src\player\player-status-table.h" />
+    <ClInclude Include="..\..\src\player\player-view.h" />
     <ClInclude Include="..\..\src\racial\class-racial-switcher.h" />
     <ClInclude Include="..\..\src\racial\mutation-racial-selector.h" />
     <ClInclude Include="..\..\src\racial\race-racial-command-setter.h" />

@@ -5,6 +5,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
 

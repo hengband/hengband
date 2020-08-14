@@ -10,6 +10,7 @@
 #include "core/game-closer.h"
 #include "floor/floor-events.h"
 #include "io/write-diary.h"
+#include "monster-floor/monster-lite.h"
 #include "save/save.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"

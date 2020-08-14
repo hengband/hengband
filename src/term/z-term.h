@@ -157,6 +157,7 @@ extern errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
 extern errr term_erase(TERM_LEN x, TERM_LEN y, int n);
 extern errr term_clear(void);
 extern errr term_redraw(void);
+extern errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
 
 extern errr term_get_cursor(int *v);
 extern errr term_get_size(TERM_LEN *w, TERM_LEN *h);

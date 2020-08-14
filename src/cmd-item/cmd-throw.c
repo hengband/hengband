@@ -30,6 +30,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-checker.h"

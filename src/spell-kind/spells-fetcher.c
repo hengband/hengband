@@ -11,7 +11,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
-#include "monster/monster-status.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"

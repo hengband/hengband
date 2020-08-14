@@ -11,7 +11,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
-#include "floor/floor-save.h"
+#include "floor/floor-mode-changer.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
