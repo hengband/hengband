@@ -239,27 +239,13 @@ static void get_out_monster(player_type *protected_ptr)
 }
 
 /*!
- * @brief 現在のフロアを離れるに伴って行なわれる保存処理
- * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
+ * @brief クエスト・フロア内のモンスター・インベントリ情報を保存する
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void leave_floor(player_type *creature_ptr)
+static void preserve_info(player_type *creature_ptr)
 {
-    grid_type *g_ptr = NULL;
-    feature_type *f_ptr;
-    saved_floor_type *sf_ptr;
     MONRACE_IDX quest_r_idx = 0;
-    FLOOR_IDX tmp_floor_idx = 0;
-    preserve_pet(creature_ptr);
-    remove_all_mirrors(creature_ptr, FALSE);
-    if (creature_ptr->special_defense & NINJA_S_STEALTH)
-        set_superstealth(creature_ptr, FALSE);
-
-    new_floor_id = 0;
-    if (!creature_ptr->floor_id && (creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) && !(creature_ptr->change_floor_mode & CFM_NO_RETURN))
-        tmp_floor_idx = get_new_floor_id(creature_ptr);
-
     for (DUNGEON_IDX i = 0; i < max_q_idx; i++) {
         if ((quest[i].status == QUEST_STATUS_TAKEN) && ((quest[i].type == QUEST_TYPE_KILL_LEVEL) || (quest[i].type == QUEST_TYPE_RANDOM))
             && (quest[i].level == creature_ptr->current_floor_ptr->dun_level) && (creature_ptr->dungeon_idx == quest[i].dungeon)
@@ -289,11 +275,34 @@ void leave_floor(player_type *creature_ptr)
         if (object_is_fixed_artifact(o_ptr))
             a_info[o_ptr->name1].floor_id = 0;
     }
+}
 
+/*!
+ * @brief 現在のフロアを離れるに伴って行なわれる保存処理
+ * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void leave_floor(player_type *creature_ptr)
+{
+    preserve_pet(creature_ptr);
+    remove_all_mirrors(creature_ptr, FALSE);
+    if (creature_ptr->special_defense & NINJA_S_STEALTH)
+        set_superstealth(creature_ptr, FALSE);
+
+    new_floor_id = 0;
+    FLOOR_IDX tmp_floor_idx = 0;
+    if (!creature_ptr->floor_id && (creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) && !(creature_ptr->change_floor_mode & CFM_NO_RETURN))
+        tmp_floor_idx = get_new_floor_id(creature_ptr);
+
+    preserve_info(creature_ptr);
+    saved_floor_type *sf_ptr;
     sf_ptr = get_sf_ptr(creature_ptr->floor_id);
     if ((creature_ptr->change_floor_mode & CFM_RAND_CONNECT) && tmp_floor_idx)
         locate_connected_stairs(creature_ptr, creature_ptr->current_floor_ptr, sf_ptr, creature_ptr->change_floor_mode);
 
+    grid_type *g_ptr = NULL;
+    feature_type *f_ptr;
     if (creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) {
         g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
         f_ptr = &f_info[g_ptr->feat];
