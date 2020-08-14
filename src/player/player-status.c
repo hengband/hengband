@@ -114,7 +114,7 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr);
 static void calc_num_blow(player_type *creature_ptr, int i);
 static s16b calc_strength_addition(player_type *creature_ptr);
 static s16b calc_intelligence_addition(player_type *creature_ptr);
-static void calc_wisdom_addition(player_type *creature_ptr);
+static s16b calc_wisdom_addition(player_type *creature_ptr);
 static void calc_dexterity_addition(player_type *creature_ptr);
 static void calc_constitution_addition(player_type *creature_ptr);
 static void calc_charisma_addition(player_type *creature_ptr);
@@ -742,7 +742,7 @@ void calc_bonuses(player_type *creature_ptr)
 
     creature_ptr->stat_add[A_STR] = calc_strength_addition(creature_ptr);
     creature_ptr->stat_add[A_INT] = calc_intelligence_addition(creature_ptr);
-    calc_wisdom_addition(creature_ptr);
+    creature_ptr->stat_add[A_WIS] = calc_wisdom_addition(creature_ptr);
     calc_dexterity_addition(creature_ptr);
     calc_constitution_addition(creature_ptr);
     calc_charisma_addition(creature_ptr);
@@ -2313,8 +2313,24 @@ s16b calc_intelligence_addition(player_type *creature_ptr)
 	return pow;
 }
 
-static void calc_wisdom_addition(player_type *creature_ptr)
+/*!
+ * @brief 賢さ補正計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 賢さ補正値
+ * @details
+ * * 種族/職業/性格修正
+ * * 装備がTR_WISフラグを持っていれば加算(+pval*1)
+ * * 呪術の腕力強化で加算(+4)
+ * * 呪術の肉体強化で加算(+4)
+ * * 降鬼陣で加算(+5)
+ * * 玄武の構えで減算(-1)
+ * * 朱雀の構えで加算(+1)
+ * * 変異MUT3_HYPER_INTで加算(+4)
+ * * 変異MUT3_MORONICで減算(-4)
+ */
+static s16b calc_wisdom_addition(player_type *creature_ptr)
 {
+    s16b pow;
     const player_race *tmp_rp_ptr;
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
@@ -2322,7 +2338,7 @@ static void calc_wisdom_addition(player_type *creature_ptr)
         tmp_rp_ptr = &race_info[creature_ptr->prace];
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
-    creature_ptr->stat_add[A_WIS] = tmp_rp_ptr->r_adj[A_WIS] + c_ptr->c_adj[A_WIS] + a_ptr->a_adj[A_WIS];
+    pow = tmp_rp_ptr->r_adj[A_WIS] + c_ptr->c_adj[A_WIS] + a_ptr->a_adj[A_WIS];
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -2332,35 +2348,36 @@ static void calc_wisdom_addition(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_WIS)) {
-            creature_ptr->stat_add[A_WIS] += o_ptr->pval;
+            pow += o_ptr->pval;
         }
+    }
+
+    if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+        pow += 5;
+    }
+
+    if (creature_ptr->special_defense & KAMAE_GENBU) {
+        pow -= 1;
+    } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        pow += 1;
     }
 
     if (creature_ptr->muta3) {
 
         if (creature_ptr->muta3 & MUT3_HYPER_INT) {
-            creature_ptr->stat_add[A_WIS] += 4;
+            pow += 4;
         }
 
         if (creature_ptr->muta3 & MUT3_MORONIC) {
-            creature_ptr->stat_add[A_WIS] -= 4;
+            pow -= 4;
         }
     }
 
-    if (creature_ptr->special_defense & KATA_KOUKIJIN) {
-        creature_ptr->stat_add[A_WIS] += 5;
-    }
-
-    if (creature_ptr->special_defense & KAMAE_GENBU) {
-        creature_ptr->stat_add[A_WIS] -= 1;
-    } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
-        creature_ptr->stat_add[A_WIS] += 1;
-    }
+	return pow;
 }
 
 static void calc_dexterity_addition(player_type *creature_ptr)
 {
-
     const player_race *tmp_rp_ptr;
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
