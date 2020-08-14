@@ -189,6 +189,27 @@ void kill_saved_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
     sf_ptr->floor_id = 0;
 }
 
+static void find_oldest_floor_id(player_type *creature_ptr, saved_floor_type *sf_ptr, FLOOR_IDX *fl_idx)
+{
+    if (*fl_idx != MAX_SAVED_FLOORS)
+        return;
+
+    s16b oldest = 0;
+    u32b oldest_visit = 0xffffffffL;
+    for (*fl_idx = 0; *fl_idx < MAX_SAVED_FLOORS; (*fl_idx)++) {
+        sf_ptr = &saved_floors[*fl_idx];
+        if ((sf_ptr->floor_id == creature_ptr->floor_id) || (sf_ptr->visit_mark > oldest_visit))
+            continue;
+
+        oldest = *fl_idx;
+        oldest_visit = sf_ptr->visit_mark;
+    }
+
+    sf_ptr = &saved_floors[oldest];
+    kill_saved_floor(creature_ptr, sf_ptr);
+    *fl_idx = oldest;
+}
+
 /*!
  * @brief 新規に利用可能な保存フロアを返す / Initialize new saved floor and get its floor id.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -199,31 +220,15 @@ void kill_saved_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
 FLOOR_IDX get_new_floor_id(player_type *creature_ptr)
 {
     saved_floor_type *sf_ptr = NULL;
-    FLOOR_IDX i;
-    for (i = 0; i < MAX_SAVED_FLOORS; i++) {
-        sf_ptr = &saved_floors[i];
+    FLOOR_IDX fl_idx;
+    for (fl_idx = 0; fl_idx < MAX_SAVED_FLOORS; fl_idx++) {
+        sf_ptr = &saved_floors[fl_idx];
         if (!sf_ptr->floor_id)
             break;
     }
 
-    if (i == MAX_SAVED_FLOORS) {
-        s16b oldest = 0;
-        u32b oldest_visit = 0xffffffffL;
-        for (i = 0; i < MAX_SAVED_FLOORS; i++) {
-            sf_ptr = &saved_floors[i];
-            if ((sf_ptr->floor_id == creature_ptr->floor_id) || (sf_ptr->visit_mark > oldest_visit))
-                continue;
-
-            oldest = i;
-            oldest_visit = sf_ptr->visit_mark;
-        }
-
-        sf_ptr = &saved_floors[oldest];
-        kill_saved_floor(creature_ptr, sf_ptr);
-        i = oldest;
-    }
-
-    sf_ptr->savefile_id = i;
+    find_oldest_floor_id(creature_ptr, sf_ptr, &fl_idx);
+    sf_ptr->savefile_id = fl_idx;
     sf_ptr->floor_id = max_floor_id;
     sf_ptr->last_visit = 0;
     sf_ptr->upper_floor_id = 0;
