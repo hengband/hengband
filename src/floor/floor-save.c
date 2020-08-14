@@ -232,24 +232,23 @@ FLOOR_IDX get_new_floor_id(player_type *creature_ptr)
 }
 
 /*!
- * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
+ * @brief フロア移動時にペットを伴った場合の準備処理 / Pre-calculate the racial counters of preserved pets
+ * @param master_ptr プレーヤーへの参照ポインタ
  * @return なし
+ * @details
+ * To prevent multiple generation of unique monster who is the minion of player
  */
-static void build_dead_end(player_type *creature_ptr)
+void precalc_cur_num_of_pet(player_type *player_ptr)
 {
-    clear_cave(creature_ptr);
-    creature_ptr->x = creature_ptr->y = 0;
-    set_floor_and_wall(0);
-    creature_ptr->current_floor_ptr->height = SCREEN_HGT;
-    creature_ptr->current_floor_ptr->width = SCREEN_WID;
-    for (POSITION y = 0; y < MAX_HGT; y++)
-        for (POSITION x = 0; x < MAX_WID; x++)
-            place_bold(creature_ptr, y, x, GB_SOLID_PERM);
+    monster_type *m_ptr;
+    int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;
+    for (int i = 0; i < max_num; i++) {
+        m_ptr = &party_mon[i];
+        if (!monster_is_valid(m_ptr))
+            continue;
 
-    creature_ptr->y = creature_ptr->current_floor_ptr->height / 2;
-    creature_ptr->x = creature_ptr->current_floor_ptr->width / 2;
-    place_bold(creature_ptr, creature_ptr->y, creature_ptr->x, GB_FLOOR);
-    wipe_generate_random_floor_flags(creature_ptr->current_floor_ptr);
+        real_r_ptr(m_ptr)->cur_num++;
+    }
 }
 
 /*!
@@ -334,178 +333,6 @@ static void preserve_pet(player_type *master_ptr)
 }
 
 /*!
- * @brief フロア移動時にペットを伴った場合の準備処理 / Pre-calculate the racial counters of preserved pets
- * @param master_ptr プレーヤーへの参照ポインタ
- * @return なし
- * @details
- * To prevent multiple generation of unique monster who is the minion of player
- */
-void precalc_cur_num_of_pet(player_type *player_ptr)
-{
-    monster_type *m_ptr;
-    int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;
-    for (int i = 0; i < max_num; i++) {
-        m_ptr = &party_mon[i];
-        if (!monster_is_valid(m_ptr))
-            continue;
-
-        real_r_ptr(m_ptr)->cur_num++;
-    }
-}
-
-/*!
- * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
- * @param master_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-static void place_pet(player_type *master_ptr)
-{
-    int max_num = master_ptr->wild_mode ? 1 : MAX_PARTY_MON;
-    floor_type *floor_ptr = master_ptr->current_floor_ptr;
-    for (int i = 0; i < max_num; i++) {
-        POSITION cy = 0, cx = 0;
-        MONSTER_IDX m_idx;
-        if (!(party_mon[i].r_idx))
-            continue;
-
-        if (i == 0) {
-            m_idx = m_pop(floor_ptr);
-            master_ptr->riding = m_idx;
-            if (m_idx) {
-                cy = master_ptr->y;
-                cx = master_ptr->x;
-            }
-        } else {
-            POSITION d;
-            for (d = 1; d < A_MAX; d++) {
-                int j;
-                for (j = 1000; j > 0; j--) {
-                    scatter(master_ptr, &cy, &cx, master_ptr->y, master_ptr->x, d, 0);
-                    if (monster_can_enter(master_ptr, cy, cx, &r_info[party_mon[i].r_idx], 0))
-                        break;
-                }
-
-                if (j != 0)
-                    break;
-            }
-
-            m_idx = (d == 6) ? 0 : m_pop(floor_ptr);
-        }
-
-        if (m_idx != 0) {
-            monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[m_idx];
-            monster_race *r_ptr;
-            master_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
-            m_ptr->r_idx = party_mon[i].r_idx;
-            *m_ptr = party_mon[i];
-            r_ptr = real_r_ptr(m_ptr);
-            m_ptr->fy = cy;
-            m_ptr->fx = cx;
-            m_ptr->current_floor_ptr = master_ptr->current_floor_ptr;
-            m_ptr->ml = TRUE;
-            m_ptr->mtimed[MTIMED_CSLEEP] = 0;
-            m_ptr->hold_o_idx = 0;
-            m_ptr->target_y = 0;
-            if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare) {
-                m_ptr->mflag |= (MFLAG_NICE);
-                repair_monsters = TRUE;
-            }
-
-            update_monster(master_ptr, m_idx, TRUE);
-            lite_spot(master_ptr, cy, cx);
-            if (r_ptr->flags2 & RF2_MULTIPLY)
-                master_ptr->current_floor_ptr->num_repro++;
-        } else {
-            monster_type *m_ptr = &party_mon[i];
-            monster_race *r_ptr = real_r_ptr(m_ptr);
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(master_ptr, m_name, m_ptr, 0);
-            msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);
-            if (record_named_pet && m_ptr->nickname) {
-                monster_desc(master_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-                exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
-            }
-
-            if (r_ptr->cur_num)
-                r_ptr->cur_num--;
-        }
-    }
-
-    (void)C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
-}
-
-/*!
- * @brief ユニークモンスターやアーティファクトの所在フロアを更新する / Hack -- Update location of unique monsters and artifacts
- * @param cur_floor_id 現在のフロアID
- * @return なし
- * @details
- * The r_ptr->floor_id and a_ptr->floor_id are not updated correctly\n
- * while new floor creation since dungeons may be re-created by\n
- * auto-scum option.\n
- */
-static void update_unique_artifact(floor_type *floor_ptr, s16b cur_floor_id)
-{
-    for (int i = 1; i < floor_ptr->m_max; i++) {
-        monster_race *r_ptr;
-        monster_type *m_ptr = &floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr))
-            continue;
-
-        r_ptr = real_r_ptr(m_ptr);
-        if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
-            r_ptr->floor_id = cur_floor_id;
-    }
-
-    for (int i = 1; i < floor_ptr->o_max; i++) {
-        object_type *o_ptr = &floor_ptr->o_list[i];
-        if (!object_is_valid(o_ptr))
-            continue;
-
-        if (object_is_fixed_artifact(o_ptr))
-            a_info[o_ptr->name1].floor_id = cur_floor_id;
-    }
-}
-
-/*!
- * @brief フロア移動時、プレイヤーの移動先モンスターが既にいた場合ランダムな近隣に移動させる / When a monster is at a place where player will return,
- * @return なし
- */
-static void get_out_monster(player_type *protected_ptr)
-{
-    int tries = 0;
-    POSITION dis = 1;
-    POSITION oy = protected_ptr->y;
-    POSITION ox = protected_ptr->x;
-    floor_type *floor_ptr = protected_ptr->current_floor_ptr;
-    MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
-    if (m_idx == 0)
-        return;
-
-    while (TRUE) {
-        monster_type *m_ptr;
-        POSITION ny = rand_spread(oy, dis);
-        POSITION nx = rand_spread(ox, dis);
-        tries++;
-        if (tries > 10000)
-            return;
-
-        if (tries > 20 * dis * dis)
-            dis++;
-
-        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(protected_ptr, ny, nx) || is_glyph_grid(&floor_ptr->grid_array[ny][nx])
-            || is_explosive_rune_grid(&floor_ptr->grid_array[ny][nx]) || pattern_tile(floor_ptr, ny, nx))
-            continue;
-
-        m_ptr = &floor_ptr->m_list[m_idx];
-        floor_ptr->grid_array[oy][ox].m_idx = 0;
-        floor_ptr->grid_array[ny][nx].m_idx = m_idx;
-        m_ptr->fy = ny;
-        m_ptr->fx = nx;
-        return;
-    }
-}
-
-/*!
  * @brief 新フロアに移動元フロアに繋がる階段を配置する / Virtually teleport onto the stairs that is connecting between two floors.
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
  * @return なし
@@ -569,6 +396,45 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
     int i = randint0(num);
     creature_ptr->y = y_table[i];
     creature_ptr->x = x_table[i];
+}
+
+/*!
+ * @brief フロア移動時、プレイヤーの移動先モンスターが既にいた場合ランダムな近隣に移動させる / When a monster is at a place where player will return,
+ * @return なし
+ */
+static void get_out_monster(player_type *protected_ptr)
+{
+    int tries = 0;
+    POSITION dis = 1;
+    POSITION oy = protected_ptr->y;
+    POSITION ox = protected_ptr->x;
+    floor_type *floor_ptr = protected_ptr->current_floor_ptr;
+    MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
+    if (m_idx == 0)
+        return;
+
+    while (TRUE) {
+        monster_type *m_ptr;
+        POSITION ny = rand_spread(oy, dis);
+        POSITION nx = rand_spread(ox, dis);
+        tries++;
+        if (tries > 10000)
+            return;
+
+        if (tries > 20 * dis * dis)
+            dis++;
+
+        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(protected_ptr, ny, nx) || is_glyph_grid(&floor_ptr->grid_array[ny][nx])
+            || is_explosive_rune_grid(&floor_ptr->grid_array[ny][nx]) || pattern_tile(floor_ptr, ny, nx))
+            continue;
+
+        m_ptr = &floor_ptr->m_list[m_idx];
+        floor_ptr->grid_array[oy][ox].m_idx = 0;
+        floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+        m_ptr->fy = ny;
+        m_ptr->fx = nx;
+        return;
+    }
 }
 
 /*!
@@ -706,6 +572,140 @@ void leave_floor(player_type *creature_ptr)
     if (!save_floor(creature_ptr, sf_ptr, 0)) {
         prepare_change_floor_mode(creature_ptr, CFM_NO_RETURN);
         kill_saved_floor(creature_ptr, get_sf_ptr(creature_ptr->floor_id));
+    }
+}
+
+/*!
+ * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
+ * @return なし
+ */
+static void build_dead_end(player_type *creature_ptr)
+{
+    clear_cave(creature_ptr);
+    creature_ptr->x = creature_ptr->y = 0;
+    set_floor_and_wall(0);
+    creature_ptr->current_floor_ptr->height = SCREEN_HGT;
+    creature_ptr->current_floor_ptr->width = SCREEN_WID;
+    for (POSITION y = 0; y < MAX_HGT; y++)
+        for (POSITION x = 0; x < MAX_WID; x++)
+            place_bold(creature_ptr, y, x, GB_SOLID_PERM);
+
+    creature_ptr->y = creature_ptr->current_floor_ptr->height / 2;
+    creature_ptr->x = creature_ptr->current_floor_ptr->width / 2;
+    place_bold(creature_ptr, creature_ptr->y, creature_ptr->x, GB_FLOOR);
+    wipe_generate_random_floor_flags(creature_ptr->current_floor_ptr);
+}
+
+/*!
+ * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
+ * @param master_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void place_pet(player_type *master_ptr)
+{
+    int max_num = master_ptr->wild_mode ? 1 : MAX_PARTY_MON;
+    floor_type *floor_ptr = master_ptr->current_floor_ptr;
+    for (int i = 0; i < max_num; i++) {
+        POSITION cy = 0, cx = 0;
+        MONSTER_IDX m_idx;
+        if (!(party_mon[i].r_idx))
+            continue;
+
+        if (i == 0) {
+            m_idx = m_pop(floor_ptr);
+            master_ptr->riding = m_idx;
+            if (m_idx) {
+                cy = master_ptr->y;
+                cx = master_ptr->x;
+            }
+        } else {
+            POSITION d;
+            for (d = 1; d < A_MAX; d++) {
+                int j;
+                for (j = 1000; j > 0; j--) {
+                    scatter(master_ptr, &cy, &cx, master_ptr->y, master_ptr->x, d, 0);
+                    if (monster_can_enter(master_ptr, cy, cx, &r_info[party_mon[i].r_idx], 0))
+                        break;
+                }
+
+                if (j != 0)
+                    break;
+            }
+
+            m_idx = (d == 6) ? 0 : m_pop(floor_ptr);
+        }
+
+        if (m_idx != 0) {
+            monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[m_idx];
+            monster_race *r_ptr;
+            master_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
+            m_ptr->r_idx = party_mon[i].r_idx;
+            *m_ptr = party_mon[i];
+            r_ptr = real_r_ptr(m_ptr);
+            m_ptr->fy = cy;
+            m_ptr->fx = cx;
+            m_ptr->current_floor_ptr = master_ptr->current_floor_ptr;
+            m_ptr->ml = TRUE;
+            m_ptr->mtimed[MTIMED_CSLEEP] = 0;
+            m_ptr->hold_o_idx = 0;
+            m_ptr->target_y = 0;
+            if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare) {
+                m_ptr->mflag |= (MFLAG_NICE);
+                repair_monsters = TRUE;
+            }
+
+            update_monster(master_ptr, m_idx, TRUE);
+            lite_spot(master_ptr, cy, cx);
+            if (r_ptr->flags2 & RF2_MULTIPLY)
+                master_ptr->current_floor_ptr->num_repro++;
+        } else {
+            monster_type *m_ptr = &party_mon[i];
+            monster_race *r_ptr = real_r_ptr(m_ptr);
+            GAME_TEXT m_name[MAX_NLEN];
+            monster_desc(master_ptr, m_name, m_ptr, 0);
+            msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);
+            if (record_named_pet && m_ptr->nickname) {
+                monster_desc(master_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+                exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
+            }
+
+            if (r_ptr->cur_num)
+                r_ptr->cur_num--;
+        }
+    }
+
+    (void)C_WIPE(party_mon, MAX_PARTY_MON, monster_type);
+}
+
+/*!
+ * @brief ユニークモンスターやアーティファクトの所在フロアを更新する / Hack -- Update location of unique monsters and artifacts
+ * @param cur_floor_id 現在のフロアID
+ * @return なし
+ * @details
+ * The r_ptr->floor_id and a_ptr->floor_id are not updated correctly\n
+ * while new floor creation since dungeons may be re-created by\n
+ * auto-scum option.\n
+ */
+static void update_unique_artifact(floor_type *floor_ptr, s16b cur_floor_id)
+{
+    for (int i = 1; i < floor_ptr->m_max; i++) {
+        monster_race *r_ptr;
+        monster_type *m_ptr = &floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr))
+            continue;
+
+        r_ptr = real_r_ptr(m_ptr);
+        if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
+            r_ptr->floor_id = cur_floor_id;
+    }
+
+    for (int i = 1; i < floor_ptr->o_max; i++) {
+        object_type *o_ptr = &floor_ptr->o_list[i];
+        if (!object_is_valid(o_ptr))
+            continue;
+
+        if (object_is_fixed_artifact(o_ptr))
+            a_info[o_ptr->name1].floor_id = cur_floor_id;
     }
 }
 
