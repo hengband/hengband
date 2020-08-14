@@ -300,6 +300,29 @@ static void check_dead_end(player_type *creature_ptr, saved_floor_type *sf_ptr)
         sf_ptr->lower_floor_id = 0;
 }
 
+static void update_new_floor_feature(player_type *creature_ptr, saved_floor_type *sf_ptr, const bool loaded)
+{
+    if (loaded) {
+        new_floor_allocation(creature_ptr, sf_ptr);
+        return;
+    }
+
+    check_dead_end(creature_ptr, sf_ptr);
+    sf_ptr->last_visit = current_world_ptr->game_turn;
+    sf_ptr->dun_level = creature_ptr->current_floor_ptr->dun_level;
+    if ((creature_ptr->change_floor_mode & CFM_NO_RETURN) != 0)
+        return;
+
+    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+    if ((creature_ptr->change_floor_mode & CFM_UP) && !quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level))
+        g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr, feat_down_stair, FF_SHAFT) : feat_down_stair;
+    else if ((creature_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward)
+        g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr, feat_up_stair, FF_SHAFT) : feat_up_stair;
+
+    g_ptr->mimic = 0;
+    g_ptr->special = creature_ptr->floor_id;
+}
+
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -330,25 +353,8 @@ void change_floor(player_type *creature_ptr)
         sf_ptr = get_sf_ptr(new_floor_id);
         check_visited_floor(creature_ptr, sf_ptr, &loaded);
         update_floor_id(creature_ptr, sf_ptr);
-        if (loaded) {
-            new_floor_allocation(creature_ptr, sf_ptr);
-        } else {
-            check_dead_end(creature_ptr, sf_ptr);
-            sf_ptr->last_visit = current_world_ptr->game_turn;
-            sf_ptr->dun_level = creature_ptr->current_floor_ptr->dun_level;
-            if (!(creature_ptr->change_floor_mode & CFM_NO_RETURN)) {
-                grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
-                if ((creature_ptr->change_floor_mode & CFM_UP) && !quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level))
-                    g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr, feat_down_stair, FF_SHAFT) : feat_down_stair;
-                else if ((creature_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward)
-                    g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr, feat_up_stair, FF_SHAFT) : feat_up_stair;
-
-                g_ptr->mimic = 0;
-                g_ptr->special = creature_ptr->floor_id;
-            }
-        }
-
-        if (creature_ptr->change_floor_mode & (CFM_RAND_PLACE)) {
+        update_new_floor_feature(creature_ptr, sf_ptr, loaded);
+        if (creature_ptr->change_floor_mode & CFM_RAND_PLACE) {
             (void)new_player_spot(creature_ptr);
         } else if ((creature_ptr->change_floor_mode & CFM_NO_RETURN) && (creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP))) {
             if (!creature_ptr->blind) {
