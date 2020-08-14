@@ -205,6 +205,29 @@ static void check_visited_floor(player_type *creature_ptr, saved_floor_type *sf_
     g_ptr->special = 0;
 }
 
+static void update_floor_id(player_type *creature_ptr, saved_floor_type *sf_ptr)
+{
+    if (creature_ptr->floor_id == 0) {
+        if (creature_ptr->change_floor_mode & CFM_UP)
+            sf_ptr->lower_floor_id = 0;
+        else if (creature_ptr->change_floor_mode & CFM_DOWN)
+            sf_ptr->upper_floor_id = 0;
+        
+        return;        
+    }
+
+    saved_floor_type *cur_sf_ptr = get_sf_ptr(creature_ptr->floor_id);
+    if (creature_ptr->change_floor_mode & CFM_UP) {
+        if (cur_sf_ptr->upper_floor_id == new_floor_id)
+            sf_ptr->lower_floor_id = creature_ptr->floor_id;
+        
+        return;
+    }
+    
+    if (((creature_ptr->change_floor_mode & CFM_DOWN) != 0) && (cur_sf_ptr->lower_floor_id == new_floor_id))
+        sf_ptr->upper_floor_id = creature_ptr->floor_id;
+}
+
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -234,22 +257,7 @@ void change_floor(player_type *creature_ptr)
 
         sf_ptr = get_sf_ptr(new_floor_id);
         check_visited_floor(creature_ptr, sf_ptr, &loaded);
-        if (creature_ptr->floor_id != 0) {
-            saved_floor_type *cur_sf_ptr = get_sf_ptr(creature_ptr->floor_id);
-            if (creature_ptr->change_floor_mode & CFM_UP) {
-                if (cur_sf_ptr->upper_floor_id == new_floor_id)
-                    sf_ptr->lower_floor_id = creature_ptr->floor_id;
-            } else if (creature_ptr->change_floor_mode & CFM_DOWN) {
-                if (cur_sf_ptr->lower_floor_id == new_floor_id)
-                    sf_ptr->upper_floor_id = creature_ptr->floor_id;
-            }
-        } else {
-            if (creature_ptr->change_floor_mode & CFM_UP)
-                sf_ptr->lower_floor_id = 0;
-            else if (creature_ptr->change_floor_mode & CFM_DOWN)
-                sf_ptr->upper_floor_id = 0;
-        }
-
+        update_floor_id(creature_ptr, sf_ptr);
         if (loaded) {
             GAME_TURN tmp_last_visit = sf_ptr->last_visit;
             GAME_TURN absence_ticks;
