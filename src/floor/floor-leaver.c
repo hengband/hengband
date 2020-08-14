@@ -356,6 +356,17 @@ static void refresh_new_floor_id(player_type *creature_ptr, grid_type *g_ptr)
         g_ptr->special = new_floor_id;
 }
 
+static void update_upper_lower_or_floor_id(player_type *creature_ptr, saved_floor_type *sf_ptr)
+{
+    if ((creature_ptr->change_floor_mode & CFM_RAND_CONNECT) == 0)
+        return;
+
+    if (creature_ptr->change_floor_mode & CFM_UP)
+        sf_ptr->upper_floor_id = new_floor_id;
+    else if (creature_ptr->change_floor_mode & CFM_DOWN)
+        sf_ptr->lower_floor_id = new_floor_id;
+}
+
 /*!
  * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
@@ -388,13 +399,7 @@ void leave_floor(player_type *creature_ptr)
         return;
 
     refresh_new_floor_id(creature_ptr, g_ptr);
-    if (creature_ptr->change_floor_mode & CFM_RAND_CONNECT) {
-        if (creature_ptr->change_floor_mode & CFM_UP)
-            sf_ptr->upper_floor_id = new_floor_id;
-        else if (creature_ptr->change_floor_mode & CFM_DOWN)
-            sf_ptr->lower_floor_id = new_floor_id;
-    }
-
+    update_upper_lower_or_floor_id(creature_ptr, sf_ptr);
     if (((creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0) || ((creature_ptr->change_floor_mode & CFM_NO_RETURN) != 0))
         return;
 
