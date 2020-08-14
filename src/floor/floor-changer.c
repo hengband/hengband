@@ -93,6 +93,26 @@ static MONSTER_IDX decide_pet_index(player_type *master_ptr, const int current_m
     return (d == 6) ? 0 : m_pop(floor_ptr);
 }
 
+static void set_pet_params(player_type *master_ptr, monster_race *r_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
+{
+    monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[m_idx];
+    master_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
+    m_ptr->r_idx = party_mon[current_monster].r_idx;
+    *m_ptr = party_mon[current_monster];
+    r_ptr = real_r_ptr(m_ptr);
+    m_ptr->fy = cy;
+    m_ptr->fx = cx;
+    m_ptr->current_floor_ptr = master_ptr->current_floor_ptr;
+    m_ptr->ml = TRUE;
+    m_ptr->mtimed[MTIMED_CSLEEP] = 0;
+    m_ptr->hold_o_idx = 0;
+    m_ptr->target_y = 0;
+    if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare) {
+        m_ptr->mflag |= MFLAG_NICE;
+        repair_monsters = TRUE;
+    }
+}
+
 /*!
  * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
  * @param master_ptr プレーヤーへの参照ポインタ
@@ -110,27 +130,11 @@ static void place_pet(player_type *master_ptr)
 
         MONSTER_IDX m_idx = decide_pet_index(master_ptr, current_monster, &cy, &cx);
         if (m_idx != 0) {
-            monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[m_idx];
-            monster_race *r_ptr;
-            master_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
-            m_ptr->r_idx = party_mon[current_monster].r_idx;
-            *m_ptr = party_mon[current_monster];
-            r_ptr = real_r_ptr(m_ptr);
-            m_ptr->fy = cy;
-            m_ptr->fx = cx;
-            m_ptr->current_floor_ptr = master_ptr->current_floor_ptr;
-            m_ptr->ml = TRUE;
-            m_ptr->mtimed[MTIMED_CSLEEP] = 0;
-            m_ptr->hold_o_idx = 0;
-            m_ptr->target_y = 0;
-            if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare) {
-                m_ptr->mflag |= MFLAG_NICE;
-                repair_monsters = TRUE;
-            }
-
+            monster_race m_race;
+            set_pet_params(master_ptr, &m_race, current_monster, m_idx, cy, cx);
             update_monster(master_ptr, m_idx, TRUE);
             lite_spot(master_ptr, cy, cx);
-            if (r_ptr->flags2 & RF2_MULTIPLY)
+            if (m_race.flags2 & RF2_MULTIPLY)
                 master_ptr->current_floor_ptr->num_repro++;
         } else {
             monster_type *m_ptr = &party_mon[current_monster];
