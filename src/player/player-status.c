@@ -100,7 +100,7 @@
 
 static bool is_martial_arts_mode(player_type *creature_ptr);
 
-static void calc_intra_vision(player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr);
@@ -784,7 +784,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->monk_armour_aux = heavy_armor(creature_ptr);
 
     calc_speed(creature_ptr);
-    calc_intra_vision(creature_ptr);
+    creature_ptr->see_infra = calc_intra_vision(creature_ptr);
     creature_ptr->skill_stl = calc_stealth(creature_ptr);
     creature_ptr->skill_dis = calc_disarming(creature_ptr);
     creature_ptr->skill_dev = calc_device_ability(creature_ptr);
@@ -1521,14 +1521,18 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 
 
 /*!
- * @brief プレイヤーの赤外線視力値を計算する
- * @return なし
+ * @brief 赤外線視力計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 赤外線視力
  * @details
- * This function induces status messages.
+ * * 種族による加算
+ * * 変異MUT3_INFRAVISによる加算(+3)
+ * * 魔法効果tim_infraによる加算(+3)
+ * * 装備がTR_INFRAフラグ持ちなら加算(+pval*1)
  */
-static void calc_intra_vision(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr)
 {
-
+    ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
 
     if (creature_ptr->mimic_form)
@@ -1536,14 +1540,14 @@ static void calc_intra_vision(player_type *creature_ptr)
     else
         tmp_rp_ptr = &race_info[creature_ptr->prace];
 
-    creature_ptr->see_infra = tmp_rp_ptr->infra;
+    pow = tmp_rp_ptr->infra;
 
     if (creature_ptr->muta3 & MUT3_INFRAVIS) {
-        creature_ptr->see_infra += 3;
+        pow += 3;
     }
 
     if (creature_ptr->tim_infra) {
-        creature_ptr->see_infra += 3;
+        pow += 3;
     }
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
@@ -1554,8 +1558,10 @@ static void calc_intra_vision(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_INFRA))
-            creature_ptr->see_infra += o_ptr->pval;
+            pow += o_ptr->pval;
     }
+
+	return pow;
 }
 
 /*!
