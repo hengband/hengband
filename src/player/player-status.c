@@ -469,14 +469,6 @@ void calc_bonuses(player_type *creature_ptr)
         calc_ind_status(creature_ptr, i);
     }
 
-    s16b r_pena = calc_double_weapon_penalty(creature_ptr, INVEN_RARM);
-    s16b l_pena = calc_double_weapon_penalty(creature_ptr, INVEN_LARM);
-
-	creature_ptr->to_h[0] -= r_pena;
-    creature_ptr->dis_to_h[0] -= r_pena;
-    creature_ptr->to_h[1] -= l_pena;
-    creature_ptr->dis_to_h[1] -= l_pena;
-
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     creature_ptr->heavy_shoot = is_heavy_shoot(creature_ptr, o_ptr);
 
@@ -3447,7 +3439,7 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
 
     }
 
-
+	creature_ptr->to_h[id] -= calc_double_weapon_penalty(creature_ptr, slot);
 }
 
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3597,6 +3589,8 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
 
         creature_ptr->dis_to_h[default_hand] += (s16b)bonus_to_h;
     }
+
+    creature_ptr->dis_to_h[id] -= calc_double_weapon_penalty(creature_ptr, slot);
 }
 
 static void calc_to_hit_bow(player_type *creature_ptr)
