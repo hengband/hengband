@@ -121,7 +121,6 @@ static void set_pet_params(player_type *master_ptr, monster_race *r_ptr, const i
 static void place_pet(player_type *master_ptr)
 {
     int max_num = master_ptr->wild_mode ? 1 : MAX_PARTY_MON;
-    floor_type *floor_ptr = master_ptr->current_floor_ptr;
     for (int current_monster = 0; current_monster < max_num; current_monster++) {
         POSITION cy = 0;
         POSITION cx = 0;
@@ -187,6 +186,25 @@ static void update_unique_artifact(floor_type *floor_ptr, s16b cur_floor_id)
     }
 }
 
+static void check_visited_floor(player_type *creature_ptr, saved_floor_type *sf_ptr, bool *loaded)
+{
+    if ((sf_ptr->last_visit == 0) || !load_floor(creature_ptr, sf_ptr, 0))
+        return;
+
+    *loaded = TRUE;
+    if ((creature_ptr->change_floor_mode & CFM_NO_RETURN) == 0)
+        return;
+
+    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+    if (feat_uses_special(g_ptr->feat))
+        return;
+
+    if (creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP))
+        g_ptr->feat = feat_ground_type[randint0(100)];
+
+    g_ptr->special = 0;
+}
+
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -215,21 +233,7 @@ void change_floor(player_type *creature_ptr)
             new_floor_id = get_new_floor_id(creature_ptr);
 
         sf_ptr = get_sf_ptr(new_floor_id);
-        if (sf_ptr->last_visit) {
-            if (load_floor(creature_ptr, sf_ptr, 0)) {
-                loaded = TRUE;
-                if (creature_ptr->change_floor_mode & CFM_NO_RETURN) {
-                    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
-                    if (!feat_uses_special(g_ptr->feat)) {
-                        if (creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP))
-                            g_ptr->feat = feat_ground_type[randint0(100)];
-
-                        g_ptr->special = 0;
-                    }
-                }
-            }
-        }
-
+        check_visited_floor(creature_ptr, sf_ptr, &loaded);
         if (creature_ptr->floor_id != 0) {
             saved_floor_type *cur_sf_ptr = get_sf_ptr(creature_ptr->floor_id);
             if (creature_ptr->change_floor_mode & CFM_UP) {
