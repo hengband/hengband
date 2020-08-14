@@ -63,6 +63,36 @@ static void build_dead_end(player_type *creature_ptr)
     wipe_generate_random_floor_flags(creature_ptr->current_floor_ptr);
 }
 
+static MONSTER_IDX decide_pet_index(player_type *master_ptr, const int current_monster, POSITION *cy, POSITION *cx)
+{
+    floor_type *floor_ptr = master_ptr->current_floor_ptr;
+    if (current_monster == 0) {
+        MONSTER_IDX m_idx = m_pop(floor_ptr);
+        master_ptr->riding = m_idx;
+        if (m_idx) {
+            *cy = master_ptr->y;
+            *cx = master_ptr->x;
+        }
+
+        return m_idx;
+    }
+
+    POSITION d;
+    for (d = 1; d < A_MAX; d++) {
+        int j;
+        for (j = 1000; j > 0; j--) {
+            scatter(master_ptr, cy, cx, master_ptr->y, master_ptr->x, d, 0);
+            if (monster_can_enter(master_ptr, *cy, *cx, &r_info[party_mon[current_monster].r_idx], 0))
+                break;
+        }
+
+        if (j != 0)
+            break;
+    }
+
+    return (d == 6) ? 0 : m_pop(floor_ptr);
+}
+
 /*!
  * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
  * @param master_ptr プレーヤーへの参照ポインタ
@@ -72,42 +102,19 @@ static void place_pet(player_type *master_ptr)
 {
     int max_num = master_ptr->wild_mode ? 1 : MAX_PARTY_MON;
     floor_type *floor_ptr = master_ptr->current_floor_ptr;
-    for (int i = 0; i < max_num; i++) {
-        POSITION cy = 0, cx = 0;
-        MONSTER_IDX m_idx;
-        if (!(party_mon[i].r_idx))
+    for (int current_monster = 0; current_monster < max_num; current_monster++) {
+        POSITION cy = 0;
+        POSITION cx = 0;
+        if (party_mon[current_monster].r_idx == 0)
             continue;
 
-        if (i == 0) {
-            m_idx = m_pop(floor_ptr);
-            master_ptr->riding = m_idx;
-            if (m_idx) {
-                cy = master_ptr->y;
-                cx = master_ptr->x;
-            }
-        } else {
-            POSITION d;
-            for (d = 1; d < A_MAX; d++) {
-                int j;
-                for (j = 1000; j > 0; j--) {
-                    scatter(master_ptr, &cy, &cx, master_ptr->y, master_ptr->x, d, 0);
-                    if (monster_can_enter(master_ptr, cy, cx, &r_info[party_mon[i].r_idx], 0))
-                        break;
-                }
-
-                if (j != 0)
-                    break;
-            }
-
-            m_idx = (d == 6) ? 0 : m_pop(floor_ptr);
-        }
-
+        MONSTER_IDX m_idx = decide_pet_index(master_ptr, current_monster, &cy, &cx);
         if (m_idx != 0) {
             monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[m_idx];
             monster_race *r_ptr;
             master_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
-            m_ptr->r_idx = party_mon[i].r_idx;
-            *m_ptr = party_mon[i];
+            m_ptr->r_idx = party_mon[current_monster].r_idx;
+            *m_ptr = party_mon[current_monster];
             r_ptr = real_r_ptr(m_ptr);
             m_ptr->fy = cy;
             m_ptr->fx = cx;
@@ -126,7 +133,7 @@ static void place_pet(player_type *master_ptr)
             if (r_ptr->flags2 & RF2_MULTIPLY)
                 master_ptr->current_floor_ptr->num_repro++;
         } else {
-            monster_type *m_ptr = &party_mon[i];
+            monster_type *m_ptr = &party_mon[current_monster];
             monster_race *r_ptr = real_r_ptr(m_ptr);
             GAME_TEXT m_name[MAX_NLEN];
             monster_desc(master_ptr, m_name, m_ptr, 0);
