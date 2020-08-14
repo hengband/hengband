@@ -36,6 +36,38 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static void sweep_preserving_pet(player_type *master_ptr)
+{
+    if (master_ptr->wild_mode || master_ptr->current_floor_ptr->inside_arena || master_ptr->phase_out)
+        return;
+
+    for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
+        monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == master_ptr->riding))
+            continue;
+
+        if (reinit_wilderness) {
+        } else {
+            POSITION dis = distance(master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx);
+            if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || monster_csleep_remaining(m_ptr) || (m_ptr->parent_m_idx != 0))
+                continue;
+
+            if (m_ptr->nickname
+                && ((player_has_los_bold(master_ptr, m_ptr->fy, m_ptr->fx) && projectable(master_ptr, master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx))
+                    || (los(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)
+                        && projectable(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)))) {
+                if (dis > 3)
+                    continue;
+            } else if (dis > 1)
+                continue;
+        }
+
+        (void)COPY(&party_mon[party_monster_num], &master_ptr->current_floor_ptr->m_list[i], monster_type);
+        party_monster_num++;
+        delete_monster_idx(master_ptr, i);
+    }
+}
+
 /*!
  * @brief フロア移動時のペット保存処理 / Preserve_pets
  * @param master_ptr プレーヤーへの参照ポインタ
@@ -58,38 +90,7 @@ static void preserve_pet(player_type *master_ptr)
         }
     }
 
-    /*
-     * todo 関数分割時の参考とするため、このコメントは残しておく。分割後はnumをparty_monster_numに変更する.
-     * If player is in wild mode, no pets are preserved except a monster whom player riding.
-     */
-    if (!master_ptr->wild_mode && !master_ptr->current_floor_ptr->inside_arena && !master_ptr->phase_out) {
-        for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1, num = 1; (i >= 1 && num < MAX_PARTY_MON); i--) {
-            monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
-            if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == master_ptr->riding))
-                continue;
-
-            if (reinit_wilderness) {
-            } else {
-                POSITION dis = distance(master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx);
-                if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || monster_csleep_remaining(m_ptr) || (m_ptr->parent_m_idx != 0))
-                    continue;
-
-                if (m_ptr->nickname
-                    && ((player_has_los_bold(master_ptr, m_ptr->fy, m_ptr->fx) && projectable(master_ptr, master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx))
-                        || (los(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)
-                            && projectable(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)))) {
-                    if (dis > 3)
-                        continue;
-                } else if (dis > 1)
-                    continue;
-            }
-
-            (void)COPY(&party_mon[num], &master_ptr->current_floor_ptr->m_list[i], monster_type);
-            num++;
-            delete_monster_idx(master_ptr, i);
-        }
-    }
-
+    sweep_preserving_pet(master_ptr);
     if (record_named_pet) {
         for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
             monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
