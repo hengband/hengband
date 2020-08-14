@@ -277,6 +277,20 @@ static void preserve_info(player_type *creature_ptr)
     }
 }
 
+static void set_grid_by_leaving_floor(player_type *creature_ptr, grid_type **g_ptr)
+{
+    if ((creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0)
+        return;
+
+    *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+    feature_type *f_ptr =  &f_info[(*g_ptr)->feat];
+    if ((*g_ptr)->special && !have_flag(f_ptr->flags, FF_SPECIAL) && get_sf_ptr((*g_ptr)->special))
+        new_floor_id = (*g_ptr)->special;
+
+    if (have_flag(f_ptr->flags, FF_STAIRS) && have_flag(f_ptr->flags, FF_SHAFT))
+        prepare_change_floor_mode(creature_ptr, CFM_SHAFT);
+}
+
 /*!
  * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
@@ -296,23 +310,12 @@ void leave_floor(player_type *creature_ptr)
         tmp_floor_idx = get_new_floor_id(creature_ptr);
 
     preserve_info(creature_ptr);
-    saved_floor_type *sf_ptr;
-    sf_ptr = get_sf_ptr(creature_ptr->floor_id);
+    saved_floor_type *sf_ptr = get_sf_ptr(creature_ptr->floor_id);
     if ((creature_ptr->change_floor_mode & CFM_RAND_CONNECT) && tmp_floor_idx)
         locate_connected_stairs(creature_ptr, creature_ptr->current_floor_ptr, sf_ptr, creature_ptr->change_floor_mode);
 
     grid_type *g_ptr = NULL;
-    feature_type *f_ptr;
-    if (creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) {
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
-        f_ptr = &f_info[g_ptr->feat];
-        if (g_ptr->special && !have_flag(f_ptr->flags, FF_SPECIAL) && get_sf_ptr(g_ptr->special))
-            new_floor_id = g_ptr->special;
-
-        if (have_flag(f_ptr->flags, FF_STAIRS) && have_flag(f_ptr->flags, FF_SHAFT))
-            prepare_change_floor_mode(creature_ptr, CFM_SHAFT);
-    }
-
+    set_grid_by_leaving_floor(creature_ptr, &g_ptr);
     if (creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) {
         int move_num = 0;
         if (creature_ptr->change_floor_mode & CFM_DOWN)
