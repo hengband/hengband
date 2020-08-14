@@ -122,7 +122,7 @@ static s16b calc_wisdom_addition(player_type *creature_ptr);
 static s16b calc_dexterity_addition(player_type *creature_ptr);
 static s16b calc_constitution_addition(player_type *creature_ptr);
 static s16b calc_charisma_addition(player_type *creature_ptr);
-static void calc_to_magic_chance(player_type *creature_ptr);
+static s16b calc_to_magic_chance(player_type *creature_ptr);
 static void calc_base_ac(player_type *creature_ptr);
 static void calc_base_ac_display(player_type *creature_ptr);
 static void calc_to_ac(player_type *creature_ptr);
@@ -457,7 +457,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->stat_add[A_DEX] = calc_dexterity_addition(creature_ptr);
     creature_ptr->stat_add[A_CON] = calc_constitution_addition(creature_ptr);
     creature_ptr->stat_add[A_CHR] = calc_charisma_addition(creature_ptr);
-    calc_to_magic_chance(creature_ptr);
+    creature_ptr->to_m_chance = calc_to_magic_chance(creature_ptr);
     calc_base_ac(creature_ptr);
     calc_to_ac(creature_ptr);
     calc_base_ac_display(creature_ptr);
@@ -2331,18 +2331,29 @@ static s16b calc_charisma_addition(player_type *creature_ptr)
 	return pow;
 }
 
-static void calc_to_magic_chance(player_type *creature_ptr)
+/*!
+ * @brief 魔法失敗値計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 魔法失敗値
+ * @details
+ * * 性格なまけものなら加算(+10)
+ * * 性格きれものなら減算(-3)
+ * * 性格ちからじまんとがまんづよいなら加算(+1)
+ * * 性格チャージマンなら加算(+5)
+ * * 装備品にTRC_LOW_MAGICがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
+ */
+static s16b calc_to_magic_chance(player_type *creature_ptr)
 {
-    creature_ptr->to_m_chance = 0;
+    s16b chance = 0;
 
     if (creature_ptr->pseikaku == PERSONALITY_LAZY)
-        creature_ptr->to_m_chance += 10;
+        chance += 10;
     if (creature_ptr->pseikaku == PERSONALITY_SHREWD)
-        creature_ptr->to_m_chance -= 3;
+        chance -= 3;
     if ((creature_ptr->pseikaku == PERSONALITY_PATIENT) || (creature_ptr->pseikaku == PERSONALITY_MIGHTY))
-        creature_ptr->to_m_chance++;
+        chance++;
     if (creature_ptr->pseikaku == PERSONALITY_CHARGEMAN)
-        creature_ptr->to_m_chance += 5;
+        chance += 5;
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -2353,12 +2364,13 @@ static void calc_to_magic_chance(player_type *creature_ptr)
         object_flags(creature_ptr, o_ptr, flgs);
         if (o_ptr->curse_flags & TRC_LOW_MAGIC) {
             if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-                creature_ptr->to_m_chance += 10;
+                chance += 10;
             } else {
-                creature_ptr->to_m_chance += 3;
+                chance += 3;
             }
         }
     }
+    return chance;
 }
 
 static void calc_base_ac(player_type *creature_ptr)
