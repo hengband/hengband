@@ -291,6 +291,31 @@ static void set_grid_by_leaving_floor(player_type *creature_ptr, grid_type **g_p
         prepare_change_floor_mode(creature_ptr, CFM_SHAFT);
 }
 
+static void jump_floors(player_type *creature_ptr)
+{
+    if ((creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) == 0)
+        return;
+
+    int move_num = 0;
+    if (creature_ptr->change_floor_mode & CFM_DOWN)
+        move_num = 1;
+    else if (creature_ptr->change_floor_mode & CFM_UP)
+        move_num = -1;
+
+    if (creature_ptr->change_floor_mode & CFM_SHAFT)
+        move_num += SGN(move_num);
+
+    if (creature_ptr->change_floor_mode & CFM_DOWN) {
+        if (!creature_ptr->current_floor_ptr->dun_level)
+            move_num = d_info[creature_ptr->dungeon_idx].mindepth;
+    } else if (creature_ptr->change_floor_mode & CFM_UP) {
+        if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth)
+            move_num = -creature_ptr->current_floor_ptr->dun_level;
+    }
+
+    creature_ptr->current_floor_ptr->dun_level += move_num;
+}
+
 /*!
  * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
@@ -316,27 +341,7 @@ void leave_floor(player_type *creature_ptr)
 
     grid_type *g_ptr = NULL;
     set_grid_by_leaving_floor(creature_ptr, &g_ptr);
-    if (creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) {
-        int move_num = 0;
-        if (creature_ptr->change_floor_mode & CFM_DOWN)
-            move_num = 1;
-        else if (creature_ptr->change_floor_mode & CFM_UP)
-            move_num = -1;
-
-        if (creature_ptr->change_floor_mode & CFM_SHAFT)
-            move_num += SGN(move_num);
-
-        if (creature_ptr->change_floor_mode & CFM_DOWN) {
-            if (!creature_ptr->current_floor_ptr->dun_level)
-                move_num = d_info[creature_ptr->dungeon_idx].mindepth;
-        } else if (creature_ptr->change_floor_mode & CFM_UP) {
-            if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth)
-                move_num = -creature_ptr->current_floor_ptr->dun_level;
-        }
-
-        creature_ptr->current_floor_ptr->dun_level += move_num;
-    }
-
+    jump_floors(creature_ptr);
     if (!creature_ptr->current_floor_ptr->dun_level && creature_ptr->dungeon_idx) {
         creature_ptr->leaving_dungeon = TRUE;
         if (!vanilla_town && !lite_town) {
