@@ -228,6 +228,34 @@ static void update_floor_id(player_type *creature_ptr, saved_floor_type *sf_ptr)
         sf_ptr->upper_floor_id = creature_ptr->floor_id;
 }
 
+static void reset_unique_by_floor_change(player_type *creature_ptr)
+{
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
+        monster_race *r_ptr;
+        monster_type *m_ptr = &floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr))
+            continue;
+
+        if (!is_pet(m_ptr)) {
+            m_ptr->hp = m_ptr->maxhp = m_ptr->max_maxhp;
+            (void)set_monster_fast(creature_ptr, i, 0);
+            (void)set_monster_slow(creature_ptr, i, 0);
+            (void)set_monster_stunned(creature_ptr, i, 0);
+            (void)set_monster_confused(creature_ptr, i, 0);
+            (void)set_monster_monfear(creature_ptr, i, 0);
+            (void)set_monster_invulner(creature_ptr, i, 0, FALSE);
+        }
+
+        r_ptr = real_r_ptr(m_ptr);
+        if (!(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_NAZGUL))
+            continue;
+
+        if (r_ptr->floor_id != new_floor_id)
+            delete_monster_idx(creature_ptr, i);
+    }
+}
+
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -260,37 +288,12 @@ void change_floor(player_type *creature_ptr)
         update_floor_id(creature_ptr, sf_ptr);
         if (loaded) {
             GAME_TURN tmp_last_visit = sf_ptr->last_visit;
-            GAME_TURN absence_ticks;
             int alloc_chance = d_info[creature_ptr->dungeon_idx].max_m_alloc_chance;
-            GAME_TURN alloc_times;
             while (tmp_last_visit > current_world_ptr->game_turn)
                 tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
 
-            absence_ticks = (current_world_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
-            for (MONSTER_IDX i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
-                monster_race *r_ptr;
-                monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
-                if (!monster_is_valid(m_ptr))
-                    continue;
-
-                if (!is_pet(m_ptr)) {
-                    m_ptr->hp = m_ptr->maxhp = m_ptr->max_maxhp;
-                    (void)set_monster_fast(creature_ptr, i, 0);
-                    (void)set_monster_slow(creature_ptr, i, 0);
-                    (void)set_monster_stunned(creature_ptr, i, 0);
-                    (void)set_monster_confused(creature_ptr, i, 0);
-                    (void)set_monster_monfear(creature_ptr, i, 0);
-                    (void)set_monster_invulner(creature_ptr, i, 0, FALSE);
-                }
-
-                r_ptr = real_r_ptr(m_ptr);
-                if (!(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_NAZGUL))
-                    continue;
-
-                if (r_ptr->floor_id != new_floor_id)
-                    delete_monster_idx(creature_ptr, i);
-            }
-
+            GAME_TURN absence_ticks = (current_world_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
+            reset_unique_by_floor_change(creature_ptr);
             for (MONSTER_IDX i = 1; i < creature_ptr->current_floor_ptr->o_max; i++) {
                 object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
                 if (!object_is_valid(o_ptr) || !object_is_fixed_artifact(o_ptr))
@@ -303,7 +306,7 @@ void change_floor(player_type *creature_ptr)
             }
 
             (void)place_quest_monsters(creature_ptr);
-            alloc_times = absence_ticks / alloc_chance;
+            GAME_TURN alloc_times = absence_ticks / alloc_chance;
             if (randint0(alloc_chance) < (absence_ticks % alloc_chance))
                 alloc_times++;
 
