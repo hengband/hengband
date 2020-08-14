@@ -116,7 +116,7 @@ static s16b calc_strength_addition(player_type *creature_ptr);
 static s16b calc_intelligence_addition(player_type *creature_ptr);
 static s16b calc_wisdom_addition(player_type *creature_ptr);
 static s16b calc_dexterity_addition(player_type *creature_ptr);
-static void calc_constitution_addition(player_type *creature_ptr);
+static s16b calc_constitution_addition(player_type *creature_ptr);
 static void calc_charisma_addition(player_type *creature_ptr);
 static void calc_to_magic_chance(player_type *creature_ptr);
 static void calc_base_ac(player_type *creature_ptr);
@@ -744,7 +744,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->stat_add[A_INT] = calc_intelligence_addition(creature_ptr);
     creature_ptr->stat_add[A_WIS] = calc_wisdom_addition(creature_ptr);
     creature_ptr->stat_add[A_DEX] = calc_dexterity_addition(creature_ptr);
-    calc_constitution_addition(creature_ptr);
+    creature_ptr->stat_add[A_CON] = calc_constitution_addition(creature_ptr);
     calc_charisma_addition(creature_ptr);
     calc_to_magic_chance(creature_ptr);
     calc_base_ac(creature_ptr);
@@ -2459,8 +2459,28 @@ static s16b calc_dexterity_addition(player_type *creature_ptr)
 	return pow;
 }
 
-static void calc_constitution_addition(player_type *creature_ptr)
+/*!
+ * @brief 耐久力補正計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 耐久力補正値
+ * @details
+ * * 種族/職業/性格修正
+ * * エントは別途レベル26,41,46到達ごとに加算(+1)
+ * * 装備がTR_CONフラグを持っていれば加算(+pval*1)
+ * * 呪術の肉体強化で加算(+4)
+ * * 降鬼陣で加算(+5)
+ * * 白虎の構えで減算(-3)
+ * * 玄武の構えで加算(+3)
+ * * 朱雀の構えで減算(-2)
+ * * 変異MUT3_RESILIENTで加算(+4)
+ * * 変異MUT3_ALBINOで減算(-4)
+ * * 変異MUT3_XTRA_FATで加算(+2)
+ * * 変異MUT3_FLESH_ROTで減算(-2)
+ * * ネオ・つよしスペシャル中で加算(+4)
+ */
+static s16b calc_constitution_addition(player_type *creature_ptr)
 {
+    s16b pow;
     const player_race *tmp_rp_ptr;
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
@@ -2468,15 +2488,15 @@ static void calc_constitution_addition(player_type *creature_ptr)
         tmp_rp_ptr = &race_info[creature_ptr->prace];
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
-    creature_ptr->stat_add[A_CON] = tmp_rp_ptr->r_adj[A_CON] + c_ptr->c_adj[A_CON] + a_ptr->a_adj[A_CON];
+    pow = tmp_rp_ptr->r_adj[A_CON] + c_ptr->c_adj[A_CON] + a_ptr->a_adj[A_CON];
 
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_ENT) {
         if (creature_ptr->lev > 25)
-            creature_ptr->stat_add[A_CON]++;
+            pow++;
         if (creature_ptr->lev > 40)
-            creature_ptr->stat_add[A_CON]++;
+            pow++;
         if (creature_ptr->lev > 45)
-            creature_ptr->stat_add[A_CON]++;
+            pow++;
     }
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
@@ -2487,48 +2507,50 @@ static void calc_constitution_addition(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_CON))
-            creature_ptr->stat_add[A_CON] += o_ptr->pval;
-    }
-
-    if (creature_ptr->special_defense & KATA_KOUKIJIN) {
-        creature_ptr->stat_add[A_CON] += 5;
-    }
-
-    if (creature_ptr->muta3) {
-        if (creature_ptr->muta3 & MUT3_RESILIENT) {
-            creature_ptr->stat_add[A_CON] += 4;
-        }
-
-        if (creature_ptr->muta3 & MUT3_ALBINO) {
-            creature_ptr->stat_add[A_CON] -= 4;
-        }
-
-        if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
-            creature_ptr->stat_add[A_CON] += 2;
-        }
-
-        if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
-            creature_ptr->stat_add[A_CON] -= 2;
-        }
+            pow += o_ptr->pval;
     }
 
     if (creature_ptr->realm1 == REALM_HEX) {
         if (hex_spelling(creature_ptr, HEX_BUILDING)) {
-            creature_ptr->stat_add[A_CON] += 4;
+            pow += 4;
+        }
+    }
+
+    if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+        pow += 5;
+    }
+
+    if (creature_ptr->special_defense & KAMAE_BYAKKO) {
+        pow -= 3;
+    } else if (creature_ptr->special_defense & KAMAE_GENBU) {
+        pow += 3;
+    } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        pow -= 2;
+    }
+
+    if (creature_ptr->muta3) {
+        if (creature_ptr->muta3 & MUT3_RESILIENT) {
+            pow += 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_ALBINO) {
+            pow -= 4;
+        }
+
+        if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
+            pow += 2;
+        }
+
+        if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
+            pow -= 2;
         }
     }
 
     if (creature_ptr->tsuyoshi) {
-        creature_ptr->stat_add[A_CON] += 4;
+        pow += 4;
     }
 
-    if (creature_ptr->special_defense & KAMAE_BYAKKO) {
-        creature_ptr->stat_add[A_CON] -= 3;
-    } else if (creature_ptr->special_defense & KAMAE_GENBU) {
-        creature_ptr->stat_add[A_CON] += 3;
-    } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
-        creature_ptr->stat_add[A_CON] -= 2;
-    }
+	return pow;
 }
 
 static void calc_charisma_addition(player_type *creature_ptr)
