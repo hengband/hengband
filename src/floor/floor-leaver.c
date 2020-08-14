@@ -367,6 +367,33 @@ static void update_upper_lower_or_floor_id(player_type *creature_ptr, saved_floo
         sf_ptr->lower_floor_id = new_floor_id;
 }
 
+static void exe_leave_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
+{
+    grid_type *g_ptr = NULL;
+    set_grid_by_leaving_floor(creature_ptr, &g_ptr);
+    jump_floors(creature_ptr);
+    exit_to_wilderness(creature_ptr);
+    kill_saved_floors(creature_ptr, sf_ptr);
+    if (creature_ptr->floor_id == 0)
+        return;
+
+    refresh_new_floor_id(creature_ptr, g_ptr);
+    update_upper_lower_or_floor_id(creature_ptr, sf_ptr);
+    if (((creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0) || ((creature_ptr->change_floor_mode & CFM_NO_RETURN) != 0))
+        return;
+
+    get_out_monster(creature_ptr);
+    sf_ptr->last_visit = current_world_ptr->game_turn;
+    forget_lite(creature_ptr->current_floor_ptr);
+    forget_view(creature_ptr->current_floor_ptr);
+    clear_mon_lite(creature_ptr->current_floor_ptr);
+    if (save_floor(creature_ptr, sf_ptr, 0))
+        return;
+
+    prepare_change_floor_mode(creature_ptr, CFM_NO_RETURN);
+    kill_saved_floor(creature_ptr, get_sf_ptr(creature_ptr->floor_id));
+}
+
 /*!
  * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
@@ -390,26 +417,5 @@ void leave_floor(player_type *creature_ptr)
     if ((creature_ptr->change_floor_mode & CFM_RAND_CONNECT) && tmp_floor_idx)
         locate_connected_stairs(creature_ptr, creature_ptr->current_floor_ptr, sf_ptr, creature_ptr->change_floor_mode);
 
-    grid_type *g_ptr = NULL;
-    set_grid_by_leaving_floor(creature_ptr, &g_ptr);
-    jump_floors(creature_ptr);
-    exit_to_wilderness(creature_ptr);
-    kill_saved_floors(creature_ptr, sf_ptr);
-    if (creature_ptr->floor_id == 0)
-        return;
-
-    refresh_new_floor_id(creature_ptr, g_ptr);
-    update_upper_lower_or_floor_id(creature_ptr, sf_ptr);
-    if (((creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) == 0) || ((creature_ptr->change_floor_mode & CFM_NO_RETURN) != 0))
-        return;
-
-    get_out_monster(creature_ptr);
-    sf_ptr->last_visit = current_world_ptr->game_turn;
-    forget_lite(creature_ptr->current_floor_ptr);
-    forget_view(creature_ptr->current_floor_ptr);
-    clear_mon_lite(creature_ptr->current_floor_ptr);
-    if (!save_floor(creature_ptr, sf_ptr, 0)) {
-        prepare_change_floor_mode(creature_ptr, CFM_NO_RETURN);
-        kill_saved_floor(creature_ptr, get_sf_ptr(creature_ptr->floor_id));
-    }
+    exe_leave_floor(creature_ptr, sf_ptr);
 }
