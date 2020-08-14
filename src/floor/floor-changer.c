@@ -256,6 +256,35 @@ static void reset_unique_by_floor_change(player_type *creature_ptr)
     }
 }
 
+static void new_floor_allocation(player_type *creature_ptr, saved_floor_type *sf_ptr)
+{
+    GAME_TURN tmp_last_visit = sf_ptr->last_visit;
+    int alloc_chance = d_info[creature_ptr->dungeon_idx].max_m_alloc_chance;
+    while (tmp_last_visit > current_world_ptr->game_turn)
+        tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
+
+    GAME_TURN absence_ticks = (current_world_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
+    reset_unique_by_floor_change(creature_ptr);
+    for (MONSTER_IDX i = 1; i < creature_ptr->current_floor_ptr->o_max; i++) {
+        object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
+        if (!object_is_valid(o_ptr) || !object_is_fixed_artifact(o_ptr))
+            continue;
+
+        if (a_info[o_ptr->name1].floor_id == new_floor_id)
+            a_info[o_ptr->name1].cur_num = 1;
+        else
+            delete_object_idx(creature_ptr, i);
+    }
+
+    (void)place_quest_monsters(creature_ptr);
+    GAME_TURN alloc_times = absence_ticks / alloc_chance;
+    if (randint0(alloc_chance) < (absence_ticks % alloc_chance))
+        alloc_times++;
+
+    for (MONSTER_IDX i = 0; i < alloc_times; i++)
+        (void)alloc_monster(creature_ptr, 0, 0, summon_specific);
+}
+
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -287,31 +316,7 @@ void change_floor(player_type *creature_ptr)
         check_visited_floor(creature_ptr, sf_ptr, &loaded);
         update_floor_id(creature_ptr, sf_ptr);
         if (loaded) {
-            GAME_TURN tmp_last_visit = sf_ptr->last_visit;
-            int alloc_chance = d_info[creature_ptr->dungeon_idx].max_m_alloc_chance;
-            while (tmp_last_visit > current_world_ptr->game_turn)
-                tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
-
-            GAME_TURN absence_ticks = (current_world_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
-            reset_unique_by_floor_change(creature_ptr);
-            for (MONSTER_IDX i = 1; i < creature_ptr->current_floor_ptr->o_max; i++) {
-                object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
-                if (!object_is_valid(o_ptr) || !object_is_fixed_artifact(o_ptr))
-                    continue;
-
-                if (a_info[o_ptr->name1].floor_id != new_floor_id)
-                    delete_object_idx(creature_ptr, i);
-                else
-                    a_info[o_ptr->name1].cur_num = 1;
-            }
-
-            (void)place_quest_monsters(creature_ptr);
-            GAME_TURN alloc_times = absence_ticks / alloc_chance;
-            if (randint0(alloc_chance) < (absence_ticks % alloc_chance))
-                alloc_times++;
-
-            for (MONSTER_IDX i = 0; i < alloc_times; i++)
-                (void)alloc_monster(creature_ptr, 0, 0, summon_specific);
+            new_floor_allocation(creature_ptr, sf_ptr);
         } else {
             if (sf_ptr->last_visit) {
                 msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
