@@ -72,6 +72,26 @@
 #include "window/main-window-util.h"
 #include "world/world.h"
 
+static void check_saved_tmp_files(const int fd, bool *force)
+{
+    if (fd >= 0) {
+        (void)fd_close(fd);
+        return;
+    }
+    
+    if (*force)
+        return;
+
+    msg_print(_("エラー：古いテンポラリ・ファイルが残っています。", "Error: There are old temporary files."));
+    msg_print(_("変愚蛮怒を二重に起動していないか確認してください。", "Make sure you are not running two game processes simultaneously."));
+    msg_print(_("過去に変愚蛮怒がクラッシュした場合は一時ファイルを", "If the temporary files are garbage from an old crashed process, "));
+    msg_print(_("強制的に削除して実行を続けられます。", "you can delete them safely."));
+    if (!get_check(_("強制的に削除してもよろしいですか？", "Do you delete the old temporary files? ")))
+        quit(_("実行中止", "Aborted."));
+
+    *force = TRUE;
+}
+
 /*!
  * @brief 保存フロア配列を初期化する / Initialize saved_floors array.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -90,20 +110,7 @@ void init_saved_floors(player_type *creature_ptr, bool force)
         safe_setuid_grab(creature_ptr);
         fd = fd_make(floor_savefile, mode);
         safe_setuid_drop();
-        if (fd < 0) {
-            if (!force) {
-                msg_print(_("エラー：古いテンポラリ・ファイルが残っています。", "Error: There are old temporary files."));
-                msg_print(_("変愚蛮怒を二重に起動していないか確認してください。", "Make sure you are not running two game processes simultaneously."));
-                msg_print(_("過去に変愚蛮怒がクラッシュした場合は一時ファイルを", "If the temporary files are garbage from an old crashed process, "));
-                msg_print(_("強制的に削除して実行を続けられます。", "you can delete them safely."));
-                if (!get_check(_("強制的に削除してもよろしいですか？", "Do you delete the old temporary files? ")))
-                    quit(_("実行中止", "Aborted."));
-
-                force = TRUE;
-            }
-        } else
-            (void)fd_close(fd);
-
+        check_saved_tmp_files(fd, &force);
         safe_setuid_grab(creature_ptr);
         (void)fd_kill(floor_savefile);
         safe_setuid_drop();
