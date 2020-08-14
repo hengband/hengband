@@ -36,6 +36,27 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static bool check_pet_preservation_conditions(player_type *master_ptr, monster_type *m_ptr)
+{
+    if (reinit_wilderness)
+        return FALSE;
+
+    POSITION dis = distance(master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx);
+    if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || monster_csleep_remaining(m_ptr) || (m_ptr->parent_m_idx != 0))
+        return TRUE;
+
+    if (m_ptr->nickname
+        && ((player_has_los_bold(master_ptr, m_ptr->fy, m_ptr->fx) && projectable(master_ptr, master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx))
+            || (los(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)
+                && projectable(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)))) {
+        if (dis > 3)
+            return TRUE;
+    } else if (dis > 1)
+        return TRUE;
+
+    return FALSE;
+}
+
 static void sweep_preserving_pet(player_type *master_ptr)
 {
     if (master_ptr->wild_mode || master_ptr->current_floor_ptr->inside_arena || master_ptr->phase_out)
@@ -43,24 +64,8 @@ static void sweep_preserving_pet(player_type *master_ptr)
 
     for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
         monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == master_ptr->riding))
+        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == master_ptr->riding) || check_pet_preservation_conditions(master_ptr, m_ptr))
             continue;
-
-        if (reinit_wilderness) {
-        } else {
-            POSITION dis = distance(master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx);
-            if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || monster_csleep_remaining(m_ptr) || (m_ptr->parent_m_idx != 0))
-                continue;
-
-            if (m_ptr->nickname
-                && ((player_has_los_bold(master_ptr, m_ptr->fy, m_ptr->fx) && projectable(master_ptr, master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx))
-                    || (los(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)
-                        && projectable(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)))) {
-                if (dis > 3)
-                    continue;
-            } else if (dis > 1)
-                continue;
-        }
 
         (void)COPY(&party_mon[party_monster_num], &master_ptr->current_floor_ptr->m_list[i], monster_type);
         party_monster_num++;
