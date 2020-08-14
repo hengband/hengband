@@ -590,6 +590,7 @@ hengband_SOURCES = \
 	player/player-skill.c player/player-skill.h \
 	player/player-status.c player/player-status.h \
 	player/player-status-flags.c player/player-status-flags.h \
+	player/player-status-table.c player/player-status-table.h \
 	player/player-personalities-types.h \
 	player/player-sex.c player/player-sex.h \
 	player/selfinfo.c player/selfinfo.h \
