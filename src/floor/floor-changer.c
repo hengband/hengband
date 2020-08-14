@@ -323,6 +323,22 @@ static void update_new_floor_feature(player_type *creature_ptr, saved_floor_type
     g_ptr->special = creature_ptr->floor_id;
 }
 
+static void cut_off_the_upstair(player_type *creature_ptr)
+{
+    if (creature_ptr->change_floor_mode & CFM_RAND_PLACE) {
+        (void)new_player_spot(creature_ptr);
+        return;
+    }
+    
+    if (((creature_ptr->change_floor_mode & CFM_NO_RETURN) == 0) || ((creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) == 0))
+        return;
+
+    if (!creature_ptr->blind)
+        msg_print(_("突然階段が塞がれてしまった。", "Suddenly the stairs is blocked!"));
+    else
+        msg_print(_("ゴトゴトと何か音がした。", "You hear some noises."));
+}
+
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -354,16 +370,7 @@ void change_floor(player_type *creature_ptr)
         check_visited_floor(creature_ptr, sf_ptr, &loaded);
         update_floor_id(creature_ptr, sf_ptr);
         update_new_floor_feature(creature_ptr, sf_ptr, loaded);
-        if (creature_ptr->change_floor_mode & CFM_RAND_PLACE) {
-            (void)new_player_spot(creature_ptr);
-        } else if ((creature_ptr->change_floor_mode & CFM_NO_RETURN) && (creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP))) {
-            if (!creature_ptr->blind) {
-                msg_print(_("突然階段が塞がれてしまった。", "Suddenly the stairs is blocked!"));
-            } else {
-                msg_print(_("ゴトゴトと何か音がした。", "You hear some noises."));
-            }
-        }
-
+        cut_off_the_upstair(creature_ptr);
         sf_ptr->visit_mark = latest_visit_mark++;
     }
 
