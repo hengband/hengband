@@ -332,6 +332,20 @@ static void exit_to_wilderness(player_type *creature_ptr)
     creature_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
 }
 
+static void kill_saved_floors(player_type *creature_ptr, saved_floor_type *sf_ptr)
+{
+    if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS)) {
+        for (DUNGEON_IDX i = 0; i < MAX_SAVED_FLOORS; i++)
+            kill_saved_floor(creature_ptr, &saved_floors[i]);
+
+        latest_visit_mark = 1;
+        return;
+    }
+    
+    if (creature_ptr->change_floor_mode & CFM_NO_RETURN)
+        kill_saved_floor(creature_ptr, sf_ptr);
+}
+
 /*!
  * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
@@ -359,15 +373,7 @@ void leave_floor(player_type *creature_ptr)
     set_grid_by_leaving_floor(creature_ptr, &g_ptr);
     jump_floors(creature_ptr);
     exit_to_wilderness(creature_ptr);
-    if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS)) {
-        for (DUNGEON_IDX i = 0; i < MAX_SAVED_FLOORS; i++)
-            kill_saved_floor(creature_ptr, &saved_floors[i]);
-
-        latest_visit_mark = 1;
-    } else if (creature_ptr->change_floor_mode & CFM_NO_RETURN) {
-        kill_saved_floor(creature_ptr, sf_ptr);
-    }
-
+    kill_saved_floors(creature_ptr, sf_ptr);
     if (creature_ptr->floor_id == 0)
         return;
 
