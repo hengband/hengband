@@ -316,6 +316,22 @@ static void jump_floors(player_type *creature_ptr)
     creature_ptr->current_floor_ptr->dun_level += move_num;
 }
 
+static void exit_to_wilderness(player_type *creature_ptr)
+{
+    if ((creature_ptr->current_floor_ptr->dun_level != 0) || (creature_ptr->dungeon_idx == 0))
+        return;
+
+    creature_ptr->leaving_dungeon = TRUE;
+    if (!vanilla_town && !lite_town) {
+        creature_ptr->wilderness_y = d_info[creature_ptr->dungeon_idx].dy;
+        creature_ptr->wilderness_x = d_info[creature_ptr->dungeon_idx].dx;
+    }
+
+    creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
+    creature_ptr->dungeon_idx = 0;
+    creature_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
+}
+
 /*!
  * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
@@ -342,18 +358,7 @@ void leave_floor(player_type *creature_ptr)
     grid_type *g_ptr = NULL;
     set_grid_by_leaving_floor(creature_ptr, &g_ptr);
     jump_floors(creature_ptr);
-    if (!creature_ptr->current_floor_ptr->dun_level && creature_ptr->dungeon_idx) {
-        creature_ptr->leaving_dungeon = TRUE;
-        if (!vanilla_town && !lite_town) {
-            creature_ptr->wilderness_y = d_info[creature_ptr->dungeon_idx].dy;
-            creature_ptr->wilderness_x = d_info[creature_ptr->dungeon_idx].dx;
-        }
-
-        creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
-        creature_ptr->dungeon_idx = 0;
-        creature_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
-    }
-
+    exit_to_wilderness(creature_ptr);
     if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS)) {
         for (DUNGEON_IDX i = 0; i < MAX_SAVED_FLOORS; i++)
             kill_saved_floor(creature_ptr, &saved_floors[i]);
