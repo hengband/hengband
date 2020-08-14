@@ -12,7 +12,7 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
-#include "floor/floor-save.h"
+#include "floor/floor-save-util.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"

@@ -2024,6 +2024,9 @@
     <ClCompile Include="..\..\src\floor\floor-mode-changer.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-save-util.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4397,6 +4400,9 @@
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-mode-changer.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-save-util.h">
       <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>

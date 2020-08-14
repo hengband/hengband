@@ -22,6 +22,7 @@
 #include "floor/floor-generator.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
+#include "floor/floor-save-util.h"
 #include "floor/floor.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
@@ -70,22 +71,6 @@
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
-
-#define MAX_PARTY_MON 21 /*!< フロア移動時に先のフロアに連れて行けるペットの最大数 Maximum number of preservable pets */
-
-bool repair_monsters;
-FLOOR_IDX max_floor_id; /*!< Number of floor_id used from birth */
-
-/*
- * Sign for current process used in temporary files.
- * Actually it is the start time of current process.
- */
-u32b saved_floor_file_sign;
-saved_floor_type saved_floors[MAX_SAVED_FLOORS];
-
-static FLOOR_IDX new_floor_id; /*!<次のフロアのID / floor_id of the destination */
-static u32b latest_visit_mark; /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */
-static monster_type party_mon[MAX_PARTY_MON]; /*!< フロア移動に保存するペットモンスターの配列 */
 
 /*!
  * @brief 保存フロア配列を初期化する / Initialize saved_floors array.

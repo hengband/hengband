@@ -8,7 +8,7 @@
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "floor/floor-save.h"
+#include "floor/floor-save-util.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/disturbance-options.h"
