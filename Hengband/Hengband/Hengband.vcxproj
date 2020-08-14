@@ -222,6 +222,7 @@
     <ClCompile Include="..\..\src\floor\cave.c" />
     <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.c" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
+    <ClCompile Include="..\..\src\floor\floor-mode-changer.c" />
     <ClCompile Include="..\..\src\floor\floor-util.c" />
     <ClCompile Include="..\..\src\floor\object-allocator.c" />
     <ClCompile Include="..\..\src\floor\object-scanner.c" />
@@ -810,6 +811,7 @@
     <ClInclude Include="..\..\src\flavor\tval-description-switcher.h" />
     <ClInclude Include="..\..\src\floor\cave-generator.h" />
     <ClInclude Include="..\..\src\floor\cave.h" />
+    <ClInclude Include="..\..\src\floor\floor-mode-changer.h" />
     <ClInclude Include="..\..\src\floor\dungeon-tunnel-util.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
     <ClInclude Include="..\..\src\floor\floor-allocation-types.h" />

@@ -30,7 +30,7 @@
 #include "flavor/object-flavor.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
-#include "floor/floor-save.h"
+#include "floor/floor-mode-changer.h"
 #include "floor/floor-util.h"
 #include "floor/floor.h"
 #include "floor/wild.h"
