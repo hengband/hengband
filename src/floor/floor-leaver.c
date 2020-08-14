@@ -36,6 +36,22 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static void check_riding_preservation(player_type *master_ptr)
+{
+    if (!master_ptr->riding)
+        return;
+
+    monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[master_ptr->riding];
+    if (m_ptr->parent_m_idx) {
+        master_ptr->riding = 0;
+        master_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
+        master_ptr->riding_ryoute = master_ptr->old_riding_ryoute = FALSE;
+    } else {
+        (void)COPY(&party_mon[0], m_ptr, monster_type);
+        delete_monster_idx(master_ptr, master_ptr->riding);
+    }
+}
+
 static bool check_pet_preservation_conditions(player_type *master_ptr, monster_type *m_ptr)
 {
     if (reinit_wilderness)
@@ -83,18 +99,7 @@ static void preserve_pet(player_type *master_ptr)
     for (MONSTER_IDX party_monster_num = 0; party_monster_num < MAX_PARTY_MON; party_monster_num++)
         party_mon[party_monster_num].r_idx = 0;
 
-    if (master_ptr->riding) {
-        monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[master_ptr->riding];
-        if (m_ptr->parent_m_idx) {
-            master_ptr->riding = 0;
-            master_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-            master_ptr->riding_ryoute = master_ptr->old_riding_ryoute = FALSE;
-        } else {
-            (void)COPY(&party_mon[0], m_ptr, monster_type);
-            delete_monster_idx(master_ptr, master_ptr->riding);
-        }
-    }
-
+    check_riding_preservation(master_ptr);
     sweep_preserving_pet(master_ptr);
     if (record_named_pet) {
         for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
