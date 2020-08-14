@@ -339,6 +339,27 @@ static void cut_off_the_upstair(player_type *creature_ptr)
         msg_print(_("ゴトゴトと何か音がした。", "You hear some noises."));
 }
 
+static void update_floor(player_type *creature_ptr)
+{
+    if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) && !(creature_ptr->change_floor_mode & CFM_FIRST_FLOOR)) {
+        generate_floor(creature_ptr);
+        new_floor_id = 0;
+        return;
+    }
+
+    if (new_floor_id == 0)
+        new_floor_id = get_new_floor_id(creature_ptr);
+
+    saved_floor_type *sf_ptr;
+    bool loaded = FALSE;
+    sf_ptr = get_sf_ptr(new_floor_id);
+    check_visited_floor(creature_ptr, sf_ptr, &loaded);
+    update_floor_id(creature_ptr, sf_ptr);
+    update_new_floor_feature(creature_ptr, sf_ptr, loaded);
+    cut_off_the_upstair(creature_ptr);
+    sf_ptr->visit_mark = latest_visit_mark++;
+}
+
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -350,8 +371,6 @@ static void cut_off_the_upstair(player_type *creature_ptr)
  */
 void change_floor(player_type *creature_ptr)
 {
-    saved_floor_type *sf_ptr;
-    bool loaded = FALSE;
     current_world_ptr->character_dungeon = FALSE;
     creature_ptr->dtrap = FALSE;
     panel_row_min = 0;
@@ -359,21 +378,7 @@ void change_floor(player_type *creature_ptr)
     panel_col_min = 0;
     panel_col_max = 0;
     creature_ptr->ambush_flag = FALSE;
-    if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) && !(creature_ptr->change_floor_mode & CFM_FIRST_FLOOR)) {
-        generate_floor(creature_ptr);
-        new_floor_id = 0;
-    } else {
-        if (new_floor_id == 0)
-            new_floor_id = get_new_floor_id(creature_ptr);
-
-        sf_ptr = get_sf_ptr(new_floor_id);
-        check_visited_floor(creature_ptr, sf_ptr, &loaded);
-        update_floor_id(creature_ptr, sf_ptr);
-        update_new_floor_feature(creature_ptr, sf_ptr, loaded);
-        cut_off_the_upstair(creature_ptr);
-        sf_ptr->visit_mark = latest_visit_mark++;
-    }
-
+    update_floor(creature_ptr);
     place_pet(creature_ptr);
     forget_travel_flow(creature_ptr->current_floor_ptr);
     update_unique_artifact(creature_ptr->current_floor_ptr, new_floor_id);
