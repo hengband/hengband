@@ -117,7 +117,7 @@ static s16b calc_intelligence_addition(player_type *creature_ptr);
 static s16b calc_wisdom_addition(player_type *creature_ptr);
 static s16b calc_dexterity_addition(player_type *creature_ptr);
 static s16b calc_constitution_addition(player_type *creature_ptr);
-static void calc_charisma_addition(player_type *creature_ptr);
+static s16b calc_charisma_addition(player_type *creature_ptr);
 static void calc_to_magic_chance(player_type *creature_ptr);
 static void calc_base_ac(player_type *creature_ptr);
 static void calc_base_ac_display(player_type *creature_ptr);
@@ -745,7 +745,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->stat_add[A_WIS] = calc_wisdom_addition(creature_ptr);
     creature_ptr->stat_add[A_DEX] = calc_dexterity_addition(creature_ptr);
     creature_ptr->stat_add[A_CON] = calc_constitution_addition(creature_ptr);
-    calc_charisma_addition(creature_ptr);
+    creature_ptr->stat_add[A_CHR] = calc_charisma_addition(creature_ptr);
     calc_to_magic_chance(creature_ptr);
     calc_base_ac(creature_ptr);
     calc_to_ac(creature_ptr);
@@ -2553,8 +2553,25 @@ static s16b calc_constitution_addition(player_type *creature_ptr)
 	return pow;
 }
 
-static void calc_charisma_addition(player_type *creature_ptr)
+/*!
+ * @brief 魅力補正計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 魅力補正値
+ * @details
+ * * 種族/職業/性格修正
+ * * 装備がTR_CHRフラグを持っていれば加算(+pval*1)
+ * * 呪術の肉体強化で加算(+4)
+ * * 降鬼陣で加算(+5)
+ * * 変異MUT3_FLESH_ROTで減算(-1)
+ * * 変異MUT3_SILLY_VOIで減算(-4)
+ * * 変異MUT3_BLANK_FACで減算(-1)
+ * * 変異MUT3_WART_SKINで減算(-2)
+ * * 変異MUT3_SCALESで減算(-1)
+ * * 変異MUT3_ILL_NORMで0固定(後で個体値のみ上書きを行う)
+ */
+static s16b calc_charisma_addition(player_type *creature_ptr)
 {
+    s16b pow;
     const player_race *tmp_rp_ptr;
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
@@ -2562,7 +2579,7 @@ static void calc_charisma_addition(player_type *creature_ptr)
         tmp_rp_ptr = &race_info[creature_ptr->prace];
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
-    creature_ptr->stat_add[A_CHR] = tmp_rp_ptr->r_adj[A_CHR] + c_ptr->c_adj[A_CHR] + a_ptr->a_adj[A_CHR];
+    pow = tmp_rp_ptr->r_adj[A_CHR] + c_ptr->c_adj[A_CHR] + a_ptr->a_adj[A_CHR];
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -2572,33 +2589,35 @@ static void calc_charisma_addition(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (have_flag(flgs, TR_CHR))
-            creature_ptr->stat_add[A_CHR] += o_ptr->pval;
+            pow += o_ptr->pval;
     }
 
     if (creature_ptr->special_defense & KATA_KOUKIJIN) {
-        creature_ptr->stat_add[A_CHR] += 5;
+        pow += 5;
     }
 
     if (creature_ptr->muta3) {
         if (creature_ptr->muta3 & MUT3_FLESH_ROT) {
-            creature_ptr->stat_add[A_CHR] -= 1;
+            pow -= 1;
         }
         if (creature_ptr->muta3 & MUT3_SILLY_VOI) {
-            creature_ptr->stat_add[A_CHR] -= 4;
+            pow -= 4;
         }
         if (creature_ptr->muta3 & MUT3_BLANK_FAC) {
-            creature_ptr->stat_add[A_CHR] -= 1;
+            pow -= 1;
         }
         if (creature_ptr->muta3 & MUT3_WART_SKIN) {
-            creature_ptr->stat_add[A_CHR] -= 2;
+            pow -= 2;
         }
         if (creature_ptr->muta3 & MUT3_SCALES) {
-            creature_ptr->stat_add[A_CHR] -= 1;
+            pow -= 1;
         }
         if (creature_ptr->muta3 & MUT3_ILL_NORM) {
-            creature_ptr->stat_add[A_CHR] = 0;
+            pow = 0;
         }
     }
+
+	return pow;
 }
 
 static void calc_to_magic_chance(player_type *creature_ptr)
