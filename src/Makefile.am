@@ -218,6 +218,7 @@ hengband_SOURCES = \
 	floor/floor-events.c floor/floor-events.h \
 	floor/floor-generator-util.h \
 	floor/floor-generator.c floor/floor-generator.h \
+	floor/floor-leaver.c floor/floor-leaver.h \
 	floor/floor-mode-changer.c floor/floor-mode-changer.h \
 	floor/floor-object.c floor/floor-object.h \
 	floor/floor-save.c floor/floor-save.h \

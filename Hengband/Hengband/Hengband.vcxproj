@@ -223,6 +223,7 @@
     <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.c" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
     <ClCompile Include="..\..\src\floor\floor-changer.c" />
+    <ClCompile Include="..\..\src\floor\floor-leaver.c" />
     <ClCompile Include="..\..\src\floor\floor-mode-changer.c" />
     <ClCompile Include="..\..\src\floor\floor-save-util.c" />
     <ClCompile Include="..\..\src\floor\floor-util.c" />
@@ -814,6 +815,7 @@
     <ClInclude Include="..\..\src\floor\cave-generator.h" />
     <ClInclude Include="..\..\src\floor\cave.h" />
     <ClInclude Include="..\..\src\floor\floor-changer.h" />
+    <ClInclude Include="..\..\src\floor\floor-leaver.h" />
     <ClInclude Include="..\..\src\floor\floor-mode-changer.h" />
     <ClInclude Include="..\..\src\floor\dungeon-tunnel-util.h" />
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
