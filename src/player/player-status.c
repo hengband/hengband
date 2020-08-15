@@ -123,7 +123,6 @@ static s16b calc_constitution_addition(player_type *creature_ptr);
 static s16b calc_charisma_addition(player_type *creature_ptr);
 static s16b calc_to_magic_chance(player_type *creature_ptr);
 static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr);
-static void calc_base_ac_display(player_type *creature_ptr);
 static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr);
 static void calc_to_ac_display(player_type *creature_ptr);
 static s16b calc_speed(player_type *creature_ptr);
@@ -458,7 +457,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->to_m_chance = calc_to_magic_chance(creature_ptr);
     creature_ptr->ac = calc_base_ac(creature_ptr);
     creature_ptr->to_a = calc_to_ac(creature_ptr);
-    calc_base_ac_display(creature_ptr);
+    creature_ptr->dis_ac = calc_base_ac(creature_ptr);
     calc_to_ac_display(creature_ptr);
 
     for (int i = 0; i < A_MAX; i++) {
@@ -2529,25 +2528,6 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr)
     }
 
 	return ac;
-}
-
-static void calc_base_ac_display(player_type *creature_ptr)
-{
-    creature_ptr->dis_ac = 0;
-    if (creature_ptr->yoiyami)
-        return;
-
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr;
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-        creature_ptr->dis_ac += o_ptr->ac;
-    }
-    if (object_is_armour(creature_ptr, &creature_ptr->inventory_list[INVEN_RARM])
-        || object_is_armour(creature_ptr, &creature_ptr->inventory_list[INVEN_LARM])) {
-        creature_ptr->dis_ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
-    }
 }
 
 static void calc_to_ac_display(player_type *creature_ptr)
