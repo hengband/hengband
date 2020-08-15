@@ -23480,3 +23480,27 @@ F:ANIMAL | DROP_SKELETON | DROP_CORPSE
 D:$It is relative of platypus and was thought to be a composite of reptiles and mammals, 
 D:$ so it was named after the Greek monster.
 D:それはカモノハシの類縁で、爬虫類と哺乳類の合成と考えられたためギリシアの怪物にちなんで英名を名付けられた。
+
+N:1171:虚界の魔獣『ジェノサイバー』
+E:Genocyber the Vajura Beast
+G:U:w
+I:132:70d100:40:160:10
+W:72:3:0:27500:0:0
+B:PUNCH:HURT:12d12
+B:PUNCH:HURT:12d12
+B:CRUSH:SHATTER:16d11
+B:CRUSH:SHATTER:16d11
+F:UNIQUE | FEMALE | RES_TELE | CAN_FLY
+F:DROP_SKELETON | DROP_CORPSE
+F:FORCE_SLEEP | FORCE_MAXHP | KILL_WALL | DEMON | HUMAN
+F:ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_GREAT | MOVE_BODY
+F:REGENERATE | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | POWERFUL
+F:IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE
+F:OPEN_DOOR | BASH_DOOR | RES_WALL
+S:1_IN_8 |
+S:TELE_TO | BO_MANA | BR_MANA | BR_WALL | BR_PLAS | BR_DISI | HEAL | HASTE
+D:$It is the fusion of twin sisters born at the end of the vaunted study of Vajura energy.
+D:$Its outrageous power will destroy a star and eventually become a new myth.
+D:ヴァジュラエネルギーのおぞましい研究の果てに産みだされた双子の姉妹の融合体だ。
+D:その無法図な力は一個の星を滅ぼし、やがて新たな神話の存在となるに足るものだろう。
+
