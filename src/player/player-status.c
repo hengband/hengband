@@ -2532,6 +2532,38 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
 	return ac;
 }
 
+/*!
+ * @brief 速度計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 速度値
+ * @details
+ * * 基礎値110(+-0に対応)
+ * * 騎乗していない場合以下の処理
+ * ** クラッコンと妖精に加算(+レベル/10)
+ * ** 悪魔変化/吸血鬼変化で加算(+3)
+ * ** 魔王変化で加算(+5)
+ * ** 装備品にTR_SPEEDがあれば加算(+pval+1
+ * ** 忍者の装備が重ければ減算(-レベル/10)
+ * ** 忍者の装備が適正ならば加算(+3)さらにクラッコン、妖精、いかさま以外なら加算(+レベル/10)
+ * ** 錬気術師で装備が重くなくクラッコン、妖精、いかさま以外なら加算(+レベル/10)
+ * ** 狂戦士なら加算(+3),レベル20/30/40/50ごとに+1
+ * ** いかさまでクラッコン/妖精以外なら加算(+5+レベル/10)
+ * ** 加速状態中なら加算(+10)
+ * ** 原則状態中なら減算(-10)
+ * ** 呪術「衝撃のクローク」で加算(+3)
+ * ** 食い過ぎなら減算(-10)
+ * ** 朱雀の構えなら加算(+10)
+ * ** 変異MUT3_XTRA_FATなら減算(-2)
+ * ** 変異MUT3_XTRA_LEGなら加算(+3)
+ * ** 変異MUT3_SHORT_LEGなら減算(-3)
+ * ** マーフォークがFF_WATER地形にいれば加算(+2+レベル/10)
+ * ** そうでなく浮遊を持っていないなら減算(-2)
+ * ** 棘セット装備中ならば加算(+7)
+ * * 騎乗中ならばモンスターの加速に準拠、ただし騎乗技能値とモンスターレベルによるキャップ処理あり
+ * * 探索中なら減算(-10)
+ * * 光速移動中かこの時点で+99を超えていたら+99にキャップ
+ * * -99未満なら-99にキャップ
+ */
 static s16b calc_speed(player_type *creature_ptr)
 {
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
@@ -2554,17 +2586,6 @@ static s16b calc_speed(player_type *creature_ptr)
         if (is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE))
             pow += (creature_ptr->lev) / 10;
 
-        for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-            object_type *o_ptr = &creature_ptr->inventory_list[i];
-            BIT_FLAGS flgs[TR_FLAG_SIZE];
-            object_flags(creature_ptr, o_ptr, flgs);
-
-            if (!o_ptr->k_idx)
-                continue;
-            if (have_flag(flgs, TR_SPEED))
-                pow += o_ptr->pval;
-        }
-
         if (creature_ptr->mimic_form) {
             switch (creature_ptr->mimic_form) {
             case MIMIC_DEMON:
@@ -2577,6 +2598,17 @@ static s16b calc_speed(player_type *creature_ptr)
                 pow += 3;
                 break;
             }
+        }
+
+        for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+            object_type *o_ptr = &creature_ptr->inventory_list[i];
+            BIT_FLAGS flgs[TR_FLAG_SIZE];
+            object_flags(creature_ptr, o_ptr, flgs);
+
+            if (!o_ptr->k_idx)
+                continue;
+            if (have_flag(flgs, TR_SPEED))
+                pow += o_ptr->pval;
         }
 
         if (creature_ptr->pclass == CLASS_NINJA) {
@@ -2627,7 +2659,7 @@ static s16b calc_speed(player_type *creature_ptr)
             }
         }
 
-        if (creature_ptr->food >= PY_FOOD_MAX)
+		if (creature_ptr->food >= PY_FOOD_MAX)
             pow -= 10;
 
         if (creature_ptr->special_defense & KAMAE_SUZAKU)
@@ -2686,10 +2718,10 @@ static s16b calc_speed(player_type *creature_ptr)
             j += (creature_ptr->wt * 3 * (RIDING_EXP_SKILLED - creature_ptr->skill_exp[GINOU_RIDING])) / RIDING_EXP_SKILLED;
 
         count = 1500 + riding_r_ptr->level * 25;
+        if (j > count)
+            pow -= ((j - count) / (count / 5));
     }
 
-    if (j > count)
-        pow -= ((j - count) / (count / 5));
 
     if (creature_ptr->action == ACTION_SEARCH)
         pow -= 10;
