@@ -124,7 +124,7 @@ static s16b calc_charisma_addition(player_type *creature_ptr);
 static s16b calc_to_magic_chance(player_type *creature_ptr);
 static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr);
 static void calc_base_ac_display(player_type *creature_ptr);
-static void calc_to_ac(player_type *creature_ptr);
+static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr);
 static void calc_to_ac_display(player_type *creature_ptr);
 static s16b calc_speed(player_type *creature_ptr);
 static s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
@@ -457,7 +457,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->stat_add[A_CHR] = calc_charisma_addition(creature_ptr);
     creature_ptr->to_m_chance = calc_to_magic_chance(creature_ptr);
     creature_ptr->ac = calc_base_ac(creature_ptr);
-    calc_to_ac(creature_ptr);
+    creature_ptr->to_a = calc_to_ac(creature_ptr);
     calc_base_ac_display(creature_ptr);
     calc_to_ac_display(creature_ptr);
 
@@ -2388,32 +2388,32 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
 	return ac;
 }
 
-static void calc_to_ac(player_type *creature_ptr)
+static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr)
 {
-    creature_ptr->to_a = 0;
+    ARMOUR_CLASS ac = 0;
     if (creature_ptr->yoiyami)
-        return;
+        return 0;
 
-    creature_ptr->to_a += ((int)(adj_dex_ta[creature_ptr->stat_ind[A_DEX]]) - 128);
+    ac += ((int)(adj_dex_ta[creature_ptr->stat_ind[A_DEX]]) - 128);
 
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
         case MIMIC_DEMON:
-            creature_ptr->to_a += 10;
+            ac += 10;
             break;
         case MIMIC_DEMON_LORD:
-            creature_ptr->to_a += 20;
+            ac += 20;
             break;
         case MIMIC_VAMPIRE:
-            creature_ptr->to_a += 10;
+            ac += 10;
         }
     }
 
     if (creature_ptr->pclass == CLASS_BERSERKER) {
-        creature_ptr->to_a += 10 + creature_ptr->lev / 2;
+        ac += 10 + creature_ptr->lev / 2;
     }
     if (creature_ptr->pclass == CLASS_SORCERER) {
-        creature_ptr->to_a -= 50;
+        ac -= 50;
     }
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
@@ -2421,69 +2421,68 @@ static void calc_to_ac(player_type *creature_ptr)
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        creature_ptr->to_a += o_ptr->to_a;
+        ac += o_ptr->to_a;
 
         if (o_ptr->curse_flags & TRC_LOW_AC) {
             if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-                creature_ptr->to_a -= 30;
+                ac -= 30;
             } else {
-                creature_ptr->to_a -= 10;
+                ac -= 10;
             }
         }
     }
 
     if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
-        creature_ptr->to_a += 10 + (creature_ptr->lev * 2 / 5);
+        ac += 10 + (creature_ptr->lev * 2 / 5);
     }
 
     if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_TINYTHORN)) {
-        creature_ptr->to_a += 10;
+        ac += 10;
     }
 
     if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_MUSASI_KATANA) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_MUSASI_WAKIZASI)) {
-        creature_ptr->to_a += 10;
+        ac += 10;
     }
 
     if (creature_ptr->muta3 & MUT3_WART_SKIN) {
-        creature_ptr->to_a += 5;
+        ac += 5;
     }
 
     if (creature_ptr->muta3 & MUT3_SCALES) {
-        creature_ptr->to_a += 10;
+        ac += 10;
     }
 
     if (creature_ptr->muta3 & MUT3_IRON_SKIN) {
-        creature_ptr->to_a += 25;
+        ac += 25;
     }
 
     if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && !heavy_armor(creature_ptr)) {
         if (!(creature_ptr->inventory_list[INVEN_BODY].k_idx)) {
-            creature_ptr->to_a += (creature_ptr->lev * 3) / 2;
+            ac += (creature_ptr->lev * 3) / 2;
         }
         if (!(creature_ptr->inventory_list[INVEN_OUTER].k_idx) && (creature_ptr->lev > 15)) {
-            creature_ptr->to_a += ((creature_ptr->lev - 13) / 3);
+            ac += ((creature_ptr->lev - 13) / 3);
         }
         if (!(creature_ptr->inventory_list[INVEN_LARM].k_idx) && (creature_ptr->lev > 10)) {
-            creature_ptr->to_a += ((creature_ptr->lev - 8) / 3);
+            ac += ((creature_ptr->lev - 8) / 3);
         }
         if (!(creature_ptr->inventory_list[INVEN_HEAD].k_idx) && (creature_ptr->lev > 4)) {
-            creature_ptr->to_a += (creature_ptr->lev - 2) / 3;
+            ac += (creature_ptr->lev - 2) / 3;
         }
         if (!(creature_ptr->inventory_list[INVEN_HANDS].k_idx)) {
-            creature_ptr->to_a += (creature_ptr->lev / 2);
+            ac += (creature_ptr->lev / 2);
         }
         if (!(creature_ptr->inventory_list[INVEN_FEET].k_idx)) {
-            creature_ptr->to_a += (creature_ptr->lev / 3);
+            ac += (creature_ptr->lev / 3);
         }
     }
 
     if (creature_ptr->realm1 == REALM_HEX) {
         if (hex_spelling(creature_ptr, HEX_ICE_ARMOR)) {
-            creature_ptr->to_a += 30;
+            ac += 30;
         }
 
         for (int i = INVEN_RARM; i <= INVEN_FEET; i++) {
-            ARMOUR_CLASS ac = 0;
             object_type *o_ptr = &creature_ptr->inventory_list[i];
             if (!o_ptr->k_idx)
                 continue;
@@ -2491,43 +2490,45 @@ static void calc_to_ac(player_type *creature_ptr)
                 continue;
             if (!object_is_cursed(o_ptr))
                 continue;
-            ac += 5;
+            if (o_ptr->curse_flags & TRC_CURSED)
+	            ac += 5;
             if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
                 ac += 7;
             if (o_ptr->curse_flags & TRC_PERMA_CURSE)
                 ac += 13;
-            creature_ptr->to_a += ac;
         }
     }
 
     if (creature_ptr->special_defense & KAMAE_BYAKKO) {
-        creature_ptr->to_a -= 40;
+        ac -= 40;
     } else if (creature_ptr->special_defense & KAMAE_SEIRYU) {
-        creature_ptr->to_a -= 50;
+        ac -= 50;
     } else if (creature_ptr->special_defense & KATA_KOUKIJIN) {
-        creature_ptr->to_a -= 50;
+        ac -= 50;
     }
 
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->to_a += 100;
+        ac += 100;
     } else if (creature_ptr->tsubureru || creature_ptr->shield || creature_ptr->magicdef) {
-        creature_ptr->to_a += 50;
+        ac += 50;
     }
 
     if (is_blessed(creature_ptr)) {
-        creature_ptr->to_a += 5;
+        ac += 5;
     }
 
     if (creature_ptr->shero) {
-        creature_ptr->to_a -= 10;
+        ac -= 10;
     }
 
     if (creature_ptr->pclass == CLASS_NINJA) {
         if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
             && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
-            creature_ptr->to_a += creature_ptr->lev / 2 + 5;
+            ac += creature_ptr->lev / 2 + 5;
         }
     }
+
+	return ac;
 }
 
 static void calc_base_ac_display(player_type *creature_ptr)
