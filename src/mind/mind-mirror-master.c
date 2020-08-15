@@ -504,10 +504,9 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
     case ILLUSION_LIGHT:
         tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 3;
         slow_monsters(caster_ptr, plev);
-        stun_monsters(caster_ptr, plev * tmp);
+        stun_monsters(caster_ptr, plev * tmp * 2);
         confuse_monsters(caster_ptr, plev * tmp);
         turn_monsters(caster_ptr, plev * tmp);
-        stun_monsters(caster_ptr, plev * tmp);
         stasis_monsters(caster_ptr, plev * tmp);
         break;
     case MIRROR_SHIFT:
