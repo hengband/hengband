@@ -140,7 +140,7 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
 static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot);
 
-static void calc_to_hit_bow(player_type *creature_ptr);
+static s16b calc_to_hit_bow(player_type *creature_ptr);
 static void calc_to_hit_bow_display(player_type *creature_ptr);
 
 static void calc_to_damage_misc(player_type *creature_ptr);
@@ -510,7 +510,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_to_hit(creature_ptr, INVEN_LARM);
     calc_to_hit_display(creature_ptr, INVEN_RARM);
     calc_to_hit_display(creature_ptr, INVEN_LARM);
-    calc_to_hit_bow(creature_ptr);
+    creature_ptr->to_h_b = calc_to_hit_bow(creature_ptr);
     calc_to_hit_bow_display(creature_ptr);
     calc_to_damage_misc(creature_ptr);
     calc_to_hit_misc(creature_ptr);
@@ -3593,9 +3593,9 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
     creature_ptr->dis_to_h[id] -= calc_double_weapon_penalty(creature_ptr, slot);
 }
 
-static void calc_to_hit_bow(player_type *creature_ptr)
+static s16b calc_to_hit_bow(player_type *creature_ptr)
 {
-    creature_ptr->to_h_b = 0;
+    s16b pow = 0;
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -3609,9 +3609,9 @@ static void calc_to_hit_bow(player_type *creature_ptr)
             int slot = i - INVEN_RARM;
             if (slot >= 2) {
                 if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-                    creature_ptr->to_h_b -= 15;
+                    pow -= 15;
                 } else {
-                    creature_ptr->to_h_b -= 5;
+                    pow -= 5;
                 }
             }
         }
@@ -3621,41 +3621,41 @@ static void calc_to_hit_bow(player_type *creature_ptr)
             if (o_ptr->to_h > 0)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
         }
-        creature_ptr->to_h_b += (s16b)bonus_to_h;
+        pow += (s16b)bonus_to_h;
     }
 
     if (creature_ptr->stun > 50) {
-        creature_ptr->to_h_b -= 20;
+        pow -= 20;
     } else if (creature_ptr->stun) {
-        creature_ptr->to_h_b -= 5;
+        pow -= 5;
     }
 
     if (is_blessed(creature_ptr)) {
-        creature_ptr->to_h_b += 10;
+        pow += 10;
     }
 
     if (is_hero(creature_ptr)) {
-        creature_ptr->to_h_b += 12;
+        pow += 12;
     }
 
     if (creature_ptr->shero) {
-        creature_ptr->to_h_b -= 12;
+        pow -= 12;
     }
 
-    creature_ptr->to_h_b += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-    creature_ptr->to_h_b += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+    pow += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
+    pow += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
 
     creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
 
     if (is_heavy_shoot(creature_ptr, o_ptr)) {
-        creature_ptr->to_h_b += 2 * (creature_ptr->hold - o_ptr->weight / 10);
+        pow += 2 * (creature_ptr->hold - o_ptr->weight / 10);
     }
 
     if (o_ptr->k_idx) {
         if (o_ptr->k_idx && !creature_ptr->heavy_shoot) {
             if ((creature_ptr->pclass == CLASS_SNIPER) && (creature_ptr->tval_ammo == TV_BOLT)) {
-                creature_ptr->to_h_b += (10 + (creature_ptr->lev / 5));
+                pow += (10 + (creature_ptr->lev / 5));
             }
         }
     }
@@ -3675,8 +3675,10 @@ static void calc_to_hit_bow(player_type *creature_ptr)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
         }
 
-        creature_ptr->to_h_b += (s16b)bonus_to_h;
+        pow += (s16b)bonus_to_h;
     }
+
+	return pow;
 }
 
 static void calc_to_hit_bow_display(player_type *creature_ptr)
