@@ -32,33 +32,31 @@ bool inc_stat(player_type *creature_ptr, int stat)
 {
     BASE_STATUS gain;
     BASE_STATUS value = creature_ptr->stat_cur[stat];
+    if (value >= creature_ptr->stat_max_max[stat])
+        return FALSE;
 
-    if (value < creature_ptr->stat_max_max[stat]) {
-        if (value < 18) {
-            gain = ((randint0(100) < 75) ? 1 : 2);
-            value += gain;
-        } else if (value < (creature_ptr->stat_max_max[stat] - 2)) {
-            gain = (((creature_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
-            if (gain < 1)
-                gain = 1;
+    if (value < 18) {
+        gain = ((randint0(100) < 75) ? 1 : 2);
+        value += gain;
+    } else if (value < (creature_ptr->stat_max_max[stat] - 2)) {
+        gain = (((creature_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
+        if (gain < 1)
+            gain = 1;
 
-            value += randint1(gain) + gain / 2;
-            if (value > (creature_ptr->stat_max_max[stat] - 1))
-                value = creature_ptr->stat_max_max[stat] - 1;
-        } else {
-            value++;
-        }
-
-        creature_ptr->stat_cur[stat] = value;
-        if (value > creature_ptr->stat_max[stat]) {
-            creature_ptr->stat_max[stat] = value;
-        }
-
-        creature_ptr->update |= (PU_BONUS);
-        return TRUE;
+        value += randint1(gain) + gain / 2;
+        if (value > (creature_ptr->stat_max_max[stat] - 1))
+            value = creature_ptr->stat_max_max[stat] - 1;
+    } else {
+        value++;
     }
 
-    return FALSE;
+    creature_ptr->stat_cur[stat] = value;
+    if (value > creature_ptr->stat_max[stat]) {
+        creature_ptr->stat_max[stat] = value;
+    }
+
+    creature_ptr->update |= PU_BONUS;
+    return TRUE;
 }
 
 /*!
@@ -80,9 +78,7 @@ bool inc_stat(player_type *creature_ptr, int stat)
  */
 bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
 {
-    int loss;
     bool res = FALSE;
-
     BASE_STATUS cur = creature_ptr->stat_cur[stat];
     BASE_STATUS max = creature_ptr->stat_max[stat];
     int same = (cur == max);
@@ -96,7 +92,7 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
                 cur--;
             cur--;
         } else {
-            loss = (((cur - 18) / 2 + 1) / 2 + 1);
+            int loss = (((cur - 18) / 2 + 1) / 2 + 1);
             if (loss < 1)
                 loss = 1;
 
@@ -130,7 +126,7 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
                 max--;
             max--;
         } else {
-            loss = (((max - 18) / 2 + 1) / 2 + 1);
+            int loss = (((max - 18) / 2 + 1) / 2 + 1);
             loss = ((randint1(loss) + loss) * amount) / 100;
             if (loss < amount / 2)
                 loss = amount / 2;
@@ -180,8 +176,6 @@ bool res_stat(player_type *creature_ptr, int stat)
 bool do_dec_stat(player_type *creature_ptr, int stat)
 {
     bool sust = FALSE;
-
-    /* Access the "sustain" */
     switch (stat) {
     case A_STR:
         if (creature_ptr->sustain_str)
@@ -211,13 +205,11 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
 
     if (sust && (!ironman_nightmare || randint0(13))) {
         msg_format(_("%sなった気がしたが、すぐに元に戻った。", "You feel %s for a moment, but the feeling passes."), desc_stat_neg[stat]);
-
         return TRUE;
     }
 
     if (dec_stat(creature_ptr, stat, 10, (ironman_nightmare && !randint0(13)))) {
         msg_format(_("ひどく%sなった気がする。", "You feel %s."), desc_stat_neg[stat]);
-
         return TRUE;
     }
 
@@ -274,9 +266,7 @@ bool lose_all_info(player_type *creature_ptr)
     chg_virtue(creature_ptr, V_ENLIGHTEN, -5);
     for (int i = 0; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-        if (object_is_fully_known(o_ptr))
+        if ((o_ptr->k_idx == 0) || object_is_fully_known(o_ptr))
             continue;
 
         o_ptr->feeling = FEEL_NONE;
