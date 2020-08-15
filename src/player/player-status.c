@@ -126,7 +126,7 @@ static void calc_base_ac(player_type *creature_ptr);
 static void calc_base_ac_display(player_type *creature_ptr);
 static void calc_to_ac(player_type *creature_ptr);
 static void calc_to_ac_display(player_type *creature_ptr);
-static void calc_speed(player_type *creature_ptr);
+static s16b calc_speed(player_type *creature_ptr);
 static s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_use_status(player_type *creature_ptr, int status);
 static void calc_top_status(player_type *creature_ptr, int status);
@@ -489,7 +489,7 @@ void calc_bonuses(player_type *creature_ptr)
 
     creature_ptr->monk_armour_aux = heavy_armor(creature_ptr);
 
-    calc_speed(creature_ptr);
+    creature_ptr->pspeed = calc_speed(creature_ptr);
     creature_ptr->see_infra = calc_intra_vision(creature_ptr);
     creature_ptr->skill_stl = calc_stealth(creature_ptr);
     creature_ptr->skill_dis = calc_disarming(creature_ptr);
@@ -2693,12 +2693,12 @@ static void calc_to_ac_display(player_type *creature_ptr)
     }
 }
 
-static void calc_speed(player_type *creature_ptr)
+static s16b calc_speed(player_type *creature_ptr)
 {
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     feature_type *f_ptr = &f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 
-    creature_ptr->pspeed = 110;
+    s16b pow = 110;
 
     int j = creature_ptr->total_weight;
     int count;
@@ -2713,7 +2713,7 @@ static void calc_speed(player_type *creature_ptr)
             tmp_rp_ptr = &race_info[creature_ptr->prace];
 
         if (is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE))
-            creature_ptr->pspeed += (creature_ptr->lev) / 10;
+            pow += (creature_ptr->lev) / 10;
 
         for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
             object_type *o_ptr = &creature_ptr->inventory_list[i];
@@ -2723,103 +2723,103 @@ static void calc_speed(player_type *creature_ptr)
             if (!o_ptr->k_idx)
                 continue;
             if (have_flag(flgs, TR_SPEED))
-                creature_ptr->pspeed += o_ptr->pval;
+                pow += o_ptr->pval;
         }
 
         if (creature_ptr->mimic_form) {
             switch (creature_ptr->mimic_form) {
             case MIMIC_DEMON:
-                creature_ptr->pspeed += 3;
+                pow += 3;
                 break;
             case MIMIC_DEMON_LORD:
-                creature_ptr->pspeed += 5;
+                pow += 5;
                 break;
             case MIMIC_VAMPIRE:
-                creature_ptr->pspeed += 3;
+                pow += 3;
                 break;
             }
         }
 
         if (creature_ptr->pclass == CLASS_NINJA) {
             if (heavy_armor(creature_ptr)) {
-                creature_ptr->pspeed -= (creature_ptr->lev) / 10;
+                pow -= (creature_ptr->lev) / 10;
             } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon)
                 && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
-                creature_ptr->pspeed += 3;
+                pow += 3;
                 if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
                         || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
-                    creature_ptr->pspeed += (creature_ptr->lev) / 10;
+                    pow += (creature_ptr->lev) / 10;
             }
         }
 
         if (creature_ptr->pclass == CLASS_FORCETRAINER && !(heavy_armor(creature_ptr))) {
             if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
                     || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
-                creature_ptr->pspeed += (creature_ptr->lev) / 10;
+                pow += (creature_ptr->lev) / 10;
         }
 
         if (creature_ptr->pclass == CLASS_BERSERKER) {
-            creature_ptr->pspeed += 2;
+            pow += 2;
             if (creature_ptr->lev > 29)
-                creature_ptr->pspeed++;
+                pow++;
             if (creature_ptr->lev > 39)
-                creature_ptr->pspeed++;
+                pow++;
             if (creature_ptr->lev > 44)
-                creature_ptr->pspeed++;
+                pow++;
             if (creature_ptr->lev > 49)
-                creature_ptr->pspeed++;
+                pow++;
         }
 
         if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN && creature_ptr->prace != RACE_KLACKON && creature_ptr->prace != RACE_SPRITE) {
-            creature_ptr->pspeed += (creature_ptr->lev) / 10 + 5;
+            pow += (creature_ptr->lev) / 10 + 5;
         }
 
         if (is_fast(creature_ptr)) {
-            creature_ptr->pspeed += 10;
+            pow += 10;
         }
 
         if (creature_ptr->slow) {
-            creature_ptr->pspeed -= 10;
+            pow -= 10;
         }
 
         if (creature_ptr->realm1 == REALM_HEX) {
             if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK)) {
-                creature_ptr->pspeed += 3;
+                pow += 3;
             }
         }
 
         if (creature_ptr->food >= PY_FOOD_MAX)
-            creature_ptr->pspeed -= 10;
+            pow -= 10;
 
         if (creature_ptr->special_defense & KAMAE_SUZAKU)
-            creature_ptr->pspeed += 10;
+            pow += 10;
 
         if (creature_ptr->muta3) {
 
             if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
-                creature_ptr->pspeed -= 2;
+                pow -= 2;
             }
 
             if (creature_ptr->muta3 & MUT3_XTRA_LEGS) {
-                creature_ptr->pspeed += 3;
+                pow += 3;
             }
 
             if (creature_ptr->muta3 & MUT3_SHORT_LEG) {
-                creature_ptr->pspeed -= 3;
+                pow -= 3;
             }
         }
 
         if (creature_ptr->prace == RACE_MERFOLK) {
             if (have_flag(f_ptr->flags, FF_WATER)) {
-                creature_ptr->pspeed += (2 + creature_ptr->lev / 10);
+                pow += (2 + creature_ptr->lev / 10);
             } else if (!creature_ptr->levitation) {
-                creature_ptr->pspeed -= 2;
+                pow -= 2;
             }
         }
 
         if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
             if ((creature_ptr->inventory_list[INVEN_RARM].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_TINYTHORN)) {
-                creature_ptr->pspeed += 7;
+                pow += 7;
             }
         }
 
@@ -2829,19 +2829,19 @@ static void calc_speed(player_type *creature_ptr)
         SPEED speed = riding_m_ptr->mspeed;
 
         if (riding_m_ptr->mspeed > 110) {
-            creature_ptr->pspeed = 110 + (s16b)((speed - 110) * (creature_ptr->skill_exp[GINOU_RIDING] * 3 + creature_ptr->lev * 160L - 10000L) / (22000L));
-            if (creature_ptr->pspeed < 110)
-                creature_ptr->pspeed = 110;
+            pow = 110 + (s16b)((speed - 110) * (creature_ptr->skill_exp[GINOU_RIDING] * 3 + creature_ptr->lev * 160L - 10000L) / (22000L));
+            if (pow < 110)
+                pow = 110;
         } else {
-            creature_ptr->pspeed = speed;
+            pow = speed;
         }
 
-        creature_ptr->pspeed += (creature_ptr->skill_exp[GINOU_RIDING] + creature_ptr->lev * 160L) / 3200;
+        pow += (creature_ptr->skill_exp[GINOU_RIDING] + creature_ptr->lev * 160L) / 3200;
 
         if (monster_fast_remaining(riding_m_ptr))
-            creature_ptr->pspeed += 10;
+            pow += 10;
         if (monster_slow_remaining(riding_m_ptr))
-            creature_ptr->pspeed -= 10;
+            pow -= 10;
 
         if (creature_ptr->skill_exp[GINOU_RIDING] < RIDING_EXP_SKILLED)
             j += (creature_ptr->wt * 3 * (RIDING_EXP_SKILLED - creature_ptr->skill_exp[GINOU_RIDING])) / RIDING_EXP_SKILLED;
@@ -2850,20 +2850,22 @@ static void calc_speed(player_type *creature_ptr)
     }
 
     if (j > count)
-        creature_ptr->pspeed -= ((j - count) / (count / 5));
+        pow -= ((j - count) / (count / 5));
 
     if (creature_ptr->action == ACTION_SEARCH)
-        creature_ptr->pspeed -= 10;
+        pow -= 10;
 
     /* Maximum speed is (+99). (internally it's 110 + 99) */
     /* Temporary lightspeed forces to be maximum speed */
-    if ((creature_ptr->lightspeed && !creature_ptr->riding) || (creature_ptr->pspeed > 209)) {
-        creature_ptr->pspeed = 209;
+    if ((creature_ptr->lightspeed && !creature_ptr->riding) || (pow > 209)) {
+        pow = 209;
     }
 
     /* Minimum speed is (-99). (internally it's 110 - 99) */
-    if (creature_ptr->pspeed < 11)
-        creature_ptr->pspeed = 11;
+    if (pow < 11)
+        pow = 11;
+
+	return pow;
 }
 
 /*!
