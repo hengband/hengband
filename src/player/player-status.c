@@ -1729,11 +1729,6 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             creature_ptr->heavy_wield[i] = TRUE;
         }
 
-        if ((i == 1) && (o_ptr->tval == TV_SWORD) && ((o_ptr->sval == SV_MAIN_GAUCHE) || (o_ptr->sval == SV_WAKIZASHI))) {
-            creature_ptr->to_a += 5;
-            creature_ptr->dis_to_a += 5;
-        }
-
         if (o_ptr->k_idx && !creature_ptr->heavy_wield[i]) {
             int str_index, dex_index;
             int num = 0, wgt = 0, mul = 0, div = 0;
@@ -2430,6 +2425,10 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
                 if (is_true_value || object_is_fully_known(o_ptr))
                     ac -= 10;
             }
+        }
+
+        if ((i == INVEN_LARM) && (o_ptr->tval == TV_SWORD) && ((o_ptr->sval == SV_MAIN_GAUCHE) || (o_ptr->sval == SV_WAKIZASHI))) {
+            ac += 5;
         }
     }
 
