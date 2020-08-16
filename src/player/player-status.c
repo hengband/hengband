@@ -129,7 +129,7 @@ static s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX 
 static void calc_use_status(player_type *creature_ptr, int status);
 static void calc_top_status(player_type *creature_ptr, int status);
 static void calc_ind_status(player_type *creature_ptr, int status);
-static void calc_riding_weapon_penalty(player_type *creature_ptr);
+static s16b calc_riding_bow_penalty(player_type *creature_ptr);
 static void put_equipment_warning(player_type *creature_ptr);
 
 static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot);
@@ -482,8 +482,6 @@ void calc_bonuses(player_type *creature_ptr)
         calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
         calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
     }
-
-    calc_riding_weapon_penalty(creature_ptr);
 
     creature_ptr->monk_armour_aux = heavy_armor(creature_ptr);
 
@@ -2843,44 +2841,44 @@ static void calc_top_status(player_type *creature_ptr, int status)
     }
 }
 
-static void calc_riding_weapon_penalty(player_type *creature_ptr)
+static s16b calc_riding_bow_penalty(player_type *creature_ptr)
 {
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    if (!creature_ptr->riding)
+        return 0;
 
-    if (creature_ptr->riding) {
-        int penalty = 0;
+    s16b penalty = 0;
 
-        creature_ptr->riding_ryoute = FALSE;
+    creature_ptr->riding_ryoute = FALSE;
 
-        if (creature_ptr->two_handed_weapon || (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE))
-            creature_ptr->riding_ryoute = TRUE;
-        else if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
-            switch (creature_ptr->pclass) {
-            case CLASS_MONK:
-            case CLASS_FORCETRAINER:
-            case CLASS_BERSERKER:
-                if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_RARM)
-                    && !has_melee_weapon(creature_ptr, INVEN_LARM))
-                    creature_ptr->riding_ryoute = TRUE;
-                break;
-            }
+    if (creature_ptr->two_handed_weapon || (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE))
+        creature_ptr->riding_ryoute = TRUE;
+    else if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
+        switch (creature_ptr->pclass) {
+        case CLASS_MONK:
+        case CLASS_FORCETRAINER:
+        case CLASS_BERSERKER:
+            if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_RARM)
+                && !has_melee_weapon(creature_ptr, INVEN_LARM))
+                creature_ptr->riding_ryoute = TRUE;
+            break;
         }
-
-        if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
-            if (creature_ptr->tval_ammo != TV_ARROW)
-                penalty = 5;
-        } else {
-            penalty = r_info[floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
-            penalty += 30;
-            if (penalty < 30)
-                penalty = 30;
-        }
-
-        if (creature_ptr->tval_ammo == TV_BOLT)
-            penalty *= 2;
-        creature_ptr->to_h_b -= (s16b)penalty;
-        creature_ptr->dis_to_h_b -= (s16b)penalty;
     }
+
+    if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
+        if (creature_ptr->tval_ammo != TV_ARROW)
+            penalty = 5;
+    } else {
+        penalty = r_info[floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+        penalty += 30;
+        if (penalty < 30)
+            penalty = 30;
+    }
+
+    if (creature_ptr->tval_ammo == TV_BOLT)
+        penalty *= 2;
+
+	return penalty;
 }
 
 void put_equipment_warning(player_type *creature_ptr)
@@ -3532,6 +3530,8 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
         if (is_true_value || object_is_known(o_ptr))
             pow += (s16b)bonus_to_h;
     }
+
+	pow -= calc_riding_bow_penalty(creature_ptr);
 
     return pow;
 }
