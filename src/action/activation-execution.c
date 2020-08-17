@@ -168,6 +168,45 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
     return TRUE;
 }
 
+static void inscribe_nickname(ae_type *ae_ptr)
+{
+    if (!cap_nickname)
+        return;
+
+    concptr t;
+    char *s;
+    char buf[80] = "";
+    if (ae_ptr->o_ptr->inscription)
+        strcpy(buf, quark_str(ae_ptr->o_ptr->inscription));
+
+    s = buf;
+    for (s = buf; *s && (*s != '#'); s++) {
+#ifdef JP
+        if (iskanji(*s))
+            s++;
+#endif
+    }
+
+    *s = '#';
+    s++;
+#ifdef JP
+#else
+    *s++ = '\'';
+#endif
+    t = quark_str(cap_nickname);
+    while (*t) {
+        *s = *t;
+        s++;
+        t++;
+    }
+#ifdef JP
+#else
+    *s++ = '\'';
+#endif
+    *s = '\0';
+    ae_ptr->o_ptr->inscription = quark_add(buf);
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -222,40 +261,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
                 ae_ptr->o_ptr->xtra3 = (XTRA8)cap_mspeed;
                 ae_ptr->o_ptr->xtra4 = (XTRA16)cap_hp;
                 ae_ptr->o_ptr->xtra5 = (XTRA16)cap_maxhp;
-                if (cap_nickname) {
-                    concptr t;
-                    char *s;
-                    char buf[80] = "";
-                    if (ae_ptr->o_ptr->inscription)
-                        strcpy(buf, quark_str(ae_ptr->o_ptr->inscription));
-
-                    s = buf;
-                    for (s = buf; *s && (*s != '#'); s++) {
-#ifdef JP
-                        if (iskanji(*s))
-                            s++;
-#endif
-                    }
-
-                    *s = '#';
-                    s++;
-#ifdef JP
-#else
-                    *s++ = '\'';
-#endif
-                    t = quark_str(cap_nickname);
-                    while (*t) {
-                        *s = *t;
-                        s++;
-                        t++;
-                    }
-#ifdef JP
-#else
-                    *s++ = '\'';
-#endif
-                    *s = '\0';
-                    ae_ptr->o_ptr->inscription = quark_add(buf);
-                }
+                inscribe_nickname(ae_ptr);
             }
         } else {
             ae_ptr->success = FALSE;
