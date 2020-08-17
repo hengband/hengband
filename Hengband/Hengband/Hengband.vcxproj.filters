@@ -2036,6 +2036,9 @@
     <ClCompile Include="..\..\src\floor\floor-leaver.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\action\activation-execution.c">
+      <Filter>action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4422,6 +4425,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-leaver.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\action\activation-execution.h">
+      <Filter>action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
