@@ -107,30 +107,6 @@
 #include "world/world.h"
 
 /*!
- * @brief 装備を発動するコマンドのメインルーチン /
- * @param user_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void do_cmd_activate(player_type *user_ptr)
-{
-    OBJECT_IDX item;
-    if (user_ptr->wild_mode || cmd_limit_arena(user_ptr))
-        return;
-
-    if (user_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-        set_action(user_ptr, ACTION_NONE);
-
-    item_tester_hook = item_tester_hook_activate;
-
-    concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
-    concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
-    if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0))
-        return;
-
-    exe_activate(user_ptr, item);
-}
-
-/*!
  * @brief アイテムの発動効果を処理する。
  * @param user_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
