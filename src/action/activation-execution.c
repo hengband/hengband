@@ -90,6 +90,21 @@ static void decide_chance_fail(player_type *user_ptr, ae_type *ae_ptr)
         ae_ptr->chance = USE_DEVICE;
 }
 
+static void decide_activation_success(player_type *user_ptr, ae_type *ae_ptr)
+{
+    if (user_ptr->pclass == CLASS_BERSERKER) {
+        ae_ptr->success = FALSE;
+        return;
+    }
+    
+    if (ae_ptr->chance > ae_ptr->fail) {
+        ae_ptr->success = randint0(ae_ptr->chance * 2) >= ae_ptr->fail;
+        return;
+    }
+
+    ae_ptr->success = randint0(ae_ptr->fail * 2) < ae_ptr->chance;
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -114,20 +129,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
     if (cmd_limit_time_walk(user_ptr))
         return;
 
-    if (user_ptr->pclass == CLASS_BERSERKER)
-        ae_ptr->success = FALSE;
-    else if (ae_ptr->chance > ae_ptr->fail) {
-        if (randint0(ae_ptr->chance * 2) < ae_ptr->fail)
-            ae_ptr->success = FALSE;
-        else
-            ae_ptr->success = TRUE;
-    } else {
-        if (randint0(ae_ptr->fail * 2) < ae_ptr->chance)
-            ae_ptr->success = TRUE;
-        else
-            ae_ptr->success = FALSE;
-    }
-
+    decide_activation_success(user_ptr, ae_ptr);
     if (!ae_ptr->success) {
         if (flush_failure)
             flush();
