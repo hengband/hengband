@@ -114,7 +114,6 @@
  */
 bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 {
-    PLAYER_LEVEL plev = user_ptr->lev;
     DIRECTION dir;
     concptr name = k_name + k_info[o_ptr->k_idx].name;
     const activation_type *const act_ptr = find_activation_info(user_ptr, o_ptr);
@@ -302,7 +301,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
             return FALSE;
 
         msg_print(_("ロケットを発射した！", "You launch a rocket!"));
-        fire_ball(user_ptr, GF_ROCKET, dir, 250 + plev * 3, 2);
+        fire_ball(user_ptr, GF_ROCKET, dir, 250 + user_ptr->lev * 3, 2);
         break;
     case ACT_DISP_EVIL:
         msg_print(_("神聖な雰囲気が充満した...", "It floods the area with goodness..."));
@@ -445,7 +444,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        (void)fire_beam(user_ptr, GF_AWAY_ALL, dir, plev);
+        (void)fire_beam(user_ptr, GF_AWAY_ALL, dir, user_ptr->lev);
         break;
     case ACT_BANISH_EVIL:
         if (banish_evil(user_ptr, 100))
@@ -482,48 +481,48 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        (void)charm_animal(user_ptr, dir, plev);
+        (void)charm_animal(user_ptr, dir, user_ptr->lev);
         break;
     case ACT_CHARM_UNDEAD:
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        (void)control_one_undead(user_ptr, dir, plev);
+        (void)control_one_undead(user_ptr, dir, user_ptr->lev);
         break;
     case ACT_CHARM_OTHER:
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        (void)charm_monster(user_ptr, dir, plev * 2);
+        (void)charm_monster(user_ptr, dir, user_ptr->lev * 2);
         break;
     case ACT_CHARM_ANIMALS:
-        (void)charm_animals(user_ptr, plev * 2);
+        (void)charm_animals(user_ptr, user_ptr->lev * 2);
         break;
     case ACT_CHARM_OTHERS:
-        charm_monsters(user_ptr, plev * 2);
+        charm_monsters(user_ptr, user_ptr->lev * 2);
         break;
     case ACT_SUMMON_ANIMAL:
-        (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
+        (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->lev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
         break;
     case ACT_SUMMON_PHANTOM:
         msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
         (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
         break;
     case ACT_SUMMON_ELEMENTAL:
-        if (!cast_summon_elemental(user_ptr, (plev * 3) / 2))
+        if (!cast_summon_elemental(user_ptr, (user_ptr->lev * 3) / 2))
             return FALSE;
 
         break;
     case ACT_SUMMON_DEMON:
-        cast_summon_demon(user_ptr, (plev * 3) / 2);
+        cast_summon_demon(user_ptr, (user_ptr->lev * 3) / 2);
         break;
     case ACT_SUMMON_UNDEAD:
-        if (!cast_summon_undead(user_ptr, (plev * 3) / 2))
+        if (!cast_summon_undead(user_ptr, (user_ptr->lev * 3) / 2))
             return FALSE;
 
         break;
     case ACT_SUMMON_HOUND:
-        if (!cast_summon_hound(user_ptr, (plev * 3) / 2))
+        if (!cast_summon_hound(user_ptr, (user_ptr->lev * 3) / 2))
             return FALSE;
 
         break;
@@ -609,7 +608,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
         (void)set_fast(user_ptr, randint1(75) + 75, FALSE);
         break;
     case ACT_WRAITH:
-        set_wraith_form(user_ptr, randint1(plev / 2) + (plev / 2), FALSE);
+        set_wraith_form(user_ptr, randint1(user_ptr->lev / 2) + (user_ptr->lev / 2), FALSE);
         break;
     case ACT_INVULN:
         (void)set_invuln(user_ptr, randint1(8) + 8, FALSE);
