@@ -50,28 +50,22 @@ void have_kill_wall(player_type *creature_ptr)
     }
 }
 
-void have_pass_wall(player_type *creature_ptr)
+bool have_pass_wall(player_type *creature_ptr)
 {
-    creature_ptr->pass_wall = FALSE;
+    bool pow = FALSE;
 
-    if (creature_ptr->wraith_form) {
-        creature_ptr->pass_wall = TRUE;
-    }
-
-    if (creature_ptr->tim_pass_wall) {
-        creature_ptr->pass_wall = TRUE;
-    }
-
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_SPECTRE) {
-        creature_ptr->pass_wall = TRUE;
+    if (creature_ptr->wraith_form || creature_ptr->tim_pass_wall || (!creature_ptr->mimic_form && creature_ptr->prace == RACE_SPECTRE)) {
+        pow = TRUE;
     }
 
     if (creature_ptr->riding) {
         monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         if (!(riding_r_ptr->flags2 & RF2_PASS_WALL))
-            creature_ptr->pass_wall = FALSE;
+            pow = FALSE;
     }
+
+	return pow;
 }
 
 void have_xtra_might(player_type *creature_ptr)
