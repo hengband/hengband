@@ -143,7 +143,7 @@ static void calc_to_damage_misc(player_type *creature_ptr);
 static void calc_to_hit_misc(player_type *creature_ptr);
 
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
-static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
+static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
 
 static void calc_weapon_weight_limit(player_type *creature_ptr);
 
@@ -480,7 +480,7 @@ void calc_bonuses(player_type *creature_ptr)
         is_riding_wield_weapon(creature_ptr, i);
         calc_num_blow(creature_ptr, i);
         creature_ptr->to_dd[i] = calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
-        calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
+        creature_ptr->to_ds[i] = calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
     }
 
     creature_ptr->monk_armour_aux = heavy_armor(creature_ptr);
@@ -3630,10 +3630,11 @@ static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_
 	return dn;
 }
 
-static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot)
+static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot)
 {
-    int id = slot - INVEN_RARM;
-    creature_ptr->to_ds[id] = 0;
+    (creature_ptr); // unused
+    (slot); // unused
+    return 0;
 }
 
 /*!
