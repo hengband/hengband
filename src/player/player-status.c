@@ -142,7 +142,7 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value);
 static void calc_to_damage_misc(player_type *creature_ptr);
 static void calc_to_hit_misc(player_type *creature_ptr);
 
-static void calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
+static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
 
 static void calc_weapon_weight_limit(player_type *creature_ptr);
@@ -479,7 +479,7 @@ void calc_bonuses(player_type *creature_ptr)
         is_icky_wield_weapon(creature_ptr, i);
         is_riding_wield_weapon(creature_ptr, i);
         calc_num_blow(creature_ptr, i);
-        calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
+        creature_ptr->to_dd[i] = calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
         calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
     }
 
@@ -3615,18 +3615,19 @@ static void calc_to_hit_misc(player_type *creature_ptr)
     creature_ptr->to_h_m += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
 }
 
-static void calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot)
+static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot)
 {
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
-    int id = slot - INVEN_RARM;
-    creature_ptr->to_dd[id] = 0;
+    DICE_NUMBER dn = 0;
 
     if (creature_ptr->riding) {
 
         if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
-            creature_ptr->to_dd[id] += 2;
+            dn += 2;
         }
     }
+
+	return dn;
 }
 
 static void calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot)
