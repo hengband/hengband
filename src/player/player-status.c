@@ -139,7 +139,7 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot);
 
 static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value);
 
-static void calc_to_damage_misc(player_type *creature_ptr);
+static s16b calc_to_damage_misc(player_type *creature_ptr);
 static void calc_to_hit_misc(player_type *creature_ptr);
 
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
@@ -506,7 +506,7 @@ void calc_bonuses(player_type *creature_ptr)
     calc_to_hit_display(creature_ptr, INVEN_LARM);
     creature_ptr->to_h_b = calc_to_hit_bow(creature_ptr, TRUE);
     creature_ptr->dis_to_h_b = calc_to_hit_bow(creature_ptr, FALSE);
-    calc_to_damage_misc(creature_ptr);
+    creature_ptr->to_d_m = calc_to_damage_misc(creature_ptr);
     calc_to_hit_misc(creature_ptr);
     creature_ptr->skill_dig = calc_skill_dig(creature_ptr);
 
@@ -3549,12 +3549,12 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
     return pow;
 }
 
-static void calc_to_damage_misc(player_type *creature_ptr)
+static s16b calc_to_damage_misc(player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-    creature_ptr->to_d_m = 0;
+    s16b to_dam = 0;
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -3568,20 +3568,21 @@ static void calc_to_damage_misc(player_type *creature_ptr)
             if (o_ptr->to_d > 0)
                 bonus_to_d = (o_ptr->to_d + 1) / 2;
         }
-        creature_ptr->to_d_m += (s16b)bonus_to_d;
+        to_dam += (s16b)bonus_to_d;
     }
 
     if (creature_ptr->shero) {
-        creature_ptr->to_d_m += 3 + (creature_ptr->lev / 5);
+        to_dam += 3 + (creature_ptr->lev / 5);
     }
 
     if (creature_ptr->stun > 50) {
-        creature_ptr->to_d_m -= 20;
+        to_dam -= 20;
     } else if (creature_ptr->stun) {
-        creature_ptr->to_d_m -= 5;
+        to_dam -= 5;
     }
 
-    creature_ptr->to_d_m += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
+    to_dam += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
+    return to_dam;
 }
 
 static void calc_to_hit_misc(player_type *creature_ptr)
