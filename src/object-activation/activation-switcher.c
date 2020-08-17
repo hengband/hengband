@@ -4,7 +4,7 @@
  * @author deskull
  */
 
-#include "cmd-item/cmd-activate.h"
+#include "object-activation/activation-switcher.h"
 #include "action/action-limited.h"
 #include "action/activation-execution.h"
 #include "artifact/artifact-info.h"

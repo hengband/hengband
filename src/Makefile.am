@@ -124,7 +124,6 @@ hengband_SOURCES = \
 	cmd-io/feeling-table.c cmd-io/feeling-table.h \
 	cmd-io/macro-util.c cmd-io/macro-util.h \
 	\
-	cmd-item/cmd-activate.c cmd-item/cmd-activate.h \
 	cmd-item/cmd-eat.c cmd-item/cmd-eat.h \
 	cmd-item/cmd-item.c cmd-item/cmd-item.h \
 	cmd-item/cmd-magiceat.c cmd-item/cmd-magiceat.h \
@@ -540,6 +539,7 @@ hengband_SOURCES = \
 	object/item-use-flags.h \
 	\
 	object-activation/activation-breath.c object-activation/activation-breath.h \
+	object-activation/acrivation-switcher.c object-activation/acrivation-switcher.h \
 	\
 	object-enchant/activation-info-table.c object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.c object-enchant/apply-magic.h \
