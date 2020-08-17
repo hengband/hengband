@@ -314,6 +314,31 @@ static void check_monster_ball_use(player_type *user_ptr, ae_type *ae_ptr)
     ae_ptr->success = TRUE;
 }
 
+static bool exe_monster_capture(player_type *user_ptr, ae_type *ae_ptr)
+{
+    if (ae_ptr->o_ptr->tval != TV_CAPTURE)
+        return FALSE;
+
+    if (ae_ptr->o_ptr->pval == 0) {
+        if (!set_activation_target(user_ptr, ae_ptr))
+            return TRUE;
+
+        calc_android_exp(user_ptr);
+        return TRUE;
+    }
+
+    ae_ptr->success = FALSE;
+    if (!get_direction(user_ptr, &ae_ptr->dir, FALSE, FALSE))
+        return TRUE;
+
+    check_monster_ball_use(user_ptr, ae_ptr);
+    if (!ae_ptr->success)
+        msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
+
+    calc_android_exp(user_ptr);
+    return TRUE;
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -353,26 +378,8 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
     if (activate_whistle(user_ptr, ae_ptr))
         return;
 
-    if (ae_ptr->o_ptr->tval == TV_CAPTURE) {
-        if (!ae_ptr->o_ptr->pval) {
-            if (!set_activation_target(user_ptr, ae_ptr))
-                return;
-
-            calc_android_exp(user_ptr);
-            return;
-        }
-
-        ae_ptr->success = FALSE;
-        if (!get_direction(user_ptr, &ae_ptr->dir, FALSE, FALSE))
-            return;
-
-        check_monster_ball_use(user_ptr, ae_ptr);
-        if (!ae_ptr->success)
-            msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
-
-        calc_android_exp(user_ptr);
+    if (exe_monster_capture(user_ptr, ae_ptr))
         return;
-    }
 
     msg_print(_("おっと、このアイテムは始動できない。", "Oops.  That object cannot be activated."));
 }
