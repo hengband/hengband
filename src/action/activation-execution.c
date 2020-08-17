@@ -50,6 +50,25 @@ static ae_type *initialize_ae_type(player_type *user_ptr, ae_type *ae_ptr, const
     return ae_ptr;
 }
 
+static void decide_activation_level(player_type *user_ptr, ae_type *ae_ptr)
+{
+    if (object_is_fixed_artifact(ae_ptr->o_ptr)) {
+        ae_ptr->lev = a_info[ae_ptr->o_ptr->name1].level;
+        return;
+    }
+    
+    if (object_is_random_artifact(ae_ptr->o_ptr)) {
+        const activation_type *const act_ptr = find_activation_info(user_ptr, ae_ptr->o_ptr);
+        if (act_ptr != NULL)
+            ae_ptr->lev = act_ptr->level;
+
+        return;
+    }
+    
+    if (((ae_ptr->o_ptr->tval == TV_RING) || (ae_ptr->o_ptr->tval == TV_AMULET)) && ae_ptr->o_ptr->name2)
+        ae_ptr->lev = e_info[ae_ptr->o_ptr->name2].level;
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -69,15 +88,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
     take_turn(user_ptr, 100);
     ae_type tmp_ae;
     ae_type *ae_ptr = initialize_ae_type(user_ptr, &tmp_ae, item);
-    if (object_is_fixed_artifact(ae_ptr->o_ptr)) {
-        ae_ptr->lev = a_info[ae_ptr->o_ptr->name1].level;
-    } else if (object_is_random_artifact(ae_ptr->o_ptr)) {
-        const activation_type *const act_ptr = find_activation_info(user_ptr, ae_ptr->o_ptr);
-        if (act_ptr)
-            ae_ptr->lev = act_ptr->level;
-    } else if (((ae_ptr->o_ptr->tval == TV_RING) || (ae_ptr->o_ptr->tval == TV_AMULET)) && ae_ptr->o_ptr->name2)
-        ae_ptr->lev = e_info[ae_ptr->o_ptr->name2].level;
-
+    decide_activation_level(user_ptr, ae_ptr);
     int chance = user_ptr->skill_dev;
     if (user_ptr->confused)
         chance = chance / 2;
