@@ -228,6 +228,48 @@ static bool set_activation_target(player_type *user_ptr, ae_type *ae_ptr)
     return TRUE;
 }
 
+static void add_quark_to_inscription(player_type *user_ptr, ae_type *ae_ptr, concptr t, char *buf)
+{
+    if (!*t)
+        return;
+
+    char *s = buf;
+    t++;
+#ifdef JP
+#else
+    bool quote = FALSE;
+    if (*t == '\'') {
+        t++;
+        quote = TRUE;
+    }
+#endif
+
+    while (*t) {
+        *s = *t;
+        t++;
+        s++;
+    }
+
+#ifdef JP
+#else
+    if (quote && *(s - 1) == '\'')
+        s--;
+#endif
+
+    *s = '\0';
+    user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
+    t = quark_str(ae_ptr->o_ptr->inscription);
+    s = buf;
+    while (*t && (*t != '#')) {
+        *s = *t;
+        t++;
+        s++;
+    }
+
+    *s = '\0';
+    ae_ptr->o_ptr->inscription = quark_add(buf);
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -295,10 +337,6 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
                 user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
                 if (ae_ptr->o_ptr->inscription) {
                     char buf[80];
-#ifdef JP
-#else
-                    bool quote = FALSE;
-#endif
                     concptr t = quark_str(ae_ptr->o_ptr->inscription);
                     for (t = quark_str(ae_ptr->o_ptr->inscription); *t && (*t != '#'); t++) {
 #ifdef JP
@@ -307,39 +345,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 #endif
                     }
 
-                    if (*t) {
-                        char *s = buf;
-                        t++;
-#ifdef JP
-#else
-                        if (*t == '\'') {
-                            t++;
-                            quote = TRUE;
-                        }
-#endif
-                        while (*t) {
-                            *s = *t;
-                            t++;
-                            s++;
-                        }
-#ifdef JP
-#else
-                        if (quote && *(s - 1) == '\'')
-                            s--;
-#endif
-                        *s = '\0';
-                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
-                        t = quark_str(ae_ptr->o_ptr->inscription);
-                        s = buf;
-                        while (*t && (*t != '#')) {
-                            *s = *t;
-                            t++;
-                            s++;
-                        }
-
-                        *s = '\0';
-                        ae_ptr->o_ptr->inscription = quark_add(buf);
-                    }
+                    add_quark_to_inscription(user_ptr, ae_ptr, t, buf);
                 }
 
                 ae_ptr->o_ptr->pval = 0;
