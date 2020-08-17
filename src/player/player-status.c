@@ -476,7 +476,7 @@ void calc_bonuses(player_type *creature_ptr)
     }
 
     for (int i = 0; i < 2; i++) {
-        is_icky_wield_weapon(creature_ptr, i);
+        creature_ptr->icky_wield[i] = is_icky_wield_weapon(creature_ptr, i);
         is_riding_wield_weapon(creature_ptr, i);
         calc_num_blow(creature_ptr, i);
         creature_ptr->to_dd[i] = calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);

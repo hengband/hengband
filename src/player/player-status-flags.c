@@ -2131,24 +2131,24 @@ bool is_disable_two_handed_bonus(player_type *creature_ptr, int i)
     return FALSE;
 }
 
-void is_icky_wield_weapon(player_type *creature_ptr, int i)
+bool is_icky_wield_weapon(player_type *creature_ptr, int i)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     object_flags(creature_ptr, o_ptr, flgs);
 
-    creature_ptr->icky_wield[i] = FALSE;
     if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
-        creature_ptr->icky_wield[i] = TRUE;
+        return TRUE;
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
         if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
-            creature_ptr->icky_wield[i] = TRUE;
+            return TRUE;
         }
     }
     if (is_not_monk_weapon(creature_ptr, i) || is_not_ninja_weapon(creature_ptr, i)) {
-        creature_ptr->icky_wield[i] = TRUE;
+        return TRUE;
     }
+    return FALSE;
 }
 
 void is_riding_wield_weapon(player_type *creature_ptr, int i)

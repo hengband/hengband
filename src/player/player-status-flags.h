@@ -78,6 +78,6 @@ void have_lite(player_type *creature_ptr);
 bool is_disable_two_handed_bonus(player_type *creature_ptr, int i);
 bool is_not_ninja_weapon(player_type *creature_ptr, int i);
 bool is_not_monk_weapon(player_type *creature_ptr, int i);
-void is_icky_wield_weapon(player_type *creature_ptr, int i);
+bool is_icky_wield_weapon(player_type *creature_ptr, int i);
 void is_riding_wield_weapon(player_type *creature_ptr, int i);
 bool have_good_luck(player_type *creature_ptr);
