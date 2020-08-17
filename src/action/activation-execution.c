@@ -207,6 +207,27 @@ static void inscribe_nickname(ae_type *ae_ptr)
     ae_ptr->o_ptr->inscription = quark_add(buf);
 }
 
+static bool set_activation_target(player_type *user_ptr, ae_type *ae_ptr)
+{
+    bool old_target_pet = target_pet;
+    target_pet = TRUE;
+    if (!get_aim_dir(user_ptr, &ae_ptr->dir)) {
+        target_pet = old_target_pet;
+        return FALSE;
+    }
+
+    target_pet = old_target_pet;
+    if (!fire_ball(user_ptr, GF_CAPTURE, ae_ptr->dir, 0, 0))
+        return TRUE;
+
+    ae_ptr->o_ptr->pval = (PARAMETER_VALUE)cap_mon;
+    ae_ptr->o_ptr->xtra3 = (XTRA8)cap_mspeed;
+    ae_ptr->o_ptr->xtra4 = (XTRA16)cap_hp;
+    ae_ptr->o_ptr->xtra5 = (XTRA16)cap_maxhp;
+    inscribe_nickname(ae_ptr);
+    return TRUE;
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -248,99 +269,89 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 
     if (ae_ptr->o_ptr->tval == TV_CAPTURE) {
         if (!ae_ptr->o_ptr->pval) {
-            bool old_target_pet = target_pet;
-            target_pet = TRUE;
-            if (!get_aim_dir(user_ptr, &ae_ptr->dir)) {
-                target_pet = old_target_pet;
-                return;
-            }
-
-            target_pet = old_target_pet;
-            if (fire_ball(user_ptr, GF_CAPTURE, ae_ptr->dir, 0, 0)) {
-                ae_ptr->o_ptr->pval = (PARAMETER_VALUE)cap_mon;
-                ae_ptr->o_ptr->xtra3 = (XTRA8)cap_mspeed;
-                ae_ptr->o_ptr->xtra4 = (XTRA16)cap_hp;
-                ae_ptr->o_ptr->xtra5 = (XTRA16)cap_maxhp;
-                inscribe_nickname(ae_ptr);
-            }
-        } else {
-            ae_ptr->success = FALSE;
-            if (!get_direction(user_ptr, &ae_ptr->dir, FALSE, FALSE))
+            if (!set_activation_target(user_ptr, ae_ptr))
                 return;
 
-            if (monster_can_enter(user_ptr, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0)) {
-                if (place_monster_aux(
-                        user_ptr, 0, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE)) {
-                    if (ae_ptr->o_ptr->xtra3)
-                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->xtra3;
+            calc_android_exp(user_ptr);
+            return;
+        }
 
-                    if (ae_ptr->o_ptr->xtra5)
-                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->xtra5;
+        ae_ptr->success = FALSE;
+        if (!get_direction(user_ptr, &ae_ptr->dir, FALSE, FALSE))
+            return;
 
-                    if (ae_ptr->o_ptr->xtra4)
-                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->xtra4;
+        if (monster_can_enter(user_ptr, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0)) {
+            if (place_monster_aux(
+                    user_ptr, 0, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE)) {
+                if (ae_ptr->o_ptr->xtra3)
+                    user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->xtra3;
 
-                    user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
-                    if (ae_ptr->o_ptr->inscription) {
-                        char buf[80];
+                if (ae_ptr->o_ptr->xtra5)
+                    user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->xtra5;
+
+                if (ae_ptr->o_ptr->xtra4)
+                    user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->xtra4;
+
+                user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
+                if (ae_ptr->o_ptr->inscription) {
+                    char buf[80];
 #ifdef JP
 #else
-                        bool quote = FALSE;
+                    bool quote = FALSE;
 #endif
-                        concptr t = quark_str(ae_ptr->o_ptr->inscription);
-                        for (t = quark_str(ae_ptr->o_ptr->inscription); *t && (*t != '#'); t++) {
+                    concptr t = quark_str(ae_ptr->o_ptr->inscription);
+                    for (t = quark_str(ae_ptr->o_ptr->inscription); *t && (*t != '#'); t++) {
 #ifdef JP
-                            if (iskanji(*t))
-                                t++;
-#endif
-                        }
-
-                        if (*t) {
-                            char *s = buf;
+                        if (iskanji(*t))
                             t++;
-#ifdef JP
-#else
-                            if (*t == '\'') {
-                                t++;
-                                quote = TRUE;
-                            }
 #endif
-                            while (*t) {
-                                *s = *t;
-                                t++;
-                                s++;
-                            }
-#ifdef JP
-#else
-                            if (quote && *(s - 1) == '\'')
-                                s--;
-#endif
-                            *s = '\0';
-                            user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
-                            t = quark_str(ae_ptr->o_ptr->inscription);
-                            s = buf;
-                            while (*t && (*t != '#')) {
-                                *s = *t;
-                                t++;
-                                s++;
-                            }
-
-                            *s = '\0';
-                            ae_ptr->o_ptr->inscription = quark_add(buf);
-                        }
                     }
 
-                    ae_ptr->o_ptr->pval = 0;
-                    ae_ptr->o_ptr->xtra3 = 0;
-                    ae_ptr->o_ptr->xtra4 = 0;
-                    ae_ptr->o_ptr->xtra5 = 0;
-                    ae_ptr->success = TRUE;
-                }
-            }
+                    if (*t) {
+                        char *s = buf;
+                        t++;
+#ifdef JP
+#else
+                        if (*t == '\'') {
+                            t++;
+                            quote = TRUE;
+                        }
+#endif
+                        while (*t) {
+                            *s = *t;
+                            t++;
+                            s++;
+                        }
+#ifdef JP
+#else
+                        if (quote && *(s - 1) == '\'')
+                            s--;
+#endif
+                        *s = '\0';
+                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
+                        t = quark_str(ae_ptr->o_ptr->inscription);
+                        s = buf;
+                        while (*t && (*t != '#')) {
+                            *s = *t;
+                            t++;
+                            s++;
+                        }
 
-            if (!ae_ptr->success)
-                msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
+                        *s = '\0';
+                        ae_ptr->o_ptr->inscription = quark_add(buf);
+                    }
+                }
+
+                ae_ptr->o_ptr->pval = 0;
+                ae_ptr->o_ptr->xtra3 = 0;
+                ae_ptr->o_ptr->xtra4 = 0;
+                ae_ptr->o_ptr->xtra5 = 0;
+                ae_ptr->success = TRUE;
+            }
         }
+
+        if (!ae_ptr->success)
+            msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
 
         calc_android_exp(user_ptr);
         return;
