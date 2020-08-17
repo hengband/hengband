@@ -118,6 +118,25 @@ static bool check_activation_success(ae_type *ae_ptr)
     return FALSE;
 }
 
+static bool check_activation_conditions(player_type *user_ptr, ae_type *ae_ptr)
+{
+    if (!check_activation_success(ae_ptr))
+        return FALSE;
+
+    if (ae_ptr->o_ptr->timeout) {
+        msg_print(_("それは微かに音を立て、輝き、消えた...", "It whines, glows and fades..."));
+        return FALSE;
+    }
+
+    if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == TV_FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
+        msg_print(_("燃料がない。", "It has no fuel."));
+        free_turn(user_ptr);
+        return FALSE;
+    }
+    
+    return TRUE;
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -143,19 +162,8 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
         return;
 
     decide_activation_success(user_ptr, ae_ptr);
-    if (!check_activation_success(ae_ptr))
+    if (!check_activation_conditions(user_ptr, ae_ptr))
         return;
-
-    if (ae_ptr->o_ptr->timeout) {
-        msg_print(_("それは微かに音を立て、輝き、消えた...", "It whines, glows and fades..."));
-        return;
-    }
-
-    if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == TV_FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
-        msg_print(_("燃料がない。", "It has no fuel."));
-        free_turn(user_ptr);
-        return;
-    }
 
     msg_print(_("始動させた...", "You activate it..."));
     sound(SOUND_ZAP);
