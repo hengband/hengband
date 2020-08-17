@@ -105,6 +105,19 @@ static void decide_activation_success(player_type *user_ptr, ae_type *ae_ptr)
     ae_ptr->success = randint0(ae_ptr->fail * 2) < ae_ptr->chance;
 }
 
+static bool check_activation_success(ae_type *ae_ptr)
+{
+    if (ae_ptr->success)
+        return TRUE;
+
+    if (flush_failure)
+        flush();
+
+    msg_print(_("うまく始動させることができなかった。", "You failed to activate it properly."));
+    sound(SOUND_FAIL);
+    return FALSE;
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -130,14 +143,8 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
         return;
 
     decide_activation_success(user_ptr, ae_ptr);
-    if (!ae_ptr->success) {
-        if (flush_failure)
-            flush();
-
-        msg_print(_("うまく始動させることができなかった。", "You failed to activate it properly."));
-        sound(SOUND_FAIL);
+    if (!check_activation_success(ae_ptr))
         return;
-    }
 
     if (ae_ptr->o_ptr->timeout) {
         msg_print(_("それは微かに音を立て、輝き、消えた...", "It whines, glows and fades..."));
@@ -156,7 +163,9 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
         (void)activate_artifact(user_ptr, ae_ptr->o_ptr);
         user_ptr->window |= PW_INVEN | PW_EQUIP;
         return;
-    } else if (ae_ptr->o_ptr->tval == TV_WHISTLE) {
+    }
+    
+    if (ae_ptr->o_ptr->tval == TV_WHISTLE) {
         if (music_singing_any(user_ptr))
             stop_singing(user_ptr);
         if (hex_spelling_any(user_ptr))
@@ -180,7 +189,9 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
         C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);
         ae_ptr->o_ptr->timeout = 100 + randint1(100);
         return;
-    } else if (ae_ptr->o_ptr->tval == TV_CAPTURE) {
+    }
+    
+    if (ae_ptr->o_ptr->tval == TV_CAPTURE) {
         if (!ae_ptr->o_ptr->pval) {
             bool old_target_pet = target_pet;
             target_pet = TRUE;
