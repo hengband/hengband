@@ -35,6 +35,21 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+// Activation Execution.
+typedef struct ae_type {
+    DIRECTION dir;
+    bool success;
+    object_type *o_ptr;
+    DEPTH lev;
+} ae_type;
+
+static ae_type *initialize_ae_type(player_type *user_ptr, ae_type *ae_ptr, const INVENTORY_IDX item)
+{
+    ae_ptr->o_ptr = ref_item(user_ptr, item);
+    ae_ptr->lev = k_info[ae_ptr->o_ptr->k_idx].level;
+    return ae_ptr;
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -51,26 +66,23 @@
  */
 void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 {
-    DIRECTION dir;
-    bool success;
-    object_type *o_ptr = ref_item(user_ptr, item);
     take_turn(user_ptr, 100);
-    DEPTH lev = k_info[o_ptr->k_idx].level;
-
-    if (object_is_fixed_artifact(o_ptr)) {
-        lev = a_info[o_ptr->name1].level;
-    } else if (object_is_random_artifact(o_ptr)) {
-        const activation_type *const act_ptr = find_activation_info(user_ptr, o_ptr);
+    ae_type tmp_ae;
+    ae_type *ae_ptr = initialize_ae_type(user_ptr, &tmp_ae, item);
+    if (object_is_fixed_artifact(ae_ptr->o_ptr)) {
+        ae_ptr->lev = a_info[ae_ptr->o_ptr->name1].level;
+    } else if (object_is_random_artifact(ae_ptr->o_ptr)) {
+        const activation_type *const act_ptr = find_activation_info(user_ptr, ae_ptr->o_ptr);
         if (act_ptr)
-            lev = act_ptr->level;
-    } else if (((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET)) && o_ptr->name2)
-        lev = e_info[o_ptr->name2].level;
+            ae_ptr->lev = act_ptr->level;
+    } else if (((ae_ptr->o_ptr->tval == TV_RING) || (ae_ptr->o_ptr->tval == TV_AMULET)) && ae_ptr->o_ptr->name2)
+        ae_ptr->lev = e_info[ae_ptr->o_ptr->name2].level;
 
     int chance = user_ptr->skill_dev;
     if (user_ptr->confused)
         chance = chance / 2;
 
-    int fail = lev + 5;
+    int fail = ae_ptr->lev + 5;
     if (chance > fail)
         fail -= (chance - fail) * 2;
     else
@@ -86,20 +98,20 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
         return;
 
     if (user_ptr->pclass == CLASS_BERSERKER)
-        success = FALSE;
+        ae_ptr->success = FALSE;
     else if (chance > fail) {
         if (randint0(chance * 2) < fail)
-            success = FALSE;
+            ae_ptr->success = FALSE;
         else
-            success = TRUE;
+            ae_ptr->success = TRUE;
     } else {
         if (randint0(fail * 2) < chance)
-            success = TRUE;
+            ae_ptr->success = TRUE;
         else
-            success = FALSE;
+            ae_ptr->success = FALSE;
     }
 
-    if (!success) {
+    if (!ae_ptr->success) {
         if (flush_failure)
             flush();
 
@@ -108,12 +120,12 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
         return;
     }
 
-    if (o_ptr->timeout) {
+    if (ae_ptr->o_ptr->timeout) {
         msg_print(_("それは微かに音を立て、輝き、消えた...", "It whines, glows and fades..."));
         return;
     }
 
-    if (!o_ptr->xtra4 && (o_ptr->tval == TV_FLASK) && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN))) {
+    if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == TV_FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
         msg_print(_("燃料がない。", "It has no fuel."));
         free_turn(user_ptr);
         return;
@@ -121,11 +133,11 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 
     msg_print(_("始動させた...", "You activate it..."));
     sound(SOUND_ZAP);
-    if (activation_index(user_ptr, o_ptr)) {
-        (void)activate_artifact(user_ptr, o_ptr);
+    if (activation_index(user_ptr, ae_ptr->o_ptr)) {
+        (void)activate_artifact(user_ptr, ae_ptr->o_ptr);
         user_ptr->window |= PW_INVEN | PW_EQUIP;
         return;
-    } else if (o_ptr->tval == TV_WHISTLE) {
+    } else if (ae_ptr->o_ptr->tval == TV_WHISTLE) {
         if (music_singing_any(user_ptr))
             stop_singing(user_ptr);
         if (hex_spelling_any(user_ptr))
@@ -147,29 +159,29 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
         }
 
         C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);
-        o_ptr->timeout = 100 + randint1(100);
+        ae_ptr->o_ptr->timeout = 100 + randint1(100);
         return;
-    } else if (o_ptr->tval == TV_CAPTURE) {
-        if (!o_ptr->pval) {
+    } else if (ae_ptr->o_ptr->tval == TV_CAPTURE) {
+        if (!ae_ptr->o_ptr->pval) {
             bool old_target_pet = target_pet;
             target_pet = TRUE;
-            if (!get_aim_dir(user_ptr, &dir)) {
+            if (!get_aim_dir(user_ptr, &ae_ptr->dir)) {
                 target_pet = old_target_pet;
                 return;
             }
 
             target_pet = old_target_pet;
-            if (fire_ball(user_ptr, GF_CAPTURE, dir, 0, 0)) {
-                o_ptr->pval = (PARAMETER_VALUE)cap_mon;
-                o_ptr->xtra3 = (XTRA8)cap_mspeed;
-                o_ptr->xtra4 = (XTRA16)cap_hp;
-                o_ptr->xtra5 = (XTRA16)cap_maxhp;
+            if (fire_ball(user_ptr, GF_CAPTURE, ae_ptr->dir, 0, 0)) {
+                ae_ptr->o_ptr->pval = (PARAMETER_VALUE)cap_mon;
+                ae_ptr->o_ptr->xtra3 = (XTRA8)cap_mspeed;
+                ae_ptr->o_ptr->xtra4 = (XTRA16)cap_hp;
+                ae_ptr->o_ptr->xtra5 = (XTRA16)cap_maxhp;
                 if (cap_nickname) {
                     concptr t;
                     char *s;
                     char buf[80] = "";
-                    if (o_ptr->inscription)
-                        strcpy(buf, quark_str(o_ptr->inscription));
+                    if (ae_ptr->o_ptr->inscription)
+                        strcpy(buf, quark_str(ae_ptr->o_ptr->inscription));
 
                     s = buf;
                     for (s = buf; *s && (*s != '#'); s++) {
@@ -196,34 +208,35 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
                     *s++ = '\'';
 #endif
                     *s = '\0';
-                    o_ptr->inscription = quark_add(buf);
+                    ae_ptr->o_ptr->inscription = quark_add(buf);
                 }
             }
         } else {
-            success = FALSE;
-            if (!get_direction(user_ptr, &dir, FALSE, FALSE))
+            ae_ptr->success = FALSE;
+            if (!get_direction(user_ptr, &ae_ptr->dir, FALSE, FALSE))
                 return;
 
-            if (monster_can_enter(user_ptr, user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0)) {
-                if (place_monster_aux(user_ptr, 0, user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE)) {
-                    if (o_ptr->xtra3)
-                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mspeed = o_ptr->xtra3;
+            if (monster_can_enter(user_ptr, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0)) {
+                if (place_monster_aux(
+                        user_ptr, 0, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE)) {
+                    if (ae_ptr->o_ptr->xtra3)
+                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->xtra3;
 
-                    if (o_ptr->xtra5)
-                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = o_ptr->xtra5;
+                    if (ae_ptr->o_ptr->xtra5)
+                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->xtra5;
 
-                    if (o_ptr->xtra4)
-                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = o_ptr->xtra4;
+                    if (ae_ptr->o_ptr->xtra4)
+                        user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->xtra4;
 
                     user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
-                    if (o_ptr->inscription) {
+                    if (ae_ptr->o_ptr->inscription) {
                         char buf[80];
 #ifdef JP
 #else
                         bool quote = FALSE;
 #endif
-                        concptr t = quark_str(o_ptr->inscription);
-                        for (t = quark_str(o_ptr->inscription); *t && (*t != '#'); t++) {
+                        concptr t = quark_str(ae_ptr->o_ptr->inscription);
+                        for (t = quark_str(ae_ptr->o_ptr->inscription); *t && (*t != '#'); t++) {
 #ifdef JP
                             if (iskanji(*t))
                                 t++;
@@ -252,7 +265,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 #endif
                             *s = '\0';
                             user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
-                            t = quark_str(o_ptr->inscription);
+                            t = quark_str(ae_ptr->o_ptr->inscription);
                             s = buf;
                             while (*t && (*t != '#')) {
                                 *s = *t;
@@ -261,19 +274,19 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
                             }
 
                             *s = '\0';
-                            o_ptr->inscription = quark_add(buf);
+                            ae_ptr->o_ptr->inscription = quark_add(buf);
                         }
                     }
 
-                    o_ptr->pval = 0;
-                    o_ptr->xtra3 = 0;
-                    o_ptr->xtra4 = 0;
-                    o_ptr->xtra5 = 0;
-                    success = TRUE;
+                    ae_ptr->o_ptr->pval = 0;
+                    ae_ptr->o_ptr->xtra3 = 0;
+                    ae_ptr->o_ptr->xtra4 = 0;
+                    ae_ptr->o_ptr->xtra5 = 0;
+                    ae_ptr->success = TRUE;
                 }
             }
 
-            if (!success)
+            if (!ae_ptr->success)
                 msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
         }
 
