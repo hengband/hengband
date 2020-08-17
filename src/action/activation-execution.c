@@ -287,6 +287,33 @@ static void check_inscription_value(player_type *user_ptr, ae_type *ae_ptr)
     add_quark_to_inscription(user_ptr, ae_ptr, t, buf);
 }
 
+static void check_monster_ball_use(player_type *user_ptr, ae_type *ae_ptr)
+{
+    if (!monster_can_enter(user_ptr, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0))
+        return;
+
+    if (!place_monster_aux(user_ptr, 0, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE))
+        return;
+
+    floor_type *floor_ptr = user_ptr->current_floor_ptr;
+    if (ae_ptr->o_ptr->xtra3)
+        floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->xtra3;
+
+    if (ae_ptr->o_ptr->xtra5)
+        floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->xtra5;
+
+    if (ae_ptr->o_ptr->xtra4)
+        floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->xtra4;
+
+    floor_ptr->m_list[hack_m_idx_ii].maxhp = floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
+    check_inscription_value(user_ptr, ae_ptr);
+    ae_ptr->o_ptr->pval = 0;
+    ae_ptr->o_ptr->xtra3 = 0;
+    ae_ptr->o_ptr->xtra4 = 0;
+    ae_ptr->o_ptr->xtra5 = 0;
+    ae_ptr->success = TRUE;
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -339,28 +366,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
         if (!get_direction(user_ptr, &ae_ptr->dir, FALSE, FALSE))
             return;
 
-        if (monster_can_enter(user_ptr, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], &r_info[ae_ptr->o_ptr->pval], 0)) {
-            if (place_monster_aux(
-                    user_ptr, 0, user_ptr->y + ddy[ae_ptr->dir], user_ptr->x + ddx[ae_ptr->dir], ae_ptr->o_ptr->pval, PM_FORCE_PET | PM_NO_KAGE)) {
-                if (ae_ptr->o_ptr->xtra3)
-                    user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mspeed = ae_ptr->o_ptr->xtra3;
-
-                if (ae_ptr->o_ptr->xtra5)
-                    user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = ae_ptr->o_ptr->xtra5;
-
-                if (ae_ptr->o_ptr->xtra4)
-                    user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->xtra4;
-
-                user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
-                check_inscription_value();
-                ae_ptr->o_ptr->pval = 0;
-                ae_ptr->o_ptr->xtra3 = 0;
-                ae_ptr->o_ptr->xtra4 = 0;
-                ae_ptr->o_ptr->xtra5 = 0;
-                ae_ptr->success = TRUE;
-            }
-        }
-
+        check_monster_ball_use(user_ptr, ae_ptr);
         if (!ae_ptr->success)
             msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
 
