@@ -11,13 +11,13 @@
 
 #include "cmd-item/cmd-item.h"
 #include "action/action-limited.h"
+#include "action/activation-execution.h"
 #include "action/weapon-shield.h"
 #include "art-definition/art-protector-types.h"
 #include "autopick/autopick-registry.h"
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-open-close.h"
 #include "cmd-action/cmd-pet.h"
-#include "cmd-item/cmd-activate.h"
 #include "cmd-item/cmd-eat.h"
 #include "cmd-item/cmd-quaff.h"
 #include "cmd-item/cmd-read.h"
@@ -47,6 +47,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/snipe-types.h"
+#include "object-activation/activation-switcher.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
@@ -911,4 +912,28 @@ void do_cmd_use(player_type *creature_ptr)
         exe_activate(creature_ptr, item);
         break;
     }
+}
+
+/*!
+ * @brief 装備を発動するコマンドのメインルーチン /
+ * @param user_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void do_cmd_activate(player_type *user_ptr)
+{
+    OBJECT_IDX item;
+    if (user_ptr->wild_mode || cmd_limit_arena(user_ptr))
+        return;
+
+    if (user_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+        set_action(user_ptr, ACTION_NONE);
+
+    item_tester_hook = item_tester_hook_activate;
+
+    concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
+    concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
+    if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0))
+        return;
+
+    exe_activate(user_ptr, item);
 }

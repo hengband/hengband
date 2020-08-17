@@ -68,7 +68,6 @@ typedef enum random_art_activation_type {
     ACT_SUMMON_HOUND = 75,
     ACT_SUMMON_DAWN = 76,
     ACT_SUMMON_OCTOPUS = 77,
-    /* 76 - 80 unused */
     ACT_CHOIR_SINGS = 80,
     ACT_CURE_LW = 81,
     ACT_CURE_MW = 82,
@@ -79,7 +78,6 @@ typedef enum random_art_activation_type {
     ACT_CURE_1000 = 87,
     ACT_CURING = 88,
     ACT_CURE_MANA_FULL = 89,
-    /* 90 unused */
     ACT_ESP = 91,
     ACT_BERSERK = 92,
     ACT_PROT_EVIL = 93,
@@ -95,7 +93,6 @@ typedef enum random_art_activation_type {
     ACT_RESIST_COLD = 103,
     ACT_RESIST_ELEC = 104,
     ACT_RESIST_POIS = 105,
-    /* 106 - 110 unused */
     ACT_LIGHT = 111,
     ACT_MAP_LIGHT = 112,
     ACT_DETECT_ALL = 113,
@@ -124,7 +121,6 @@ typedef enum random_art_activation_type {
     ACT_PHASE_DOOR = 136,
     ACT_DETECT_ALL_MONS = 137,
     ACT_ULTIMATE_RESIST = 138,
-    /* 127 -> unused */
     ACT_FALLING_STAR = 246,
     ACT_STRAIN_HASTE = 247,
     ACT_TELEPORT_LEVEL = 248,

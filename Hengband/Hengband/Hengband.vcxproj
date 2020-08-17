@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\action\action-limited.c" />
+    <ClCompile Include="..\..\src\action\activation-execution.c" />
     <ClCompile Include="..\..\src\action\mutation-execution.c" />
     <ClCompile Include="..\..\src\action\open-close-execution.c" />
     <ClCompile Include="..\..\src\action\open-util.c" />
@@ -301,6 +302,7 @@
     <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.c" />
     <ClCompile Include="..\..\src\mutation\mutation-util.c" />
     <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c" />
+    <ClCompile Include="..\..\src\object-activation\activation-breath.c" />
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
     <ClCompile Include="..\..\src\player\player-status-table.c" />
@@ -575,7 +577,7 @@
     <ClCompile Include="..\..\src\io-dump\character-dump.c" />
     <ClCompile Include="..\..\src\specific-object\chest.c" />
     <ClCompile Include="..\..\src\io\chuukei.c" />
-    <ClCompile Include="..\..\src\cmd-item\cmd-activate.c" />
+    <ClCompile Include="..\..\src\object-activation\activation-switcher.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-others.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-diary.c" />
     <ClCompile Include="..\..\src\cmd-visual\cmd-draw.c" />
@@ -737,6 +739,7 @@
     <ClCompile Include="..\..\src\view\display-store.c" />
     <ClCompile Include="..\..\src\action\throw-util.c" />
     <ClInclude Include="..\..\src\action\action-limited.h" />
+    <ClInclude Include="..\..\src\action\activation-execution.h" />
     <ClInclude Include="..\..\src\action\mutation-execution.h" />
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
@@ -907,6 +910,7 @@
     <ClInclude Include="..\..\src\mutation\lose-mutation-switcher.h" />
     <ClInclude Include="..\..\src\mutation\mutation-util.h" />
     <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h" />
+    <ClInclude Include="..\..\src\object-activation\activation-breath.h" />
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
     <ClInclude Include="..\..\src\player\player-status-table.h" />
@@ -1384,7 +1388,7 @@
     <ClCompile Include="..\..\src\term\z-term.c" />
     <ClCompile Include="..\..\src\term\z-util.c" />
     <ClCompile Include="..\..\src\term\z-virt.c" />
-    <ClInclude Include="..\..\src\cmd-item\cmd-activate.h" />
+    <ClInclude Include="..\..\src\object-activation\activation-switcher.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-others.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-diary.h" />
     <ClInclude Include="..\..\src\cmd-visual\cmd-draw.h" />
