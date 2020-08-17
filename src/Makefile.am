@@ -539,6 +539,8 @@ hengband_SOURCES = \
 	object/object-mark-types.h \
 	object/item-use-flags.h \
 	\
+	object-activation/activation-breath.c object-activation/activation-breath.h \
+	\
 	object-enchant/activation-info-table.c object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.c object-enchant/apply-magic.h \
 	object-enchant/apply-magic-accessory.c object-enchant/apply-magic-accessory.h \
@@ -861,10 +863,10 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Ifloor -Igame-option -Igrid -Iinfo-reader -Iinventory -Iio -Iio-dump \
 	-Iknowledge -Iload -Imarket -Imelee -Imind -Imonster -Imonster-attack \
 	-Imonster-floor -Imonster-race -Ilore -Imspell -Imutation -Iobject \
-	-Iobject-enchant -Iobject-hook -Iobject-use -Ipet -Iplayer -Iplayer-attack \
-	-Iracial -Irealm -Iroom -Isave -Ispecific-object -Ispell -Ispell-kind \
-	-Ispell-realm -Istatus -Isv-definition -Isystem -Itarget -Iterm -Iutil \
-	-Iview -Iwindow -Iwizard -Iworld
+	-Iobject-activation -Iobject-enchant -Iobject-hook -Iobject-use -Ipet \
+	-Iplayer -Iplayer-attack -Iracial -Irealm -Iroom -Isave -Ispecific-object \
+	-Ispell -Ispell-kind -Ispell-realm -Istatus -Isv-definition -Isystem \
+	-Itarget -Iterm -Iutil -Iview -Iwindow -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

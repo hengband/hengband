@@ -2039,6 +2039,9 @@
     <ClCompile Include="..\..\src\action\activation-execution.c">
       <Filter>action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-breath.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4429,6 +4432,9 @@
     <ClInclude Include="..\..\src\action\activation-execution.h">
       <Filter>action</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-breath.h">
+      <Filter>object-activation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -4626,6 +4632,9 @@
     </Filter>
     <Filter Include="target">
       <UniqueIdentifier>{1789a1b0-5c89-4dfc-a4ba-1c3b711705b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-activation">
+      <UniqueIdentifier>{14dcf604-bbe5-4084-b4ff-124ea8c55654}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
