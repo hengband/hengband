@@ -41,6 +41,8 @@ typedef struct ae_type {
     bool success;
     object_type *o_ptr;
     DEPTH lev;
+    int chance;
+    int fail;
 } ae_type;
 
 static ae_type *initialize_ae_type(player_type *user_ptr, ae_type *ae_ptr, const INVENTORY_IDX item)
@@ -69,6 +71,25 @@ static void decide_activation_level(player_type *user_ptr, ae_type *ae_ptr)
         ae_ptr->lev = e_info[ae_ptr->o_ptr->name2].level;
 }
 
+static void decide_chance_fail(player_type *user_ptr, ae_type *ae_ptr)
+{
+    ae_ptr->chance = user_ptr->skill_dev;
+    if (user_ptr->confused)
+        ae_ptr->chance = ae_ptr->chance / 2;
+
+    ae_ptr->fail = ae_ptr->lev + 5;
+    if (ae_ptr->chance > ae_ptr->fail)
+        ae_ptr->fail -= (ae_ptr->chance - ae_ptr->fail) * 2;
+    else
+        ae_ptr->chance -= (ae_ptr->fail - ae_ptr->chance) * 2;
+
+    if (ae_ptr->fail < USE_DEVICE)
+        ae_ptr->fail = USE_DEVICE;
+
+    if (ae_ptr->chance < USE_DEVICE)
+        ae_ptr->chance = USE_DEVICE;
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -89,34 +110,19 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
     ae_type tmp_ae;
     ae_type *ae_ptr = initialize_ae_type(user_ptr, &tmp_ae, item);
     decide_activation_level(user_ptr, ae_ptr);
-    int chance = user_ptr->skill_dev;
-    if (user_ptr->confused)
-        chance = chance / 2;
-
-    int fail = ae_ptr->lev + 5;
-    if (chance > fail)
-        fail -= (chance - fail) * 2;
-    else
-        chance -= (fail - chance) * 2;
-
-    if (fail < USE_DEVICE)
-        fail = USE_DEVICE;
-
-    if (chance < USE_DEVICE)
-        chance = USE_DEVICE;
-
+    decide_chance_fail(user_ptr, ae_ptr);
     if (cmd_limit_time_walk(user_ptr))
         return;
 
     if (user_ptr->pclass == CLASS_BERSERKER)
         ae_ptr->success = FALSE;
-    else if (chance > fail) {
-        if (randint0(chance * 2) < fail)
+    else if (ae_ptr->chance > ae_ptr->fail) {
+        if (randint0(ae_ptr->chance * 2) < ae_ptr->fail)
             ae_ptr->success = FALSE;
         else
             ae_ptr->success = TRUE;
     } else {
-        if (randint0(fail * 2) < chance)
+        if (randint0(ae_ptr->fail * 2) < ae_ptr->chance)
             ae_ptr->success = TRUE;
         else
             ae_ptr->success = FALSE;
