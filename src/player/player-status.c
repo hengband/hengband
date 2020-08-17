@@ -114,7 +114,7 @@ static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr);
-static void calc_num_blow(player_type *creature_ptr, int i);
+static s16b calc_num_blow(player_type *creature_ptr, int i);
 static s16b calc_strength_addition(player_type *creature_ptr);
 static s16b calc_intelligence_addition(player_type *creature_ptr);
 static s16b calc_wisdom_addition(player_type *creature_ptr);
@@ -478,7 +478,7 @@ void calc_bonuses(player_type *creature_ptr)
     for (int i = 0; i < 2; i++) {
         creature_ptr->icky_wield[i] = is_icky_wield_weapon(creature_ptr, i);
         creature_ptr->riding_wield[i] = is_riding_wield_weapon(creature_ptr, i);
-        calc_num_blow(creature_ptr, i);
+        creature_ptr->num_blow[i] = calc_num_blow(creature_ptr, i);
         creature_ptr->to_dd[i] = calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
         creature_ptr->to_ds[i] = calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
     }
@@ -1712,16 +1712,17 @@ static bool is_martial_arts_mode(player_type *creature_ptr)
         && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) && !creature_ptr->left_hand_weapon;
 }
 
-static void calc_num_blow(player_type *creature_ptr, int i)
+static s16b calc_num_blow(player_type *creature_ptr, int i)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
+    s16b num_blow = 0;
 
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     object_flags(creature_ptr, o_ptr, flgs);
     creature_ptr->heavy_wield[i] = FALSE;
     if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
-        creature_ptr->num_blow[i] = 1;
+        num_blow = 1;
     } else {
         if (creature_ptr->hold < o_ptr->weight / 10) {
             creature_ptr->heavy_wield[i] = TRUE;
@@ -1761,45 +1762,45 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             if (dex_index > 11)
                 dex_index = 11;
 
-            creature_ptr->num_blow[i] = blows_table[str_index][dex_index];
-            if (creature_ptr->num_blow[i] > num)
-                creature_ptr->num_blow[i] = (s16b)num;
+            num_blow = blows_table[str_index][dex_index];
+            if (num_blow > num)
+                num_blow = (s16b)num;
 
-            creature_ptr->num_blow[i] += (s16b)creature_ptr->extra_blows[i];
+            num_blow += (s16b)creature_ptr->extra_blows[i];
             if (creature_ptr->pclass == CLASS_WARRIOR)
-                creature_ptr->num_blow[i] += (creature_ptr->lev / 40);
+                num_blow += (creature_ptr->lev / 40);
             else if (creature_ptr->pclass == CLASS_BERSERKER)
-                creature_ptr->num_blow[i] += (creature_ptr->lev / 23);
+                num_blow += (creature_ptr->lev / 23);
             else if ((creature_ptr->pclass == CLASS_ROGUE) && (o_ptr->weight < 50) && (creature_ptr->stat_ind[A_DEX] >= 30))
-                creature_ptr->num_blow[i]++;
+                num_blow++;
 
             if (creature_ptr->special_defense & KATA_FUUJIN)
-                creature_ptr->num_blow[i] -= 1;
+                num_blow -= 1;
 
             if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
-                creature_ptr->num_blow[i] = 1;
+                num_blow = 1;
 
-            if (creature_ptr->num_blow[i] < 1)
-                creature_ptr->num_blow[i] = 1;
+            if (num_blow < 1)
+                num_blow = 1;
         }
     }
 
     if (i != 0)
-        return;
+        return num_blow;
     /* Different calculation for monks with empty hands */
     if (is_martial_arts_mode(creature_ptr)) {
         int blow_base = creature_ptr->lev + adj_dex_blow[creature_ptr->stat_ind[A_DEX]];
-        creature_ptr->num_blow[i] = 0;
+        num_blow = 0;
 
         if (creature_ptr->pclass == CLASS_FORCETRAINER) {
             if (blow_base > 18)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
             if (blow_base > 31)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
             if (blow_base > 44)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
             if (blow_base > 58)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
 
             MAGIC_NUM1 current_ki = get_current_ki(creature_ptr);
             if (current_ki != i) {
@@ -1808,23 +1809,23 @@ static void calc_num_blow(player_type *creature_ptr, int i)
             }
         } else {
             if (blow_base > 12)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
             if (blow_base > 22)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
             if (blow_base > 31)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
             if (blow_base > 39)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
             if (blow_base > 46)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
             if (blow_base > 53)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
             if (blow_base > 59)
-                creature_ptr->num_blow[i]++;
+                num_blow++;
         }
 
         if (heavy_armor(creature_ptr) && (creature_ptr->pclass != CLASS_BERSERKER))
-            creature_ptr->num_blow[i] /= 2;
+            num_blow /= 2;
         else {
             creature_ptr->to_h[i] += (creature_ptr->lev / 3);
             creature_ptr->dis_to_h[i] += (creature_ptr->lev / 3);
@@ -1836,28 +1837,30 @@ static void calc_num_blow(player_type *creature_ptr, int i)
         if (creature_ptr->special_defense & KAMAE_GENBU) {
             creature_ptr->to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
             creature_ptr->dis_to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
-            creature_ptr->num_blow[i] -= 2;
+            num_blow -= 2;
             if ((creature_ptr->pclass == CLASS_MONK) && (creature_ptr->lev > 42))
-                creature_ptr->num_blow[i]--;
-            if (creature_ptr->num_blow[i] < 0)
-                creature_ptr->num_blow[i] = 0;
+                num_blow--;
+            if (num_blow < 0)
+                num_blow = 0;
         } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
             creature_ptr->to_h[i] -= (creature_ptr->lev / 3);
             creature_ptr->to_d[i] -= (creature_ptr->lev / 6);
 
             creature_ptr->dis_to_h[i] -= (creature_ptr->lev / 3);
             creature_ptr->dis_to_d[i] -= (creature_ptr->lev / 6);
-            creature_ptr->num_blow[i] /= 2;
+            num_blow /= 2;
         }
 
-        creature_ptr->num_blow[i] += 1 + creature_ptr->extra_blows[0];
+        num_blow += 1 + creature_ptr->extra_blows[0];
     }
 
     if (is_not_ninja_weapon(creature_ptr, i)) {
-        creature_ptr->num_blow[i] /= 2;
-        if (creature_ptr->num_blow[i] < 1)
-            creature_ptr->num_blow[i] = 1;
+        num_blow /= 2;
+        if (num_blow < 1)
+            num_blow = 1;
     }
+
+	return num_blow;
 }
 
 /*!
