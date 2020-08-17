@@ -270,6 +270,23 @@ static void add_quark_to_inscription(player_type *user_ptr, ae_type *ae_ptr, con
     ae_ptr->o_ptr->inscription = quark_add(buf);
 }
 
+static void check_inscription_value(player_type *user_ptr, ae_type *ae_ptr)
+{
+    if (ae_ptr->o_ptr->inscription == 0)
+        return;
+
+    char buf[80];
+    concptr t = quark_str(ae_ptr->o_ptr->inscription);
+    for (t = quark_str(ae_ptr->o_ptr->inscription); *t && (*t != '#'); t++) {
+#ifdef JP
+        if (iskanji(*t))
+            t++;
+#endif
+    }
+
+    add_quark_to_inscription(user_ptr, ae_ptr, t, buf);
+}
+
 /*!
  * @brief 装備を発動するコマンドのサブルーチン /
  * Activate a wielded object.  Wielded objects never stack.
@@ -335,19 +352,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
                     user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = ae_ptr->o_ptr->xtra4;
 
                 user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
-                if (ae_ptr->o_ptr->inscription) {
-                    char buf[80];
-                    concptr t = quark_str(ae_ptr->o_ptr->inscription);
-                    for (t = quark_str(ae_ptr->o_ptr->inscription); *t && (*t != '#'); t++) {
-#ifdef JP
-                        if (iskanji(*t))
-                            t++;
-#endif
-                    }
-
-                    add_quark_to_inscription(user_ptr, ae_ptr, t, buf);
-                }
-
+                check_inscription_value();
                 ae_ptr->o_ptr->pval = 0;
                 ae_ptr->o_ptr->xtra3 = 0;
                 ae_ptr->o_ptr->xtra4 = 0;
