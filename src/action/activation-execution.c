@@ -58,7 +58,7 @@ static void decide_activation_level(player_type *user_ptr, ae_type *ae_ptr)
         ae_ptr->lev = a_info[ae_ptr->o_ptr->name1].level;
         return;
     }
-    
+
     if (object_is_random_artifact(ae_ptr->o_ptr)) {
         const activation_type *const act_ptr = find_activation_info(user_ptr, ae_ptr->o_ptr);
         if (act_ptr != NULL)
@@ -66,7 +66,7 @@ static void decide_activation_level(player_type *user_ptr, ae_type *ae_ptr)
 
         return;
     }
-    
+
     if (((ae_ptr->o_ptr->tval == TV_RING) || (ae_ptr->o_ptr->tval == TV_AMULET)) && ae_ptr->o_ptr->name2)
         ae_ptr->lev = e_info[ae_ptr->o_ptr->name2].level;
 }
@@ -96,7 +96,7 @@ static void decide_activation_success(player_type *user_ptr, ae_type *ae_ptr)
         ae_ptr->success = FALSE;
         return;
     }
-    
+
     if (ae_ptr->chance > ae_ptr->fail) {
         ae_ptr->success = randint0(ae_ptr->chance * 2) >= ae_ptr->fail;
         return;
@@ -133,7 +133,38 @@ static bool check_activation_conditions(player_type *user_ptr, ae_type *ae_ptr)
         free_turn(user_ptr);
         return FALSE;
     }
-    
+
+    return TRUE;
+}
+
+static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
+{
+    if (ae_ptr->o_ptr->tval != TV_WHISTLE)
+        return FALSE;
+
+    if (music_singing_any(user_ptr))
+        stop_singing(user_ptr);
+
+    if (hex_spelling_any(user_ptr))
+        stop_hex_spell_all(user_ptr);
+
+    MONSTER_IDX pet_ctr;
+    MONSTER_IDX *who;
+    int max_pet = 0;
+    C_MAKE(who, current_world_ptr->max_m_idx, MONSTER_IDX);
+    for (pet_ctr = user_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
+        if (is_pet(&user_ptr->current_floor_ptr->m_list[pet_ctr]) && (user_ptr->riding != pet_ctr))
+            who[max_pet++] = pet_ctr;
+
+    u16b dummy_why;
+    ang_sort(user_ptr, who, &dummy_why, max_pet, ang_sort_comp_pet, ang_sort_swap_hook);
+    for (MONSTER_IDX i = 0; i < max_pet; i++) {
+        pet_ctr = who[i];
+        teleport_monster_to(user_ptr, pet_ctr, user_ptr->y, user_ptr->x, 100, TELEPORT_PASSIVE);
+    }
+
+    C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);
+    ae_ptr->o_ptr->timeout = 100 + randint1(100);
     return TRUE;
 }
 
@@ -172,33 +203,10 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
         user_ptr->window |= PW_INVEN | PW_EQUIP;
         return;
     }
-    
-    if (ae_ptr->o_ptr->tval == TV_WHISTLE) {
-        if (music_singing_any(user_ptr))
-            stop_singing(user_ptr);
-        if (hex_spelling_any(user_ptr))
-            stop_hex_spell_all(user_ptr);
 
-        MONSTER_IDX pet_ctr;
-        MONSTER_IDX *who;
-        int max_pet = 0;
-        C_MAKE(who, current_world_ptr->max_m_idx, MONSTER_IDX);
-        for (pet_ctr = user_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
-            if (is_pet(&user_ptr->current_floor_ptr->m_list[pet_ctr]) && (user_ptr->riding != pet_ctr))
-                who[max_pet++] = pet_ctr;
-
-        u16b dummy_why;
-        ang_sort(user_ptr, who, &dummy_why, max_pet, ang_sort_comp_pet, ang_sort_swap_hook);
-        for (MONSTER_IDX i = 0; i < max_pet; i++) {
-            pet_ctr = who[i];
-            teleport_monster_to(user_ptr, pet_ctr, user_ptr->y, user_ptr->x, 100, TELEPORT_PASSIVE);
-        }
-
-        C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);
-        ae_ptr->o_ptr->timeout = 100 + randint1(100);
+    if (activate_whistle(user_ptr, ae_ptr))
         return;
-    }
-    
+
     if (ae_ptr->o_ptr->tval == TV_CAPTURE) {
         if (!ae_ptr->o_ptr->pval) {
             bool old_target_pet = target_pet;
