@@ -44,7 +44,7 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
 
     if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
         display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
-    else if (creature_ptr->two_handed_weapon)
+    else if (have_two_handed_weapons(creature_ptr))
         display_player_one_line(ENTRY_TWO_HANDS, buf, TERM_L_BLUE);
     else
         display_player_one_line(hand_entry, buf, TERM_L_BLUE);

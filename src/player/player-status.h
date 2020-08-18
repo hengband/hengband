@@ -492,7 +492,6 @@ typedef struct player_type {
 
     s16b to_m_chance; /* Minusses to cast chance */
 
-    bool two_handed_weapon;
     bool no_flowed;
 
     ARMOUR_CLASS ac; /*!< 装備無しの基本AC / Base ac */

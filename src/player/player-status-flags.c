@@ -1347,9 +1347,9 @@ void have_extra_blow(player_type *creature_ptr)
         if (have_flag(flgs, TR_INFRA))
             creature_ptr->see_infra += o_ptr->pval;
         if (have_flag(flgs, TR_BLOWS)) {
-            if ((i == INVEN_RARM || i == INVEN_RIGHT) && !creature_ptr->two_handed_weapon)
+            if ((i == INVEN_RARM || i == INVEN_RIGHT) && !have_two_handed_weapons(creature_ptr))
                 creature_ptr->extra_blows[0] += o_ptr->pval;
-            else if ((i == INVEN_LARM || i == INVEN_LEFT) && !creature_ptr->two_handed_weapon)
+            else if ((i == INVEN_LARM || i == INVEN_LEFT) && !have_two_handed_weapons(creature_ptr))
                 creature_ptr->extra_blows[1] += o_ptr->pval;
             else {
                 creature_ptr->extra_blows[0] += o_ptr->pval;
@@ -2123,7 +2123,7 @@ bool is_disable_two_handed_bonus(player_type *creature_ptr, int i)
     object_type *o_ptr;
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
-        if (creature_ptr->hold *= 2 >= o_ptr->weight / 10 && creature_ptr->two_handed_weapon && (creature_ptr->hold *= 2 < o_ptr->weight / 5))
+        if (creature_ptr->hold *= 2 >= o_ptr->weight / 10 && have_two_handed_weapons(creature_ptr) && (creature_ptr->hold *= 2 < o_ptr->weight / 5))
             return TRUE;
     }
     return FALSE;
