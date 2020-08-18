@@ -576,28 +576,11 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_BLADETURNER:
         return activate_bladeturner(user_ptr);
     case ACT_BR_FIRE:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        fire_breath(user_ptr, GF_FIRE, dir, 200, 2);
-        if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-            (void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
-
-        return TRUE;
+        return activate_breath_fire(user_ptr, o_ptr);
     case ACT_BR_COLD:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        fire_breath(user_ptr, GF_COLD, dir, 200, 2);
-        if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-            (void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
-
-        return TRUE;
+        return activate_breath_cold(user_ptr, o_ptr);
     case ACT_BR_DRAGON:
-        if (!activate_dragon_breath(user_ptr, o_ptr))
-            return FALSE;
-
-        return TRUE;
+        return activate_dragon_breath(user_ptr, o_ptr);
     case ACT_CONFUSE:
         msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
         if (!get_aim_dir(user_ptr, &dir))
