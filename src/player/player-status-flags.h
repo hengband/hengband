@@ -73,7 +73,7 @@ void have_immune_fire(player_type *creature_ptr);
 void have_immune_cold(player_type *creature_ptr);
 bool have_right_hand_weapon(player_type *creature_ptr);
 bool have_left_hand_weapon(player_type *creature_ptr);
-void have_two_handed_weapons(player_type *creature_ptr);
+bool have_two_handed_weapons(player_type *creature_ptr);
 void have_lite(player_type *creature_ptr);
 bool is_disable_two_handed_bonus(player_type *creature_ptr, int i);
 bool is_not_ninja_weapon(player_type *creature_ptr, int i);

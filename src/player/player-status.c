@@ -324,7 +324,7 @@ void calc_bonuses(player_type *creature_ptr)
 
     creature_ptr->right_hand_weapon = have_right_hand_weapon(creature_ptr);
     creature_ptr->left_hand_weapon = have_left_hand_weapon(creature_ptr);
-    have_two_handed_weapons(creature_ptr);
+    creature_ptr->two_handed_weapon = have_two_handed_weapons(creature_ptr);
     creature_ptr->hold = calc_weapon_weight_limit(creature_ptr);
 
     creature_ptr->pass_wall = have_pass_wall(creature_ptr);
