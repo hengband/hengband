@@ -738,7 +738,6 @@ hengband_SOURCES = \
 	store/pricing.c store/pricing.h \
 	store/purchase-order.c store/purchase-order.h \
 	store/owner-insults.c store/owner-insults.h \
-	store/purchase-order.c store/purchase-order.h \
 	store/rumor.c store/rumor.h \
 	store/say-comments.c store/say-comments.h \
 	store/sell-order.c store/sell-order.h \
