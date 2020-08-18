@@ -483,6 +483,17 @@ bool activate_bladeturner(player_type *user_ptr)
     return TRUE;
 }
 
+bool activate_confusion(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    confuse_monster(user_ptr, dir, 20);
+    return TRUE;
+}
+
 bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
     DIRECTION dir;
@@ -582,12 +593,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_BR_DRAGON:
         return activate_dragon_breath(user_ptr, o_ptr);
     case ACT_CONFUSE:
-        msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        confuse_monster(user_ptr, dir, 20);
-        return TRUE;
+        return activate_confusion(user_ptr);
     case ACT_SLEEP:
         msg_print(_("深青色に輝いている...", "It glows deep blue..."));
         sleep_monsters_touch(user_ptr);
