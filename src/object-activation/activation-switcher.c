@@ -494,6 +494,48 @@ bool activate_confusion(player_type *user_ptr)
     return TRUE;
 }
 
+bool activate_teleport_away(player_type *user_ptr)
+{
+    DIRECTION dir;
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_beam(user_ptr, GF_AWAY_ALL, dir, user_ptr->lev);
+    return TRUE;
+}
+
+bool activate_banish_evil(player_type *user_ptr)
+{
+    if (banish_evil(user_ptr, 100))
+        msg_print(_("アーティファクトの力が邪悪を打ち払った！", "The power of the artifact banishes evil!"));
+
+    return TRUE;
+}
+
+bool activate_scare(player_type *user_ptr)
+{
+    if (music_singing_any(user_ptr))
+        stop_singing(user_ptr);
+
+    if (hex_spelling_any(user_ptr))
+        stop_hex_spell_all(user_ptr);
+
+    msg_print(_("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!", "You wind a mighty blast; your enemies tremble!"));
+    (void)turn_monsters(user_ptr, (3 * user_ptr->lev / 2) + 10);
+    return TRUE;
+}
+
+bool activate_aggravation(player_type *user_ptr, object_type *o_ptr, concptr name)
+{
+    if (o_ptr->name1 == ART_HYOUSIGI)
+        msg_print(_("拍子木を打った。", "You beat your wooden clappers."));
+    else
+        msg_format(_("%sは不快な物音を立てた。", "The %s sounds an unpleasant noise."), name);
+
+    aggravate_monsters(user_ptr, 0);
+    return TRUE;
+}
+
 bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
     DIRECTION dir;
@@ -605,16 +647,9 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         turn_monsters(user_ptr, 40 + user_ptr->lev);
         return TRUE;
     case ACT_TELE_AWAY:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_beam(user_ptr, GF_AWAY_ALL, dir, user_ptr->lev);
-        return TRUE;
+        return activate_teleport_away(user_ptr);
     case ACT_BANISH_EVIL:
-        if (banish_evil(user_ptr, 100))
-            msg_print(_("アーティファクトの力が邪悪を打ち払った！", "The power of the artifact banishes evil!"));
-
-        return TRUE;
+        return activate_banish_evil(user_ptr);
     case ACT_GENOCIDE:
         msg_print(_("深青色に輝いている...", "It glows deep blue..."));
         (void)symbol_genocide(user_ptr, 200, TRUE);
@@ -624,23 +659,9 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         (void)mass_genocide(user_ptr, 200, TRUE);
         return TRUE;
     case ACT_SCARE_AREA:
-        if (music_singing_any(user_ptr))
-            stop_singing(user_ptr);
-
-        if (hex_spelling_any(user_ptr))
-            stop_hex_spell_all(user_ptr);
-
-        msg_print(_("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!", "You wind a mighty blast; your enemies tremble!"));
-        (void)turn_monsters(user_ptr, (3 * user_ptr->lev / 2) + 10);
-        return TRUE;
+        return activate_scare(user_ptr);
     case ACT_AGGRAVATE:
-        if (o_ptr->name1 == ART_HYOUSIGI)
-            msg_print(_("拍子木を打った。", "You beat your wooden clappers."));
-        else
-            msg_format(_("%sは不快な物音を立てた。", "The %s sounds an unpleasant noise."), name);
-
-        aggravate_monsters(user_ptr, 0);
-        return TRUE;
+        return activate_aggravation(user_ptr, o_ptr, name);
     case ACT_CHARM_ANIMAL:
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
