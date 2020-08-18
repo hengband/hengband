@@ -304,6 +304,52 @@ bool activate_ball_nuke_1(player_type *user_ptr)
     return TRUE;
 }
 
+bool activate_bolt_hypodynamia_1(player_type *user_ptr, concptr name)
+{
+    DIRECTION dir;
+    msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    hypodynamic_bolt(user_ptr, dir, 100);
+    return TRUE;
+}
+
+bool activate_bolt_hypodynamia_2(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("黒く輝いている...", "It glows black..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    hypodynamic_bolt(user_ptr, dir, 120);
+    return TRUE;
+}
+
+bool activate_bolt_drain_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    for (int dummy = 0; dummy < 3; dummy++)
+        if (hypodynamic_bolt(user_ptr, dir, 50))
+            hp_player(user_ptr, 50);
+
+    return TRUE;
+}
+
+bool activate_missile_2(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("魔法のトゲが現れた...", "It grows magical spikes..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_bolt(user_ptr, GF_ARROW, dir, 150);
+    return TRUE;
+}
+
 bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
     DIRECTION dir;
@@ -346,35 +392,13 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_BA_NUKE_1:
         return activate_ball_nuke_1(user_ptr);
     case ACT_HYPODYNAMIA_1:
-        msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        hypodynamic_bolt(user_ptr, dir, 100);
-        return TRUE;
+        return activate_bolt_hypodynamia_1(user_ptr, name);
     case ACT_HYPODYNAMIA_2:
-        msg_print(_("黒く輝いている...", "It glows black..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        hypodynamic_bolt(user_ptr, dir, 120);
-        return TRUE;
+        return activate_bolt_hypodynamia_2(user_ptr);
     case ACT_DRAIN_1:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        for (int dummy = 0; dummy < 3; dummy++)
-            if (hypodynamic_bolt(user_ptr, dir, 50))
-                hp_player(user_ptr, 50);
-
-        return TRUE;
+        return activate_bolt_drain_1(user_ptr);
     case ACT_BO_MISS_2:
-        msg_print(_("魔法のトゲが現れた...", "It grows magical spikes..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_bolt(user_ptr, GF_ARROW, dir, 150);
-        return TRUE;
+        return activate_missile_2(user_ptr);
     case ACT_WHIRLWIND:
         massacre(user_ptr);
         return TRUE;
