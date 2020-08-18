@@ -216,7 +216,95 @@ bool activate_ball_cold_3(player_type *user_ptr)
     return TRUE;
 }
 
-static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
+bool activate_ball_fire_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_FIRE, dir, 72, 2);
+    return TRUE;
+}
+
+bool activate_ball_fire_2(player_type *user_ptr, concptr name)
+{
+    DIRECTION dir;
+    msg_format(_("%sから炎が吹き出した...", "The %s rages in fire..."), name);
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_FIRE, dir, 120, 3);
+    return TRUE;
+}
+
+bool activate_ball_fire_3(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("深赤色に輝いている...", "It glows deep red..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_FIRE, dir, 300, 3);
+    return TRUE;
+}
+
+bool activate_ball_fire_4(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
+    return TRUE;
+}
+
+bool activate_ball_elec_2(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("電気がパチパチ音を立てた...", "It crackles with electricity..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_ELEC, dir, 100, 3);
+    return TRUE;
+}
+
+bool activate_ball_elec_3(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("深青色に輝いている...", "It glows deep blue..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_ELEC, dir, 500, 3);
+    return TRUE;
+}
+
+bool activate_ball_acid_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは黒く激しく輝いた...", "It glows an intense black..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_ACID, dir, 100, 2);
+    return TRUE;
+}
+
+bool activate_ball_nuke_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは緑に激しく輝いた...", "It glows an intense green..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_NUKE, dir, 100, 2);
+    return TRUE;
+}
+
+bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
     DIRECTION dir;
     switch (act_ptr->index)
@@ -242,61 +330,21 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
     case ACT_BA_COLD_3:
         return activate_ball_cold_2(user_ptr);
     case ACT_BA_FIRE_1:
-        msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_FIRE, dir, 72, 2);
-        return TRUE;
+        return activate_ball_fire_1(user_ptr);
     case ACT_BA_FIRE_2:
-        msg_format(_("%sから炎が吹き出した...", "The %s rages in fire..."), name);
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_FIRE, dir, 120, 3);
-        return TRUE;
+        return activate_ball_fire_2(user_ptr, name);
     case ACT_BA_FIRE_3:
-        msg_print(_("深赤色に輝いている...", "It glows deep red..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_FIRE, dir, 300, 3);
-        return TRUE;
+        return activate_ball_fire_3(user_ptr);
     case ACT_BA_FIRE_4:
-        msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
-        return TRUE;
+        return activate_ball_fire_4(user_ptr);
     case ACT_BA_ELEC_2:
-        msg_print(_("電気がパチパチ音を立てた...", "It crackles with electricity..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_ELEC, dir, 100, 3);
-        return TRUE;
+        return activate_ball_elec_2(user_ptr);
     case ACT_BA_ELEC_3:
-        msg_print(_("深青色に輝いている...", "It glows deep blue..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_ELEC, dir, 500, 3);
-        return TRUE;
+        return activate_ball_elec_3(user_ptr);
     case ACT_BA_ACID_1:
-        msg_print(_("それは黒く激しく輝いた...", "It glows an intense black..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_ACID, dir, 100, 2);
-        return TRUE;
+        return activate_ball_acid_1(user_ptr);
     case ACT_BA_NUKE_1:
-        msg_print(_("それは緑に激しく輝いた...", "It glows an intense green..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_NUKE, dir, 100, 2);
-        return TRUE;
+        return activate_ball_nuke_1(user_ptr);
     case ACT_HYPODYNAMIA_1:
         msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
         if (!get_aim_dir(user_ptr, &dir))
