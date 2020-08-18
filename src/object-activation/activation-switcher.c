@@ -183,6 +183,39 @@ bool activate_bolt_fire_1(player_type *user_ptr)
     return TRUE;
 }
 
+bool activate_ball_cold_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_COLD, dir, 48, 2);
+    return TRUE;
+}
+
+bool activate_ball_cold_2(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは青く激しく輝いた...", "It glows an intense blue..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_COLD, dir, 100, 2);
+    return TRUE;
+}
+
+bool activate_ball_cold_3(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("明るく白色に輝いている...", "It glows bright white..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_COLD, dir, 400, 3);
+    return TRUE;
+}
+
 static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
     DIRECTION dir;
@@ -203,26 +236,11 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
     case ACT_BO_FIRE_1:
         return activate_bolt_fire_1(user_ptr);
     case ACT_BA_COLD_1:
-        msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_COLD, dir, 48, 2);
-        return TRUE;
+        return activate_ball_cold_1(user_ptr);
     case ACT_BA_COLD_2:
-        msg_print(_("それは青く激しく輝いた...", "It glows an intense blue..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_COLD, dir, 100, 2);
-        return TRUE;
+        return activate_ball_cold_2(user_ptr);
     case ACT_BA_COLD_3:
-        msg_print(_("明るく白色に輝いている...", "It glows bright white..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_COLD, dir, 400, 3);
-        return TRUE;
+        return activate_ball_cold_2(user_ptr);
     case ACT_BA_FIRE_1:
         msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
         if (!get_aim_dir(user_ptr, &dir))
