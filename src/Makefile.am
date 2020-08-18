@@ -345,6 +345,7 @@ hengband_SOURCES = \
 	load/load-util.c load/load-util.h \
 	load/load-v1-3-0.c load/load-v1-3-0.h \
 	load/load-v1-5-0.c load/load-v1-5-0.h \
+	load/load-v1-7-0.c load/load-v1-7-0.h \
 	load/load-zangband.c load/load-zangband.h \
 	load/quest-loader.c load/quest-loader.h \
 	load/load.c load/load.h \
