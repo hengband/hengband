@@ -350,6 +350,52 @@ bool activate_missile_2(player_type *user_ptr)
     return TRUE;
 }
 
+bool activate_bolt_drain_2(player_type *user_ptr)
+{
+    DIRECTION dir;
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    for (int dummy = 0; dummy < 3; dummy++)
+        if (hypodynamic_bolt(user_ptr, dir, 100))
+            hp_player(user_ptr, 100);
+
+    return TRUE;
+}
+
+bool activate_rocket(player_type *user_ptr)
+{
+    DIRECTION dir;
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    msg_print(_("ロケットを発射した！", "You launch a rocket!"));
+    (void)fire_ball(user_ptr, GF_ROCKET, dir, 250 + user_ptr->lev * 3, 2);
+    return TRUE;
+}
+
+bool activate_missile_3(player_type *user_ptr)
+{
+    DIRECTION dir;
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
+    fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
+    return TRUE;
+}
+
+bool activate_bolt_mana(player_type *user_ptr, concptr name)
+{
+    DIRECTION dir;
+    msg_format(_("%sに魔法のトゲが現れた...", "The %s grows magical spikes..."), name);
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_bolt(user_ptr, GF_ARROW, dir, 150);
+    return TRUE;
+}
+
 bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
     DIRECTION dir;
@@ -403,47 +449,25 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         massacre(user_ptr);
         return TRUE;
     case ACT_DRAIN_2:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        for (int dummy = 0; dummy < 3; dummy++)
-            if (hypodynamic_bolt(user_ptr, dir, 100))
-                hp_player(user_ptr, 100);
-
-        return TRUE;
+        return activate_bolt_drain_2(user_ptr);
     case ACT_CALL_CHAOS:
         msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
         call_chaos(user_ptr);
         return TRUE;
     case ACT_ROCKET:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        msg_print(_("ロケットを発射した！", "You launch a rocket!"));
-        (void)fire_ball(user_ptr, GF_ROCKET, dir, 250 + user_ptr->lev * 3, 2);
-        return TRUE;
+        return activate_rocket(user_ptr);
     case ACT_DISP_EVIL:
         msg_print(_("神聖な雰囲気が充満した...", "It floods the area with goodness..."));
         dispel_evil(user_ptr, user_ptr->lev * 5);
         return TRUE;
     case ACT_BA_MISS_3:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
-        fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
-        return TRUE;
+        return activate_missile_3(user_ptr);
     case ACT_DISP_GOOD:
         msg_print(_("邪悪な雰囲気が充満した...", "It floods the area with evil..."));
         dispel_good(user_ptr, user_ptr->lev * 5);
         return TRUE;
     case ACT_BO_MANA:
-        msg_format(_("%sに魔法のトゲが現れた...", "The %s grows magical spikes..."), name);
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_bolt(user_ptr, GF_ARROW, dir, 150);
-        return TRUE;
+        return activate_bolt_mana(user_ptr, name);
     case ACT_BA_WATER:
         msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name);
         if (!get_aim_dir(user_ptr, &dir))
