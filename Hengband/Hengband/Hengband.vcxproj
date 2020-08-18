@@ -302,6 +302,7 @@
     <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.c" />
     <ClCompile Include="..\..\src\mutation\mutation-util.c" />
     <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c" />
+    <ClCompile Include="..\..\src\object-activation\activation-bolt-ball.c" />
     <ClCompile Include="..\..\src\object-activation\activation-breath.c" />
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
@@ -910,6 +911,7 @@
     <ClInclude Include="..\..\src\mutation\lose-mutation-switcher.h" />
     <ClInclude Include="..\..\src\mutation\mutation-util.h" />
     <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h" />
+    <ClInclude Include="..\..\src\object-activation\activation-bolt-ball.h" />
     <ClInclude Include="..\..\src\object-activation\activation-breath.h" />
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />
