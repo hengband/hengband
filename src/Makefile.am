@@ -546,7 +546,6 @@ hengband_SOURCES = \
 	object-enchant/apply-magic-armor.c object-enchant/apply-magic-armor.h \
 	object-enchant/apply-magic-others.c object-enchant/apply-magic-others.h \
 	object-enchant/apply-magic-weapon.c object-enchant/apply-magic-weapon.h \
-	object-enchant/artifact.c object-enchant/artifact.h \
 	object-enchant/dragon-breaths-table.c object-enchant/dragon-breaths-table.h \
 	object-enchant/object-boost.c object-enchant/object-boost.h \
 	object-enchant/object-curse.c object-enchant/object-curse.h \
