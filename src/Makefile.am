@@ -823,7 +823,7 @@ hengband_SOURCES = \
 	window/main-window-row-column.h \
 	window/main-window-stat-poster.c window/main-window-stat-poster.h \
 	window/main-window-util.c window/main-window-util.h \
-	window/main-window-equipment.c window/main-window-equipment.h \
+	window/main-window-equipments.c window/main-window-equipments.h \
 	\
 	wizard/artifact-analyzer.c wizard/artifact-analyzer.h \
 	wizard/artifact-bias-table.c wizard/artifact-bias-table.h \
