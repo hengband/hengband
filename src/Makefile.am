@@ -351,7 +351,7 @@ hengband_SOURCES = \
 	load/load.c load/load.h \
 	load/lore-loader.c load/lore-loader.h \
 	load/option-loader.c load/option-loader.h \
-	load/player-attack-loader.c load/player-attack-loader. \
+	load/player-attack-loader.c load/player-attack-loader.h \
 	load/player-info-loader.c load/player-info-loader.h \
 	load/savedata-flag-types.h \
 	load/store-loader.c load/store-loader.h \
