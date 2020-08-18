@@ -540,7 +540,7 @@ hengband_SOURCES = \
 	\
 	object-activation/activation-bolt-ball.c object-activation/activation-bolt-ball.h \
 	object-activation/activation-breath.c object-activation/activation-breath.h \
-	object-activation/acrivation-switcher.c object-activation/acrivation-switcher.h \
+	object-activation/activation-switcher.c object-activation/activation-switcher.h \
 	\
 	object-enchant/activation-info-table.c object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.c object-enchant/apply-magic.h \
