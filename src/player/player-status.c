@@ -145,8 +145,6 @@ static s16b calc_to_hit_misc(player_type *creature_ptr);
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
 static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
 
-static int calc_weapon_weight_limit(player_type *creature_ptr);
-
 static int get_default_hand(player_type *creature_ptr);
 
 /*** Player information ***/
@@ -321,8 +319,6 @@ void calc_bonuses(player_type *creature_ptr)
 
     ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
     ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
-
-    creature_ptr->hold = calc_weapon_weight_limit(creature_ptr);
 
     creature_ptr->pass_wall = have_pass_wall(creature_ptr);
     creature_ptr->kill_wall = have_kill_wall(creature_ptr);
@@ -1721,7 +1717,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
     if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
         num_blow = 1;
     } else {
-        if (creature_ptr->hold < o_ptr->weight / 10) {
+        if (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10) {
             creature_ptr->heavy_wield[i] = TRUE;
         }
 
@@ -3162,8 +3158,6 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
     tval_type tval = creature_ptr->inventory_list[INVEN_RARM + id].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + id].sval;
 
-    creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
-
     creature_ptr->to_h[id] = 0;
 
     creature_ptr->to_h[id] += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
@@ -3207,8 +3201,8 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
         }
     }
 
-    if (creature_ptr->hold < o_ptr->weight / 10) {
-        creature_ptr->to_h[id] += 2 * (creature_ptr->hold - o_ptr->weight / 10);
+    if (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10) {
+        creature_ptr->to_h[id] += 2 * (calc_weapon_weight_limit(creature_ptr) - o_ptr->weight / 10);
     }
 
     if (is_blessed(creature_ptr)) {
@@ -3314,7 +3308,6 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
 {
     int id = slot - INVEN_RARM;
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
-    creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(creature_ptr, o_ptr, flgs);
     tval_type tval = creature_ptr->inventory_list[INVEN_RARM + id].tval - TV_WEAPON_BEGIN;
@@ -3363,8 +3356,8 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
     }
 
-    if (creature_ptr->hold < o_ptr->weight / 10) {
-        creature_ptr->dis_to_h[id] += 2 * (creature_ptr->hold - o_ptr->weight / 10);
+    if (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10) {
+        creature_ptr->dis_to_h[id] += 2 * (calc_weapon_weight_limit(creature_ptr) - o_ptr->weight / 10);
     }
 
     if (is_blessed(creature_ptr)) {
@@ -3507,11 +3500,10 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
         pow -= 12;
     }
 
-    creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
 
     if (is_heavy_shoot(creature_ptr, o_ptr)) {
-        pow += 2 * (creature_ptr->hold - o_ptr->weight / 10);
+        pow += 2 * (calc_weapon_weight_limit(creature_ptr) - o_ptr->weight / 10);
     }
 
     if (o_ptr->k_idx) {
