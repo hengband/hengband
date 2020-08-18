@@ -760,6 +760,7 @@ hengband_SOURCES = \
 	system/alloc-entries.c system/alloc-entries.h \
 	system/alloc-entry-definition.h \
 	system/angband.h system/angband-version.h \
+	system/artifact-type-definition.c system/artifact-type-definition.h \
 	system/building-type-definition.c system/building-type-definition.h \
 	system/dungeon-data-definition.h \
 	system/floor-type-definition.h \
