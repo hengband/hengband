@@ -538,6 +538,7 @@ hengband_SOURCES = \
 	object/object-mark-types.h \
 	object/item-use-flags.h \
 	\
+	object-activation/activation-bolt-ball.c object-activation/activation-bolt-ball.h \
 	object-activation/activation-breath.c object-activation/activation-breath.h \
 	object-activation/acrivation-switcher.c object-activation/acrivation-switcher.h \
 	\

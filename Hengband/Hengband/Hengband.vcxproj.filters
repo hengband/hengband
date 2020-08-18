@@ -2042,6 +2042,9 @@
     <ClCompile Include="..\..\src\object-activation\activation-switcher.c">
       <Filter>object-activation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-bolt-ball.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4433,6 +4436,9 @@
       <Filter>object-activation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-activation\activation-switcher.h">
+      <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-bolt-ball.h">
       <Filter>object-activation</Filter>
     </ClInclude>
   </ItemGroup>
