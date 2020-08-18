@@ -129,6 +129,7 @@ hengband_SOURCES = \
 	cmd-item/cmd-quaff.c cmd-item/cmd-quaff.h \
 	cmd-item/cmd-read.c cmd-item/cmd-read.h \
 	cmd-item/cmd-smith.c cmd-item/cmd-smith.h \
+	cmd-item/cmd-throw.c cmd-item/cmd-throw.h \
 	cmd-item/cmd-usestaff.c cmd-item/cmd-usestaff.h \
 	cmd-item/cmd-zaprod.c cmd-item/cmd-zaprod.h \
 	cmd-item/cmd-zapwand.c cmd-item/cmd-zapwand.h \
