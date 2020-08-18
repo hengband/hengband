@@ -224,7 +224,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         if (have_right_hand_weapon(owner_ptr)) {
             if (item_selection_ptr->e2 < INVEN_LARM)
                 item_selection_ptr->e2 = INVEN_LARM;
-        } else if (owner_ptr->left_hand_weapon)
+        } else if (have_left_hand_weapon(owner_ptr))
             item_selection_ptr->e1 = INVEN_RARM;
     }
 

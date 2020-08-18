@@ -57,7 +57,7 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
  */
 static void display_left_hand(player_type *creature_ptr)
 {
-    if (creature_ptr->left_hand_weapon) {
+    if (have_left_hand_weapon(creature_ptr)) {
         display_player_melee_bonus(creature_ptr, 1, left_hander ? ENTRY_RIGHT_HAND2 : ENTRY_LEFT_HAND2);
         return;
     }

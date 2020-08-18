@@ -322,7 +322,6 @@ void calc_bonuses(player_type *creature_ptr)
     ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
     ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
 
-    creature_ptr->left_hand_weapon = have_left_hand_weapon(creature_ptr);
     creature_ptr->two_handed_weapon = have_two_handed_weapons(creature_ptr);
     creature_ptr->hold = calc_weapon_weight_limit(creature_ptr);
 
@@ -1329,7 +1328,7 @@ static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
     if (creature_ptr->pclass == CLASS_NINJA && heavy_armor(creature_ptr)) {
         pow -= (creature_ptr->lev) / 10;
     } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || have_right_hand_weapon(creature_ptr))
-        && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
+        && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || have_left_hand_weapon(creature_ptr))) {
         pow += (creature_ptr->lev) / 10;
     }
 
@@ -1708,7 +1707,7 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
 static bool is_martial_arts_mode(player_type *creature_ptr)
 {
     return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_BERSERKER))
-        && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) && !creature_ptr->left_hand_weapon;
+        && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) && !have_left_hand_weapon(creature_ptr);
 }
 
 static s16b calc_num_blow(player_type *creature_ptr, int i)
@@ -2516,7 +2515,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
 
     if (creature_ptr->pclass == CLASS_NINJA) {
         if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || have_right_hand_weapon(creature_ptr))
-            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
+            && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || have_left_hand_weapon(creature_ptr))) {
             ac += creature_ptr->lev / 2 + 5;
         }
     }
@@ -2607,7 +2606,7 @@ static s16b calc_speed(player_type *creature_ptr)
             if (heavy_armor(creature_ptr)) {
                 pow -= (creature_ptr->lev) / 10;
             } else if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || have_right_hand_weapon(creature_ptr))
-                && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon)) {
+                && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || have_left_hand_weapon(creature_ptr))) {
                 pow += 3;
                 if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
                         || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
@@ -2991,7 +2990,7 @@ static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot)
         creature_ptr->to_d[id] -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->to_d[id] += creature_ptr->lev / 6;
-        if (((id == 0) && !creature_ptr->left_hand_weapon) || creature_ptr->two_handed_weapon) {
+        if (((id == 0) && !have_left_hand_weapon(creature_ptr)) || creature_ptr->two_handed_weapon) {
             creature_ptr->to_d[id] += creature_ptr->lev / 6;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
@@ -3049,7 +3048,7 @@ static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot)
             continue;
         }
 
-        if (have_right_hand_weapon(creature_ptr) && creature_ptr->left_hand_weapon) {
+        if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
             creature_ptr->to_d[0] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
             creature_ptr->to_d[1] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
             continue;
@@ -3087,7 +3086,7 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
         creature_ptr->dis_to_d[id] -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->dis_to_d[id] += creature_ptr->lev / 6;
-        if (((id == 0) && !creature_ptr->left_hand_weapon) || creature_ptr->two_handed_weapon) {
+        if (((id == 0) && !have_left_hand_weapon(creature_ptr)) || creature_ptr->two_handed_weapon) {
             creature_ptr->dis_to_d[id] += creature_ptr->lev / 6;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
@@ -3135,7 +3134,7 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
             continue;
         }
 
-        if (have_right_hand_weapon(creature_ptr) && creature_ptr->left_hand_weapon) {
+        if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
             if (!object_is_known(o_ptr))
                 continue;
 
@@ -3175,7 +3174,7 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
         creature_ptr->to_h[id] -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->to_h[id] += creature_ptr->lev / 5;
-        if (((id == 0) && !creature_ptr->left_hand_weapon) || creature_ptr->two_handed_weapon) {
+        if (((id == 0) && !have_left_hand_weapon(creature_ptr)) || creature_ptr->two_handed_weapon) {
             creature_ptr->to_h[id] += creature_ptr->lev / 5;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
@@ -3260,7 +3259,7 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
 
     if (get_default_hand(creature_ptr) == id) {
         if ((have_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
-            || (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_LARM))) {
+            || (have_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_LARM))) {
             creature_ptr->to_h[id] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
         }
 
@@ -3296,7 +3295,7 @@ static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
             continue;
         }
 
-        if (have_right_hand_weapon(creature_ptr) && creature_ptr->left_hand_weapon) {
+        if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
             creature_ptr->to_h[0] += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
             creature_ptr->to_h[1] += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
             continue;
@@ -3331,7 +3330,7 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         creature_ptr->dis_to_h[id] -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->dis_to_h[id] += creature_ptr->lev / 5;
-        if (((id == 0) && !creature_ptr->left_hand_weapon) || creature_ptr->two_handed_weapon) {
+        if (((id == 0) && !have_left_hand_weapon(creature_ptr)) || creature_ptr->two_handed_weapon) {
             creature_ptr->dis_to_h[id] += creature_ptr->lev / 5;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
@@ -3416,7 +3415,7 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
 
     if (get_default_hand(creature_ptr) == id) {
         if ((have_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
-            || (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_LARM))) {
+            || (have_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_LARM))) {
             creature_ptr->dis_to_h[id] += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
         }
     }
@@ -3445,7 +3444,7 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
             continue;
         }
 
-        if (have_right_hand_weapon(creature_ptr) && creature_ptr->left_hand_weapon) {
+        if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
             if (!object_is_known(o_ptr))
                 continue;
 
@@ -4389,7 +4388,7 @@ static int get_default_hand(player_type *creature_ptr)
     if (can_two_hands_wielding(creature_ptr)) {
         if (have_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM])) {
-        } else if (creature_ptr->left_hand_weapon && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
+        } else if (have_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
         } else {
             default_hand = 1;

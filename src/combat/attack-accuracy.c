@@ -112,7 +112,7 @@ static bool decide_attack_hit(player_type *attacker_ptr, player_attack_type *pa_
     if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         int n = 1;
 
-        if (have_right_hand_weapon(attacker_ptr) && attacker_ptr->left_hand_weapon)
+        if (have_right_hand_weapon(attacker_ptr) && have_left_hand_weapon(attacker_ptr))
             n *= 2;
 
         if (pa_ptr->mode == HISSATSU_3DAN)

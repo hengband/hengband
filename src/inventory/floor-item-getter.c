@@ -231,7 +231,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         if (have_right_hand_weapon(owner_ptr)) {
             if (fis_ptr->e2 < INVEN_LARM)
                 fis_ptr->e2 = INVEN_LARM;
-        } else if (owner_ptr->left_hand_weapon)
+        } else if (have_left_hand_weapon(owner_ptr))
             fis_ptr->e1 = INVEN_RARM;
     }
 
