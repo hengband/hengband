@@ -106,136 +106,178 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+bool activate_sunlight(player_type *user_ptr)
+{
+    DIRECTION dir;
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    msg_print(_("太陽光線が放たれた。", "A line of sunlight appears."));
+    (void)lite_line(user_ptr, dir, damroll(6, 8));
+    return TRUE;
+}
+
+bool activate_missile_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは眩しいくらいに明るく輝いている...", "It glows extremely brightly..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_bolt(user_ptr, GF_MISSILE, dir, damroll(2, 6));
+    return TRUE;
+}
+
+bool activate_ball_pois_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは濃緑色に脈動している...", "It throbs deep green..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_POIS, dir, 12, 3);
+    return TRUE;
+}
+
+bool activate_bolt_elec_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは火花に覆われた...", "It is covered in sparks..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_bolt(user_ptr, GF_ELEC, dir, damroll(4, 8));
+    return TRUE;
+}
+
+bool activate_bolt_acid_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは酸に覆われた...", "It is covered in acid..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_bolt(user_ptr, GF_ACID, dir, damroll(5, 8));
+    return TRUE;
+}
+
+bool activate_bolt_cold_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_bolt(user_ptr, GF_COLD, dir, damroll(6, 8));
+    return TRUE;
+}
+
+bool activate_bolt_fire_1(player_type *user_ptr)
+{
+    DIRECTION dir;
+    msg_print(_("それは炎に覆われた...", "It is covered in fire..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_bolt(user_ptr, GF_FIRE, dir, damroll(9, 8));
+    return TRUE;
+}
+
 static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
     DIRECTION dir;
     switch (act_ptr->index)
     {
     case ACT_SUNLIGHT:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        msg_print(_("太陽光線が放たれた。", "A line of sunlight appears."));
-        (void)lite_line(user_ptr, dir, damroll(6, 8));
-        return TRUE;
+        return activate_sunlight(user_ptr);
     case ACT_BO_MISS_1:
-        msg_print(_("それは眩しいくらいに明るく輝いている...", "It glows extremely brightly..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        fire_bolt(user_ptr, GF_MISSILE, dir, damroll(2, 6));
-        return TRUE;
+        return activate_missile_1(user_ptr);
     case ACT_BA_POIS_1:
-        msg_print(_("それは濃緑色に脈動している...", "It throbs deep green..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        fire_ball(user_ptr, GF_POIS, dir, 12, 3);
-        return TRUE;
+        return activate_ball_pois_1(user_ptr);
     case ACT_BO_ELEC_1:
-        msg_print(_("それは火花に覆われた...", "It is covered in sparks..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        fire_bolt(user_ptr, GF_ELEC, dir, damroll(4, 8));
-        return TRUE;
+        return activate_bolt_elec_1(user_ptr);
     case ACT_BO_ACID_1:
-        msg_print(_("それは酸に覆われた...", "It is covered in acid..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        fire_bolt(user_ptr, GF_ACID, dir, damroll(5, 8));
-        return TRUE;
+        return activate_bolt_acid_1(user_ptr);
     case ACT_BO_COLD_1:
-        msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        fire_bolt(user_ptr, GF_COLD, dir, damroll(6, 8));
-        return TRUE;
+        return activate_bolt_cold_1(user_ptr);
     case ACT_BO_FIRE_1:
-        msg_print(_("それは炎に覆われた...", "It is covered in fire..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        fire_bolt(user_ptr, GF_FIRE, dir, damroll(9, 8));
-        return TRUE;
+        return activate_bolt_fire_1(user_ptr);
     case ACT_BA_COLD_1:
         msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_COLD, dir, 48, 2);
+        (void)fire_ball(user_ptr, GF_COLD, dir, 48, 2);
         return TRUE;
     case ACT_BA_COLD_2:
         msg_print(_("それは青く激しく輝いた...", "It glows an intense blue..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_COLD, dir, 100, 2);
+        (void)fire_ball(user_ptr, GF_COLD, dir, 100, 2);
         return TRUE;
     case ACT_BA_COLD_3:
         msg_print(_("明るく白色に輝いている...", "It glows bright white..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_COLD, dir, 400, 3);
+        (void)fire_ball(user_ptr, GF_COLD, dir, 400, 3);
         return TRUE;
     case ACT_BA_FIRE_1:
         msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_FIRE, dir, 72, 2);
+        (void)fire_ball(user_ptr, GF_FIRE, dir, 72, 2);
         return TRUE;
     case ACT_BA_FIRE_2:
         msg_format(_("%sから炎が吹き出した...", "The %s rages in fire..."), name);
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_FIRE, dir, 120, 3);
+        (void)fire_ball(user_ptr, GF_FIRE, dir, 120, 3);
         return TRUE;
     case ACT_BA_FIRE_3:
         msg_print(_("深赤色に輝いている...", "It glows deep red..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_FIRE, dir, 300, 3);
+        (void)fire_ball(user_ptr, GF_FIRE, dir, 300, 3);
         return TRUE;
     case ACT_BA_FIRE_4:
         msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
+        (void)fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
         return TRUE;
     case ACT_BA_ELEC_2:
         msg_print(_("電気がパチパチ音を立てた...", "It crackles with electricity..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_ELEC, dir, 100, 3);
+        (void)fire_ball(user_ptr, GF_ELEC, dir, 100, 3);
         return TRUE;
     case ACT_BA_ELEC_3:
         msg_print(_("深青色に輝いている...", "It glows deep blue..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_ELEC, dir, 500, 3);
+        (void)fire_ball(user_ptr, GF_ELEC, dir, 500, 3);
         return TRUE;
     case ACT_BA_ACID_1:
         msg_print(_("それは黒く激しく輝いた...", "It glows an intense black..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_ACID, dir, 100, 2);
+        (void)fire_ball(user_ptr, GF_ACID, dir, 100, 2);
         return TRUE;
     case ACT_BA_NUKE_1:
         msg_print(_("それは緑に激しく輝いた...", "It glows an intense green..."));
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_NUKE, dir, 100, 2);
+        (void)fire_ball(user_ptr, GF_NUKE, dir, 100, 2);
         return TRUE;
     case ACT_HYPODYNAMIA_1:
         msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
@@ -265,7 +307,7 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_bolt(user_ptr, GF_ARROW, dir, 150);
+        (void)fire_bolt(user_ptr, GF_ARROW, dir, 150);
         return TRUE;
     case ACT_WHIRLWIND:
         massacre(user_ptr);
@@ -288,7 +330,7 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
             return FALSE;
 
         msg_print(_("ロケットを発射した！", "You launch a rocket!"));
-        fire_ball(user_ptr, GF_ROCKET, dir, 250 + user_ptr->lev * 3, 2);
+        (void)fire_ball(user_ptr, GF_ROCKET, dir, 250 + user_ptr->lev * 3, 2);
         return TRUE;
     case ACT_DISP_EVIL:
         msg_print(_("神聖な雰囲気が充満した...", "It floods the area with goodness..."));
@@ -310,28 +352,28 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_bolt(user_ptr, GF_ARROW, dir, 150);
+        (void)fire_bolt(user_ptr, GF_ARROW, dir, 150);
         return TRUE;
     case ACT_BA_WATER:
         msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name);
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_WATER, dir, 200, 3);
+        (void)fire_ball(user_ptr, GF_WATER, dir, 200, 3);
         return TRUE;
     case ACT_BA_DARK:
         msg_format(_("%sが深い闇に覆われた...", "The %s is coverd in pitch-darkness..."), name);
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_DARK, dir, 250, 4);
+        (void)fire_ball(user_ptr, GF_DARK, dir, 250, 4);
         return TRUE;
     case ACT_BA_MANA:
         msg_format(_("%sが青白く光った．．．", "The %s glows pale..."), name);
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_MANA, dir, 250, 4);
+        (void)fire_ball(user_ptr, GF_MANA, dir, 250, 4);
         return TRUE;
     case ACT_PESTICIDE:
         msg_print(_("あなたは害虫を一掃した。", "You exterminate small life."));
@@ -339,7 +381,7 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
         return TRUE;
     case ACT_BLINDING_LIGHT:
         msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name);
-        fire_ball(user_ptr, GF_LITE, 0, 300, 6);
+        (void)fire_ball(user_ptr, GF_LITE, 0, 300, 6);
         confuse_monsters(user_ptr, 3 * user_ptr->lev / 2);
         return TRUE;
     case ACT_BIZARRE:
@@ -603,7 +645,7 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_ACID, dir, 100, 2);
+        (void)fire_ball(user_ptr, GF_ACID, dir, 100, 2);
         (void)set_oppose_acid(user_ptr, randint1(20) + 20, FALSE);
         return TRUE;
     case ACT_RESIST_FIRE:
@@ -614,7 +656,7 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
+        (void)fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
         (void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
         return TRUE;
     case ACT_RESIST_COLD:
@@ -625,7 +667,7 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_COLD, dir, 100, 2);
+        (void)fire_ball(user_ptr, GF_COLD, dir, 100, 2);
         (void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
         return TRUE;
     case ACT_RESIST_ELEC:
@@ -636,7 +678,7 @@ static bool switch_activation(player_type *user_ptr, object_type *o_ptr, const a
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
 
-        fire_ball(user_ptr, GF_ELEC, dir, 100, 2);
+        (void)fire_ball(user_ptr, GF_ELEC, dir, 100, 2);
         (void)set_oppose_elec(user_ptr, randint1(20) + 20, FALSE);
         return TRUE;
     case ACT_RESIST_POIS:
