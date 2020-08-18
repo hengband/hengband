@@ -17,6 +17,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
+#include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -220,7 +221,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         item_selection_ptr->e2--;
 
     if (item_selection_ptr->equip && owner_ptr->two_handed_weapon && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        if (owner_ptr->right_hand_weapon) {
+        if (have_right_hand_weapon(owner_ptr)) {
             if (item_selection_ptr->e2 < INVEN_LARM)
                 item_selection_ptr->e2 = INVEN_LARM;
         } else if (owner_ptr->left_hand_weapon)

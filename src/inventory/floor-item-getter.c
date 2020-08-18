@@ -23,6 +23,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
+#include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -227,7 +228,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         fis_ptr->e2--;
 
     if (fis_ptr->equip && owner_ptr->two_handed_weapon && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        if (owner_ptr->right_hand_weapon) {
+        if (have_right_hand_weapon(owner_ptr)) {
             if (fis_ptr->e2 < INVEN_LARM)
                 fis_ptr->e2 = INVEN_LARM;
         } else if (owner_ptr->left_hand_weapon)

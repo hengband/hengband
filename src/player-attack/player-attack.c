@@ -37,6 +37,7 @@
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
+#include "player/player-status-flags.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/earthquake.h"
 #include "spell-realm/spells-hex.h"
@@ -336,7 +337,7 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
 
     *(pa_ptr->mdeath) = TRUE;
     if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
-        if (attacker_ptr->right_hand_weapon && attacker_ptr->left_hand_weapon) {
+        if (have_right_hand_weapon(attacker_ptr) && attacker_ptr->left_hand_weapon) {
             if (pa_ptr->hand)
                 attacker_ptr->energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
             else

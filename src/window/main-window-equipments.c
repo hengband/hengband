@@ -14,6 +14,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "player/player-status-flags.h"
 
 /*!
  * @brief メインウィンドウの右上に装備アイテムの表示させる
@@ -40,12 +41,12 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
     for (k = 0, i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
         if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval) || (mode & USE_FULL))
-            && (!((((i == INVEN_RARM) && owner_ptr->left_hand_weapon) || ((i == INVEN_LARM) && owner_ptr->right_hand_weapon)) && owner_ptr->two_handed_weapon)
+            && (!((((i == INVEN_RARM) && owner_ptr->left_hand_weapon) || ((i == INVEN_LARM) && have_right_hand_weapon(owner_ptr))) && owner_ptr->two_handed_weapon)
                 || (mode & IGNORE_BOTHHAND_SLOT)))
             continue;
 
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
-        if ((((i == INVEN_RARM) && owner_ptr->left_hand_weapon) || ((i == INVEN_LARM) && owner_ptr->right_hand_weapon)) && owner_ptr->two_handed_weapon) {
+        if ((((i == INVEN_RARM) && owner_ptr->left_hand_weapon) || ((i == INVEN_LARM) && have_right_hand_weapon(owner_ptr))) && owner_ptr->two_handed_weapon) {
             (void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
             out_color[k] = TERM_WHITE;
         } else {

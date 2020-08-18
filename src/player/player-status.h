@@ -493,7 +493,6 @@ typedef struct player_type {
     s16b to_m_chance; /* Minusses to cast chance */
 
     bool two_handed_weapon;
-    bool right_hand_weapon;
     bool left_hand_weapon;
     bool no_flowed;
 

@@ -5,6 +5,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "player/attack-defense-types.h"
+#include "player/player-status-flags.h"
 #include "specific-object/death-scythe.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "view/display-messages.h"
@@ -111,7 +112,7 @@ static bool decide_attack_hit(player_type *attacker_ptr, player_attack_type *pa_
     if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         int n = 1;
 
-        if (attacker_ptr->right_hand_weapon && attacker_ptr->left_hand_weapon)
+        if (have_right_hand_weapon(attacker_ptr) && attacker_ptr->left_hand_weapon)
             n *= 2;
 
         if (pa_ptr->mode == HISSATSU_3DAN)

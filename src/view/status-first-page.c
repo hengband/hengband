@@ -19,6 +19,7 @@
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
@@ -311,7 +312,7 @@ static void display_first_page(player_type *creature_ptr, int xthb, int *damage,
 	if (creature_ptr->muta2 & MUT2_TRUNK) muta_att++;
 	if (creature_ptr->muta2 & MUT2_TENTACLES) muta_att++;
 
-	int blows1 = creature_ptr->right_hand_weapon ? creature_ptr->num_blow[0] : 0;
+	int blows1 = have_right_hand_weapon(creature_ptr) ? creature_ptr->num_blow[0] : 0;
 	int blows2 = creature_ptr->left_hand_weapon ? creature_ptr->num_blow[1] : 0;
 	int xdis = creature_ptr->skill_dis;
 	int xdev = creature_ptr->skill_dev;

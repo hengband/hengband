@@ -35,6 +35,7 @@
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
@@ -168,7 +169,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     take_turn(attacker_ptr, 100);
 
-    if (!attacker_ptr->right_hand_weapon && !attacker_ptr->left_hand_weapon && !(attacker_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES))) {
+    if (!have_right_hand_weapon(attacker_ptr) && !attacker_ptr->left_hand_weapon && !(attacker_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES))) {
         msg_format(_("%s攻撃できない。", "You cannot do attacking."), (empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
         return FALSE;
     }
@@ -236,7 +237,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
             chg_virtue(attacker_ptr, V_HONOUR, -1);
     }
 
-    if (attacker_ptr->right_hand_weapon && attacker_ptr->left_hand_weapon) {
+    if (have_right_hand_weapon(attacker_ptr) && attacker_ptr->left_hand_weapon) {
         if ((attacker_ptr->skill_exp[GINOU_NITOURYU] < s_info[attacker_ptr->pclass].s_max[GINOU_NITOURYU])
             && ((attacker_ptr->skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_ptr->level)) {
             if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_BEGINNER)
@@ -279,7 +280,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     attacker_ptr->riding_t_m_idx = g_ptr->m_idx;
     bool fear = FALSE;
     bool mdeath = FALSE;
-    if (attacker_ptr->right_hand_weapon)
+    if (have_right_hand_weapon(attacker_ptr))
         exe_player_attack_to_monster(attacker_ptr, y, x, &fear, &mdeath, 0, mode);
     if (attacker_ptr->left_hand_weapon && !mdeath)
         exe_player_attack_to_monster(attacker_ptr, y, x, &fear, &mdeath, 1, mode);

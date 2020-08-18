@@ -5,6 +5,7 @@
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
+#include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -69,7 +70,7 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		}
 		else
 		{
-			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->right_hand_weapon) &&
+			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || have_right_hand_weapon(creature_ptr)) &&
 				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->left_hand_weapon))
 				add_flag(flags, TR_SPEED);
 			if (creature_ptr->lev > 24)

@@ -10,6 +10,7 @@
 #include "player/attack-defense-types.h"
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
+#include "player/player-status-flags.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
@@ -289,7 +290,7 @@ static void display_real_playtime(void)
  */
 void display_player_middle(player_type *creature_ptr)
 {
-    if (creature_ptr->right_hand_weapon)
+    if (have_right_hand_weapon(creature_ptr))
         display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
 
     display_left_hand(creature_ptr);
