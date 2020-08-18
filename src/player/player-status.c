@@ -451,19 +451,17 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->to_a = calc_to_ac(creature_ptr, TRUE);
     creature_ptr->dis_ac = calc_base_ac(creature_ptr);
     creature_ptr->dis_to_a = calc_to_ac(creature_ptr, FALSE);
-
+	
     for (int i = 0; i < A_MAX; i++) {
         calc_top_status(creature_ptr, i);
         calc_use_status(creature_ptr, i);
         calc_ind_status(creature_ptr, i);
     }
 
-    o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
-    creature_ptr->heavy_shoot = is_heavy_shoot(creature_ptr, o_ptr);
-
+	o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     if (o_ptr->k_idx) {
         creature_ptr->tval_ammo = (byte)bow_tval_ammo(o_ptr);
-        if (o_ptr->k_idx && !creature_ptr->heavy_shoot) {
+        if (o_ptr->k_idx && !is_heavy_shoot(creature_ptr, &creature_ptr->inventory_list[INVEN_BOW])) {
             creature_ptr->num_fire = calc_num_fire(creature_ptr, o_ptr);
         }
     }
@@ -2870,16 +2868,16 @@ static s16b calc_riding_bow_penalty(player_type *creature_ptr)
 
 void put_equipment_warning(player_type *creature_ptr)
 {
-    if (creature_ptr->old_heavy_shoot != creature_ptr->heavy_shoot) {
-        if (creature_ptr->heavy_shoot) {
+    bool heavy_shoot = is_heavy_shoot(creature_ptr, &creature_ptr->inventory_list[INVEN_BOW]);
+    if (creature_ptr->old_heavy_shoot != heavy_shoot) {
+        if (heavy_shoot) {
             msg_print(_("こんな重い弓を装備しているのは大変だ。", "You have trouble wielding such a heavy bow."));
         } else if (creature_ptr->inventory_list[INVEN_BOW].k_idx) {
             msg_print(_("この弓なら装備していても辛くない。", "You have no trouble wielding your bow."));
         } else {
             msg_print(_("重い弓を装備からはずして体が楽になった。", "You feel relieved to put down your heavy bow."));
         }
-
-        creature_ptr->old_heavy_shoot = creature_ptr->heavy_shoot;
+        creature_ptr->old_heavy_shoot = heavy_shoot;
     }
 
     for (int i = 0; i < 2; i++) {
@@ -3505,7 +3503,7 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
     }
 
     if (o_ptr->k_idx) {
-        if (o_ptr->k_idx && !creature_ptr->heavy_shoot) {
+        if (o_ptr->k_idx && !is_heavy_shoot(creature_ptr, &creature_ptr->inventory_list[INVEN_BOW])) {
             if ((creature_ptr->pclass == CLASS_SNIPER) && (creature_ptr->tval_ammo == TV_BOLT)) {
                 pow += (10 + (creature_ptr->lev / 5));
             }

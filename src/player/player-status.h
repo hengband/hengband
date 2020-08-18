@@ -353,7 +353,6 @@ typedef struct player_type {
     bool cumber_armor; /* Mana draining armor */
     bool cumber_glove; /* Mana draining gloves */
     bool heavy_wield[2]; /* Heavy weapon */
-    bool heavy_shoot; /* Heavy shooter */
     bool icky_wield[2]; /* Icky weapon */
     bool riding_wield[2]; /* Riding weapon */
     bool riding_ryoute; /* Riding weapon */
