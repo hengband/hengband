@@ -145,7 +145,7 @@ static s16b calc_to_hit_misc(player_type *creature_ptr);
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
 static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
 
-static void calc_weapon_weight_limit(player_type *creature_ptr);
+static int calc_weapon_weight_limit(player_type *creature_ptr);
 
 static int get_default_hand(player_type *creature_ptr);
 
@@ -322,10 +322,10 @@ void calc_bonuses(player_type *creature_ptr)
     ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
     ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
 
-    have_right_hand_weapon(creature_ptr);
+    creature_ptr->right_hand_weapon = have_right_hand_weapon(creature_ptr);
     have_left_hand_weapon(creature_ptr);
     have_two_handed_weapons(creature_ptr);
-    calc_weapon_weight_limit(creature_ptr);
+    creature_ptr->hold = calc_weapon_weight_limit(creature_ptr);
 
     creature_ptr->pass_wall = have_pass_wall(creature_ptr);
     creature_ptr->kill_wall = have_kill_wall(creature_ptr);
@@ -4368,13 +4368,14 @@ bool is_echizen(player_type *creature_ptr)
     return (creature_ptr->pseikaku == PERSONALITY_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
 }
 
-void calc_weapon_weight_limit(player_type *creature_ptr)
+int calc_weapon_weight_limit(player_type *creature_ptr)
 {
-    creature_ptr->hold = 0;
-    creature_ptr->hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
+    int weight = adj_str_hold[creature_ptr->stat_ind[A_STR]];
 
     if (creature_ptr->two_handed_weapon)
-        creature_ptr->hold *= 2;
+        weight *= 2;
+
+	return weight;
 }
 
 static int get_default_hand(player_type *creature_ptr)
