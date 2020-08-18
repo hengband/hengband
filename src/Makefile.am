@@ -1,6 +1,6 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
-AUTOMAKE_OPTIONS = foreign subdir-objects
+AUTOMAKE_OPTIONS = foreign subdir-objects nostdinc
 
 bin_PROGRAMS = hengband
 
@@ -854,19 +854,72 @@ EXTRA_hengband_SOURCES = \
 EXTRA_DIST = \
 	gcc-wrap
 
+DEFAULT_INCLUDES = -I$(srcdir) \
+	-I$(srcdir)/artifact \
+	-I$(srcdir)/art-definition \
+	-I$(srcdir)/autopick \
+	-I$(srcdir)/birth \
+	-I$(srcdir)/blue-magic \
+	-I$(srcdir)/cmd-action \
+	-I$(srcdir)/cmd-building \
+	-I$(srcdir)/cmd-io \
+	-I$(srcdir)/cmd-item \
+	-I$(srcdir)/cmd-visual \
+	-I$(srcdir)/combat \
+	-I$(srcdir)/core \
+	-I$(srcdir)/dungeon \
+	-I$(srcdir)/effect \
+	-I$(srcdir)/flavor \
+	-I$(srcdir)/floor \
+	-I$(srcdir)/game-option \
+	-I$(srcdir)/grid \
+	-I$(srcdir)/info-reader \
+	-I$(srcdir)/inventory \
+	-I$(srcdir)/io \
+	-I$(srcdir)/io-dump \
+	-I$(srcdir)/knowledge \
+	-I$(srcdir)/load \
+	-I$(srcdir)/lore \
+	-I$(srcdir)/market \
+	-I$(srcdir)/melee \
+	-I$(srcdir)/mind \
+	-I$(srcdir)/monster \
+	-I$(srcdir)/monster-attack \
+	-I$(srcdir)/monster-floor \
+	-I$(srcdir)/monster-race \
+	-I$(srcdir)/mspell \
+	-I$(srcdir)/mutation \
+	-I$(srcdir)/object \
+	-I$(srcdir)/object-activation \
+	-I$(srcdir)/object-enchant \
+	-I$(srcdir)/object-hook \
+	-I$(srcdir)/object-use \
+	-I$(srcdir)/pet \
+	-I$(srcdir)/player \
+	-I$(srcdir)/player-attack \
+	-I$(srcdir)/racial \
+	-I$(srcdir)/realm \
+	-I$(srcdir)/room \
+	-I$(srcdir)/save \
+	-I$(srcdir)/specific-object \
+	-I$(srcdir)/spell \
+	-I$(srcdir)/spell-kind \
+	-I$(srcdir)/spell-realm \
+	-I$(srcdir)/status \
+	-I$(srcdir)/sv-definition \
+	-I$(srcdir)/system \
+	-I$(srcdir)/target \
+	-I$(srcdir)/term \
+	-I$(srcdir)/util \
+	-I$(srcdir)/view \
+	-I$(srcdir)/window \
+	-I$(srcdir)/wizard \
+	-I$(srcdir)/world \
+	-I$(top_builddir)/src 
 CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iartifact -Iart-definition -Iautopick -Ibirth -Iblue-magic -Icmd-io \
-	-Icmd-item -Icmd-visual -Icombat -Icore -Idungeon -Ieffect -Iflavor \
-	-Ifloor -Igame-option -Igrid -Iinfo-reader -Iinventory -Iio -Iio-dump \
-	-Iknowledge -Iload -Imarket -Imelee -Imind -Imonster -Imonster-attack \
-	-Imonster-floor -Imonster-race -Ilore -Imspell -Imutation -Iobject \
-	-Iobject-activation -Iobject-enchant -Iobject-hook -Iobject-use -Ipet \
-	-Iplayer -Iplayer-attack -Iracial -Irealm -Iroom -Isave -Ispecific-object \
-	-Ispell -Ispell-kind -Ispell-realm -Istatus -Isv-definition -Isystem \
-	-Itarget -Iterm -Iutil -Iview -Iwindow -Iwizard -Iworld
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) 
 
 install-exec-hook:
 if SET_GID
