@@ -9,6 +9,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-blue-mage.h"
 #include "mspell/monster-power-table.h"
 #include "realm/realm-types.h"
 #include "spell/spell-info.h"
