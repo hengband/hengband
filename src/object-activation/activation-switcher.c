@@ -442,7 +442,6 @@ bool activate_ring_of_power(player_type *user_ptr, concptr name)
 
 bool activate_ball_lite(player_type *user_ptr, concptr name)
 {
-    DIRECTION dir;
     HIT_POINT num = damroll(5, 3);
     POSITION y = 0, x = 0;
     msg_format(_("%sが稲妻で覆われた...", "The %s is surrounded by lightning..."), name);
