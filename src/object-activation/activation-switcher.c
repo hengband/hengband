@@ -7,11 +7,11 @@
 #include "object-activation/activation-switcher.h"
 #include "action/action-limited.h"
 #include "action/activation-execution.h"
-#include "artifact/artifact-info.h"
 #include "art-definition/art-bow-types.h"
 #include "art-definition/art-sword-types.h"
 #include "art-definition/art-weapon-types.h"
 #include "art-definition/random-art-effects.h"
+#include "artifact/artifact-info.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
@@ -396,11 +396,98 @@ bool activate_bolt_mana(player_type *user_ptr, concptr name)
     return TRUE;
 }
 
+bool activate_ball_water(player_type *user_ptr, concptr name)
+{
+    DIRECTION dir;
+    msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name);
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_WATER, dir, 200, 3);
+    return TRUE;
+}
+
+bool activate_ball_dark(player_type *user_ptr, concptr name)
+{
+    DIRECTION dir;
+    msg_format(_("%sが深い闇に覆われた...", "The %s is coverd in pitch-darkness..."), name);
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_DARK, dir, 250, 4);
+    return TRUE;
+}
+
+bool activate_ball_mana(player_type *user_ptr, concptr name)
+{
+    DIRECTION dir;
+    msg_format(_("%sが青白く光った．．．", "The %s glows pale..."), name);
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    (void)fire_ball(user_ptr, GF_MANA, dir, 250, 4);
+    return TRUE;
+}
+
+bool activate_ring_of_power(player_type *user_ptr, concptr name)
+{
+    DIRECTION dir;
+    msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    ring_of_power(user_ptr, dir);
+    return TRUE;
+}
+
+bool activate_ball_lite(player_type *user_ptr, concptr name)
+{
+    DIRECTION dir;
+    HIT_POINT num = damroll(5, 3);
+    POSITION y = 0, x = 0;
+    msg_format(_("%sが稲妻で覆われた...", "The %s is surrounded by lightning..."), name);
+    for (int k = 0; k < num; k++) {
+        int attempts = 1000;
+        while (attempts--) {
+            scatter(user_ptr, &y, &x, user_ptr->y, user_ptr->x, 4, 0);
+            if (!cave_have_flag_bold(user_ptr->current_floor_ptr, y, x, FF_PROJECT))
+                continue;
+
+            if (!player_bold(user_ptr, y, x))
+                break;
+        }
+
+        project(user_ptr, 0, 3, y, x, 150, GF_ELEC, (PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+    }
+
+    return TRUE;
+}
+
+bool activate_bladeturner(player_type *user_ptr)
+{
+    DIRECTION dir;
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
+    fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
+    msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
+    (void)set_afraid(user_ptr, 0);
+    (void)set_hero(user_ptr, randint1(50) + 50, FALSE);
+    (void)hp_player(user_ptr, 10);
+    (void)set_blessed(user_ptr, randint1(50) + 50, FALSE);
+    (void)set_oppose_acid(user_ptr, randint1(50) + 50, FALSE);
+    (void)set_oppose_elec(user_ptr, randint1(50) + 50, FALSE);
+    (void)set_oppose_fire(user_ptr, randint1(50) + 50, FALSE);
+    (void)set_oppose_cold(user_ptr, randint1(50) + 50, FALSE);
+    (void)set_oppose_pois(user_ptr, randint1(50) + 50, FALSE);
+    return TRUE;
+}
+
 bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
     DIRECTION dir;
-    switch (act_ptr->index)
-    {
+    switch (act_ptr->index) {
     case ACT_SUNLIGHT:
         return activate_sunlight(user_ptr);
     case ACT_BO_MISS_1:
@@ -469,26 +556,11 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_BO_MANA:
         return activate_bolt_mana(user_ptr, name);
     case ACT_BA_WATER:
-        msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name);
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_WATER, dir, 200, 3);
-        return TRUE;
+        return activate_ball_water(user_ptr, name);
     case ACT_BA_DARK:
-        msg_format(_("%sが深い闇に覆われた...", "The %s is coverd in pitch-darkness..."), name);
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_DARK, dir, 250, 4);
-        return TRUE;
+        return activate_ball_dark(user_ptr, name);
     case ACT_BA_MANA:
-        msg_format(_("%sが青白く光った．．．", "The %s glows pale..."), name);
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_MANA, dir, 250, 4);
-        return TRUE;
+        return activate_ball_mana(user_ptr, name);
     case ACT_PESTICIDE:
         msg_print(_("あなたは害虫を一掃した。", "You exterminate small life."));
         (void)dispel_monsters(user_ptr, 4);
@@ -499,51 +571,11 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         confuse_monsters(user_ptr, 3 * user_ptr->lev / 2);
         return TRUE;
     case ACT_BIZARRE:
-        msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        ring_of_power(user_ptr, dir);
-        return TRUE;
-    case ACT_CAST_BA_STAR: {
-        HIT_POINT num = damroll(5, 3);
-        POSITION y = 0, x = 0;
-        int attempts;
-        msg_format(_("%sが稲妻で覆われた...", "The %s is surrounded by lightning..."), name);
-        for (int k = 0; k < num; k++) {
-            attempts = 1000;
-
-            while (attempts--) {
-                scatter(user_ptr, &y, &x, user_ptr->y, user_ptr->x, 4, 0);
-                if (!cave_have_flag_bold(user_ptr->current_floor_ptr, y, x, FF_PROJECT))
-                    continue;
-
-                if (!player_bold(user_ptr, y, x))
-                    break;
-            }
-
-            project(user_ptr, 0, 3, y, x, 150, GF_ELEC, (PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
-        }
-
-        return TRUE;
-    }
+        return activate_ring_of_power(user_ptr, name);
+    case ACT_CAST_BA_STAR:
+        return activate_ball_lite(user_ptr, name);
     case ACT_BLADETURNER:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
-        fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
-        msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
-        (void)set_afraid(user_ptr, 0);
-        (void)set_hero(user_ptr, randint1(50) + 50, FALSE);
-        (void)hp_player(user_ptr, 10);
-        (void)set_blessed(user_ptr, randint1(50) + 50, FALSE);
-        (void)set_oppose_acid(user_ptr, randint1(50) + 50, FALSE);
-        (void)set_oppose_elec(user_ptr, randint1(50) + 50, FALSE);
-        (void)set_oppose_fire(user_ptr, randint1(50) + 50, FALSE);
-        (void)set_oppose_cold(user_ptr, randint1(50) + 50, FALSE);
-        (void)set_oppose_pois(user_ptr, randint1(50) + 50, FALSE);
-        return TRUE;
+        return activate_bladeturner(user_ptr);
     case ACT_BR_FIRE:
         if (!get_aim_dir(user_ptr, &dir))
             return FALSE;
