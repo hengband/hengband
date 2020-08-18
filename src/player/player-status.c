@@ -140,7 +140,7 @@ static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot);
 static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value);
 
 static s16b calc_to_damage_misc(player_type *creature_ptr);
-static void calc_to_hit_misc(player_type *creature_ptr);
+static s16b calc_to_hit_misc(player_type *creature_ptr);
 
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
 static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
@@ -507,7 +507,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->to_h_b = calc_to_hit_bow(creature_ptr, TRUE);
     creature_ptr->dis_to_h_b = calc_to_hit_bow(creature_ptr, FALSE);
     creature_ptr->to_d_m = calc_to_damage_misc(creature_ptr);
-    calc_to_hit_misc(creature_ptr);
+    creature_ptr->to_h_m = calc_to_hit_misc(creature_ptr);
     creature_ptr->skill_dig = calc_skill_dig(creature_ptr);
 
     if (old_mighty_throw != creature_ptr->mighty_throw) {
@@ -3585,12 +3585,12 @@ static s16b calc_to_damage_misc(player_type *creature_ptr)
     return to_dam;
 }
 
-static void calc_to_hit_misc(player_type *creature_ptr)
+static s16b calc_to_hit_misc(player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-    creature_ptr->to_h_m = 0;
+    s16b to_hit = 0;
 
     for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -3604,29 +3604,31 @@ static void calc_to_hit_misc(player_type *creature_ptr)
             if (o_ptr->to_h > 0)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
         }
-        creature_ptr->to_h_m += (s16b)o_ptr->to_h;
+        to_hit += (s16b)o_ptr->to_h;
     }
 
     if (is_blessed(creature_ptr)) {
-        creature_ptr->to_h_m += 10;
+        to_hit += 10;
     }
 
     if (is_hero(creature_ptr)) {
-        creature_ptr->to_h_m += 12;
+        to_hit += 12;
     }
 
     if (creature_ptr->shero) {
-        creature_ptr->to_h_m += 12;
+        to_hit += 12;
     }
 
     if (creature_ptr->stun > 50) {
-        creature_ptr->to_h_m -= 20;
+        to_hit -= 20;
     } else if (creature_ptr->stun) {
-        creature_ptr->to_h_m -= 5;
+        to_hit -= 5;
     }
 
-    creature_ptr->to_h_m += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-    creature_ptr->to_h_m += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+    to_hit += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
+    to_hit += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
+
+	return to_hit;
 }
 
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot)
