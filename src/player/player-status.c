@@ -476,8 +476,6 @@ void calc_bonuses(player_type *creature_ptr)
         creature_ptr->to_ds[i] = calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
     }
 
-    creature_ptr->monk_armour_aux = heavy_armor(creature_ptr);
-
     creature_ptr->pspeed = calc_speed(creature_ptr);
     creature_ptr->see_infra = calc_intra_vision(creature_ptr);
     creature_ptr->skill_stl = calc_stealth(creature_ptr);
@@ -2947,7 +2945,7 @@ void put_equipment_warning(player_type *creature_ptr)
     }
 
     if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_NINJA))
-        && (creature_ptr->monk_armour_aux != creature_ptr->monk_notify_aux)) {
+        && (heavy_armor(creature_ptr) != creature_ptr->monk_notify_aux)) {
         if (heavy_armor(creature_ptr)) {
             msg_print(_("装備が重くてバランスを取れない。", "The weight of your armor disrupts your balance."));
             if (current_world_ptr->is_loading_now) {
@@ -2957,7 +2955,7 @@ void put_equipment_warning(player_type *creature_ptr)
             msg_print(_("バランスがとれるようになった。", "You regain your balance."));
         }
 
-        creature_ptr->monk_notify_aux = creature_ptr->monk_armour_aux;
+        creature_ptr->monk_notify_aux = heavy_armor(creature_ptr);
     }
 }
 

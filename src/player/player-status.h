@@ -318,7 +318,6 @@ typedef struct player_type {
     bool playing; /* True if player is playing */
     bool leaving; /* True if player is leaving */
 
-    bool monk_armour_aux;
     bool monk_notify_aux;
 
     byte leave_bldg;
