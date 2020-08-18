@@ -1,5 +1,4 @@
 ﻿#include "floor/floor-save-util.h"
-#include "system/monster-type-definition.h"
 
 /*
  * Sign for current process used in temporary files.
