@@ -681,11 +681,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_BLOODY_MOON:
         return activate_bloody_moon(user_ptr, o_ptr);
     case ACT_CRIMSON:
-        if (o_ptr->name1 != ART_CRIMSON)
-            return FALSE;
-
-        msg_print(_("せっかくだから『クリムゾン』をぶっぱなすぜ！", "I'll fire CRIMSON! SEKKAKUDAKARA!"));
-        return fire_crimson(user_ptr);
+        return activate_crimson(user_ptr, o_ptr);
     default:
         msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
         return FALSE;
