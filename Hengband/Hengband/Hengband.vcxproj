@@ -366,6 +366,7 @@
     <ClCompile Include="..\..\src\specific-object\bloody-moon.c" />
     <ClCompile Include="..\..\src\specific-object\death-crimson.c" />
     <ClCompile Include="..\..\src\specific-object\muramasa.c" />
+    <ClCompile Include="..\..\src\specific-object\ring-of-power.c" />
     <ClCompile Include="..\..\src\spell-kind\blood-curse.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-enchant.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-equipment.c" />
@@ -991,6 +992,7 @@
     <ClInclude Include="..\..\src\specific-object\bloody-moon.h" />
     <ClInclude Include="..\..\src\specific-object\death-crimson.h" />
     <ClInclude Include="..\..\src\specific-object\muramasa.h" />
+    <ClInclude Include="..\..\src\specific-object\ring-of-power.h" />
     <ClInclude Include="..\..\src\spell-kind\blood-curse.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-enchant.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-equipment.h" />

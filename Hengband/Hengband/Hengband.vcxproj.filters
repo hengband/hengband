@@ -2057,6 +2057,9 @@
     <ClCompile Include="..\..\src\specific-object\bloody-moon.c">
       <Filter>specific-object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\ring-of-power.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4463,6 +4466,9 @@
       <Filter>specific-object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\specific-object\bloody-moon.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\ring-of-power.h">
       <Filter>specific-object</Filter>
     </ClInclude>
   </ItemGroup>

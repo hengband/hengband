@@ -63,6 +63,7 @@
 #include "specific-object/bloody-moon.h"
 #include "specific-object/death-crimson.h"
 #include "specific-object/muramasa.h"
+#include "specific-object/ring-of-power.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-beam.h"
@@ -119,17 +120,6 @@ bool activate_sunlight(player_type *user_ptr)
 
     msg_print(_("太陽光線が放たれた。", "A line of sunlight appears."));
     (void)lite_line(user_ptr, dir, damroll(6, 8));
-    return TRUE;
-}
-
-bool activate_ring_of_power(player_type *user_ptr, concptr name)
-{
-    DIRECTION dir;
-    msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);
-    if (!get_aim_dir(user_ptr, &dir))
-        return FALSE;
-
-    ring_of_power(user_ptr, dir);
     return TRUE;
 }
 
