@@ -40,6 +40,7 @@
 #include "monster/smart-learn-types.h"
 #include "object-activation/activation-bolt-ball.h"
 #include "object-activation/activation-breath.h"
+#include "object-activation/activation-charm.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
@@ -330,29 +331,15 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_AGGRAVATE:
         return activate_aggravation(user_ptr, o_ptr, name);
     case ACT_CHARM_ANIMAL:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)charm_animal(user_ptr, dir, user_ptr->lev);
-        return TRUE;
+        return activate_charm_animal(user_ptr);
     case ACT_CHARM_UNDEAD:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)control_one_undead(user_ptr, dir, user_ptr->lev);
-        return TRUE;
+        return activate_charm_undead(user_ptr);
     case ACT_CHARM_OTHER:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)charm_monster(user_ptr, dir, user_ptr->lev * 2);
-        return TRUE;
+        return activate_charm_other(user_ptr);
     case ACT_CHARM_ANIMALS:
-        (void)charm_animals(user_ptr, user_ptr->lev * 2);
-        return TRUE;
+        return activate_charm_animals(user_ptr);
     case ACT_CHARM_OTHERS:
-        (void)charm_monsters(user_ptr, user_ptr->lev * 2);
-        return TRUE;
+        return activate_charm_others(user_ptr);
     case ACT_SUMMON_ANIMAL:
         (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->lev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
         return TRUE;
