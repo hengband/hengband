@@ -17,3 +17,5 @@ bool activate_teleport_level(player_type *user_ptr);
 bool activate_dimension_door(player_type *user_ptr);
 bool activate_teleport(player_type *user_ptr);
 bool activate_dispel_curse(player_type *user_ptr, concptr name);
+bool activate_cure_lw(player_type *user_ptr);
+bool activate_grand_cross(player_type *user_ptr);

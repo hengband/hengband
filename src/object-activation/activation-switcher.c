@@ -5,62 +5,18 @@
  */
 
 #include "object-activation/activation-switcher.h"
-#include "action/action-limited.h"
-#include "action/activation-execution.h"
-#include "art-definition/art-bow-types.h"
-#include "art-definition/art-sword-types.h"
-#include "art-definition/art-weapon-types.h"
 #include "art-definition/random-art-effects.h"
-#include "artifact/artifact-info.h"
-#include "cmd-io/cmd-save.h"
-#include "core/asking-player.h"
-#include "core/hp-mp-processor.h"
-#include "core/player-update-types.h"
-#include "core/window-redrawer.h"
-#include "effect/effect-characteristics.h"
-#include "effect/spells-effect-util.h"
-#include "floor/cave.h"
-#include "floor/floor-object.h"
-#include "floor/floor.h"
-#include "game-option/disturbance-options.h"
-#include "game-option/input-options.h"
-#include "game-option/special-options.h"
-#include "grid/feature-flag-types.h"
-#include "grid/grid.h"
-#include "main/sound-definitions-table.h"
-#include "main/sound-of-music.h"
-#include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race.h"
-#include "monster-race/race-flags1.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "monster/monster-util.h"
-#include "monster/smart-learn-types.h"
 #include "object-activation/activation-bolt-ball.h"
 #include "object-activation/activation-breath.h"
 #include "object-activation/activation-charm.h"
 #include "object-activation/activation-others.h"
 #include "object-activation/activation-resistance.h"
 #include "object-enchant/activation-info-table.h"
-#include "object-enchant/dragon-breaths-table.h"
-#include "object-enchant/object-ego.h"
-#include "object-hook/hook-enchant.h"
-#include "object-hook/hook-magic.h"
-#include "object/item-tester-hooker.h"
-#include "object/item-use-flags.h"
-#include "object/object-flags.h"
-#include "object/object-info.h"
-#include "object/object-kind.h"
 #include "player-attack/player-attack.h"
-#include "player/attack-defense-types.h"
-#include "player/avatar.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
-#include "player/player-race-types.h"
-#include "player/special-defense-types.h"
-#include "racial/racial-android.h"
 #include "specific-object/blade-turner.h"
 #include "specific-object/bloody-moon.h"
 #include "specific-object/death-crimson.h"
@@ -68,9 +24,6 @@
 #include "specific-object/ring-of-power.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/magic-item-recharger.h"
-#include "spell-kind/spells-beam.h"
-#include "spell-kind/spells-charm.h"
-#include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
@@ -81,37 +34,21 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-sight.h"
-#include "spell-kind/spells-specific-bolt.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-sorcery.h"
-#include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
-#include "status/action-setter.h"
 #include "status/bad-status-setter.h"
-#include "status/base-status.h"
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
-#include "status/element-resistance.h"
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
-#include "status/temporary-resistance.h"
-#include "sv-definition/sv-lite-types.h"
-#include "sv-definition/sv-ring-types.h"
-#include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "target/target-getter.h"
-#include "term/screen-processor.h"
-#include "util/bit-flags-calculator.h"
-#include "util/quarks.h"
-#include "util/sort.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 
 bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
@@ -249,11 +186,11 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_CHARM_OTHERS:
         return activate_charm_others(user_ptr);
     case ACT_SUMMON_ANIMAL:
-        (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->lev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
+        (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->lev, SUMMON_ANIMAL_RANGER, PM_ALLOW_GROUP | PM_FORCE_PET);
         return TRUE;
     case ACT_SUMMON_PHANTOM:
         msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
-        (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
+        (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, PM_ALLOW_GROUP | PM_FORCE_PET);
         return TRUE;
     case ACT_SUMMON_ELEMENTAL:
         return cast_summon_elemental(user_ptr, (user_ptr->lev * 3) / 2);
@@ -266,7 +203,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         return cast_summon_hound(user_ptr, (user_ptr->lev * 3) / 2);
     case ACT_SUMMON_DAWN:
         msg_print(_("暁の師団を召喚した。", "You summon the Legion of the Dawn."));
-        (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
+        (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_DAWN, PM_ALLOW_GROUP | PM_FORCE_PET);
         return TRUE;
     case ACT_SUMMON_OCTOPUS:
         return cast_summon_octopus(user_ptr);
@@ -276,9 +213,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         (void)set_hero(user_ptr, randint1(25) + 25, FALSE);
         return TRUE;
     case ACT_CURE_LW:
-        (void)set_afraid(user_ptr, 0);
-        (void)hp_player(user_ptr, 30);
-        return TRUE;
+        return activate_cure_lw(user_ptr);
     case ACT_CURE_MW:
         msg_print(_("深紫色の光を発している...", "It radiates deep purple..."));
         (void)cure_serious_wounds(user_ptr, 4, 8);
@@ -459,9 +394,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         massacre(user_ptr);
         return TRUE;
     case ACT_GRAND_CROSS:
-        msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
-        (void)project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
-        return TRUE;
+        return activate_grand_cross(user_ptr);
     case ACT_TELEPORT_LEVEL:
         return activate_teleport_level(user_ptr);
     case ACT_STRAIN_HASTE:

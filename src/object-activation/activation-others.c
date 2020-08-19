@@ -9,6 +9,7 @@
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
+#include "effect/effect-characteristics.h"
 #include "game-option/special-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -28,6 +29,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
+#include "spell/process-effect.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
@@ -220,5 +222,19 @@ bool activate_dispel_curse(player_type *user_ptr, concptr name)
     msg_format(_("%sが真実を照らし出す...", "The %s exhibits the truth..."), name);
     (void)remove_all_curse(user_ptr);
     (void)probing(user_ptr);
+    return TRUE;
+}
+
+bool activate_cure_lw(player_type *user_ptr)
+{
+    (void)set_afraid(user_ptr, 0);
+    (void)hp_player(user_ptr, 30);
+    return TRUE;
+}
+
+bool activate_grand_cross(player_type *user_ptr)
+{
+    msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
+    (void)project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
     return TRUE;
 }
