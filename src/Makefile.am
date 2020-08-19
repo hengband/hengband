@@ -672,6 +672,7 @@ hengband_SOURCES = \
 	save/save.c save/save.h \
 	save/save-util.c save/save-util.h \
 	\
+	specific-object/blade-turner.c specific-object/blade-turner.h \
 	specific-object/bloody-moon.c specific-object/bloody-moon.h \
 	specific-object/bow.c specific-object/bow.h \
 	specific-object/chest.c specific-object/chest.h \

@@ -1,3 +1,9 @@
+/*!
+ * @brief 発動処理その他 (肥大化しがちなので適宜まとまりを別ファイルへ分割すること)
+ * @date 2020/08/19
+ * @author Hourier
+ */
+
 #include "object-activation/activation-others.h"
 #include "art-definition/art-weapon-types.h"
 #include "cmd-io/cmd-save.h"

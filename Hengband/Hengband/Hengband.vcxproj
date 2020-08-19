@@ -307,6 +307,7 @@
     <ClCompile Include="..\..\src\object-activation\activation-charm.c" />
     <ClCompile Include="..\..\src\object-activation\activation-resistance.c" />
     <ClCompile Include="..\..\src\object-activation\activation-util.c" />
+    <ClCompile Include="..\..\src\specific-object\blade-turner.c" />
     <ClCompile Include="..\..\src\specific-object\monster-ball.c" />
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
     <ClCompile Include="..\..\src\player\player-status-flags.c" />
@@ -924,6 +925,7 @@
     <ClInclude Include="..\..\src\object-activation\activation-charm.h" />
     <ClInclude Include="..\..\src\object-activation\activation-resistance.h" />
     <ClInclude Include="..\..\src\object-activation\activation-util.h" />
+    <ClInclude Include="..\..\src\specific-object\blade-turner.h" />
     <ClInclude Include="..\..\src\specific-object\monster-ball.h" />
     <ClInclude Include="..\..\src\object-use\read-execution.h" />
     <ClInclude Include="..\..\src\player\player-status-flags.h" />

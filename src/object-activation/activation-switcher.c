@@ -61,6 +61,7 @@
 #include "player/player-race-types.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
+#include "specific-object/blade-turner.h"
 #include "specific-object/bloody-moon.h"
 #include "specific-object/death-crimson.h"
 #include "specific-object/muramasa.h"
@@ -111,27 +112,6 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-bool activate_bladeturner(player_type *user_ptr)
-{
-    DIRECTION dir;
-    if (!get_aim_dir(user_ptr, &dir))
-        return FALSE;
-
-    msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
-    fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
-    msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
-    (void)set_afraid(user_ptr, 0);
-    (void)set_hero(user_ptr, randint1(50) + 50, FALSE);
-    (void)hp_player(user_ptr, 10);
-    (void)set_blessed(user_ptr, randint1(50) + 50, FALSE);
-    (void)set_oppose_acid(user_ptr, randint1(50) + 50, FALSE);
-    (void)set_oppose_elec(user_ptr, randint1(50) + 50, FALSE);
-    (void)set_oppose_fire(user_ptr, randint1(50) + 50, FALSE);
-    (void)set_oppose_cold(user_ptr, randint1(50) + 50, FALSE);
-    (void)set_oppose_pois(user_ptr, randint1(50) + 50, FALSE);
-    return TRUE;
-}
 
 bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
 {
