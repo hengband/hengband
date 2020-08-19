@@ -72,7 +72,7 @@ void torch_lost_fuel(object_type *o_ptr)
 void calc_lite_radius(player_type *creature_ptr)
 {
     creature_ptr->cur_lite = 0;
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)

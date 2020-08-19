@@ -181,7 +181,7 @@ static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
     if (!use_menu)
         return;
 
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
+    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++)
         if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], fis_ptr->tval) || (fis_ptr->mode & USE_FULL))
             fis_ptr->max_equip++;
 }

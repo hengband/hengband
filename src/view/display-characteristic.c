@@ -133,7 +133,7 @@ static void decide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, i
 static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, byte *header_color, bool vuln)
 {
 	int max_i = (mode & DP_WP) ? INVEN_LARM + 1 : INVEN_TOTAL;
-	for (int i = INVEN_RARM; i < max_i; i++)
+	for (inventory_slot_type i = INVEN_RARM; i < max_i; i++)
 	{
 		BIT_FLAGS flags[TR_FLAG_SIZE];
 		object_type *o_ptr;

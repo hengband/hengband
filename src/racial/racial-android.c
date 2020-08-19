@@ -59,7 +59,7 @@ void calc_android_exp(player_type *creature_ptr)
     if (creature_ptr->is_dead || (creature_ptr->prace != RACE_ANDROID))
         return;
 
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         object_type forge;
         object_type *q_ptr = &forge;

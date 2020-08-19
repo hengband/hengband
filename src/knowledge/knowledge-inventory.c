@@ -217,7 +217,7 @@ static void show_wearing_equipment_resistances(player_type *creature_ptr, tval_t
 {
     char where[32];
     strcpy(where, _("装", "E "));
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;

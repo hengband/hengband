@@ -71,7 +71,7 @@ void known_obj_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
 	for (int i = 0; i < TR_FLAG_SIZE; i++)
 		flags[i] = 0L;
 
-	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		u32b o_flags[TR_FLAG_SIZE];
 		object_type *o_ptr;

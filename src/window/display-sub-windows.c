@@ -206,7 +206,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
     TERM_COLOR attr = TERM_WHITE;
     char tmp_val[80];
     GAME_TEXT o_name[MAX_NLEN];
-    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         o_ptr = &owner_ptr->inventory_list[i];
         tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
