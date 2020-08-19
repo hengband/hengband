@@ -22702,7 +22702,7 @@ F:IM_FIRE | RES_NETH | NO_FEAR | HURT_COLD | DROP_60
 S:1_IN_9
 S:SCARE | BLIND | CONF | HOLD
 S:BA_FIRE | BO_NETH | BO_PLAS
-D:$This ogre is the one of the weakest resitents in the hell.
+D:$This ogre is the one of the weakest residents in hell.
 D:$  It hits sinners and gives punishment to them in the blood pond.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
 D:それは罪人を殴りつけ、血の池で劫罰を与え続ける。
@@ -22720,7 +22720,7 @@ F:IM_COLD | RES_NETH | NO_FEAR | HURT_FIRE | DROP_60
 S:1_IN_9
 S:SCARE | BLIND | CONF | HOLD
 S:BA_COLD | BO_NETH | BO_ICEE
-D:$This ogre is the one of the weakest resitents in the hell.
+D:$This ogre is the one of the weakest residents in hell.
 D:$  It hashes sinners and gives punishment to them on the mountain of needles.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
 D:それは罪人を斬りつけ、針の山で劫罰を与え続ける。
@@ -22738,8 +22738,8 @@ F:IM_FIRE | IM_COLD | RES_NETH | NO_FEAR | DROP_60
 S:1_IN_9
 S:SCARE | BLIND | CONF | HOLD
 S:BO_PLAS | BO_ICEE | BO_NETH
-D:$This ogre is the one of the weakest resitents in the hell.
-D:$  It slahes sinners and gives punishment to them by its heated axe.
+D:$This ogre is the one of the weakest residents in hell.
+D:$  It slashes sinners and gives punishment to them with its heated axe.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
 D:それは罪人を斬りつけ、灼けた斧で劫罰を与え続ける。
 
@@ -22787,13 +22787,11 @@ B:SLASH:SUPERHURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
 F:DROP_CORPSE | DROP_SKELETON | HURT_LITE
 F:IM_FIRE | RES_DARK | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
-S:1_IN_8
 S:SCARE | BLIND | CONF | HOLD | BO_NETH | BR_NETH
-D:$It is a ogre who guards Styx following its masters.
-D:$  It destroys cairn piled up by children having died before parents.
+D:$It is an ogre who guards Styx following its masters.
+D:$ their parents.
 D:奪衣婆と懸衣翁に仕え、三途の川に佇む鬼だ。
 D:それは時々賽の河原を見回って、積石塚を破壊して回る。
-
 N:1131:土の鬼
 E:Earth ogre
 G:O:u
@@ -22810,7 +22808,7 @@ S:SCARE | BLIND | CONF | HOLD
 S:BR_WALL | BA_NETH | BR_PLAS | S_DEMON
 R:1125:5d3
 D:$This ogre has earthy colored skin.
-D:$  It doesn't only punish sinners but also leads lower-class ogres.
+D:$  Besides punishing sinners, it also leads lower-class ogres.
 D:土気色の肌をした鬼だ。
 D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
 
@@ -22830,7 +22828,7 @@ S:SCARE | BLIND | CONF | HOLD
 S:BO_WATE | BA_WATE | BA_NETH | S_DEMON
 R:1126:5d3
 D:$This ogre has stagnant river colored skin.
-D:$  It doesn't only punish sinners but also leads lower-class ogres.
+D:$  Besides punishing sinners, it also leads lower-class ogres.
 D:淀んだ川の色の肌をした鬼だ。
 D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
 
@@ -22851,7 +22849,7 @@ S:SCARE | BLIND | CONF | HOLD
 S:BA_NUKE | BA_NETH | BR_GRAV | S_DEMON
 R:1127:5d3
 D:$It lives in Rajoumon.
-D:$  It doesn't only punish sinners but also leads lower-class ogres.
+D:$  Besides punishing sinners, it also leads lower-class ogres.
 D:羅生門に巣食う鬼だ。
 D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
 
@@ -22871,7 +22869,7 @@ F:NO_FEAR | NO_CONF | NO_SLEEP | CAN_SWIM
 S:1_IN_5
 S:BLIND | CONF | HOLD | SCARE
 S:BO_NETH | BR_NETH | BA_NETH | CAUSE_4 | S_KIN
-D:$Be honest with him. Otherwise he will send you to hell straight.
+D:$Be honest with him. Otherwise, he will send you straight to hell.
 D:彼の前では正直でいることだ。さもなくば地獄へ一直線だろう。
 
 N:1135:狂気を紡ぎしもの『アブドゥル・アルハザード』
@@ -22894,15 +22892,15 @@ S:S_HI_UNDEAD | S_DEMON | DISPEL
 D:$Undoubtedly, it was this man who released the cursed artifacts
 D:$ and called upon the great old ones who came from the outside world
 D:$ and settled in Llouis.
-D:$  It is told that his book, Necronomicon, namely stargate to the abyss,
-D:$ is still slept somewhere in the land.
+D:$  It is said that his book, Necronomicon, namely stargate to the abyss,
+D:$ still sleeps somewhere in the land.
 D:呪われしアーティファクトを世に解き放ち、
 D:外界より来たりてルルイエに住み着いた旧支配者達を呼び寄せたのは、
 D:紛れもなくこの男である。
 D:彼の著した深淵の書『ネクロノミコン』は、今もこの地のどこかに眠ると云う。
 
 N:1136:スケイヴン・ウォーリア
-E:Skaven warriar
+E:Skaven warrior
 G:r:u
 I:110:11d11:20:10:25
 W:12:1:0:48:0:0
