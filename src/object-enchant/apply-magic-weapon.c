@@ -208,20 +208,6 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
                     if (one_in_(3))
                         o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
                     break;
-                case EGO_WEIRD:
-                    if (one_in_(4))
-                        add_flag(o_ptr->art_flags, TR_BRAND_POIS);
-                    if (one_in_(4))
-                        add_flag(o_ptr->art_flags, TR_RES_NETHER);
-                    if (one_in_(3))
-                        add_flag(o_ptr->art_flags, TR_NO_MAGIC);
-                    if (one_in_(6))
-                        add_flag(o_ptr->art_flags, TR_NO_TELE);
-                    if (one_in_(6))
-                        add_flag(o_ptr->art_flags, TR_TY_CURSE);
-                    if (one_in_(6))
-                        add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
-                    break;
                 }
             }
         }
