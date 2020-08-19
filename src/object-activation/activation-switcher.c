@@ -205,9 +205,101 @@ bool activate_aggravation(player_type *user_ptr, object_type *o_ptr, concptr nam
     return TRUE;
 }
 
-bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
+bool activate_stone_mud(player_type *user_ptr)
 {
     DIRECTION dir;
+    msg_print(_("鼓動している...", "It pulsates..."));
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    wall_to_mud(user_ptr, dir, 20 + randint1(30));
+    return TRUE;
+}
+
+bool activate_judgement(player_type *user_ptr, concptr name)
+{
+    msg_format(_("%sは赤く明るく光った！", "The %s flashes bright red!"), name);
+    chg_virtue(user_ptr, V_KNOWLEDGE, 1);
+    chg_virtue(user_ptr, V_ENLIGHTEN, 1);
+    wiz_lite(user_ptr, FALSE);
+
+    msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
+    take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);
+
+    (void)detect_traps(user_ptr, DETECT_RAD_DEFAULT, TRUE);
+    (void)detect_doors(user_ptr, DETECT_RAD_DEFAULT);
+    (void)detect_stairs(user_ptr, DETECT_RAD_DEFAULT);
+
+    if (get_check(_("帰還の力を使いますか？", "Activate recall? ")))
+        (void)recall_player(user_ptr, randint0(21) + 15);
+
+    return TRUE;
+}
+
+bool activate_telekinesis(player_type *user_ptr, concptr name)
+{
+    DIRECTION dir;
+    if (!get_aim_dir(user_ptr, &dir))
+        return FALSE;
+
+    msg_format(_("%sを伸ばした。", "You stretched your %s."), name);
+    fetch_item(user_ptr, dir, 500, TRUE);
+    return TRUE;
+}
+
+bool activate_unique_detection(player_type *user_ptr)
+{
+    monster_type *m_ptr;
+    monster_race *r_ptr;
+    msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
+    for (int i = user_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
+        m_ptr = &user_ptr->current_floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr))
+            continue;
+
+        r_ptr = &r_info[m_ptr->r_idx];
+        if (r_ptr->flags1 & RF1_UNIQUE)
+            msg_format(_("%s． ", "%s. "), r_name + r_ptr->name);
+    }
+
+    return TRUE;
+}
+
+bool activate_escape(player_type *user_ptr)
+{
+    switch (randint1(13)) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+        teleport_player(user_ptr, 10, TELEPORT_SPONTANEOUS);
+        return TRUE;
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+        teleport_player(user_ptr, 222, TELEPORT_SPONTANEOUS);
+        return TRUE;
+    case 11:
+    case 12:
+        (void)stair_creation(user_ptr);
+        return TRUE;
+    default:
+        if (!get_check(_("この階を去りますか？", "Leave this level? ")))
+            return TRUE;
+
+        if (autosave_l)
+            do_cmd_save_game(user_ptr, TRUE);
+
+        user_ptr->leaving = TRUE;
+        return TRUE;
+    }
+}
+
+bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
+{
     switch (act_ptr->index) {
     case ACT_SUNLIGHT:
         return activate_sunlight(user_ptr);
@@ -493,12 +585,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         destroy_doors_touch(user_ptr);
         return TRUE;
     case ACT_STONE_MUD:
-        msg_print(_("鼓動している...", "It pulsates..."));
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        wall_to_mud(user_ptr, dir, 20 + randint1(30));
-        return TRUE;
+        return activate_stone_mud(user_ptr);
     case ACT_RECHARGE:
         recharge(user_ptr, 130);
         return TRUE;
@@ -517,75 +604,13 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         msg_print(_("やわらかな白色に輝いている...", "It glows soft white..."));
         return recall_player(user_ptr, randint0(21) + 15);
     case ACT_JUDGE:
-        msg_format(_("%sは赤く明るく光った！", "The %s flashes bright red!"), name);
-        chg_virtue(user_ptr, V_KNOWLEDGE, 1);
-        chg_virtue(user_ptr, V_ENLIGHTEN, 1);
-        wiz_lite(user_ptr, FALSE);
-
-        msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
-        take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);
-
-        (void)detect_traps(user_ptr, DETECT_RAD_DEFAULT, TRUE);
-        (void)detect_doors(user_ptr, DETECT_RAD_DEFAULT);
-        (void)detect_stairs(user_ptr, DETECT_RAD_DEFAULT);
-
-        if (get_check(_("帰還の力を使いますか？", "Activate recall? ")))
-            (void)recall_player(user_ptr, randint0(21) + 15);
-
-        return TRUE;
+        return activate_judgement(user_ptr, name);
     case ACT_TELEKINESIS:
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        msg_format(_("%sを伸ばした。", "You stretched your %s."), name);
-        fetch_item(user_ptr, dir, 500, TRUE);
-        return TRUE;
-    case ACT_DETECT_UNIQUE: {
-        monster_type *m_ptr;
-        monster_race *r_ptr;
-        msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
-        for (int i = user_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-            m_ptr = &user_ptr->current_floor_ptr->m_list[i];
-            if (!monster_is_valid(m_ptr))
-                continue;
-
-            r_ptr = &r_info[m_ptr->r_idx];
-            if (r_ptr->flags1 & RF1_UNIQUE)
-                msg_format(_("%s． ", "%s. "), r_name + r_ptr->name);
-        }
-
-        return TRUE;
-    }
+        return activate_telekinesis(user_ptr, name);
+    case ACT_DETECT_UNIQUE:
+        return activate_unique_detection(user_ptr);
     case ACT_ESCAPE:
-        switch (randint1(13)) {
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-            teleport_player(user_ptr, 10, TELEPORT_SPONTANEOUS);
-            return TRUE;
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-            teleport_player(user_ptr, 222, TELEPORT_SPONTANEOUS);
-            return TRUE;
-        case 11:
-        case 12:
-            (void)stair_creation(user_ptr);
-            return TRUE;
-        default:
-            if (!get_check(_("この階を去りますか？", "Leave this level? ")))
-                return TRUE;
-
-            if (autosave_l)
-                do_cmd_save_game(user_ptr, TRUE);
-
-            user_ptr->leaving = TRUE;
-            return TRUE;
-        }
+        return activate_escape(user_ptr);
     case ACT_DISP_CURSE_XTRA:
         msg_format(_("%sが真実を照らし出す...", "The %s exhibits the truth..."), name);
         (void)remove_all_curse(user_ptr);
@@ -614,22 +639,10 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         (void)detect_monsters_invis(user_ptr, 255);
         (void)detect_monsters_normal(user_ptr, 255);
         return TRUE;
-    case ACT_ULTIMATE_RESIST: {
-        TIME_EFFECT v = randint1(25) + 25;
-        (void)set_afraid(user_ptr, 0);
-        (void)set_hero(user_ptr, v, FALSE);
-        (void)hp_player(user_ptr, 10);
-        (void)set_blessed(user_ptr, v, FALSE);
-        (void)set_oppose_acid(user_ptr, v, FALSE);
-        (void)set_oppose_elec(user_ptr, v, FALSE);
-        (void)set_oppose_fire(user_ptr, v, FALSE);
-        (void)set_oppose_cold(user_ptr, v, FALSE);
-        (void)set_oppose_pois(user_ptr, v, FALSE);
-        (void)set_ultimate_res(user_ptr, v, FALSE);
-        return TRUE;
-    }
+    case ACT_ULTIMATE_RESIST:
+        return activate_ultimate_resistance(user_ptr);
     case ACT_CAST_OFF:
-        cosmic_cast_off(user_ptr, o_ptr);
+        (void)cosmic_cast_off(user_ptr, o_ptr);
         return TRUE;
     case ACT_FALLING_STAR:
         msg_print(_("あなたは妖刀に魅入られた…", "You are enchanted by cursed blade..."));
@@ -638,7 +651,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         return TRUE;
     case ACT_GRAND_CROSS:
         msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
-        project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+        (void)project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
         return TRUE;
     case ACT_TELEPORT_LEVEL:
         if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))

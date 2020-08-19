@@ -1,7 +1,11 @@
 #include "object-activation/activation-resistance.h"
+#include "core/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
+#include "status/bad-status-setter.h"
+#include "status/buff-setter.h"
 #include "status/element-resistance.h"
+#include "status/temporary-resistance.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/object-type-definition.h"
 #include "target/target-getter.h"
@@ -117,5 +121,21 @@ bool activate_resistance_pois(player_type *user_ptr, concptr name)
 {
     msg_format(_("%s‚ª—Î‚É‹P‚¢‚½...", "The %s grows green."), name);
     (void)set_oppose_pois(user_ptr, randint1(20) + 20, FALSE);
+    return TRUE;
+}
+
+bool activate_ultimate_resistance(player_type *user_ptr)
+{
+    TIME_EFFECT v = randint1(25) + 25;
+    (void)set_afraid(user_ptr, 0);
+    (void)set_hero(user_ptr, v, FALSE);
+    (void)hp_player(user_ptr, 10);
+    (void)set_blessed(user_ptr, v, FALSE);
+    (void)set_oppose_acid(user_ptr, v, FALSE);
+    (void)set_oppose_elec(user_ptr, v, FALSE);
+    (void)set_oppose_fire(user_ptr, v, FALSE);
+    (void)set_oppose_cold(user_ptr, v, FALSE);
+    (void)set_oppose_pois(user_ptr, v, FALSE);
+    (void)set_ultimate_res(user_ptr, v, FALSE);
     return TRUE;
 }
