@@ -363,6 +363,7 @@
     <ClCompile Include="..\..\src\save\monster-writer.c" />
     <ClCompile Include="..\..\src\save\player-writer.c" />
     <ClCompile Include="..\..\src\save\save-util.c" />
+    <ClCompile Include="..\..\src\object-activation\activation-others.c" />
     <ClCompile Include="..\..\src\specific-object\bloody-moon.c" />
     <ClCompile Include="..\..\src\specific-object\death-crimson.c" />
     <ClCompile Include="..\..\src\specific-object\muramasa.c" />
@@ -989,6 +990,7 @@
     <ClInclude Include="..\..\src\save\monster-writer.h" />
     <ClInclude Include="..\..\src\save\player-writer.h" />
     <ClInclude Include="..\..\src\save\save-util.h" />
+    <ClInclude Include="..\..\src\object-activation\activation-others.h" />
     <ClInclude Include="..\..\src\specific-object\bloody-moon.h" />
     <ClInclude Include="..\..\src\specific-object\death-crimson.h" />
     <ClInclude Include="..\..\src\specific-object\muramasa.h" />

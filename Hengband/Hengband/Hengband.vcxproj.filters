@@ -2060,6 +2060,9 @@
     <ClCompile Include="..\..\src\specific-object\ring-of-power.c">
       <Filter>specific-object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-others.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4470,6 +4473,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\specific-object\ring-of-power.h">
       <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-others.h">
+      <Filter>object-activation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
