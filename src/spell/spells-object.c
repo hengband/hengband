@@ -6,7 +6,6 @@
 
 #include "spell/spells-object.h"
 #include "action/action-limited.h"
-#include "art-definition/art-weapon-types.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
@@ -830,43 +829,6 @@ bool perilous_secrets(player_type *user_ptr)
     if (one_in_(20))
         take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"), -1);
     return TRUE;
-}
-
-/*!
- * @brief 固定アーティファクト『ブラッディムーン』の特性を変更する。
- * @details スレイ2d2種、及びone_resistance()による耐性1d2種、pval2種を得る。
- * @param o_ptr 対象のオブジェクト構造体（ブラッディムーン）のポインタ
- * @return なし
- */
-void get_bloody_moon_flags(object_type *o_ptr)
-{
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        o_ptr->art_flags[i] = a_info[ART_BLOOD].flags[i];
-
-    int dummy = randint1(2) + randint1(2);
-    for (int i = 0; i < dummy; i++) {
-        int flag = randint0(26);
-        if (flag >= 20)
-            add_flag(o_ptr->art_flags, TR_KILL_UNDEAD + flag - 20);
-        else if (flag == 19)
-            add_flag(o_ptr->art_flags, TR_KILL_ANIMAL);
-        else if (flag == 18)
-            add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
-        else
-            add_flag(o_ptr->art_flags, TR_CHAOTIC + flag);
-    }
-
-    dummy = randint1(2);
-    for (int i = 0; i < dummy; i++)
-        one_resistance(o_ptr);
-
-    for (int i = 0; i < 2; i++) {
-        int tmp = randint0(11);
-        if (tmp < A_MAX)
-            add_flag(o_ptr->art_flags, TR_STR + tmp);
-        else
-            add_flag(o_ptr->art_flags, TR_STEALTH + tmp - 6);
-    }
 }
 
 /*!

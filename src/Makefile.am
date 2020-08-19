@@ -538,8 +538,13 @@ hengband_SOURCES = \
 	object/object-mark-types.h \
 	object/item-use-flags.h \
 	\
+	object-activation/activation-bolt-ball.c object-activation/activation-bolt-ball.h \
 	object-activation/activation-breath.c object-activation/activation-breath.h \
-	object-activation/acrivation-switcher.c object-activation/acrivation-switcher.h \
+	object-activation/activation-charm.c object-activation/activation-charm.h \
+	object-activation/activation-others.c object-activation/activation-others.h \
+	object-activation/activation-resistance.c object-activation/activation-resistance.h \
+	object-activation/activation-switcher.c object-activation/activation-switcher.h \
+	object-activation/activation-teleport.c object-activation/activation-teleport.h \
 	\
 	object-enchant/activation-info-table.c object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.c object-enchant/apply-magic.h \
@@ -668,10 +673,16 @@ hengband_SOURCES = \
 	save/save.c save/save.h \
 	save/save-util.c save/save-util.h \
 	\
+	specific-object/blade-turner.c specific-object/blade-turner.h \
+	specific-object/bloody-moon.c specific-object/bloody-moon.h \
 	specific-object/bow.c specific-object/bow.h \
 	specific-object/chest.c specific-object/chest.h \
 	specific-object/death-crimson.c specific-object/death-crimson.h \
 	specific-object/death-scythe.c specific-object/death-scythe.h \
+	specific-object/monster-ball.c specific-object/monster-ball.h \
+	specific-object/muramasa.c specific-object/muramasa.h \
+	specific-object/ring-of-power.c specific-object/ring-of-power.h \
+	specific-object/toragoroshi.c specific-object/toragoroshi.h \
 	specific-object/torch.c specific-object/torch.h \
 	\
 	spell/process-effect.c spell/process-effect.h \

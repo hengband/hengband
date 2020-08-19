@@ -2042,6 +2042,42 @@
     <ClCompile Include="..\..\src\object-activation\activation-switcher.c">
       <Filter>object-activation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-bolt-ball.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-charm.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-resistance.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\muramasa.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\bloody-moon.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\ring-of-power.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-others.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\monster-ball.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-util.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\blade-turner.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-teleport.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\toragoroshi.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4434,6 +4470,42 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-activation\activation-switcher.h">
       <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-bolt-ball.h">
+      <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-charm.h">
+      <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-resistance.h">
+      <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\muramasa.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\bloody-moon.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\ring-of-power.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-others.h">
+      <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\monster-ball.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-util.h">
+      <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\blade-turner.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-teleport.h">
+      <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\toragoroshi.h">
+      <Filter>specific-object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

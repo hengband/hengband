@@ -24,7 +24,7 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "spell/spells-object.h"
+#include "specific-object/bloody-moon.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"

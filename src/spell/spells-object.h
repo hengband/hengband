@@ -13,7 +13,6 @@ bool curse_weapon_object(player_type *creature_ptr, bool force, object_type *o_p
 bool rustproof(player_type *caster_ptr);
 void brand_bolts(player_type *caster_ptr);
 bool perilous_secrets(player_type *user_ptr);
-void get_bloody_moon_flags(object_type *o_ptr);
 void phlogiston(player_type *caster_ptr);
 bool bless_weapon(player_type *caster_ptr);
 bool pulish_shield(player_type *caster_ptr);

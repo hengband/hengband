@@ -2,4 +2,4 @@
 
 #include "system/angband.h"
 
-bool fire_crimson(player_type *shooter_ptr);
+bool activate_crimson(player_type *user_ptr, object_type *o_ptr);

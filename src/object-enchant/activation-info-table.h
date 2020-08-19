@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct {
+typedef struct activation_type {
     concptr flag;
     byte index;
     byte level;
