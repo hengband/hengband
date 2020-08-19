@@ -61,6 +61,7 @@
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
 #include "specific-object/death-crimson.h"
+#include "specific-object/muramasa.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-beam.h"
@@ -296,6 +297,15 @@ bool activate_escape(player_type *user_ptr)
         user_ptr->leaving = TRUE;
         return TRUE;
     }
+}
+
+bool activate_teleport_level(player_type *user_ptr)
+{
+    if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))
+        return FALSE;
+
+    teleport_level(user_ptr, 0);
+    return TRUE;
 }
 
 bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
@@ -654,11 +664,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         (void)project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
         return TRUE;
     case ACT_TELEPORT_LEVEL:
-        if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))
-            return FALSE;
-
-        teleport_level(user_ptr, 0);
-        return TRUE;
+        return activate_teleport_level(user_ptr);
     case ACT_STRAIN_HASTE:
         msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
         take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"), -1);
@@ -670,20 +676,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         mitokohmon(user_ptr);
         return TRUE;
     case ACT_MURAMASA:
-        if (o_ptr->name1 != ART_MURAMASA)
-            return FALSE;
-
-        if (!get_check(_("本当に使いますか？", "Are you sure?!")))
-            return TRUE;
-
-        msg_print(_("村正が震えた．．．", "The Muramasa pulsates..."));
-        do_inc_stat(user_ptr, A_STR);
-        if (one_in_(2)) {
-            msg_print(_("村正は壊れた！", "The Muramasa is destroyed!"));
-            curse_weapon_object(user_ptr, TRUE, o_ptr);
-        }
-
-        return TRUE;
+        return activate_muramasa(user_ptr, o_ptr);
     case ACT_BLOODY_MOON:
         if (o_ptr->name1 != ART_BLOOD)
             return FALSE;

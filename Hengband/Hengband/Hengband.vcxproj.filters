@@ -2051,6 +2051,9 @@
     <ClCompile Include="..\..\src\object-activation\activation-resistance.c">
       <Filter>object-activation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\muramasa.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4452,6 +4455,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-activation\activation-resistance.h">
       <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\muramasa.h">
+      <Filter>specific-object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

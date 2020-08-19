@@ -675,6 +675,7 @@ hengband_SOURCES = \
 	specific-object/chest.c specific-object/chest.h \
 	specific-object/death-crimson.c specific-object/death-crimson.h \
 	specific-object/death-scythe.c specific-object/death-scythe.h \
+	specific-object/muramasa.c specific-object/muramasa.h \
 	specific-object/torch.c specific-object/torch.h \
 	\
 	spell/process-effect.c spell/process-effect.h \
