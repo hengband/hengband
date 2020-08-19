@@ -566,6 +566,7 @@ hengband_SOURCES = \
 	object-activation/activation-resistance.c object-activation/activation-resistance.h \
 	object-activation/activation-switcher.c object-activation/activation-switcher.h \
 	object-activation/activation-teleport.c object-activation/activation-teleport.h \
+	object-activation/activation-util.c object-activation/activation-util.h \
 	\
 	object-enchant/activation-info-table.c object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.c object-enchant/apply-magic.h \
