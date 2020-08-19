@@ -779,19 +779,16 @@ void have_hold_exp(player_type *creature_ptr)
         creature_ptr->hold_exp = TRUE;
     }
 
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_HOBBIT) {
+    if (is_specific_player_race(creature_ptr, RACE_HOBBIT) || is_specific_player_race(creature_ptr, RACE_SKELETON) ||
+        is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_VAMPIRE) ||
+		is_specific_player_race(creature_ptr, RACE_SPECTRE) || is_specific_player_race(creature_ptr, RACE_BALROG) ||
+        is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->hold_exp = TRUE;
     }
 
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_GOLEM) {
+    if (is_specific_player_race(creature_ptr, RACE_GOLEM)) {
         if (creature_ptr->lev > 34)
             creature_ptr->hold_exp = TRUE;
-    }
-
-    if (!creature_ptr->mimic_form
-        && (creature_ptr->prace == RACE_SKELETON || creature_ptr->prace == RACE_ZOMBIE || creature_ptr->prace == RACE_VAMPIRE
-            || creature_ptr->prace == RACE_SPECTRE || creature_ptr->prace == RACE_BALROG || creature_ptr->prace == RACE_ANDROID)) {
-        creature_ptr->hold_exp = TRUE;
     }
 
     if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
