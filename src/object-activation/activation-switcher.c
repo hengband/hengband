@@ -13,6 +13,7 @@
 #include "object-activation/activation-charm.h"
 #include "object-activation/activation-others.h"
 #include "object-activation/activation-resistance.h"
+#include "object-activation/activation-teleport.h"
 #include "object-enchant/activation-info-table.h"
 #include "player-attack/player-attack.h"
 #include "player/digestion-processor.h"

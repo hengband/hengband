@@ -2072,6 +2072,9 @@
     <ClCompile Include="..\..\src\specific-object\blade-turner.c">
       <Filter>specific-object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-teleport.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4494,6 +4497,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\specific-object\blade-turner.h">
       <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-teleport.h">
+      <Filter>object-activation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

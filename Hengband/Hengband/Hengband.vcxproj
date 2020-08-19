@@ -306,6 +306,7 @@
     <ClCompile Include="..\..\src\object-activation\activation-breath.c" />
     <ClCompile Include="..\..\src\object-activation\activation-charm.c" />
     <ClCompile Include="..\..\src\object-activation\activation-resistance.c" />
+    <ClCompile Include="..\..\src\object-activation\activation-teleport.c" />
     <ClCompile Include="..\..\src\object-activation\activation-util.c" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.c" />
     <ClCompile Include="..\..\src\specific-object\monster-ball.c" />
@@ -924,6 +925,7 @@
     <ClInclude Include="..\..\src\object-activation\activation-breath.h" />
     <ClInclude Include="..\..\src\object-activation\activation-charm.h" />
     <ClInclude Include="..\..\src\object-activation\activation-resistance.h" />
+    <ClInclude Include="..\..\src\object-activation\activation-teleport.h" />
     <ClInclude Include="..\..\src\object-activation\activation-util.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />
     <ClInclude Include="..\..\src\specific-object\monster-ball.h" />
