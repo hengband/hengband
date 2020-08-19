@@ -2048,6 +2048,9 @@
     <ClCompile Include="..\..\src\object-activation\activation-charm.c">
       <Filter>object-activation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-resistance.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4445,6 +4448,9 @@
       <Filter>object-activation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-activation\activation-charm.h">
+      <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-resistance.h">
       <Filter>object-activation</Filter>
     </ClInclude>
   </ItemGroup>

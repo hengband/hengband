@@ -41,6 +41,7 @@
 #include "object-activation/activation-bolt-ball.h"
 #include "object-activation/activation-breath.h"
 #include "object-activation/activation-charm.h"
+#include "object-activation/activation-resistance.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object-enchant/object-ego.h"
@@ -418,13 +419,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         (void)set_protevil(user_ptr, randint1(25) + user_ptr->lev * 3, FALSE);
         return TRUE;
     case ACT_RESIST_ALL:
-        msg_print(_("様々な色に輝いている...", "It glows many colours..."));
-        (void)set_oppose_acid(user_ptr, randint1(40) + 40, FALSE);
-        (void)set_oppose_elec(user_ptr, randint1(40) + 40, FALSE);
-        (void)set_oppose_fire(user_ptr, randint1(40) + 40, FALSE);
-        (void)set_oppose_cold(user_ptr, randint1(40) + 40, FALSE);
-        (void)set_oppose_pois(user_ptr, randint1(40) + 40, FALSE);
-        return TRUE;
+        return activate_resistance_elements(user_ptr);
     case ACT_SPEED:
         msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
         (void)set_fast(user_ptr, randint1(20) + 20, FALSE);
@@ -447,53 +442,15 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         (void)heroism(user_ptr, 50);
         return TRUE;
     case ACT_RESIST_ACID:
-        msg_format(_("%sが黒く輝いた...", "The %s grows black."), name);
-        if ((o_ptr->tval != TV_RING) || (o_ptr->sval != SV_RING_ACID))
-            return TRUE;
-
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_ACID, dir, 100, 2);
-        (void)set_oppose_acid(user_ptr, randint1(20) + 20, FALSE);
-        return TRUE;
+        return activate_resistance_acid(user_ptr, o_ptr, name);
     case ACT_RESIST_FIRE:
-        msg_format(_("%sが赤く輝いた...", "The %s grows red."), name);
-        if ((o_ptr->tval != TV_RING) || (o_ptr->sval != SV_RING_FLAMES))
-            return TRUE;
-
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
-        (void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
-        return TRUE;
+        return activate_resistance_fire(user_ptr, o_ptr, name);
     case ACT_RESIST_COLD:
-        msg_format(_("%sが白く輝いた...", "The %s grows white."), name);
-        if ((o_ptr->tval != TV_RING) || (o_ptr->sval != SV_RING_ICE))
-            return TRUE;
-
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_COLD, dir, 100, 2);
-        (void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
-        return TRUE;
+        return activate_resistance_cold(user_ptr, o_ptr, name);
     case ACT_RESIST_ELEC:
-        msg_format(_("%sが青く輝いた...", "The %s grows blue."), name);
-        if ((o_ptr->tval != TV_RING) || (o_ptr->sval != SV_RING_ELEC))
-            return TRUE;
-
-        if (!get_aim_dir(user_ptr, &dir))
-            return FALSE;
-
-        (void)fire_ball(user_ptr, GF_ELEC, dir, 100, 2);
-        (void)set_oppose_elec(user_ptr, randint1(20) + 20, FALSE);
-        return TRUE;
+        return activate_resistance_elec(user_ptr, o_ptr, name);
     case ACT_RESIST_POIS:
-        msg_format(_("%sが緑に輝いた...", "The %s grows green."), name);
-        (void)set_oppose_pois(user_ptr, randint1(20) + 20, FALSE);
-        return TRUE;
+        return activate_resistance_pois(user_ptr, name);
     case ACT_LIGHT:
         msg_format(_("%sから澄んだ光があふれ出た...", "The %s wells with clear light..."), name);
         lite_area(user_ptr, damroll(2, 15), 3);
