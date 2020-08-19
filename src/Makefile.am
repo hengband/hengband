@@ -677,6 +677,7 @@ hengband_SOURCES = \
 	specific-object/chest.c specific-object/chest.h \
 	specific-object/death-crimson.c specific-object/death-crimson.h \
 	specific-object/death-scythe.c specific-object/death-scythe.h \
+	specific-object/monster-ball.c specific-object/monster-ball.h \
 	specific-object/muramasa.c specific-object/muramasa.h \
 	specific-object/ring-of-power.c specific-object/ring-of-power.h \
 	specific-object/torch.c specific-object/torch.h \
