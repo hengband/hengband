@@ -23,7 +23,6 @@ hengband_SOURCES = \
 	artifact/random-art-activation.c artifact/random-art-activation.h \
 	artifact/random-art-bias-types.h \
 	artifact/random-art-characteristics.c artifact/random-art-characteristics.h \
-	artifact/fixed-art-generator.c artifact/fixed-art-generator.h \
 	artifact/random-art-generator.c artifact/random-art-generator.h \
 	artifact/random-art-misc.c artifact/random-art-misc.h \
 	artifact/random-art-pval-investor.c artifact/random-art-pval-investor.h \
@@ -101,7 +100,6 @@ hengband_SOURCES = \
 	cmd-action/cmd-racial.c cmd-action/cmd-racial.h \
 	cmd-action/cmd-shoot.c cmd-action/cmd-shoot.h \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
-	cmd-action/cmd-throw.c cmd-action/cmd-throw.h \
 	cmd-action/cmd-travel.c cmd-action/cmd-travel.h \
 	cmd-action/cmd-tunnel.c cmd-action/cmd-tunnel.h \
 	\
@@ -130,6 +128,7 @@ hengband_SOURCES = \
 	cmd-item/cmd-quaff.c cmd-item/cmd-quaff.h \
 	cmd-item/cmd-read.c cmd-item/cmd-read.h \
 	cmd-item/cmd-smith.c cmd-item/cmd-smith.h \
+	cmd-item/cmd-throw.c cmd-item/cmd-throw.h \
 	cmd-item/cmd-usestaff.c cmd-item/cmd-usestaff.h \
 	cmd-item/cmd-zaprod.c cmd-item/cmd-zaprod.h \
 	cmd-item/cmd-zapwand.c cmd-item/cmd-zapwand.h \
@@ -346,6 +345,7 @@ hengband_SOURCES = \
 	load/load-util.c load/load-util.h \
 	load/load-v1-3-0.c load/load-v1-3-0.h \
 	load/load-v1-5-0.c load/load-v1-5-0.h \
+	load/load-v1-7-0.c load/load-v1-7-0.h \
 	load/load-zangband.c load/load-zangband.h \
 	load/quest-loader.c load/quest-loader.h \
 	load/load.c load/load.h \
@@ -508,7 +508,7 @@ hengband_SOURCES = \
 	mspell/mspell-special.c mspell/mspell-special.h \
 	mspell/mspell-status.c mspell/mspell-status.h \
 	mspell/mspell-particularity.c mspell/mspell-particularity.h \
-	mspell/mspell-selector.hmspell/mspell-selector.h \
+	mspell/mspell-selector.c mspell/mspell-selector.h \
 	mspell/smart-mspell-util.c mspell/smart-mspell-util.h \
 	mspell/specified-summon.c mspell/specified-summon.h \
 	mspell/summon-checker.c mspell/summon-checker.h \
@@ -552,7 +552,6 @@ hengband_SOURCES = \
 	object-enchant/apply-magic-armor.c object-enchant/apply-magic-armor.h \
 	object-enchant/apply-magic-others.c object-enchant/apply-magic-others.h \
 	object-enchant/apply-magic-weapon.c object-enchant/apply-magic-weapon.h \
-	object-enchant/artifact.c object-enchant/artifact.h \
 	object-enchant/dragon-breaths-table.c object-enchant/dragon-breaths-table.h \
 	object-enchant/object-boost.c object-enchant/object-boost.h \
 	object-enchant/object-curse.c object-enchant/object-curse.h \
@@ -746,10 +745,10 @@ hengband_SOURCES = \
 	store/home.c store/home.h \
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \
+	store/museum.c store/museum.h \
 	store/pricing.c store/pricing.h \
 	store/purchase-order.c store/purchase-order.h \
 	store/owner-insults.c store/owner-insults.h \
-	store/purchase-order.c store/purchase-order.h \
 	store/rumor.c store/rumor.h \
 	store/say-comments.c store/say-comments.h \
 	store/sell-order.c store/sell-order.h \
@@ -770,8 +769,9 @@ hengband_SOURCES = \
 	system/alloc-entries.c system/alloc-entries.h \
 	system/alloc-entry-definition.h \
 	system/angband.h system/angband-version.h \
+	system/artifact-type-definition.c system/artifact-type-definition.h \
 	system/building-type-definition.c system/building-type-definition.h \
-	system/dungeon-data-definition.c system/dungeon-data-definition.h \
+	system/dungeon-data-definition.h \
 	system/floor-type-definition.h \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
@@ -836,7 +836,7 @@ hengband_SOURCES = \
 	window/main-window-row-column.h \
 	window/main-window-stat-poster.c window/main-window-stat-poster.h \
 	window/main-window-util.c window/main-window-util.h \
-	window/main-window-equipment.c window/main-window-equipment.h \
+	window/main-window-equipments.c window/main-window-equipments.h \
 	\
 	wizard/artifact-analyzer.c wizard/artifact-analyzer.h \
 	wizard/artifact-bias-table.c wizard/artifact-bias-table.h \
