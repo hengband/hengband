@@ -43,7 +43,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
             prt(_("(9) 我が家のアイテム                     の一覧", "(8) Display home inventory"), 14, 5);
             prt(_("(0) *鑑定*済み装備の耐性                 の一覧", "(9) Display *identified* equip."), 15, 5);
         } else {
-            prt(_("(a) 地形の表示文字/タイル                の一覧", "(0) Display terrain symbols."), 6, 5);
+            prt(_("(a) 地形の表示文字/タイル                の一覧", "(0) Display terrain symbols"), 6, 5);
             prt(_("(b) 自分に関する情報                     の一覧", "(a) Display about yourself"), 7, 5);
             prt(_("(c) 突然変異                             の一覧", "(b) Display mutations"), 8, 5);
             prt(_("(d) 武器の経験値                         の一覧", "(c) Display weapon proficiency"), 9, 5);
