@@ -23,19 +23,16 @@
 #include "specific-object/death-crimson.h"
 #include "specific-object/muramasa.h"
 #include "specific-object/ring-of-power.h"
+#include "specific-object/toragoroshi.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/magic-item-recharger.h"
-#include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
-#include "spell-kind/spells-perception.h"
-#include "spell-kind/spells-random.h"
 #include "spell-kind/spells-sight.h"
-#include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-sorcery.h"
 #include "spell/spell-types.h"
@@ -104,21 +101,15 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_DRAIN_2:
         return activate_bolt_drain_2(user_ptr);
     case ACT_CALL_CHAOS:
-        msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
-        call_chaos(user_ptr);
-        return TRUE;
+        return activate_call_chaos(user_ptr);
     case ACT_ROCKET:
         return activate_rocket(user_ptr);
     case ACT_DISP_EVIL:
-        msg_print(_("神聖な雰囲気が充満した...", "It floods the area with goodness..."));
-        dispel_evil(user_ptr, user_ptr->lev * 5);
-        return TRUE;
+        return activate_dispel_evil(user_ptr);
     case ACT_BA_MISS_3:
         return activate_missile_3(user_ptr);
     case ACT_DISP_GOOD:
-        msg_print(_("邪悪な雰囲気が充満した...", "It floods the area with evil..."));
-        dispel_good(user_ptr, user_ptr->lev * 5);
-        return TRUE;
+        return activate_dispel_good(user_ptr);
     case ACT_BO_MANA:
         return activate_bolt_mana(user_ptr, name);
     case ACT_BA_WATER:
@@ -128,9 +119,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_BA_MANA:
         return activate_ball_mana(user_ptr, name);
     case ACT_PESTICIDE:
-        msg_print(_("あなたは害虫を一掃した。", "You exterminate small life."));
-        (void)dispel_monsters(user_ptr, 4);
-        return TRUE;
+        return activate_pesticide(user_ptr);
     case ACT_BLINDING_LIGHT:
         msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name);
         (void)fire_ball(user_ptr, GF_LITE, 0, 300, 6);
@@ -304,22 +293,13 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         lite_area(user_ptr, damroll(2, 15), 3);
         return TRUE;
     case ACT_DETECT_ALL:
-        msg_print(_("白く明るく輝いている...", "It glows bright white..."));
-        msg_print(_("心にイメージが浮かんできた...", "An image forms in your mind..."));
-        detect_all(user_ptr, DETECT_RAD_DEFAULT);
-        return TRUE;
+        return activate_all_detection(user_ptr);
     case ACT_DETECT_XTRA:
-        msg_print(_("明るく輝いている...", "It glows brightly..."));
-        detect_all(user_ptr, DETECT_RAD_DEFAULT);
-        probing(user_ptr);
-        identify_fully(user_ptr, FALSE, 0);
-        return TRUE;
+        return activate_extra_detection(user_ptr);
     case ACT_ID_FULL:
-        msg_print(_("黄色く輝いている...", "It glows yellow..."));
-        identify_fully(user_ptr, FALSE, 0);
-        return TRUE;
+        return activate_fully_identification(user_ptr);
     case ACT_ID_PLAIN:
-        return ident_spell(user_ptr, FALSE, 0);
+        return activate_identification(user_ptr);
     case ACT_RUNE_EXPLO:
         msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
         explosive_rune(user_ptr, user_ptr->y, user_ptr->x);
@@ -378,22 +358,16 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         (void)dispel_evil(user_ptr, user_ptr->lev * 3);
         return TRUE;
     case ACT_PHASE_DOOR:
-        teleport_player(user_ptr, 10, TELEPORT_SPONTANEOUS);
-        return TRUE;
+        return activate_phase_door(user_ptr);
     case ACT_DETECT_ALL_MONS:
-        (void)detect_monsters_invis(user_ptr, 255);
-        (void)detect_monsters_normal(user_ptr, 255);
-        return TRUE;
+        return activate_all_monsters_detection(user_ptr);
     case ACT_ULTIMATE_RESIST:
         return activate_ultimate_resistance(user_ptr);
     case ACT_CAST_OFF:
         (void)cosmic_cast_off(user_ptr, o_ptr);
         return TRUE;
     case ACT_FALLING_STAR:
-        msg_print(_("あなたは妖刀に魅入られた…", "You are enchanted by cursed blade..."));
-        msg_print(_("「狂ほしく 血のごとき 月はのぼれり 秘めおきし 魔剣 いずこぞや」", "'Behold the blade arts.'"));
-        massacre(user_ptr);
-        return TRUE;
+        return activate_toragoroshi(user_ptr);
     case ACT_GRAND_CROSS:
         return activate_grand_cross(user_ptr);
     case ACT_TELEPORT_LEVEL:

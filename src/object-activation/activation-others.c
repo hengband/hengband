@@ -25,6 +25,8 @@
 #include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
+#include "spell-kind/spells-perception.h"
+#include "spell-kind/spells-random.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
@@ -171,5 +173,71 @@ bool activate_grand_cross(player_type *user_ptr)
 {
     msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
     (void)project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+    return TRUE;
+}
+
+bool activate_call_chaos(player_type *user_ptr)
+{
+    msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
+    call_chaos(user_ptr);
+    return TRUE;
+}
+
+bool activate_dispel_evil(player_type *user_ptr)
+{
+    msg_print(_("神聖な雰囲気が充満した...", "It floods the area with goodness..."));
+    dispel_evil(user_ptr, user_ptr->lev * 5);
+    return TRUE;
+}
+
+bool activate_dispel_good(player_type *user_ptr)
+{
+    msg_print(_("邪悪な雰囲気が充満した...", "It floods the area with evil..."));
+    dispel_good(user_ptr, user_ptr->lev * 5);
+    return TRUE;
+}
+
+bool activate_all_monsters_detection(player_type *user_ptr)
+{
+    (void)detect_monsters_invis(user_ptr, 255);
+    (void)detect_monsters_normal(user_ptr, 255);
+    return TRUE;
+}
+
+bool activate_all_detection(player_type *user_ptr)
+{
+    msg_print(_("白く明るく輝いている...", "It glows bright white..."));
+    msg_print(_("心にイメージが浮かんできた...", "An image forms in your mind..."));
+    detect_all(user_ptr, DETECT_RAD_DEFAULT);
+    return TRUE;
+}
+
+bool activate_extra_detection(player_type *user_ptr)
+{
+    msg_print(_("明るく輝いている...", "It glows brightly..."));
+    detect_all(user_ptr, DETECT_RAD_DEFAULT);
+    probing(user_ptr);
+    identify_fully(user_ptr, FALSE, 0);
+    return TRUE;
+}
+
+bool activate_fully_identification(player_type *user_ptr)
+{
+    msg_print(_("黄色く輝いている...", "It glows yellow..."));
+    identify_fully(user_ptr, FALSE, 0);
+    return TRUE;
+}
+
+/*!
+ * @brief switch_activation() から個々のスペルへの依存性をなくすためのシンタックスシュガー
+ * @param user_ptr プレーヤーへの参照ポインタ
+ * @return 発動に成功したらTRUE
+ */
+bool activate_identification(player_type *user_ptr) { return ident_spell(user_ptr, FALSE, 0); }
+
+bool activate_pesticide(player_type *user_ptr)
+{
+    msg_print(_("あなたは害虫を一掃した。", "You exterminate small life."));
+    (void)dispel_monsters(user_ptr, 4);
     return TRUE;
 }

@@ -74,3 +74,9 @@ bool activate_teleport(player_type *user_ptr)
     teleport_player(user_ptr, 100, TELEPORT_SPONTANEOUS);
     return TRUE;
 }
+
+bool activate_phase_door(player_type *user_ptr)
+{
+    teleport_player(user_ptr, 10, TELEPORT_SPONTANEOUS);
+    return TRUE;
+}
