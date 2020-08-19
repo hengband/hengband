@@ -60,6 +60,7 @@
 #include "player/player-race-types.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
+#include "specific-object/bloody-moon.h"
 #include "specific-object/death-crimson.h"
 #include "specific-object/muramasa.h"
 #include "spell-kind/earthquake.h"
@@ -678,16 +679,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_MURAMASA:
         return activate_muramasa(user_ptr, o_ptr);
     case ACT_BLOODY_MOON:
-        if (o_ptr->name1 != ART_BLOOD)
-            return FALSE;
-
-        msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));
-        get_bloody_moon_flags(o_ptr);
-        if (user_ptr->prace == RACE_ANDROID)
-            calc_android_exp(user_ptr);
-
-        user_ptr->update |= (PU_BONUS | PU_HP);
-        return TRUE;
+        return activate_bloody_moon(user_ptr, o_ptr);
     case ACT_CRIMSON:
         if (o_ptr->name1 != ART_CRIMSON)
             return FALSE;
