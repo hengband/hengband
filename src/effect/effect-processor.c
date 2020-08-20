@@ -175,7 +175,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
     }
 
     /* Calculate the projection path */
-    path_n = project_path(caster_ptr, path_g, (project_length ? project_length : get_max_range(caster_ptr)), y1, x1, y2, x2, flag);
+    path_n = projection_path(caster_ptr, path_g, (project_length ? project_length : get_max_range(caster_ptr)), y1, x1, y2, x2, flag);
     handle_stuff(caster_ptr);
 
     if (typ == GF_SEEKER) {
@@ -228,7 +228,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             monster_target_x = x;
             remove_mirror(caster_ptr, y, x);
             next_mirror(caster_ptr, &oy, &ox, y, x);
-            path_n = i + project_path(caster_ptr, &(path_g[i + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, oy, ox, flag);
+            path_n = i + projection_path(caster_ptr, &(path_g[i + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, oy, ox, flag);
             for (j = last_i; j <= i; j++) {
                 y = GRID_Y(path_g[j]);
                 x = GRID_X(path_g[j]);
@@ -335,17 +335,17 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
                 path_n = i;
                 second_step = i + 1;
                 path_n
-                    += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x - 1, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x, flag);
+                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x - 1, flag);
+                path_n += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x, flag);
                 path_n
-                    += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x + 1, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x - 1, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x + 1, flag);
+                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x + 1, flag);
+                path_n += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x - 1, flag);
+                path_n += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x + 1, flag);
                 path_n
-                    += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x - 1, flag);
-                path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x, flag);
+                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x - 1, flag);
+                path_n += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x, flag);
                 path_n
-                    += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x + 1, flag);
+                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x + 1, flag);
             }
         }
 

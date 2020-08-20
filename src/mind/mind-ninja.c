@@ -123,7 +123,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
 
     u16b path_g[32];
-    int path_n = project_path(attacker_ptr, path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
+    int path_n = projection_path(attacker_ptr, path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
     if (!path_n)
         return TRUE;

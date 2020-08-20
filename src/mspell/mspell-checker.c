@@ -147,7 +147,7 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     u16b grid_g[512];
-    int grid_n = project_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, 0);
+    int grid_n = projection_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, 0);
     if (!grid_n)
         return FALSE;
 

@@ -472,7 +472,7 @@ int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 
 bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     u16b grid_g[512];
-    int grid_n = project_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
+    int grid_n = projection_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
     if (!grid_n)
         return TRUE;
 
@@ -892,7 +892,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
  * @param flg フラグID
  * @return リストの長さ
  */
-int project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
+int projection_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
 {
     if ((x1 == x2) && (y1 == y2))
         return 0;
@@ -921,11 +921,11 @@ int project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1,
 
     int half = (ay * ax);
     int full = half << 1;
-
-    /* Vertical */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int n = 0;
     int k = 0;
+   
+    /* Vertical */
     if (ay > ax) {
         m = ax * ax * 2;
         y = y1 + sy;
@@ -942,23 +942,23 @@ int project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1,
             if ((n + (k >> 1)) >= range)
                 break;
 
-            if (!(flg & (PROJECT_THRU))) {
+            if (!(flg & PROJECT_THRU)) {
                 if ((x == x2) && (y == y2))
                     break;
             }
 
-            if (flg & (PROJECT_DISI)) {
+            if (flg & PROJECT_DISI) {
                 if ((n > 0) && cave_stop_disintegration(floor_ptr, y, x))
                     break;
-            } else if (flg & (PROJECT_LOS)) {
+            } else if (flg & PROJECT_LOS) {
                 if ((n > 0) && !cave_los_bold(floor_ptr, y, x))
                     break;
-            } else if (!(flg & (PROJECT_PATH))) {
+            } else if (!(flg & PROJECT_PATH)) {
                 if ((n > 0) && !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT))
                     break;
             }
 
-            if (flg & (PROJECT_STOP)) {
+            if (flg & PROJECT_STOP) {
                 if ((n > 0) && (player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
                     break;
             }
