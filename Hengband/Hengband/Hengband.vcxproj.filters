@@ -2117,8 +2117,11 @@
     <ClCompile Include="..\..\src\main\angband-headers.c">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\initialization-error-messages-table.c">
+    <ClCompile Include="..\..\src\main\init-error-messages-table.c">
       <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\market\building-initializer.c">
+      <Filter>market</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4588,8 +4591,11 @@
     <ClInclude Include="..\..\src\main\angband-headers.h">
       <Filter>main</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\main\initialization-error-messages-table.h">
+    <ClInclude Include="..\..\src\main\init-error-messages-table.h">
       <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\building-initializer.h">
+      <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
