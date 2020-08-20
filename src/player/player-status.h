@@ -521,12 +521,12 @@ typedef struct player_type {
     byte tval_xtra; /* (Unused)Correct xtra tval */
     byte tval_ammo; /* Correct ammo tval */
 
-    s16b pspeed; /* Current speed */
+    s16b pspeed; /*!< 現在の速度 / Current speed */
 
-    ENERGY energy_use; /* Energy use this turn */
+    ENERGY energy_use; /*!< 直近のターンに消費したエネルギー / Energy use this turn */
 
-    POSITION y; /* Player location in dungeon */
-    POSITION x; /* Player location in dungeon */
+    POSITION y; /*!< ダンジョンの現在Y座標 / Player location in dungeon */
+    POSITION x; /*!< ダンジョンの現在X座標 / Player location in dungeon */
     GAME_TEXT name[32]; /*!< 現在のプレイヤー名 / Current player's character name */
     char base_name[32]; /*!< Stripped version of "player_name" */
 
