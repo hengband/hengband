@@ -2102,6 +2102,9 @@
     <ClCompile Include="..\..\src\floor\line-of-sight.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\vault-builder.c">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4554,6 +4557,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\floor\line-of-sight.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\vault-builder.h">
+      <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

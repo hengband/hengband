@@ -315,6 +315,7 @@
     <ClCompile Include="..\..\src\object-activation\activation-resistance.c" />
     <ClCompile Include="..\..\src\object-activation\activation-teleport.c" />
     <ClCompile Include="..\..\src\object-activation\activation-util.c" />
+    <ClCompile Include="..\..\src\room\vault-builder.c" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.c" />
     <ClCompile Include="..\..\src\specific-object\monster-ball.c" />
     <ClCompile Include="..\..\src\object-use\read-execution.c" />
@@ -943,6 +944,7 @@
     <ClInclude Include="..\..\src\object-activation\activation-resistance.h" />
     <ClInclude Include="..\..\src\object-activation\activation-teleport.h" />
     <ClInclude Include="..\..\src\object-activation\activation-util.h" />
+    <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />
     <ClInclude Include="..\..\src\specific-object\monster-ball.h" />
     <ClInclude Include="..\..\src\object-use\read-execution.h" />

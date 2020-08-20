@@ -8,6 +8,7 @@
 #include "room/door-definition.h"
 #include "room/rooms-builder.h"
 #include "room/space-finder.h"
+#include "room/vault-builder.h"
 #include "system/floor-type-definition.h"
 
 /*!
