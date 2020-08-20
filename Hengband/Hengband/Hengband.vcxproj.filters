@@ -2090,6 +2090,9 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-refill.c">
       <Filter>cmd-item</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-destroy.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4529,6 +4532,9 @@
       <Filter>cmd-item</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-refill.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-destroy.h">
       <Filter>cmd-item</Filter>
     </ClInclude>
   </ItemGroup>

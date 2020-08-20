@@ -32,6 +32,7 @@
 #include "cmd-io/cmd-macro.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
+#include "cmd-item/cmd-destroy.h"
 #include "cmd-item/cmd-eat.h"
 #include "cmd-item/cmd-equipment.h"
 #include "cmd-item/cmd-item.h"

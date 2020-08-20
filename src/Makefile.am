@@ -123,6 +123,7 @@ hengband_SOURCES = \
 	cmd-io/feeling-table.c cmd-io/feeling-table.h \
 	cmd-io/macro-util.c cmd-io/macro-util.h \
 	\
+	cmd-item/cmd-destroy.c cmd-item/cmd-destroy.h \
 	cmd-item/cmd-eat.c cmd-item/cmd-eat.h \
 	cmd-item/cmd-equipment.c cmd-item/cmd-equipment.h \
 	cmd-item/cmd-item.c cmd-item/cmd-item.h \

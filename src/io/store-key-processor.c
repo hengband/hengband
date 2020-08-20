@@ -8,6 +8,7 @@
 #include "cmd-io/cmd-help.h"
 #include "cmd-io/cmd-knowledge.h"
 #include "cmd-io/cmd-process-screen.h"
+#include "cmd-item/cmd-destroy.h"
 #include "cmd-item/cmd-item.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-io/cmd-lore.h"
