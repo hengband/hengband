@@ -12,7 +12,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
 #include "io/files-util.h"
@@ -32,6 +31,7 @@
 #include "pet/pet-util.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

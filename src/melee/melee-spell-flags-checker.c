@@ -2,7 +2,6 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
-#include "floor/floor.h"
 #include "floor/line-of-sight.h"
 #include "melee/melee-spell-util.h"
 #include "monster-floor/monster-move.h"
@@ -24,6 +23,7 @@
 #include "spell-kind/spells-world.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 
 static void decide_melee_spell_target(player_type *target_ptr, melee_spell_type *ms_ptr)
 {

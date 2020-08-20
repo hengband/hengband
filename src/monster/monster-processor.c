@@ -17,7 +17,6 @@
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -60,6 +59,7 @@
 #include "spell/spells-summon.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);

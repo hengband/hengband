@@ -26,6 +26,7 @@
 #include "mspell/summon-checker.h"
 #include "spell/spells-summon.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 

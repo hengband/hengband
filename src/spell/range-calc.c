@@ -6,12 +6,12 @@
 
 #include "spell/range-calc.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "floor/line-of-sight.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 
 /*
@@ -224,8 +224,8 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
 	{
 		if ((0 < dist) && (path_n < dist))
 		{
-			POSITION ny = GRID_Y(path_g[path_n]);
-			POSITION nx = GRID_X(path_g[path_n]);
+			POSITION ny = get_grid_y(path_g[path_n]);
+			POSITION nx = get_grid_x(path_g[path_n]);
 			POSITION nd = distance(ny, nx, y1, x1);
 
 			if (bdis >= nd)

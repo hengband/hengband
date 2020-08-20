@@ -136,8 +136,8 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
     for (int i = 0; i < path_n; i++) {
         monster_type *m_ptr;
 
-        int ny = GRID_Y(path_g[i]);
-        int nx = GRID_X(path_g[i]);
+        int ny = get_grid_y(path_g[i]);
+        int nx = get_grid_x(path_g[i]);
 
         if (is_cave_empty_bold(attacker_ptr, ny, nx) && player_can_enter(attacker_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
             ty = ny;

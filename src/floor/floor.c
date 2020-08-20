@@ -160,34 +160,6 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @briefプレイヤーの攻撃射程(マス) / Maximum range (spells, etc)
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return 射程
- */
-int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 36 : 18; }
-
-/*
- * Determine if a bolt spell cast from (y1,x1) to (y2,x2) will arrive
- * at the final destination, assuming no monster gets in the way.
- *
- * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
- */
-bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
-{
-    u16b grid_g[512];
-    int grid_n = projection_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
-    if (!grid_n)
-        return TRUE;
-
-    POSITION y = GRID_Y(grid_g[grid_n - 1]);
-    POSITION x = GRID_X(grid_g[grid_n - 1]);
-    if ((y != y2) || (x != x2))
-        return FALSE;
-
-    return TRUE;
-}
-
-/*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。 / Determine if a given location may be "destroyed"
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y y座標

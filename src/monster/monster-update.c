@@ -12,7 +12,6 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
@@ -32,6 +31,7 @@
 #include "player/special-defense-types.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 
 /*!
  * @brief 騎乗中のモンスター情報を更新する

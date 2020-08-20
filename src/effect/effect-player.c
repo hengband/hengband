@@ -11,7 +11,6 @@
 #include "effect/effect-player-util.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
@@ -24,6 +23,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
 
 typedef enum effect_player_check_result {

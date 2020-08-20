@@ -7,7 +7,6 @@
 #include "core/window-redrawer.h"
 #include "dungeon/quest-completion-checker.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
@@ -21,6 +20,7 @@
 #include "player/avatar.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

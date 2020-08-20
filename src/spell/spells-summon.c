@@ -2,7 +2,6 @@
 #include "core/hp-mp-processor.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-object.h"
@@ -29,6 +28,7 @@
 #include "status/bad-status-setter.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 

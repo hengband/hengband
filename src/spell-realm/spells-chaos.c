@@ -6,7 +6,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-describer.h"
@@ -18,6 +17,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

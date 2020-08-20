@@ -1,5 +1,6 @@
 #include "target/projection-path-calculator.h"
 #include "effect/effect-characteristics.h"
+#include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
@@ -185,7 +186,8 @@ static void calc_projection_others(player_type *player_ptr, projection_path_type
                 break;
         }
 
-        if (((pp_ptr->flag & PROJECT_STOP) != 0) && (pp_ptr->n > 0) && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0))
+        if (((pp_ptr->flag & PROJECT_STOP) != 0) && (pp_ptr->n > 0)
+            && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0))
             break;
 
         if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x))
@@ -233,3 +235,41 @@ int projection_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION 
     calc_projection_others(player_ptr, pp_ptr);
     return pp_ptr->n;
 }
+
+/*
+ * Determine if a bolt spell cast from (y1,x1) to (y2,x2) will arrive
+ * at the final destination, assuming no monster gets in the way.
+ *
+ * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
+ */
+bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+{
+    u16b grid_g[512];
+    int grid_n = projection_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
+    if (!grid_n)
+        return TRUE;
+
+    POSITION y = get_grid_y(grid_g[grid_n - 1]);
+    POSITION x = get_grid_x(grid_g[grid_n - 1]);
+    if ((y != y2) || (x != x2))
+        return FALSE;
+
+    return TRUE;
+}
+
+/*!
+ * @briefプレイヤーの攻撃射程(マス) / Maximum range (spells, etc)
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 射程
+ */
+int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 36 : 18; }
+
+/*
+ * Convert a "grid" (G) into a "location" (Y)
+ */
+POSITION get_grid_y(u16b grid) { return (int)(grid / 256U); }
+
+/*
+ * Convert a "grid" (G) into a "location" (X)
+ */
+POSITION get_grid_x(u16b grid) { return (int)(grid % 256U); }

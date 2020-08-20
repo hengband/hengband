@@ -19,7 +19,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-move.h"
@@ -153,14 +152,14 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
     if (!grid_n)
         return FALSE;
 
-    POSITION y = GRID_Y(grid_g[grid_n - 1]);
-    POSITION x = GRID_X(grid_g[grid_n - 1]);
+    POSITION y = get_grid_y(grid_g[grid_n - 1]);
+    POSITION x = get_grid_x(grid_g[grid_n - 1]);
     if ((y != y2) || (x != x2))
         return FALSE;
 
     for (int i = 0; i < grid_n; i++) {
-        y = GRID_Y(grid_g[i]);
-        x = GRID_X(grid_g[i]);
+        y = get_grid_y(grid_g[i]);
+        x = get_grid_x(grid_g[i]);
 
         if ((floor_ptr->grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2))) {
             monster_type *m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx];

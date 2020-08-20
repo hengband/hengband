@@ -6,7 +6,6 @@
 
 #include "monster-floor/monster-safety-hiding.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-dist-offsets.h"
 #include "monster-race/monster-race.h"
@@ -14,6 +13,7 @@
 #include "monster/monster-info.h"
 #include "mspell/mspell-checker.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 
  /*!
   * @brief モンスターが逃げ込める地点を走査する

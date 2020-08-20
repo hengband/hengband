@@ -13,7 +13,6 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
@@ -54,8 +53,8 @@ bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2,
     POSITION y, x;
     bool is_friend = is_pet(m_ptr);
     for (int i = 0; i < grid_n; i++) {
-        y = GRID_Y(grid_g[i]);
-        x = GRID_X(grid_g[i]);
+        y = get_grid_y(grid_g[i]);
+        x = get_grid_x(grid_g[i]);
 
         if (y == y2 && x == x2)
             hit2 = TRUE;
@@ -106,8 +105,8 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
     POSITION y = y1;
     POSITION x = x1;
     for (i = 0; i < grid_n; ++i) {
-        int ny = GRID_Y(grid_g[i]);
-        int nx = GRID_X(grid_g[i]);
+        int ny = get_grid_y(grid_g[i]);
+        int nx = get_grid_x(grid_g[i]);
 
         if (flg & PROJECT_DISI) {
             if (cave_stop_disintegration(master_ptr->current_floor_ptr, ny, nx))
@@ -187,8 +186,8 @@ void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITI
     *ty = sy;
     *tx = sx;
     for (int i = 0; i < path_n; i++) {
-        sy = GRID_Y(path_g[i]);
-        sx = GRID_X(path_g[i]);
+        sy = get_grid_y(path_g[i]);
+        sx = get_grid_x(path_g[i]);
         if (!cave_have_flag_bold(target_ptr->current_floor_ptr, sy, sx, FF_PROJECT))
             break;
 

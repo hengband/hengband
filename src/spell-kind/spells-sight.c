@@ -5,7 +5,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
 #include "io/cursor.h"
@@ -24,6 +23,7 @@
 #include "player/avatar.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 

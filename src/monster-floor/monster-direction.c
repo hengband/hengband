@@ -6,7 +6,6 @@
 
 #include "monster-floor/monster-direction.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -17,6 +16,7 @@
 #include "pet/pet-util.h"
 #include "spell/range-calc.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 
 /*!
  * @brief ペットが敵に接近するための方向を決定する
