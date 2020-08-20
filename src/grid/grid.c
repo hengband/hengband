@@ -28,6 +28,7 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
+#include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "io/screen-util.h"
 #include "monster-floor/monster-remover.h"

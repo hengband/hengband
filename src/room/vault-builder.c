@@ -5,6 +5,7 @@
 #include "game-option/cheat-options.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
+#include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"

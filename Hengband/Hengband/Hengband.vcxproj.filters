@@ -2105,6 +2105,9 @@
     <ClCompile Include="..\..\src\room\vault-builder.c">
       <Filter>room</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\grid\object-placer.c">
+      <Filter>grid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4560,6 +4563,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\room\vault-builder.h">
       <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\object-placer.h">
+      <Filter>grid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

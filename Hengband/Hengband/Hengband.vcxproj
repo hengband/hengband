@@ -252,6 +252,7 @@
     <ClCompile Include="..\..\src\game-option\text-display-options.c" />
     <ClCompile Include="..\..\src\grid\door.c" />
     <ClCompile Include="..\..\src\grid\feature-generator.c" />
+    <ClCompile Include="..\..\src\grid\object-placer.c" />
     <ClCompile Include="..\..\src\grid\lighting-colors-table.c" />
     <ClCompile Include="..\..\src\info-reader\artifact-reader.c" />
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.c" />
@@ -875,6 +876,7 @@
     <ClInclude Include="..\..\src\grid\door.h" />
     <ClInclude Include="..\..\src\grid\feature-flag-types.h" />
     <ClInclude Include="..\..\src\grid\feature-generator.h" />
+    <ClInclude Include="..\..\src\grid\object-placer.h" />
     <ClInclude Include="..\..\src\grid\lighting-colors-table.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />

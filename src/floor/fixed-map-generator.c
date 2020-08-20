@@ -7,6 +7,7 @@
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/random-grid-effect-types.h"

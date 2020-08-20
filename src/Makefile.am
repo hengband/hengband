@@ -261,6 +261,7 @@ hengband_SOURCES = \
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h \
 	grid/lighting-colors-table.c grid/lighting-colors-table.h \
+	grid/object-placer.c grid/object-placer.h \
 	grid/trap.c grid/trap.h \
 	\
 	info-reader/artifact-reader.c info-reader/artifact-reader.h \
