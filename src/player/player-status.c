@@ -3103,33 +3103,32 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
 
     // 武器以外の装備による修正
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        int bonus_to_d;
+        int bonus_to_d = 0;
         o_ptr = &creature_ptr->inventory_list[i];
+
         if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
             || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
+            continue;
+
+        if (!object_is_known(o_ptr))
             continue;
 
         bonus_to_d = o_ptr->to_d;
 
         if (creature_ptr->pclass == CLASS_NINJA) {
-            if (o_ptr->to_d > 0)
-                bonus_to_d = (o_ptr->to_d + 1) / 2;
+            if (o_ptr->to_d > 0) bonus_to_d = (o_ptr->to_d + 1) / 2;
         }
 
         if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !have_two_handed_weapons(creature_ptr)) {
-            if (object_is_known(o_ptr)) {
-                creature_ptr->dis_to_d[i - INVEN_RIGHT] += (s16b)bonus_to_d;
-            }
+            creature_ptr->dis_to_d[i - INVEN_RIGHT] += (s16b)bonus_to_d;
             continue;
         }
 
         if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
-            if (!object_is_known(o_ptr))
-                continue;
             if(id == 0) creature_ptr->dis_to_d[id] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
             if(id == 1) creature_ptr->dis_to_d[id] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
         } else if (id == get_default_hand(creature_ptr)) {
-            if(object_is_known(o_ptr)) creature_ptr->to_d[id] += (s16b)bonus_to_d;
+            creature_ptr->to_d[id] += (s16b)bonus_to_d;
         }
 				
 	}
