@@ -129,6 +129,26 @@ static bool decide_magic_book_exp(player_type *creature_ptr, destroy_type *destr
     return gain_expr;
 }
 
+static void gain_exp_by_destroying_magic_book(player_type *creature_ptr, destroy_type *destroy_ptr)
+{
+    bool gain_expr = decide_magic_book_exp(creature_ptr, destroy_ptr);
+    if (!gain_expr || (creature_ptr->exp >= PY_MAX_EXP))
+        return;
+
+    s32b tester_exp = creature_ptr->max_exp / 20;
+    if (tester_exp > 10000)
+        tester_exp = 10000;
+
+    if (destroy_ptr->q_ptr->sval < 3)
+        tester_exp /= 4;
+
+    if (tester_exp < 1)
+        tester_exp = 1;
+
+    msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
+    gain_exp(creature_ptr, tester_exp * destroy_ptr->amt);
+}
+
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -165,22 +185,7 @@ void do_cmd_destroy(player_type *creature_ptr)
     reduce_charges(destroy_ptr->o_ptr, destroy_ptr->amt);
     vary_item(creature_ptr, destroy_ptr->item, -destroy_ptr->amt);
     if (item_tester_high_level_book(destroy_ptr->q_ptr)) {
-        bool gain_expr = decide_magic_book_exp(creature_ptr, destroy_ptr);
-        if (gain_expr && (creature_ptr->exp < PY_MAX_EXP)) {
-            s32b tester_exp = creature_ptr->max_exp / 20;
-            if (tester_exp > 10000)
-                tester_exp = 10000;
-
-            if (destroy_ptr->q_ptr->sval < 3)
-                tester_exp /= 4;
-
-            if (tester_exp < 1)
-                tester_exp = 1;
-
-            msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
-            gain_exp(creature_ptr, tester_exp * destroy_ptr->amt);
-        }
-
+        gain_exp_by_destroying_magic_book(creature_ptr, destroy_ptr);
         if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == TV_LIFE_BOOK) {
             chg_virtue(creature_ptr, V_UNLIFE, 1);
             chg_virtue(creature_ptr, V_VITALITY, -1);
