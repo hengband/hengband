@@ -24,6 +24,7 @@
 #include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-diary.h"
 #include "cmd-io/cmd-dump.h"
+#include "cmd-io/cmd-floor.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "cmd-io/cmd-help.h"
 #include "cmd-io/cmd-knowledge.h"
