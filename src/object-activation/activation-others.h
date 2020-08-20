@@ -33,3 +33,7 @@ bool activate_recharge_extra(player_type *user_ptr, concptr name);
 bool activate_shikofumi(player_type *user_ptr);
 bool activate_terror(player_type *user_ptr);
 bool activate_map_light(player_type *user_ptr);
+bool activate_exploding_rune(player_type *user_ptr);
+bool activate_protection_rune(player_type *user_ptr);
+bool activate_light(player_type *user_ptr, concptr name);
+bool activate_recall(player_type *user_ptr);

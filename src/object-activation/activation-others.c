@@ -320,3 +320,30 @@ bool activate_map_light(player_type *user_ptr)
     lite_area(user_ptr, damroll(2, 15), 3);
     return TRUE;
 }
+
+bool activate_exploding_rune(player_type *user_ptr)
+{
+    msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
+    explosive_rune(user_ptr, user_ptr->y, user_ptr->x);
+    return TRUE;
+}
+
+bool activate_protection_rune(player_type *user_ptr)
+{
+    msg_print(_("ブルーに明るく輝いている...", "It glows light blue..."));
+    warding_glyph(user_ptr);
+    return TRUE;
+}
+
+bool activate_light(player_type *user_ptr, concptr name)
+{
+    msg_format(_("%sから澄んだ光があふれ出た...", "The %s wells with clear light..."), name);
+    lite_area(user_ptr, damroll(2, 15), 3);
+    return TRUE;
+}
+
+bool activate_recall(player_type *user_ptr)
+{
+    msg_print(_("やわらかな白色に輝いている...", "It glows soft white..."));
+    return recall_player(user_ptr, randint0(21) + 15);
+}

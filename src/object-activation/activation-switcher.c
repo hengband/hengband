@@ -24,12 +24,7 @@
 #include "specific-object/muramasa.h"
 #include "specific-object/ring-of-power.h"
 #include "specific-object/toragoroshi.h"
-#include "spell-kind/spells-grid.h"
-#include "spell-kind/spells-launcher.h"
-#include "spell-kind/spells-lite.h"
-#include "spell-kind/spells-world.h"
 #include "spell-realm/spells-sorcery.h"
-#include "spell/spell-types.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
@@ -266,9 +261,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_RESIST_POIS:
         return activate_resistance_pois(user_ptr, name);
     case ACT_LIGHT:
-        msg_format(_("%sから澄んだ光があふれ出た...", "The %s wells with clear light..."), name);
-        lite_area(user_ptr, damroll(2, 15), 3);
-        return TRUE;
+        return activate_light(user_ptr, name);
     case ACT_MAP_LIGHT:
         return activate_map_light(user_ptr);
     case ACT_DETECT_ALL:
@@ -280,13 +273,9 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_ID_PLAIN:
         return activate_identification(user_ptr);
     case ACT_RUNE_EXPLO:
-        msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
-        explosive_rune(user_ptr, user_ptr->y, user_ptr->x);
-        return TRUE;
+        return activate_exploding_rune(user_ptr);
     case ACT_RUNE_PROT:
-        msg_print(_("ブルーに明るく輝いている...", "It glows light blue..."));
-        warding_glyph(user_ptr);
-        return TRUE;
+        return activate_protection_rune(user_ptr);
     case ACT_SATIATE:
         (void)set_food(user_ptr, PY_FOOD_MAX - 1);
         return TRUE;
@@ -305,8 +294,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_TELEPORT:
         return activate_teleport(user_ptr);
     case ACT_RECALL:
-        msg_print(_("やわらかな白色に輝いている...", "It glows soft white..."));
-        return recall_player(user_ptr, randint0(21) + 15);
+        return activate_recall(user_ptr);
     case ACT_JUDGE:
         return activate_judgement(user_ptr, name);
     case ACT_TELEKINESIS:
