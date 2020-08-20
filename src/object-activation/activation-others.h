@@ -27,3 +27,8 @@ bool activate_whirlwind(player_type *user_ptr);
 bool activate_blinding_light(player_type *user_ptr, concptr name);
 bool activate_sleep(player_type *user_ptr);
 bool activate_door_destroy(player_type *user_ptr);
+bool activate_earthquake(player_type *user_ptr);
+bool activate_recharge(player_type *user_ptr);
+bool activate_recharge_extra(player_type *user_ptr, concptr name);
+bool activate_shikofumi(player_type *user_ptr);
+bool activate_terror(player_type *user_ptr);

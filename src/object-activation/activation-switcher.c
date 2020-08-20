@@ -23,14 +23,11 @@
 #include "specific-object/muramasa.h"
 #include "specific-object/ring-of-power.h"
 #include "specific-object/toragoroshi.h"
-#include "spell-kind/earthquake.h"
-#include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
-#include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-sorcery.h"
 #include "spell/spell-types.h"
@@ -136,11 +133,9 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_SLEEP:
         return activate_sleep(user_ptr);
     case ACT_QUAKE:
-        earthquake(user_ptr, user_ptr->y, user_ptr->x, 5, 0);
-        return TRUE;
+        return activate_earthquake(user_ptr);
     case ACT_TERROR:
-        turn_monsters(user_ptr, 40 + user_ptr->lev);
-        return TRUE;
+        return activate_terror(user_ptr);
     case ACT_TELE_AWAY:
         return activate_teleport_away(user_ptr);
     case ACT_BANISH_EVIL:
@@ -308,8 +303,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_STONE_MUD:
         return activate_stone_mud(user_ptr);
     case ACT_RECHARGE:
-        recharge(user_ptr, 130);
-        return TRUE;
+        return activate_recharge(user_ptr);
     case ACT_ALCHEMY:
         msg_print(_("明るい黄色に輝いている...", "It glows bright yellow..."));
         (void)alchemy(user_ptr);
@@ -336,17 +330,12 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         brand_bolts(user_ptr);
         return TRUE;
     case ACT_RECHARGE_XTRA:
-        msg_format(_("%sが白く輝いた．．．", "The %s gleams with blinding light..."), name);
-        return recharge(user_ptr, 1000);
+        return activate_recharge_extra(user_ptr, name);
     case ACT_LORE:
         msg_print(_("石が隠された秘密を写し出した．．．", "The stone reveals hidden mysteries..."));
         return perilous_secrets(user_ptr);
     case ACT_SHIKOFUMI:
-        msg_print(_("力強く四股を踏んだ。", "You stamp. (as if you are in a ring.)"));
-        (void)set_afraid(user_ptr, 0);
-        (void)set_hero(user_ptr, randint1(20) + 20, FALSE);
-        (void)dispel_evil(user_ptr, user_ptr->lev * 3);
-        return TRUE;
+        return activate_shikofumi(user_ptr);
     case ACT_PHASE_DOOR:
         return activate_phase_door(user_ptr);
     case ACT_DETECT_ALL_MONS:

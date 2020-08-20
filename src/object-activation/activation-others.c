@@ -18,6 +18,8 @@
 #include "player-attack/player-attack.h"
 #include "player/player-damage.h"
 #include "spell/spell-types.h"
+#include "spell-kind/earthquake.h"
+#include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
@@ -275,4 +277,38 @@ bool activate_door_destroy(player_type *user_ptr)
     msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
     destroy_doors_touch(user_ptr);
     return TRUE;
+}
+
+bool activate_earthquake(player_type *user_ptr)
+{
+    earthquake(user_ptr, user_ptr->y, user_ptr->x, 5, 0);
+    return TRUE;
+}
+
+bool activate_recharge(player_type *user_ptr)
+{
+    recharge(user_ptr, 130);
+    return TRUE;
+}
+
+bool activate_recharge_extra(player_type *user_ptr, concptr name)
+{
+    msg_format(_("%sが白く輝いた．．．", "The %s gleams with blinding light..."), name);
+    return recharge(user_ptr, 1000);
+}
+
+bool activate_shikofumi(player_type *user_ptr)
+{
+    msg_print(_("力強く四股を踏んだ。", "You stamp. (as if you are in a ring.)"));
+    (void)set_afraid(user_ptr, 0);
+    (void)set_hero(user_ptr, randint1(20) + 20, FALSE);
+    (void)dispel_evil(user_ptr, user_ptr->lev * 3);
+    return TRUE;
+}
+
+bool activate_terror(player_type *user_ptr)
+{
+    turn_monsters(user_ptr, 40 + user_ptr->lev);
+    return TRUE;
+
 }
