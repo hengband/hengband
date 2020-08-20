@@ -380,6 +380,7 @@ hengband_SOURCES = \
 	main.c main-x11.c main-gcu.c \
 	\
 	main/angband-headers.c main/angband-headers.h \
+	main/game-data-initializer.c main/game-data-initializer.h \
 	main/info-initializer.c main/info-initializer.h \
 	main/init.c main/init.h \
 	main/initialization-error-messages-table.c main/initialization-error-messages-table.h \

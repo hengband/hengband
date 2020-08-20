@@ -2123,6 +2123,9 @@
     <ClCompile Include="..\..\src\market\building-initializer.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\game-data-initializer.c">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4596,6 +4599,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\market\building-initializer.h">
       <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\game-data-initializer.h">
+      <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

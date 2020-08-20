@@ -284,6 +284,7 @@
     <ClCompile Include="..\..\src\io\store-key-processor.c" />
     <ClCompile Include="..\..\src\load\info-loader.c" />
     <ClCompile Include="..\..\src\main\angband-headers.c" />
+    <ClCompile Include="..\..\src\main\game-data-initializer.c" />
     <ClCompile Include="..\..\src\main\info-initializer.c" />
     <ClCompile Include="..\..\src\main\init-error-messages-table.c" />
     <ClCompile Include="..\..\src\market\building-initializer.c" />
@@ -917,6 +918,7 @@
     <ClInclude Include="..\..\src\load\info-loader.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\main\angband-headers.h" />
+    <ClInclude Include="..\..\src\main\game-data-initializer.h" />
     <ClInclude Include="..\..\src\main\info-initializer.h" />
     <ClInclude Include="..\..\src\main\init-error-messages-table.h" />
     <ClInclude Include="..\..\src\market\building-initializer.h" />
