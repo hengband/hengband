@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief ゲームデータ初期化2 / Initialization (part 2) -BEN-
+ * @brief ゲームデータ初期化
  * @date 2014/01/28
  * @author
  * <pre>
@@ -9,82 +9,25 @@
  * are included in all such copies.  Other copyrights may also apply.
  * 2014 Deskull rearranged comment for Doxygen.\n
  * </pre>
- * @details
- * <pre>
- * This file is used to initialize various variables and arrays for the
- * Angband game.  Note the use of "fd_read()" and "fd_write()" to bypass
- * the common limitation of "read()" and "write()" to only 32767 bytes
- * at a time.
- * Several of the arrays for Angband are built from "template" files in
- * the "lib/file" directory, from which quick-load binary "image" files
- * are constructed whenever they are not present in the "lib/data"
- * directory, or if those files become obsolete, if we are allowed.
- * Warning -- the "ascii" file parsers use a minor hack to collect the
- * name and text information in a single pass.  Thus, the game will not
- * be able to load any template file with more than 20K of names or 60K
- * of text, even though technically, up to 64K should be legal.
- * The "init1.c" file is used only to parse the ascii template files,
- * to create the binary image files.  Note that the binary image files
- * are extremely system dependant.
- * </pre>
  */
 
 #include "main/init.h"
-#include "cmd-building/cmd-building.h"
-#include "cmd-io/macro-util.h"
 #include "dungeon/dungeon.h"
-#include "dungeon/quest.h"
-#include "floor/floor-town.h"
-#include "floor/floor-util.h"
 #include "floor/wild.h"
-#include "game-option/option-flags.h"
-#include "game-option/option-types-table.h"
-#include "grid/feature.h"
-#include "grid/grid.h"
-#include "grid/trap.h"
-#include "info-reader/artifact-reader.h"
-#include "info-reader/dungeon-reader.h"
-#include "info-reader/ego-reader.h"
 #include "info-reader/feature-reader.h"
-#include "info-reader/general-parser.h"
-#include "info-reader/kind-reader.h"
-#include "info-reader/magic-reader.h"
-#include "info-reader/parse-error-types.h"
-#include "info-reader/race-reader.h"
-#include "info-reader/skill-reader.h"
-#include "info-reader/vault-reader.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
 #include "io/uid-checker.h"
-#include "main/angband-headers.h"
 #include "main/game-data-initializer.h"
 #include "main/info-initializer.h"
-#include "main/init-error-messages-table.h"
-#include "market/articles-on-sale.h"
 #include "market/building-initializer.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
-#include "object-enchant/object-ego.h"
-#include "object/object-kind.h"
-#include "player/player-class.h"
-#include "player/player-skill.h"
-#include "room/rooms-builder.h"
-#include "room/rooms-vault.h"
-#include "store/store-util.h"
-#include "store/store.h"
-#include "system/alloc-entries.h"
 #include "system/angband-version.h"
-#include "system/artifact-type-definition.h"
-#include "system/building-type-definition.h"
-#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
-#include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
-#include "util/quarks.h"
-#include "util/tag-sorter.h"
-#include "view/display-messages.h"
 #include "world/world.h"
 
 /*!
@@ -92,32 +35,6 @@
  * Find the default paths to all of our important sub-directories.
  * @param path パス保管先の文字列
  * @return なし
- * @details
- * <pre>
- * The purpose of each sub-directory is described in "variable.c".
- * All of the sub-directories should, by default, be located inside
- * the main "lib" directory, whose location is very system dependant.
- * This function takes a writable buffer, initially containing the
- * "path" to the "lib" directory, for example, "/pkg/lib/angband/",
- * or a system dependant string, for example, ":lib:".  The buffer
- * must be large enough to contain at least 32 more characters.
- * Various command line options may allow some of the important
- * directories to be changed to user-specified directories, most
- * importantly, the "info" and "user" and "save" directories,
- * but this is done after this function, see "main.c".
- * In general, the initial path should end in the appropriate "PATH_SEP"
- * string.  All of the "sub-directory" paths (created below or supplied
- * by the user) will NOT end in the "PATH_SEP" string, see the special
- * "path_build()" function in "util.c" for more information.
- * Mega-Hack -- support fat raw files under NEXTSTEP, using special
- * "suffixed" directories for the "ANGBAND_DIR_DATA" directory, but
- * requiring the directories to be created by hand by the user.
- * Hack -- first we free all the strings, since this is known
- * to succeed even if the strings have not been allocated yet,
- * as long as the variables start out as "NULL".  This allows
- * this function to be called multiple times, for example, to
- * try several base "path" values until a good one is found.
- * </pre>
  */
 void init_file_paths(char *path)
 {
@@ -172,8 +89,8 @@ void init_file_paths(char *path)
 }
 
 /*!
- * @brief 画面左下にシステムメッセージを表示する /
- * Hack -- take notes on line 23
+ * @brief 画面左下にシステムメッセージを表示する / Take notes on line 23
+ * @param str 初期化中のコンテンツ文字列
  * @return なし
  */
 static void init_note(concptr str)
@@ -184,8 +101,8 @@ static void init_note(concptr str)
 }
 
 /*!
- * @brief 全ゲームデータ読み込みのサブルーチン /
- * Hack -- Explain a broken "lib" folder and quit (see below).
+ * @brief 全ゲームデータ読み込みのサブルーチン / Explain a broken "lib" folder and quit (see below).
+ * @param なし
  * @return なし
  * @note
  * <pre>
@@ -205,6 +122,7 @@ static void init_angband_aux(concptr why)
 
 /*!
  * @brief タイトル記述
+ * @param なし
  * @return なし
  */
 static void put_title(void)
