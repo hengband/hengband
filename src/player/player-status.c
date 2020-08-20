@@ -134,7 +134,7 @@ static s16b calc_riding_bow_penalty(player_type *creature_ptr);
 static void put_equipment_warning(player_type *creature_ptr);
 
 static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot);
-static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot);
+static s16b calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot);
 
@@ -488,8 +488,8 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->skill_tht = calc_to_hit_throw(creature_ptr);
     creature_ptr->to_d[0] = calc_to_damage(creature_ptr, INVEN_RARM);
     creature_ptr->to_d[1] = calc_to_damage(creature_ptr, INVEN_LARM);
-    calc_to_damage_display(creature_ptr, INVEN_RARM);
-    calc_to_damage_display(creature_ptr, INVEN_LARM);
+    creature_ptr->dis_to_d[0] = calc_to_damage_display(creature_ptr, INVEN_RARM);
+    creature_ptr->dis_to_d[1] = calc_to_damage_display(creature_ptr, INVEN_LARM);
     calc_to_hit(creature_ptr, INVEN_RARM);
     calc_to_hit(creature_ptr, INVEN_LARM);
     calc_to_hit_display(creature_ptr, INVEN_RARM);
@@ -3054,51 +3054,51 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot)
 	return damage;
 }
 
-static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot)
+static s16b calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot)
 {
     int id = slot - INVEN_RARM;
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(creature_ptr, o_ptr, flgs);
 
-    creature_ptr->dis_to_d[id] = 0;
-    creature_ptr->dis_to_d[id] += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
+    s16b damage = 0;
+    damage += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
 
     if (creature_ptr->shero) {
-        creature_ptr->dis_to_d[id] += 3 + (creature_ptr->lev / 5);
+        damage += 3 + (creature_ptr->lev / 5);
     }
 
     if (creature_ptr->stun > 50) {
-        creature_ptr->dis_to_d[id] -= 20;
+        damage -= 20;
     } else if (creature_ptr->stun) {
-        creature_ptr->dis_to_d[id] -= 5;
+        damage -= 5;
     }
 
     if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
-        creature_ptr->dis_to_d[id] -= 2;
+        damage -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
-        creature_ptr->dis_to_d[id] += creature_ptr->lev / 6;
+        damage += creature_ptr->lev / 6;
         if (((id == 0) && !have_left_hand_weapon(creature_ptr)) || have_two_handed_weapons(creature_ptr)) {
-            creature_ptr->dis_to_d[id] += creature_ptr->lev / 6;
+            damage += creature_ptr->lev / 6;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
         if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
-            creature_ptr->dis_to_d[id] -= 200;
+            damage -= 200;
         } else {
-            creature_ptr->dis_to_d[id] -= 10;
+            damage -= 10;
         }
     }
 
     if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
         if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
             if (o_ptr->curse_flags & (TRC_CURSED)) {
-                creature_ptr->dis_to_d[id] += 5;
+                damage += 5;
             }
             if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
-                creature_ptr->dis_to_d[id] += 7;
+                damage += 7;
             }
             if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
-                creature_ptr->dis_to_d[id] += 13;
+                damage += 13;
             }
         }
     }
@@ -3127,8 +3127,8 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
         }
 
         if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
-            if(id == 0) creature_ptr->dis_to_d[id] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
-            if(id == 1) creature_ptr->dis_to_d[id] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
+            if(id == 0) damage += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
+            if(id == 1) damage += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
         } else if (id == get_default_hand(creature_ptr)) {
             creature_ptr->to_d[id] += (s16b)bonus_to_d;
         }
@@ -3136,8 +3136,10 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
 	}
 
 	if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
-        creature_ptr->dis_to_d[id] += (creature_ptr->lev / 6);
+        damage += (creature_ptr->lev / 6);
     }
+
+	return damage;
 }
 
 static void calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
