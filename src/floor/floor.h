@@ -24,7 +24,6 @@ bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);
 void wipe_o_list(floor_type *floor_ptr);
 bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
-FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
 void set_floor(player_type *player_ptr, POSITION x, POSITION y);
 void compact_objects(player_type *owner_ptr, int size);
 void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);

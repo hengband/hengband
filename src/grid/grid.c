@@ -23,7 +23,6 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-generator.h"
-#include "floor/floor.h"
 #include "game-option/game-play-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
