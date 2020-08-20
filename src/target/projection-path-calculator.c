@@ -5,6 +5,21 @@
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"
 
+typedef struct projection_path_type {
+    POSITION y;
+    POSITION x;
+    POSITION ay;
+    POSITION ax;
+    POSITION sy;
+    POSITION sx;
+    int frac;
+    int m;
+    int half;
+    int full;
+    int n;
+    int k;
+} projection_path_type;
+
 /*
  * @brief Convert a "location" (Y, X) into a "grid" (G)
  * @param y Yç¿ïW
@@ -31,181 +46,179 @@ int projection_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION 
     if ((x1 == x2) && (y1 == y2))
         return 0;
 
-    POSITION y, x;
-    POSITION ay, ax;
-    POSITION sy, sx;
-    int frac;
-    int m;
-
+    projection_path_type tmp_projection_path;
+    projection_path_type *pp_ptr = &tmp_projection_path;
     if (y2 < y1) {
-        ay = (y1 - y2);
-        sy = -1;
+        pp_ptr->ay = (y1 - y2);
+        pp_ptr->sy = -1;
     } else {
-        ay = (y2 - y1);
-        sy = 1;
+        pp_ptr->ay = (y2 - y1);
+        pp_ptr->sy = 1;
     }
 
     if (x2 < x1) {
-        ax = (x1 - x2);
-        sx = -1;
+        pp_ptr->ax = (x1 - x2);
+        pp_ptr->sx = -1;
     } else {
-        ax = (x2 - x1);
-        sx = 1;
+        pp_ptr->ax = (x2 - x1);
+        pp_ptr->sx = 1;
     }
 
-    int half = (ay * ax);
-    int full = half << 1;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    int n = 0;
-    int k = 0;
+    pp_ptr->half = pp_ptr->ay * pp_ptr->ax;
+    pp_ptr->full = pp_ptr->half << 1;
+    pp_ptr->n = 0;
+    pp_ptr->k = 0;
 
     /* Vertical */
-    if (ay > ax) {
-        m = ax * ax * 2;
-        y = y1 + sy;
-        x = x1;
-        frac = m;
-        if (frac > half) {
-            x += sx;
-            frac -= full;
-            k++;
+    if (pp_ptr->ay > pp_ptr->ax) {
+        pp_ptr->m = pp_ptr->ax * pp_ptr->ax * 2;
+        pp_ptr->y = y1 + pp_ptr->sy;
+        pp_ptr->x = x1;
+        pp_ptr->frac = pp_ptr->m;
+        if (pp_ptr->frac > pp_ptr->half) {
+            pp_ptr->x += pp_ptr->sx;
+            pp_ptr->frac -= pp_ptr->full;
+            pp_ptr->k++;
         }
 
+        floor_type *floor_ptr = player_ptr->current_floor_ptr;
         while (TRUE) {
-            gp[n++] = location_to_grid(y, x);
-            if ((n + (k >> 1)) >= range)
+            gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
+            if ((pp_ptr->n + (pp_ptr->k >> 1)) >= range)
                 break;
 
             if (!(flg & PROJECT_THRU)) {
-                if ((x == x2) && (y == y2))
+                if ((pp_ptr->x == x2) && (pp_ptr->y == y2))
                     break;
             }
 
             if (flg & PROJECT_DISI) {
-                if ((n > 0) && cave_stop_disintegration(floor_ptr, y, x))
+                if ((pp_ptr->n > 0) && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x))
                     break;
             } else if (flg & PROJECT_LOS) {
-                if ((n > 0) && !cave_los_bold(floor_ptr, y, x))
+                if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
                     break;
             } else if (!(flg & PROJECT_PATH)) {
-                if ((n > 0) && !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT))
+                if ((pp_ptr->n > 0) && !cave_have_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
                     break;
             }
 
             if (flg & PROJECT_STOP) {
-                if ((n > 0) && (player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
+                if ((pp_ptr->n > 0) && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0))
                     break;
             }
 
-            if (!in_bounds(floor_ptr, y, x))
+            if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
 
-            if (m) {
-                frac += m;
-                if (frac > half) {
-                    x += sx;
-                    frac -= full;
-                    k++;
+            if (pp_ptr->m) {
+                pp_ptr->frac += pp_ptr->m;
+                if (pp_ptr->frac > pp_ptr->half) {
+                    pp_ptr->x += pp_ptr->sx;
+                    pp_ptr->frac -= pp_ptr->full;
+                    pp_ptr->k++;
                 }
             }
 
-            y += sy;
+            pp_ptr->y += pp_ptr->sy;
         }
 
-        return n;
+        return pp_ptr->n;
     }
 
     /* Horizontal */
-    if (ax > ay) {
-        m = ay * ay * 2;
-        y = y1;
-        x = x1 + sx;
-        frac = m;
-        if (frac > half) {
-            y += sy;
-            frac -= full;
-            k++;
+    if (pp_ptr->ax > pp_ptr->ay) {
+        pp_ptr->m = pp_ptr->ay * pp_ptr->ay * 2;
+        pp_ptr->y = y1;
+        pp_ptr->x = x1 + pp_ptr->sx;
+        pp_ptr->frac = pp_ptr->m;
+        if (pp_ptr->frac > pp_ptr->half) {
+            pp_ptr->y += pp_ptr->sy;
+            pp_ptr->frac -= pp_ptr->full;
+            pp_ptr->k++;
         }
 
+        floor_type *floor_ptr = player_ptr->current_floor_ptr;
         while (TRUE) {
-            gp[n++] = location_to_grid(y, x);
-            if ((n + (k >> 1)) >= range)
+            gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
+            if ((pp_ptr->n + (pp_ptr->k >> 1)) >= range)
                 break;
 
             if (!(flg & (PROJECT_THRU))) {
-                if ((x == x2) && (y == y2))
+                if ((pp_ptr->x == x2) && (pp_ptr->y == y2))
                     break;
             }
 
             if (flg & (PROJECT_DISI)) {
-                if ((n > 0) && cave_stop_disintegration(floor_ptr, y, x))
+                if ((pp_ptr->n > 0) && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x))
                     break;
             } else if (flg & (PROJECT_LOS)) {
-                if ((n > 0) && !cave_los_bold(floor_ptr, y, x))
+                if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
                     break;
             } else if (!(flg & (PROJECT_PATH))) {
-                if ((n > 0) && !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT))
+                if ((pp_ptr->n > 0) && !cave_have_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
                     break;
             }
 
             if (flg & (PROJECT_STOP)) {
-                if ((n > 0) && (player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
+                if ((pp_ptr->n > 0) && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0))
                     break;
             }
 
-            if (!in_bounds(floor_ptr, y, x))
+            if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
 
-            if (m) {
-                frac += m;
-                if (frac > half) {
-                    y += sy;
-                    frac -= full;
-                    k++;
+            if (pp_ptr->m) {
+                pp_ptr->frac += pp_ptr->m;
+                if (pp_ptr->frac > pp_ptr->half) {
+                    pp_ptr->y += pp_ptr->sy;
+                    pp_ptr->frac -= pp_ptr->full;
+                    pp_ptr->k++;
                 }
             }
 
-            x += sx;
+            pp_ptr->x += pp_ptr->sx;
         }
 
-        return n;
+        return pp_ptr->n;
     }
 
-    y = y1 + sy;
-    x = x1 + sx;
+    pp_ptr->y = y1 + pp_ptr->sy;
+    pp_ptr->x = x1 + pp_ptr->sx;
 
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     while (TRUE) {
-        gp[n++] = location_to_grid(y, x);
-        if ((n + (n >> 1)) >= range)
+        gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
+        if ((pp_ptr->n + (pp_ptr->n >> 1)) >= range)
             break;
 
         if (!(flg & PROJECT_THRU)) {
-            if ((x == x2) && (y == y2))
+            if ((pp_ptr->x == x2) && (pp_ptr->y == y2))
                 break;
         }
 
         if (flg & PROJECT_DISI) {
-            if ((n > 0) && cave_stop_disintegration(floor_ptr, y, x))
+            if ((pp_ptr->n > 0) && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
         } else if (flg & PROJECT_LOS) {
-            if ((n > 0) && !cave_los_bold(floor_ptr, y, x))
+            if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
         } else if (!(flg & PROJECT_PATH)) {
-            if ((n > 0) && !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT))
+            if ((pp_ptr->n > 0) && !cave_have_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
                 break;
         }
 
         if (flg & PROJECT_STOP) {
-            if ((n > 0) && (player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
+            if ((pp_ptr->n > 0) && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0))
                 break;
         }
 
-        if (!in_bounds(floor_ptr, y, x))
+        if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x))
             break;
 
-        y += sy;
-        x += sx;
+        pp_ptr->y += pp_ptr->sy;
+        pp_ptr->x += pp_ptr->sx;
     }
 
-    return n;
+    return pp_ptr->n;
 }
