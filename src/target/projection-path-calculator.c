@@ -67,6 +67,24 @@ static void set_asxy(projection_path_type *pp_ptr)
     }
 }
 
+static void calc_frac(projection_path_type *pp_ptr, bool is_vertical)
+{
+    if (pp_ptr->m == 0)
+        return;
+
+    pp_ptr->frac += pp_ptr->m;
+    if (pp_ptr->frac <= pp_ptr->half)
+        return;
+
+    if (is_vertical)
+        pp_ptr->x += pp_ptr->sx;
+    else
+        pp_ptr->y += pp_ptr->sy;
+
+    pp_ptr->frac -= pp_ptr->full;
+    pp_ptr->k++;
+}
+
 static void calc_projection_to_target(player_type *player_ptr, projection_path_type *pp_ptr, bool is_vertical)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -99,19 +117,7 @@ static void calc_projection_to_target(player_type *player_ptr, projection_path_t
         if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x))
             break;
 
-        if (pp_ptr->m) {
-            pp_ptr->frac += pp_ptr->m;
-            if (pp_ptr->frac > pp_ptr->half) {
-                if (is_vertical)
-                    pp_ptr->x += pp_ptr->sx;
-                else
-                    pp_ptr->y += pp_ptr->sy;
-
-                pp_ptr->frac -= pp_ptr->full;
-                pp_ptr->k++;
-            }
-        }
-
+        calc_frac(pp_ptr, is_vertical);
         if (is_vertical)
             pp_ptr->y += pp_ptr->sy;
         else
