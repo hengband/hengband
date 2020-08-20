@@ -33,6 +33,7 @@
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
 #include "cmd-item/cmd-eat.h"
+#include "cmd-item/cmd-equipment.h"
 #include "cmd-item/cmd-item.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-quaff.h"

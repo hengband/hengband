@@ -124,6 +124,7 @@ hengband_SOURCES = \
 	cmd-io/macro-util.c cmd-io/macro-util.h \
 	\
 	cmd-item/cmd-eat.c cmd-item/cmd-eat.h \
+	cmd-item/cmd-equipment.c cmd-item/cmd-equipment.h \
 	cmd-item/cmd-item.c cmd-item/cmd-item.h \
 	cmd-item/cmd-magiceat.c cmd-item/cmd-magiceat.h \
 	cmd-item/cmd-quaff.c cmd-item/cmd-quaff.h \

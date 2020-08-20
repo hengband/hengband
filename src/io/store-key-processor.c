@@ -12,6 +12,7 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-io/cmd-lore.h"
 #include "cmd-io/cmd-macro.h"
+#include "cmd-item/cmd-equipment.h"
 #include "cmd-item/cmd-smith.h"
 #include "cmd-visual/cmd-draw.h"
 #include "cmd-visual/cmd-visuals.h"

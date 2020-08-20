@@ -2084,6 +2084,9 @@
     <ClCompile Include="..\..\src\cmd-io\cmd-floor.c">
       <Filter>cmd-io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-equipment.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4518,6 +4521,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-io\cmd-floor.h">
       <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-equipment.h">
+      <Filter>cmd-item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
