@@ -2081,6 +2081,9 @@
     <ClCompile Include="..\..\src\effect\effect-processor.c">
       <Filter>effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-floor.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4512,6 +4515,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-processor.h">
       <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-floor.h">
+      <Filter>cmd-io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

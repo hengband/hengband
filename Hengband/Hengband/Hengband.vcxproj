@@ -202,6 +202,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.c" />
     <ClCompile Include="..\..\src\action\movement-execution.c" />
     <ClCompile Include="..\..\src\cmd-building\cmd-store.c" />
+    <ClCompile Include="..\..\src\cmd-io\cmd-floor.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\cmd-io\macro-util.c" />
@@ -809,6 +810,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h" />
     <ClInclude Include="..\..\src\action\movement-execution.h" />
     <ClInclude Include="..\..\src\cmd-building\cmd-store.h" />
+    <ClInclude Include="..\..\src\cmd-io\cmd-floor.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\cmd-io\macro-util.h" />
