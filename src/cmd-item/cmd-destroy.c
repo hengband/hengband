@@ -43,12 +43,43 @@ typedef struct destroy_type {
     char out_val[MAX_NLEN + 40];
 } destroy_type;
 
-destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, object_type *o_ptr)
+static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, object_type *o_ptr)
 {
     destroy_ptr->amt = 1;
     destroy_ptr->force = FALSE;
     destroy_ptr->q_ptr = o_ptr;
     return destroy_ptr;
+}
+
+static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_ptr)
+{
+    if (destroy_ptr->force || (!confirm_destroy && (object_value(creature_ptr, destroy_ptr->o_ptr) <= 0)))
+        return TRUE;
+
+    describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, OD_OMIT_PREFIX);
+    sprintf(destroy_ptr->out_val, _("–{“–‚É%s‚ğ‰ó‚µ‚Ü‚·‚©? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
+    msg_print(NULL);
+    message_add(destroy_ptr->out_val);
+    creature_ptr->window |= PW_MESSAGE;
+    handle_stuff(creature_ptr);
+    while (TRUE) {
+        prt(destroy_ptr->out_val, 0, 0);
+        char i = inkey();
+        prt("", 0, 0);
+        if (i == 'y' || i == 'Y')
+            return TRUE;
+
+        if (i == ESCAPE || i == 'n' || i == 'N')
+            return FALSE;
+
+        if (i != 'A')
+            continue;
+
+        if (autopick_autoregister(creature_ptr, destroy_ptr->o_ptr))
+            autopick_alter_item(creature_ptr, destroy_ptr->item, TRUE);
+
+        return FALSE;
+    }
 }
 
 /*!
@@ -73,31 +104,8 @@ void do_cmd_destroy(player_type *creature_ptr)
     if (destroy_ptr->o_ptr == NULL)
         return;
 
-    if (!destroy_ptr->force && (confirm_destroy || (object_value(creature_ptr, destroy_ptr->o_ptr) > 0))) {
-        describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, OD_OMIT_PREFIX);
-        sprintf(destroy_ptr->out_val, _("–{“–‚É%s‚ğ‰ó‚µ‚Ü‚·‚©? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
-        msg_print(NULL);
-        message_add(destroy_ptr->out_val);
-        creature_ptr->window |= PW_MESSAGE;
-        handle_stuff(creature_ptr);
-        while (TRUE) {
-            prt(destroy_ptr->out_val, 0, 0);
-            char i = inkey();
-            prt("", 0, 0);
-            if (i == 'y' || i == 'Y')
-                break;
-
-            if (i == ESCAPE || i == 'n' || i == 'N')
-                return;
-
-            if (i == 'A') {
-                if (autopick_autoregister(creature_ptr, destroy_ptr->o_ptr))
-                    autopick_alter_item(creature_ptr, destroy_ptr->item, TRUE);
-
-                return;
-            }
-        }
-    }
+    if (!check_destory_item(creature_ptr, destroy_ptr))
+        return;
 
     if (destroy_ptr->o_ptr->number > 1) {
         destroy_ptr->amt = get_quantity(NULL, destroy_ptr->o_ptr->number);
