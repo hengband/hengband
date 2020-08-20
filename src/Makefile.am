@@ -390,6 +390,7 @@ hengband_SOURCES = \
 	main/x11-type-string.c main/x11-type-string.h \
 	\
 	market/arena-info-table.c market/arena-info-table.h \
+	market/building-initializer.c market/building-initializer.h \
 	market/building-util.c market/building-util.h \
 	market/play-gamble.c market/play-gamble.h \
 	market/poker.c market/poker.h \

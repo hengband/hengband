@@ -285,7 +285,8 @@
     <ClCompile Include="..\..\src\load\info-loader.c" />
     <ClCompile Include="..\..\src\main\angband-headers.c" />
     <ClCompile Include="..\..\src\main\info-initializer.c" />
-    <ClCompile Include="..\..\src\main\initialization-error-messages-table.c" />
+    <ClCompile Include="..\..\src\main\init-error-messages-table.c" />
+    <ClCompile Include="..\..\src\market\building-initializer.c" />
     <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.c" />
     <ClCompile Include="..\..\src\melee\melee-spell-util.c" />
     <ClCompile Include="..\..\src\melee\melee-spell.c" />
@@ -917,7 +918,8 @@
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\main\angband-headers.h" />
     <ClInclude Include="..\..\src\main\info-initializer.h" />
-    <ClInclude Include="..\..\src\main\initialization-error-messages-table.h" />
+    <ClInclude Include="..\..\src\main\init-error-messages-table.h" />
+    <ClInclude Include="..\..\src\market\building-initializer.h" />
     <ClInclude Include="..\..\src\melee\melee-spell-flags-checker.h" />
     <ClInclude Include="..\..\src\melee\melee-spell-util.h" />
     <ClInclude Include="..\..\src\melee\melee-spell.h" />

@@ -25,7 +25,7 @@
 #include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
-#include "main/init.h"
+#include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
