@@ -38,6 +38,7 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-quaff.h"
 #include "cmd-item/cmd-read.h"
+#include "cmd-item/cmd-refill.h"
 #include "cmd-item/cmd-smith.h"
 #include "cmd-item/cmd-throw.h"
 #include "cmd-item/cmd-usestaff.h"

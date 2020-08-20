@@ -2087,6 +2087,9 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-equipment.c">
       <Filter>cmd-item</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-refill.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4523,6 +4526,9 @@
       <Filter>cmd-io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-equipment.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-refill.h">
       <Filter>cmd-item</Filter>
     </ClInclude>
   </ItemGroup>
