@@ -82,6 +82,24 @@ static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_
     }
 }
 
+static bool select_destroying_item(player_type *creature_ptr, destroy_type *destroy_ptr)
+{
+    concptr q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
+    concptr s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
+    destroy_ptr->o_ptr = choose_object(creature_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR, 0);
+    if (destroy_ptr->o_ptr == NULL)
+        return FALSE;
+
+    if (!check_destory_item(creature_ptr, destroy_ptr))
+        return FALSE;
+
+    if (destroy_ptr->o_ptr->number <= 1)
+        return TRUE;
+
+    destroy_ptr->amt = get_quantity(NULL, destroy_ptr->o_ptr->number);
+    return destroy_ptr->amt > 0;
+}
+
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -98,20 +116,8 @@ void do_cmd_destroy(player_type *creature_ptr)
     if (command_arg > 0)
         destroy_ptr->force = TRUE;
 
-    concptr q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
-    concptr s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
-    destroy_ptr->o_ptr = choose_object(creature_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR, 0);
-    if (destroy_ptr->o_ptr == NULL)
+    if (!select_destroying_item(creature_ptr, destroy_ptr))
         return;
-
-    if (!check_destory_item(creature_ptr, destroy_ptr))
-        return;
-
-    if (destroy_ptr->o_ptr->number > 1) {
-        destroy_ptr->amt = get_quantity(NULL, destroy_ptr->o_ptr->number);
-        if (destroy_ptr->amt <= 0)
-            return;
-    }
 
     destroy_ptr->old_number = destroy_ptr->o_ptr->number;
     destroy_ptr->o_ptr->number = destroy_ptr->amt;
