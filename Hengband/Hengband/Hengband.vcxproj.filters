@@ -2078,6 +2078,9 @@
     <ClCompile Include="..\..\src\specific-object\toragoroshi.c">
       <Filter>specific-object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-activation\activation-genocide.c">
+      <Filter>object-activation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4506,6 +4509,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\specific-object\toragoroshi.h">
       <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-activation\activation-genocide.h">
+      <Filter>object-activation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

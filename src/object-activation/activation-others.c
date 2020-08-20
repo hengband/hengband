@@ -312,3 +312,11 @@ bool activate_terror(player_type *user_ptr)
     return TRUE;
 
 }
+
+bool activate_map_light(player_type *user_ptr)
+{
+    msg_print(_("á¿‚µ‚­‹P‚¢‚½...", "It shines brightly..."));
+    map_area(user_ptr, DETECT_RAD_MAP);
+    lite_area(user_ptr, damroll(2, 15), 3);
+    return TRUE;
+}

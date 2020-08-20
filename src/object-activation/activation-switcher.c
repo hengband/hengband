@@ -11,6 +11,7 @@
 #include "object-activation/activation-bolt-ball.h"
 #include "object-activation/activation-breath.h"
 #include "object-activation/activation-charm.h"
+#include "object-activation/activation-genocide.h"
 #include "object-activation/activation-others.h"
 #include "object-activation/activation-resistance.h"
 #include "object-activation/activation-teleport.h"
@@ -23,8 +24,6 @@
 #include "specific-object/muramasa.h"
 #include "specific-object/ring-of-power.h"
 #include "specific-object/toragoroshi.h"
-#include "spell-kind/spells-floor.h"
-#include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
@@ -141,13 +140,9 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_BANISH_EVIL:
         return activate_banish_evil(user_ptr);
     case ACT_GENOCIDE:
-        msg_print(_("深青色に輝いている...", "It glows deep blue..."));
-        (void)symbol_genocide(user_ptr, 200, TRUE);
-        return TRUE;
+        return activate_genocide(user_ptr);
     case ACT_MASS_GENO:
-        msg_print(_("ひどく鋭い音が流れ出た...", "It lets out a long, shrill note..."));
-        (void)mass_genocide(user_ptr, 200, TRUE);
-        return TRUE;
+        return activate_mass_genocide(user_ptr);
     case ACT_SCARE_AREA:
         return activate_scare(user_ptr);
     case ACT_AGGRAVATE:
@@ -275,10 +270,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         lite_area(user_ptr, damroll(2, 15), 3);
         return TRUE;
     case ACT_MAP_LIGHT:
-        msg_print(_("眩しく輝いた...", "It shines brightly..."));
-        map_area(user_ptr, DETECT_RAD_MAP);
-        lite_area(user_ptr, damroll(2, 15), 3);
-        return TRUE;
+        return activate_map_light(user_ptr);
     case ACT_DETECT_ALL:
         return activate_all_detection(user_ptr);
     case ACT_DETECT_XTRA:
