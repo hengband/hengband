@@ -3040,8 +3040,8 @@ static void calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot)
         }
 
         if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
-            creature_ptr->to_d[0] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
-            creature_ptr->to_d[1] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
+            if (id == 0) creature_ptr->to_d[id] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
+            if (id == 1) creature_ptr->to_d[id] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
             continue;
         } else if (id == get_default_hand(creature_ptr))
 			creature_ptr->to_d[id] += (s16b)bonus_to_d;
@@ -3126,9 +3126,8 @@ static void calc_to_damage_display(player_type *creature_ptr, INVENTORY_IDX slot
         if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
             if (!object_is_known(o_ptr))
                 continue;
-            creature_ptr->dis_to_d[0] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
-            creature_ptr->dis_to_d[1] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
-            continue;
+            if(id == 0) creature_ptr->dis_to_d[id] += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
+            if(id == 1) creature_ptr->dis_to_d[id] += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
         } else if (id == get_default_hand(creature_ptr)) {
             if(object_is_known(o_ptr)) creature_ptr->to_d[id] += (s16b)bonus_to_d;
         }
