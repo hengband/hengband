@@ -315,6 +315,7 @@ concptr r_a_ability_flags2[NUM_R_ABILITY_FLAGS_2] = {
 /*!
  * モンスター特性トークンの定義7 /
  * Monster race flags
+ * "GUARDIAN" ... init.c d_infoの FINAL_GUARDIAN_* にて自動指定
  */
 concptr r_info_flags7[NUM_R_FLAGS_7] = {
 	"AQUATIC",
@@ -329,7 +330,7 @@ concptr r_info_flags7[NUM_R_FLAGS_7] = {
 	"SELF_LITE_1",
 	"HAS_LITE_2",
 	"SELF_LITE_2",
-	"GUARDIAN",
+	"XXX7X12",
 	"CHAMELEON",
 	"XXXX4XXX",
 	"TANUKI",
