@@ -149,6 +149,29 @@ static void gain_exp_by_destroying_magic_book(player_type *creature_ptr, destroy
     gain_exp(creature_ptr, tester_exp * destroy_ptr->amt);
 }
 
+static void process_destroy_magic_book(player_type *creature_ptr, destroy_type *destroy_ptr)
+{
+    if (!item_tester_high_level_book(destroy_ptr->q_ptr))
+        return;
+
+    gain_exp_by_destroying_magic_book(creature_ptr, destroy_ptr);
+    if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == TV_LIFE_BOOK) {
+        chg_virtue(creature_ptr, V_UNLIFE, 1);
+        chg_virtue(creature_ptr, V_VITALITY, -1);
+    } else if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == TV_DEATH_BOOK) {
+        chg_virtue(creature_ptr, V_UNLIFE, -1);
+        chg_virtue(creature_ptr, V_VITALITY, 1);
+    }
+
+    if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_h != 0) || (destroy_ptr->q_ptr->to_d != 0))
+        chg_virtue(creature_ptr, V_ENCHANT, -1);
+
+    if (object_value_real(creature_ptr, destroy_ptr->q_ptr) > 30000)
+        chg_virtue(creature_ptr, V_SACRIFICE, 2);
+    else if (object_value_real(creature_ptr, destroy_ptr->q_ptr) > 10000)
+        chg_virtue(creature_ptr, V_SACRIFICE, 1);
+}
+
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -184,25 +207,7 @@ void do_cmd_destroy(player_type *creature_ptr)
     sound(SOUND_DESTITEM);
     reduce_charges(destroy_ptr->o_ptr, destroy_ptr->amt);
     vary_item(creature_ptr, destroy_ptr->item, -destroy_ptr->amt);
-    if (item_tester_high_level_book(destroy_ptr->q_ptr)) {
-        gain_exp_by_destroying_magic_book(creature_ptr, destroy_ptr);
-        if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == TV_LIFE_BOOK) {
-            chg_virtue(creature_ptr, V_UNLIFE, 1);
-            chg_virtue(creature_ptr, V_VITALITY, -1);
-        } else if (item_tester_high_level_book(destroy_ptr->q_ptr) && destroy_ptr->q_ptr->tval == TV_DEATH_BOOK) {
-            chg_virtue(creature_ptr, V_UNLIFE, -1);
-            chg_virtue(creature_ptr, V_VITALITY, 1);
-        }
-
-        if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_h != 0) || (destroy_ptr->q_ptr->to_d != 0))
-            chg_virtue(creature_ptr, V_ENCHANT, -1);
-
-        if (object_value_real(creature_ptr, destroy_ptr->q_ptr) > 30000)
-            chg_virtue(creature_ptr, V_SACRIFICE, 2);
-        else if (object_value_real(creature_ptr, destroy_ptr->q_ptr) > 10000)
-            chg_virtue(creature_ptr, V_SACRIFICE, 1);
-    }
-
+    process_destroy_magic_book(creature_ptr, destroy_ptr);
     if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_d != 0) || (destroy_ptr->q_ptr->to_h != 0))
         chg_virtue(creature_ptr, V_HARMONY, 1);
 
