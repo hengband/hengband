@@ -36,7 +36,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
-#include "floor/floor.h"
+#include "floor/floor-util.h"
 #include "floor/wild.h"
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"

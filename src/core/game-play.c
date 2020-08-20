@@ -34,7 +34,6 @@
 #include "floor/floor-leaver.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-util.h"
-#include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
 #include "game-option/input-options.h"

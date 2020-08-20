@@ -8,7 +8,7 @@
 #include "blue-magic/blue-magic-checker.h"
 #include "core/asking-player.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
+#include "floor/floor-util.h"
 #include "mind/mind-blue-mage.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"

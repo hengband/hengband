@@ -9,7 +9,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
+#include "floor/floor-util.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"

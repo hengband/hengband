@@ -3,7 +3,6 @@
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "inventory/player-inventory.h"

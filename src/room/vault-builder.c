@@ -1,7 +1,7 @@
 #include "room/vault-builder.h"
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
-#include "floor/floor.h"
+#include "floor/floor-util.h"
 #include "game-option/cheat-options.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"

@@ -216,7 +216,6 @@ hengband_SOURCES = \
 	floor/cave-generator.c floor/cave-generator.h \
 	floor/dungeon-tunnel-util.c floor/dungeon-tunnel-util.h \
 	floor/fixed-map-generator.c floor/fixed-map-generator.h \
-	floor/floor.c floor/floor.h \
 	floor/floor-allocation-types.h \
 	floor/floor-base-definitions.h \
 	floor/floor-changer.c floor/floor-changer.h \

@@ -371,9 +371,6 @@
     <ClCompile Include="..\..\src\core\game-play.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\floor\floor-events.c">
       <Filter>floor</Filter>
     </ClCompile>
@@ -2517,9 +2514,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\game-play.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor\floor.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-events.h">
       <Filter>floor</Filter>

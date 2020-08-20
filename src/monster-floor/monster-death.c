@@ -13,7 +13,7 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
+#include "floor/floor-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"

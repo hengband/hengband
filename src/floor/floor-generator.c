@@ -16,7 +16,7 @@
 #include "floor/cave-generator.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h" // todo precalc_cur_num_of_pet() が依存している、違和感.
-#include "floor/floor.h" // todo wipe_o_list() が依存している、違和感.
+#include "floor/floor-util.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"

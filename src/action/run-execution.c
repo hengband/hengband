@@ -2,7 +2,7 @@
 #include "action/movement-execution.h"
 #include "core/disturbance.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
+#include "floor/floor-util.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

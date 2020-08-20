@@ -9,7 +9,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-save-util.h"
-#include "floor/floor.h"
+#include "floor/floor-util.h"
 #include "floor/wild.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"

@@ -2,7 +2,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
-#include "floor/floor.h"
+#include "floor/floor-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "inventory/inventory-slot-types.h"
