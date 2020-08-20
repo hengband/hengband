@@ -6,6 +6,10 @@
 #include "system/floor-type-definition.h"
 
 typedef struct projection_path_type {
+    POSITION y1;
+    POSITION x1;
+    POSITION y2;
+    POSITION x2;
     POSITION y;
     POSITION x;
     POSITION ay;
@@ -28,6 +32,34 @@ typedef struct projection_path_type {
  */
 static u16b location_to_grid(POSITION y, POSITION x) { return 256 * y + x; }
 
+static projection_path_type *initialize_projection_path_type(projection_path_type *pp_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+{
+    pp_ptr->y1 = y1;
+    pp_ptr->x1 = x1;
+    pp_ptr->y2 = y2;
+    pp_ptr->x2 = x2;
+    return pp_ptr;
+}
+
+static void set_asxy(projection_path_type *pp_ptr)
+{
+    if (pp_ptr->y2 < pp_ptr->y1) {
+        pp_ptr->ay = pp_ptr->y1 - pp_ptr->y2;
+        pp_ptr->sy = -1;
+    } else {
+        pp_ptr->ay = pp_ptr->y2 - pp_ptr->y1;
+        pp_ptr->sy = 1;
+    }
+
+    if (pp_ptr->x2 < pp_ptr->x1) {
+        pp_ptr->ax = pp_ptr->x1 - pp_ptr->x2;
+        pp_ptr->sx = -1;
+    } else {
+        pp_ptr->ax = pp_ptr->x2 - pp_ptr->x1;
+        pp_ptr->sx = 1;
+    }
+}
+
 /*!
  * @brief 始点から終点への直線経路を返す /
  * Determine the path taken by a projection.
@@ -47,23 +79,8 @@ int projection_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION 
         return 0;
 
     projection_path_type tmp_projection_path;
-    projection_path_type *pp_ptr = &tmp_projection_path;
-    if (y2 < y1) {
-        pp_ptr->ay = (y1 - y2);
-        pp_ptr->sy = -1;
-    } else {
-        pp_ptr->ay = (y2 - y1);
-        pp_ptr->sy = 1;
-    }
-
-    if (x2 < x1) {
-        pp_ptr->ax = (x1 - x2);
-        pp_ptr->sx = -1;
-    } else {
-        pp_ptr->ax = (x2 - x1);
-        pp_ptr->sx = 1;
-    }
-
+    projection_path_type *pp_ptr = initialize_projection_path_type(&tmp_projection_path, y1, x1, y2, x2);
+    set_asxy(pp_ptr);
     pp_ptr->half = pp_ptr->ay * pp_ptr->ax;
     pp_ptr->full = pp_ptr->half << 1;
     pp_ptr->n = 0;
