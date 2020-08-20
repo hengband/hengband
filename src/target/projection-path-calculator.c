@@ -67,21 +67,8 @@ static void set_asxy(projection_path_type *pp_ptr)
     }
 }
 
-static bool calc_vertical_projection(player_type *player_ptr, projection_path_type *pp_ptr)
+static void calc_projection_to_target(player_type *player_ptr, projection_path_type *pp_ptr, bool is_vertical)
 {
-    if (pp_ptr->ay <= pp_ptr->ax)
-        return FALSE;
-
-    pp_ptr->m = pp_ptr->ax * pp_ptr->ax * 2;
-    pp_ptr->y = pp_ptr->y1 + pp_ptr->sy;
-    pp_ptr->x = pp_ptr->x1;
-    pp_ptr->frac = pp_ptr->m;
-    if (pp_ptr->frac > pp_ptr->half) {
-        pp_ptr->x += pp_ptr->sx;
-        pp_ptr->frac -= pp_ptr->full;
-        pp_ptr->k++;
-    }
-
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     while (TRUE) {
         pp_ptr->gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
@@ -115,15 +102,39 @@ static bool calc_vertical_projection(player_type *player_ptr, projection_path_ty
         if (pp_ptr->m) {
             pp_ptr->frac += pp_ptr->m;
             if (pp_ptr->frac > pp_ptr->half) {
-                pp_ptr->x += pp_ptr->sx;
+                if (is_vertical)
+                    pp_ptr->x += pp_ptr->sx;
+                else
+                    pp_ptr->y += pp_ptr->sy;
+
                 pp_ptr->frac -= pp_ptr->full;
                 pp_ptr->k++;
             }
         }
 
-        pp_ptr->y += pp_ptr->sy;
+        if (is_vertical)
+            pp_ptr->y += pp_ptr->sy;
+        else
+            pp_ptr->x += pp_ptr->sx;
+    }
+}
+
+static bool calc_vertical_projection(player_type *player_ptr, projection_path_type *pp_ptr)
+{
+    if (pp_ptr->ay <= pp_ptr->ax)
+        return FALSE;
+
+    pp_ptr->m = pp_ptr->ax * pp_ptr->ax * 2;
+    pp_ptr->y = pp_ptr->y1 + pp_ptr->sy;
+    pp_ptr->x = pp_ptr->x1;
+    pp_ptr->frac = pp_ptr->m;
+    if (pp_ptr->frac > pp_ptr->half) {
+        pp_ptr->x += pp_ptr->sx;
+        pp_ptr->frac -= pp_ptr->full;
+        pp_ptr->k++;
     }
 
+    calc_projection_to_target(player_ptr, pp_ptr, TRUE);
     return TRUE;
 }
 
@@ -142,48 +153,7 @@ static bool calc_horizontal_projection(player_type *player_ptr, projection_path_
         pp_ptr->k++;
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    while (TRUE) {
-        pp_ptr->gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
-        if ((pp_ptr->n + (pp_ptr->k >> 1)) >= pp_ptr->range)
-            break;
-
-        if (!(pp_ptr->flag & PROJECT_THRU)) {
-            if ((pp_ptr->x == pp_ptr->x2) && (pp_ptr->y == pp_ptr->y2))
-                break;
-        }
-
-        if (pp_ptr->flag & PROJECT_DISI) {
-            if ((pp_ptr->n > 0) && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x))
-                break;
-        } else if (pp_ptr->flag & PROJECT_LOS) {
-            if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
-                break;
-        } else if (!(pp_ptr->flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_have_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
-                break;
-        }
-
-        if (pp_ptr->flag & PROJECT_STOP) {
-            if ((pp_ptr->n > 0) && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0))
-                break;
-        }
-
-        if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x))
-            break;
-
-        if (pp_ptr->m) {
-            pp_ptr->frac += pp_ptr->m;
-            if (pp_ptr->frac > pp_ptr->half) {
-                pp_ptr->y += pp_ptr->sy;
-                pp_ptr->frac -= pp_ptr->full;
-                pp_ptr->k++;
-            }
-        }
-
-        pp_ptr->x += pp_ptr->sx;
-    }
-
+    calc_projection_to_target(player_ptr, pp_ptr, FALSE);
     return TRUE;
 }
 
