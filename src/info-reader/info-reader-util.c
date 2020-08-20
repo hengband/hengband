@@ -1,4 +1,5 @@
 ﻿#include "info-reader/info-reader-util.h"
+#include "main/angband-headers.h"
 #include "object-enchant/activation-info-table.h"
 #include "view/display-messages.h"
 

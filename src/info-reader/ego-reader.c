@@ -1,5 +1,6 @@
 ﻿#include "info-reader/ego-reader.h"
 #include "info-reader/kind-info-tokens-table.h"
+#include "main/angband-headers.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "util/bit-flags-calculator.h"

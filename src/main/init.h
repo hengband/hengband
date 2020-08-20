@@ -1,5 +1,4 @@
 ﻿/*!
- * @file init.h
  * @brief ゲームデータ初期化処理のヘッダファイル
  * @date 2015/01/02
  * @author
@@ -14,11 +13,9 @@
 #define INCLUDED_INIT_H
 
 #include "system/angband.h"
-#include "info-reader/info-reader-util.h"
 
 typedef void (*process_autopick_file_command_pf)(char *);
 void init_angband(player_type *player_ptr, process_autopick_file_command_pf process_autopick_file_command);
-concptr get_check_sum(void);
 void init_file_paths(char *path);
 errr init_v_info(player_type *player_ptr);
 errr init_buildings(void);

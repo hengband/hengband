@@ -5,6 +5,7 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
+#include "main/angband-headers.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-kind-hook.h"
 #include "realm/realm-types.h"
