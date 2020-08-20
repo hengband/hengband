@@ -23,3 +23,7 @@ bool activate_extra_detection(player_type *user_ptr);
 bool activate_fully_identification(player_type *user_ptr);
 bool activate_identification(player_type *user_ptr);
 bool activate_pesticide(player_type *user_ptr);
+bool activate_whirlwind(player_type *user_ptr);
+bool activate_blinding_light(player_type *user_ptr, concptr name);
+bool activate_sleep(player_type *user_ptr);
+bool activate_door_destroy(player_type *user_ptr);

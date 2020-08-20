@@ -15,6 +15,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster/monster-status.h"
 #include "player/avatar.h"
+#include "player-attack/player-attack.h"
 #include "player/player-damage.h"
 #include "spell/spell-types.h"
 #include "spell-kind/spells-beam.h"
@@ -25,6 +26,7 @@
 #include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
+#include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-sight.h"
@@ -239,5 +241,38 @@ bool activate_pesticide(player_type *user_ptr)
 {
     msg_print(_("あなたは害虫を一掃した。", "You exterminate small life."));
     (void)dispel_monsters(user_ptr, 4);
+    return TRUE;
+}
+
+/*!
+ * @brief switch_activation() から個々のスペルへの依存性をなくすためのシンタックスシュガー
+ * @param user_ptr プレーヤーへの参照ポインタ
+ * @return 発動に成功したらTRUE
+ */
+bool activate_whirlwind(player_type *user_ptr)
+{
+    massacre(user_ptr);
+    return TRUE;
+}
+
+bool activate_blinding_light(player_type *user_ptr, concptr name)
+{
+    msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name);
+    (void)fire_ball(user_ptr, GF_LITE, 0, 300, 6);
+    confuse_monsters(user_ptr, 3 * user_ptr->lev / 2);
+    return TRUE;
+}
+
+bool activate_sleep(player_type *user_ptr)
+{
+    msg_print(_("深青色に輝いている...", "It glows deep blue..."));
+    sleep_monsters_touch(user_ptr);
+    return TRUE;
+}
+
+bool activate_door_destroy(player_type *user_ptr)
+{
+    msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
+    destroy_doors_touch(user_ptr);
     return TRUE;
 }

@@ -15,7 +15,6 @@
 #include "object-activation/activation-resistance.h"
 #include "object-activation/activation-teleport.h"
 #include "object-enchant/activation-info-table.h"
-#include "player-attack/player-attack.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "specific-object/blade-turner.h"
@@ -31,7 +30,6 @@
 #include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
-#include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-sorcery.h"
@@ -96,8 +94,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_BO_MISS_2:
         return activate_missile_2(user_ptr);
     case ACT_WHIRLWIND:
-        massacre(user_ptr);
-        return TRUE;
+        return activate_whirlwind(user_ptr);
     case ACT_DRAIN_2:
         return activate_bolt_drain_2(user_ptr);
     case ACT_CALL_CHAOS:
@@ -121,10 +118,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_PESTICIDE:
         return activate_pesticide(user_ptr);
     case ACT_BLINDING_LIGHT:
-        msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name);
-        (void)fire_ball(user_ptr, GF_LITE, 0, 300, 6);
-        confuse_monsters(user_ptr, 3 * user_ptr->lev / 2);
-        return TRUE;
+        return activate_blinding_light(user_ptr, name);
     case ACT_BIZARRE:
         return activate_ring_of_power(user_ptr, name);
     case ACT_CAST_BA_STAR:
@@ -140,9 +134,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_CONFUSE:
         return activate_confusion(user_ptr);
     case ACT_SLEEP:
-        msg_print(_("深青色に輝いている...", "It glows deep blue..."));
-        sleep_monsters_touch(user_ptr);
-        return TRUE;
+        return activate_sleep(user_ptr);
     case ACT_QUAKE:
         earthquake(user_ptr, user_ptr->y, user_ptr->x, 5, 0);
         return TRUE;
@@ -312,9 +304,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         (void)set_food(user_ptr, PY_FOOD_MAX - 1);
         return TRUE;
     case ACT_DEST_DOOR:
-        msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
-        destroy_doors_touch(user_ptr);
-        return TRUE;
+        return activate_door_destroy(user_ptr);
     case ACT_STONE_MUD:
         return activate_stone_mud(user_ptr);
     case ACT_RECHARGE:
