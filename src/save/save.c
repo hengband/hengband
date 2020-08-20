@@ -12,9 +12,9 @@
  */
 
 #include "save/save.h"
+#include "core/object-compressor.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
-#include "floor/floor.h"
 #include "floor/wild.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"

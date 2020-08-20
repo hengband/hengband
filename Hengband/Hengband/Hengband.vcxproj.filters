@@ -2111,6 +2111,9 @@
     <ClCompile Include="..\..\src\grid\stair.c">
       <Filter>grid</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\object-compressor.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4572,6 +4575,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\grid\stair.h">
       <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\object-compressor.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
