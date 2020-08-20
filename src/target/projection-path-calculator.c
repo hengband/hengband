@@ -163,6 +163,39 @@ static bool calc_horizontal_projection(player_type *player_ptr, projection_path_
     return TRUE;
 }
 
+static void calc_projection_others(player_type *player_ptr, projection_path_type *pp_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    while (TRUE) {
+        pp_ptr->gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
+        if ((pp_ptr->n + (pp_ptr->n >> 1)) >= pp_ptr->range)
+            break;
+
+        if (((pp_ptr->flag & PROJECT_THRU) == 0) && (pp_ptr->x == pp_ptr->x2) && (pp_ptr->y == pp_ptr->y2))
+            break;
+
+        if (pp_ptr->flag & PROJECT_DISI) {
+            if ((pp_ptr->n > 0) && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x))
+                break;
+        } else if (pp_ptr->flag & PROJECT_LOS) {
+            if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
+                break;
+        } else if (!(pp_ptr->flag & PROJECT_PATH)) {
+            if ((pp_ptr->n > 0) && !cave_have_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
+                break;
+        }
+
+        if (((pp_ptr->flag & PROJECT_STOP) != 0) && (pp_ptr->n > 0) && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0))
+            break;
+
+        if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x))
+            break;
+
+        pp_ptr->y += pp_ptr->sy;
+        pp_ptr->x += pp_ptr->sx;
+    }
+}
+
 /*!
  * @brief 始点から終点への直線経路を返す /
  * Determine the path taken by a projection.
@@ -197,40 +230,6 @@ int projection_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION 
 
     pp_ptr->y = y1 + pp_ptr->sy;
     pp_ptr->x = x1 + pp_ptr->sx;
-
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    while (TRUE) {
-        gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
-        if ((pp_ptr->n + (pp_ptr->n >> 1)) >= range)
-            break;
-
-        if (!(flag & PROJECT_THRU)) {
-            if ((pp_ptr->x == x2) && (pp_ptr->y == y2))
-                break;
-        }
-
-        if (flag & PROJECT_DISI) {
-            if ((pp_ptr->n > 0) && cave_stop_disintegration(floor_ptr, pp_ptr->y, pp_ptr->x))
-                break;
-        } else if (flag & PROJECT_LOS) {
-            if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
-                break;
-        } else if (!(flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_have_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
-                break;
-        }
-
-        if (flag & PROJECT_STOP) {
-            if ((pp_ptr->n > 0) && (player_bold(player_ptr, pp_ptr->y, pp_ptr->x) || floor_ptr->grid_array[pp_ptr->y][pp_ptr->x].m_idx != 0))
-                break;
-        }
-
-        if (!in_bounds(floor_ptr, pp_ptr->y, pp_ptr->x))
-            break;
-
-        pp_ptr->y += pp_ptr->sy;
-        pp_ptr->x += pp_ptr->sx;
-    }
-
+    calc_projection_others(player_ptr, pp_ptr);
     return pp_ptr->n;
 }
