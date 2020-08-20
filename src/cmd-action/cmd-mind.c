@@ -16,6 +16,7 @@
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
+#include "effect/effect-processor.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "grid/grid.h"
@@ -35,7 +36,6 @@
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/process-effect.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -133,7 +133,7 @@ static bool check_mind_hp_mp_sufficiency(player_type *caster_ptr, cm_type *cm_pt
 
         return TRUE;
     }
-    
+
     if (cm_ptr->mana_cost <= caster_ptr->csp)
         return TRUE;
 
@@ -187,19 +187,19 @@ static void check_mind_mindcrafter(player_type *caster_ptr, cm_type *cm_ptr)
         lose_all_info(caster_ptr);
         return;
     }
-    
+
     if (cm_ptr->b < 15) {
         msg_print(_("奇妙な光景が目の前で踊っている...", "Weird visions seem to dance before your eyes..."));
         set_image(caster_ptr, caster_ptr->image + 5 + randint1(10));
         return;
     }
-    
+
     if (cm_ptr->b < 45) {
         msg_print(_("あなたの頭は混乱した！", "Your brain is addled!"));
         set_confused(caster_ptr, caster_ptr->confused + randint1(8));
         return;
     }
-    
+
     if (cm_ptr->b < 90) {
         set_stun(caster_ptr, caster_ptr->stun + randint1(8));
         return;
@@ -218,13 +218,13 @@ static void check_mind_mirror_master(player_type *caster_ptr, cm_type *cm_ptr)
 
     if (cm_ptr->b < 51)
         return;
-    
+
     if (cm_ptr->b < 81) {
         msg_print(_("鏡の世界の干渉を受けた！", "Weird visions seem to dance before your eyes..."));
         teleport_player(caster_ptr, 10, TELEPORT_PASSIVE);
         return;
     }
-    
+
     if (cm_ptr->b < 96) {
         msg_print(_("まわりのものがキラキラ輝いている！", "Your brain is addled!"));
         set_image(caster_ptr, caster_ptr->image + 5 + randint1(10));
@@ -286,9 +286,9 @@ static void mind_turn_passing(player_type *caster_ptr, cm_type *cm_ptr)
 {
     if (!cm_ptr->on_mirror || (caster_ptr->pclass != CLASS_MIRROR_MASTER)) {
         take_turn(caster_ptr, 100);
-        return;    
+        return;
     }
-        
+
     if (cm_ptr->n == 3 || cm_ptr->n == 5 || cm_ptr->n == 7 || cm_ptr->n == 16)
         take_turn(caster_ptr, 50);
 }
@@ -333,10 +333,10 @@ static void process_hard_concentration(player_type *caster_ptr, cm_type *cm_ptr)
         caster_ptr->redraw |= PR_HP;
         return;
     }
-    
+
     if (cm_ptr->mana_cost > cm_ptr->old_csp) {
         mind_reflection(caster_ptr, cm_ptr);
-        return;    
+        return;
     }
 
     caster_ptr->csp -= cm_ptr->mana_cost;

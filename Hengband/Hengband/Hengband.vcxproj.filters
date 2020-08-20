@@ -296,9 +296,6 @@
     <ClCompile Include="..\..\src\effect\effect-player-spirit.c">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\process-effect.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\stuff-handler.c">
       <Filter>core</Filter>
     </ClCompile>
@@ -2081,6 +2078,9 @@
     <ClCompile Include="..\..\src\object-activation\activation-genocide.c">
       <Filter>object-activation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\effect-processor.c">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2403,9 +2403,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-player-spirit.h">
       <Filter>effect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\process-effect.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-characteristics.h">
       <Filter>effect</Filter>
@@ -4512,6 +4509,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-activation\activation-genocide.h">
       <Filter>object-activation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-processor.h">
+      <Filter>effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

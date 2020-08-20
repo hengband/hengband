@@ -15,6 +15,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
+#include "effect/effect-processor.h"
 #include "game-option/cheat-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
@@ -34,9 +35,8 @@
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
-#include "spell/process-effect.h"
+#include "player/special-defense-types.h"
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
@@ -169,7 +169,8 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     take_turn(attacker_ptr, 100);
 
-    if (!have_right_hand_weapon(attacker_ptr) && !have_left_hand_weapon(attacker_ptr) && !(attacker_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES))) {
+    if (!have_right_hand_weapon(attacker_ptr) && !have_left_hand_weapon(attacker_ptr)
+        && !(attacker_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES))) {
         msg_format(_("%s攻撃できない。", "You cannot do attacking."), (empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
         return FALSE;
     }

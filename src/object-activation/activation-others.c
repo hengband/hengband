@@ -10,14 +10,14 @@
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
+#include "effect/effect-processor.h"
 #include "game-option/special-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-status.h"
-#include "player/avatar.h"
 #include "player-attack/player-attack.h"
+#include "player/avatar.h"
 #include "player/player-damage.h"
-#include "spell/spell-types.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-beam.h"
@@ -35,7 +35,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/process-effect.h"
+#include "spell/spell-types.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
@@ -310,7 +310,6 @@ bool activate_terror(player_type *user_ptr)
 {
     turn_monsters(user_ptr, 40 + user_ptr->lev);
     return TRUE;
-
 }
 
 bool activate_map_light(player_type *user_ptr)

@@ -734,7 +734,7 @@
     <ClCompile Include="..\..\src\realm\realm-song.c" />
     <ClCompile Include="..\..\src\realm\realm-sorcery.c" />
     <ClCompile Include="..\..\src\spell-realm\spells-song.c" />
-    <ClCompile Include="..\..\src\spell\process-effect.c" />
+    <ClCompile Include="..\..\src\effect\effect-processor.c" />
     <ClCompile Include="..\..\src\spell\spells-execution.c" />
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
     <ClCompile Include="..\..\src\combat\aura-counterattack.c" />
@@ -1529,7 +1529,7 @@
     <ClInclude Include="..\..\src\io\signal-handlers.h" />
     <ClInclude Include="..\..\src\io\uid-checker.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-song.h" />
-    <ClInclude Include="..\..\src\spell\process-effect.h" />
+    <ClInclude Include="..\..\src\effect\effect-processor.h" />
     <ClInclude Include="..\..\src\spell\spell-types.h" />
     <ClInclude Include="..\..\src\spell\spells-util.h" />
     <ClInclude Include="..\..\src\spell\spells-execution.h" />

@@ -1,6 +1,7 @@
 ﻿#include "mspell/mspell-summon.h"
 #include "core/disturbance.h"
 #include "effect/effect-characteristics.h"
+#include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "game-option/birth-options.h"
 #include "monster-floor/monster-summon.h"
@@ -15,9 +16,8 @@
 #include "mspell/mspell-util.h"
 #include "mspell/specified-summon.h"
 #include "spell-kind/spells-launcher.h"
-#include "spell/process-effect.h"
-#include "spell/spells-summon.h"
 #include "spell/spell-types.h"
+#include "spell/spells-summon.h"
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 

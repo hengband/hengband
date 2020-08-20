@@ -196,6 +196,7 @@ hengband_SOURCES = \
 	effect/effect-player-curse.c effect/effect-player-curse.h \
 	effect/effect-player-spirit.c effect/effect-player-spirit.h \
 	effect/effect-player-switcher.c effect/effect-player-switcher.h \
+	effect/effect-processor.c effect/effect-processor.h \
 	effect/effect-characteristics.h \
 	\
 	flavor/flag-inscriptions-table.c flavor/flag-inscriptions-table.h \
@@ -685,7 +686,6 @@ hengband_SOURCES = \
 	specific-object/toragoroshi.c specific-object/toragoroshi.h \
 	specific-object/torch.c specific-object/torch.h \
 	\
-	spell/process-effect.c spell/process-effect.h \
 	spell/range-calc.c spell/range-calc.h \
 	spell/spells-describer.c spell/spells-describer.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \

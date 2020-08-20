@@ -1,4 +1,4 @@
-﻿#include "spell/process-effect.h"
+﻿#include "effect/effect-processor.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-feature.h"
@@ -80,13 +80,14 @@ static void next_mirror(player_type *creature_ptr, POSITION *next_y, POSITION *n
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the
  * projection were observed, else FALSE
  */
-bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, int monspell)
+bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ, BIT_FLAGS flag,
+    const int monspell)
 {
     int dist;
-    POSITION y1, x1;
-    POSITION y2, x2;
-
-    /* For reflecting monsters */
+    POSITION y1;
+    POSITION x1;
+    POSITION y2;
+    POSITION x2;
     POSITION y_saver;
     POSITION x_saver;
     int msec = delay_factor * delay_factor * delay_factor;

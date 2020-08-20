@@ -9,7 +9,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
-#include "spell/process-effect.h"
+#include "effect/effect-processor.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "util/bit-flags-calculator.h"
