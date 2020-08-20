@@ -5,12 +5,6 @@
 extern floor_type floor_info;
 
 /*
- * Convert a "location" (Y,X) into a "grid" (G)
- */
-#define GRID(Y,X) \
-	(256 * (Y) + (X))
-
-/*
  * Convert a "grid" (G) into a "location" (Y)
  */
 #define GRID_Y(G) \
@@ -40,7 +34,6 @@ void wipe_o_list(floor_type *floor_ptr);
 bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
 FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
 void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num);
-int projection_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
 void set_floor(player_type *player_ptr, POSITION x, POSITION y);
 void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
 void place_gold(player_type *player_ptr, POSITION y, POSITION x);

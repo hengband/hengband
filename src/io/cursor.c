@@ -12,6 +12,7 @@
 #include "grid/grid.h"
 #include "io/screen-util.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "term/term-color-types.h"
 #include "view/display-map.h"
 #include "window/main-window-util.h"

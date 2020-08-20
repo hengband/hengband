@@ -42,6 +42,7 @@
 #include "status/element-resistance.h"
 #include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"

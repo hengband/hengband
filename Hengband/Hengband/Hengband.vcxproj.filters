@@ -2093,6 +2093,9 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-destroy.c">
       <Filter>cmd-item</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\target\projection-path-calculator.c">
+      <Filter>target</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4536,6 +4539,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-destroy.h">
       <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\projection-path-calculator.h">
+      <Filter>target</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

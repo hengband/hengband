@@ -409,6 +409,7 @@
     <ClCompile Include="..\..\src\store\sell-order.c" />
     <ClCompile Include="..\..\src\store\service-checker.c" />
     <ClCompile Include="..\..\src\target\grid-selector.c" />
+    <ClCompile Include="..\..\src\target\projection-path-calculator.c" />
     <ClCompile Include="..\..\src\target\target-describer.c" />
     <ClCompile Include="..\..\src\target\target-getter.c" />
     <ClCompile Include="..\..\src\target\target-preparation.c" />
@@ -1050,6 +1051,7 @@
     <ClInclude Include="..\..\src\system\dungeon-data-definition.h" />
     <ClInclude Include="..\..\src\system\floor-type-definition.h" />
     <ClInclude Include="..\..\src\target\grid-selector.h" />
+    <ClInclude Include="..\..\src\target\projection-path-calculator.h" />
     <ClInclude Include="..\..\src\target\target-describer.h" />
     <ClInclude Include="..\..\src\target\target-getter.h" />
     <ClInclude Include="..\..\src\target\target-preparation.h" />

@@ -10,7 +10,6 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "game-option/cheat-types.h"
 #include "game-option/special-options.h"
 #include "grid/feature-flag-types.h"
@@ -55,6 +54,7 @@
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
@@ -452,7 +452,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
     }
 
     /* Get projection path length */
-    tdis = project_path(shooter_ptr, path_g, project_length, shooter_ptr->y, shooter_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU) - 1;
+    tdis = projection_path(shooter_ptr, path_g, project_length, shooter_ptr->y, shooter_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU) - 1;
 
     project_length = 0; /* reset to default */
 
