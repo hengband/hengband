@@ -16,7 +16,8 @@
 #include "system/angband.h"
 #include "info-reader/info-reader-util.h"
 
-void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(char*));
+typedef void (*process_autopick_file_command_pf)(char *);
+void init_angband(player_type *player_ptr, process_autopick_file_command_pf process_autopick_file_command);
 concptr get_check_sum(void);
 void init_file_paths(char *path);
 errr init_v_info(player_type *player_ptr);
