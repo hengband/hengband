@@ -129,3 +129,5 @@ bool cave_drop_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     return cave_have_flag_bold(floor_ptr, y, x, FF_DROP) && ((floor_ptr->grid_array[y][x].info & CAVE_OBJECT) == 0);
 }
+
+bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_have_flag_bold(floor_ptr, y, x, FF_PATTERN); }

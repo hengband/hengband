@@ -22,7 +22,6 @@ extern floor_type floor_info;
 #define GRID_X(G) \
 	((int)((G) % 256U))
 
-bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x);
 void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
 void add_door(player_type *player_ptr, POSITION x, POSITION y);
 void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type);

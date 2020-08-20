@@ -9,7 +9,6 @@
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
-#include "floor/floor-generator.h" // todo 相互依存している、後で消す.
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
@@ -42,8 +41,6 @@
  * Not completely hardcoded, that would overflow memory
  */
 floor_type floor_info;
-
-bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_have_flag_bold(floor_ptr, y, x, FF_PATTERN); }
 
 /*!
  * @brief 鍵のかかったドアを配置する
@@ -894,45 +891,6 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
  * @param x2 終点X座標
  * @param flg フラグID
  * @return リストの長さ
- * @details
- * <pre>
- * The projection will always start from the grid (y1,x1), and will travel
- * towards the grid (y2,x2), touching one grid per unit of distance along
- * the major axis, and stopping when it enters the destination grid or a
- * wall grid, or has travelled the maximum legal distance of "range".
- *
- * Note that "distance" in this function (as in the "update_view()" code)
- * is defined as "MAX(dy,dx) + MIN(dy,dx)/2", which means that the player
- * actually has an "octagon of projection" not a "circle of projection".
- *
- * The path grids are saved into the grid array pointed to by "gp", and
- * there should be room for at least "range" grids in "gp".  Note that
- * due to the way in which distance is calculated, this function normally
- * uses fewer than "range" grids for the projection path, so the result
- * of this function should never be compared directly to "range".  Note
- * that the initial grid (y1,x1) is never saved into the grid array, not
- * even if the initial grid is also the final grid.
- *
- * The "flg" flags can be used to modify the behavior of this function.
- *
- * In particular, the "PROJECT_STOP" and "PROJECT_THRU" flags have the same
- * semantics as they do for the "project" function, namely, that the path
- * will stop as soon as it hits a monster, or that the path will continue
- * through the destination grid, respectively.
- *
- * The "PROJECT_JUMP" flag, which for the "project()" function means to
- * start at a special grid (which makes no sense in this function), means
- * that the path should be "angled" slightly if needed to avoid any wall
- * grids, allowing the player to "target" any grid which is in "view".
- * This flag is non-trivial and has not yet been implemented, but could
- * perhaps make use of the "vinfo" array (above).
- *
- * This function returns the number of grids (if any) in the path.  This
- * function will return zero if and only if (y1,x1) and (y2,x2) are equal.
- *
- * This algorithm is similar to, but slightly different from, the one used
- * by "update_view_los()", and very different from the one used by "los()".
- * </pre>
  */
 int project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
 {

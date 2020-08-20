@@ -3,6 +3,7 @@
 #include "core/asking-player.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor.h"
 #include "game-option/birth-options.h"
