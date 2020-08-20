@@ -58,6 +58,7 @@
 #include "io/uid-checker.h"
 #include "main/angband-headers.h"
 #include "main/info-initializer.h"
+#include "main/init-error-messages-table.h"
 #include "market/articles-on-sale.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
@@ -179,23 +180,6 @@ void init_file_paths(char *path)
  */
 int error_idx; /*!< データ読み込み/初期化時に汎用的にエラーコードを保存するグローバル変数 */
 int error_line; /*!< データ読み込み/初期化時に汎用的にエラー行数を保存するグローバル変数 */
-
-/*!
- * エラーメッセージの名称定義 / Standard error message text
- */
-concptr err_str[PARSE_ERROR_MAX] = {
-    NULL,
-    _("文法エラー", "parse error"),
-    _("古いファイル", "obsolete file"),
-    _("記録ヘッダがない", "missing record header"),
-    _("不連続レコード", "non-sequential records"),
-    _("おかしなフラグ存在", "invalid flag specification"),
-    _("未定義命令", "undefined directive"),
-    _("メモリ不足", "out of memory"),
-    _("座標範囲外", "coordinates out of bounds"),
-    _("引数不足", "too few arguments"),
-    _("未定義地形タグ", "undefined terrain tag"),
-};
 
 /*!
  * @brief 町情報読み込みのメインルーチン /

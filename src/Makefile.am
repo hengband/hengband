@@ -382,6 +382,7 @@ hengband_SOURCES = \
 	main/angband-headers.c main/angband-headers.h \
 	main/info-initializer.c main/info-initializer.h \
 	main/init.c main/init.h \
+	main/initialization-error-messages-table.c main/initialization-error-messages-table.h \
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
 	main/sound-of-music.c main/sound-of-music.h \
