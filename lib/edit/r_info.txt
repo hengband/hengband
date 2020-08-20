@@ -22787,9 +22787,10 @@ B:SLASH:SUPERHURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
 F:DROP_CORPSE | DROP_SKELETON | HURT_LITE
 F:IM_FIRE | RES_DARK | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_8
 S:SCARE | BLIND | CONF | HOLD | BO_NETH | BR_NETH
 D:$It is an ogre who guards Styx following its masters.
-D:$ their parents.
+D:$  It destroys cairn piled up by children having died before their parents.
 D:奪衣婆と懸衣翁に仕え、三途の川に佇む鬼だ。
 D:それは時々賽の河原を見回って、積石塚を破壊して回る。
 N:1131:土の鬼
