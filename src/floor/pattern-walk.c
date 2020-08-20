@@ -5,7 +5,6 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
-#include "floor/floor.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"

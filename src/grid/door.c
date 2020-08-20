@@ -2,7 +2,6 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/door-definition.h"
