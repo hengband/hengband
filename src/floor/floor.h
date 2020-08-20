@@ -17,9 +17,6 @@ extern floor_type floor_info;
 	((int)((G) % 256U))
 
 void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
-void add_door(player_type *player_ptr, POSITION x, POSITION y);
-void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type);
-void place_locked_door(player_type *player_ptr, POSITION y, POSITION x);
 void forget_flow(floor_type *floor_ptr);
 void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x);
 bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);

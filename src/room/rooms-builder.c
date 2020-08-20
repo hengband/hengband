@@ -39,7 +39,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
+#include "grid/door.h"
 #include "grid/grid.h"
 #include "room/cave-filler.h"
 #include "room/lake-types.h"

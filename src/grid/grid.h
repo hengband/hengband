@@ -74,14 +74,6 @@ typedef struct grid_template_type {
 	u16b occurrence;
 } grid_template_type;
 
-#define feat_locked_door_random(DOOR_TYPE) \
-	(feat_door[(DOOR_TYPE)].num_locked ? \
-	 feat_door[(DOOR_TYPE)].locked[randint0(feat_door[(DOOR_TYPE)].num_locked)] : feat_none)
-
-#define feat_jammed_door_random(DOOR_TYPE) \
-	(feat_door[(DOOR_TYPE)].num_jammed ? \
-	 feat_door[(DOOR_TYPE)].jammed[randint0(feat_door[(DOOR_TYPE)].num_jammed)] : feat_none)
-
 /*!
  * @brief 指定座標に瓦礫を配置する
  * @param Y 指定Y座標

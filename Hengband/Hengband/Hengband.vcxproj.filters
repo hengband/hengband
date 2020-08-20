@@ -2096,6 +2096,9 @@
     <ClCompile Include="..\..\src\target\projection-path-calculator.c">
       <Filter>target</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\grid\door.c">
+      <Filter>grid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4542,6 +4545,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\target\projection-path-calculator.h">
       <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\door.h">
+      <Filter>grid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

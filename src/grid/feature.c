@@ -1,5 +1,6 @@
 ﻿#include "grid/feature.h"
 #include "grid/lighting-colors-table.h"
+#include "room/door-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*** Terrain feature variables ***/
@@ -157,3 +158,13 @@ bool is_ascii_graphics(char x) { return (x & 0x80) == 0; }
  * Determine if a "feature" is "permanent wall"
  */
 bool permanent_wall(feature_type *f_ptr) { return have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT); }
+
+FEAT_IDX feat_locked_door_random(int door_type)
+{
+    return feat_door[door_type].num_locked ? feat_door[door_type].locked[randint0(feat_door[door_type].num_locked)] : feat_none;
+}
+
+FEAT_IDX feat_jammed_door_random(int door_type)
+{
+    return feat_door[door_type].num_jammed ? feat_door[door_type].jammed[randint0(feat_door[door_type].num_jammed)] : feat_none;
+}

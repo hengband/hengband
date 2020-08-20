@@ -254,6 +254,7 @@ hengband_SOURCES = \
 	game-option/special-options.c game-option/special-options.h \
 	game-option/text-display-options.c game-option/text-display-options.h \
 	\
+	grid/door.c grid/door.h \
 	grid/feature-flag-types.h \
 	grid/feature-generator.c grid/feature-generator.h \
 	grid/feature.c grid/feature.h \
