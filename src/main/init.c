@@ -92,8 +92,6 @@
  */
 static const int MACRO_MAX = 256;
 
-static void put_title(void);
-
 /*!
  * @brief 各データファイルを読み取るためのパスを取得する
  * Find the default paths to all of our important sub-directories.
@@ -1180,6 +1178,25 @@ static void init_angband_aux(concptr why)
 }
 
 /*!
+ * @brief タイトル記述
+ * @return なし
+ */
+static void put_title(void)
+{
+    char title[120];
+#if H_VER_EXTRA > 0
+    sprintf(title, _("変愚蛮怒 %d.%d.%d.%d(%s)", "Hengband %d.%d.%d.%d(%s)"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, H_VER_EXTRA,
+#else
+    sprintf(title, _("変愚蛮怒 %d.%d.%d(%s)", "Hengband %d.%d.%d(%s)"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH,
+#endif
+        IS_STABLE_VERSION ? _("安定版", "Stable") : _("開発版", "Developing"));
+    int col = (80 - strlen(title)) / 2;
+    col = col < 0 ? 0 : col;
+    const int VER_INFO_ROW = 3; //!< タイトル表記(行)
+    prt(title, VER_INFO_ROW, col);
+}
+
+/*!
  * @brief 全ゲームデータ読み込みのメインルーチン /
  * Hack -- main Angband initialization entry point
  * @return なし
@@ -1406,25 +1423,6 @@ void init_angband(player_type *player_ptr, void (*process_autopick_file_command)
     process_pref_file(player_ptr, buf, process_autopick_file_command);
 
     init_note(_("[初期化終了]", "[Initialization complete]"));
-}
-
-/*!
- * @brief タイトル記述
- * @return なし
- */
-static void put_title(void)
-{
-    char title[120];
-#if H_VER_EXTRA > 0
-    sprintf(title, _("変愚蛮怒 %d.%d.%d.%d(%s)", "Hengband %d.%d.%d.%d(%s)"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, H_VER_EXTRA,
-#else
-    sprintf(title, _("変愚蛮怒 %d.%d.%d(%s)", "Hengband %d.%d.%d(%s)"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH,
-#endif
-        IS_STABLE_VERSION ? _("安定版", "Stable") : _("開発版", "Developing"));
-    int col = (80 - strlen(title)) / 2;
-    col = col < 0 ? 0 : col;
-    const int VER_INFO_ROW = 3; //!< タイトル表記(行)
-    prt(title, VER_INFO_ROW, col);
 }
 
 /*!
