@@ -46,7 +46,6 @@
 #include "info-reader/dungeon-reader.h"
 #include "info-reader/ego-reader.h"
 #include "info-reader/feature-reader.h"
-#include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/kind-reader.h"
 #include "info-reader/magic-reader.h"
@@ -57,6 +56,7 @@
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
 #include "io/uid-checker.h"
+#include "main/info-initializer.h"
 #include "market/articles-on-sale.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
@@ -541,14 +541,6 @@ static errr init_m_info(player_type *player_ptr)
     m_head.parse_info_txt = parse_m_info;
     return init_info(player_ptr, "m_info", &m_head, (void *)&m_info, NULL, NULL, NULL);
 }
-
-/*!
- * @brief 基本情報読み込みのメインルーチン /
- * Initialize misc. values
- * @param player_ptr プレーヤーへの参照ポインタ
- * @return エラーコード
- */
-static errr init_misc(player_type *player_ptr) { return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0); }
 
 /*!
  * @brief 町情報読み込みのメインルーチン /

@@ -2111,6 +2111,9 @@
     <ClCompile Include="..\..\src\core\object-compressor.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\info-initializer.c">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4572,6 +4575,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\object-compressor.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\info-initializer.h">
+      <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
