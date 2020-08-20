@@ -166,28 +166,6 @@ void wipe_o_list(floor_type *floor_ptr)
     floor_ptr->o_cnt = 0;
 }
 
-/*!
- * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param x 地形を変えたいマスのX座標
- * @param y 地形を変えたいマスのY座標
- * @return なし
- */
-void set_floor(player_type *player_ptr, POSITION x, POSITION y)
-{
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x)) {
-        return;
-    }
-
-    if (floor_ptr->grid_array[y][x].info & CAVE_ROOM) {
-        return;
-    }
-
-    if (is_extra_bold(floor_ptr, y, x))
-        place_bold(player_ptr, y, x, GB_FLOOR);
-}
-
 /*
  * Standard "find me a location" function
  *
