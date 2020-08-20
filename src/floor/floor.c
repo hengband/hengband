@@ -611,25 +611,6 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief 指定位置に存在するモンスターを削除する / Delete the monster, if any, at a given location
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param x 削除位置x座標
- * @param y 削除位置y座標
- * @return なし
- */
-void delete_monster(player_type *player_ptr, POSITION y, POSITION x)
-{
-    grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x))
-        return;
-
-    g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->m_idx)
-        delete_monster_idx(player_ptr, g_ptr->m_idx);
-}
-
-/*!
  * @brief グローバルオブジェクト配列に対し指定範囲のオブジェクトを整理してIDの若い順に寄せる /
  * Move an object from index i1 to index i2 in the object list
  * @param i1 整理したい配列の始点

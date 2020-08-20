@@ -15,9 +15,9 @@
 #include "floor/floor-streams.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "floor/cave.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-object.h"
@@ -208,8 +208,8 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
         feature_type *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER))
-                || !dd_ptr->laketype)) {
+        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA))
+                || ((dd_ptr->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER)) || !dd_ptr->laketype)) {
             return;
         }
     }

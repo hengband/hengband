@@ -1,6 +1,7 @@
 ﻿#include "monster-floor/monster-remover.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
@@ -137,4 +138,23 @@ void wipe_monsters_list(player_type *player_ptr)
     player_ptr->pet_t_m_idx = 0;
     player_ptr->riding_t_m_idx = 0;
     health_track(player_ptr, 0);
+}
+
+/*!
+ * @brief 指定位置に存在するモンスターを削除する / Delete the monster, if any, at a given location
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param x 削除位置x座標
+ * @param y 削除位置y座標
+ * @return なし
+ */
+void delete_monster(player_type *player_ptr, POSITION y, POSITION x)
+{
+    grid_type *g_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (!in_bounds(floor_ptr, y, x))
+        return;
+
+    g_ptr = &floor_ptr->grid_array[y][x];
+    if (g_ptr->m_idx)
+        delete_monster_idx(player_ptr, g_ptr->m_idx);
 }
