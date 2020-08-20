@@ -20,6 +20,7 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor.h"
+#include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"

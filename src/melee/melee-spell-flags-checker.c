@@ -3,6 +3,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
+#include "floor/line-of-sight.h"
 #include "melee/melee-spell-util.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"

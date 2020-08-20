@@ -231,6 +231,7 @@ hengband_SOURCES = \
 	floor/floor-town.h floor/floor-town.c \
 	floor/floor-util.c floor/floor-util.h \
 	floor/geometry.c floor/geometry.h \
+	floor/line-of-sight.c floor/line-of-sight.h \
 	floor/object-allocator.c floor/object-allocator.h \
 	floor/object-scanner.c floor/object-scanner.h \
 	floor/pattern-walk.c floor/pattern-walk.h \

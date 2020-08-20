@@ -1,5 +1,5 @@
 ﻿#include "monster-floor/quantum-effect.h"
-#include "floor/floor.h"
+#include "floor/line-of-sight.h"
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"

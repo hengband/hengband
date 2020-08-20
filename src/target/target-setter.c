@@ -4,6 +4,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/floor.h"
+#include "floor/line-of-sight.h"
 #include "game-option/cheat-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"

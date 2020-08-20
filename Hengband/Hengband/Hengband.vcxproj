@@ -232,6 +232,7 @@
     <ClCompile Include="..\..\src\floor\floor-mode-changer.c" />
     <ClCompile Include="..\..\src\floor\floor-save-util.c" />
     <ClCompile Include="..\..\src\floor\floor-util.c" />
+    <ClCompile Include="..\..\src\floor\line-of-sight.c" />
     <ClCompile Include="..\..\src\floor\object-allocator.c" />
     <ClCompile Include="..\..\src\floor\object-scanner.c" />
     <ClCompile Include="..\..\src\floor\tunnel-generator.c" />
@@ -851,6 +852,7 @@
     <ClInclude Include="..\..\src\floor\floor-generator-util.h" />
     <ClInclude Include="..\..\src\floor\floor-save-util.h" />
     <ClInclude Include="..\..\src\floor\floor-util.h" />
+    <ClInclude Include="..\..\src\floor\line-of-sight.h" />
     <ClInclude Include="..\..\src\floor\object-allocator.h" />
     <ClInclude Include="..\..\src\floor\object-scanner.h" />
     <ClInclude Include="..\..\src\floor\sight-definitions.h" />

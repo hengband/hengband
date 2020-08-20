@@ -1,7 +1,7 @@
 ﻿#include "player/player-view.h"
 #include "core/player-update-types.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
+#include "floor/line-of-sight.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"

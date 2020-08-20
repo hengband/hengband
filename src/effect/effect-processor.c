@@ -8,6 +8,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "floor/floor.h"
+#include "floor/line-of-sight.h"
 #include "game-option/special-options.h"
 #include "grid/feature-flag-types.h"
 #include "io/cursor.h"

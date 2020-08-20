@@ -10,7 +10,7 @@
 #include "core/speed-table.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
-#include "floor/floor.h"
+#include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"

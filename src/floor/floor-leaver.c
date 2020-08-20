@@ -8,6 +8,7 @@
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
+#include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
