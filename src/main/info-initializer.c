@@ -15,6 +15,7 @@
 #include "io/files-util.h"
 #include "io/uid-checker.h"
 #include "main/angband-headers.h"
+#include "main/init-error-messages-table.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-kind.h"

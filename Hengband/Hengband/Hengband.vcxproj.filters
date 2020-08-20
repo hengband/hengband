@@ -2117,6 +2117,9 @@
     <ClCompile Include="..\..\src\main\angband-headers.c">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\initialization-error-messages-table.c">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4583,6 +4586,9 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\angband-headers.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\initialization-error-messages-table.h">
       <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,6 +12,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/runtime-arguments.h"
 #include "io/files-util.h"
+#include "main/init-error-messages-table.h"
 #include "player/player-class.h"
 #include "player/player-race.h"
 #include "realm/realm-names-table.h"
