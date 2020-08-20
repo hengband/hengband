@@ -509,9 +509,6 @@
     <ClCompile Include="..\..\src\birth\history.c">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\init.c">
-      <Filter>main</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\term\readdib.c">
       <Filter>term</Filter>
     </ClCompile>
@@ -2126,6 +2123,9 @@
     <ClCompile Include="..\..\src\main\game-data-initializer.c">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\angband-initializer.c">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2679,9 +2679,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\selfinfo.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\main\init.h">
-      <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\term\readdib.h">
       <Filter>term</Filter>
@@ -4601,6 +4598,9 @@
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\game-data-initializer.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\angband-initializer.h">
       <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>
