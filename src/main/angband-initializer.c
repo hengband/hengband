@@ -11,7 +11,7 @@
  * </pre>
  */
 
-#include "main/init.h"
+#include "main/angband-initializer.h"
 #include "dungeon/dungeon.h"
 #include "floor/wild.h"
 #include "info-reader/feature-reader.h"

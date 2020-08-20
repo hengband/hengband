@@ -19,7 +19,7 @@
 #include "io/inet.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
-#include "main/init.h"
+#include "main/angband-initializer.h"
 #include "player/process-name.h"
 #include "system/angband-version.h"
 #include "system/system-variables.h"
