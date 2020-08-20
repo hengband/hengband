@@ -23,8 +23,6 @@ int get_max_range(player_type *creature_ptr);
 bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);
 void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat);
-void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room);
-void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type);
 void wipe_o_list(floor_type *floor_ptr);
 bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
 FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);

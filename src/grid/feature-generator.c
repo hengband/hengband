@@ -3,10 +3,10 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
-#include "floor/floor.h" // todo place_random_door() が依存している。ここへ引っ越し.
 #include "floor/dungeon-tunnel-util.h"
 #include "game-option/cheat-types.h"
 #include "game-option/game-play-options.h"
+#include "grid/door.h"
 #include "grid/grid.h"
 #include "room/lake-types.h"
 #include "room/rooms-builder.h"

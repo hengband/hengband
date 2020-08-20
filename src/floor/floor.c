@@ -306,65 +306,6 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 }
 
 /*!
- * @brief 所定の位置にさまざまな状態や種類のドアを配置する / Place a random type of door at the given location
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param y ドアの配置を試みたいマスのY座標
- * @param x ドアの配置を試みたいマスのX座標
- * @param room 部屋に接している場合向けのドア生成か否か
- * @return なし
- */
-void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room)
-{
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    g_ptr->mimic = 0;
-
-    if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS) {
-        place_bold(player_ptr, y, x, GB_FLOOR);
-        return;
-    }
-
-    int type = ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_CURTAIN) && one_in_((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256))
-        ? DOOR_CURTAIN
-        : ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
-
-    int tmp = randint0(1000);
-    FEAT_IDX feat = feat_none;
-    if (tmp < 300) {
-        feat = feat_door[type].open;
-    } else if (tmp < 400) {
-        feat = feat_door[type].broken;
-    } else if (tmp < 600) {
-        place_closed_door(player_ptr, y, x, type);
-
-        if (type != DOOR_CURTAIN) {
-            g_ptr->mimic = room ? feat_wall_outer : feat_wall_type[randint0(100)];
-            if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
-                if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY)) {
-                    g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
-                }
-                g_ptr->mimic = 0;
-            }
-        }
-    } else {
-        place_closed_door(player_ptr, y, x, type);
-    }
-
-    if (tmp >= 400) {
-        delete_monster(player_ptr, y, x);
-        return;
-    }
-
-    if (feat != feat_none) {
-        set_cave_feat(floor_ptr, y, x, feat);
-    } else {
-        place_bold(player_ptr, y, x, GB_FLOOR);
-    }
-
-    delete_monster(player_ptr, y, x);
-}
-
-/*!
  * @brief グローバルオブジェクト配列を初期化する /
  * Delete all the items when player leaves the level
  * @note we do NOT visually reflect these (irrelevant) changes
@@ -408,42 +349,6 @@ void wipe_o_list(floor_type *floor_ptr)
 
     floor_ptr->o_max = 1;
     floor_ptr->o_cnt = 0;
-}
-
-/*!
- * @brief 所定の位置に各種の閉じたドアを配置する / Place a random type of normal door at the given location.
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param y ドアの配置を試みたいマスのY座標
- * @param x ドアの配置を試みたいマスのX座標
- * @param type ドアの地形ID
- * @return なし
- */
-void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type)
-{
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS) {
-        place_bold(player_ptr, y, x, GB_FLOOR);
-        return;
-    }
-
-    int tmp = randint0(400);
-    FEAT_IDX feat = feat_none;
-    if (tmp < 300) {
-        /* Create closed door */
-        feat = feat_door[type].closed;
-    } else if (tmp < 399) {
-        feat = feat_locked_door_random(type);
-    } else {
-        feat = feat_jammed_door_random(type);
-    }
-
-    if (feat == feat_none) {
-        place_bold(player_ptr, y, x, GB_FLOOR);
-        return;
-    }
-
-    cave_set_feat(player_ptr, y, x, feat);
-    floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 }
 
 /*!
