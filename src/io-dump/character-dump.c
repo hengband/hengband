@@ -12,7 +12,7 @@
 #include "io/mutations-dump.h"
 #include "io/write-diary.h"
 #include "knowledge/knowledge-quests.h"
-#include "main/init.h"
+#include "main/angband-headers.h"
 #include "market/arena-info-table.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -536,6 +536,16 @@ static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
     }
 
     fprintf(fff, "\n\n");
+}
+
+/*!
+ * @brief チェックサム情報を出力 / Get check sum in string form
+ * @return チェックサム情報の文字列
+ */
+static concptr get_check_sum(void)
+{
+    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", f_head.v_extra, k_head.v_extra, a_head.v_extra, e_head.v_extra, r_head.v_extra, d_head.v_extra,
+        m_head.v_extra, s_head.v_extra, v_head.v_extra);
 }
 
 /*!

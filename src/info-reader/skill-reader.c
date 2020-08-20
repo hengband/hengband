@@ -1,4 +1,5 @@
 ﻿#include "info-reader/skill-reader.h"
+#include "main/angband-headers.h"
 #include "player/player-skill.h"
 
 /*!

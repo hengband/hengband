@@ -1,5 +1,4 @@
 #include "main/angband-headers.h"
-#include "info-reader/info-reader-util.h"
 
 angband_header f_head; /*!< 地形情報のヘッダ構造体 */
 angband_header v_head; /*!< Vault情報のヘッダ構造体 */

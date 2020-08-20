@@ -1,5 +1,6 @@
 #include "info-reader/kind-reader.h"
 #include "info-reader/kind-info-tokens-table.h"
+#include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-kind.h"
 #include "term/gameterm.h"
