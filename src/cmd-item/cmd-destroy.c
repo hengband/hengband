@@ -101,6 +101,35 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
 }
 
 /*!
+ * @brief 一部職業で高位魔法書の破壊による経験値上昇の判定
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param destory_ptr アイテム破壊構造体への参照ポインタ
+ * return 魔法書の破壊によって経験値が入るならばTRUE
+ */
+static bool decide_magic_book_exp(player_type *creature_ptr, destroy_type *destroy_ptr)
+{
+    if (creature_ptr->prace == RACE_ANDROID)
+        return FALSE;
+    
+    if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_BERSERKER))
+        return TRUE;
+    
+    if (creature_ptr->pclass != CLASS_PALADIN)
+        return FALSE;
+
+    bool gain_expr = FALSE;
+    if (is_good_realm(creature_ptr->realm1)) {
+        if (!is_good_realm(tval2realm(destroy_ptr->q_ptr->tval)))
+            gain_expr = TRUE;
+    } else {
+        if (is_good_realm(tval2realm(destroy_ptr->q_ptr->tval)))
+            gain_expr = TRUE;
+    }
+
+    return gain_expr;
+}
+
+/*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -136,20 +165,7 @@ void do_cmd_destroy(player_type *creature_ptr)
     reduce_charges(destroy_ptr->o_ptr, destroy_ptr->amt);
     vary_item(creature_ptr, destroy_ptr->item, -destroy_ptr->amt);
     if (item_tester_high_level_book(destroy_ptr->q_ptr)) {
-        bool gain_expr = FALSE;
-        if (creature_ptr->prace == RACE_ANDROID) {
-        } else if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_BERSERKER)) {
-            gain_expr = TRUE;
-        } else if (creature_ptr->pclass == CLASS_PALADIN) {
-            if (is_good_realm(creature_ptr->realm1)) {
-                if (!is_good_realm(tval2realm(destroy_ptr->q_ptr->tval)))
-                    gain_expr = TRUE;
-            } else {
-                if (is_good_realm(tval2realm(destroy_ptr->q_ptr->tval)))
-                    gain_expr = TRUE;
-            }
-        }
-
+        bool gain_expr = decide_magic_book_exp(creature_ptr, destroy_ptr);
         if (gain_expr && (creature_ptr->exp < PY_MAX_EXP)) {
             s32b tester_exp = creature_ptr->max_exp / 20;
             if (tester_exp > 10000)
