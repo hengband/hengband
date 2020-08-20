@@ -93,7 +93,6 @@ void process_player(player_type *creature_ptr)
 {
     if (creature_ptr->hack_mutation) {
         msg_print(_("何か変わった気がする！", "You feel different!"));
-
         (void)gain_mutation(creature_ptr, 0);
         creature_ptr->hack_mutation = FALSE;
     }

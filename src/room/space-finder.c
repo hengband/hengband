@@ -1,9 +1,29 @@
 ﻿#include "room/space-finder.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/cave.h"
 #include "floor/floor.h"
+#include "grid/grid.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+
+/*!
+ * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
+ * @param x チェックするマスのX座標
+ * @param y チェックするマスのY座標
+ * @return 床系地形ならばTRUE
+ */
+static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
+{
+    if (!in_bounds(floor_ptr, y, x)) {
+        return FALSE;
+    }
+
+    if (is_floor_bold(floor_ptr, y, x))
+        return TRUE;
+
+    return FALSE;
+}
 
 /*!
  * @brief

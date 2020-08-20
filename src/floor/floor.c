@@ -121,72 +121,6 @@ void forget_flow(floor_type *floor_ptr)
 }
 
 /*!
- * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param y 配置を試みたいマスのY座標
- * @param x 配置を試みたいマスのX座標
- * @return なし
- */
-void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
-{
-    bool up_stairs = TRUE;
-    bool down_stairs = TRUE;
-    grid_type *g_ptr;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    if (!is_floor_grid(g_ptr) || g_ptr->o_idx)
-        return;
-
-    if (!floor_ptr->dun_level)
-        up_stairs = FALSE;
-    if (ironman_downward)
-        up_stairs = FALSE;
-    if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth)
-        down_stairs = FALSE;
-    if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1))
-        down_stairs = FALSE;
-
-    if (down_stairs && up_stairs) {
-        if (randint0(100) < 50)
-            up_stairs = FALSE;
-        else
-            down_stairs = FALSE;
-    }
-
-    if (up_stairs)
-        set_cave_feat(floor_ptr, y, x, feat_up_stair);
-    else if (down_stairs)
-        set_cave_feat(floor_ptr, y, x, feat_down_stair);
-}
-
-/*!
- * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。 / Determine if a given location may be "destroyed"
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param y y座標
- * @param x x座標
- * @return 各種の変更が可能ならTRUEを返す。
- * @details
- * 条件は永久地形でなく、なおかつ該当のマスにアーティファクトが存在しないか、である。英語の旧コメントに反して＊破壊＊の抑止判定には現在使われていない。
- */
-bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
-{
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    if (cave_have_flag_grid(g_ptr, FF_PERMANENT))
-        return FALSE;
-
-    OBJECT_IDX next_o_idx = 0;
-    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
-        object_type *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
-        if (object_is_artifact(o_ptr))
-            return FALSE;
-    }
-
-    return TRUE;
-}
-
-/*!
  * @brief グローバルオブジェクト配列を初期化する /
  * Delete all the items when player leaves the level
  * @note we do NOT visually reflect these (irrelevant) changes
@@ -233,24 +167,6 @@ void wipe_o_list(floor_type *floor_ptr)
 }
 
 /*!
- * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
- * @param x チェックするマスのX座標
- * @param y チェックするマスのY座標
- * @return 床系地形ならばTRUE
- */
-bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
-{
-    if (!in_bounds(floor_ptr, y, x)) {
-        return FALSE;
-    }
-
-    if (is_floor_bold(floor_ptr, y, x))
-        return TRUE;
-
-    return FALSE;
-}
-
-/*!
  * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param x 地形を変えたいマスのX座標
@@ -290,9 +206,8 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
         if (!o_ptr->k_idx)
             continue;
 
-        if (o_ptr->next_o_idx == i1) {
+        if (o_ptr->next_o_idx == i1)
             o_ptr->next_o_idx = i2;
-        }
     }
 
     o_ptr = &floor_ptr->o_list[i1];
@@ -300,18 +215,15 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
     if (object_is_held_monster(o_ptr)) {
         monster_type *m_ptr;
         m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-        if (m_ptr->hold_o_idx == i1) {
+        if (m_ptr->hold_o_idx == i1)
             m_ptr->hold_o_idx = i2;
-        }
     } else {
         POSITION y = o_ptr->iy;
         POSITION x = o_ptr->ix;
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
-
-        if (g_ptr->o_idx == i1) {
+        if (g_ptr->o_idx == i1)
             g_ptr->o_idx = i2;
-        }
     }
 
     floor_ptr->o_list[i2] = floor_ptr->o_list[i1];
@@ -340,8 +252,8 @@ void compact_objects(player_type *player_ptr, int size)
     object_type *o_ptr;
     if (size) {
         msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
-        player_ptr->redraw |= (PR_MAP);
-        player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+        player_ptr->redraw |= PR_MAP;
+        player_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
     }
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -351,9 +263,7 @@ void compact_objects(player_type *player_ptr, int size)
         for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
             o_ptr = &floor_ptr->o_list[i];
 
-            if (!object_is_valid(o_ptr))
-                continue;
-            if (k_info[o_ptr->k_idx].level > cur_lev)
+            if (!object_is_valid(o_ptr) || (k_info[o_ptr->k_idx].level > cur_lev))
                 continue;
 
             POSITION y, x;
