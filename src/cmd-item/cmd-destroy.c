@@ -172,6 +172,21 @@ static void process_destroy_magic_book(player_type *creature_ptr, destroy_type *
         chg_virtue(creature_ptr, V_SACRIFICE, 1);
 }
 
+static void exe_destroy_item(player_type *creature_ptr, destroy_type *destroy_ptr)
+{
+    object_copy(destroy_ptr->q_ptr, destroy_ptr->o_ptr);
+    msg_format(_("%sを壊した。", "You destroy %s."), destroy_ptr->o_name);
+    sound(SOUND_DESTITEM);
+    reduce_charges(destroy_ptr->o_ptr, destroy_ptr->amt);
+    vary_item(creature_ptr, destroy_ptr->item, -destroy_ptr->amt);
+    process_destroy_magic_book(creature_ptr, destroy_ptr);
+    if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_d != 0) || (destroy_ptr->q_ptr->to_h != 0))
+        chg_virtue(creature_ptr, V_HARMONY, 1);
+
+    if (destroy_ptr->item >= INVEN_RARM)
+        calc_android_exp(creature_ptr);
+}
+
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -202,15 +217,5 @@ void do_cmd_destroy(player_type *creature_ptr)
         return;
     }
 
-    object_copy(destroy_ptr->q_ptr, destroy_ptr->o_ptr);
-    msg_format(_("%sを壊した。", "You destroy %s."), destroy_ptr->o_name);
-    sound(SOUND_DESTITEM);
-    reduce_charges(destroy_ptr->o_ptr, destroy_ptr->amt);
-    vary_item(creature_ptr, destroy_ptr->item, -destroy_ptr->amt);
-    process_destroy_magic_book(creature_ptr, destroy_ptr);
-    if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_d != 0) || (destroy_ptr->q_ptr->to_h != 0))
-        chg_virtue(creature_ptr, V_HARMONY, 1);
-
-    if (destroy_ptr->item >= INVEN_RARM)
-        calc_android_exp(creature_ptr);
+    exe_destroy_item(creature_ptr, destroy_ptr);
 }
