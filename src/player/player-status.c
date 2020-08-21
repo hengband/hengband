@@ -3181,9 +3181,6 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
         }
 
-        if (object_is_known(o_ptr))
-            creature_ptr->dis_to_h_b += (s16b)bonus_to_h;
-
         if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !have_two_handed_weapons(creature_ptr)) {
             creature_ptr->to_h[i - INVEN_RIGHT] += (s16b)bonus_to_h;
             continue;
