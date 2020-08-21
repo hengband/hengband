@@ -632,6 +632,7 @@ hengband_SOURCES = \
 	\
 	player-info/avatar.h player-info/avatar.c \
 	player-info/base-status-types.h \
+	player-info/body-improvement-info.c player-info/body-improvement-info.h \
 	player-info/class-ability-info.c player-info/class-ability-info.h \
 	player-info/mutation-info.c player-info/mutation-info.h \
 	player-info/race-ability-info.c player-info/race-ability-info.h \
