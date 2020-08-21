@@ -7,7 +7,7 @@
 #include "floor/wild.h"
 #include "game-option/disturbance-options.h"
 #include "object-enchant/trc-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"

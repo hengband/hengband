@@ -27,7 +27,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"

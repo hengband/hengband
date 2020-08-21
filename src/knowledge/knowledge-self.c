@@ -11,7 +11,7 @@
 #include "floor/floor-town.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/race-info-table.h"
 #include "store/store-util.h"

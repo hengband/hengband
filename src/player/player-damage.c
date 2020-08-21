@@ -41,7 +41,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"

@@ -10,7 +10,7 @@
 #include "monster/monster-status.h"
 #include "monster-floor/monster-generator.h"
 #include "monster/monster-info.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 

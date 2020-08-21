@@ -54,7 +54,7 @@
 #include "object-hook/hook-bow.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-perception.h"

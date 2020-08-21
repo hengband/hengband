@@ -23,7 +23,7 @@
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"

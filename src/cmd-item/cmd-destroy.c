@@ -21,7 +21,7 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
 #include "realm/realm-names-table.h"

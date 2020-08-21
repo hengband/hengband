@@ -2,7 +2,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation-investor-remover.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-floor.h"

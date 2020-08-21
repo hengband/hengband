@@ -20,7 +20,7 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/patron.h"
 #include "player/player-class.h"
 #include "player/player-race.h"

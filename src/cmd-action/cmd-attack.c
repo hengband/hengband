@@ -32,7 +32,7 @@
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"

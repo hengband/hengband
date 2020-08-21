@@ -26,7 +26,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell/spell-types.h"

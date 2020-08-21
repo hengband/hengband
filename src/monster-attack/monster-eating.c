@@ -18,7 +18,7 @@
 #include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/mimic-info-table.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"

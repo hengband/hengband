@@ -2,7 +2,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
 #include "player-info/self-info.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"

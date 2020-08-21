@@ -14,7 +14,7 @@
 #include "monster/smart-learn-types.h"
 #include "object/item-use-flags.h"
 #include "object/item-tester-hooker.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "spell/spells-diceroll.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-floor.h"

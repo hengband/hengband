@@ -52,7 +52,7 @@
 #include "mspell/mspell-judgement.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"

@@ -68,7 +68,7 @@
 #include "object/object-kind.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
 #include "spell/spell-info.h"

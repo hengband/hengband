@@ -16,7 +16,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster/monster-status.h"
 #include "player-attack/player-attack.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/magic-item-recharger.h"

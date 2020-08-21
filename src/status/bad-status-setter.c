@@ -7,7 +7,7 @@
 #include "game-option/disturbance-options.h"
 #include "mind/mind-sniper.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"

@@ -20,7 +20,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"

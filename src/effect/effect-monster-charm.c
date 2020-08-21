@@ -16,7 +16,7 @@
 #include "monster/monster-status.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "status/bad-status-setter.h"
 #include "spell/spells-diceroll.h"
 #include "system/floor-type-definition.h"

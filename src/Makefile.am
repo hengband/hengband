@@ -598,7 +598,6 @@ hengband_SOURCES = \
 	pet/pet-util.c pet/pet-util.h \
 	\
 	player/attack-defense-types.h \
-	player/avatar.h player/avatar.c \
 	player/eldritch-horror.c player/eldritch-horror.h \
 	player/mimic-info-table.c player/mimic-info-table.h \
 	player/patron.c player/patron.h \
@@ -631,6 +630,7 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.c player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.c player-attack/player-attack.h \
 	\
+	player-info/avatar.h player-info/avatar.c \
 	player-info/self-info.c player-info/self-info.h \
 	player-info/self-info-util.c player-info/self-info-util.h \
 	\

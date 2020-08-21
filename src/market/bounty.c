@@ -26,7 +26,7 @@
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"

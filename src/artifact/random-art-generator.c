@@ -27,7 +27,7 @@
 #include "object/object-value-calc.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"

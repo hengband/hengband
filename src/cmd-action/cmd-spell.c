@@ -32,7 +32,7 @@
 #include "object/item-use-flags.h"
 #include "player-info/self-info.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/eldritch-horror.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"

@@ -23,7 +23,7 @@
 #include "monster/smart-learn-types.h"
 #include "object/object-info.h"
 #include "pet/pet-util.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/race-info-table.h"
 #include "player/player-status-flags.h"
 #include "realm/realm-names-table.h"

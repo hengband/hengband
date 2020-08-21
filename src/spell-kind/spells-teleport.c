@@ -28,7 +28,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-checker.h"
 #include "object/object-flags.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"

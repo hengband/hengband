@@ -45,7 +45,7 @@
 #include "monster/smart-learn-types.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "object-enchant/object-curse.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-personalities-types.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"

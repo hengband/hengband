@@ -22,7 +22,7 @@
 #include "perception/object-perception.h"
 #include "player-info/self-info.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/digestion-processor.h"
 #include "player/eldritch-horror.h"
 #include "player/mimic-info-table.h"

@@ -34,7 +34,7 @@
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"

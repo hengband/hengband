@@ -18,7 +18,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"

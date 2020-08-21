@@ -12,7 +12,7 @@
  * included in all such copies.
  */
 
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "core/player-update-types.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"

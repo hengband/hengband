@@ -13,7 +13,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-generator.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "racial/racial-android.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"

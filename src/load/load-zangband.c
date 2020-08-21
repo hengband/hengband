@@ -9,7 +9,7 @@
 #include "monster-race/monster-race.h"
 #include "pet/pet-util.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/patron.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"

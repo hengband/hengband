@@ -22,7 +22,7 @@
 #include "object/object-mark-types.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"

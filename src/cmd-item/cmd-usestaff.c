@@ -17,7 +17,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"

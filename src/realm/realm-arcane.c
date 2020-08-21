@@ -3,7 +3,7 @@
 #include "core/asking-player.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/digestion-processor.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-detection.h"

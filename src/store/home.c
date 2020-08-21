@@ -5,7 +5,7 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "object/object-generator.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "store/store-util.h"
 #include "util/object-sort.h"
 
