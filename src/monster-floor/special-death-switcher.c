@@ -22,6 +22,8 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
@@ -111,6 +113,17 @@ static void on_dead_dawn(player_type *player_ptr, monster_death_type *md_ptr)
         msg_print(_("V‚½‚ÈíŽm‚ªŒ»‚ê‚½I", "A new warrior steps forth!"));
 }
 
+static void on_dead_unmaker(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (is_seen(player_ptr, md_ptr->m_ptr)) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+        msg_format(_("%s‚Í•Ó‚è‚ÉƒƒOƒ‹ƒX‚ÌŽc‚è‚ðŽT‚«ŽU‚ç‚µ‚½I", "%^s sprinkled the remaining incense from Logrus!"), m_name);
+    }
+
+    (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, GF_CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+}
+
 static void on_dead_sacred_treasures(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if ((player_ptr->pseikaku != PERSONALITY_LAZY) || !md_ptr->drop_chosen_item)
@@ -192,7 +205,7 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         on_dead_dawn(player_ptr, md_ptr);
         return;
     case MON_UNMAKER:
-        (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, GF_CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+        on_dead_unmaker(player_ptr, md_ptr);
         break;
     case MON_UNICORN_ORD:
     case MON_MORGOTH:
