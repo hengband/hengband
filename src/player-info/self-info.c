@@ -275,7 +275,7 @@ void set_body_improvement_info_1(player_type *creature_ptr, self_info_type *si_p
         si_ptr->info[si_ptr->line++] = _("あなたは一時的に幽体化している。", "You are temporarily incorporeal.");
 }
 
-void special_attack_info(player_type *creature_ptr, self_info_type *si_ptr)
+void set_special_attack_info(player_type *creature_ptr, self_info_type *si_ptr)
 {
     if (creature_ptr->special_attack & ATTACK_CONFUSE)
         si_ptr->info[si_ptr->line++] = _("あなたの手は赤く輝いている。", "Your hands are glowing dull red.");
@@ -294,6 +294,37 @@ void special_attack_info(player_type *creature_ptr, self_info_type *si_ptr)
 
     if (creature_ptr->special_attack & ATTACK_POIS)
         si_ptr->info[si_ptr->line++] = _("あなたの手は毒に覆われている。", "You can strike the enemy with poison.");
+}
+
+/* todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
+void set_body_improvement_info_2(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    if (creature_ptr->new_spells)
+        si_ptr->info[si_ptr->line++] = _("あなたは呪文や祈りを学ぶことができる。", "You can learn some spells/prayers.");
+    
+    if (creature_ptr->word_recall)
+        si_ptr->info[si_ptr->line++] = _("あなたはすぐに帰還するだろう。", "You will soon be recalled.");
+    
+    if (creature_ptr->alter_reality)
+        si_ptr->info[si_ptr->line++] = _("あなたはすぐにこの世界を離れるだろう。", "You will soon be altered.");
+    
+    if (creature_ptr->see_infra)
+        si_ptr->info[si_ptr->line++] = _("あなたの瞳は赤外線に敏感である。", "Your eyes are sensitive to infrared light.");
+    
+    if (creature_ptr->see_inv)
+        si_ptr->info[si_ptr->line++] = _("あなたは透明なモンスターを見ることができる。", "You can see invisible creatures.");
+    
+    if (creature_ptr->levitation)
+        si_ptr->info[si_ptr->line++] = _("あなたは飛ぶことができる。", "You can fly.");
+    
+    if (creature_ptr->free_act)
+        si_ptr->info[si_ptr->line++] = _("あなたは麻痺知らずの効果を持っている。", "You have free action.");
+    
+    if (creature_ptr->regenerate)
+        si_ptr->info[si_ptr->line++] = _("あなたは素早く体力を回復する。", "You regenerate quickly.");
+    
+    if (creature_ptr->slow_digest)
+        si_ptr->info[si_ptr->line++] = _("あなたは食欲が少ない。", "Your appetite is small.");
 }
 
 /*!
@@ -342,33 +373,8 @@ void self_knowledge(player_type *creature_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたはひじょうに注意深く周囲を見渡している。", "You are looking around very carefully.");
         break;
     }
-    if (creature_ptr->new_spells) {
-        si_ptr->info[si_ptr->line++] = _("あなたは呪文や祈りを学ぶことができる。", "You can learn some spells/prayers.");
-    }
-    if (creature_ptr->word_recall) {
-        si_ptr->info[si_ptr->line++] = _("あなたはすぐに帰還するだろう。", "You will soon be recalled.");
-    }
-    if (creature_ptr->alter_reality) {
-        si_ptr->info[si_ptr->line++] = _("あなたはすぐにこの世界を離れるだろう。", "You will soon be altered.");
-    }
-    if (creature_ptr->see_infra) {
-        si_ptr->info[si_ptr->line++] = _("あなたの瞳は赤外線に敏感である。", "Your eyes are sensitive to infrared light.");
-    }
-    if (creature_ptr->see_inv) {
-        si_ptr->info[si_ptr->line++] = _("あなたは透明なモンスターを見ることができる。", "You can see invisible creatures.");
-    }
-    if (creature_ptr->levitation) {
-        si_ptr->info[si_ptr->line++] = _("あなたは飛ぶことができる。", "You can fly.");
-    }
-    if (creature_ptr->free_act) {
-        si_ptr->info[si_ptr->line++] = _("あなたは麻痺知らずの効果を持っている。", "You have free action.");
-    }
-    if (creature_ptr->regenerate) {
-        si_ptr->info[si_ptr->line++] = _("あなたは素早く体力を回復する。", "You regenerate quickly.");
-    }
-    if (creature_ptr->slow_digest) {
-        si_ptr->info[si_ptr->line++] = _("あなたは食欲が少ない。", "Your appetite is small.");
-    }
+
+    set_body_improvement_info_2(creature_ptr, si_ptr);
     if (creature_ptr->telepathy) {
         si_ptr->info[si_ptr->line++] = _("あなたはテレパシー能力を持っている。", "You have ESP.");
     }
