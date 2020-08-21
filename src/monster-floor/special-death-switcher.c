@@ -215,9 +215,120 @@ static void on_dead_rolento(player_type *player_ptr, monster_death_type *md_ptr)
     (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), GF_FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 }
 
-void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
+static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
+        return;
+
+    bool notice = FALSE;
+    const int popped_bubbles = 4;
+    for (int i = 0; i < popped_bubbles; i++) {
+        POSITION wy = md_ptr->md_y;
+        POSITION wx = md_ptr->md_x;
+        bool pet = is_pet(md_ptr->m_ptr);
+        BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+        MONSTER_IDX smaller_bubblle = md_ptr->m_ptr->r_idx - 1;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubblle, mode) && player_can_see_bold(player_ptr, wy, wx))
+            notice = TRUE;
+    }
+
+    if (notice)
+        msg_print(_("泡が弾けた！", "The bubble pops!"));
+}
+
+static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (floor_ptr->inside_arena || player_ptr->phase_out || one_in_(8))
+        return;
+
+    POSITION wy = md_ptr->md_y;
+    POSITION wx = md_ptr->md_x;
+    int attempts = 100;
+    bool pet = is_pet(md_ptr->m_ptr);
+    do {
+        scatter(player_ptr, &wy, &wx, md_ptr->md_y, md_ptr->md_x, 20, 0);
+    } while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
+
+    if (attempts <= 0)
+        return;
+
+    BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+    if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, MON_TOTEM_MOAI, mode) && player_can_see_bold(player_ptr, wy, wx))
+        msg_print(_("新たなモアイが現れた！", "A new moai steps forth!"));
+}
+
+static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (!md_ptr->drop_chosen_item)
+        return;
+
+    switch (md_ptr->r_ptr->d_char) {
+    case '(': {
+        if (player_ptr->current_floor_ptr->dun_level <= 0)
+            break;
+
+        object_type forge;
+        object_type *q_ptr = &forge;
+        object_wipe(q_ptr);
+        get_obj_num_hook = kind_is_cloak;
+        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
+        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        break;
+    }
+    case '/': {
+        if (player_ptr->current_floor_ptr->dun_level <= 4)
+            break;
+
+        object_type forge;
+        object_type *q_ptr = &forge;
+        object_wipe(q_ptr);
+        get_obj_num_hook = kind_is_polearm;
+        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
+        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        break;
+    }
+    case '[': {
+        if (player_ptr->current_floor_ptr->dun_level <= 19)
+            break;
+
+        object_type forge;
+        object_type *q_ptr = &forge;
+        object_wipe(q_ptr);
+        get_obj_num_hook = kind_is_armor;
+        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
+        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        break;
+    }
+    case '\\': {
+        if (player_ptr->current_floor_ptr->dun_level <= 4)
+            break;
+
+        object_type forge;
+        object_type *q_ptr = &forge;
+        object_wipe(q_ptr);
+        get_obj_num_hook = kind_is_hafted;
+        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
+        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        break;
+    }
+    case '|': {
+        if (md_ptr->m_ptr->r_idx == MON_STORMBRINGER)
+            break;
+
+        object_type forge;
+        object_type *q_ptr = &forge;
+        object_wipe(q_ptr);
+        get_obj_num_hook = kind_is_sword;
+        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
+        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        break;
+    }
+    }
+}
+
+void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
+{
     switch (md_ptr->m_ptr->r_idx) {
     case MON_PINK_HORROR:
         on_dead_pink_horror(player_ptr, md_ptr);
@@ -251,119 +362,20 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         return;
     case MON_ROLENTO:
         on_dead_rolento(player_ptr, md_ptr);
+        return;
     case MON_MIDDLE_AQUA_FIRST:
     case MON_LARGE_AQUA_FIRST:
     case MON_EXTRA_LARGE_AQUA_FIRST:
     case MON_MIDDLE_AQUA_SECOND:
     case MON_LARGE_AQUA_SECOND:
-    case MON_EXTRA_LARGE_AQUA_SECOND: {
-        if (floor_ptr->inside_arena || player_ptr->phase_out)
-            break;
-
-        bool notice = FALSE;
-        const int popped_bubbles = 4;
-        for (int i = 0; i < popped_bubbles; i++) {
-            POSITION wy = md_ptr->md_y;
-            POSITION wx = md_ptr->md_x;
-            bool pet = is_pet(md_ptr->m_ptr);
-            BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
-            MONSTER_IDX smaller_bubblle = md_ptr->m_ptr->r_idx - 1;
-            if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubblle, mode) && player_can_see_bold(player_ptr, wy, wx))
-                notice = TRUE;
-        }
-
-        if (notice)
-            msg_print(_("泡が弾けた！", "The bubble pops!"));
-
-        break;
-    }
-    case MON_TOTEM_MOAI: {
-        if (floor_ptr->inside_arena || player_ptr->phase_out || one_in_(8))
-            break;
-
-        POSITION wy = md_ptr->md_y;
-        POSITION wx = md_ptr->md_x;
-        int attempts = 100;
-        bool pet = is_pet(md_ptr->m_ptr);
-        do {
-            scatter(player_ptr, &wy, &wx, md_ptr->md_y, md_ptr->md_x, 20, 0);
-        } while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
-
-        if (attempts <= 0)
-            break;
-
-        BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
-        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, MON_TOTEM_MOAI, mode) && player_can_see_bold(player_ptr, wy, wx))
-            msg_print(_("新たなモアイが現れた！", "A new moai steps forth!"));
-
-        break;
-    }
-    default: {
-        if (!md_ptr->drop_chosen_item)
-            break;
-
-        switch (md_ptr->r_ptr->d_char) {
-        case '(': {
-            if (floor_ptr->dun_level <= 0)
-                break;
-
-            object_type forge;
-            object_type *q_ptr = &forge;
-            object_wipe(q_ptr);
-            get_obj_num_hook = kind_is_cloak;
-            make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-            (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-            break;
-        }
-        case '/': {
-            if (floor_ptr->dun_level <= 4)
-                break;
-
-            object_type forge;
-            object_type *q_ptr = &forge;
-            object_wipe(q_ptr);
-            get_obj_num_hook = kind_is_polearm;
-            make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-            (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-            break;
-        }
-        case '[': {
-            if (floor_ptr->dun_level <= 19)
-                break;
-
-            object_type forge;
-            object_type *q_ptr = &forge;
-            object_wipe(q_ptr);
-            get_obj_num_hook = kind_is_armor;
-            make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-            (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-            break;
-        }
-        case '\\': {
-            if (floor_ptr->dun_level <= 4)
-                break;
-
-            object_type forge;
-            object_type *q_ptr = &forge;
-            object_wipe(q_ptr);
-            get_obj_num_hook = kind_is_hafted;
-            make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-            (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-            break;
-        }
-        case '|': {
-            if (md_ptr->m_ptr->r_idx == MON_STORMBRINGER)
-                break;
-
-            object_type forge;
-            object_type *q_ptr = &forge;
-            object_wipe(q_ptr);
-            get_obj_num_hook = kind_is_sword;
-            make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-            (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-            break;
-        }
-        }
-    }
+    case MON_EXTRA_LARGE_AQUA_SECOND:
+        on_dead_aqua_illusion(player_ptr, md_ptr);
+        return;
+    case MON_TOTEM_MOAI:
+        on_dead_totem_moai(player_ptr, md_ptr);
+        return;
+    default:
+        on_dead_mimics(player_ptr, md_ptr);
+        return;
     }
 }
