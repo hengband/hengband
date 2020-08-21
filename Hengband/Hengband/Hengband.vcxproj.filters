@@ -2177,6 +2177,9 @@
     <ClCompile Include="..\..\src\monster-floor\monster-death-util.c">
       <Filter>monster-floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\special-death-switcher.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4706,6 +4709,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-floor\monster-death-util.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\special-death-switcher.h">
       <Filter>monster-floor</Filter>
     </ClInclude>
   </ItemGroup>

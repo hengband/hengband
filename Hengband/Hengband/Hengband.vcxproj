@@ -308,6 +308,7 @@
     <ClCompile Include="..\..\src\monster-floor\monster-death-util.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite.c" />
+    <ClCompile Include="..\..\src\monster-floor\special-death-switcher.c" />
     <ClCompile Include="..\..\src\monster\monster-status-setter.c" />
     <ClCompile Include="..\..\src\mspell\element-resistance-checker.c" />
     <ClCompile Include="..\..\src\mspell\high-resistance-checker.c" />
@@ -961,6 +962,7 @@
     <ClInclude Include="..\..\src\monster-floor\monster-death-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite.h" />
+    <ClInclude Include="..\..\src\monster-floor\special-death-switcher.h" />
     <ClInclude Include="..\..\src\monster\monster-status-setter.h" />
     <ClInclude Include="..\..\src\mspell\element-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\high-resistance-checker.h" />

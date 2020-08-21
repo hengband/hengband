@@ -492,6 +492,7 @@ hengband_SOURCES = \
 	monster-floor/one-monster-placer.c monster-floor/one-monster-placer.h \
 	monster-floor/place-monster-types.h \
 	monster-floor/quantum-effect.c monster-floor/quantum-effect.h \
+	monster-floor/special-death-switcher.c monster-floor/special-death-switcher.h \
 	\
 	monster-race/monster-race.c monster-race/monster-race.h \
 	monster-race/monster-race-hook.c monster-race/monster-race-hook.h \
