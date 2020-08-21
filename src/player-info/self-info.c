@@ -369,6 +369,54 @@ void set_esp_info(player_type *creature_ptr, self_info_type *si_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたは特別な強敵の存在を感じる能力を持っている。", "You sense unique monsters.");
 }
 
+void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    if (creature_ptr->hold_exp)
+        si_ptr->info[si_ptr->line++] = _("あなたは自己の経験値をしっかりと維持する。", "You have a firm hold on your experience.");
+
+    if (creature_ptr->reflect)
+        si_ptr->info[si_ptr->line++] = _("あなたは矢の呪文を反射する。", "You reflect bolt spells.");
+
+    if (creature_ptr->sh_fire)
+        si_ptr->info[si_ptr->line++] = _("あなたは炎のオーラに包まれている。", "You are surrounded with a fiery aura.");
+
+    if (creature_ptr->sh_elec)
+        si_ptr->info[si_ptr->line++] = _("あなたは電気に包まれている。", "You are surrounded with electricity.");
+
+    if (creature_ptr->sh_cold)
+        si_ptr->info[si_ptr->line++] = _("あなたは冷気のオーラに包まれている。", "You are surrounded with an aura of coldness.");
+
+    if (creature_ptr->tim_sh_holy)
+        si_ptr->info[si_ptr->line++] = _("あなたは聖なるオーラに包まれている。", "You are surrounded with a holy aura.");
+
+    if (creature_ptr->tim_sh_touki)
+        si_ptr->info[si_ptr->line++] = _("あなたは闘気のオーラに包まれている。", "You are surrounded with an energy aura.");
+
+    if (creature_ptr->anti_magic)
+        si_ptr->info[si_ptr->line++] = _("あなたは反魔法シールドに包まれている。", "You are surrounded by an anti-magic shell.");
+
+    if (creature_ptr->anti_tele)
+        si_ptr->info[si_ptr->line++] = _("あなたはテレポートできない。", "You cannot teleport.");
+
+    if (creature_ptr->lite)
+        si_ptr->info[si_ptr->line++] = _("あなたの身体は光っている。", "You are carrying a permanent light.");
+
+    if (creature_ptr->warning)
+        si_ptr->info[si_ptr->line++] = _("あなたは行動の前に危険を察知することができる。", "You will be warned before dangerous actions.");
+
+    if (creature_ptr->dec_mana)
+        si_ptr->info[si_ptr->line++] = _("あなたは少ない消費魔力で魔法を唱えることができる。", "You can cast spells with fewer mana points.");
+
+    if (creature_ptr->easy_spell)
+        si_ptr->info[si_ptr->line++] = _("あなたは低い失敗率で魔法を唱えることができる。", "Fail rate of your magic is decreased.");
+
+    if (creature_ptr->heavy_spell)
+        si_ptr->info[si_ptr->line++] = _("あなたは高い失敗率で魔法を唱えなければいけない。", "Fail rate of your magic is increased.");
+
+    if (creature_ptr->mighty_throw)
+        si_ptr->info[si_ptr->line++] = _("あなたは強く物を投げる。", "You can throw objects powerfully.");
+}
+
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
  * @return なし
@@ -418,52 +466,7 @@ void self_knowledge(player_type *creature_ptr)
 
     set_body_improvement_info_2(creature_ptr, si_ptr);
     set_esp_info(creature_ptr, si_ptr);
-    if (creature_ptr->hold_exp) {
-        si_ptr->info[si_ptr->line++] = _("あなたは自己の経験値をしっかりと維持する。", "You have a firm hold on your experience.");
-    }
-    if (creature_ptr->reflect) {
-        si_ptr->info[si_ptr->line++] = _("あなたは矢の呪文を反射する。", "You reflect bolt spells.");
-    }
-    if (creature_ptr->sh_fire) {
-        si_ptr->info[si_ptr->line++] = _("あなたは炎のオーラに包まれている。", "You are surrounded with a fiery aura.");
-    }
-    if (creature_ptr->sh_elec) {
-        si_ptr->info[si_ptr->line++] = _("あなたは電気に包まれている。", "You are surrounded with electricity.");
-    }
-    if (creature_ptr->sh_cold) {
-        si_ptr->info[si_ptr->line++] = _("あなたは冷気のオーラに包まれている。", "You are surrounded with an aura of coldness.");
-    }
-    if (creature_ptr->tim_sh_holy) {
-        si_ptr->info[si_ptr->line++] = _("あなたは聖なるオーラに包まれている。", "You are surrounded with a holy aura.");
-    }
-    if (creature_ptr->tim_sh_touki) {
-        si_ptr->info[si_ptr->line++] = _("あなたは闘気のオーラに包まれている。", "You are surrounded with an energy aura.");
-    }
-    if (creature_ptr->anti_magic) {
-        si_ptr->info[si_ptr->line++] = _("あなたは反魔法シールドに包まれている。", "You are surrounded by an anti-magic shell.");
-    }
-    if (creature_ptr->anti_tele) {
-        si_ptr->info[si_ptr->line++] = _("あなたはテレポートできない。", "You cannot teleport.");
-    }
-    if (creature_ptr->lite) {
-        si_ptr->info[si_ptr->line++] = _("あなたの身体は光っている。", "You are carrying a permanent light.");
-    }
-    if (creature_ptr->warning) {
-        si_ptr->info[si_ptr->line++] = _("あなたは行動の前に危険を察知することができる。", "You will be warned before dangerous actions.");
-    }
-    if (creature_ptr->dec_mana) {
-        si_ptr->info[si_ptr->line++] = _("あなたは少ない消費魔力で魔法を唱えることができる。", "You can cast spells with fewer mana points.");
-    }
-    if (creature_ptr->easy_spell) {
-        si_ptr->info[si_ptr->line++] = _("あなたは低い失敗率で魔法を唱えることができる。", "Fail rate of your magic is decreased.");
-    }
-    if (creature_ptr->heavy_spell) {
-        si_ptr->info[si_ptr->line++] = _("あなたは高い失敗率で魔法を唱えなければいけない。", "Fail rate of your magic is increased.");
-    }
-    if (creature_ptr->mighty_throw) {
-        si_ptr->info[si_ptr->line++] = _("あなたは強く物を投げる。", "You can throw objects powerfully.");
-    }
-
+    set_body_improvement_info_3(creature_ptr, si_ptr);
     if (creature_ptr->immune_acid) {
         si_ptr->info[si_ptr->line++] = _("あなたは酸に対する完全なる免疫を持っている。", "You are completely immune to acid.");
     } else if (creature_ptr->resist_acid && is_oppose_acid(creature_ptr)) {
