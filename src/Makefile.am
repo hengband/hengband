@@ -476,6 +476,7 @@ hengband_SOURCES = \
 	monster-attack/monster-eating.c monster-attack/monster-eating.h \
 	\
 	monster-floor/monster-death.c monster-floor/monster-death.h \
+	monster-floor/monster-death-util.c monster-floor/monster-death-util.h \
 	monster-floor/monster-direction.c monster-floor/monster-direction.h \
 	monster-floor/monster-dist-offsets.c monster-floor/monster-dist-offsets.h \
 	monster-floor/monster-generator.c monster-floor/monster-generator.h \

@@ -2174,6 +2174,9 @@
     <ClCompile Include="..\..\src\mind\mind-hobbit.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-death-util.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4701,6 +4704,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-hobbit.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-death-util.h">
+      <Filter>monster-floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

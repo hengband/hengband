@@ -305,6 +305,7 @@
     <ClCompile Include="..\..\src\mind\mind-power-getter.c" />
     <ClCompile Include="..\..\src\mind\mind-priest.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
+    <ClCompile Include="..\..\src\monster-floor\monster-death-util.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite.c" />
     <ClCompile Include="..\..\src\monster\monster-status-setter.c" />
@@ -957,6 +958,7 @@
     <ClInclude Include="..\..\src\mind\mind-priest.h" />
     <ClInclude Include="..\..\src\mind\mind-types.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
+    <ClInclude Include="..\..\src\monster-floor\monster-death-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite.h" />
     <ClInclude Include="..\..\src\monster\monster-status-setter.h" />
