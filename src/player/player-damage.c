@@ -51,6 +51,7 @@
 #include "save/save.h"
 #include "status/base-status.h"
 #include "status/element-resistance.h"
+#include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

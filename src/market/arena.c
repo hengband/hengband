@@ -1,4 +1,5 @@
 ﻿#include "market/arena.h"
+#include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
 #include "core/status-reseter.h"
@@ -20,6 +21,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
+#include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"

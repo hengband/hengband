@@ -10,6 +10,7 @@
  */
 
 #include "floor/floor-generator.h"
+#include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -37,6 +38,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
+#include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "view/display-messages.h"

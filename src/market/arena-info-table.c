@@ -9,6 +9,7 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
+#include "system/building-type-definition.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
