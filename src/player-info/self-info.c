@@ -56,6 +56,50 @@ void display_max_base_status(player_type *creature_ptr, self_info_type *si_ptr)
     }
 }
 
+void display_virtue(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    si_ptr->info[si_ptr->line++] = "";
+    sprintf(si_ptr->plev_buf, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
+    strcpy(si_ptr->buf[1], si_ptr->plev_buf);
+    si_ptr->info[si_ptr->line++] = si_ptr->buf[1];
+    for (int v_nr = 0; v_nr < 8; v_nr++) {
+        GAME_TEXT vir_name[20];
+        char vir_desc[80];
+        int tester = creature_ptr->virtues[v_nr];
+        strcpy(vir_name, virtue[(creature_ptr->vir_types[v_nr]) - 1]);
+        sprintf(vir_desc, _("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
+        if (tester < -100)
+            sprintf(vir_desc, _("[%s]の対極 (%d)", "You are the polar opposite of %s (%d)."), vir_name, tester);
+        else if (tester < -80)
+            sprintf(vir_desc, _("[%s]の大敵 (%d)", "You are an arch-enemy of %s (%d)."), vir_name, tester);
+        else if (tester < -60)
+            sprintf(vir_desc, _("[%s]の強敵 (%d)", "You are a bitter enemy of %s (%d)."), vir_name, tester);
+        else if (tester < -40)
+            sprintf(vir_desc, _("[%s]の敵 (%d)", "You are an enemy of %s (%d)."), vir_name, tester);
+        else if (tester < -20)
+            sprintf(vir_desc, _("[%s]の罪者 (%d)", "You have sinned against %s (%d)."), vir_name, tester);
+        else if (tester < 0)
+            sprintf(vir_desc, _("[%s]の迷道者 (%d)", "You have strayed from the path of %s (%d)."), vir_name, tester);
+        else if (tester == 0)
+            sprintf(vir_desc, _("[%s]の中立者 (%d)", "You are neutral to %s (%d)."), vir_name, tester);
+        else if (tester < 20)
+            sprintf(vir_desc, _("[%s]の小徳者 (%d)", "You are somewhat virtuous in %s (%d)."), vir_name, tester);
+        else if (tester < 40)
+            sprintf(vir_desc, _("[%s]の中徳者 (%d)", "You are virtuous in %s (%d)."), vir_name, tester);
+        else if (tester < 60)
+            sprintf(vir_desc, _("[%s]の高徳者 (%d)", "You are very virtuous in %s (%d)."), vir_name, tester);
+        else if (tester < 80)
+            sprintf(vir_desc, _("[%s]の覇者 (%d)", "You are a champion of %s (%d)."), vir_name, tester);
+        else if (tester < 100)
+            sprintf(vir_desc, _("[%s]の偉大な覇者 (%d)", "You are a great champion of %s (%d)."), vir_name, tester);
+        else
+            sprintf(vir_desc, _("[%s]の具現者 (%d)", "You are the living embodiment of %s (%d)."), vir_name, tester);
+
+        strcpy(si_ptr->v_string[v_nr], vir_desc);
+        si_ptr->info[si_ptr->line++] = si_ptr->v_string[v_nr];
+    }
+}
+
 void display_equipment_influence(player_type *creature_ptr, self_info_type *si_ptr)
 {
     for (int k = INVEN_RARM; k < INVEN_TOTAL; k++) {
@@ -132,47 +176,7 @@ void self_knowledge(player_type *creature_ptr)
     chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
     chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
     display_max_base_status(creature_ptr, si_ptr);
-    si_ptr->info[si_ptr->line++] = "";
-    sprintf(si_ptr->plev_buf, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
-    strcpy(si_ptr->buf[1], si_ptr->plev_buf);
-    si_ptr->info[si_ptr->line++] = si_ptr->buf[1];
-    for (int v_nr = 0; v_nr < 8; v_nr++) {
-        GAME_TEXT vir_name[20];
-        char vir_desc[80];
-        int tester = creature_ptr->virtues[v_nr];
-        strcpy(vir_name, virtue[(creature_ptr->vir_types[v_nr]) - 1]);
-        sprintf(vir_desc, _("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
-        if (tester < -100)
-            sprintf(vir_desc, _("[%s]の対極 (%d)", "You are the polar opposite of %s (%d)."), vir_name, tester);
-        else if (tester < -80)
-            sprintf(vir_desc, _("[%s]の大敵 (%d)", "You are an arch-enemy of %s (%d)."), vir_name, tester);
-        else if (tester < -60)
-            sprintf(vir_desc, _("[%s]の強敵 (%d)", "You are a bitter enemy of %s (%d)."), vir_name, tester);
-        else if (tester < -40)
-            sprintf(vir_desc, _("[%s]の敵 (%d)", "You are an enemy of %s (%d)."), vir_name, tester);
-        else if (tester < -20)
-            sprintf(vir_desc, _("[%s]の罪者 (%d)", "You have sinned against %s (%d)."), vir_name, tester);
-        else if (tester < 0)
-            sprintf(vir_desc, _("[%s]の迷道者 (%d)", "You have strayed from the path of %s (%d)."), vir_name, tester);
-        else if (tester == 0)
-            sprintf(vir_desc, _("[%s]の中立者 (%d)", "You are neutral to %s (%d)."), vir_name, tester);
-        else if (tester < 20)
-            sprintf(vir_desc, _("[%s]の小徳者 (%d)", "You are somewhat virtuous in %s (%d)."), vir_name, tester);
-        else if (tester < 40)
-            sprintf(vir_desc, _("[%s]の中徳者 (%d)", "You are virtuous in %s (%d)."), vir_name, tester);
-        else if (tester < 60)
-            sprintf(vir_desc, _("[%s]の高徳者 (%d)", "You are very virtuous in %s (%d)."), vir_name, tester);
-        else if (tester < 80)
-            sprintf(vir_desc, _("[%s]の覇者 (%d)", "You are a champion of %s (%d)."), vir_name, tester);
-        else if (tester < 100)
-            sprintf(vir_desc, _("[%s]の偉大な覇者 (%d)", "You are a great champion of %s (%d)."), vir_name, tester);
-        else
-            sprintf(vir_desc, _("[%s]の具現者 (%d)", "You are the living embodiment of %s (%d)."), vir_name, tester);
-
-        strcpy(si_ptr->v_string[v_nr], vir_desc);
-        si_ptr->info[si_ptr->line++] = si_ptr->v_string[v_nr];
-    }
-
+    display_virtue(creature_ptr, si_ptr);
     si_ptr->info[si_ptr->line++] = "";
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
