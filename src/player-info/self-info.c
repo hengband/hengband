@@ -45,6 +45,17 @@ void display_life_rating(player_type *creature_ptr, self_info_type *si_ptr)
     si_ptr->info[si_ptr->line++] = "";
 }
 
+void display_max_base_status(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    si_ptr->info[si_ptr->line++] = _("能力の最大値", "Limits of maximum stats");
+    for (base_status_type v_nr = 0; v_nr < A_MAX; v_nr++) {
+        char stat_desc[80];
+        sprintf(stat_desc, "%s 18/%d", stat_names[v_nr], creature_ptr->stat_max_max[v_nr] - 18);
+        strcpy(si_ptr->s_string[v_nr], stat_desc);
+        si_ptr->info[si_ptr->line++] = si_ptr->s_string[v_nr];
+    }
+}
+
 void display_equipment_influence(player_type *creature_ptr, self_info_type *si_ptr)
 {
     for (int k = INVEN_RARM; k < INVEN_TOTAL; k++) {
@@ -120,14 +131,7 @@ void self_knowledge(player_type *creature_ptr)
     display_life_rating(creature_ptr, si_ptr);
     chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
     chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
-    si_ptr->info[si_ptr->line++] = _("能力の最大値", "Limits of maximum stats");
-    for (base_status_type v_nr = 0; v_nr < A_MAX; v_nr++) {
-        char stat_desc[80];
-        sprintf(stat_desc, "%s 18/%d", stat_names[v_nr], creature_ptr->stat_max_max[v_nr] - 18);
-        strcpy(si_ptr->s_string[v_nr], stat_desc);
-        si_ptr->info[si_ptr->line++] = si_ptr->s_string[v_nr];
-    }
-
+    display_max_base_status(creature_ptr, si_ptr);
     si_ptr->info[si_ptr->line++] = "";
     sprintf(si_ptr->plev_buf, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
     strcpy(si_ptr->buf[1], si_ptr->plev_buf);
