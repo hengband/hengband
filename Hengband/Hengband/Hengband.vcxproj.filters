@@ -503,9 +503,6 @@
     <ClCompile Include="..\..\src\player\patron.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\selfinfo.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\birth\history.c">
       <Filter>birth</Filter>
     </ClCompile>
@@ -2129,6 +2126,9 @@
     <ClCompile Include="..\..\src\player-info\self-info-util.c">
       <Filter>player-info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-info\self-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2678,9 +2678,6 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\patron.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\selfinfo.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\term\readdib.h">
@@ -4607,6 +4604,9 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\self-info-util.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\self-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
   </ItemGroup>

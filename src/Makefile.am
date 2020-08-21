@@ -624,7 +624,6 @@ hengband_SOURCES = \
 	player/player-personalities-types.h \
 	player/player-sex.c player/player-sex.h \
 	player/player-view.c player/player-view.h \
-	player/selfinfo.c player/selfinfo.h \
 	player/special-defense-types.h \
 	\
 	player-attack/player-attack-util.h \
@@ -632,6 +631,7 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.c player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.c player-attack/player-attack.h \
 	\
+	player-info/self-info.c player-info/self-info.h \
 	player-info/self-info-util.c player-info/self-info-util.h \
 	\
 	racial/class-racial-switcher.c racial/class-racial-switcher.h \

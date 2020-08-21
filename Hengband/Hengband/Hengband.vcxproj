@@ -1389,7 +1389,7 @@
     <ClCompile Include="..\..\src\store\rumor.c" />
     <ClCompile Include="..\..\src\save\save.c" />
     <ClCompile Include="..\..\src\core\scores.c" />
-    <ClCompile Include="..\..\src\player\selfinfo.c" />
+    <ClCompile Include="..\..\src\player-info\self-info.c" />
     <ClCompile Include="..\..\src\io\signal-handlers.c" />
     <ClCompile Include="..\..\src\mind\mind-sniper.c" />
     <ClCompile Include="..\..\src\util\sort.c" />
@@ -1666,7 +1666,7 @@
     <ClInclude Include="..\..\src\store\rumor.h" />
     <ClInclude Include="..\..\src\save\save.h" />
     <ClInclude Include="..\..\src\core\scores.h" />
-    <ClInclude Include="..\..\src\player\selfinfo.h" />
+    <ClInclude Include="..\..\src\player-info\self-info.h" />
     <ClInclude Include="..\..\src\mind\mind-sniper.h" />
     <ClInclude Include="..\..\src\util\sort.h" />
     <ClInclude Include="..\..\src\spell\spells-diceroll.h" />

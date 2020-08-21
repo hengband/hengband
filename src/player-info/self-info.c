@@ -13,7 +13,7 @@
  * spell2s.cから分離
  */
 
-#include "player/selfinfo.h"
+#include "player-info/self-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "mutation/mutation-flag-types.h"
