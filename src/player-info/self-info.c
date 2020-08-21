@@ -275,6 +275,27 @@ void set_body_improvement_info_1(player_type *creature_ptr, self_info_type *si_p
         si_ptr->info[si_ptr->line++] = _("あなたは一時的に幽体化している。", "You are temporarily incorporeal.");
 }
 
+void special_attack_info(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    if (creature_ptr->special_attack & ATTACK_CONFUSE)
+        si_ptr->info[si_ptr->line++] = _("あなたの手は赤く輝いている。", "Your hands are glowing dull red.");
+
+    if (creature_ptr->special_attack & ATTACK_FIRE)
+        si_ptr->info[si_ptr->line++] = _("あなたの手は火炎に覆われている。", "You can strike the enemy with flame.");
+
+    if (creature_ptr->special_attack & ATTACK_COLD)
+        si_ptr->info[si_ptr->line++] = _("あなたの手は冷気に覆われている。", "You can strike the enemy with cold.");
+
+    if (creature_ptr->special_attack & ATTACK_ACID)
+        si_ptr->info[si_ptr->line++] = _("あなたの手は酸に覆われている。", "You can strike the enemy with acid.");
+
+    if (creature_ptr->special_attack & ATTACK_ELEC)
+        si_ptr->info[si_ptr->line++] = _("あなたの手は電撃に覆われている。", "You can strike the enemy with electoric shock.");
+
+    if (creature_ptr->special_attack & ATTACK_POIS)
+        si_ptr->info[si_ptr->line++] = _("あなたの手は毒に覆われている。", "You can strike the enemy with poison.");
+}
+
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
  * @return なし
@@ -315,24 +336,7 @@ void self_knowledge(player_type *creature_ptr)
     set_bad_status_info(creature_ptr, si_ptr);
     set_curse_info(creature_ptr, si_ptr);
     set_body_improvement_info_1(creature_ptr, si_ptr);
-    if (creature_ptr->special_attack & ATTACK_CONFUSE) {
-        si_ptr->info[si_ptr->line++] = _("あなたの手は赤く輝いている。", "Your hands are glowing dull red.");
-    }
-    if (creature_ptr->special_attack & ATTACK_FIRE) {
-        si_ptr->info[si_ptr->line++] = _("あなたの手は火炎に覆われている。", "You can strike the enemy with flame.");
-    }
-    if (creature_ptr->special_attack & ATTACK_COLD) {
-        si_ptr->info[si_ptr->line++] = _("あなたの手は冷気に覆われている。", "You can strike the enemy with cold.");
-    }
-    if (creature_ptr->special_attack & ATTACK_ACID) {
-        si_ptr->info[si_ptr->line++] = _("あなたの手は酸に覆われている。", "You can strike the enemy with acid.");
-    }
-    if (creature_ptr->special_attack & ATTACK_ELEC) {
-        si_ptr->info[si_ptr->line++] = _("あなたの手は電撃に覆われている。", "You can strike the enemy with electoric shock.");
-    }
-    if (creature_ptr->special_attack & ATTACK_POIS) {
-        si_ptr->info[si_ptr->line++] = _("あなたの手は毒に覆われている。", "You can strike the enemy with poison.");
-    }
+    set_special_attack_info(creature_ptr, si_ptr);
     switch (creature_ptr->action) {
     case ACTION_SEARCH:
         si_ptr->info[si_ptr->line++] = _("あなたはひじょうに注意深く周囲を見渡している。", "You are looking around very carefully.");
