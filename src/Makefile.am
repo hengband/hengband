@@ -750,6 +750,7 @@ hengband_SOURCES = \
 	spell-kind/spells-teleport.c spell-kind/spells-teleport.h \
 	spell-kind/spells-world.c spell-kind/spells-world.h \
 	\
+	spell-realm/spells-arcane.c spell-realm/spells-arcane.h \
 	spell-realm/spells-chaos.c spell-realm/spells-chaos.h \
 	spell-realm/spells-craft.c spell-realm/spells-craft.h \
 	spell-realm/spells-crusade.c spell-realm/spells-crusade.h \

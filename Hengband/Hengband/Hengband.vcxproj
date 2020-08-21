@@ -406,6 +406,7 @@
     <ClCompile Include="..\..\src\spell-kind\spells-fetcher.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-polymorph.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-world.c" />
+    <ClCompile Include="..\..\src\spell-realm\spells-arcane.c" />
     <ClCompile Include="..\..\src\spell-realm\spells-craft.c" />
     <ClCompile Include="..\..\src\spell-realm\spells-demon.c" />
     <ClCompile Include="..\..\src\spell-realm\spells-nature.c" />
@@ -1068,6 +1069,7 @@
     <ClInclude Include="..\..\src\spell-kind\spells-fetcher.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-polymorph.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-world.h" />
+    <ClInclude Include="..\..\src\spell-realm\spells-arcane.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-craft.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-demon.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-nature.h" />
