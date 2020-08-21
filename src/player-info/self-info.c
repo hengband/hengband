@@ -45,6 +45,56 @@ void display_life_rating(player_type *creature_ptr, self_info_type *si_ptr)
     si_ptr->info[si_ptr->line++] = "";
 }
 
+void display_equipment_influence(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    for (int k = INVEN_RARM; k < INVEN_TOTAL; k++) {
+        u32b tflgs[TR_FLAG_SIZE];
+        si_ptr->o_ptr = &creature_ptr->inventory_list[k];
+        if (si_ptr->o_ptr->k_idx == 0)
+            continue;
+
+        object_flags(creature_ptr, si_ptr->o_ptr, tflgs);
+        for (int j = 0; j < TR_FLAG_SIZE; j++)
+            si_ptr->flags[j] |= tflgs[j];
+    }
+
+    if (have_flag(si_ptr->flags, TR_STR))
+        si_ptr->info[si_ptr->line++] = _("あなたの腕力は装備によって影響を受けている。", "Your strength is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_INT))
+        si_ptr->info[si_ptr->line++] = _("あなたの知能は装備によって影響を受けている。", "Your intelligence is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_WIS))
+        si_ptr->info[si_ptr->line++] = _("あなたの賢さは装備によって影響を受けている。", "Your wisdom is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_DEX))
+        si_ptr->info[si_ptr->line++] = _("あなたの器用さは装備によって影響を受けている。", "Your dexterity is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_CON))
+        si_ptr->info[si_ptr->line++] = _("あなたの耐久力は装備によって影響を受けている。", "Your constitution is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_CHR))
+        si_ptr->info[si_ptr->line++] = _("あなたの魅力は装備によって影響を受けている。", "Your charisma is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_STEALTH))
+        si_ptr->info[si_ptr->line++] = _("あなたの隠密行動能力は装備によって影響を受けている。", "Your stealth is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_SEARCH))
+        si_ptr->info[si_ptr->line++] = _("あなたの探索能力は装備によって影響を受けている。", "Your searching ability is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_INFRA))
+        si_ptr->info[si_ptr->line++] = _("あなたの赤外線視力は装備によって影響を受けている。", "Your infravision is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_TUNNEL))
+        si_ptr->info[si_ptr->line++] = _("あなたの採掘能力は装備によって影響を受けている。", "Your digging ability is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_SPEED))
+        si_ptr->info[si_ptr->line++] = _("あなたのスピードは装備によって影響を受けている。", "Your speed is affected by your equipment.");
+
+    if (have_flag(si_ptr->flags, TR_BLOWS))
+        si_ptr->info[si_ptr->line++] = _("あなたの攻撃速度は装備によって影響を受けている。", "Your attack speed is affected by your equipment.");
+}
+
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
  * @return なし
@@ -70,17 +120,6 @@ void self_knowledge(player_type *creature_ptr)
     display_life_rating(creature_ptr, si_ptr);
     chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
     chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
-    for (int k = INVEN_RARM; k < INVEN_TOTAL; k++) {
-        u32b tflgs[TR_FLAG_SIZE];
-        si_ptr->o_ptr = &creature_ptr->inventory_list[k];
-        if (!si_ptr->o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, si_ptr->o_ptr, tflgs);
-        for (int j = 0; j < TR_FLAG_SIZE; j++)
-            si_ptr->flags[j] |= tflgs[j];
-    }
-
     si_ptr->info[si_ptr->line++] = _("能力の最大値", "Limits of maximum stats");
     for (base_status_type v_nr = 0; v_nr < A_MAX; v_nr++) {
         char stat_desc[80];
@@ -1076,43 +1115,7 @@ void self_knowledge(player_type *creature_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたの魅力は維持されている。", "Your charisma is sustained.");
     }
 
-    if (have_flag(si_ptr->flags, TR_STR)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの腕力は装備によって影響を受けている。", "Your strength is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_INT)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの知能は装備によって影響を受けている。", "Your intelligence is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_WIS)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの賢さは装備によって影響を受けている。", "Your wisdom is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_DEX)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの器用さは装備によって影響を受けている。", "Your dexterity is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_CON)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの耐久力は装備によって影響を受けている。", "Your constitution is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_CHR)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの魅力は装備によって影響を受けている。", "Your charisma is affected by your equipment.");
-    }
-
-    if (have_flag(si_ptr->flags, TR_STEALTH)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの隠密行動能力は装備によって影響を受けている。", "Your stealth is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_SEARCH)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの探索能力は装備によって影響を受けている。", "Your searching ability is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_INFRA)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの赤外線視力は装備によって影響を受けている。", "Your infravision is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_TUNNEL)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの採掘能力は装備によって影響を受けている。", "Your digging ability is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_SPEED)) {
-        si_ptr->info[si_ptr->line++] = _("あなたのスピードは装備によって影響を受けている。", "Your speed is affected by your equipment.");
-    }
-    if (have_flag(si_ptr->flags, TR_BLOWS)) {
-        si_ptr->info[si_ptr->line++] = _("あなたの攻撃速度は装備によって影響を受けている。", "Your attack speed is affected by your equipment.");
-    }
+    display_equipment_influence(creature_ptr, si_ptr);
 
     /* Access the current weapon */
     si_ptr->o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
