@@ -2141,6 +2141,9 @@
     <ClCompile Include="..\..\src\player-info\body-improvement-info.c">
       <Filter>player-info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-info\resistance-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4634,6 +4637,9 @@
       <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\body-improvement-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\resistance-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
   </ItemGroup>

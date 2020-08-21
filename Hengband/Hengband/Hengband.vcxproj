@@ -327,6 +327,7 @@
     <ClCompile Include="..\..\src\player-info\class-ability-info.c" />
     <ClCompile Include="..\..\src\player-info\mutation-info.c" />
     <ClCompile Include="..\..\src\player-info\race-ability-info.c" />
+    <ClCompile Include="..\..\src\player-info\resistance-info.c" />
     <ClCompile Include="..\..\src\player-info\self-info-util.c" />
     <ClCompile Include="..\..\src\room\vault-builder.c" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.c" />
@@ -969,6 +970,7 @@
     <ClInclude Include="..\..\src\player-info\class-ability-info.h" />
     <ClInclude Include="..\..\src\player-info\mutation-info.h" />
     <ClInclude Include="..\..\src\player-info\race-ability-info.h" />
+    <ClInclude Include="..\..\src\player-info\resistance-info.h" />
     <ClInclude Include="..\..\src\player-info\self-info-util.h" />
     <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />
