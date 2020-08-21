@@ -55,21 +55,21 @@ void self_knowledge(player_type *creature_ptr)
     int line = 0;
     char v_string[8][128];
     char s_string[6][128];
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    BIT_FLAGS flags[TR_FLAG_SIZE];
     object_type *o_ptr;
-    char Dummy[80];
+    char plev_buf[80];
     char buf[2][80];
     concptr info[220];
     for (int j = 0; j < TR_FLAG_SIZE; j++)
-        flgs[j] = 0L;
+        flags[j] = 0L;
 
     creature_ptr->knowledge |= (KNOW_STAT | KNOW_HPRATE);
-    strcpy(Dummy, "");
+    strcpy(plev_buf, "");
     int percent
         = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
 
-    sprintf(Dummy, _("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent);
-    strcpy(buf[0], Dummy);
+    sprintf(plev_buf, _("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent);
+    strcpy(buf[0], plev_buf);
     info[line++] = buf[0];
     info[line++] = "";
     chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
@@ -82,7 +82,7 @@ void self_knowledge(player_type *creature_ptr)
 
         object_flags(creature_ptr, o_ptr, tflgs);
         for (int j = 0; j < TR_FLAG_SIZE; j++)
-            flgs[j] |= tflgs[j];
+            flags[j] |= tflgs[j];
     }
 
     info[line++] = _("能力の最大値", "Limits of maximum stats");
@@ -94,8 +94,8 @@ void self_knowledge(player_type *creature_ptr)
     }
 
     info[line++] = "";
-    sprintf(Dummy, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
-    strcpy(buf[1], Dummy);
+    sprintf(plev_buf, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
+    strcpy(buf[1], plev_buf);
     info[line++] = buf[1];
     for (int v_nr = 0; v_nr < 8; v_nr++) {
         GAME_TEXT vir_name[20];
@@ -139,16 +139,16 @@ void self_knowledge(player_type *creature_ptr)
         switch (creature_ptr->mimic_form) {
         case MIMIC_DEMON:
         case MIMIC_DEMON_LORD:
-            sprintf(Dummy, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can nether breathe, dam. %d (cost %d)."), 3 * creature_ptr->lev,
+            sprintf(plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can nether breathe, dam. %d (cost %d)."), 3 * creature_ptr->lev,
                 10 + creature_ptr->lev / 3);
 
-            info[line++] = Dummy;
+            info[line++] = plev_buf;
             break;
         case MIMIC_VAMPIRE:
             if (creature_ptr->lev > 1) {
-                sprintf(Dummy, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
+                sprintf(plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
                     creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10), 1 + (creature_ptr->lev / 3));
-                info[line++] = Dummy;
+                info[line++] = plev_buf;
             }
             break;
         }
@@ -166,8 +166,8 @@ void self_knowledge(player_type *creature_ptr)
             break;
         case RACE_GNOME:
             if (creature_ptr->lev > 4) {
-                sprintf(Dummy, _("あなたは範囲 %d 以内にテレポートできる。(%d MP)", "You can teleport, range %d (cost %d)."), (1 + creature_ptr->lev), (5 + (creature_ptr->lev / 5)));
-                info[line++] = Dummy;
+                sprintf(plev_buf, _("あなたは範囲 %d 以内にテレポートできる。(%d MP)", "You can teleport, range %d (cost %d)."), (1 + creature_ptr->lev), (5 + (creature_ptr->lev / 5)));
+                info[line++] = plev_buf;
             }
             break;
         case RACE_HALF_ORC:
@@ -206,8 +206,8 @@ void self_knowledge(player_type *creature_ptr)
             break;
         case RACE_CYCLOPS:
             if (creature_ptr->lev > 19) {
-                sprintf(Dummy, _("あなたは %d ダメージの岩石を投げることができる。(15 MP)", "You can throw a boulder, dam. %d (cost 15)."), 3 * creature_ptr->lev);
-                info[line++] = Dummy;
+                sprintf(plev_buf, _("あなたは %d ダメージの岩石を投げることができる。(15 MP)", "You can throw a boulder, dam. %d (cost 15)."), 3 * creature_ptr->lev);
+                info[line++] = plev_buf;
             }
             break;
         case RACE_YEEK:
@@ -216,39 +216,39 @@ void self_knowledge(player_type *creature_ptr)
             break;
         case RACE_KLACKON:
             if (creature_ptr->lev > 8) {
-                sprintf(Dummy, _("あなたは %d ダメージの酸を吹きかけることができる。(9 MP)", "You can spit acid, dam. %d (cost 9)."), creature_ptr->lev);
-                info[line++] = Dummy;
+                sprintf(plev_buf, _("あなたは %d ダメージの酸を吹きかけることができる。(9 MP)", "You can spit acid, dam. %d (cost 9)."), creature_ptr->lev);
+                info[line++] = plev_buf;
             }
             break;
         case RACE_KOBOLD:
             if (creature_ptr->lev > 11) {
-                sprintf(Dummy, _("あなたは %d ダメージの毒矢を投げることができる。(8 MP)", "You can throw a dart of poison, dam. %d (cost 8)."), creature_ptr->lev);
-                info[line++] = Dummy;
+                sprintf(plev_buf, _("あなたは %d ダメージの毒矢を投げることができる。(8 MP)", "You can throw a dart of poison, dam. %d (cost 8)."), creature_ptr->lev);
+                info[line++] = plev_buf;
             }
             break;
         case RACE_DARK_ELF:
             if (creature_ptr->lev > 1) {
-                sprintf(Dummy, _("あなたは %d ダメージのマジック・ミサイルの呪文を使える。(2 MP)", "You can cast a Magic Missile, dam %d (cost 2)."),
+                sprintf(plev_buf, _("あなたは %d ダメージのマジック・ミサイルの呪文を使える。(2 MP)", "You can cast a Magic Missile, dam %d (cost 2)."),
                     (3 + ((creature_ptr->lev - 1) / 5)));
-                info[line++] = Dummy;
+                info[line++] = plev_buf;
             }
             break;
         case RACE_DRACONIAN:
-            sprintf(Dummy, _("あなたは %d ダメージのブレスを吐くことができる。(%d MP)", "You can breathe, dam. %d (cost %d)."), 2 * creature_ptr->lev, creature_ptr->lev);
-            info[line++] = Dummy;
+            sprintf(plev_buf, _("あなたは %d ダメージのブレスを吐くことができる。(%d MP)", "You can breathe, dam. %d (cost %d)."), 2 * creature_ptr->lev, creature_ptr->lev);
+            info[line++] = plev_buf;
             break;
         case RACE_MIND_FLAYER:
             if (creature_ptr->lev > 14)
-                sprintf(Dummy, _("あなたは %d ダメージの精神攻撃をすることができる。(12 MP)", "You can mind blast your enemies, dam %d (cost 12)."), creature_ptr->lev);
-            info[line++] = Dummy;
+                sprintf(plev_buf, _("あなたは %d ダメージの精神攻撃をすることができる。(12 MP)", "You can mind blast your enemies, dam %d (cost 12)."), creature_ptr->lev);
+            info[line++] = plev_buf;
             break;
         case RACE_IMP:
             if (creature_ptr->lev > 29) {
-                sprintf(Dummy, _("あなたは %d ダメージのファイア・ボールの呪文を使える。(15 MP)", "You can cast a Fire Ball, dam. %d (cost 15)."), creature_ptr->lev);
-                info[line++] = Dummy;
+                sprintf(plev_buf, _("あなたは %d ダメージのファイア・ボールの呪文を使える。(15 MP)", "You can cast a Fire Ball, dam. %d (cost 15)."), creature_ptr->lev);
+                info[line++] = plev_buf;
             } else if (creature_ptr->lev > 8) {
-                sprintf(Dummy, _("あなたは %d ダメージのファイア・ボルトの呪文を使える。(15 MP)", "You can cast a Fire Bolt, dam. %d (cost 15)."), creature_ptr->lev);
-                info[line++] = Dummy;
+                sprintf(plev_buf, _("あなたは %d ダメージのファイア・ボルトの呪文を使える。(15 MP)", "You can cast a Fire Bolt, dam. %d (cost 15)."), creature_ptr->lev);
+                info[line++] = plev_buf;
             }
             break;
         case RACE_GOLEM:
@@ -262,9 +262,9 @@ void self_knowledge(player_type *creature_ptr)
             break;
         case RACE_VAMPIRE:
             if (creature_ptr->lev > 1) {
-                sprintf(Dummy, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
+                sprintf(plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
                     creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10), 1 + (creature_ptr->lev / 3));
-                info[line++] = Dummy;
+                info[line++] = plev_buf;
             }
             break;
         case RACE_SPECTRE:
@@ -278,10 +278,10 @@ void self_knowledge(player_type *creature_ptr)
             }
             break;
         case RACE_BALROG:
-            sprintf(Dummy, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."), 3 * creature_ptr->lev,
+            sprintf(plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."), 3 * creature_ptr->lev,
                 10 + creature_ptr->lev / 3);
 
-            info[line++] = Dummy;
+            info[line++] = plev_buf;
             break;
         case RACE_KUTAR:
             if (creature_ptr->lev > 19)
@@ -290,18 +290,18 @@ void self_knowledge(player_type *creature_ptr)
         case RACE_ANDROID:
             if (creature_ptr->lev < 10)
                 sprintf(
-                    Dummy, _("あなたは %d ダメージのレイガンを撃つことができる。(7 MP)", "You can fire a ray gun with damage %d (cost 7)."), (creature_ptr->lev + 1) / 2);
+                    plev_buf, _("あなたは %d ダメージのレイガンを撃つことができる。(7 MP)", "You can fire a ray gun with damage %d (cost 7)."), (creature_ptr->lev + 1) / 2);
             else if (creature_ptr->lev < 25)
-                sprintf(Dummy, _("あなたは %d ダメージのブラスターを撃つことができる。(13 MP)", "You can fire a blaster with damage %d (cost 13)."), creature_ptr->lev);
+                sprintf(plev_buf, _("あなたは %d ダメージのブラスターを撃つことができる。(13 MP)", "You can fire a blaster with damage %d (cost 13)."), creature_ptr->lev);
             else if (creature_ptr->lev < 35)
-                sprintf(Dummy, _("あなたは %d ダメージのバズーカを撃つことができる。(26 MP)", "You can fire a bazooka with damage %d (cost 26)."), creature_ptr->lev * 2);
+                sprintf(plev_buf, _("あなたは %d ダメージのバズーカを撃つことができる。(26 MP)", "You can fire a bazooka with damage %d (cost 26)."), creature_ptr->lev * 2);
             else if (creature_ptr->lev < 45)
-                sprintf(Dummy, _("あなたは %d ダメージのビームキャノンを撃つことができる。(40 MP)", "You can fire a beam cannon with damage %d (cost 40)."),
+                sprintf(plev_buf, _("あなたは %d ダメージのビームキャノンを撃つことができる。(40 MP)", "You can fire a beam cannon with damage %d (cost 40)."),
                     creature_ptr->lev * 2);
             else
-                sprintf(Dummy, _("あなたは %d ダメージのロケットを撃つことができる。(60 MP)", "You can fire a rocket with damage %d (cost 60)."), creature_ptr->lev * 5);
+                sprintf(plev_buf, _("あなたは %d ダメージのロケットを撃つことができる。(60 MP)", "You can fire a rocket with damage %d (cost 60)."), creature_ptr->lev * 5);
 
-            info[line++] = Dummy;
+            info[line++] = plev_buf;
             break;
         default:
             break;
@@ -1080,41 +1080,41 @@ void self_knowledge(player_type *creature_ptr)
         info[line++] = _("あなたの魅力は維持されている。", "Your charisma is sustained.");
     }
 
-    if (have_flag(flgs, TR_STR)) {
+    if (have_flag(flags, TR_STR)) {
         info[line++] = _("あなたの腕力は装備によって影響を受けている。", "Your strength is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_INT)) {
+    if (have_flag(flags, TR_INT)) {
         info[line++] = _("あなたの知能は装備によって影響を受けている。", "Your intelligence is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_WIS)) {
+    if (have_flag(flags, TR_WIS)) {
         info[line++] = _("あなたの賢さは装備によって影響を受けている。", "Your wisdom is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_DEX)) {
+    if (have_flag(flags, TR_DEX)) {
         info[line++] = _("あなたの器用さは装備によって影響を受けている。", "Your dexterity is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_CON)) {
+    if (have_flag(flags, TR_CON)) {
         info[line++] = _("あなたの耐久力は装備によって影響を受けている。", "Your constitution is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_CHR)) {
+    if (have_flag(flags, TR_CHR)) {
         info[line++] = _("あなたの魅力は装備によって影響を受けている。", "Your charisma is affected by your equipment.");
     }
 
-    if (have_flag(flgs, TR_STEALTH)) {
+    if (have_flag(flags, TR_STEALTH)) {
         info[line++] = _("あなたの隠密行動能力は装備によって影響を受けている。", "Your stealth is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_SEARCH)) {
+    if (have_flag(flags, TR_SEARCH)) {
         info[line++] = _("あなたの探索能力は装備によって影響を受けている。", "Your searching ability is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_INFRA)) {
+    if (have_flag(flags, TR_INFRA)) {
         info[line++] = _("あなたの赤外線視力は装備によって影響を受けている。", "Your infravision is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_TUNNEL)) {
+    if (have_flag(flags, TR_TUNNEL)) {
         info[line++] = _("あなたの採掘能力は装備によって影響を受けている。", "Your digging ability is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_SPEED)) {
+    if (have_flag(flags, TR_SPEED)) {
         info[line++] = _("あなたのスピードは装備によって影響を受けている。", "Your speed is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_BLOWS)) {
+    if (have_flag(flags, TR_BLOWS)) {
         info[line++] = _("あなたの攻撃速度は装備によって影響を受けている。", "Your attack speed is affected by your equipment.");
     }
 
@@ -1124,95 +1124,95 @@ void self_knowledge(player_type *creature_ptr)
     /* Analyze the weapon */
     if (o_ptr->k_idx) {
         /* Indicate Blessing */
-        if (have_flag(flgs, TR_BLESSED)) {
+        if (have_flag(flags, TR_BLESSED)) {
             info[line++] = _("あなたの武器は神の祝福を受けている。", "Your weapon has been blessed by the gods.");
         }
 
-        if (have_flag(flgs, TR_CHAOTIC)) {
+        if (have_flag(flags, TR_CHAOTIC)) {
             info[line++] = _("あなたの武器はログルスの徴の属性をもつ。", "Your weapon is branded with the Sign of Logrus.");
         }
 
-        if (have_flag(flgs, TR_IMPACT)) {
+        if (have_flag(flags, TR_IMPACT)) {
             info[line++] = _("あなたの武器は打撃で地震を発生することができる。", "The impact of your weapon can cause earthquakes.");
         }
 
-        if (have_flag(flgs, TR_VORPAL)) {
+        if (have_flag(flags, TR_VORPAL)) {
             info[line++] = _("あなたの武器は非常に鋭い。", "Your weapon is very sharp.");
         }
 
-        if (have_flag(flgs, TR_VAMPIRIC)) {
+        if (have_flag(flags, TR_VAMPIRIC)) {
             info[line++] = _("あなたの武器は敵から生命力を吸収する。", "Your weapon drains life from your foes.");
         }
 
         /* Special "Attack Bonuses" */
-        if (have_flag(flgs, TR_BRAND_ACID)) {
+        if (have_flag(flags, TR_BRAND_ACID)) {
             info[line++] = _("あなたの武器は敵を溶かす。", "Your weapon melts your foes.");
         }
-        if (have_flag(flgs, TR_BRAND_ELEC)) {
+        if (have_flag(flags, TR_BRAND_ELEC)) {
             info[line++] = _("あなたの武器は敵を感電させる。", "Your weapon shocks your foes.");
         }
-        if (have_flag(flgs, TR_BRAND_FIRE)) {
+        if (have_flag(flags, TR_BRAND_FIRE)) {
             info[line++] = _("あなたの武器は敵を燃やす。", "Your weapon burns your foes.");
         }
-        if (have_flag(flgs, TR_BRAND_COLD)) {
+        if (have_flag(flags, TR_BRAND_COLD)) {
             info[line++] = _("あなたの武器は敵を凍らせる。", "Your weapon freezes your foes.");
         }
-        if (have_flag(flgs, TR_BRAND_POIS)) {
+        if (have_flag(flags, TR_BRAND_POIS)) {
             info[line++] = _("あなたの武器は敵を毒で侵す。", "Your weapon poisons your foes.");
         }
 
         /* Special "slay" flags */
-        if (have_flag(flgs, TR_KILL_ANIMAL)) {
+        if (have_flag(flags, TR_KILL_ANIMAL)) {
             info[line++] = _("あなたの武器は動物の天敵である。", "Your weapon is a great bane of animals.");
-        } else if (have_flag(flgs, TR_SLAY_ANIMAL)) {
+        } else if (have_flag(flags, TR_SLAY_ANIMAL)) {
             info[line++] = _("あなたの武器は動物に対して強い力を発揮する。", "Your weapon strikes at animals with extra force.");
         }
-        if (have_flag(flgs, TR_KILL_EVIL)) {
+        if (have_flag(flags, TR_KILL_EVIL)) {
             info[line++] = _("あなたの武器は邪悪なる存在の天敵である。", "Your weapon is a great bane of evil.");
-        } else if (have_flag(flgs, TR_SLAY_EVIL)) {
+        } else if (have_flag(flags, TR_SLAY_EVIL)) {
             info[line++] = _("あなたの武器は邪悪なる存在に対して強い力を発揮する。", "Your weapon strikes at evil with extra force.");
         }
-        if (have_flag(flgs, TR_KILL_HUMAN)) {
+        if (have_flag(flags, TR_KILL_HUMAN)) {
             info[line++] = _("あなたの武器は人間の天敵である。", "Your weapon is a great bane of humans.");
-        } else if (have_flag(flgs, TR_SLAY_HUMAN)) {
+        } else if (have_flag(flags, TR_SLAY_HUMAN)) {
             info[line++] = _("あなたの武器は人間に対して特に強い力を発揮する。", "Your weapon is especially deadly against humans.");
         }
-        if (have_flag(flgs, TR_KILL_UNDEAD)) {
+        if (have_flag(flags, TR_KILL_UNDEAD)) {
             info[line++] = _("あなたの武器はアンデッドの天敵である。", "Your weapon is a great bane of undead.");
-        } else if (have_flag(flgs, TR_SLAY_UNDEAD)) {
+        } else if (have_flag(flags, TR_SLAY_UNDEAD)) {
             info[line++] = _("あなたの武器はアンデッドに対して神聖なる力を発揮する。", "Your weapon strikes at undead with holy wrath.");
         }
-        if (have_flag(flgs, TR_KILL_DEMON)) {
+        if (have_flag(flags, TR_KILL_DEMON)) {
             info[line++] = _("あなたの武器はデーモンの天敵である。", "Your weapon is a great bane of demons.");
-        } else if (have_flag(flgs, TR_SLAY_DEMON)) {
+        } else if (have_flag(flags, TR_SLAY_DEMON)) {
             info[line++] = _("あなたの武器はデーモンに対して神聖なる力を発揮する。", "Your weapon strikes at demons with holy wrath.");
         }
-        if (have_flag(flgs, TR_KILL_ORC)) {
+        if (have_flag(flags, TR_KILL_ORC)) {
             info[line++] = _("あなたの武器はオークの天敵である。", "Your weapon is a great bane of orcs.");
-        } else if (have_flag(flgs, TR_SLAY_ORC)) {
+        } else if (have_flag(flags, TR_SLAY_ORC)) {
             info[line++] = _("あなたの武器はオークに対して特に強い力を発揮する。", "Your weapon is especially deadly against orcs.");
         }
-        if (have_flag(flgs, TR_KILL_TROLL)) {
+        if (have_flag(flags, TR_KILL_TROLL)) {
             info[line++] = _("あなたの武器はトロルの天敵である。", "Your weapon is a great bane of trolls.");
-        } else if (have_flag(flgs, TR_SLAY_TROLL)) {
+        } else if (have_flag(flags, TR_SLAY_TROLL)) {
             info[line++] = _("あなたの武器はトロルに対して特に強い力を発揮する。", "Your weapon is especially deadly against trolls.");
         }
-        if (have_flag(flgs, TR_KILL_GIANT)) {
+        if (have_flag(flags, TR_KILL_GIANT)) {
             info[line++] = _("あなたの武器は巨人の天敵である。", "Your weapon is a great bane of giants.");
-        } else if (have_flag(flgs, TR_SLAY_GIANT)) {
+        } else if (have_flag(flags, TR_SLAY_GIANT)) {
             info[line++] = _("あなたの武器は巨人に対して特に強い力を発揮する。", "Your weapon is especially deadly against giants.");
         }
         /* Special "kill" flags */
-        if (have_flag(flgs, TR_KILL_DRAGON)) {
+        if (have_flag(flags, TR_KILL_DRAGON)) {
             info[line++] = _("あなたの武器はドラゴンの天敵である。", "Your weapon is a great bane of dragons.");
-        } else if (have_flag(flgs, TR_SLAY_DRAGON)) {
+        } else if (have_flag(flags, TR_SLAY_DRAGON)) {
             info[line++] = _("あなたの武器はドラゴンに対して特に強い力を発揮する。", "Your weapon is especially deadly against dragons.");
         }
 
-        if (have_flag(flgs, TR_FORCE_WEAPON))
+        if (have_flag(flags, TR_FORCE_WEAPON))
             info[line++] = _("あなたの武器はMPを使って攻撃する。", "Your weapon causes greate damages using your MP.");
 
-        if (have_flag(flgs, TR_THROW))
+        if (have_flag(flags, TR_THROW))
             info[line++] = _("あなたの武器は投げやすい。", "Your weapon can be thrown well.");
     }
 
