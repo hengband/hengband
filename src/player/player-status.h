@@ -44,10 +44,12 @@
 #define SPELL_SW 22
 #define SPELL_WALL 20
 
-/* Empty hand status */
-#define EMPTY_HAND_NONE 0x0000 /* Both hands are used */
-#define EMPTY_HAND_LARM 0x0001 /* Left hand is empty */
-#define EMPTY_HAND_RARM 0x0002 /* Right hand is empty */
+/*!< Empty hand status */
+enum empty_hand_status {
+    EMPTY_HAND_NONE = 0x0000, /*!<Both hands are used */
+    EMPTY_HAND_LARM = 0x0001, /*!<Left hand is empty */
+    EMPTY_HAND_RARM = 0x0002 /*!<Right hand is empty */
+};
 
 /*
  * Player sex constants (hard-coded by save-files, arrays, etc)
