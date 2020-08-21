@@ -3165,7 +3165,6 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
         }
     }
 
-    // 武器以外の装備による修正
     int default_hand = get_default_hand(creature_ptr);
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         int bonus_to_h;
@@ -3182,16 +3181,20 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
         }
 
         if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !have_two_handed_weapons(creature_ptr)) {
-            creature_ptr->to_h[i - INVEN_RIGHT] += (s16b)bonus_to_h;
+            hit += (s16b)bonus_to_h;
             continue;
         }
 
         if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
-            creature_ptr->to_h[0] += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
-            creature_ptr->to_h[1] += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
+            if (default_hand == 0)
+                hit += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
+            if (default_hand == 1)
+                hit += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
             continue;
         }
-        creature_ptr->to_h[default_hand] += (s16b)bonus_to_h;
+
+        if (default_hand == id)
+            hit += (s16b)bonus_to_h;
     }
     if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
         hit += (creature_ptr->lev / 3);
@@ -3310,7 +3313,6 @@ static s16b calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
     }
 
-    // 武器以外の装備による修正
     int default_hand = get_default_hand(creature_ptr);
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         int bonus_to_h;
@@ -3335,7 +3337,6 @@ static s16b calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
 
         if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
-
             if (default_hand == 0) hit += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
             if (default_hand == 1) hit += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
             continue;
