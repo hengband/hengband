@@ -2153,6 +2153,9 @@
     <ClCompile Include="..\..\src\player-info\weapon-effect-info.c">
       <Filter>player-info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-archer.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4659,6 +4662,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\weapon-effect-info.h">
       <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-archer.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

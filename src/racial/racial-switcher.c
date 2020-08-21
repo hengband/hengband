@@ -28,6 +28,7 @@
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "melee/melee-postprocess.h"
+#include "mind/mind-archer.h"
 #include "mind/mind-cavalry.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-mage.h"
