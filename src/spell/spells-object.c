@@ -100,6 +100,13 @@ static amuse_type amuse_info[]
 
           { 0, 0, 0, 0 } };
 
+typedef enum ammo_creation_type {
+    AMMO_NONE = 0,
+    AMMO_SHOT = 1,
+    AMMO_ARROW = 2,
+    AMMO_BOLT = 3,
+} ammo_creation_type;
+
 /*!
  * @brief「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.
  * Hook to determine if an object is contertible in an arrow/bolt
@@ -115,12 +122,10 @@ bool create_ammo(player_type *creature_ptr)
     else
         sprintf(com, _("[S]弾:", "Create [S]hots ?"));
 
-    if (cmd_limit_confused(creature_ptr))
-        return FALSE;
-    if (cmd_limit_blind(creature_ptr))
+    if (cmd_limit_confused(creature_ptr) || cmd_limit_blind(creature_ptr))
         return FALSE;
 
-    int ext = 0;
+    ammo_creation_type ext = AMMO_NONE;
     char ch;
     while (TRUE) {
         if (!get_com(com, &ch, TRUE)) {
@@ -128,38 +133,30 @@ bool create_ammo(player_type *creature_ptr)
         }
 
         if (ch == 'S' || ch == 's') {
-            ext = 1;
+            ext = AMMO_SHOT;
             break;
         }
 
         if ((ch == 'A' || ch == 'a') && (creature_ptr->lev >= 10)) {
-            ext = 2;
+            ext = AMMO_ARROW;
             break;
         }
 
         if ((ch == 'B' || ch == 'b') && (creature_ptr->lev >= 20)) {
-            ext = 3;
+            ext = AMMO_BOLT;
             break;
         }
     }
 
-    GAME_TEXT o_name[MAX_NLEN];
-    object_type forge;
-    object_type *q_ptr;
-    q_ptr = &forge;
-
-    /**********Create shots*********/
-    if (ext == 1) {
-        POSITION x, y;
+    switch (ext) {
+    case AMMO_SHOT: {
         DIRECTION dir;
-        grid_type *g_ptr;
-
         if (!get_rep_dir(creature_ptr, &dir, FALSE))
             return FALSE;
-        y = creature_ptr->y + ddy[dir];
-        x = creature_ptr->x + ddx[dir];
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
+        POSITION y = creature_ptr->y + ddy[dir];
+        POSITION x = creature_ptr->x + ddx[dir];
+        grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
         if (!have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG)) {
             msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
             return FALSE;
@@ -170,109 +167,82 @@ bool create_ammo(player_type *creature_ptr)
             return TRUE;
         }
 
-        s16b slot;
-        q_ptr = &forge;
-
-        /* Hack -- Give the player some small firestones */
+        object_type forge;
+        object_type *q_ptr = &forge;
         object_prep(creature_ptr, q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
         apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
-
-        slot = store_item_to_inventory(creature_ptr, q_ptr);
-
+        s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
+        GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
-
-        /* Auto-inscription */
         if (slot >= 0)
             autopick_alter_item(creature_ptr, slot, FALSE);
 
-        /* Destroy the wall */
         cave_alter_feat(creature_ptr, y, x, FF_HURT_ROCK);
-
-        creature_ptr->update |= (PU_FLOW);
+        creature_ptr->update |= PU_FLOW;
         return TRUE;
     }
-
-    /**********Create arrows*********/
-    if (ext == 2) {
-        OBJECT_IDX item;
-        concptr q, s;
-        s16b slot;
-
+    case AMMO_ARROW: {
         item_tester_hook = item_tester_hook_convertible;
-
-        q = _("どのアイテムから作りますか？ ", "Convert which item? ");
-        s = _("材料を持っていない。", "You have no item to convert.");
-        q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+        concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
+        concptr s = _("材料を持っていない。", "You have no item to convert.");
+        OBJECT_IDX item;
+        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
         if (!q_ptr)
             return FALSE;
 
+        object_type forge;
         q_ptr = &forge;
-
-        /* Hack -- Give the player some small firestones */
         object_prep(creature_ptr, q_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(5, 10);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
         apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
-
         q_ptr->discount = 99;
-
+        GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
-
         vary_item(creature_ptr, item, -1);
-        slot = store_item_to_inventory(creature_ptr, q_ptr);
-
-        /* Auto-inscription */
+        s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
         if (slot >= 0)
             autopick_alter_item(creature_ptr, slot, FALSE);
+
         return TRUE;
     }
-
-    /**********Create bolts*********/
-    if (ext == 3) {
-        OBJECT_IDX item;
-        concptr q, s;
-        s16b slot;
-
+    case AMMO_BOLT: {
         item_tester_hook = item_tester_hook_convertible;
-
-        q = _("どのアイテムから作りますか？ ", "Convert which item? ");
-        s = _("材料を持っていない。", "You have no item to convert.");
-
-        q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+        concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
+        concptr s = _("材料を持っていない。", "You have no item to convert.");
+        OBJECT_IDX item;
+        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
         if (!q_ptr)
             return FALSE;
 
+        object_type forge;
         q_ptr = &forge;
-
-        /* Hack -- Give the player some small firestones */
         object_prep(creature_ptr, q_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(4, 8);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
         apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
-
         q_ptr->discount = 99;
-
+        GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
-
         vary_item(creature_ptr, item, -1);
-
-        slot = store_item_to_inventory(creature_ptr, q_ptr);
-
-        /* Auto-inscription */
+        s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
         if (slot >= 0)
             autopick_alter_item(creature_ptr, slot, FALSE);
-    }
 
-    return TRUE;
+        return TRUE;
+    }
+    default:
+        return TRUE;
+    }
 }
 
 /*!
