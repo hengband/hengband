@@ -3195,16 +3195,14 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot)
             continue;
         }
         creature_ptr->to_h[default_hand] += (s16b)bonus_to_h;
-
-	}
-
-	if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
+    }
+    if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
         hit += (creature_ptr->lev / 3);
-	}	
+    }
 
     hit -= calc_double_weapon_penalty(creature_ptr, slot);
 
-	return hit;
+    return hit;
 }
 
 static s16b calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3236,6 +3234,14 @@ static s16b calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
     }
 
+    if (object_is_fully_known(o_ptr) && o_ptr->curse_flags & TRC_LOW_MELEE) {
+        if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+            hit -= 15;
+        } else {
+            hit -= 5;
+        }
+    }
+
     if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
         if (o_ptr->curse_flags & (TRC_CURSED)) {
             hit += 5;
@@ -3248,14 +3254,6 @@ static s16b calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
         if (o_ptr->curse_flags & (TRC_TY_CURSE)) {
             hit += 5;
-        }
-    }
-
-    if (object_is_fully_known(o_ptr) && o_ptr->curse_flags & TRC_LOW_MELEE) {
-        if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-            hit -= 15;
-        } else {
-            hit -= 5;
         }
     }
 
@@ -3320,7 +3318,6 @@ static s16b calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         int bonus_to_h;
         o_ptr = &creature_ptr->inventory_list[i];
-
         if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
             || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
             continue;
@@ -3354,13 +3351,13 @@ static s16b calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         creature_ptr->dis_to_h[default_hand] += (s16b)bonus_to_h;
     }
 
-	if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
+    if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
         hit += (creature_ptr->lev / 3);
-    }	
+    }
 
     hit -= calc_double_weapon_penalty(creature_ptr, slot);
 
-	return hit;
+    return hit;
 }
 
 static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
