@@ -1,16 +1,13 @@
 ﻿/*!
  * @brief 自己分析処理/ Self knowledge
  * @date 2018/09/07
- * @author
+ * @author deskull
  * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
  * </pre>
- * 2018 Deskull
- * @details
- * spell2s.cから分離
  */
 
 #include "player-info/self-info.h"
@@ -253,6 +250,31 @@ void set_curse_info(player_type *creature_ptr, self_info_type *si_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたは魔力を吸われている。", "You occasionally lose spell points for no reason.");
 }
 
+/* todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
+void set_body_improvement_info_1(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    if (is_blessed(creature_ptr))
+        si_ptr->info[si_ptr->line++] = _("あなたは高潔さを感じている。", "You feel rightous.");
+
+    if (is_hero(creature_ptr))
+        si_ptr->info[si_ptr->line++] = _("あなたはヒーロー気分だ。", "You feel heroic.");
+
+    if (creature_ptr->shero)
+        si_ptr->info[si_ptr->line++] = _("あなたは戦闘狂だ。", "You are in a battle rage.");
+
+    if (creature_ptr->protevil)
+        si_ptr->info[si_ptr->line++] = _("あなたは邪悪なる存在から守られている。", "You are protected from evil.");
+
+    if (creature_ptr->shield)
+        si_ptr->info[si_ptr->line++] = _("あなたは神秘のシールドで守られている。", "You are protected by a mystic shield.");
+
+    if (is_invuln(creature_ptr))
+        si_ptr->info[si_ptr->line++] = _("あなたは現在傷つかない。", "You are temporarily invulnerable.");
+
+    if (creature_ptr->wraith_form)
+        si_ptr->info[si_ptr->line++] = _("あなたは一時的に幽体化している。", "You are temporarily incorporeal.");
+}
+
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
  * @return なし
@@ -292,27 +314,7 @@ void self_knowledge(player_type *creature_ptr)
     set_mutation_info_3(creature_ptr, si_ptr);
     set_bad_status_info(creature_ptr, si_ptr);
     set_curse_info(creature_ptr, si_ptr);
-    if (is_blessed(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは高潔さを感じている。", "You feel rightous.");
-    }
-    if (is_hero(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたはヒーロー気分だ。", "You feel heroic.");
-    }
-    if (creature_ptr->shero) {
-        si_ptr->info[si_ptr->line++] = _("あなたは戦闘狂だ。", "You are in a battle rage.");
-    }
-    if (creature_ptr->protevil) {
-        si_ptr->info[si_ptr->line++] = _("あなたは邪悪なる存在から守られている。", "You are protected from evil.");
-    }
-    if (creature_ptr->shield) {
-        si_ptr->info[si_ptr->line++] = _("あなたは神秘のシールドで守られている。", "You are protected by a mystic shield.");
-    }
-    if (is_invuln(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは現在傷つかない。", "You are temporarily invulnerable.");
-    }
-    if (creature_ptr->wraith_form) {
-        si_ptr->info[si_ptr->line++] = _("あなたは一時的に幽体化している。", "You are temporarily incorporeal.");
-    }
+    set_body_improvement_info_1(creature_ptr, si_ptr);
     if (creature_ptr->special_attack & ATTACK_CONFUSE) {
         si_ptr->info[si_ptr->line++] = _("あなたの手は赤く輝いている。", "Your hands are glowing dull red.");
     }
@@ -505,9 +507,7 @@ void self_knowledge(player_type *creature_ptr)
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE) || creature_ptr->wraith_form) {
         si_ptr->info[si_ptr->line++] = _("あなたは暗黒に対する完全なる免疫を持っている。", "You are completely immune to darkness.");
-    }
-
-    else if (creature_ptr->resist_dark) {
+    } else if (creature_ptr->resist_dark) {
         si_ptr->info[si_ptr->line++] = _("あなたは暗黒への耐性を持っている。", "You are resistant to darkness.");
     }
     if (creature_ptr->resist_conf) {
