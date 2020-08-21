@@ -366,6 +366,32 @@ void set_weapon_effect_info(player_type *creature_ptr, self_info_type *si_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたの武器は投げやすい。", "Your weapon can be thrown well.");
 }
 
+void display_self_info(self_info_type *si_ptr)
+{
+    screen_save();
+    for (int k = 1; k < 24; k++)
+        prt("", k, 13);
+
+    prt(_("        あなたの状態:", "     Your Attributes:"), 1, 15);
+    int k = 2;
+    for (int j = 0; j < si_ptr->line; j++) {
+        prt(si_ptr->info[j], k++, 15);
+
+        /* Every 20 entries (lines 2 to 21), start over */
+        if ((k != 22) || (j + 1 >= si_ptr->line))
+            continue;
+
+        prt(_("-- 続く --", "-- more --"), k, 15);
+        inkey();
+        for (; k > 2; k--)
+            prt("", k, 15);
+    }
+
+    prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 13);
+    inkey();
+    screen_load();
+}
+
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
  * @return なし
@@ -422,28 +448,7 @@ void self_knowledge(player_type *creature_ptr)
     set_status_sustain_info(creature_ptr, si_ptr);
     set_equipment_influence(creature_ptr, si_ptr);
     set_weapon_effect_info(creature_ptr, si_ptr);
-    screen_save();
-    for (int k = 1; k < 24; k++)
-        prt("", k, 13);
-
-    prt(_("        あなたの状態:", "     Your Attributes:"), 1, 15);
-    int k = 2;
-    for (int j = 0; j < si_ptr->line; j++) {
-        prt(si_ptr->info[j], k++, 15);
-
-        /* Every 20 entries (lines 2 to 21), start over */
-        if ((k != 22) || (j + 1 >= si_ptr->line))
-            continue;
-
-        prt(_("-- 続く --", "-- more --"), k, 15);
-        inkey();
-        for (; k > 2; k--)
-            prt("", k, 15);
-    }
-
-    prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 13);
-    inkey();
-    screen_load();
+    display_self_info(si_ptr);
 }
 
 /*!
