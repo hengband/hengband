@@ -266,6 +266,98 @@ void set_esp_info(player_type *creature_ptr, self_info_type *si_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたは特別な強敵の存在を感じる能力を持っている。", "You sense unique monsters.");
 }
 
+void set_weapon_effect_info(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
+    if (o_ptr->k_idx == 0)
+        return;
+
+    /* Indicate Blessing */
+    if (have_flag(si_ptr->flags, TR_BLESSED))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は神の祝福を受けている。", "Your weapon has been blessed by the gods.");
+
+    if (have_flag(si_ptr->flags, TR_CHAOTIC))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はログルスの徴の属性をもつ。", "Your weapon is branded with the Sign of Logrus.");
+
+    if (have_flag(si_ptr->flags, TR_IMPACT))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は打撃で地震を発生することができる。", "The impact of your weapon can cause earthquakes.");
+
+    if (have_flag(si_ptr->flags, TR_VORPAL))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は非常に鋭い。", "Your weapon is very sharp.");
+
+    if (have_flag(si_ptr->flags, TR_VAMPIRIC))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は敵から生命力を吸収する。", "Your weapon drains life from your foes.");
+
+    /* Special "Attack Bonuses" */
+    if (have_flag(si_ptr->flags, TR_BRAND_ACID))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を溶かす。", "Your weapon melts your foes.");
+    
+    if (have_flag(si_ptr->flags, TR_BRAND_ELEC))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を感電させる。", "Your weapon shocks your foes.");
+    
+    if (have_flag(si_ptr->flags, TR_BRAND_FIRE))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を燃やす。", "Your weapon burns your foes.");
+    
+    if (have_flag(si_ptr->flags, TR_BRAND_COLD))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を凍らせる。", "Your weapon freezes your foes.");
+    
+    if (have_flag(si_ptr->flags, TR_BRAND_POIS))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を毒で侵す。", "Your weapon poisons your foes.");
+
+    /* Special "slay" si_ptr->flags */
+    if (have_flag(si_ptr->flags, TR_KILL_ANIMAL))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は動物の天敵である。", "Your weapon is a great bane of animals.");
+    else if (have_flag(si_ptr->flags, TR_SLAY_ANIMAL))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は動物に対して強い力を発揮する。", "Your weapon strikes at animals with extra force.");
+    
+    if (have_flag(si_ptr->flags, TR_KILL_EVIL))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は邪悪なる存在の天敵である。", "Your weapon is a great bane of evil.");
+    else if (have_flag(si_ptr->flags, TR_SLAY_EVIL))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は邪悪なる存在に対して強い力を発揮する。", "Your weapon strikes at evil with extra force.");
+    
+    if (have_flag(si_ptr->flags, TR_KILL_HUMAN))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は人間の天敵である。", "Your weapon is a great bane of humans.");
+    else if (have_flag(si_ptr->flags, TR_SLAY_HUMAN))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は人間に対して特に強い力を発揮する。", "Your weapon is especially deadly against humans.");
+    
+    if (have_flag(si_ptr->flags, TR_KILL_UNDEAD))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はアンデッドの天敵である。", "Your weapon is a great bane of undead.");
+    else if (have_flag(si_ptr->flags, TR_SLAY_UNDEAD))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はアンデッドに対して神聖なる力を発揮する。", "Your weapon strikes at undead with holy wrath.");
+    
+    if (have_flag(si_ptr->flags, TR_KILL_DEMON))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はデーモンの天敵である。", "Your weapon is a great bane of demons.");
+    else if (have_flag(si_ptr->flags, TR_SLAY_DEMON))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はデーモンに対して神聖なる力を発揮する。", "Your weapon strikes at demons with holy wrath.");
+    
+    if (have_flag(si_ptr->flags, TR_KILL_ORC))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はオークの天敵である。", "Your weapon is a great bane of orcs.");
+    else if (have_flag(si_ptr->flags, TR_SLAY_ORC))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はオークに対して特に強い力を発揮する。", "Your weapon is especially deadly against orcs.");
+    
+    if (have_flag(si_ptr->flags, TR_KILL_TROLL))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はトロルの天敵である。", "Your weapon is a great bane of trolls.");
+    else if (have_flag(si_ptr->flags, TR_SLAY_TROLL))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はトロルに対して特に強い力を発揮する。", "Your weapon is especially deadly against trolls.");
+    
+    if (have_flag(si_ptr->flags, TR_KILL_GIANT))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は巨人の天敵である。", "Your weapon is a great bane of giants.");
+    else if (have_flag(si_ptr->flags, TR_SLAY_GIANT))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は巨人に対して特に強い力を発揮する。", "Your weapon is especially deadly against giants.");
+    
+    /* Special "kill" si_ptr->flags */
+    if (have_flag(si_ptr->flags, TR_KILL_DRAGON))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はドラゴンの天敵である。", "Your weapon is a great bane of dragons.");
+    else if (have_flag(si_ptr->flags, TR_SLAY_DRAGON))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はドラゴンに対して特に強い力を発揮する。", "Your weapon is especially deadly against dragons.");
+    
+    if (have_flag(si_ptr->flags, TR_FORCE_WEAPON))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器はMPを使って攻撃する。", "Your weapon causes greate damages using your MP.");
+
+    if (have_flag(si_ptr->flags, TR_THROW))
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は投げやすい。", "Your weapon can be thrown well.");
+}
+
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
  * @return なし
@@ -321,102 +413,7 @@ void self_knowledge(player_type *creature_ptr)
     set_body_improvement_info_4(creature_ptr, si_ptr);
     set_status_sustain_info(creature_ptr, si_ptr);
     set_equipment_influence(creature_ptr, si_ptr);
-
-    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
-    if (o_ptr->k_idx != 0) {
-        /* Indicate Blessing */
-        if (have_flag(si_ptr->flags, TR_BLESSED)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は神の祝福を受けている。", "Your weapon has been blessed by the gods.");
-        }
-
-        if (have_flag(si_ptr->flags, TR_CHAOTIC)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はログルスの徴の属性をもつ。", "Your weapon is branded with the Sign of Logrus.");
-        }
-
-        if (have_flag(si_ptr->flags, TR_IMPACT)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は打撃で地震を発生することができる。", "The impact of your weapon can cause earthquakes.");
-        }
-
-        if (have_flag(si_ptr->flags, TR_VORPAL)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は非常に鋭い。", "Your weapon is very sharp.");
-        }
-
-        if (have_flag(si_ptr->flags, TR_VAMPIRIC)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は敵から生命力を吸収する。", "Your weapon drains life from your foes.");
-        }
-
-        /* Special "Attack Bonuses" */
-        if (have_flag(si_ptr->flags, TR_BRAND_ACID)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を溶かす。", "Your weapon melts your foes.");
-        }
-        if (have_flag(si_ptr->flags, TR_BRAND_ELEC)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を感電させる。", "Your weapon shocks your foes.");
-        }
-        if (have_flag(si_ptr->flags, TR_BRAND_FIRE)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を燃やす。", "Your weapon burns your foes.");
-        }
-        if (have_flag(si_ptr->flags, TR_BRAND_COLD)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を凍らせる。", "Your weapon freezes your foes.");
-        }
-        if (have_flag(si_ptr->flags, TR_BRAND_POIS)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を毒で侵す。", "Your weapon poisons your foes.");
-        }
-
-        /* Special "slay" si_ptr->flags */
-        if (have_flag(si_ptr->flags, TR_KILL_ANIMAL)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は動物の天敵である。", "Your weapon is a great bane of animals.");
-        } else if (have_flag(si_ptr->flags, TR_SLAY_ANIMAL)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は動物に対して強い力を発揮する。", "Your weapon strikes at animals with extra force.");
-        }
-        if (have_flag(si_ptr->flags, TR_KILL_EVIL)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は邪悪なる存在の天敵である。", "Your weapon is a great bane of evil.");
-        } else if (have_flag(si_ptr->flags, TR_SLAY_EVIL)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は邪悪なる存在に対して強い力を発揮する。", "Your weapon strikes at evil with extra force.");
-        }
-        if (have_flag(si_ptr->flags, TR_KILL_HUMAN)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は人間の天敵である。", "Your weapon is a great bane of humans.");
-        } else if (have_flag(si_ptr->flags, TR_SLAY_HUMAN)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は人間に対して特に強い力を発揮する。", "Your weapon is especially deadly against humans.");
-        }
-        if (have_flag(si_ptr->flags, TR_KILL_UNDEAD)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はアンデッドの天敵である。", "Your weapon is a great bane of undead.");
-        } else if (have_flag(si_ptr->flags, TR_SLAY_UNDEAD)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はアンデッドに対して神聖なる力を発揮する。", "Your weapon strikes at undead with holy wrath.");
-        }
-        if (have_flag(si_ptr->flags, TR_KILL_DEMON)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はデーモンの天敵である。", "Your weapon is a great bane of demons.");
-        } else if (have_flag(si_ptr->flags, TR_SLAY_DEMON)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はデーモンに対して神聖なる力を発揮する。", "Your weapon strikes at demons with holy wrath.");
-        }
-        if (have_flag(si_ptr->flags, TR_KILL_ORC)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はオークの天敵である。", "Your weapon is a great bane of orcs.");
-        } else if (have_flag(si_ptr->flags, TR_SLAY_ORC)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はオークに対して特に強い力を発揮する。", "Your weapon is especially deadly against orcs.");
-        }
-        if (have_flag(si_ptr->flags, TR_KILL_TROLL)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はトロルの天敵である。", "Your weapon is a great bane of trolls.");
-        } else if (have_flag(si_ptr->flags, TR_SLAY_TROLL)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はトロルに対して特に強い力を発揮する。", "Your weapon is especially deadly against trolls.");
-        }
-        if (have_flag(si_ptr->flags, TR_KILL_GIANT)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は巨人の天敵である。", "Your weapon is a great bane of giants.");
-        } else if (have_flag(si_ptr->flags, TR_SLAY_GIANT)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は巨人に対して特に強い力を発揮する。", "Your weapon is especially deadly against giants.");
-        }
-        /* Special "kill" si_ptr->flags */
-        if (have_flag(si_ptr->flags, TR_KILL_DRAGON)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はドラゴンの天敵である。", "Your weapon is a great bane of dragons.");
-        } else if (have_flag(si_ptr->flags, TR_SLAY_DRAGON)) {
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はドラゴンに対して特に強い力を発揮する。", "Your weapon is especially deadly against dragons.");
-        }
-
-        if (have_flag(si_ptr->flags, TR_FORCE_WEAPON))
-            si_ptr->info[si_ptr->line++] = _("あなたの武器はMPを使って攻撃する。", "Your weapon causes greate damages using your MP.");
-
-        if (have_flag(si_ptr->flags, TR_THROW))
-            si_ptr->info[si_ptr->line++] = _("あなたの武器は投げやすい。", "Your weapon can be thrown well.");
-    }
-
+    set_weapon_effect_info(creature_ptr, si_ptr);
     screen_save();
     for (int k = 1; k < 24; k++)
         prt("", k, 13);
