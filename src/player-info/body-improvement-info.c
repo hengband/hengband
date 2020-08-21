@@ -105,3 +105,16 @@ void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *si_p
     if (creature_ptr->mighty_throw)
         si_ptr->info[si_ptr->line++] = _("あなたは強く物を投げる。", "You can throw objects powerfully.");
 }
+
+/* todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
+void set_body_improvement_info_4(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    if (creature_ptr->resist_fear)
+        si_ptr->info[si_ptr->line++] = _("あなたは全く恐怖を感じない。", "You are completely fearless.");
+    
+    if (creature_ptr->resist_blind)
+        si_ptr->info[si_ptr->line++] = _("あなたの目は盲目への耐性を持っている。", "Your eyes are resistant to blindness.");
+    
+    if (creature_ptr->resist_time)
+        si_ptr->info[si_ptr->line++] = _("あなたは時間逆転への耐性を持っている。", "You are resistant to time.");
+}

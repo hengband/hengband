@@ -367,16 +367,7 @@ void self_knowledge(player_type *creature_ptr)
     set_body_improvement_info_3(creature_ptr, si_ptr);
     set_element_resistance_info(creature_ptr, si_ptr);
     set_high_resistance_info(creature_ptr, si_ptr);
-    if (creature_ptr->resist_fear) {
-        si_ptr->info[si_ptr->line++] = _("あなたは全く恐怖を感じない。", "You are completely fearless.");
-    }
-    if (creature_ptr->resist_blind) {
-        si_ptr->info[si_ptr->line++] = _("あなたの目は盲目への耐性を持っている。", "Your eyes are resistant to blindness.");
-    }
-    if (creature_ptr->resist_time) {
-        si_ptr->info[si_ptr->line++] = _("あなたは時間逆転への耐性を持っている。", "You are resistant to time.");
-    }
-
+    set_body_improvement_info_4(creature_ptr, si_ptr);
     if (creature_ptr->sustain_str) {
         si_ptr->info[si_ptr->line++] = _("あなたの腕力は維持されている。", "Your strength is sustained.");
     }
