@@ -151,6 +151,44 @@ static void drop_corpse(player_type *player_ptr, monster_death_type *md_ptr)
 }
 
 /*!
+ * @brief アーティファクトのドロップ判定処理
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param md_ptr モンスター死亡構造体への参照ポインタ
+ * @return 何かドロップするなら1以上、何もドロップしないなら0
+ */
+static ARTIFACT_IDX get_artifact_index(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    ARTIFACT_IDX a_idx = 0;
+    PERCENTAGE chance = 0;
+    for (int i = 0; i < 4; i++) {
+        if (!md_ptr->r_ptr->artifact_id[i])
+            break;
+
+        a_idx = md_ptr->r_ptr->artifact_id[i];
+        chance = md_ptr->r_ptr->artifact_percent[i];
+        if ((randint0(100) >= chance) && !current_world_ptr->wizard)
+            continue;
+
+        artifact_type *a_ptr = &a_info[a_idx];
+        if (a_ptr->cur_num == 1)
+            continue;
+
+        if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
+            a_ptr->cur_num = 1;
+            if (current_world_ptr->character_dungeon)
+                a_ptr->floor_id = player_ptr->floor_id;
+
+            continue;
+        }
+        
+        if (!preserve_mode)
+            a_ptr->cur_num = 1;
+    }
+
+    return a_idx;
+}
+
+/*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
  * @param m_idx 死亡したモンスターのID
@@ -192,7 +230,6 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
     }
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     drop_corpse(player_ptr, md_ptr);
     monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
 
@@ -204,27 +241,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
     switch_special_death(player_ptr, md_ptr);
     if (md_ptr->drop_chosen_item) {
-        ARTIFACT_IDX a_idx = 0;
-        PERCENTAGE chance = 0;
-        for (int i = 0; i < 4; i++) {
-            if (!md_ptr->r_ptr->artifact_id[i])
-                break;
-            a_idx = md_ptr->r_ptr->artifact_id[i];
-            chance = md_ptr->r_ptr->artifact_percent[i];
-            if (randint0(100) < chance || current_world_ptr->wizard) {
-                artifact_type *a_ptr = &a_info[a_idx];
-                if (!a_ptr->cur_num) {
-                    if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-                        a_ptr->cur_num = 1;
-                        if (current_world_ptr->character_dungeon)
-                            a_ptr->floor_id = player_ptr->floor_id;
-                    } else if (!preserve_mode) {
-                        a_ptr->cur_num = 1;
-                    }
-                }
-            }
-        }
-
+        ARTIFACT_IDX a_idx = get_artifact_index(player_ptr, md_ptr);
         if ((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) && (d_info[player_ptr->dungeon_idx].final_guardian == md_ptr->m_ptr->r_idx)) {
             KIND_OBJECT_IDX k_idx = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object
                                                                                       : lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
@@ -249,7 +266,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
             if (k_idx != 0) {
                 q_ptr = &forge;
                 object_prep(player_ptr, q_ptr, k_idx);
-                apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
+                apply_magic(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
                 (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
             }
 
@@ -279,7 +296,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     if (md_ptr->cloned && !(md_ptr->r_ptr->flags1 & RF1_UNIQUE))
         number = 0;
 
-    if (is_pet(md_ptr->m_ptr) || player_ptr->phase_out || floor_ptr->inside_arena)
+    if (is_pet(md_ptr->m_ptr) || player_ptr->phase_out || player_ptr->current_floor_ptr->inside_arena)
         number = 0;
 
     if (!drop_item && (md_ptr->r_ptr->d_char != '$'))
