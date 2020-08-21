@@ -35,95 +35,7 @@
 #include "status/element-resistance.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
-
-void display_life_rating(player_type *creature_ptr, self_info_type *si_ptr)
-{
-    creature_ptr->knowledge |= KNOW_STAT | KNOW_HPRATE;
-    strcpy(si_ptr->plev_buf, "");
-    int percent
-        = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
-    sprintf(si_ptr->plev_buf, _("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent);
-    strcpy(si_ptr->buf[0], si_ptr->plev_buf);
-    si_ptr->info[si_ptr->line++] = si_ptr->buf[0];
-    si_ptr->info[si_ptr->line++] = "";
-}
-
-void display_max_base_status(player_type *creature_ptr, self_info_type *si_ptr)
-{
-    si_ptr->info[si_ptr->line++] = _("能力の最大値", "Limits of maximum stats");
-    for (base_status_type v_nr = 0; v_nr < A_MAX; v_nr++) {
-        char stat_desc[80];
-        sprintf(stat_desc, "%s 18/%d", stat_names[v_nr], creature_ptr->stat_max_max[v_nr] - 18);
-        strcpy(si_ptr->s_string[v_nr], stat_desc);
-        si_ptr->info[si_ptr->line++] = si_ptr->s_string[v_nr];
-    }
-}
-
-void display_virtue(player_type *creature_ptr, self_info_type *si_ptr)
-{
-    si_ptr->info[si_ptr->line++] = "";
-    sprintf(si_ptr->plev_buf, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
-    strcpy(si_ptr->buf[1], si_ptr->plev_buf);
-    si_ptr->info[si_ptr->line++] = si_ptr->buf[1];
-    for (int v_nr = 0; v_nr < 8; v_nr++) {
-        GAME_TEXT vir_name[20];
-        char vir_desc[80];
-        int tester = creature_ptr->virtues[v_nr];
-        strcpy(vir_name, virtue[(creature_ptr->vir_types[v_nr]) - 1]);
-        sprintf(vir_desc, _("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
-        if (tester < -100)
-            sprintf(vir_desc, _("[%s]の対極 (%d)", "You are the polar opposite of %s (%d)."), vir_name, tester);
-        else if (tester < -80)
-            sprintf(vir_desc, _("[%s]の大敵 (%d)", "You are an arch-enemy of %s (%d)."), vir_name, tester);
-        else if (tester < -60)
-            sprintf(vir_desc, _("[%s]の強敵 (%d)", "You are a bitter enemy of %s (%d)."), vir_name, tester);
-        else if (tester < -40)
-            sprintf(vir_desc, _("[%s]の敵 (%d)", "You are an enemy of %s (%d)."), vir_name, tester);
-        else if (tester < -20)
-            sprintf(vir_desc, _("[%s]の罪者 (%d)", "You have sinned against %s (%d)."), vir_name, tester);
-        else if (tester < 0)
-            sprintf(vir_desc, _("[%s]の迷道者 (%d)", "You have strayed from the path of %s (%d)."), vir_name, tester);
-        else if (tester == 0)
-            sprintf(vir_desc, _("[%s]の中立者 (%d)", "You are neutral to %s (%d)."), vir_name, tester);
-        else if (tester < 20)
-            sprintf(vir_desc, _("[%s]の小徳者 (%d)", "You are somewhat virtuous in %s (%d)."), vir_name, tester);
-        else if (tester < 40)
-            sprintf(vir_desc, _("[%s]の中徳者 (%d)", "You are virtuous in %s (%d)."), vir_name, tester);
-        else if (tester < 60)
-            sprintf(vir_desc, _("[%s]の高徳者 (%d)", "You are very virtuous in %s (%d)."), vir_name, tester);
-        else if (tester < 80)
-            sprintf(vir_desc, _("[%s]の覇者 (%d)", "You are a champion of %s (%d)."), vir_name, tester);
-        else if (tester < 100)
-            sprintf(vir_desc, _("[%s]の偉大な覇者 (%d)", "You are a great champion of %s (%d)."), vir_name, tester);
-        else
-            sprintf(vir_desc, _("[%s]の具現者 (%d)", "You are the living embodiment of %s (%d)."), vir_name, tester);
-
-        strcpy(si_ptr->v_string[v_nr], vir_desc);
-        si_ptr->info[si_ptr->line++] = si_ptr->v_string[v_nr];
-    }
-}
-
-void display_mimic_race_ability(player_type *creature_ptr, self_info_type *si_ptr)
-{
-    switch (creature_ptr->mimic_form) {
-    case MIMIC_DEMON:
-    case MIMIC_DEMON_LORD:
-        sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can nether breathe, dam. %d (cost %d)."),
-            3 * creature_ptr->lev, 10 + creature_ptr->lev / 3);
-
-        si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
-        break;
-    case MIMIC_VAMPIRE:
-        if (creature_ptr->lev <= 1)
-            break;
-
-        sprintf(si_ptr->plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
-            creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10),
-            1 + (creature_ptr->lev / 3));
-        si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
-        break;
-    }
-}
+#include "view/display-self-info.h"
 
 void set_bad_status_info(player_type *creature_ptr, self_info_type *si_ptr)
 {
@@ -266,7 +178,7 @@ void set_esp_info(player_type *creature_ptr, self_info_type *si_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたは特別な強敵の存在を感じる能力を持っている。", "You sense unique monsters.");
 }
 
-void set_weapon_bless_info(player_type *creature_ptr, self_info_type *si_ptr)
+static void set_weapon_bless_info(self_info_type *si_ptr)
 {
     if (have_flag(si_ptr->flags, TR_BLESSED))
         si_ptr->info[si_ptr->line++] = _("あなたの武器は神の祝福を受けている。", "Your weapon has been blessed by the gods.");
@@ -284,7 +196,7 @@ void set_weapon_bless_info(player_type *creature_ptr, self_info_type *si_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたの武器は敵から生命力を吸収する。", "Your weapon drains life from your foes.");
 }
 
-void set_special_attack_info(player_type *creature_ptr, self_info_type *si_ptr)
+static void set_brand_attack_info(self_info_type *si_ptr)
 {
     if (have_flag(si_ptr->flags, TR_BRAND_ACID))
         si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を溶かす。", "Your weapon melts your foes.");
@@ -302,7 +214,7 @@ void set_special_attack_info(player_type *creature_ptr, self_info_type *si_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたの武器は敵を毒で侵す。", "Your weapon poisons your foes.");
 }
 
-void set_slay_info(player_type *creature_ptr, self_info_type *si_ptr)
+static void set_slay_info(self_info_type *si_ptr)
 {
     if (have_flag(si_ptr->flags, TR_KILL_ANIMAL))
         si_ptr->info[si_ptr->line++] = _("あなたの武器は動物の天敵である。", "Your weapon is a great bane of animals.");
@@ -356,40 +268,14 @@ void set_weapon_effect_info(player_type *creature_ptr, self_info_type *si_ptr)
     if (o_ptr->k_idx == 0)
         return;
 
-    set_weapon_bless_info(creature_ptr, si_ptr);
-    set_special_attack_info(creature_ptr, si_ptr);
-    set_slay_info(creature_ptr, si_ptr);
+    set_weapon_bless_info(si_ptr);
+    set_brand_attack_info(si_ptr);
+    set_slay_info(si_ptr);
     if (have_flag(si_ptr->flags, TR_FORCE_WEAPON))
         si_ptr->info[si_ptr->line++] = _("あなたの武器はMPを使って攻撃する。", "Your weapon causes greate damages using your MP.");
 
     if (have_flag(si_ptr->flags, TR_THROW))
         si_ptr->info[si_ptr->line++] = _("あなたの武器は投げやすい。", "Your weapon can be thrown well.");
-}
-
-void display_self_info(self_info_type *si_ptr)
-{
-    screen_save();
-    for (int k = 1; k < 24; k++)
-        prt("", k, 13);
-
-    prt(_("        あなたの状態:", "     Your Attributes:"), 1, 15);
-    int k = 2;
-    for (int j = 0; j < si_ptr->line; j++) {
-        prt(si_ptr->info[j], k++, 15);
-
-        /* Every 20 entries (lines 2 to 21), start over */
-        if ((k != 22) || (j + 1 >= si_ptr->line))
-            continue;
-
-        prt(_("-- 続く --", "-- more --"), k, 15);
-        inkey();
-        for (; k > 2; k--)
-            prt("", k, 15);
-    }
-
-    prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 13);
-    inkey();
-    screen_load();
 }
 
 /*!

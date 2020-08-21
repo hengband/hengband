@@ -848,6 +848,7 @@ hengband_SOURCES = \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player-middle.c view/display-player-middle.h \
 	view/display-player.c view/display-player.h \
+	view/display-self-info.c view/display-self-info.h \
 	view/display-store.c view/display-store.h \
 	view/display-util.c view/display-util.h \
 	view/object-describer.c view/object-describer.h \
