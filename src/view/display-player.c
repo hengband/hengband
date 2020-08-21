@@ -21,6 +21,7 @@
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"
+#include "player/player-status-table.h"
 #include "realm/realm-names-table.h"
 #include "status-first-page.h"
 #include "system/system-variables.h" // 暫定。後で消す

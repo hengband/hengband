@@ -16,6 +16,7 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "player/player-status-table.h"
 
 typedef struct learnt_magic_type {
     int blue_magic_num;

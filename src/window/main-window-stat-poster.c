@@ -3,6 +3,7 @@
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
 #include "player/attack-defense-types.h"
+#include "player/player-status-table.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"

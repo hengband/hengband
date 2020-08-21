@@ -23,6 +23,7 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "player/player-status-table.h"
 
 /*!
  * @brief 「開ける」動作コマンドのサブルーチン /

@@ -36,6 +36,7 @@
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-teleport.h"
+#include "player/player-status-table.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"

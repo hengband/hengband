@@ -4,6 +4,7 @@
 #include "mind/mind-magic-resistance.h"
 #include "mind/mind-mirror-master.h"
 #include "racial/racial-kutar.h"
+#include "player/player-status-table.h"
 #include "spell-realm/spells-craft.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-demon.h"

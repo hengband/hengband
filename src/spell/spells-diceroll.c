@@ -8,6 +8,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "player/player-class.h"
+#include "player/player-status-table.h"
 #include "room/rooms-builder.h"
 #include "system/floor-type-definition.h"
 

@@ -9,6 +9,7 @@
 #include "monster/monster-status.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-table.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 

@@ -57,6 +57,7 @@
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
+#include "player/player-status-table.h"
 #include "player/selfinfo.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"

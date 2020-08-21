@@ -6,6 +6,7 @@
 #include "mind/mind-info.h"
 #include "mind/mind-types.h"
 #include "player/player-class.h"
+#include "player/player-status-table.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"

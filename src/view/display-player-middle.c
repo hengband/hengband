@@ -11,6 +11,7 @@
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
+#include "player/player-status-table.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"

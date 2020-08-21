@@ -20,6 +20,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-flag-types.h"
 #include "object/object-mark-types.h"
+#include "player/player-status-table.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"

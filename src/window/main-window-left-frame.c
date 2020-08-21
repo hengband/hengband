@@ -6,6 +6,7 @@
 #include "monster/monster-status.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
+#include "player/player-status-table.h"
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

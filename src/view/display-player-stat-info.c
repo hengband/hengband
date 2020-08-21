@@ -16,6 +16,7 @@
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-race-types.h"
+#include "player/player-status-table.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"

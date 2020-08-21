@@ -20,6 +20,7 @@
 #include "object/object-mark-types.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
+#include "player/player-status-table.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"

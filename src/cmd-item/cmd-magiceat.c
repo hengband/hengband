@@ -71,6 +71,7 @@
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
+#include "player/player-status-table.h"
 #include "spell/spell-info.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"

@@ -26,6 +26,7 @@
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
+#include "player/player-status-table.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-song-numbers.h"
 #include "status/element-resistance.h"

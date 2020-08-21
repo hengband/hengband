@@ -12,6 +12,7 @@
 #include "mspell/monster-power-table.h"
 #include "mspell/mspell-type.h"
 #include "player/avatar.h"
+#include "player/player-status-table.h"
 #include "realm/realm-types.h"
 #include "spell/spell-info.h"
 #include "status/bad-status-setter.h"

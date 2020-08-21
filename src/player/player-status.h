@@ -63,30 +63,6 @@
 #define SEX_MALE 1
 #define MAX_SEXES 2 /*!< 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */
 
-extern const byte adj_mag_study[];
-extern const byte adj_mag_mana[];
-extern const byte adj_mag_fail[];
-extern const byte adj_mag_stat[];
-extern const byte adj_chr_gold[];
-extern const byte adj_int_dev[];
-extern const byte adj_wis_sav[];
-extern const byte adj_dex_dis[];
-extern const byte adj_int_dis[];
-extern const byte adj_dex_ta[];
-extern const byte adj_str_td[];
-extern const byte adj_dex_th[];
-extern const byte adj_str_th[];
-extern const byte adj_str_wgt[];
-extern const byte adj_str_hold[];
-extern const byte adj_str_dig[];
-extern const byte adj_dex_safe[];
-extern const byte adj_con_fix[];
-extern const byte adj_con_mhp[];
-extern const byte adj_chr_chm[];
-
-extern const concptr stat_names[A_MAX];
-extern const concptr stat_names_reduced[A_MAX];
-
 typedef struct floor_type floor_type;
 typedef struct object_type object_type;
 typedef struct player_type {
@@ -562,9 +538,6 @@ extern void wreck_the_pattern(player_type *creature_ptr);
 extern void cnv_stat(int val, char *out_val);
 extern s16b modify_stat_value(int value, int amount);
 extern long calc_score(player_type *creature_ptr);
-
-extern const s32b player_exp[PY_MAX_LEVEL];
-extern const s32b player_exp_a[PY_MAX_LEVEL];
 
 extern bool is_blessed(player_type *creature_ptr);
 extern bool is_time_limit_esp(player_type *creature_ptr);

@@ -14,6 +14,7 @@
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/race-info-table.h"
+#include "player/player-status-table.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
 #include "util/angband-files.h"

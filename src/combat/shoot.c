@@ -50,6 +50,7 @@
 #include "player/player-personalities-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
+#include "player/player-status-table.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"

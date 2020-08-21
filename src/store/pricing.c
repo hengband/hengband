@@ -1,6 +1,7 @@
 ﻿#include "store/pricing.h"
 #include "market/gold-magnification-table.h"
 #include "object/object-value.h"
+#include "player/player-status-table.h"
 #include "store/store-util.h"
 #include "store/store.h"
 

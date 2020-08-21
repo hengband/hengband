@@ -3,6 +3,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "system/object-type-definition.h"
 #include "player/player-status-flags.h"
+#include "player/player-status-table.h"
 
 /*!
  * @brief 所持/装備オブジェクトIDの部位表現を返す /

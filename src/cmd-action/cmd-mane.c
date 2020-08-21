@@ -36,6 +36,7 @@
 #include "mspell/monster-power-table.h"
 #include "mspell/mspell-type.h"
 #include "player/player-status.h"
+#include "player/player-status-table.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"

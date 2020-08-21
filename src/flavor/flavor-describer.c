@@ -25,6 +25,7 @@
 #include "object-hook/hook-quest.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player/player-status-table.h"
 #include "sv-definition/sv-lite-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"

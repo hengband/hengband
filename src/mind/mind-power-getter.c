@@ -14,6 +14,7 @@
 #include "player/player-class.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
+#include "player/player-status-table.h"
 
 /*!
  * @brief 使用可能な特殊技能を選択する /

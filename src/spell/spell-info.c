@@ -3,6 +3,7 @@
 #include "monster-race/monster-race.h"
 #include "player/player-class.h"
 #include "player/player-skill.h"
+#include "player/player-status-table.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
 #include "spell/spells-execution.h"

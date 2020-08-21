@@ -26,6 +26,7 @@
 #include "player/player-race.h"
 #include "player/player-sex.h"
 #include "player/process-name.h"
+#include "player/player-status-table.h"
 #include "system/game-option-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
