@@ -2129,6 +2129,9 @@
     <ClCompile Include="..\..\src\player-info\avatar.c">
       <Filter>player-info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-info\race-ability-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4610,6 +4613,9 @@
       <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\base-status-types.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\race-ability-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
   </ItemGroup>
