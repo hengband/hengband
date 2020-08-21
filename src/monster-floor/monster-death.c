@@ -231,6 +231,16 @@ static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
     msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[player_ptr->dungeon_idx].name);
 }
 
+static void decide_drop_quality(monster_death_type *md_ptr)
+{
+    md_ptr->mo_mode = 0L;
+    if (md_ptr->r_ptr->flags1 & RF1_DROP_GOOD)
+        md_ptr->mo_mode |= AM_GOOD;
+
+    if (md_ptr->r_ptr->flags1 & RF1_DROP_GREAT)
+        md_ptr->mo_mode |= AM_GREAT;
+}
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
@@ -267,23 +277,14 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
     check_quest_completion(player_ptr, md_ptr->m_ptr);
     on_defeat_arena_monster(player_ptr, md_ptr);
-    object_type forge;
-    object_type *q_ptr;
-    if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, FALSE)) {
+    if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, FALSE))
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
-    }
 
     drop_corpse(player_ptr, md_ptr);
     monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
-
-    md_ptr->mo_mode = 0L;
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_GOOD)
-        md_ptr->mo_mode |= AM_GOOD;
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_GREAT)
-        md_ptr->mo_mode |= AM_GREAT;
-
+    decide_drop_quality(player_ptr, md_ptr);
     switch_special_death(player_ptr, md_ptr);
-    drop_artifact(player_ptr, md_ptr);
+    drop_artifact(md_ptr);
     int number = 0;
     if ((md_ptr->r_ptr->flags1 & RF1_DROP_60) && (randint0(100) < 60))
         number++;
@@ -322,9 +323,9 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     int dump_item = 0;
     int dump_gold = 0;
     for (int i = 0; i < number; i++) {
-        q_ptr = &forge;
+        object_type forge;
+        object_type *q_ptr = &forge;
         object_wipe(q_ptr);
-
         if (md_ptr->do_gold && (!md_ptr->do_item || (randint0(100) < 50))) {
             if (!make_gold(player_ptr, q_ptr))
                 continue;
