@@ -86,6 +86,38 @@ static void on_dead_explosion(player_type *player_ptr, monster_death_type *md_pt
     }
 }
 
+static void on_defeat_arena_monster(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (!floor_ptr->inside_arena || is_pet(md_ptr->m_ptr))
+        return;
+
+    player_ptr->exit_bldg = TRUE;
+    if (player_ptr->arena_number > MAX_ARENA_MONS)
+        msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
+    else
+        msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
+
+    if (arena_info[player_ptr->arena_number].tval) {
+        object_type forge;
+        object_type *q_ptr = &forge;
+        object_prep(player_ptr, q_ptr, lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
+        apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
+        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+    }
+
+    if (player_ptr->arena_number > MAX_ARENA_MONS)
+        player_ptr->arena_number++;
+
+    player_ptr->arena_number++;
+    if (!record_arena)
+        return;
+
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_WRONGDOER_NAME);
+    exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
+}
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
@@ -105,7 +137,6 @@ static void on_dead_explosion(player_type *player_ptr, monster_death_type *md_pt
  */
 void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_death_type tmp_md;
     monster_death_type *md_ptr = initialize_monster_death_type(player_ptr, &tmp_md, m_idx, drop_item);
     if (current_world_ptr->timewalk_m_idx && current_world_ptr->timewalk_m_idx == m_idx)
@@ -122,38 +153,14 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     }
 
     check_quest_completion(player_ptr, md_ptr->m_ptr);
-
+    on_defeat_arena_monster(player_ptr, md_ptr);
     object_type forge;
-    object_type *q_ptr;
-    if (floor_ptr->inside_arena && !is_pet(md_ptr->m_ptr)) {
-        player_ptr->exit_bldg = TRUE;
-        if (player_ptr->arena_number > MAX_ARENA_MONS) {
-            msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
-        } else {
-            msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
-        }
-
-        if (arena_info[player_ptr->arena_number].tval) {
-            q_ptr = &forge;
-            object_prep(player_ptr, q_ptr, lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
-            apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
-            (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        }
-
-        if (player_ptr->arena_number > MAX_ARENA_MONS)
-            player_ptr->arena_number++;
-        player_ptr->arena_number++;
-        if (record_arena) {
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_WRONGDOER_NAME);
-            exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
-        }
-    }
-
+    object_type *q_ptr;    
     if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, FALSE)) {
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
     }
 
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool is_drop_corpse = one_in_(md_ptr->r_ptr->flags1 & RF1_UNIQUE ? 1 : 4);
     is_drop_corpse &= (md_ptr->r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != 0;
     is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == today_mon) && is_pet(md_ptr->m_ptr)));
