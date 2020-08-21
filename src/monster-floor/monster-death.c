@@ -70,6 +70,22 @@ static void write_pet_death(player_type *player_ptr, monster_death_type *md_ptr)
     }
 }
 
+static void on_dead_explosion(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    for (int i = 0; i < 4; i++) {
+        if (md_ptr->r_ptr->blow[i].method != RBM_EXPLODE)
+            continue;
+
+        BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+        EFFECT_ID typ = mbe_info[md_ptr->r_ptr->blow[i].effect].explode_type;
+        DICE_NUMBER d_dice = md_ptr->r_ptr->blow[i].d_dice;
+        DICE_SID d_side = md_ptr->r_ptr->blow[i].d_side;
+        HIT_POINT damage = damroll(d_dice, d_side);
+        (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damage, typ, flg, -1);
+        break;
+    }
+}
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
@@ -99,19 +115,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         player_ptr->update |= PU_MON_LITE;
 
     write_pet_death(player_ptr, md_ptr);
-    for (int i = 0; i < 4; i++) {
-        if (md_ptr->r_ptr->blow[i].method != RBM_EXPLODE)
-            continue;
-
-        BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-        EFFECT_ID typ = mbe_info[md_ptr->r_ptr->blow[i].effect].explode_type;
-        DICE_NUMBER d_dice = md_ptr->r_ptr->blow[i].d_dice;
-        DICE_SID d_side = md_ptr->r_ptr->blow[i].d_side;
-        HIT_POINT damage = damroll(d_dice, d_side);
-        project(player_ptr, m_idx, 3, md_ptr->md_y, md_ptr->md_x, damage, typ, flg, -1);
-        break;
-    }
-
+    on_dead_explosion(player_ptr, md_ptr);
     if (md_ptr->m_ptr->mflag2 & MFLAG2_CHAMELEON) {
         choose_new_monster(player_ptr, m_idx, TRUE, MON_CHAMELEON);
         md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
