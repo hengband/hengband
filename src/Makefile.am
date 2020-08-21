@@ -755,6 +755,7 @@ hengband_SOURCES = \
 	spell-realm/spells-crusade.c spell-realm/spells-crusade.h \
 	spell-realm/spells-demon.c spell-realm/spells-demon.h \
 	spell-realm/spells-hex.c spell-realm/spells-hex.h \
+	spell-realm/spells-nature.c spell-realm/spells-nature.h \
 	spell-realm/spells-song.c spell-realm/spells-song.h \
 	spell-realm/spells-sorcery.c spell-realm/spells-sorcery.h \
 	spell-realm/spells-trump.c spell-realm/spells-trump.h \

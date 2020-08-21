@@ -25,6 +25,7 @@
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
+#include "spell-realm/spells-nature.h"
 #include "spell/spell-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"

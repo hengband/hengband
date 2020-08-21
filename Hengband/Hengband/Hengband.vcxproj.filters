@@ -2162,6 +2162,9 @@
     <ClCompile Include="..\..\src\mind\mind-chaos-warrior.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-nature.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4677,6 +4680,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-chaos-warrior.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-nature.h">
+      <Filter>spell-realm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
