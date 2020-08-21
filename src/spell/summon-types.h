@@ -27,8 +27,8 @@ typedef enum summon_type {
     SUMMON_ANIMAL = 42, /*!< 召喚タイプ: 自然界の動物 */
     SUMMON_ANIMAL_RANGER = 43, /*!< 召喚タイプ: レンジャー向け自然界の動物 */
     SUMMON_PHANTOM = 47, /*!< 召喚タイプ: ゴースト */
-    SUMMON_BLUE_HORROR = 49, /*!< 召喚タイプ: ブルー・ホラー */
     SUMMON_TOTEM_MOAI = 48, /*!< 召喚タイプ: トーテムモアイ */
+    SUMMON_BLUE_HORROR = 49, /*!< 召喚タイプ: ブルー・ホラー */
     SUMMON_LIVING = 50, /*!< 召喚タイプ: 生命のあるモンスター */
     SUMMON_HI_DRAGON_LIVING = 51, /*!< 召喚タイプ: 生命のある古代ドラゴン */
     SUMMON_GOLEM = 52, /*!< 召喚タイプ: ゴーレム */

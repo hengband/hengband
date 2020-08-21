@@ -18,6 +18,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-leaver.h"
@@ -3783,7 +3784,7 @@ void wreck_the_pattern(player_type *creature_ptr)
     int to_ruin = randint1(45) + 35;
     while (to_ruin--) {
         POSITION r_y, r_x;
-        scatter(creature_ptr, &r_y, &r_x, creature_ptr->y, creature_ptr->x, 4, 0);
+        scatter(creature_ptr, &r_y, &r_x, creature_ptr->y, creature_ptr->x, 4, PROJECT_NONE);
 
         if (pattern_tile(floor_ptr, r_y, r_x) && (f_info[floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED)) {
             cave_set_feat(creature_ptr, r_y, r_x, feat_pattern_corrupted);

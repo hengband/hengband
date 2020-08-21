@@ -7,6 +7,7 @@
 #include "wizard/wizard-spells.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/asking-player.h"
+#include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "mind/mind-blue-mage.h"
@@ -91,7 +92,7 @@ void wiz_summon_horde(player_type *caster_ptr)
     int attempts = 1000;
 
     while (--attempts) {
-        scatter(caster_ptr, &wy, &wx, caster_ptr->y, caster_ptr->x, 3, 0);
+        scatter(caster_ptr, &wy, &wx, caster_ptr->y, caster_ptr->x, 3, PROJECT_NONE);
         if (is_cave_empty_bold(caster_ptr, wy, wx))
             break;
     }

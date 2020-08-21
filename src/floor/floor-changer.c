@@ -3,6 +3,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
+#include "effect/effect-characteristics.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
@@ -81,7 +82,7 @@ static MONSTER_IDX decide_pet_index(player_type *master_ptr, const int current_m
     for (d = 1; d < A_MAX; d++) {
         int j;
         for (j = 1000; j > 0; j--) {
-            scatter(master_ptr, cy, cx, master_ptr->y, master_ptr->x, d, 0);
+            scatter(master_ptr, cy, cx, master_ptr->y, master_ptr->x, d, PROJECT_NONE);
             if (monster_can_enter(master_ptr, *cy, *cx, &r_info[party_mon[current_monster].r_idx], 0))
                 break;
         }

@@ -642,7 +642,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                     POSITION my = 0, mx = 0;
 
                     while (attempt--) {
-                        scatter(caster_ptr, &my, &mx, caster_ptr->y, caster_ptr->x, 4, 0);
+                        scatter(caster_ptr, &my, &mx, caster_ptr->y, caster_ptr->x, 4, PROJECT_NONE);
 
                         /* Require empty grids */
                         if (is_cave_empty_bold2(caster_ptr, my, mx))

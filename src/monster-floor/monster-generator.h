@@ -2,7 +2,8 @@
 
 #include "system/angband.h"
 
-typedef bool (*summon_specific_pf)(player_type *, MONSTER_IDX, POSITION, POSITION, DEPTH, int, BIT_FLAGS);
+typedef enum summon_type summon_type;
+typedef bool (*summon_specific_pf)(player_type *, MONSTER_IDX, POSITION, POSITION, DEPTH, summon_type, BIT_FLAGS);
 
 bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist);
 bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);

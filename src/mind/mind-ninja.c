@@ -450,7 +450,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
             EFFECT_ID typ = one_in_(2) ? GF_FIRE : one_in_(3) ? GF_NETHER : GF_PLASMA;
             int attempts = 1000;
             while (attempts--) {
-                scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
+                scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_NONE);
                 if (!player_bold(caster_ptr, y, x))
                     break;
             }

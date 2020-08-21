@@ -42,13 +42,46 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+/*!
+ * @brief 死亡時召喚処理 (今のところ自分自身のみ)
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param md_ptr モンスター撃破構造体への参照ポインタ
+ * @param type 召喚タイプ
+ * @param probability 召喚確率 (計算式：1 - 1/probability)
+ * @param radius 召喚半径 (モンスターが死亡した座標から半径何マス以内に召喚させるか)
+ * @param message 召喚時のメッセージ
+ * @return なし
+ */
+static void summon_self(player_type *player_ptr, monster_death_type *md_ptr, summon_type type, int probability, POSITION radius, concptr message)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (floor_ptr->inside_arena || player_ptr->phase_out || one_in_(probability))
+        return;
+
+    POSITION wy = md_ptr->md_y;
+    POSITION wx = md_ptr->md_x;
+    int attempts = 100;
+    bool pet = is_pet(md_ptr->m_ptr);
+    do {
+        scatter(player_ptr, &wy, &wx, md_ptr->md_y, md_ptr->md_x, radius, PROJECT_NONE);
+    } while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
+
+    if (attempts <= 0)
+        return;
+
+    BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+    if (summon_specific(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, 100, type, mode) && player_can_see_bold(player_ptr, wy, wx))
+        msg_print(message);
+}
+
 static void on_dead_pink_horror(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
         return;
 
     bool notice = FALSE;
-    for (int i = 0; i < 2; i++) {
+    const int blue_horrors = 2;
+    for (int i = 0; i < blue_horrors; i++) {
         POSITION wy = md_ptr->md_y;
         POSITION wx = md_ptr->md_x;
         bool pet = is_pet(md_ptr->m_ptr);
@@ -91,26 +124,15 @@ static void on_dead_raal(player_type *player_ptr, monster_death_type *md_ptr)
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
+/*!
+ * @brief 6/7の確率で、20マス以内に暁の戦士自身を召喚する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param md_ptr モンスター撃破構造体への参照ポインタ
+ * @return なし
+ */
 static void on_dead_dawn(player_type *player_ptr, monster_death_type *md_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->inside_arena || player_ptr->phase_out || one_in_(7))
-        return;
-
-    POSITION wy = md_ptr->md_y;
-    POSITION wx = md_ptr->md_x;
-    int attempts = 100;
-    bool pet = is_pet(md_ptr->m_ptr);
-    do {
-        scatter(player_ptr, &wy, &wx, md_ptr->md_y, md_ptr->md_x, 20, 0);
-    } while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
-
-    if (attempts <= 0)
-        return;
-
-    BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
-    if (summon_specific(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, 100, SUMMON_DAWN, mode) && player_can_see_bold(player_ptr, wy, wx))
-        msg_print(_("新たな戦士が現れた！", "A new warrior steps forth!"));
+    summon_self(player_ptr, md_ptr, SUMMON_DAWN, 7, 20, _("新たな戦士が現れた！", "A new warrior steps forth!"));
 }
 
 static void on_dead_unmaker(player_type *player_ptr, monster_death_type *md_ptr)
@@ -236,26 +258,15 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
         msg_print(_("泡が弾けた！", "The bubble pops!"));
 }
 
+/*!
+ * @brief 7/8の確率で、5マス以内にトーテムモアイ自身を召喚する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param md_ptr モンスター撃破構造体への参照ポインタ
+ * @return なし
+ */
 static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_ptr)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->inside_arena || player_ptr->phase_out || one_in_(8))
-        return;
-
-    POSITION wy = md_ptr->md_y;
-    POSITION wx = md_ptr->md_x;
-    int attempts = 100;
-    bool pet = is_pet(md_ptr->m_ptr);
-    do {
-        scatter(player_ptr, &wy, &wx, md_ptr->md_y, md_ptr->md_x, 20, 0);
-    } while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
-
-    if (attempts <= 0)
-        return;
-
-    BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
-    if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, MON_TOTEM_MOAI, mode) && player_can_see_bold(player_ptr, wy, wx))
-        msg_print(_("新たなモアイが現れた！", "A new moai steps forth!"));
+    summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("新たなモアイが現れた！", "A new moai steps forth!"));
 }
 
 static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
