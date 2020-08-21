@@ -632,6 +632,8 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.c player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.c player-attack/player-attack.h \
 	\
+	player-info/self-info-util.c player-info/self-info-util.h \
+	\
 	racial/class-racial-switcher.c racial/class-racial-switcher.h \
 	racial/mutation-racial-selector.c racial/mutation-racial-selector.h \
 	racial/race-racial-command-setter.c racial/race-racial-command-setter.h \
@@ -924,6 +926,7 @@ DEFAULT_INCLUDES = -I$(srcdir) \
 	-I$(srcdir)/pet \
 	-I$(srcdir)/player \
 	-I$(srcdir)/player-attack \
+	-I$(srcdir)/player-info \
 	-I$(srcdir)/racial \
 	-I$(srcdir)/realm \
 	-I$(srcdir)/room \

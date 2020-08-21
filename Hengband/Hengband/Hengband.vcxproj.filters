@@ -2126,6 +2126,9 @@
     <ClCompile Include="..\..\src\main\angband-initializer.c">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-info\self-info-util.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4603,6 +4606,9 @@
     <ClInclude Include="..\..\src\main\angband-initializer.h">
       <Filter>main</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-info\self-info-util.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -4803,6 +4809,9 @@
     </Filter>
     <Filter Include="object-activation">
       <UniqueIdentifier>{14dcf604-bbe5-4084-b4ff-124ea8c55654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-info">
+      <UniqueIdentifier>{9b6116c6-24e1-4d33-b3b5-3591f58fb9e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
