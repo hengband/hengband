@@ -640,6 +640,7 @@ hengband_SOURCES = \
 	player-info/resistance-info.c player-info/resistance-info.h \
 	player-info/self-info.c player-info/self-info.h \
 	player-info/self-info-util.c player-info/self-info-util.h \
+	player-info/weapon-effect-info.c player-info/weapon-effect-info.h \
 	\
 	racial/class-racial-switcher.c racial/class-racial-switcher.h \
 	racial/mutation-racial-selector.c racial/mutation-racial-selector.h \

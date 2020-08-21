@@ -2150,6 +2150,9 @@
     <ClCompile Include="..\..\src\view\display-self-info.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-info\weapon-effect-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4653,6 +4656,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-self-info.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\weapon-effect-info.h">
+      <Filter>player-info</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
