@@ -6,6 +6,7 @@
 #include "load/load-util.h"
 #include "load/load-zangband.h"
 #include "market/bounty.h"
+#include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "world/world.h"
 

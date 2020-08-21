@@ -15,7 +15,6 @@
 extern bool reinit_wilderness;
 extern MONRACE_IDX today_mon;
 
-extern MONRACE_IDX battle_mon[4];
 extern u32b mon_odds[4];
 extern int battle_odds;
 extern PRICE kakekin;

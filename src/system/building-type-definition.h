@@ -36,3 +36,4 @@ typedef struct building_type {
 } building_type;
 
 extern building_type building[MAX_BLDG];
+extern MONRACE_IDX battle_mon[4];

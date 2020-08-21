@@ -68,7 +68,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-MONRACE_IDX battle_mon[4];
 u32b mon_odds[4];
 int battle_odds;
 PRICE kakekin;
