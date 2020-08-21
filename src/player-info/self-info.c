@@ -175,6 +175,84 @@ void display_equipment_influence(player_type *creature_ptr, self_info_type *si_p
         si_ptr->info[si_ptr->line++] = _("あなたの攻撃速度は装備によって影響を受けている。", "Your attack speed is affected by your equipment.");
 }
 
+void set_bad_status_info(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    if (creature_ptr->blind)
+        si_ptr->info[si_ptr->line++] = _("あなたは目が見えない。", "You cannot see.");
+
+    if (creature_ptr->confused)
+        si_ptr->info[si_ptr->line++] = _("あなたは混乱している。", "You are confused.");
+
+    if (creature_ptr->afraid)
+        si_ptr->info[si_ptr->line++] = _("あなたは恐怖に侵されている。", "You are terrified.");
+
+    if (creature_ptr->cut)
+        si_ptr->info[si_ptr->line++] = _("あなたは出血している。", "You are bleeding.");
+
+    if (creature_ptr->stun)
+        si_ptr->info[si_ptr->line++] = _("あなたはもうろうとしている。", "You are stunned.");
+
+    if (creature_ptr->poisoned)
+        si_ptr->info[si_ptr->line++] = _("あなたは毒に侵されている。", "You are poisoned.");
+
+    if (creature_ptr->image)
+        si_ptr->info[si_ptr->line++] = _("あなたは幻覚を見ている。", "You are hallucinating.");
+}
+
+void set_curse_info(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    if (creature_ptr->cursed & TRC_TY_CURSE)
+        si_ptr->info[si_ptr->line++] = _("あなたは邪悪な怨念に包まれている。", "You carry an ancient foul curse.");
+
+    if (creature_ptr->cursed & TRC_AGGRAVATE)
+        si_ptr->info[si_ptr->line++] = _("あなたはモンスターを怒らせている。", "You aggravate monsters.");
+
+    if (creature_ptr->cursed & TRC_DRAIN_EXP)
+        si_ptr->info[si_ptr->line++] = _("あなたは経験値を吸われている。", "You occasionally lose experience for no reason.");
+
+    if (creature_ptr->cursed & TRC_SLOW_REGEN)
+        si_ptr->info[si_ptr->line++] = _("あなたの回復力は非常に遅い。", "You regenerate slowly.");
+
+    if (creature_ptr->cursed & TRC_ADD_L_CURSE)
+        si_ptr->info[si_ptr->line++] = _("あなたの弱い呪いは増える。", "Your weak curses multiply."); /* 暫定的 -- henkma */
+
+    if (creature_ptr->cursed & TRC_ADD_H_CURSE)
+        si_ptr->info[si_ptr->line++] = _("あなたの強い呪いは増える。", "Your heavy curses multiply."); /* 暫定的 -- henkma */
+
+    if (creature_ptr->cursed & TRC_CALL_ANIMAL)
+        si_ptr->info[si_ptr->line++] = _("あなたは動物に狙われている。", "You attract animals.");
+
+    if (creature_ptr->cursed & TRC_CALL_DEMON)
+        si_ptr->info[si_ptr->line++] = _("あなたは悪魔に狙われている。", "You attract demons.");
+
+    if (creature_ptr->cursed & TRC_CALL_DRAGON)
+        si_ptr->info[si_ptr->line++] = _("あなたはドラゴンに狙われている。", "You attract dragons.");
+
+    if (creature_ptr->cursed & TRC_COWARDICE)
+        si_ptr->info[si_ptr->line++] = _("あなたは時々臆病になる。", "You are subject to cowardice.");
+
+    if (creature_ptr->cursed & TRC_TELEPORT)
+        si_ptr->info[si_ptr->line++] = _("あなたの位置はひじょうに不安定だ。", "Your position is very uncertain.");
+
+    if (creature_ptr->cursed & TRC_LOW_MELEE)
+        si_ptr->info[si_ptr->line++] = _("あなたの武器は攻撃を外しやすい。", "Your weapon causes you to miss blows.");
+
+    if (creature_ptr->cursed & TRC_LOW_AC)
+        si_ptr->info[si_ptr->line++] = _("あなたは攻撃を受けやすい。", "You are subject to be hit.");
+
+    if (creature_ptr->cursed & TRC_LOW_MAGIC)
+        si_ptr->info[si_ptr->line++] = _("あなたは魔法を失敗しやすい。", "Your spells fail more frequently.");
+
+    if (creature_ptr->cursed & TRC_FAST_DIGEST)
+        si_ptr->info[si_ptr->line++] = _("あなたはすぐお腹がへる。", "You have a good appetite.");
+
+    if (creature_ptr->cursed & TRC_DRAIN_HP)
+        si_ptr->info[si_ptr->line++] = _("あなたは体力を吸われている。", "You occasionally lose hit points for no reason.");
+
+    if (creature_ptr->cursed & TRC_DRAIN_MANA)
+        si_ptr->info[si_ptr->line++] = _("あなたは魔力を吸われている。", "You occasionally lose spell points for no reason.");
+}
+
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
  * @return なし
@@ -212,78 +290,8 @@ void self_knowledge(player_type *creature_ptr)
     set_mutation_info_1(creature_ptr, si_ptr);
     set_mutation_info_2(creature_ptr, si_ptr);
     set_mutation_info_3(creature_ptr, si_ptr);
-    if (creature_ptr->blind) {
-        si_ptr->info[si_ptr->line++] = _("あなたは目が見えない。", "You cannot see.");
-    }
-    if (creature_ptr->confused) {
-        si_ptr->info[si_ptr->line++] = _("あなたは混乱している。", "You are confused.");
-    }
-    if (creature_ptr->afraid) {
-        si_ptr->info[si_ptr->line++] = _("あなたは恐怖に侵されている。", "You are terrified.");
-    }
-    if (creature_ptr->cut) {
-        si_ptr->info[si_ptr->line++] = _("あなたは出血している。", "You are bleeding.");
-    }
-    if (creature_ptr->stun) {
-        si_ptr->info[si_ptr->line++] = _("あなたはもうろうとしている。", "You are stunned.");
-    }
-    if (creature_ptr->poisoned) {
-        si_ptr->info[si_ptr->line++] = _("あなたは毒に侵されている。", "You are poisoned.");
-    }
-    if (creature_ptr->image) {
-        si_ptr->info[si_ptr->line++] = _("あなたは幻覚を見ている。", "You are hallucinating.");
-    }
-    if (creature_ptr->cursed & TRC_TY_CURSE) {
-        si_ptr->info[si_ptr->line++] = _("あなたは邪悪な怨念に包まれている。", "You carry an ancient foul curse.");
-    }
-    if (creature_ptr->cursed & TRC_AGGRAVATE) {
-        si_ptr->info[si_ptr->line++] = _("あなたはモンスターを怒らせている。", "You aggravate monsters.");
-    }
-    if (creature_ptr->cursed & TRC_DRAIN_EXP) {
-        si_ptr->info[si_ptr->line++] = _("あなたは経験値を吸われている。", "You occasionally lose experience for no reason.");
-    }
-    if (creature_ptr->cursed & TRC_SLOW_REGEN) {
-        si_ptr->info[si_ptr->line++] = _("あなたの回復力は非常に遅い。", "You regenerate slowly.");
-    }
-    if (creature_ptr->cursed & TRC_ADD_L_CURSE) {
-        si_ptr->info[si_ptr->line++] = _("あなたの弱い呪いは増える。", "Your weak curses multiply."); /* 暫定的 -- henkma */
-    }
-    if (creature_ptr->cursed & TRC_ADD_H_CURSE) {
-        si_ptr->info[si_ptr->line++] = _("あなたの強い呪いは増える。", "Your heavy curses multiply."); /* 暫定的 -- henkma */
-    }
-    if (creature_ptr->cursed & TRC_CALL_ANIMAL) {
-        si_ptr->info[si_ptr->line++] = _("あなたは動物に狙われている。", "You attract animals.");
-    }
-    if (creature_ptr->cursed & TRC_CALL_DEMON) {
-        si_ptr->info[si_ptr->line++] = _("あなたは悪魔に狙われている。", "You attract demons.");
-    }
-    if (creature_ptr->cursed & TRC_CALL_DRAGON) {
-        si_ptr->info[si_ptr->line++] = _("あなたはドラゴンに狙われている。", "You attract dragons.");
-    }
-    if (creature_ptr->cursed & TRC_COWARDICE) {
-        si_ptr->info[si_ptr->line++] = _("あなたは時々臆病になる。", "You are subject to cowardice.");
-    }
-    if (creature_ptr->cursed & TRC_TELEPORT) {
-        si_ptr->info[si_ptr->line++] = _("あなたの位置はひじょうに不安定だ。", "Your position is very uncertain.");
-    }
-    if (creature_ptr->cursed & TRC_LOW_MELEE) {
-        si_ptr->info[si_ptr->line++] = _("あなたの武器は攻撃を外しやすい。", "Your weapon causes you to miss blows.");
-    }
-    if (creature_ptr->cursed & TRC_LOW_AC) {
-        si_ptr->info[si_ptr->line++] = _("あなたは攻撃を受けやすい。", "You are subject to be hit.");
-    }
-    if (creature_ptr->cursed & TRC_LOW_MAGIC) {
-        si_ptr->info[si_ptr->line++] = _("あなたは魔法を失敗しやすい。", "Your spells fail more frequently.");
-    }
-    if (creature_ptr->cursed & TRC_FAST_DIGEST) {
-        si_ptr->info[si_ptr->line++] = _("あなたはすぐお腹がへる。", "You have a good appetite.");
-    }
-    if (creature_ptr->cursed & TRC_DRAIN_HP) {
-        si_ptr->info[si_ptr->line++] = _("あなたは体力を吸われている。", "You occasionally lose hit points for no reason.");
-    }
-    if (creature_ptr->cursed & TRC_DRAIN_MANA) {
-        si_ptr->info[si_ptr->line++] = _("あなたは魔力を吸われている。", "You occasionally lose spell points for no reason.");
-    }
+    set_bad_status_info(creature_ptr, si_ptr);
+    set_curse_info(creature_ptr, si_ptr);
     if (is_blessed(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは高潔さを感じている。", "You feel rightous.");
     }
