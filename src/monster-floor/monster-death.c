@@ -306,6 +306,18 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
         lore_treasure(player_ptr, md_ptr->m_idx, dump_item, dump_gold);
 }
 
+static void on_defeat_last_boss(player_type *player_ptr)
+{
+    current_world_ptr->total_winner = TRUE;
+    player_ptr->redraw |= PR_TITLE;
+    play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
+    admire_from_patron(player_ptr);
+    msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));
+    msg_print(_("あなたはゲームをコンプリートしました。", "You have won the game!"));
+    msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));
+}
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
@@ -358,14 +370,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     if (((md_ptr->r_ptr->flags1 & RF1_QUESTOR) == 0) || player_ptr->phase_out || (md_ptr->m_ptr->r_idx != MON_SERPENT) || md_ptr->cloned)
         return;
 
-    current_world_ptr->total_winner = TRUE;
-    player_ptr->redraw |= (PR_TITLE);
-    play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
-    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
-    admire_from_patron(player_ptr);
-    msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));
-    msg_print(_("あなたはゲームをコンプリートしました。", "You have won the game!"));
-    msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));
+    on_defeat_last_boss(player_ptr);
 }
 
 /*!
