@@ -423,54 +423,6 @@ bool perilous_secrets(player_type *user_ptr)
 }
 
 /*!
- * @brief 盾磨き処理 /
- * pulish shield
- * @return ターン消費を要する処理を行ったならばTRUEを返す
- */
-bool pulish_shield(player_type *caster_ptr)
-{
-    concptr q = _("どの盾を磨きますか？", "Pulish which weapon? ");
-    concptr s = _("磨く盾がありません。", "You have weapon to pulish.");
-
-    OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_SHIELD);
-    if (!o_ptr)
-        return FALSE;
-
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(caster_ptr, o_ptr, flgs);
-
-    bool is_pulish_successful = o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr);
-    is_pulish_successful &= !object_is_cursed(o_ptr);
-    is_pulish_successful &= (o_ptr->sval != SV_MIRROR_SHIELD);
-    if (is_pulish_successful) {
-#ifdef JP
-        msg_format("%sは輝いた！", o_name);
-#else
-        msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
-#endif
-        o_ptr->name2 = EGO_REFLECTION;
-        enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOAC);
-
-        o_ptr->discount = 99;
-        chg_virtue(caster_ptr, V_ENCHANT, 2);
-
-        return TRUE;
-    }
-
-    if (flush_failure)
-        flush();
-
-    msg_print(_("失敗した。", "Failed."));
-    chg_virtue(caster_ptr, V_ENCHANT, -2);
-    calc_android_exp(caster_ptr);
-    return FALSE;
-}
-
-/*!
  * @brief 呪いの打ち破り処理 /
  * Break the curse of an item
  * @param o_ptr 呪い装備情報の参照ポインタ
