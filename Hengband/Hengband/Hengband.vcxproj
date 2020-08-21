@@ -960,6 +960,7 @@
     <ClInclude Include="..\..\src\object-activation\activation-resistance.h" />
     <ClInclude Include="..\..\src\object-activation\activation-teleport.h" />
     <ClInclude Include="..\..\src\object-activation\activation-util.h" />
+    <ClInclude Include="..\..\src\player-info\base-status-types.h" />
     <ClInclude Include="..\..\src\player-info\self-info-util.h" />
     <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />

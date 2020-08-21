@@ -82,7 +82,7 @@ void self_knowledge(player_type *creature_ptr)
     }
 
     si_ptr->info[si_ptr->line++] = _("能力の最大値", "Limits of maximum stats");
-    for (int v_nr = 0; v_nr < A_MAX; v_nr++) {
+    for (base_status_type v_nr = 0; v_nr < A_MAX; v_nr++) {
         char stat_desc[80];
         sprintf(stat_desc, "%s 18/%d", stat_names[v_nr], creature_ptr->stat_max_max[v_nr] - 18);
         strcpy(si_ptr->s_string[v_nr], stat_desc);

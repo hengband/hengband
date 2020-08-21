@@ -4609,6 +4609,9 @@
     <ClInclude Include="..\..\src\player-info\avatar.h">
       <Filter>player-info</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-info\base-status-types.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

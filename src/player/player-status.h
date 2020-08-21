@@ -3,6 +3,7 @@
 #include "system/angband.h"
 
 /* 人畜無害なenumヘッダを先に読み込む */
+#include "player-info/base-status-types.h"
 #include "player/player-classes-types.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
@@ -22,17 +23,6 @@
  * is saved in the savefile.  The "transient" info is recomputed
  * whenever anything important changes.
  */
-
-/*
- * Player constants
- */
-#define A_STR 0
-#define A_INT 1
-#define A_WIS 2
-#define A_DEX 3
-#define A_CON 4
-#define A_CHR 5
-#define A_MAX 6
 
 #define PY_MAX_EXP 99999999L /*!< プレイヤー経験値の最大値 / Maximum exp */
 #define PY_MAX_GOLD 999999999L /*!< プレイヤー所持金の最大値 / Maximum gold */
