@@ -3319,6 +3319,9 @@ static s16b calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
             || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
             continue;
 
+        if (!object_is_known(o_ptr))
+            continue;
+
         bonus_to_h = o_ptr->to_h;
 
         if (creature_ptr->pclass == CLASS_NINJA) {
@@ -3327,25 +3330,18 @@ static s16b calc_to_hit_display(player_type *creature_ptr, INVENTORY_IDX slot)
         }
 
         if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !have_two_handed_weapons(creature_ptr)) {
-            if (object_is_known(o_ptr)) {
-                creature_ptr->dis_to_h[i - INVEN_RIGHT] += (s16b)bonus_to_h;
-            }
+            hit += (s16b)bonus_to_h;
             continue;
         }
 
         if (have_right_hand_weapon(creature_ptr) && have_left_hand_weapon(creature_ptr)) {
-            if (!object_is_known(o_ptr))
-                continue;
 
-            creature_ptr->dis_to_h[0] += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
-            creature_ptr->dis_to_h[1] += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
+            if (default_hand == 0) hit += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
+            if (default_hand == 1) hit += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
             continue;
         }
 
-        if (!object_is_known(o_ptr))
-            continue;
-
-        creature_ptr->dis_to_h[default_hand] += (s16b)bonus_to_h;
+        if (default_hand == id) hit += (s16b)bonus_to_h;
     }
 
     if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
