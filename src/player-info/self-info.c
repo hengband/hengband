@@ -11,12 +11,8 @@
  */
 
 #include "player-info/self-info.h"
-#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
-#include "mutation/mutation-flag-types.h"
-#include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-flags.h"
 #include "player-info/avatar.h"
 #include "player-info/base-status-info.h"
 #include "player-info/body-improvement-info.h"
@@ -27,15 +23,7 @@
 #include "player-info/self-info-util.h"
 #include "player-info/weapon-effect-info.h"
 #include "player/attack-defense-types.h"
-#include "player/player-class.h"
-#include "player/player-race-types.h"
-#include "player/player-race.h"
-#include "player/player-status-flags.h"
-#include "realm/realm-names-table.h"
-#include "realm/realm-song-numbers.h"
-#include "status/element-resistance.h"
 #include "term/screen-processor.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-self-info.h"
 
 static void set_bad_status_info(player_type *creature_ptr, self_info_type *si_ptr)
