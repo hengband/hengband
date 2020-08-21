@@ -1,7 +1,6 @@
 ﻿#include "player/player-damage.h"
 #include "autopick/autopick-pref-processor.h"
 #include "blue-magic/blue-magic-checker.h"
-#include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"

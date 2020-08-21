@@ -10,7 +10,6 @@
  */
 
 #include "floor/floor-generator.h"
-#include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

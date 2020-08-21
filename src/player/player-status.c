@@ -6,7 +6,6 @@
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-action/cmd-spell.h"
-#include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "combat/attack-power-table.h"
