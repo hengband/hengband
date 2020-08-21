@@ -59,7 +59,7 @@
 #define SMALL_LEVEL 3   /*!< 小さいフロアの生成される基本確率(1/定数) / 1/chance of smaller size (3) */
 #define EMPTY_LEVEL 24  /*!< アリーナレベル(外壁のないフロア)の生成される基本確率(1/定数) / 1/chance of being 'empty' (15) */
 #define LAKE_LEVEL  24  /*!< 川や湖のあるフロアの生成される確率(1/定数) / 1/chance of being a lake on the level */
-#define DARK_EMPTY  5   /*!< フロア全体が暗い可能性の基本確率(1/定数) / 1/chance of arena level NOT being lit (2) */
+#define DARK_EMPTY  5   /*!< フロア全体が暗い可能性の基本確率(1/定数) / 1/chance of on_defeat_arena_monster level NOT being lit (2) */
 #define DUN_CAVERN  20	/*!< 洞窟状のダンジョンが生成される基本確率(1/定数) / 1/chance of having a cavern level */
 
 /*

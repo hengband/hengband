@@ -134,7 +134,7 @@ static void see_arena_poster(player_type *player_ptr)
 }
 
 /*!
- * @brief 闘技場に入るコマンドの処理 / arena commands
+ * @brief 闘技場に入るコマンドの処理 / on_defeat_arena_monster commands
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param cmd 闘技場処理のID
  * @return なし
@@ -151,7 +151,7 @@ void arena_comm(player_type *player_ptr, int cmd)
     case BACT_ARENA_RULES:
         screen_save();
 
-        /* Peruse the arena help file */
+        /* Peruse the on_defeat_arena_monster help file */
         (void)show_file(player_ptr, TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
         screen_load();
         break;

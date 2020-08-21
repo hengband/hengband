@@ -49,6 +49,6 @@ typedef struct floor_type {
 
     bool monster_noise;
     QUEST_IDX inside_quest; /* Inside quest level */
-    bool inside_arena; /* Is character inside arena? */
+    bool inside_arena; /* Is character inside on_defeat_arena_monster? */
 
 } floor_type;

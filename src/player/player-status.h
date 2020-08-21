@@ -117,7 +117,7 @@ typedef struct player_type {
     PLAYER_LEVEL lev; /* Level */
 
     TOWN_IDX town_num; /* Current town number */
-    s16b arena_number; /* monster number in arena -KMW- */
+    s16b arena_number; /* monster number in on_defeat_arena_monster -KMW- */
     bool phase_out; /*!< フェイズアウト状態(闘技場観戦状態などに利用、NPCの処理の対象にならず自身もほとんどの行動ができない) */
 
     DUNGEON_IDX dungeon_idx; /* current dungeon index */
@@ -312,7 +312,7 @@ typedef struct player_type {
     bool monk_notify_aux;
 
     byte leave_bldg;
-    byte exit_bldg; /* Goal obtained in arena? -KMW- */
+    byte exit_bldg; /* Goal obtained in on_defeat_arena_monster? -KMW- */
 
     bool leaving_dungeon; /* True if player is leaving the dungeon */
     bool teleport_town;

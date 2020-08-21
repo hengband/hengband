@@ -12,7 +12,7 @@ extern bool record_stair; /* Record recall and stair movements */
 extern bool record_buy; /* Record purchased items */
 extern bool record_sell; /* Record sold items */
 extern bool record_danger; /* Record hitpoint warning */
-extern bool record_arena; /* Record arena victories */
+extern bool record_arena; /* Record on_defeat_arena_monster victories */
 extern bool record_ident; /* Record first identified items */
 extern bool record_named_pet; /* Record information about named pets */
 

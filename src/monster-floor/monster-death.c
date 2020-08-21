@@ -188,6 +188,45 @@ static ARTIFACT_IDX get_artifact_index(player_type *player_ptr, monster_death_ty
     return a_idx;
 }
 
+static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (!md_ptr->drop_chosen_item)
+        return;
+
+    ARTIFACT_IDX a_idx = get_artifact_index(player_ptr, md_ptr);
+    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (d_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx))
+        return;
+
+    KIND_OBJECT_IDX k_idx
+        = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object : lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
+    if (d_info[player_ptr->dungeon_idx].final_artifact != 0) {
+        a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
+        artifact_type *a_ptr = &a_info[a_idx];
+        if (!a_ptr->cur_num) {
+            if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
+                a_ptr->cur_num = 1;
+                if (current_world_ptr->character_dungeon)
+                    a_ptr->floor_id = player_ptr->floor_id;
+            } else if (!preserve_mode) {
+                a_ptr->cur_num = 1;
+            }
+
+            if (!d_info[player_ptr->dungeon_idx].final_object)
+                k_idx = 0;
+        }
+    }
+
+    if (k_idx != 0) {
+        object_type forge;
+        object_type *q_ptr = &forge;
+        object_prep(player_ptr, q_ptr, k_idx);
+        apply_magic(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
+        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+    }
+
+    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[player_ptr->dungeon_idx].name);
+}
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
@@ -240,40 +279,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         md_ptr->mo_mode |= AM_GREAT;
 
     switch_special_death(player_ptr, md_ptr);
-    if (md_ptr->drop_chosen_item) {
-        ARTIFACT_IDX a_idx = get_artifact_index(player_ptr, md_ptr);
-        if ((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) && (d_info[player_ptr->dungeon_idx].final_guardian == md_ptr->m_ptr->r_idx)) {
-            KIND_OBJECT_IDX k_idx = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object
-                                                                                      : lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
-
-            if (d_info[player_ptr->dungeon_idx].final_artifact != 0) {
-                a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
-                artifact_type *a_ptr = &a_info[a_idx];
-                if (!a_ptr->cur_num) {
-                    if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-                        a_ptr->cur_num = 1;
-                        if (current_world_ptr->character_dungeon)
-                            a_ptr->floor_id = player_ptr->floor_id;
-                    } else if (!preserve_mode) {
-                        a_ptr->cur_num = 1;
-                    }
-
-                    if (!d_info[player_ptr->dungeon_idx].final_object)
-                        k_idx = 0;
-                }
-            }
-
-            if (k_idx != 0) {
-                q_ptr = &forge;
-                object_prep(player_ptr, q_ptr, k_idx);
-                apply_magic(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
-                (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-            }
-
-            msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[player_ptr->dungeon_idx].name);
-        }
-    }
-
+    drop_artifact(player_ptr, md_ptr);
     int number = 0;
     if ((md_ptr->r_ptr->flags1 & RF1_DROP_60) && (randint0(100) < 60))
         number++;
@@ -296,7 +302,8 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     if (md_ptr->cloned && !(md_ptr->r_ptr->flags1 & RF1_UNIQUE))
         number = 0;
 
-    if (is_pet(md_ptr->m_ptr) || player_ptr->phase_out || player_ptr->current_floor_ptr->inside_arena)
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (is_pet(md_ptr->m_ptr) || player_ptr->phase_out || floor_ptr->inside_arena)
         number = 0;
 
     if (!drop_item && (md_ptr->r_ptr->d_char != '$'))
