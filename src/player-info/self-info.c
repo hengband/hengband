@@ -20,9 +20,9 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
+#include "player-info/avatar.h"
 #include "player-info/self-info-util.h"
 #include "player/attack-defense-types.h"
-#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
@@ -208,25 +208,30 @@ void self_knowledge(player_type *creature_ptr)
         case RACE_DWARF:
             if (creature_ptr->lev > 4)
                 si_ptr->info[si_ptr->line++] = _("あなたは罠とドアと階段を感知できる。(5 MP)", "You can find traps, doors and stairs (cost 5).");
+
             break;
         case RACE_HOBBIT:
-            if (creature_ptr->lev > 14) {
+            if (creature_ptr->lev > 14)
                 si_ptr->info[si_ptr->line++] = _("あなたは食料を生成できる。(10 MP)", "You can produce food (cost 10).");
-            }
+
             break;
         case RACE_GNOME:
             if (creature_ptr->lev > 4) {
-                sprintf(si_ptr->plev_buf, _("あなたは範囲 %d 以内にテレポートできる。(%d MP)", "You can teleport, range %d (cost %d)."), (1 + creature_ptr->lev), (5 + (creature_ptr->lev / 5)));
+                sprintf(si_ptr->plev_buf, _("あなたは範囲 %d 以内にテレポートできる。(%d MP)", "You can teleport, range %d (cost %d)."),
+                    (1 + creature_ptr->lev), (5 + (creature_ptr->lev / 5)));
                 si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             }
+
             break;
         case RACE_HALF_ORC:
             if (creature_ptr->lev > 2)
                 si_ptr->info[si_ptr->line++] = _("あなたは恐怖を除去できる。(5 MP)", "You can remove fear (cost 5).");
+
             break;
         case RACE_HALF_TROLL:
             if (creature_ptr->lev > 9)
                 si_ptr->info[si_ptr->line++] = _("あなたは狂暴化することができる。(12 MP) ", "You can enter a berserk fury (cost 12).");
+
             break;
         case RACE_AMBERITE:
             if (creature_ptr->lev > 29)
@@ -249,32 +254,41 @@ void self_knowledge(player_type *creature_ptr)
         case RACE_HALF_GIANT:
             if (creature_ptr->lev > 19)
                 si_ptr->info[si_ptr->line++] = _("あなたは石の壁を壊すことができる。(10 MP)", "You can break stone walls (cost 10).");
+
             break;
         case RACE_HALF_TITAN:
             if (creature_ptr->lev > 34)
                 si_ptr->info[si_ptr->line++] = _("あなたはモンスターをスキャンすることができる。(20 MP)", "You can probe monsters (cost 20).");
+
             break;
         case RACE_CYCLOPS:
             if (creature_ptr->lev > 19) {
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの岩石を投げることができる。(15 MP)", "You can throw a boulder, dam. %d (cost 15)."), 3 * creature_ptr->lev);
+                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの岩石を投げることができる。(15 MP)", "You can throw a boulder, dam. %d (cost 15)."),
+                    3 * creature_ptr->lev);
                 si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             }
+
             break;
         case RACE_YEEK:
             if (creature_ptr->lev > 14)
                 si_ptr->info[si_ptr->line++] = _("あなたは恐怖を呼び起こす叫び声を発することができる。(15 MP)", "You can make a terrifying scream (cost 15).");
+
             break;
         case RACE_KLACKON:
             if (creature_ptr->lev > 8) {
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの酸を吹きかけることができる。(9 MP)", "You can spit acid, dam. %d (cost 9)."), creature_ptr->lev);
+                sprintf(
+                    si_ptr->plev_buf, _("あなたは %d ダメージの酸を吹きかけることができる。(9 MP)", "You can spit acid, dam. %d (cost 9)."), creature_ptr->lev);
                 si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             }
+
             break;
         case RACE_KOBOLD:
             if (creature_ptr->lev > 11) {
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの毒矢を投げることができる。(8 MP)", "You can throw a dart of poison, dam. %d (cost 8)."), creature_ptr->lev);
+                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの毒矢を投げることができる。(8 MP)", "You can throw a dart of poison, dam. %d (cost 8)."),
+                    creature_ptr->lev);
                 si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             }
+
             break;
         case RACE_DARK_ELF:
             if (creature_ptr->lev > 1) {
@@ -282,74 +296,95 @@ void self_knowledge(player_type *creature_ptr)
                     (3 + ((creature_ptr->lev - 1) / 5)));
                 si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             }
+
             break;
         case RACE_DRACONIAN:
-            sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのブレスを吐くことができる。(%d MP)", "You can breathe, dam. %d (cost %d)."), 2 * creature_ptr->lev, creature_ptr->lev);
+            sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのブレスを吐くことができる。(%d MP)", "You can breathe, dam. %d (cost %d)."),
+                2 * creature_ptr->lev, creature_ptr->lev);
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             break;
         case RACE_MIND_FLAYER:
             if (creature_ptr->lev > 14)
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの精神攻撃をすることができる。(12 MP)", "You can mind blast your enemies, dam %d (cost 12)."), creature_ptr->lev);
+                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの精神攻撃をすることができる。(12 MP)", "You can mind blast your enemies, dam %d (cost 12)."),
+                    creature_ptr->lev);
+
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             break;
         case RACE_IMP:
             if (creature_ptr->lev > 29) {
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのファイア・ボールの呪文を使える。(15 MP)", "You can cast a Fire Ball, dam. %d (cost 15)."), creature_ptr->lev);
+                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのファイア・ボールの呪文を使える。(15 MP)", "You can cast a Fire Ball, dam. %d (cost 15)."),
+                    creature_ptr->lev);
                 si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
-            } else if (creature_ptr->lev > 8) {
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのファイア・ボルトの呪文を使える。(15 MP)", "You can cast a Fire Bolt, dam. %d (cost 15)."), creature_ptr->lev);
+                break;
+            }
+
+            if (creature_ptr->lev > 8) {
+                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのファイア・ボルトの呪文を使える。(15 MP)", "You can cast a Fire Bolt, dam. %d (cost 15)."),
+                    creature_ptr->lev);
                 si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             }
+
             break;
         case RACE_GOLEM:
             if (creature_ptr->lev > 19)
-                si_ptr->info[si_ptr->line++] = _("あなたは d20+30 ターンの間肌を石に変化させられる。(15 MP)", "You can turn your skin to stone, dur d20+30 (cost 15).");
+                si_ptr->info[si_ptr->line++]
+                    = _("あなたは d20+30 ターンの間肌を石に変化させられる。(15 MP)", "You can turn your skin to stone, dur d20+30 (cost 15).");
+
             break;
         case RACE_ZOMBIE:
         case RACE_SKELETON:
             if (creature_ptr->lev > 29)
                 si_ptr->info[si_ptr->line++] = _("あなたは失った経験値を回復することができる。(30 MP)", "You can restore lost experience (cost 30).");
+
             break;
         case RACE_VAMPIRE:
-            if (creature_ptr->lev > 1) {
-                sprintf(si_ptr->plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
-                    creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10), 1 + (creature_ptr->lev / 3));
-                si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
-            }
+            if (creature_ptr->lev <= 1)
+                break;
+
+            sprintf(si_ptr->plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
+                creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10),
+                1 + (creature_ptr->lev / 3));
+            si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             break;
         case RACE_SPECTRE:
-            if (creature_ptr->lev > 3) {
+            if (creature_ptr->lev > 3)
                 si_ptr->info[si_ptr->line++] = _("あなたは泣き叫んで敵を恐怖させることができる。(3 MP)", "You can wail to terrify your enemies (cost 3).");
-            }
+
             break;
         case RACE_SPRITE:
-            if (creature_ptr->lev > 11) {
-                si_ptr->info[si_ptr->line++] = _("あなたは敵を眠らせる魔法の粉を投げることができる。(12 MP)", "You can throw magical dust which induces sleep (cost 12).");
-            }
+            if (creature_ptr->lev > 11)
+                si_ptr->info[si_ptr->line++]
+                    = _("あなたは敵を眠らせる魔法の粉を投げることができる。(12 MP)", "You can throw magical dust which induces sleep (cost 12).");
+
             break;
         case RACE_BALROG:
-            sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."), 3 * creature_ptr->lev,
-                10 + creature_ptr->lev / 3);
-
+            sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."),
+                3 * creature_ptr->lev, 10 + creature_ptr->lev / 3);
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             break;
         case RACE_KUTAR:
             if (creature_ptr->lev > 19)
-                si_ptr->info[si_ptr->line++] = _("あなたは d20+30 ターンの間横に伸びることができる。(15 MP)", "You can expand horizontally, dur d20+30 (cost 15).");
+                si_ptr->info[si_ptr->line++]
+                    = _("あなたは d20+30 ターンの間横に伸びることができる。(15 MP)", "You can expand horizontally, dur d20+30 (cost 15).");
+
             break;
         case RACE_ANDROID:
             if (creature_ptr->lev < 10)
-                sprintf(
-                    si_ptr->plev_buf, _("あなたは %d ダメージのレイガンを撃つことができる。(7 MP)", "You can fire a ray gun with damage %d (cost 7)."), (creature_ptr->lev + 1) / 2);
+                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのレイガンを撃つことができる。(7 MP)", "You can fire a ray gun with damage %d (cost 7)."),
+                    (creature_ptr->lev + 1) / 2);
             else if (creature_ptr->lev < 25)
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのブラスターを撃つことができる。(13 MP)", "You can fire a blaster with damage %d (cost 13)."), creature_ptr->lev);
+                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのブラスターを撃つことができる。(13 MP)", "You can fire a blaster with damage %d (cost 13)."),
+                    creature_ptr->lev);
             else if (creature_ptr->lev < 35)
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのバズーカを撃つことができる。(26 MP)", "You can fire a bazooka with damage %d (cost 26)."), creature_ptr->lev * 2);
+                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのバズーカを撃つことができる。(26 MP)", "You can fire a bazooka with damage %d (cost 26)."),
+                    creature_ptr->lev * 2);
             else if (creature_ptr->lev < 45)
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのビームキャノンを撃つことができる。(40 MP)", "You can fire a beam cannon with damage %d (cost 40)."),
+                sprintf(si_ptr->plev_buf,
+                    _("あなたは %d ダメージのビームキャノンを撃つことができる。(40 MP)", "You can fire a beam cannon with damage %d (cost 40)."),
                     creature_ptr->lev * 2);
             else
-                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのロケットを撃つことができる。(60 MP)", "You can fire a rocket with damage %d (cost 60)."), creature_ptr->lev * 5);
+                sprintf(si_ptr->plev_buf, _("あなたは %d ダメージのロケットを撃つことができる。(60 MP)", "You can fire a rocket with damage %d (cost 60)."),
+                    creature_ptr->lev * 5);
 
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             break;
@@ -361,7 +396,8 @@ void self_knowledge(player_type *creature_ptr)
     switch (creature_ptr->pclass) {
     case CLASS_WARRIOR:
         if (creature_ptr->lev > 39) {
-            si_ptr->info[si_ptr->line++] = _("あなたはランダムな方向に対して数回攻撃することができる。(75 MP)", "You can attack some random directions simultaneously (cost 75).");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたはランダムな方向に対して数回攻撃することができる。(75 MP)", "You can attack some random directions simultaneously (cost 75).");
         }
         break;
     case CLASS_HIGH_MAGE:
@@ -381,13 +417,15 @@ void self_knowledge(player_type *creature_ptr)
             }
         } else {
             if (creature_ptr->lev > 41) {
-                si_ptr->info[si_ptr->line++] = _("あなたは周りのすべてのモンスターを攻撃することができる。(40 MP)", "You can damage all monsters in sight (cost 40).");
+                si_ptr->info[si_ptr->line++]
+                    = _("あなたは周りのすべてのモンスターを攻撃することができる。(40 MP)", "You can damage all monsters in sight (cost 40).");
             }
         }
         break;
     case CLASS_ROGUE:
         if (creature_ptr->lev > 7) {
-            si_ptr->info[si_ptr->line++] = _("あなたは攻撃して即座に逃げることができる。(12 MP)", "You can hit a monster and teleport away simultaneously (cost 12).");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたは攻撃して即座に逃げることができる。(12 MP)", "You can hit a monster and teleport away simultaneously (cost 12).");
         }
         break;
     case CLASS_RANGER:
@@ -402,7 +440,8 @@ void self_knowledge(player_type *creature_ptr)
             }
         } else {
             if (creature_ptr->lev > 29) {
-                si_ptr->info[si_ptr->line++] = _("あなたは生命力を減少させる槍を放つことができる。(30 MP)", "You can fire a spear which drains vitality (cost 30).");
+                si_ptr->info[si_ptr->line++]
+                    = _("あなたは生命力を減少させる槍を放つことができる。(30 MP)", "You can fire a spear which drains vitality (cost 30).");
             }
         }
         break;
@@ -414,7 +453,8 @@ void self_knowledge(player_type *creature_ptr)
         break;
     case CLASS_CHAOS_WARRIOR:
         if (creature_ptr->lev > 39) {
-            si_ptr->info[si_ptr->line++] = _("あなたは周囲に怪物を惑わす光を発生させることができる。(50 MP)", "You can radiate light which confuses nearby monsters (cost 50).");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたは周囲に怪物を惑わす光を発生させることができる。(50 MP)", "You can radiate light which confuses nearby monsters (cost 50).");
         }
         break;
     case CLASS_MONK:
@@ -428,7 +468,8 @@ void self_knowledge(player_type *creature_ptr)
     case CLASS_MINDCRAFTER:
     case CLASS_FORCETRAINER:
         if (creature_ptr->lev > 14) {
-            si_ptr->info[si_ptr->line++] = _("あなたは精神を集中してＭＰを回復させることができる。(0 MP)", "You can concentrate to regenerate your mana (cost 0).");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたは精神を集中してＭＰを回復させることができる。(0 MP)", "You can concentrate to regenerate your mana (cost 0).");
         }
         break;
     case CLASS_TOURIST:
@@ -444,7 +485,8 @@ void self_knowledge(player_type *creature_ptr)
         }
         break;
     case CLASS_BEASTMASTER:
-        si_ptr->info[si_ptr->line++] = _("あなたは1体の生命のあるモンスターを支配することができる。(レベル/4 MP)", "You can dominate a monster (cost level/4).");
+        si_ptr->info[si_ptr->line++]
+            = _("あなたは1体の生命のあるモンスターを支配することができる。(レベル/4 MP)", "You can dominate a monster (cost level/4).");
         if (creature_ptr->lev > 29) {
             si_ptr->info[si_ptr->line++] = _("あなたは視界内の生命のあるモンスターを支配することができる。((レベル+20)/2 MP)",
                 "You can dominate living monsters in sight (cost (level+20)/4).");
@@ -470,7 +512,8 @@ void self_knowledge(player_type *creature_ptr)
         break;
     case CLASS_CAVALRY:
         if (creature_ptr->lev > 9) {
-            si_ptr->info[si_ptr->line++] = _("あなたはモンスターに乗って無理矢理ペットにすることができる。", "You can ride on a hostile monster to forcibly turn it into a pet.");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたはモンスターに乗って無理矢理ペットにすることができる。", "You can ride on a hostile monster to forcibly turn it into a pet.");
         }
         break;
     case CLASS_BERSERKER:
@@ -509,7 +552,8 @@ void self_knowledge(player_type *creature_ptr)
             si_ptr->info[si_ptr->line++] = _("あなたは精神攻撃を行える。(ダメージ 3～12d3)", "You can Mind Blast your enemies (3 to 12d3 dam).");
         }
         if (creature_ptr->muta1 & MUT1_RADIATION) {
-            si_ptr->info[si_ptr->line++] = _("あなたは自分の意思で強い放射線を発生することができる。(ダメージ レベルX2)", "You can emit hard radiation at will (dam lvl * 2).");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたは自分の意思で強い放射線を発生することができる。(ダメージ レベルX2)", "You can emit hard radiation at will (dam lvl * 2).");
         }
         if (creature_ptr->muta1 & MUT1_VAMPIRISM) {
             si_ptr->info[si_ptr->line++] = _("あなたは吸血鬼のように敵から生命力を吸収することができる。(ダメージ レベルX2)",
@@ -531,7 +575,8 @@ void self_knowledge(player_type *creature_ptr)
             si_ptr->info[si_ptr->line++] = _("あなたは他の者と場所を入れ替わることができる。", "You can switch locations with another being.");
         }
         if (creature_ptr->muta1 & MUT1_SHRIEK) {
-            si_ptr->info[si_ptr->line++] = _("あなたは身の毛もよだつ叫び声を発することができる。(ダメージ レベルX2)", "You can emit a horrible shriek (dam 2 * lvl).");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたは身の毛もよだつ叫び声を発することができる。(ダメージ レベルX2)", "You can emit a horrible shriek (dam 2 * lvl).");
         }
         if (creature_ptr->muta1 & MUT1_ILLUMINE) {
             si_ptr->info[si_ptr->line++] = _("あなたは明るい光を放つことができる。", "You can emit bright light.");
@@ -561,7 +606,8 @@ void self_knowledge(player_type *creature_ptr)
             si_ptr->info[si_ptr->line++] = _("あなたは魔法のエネルギーを自分の物として使用できる。", "You can consume magic energy for your own use.");
         }
         if (creature_ptr->muta1 & MUT1_WEIGH_MAG) {
-            si_ptr->info[si_ptr->line++] = _("あなたは自分に影響を与える魔法の力を感じることができる。", "You can feel the strength of the magics affecting you.");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたは自分に影響を与える魔法の力を感じることができる。", "You can feel the strength of the magics affecting you.");
         }
         if (creature_ptr->muta1 & MUT1_STERILITY) {
             si_ptr->info[si_ptr->line++] = _("あなたは集団的生殖不能を起こすことができる。", "You can cause mass impotence.");
@@ -573,7 +619,8 @@ void self_knowledge(player_type *creature_ptr)
             si_ptr->info[si_ptr->line++] = _("あなたは混乱と盲目を引き起こす放射能を発生することができる。 ", "You can emit confusing, blinding radiation.");
         }
         if (creature_ptr->muta1 & MUT1_LASER_EYE) {
-            si_ptr->info[si_ptr->line++] = _("あなたは目からレーザー光線を発することができる。(ダメージ レベルX2)", "Your eyes can fire laser beams (dam 2 * lvl).");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたは目からレーザー光線を発することができる。(ダメージ レベルX2)", "Your eyes can fire laser beams (dam 2 * lvl).");
         }
         if (creature_ptr->muta1 & MUT1_RECALL) {
             si_ptr->info[si_ptr->line++] = _("あなたは街とダンジョンの間を行き来することができる。", "You can travel between town and the depths.");
@@ -582,7 +629,8 @@ void self_knowledge(player_type *creature_ptr)
             si_ptr->info[si_ptr->line++] = _("あなたは邪悪なモンスターを地獄に落とすことができる。", "You can send evil creatures directly to Hell.");
         }
         if (creature_ptr->muta1 & MUT1_COLD_TOUCH) {
-            si_ptr->info[si_ptr->line++] = _("あなたは敵を触って凍らせることができる。(ダメージ レベルX3)", "You can freeze things with a touch (dam 3 * lvl).");
+            si_ptr->info[si_ptr->line++]
+                = _("あなたは敵を触って凍らせることができる。(ダメージ レベルX3)", "You can freeze things with a touch (dam 3 * lvl).");
         }
         if (creature_ptr->muta1 & MUT1_LAUNCHER) {
             si_ptr->info[si_ptr->line++] = _("あなたはアイテムを力強く投げることができる。", "You can hurl objects with great force.");
