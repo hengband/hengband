@@ -188,6 +188,33 @@ static void on_dead_death_sword(player_type *player_ptr, monster_death_type *md_
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
+static void on_dead_can_angel(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    bool is_drop_can = md_ptr->drop_chosen_item;
+    bool is_silver = md_ptr->m_ptr->r_idx == MON_A_SILVER;
+    is_silver &= md_ptr->r_ptr->r_akills % 5 == 0;
+    is_drop_can &= (md_ptr->m_ptr->r_idx == MON_A_GOLD) || is_silver;
+    if (!is_drop_can)
+        return;
+
+    object_type forge;
+    object_type *q_ptr = &forge;
+    object_prep(player_ptr, q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
+    apply_magic(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
+    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+}
+
+static void on_dead_rolento(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (is_seen(player_ptr, md_ptr->m_ptr)) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+        msg_format(_("%s‚ÍŽèžÖ’e‚ð•ø‚¦‚ÄŽ©”š‚µ‚½I", "%^s broke himself with grenades!"), m_name);
+    }
+
+    (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), GF_FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+}
+
 void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -219,26 +246,11 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         on_dead_death_sword(player_ptr, md_ptr);
         return;
     case MON_A_GOLD:
-    case MON_A_SILVER: {
-        bool is_drop_can = md_ptr->drop_chosen_item;
-        bool is_silver = md_ptr->m_ptr->r_idx == MON_A_SILVER;
-        is_silver &= md_ptr->r_ptr->r_akills % 5 == 0;
-        is_drop_can &= (md_ptr->m_ptr->r_idx == MON_A_GOLD) || is_silver;
-        if (!is_drop_can)
-            break;
-
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_prep(player_ptr, q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
-        apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
-    }
-    case MON_ROLENTO: {
-        BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-        (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), GF_FIRE, flg, -1);
-        break;
-    }
+    case MON_A_SILVER:
+        on_dead_can_angel(player_ptr, md_ptr);
+        return;
+    case MON_ROLENTO:
+        on_dead_rolento(player_ptr, md_ptr);
     case MON_MIDDLE_AQUA_FIRST:
     case MON_LARGE_AQUA_FIRST:
     case MON_EXTRA_LARGE_AQUA_FIRST:
