@@ -301,30 +301,72 @@ void set_body_improvement_info_2(player_type *creature_ptr, self_info_type *si_p
 {
     if (creature_ptr->new_spells)
         si_ptr->info[si_ptr->line++] = _("あなたは呪文や祈りを学ぶことができる。", "You can learn some spells/prayers.");
-    
+
     if (creature_ptr->word_recall)
         si_ptr->info[si_ptr->line++] = _("あなたはすぐに帰還するだろう。", "You will soon be recalled.");
-    
+
     if (creature_ptr->alter_reality)
         si_ptr->info[si_ptr->line++] = _("あなたはすぐにこの世界を離れるだろう。", "You will soon be altered.");
-    
+
     if (creature_ptr->see_infra)
         si_ptr->info[si_ptr->line++] = _("あなたの瞳は赤外線に敏感である。", "Your eyes are sensitive to infrared light.");
-    
+
     if (creature_ptr->see_inv)
         si_ptr->info[si_ptr->line++] = _("あなたは透明なモンスターを見ることができる。", "You can see invisible creatures.");
-    
+
     if (creature_ptr->levitation)
         si_ptr->info[si_ptr->line++] = _("あなたは飛ぶことができる。", "You can fly.");
-    
+
     if (creature_ptr->free_act)
         si_ptr->info[si_ptr->line++] = _("あなたは麻痺知らずの効果を持っている。", "You have free action.");
-    
+
     if (creature_ptr->regenerate)
         si_ptr->info[si_ptr->line++] = _("あなたは素早く体力を回復する。", "You regenerate quickly.");
-    
+
     if (creature_ptr->slow_digest)
         si_ptr->info[si_ptr->line++] = _("あなたは食欲が少ない。", "Your appetite is small.");
+}
+
+void set_esp_info(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    if (creature_ptr->telepathy)
+        si_ptr->info[si_ptr->line++] = _("あなたはテレパシー能力を持っている。", "You have ESP.");
+
+    if (creature_ptr->esp_animal)
+        si_ptr->info[si_ptr->line++] = _("あなたは自然界の生物の存在を感じる能力を持っている。", "You sense natural creatures.");
+
+    if (creature_ptr->esp_undead)
+        si_ptr->info[si_ptr->line++] = _("あなたはアンデッドの存在を感じる能力を持っている。", "You sense undead.");
+
+    if (creature_ptr->esp_demon)
+        si_ptr->info[si_ptr->line++] = _("あなたは悪魔の存在を感じる能力を持っている。", "You sense demons.");
+
+    if (creature_ptr->esp_orc)
+        si_ptr->info[si_ptr->line++] = _("あなたはオークの存在を感じる能力を持っている。", "You sense orcs.");
+
+    if (creature_ptr->esp_troll)
+        si_ptr->info[si_ptr->line++] = _("あなたはトロルの存在を感じる能力を持っている。", "You sense trolls.");
+
+    if (creature_ptr->esp_giant)
+        si_ptr->info[si_ptr->line++] = _("あなたは巨人の存在を感じる能力を持っている。", "You sense giants.");
+
+    if (creature_ptr->esp_dragon)
+        si_ptr->info[si_ptr->line++] = _("あなたはドラゴンの存在を感じる能力を持っている。", "You sense dragons.");
+
+    if (creature_ptr->esp_human)
+        si_ptr->info[si_ptr->line++] = _("あなたは人間の存在を感じる能力を持っている。", "You sense humans.");
+
+    if (creature_ptr->esp_evil)
+        si_ptr->info[si_ptr->line++] = _("あなたは邪悪な生き物の存在を感じる能力を持っている。", "You sense evil creatures.");
+
+    if (creature_ptr->esp_good)
+        si_ptr->info[si_ptr->line++] = _("あなたは善良な生き物の存在を感じる能力を持っている。", "You sense good creatures.");
+
+    if (creature_ptr->esp_nonliving)
+        si_ptr->info[si_ptr->line++] = _("あなたは活動する無生物体の存在を感じる能力を持っている。", "You sense non-living creatures.");
+
+    if (creature_ptr->esp_unique)
+        si_ptr->info[si_ptr->line++] = _("あなたは特別な強敵の存在を感じる能力を持っている。", "You sense unique monsters.");
 }
 
 /*!
@@ -375,45 +417,7 @@ void self_knowledge(player_type *creature_ptr)
     }
 
     set_body_improvement_info_2(creature_ptr, si_ptr);
-    if (creature_ptr->telepathy) {
-        si_ptr->info[si_ptr->line++] = _("あなたはテレパシー能力を持っている。", "You have ESP.");
-    }
-    if (creature_ptr->esp_animal) {
-        si_ptr->info[si_ptr->line++] = _("あなたは自然界の生物の存在を感じる能力を持っている。", "You sense natural creatures.");
-    }
-    if (creature_ptr->esp_undead) {
-        si_ptr->info[si_ptr->line++] = _("あなたはアンデッドの存在を感じる能力を持っている。", "You sense undead.");
-    }
-    if (creature_ptr->esp_demon) {
-        si_ptr->info[si_ptr->line++] = _("あなたは悪魔の存在を感じる能力を持っている。", "You sense demons.");
-    }
-    if (creature_ptr->esp_orc) {
-        si_ptr->info[si_ptr->line++] = _("あなたはオークの存在を感じる能力を持っている。", "You sense orcs.");
-    }
-    if (creature_ptr->esp_troll) {
-        si_ptr->info[si_ptr->line++] = _("あなたはトロルの存在を感じる能力を持っている。", "You sense trolls.");
-    }
-    if (creature_ptr->esp_giant) {
-        si_ptr->info[si_ptr->line++] = _("あなたは巨人の存在を感じる能力を持っている。", "You sense giants.");
-    }
-    if (creature_ptr->esp_dragon) {
-        si_ptr->info[si_ptr->line++] = _("あなたはドラゴンの存在を感じる能力を持っている。", "You sense dragons.");
-    }
-    if (creature_ptr->esp_human) {
-        si_ptr->info[si_ptr->line++] = _("あなたは人間の存在を感じる能力を持っている。", "You sense humans.");
-    }
-    if (creature_ptr->esp_evil) {
-        si_ptr->info[si_ptr->line++] = _("あなたは邪悪な生き物の存在を感じる能力を持っている。", "You sense evil creatures.");
-    }
-    if (creature_ptr->esp_good) {
-        si_ptr->info[si_ptr->line++] = _("あなたは善良な生き物の存在を感じる能力を持っている。", "You sense good creatures.");
-    }
-    if (creature_ptr->esp_nonliving) {
-        si_ptr->info[si_ptr->line++] = _("あなたは活動する無生物体の存在を感じる能力を持っている。", "You sense non-living creatures.");
-    }
-    if (creature_ptr->esp_unique) {
-        si_ptr->info[si_ptr->line++] = _("あなたは特別な強敵の存在を感じる能力を持っている。", "You sense unique monsters.");
-    }
+    set_esp_info(creature_ptr, si_ptr);
     if (creature_ptr->hold_exp) {
         si_ptr->info[si_ptr->line++] = _("あなたは自己の経験値をしっかりと維持する。", "You have a firm hold on your experience.");
     }
