@@ -302,6 +302,7 @@
     <ClCompile Include="..\..\src\mind\mind-magic-resistance.c" />
     <ClCompile Include="..\..\src\mind\mind-monk.c" />
     <ClCompile Include="..\..\src\mind\mind-power-getter.c" />
+    <ClCompile Include="..\..\src\mind\mind-priest.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite.c" />
@@ -951,6 +952,7 @@
     <ClInclude Include="..\..\src\mind\mind-monk.h" />
     <ClInclude Include="..\..\src\mind\mind-numbers.h" />
     <ClInclude Include="..\..\src\mind\mind-power-getter.h" />
+    <ClInclude Include="..\..\src\mind\mind-priest.h" />
     <ClInclude Include="..\..\src\mind\mind-types.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h" />

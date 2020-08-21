@@ -36,6 +36,7 @@
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-monk.h"
 #include "mind/mind-ninja.h"
+#include "mind/mind-priest.h"
 #include "mind/mind-samurai.h"
 #include "mind/mind-warrior-mage.h"
 #include "mind/mind-warrior.h"

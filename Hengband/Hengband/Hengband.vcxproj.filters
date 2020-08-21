@@ -2168,6 +2168,9 @@
     <ClCompile Include="..\..\src\spell-realm\spells-arcane.c">
       <Filter>spell-realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-priest.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4689,6 +4692,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-arcane.h">
       <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-priest.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

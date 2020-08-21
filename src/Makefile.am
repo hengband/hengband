@@ -436,6 +436,7 @@ hengband_SOURCES = \
 	mind/mind-ninja.c mind/mind-ninja.h \
 	mind/mind-numbers.h \
 	mind/mind-power-getter.c mind/mind-power-getter.h \
+	mind/mind-priest.c mind/mind-priest.h \
 	mind/mind-samurai.c mind/mind-samurai.h \
 	mind/mind-sniper.c mind/mind-sniper.h \
 	mind/mind-types.h \
