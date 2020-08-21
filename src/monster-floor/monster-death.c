@@ -104,7 +104,6 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         DICE_NUMBER d_dice = md_ptr->r_ptr->blow[i].d_dice;
         DICE_SID d_side = md_ptr->r_ptr->blow[i].d_side;
         HIT_POINT damage = damroll(d_dice, d_side);
-
         project(player_ptr, m_idx, 3, md_ptr->md_y, md_ptr->md_x, damage, typ, flg, -1);
         break;
     }
