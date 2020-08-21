@@ -33,6 +33,18 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 
+void display_life_rating(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    creature_ptr->knowledge |= KNOW_STAT | KNOW_HPRATE;
+    strcpy(si_ptr->plev_buf, "");
+    int percent
+        = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
+    sprintf(si_ptr->plev_buf, _("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent);
+    strcpy(si_ptr->buf[0], si_ptr->plev_buf);
+    si_ptr->info[si_ptr->line++] = si_ptr->buf[0];
+    si_ptr->info[si_ptr->line++] = "";
+}
+
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
  * @return なし
@@ -55,15 +67,7 @@ void self_knowledge(player_type *creature_ptr)
 {
     self_info_type tmp_si;
     self_info_type *si_ptr = initialize_self_info_type(&tmp_si);
-    creature_ptr->knowledge |= (KNOW_STAT | KNOW_HPRATE);
-    strcpy(si_ptr->plev_buf, "");
-    int percent
-        = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
-
-    sprintf(si_ptr->plev_buf, _("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent);
-    strcpy(si_ptr->buf[0], si_ptr->plev_buf);
-    si_ptr->info[si_ptr->line++] = si_ptr->buf[0];
-    si_ptr->info[si_ptr->line++] = "";
+    display_life_rating(creature_ptr, si_ptr);
     chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
     chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
     for (int k = INVEN_RARM; k < INVEN_TOTAL; k++) {
