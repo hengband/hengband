@@ -5,6 +5,7 @@
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"
+#include "mind/mind-chaos-warrior.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"

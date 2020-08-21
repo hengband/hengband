@@ -2159,6 +2159,9 @@
     <ClCompile Include="..\..\src\mind\mind-magic-eater.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-chaos-warrior.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4670,6 +4673,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-magic-eater.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-chaos-warrior.h">
       <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
