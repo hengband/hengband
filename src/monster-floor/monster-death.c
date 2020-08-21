@@ -241,6 +241,71 @@ static void decide_drop_quality(monster_death_type *md_ptr)
         md_ptr->mo_mode |= AM_GREAT;
 }
 
+static int decide_drop_numbers(player_type *player_ptr, monster_death_type *md_ptr, const bool drop_item)
+{
+    int drop_numbers = 0;
+    if ((md_ptr->r_ptr->flags1 & RF1_DROP_60) && (randint0(100) < 60))
+        drop_numbers++;
+
+    if ((md_ptr->r_ptr->flags1 & RF1_DROP_90) && (randint0(100) < 90))
+        drop_numbers++;
+
+    if (md_ptr->r_ptr->flags1 & RF1_DROP_1D2)
+        drop_numbers += damroll(1, 2);
+
+    if (md_ptr->r_ptr->flags1 & RF1_DROP_2D2)
+        drop_numbers += damroll(2, 2);
+
+    if (md_ptr->r_ptr->flags1 & RF1_DROP_3D2)
+        drop_numbers += damroll(3, 2);
+
+    if (md_ptr->r_ptr->flags1 & RF1_DROP_4D2)
+        drop_numbers += damroll(4, 2);
+
+    if (md_ptr->cloned && !(md_ptr->r_ptr->flags1 & RF1_UNIQUE))
+        drop_numbers = 0;
+
+    if (is_pet(md_ptr->m_ptr) || player_ptr->phase_out || player_ptr->current_floor_ptr->inside_arena)
+        drop_numbers = 0;
+
+    if (!drop_item && (md_ptr->r_ptr->d_char != '$'))
+        drop_numbers = 0;
+
+    if ((md_ptr->r_ptr->flags2 & (RF2_MULTIPLY)) && (md_ptr->r_ptr->r_akills > 1024))
+        drop_numbers = 0;
+}
+
+static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr, int drop_numbers)
+{
+    int dump_item = 0;
+    int dump_gold = 0;
+    for (int i = 0; i < drop_numbers; i++) {
+        object_type forge;
+        object_type *q_ptr = &forge;
+        object_wipe(q_ptr);
+        if (md_ptr->do_gold && (!md_ptr->do_item || (randint0(100) < 50))) {
+            if (!make_gold(player_ptr, q_ptr))
+                continue;
+
+            dump_gold++;
+        } else {
+            if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode))
+                continue;
+
+            dump_item++;
+        }
+
+        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+    }
+
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    floor_ptr->object_level = floor_ptr->base_level;
+    coin_type = 0;
+    bool visible = (md_ptr->m_ptr->ml && !player_ptr->image) || ((md_ptr->r_ptr->flags1 & RF1_UNIQUE) != 0);
+    if (visible && (dump_item || dump_gold))
+        lore_treasure(player_ptr, md_ptr->m_idx, dump_item, dump_gold);
+}
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
@@ -282,75 +347,15 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
     drop_corpse(player_ptr, md_ptr);
     monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
-    decide_drop_quality(player_ptr, md_ptr);
+    decide_drop_quality(md_ptr);
     switch_special_death(player_ptr, md_ptr);
-    drop_artifact(md_ptr);
-    int number = 0;
-    if ((md_ptr->r_ptr->flags1 & RF1_DROP_60) && (randint0(100) < 60))
-        number++;
-
-    if ((md_ptr->r_ptr->flags1 & RF1_DROP_90) && (randint0(100) < 90))
-        number++;
-
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_1D2)
-        number += damroll(1, 2);
-
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_2D2)
-        number += damroll(2, 2);
-
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_3D2)
-        number += damroll(3, 2);
-
-    if (md_ptr->r_ptr->flags1 & RF1_DROP_4D2)
-        number += damroll(4, 2);
-
-    if (md_ptr->cloned && !(md_ptr->r_ptr->flags1 & RF1_UNIQUE))
-        number = 0;
-
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (is_pet(md_ptr->m_ptr) || player_ptr->phase_out || floor_ptr->inside_arena)
-        number = 0;
-
-    if (!drop_item && (md_ptr->r_ptr->d_char != '$'))
-        number = 0;
-
-    if ((md_ptr->r_ptr->flags2 & (RF2_MULTIPLY)) && (md_ptr->r_ptr->r_akills > 1024))
-        number = 0;
-
+    drop_artifact(player_ptr, md_ptr);
+    int drop_numbers = decide_drop_numbers(player_ptr, md_ptr, drop_item);
     coin_type = md_ptr->force_coin;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->object_level = (floor_ptr->dun_level + md_ptr->r_ptr->level) / 2;
-
-    int dump_item = 0;
-    int dump_gold = 0;
-    for (int i = 0; i < number; i++) {
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        if (md_ptr->do_gold && (!md_ptr->do_item || (randint0(100) < 50))) {
-            if (!make_gold(player_ptr, q_ptr))
-                continue;
-            dump_gold++;
-        } else {
-            if (!make_object(player_ptr, q_ptr, md_ptr->mo_mode))
-                continue;
-            dump_item++;
-        }
-
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-    }
-
-    floor_ptr->object_level = floor_ptr->base_level;
-    coin_type = 0;
-    bool visible = (md_ptr->m_ptr->ml && !player_ptr->image) || ((md_ptr->r_ptr->flags1 & RF1_UNIQUE) != 0);
-    if (visible && (dump_item || dump_gold)) {
-        lore_treasure(player_ptr, m_idx, dump_item, dump_gold);
-    }
-
-    if (!(md_ptr->r_ptr->flags1 & RF1_QUESTOR))
-        return;
-    if (player_ptr->phase_out)
-        return;
-    if ((md_ptr->m_ptr->r_idx != MON_SERPENT) || md_ptr->cloned)
+    drop_items_golds(player_ptr, md_ptr, drop_numbers);
+    if (((md_ptr->r_ptr->flags1 & RF1_QUESTOR) == 0) || player_ptr->phase_out || (md_ptr->m_ptr->r_idx != MON_SERPENT) || md_ptr->cloned)
         return;
 
     current_world_ptr->total_winner = TRUE;
