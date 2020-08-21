@@ -118,6 +118,38 @@ static void on_defeat_arena_monster(player_type *player_ptr, monster_death_type 
     exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
 }
 
+static void drop_corpse(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    bool is_drop_corpse = one_in_(md_ptr->r_ptr->flags1 & RF1_UNIQUE ? 1 : 4);
+    is_drop_corpse &= (md_ptr->r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != 0;
+    is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == today_mon) && is_pet(md_ptr->m_ptr)));
+    if (!is_drop_corpse)
+        return;
+
+    bool corpse = FALSE;
+    if (!(md_ptr->r_ptr->flags9 & RF9_DROP_SKELETON))
+        corpse = TRUE;
+    else if ((md_ptr->r_ptr->flags9 & RF9_DROP_CORPSE) && (md_ptr->r_ptr->flags1 & RF1_UNIQUE))
+        corpse = TRUE;
+    else if (md_ptr->r_ptr->flags9 & RF9_DROP_CORPSE) {
+        if ((0 - ((md_ptr->m_ptr->maxhp) / 4)) > md_ptr->m_ptr->hp) {
+            if (one_in_(5))
+                corpse = TRUE;
+        } else {
+            if (!one_in_(5))
+                corpse = TRUE;
+        }
+    }
+
+    object_type forge;
+    object_type *q_ptr = &forge;
+    object_prep(player_ptr, q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
+    apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
+    q_ptr->pval = md_ptr->m_ptr->r_idx;
+    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+}
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
@@ -161,33 +193,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     }
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_drop_corpse = one_in_(md_ptr->r_ptr->flags1 & RF1_UNIQUE ? 1 : 4);
-    is_drop_corpse &= (md_ptr->r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != 0;
-    is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == today_mon) && is_pet(md_ptr->m_ptr)));
-    if (is_drop_corpse) {
-        bool corpse = FALSE;
-
-        if (!(md_ptr->r_ptr->flags9 & RF9_DROP_SKELETON))
-            corpse = TRUE;
-        else if ((md_ptr->r_ptr->flags9 & RF9_DROP_CORPSE) && (md_ptr->r_ptr->flags1 & RF1_UNIQUE))
-            corpse = TRUE;
-        else if (md_ptr->r_ptr->flags9 & RF9_DROP_CORPSE) {
-            if ((0 - ((md_ptr->m_ptr->maxhp) / 4)) > md_ptr->m_ptr->hp) {
-                if (one_in_(5))
-                    corpse = TRUE;
-            } else {
-                if (!one_in_(5))
-                    corpse = TRUE;
-            }
-        }
-
-        q_ptr = &forge;
-        object_prep(player_ptr, q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
-        apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
-        q_ptr->pval = md_ptr->m_ptr->r_idx;
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-    }
-
+    drop_corpse(player_ptr, md_ptr);
     monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
 
     md_ptr->mo_mode = 0L;
