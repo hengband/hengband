@@ -22,11 +22,11 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
-#include "monster-floor/special-death-switcher.h"
 #include "monster-floor/monster-death-util.h"
 #include "monster-floor/monster-object.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "monster-floor/special-death-switcher.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -180,12 +180,34 @@ static ARTIFACT_IDX get_artifact_index(player_type *player_ptr, monster_death_ty
 
             continue;
         }
-        
+
         if (!preserve_mode)
             a_ptr->cur_num = 1;
     }
 
     return a_idx;
+}
+
+static KIND_OBJECT_IDX drop_dungeon_final_artifact(player_type *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
+{
+    KIND_OBJECT_IDX k_idx
+        = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object : lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
+    if (d_info[player_ptr->dungeon_idx].final_artifact == 0)
+        return k_idx;
+
+    a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
+    artifact_type *a_ptr = &a_info[a_idx];
+    if (a_ptr->cur_num == 1)
+        return k_idx;
+    if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
+        a_ptr->cur_num = 1;
+        if (current_world_ptr->character_dungeon)
+            a_ptr->floor_id = player_ptr->floor_id;
+    } else if (!preserve_mode) {
+        a_ptr->cur_num = 1;
+    }
+
+    return d_info[player_ptr->dungeon_idx].final_object ? k_idx : 0;
 }
 
 static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
@@ -197,25 +219,7 @@ static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
     if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (d_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx))
         return;
 
-    KIND_OBJECT_IDX k_idx
-        = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object : lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
-    if (d_info[player_ptr->dungeon_idx].final_artifact != 0) {
-        a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
-        artifact_type *a_ptr = &a_info[a_idx];
-        if (!a_ptr->cur_num) {
-            if (create_named_art(player_ptr, a_idx, md_ptr->md_y, md_ptr->md_x)) {
-                a_ptr->cur_num = 1;
-                if (current_world_ptr->character_dungeon)
-                    a_ptr->floor_id = player_ptr->floor_id;
-            } else if (!preserve_mode) {
-                a_ptr->cur_num = 1;
-            }
-
-            if (!d_info[player_ptr->dungeon_idx].final_object)
-                k_idx = 0;
-        }
-    }
-
+    KIND_OBJECT_IDX k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr, a_idx);
     if (k_idx != 0) {
         object_type forge;
         object_type *q_ptr = &forge;
@@ -264,7 +268,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     check_quest_completion(player_ptr, md_ptr->m_ptr);
     on_defeat_arena_monster(player_ptr, md_ptr);
     object_type forge;
-    object_type *q_ptr;    
+    object_type *q_ptr;
     if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, FALSE)) {
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
     }
