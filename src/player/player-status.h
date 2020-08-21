@@ -26,13 +26,16 @@
 /*
  * Player constants
  */
-#define A_STR 0
-#define A_INT 1
-#define A_WIS 2
-#define A_DEX 3
-#define A_CON 4
-#define A_CHR 5
-#define A_MAX 6
+
+typedef enum base_status {
+    A_STR = 0,
+    A_INT = 1,
+    A_WIS = 2,
+    A_DEX = 3,
+    A_CON = 4,
+    A_CHR = 5,
+    A_MAX = 6
+} base_status;
 
 #define PY_MAX_EXP 99999999L /*!< プレイヤー経験値の最大値 / Maximum exp */
 #define PY_MAX_GOLD 999999999L /*!< プレイヤー所持金の最大値 / Maximum gold */
@@ -516,7 +519,6 @@ extern int riding_exp_level(int riding_exp);
 extern int spell_exp_level(int spell_exp);
 
 extern int calc_weapon_weight_limit(player_type *creature_ptr);
-
 
 extern s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr);
 extern void calc_bonuses(player_type *creature_ptr);
