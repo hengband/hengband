@@ -32,6 +32,7 @@
 #include "mind/mind-cavalry.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-mage.h"
+#include "mind/mind-magic-eater.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-monk.h"
 #include "mind/mind-ninja.h"

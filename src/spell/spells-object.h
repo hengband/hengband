@@ -2,7 +2,6 @@
 
 #include "system/angband.h"
 
-bool import_magic_device(player_type *creature_ptr);
 void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, bool known);
 void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known);
 void acquire_chaos_weapon(player_type *creature_ptr);

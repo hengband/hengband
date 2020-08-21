@@ -297,6 +297,7 @@
     <ClCompile Include="..\..\src\mind\mind-explanations-table.c" />
     <ClCompile Include="..\..\src\mind\mind-info.c" />
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
+    <ClCompile Include="..\..\src\mind\mind-magic-eater.c" />
     <ClCompile Include="..\..\src\mind\mind-magic-resistance.c" />
     <ClCompile Include="..\..\src\mind\mind-monk.c" />
     <ClCompile Include="..\..\src\mind\mind-power-getter.c" />
@@ -941,6 +942,7 @@
     <ClInclude Include="..\..\src\mind\mind-explanations-table.h" />
     <ClInclude Include="..\..\src\mind\mind-info.h" />
     <ClInclude Include="..\..\src\mind\mind-mage.h" />
+    <ClInclude Include="..\..\src\mind\mind-magic-eater.h" />
     <ClInclude Include="..\..\src\mind\mind-magic-resistance.h" />
     <ClInclude Include="..\..\src\mind\mind-monk.h" />
     <ClInclude Include="..\..\src\mind\mind-numbers.h" />
