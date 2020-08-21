@@ -273,6 +273,8 @@ static int decide_drop_numbers(player_type *player_ptr, monster_death_type *md_p
 
     if ((md_ptr->r_ptr->flags2 & (RF2_MULTIPLY)) && (md_ptr->r_ptr->r_akills > 1024))
         drop_numbers = 0;
+
+    return drop_numbers;
 }
 
 static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr, int drop_numbers)
@@ -385,11 +387,9 @@ concptr extract_note_dies(MONRACE_IDX r_idx)
     if (monster_living(r_idx))
         return _("は死んだ。", " dies.");
 
-    for (int i = 0; i < 4; i++) {
-        if (r_ptr->blow[i].method == RBM_EXPLODE) {
+    for (int i = 0; i < 4; i++)
+        if (r_ptr->blow[i].method == RBM_EXPLODE)
             return _("は爆発して粉々になった。", " explodes into tiny shreds.");
-        }
-    }
 
     return _("を倒した。", " is destroyed.");
 }
