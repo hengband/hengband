@@ -427,6 +427,7 @@ hengband_SOURCES = \
 	mind/mind-explanations-table.c mind/mind-explanations-table.h \
 	mind/mind-force-trainer.c mind/mind-force-trainer.h \
 	mind/mind-info.c mind/mind-info.h \
+	mind/mind-hobbit.c mind/mind-hobbit.h \
 	mind/mind-mage.c mind/mind-mage.h \
 	mind/mind-magic-eater.c mind/mind-magic-eater.h \
 	mind/mind-magic-resistance.c mind/mind-magic-resistance.h \

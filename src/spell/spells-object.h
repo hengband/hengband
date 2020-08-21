@@ -8,7 +8,6 @@ bool curse_armor(player_type *owner_ptr);
 bool curse_weapon_object(player_type *creature_ptr, bool force, object_type *o_ptr);
 void brand_bolts(player_type *caster_ptr);
 bool perilous_secrets(player_type *user_ptr);
-bool create_ration(player_type *crature_ptr);
 
 /*
  * Bit flags for the "enchant()" function

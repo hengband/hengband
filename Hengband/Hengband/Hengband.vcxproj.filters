@@ -2171,6 +2171,9 @@
     <ClCompile Include="..\..\src\mind\mind-priest.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-hobbit.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4694,6 +4697,9 @@
       <Filter>spell-realm</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-priest.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-hobbit.h">
       <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>

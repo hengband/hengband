@@ -296,6 +296,7 @@
     <ClCompile Include="..\..\src\mind\mind-blue-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-chaos-warrior.c" />
     <ClCompile Include="..\..\src\mind\mind-explanations-table.c" />
+    <ClCompile Include="..\..\src\mind\mind-hobbit.c" />
     <ClCompile Include="..\..\src\mind\mind-info.c" />
     <ClCompile Include="..\..\src\mind\mind-mage.c" />
     <ClCompile Include="..\..\src\mind\mind-magic-eater.c" />
@@ -945,6 +946,7 @@
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-chaos-warrior.h" />
     <ClInclude Include="..\..\src\mind\mind-explanations-table.h" />
+    <ClInclude Include="..\..\src\mind\mind-hobbit.h" />
     <ClInclude Include="..\..\src\mind\mind-info.h" />
     <ClInclude Include="..\..\src\mind\mind-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-magic-eater.h" />

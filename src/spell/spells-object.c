@@ -637,7 +637,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
+    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, 0);
     if (!o_ptr)
         return;
 
@@ -654,7 +654,6 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
         return;
     }
 
-    /* Let's get the name before it is changed... */
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -749,19 +748,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 
     msg_format(_("あなたの%s%s", "Your %s %s"), o_name, act);
     enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
-
     o_ptr->discount = 99;
     chg_virtue(caster_ptr, V_ENCHANT, 2);
     calc_android_exp(caster_ptr);
-}
-
-bool create_ration(player_type *creature_ptr)
-{
-    object_type *q_ptr;
-    object_type forge;
-    q_ptr = &forge;
-    object_prep(creature_ptr, q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
-    (void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
-    msg_print(_("食事を料理して作った。", "You cook some food."));
-    return TRUE;
 }
