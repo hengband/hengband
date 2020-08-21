@@ -59,6 +59,17 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static void write_pet_death(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    md_ptr->md_y = md_ptr->m_ptr->fy;
+    md_ptr->md_x = md_ptr->m_ptr->fx;
+    if (record_named_pet && is_pet(md_ptr->m_ptr) && md_ptr->m_ptr->nickname) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_INDEF_VISIBLE);
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name);
+    }
+}
+
 /*!
  * @brief モンスターが死亡した時の処理 /
  * Handle the "death" of a monster.
@@ -87,14 +98,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     if (md_ptr->r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
         player_ptr->update |= PU_MON_LITE;
 
-    md_ptr->md_y = md_ptr->m_ptr->fy;
-    md_ptr->md_x = md_ptr->m_ptr->fx;
-    if (record_named_pet && is_pet(md_ptr->m_ptr) && md_ptr->m_ptr->nickname) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_INDEF_VISIBLE);
-        exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name);
-    }
-
+    write_pet_death(player_ptr, md_ptr);
     for (int i = 0; i < 4; i++) {
         if (md_ptr->r_ptr->blow[i].method != RBM_EXPLODE)
             continue;
