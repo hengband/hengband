@@ -100,6 +100,28 @@ void display_virtue(player_type *creature_ptr, self_info_type *si_ptr)
     }
 }
 
+void display_mimic_race_ability(player_type *creature_ptr, self_info_type *si_ptr)
+{
+    switch (creature_ptr->mimic_form) {
+    case MIMIC_DEMON:
+    case MIMIC_DEMON_LORD:
+        sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can nether breathe, dam. %d (cost %d)."),
+            3 * creature_ptr->lev, 10 + creature_ptr->lev / 3);
+
+        si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
+        break;
+    case MIMIC_VAMPIRE:
+        if (creature_ptr->lev <= 1)
+            break;
+
+        sprintf(si_ptr->plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
+            creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10),
+            1 + (creature_ptr->lev / 3));
+        si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
+        break;
+    }
+}
+
 void display_equipment_influence(player_type *creature_ptr, self_info_type *si_ptr)
 {
     for (int k = INVEN_RARM; k < INVEN_TOTAL; k++) {
@@ -179,22 +201,7 @@ void self_knowledge(player_type *creature_ptr)
     display_virtue(creature_ptr, si_ptr);
     si_ptr->info[si_ptr->line++] = "";
     if (creature_ptr->mimic_form) {
-        switch (creature_ptr->mimic_form) {
-        case MIMIC_DEMON:
-        case MIMIC_DEMON_LORD:
-            sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can nether breathe, dam. %d (cost %d)."), 3 * creature_ptr->lev,
-                10 + creature_ptr->lev / 3);
-
-            si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
-            break;
-        case MIMIC_VAMPIRE:
-            if (creature_ptr->lev > 1) {
-                sprintf(si_ptr->plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
-                    creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10), 1 + (creature_ptr->lev / 3));
-                si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
-            }
-            break;
-        }
+        display_mimic_race_ability(creature_ptr, si_ptr);
     } else {
         switch (creature_ptr->prace) {
         case RACE_NIBELUNG:
