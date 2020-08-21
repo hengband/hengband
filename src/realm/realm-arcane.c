@@ -17,7 +17,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-status.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
 #include "status/sight-setter.h"

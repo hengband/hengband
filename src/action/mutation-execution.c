@@ -37,7 +37,7 @@
 #include "spell-realm/spells-sorcery.h"
 #include "spell/spell-types.h"
 #include "spell/spells-status.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/element-resistance.h"
 #include "status/shape-changer.h"
 #include "system/floor-type-definition.h"

@@ -727,6 +727,7 @@ hengband_SOURCES = \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-status.c spell/spells-status.h \
 	spell/spell-types.h spell/spells-util.h \
+	spell/summon-types.h \
 	spell/technic-info-table.c spell/technic-info-table.h \
 	\
 	spell-kind/blood-curse.c spell-kind/blood-curse.h \

@@ -24,7 +24,7 @@
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/summon-checker.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/string-processor.h"

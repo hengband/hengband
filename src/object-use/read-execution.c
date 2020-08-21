@@ -47,6 +47,7 @@
 #include "spell/spell-types.h"
 #include "spell/spells-object.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"

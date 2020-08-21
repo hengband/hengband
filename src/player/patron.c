@@ -26,6 +26,7 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/base-status.h"
 #include "status/experience.h"
 #include "status/shape-changer.h"

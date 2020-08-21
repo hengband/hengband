@@ -56,7 +56,7 @@
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "target/projection-path-calculator.h"

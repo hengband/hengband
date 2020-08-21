@@ -27,6 +27,7 @@
 #include "spell/spells-diceroll.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/experience.h"

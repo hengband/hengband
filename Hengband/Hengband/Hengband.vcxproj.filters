@@ -4714,6 +4714,9 @@
     <ClInclude Include="..\..\src\monster-floor\special-death-switcher.h">
       <Filter>monster-floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\spell\summon-types.h">
+      <Filter>spell</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

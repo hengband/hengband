@@ -30,7 +30,7 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "spell/spell-types.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"

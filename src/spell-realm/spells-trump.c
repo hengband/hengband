@@ -13,6 +13,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "status/experience.h"

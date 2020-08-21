@@ -13,7 +13,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "mspell/summon-checker.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 

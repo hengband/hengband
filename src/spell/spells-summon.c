@@ -25,6 +25,7 @@
 #include "spell-kind/spells-specific-bolt.h"
 #include "spell/spells-status.h"
 #include "spell/spell-types.h"
+#include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"

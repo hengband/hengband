@@ -1082,6 +1082,7 @@
     <ClInclude Include="..\..\src\spell-realm\spells-demon.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-nature.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-sorcery.h" />
+    <ClInclude Include="..\..\src\spell\summon-types.h" />
     <ClInclude Include="..\..\src\status\bad-status-setter.h" />
     <ClInclude Include="..\..\src\status\base-status.h" />
     <ClInclude Include="..\..\src\status\body-improvement.h" />
