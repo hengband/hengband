@@ -5,6 +5,7 @@
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"
+#include "mind/mind-chaos-warrior.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
@@ -25,10 +26,12 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/base-status.h"
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
 #ifdef JP

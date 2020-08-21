@@ -31,7 +31,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/element-resistance.h"

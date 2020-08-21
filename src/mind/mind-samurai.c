@@ -23,7 +23,7 @@
 #include "monster/monster-status.h"
 #include "object-enchant/tr-types.h"
 #include "player/attack-defense-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "status/action-setter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"

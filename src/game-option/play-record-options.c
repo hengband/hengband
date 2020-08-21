@@ -10,7 +10,7 @@ bool record_stair; /* Record recall and stair movements */
 bool record_buy; /* Record purchased items */
 bool record_sell; /* Record sold items */
 bool record_danger; /* Record hitpoint warning */
-bool record_arena; /* Record arena victories */
+bool record_arena; /* Record on_defeat_arena_monster victories */
 bool record_ident; /* Record first identified items */
 bool record_named_pet; /* Record information about named pets */
 char record_o_name[MAX_NLEN];

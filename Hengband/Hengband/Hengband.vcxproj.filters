@@ -464,9 +464,6 @@
     <ClCompile Include="..\..\src\grid\feature.c">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\avatar.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\horror-descriptions.c">
       <Filter>monster</Filter>
     </ClCompile>
@@ -503,14 +500,8 @@
     <ClCompile Include="..\..\src\player\patron.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\selfinfo.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\birth\history.c">
       <Filter>birth</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\main\init.c">
-      <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\term\readdib.c">
       <Filter>term</Filter>
@@ -2111,6 +2102,84 @@
     <ClCompile Include="..\..\src\core\object-compressor.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\info-initializer.c">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main\angband-headers.c">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main\init-error-messages-table.c">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\market\building-initializer.c">
+      <Filter>market</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main\game-data-initializer.c">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main\angband-initializer.c">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\self-info-util.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\self-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\avatar.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\race-ability-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\class-ability-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\mutation-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\body-improvement-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\resistance-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\base-status-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-self-info.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-info\weapon-effect-info.c">
+      <Filter>player-info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-archer.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-magic-eater.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-chaos-warrior.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-nature.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-arcane.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-priest.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-hobbit.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-death-util.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\special-death-switcher.c">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2617,9 +2686,6 @@
     <ClInclude Include="..\..\src\grid\trap.h">
       <Filter>grid</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\avatar.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster\horror-descriptions.h">
       <Filter>monster</Filter>
     </ClInclude>
@@ -2661,12 +2727,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\patron.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player\selfinfo.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\main\init.h">
-      <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\term\readdib.h">
       <Filter>term</Filter>
@@ -4573,6 +4633,90 @@
     <ClInclude Include="..\..\src\core\object-compressor.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\main\info-initializer.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\angband-headers.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\init-error-messages-table.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\building-initializer.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\game-data-initializer.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\angband-initializer.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\self-info-util.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\self-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\avatar.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\base-status-types.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\race-ability-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\class-ability-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\mutation-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\body-improvement-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\resistance-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\base-status-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-self-info.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\weapon-effect-info.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-archer.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-magic-eater.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-chaos-warrior.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-nature.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-arcane.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-priest.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-hobbit.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-death-util.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\special-death-switcher.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\summon-types.h">
+      <Filter>spell</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -4773,6 +4917,9 @@
     </Filter>
     <Filter Include="object-activation">
       <UniqueIdentifier>{14dcf604-bbe5-4084-b4ff-124ea8c55654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-info">
+      <UniqueIdentifier>{9b6116c6-24e1-4d33-b3b5-3591f58fb9e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

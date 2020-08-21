@@ -3,6 +3,7 @@
 #include "system/angband.h"
 
 /* 人畜無害なenumヘッダを先に読み込む */
+#include "player-info/base-status-types.h"
 #include "player/player-classes-types.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
@@ -26,17 +27,6 @@
 /*
  * Player constants
  */
-
-typedef enum base_status {
-    A_STR = 0,
-    A_INT = 1,
-    A_WIS = 2,
-    A_DEX = 3,
-    A_CON = 4,
-    A_CHR = 5,
-    A_MAX = 6
-} base_status;
-
 #define PY_MAX_EXP 99999999L /*!< プレイヤー経験値の最大値 / Maximum exp */
 #define PY_MAX_GOLD 999999999L /*!< プレイヤー所持金の最大値 / Maximum gold */
 #define PY_MAX_LEVEL 50 /*!< プレイヤーレベルの最大値 / Maximum level */
@@ -106,7 +96,7 @@ typedef struct player_type {
     PLAYER_LEVEL lev; /* Level */
 
     TOWN_IDX town_num; /* Current town number */
-    s16b arena_number; /* monster number in arena -KMW- */
+    s16b arena_number; /* monster number in on_defeat_arena_monster -KMW- */
     bool phase_out; /*!< フェイズアウト状態(闘技場観戦状態などに利用、NPCの処理の対象にならず自身もほとんどの行動ができない) */
 
     DUNGEON_IDX dungeon_idx; /* current dungeon index */
@@ -301,7 +291,7 @@ typedef struct player_type {
     bool monk_notify_aux;
 
     byte leave_bldg;
-    byte exit_bldg; /* Goal obtained in arena? -KMW- */
+    byte exit_bldg; /* Goal obtained in on_defeat_arena_monster? -KMW- */
 
     bool leaving_dungeon; /* True if player is leaving the dungeon */
     bool teleport_town;

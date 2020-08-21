@@ -1,6 +1,7 @@
 ﻿#include "dungeon/quest-completion-checker.h"
 #include "core/player-update-types.h"
 #include "dungeon/quest.h"
+#include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
@@ -154,7 +155,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
     if (create_stairs) {
         POSITION ny, nx;
         while (cave_have_flag_bold(floor_ptr, y, x, FF_PERMANENT) || floor_ptr->grid_array[y][x].o_idx || (floor_ptr->grid_array[y][x].info & CAVE_OBJECT)) {
-            scatter(player_ptr, &ny, &nx, y, x, 1, 0);
+            scatter(player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
             y = ny;
             x = nx;
         }

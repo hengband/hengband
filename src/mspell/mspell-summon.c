@@ -18,6 +18,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 

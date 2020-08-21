@@ -18,7 +18,7 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/race-info-table.h"
 #include "store/home.h"
 #include "store/owner-insults.h"

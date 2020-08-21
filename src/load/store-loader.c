@@ -6,7 +6,7 @@
 #include "load/load-util.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "store/store.h"
 #include "util/object-sort.h"
 

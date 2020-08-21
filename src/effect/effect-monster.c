@@ -35,7 +35,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "spell-kind/blood-curse.h"
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"

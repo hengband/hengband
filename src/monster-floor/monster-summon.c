@@ -13,7 +13,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "mspell/summon-checker.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 
@@ -69,6 +69,19 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
 }
 
 /*!
+ * @brief モンスター死亡時に召喚されうるモンスターかどうかの判定
+ * @param type モンスター種族ID
+ * @return 召喚されうるならばTRUE (あやしい影として生成されない)
+ */
+static bool is_dead_summoning(summon_type type)
+{
+    bool summoning = type == SUMMON_BLUE_HORROR;
+    summoning |= type == SUMMON_DAWN;
+    summoning |= type == SUMMON_TOTEM_MOAI;
+    return summoning;
+}
+
+/*!
  * @brief モンスターを召喚により配置する / Place a monster (of the specified "type") near the given location. Return TRUE if a monster was actually summoned.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param who 召喚主のモンスター情報ID
@@ -79,7 +92,7 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param mode 生成オプション
  * @return 召喚できたらtrueを返す
  */
-bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode)
+bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena)
@@ -100,7 +113,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
         return FALSE;
     }
 
-    if ((type == SUMMON_BLUE_HORROR) || (type == SUMMON_DAWN))
+    if (is_dead_summoning(type))
         mode |= PM_NO_KAGE;
 
     if (!place_monster_aux(player_ptr, who, y, x, r_idx, mode)) {

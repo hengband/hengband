@@ -7,7 +7,7 @@
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "racial/racial-android.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"

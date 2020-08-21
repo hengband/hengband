@@ -12,7 +12,7 @@
 #include "mspell/mspell-util.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "view/display-messages.h"
 
 /*!
@@ -177,7 +177,7 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
         if (!summon_possible(target_ptr, cy, cx) || !is_cave_empty_bold(target_ptr, cy, cx)) {
             int j;
             for (j = 100; j > 0; j--) {
-                scatter(target_ptr, &cy, &cx, y, x, 2, 0);
+                scatter(target_ptr, &cy, &cx, y, x, 2, PROJECT_NONE);
                 if (is_cave_empty_bold(target_ptr, cy, cx))
                     break;
             }

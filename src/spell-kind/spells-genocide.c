@@ -20,7 +20,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"

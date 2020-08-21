@@ -1,4 +1,5 @@
 ﻿#include "info-reader/magic-reader.h"
+#include "main/angband-headers.h"
 #include "player/player-class.h"
 #include "util/string-processor.h"
 

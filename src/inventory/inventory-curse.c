@@ -21,7 +21,7 @@
 #include "player/player-race-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"

@@ -5,7 +5,7 @@
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-move.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"

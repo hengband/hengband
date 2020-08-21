@@ -183,7 +183,7 @@ static void build_room_vault(player_type *player_ptr, POSITION x0, POSITION y0, 
 
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("部屋型ランダムVaultを生成しました。", "Room Vault."));
 
-    /* fill area so don't get problems with arena levels */
+    /* fill area so don't get problems with on_defeat_arena_monster levels */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (x1 = 0; x1 < xsize; x1++) {
         POSITION x = x0 - xhsize + x1;
@@ -786,11 +786,11 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
                 /* inside- so is floor */
                 place_bold(player_ptr, y, x, GB_FLOOR);
             } else {
-                /* make granite outside so arena works */
+                /* make granite outside so on_defeat_arena_monster works */
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }
 
-            /* proper boundary for arena */
+            /* proper boundary for on_defeat_arena_monster */
             if (((y + rad) == y0) || ((y - rad) == y0) || ((x + rad) == x0) || ((x - rad) == x0)) {
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }

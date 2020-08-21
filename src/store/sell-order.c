@@ -22,7 +22,7 @@
 #include "object/object-info.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "racial/racial-android.h"
 #include "spell-kind/spells-perception.h"
 #include "store/home.h"

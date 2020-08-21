@@ -10,7 +10,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-util.h"
 #include "player/player-race.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "util/string-processor.h"
 
 /*!
@@ -144,6 +144,10 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
     }
     case SUMMON_BLUE_HORROR: {
         is_match = (r_idx == MON_BLUE_HORROR);
+        break;
+    }
+    case SUMMON_TOTEM_MOAI: {
+        is_match = r_idx == MON_TOTEM_MOAI;
         break;
     }
     case SUMMON_ELEMENTAL: {

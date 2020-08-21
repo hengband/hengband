@@ -896,7 +896,7 @@ bool build_type11(player_type *player_ptr, dun_data_type *dd_ptr)
                 /* inside- so is floor */
                 place_bold(player_ptr, y, x, GB_FLOOR);
             } else if (distance(y0, x0, y, x) <= rad + 1) {
-                /* make granite outside so arena works */
+                /* make granite outside so on_defeat_arena_monster works */
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }
         }
@@ -954,11 +954,11 @@ bool build_type12(player_type *player_ptr, dun_data_type *dd_ptr)
             } else if (distance(y0, x0, y, x) < 3) {
                 place_bold(player_ptr, y, x, GB_FLOOR);
             } else {
-                /* make granite outside so arena works */
+                /* make granite outside so on_defeat_arena_monster works */
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }
 
-            /* proper boundary for arena */
+            /* proper boundary for on_defeat_arena_monster */
             if (((y + rad) == y0) || ((y - rad) == y0) || ((x + rad) == x0) || ((x - rad) == x0)) {
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }

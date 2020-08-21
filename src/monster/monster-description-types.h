@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 typedef enum monsetr_description_type {
+    MD_NONE = 0x00000000,
 	MD_OBJECTIVE = 0x00000001, /* Objective (or Reflexive) */
     MD_POSSESSIVE = 0x00000002, /* Possessive (or Reflexive) */
     MD_INDEF_HIDDEN = 0x00000004, /* Use indefinites for hidden monsters ("something") */

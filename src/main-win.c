@@ -109,7 +109,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
-#include "main/init.h"
+#include "main/angband-initializer.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"

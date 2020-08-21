@@ -3,7 +3,7 @@
 #include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "player/player-race.h"

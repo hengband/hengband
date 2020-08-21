@@ -8,6 +8,16 @@
 
 #define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */
 
+/*!
+ * @brief 闘技場のモンスターエントリー構造体 / A structure type for on_defeat_arena_monster entry
+ */
+typedef enum tval_type tval_type;
+typedef struct arena_type {
+    MONRACE_IDX r_idx; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
+    tval_type tval; /*!< モンスター打倒後に得られるアイテムの大カテゴリID / tval of prize (0 means no prize) */
+    OBJECT_SUBTYPE_VALUE sval; /*!< モンスター打倒後に得られるアイテムの小カテゴリID / sval of prize */
+} arena_type;
+
 typedef struct building_type {
     GAME_TEXT name[20]; /* proprietor name */
     GAME_TEXT owner_name[20]; /* proprietor name */
@@ -26,3 +36,4 @@ typedef struct building_type {
 } building_type;
 
 extern building_type building[MAX_BLDG];
+extern MONRACE_IDX battle_mon[4];

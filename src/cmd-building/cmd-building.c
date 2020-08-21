@@ -54,7 +54,7 @@
 #include "object-hook/hook-bow.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-personalities-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-perception.h"
@@ -68,7 +68,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-MONRACE_IDX battle_mon[4];
 u32b mon_odds[4];
 int battle_odds;
 PRICE kakekin;

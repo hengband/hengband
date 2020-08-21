@@ -17,7 +17,7 @@
 #include "monster/monster-status.h" // todo 相互依存. 後で何とかする.
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "target/projection-path-calculator.h"

@@ -129,7 +129,7 @@ void wall_breaker(player_type *caster_ptr)
     int attempts = 1000;
     if (randint1(80 + caster_ptr->lev) < 70) {
         while (attempts--) {
-            scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
+            scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_NONE);
 
             if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))
                 continue;
@@ -150,7 +150,7 @@ void wall_breaker(player_type *caster_ptr)
     int num = damroll(5, 3);
     for (int i = 0; i < num; i++) {
         while (TRUE) {
-            scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 10, 0);
+            scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 10, PROJECT_NONE);
 
             if (!player_bold(caster_ptr, y, x))
                 break;

@@ -3,7 +3,7 @@
 #include "main/sound-of-music.h"
 #include "store/store-owner-comments.h"
 #include "store/store-util.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "store/rumor.h"
 #include "view/display-messages.h"
 

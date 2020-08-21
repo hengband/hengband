@@ -6,7 +6,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
 #include "mutation/mutation-calculator.h" // todo calc_mutant_regenerate_mod() が相互依存している、後で消す.
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "view/display-messages.h"
 
 static void sweep_gain_mutation(player_type *creature_ptr, glm_type *gm_ptr)

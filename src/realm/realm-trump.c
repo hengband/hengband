@@ -19,6 +19,7 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/sight-setter.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"

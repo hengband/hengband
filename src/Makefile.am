@@ -379,7 +379,11 @@ hengband_SOURCES = \
 	\
 	main.c main-x11.c main-gcu.c \
 	\
-	main/init.c main/init.h \
+	main/angband-headers.c main/angband-headers.h \
+	main/angband-initializer.c main/angband-initializer.h \
+	main/game-data-initializer.c main/game-data-initializer.h \
+	main/info-initializer.c main/info-initializer.h \
+	main/initialization-error-messages-table.c main/initialization-error-messages-table.h \
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
 	main/sound-of-music.c main/sound-of-music.h \
@@ -387,6 +391,7 @@ hengband_SOURCES = \
 	main/x11-type-string.c main/x11-type-string.h \
 	\
 	market/arena-info-table.c market/arena-info-table.h \
+	market/building-initializer.c market/building-initializer.h \
 	market/building-util.c market/building-util.h \
 	market/play-gamble.c market/play-gamble.h \
 	market/poker.c market/poker.h \
@@ -414,13 +419,17 @@ hengband_SOURCES = \
 	melee/melee-util.c melee/melee-util.h \
 	\
 	mind/drs-types.h \
+	mind/mind-archer.c mind/mind-archer.h \
 	mind/mind-berserker.c mind/mind-berserker.h \
 	mind/mind-blue-mage.c mind/mind-blue-mage.h \
 	mind/mind-cavalry.c mind/mind-cavalry.h \
+	mind/mind-chaos-warrior.c mind/mind-chaos-warrior.h \
 	mind/mind-explanations-table.c mind/mind-explanations-table.h \
 	mind/mind-force-trainer.c mind/mind-force-trainer.h \
 	mind/mind-info.c mind/mind-info.h \
+	mind/mind-hobbit.c mind/mind-hobbit.h \
 	mind/mind-mage.c mind/mind-mage.h \
+	mind/mind-magic-eater.c mind/mind-magic-eater.h \
 	mind/mind-magic-resistance.c mind/mind-magic-resistance.h \
 	mind/mind-mindcrafter.c mind/mind-mindcrafter.h \
 	mind/mind-mirror-master.c mind/mind-mirror-master.h \
@@ -428,6 +437,7 @@ hengband_SOURCES = \
 	mind/mind-ninja.c mind/mind-ninja.h \
 	mind/mind-numbers.h \
 	mind/mind-power-getter.c mind/mind-power-getter.h \
+	mind/mind-priest.c mind/mind-priest.h \
 	mind/mind-samurai.c mind/mind-samurai.h \
 	mind/mind-sniper.c mind/mind-sniper.h \
 	mind/mind-types.h \
@@ -466,6 +476,7 @@ hengband_SOURCES = \
 	monster-attack/monster-eating.c monster-attack/monster-eating.h \
 	\
 	monster-floor/monster-death.c monster-floor/monster-death.h \
+	monster-floor/monster-death-util.c monster-floor/monster-death-util.h \
 	monster-floor/monster-direction.c monster-floor/monster-direction.h \
 	monster-floor/monster-dist-offsets.c monster-floor/monster-dist-offsets.h \
 	monster-floor/monster-generator.c monster-floor/monster-generator.h \
@@ -481,6 +492,7 @@ hengband_SOURCES = \
 	monster-floor/one-monster-placer.c monster-floor/one-monster-placer.h \
 	monster-floor/place-monster-types.h \
 	monster-floor/quantum-effect.c monster-floor/quantum-effect.h \
+	monster-floor/special-death-switcher.c monster-floor/special-death-switcher.h \
 	\
 	monster-race/monster-race.c monster-race/monster-race.h \
 	monster-race/monster-race-hook.c monster-race/monster-race-hook.h \
@@ -593,7 +605,6 @@ hengband_SOURCES = \
 	pet/pet-util.c pet/pet-util.h \
 	\
 	player/attack-defense-types.h \
-	player/avatar.h player/avatar.c \
 	player/eldritch-horror.c player/eldritch-horror.h \
 	player/mimic-info-table.c player/mimic-info-table.h \
 	player/patron.c player/patron.h \
@@ -619,13 +630,24 @@ hengband_SOURCES = \
 	player/player-personalities-types.h \
 	player/player-sex.c player/player-sex.h \
 	player/player-view.c player/player-view.h \
-	player/selfinfo.c player/selfinfo.h \
 	player/special-defense-types.h \
 	\
 	player-attack/player-attack-util.h \
 	player-attack/attack-chaos-effect.c player-attack/attack-chaos-effect.h \
 	player-attack/blood-sucking-processor.c player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.c player-attack/player-attack.h \
+	\
+	player-info/avatar.h player-info/avatar.c \
+	player-info/base-status-info.c player-info/base-status-info.h \
+	player-info/base-status-types.h \
+	player-info/body-improvement-info.c player-info/body-improvement-info.h \
+	player-info/class-ability-info.c player-info/class-ability-info.h \
+	player-info/mutation-info.c player-info/mutation-info.h \
+	player-info/race-ability-info.c player-info/race-ability-info.h \
+	player-info/resistance-info.c player-info/resistance-info.h \
+	player-info/self-info.c player-info/self-info.h \
+	player-info/self-info-util.c player-info/self-info-util.h \
+	player-info/weapon-effect-info.c player-info/weapon-effect-info.h \
 	\
 	racial/class-racial-switcher.c racial/class-racial-switcher.h \
 	racial/mutation-racial-selector.c racial/mutation-racial-selector.h \
@@ -705,6 +727,7 @@ hengband_SOURCES = \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-status.c spell/spells-status.h \
 	spell/spell-types.h spell/spells-util.h \
+	spell/summon-types.h \
 	spell/technic-info-table.c spell/technic-info-table.h \
 	\
 	spell-kind/blood-curse.c spell-kind/blood-curse.h \
@@ -732,11 +755,13 @@ hengband_SOURCES = \
 	spell-kind/spells-teleport.c spell-kind/spells-teleport.h \
 	spell-kind/spells-world.c spell-kind/spells-world.h \
 	\
+	spell-realm/spells-arcane.c spell-realm/spells-arcane.h \
 	spell-realm/spells-chaos.c spell-realm/spells-chaos.h \
 	spell-realm/spells-craft.c spell-realm/spells-craft.h \
 	spell-realm/spells-crusade.c spell-realm/spells-crusade.h \
 	spell-realm/spells-demon.c spell-realm/spells-demon.h \
 	spell-realm/spells-hex.c spell-realm/spells-hex.h \
+	spell-realm/spells-nature.c spell-realm/spells-nature.h \
 	spell-realm/spells-song.c spell-realm/spells-song.h \
 	spell-realm/spells-sorcery.c spell-realm/spells-sorcery.h \
 	spell-realm/spells-trump.c spell-realm/spells-trump.h \
@@ -834,6 +859,7 @@ hengband_SOURCES = \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player-middle.c view/display-player-middle.h \
 	view/display-player.c view/display-player.h \
+	view/display-self-info.c view/display-self-info.h \
 	view/display-store.c view/display-store.h \
 	view/display-util.c view/display-util.h \
 	view/object-describer.c view/object-describer.h \
@@ -919,6 +945,7 @@ DEFAULT_INCLUDES = -I$(srcdir) \
 	-I$(srcdir)/pet \
 	-I$(srcdir)/player \
 	-I$(srcdir)/player-attack \
+	-I$(srcdir)/player-info \
 	-I$(srcdir)/racial \
 	-I$(srcdir)/realm \
 	-I$(srcdir)/room \

@@ -4,6 +4,7 @@
  * project()関数に用いられる、遠隔攻撃特性ビットフラグ / Bit flags for the "project()" function
  */
 typedef enum effect_characteristics {
+    PROJECT_NONE = 0x0000,
     PROJECT_JUMP = 0x0001, /*!< 発動者からの軌跡を持たず、指定地点に直接発生する(予め置いたトラップ、上空からの発生などのイメージ) / Jump directly to the target location (this is a hack) */
     PROJECT_BEAM = 0x0002, /*!< ビーム範囲を持つ。 / Work as a beam weapon (affect every grid passed through) */
     PROJECT_THRU = 0x0004, /*!< 目標地点に到達しても射程と遮蔽の限り引き延ばす。 / Continue "through" the target (used for "bolts"/"beams") */

@@ -5,13 +5,12 @@
 #include "grid/trap.h"
 #include "info-reader/feature-info-tokens-table.h"
 #include "info-reader/parse-error-types.h"
+#include "main/angband-headers.h"
 #include "room/door-definition.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-
-angband_header f_head; /*!< 地形情報のヘッダ構造体 */
 
 /*! 地形タグ情報から地形IDを得られなかった場合にTRUEを返す */
 static bool feat_tag_is_not_found = FALSE;

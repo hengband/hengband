@@ -7,6 +7,7 @@
 
 #include "monster-floor/monster-generator.h"
 #include "dungeon/dungeon.h"
+#include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "game-option/cheat-options.h"
@@ -24,7 +25,7 @@
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/summon-checker.h"
-#include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/string-processor.h"
@@ -190,7 +191,7 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
         POSITION hy = hack_y[n];
         for (int i = 0; (i < 8) && (hack_n < total); i++) {
             POSITION mx, my;
-            scatter(player_ptr, &my, &mx, hy, hx, 4, 0);
+            scatter(player_ptr, &my, &mx, hy, hx, 4, PROJECT_NONE);
             if (!is_cave_empty_bold2(player_ptr, my, mx))
                 continue;
 
@@ -271,7 +272,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         int n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);
         for (int j = 0; j < n; j++) {
             POSITION nx, ny, d = 7;
-            scatter(player_ptr, &ny, &nx, y, x, d, 0);
+            scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
             (void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
         }
     }
@@ -287,7 +288,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     for (int i = 0; i < 32; i++) {
         POSITION nx, ny, d = 3;
         MONRACE_IDX z;
-        scatter(player_ptr, &ny, &nx, y, x, d, 0);
+        scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
         if (!is_cave_empty_bold2(player_ptr, ny, nx))
             continue;
 
@@ -381,7 +382,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
     POSITION cy = y;
     POSITION cx = x;
     for (attempts = randint1(10) + 5; attempts; attempts--) {
-        scatter(player_ptr, &cy, &cx, y, x, 5, 0);
+        scatter(player_ptr, &cy, &cx, y, x, 5, PROJECT_NONE);
         (void)(*summon_specific)(player_ptr, m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
         y = cy;
         x = cx;

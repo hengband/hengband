@@ -5,6 +5,7 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "io/tokenizer.h"
+#include "main/angband-headers.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 

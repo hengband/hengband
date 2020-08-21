@@ -22,7 +22,7 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "view/display-messages.h"
 #include "player/player-status-flags.h"
 

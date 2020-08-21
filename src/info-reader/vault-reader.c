@@ -1,4 +1,5 @@
 ﻿#include "info-reader/vault-reader.h"
+#include "main/angband-headers.h"
 #include "room/rooms-vault.h"
 #include "util/string-processor.h"
 

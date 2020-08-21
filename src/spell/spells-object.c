@@ -5,22 +5,14 @@
  */
 
 #include "spell/spells-object.h"
-#include "action/action-limited.h"
-#include "autopick/autopick.h"
-#include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
-#include "grid/feature.h"
-#include "grid/grid.h"
-#include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
-#include "inventory/player-inventory.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "object-enchant/apply-magic.h"
@@ -29,41 +21,30 @@
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-bow.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
-#include "object-hook/hook-magic.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-flags.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player/avatar.h"
+#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-status.h"
 #include "racial/racial-android.h"
 #include "spell-kind/spells-perception.h"
 #include "status/bad-status-setter.h"
-#include "sv-definition/sv-food-types.h"
-#include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-scroll-types.h"
-#include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 typedef struct {
@@ -99,260 +80,6 @@ static amuse_type amuse_info[]
           { TV_SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING }, { TV_SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING }, { TV_SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
 
           { 0, 0, 0, 0 } };
-
-/*!
- * @brief「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.
- * Hook to determine if an object is contertible in an arrow/bolt
- * @return 製造を実際に行ったらTRUE、キャンセルしたらFALSEを返す
- */
-bool create_ammo(player_type *creature_ptr)
-{
-    char com[80];
-    if (creature_ptr->lev >= 20)
-        sprintf(com, _("[S]弾, [A]矢, [B]クロスボウの矢 :", "Create [S]hots, Create [A]rrow or Create [B]olt ?"));
-    else if (creature_ptr->lev >= 10)
-        sprintf(com, _("[S]弾, [A]矢:", "Create [S]hots or Create [A]rrow ?"));
-    else
-        sprintf(com, _("[S]弾:", "Create [S]hots ?"));
-
-    if (cmd_limit_confused(creature_ptr))
-        return FALSE;
-    if (cmd_limit_blind(creature_ptr))
-        return FALSE;
-
-    int ext = 0;
-    char ch;
-    while (TRUE) {
-        if (!get_com(com, &ch, TRUE)) {
-            return FALSE;
-        }
-
-        if (ch == 'S' || ch == 's') {
-            ext = 1;
-            break;
-        }
-
-        if ((ch == 'A' || ch == 'a') && (creature_ptr->lev >= 10)) {
-            ext = 2;
-            break;
-        }
-
-        if ((ch == 'B' || ch == 'b') && (creature_ptr->lev >= 20)) {
-            ext = 3;
-            break;
-        }
-    }
-
-    GAME_TEXT o_name[MAX_NLEN];
-    object_type forge;
-    object_type *q_ptr;
-    q_ptr = &forge;
-
-    /**********Create shots*********/
-    if (ext == 1) {
-        POSITION x, y;
-        DIRECTION dir;
-        grid_type *g_ptr;
-
-        if (!get_rep_dir(creature_ptr, &dir, FALSE))
-            return FALSE;
-        y = creature_ptr->y + ddy[dir];
-        x = creature_ptr->x + ddx[dir];
-        g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-
-        if (!have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG)) {
-            msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
-            return FALSE;
-        }
-
-        if (!cave_have_flag_grid(g_ptr, FF_CAN_DIG) || !cave_have_flag_grid(g_ptr, FF_HURT_ROCK)) {
-            msg_print(_("硬すぎて崩せなかった。", "You failed to make ammo."));
-            return TRUE;
-        }
-
-        s16b slot;
-        q_ptr = &forge;
-
-        /* Hack -- Give the player some small firestones */
-        object_prep(creature_ptr, q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
-        q_ptr->number = (byte)rand_range(15, 30);
-        object_aware(creature_ptr, q_ptr);
-        object_known(q_ptr);
-        apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
-        q_ptr->discount = 99;
-
-        slot = store_item_to_inventory(creature_ptr, q_ptr);
-
-        describe_flavor(creature_ptr, o_name, q_ptr, 0);
-        msg_format(_("%sを作った。", "You make some ammo."), o_name);
-
-        /* Auto-inscription */
-        if (slot >= 0)
-            autopick_alter_item(creature_ptr, slot, FALSE);
-
-        /* Destroy the wall */
-        cave_alter_feat(creature_ptr, y, x, FF_HURT_ROCK);
-
-        creature_ptr->update |= (PU_FLOW);
-        return TRUE;
-    }
-
-    /**********Create arrows*********/
-    if (ext == 2) {
-        OBJECT_IDX item;
-        concptr q, s;
-        s16b slot;
-
-        item_tester_hook = item_tester_hook_convertible;
-
-        q = _("どのアイテムから作りますか？ ", "Convert which item? ");
-        s = _("材料を持っていない。", "You have no item to convert.");
-        q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
-        if (!q_ptr)
-            return FALSE;
-
-        q_ptr = &forge;
-
-        /* Hack -- Give the player some small firestones */
-        object_prep(creature_ptr, q_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
-        q_ptr->number = (byte)rand_range(5, 10);
-        object_aware(creature_ptr, q_ptr);
-        object_known(q_ptr);
-        apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
-
-        q_ptr->discount = 99;
-
-        describe_flavor(creature_ptr, o_name, q_ptr, 0);
-        msg_format(_("%sを作った。", "You make some ammo."), o_name);
-
-        vary_item(creature_ptr, item, -1);
-        slot = store_item_to_inventory(creature_ptr, q_ptr);
-
-        /* Auto-inscription */
-        if (slot >= 0)
-            autopick_alter_item(creature_ptr, slot, FALSE);
-        return TRUE;
-    }
-
-    /**********Create bolts*********/
-    if (ext == 3) {
-        OBJECT_IDX item;
-        concptr q, s;
-        s16b slot;
-
-        item_tester_hook = item_tester_hook_convertible;
-
-        q = _("どのアイテムから作りますか？ ", "Convert which item? ");
-        s = _("材料を持っていない。", "You have no item to convert.");
-
-        q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
-        if (!q_ptr)
-            return FALSE;
-
-        q_ptr = &forge;
-
-        /* Hack -- Give the player some small firestones */
-        object_prep(creature_ptr, q_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
-        q_ptr->number = (byte)rand_range(4, 8);
-        object_aware(creature_ptr, q_ptr);
-        object_known(q_ptr);
-        apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
-
-        q_ptr->discount = 99;
-
-        describe_flavor(creature_ptr, o_name, q_ptr, 0);
-        msg_format(_("%sを作った。", "You make some ammo."), o_name);
-
-        vary_item(creature_ptr, item, -1);
-
-        slot = store_item_to_inventory(creature_ptr, q_ptr);
-
-        /* Auto-inscription */
-        if (slot >= 0)
-            autopick_alter_item(creature_ptr, slot, FALSE);
-    }
-
-    return TRUE;
-}
-
-/*!
- * @brief 魔道具術師の魔力取り込み処理
- * @param user_ptr アイテムを取り込むクリーチャー
- * @return 取り込みを実行したらTRUE、キャンセルしたらFALSEを返す
- */
-bool import_magic_device(player_type *user_ptr)
-{
-    /* Only accept legal items */
-    item_tester_hook = item_tester_hook_recharge;
-
-    concptr q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
-    concptr s = _("魔力を取り込めるアイテムがない。", "You have nothing to gain power.");
-
-    OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(user_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
-    if (!o_ptr)
-        return FALSE;
-
-    if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING) {
-        msg_print(_("この杖には発動の為の能力は何も備わっていないようだ。", "This staff doesn't have any magical ability."));
-        return FALSE;
-    }
-
-    if (!object_is_known(o_ptr)) {
-        msg_print(_("鑑定されていないと取り込めない。", "You need to identify before absorbing."));
-        return FALSE;
-    }
-
-    if (o_ptr->timeout) {
-        msg_print(_("充填中のアイテムは取り込めない。", "This item is still charging."));
-        return FALSE;
-    }
-
-    PARAMETER_VALUE pval = o_ptr->pval;
-    int ext = 0;
-    if (o_ptr->tval == TV_ROD)
-        ext = 72;
-    else if (o_ptr->tval == TV_WAND)
-        ext = 36;
-
-    if (o_ptr->tval == TV_ROD) {
-        user_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)o_ptr->number;
-        if (user_ptr->magic_num2[o_ptr->sval + ext] > 99)
-            user_ptr->magic_num2[o_ptr->sval + ext] = 99;
-    } else {
-        int num;
-        for (num = o_ptr->number; num; num--) {
-            int gain_num = pval;
-            if (o_ptr->tval == TV_WAND)
-                gain_num = (pval + num - 1) / num;
-            if (user_ptr->magic_num2[o_ptr->sval + ext]) {
-                gain_num *= 256;
-                gain_num = (gain_num / 3 + randint0(gain_num / 3)) / 256;
-                if (gain_num < 1)
-                    gain_num = 1;
-            }
-            user_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)gain_num;
-            if (user_ptr->magic_num2[o_ptr->sval + ext] > 99)
-                user_ptr->magic_num2[o_ptr->sval + ext] = 99;
-            user_ptr->magic_num1[o_ptr->sval + ext] += pval * 0x10000;
-            if (user_ptr->magic_num1[o_ptr->sval + ext] > 99 * 0x10000)
-                user_ptr->magic_num1[o_ptr->sval + ext] = 99 * 0x10000;
-            if (user_ptr->magic_num1[o_ptr->sval + ext] > user_ptr->magic_num2[o_ptr->sval + ext] * 0x10000)
-                user_ptr->magic_num1[o_ptr->sval + ext] = user_ptr->magic_num2[o_ptr->sval + ext] * 0x10000;
-            if (o_ptr->tval == TV_WAND)
-                pval -= (pval + num - 1) / num;
-        }
-    }
-
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(user_ptr, o_name, o_ptr, 0);
-    msg_format(_("%sの魔力を取り込んだ。", "You absorb magic of %s."), o_name);
-
-    vary_item(user_ptr, item, -999);
-    take_turn(user_ptr, 100);
-    return TRUE;
-}
 
 /*!
  * @brief 誰得ドロップを行う。
@@ -481,118 +208,6 @@ void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, boo
     }
 }
 
-void acquire_chaos_weapon(player_type *creature_ptr)
-{
-    object_type forge;
-    object_type *q_ptr = &forge;
-    tval_type dummy = TV_SWORD;
-    OBJECT_SUBTYPE_VALUE dummy2;
-    switch (randint1(creature_ptr->lev)) {
-    case 0:
-    case 1:
-        dummy2 = SV_DAGGER;
-        break;
-    case 2:
-    case 3:
-        dummy2 = SV_MAIN_GAUCHE;
-        break;
-    case 4:
-        dummy2 = SV_TANTO;
-        break;
-    case 5:
-    case 6:
-        dummy2 = SV_RAPIER;
-        break;
-    case 7:
-    case 8:
-        dummy2 = SV_SMALL_SWORD;
-        break;
-    case 9:
-    case 10:
-        dummy2 = SV_BASILLARD;
-        break;
-    case 11:
-    case 12:
-    case 13:
-        dummy2 = SV_SHORT_SWORD;
-        break;
-    case 14:
-    case 15:
-        dummy2 = SV_SABRE;
-        break;
-    case 16:
-    case 17:
-        dummy2 = SV_CUTLASS;
-        break;
-    case 18:
-        dummy2 = SV_WAKIZASHI;
-        break;
-    case 19:
-        dummy2 = SV_KHOPESH;
-        break;
-    case 20:
-        dummy2 = SV_TULWAR;
-        break;
-    case 21:
-        dummy2 = SV_BROAD_SWORD;
-        break;
-    case 22:
-    case 23:
-        dummy2 = SV_LONG_SWORD;
-        break;
-    case 24:
-    case 25:
-        dummy2 = SV_SCIMITAR;
-        break;
-    case 26:
-        dummy2 = SV_NINJATO;
-        break;
-    case 27:
-        dummy2 = SV_KATANA;
-        break;
-    case 28:
-    case 29:
-        dummy2 = SV_BASTARD_SWORD;
-        break;
-    case 30:
-        dummy2 = SV_GREAT_SCIMITAR;
-        break;
-    case 31:
-        dummy2 = SV_CLAYMORE;
-        break;
-    case 32:
-        dummy2 = SV_ESPADON;
-        break;
-    case 33:
-        dummy2 = SV_TWO_HANDED_SWORD;
-        break;
-    case 34:
-        dummy2 = SV_FLAMBERGE;
-        break;
-    case 35:
-        dummy2 = SV_NO_DACHI;
-        break;
-    case 36:
-        dummy2 = SV_EXECUTIONERS_SWORD;
-        break;
-    case 37:
-        dummy2 = SV_ZWEIHANDER;
-        break;
-    case 38:
-        dummy2 = SV_HAYABUSA;
-        break;
-    default:
-        dummy2 = SV_BLADE_OF_CHAOS;
-    }
-
-    object_prep(creature_ptr, q_ptr, lookup_kind(dummy, dummy2));
-    q_ptr->to_h = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
-    q_ptr->to_d = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
-    one_resistance(q_ptr);
-    q_ptr->name2 = EGO_CHAOTIC;
-    (void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
-}
-
 /*!
  * todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  * @brief 防具呪縛処理 /
@@ -705,50 +320,6 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
 }
 
 /*!
- * @brief 防具の錆止め防止処理
- * @param caster_ptr 錆止め実行者の参照ポインタ
- * @return ターン消費を要する処理を行ったならばTRUEを返す
- */
-bool rustproof(player_type *caster_ptr)
-{
-    /* Select a piece of armour */
-    item_tester_hook = object_is_armour;
-
-    concptr q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
-    concptr s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
-
-    OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-    if (!o_ptr)
-        return FALSE;
-
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-    add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
-
-    if ((o_ptr->to_a < 0) && !object_is_cursed(o_ptr)) {
-#ifdef JP
-        msg_format("%sは新品同様になった！", o_name);
-#else
-        msg_format("%s %s look%s as good as new!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
-#endif
-
-        o_ptr->to_a = 0;
-    }
-
-#ifdef JP
-    msg_format("%sは腐食しなくなった。", o_name);
-#else
-    msg_format("%s %s %s now protected against corrosion.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "are" : "is"));
-#endif
-
-    calc_android_exp(caster_ptr);
-    return TRUE;
-}
-
-/*!
  * @brief ボルトのエゴ化処理(火炎エゴのみ) /
  * Enchant some bolts
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -829,225 +400,6 @@ bool perilous_secrets(player_type *user_ptr)
     if (one_in_(20))
         take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"), -1);
     return TRUE;
-}
-
-/*!
- * @brief 寿命つき光源の燃素追加処理 /
- * Charge a lite (torch or latern)
- * @return なし
- */
-void phlogiston(player_type *caster_ptr)
-{
-    GAME_TURN max_flog = 0;
-    object_type *o_ptr = &caster_ptr->inventory_list[INVEN_LITE];
-
-    /* It's a lamp */
-    if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_LANTERN)) {
-        max_flog = FUEL_LAMP;
-    }
-
-    /* It's a torch */
-    else if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH)) {
-        max_flog = FUEL_TORCH;
-    }
-
-    /* No torch to refill */
-    else {
-        msg_print(_("燃素を消費するアイテムを装備していません。", "You are not wielding anything which uses phlogiston."));
-        return;
-    }
-
-    if (o_ptr->xtra4 >= max_flog) {
-        msg_print(_("このアイテムにはこれ以上燃素を補充できません。", "No more phlogiston can be put in this item."));
-        return;
-    }
-
-    /* Refuel */
-    o_ptr->xtra4 += (XTRA16)(max_flog / 2);
-    msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light item."));
-
-    if (o_ptr->xtra4 >= max_flog) {
-        o_ptr->xtra4 = (XTRA16)max_flog;
-        msg_print(_("照明用アイテムは満タンになった。", "Your light item is full."));
-    }
-
-    caster_ptr->update |= (PU_TORCH);
-}
-
-/*!
- * @brief 武器の祝福処理 /
- * Bless a weapon
- * @return ターン消費を要する処理を行ったならばTRUEを返す
- */
-bool bless_weapon(player_type *caster_ptr)
-{
-    /* Bless only weapons */
-    item_tester_hook = object_is_weapon;
-
-    concptr q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
-    concptr s = _("祝福できる武器がありません。", "You have weapon to bless.");
-
-    OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-    if (!o_ptr)
-        return FALSE;
-
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(caster_ptr, o_ptr, flgs);
-
-    if (object_is_cursed(o_ptr)) {
-        if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) || have_flag(flgs, TR_ADD_L_CURSE) || have_flag(flgs, TR_ADD_H_CURSE)
-            || (o_ptr->curse_flags & TRC_PERMA_CURSE)) {
-#ifdef JP
-            msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", o_name);
-#else
-            msg_format("The black aura on %s %s disrupts the blessing!", ((item >= 0) ? "your" : "the"), o_name);
-#endif
-
-            return TRUE;
-        }
-
-#ifdef JP
-        msg_format("%s から邪悪なオーラが消えた。", o_name);
-#else
-        msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), o_name);
-#endif
-
-        o_ptr->curse_flags = 0L;
-
-        o_ptr->ident |= (IDENT_SENSE);
-        o_ptr->feeling = FEEL_NONE;
-
-        /* Recalculate the bonuses */
-        caster_ptr->update |= (PU_BONUS);
-        caster_ptr->window |= (PW_EQUIP);
-    }
-
-    /*
-     * Next, we try to bless it. Artifacts have a 1/3 chance of
-     * being blessed, otherwise, the operation simply disenchants
-     * them, godly power negating the magic. Ok, the explanation
-     * is silly, but otherwise priests would always bless every
-     * artifact weapon they find. Ego weapons and normal weapons
-     * can be blessed automatically.
-     */
-    if (have_flag(flgs, TR_BLESSED)) {
-#ifdef JP
-        msg_format("%s は既に祝福されている。", o_name);
-#else
-        msg_format("%s %s %s blessed already.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
-#endif
-
-        return TRUE;
-    }
-
-    if (!(object_is_artifact(o_ptr) || object_is_ego(o_ptr)) || one_in_(3)) {
-#ifdef JP
-        msg_format("%sは輝いた！", o_name);
-#else
-        msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
-#endif
-
-        add_flag(o_ptr->art_flags, TR_BLESSED);
-        o_ptr->discount = 99;
-    } else {
-        bool dis_happened = FALSE;
-        msg_print(_("その武器は祝福を嫌っている！", "The weapon resists your blessing!"));
-
-        /* Disenchant tohit */
-        if (o_ptr->to_h > 0) {
-            o_ptr->to_h--;
-            dis_happened = TRUE;
-        }
-
-        if ((o_ptr->to_h > 5) && (randint0(100) < 33))
-            o_ptr->to_h--;
-
-        /* Disenchant todam */
-        if (o_ptr->to_d > 0) {
-            o_ptr->to_d--;
-            dis_happened = TRUE;
-        }
-
-        if ((o_ptr->to_d > 5) && (randint0(100) < 33))
-            o_ptr->to_d--;
-
-        /* Disenchant toac */
-        if (o_ptr->to_a > 0) {
-            o_ptr->to_a--;
-            dis_happened = TRUE;
-        }
-
-        if ((o_ptr->to_a > 5) && (randint0(100) < 33))
-            o_ptr->to_a--;
-
-        if (dis_happened) {
-            msg_print(_("周囲が凡庸な雰囲気で満ちた...", "There is a static feeling in the air..."));
-
-#ifdef JP
-            msg_format("%s は劣化した！", o_name);
-#else
-            msg_format("%s %s %s disenchanted!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
-#endif
-        }
-    }
-
-    caster_ptr->update |= (PU_BONUS);
-    caster_ptr->window |= (PW_EQUIP | PW_PLAYER);
-    calc_android_exp(caster_ptr);
-
-    return TRUE;
-}
-
-/*!
- * @brief 盾磨き処理 /
- * pulish shield
- * @return ターン消費を要する処理を行ったならばTRUEを返す
- */
-bool pulish_shield(player_type *caster_ptr)
-{
-    concptr q = _("どの盾を磨きますか？", "Pulish which weapon? ");
-    concptr s = _("磨く盾がありません。", "You have weapon to pulish.");
-
-    OBJECT_IDX item;
-    object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_SHIELD);
-    if (!o_ptr)
-        return FALSE;
-
-    GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(caster_ptr, o_ptr, flgs);
-
-    bool is_pulish_successful = o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr);
-    is_pulish_successful &= !object_is_cursed(o_ptr);
-    is_pulish_successful &= (o_ptr->sval != SV_MIRROR_SHIELD);
-    if (is_pulish_successful) {
-#ifdef JP
-        msg_format("%sは輝いた！", o_name);
-#else
-        msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
-#endif
-        o_ptr->name2 = EGO_REFLECTION;
-        enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOAC);
-
-        o_ptr->discount = 99;
-        chg_virtue(caster_ptr, V_ENCHANT, 2);
-
-        return TRUE;
-    }
-
-    if (flush_failure)
-        flush();
-
-    msg_print(_("失敗した。", "Failed."));
-    chg_virtue(caster_ptr, V_ENCHANT, -2);
-    calc_android_exp(caster_ptr);
-    return FALSE;
 }
 
 /*!
@@ -1265,7 +617,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
+    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, 0);
     if (!o_ptr)
         return;
 
@@ -1282,7 +634,6 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
         return;
     }
 
-    /* Let's get the name before it is changed... */
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -1377,19 +728,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 
     msg_format(_("あなたの%s%s", "Your %s %s"), o_name, act);
     enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
-
     o_ptr->discount = 99;
     chg_virtue(caster_ptr, V_ENCHANT, 2);
     calc_android_exp(caster_ptr);
-}
-
-bool create_ration(player_type *creature_ptr)
-{
-    object_type *q_ptr;
-    object_type forge;
-    q_ptr = &forge;
-    object_prep(creature_ptr, q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
-    (void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
-    msg_print(_("食事を料理して作った。", "You cook some food."));
-    return TRUE;
 }

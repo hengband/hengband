@@ -37,6 +37,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
+#include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "view/display-messages.h"
@@ -45,7 +46,7 @@
 #include "world/world.h"
 
 /*!
- * @brief 闘技場用のアリーナ地形を作成する / Builds the arena after it is entered -KMW-
+ * @brief 闘技場用のアリーナ地形を作成する / Builds the on_defeat_arena_monster after it is entered -KMW-
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
@@ -98,7 +99,7 @@ static void build_arena(player_type *player_ptr, POSITION *start_y, POSITION *st
 }
 
 /*!
- * @brief 挑戦時闘技場への入場処理 / Town logic flow for generation of arena -KMW-
+ * @brief 挑戦時闘技場への入場処理 / Town logic flow for generation of on_defeat_arena_monster -KMW-
  * @return なし
  */
 static void generate_challenge_arena(player_type *challanger_ptr)
@@ -131,7 +132,7 @@ static void generate_challenge_arena(player_type *challanger_ptr)
 }
 
 /*!
- * @brief モンスター闘技場のフロア生成 / Builds the arena after it is entered -KMW-
+ * @brief モンスター闘技場のフロア生成 / Builds the on_defeat_arena_monster after it is entered -KMW-
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
@@ -192,7 +193,7 @@ static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
 }
 
 /*!
- * @brief モンスター闘技場への導入処理 / Town logic flow for generation of arena -KMW-
+ * @brief モンスター闘技場への導入処理 / Town logic flow for generation of on_defeat_arena_monster -KMW-
  * @return なし
  */
 static void generate_gambling_arena(player_type *creature_ptr)
