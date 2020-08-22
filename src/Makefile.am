@@ -382,7 +382,7 @@ hengband_SOURCES = \
 	main/angband-initializer.c main/angband-initializer.h \
 	main/game-data-initializer.c main/game-data-initializer.h \
 	main/info-initializer.c main/info-initializer.h \
-	main/initialization-error-messages-table.c main/initialization-error-messages-table.h \
+	main/init-error-messages-table.c main/init-error-messages-table.h \
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
 	main/sound-of-music.c main/sound-of-music.h \
