@@ -302,7 +302,7 @@ void calc_bonuses(player_type *creature_ptr)
     bool old_telepathy = creature_ptr->telepathy;
     BIT_FLAGS old_esp_animal = creature_ptr->esp_animal;
     BIT_FLAGS old_esp_undead = creature_ptr->esp_undead;
-    bool old_esp_demon = creature_ptr->esp_demon;
+    BIT_FLAGS old_esp_demon = creature_ptr->esp_demon;
     bool old_esp_orc = creature_ptr->esp_orc;
     bool old_esp_troll = creature_ptr->esp_troll;
     bool old_esp_giant = creature_ptr->esp_giant;
@@ -325,7 +325,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->esp_evil = have_esp_evil(creature_ptr);
     creature_ptr->esp_animal = have_esp_animal(creature_ptr);
     creature_ptr->esp_undead = have_esp_undead(creature_ptr);
-    have_esp_demon(creature_ptr);
+    creature_ptr->esp_demon = have_esp_demon(creature_ptr);
     have_esp_orc(creature_ptr);
     have_esp_troll(creature_ptr);
     have_esp_giant(creature_ptr);

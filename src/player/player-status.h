@@ -419,7 +419,7 @@ typedef struct player_type {
     bool telepathy; /* Telepathy */
     BIT_FLAGS esp_animal;
     BIT_FLAGS esp_undead;
-    bool esp_demon;
+    BIT_FLAGS esp_demon;
     bool esp_orc;
     bool esp_troll;
     bool esp_giant;
