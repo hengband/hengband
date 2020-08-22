@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "object/tval-types.h"
 #include "system/angband.h"
 #include "system/building-type-definition.h"
 
