@@ -6208,17 +6208,16 @@ D:それは鋭い刺を持った巨大なサソリだ。
 N:370:緑衣の修行僧
 E:Jade monk
 G:p:G
-I:120:54d12:30:46:10
-W:30:2:0:800:0:0
-B:KICK:SUPERHURT:5d2
-B:HIT:SUPERHURT:5d1
-B:KICK:SUPERHURT:5d5
-B:HIT:SUPERHURT:5d1
-F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2 |
-F:IM_FIRE | IM_COLD | IM_POIS | NO_FEAR | NO_CONF | NO_SLEEP | HUMAN |
-F:DROP_CORPSE | DROP_SKELETON
-S:1_IN_6 | 
-S:BO_ELEC
+I:115:44d12:30:46:10
+W:30:2:0:600:1800:1172
+B:KICK:SUPERHURT:4d2
+B:HIT:SUPERHURT:4d1
+B:KICK:SUPERHURT:4d5
+B:HIT:SUPERHURT:4d1
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2
+F:IM_FIRE | IM_COLD | IM_POIS | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_6 | BO_ELEC
 D:$A green-garbed monk, trained in martial arts.
 D:緑色の法衣を身にまとった、拳法に熟練した修行僧だ。
 
@@ -8551,17 +8550,16 @@ D:餌食を探し回っている、巨大で醜い人間とトロルの混血だ
 N:492:白衣の修行僧
 E:Ivory monk
 G:p:w
-I:120:42d13:25:51:7
-W:33:1:0:900:2000:915
-B:KICK:SUPERHURT:8d1
-B:HIT:SUPERHURT:8d1
-B:KICK:SUPERHURT:8d4
-B:HIT:SUPERHURT:8d1
-F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_FIRE | HUMAN |
-F:IM_POIS | NO_FEAR | NO_CONF | NO_SLEEP | DROP_CORPSE | HAS_LITE_1 |
-F:DROP_SKELETON | HAS_LITE_2 |
-S:1_IN_7 | 
-S:HEAL
+I:115:41d14:25:51:7
+W:33:1:0:700:2000:1173
+B:KICK:SUPERHURT:7d1
+B:HIT:SUPERHURT:7d1
+B:KICK:SUPERHURT:7d4
+B:HIT:SUPERHURT:7d1
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_FIRE | IM_POIS
+F:NO_FEAR | NO_CONF | NO_SLEEP | HAS_LITE_1 | HAS_LITE_2
+S:1_IN_7 | HEAL
 D:$A monk in white robes.  He is skilled in martial arts.
 D:純白の法衣を身にまとった、拳法に熟練した修行僧だ。
 
@@ -11022,19 +11020,19 @@ D:６つの頭と12本の脚を持つ。
 N:611:リッチの修行僧
 E:Monastic lich
 G:L:u
-I:120:12d100:30:80:30
-W:39:2:0:5000:0:0
-B:KICK:HURT:24d1
-B:HIT:HURT:24d1
+I:115:12d80:30:80:30
+W:39:2:0:2500:5000:1176
+B:KICK:HURT:20d1
+B:HIT:HURT:20d1
 B:CLAW:EXP_80:4d2
 B:CLAW:LOSE_DEX:4d2
-F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE
+F:UNDEAD | FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
-S:1_IN_3 | 
-S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
-S:DRAIN_MANA | BRAIN_SMASH | ANIM_DEAD 
+S:1_IN_4 | 
+S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3
+S:DRAIN_MANA | BRAIN_SMASH | ANIM_DEAD
 D:$A skeletal form wrapped in priestly robes.  Before its un-death, it 
 D:$was a monk in an evil order...
 D:僧侶の法衣に身を包んだ骸骨のような姿だ。アンデッドになる前は
@@ -17999,17 +17997,16 @@ D:（ロジャー・ゼラズニイ、小尾芙佐訳「わが名はコンラッ
 N:870:黒衣の修行僧
 E:Ebony monk
 G:p:D
-I:120:63d11:20:57:5
-W:36:3:0:1100:0:0
-B:KICK:SUPERHURT:7d1
-B:HIT:EXP_10:7d2
-B:KICK:SUPERHURT:7d4
-B:HIT:EXP_10:7d2
-F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_COLD | HAS_LITE_2 |
-F:IM_POIS | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP | HUMAN |
-F:DROP_CORPSE | DROP_SKELETON
-S:1_IN_9 | 
-S:BO_NETH
+I:115:57d11:20:57:5
+W:36:3:0:1000:2500:1175
+B:KICK:SUPERHURT:6d1
+B:HIT:EXP_10:6d2
+B:KICK:SUPERHURT:6d4
+B:HIT:EXP_10:6d2
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON | DROP_60 | DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | IM_COLD | HAS_LITE_2
+F:IM_POIS | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_9 | BO_NETH
 D:$A monk in dusky robes trained in the most lethal martial arts.
 D:漆黒の法衣を身にまとい、暗殺拳に熟練した修行僧だ。
 
@@ -18818,11 +18815,31 @@ D:$vigour.  He can prove a troublesome opponent.
 D:彼はけた外れの力と体の大きさが有名な、屈強なホビットだ。彼がやっかいな
 D:強敵であることは間違いがない。
 
-N:915:修験者
-E:Mystic
+N:915:初級修験者
+E:Elementary mystic
 G:p:o
-I:120:35d10:30:50:5
-W:33:3:0:500:10000:916
+I:115:35d10:30:50:5
+W:33:3:0:600:5000:916
+B:KICK:HURT:9d2
+B:KICK:HURT:9d2
+B:KICK:HURT:9d2
+B:KICK:HURT:9d2
+F:MALE | GOOD | DROP_CORPSE | DROP_SKELETON |
+F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
+F:ONLY_ITEM | DROP_1D2 | 
+F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
+F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_7 | HEAL | S_SPIDER
+V:75
+D:$He is constantly training for bears and tigers to sank with a single blow.
+D:彼はクマであれトラであれ一撃で沈めるべく、絶え間ない特訓を続けている。
+
+N:916:中級修験者
+E:Medium mystic
+G:p:o
+G:p:o
+I:120:35d15:30:50:5
+W:38:3:0:500:10000:917
 B:KICK:HURT:10d2
 B:KICK:HURT:10d2
 B:KICK:HURT:10d2
@@ -18832,21 +18849,20 @@ F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
 F:ONLY_ITEM | DROP_1D2 | 
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
 F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP
-S:1_IN_6 | 
-S:HEAL | 
-S:S_SPIDER
-D:$An adept at unarmed combat, the mystic strikes with stunning power.  He 
-D:$can summon help from nature and is able to focus his power to ease any 
-D:$pain.
+S:1_IN_6 | HEAL | S_SPIDER
+V:75
+D:$An adept at unarmed combat, the mystic strikes with stunning power.
+D:$  He can summon help from nature and is able to focus his power
+D:$ to ease any pain.
 D:素手での戦いに習熟した修験者は、一撃で敵を気絶させることができる。
 D:彼にとって自然は味方であり、自然界の生物を召喚することもできる。
 D:またその鍛えられた精神力によって容易に自分の傷を治癒する。
 
-N:916:上級修験者
-E:Master mystic
+N:917:上級修験者
+E:High mystic
 G:p:o
-I:130:11d100:30:60:5
-W:50:3:0:6000:50000:917
+I:125:11d100:30:60:5
+W:50:3:0:6000:40000:1177
 B:KICK:HURT:15d2
 B:KICK:HURT:15d2
 B:HIT:POISON:20d1
@@ -18857,40 +18873,16 @@ F:ONLY_ITEM | DROP_1D2 | DROP_2D2 |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP
-S:1_IN_3 | 
-S:HEAL | 
-S:S_SPIDER
+S:1_IN_4 | HEAL | S_SPIDER
 V:75
-D:$A lord of all that is natural, skilled in the mystic ways.  He is a master 
-D:$of martial arts and is at one with nature, able to summon help from the 
-D:$wild if need be.
-D:彼は自然の中で修行をする修験道を極めた者である。彼は肉弾戦の熟練者で
-D:あり、自然の理を深く熟知している者でもある。そのため必要があれば、野生の
-D:生物を召喚することもできる。
-
-N:917:修験道免許皆伝者
-E:Grand master mystic
-G:p:o
-I:130:22d100:30:80:5
-W:59:3:0:15000:0:0
-B:KICK:HURT:20d2
-B:KICK:HURT:20d2
-B:HIT:POISON:20d1
-B:HIT:PARALYZE:20d1
-F:MALE | GOOD | DROP_CORPSE | DROP_SKELETON |
-F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
-F:ONLY_ITEM | DROP_4D2 | 
-F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
-F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
-S:1_IN_2 | 
-S:HEAL | MIND_BLAST | 
-S:S_SPIDER | S_HOUND
-V:75
-D:$He is one of the few true masters of the art, being extremely skillful in 
-D:$all forms of unarmed combat and controlling the world's natural creatures 
-D:$with disdainful ease.
-D:彼は修験道を真に極めた数少ない者であり、全ての種類の肉弾戦をマスター
-D:している。そしてこの世界の自然界の生物に顎で命令を与えることができる。
+D:$He is being at the culmination of martial arts,
+D:$ but he never gives up on himself.
+D:$  He is still not fully manipulating the creatures of nature
+D:$ and suffers from that.
+D:$  However, he does not despair and continues steadily step by step.
+D:彼は修験道を極めつつあるが、決して自分に驕ることはない。
+D:まだまだ彼は自然界の生物を完全には操れておらず、そのことを苦悩している。
+D:しかし彼は絶望せず、一歩ずつ着実に進み続けている。
 
 N:918:チョウチンアンコウ
 E:Devilfish
@@ -20536,19 +20528,15 @@ D:なんてこった！そこらじゅうにいるぞ！
 N:1008:悪魔崇拝者
 E:Demonologist
 G:p:R
-I:120:28d10:20:50:10
-W:36:2:0:700:0:0
-B:HIT:HURT:2d6
-B:HIT:HURT:2d6
+I:115:28d10:20:50:10
+W:36:2:0:700:2250:1179
 B:HIT:HURT:2d5
-F:MALE | DROP_CORPSE | DROP_SKELETON | HAS_LITE_2 |
-F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
-F:ONLY_ITEM | DROP_1D2 | 
-F:SMART | OPEN_DOOR | BASH_DOOR | 
-F:EVIL
-S:1_IN_2 | 
-S:TPORT | HOLD | 
-S:S_DEMON
+B:HIT:HURT:2d5
+B:HIT:HURT:2d4
+F:HUMAN | MALE | EVIL | DROP_CORPSE | DROP_SKELETON | HAS_LITE_2
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_1D2
+F:SMART | OPEN_DOOR | BASH_DOOR
+S:1_IN_4 | TPORT | HOLD | S_DEMON
 D:$A figure twisted by evil standing in robes of deepest crimson.
 D:深紅のローブを身にまとってたたずむ、邪悪に歪んだ人間だ。
 
@@ -21243,17 +21231,16 @@ D:背が低くて浅黒い肌をした東夷で、黒い服に身を包んでい
 N:1047:黄衣の修行僧
 E:Topaz monk
 G:p:y
-I:120:59d11:30:46:10
-W:35:2:0:800:0:0
-B:KICK:SUPERHURT:9d1
-B:HIT:SUPERHURT:9d1
-B:KICK:SUPERHURT:9d4
-B:HIT:SUPERHURT:9d1
+I:115:59d11:30:46:10
+W:35:2:0:800:2200:1175
+B:KICK:SUPERHURT:8d1
+B:HIT:SUPERHURT:8d1
+B:KICK:SUPERHURT:8d4
+B:HIT:SUPERHURT:8d1
 F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2 |
 F:IM_FIRE | IM_COLD | IM_POIS | IM_ACID | NO_FEAR | NO_CONF | NO_SLEEP | 
 F:HUMAN | DROP_CORPSE | DROP_SKELETON
-S:1_IN_9 | 
-S:HASTE
+S:1_IN_9 | HASTE
 D:$A yellow-garbed monk, trained in martial arts.
 D:黄色の法衣を身にまとった、拳法に熟練した修行僧だ。
 
