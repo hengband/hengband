@@ -417,7 +417,7 @@ typedef struct player_type {
     bool hold_exp; /* Resist exp draining */
 
     bool telepathy; /* Telepathy */
-    bool esp_animal;
+    BIT_FLAGS esp_animal;
     bool esp_undead;
     bool esp_demon;
     bool esp_orc;
