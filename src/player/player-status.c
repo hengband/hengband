@@ -308,7 +308,7 @@ void calc_bonuses(player_type *creature_ptr)
     bool old_esp_giant = creature_ptr->esp_giant;
     bool old_esp_dragon = creature_ptr->esp_dragon;
     bool old_esp_human = creature_ptr->esp_human;
-    bool old_esp_evil = creature_ptr->esp_evil;
+    BIT_FLAGS old_esp_evil = creature_ptr->esp_evil;
     bool old_esp_good = creature_ptr->esp_good;
     bool old_esp_nonliving = creature_ptr->esp_nonliving;
     bool old_esp_unique = creature_ptr->esp_unique;
@@ -322,7 +322,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->pass_wall = have_pass_wall(creature_ptr);
     creature_ptr->kill_wall = have_kill_wall(creature_ptr);
     creature_ptr->xtra_might = have_xtra_might(creature_ptr);
-    have_esp_evil(creature_ptr);
+    creature_ptr->esp_evil = have_esp_evil(creature_ptr);
     have_esp_animal(creature_ptr);
     have_esp_undead(creature_ptr);
     have_esp_demon(creature_ptr);
