@@ -11032,7 +11032,7 @@ F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
 S:1_IN_4 | 
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3
-S:DRAIN_MANA | BRAIN_SMASH | ANIM_DEAD
+S:DRAIN_MANA | MIND_BLAST | ANIM_DEAD
 D:$A skeletal form wrapped in priestly robes.  Before its un-death, it 
 D:$was a monk in an evil order...
 D:僧侶の法衣に身を包んだ骸骨のような姿だ。アンデッドになる前は
@@ -22844,7 +22844,7 @@ D:それは罪人を処罰すると同時に、下級の鬼達を統率してい
 N:1134:冥界の裁判長『閻魔大王』
 E:Yama, the Judge of the afterlife
 G:O:v
-I:120:50d60:30:100:10
+I:120:55d60:30:100:10
 W:57:2:0:24000:0:0
 B:SLASH:HURT:10d5
 B:SLASH:HURT:10d5
