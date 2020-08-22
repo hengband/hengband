@@ -23490,3 +23490,146 @@ D:$Its outrageous power will destroy a star and eventually become a new myth.
 D:ヴァジュラエネルギーのおぞましい研究の果てに産みだされた双子の姉妹の融合体だ。
 D:その無法図な力は一個の星を滅ぼし、やがて新たな神話の存在となるに足るものだろう。
 
+N:1172:緑衣の高位修行僧
+E:High jade monk
+G:p:g
+I:120:54d12:30:46:10
+W:35:2:0:800:0:0
+B:KICK:SUPERHURT:5d2
+B:HIT:SUPERHURT:5d1
+B:KICK:SUPERHURT:5d5
+B:HIT:SUPERHURT:5d1
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2
+F:IM_FIRE | IM_COLD | IM_POIS | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_6 | BO_ELEC
+D:$A high-rank green-garbed monk, trained in martial arts.
+D:緑色の法衣を身にまとった、拳法に熟練した高位の修行僧だ。
+
+N:1173:白衣の高位修行僧
+E:High ivory monk
+G:p:s
+I:120:47d17:25:51:7
+W:38:1:0:900:0:0
+B:KICK:SUPERHURT:8d1
+B:HIT:SUPERHURT:8d1
+B:KICK:SUPERHURT:8d4
+B:HIT:SUPERHURT:8d1
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_FIRE | IM_POIS
+F:NO_FEAR | NO_CONF | NO_SLEEP | HAS_LITE_1 | HAS_LITE_2
+S:1_IN_7 | HEAL
+D:$A high-rank monk in white robes.  He is skilled in martial arts.
+D:純白の法衣を身にまとった、拳法に熟練した高位の修行僧だ。
+
+N:1174:黄衣の高位修行僧
+E:High topaz monk
+G:p:o
+I:120:55d15:30:46:10
+W:40:2:0:800:0:0
+B:KICK:SUPERHURT:9d1
+B:HIT:SUPERHURT:9d1
+B:KICK:SUPERHURT:9d4
+B:HIT:SUPERHURT:9d1
+F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2 |
+F:IM_FIRE | IM_COLD | IM_POIS | IM_ACID | NO_FEAR | NO_CONF | NO_SLEEP | 
+F:HUMAN | DROP_CORPSE | DROP_SKELETON
+S:1_IN_9 | HASTE
+D:$A high-rank yellow-garbed monk, trained in martial arts.
+D:黄色の法衣を身にまとった、拳法に熟練した高位の修行僧だ。
+
+N:1175:黒衣の高位修行僧
+E:High ebony monk
+G:p:s
+I:120:63d11:20:57:5
+W:41:3:0:1100:0:0
+B:KICK:SUPERHURT:7d1
+B:HIT:EXP_10:7d2
+B:KICK:SUPERHURT:7d4
+B:HIT:EXP_10:7d2
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON | DROP_60 | DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | IM_COLD | HAS_LITE_2
+F:IM_POIS | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_8 | BO_NETH
+D:$A high-rank monk in dusky robes trained in the most lethal martial arts.
+D:漆黒の法衣を身にまとい、暗殺拳に熟練した高位の修行僧だ。
+
+N:1176:リッチの上級修行僧
+E:High monastic lich
+G:L:U
+I:120:12d100:30:80:30
+W:44:2:0:5000:0:0
+B:KICK:HURT:24d1
+B:HIT:HURT:24d1
+B:CLAW:EXP_80:4d2
+B:CLAW:LOSE_DEX:4d2
+F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | 
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
+S:1_IN_3 | 
+S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
+S:DRAIN_MANA | BRAIN_SMASH | ANIM_DEAD 
+D:$A skeletal form wrapped in priestly gold robes.
+D:$  There is a dignity that feels even awe.
+D:金色の僧侶の法衣に身を包んだ骸骨のような姿だ。
+D:そこには畏怖すら感じる気品が漂っている。
+
+N:1177:修験道師範代
+E:Acting master mystic
+G:p:B
+I:125:22d90:30:80:5
+W:59:3:0:15000:60000:1178
+B:KICK:HURT:18d2
+B:KICK:HURT:18d2
+B:HIT:POISON:18d1
+B:HIT:PARALYZE:18d1
+F:HUMAN | MALE | GOOD | DROP_CORPSE | DROP_SKELETON
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_4D2
+F:INVISIBLE | OPEN_DOOR | BASH_DOOR
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_3 | HEAL | MIND_BLAST | S_SPIDER | S_HOUND
+V:75
+D:$He is a martial arts' examiner who has trained his body and spirit
+D:$ so that he can teach the next generation.
+D:$His fist can catch the rock's deadline and crush it with a single blow.
+D:彼は後進を指導できるほどに肉体も精神も鍛え上げた修験者だ。
+D:彼の拳は岩の死線を捉えて一撃で砕くことができる。
+
+N:1178:修験道免許皆伝者
+E:Grand master mystic
+G:p:v
+I:130:22d100:30:80:5
+W:64:3:0:20000:0:0
+B:KICK:HURT:20d2
+B:KICK:HURT:20d2
+B:HIT:POISON:20d1
+B:HIT:PARALYZE:20d1
+F:HUMAN | MALE | GOOD | DROP_CORPSE | DROP_SKELETON
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_GOOD DROP_4D2
+F:INVISIBLE | OPEN_DOOR | BASH_DOOR
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_2 | HEAL | MIND_BLAST | S_SPIDER | S_HOUND
+V:75
+D:$He is one of the few true masters of the art, being extremely skillful in 
+D:$all forms of unarmed combat and controlling the world's natural creatures 
+D:$with disdainful ease.
+D:彼は修験道を真に極めた数少ない者であり、全ての種類の肉弾戦をマスター
+D:している。そしてこの世界の自然界の生物に顎で命令を与えることができる。
+
+N:1179:悪魔崇拝司祭
+E:High demonologist
+G:p:r
+I:120:28d10:20:50:10
+W:41:2:0:700:0:0
+B:HIT:HURT:2d6
+B:HIT:HURT:2d6
+B:HIT:HURT:2d5
+F:HUMAN | MALE | EVIL | DROP_CORPSE | DROP_SKELETON | HAS_LITE_2
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_1D2
+F:SMART | OPEN_DOOR | BASH_DOOR
+S:1_IN_2 | TPORT | HOLD | S_DEMON
+D:$This man will soon be absorbed in the devil's world.
+D:$To that extent he continues to devote his strong prayers to the devil.
+D:この男は間もなく悪魔に取り込まれるだろう。
+D:それほどまでに彼は強い祈りを悪魔に捧げ続けている。
