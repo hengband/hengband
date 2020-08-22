@@ -321,7 +321,7 @@ void calc_bonuses(player_type *creature_ptr)
 
     creature_ptr->pass_wall = have_pass_wall(creature_ptr);
     creature_ptr->kill_wall = have_kill_wall(creature_ptr);
-    have_xtra_might(creature_ptr);
+    creature_ptr->xtra_might = have_xtra_might(creature_ptr);
     have_esp_evil(creature_ptr);
     have_esp_animal(creature_ptr);
     have_esp_undead(creature_ptr);

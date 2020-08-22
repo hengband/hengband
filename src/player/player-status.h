@@ -432,7 +432,7 @@ typedef struct player_type {
 
     bool slow_digest; /* Slower digestion */
     bool bless_blade; /* Blessed blade */
-    bool xtra_might; /* Extra might bow */
+    BIT_FLAGS xtra_might; /* Extra might bow */
     bool impact[2]; /* Earthquake blows */
     bool pass_wall; /* Permanent wraithform */
     bool kill_wall;
