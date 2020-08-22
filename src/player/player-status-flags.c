@@ -209,12 +209,11 @@ BIT_FLAGS have_esp_troll(player_type *creature_ptr)
 	return result;
 }
 
-void have_esp_giant(player_type *creature_ptr)
+BIT_FLAGS have_esp_giant(player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-    creature_ptr->esp_giant = FALSE;
+    BIT_FLAGS result = 0L;
 
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -224,8 +223,10 @@ void have_esp_giant(player_type *creature_ptr)
         object_flags(creature_ptr, o_ptr, flgs);
 
         if (have_flag(flgs, TR_ESP_GIANT))
-            creature_ptr->esp_giant = TRUE;
+            result |= 0x01 << (i - INVEN_RARM);
     }
+
+	return result;
 }
 
 void have_esp_dragon(player_type *creature_ptr)

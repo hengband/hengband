@@ -28,7 +28,7 @@ BIT_FLAGS have_esp_undead(player_type *creature_ptr);
 BIT_FLAGS have_esp_demon(player_type *creature_ptr);
 BIT_FLAGS have_esp_orc(player_type *creature_ptr);
 BIT_FLAGS have_esp_troll(player_type *creature_ptr);
-void have_esp_giant(player_type *creature_ptr);
+BIT_FLAGS have_esp_giant(player_type *creature_ptr);
 void have_esp_dragon(player_type *creature_ptr);
 void have_esp_human(player_type *creature_ptr);
 void have_esp_good(player_type *creature_ptr);
