@@ -8,6 +8,7 @@
 #include "game-option/text-display-options.h"
 #include "lore/lore-calculator.h"
 #include "lore/monster-lore.h"
+#include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"

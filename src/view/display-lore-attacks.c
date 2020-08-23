@@ -1,6 +1,7 @@
 ﻿#include "view/display-lore-attacks.h"
 #include "lore/combat-types-setter.h"
 #include "lore/lore-calculator.h"
+#include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-flags1.h"
 #ifdef JP
 #include "locale/japanese.h"
