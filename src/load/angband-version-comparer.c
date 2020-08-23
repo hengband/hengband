@@ -2,7 +2,7 @@
 #include "world/world.h"
 
 /*!
- * @brief 変愚蛮怒のバージョン比較処理 / This function determines if the version of the savefile currently being read is older than version
+ * @brief 馬鹿馬鹿蛮怒のバージョン比較処理 / This function determines if the version of the savefile currently being read is older than version
  * "major.minor.patch.extra".
  * @param major メジャーバージョン値
  * @param minor マイナーバージョン値

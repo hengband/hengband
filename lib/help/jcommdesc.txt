@@ -584,7 +584,7 @@
 ある jpref.hlp を見て下さい。
 
 オプションの設定 (=)
-     オプション設定画面を表示して、そこで変愚蛮怒の動作を変更すること
+     オプション設定画面を表示して、そこで馬鹿馬鹿蛮怒の動作を変更すること
      ができます。「詐欺オプション」の扱いには注意して下さい。一度でも
      このオプションを有効にすると、そのことがセーブファイルに記録され
      てしまって、ハイスコアリストに載ることが不可能になってしまいま
@@ -707,7 +707,7 @@ Updated    : (2.7.6) by Russ Allbery (rra@cs.stanford.edu)
 Updated    : (2.7.9) by Ben Harrison (benh@phial.com)
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.7.0
+Updated    : Bakabakaband 1.7.0
 
 
 ***** Begin Hyperlinks

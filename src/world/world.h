@@ -31,14 +31,14 @@ typedef struct world_type {
 	/*
 	 * Savefile version
 	 */
-	byte h_ver_major; /* Savefile version for Hengband 1.1.1 and later */
+	byte h_ver_major; /* Savefile version for Bakabakaband 1.1.1 and later */
 	byte h_ver_minor;
 	byte h_ver_patch;
 	byte h_ver_extra;
 
 	byte sf_extra;		/* Savefile's encoding key */
 
-	byte z_major;           /* Savefile version for Hengband */
+	byte z_major;           /* Savefile version for Bakabakaband */
 	byte z_minor;
 	byte z_patch;
 

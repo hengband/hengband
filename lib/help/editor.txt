@@ -85,7 +85,7 @@ Selected text will be displayed in yellow.  You can press ^X to cut
 the selected text, or press ^C to copy the selected text to the
 clipboard.  Contents of the clipboard will be pasted on pressing ^V.
 
-Note that it's possible that Hengband cannot recognize shift+arrow
+Note that it's possible that Bakabakaband cannot recognize shift+arrow
 keys on a minor environment.  In that case, you can press ^G and then
 move cursor to select text.
 
@@ -111,10 +111,10 @@ move cursor to select text.
 ***** <AutopickFormat>
 [[[[G|--- Format of Auto-picker/destroyer ---
 
-Hengband can automatically pick up or destroy specified objects when
+Bakabakaband can automatically pick up or destroy specified objects when
 you write objects name in the file "pickpref.prf" or
 "pickpref-<<playername>>.prf" in the user directory, this will be
-~/.angband/Hengband/ for UNIX, or Hengband\lib\user\ for other
+~/.angband/Bakabakaband/ for UNIX, or Bakabakaband\lib\user\ for other
 operating systems.
 
 The game will read the file "pickpref-<<playername>>.prf" first and

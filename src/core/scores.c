@@ -213,7 +213,7 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 		term_clear();
 
 		/* Title */
-		put_str(_("                変愚蛮怒: 勇者の殿堂", "                Hengband Hall of Fame"), 0, 0);
+		put_str(_("                馬鹿馬鹿蛮怒: 勇者の殿堂", "                Bakabakaband Hall of Fame"), 0, 0);
 
 		/* Indicate non-top scores */
 		if (k > 0)

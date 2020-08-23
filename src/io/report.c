@@ -2,7 +2,7 @@
  * @file report.c
  * @brief スコアサーバ転送機能の実装
  * @date 2014/07/14
- * @author Hengband Team
+ * @author Bakabakaband Team
  */
 
 #include "io/report.h"
@@ -57,13 +57,13 @@ concptr screen_dump = NULL;
 #define HTTP_PROXY ""                   /*!< デフォルトのプロキシURL / Default proxy url */
 #define HTTP_PROXY_PORT 0               /*!< デフォルトのプロキシポート / Default proxy port */
 #define HTTP_TIMEOUT    20              /*!< デフォルトのタイムアウト時間(秒) / Timeout length (second) */
-#define SCORE_SERVER "hengband.osdn.jp" /*!< デフォルトのスコアサーバURL / Default score server url */
+#define SCORE_SERVER "Bakabakaband.osdn.jp" /*!< デフォルトのスコアサーバURL / Default score server url */
 #define SCORE_PORT 80                   /*!< デフォルトのスコアサーバポート / Default score server port */
 
 #ifdef JP
-#define SCORE_PATH "http://hengband.osdn.jp/score/register_score.php" /*!< スコア開示URL */
+#define SCORE_PATH "http://Bakabakaband.osdn.jp/score/register_score.php" /*!< スコア開示URL */
 #else
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
+#define SCORE_PATH "http://moon.kmc.gr.jp/Bakabakaband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
 
  /*
@@ -181,7 +181,7 @@ static bool http_post(int sd, concptr url, BUF *buf)
 
 	output = buf_new();
 	buf_sprintf(output, "POST %s HTTP/1.0\r\n", url);
-	buf_sprintf(output, "User-Agent: Hengband %d.%d.%d\r\n",
+	buf_sprintf(output, "User-Agent: Bakabakaband %d.%d.%d\r\n",
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	buf_sprintf(output, "Content-Length: %d\r\n", buf->size);
@@ -397,10 +397,10 @@ errr report_score(player_type *creature_ptr, void(*update_playtime)(void), displ
 
 	buf_sprintf(score, "name: %s\n", creature_ptr->name);
 #ifdef JP
-	buf_sprintf(score, "version: 変愚蛮怒 %d.%d.%d\n",
+	buf_sprintf(score, "version: 馬鹿馬鹿蛮怒 %d.%d.%d\n",
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #else
-	buf_sprintf(score, "version: Hengband %d.%d.%d\n",
+	buf_sprintf(score, "version: Bakabakaband %d.%d.%d\n",
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #endif
 	buf_sprintf(score, "score: %d\n", calc_score(creature_ptr));

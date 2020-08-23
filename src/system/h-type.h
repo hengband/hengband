@@ -5,7 +5,7 @@
  * @brief ゲーム中に用いる変数型定義 / Basic "types".
  * @date 2017/12/03
  * @author
- * 不明(変愚蛮怒スタッフ？)
+ * 不明(馬鹿馬鹿蛮怒スタッフ？)
  * @details
  * <pre>
  * Note the attempt to make all basic types have 4 letters.

@@ -4,7 +4,7 @@
  * The most basic "include" file. This file simply includes other low level header files.
  * @date 2014/08/15
  * @author
- * 不明(変愚蛮怒スタッフ？)
+ * 不明(馬鹿馬鹿蛮怒スタッフ？)
  * @details
  * <pre>
  * Choose the hardware, operating system, and compiler.

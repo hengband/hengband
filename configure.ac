@@ -1,12 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(hengband, 2.1.5)
+AC_INIT(Bakabakaband, 2.1.5)
 
 AC_CONFIG_HEADERS(src/autoconf.h)
 AC_CONFIG_SRCDIR(src/main.c)
 AM_INIT_AUTOMAKE
 
 AC_ARG_WITH(setgid,
-[  --with-setgid=NAME      install hengband as group NAME],
+[  --with-setgid=NAME      install Bakabakaband as group NAME],
 [case "${withval}" in
   no) GAMEGROUP="";;
   yes) AC_MSG_ERROR(missing argument for --with-setgid);;
@@ -27,10 +27,10 @@ fi
 
 dnl overwrite the path with an user-specified value
 AC_ARG_WITH(libpath,
-[  --with-libpath=path     specify the path to the Hengband lib folder],
+[  --with-libpath=path     specify the path to the Bakabakaband lib folder],
 [game_datadir="$withval"])
 
-AC_DEFINE_UNQUOTED(DEFAULT_PATH, "$game_datadir", [Path to the Hengband lib folder])
+AC_DEFINE_UNQUOTED(DEFAULT_PATH, "$game_datadir", [Path to the Bakabakaband lib folder])
 DEFAULT_PATH="$game_datadir"
 AC_SUBST(DEFAULT_PATH)
 

@@ -1,13 +1,13 @@
-=== Hengband Magic System ===
+=== Bakabakaband Magic System ===
 
 
-The magic system of Hengband is a modified version of Zangband's, with many
-new features added.  There are two kind of magic in Hengband:  Spellbook
+The magic system of Bakabakaband is a modified version of Zangband's, with many
+new features added.  There are two kind of magic in Bakabakaband:  Spellbook
 magic, similar to the normal magic system of Zangband, and class-specific
 magic, similar to Zangband's mindcrafting.
 
 You might not be able to understand the function of every magic spell
-by reading its name or casting it a few times.  In Hengband, spells
+by reading its name or casting it a few times.  In Bakabakaband, spells
 have descriptions.  Use the browse command ("b"/"P") and choose a
 spell from the list to see its description.
 
@@ -21,7 +21,7 @@ intelligence, wisdom, or charisma.  For spellcasting, you must always
 carry spellbooks which include spells which you want to cast.  You can
 choose either one or two realms, depending on class.  
 
-In Hengband, you cannot be as proficient in the second realm as in
+In Bakabakaband, you cannot be as proficient in the second realm as in
 the first realm.  But you can change the second realm to another realm
 of magic even in the middle of the game.  For that, you must choose a
 spellbook of the new realm in the study command ('G').  But beware!
@@ -201,7 +201,7 @@ See raceclas.txt#TheClasses [a] for more details.
 ***** <Craft>
 --- Craft ---
 
-     Craft magic is an original realm in Hengband.  It provides spells
+     Craft magic is an original realm in Bakabakaband.  It provides spells
      which reinforce the casters physical abilities, including
      offensive power, defensive power, speed, regeneration,
      infravision, etc..  The 'Regeneration' and 'Walk through Wall'
@@ -213,7 +213,7 @@ See raceclas.txt#TheClasses [a] for more details.
 ***** <Daemon>
 --- Daemon ---
 
-     Daemon magic is an original realm in Hengband.  It offers
+     Daemon magic is an original realm in Bakabakaband.  It offers
      powerful attack spells with the properties of Fire or Nether.
      There are a few detection spells which provide a map of the
      nearby area or temporary telepathy.  Daemon magic also provides
@@ -362,7 +362,7 @@ inscriptions).
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.7.2
+Updated    : Bakabakaband 1.7.2
 
 
 ***** [a] raceclas.txt#TheClasses

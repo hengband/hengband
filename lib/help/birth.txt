@@ -1,7 +1,7 @@
 === Creating a Character ===
 
-Hengband is a role playing game, in which you, the player, control a
-character in the world of Hengband.  Perhaps the most important thing
+Bakabakaband is a role playing game, in which you, the player, control a
+character in the world of Bakabakaband.  Perhaps the most important thing
 you control is the birth of your character, in which you choose or
 allow to be chosen various attributes that will affect the future life
 of your character.
@@ -159,7 +159,7 @@ quantum of this modification can be found in the stat bonus table (see
 raceclas.txt#StatBonusTable [h]).
 
 Once a character that matches or exceeds your expectations has been
-rolled, Hengband stops to ask you whether you accept or not.  If you
+rolled, Bakabakaband stops to ask you whether you accept or not.  If you
 accept the rolled character (by pressing Enter), you will be asked for
 its name.  If not, you may press 'r' to resume rolling and searching
 for the next match or, if this is not your first match, 'p' to return
@@ -364,7 +364,7 @@ Infravision
      player to see walls and objects.  Infravision will allow a
      character to see any warm-blooded creatures up to a certain
      distance.  This ability works equally well with or with out a
-     light source.  The majority of Hengband's creatures are
+     light source.  The majority of Bakabakaband's creatures are
      cold-blooded, and will not be detected unless lit up by a light
      source.  Most non-human races have innate infravision ability.
      Humans can gain infravision only if it is magically enhanced.
@@ -373,7 +373,7 @@ Infravision
 ***** <Proficiency>
 === Proficiency Levels ===
 
-In Hengband, characters possess different proficiency levels or
+In Bakabakaband, characters possess different proficiency levels or
 experiences for each weapon type, spells, and a few other skills.  The
 starting proficiency levels and the maximum proficiency levels of a
 character are based upon class.  Each proficiency level may increase
@@ -407,7 +407,7 @@ monster.txt#Pets [i])
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.5.2
+Updated    : Bakabakaband 1.5.2
 
 ***** [a] raceclas.hlp
 ***** [b] magic.hlp

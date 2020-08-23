@@ -2,7 +2,7 @@
 
 /*
  * Feature flags - should be used instead of feature indexes unless generating.
- * Originally from UnAngband, and modified into TR-like style in Hengband
+ * Originally from UnAngband, and modified into TR-like style in Bakabakaband
  */
 
 typedef enum feature_flag_type {

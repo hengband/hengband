@@ -1,10 +1,10 @@
-# autopick.txt 変愚蛮怒仕様
+# autopick.txt 馬鹿馬鹿蛮怒仕様
 #
 # このファイルの一番最後は実際に使用できる設定ファイルの具体例になって
 # います。このファイルを 'picktype.prf' という名前で
-# lib\user\picktype.prf か ~/.angband/Hengband/picktype.prf としてコピー
+# lib\user\picktype.prf か ~/.angband/Bakabakaband/picktype.prf としてコピー
 # すれば、そのまま自動拾いファイルとして使用することができます。
-# (Unix の場合は ~/.angband/Hengband/ のみが使用可能。Windows等、Unix以
+# (Unix の場合は ~/.angband/Bakabakaband/ のみが使用可能。Windows等、Unix以
 # 外の場合は、lib\user\ のみが使用可能です。)
 #
 #    ●自動拾いの使い方
@@ -29,8 +29,8 @@
 #       'n' : 次にマッチする行を検索。(条件分岐を考慮しません)
 #       'N' : 前にマッチする行を検索。(条件分岐を考慮しません)
 #
-#      設定は全て変愚蛮怒ディレクトリの中の lib\user\ の下か 
-#      ~/.angband/Hengband/ の下に「picktype-(名前).prf」 という名前の
+#      設定は全て馬鹿馬鹿蛮怒ディレクトリの中の lib\user\ の下か 
+#      ~/.angband/Bakabakaband/ の下に「picktype-(名前).prf」 という名前の
 #      ファイルで記録されるので、これをメモ帳等の適当なエディタで編集
 #      して、'$'コマンドで読み込み直すこともできます。このファイルはプ
 #      レイヤーキャラクターの名前が「(名前)」であるときに使用されます
@@ -205,7 +205,7 @@
 #    
 #      ・ファイルの挿入の書式
 #        %:ファイル名
-#          lib\user\ファイル名 か ~/.angband/Hengband/ファイル名 を自
+#          lib\user\ファイル名 か ~/.angband/Bakabakaband/ファイル名 を自
 #          動拾いの登録ファイルとして読み込みます。
 #    
 #      ・使用可能な演算子
@@ -263,7 +263,7 @@
 #
 #    これ以下は具体的に使用可能な設定例です。
 #    このファイルをpicktype.prfという名前でlib\user\ か 
-#    ~/.angband/Hengband/ にコピーすれば自動拾いファイルとして
+#    ~/.angband/Bakabakaband/ にコピーすれば自動拾いファイルとして
 #    使用することができます。
 #
 #------------------------------------------------------------------

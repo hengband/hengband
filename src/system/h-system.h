@@ -1,10 +1,10 @@
 ﻿/*!
  * @file h-system.h
- * @brief 変愚蛮怒用システムヘッダーファイル /
+ * @brief 馬鹿馬鹿蛮怒用システムヘッダーファイル /
  * The most basic "include" file. This file simply includes other low level header files.
  * @date 2014/08/16
  * @author
- * 不明(変愚蛮怒スタッフ？)
+ * 不明(馬鹿馬鹿蛮怒スタッフ？)
  * @details
  * Include the basic "system" files.
  * Make sure all "system" constants/macros are defined.

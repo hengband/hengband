@@ -33,8 +33,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C00503B6-18FF-42F1-BAC0-6C94EDE62CB2}</ProjectGuid>
-    <RootNamespace>Hengband</RootNamespace>
+    <RootNamespace>Bakabakaband</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Bakabakaband</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

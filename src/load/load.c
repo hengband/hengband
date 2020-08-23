@@ -45,7 +45,7 @@
 #include "world/world.h"
 
 /*!
- * @brief 変愚蛮怒 v2.1.3で追加された街とクエストについて読み込む
+ * @brief 馬鹿馬鹿蛮怒 v2.1.3で追加された街とクエストについて読み込む
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  */

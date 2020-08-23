@@ -3,7 +3,7 @@
  * @file main-win.c
  * @brief Windows版固有実装(メインエントリポイント含む)
  * @date 2018/03/16
- * @author Hengband Team
+ * @author Bakabakaband Team
  * @details
  *
  * <h3>概要</h3>
@@ -141,7 +141,7 @@
 #define GRAPHICS_NONE 0
 #define GRAPHICS_ORIGINAL 1
 #define GRAPHICS_ADAM_BOLT 2
-#define GRAPHICS_HENGBAND 3
+#define GRAPHICS_Bakabakaband 3
 
 /*
  * Menu constants -- see "ANGBAND.RC"
@@ -1120,7 +1120,7 @@ static bool init_graphics(void)
         name = "16X16.BMP";
 
         ANGBAND_GRAF = "new";
-    } else if (arg_graphics == GRAPHICS_HENGBAND) {
+    } else if (arg_graphics == GRAPHICS_Bakabakaband) {
         wid = 32;
         hgt = 32;
         twid = 32;
@@ -1162,7 +1162,7 @@ static bool init_graphics(void)
         }
     }
 
-    if (arg_graphics == GRAPHICS_HENGBAND) {
+    if (arg_graphics == GRAPHICS_Bakabakaband) {
         path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
         if (!ReadDIB(data[0].w, buf, &infMask)) {
             plog_fmt("Cannot read bitmap file '%s'", buf);
@@ -1868,7 +1868,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     HDC hdcSrc = CreateCompatibleDC(hdc);
     HBITMAP hbmSrcOld = SelectObject(hdcSrc, infGraph.hBitmap);
 
-    if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND) {
+    if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_Bakabakaband) {
         hdcMask = CreateCompatibleDC(hdc);
         SelectObject(hdcMask, infMask.hBitmap);
     }
@@ -1881,7 +1881,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
         TERM_LEN x1 = col * w1;
         TERM_LEN y1 = row * h1;
 
-        if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND) {
+        if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_Bakabakaband) {
             TERM_LEN x3 = (tcp[i] & 0x7F) * w1;
             TERM_LEN y3 = (tap[i] & 0x7F) * h1;
             tw2 = tw2 * w1 / tw1;
@@ -1915,7 +1915,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 
     SelectObject(hdcSrc, hbmSrcOld);
     DeleteDC(hdcSrc);
-    if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND) {
+    if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_Bakabakaband) {
         SelectObject(hdcMask, hbmSrcOld);
         DeleteDC(hdcMask);
     }
@@ -1997,7 +1997,7 @@ static void init_windows(void)
     td = &data[0];
     WIPE(td, term_data);
 #ifdef JP
-    td->s = "変愚蛮怒";
+    td->s = "馬鹿馬鹿蛮怒";
 #else
     td->s = angband_term_name[0];
 #endif
@@ -2215,7 +2215,7 @@ static void setup_menus(void)
     CheckMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, (arg_graphics == GRAPHICS_NONE ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, (arg_graphics == GRAPHICS_ORIGINAL ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, (arg_graphics == GRAPHICS_ADAM_BOLT ? MF_CHECKED : MF_UNCHECKED));
-    CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == GRAPHICS_HENGBAND ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == GRAPHICS_Bakabakaband ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BIGTILE, (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_SOUND, (arg_sound ? MF_CHECKED : MF_UNCHECKED));
@@ -2583,8 +2583,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             break;
         }
 
-        if (arg_graphics != GRAPHICS_HENGBAND) {
-            arg_graphics = GRAPHICS_HENGBAND;
+        if (arg_graphics != GRAPHICS_Bakabakaband) {
+            arg_graphics = GRAPHICS_Bakabakaband;
             term_xtra_win_react(player_ptr);
             term_key_push(KTRL('R'));
         }
@@ -3463,7 +3463,7 @@ static void init_stuff(void)
 
 /*!
  * todo よく見るとhMutexはちゃんと使われていない……？
- * @brief (Windows固有)変愚蛮怒が起動済かどうかのチェック
+ * @brief (Windows固有)馬鹿馬鹿蛮怒が起動済かどうかのチェック
  */
 static bool is_already_running(void)
 {
@@ -3490,7 +3490,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
     hInstance = hInst;
     if (is_already_running()) {
         MessageBox(
-            NULL, _("変愚蛮怒はすでに起動しています。", "Hengband is already running."), _("エラー！", "Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+            NULL, _("馬鹿馬鹿蛮怒はすでに起動しています。", "Bakabakaband is already running."), _("エラー！", "Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
         return FALSE;
     }
 
