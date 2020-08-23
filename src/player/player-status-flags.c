@@ -30,6 +30,26 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
+static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag);
+
+static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
+{
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    BIT_FLAGS result = 0L;
+    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (have_flag(flgs, tr_flag))
+            result |= 0x01 << (i - INVEN_RARM);
+    }
+    return result;
+}
+
 bool have_kill_wall(player_type *creature_ptr)
 {
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD || music_singing(creature_ptr, MUSIC_WALL)) {
@@ -66,186 +86,68 @@ bool have_pass_wall(player_type *creature_ptr)
 
 BIT_FLAGS have_xtra_might(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    BIT_FLAGS result = 0L;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_XTRA_MIGHT))
-            result |= 0x01 << (i - INVEN_RARM);
-    }
-
+	BIT_FLAGS result = 0L;
+    result |= check_equipment_flags(creature_ptr, TR_XTRA_MIGHT);
 	return result;
 }
 
 BIT_FLAGS have_esp_evil(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-
     if (creature_ptr->realm1 == REALM_HEX) {
         if (hex_spelling(creature_ptr, HEX_DETECT_EVIL))
             result |= 0x01 << FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_ESP_EVIL))
-            result |= 0x01 << (i - INVEN_RARM);
-    }
-
+    result |= check_equipment_flags(creature_ptr, TR_ESP_EVIL);
 	return result;
 }
 
 BIT_FLAGS have_esp_animal(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_ESP_ANIMAL))
-            result |= 0x01 << (i - INVEN_RARM);
-    }
-
+    result |= check_equipment_flags(creature_ptr, TR_ESP_ANIMAL);
 	return result;
 }
 
 BIT_FLAGS have_esp_undead(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_ESP_UNDEAD))
-            result |= 0x01 << (i - INVEN_RARM);
-    }
-
+    result |= check_equipment_flags(creature_ptr, TR_ESP_UNDEAD);
 	return result;
 }
 
 BIT_FLAGS have_esp_demon(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_ESP_DEMON))
-            result |= 0x01 << (i - INVEN_RARM);
-    }
-
+    result |= check_equipment_flags(creature_ptr, TR_ESP_DEMON);
 	return result;
 }
 
 BIT_FLAGS have_esp_orc(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_ESP_ORC))
-            result |= 0x01 << (i - INVEN_RARM);
-    }
-
+    result |= check_equipment_flags(creature_ptr, TR_ESP_ORC);
 	return result;
 }
 
 BIT_FLAGS have_esp_troll(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_ESP_TROLL))
-            result |= 0x01 << (i - INVEN_RARM);
-    }
-
+    result |= check_equipment_flags(creature_ptr, TR_ESP_TROLL);
 	return result;
 }
 
 BIT_FLAGS have_esp_giant(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_ESP_GIANT))
-            result |= 0x01 << (i - INVEN_RARM);
-    }
-
+    result |= check_equipment_flags(creature_ptr, TR_ESP_GIANT);
 	return result;
 }
 
 BIT_FLAGS have_esp_dragon(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_ESP_DRAGON))
-            result |= 0x01 << (i - INVEN_RARM);
-    }
-
+    result |= check_equipment_flags(creature_ptr, TR_ESP_DRAGON);
 	return result;
 }
 
