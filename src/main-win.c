@@ -3411,54 +3411,142 @@ static void hook_quit(concptr str)
  */
 static void init_stuff(void)
 {
-    char path[1024];
-    GetModuleFileName(hInstance, path, 512);
-    argv0 = path;
-    strcpy(path + strlen(path) - 4, ".INI");
-    ini_file = string_make(path);
-    int i = strlen(path);
+	int i;
 
-    for (; i > 0; i--) {
-        if (path[i] == '\\') {
-            break;
-        }
-    }
+	char path[1024];
 
-    strcpy(path + i + 1, "lib\\");
-    validate_dir(path, TRUE);
-    init_file_paths(path);
-    validate_dir(ANGBAND_DIR_APEX, FALSE);
-    validate_dir(ANGBAND_DIR_BONE, FALSE);
-    if (!check_dir(ANGBAND_DIR_EDIT)) {
-        validate_dir(ANGBAND_DIR_DATA, TRUE);
-    } else {
-        validate_dir(ANGBAND_DIR_DATA, FALSE);
-    }
 
-    validate_dir(ANGBAND_DIR_FILE, TRUE);
-    validate_dir(ANGBAND_DIR_HELP, FALSE);
-    validate_dir(ANGBAND_DIR_INFO, FALSE);
-    validate_dir(ANGBAND_DIR_PREF, TRUE);
-    validate_dir(ANGBAND_DIR_SAVE, FALSE);
-    validate_dir(ANGBAND_DIR_USER, TRUE);
-    validate_dir(ANGBAND_DIR_XTRA, TRUE);
-    path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
+	/* Get program name with full path */
+	GetModuleFileName(hInstance, path, 512);
 
-    validate_file(path);
-    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
-    ANGBAND_DIR_XTRA_GRAF = string_make(path);
-    validate_dir(ANGBAND_DIR_XTRA_GRAF, TRUE);
+	/* Save the "program name" */
+	argv0 = path;
 
-    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
-    ANGBAND_DIR_XTRA_SOUND = string_make(path);
-    validate_dir(ANGBAND_DIR_XTRA_SOUND, FALSE);
+	/* Get the name of the "*.ini" file */
+	strcpy(path + strlen(path) - 4, ".INI");
 
-    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
-    ANGBAND_DIR_XTRA_MUSIC = string_make(path);
-    validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
+	/* Save the the name of the ini-file */
+	ini_file = string_make(path);
 
-    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "help");
-    ANGBAND_DIR_XTRA_HELP = string_make(path);
+	/* Analyze the path */
+	i = strlen(path);
+
+	/* Get the path */
+	for (; i > 0; i--)
+	{
+		if (path[i] == '\\')
+		{
+			/* End of path */
+			break;
+		}
+	}
+
+	/* Add "lib" to the path */
+	strcpy(path + i + 1, "lib\\");
+
+	/* Validate the path */
+	validate_dir(path, TRUE);
+
+	/* Init the file paths */
+	init_file_paths(path, path);
+
+	/* Hack -- Validate the paths */
+	validate_dir(ANGBAND_DIR_APEX, FALSE);
+	validate_dir(ANGBAND_DIR_BONE, FALSE);
+
+	/* Allow missing 'edit' directory */
+	if (!check_dir(ANGBAND_DIR_EDIT))
+	{
+		/* Must have 'data'! */
+		validate_dir(ANGBAND_DIR_DATA, TRUE);
+	}
+	else
+	{
+		/* Don't need 'data' */
+		validate_dir(ANGBAND_DIR_DATA, FALSE);
+	}
+
+	validate_dir(ANGBAND_DIR_FILE, TRUE);
+	validate_dir(ANGBAND_DIR_HELP, FALSE);
+	validate_dir(ANGBAND_DIR_INFO, FALSE);
+	validate_dir(ANGBAND_DIR_PREF, TRUE);
+	validate_dir(ANGBAND_DIR_SAVE, FALSE);
+	validate_dir(ANGBAND_DIR_USER, TRUE);
+	validate_dir(ANGBAND_DIR_XTRA, TRUE);
+
+	/* Build the filename */
+	path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
+
+	/* Hack -- Validate the "news.txt" file */
+	validate_file(path);
+
+
+#if 0 /* #ifndef JP */
+	/* Build the "font" path */
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "font");
+
+	/* Allocate the path */
+	ANGBAND_DIR_XTRA_FONT = string_make(path);
+
+	/* Validate the "font" directory */
+	validate_dir(ANGBAND_DIR_XTRA_FONT, TRUE);
+
+	/* Build the filename */
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
+
+	/* Hack -- Validate the basic font */
+	validate_file(path);
+#endif
+
+
+#ifdef USE_GRAPHICS
+
+	/* Build the "graf" path */
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
+
+	/* Allocate the path */
+	ANGBAND_DIR_XTRA_GRAF = string_make(path);
+
+	/* Validate the "graf" directory */
+	validate_dir(ANGBAND_DIR_XTRA_GRAF, TRUE);
+
+#endif /* USE_GRAPHICS */
+
+
+#ifdef USE_SOUND
+
+	/* Build the "sound" path */
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
+
+	/* Allocate the path */
+	ANGBAND_DIR_XTRA_SOUND = string_make(path);
+
+	/* Validate the "sound" directory */
+	validate_dir(ANGBAND_DIR_XTRA_SOUND, FALSE);
+
+#endif /* USE_SOUND */
+
+#ifdef USE_MUSIC
+
+	/* Build the "music" path */
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
+
+	/* Allocate the path */
+	ANGBAND_DIR_XTRA_MUSIC = string_make(path);
+
+	/* Validate the "music" directory */
+	validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
+
+#endif /* USE_MUSIC */
+
+	/* Build the "help" path */
+	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "help");
+
+	/* Allocate the path */
+	ANGBAND_DIR_XTRA_HELP = string_make(path);
+
+	/* Validate the "help" directory */
+	/* validate_dir(ANGBAND_DIR_XTRA_HELP); */
 }
 
 /*!

@@ -584,18 +584,19 @@ Bakabakaband_SOURCES = \
 	object-enchant/trg-types.h \
 	object-enchant/vorpal-weapon.c object-enchant/vorpal-weapon.h \
 	\
-	object-hook/hook-armor.c object-hook/hook-armor.h \
-	object-hook/hook-bow.c object-hook/hook-bow.h \
-	object-hook/hook-checker.c object-hook/hook-checker.h \
-	object-hook/hook-enchant.c object-hook/hook-enchant.h \
-	object-hook/hook-expendable.c object-hook/hook-expendable.h \
-	object-hook/hook-magic.c object-hook/hook-magic.h \
-	object-hook/hook-perception.c object-hook/hook-perception.h \
-	object-hook/hook-quest.c object-hook/hook-quest.h \
-	object-hook/hook-weapon.c object-hook/hook-weapon.h \
+	spells.h \
+	spells1.c spells2.c spells3.c \
+	spells-diceroll.c spells-diceroll.h \
+	spells-floor.c spells-floor.h \
+	spells-object.c spells-object.h \
+	spells-status.c spells-status.h \
+	spells-summon.c spells-summon.h \
+	spells-world.c spells-world.h \
 	\
-	object-use/quaff-execution.c object-use/quaff-execution.h \
-	object-use/read-execution.c object-use/read-execution.h \
+	sort.c sort.h \
+	store.h store.c tables.c term.c term.h trap.c trap.h types.h util.c \
+	variable.c wild.h wild.c wizard1.c wizard2.c \
+	warning.c warning.h world.c world.h \
 	\
 	perception/identification.c perception/identification.h \
 	perception/object-perception.c perception/object-perception.h \
