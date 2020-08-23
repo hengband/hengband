@@ -349,7 +349,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_sh_fire(creature_ptr);
     have_sh_elec(creature_ptr);
     have_sh_cold(creature_ptr);
-    have_easy_spell(creature_ptr);
+    creature_ptr->easy_spell = have_easy_spell(creature_ptr);
     have_heavy_spell(creature_ptr);
     have_hold_exp(creature_ptr);
     have_see_inv(creature_ptr);

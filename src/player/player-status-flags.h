@@ -50,7 +50,7 @@ BIT_FLAGS have_anti_tele(player_type *creature_ptr);
 void have_sh_fire(player_type *creature_ptr);
 void have_sh_elec(player_type *creature_ptr);
 void have_sh_cold(player_type *creature_ptr);
-void have_easy_spell(player_type *creature_ptr);
+BIT_FLAGS have_easy_spell(player_type *creature_ptr);
 void have_heavy_spell(player_type *creature_ptr);
 void have_hold_exp(player_type *creature_ptr);
 void have_see_inv(player_type *creature_ptr);

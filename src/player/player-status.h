@@ -437,7 +437,7 @@ typedef struct player_type {
     bool pass_wall; /* Permanent wraithform */
     bool kill_wall;
     BIT_FLAGS dec_mana;
-    bool easy_spell;
+    BIT_FLAGS easy_spell;
     bool heavy_spell;
     bool warning;
     bool mighty_throw;
