@@ -223,23 +223,11 @@ void have_esp_telepathy(player_type *creature_ptr)
     }
 }
 
-void have_bless_blade(player_type *creature_ptr)
+BIT_FLAGS have_bless_blade(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-    creature_ptr->bless_blade = FALSE;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_BLESSED))
-            creature_ptr->bless_blade = TRUE;
-    }
+    BIT_FLAGS result = 0L;
+    result |= check_equipment_flags(creature_ptr, TR_BLESSED);
+    return result;
 }
 
 void have_easy2_weapon(player_type *creature_ptr)

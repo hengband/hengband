@@ -335,7 +335,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->esp_nonliving = have_esp_nonliving(creature_ptr);
     creature_ptr->esp_unique = have_esp_unique(creature_ptr);
     have_esp_telepathy(creature_ptr);
-    have_bless_blade(creature_ptr);
+    creature_ptr->bless_blade = have_bless_blade(creature_ptr);
     have_easy2_weapon(creature_ptr);
     have_down_saving(creature_ptr);
     have_no_ac(creature_ptr);
