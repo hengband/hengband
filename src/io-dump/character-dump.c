@@ -294,7 +294,7 @@ static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
     /* Count monster kills */
     long uniq_total = 0;
     long norm_total = 0;
-    for (IDX k = 1; k < max_r_idx; k++) {
+    for (MONRACE_IDX k = 1; k < max_r_idx; k++) {
         /* Ignore unused index */
         monster_race *r_ptr = &r_info[k];
         if (!r_ptr->name)
@@ -347,7 +347,7 @@ static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
     ang_sort(creature_ptr, who, &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
     fprintf(fff, _("\n《上位%ld体のユニーク・モンスター》\n", "\n< Unique monsters top %ld >\n"), MIN(uniq_total, 10));
 
-    for (IDX k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--) {
+    for (MONRACE_IDX k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--) {
         monster_race *r_ptr = &r_info[who[k]];
         fprintf(fff, _("  %-40s (レベル%3d)\n", "  %-40s (level %3d)\n"), (r_name + r_ptr->name), (int)r_ptr->level);
     }
