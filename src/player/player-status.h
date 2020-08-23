@@ -428,7 +428,7 @@ typedef struct player_type {
     BIT_FLAGS esp_evil;
     BIT_FLAGS esp_good;
     BIT_FLAGS esp_nonliving;
-    bool esp_unique;
+    BIT_FLAGS esp_unique;
 
     bool slow_digest; /* Slower digestion */
     bool bless_blade; /* Blessed blade */
