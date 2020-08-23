@@ -436,7 +436,7 @@ typedef struct player_type {
     bool impact[2]; /* Earthquake blows */
     bool pass_wall; /* Permanent wraithform */
     bool kill_wall;
-    bool dec_mana;
+    BIT_FLAGS dec_mana;
     bool easy_spell;
     bool heavy_spell;
     bool warning;

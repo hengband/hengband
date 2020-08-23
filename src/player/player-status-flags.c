@@ -344,23 +344,11 @@ void have_mighty_throw(player_type *creature_ptr)
     }
 }
 
-void have_dec_mana(player_type *creature_ptr)
+BIT_FLAGS have_dec_mana(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-    creature_ptr->xtra_might = FALSE;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_DEC_MANA))
-            creature_ptr->dec_mana = TRUE;
-    }
+    BIT_FLAGS result = 0L;
+    result |= check_equipment_flags(creature_ptr, TR_DEC_MANA);
+    return result;
 }
 
 void have_reflect(player_type *creature_ptr)

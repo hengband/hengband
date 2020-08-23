@@ -340,7 +340,7 @@ void calc_bonuses(player_type *creature_ptr)
     have_down_saving(creature_ptr);
     have_no_ac(creature_ptr);
     have_mighty_throw(creature_ptr);
-    have_dec_mana(creature_ptr);
+    creature_ptr->dec_mana = have_dec_mana(creature_ptr);
     have_reflect(creature_ptr);
     have_see_nocto(creature_ptr);
     have_warning(creature_ptr);
