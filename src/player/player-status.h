@@ -396,7 +396,7 @@ typedef struct player_type {
     bool sh_elec; /* Electric 'immolation' effect */
     bool sh_cold; /* Cold 'immolation' effect */
 
-    bool anti_magic; /* Anti-magic */
+    BIT_FLAGS anti_magic; /* Anti-magic */
     bool anti_tele; /* Prevent teleportation */
 
     bool sustain_str; /* Keep strength */
