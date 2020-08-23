@@ -426,7 +426,7 @@ typedef struct player_type {
     BIT_FLAGS esp_dragon;
     BIT_FLAGS esp_human;
     BIT_FLAGS esp_evil;
-    bool esp_good;
+    BIT_FLAGS esp_good;
     bool esp_nonliving;
     bool esp_unique;
 

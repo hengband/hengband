@@ -309,7 +309,7 @@ void calc_bonuses(player_type *creature_ptr)
     BIT_FLAGS old_esp_dragon = creature_ptr->esp_dragon;
     BIT_FLAGS old_esp_human = creature_ptr->esp_human;
     BIT_FLAGS old_esp_evil = creature_ptr->esp_evil;
-    bool old_esp_good = creature_ptr->esp_good;
+    BIT_FLAGS old_esp_good = creature_ptr->esp_good;
     bool old_esp_nonliving = creature_ptr->esp_nonliving;
     bool old_esp_unique = creature_ptr->esp_unique;
     bool old_see_inv = creature_ptr->see_inv;
@@ -331,7 +331,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->esp_giant = have_esp_giant(creature_ptr);
     creature_ptr->esp_dragon = have_esp_dragon(creature_ptr);
     creature_ptr->esp_human = have_esp_human(creature_ptr);
-    have_esp_good(creature_ptr);
+    creature_ptr->esp_good = have_esp_good(creature_ptr);
     have_esp_nonliving(creature_ptr);
     have_esp_unique(creature_ptr);
     have_esp_telepathy(creature_ptr);

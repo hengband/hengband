@@ -158,23 +158,11 @@ BIT_FLAGS have_esp_human(player_type *creature_ptr)
     return result;
 }
 
-void have_esp_good(player_type *creature_ptr)
+BIT_FLAGS have_esp_good(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-    creature_ptr->esp_good = FALSE;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_ESP_GOOD))
-            creature_ptr->esp_good = TRUE;
-    }
+    BIT_FLAGS result = 0L;
+    result |= check_equipment_flags(creature_ptr, TR_ESP_GOOD);
+    return result;
 }
 
 void have_esp_nonliving(player_type *creature_ptr)
