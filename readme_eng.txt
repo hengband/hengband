@@ -3,8 +3,8 @@
 --- UNIX
   Download source archive and try...
 
-  tar -zxvf Bakabakaband-x.x.x.tar.gz
-  cd Bakabakaband-x.x.x
+  tar -zxvf hengband-x.x.x.tar.gz
+  cd hengband-x.x.x
   ./configure --disable-japanese
   make install
 
@@ -13,11 +13,11 @@
   If you are a super user, --with-setgid=games option works.
 
   then try
-  ./Bakabakaband -- -n<number of windows>  ## for normal ASCII graphics
+  ./hengband -- -n<number of windows>  ## for normal ASCII graphics
   or
-  ./Bakabakaband -g -- -n<# of windows>    ## for 8x8 tile graphics 
-  ./Bakabakaband -g -- -b -n<# of windows> ## for Bigtile graphics
-  ./Bakabakaband -g -- -a -n<# of windows> ## for 16x16 tile (need heng_graf.tar.gz)
+  ./hengband -g -- -n<# of windows>    ## for 8x8 tile graphics 
+  ./hengband -g -- -b -n<# of windows> ## for Bigtile graphics
+  ./hengband -g -- -a -n<# of windows> ## for 16x16 tile (need heng_graf.tar.gz)
   to play.
 
 You can change game windows' font, location, and size, by environment 
@@ -25,7 +25,7 @@ variables.
 
 Ex.
 setenv ANGBAND_X11_FONT '-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1'
-Bakabakaband -- -n
+hengband -- -n
 
 Then font size will be changed.
 
@@ -38,7 +38,7 @@ Size of windows are ANGBAND_X11_COLS_n, and ANGBAND_X11_ROWS_n.
 --- Windows
 
 Download the binary archive for Windows.
-Unzip it, and click Bakabakaband to play.
+Unzip it, and click hengband to play.
 
 The makefile.bcc was changed again.
 If you want to compile from the source with borland compiler (BCC),
@@ -56,7 +56,7 @@ or makefile.dos before MAKE with these.
 --- Macintosh
 
 Download the binary archive for Macintosh.
-Unpack it, and click Bakabakaband to play.
+Unpack it, and click hengband to play.
 
 
 
@@ -165,7 +165,7 @@ keyset, and by pushing 'x' in the Rogue-like keyset.
 
 --- Inscriptions
 
-Below, only the new features in Bakabakaband are explained.
+Below, only the new features in Hengband are explained.
 
 - You can inscribe on objects with "@ma" or '@'+<any command letter>+<any tag>.
   Then, type these alphabet letter in 'm' command to cast from the spellbook.
@@ -186,9 +186,9 @@ Below, only the new features in Bakabakaband are explained.
 
 ---- Auto pickup/destroy
 
-Bakabakaband offers two different methods of auto-pickup/destroy.
+Hengband offers two different methods of auto-pickup/destroy.
 - Powerful method
-  Bakabakaband offers a very powerful auto-pickup/auto-destroy system
+  Hengband offers a very powerful auto-pickup/auto-destroy system
   which you may customize.  Press '_' key to enter edit mode.  Please
   read the file "autopick_eng.txt" about the syntax.
 
@@ -224,7 +224,7 @@ Bakabakaband offers two different methods of auto-pickup/destroy.
 ------ Play Record
 Play record will be written to a file named 'playrec-<character's name>.txt' 
 in the same directory as your user preference file.  It is in ~/.angband/
-Bakabakaband/ for UNIX, or Bakabakaband/lib/user/ for other OS.
+Hengband/ for UNIX, or hengband/lib/user/ for other OS.
 '|' command displays play record in the game.
 
 
@@ -237,5 +237,5 @@ by modifying data or source files, or by restoring from a backed
 up savefile.
 
 The score server is here:
-  http://Bakabakaband.sourceforge.jp/en/score.html
+  http://hengband.sourceforge.jp/en/score.html
 

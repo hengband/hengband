@@ -17,7 +17,7 @@
     [[[[y]「|」キー]     (現在のファイル内容を保存)
 
 --
-Updated    : Bakabakaband 1.7.0
+Updated    : Hengband 1.7.0
 
 ***** [j] jmonster.txt#Pets
 

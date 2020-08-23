@@ -2,7 +2,7 @@
 
 #
 # This file defines special attr/char mappings for use in "graphics" mode
-# with Bakabakaband 32x32.
+# with Hengband 32x32.
 # See "lib/help/command.txt" and "src/files.c" for more information.
 #
 

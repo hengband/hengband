@@ -15,6 +15,6 @@
 ?:[EQU $GRAF new]
 %:graf-new.prf
 
-# Bakabakaband tiles
+# Hengband tiles
 ?:[EQU $GRAF ne2]
 %:graf-ne2.prf

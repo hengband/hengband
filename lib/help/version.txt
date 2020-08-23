@@ -1,7 +1,7 @@
-=== History of Bakabakaband ===
+=== History of Hengband ===
 
 
-Jan. 9th, 2004  Bakabakaband 1.6.0 (New stable branch) released.
+Jan. 9th, 2004  hengband 1.6.0 (New stable branch) released.
  This is a bug-fix version of 1.5.4, and 
  the first version of the new stable branch (1.6.x) .
 
@@ -24,7 +24,7 @@ Jan. 9th, 2004  Bakabakaband 1.6.0 (New stable branch) released.
 - All changes for 1.4.5 are also included in 1.6.0 .
 
 
-Jan. 9th, 2004  Bakabakaband 1.4.5 (Old stable branch) released.
+Jan. 9th, 2004  hengband 1.4.5 (Old stable branch) released.
  This is the final version of old stable branch (1.4.x),
  and is the final version without the saved floor.
 
@@ -51,7 +51,7 @@ Jan. 9th, 2004  Bakabakaband 1.4.5 (Old stable branch) released.
   Many typo, screen update failures, wrong descriptions etc.
 
 
-Aug. 12th, 2003  Bakabakaband 1.5.4 (Development branch) released.
+Aug. 12th, 2003  hengband 1.5.4 (Development branch) released.
 
 - New artifatct amulets.
 - Special inscription {@ma},{@0} etc. on equip/floor lists are allowed.
@@ -65,7 +65,7 @@ Aug. 12th, 2003  Bakabakaband 1.5.4 (Development branch) released.
 - All changes for 1.4.4 are also included in 1.5.4.
 
 
-Aug. 12th, 2003  Bakabakaband 1.4.4 (Stable branch) released.
+Aug. 12th, 2003  hengband 1.4.4 (Stable branch) released.
 
 - Various bug fixes:
   Hidden doors were not hidden on tile graphics mode.
@@ -73,7 +73,7 @@ Aug. 12th, 2003  Bakabakaband 1.4.4 (Stable branch) released.
   Repeat didn't work correctly for Forcetrainers when blinded.
 
 
-Jul. 20th, 2003  Bakabakaband 1.5.3 (Development branch) released.
+Jul. 20th, 2003  hengband 1.5.3 (Development branch) released.
 
 - Improved Warning ability a bit.
 - Some English text were corrected. (thanks to an choco)
@@ -86,7 +86,7 @@ Jul. 20th, 2003  Bakabakaband 1.5.3 (Development branch) released.
 - All changes for 1.4.3 are also included in 1.5.3.
 
 
-Jul. 20th, 2003  Bakabakaband 1.4.3 (Stable branch) released.
+Jul. 20th, 2003  hengband 1.4.3 (Stable branch) released.
 
 - Various bug fixes:
   Experience gain for killing monsters was zero.
@@ -94,7 +94,7 @@ Jul. 20th, 2003  Bakabakaband 1.4.3 (Stable branch) released.
   Mana point was not updated correctly after Clear Mind.
 
 
-Jul. 10th, 2003  Bakabakaband 1.5.2 (Development branch) released.
+Jul. 10th, 2003  hengband 1.5.2 (Development branch) released.
 - Random artifacts get more 'Construction point' for Android.
 - Hunter's office gives items as prize now.
 - Probing gives all monster recall infomations.
@@ -130,7 +130,7 @@ Jul. 10th, 2003  Bakabakaband 1.5.2 (Development branch) released.
 - All changes for 1.4.2 are also included in 1.5.2.
 
 
-Jul. 10th, 2003  Bakabakaband 1.4.2 (Stable branch) released.
+Jul. 10th, 2003  hengband 1.4.2 (Stable branch) released.
 
 - Cancelling of Racial/Class power no longer takes energy.
 - The algorism for breath shape is changed.
@@ -159,7 +159,7 @@ Jul. 10th, 2003  Bakabakaband 1.4.2 (Stable branch) released.
   Collected update for monster light.  etc...
 
 
-  Dec. 24th, 2002  Bakabakaband 1.5.1 (Development branch) released.
+  Dec. 24th, 2002  hengband 1.5.1 (Development branch) released.
 
 - Added visual editor in lists of known objects and etc... (Unangband)
 - Clairaudience spell of Bard doesn't detect walls with treasure.
@@ -170,7 +170,7 @@ Jul. 10th, 2003  Bakabakaband 1.4.2 (Stable branch) released.
 - All changes for 1.4.1 are also included in 1.5.1.
 
 
-  Dec. 24th, 2002  Bakabakaband 1.4.1 (Stable branch) released.
+  Dec. 24th, 2002  hengband 1.4.1 (Stable branch) released.
 
 - Elvish waybread fully satisfies mortals.  (from OAngband)
 - General store sell Elvish waybread.
@@ -186,7 +186,7 @@ Jul. 10th, 2003  Bakabakaband 1.4.2 (Stable branch) released.
  Broken name of the Staff,  Random teleport in monster arena.
 
 
-  Dec. 9th, 2002  Bakabakaband 1.5.0 (Development branch) released.
+  Dec. 9th, 2002  hengband 1.5.0 (Development branch) released.
 
 Implemented 'Saved Floors':
 - You can climb back the same stairs to get back to the same floor.
@@ -201,12 +201,12 @@ Implemented 'Saved Floors':
 - Removed detect treasure effect from the Detection spell.
 
 
-  Dec. 9th, 2002  Bakabakaband 1.4.0 (Stable branch) released.
+  Dec. 9th, 2002  hengband 1.4.0 (Stable branch) released.
 
 - Removed scrolls of satisfy hunger and that class power of Berserkers.
   Androids can quaff flasks of oil.
   Barlogs can sacrifice corpses with symbol 't','p', or 'h' using the Eat command.
-  Golems, Zombies, Skeletons, and Spectors can Eat charges of wands and staffs.
+  Golems, Zombies, Skeletons, and Spectors can Eat charges of wands and staves.
   Ents can get nutritions from water in any potions.
 - Added lists of known monsters/objects from Eyangband.
 - Shift + direction keys will move cursor quickly in the look command.
@@ -226,7 +226,7 @@ Implemented 'Saved Floors':
   Buffer-overflow breaks macro.
 
 
-  Oct. 31st, 2002  Bakabakaband 1.3.1 (Development branch) released.
+  Oct. 31st, 2002  hengband 1.3.1 (Development branch) released.
 
 - Added a new menu 'Keep on top' for subwindows of Windows version
 - Auto-Inscription-For-Resistances, {%}, will work dynamically.
@@ -241,7 +241,7 @@ Implemented 'Saved Floors':
 - All changes from 1.2.0 to 1.2.2.
 
 
-  Oct. 31st, 2002  Bakabakaband 1.2.2 (Stable branch) released.
+  Oct. 31st, 2002  hengband 1.2.2 (Stable branch) released.
 
 - The Cloning Pits now includes Borshin.
 - Description of *identified* Light source of darkness now include
@@ -251,9 +251,9 @@ Implemented 'Saved Floors':
 - Fixed many bugs(rod of percention, Royal Crypt, etc...)
 
 
-  Sep. 9th, 2002  Bakabakaband 1.2.1 (Stable branch) released.
+  Sep. 9th, 2002  hengband 1.2.1 (Stable branch) released.
 
-- Added description about license of Bakabakaband; 'jlicense.txt'.
+- Added description about license of Hengband; 'jlicense.txt'.
   (jlicense.txt is Japanese only for now)
 - Increased AC of the ego Ring of Protection (Extra Armor) by 7.
 - Fixed some bug on monster's AI.
@@ -266,7 +266,7 @@ Implemented 'Saved Floors':
 - Fixed some other bug.
 
 
-  Aug. 28th, 2002  Bakabakaband 1.3.0 (Development branch) released.
+  Aug. 28th, 2002  hengband 1.3.0 (Development branch) released.
 
 - Added a new room type; trapped monster pit.
 - Added object flags of various ESPs. (from Unangband and ToME)
@@ -284,7 +284,7 @@ Implemented 'Saved Floors':
   character making.(from Eyangband)
 
 
-  Aug. 28th, 2002  Bakabakaband 1.2.0 (Stable branch) released.
+  Aug. 28th, 2002  hengband 1.2.0 (Stable branch) released.
 
 - Fixed many bugs
 - Splited version tree into two branch;
@@ -317,13 +317,13 @@ Modifications for auto-picker/destroyer editor:
 - Do auto-save the game at starting the editor.
 
 
-  Jun. 15th, 2002  Bakabakaband 1.1.0 released.
+  Jun. 15th, 2002  hengband 1.1.0 released.
 
 - Changed behavior of light area.
 - Various bug fixes and tuning.
 
 
-  Jun. 2nd, 2002  Bakabakaband 1.1.0 Release Candidate 1 released.
+  Jun. 2nd, 2002  hengband 1.1.0 Release Candidate 1 released.
 
 - Splited Life realm into two and new spells added; New 'Life' realm
   and New 'Crusade' realm.
@@ -360,7 +360,7 @@ Modifications for auto-picker/destroyer editor:
 - Some bugs fixed.
 
 
-  Apl. 6th, 2002  Bakabakaband 1.0.11 released.
+  Apl. 6th, 2002  hengband 1.0.11 released.
 
 - The on-line help files is translated to English
 - Warning ability of an object can be canceled by its inscription {$}.
@@ -379,7 +379,7 @@ Modifications for auto-picker/destroyer editor:
 - Some bugs fixed.
 
 
-  Mar. 6th, 2002  Bakabakaband 1.0.10 released.
+  Mar. 6th, 2002  hengband 1.0.10 released.
 
 - New artifact, ego-ammo and vault.
 - Class power of Red-Mage is more useful.
@@ -396,11 +396,11 @@ Modifications for auto-picker/destroyer editor:
 - Screen shot is supported in graphics mode.
 - Support in MPW environment of Macintosh.
 
-  Jan.30th, 2002  Bakabakaband 1.0.9 revision 1 released.
+  Jan.30th, 2002  hengband 1.0.9 revision 1 released.
 
 - Fixed one more bug which cause crash (English version only).
 
-  Jan.27th, 2002  Bakabakaband 1.0.9 released.
+  Jan.27th, 2002  hengband 1.0.9 released.
 
 - New character making screen
 - New character information 'C' screen
@@ -411,7 +411,7 @@ Modifications for auto-picker/destroyer editor:
   'http://www.kmc.gr.jp/~habu/local/hengscore-en/screens/'.
   But links on the webpage to the screenshots are not yet available.
 - Limited support of 8x8 tile graphics.
-- Bakabakaband online help in *Japanese*. 
+- Hengband online help in *Japanese*. 
   (sadly English version of online help is not yet available)
 - Rune of explosion no longer has anti-summoning effects.
 - Rune of protection no longer has perfect
@@ -422,7 +422,7 @@ Modifications for auto-picker/destroyer editor:
 - Difficulty to activate random artifact is changed.
 
 
-  Dec.31th, 2001  Bakabakaband 108fix2 revision 1 released.
+  Dec.31th, 2001  hengband 108fix2 revision 1 released.
 
 - 'fix2' is japanese bug fixed version but this bug was 
   not effect on English version.
@@ -430,7 +430,7 @@ Modifications for auto-picker/destroyer editor:
   You can get display of lines of auto picker/destroyer.
 
 
-  Dec.31th, 2001  Bakabakaband 108fix1 version 3 released.
+  Dec.31th, 2001  hengband 108fix1 version 3 released.
 
 - Auto macro dump and other auto dump is now 
   more useful. Old dump lines will be deleted 
@@ -438,20 +438,20 @@ Modifications for auto-picker/destroyer editor:
 - A minor typo and a minor bug fixed.
 
  
-  Dec.30th, 2001  Bakabakaband 108fix1 version 2 released.
+  Dec.30th, 2001  hengband 108fix1 version 2 released.
 
 - All remained japanese messages are found and fixed, 
   using a exclusive C program.
 - You can now define macros in the 'pickpref.prf'.
 
 
-  Dec.29th, 2001  Bakabakaband 108fix1 released.
+  Dec.29th, 2001  hengband 108fix1 released.
 
 - This is a bug fixed japanese version, and almost 
 - same as 108eng3, but a few more bugs are fixed.
 
 
-  Dec.25th, 2001  Bakabakaband 108eng2(stable) and 108eng3(test version) released.
+  Dec.25th, 2001  hengband 108eng2(stable) and 108eng3(test version) released.
 
 -  108eng2: fixed some typo. ']' key now can be used as macro key.
 -  108eng3: macro trigger is displayed in more suitable way;
@@ -460,9 +460,9 @@ Modifications for auto-picker/destroyer editor:
      key on Windows now; \[alt-A] or \[shift-alt-B].
 
 
-  Dec.24th, 2001  Bakabakaband 108eng1: makefile.bcc was not work. now fixed.
+  Dec.24th, 2001  hengband 108eng1: makefile.bcc was not work. now fixed.
 
-  Dec.24th, 2001  Bakabakaband 1.0.8 released. This is a new Japanese version. 
+  Dec.24th, 2001  hengband 1.0.8 released. This is a new Japanese version. 
 
 The source can be used to compile English version too.
 - The address of the world score server is changed.
@@ -474,7 +474,7 @@ The source can be used to compile English version too.
 - Yet another japanese massage was translated.
 
 
-  Dec.17th, 2001  Bakabakaband 1.0.7fix2 english beta4 released.
+  Dec.17th, 2001  hengband 1.0.7fix2 english beta4 released.
 
 - Yet another remained japanese messages are now translated.
 - Changed some option info texts and names again.
@@ -482,20 +482,20 @@ The source can be used to compile English version too.
 - Some bugs related groo and Metal Babble is fixed.
 
 
-  Dec.11th, 2001  Bakabakaband 1.0.7fix2 english beta3 released.
+  Dec.11th, 2001  hengband 1.0.7fix2 english beta3 released.
 
 - fixed a compile error. English info message of artifacts added.
 - changed some info text and name of options.
 
 
-  Dec. 9th, 2001  Bakabakaband 1.0.7fix2 english beta2 released.
+  Dec. 9th, 2001  hengband 1.0.7fix2 english beta2 released.
 
 - fixed a terrible bug,
 - items in the home was not saved when more than 24 items stored.
 - Binary for Macintosh (ppc, osX) is now available.
 
 
-  Dec. 8th, 2001  Bakabakaband 1.0.7fix2 english beta released.
+  Dec. 8th, 2001  hengband 1.0.7fix2 english beta released.
 
 - Many mistakes of English messages, and bugs are fixed.
 
@@ -505,10 +505,10 @@ The source can be used to compile English version too.
 - fixed some mistakes of archives. 
 
 
-  Dec. 4th, 2001  Bakabakaband 1.0.7fix2 english alpha version released.
+  Dec. 4th, 2001  hengband 1.0.7fix2 english alpha version released.
 
 
-=== The main differences of Bakabakaband 1.0.7 from ZAngband2.2.8  ===
+=== The main differences of Hengband 1.0.7 from ZAngband2.2.8  ===
 
 - World score server: You can register scores and character dumps.
 - Player can write last words when died, which is displayed in the 
@@ -1200,4 +1200,4 @@ Angband Version 2.7   :  1/1/95  Ben Harrison
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Bakabakaband 1.5.3
+Updated    : Hengband 1.5.3

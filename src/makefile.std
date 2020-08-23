@@ -91,7 +91,7 @@ OBJS = \
 ## change the compiler to "cc", or remove the "debugging" options, or
 ## remove the X11 or Curses support, etc, as desired.
 ##
-## See also "h-config.h" for important information.
+## See also "z-config.h" and "h-config.h" for important information.
 ##
 ## Some "examples" are given below, they can be used by simply
 ## removing the FIRST column of "#" signs from the "block" of lines
@@ -130,8 +130,8 @@ JP_OPT= -D"JP" -D"EUC" -DDEFAULT_LOCALE="\"ja_JP.eucJP\""
 # "new curses" library instead of the "old curses" library, and
 # you may have to add "-l/usr/include/ncurses" to the "CFLAGS".
 #
-# See "main-gcu.c" for some optional "curses" defines,
-# including "USE_GETCH" and "USE_CURS_SET".  Note that "h-config.h" will
+# See "main-gcu.c" and "z-config.h" for some optional "curses" defines,
+# including "USE_GETCH" and "USE_CURS_SET".  Note that "z-config.h" will
 # attempt to "guess" at many of these flags based on your system.
 #
 #CFLAGS = -Wall -O1 -pipe -g -D"USE_X11" -D"USE_GCU"
@@ -210,6 +210,14 @@ LIBS = -L/usr/X11R6/lib -lX11 -lncurses
 
 
 ##
+## Variation -- compile for SGI Indigo runnig Irix
+##
+#CFLAGS = -Wall -O2  -fno-strength-reduce -g -D"USE_X11" $(JP_OPT) -D"USE_GCU" -I/usr/X11R6/include
+#LIBS = -L/usr/X11R6/lib -lX11 -lncurses -ltermcap -lsun
+
+
+
+##
 ## Variation -- compile for Dec ALPHA OSF/1 v2.0
 ##
 #CC     = cc
@@ -252,17 +260,17 @@ LIBS = -L/usr/X11R6/lib -lX11 -lncurses
 # Hack -- "install" as the base target
 #
 
-install: Bakabakaband
-	cp Bakabakaband ..
-#	chmod u+s ../Bakabakaband
+install: hengband
+	cp hengband ..
+#	chmod u+s ../hengband
 
 
 #
 # Build the "Angband" program
 #
 
-Bakabakaband: $(OBJS)
-	$(CC) $(CFLAGS) -o Bakabakaband $(OBJS) $(LDFLAGS) $(LIBS)
+hengband: $(OBJS)
+	$(CC) $(CFLAGS) -o hengband $(OBJS) $(LDFLAGS) $(LIBS)
 
 
 #
@@ -291,7 +299,7 @@ HDRS = \
 
 INCS = \
 	angband.h \
-	defines.h types.h externs.h \
+	z-config.h defines.h types.h externs.h \
 	z-term.h z-rand.h z-util.h z-virt.h z-form.h $(HDRS)
 
 

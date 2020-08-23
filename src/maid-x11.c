@@ -11,7 +11,7 @@
 #ifdef USE_X11
 
 #include <math.h>
-#include "main/x11-gamma-builder.h"
+
 
 /*
  * This file defines some "XImage" manipulation functions for X11.
@@ -68,21 +68,22 @@
   ((unsigned)(keysym) >= 0xFF00)
 
 
+#ifdef SUPPORT_GAMMA
 static bool gamma_table_ready = FALSE;
 static int gamma_val = 0;
+#endif /* SUPPORT_GAMMA */
 
 
 /*
  * Hack -- Convert an RGB value to an X11 Pixel, or die.
  */
-#ifdef USE_XFT
-static XftColor create_pixel(Display *dpy, byte red, byte green, byte blue)
-#else
 static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
-#endif
 {
 	Colormap cmap = DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy));
 	XColor xcolour;
+
+#ifdef SUPPORT_GAMMA
+
 	if (!gamma_table_ready)
 	{
 		concptr str = getenv("ANGBAND_X11_GAMMA");
@@ -102,6 +103,8 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 		blue = gamma_table[blue];
 	}
 
+#endif /* SUPPORT_GAMMA */
+
 	/* Build the color */
 	
 	xcolour.red = red * 255;
@@ -109,20 +112,6 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 	xcolour.blue = blue * 255;
 	xcolour.flags = DoRed | DoGreen | DoBlue;
 
-#ifdef USE_XFT
-	XftColor color;
-	XRenderColor xcol;
-	xcol.red = xcolour.red;
-	xcol.green = xcolour.green;
-	xcol.blue = xcolour.blue;
-	if (!XftColorAllocValue(dpy, DefaultVisual(dpy, 0), cmap, &xcol, &color))
-	{
-		quit_fmt("Couldn't allocate bitmap color '#%02x%02x%02x'\n",
-			 red, green, blue);
-	}
-
-	return color;
-#else
 	/* Attempt to Allocate the Parsed color */
 	if (!(XAllocColor(dpy, cmap, &xcolour)))
 	{
@@ -131,11 +120,11 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 	}
 
 	return (xcolour.pixel);
-#endif
 }
 
 
-#ifndef USE_XFT
+
+#ifdef USE_GRAPHICS
 
 /*
  * The Win32 "BITMAPFILEHEADER" type.
@@ -890,6 +879,7 @@ static XImage *ResizeImage(Display *dpy, XImage *Im,
 	return Tmp;
 }
 
-#endif /* !USE_XFT */
+#endif /* USE_GRAPHICS */
+
 
 #endif /* USE_X11 */

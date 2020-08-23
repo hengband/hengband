@@ -4,23 +4,23 @@ The town is composed of both stores and buildings.
 
 Classical stores:
 Magic Shop: buy your wands, staffs, rings and amulets here.
-Alchemy Shop: for all sorts of bubbling potions and scrolls.
-Weaponsmith's Shop: they deal in anything sharp and to the point.
-Armoury: to offer protection from the ravages of the dungeon.
+Alchemist: for all sorts of bubbling potions and scrolls.
+Weaponsmith: they deal in anything sharp and to the point.
+Armorer: to offer protection from the ravages of the dungeon.
 General Store: food, torches, ammo, some necessities.
-Temple: those items permitted to the pious in life.
-Black Market: the prices are usurious, but may have powerful items!
+Temple Trade: those items permitted to the pious in life.
+Black Market: the prices are usurious, but some depths items!
 Home: to store some of your precious treasures.
 
 Zangband additional (if you do not prefer Ironman/Vanilla):
-The Fighters' Halls, Order of Paladins, Rangers' Taverns, 
-Thieves' Guilds, and the diverse Towers of magic realms 
+The Fighter's Halls, Order of Paladins, Ranger's Taverns, 
+Gilds of Thieves, and the diverse Towers of magic realms 
 are no longer restricted to the professionals involved. 
 Nevertheless some of the services are exclusive for members. 
 Look out for ambitious quests! 
 
 Buildings that anyone can visit if in need of some diversion:
-Gambling Houses: Read the rules before playing. And, the games 
+Gambling Houses: Read the rules before paying. And, the games 
 are not rigged, just naturally difficult.
 Authorities: Ask for quests to gain reputation and rewards.
 Libraries: For information indexes of all kinds.

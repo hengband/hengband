@@ -1,9 +1,9 @@
-# autopick.txt for Bakabakaband
+# autopick.txt for Hengband
 #
 # The last part of this file is an example of 'pickpref.prf'. 
-# You can copy this file to lib\user\ or ~/.angband/Bakabakaband/ 
+# You can copy this file to lib\user\ or ~/.angband/Hengband/ 
 # to use as preference of auto-picker.
-# (UNIX user must copy to ~/.angband/Bakabakaband/. Others must 
+# (UNIX user must copy to ~/.angband/Hengband/. Others must 
 # copy to lib\user\ .)
 #
 #    =====   How to use auto-picker/destroyer   ========
@@ -30,7 +30,7 @@
 #
 #      The preference will be saved in a file named
 #      "pickpref-<<name>>.prf" in your user directory; This will be
-#      ~/.angband/Bakabakaband/ for UNIX, or Bakabakaband\lib\user\ for other
+#      ~/.angband/Hengband/ for UNIX, or hengband\lib\user\ for other
 #      operating systems.  You may edit this file using any text
 #      editor, and may use the '$' command within the game to reread
 #      this file.  When you don't use the in-game editor, you may use
@@ -260,8 +260,8 @@
 #------------------------------------------------------------------
 #
 #    Below is an example 'pickpref.prf' file.
-#    You can copy this file to lib\user\ or ~/.angband/Bakabakaband/.
-#    (UNIX user must copy to ~/.angband/Bakabakaband/. Others must copy 
+#    You can copy this file to lib\user\ or ~/.angband/Hengband/.
+#    (UNIX user must copy to ~/.angband/Hengband/. Others must copy 
 #    to  lib\user\ .)
 #
 #------------------------------------------------------------------

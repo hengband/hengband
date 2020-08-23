@@ -156,17 +156,8 @@
  * XXX XXX XXX Consider the use of "savetty()" and "resetty()".
  */
 
-#include "system/angband.h"
-#include "game-option/runtime-arguments.h"
-#include "game-option/special-options.h"
-#include "io/exit-panic.h"
-#include "io/files-util.h"
-#include "main/sound-definitions-table.h"
-#include "main/sound-of-music.h"
-#include "term/gameterm.h"
-#include "term/term-color-types.h"
-#include "util/angband-files.h"
-#include "view/display-map.h"
+#include "angband.h"
+
 
 #ifdef USE_GCU
 
@@ -178,13 +169,18 @@
 /*
  * Include the proper "header" file
  */
+#ifdef USE_NCURSES
+# undef bool
+# include <ncurses.h>
+#else
 # include <curses.h>
+#endif
 
 typedef struct term_data term_data;
 
 struct term_data
 {
-   term_type t;
+   term t;
 
    WINDOW *win;
 };
@@ -200,22 +196,35 @@ static term_data data[MAX_TERM_DATA];
  * Mega-Hack -- try to guess when "POSIX" is available.
  * If the user defines two of these, we will probably crash.
  */
-#if !defined(USE_TCHARS)
-# if defined(_POSIX_VERSION)
-#  define USE_TPOSIX
-# else
-#  if defined(linux)
-#   define USE_TERMIO
+#if !defined(USE_TPOSIX)
+# if !defined(USE_TERMIO) && !defined(USE_TCHARS)
+#  if defined(_POSIX_VERSION)
+#   define USE_TPOSIX
 #  else
-#   define USE_TCHARS
+#   if defined(USG) || defined(linux) || defined(SOLARIS)
+#    define USE_TERMIO
+#   else
+#    define USE_TCHARS
+#   endif
 #  endif
 # endif
+#endif
+
+/*
+ * Hack -- Amiga uses "fake curses" and cannot do any of this stuff
+ */
+#if defined(AMIGA)
+# undef USE_TPOSIX
+# undef USE_TERMIO
+# undef USE_TCHARS
 #endif
 
 /*
  * Try redefining the colors at startup.
  */
 #define REDEFINE_COLORS
+
+
 
 /*
  * POSIX stuff
@@ -244,7 +253,9 @@ static term_data data[MAX_TERM_DATA];
 # include <sys/types.h>
 #endif
 
+
 #include <locale.h>
+
 
 /*
  * XXX XXX Hack -- POSIX uses "O_NONBLOCK" instead of "O_NDELAY"
@@ -255,11 +266,13 @@ static term_data data[MAX_TERM_DATA];
 # define O_NDELAY O_NONBLOCK
 #endif
 
+
 /*
  * OPTION: some machines lack "cbreak()"
  * On these machines, we use an older definition
  */
 /* #define cbreak() crmode() */
+
 
 /*
  * OPTION: some machines cannot handle "nonl()" and "nl()"
@@ -268,10 +281,12 @@ static term_data data[MAX_TERM_DATA];
 /* #define nonl() */
 /* #define nl() */
 
+
+#ifdef USE_SOUND
+
 static concptr ANGBAND_DIR_XTRA_SOUND;
 
 /*
- * todo 有効活用されていない疑惑
  * Flag set once "sound" has been initialized
  */
 static bool can_use_sound = FALSE;
@@ -280,6 +295,8 @@ static bool can_use_sound = FALSE;
  * An array of sound file names
  */
 static concptr sound_file[SOUND_MAX];
+
+#endif /* USE_SOUND */
 
 /*
  * Save the "normal" and "angband" terminal settings
@@ -302,6 +319,7 @@ static struct termio  game_termio;
 #endif
 
 #ifdef USE_TCHARS
+
 static struct ltchars norm_speciax_chars;
 static struct sgttyb  norm_ttyb;
 static struct tchars  norm_tchars;
@@ -311,14 +329,20 @@ static struct ltchars game_speciax_chars;
 static struct sgttyb  game_ttyb;
 static struct tchars  game_tchars;
 static int            game_locax_chars;
+
 #endif
+
+
 
 /*
  * Hack -- Number of initialized "term" structures
  */
 static int active = 0;
 
+
+
 #ifdef A_COLOR
+
 /*
  * Hack -- define "A_BRIGHT" to be "A_BOLD", because on many
  * machines, "A_BRIGHT" produces ugly "inverse" video.
@@ -341,30 +365,41 @@ static int can_fix_color = FALSE;
  * Simple Angband to Curses color conversion table
  */
 static int colortable[16];
+
 #endif
+
+
 
 /*
  * Place the "keymap" into its "normal" state
  */
 static void keymap_norm(void)
 {
+
 #ifdef USE_TPOSIX
+
    /* restore the saved values of the special chars */
    (void)tcsetattr(0, TCSAFLUSH, &norm_termios);
+
 #endif
 
 #ifdef USE_TERMIO
+
    /* restore the saved values of the special chars */
    (void)ioctl(0, TCSETA, (char *)&norm_termio);
+
 #endif
 
 #ifdef USE_TCHARS
+
    /* restore the saved values of the special chars */
    (void)ioctl(0, TIOCSLTC, (char *)&norm_speciax_chars);
    (void)ioctl(0, TIOCSETP, (char *)&norm_ttyb);
    (void)ioctl(0, TIOCSETC, (char *)&norm_tchars);
    (void)ioctl(0, TIOCLSET, (char *)&norm_locax_chars);
+
 #endif
+
 }
 
 
@@ -373,23 +408,31 @@ static void keymap_norm(void)
  */
 static void keymap_game(void)
 {
+
 #ifdef USE_TPOSIX
+
    /* restore the saved values of the special chars */
    (void)tcsetattr(0, TCSAFLUSH, &game_termios);
+
 #endif
 
 #ifdef USE_TERMIO
+
    /* restore the saved values of the special chars */
    (void)ioctl(0, TCSETA, (char *)&game_termio);
+
 #endif
 
 #ifdef USE_TCHARS
+
    /* restore the saved values of the special chars */
    (void)ioctl(0, TIOCSLTC, (char *)&game_speciax_chars);
    (void)ioctl(0, TIOCSETP, (char *)&game_ttyb);
    (void)ioctl(0, TIOCSETC, (char *)&game_tchars);
    (void)ioctl(0, TIOCLSET, (char *)&game_locax_chars);
+
 #endif
+
 }
 
 
@@ -398,23 +441,31 @@ static void keymap_game(void)
  */
 static void keymap_norm_prepare(void)
 {
+
 #ifdef USE_TPOSIX
+
    /* Get the normal keymap */
    tcgetattr(0, &norm_termios);
+
 #endif
 
 #ifdef USE_TERMIO
+
    /* Get the normal keymap */
    (void)ioctl(0, TCGETA, (char *)&norm_termio);
+
 #endif
 
 #ifdef USE_TCHARS
+
    /* Get the normal keymap */
    (void)ioctl(0, TIOCGETP, (char *)&norm_ttyb);
    (void)ioctl(0, TIOCGLTC, (char *)&norm_speciax_chars);
    (void)ioctl(0, TIOCGETC, (char *)&norm_tchars);
    (void)ioctl(0, TIOCLGET, (char *)&norm_locax_chars);
+
 #endif
+
 }
 
 
@@ -423,7 +474,9 @@ static void keymap_norm_prepare(void)
  */
 static void keymap_game_prepare(void)
 {
+
 #ifdef USE_TPOSIX
+
    /* Acquire the current mapping */
    tcgetattr(0, &game_termios);
 
@@ -445,9 +498,11 @@ static void keymap_game_prepare(void)
    /* Normally, block until a character is read */
    game_termios.c_cc[VMIN] = 1;
    game_termios.c_cc[VTIME] = 0;
+
 #endif
 
 #ifdef USE_TERMIO
+
    /* Acquire the current mapping */
    (void)ioctl(0, TCGETA, (char *)&game_termio);
 
@@ -457,6 +512,8 @@ static void keymap_game_prepare(void)
    /* Force "Ctrl-Z" to suspend */
    game_termio.c_cc[VSUSP] = (char)26;
 
+   /* Hack -- Leave "VSTART/VSTOP" alone */
+
    /* Disable the standard control characters */
    game_termio.c_cc[VQUIT] = (char)-1;
    game_termio.c_cc[VERASE] = (char)-1;
@@ -464,12 +521,26 @@ static void keymap_game_prepare(void)
    game_termio.c_cc[VEOF] = (char)-1;
    game_termio.c_cc[VEOL] = (char)-1;
 
+#if 0
+   /* Disable the non-posix control characters */
+   game_termio.c_cc[VEOL2] = (char)-1;
+   game_termio.c_cc[VSWTCH] = (char)-1;
+   game_termio.c_cc[VDSUSP] = (char)-1;
+   game_termio.c_cc[VREPRINT] = (char)-1;
+   game_termio.c_cc[VDISCARD] = (char)-1;
+   game_termio.c_cc[VWERASE] = (char)-1;
+   game_termio.c_cc[VLNEXT] = (char)-1;
+   game_termio.c_cc[VSTATUS] = (char)-1;
+#endif
+
    /* Normally, block until a character is read */
    game_termio.c_cc[VMIN] = 1;
    game_termio.c_cc[VTIME] = 0;
+
 #endif
 
 #ifdef USE_TCHARS
+
    /* Get the default game characters */
    (void)ioctl(0, TIOCGETP, (char *)&game_ttyb);
    (void)ioctl(0, TIOCGLTC, (char *)&game_speciax_chars);
@@ -497,8 +568,11 @@ static void keymap_game_prepare(void)
    game_tchars.t_quitc = (char)-1;
    game_tchars.t_eofc = (char)-1;
    game_tchars.t_brkc = (char)-1;
+
 #endif
+
 }
+
 
 
 
@@ -507,6 +581,7 @@ static void keymap_game_prepare(void)
  */
 static errr Term_xtra_gcu_alive(int v)
 {
+   /* Suspend */
    if (!v)
    {
       /* Go to normal keymap mode */
@@ -518,13 +593,18 @@ static errr Term_xtra_gcu_alive(int v)
       nl();
 
       /* Hack -- make sure the cursor is visible */
-      term_xtra(TERM_XTRA_SHAPE, 1);
+      Term_xtra(TERM_XTRA_SHAPE, 1);
 
       /* Flush the curses buffer */
       (void)refresh();
 
+#ifdef SPECIAL_BSD
+      /* this moves curses to bottom right corner */
+      mvcur(curscr->cury, curscr->curx, LINES - 1, 0);
+#else
       /* this moves curses to bottom right corner */
       mvcur(getcury(curscr), getcurx(curscr), LINES - 1, 0);
+#endif
 
       /* Exit curses */
       endwin();
@@ -532,8 +612,14 @@ static errr Term_xtra_gcu_alive(int v)
       /* Flush the output */
       (void)fflush(stdout);
    }
+
+   /* Resume */
    else
    {
+      /* Refresh */
+      /* (void)touchwin(curscr); */
+      /* (void)wrefresh(curscr); */
+
       /* Restore the settings */
       cbreak();
       noecho();
@@ -543,9 +629,9 @@ static errr Term_xtra_gcu_alive(int v)
       keymap_game();
    }
 
+   /* Success */
    return (0);
 }
-
 
 /*
  * Check for existance of a file
@@ -553,6 +639,7 @@ static errr Term_xtra_gcu_alive(int v)
 static bool check_file(concptr s)
 {
    FILE *fff;
+
    fff = fopen(s, "r");
    if (!fff) return (FALSE);
 
@@ -561,41 +648,51 @@ static bool check_file(concptr s)
 }
 
 
+
+#ifdef USE_SOUND
+
 /*
  * Initialize sound
  */
 static bool init_sound(void)
 {
    /* Initialize once */
-	if (can_use_sound) return can_use_sound;
+   if (!can_use_sound)
+   {
+      int i;
 
-	int i;
-	char wav[128];
-	char buf[1024];
+      char wav[128];
+      char buf[1024];
 
-	/* Prepare the sounds */
-	for (i = 1; i < SOUND_MAX; i++)
-	{
-		/* Extract name of sound file */
-		sprintf(wav, "%s.wav", angband_sound_name[i]);
+      /* Prepare the sounds */
+      for (i = 1; i < SOUND_MAX; i++)
+      {
+	 /* Extract name of sound file */
+	 sprintf(wav, "%s.wav", angband_sound_name[i]);
 
-		/* Access the sound */
-		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
+	 /* Access the sound */
+	 path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_SOUND, wav);
 
-		/* Save the sound filename, if it exists */
-		if (check_file(buf)) sound_file[i] = string_make(buf);
-	}
+	 /* Save the sound filename, if it exists */
+	 if (check_file(buf)) sound_file[i] = string_make(buf);
+      }
 
-	/* Sound available */
-	can_use_sound = TRUE;
-	return (can_use_sound);
+      /* Sound available */
+      can_use_sound = TRUE;
+   }
+
+   /* Result */
+   return (can_use_sound);
 }
+
+#endif /* USE_SOUND */
+
 
 
 /*
  * Init the "curses" system
  */
-static void Term_init_gcu(term_type *t)
+static void Term_init_gcu(term *t)
 {
    term_data *td = (term_data *)(t->data);
 
@@ -619,7 +716,7 @@ static void Term_init_gcu(term_type *t)
 /*
  * Nuke the "curses" system
  */
-static void Term_nuke_gcu(term_type *t)
+static void Term_nuke_gcu(term *t)
 {
    term_data *td = (term_data *)(t->data);
 
@@ -630,15 +727,20 @@ static void Term_nuke_gcu(term_type *t)
    if (--active != 0) return;
 
    /* Hack -- make sure the cursor is visible */
-   term_xtra(TERM_XTRA_SHAPE, 1);
+   Term_xtra(TERM_XTRA_SHAPE, 1);
 
 #ifdef A_COLOR
   /* Reset colors to defaults */
   start_color();
 #endif
 
+#ifdef SPECIAL_BSD
+   /* This moves curses to bottom right corner */
+   mvcur(curscr->cury, curscr->curx, LINES - 1, 0);
+#else
    /* This moves curses to bottom right corner */
    mvcur(getcury(curscr), getcurx(curscr), LINES - 1, 0);
+#endif
 
    /* Flush the curses buffer */
    (void)refresh();
@@ -675,8 +777,8 @@ static errr Term_xtra_gcu_event(int v)
       for (k = 0; (k < 10) && (i == ERR); k++) i = getch();
 
       /* Broken input is special */
-      if (i == ERR) exit_game_panic(p_ptr);
-      if (i == EOF) exit_game_panic(p_ptr);
+      if (i == ERR) exit_game_panic();
+      if (i == EOF) exit_game_panic();
    }
 
    /* Do not wait */
@@ -697,7 +799,7 @@ static errr Term_xtra_gcu_event(int v)
    }
 
    /* Enqueue the keypress */
-   term_key_push(i);
+   Term_keypress(i);
 
    /* Success */
    return (0);
@@ -721,7 +823,7 @@ static errr Term_xtra_gcu_event(int v)
       i = read(0, buf, 1);
 
       /* Hack -- Handle bizarre "errors" */
-      if ((i <= 0) && (errno != EINTR)) exit_game_panic(p_ptr);
+      if ((i <= 0) && (errno != EINTR)) exit_game_panic();
    }
 
    /* Do not wait */
@@ -747,13 +849,15 @@ static errr Term_xtra_gcu_event(int v)
    if ((i != 1) || (!buf[0])) return (1);
 
    /* Enqueue the keypress */
-   term_key_push(buf[0]);
+   Term_keypress(buf[0]);
 
    /* Success */
    return (0);
 }
 
 #endif   /* USE_GETCH */
+
+#ifdef USE_SOUND
 
 /*
  * Hack -- make a sound
@@ -775,10 +879,39 @@ static errr Term_xtra_gcu_sound(int v)
    
    return (system(buf) < 0);
 
+#if 0
+   char *argv[4];
+   pid_t pid;
+
+   /* Sound disabled */
+   if (!use_sound) return (1);
+
+   /* Illegal sound */
+   if ((v < 0) || (v >= SOUND_MAX)) return (1);
+
+   /* Unknown sound */
+   if (!sound_file[v]) return (1);
+
+   pid=fork();
+
+   /* cannot fork? */
+   if (pid==-1) return (1);
+
+   if (pid==0)
+   {
+      char *argv[4];
+      argv[0]="sh";
+      argv[1]="-c";
+      argv[2]="./gcusound.sh";
+      strcpy(argv[3],sound_file[v]);
+      execvp(argv[0], argv);
+      exit(0);
+   }
+#endif
    return (0);
 
 }
-
+#endif
 
 /*
  * React to changes
@@ -829,9 +962,11 @@ static errr Term_xtra_gcu(int n, int v)
       case TERM_XTRA_NOISE:
       return write(1, "\007", 1) != 1;
 
+#ifdef USE_SOUND
       /* Make a special sound */
       case TERM_XTRA_SOUND:
 	 return (Term_xtra_gcu_sound(v));
+#endif
 
       /* Flush the Curses buffer */
       case TERM_XTRA_FRESH:
@@ -973,8 +1108,7 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
 #endif
 
    /* Obtain a copy of the text */
-   for (i = 0; i < n; i++) text[i] = s[i];
-   text[n] = 0;
+   for (i = 0; i < n; i++) text[i] = s[i];    text[n] = 0;
 
    /* Move the cursor and dump the string */
    wmove(td->win, y, x);
@@ -995,7 +1129,7 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
 
 static errr term_data_init(term_data *td, int rows, int cols, int y, int x)
 {
-   term_type *t = &td->t;
+   term *t = &td->t;
 
    /* Make sure the window has a positive size */
    if (rows <= 0 || cols <= 0) return (0);
@@ -1034,7 +1168,7 @@ static errr term_data_init(term_data *td, int rows, int cols, int y, int x)
    t->data = td;
 
    /* Activate it */
-   term_activate(t);
+   Term_activate(t);
 
 
    /* Success */
@@ -1074,17 +1208,26 @@ errr init_gcu(int argc, char *argv[])
 
    setlocale(LC_ALL, "");
 
+#ifdef USE_SOUND
+
    /* Build the "sound" path */
    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
 
    /* Allocate the path */
    ANGBAND_DIR_XTRA_SOUND = string_make(path);
 
+#endif
+
    /* Extract the normal keymap */
    keymap_norm_prepare();
 
+#if defined(USG)
+   /* Initialize for USG Unix */
+   if (initscr() == NULL) return (-1);
+#else
    /* Initialize for others systems */
    if (initscr() == (WINDOW*)ERR) return (-1);
+#endif
 
    /* Activate hooks */
    quit_aux = hook_quit;
@@ -1113,16 +1256,23 @@ errr init_gcu(int argc, char *argv[])
    if (can_fix_color)
    {
       /* Prepare the color pairs */
-	   for (i = 1; i <= 15; i++)
-	   {
-		   if (init_pair(i, i, 0) == ERR)
-		   {
-			   quit("Color pair init failed");
-		   }
+      for (i = 1; i <= 63; i++)
+      {
+	 /* Reset the color */
+	 if (init_pair(i, (i - 1) % 8, (i - 1) / 8) == ERR)
+	 {
+	    quit("Color pair init failed");
+	 }
 
-		   colortable[i] = COLOR_PAIR(i);
-		   Term_xtra_gcu_react();
-	   }
+	/* Set up the colormap */
+	colortable[i - 1] = (COLOR_PAIR(i) | A_NORMAL);
+	colortable[i + 7] = (COLOR_PAIR(i) | A_BRIGHT);
+
+	/* XXX XXX XXX Take account of "gamma correction" */
+
+	/* Prepare the "Angband Colors" */
+	Term_xtra_gcu_react();
+      }
    }
    /* Attempt to use colors */
    else if (can_use_color)
@@ -1161,6 +1311,7 @@ errr init_gcu(int argc, char *argv[])
 
 #endif
 
+#ifdef USE_SOUND
    /* Handle "arg_sound" */
    if (use_sound != arg_sound)
    {
@@ -1177,6 +1328,9 @@ errr init_gcu(int argc, char *argv[])
       /* Change setting */
       use_sound = arg_sound;
    }
+#endif
+
+#ifdef USE_GRAPHICS
 
    /* Try graphics */
    if (arg_graphics)
@@ -1186,6 +1340,10 @@ errr init_gcu(int argc, char *argv[])
       use_graphics = TRUE;
 #endif
    }
+
+#endif /* USE_GRAPHICS */
+
+
 
    /*** Low level preparation ***/
 
@@ -1256,7 +1414,7 @@ errr init_gcu(int argc, char *argv[])
    }
 
    /* Activate the "Angband" window screen */
-   term_activate(&data[0].t);
+   Term_activate(&data[0].t);
 
    /* Store */
    term_screen = &data[0].t;
@@ -1267,3 +1425,5 @@ errr init_gcu(int argc, char *argv[])
 
 
 #endif /* USE_GCU */
+
+

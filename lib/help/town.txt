@@ -1,7 +1,7 @@
 === The Town and Wilderness ===
 
 
-After you have created your character, you will begin your Bakabakaband
+After you have created your character, you will begin your Hengband
 adventure in the town called Outpost. Symbols appearing on your screen
 will represent the walls, floor, objects, features, and creatures
 lurking about. In order to direct your character through his
@@ -72,12 +72,12 @@ passes and if you enter the town at night, the town will be dark.
 Fortunately, the various shops and the other special buildings are open
 on a 24-hour basis.
 
-The world of Bakabakaband includes five towns separated by a wilderness
+The world of Hengband includes five towns separated by a wilderness
 and many dungeons. Fixed quests (see below [d]) could be begun by
 entering certain buildings in the towns.
 
 While most people welcome this large world, they are not for everyone
-and consequently, there are three possible town options in Bakabakaband -
+and consequently, there are three possible town options in Hengband -
 the 'Standard' town(s), the 'Lite' town and the 'Vanilla' town. The
 default is the standard town and the lite town and the vanilla town
 options can be selected by pressing '=' during character
@@ -92,7 +92,7 @@ during the creation of your next character.
 --- The 'Standard' Town ---
 
 The 'standard' town consists of a 97x62 square world. Each square
-(actually a rectangle) is the size of a standard Bakabakaband dungeon
+(actually a rectangle) is the size of a standard Hengband dungeon
 level and contains themed wilderness terrain (mountainous areas,
 oceans, plains, etc). There are several towns located in various parts
 of the world and each town is situated in its own wilderness square.
@@ -260,8 +260,8 @@ The General Store ("1")
      lamps, oil, shovels, picks, and spikes. All of these items and
      some others can be sold back to the General store for money.
 
-The Armoury ("2")
-     The Armoury is where the town's armor is fashioned. All sorts of
+The Armory ("2")
+     The Armory is where the town's armor is fashioned. All sorts of
      protective gear may be bought and sold here.
 
 The Weaponsmith's Shop ("3")
@@ -274,12 +274,12 @@ The Temple ("4")
      bless scrolls, word of recall scrolls, some approved priestly
      weapons, as well as books of Life magic for priests and paladins.
 
-The Alchemy Shop ("5")
+The Alchemy shop ("5")
      The Alchemy Shop deals in all types of potions and scrolls.
 
-The Magic Shop ("6")
-     The Magic Shop deals in all sorts of rings, wands, amulets,
-     and staffs, as well as some magic books.
+The Magic User's Shop ("6")
+     The Magic User's Shop deals in all sorts of rings, wands, amulets,
+     and staves, as well as some magic books.
 
 The Black Market ("7")
      The Black Market will sell and buy anything at extortionate
@@ -361,7 +361,7 @@ quest.
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Bakabakaband 1.0.11
+Updated    : Hengband 1.0.11
 
 
 ***** Begin Hyperlinks
