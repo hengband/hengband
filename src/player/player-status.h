@@ -329,7 +329,7 @@ typedef struct player_type {
     bool riding_wield[2]; /* Riding weapon */
     bool riding_ryoute; /* Riding weapon */
     bool monlite;
-    bool yoiyami;
+    BIT_FLAGS yoiyami;
     BIT_FLAGS easy_2weapon;
     BIT_FLAGS down_saving;
 

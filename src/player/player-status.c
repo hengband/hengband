@@ -338,7 +338,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->bless_blade = have_bless_blade(creature_ptr);
     creature_ptr->easy_2weapon = have_easy2_weapon(creature_ptr);
     creature_ptr->down_saving = have_down_saving(creature_ptr);
-    have_no_ac(creature_ptr);
+    creature_ptr->yoiyami = have_no_ac(creature_ptr);
     creature_ptr->mighty_throw = have_mighty_throw(creature_ptr);
     creature_ptr->dec_mana = have_dec_mana(creature_ptr);
     creature_ptr->reflect = have_reflect(creature_ptr);
