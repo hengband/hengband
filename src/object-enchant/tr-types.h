@@ -148,6 +148,7 @@ typedef enum tr_type {
     TR_SLOW_REGEN = 137,
     TR_MIGHTY_THROW = 138,
     TR_EASY2_WEAPON = 139,
+    TR_DOWN_SAVING = 140,
     
-    TR_FLAG_MAX = 140,
+    TR_FLAG_MAX = 141,
 } tr_type;
