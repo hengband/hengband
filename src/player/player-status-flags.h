@@ -42,7 +42,7 @@ void have_easy2_weapon(player_type *creature_ptr);
 void have_down_saving(player_type *creature_ptr);
 void have_no_ac(player_type *creature_ptr);
 void have_no_flowed(player_type *creature_ptr);
-void have_mighty_throw(player_type *creature_ptr);
+BIT_FLAGS have_mighty_throw(player_type *creature_ptr);
 BIT_FLAGS have_dec_mana(player_type *creature_ptr);
 BIT_FLAGS have_reflect(player_type *creature_ptr);
 void have_see_nocto(player_type *creature_ptr);

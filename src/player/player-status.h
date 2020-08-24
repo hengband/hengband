@@ -440,7 +440,7 @@ typedef struct player_type {
     BIT_FLAGS easy_spell;
     bool heavy_spell;
     bool warning;
-    bool mighty_throw;
+    BIT_FLAGS mighty_throw;
     bool see_nocto; /* Noctovision */
     bool invoking_midnight_curse;
 

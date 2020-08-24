@@ -313,20 +313,11 @@ void have_no_flowed(player_type *creature_ptr)
     }
 }
 
-void have_mighty_throw(player_type *creature_ptr)
+BIT_FLAGS have_mighty_throw(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-
-    creature_ptr->mighty_throw = FALSE;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        if (o_ptr->name2 == EGO_RING_THROW)
-            creature_ptr->mighty_throw = TRUE;
-    }
+    BIT_FLAGS result = 0L;
+    result |= check_equipment_flags(creature_ptr, TR_MIGHTY_THROW);
+    return result;
 }
 
 BIT_FLAGS have_dec_mana(player_type *creature_ptr)
