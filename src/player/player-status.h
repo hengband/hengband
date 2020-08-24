@@ -391,7 +391,7 @@ typedef struct player_type {
     bool resist_time; /* Resist time */
     bool resist_water; /* Resist water */
 
-    bool reflect; /* Reflect 'bolt' attacks */
+    BIT_FLAGS reflect; /* Reflect 'bolt' attacks */
     bool sh_fire; /* Fiery 'immolation' effect */
     bool sh_elec; /* Electric 'immolation' effect */
     bool sh_cold; /* Cold 'immolation' effect */

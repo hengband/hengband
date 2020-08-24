@@ -17,7 +17,8 @@ enum flag_cause {
     FLAG_CAUSE_CLASS = 13, /*!< 職業上の体得 */
     FLAG_CAUSE_PERSONALITY = 14, /*!< 性格上の体得 */
     FLAG_CAUSE_MAGIC_TIME_EFFECT = 15, /*!< 魔法による時限効果 */
-    FLAG_CAUSE_MUTATION = 16 /*!< 変異による効果 */
+    FLAG_CAUSE_MUTATION = 16, /*!< 変異による効果 */
+    FLAG_CAUSE_BATTLE_FORM = 17 /*!< 構えによる効果 */
 };
 
 bool have_pass_wall(player_type *creature_ptr);
@@ -43,7 +44,7 @@ void have_no_ac(player_type *creature_ptr);
 void have_no_flowed(player_type *creature_ptr);
 void have_mighty_throw(player_type *creature_ptr);
 BIT_FLAGS have_dec_mana(player_type *creature_ptr);
-void have_reflect(player_type *creature_ptr);
+BIT_FLAGS have_reflect(player_type *creature_ptr);
 void have_see_nocto(player_type *creature_ptr);
 void have_warning(player_type *creature_ptr);
 BIT_FLAGS have_anti_magic(player_type *creature_ptr);
