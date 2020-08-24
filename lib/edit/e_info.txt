@@ -1195,6 +1195,7 @@ E:and Power Throwing
 X:27:5
 W:30:0:0:500
 C:0:0:0:0
+F:MIGHTY_THROW
 
 N:170:活力の
 E:and Regeneration

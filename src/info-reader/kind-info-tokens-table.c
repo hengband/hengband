@@ -148,6 +148,7 @@ concptr k_info_flags[NUM_K_FLAGS] = {
     "LOW_MAGIC",
     "FAST_DIGEST",
     "SLOW_REGEN",
+    "MIGHTY_THROW",
 };
 
 /*!
