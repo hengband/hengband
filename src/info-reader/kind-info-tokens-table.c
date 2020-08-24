@@ -151,6 +151,7 @@ concptr k_info_flags[NUM_K_FLAGS] = {
     "MIGHTY_THROW",
     "EASY2_WEAPON",
     "DOWN_SAVING",
+    "NO_AC",
 };
 
 /*!
