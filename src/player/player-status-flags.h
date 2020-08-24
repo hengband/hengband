@@ -39,7 +39,7 @@ BIT_FLAGS have_esp_unique(player_type *creature_ptr);
 BIT_FLAGS have_esp_telepathy(player_type *creature_ptr);
 BIT_FLAGS have_bless_blade(player_type *creature_ptr);
 BIT_FLAGS have_easy2_weapon(player_type *creature_ptr);
-void have_down_saving(player_type *creature_ptr);
+BIT_FLAGS have_down_saving(player_type *creature_ptr);
 void have_no_ac(player_type *creature_ptr);
 void have_no_flowed(player_type *creature_ptr);
 BIT_FLAGS have_mighty_throw(player_type *creature_ptr);

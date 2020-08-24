@@ -222,23 +222,11 @@ BIT_FLAGS have_easy2_weapon(player_type *creature_ptr)
     return result;
 }
 
-void have_down_saving(player_type *creature_ptr)
+BIT_FLAGS have_down_saving(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-    creature_ptr->down_saving = FALSE;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (o_ptr->name2 == EGO_AMU_NAIVETY)
-            creature_ptr->down_saving = TRUE;
-    }
+    BIT_FLAGS result = 0L;
+    result |= check_equipment_flags(creature_ptr, TR_DOWN_SAVING);
+    return result;
 }
 
 void have_no_ac(player_type *creature_ptr)

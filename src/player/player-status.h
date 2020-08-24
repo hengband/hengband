@@ -331,7 +331,7 @@ typedef struct player_type {
     bool monlite;
     bool yoiyami;
     BIT_FLAGS easy_2weapon;
-    bool down_saving;
+    BIT_FLAGS down_saving;
 
     POSITION cur_lite; /* Radius of lite (if any) */
 
