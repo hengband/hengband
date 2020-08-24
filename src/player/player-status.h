@@ -330,7 +330,7 @@ typedef struct player_type {
     bool riding_ryoute; /* Riding weapon */
     bool monlite;
     bool yoiyami;
-    bool easy_2weapon;
+    BIT_FLAGS easy_2weapon;
     bool down_saving;
 
     POSITION cur_lite; /* Radius of lite (if any) */

@@ -336,7 +336,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->esp_unique = have_esp_unique(creature_ptr);
     creature_ptr->telepathy = have_esp_telepathy(creature_ptr);
     creature_ptr->bless_blade = have_bless_blade(creature_ptr);
-    have_easy2_weapon(creature_ptr);
+    creature_ptr->easy_2weapon = have_easy2_weapon(creature_ptr);
     have_down_saving(creature_ptr);
     have_no_ac(creature_ptr);
     creature_ptr->mighty_throw = have_mighty_throw(creature_ptr);
