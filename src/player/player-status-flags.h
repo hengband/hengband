@@ -16,7 +16,8 @@ enum flag_cause {
     FLAG_CAUSE_RACE = 12, /*!< 種族上の体得 */
     FLAG_CAUSE_CLASS = 13, /*!< 職業上の体得 */
     FLAG_CAUSE_PERSONALITY = 14, /*!< 性格上の体得 */
-    FLAG_CAUSE_MAGIC_TIME_EFFECT = 15 /*!< 魔法による時限効果 */
+    FLAG_CAUSE_MAGIC_TIME_EFFECT = 15, /*!< 魔法による時限効果 */
+    FLAG_CAUSE_MUTATION = 16 /*!< 変異による効果 */
 };
 
 bool have_pass_wall(player_type *creature_ptr);
@@ -34,7 +35,7 @@ BIT_FLAGS have_esp_human(player_type *creature_ptr);
 BIT_FLAGS have_esp_good(player_type *creature_ptr);
 BIT_FLAGS have_esp_nonliving(player_type *creature_ptr);
 BIT_FLAGS have_esp_unique(player_type *creature_ptr);
-void have_esp_telepathy(player_type *creature_ptr);
+BIT_FLAGS have_esp_telepathy(player_type *creature_ptr);
 BIT_FLAGS have_bless_blade(player_type *creature_ptr);
 void have_easy2_weapon(player_type *creature_ptr);
 void have_down_saving(player_type *creature_ptr);

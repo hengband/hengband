@@ -179,48 +179,33 @@ BIT_FLAGS have_esp_unique(player_type *creature_ptr)
     return result;
 }
 
-void have_esp_telepathy(player_type *creature_ptr)
+BIT_FLAGS have_esp_telepathy(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    BIT_FLAGS result = 0L;
 
-    creature_ptr->telepathy = FALSE;
-
-    if (is_time_limit_esp(creature_ptr)) {
-        creature_ptr->telepathy = TRUE;
+    if (is_time_limit_esp(creature_ptr) || creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
     if (creature_ptr->muta3 & MUT3_ESP) {
-        creature_ptr->telepathy = TRUE;
+        result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_MIND_FLAYER && creature_ptr->lev > 29)
-        creature_ptr->telepathy = TRUE;
+    if (is_specific_player_race(creature_ptr, RACE_MIND_FLAYER) && creature_ptr->lev > 29)
+        result |= FLAG_CAUSE_RACE;
 
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_SPECTRE && creature_ptr->lev > 34)
-        creature_ptr->telepathy = TRUE;
+    if (is_specific_player_race(creature_ptr, RACE_SPECTRE) && creature_ptr->lev > 34)
+        result |= FLAG_CAUSE_RACE;
 
     if (creature_ptr->pclass == CLASS_MINDCRAFTER && creature_ptr->lev > 39)
-        creature_ptr->telepathy = TRUE;
+        result |= FLAG_CAUSE_CLASS;
 
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
-        creature_ptr->telepathy = TRUE;
+        result |= FLAG_CAUSE_RACE;
     }
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->telepathy = TRUE;
-    }
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (have_flag(flgs, TR_TELEPATHY))
-            creature_ptr->telepathy = TRUE;
-    }
+    result |= check_equipment_flags(creature_ptr, TR_TELEPATHY);
+    return result;
 }
 
 BIT_FLAGS have_bless_blade(player_type *creature_ptr)

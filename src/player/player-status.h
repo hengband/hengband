@@ -416,7 +416,7 @@ typedef struct player_type {
     bool regenerate; /* Regenerate hit pts */
     bool hold_exp; /* Resist exp draining */
 
-    bool telepathy; /* Telepathy */
+    BIT_FLAGS telepathy; /* Telepathy */
     BIT_FLAGS esp_animal;
     BIT_FLAGS esp_undead;
     BIT_FLAGS esp_demon;
