@@ -481,7 +481,7 @@ E:of Genji
 X:34:30
 W:0:36:0:50000
 C:8:0:0:3
-F:DEX | SHOW_MODS | HIDE_TYPE
+F:DEX | SHOW_MODS | HIDE_TYPE | EASY2_WEAPON
 
 N:53:魔力支配の
 E:of Magic Mastery
