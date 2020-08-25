@@ -18830,7 +18830,6 @@ F:ONLY_ITEM | DROP_1D2 |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
 F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_7 | HEAL | S_SPIDER
-V:75
 D:$He is constantly training for bears and tigers to sank with a single blow.
 D:彼はクマであれトラであれ一撃で沈めるべく、絶え間ない特訓を続けている。
 
@@ -18850,7 +18849,6 @@ F:ONLY_ITEM | DROP_1D2 |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
 F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_6 | HEAL | S_SPIDER
-V:75
 D:$An adept at unarmed combat, the mystic strikes with stunning power.
 D:$  He can summon help from nature and is able to focus his power
 D:$ to ease any pain.
@@ -18874,7 +18872,6 @@ F:INVISIBLE | OPEN_DOOR | BASH_DOOR |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP
 S:1_IN_4 | HEAL | S_SPIDER
-V:75
 D:$He is being at the culmination of martial arts,
 D:$ but he never gives up on himself.
 D:$  He is still not fully manipulating the creatures of nature
@@ -23589,7 +23586,6 @@ F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_4D2
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3 | HEAL | MIND_BLAST | S_SPIDER | S_HOUND
-V:75
 D:$He is a martial arts' examiner who has trained his body and spirit
 D:$ so that he can teach the next generation.
 D:$His fist can catch the rock's deadline and crush it with a single blow.
@@ -23610,7 +23606,6 @@ F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_GOOD | DROP_4D2
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_2 | HEAL | MIND_BLAST | S_SPIDER | S_HOUND
-V:75
 D:$He is one of the few true masters of the art, being extremely skillful in 
 D:$all forms of unarmed combat and controlling the world's natural creatures 
 D:$with disdainful ease.
