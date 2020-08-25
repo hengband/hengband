@@ -62,7 +62,7 @@ bool is_cave_empty_bold2(player_type *player_ptr, POSITION y, POSITION x)
 
 bool cave_have_flag_bold(floor_type *floor_ptr, POSITION y, POSITION x, feature_flag_type f_idx)
 {
-    return have_flag(f_info[floor_ptr->grid_array[y][x].feat].flags, f_idx);
+    return has_flag(f_info[floor_ptr->grid_array[y][x].feat].flags, f_idx);
 }
 
 /*
@@ -99,11 +99,11 @@ bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x) { return feat_
 /*
  * Determine if a "feature" supports "los"
  */
-bool feat_supports_los(FEAT_IDX f_idx) { return have_flag(f_info[f_idx].flags, FF_LOS); }
+bool feat_supports_los(FEAT_IDX f_idx) { return has_flag(f_info[f_idx].flags, FF_LOS); }
 
 bool cave_los_grid(grid_type *grid_ptr) { return feat_supports_los(grid_ptr->feat); }
 
-bool cave_have_flag_grid(grid_type *grid_ptr, int feature_flags) { return have_flag(f_info[grid_ptr->feat].flags, feature_flags); }
+bool cave_have_flag_grid(grid_type *grid_ptr, int feature_flags) { return has_flag(f_info[grid_ptr->feat].flags, feature_flags); }
 
 /*
  * Determine if a "legal" grid is a "clean" floor grid

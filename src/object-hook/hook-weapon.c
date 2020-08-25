@@ -122,7 +122,7 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
         BIT_FLAGS flgs[TR_FLAG_SIZE];
         object_flags_known(player_ptr, o_ptr, flgs);
 
-        if (!have_flag(flgs, TR_BLESSED) && !(o_ptr->tval == TV_HAFTED))
+        if (!has_flag(flgs, TR_BLESSED) && !(o_ptr->tval == TV_HAFTED))
             return FALSE;
         break;
     }
@@ -140,7 +140,7 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
         object_flags_known(player_ptr, o_ptr, flgs);
 
         /* Is it known to be suitable to using while riding? */
-        if (!(have_flag(flgs, TR_RIDING)))
+        if (!(has_flag(flgs, TR_RIDING)))
             return FALSE;
 
         break;

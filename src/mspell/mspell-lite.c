@@ -79,7 +79,7 @@ void decide_lite_range(player_type *target_ptr, msa_type *msa_ptr)
     msa_ptr->x_br_lite = msa_ptr->x;
     if (los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
         feature_type *f_ptr = &f_info[target_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
-        if (!have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT) && one_in_(2))
+        if (!has_flag(f_ptr->flags, FF_LOS) && has_flag(f_ptr->flags, FF_PROJECT) && one_in_(2))
             msa_ptr->f4 &= ~(RF4_BR_LITE);
     } else if (!adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, FF_LOS, los))
         msa_ptr->f4 &= ~(RF4_BR_LITE);
@@ -94,15 +94,15 @@ void decide_lite_range(player_type *target_ptr, msa_type *msa_ptr)
 static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
 {
     feature_type *f_ptr = &f_info[floor_ptr->grid_array[msa_ptr->y][msa_ptr->x].feat];
-    if (have_flag(f_ptr->flags, FF_PROJECT))
+    if (has_flag(f_ptr->flags, FF_PROJECT))
         return;
 
-    if ((msa_ptr->f4 & RF4_BR_DISI) && have_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2)) {
+    if ((msa_ptr->f4 & RF4_BR_DISI) && has_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2)) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         return;
     }
 
-    if ((msa_ptr->f4 & RF4_BR_LITE) && have_flag(f_ptr->flags, FF_LOS) && one_in_(2))
+    if ((msa_ptr->f4 & RF4_BR_LITE) && has_flag(f_ptr->flags, FF_LOS) && one_in_(2))
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
 }
 

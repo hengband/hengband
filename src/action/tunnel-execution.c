@@ -62,12 +62,12 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
     mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
     name = f_name + mimic_f_ptr->name;
     sound(SOUND_DIG);
-    if (have_flag(f_ptr->flags, FF_PERMANENT)) {
-        if (have_flag(mimic_f_ptr->flags, FF_PERMANENT))
+    if (has_flag(f_ptr->flags, FF_PERMANENT)) {
+        if (has_flag(mimic_f_ptr->flags, FF_PERMANENT))
             msg_print(_("この岩は硬すぎて掘れないようだ。", "This seems to be permanent rock."));
         else
             msg_print(_("そこは掘れない!", "You can't tunnel through that!"));
-    } else if (have_flag(f_ptr->flags, FF_CAN_DIG)) {
+    } else if (has_flag(f_ptr->flags, FF_CAN_DIG)) {
         if (creature_ptr->skill_dig > randint0(20 * power)) {
             msg_format(_("%sをくずした。", "You have removed the %s."), name);
             cave_alter_feat(creature_ptr, y, x, FF_TUNNEL);
@@ -77,7 +77,7 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
             more = TRUE;
         }
     } else {
-        bool tree = have_flag(mimic_f_ptr->flags, FF_TREE);
+        bool tree = has_flag(mimic_f_ptr->flags, FF_TREE);
         if (creature_ptr->skill_dig > power + randint0(40 * power)) {
             if (tree)
                 msg_format(_("%sを切り払った。", "You have cleared away the %s."), name);
@@ -86,7 +86,7 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
                 creature_ptr->update |= (PU_FLOW);
             }
 
-            if (have_flag(f_ptr->flags, FF_GLASS))
+            if (has_flag(f_ptr->flags, FF_GLASS))
                 sound(SOUND_GLASS);
 
             cave_alter_feat(creature_ptr, y, x, FF_TUNNEL);

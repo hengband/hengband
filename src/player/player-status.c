@@ -981,8 +981,8 @@ static void calc_mana(player_type *creature_ptr)
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[INVEN_HANDS];
         object_flags(creature_ptr, o_ptr, flgs);
-        if (o_ptr->k_idx && !(have_flag(flgs, TR_FREE_ACT)) && !(have_flag(flgs, TR_DEC_MANA)) && !(have_flag(flgs, TR_EASY_SPELL))
-            && !((have_flag(flgs, TR_MAGIC_MASTERY)) && (o_ptr->pval > 0)) && !((have_flag(flgs, TR_DEX)) && (o_ptr->pval > 0))) {
+        if (o_ptr->k_idx && !(has_flag(flgs, TR_FREE_ACT)) && !(has_flag(flgs, TR_DEC_MANA)) && !(has_flag(flgs, TR_EASY_SPELL))
+            && !((has_flag(flgs, TR_MAGIC_MASTERY)) && (o_ptr->pval > 0)) && !((has_flag(flgs, TR_DEX)) && (o_ptr->pval > 0))) {
             creature_ptr->cumber_glove = TRUE;
             msp = (3 * msp) / 4;
         }
@@ -1166,12 +1166,12 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
             continue;
 
         object_flags(creature_ptr, q_ptr, flgs);
-        if (have_flag(flgs, TR_XTRA_SHOTS))
+        if (has_flag(flgs, TR_XTRA_SHOTS))
             extra_shots++;
     }
 
     object_flags(creature_ptr, o_ptr, flgs);
-    if (have_flag(flgs, TR_XTRA_SHOTS))
+    if (has_flag(flgs, TR_XTRA_SHOTS))
         extra_shots++;
 
     int num = 0;
@@ -1245,7 +1245,7 @@ static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_INFRA))
+        if (has_flag(flgs, TR_INFRA))
             pow += o_ptr->pval;
     }
 
@@ -1293,7 +1293,7 @@ static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_STEALTH))
+        if (has_flag(flgs, TR_STEALTH))
             pow += o_ptr->pval;
     }
 
@@ -1395,7 +1395,7 @@ static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_MAGIC_MASTERY))
+        if (has_flag(flgs, TR_MAGIC_MASTERY))
             pow += 8 * o_ptr->pval;
     }
 
@@ -1493,7 +1493,7 @@ static ACTION_SKILL_POWER calc_search(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_SEARCH))
+        if (has_flag(flgs, TR_SEARCH))
             pow += (o_ptr->pval * 5);
     }
 
@@ -1541,7 +1541,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_SEARCH))
+        if (has_flag(flgs, TR_SEARCH))
             pow += (o_ptr->pval * 5);
     }
 
@@ -1673,7 +1673,7 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_TUNNEL))
+        if (has_flag(flgs, TR_TUNNEL))
             pow += (o_ptr->pval * 20);
     }
 
@@ -1724,7 +1724,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
             wgt = class_info[creature_ptr->pclass].wgt;
             mul = class_info[creature_ptr->pclass].mul;
 
-            if (creature_ptr->pclass == CLASS_CAVALRY && (creature_ptr->riding) && (have_flag(flgs, TR_RIDING))) {
+            if (creature_ptr->pclass == CLASS_CAVALRY && (creature_ptr->riding) && (has_flag(flgs, TR_RIDING))) {
                 num = 5;
                 wgt = 70;
                 mul = 4;
@@ -1889,7 +1889,7 @@ static s16b calc_strength_addition(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_STR)) {
+        if (has_flag(flgs, TR_STR)) {
             pow += o_ptr->pval;
         }
     }
@@ -1964,7 +1964,7 @@ s16b calc_intelligence_addition(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_INT)) {
+        if (has_flag(flgs, TR_INT)) {
             pow += o_ptr->pval;
         }
     }
@@ -2026,7 +2026,7 @@ static s16b calc_wisdom_addition(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_WIS)) {
+        if (has_flag(flgs, TR_WIS)) {
             pow += o_ptr->pval;
         }
     }
@@ -2100,7 +2100,7 @@ static s16b calc_dexterity_addition(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_DEX)) {
+        if (has_flag(flgs, TR_DEX)) {
             pow += o_ptr->pval;
         }
     }
@@ -2185,7 +2185,7 @@ static s16b calc_constitution_addition(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_CON))
+        if (has_flag(flgs, TR_CON))
             pow += o_ptr->pval;
     }
 
@@ -2267,7 +2267,7 @@ static s16b calc_charisma_addition(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_CHR))
+        if (has_flag(flgs, TR_CHR))
             pow += o_ptr->pval;
     }
 
@@ -2588,7 +2588,7 @@ static s16b calc_speed(player_type *creature_ptr)
 
             if (!o_ptr->k_idx)
                 continue;
-            if (have_flag(flgs, TR_SPEED))
+            if (has_flag(flgs, TR_SPEED))
                 pow += o_ptr->pval;
         }
 
@@ -2662,7 +2662,7 @@ static s16b calc_speed(player_type *creature_ptr)
         }
 
         if (creature_ptr->prace == RACE_MERFOLK) {
-            if (have_flag(f_ptr->flags, FF_WATER)) {
+            if (has_flag(f_ptr->flags, FF_WATER)) {
                 pow += (2 + creature_ptr->lev / 10);
             } else if (!creature_ptr->levitation) {
                 pow -= 2;
@@ -2976,7 +2976,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         damage -= 5;
     }
 
-    if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
+    if ((creature_ptr->pclass == CLASS_PRIEST) && (!(has_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
         damage -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         damage += creature_ptr->lev / 6;
@@ -3063,7 +3063,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
     hit += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     hit += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
 
-    if ((creature_ptr->pclass == CLASS_PRIEST) && (!(have_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
+    if ((creature_ptr->pclass == CLASS_PRIEST) && (!(has_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
         hit -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         hit += creature_ptr->lev / 5;
@@ -3130,7 +3130,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
     }
 
     if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
-        && !have_flag(flgs, TR_RIDING)) {
+        && !has_flag(flgs, TR_RIDING)) {
 
         int penalty;
         if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {

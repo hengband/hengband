@@ -74,13 +74,13 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
     int shaft_num = 0;
     feature_type *f_ptr = &f_info[feat];
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
-    if (have_flag(f_ptr->flags, FF_LESS)) {
+    if (has_flag(f_ptr->flags, FF_LESS)) {
         if (ironman_downward || !floor_ptr->dun_level)
             return TRUE;
 
         if (floor_ptr->dun_level > d_info[floor_ptr->dungeon_idx].mindepth)
             shaft_num = (randint1(num + 1)) / 2;
-    } else if (have_flag(f_ptr->flags, FF_MORE)) {
+    } else if (has_flag(f_ptr->flags, FF_MORE)) {
         QUEST_IDX q_idx = quest_number(owner_ptr, floor_ptr->dun_level);
         if (floor_ptr->dun_level > 1 && q_idx) {
             monster_race *r_ptr = &r_info[quest[q_idx].r_idx];

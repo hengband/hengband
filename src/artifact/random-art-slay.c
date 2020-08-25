@@ -36,7 +36,7 @@ static bool random_art_slay_bow(object_type *o_ptr)
 
 static bool random_art_slay_chaos(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_CHAOTIC))
+    if (has_flag(o_ptr->art_flags, TR_CHAOTIC))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_CHAOTIC);
@@ -45,7 +45,7 @@ static bool random_art_slay_chaos(object_type *o_ptr)
 
 static bool random_art_slay_vampiric(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_VAMPIRIC))
+    if (has_flag(o_ptr->art_flags, TR_VAMPIRIC))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_VAMPIRIC);
@@ -54,7 +54,7 @@ static bool random_art_slay_vampiric(object_type *o_ptr)
 
 static bool random_art_slay_brand_acid(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_BRAND_ACID))
+    if (has_flag(o_ptr->art_flags, TR_BRAND_ACID))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_BRAND_ACID);
@@ -63,7 +63,7 @@ static bool random_art_slay_brand_acid(object_type *o_ptr)
 
 static bool random_art_slay_brand_elec(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_BRAND_ELEC))
+    if (has_flag(o_ptr->art_flags, TR_BRAND_ELEC))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_BRAND_ELEC);
@@ -72,7 +72,7 @@ static bool random_art_slay_brand_elec(object_type *o_ptr)
 
 static bool random_art_slay_brand_fire(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_BRAND_FIRE))
+    if (has_flag(o_ptr->art_flags, TR_BRAND_FIRE))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_BRAND_FIRE);
@@ -81,7 +81,7 @@ static bool random_art_slay_brand_fire(object_type *o_ptr)
 
 static bool random_art_slay_brand_cold(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_BRAND_COLD))
+    if (has_flag(o_ptr->art_flags, TR_BRAND_COLD))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_BRAND_COLD);
@@ -90,7 +90,7 @@ static bool random_art_slay_brand_cold(object_type *o_ptr)
 
 static bool random_art_slay_brand_pois(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_BRAND_POIS) || one_in_(2))
+    if (has_flag(o_ptr->art_flags, TR_BRAND_POIS) || one_in_(2))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_BRAND_POIS);
@@ -99,7 +99,7 @@ static bool random_art_slay_brand_pois(object_type *o_ptr)
 
 static bool random_art_slay_animal(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_SLAY_ANIMAL))
+    if (has_flag(o_ptr->art_flags, TR_SLAY_ANIMAL))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
@@ -108,7 +108,7 @@ static bool random_art_slay_animal(object_type *o_ptr)
 
 static bool random_art_slay_evil(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_SLAY_EVIL))
+    if (has_flag(o_ptr->art_flags, TR_SLAY_EVIL))
         return FALSE;
     
     add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
@@ -117,7 +117,7 @@ static bool random_art_slay_evil(object_type *o_ptr)
 
 static bool random_art_slay_undead(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_SLAY_UNDEAD))
+    if (has_flag(o_ptr->art_flags, TR_SLAY_UNDEAD))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
@@ -126,7 +126,7 @@ static bool random_art_slay_undead(object_type *o_ptr)
 
 static bool random_art_slay_demon(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_SLAY_DEMON))
+    if (has_flag(o_ptr->art_flags, TR_SLAY_DEMON))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_SLAY_DEMON);
@@ -139,7 +139,7 @@ static bool switch_random_art_slay(object_type *o_ptr)
     case BIAS_CHAOS:
         return random_art_slay_chaos(o_ptr);
     case BIAS_PRIESTLY:
-        if (((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM)) && !have_flag(o_ptr->art_flags, TR_BLESSED))
+        if (((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM)) && !has_flag(o_ptr->art_flags, TR_BLESSED))
             add_flag(o_ptr->art_flags, TR_BLESSED);
 
         return FALSE;
@@ -149,7 +149,7 @@ static bool switch_random_art_slay(object_type *o_ptr)
         return random_art_slay_animal(o_ptr);
     case BIAS_ROGUE:
         if ((((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DAGGER)) || ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_SPEAR)))
-            && !(have_flag(o_ptr->art_flags, TR_THROW))) {
+            && !(has_flag(o_ptr->art_flags, TR_THROW))) {
             add_flag(o_ptr->art_flags, TR_THROW);
         }
 

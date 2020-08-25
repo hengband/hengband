@@ -36,7 +36,7 @@ void call_the_void(player_type *caster_ptr)
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[caster_ptr->y + ddy_ddd[i]][caster_ptr->x + ddx_ddd[i]];
 
         if (!cave_have_flag_grid(g_ptr, FF_PROJECT)) {
-            if (!g_ptr->mimic || !have_flag(f_info[g_ptr->mimic].flags, FF_PROJECT) || !permanent_wall(&f_info[g_ptr->feat])) {
+            if (!g_ptr->mimic || !has_flag(f_info[g_ptr->mimic].flags, FF_PROJECT) || !permanent_wall(&f_info[g_ptr->feat])) {
                 do_call = FALSE;
                 break;
             }
@@ -124,7 +124,7 @@ bool vanish_dungeon(player_type *caster_ptr)
                 }
             }
 
-            if (have_flag(f_ptr->flags, FF_HURT_DISI))
+            if (has_flag(f_ptr->flags, FF_HURT_DISI))
                 cave_alter_feat(caster_ptr, y, x, FF_HURT_DISI);
         }
     }
@@ -134,9 +134,9 @@ bool vanish_dungeon(player_type *caster_ptr)
         f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI)) {
+        if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
             g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
-            if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
+            if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
 
@@ -144,9 +144,9 @@ bool vanish_dungeon(player_type *caster_ptr)
         f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI)) {
+        if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
             g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
-            if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
+            if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
     }
@@ -157,9 +157,9 @@ bool vanish_dungeon(player_type *caster_ptr)
         f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI)) {
+        if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
             g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
-            if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
+            if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
 
@@ -167,9 +167,9 @@ bool vanish_dungeon(player_type *caster_ptr)
         f_ptr = &f_info[g_ptr->mimic];
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-        if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI)) {
+        if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
             g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
-            if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
+            if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
     }

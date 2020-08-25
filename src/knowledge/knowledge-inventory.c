@@ -41,7 +41,7 @@ static concptr inven_res_label = _("                               酸電火冷�
  */
 static void print_im_or_res_flag(int immunity, int resistance, BIT_FLAGS *flags, FILE *fff)
 {
-    fputs(have_flag(flags, immunity) ? IM_FLAG_STR : (have_flag(flags, resistance) ? HAS_FLAG_STR : NO_FLAG_STR), fff);
+    fputs(has_flag(flags, immunity) ? IM_FLAG_STR : (has_flag(flags, resistance) ? HAS_FLAG_STR : NO_FLAG_STR), fff);
 }
 
 /*!
@@ -51,7 +51,7 @@ static void print_im_or_res_flag(int immunity, int resistance, BIT_FLAGS *flags,
  * @param fff 一時ファイルへのポインタ
  * @return なし
  */
-static void print_flag(int tr, BIT_FLAGS *flags, FILE *fff) { fputs(have_flag(flags, tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff); }
+static void print_flag(int tr, BIT_FLAGS *flags, FILE *fff) { fputs(has_flag(flags, tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff); }
 
 /*!
  * @brief 特殊なアイテムかどうかを調べる

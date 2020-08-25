@@ -170,7 +170,7 @@ FEAT_IDX choose_random_trap(player_type *trapped_ptr)
         feat = normal_traps[randint0(MAX_NORMAL_TRAPS)];
 
         /* Accept non-trapdoors */
-        if (!have_flag(f_info[feat].flags, FF_MORE))
+        if (!has_flag(f_info[feat].flags, FF_MORE))
             break;
 
         /* Hack -- no trap doors on special levels */
@@ -408,7 +408,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     POSITION x = trapped_ptr->x, y = trapped_ptr->y;
     grid_type *g_ptr = &trapped_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
+    int trap_feat_type = has_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 
     disturb(trapped_ptr, FALSE, TRUE);

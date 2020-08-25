@@ -53,9 +53,9 @@ void do_cmd_tunnel(player_type *creature_ptr)
     grid_type *g_ptr;
     g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX feat = get_feat_mimic(g_ptr);
-    if (have_flag(f_info[feat].flags, FF_DOOR))
+    if (has_flag(f_info[feat].flags, FF_DOOR))
         msg_print(_("ドアは掘れない。", "You cannot tunnel through doors."));
-    else if (!have_flag(f_info[feat].flags, FF_TUNNEL))
+    else if (!has_flag(f_info[feat].flags, FF_TUNNEL))
         msg_print(_("そこは掘れない。", "You can't tunnel through that."));
     else if (g_ptr->m_idx) {
         take_turn(creature_ptr, 100);

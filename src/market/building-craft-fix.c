@@ -60,7 +60,7 @@ static void give_one_ability_of_object(player_type *player_ptr, object_type *to_
         case TR_FIXED_FLAVOR:
             break;
         default:
-            if (have_flag(from_flgs, i) && !have_flag(to_flgs, i)) {
+            if (has_flag(from_flgs, i) && !has_flag(to_flgs, i)) {
                 if (!(is_pval_flag(i) && (from_ptr->pval < 1)))
                     cand[n++] = i;
             }
@@ -208,7 +208,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         o_ptr->art_flags[i] |= k_ptr->flags[i];
     if (k_ptr->pval)
         o_ptr->pval = MAX(o_ptr->pval, randint1(k_ptr->pval));
-    if (have_flag(k_ptr->flags, TR_ACTIVATE))
+    if (has_flag(k_ptr->flags, TR_ACTIVATE))
         o_ptr->xtra2 = (byte)k_ptr->act_idx;
 
     if (dd_bonus > 0) {
@@ -227,7 +227,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         }
     }
 
-    if (have_flag(k_ptr->flags, TR_BLOWS)) {
+    if (has_flag(k_ptr->flags, TR_BLOWS)) {
         int bmax = MIN(3, MAX(1, 40 / (o_ptr->dd * o_ptr->ds)));
         o_ptr->pval = MIN(o_ptr->pval, bmax);
     }

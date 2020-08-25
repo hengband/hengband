@@ -6,7 +6,7 @@
 
 static bool random_art_resistance_acid(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_ACID))
+    if (has_flag(o_ptr->art_flags, TR_RES_ACID))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_ACID);
@@ -15,7 +15,7 @@ static bool random_art_resistance_acid(object_type *o_ptr)
 
 static bool random_art_immunity_acid(object_type *o_ptr)
 {
-    if (!one_in_(BIAS_LUCK) || have_flag(o_ptr->art_flags, TR_IM_ACID))
+    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, TR_IM_ACID))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_IM_ACID);
@@ -30,7 +30,7 @@ static bool random_art_immunity_acid(object_type *o_ptr)
 
 static bool random_art_resistance_elec(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_ELEC))
+    if (has_flag(o_ptr->art_flags, TR_RES_ELEC))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_ELEC);
@@ -39,7 +39,7 @@ static bool random_art_resistance_elec(object_type *o_ptr)
 
 static bool random_art_aura_elec(object_type *o_ptr)
 {
-    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || have_flag(o_ptr->art_flags, TR_SH_ELEC))
+    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || has_flag(o_ptr->art_flags, TR_SH_ELEC))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_SH_ELEC);
@@ -48,7 +48,7 @@ static bool random_art_aura_elec(object_type *o_ptr)
 
 static bool random_art_immunity_elec(object_type *o_ptr)
 {
-    if (!one_in_(BIAS_LUCK) || have_flag(o_ptr->art_flags, TR_IM_ELEC))
+    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, TR_IM_ELEC))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_IM_ELEC);
@@ -63,7 +63,7 @@ static bool random_art_immunity_elec(object_type *o_ptr)
 
 static bool random_art_resistance_fire(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_FIRE))
+    if (has_flag(o_ptr->art_flags, TR_RES_FIRE))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_FIRE);
@@ -72,7 +72,7 @@ static bool random_art_resistance_fire(object_type *o_ptr)
 
 static bool random_art_aura_fire(object_type *o_ptr)
 {
-    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || have_flag(o_ptr->art_flags, TR_SH_FIRE))
+    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || has_flag(o_ptr->art_flags, TR_SH_FIRE))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_SH_FIRE);
@@ -81,7 +81,7 @@ static bool random_art_aura_fire(object_type *o_ptr)
 
 static bool random_art_immunity_fire(object_type *o_ptr)
 {
-    if (!one_in_(BIAS_LUCK) || have_flag(o_ptr->art_flags, TR_IM_FIRE))
+    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, TR_IM_FIRE))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_IM_FIRE);
@@ -96,7 +96,7 @@ static bool random_art_immunity_fire(object_type *o_ptr)
 
 static bool random_art_resistance_cold(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_COLD))
+    if (has_flag(o_ptr->art_flags, TR_RES_COLD))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_COLD);
@@ -105,7 +105,7 @@ static bool random_art_resistance_cold(object_type *o_ptr)
 
 static bool random_art_aura_cold(object_type *o_ptr)
 {
-    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || have_flag(o_ptr->art_flags, TR_SH_COLD))
+    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || has_flag(o_ptr->art_flags, TR_SH_COLD))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_SH_COLD);
@@ -114,7 +114,7 @@ static bool random_art_aura_cold(object_type *o_ptr)
 
 static bool random_art_immunity_cold(object_type *o_ptr)
 {
-    if (!one_in_(BIAS_LUCK) || have_flag(o_ptr->art_flags, TR_IM_COLD))
+    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, TR_IM_COLD))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_IM_COLD);
@@ -129,7 +129,7 @@ static bool random_art_immunity_cold(object_type *o_ptr)
 
 static bool random_art_resistance_pois(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_POIS))
+    if (has_flag(o_ptr->art_flags, TR_RES_POIS))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_POIS);
@@ -138,7 +138,7 @@ static bool random_art_resistance_pois(object_type *o_ptr)
 
 static bool random_art_resistance_fear(object_type *o_ptr)
 {
-    if (one_in_(3) || have_flag(o_ptr->art_flags, TR_RES_FEAR))
+    if (one_in_(3) || has_flag(o_ptr->art_flags, TR_RES_FEAR))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_FEAR);
@@ -147,7 +147,7 @@ static bool random_art_resistance_fear(object_type *o_ptr)
 
 static bool random_art_resistance_no_magic(object_type *o_ptr)
 {
-    if (!one_in_(3) || have_flag(o_ptr->art_flags, TR_NO_MAGIC))
+    if (!one_in_(3) || has_flag(o_ptr->art_flags, TR_NO_MAGIC))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_NO_MAGIC);
@@ -156,7 +156,7 @@ static bool random_art_resistance_no_magic(object_type *o_ptr)
 
 static bool random_art_resistance_nether(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_NETHER))
+    if (has_flag(o_ptr->art_flags, TR_RES_NETHER))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_NETHER);
@@ -165,7 +165,7 @@ static bool random_art_resistance_nether(object_type *o_ptr)
 
 static bool random_art_resistance_dark(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_DARK))
+    if (has_flag(o_ptr->art_flags, TR_RES_DARK))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_DARK);
@@ -174,7 +174,7 @@ static bool random_art_resistance_dark(object_type *o_ptr)
 
 static bool random_art_resistance_chaos(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_CHAOS))
+    if (has_flag(o_ptr->art_flags, TR_RES_CHAOS))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_CHAOS);
@@ -183,7 +183,7 @@ static bool random_art_resistance_chaos(object_type *o_ptr)
 
 static bool random_art_resistance_confusion(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_CONF))
+    if (has_flag(o_ptr->art_flags, TR_RES_CONF))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_CONF);
@@ -192,7 +192,7 @@ static bool random_art_resistance_confusion(object_type *o_ptr)
 
 static bool random_art_resistance_disenchant(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_RES_DISEN))
+    if (has_flag(o_ptr->art_flags, TR_RES_DISEN))
         return FALSE;
 
     add_flag(o_ptr->art_flags, TR_RES_DISEN);

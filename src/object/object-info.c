@@ -45,7 +45,7 @@ static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type
     strcpy(desc, _("", "breath "));
 
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
-        if (have_flag(flgs, dragonbreath_info[i].flag)) {
+        if (has_flag(flgs, dragonbreath_info[i].flag)) {
             if (n > 0)
                 strcat(desc, _("、", ", "));
 
@@ -158,7 +158,7 @@ concptr activation_explanation(player_type *owner_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(owner_ptr, o_ptr, flgs);
-    if (!(have_flag(flgs, TR_ACTIVATE)))
+    if (!(has_flag(flgs, TR_ACTIVATE)))
         return (_("なし", "nothing"));
 
     if (activation_index(owner_ptr, o_ptr)) {

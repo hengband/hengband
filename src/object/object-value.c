@@ -193,31 +193,31 @@ PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
         if (o_ptr->pval < 0)
             return (0L);
 
-        if (have_flag(flgs, TR_STR))
+        if (has_flag(flgs, TR_STR))
             value += (o_ptr->pval * 200L);
-        if (have_flag(flgs, TR_INT))
+        if (has_flag(flgs, TR_INT))
             value += (o_ptr->pval * 200L);
-        if (have_flag(flgs, TR_WIS))
+        if (has_flag(flgs, TR_WIS))
             value += (o_ptr->pval * 200L);
-        if (have_flag(flgs, TR_DEX))
+        if (has_flag(flgs, TR_DEX))
             value += (o_ptr->pval * 200L);
-        if (have_flag(flgs, TR_CON))
+        if (has_flag(flgs, TR_CON))
             value += (o_ptr->pval * 200L);
-        if (have_flag(flgs, TR_CHR))
+        if (has_flag(flgs, TR_CHR))
             value += (o_ptr->pval * 200L);
-        if (have_flag(flgs, TR_MAGIC_MASTERY))
+        if (has_flag(flgs, TR_MAGIC_MASTERY))
             value += (o_ptr->pval * 100);
-        if (have_flag(flgs, TR_STEALTH))
+        if (has_flag(flgs, TR_STEALTH))
             value += (o_ptr->pval * 100L);
-        if (have_flag(flgs, TR_SEARCH))
+        if (has_flag(flgs, TR_SEARCH))
             value += (o_ptr->pval * 100L);
-        if (have_flag(flgs, TR_INFRA))
+        if (has_flag(flgs, TR_INFRA))
             value += (o_ptr->pval * 50L);
-        if (have_flag(flgs, TR_TUNNEL))
+        if (has_flag(flgs, TR_TUNNEL))
             value += (o_ptr->pval * 50L);
-        if (have_flag(flgs, TR_BLOWS))
+        if (has_flag(flgs, TR_BLOWS))
             value += (o_ptr->pval * 5000L);
-        if (have_flag(flgs, TR_SPEED))
+        if (has_flag(flgs, TR_SPEED))
             value += (o_ptr->pval * 10000L);
         break;
     }

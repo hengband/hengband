@@ -199,7 +199,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return FALSE;
 
-            if (!one_in_(3) && (object_is_artifact(o_ptr) || have_flag(f, TR_BLESSED))) {
+            if (!one_in_(3) && (object_is_artifact(o_ptr) || has_flag(f, TR_BLESSED))) {
                 msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
                 if (one_in_(3)) {
                     if (o_ptr->to_d > 0) {
@@ -507,7 +507,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return FALSE;
 
-            if (!one_in_(3) && (object_is_artifact(o_ptr) || have_flag(f, TR_BLESSED))) {
+            if (!one_in_(3) && (object_is_artifact(o_ptr) || has_flag(f, TR_BLESSED))) {
                 msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
                 if (one_in_(3)) {
                     if (o_ptr->to_d > 0) {
@@ -704,7 +704,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             object_flags(caster_ptr, o_ptr, f);
 
             caster_ptr->csp += (caster_ptr->lev / 5) + randint1(caster_ptr->lev / 5);
-            if (have_flag(f, TR_TY_CURSE) || (o_ptr->curse_flags & TRC_TY_CURSE))
+            if (has_flag(f, TR_TY_CURSE) || (o_ptr->curse_flags & TRC_TY_CURSE))
                 caster_ptr->csp += randint1(5);
             if (caster_ptr->csp > caster_ptr->msp)
                 caster_ptr->csp = caster_ptr->msp;

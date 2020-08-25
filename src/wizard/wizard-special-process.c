@@ -348,9 +348,9 @@ void wiz_create_feature(player_type *creature_ptr)
     feature_type *f_ptr;
     f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
-    if (have_flag(f_ptr->flags, FF_GLYPH) || have_flag(f_ptr->flags, FF_MINOR_GLYPH))
+    if (has_flag(f_ptr->flags, FF_GLYPH) || has_flag(f_ptr->flags, FF_MINOR_GLYPH))
         g_ptr->info |= CAVE_OBJECT;
-    else if (have_flag(f_ptr->flags, FF_MIRROR))
+    else if (has_flag(f_ptr->flags, FF_MIRROR))
         g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
 
     note_spot(creature_ptr, y, x);

@@ -42,7 +42,7 @@ bool bless_weapon(player_type *caster_ptr)
     object_flags(caster_ptr, o_ptr, flgs);
 
     if (object_is_cursed(o_ptr)) {
-        if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) || have_flag(flgs, TR_ADD_L_CURSE) || have_flag(flgs, TR_ADD_H_CURSE)
+        if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)
             || (o_ptr->curse_flags & TRC_PERMA_CURSE)) {
 #ifdef JP
             msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", o_name);
@@ -73,7 +73,7 @@ bool bless_weapon(player_type *caster_ptr)
      * artifact weapon they find. Ego weapons and normal weapons
      * can be blessed automatically.
      */
-    if (have_flag(flgs, TR_BLESSED)) {
+    if (has_flag(flgs, TR_BLESSED)) {
 #ifdef JP
         msg_format("%s は既に祝福されている。", o_name);
 #else

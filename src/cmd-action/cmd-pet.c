@@ -255,14 +255,14 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_name + f_ptr->name,
-                ((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
-                    || (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE)))
+                ((!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY))
+                    || (!has_flag(f_ptr->flags, FF_LOS) && !has_flag(f_ptr->flags, FF_TREE)))
                     ? "中"
                     : "上");
 #else
             msg_format("This monster is %s the %s.",
-                ((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
-                    || (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE)))
+                ((!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY))
+                    || (!has_flag(f_ptr->flags, FF_LOS) && !has_flag(f_ptr->flags, FF_TREE)))
                     ? "in"
                     : "on",
                 f_name + f_ptr->name);

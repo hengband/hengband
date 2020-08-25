@@ -122,7 +122,7 @@ static void make_tunnels(player_type *player_ptr, dun_data_type *dd_ptr)
         dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
         f_ptr = &f_info[g_ptr->feat];
-        if (!have_flag(f_ptr->flags, FF_MOVE) || (!have_flag(f_ptr->flags, FF_WATER) && !have_flag(f_ptr->flags, FF_LAVA))) {
+        if (!has_flag(f_ptr->flags, FF_MOVE) || (!has_flag(f_ptr->flags, FF_WATER) && !has_flag(f_ptr->flags, FF_LAVA))) {
             g_ptr->mimic = 0;
             place_grid(player_ptr, g_ptr, GB_FLOOR);
         }

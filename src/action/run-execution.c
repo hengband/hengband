@@ -59,13 +59,13 @@ static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSIT
     s16b feat = get_feat_mimic(g_ptr);
     feature_type *f_ptr = &f_info[feat];
     if (!player_can_enter(creature_ptr, feat, 0))
-        return !have_flag(f_ptr->flags, FF_DOOR);
+        return !has_flag(f_ptr->flags, FF_DOOR);
 
-    if (have_flag(f_ptr->flags, FF_AVOID_RUN) && !ignore_avoid_run)
+    if (has_flag(f_ptr->flags, FF_AVOID_RUN) && !ignore_avoid_run)
         return TRUE;
 
-    if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
-        return !have_flag(f_ptr->flags, FF_DOOR);
+    if (!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY))
+        return !has_flag(f_ptr->flags, FF_DOOR);
 
     return FALSE;
 }
@@ -225,15 +225,15 @@ static bool run_test(player_type *creature_ptr)
 
         bool inv = TRUE;
         if (g_ptr->info & (CAVE_MARK)) {
-            bool notice = have_flag(f_ptr->flags, FF_NOTICE);
-            if (notice && have_flag(f_ptr->flags, FF_MOVE)) {
-                if (find_ignore_doors && have_flag(f_ptr->flags, FF_DOOR) && have_flag(f_ptr->flags, FF_CLOSE)) {
+            bool notice = has_flag(f_ptr->flags, FF_NOTICE);
+            if (notice && has_flag(f_ptr->flags, FF_MOVE)) {
+                if (find_ignore_doors && has_flag(f_ptr->flags, FF_DOOR) && has_flag(f_ptr->flags, FF_CLOSE)) {
                     notice = FALSE;
-                } else if (find_ignore_stairs && have_flag(f_ptr->flags, FF_STAIRS)) {
+                } else if (find_ignore_stairs && has_flag(f_ptr->flags, FF_STAIRS)) {
                     notice = FALSE;
-                } else if (have_flag(f_ptr->flags, FF_LAVA) && (creature_ptr->immune_fire || is_invuln(creature_ptr))) {
+                } else if (has_flag(f_ptr->flags, FF_LAVA) && (creature_ptr->immune_fire || is_invuln(creature_ptr))) {
                     notice = FALSE;
-                } else if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP)
+                } else if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP)
                     && (creature_ptr->levitation || creature_ptr->can_swim || (creature_ptr->total_weight <= weight_limit(creature_ptr)))) {
                     notice = FALSE;
                 }
