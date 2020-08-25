@@ -12282,28 +12282,26 @@ D:$energy from your soul to feed its power.
 D:ぼんやりとした人間のような姿をした強力な暗黒の精霊だ。滑るように近づいては、
 D:その剃刀のような爪で冒険者の生命を奪い、力を得るためにその魂を吸い取る。
 
-N:666:アイアン・リッチ
-E:Iron lich
-G:L:s
-I:120:28d100:30:100:10
-W:42:4:0:9000:0:0
+N:666:ストーン・リッチ
+E:Stone lich
+G:L:D
+I:115:40d30:25:70:15
+W:42:1:0:4000:20000:1180
 B:BUTT:COLD:3d6
 B:BUTT:FIRE:3d6
 B:BUTT:ELEC:3d6
-F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING |
-F:COLD_BLOOD | BASH_DOOR | CAN_FLY |
-F:EVIL | UNDEAD | SMART |
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR | CAN_FLY
+F:EVIL | UNDEAD | SMART | ONLY_ITEM | DROP_60 | DROP_GOOD
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
-F:ONLY_ITEM | DROP_60 | DROP_GOOD |
 F:NO_CONF | NO_SLEEP
-S:1_IN_2 |
-S:BA_WATE | BR_FIRE | BO_ICEE | BA_ELEC | BA_COLD |
-S:CAUSE_4 | DRAIN_MANA | BRAIN_SMASH | 
-S:S_UNDEAD
-D:$It is a huge, twisted grey skull floating through the air. Its cold eyes 
-D:$burn with hatred towards all who live.
-D:それは宙に浮いた巨大で、捻じ曲げられた灰色の髑髏だ。その冷たい目は
-D:全ての命ある物への憎しみに燃えている。
+S:1_IN_4 |
+S:BO_WATE | BR_FIRE | BO_ICEE | BA_ELEC | BA_COLD | CAUSE_3 | CAUSE_4
+S:DRAIN_MANA | MIND_BLAST | S_UNDEAD | BLIND | HOLD | CONF | BLINK
+D:$This skeleton is wearing a tattered robe.
+D:$ It unleashes some magics from a pumice stone staff
+D:$ that has been used for a while.
+D:この骸骨はボロボロの法衣を着ていて、
+D:しばらく使い込んだ軽石の杖からいくつもの魔法を繰り出してくる。
 
 #J0#
 #J0#
@@ -14229,7 +14227,7 @@ N:742:デミリッチ
 E:Demilich
 G:L:U
 I:120:30d100:20:100:50
-W:54:2:0:12500:80000:776
+W:61:2:0:14500:80000:776
 B:TOUCH:EXP_VAMP:1d12
 B:TOUCH:UN_POWER
 B:TOUCH:LOSE_DEX:4d12
@@ -14242,7 +14240,6 @@ S:1_IN_3 |
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:DRAIN_MANA | BRAIN_SMASH | S_HI_UNDEAD | S_UNDEAD | FORGET |
 S:TPORT | HEAL | ANIM_DEAD
-V:75
 D:$A lich who is partially immaterial, on its way to a new, ethereal form.
 D:部分的に非物質化したリッチで、霊的な存在に生まれ変わる過程にある。
 
@@ -23119,7 +23116,7 @@ F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_5 | ROCKET
 R:1147:5d5
 D:$It is a ghost of those who made human life a part,
-D:$ ran on the battlefield with iron wings, 
+D:$ flied on the battlefield with iron wings,
 D:$ and continued to shed a lot of blood on both sides.
 D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
 
@@ -23134,7 +23131,7 @@ F:COLD_BLOOD | CAN_FLY | GOOD | UNDEAD
 F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_60 | ONLY_ITEM
 S:1_IN_6 | BO_MANA | MISSILE | BLINK
 D:$It is a ghost of those who made human life a part,
-D:$ ran on the battlefield with iron wings,
+D:$ flied on the battlefield with iron wings,
 D:$ and continued to shed a lot of blood on both sides.
 D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
 
@@ -23628,3 +23625,63 @@ D:$This man will soon be absorbed in the devil's world.
 D:$To that extent he continues to devote his strong prayers to the devil.
 D:この男は間もなく悪魔に取り込まれるだろう。
 D:それほどまでに彼は強い祈りを悪魔に捧げ続けている。
+
+N:1180:ブロンズ・リッチ
+E:Bronze lich
+G:L:B
+I:120:95d20:30:85:10
+W:50:1:0:14000:35000:1181
+B:BUTT:COLD:4d6
+B:BUTT:FIRE:4d6
+B:BUTT:ELEC:4d6
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR | CAN_FLY
+F:EVIL | UNDEAD | SMART | ONLY_ITEM | DROP_60 | DROP_90 | DROP_GOOD
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
+F:NO_CONF | NO_SLEEP
+S:1_IN_3
+S:BO_WATE | BA_WATE | BR_FIRE | BO_ICEE | BA_ELEC | BA_COLD | CAUSE_3 | CAUSE_4
+S:DRAIN_MANA | BRAIN_SMASH | MIND_BLAST | S_UNDEAD | BLINK
+D:$This skeleton wears a robe which has a neat appearance over the years.
+D:$  It unleashes powerful magic from a bronze staff
+D:$ that has been used for many years.
+D:この骸骨は長い年月を経ても小ざっぱりしている法衣を着ていて、
+D:長年使い込んだ青銅の杖から強力な魔法を繰り出してくる。
+
+N:1181:アイアン・リッチ
+E:Iron lich
+G:L:s
+I:120:28d100:30:100:10
+W:58:4:0:19000:0:0
+B:BUTT:COLD:5d6
+B:BUTT:FIRE:5d6
+B:BUTT:ELEC:5d6
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR | CAN_FLY
+F:EVIL | UNDEAD | SMART | ONLY_ITEM | DROP_2D2 | DROP_GOOD
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
+F:NO_CONF | NO_SLEEP
+S:1_IN_2
+S:BA_WATE | BR_FIRE | BO_ICEE | BA_ELEC | BA_COLD | CAUSE_4
+S:DRAIN_MANA | BRAIN_SMASH | S_UNDEAD
+D:$It is a huge, twisted grey skull floating through the air. Its cold eyes 
+D:$burn with hatred towards all who live.
+D:それは宙に浮いた巨大で、捻じ曲げられた灰色の髑髏だ。その冷たい目は
+D:全ての命ある物への憎しみに燃えている。
+
+N:1182:リッチの破戒僧
+E:Depraved monk lich
+G:L:r
+I:120:70d39:25:80:15
+W:46:2:0:10000:0:0
+B:CLAW:SUPERHURT:12d11
+B:BITE:SUPERHURT:12d11
+B:PUNCH:TERRIFY:25d1
+B:KICK:TERRIFY:25d1
+F:UNDEAD | EVIL | COLD_BLOOD | DROP_SKELETON | SMART | HAS_DARK_1
+F:FORCE_SLEEP | ONLY_ITEM | DROP_GOOD | DROP_2D2
+F:BASH_DOOR | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
+S:1_IN_5 | BA_FIRE | BA_DARK | BA_CHAO | CAUSE_3 | MIND_BLAST
+S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | ANIM_DEAD | S_UNDEAD
+D:$It is a skull majoring in both scholarship and the martial arts.
+D:$  It is stubborn in his strength and continues to seek blood
+D:$ even when it is dead already.
+D:生前は文武両道だった髑髏だ。強さに拘泥し死してなお血を求め続けている。
