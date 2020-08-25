@@ -393,7 +393,7 @@ typedef struct player_type {
 
     BIT_FLAGS reflect; /* Reflect 'bolt' attacks */
     bool sh_fire; /* Fiery 'immolation' effect */
-    bool sh_elec; /* Electric 'immolation' effect */
+    BIT_FLAGS sh_elec; /* Electric 'immolation' effect */
     bool sh_cold; /* Cold 'immolation' effect */
 
     BIT_FLAGS anti_magic; /* Anti-magic */
