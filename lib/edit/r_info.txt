@@ -10854,25 +10854,23 @@ S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
 D:$A disembodied eye, surrounded by twelve smaller eyes on stalks.
 D:触手の先に付いた１２個の小さな目玉に囲まれている、体を持たない目玉だ。
 
-#J0#
-N:604:エンペラー・ワイト
-E:Emperor wight
-G:W:y
-I:120:38d10:20:40:10
-W:38:2:0:1600:0:0
+N:604:ノーブル・ワイト
+E:Noble wight
+G:W:o
+I:115:38d10:20:40:10
+W:38:2:0:1600:4000:1183
 B:HIT:HURT:1d12
 B:HIT:HURT:1d12
-B:TOUCH:EXP_80
-B:TOUCH:EXP_80
-F:FORCE_SLEEP | FORCE_MAXHP | 
-F:ONLY_ITEM | DROP_90 | DROP_4D2 | CAN_FLY |
+B:TOUCH:EXP_40
+B:TOUCH:EXP_40
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_90 | DROP_4D2 | CAN_FLY |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_NETH |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
 S:HOLD | SCARE | CAUSE_3 | BO_NETH
-D:$Your life force is torn from your body as this powerful unearthly being 
-D:$approaches.
-D:この強力なあの世の者が近づいてくると、自分の魂が肉体から引き裂かれるようだ。
+D:$If you are trapped in the nightmare created by this wight,
+D:$ you will never wake up forever.
+D:この亡霊が生み出す悪夢に囚われたら最期、あなたは永遠に目覚めることはないだろう。
 
 #JZ#
 N:605:熾天使
@@ -23685,3 +23683,22 @@ D:$It is a skull majoring in both scholarship and the martial arts.
 D:$  It is stubborn in his strength and continues to seek blood
 D:$ even when it is dead already.
 D:生前は文武両道だった髑髏だ。強さに拘泥し死してなお血を求め続けている。
+
+#J0#
+N:1183:エンペラー・ワイト
+E:Emperor wight
+G:W:y
+I:120:38d13:20:40:10
+W:43:2:0:2400:0:0
+B:HIT:HURT:1d12
+B:HIT:HURT:1d12
+B:TOUCH:EXP_80
+B:TOUCH:EXP_80
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_90 | DROP_4D2 | CAN_FLY
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_NETH |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
+S:1_IN_6 | 
+S:HOLD | SCARE | CAUSE_3 | BO_NETH
+D:$Your life force is torn from your body as this powerful unearthly being 
+D:$approaches.
+D:この強力なあの世の者が近づいてくると、自分の魂が肉体から引き裂かれるようだ。
