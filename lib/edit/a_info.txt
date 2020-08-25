@@ -3879,8 +3879,8 @@ W:15:10:60:50000
 P:0:3d5:5:19:0
 F:DEX | STEALTH | HIDE_TYPE | FORCE_WEAPON |
 F:KILL_HUMAN | VORPAL | SEE_INVIS |
-D:$This is a hatchet of Elmi who was a horrible muder of 
-D:$Raffnor.
+D:$This is a hatchet of Elmi who was a horrible murderer of
+D:$ Raffnor.
 D:ラフノール中を震え上がらせた殺人鬼エルミの使った手斧だ。
 D:ラフノールはこの殺人鬼を捕らえるために、20人以上の行者
 D:(エスパー)を投入したという。「この手口には見覚えがある…」
