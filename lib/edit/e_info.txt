@@ -1365,7 +1365,7 @@ E:and Stupidity
 X:27:0
 W:30:0:0:0
 C:0:0:0:3
-F:INT | CURSED | HEAVY_CURSE
+F:INT | CURSED | HEAVY_CURSE | HEAVY_SPELL
 
 N:216:反感の
 E:and Aggravate
