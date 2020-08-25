@@ -41,12 +41,12 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
     for (k = 0, i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
         if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval) || (mode & USE_FULL))
-            && (!((((i == INVEN_RARM) && have_left_hand_weapon(owner_ptr)) || ((i == INVEN_LARM) && have_right_hand_weapon(owner_ptr))) && have_two_handed_weapons(owner_ptr))
+            && (!((((i == INVEN_RARM) && has_left_hand_weapon(owner_ptr)) || ((i == INVEN_LARM) && has_right_hand_weapon(owner_ptr))) && has_two_handed_weapons(owner_ptr))
                 || (mode & IGNORE_BOTHHAND_SLOT)))
             continue;
 
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
-        if ((((i == INVEN_RARM) && have_left_hand_weapon(owner_ptr)) || ((i == INVEN_LARM) && have_right_hand_weapon(owner_ptr))) && have_two_handed_weapons(owner_ptr)) {
+        if ((((i == INVEN_RARM) && has_left_hand_weapon(owner_ptr)) || ((i == INVEN_LARM) && has_right_hand_weapon(owner_ptr))) && has_two_handed_weapons(owner_ptr)) {
             (void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
             out_color[k] = TERM_WHITE;
         } else {

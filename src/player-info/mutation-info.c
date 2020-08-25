@@ -310,7 +310,7 @@ void set_mutation_info_3(player_type *creature_ptr, self_info_type *si_ptr)
     if (creature_ptr->muta3 & MUT3_MOTION)
         si_ptr->info[si_ptr->line++] = _("あなたの動作は正確で力強い。(隠密+1)", "Your movements are precise and forceful (+1 STL).");
 
-    if (have_good_luck(creature_ptr))
+    if (has_good_luck(creature_ptr))
         si_ptr->info[si_ptr->line++] = _("あなたは白いオーラにつつまれている。", "There is a white aura surrounding you.");
 
     if (creature_ptr->muta3 & MUT3_BAD_LUCK)

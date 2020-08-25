@@ -235,7 +235,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 		return;
 	}
 
-	if (have_good_luck(creature_ptr))
+	if (has_good_luck(creature_ptr))
 		msg_print(do_cmd_feeling_text_lucky[creature_ptr->feeling]);
 	else if (is_echizen(creature_ptr))
 		msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);

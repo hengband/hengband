@@ -61,7 +61,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     if ((owner_ptr->pseikaku != PERSONALITY_MUNCHKIN) && (f2 > d_info[owner_ptr->dungeon_idx].obj_great))
         f2 = d_info[owner_ptr->dungeon_idx].obj_great;
 
-    if (have_good_luck(owner_ptr)) {
+    if (has_good_luck(owner_ptr)) {
         f1 += 5;
         f2 += 2;
     } else if (owner_ptr->muta3 & MUT3_BAD_LUCK) {
@@ -102,7 +102,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     for (int i = 0; i < rolls; i++) {
         if (make_artifact(owner_ptr, o_ptr))
             break;
-        if (have_good_luck(owner_ptr) && one_in_(77)) {
+        if (has_good_luck(owner_ptr) && one_in_(77)) {
             if (make_artifact(owner_ptr, o_ptr))
                 break;
         }

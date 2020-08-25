@@ -757,7 +757,7 @@ void self_knowledge(player_type *creature_ptr)
         if (creature_ptr->muta3 & MUT3_MOTION) {
             info[i++] = _("あなたの動作は正確で力強い。(隠密+1)", "Your movements are precise and forceful (+1 STL).");
         }
-        if (have_good_luck(creature_ptr)) {
+        if (has_good_luck(creature_ptr)) {
             info[i++] = _("あなたは白いオーラにつつまれている。", "There is a white aura surrounding you.");
         }
         if (creature_ptr->muta3 & MUT3_BAD_LUCK) {

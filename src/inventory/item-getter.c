@@ -172,7 +172,7 @@ static void test_equipment(player_type *owner_ptr, item_selection_type *item_sel
                              : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL))
             item_selection_ptr->max_equip++;
 
-    if (have_two_handed_weapons(owner_ptr) && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT))
+    if (has_two_handed_weapons(owner_ptr) && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT))
         item_selection_ptr->max_equip++;
 }
 
@@ -220,11 +220,11 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     while ((item_selection_ptr->e1 <= item_selection_ptr->e2) && (!get_item_okay(owner_ptr, item_selection_ptr->e2, item_selection_ptr->tval)))
         item_selection_ptr->e2--;
 
-    if (item_selection_ptr->equip && have_two_handed_weapons(owner_ptr) && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        if (have_right_hand_weapon(owner_ptr)) {
+    if (item_selection_ptr->equip && has_two_handed_weapons(owner_ptr) && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
+        if (has_right_hand_weapon(owner_ptr)) {
             if (item_selection_ptr->e2 < INVEN_LARM)
                 item_selection_ptr->e2 = INVEN_LARM;
-        } else if (have_left_hand_weapon(owner_ptr))
+        } else if (has_left_hand_weapon(owner_ptr))
             item_selection_ptr->e1 = INVEN_RARM;
     }
 

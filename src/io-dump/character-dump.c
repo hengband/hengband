@@ -470,7 +470,7 @@ static void dump_aux_equipment_inventory(player_type *creature_ptr, FILE *fff)
         fprintf(fff, _("  [キャラクタの装備]\n\n", "  [Character Equipment]\n\n"));
         for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
             describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[i], 0);
-            if ((((i == INVEN_RARM) && have_left_hand_weapon(creature_ptr)) || ((i == INVEN_LARM) && have_right_hand_weapon(creature_ptr))) && have_two_handed_weapons(creature_ptr))
+            if ((((i == INVEN_RARM) && has_left_hand_weapon(creature_ptr)) || ((i == INVEN_LARM) && has_right_hand_weapon(creature_ptr))) && has_two_handed_weapons(creature_ptr))
                 strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 
             fprintf(fff, "%c) %s\n", index_to_label(i), o_name);
