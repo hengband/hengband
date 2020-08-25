@@ -78,7 +78,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは無敵のバリアを切り裂く。", "It always penetrates invulnerability barriers.");
     }
 
-    if (o_ptr->name2 == EGO_2WEAPON) {
+    if (has_flag(flgs, TR_EASY2_WEAPON)) {
         info[i++] = _("それは二刀流での命中率を向上させる。", "It affects your ability to hit when you are wielding two weapons.");
     }
 
@@ -86,15 +86,15 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは魔法の難易度を下げる。", "It affects your ability to cast spells.");
     }
 
-    if (o_ptr->name2 == EGO_AMU_FOOL) {
+    if (has_flag(flgs, TR_HEAVY_SPELL)) {
         info[i++] = _("それは魔法の難易度を上げる。", "It interferes with casting spells.");
     }
 
-    if (o_ptr->name2 == EGO_RING_THROW) {
+    if (has_flag(flgs, TR_MIGHTY_THROW)) {
         info[i++] = _("それは物を強く投げることを可能にする。", "It provides great strength when you throw an item.");
     }
 
-    if (o_ptr->name2 == EGO_AMU_NAIVETY) {
+    if (has_flag(flgs, TR_LOW_MAGIC)) {
         info[i++] = _("それは魔法抵抗力を下げる。", "It decreases your magic resistance.");
     }
 
