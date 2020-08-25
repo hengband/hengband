@@ -10839,17 +10839,16 @@ D:色の流れに身を包まれた巨大なドラゴンだ。
 N:603:ビホルダー
 E:Beholder
 G:e:g
-I:120:16d100:30:80:10
+I:115:16d99:30:70:10
 W:38:4:0:4000:8000:664
 B:GAZE:EXP_20:2d4
 B:GAZE:PARALYZE:2d4
 B:GAZE:LOSE_INT:2d6
-B:GAZE:DR_MANA:2d12
-F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | CAN_FLY |
-F:BASH_DOOR | DROP_CORPSE |
+B:GAZE:DR_MANA:2d10
+F:FORCE_SLEEP | RES_TELE | CAN_FLY | BASH_DOOR | DROP_CORPSE
 F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
-S:1_IN_2 | 
-S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
+S:1_IN_4
+S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET
 S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
 D:$A disembodied eye, surrounded by twelve smaller eyes on stalks.
 D:触手の先に付いた１２個の小さな目玉に囲まれている、体を持たない目玉だ。
@@ -12229,34 +12228,24 @@ D:日中ではせいぜい２、３時間しか耐えられない。
 D:ナイアルラトホテップによく仕え、猟犬として活躍する事が多い。
 D:（ダーレス「暗黒の儀式」）
 
-#J0#
-N:664:アンデッド・ビホルダー
-E:Undead beholder
-G:e:s
-I:120:27d100:30:100:10
-W:42:4:0:6000:40000:781
-B:GAZE:EXP_40
-B:GAZE:PARALYZE
+N:664:ビッグ・ビホルダー
+E:Big beholder
+G:e:G
+I:120:16d100:30:75:10
+W:45:4:0:4000:8000:781
+B:GAZE:EXP_40:2d4
+B:GAZE:PARALYZE:2d4
 B:GAZE:LOSE_INT:2d6
-B:GAZE:DR_MANA:4d6
-F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | HAS_DARK_1 |
-F:COLD_BLOOD | BASH_DOOR | 
-F:EVIL | UNDEAD | CAN_FLY |
-F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH |
-F:NO_CONF | NO_SLEEP
-S:1_IN_2 | 
-S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET | 
-S:BO_MANA | ANIM_DEAD 
-S:S_UNDEAD
-V:60
-D:$A disembodied eye, floating in the air.  Black nether storms rage around 
-D:$its bloodshot pupil and light seems to bend as it sucks its power from the 
-D:$very air around it.  Your soul chills as it drains your vitality for its 
-D:$evil enchantments.
-D:宙に浮かぶ巨大な目玉だ。その血走った瞳の周りでは冥界の暗黒の嵐が
-D:巻き起こっている。
-D:また周辺の大気から力を吸い取っているので、どんどんと光が失われていくようだ。
-D:それは邪悪な魔力を得るために冒険者の生命力を吸い取る。
+B:GAZE:DR_MANA:2d12
+F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | CAN_FLY | BASH_DOOR | DROP_CORPSE
+F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_3
+S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
+S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
+D:$A disembodied eye, surrounded by twenty fourth smaller eyes
+D:$ on undulating stalks.
+D:大きくうねる触手の先に付いた２４個の小さな目玉に囲まれている、
+D:体を持たない目玉だ。
 
 #JZ#
 N:665:シャドウ・デーモン
@@ -15295,27 +15284,31 @@ D:$The most feared of all vampires, the Prince of Darkness himself.
 D:ヴァンパイアの中で最も恐れられている、闇の貴公子その人である。
 
 #JZ#
-N:781:究極ビホルダー
-E:Ultimate beholder
-G:e:o
-I:120:40d100:30:80:10
-W:66:4:0:18000:0:0
-B:GAZE:EXP_40:2d5
-B:GAZE:LOSE_INT:2d6
-B:GAZE:UN_POWER:2d6
-B:GAZE:DR_MANA:5d10
-F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | CAN_FLY |
-F:BASH_DOOR | FEMALE | SMART | DROP_CORPSE |
-F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
-S:1_IN_2 | 
-S:BLIND | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
-S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD | S_KIN | BO_MANA | DISPEL
+N:781:アンデッド・ビホルダー
+E:Undead beholder
+G:e:s
+I:120:37d99:30:80:10
+W:52:4:0:6000:40000:1184
+B:GAZE:EXP_40:4d6
+B:GAZE:PARALYZE:4d6
+B:GAZE:LOSE_INT:4d6
+B:GAZE:DR_MANA:6d6
+F:FORCE_SLEEP | RES_TELE | HAS_DARK_1 | COLD_BLOOD | BASH_DOOR
+F:EVIL | UNDEAD | CAN_FLY
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH |
+F:NO_CONF | NO_SLEEP
+S:1_IN_3 | 
+S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET
+S:BO_MANA | ANIM_DEAD | S_UNDEAD
 V:60
-D:$A disembodied eye, surrounded by twelve smaller eyes on stalks. 
-D:$This is a beholder hive-mother, far more powerful than normal 
-D:$beholders.
-D:柄のついた１２個の小さい目に囲まれた目玉だ。ビホルダーの巣の女王
-D:であり、普通のビホルダーよりはるかに強力だ。
+D:$A disembodied eye, floating in the air.  Black nether storms rage around 
+D:$its bloodshot pupil and light seems to bend as it sucks its power from the 
+D:$very air around it.  Your soul chills as it drains your vitality for its 
+D:$evil enchantments.
+D:宙に浮かぶ巨大な目玉だ。その血走った瞳の周りでは冥界の暗黒の嵐が
+D:巻き起こっている。
+D:また周辺の大気から力を吸い取っているので、どんどんと光が失われていくようだ。
+D:それは邪悪な魔力を得るために冒険者の生命力を吸い取る。
 
 #JZ#
 N:782:リヴァイアサン
@@ -23702,3 +23695,51 @@ S:HOLD | SCARE | CAUSE_3 | BO_NETH
 D:$Your life force is torn from your body as this powerful unearthly being 
 D:$approaches.
 D:この強力なあの世の者が近づいてくると、自分の魂が肉体から引き裂かれるようだ。
+
+N:1184:腐敗ビホルダー
+E:Rotten beholder
+G:e:v
+I:120:27d100:30:80:10
+W:57:4:0:6000:40000:1185
+B:GAZE:EXP_80
+B:GAZE:PARALYZE:5d6
+B:GAZE:LOSE_INT:5d6
+B:GAZE:DR_MANA:6d6
+F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | HAS_DARK_1 |
+F:COLD_BLOOD | BASH_DOOR | 
+F:EVIL | UNDEAD | CAN_FLY |
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH |
+F:NO_CONF | NO_SLEEP
+S:1_IN_2 | 
+S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET | 
+S:BO_MANA | ANIM_DEAD 
+S:S_UNDEAD
+D:$A disembodied eye, floating in the air.  Black nether storms rage around 
+D:$its bloodshot pupil and light seems to bend as it sucks its power from the 
+D:$very air around it.  Your soul chills as it drains your vitality for its 
+D:$evil enchantments.
+D:宙に浮かぶ巨大な目玉だ。その血走った瞳の周りでは冥界の暗黒の嵐が
+D:巻き起こっている。
+D:また周辺の大気から力を吸い取っているので、どんどんと光が失われていくようだ。
+D:それは邪悪な魔力を得るために冒険者の生命力を吸い取る。
+
+N:1185:究極ビホルダー
+E:Ultimate beholder
+G:e:o
+I:120:40d100:30:80:10
+W:73:4:0:18000:0:0
+B:GAZE:EXP_40:5d5
+B:GAZE:LOSE_INT:5d6
+B:GAZE:UN_POWER:5d6
+B:GAZE:DR_MANA:5d10
+F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | CAN_FLY |
+F:BASH_DOOR | FEMALE | SMART | DROP_CORPSE |
+F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_2 | 
+S:BLIND | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
+S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD | S_KIN | BO_MANA | DISPEL
+D:$A disembodied eye, surrounded by twelve smaller eyes on stalks. 
+D:$This is a beholder hive-mother, far more powerful than normal 
+D:$beholders.
+D:柄のついた１２個の小さい目に囲まれた目玉だ。ビホルダーの巣の女王
+D:であり、普通のビホルダーよりはるかに強力だ。
