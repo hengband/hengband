@@ -15283,7 +15283,7 @@ S:BRAIN_SMASH | BA_NETH | S_KIN | DARKNESS | BA_DARK
 D:$The most feared of all vampires, the Prince of Darkness himself.
 D:ヴァンパイアの中で最も恐れられている、闇の貴公子その人である。
 
-#JZ#
+#J0#
 N:781:アンデッド・ビホルダー
 E:Undead beholder
 G:e:s
@@ -23723,6 +23723,7 @@ D:巻き起こっている。
 D:また周辺の大気から力を吸い取っているので、どんどんと光が失われていくようだ。
 D:それは邪悪な魔力を得るために冒険者の生命力を吸い取る。
 
+#JZ#
 N:1185:究極ビホルダー
 E:Ultimate beholder
 G:e:o
