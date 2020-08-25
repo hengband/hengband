@@ -15783,11 +15783,11 @@ F:IM_ACID | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | RES_WATE
 S:1_IN_5 | 
 S:S_DEMON | BR_ACID | S_UNDEAD | S_KIN | CONF | SCARE |
 S:MIND_BLAST | BR_CONF 
-D:$"An almost globular torso, with six long, sinuous limbs terminating 
-D:$in clab-like claws. From the upper end a subsidiary globe bulged 
-D:$forward bubble-like; its triangle of three staring, fishy eyes, 
-D:$its foot-long and evidently flexible proboscis, and a distended 
-D:$lateral system analogous to gills, suggested that it was a head."
+D:$"An almost globular torso, with six long, sinuous limbs terminating
+D:$ in crab-like claws. From the upper end a subsidiary globe bulged
+D:$ forward bubble-like; its triangle of three staring, fishy eyes,
+D:$ its foot-long and evidently flexible proboscis, and a distended
+D:$ lateral system analogous to gills, suggested that it was a head."
 D:太古に宇宙から北極にやって来た神。
 D:「胴はほぼ球形をしていて、まがりくねる手足が６本備わり、先端は蟹
 D:のような鋏になっていた。胴の上からは補助的な球体が泡のようにまえ
