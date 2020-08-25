@@ -471,20 +471,11 @@ BIT_FLAGS have_easy_spell(player_type *creature_ptr)
     return result;
 }
 
-void have_heavy_spell(player_type *creature_ptr)
+BIT_FLAGS have_heavy_spell(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->heavy_spell = FALSE;
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (o_ptr->name2 == EGO_AMU_FOOL)
-            creature_ptr->heavy_spell = TRUE;
-    }
+    BIT_FLAGS result = 0L;
+    result |= check_equipment_flags(creature_ptr, TR_HEAVY_SPELL);
+    return result;
 }
 
 void have_hold_exp(player_type *creature_ptr)

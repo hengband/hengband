@@ -438,7 +438,7 @@ typedef struct player_type {
     bool kill_wall;
     BIT_FLAGS dec_mana;
     BIT_FLAGS easy_spell;
-    bool heavy_spell;
+    BIT_FLAGS heavy_spell;
     bool warning;
     BIT_FLAGS mighty_throw;
     bool see_nocto; /* Noctovision */
