@@ -7591,8 +7591,8 @@ D:感心して夢中になってしまうだろう。
 N:444:サイクロプス
 E:Cyclops
 G:P:u
-I:120:66d12:20:90:20
-W:28:2:0:350:2000:490
+I:120:60d12:20:90:20
+W:30:1:0:350:2000:490
 B:SHOOT:HURT:7d6
 B:HIT:HURT:9d8
 B:HIT:HURT:9d8
@@ -8511,8 +8511,8 @@ D:（ラヴクラフト「サルナスをみまった災厄」他）
 N:490:バイクロプス
 E:Biclops
 G:P:u
-I:120:60d12:20:90:20
-W:33:5:0:1200:0:0
+I:120:66d12:20:90:20
+W:36:1:0:1200:4500:1186
 B:SHOOT:HURT:9d6
 B:HIT:HURT:11d8
 B:HIT:HURT:11d8
@@ -11510,7 +11510,7 @@ N:634:レッサー・タイタン
 E:Lesser titan
 G:P:y
 I:120:10d100:30:80:15
-W:40:3:0:3500:25000:702
+W:46:1:0:3500:25000:702
 B:HIT:CONFUSE:6d6
 B:HIT:CONFUSE:6d6
 B:HIT:CONFUSE:6d6
@@ -11519,9 +11519,7 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:DROP_2D2 | DROP_4D2 | DROP_SKELETON | DROP_CORPSE
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL | GIANT | MALE
-S:1_IN_5 | 
-S:HEAL | TELE_TO | SCARE | 
-S:S_MONSTERS
+S:1_IN_5 | HEAL | TELE_TO | SCARE | S_MONSTERS
 D:$It is a humanoid figure thirty feet tall that gives off an aura of power 
 D:$and hate.
 D:それは力と憎悪のオーラを発散する、背丈が 10 メートル近くある人間型の
@@ -13191,23 +13189,20 @@ D:$prey to satisfy its hunger.
 D:古代の偉大なドラゴンの骸骨に、最も危険な魔法によって生命を吹き込んだものだ。
 D:餌食に素早い一撃を食らわせ、その生命を吸い取っては空腹を満たしている。
 
-#J0#
-N:702:グレーター・タイタン
-E:Greater titan
-G:P:v
-I:120:30d100:30:125:15
-W:46:3:0:13500:0:0
-B:HIT:CONFUSE:12d12
-B:HIT:CONFUSE:12d12
-B:HIT:CONFUSE:12d12
-B:HIT:CONFUSE:12d12
+N:702:ミッド・タイタン
+E:Middle titan
+G:P:o
+I:120:20d100:30:110:15
+W:52:1:0:13500:22000:1187
+B:HIT:CONFUSE:9d9
+B:HIT:CONFUSE:9d9
+B:HIT:CONFUSE:9d9
+B:HIT:CONFUSE:9d9
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | MOVE_BODY |
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL | GIANT | MALE
-S:1_IN_5 | 
-S:HEAL | TELE_TO | 
-S:S_MONSTERS
+S:1_IN_5 | HEAL | TELE_TO | S_MONSTERS
 D:$A forty foot tall humanoid that shakes the ground as it walks.  The power 
 D:$radiating from its frame shakes your courage, its hatred inspired by your 
 D:$defiance.
@@ -23714,14 +23709,10 @@ S:1_IN_2 |
 S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET | 
 S:BO_MANA | ANIM_DEAD 
 S:S_UNDEAD
-D:$A disembodied eye, floating in the air.  Black nether storms rage around 
-D:$its bloodshot pupil and light seems to bend as it sucks its power from the 
-D:$very air around it.  Your soul chills as it drains your vitality for its 
-D:$evil enchantments.
-D:宙に浮かぶ巨大な目玉だ。その血走った瞳の周りでは冥界の暗黒の嵐が
-D:巻き起こっている。
-D:また周辺の大気から力を吸い取っているので、どんどんと光が失われていくようだ。
-D:それは邪悪な魔力を得るために冒険者の生命力を吸い取る。
+D:$It is a deviant monster with innumerable eyes with muddy tentacles.
+D:$  It spreads nauseous nasty odors around.
+D:ドロドロした触手に爛れた目が無数についている異形のモンスターだ。
+D:それは吐き気を催す異臭を周囲に撒き散らしている。
 
 #JZ#
 N:1185:究極ビホルダー
@@ -23744,3 +23735,41 @@ D:$This is a beholder hive-mother, far more powerful than normal
 D:$beholders.
 D:柄のついた１２個の小さい目に囲まれた目玉だ。ビホルダーの巣の女王
 D:であり、普通のビホルダーよりはるかに強力だ。
+
+N:1186:トリクロプス
+E:Triclops
+G:P:u
+I:120:72d12:20:100:20
+W:42:5:0:2000:0:0
+B:SHOOT:HURT:9d9
+B:HIT:HURT:15d8
+B:HIT:HURT:15d8
+F:FORCE_SLEEP |
+F:ONLY_ITEM | DROP_2D2 | TAKE_ITEM | DROP_CORPSE |
+F:BASH_DOOR | OPEN_DOOR | MOVE_BODY |
+F:EVIL | IM_POIS | IM_ACID | GIANT | EAT_GIVE_STR |
+S:1_IN_8 |
+S:SHOOT
+D:$The thee-eyes cyclops!? What the hell is going on!?
+D:三つ目のサイクロプス！？　一体何が起きているというんだ！？
+
+#J0#
+N:1187:グレーター・タイタン
+E:Greater titan
+G:P:v
+I:120:64d50:30:125:15
+W:58:1:0:13500:0:0
+B:HIT:CONFUSE:12d12
+B:HIT:CONFUSE:12d12
+B:HIT:CONFUSE:12d12
+B:HIT:CONFUSE:12d12
+F:FORCE_SLEEP | FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | MOVE_BODY |
+F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
+F:EVIL | GIANT | MALE
+S:1_IN_5 | HEAL | TELE_TO | S_MONSTERS
+D:$This giant is rampaging with a physical structure that
+D:$ can reach ceiling of the cave.
+D:$  Part of the cave is the traces they passed by.
+D:この巨人は天に届かんばかりの体躯で暴れ回っている。
+D:洞窟や階段の一部は彼らが通り過ぎた跡だ。
