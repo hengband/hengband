@@ -356,47 +356,28 @@ BIT_FLAGS has_anti_tele(player_type *creature_ptr)
     return result;
 }
 
-void has_sh_fire(player_type *creature_ptr)
+BIT_FLAGS has_sh_fire(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->sh_fire = FALSE;
+    BIT_FLAGS result = 0L;
 
     if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
-        creature_ptr->sh_fire = TRUE;
+        result |= FLAG_CAUSE_MUTATION;
     }
 
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
-        creature_ptr->sh_fire = TRUE;
+        result |= FLAG_CAUSE_RACE;
     }
 
-    if (creature_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
-            creature_ptr->sh_fire = TRUE;
-        }
+    if (creature_ptr->special_defense & KAMAE_SEIRYU || creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    if (creature_ptr->special_defense & KAMAE_SEIRYU) {
-        creature_ptr->sh_fire = TRUE;
+    if (hex_spelling(creature_ptr, HEX_DEMON_AURA) || creature_ptr->ult_res || creature_ptr->tim_sh_fire) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->sh_fire = TRUE;
-    }
-
-    if (creature_ptr->tim_sh_fire) {
-        creature_ptr->sh_fire = TRUE;
-    }
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_SH_FIRE))
-            creature_ptr->sh_fire = TRUE;
-    }
+    result |= check_equipment_flags(creature_ptr, TR_SH_FIRE);
+    return result;
 }
 
 BIT_FLAGS has_sh_elec(player_type *creature_ptr)
