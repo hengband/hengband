@@ -103,7 +103,7 @@ static void pass_game_turn_by_stay(void)
  * @param customer_ptr プレーヤーへの参照ポインタ
  * @return 悪夢モードならばTRUE
  */
-static bool have_a_nightmare(player_type *customer_ptr)
+static bool has_a_nightmare(player_type *customer_ptr)
 {
 	if (!ironman_nightmare) return FALSE;
 
@@ -206,7 +206,7 @@ static bool stay_inn(player_type *customer_ptr)
 		exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
 
 	customer_ptr->chp = customer_ptr->mhp;
-	if (have_a_nightmare(customer_ptr)) return TRUE;
+	if (has_a_nightmare(customer_ptr)) return TRUE;
 
 	back_to_health(customer_ptr);
 	charge_magic_eating_energy(customer_ptr);
