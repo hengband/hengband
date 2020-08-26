@@ -1028,7 +1028,7 @@ static void erase_essence(player_type *creature_ptr)
     }
     o_ptr->xtra3 = 0;
     object_flags(creature_ptr, o_ptr, flgs);
-    if (!(have_pval_flags(flgs)))
+    if (!(has_pval_flags(flgs)))
         o_ptr->pval = 0;
     msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
