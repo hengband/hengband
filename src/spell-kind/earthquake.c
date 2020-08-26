@@ -282,7 +282,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 continue;
 
             delete_all_items_from_floor(caster_ptr, yy, xx);
-            int t = cave_have_flag_bold(floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;
+            int t = cave_has_flag_bold(floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;
             if (t < 20) {
                 cave_set_feat(caster_ptr, yy, xx, feat_granite);
                 continue;

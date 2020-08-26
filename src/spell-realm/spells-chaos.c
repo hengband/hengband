@@ -210,7 +210,7 @@ void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
             floor_type *floor_ptr = caster_ptr->current_floor_ptr;
             if (!in_bounds(floor_ptr, y, x) || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)
-                || !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT))
+                || !cave_has_flag_bold(floor_ptr, y, x, FF_PROJECT))
                 continue;
 
             break;

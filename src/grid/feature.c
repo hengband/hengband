@@ -211,7 +211,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
         return;
     }
 
-    bool old_los = cave_have_flag_bold(floor_ptr, y, x, FF_LOS);
+    bool old_los = cave_has_flag_bold(floor_ptr, y, x, FF_LOS);
     bool old_mirror = is_mirror_grid(g_ptr);
 
     g_ptr->mimic = 0;

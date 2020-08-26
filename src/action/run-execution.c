@@ -101,7 +101,7 @@ static void run_init(player_type *creature_ptr, DIRECTION dir)
     creature_ptr->run_px = creature_ptr->x;
     int row = creature_ptr->y + ddy[dir];
     int col = creature_ptr->x + ddx[dir];
-    ignore_avoid_run = cave_have_flag_bold(creature_ptr->current_floor_ptr, row, col, FF_AVOID_RUN);
+    ignore_avoid_run = cave_has_flag_bold(creature_ptr->current_floor_ptr, row, col, FF_AVOID_RUN);
     int i = chome[dir];
     if (see_wall(creature_ptr, cycle[i + 1], creature_ptr->y, creature_ptr->x)) {
         find_breakleft = TRUE;

@@ -223,7 +223,7 @@ static bool check_racial_target_bold(player_type *creature_ptr, it_type *it_ptr)
     it_ptr->ny[it_ptr->cur_dis] = it_ptr->y;
     it_ptr->nx[it_ptr->cur_dis] = it_ptr->x;
     mmove2(&it_ptr->ny[it_ptr->cur_dis], &it_ptr->nx[it_ptr->cur_dis], creature_ptr->y, creature_ptr->x, it_ptr->ty, it_ptr->tx);
-    if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT))
+    if (cave_has_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT))
         return FALSE;
 
     it_ptr->hit_wall = TRUE;
@@ -491,7 +491,7 @@ static void drop_thrown_item(player_type *creature_ptr, it_type *it_ptr)
     if (!it_ptr->do_drop)
         return;
 
-    if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
+    if (cave_has_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
         (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->y, it_ptr->x);
     else
         (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->prev_y, it_ptr->prev_x);

@@ -255,7 +255,7 @@ static void cave_temp_lite_room_aux(player_type *caster_ptr, POSITION y, POSITIO
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
-static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT); }
+static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_has_flag_bold(floor_ptr, y, x, FF_PROJECT); }
 
 /*!
  * @brief 部屋内にある一点の周囲がいくつ射線を通すかをグローバル変数tmp_pos.nに返す / Aux function -- see below
@@ -352,7 +352,7 @@ bool starlight(player_type *caster_ptr, bool magic)
 
         while (attempts--) {
             scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_LOS);
-            if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))
+            if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))
                 continue;
             if (!player_bold(caster_ptr, y, x))
                 break;
