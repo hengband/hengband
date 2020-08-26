@@ -573,11 +573,16 @@ void has_sustain_str(player_type *creature_ptr)
     if (creature_ptr->pclass == CLASS_BERSERKER) {
         creature_ptr->sustain_str = TRUE;
     }
-    if (!creature_ptr->mimic_form
-        && (creature_ptr->prace == RACE_HALF_TROLL || creature_ptr->prace == RACE_HALF_OGRE || creature_ptr->prace == RACE_HALF_GIANT)) {
+    if (is_specific_player_race(creature_ptr, RACE_HALF_TROLL) || is_specific_player_race(creature_ptr, RACE_HALF_OGRE)
+        || is_specific_player_race(creature_ptr, RACE_HALF_GIANT)) {
+		        creature_ptr->sustain_str = TRUE;
+    }
+
+	if (creature_ptr->ult_res) {
         creature_ptr->sustain_str = TRUE;
     }
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+
+	if (creature_ptr->special_defense & KATA_MUSOU) {
         creature_ptr->sustain_str = TRUE;
     }
 
