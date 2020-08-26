@@ -411,7 +411,7 @@ typedef struct player_type {
     bool can_swim; /* No damage falling */
     bool levitation; /* No damage falling */
     bool lite; /* Permanent light */
-    bool free_act; /* Never paralyzed */
+    BIT_FLAGS free_act; /* Never paralyzed */
     bool see_inv; /* Can see invisible */
     bool regenerate; /* Regenerate hit pts */
     bool hold_exp; /* Resist exp draining */

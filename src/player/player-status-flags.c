@@ -63,7 +63,7 @@ bool has_kill_wall(player_type *creature_ptr)
             return TRUE;
     }
 
-	return FALSE;
+    return FALSE;
 }
 
 bool has_pass_wall(player_type *creature_ptr)
@@ -81,14 +81,14 @@ bool has_pass_wall(player_type *creature_ptr)
             pow = FALSE;
     }
 
-	return pow;
+    return pow;
 }
 
 BIT_FLAGS has_xtra_might(player_type *creature_ptr)
 {
-	BIT_FLAGS result = 0L;
+    BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_XTRA_MIGHT);
-	return result;
+    return result;
 }
 
 BIT_FLAGS has_esp_evil(player_type *creature_ptr)
@@ -99,56 +99,56 @@ BIT_FLAGS has_esp_evil(player_type *creature_ptr)
             result |= 0x01 << FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
     result |= check_equipment_flags(creature_ptr, TR_ESP_EVIL);
-	return result;
+    return result;
 }
 
 BIT_FLAGS has_esp_animal(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_ANIMAL);
-	return result;
+    return result;
 }
 
 BIT_FLAGS has_esp_undead(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_UNDEAD);
-	return result;
+    return result;
 }
 
 BIT_FLAGS has_esp_demon(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_DEMON);
-	return result;
+    return result;
 }
 
 BIT_FLAGS has_esp_orc(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_ORC);
-	return result;
+    return result;
 }
 
 BIT_FLAGS has_esp_troll(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_TROLL);
-	return result;
+    return result;
 }
 
 BIT_FLAGS has_esp_giant(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_GIANT);
-	return result;
+    return result;
 }
 
 BIT_FLAGS has_esp_dragon(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_DRAGON);
-	return result;
+    return result;
 }
 
 BIT_FLAGS has_esp_human(player_type *creature_ptr)
@@ -411,7 +411,7 @@ BIT_FLAGS has_sh_cold(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-	result |= check_equipment_flags(creature_ptr, TR_SH_COLD);
+    result |= check_equipment_flags(creature_ptr, TR_SH_COLD);
     return result;
 }
 
@@ -444,10 +444,10 @@ void has_hold_exp(player_type *creature_ptr)
         creature_ptr->hold_exp = TRUE;
     }
 
-    if (is_specific_player_race(creature_ptr, RACE_HOBBIT) || is_specific_player_race(creature_ptr, RACE_SKELETON) ||
-        is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_VAMPIRE) ||
-		is_specific_player_race(creature_ptr, RACE_SPECTRE) || is_specific_player_race(creature_ptr, RACE_BALROG) ||
-        is_specific_player_race(creature_ptr, RACE_ANDROID)) {
+    if (is_specific_player_race(creature_ptr, RACE_HOBBIT) || is_specific_player_race(creature_ptr, RACE_SKELETON)
+        || is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_VAMPIRE)
+        || is_specific_player_race(creature_ptr, RACE_SPECTRE) || is_specific_player_race(creature_ptr, RACE_BALROG)
+        || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->hold_exp = TRUE;
     }
 
@@ -524,53 +524,45 @@ void has_see_inv(player_type *creature_ptr)
     }
 }
 
-void has_free_act(player_type *creature_ptr)
+BIT_FLAGS has_free_act(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->free_act = FALSE;
+    BIT_FLAGS result = 0L;
 
     if (creature_ptr->muta3 & MUT3_MOTION)
-        creature_ptr->free_act = TRUE;
+        result |= FLAG_CAUSE_MUTATION;
 
-    if (is_specific_race(creature_ptr, RACE_GNOME) || is_specific_race(creature_ptr, RACE_GOLEM) || is_specific_race(creature_ptr, RACE_SPECTRE) || is_specific_race(creature_ptr, RACE_ANDROID)) {
-        creature_ptr->free_act = TRUE;
+    if (is_specific_player_race(creature_ptr, RACE_GNOME) || is_specific_player_race(creature_ptr, RACE_GOLEM)
+        || is_specific_player_race(creature_ptr, RACE_SPECTRE) || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
+        result |= FLAG_CAUSE_RACE;
     }
 
     if (heavy_armor(creature_ptr) && (!creature_ptr->inventory_list[INVEN_RARM].k_idx || has_right_hand_weapon(creature_ptr))
         && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || has_left_hand_weapon(creature_ptr))) {
         if (creature_ptr->lev > 24)
-            creature_ptr->free_act = TRUE;
+            result |= FLAG_CAUSE_CLASS;
     }
 
     if (creature_ptr->pclass == CLASS_MONK || creature_ptr->pclass == CLASS_FORCETRAINER) {
         if (!(heavy_armor(creature_ptr))) {
             if (creature_ptr->lev > 24)
-                creature_ptr->free_act = TRUE;
+                result |= FLAG_CAUSE_CLASS;
         }
     }
 
     if (creature_ptr->pclass == CLASS_BERSERKER) {
-        creature_ptr->free_act = TRUE;
+        result |= FLAG_CAUSE_CLASS;
     }
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->free_act = TRUE;
+    if (creature_ptr->ult_res || creature_ptr->magicdef) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (creature_ptr->magicdef) {
-        creature_ptr->free_act = TRUE;
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_FREE_ACT))
-            creature_ptr->free_act = TRUE;
-    }
+    result |= check_equipment_flags(creature_ptr, TR_FREE_ACT);
+    return result;
 }
 
 void has_sustain_str(player_type *creature_ptr)
@@ -1717,13 +1709,10 @@ bool has_right_hand_weapon(player_type *creature_ptr)
         }
     }
 
-	return FALSE;
+    return FALSE;
 }
 
-bool has_left_hand_weapon(player_type *creature_ptr)
-{
-    return has_melee_weapon(creature_ptr, INVEN_LARM);
-}
+bool has_left_hand_weapon(player_type *creature_ptr) { return has_melee_weapon(creature_ptr, INVEN_LARM); }
 
 bool has_two_handed_weapons(player_type *creature_ptr)
 {
@@ -1773,7 +1762,8 @@ bool is_disable_two_handed_bonus(player_type *creature_ptr, int i)
     object_type *o_ptr;
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
-        if (calc_weapon_weight_limit(creature_ptr) * 2 >= o_ptr->weight / 10 && has_two_handed_weapons(creature_ptr) && (calc_weapon_weight_limit(creature_ptr) * 2 < o_ptr->weight / 5))
+        if (calc_weapon_weight_limit(creature_ptr) * 2 >= o_ptr->weight / 10 && has_two_handed_weapons(creature_ptr)
+            && (calc_weapon_weight_limit(creature_ptr) * 2 < o_ptr->weight / 5))
             return TRUE;
     }
     return FALSE;
