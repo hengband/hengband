@@ -234,7 +234,7 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
     pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, FALSE);
     calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
-    if ((attacker_ptr->impact[pa_ptr->hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
+    if (((attacker_ptr->impact & FLAG_CAUSE_INVEN_RARM) && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
         || (pa_ptr->mode == HISSATSU_QUAKE))
         *do_quake = TRUE;
 

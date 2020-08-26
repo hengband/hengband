@@ -953,21 +953,11 @@ void has_curses(player_type *creature_ptr)
     }
 }
 
-void has_impact(player_type *creature_ptr)
+BIT_FLAGS has_impact(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->impact[0] = FALSE;
-    creature_ptr->impact[1] = FALSE;
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_IMPACT))
-            creature_ptr->impact[(i == INVEN_RARM) ? 0 : 1] = TRUE;
-    }
+    BIT_FLAGS result = 0L;
+    result |= check_equipment_flags(creature_ptr, TR_IMPACT);
+    return result;
 }
 
 void has_extra_blow(player_type *creature_ptr)
