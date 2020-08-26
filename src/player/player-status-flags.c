@@ -533,19 +533,7 @@ void has_free_act(player_type *creature_ptr)
     if (creature_ptr->muta3 & MUT3_MOTION)
         creature_ptr->free_act = TRUE;
 
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_GNOME) {
-        creature_ptr->free_act = TRUE;
-    }
-
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_GOLEM) {
-        creature_ptr->free_act = TRUE;
-    }
-
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_SPECTRE) {
-        creature_ptr->free_act = TRUE;
-    }
-
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_ANDROID) {
+    if (is_specific_race(creature_ptr, RACE_GNOME) || is_specific_race(creature_ptr, RACE_GOLEM) || is_specific_race(creature_ptr, RACE_SPECTRE) || is_specific_race(creature_ptr, RACE_ANDROID)) {
         creature_ptr->free_act = TRUE;
     }
 
