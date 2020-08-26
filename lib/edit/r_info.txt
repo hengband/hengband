@@ -2642,7 +2642,7 @@ N:163:ベビー・ブルー・ドラゴン
 E:Baby blue dragon
 G:d:B
 I:110:10d10:20:30:70
-W:9:2:0:35:700:459
+W:9:1:0:35:700:459
 B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d5
@@ -2650,8 +2650,7 @@ F:FORCE_MAXHP | FORCE_SLEEP | DROP_CORPSE
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | IM_ELEC | EAT_ELEC_RES |
-S:1_IN_11 | 
-S:BR_ELEC
+S:1_IN_11 | BR_ELEC
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a pale blue.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -2662,7 +2661,7 @@ N:164:ベビー・ホワイト・ドラゴン
 E:Baby white dragon
 G:d:W
 I:110:10d10:20:30:70
-W:9:2:0:35:700:460
+W:9:1:0:35:700:460
 B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d5
@@ -2670,8 +2669,7 @@ F:FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | DROP_CORPSE
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | DRAGON | IM_COLD | EAT_COLD_RES |
-S:1_IN_11 | 
-S:BR_COLD
+S:1_IN_11 | BR_COLD
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a pale white.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -2682,7 +2680,7 @@ N:165:ベビー・グリーン・ドラゴン
 E:Baby green dragon
 G:d:G
 I:110:10d10:20:30:70
-W:9:2:0:35:700:461
+W:9:1:0:35:700:461
 B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d5
@@ -2690,8 +2688,7 @@ F:FORCE_MAXHP | FORCE_SLEEP |
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY | DROP_CORPSE
 F:EVIL | DRAGON | IM_POIS | EAT_POIS_RES
-S:1_IN_11 | 
-S:BR_POIS
+S:1_IN_11 | BR_POIS
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a sickly green.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -2702,7 +2699,7 @@ N:166:ベビー・ブラック・ドラゴン
 E:Baby black dragon
 G:d:s
 I:110:10d10:20:30:70
-W:9:2:0:35:750:546
+W:9:1:0:35:750:546
 B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d5
@@ -2710,8 +2707,7 @@ F:FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | DROP_CORPSE
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | EAT_ACID_RES | 
 F:EVIL | DRAGON | IM_ACID
-S:1_IN_11 | 
-S:BR_ACID
+S:1_IN_11 | BR_ACID
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a dull black.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -2721,17 +2717,16 @@ D:光に慣れておらず、鱗は鈍い黒色をしている。
 N:167:ベビー・レッド・ドラゴン
 E:Baby red dragon
 G:d:R
-I:110:11d10:20:30:70
-W:9:2:0:35:850:563
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d5
+I:110:23d5:20:30:70
+W:10:1:0:40:850:563
+B:CLAW:HURT:1d5
+B:CLAW:HURT:1d5
+B:BITE:HURT:1d6
 F:FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | DROP_CORPSE
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | EAT_FIRE_RES |
 F:EVIL | DRAGON | IM_FIRE
-S:1_IN_11 | 
-S:BR_FIRE
+S:1_IN_11 | BR_FIRE
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a pale red.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -5570,11 +5565,11 @@ N:334:ワイバーン
 E:Wyvern
 G:d:G
 I:120:100d5:20:65:20
-W:20:2:0:360:0:0
-B:BITE:HURT:2d6
-B:BITE:HURT:2d6
-B:BITE:HURT:2d6
-B:STING:POISON:1d6
+W:22:2:0:400:0:0
+B:BITE:HURT:2d5
+B:BITE:HURT:2d5
+B:BITE:HURT:2d5
+B:STING:POISON:1d5
 F:FORCE_SLEEP | 
 F:ONLY_GOLD | DROP_60 | DROP_90 | IM_POIS | CAN_FLY |
 F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | DRAGON |
@@ -7906,18 +7901,16 @@ D:カオスに汚染された床のタイルだ。
 N:459:ヤング・ブルー・ドラゴン
 E:Young blue dragon
 G:d:b
-I:110:27d10:20:50:70
-W:29:1:0:300:4000:560
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+I:110:30d10:20:50:70
+W:25:1:0:325:4000:560
+B:CLAW:HURT:2d4
+B:CLAW:HURT:2d4
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | WILD_WOOD |
 F:DROP_60 | DROP_90 | DROP_1D2 | DROP_CORPSE | EAT_ELEC_RES |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | IM_ELEC | RIDING | SELF_LITE_1 |
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_ELEC
+S:1_IN_8 | SCARE | BR_ELEC
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$deep blue in hue.  Sparks crackle along its length.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -7927,18 +7920,16 @@ D:まだ柔らかいその鱗は深い青色をしていて、全身から火花
 N:460:ヤング・ホワイト・ドラゴン
 E:Young white dragon
 G:d:w
-I:110:27d10:20:50:70
-W:29:1:0:275:4000:549
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+I:110:30d10:20:50:70
+W:25:1:0:325:4000:549
+B:CLAW:HURT:2d4
+B:CLAW:HURT:2d4
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | WILD_WASTE |
 F:DROP_60 | DROP_90 | DROP_1D2 | DROP_CORPSE | EAT_COLD_RES |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | IM_COLD | RIDING
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_COLD
+S:1_IN_8 | SCARE | BR_COLD
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$frosty white in hue.  Icy blasts of cold air come from it as it breathes.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -7949,18 +7940,16 @@ D:冷気がやってくる。
 N:461:ヤング・グリーン・ドラゴン
 E:Young green dragon
 G:d:g
-I:110:27d10:20:60:70
-W:29:1:0:290:4000:561
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+I:110:30d10:20:50:70
+W:25:1:0:325:4000:561
+B:CLAW:HURT:2d4
+B:CLAW:HURT:2d4
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | WILD_SWAMP |
 F:DROP_60 | DROP_90 | DROP_1D2 | DROP_CORPSE | EAT_POIS_RES |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | IM_POIS | RIDING
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_POIS
+S:1_IN_8 | SCARE | BR_POIS
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$deep green in hue.  Foul gas seeps through its scales.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -7971,18 +7960,16 @@ D:出ている。
 N:462:ヤング・ブロンズ・ドラゴン
 E:Young bronze dragon
 G:d:U
-I:110:27d10:20:63:150
-W:29:3:0:310:4000:562
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+I:110:33d10:20:65:150
+W:29:3:0:350:4000:562
+B:CLAW:HURT:2d4
+B:CLAW:HURT:2d4
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | 
 F:DROP_60 | DROP_90 | DROP_2D2 | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:DRAGON | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_CONF
+S:1_IN_8 | SCARE | BR_CONF
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$rich bronze hue, and its shape masks its true form.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -8132,7 +8119,7 @@ N:471:シャドウ・ドレイク
 E:Shadow drake
 G:d:D
 I:110:30d10:25:50:30
-W:33:3:0:700:15000:643
+W:30:2:0:700:15000:643
 B:CLAW:HURT:2d4
 B:CLAW:HURT:2d4
 B:BITE:EXP_10:3d6
@@ -8140,12 +8127,11 @@ F:FORCE_SLEEP | FORCE_MAXHP | SELF_DARK_1
 F:ONLY_ITEM | DROP_2D2 |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR |
 F:EVIL | DRAGON | NO_CONF | NO_SLEEP 
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | DARKNESS | BR_NETH
-D:$It is a dragon-like form wrapped in shadow.  Glowing red eyes shine out in 
-D:$the dark.
-D:それは暗黒に覆われたドラゴンのような姿をしている。赤い目が暗闇の中で光を
-D:発している。
+S:1_IN_6 | SLOW | CONF | SCARE | DARKNESS | BR_NETH
+D:$It is a dragon-like form wrapped in shadow.
+D:$  Glowing red eyes shine out in the dark.
+D:それは暗黒に覆われたドラゴンのような姿をしている。
+D:赤い目が暗闇の中で光を発している。
 
 #J0#
 N:472:マンティコア
@@ -8724,17 +8710,16 @@ D:それは屈強なトロルの骸骨に生命を吹き込んだものだ。
 N:501:カオス・ドレイク
 E:Chaos drake
 G:d:v
-I:110:50d10:25:100:30
-W:33:3:0:700:150000:783
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+I:110:50d10:25:80:30
+W:33:3:0:850:150000:783
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d6
 F:ATTR_MULTI | ATTR_ANY | CAN_FLY | FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_2D2 | RES_DISE | OPEN_DOOR | BASH_DOOR | DROP_CORPSE |
 F:EVIL | DRAGON | IM_FIRE | RES_CHAO | NO_CONF | NO_SLEEP | RIDING |
 F:EAT_CONF | EAT_INSANITY
-S:1_IN_6 |
-S:SLOW | CONF | SCARE | BR_DISE | BR_CHAO
+S:1_IN_7 | SLOW | CONF | SCARE | BR_DISE | BR_CHAO
 D:$A dragon twisted by the forces of chaos.  It seems first ugly, then fair, 
 D:$as its form shimmers and changes in front of your eyes.
 D:カオスの力で歪んだドラゴンだ。それは一見すると醜いようだが、眼前で刻々と
@@ -8744,16 +8729,15 @@ D:輝きながら変化する姿は独特の美しさを持っている。
 N:502:ロー・ドレイク
 E:Law drake
 G:d:W
-I:110:55d10:25:100:30
-W:33:3:0:700:150000:784
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+I:110:55d10:25:80:30
+W:33:3:0:850:150000:784
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | GOOD | ONLY_ITEM | DROP_2D2 | CAN_FLY |
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DRAGON | IM_COLD | NO_CONF | NO_SLEEP |
 F:RIDING | RES_SOUN | RES_SHAR
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | BR_SOUN | BR_SHAR
+S:1_IN_7 | SLOW | CONF | SCARE | BR_SOUN | BR_SHAR
 D:$This dragon is clever and cunning.  It laughs at your puny efforts to 
 D:$disturb it.
 D:このドラゴンは頭が良くてずる賢い。攻撃をされても、ものともせずに
@@ -8763,10 +8747,10 @@ D:せせら笑っている。
 N:503:バランス・ドレイク
 E:Balance drake
 G:d:s
-I:110:60d10:25:100:30
+I:110:60d10:25:80:30
 W:33:3:0:700:180000:785
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d6
 F:ATTR_MULTI | ATTR_ANY |
 F:FORCE_SLEEP | FORCE_MAXHP | 
@@ -8774,9 +8758,7 @@ F:ONLY_ITEM | DROP_2D2 | RES_SOUN | RES_SHAR | RES_DISE | RES_CHAO |
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE
 F:DRAGON| CAN_FLY | EAT_CONF | EAT_INSANITY |
 F:IM_FIRE | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | 
-S:BR_SOUN | BR_SHAR | BR_DISE | BR_CHAO
+S:1_IN_7 | SLOW | CONF | SCARE | BR_SOUN | BR_SHAR | BR_DISE | BR_CHAO
 D:$A mighty dragon, the balance drake seeks to maintain the Cosmic Balance, 
 D:$and despises your feeble efforts to destroy evil.
 D:強力なドラゴンであるバランス・ドレイクは、宇宙のバランスを維持することを
@@ -8787,17 +8769,16 @@ D:ている。
 N:504:天上界ドレイク
 E:Ethereal drake
 G:d:o
-I:110:45d10:25:100:15
-W:33:3:0:700:20000:676
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+I:110:45d10:25:80:15
+W:33:2:0:700:20000:676
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | CAN_FLY |
 F:INVISIBLE | PASS_WALL |
 F:DRAGON | RES_LITE | RES_DARK | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | 
+S:1_IN_7 | SLOW | CONF | SCARE | 
 S:BR_LITE | BR_DARK
 D:$A dragon of elemental power, with control over light and dark, the 
 D:$ethereal drake's eyes glare with white hatred from the shadows.
@@ -9255,17 +9236,16 @@ N:527:ドゥーム・ドレイク
 E:Doom drake
 G:d:v
 I:110:40d11:25:100:30
-W:34:3:0:450:3000:589
-B:CLAW:HURT:1d5
-B:CLAW:HURT:1d5
+W:34:3:0:750:3000:589
+B:CLAW:HURT:2d5
+B:CLAW:HURT:2d5
 B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:ONLY_ITEM | DROP_1D2 | FRIENDS |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | SELF_LITE_1 |
 F:IM_FIRE | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BR_FIRE
+S:1_IN_6 | BR_FIRE
 D:$Doom drakes are trained firedrakes, always moving in pairs, looking 
 D:$for a battle.
 D:ドゥーム・ドレイクは訓練されたファイア・ドレイクで、常に対になって行動し
@@ -9648,18 +9628,16 @@ D:それはそびえ立つような汚物の塊で、見るも汚らわしいウ
 N:546:ヤング・ブラック・ドラゴン
 E:Young black dragon
 G:d:D
-I:110:25d10:20:60:50
-W:35:1:0:620:4000:592
-B:CLAW:HURT:1d5
-B:CLAW:HURT:1d5
-B:BITE:HURT:1d6
+I:110:30d10:20:50:50
+W:25:2:0:325:4000:592
+B:CLAW:HURT:2d5
+B:CLAW:HURT:2d5
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_SWAMP |
 F:DROP_60 | DROP_90 | DROP_1D2 | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY | 
 F:EVIL | DRAGON | IM_ACID | RIDING
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_ACID
+S:1_IN_8 | SCARE | BR_ACID
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$darkest black hue.  Acid drips from its body.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -9845,10 +9823,10 @@ D:壊れたプレートメイルを身につけている。
 N:556:ヤング万色ドラゴン
 E:Young multi-hued dragon
 G:d:v
-I:110:32d10:20:60:50
-W:36:1:0:1320:7000:593
-B:CLAW:HURT:1d9
-B:CLAW:HURT:1d9
+I:110:42d10:20:60:50
+W:30:1:0:1320:7000:593
+B:CLAW:HURT:2d9
+B:CLAW:HURT:2d9
 B:BITE:HURT:2d10
 F:ATTR_MULTI | 
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
@@ -9856,9 +9834,7 @@ F:DROP_1D2 | DROP_4D2 | CAN_FLY |
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | 
 F:IM_POIS | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_1 |
-S:1_IN_5 | 
-S:SCARE | 
-S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
+S:1_IN_7 | SCARE | BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$It has a form that legends are made of.  Beautiful scales of shimmering 
 D:$and magical colours cover it.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -9986,18 +9962,16 @@ D:大きなドラゴンで、豊かな青銅色の鱗を持っている。
 N:563:ヤング・レッド・ドラゴン
 E:Young red dragon
 G:d:r
-I:110:29d10:20:63:50
-W:36:1:0:640:5000:589
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+I:110:23d15:20:60:50
+W:26:1:0:400:5000:589
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_60 | DROP_90 | DROP_1D2 | WILD_MOUNTAIN | WILD_VOLCANO |
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | RIDING
 F:EVIL | DRAGON | IM_FIRE | SELF_LITE_1 |
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_FIRE
+S:1_IN_8 | SCARE | BR_FIRE
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$deepest red hue.  Heat radiates from its form.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -13493,7 +13467,7 @@ B:CRUSH:HURT:23d13
 B:CRUSH:HURT:23d13
 B:CRUSH:HURT:23d13
 F:FORCE_SLEEP | FORCE_MAXHP | UNIQUE | ELDRITCH_HORROR |
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | KILL_BODY |
+F:ONLY_ITEM | DROP_4D2 | DROP_GREAT | KILL_BODY |
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | CAN_SWIM |
 F:EVIL
 S:1_IN_6
@@ -22185,7 +22159,7 @@ D:敵であろうと味方であろうと、間合いに入った者全てを斬
 N:1097:ヤング・クイックシルバー・ドラゴン
 E:Young quicksilver dragon
 G:d:s
-I:115:28d10:20:90:150
+I:115:38d10:20:90:150
 W:33:2:0:900:5500:1098
 B:CLAW:HURT:1d12
 B:CLAW:HURT:1d12
