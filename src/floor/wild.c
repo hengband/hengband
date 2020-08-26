@@ -867,14 +867,14 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
         return TRUE;
     }
 
-    bool have_pet = FALSE;
+    bool has_pet = FALSE;
     for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
         if (is_pet(m_ptr) && i != creature_ptr->riding)
-            have_pet = TRUE;
+            has_pet = TRUE;
 
         if (monster_csleep_remaining(m_ptr) || (m_ptr->cdis > MAX_SIGHT) || !is_hostile(m_ptr))
             continue;
@@ -884,7 +884,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
         return FALSE;
     }
 
-    if (have_pet) {
+    if (has_pet) {
         concptr msg = _("ペットを置いて広域マップに入りますか？", "Do you leave your pets behind? ");
         if (!get_check_strict(creature_ptr, msg, CHECK_OKAY_CANCEL)) {
             free_turn(creature_ptr);
