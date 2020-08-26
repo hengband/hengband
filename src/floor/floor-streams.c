@@ -120,7 +120,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                             continue;
 
                         /* Do not convert permanent features */
-                        if (cave_have_flag_grid(g_ptr, FF_PERMANENT))
+                        if (cave_has_flag_grid(g_ptr, FF_PERMANENT))
                             continue;
 
                         /*
@@ -434,7 +434,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
                 continue;
 
             /* Want square to be in the circle and accessable. */
-            if ((distance(j, i, y, x) < 4) && !cave_have_flag_grid(g_ptr, FF_PERMANENT)) {
+            if ((distance(j, i, y, x) < 4) && !cave_has_flag_grid(g_ptr, FF_PERMANENT)) {
                 /*
                  * Clear previous contents, add feature
                  * The border mainly gets trees, while the center gets rubble

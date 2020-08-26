@@ -281,7 +281,7 @@ void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
  */
 bool is_known_trap(player_type *player_ptr, grid_type *g_ptr)
 {
-    if (!g_ptr->mimic && !cave_have_flag_grid(g_ptr, FF_SECRET) && is_trap(player_ptr, g_ptr->feat))
+    if (!g_ptr->mimic && !cave_has_flag_grid(g_ptr, FF_SECRET) && is_trap(player_ptr, g_ptr->feat))
         return TRUE;
     else
         return FALSE;
@@ -295,7 +295,7 @@ bool is_known_trap(player_type *player_ptr, grid_type *g_ptr)
  */
 bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
 {
-    if ((g_ptr->mimic || cave_have_flag_grid(g_ptr, FF_SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
+    if ((g_ptr->mimic || cave_has_flag_grid(g_ptr, FF_SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
         return TRUE;
     else
         return FALSE;
@@ -914,7 +914,7 @@ void update_flow(player_type *subject_ptr)
                 continue;
 
             /* Ignore "walls" and "rubble" */
-            if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
+            if (!cave_has_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
                 continue;
 
             /* Save the flow cost */

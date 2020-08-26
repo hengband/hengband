@@ -86,7 +86,7 @@ bool create_ammo(player_type *creature_ptr)
             return FALSE;
         }
 
-        if (!cave_have_flag_grid(g_ptr, FF_CAN_DIG) || !cave_have_flag_grid(g_ptr, FF_HURT_ROCK)) {
+        if (!cave_has_flag_grid(g_ptr, FF_CAN_DIG) || !cave_has_flag_grid(g_ptr, FF_HURT_ROCK)) {
             msg_print(_("çdÇ∑Ç¨ÇƒïˆÇπÇ»Ç©Ç¡ÇΩÅB", "You failed to make ammo."));
             return TRUE;
         }

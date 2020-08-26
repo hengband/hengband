@@ -81,7 +81,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
             term_queue_bigchar(panel_col_of(nx), ny - panel_row_prt, a, c, ta, tc);
         }
 
-        if ((g_ptr->info & CAVE_MARK) && !cave_have_flag_grid(g_ptr, FF_PROJECT))
+        if ((g_ptr->info & CAVE_MARK) && !cave_has_flag_grid(g_ptr, FF_PROJECT))
             break;
 
         if (nx == x && ny == y)

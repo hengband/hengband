@@ -60,7 +60,7 @@ void do_cmd_store(player_type *player_ptr)
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
 
-    if (!cave_have_flag_grid(g_ptr, FF_STORE)) {
+    if (!cave_has_flag_grid(g_ptr, FF_STORE)) {
         msg_print(_("ここには店がありません。", "You see no store here."));
         return;
     }

@@ -40,8 +40,8 @@ static bool tgt_pt_accept(player_type *creature_ptr, POSITION y, POSITION x)
     if (!(g_ptr->info & (CAVE_MARK)))
         return FALSE;
 
-    if (cave_have_flag_grid(g_ptr, FF_LESS) || cave_have_flag_grid(g_ptr, FF_MORE) || cave_have_flag_grid(g_ptr, FF_QUEST_ENTER)
-        || cave_have_flag_grid(g_ptr, FF_QUEST_EXIT))
+    if (cave_has_flag_grid(g_ptr, FF_LESS) || cave_has_flag_grid(g_ptr, FF_MORE) || cave_has_flag_grid(g_ptr, FF_QUEST_ENTER)
+        || cave_has_flag_grid(g_ptr, FF_QUEST_EXIT))
         return TRUE;
 
     return FALSE;
@@ -120,7 +120,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
             n++;
             for (; n < tmp_pos.n; ++n) {
                 grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[tmp_pos.y[n]][tmp_pos.x[n]];
-                if (cave_have_flag_grid(g_ptr, FF_STAIRS) && cave_have_flag_grid(g_ptr, ch == '>' ? FF_MORE : FF_LESS))
+                if (cave_has_flag_grid(g_ptr, FF_STAIRS) && cave_has_flag_grid(g_ptr, ch == '>' ? FF_MORE : FF_LESS))
                     break;
             }
 

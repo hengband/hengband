@@ -57,7 +57,7 @@ bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION 
         int next_y = *yp + tonari_y[next][i];
         grid_type *g_ptr;
         g_ptr = &target_ptr->current_floor_ptr->grid_array[next_y][next_x];
-        if (!cave_have_flag_grid(g_ptr, f_flag))
+        if (!cave_has_flag_grid(g_ptr, f_flag))
             continue;
 
         if (path_check(target_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x)) {

@@ -199,7 +199,7 @@ void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &trapped_ptr->current_floor_ptr->grid_array[y][x];
 
-    if (cave_have_flag_grid(g_ptr, FF_SECRET)) {
+    if (cave_has_flag_grid(g_ptr, FF_SECRET)) {
         /* No longer hidden */
         cave_alter_feat(trapped_ptr, y, x, FF_SECRET);
     } else if (g_ptr->mimic) {

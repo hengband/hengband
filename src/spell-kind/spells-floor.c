@@ -360,7 +360,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
             delete_all_items_from_floor(caster_ptr, y, x);
 
             /* Destroy "non-permanent" grids */
-            if (cave_have_flag_grid(g_ptr, FF_PERMANENT))
+            if (cave_has_flag_grid(g_ptr, FF_PERMANENT))
                 continue;
 
             /* Wall (or floor) type */
