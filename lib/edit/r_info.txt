@@ -9675,17 +9675,15 @@ D:全身が毛で覆われた巨大なアリだ。その強力な顎は熱に輝
 N:549:ホワイト・ドラゴン
 E:Mature white dragon
 G:d:w
-I:110:40d10:20:65:70
-W:35:1:0:1000:10000:617
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
-B:BITE:HURT:2d8
+I:110:40d10:20:70:70
+W:33:1:0:1000:10000:617
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
+B:BITE:HURT:3d8
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_2D2 | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY | WILD_WASTE | WILD_MOUNTAIN | 
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_10 |
-S:SCARE |
-S:BR_COLD
+S:1_IN_7 | SCARE | BR_COLD
 D:$A large dragon, scales gleaming bright white.
 D:大きなドラゴンで、微かにきらめく白色の鱗を持っている。
 
@@ -9905,18 +9903,16 @@ D:まだ柔らかいその鱗は曇った金色をしていて、全身で光を
 N:560:ブルー・ドラゴン
 E:Mature blue dragon
 G:d:b
-I:110:40d10:20:75:70
-W:36:1:0:1200:10000:601
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
-B:BITE:HURT:2d10
+I:110:40d10:20:70:70
+W:33:1:0:1200:10000:601
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
+B:BITE:HURT:3d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_60 | DROP_90 | DROP_2D2 | DROP_CORPSE | RIDING
 F:BASH_DOOR | WILD_MOUNTAIN | WILD_WOOD |
 F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | SELF_LITE_1
-S:1_IN_9 | 
-S:SCARE | 
-S:BR_ELEC
+S:1_IN_7 | SCARE | BR_ELEC
 D:$A large dragon, scales tinted deep blue.
 D:大きなドラゴンで、深く淡い青色の鱗を持っている。
 
@@ -9925,17 +9921,15 @@ N:561:グリーン・ドラゴン
 E:Mature green dragon
 G:d:g
 I:110:40d10:20:70:70
-W:36:1:0:1100:10000:618
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+W:33:1:0:1200:10000:618
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
+B:BITE:HURT:3d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_60 | DROP_90 | DROP_2D2 | DROP_CORPSE
 F:BASH_DOOR | WILD_MOUNTAIN | WILD_WOOD |
 F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:SCARE | 
-S:BR_POIS
+S:1_IN_7 | SCARE | BR_POIS
 D:$A large dragon, scales tinted deep green.
 D:大きなドラゴンで、深く淡い緑色の鱗を持っている。
 
@@ -10506,18 +10500,16 @@ D:強烈な火炎の渦巻きで、冒険者の足下の床を焦がしている
 N:589:レッド・ドラゴン
 E:Mature red dragon
 G:d:r
-I:110:48d10:20:80:30
-W:37:1:0:1400:10000:644
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d10
-B:BITE:HURT:2d12
+I:110:46d10:20:75:30
+W:34:1:0:1400:10000:644
+B:CLAW:HURT:2d9
+B:CLAW:HURT:2d9
+B:BITE:HURT:3d9
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | WILD_VOLCANO |
 F:DROP_1D2 | DROP_4D2 | CAN_FLY | DROP_CORPSE | RIDING
 F:BASH_DOOR | SELF_LITE_1 |
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP
-S:1_IN_9 | 
-S:CONF | SCARE | 
-S:BR_FIRE
+S:1_IN_7 | CONF | SCARE | BR_FIRE
 D:$A large dragon, scales tinted deep red.
 D:大きなドラゴンで、深く淡い赤色の鱗を持っている。
 
@@ -10565,18 +10557,16 @@ D:目を眩ませる。
 N:592:ブラック・ドラゴン
 E:Mature black dragon
 G:d:D
-I:110:46d10:20:55:30
-W:37:1:0:1350:10000:624
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
-B:BITE:HURT:2d10
+I:110:40d10:20:70:30
+W:33:2:0:1200:10000:624
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
+B:BITE:HURT:3d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | DROP_CORPSE
 F:DROP_60 | DROP_90 | DROP_2D2 | WILD_SWAMP | WILD_MOUNTAIN |
 F:BASH_DOOR | 
 F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:SCARE | 
-S:BR_ACID
+S:1_IN_7 | SCARE | BR_ACID
 D:$A large dragon, with scales of deepest black.
 D:大きなドラゴンで、漆黒の鱗を持っている。
 
@@ -10585,18 +10575,17 @@ N:593:万色ドラゴン
 E:Mature multi-hued dragon
 G:d:v
 I:110:64d10:20:65:50
-W:38:2:0:1700:20000:675
-B:CLAW:HURT:1d10
-B:CLAW:HURT:1d10
-B:BITE:HURT:2d12
+W:35:2:0:1700:20000:675
+B:CLAW:HURT:2d10
+B:CLAW:HURT:2d10
+B:BITE:HURT:3d10
 F:ATTR_MULTI | 
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_3D2 | DROP_4D2 | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | SELF_LITE_1 |
 F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | 
 F:IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_5 | 
-S:BLIND | CONF | SCARE | 
+S:1_IN_5 | BLIND | CONF | SCARE
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$A large dragon, scales shimmering many colours.
 D:大きなドラゴンで、鱗が様々な色に輝いている。
@@ -11123,24 +11112,24 @@ D:（ロジャー・ゼラズニイ、岡部宏之訳「アンバーの九王子
 
 #J0#
 N:616:多首の『カブラックス』
-E:Kavlax the Many-Headed
+E:Kavlax, the Many-Headed
 G:d:v
 I:120:13d100:20:85:30
-W:39:3:0:3000:0:0
+W:40:3:0:3000:0:0
 B:BITE:HURT:2d12
-B:BITE:HURT:2d12
-B:BITE:HURT:2d12
-B:BITE:HURT:2d12
+B:BITE:HURT:3d12
+B:BUTT:HURT:2d12
+B:BUTT:HURT:3d12
 F:UNIQUE | MALE | ATTR_MULTI | CAN_SPEAK | ATTR_ANY |
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE | SELF_LITE_2 |
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | RES_NEXU | RES_SOUN |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | CAN_FLY |
 F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | RES_SHAR | RES_GRAV |
 F:NO_CONF | NO_SLEEP | RIDING
-S:1_IN_4 | 
+S:1_IN_5 | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_SOUN | BR_CONF | 
 S:BR_SHAR | BR_GRAV | BR_NEXU
-V:150
+V:140
 D:$A large dragon with a selection of heads, all shouting and arguing as they 
 D:$look for prey, but each with its own deadly breath weapon.
 D:多くの首を使い分ける巨大なドラゴンだ。獲物を探しているときは首同士が
