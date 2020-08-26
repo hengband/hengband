@@ -399,35 +399,20 @@ BIT_FLAGS has_sh_elec(player_type *creature_ptr)
     return result;
 }
 
-void has_sh_cold(player_type *creature_ptr)
+BIT_FLAGS has_sh_cold(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->sh_cold = FALSE;
+    BIT_FLAGS result = 0L;
 
-    if (creature_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling(creature_ptr, HEX_ICE_ARMOR)) {
-            creature_ptr->sh_cold = TRUE;
-        }
+    if (creature_ptr->special_defense & KAMAE_SEIRYU || creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    if (creature_ptr->special_defense & KAMAE_SEIRYU) {
-        creature_ptr->sh_cold = TRUE;
+    if (creature_ptr->ult_res || hex_spelling(creature_ptr, HEX_ICE_ARMOR)) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->sh_cold = TRUE;
-    }
-
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_SH_COLD))
-            creature_ptr->sh_cold = TRUE;
-    }
+	result |= check_equipment_flags(creature_ptr, TR_SH_COLD);
+    return result;
 }
 
 BIT_FLAGS has_easy_spell(player_type *creature_ptr)

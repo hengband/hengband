@@ -51,7 +51,7 @@ BIT_FLAGS has_anti_magic(player_type *creature_ptr);
 BIT_FLAGS has_anti_tele(player_type *creature_ptr);
 BIT_FLAGS has_sh_fire(player_type *creature_ptr);
 BIT_FLAGS has_sh_elec(player_type *creature_ptr);
-void has_sh_cold(player_type *creature_ptr);
+BIT_FLAGS has_sh_cold(player_type *creature_ptr);
 BIT_FLAGS has_easy_spell(player_type *creature_ptr);
 BIT_FLAGS has_heavy_spell(player_type *creature_ptr);
 void has_hold_exp(player_type *creature_ptr);
