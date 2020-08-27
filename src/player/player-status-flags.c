@@ -589,15 +589,15 @@ BIT_FLAGS has_sustain_int(player_type *creature_ptr)
     BIT_FLAGS result = 0L;
 
     if (is_specific_player_race(creature_ptr, RACE_MIND_FLAYER)) {
-        creature_ptr->sustain_int |= FLAG_CAUSE_RACE;
+        result |= FLAG_CAUSE_RACE;
     }
 
     if (creature_ptr->ult_res) {
-        creature_ptr->sustain_int |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
 	if (creature_ptr->special_defense & KATA_MUSOU) {
-        creature_ptr->sustain_int |= FLAG_CAUSE_BATTLE_FORM;
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
     result |= check_equipment_flags(creature_ptr, TR_SUST_INT);
