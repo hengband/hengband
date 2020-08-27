@@ -696,16 +696,16 @@ void has_levitation(player_type *creature_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     creature_ptr->levitation = FALSE;
 
+    if (creature_ptr->muta3 & MUT3_WINGS)
+        creature_ptr->levitation = TRUE;
+
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
         creature_ptr->levitation = TRUE;
     }
 
-    if (creature_ptr->muta3 & MUT3_WINGS)
-        creature_ptr->levitation = TRUE;
-
-    if (!creature_ptr->mimic_form
-        && (creature_ptr->prace == RACE_DRACONIAN || creature_ptr->prace == RACE_SPECTRE || creature_ptr->prace == RACE_SPRITE
-            || creature_ptr->prace == RACE_ARCHON || creature_ptr->prace == RACE_S_FAIRY)) {
+    if (is_specific_player_race(creature_ptr, RACE_DRACONIAN) || is_specific_player_race(creature_ptr, RACE_SPECTRE)
+        || is_specific_player_race(creature_ptr, RACE_SPRITE) || is_specific_player_race(creature_ptr, RACE_ARCHON)
+        || is_specific_player_race(creature_ptr, RACE_S_FAIRY)) {
         creature_ptr->levitation = TRUE;
     }
 
