@@ -313,13 +313,8 @@ BIT_FLAGS has_reflect(player_type *creature_ptr)
     return result;
 }
 
-void has_see_nocto(player_type *creature_ptr)
-{
-    creature_ptr->see_nocto = FALSE;
-
-    if (creature_ptr->pclass == CLASS_NINJA)
-        creature_ptr->see_nocto = TRUE;
-}
+BIT_FLAGS has_see_nocto(player_type *creature_ptr)
+{ return creature_ptr->pclass == CLASS_NINJA ? FLAG_CAUSE_CLASS : 0L; }
 
 void has_warning(player_type *creature_ptr)
 {

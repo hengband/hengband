@@ -441,7 +441,7 @@ typedef struct player_type {
     BIT_FLAGS heavy_spell;
     bool warning;
     BIT_FLAGS mighty_throw;
-    bool see_nocto; /* Noctovision */
+    BIT_FLAGS see_nocto; /* Noctovision */
     bool invoking_midnight_curse;
 
     DICE_NUMBER to_dd[2]; /* Extra dice/sides */

@@ -342,7 +342,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->mighty_throw = has_mighty_throw(creature_ptr);
     creature_ptr->dec_mana = has_dec_mana(creature_ptr);
     creature_ptr->reflect = has_reflect(creature_ptr);
-    has_see_nocto(creature_ptr);
+    creature_ptr->see_nocto = has_see_nocto(creature_ptr);
     has_warning(creature_ptr);
     creature_ptr->anti_magic = has_anti_magic(creature_ptr);
     creature_ptr->anti_tele = has_anti_tele(creature_ptr);
