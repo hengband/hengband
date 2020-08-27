@@ -61,7 +61,7 @@ BIT_FLAGS has_sustain_str(player_type *creature_ptr);
 BIT_FLAGS has_sustain_int(player_type *creature_ptr);
 BIT_FLAGS has_sustain_wis(player_type *creature_ptr);
 BIT_FLAGS has_sustain_dex(player_type *creature_ptr);
-void has_sustain_con(player_type *creature_ptr);
+BIT_FLAGS has_sustain_con(player_type *creature_ptr);
 void has_sustain_chr(player_type *creature_ptr);
 void has_levitation(player_type *creature_ptr);
 void has_can_swim(player_type *creature_ptr);
