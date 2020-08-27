@@ -409,7 +409,7 @@ typedef struct player_type {
     BIT_FLAGS cursed; /* Player is cursed */
 
     bool can_swim; /* No damage falling */
-    bool levitation; /* No damage falling */
+    BIT_FLAGS levitation; /* No damage falling */
     bool lite; /* Permanent light */
     BIT_FLAGS free_act; /* Never paralyzed */
     bool see_inv; /* Can see invisible */
