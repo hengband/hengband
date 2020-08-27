@@ -404,7 +404,7 @@ typedef struct player_type {
     BIT_FLAGS sustain_wis; /* Keep wisdom */
     BIT_FLAGS sustain_dex; /* Keep dexterity */
     BIT_FLAGS sustain_con; /* Keep constitution */
-    bool sustain_chr; /* Keep charisma */
+    BIT_FLAGS sustain_chr; /* Keep charisma */
 
     BIT_FLAGS cursed; /* Player is cursed */
 

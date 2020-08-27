@@ -673,25 +673,21 @@ BIT_FLAGS has_sustain_con(player_type *creature_ptr)
     return result;
 }
 
-void has_sustain_chr(player_type *creature_ptr)
+BIT_FLAGS has_sustain_chr(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    BIT_FLAGS result = 0L;
     creature_ptr->sustain_chr = FALSE;
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->sustain_chr = TRUE;
+    if (creature_ptr->ult_res) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_SUST_CHR))
-            creature_ptr->sustain_chr = TRUE;
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
+
+    result |= check_equipment_flags(creature_ptr, TR_SUST_CHR);
+    return result;
 }
 
 void has_levitation(player_type *creature_ptr)
