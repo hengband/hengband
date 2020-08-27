@@ -400,7 +400,7 @@ typedef struct player_type {
     BIT_FLAGS anti_tele; /* Prevent teleportation */
 
     BIT_FLAGS sustain_str; /* Keep strength */
-    bool sustain_int; /* Keep intelligence */
+    BIT_FLAGS sustain_int; /* Keep intelligence */
     bool sustain_wis; /* Keep wisdom */
     bool sustain_dex; /* Keep dexterity */
     bool sustain_con; /* Keep constitution */
