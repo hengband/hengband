@@ -351,7 +351,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->sh_cold = has_sh_cold(creature_ptr);
     creature_ptr->easy_spell = has_easy_spell(creature_ptr);
     creature_ptr->heavy_spell = has_heavy_spell(creature_ptr);
-    has_hold_exp(creature_ptr);
+    creature_ptr->hold_exp = has_hold_exp(creature_ptr);
     has_see_inv(creature_ptr);
     creature_ptr->free_act = has_free_act(creature_ptr);
     creature_ptr->sustain_str = has_sustain_str(creature_ptr);

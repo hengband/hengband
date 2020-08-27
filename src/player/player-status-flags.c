@@ -423,46 +423,40 @@ BIT_FLAGS has_heavy_spell(player_type *creature_ptr)
     return result;
 }
 
-void has_hold_exp(player_type *creature_ptr)
+BIT_FLAGS has_hold_exp(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-    creature_ptr->hold_exp = FALSE;
+    BIT_FLAGS result = 0L;
 
     if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
-        creature_ptr->hold_exp = TRUE;
+        result |= FLAG_CAUSE_PERSONALITY;
     }
 
     if (creature_ptr->mimic_form == MIMIC_DEMON || creature_ptr->mimic_form == MIMIC_DEMON_LORD || creature_ptr->mimic_form == MIMIC_VAMPIRE) {
-        creature_ptr->hold_exp = TRUE;
+        result |= FLAG_CAUSE_RACE;
     }
 
     if (is_specific_player_race(creature_ptr, RACE_HOBBIT) || is_specific_player_race(creature_ptr, RACE_SKELETON)
         || is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_VAMPIRE)
         || is_specific_player_race(creature_ptr, RACE_SPECTRE) || is_specific_player_race(creature_ptr, RACE_BALROG)
         || is_specific_player_race(creature_ptr, RACE_ANDROID)) {
-        creature_ptr->hold_exp = TRUE;
+        result |= FLAG_CAUSE_RACE;
     }
 
     if (is_specific_player_race(creature_ptr, RACE_GOLEM)) {
         if (creature_ptr->lev > 34)
-            creature_ptr->hold_exp = TRUE;
+            result |= FLAG_CAUSE_RACE;
     }
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->hold_exp = TRUE;
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_HOLD_EXP))
-            creature_ptr->hold_exp = TRUE;
+    if (creature_ptr->ult_res) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
+
+    result |= check_equipment_flags(creature_ptr, TR_HOLD_EXP);
+    return result;
 }
 
 void has_see_inv(player_type *creature_ptr)

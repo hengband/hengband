@@ -414,7 +414,7 @@ typedef struct player_type {
     BIT_FLAGS free_act; /* Never paralyzed */
     bool see_inv; /* Can see invisible */
     BIT_FLAGS regenerate; /* Regenerate hit pts */
-    bool hold_exp; /* Resist exp draining */
+    BIT_FLAGS hold_exp; /* Resist exp draining */
 
     BIT_FLAGS telepathy; /* Telepathy */
     BIT_FLAGS esp_animal;
