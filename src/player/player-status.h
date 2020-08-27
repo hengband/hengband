@@ -401,8 +401,8 @@ typedef struct player_type {
 
     BIT_FLAGS sustain_str; /* Keep strength */
     BIT_FLAGS sustain_int; /* Keep intelligence */
-    bool sustain_wis; /* Keep wisdom */
-    bool sustain_dex; /* Keep dexterity */
+    BIT_FLAGS sustain_wis; /* Keep wisdom */
+    BIT_FLAGS sustain_dex; /* Keep dexterity */
     bool sustain_con; /* Keep constitution */
     bool sustain_chr; /* Keep charisma */
 

@@ -357,7 +357,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->sustain_str = has_sustain_str(creature_ptr);
     creature_ptr->sustain_int = has_sustain_int(creature_ptr);
     creature_ptr->sustain_wis = has_sustain_wis(creature_ptr);
-    has_sustain_dex(creature_ptr);
+    creature_ptr->sustain_dex = has_sustain_dex(creature_ptr);
     has_sustain_con(creature_ptr);
     has_sustain_chr(creature_ptr);
     has_levitation(creature_ptr);

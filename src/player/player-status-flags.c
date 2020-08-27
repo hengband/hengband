@@ -628,31 +628,26 @@ BIT_FLAGS has_sustain_wis(player_type *creature_ptr)
     return result;
 }
 
-void has_sustain_dex(player_type *creature_ptr)
+BIT_FLAGS has_sustain_dex(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->sustain_dex = FALSE;
+    BIT_FLAGS result = 0L;
     if (creature_ptr->pclass == CLASS_BERSERKER) {
-        creature_ptr->sustain_dex = TRUE;
+        result |= FLAG_CAUSE_CLASS;
     }
 
     if (creature_ptr->pclass == CLASS_NINJA && creature_ptr->lev > 24)
-        creature_ptr->sustain_dex = TRUE;
+        result |= FLAG_CAUSE_CLASS;
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->sustain_dex = TRUE;
+    if (creature_ptr->ult_res) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_SUST_DEX))
-            creature_ptr->sustain_dex = TRUE;
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
+
+    result |= check_equipment_flags(creature_ptr, TR_SUST_DEX);
+    return result;
 }
 
 void has_sustain_con(player_type *creature_ptr)
