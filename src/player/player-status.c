@@ -312,7 +312,7 @@ void calc_bonuses(player_type *creature_ptr)
     BIT_FLAGS old_esp_good = creature_ptr->esp_good;
     BIT_FLAGS old_esp_nonliving = creature_ptr->esp_nonliving;
     BIT_FLAGS old_esp_unique = creature_ptr->esp_unique;
-    bool old_see_inv = creature_ptr->see_inv;
+    BIT_FLAGS old_see_inv = creature_ptr->see_inv;
     BIT_FLAGS old_mighty_throw = creature_ptr->mighty_throw;
     s16b old_speed = creature_ptr->pspeed;
 
@@ -352,7 +352,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->easy_spell = has_easy_spell(creature_ptr);
     creature_ptr->heavy_spell = has_heavy_spell(creature_ptr);
     creature_ptr->hold_exp = has_hold_exp(creature_ptr);
-    has_see_inv(creature_ptr);
+    creature_ptr->see_inv = has_see_inv(creature_ptr);
     creature_ptr->free_act = has_free_act(creature_ptr);
     creature_ptr->sustain_str = has_sustain_str(creature_ptr);
     creature_ptr->sustain_int = has_sustain_int(creature_ptr);

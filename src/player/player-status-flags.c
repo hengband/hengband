@@ -459,57 +459,49 @@ BIT_FLAGS has_hold_exp(player_type *creature_ptr)
     return result;
 }
 
-void has_see_inv(player_type *creature_ptr)
+BIT_FLAGS has_see_inv(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->see_inv = FALSE;
+    BIT_FLAGS result = 0L;
 
     if (creature_ptr->pclass == CLASS_NINJA || creature_ptr->lev > 29)
-        creature_ptr->see_inv = TRUE;
+        result |= FLAG_CAUSE_CLASS;
 
     if (creature_ptr->mimic_form == MIMIC_DEMON || creature_ptr->mimic_form == MIMIC_DEMON_LORD || creature_ptr->mimic_form == MIMIC_VAMPIRE) {
-        creature_ptr->see_inv = TRUE;
+        result |= FLAG_CAUSE_RACE;
     }
 
     if (!creature_ptr->mimic_form
         && (creature_ptr->prace == RACE_HIGH_ELF || creature_ptr->prace == RACE_GOLEM || creature_ptr->prace == RACE_SKELETON
             || creature_ptr->prace == RACE_ZOMBIE || creature_ptr->prace == RACE_SPECTRE || creature_ptr->prace == RACE_ARCHON)) {
-        creature_ptr->see_inv = TRUE;
+        result |= FLAG_CAUSE_RACE;
     }
 
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_DARK_ELF) {
         if (creature_ptr->lev > 19)
-            creature_ptr->see_inv = TRUE;
+            result |= FLAG_CAUSE_RACE;
     }
 
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_MIND_FLAYER) {
         if (creature_ptr->lev > 14)
-            creature_ptr->see_inv = TRUE;
+            result |= FLAG_CAUSE_RACE;
     }
 
     if (!creature_ptr->mimic_form && (creature_ptr->prace == RACE_IMP || creature_ptr->prace == RACE_BALROG)) {
         if (creature_ptr->lev > 9)
-            creature_ptr->see_inv = TRUE;
+            result |= FLAG_CAUSE_RACE;
     }
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->see_inv = TRUE;
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    if (creature_ptr->tim_invis) {
-        creature_ptr->see_inv = TRUE;
+    if (creature_ptr->ult_res || creature_ptr->tim_invis) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
+	result |= check_equipment_flags(creature_ptr, TR_SEE_INVIS);
+    return result;
 
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_SEE_INVIS))
-            creature_ptr->see_inv = TRUE;
-    }
 }
 
 BIT_FLAGS has_free_act(player_type *creature_ptr)
