@@ -676,7 +676,6 @@ BIT_FLAGS has_sustain_con(player_type *creature_ptr)
 BIT_FLAGS has_sustain_chr(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
-    creature_ptr->sustain_chr = FALSE;
 
     if (creature_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
