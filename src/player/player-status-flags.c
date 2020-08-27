@@ -313,8 +313,7 @@ BIT_FLAGS has_reflect(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_see_nocto(player_type *creature_ptr)
-{ return creature_ptr->pclass == CLASS_NINJA ? FLAG_CAUSE_CLASS : 0L; }
+BIT_FLAGS has_see_nocto(player_type *creature_ptr) { return creature_ptr->pclass == CLASS_NINJA ? FLAG_CAUSE_CLASS : 0L; }
 
 void has_warning(player_type *creature_ptr)
 {
@@ -564,19 +563,19 @@ BIT_FLAGS has_sustain_str(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-	if (creature_ptr->pclass == CLASS_BERSERKER) {
+    if (creature_ptr->pclass == CLASS_BERSERKER) {
         result |= FLAG_CAUSE_CLASS;
     }
     if (is_specific_player_race(creature_ptr, RACE_HALF_TROLL) || is_specific_player_race(creature_ptr, RACE_HALF_OGRE)
         || is_specific_player_race(creature_ptr, RACE_HALF_GIANT)) {
-		result |= FLAG_CAUSE_RACE;
+        result |= FLAG_CAUSE_RACE;
     }
 
-	if (creature_ptr->ult_res) {
+    if (creature_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-	if (creature_ptr->special_defense & KATA_MUSOU) {
+    if (creature_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -596,7 +595,7 @@ BIT_FLAGS has_sustain_int(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-	if (creature_ptr->special_defense & KATA_MUSOU) {
+    if (creature_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
@@ -780,63 +779,43 @@ void has_slow_digest(player_type *creature_ptr)
     }
 }
 
-void has_regenerate(player_type *creature_ptr)
+BIT_FLAGS has_regenerate(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->regenerate = FALSE;
+    BIT_FLAGS result = 0L;
 
-    if (!creature_ptr->mimic_form) {
-        switch (creature_ptr->prace) {
-        case RACE_HALF_TROLL:
-            if (creature_ptr->lev > 14) {
-                creature_ptr->regenerate = TRUE;
-            }
-            break;
-        case RACE_AMBERITE:
-            creature_ptr->regenerate = TRUE;
-            break;
-        }
+    if (is_specific_player_race(creature_ptr, RACE_HALF_TROLL) && creature_ptr->lev > 14) {
+        result |= FLAG_CAUSE_RACE;
     }
 
-    switch (creature_ptr->pclass) {
-    case CLASS_WARRIOR:
-        if (creature_ptr->lev > 44)
-            creature_ptr->regenerate = TRUE;
-        break;
-    case CLASS_BERSERKER:
-        creature_ptr->regenerate = TRUE;
-        break;
+    if (is_specific_player_race(creature_ptr, RACE_AMBERITE)) {
+        result |= FLAG_CAUSE_RACE;
     }
 
-    if (creature_ptr->muta3 & MUT3_FLESH_ROT)
-        creature_ptr->regenerate = FALSE;
+    if (creature_ptr->pclass == CLASS_WARRIOR && creature_ptr->lev > 44) {
+        result |= FLAG_CAUSE_RACE;    
+	}
+
+	if (creature_ptr->pclass == CLASS_BERSERKER) {
+        result |= FLAG_CAUSE_RACE;
+    }
 
     if (creature_ptr->muta3 & MUT3_REGEN)
-        creature_ptr->regenerate = TRUE;
+        result |= FLAG_CAUSE_MUTATION;
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->regenerate = TRUE;
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (creature_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
-            creature_ptr->regenerate = TRUE;
-        }
+    if (hex_spelling(creature_ptr, HEX_DEMON_AURA) || creature_ptr->ult_res || creature_ptr->tim_regen) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (creature_ptr->tim_regen) {
-        creature_ptr->regenerate = TRUE;
-    }
+    result |= check_equipment_flags(creature_ptr, TR_REGEN);
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_REGEN))
-            creature_ptr->regenerate = TRUE;
-    }
+    if (creature_ptr->muta3 & MUT3_FLESH_ROT)
+        result = 0L;
+
+    return result;
 }
 
 void has_curses(player_type *creature_ptr)

@@ -363,7 +363,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->levitation = has_levitation(creature_ptr);
     has_can_swim(creature_ptr);
     has_slow_digest(creature_ptr);
-    has_regenerate(creature_ptr);
+    creature_ptr->regenerate = has_regenerate(creature_ptr);
     has_curses(creature_ptr);
     creature_ptr->impact = has_impact(creature_ptr);
     has_extra_blow(creature_ptr);

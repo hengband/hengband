@@ -413,7 +413,7 @@ typedef struct player_type {
     bool lite; /* Permanent light */
     BIT_FLAGS free_act; /* Never paralyzed */
     bool see_inv; /* Can see invisible */
-    bool regenerate; /* Regenerate hit pts */
+    BIT_FLAGS regenerate; /* Regenerate hit pts */
     bool hold_exp; /* Resist exp draining */
 
     BIT_FLAGS telepathy; /* Telepathy */

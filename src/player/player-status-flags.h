@@ -66,7 +66,7 @@ BIT_FLAGS has_sustain_chr(player_type *creature_ptr);
 BIT_FLAGS has_levitation(player_type *creature_ptr);
 void has_can_swim(player_type *creature_ptr);
 void has_slow_digest(player_type *creature_ptr);
-void has_regenerate(player_type *creature_ptr);
+BIT_FLAGS has_regenerate(player_type *creature_ptr);
 void has_curses(player_type *creature_ptr);
 BIT_FLAGS has_impact(player_type *creature_ptr);
 void has_extra_blow(player_type *creature_ptr);
