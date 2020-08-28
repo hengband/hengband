@@ -367,7 +367,7 @@ void calc_bonuses(player_type *creature_ptr)
     has_curses(creature_ptr);
     creature_ptr->impact = has_impact(creature_ptr);
     has_extra_blow(creature_ptr);
-    has_immune_acid(creature_ptr);
+    creature_ptr->immune_acid = has_immune_acid(creature_ptr);
     has_immune_elec(creature_ptr);
     has_immune_fire(creature_ptr);
     has_immune_cold(creature_ptr);
