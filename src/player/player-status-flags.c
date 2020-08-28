@@ -1559,25 +1559,17 @@ BIT_FLAGS has_immune_fire(player_type *creature_ptr)
     return result;
 }
 
-void has_immune_cold(player_type *creature_ptr)
+BIT_FLAGS has_immune_cold(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->immune_cold = FALSE;
-    if (creature_ptr->ele_immune) {
+    BIT_FLAGS result = 0L;
+
+	if (creature_ptr->ele_immune) {
         if (creature_ptr->special_defense & DEFENSE_COLD)
-            creature_ptr->immune_cold = TRUE;
+           result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_IM_COLD))
-            creature_ptr->immune_cold = TRUE;
-    }
+    result |= check_equipment_flags(creature_ptr, TR_IM_COLD);
+    return result;
 }
 
 bool has_right_hand_weapon(player_type *creature_ptr)
