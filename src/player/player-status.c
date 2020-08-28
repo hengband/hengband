@@ -369,7 +369,7 @@ void calc_bonuses(player_type *creature_ptr)
     has_extra_blow(creature_ptr);
     creature_ptr->immune_acid = has_immune_acid(creature_ptr);
     creature_ptr->immune_elec = has_immune_elec(creature_ptr);
-    has_immune_fire(creature_ptr);
+    creature_ptr->immune_fire = has_immune_fire(creature_ptr);
     has_immune_cold(creature_ptr);
     has_resist_acid(creature_ptr);
     has_resist_elec(creature_ptr);
