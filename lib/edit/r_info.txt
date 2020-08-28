@@ -10764,18 +10764,16 @@ D:ように辺りのモンスターを眠りから目覚めさせる。
 N:601:古代ブルー・ドラゴン
 E:Ancient blue dragon
 G:D:b
-I:120:70d10:20:80:80
-W:38:1:0:1500:100000:728
-B:CLAW:HURT:4d8
-B:CLAW:HURT:4d8
-B:BITE:ELEC:5d8
+I:120:60d12:20:85:80
+W:39:1:0:2500:100000:728
+B:CLAW:HURT:4d9
+B:CLAW:HURT:4d9
+B:BITE:ELEC:5d12
 F:FORCE_SLEEP | FORCE_MAXHP | SELF_LITE_1 |
-F:DROP_1D2 | DROP_4D2 | DROP_CORPSE | RIDING
+F:DROP_3D2 | DROP_4D2 | DROP_CORPSE | RIDING
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | CAN_FLY |
 F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP
-S:1_IN_9 | 
-S:BLIND | CONF | SCARE | 
-S:BR_ELEC
+S:1_IN_6 | BLIND | CONF | SCARE | BR_ELEC
 D:$A huge draconic form.  Lightning crackles along its length.
 D:巨大なドラゴンで、全身が稲妻で覆われている。
 
@@ -11140,7 +11138,7 @@ D:ブレスを吐いてくる。
 N:617:古代ホワイト・ドラゴン
 E:Ancient white dragon
 G:D:w
-I:120:70d10:20:90:80
+I:120:60d12:20:85:80
 W:39:1:0:2500:100000:741
 B:CLAW:HURT:4d9
 B:CLAW:HURT:4d9
@@ -11149,9 +11147,7 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:DROP_3D2 | DROP_4D2 | DROP_CORPSE
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | CAN_FLY |
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:BLIND | CONF | SCARE | 
-S:BR_COLD
+S:1_IN_6 | BLIND | CONF | SCARE | BR_COLD
 D:$A huge draconic form.  Frost covers it from head to tail.
 D:巨大なドラゴンで、頭の先から爪の先まで冷気に覆われている。
 
@@ -11161,16 +11157,14 @@ E:Ancient green dragon
 G:D:g
 I:120:72d10:20:85:80
 W:39:1:0:2400:100000:890
-B:CLAW:HURT:4d8
-B:CLAW:HURT:4d8
-B:BITE:HURT:5d10
+B:CLAW:HURT:4d9
+B:CLAW:HURT:4d9
+B:BITE:POISON:5d12
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:DROP_3D2 | DROP_4D2 | CAN_FLY |
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:BLIND | CONF | SCARE | 
-S:BR_POIS
+S:1_IN_6 | BLIND | CONF | SCARE | BR_POIS
 D:$A huge draconic form enveloped in clouds of poisonous vapour.
 D:毒の霧に身を包んだ巨大なドラゴンだ。
 
@@ -11296,18 +11290,16 @@ D:この死人のような存在が近づいてくると、汚れた風が冒険
 N:624:古代ブラック・ドラゴン
 E:Ancient black dragon
 G:D:D
-I:120:72d10:20:90:70
+I:120:60d12:20:85:80
 W:39:1:0:2500:100000:1066
 B:CLAW:HURT:4d9
 B:CLAW:HURT:4d9
-B:BITE:ACID:5d10
+B:BITE:ACID:5d12
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_3D2 | DROP_4D2 | DROP_CORPSE
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:BLIND | CONF | SCARE | 
-S:BR_ACID
+S:1_IN_6 | BLIND | CONF | SCARE | BR_ACID
 D:$A huge draconic form.  Pools of acid melt the floor around it.
 D:巨大なドラゴンで、滴る酸が池のようになって周りの床を溶かしている。
 
@@ -11684,7 +11676,7 @@ D:できないが、その邪悪な気は感じとることができる。
 N:644:古代レッド・ドラゴン
 E:Ancient red dragon
 G:D:r
-I:120:10d100:20:100:70
+I:120:69d12:20:90:80
 W:40:1:0:2750:100000:756
 B:CLAW:HURT:4d10
 B:CLAW:HURT:4d10
@@ -11693,9 +11685,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:DROP_3D2 | DROP_4D2 | CAN_FLY | SELF_LITE_2 |
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
-S:BR_FIRE
+S:1_IN_6 | BLIND | CONF | SCARE | BR_FIRE
 D:$A huge draconic form.  Wisps of smoke steam from its nostrils and the 
 D:$extreme heat surrounding it makes you gasp for breath.
 D:巨大なドラゴンで、その鼻孔から立ち昇る幾筋もの煙と、辺りに充満する
@@ -12429,8 +12419,8 @@ D:で知られる。
 N:675:古代万色ドラゴン
 E:Ancient multi-hued dragon
 G:D:v
-I:120:21d100:20:100:70
-W:43:1:0:13000:300000:790
+I:120:40d40:20:95:70
+W:41:1:0:10000:300000:790
 B:CLAW:HURT:4d12
 B:CLAW:HURT:4d12
 B:BITE:HURT:6d12
@@ -12440,8 +12430,7 @@ F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 |
 F:SMART | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | 
 F:IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_5 | 
-S:BLIND | CONF | SCARE | 
+S:1_IN_6 | BLIND | CONF | SCARE | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$A huge draconic form.  Many colours ripple down its massive frame.  Few 
 D:$live to see another.
