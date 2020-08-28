@@ -72,7 +72,7 @@ BIT_FLAGS has_impact(player_type *creature_ptr);
 void has_extra_blow(player_type *creature_ptr);
 BIT_FLAGS has_resist_acid(player_type *creature_ptr);
 BIT_FLAGS has_resist_elec(player_type *creature_ptr);
-void has_resist_fire(player_type *creature_ptr);
+BIT_FLAGS has_resist_fire(player_type *creature_ptr);
 void has_resist_cold(player_type *creature_ptr);
 void has_resist_pois(player_type *creature_ptr);
 void has_resist_conf(player_type *creature_ptr);
