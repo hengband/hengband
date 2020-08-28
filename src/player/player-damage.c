@@ -723,10 +723,13 @@ static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, b
  */
 void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
 {
-    process_aura_damage(m_ptr, touched_ptr, touched_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE, fire_dam,
+    process_aura_damage(m_ptr, touched_ptr, (bool)touched_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
+        fire_dam,
         _("突然とても熱くなった！", "You are suddenly very hot!"));
-    process_aura_damage(m_ptr, touched_ptr, touched_ptr->immune_cold, offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD, cold_dam,
+    process_aura_damage(m_ptr, touched_ptr, (bool)touched_ptr->immune_cold, offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
+        cold_dam,
         _("突然とても寒くなった！", "You are suddenly very cold!"));
-    process_aura_damage(m_ptr, touched_ptr, touched_ptr->immune_elec, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC, elec_dam,
+    process_aura_damage(m_ptr, touched_ptr, (bool)touched_ptr->immune_elec, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
+		elec_dam,
         _("電撃をくらった！", "You get zapped!"));
 }

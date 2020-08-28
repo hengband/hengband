@@ -367,7 +367,7 @@ typedef struct player_type {
     bool level_up_message;
 
     BIT_FLAGS immune_acid; /* Immunity to acid */
-    bool immune_elec; /* Immunity to lightning */
+    BIT_FLAGS immune_elec; /* Immunity to lightning */
     bool immune_fire; /* Immunity to fire */
     bool immune_cold; /* Immunity to cold */
 
