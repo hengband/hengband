@@ -377,7 +377,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->resist_cold = has_resist_cold(creature_ptr);
     creature_ptr->resist_pois = has_resist_pois(creature_ptr);
     creature_ptr->resist_conf = has_resist_conf(creature_ptr);
-    has_resist_sound(creature_ptr);
+    creature_ptr->resist_sound = has_resist_sound(creature_ptr);
     has_resist_lite(creature_ptr);
     has_resist_dark(creature_ptr);
     has_resist_chaos(creature_ptr);

@@ -76,7 +76,7 @@ BIT_FLAGS has_resist_fire(player_type *creature_ptr);
 BIT_FLAGS has_resist_cold(player_type *creature_ptr);
 BIT_FLAGS has_resist_pois(player_type *creature_ptr);
 BIT_FLAGS has_resist_conf(player_type *creature_ptr);
-void has_resist_sound(player_type *creature_ptr);
+BIT_FLAGS has_resist_sound(player_type *creature_ptr);
 void has_resist_lite(player_type *creature_ptr);
 void has_resist_dark(player_type *creature_ptr);
 void has_resist_chaos(player_type *creature_ptr);
