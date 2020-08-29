@@ -380,7 +380,7 @@ typedef struct player_type {
     BIT_FLAGS resist_conf; /* Resist confusion */
     BIT_FLAGS resist_sound; /* Resist sound */
     BIT_FLAGS resist_lite; /* Resist light */
-    bool resist_dark; /* Resist darkness */
+    BIT_FLAGS resist_dark; /* Resist darkness */
     bool resist_chaos; /* Resist chaos */
     bool resist_disen; /* Resist disenchant */
     bool resist_shard; /* Resist shards */
