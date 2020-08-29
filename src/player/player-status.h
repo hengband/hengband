@@ -377,7 +377,7 @@ typedef struct player_type {
     BIT_FLAGS resist_cold; /* Resist cold */
     BIT_FLAGS resist_pois; /* Resist poison */
 
-    bool resist_conf; /* Resist confusion */
+    BIT_FLAGS resist_conf; /* Resist confusion */
     bool resist_sound; /* Resist sound */
     bool resist_lite; /* Resist light */
     bool resist_dark; /* Resist darkness */
