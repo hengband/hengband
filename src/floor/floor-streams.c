@@ -284,7 +284,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 
     feature_type *streamer_ptr = &f_info[feat];
     bool streamer_is_wall = has_flag(streamer_ptr->flags, FF_WALL) && !has_flag(streamer_ptr->flags, FF_PERMANENT);
-    bool streamer_may_has_gold = has_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
+    bool streamer_may_have_gold = has_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -367,7 +367,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             /* Paranoia: Clear mimic field */
             g_ptr->mimic = 0;
 
-            if (streamer_may_has_gold) {
+            if (streamer_may_have_gold) {
                 /* Hack -- Add some known treasure */
                 if (one_in_(chance)) {
                     cave_alter_feat(player_ptr, ty, tx, FF_MAY_HAVE_GOLD);
