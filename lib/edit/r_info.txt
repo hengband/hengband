@@ -14487,18 +14487,17 @@ D:だが、その羽と瞳を見ればそんな思いはどこかに吹き飛ん
 N:756:デイドラ・レッド・ドラゴン
 E:Great Hell Wyrm
 G:D:r
-I:120:30d80:40:170:40
-W:55:1:0:16000:360000:1192
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:HURT:5d14
+I:120:30d80:40:120:40
+W:48:1:0:16000:360000:1192
+B:CLAW:HURT:4d14
+B:CLAW:FIRE:6d16
+B:CLAW:HURT:4d14
+B:BITE:FIRE:6d16
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | DROP_CORPSE | SELF_LITE_1 |
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | SELF_LITE_2 |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_4 | BLIND | CONF | SCARE | 
-S:BR_FIRE
+S:1_IN_4 | BLIND | CONF | SCARE | BR_FIRE
 D:$It is a dragon that has accumulated great power in the Oblivion
 D:$ and has returned to this world.
 D:$In front of this fiery flame,
@@ -15478,27 +15477,28 @@ D:工の象眼がある。右手には大きな二つの指輪、左手にも一
 D:ド、ルビー、サファイアのもの。」
 D:（ロジャー・ゼラズニイ、岡部宏之訳「アンバーの九王子」早川書房、p.48）
 
-#JZ#
-N:790:万色ワイアーム
-E:Great Wyrm of Many Colours
+N:790:万色デイドラ・ドラゴン
+E:Daedra Dragon of Many Colours
 G:D:v
-I:120:52d100:40:170:255
-W:68:4:0:31000:0:0
-B:CLAW:HURT:6d12
-B:CLAW:HURT:6d12
-B:CLAW:HURT:6d12
-B:BITE:HURT:9d14
+I:120:66d50:40:125:40
+W:50:2:0:21000:200000:1198
+B:CLAW:HURT:6d10
+B:BITE:HURT:6d10
+B:BUTT:HURT:6d10
+B:CRUSH:HURT:6d10
 F:ATTR_MULTI | CAN_FLY | EVIL |
 F:FORCE_SLEEP | FORCE_MAXHP | AURA_FIRE | AURA_ELEC | RES_TELE
 F:IM_FIRE | IM_ACID | IM_POIS | IM_COLD | IM_ELEC | AURA_COLD |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE 
 F:DRAGON | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_2 |
-S:1_IN_3 |
+S:1_IN_4 |
 S:BR_POIS | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
 S:CONF | SCARE | BLIND
-D:$A huge dragon whose scales shimmer in myriad hues.
-D:巨大なドラゴンで、その鱗は様々な色に輝いている。
+D:$It is a dragon whose scales change color.
+D:$This giant dragon can control all the elements in this world.
+D:めぐるましく鱗の色が変わるドラゴンだ。
+D:この巨大な竜はこの世界に存在する元素の全てを操ることができる。
 
 #JZ#
 #JZ#フィオナ。愛称ファイ。アンバーの王女。
@@ -23887,7 +23887,7 @@ D:信じられない程の破壊的な力を持った巨大なドラゴンだ。
 D:有毒な霧が近くの部屋に充満し、ほとんど息ができない。
 D:逃げられるうちに逃げろ！
 
-N:1197:ヴェノム・ワイアーム
+N:1197:グレート・ヴェノム・ワイアーム
 E:Great Venom Wyrm
 G:D:g
 I:125:48d100:30:150:10
@@ -23906,3 +23906,50 @@ D:$  If you take a breath,
 D:$ the bereaved will not even be able to approach your body!
 D:この世で最も強力で凶悪なドラゴンの一体だ。
 D:一息でも浴びてしまえば、遺族はあなたの遺体に近付くことすらできなくなる！
+
+N:1198:万色ワイアーム
+E:Wyrm of Many Colours
+G:D:v
+I:120:84d50:40:140:255
+W:60:2:0:28000:0:0
+B:CLAW:HURT:6d11
+B:BITE:HURT:6d11
+B:BUTT:HURT:6d11
+B:CRUSH:HURT:6d11
+F:ATTR_MULTI | CAN_FLY | EVIL |
+F:FORCE_SLEEP | FORCE_MAXHP | AURA_FIRE | AURA_ELEC | RES_TELE
+F:IM_FIRE | IM_ACID | IM_POIS | IM_COLD | IM_ELEC | AURA_COLD
+F:ONLY_ITEM | DROP_60 | DROP_90
+F:DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE 
+F:DRAGON | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_2 |
+S:1_IN_4 |
+S:BR_POIS | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
+S:CONF | SCARE | BLIND
+D:$A huge dragon whose scales shimmer in myriad hues.
+D:巨大なドラゴンで、その鱗は様々な色に輝いている。
+
+N:1199:グレーター・万色ワイアーム
+E:Great Wyrm of Many Colours
+G:D:v
+I:125:65d100:40:170:255
+W:72:2:0:38000:0:0
+B:CLAW:SUPERHURT:7d11
+B:BITE:SUPERHURT:7d11
+B:BUTT:SUPERHURT:7d11
+B:CRUSH:SUPERHURT:7d11
+F:ATTR_MULTI | CAN_FLY | EVIL |
+F:FORCE_SLEEP | FORCE_MAXHP | AURA_FIRE | AURA_ELEC | RES_TELE
+F:IM_FIRE | IM_ACID | IM_POIS | IM_COLD | IM_ELEC | AURA_COLD |
+F:ONLY_ITEM | DROP_60 | DROP_90
+F:DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE 
+F:DRAGON | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_2 |
+S:1_IN_3 |
+S:BR_POIS | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
+S:CONF | SCARE | BLIND
+D:$This dragon is the most powerful and evil being in the world
+D:$ who controls all the power of elements.
+D:$  If you want to live, never try to defeat it!!
+D:元素の力を全て支配している、この世で最も強力かつ邪悪な竜だ。
+D:生きていたいなら決して手を出さないことだ！！
