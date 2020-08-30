@@ -14117,29 +14117,25 @@ D:$resembles a gargantuan octopus and its evil is almost tangible.
 D:とてつもなく強く恐ろしい深海の生き物だ。巨大な蛸に似ていて、
 D:見ただけでその邪悪さが伝わってくる。
 
-#J0#
-N:741:アイス・ワイアーム
-E:Great Ice Wyrm
-G:D:w
-I:120:30d100:30:170:80
-W:54:2:0:15000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:COLD:5d14
+N:741:デイドラ・ホワイト・ドラゴン
+E:Daedra White Dragon
+G:D:W
+I:120:42d50:30:110:80
+W:47:1:0:12000:100000:1190
+B:CLAW:HURT:4d10
+B:CLAW:COLD:6d12
+B:BITE:HURT:4d10
+B:BITE:COLD:6d12
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | AURA_COLD |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
-S:BR_COLD
-D:$An immense dragon capable of awesome destruction.  You have never felt 
-D:$such extreme cold, or witnessed such an icy stare.  Begone quickly or feel 
-D:$its wrath!
-D:恐るべき破壊能力を持った巨大なドラゴンだ。このような冷気はかつて感じたこと
-D:がないし、このような冷たい眼差しはかつて見たことがない。素早く逃げないと
-D:恐るべき怒りを呼び覚ましてしまうだろう！
+S:1_IN_4 | BLIND | CONF | SCARE | BR_COLD
+D:$It is a dragon that has accumulated great power in the Oblivion
+D:$ and has returned to this world.
+D:$  Be careful, this dragon can freeze your body and even your soul!
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:魂まで凍らされないように気をつけろ！
 
 #JZ#
 N:742:デミリッチ
@@ -14488,10 +14484,10 @@ D:バンパイア族の中で最も恐るべき存在だ。一見したところ
 D:だが、その羽と瞳を見ればそんな思いはどこかに吹き飛んでしまうだろう。
 
 #J0#
-N:756:ヘル・ワイアーム
+N:756:デイドラ・レッド・ドラゴン
 E:Great Hell Wyrm
 G:D:r
-I:120:54d100:40:170:40
+I:120:30d80:40:170:40
 W:55:2:0:18000:0:0
 B:CLAW:HURT:4d12
 B:CLAW:HURT:4d12
@@ -23716,9 +23712,9 @@ G:D:s
 I:120:63d50:30:125:80
 W:54:1:0:20000:300000:1189
 B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:ACID:6d14
-B:BITE:ACID:6d14
+B:CLAW:ACID:12d14
+B:BITE:HURT:4d12
+B:BITE:ACID:12d14
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | RIDING | CAN_FLY
@@ -23738,9 +23734,9 @@ G:D:D
 I:125:48d100:30:150:80
 W:64:1:0:30000:0:0
 B:CLAW:SUPERHURT:6d12
-B:CLAW:ACID:8d14
+B:CLAW:ACID:23d23
 B:BITE:SUPERHURT:6d12
-B:BITE:ACID:8d14
+B:BITE:ACID:23d23
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | RIDING | CAN_FLY
@@ -23757,9 +23753,9 @@ G:D:B
 I:120:63d50:30:125:80
 W:54:1:0:20000:300000:1191
 B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:ELEC:6d14
-B:BITE:ELEC:6d14
+B:CLAW:ELEC:12d14
+B:BITE:HURT:4d12
+B:BITE:ELEC:12d14
 F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | CAN_FLY |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | SELF_LITE_2 |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
@@ -23776,12 +23772,12 @@ D:それは冒険者を軽蔑すべき者とみなしている。
 N:1191:グレート・ストーム・ワイアーム
 E:Great Storm Wyrm
 G:D:b
-I:120:48d100:30:150:80
+I:125:48d100:30:150:80
 W:64:1:0:30000:0:0
 B:CLAW:SUPERHURT:6d12
-B:CLAW:ELEC:8d14
+B:CLAW:ELEC:23d23
 B:BITE:SUPERHURT:6d12
-B:BITE:ELEC:8d14
+B:BITE:ELEC:23d23
 F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | CAN_FLY |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | SELF_LITE_2 |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
@@ -23791,3 +23787,88 @@ D:$It is one of the most powerful and brutal dragons in the world.
 D:$  You will be charred by the breath just by approaching!
 D:この世で最も強力で凶悪なドラゴンの一体だ。
 D:近付いただけでその息吹で黒焦げにされてしまうだろう！
+
+#J0#
+N:1192:ヘル・ワイアーム
+E:Great Hell Wyrm
+G:D:R
+I:120:40d90:30:130:80
+W:55:1:0:23000:340000:1193
+B:CLAW:HURT:5d12
+B:CLAW:FIRE:12d15
+B:BITE:HURT:5d12
+B:BITE:FIRE:12d15
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | DROP_CORPSE | SELF_LITE_1 |
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | SELF_LITE_2 |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
+F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | SCARE | BR_FIRE
+D:$A vast dragon of immense power.  Fire leaps continuously from its huge 
+D:$form.  The air around it scalds you.  Its slightest glance burns you, and 
+D:$you truly realize how insignificant you are.
+D:それは信じ難たい程の力を持った巨大なドラゴンで、その体からは常に炎
+D:が吹き上がっている。その周りに立ちこめる熱気だけでも冒険者を火傷させるのに
+D:は充分であり、そのほんの一瞥だけでも冒険者を燃え上がらせるには十分だ。
+D:冒険者はこの生物の前では自分がなんと無力であるのかを痛感するだろう。
+
+N:1193:グレート・ヘル・ワイアーム
+E:Great Hell Wyrm
+G:D:r
+I:125:110d50:30:155:80
+W:66:1:0:35000:0:0
+B:CLAW:SUPERHURT:7d12
+B:CLAW:FIRE:24d23
+B:BITE:SUPERHURT:7d12
+B:BITE:FIRE:24d23
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | DROP_CORPSE | SELF_LITE_1 |
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | SELF_LITE_2 |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
+F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_3 | BLIND | CONF | SCARE | BR_FIRE
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$This breath will burn away your body without leaving any bones!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:その息吹はあなたの身体を骨一本残さず焼き尽くす！
+
+#J0#
+N:1194:アイス・ワイアーム
+E:Great Ice Wyrm
+G:D:w
+I:120:63d50:30:125:80
+W:54:1:0:20000:300000:1193
+B:CLAW:HURT:4d12
+B:CLAW:COLD:12d14
+B:BITE:HURT:4d12
+B:BITE:COLD:12d14
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | AURA_COLD |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | 
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
+F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | SCARE | BR_COLD
+D:$An immense dragon capable of awesome destruction.
+D:$  You have never felt such extreme cold, or witnessed such an icy stare.
+D:$  Begone quickly or feel its wrath!
+D:恐るべき破壊能力を持った巨大なドラゴンだ。このような冷気はかつて感じたこと
+D:がないし、このような冷たい眼差しはかつて見たことがない。
+D:素早く逃げないと恐るべき怒りを呼び覚ましてしまうだろう！
+
+#J0#
+N:1195:グレート・アイス・ワイアーム
+E:Great Ice Wyrm
+G:D:W
+I:125:48d100:30:150:80
+W:64:1:0:30000:0:0
+B:CLAW:SUPERHURT:6d12
+B:CLAW:COLD:23d23
+B:BITE:SUPERHURT:6d12
+B:BITE:COLD:23d23
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | AURA_COLD |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | 
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
+F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_3 | BLIND | CONF | SCARE | BR_COLD
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$  Your body will be freeze-dried on the floor
+D:$ by the breath just by approaching!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:その息吹はあなたが近付いただけでフロアごと氷漬けにしてしまうだろう！
