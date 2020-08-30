@@ -82,7 +82,7 @@ BIT_FLAGS has_resist_dark(player_type *creature_ptr);
 BIT_FLAGS has_resist_chaos(player_type *creature_ptr);
 BIT_FLAGS has_resist_disen(player_type *creature_ptr);
 BIT_FLAGS has_resist_shard(player_type *creature_ptr);
-void has_resist_nexus(player_type *creature_ptr);
+BIT_FLAGS has_resist_nexus(player_type *creature_ptr);
 void has_resist_blind(player_type *creature_ptr);
 void has_resist_neth(player_type *creature_ptr);
 void has_resist_time(player_type *creature_ptr);
