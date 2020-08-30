@@ -1255,37 +1255,27 @@ BIT_FLAGS has_resist_nexus(player_type *creature_ptr)
     return result;
 }
 
-void has_resist_blind(player_type *creature_ptr)
+BIT_FLAGS has_resist_blind(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->resist_blind = FALSE;
+    BIT_FLAGS result = 0L;
 
     if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
-        creature_ptr->resist_blind = TRUE;
+        result |= FLAG_CAUSE_PERSONALITY;
     }
 
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_DWARF)
-        creature_ptr->resist_blind = TRUE;
+        result |= FLAG_CAUSE_RACE;
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->resist_blind = TRUE;
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    if (creature_ptr->magicdef) {
-        creature_ptr->resist_blind = TRUE;
+    if (creature_ptr->ult_res || creature_ptr->magicdef) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-
-        if (has_flag(flgs, TR_RES_BLIND))
-            creature_ptr->resist_blind = TRUE;
-    }
+    result |= check_equipment_flags(creature_ptr, TR_RES_BLIND);
+    return result;
 }
 
 void has_resist_neth(player_type *creature_ptr)
