@@ -1326,65 +1326,50 @@ BIT_FLAGS has_resist_water(player_type *creature_ptr)
     return result;
 }
 
-void has_resist_fear(player_type *creature_ptr)
+BIT_FLAGS has_resist_fear(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->resist_fear = FALSE;
+    BIT_FLAGS result = 0L;
 
     if (creature_ptr->muta3 & MUT3_FEARLESS)
-        creature_ptr->resist_fear = TRUE;
+        result |= FLAG_CAUSE_MUTATION;
 
     switch (creature_ptr->pclass) {
     case CLASS_WARRIOR:
+    case CLASS_SAMURAI:
         if (creature_ptr->lev > 29)
-            creature_ptr->resist_fear = TRUE;
+            result |= FLAG_CAUSE_CLASS;
         break;
     case CLASS_PALADIN:
-        if (creature_ptr->lev > 39)
-            creature_ptr->resist_fear = TRUE;
-        break;
     case CLASS_CHAOS_WARRIOR:
         if (creature_ptr->lev > 39)
-            creature_ptr->resist_fear = TRUE;
+            result |= FLAG_CAUSE_CLASS;
         break;
     case CLASS_MINDCRAFTER:
         if (creature_ptr->lev > 9)
-            creature_ptr->resist_fear = TRUE;
-        break;
-    case CLASS_SAMURAI:
-        if (creature_ptr->lev > 29)
-            creature_ptr->resist_fear = TRUE;
+            result |= FLAG_CAUSE_CLASS;
         break;
     case CLASS_NINJA:
-        creature_ptr->resist_fear = TRUE;
+        result |= FLAG_CAUSE_CLASS;
         break;
     }
 
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
-        creature_ptr->resist_fear = TRUE;
+        result |= FLAG_CAUSE_RACE;
     }
 
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_BARBARIAN)
-        creature_ptr->resist_fear = TRUE;
+        result |= FLAG_CAUSE_RACE;
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->resist_fear = TRUE;
+    if ((creature_ptr->special_defense & KATA_MUSOU)) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    if (is_hero(creature_ptr) || creature_ptr->shero) {
-        creature_ptr->resist_fear = TRUE;
+    if (is_hero(creature_ptr) || creature_ptr->shero || creature_ptr->ult_res) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_RES_FEAR))
-            creature_ptr->resist_fear = TRUE;
-    }
+    result |= check_equipment_flags(creature_ptr, TR_RES_FEAR);
+    return result;
 }
 
 BIT_FLAGS has_immune_acid(player_type *creature_ptr)
