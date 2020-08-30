@@ -13763,7 +13763,7 @@ D:このモンスターの存在を嫌悪しているように感じる。
 N:728:デイドラ・ブルー・ドラゴン
 E:Daedra Blue Dragon
 G:D:b
-I:120:42d50:30:110:80
+I:120:42d50:30:110:40
 W:47:1:0:12000:100000:1190
 B:CLAW:HURT:4d10
 B:CLAW:ELEC:6d12
@@ -14120,8 +14120,8 @@ D:見ただけでその邪悪さが伝わってくる。
 N:741:デイドラ・ホワイト・ドラゴン
 E:Daedra White Dragon
 G:D:W
-I:120:42d50:30:110:80
-W:47:1:0:12000:100000:1190
+I:120:42d50:30:110:40
+W:47:1:0:12000:100000:1194
 B:CLAW:HURT:4d10
 B:CLAW:COLD:6d12
 B:BITE:HURT:4d10
@@ -14488,7 +14488,7 @@ N:756:デイドラ・レッド・ドラゴン
 E:Great Hell Wyrm
 G:D:r
 I:120:30d80:40:170:40
-W:55:2:0:18000:0:0
+W:55:1:0:16000:360000:1192
 B:CLAW:HURT:4d12
 B:CLAW:HURT:4d12
 B:CLAW:HURT:4d12
@@ -14497,8 +14497,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | DROP_CORPSE | SELF_LITE_1 |
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | SELF_LITE_2 |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
+S:1_IN_4 | BLIND | CONF | SCARE | 
 S:BR_FIRE
 D:$A vast dragon of immense power.  Fire leaps continuously from its huge 
 D:$form.  The air around it scalds you.  Its slightest glance burns you, and 
@@ -21494,7 +21493,7 @@ D:そこらへひっくり返る奴と、ばたばたばたばたと倒れて…
 N:1066:デイドラ・ブラック・ドラゴン
 E:Daedra Black Dragon
 G:D:D
-I:120:42d50:30:110:80
+I:120:42d50:30:110:40
 W:47:1:0:12000:100000:1188
 B:CLAW:HURT:4d10
 B:CLAW:HURT:4d10
@@ -23709,7 +23708,7 @@ D:洞窟や階段の一部は彼らが通り過ぎた跡だ。
 N:1188:バイル・ワイアーム
 E:Bile Wyrm
 G:D:s
-I:120:63d50:30:125:80
+I:120:63d50:30:125:20
 W:54:1:0:20000:300000:1189
 B:CLAW:HURT:4d12
 B:CLAW:ACID:12d14
@@ -23731,7 +23730,7 @@ D:これがあなたに当たったらどうなることか！
 N:1189:グレート・バイル・ワイアーム
 E:Great Bile Wyrm
 G:D:D
-I:125:48d100:30:150:80
+I:125:48d100:30:150:10
 W:64:1:0:30000:0:0
 B:CLAW:SUPERHURT:6d12
 B:CLAW:ACID:23d23
@@ -23750,7 +23749,7 @@ D:近付いただけでその息吹に溶かされてしまうだろう！
 N:1190:ストーム・ワイアーム
 E:Storm Wyrm
 G:D:B
-I:120:63d50:30:125:80
+I:120:63d50:30:125:20
 W:54:1:0:20000:300000:1191
 B:CLAW:HURT:4d12
 B:CLAW:ELEC:12d14
@@ -23772,7 +23771,7 @@ D:それは冒険者を軽蔑すべき者とみなしている。
 N:1191:グレート・ストーム・ワイアーム
 E:Great Storm Wyrm
 G:D:b
-I:125:48d100:30:150:80
+I:125:48d100:30:150:10
 W:64:1:0:30000:0:0
 B:CLAW:SUPERHURT:6d12
 B:CLAW:ELEC:23d23
@@ -23792,7 +23791,7 @@ D:近付いただけでその息吹で黒焦げにされてしまうだろう！
 N:1192:ヘル・ワイアーム
 E:Great Hell Wyrm
 G:D:R
-I:120:40d90:30:130:80
+I:120:40d90:30:130:20
 W:55:1:0:23000:340000:1193
 B:CLAW:HURT:5d12
 B:CLAW:FIRE:12d15
@@ -23814,7 +23813,7 @@ D:冒険者はこの生物の前では自分がなんと無力であるのかを
 N:1193:グレート・ヘル・ワイアーム
 E:Great Hell Wyrm
 G:D:r
-I:125:110d50:30:155:80
+I:125:110d50:30:155:10
 W:66:1:0:35000:0:0
 B:CLAW:SUPERHURT:7d12
 B:CLAW:FIRE:24d23
@@ -23834,8 +23833,8 @@ D:その息吹はあなたの身体を骨一本残さず焼き尽くす！
 N:1194:アイス・ワイアーム
 E:Great Ice Wyrm
 G:D:w
-I:120:63d50:30:125:80
-W:54:1:0:20000:300000:1193
+I:120:63d50:30:125:20
+W:54:1:0:20000:300000:1195
 B:CLAW:HURT:4d12
 B:CLAW:COLD:12d14
 B:BITE:HURT:4d12
@@ -23856,7 +23855,7 @@ D:素早く逃げないと恐るべき怒りを呼び覚ましてしまうだろ
 N:1195:グレート・アイス・ワイアーム
 E:Great Ice Wyrm
 G:D:W
-I:125:48d100:30:150:80
+I:125:48d100:30:150:10
 W:64:1:0:30000:0:0
 B:CLAW:SUPERHURT:6d12
 B:CLAW:COLD:23d23
