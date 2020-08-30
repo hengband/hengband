@@ -154,7 +154,8 @@ concptr k_info_flags[NUM_K_FLAGS] = {
     "NO_AC",
     "HEAVY_SPELL",
     "RES_TIME",
- };
+    "RES_WATER",
+};
 
 /*!
  * オブジェクト生成特性トークンの定義 /

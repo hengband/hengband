@@ -1322,6 +1322,7 @@ BIT_FLAGS has_resist_water(player_type *creature_ptr)
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_MERFOLK)
         result |= FLAG_CAUSE_RACE;
 
+    result |= check_equipment_flags(creature_ptr, TR_RES_WATER);
     return result;
 }
 
