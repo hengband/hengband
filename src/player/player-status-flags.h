@@ -86,7 +86,7 @@ BIT_FLAGS has_resist_nexus(player_type *creature_ptr);
 BIT_FLAGS has_resist_blind(player_type *creature_ptr);
 BIT_FLAGS has_resist_neth(player_type *creature_ptr);
 BIT_FLAGS has_resist_time(player_type *creature_ptr);
-void has_resist_water(player_type *creature_ptr);
+BIT_FLAGS has_resist_water(player_type *creature_ptr);
 void has_resist_fear(player_type *creature_ptr);
 BIT_FLAGS has_immune_acid(player_type *creature_ptr);
 BIT_FLAGS has_immune_elec(player_type *creature_ptr);

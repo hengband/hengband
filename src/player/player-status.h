@@ -389,7 +389,7 @@ typedef struct player_type {
     BIT_FLAGS resist_neth; /* Resist nether */
     bool resist_fear; /* Resist fear */
     BIT_FLAGS resist_time; /* Resist time */
-    bool resist_water; /* Resist water */
+    BIT_FLAGS resist_water; /* Resist water */
 
     BIT_FLAGS reflect; /* Reflect 'bolt' attacks */
     BIT_FLAGS sh_fire; /* Fiery 'immolation' effect */

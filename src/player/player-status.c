@@ -388,6 +388,8 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->resist_neth = has_resist_neth(creature_ptr);
     creature_ptr->resist_time = has_resist_time(creature_ptr);
     has_resist_fear(creature_ptr);
+    creature_ptr->resist_time = has_resist_time(creature_ptr);
+    creature_ptr->resist_water = has_resist_water(creature_ptr);
 
     has_lite(creature_ptr);
 

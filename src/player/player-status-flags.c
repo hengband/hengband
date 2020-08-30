@@ -1315,12 +1315,14 @@ BIT_FLAGS has_resist_time(player_type *creature_ptr)
     return result;
 }
 
-void has_resist_water(player_type *creature_ptr)
+BIT_FLAGS has_resist_water(player_type *creature_ptr)
 {
-    creature_ptr->resist_water = FALSE;
+    BIT_FLAGS result = 0L;
 
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_MERFOLK)
-        creature_ptr->resist_water = TRUE;
+        result |= FLAG_CAUSE_RACE;
+
+    return result;
 }
 
 void has_resist_fear(player_type *creature_ptr)
