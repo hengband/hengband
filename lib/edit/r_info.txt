@@ -11154,7 +11154,7 @@ D:巨大なドラゴンで、頭の先から爪の先まで冷気に覆われて
 #J0#
 N:618:古代グリーン・ドラゴン
 E:Ancient green dragon
-G:D:g
+G:D:G
 I:120:72d10:20:85:80
 W:39:1:0:2400:100000:890
 B:CLAW:HURT:4d9
@@ -14499,13 +14499,12 @@ F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BLIND | CONF | SCARE | 
 S:BR_FIRE
-D:$A vast dragon of immense power.  Fire leaps continuously from its huge 
-D:$form.  The air around it scalds you.  Its slightest glance burns you, and 
-D:$you truly realize how insignificant you are.
-D:それは信じ難たい程の力を持った巨大なドラゴンで、その体からは常に炎
-D:が吹き上がっている。その周りに立ちこめる熱気だけでも冒険者を火傷させるのに
-D:は充分であり、そのほんの一瞥だけでも冒険者を燃え上がらせるには十分だ。
-D:冒険者はこの生物の前では自分がなんと無力であるのかを痛感するだろう。
+D:$It is a dragon that has accumulated great power in the Oblivion
+D:$ and has returned to this world.
+D:$In front of this fiery flame,
+D:$ you may not be able to leave a proof that you were alive!
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:この激烈な炎の前では、あなたは生きていた証をこの世に残せないかもしれない！
 
 #JZ#名状しがたきものハスター（ハストゥール）
 #JZ#元来はアンブローズ・ビアスの「羊飼いハイタ」で言及された
@@ -18321,29 +18320,24 @@ S:ROCKET | SHOOT | BLINK | BR_POIS | BR_CHAO | BR_NEXU
 D:$It was left here to be used against intruders.
 D:それは侵入者に対して使用するために置かれている。
 
-N:890:ヴェノム・ワイアーム
-E:Great Venom Wyrm
+N:890:デイドラ・グリーン・ドラゴン
+E:Daedra Green Draon
 G:D:g
-I:120:54d100:30:170:80
-W:55:2:0:16000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:POISON:5d14
+I:120:42d50:30:110:40
+W:47:1:0:12000:100000:1196
+B:CLAW:HURT:4d10
+B:CLAW:POISON:6d11
+B:BITE:HURT:4d10
+B:BITE:POISON:6d11
 F:FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | CAN_FLY |
 F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING |
-S:1_IN_6 |
-S:BLIND | CONF | SCARE |
-S:BR_POIS
-V:75
-D:$A huge dragon of incredible destructive power.  Noxious vapours 
-D:$fill the room near it, leaving you gasping for breath.  Flee 
-D:$now while you still can!
-D:信じられない程の破壊的な力を持った巨大なドラゴンだ。
-D:有毒な霧が近くの部屋に充満し、ほとんど息ができない。
-D:逃げられるうちに逃げろ!
+S:1_IN_4 | BLIND | CONF | SCARE | BR_POIS
+D:$It is a dragon that has accumulated great power in the Oblivion
+D:$ and has returned to this world.
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:
 
 N:891:バラヒアを裏切りし『ゴルリム』
 E:Gorlim, Betrayer of Barahir
@@ -23825,7 +23819,7 @@ F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_3 | BLIND | CONF | SCARE | BR_FIRE
 D:$It is one of the most powerful and brutal dragons in the world.
-D:$This breath will burn away your body without leaving any bones!
+D:$  This breath will burn away your body without leaving any bones!
 D:この世で最も強力で凶悪なドラゴンの一体だ。
 D:その息吹はあなたの身体を骨一本残さず焼き尽くす！
 
@@ -23871,3 +23865,44 @@ D:$  Your body will be freeze-dried on the floor
 D:$ by the breath just by approaching!
 D:この世で最も強力で凶悪なドラゴンの一体だ。
 D:その息吹はあなたが近付いただけでフロアごと氷漬けにしてしまうだろう！
+
+N:1196:ヴェノム・ワイアーム
+E:Venom Wyrm
+G:D:G
+I:120:63d50:30:125:20
+W:54:1:0:20000:300000:1197
+B:CLAW:HURT:4d12
+B:CLAW:POISON:12d14
+B:BITE:HURT:4d12
+B:BITE:POISON:12d14
+F:FORCE_SLEEP | FORCE_MAXHP |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | CAN_FLY |
+F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING |
+S:1_IN_4 | BLIND | CONF | SCARE | BR_POIS
+D:$A huge dragon of incredible destructive power.  Noxious vapours 
+D:$fill the room near it, leaving you gasping for breath.
+D:$  Free now while you still can!
+D:信じられない程の破壊的な力を持った巨大なドラゴンだ。
+D:有毒な霧が近くの部屋に充満し、ほとんど息ができない。
+D:逃げられるうちに逃げろ！
+
+N:1197:ヴェノム・ワイアーム
+E:Great Venom Wyrm
+G:D:g
+I:125:48d100:30:150:10
+W:64:1:0:30000:0:0
+B:CLAW:SUPERHURT:6d12
+B:CLAW:POISON:20d23
+B:BITE:SUPERHURT:6d12
+B:BITE:POISON:20d23
+F:FORCE_SLEEP | FORCE_MAXHP |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | CAN_FLY |
+F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING |
+S:1_IN_3 | BLIND | CONF | SCARE | BR_POIS
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$  If you take a breath,
+D:$ the bereaved will not even be able to approach your body!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:一息でも浴びてしまえば、遺族はあなたの遺体に近付くことすらできなくなる！
