@@ -383,7 +383,7 @@ typedef struct player_type {
     BIT_FLAGS resist_dark; /* Resist darkness */
     BIT_FLAGS resist_chaos; /* Resist chaos */
     BIT_FLAGS resist_disen; /* Resist disenchant */
-    bool resist_shard; /* Resist shards */
+    BIT_FLAGS resist_shard; /* Resist shards */
     bool resist_nexus; /* Resist nexus */
     bool resist_blind; /* Resist blindness */
     bool resist_neth; /* Resist nether */

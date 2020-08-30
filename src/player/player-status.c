@@ -382,7 +382,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->resist_dark = has_resist_dark(creature_ptr);
     creature_ptr->resist_chaos = has_resist_chaos(creature_ptr);
     creature_ptr->resist_disen = has_resist_disen(creature_ptr);
-    has_resist_shard(creature_ptr);
+    creature_ptr->resist_shard = has_resist_shard(creature_ptr);
     has_resist_nexus(creature_ptr);
     has_resist_blind(creature_ptr);
     has_resist_neth(creature_ptr);
