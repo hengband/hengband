@@ -11289,7 +11289,7 @@ D:この死人のような存在が近づいてくると、汚れた風が冒険
 #J0#
 N:624:古代ブラック・ドラゴン
 E:Ancient black dragon
-G:D:D
+G:D:s
 I:120:60d12:20:85:80
 W:39:1:0:2500:100000:1066
 B:CLAW:HURT:4d9
@@ -13760,15 +13760,6 @@ D:$itself seems to cry out against it.
 D:脈動する肉の塊で、その内部は地獄の業火に輝いている。この世界そのものが
 D:このモンスターの存在を嫌悪しているように感じる。
 
-#J0#
-#J0#
-#J0#(コメント)
-#J0# ワイアームについてはすべて「グレート」がつくのだが、文字数をかせぐため
-#J0# (スペースキーを押す回数を減らすため)グレートをはぶいてある。
-#J0#
-#J0# また「ウィルム」「ワーム」という読み方も聞きましたが、「ワイアーム」が
-#J0# 一番気に入りましたので、そうしてあります。
-#J0#
 N:728:ストーム・ワイアーム
 E:Great Storm Wyrm
 G:D:b
@@ -21507,28 +21498,25 @@ D:敵軍目がけて攻めかかるんや。忽ちに、辺り一面、闇夜の
 D:蛸の吹き出す毒気にむせたんかしらんけど、もんどり打って馬から落ちる奴、
 D:そこらへひっくり返る奴と、ばたばたばたばたと倒れて…」
 
-N:1066:バイル・ワイアーム
-E:Great Bile Wyrm
-G:D:s
-I:120:40d100:30:150:80
-W:54:2:0:17000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:ACID:6d14
-B:BITE:ACID:6d14
+N:1066:デイドラ・ブラック・ドラゴン
+E:Daedra Black Dragon
+G:D:D
+I:120:42d50:30:110:80
+W:47:1:0:15000:120000:1188
+B:CLAW:HURT:4d10
+B:CLAW:HURT:4d10
+B:BITE:ACID:6d12
+B:BITE:ACID:6d12
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | RIDING | CAN_FLY
 F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP
-S:1_IN_4 | 
-S:BLIND | CONF | SCARE | 
-S:BR_ACID
-D:$A huge and very powerful dragon.  Great steaming pools of acid drip from 
-D:$its form onto the ground.  You shudder when you see the acid eating away 
-D:$the very stones of the dungeon - what could it do to you?
-D:巨大でとても強力なドラゴンだ。激しく蒸気を吹きだす酸を地面に滴らせ、
-D:滴った酸はダンジョンの岩石をあっという間に溶解し穴を空けている…
-D:これがあなたに当たったらどうなることか！
+S:1_IN_4 | BLIND | CONF | SCARE | BR_ACID
+D:$It is a dragon that has accumulated great power in the Oblivion
+D:$ and has returned to this world.
+D:$  With half-finished armor, your whole body will be melted!
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:生半可な鎧では肉体ごと溶かされてしまうだろう！
 
 N:1067:たぬき
 E:Tanuki
@@ -23724,3 +23712,44 @@ D:$ can reach ceiling of the cave.
 D:$  Part of the cave is the traces they passed by.
 D:この巨人は天に届かんばかりの体躯で暴れ回っている。
 D:洞窟や階段の一部は彼らが通り過ぎた跡だ。
+
+N:1188:バイル・ワイアーム
+E:Bile Wyrm
+G:D:s
+I:120:80d40:30:115:80
+W:54:1:0:20000:300000:1189
+B:CLAW:HURT:4d12
+B:CLAW:HURT:4d12
+B:BITE:ACID:6d14
+B:BITE:ACID:6d14
+F:FORCE_SLEEP | FORCE_MAXHP | 
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | RIDING | CAN_FLY
+F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP
+S:1_IN_4 | BLIND | CONF | SCARE | BR_ACID
+D:$A huge and very powerful dragon.
+D:$  Steaming pools of acid drip from its form onto the ground.
+D:$  You shudder when you see the acid eating away
+D:$ the very stones of the dungeon - what could it do to you?
+D:巨大でとても強力なドラゴンだ。激しく蒸気を吹きだす酸を地面に滴らせ、
+D:滴った酸はダンジョンの岩石をあっという間に溶解し穴を空けている…
+D:これがあなたに当たったらどうなることか！
+
+N:1189:グレート・バイル・ワイアーム
+E:Great Bile Wyrm
+G:D:D
+I:125:48d100:30:150:80
+W:64:1:0:30000:0:0
+B:CLAW:HURT:6d12
+B:CLAW:HURT:6d12
+B:BITE:ACID:8d14
+B:BITE:ACID:8d14
+F:FORCE_SLEEP | FORCE_MAXHP | 
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | RIDING | CAN_FLY
+F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP
+S:1_IN_3 | BLIND | CONF | SCARE | BR_ACID
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$  You will be melted by the breath just by approaching!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:近付いただけでその息吹に溶かされてしまうだろう！
