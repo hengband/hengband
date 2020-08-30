@@ -724,19 +724,17 @@ void has_can_swim(player_type *creature_ptr)
     }
 }
 
-void has_slow_digest(player_type *creature_ptr)
+BIT_FLAGS has_slow_digest(player_type *creature_ptr)
 {
-    object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->slow_digest = FALSE;
+    BIT_FLAGS result = 0L;
 
     if (creature_ptr->pclass == CLASS_NINJA) {
-        creature_ptr->slow_digest = TRUE;
+        result = FLAG_CAUSE_CLASS;
     }
 
     if (creature_ptr->lev > 14 && !creature_ptr->mimic_form && creature_ptr->prace == RACE_HALF_TROLL) {
         if (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_BERSERKER) {
-            creature_ptr->slow_digest = TRUE;
+            result = FLAG_CAUSE_CLASS;
             /* Let's not make Regeneration
              * a disadvantage for the poor warriors who can
              * never learn a spell that satisfies hunger (actually
@@ -745,24 +743,22 @@ void has_slow_digest(player_type *creature_ptr)
         }
     }
 
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->slow_digest = TRUE;
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result = FLAG_CAUSE_BATTLE_FORM;
+    }
+
+    if (creature_ptr->ult_res) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
     if (!creature_ptr->mimic_form
         && (creature_ptr->prace == RACE_GOLEM || creature_ptr->prace == RACE_ZOMBIE || creature_ptr->prace == RACE_SPECTRE
             || creature_ptr->prace == RACE_ANDROID)) {
-        creature_ptr->slow_digest = TRUE;
+        result = FLAG_CAUSE_RACE;
     }
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_SLOW_DIGEST))
-            creature_ptr->slow_digest = TRUE;
-    }
+    result |= check_equipment_flags(creature_ptr, TR_SLOW_DIGEST);
+    return result;
 }
 
 BIT_FLAGS has_regenerate(player_type *creature_ptr)

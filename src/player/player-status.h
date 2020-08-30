@@ -430,7 +430,7 @@ typedef struct player_type {
     BIT_FLAGS esp_nonliving;
     BIT_FLAGS esp_unique;
 
-    bool slow_digest; /* Slower digestion */
+    BIT_FLAGS slow_digest; /* Slower digestion */
     BIT_FLAGS bless_blade; /* Blessed blade */
     BIT_FLAGS xtra_might; /* Extra might bow */
     BIT_FLAGS impact; /* Earthquake blows */
