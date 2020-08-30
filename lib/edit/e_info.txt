@@ -1308,6 +1308,7 @@ E:and Resist Time
 X:27:25
 W:30:0:0:7500
 C:0:0:0:0
+F:RES_TIME
 
 N:186:不安定の
 E:and Random Teleportation

@@ -153,7 +153,8 @@ concptr k_info_flags[NUM_K_FLAGS] = {
     "DOWN_SAVING",
     "NO_AC",
     "HEAVY_SPELL",
-};
+    "RES_TIME",
+ };
 
 /*!
  * オブジェクト生成特性トークンの定義 /
