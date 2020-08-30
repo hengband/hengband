@@ -10763,7 +10763,7 @@ D:ように辺りのモンスターを眠りから目覚めさせる。
 #J0#
 N:601:古代ブルー・ドラゴン
 E:Ancient blue dragon
-G:D:b
+G:D:B
 I:120:60d12:20:85:80
 W:39:1:0:2500:100000:728
 B:CLAW:HURT:4d9
@@ -13760,29 +13760,26 @@ D:$itself seems to cry out against it.
 D:脈動する肉の塊で、その内部は地獄の業火に輝いている。この世界そのものが
 D:このモンスターの存在を嫌悪しているように感じる。
 
-N:728:ストーム・ワイアーム
-E:Great Storm Wyrm
+N:728:デイドラ・ブルー・ドラゴン
+E:Daedra Blue Dragon
 G:D:b
-I:120:30d100:30:150:80
-W:51:2:0:13000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:ELEC:5d14
+I:120:42d50:30:110:80
+W:47:1:0:12000:100000:1190
+B:CLAW:HURT:4d10
+B:CLAW:ELEC:6d12
+B:BITE:HURT:4d10
+B:BITE:ELEC:6d12
 F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | CAN_FLY |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | SELF_LITE_2 |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
 F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
-S:BR_ELEC
-D:$A vast dragon of power.  Storms and lightning crash around its titanic 
-D:$form.  Deep blue scales reflect the flashes and highlight the creature's 
-D:$great muscles.  It regards you with contempt.
-D:力に満ちた巨大なドラゴンだ。その山のような体の周りには嵐が巻き起こり、稲妻
-D:が光っている。
-D:深い青色の鱗が光を反射して、この生物の隆々たる筋肉を浮き彫りにしている。
-D:それは冒険者を軽蔑すべき者とみなしている。
+S:1_IN_4 | BLIND | CONF | SCARE | BR_ELEC
+D:$It is a dragon that has accumulated great power in the Oblivion
+D:$ and has returned to this world.
+D:$  The electricity produced by this dragon can light one town
+D:$ all year round.
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:この竜一匹が生み出す電気は一つの街に一年中灯りを灯すことができる。
 
 #JZ#
 N:729:トロルの『ウリク』
@@ -21502,7 +21499,7 @@ N:1066:デイドラ・ブラック・ドラゴン
 E:Daedra Black Dragon
 G:D:D
 I:120:42d50:30:110:80
-W:47:1:0:15000:120000:1188
+W:47:1:0:12000:100000:1188
 B:CLAW:HURT:4d10
 B:CLAW:HURT:4d10
 B:BITE:ACID:6d12
@@ -23716,7 +23713,7 @@ D:洞窟や階段の一部は彼らが通り過ぎた跡だ。
 N:1188:バイル・ワイアーム
 E:Bile Wyrm
 G:D:s
-I:120:80d40:30:115:80
+I:120:63d50:30:125:80
 W:54:1:0:20000:300000:1189
 B:CLAW:HURT:4d12
 B:CLAW:HURT:4d12
@@ -23740,9 +23737,9 @@ E:Great Bile Wyrm
 G:D:D
 I:125:48d100:30:150:80
 W:64:1:0:30000:0:0
-B:CLAW:HURT:6d12
-B:CLAW:HURT:6d12
-B:BITE:ACID:8d14
+B:CLAW:SUPERHURT:6d12
+B:CLAW:ACID:8d14
+B:BITE:SUPERHURT:6d12
 B:BITE:ACID:8d14
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
@@ -23753,3 +23750,44 @@ D:$It is one of the most powerful and brutal dragons in the world.
 D:$  You will be melted by the breath just by approaching!
 D:この世で最も強力で凶悪なドラゴンの一体だ。
 D:近付いただけでその息吹に溶かされてしまうだろう！
+
+N:1190:ストーム・ワイアーム
+E:Storm Wyrm
+G:D:B
+I:120:63d50:30:125:80
+W:54:1:0:20000:300000:1191
+B:CLAW:HURT:4d12
+B:CLAW:HURT:4d12
+B:BITE:ELEC:6d14
+B:BITE:ELEC:6d14
+F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | CAN_FLY |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | SELF_LITE_2 |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
+F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | SCARE | BR_ELEC
+D:$A vast dragon of power.  Storms and lightning crash around its titanic form.
+D:$  Deep blue scales reflect the flashes and highlight the creature's 
+D:$great muscles.  It regards you with contempt.
+D:力に満ちた巨大なドラゴンだ。その山のような体の周りには嵐が巻き起こり、稲妻
+D:が光っている。
+D:深い青色の鱗が光を反射して、この生物の隆々たる筋肉を浮き彫りにしている。
+D:それは冒険者を軽蔑すべき者とみなしている。
+
+N:1191:グレート・ストーム・ワイアーム
+E:Great Storm Wyrm
+G:D:b
+I:120:48d100:30:150:80
+W:64:1:0:30000:0:0
+B:CLAW:SUPERHURT:6d12
+B:CLAW:ELEC:8d14
+B:BITE:SUPERHURT:6d12
+B:BITE:ELEC:8d14
+F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | CAN_FLY |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | SELF_LITE_2 |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
+F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_3 | BLIND | CONF | SCARE | BR_ELEC
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$  You will be charred by the breath just by approaching!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:近付いただけでその息吹で黒焦げにされてしまうだろう！
