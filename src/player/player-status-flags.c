@@ -463,31 +463,29 @@ BIT_FLAGS has_see_inv(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (creature_ptr->pclass == CLASS_NINJA || creature_ptr->lev > 29)
+    if (creature_ptr->pclass == CLASS_NINJA && creature_ptr->lev > 29)
         result |= FLAG_CAUSE_CLASS;
 
     if (creature_ptr->mimic_form == MIMIC_DEMON || creature_ptr->mimic_form == MIMIC_DEMON_LORD || creature_ptr->mimic_form == MIMIC_VAMPIRE) {
         result |= FLAG_CAUSE_RACE;
     }
-
-    if (!creature_ptr->mimic_form
-        && (creature_ptr->prace == RACE_HIGH_ELF || creature_ptr->prace == RACE_GOLEM || creature_ptr->prace == RACE_SKELETON
-            || creature_ptr->prace == RACE_ZOMBIE || creature_ptr->prace == RACE_SPECTRE || creature_ptr->prace == RACE_ARCHON)) {
+    else if (is_specific_player_race(creature_ptr->mimic_form, RACE_HIGH_ELF)
+        || is_specific_player_race(creature_ptr->mimic_form, RACE_GOLEM)
+        || is_specific_player_race(creature_ptr->mimic_form, RACE_SKELETON)
+        || is_specific_player_race(creature_ptr->mimic_form, RACE_ZOMBIE)
+        || is_specific_player_race(creature_ptr->mimic_form, RACE_SPECTRE)
+        || is_specific_player_race(creature_ptr->mimic_form, RACE_ARCHON))
+    {
         result |= FLAG_CAUSE_RACE;
     }
-
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_DARK_ELF) {
-        if (creature_ptr->lev > 19)
+    else if (is_specific_player_race(creature_ptr->mimic_form, RACE_DARK_ELF) && creature_ptr->lev > 19) {
+        result |= FLAG_CAUSE_RACE;
+    }
+    else if (is_specific_player_race(creature_ptr->mimic_form, RACE_MIND_FLAYER) && creature_ptr->lev > 14) {
             result |= FLAG_CAUSE_RACE;
     }
-
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_MIND_FLAYER) {
-        if (creature_ptr->lev > 14)
-            result |= FLAG_CAUSE_RACE;
-    }
-
-    if (!creature_ptr->mimic_form && (creature_ptr->prace == RACE_IMP || creature_ptr->prace == RACE_BALROG)) {
-        if (creature_ptr->lev > 9)
+    else if ((is_specific_player_race(creature_ptr->mimic_form, RACE_IMP) || is_specific_player_race(creature_ptr->mimic_form, RACE_BALROG))
+        && creature_ptr->lev > 9) {
             result |= FLAG_CAUSE_RACE;
     }
 
