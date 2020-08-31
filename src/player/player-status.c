@@ -3921,12 +3921,7 @@ void cheat_death(player_type *creature_ptr)
     (void)restore_mana(creature_ptr, TRUE);
 
     (void)recall_player(creature_ptr, 0);
-
-    if (creature_ptr->alter_reality)
-    {
-        creature_ptr->alter_reality = 0;
-        creature_ptr->redraw |= (PR_STATUS);
-    }
+    reserve_alter_reality(creature_ptr, 0);
 
     (void)strcpy(creature_ptr->died_from, _("死の欺き", "Cheating death"));
     creature_ptr->is_dead = FALSE;
