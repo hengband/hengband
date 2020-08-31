@@ -296,7 +296,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
     case RACE_AMBERITE:
         if (command == -1) {
             msg_print(_("あなたは歩き周り始めた。", "You start walking around. "));
-            reserve_alter_reality(creature_ptr);
+            reserve_alter_reality(creature_ptr, randint0(21) + 15);
             return TRUE;
         }
         

@@ -476,7 +476,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_delay(base, sides);
 
             if (cast) {
-                reserve_alter_reality(caster_ptr);
+                reserve_alter_reality(caster_ptr, randint0(sides) + base);
             }
         }
         break;
