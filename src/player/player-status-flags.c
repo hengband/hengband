@@ -913,12 +913,10 @@ BIT_FLAGS has_resist_acid(player_type *creature_ptr)
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
         result |= FLAG_CAUSE_RACE;
     }
-
-    if (!creature_ptr->mimic_form && (creature_ptr->prace == RACE_YEEK || creature_ptr->prace == RACE_KLACKON)) {
+    else if (is_specific_player_race(creature_ptr, RACE_YEEK) || is_specific_player_race(creature_ptr, RACE_KLACKON)) {
         result |= FLAG_CAUSE_RACE;
     }
-
-    if (is_specific_player_race(creature_ptr, RACE_DRACONIAN) && creature_ptr->lev > 14) {
+    else if (is_specific_player_race(creature_ptr, RACE_DRACONIAN) && creature_ptr->lev > 14) {
         result |= FLAG_CAUSE_RACE;
     }
 
