@@ -61,8 +61,8 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "pet/pet-util.h"
-#include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
 #include "player/patron.h"
@@ -452,14 +452,14 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->to_a = calc_to_ac(creature_ptr, TRUE);
     creature_ptr->dis_ac = calc_base_ac(creature_ptr);
     creature_ptr->dis_to_a = calc_to_ac(creature_ptr, FALSE);
-	
+
     for (int i = 0; i < A_MAX; i++) {
         calc_top_status(creature_ptr, i);
         calc_use_status(creature_ptr, i);
         calc_ind_status(creature_ptr, i);
     }
 
-	o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
+    o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     if (o_ptr->k_idx) {
         creature_ptr->tval_ammo = (byte)bow_tval_ammo(o_ptr);
         if (o_ptr->k_idx && !is_heavy_shoot(creature_ptr, &creature_ptr->inventory_list[INVEN_BOW])) {
@@ -1579,7 +1579,7 @@ static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr)
 
     pow = tmp_rp_ptr->r_thn + c_ptr->c_thn + a_ptr->a_thn;
     pow += ((c_ptr->x_thn * creature_ptr->lev / 10) + (a_ptr->a_thn * creature_ptr->lev / 50));
-	return pow;
+    return pow;
 }
 
 /*!
@@ -1843,7 +1843,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
             num_blow = 1;
     }
 
-	return num_blow;
+    return num_blow;
 }
 
 /*!
@@ -2362,7 +2362,7 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
         ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
     }
 
-	return ac;
+    return ac;
 }
 
 static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
@@ -2512,7 +2512,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
         }
     }
 
-	return ac;
+    return ac;
 }
 
 /*!
@@ -2642,7 +2642,7 @@ static s16b calc_speed(player_type *creature_ptr)
             }
         }
 
-		if (creature_ptr->food >= PY_FOOD_MAX)
+        if (creature_ptr->food >= PY_FOOD_MAX)
             pow -= 10;
 
         if (creature_ptr->special_defense & KAMAE_SUZAKU)
@@ -2705,7 +2705,6 @@ static s16b calc_speed(player_type *creature_ptr)
             pow -= ((j - count) / (count / 5));
     }
 
-
     if (creature_ptr->action == ACTION_SEARCH)
         pow -= 10;
 
@@ -2719,7 +2718,7 @@ static s16b calc_speed(player_type *creature_ptr)
     if (pow < 11)
         pow = 11;
 
-	return pow;
+    return pow;
 }
 
 /*!
@@ -2864,7 +2863,7 @@ static s16b calc_riding_bow_penalty(player_type *creature_ptr)
     if (creature_ptr->tval_ammo == TV_BOLT)
         penalty *= 2;
 
-	return penalty;
+    return penalty;
 }
 
 void put_equipment_warning(player_type *creature_ptr)
@@ -3014,7 +3013,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
             || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
             continue;
 
-		if (!object_is_known(o_ptr) && !is_true_value)
+        if (!object_is_known(o_ptr) && !is_true_value)
             continue;
         bonus_to_d = o_ptr->to_d;
 
@@ -3283,7 +3282,7 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
             pow += (s16b)bonus_to_h;
     }
 
-	pow -= calc_riding_bow_penalty(creature_ptr);
+    pow -= calc_riding_bow_penalty(creature_ptr);
 
     return pow;
 }
@@ -3367,7 +3366,7 @@ static s16b calc_to_hit_misc(player_type *creature_ptr)
     to_hit += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     to_hit += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
 
-	return to_hit;
+    return to_hit;
 }
 
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3382,7 +3381,7 @@ static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_
         }
     }
 
-	return dn;
+    return dn;
 }
 
 static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot)
@@ -3921,14 +3920,10 @@ void cheat_death(player_type *creature_ptr)
     (void)life_stream(creature_ptr, FALSE, FALSE);
     (void)restore_mana(creature_ptr, TRUE);
 
-    if (creature_ptr->word_recall) {
-        msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
-        msg_print(NULL);
-        creature_ptr->word_recall = 0;
-        creature_ptr->redraw |= (PR_STATUS);
-    }
+    (void)recall_player(creature_ptr, 0);
 
-    if (creature_ptr->alter_reality) {
+    if (creature_ptr->alter_reality)
+    {
         creature_ptr->alter_reality = 0;
         creature_ptr->redraw |= (PR_STATUS);
     }
@@ -4114,7 +4109,7 @@ int calc_weapon_weight_limit(player_type *creature_ptr)
     if (has_two_handed_weapons(creature_ptr))
         weight *= 2;
 
-	return weight;
+    return weight;
 }
 
 static int get_default_hand(player_type *creature_ptr)
