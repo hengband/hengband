@@ -942,8 +942,7 @@ BIT_FLAGS has_resist_elec(player_type *creature_ptr)
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
         result |= FLAG_CAUSE_RACE;
     }
-
-    if (is_specific_player_race(creature_ptr, RACE_DRACONIAN) && creature_ptr->lev > 19) {
+    else if (is_specific_player_race(creature_ptr, RACE_DRACONIAN) && creature_ptr->lev > 19) {
         result |= FLAG_CAUSE_RACE;
     }
 
