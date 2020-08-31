@@ -367,7 +367,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
         }
     }
 
-    if (creature_ptr->word_recall) {
+    if (creature_ptr->word_recall || turns == 0) {
         creature_ptr->word_recall = 0;
         msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
         creature_ptr->redraw |= (PR_STATUS);
