@@ -895,9 +895,6 @@ void has_extra_blow(player_type *creature_ptr)
             continue;
 
         object_flags(creature_ptr, o_ptr, flgs);
-
-        if (has_flag(flgs, TR_INFRA))
-            creature_ptr->see_infra += o_ptr->pval;
         if (has_flag(flgs, TR_BLOWS)) {
             if ((i == INVEN_RARM || i == INVEN_RIGHT) && !has_two_handed_weapons(creature_ptr))
                 creature_ptr->extra_blows[0] += o_ptr->pval;
