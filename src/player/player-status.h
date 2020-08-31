@@ -561,8 +561,6 @@ bool is_echizen(player_type *creature_ptr);
 #define PY_REGEN_HPBASE 1442 /* Min amount hp regen*2^16 */
 #define PY_REGEN_MNBASE 524 /* Min amount mana regen*2^16 */
 
-extern void cheat_death(player_type *creature_ptr);
-
 extern void stop_singing(player_type *creature_ptr);
 extern void stop_mouth(player_type *caster_ptr);
 extern PERCENTAGE calculate_upkeep(player_type *creature_ptr);

@@ -3,6 +3,17 @@
 #include "monster/monster-status-setter.h"
 #include "player/attack-defense-types.h"
 #include "player/player-race.h"
+#include "player/player-status.h"
+#include "player/digestion-processor.h"
+#include "spell/spells-status.h"
+#include "world/world.h"
+#include "game-option/birth-options.h"
+#include "dungeon/quest.h"
+#include "io/write-diary.h"
+#include "system/floor-type-definition.h"
+#include "view/display-messages.h"
+#include "spell-kind/spells-world.h"
+#include "floor/floor-leaver.h"
 
 /*!
  * @brief プレイヤーの全ての時限効果をリセットする。 / reset timed flags
@@ -90,4 +101,58 @@ void reset_tim_flags(player_type *creature_ptr)
         SINGING_SONG_EFFECT(creature_ptr) = 0;
         SINGING_SONG_ID(creature_ptr) = 0;
     }
+}
+
+
+void cheat_death(player_type *creature_ptr)
+{
+    if (creature_ptr->sc)
+        creature_ptr->sc = creature_ptr->age = 0;
+    creature_ptr->age++;
+
+    current_world_ptr->noscore |= 0x0001;
+    msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
+    msg_print(NULL);
+
+    (void)life_stream(creature_ptr, FALSE, FALSE);
+    (void)restore_mana(creature_ptr, TRUE);
+
+    (void)recall_player(creature_ptr, 0);
+    reserve_alter_reality(creature_ptr, 0);
+
+    (void)strcpy(creature_ptr->died_from, _("死の欺き", "Cheating death"));
+    creature_ptr->is_dead = FALSE;
+    (void)set_food(creature_ptr, PY_FOOD_MAX - 1);
+
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    floor_ptr->dun_level = 0;
+    floor_ptr->inside_arena = FALSE;
+    creature_ptr->phase_out = FALSE;
+    leaving_quest = 0;
+    floor_ptr->inside_quest = 0;
+    if (creature_ptr->dungeon_idx)
+        creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
+    creature_ptr->dungeon_idx = 0;
+    if (lite_town || vanilla_town) {
+        creature_ptr->wilderness_y = 1;
+        creature_ptr->wilderness_x = 1;
+        if (vanilla_town) {
+            creature_ptr->oldpy = 10;
+            creature_ptr->oldpx = 34;
+        } else {
+            creature_ptr->oldpy = 33;
+            creature_ptr->oldpx = 131;
+        }
+    } else {
+        creature_ptr->wilderness_y = 48;
+        creature_ptr->wilderness_x = 5;
+        creature_ptr->oldpy = 33;
+        creature_ptr->oldpx = 131;
+    }
+
+    creature_ptr->wild_mode = FALSE;
+    creature_ptr->leaving = TRUE;
+
+    exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, _("                            しかし、生き返った。", "                            but revived."));
+    leave_floor(creature_ptr);
 }
