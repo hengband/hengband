@@ -46,7 +46,7 @@ BIT_FLAGS has_mighty_throw(player_type *creature_ptr);
 BIT_FLAGS has_dec_mana(player_type *creature_ptr);
 BIT_FLAGS has_reflect(player_type *creature_ptr);
 BIT_FLAGS has_see_nocto(player_type *creature_ptr);
-void has_warning(player_type *creature_ptr);
+BIT_FLAGS has_warning(player_type *creature_ptr);
 BIT_FLAGS has_anti_magic(player_type *creature_ptr);
 BIT_FLAGS has_anti_tele(player_type *creature_ptr);
 BIT_FLAGS has_sh_fire(player_type *creature_ptr);

@@ -315,12 +315,11 @@ BIT_FLAGS has_reflect(player_type *creature_ptr)
 
 BIT_FLAGS has_see_nocto(player_type *creature_ptr) { return creature_ptr->pclass == CLASS_NINJA ? FLAG_CAUSE_CLASS : 0L; }
 
-void has_warning(player_type *creature_ptr)
+BIT_FLAGS has_warning(player_type *creature_ptr)
 {
+    BIT_FLAGS result = 0L;
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-    creature_ptr->warning = FALSE;
 
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -331,9 +330,10 @@ void has_warning(player_type *creature_ptr)
 
         if (has_flag(flgs, TR_WARNING)) {
             if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
-                creature_ptr->warning = TRUE;
+                result |= 0x01 << (i - INVEN_RARM);
         }
     }
+    return result;
 }
 
 BIT_FLAGS has_anti_magic(player_type *creature_ptr)
@@ -468,25 +468,16 @@ BIT_FLAGS has_see_inv(player_type *creature_ptr)
 
     if (creature_ptr->mimic_form == MIMIC_DEMON || creature_ptr->mimic_form == MIMIC_DEMON_LORD || creature_ptr->mimic_form == MIMIC_VAMPIRE) {
         result |= FLAG_CAUSE_RACE;
-    }
-    else if (is_specific_player_race(creature_ptr, RACE_HIGH_ELF)
-        || is_specific_player_race(creature_ptr, RACE_GOLEM)
-        || is_specific_player_race(creature_ptr, RACE_SKELETON)
-        || is_specific_player_race(creature_ptr, RACE_ZOMBIE)
-        || is_specific_player_race(creature_ptr, RACE_SPECTRE)
-        || is_specific_player_race(creature_ptr, RACE_ARCHON))
-    {
+    } else if (is_specific_player_race(creature_ptr, RACE_HIGH_ELF) || is_specific_player_race(creature_ptr, RACE_GOLEM)
+        || is_specific_player_race(creature_ptr, RACE_SKELETON) || is_specific_player_race(creature_ptr, RACE_ZOMBIE)
+        || is_specific_player_race(creature_ptr, RACE_SPECTRE) || is_specific_player_race(creature_ptr, RACE_ARCHON)) {
         result |= FLAG_CAUSE_RACE;
-    }
-    else if (is_specific_player_race(creature_ptr, RACE_DARK_ELF) && creature_ptr->lev > 19) {
+    } else if (is_specific_player_race(creature_ptr, RACE_DARK_ELF) && creature_ptr->lev > 19) {
         result |= FLAG_CAUSE_RACE;
-    }
-    else if (is_specific_player_race(creature_ptr, RACE_MIND_FLAYER) && creature_ptr->lev > 14) {
-            result |= FLAG_CAUSE_RACE;
-    }
-    else if ((is_specific_player_race(creature_ptr, RACE_IMP) || is_specific_player_race(creature_ptr, RACE_BALROG))
-        && creature_ptr->lev > 9) {
-            result |= FLAG_CAUSE_RACE;
+    } else if (is_specific_player_race(creature_ptr, RACE_MIND_FLAYER) && creature_ptr->lev > 14) {
+        result |= FLAG_CAUSE_RACE;
+    } else if ((is_specific_player_race(creature_ptr, RACE_IMP) || is_specific_player_race(creature_ptr, RACE_BALROG)) && creature_ptr->lev > 9) {
+        result |= FLAG_CAUSE_RACE;
     }
 
     if (creature_ptr->special_defense & KATA_MUSOU) {
@@ -497,9 +488,8 @@ BIT_FLAGS has_see_inv(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-	result |= check_equipment_flags(creature_ptr, TR_SEE_INVIS);
+    result |= check_equipment_flags(creature_ptr, TR_SEE_INVIS);
     return result;
-
 }
 
 BIT_FLAGS has_free_act(player_type *creature_ptr)
@@ -772,10 +762,10 @@ BIT_FLAGS has_regenerate(player_type *creature_ptr)
     }
 
     if (creature_ptr->pclass == CLASS_WARRIOR && creature_ptr->lev > 44) {
-        result |= FLAG_CAUSE_RACE;    
-	}
+        result |= FLAG_CAUSE_RACE;
+    }
 
-	if (creature_ptr->pclass == CLASS_BERSERKER) {
+    if (creature_ptr->pclass == CLASS_BERSERKER) {
         result |= FLAG_CAUSE_RACE;
     }
 
@@ -912,11 +902,9 @@ BIT_FLAGS has_resist_acid(player_type *creature_ptr)
 
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
         result |= FLAG_CAUSE_RACE;
-    }
-    else if (is_specific_player_race(creature_ptr, RACE_YEEK) || is_specific_player_race(creature_ptr, RACE_KLACKON)) {
+    } else if (is_specific_player_race(creature_ptr, RACE_YEEK) || is_specific_player_race(creature_ptr, RACE_KLACKON)) {
         result |= FLAG_CAUSE_RACE;
-    }
-    else if (is_specific_player_race(creature_ptr, RACE_DRACONIAN) && creature_ptr->lev > 14) {
+    } else if (is_specific_player_race(creature_ptr, RACE_DRACONIAN) && creature_ptr->lev > 14) {
         result |= FLAG_CAUSE_RACE;
     }
 
@@ -932,7 +920,6 @@ BIT_FLAGS has_resist_acid(player_type *creature_ptr)
 
     result |= check_equipment_flags(creature_ptr, TR_RES_ACID);
     return result;
-
 }
 
 BIT_FLAGS has_resist_elec(player_type *creature_ptr)
@@ -941,8 +928,7 @@ BIT_FLAGS has_resist_elec(player_type *creature_ptr)
 
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
         result |= FLAG_CAUSE_RACE;
-    }
-    else if (is_specific_player_race(creature_ptr, RACE_DRACONIAN) && creature_ptr->lev > 19) {
+    } else if (is_specific_player_race(creature_ptr, RACE_DRACONIAN) && creature_ptr->lev > 19) {
         result |= FLAG_CAUSE_RACE;
     }
 
@@ -981,7 +967,7 @@ BIT_FLAGS has_resist_fire(player_type *creature_ptr)
 
     if (creature_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
-	}
+    }
 
     result |= check_equipment_flags(creature_ptr, TR_RES_FIRE);
     result |= has_immune_fire(creature_ptr);
@@ -1379,7 +1365,7 @@ BIT_FLAGS has_immune_elec(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-	if (creature_ptr->ele_immune) {
+    if (creature_ptr->ele_immune) {
         if (creature_ptr->special_defense & DEFENSE_ELEC)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1392,7 +1378,7 @@ BIT_FLAGS has_immune_fire(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-	if (creature_ptr->ele_immune) {
+    if (creature_ptr->ele_immune) {
         if (creature_ptr->special_defense & DEFENSE_FIRE)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
@@ -1405,9 +1391,9 @@ BIT_FLAGS has_immune_cold(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-	if (creature_ptr->ele_immune) {
+    if (creature_ptr->ele_immune) {
         if (creature_ptr->special_defense & DEFENSE_COLD)
-           result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+            result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
     result |= check_equipment_flags(creature_ptr, TR_IM_COLD);
