@@ -95,7 +95,7 @@ BIT_FLAGS has_immune_cold(player_type *creature_ptr);
 bool has_right_hand_weapon(player_type *creature_ptr);
 bool has_left_hand_weapon(player_type *creature_ptr);
 bool has_two_handed_weapons(player_type *creature_ptr);
-void has_lite(player_type *creature_ptr);
+BIT_FLAGS has_lite(player_type *creature_ptr);
 bool is_disable_two_handed_bonus(player_type *creature_ptr, int i);
 bool is_not_ninja_weapon(player_type *creature_ptr, int i);
 bool is_not_monk_weapon(player_type *creature_ptr, int i);

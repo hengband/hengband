@@ -391,7 +391,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->resist_time = has_resist_time(creature_ptr);
     creature_ptr->resist_water = has_resist_water(creature_ptr);
 
-    has_lite(creature_ptr);
+    creature_ptr->lite = has_lite(creature_ptr);
 
     const player_race *tmp_rp_ptr;
     if (creature_ptr->mimic_form)

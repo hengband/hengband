@@ -1450,33 +1450,34 @@ bool has_two_handed_weapons(player_type *creature_ptr)
     return FALSE;
 }
 
-void has_lite(player_type *creature_ptr)
+BIT_FLAGS has_lite(player_type *creature_ptr)
 {
-    creature_ptr->lite = FALSE;
+    BIT_FLAGS result = 0L;
     if (creature_ptr->pclass == CLASS_NINJA)
-        return;
+        return 0L;
 
     if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
-        creature_ptr->lite = TRUE;
+        result |= FLAG_CAUSE_PERSONALITY;
     }
 
     if (creature_ptr->mimic_form == MIMIC_VAMPIRE) {
-        creature_ptr->lite = TRUE;
-    }
-
-    if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
-        creature_ptr->lite = TRUE;
+        result |= FLAG_CAUSE_RACE;
     }
 
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_VAMPIRE)
-        creature_ptr->lite = TRUE;
+        result |= FLAG_CAUSE_RACE;
 
-    if (creature_ptr->sh_fire)
-        creature_ptr->lite = TRUE;
-
-    if (creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
-        creature_ptr->lite = TRUE;
+    if (creature_ptr->ult_res) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
+
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
+    }
+
+    result |= has_sh_fire(creature_ptr);
+
+    return result;
 }
 
 bool is_disable_two_handed_bonus(player_type *creature_ptr, int i)
