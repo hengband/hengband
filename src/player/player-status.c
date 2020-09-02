@@ -417,16 +417,6 @@ void calc_bonuses(player_type *creature_ptr)
         }
     }
 
-    switch (creature_ptr->pclass) {
-
-    case CLASS_NINJA:
-        if (creature_ptr->lev > 44) {
-            creature_ptr->oppose_pois = 1;
-            creature_ptr->redraw |= PR_STATUS;
-        }
-        break;
-    }
-
     if (creature_ptr->special_defense & KAMAE_MASK) {
         if (!(empty_hands_status & EMPTY_HAND_RARM)) {
             set_action(creature_ptr, ACTION_NONE);

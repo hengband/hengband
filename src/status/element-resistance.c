@@ -234,5 +234,6 @@ bool is_oppose_cold(player_type *creature_ptr)
 
 bool is_oppose_pois(player_type *creature_ptr)
 {
-    return creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
+    return creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU ||
+        (creature_ptr->pclass == CLASS_NINJA && creature_ptr->lev > 44) );
 }
