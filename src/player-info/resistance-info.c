@@ -26,7 +26,7 @@ void set_element_resistance_info(player_type* creature_ptr, self_info_type* si_p
         si_ptr->info[si_ptr->line++] = _("あなたは電撃に弱い。", "You are susceptible to damage from lightning.");
     }
 
-    if (creature_ptr->immune_fire) {
+    if (has_immune_fire(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは火に対する完全なる免疫を持っている。", "You are completely immune to fire.");
     } else if (creature_ptr->resist_fire && is_oppose_fire(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは火への強力な耐性を持っている。", "You resist fire exceptionally well.");
@@ -34,7 +34,7 @@ void set_element_resistance_info(player_type* creature_ptr, self_info_type* si_p
         si_ptr->info[si_ptr->line++] = _("あなたは火への耐性を持っている。", "You are resistant to fire.");
     }
 
-    if (is_specific_player_race(creature_ptr, RACE_ENT) && !creature_ptr->immune_fire) {
+    if (is_specific_player_race(creature_ptr, RACE_ENT) && !has_immune_fire(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは火に弱い。", "You are susceptible to damage from fire.");
     }
 

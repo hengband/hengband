@@ -90,7 +90,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !creature_ptr->immune_fire) {
+    if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !has_immune_fire(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -282,7 +282,7 @@ void process_player_hp_mp(player_type *creature_ptr)
 
     if (creature_ptr->riding) {
         HIT_POINT damage;
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !creature_ptr->immune_fire) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !has_immune_fire(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (is_specific_player_race(creature_ptr, RACE_ENT))
                 damage += damage / 3;

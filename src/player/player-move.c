@@ -278,7 +278,7 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
             return TRUE;
         break;
     case TRAP_FIRE:
-        if (creature_ptr->immune_fire)
+        if (has_immune_fire(creature_ptr))
             return TRUE;
         break;
     case TRAP_ACID:

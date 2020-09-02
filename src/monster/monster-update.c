@@ -471,7 +471,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
             m_ptr->smart |= (SM_RES_FIRE);
         if (is_oppose_fire(player_ptr))
             m_ptr->smart |= (SM_OPP_FIRE);
-        if (player_ptr->immune_fire)
+        if (has_immune_fire(player_ptr))
             m_ptr->smart |= (SM_IMM_FIRE);
         break;
 

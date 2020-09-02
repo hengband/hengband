@@ -39,6 +39,7 @@
 #include "object/object-mark-types.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
+#include "player/player-status-flags.h"
 #include "room/rooms-builder.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
@@ -1150,7 +1151,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
                 return FALSE;
         }
 
-        if (has_flag(f_ptr->flags, FF_LAVA) && !player_ptr->immune_fire && !is_invuln(player_ptr)) {
+        if (has_flag(f_ptr->flags, FF_LAVA) && !has_immune_fire(player_ptr) && !is_invuln(player_ptr)) {
             /* Always forbid deep lava */
             if (has_flag(f_ptr->flags, FF_DEEP))
                 return FALSE;

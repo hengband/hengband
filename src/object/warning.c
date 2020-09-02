@@ -148,7 +148,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_FIRE:
-        if (target_ptr->immune_fire) {
+        if (has_immune_fire(target_ptr)) {
             dam = 0;
             ignore_wraith_form = TRUE;
             break;
