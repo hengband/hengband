@@ -30,6 +30,7 @@
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "spell/spell-types.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
@@ -86,7 +87,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     /* Vulnerability, resistance and immunity */
     switch (typ) {
     case GF_ELEC:
-        if (target_ptr->immune_elec) {
+        if (has_immune_elec(target_ptr)) {
             dam = 0;
             ignore_wraith_form = TRUE;
             break;
@@ -112,7 +113,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_ACID:
-        if (target_ptr->immune_acid) {
+        if (has_immune_acid(target_ptr)) {
             dam = 0;
             ignore_wraith_form = TRUE;
             break;

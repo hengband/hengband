@@ -20,6 +20,7 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
@@ -161,7 +162,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_elec) {
+    if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_elec(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -196,7 +197,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_acid) {
+    if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_acid(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -292,7 +293,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             msg_print(_("熱い！", "It's hot!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
         }
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !creature_ptr->immune_elec) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !has_immune_elec(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (is_specific_player_race(creature_ptr, RACE_ANDROID))
                 damage += damage / 3;

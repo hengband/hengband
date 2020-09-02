@@ -19,6 +19,7 @@
 #include "status/element-resistance.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "player/player-status-flags.h"
 
 /*!
  * @brief 死の大鎌ダメージが跳ね返ってきた時の、種族ごとのダメージ倍率を返す
@@ -86,10 +87,10 @@ static void compensate_death_scythe_reflection_magnification(player_type *attack
     if ((attacker_ptr->align < 0) && (*magnification < 20))
         *magnification = 20;
 
-    if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (*magnification < 25))
+    if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || has_immune_acid(attacker_ptr)) && (*magnification < 25))
         *magnification = 25;
 
-    if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || attacker_ptr->immune_elec) && (*magnification < 25))
+    if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || has_immune_elec(attacker_ptr)) && (*magnification < 25))
         *magnification = 25;
 
     if (!(attacker_ptr->resist_fire || is_oppose_fire(attacker_ptr) || attacker_ptr->immune_fire) && (*magnification < 25))

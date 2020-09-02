@@ -29,6 +29,7 @@
 #include "player/eldritch-horror.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
@@ -452,7 +453,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
             m_ptr->smart |= (SM_RES_ACID);
         if (is_oppose_acid(player_ptr))
             m_ptr->smart |= (SM_OPP_ACID);
-        if (player_ptr->immune_acid)
+        if (has_immune_acid(player_ptr))
             m_ptr->smart |= (SM_IMM_ACID);
         break;
 
@@ -461,7 +462,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
             m_ptr->smart |= (SM_RES_ELEC);
         if (is_oppose_elec(player_ptr))
             m_ptr->smart |= (SM_OPP_ELEC);
-        if (player_ptr->immune_elec)
+        if (has_immune_elec(player_ptr))
             m_ptr->smart |= (SM_IMM_ELEC);
         break;
 

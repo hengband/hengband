@@ -2,10 +2,11 @@
 #include "player-info/self-info-util.h"
 #include "player/player-race.h"
 #include "status/element-resistance.h"
+#include "player/player-status-flags.h"
 
 void set_element_resistance_info(player_type* creature_ptr, self_info_type* si_ptr)
 {
-    if (creature_ptr->immune_acid) {
+    if (has_immune_acid(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは酸に対する完全なる免疫を持っている。", "You are completely immune to acid.");
     } else if (creature_ptr->resist_acid && is_oppose_acid(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは酸への強力な耐性を持っている。", "You resist acid exceptionally well.");
@@ -13,7 +14,7 @@ void set_element_resistance_info(player_type* creature_ptr, self_info_type* si_p
         si_ptr->info[si_ptr->line++] = _("あなたは酸への耐性を持っている。", "You are resistant to acid.");
     }
 
-    if (creature_ptr->immune_elec) {
+    if (has_immune_elec(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは電撃に対する完全なる免疫を持っている。", "You are completely immune to lightning.");
     } else if (creature_ptr->resist_elec && is_oppose_elec(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは電撃への強力な耐性を持っている。", "You resist lightning exceptionally well.");
@@ -21,7 +22,7 @@ void set_element_resistance_info(player_type* creature_ptr, self_info_type* si_p
         si_ptr->info[si_ptr->line++] = _("あなたは電撃への耐性を持っている。", "You are resistant to lightning.");
     }
 
-    if (is_specific_player_race(creature_ptr, RACE_ANDROID) && !creature_ptr->immune_elec) {
+    if (is_specific_player_race(creature_ptr, RACE_ANDROID) && !has_immune_elec(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは電撃に弱い。", "You are susceptible to damage from lightning.");
     }
 
