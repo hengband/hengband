@@ -38,7 +38,7 @@ void set_element_resistance_info(player_type* creature_ptr, self_info_type* si_p
         si_ptr->info[si_ptr->line++] = _("あなたは火に弱い。", "You are susceptible to damage from fire.");
     }
 
-    if (creature_ptr->immune_cold) {
+    if (has_immune_cold(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは冷気に対する完全なる免疫を持っている。", "You are completely immune to cold.");
     } else if (creature_ptr->resist_cold && is_oppose_cold(creature_ptr)) {
         si_ptr->info[si_ptr->line++] = _("あなたは冷気への強力な耐性を持っている。", "You resist cold exceptionally well.");

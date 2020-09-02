@@ -281,7 +281,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     }
 
     if (r_ptr->flags4 & RF4_BR_COLD) {
-        if (!creature_ptr->immune_cold && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_cold(creature_ptr) && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
 
         if (creature_ptr->special_defense & DEFENSE_COLD)

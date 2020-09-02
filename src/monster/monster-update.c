@@ -480,7 +480,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
             m_ptr->smart |= (SM_RES_COLD);
         if (is_oppose_cold(player_ptr))
             m_ptr->smart |= (SM_OPP_COLD);
-        if (player_ptr->immune_cold)
+        if (has_immune_cold(player_ptr))
             m_ptr->smart |= (SM_IMM_COLD);
         break;
 

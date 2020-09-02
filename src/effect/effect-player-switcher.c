@@ -66,7 +66,7 @@ void effect_player_icee(player_type *target_ptr, effect_player_type *ep_ptr)
     }
 
     if ((!(target_ptr->resist_cold || is_oppose_cold(target_ptr))) || one_in_(12)) {
-        if (!target_ptr->immune_cold)
+        if (!has_immune_cold(target_ptr))
             inventory_damage(target_ptr, set_cold_destroy, 3);
     }
 }

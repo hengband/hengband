@@ -131,7 +131,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_COLD:
     case GF_ICE:
-        if (target_ptr->immune_cold) {
+        if (has_immune_cold(target_ptr)) {
             dam = 0;
             ignore_wraith_form = TRUE;
             break;
