@@ -395,28 +395,6 @@ void calc_bonuses(player_type *creature_ptr)
     else
         tmp_rp_ptr = &race_info[creature_ptr->prace];
 
-    if (creature_ptr->mimic_form) {
-        switch (creature_ptr->mimic_form) {
-        case MIMIC_DEMON:
-            creature_ptr->oppose_fire = 1;
-            creature_ptr->redraw |= PR_STATUS;
-            break;
-        }
-    } else {
-        switch (creature_ptr->prace) {
-
-        case RACE_BALROG:
-            if (creature_ptr->lev > 44) {
-                creature_ptr->oppose_fire = 1;
-                creature_ptr->redraw |= PR_STATUS;
-            }
-            break;
-
-        default:
-            break;
-        }
-    }
-
     if (creature_ptr->special_defense & KAMAE_MASK) {
         if (!(empty_hands_status & EMPTY_HAND_RARM)) {
             set_action(creature_ptr, ACTION_NONE);
