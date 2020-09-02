@@ -147,7 +147,7 @@ void effect_player_plasma(player_type *target_ptr, effect_player_type *ep_ptr)
         (void)set_stun(target_ptr, target_ptr->stun + plus_stun);
     }
 
-    if (!(target_ptr->resist_fire || is_oppose_fire(target_ptr) || has_immune_fire(target_ptr)))
+    if (!(target_ptr->resist_fire || is_oppose_fire(target_ptr) || is_immune_fire(target_ptr)))
         inventory_damage(target_ptr, set_acid_destroy, 3);
 }
 

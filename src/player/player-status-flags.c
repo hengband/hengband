@@ -50,7 +50,7 @@ static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_fla
     return result;
 }
 
-bool has_kill_wall(player_type *creature_ptr)
+bool is_kill_wall(player_type *creature_ptr)
 {
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD || music_singing(creature_ptr, MUSIC_WALL)) {
         return TRUE;
@@ -66,7 +66,7 @@ bool has_kill_wall(player_type *creature_ptr)
     return FALSE;
 }
 
-bool has_pass_wall(player_type *creature_ptr)
+bool is_pass_wall(player_type *creature_ptr)
 {
     bool pow = FALSE;
 
@@ -84,14 +84,14 @@ bool has_pass_wall(player_type *creature_ptr)
     return pow;
 }
 
-BIT_FLAGS has_xtra_might(player_type *creature_ptr)
+BIT_FLAGS is_xtra_might(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_XTRA_MIGHT);
     return result;
 }
 
-BIT_FLAGS has_esp_evil(player_type *creature_ptr)
+BIT_FLAGS is_esp_evil(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     if (creature_ptr->realm1 == REALM_HEX) {
@@ -102,84 +102,84 @@ BIT_FLAGS has_esp_evil(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_esp_animal(player_type *creature_ptr)
+BIT_FLAGS is_esp_animal(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_ANIMAL);
     return result;
 }
 
-BIT_FLAGS has_esp_undead(player_type *creature_ptr)
+BIT_FLAGS is_esp_undead(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_UNDEAD);
     return result;
 }
 
-BIT_FLAGS has_esp_demon(player_type *creature_ptr)
+BIT_FLAGS is_esp_demon(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_DEMON);
     return result;
 }
 
-BIT_FLAGS has_esp_orc(player_type *creature_ptr)
+BIT_FLAGS is_esp_orc(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_ORC);
     return result;
 }
 
-BIT_FLAGS has_esp_troll(player_type *creature_ptr)
+BIT_FLAGS is_esp_troll(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_TROLL);
     return result;
 }
 
-BIT_FLAGS has_esp_giant(player_type *creature_ptr)
+BIT_FLAGS is_esp_giant(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_GIANT);
     return result;
 }
 
-BIT_FLAGS has_esp_dragon(player_type *creature_ptr)
+BIT_FLAGS is_esp_dragon(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_DRAGON);
     return result;
 }
 
-BIT_FLAGS has_esp_human(player_type *creature_ptr)
+BIT_FLAGS is_esp_human(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_HUMAN);
     return result;
 }
 
-BIT_FLAGS has_esp_good(player_type *creature_ptr)
+BIT_FLAGS is_esp_good(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_GOOD);
     return result;
 }
 
-BIT_FLAGS has_esp_nonliving(player_type *creature_ptr)
+BIT_FLAGS is_esp_nonliving(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_GOOD);
     return result;
 }
 
-BIT_FLAGS has_esp_unique(player_type *creature_ptr)
+BIT_FLAGS is_esp_unique(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_ESP_UNIQUE);
     return result;
 }
 
-BIT_FLAGS has_esp_telepathy(player_type *creature_ptr)
+BIT_FLAGS is_esp_telepathy(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -533,7 +533,7 @@ BIT_FLAGS has_free_act(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_str(player_type *creature_ptr)
+BIT_FLAGS is_sustain_str(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -557,7 +557,7 @@ BIT_FLAGS has_sustain_str(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_int(player_type *creature_ptr)
+BIT_FLAGS is_sustain_int(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -577,7 +577,7 @@ BIT_FLAGS has_sustain_int(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_wis(player_type *creature_ptr)
+BIT_FLAGS is_sustain_wis(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -601,7 +601,7 @@ BIT_FLAGS has_sustain_wis(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_dex(player_type *creature_ptr)
+BIT_FLAGS is_sustain_dex(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     if (creature_ptr->pclass == CLASS_BERSERKER) {
@@ -623,7 +623,7 @@ BIT_FLAGS has_sustain_dex(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_con(player_type *creature_ptr)
+BIT_FLAGS is_sustain_con(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     if (creature_ptr->pclass == CLASS_BERSERKER) {
@@ -646,7 +646,7 @@ BIT_FLAGS has_sustain_con(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_sustain_chr(player_type *creature_ptr)
+BIT_FLAGS is_sustain_chr(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -896,7 +896,7 @@ void has_extra_blow(player_type *creature_ptr)
     }
 }
 
-BIT_FLAGS has_resist_acid(player_type *creature_ptr)
+BIT_FLAGS is_resist_acid(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -916,13 +916,13 @@ BIT_FLAGS has_resist_acid(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    result |= has_immune_acid(creature_ptr);
+    result |= is_immune_acid(creature_ptr);
 
     result |= check_equipment_flags(creature_ptr, TR_RES_ACID);
     return result;
 }
 
-BIT_FLAGS has_resist_elec(player_type *creature_ptr)
+BIT_FLAGS is_resist_elec(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -941,11 +941,11 @@ BIT_FLAGS has_resist_elec(player_type *creature_ptr)
     }
 
     result |= check_equipment_flags(creature_ptr, TR_RES_ELEC);
-    result |= has_immune_elec(creature_ptr);
+    result |= is_immune_elec(creature_ptr);
     return result;
 }
 
-BIT_FLAGS has_resist_fire(player_type *creature_ptr)
+BIT_FLAGS is_resist_fire(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -970,11 +970,11 @@ BIT_FLAGS has_resist_fire(player_type *creature_ptr)
     }
 
     result |= check_equipment_flags(creature_ptr, TR_RES_FIRE);
-    result |= has_immune_fire(creature_ptr);
+    result |= is_immune_fire(creature_ptr);
     return result;
 }
 
-BIT_FLAGS has_resist_cold(player_type *creature_ptr)
+BIT_FLAGS is_resist_cold(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1003,11 +1003,11 @@ BIT_FLAGS has_resist_cold(player_type *creature_ptr)
     }
 
     result |= check_equipment_flags(creature_ptr, TR_RES_COLD);
-    result |= has_immune_cold(creature_ptr);
+    result |= is_immune_cold(creature_ptr);
     return result;
 }
 
-BIT_FLAGS has_resist_pois(player_type *creature_ptr)
+BIT_FLAGS is_resist_pois(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1040,7 +1040,7 @@ BIT_FLAGS has_resist_pois(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_conf(player_type *creature_ptr)
+BIT_FLAGS is_resist_conf(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1071,7 +1071,7 @@ BIT_FLAGS has_resist_conf(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_sound(player_type *creature_ptr)
+BIT_FLAGS is_resist_sound(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1095,7 +1095,7 @@ BIT_FLAGS has_resist_sound(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_lite(player_type *creature_ptr)
+BIT_FLAGS is_resist_lite(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1115,7 +1115,7 @@ BIT_FLAGS has_resist_lite(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_dark(player_type *creature_ptr)
+BIT_FLAGS is_resist_dark(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1141,7 +1141,7 @@ BIT_FLAGS has_resist_dark(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_chaos(player_type *creature_ptr)
+BIT_FLAGS is_resist_chaos(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1167,7 +1167,7 @@ BIT_FLAGS has_resist_chaos(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_disen(player_type *creature_ptr)
+BIT_FLAGS is_resist_disen(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1190,7 +1190,7 @@ BIT_FLAGS has_resist_disen(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_shard(player_type *creature_ptr)
+BIT_FLAGS is_resist_shard(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1209,7 +1209,7 @@ BIT_FLAGS has_resist_shard(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_nexus(player_type *creature_ptr)
+BIT_FLAGS is_resist_nexus(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1229,7 +1229,7 @@ BIT_FLAGS has_resist_nexus(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_blind(player_type *creature_ptr)
+BIT_FLAGS is_resist_blind(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1252,7 +1252,7 @@ BIT_FLAGS has_resist_blind(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_neth(player_type *creature_ptr)
+BIT_FLAGS is_resist_neth(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1277,7 +1277,7 @@ BIT_FLAGS has_resist_neth(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_time(player_type *creature_ptr)
+BIT_FLAGS is_resist_time(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1289,7 +1289,7 @@ BIT_FLAGS has_resist_time(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_water(player_type *creature_ptr)
+BIT_FLAGS is_resist_water(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1300,7 +1300,7 @@ BIT_FLAGS has_resist_water(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_resist_fear(player_type *creature_ptr)
+BIT_FLAGS is_resist_fear(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1346,7 +1346,7 @@ BIT_FLAGS has_resist_fear(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_immune_acid(player_type *creature_ptr)
+BIT_FLAGS is_immune_acid(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_YEEK && creature_ptr->lev > 19)
@@ -1361,7 +1361,7 @@ BIT_FLAGS has_immune_acid(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_immune_elec(player_type *creature_ptr)
+BIT_FLAGS is_immune_elec(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1374,7 +1374,7 @@ BIT_FLAGS has_immune_elec(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_immune_fire(player_type *creature_ptr)
+BIT_FLAGS is_immune_fire(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
@@ -1387,7 +1387,7 @@ BIT_FLAGS has_immune_fire(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_immune_cold(player_type *creature_ptr)
+BIT_FLAGS is_immune_cold(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
