@@ -535,6 +535,7 @@ extern bool can_two_hands_wielding(player_type *creature_ptr);
 bool is_fast(player_type *creature_ptr);
 bool is_invuln(player_type *creature_ptr);
 bool is_hero(player_type *creature_ptr);
+bool is_shero(player_type *creature_ptr);
 bool is_echizen(player_type *creature_ptr);
 
 /*

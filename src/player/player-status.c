@@ -4033,6 +4033,8 @@ bool is_invuln(player_type *creature_ptr) { return creature_ptr->invuln || music
 
 bool is_hero(player_type *creature_ptr) { return creature_ptr->hero || music_singing(creature_ptr, MUSIC_HERO) || music_singing(creature_ptr, MUSIC_SHERO); }
 
+bool is_shero(player_type *creature_ptr) { return creature_ptr->shero || creature_ptr->pclass == CLASS_BERSERKER; }
+
 bool is_echizen(player_type *creature_ptr)
 {
     return (creature_ptr->pseikaku == PERSONALITY_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
