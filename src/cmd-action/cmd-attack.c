@@ -197,7 +197,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     }
 
     bool stormbringer = FALSE;
-    if (!is_hostile(m_ptr) && !(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || attacker_ptr->shero || !m_ptr->ml)) {
+    if (!is_hostile(m_ptr) && !(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || is_shero(attacker_ptr) || !m_ptr->ml)) {
         if (attacker_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER)
             stormbringer = TRUE;
         if (attacker_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER)

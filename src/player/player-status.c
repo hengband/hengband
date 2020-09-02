@@ -419,10 +419,6 @@ void calc_bonuses(player_type *creature_ptr)
 
     switch (creature_ptr->pclass) {
 
-    case CLASS_BERSERKER:
-        creature_ptr->shero = 1;
-        creature_ptr->redraw |= PR_STATUS;
-        break;
     case CLASS_NINJA:
         if (creature_ptr->lev > 44) {
             creature_ptr->oppose_pois = 1;
@@ -653,7 +649,7 @@ static void calc_hitpoints(player_type *creature_ptr)
         mhp = creature_ptr->lev + 1;
     if (is_hero(creature_ptr))
         mhp += 10;
-    if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER))
+    if (is_shero(creature_ptr))
         mhp += 30;
     if (creature_ptr->tsuyoshi)
         mhp += 50;
@@ -1309,7 +1305,7 @@ static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
         pow = MIN(pow - 3, (pow + 2) / 2);
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         pow -= 7;
     }
 
@@ -1399,7 +1395,7 @@ static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr)
 
     pow += adj_int_dev[creature_ptr->stat_ind[A_INT]];
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         pow -= 20;
     }
     return pow;
@@ -1440,7 +1436,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
 
     pow += adj_wis_sav[creature_ptr->stat_ind[A_WIS]];
 
-    if (creature_ptr->shero)
+    if (is_shero(creature_ptr))
         pow -= 30;
 
     if (creature_ptr->anti_magic && (pow < (90 + creature_ptr->lev)))
@@ -1499,7 +1495,7 @@ static ACTION_SKILL_POWER calc_search(player_type *creature_ptr)
         pow += 15;
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         pow -= 15;
     }
 
@@ -1543,7 +1539,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr)
             pow += (o_ptr->pval * 5);
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         pow -= 15;
     }
 
@@ -1625,7 +1621,7 @@ static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr)
     pow = tmp_rp_ptr->r_thb + c_ptr->c_thb + a_ptr->a_thb;
     pow += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         pow -= 20;
     }
 
@@ -1658,7 +1654,7 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
         pow += creature_ptr->lev * 10;
     }
 
-    if (creature_ptr->shero)
+    if (is_shero(creature_ptr))
         pow += 30;
 
     pow += adj_str_dig[creature_ptr->stat_ind[A_STR]];
@@ -1682,7 +1678,7 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
         }
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         pow += 30;
     }
 
@@ -2497,7 +2493,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
         ac += 5;
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         ac -= 10;
     }
 
@@ -2963,7 +2959,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
     s16b damage = 0;
     damage += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         damage += 3 + (creature_ptr->lev / 5);
     }
 
@@ -3110,7 +3106,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         hit += 12;
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         hit += 12;
     }
 
@@ -3241,7 +3237,7 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
         pow += 12;
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         pow -= 12;
     }
 
@@ -3305,7 +3301,7 @@ static s16b calc_to_damage_misc(player_type *creature_ptr)
         to_dam += (s16b)bonus_to_d;
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         to_dam += 3 + (creature_ptr->lev / 5);
     }
 
@@ -3349,7 +3345,7 @@ static s16b calc_to_hit_misc(player_type *creature_ptr)
         to_hit += 12;
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         to_hit += 12;
     }
 

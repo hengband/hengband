@@ -1338,7 +1338,7 @@ BIT_FLAGS is_resist_fear(player_type *creature_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    if (is_hero(creature_ptr) || creature_ptr->shero || creature_ptr->ult_res) {
+    if (is_hero(creature_ptr) || is_shero(creature_ptr) || creature_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
