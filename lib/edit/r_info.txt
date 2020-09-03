@@ -11653,24 +11653,22 @@ D:沈めるほどだが、ブランドは面食いではない。
 N:643:デス・ドレイク
 E:Death drake
 G:D:u
-I:120:10d100:25:100:30
-W:40:2:0:3500:250000:874
+I:120:12d100:25:90:40
+W:41:2:0:3500:30000:874
 B:CLAW:HURT:4d10
 B:CLAW:HURT:4d10
-B:BITE:EXP_80:3d6
-B:BITE:EXP_80:3d6
+B:BITE:EXP_80:4d6
+B:BITE:EXP_80:4d6
 F:FORCE_SLEEP | FORCE_MAXHP | SELF_DARK_1 |
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | RES_TELE
 F:INVISIBLE | TAKE_ITEM | CAN_FLY |
 F:PASS_WALL | POWERFUL | MOVE_BODY | RES_NETH |
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | 
-S:BR_NETH
-D:$It is a dragon-like form wrapped in darkness.  You cannot make out its 
-D:$true form but you sense its evil.
-D:それは暗黒に包まれたドラゴンのようなモンスターだ。その真の姿を把握することは
-D:できないが、その邪悪な気は感じとることができる。
+S:1_IN_6 | SLOW | CONF | SCARE | BR_NETH
+D:$It is a dragon-like form wrapped in darkness. 
+D:$ You cannot make out its true form but you sense its evil.
+D:それは暗黒に包まれたドラゴンのようなモンスターだ。
+D:その真の姿を把握することはできないが、その邪悪な気は感じとることができる。
 
 #J0#
 N:644:古代レッド・ドラゴン
@@ -11710,12 +11708,11 @@ S:BR_SOUN
 D:$A huge draconic form wreathed in a nimbus of light.
 D:後光に身を包まれた巨大なドラゴンだ。
 
-#J0#
-N:646:グレート・クリスタル・ドレイク
-E:Great crystal drake
+N:646:古代クリスタル・ドラゴン
+E:Ancient Crystal Dragon
 G:D:B
-I:120:15d100:25:100:30
-W:40:2:0:3500:0:0
+I:120:12d100:25:90:40
+W:41:2:0:3500:30000:1201
 B:CLAW:HURT:4d9
 B:CLAW:HURT:4d9
 B:BITE:HURT:5d12
@@ -11723,15 +11720,13 @@ F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | DROP_CORPSE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | CAN_FLY | ATTR_CLEAR |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_COLD | NO_CONF | RES_SHAR | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | 
-S:BR_SHAR
-D:$A huge crystalline dragon.  Its claws could cut you to shreds and its 
-D:$teeth are razor sharp.  Strange colours ripple through it as it moves in 
-D:$the light.
-D:巨大な水晶のようなドラゴンだ。冒険者の体をバラバラに切り刻むことができる
-D:爪と、剃刀のように鋭い歯を持っている。それが動くと光が反射して体中が奇妙
-D:な色にきらめく。
+S:1_IN_6 | SLOW | CONF | SCARE | BR_SHAR
+D:$A huge crystalline dragon.
+D:$  Every time it moves one step, an unpleasant sound of glass rubbing
+D:$ and a confusing light fill the entire floor.
+D:巨大な水晶のようなドラゴンだ。
+D:それは一歩動く度に硝子の擦れ合うような不快な音と、
+D:幻惑的な光を辺り一面に満ちさせる。
 
 N:647:運命の魔女
 E:Wyrd sister
@@ -17999,28 +17994,26 @@ D:一匹狼。正義感、勇気とも平均以上だがカッとしやすい所
 D:計画的人生より行き当たりばったりの人生を選んでしまうタイプで、
 D:女性の扱いは苦手。
 
-N:874:幽体ワイアーム
-E:Spectral Wyrm
-G:D:w
-I:130:60d100:40:200:255
-W:77:4:0:35000:0:0
-B:CLAW:HURT:10d12
-B:CLAW:HURT:10d12
-B:CLAW:HURT:10d12
-B:BITE:UN_BONUS:8d8
-F:FORCE_MAXHP | EVIL | UNDEAD | CAN_FLY | AURA_COLD |
-F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
-F:POWERFUL | MOVE_BODY | PASS_WALL | INVISIBLE |
-F:DRAGON | NO_CONF | NO_SLEEP | RES_TELE |
-F:IM_POIS | IM_COLD |
-F:RES_NETH | RES_NEXU | RES_DISE | RIDING |
-S:1_IN_3 |
-S:BR_NEXU | BR_NETH | BR_DISE |
-S:S_HI_DRAGON
-S:SCARE | BLINK | SHRIEK
-V:133
-D:$The tortured soul of a once powerful wyrm.
-D:かつて強大な力を誇っていたワイアームの怨霊だ。
+N:874:グレート・インフェルノ・ドレイク
+E:Great Inferno Drake
+G:D:D
+I:120:30d90:30:110:30
+W:54:2:0:18000:400000:1200
+B:CLAW:HURT:10d9
+B:CLAW:HURT:10d9
+B:CLAW:HURT:10d9
+B:BITE:UN_BONUS:6d6
+F:FORCE_SLEEP | FORCE_MAXHP | SELF_DARK_2 |
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | RES_TELE
+F:INVISIBLE | TAKE_ITEM | CAN_FLY
+F:PASS_WALL | POWERFUL | MOVE_BODY | RES_DARK | RES_NETH
+F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BR_NETH | BR_DARK | SCARE | BLINK | SHRIEK
+D:$It draws darkness from the underworld and brings chaos to the dungeon.
+D:$  The space around it is distorted and it is not possible
+D:$ to clearly capture its appearance.
+D:それは冥界から闇を呼び寄せてダンジョンに混沌をもたらしている。
+D:それの周りでは空間が歪み、姿をはっきりと捉えることができない。
 
 N:875:ストームトロル
 E:Storm troll
@@ -23953,3 +23946,47 @@ D:$ who controls all the power of elements.
 D:$  If you want to live, never try to defeat it!!
 D:元素の力を全て支配している、この世で最も強力かつ邪悪な竜だ。
 D:生きていたいなら決して手を出さないことだ！！
+
+N:1200:幽体ワイアーム
+E:Spectral Wyrm
+G:D:w
+I:130:60d100:40:200:255
+W:77:4:0:35000:0:0
+B:CLAW:HURT:10d12
+B:CLAW:HURT:10d12
+B:CLAW:HURT:10d12
+B:BITE:UN_BONUS:8d8
+F:FORCE_MAXHP | EVIL | UNDEAD | CAN_FLY | AURA_COLD |
+F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
+F:POWERFUL | MOVE_BODY | PASS_WALL | INVISIBLE |
+F:DRAGON | NO_CONF | NO_SLEEP | RES_TELE |
+F:IM_POIS | IM_COLD |
+F:RES_NETH | RES_NEXU | RES_DISE | RIDING |
+S:1_IN_3 |
+S:BR_NEXU | BR_NETH | BR_DISE |
+S:S_HI_DRAGON
+S:SCARE | BLINK | SHRIEK
+V:133
+D:$The tortured soul of a once powerful wyrm.
+D:かつて強大な力を誇っていたワイアームの怨霊だ。
+
+#J0#
+N:1201:グレート・クリスタル・ドレイク
+E:Great Crystal Drake
+G:D:B
+I:120:30d90:25:110:30
+W:54:2:0:18000:0:0
+B:CLAW:HURT:4d9
+B:CLAW:HURT:4d9
+B:BITE:HURT:5d12
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | DROP_CORPSE
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | CAN_FLY | ATTR_CLEAR
+F:INVISIBLE | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
+F:EVIL | DRAGON | IM_COLD | NO_CONF | RES_SHAR | NO_SLEEP | RIDING
+S:1_IN_4 | SLOW | CONF | SCARE | BR_SHAR
+D:$A huge crystalline dragon.
+D:$  Its claws could cut you to shreds and its teeth are razor sharp.
+D:$  Strange colours ripple through it as it moves in the light.
+D:巨大な水晶のようなドラゴンだ。冒険者の体をバラバラに切り刻むことができる
+D:爪と、剃刀のように鋭い歯を持っている。
+D:それが動くと光が反射して体中が奇妙な色にきらめく。
