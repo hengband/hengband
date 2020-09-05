@@ -11693,18 +11693,16 @@ D:高熱で息が苦しくなる。
 N:645:古代ゴールド・ドラゴン
 E:Ancient gold dragon
 G:D:y
-I:120:15d100:20:100:200
-W:40:2:0:4000:0:0
-B:CLAW:HURT:4d10
-B:CLAW:HURT:4d10
-B:BITE:HURT:5d14
+I:120:12d100:20:100:200
+W:41:2:0:3500:30000:1202
+B:CLAW:HURT:4d9
+B:CLAW:HURT:4d9
+B:BITE:HURT:5d12
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:DROP_3D2 | DROP_4D2 | CAN_FLY |
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:DRAGON | RES_SOUN | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
-S:BR_SOUN
+S:1_IN_6 | BLIND | CONF | SCARE | BR_SOUN
 D:$A huge draconic form wreathed in a nimbus of light.
 D:後光に身を包まれた巨大なドラゴンだ。
 
@@ -17999,9 +17997,9 @@ E:Great Inferno Drake
 G:D:D
 I:120:30d90:30:110:30
 W:54:2:0:18000:400000:1200
-B:CLAW:HURT:10d9
-B:CLAW:HURT:10d9
-B:CLAW:HURT:10d9
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
 B:BITE:UN_BONUS:6d6
 F:FORCE_SLEEP | FORCE_MAXHP | SELF_DARK_2 |
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | RES_TELE
@@ -23976,9 +23974,10 @@ E:Great Crystal Drake
 G:D:B
 I:120:30d90:25:110:30
 W:54:2:0:18000:0:0
-B:CLAW:HURT:4d9
-B:CLAW:HURT:4d9
-B:BITE:HURT:5d12
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
+B:BITE:HURT:6d14
 F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | DROP_CORPSE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | CAN_FLY | ATTR_CLEAR
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
@@ -23990,3 +23989,21 @@ D:$  Strange colours ripple through it as it moves in the light.
 D:巨大な水晶のようなドラゴンだ。冒険者の体をバラバラに切り刻むことができる
 D:爪と、剃刀のように鋭い歯を持っている。
 D:それが動くと光が反射して体中が奇妙な色にきらめく。
+
+N:1202:グレート・ロア・ドレイク
+E:Great Roar Drake
+G:D:o
+I:120:30d90:25:110:30
+W:54:2:0:18000:0:0
+B:CLAW:HURT:8d9
+B:CLAW:HURT:8d9
+B:CLAW:HURT:8d9
+B:BITE:HURT:5d14
+F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
+F:DROP_3D2 | DROP_4D2 | DROP_GOOD | CAN_FLY
+F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY
+F:DRAGON | RES_SOUN | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | SCARE | BR_SOUN
+D:$A powerful roaring dragon that breaks the dungeon ceiling
+D:$ and creates new terrain.
+D:ダンジョンの天井を崩し新しい地形を生み出すほどの力強い咆哮を放つドラゴンだ。
