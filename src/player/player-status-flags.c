@@ -1246,10 +1246,15 @@ BIT_FLAGS is_resist_lite(player_type *creature_ptr)
 BIT_FLAGS is_vuln_lite(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_S_FAIRY)
+    if (is_specific_player_race(creature_ptr, RACE_S_FAIRY) || is_specific_player_race(creature_ptr, RACE_VAMPIRE)
         || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
         result |= 0x01 << FLAG_CAUSE_RACE;
     }
+
+    if (creature_ptr->wraith_form) {
+        result |= 0x01 << FLAG_CAUSE_MAGIC_TIME_EFFECT;
+    }
+
     return result;
 }
 
