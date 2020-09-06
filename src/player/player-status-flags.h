@@ -77,6 +77,7 @@ BIT_FLAGS is_vuln_elec(player_type *creature_ptr);
 BIT_FLAGS is_resist_fire(player_type *creature_ptr);
 BIT_FLAGS is_vuln_fire(player_type *creature_ptr);
 BIT_FLAGS is_resist_cold(player_type *creature_ptr);
+BIT_FLAGS is_vuln_cold(player_type *creature_ptr);
 BIT_FLAGS is_resist_pois(player_type *creature_ptr);
 BIT_FLAGS is_resist_conf(player_type *creature_ptr);
 BIT_FLAGS is_resist_sound(player_type *creature_ptr);
