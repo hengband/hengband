@@ -79,6 +79,7 @@ BIT_FLAGS is_vuln_elec(player_type *creature_ptr);
 PERCENTAGE calc_vuln_elec_rate(player_type *creature_ptr);
 BIT_FLAGS is_resist_fire(player_type *creature_ptr);
 BIT_FLAGS is_vuln_fire(player_type *creature_ptr);
+PERCENTAGE calc_vuln_fire_rate(player_type *creature_ptr);
 BIT_FLAGS is_resist_cold(player_type *creature_ptr);
 BIT_FLAGS is_vuln_cold(player_type *creature_ptr);
 BIT_FLAGS is_resist_pois(player_type *creature_ptr);
