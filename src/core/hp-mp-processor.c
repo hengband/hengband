@@ -106,6 +106,8 @@ void process_player_hp_mp(player_type *creature_ptr)
                 damage = damage / 3;
             if (is_oppose_fire(creature_ptr))
                 damage = damage / 3;
+
+
             if (creature_ptr->levitation)
                 damage = damage / 5;
 
