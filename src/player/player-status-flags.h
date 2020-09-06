@@ -102,6 +102,7 @@ BIT_FLAGS is_immune_acid(player_type *creature_ptr);
 BIT_FLAGS is_immune_elec(player_type *creature_ptr);
 BIT_FLAGS is_immune_fire(player_type *creature_ptr);
 BIT_FLAGS is_immune_cold(player_type *creature_ptr);
+BIT_FLAGS is_immune_dark(player_type *creature_ptr);
 bool has_right_hand_weapon(player_type *creature_ptr);
 bool has_left_hand_weapon(player_type *creature_ptr);
 bool has_two_handed_weapons(player_type *creature_ptr);

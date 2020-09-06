@@ -1543,6 +1543,21 @@ BIT_FLAGS is_immune_cold(player_type *creature_ptr)
     return result;
 }
 
+BIT_FLAGS is_immune_dark(player_type *creature_ptr)
+{
+    BIT_FLAGS result = 0L;
+
+    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
+        result |= 0x01 << FLAG_CAUSE_RACE;
+    }
+
+    if (creature_ptr->wraith_form) {
+        result |= 0x01 << FLAG_CAUSE_MAGIC_TIME_EFFECT;
+    }
+
+    return result;
+}
+
 bool has_right_hand_weapon(player_type *creature_ptr)
 {
     if (has_melee_weapon(creature_ptr, INVEN_RARM))
