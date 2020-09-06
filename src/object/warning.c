@@ -144,13 +144,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
             ignore_wraith_form = TRUE;
             break;
         }
-
-        if (target_ptr->muta3 & MUT3_VULN_ELEM)
-            dam *= 2;
-        if (is_specific_player_race(target_ptr, RACE_ENT))
-            dam += dam / 3;
-        if (target_ptr->special_defense & KATA_KOUKIJIN)
-            dam += dam / 3;
+        dam = dam * calc_vuln_fire_rate(target_ptr) / 100;
         if (target_ptr->resist_fire)
             dam = (dam + 2) / 3;
         if (is_oppose_fire(target_ptr))
