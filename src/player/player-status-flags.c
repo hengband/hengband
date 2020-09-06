@@ -1175,6 +1175,16 @@ BIT_FLAGS is_resist_lite(player_type *creature_ptr)
     return result;
 }
 
+BIT_FLAGS is_vuln_lite(player_type *creature_ptr)
+{
+    BIT_FLAGS result = 0L;
+    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_S_FAIRY)
+        || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
+        result |= FLAG_CAUSE_RACE;
+    }
+    return result;
+}
+
 BIT_FLAGS is_resist_dark(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
