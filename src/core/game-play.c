@@ -86,6 +86,7 @@
 #include "view/display-player.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include "wizard/wizard-special-process.h"
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game

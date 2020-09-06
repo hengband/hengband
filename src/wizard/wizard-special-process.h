@@ -15,3 +15,4 @@ void wiz_dump_options(void);
 void set_gametime(void);
 void wiz_zap_surrounding_monsters(player_type *caster_ptr);
 void wiz_zap_floor_monsters(player_type *caster_ptr);
+extern void cheat_death(player_type *creature_ptr);
