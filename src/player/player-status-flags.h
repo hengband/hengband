@@ -73,6 +73,7 @@ void has_extra_blow(player_type *creature_ptr);
 BIT_FLAGS is_resist_acid(player_type *creature_ptr);
 BIT_FLAGS is_vuln_acid(player_type *creature_ptr);
 BIT_FLAGS is_resist_elec(player_type *creature_ptr);
+BIT_FLAGS is_vuln_elec(player_type *creature_ptr);
 BIT_FLAGS is_resist_fire(player_type *creature_ptr);
 BIT_FLAGS is_resist_cold(player_type *creature_ptr);
 BIT_FLAGS is_resist_pois(player_type *creature_ptr);
