@@ -119,10 +119,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
             break;
         }
 
-        if (target_ptr->muta3 & MUT3_VULN_ELEM)
-            dam *= 2;
-        if (target_ptr->special_defense & KATA_KOUKIJIN)
-            dam += dam / 3;
+        dam = dam * calc_vuln_acid_rate(target_ptr) / 100;
         if (target_ptr->resist_acid)
             dam = (dam + 2) / 3;
         if (is_oppose_acid(target_ptr))
