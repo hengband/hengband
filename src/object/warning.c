@@ -164,13 +164,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_LITE:
         if (target_ptr->resist_lite)
             dam /= 2; /* Worst case of 4 / (d4 + 7) */
-        if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE))
-            dam *= 2;
-        else if (is_specific_player_race(target_ptr, RACE_S_FAIRY))
-            dam = dam * 4 / 3;
-
-        if (target_ptr->wraith_form)
-            dam *= 2;
+        dam = dam * calc_vuln_lite_rate(target_ptr) / 100;
         break;
 
     case GF_DARK:

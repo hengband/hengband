@@ -365,17 +365,15 @@ void effect_player_lite(player_type *target_ptr, effect_player_type *ep_ptr)
         (void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
     }
 
+    ep_ptr->dam = ep_ptr->dam * calc_vuln_fire_rate(target_ptr) / 100;
+
     if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE)) {
         if (!check_multishadow(target_ptr))
             msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
-        ep_ptr->dam *= 2;
-    } else if (is_specific_player_race(target_ptr, RACE_S_FAIRY)) {
-        ep_ptr->dam = ep_ptr->dam * 4 / 3;
     }
 
     if (target_ptr->wraith_form)
         ep_ptr->dam *= 2;
-
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 
     if (!target_ptr->wraith_form || check_multishadow(target_ptr))
