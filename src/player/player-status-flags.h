@@ -88,6 +88,7 @@ BIT_FLAGS is_resist_conf(player_type *creature_ptr);
 BIT_FLAGS is_resist_sound(player_type *creature_ptr);
 BIT_FLAGS is_resist_lite(player_type *creature_ptr);
 BIT_FLAGS is_vuln_lite(player_type *creature_ptr);
+PERCENTAGE calc_vuln_lite_rate(player_type *creature_ptr);
 BIT_FLAGS is_resist_dark(player_type *creature_ptr);
 BIT_FLAGS is_resist_chaos(player_type *creature_ptr);
 BIT_FLAGS is_resist_disen(player_type *creature_ptr);

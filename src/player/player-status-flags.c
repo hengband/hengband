@@ -1258,6 +1258,21 @@ BIT_FLAGS is_vuln_lite(player_type *creature_ptr)
     return result;
 }
 
+PERCENTAGE calc_vuln_lite_rate(player_type *creature_ptr)
+{
+    PERCENTAGE per = 100;
+    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
+        per *= 2;
+    } else if (is_specific_player_race(creature_ptr, RACE_S_FAIRY)) {
+        per = per * 4 / 3;
+    }
+
+    if (creature_ptr->wraith_form)
+        per *= 2;
+
+    return per;
+}
+
 BIT_FLAGS is_resist_dark(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
