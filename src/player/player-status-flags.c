@@ -1004,6 +1004,23 @@ BIT_FLAGS is_resist_fire(player_type *creature_ptr)
     return result;
 }
 
+BIT_FLAGS is_vuln_fire(player_type *creature_ptr)
+{
+    BIT_FLAGS result = 0L;
+    if (creature_ptr->muta3 & MUT3_VULN_ELEM) {
+        result |= FLAG_CAUSE_MUTATION;
+    }
+
+    if (is_specific_player_race(creature_ptr, RACE_ENT)) {
+        result |= FLAG_CAUSE_RACE;
+    }
+
+    if (creature_ptr->special_defense & KATA_KOUKIJIN) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
+    }
+    return result;
+}
+
 BIT_FLAGS is_resist_cold(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
