@@ -935,6 +935,23 @@ BIT_FLAGS is_vuln_acid(player_type *creature_ptr)
     return result;
 }
 
+PERCENTAGE calc_vuln_acid_rate(player_type *creature_ptr)
+{
+    PERCENTAGE per = 100;
+    int i;
+    BIT_FLAGS flgs = is_vuln_acid(creature_ptr);
+    for (i = 0; i < FLAG_CAUSE_MAX; i++) {
+        if (flgs & (0x01 << i)) {
+            if (i == FLAG_CAUSE_MUTATION) {
+                per *= 2;
+            } else {
+                per += per / 3;
+            }
+        }
+    }
+    return per;
+}
+
 BIT_FLAGS is_resist_elec(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
