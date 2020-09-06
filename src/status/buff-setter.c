@@ -86,11 +86,6 @@ void reset_tim_flags(player_type *creature_ptr)
 
     creature_ptr->timewalk = FALSE;
 
-    if (is_specific_player_race(creature_ptr, RACE_BALROG) && (creature_ptr->lev > 44))
-        creature_ptr->oppose_fire = 1;
-    if ((creature_ptr->pclass == CLASS_NINJA) && (creature_ptr->lev > 44))
-        creature_ptr->oppose_pois = 1;
-
     if (creature_ptr->riding) {
         (void)set_monster_fast(creature_ptr, creature_ptr->riding, 0);
         (void)set_monster_slow(creature_ptr, creature_ptr->riding, 0);
