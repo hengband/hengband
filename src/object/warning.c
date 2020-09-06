@@ -127,11 +127,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
             ignore_wraith_form = TRUE;
             break;
         }
-
-        if (target_ptr->muta3 & MUT3_VULN_ELEM)
-            dam *= 2;
-        if (target_ptr->special_defense & KATA_KOUKIJIN)
-            dam += dam / 3;
+        dam = dam * calc_vuln_cold_rate(target_ptr) / 100;
         if (target_ptr->resist_cold)
             dam = (dam + 2) / 3;
         if (is_oppose_cold(target_ptr))

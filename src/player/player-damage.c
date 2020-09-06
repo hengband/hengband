@@ -295,10 +295,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    if (creature_ptr->muta3 & MUT3_VULN_ELEM)
-        dam *= 2;
-    if (creature_ptr->special_defense & KATA_KOUKIJIN)
-        dam += dam / 3;
+    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_cold)
