@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+void reset_tim_flags(player_type *creature_ptr);
 bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);

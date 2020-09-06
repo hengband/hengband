@@ -167,7 +167,6 @@ hengband_SOURCES = \
 	core/show-file.c core/show-file.h \
 	core/special-internal-keys.h \
 	core/speed-table.c core/speed-table.h \
-	core/status-reseter.c core/status-reseter.h \
 	core/stuff-handler.c core/stuff-handler.h \
 	core/turn-compensator.c core/turn-compensator.h \
 	core/visuals-reseter.c core/visuals-reseter.h \

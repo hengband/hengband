@@ -27,6 +27,12 @@
 #include "status/temporary-resistance.h"
 #include "view/display-messages.h"
 
+#include "status/buff-setter.h"
+#include "core/speed-table.h"
+#include "monster/monster-status-setter.h"
+#include "player/attack-defense-types.h"
+#include "player/player-race.h"
+
 /*!
  * @brief プレイヤーに魔力消去効果を与える。
  * @return なし
