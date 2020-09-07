@@ -382,7 +382,7 @@ hengband_SOURCES = \
 	main/angband-initializer.c main/angband-initializer.h \
 	main/game-data-initializer.c main/game-data-initializer.h \
 	main/info-initializer.c main/info-initializer.h \
-	main/initialization-error-messages-table.c main/initialization-error-messages-table.h \
+	main/init-error-messages-table.c main/init-error-messages-table.h \
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
 	main/sound-of-music.c main/sound-of-music.h \
@@ -566,6 +566,7 @@ hengband_SOURCES = \
 	object-activation/activation-resistance.c object-activation/activation-resistance.h \
 	object-activation/activation-switcher.c object-activation/activation-switcher.h \
 	object-activation/activation-teleport.c object-activation/activation-teleport.h \
+	object-activation/activation-util.c object-activation/activation-util.h \
 	\
 	object-enchant/activation-info-table.c object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.c object-enchant/apply-magic.h \
@@ -817,7 +818,7 @@ hengband_SOURCES = \
 	system/gamevalue.h \
 	\
 	target/grid-selector.c target/grid-selector.h \
-	target/projection-path-calculator.c target/projection-path-calculator.h
+	target/projection-path-calculator.c target/projection-path-calculator.h \
 	target/target-checker.c target/target-checker.h \
 	target/target-describer.c target/target-describer.h \
 	target/target-getter.c target/target-getter.h \
