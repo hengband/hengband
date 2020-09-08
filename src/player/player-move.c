@@ -29,6 +29,7 @@
 #include "monster/monster-update.h"
 #include "perception/object-perception.h"
 #include "player/attack-defense-types.h"
+#include "player/player-status-flags.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-floor.h"
 #include "spell/spell-types.h"
@@ -174,13 +175,13 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         }
 
         if ((creature_ptr->action == ACTION_HAYAGAKE)
-            && (!have_flag(f_ptr->flags, FF_PROJECT) || (!creature_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP)))) {
+            && (!has_flag(f_ptr->flags, FF_PROJECT) || (!creature_ptr->levitation && has_flag(f_ptr->flags, FF_DEEP)))) {
             msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
             set_action(creature_ptr, ACTION_NONE);
         }
 
         if (creature_ptr->prace == RACE_MERFOLK) {
-            if (have_flag(f_ptr->flags, FF_WATER) ^ have_flag(of_ptr->flags, FF_WATER)) {
+            if (has_flag(f_ptr->flags, FF_WATER) ^ has_flag(of_ptr->flags, FF_WATER)) {
                 creature_ptr->update |= PU_BONUS;
                 update_creature(creature_ptr);
             }
@@ -204,19 +205,19 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
     if (!(mpe_mode & MPE_DONT_PICKUP))
         carry(creature_ptr, (mpe_mode & MPE_DO_PICKUP) ? TRUE : FALSE);
 
-    if (have_flag(f_ptr->flags, FF_STORE)) {
+    if (has_flag(f_ptr->flags, FF_STORE)) {
         disturb(creature_ptr, FALSE, TRUE);
         free_turn(creature_ptr);
         command_new = SPECIAL_KEY_STORE;
-    } else if (have_flag(f_ptr->flags, FF_BLDG)) {
+    } else if (has_flag(f_ptr->flags, FF_BLDG)) {
         disturb(creature_ptr, FALSE, TRUE);
         free_turn(creature_ptr);
         command_new = SPECIAL_KEY_BUILDING;
-    } else if (have_flag(f_ptr->flags, FF_QUEST_ENTER)) {
+    } else if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
         disturb(creature_ptr, FALSE, TRUE);
         free_turn(creature_ptr);
         command_new = SPECIAL_KEY_QUEST;
-    } else if (have_flag(f_ptr->flags, FF_QUEST_EXIT)) {
+    } else if (has_flag(f_ptr->flags, FF_QUEST_EXIT)) {
         if (quest[floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
             complete_quest(creature_ptr, floor_ptr->inside_quest);
 
@@ -226,9 +227,9 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
         creature_ptr->leaving = TRUE;
-    } else if (have_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
+    } else if (has_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
         disturb(creature_ptr, FALSE, TRUE);
-        if (g_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET)) {
+        if (g_ptr->mimic || has_flag(f_ptr->flags, FF_SECRET)) {
             msg_print(_("トラップだ！", "You found a trap!"));
             disclose_grid(creature_ptr, creature_ptr->y, creature_ptr->x);
         }
@@ -261,7 +262,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
 {
     feature_type *f_ptr = &f_info[feat];
-    if (!have_flag(f_ptr->flags, FF_TRAP))
+    if (!has_flag(f_ptr->flags, FF_TRAP))
         return TRUE;
 
     switch (f_ptr->subtype) {
@@ -277,11 +278,11 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
             return TRUE;
         break;
     case TRAP_FIRE:
-        if (creature_ptr->immune_fire)
+        if (is_immune_fire(creature_ptr))
             return TRUE;
         break;
     case TRAP_ACID:
-        if (creature_ptr->immune_acid)
+        if (is_immune_acid(creature_ptr))
             return TRUE;
         break;
     case TRAP_BLIND:

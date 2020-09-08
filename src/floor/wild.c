@@ -472,15 +472,15 @@ void wilderness_gen(player_type *creature_ptr)
 
             feature_type *f_ptr;
             f_ptr = &f_info[get_feat_mimic(g_ptr)];
-            if (!is_mirror_grid(g_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) && !have_flag(f_ptr->flags, FF_ENTRANCE)) {
+            if (!is_mirror_grid(g_ptr) && !has_flag(f_ptr->flags, FF_QUEST_ENTER) && !has_flag(f_ptr->flags, FF_ENTRANCE)) {
                 g_ptr->info &= ~(CAVE_GLOW);
-                if (!have_flag(f_ptr->flags, FF_REMEMBER))
+                if (!has_flag(f_ptr->flags, FF_REMEMBER))
                     g_ptr->info &= ~(CAVE_MARK);
 
                 continue;
             }
 
-            if (!have_flag(f_ptr->flags, FF_ENTRANCE))
+            if (!has_flag(f_ptr->flags, FF_ENTRANCE))
                 continue;
 
             g_ptr->info |= CAVE_GLOW;
@@ -496,7 +496,7 @@ void wilderness_gen(player_type *creature_ptr)
                 g_ptr = &floor_ptr->grid_array[y][x];
                 feature_type *f_ptr;
                 f_ptr = &f_info[g_ptr->feat];
-                if (!have_flag(f_ptr->flags, FF_BLDG))
+                if (!has_flag(f_ptr->flags, FF_BLDG))
                     continue;
 
                 if ((f_ptr->subtype != 4) && !((creature_ptr->town_num == 1) && (f_ptr->subtype == 0)))
@@ -516,7 +516,7 @@ void wilderness_gen(player_type *creature_ptr)
             for (x = 0; x < floor_ptr->width; x++) {
                 grid_type *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
-                if (!cave_have_flag_grid(g_ptr, FF_ENTRANCE))
+                if (!cave_has_flag_grid(g_ptr, FF_ENTRANCE))
                     continue;
 
                 if (g_ptr->m_idx != 0)
@@ -867,14 +867,14 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
         return TRUE;
     }
 
-    bool have_pet = FALSE;
+    bool has_pet = FALSE;
     for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
         if (is_pet(m_ptr) && i != creature_ptr->riding)
-            have_pet = TRUE;
+            has_pet = TRUE;
 
         if (monster_csleep_remaining(m_ptr) || (m_ptr->cdis > MAX_SIGHT) || !is_hostile(m_ptr))
             continue;
@@ -884,7 +884,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
         return FALSE;
     }
 
-    if (have_pet) {
+    if (has_pet) {
         concptr msg = _("ペットを置いて広域マップに入りますか？", "Do you leave your pets behind? ");
         if (!get_check_strict(creature_ptr, msg, CHECK_OKAY_CANCEL)) {
             free_turn(creature_ptr);

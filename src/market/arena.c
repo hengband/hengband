@@ -2,7 +2,7 @@
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
-#include "core/status-reseter.h"
+#include "status/buff-setter.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"

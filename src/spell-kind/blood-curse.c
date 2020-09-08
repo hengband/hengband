@@ -9,6 +9,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/base-status.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"

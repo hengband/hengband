@@ -214,7 +214,6 @@
     <ClCompile Include="..\..\src\core\asking-player.c" />
     <ClCompile Include="..\..\src\core\disturbance.c" />
     <ClCompile Include="..\..\src\core\object-compressor.c" />
-    <ClCompile Include="..\..\src\core\status-reseter.c" />
     <ClCompile Include="..\..\src\core\visuals-reseter.c" />
     <ClCompile Include="..\..\src\core\window-redrawer.c" />
     <ClCompile Include="..\..\src\dungeon\quest-completion-checker.c" />
@@ -855,7 +854,6 @@
     <ClInclude Include="..\..\src\core\disturbance.h" />
     <ClInclude Include="..\..\src\core\object-compressor.h" />
     <ClInclude Include="..\..\src\core\player-redraw-types.h" />
-    <ClInclude Include="..\..\src\core\status-reseter.h" />
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\core\window-redrawer.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h" />

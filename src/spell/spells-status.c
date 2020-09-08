@@ -439,7 +439,7 @@ bool fishing(player_type *creature_ptr)
     POSITION y = creature_ptr->y + ddy[dir];
     POSITION x = creature_ptr->x + ddx[dir];
     creature_ptr->fishing_dir = dir;
-    if (!cave_have_flag_bold(creature_ptr->current_floor_ptr, y, x, FF_WATER)) {
+    if (!cave_has_flag_bold(creature_ptr->current_floor_ptr, y, x, FF_WATER)) {
         msg_print(_("そこは水辺ではない。", "There is no fishing place."));
         return FALSE;
     }

@@ -308,7 +308,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
         o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_YOIYAMI_ROBE);
 
     if (z_older_than(10, 4, 9)) {
-        if (have_flag(o_ptr->art_flags, TR_MAGIC_MASTERY)) {
+        if (has_flag(o_ptr->art_flags, TR_MAGIC_MASTERY)) {
             remove_flag(o_ptr->art_flags, TR_MAGIC_MASTERY);
             add_flag(o_ptr->art_flags, TR_DEC_MANA);
         }

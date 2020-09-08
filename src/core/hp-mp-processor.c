@@ -20,6 +20,7 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
@@ -89,10 +90,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !creature_ptr->immune_fire) {
+    if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !is_immune_fire(creature_ptr)) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -105,6 +106,8 @@ void process_player_hp_mp(player_type *creature_ptr)
                 damage = damage / 3;
             if (is_oppose_fire(creature_ptr))
                 damage = damage / 3;
+
+
             if (creature_ptr->levitation)
                 damage = damage / 5;
 
@@ -126,10 +129,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_cold) {
+    if (has_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !is_immune_cold(creature_ptr)) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -161,10 +164,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_elec) {
+    if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !is_immune_elec(creature_ptr)) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -196,10 +199,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_acid) {
+    if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !is_immune_acid(creature_ptr)) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -231,10 +234,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_POISON_PUDDLE) && !is_invuln(creature_ptr)) {
+    if (has_flag(f_ptr->flags, FF_POISON_PUDDLE) && !is_invuln(creature_ptr)) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -270,7 +273,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation && !creature_ptr->can_swim
+    if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation && !creature_ptr->can_swim
         && !creature_ptr->resist_water) {
         if (creature_ptr->total_weight > weight_limit(creature_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
@@ -281,7 +284,7 @@ void process_player_hp_mp(player_type *creature_ptr)
 
     if (creature_ptr->riding) {
         HIT_POINT damage;
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !creature_ptr->immune_fire) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !is_immune_fire(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (is_specific_player_race(creature_ptr, RACE_ENT))
                 damage += damage / 3;
@@ -292,7 +295,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             msg_print(_("熱い！", "It's hot!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
         }
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !creature_ptr->immune_elec) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !is_immune_elec(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (is_specific_player_race(creature_ptr, RACE_ANDROID))
                 damage += damage / 3;
@@ -303,7 +306,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             msg_print(_("痛い！", "It hurts!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
         }
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !creature_ptr->immune_cold) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !is_immune_cold(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (creature_ptr->resist_cold)
                 damage = damage / 3;
@@ -321,7 +324,7 @@ void process_player_hp_mp(player_type *creature_ptr)
      * reduced below 0 hp by being inside a stone wall; others
      * WILL BE!
      */
-    if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) {
+    if (!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY)) {
         if (!is_invuln(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->tim_pass_wall
             && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall)) {
             concptr dam_desc;

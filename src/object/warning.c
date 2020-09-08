@@ -30,6 +30,7 @@
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "spell/spell-types.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
@@ -58,7 +59,7 @@ object_type *choose_warning_item(player_type *creature_ptr)
         object_type *o_ptr = &creature_ptr->inventory_list[i];
 
         object_flags(creature_ptr, o_ptr, flgs);
-        if (have_flag(flgs, TR_WARNING)) {
+        if (has_flag(flgs, TR_WARNING)) {
             choices[number] = i;
             number++;
         }
@@ -86,18 +87,12 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     /* Vulnerability, resistance and immunity */
     switch (typ) {
     case GF_ELEC:
-        if (target_ptr->immune_elec) {
+        if (is_immune_elec(target_ptr)) {
             dam = 0;
             ignore_wraith_form = TRUE;
             break;
         }
-
-        if (target_ptr->muta3 & MUT3_VULN_ELEM)
-            dam *= 2;
-        if (target_ptr->special_defense & KATA_KOUKIJIN)
-            dam += dam / 3;
-        if (is_specific_player_race(target_ptr, RACE_ANDROID))
-            dam += dam / 3;
+        dam = dam * calc_vuln_elec_rate(target_ptr) / 100;
         if (target_ptr->resist_elec)
             dam = (dam + 2) / 3;
         if (is_oppose_elec(target_ptr))
@@ -112,16 +107,13 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_ACID:
-        if (target_ptr->immune_acid) {
+        if (is_immune_acid(target_ptr)) {
             dam = 0;
             ignore_wraith_form = TRUE;
             break;
         }
 
-        if (target_ptr->muta3 & MUT3_VULN_ELEM)
-            dam *= 2;
-        if (target_ptr->special_defense & KATA_KOUKIJIN)
-            dam += dam / 3;
+        dam = dam * calc_vuln_acid_rate(target_ptr) / 100;
         if (target_ptr->resist_acid)
             dam = (dam + 2) / 3;
         if (is_oppose_acid(target_ptr))
@@ -130,16 +122,12 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_COLD:
     case GF_ICE:
-        if (target_ptr->immune_cold) {
+        if (is_immune_cold(target_ptr)) {
             dam = 0;
             ignore_wraith_form = TRUE;
             break;
         }
-
-        if (target_ptr->muta3 & MUT3_VULN_ELEM)
-            dam *= 2;
-        if (target_ptr->special_defense & KATA_KOUKIJIN)
-            dam += dam / 3;
+        dam = dam * calc_vuln_cold_rate(target_ptr) / 100;
         if (target_ptr->resist_cold)
             dam = (dam + 2) / 3;
         if (is_oppose_cold(target_ptr))
@@ -147,18 +135,12 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_FIRE:
-        if (target_ptr->immune_fire) {
+        if (is_immune_fire(target_ptr)) {
             dam = 0;
             ignore_wraith_form = TRUE;
             break;
         }
-
-        if (target_ptr->muta3 & MUT3_VULN_ELEM)
-            dam *= 2;
-        if (is_specific_player_race(target_ptr, RACE_ENT))
-            dam += dam / 3;
-        if (target_ptr->special_defense & KATA_KOUKIJIN)
-            dam += dam / 3;
+        dam = dam * calc_vuln_fire_rate(target_ptr) / 100;
         if (target_ptr->resist_fire)
             dam = (dam + 2) / 3;
         if (is_oppose_fire(target_ptr))
@@ -182,13 +164,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_LITE:
         if (target_ptr->resist_lite)
             dam /= 2; /* Worst case of 4 / (d4 + 7) */
-        if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE))
-            dam *= 2;
-        else if (is_specific_player_race(target_ptr, RACE_S_FAIRY))
-            dam = dam * 4 / 3;
-
-        if (target_ptr->wraith_form)
-            dam *= 2;
+        dam = dam * calc_vuln_lite_rate(target_ptr) / 100;
         break;
 
     case GF_DARK:

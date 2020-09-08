@@ -144,7 +144,7 @@ static void calc_throw_range(player_type *creature_ptr, it_type *it_ptr)
 
     int mul = 10 + 2 * (it_ptr->mult - 1);
     int div = ((it_ptr->q_ptr->weight > 10) ? it_ptr->q_ptr->weight : 10);
-    if ((have_flag(it_ptr->obj_flags, TR_THROW)) || it_ptr->boomerang)
+    if ((has_flag(it_ptr->obj_flags, TR_THROW)) || it_ptr->boomerang)
         div /= 2;
 
     it_ptr->tdis = (adj_str_blow[creature_ptr->stat_ind[A_STR]] + 20) * mul / div;
@@ -204,12 +204,12 @@ static void set_class_specific_throw_params(player_type *creature_ptr, it_type *
     it_ptr->x = creature_ptr->x;
     handle_stuff(creature_ptr);
     it_ptr->shuriken = (creature_ptr->pclass == CLASS_NINJA)
-        && ((it_ptr->q_ptr->tval == TV_SPIKE) || ((have_flag(it_ptr->obj_flags, TR_THROW)) && (it_ptr->q_ptr->tval == TV_SWORD)));
+        && ((it_ptr->q_ptr->tval == TV_SPIKE) || ((has_flag(it_ptr->obj_flags, TR_THROW)) && (it_ptr->q_ptr->tval == TV_SWORD)));
 }
 
 static void set_racial_chance(player_type *creature_ptr, it_type *it_ptr)
 {
-    if (have_flag(it_ptr->obj_flags, TR_THROW))
+    if (has_flag(it_ptr->obj_flags, TR_THROW))
         it_ptr->chance = ((creature_ptr->skill_tht) + ((creature_ptr->to_h_b + it_ptr->q_ptr->to_h) * BTH_PLUS_ADJ));
     else
         it_ptr->chance = (creature_ptr->skill_tht + (creature_ptr->to_h_b * BTH_PLUS_ADJ));
@@ -223,7 +223,7 @@ static bool check_racial_target_bold(player_type *creature_ptr, it_type *it_ptr)
     it_ptr->ny[it_ptr->cur_dis] = it_ptr->y;
     it_ptr->nx[it_ptr->cur_dis] = it_ptr->x;
     mmove2(&it_ptr->ny[it_ptr->cur_dis], &it_ptr->nx[it_ptr->cur_dis], creature_ptr->y, creature_ptr->x, it_ptr->ty, it_ptr->tx);
-    if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT))
+    if (cave_has_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT))
         return FALSE;
 
     it_ptr->hit_wall = TRUE;
@@ -292,7 +292,7 @@ static void calc_racial_power_damage(player_type *creature_ptr, it_type *it_ptr)
     if (it_ptr->boomerang) {
         it_ptr->tdam *= (it_ptr->mult + creature_ptr->num_blow[it_ptr->item - INVEN_RARM]);
         it_ptr->tdam += creature_ptr->to_d_m;
-    } else if (have_flag(it_ptr->obj_flags, TR_THROW)) {
+    } else if (has_flag(it_ptr->obj_flags, TR_THROW)) {
         it_ptr->tdam *= (3 + it_ptr->mult);
         it_ptr->tdam += creature_ptr->to_d_m;
     } else {
@@ -491,7 +491,7 @@ static void drop_thrown_item(player_type *creature_ptr, it_type *it_ptr)
     if (!it_ptr->do_drop)
         return;
 
-    if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
+    if (cave_has_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
         (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->y, it_ptr->x);
     else
         (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->prev_y, it_ptr->prev_x);

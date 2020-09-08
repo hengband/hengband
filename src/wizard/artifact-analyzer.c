@@ -34,7 +34,7 @@
 static concptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE], const flag_desc *flag_ptr, concptr *desc_ptr, const int n_elmnts)
 {
     for (int i = 0; i < n_elmnts; ++i)
-        if (have_flag(art_flags, flag_ptr[i].flag))
+        if (has_flag(art_flags, flag_ptr[i].flag))
             *desc_ptr++ = flag_ptr[i].desc;
 
     return desc_ptr;
@@ -72,11 +72,11 @@ static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_
     object_flags(player_ptr, o_ptr, flgs);
     affects_list = pi_ptr->pval_affects;
     sprintf(pi_ptr->pval_desc, "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
-    if (have_flag(flgs, TR_STR) && have_flag(flgs, TR_INT) && have_flag(flgs, TR_WIS) && have_flag(flgs, TR_DEX) && have_flag(flgs, TR_CON)
-        && have_flag(flgs, TR_CHR)) {
+    if (has_flag(flgs, TR_STR) && has_flag(flgs, TR_INT) && has_flag(flgs, TR_WIS) && has_flag(flgs, TR_DEX) && has_flag(flgs, TR_CON)
+        && has_flag(flgs, TR_CHR)) {
         *affects_list++ = _("全能力", "All stats");
-    } else if (have_flag(flgs, TR_STR) || have_flag(flgs, TR_INT) || have_flag(flgs, TR_WIS) || have_flag(flgs, TR_DEX) || have_flag(flgs, TR_CON)
-        || have_flag(flgs, TR_CHR)) {
+    } else if (has_flag(flgs, TR_STR) || has_flag(flgs, TR_INT) || has_flag(flgs, TR_WIS) || has_flag(flgs, TR_DEX) || has_flag(flgs, TR_CON)
+        || has_flag(flgs, TR_CHR)) {
         affects_list = spoiler_flag_aux(flgs, stat_flags_desc, affects_list, N_ELEMENTS(stat_flags_desc));
     }
 
@@ -155,11 +155,11 @@ static void analyze_sustains(player_type *player_ptr, object_type *o_ptr, concpt
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(player_ptr, o_ptr, flgs);
-    if (have_flag(flgs, TR_SUST_STR) && have_flag(flgs, TR_SUST_INT) && have_flag(flgs, TR_SUST_WIS) && have_flag(flgs, TR_SUST_DEX)
-        && have_flag(flgs, TR_SUST_CON) && have_flag(flgs, TR_SUST_CHR)) {
+    if (has_flag(flgs, TR_SUST_STR) && has_flag(flgs, TR_SUST_INT) && has_flag(flgs, TR_SUST_WIS) && has_flag(flgs, TR_SUST_DEX)
+        && has_flag(flgs, TR_SUST_CON) && has_flag(flgs, TR_SUST_CHR)) {
         *sustain_list++ = _("全能力", "All stats");
-    } else if (have_flag(flgs, TR_SUST_STR) || have_flag(flgs, TR_SUST_INT) || have_flag(flgs, TR_SUST_WIS) || have_flag(flgs, TR_SUST_DEX)
-        || have_flag(flgs, TR_SUST_CON) || have_flag(flgs, TR_SUST_CHR)) {
+    } else if (has_flag(flgs, TR_SUST_STR) || has_flag(flgs, TR_SUST_INT) || has_flag(flgs, TR_SUST_WIS) || has_flag(flgs, TR_SUST_DEX)
+        || has_flag(flgs, TR_SUST_CON) || has_flag(flgs, TR_SUST_CHR)) {
         sustain_list = spoiler_flag_aux(flgs, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
     }
 
@@ -183,28 +183,28 @@ static void analyze_misc_magic(player_type *player_ptr, object_type *o_ptr, conc
     misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
     misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
     POSITION rad = 0;
-    if (have_flag(flgs, TR_LITE_1))
+    if (has_flag(flgs, TR_LITE_1))
         rad += 1;
 
-    if (have_flag(flgs, TR_LITE_2))
+    if (has_flag(flgs, TR_LITE_2))
         rad += 2;
 
-    if (have_flag(flgs, TR_LITE_3))
+    if (has_flag(flgs, TR_LITE_3))
         rad += 3;
 
-    if (have_flag(flgs, TR_LITE_M1))
+    if (has_flag(flgs, TR_LITE_M1))
         rad -= 1;
 
-    if (have_flag(flgs, TR_LITE_M2))
+    if (has_flag(flgs, TR_LITE_M2))
         rad -= 2;
 
-    if (have_flag(flgs, TR_LITE_M3))
+    if (has_flag(flgs, TR_LITE_M3))
         rad -= 3;
 
     if (o_ptr->name2 == EGO_LITE_SHINE)
         rad++;
 
-    if (have_flag(flgs, TR_LITE_FUEL)) {
+    if (has_flag(flgs, TR_LITE_FUEL)) {
         if (rad > 0)
             sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
     } else {
@@ -218,7 +218,7 @@ static void analyze_misc_magic(player_type *player_ptr, object_type *o_ptr, conc
     if (rad != 0)
         *misc_list++ = quark_str(quark_add(desc));
 
-    if (have_flag(flgs, TR_TY_CURSE))
+    if (has_flag(flgs, TR_TY_CURSE))
         *misc_list++ = _("太古の怨念", "Ancient Curse");
 
     if (o_ptr->curse_flags & TRC_PERMA_CURSE)
@@ -228,10 +228,10 @@ static void analyze_misc_magic(player_type *player_ptr, object_type *o_ptr, conc
     else if (o_ptr->curse_flags & TRC_CURSED)
         *misc_list++ = _("呪い", "Cursed");
 
-    if (have_flag(flgs, TR_ADD_L_CURSE))
+    if (has_flag(flgs, TR_ADD_L_CURSE))
         *misc_list++ = _("呪いを増やす", "Cursing");
 
-    if (have_flag(flgs, TR_ADD_H_CURSE))
+    if (has_flag(flgs, TR_ADD_H_CURSE))
         *misc_list++ = _("強力な呪いを増やす", "Heavily Cursing");
 
     *misc_list = NULL;

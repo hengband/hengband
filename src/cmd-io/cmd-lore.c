@@ -34,7 +34,7 @@
  */
 void do_cmd_query_symbol(player_type *creature_ptr)
 {
-    IDX i;
+    MONRACE_IDX i;
     int n;
     MONRACE_IDX r_idx;
     char sym, query;
@@ -203,6 +203,6 @@ void do_cmd_query_symbol(player_type *creature_ptr)
         }
     }
 
-    C_KILL(who, max_r_idx, IDX);
+    C_KILL(who, max_r_idx, MONRACE_IDX);
     prt(buf, 0, 0);
 }

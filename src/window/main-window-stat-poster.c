@@ -441,7 +441,7 @@ void print_status(player_type *creature_ptr)
     if (is_hero(creature_ptr))
         ADD_BAR_FLAG(BAR_HEROISM);
 
-    if (creature_ptr->shero)
+    if (is_shero(creature_ptr))
         ADD_BAR_FLAG(BAR_BERSERK);
 
     if (is_blessed(creature_ptr))

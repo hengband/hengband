@@ -29,6 +29,7 @@
 #include "player/eldritch-horror.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
@@ -452,7 +453,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
             m_ptr->smart |= (SM_RES_ACID);
         if (is_oppose_acid(player_ptr))
             m_ptr->smart |= (SM_OPP_ACID);
-        if (player_ptr->immune_acid)
+        if (is_immune_acid(player_ptr))
             m_ptr->smart |= (SM_IMM_ACID);
         break;
 
@@ -461,7 +462,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
             m_ptr->smart |= (SM_RES_ELEC);
         if (is_oppose_elec(player_ptr))
             m_ptr->smart |= (SM_OPP_ELEC);
-        if (player_ptr->immune_elec)
+        if (is_immune_elec(player_ptr))
             m_ptr->smart |= (SM_IMM_ELEC);
         break;
 
@@ -470,7 +471,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
             m_ptr->smart |= (SM_RES_FIRE);
         if (is_oppose_fire(player_ptr))
             m_ptr->smart |= (SM_OPP_FIRE);
-        if (player_ptr->immune_fire)
+        if (is_immune_fire(player_ptr))
             m_ptr->smart |= (SM_IMM_FIRE);
         break;
 
@@ -479,7 +480,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
             m_ptr->smart |= (SM_RES_COLD);
         if (is_oppose_cold(player_ptr))
             m_ptr->smart |= (SM_OPP_COLD);
-        if (player_ptr->immune_cold)
+        if (is_immune_cold(player_ptr))
             m_ptr->smart |= (SM_IMM_COLD);
         break;
 

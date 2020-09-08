@@ -143,7 +143,7 @@ void process_world(player_type *player_ptr)
                     feature_type *f_ptr = &f_info[i];
                     if (!f_ptr->name)
                         continue;
-                    if (!have_flag(f_ptr->flags, FF_STORE))
+                    if (!has_flag(f_ptr->flags, FF_STORE))
                         continue;
 
                     if (f_ptr->subtype == n) {

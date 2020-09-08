@@ -329,9 +329,9 @@ typedef struct player_type {
     bool riding_wield[2]; /* Riding weapon */
     bool riding_ryoute; /* Riding weapon */
     bool monlite;
-    bool yoiyami;
-    bool easy_2weapon;
-    bool down_saving;
+    BIT_FLAGS yoiyami;
+    BIT_FLAGS easy_2weapon;
+    BIT_FLAGS down_saving;
 
     POSITION cur_lite; /* Radius of lite (if any) */
 
@@ -366,82 +366,77 @@ typedef struct player_type {
     bool is_fired;
     bool level_up_message;
 
-    bool immune_acid; /* Immunity to acid */
-    bool immune_elec; /* Immunity to lightning */
-    bool immune_fire; /* Immunity to fire */
-    bool immune_cold; /* Immunity to cold */
+    BIT_FLAGS resist_acid; /* Resist acid */
+    BIT_FLAGS resist_elec; /* Resist lightning */
+    BIT_FLAGS resist_fire; /* Resist fire */
+    BIT_FLAGS resist_cold; /* Resist cold */
+    BIT_FLAGS resist_pois; /* Resist poison */
 
-    bool resist_acid; /* Resist acid */
-    bool resist_elec; /* Resist lightning */
-    bool resist_fire; /* Resist fire */
-    bool resist_cold; /* Resist cold */
-    bool resist_pois; /* Resist poison */
+    BIT_FLAGS resist_conf; /* Resist confusion */
+    BIT_FLAGS resist_sound; /* Resist sound */
+    BIT_FLAGS resist_lite; /* Resist light */
+    BIT_FLAGS resist_dark; /* Resist darkness */
+    BIT_FLAGS resist_chaos; /* Resist chaos */
+    BIT_FLAGS resist_disen; /* Resist disenchant */
+    BIT_FLAGS resist_shard; /* Resist shards */
+    BIT_FLAGS resist_nexus; /* Resist nexus */
+    BIT_FLAGS resist_blind; /* Resist blindness */
+    BIT_FLAGS resist_neth; /* Resist nether */
+    BIT_FLAGS resist_fear; /* Resist fear */
+    BIT_FLAGS resist_time; /* Resist time */
+    BIT_FLAGS resist_water; /* Resist water */
 
-    bool resist_conf; /* Resist confusion */
-    bool resist_sound; /* Resist sound */
-    bool resist_lite; /* Resist light */
-    bool resist_dark; /* Resist darkness */
-    bool resist_chaos; /* Resist chaos */
-    bool resist_disen; /* Resist disenchant */
-    bool resist_shard; /* Resist shards */
-    bool resist_nexus; /* Resist nexus */
-    bool resist_blind; /* Resist blindness */
-    bool resist_neth; /* Resist nether */
-    bool resist_fear; /* Resist fear */
-    bool resist_time; /* Resist time */
-    bool resist_water; /* Resist water */
+    BIT_FLAGS reflect; /* Reflect 'bolt' attacks */
+    BIT_FLAGS sh_fire; /* Fiery 'immolation' effect */
+    BIT_FLAGS sh_elec; /* Electric 'immolation' effect */
+    BIT_FLAGS sh_cold; /* Cold 'immolation' effect */
 
-    bool reflect; /* Reflect 'bolt' attacks */
-    bool sh_fire; /* Fiery 'immolation' effect */
-    bool sh_elec; /* Electric 'immolation' effect */
-    bool sh_cold; /* Cold 'immolation' effect */
+    BIT_FLAGS anti_magic; /* Anti-magic */
+    BIT_FLAGS anti_tele; /* Prevent teleportation */
 
-    bool anti_magic; /* Anti-magic */
-    bool anti_tele; /* Prevent teleportation */
-
-    bool sustain_str; /* Keep strength */
-    bool sustain_int; /* Keep intelligence */
-    bool sustain_wis; /* Keep wisdom */
-    bool sustain_dex; /* Keep dexterity */
-    bool sustain_con; /* Keep constitution */
-    bool sustain_chr; /* Keep charisma */
+    BIT_FLAGS sustain_str; /* Keep strength */
+    BIT_FLAGS sustain_int; /* Keep intelligence */
+    BIT_FLAGS sustain_wis; /* Keep wisdom */
+    BIT_FLAGS sustain_dex; /* Keep dexterity */
+    BIT_FLAGS sustain_con; /* Keep constitution */
+    BIT_FLAGS sustain_chr; /* Keep charisma */
 
     BIT_FLAGS cursed; /* Player is cursed */
 
     bool can_swim; /* No damage falling */
-    bool levitation; /* No damage falling */
-    bool lite; /* Permanent light */
-    bool free_act; /* Never paralyzed */
-    bool see_inv; /* Can see invisible */
-    bool regenerate; /* Regenerate hit pts */
-    bool hold_exp; /* Resist exp draining */
+    BIT_FLAGS levitation; /* No damage falling */
+    BIT_FLAGS lite; /* Permanent light */
+    BIT_FLAGS free_act; /* Never paralyzed */
+    BIT_FLAGS see_inv; /* Can see invisible */
+    BIT_FLAGS regenerate; /* Regenerate hit pts */
+    BIT_FLAGS hold_exp; /* Resist exp draining */
 
-    bool telepathy; /* Telepathy */
-    bool esp_animal;
-    bool esp_undead;
-    bool esp_demon;
-    bool esp_orc;
-    bool esp_troll;
-    bool esp_giant;
-    bool esp_dragon;
-    bool esp_human;
-    bool esp_evil;
-    bool esp_good;
-    bool esp_nonliving;
-    bool esp_unique;
+    BIT_FLAGS telepathy; /* Telepathy */
+    BIT_FLAGS esp_animal;
+    BIT_FLAGS esp_undead;
+    BIT_FLAGS esp_demon;
+    BIT_FLAGS esp_orc;
+    BIT_FLAGS esp_troll;
+    BIT_FLAGS esp_giant;
+    BIT_FLAGS esp_dragon;
+    BIT_FLAGS esp_human;
+    BIT_FLAGS esp_evil;
+    BIT_FLAGS esp_good;
+    BIT_FLAGS esp_nonliving;
+    BIT_FLAGS esp_unique;
 
-    bool slow_digest; /* Slower digestion */
-    bool bless_blade; /* Blessed blade */
-    bool xtra_might; /* Extra might bow */
-    bool impact[2]; /* Earthquake blows */
+    BIT_FLAGS slow_digest; /* Slower digestion */
+    BIT_FLAGS bless_blade; /* Blessed blade */
+    BIT_FLAGS xtra_might; /* Extra might bow */
+    BIT_FLAGS impact; /* Earthquake blows */
     bool pass_wall; /* Permanent wraithform */
     bool kill_wall;
-    bool dec_mana;
-    bool easy_spell;
-    bool heavy_spell;
-    bool warning;
-    bool mighty_throw;
-    bool see_nocto; /* Noctovision */
+    BIT_FLAGS dec_mana;
+    BIT_FLAGS easy_spell;
+    BIT_FLAGS heavy_spell;
+    BIT_FLAGS warning;
+    BIT_FLAGS mighty_throw;
+    BIT_FLAGS see_nocto; /* Noctovision */
     bool invoking_midnight_curse;
 
     DICE_NUMBER to_dd[2]; /* Extra dice/sides */
@@ -540,6 +535,7 @@ extern bool can_two_hands_wielding(player_type *creature_ptr);
 bool is_fast(player_type *creature_ptr);
 bool is_invuln(player_type *creature_ptr);
 bool is_hero(player_type *creature_ptr);
+bool is_shero(player_type *creature_ptr);
 bool is_echizen(player_type *creature_ptr);
 
 /*
@@ -560,8 +556,6 @@ bool is_echizen(player_type *creature_ptr);
 #define PY_REGEN_FAINT 33 /* Regen factor*2^16 when fainting */
 #define PY_REGEN_HPBASE 1442 /* Min amount hp regen*2^16 */
 #define PY_REGEN_MNBASE 524 /* Min amount mana regen*2^16 */
-
-extern void cheat_death(player_type *creature_ptr);
 
 extern void stop_singing(player_type *creature_ptr);
 extern void stop_mouth(player_type *caster_ptr);

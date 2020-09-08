@@ -255,14 +255,14 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_name + f_ptr->name,
-                ((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
-                    || (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE)))
+                ((!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY))
+                    || (!has_flag(f_ptr->flags, FF_LOS) && !has_flag(f_ptr->flags, FF_TREE)))
                     ? "中"
                     : "上");
 #else
             msg_format("This monster is %s the %s.",
-                ((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
-                    || (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE)))
+                ((!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY))
+                    || (!has_flag(f_ptr->flags, FF_LOS) && !has_flag(f_ptr->flags, FF_TREE)))
                     ? "in"
                     : "on",
                 f_name + f_ptr->name);
@@ -495,9 +495,9 @@ void do_cmd_pet(player_type *creature_ptr)
     powers[num++] = PET_NAME;
 
     if (creature_ptr->riding) {
-        if ((have_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
+        if ((has_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
                 && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM]))
-            || (have_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
+            || (has_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
                 && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM]))) {
             if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                 power_desc[num] = _("武器を片手で持つ", "use one hand to control the pet you are riding");

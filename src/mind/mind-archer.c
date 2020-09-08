@@ -81,12 +81,12 @@ bool create_ammo(player_type *creature_ptr)
         POSITION y = creature_ptr->y + ddy[dir];
         POSITION x = creature_ptr->x + ddx[dir];
         grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-        if (!have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG)) {
+        if (!has_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG)) {
             msg_print(_("‚»‚±‚É‚ÍŠâÎ‚ª‚È‚¢B", "You need a pile of rubble."));
             return FALSE;
         }
 
-        if (!cave_have_flag_grid(g_ptr, FF_CAN_DIG) || !cave_have_flag_grid(g_ptr, FF_HURT_ROCK)) {
+        if (!cave_has_flag_grid(g_ptr, FF_CAN_DIG) || !cave_has_flag_grid(g_ptr, FF_HURT_ROCK)) {
             msg_print(_("d‚·‚¬‚Ä•ö‚¹‚È‚©‚Á‚½B", "You failed to make ammo."));
             return TRUE;
         }

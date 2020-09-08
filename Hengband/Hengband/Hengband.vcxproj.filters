@@ -1334,9 +1334,6 @@
     <ClCompile Include="..\..\src\io\screen-util.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\status-reseter.c">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\realm\realm-demon.c">
       <Filter>realm</Filter>
     </ClCompile>
@@ -3795,9 +3792,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\special-defense-types.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\status-reseter.h">
-      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-demon.h">
       <Filter>realm</Filter>

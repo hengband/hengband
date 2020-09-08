@@ -298,7 +298,7 @@ void report_magics(player_type *creature_ptr)
         info[i++] = _("あなたはヒーロー気分だ", "You feel heroic");
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         info2[i] = report_magics_aux(creature_ptr->shero);
         info[i++] = _("あなたは戦闘狂だ", "You are in a battle rage");
     }

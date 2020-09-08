@@ -145,7 +145,7 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
         }
 
         for (j = 0; j < max_f_idx; j++) {
-            if (have_flag(f_info[j].flags, FF_STORE)) {
+            if (has_flag(f_info[j].flags, FF_STORE)) {
                 if (f_info[j].subtype == stores[i])
                     break;
             }

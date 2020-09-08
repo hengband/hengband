@@ -36,6 +36,7 @@
 #include "spell/spells-staff-only.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"

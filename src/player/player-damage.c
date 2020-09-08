@@ -46,6 +46,7 @@
 #include "player/player-race-types.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "racial/racial-android.h"
 #include "save/save.h"
 #include "status/base-status.h"
@@ -113,7 +114,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
     }
 
     /* Object resists */
-    if (have_flag(flgs, TR_IGNORE_ACID)) {
+    if (has_flag(flgs, TR_IGNORE_ACID)) {
         msg_format(_("しかし%sには効果がなかった！", "Your %s is unaffected!"), o_name);
         return TRUE;
     }
@@ -150,16 +151,13 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     bool double_resist = is_oppose_acid(creature_ptr);
 
     /* Total Immunity */
-    if (creature_ptr->immune_acid || (dam <= 0)) {
+    if (is_immune_acid(creature_ptr) || (dam <= 0)) {
         learn_spell(creature_ptr, monspell);
         return 0;
     }
 
     /* Vulnerability (Ouch!) */
-    if (creature_ptr->muta3 & MUT3_VULN_ELEM)
-        dam *= 2;
-    if (creature_ptr->special_defense & KATA_KOUKIJIN)
-        dam += dam / 3;
+    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_acid)
@@ -201,18 +199,13 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     bool double_resist = is_oppose_elec(creature_ptr);
 
     /* Total immunity */
-    if (creature_ptr->immune_elec || (dam <= 0)) {
+    if (is_immune_elec(creature_ptr) || (dam <= 0)) {
         learn_spell(creature_ptr, monspell);
         return 0;
     }
 
     /* Vulnerability (Ouch!) */
-    if (creature_ptr->muta3 & MUT3_VULN_ELEM)
-        dam *= 2;
-    if (creature_ptr->special_defense & KATA_KOUKIJIN)
-        dam += dam / 3;
-    if (is_specific_player_race(creature_ptr, RACE_ANDROID))
-        dam += dam / 3;
+    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_elec)
@@ -251,18 +244,13 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     bool double_resist = is_oppose_fire(creature_ptr);
 
     /* Totally immune */
-    if (creature_ptr->immune_fire || (dam <= 0)) {
+    if (is_immune_fire(creature_ptr) || (dam <= 0)) {
         learn_spell(creature_ptr, monspell);
         return 0;
     }
 
     /* Vulnerability (Ouch!) */
-    if (creature_ptr->muta3 & MUT3_VULN_ELEM)
-        dam *= 2;
-    if (is_specific_player_race(creature_ptr, RACE_ENT))
-        dam += dam / 3;
-    if (creature_ptr->special_defense & KATA_KOUKIJIN)
-        dam += dam / 3;
+    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_fire)
@@ -301,16 +289,13 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     bool double_resist = is_oppose_cold(creature_ptr);
 
     /* Total immunity */
-    if (creature_ptr->immune_cold || (dam <= 0)) {
+    if (is_immune_cold(creature_ptr) || (dam <= 0)) {
         learn_spell(creature_ptr, monspell);
         return 0;
     }
 
     /* Vulnerability (Ouch!) */
-    if (creature_ptr->muta3 & MUT3_VULN_ELEM)
-        dam *= 2;
-    if (creature_ptr->special_defense & KATA_KOUKIJIN)
-        dam += dam / 3;
+    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_cold)
@@ -723,10 +708,16 @@ static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, b
  */
 void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
 {
-    process_aura_damage(m_ptr, touched_ptr, touched_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE, fire_dam,
+    process_aura_damage(m_ptr, touched_ptr, (bool)is_immune_fire(touched_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2),
+        RF2_AURA_FIRE,
+        fire_dam,
         _("突然とても熱くなった！", "You are suddenly very hot!"));
-    process_aura_damage(m_ptr, touched_ptr, touched_ptr->immune_cold, offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD, cold_dam,
+    process_aura_damage(m_ptr, touched_ptr, (bool)is_immune_cold(touched_ptr), offsetof(monster_race, flags3), offsetof(monster_race, r_flags3),
+        RF3_AURA_COLD,
+        cold_dam,
         _("突然とても寒くなった！", "You are suddenly very cold!"));
-    process_aura_damage(m_ptr, touched_ptr, touched_ptr->immune_elec, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC, elec_dam,
+    process_aura_damage(m_ptr, touched_ptr, (bool)is_immune_elec(touched_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2),
+        RF2_AURA_ELEC,
+		elec_dam,
         _("電撃をくらった！", "You get zapped!"));
 }

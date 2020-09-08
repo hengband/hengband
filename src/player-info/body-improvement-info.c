@@ -10,7 +10,7 @@ void set_body_improvement_info_1(player_type *creature_ptr, self_info_type *si_p
     if (is_hero(creature_ptr))
         si_ptr->info[si_ptr->line++] = _("あなたはヒーロー気分だ。", "You feel heroic.");
 
-    if (creature_ptr->shero)
+    if (is_shero(creature_ptr))
         si_ptr->info[si_ptr->line++] = _("あなたは戦闘狂だ。", "You are in a battle rage.");
 
     if (creature_ptr->protevil)

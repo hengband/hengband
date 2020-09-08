@@ -61,7 +61,7 @@ MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const BIT_FLAGS *f
     for (size_t i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i) {
         const struct slay_table_t *p = &slay_table[i];
 
-        if (!have_flag(flgs, p->slay_flag) || !(atoffset(BIT_FLAGS, r_ptr, p->flag_offset) & p->affect_race_flag))
+        if (!has_flag(flgs, p->slay_flag) || !(atoffset(BIT_FLAGS, r_ptr, p->flag_offset) & p->affect_race_flag))
             continue;
 
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
@@ -100,7 +100,7 @@ MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const BIT_FLAGS *flg
     for (size_t i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++i) {
         const struct brand_table_t *p = &brand_table[i];
 
-        if (!have_flag(flgs, p->brand_flag))
+        if (!has_flag(flgs, p->brand_flag))
             continue;
 
         /* Notice immunity */
@@ -184,7 +184,7 @@ HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o
             mult = mult_hissatsu(attacker_ptr, mult, flgs, m_ptr, mode);
         }
 
-        if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
+        if ((attacker_ptr->pclass != CLASS_SAMURAI) && (has_flag(flgs, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
             attacker_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
             attacker_ptr->redraw |= (PR_MANA);
             mult = mult * 3 / 2 + 20;

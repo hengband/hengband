@@ -26,7 +26,7 @@ bool cmd_limit_cast(player_type *creature_ptr)
         return TRUE;
     }
 
-    if (creature_ptr->shero) {
+    if (is_shero(creature_ptr)) {
         msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
         return TRUE;
     }

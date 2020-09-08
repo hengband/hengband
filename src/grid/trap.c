@@ -170,7 +170,7 @@ FEAT_IDX choose_random_trap(player_type *trapped_ptr)
         feat = normal_traps[randint0(MAX_NORMAL_TRAPS)];
 
         /* Accept non-trapdoors */
-        if (!have_flag(f_info[feat].flags, FF_MORE))
+        if (!has_flag(f_info[feat].flags, FF_MORE))
             break;
 
         /* Hack -- no trap doors on special levels */
@@ -199,7 +199,7 @@ void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &trapped_ptr->current_floor_ptr->grid_array[y][x];
 
-    if (cave_have_flag_grid(g_ptr, FF_SECRET)) {
+    if (cave_has_flag_grid(g_ptr, FF_SECRET)) {
         /* No longer hidden */
         cave_alter_feat(trapped_ptr, y, x, FF_SECRET);
     } else if (g_ptr->mimic) {
@@ -408,7 +408,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     POSITION x = trapped_ptr->x, y = trapped_ptr->y;
     grid_type *g_ptr = &trapped_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
+    int trap_feat_type = has_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 
     disturb(trapped_ptr, FALSE, TRUE);
@@ -511,13 +511,14 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     }
 
     case TRAP_BLIND: {
-        hit_trap_set_abnormal_status_p(trapped_ptr, _("黒いガスに包み込まれた！", "A black gas surrounds you!"), trapped_ptr->resist_blind, set_blind,
+        hit_trap_set_abnormal_status_p(trapped_ptr, _("黒いガスに包み込まれた！", "A black gas surrounds you!"), (bool)trapped_ptr->resist_blind, set_blind,
             trapped_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
         break;
     }
 
     case TRAP_CONFUSE: {
-        hit_trap_set_abnormal_status_p(trapped_ptr, _("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"), trapped_ptr->resist_conf,
+        hit_trap_set_abnormal_status_p(trapped_ptr, _("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
+            (bool)trapped_ptr->resist_conf,
             set_confused, trapped_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
         break;
     }

@@ -62,7 +62,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (hates_acid(o_ptr)) {
                 do_kill = TRUE;
                 note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
-                if (have_flag(flags, TR_IGNORE_ACID))
+                if (has_flag(flags, TR_IGNORE_ACID))
                     ignore = TRUE;
             }
 
@@ -72,7 +72,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (hates_elec(o_ptr)) {
                 do_kill = TRUE;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-                if (have_flag(flags, TR_IGNORE_ELEC))
+                if (has_flag(flags, TR_IGNORE_ELEC))
                     ignore = TRUE;
             }
 
@@ -82,7 +82,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (hates_fire(o_ptr)) {
                 do_kill = TRUE;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-                if (have_flag(flags, TR_IGNORE_FIRE))
+                if (has_flag(flags, TR_IGNORE_FIRE))
                     ignore = TRUE;
             }
 
@@ -92,7 +92,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (hates_cold(o_ptr)) {
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
                 do_kill = TRUE;
-                if (have_flag(flags, TR_IGNORE_COLD))
+                if (has_flag(flags, TR_IGNORE_COLD))
                     ignore = TRUE;
             }
 
@@ -102,7 +102,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (hates_fire(o_ptr)) {
                 do_kill = TRUE;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-                if (have_flag(flags, TR_IGNORE_FIRE))
+                if (has_flag(flags, TR_IGNORE_FIRE))
                     ignore = TRUE;
             }
 
@@ -110,7 +110,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
                 ignore = FALSE;
                 do_kill = TRUE;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-                if (have_flag(flags, TR_IGNORE_ELEC))
+                if (has_flag(flags, TR_IGNORE_ELEC))
                     ignore = TRUE;
             }
 
@@ -120,7 +120,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             if (hates_fire(o_ptr)) {
                 do_kill = TRUE;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-                if (have_flag(flags, TR_IGNORE_FIRE))
+                if (has_flag(flags, TR_IGNORE_FIRE))
                     ignore = TRUE;
             }
 
@@ -128,7 +128,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
                 ignore = FALSE;
                 do_kill = TRUE;
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
-                if (have_flag(flags, TR_IGNORE_COLD))
+                if (has_flag(flags, TR_IGNORE_COLD))
                     ignore = TRUE;
             }
 
@@ -160,7 +160,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         case GF_CHAOS: {
             do_kill = TRUE;
             note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-            if (have_flag(flags, TR_RES_CHAOS))
+            if (has_flag(flags, TR_RES_CHAOS))
                 ignore = TRUE;
             else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS))
                 ignore = TRUE;

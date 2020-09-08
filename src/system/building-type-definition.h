@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 /* 人畜無害なenumヘッダを先に読み込む */
+#include "object/tval-types.h"
 #include "player/player-classes-types.h"
 #include "player/player-race-types.h"
 #include "realm/realm-types.h"
@@ -11,7 +12,6 @@
 /*!
  * @brief 闘技場のモンスターエントリー構造体 / A structure type for on_defeat_arena_monster entry
  */
-typedef enum tval_type tval_type;
 typedef struct arena_type {
     MONRACE_IDX r_idx; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
     tval_type tval; /*!< モンスター打倒後に得られるアイテムの大カテゴリID / tval of prize (0 means no prize) */

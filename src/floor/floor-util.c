@@ -78,7 +78,7 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
                 continue;
 
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
+            if (!cave_has_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
                 continue;
             if (!player_has_los_bold(subject_ptr, y, x))
                 continue;

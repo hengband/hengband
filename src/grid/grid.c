@@ -39,6 +39,7 @@
 #include "object/object-mark-types.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
+#include "player/player-status-flags.h"
 #include "room/rooms-builder.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
@@ -212,18 +213,18 @@ bool new_player_spot(player_type *creature_ptr)
 
             if (max_attempts > 5000) /* Rule 1 */
             {
-                if (!have_flag(f_ptr->flags, FF_FLOOR))
+                if (!has_flag(f_ptr->flags, FF_FLOOR))
                     continue;
             } else /* Rule 2 */
             {
-                if (!have_flag(f_ptr->flags, FF_MOVE))
+                if (!has_flag(f_ptr->flags, FF_MOVE))
                     continue;
-                if (have_flag(f_ptr->flags, FF_HIT_TRAP))
+                if (has_flag(f_ptr->flags, FF_HIT_TRAP))
                     continue;
             }
 
             /* Refuse to start on anti-teleport grids in dungeon */
-            if (!have_flag(f_ptr->flags, FF_TELEPORTABLE))
+            if (!has_flag(f_ptr->flags, FF_TELEPORTABLE))
                 continue;
         }
         if (!player_can_enter(creature_ptr, g_ptr->feat, 0))
@@ -262,7 +263,7 @@ void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
         feature_type *f_ptr = &f_info[g_ptr->feat];
 
         /* Hack -- Decline boundary walls with known treasure  */
-        if ((have_flag(f_ptr->flags, FF_HAS_GOLD) || have_flag(f_ptr->flags, FF_HAS_ITEM)) && !have_flag(f_ptr->flags, FF_SECRET))
+        if ((has_flag(f_ptr->flags, FF_HAS_GOLD) || has_flag(f_ptr->flags, FF_HAS_ITEM)) && !has_flag(f_ptr->flags, FF_SECRET))
             g_ptr->feat = feat_state(player_ptr, g_ptr->feat, FF_ENSECRET);
 
         /* Set boundary mimic */
@@ -281,7 +282,7 @@ void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
  */
 bool is_known_trap(player_type *player_ptr, grid_type *g_ptr)
 {
-    if (!g_ptr->mimic && !cave_have_flag_grid(g_ptr, FF_SECRET) && is_trap(player_ptr, g_ptr->feat))
+    if (!g_ptr->mimic && !cave_has_flag_grid(g_ptr, FF_SECRET) && is_trap(player_ptr, g_ptr->feat))
         return TRUE;
     else
         return FALSE;
@@ -295,7 +296,7 @@ bool is_known_trap(player_type *player_ptr, grid_type *g_ptr)
  */
 bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
 {
-    if ((g_ptr->mimic || cave_have_flag_grid(g_ptr, FF_SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
+    if ((g_ptr->mimic || cave_has_flag_grid(g_ptr, FF_SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
         return TRUE;
     else
         return FALSE;
@@ -545,7 +546,7 @@ void note_spot(player_type *player_ptr, POSITION y, POSITION x)
         feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
         /* Memorize some "boring" grids */
-        if (!have_flag(f_ptr->flags, FF_REMEMBER)) {
+        if (!has_flag(f_ptr->flags, FF_REMEMBER)) {
             /* Option -- memorize all torch-lit floors */
             if (view_torch_grids && ((g_ptr->info & (CAVE_LITE | CAVE_MNLT)) || player_ptr->see_nocto)) {
                 g_ptr->info |= (CAVE_MARK);
@@ -558,7 +559,7 @@ void note_spot(player_type *player_ptr, POSITION y, POSITION x)
         }
 
         /* Memorize normal grids */
-        else if (have_flag(f_ptr->flags, FF_LOS)) {
+        else if (has_flag(f_ptr->flags, FF_LOS)) {
             g_ptr->info |= (CAVE_MARK);
         }
 
@@ -914,7 +915,7 @@ void update_flow(player_type *subject_ptr)
                 continue;
 
             /* Ignore "walls" and "rubble" */
-            if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
+            if (!cave_has_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
                 continue;
 
             /* Save the flow cost */
@@ -958,7 +959,7 @@ FEAT_IDX feat_state(player_type *player_ptr, FEAT_IDX feat, int action)
             return conv_dungeon_feat(floor_ptr, f_ptr->state[i].result);
     }
 
-    if (have_flag(f_ptr->flags, FF_PERMANENT))
+    if (has_flag(f_ptr->flags, FF_PERMANENT))
         return feat;
 
     return (feature_action_flags[action] & FAF_DESTROY) ? conv_dungeon_feat(floor_ptr, f_ptr->destroyed) : feat;
@@ -990,14 +991,14 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action
         bool found = FALSE;
 
         /* Handle gold */
-        if (have_flag(old_f_ptr->flags, FF_HAS_GOLD) && !have_flag(f_ptr->flags, FF_HAS_GOLD)) {
+        if (has_flag(old_f_ptr->flags, FF_HAS_GOLD) && !has_flag(f_ptr->flags, FF_HAS_GOLD)) {
             /* Place some gold */
             place_gold(player_ptr, y, x);
             found = TRUE;
         }
 
         /* Handle item */
-        if (have_flag(old_f_ptr->flags, FF_HAS_ITEM) && !have_flag(f_ptr->flags, FF_HAS_ITEM) && (randint0(100) < (15 - floor_ptr->dun_level / 2))) {
+        if (has_flag(old_f_ptr->flags, FF_HAS_ITEM) && !has_flag(f_ptr->flags, FF_HAS_ITEM) && (randint0(100) < (15 - floor_ptr->dun_level / 2))) {
             /* Place object */
             place_object(player_ptr, y, x, 0L);
             found = TRUE;
@@ -1011,7 +1012,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action
     if (feature_action_flags[action] & FAF_CRASH_GLASS) {
         feature_type *old_f_ptr = &f_info[oldfeat];
 
-        if (have_flag(old_f_ptr->flags, FF_GLASS) && current_world_ptr->character_dungeon) {
+        if (has_flag(old_f_ptr->flags, FF_GLASS) && current_world_ptr->character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(floor_ptr->dun_level, 100) / 4, GF_SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
         }
@@ -1047,7 +1048,7 @@ void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
  */
 bool is_mirror_grid(grid_type *g_ptr)
 {
-    if ((g_ptr->info & CAVE_OBJECT) && have_flag(f_info[g_ptr->mimic].flags, FF_MIRROR))
+    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_MIRROR))
         return TRUE;
     else
         return FALSE;
@@ -1058,7 +1059,7 @@ bool is_mirror_grid(grid_type *g_ptr)
  */
 bool is_glyph_grid(grid_type *g_ptr)
 {
-    if ((g_ptr->info & CAVE_OBJECT) && have_flag(f_info[g_ptr->mimic].flags, FF_GLYPH))
+    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_GLYPH))
         return TRUE;
     else
         return FALSE;
@@ -1069,7 +1070,7 @@ bool is_glyph_grid(grid_type *g_ptr)
  */
 bool is_explosive_rune_grid(grid_type *g_ptr)
 {
-    if ((g_ptr->info & CAVE_OBJECT) && have_flag(f_info[g_ptr->mimic].flags, FF_MINOR_GLYPH))
+    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_MINOR_GLYPH))
         return TRUE;
     else
         return FALSE;
@@ -1091,7 +1092,7 @@ bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, 
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
     /* Require "teleportable" space */
-    if (!have_flag(f_ptr->flags, FF_TELEPORTABLE))
+    if (!has_flag(f_ptr->flags, FF_TELEPORTABLE))
         return FALSE;
 
     if (g_ptr->m_idx && (g_ptr->m_idx != m_idx))
@@ -1127,7 +1128,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
     /* Require "teleportable" space */
-    if (!have_flag(f_ptr->flags, FF_TELEPORTABLE))
+    if (!has_flag(f_ptr->flags, FF_TELEPORTABLE))
         return FALSE;
 
     /* No magical teleporting into vaults and such */
@@ -1138,21 +1139,21 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
         return FALSE;
 
     /* don't teleport on a trap. */
-    if (have_flag(f_ptr->flags, FF_HIT_TRAP))
+    if (has_flag(f_ptr->flags, FF_HIT_TRAP))
         return FALSE;
 
     if (!(mode & TELEPORT_PASSIVE)) {
         if (!player_can_enter(player_ptr, g_ptr->feat, 0))
             return FALSE;
 
-        if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP)) {
             if (!player_ptr->levitation && !player_ptr->can_swim)
                 return FALSE;
         }
 
-        if (have_flag(f_ptr->flags, FF_LAVA) && !player_ptr->immune_fire && !is_invuln(player_ptr)) {
+        if (has_flag(f_ptr->flags, FF_LAVA) && !is_immune_fire(player_ptr) && !is_invuln(player_ptr)) {
             /* Always forbid deep lava */
-            if (have_flag(f_ptr->flags, FF_DEEP))
+            if (has_flag(f_ptr->flags, FF_DEEP))
                 return FALSE;
 
             /* Forbid shallow lava when the player don't have levitation */
@@ -1170,7 +1171,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
  * @param feat 地形ID
  * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
  */
-bool is_open(player_type *player_ptr, FEAT_IDX feat) { return have_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(player_ptr, feat, FF_CLOSE)); }
+bool is_open(player_type *player_ptr, FEAT_IDX feat) { return has_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(player_ptr, feat, FF_CLOSE)); }
 
 /*!
  * @brief プレイヤーが地形踏破可能かを返す
@@ -1186,19 +1187,19 @@ bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 m
         return monster_can_cross_terrain(
             creature_ptr, feature, &r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx], mode | CEM_RIDING);
 
-    if (have_flag(f_ptr->flags, FF_PATTERN)) {
+    if (has_flag(f_ptr->flags, FF_PATTERN)) {
         if (!(mode & CEM_P_CAN_ENTER_PATTERN))
             return FALSE;
     }
 
-    if (have_flag(f_ptr->flags, FF_CAN_FLY) && creature_ptr->levitation)
+    if (has_flag(f_ptr->flags, FF_CAN_FLY) && creature_ptr->levitation)
         return TRUE;
-    if (have_flag(f_ptr->flags, FF_CAN_SWIM) && creature_ptr->can_swim)
+    if (has_flag(f_ptr->flags, FF_CAN_SWIM) && creature_ptr->can_swim)
         return TRUE;
-    if (have_flag(f_ptr->flags, FF_CAN_PASS) && creature_ptr->pass_wall)
+    if (has_flag(f_ptr->flags, FF_CAN_PASS) && creature_ptr->pass_wall)
         return TRUE;
 
-    if (!have_flag(f_ptr->flags, FF_MOVE))
+    if (!has_flag(f_ptr->flags, FF_MOVE))
         return FALSE;
 
     return TRUE;
@@ -1421,4 +1422,4 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
     return count;
 }
 
-bool feat_uses_special(FEAT_IDX f_idx) { return have_flag(f_info[(f_idx)].flags, FF_SPECIAL); }
+bool feat_uses_special(FEAT_IDX f_idx) { return has_flag(f_info[(f_idx)].flags, FF_SPECIAL); }

@@ -159,7 +159,7 @@ static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_
 #endif
 
     while (fi_ptr->english) {
-        if (have_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !have_flag(flgs, fi_ptr->except_flag)))
+        if (has_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !has_flag(flgs, fi_ptr->except_flag)))
             add_inscription(&ptr, _(kanji ? fi_ptr->japanese : fi_ptr->english, fi_ptr->english));
 
         fi_ptr++;
@@ -169,16 +169,16 @@ static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_
 }
 
 /*!
- * @brief オブジェクトの特性表示記号テーブル1つに従いオブジェクトの特性フラグ配列に1つでも該当の特性があるかを返す / Special variation of have_flag for
+ * @brief オブジェクトの特性表示記号テーブル1つに従いオブジェクトの特性フラグ配列に1つでも該当の特性があるかを返す / Special variation of has_flag for
  * auto-inscription
  * @param fi_ptr 参照する特性表示記号テーブル
  * @param flgs 対応するオブジェクトのフラグ文字列
  * @return 1つでも該当の特性があったらTRUEを返す。
  */
-static bool have_flag_of(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
+static bool has_flag_of(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
     while (fi_ptr->english) {
-        if (have_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !have_flag(flgs, fi_ptr->except_flag)))
+        if (has_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !has_flag(flgs, fi_ptr->except_flag)))
             return TRUE;
 
         fi_ptr++;
@@ -219,29 +219,29 @@ char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, obje
     }
 
     if (has_dark_flag(flgs)) {
-        if (have_flag(flgs, TR_LITE_1))
+        if (has_flag(flgs, TR_LITE_1))
             remove_flag(flgs, TR_LITE_1);
 
-        if (have_flag(flgs, TR_LITE_2))
+        if (has_flag(flgs, TR_LITE_2))
             remove_flag(flgs, TR_LITE_2);
 
-        if (have_flag(flgs, TR_LITE_3))
+        if (has_flag(flgs, TR_LITE_3))
             remove_flag(flgs, TR_LITE_3);
     } else if (has_lite_flag(flgs)) {
         add_flag(flgs, TR_LITE_1);
-        if (have_flag(flgs, TR_LITE_2))
+        if (has_flag(flgs, TR_LITE_2))
             remove_flag(flgs, TR_LITE_2);
 
-        if (have_flag(flgs, TR_LITE_3))
+        if (has_flag(flgs, TR_LITE_3))
             remove_flag(flgs, TR_LITE_3);
     }
 
-    if (have_flag_of(flag_insc_plus, flgs) && kanji)
+    if (has_flag_of(flag_insc_plus, flgs) && kanji)
         add_inscription(&short_flavor, "+");
 
     short_flavor = inscribe_flags_aux(flag_insc_plus, flgs, kanji, short_flavor);
 
-    if (have_flag_of(flag_insc_immune, flgs)) {
+    if (has_flag_of(flag_insc_immune, flgs)) {
         if (!kanji && short_flavor != prev_ptr) {
             add_inscription(&short_flavor, ";");
             prev_ptr = short_flavor;
@@ -252,7 +252,7 @@ char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, obje
 
     short_flavor = inscribe_flags_aux(flag_insc_immune, flgs, kanji, short_flavor);
 
-    if (have_flag_of(flag_insc_resistance, flgs)) {
+    if (has_flag_of(flag_insc_resistance, flgs)) {
         if (kanji)
             add_inscription(&short_flavor, "r");
         else if (short_flavor != prev_ptr) {
@@ -263,52 +263,52 @@ char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, obje
 
     short_flavor = inscribe_flags_aux(flag_insc_resistance, flgs, kanji, short_flavor);
 
-    if (have_flag_of(flag_insc_misc, flgs) && (short_flavor != prev_ptr)) {
+    if (has_flag_of(flag_insc_misc, flgs) && (short_flavor != prev_ptr)) {
         add_inscription(&short_flavor, ";");
         prev_ptr = short_flavor;
     }
 
     short_flavor = inscribe_flags_aux(flag_insc_misc, flgs, kanji, short_flavor);
 
-    if (have_flag_of(flag_insc_aura, flgs))
+    if (has_flag_of(flag_insc_aura, flgs))
         add_inscription(&short_flavor, "[");
 
     short_flavor = inscribe_flags_aux(flag_insc_aura, flgs, kanji, short_flavor);
 
-    if (have_flag_of(flag_insc_brand, flgs))
+    if (has_flag_of(flag_insc_brand, flgs))
         add_inscription(&short_flavor, "|");
 
     short_flavor = inscribe_flags_aux(flag_insc_brand, flgs, kanji, short_flavor);
 
-    if (have_flag_of(flag_insc_kill, flgs))
+    if (has_flag_of(flag_insc_kill, flgs))
         add_inscription(&short_flavor, "/X");
 
     short_flavor = inscribe_flags_aux(flag_insc_kill, flgs, kanji, short_flavor);
 
-    if (have_flag_of(flag_insc_slay, flgs))
+    if (has_flag_of(flag_insc_slay, flgs))
         add_inscription(&short_flavor, "/");
 
     short_flavor = inscribe_flags_aux(flag_insc_slay, flgs, kanji, short_flavor);
 
     if (kanji) {
-        if (have_flag_of(flag_insc_esp1, flgs) || have_flag_of(flag_insc_esp2, flgs))
+        if (has_flag_of(flag_insc_esp1, flgs) || has_flag_of(flag_insc_esp2, flgs))
             add_inscription(&short_flavor, "~");
 
         short_flavor = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, short_flavor);
         short_flavor = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, short_flavor);
     } else {
-        if (have_flag_of(flag_insc_esp1, flgs))
+        if (has_flag_of(flag_insc_esp1, flgs))
             add_inscription(&short_flavor, "~");
 
         short_flavor = inscribe_flags_aux(flag_insc_esp1, flgs, kanji, short_flavor);
 
-        if (have_flag_of(flag_insc_esp2, flgs))
+        if (has_flag_of(flag_insc_esp2, flgs))
             add_inscription(&short_flavor, "~");
 
         short_flavor = inscribe_flags_aux(flag_insc_esp2, flgs, kanji, short_flavor);
     }
 
-    if (have_flag_of(flag_insc_sust, flgs))
+    if (has_flag_of(flag_insc_sust, flgs))
         add_inscription(&short_flavor, "(");
 
     short_flavor = inscribe_flags_aux(flag_insc_sust, flgs, kanji, short_flavor);
@@ -464,6 +464,6 @@ char *object_desc_count_japanese(char *t, object_type *o_ptr)
 }
 #endif
 
-bool has_lite_flag(BIT_FLAGS *flags) { return have_flag(flags, TR_LITE_1) || have_flag(flags, TR_LITE_2) || have_flag(flags, TR_LITE_3); }
+bool has_lite_flag(BIT_FLAGS *flags) { return has_flag(flags, TR_LITE_1) || has_flag(flags, TR_LITE_2) || has_flag(flags, TR_LITE_3); }
 
-bool has_dark_flag(BIT_FLAGS *flags) { return have_flag(flags, TR_LITE_M1) || have_flag(flags, TR_LITE_M2) || have_flag(flags, TR_LITE_M3); }
+bool has_dark_flag(BIT_FLAGS *flags) { return has_flag(flags, TR_LITE_M1) || has_flag(flags, TR_LITE_M2) || has_flag(flags, TR_LITE_M3); }

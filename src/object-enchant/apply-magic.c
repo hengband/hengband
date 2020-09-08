@@ -61,7 +61,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     if ((owner_ptr->pseikaku != PERSONALITY_MUNCHKIN) && (f2 > d_info[owner_ptr->dungeon_idx].obj_great))
         f2 = d_info[owner_ptr->dungeon_idx].obj_great;
 
-    if (have_good_luck(owner_ptr)) {
+    if (has_good_luck(owner_ptr)) {
         f1 += 5;
         f2 += 2;
     } else if (owner_ptr->muta3 & MUT3_BAD_LUCK) {
@@ -102,7 +102,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     for (int i = 0; i < rolls; i++) {
         if (make_artifact(owner_ptr, o_ptr))
             break;
-        if (have_good_luck(owner_ptr) && one_in_(77)) {
+        if (has_good_luck(owner_ptr) && one_in_(77)) {
             if (make_artifact(owner_ptr, o_ptr))
                 break;
         }
@@ -307,12 +307,12 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
             }
 
             if (e_ptr->max_pval) {
-                if ((o_ptr->name2 == EGO_HA) && (have_flag(o_ptr->art_flags, TR_BLOWS))) {
+                if ((o_ptr->name2 == EGO_HA) && (has_flag(o_ptr->art_flags, TR_BLOWS))) {
                     o_ptr->pval++;
                     if ((lev > 60) && one_in_(3) && ((o_ptr->dd * (o_ptr->ds + 1)) < 15))
                         o_ptr->pval++;
                 } else if (o_ptr->name2 == EGO_DEMON) {
-                    if (have_flag(o_ptr->art_flags, TR_BLOWS)) {
+                    if (has_flag(o_ptr->art_flags, TR_BLOWS)) {
                         o_ptr->pval += randint1(2);
                     } else {
                         o_ptr->pval += randint1(e_ptr->max_pval);

@@ -34,13 +34,13 @@ int activation_index(player_type *player_ptr, object_type *o_ptr)
         }
     }
 
-    if (object_is_fixed_artifact(o_ptr) && have_flag(a_info[o_ptr->name1].flags, TR_ACTIVATE))
+    if (object_is_fixed_artifact(o_ptr) && has_flag(a_info[o_ptr->name1].flags, TR_ACTIVATE))
         return a_info[o_ptr->name1].act_idx;
 
-    if (object_is_ego(o_ptr) && have_flag(e_info[o_ptr->name2].flags, TR_ACTIVATE))
+    if (object_is_ego(o_ptr) && has_flag(e_info[o_ptr->name2].flags, TR_ACTIVATE))
         return e_info[o_ptr->name2].act_idx;
 
-    if (!object_is_random_artifact(o_ptr) && have_flag(k_info[o_ptr->k_idx].flags, TR_ACTIVATE))
+    if (!object_is_random_artifact(o_ptr) && has_flag(k_info[o_ptr->k_idx].flags, TR_ACTIVATE))
         return k_info[o_ptr->k_idx].act_idx;
 
     return o_ptr->xtra2;

@@ -317,21 +317,20 @@ bool tele_town(player_type *caster_ptr)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void reserve_alter_reality(player_type *caster_ptr)
+void reserve_alter_reality(player_type *caster_ptr, TIME_EFFECT turns)
 {
     if (caster_ptr->current_floor_ptr->inside_arena || ironman_downward) {
         msg_print(_("何も起こらなかった。", "Nothing happens."));
         return;
     }
 
-    if (caster_ptr->alter_reality) {
+    if (caster_ptr->alter_reality || turns == 0) {
         caster_ptr->alter_reality = 0;
         msg_print(_("景色が元に戻った...", "The view around you returns to normal..."));
         caster_ptr->redraw |= PR_STATUS;
         return;
     }
 
-    TIME_EFFECT turns = randint0(21) + 15;
     caster_ptr->alter_reality = turns;
     msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
     caster_ptr->redraw |= PR_STATUS;
@@ -367,7 +366,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
         }
     }
 
-    if (creature_ptr->word_recall) {
+    if (creature_ptr->word_recall || turns == 0) {
         creature_ptr->word_recall = 0;
         msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
         creature_ptr->redraw |= (PR_STATUS);

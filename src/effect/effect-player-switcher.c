@@ -12,6 +12,7 @@
 #include "player/mimic-info-table.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
+#include "player/player-status-flags.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
@@ -41,7 +42,7 @@ void effect_player_meteor(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
     if (!target_ptr->resist_shard || one_in_(13)) {
-        if (!target_ptr->immune_fire)
+        if (!is_immune_fire(target_ptr))
             inventory_damage(target_ptr, set_fire_destroy, 2);
         inventory_damage(target_ptr, set_cold_destroy, 2);
     }
@@ -65,7 +66,7 @@ void effect_player_icee(player_type *target_ptr, effect_player_type *ep_ptr)
     }
 
     if ((!(target_ptr->resist_cold || is_oppose_cold(target_ptr))) || one_in_(12)) {
-        if (!target_ptr->immune_cold)
+        if (!is_immune_cold(target_ptr))
             inventory_damage(target_ptr, set_cold_destroy, 3);
     }
 }

@@ -95,22 +95,22 @@ void calc_lite_radius(player_type *creature_ptr)
         object_flags(creature_ptr, o_ptr, flgs);
 
         POSITION rad = 0;
-        if (have_flag(flgs, TR_LITE_1) && o_ptr->name2 != EGO_LITE_DARKNESS)
+        if (has_flag(flgs, TR_LITE_1) && o_ptr->name2 != EGO_LITE_DARKNESS)
             rad += 1;
 
-        if (have_flag(flgs, TR_LITE_2) && o_ptr->name2 != EGO_LITE_DARKNESS)
+        if (has_flag(flgs, TR_LITE_2) && o_ptr->name2 != EGO_LITE_DARKNESS)
             rad += 2;
 
-        if (have_flag(flgs, TR_LITE_3) && o_ptr->name2 != EGO_LITE_DARKNESS)
+        if (has_flag(flgs, TR_LITE_3) && o_ptr->name2 != EGO_LITE_DARKNESS)
             rad += 3;
 
-        if (have_flag(flgs, TR_LITE_M1))
+        if (has_flag(flgs, TR_LITE_M1))
             rad -= 1;
 
-        if (have_flag(flgs, TR_LITE_M2))
+        if (has_flag(flgs, TR_LITE_M2))
             rad -= 2;
 
-        if (have_flag(flgs, TR_LITE_M3))
+        if (has_flag(flgs, TR_LITE_M3))
             rad -= 3;
 
         creature_ptr->cur_lite += rad;

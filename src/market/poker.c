@@ -67,13 +67,12 @@ static void reset_deck(int deck[])
  * @param なし
  * @return ジョーカーを持っているか
  */
-static bool have_joker(void)
+static bool has_joker(void)
 {
 	for (int i = 0; i < 5; i++)
 	{
 		if (IS_JOKER(cards[i])) return TRUE;
 	}
-
 	return FALSE;
 }
 
@@ -107,7 +106,7 @@ static bool poker_hand_check_flush(void)
 	for (int i = 0; i < 5; i++) {
 		if (SUIT_OF(cards[i]) == suit) continue;
 
-		if (have_joker() && !joker_is_used)
+		if (has_joker() && !joker_is_used)
 			joker_is_used = TRUE;
 		else
 			return FALSE;
@@ -142,7 +141,7 @@ static int poker_hand_check_straight(void)
 			for (i = 0; i < 4; i++)
 			{
 				if (!find_card_num(9 + i)) {
-					if (have_joker() && !joker_is_used)
+					if (has_joker() && !joker_is_used)
 						joker_is_used = TRUE;
 					else
 						break;
@@ -160,7 +159,7 @@ static int poker_hand_check_straight(void)
 					break;
 			}
 
-			if (i == 3 && have_joker()) return 3;
+			if (i == 3 && has_joker()) return 3;
 		}
 	}
 
@@ -172,7 +171,7 @@ static int poker_hand_check_straight(void)
 		for (i = 0; i < 4; i++)
 		{
 			if (!find_card_num(9 + i)) {
-				if (have_joker() && !joker_is_used)
+				if (has_joker() && !joker_is_used)
 					joker_is_used = TRUE;
 				else
 					break;
@@ -189,7 +188,7 @@ static int poker_hand_check_straight(void)
 	{
 		if (!find_card_num(lowest + i))
 		{
-			if (have_joker() && !joker_is_used)
+			if (has_joker() && !joker_is_used)
 				joker_is_used = TRUE;
 			else
 				break; /* None */
@@ -222,7 +221,7 @@ static int poker_hand_check_pair(void)
 		}
 	}
 
-	if (have_joker())
+	if (has_joker())
 	{
 		switch (matching) {
 		case 0:

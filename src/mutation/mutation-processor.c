@@ -392,7 +392,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_WALK_SHAD) && !creature_ptr->anti_magic && one_in_(12000) && !creature_ptr->current_floor_ptr->inside_arena)
-        reserve_alter_reality(creature_ptr);
+        reserve_alter_reality(creature_ptr, randint0(21) + 15);
 
     if ((creature_ptr->muta2 & MUT2_WARNING) && one_in_(1000)) {
         int danger_amount = 0;

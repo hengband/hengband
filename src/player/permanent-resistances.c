@@ -70,8 +70,8 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		}
 		else
 		{
-			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || have_right_hand_weapon(creature_ptr)) &&
-				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || have_left_hand_weapon(creature_ptr)))
+			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || has_right_hand_weapon(creature_ptr)) &&
+				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || has_left_hand_weapon(creature_ptr)))
 				add_flag(flags, TR_SPEED);
 			if (creature_ptr->lev > 24)
 				add_flag(flags, TR_FREE_ACT);

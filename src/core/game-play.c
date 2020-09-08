@@ -22,7 +22,7 @@
 #include "core/player-update-types.h"
 #include "core/scores.h"
 #include "core/speed-table.h"
-#include "core/status-reseter.h"
+#include "status/buff-setter.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
 #include "core/window-redrawer.h"
@@ -86,6 +86,7 @@
 #include "view/display-player.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include "wizard/wizard-special-process.h"
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game

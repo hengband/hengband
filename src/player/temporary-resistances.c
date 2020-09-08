@@ -26,7 +26,7 @@ void tim_player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         flags[i] = 0L;
 
-    if (is_hero(creature_ptr) || creature_ptr->shero)
+    if (is_hero(creature_ptr) || is_shero(creature_ptr))
         add_flag(flags, TR_RES_FEAR);
     if (creature_ptr->tim_invis)
         add_flag(flags, TR_SEE_INVIS);
