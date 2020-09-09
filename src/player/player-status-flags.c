@@ -935,23 +935,6 @@ BIT_FLAGS is_vuln_acid(player_type *creature_ptr)
     return result;
 }
 
-PERCENTAGE calc_vuln_acid_rate(player_type *creature_ptr)
-{
-    PERCENTAGE per = 100;
-    int i;
-    BIT_FLAGS flgs = is_vuln_acid(creature_ptr);
-    for (i = 0; i < FLAG_CAUSE_MAX; i++) {
-        if (flgs & (0x01 << i)) {
-            if (i == FLAG_CAUSE_MUTATION) {
-                per *= 2;
-            } else {
-                per += per / 3;
-            }
-        }
-    }
-    return per;
-}
-
 BIT_FLAGS is_resist_elec(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
@@ -990,23 +973,6 @@ BIT_FLAGS is_vuln_elec(player_type *creature_ptr)
         result |= 0x01 << FLAG_CAUSE_BATTLE_FORM;
     }
     return result;
-}
-
-PERCENTAGE calc_vuln_elec_rate(player_type *creature_ptr)
-{
-    PERCENTAGE per = 100;
-    int i;
-    BIT_FLAGS flgs = is_vuln_elec(creature_ptr);
-    for (i = 0; i < FLAG_CAUSE_MAX; i++) {
-        if (flgs & (0x01 << i)) {
-            if (i == FLAG_CAUSE_MUTATION) {
-                per *= 2;
-            } else {
-                per += per / 3;
-            }
-        }
-    }
-    return per;
 }
 
 BIT_FLAGS is_resist_fire(player_type *creature_ptr)
@@ -1055,23 +1021,6 @@ BIT_FLAGS is_vuln_fire(player_type *creature_ptr)
     return result;
 }
 
-PERCENTAGE calc_vuln_fire_rate(player_type *creature_ptr)
-{
-    PERCENTAGE per = 100;
-    int i;
-    BIT_FLAGS flgs = is_vuln_fire(creature_ptr);
-    for (i = 0; i < FLAG_CAUSE_MAX; i++) {
-        if (flgs & (0x01 << i)) {
-            if (i == FLAG_CAUSE_MUTATION) {
-                per *= 2;
-            } else {
-                per += per / 3;
-            }
-        }
-    }
-    return per;
-}
-
 BIT_FLAGS is_resist_cold(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
@@ -1116,23 +1065,6 @@ BIT_FLAGS is_vuln_cold(player_type *creature_ptr)
         result |= 0x01 << FLAG_CAUSE_BATTLE_FORM;
     }
     return result;
-}
-
-PERCENTAGE calc_vuln_cold_rate(player_type *creature_ptr)
-{
-    PERCENTAGE per = 100;
-    int i;
-    BIT_FLAGS flgs = is_vuln_cold(creature_ptr);
-    for (i = 0; i < FLAG_CAUSE_MAX; i++) {
-        if (flgs & (0x01 << i)) {
-            if (i == FLAG_CAUSE_MUTATION) {
-                per *= 2;
-            } else {
-                per += per / 3;
-            }
-        }
-    }
-    return per;
 }
 
 BIT_FLAGS is_resist_pois(player_type *creature_ptr)
@@ -1256,21 +1188,6 @@ BIT_FLAGS is_vuln_lite(player_type *creature_ptr)
     }
 
     return result;
-}
-
-PERCENTAGE calc_vuln_lite_rate(player_type *creature_ptr)
-{
-    PERCENTAGE per = 100;
-    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
-        per *= 2;
-    } else if (is_specific_player_race(creature_ptr, RACE_S_FAIRY)) {
-        per = per * 4 / 3;
-    }
-
-    if (creature_ptr->wraith_form)
-        per *= 2;
-
-    return per;
 }
 
 BIT_FLAGS is_resist_dark(player_type *creature_ptr)

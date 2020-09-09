@@ -47,6 +47,7 @@
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status-resist.h"
 #include "racial/racial-android.h"
 #include "save/save.h"
 #include "status/base-status.h"

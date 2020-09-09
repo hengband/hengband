@@ -337,6 +337,7 @@
     <ClCompile Include="..\..\src\player-info\resistance-info.c" />
     <ClCompile Include="..\..\src\player-info\self-info-util.c" />
     <ClCompile Include="..\..\src\player-info\weapon-effect-info.c" />
+    <ClCompile Include="..\..\src\player\player-status-resist.c" />
     <ClCompile Include="..\..\src\room\vault-builder.c" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.c" />
     <ClCompile Include="..\..\src\specific-object\monster-ball.c" />
@@ -991,6 +992,7 @@
     <ClInclude Include="..\..\src\player-info\resistance-info.h" />
     <ClInclude Include="..\..\src\player-info\self-info-util.h" />
     <ClInclude Include="..\..\src\player-info\weapon-effect-info.h" />
+    <ClInclude Include="..\..\src\player\player-status-resist.h" />
     <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />
     <ClInclude Include="..\..\src\specific-object\monster-ball.h" />

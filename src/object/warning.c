@@ -31,6 +31,7 @@
 #include "player/player-race-types.h"
 #include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status-resist.h"
 #include "spell/spell-types.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
