@@ -176,4 +176,10 @@ extern errr term_resize(TERM_LEN w, TERM_LEN h);
 extern errr term_activate(term_type *t);
 
 extern errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k);
+
+#ifdef JP
+extern errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s);
 #endif
+
+#endif
+
