@@ -205,7 +205,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
+    dam = dam * calc_vuln_elec_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_elec)
@@ -250,7 +250,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
+    dam = dam * calc_vuln_fire_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_fire)
@@ -295,7 +295,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
+    dam = dam * calc_vuln_cold_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_cold)
