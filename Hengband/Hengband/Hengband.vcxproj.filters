@@ -2177,6 +2177,9 @@
     <ClCompile Include="..\..\src\monster-floor\special-death-switcher.c">
       <Filter>monster-floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\player-status-resist.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4710,6 +4713,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell\summon-types.h">
       <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-status-resist.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

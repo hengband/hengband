@@ -47,6 +47,7 @@
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status-resist.h"
 #include "racial/racial-android.h"
 #include "save/save.h"
 #include "status/base-status.h"
@@ -205,7 +206,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
+    dam = dam * calc_vuln_elec_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_elec)
@@ -250,7 +251,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
+    dam = dam * calc_vuln_fire_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_fire)
@@ -295,7 +296,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
+    dam = dam * calc_vuln_cold_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_cold)
@@ -316,38 +317,6 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 
     return get_damage;
 }
-
-#ifdef JP
-/*
- * Move to a location and, using an attr, add a string vertically
- */
-static errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
-{
-    errr res;
-    int y0 = y;
-
-    for (int i = 0; i < n && s[i] != 0; i++) {
-        /* Move first */
-        if ((res = term_gotoxy(x, y0)) != 0)
-            return (res);
-
-        if (iskanji(s[i])) {
-            if ((res = term_addstr(2, a, &s[i])) != 0)
-                return (res);
-            i++;
-            y0++;
-            if (s[i] == 0)
-                break;
-        } else {
-            if ((res = term_addstr(1, a, &s[i])) != 0)
-                return (res);
-            y0++;
-        }
-    }
-
-    return 0;
-}
-#endif
 
 /*
  * Decreases players hit points and sets death flag if necessary

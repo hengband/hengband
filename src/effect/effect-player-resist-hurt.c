@@ -15,6 +15,7 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-status-flags.h"
+#include "player/player-status-resist.h"
 #include "spell-kind/spells-equipment.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"

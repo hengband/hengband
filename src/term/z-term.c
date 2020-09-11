@@ -2267,3 +2267,35 @@ errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
     t->pict_hook = term_pict_hack;
     return 0;
 }
+
+#ifdef JP
+/*
+ * Move to a location and, using an attr, add a string vertically
+ */
+errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
+{
+    errr res;
+    int y0 = y;
+
+    for (int i = 0; i < n && s[i] != 0; i++) {
+        /* Move first */
+        if ((res = term_gotoxy(x, y0)) != 0)
+            return (res);
+
+        if (iskanji(s[i])) {
+            if ((res = term_addstr(2, a, &s[i])) != 0)
+                return (res);
+            i++;
+            y0++;
+            if (s[i] == 0)
+                break;
+        } else {
+            if ((res = term_addstr(1, a, &s[i])) != 0)
+                return (res);
+            y0++;
+        }
+    }
+
+    return 0;
+}
+#endif
