@@ -34,22 +34,22 @@
 
 PERCENTAGE randrate(int dice, int fix, rate_calc_type_mode mode)
 {
-    switch (mode) {    
-        case CALC_RAND:
-            return randint1(dice) * 100 + fix * 100;
-            break;
-        case CALC_AVERAGE:    
-            return (dice + 1) * 50 + fix * 100;
-            break;
-        case CALC_MIN:    
-            return (fix + 1) * 100;
-            break;
-        case CALC_MAX:
-            return (dice + fix) * 100;
-            break;
-        default:
-            return (fix + 1) * 100;
-            break;
+    switch (mode) {
+    case CALC_RAND:
+        return randint1(dice) * 100 + fix * 100;
+        break;
+    case CALC_AVERAGE:
+        return (dice + 1) * 50 + fix * 100;
+        break;
+    case CALC_MIN:
+        return (fix + 1) * 100;
+        break;
+    case CALC_MAX:
+        return (dice + fix) * 100;
+        break;
+    default:
+        return (fix + 1) * 100;
+        break;
     }
 }
 
@@ -174,6 +174,22 @@ PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
 
     if (creature_ptr->wraith_form)
         per *= 2;
+
+    return per;
+}
+
+PERCENTAGE calc_dark_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    PERCENTAGE per = 100;
+
+    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE) || creature_ptr->wraith_form) {
+        return 0;
+    }
+
+    if (creature_ptr->resist_dark) {
+        per *= 400;
+        per /= randrate(4, 7, mode);
+    }
 
     return per;
 }

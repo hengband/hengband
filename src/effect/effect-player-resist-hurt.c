@@ -384,13 +384,10 @@ void effect_player_dark(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
-    if (target_ptr->resist_dark) {
-        ep_ptr->dam *= 4;
-        ep_ptr->dam /= (randint1(4) + 7);
 
-        if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form)
-            ep_ptr->dam = 0;
-    } else if (!target_ptr->blind && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
+    ep_ptr->dam = ep_ptr->dam * calc_dark_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->blind && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
         (void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
     }
 

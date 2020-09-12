@@ -147,11 +147,9 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_DARK:
-        if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form) {
-            dam = 0;
+        dam = dam * calc_dark_damage_rate(target_ptr, RAND_MAX) / 100;
+        if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form)
             ignore_wraith_form = TRUE;
-        } else if (target_ptr->resist_dark)
-            dam /= 2; /* Worst case of 4 / (d4 + 7) */
         break;
 
     case GF_SHARDS:
