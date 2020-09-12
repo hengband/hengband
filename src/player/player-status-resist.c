@@ -147,13 +147,18 @@ PERCENTAGE calc_cold_damage_rate(player_type *creature_ptr)
     return per;
 }
 
-PERCENTAGE calc_vuln_lite_rate(player_type *creature_ptr)
+PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
         per *= 2;
     } else if (is_specific_player_race(creature_ptr, RACE_S_FAIRY)) {
         per = per * 4 / 3;
+    }
+
+    if (creature_ptr->resist_lite) {
+        per *= 400;
+        per /= randrate(4, 7, mode);
     }
 
     if (creature_ptr->wraith_form)

@@ -146,9 +146,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_LITE:
-        if (target_ptr->resist_lite)
-            dam /= 2; /* Worst case of 4 / (d4 + 7) */
-        dam = dam * calc_vuln_lite_rate(target_ptr) / 100;
+        dam = dam * calc_lite_damage_rate(target_ptr, RAND_MAX) / 100;
         break;
 
     case GF_DARK:
