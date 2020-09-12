@@ -276,7 +276,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_cold_rate(creature_ptr) / 100;
+    dam = dam * calc_cold_damage_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_cold)

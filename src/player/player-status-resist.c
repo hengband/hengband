@@ -103,7 +103,7 @@ PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr)
     return per;
 }
 
-PERCENTAGE calc_vuln_cold_rate(player_type *creature_ptr)
+PERCENTAGE calc_cold_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
     int i;
@@ -117,6 +117,12 @@ PERCENTAGE calc_vuln_cold_rate(player_type *creature_ptr)
             }
         }
     }
+
+    if (creature_ptr->resist_cold)
+        per = (per + 2) / 3;
+    if (is_oppose_cold(creature_ptr))
+        per = (per + 2) / 3;
+
     return per;
 }
 
