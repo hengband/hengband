@@ -114,11 +114,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
             break;
         }
 
-        dam = dam * calc_vuln_acid_rate(target_ptr) / 100;
-        if (target_ptr->resist_acid)
-            dam = (dam + 2) / 3;
-        if (is_oppose_acid(target_ptr))
-            dam = (dam + 2) / 3;
+        dam = dam * calc_acid_damage_rate(target_ptr) / 100;
         break;
 
     case GF_COLD:

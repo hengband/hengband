@@ -29,11 +29,13 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
+#include "status/element-resistance.h"
 
-PERCENTAGE calc_vuln_acid_rate(player_type *creature_ptr)
+PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
     int i;
+
     BIT_FLAGS flgs = is_vuln_acid(creature_ptr);
     for (i = 0; i < FLAG_CAUSE_MAX; i++) {
         if (flgs & (0x01 << i)) {
@@ -44,7 +46,14 @@ PERCENTAGE calc_vuln_acid_rate(player_type *creature_ptr)
             }
         }
     }
+
+    if (creature_ptr->resist_acid)
+        per = (per + 2) / 3;
+    if (is_oppose_acid(creature_ptr))
+        per = (per + 2) / 3;
+
     return per;
+
 }
 
 PERCENTAGE calc_vuln_elec_rate(player_type *creature_ptr)

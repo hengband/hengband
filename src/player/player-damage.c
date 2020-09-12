@@ -158,13 +158,7 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
-
-    /* Resist the damage */
-    if (creature_ptr->resist_acid)
-        dam = (dam + 2) / 3;
-    if (double_resist)
-        dam = (dam + 2) / 3;
+    dam = dam * calc_acid_damage_rate(creature_ptr) / 100;
 
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || creature_ptr->resist_acid)) && one_in_(HURT_CHANCE))
