@@ -24115,7 +24115,7 @@ G:D:v
 I:125:70d100:45:150:10
 W:73:2:0:38000:0:0
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | ATTR_MULTI
-F:DROP_1D2 | DROP_2D2 | DROP_GOOD | DROP_GREAT | CAN_FLY | FRIENDLY | EVIL
+F:DROP_1D2 | DROP_2D2 | DROP_GOOD | DROP_GREAT | CAN_FLY | EVIL
 F:DROP_GOOD | CAN_FLY | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_STUN | RIDING
 S:1_IN_3 | SCARE | BLINK | S_HI_DRAGON | ANIM_DEAD
@@ -24128,3 +24128,79 @@ D:多元世界の一つにおいて最初に創造されたドラゴンだ。
 D:人の魂を喰らい、次元を消滅させんばかりにあらゆるものを破壊して回っている。
 D:あまりの強さに長い間封印されていたが、ついに解き放たれてしまった。
 D:この恐るべきドラゴンを討ち滅ぼすことができるのはあなただけだ！
+
+N:1210:ミラークの信者
+E:Follower of Miraak
+G:p:U
+I:120:40d40:40:80:20
+W:50:5:0:1600:0:0
+B:SHOOT:HURT:15d15
+B:HIT:HURT:11d10
+B:HIT:HURT:11d10
+B:INSULT:HURT:11d10
+F:HUMAN | EVIL | DROP_CORPSE | DROP_SKELETON | SMART
+F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
+F:NO_SLEEP | NO_CONF | DROP_60
+S:1_IN_5 | SHOOT
+D:$It is one of those who agree with Miraak's corrupt wishes.
+D:$They are relentlessly chasing you as against Mirak's noble will.
+D:ミラークの堕落した願いに賛同している者共の一人だ。
+D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
+
+N:1211:ミラークの信者
+E:Follower of Miraak
+G:p:u
+I:120:40d40:40:80:20
+W:50:5:0:1600:0:0
+B:HIT:HURT:7d9
+B:HIT:HURT:7d9
+B:INSULT:HURT:7d9
+F:HUMAN | EVIL | DROP_CORPSE | DROP_SKELETON | SMART
+F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
+F:NO_SLEEP | NO_CONF | DROP_60
+S:1_IN_2 | BLINK | CONF | HOLD | BA_POIS | BA_FIRE | BA_COLD | BA_ELEC
+D:$It is one of those who agree with Miraak's corrupt wishes.
+D:$They are relentlessly chasing you as against Mirak's noble will.
+D:ミラークの堕落した願いに賛同している者共の一人だ。
+D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
+
+# 1/4ずつの確率で信者どちらか、1/4ずつでdまたはDを召喚
+N:1212:原初の竜殺し『ミラーク』
+E:Miraak, the first Dragon-soul Taker
+G:p:v
+I:125:80d80:45:125:10
+W:66:3:0:36000:0:0
+B:SLASH:UN_BONUS:13d11
+B:HIT:UN_POWER:13d11
+B:SLASH:EXP_VAMP:13d11
+B:HIT:SUPERHURT:10d11
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | DROP_SKELETON
+F:POWERFUL | SMART | IM_FIRE | IM_COLD | IM_ELEC | RES_CHAO
+F:NO_SLEEP | NO_CONF
+S:1_IN_3 | TELE_TO | TPORT | HEAL | S_KIN | BA_ELEC | BA_FIRE | BA_COLD | BR_SOUN
+D:$This man can completely absorb the soul of dragons
+D:$ without giving him time to save the power to revive in Mordor nor Oblivion.
+D:$  Will there ever be a dragon who can not hang its head to him?
+D:この男は、冥界で復活する力を蓄える時間すら与えず
+D:ドラゴンの魂を完全に吸収することができる。
+D:彼の前で頭を垂れないドラゴンが果たしてこの世にいるだろうか？
+
+N:1213:ヴォルキハルの主『ハルコン』
+E:Harkon, the patriarch of Volkihar
+G:V:s
+I:120:70d80:45:120:10
+W:61:2:0:32000:0:0
+B:CRUSH:LOSE_INT:10d11
+B:CRUSH:LOSE_WIS:10d11
+B:SLASH:EXP_VAMP:10d11
+B:SLASH:EXP_VAMP:10d11
+F:UNIQUE | FORCE_MAXHP | UNDEAD | EVIL | DEMON | MALE
+F:DROP_CORPSE | DROP_SKELETON
+F:HURT_LITE | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
+F:RES_NETH | RES_DARK | RES_SHAR | NO_SLEEP | NO_CONF
+S:1_IN_4 | TPORT | BA_DARK | S_UNDEAD | S_HI_UNDEAD | HEAL
+D:$A terrifying vampire trying to extinguish the sun's rays from this land.
+D:$  For that purpose, he is also a ruthless man
+D:$ who easily throws away the genus.
+D:太陽の光をこの大地から消しさそろうとしている恐るべき吸血鬼だ。
+D:そのためには眷属をも容易く使い捨てにする、冷酷な男でもある。
