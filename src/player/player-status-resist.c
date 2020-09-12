@@ -56,7 +56,7 @@ PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
 
 }
 
-PERCENTAGE calc_vuln_elec_rate(player_type *creature_ptr)
+PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
     int i;
@@ -70,6 +70,12 @@ PERCENTAGE calc_vuln_elec_rate(player_type *creature_ptr)
             }
         }
     }
+
+    if (creature_ptr->resist_elec)
+        per = (per + 2) / 3;
+    if (is_oppose_elec(creature_ptr))
+        per = (per + 2) / 3;
+
     return per;
 }
 

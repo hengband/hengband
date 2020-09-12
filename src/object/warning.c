@@ -93,11 +93,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
             ignore_wraith_form = TRUE;
             break;
         }
-        dam = dam * calc_vuln_elec_rate(target_ptr) / 100;
-        if (target_ptr->resist_elec)
-            dam = (dam + 2) / 3;
-        if (is_oppose_elec(target_ptr))
-            dam = (dam + 2) / 3;
+        dam = dam * calc_elec_damage_rate(target_ptr) / 100;
         break;
 
     case GF_POIS:
