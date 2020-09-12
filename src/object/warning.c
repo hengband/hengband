@@ -133,12 +133,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
             ignore_wraith_form = TRUE;
             break;
         }
-        dam = dam * calc_vuln_fire_rate(target_ptr) / 100;
-        if (target_ptr->resist_fire)
-            dam = (dam + 2) / 3;
-        if (is_oppose_fire(target_ptr))
-            dam = (dam + 2) / 3;
-        break;
+        dam = dam * calc_fire_damage_rate(target_ptr) / 100;
 
     case GF_PSY_SPEAR:
         ignore_wraith_form = TRUE;

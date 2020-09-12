@@ -79,7 +79,7 @@ PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
     return per;
 }
 
-PERCENTAGE calc_vuln_fire_rate(player_type *creature_ptr)
+PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
     int i;
@@ -93,6 +93,13 @@ PERCENTAGE calc_vuln_fire_rate(player_type *creature_ptr)
             }
         }
     }
+
+    /* Resist the damage */
+    if (creature_ptr->resist_fire)
+        per = (per + 2) / 3;
+    if (is_oppose_fire(creature_ptr))
+        per = (per + 2) / 3;
+
     return per;
 }
 

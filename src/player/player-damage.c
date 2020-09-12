@@ -237,14 +237,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
         return 0;
     }
 
-    /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_fire_rate(creature_ptr) / 100;
-
-    /* Resist the damage */
-    if (creature_ptr->resist_fire)
-        dam = (dam + 2) / 3;
-    if (double_resist)
-        dam = (dam + 2) / 3;
+    dam = dam * calc_fire_damage_rate(creature_ptr) / 100;
 
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || creature_ptr->resist_fire)) && one_in_(HURT_CHANCE))
