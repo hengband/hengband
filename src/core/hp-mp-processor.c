@@ -27,6 +27,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include "player/player-status-resist.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
@@ -244,10 +245,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
 
         if (damage) {
-            if (creature_ptr->resist_pois)
-                damage = damage / 3;
-            if (is_oppose_pois(creature_ptr))
-                damage = damage / 3;
+            damage = calc_pois_damage_rate(creature_ptr) / 100;
             if (creature_ptr->levitation)
                 damage = damage / 5;
 

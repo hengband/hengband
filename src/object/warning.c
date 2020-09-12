@@ -97,10 +97,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_POIS:
-        if (target_ptr->resist_pois)
-            dam = (dam + 2) / 3;
-        if (is_oppose_pois(target_ptr))
-            dam = (dam + 2) / 3;
+        dam = dam * calc_pois_damage_rate(target_ptr) / 100;
         break;
 
     case GF_ACID:

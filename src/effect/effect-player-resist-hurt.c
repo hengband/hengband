@@ -44,10 +44,7 @@ void effect_player_poison(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("毒で攻撃された！", "You are hit by poison!"));
 
-    if (target_ptr->resist_pois)
-        ep_ptr->dam = (ep_ptr->dam + 2) / 3;
-    if (double_resist)
-        ep_ptr->dam = (ep_ptr->dam + 2) / 3;
+    ep_ptr->dam = ep_ptr->dam * calc_elec_damage_rate(target_ptr) / 100;
 
     if ((!(double_resist || target_ptr->resist_pois)) && one_in_(HURT_CHANCE) && !check_multishadow(target_ptr)) {
         do_dec_stat(target_ptr, A_CON);

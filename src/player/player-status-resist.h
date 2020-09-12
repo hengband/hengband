@@ -12,4 +12,5 @@ PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr);
 PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr);
 PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr);
 PERCENTAGE calc_cold_damage_rate(player_type *creature_ptr);
+PERCENTAGE calc_pois_damage_rate(player_type *creature_ptr);
 PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
