@@ -1,4 +1,4 @@
-﻿#include "player/player-status-flags.h"
+﻿#include "player/player-status-resist.h"
 #include "art-definition/art-sword-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -16,12 +16,14 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-skill.h"
+#include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
+#include "status/element-resistance.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -29,7 +31,27 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
-#include "status/element-resistance.h"
+
+PERCENTAGE randrate(int dice, int fix, rate_calc_type_mode mode)
+{
+    switch (mode) {    
+        case CALC_RAND:
+            return randint1(dice) * 100 + fix * 100;
+            break;
+        case CALC_AVERAGE:    
+            return (dice + 1) * 50 + fix * 100;
+            break;
+        case CALC_MIN:    
+            return (fix + 1) * 100;
+            break;
+        case CALC_MAX:
+            return (dice + fix) * 100;
+            break;
+        default:
+            return (fix + 1) * 100;
+            break;
+    }
+}
 
 PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
 {
@@ -53,7 +75,6 @@ PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
         per = (per + 2) / 3;
 
     return per;
-
 }
 
 PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
