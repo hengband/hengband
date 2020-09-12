@@ -366,7 +366,7 @@ void effect_player_lite(player_type *target_ptr, effect_player_type *ep_ptr)
         (void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
     }
 
-    ep_ptr->dam = ep_ptr->dam * calc_fire_damage_rate(target_ptr) / 100;
+    ep_ptr->dam = ep_ptr->dam * calc_vuln_lite_rate(target_ptr) / 100;
 
     if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE)) {
         if (!check_multishadow(target_ptr))
