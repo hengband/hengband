@@ -232,8 +232,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_HELL_FIRE:
-        if (target_ptr->align > 10)
-            dam *= 2;
+        dam = dam * calc_hell_fire_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_MIND_BLAST:
