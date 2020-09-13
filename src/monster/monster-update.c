@@ -230,7 +230,8 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
                     if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                         r_ptr->r_flags2 |= RF2_EMPTY_MIND;
                 } else if (r_ptr->flags2 & RF2_WEIRD_MIND) {
-                    if ((m_idx % 10) == 5) {
+                    const int weird_telepathy_possibility = 10;
+                    if (one_in_(weird_telepathy_possibility)) {
                         um_ptr->flag = TRUE;
                         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
                             r_ptr->r_flags2 |= RF2_WEIRD_MIND;
