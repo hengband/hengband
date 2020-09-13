@@ -262,6 +262,18 @@ PERCENTAGE calc_chaos_damage_rate(player_type *creature_ptr, rate_calc_type_mode
     return per;
 }
 
+PERCENTAGE calc_disenchant_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    PERCENTAGE per = 100;
+
+    if (creature_ptr->resist_disen) {
+        per *= 600;
+        per /= randrate(4, 7, mode);
+    }
+
+    return per;
+}
+
 PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;

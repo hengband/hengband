@@ -168,8 +168,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_DISENCHANT:
-        if (target_ptr->resist_disen)
-            dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+        dam = dam * calc_disenchant_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_NEXUS:

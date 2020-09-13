@@ -21,5 +21,6 @@ PERCENTAGE calc_sound_damage_rate(player_type *creature_ptr, rate_calc_type_mode
 PERCENTAGE calc_conf_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_chaos_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
+PERCENTAGE calc_disenchant_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_hell_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
