@@ -198,6 +198,45 @@ static void update_smart_stupid_flags(monster_race *r_ptr)
         r_ptr->r_flags2 |= RF2_STUPID;
 }
 
+static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr)
+{
+    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    if (subject_ptr->special_defense & KATA_MUSOU) {
+        um_ptr->flag = TRUE;
+        if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
+            update_smart_stupid_flags(r_ptr);
+
+        return;
+    }
+    
+    if (!subject_ptr->telepathy)
+        return;
+
+    if (r_ptr->flags2 & RF2_EMPTY_MIND) {
+        if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
+            r_ptr->r_flags2 |= RF2_EMPTY_MIND;
+
+        return;
+    }
+    
+    if (r_ptr->flags2 & RF2_WEIRD_MIND) {
+        const int weird_telepathy_possibility = 10;
+        if (one_in_(weird_telepathy_possibility)) {
+            um_ptr->flag = TRUE;
+            if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
+                r_ptr->r_flags2 |= RF2_WEIRD_MIND;
+                update_smart_stupid_flags(r_ptr);
+            }
+        }
+
+        return;
+    }
+
+    um_ptr->flag = TRUE;
+    if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
+        update_smart_stupid_flags(r_ptr);
+}
+
 /*!
  * @brief モンスターの各情報を更新する / This function updates the monster record of the given monster
  * @param m_idx 更新するモンスター情報のID
@@ -221,30 +260,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (distance <= (um_ptr->in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT)) {
         if (!um_ptr->in_darkness || (distance <= MAX_SIGHT / 4)) {
-            if (subject_ptr->special_defense & KATA_MUSOU) {
-                um_ptr->flag = TRUE;
-                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
-                    update_smart_stupid_flags(r_ptr);
-            } else if (subject_ptr->telepathy) {
-                if (r_ptr->flags2 & RF2_EMPTY_MIND) {
-                    if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
-                        r_ptr->r_flags2 |= RF2_EMPTY_MIND;
-                } else if (r_ptr->flags2 & RF2_WEIRD_MIND) {
-                    const int weird_telepathy_possibility = 10;
-                    if (one_in_(weird_telepathy_possibility)) {
-                        um_ptr->flag = TRUE;
-                        if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
-                            r_ptr->r_flags2 |= RF2_WEIRD_MIND;
-                            update_smart_stupid_flags(r_ptr);
-                        }
-                    }
-                } else {
-                    um_ptr->flag = TRUE;
-                    if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
-                        update_smart_stupid_flags(r_ptr);
-                }
-            }
-
+            update_telepathy_sight(subject_ptr, um_ptr);
             if ((subject_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
                 um_ptr->flag = TRUE;
                 if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
