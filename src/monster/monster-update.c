@@ -403,10 +403,11 @@ static void decide_sight_invisible_monsters(player_type *subject_ptr, um_type *u
  * 以上を感知する
  * @param subject_ptr プレーヤーへの参照ポインタ
  * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
+ * @param m_idx フロアのモンスター番号
  * @return なし
  * @details 感知した結果、エルドリッチホラー持ちがいたら精神を破壊する
  */
-static void update_monsters_visibility(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+static void update_invisible_monsters(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     if (um_ptr->m_ptr->ml)
         return;
@@ -439,6 +440,24 @@ static void update_monsters_visibility(player_type *subject_ptr, um_type *um_ptr
     }
 }
 
+static void update_visible_monsters(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+{
+    if (!um_ptr->m_ptr->ml)
+        return;
+
+    um_ptr->m_ptr->ml = FALSE;
+    lite_spot(subject_ptr, um_ptr->fy, um_ptr->fx);
+
+    if (subject_ptr->health_who == m_idx)
+        subject_ptr->redraw |= PR_HEALTH;
+
+    if (subject_ptr->riding == m_idx)
+        subject_ptr->redraw |= PR_UHEALTH;
+
+    if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
+        disturb(subject_ptr, TRUE, TRUE);
+}
+
 /*!
  * @brief モンスターの各情報を更新する / This function updates the monster record of the given monster
  * @param m_idx 更新するモンスター情報のID
@@ -460,24 +479,11 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
     decide_sight_invisible_monsters(subject_ptr, um_ptr);
 
-    if (um_ptr->flag) {
-        update_monsters_visibility(subject_ptr, um_ptr, m_idx);
-    } else {
-        if (um_ptr->m_ptr->ml) {
-            um_ptr->m_ptr->ml = FALSE;
-            lite_spot(subject_ptr, um_ptr->fy, um_ptr->fx);
-
-            if (subject_ptr->health_who == m_idx)
-                subject_ptr->redraw |= PR_HEALTH;
-
-            if (subject_ptr->riding == m_idx)
-                subject_ptr->redraw |= PR_UHEALTH;
-
-            if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-                disturb(subject_ptr, TRUE, TRUE);
-        }
-    }
-
+    if (um_ptr->flag)
+        update_invisible_monsters(subject_ptr, um_ptr, m_idx);
+    else
+        update_visible_monsters(subject_ptr, um_ptr, m_idx);
+    
     /* The monster is now easily visible */
     if (um_ptr->easy) {
         if (!(um_ptr->m_ptr->mflag & MFLAG_VIEW)) {
