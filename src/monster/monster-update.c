@@ -34,6 +34,18 @@
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
 
+// Update Monster.
+typedef struct um_type {
+    monster_type *m_ptr;
+    bool do_disturb;
+    POSITION fy;
+    POSITION fx;
+    bool flag;
+    bool easy;
+    bool in_darkness;
+    bool full;
+} um_type;
+
 /*!
  * @brief 騎乗中のモンスター情報を更新する
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -146,13 +158,26 @@ void update_player_window(player_type *target_ptr, old_race_flags *old_race_flag
     }
 }
 
-static POSITION decide_updated_distance(player_type *subject_ptr, const bool full, monster_type *m_ptr, const POSITION fy, const POSITION fx)
+static um_type* initialize_um_type(player_type* subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx, bool full)
 {
-    if (!full)
-        return m_ptr->cdis;
+    um_ptr->m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
+    um_ptr->do_disturb = disturb_move;
+    um_ptr->fy = um_ptr->m_ptr->fy;
+    um_ptr->fx = um_ptr->m_ptr->fx;
+    um_ptr->flag = FALSE;
+    um_ptr->easy = FALSE;
+    um_ptr->in_darkness = (d_info[subject_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !subject_ptr->see_nocto;
+    um_ptr->full = full;
+    return um_ptr;
+}
 
-    int dy = (subject_ptr->y > fy) ? (subject_ptr->y - fy) : (fy - subject_ptr->y);
-    int dx = (subject_ptr->x > fx) ? (subject_ptr->x - fx) : (fx - subject_ptr->x);
+static POSITION decide_updated_distance(player_type *subject_ptr, um_type *um_ptr)
+{
+    if (!um_ptr->full)
+        return um_ptr->m_ptr->cdis;
+
+    int dy = (subject_ptr->y > um_ptr->fy) ? (subject_ptr->y - um_ptr->fy) : (um_ptr->fy - subject_ptr->y);
+    int dx = (subject_ptr->x > um_ptr->fx) ? (subject_ptr->x - um_ptr->fx) : (um_ptr->fx - subject_ptr->x);
     POSITION distance = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
     if (distance > 255)
         distance = 255;
@@ -160,7 +185,7 @@ static POSITION decide_updated_distance(player_type *subject_ptr, const bool ful
     if (!distance)
         distance = 1;
 
-    m_ptr->cdis = distance;
+    um_ptr->m_ptr->cdis = distance;
     return distance;
 }
 
@@ -181,145 +206,146 @@ static void update_smart_stupid_flags(monster_race *r_ptr)
  */
 void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 {
-    monster_type *m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    bool do_disturb = disturb_move;
-    POSITION fy = m_ptr->fy;
-    POSITION fx = m_ptr->fx;
-    bool flag = FALSE;
-    bool easy = FALSE;
-    bool in_darkness = (d_info[subject_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !subject_ptr->see_nocto;
+    um_type tmp_um;
+    um_type *um_ptr = initialize_um_type(subject_ptr, &tmp_um, m_idx, full);
     if (disturb_high) {
-        monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+        monster_race *ap_r_ptr = &r_info[um_ptr->m_ptr->ap_r_idx];
         if (ap_r_ptr->r_tkills && ap_r_ptr->level >= subject_ptr->lev)
-            do_disturb = TRUE;
+            um_ptr->do_disturb = TRUE;
     }
 
-    if (m_ptr->mflag2 & MFLAG2_MARK)
-        flag = TRUE;
+    if (um_ptr->m_ptr->mflag2 & MFLAG2_MARK)
+        um_ptr->flag = TRUE;
 
-    POSITION distance = decide_updated_distance(subject_ptr, full, m_ptr, fy, fx);
-    if (distance <= (in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT)) {
-        if (!in_darkness || (distance <= MAX_SIGHT / 4)) {
+    POSITION distance = decide_updated_distance(subject_ptr, um_ptr);
+    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    if (distance <= (um_ptr->in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT)) {
+        if (!um_ptr->in_darkness || (distance <= MAX_SIGHT / 4)) {
             if (subject_ptr->special_defense & KATA_MUSOU) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     update_smart_stupid_flags(r_ptr);
             } else if (subject_ptr->telepathy) {
                 if (r_ptr->flags2 & RF2_EMPTY_MIND) {
-                    if (is_original_ap(m_ptr) && !subject_ptr->image)
+                    if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                         r_ptr->r_flags2 |= RF2_EMPTY_MIND;
                 } else if (r_ptr->flags2 & RF2_WEIRD_MIND) {
                     if ((m_idx % 10) == 5) {
-                        flag = TRUE;
-                        if (is_original_ap(m_ptr) && !subject_ptr->image) {
+                        um_ptr->flag = TRUE;
+                        if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
                             r_ptr->r_flags2 |= RF2_WEIRD_MIND;
                             update_smart_stupid_flags(r_ptr);
                         }
                     }
                 } else {
-                    flag = TRUE;
-                    if (is_original_ap(m_ptr) && !subject_ptr->image)
+                    um_ptr->flag = TRUE;
+                    if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                         update_smart_stupid_flags(r_ptr);
                 }
             }
 
             if ((subject_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_ANIMAL;
             }
 
             if ((subject_ptr->esp_undead) && (r_ptr->flags3 & RF3_UNDEAD)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_UNDEAD;
             }
 
             if ((subject_ptr->esp_demon) && (r_ptr->flags3 & RF3_DEMON)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_DEMON;
             }
 
             if ((subject_ptr->esp_orc) && (r_ptr->flags3 & RF3_ORC)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_ORC;
             }
 
             if ((subject_ptr->esp_troll) && (r_ptr->flags3 & RF3_TROLL)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_TROLL;
             }
 
             if ((subject_ptr->esp_giant) && (r_ptr->flags3 & RF3_GIANT)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_GIANT;
             }
 
             if ((subject_ptr->esp_dragon) && (r_ptr->flags3 & RF3_DRAGON)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_DRAGON;
             }
 
             if ((subject_ptr->esp_human) && (r_ptr->flags2 & RF2_HUMAN)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags2 |= RF2_HUMAN;
             }
 
             if ((subject_ptr->esp_evil) && (r_ptr->flags3 & RF3_EVIL)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_EVIL;
             }
 
             if ((subject_ptr->esp_good) && (r_ptr->flags3 & RF3_GOOD)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_GOOD;
             }
 
             if ((subject_ptr->esp_nonliving) && ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING)) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags3 |= RF3_NONLIVING;
             }
 
-            if ((subject_ptr->esp_unique) && (r_ptr->flags1 & (RF1_UNIQUE))) {
-                flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image)
+            if ((subject_ptr->esp_unique) && (r_ptr->flags1 & RF1_UNIQUE)) {
+                um_ptr->flag = TRUE;
+                if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
                     r_ptr->r_flags1 |= RF1_UNIQUE;
             }
         }
 
-        if (player_has_los_bold(subject_ptr, fy, fx) && !subject_ptr->blind) {
+        if (player_has_los_bold(subject_ptr, um_ptr->fy, um_ptr->fx) && !subject_ptr->blind) {
             bool do_invisible = FALSE;
             bool do_cold_blood = FALSE;
-            if (subject_ptr->concent >= CONCENT_RADAR_THRESHOLD)
-                easy = flag = TRUE;
-
+            if (subject_ptr->concent >= CONCENT_RADAR_THRESHOLD) {
+                um_ptr->easy = TRUE;
+                um_ptr->flag = TRUE;
+            }
+            
             if (distance <= subject_ptr->see_infra)
                 if ((r_ptr->flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) == RF2_COLD_BLOOD) {
                     do_cold_blood = TRUE;
                 } else {
-                    easy = TRUE;
-                    flag = TRUE;
+                    um_ptr->easy = TRUE;
+                    um_ptr->flag = TRUE;
                 }
 
-            if (player_can_see_bold(subject_ptr, fy, fx))
+            if (player_can_see_bold(subject_ptr, um_ptr->fy, um_ptr->fx))
                 if (r_ptr->flags2 & RF2_INVISIBLE) {
                     do_invisible = TRUE;
-                    if (subject_ptr->see_inv)
-                        easy = flag = TRUE;
-                } else
-                    easy = flag = TRUE;
-
-            if (flag && is_original_ap(m_ptr) && !subject_ptr->image) {
+                    if (subject_ptr->see_inv) {
+                        um_ptr->easy = TRUE;
+                        um_ptr->flag = TRUE;
+                    }                    
+                } else {
+                    um_ptr->easy = TRUE;
+                    um_ptr->flag = TRUE;
+                }
+                
+            if (um_ptr->flag && is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
                 if (do_invisible)
                     r_ptr->r_flags2 |= RF2_INVISIBLE;
 
@@ -330,10 +356,10 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
     }
 
     /* The monster is now visible */
-    if (flag) {
-        if (!m_ptr->ml) {
-            m_ptr->ml = TRUE;
-            lite_spot(subject_ptr, fy, fx);
+    if (um_ptr->flag) {
+        if (!um_ptr->m_ptr->ml) {
+            um_ptr->m_ptr->ml = TRUE;
+            lite_spot(subject_ptr, um_ptr->fy, um_ptr->fx);
 
             if (subject_ptr->health_who == m_idx)
                 subject_ptr->redraw |= PR_HEALTH;
@@ -342,19 +368,19 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
                 subject_ptr->redraw |= PR_UHEALTH;
 
             if (!subject_ptr->image) {
-                if ((m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
+                if ((um_ptr->m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
                     r_info[MON_KAGE].r_sights++;
-                else if (is_original_ap(m_ptr) && (r_ptr->r_sights < MAX_SHORT))
+                else if (is_original_ap(um_ptr->m_ptr) && (r_ptr->r_sights < MAX_SHORT))
                     r_ptr->r_sights++;
             }
 
-            if (r_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
-                sanity_blast(subject_ptr, m_ptr, FALSE);
+            if (r_info[um_ptr->m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
+                sanity_blast(subject_ptr, um_ptr->m_ptr, FALSE);
 
             if (disturb_near
-                && (projectable(subject_ptr, m_ptr->fy, m_ptr->fx, subject_ptr->y, subject_ptr->x)
-                    && projectable(subject_ptr, subject_ptr->y, subject_ptr->x, m_ptr->fy, m_ptr->fx))) {
-                if (disturb_pets || is_hostile(m_ptr))
+                && (projectable(subject_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, subject_ptr->y, subject_ptr->x)
+                    && projectable(subject_ptr, subject_ptr->y, subject_ptr->x, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx))) {
+                if (disturb_pets || is_hostile(um_ptr->m_ptr))
                     disturb(subject_ptr, TRUE, TRUE);
             }
         }
@@ -362,9 +388,9 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
     /* The monster is not visible */
     else {
-        if (m_ptr->ml) {
-            m_ptr->ml = FALSE;
-            lite_spot(subject_ptr, fy, fx);
+        if (um_ptr->m_ptr->ml) {
+            um_ptr->m_ptr->ml = FALSE;
+            lite_spot(subject_ptr, um_ptr->fy, um_ptr->fx);
 
             if (subject_ptr->health_who == m_idx)
                 subject_ptr->redraw |= PR_HEALTH;
@@ -372,16 +398,16 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
             if (subject_ptr->riding == m_idx)
                 subject_ptr->redraw |= PR_UHEALTH;
 
-            if (do_disturb && (disturb_pets || is_hostile(m_ptr)))
+            if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
                 disturb(subject_ptr, TRUE, TRUE);
         }
     }
 
     /* The monster is now easily visible */
-    if (easy) {
-        if (!(m_ptr->mflag & MFLAG_VIEW)) {
-            m_ptr->mflag |= MFLAG_VIEW;
-            if (do_disturb && (disturb_pets || is_hostile(m_ptr)))
+    if (um_ptr->easy) {
+        if (!(um_ptr->m_ptr->mflag & MFLAG_VIEW)) {
+            um_ptr->m_ptr->mflag |= MFLAG_VIEW;
+            if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
                 disturb(subject_ptr, TRUE, TRUE);
         }
 
@@ -390,14 +416,14 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
     /* The monster is not easily visible */
     /* Change */
-    if (!(m_ptr->mflag & MFLAG_VIEW))
+    if (!(um_ptr->m_ptr->mflag & MFLAG_VIEW))
         return;
 
     /* Mark as not easily visible */
-    m_ptr->mflag &= ~(MFLAG_VIEW);
+    um_ptr->m_ptr->mflag &= ~(MFLAG_VIEW);
 
-    if (do_disturb) {
-        if (disturb_pets || is_hostile(m_ptr))
+    if (um_ptr->do_disturb) {
+        if (disturb_pets || is_hostile(um_ptr->m_ptr))
             disturb(subject_ptr, TRUE, TRUE);
     }
 }
