@@ -108,9 +108,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_COLD:
     case GF_ICE:
         if (is_immune_cold(target_ptr)) {
-            dam = 0;
             ignore_wraith_form = TRUE;
-            break;
         }
         dam = dam * calc_cold_damage_rate(target_ptr) / 100;
         break;
@@ -137,11 +135,11 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_LITE:
-        dam = dam * calc_lite_damage_rate(target_ptr, RAND_MAX) / 100;
+        dam = dam * calc_lite_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_DARK:
-        dam = dam * calc_dark_damage_rate(target_ptr, RAND_MAX) / 100;
+        dam = dam * calc_dark_damage_rate(target_ptr, CALC_MAX) / 100;
         if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form)
             ignore_wraith_form = TRUE;
         break;
@@ -167,11 +165,11 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_NETHER:
+        dam = dam * calc_nether_damage_rate(target_ptr, CALC_MAX) / 100;
         if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
-            dam = 0;
             ignore_wraith_form = TRUE;
-        } else if (target_ptr->resist_neth)
-            dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+            dam = 0;
+        }
         break;
 
     case GF_DISENCHANT:

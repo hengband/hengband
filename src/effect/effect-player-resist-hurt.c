@@ -147,11 +147,9 @@ void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("地獄の力で攻撃された！", "You are hit by nether forces!"));
 
-    if (target_ptr->resist_neth) {
-        if (!is_specific_player_race(target_ptr, RACE_SPECTRE))
-            ep_ptr->dam *= 6;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!check_multishadow(target_ptr))
+    ep_ptr->dam = ep_ptr->dam * calc_nether_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_neth && !check_multishadow(target_ptr))
         drain_exp(target_ptr, 200 + (target_ptr->exp / 100), 200 + (target_ptr->exp / 1000), 75);
 
     if (!is_specific_player_race(target_ptr, RACE_SPECTRE) || check_multishadow(target_ptr)) {

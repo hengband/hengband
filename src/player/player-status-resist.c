@@ -214,6 +214,20 @@ PERCENTAGE calc_dark_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
     return per;
 }
 
+PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    PERCENTAGE per = 100;
+
+    if (creature_ptr->resist_neth) {
+        if (!is_specific_player_race(creature_ptr, RACE_SPECTRE))
+            per *= 6;
+        per *= 100;
+        per /= randrate(4, 7, mode);
+    }
+
+    return per;
+}
+
 PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     (mode); // unused
