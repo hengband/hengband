@@ -204,10 +204,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_NUKE:
-        if (target_ptr->resist_pois)
-            dam = (2 * dam + 2) / 5;
-        if (is_oppose_pois(target_ptr))
-            dam = (2 * dam + 2) / 5;
+        dam = dam * calc_nuke_damage_rate(target_ptr) / 100;
         break;
 
     case GF_DEATH_RAY:

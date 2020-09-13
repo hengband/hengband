@@ -62,10 +62,7 @@ void effect_player_nuke(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
 
-    if (target_ptr->resist_pois)
-        ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
-    if (double_resist)
-        ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
+    ep_ptr->dam = ep_ptr->dam * calc_pois_damage_rate(target_ptr) / 100;
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
     if ((double_resist || target_ptr->resist_pois) || check_multishadow(target_ptr))

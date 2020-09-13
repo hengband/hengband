@@ -163,6 +163,17 @@ PERCENTAGE calc_pois_damage_rate(player_type *creature_ptr)
     return per;
 }
 
+PERCENTAGE calc_nuke_damage_rate(player_type *creature_ptr)
+{
+    PERCENTAGE per = 100;
+    if (creature_ptr->resist_pois)
+        per = (per + 2) / 3;
+    if (is_oppose_pois(creature_ptr))
+        per = (per + 2) / 3;
+
+    return per;
+}
+
 PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
