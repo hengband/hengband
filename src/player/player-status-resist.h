@@ -1,4 +1,7 @@
-﻿#include "player/player-status.h"
+﻿#pragma once
+
+#include "system/angband.h"
+#include "player/player-status.h"
 
 typedef enum rate_calc_type_mode {
 	CALC_RAND = 0,
@@ -23,5 +26,6 @@ PERCENTAGE calc_chaos_damage_rate(player_type *creature_ptr, rate_calc_type_mode
 PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_disenchant_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_nexus_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
+PERCENTAGE calc_rocket_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_hell_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);

@@ -186,8 +186,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_ROCKET:
-        if (target_ptr->resist_shard)
-            dam /= 2;
+        dam = dam * calc_rocket_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_NUKE:

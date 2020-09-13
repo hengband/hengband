@@ -318,9 +318,9 @@ void effect_player_rocket(player_type *target_ptr, effect_player_type *ep_ptr)
         (void)set_stun(target_ptr, target_ptr->stun + randint1(20));
     }
 
-    if (target_ptr->resist_shard) {
-        ep_ptr->dam /= 2;
-    } else if (!check_multishadow(target_ptr)) {
+    ep_ptr->dam = ep_ptr->dam * calc_rocket_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_shard && !check_multishadow(target_ptr)) {
         (void)set_cut(target_ptr, target_ptr->cut + (ep_ptr->dam / 2));
     }
 
