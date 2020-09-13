@@ -158,7 +158,7 @@ void update_player_window(player_type *target_ptr, old_race_flags *old_race_flag
     }
 }
 
-static um_type* initialize_um_type(player_type* subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx, bool full)
+static um_type *initialize_um_type(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx, bool full)
 {
     um_ptr->m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
     um_ptr->do_disturb = disturb_move;
@@ -232,7 +232,7 @@ static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr)
 
         return;
     }
-    
+
     if (!subject_ptr->telepathy)
         return;
 
@@ -242,7 +242,7 @@ static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr)
 
         return;
     }
-    
+
     if (update_weird_telepathy(subject_ptr, um_ptr))
         return;
 
@@ -345,7 +345,7 @@ static bool check_invisible(player_type *subject_ptr, um_type *um_ptr)
 {
     if (!player_can_see_bold(subject_ptr, um_ptr->fy, um_ptr->fx))
         return FALSE;
-    
+
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (r_ptr->flags2 & RF2_INVISIBLE) {
         if (subject_ptr->see_inv) {
@@ -364,7 +364,7 @@ static bool check_invisible(player_type *subject_ptr, um_type *um_ptr)
  * @brief テレパシー・赤外線視力・可視透明によってモンスターを感知できるかどうかの判定
  * @param subject_ptr プレーヤーへの参照ポインタ
  * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
- * @return なし 
+ * @return なし
  */
 static void decide_sight_invisible_monsters(player_type *subject_ptr, um_type *um_ptr)
 {
@@ -399,6 +399,47 @@ static void decide_sight_invisible_monsters(player_type *subject_ptr, um_type *u
 }
 
 /*!
+ * @brief 壁の向こうにいるモンスターへのテレパシー・赤外線視力による冷血動物以外の透明モンスター・可視透明能力による透明モンスター
+ * 以上を感知する
+ * @param subject_ptr プレーヤーへの参照ポインタ
+ * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
+ * @return なし
+ * @details 感知した結果、エルドリッチホラー持ちがいたら精神を破壊する
+ */
+static void update_monsters_visibility(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+{
+    if (um_ptr->m_ptr->ml)
+        return;
+
+    um_ptr->m_ptr->ml = TRUE;
+    lite_spot(subject_ptr, um_ptr->fy, um_ptr->fx);
+
+    if (subject_ptr->health_who == m_idx)
+        subject_ptr->redraw |= PR_HEALTH;
+
+    if (subject_ptr->riding == m_idx)
+        subject_ptr->redraw |= PR_UHEALTH;
+
+    if (!subject_ptr->image) {
+        monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+        if ((um_ptr->m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
+            r_info[MON_KAGE].r_sights++;
+        else if (is_original_ap(um_ptr->m_ptr) && (r_ptr->r_sights < MAX_SHORT))
+            r_ptr->r_sights++;
+    }
+
+    if (r_info[um_ptr->m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
+        sanity_blast(subject_ptr, um_ptr->m_ptr, FALSE);
+
+    if (disturb_near
+        && (projectable(subject_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, subject_ptr->y, subject_ptr->x)
+            && projectable(subject_ptr, subject_ptr->y, subject_ptr->x, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx))) {
+        if (disturb_pets || is_hostile(um_ptr->m_ptr))
+            disturb(subject_ptr, TRUE, TRUE);
+    }
+}
+
+/*!
  * @brief モンスターの各情報を更新する / This function updates the monster record of the given monster
  * @param m_idx 更新するモンスター情報のID
  * @param full プレイヤーとの距離更新を行うならばtrue
@@ -419,40 +460,9 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
     decide_sight_invisible_monsters(subject_ptr, um_ptr);
 
-    /* The monster is now visible */
-    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (um_ptr->flag) {
-        if (!um_ptr->m_ptr->ml) {
-            um_ptr->m_ptr->ml = TRUE;
-            lite_spot(subject_ptr, um_ptr->fy, um_ptr->fx);
-
-            if (subject_ptr->health_who == m_idx)
-                subject_ptr->redraw |= PR_HEALTH;
-
-            if (subject_ptr->riding == m_idx)
-                subject_ptr->redraw |= PR_UHEALTH;
-
-            if (!subject_ptr->image) {
-                if ((um_ptr->m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
-                    r_info[MON_KAGE].r_sights++;
-                else if (is_original_ap(um_ptr->m_ptr) && (r_ptr->r_sights < MAX_SHORT))
-                    r_ptr->r_sights++;
-            }
-
-            if (r_info[um_ptr->m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
-                sanity_blast(subject_ptr, um_ptr->m_ptr, FALSE);
-
-            if (disturb_near
-                && (projectable(subject_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, subject_ptr->y, subject_ptr->x)
-                    && projectable(subject_ptr, subject_ptr->y, subject_ptr->x, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx))) {
-                if (disturb_pets || is_hostile(um_ptr->m_ptr))
-                    disturb(subject_ptr, TRUE, TRUE);
-            }
-        }
-    }
-
-    /* The monster is not visible */
-    else {
+        update_monsters_visibility(subject_ptr, um_ptr, m_idx);
+    } else {
         if (um_ptr->m_ptr->ml) {
             um_ptr->m_ptr->ml = FALSE;
             lite_spot(subject_ptr, um_ptr->fy, um_ptr->fx);
@@ -553,10 +563,10 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         if (is_oppose_fire(player_ptr))
             m_ptr->smart |= SM_OPP_FIRE;
-        
+
         if (is_immune_fire(player_ptr))
             m_ptr->smart |= SM_IMM_FIRE;
-        
+
         break;
     case DRS_COLD:
         if (player_ptr->resist_cold)
