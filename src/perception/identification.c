@@ -83,7 +83,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     }
 
     if (has_flag(flgs, TR_INVULN_ARROW)) {
-        info[i++] = _("それは物理的な飛び道具の一切をはねのける。", "It repels all physical missiles.");
+        info[i++] = _("それは視界がある限り物理的な飛び道具の一切をはねのける。", "It repels all physical missiles as long as there is visibility.");
     }
 
     if (has_flag(flgs, TR_NO_AC)) {
