@@ -151,14 +151,12 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_acid(creature_ptr);
 
-    /* Total Immunity */
-    if (is_immune_acid(creature_ptr) || (dam <= 0)) {
+    dam = dam * calc_acid_damage_rate(creature_ptr) / 100;
+
+    if (dam <= 0) {
         learn_spell(creature_ptr, monspell);
         return 0;
     }
-
-    /* Vulnerability (Ouch!) */
-    dam = dam * calc_acid_damage_rate(creature_ptr) / 100;
 
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || creature_ptr->resist_acid)) && one_in_(HURT_CHANCE))
