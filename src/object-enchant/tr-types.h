@@ -153,5 +153,6 @@ typedef enum tr_type {
     TR_HEAVY_SPELL = 142,
     TR_RES_TIME = 143,
     TR_RES_WATER = 144,
-    TR_FLAG_MAX = 145,
+    TR_INVULN_ARROW = 145,
+    TR_FLAG_MAX = 146,
 } tr_type;
