@@ -132,8 +132,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_ARROW:
         if (!target_ptr->blind
-            && ((target_ptr->inventory_list[INVEN_RARM].k_idx && (target_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU))
-                || (target_ptr->inventory_list[INVEN_LARM].k_idx && (target_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU)))) {
+            && (has_invuln_arrow(target_ptr))) {
             dam = 0;
             ignore_wraith_form = TRUE;
         }

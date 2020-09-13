@@ -122,7 +122,7 @@ void effect_player_arrow(player_type *target_ptr, effect_player_type *ep_ptr)
         return;
     }
 
-    if ((target_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (target_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU)) {
+    if (has_invuln_arrow(target_ptr)) {
         msg_print(_("矢を斬り捨てた！", "You cut down the arrow!"));
         return;
     }
