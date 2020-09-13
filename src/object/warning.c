@@ -176,8 +176,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_TIME:
-        if (target_ptr->resist_time)
-            dam /= 2; /* Worst case of 4 / (d4 + 7) */
+        dam = dam * calc_time_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_GRAVITY:

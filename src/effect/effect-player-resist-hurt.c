@@ -466,21 +466,16 @@ void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("過去からの衝撃に攻撃された！", "You are hit by a blast from the past!"));
 
-    if (target_ptr->resist_time) {
-        ep_ptr->dam *= 4;
-        ep_ptr->dam /= (randint1(4) + 7);
-        msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
+    ep_ptr->dam = ep_ptr->dam * calc_time_damage_rate(target_ptr, CALC_RAND) / 100;
+    if (!check_multishadow(target_ptr)) {
+        if (target_ptr->resist_time) {
+            msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
+        }
         ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-        return;
+        if (!target_ptr->resist_time) {
+            effect_player_time_addition(target_ptr);
+        }
     }
-
-    if (check_multishadow(target_ptr)) {
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-        return;
-    }
-
-    effect_player_time_addition(target_ptr);
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
 
 void effect_player_gravity(player_type *target_ptr, effect_player_type *ep_ptr)

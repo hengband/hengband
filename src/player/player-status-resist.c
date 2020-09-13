@@ -312,6 +312,20 @@ PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mod
     return per;
 }
 
+PERCENTAGE calc_time_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    (mode); // unused
+    PERCENTAGE per = 100;
+
+    if (creature_ptr->resist_time) {
+        per *= 400;
+        per /= randrate(4, 7, mode);
+        return;
+    }
+
+    return per;
+}
+
 PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     (mode); // unused
