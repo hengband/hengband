@@ -213,3 +213,15 @@ PERCENTAGE calc_dark_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
 
     return per;
 }
+
+PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    (mode); // unused
+    PERCENTAGE per = 100;
+    if (creature_ptr->align > 10)
+        per /= 2;
+    else if (creature_ptr->align < -10)
+        per *= 2;
+    return per;
+}
+

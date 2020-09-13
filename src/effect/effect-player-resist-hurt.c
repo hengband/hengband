@@ -95,10 +95,7 @@ void effect_player_holy_fire(player_type *target_ptr, effect_player_type *ep_ptr
     if (target_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
 
-    if (target_ptr->align > 10)
-        ep_ptr->dam /= 2;
-    else if (target_ptr->align < -10)
-        ep_ptr->dam *= 2;
+    ep_ptr->dam = ep_ptr->dam * calc_holy_fire_damage_rate(target_ptr, CALC_RAND) / 100;
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
