@@ -332,11 +332,31 @@ static bool check_cold_blood(player_type *subject_ptr, um_type *um_ptr)
     if (distance > subject_ptr->see_infra)
         return FALSE;
 
-    if ((r_info[um_ptr->m_ptr->r_idx].flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) == RF2_COLD_BLOOD)
+    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    if ((r_ptr->flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) != RF2_COLD_BLOOD)
         return TRUE;
 
     um_ptr->easy = TRUE;
     um_ptr->flag = TRUE;
+    return TRUE;
+}
+
+static bool check_invisible(player_type *subject_ptr, um_type *um_ptr)
+{
+    if (!player_can_see_bold(subject_ptr, um_ptr->fy, um_ptr->fx))
+        return FALSE;
+    
+    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    if (r_ptr->flags2 & RF2_INVISIBLE) {
+        if (subject_ptr->see_inv) {
+            um_ptr->easy = TRUE;
+            um_ptr->flag = TRUE;
+        }
+    } else {
+        um_ptr->easy = TRUE;
+        um_ptr->flag = TRUE;
+    }
+
     return TRUE;
 }
 
@@ -374,19 +394,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
             }
             
             bool do_cold_blood = check_cold_blood(subject_ptr, um_ptr);
-            bool do_invisible = FALSE;
-            if (player_can_see_bold(subject_ptr, um_ptr->fy, um_ptr->fx))
-                if (r_ptr->flags2 & RF2_INVISIBLE) {
-                    do_invisible = TRUE;
-                    if (subject_ptr->see_inv) {
-                        um_ptr->easy = TRUE;
-                        um_ptr->flag = TRUE;
-                    }                    
-                } else {
-                    um_ptr->easy = TRUE;
-                    um_ptr->flag = TRUE;
-                }
-                
+            bool do_invisible = check_invisible(subject_ptr, um_ptr);                
             if (um_ptr->flag && is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
                 if (do_invisible)
                     r_ptr->r_flags2 |= RF2_INVISIBLE;
