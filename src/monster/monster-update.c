@@ -198,6 +198,30 @@ static void update_smart_stupid_flags(monster_race *r_ptr)
         r_ptr->r_flags2 |= RF2_STUPID;
 }
 
+/*!
+ * @brief WEIRD_MINDフラグ持ちのモンスターを1/10の確率でテレパシーに引っかける
+ * @param subject_ptr プレーヤーへの参照ポインタ
+ * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
+ * @return WEIRD_MINDフラグがあるならTRUE
+ */
+static bool update_weird_telepathy(player_type *subject_ptr, um_type *um_ptr)
+{
+    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    if ((r_ptr->flags2 & RF2_WEIRD_MIND) == 0)
+        return FALSE;
+
+    if (!one_in_(10))
+        return TRUE;
+
+    um_ptr->flag = TRUE;
+    if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
+        r_ptr->r_flags2 |= RF2_WEIRD_MIND;
+        update_smart_stupid_flags(r_ptr);
+    }
+
+    return TRUE;
+}
+
 static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
@@ -219,18 +243,8 @@ static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr)
         return;
     }
     
-    if (r_ptr->flags2 & RF2_WEIRD_MIND) {
-        const int weird_telepathy_possibility = 10;
-        if (one_in_(weird_telepathy_possibility)) {
-            um_ptr->flag = TRUE;
-            if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
-                r_ptr->r_flags2 |= RF2_WEIRD_MIND;
-                update_smart_stupid_flags(r_ptr);
-            }
-        }
-
+    if (update_weird_telepathy(subject_ptr, um_ptr))
         return;
-    }
 
     um_ptr->flag = TRUE;
     if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
