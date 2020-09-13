@@ -89,9 +89,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     switch (typ) {
     case GF_ELEC:
         if (is_immune_elec(target_ptr)) {
-            dam = 0;
             ignore_wraith_form = TRUE;
-            break;
         }
         dam = dam * calc_elec_damage_rate(target_ptr) / 100;
         break;

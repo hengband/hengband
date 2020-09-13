@@ -81,6 +81,11 @@ PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
     int i;
+
+    if (is_immune_elec(creature_ptr)) {
+        return 0;
+    }
+
     BIT_FLAGS flgs = is_vuln_elec(creature_ptr);
     for (i = 0; i < FLAG_CAUSE_MAX; i++) {
         if (flgs & (0x01 << i)) {
