@@ -152,8 +152,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_CONFUSION:
-        if (target_ptr->resist_conf)
-            dam = dam * 5 / 8; /* Worst case of 5 / (d4 + 7) */
+        dam = dam * calc_conf_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_CHAOS:

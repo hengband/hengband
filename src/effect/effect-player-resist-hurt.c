@@ -263,10 +263,10 @@ void effect_player_confusion(player_type *target_ptr, effect_player_type *ep_ptr
 {
     if (target_ptr->blind)
         msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
-    if (target_ptr->resist_conf) {
-        ep_ptr->dam *= 5;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!check_multishadow(target_ptr)) {
+
+    ep_ptr->dam = ep_ptr->dam * calc_conf_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_conf && !check_multishadow(target_ptr)) {
         (void)set_confused(target_ptr, target_ptr->confused + randint1(20) + 10);
     }
 

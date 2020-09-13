@@ -238,6 +238,18 @@ PERCENTAGE calc_sound_damage_rate(player_type *creature_ptr, rate_calc_type_mode
     return per;
 }
 
+PERCENTAGE calc_conf_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    PERCENTAGE per = 100;
+
+    if (creature_ptr->resist_conf) {
+        per *= 500;
+        per /= randrate(4, 7, mode);
+    }
+
+    return per;
+}
+
 PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
