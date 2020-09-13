@@ -361,6 +361,44 @@ static bool check_invisible(player_type *subject_ptr, um_type *um_ptr)
 }
 
 /*!
+ * @brief テレパシー・赤外線視力・可視透明によってモンスターを感知できるかどうかの判定
+ * @param subject_ptr プレーヤーへの参照ポインタ
+ * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
+ * @return なし 
+ */
+static void decide_sight_invisible_monsters(player_type *subject_ptr, um_type *um_ptr)
+{
+    POSITION distance = decide_updated_distance(subject_ptr, um_ptr);
+    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+    if (distance > (um_ptr->in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT))
+        return;
+
+    if (!um_ptr->in_darkness || (distance <= MAX_SIGHT / 4)) {
+        update_telepathy_sight(subject_ptr, um_ptr);
+        update_specific_race_telepathy(subject_ptr, um_ptr);
+    }
+
+    if (!player_has_los_bold(subject_ptr, um_ptr->fy, um_ptr->fx) || subject_ptr->blind)
+        return;
+
+    if (subject_ptr->concent >= CONCENT_RADAR_THRESHOLD) {
+        um_ptr->easy = TRUE;
+        um_ptr->flag = TRUE;
+    }
+
+    bool do_cold_blood = check_cold_blood(subject_ptr, um_ptr);
+    bool do_invisible = check_invisible(subject_ptr, um_ptr);
+    if (!um_ptr->flag || !is_original_ap(um_ptr->m_ptr) || subject_ptr->image)
+        return;
+
+    if (do_invisible)
+        r_ptr->r_flags2 |= RF2_INVISIBLE;
+
+    if (do_cold_blood)
+        r_ptr->r_flags2 |= RF2_COLD_BLOOD;
+}
+
+/*!
  * @brief モンスターの各情報を更新する / This function updates the monster record of the given monster
  * @param m_idx 更新するモンスター情報のID
  * @param full プレイヤーとの距離更新を行うならばtrue
@@ -379,33 +417,10 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
     if (um_ptr->m_ptr->mflag2 & MFLAG2_MARK)
         um_ptr->flag = TRUE;
 
-    POSITION distance = decide_updated_distance(subject_ptr, um_ptr);
-    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
-    if (distance <= (um_ptr->in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT)) {
-        if (!um_ptr->in_darkness || (distance <= MAX_SIGHT / 4)) {
-            update_telepathy_sight(subject_ptr, um_ptr);
-            update_specific_race_telepathy(subject_ptr, um_ptr);
-        }
-
-        if (player_has_los_bold(subject_ptr, um_ptr->fy, um_ptr->fx) && !subject_ptr->blind) {
-            if (subject_ptr->concent >= CONCENT_RADAR_THRESHOLD) {
-                um_ptr->easy = TRUE;
-                um_ptr->flag = TRUE;
-            }
-            
-            bool do_cold_blood = check_cold_blood(subject_ptr, um_ptr);
-            bool do_invisible = check_invisible(subject_ptr, um_ptr);                
-            if (um_ptr->flag && is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
-                if (do_invisible)
-                    r_ptr->r_flags2 |= RF2_INVISIBLE;
-
-                if (do_cold_blood)
-                    r_ptr->r_flags2 |= RF2_COLD_BLOOD;
-            }
-        }
-    }
+    decide_sight_invisible_monsters(subject_ptr, um_ptr);
 
     /* The monster is now visible */
+    monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (um_ptr->flag) {
         if (!um_ptr->m_ptr->ml) {
             um_ptr->m_ptr->ml = TRUE;
