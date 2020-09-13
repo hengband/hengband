@@ -28,8 +28,8 @@
 #include "monster/smart-learn-types.h"
 #include "player/eldritch-horror.h"
 #include "player/player-move.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/special-defense-types.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
@@ -47,32 +47,28 @@
  */
 bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
 {
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	grid_type *g_ptr;
-	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
-	monster_type *y_ptr;
-	y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-	if (turn_flags_ptr->is_riding_mon)
-		return move_player_effect(target_ptr, ny, nx, MPE_DONT_PICKUP);
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    grid_type *g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+    monster_type *y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    if (turn_flags_ptr->is_riding_mon)
+        return move_player_effect(target_ptr, ny, nx, MPE_DONT_PICKUP);
 
-	target_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
-	if (g_ptr->m_idx)
-	{
-		y_ptr->fy = oy;
-		y_ptr->fx = ox;
-		update_monster(target_ptr, g_ptr->m_idx, TRUE);
-	}
+    target_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
+    if (g_ptr->m_idx) {
+        y_ptr->fy = oy;
+        y_ptr->fx = ox;
+        update_monster(target_ptr, g_ptr->m_idx, TRUE);
+    }
 
-	g_ptr->m_idx = m_idx;
-	m_ptr->fy = ny;
-	m_ptr->fx = nx;
-	update_monster(target_ptr, m_idx, TRUE);
+    g_ptr->m_idx = m_idx;
+    m_ptr->fy = ny;
+    m_ptr->fx = nx;
+    update_monster(target_ptr, m_idx, TRUE);
 
-	lite_spot(target_ptr, oy, ox);
-	lite_spot(target_ptr, ny, nx);
-	return TRUE;
+    lite_spot(target_ptr, oy, ox);
+    lite_spot(target_ptr, ny, nx);
+    return TRUE;
 }
-
 
 /*!
  * @brief updateフィールドを更新する
@@ -82,19 +78,17 @@ bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
  */
 void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr)
 {
-	if (turn_flags_ptr->do_view)
-	{
-		target_ptr->update |= (PU_FLOW);
-		target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-	}
+    if (turn_flags_ptr->do_view) {
+        target_ptr->update |= PU_FLOW;
+        target_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+    }
 
-	if (turn_flags_ptr->do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
-		|| ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !target_ptr->phase_out)))
-	{
-		target_ptr->update |= (PU_MON_LITE);
-	}
+    if (turn_flags_ptr->do_move
+        && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
+            || ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !target_ptr->phase_out))) {
+        target_ptr->update |= PU_MON_LITE;
+    }
 }
-
 
 /*!
  * @brief モンスターのフラグを更新する
@@ -105,18 +99,31 @@ void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, mon
  */
 void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
 {
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (!is_original_ap_and_seen(target_ptr, m_ptr)) return;
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    if (!is_original_ap_and_seen(target_ptr, m_ptr))
+        return;
 
-	if (turn_flags_ptr->did_open_door) r_ptr->r_flags2 |= (RF2_OPEN_DOOR);
-	if (turn_flags_ptr->did_bash_door) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
-	if (turn_flags_ptr->did_take_item) r_ptr->r_flags2 |= (RF2_TAKE_ITEM);
-	if (turn_flags_ptr->did_kill_item) r_ptr->r_flags2 |= (RF2_KILL_ITEM);
-	if (turn_flags_ptr->did_move_body) r_ptr->r_flags2 |= (RF2_MOVE_BODY);
-	if (turn_flags_ptr->did_pass_wall) r_ptr->r_flags2 |= (RF2_PASS_WALL);
-	if (turn_flags_ptr->did_kill_wall) r_ptr->r_flags2 |= (RF2_KILL_WALL);
+    if (turn_flags_ptr->did_open_door)
+        r_ptr->r_flags2 |= RF2_OPEN_DOOR;
+
+    if (turn_flags_ptr->did_bash_door)
+        r_ptr->r_flags2 |= RF2_BASH_DOOR;
+
+    if (turn_flags_ptr->did_take_item)
+        r_ptr->r_flags2 |= RF2_TAKE_ITEM;
+
+    if (turn_flags_ptr->did_kill_item)
+        r_ptr->r_flags2 |= RF2_KILL_ITEM;
+
+    if (turn_flags_ptr->did_move_body)
+        r_ptr->r_flags2 |= RF2_MOVE_BODY;
+
+    if (turn_flags_ptr->did_pass_wall)
+        r_ptr->r_flags2 |= RF2_PASS_WALL;
+
+    if (turn_flags_ptr->did_kill_wall)
+        r_ptr->r_flags2 |= RF2_KILL_WALL;
 }
-
 
 /*!
  * @brief モンスターフラグの更新に基づき、モンスター表示を更新する
@@ -127,23 +134,16 @@ void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_p
  */
 void update_player_window(player_type *target_ptr, old_race_flags *old_race_flags_ptr)
 {
-	monster_race *r_ptr;
-	r_ptr = &r_info[target_ptr->monster_race_idx];
-	if ((old_race_flags_ptr->old_r_flags1 != r_ptr->r_flags1) ||
-		(old_race_flags_ptr->old_r_flags2 != r_ptr->r_flags2) ||
-		(old_race_flags_ptr->old_r_flags3 != r_ptr->r_flags3) ||
-		(old_race_flags_ptr->old_r_flags4 != r_ptr->r_flags4) ||
-		(old_race_flags_ptr->old_r_flags5 != r_ptr->r_flags5) ||
-		(old_race_flags_ptr->old_r_flags6 != r_ptr->r_flags6) ||
-		(old_race_flags_ptr->old_r_flagsr != r_ptr->r_flagsr) ||
-		(old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0]) ||
-		(old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) ||
-		(old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2]) ||
-		(old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) ||
-		(old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell))
-	{
-		target_ptr->window |= (PW_MONSTER);
-	}
+    monster_race *r_ptr;
+    r_ptr = &r_info[target_ptr->monster_race_idx];
+    if ((old_race_flags_ptr->old_r_flags1 != r_ptr->r_flags1) || (old_race_flags_ptr->old_r_flags2 != r_ptr->r_flags2)
+        || (old_race_flags_ptr->old_r_flags3 != r_ptr->r_flags3) || (old_race_flags_ptr->old_r_flags4 != r_ptr->r_flags4)
+        || (old_race_flags_ptr->old_r_flags5 != r_ptr->r_flags5) || (old_race_flags_ptr->old_r_flags6 != r_ptr->r_flags6)
+        || (old_race_flags_ptr->old_r_flagsr != r_ptr->r_flagsr) || (old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0])
+        || (old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) || (old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2])
+        || (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell)) {
+        target_ptr->window |= PW_MONSTER;
+    }
 }
 
 /*!
@@ -156,12 +156,9 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 {
     monster_type *m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
     bool do_disturb = disturb_move;
-
     POSITION fy = m_ptr->fy;
     POSITION fx = m_ptr->fx;
-
     bool flag = FALSE;
     bool easy = FALSE;
     bool in_darkness = (d_info[subject_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !subject_ptr->see_nocto;
@@ -175,7 +172,6 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
     if (full) {
         int dy = (subject_ptr->y > fy) ? (subject_ptr->y - fy) : (fy - subject_ptr->y);
         int dx = (subject_ptr->x > fx) ? (subject_ptr->x - fx) : (fx - subject_ptr->x);
-
         distance = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
         if (distance > 255)
             distance = 255;
@@ -187,7 +183,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
         distance = m_ptr->cdis;
     }
 
-    if (m_ptr->mflag2 & (MFLAG2_MARK))
+    if (m_ptr->mflag2 & MFLAG2_MARK)
         flag = TRUE;
 
     if (distance <= (in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT)) {
@@ -195,144 +191,138 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
             if (subject_ptr->special_defense & KATA_MUSOU) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image) {
-                    if (r_ptr->flags2 & (RF2_SMART))
-                        r_ptr->r_flags2 |= (RF2_SMART);
-                    if (r_ptr->flags2 & (RF2_STUPID))
-                        r_ptr->r_flags2 |= (RF2_STUPID);
+                    if (r_ptr->flags2 & RF2_SMART)
+                        r_ptr->r_flags2 |= RF2_SMART;
+                    if (r_ptr->flags2 & RF2_STUPID)
+                        r_ptr->r_flags2 |= RF2_STUPID;
                 }
             } else if (subject_ptr->telepathy) {
-                if (r_ptr->flags2 & (RF2_EMPTY_MIND)) {
+                if (r_ptr->flags2 & RF2_EMPTY_MIND) {
                     if (is_original_ap(m_ptr) && !subject_ptr->image)
-                        r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-                } else if (r_ptr->flags2 & (RF2_WEIRD_MIND)) {
+                        r_ptr->r_flags2 |= RF2_EMPTY_MIND;
+                } else if (r_ptr->flags2 & RF2_WEIRD_MIND) {
                     if ((m_idx % 10) == 5) {
                         flag = TRUE;
                         if (is_original_ap(m_ptr) && !subject_ptr->image) {
-                            r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
-                            if (r_ptr->flags2 & (RF2_SMART))
-                                r_ptr->r_flags2 |= (RF2_SMART);
-                            if (r_ptr->flags2 & (RF2_STUPID))
-                                r_ptr->r_flags2 |= (RF2_STUPID);
+                            r_ptr->r_flags2 |= RF2_WEIRD_MIND;
+                            if (r_ptr->flags2 & RF2_SMART)
+                                r_ptr->r_flags2 |= RF2_SMART;
+                            if (r_ptr->flags2 & RF2_STUPID)
+                                r_ptr->r_flags2 |= RF2_STUPID;
                         }
                     }
                 } else {
                     flag = TRUE;
                     if (is_original_ap(m_ptr) && !subject_ptr->image) {
-                        if (r_ptr->flags2 & (RF2_SMART))
-                            r_ptr->r_flags2 |= (RF2_SMART);
-                        if (r_ptr->flags2 & (RF2_STUPID))
-                            r_ptr->r_flags2 |= (RF2_STUPID);
+                        if (r_ptr->flags2 & RF2_SMART)
+                            r_ptr->r_flags2 |= RF2_SMART;
+                        if (r_ptr->flags2 & RF2_STUPID)
+                            r_ptr->r_flags2 |= RF2_STUPID;
                     }
                 }
             }
 
-            if ((subject_ptr->esp_animal) && (r_ptr->flags3 & (RF3_ANIMAL))) {
+            if ((subject_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_ANIMAL);
+                    r_ptr->r_flags3 |= RF3_ANIMAL;
             }
 
-            if ((subject_ptr->esp_undead) && (r_ptr->flags3 & (RF3_UNDEAD))) {
+            if ((subject_ptr->esp_undead) && (r_ptr->flags3 & RF3_UNDEAD)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_UNDEAD);
+                    r_ptr->r_flags3 |= RF3_UNDEAD;
             }
 
-            if ((subject_ptr->esp_demon) && (r_ptr->flags3 & (RF3_DEMON))) {
+            if ((subject_ptr->esp_demon) && (r_ptr->flags3 & RF3_DEMON)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_DEMON);
+                    r_ptr->r_flags3 |= RF3_DEMON;
             }
 
-            if ((subject_ptr->esp_orc) && (r_ptr->flags3 & (RF3_ORC))) {
+            if ((subject_ptr->esp_orc) && (r_ptr->flags3 & RF3_ORC)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_ORC);
+                    r_ptr->r_flags3 |= RF3_ORC;
             }
 
-            if ((subject_ptr->esp_troll) && (r_ptr->flags3 & (RF3_TROLL))) {
+            if ((subject_ptr->esp_troll) && (r_ptr->flags3 & RF3_TROLL)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_TROLL);
+                    r_ptr->r_flags3 |= RF3_TROLL;
             }
 
-            if ((subject_ptr->esp_giant) && (r_ptr->flags3 & (RF3_GIANT))) {
+            if ((subject_ptr->esp_giant) && (r_ptr->flags3 & RF3_GIANT)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_GIANT);
+                    r_ptr->r_flags3 |= RF3_GIANT;
             }
 
-            if ((subject_ptr->esp_dragon) && (r_ptr->flags3 & (RF3_DRAGON))) {
+            if ((subject_ptr->esp_dragon) && (r_ptr->flags3 & RF3_DRAGON)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_DRAGON);
+                    r_ptr->r_flags3 |= RF3_DRAGON;
             }
 
-            if ((subject_ptr->esp_human) && (r_ptr->flags2 & (RF2_HUMAN))) {
+            if ((subject_ptr->esp_human) && (r_ptr->flags2 & RF2_HUMAN)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags2 |= (RF2_HUMAN);
+                    r_ptr->r_flags2 |= RF2_HUMAN;
             }
 
-            if ((subject_ptr->esp_evil) && (r_ptr->flags3 & (RF3_EVIL))) {
+            if ((subject_ptr->esp_evil) && (r_ptr->flags3 & RF3_EVIL)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_EVIL);
+                    r_ptr->r_flags3 |= RF3_EVIL;
             }
 
-            if ((subject_ptr->esp_good) && (r_ptr->flags3 & (RF3_GOOD))) {
+            if ((subject_ptr->esp_good) && (r_ptr->flags3 & RF3_GOOD)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_GOOD);
+                    r_ptr->r_flags3 |= RF3_GOOD;
             }
 
             if ((subject_ptr->esp_nonliving) && ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING)) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags3 |= (RF3_NONLIVING);
+                    r_ptr->r_flags3 |= RF3_NONLIVING;
             }
 
             if ((subject_ptr->esp_unique) && (r_ptr->flags1 & (RF1_UNIQUE))) {
                 flag = TRUE;
                 if (is_original_ap(m_ptr) && !subject_ptr->image)
-                    r_ptr->r_flags1 |= (RF1_UNIQUE);
+                    r_ptr->r_flags1 |= RF1_UNIQUE;
             }
         }
 
         if (player_has_los_bold(subject_ptr, fy, fx) && !subject_ptr->blind) {
             bool do_invisible = FALSE;
             bool do_cold_blood = FALSE;
-
-            if (subject_ptr->concent >= CONCENT_RADAR_THRESHOLD) {
+            if (subject_ptr->concent >= CONCENT_RADAR_THRESHOLD)
                 easy = flag = TRUE;
-            }
 
-            if (distance <= subject_ptr->see_infra) {
+            if (distance <= subject_ptr->see_infra)
                 if ((r_ptr->flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) == RF2_COLD_BLOOD) {
                     do_cold_blood = TRUE;
                 } else {
-                    easy = flag = TRUE;
+                    easy = TRUE;
+                    flag = TRUE;
                 }
-            }
 
-            if (player_can_see_bold(subject_ptr, fy, fx)) {
-                if (r_ptr->flags2 & (RF2_INVISIBLE)) {
+            if (player_can_see_bold(subject_ptr, fy, fx))
+                if (r_ptr->flags2 & RF2_INVISIBLE) {
                     do_invisible = TRUE;
-                    if (subject_ptr->see_inv) {
+                    if (subject_ptr->see_inv)
                         easy = flag = TRUE;
-                    }
-                } else {
+                } else
                     easy = flag = TRUE;
-                }
-            }
 
-            if (flag) {
-                if (is_original_ap(m_ptr) && !subject_ptr->image) {
-                    if (do_invisible)
-                        r_ptr->r_flags2 |= (RF2_INVISIBLE);
-                    if (do_cold_blood)
-                        r_ptr->r_flags2 |= (RF2_COLD_BLOOD);
-                }
+            if (flag && is_original_ap(m_ptr) && !subject_ptr->image) {
+                if (do_invisible)
+                    r_ptr->r_flags2 |= RF2_INVISIBLE;
+
+                if (do_cold_blood)
+                    r_ptr->r_flags2 |= RF2_COLD_BLOOD;
             }
         }
     }
@@ -344,9 +334,10 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
             lite_spot(subject_ptr, fy, fx);
 
             if (subject_ptr->health_who == m_idx)
-                subject_ptr->redraw |= (PR_HEALTH);
+                subject_ptr->redraw |= PR_HEALTH;
+
             if (subject_ptr->riding == m_idx)
-                subject_ptr->redraw |= (PR_UHEALTH);
+                subject_ptr->redraw |= PR_UHEALTH;
 
             if (!subject_ptr->image) {
                 if ((m_ptr->ap_r_idx == MON_KAGE) && (r_info[MON_KAGE].r_sights < MAX_SHORT))
@@ -355,9 +346,8 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
                     r_ptr->r_sights++;
             }
 
-            if (r_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR) {
+            if (r_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
                 sanity_blast(subject_ptr, m_ptr, FALSE);
-            }
 
             if (disturb_near
                 && (projectable(subject_ptr, m_ptr->fy, m_ptr->fx, subject_ptr->y, subject_ptr->x)
@@ -375,9 +365,9 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
             lite_spot(subject_ptr, fy, fx);
 
             if (subject_ptr->health_who == m_idx)
-                subject_ptr->redraw |= (PR_HEALTH);
+                subject_ptr->redraw |= PR_HEALTH;
             if (subject_ptr->riding == m_idx)
-                subject_ptr->redraw |= (PR_UHEALTH);
+                subject_ptr->redraw |= PR_UHEALTH;
             if (do_disturb) {
                 if (disturb_pets || is_hostile(m_ptr))
                     disturb(subject_ptr, TRUE, TRUE);
@@ -387,12 +377,10 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
     /* The monster is now easily visible */
     if (easy) {
-        if (!(m_ptr->mflag & (MFLAG_VIEW))) {
-            m_ptr->mflag |= (MFLAG_VIEW);
-            if (do_disturb) {
-                if (disturb_pets || is_hostile(m_ptr))
-                    disturb(subject_ptr, TRUE, TRUE);
-            }
+        if (!(m_ptr->mflag & MFLAG_VIEW)) {
+            m_ptr->mflag |= MFLAG_VIEW;
+            if (do_disturb && (disturb_pets || is_hostile(m_ptr)))
+                disturb(subject_ptr, TRUE, TRUE);
         }
 
         return;
@@ -400,7 +388,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
     /* The monster is not easily visible */
     /* Change */
-    if (!(m_ptr->mflag & (MFLAG_VIEW)))
+    if (!(m_ptr->mflag & MFLAG_VIEW))
         return;
 
     /* Mark as not easily visible */
@@ -440,125 +428,133 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (!smart_learn)
-        return;
-    if (r_ptr->flags2 & (RF2_STUPID))
-        return;
-    if (!(r_ptr->flags2 & (RF2_SMART)) && (randint0(100) < 50))
+    if (!smart_learn || ((r_ptr->flags2 & RF2_STUPID) != 0) || (((r_ptr->flags2 & RF2_SMART) == 0) && (randint0(100) < 50)))
         return;
 
     switch (what) {
     case DRS_ACID:
         if (player_ptr->resist_acid)
-            m_ptr->smart |= (SM_RES_ACID);
-        if (is_oppose_acid(player_ptr))
-            m_ptr->smart |= (SM_OPP_ACID);
-        if (is_immune_acid(player_ptr))
-            m_ptr->smart |= (SM_IMM_ACID);
-        break;
+            m_ptr->smart |= SM_RES_ACID;
 
+        if (is_oppose_acid(player_ptr))
+            m_ptr->smart |= SM_OPP_ACID;
+
+        if (is_immune_acid(player_ptr))
+            m_ptr->smart |= SM_IMM_ACID;
+
+        break;
     case DRS_ELEC:
         if (player_ptr->resist_elec)
-            m_ptr->smart |= (SM_RES_ELEC);
-        if (is_oppose_elec(player_ptr))
-            m_ptr->smart |= (SM_OPP_ELEC);
-        if (is_immune_elec(player_ptr))
-            m_ptr->smart |= (SM_IMM_ELEC);
-        break;
+            m_ptr->smart |= SM_RES_ELEC;
 
+        if (is_oppose_elec(player_ptr))
+            m_ptr->smart |= SM_OPP_ELEC;
+
+        if (is_immune_elec(player_ptr))
+            m_ptr->smart |= SM_IMM_ELEC;
+
+        break;
     case DRS_FIRE:
         if (player_ptr->resist_fire)
-            m_ptr->smart |= (SM_RES_FIRE);
-        if (is_oppose_fire(player_ptr))
-            m_ptr->smart |= (SM_OPP_FIRE);
-        if (is_immune_fire(player_ptr))
-            m_ptr->smart |= (SM_IMM_FIRE);
-        break;
+            m_ptr->smart |= SM_RES_FIRE;
 
+        if (is_oppose_fire(player_ptr))
+            m_ptr->smart |= SM_OPP_FIRE;
+        
+        if (is_immune_fire(player_ptr))
+            m_ptr->smart |= SM_IMM_FIRE;
+        
+        break;
     case DRS_COLD:
         if (player_ptr->resist_cold)
-            m_ptr->smart |= (SM_RES_COLD);
-        if (is_oppose_cold(player_ptr))
-            m_ptr->smart |= (SM_OPP_COLD);
-        if (is_immune_cold(player_ptr))
-            m_ptr->smart |= (SM_IMM_COLD);
-        break;
+            m_ptr->smart |= SM_RES_COLD;
 
+        if (is_oppose_cold(player_ptr))
+            m_ptr->smart |= SM_OPP_COLD;
+
+        if (is_immune_cold(player_ptr))
+            m_ptr->smart |= SM_IMM_COLD;
+
+        break;
     case DRS_POIS:
         if (player_ptr->resist_pois)
-            m_ptr->smart |= (SM_RES_POIS);
-        if (is_oppose_pois(player_ptr))
-            m_ptr->smart |= (SM_OPP_POIS);
-        break;
+            m_ptr->smart |= SM_RES_POIS;
 
+        if (is_oppose_pois(player_ptr))
+            m_ptr->smart |= SM_OPP_POIS;
+
+        break;
     case DRS_NETH:
         if (player_ptr->resist_neth)
-            m_ptr->smart |= (SM_RES_NETH);
-        break;
+            m_ptr->smart |= SM_RES_NETH;
 
+        break;
     case DRS_LITE:
         if (player_ptr->resist_lite)
-            m_ptr->smart |= (SM_RES_LITE);
-        break;
+            m_ptr->smart |= SM_RES_LITE;
 
+        break;
     case DRS_DARK:
         if (player_ptr->resist_dark)
-            m_ptr->smart |= (SM_RES_DARK);
-        break;
+            m_ptr->smart |= SM_RES_DARK;
 
+        break;
     case DRS_FEAR:
         if (player_ptr->resist_fear)
-            m_ptr->smart |= (SM_RES_FEAR);
-        break;
+            m_ptr->smart |= SM_RES_FEAR;
 
+        break;
     case DRS_CONF:
         if (player_ptr->resist_conf)
-            m_ptr->smart |= (SM_RES_CONF);
-        break;
+            m_ptr->smart |= SM_RES_CONF;
 
+        break;
     case DRS_CHAOS:
         if (player_ptr->resist_chaos)
-            m_ptr->smart |= (SM_RES_CHAOS);
-        break;
+            m_ptr->smart |= SM_RES_CHAOS;
 
+        break;
     case DRS_DISEN:
         if (player_ptr->resist_disen)
-            m_ptr->smart |= (SM_RES_DISEN);
-        break;
+            m_ptr->smart |= SM_RES_DISEN;
 
+        break;
     case DRS_BLIND:
         if (player_ptr->resist_blind)
-            m_ptr->smart |= (SM_RES_BLIND);
-        break;
+            m_ptr->smart |= SM_RES_BLIND;
 
+        break;
     case DRS_NEXUS:
         if (player_ptr->resist_nexus)
-            m_ptr->smart |= (SM_RES_NEXUS);
-        break;
+            m_ptr->smart |= SM_RES_NEXUS;
 
+        break;
     case DRS_SOUND:
         if (player_ptr->resist_sound)
-            m_ptr->smart |= (SM_RES_SOUND);
-        break;
+            m_ptr->smart |= SM_RES_SOUND;
 
+        break;
     case DRS_SHARD:
         if (player_ptr->resist_shard)
-            m_ptr->smart |= (SM_RES_SHARD);
-        break;
+            m_ptr->smart |= SM_RES_SHARD;
 
+        break;
     case DRS_FREE:
         if (player_ptr->free_act)
-            m_ptr->smart |= (SM_IMM_FREE);
-        break;
+            m_ptr->smart |= SM_IMM_FREE;
 
+        break;
     case DRS_MANA:
         if (!player_ptr->msp)
-            m_ptr->smart |= (SM_IMM_MANA);
-        break;
+            m_ptr->smart |= SM_IMM_MANA;
 
+        break;
     case DRS_REFLECT:
         if (player_ptr->reflect)
-            m_ptr->smart |= (SM_IMM_REFLECT);
+            m_ptr->smart |= SM_IMM_REFLECT;
+
+        break;
+    default:
         break;
     }
 }
