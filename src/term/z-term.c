@@ -2299,3 +2299,37 @@ errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
     return 0;
 }
 #endif
+
+#ifndef WINDOWS
+errr term_nuke(term_type *t)
+{
+    TERM_LEN w = t->wid;
+    TERM_LEN h = t->hgt;
+    if (t->active_flag) {
+        if (t->nuke_hook)
+            (*t->nuke_hook)(t);
+
+        t->active_flag = FALSE;
+        t->mapped_flag = FALSE;
+    }
+
+    term_win_nuke(t->old, w, h);
+    KILL(t->old, term_win);
+    term_win_nuke(t->scr, w, h);
+    KILL(t->scr, term_win);
+    if (t->mem) {
+        term_win_nuke(t->mem, w, h);
+        KILL(t->mem, term_win);
+    }
+
+    if (t->tmp) {
+        term_win_nuke(t->tmp, w, h);
+        KILL(t->tmp, term_win);
+    }
+
+    C_KILL(t->x1, h, TERM_LEN);
+    C_KILL(t->x2, h, TERM_LEN);
+    C_KILL(t->key_queue, t->key_size, char);
+    return 0;
+}
+#endif
