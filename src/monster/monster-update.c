@@ -146,6 +146,24 @@ void update_player_window(player_type *target_ptr, old_race_flags *old_race_flag
     }
 }
 
+static POSITION decide_updated_distance(player_type *subject_ptr, const bool full, monster_type *m_ptr, const POSITION fy, const POSITION fx)
+{
+    if (!full)
+        return m_ptr->cdis;
+
+    int dy = (subject_ptr->y > fy) ? (subject_ptr->y - fy) : (fy - subject_ptr->y);
+    int dx = (subject_ptr->x > fx) ? (subject_ptr->x - fx) : (fx - subject_ptr->x);
+    POSITION distance = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
+    if (distance > 255)
+        distance = 255;
+
+    if (!distance)
+        distance = 1;
+
+    m_ptr->cdis = distance;
+    return distance;
+}
+
 /*!
  * @brief モンスターの各情報を更新する / This function updates the monster record of the given monster
  * @param m_idx 更新するモンスター情報のID
@@ -168,21 +186,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
             do_disturb = TRUE;
     }
 
-    POSITION distance;
-    if (full) {
-        int dy = (subject_ptr->y > fy) ? (subject_ptr->y - fy) : (fy - subject_ptr->y);
-        int dx = (subject_ptr->x > fx) ? (subject_ptr->x - fx) : (fx - subject_ptr->x);
-        distance = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
-        if (distance > 255)
-            distance = 255;
-        if (!distance)
-            distance = 1;
-
-        m_ptr->cdis = distance;
-    } else {
-        distance = m_ptr->cdis;
-    }
-
+    POSITION distance = decide_updated_distance(subject_ptr, full, m_ptr, fy, fx);
     if (m_ptr->mflag2 & MFLAG2_MARK)
         flag = TRUE;
 
