@@ -366,7 +366,7 @@ static bool check_invisible(player_type *subject_ptr, um_type *um_ptr)
  * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
  * @return なし
  */
-static void decide_sight_invisible_monsters(player_type *subject_ptr, um_type *um_ptr)
+static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um_ptr)
 {
     POSITION distance = decide_updated_distance(subject_ptr, um_ptr);
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
@@ -407,7 +407,7 @@ static void decide_sight_invisible_monsters(player_type *subject_ptr, um_type *u
  * @return なし
  * @details 感知した結果、エルドリッチホラー持ちがいたら精神を破壊する
  */
-static void update_invisible_monsters(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+static void update_invisible_monster(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     if (um_ptr->m_ptr->ml)
         return;
@@ -440,7 +440,7 @@ static void update_invisible_monsters(player_type *subject_ptr, um_type *um_ptr,
     }
 }
 
-static void update_visible_monsters(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
+static void update_visible_monster(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     if (!um_ptr->m_ptr->ml)
         return;
@@ -456,6 +456,20 @@ static void update_visible_monsters(player_type *subject_ptr, um_type *um_ptr, M
 
     if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
         disturb(subject_ptr, TRUE, TRUE);
+}
+
+static bool update_clear_monster(player_type *subject_ptr, um_type *um_ptr)
+{
+    if (!um_ptr->easy)
+        return FALSE;
+
+    if (!(um_ptr->m_ptr->mflag & MFLAG_VIEW)) {
+        um_ptr->m_ptr->mflag |= MFLAG_VIEW;
+        if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
+            disturb(subject_ptr, TRUE, TRUE);
+    }
+
+    return TRUE;
 }
 
 /*!
@@ -477,39 +491,22 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
     if (um_ptr->m_ptr->mflag2 & MFLAG2_MARK)
         um_ptr->flag = TRUE;
 
-    decide_sight_invisible_monsters(subject_ptr, um_ptr);
-
+    decide_sight_invisible_monster(subject_ptr, um_ptr);
     if (um_ptr->flag)
-        update_invisible_monsters(subject_ptr, um_ptr, m_idx);
+        update_invisible_monster(subject_ptr, um_ptr, m_idx);
     else
-        update_visible_monsters(subject_ptr, um_ptr, m_idx);
+        update_visible_monster(subject_ptr, um_ptr, m_idx);
     
-    /* The monster is now easily visible */
-    if (um_ptr->easy) {
-        if (!(um_ptr->m_ptr->mflag & MFLAG_VIEW)) {
-            um_ptr->m_ptr->mflag |= MFLAG_VIEW;
-            if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-                disturb(subject_ptr, TRUE, TRUE);
-        }
-
-        return;
-    }
-
-    /* The monster is not easily visible */
-    /* Change */
-    if (!(um_ptr->m_ptr->mflag & MFLAG_VIEW))
+    if (update_clear_monster(subject_ptr, um_ptr) || ((um_ptr->m_ptr->mflag & MFLAG_VIEW) == 0))
         return;
 
-    /* Mark as not easily visible */
     um_ptr->m_ptr->mflag &= ~(MFLAG_VIEW);
-
-    if (um_ptr->do_disturb) {
-        if (disturb_pets || is_hostile(um_ptr->m_ptr))
-            disturb(subject_ptr, TRUE, TRUE);
-    }
+    if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
+        disturb(subject_ptr, TRUE, TRUE);
 }
 
 /*!
+ * todo モンスターの感知状況しか更新していないように見える。関数名変更を検討する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @brief 単純に生存している全モンスターの更新処理を行う / This function simply updates all the (non-dead) monsters (see above).
  * @param full 距離更新を行うならtrue
@@ -522,6 +519,7 @@ void update_monsters(player_type *player_ptr, bool full)
         monster_type *m_ptr = &floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
+
         update_monster(player_ptr, i, full);
     }
 }
@@ -536,7 +534,6 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 {
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
     if (!smart_learn || ((r_ptr->flags2 & RF2_STUPID) != 0) || (((r_ptr->flags2 & RF2_SMART) == 0) && (randint0(100) < 50)))
         return;
 
