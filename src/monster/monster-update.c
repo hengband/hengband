@@ -164,6 +164,15 @@ static POSITION decide_updated_distance(player_type *subject_ptr, const bool ful
     return distance;
 }
 
+static void update_smart_stupid_flags(monster_race *r_ptr)
+{
+    if (r_ptr->flags2 & RF2_SMART)
+        r_ptr->r_flags2 |= RF2_SMART;
+
+    if (r_ptr->flags2 & RF2_STUPID)
+        r_ptr->r_flags2 |= RF2_STUPID;
+}
+
 /*!
  * @brief モンスターの各情報を更新する / This function updates the monster record of the given monster
  * @param m_idx 更新するモンスター情報のID
@@ -186,20 +195,16 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
             do_disturb = TRUE;
     }
 
-    POSITION distance = decide_updated_distance(subject_ptr, full, m_ptr, fy, fx);
     if (m_ptr->mflag2 & MFLAG2_MARK)
         flag = TRUE;
 
+    POSITION distance = decide_updated_distance(subject_ptr, full, m_ptr, fy, fx);
     if (distance <= (in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT)) {
         if (!in_darkness || (distance <= MAX_SIGHT / 4)) {
             if (subject_ptr->special_defense & KATA_MUSOU) {
                 flag = TRUE;
-                if (is_original_ap(m_ptr) && !subject_ptr->image) {
-                    if (r_ptr->flags2 & RF2_SMART)
-                        r_ptr->r_flags2 |= RF2_SMART;
-                    if (r_ptr->flags2 & RF2_STUPID)
-                        r_ptr->r_flags2 |= RF2_STUPID;
-                }
+                if (is_original_ap(m_ptr) && !subject_ptr->image)
+                    update_smart_stupid_flags(r_ptr);
             } else if (subject_ptr->telepathy) {
                 if (r_ptr->flags2 & RF2_EMPTY_MIND) {
                     if (is_original_ap(m_ptr) && !subject_ptr->image)
@@ -209,20 +214,13 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
                         flag = TRUE;
                         if (is_original_ap(m_ptr) && !subject_ptr->image) {
                             r_ptr->r_flags2 |= RF2_WEIRD_MIND;
-                            if (r_ptr->flags2 & RF2_SMART)
-                                r_ptr->r_flags2 |= RF2_SMART;
-                            if (r_ptr->flags2 & RF2_STUPID)
-                                r_ptr->r_flags2 |= RF2_STUPID;
+                            update_smart_stupid_flags(r_ptr);
                         }
                     }
                 } else {
                     flag = TRUE;
-                    if (is_original_ap(m_ptr) && !subject_ptr->image) {
-                        if (r_ptr->flags2 & RF2_SMART)
-                            r_ptr->r_flags2 |= RF2_SMART;
-                        if (r_ptr->flags2 & RF2_STUPID)
-                            r_ptr->r_flags2 |= RF2_STUPID;
-                    }
+                    if (is_original_ap(m_ptr) && !subject_ptr->image)
+                        update_smart_stupid_flags(r_ptr);
                 }
             }
 
@@ -370,12 +368,12 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
             if (subject_ptr->health_who == m_idx)
                 subject_ptr->redraw |= PR_HEALTH;
+
             if (subject_ptr->riding == m_idx)
                 subject_ptr->redraw |= PR_UHEALTH;
-            if (do_disturb) {
-                if (disturb_pets || is_hostile(m_ptr))
-                    disturb(subject_ptr, TRUE, TRUE);
-            }
+
+            if (do_disturb && (disturb_pets || is_hostile(m_ptr)))
+                disturb(subject_ptr, TRUE, TRUE);
         }
     }
 
