@@ -327,6 +327,19 @@ static void update_specific_race_telepathy(player_type *subject_ptr, um_type *um
     }
 }
 
+static bool check_cold_blood(player_type *subject_ptr, um_type *um_ptr)
+{
+    if (distance > subject_ptr->see_infra)
+        return FALSE;
+
+    if ((r_info[um_ptr->m_ptr->r_idx].flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) == RF2_COLD_BLOOD)
+        return TRUE;
+
+    um_ptr->easy = TRUE;
+    um_ptr->flag = TRUE;
+    return TRUE;
+}
+
 /*!
  * @brief モンスターの各情報を更新する / This function updates the monster record of the given monster
  * @param m_idx 更新するモンスター情報のID
@@ -355,21 +368,13 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
         }
 
         if (player_has_los_bold(subject_ptr, um_ptr->fy, um_ptr->fx) && !subject_ptr->blind) {
-            bool do_invisible = FALSE;
-            bool do_cold_blood = FALSE;
             if (subject_ptr->concent >= CONCENT_RADAR_THRESHOLD) {
                 um_ptr->easy = TRUE;
                 um_ptr->flag = TRUE;
             }
             
-            if (distance <= subject_ptr->see_infra)
-                if ((r_ptr->flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) == RF2_COLD_BLOOD) {
-                    do_cold_blood = TRUE;
-                } else {
-                    um_ptr->easy = TRUE;
-                    um_ptr->flag = TRUE;
-                }
-
+            bool do_cold_blood = check_cold_blood(subject_ptr, um_ptr);
+            bool do_invisible = FALSE;
             if (player_can_see_bold(subject_ptr, um_ptr->fy, um_ptr->fx))
                 if (r_ptr->flags2 & RF2_INVISIBLE) {
                     do_invisible = TRUE;
