@@ -192,10 +192,8 @@ void effect_player_chaos(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
-    if (target_ptr->resist_chaos) {
-        ep_ptr->dam *= 6;
-        ep_ptr->dam /= (randint1(4) + 7);
-    }
+
+    ep_ptr->dam = ep_ptr->dam * calc_chaos_damage_rate(target_ptr, CALC_RAND) / 100;
 
     if (check_multishadow(target_ptr)) {
         ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
