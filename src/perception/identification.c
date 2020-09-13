@@ -82,6 +82,10 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは二刀流での命中率を向上させる。", "It affects your ability to hit when you are wielding two weapons.");
     }
 
+    if (has_flag(flgs, TR_INVULN_ARROW)) {
+        info[i++] = _("それは二刀流での命中率を向上させる。", "It affects your ability to hit when you are wielding two weapons.");
+    }
+
     if (has_flag(flgs, TR_EASY_SPELL)) {
         info[i++] = _("それは魔法の難易度を下げる。", "It affects your ability to cast spells.");
     }
