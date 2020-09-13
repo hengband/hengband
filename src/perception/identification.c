@@ -83,7 +83,11 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     }
 
     if (has_flag(flgs, TR_INVULN_ARROW)) {
-        info[i++] = _("それは二刀流での命中率を向上させる。", "It affects your ability to hit when you are wielding two weapons.");
+        info[i++] = _("それは物理的な飛び道具の一切をはねのける。", "It repels all physical missiles.");
+    }
+
+    if (has_flag(flgs, TR_NO_AC)) {
+        info[i++] = _("それは物理的防護の一切を奪う。", "It robs you of any physical protection.");
     }
 
     if (has_flag(flgs, TR_EASY_SPELL)) {
