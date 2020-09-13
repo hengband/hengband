@@ -137,49 +137,52 @@ typedef struct term_type {
 extern term_type *Term;
 
 errr term_win_nuke(term_win *s, TERM_LEN w, TERM_LEN h);
-extern errr term_user(int n);
-extern errr term_xtra(int n, int v);
+errr term_user(int n);
+errr term_xtra(int n, int v);
 
-extern void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
-extern void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
+void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
+void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
 
-extern void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
+void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
 
-extern errr term_fresh(void);
-extern errr term_set_cursor(int v);
-extern errr term_gotoxy(TERM_LEN x, TERM_LEN y);
-extern errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
-extern errr term_addch(TERM_COLOR a, char c);
-extern errr term_add_bigch(TERM_COLOR a, char c);
-extern errr term_addstr(int n, TERM_COLOR a, concptr s);
-extern errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
-extern errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
-extern errr term_erase(TERM_LEN x, TERM_LEN y, int n);
-extern errr term_clear(void);
-extern errr term_redraw(void);
-extern errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
+errr term_fresh(void);
+errr term_set_cursor(int v);
+errr term_gotoxy(TERM_LEN x, TERM_LEN y);
+errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
+errr term_addch(TERM_COLOR a, char c);
+errr term_add_bigch(TERM_COLOR a, char c);
+errr term_addstr(int n, TERM_COLOR a, concptr s);
+errr term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
+errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
+errr term_erase(TERM_LEN x, TERM_LEN y, int n);
+errr term_clear(void);
+errr term_redraw(void);
+errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
 
-extern errr term_get_cursor(int *v);
-extern errr term_get_size(TERM_LEN *w, TERM_LEN *h);
-extern errr term_locate(TERM_LEN *x, TERM_LEN *y);
-extern errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
+errr term_get_cursor(int *v);
+errr term_get_size(TERM_LEN *w, TERM_LEN *h);
+errr term_locate(TERM_LEN *x, TERM_LEN *y);
+errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
 
-extern errr term_flush(void);
-extern errr term_key_push(int k);
-extern errr term_inkey(char *ch, bool wait, bool take);
+errr term_flush(void);
+errr term_key_push(int k);
+errr term_inkey(char *ch, bool wait, bool take);
 
-extern errr term_save(void);
-extern errr term_load(void);
+errr term_save(void);
+errr term_load(void);
 
-extern errr term_resize(TERM_LEN w, TERM_LEN h);
+errr term_resize(TERM_LEN w, TERM_LEN h);
 
-extern errr term_activate(term_type *t);
+errr term_activate(term_type *t);
 
-extern errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k);
+errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k);
 
 #ifdef JP
-extern errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s);
+errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s);
+#endif
+
+#ifndef WINDOWS
+errr term_nuke(term_type *t);
 #endif
 
 #endif
-
