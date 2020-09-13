@@ -245,10 +245,10 @@ void effect_player_sound(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("轟音で攻撃された！", "You are hit by a loud noise!"));
-    if (target_ptr->resist_sound) {
-        ep_ptr->dam *= 5;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!check_multishadow(target_ptr)) {
+
+    ep_ptr->dam = ep_ptr->dam * calc_sound_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_sound && !check_multishadow(target_ptr)) {
         int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
         (void)set_stun(target_ptr, target_ptr->stun + plus_stun);
     }
