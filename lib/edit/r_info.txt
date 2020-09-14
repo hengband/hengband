@@ -12680,7 +12680,7 @@ N:684:塵の中を歩くもの『クァチル・ウタウス』
 E:Quachil Uttaus, Treader of the Dust
 G:z:D
 I:120:50d66:30:80:15
-W:44:3:0:20000:0:0
+W:52:3:0:20000:0:0
 B:CLAW:HURT:50d1
 B:TOUCH:TIME:1d50
 B:TOUCH:TIME:1d50
@@ -23074,7 +23074,7 @@ I:110:20d10:30:30:20
 W:10:1:0:50:0:0
 B:BITE:HURT:2d10
 B:STING:HURT:2d10
-F:UNIQUE | FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON
+F:UNIQUE | FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | ESCORT
 F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD | NO_SLEEP | ANIMAL
 S:1_IN_8 | S_KIN | BLIND
 D:$It waits to prey on all living things.
@@ -24106,7 +24106,8 @@ S:1_IN_7 | SCARE | BR_FIRE | BR_SOUN | BR_NETH
 D:$  It is a dragon who has been in Oblivion for so long that
 D:$ it has become difficult to maintain his body in this world.
 D:$  It fully acknowledges your ability.
-D:あまりにも永い間冥界にい続けたため、現世で肉体を保つことが困難になったドラゴンだ。
+D:あまりにも永い間冥界にい続けたため、
+D:現世で肉体を保つことが困難になったドラゴンだ。
 D:それはあなたの実力を十分に認めている。
 
 N:1209:世界を喰らうもの『アルドゥイン』
@@ -24176,7 +24177,7 @@ B:SLASH:EXP_VAMP:13d11
 B:HIT:SUPERHURT:10d11
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | DROP_SKELETON
 F:POWERFUL | SMART | IM_FIRE | IM_COLD | IM_ELEC | RES_CHAO
-F:NO_SLEEP | NO_CONF
+F:NO_SLEEP | NO_CONF | BASH_DOOR | KILL_BODY | PASS_WALL
 S:1_IN_3 | TELE_TO | TPORT | HEAL | S_KIN | BA_ELEC | BA_FIRE | BA_COLD | BR_SOUN
 D:$This man can completely absorb the soul of dragons
 D:$ without giving him time to save the power to revive in Mordor nor Oblivion.
@@ -24185,8 +24186,8 @@ D:この男は、冥界で復活する力を蓄える時間すら与えず
 D:ドラゴンの魂を完全に吸収することができる。
 D:彼の前で頭を垂れないドラゴンが果たしてこの世にいるだろうか？
 
-N:1213:ヴォルキハルの主『ハルコン』
-E:Harkon, the patriarch of Volkihar
+N:1213:ヴォルキハル城の主『ハルコン』
+E:Harkon, the patriarch of Volkihar castle
 G:V:s
 I:120:70d80:45:120:10
 W:61:2:0:32000:0:0
@@ -24195,7 +24196,7 @@ B:CRUSH:LOSE_WIS:10d11
 B:SLASH:EXP_VAMP:10d11
 B:SLASH:EXP_VAMP:10d11
 F:UNIQUE | FORCE_MAXHP | UNDEAD | EVIL | DEMON | MALE
-F:DROP_CORPSE | DROP_SKELETON
+F:DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:HURT_LITE | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:RES_NETH | RES_DARK | RES_SHAR | NO_SLEEP | NO_CONF
 S:1_IN_4 | TPORT | BA_DARK | S_UNDEAD | S_HI_UNDEAD | HEAL
@@ -24204,3 +24205,98 @@ D:$  For that purpose, he is also a ruthless man
 D:$ who easily throws away the genus.
 D:太陽の光をこの大地から消しさそろうとしている恐るべき吸血鬼だ。
 D:そのためには眷属をも容易く使い捨てにする、冷酷な男でもある。
+
+N:1214:ドラウグル
+E:Draugr
+G:z:y
+I:110:10d9:15:20:30
+W:8:1:0:25:150:1215
+B:HIT:HURT:1d10
+F:UNDEAD | DROP_CORPSE | HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
+F:DROP_60 | FRIENDS
+D:$It is a warrior buried in ancient times.
+D:$  It does not forgive intruders for treasure.
+D:太古に埋葬された戦士だ。財宝を狙う侵入者を容赦しない。
+
+N:1215:ドラウグル・ウォーカー
+E:Draugr walker
+G:z:b
+I:110:13d13:20:35:25
+W:16:1:0:70:450:1216
+B:SHOOT:HURT:7d7
+B:HIT:HURT:2d6
+B:SLASH:HURT:2d6
+F:UNDEAD | EVIL | DROP_CORPSE
+F:HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_90 | FRIENDS
+S:1_IN_9 | SHOOT | BA_COLD
+D:$It is a warrior buried in ancient times.
+D:$  It never forgives intruders for treasure.
+D:太古に埋葬された戦士だ。財宝を狙う侵入者を決して容赦しない。
+
+N:1216:ドラウグル・ワイト
+E:Draugr wight
+G:z:W
+I:110:21d21:25:45:20
+W:29:1:0:140:1200:1217
+B:SHOOT:HURT:8d9
+B:HIT:HURT:5d6
+B:SLASH:HURT:5d6
+B:CRUSH:HURT:5d6
+F:UNDEAD | EVIL | DROP_CORPSE
+F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_90 | FRIENDS
+S:1_IN_8 | SHOOT | BA_COLD
+D:$This warrior has continued to protect the tomb for a long time.
+D:$  You may also be a dependent!
+D:この戦士は墳墓を延々と守り続けている。あなたも眷属にされるかもしれない！
+
+N:1217:ドラウグル・スカージ
+E:Draugr scourge
+G:z:B
+I:115:25d25:30:55:15
+W:35:1:0:400:2500:1218
+B:SHOOT:HURT:10d9
+B:HIT:HURT:8d6
+B:SLASH:HURT:8d6
+B:CRUSH:HURT:8d6
+F:UNDEAD | EVIL | DROP_CORPSE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
+F:DROP_90 | DROP_1D2 | ONLY_ITEM | FRIENDS | BASH_DOOR
+S:1_IN_6 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN
+D:$It is a draugr that has acquired a unique cry.
+D:$  It informs the surroundings of the existence of an intruder.
+D:独特の叫びを会得したドラウグルだ。それは侵入者の存在を周囲に知らせる。
+
+N:1218:ドラウグル・デスロード
+E:Draugr deathlord
+G:z:D
+I:120:21d50:40:80:10
+W:42:1:0:3200:0:0
+B:SHOOT:SUPERHURT:12d12
+B:HIT:SUPERHURT:8d9
+B:SLASH:SUPERHURT:8d9
+B:CRUSH:SUPERHURT:8d9
+F:FORCE_MAXHP | UNDEAD | EVIL | ESCORT | DROP_CORPSE | BASH_DOOR | MOVE_BODY
+F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_2D2 | ONLY_ITEM
+S:1_IN_5 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN | S_UNDEAD
+D:$It is a warrior buried in ancient times.
+D:$  It oversees the draugrs and closely watches the intruders.
+D:太古に埋葬された戦士だ。
+D:それはドラウグル達を統括し、侵入者を注意深く見守っている。
+
+N:1219:ドラウグル・デス・オーバーロード
+E:Draugr death overload
+G:z:r
+I:120:100d26:50:90:10
+W:51:3:0:13000:0:0
+B:SHOOT:SUPERHURT:15d15
+B:HIT:SUPERHURT:15:d13
+B:SLASH:SUPERHURT:15d13
+B:CRUSH:SUPERHURT:15d13
+F:NAZGUL | FORCE_MAXHP | EVIL | UNDEAD
+F:ESCORT | ESCORTS | BASH_DOOR | MOVE_BODY
+F:IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP | RES_TELE
+F:DROP_90 | DROP_3D2 | DROP_GOOD | ONLY_ITEM | DROP_CORPSE
+S:1_IN_5 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN | S_UNDEAD | S_KIN
+D:$It is the strongest warrior on top of all draugrs.
+D:$  They are very few buried in the world.
+D:あらゆるドラウグル達の上位に立つ最強の戦士だ。
+D:世界でも埋葬された数はごく少ない。
