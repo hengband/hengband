@@ -155,6 +155,7 @@ concptr k_info_flags[NUM_K_FLAGS] = {
     "HEAVY_SPELL",
     "RES_TIME",
     "RES_WATER",
+    "INVULN_ARROW",
 };
 
 /*!

@@ -89,50 +89,28 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     switch (typ) {
     case GF_ELEC:
         if (is_immune_elec(target_ptr)) {
-            dam = 0;
             ignore_wraith_form = TRUE;
-            break;
         }
-        dam = dam * calc_vuln_elec_rate(target_ptr) / 100;
-        if (target_ptr->resist_elec)
-            dam = (dam + 2) / 3;
-        if (is_oppose_elec(target_ptr))
-            dam = (dam + 2) / 3;
+        dam = dam * calc_elec_damage_rate(target_ptr) / 100;
         break;
 
     case GF_POIS:
-        if (target_ptr->resist_pois)
-            dam = (dam + 2) / 3;
-        if (is_oppose_pois(target_ptr))
-            dam = (dam + 2) / 3;
+        dam = dam * calc_pois_damage_rate(target_ptr) / 100;
         break;
 
     case GF_ACID:
         if (is_immune_acid(target_ptr)) {
-            dam = 0;
             ignore_wraith_form = TRUE;
-            break;
         }
-
-        dam = dam * calc_vuln_acid_rate(target_ptr) / 100;
-        if (target_ptr->resist_acid)
-            dam = (dam + 2) / 3;
-        if (is_oppose_acid(target_ptr))
-            dam = (dam + 2) / 3;
+        dam = dam * calc_acid_damage_rate(target_ptr) / 100;
         break;
 
     case GF_COLD:
     case GF_ICE:
         if (is_immune_cold(target_ptr)) {
-            dam = 0;
             ignore_wraith_form = TRUE;
-            break;
         }
-        dam = dam * calc_vuln_cold_rate(target_ptr) / 100;
-        if (target_ptr->resist_cold)
-            dam = (dam + 2) / 3;
-        if (is_oppose_cold(target_ptr))
-            dam = (dam + 2) / 3;
+        dam = dam * calc_cold_damage_rate(target_ptr) / 100;
         break;
 
     case GF_FIRE:
@@ -141,12 +119,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
             ignore_wraith_form = TRUE;
             break;
         }
-        dam = dam * calc_vuln_fire_rate(target_ptr) / 100;
-        if (target_ptr->resist_fire)
-            dam = (dam + 2) / 3;
-        if (is_oppose_fire(target_ptr))
-            dam = (dam + 2) / 3;
-        break;
+        dam = dam * calc_fire_damage_rate(target_ptr) / 100;
 
     case GF_PSY_SPEAR:
         ignore_wraith_form = TRUE;
@@ -154,69 +127,56 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_ARROW:
         if (!target_ptr->blind
-            && ((target_ptr->inventory_list[INVEN_RARM].k_idx && (target_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU))
-                || (target_ptr->inventory_list[INVEN_LARM].k_idx && (target_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU)))) {
+            && (has_invuln_arrow(target_ptr))) {
             dam = 0;
             ignore_wraith_form = TRUE;
         }
-
         break;
 
     case GF_LITE:
-        if (target_ptr->resist_lite)
-            dam /= 2; /* Worst case of 4 / (d4 + 7) */
-        dam = dam * calc_vuln_lite_rate(target_ptr) / 100;
+        dam = dam * calc_lite_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_DARK:
-        if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form) {
-            dam = 0;
+        dam = dam * calc_dark_damage_rate(target_ptr, CALC_MAX) / 100;
+        if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form)
             ignore_wraith_form = TRUE;
-        } else if (target_ptr->resist_dark)
-            dam /= 2; /* Worst case of 4 / (d4 + 7) */
         break;
 
     case GF_SHARDS:
-        if (target_ptr->resist_shard)
-            dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+        dam = dam * calc_shards_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_SOUND:
-        if (target_ptr->resist_sound)
-            dam = dam * 5 / 8; /* Worst case of 5 / (d4 + 7) */
+        dam = dam * calc_sound_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_CONFUSION:
-        if (target_ptr->resist_conf)
-            dam = dam * 5 / 8; /* Worst case of 5 / (d4 + 7) */
+        dam = dam * calc_conf_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_CHAOS:
-        if (target_ptr->resist_chaos)
-            dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+        dam = dam * calc_chaos_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_NETHER:
+        dam = dam * calc_nether_damage_rate(target_ptr, CALC_MAX) / 100;
         if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
-            dam = 0;
             ignore_wraith_form = TRUE;
-        } else if (target_ptr->resist_neth)
-            dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+            dam = 0;
+        }
         break;
 
     case GF_DISENCHANT:
-        if (target_ptr->resist_disen)
-            dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+        dam = dam * calc_disenchant_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_NEXUS:
-        if (target_ptr->resist_nexus)
-            dam = dam * 3 / 4; /* Worst case of 6 / (d4 + 7) */
+        dam = dam * calc_nexus_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_TIME:
-        if (target_ptr->resist_time)
-            dam /= 2; /* Worst case of 4 / (d4 + 7) */
+        dam = dam * calc_time_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_GRAVITY:
@@ -225,15 +185,11 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_ROCKET:
-        if (target_ptr->resist_shard)
-            dam /= 2;
+        dam = dam * calc_rocket_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_NUKE:
-        if (target_ptr->resist_pois)
-            dam = (2 * dam + 2) / 5;
-        if (is_oppose_pois(target_ptr))
-            dam = (2 * dam + 2) / 5;
+        dam = dam * calc_nuke_damage_rate(target_ptr) / 100;
         break;
 
     case GF_DEATH_RAY:
@@ -261,15 +217,11 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_HOLY_FIRE:
-        if (target_ptr->align > 10)
-            dam /= 2;
-        else if (target_ptr->align < -10)
-            dam *= 2;
+        dam = dam * calc_holy_fire_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_HELL_FIRE:
-        if (target_ptr->align > 10)
-            dam *= 2;
+        dam = dam * calc_hell_fire_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_MIND_BLAST:

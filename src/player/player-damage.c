@@ -151,20 +151,12 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_acid(creature_ptr);
 
-    /* Total Immunity */
-    if (is_immune_acid(creature_ptr) || (dam <= 0)) {
+    dam = dam * calc_acid_damage_rate(creature_ptr) / 100;
+
+    if (dam <= 0) {
         learn_spell(creature_ptr, monspell);
         return 0;
     }
-
-    /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_acid_rate(creature_ptr) / 100;
-
-    /* Resist the damage */
-    if (creature_ptr->resist_acid)
-        dam = (dam + 2) / 3;
-    if (double_resist)
-        dam = (dam + 2) / 3;
 
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || creature_ptr->resist_acid)) && one_in_(HURT_CHANCE))
@@ -199,20 +191,12 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_elec(creature_ptr);
 
-    /* Total immunity */
-    if (is_immune_elec(creature_ptr) || (dam <= 0)) {
+    dam = dam * calc_elec_damage_rate(creature_ptr) / 100;
+
+    if (dam <= 0) {
         learn_spell(creature_ptr, monspell);
         return 0;
     }
-
-    /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_elec_rate(creature_ptr) / 100;
-
-    /* Resist the damage */
-    if (creature_ptr->resist_elec)
-        dam = (dam + 2) / 3;
-    if (double_resist)
-        dam = (dam + 2) / 3;
 
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || creature_ptr->resist_elec)) && one_in_(HURT_CHANCE))
@@ -250,14 +234,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
         return 0;
     }
 
-    /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_fire_rate(creature_ptr) / 100;
-
-    /* Resist the damage */
-    if (creature_ptr->resist_fire)
-        dam = (dam + 2) / 3;
-    if (double_resist)
-        dam = (dam + 2) / 3;
+    dam = dam * calc_fire_damage_rate(creature_ptr) / 100;
 
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || creature_ptr->resist_fire)) && one_in_(HURT_CHANCE))
@@ -296,7 +273,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     /* Vulnerability (Ouch!) */
-    dam = dam * calc_vuln_cold_rate(creature_ptr) / 100;
+    dam = dam * calc_cold_damage_rate(creature_ptr) / 100;
 
     /* Resist the damage */
     if (creature_ptr->resist_cold)

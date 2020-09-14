@@ -236,6 +236,15 @@ BIT_FLAGS has_no_ac(player_type *creature_ptr)
     return result;
 }
 
+BIT_FLAGS has_invuln_arrow(player_type *creature_ptr)
+{
+    BIT_FLAGS result = 0L;
+    if (creature_ptr->blind)
+        return result;
+    result |= check_equipment_flags(creature_ptr, TR_INVULN_ARROW);
+    return result;
+}
+
 void has_no_flowed(player_type *creature_ptr)
 {
     object_type *o_ptr;

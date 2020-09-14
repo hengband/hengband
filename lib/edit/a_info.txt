@@ -2842,7 +2842,7 @@ E:'Zantetsuken'
 I:23:20:2
 W:30:25:120:80000
 P:0:10d4:17:21:0
-F:STR | DEX | VORPAL | TUNNEL | SHOW_MODS
+F:STR | DEX | VORPAL | TUNNEL | SHOW_MODS | INVULN_ARROW
 D:$It's a sharp Japanese sword said to be capable of cutting anything.
 D:鋼をも切り裂く、切れ味抜群の日本刀だ。
 

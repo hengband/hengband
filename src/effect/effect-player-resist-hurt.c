@@ -44,10 +44,7 @@ void effect_player_poison(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("毒で攻撃された！", "You are hit by poison!"));
 
-    if (target_ptr->resist_pois)
-        ep_ptr->dam = (ep_ptr->dam + 2) / 3;
-    if (double_resist)
-        ep_ptr->dam = (ep_ptr->dam + 2) / 3;
+    ep_ptr->dam = ep_ptr->dam * calc_pois_damage_rate(target_ptr) / 100;
 
     if ((!(double_resist || target_ptr->resist_pois)) && one_in_(HURT_CHANCE) && !check_multishadow(target_ptr)) {
         do_dec_stat(target_ptr, A_CON);
@@ -65,10 +62,7 @@ void effect_player_nuke(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
 
-    if (target_ptr->resist_pois)
-        ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
-    if (double_resist)
-        ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
+    ep_ptr->dam = ep_ptr->dam * calc_pois_damage_rate(target_ptr) / 100;
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
     if ((double_resist || target_ptr->resist_pois) || check_multishadow(target_ptr))
@@ -101,10 +95,7 @@ void effect_player_holy_fire(player_type *target_ptr, effect_player_type *ep_ptr
     if (target_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
 
-    if (target_ptr->align > 10)
-        ep_ptr->dam /= 2;
-    else if (target_ptr->align < -10)
-        ep_ptr->dam *= 2;
+    ep_ptr->dam = ep_ptr->dam * calc_holy_fire_damage_rate(target_ptr, CALC_RAND) / 100;
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
@@ -114,8 +105,7 @@ void effect_player_hell_fire(player_type *target_ptr, effect_player_type *ep_ptr
     if (target_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
 
-    if (target_ptr->align > 10)
-        ep_ptr->dam *= 2;
+    ep_ptr->dam = ep_ptr->dam * calc_hell_fire_damage_rate(target_ptr, CALC_RAND) / 100;
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
@@ -128,7 +118,7 @@ void effect_player_arrow(player_type *target_ptr, effect_player_type *ep_ptr)
         return;
     }
 
-    if ((target_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (target_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU)) {
+    if (has_invuln_arrow(target_ptr)) {
         msg_print(_("矢を斬り捨てた！", "You cut down the arrow!"));
         return;
     }
@@ -157,11 +147,9 @@ void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("地獄の力で攻撃された！", "You are hit by nether forces!"));
 
-    if (target_ptr->resist_neth) {
-        if (!is_specific_player_race(target_ptr, RACE_SPECTRE))
-            ep_ptr->dam *= 6;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!check_multishadow(target_ptr))
+    ep_ptr->dam = ep_ptr->dam * calc_nether_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_neth && !check_multishadow(target_ptr))
         drain_exp(target_ptr, 200 + (target_ptr->exp / 100), 200 + (target_ptr->exp / 1000), 75);
 
     if (!is_specific_player_race(target_ptr, RACE_SPECTRE) || check_multishadow(target_ptr)) {
@@ -204,10 +192,8 @@ void effect_player_chaos(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
-    if (target_ptr->resist_chaos) {
-        ep_ptr->dam *= 6;
-        ep_ptr->dam /= (randint1(4) + 7);
-    }
+
+    ep_ptr->dam = ep_ptr->dam * calc_chaos_damage_rate(target_ptr, CALC_RAND) / 100;
 
     if (check_multishadow(target_ptr)) {
         ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
@@ -240,10 +226,10 @@ void effect_player_shards(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
-    if (target_ptr->resist_shard) {
-        ep_ptr->dam *= 6;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!check_multishadow(target_ptr)) {
+
+    ep_ptr->dam = ep_ptr->dam * calc_shards_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_shard && !check_multishadow(target_ptr)) {
         (void)set_cut(target_ptr, target_ptr->cut + ep_ptr->dam);
     }
 
@@ -257,10 +243,10 @@ void effect_player_sound(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("轟音で攻撃された！", "You are hit by a loud noise!"));
-    if (target_ptr->resist_sound) {
-        ep_ptr->dam *= 5;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!check_multishadow(target_ptr)) {
+
+    ep_ptr->dam = ep_ptr->dam * calc_sound_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_sound && !check_multishadow(target_ptr)) {
         int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
         (void)set_stun(target_ptr, target_ptr->stun + plus_stun);
     }
@@ -275,10 +261,10 @@ void effect_player_confusion(player_type *target_ptr, effect_player_type *ep_ptr
 {
     if (target_ptr->blind)
         msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
-    if (target_ptr->resist_conf) {
-        ep_ptr->dam *= 5;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!check_multishadow(target_ptr)) {
+
+    ep_ptr->dam = ep_ptr->dam * calc_conf_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_conf && !check_multishadow(target_ptr)) {
         (void)set_confused(target_ptr, target_ptr->confused + randint1(20) + 10);
     }
 
@@ -289,10 +275,10 @@ void effect_player_disenchant(player_type *target_ptr, effect_player_type *ep_pt
 {
     if (target_ptr->blind)
         msg_print(_("何かさえないもので攻撃された！", "You are hit by something static!"));
-    if (target_ptr->resist_disen) {
-        ep_ptr->dam *= 6;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!check_multishadow(target_ptr)) {
+
+    ep_ptr->dam = ep_ptr->dam * calc_disenchant_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_disen && !check_multishadow(target_ptr)) {
         (void)apply_disenchant(target_ptr, 0);
     }
 
@@ -303,10 +289,10 @@ void effect_player_nexus(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("何か奇妙なもので攻撃された！", "You are hit by something strange!"));
-    if (target_ptr->resist_nexus) {
-        ep_ptr->dam *= 6;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!check_multishadow(target_ptr)) {
+
+    ep_ptr->dam = ep_ptr->dam * calc_nexus_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_nexus && !check_multishadow(target_ptr)) {
         apply_nexus(ep_ptr->m_ptr, target_ptr);
     }
 
@@ -332,9 +318,9 @@ void effect_player_rocket(player_type *target_ptr, effect_player_type *ep_ptr)
         (void)set_stun(target_ptr, target_ptr->stun + randint1(20));
     }
 
-    if (target_ptr->resist_shard) {
-        ep_ptr->dam /= 2;
-    } else if (!check_multishadow(target_ptr)) {
+    ep_ptr->dam = ep_ptr->dam * calc_rocket_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->resist_shard && !check_multishadow(target_ptr)) {
         (void)set_cut(target_ptr, target_ptr->cut + (ep_ptr->dam / 2));
     }
 
@@ -359,22 +345,17 @@ void effect_player_lite(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
-    if (target_ptr->resist_lite) {
-        ep_ptr->dam *= 4;
-        ep_ptr->dam /= (randint1(4) + 7);
-    } else if (!target_ptr->blind && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
+    if (!target_ptr->blind && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
         (void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
     }
 
-    ep_ptr->dam = ep_ptr->dam * calc_vuln_fire_rate(target_ptr) / 100;
+    ep_ptr->dam = ep_ptr->dam * calc_lite_damage_rate(target_ptr, CALC_RAND) / 100;
 
     if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE)) {
         if (!check_multishadow(target_ptr))
             msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
     }
 
-    if (target_ptr->wraith_form)
-        ep_ptr->dam *= 2;
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 
     if (!target_ptr->wraith_form || check_multishadow(target_ptr))
@@ -392,13 +373,10 @@ void effect_player_dark(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
-    if (target_ptr->resist_dark) {
-        ep_ptr->dam *= 4;
-        ep_ptr->dam /= (randint1(4) + 7);
 
-        if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form)
-            ep_ptr->dam = 0;
-    } else if (!target_ptr->blind && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
+    ep_ptr->dam = ep_ptr->dam * calc_dark_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->blind && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
         (void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
     }
 
@@ -488,21 +466,16 @@ void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("過去からの衝撃に攻撃された！", "You are hit by a blast from the past!"));
 
-    if (target_ptr->resist_time) {
-        ep_ptr->dam *= 4;
-        ep_ptr->dam /= (randint1(4) + 7);
-        msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
+    ep_ptr->dam = ep_ptr->dam * calc_time_damage_rate(target_ptr, CALC_RAND) / 100;
+    if (!check_multishadow(target_ptr)) {
+        if (target_ptr->resist_time) {
+            msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
+        }
         ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-        return;
+        if (!target_ptr->resist_time) {
+            effect_player_time_addition(target_ptr);
+        }
     }
-
-    if (check_multishadow(target_ptr)) {
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-        return;
-    }
-
-    effect_player_time_addition(target_ptr);
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
 
 void effect_player_gravity(player_type *target_ptr, effect_player_type *ep_ptr)

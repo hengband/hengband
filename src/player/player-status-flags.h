@@ -42,6 +42,7 @@ BIT_FLAGS has_bless_blade(player_type *creature_ptr);
 BIT_FLAGS has_easy2_weapon(player_type *creature_ptr);
 BIT_FLAGS has_down_saving(player_type *creature_ptr);
 BIT_FLAGS has_no_ac(player_type *creature_ptr);
+BIT_FLAGS has_invuln_arrow(player_type *creature_ptr);
 void has_no_flowed(player_type *creature_ptr);
 BIT_FLAGS has_mighty_throw(player_type *creature_ptr);
 BIT_FLAGS has_dec_mana(player_type *creature_ptr);
