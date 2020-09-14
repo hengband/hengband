@@ -24274,7 +24274,8 @@ B:SHOOT:SUPERHURT:12d12
 B:HIT:SUPERHURT:8d9
 B:SLASH:SUPERHURT:8d9
 B:CRUSH:SUPERHURT:8d9
-F:FORCE_MAXHP | UNDEAD | EVIL | ESCORT | DROP_CORPSE | BASH_DOOR | MOVE_BODY
+F:FORCE_MAXHP | UNDEAD | EVIL | ESCORT | DROP_CORPSE
+F:NO_CONF | BASH_DOOR | MOVE_BODY
 F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_2D2 | ONLY_ITEM
 S:1_IN_5 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN | S_UNDEAD
 D:$It is a warrior buried in ancient times.
@@ -24291,12 +24292,45 @@ B:SHOOT:SUPERHURT:15d15
 B:HIT:SUPERHURT:15:d13
 B:SLASH:SUPERHURT:15d13
 B:CRUSH:SUPERHURT:15d13
-F:NAZGUL | FORCE_MAXHP | EVIL | UNDEAD
+F:NAZGUL | FORCE_MAXHP | EVIL | UNDEAD | NO_SLEEP | NO_CONF
 F:ESCORT | ESCORTS | BASH_DOOR | MOVE_BODY
-F:IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP | RES_TELE
+F:IM_COLD | IM_POIS | RES_NETH | RES_TELE | NO_CONF
 F:DROP_90 | DROP_3D2 | DROP_GOOD | ONLY_ITEM | DROP_CORPSE
-S:1_IN_5 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN | S_UNDEAD | S_KIN
+S:1_IN_5 | SHOOT | SCARE | HOLD | BA_POIS | BA_COLD | BR_COLD | BR_SOUN
+S:S_UNDEAD | S_KIN
 D:$It is the strongest warrior on top of all draugrs.
 D:$  They are very few buried in the world.
 D:あらゆるドラウグル達の上位に立つ最強の戦士だ。
 D:世界でも埋葬された数はごく少ない。
+
+N:1220:殺人スカラベ
+E:Killer scarab
+G:K:G
+I:120:10d69:25:70:20
+W:40:1:0:350:0:0
+B:CRUSH:HURT:3d12
+B:KICK:HURT:4d12
+F:WEIRD_MIND | ANIMAL | BASH_DOOR | DROP_60 | FRIENDS | DROP_CORPSE
+F:RES_DARK | RES_NETH
+D:$It will keep you rolling to hell!
+D:それはあなたを地獄まで転がしつつけるだろう！
+
+N:1221:太古の大神官『イムホテップ』
+E:Imhotep, the great ancient priest
+G:z:v
+I:120:30d70:30:80:30
+W:43:2:0:14000:0:0
+B:HIT:EXP_VAMP:9d9
+B:CLAW:DISEASE:9d9
+B:BITE:TIME:9d9
+B:INSULT:LOSE_CHR:11d9
+F:UNIQUE | FORCE_MAXHP | EVIL | UNDEAD | MALE | DROP_SKELETON
+F:ESCORT | ESCORTS | IM_COLD | RES_DARK | RES_NETH
+F:HURT_LITE | NO_SLEEP | NO_CONF
+S:1_IN_6 | HOLD | CONF | S_KIN | BRAIN_SMASH | S_UNDEAD | BA_DARK | BA_NETH
+D:$He assassinated his king.
+D:$  After that, he tried to plunder the mistress but failed.
+D:$  He could not even bring her back from the Netherworld,
+D:$ and its eyes are burning with resentment.
+D:彼は王を暗殺した。その後その愛人を略奪しようとしたが失敗した。
+D:冥府から彼女を呼び戻すこともままならず、その瞳は恨みに燃えている。
