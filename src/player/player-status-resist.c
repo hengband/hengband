@@ -320,7 +320,6 @@ PERCENTAGE calc_time_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
     if (creature_ptr->resist_time) {
         per *= 400;
         per /= randrate(4, 7, mode);
-        return;
     }
 
     return per;
