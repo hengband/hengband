@@ -24326,7 +24326,7 @@ B:BITE:TIME:9d9
 B:INSULT:LOSE_CHR:11d9
 F:UNIQUE | FORCE_MAXHP | EVIL | UNDEAD | MALE | DROP_SKELETON
 F:ESCORT | ESCORTS | IM_COLD | RES_DARK | RES_NETH
-F:HURT_LITE | NO_SLEEP | NO_CONF
+F:HURT_LITE | NO_SLEEP | NO_CONF | DROP_3D2 | DROP_GOOD
 S:1_IN_6 | HOLD | CONF | S_KIN | BRAIN_SMASH | S_UNDEAD | BA_DARK | BA_NETH
 D:$He assassinated his king.
 D:$  After that, he tried to plunder the mistress but failed.
@@ -24334,3 +24334,90 @@ D:$  He could not even bring her back from the Netherworld,
 D:$ and its eyes are burning with resentment.
 D:彼は王を暗殺した。その後その愛人を略奪しようとしたが失敗した。
 D:冥府から彼女を呼び戻すこともままならず、その瞳は恨みに燃えている。
+
+N:1222:ファルメル
+E:Falmer
+G:h:o
+I:110:11d11:1:15:50
+W:8:2:0:32:210:1223
+B:HIT:POISON:5d5
+F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
+F:IM_POIS | RES_LITE | RES_DARK
+D:$It is the fallen descendant of the snow elf.
+D:$  It is blind but good ears.
+D:スノーエルフの堕落した末裔だ。目は見えないがとても耳が利く。
+
+N:1223:ファルメル・スクルカー
+E:Falmer skulker
+G:h:U
+I:110:21d13:5:45:50
+W:21:2:0:350:2100:1224
+B:SHOOT:HURT:8d9
+B:HIT:POISON:11d7
+F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_8 | SHOOT | BA_POIS
+D:$A falmer whose body is covered with a chaurus shell.
+D:$  It is blind and does not shrug in the light.
+D:シャウラスの殻で身体を覆ったファルメルだ。
+D:目が見えないので光に身をすくめることもない。
+
+N:1224:ファルメル・グルームルーカー
+E:Falmer gloomlurker
+G:h:u
+I:115:31d31:10:65:50
+W:36:2:0:1400:10000:1225
+B:SHOOT:HURT:13d9
+B:SLASH:POISON:9d9
+B:SLASH:POISON:9d7
+F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90 | ONLY_ITEM
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_6 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD
+D:$A falmel holding a sword and shield made of chaurus shell.
+D:シャウラスの殻でできた剣と盾を手にしたファルメルだ。
+
+N:1225:ファルメル・ナイトプロウラー
+E:Falmer nightprowler
+G:h:B
+I:120:50d49:10:85:50
+W:46:2:0:4200:35000:1226
+B:SHOOT:HURT:15d11
+B:SLASH:POISON:14d12
+B:SLASH:POISON:12d10
+B:SLASH:POISON:12d10
+F:EVIL | DROP_CORPSE | DROP_SKELETON
+F:DROP_90 | DROP_1D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
+S:1_IN_6 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD
+D:$A well-trained falmer heavy warrior.
+D:鍛え上げたファルメルの重戦士だ。
+
+N:1226:ファルメル・シャドウマスター
+E:Falmer shadowmaster
+G:h:s
+I:120:75d49:10:100:50
+W:52:2:0:10000:140000:1227
+B:SHOOT:HURT:18d11
+B:SLASH:POISON:16d13
+B:SLASH:POISON:14d11
+B:SLASH:POISON:14d11
+F:EVIL | DROP_CORPSE | DROP_SKELETON
+F:DROP_1D2 | DROP_2D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
+S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+D:$A falmer who even wore magic.
+D:$  You had better stay away from the detour.
+D:魔術すら身に着けたファルメルだ。迂闊には近寄らない方がいい。
+
+N:1227:ファルメル・ウォーモンガー
+E:Falmer warmonger
+G:h:R
+I:120:100d49:10:120:50
+W:60:2:0:18000:0:0
+B:SHOOT:HURT:21d11
+B:SLASH:POISON:17d16
+B:SLASH:POISON:17d11
+B:SLASH:POISON:17d11
+F:EVIL | DROP_CORPSE | DROP_SKELETON
+F:DROP_2D2 | DROP_3D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
+S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+D:$It is the strongest falmer among general soldiers.
+D:一般兵士の中では最強のファルメルだ。
