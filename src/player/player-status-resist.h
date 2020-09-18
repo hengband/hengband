@@ -30,3 +30,4 @@ PERCENTAGE calc_time_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
 PERCENTAGE calc_rocket_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_hell_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
+PERCENTAGE calc_gravity_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);

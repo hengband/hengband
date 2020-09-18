@@ -494,9 +494,7 @@ void effect_player_gravity(player_type *target_ptr, effect_player_type *ep_ptr)
         }
     }
 
-    if (target_ptr->levitation) {
-        ep_ptr->dam = (ep_ptr->dam * 2) / 3;
-    }
+    ep_ptr->dam = ep_ptr->dam * calc_gravity_damage_rate(target_ptr, CALC_RAND) / 100;
 
     if (!target_ptr->levitation || one_in_(13)) {
         inventory_damage(target_ptr, set_cold_destroy, 2);

@@ -180,8 +180,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_GRAVITY:
-        if (target_ptr->levitation)
-            dam = (dam * 2) / 3;
+        dam = dam * calc_gravity_damage_rate(target_ptr, CALC_MAX) / 100;
         break;
 
     case GF_ROCKET:
