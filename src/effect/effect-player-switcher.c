@@ -1,22 +1,10 @@
 #include "effect/effect-player-switcher.h"
-#include "blue-magic/blue-magic-checker.h"
-#include "cmd-action/cmd-attack.h"
 #include "effect/effect-player-curse.h"
 #include "effect/effect-player-oldies.h"
 #include "effect/effect-player-resist-hurt.h"
 #include "effect/effect-player-spirit.h"
-#include "inventory/inventory-damage.h"
-#include "mind/mind-mirror-master.h"
-#include "object/object-broken.h"
-#include "player/mimic-info-table.h"
 #include "player/player-damage.h"
-#include "player/player-race-types.h"
-#include "player/player-status-flags.h"
 #include "spell/spell-types.h"
-#include "status/bad-status-setter.h"
-#include "status/element-resistance.h"
-#include "view/display-messages.h"
-#include "world/world.h"
 
 /*!
  * @brief
