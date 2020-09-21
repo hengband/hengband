@@ -7,7 +7,6 @@
 #include "effect/effect-player-spirit.h"
 #include "inventory/inventory-damage.h"
 #include "mind/mind-mirror-master.h"
-#include "object-enchant/object-curse.h"
 #include "object/object-broken.h"
 #include "player/mimic-info-table.h"
 #include "player/player-damage.h"
@@ -18,76 +17,6 @@
 #include "status/element-resistance.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-void effect_player_mana(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("魔法のオーラで攻撃された！", "You are hit by an aura of magic!"));
-
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-}
-
-void effect_player_psy_spear(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("エネルギーの塊で攻撃された！", "You are hit by an energy!"));
-
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_FORCE, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-}
-
-void effect_player_meteor(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("何かが空からあなたの頭上に落ちてきた！", "Something falls from the sky on you!"));
-
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-    if (!target_ptr->resist_shard || one_in_(13)) {
-        if (!is_immune_fire(target_ptr))
-            inventory_damage(target_ptr, set_fire_destroy, 2);
-        inventory_damage(target_ptr, set_cold_destroy, 2);
-    }
-}
-
-void effect_player_icee(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("何か鋭く冷たいもので攻撃された！", "You are hit by something sharp and cold!"));
-
-    ep_ptr->get_damage = cold_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
-    if (check_multishadow(target_ptr))
-        return;
-
-    if (!target_ptr->resist_shard) {
-        (void)set_cut(target_ptr, target_ptr->cut + damroll(5, 8));
-    }
-
-    if (!target_ptr->resist_sound) {
-        (void)set_stun(target_ptr, target_ptr->stun + randint1(15));
-    }
-
-    if ((!(target_ptr->resist_cold || is_oppose_cold(target_ptr))) || one_in_(12)) {
-        if (!is_immune_cold(target_ptr))
-            inventory_damage(target_ptr, set_cold_destroy, 3);
-    }
-}
-
-void effect_player_hand_doom(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !check_multishadow(target_ptr)) {
-        msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-        learn_spell(target_ptr, ep_ptr->monspell);
-    } else {
-        if (!check_multishadow(target_ptr)) {
-            msg_print(_("あなたは命が薄まっていくように感じた！", "You feel your life fade away!"));
-            curse_equipment(target_ptr, 40, 20);
-        }
-
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->m_name, ep_ptr->monspell);
-
-        if (target_ptr->chp < 1)
-            target_ptr->chp = 1;
-    }
-}
 
 /*!
  * @brief
