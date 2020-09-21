@@ -156,6 +156,48 @@ static void init_random_seed(player_type *player_ptr, bool new_game)
         Rand_state_init();
 }
 
+static void init_world_floor_info(player_type *player_ptr)
+{
+    current_world_ptr->character_dungeon = FALSE;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    floor_ptr->dun_level = 0;
+    floor_ptr->inside_quest = 0;
+    floor_ptr->inside_arena = FALSE;
+    player_ptr->phase_out = FALSE;
+    write_level = TRUE;
+    current_world_ptr->seed_flavor = randint0(0x10000000);
+    current_world_ptr->seed_town = randint0(0x10000000);
+    player_birth(player_ptr, process_autopick_file_command);
+    counts_write(player_ptr, 2, 0);
+    player_ptr->count = 0;
+    load = FALSE;
+    determine_bounty_uniques(player_ptr);
+    determine_daily_bounty(player_ptr, FALSE);
+    wipe_o_list(floor_ptr);
+}
+
+static void restore_world_floor_info(player_type *player_ptr)
+{
+    write_level = FALSE;
+    exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("                            ----ゲーム再開----", "                            --- Restarted Game ---"));
+
+    /*
+     * todo 3.0.Xで削除予定
+     * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
+     * もう不要だが、以前のセーブファイルとの互換のために残しておく。
+     */
+    if (player_ptr->riding == -1) {
+        player_ptr->riding = 0;
+        floor_type *floor_ptr = player_ptr->current_floor_ptr;
+        for (MONSTER_IDX i = floor_ptr->m_max; i > 0; i--) {
+            if (player_bold(player_ptr, floor_ptr->m_list[i].fy, floor_ptr->m_list[i].fx)) {
+                player_ptr->riding = i;
+                break;
+            }
+        }
+    }
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -183,46 +225,12 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     send_waiting_record(player_ptr);
     current_world_ptr->creating_savefile = new_game;
     init_random_seed(player_ptr, new_game);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (new_game) {
-        current_world_ptr->character_dungeon = FALSE;
-        floor_ptr->dun_level = 0;
-        floor_ptr->inside_quest = 0;
-        floor_ptr->inside_arena = FALSE;
-        player_ptr->phase_out = FALSE;
-        write_level = TRUE;
-        current_world_ptr->seed_flavor = randint0(0x10000000);
-        current_world_ptr->seed_town = randint0(0x10000000);
-        player_birth(player_ptr, process_autopick_file_command);
-        counts_write(player_ptr, 2, 0);
-        player_ptr->count = 0;
-        load = FALSE;
-        determine_bounty_uniques(player_ptr);
-        determine_daily_bounty(player_ptr, FALSE);
-        wipe_o_list(floor_ptr);
-    } else {
-        write_level = FALSE;
-        exe_write_diary(
-            player_ptr, DIARY_GAMESTART, 1, _("                            ----ゲーム再開----", "                            --- Restarted Game ---"));
-
-        /*
-         * todo 3.0.Xで削除予定
-         * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
-         * もう不要だが、以前のセーブファイルとの互換のために残しておく。
-         */
-        if (player_ptr->riding == -1) {
-            player_ptr->riding = 0;
-            for (MONSTER_IDX i = floor_ptr->m_max; i > 0; i--) {
-                if (player_bold(player_ptr, floor_ptr->m_list[i].fy, floor_ptr->m_list[i].fx)) {
-                    player_ptr->riding = i;
-                    break;
-                }
-            }
-        }
-    }
-
+    if (new_game)
+        init_world_floor_info(player_ptr);
+    else
+        restore_world_floor_info(player_ptr);
+    
     current_world_ptr->creating_savefile = FALSE;
-
     player_ptr->teleport_town = FALSE;
     player_ptr->sutemi = FALSE;
     current_world_ptr->timewalk_m_idx = 0;
@@ -231,6 +239,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     current_world_ptr->start_time = time(NULL) - 1;
     record_o_name[0] = '\0';
 
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
     if (player_ptr->pseikaku == PERSONALITY_SEXY)
