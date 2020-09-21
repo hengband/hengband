@@ -623,7 +623,7 @@
     <ClCompile Include="..\..\src\cmd-building\cmd-building.c" />
     <ClCompile Include="..\..\src\io-dump\character-dump.c" />
     <ClCompile Include="..\..\src\specific-object\chest.c" />
-    <ClCompile Include="..\..\src\io\chuukei.c" />
+    <ClCompile Include="..\..\src\io\record-play-movie.c" />
     <ClCompile Include="..\..\src\object-activation\activation-switcher.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-others.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-diary.c" />
@@ -1386,7 +1386,7 @@
     <ClInclude Include="..\..\src\cmd-building\cmd-building.h" />
     <ClInclude Include="..\..\src\io-dump\character-dump.h" />
     <ClInclude Include="..\..\src\specific-object\chest.h" />
-    <ClInclude Include="..\..\src\io\chuukei.h" />
+    <ClInclude Include="..\..\src\io\record-play-movie.h" />
     <ClCompile Include="..\..\src\player\player-move.c" />
     <ClCompile Include="..\..\src\io\files-util.c" />
     <ClCompile Include="..\..\src\grid\grid.c" />

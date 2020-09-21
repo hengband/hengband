@@ -41,7 +41,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
-#include "io/chuukei.h"
+#include "io/record-play-movie.h"
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"

@@ -103,7 +103,7 @@
 #include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
-#include "io/chuukei.h"
+#include "io/record-play-movie.h"
 #include "io/files-util.h"
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"

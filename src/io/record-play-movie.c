@@ -4,7 +4,7 @@
  * @author 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "io/chuukei.h"
+#include "io/record-play-movie.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"

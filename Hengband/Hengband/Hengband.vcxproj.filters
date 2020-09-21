@@ -512,9 +512,6 @@
     <ClCompile Include="..\..\src\io\inet.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\chuukei.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\dungeon\quest.c">
       <Filter>dungeon</Filter>
     </ClCompile>
@@ -2180,6 +2177,9 @@
     <ClCompile Include="..\..\src\player\player-status-resist.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\record-play-movie.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2735,9 +2735,6 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\inet.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\chuukei.h">
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\quest.h">
@@ -4716,6 +4713,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-status-resist.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\record-play-movie.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

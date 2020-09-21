@@ -11,7 +11,7 @@
 #include "core/game-play.h"
 #include "core/scores.h"
 #include "game-option/runtime-arguments.h"
-#include "io/chuukei.h"
+#include "io/record-play-movie.h"
 #include "io/files-util.h"
 #include "io/inet.h"
 #include "io/signal-handlers.h"
