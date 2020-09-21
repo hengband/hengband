@@ -28,8 +28,6 @@ static concptr errstr;
 static char *proxy;
 static int proxy_port;
 
-bool browsing_movie;
-
 /* プロキシサーバのアドレスををファイルから読んで設定する */
 void set_proxy(char *default_url, int default_port)
 {

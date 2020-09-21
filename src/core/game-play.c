@@ -90,13 +90,16 @@
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param new_game 新規にゲームを始めたかどうか
+ * @param browsing_movie ムービーモードか
  * @return なし
  * @note
  * If the "new_game" parameter is true, then, after loading the
  * savefile, we will commit suicide, if necessary, to allow the
  * player to start a new game.
  */
-void play_game(player_type *player_ptr, bool new_game)
+void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
 {
     bool load_game = TRUE;
     bool init_random_seed = FALSE;

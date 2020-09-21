@@ -2249,7 +2249,7 @@ static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
     strcat(savefile, s);
     validate_file(savefile);
     game_in_progress = TRUE;
-    play_game(player_ptr, FALSE);
+    play_game(player_ptr, FALSE, FALSE);
 }
 
 /*
@@ -2268,7 +2268,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         } else {
             game_in_progress = TRUE;
             term_flush();
-            play_game(player_ptr, TRUE);
+            play_game(player_ptr, TRUE, FALSE);
             quit(NULL);
         }
 
@@ -2294,7 +2294,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
                 validate_file(savefile);
                 game_in_progress = TRUE;
                 term_flush();
-                play_game(player_ptr, FALSE);
+                play_game(player_ptr, FALSE, FALSE);
                 quit(NULL);
             }
         }
@@ -2370,8 +2370,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
             if (GetOpenFileName(&ofn)) {
-                prepare_browse_movie_aux(savefile);
-                play_game(player_ptr, FALSE);
+                prepare_browse_movie_without_path_build(savefile);
+                play_game(player_ptr, FALSE, TRUE);
                 quit(NULL);
                 return;
             }

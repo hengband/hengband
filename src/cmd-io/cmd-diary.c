@@ -117,7 +117,6 @@ static void do_cmd_erase_diary(void)
 void do_cmd_diary(player_type *creature_ptr)
 {
     screen_save();
-    int i;
     while (TRUE) {
         term_clear();
         prt(_("[ 記録の設定 ]", "[ Play Record ]"), 2, 0);
@@ -127,7 +126,7 @@ void do_cmd_diary(player_type *creature_ptr)
         prt(_("(4) 記録を消去する", "(4) Delete your record"), 7, 5);
         prt(_("(R) プレイ動画を記録する/中止する", "(R) Record playing movie / or stop it"), 9, 5);
         prt(_("コマンド:", "Command: "), 18, 0);
-        i = inkey();
+        int i = inkey();
         if (i == ESCAPE)
             break;
 

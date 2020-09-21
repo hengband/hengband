@@ -3,8 +3,8 @@
 #include "system/angband.h"
 
 void prepare_movie_hooks(player_type *player_ptr);
-void prepare_browse_movie_aux(concptr filename);
+void prepare_browse_movie_without_path_build(concptr filename);
 void browse_movie(void);
 #ifndef WINDOWS
-void prepare_browse_movie(concptr filename);
+void prepare_browse_movie_with_path_build(concptr filename);
 #endif WINDOWS

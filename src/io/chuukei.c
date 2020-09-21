@@ -538,12 +538,9 @@ static bool flush_ringbuf_client(void)
     return TRUE;
 }
 
-void prepare_browse_movie_aux(concptr filename)
+void prepare_browse_movie_without_path_build(concptr filename)
 {
     movie_fd = fd_open(filename, O_RDONLY);
-
-    browsing_movie = TRUE;
-
     init_buffer();
 }
 
@@ -570,11 +567,10 @@ void browse_movie(void)
 }
 
 #ifndef WINDOWS
-void prepare_browse_movie(concptr filename)
+void prepare_browse_movie_with_path_build(concptr filename)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-
     prepare_browse_movie_aux(buf);
 }
 #endif

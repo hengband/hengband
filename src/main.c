@@ -345,6 +345,7 @@ int main(int argc, char *argv[])
 #endif /* SET_UID */
 
     /* Process the command line arguments */
+    bool browsing_movie = FALSE;
     for (i = 1; args && (i < argc); i++) {
         /* Require proper options */
         if (argv[i][0] != '-') {
@@ -437,7 +438,8 @@ int main(int argc, char *argv[])
                 break;
             }
 
-            prepare_browse_movie(&argv[i][2]);
+            prepare_browse_movie_with_path_build(&argv[i][2]);
+            browsing_movie = TRUE;
             break;
         }
         case '-': {
@@ -533,7 +535,7 @@ int main(int argc, char *argv[])
     pause_line(23);
 
     /* Play the game */
-    play_game(p_ptr, new_game);
+    play_game(p_ptr, new_game, browsing_movie);
 
     /* Quit */
     quit(NULL);
