@@ -88,6 +88,19 @@
 #include "wizard/wizard-special-process.h"
 #include "world/world.h"
 
+static void restore_windows(player_type *player_ptr)
+{
+    player_ptr->hack_mutation = FALSE;
+    current_world_ptr->character_icky = TRUE;
+    term_activate(angband_term[0]);
+    angband_term[0]->resize_hook = resize_map;
+    for (MONSTER_IDX i = 1; i < 8; i++)
+        if (angband_term[i])
+            angband_term[i]->resize_hook = redraw_window;
+
+    (void)term_set_cursor(0);
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -107,15 +120,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
         return;
     }
 
-    player_ptr->hack_mutation = FALSE;
-    current_world_ptr->character_icky = TRUE;
-    term_activate(angband_term[0]);
-    angband_term[0]->resize_hook = resize_map;
-    for (MONSTER_IDX i = 1; i < 8; i++)
-        if (angband_term[i])
-            angband_term[i]->resize_hook = redraw_window;
-
-    (void)term_set_cursor(0);
+    restore_windows(player_ptr);
     if (!load_savedata(player_ptr))
         quit(_("セーブファイルが壊れています", "broken savefile"));
 
