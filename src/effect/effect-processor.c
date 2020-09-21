@@ -81,7 +81,7 @@ static void next_mirror(player_type *creature_ptr, POSITION *next_y, POSITION *n
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the
  * projection were observed, else FALSE
  */
-bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ, BIT_FLAGS flag,
+bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const spell_type typ, BIT_FLAGS flag,
     const int monspell)
 {
     int dist;

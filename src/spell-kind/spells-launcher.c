@@ -20,7 +20,7 @@
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball(player_type *caster_ptr, spell_type typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     if (typ == GF_CHARM_LIVING)
@@ -53,7 +53,7 @@ bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_breath(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad) { return fire_ball(caster_ptr, typ, dir, dam, -rad); }
+bool fire_breath(player_type *caster_ptr, spell_type typ, DIRECTION dir, HIT_POINT dam, POSITION rad) { return fire_ball(caster_ptr, typ, dir, dam, -rad); }
 
 /*!
  * @brief ロケット系スペルの発動(詳細な差は確認中) / Cast a ball spell
@@ -70,7 +70,7 @@ bool fire_breath(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_rocket(player_type *caster_ptr, spell_type typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
     POSITION tx = caster_ptr->x + 99 * ddx[dir];
     POSITION ty = caster_ptr->y + 99 * ddy[dir];
@@ -98,7 +98,7 @@ bool fire_rocket(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball_hide(player_type *caster_ptr, spell_type typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
     POSITION tx = caster_ptr->x + 99 * ddx[dir];
     POSITION ty = caster_ptr->y + 99 * ddy[dir];
@@ -131,7 +131,7 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
  * Option to hurt the player.
  * </pre>
  */
-bool fire_meteor(player_type *caster_ptr, MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
+bool fire_meteor(player_type *caster_ptr, MONSTER_IDX who, spell_type typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     return (project(caster_ptr, who, rad, y, x, dam, typ, flg, -1));
@@ -148,7 +148,7 @@ bool fire_meteor(player_type *caster_ptr, MONSTER_IDX who, EFFECT_ID typ, POSITI
  * @param dev 回数分散
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev)
+bool fire_blast(player_type *caster_ptr, spell_type typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev)
 {
     POSITION ty, tx, y, x;
     POSITION ly, lx;
@@ -198,7 +198,7 @@ bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt(player_type *caster_ptr, spell_type typ, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
     if (typ != GF_ARROW)
@@ -219,7 +219,7 @@ bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
+bool fire_beam(player_type *caster_ptr, spell_type typ, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
     return (project_hook(caster_ptr, typ, dir, dam, flg));
@@ -239,7 +239,7 @@ bool fire_beam(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(player_type *caster_ptr, PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt_or_beam(player_type *caster_ptr, PERCENTAGE prob, spell_type typ, DIRECTION dir, HIT_POINT dam)
 {
     if (randint0(100) < prob) {
         return (fire_beam(caster_ptr, typ, dir, dam));
@@ -257,7 +257,7 @@ bool fire_bolt_or_beam(player_type *caster_ptr, PERCENTAGE prob, EFFECT_ID typ, 
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
+bool project_hook(player_type *caster_ptr, spell_type typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
 {
     flg |= (PROJECT_THRU);
     POSITION tx = caster_ptr->x + ddx[dir];

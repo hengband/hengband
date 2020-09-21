@@ -25,7 +25,7 @@
  * @note that we restrict the number of "crowded" rooms to reduce the chance of overflowing the monster list during level creation.
  * @return 部屋の生成に成功した場合 TRUE を返す。
  */
-static bool room_build(player_type *player_ptr, dun_data_type *dd_ptr, EFFECT_ID typ)
+static bool room_build(player_type *player_ptr, dun_data_type *dd_ptr, spell_type typ)
 {
     switch (typ) {
     case ROOM_T_NORMAL:

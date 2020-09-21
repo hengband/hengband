@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam);
+bool project_all_los(player_type *caster_ptr, spell_type typ, HIT_POINT dam);
 bool speed_monsters(player_type *caster_ptr);
 bool slow_monsters(player_type *caster_ptr, int power);
 bool sleep_monsters(player_type *caster_ptr, int power);

@@ -40,7 +40,7 @@
  * this is done in two passes. -- JDL
  * </pre>
  */
-bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
+bool project_all_los(player_type *caster_ptr, spell_type typ, HIT_POINT dam)
 {
     for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];

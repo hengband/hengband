@@ -148,7 +148,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
  * @param num 配置したい数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-void alloc_object(player_type *owner_ptr, dap_type set, EFFECT_ID typ, int num)
+void alloc_object(player_type *owner_ptr, dap_type set, spell_type typ, int num)
 {
     POSITION y = 0;
     POSITION x = 0;

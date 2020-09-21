@@ -218,8 +218,6 @@ typedef byte FEAT_POWER;   /*!< 地形強度の型定義 */
 
 typedef int QUANTITY; /*!< インターフェース上の指定個数 */
 
-typedef int EFFECT_ID; /*!< 効果属性ID */
-
 typedef s16b QUEST_TYPE;   /*!< クエストの種別ID */
 typedef s16b QUEST_STATUS; /*!< クエストの状態ID */
 

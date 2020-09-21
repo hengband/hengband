@@ -13,7 +13,7 @@ typedef struct effect_player_type
 
 	MONSTER_IDX who;
 	HIT_POINT dam;
-	EFFECT_ID effect_type;
+	spell_type effect_type;
 	BIT_FLAGS flag;
 	int monspell;
 } effect_player_type;
