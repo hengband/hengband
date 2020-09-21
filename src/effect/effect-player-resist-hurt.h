@@ -27,3 +27,4 @@ void effect_player_dark(player_type *target_ptr, effect_player_type *ep_ptr);
 void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr);
 void effect_player_gravity(player_type *target_ptr, effect_player_type *ep_ptr);
 void effect_player_disintegration(player_type *target_ptr, effect_player_type *ep_ptr);
+void effect_player_death_ray(player_type *target_ptr, effect_player_type *ep_ptr);

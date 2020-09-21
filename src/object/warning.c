@@ -192,27 +192,8 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_DEATH_RAY:
-        if (target_ptr->mimic_form) {
-            if (mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) {
-                dam = 0;
-                ignore_wraith_form = TRUE;
-            }
-
-            break;
-        }
-
-        switch (target_ptr->prace) {
-        case RACE_GOLEM:
-        case RACE_SKELETON:
-        case RACE_ZOMBIE:
-        case RACE_VAMPIRE:
-        case RACE_BALROG:
-        case RACE_SPECTRE:
-            dam = 0;
-            ignore_wraith_form = TRUE;
-            break;
-        }
-
+        dam = dam * calc_deathray_damage_rate(target_ptr, CALC_MAX) / 100;
+        if (dam == 0) ignore_wraith_form = TRUE;
         break;
 
     case GF_HOLY_FIRE:

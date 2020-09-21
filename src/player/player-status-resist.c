@@ -1,4 +1,5 @@
 ﻿#include "player/player-status-resist.h"
+#include "player/mimic-info-table.h"
 #include "art-definition/art-sword-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -176,6 +177,29 @@ PERCENTAGE calc_nuke_damage_rate(player_type *creature_ptr)
         per = (per + 2) / 3;
 
     return per;
+}
+
+PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    (mode); // unused
+    if (creature_ptr->mimic_form) {
+        if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) {
+            return 0;
+        }
+    }
+
+    switch (creature_ptr->prace) {
+    case RACE_GOLEM:
+    case RACE_SKELETON:
+    case RACE_ZOMBIE:
+    case RACE_VAMPIRE:
+    case RACE_BALROG:
+    case RACE_SPECTRE:
+        return 0;
+        break;
+    }
+
+    return 100;
 }
 
 PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)

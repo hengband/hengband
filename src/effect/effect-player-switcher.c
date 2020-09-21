@@ -71,35 +71,6 @@ void effect_player_icee(player_type *target_ptr, effect_player_type *ep_ptr)
     }
 }
 
-void effect_player_death_ray(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("‰½‚©”ñí‚É—â‚½‚¢‚à‚Ì‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something extremely cold!"));
-
-    if (target_ptr->mimic_form) {
-        if (!(mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
-            ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-
-        return;
-    }
-
-    switch (target_ptr->prace) {
-    case RACE_GOLEM:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_VAMPIRE:
-    case RACE_BALROG:
-    case RACE_SPECTRE: {
-        ep_ptr->dam = 0;
-        break;
-    }
-    default: {
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-        break;
-    }
-    }
-}
-
 void effect_player_hand_doom(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !check_multishadow(target_ptr)) {

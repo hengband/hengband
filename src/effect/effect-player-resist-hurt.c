@@ -510,3 +510,12 @@ void effect_player_disintegration(player_type *target_ptr, effect_player_type *e
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
+
+void effect_player_death_ray(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+    if (target_ptr->blind)
+        msg_print(_("何か非常に冷たいもので攻撃された！", "You are hit by something extremely cold!"));
+
+    ep_ptr->dam = ep_ptr->dam * calc_deathray_damage_rate(target_ptr, CALC_RAND) / 100;
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
