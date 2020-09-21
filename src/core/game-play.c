@@ -101,6 +101,61 @@ static void restore_windows(player_type *player_ptr)
     (void)term_set_cursor(0);
 }
 
+static void send_waiting_record(player_type *player_ptr)
+{
+    if (!player_ptr->wait_report_score)
+        return;
+
+    char buf[1024];
+    if (!get_check_strict(player_ptr, _("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
+        quit(0);
+
+    player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+    update_creature(player_ptr);
+    player_ptr->is_dead = TRUE;
+    current_world_ptr->start_time = (u32b)time(NULL);
+    signals_ignore_tstp();
+    current_world_ptr->character_icky = TRUE;
+    path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
+    highscore_fd = fd_open(buf, O_RDWR);
+
+    /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
+    parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+    bool success = send_world_score(player_ptr, TRUE, update_playtime, display_player);
+    if (!success && !get_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
+        prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
+        (void)inkey();
+    } else {
+        player_ptr->wait_report_score = FALSE;
+        top_twenty(player_ptr);
+        if (!save_player(player_ptr))
+            msg_print(_("セーブ失敗！", "death save failed!"));
+    }
+
+    (void)fd_close(highscore_fd);
+    highscore_fd = -1;
+    signals_handle_tstp();
+    quit(0);
+}
+
+static void init_random_seed(player_type *player_ptr, bool new_game)
+{
+    bool init_random_seed = FALSE;
+    if (!current_world_ptr->character_loaded) {
+        new_game = TRUE;
+        current_world_ptr->character_dungeon = FALSE;
+        init_random_seed = TRUE;
+        init_saved_floors(player_ptr, FALSE);
+    } else if (new_game)
+        init_saved_floors(player_ptr, TRUE);
+
+    if (!new_game)
+        process_player_name(player_ptr, FALSE);
+
+    if (init_random_seed)
+        Rand_state_init();
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -125,69 +180,19 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
         quit(_("セーブファイルが壊れています", "broken savefile"));
 
     extract_option_vars();
-    if (player_ptr->wait_report_score) {
-        char buf[1024];
-        if (!get_check_strict(player_ptr, _("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
-            quit(0);
-
-        player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-        update_creature(player_ptr);
-        player_ptr->is_dead = TRUE;
-        current_world_ptr->start_time = (u32b)time(NULL);
-        signals_ignore_tstp();
-        current_world_ptr->character_icky = TRUE;
-        path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-        highscore_fd = fd_open(buf, O_RDWR);
-
-        /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
-        parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-        bool success = send_world_score(player_ptr, TRUE, update_playtime, display_player);
-        if (!success && !get_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
-            prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
-            (void)inkey();
-        } else {
-            player_ptr->wait_report_score = FALSE;
-            top_twenty(player_ptr);
-            if (!save_player(player_ptr))
-                msg_print(_("セーブ失敗！", "death save failed!"));
-        }
-
-        (void)fd_close(highscore_fd);
-        highscore_fd = -1;
-        signals_handle_tstp();
-        quit(0);
-    }
-
+    send_waiting_record(player_ptr);
     current_world_ptr->creating_savefile = new_game;
-
-    bool init_random_seed = FALSE;
-    if (!current_world_ptr->character_loaded) {
-        new_game = TRUE;
-        current_world_ptr->character_dungeon = FALSE;
-        init_random_seed = TRUE;
-        init_saved_floors(player_ptr, FALSE);
-    } else if (new_game)
-        init_saved_floors(player_ptr, TRUE);
-
-    if (!new_game)
-        process_player_name(player_ptr, FALSE);
-
-    if (init_random_seed)
-        Rand_state_init();
-
+    init_random_seed(player_ptr, new_game);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (new_game) {
         current_world_ptr->character_dungeon = FALSE;
-
         floor_ptr->dun_level = 0;
         floor_ptr->inside_quest = 0;
         floor_ptr->inside_arena = FALSE;
         player_ptr->phase_out = FALSE;
         write_level = TRUE;
-
         current_world_ptr->seed_flavor = randint0(0x10000000);
         current_world_ptr->seed_town = randint0(0x10000000);
-
         player_birth(player_ptr, process_autopick_file_command);
         counts_write(player_ptr, 2, 0);
         player_ptr->count = 0;
