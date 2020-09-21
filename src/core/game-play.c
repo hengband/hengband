@@ -100,19 +100,6 @@ void play_game(player_type *player_ptr, bool new_game)
 {
     bool load_game = TRUE;
     bool init_random_seed = FALSE;
-
-#ifdef CHUUKEI
-    if (chuukei_client) {
-        reset_visuals(player_ptr, process_autopick_file_command);
-        browse_chuukei();
-        return;
-    }
-
-    else if (chuukei_server) {
-        prepare_chuukei_hooks();
-    }
-#endif
-
     if (browsing_movie) {
         reset_visuals(player_ptr, process_autopick_file_command);
         browse_movie();

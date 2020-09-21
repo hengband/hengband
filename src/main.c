@@ -470,35 +470,6 @@ int main(int argc, char *argv[])
 				change_path(&argv[i][2]);
 				break;
 			}
-#ifdef CHUUKEI
-			case 'p':
-			case 'P':
-			{
-				if (!argv[i][2])
-				{
-					is_usage_needed = TRUE;
-					break;
-				}
-
-				chuukei_server = TRUE;
-				if (connect_chuukei_server(&argv[i][2]) < 0) chuukei_server = FALSE;
-				break;
-			}
-
-			case 'c':
-			case 'C':
-			{
-				if (!argv[i][2])
-				{
-					is_usage_needed = TRUE;
-					break;
-				}
-
-				chuukei_client = TRUE;
-				connect_chuukei_server(&argv[i][2]);
-				break;
-			}
-#endif
 			case 'x':
 			{
 				if (!argv[i][2])

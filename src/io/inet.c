@@ -9,12 +9,7 @@
 #include "util/angband-files.h"
 
 #ifdef WORLD_SCORE
-
-#include <stdio.h>
-#include <stdarg.h>
-#include <ctype.h>
-
-#if defined(WINDOWS)
+#ifdef WINDOWS
 #include <winsock.h>
 #else
 #include <sys/types.h>
