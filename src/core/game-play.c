@@ -22,7 +22,6 @@
 #include "core/player-update-types.h"
 #include "core/scores.h"
 #include "core/speed-table.h"
-#include "status/buff-setter.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
 #include "core/window-redrawer.h"
@@ -55,8 +54,8 @@
 #include "market/arena-info-table.h"
 #include "market/bounty.h"
 #include "monster-floor/monster-generator.h"
-#include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-lite.h"
+#include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
@@ -71,6 +70,7 @@
 #include "save/save.h"
 #include "spell/spells-status.h"
 #include "spell/technic-info-table.h"
+#include "status/buff-setter.h"
 #include "store/home.h"
 #include "store/store-util.h"
 #include "store/store.h"
@@ -85,8 +85,8 @@
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "window/main-window-util.h"
-#include "world/world.h"
 #include "wizard/wizard-special-process.h"
+#include "world/world.h"
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
