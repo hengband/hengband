@@ -318,6 +318,34 @@ static void init_riding_pet(player_type *player_ptr, bool new_game)
     m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
 }
 
+static void decide_arena_death(player_type *player_ptr)
+{
+    if (!player_ptr->playing || !player_ptr->is_dead)
+        return;
+
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (!floor_ptr->inside_arena) {
+        if ((current_world_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
+            cheat_death(player_ptr);
+
+        return;    
+    }
+
+    floor_ptr->inside_arena = FALSE;
+    if (player_ptr->arena_number > MAX_ARENA_MONS)
+        player_ptr->arena_number++;
+    else
+        player_ptr->arena_number = -1 - player_ptr->arena_number;
+
+    player_ptr->is_dead = FALSE;
+    player_ptr->chp = 0;
+    player_ptr->chp_frac = 0;
+    player_ptr->exit_bldg = TRUE;
+    reset_tim_flags(player_ptr);
+    prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
+    leave_floor(player_ptr);
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -391,27 +419,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
 
         msg_print(NULL);
         load_game = FALSE;
-        if (player_ptr->playing && player_ptr->is_dead) {
-            if (floor_ptr->inside_arena) {
-                floor_ptr->inside_arena = FALSE;
-                if (player_ptr->arena_number > MAX_ARENA_MONS)
-                    player_ptr->arena_number++;
-                else
-                    player_ptr->arena_number = -1 - player_ptr->arena_number;
-
-                player_ptr->is_dead = FALSE;
-                player_ptr->chp = 0;
-                player_ptr->chp_frac = 0;
-                player_ptr->exit_bldg = TRUE;
-                reset_tim_flags(player_ptr);
-                prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
-                leave_floor(player_ptr);
-            } else {
-                if ((current_world_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
-                    cheat_death(player_ptr);
-            }
-        }
-
+        decide_arena_death(player_ptr);
         if (player_ptr->is_dead)
             break;
 
