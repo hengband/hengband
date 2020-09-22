@@ -346,6 +346,37 @@ static void decide_arena_death(player_type *player_ptr)
     leave_floor(player_ptr);
 }
 
+static void process_game_turn(player_type *player_ptr)
+{
+    bool load_game = TRUE;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    while (TRUE) {
+        process_dungeon(player_ptr, load_game);
+        current_world_ptr->character_xtra = TRUE;
+        handle_stuff(player_ptr);
+        current_world_ptr->character_xtra = FALSE;
+        target_who = 0;
+        health_track(player_ptr, 0);
+        forget_lite(floor_ptr);
+        forget_view(floor_ptr);
+        clear_mon_lite(floor_ptr);
+        if (!player_ptr->playing && !player_ptr->is_dead)
+            break;
+
+        wipe_o_list(floor_ptr);
+        if (!player_ptr->is_dead)
+            wipe_monsters_list(player_ptr);
+
+        msg_print(NULL);
+        load_game = FALSE;
+        decide_arena_death(player_ptr);
+        if (player_ptr->is_dead)
+            break;
+
+        change_floor(player_ptr);
+    }
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -396,36 +427,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     (void)combine_and_reorder_home(player_ptr, STORE_HOME);
     (void)combine_and_reorder_home(player_ptr, STORE_MUSEUM);
     select_floor_music(player_ptr);
-
-    bool load_game = TRUE;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    while (TRUE) {
-        process_dungeon(player_ptr, load_game);
-        current_world_ptr->character_xtra = TRUE;
-        handle_stuff(player_ptr);
-
-        current_world_ptr->character_xtra = FALSE;
-        target_who = 0;
-        health_track(player_ptr, 0);
-        forget_lite(floor_ptr);
-        forget_view(floor_ptr);
-        clear_mon_lite(floor_ptr);
-        if (!player_ptr->playing && !player_ptr->is_dead)
-            break;
-
-        wipe_o_list(floor_ptr);
-        if (!player_ptr->is_dead)
-            wipe_monsters_list(player_ptr);
-
-        msg_print(NULL);
-        load_game = FALSE;
-        decide_arena_death(player_ptr);
-        if (player_ptr->is_dead)
-            break;
-
-        change_floor(player_ptr);
-    }
-
+    process_game_turn(player_ptr);
     close_game(player_ptr);
     quit(NULL);
 }
