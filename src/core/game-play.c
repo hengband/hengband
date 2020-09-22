@@ -263,6 +263,32 @@ static void change_floor_if_error(player_type *player_ptr)
     player_ptr->panic_save = 0;
 }
 
+static void generate_world(player_type *player_ptr, bool new_game)
+{
+    reset_world_info(player_ptr);
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    panel_row_min = floor_ptr->height;
+    panel_col_min = floor_ptr->width;
+    if (player_ptr->pseikaku == PERSONALITY_SEXY)
+        s_info[player_ptr->pclass].w_max[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
+
+    set_floor_and_wall(player_ptr->dungeon_idx);
+    flavor_init();
+    prt(_("お待ち下さい...", "Please wait..."), 0, 0);
+    term_fresh();
+    set_wizard_mode_by_argument(player_ptr);
+    generate_wilderness(player_ptr);
+    change_floor_if_error(player_ptr);
+    current_world_ptr->character_generated = TRUE;
+    current_world_ptr->character_icky = FALSE;
+    if (!new_game)
+        return;
+
+    char buf[80];
+    sprintf(buf, _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
+    exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -295,35 +321,12 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     else
         restore_world_floor_info(player_ptr);
     
-    reset_world_info(player_ptr);
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    panel_row_min = floor_ptr->height;
-    panel_col_min = floor_ptr->width;
-    if (player_ptr->pseikaku == PERSONALITY_SEXY)
-        s_info[player_ptr->pclass].w_max[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
-
-    set_floor_and_wall(player_ptr->dungeon_idx);
-    flavor_init();
-    prt(_("お待ち下さい...", "Please wait..."), 0, 0);
-    term_fresh();
-    set_wizard_mode_by_argument(player_ptr);
-    generate_wilderness(player_ptr);
-    change_floor_if_error(player_ptr);
-    current_world_ptr->character_generated = TRUE;
-    current_world_ptr->character_icky = FALSE;
-
-    if (new_game) {
-        char buf[80];
-        sprintf(buf, _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
-        exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
-    }
-
+    generate_world(player_ptr, new_game);
     player_ptr->playing = TRUE;
     reset_visuals(player_ptr, process_autopick_file_command);
     load_all_pref_files(player_ptr);
-    if (new_game) {
+    if (new_game)
         player_outfit(player_ptr);
-    }
 
     term_xtra(TERM_XTRA_REACT, 0);
     player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
@@ -342,6 +345,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     if (player_ptr->prace == RACE_ANDROID)
         calc_android_exp(player_ptr);
 
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (new_game && ((player_ptr->pclass == CLASS_CAVALRY) || (player_ptr->pclass == CLASS_BEASTMASTER))) {
         monster_type *m_ptr;
         MONRACE_IDX pet_r_idx = ((player_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
