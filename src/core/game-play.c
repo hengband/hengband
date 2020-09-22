@@ -289,6 +289,18 @@ static void generate_world(player_type *player_ptr, bool new_game)
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
 }
 
+static void init_io(player_type *player_ptr)
+{
+    term_xtra(TERM_XTRA_REACT, 0);
+    player_ptr->window |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT;
+    handle_stuff(player_ptr);
+    if (arg_force_original)
+        rogue_like_commands = FALSE;
+
+    if (arg_force_roguelike)
+        rogue_like_commands = TRUE;
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -328,17 +340,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     if (new_game)
         player_outfit(player_ptr);
 
-    term_xtra(TERM_XTRA_REACT, 0);
-    player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-    player_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
-    handle_stuff(player_ptr);
-
-    if (arg_force_original)
-        rogue_like_commands = FALSE;
-
-    if (arg_force_roguelike)
-        rogue_like_commands = TRUE;
-
+    init_io(player_ptr);
     if (player_ptr->chp < 0)
         player_ptr->is_dead = TRUE;
 
