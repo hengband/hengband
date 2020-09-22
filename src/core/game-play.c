@@ -210,6 +210,26 @@ static void reset_world_info(player_type *player_ptr)
     record_o_name[0] = '\0';
 }
 
+static void set_wizard_mode_by_argument(player_type *player_ptr)
+{
+    if (!arg_wizard)
+        return;
+
+    if (enter_wizard_mode(player_ptr)) {
+        current_world_ptr->wizard = TRUE;
+        if (player_ptr->is_dead || !player_ptr->y || !player_ptr->x) {
+            init_saved_floors(player_ptr, TRUE);
+            player_ptr->current_floor_ptr->inside_quest = 0;
+            player_ptr->y = player_ptr->x = 10;
+        }
+
+        return;
+    }
+    
+    if (player_ptr->is_dead)
+        quit("Already dead.");
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -253,20 +273,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     flavor_init();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
     term_fresh();
-    if (arg_wizard) {
-        if (enter_wizard_mode(player_ptr)) {
-            current_world_ptr->wizard = TRUE;
-
-            if (player_ptr->is_dead || !player_ptr->y || !player_ptr->x) {
-                init_saved_floors(player_ptr, TRUE);
-                floor_ptr->inside_quest = 0;
-                player_ptr->y = player_ptr->x = 10;
-            }
-        } else if (player_ptr->is_dead) {
-            quit("Already dead.");
-        }
-    }
-
+    set_wizard_mode_by_argument(player_ptr);
     if (!floor_ptr->dun_level && !floor_ptr->inside_quest) {
         parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
         init_flags = INIT_ONLY_BUILDINGS;
