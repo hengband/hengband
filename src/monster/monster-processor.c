@@ -122,25 +122,15 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     turn_flags_ptr->aware = process_stealth(target_ptr, m_idx);
-    if (vanish_summoned_children(target_ptr, m_idx, turn_flags_ptr->see_m))
-        return;
-    if (process_quantum_effect(target_ptr, m_idx, turn_flags_ptr->see_m))
-        return;
-    if (explode_grenade(target_ptr, m_idx))
-        return;
-    if (runaway_monster(target_ptr, turn_flags_ptr, m_idx))
-        return;
-    if (!awake_monster(target_ptr, m_idx))
+    if (vanish_summoned_children(target_ptr, m_idx, turn_flags_ptr->see_m) || process_quantum_effect(target_ptr, m_idx, turn_flags_ptr->see_m)
+        || explode_grenade(target_ptr, m_idx) || runaway_monster(target_ptr, turn_flags_ptr, m_idx) || !awake_monster(target_ptr, m_idx))
         return;
 
-    if (monster_stunned_remaining(m_ptr)) {
-        if (one_in_(2))
-            return;
-    }
+    if (monster_stunned_remaining(m_ptr) && one_in_(2))
+        return;
 
-    if (turn_flags_ptr->is_riding_mon) {
-        target_ptr->update |= (PU_BONUS);
-    }
+    if (turn_flags_ptr->is_riding_mon)
+        target_ptr->update |= PU_BONUS;
 
     process_angar(target_ptr, m_idx, turn_flags_ptr->see_m);
 
@@ -205,10 +195,13 @@ bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx)
     int tmp = target_ptr->lev * 6 + (target_ptr->skill_stl + 10) * 4;
     if (target_ptr->monlite)
         tmp /= 3;
+
     if (target_ptr->cursed & TRC_AGGRAVATE)
         tmp /= 2;
+
     if (r_ptr->level > (target_ptr->lev * target_ptr->lev / 20 + 10))
         tmp /= 3;
+
     return (randint0(tmp) <= (r_ptr->level + 20));
 }
 
@@ -276,9 +269,7 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!monster_csleep_remaining(m_ptr))
-        return TRUE;
-    if (!(target_ptr->cursed & TRC_AGGRAVATE))
+    if (!monster_csleep_remaining(m_ptr) || ((target_ptr->cursed & TRC_AGGRAVATE) == 0))
         return FALSE;
 
     (void)set_monster_csleep(target_ptr, m_idx, 0);
@@ -288,9 +279,8 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
         msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
     }
 
-    if (is_original_ap_and_seen(target_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR)) {
+    if (is_original_ap_and_seen(target_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR))
         r_ptr->r_wake++;
-    }
 
     return TRUE;
 }
@@ -312,9 +302,8 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 
     if (is_pet(m_ptr)
         && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(target_ptr, NULL, 10, -10, r_ptr))
-            || (r_ptr->flagsr & RFR_RES_ALL))) {
+            || (r_ptr->flagsr & RFR_RES_ALL)))
         gets_angry = TRUE;
-    }
 
     if (target_ptr->phase_out || !gets_angry)
         return;
@@ -355,13 +344,8 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if ((r_ptr->a_ability_flags2 & RF6_SPECIAL) == 0)
-        return;
-    if (m_ptr->r_idx != MON_OHMU)
-        return;
-    if (target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out)
-        return;
-    if ((r_ptr->freq_spell == 0) || !(randint1(100) <= r_ptr->freq_spell))
+    if (((r_ptr->a_ability_flags2 & RF6_SPECIAL) == 0) || (m_ptr->r_idx != MON_OHMU) || target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out
+        || (r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell))
         return;
 
     int count = 0;
@@ -399,6 +383,7 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
         for (POSITION x = ox - 1; x <= ox + 1; x++) {
             if (!in_bounds2(target_ptr->current_floor_ptr, y, x))
                 continue;
+
             if (target_ptr->current_floor_ptr->grid_array[y][x].m_idx)
                 k++;
         }
@@ -409,9 +394,8 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
 
     if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ))) {
         if (multiply_monster(target_ptr, m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0))) {
-            if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(target_ptr, m_ptr)) {
-                r_ptr->r_flags2 |= (RF2_MULTIPLY);
-            }
+            if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(target_ptr, m_ptr))
+                r_ptr->r_flags2 |= RF2_MULTIPLY;
 
             return TRUE;
         }
@@ -444,14 +428,10 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
     }
 
     if (counterattack) {
-        if (monst_spell_monst(target_ptr, m_idx))
-            return TRUE;
-        if (aware && make_attack_spell(target_ptr, m_idx))
+        if (monst_spell_monst(target_ptr, m_idx) || (aware && make_attack_spell(target_ptr, m_idx)))
             return TRUE;
     } else {
-        if (aware && make_attack_spell(target_ptr, m_idx))
-            return TRUE;
-        if (monst_spell_monst(target_ptr, m_idx))
+        if ((aware && make_attack_spell(target_ptr, m_idx)) || monst_spell_monst(target_ptr, m_idx))
             return TRUE;
     }
 
@@ -521,14 +501,10 @@ void process_monsters(player_type *target_ptr)
 {
     old_race_flags tmp_flags;
     old_race_flags *old_race_flags_ptr = init_old_race_flags(&tmp_flags);
-
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    floor_ptr->monster_noise = FALSE;
-
+    target_ptr->current_floor_ptr->monster_noise = FALSE;
     MONRACE_IDX old_monster_race_idx = target_ptr->monster_race_idx;
     save_old_race_flags(target_ptr->monster_race_idx, old_race_flags_ptr);
     sweep_monster_process(target_ptr);
-
     hack_m_idx = 0;
     if (!target_ptr->monster_race_idx || (target_ptr->monster_race_idx != old_monster_race_idx))
         return;
@@ -549,9 +525,8 @@ void sweep_monster_process(player_type *target_ptr)
 
         if (target_ptr->leaving)
             return;
-        if (!monster_is_valid(m_ptr))
-            continue;
-        if (target_ptr->wild_mode)
+
+        if (!monster_is_valid(m_ptr) || target_ptr->wild_mode)
             continue;
 
         if (m_ptr->mflag & MFLAG_BORN) {
@@ -559,9 +534,7 @@ void sweep_monster_process(player_type *target_ptr)
             continue;
         }
 
-        if (m_ptr->cdis >= AAF_LIMIT)
-            continue;
-        if (!decide_process_continue(target_ptr, m_ptr))
+        if ((m_ptr->cdis >= AAF_LIMIT) || !decide_process_continue(target_ptr, m_ptr))
             continue;
 
         SPEED speed = (target_ptr->riding == i) ? target_ptr->pspeed : decide_monster_speed(m_ptr);
@@ -573,13 +546,10 @@ void sweep_monster_process(player_type *target_ptr)
         hack_m_idx = i;
         process_monster(target_ptr, i);
         reset_target(m_ptr);
-
         if (target_ptr->no_flowed && one_in_(3))
             m_ptr->mflag2 |= MFLAG2_NOFLOW;
 
-        if (!target_ptr->playing || target_ptr->is_dead)
-            return;
-        if (target_ptr->leaving)
+        if (!target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
             return;
     }
 }
