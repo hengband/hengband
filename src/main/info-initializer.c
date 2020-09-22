@@ -29,7 +29,7 @@
 #include "world/world.h"
 #include <sys/stat.h>
 #ifndef WINDOWS
-#include <sys/types.h> // Windows �ł͎g�����Ă��Ȃ�.
+#include <sys/types.h>
 #endif
 
 /*!
@@ -203,8 +203,7 @@ static errr init_info(player_type *player_ptr, concptr filename, angband_header 
     err = init_info_txt(fp, buf, head, head->parse_info_txt);
     angband_fclose(fp);
     if (err) {
-        concptr oops;
-        oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : _("未知の", "unknown"));
+        concptr oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : _("未知の", "unknown"));
 #ifdef JP
         msg_format("'%s.txt'ファイルの %d 行目にエラー。", filename, error_line);
 #else
