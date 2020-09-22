@@ -198,6 +198,18 @@ static void restore_world_floor_info(player_type *player_ptr)
     }
 }
 
+static void reset_world_info(player_type *player_ptr)
+{
+    current_world_ptr->creating_savefile = FALSE;
+    player_ptr->teleport_town = FALSE;
+    player_ptr->sutemi = FALSE;
+    current_world_ptr->timewalk_m_idx = 0;
+    player_ptr->now_damaged = FALSE;
+    now_message = 0;
+    current_world_ptr->start_time = time(NULL) - 1;
+    record_o_name[0] = '\0';
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -230,15 +242,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     else
         restore_world_floor_info(player_ptr);
     
-    current_world_ptr->creating_savefile = FALSE;
-    player_ptr->teleport_town = FALSE;
-    player_ptr->sutemi = FALSE;
-    current_world_ptr->timewalk_m_idx = 0;
-    player_ptr->now_damaged = FALSE;
-    now_message = 0;
-    current_world_ptr->start_time = time(NULL) - 1;
-    record_o_name[0] = '\0';
-
+    reset_world_info(player_ptr);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
