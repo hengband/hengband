@@ -242,6 +242,27 @@ static void generate_wilderness(player_type *player_ptr)
     select_floor_music(player_ptr);
 }
 
+static void change_floor_if_error(player_type *player_ptr)
+{
+    if (!current_world_ptr->character_dungeon) {
+        change_floor(player_ptr);
+        return;
+    }
+
+    if (player_ptr->panic_save == 0)
+        return;
+
+    if (!player_ptr->y || !player_ptr->x) {
+        msg_print(_("プレイヤーの位置がおかしい。フロアを再生成します。", "What a strange player location, regenerate the dungeon floor."));
+        change_floor(player_ptr);
+    }
+
+    if (!player_ptr->y || !player_ptr->x)
+        player_ptr->y = player_ptr->x = 10;
+
+    player_ptr->panic_save = 0;
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -287,22 +308,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     term_fresh();
     set_wizard_mode_by_argument(player_ptr);
     generate_wilderness(player_ptr);
-    if (!current_world_ptr->character_dungeon) {
-        change_floor(player_ptr);
-    } else {
-        if (player_ptr->panic_save) {
-            if (!player_ptr->y || !player_ptr->x) {
-                msg_print(_("プレイヤーの位置がおかしい。フロアを再生成します。", "What a strange player location, regenerate the dungeon floor."));
-                change_floor(player_ptr);
-            }
-
-            if (!player_ptr->y || !player_ptr->x)
-                player_ptr->y = player_ptr->x = 10;
-
-            player_ptr->panic_save = 0;
-        }
-    }
-
+    change_floor_if_error(player_ptr);
     current_world_ptr->character_generated = TRUE;
     current_world_ptr->character_icky = FALSE;
 
