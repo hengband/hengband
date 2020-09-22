@@ -234,25 +234,22 @@ errr parse_fixed_map(player_type *player_ptr, concptr name, int ymin, int xmin, 
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
-    FILE *fp;
-    fp = angband_fopen(buf, "r");
+    FILE *fp = angband_fopen(buf, "r");
     if (fp == NULL)
         return -1;
 
     int num = -1;
     parse_error_type err = PARSE_ERROR_NONE;
     bool bypass = FALSE;
-    int x = xmin, y = ymin;
+    int x = xmin;
+    int y = ymin;
     qtwg_type tmp_qg;
     qtwg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, buf, ymin, xmin, ymax, xmax, &y, &x);
     while (angband_fgets(fp, buf, sizeof(buf)) == 0) {
         num++;
-        if (!buf[0])
+        if (!buf[0] || iswspace(buf[0]) || buf[0] == '#')
             continue;
-        if (iswspace(buf[0]))
-            continue;
-        if (buf[0] == '#')
-            continue;
+
         if ((buf[0] == '?') && (buf[1] == ':')) {
             char f;
             char *s;
@@ -266,7 +263,7 @@ errr parse_fixed_map(player_type *player_ptr, concptr name, int ymin, int xmin, 
             continue;
 
         err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map);
-        if (err)
+        if (err != PARSE_ERROR_NONE)
             break;
     }
 
