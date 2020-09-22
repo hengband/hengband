@@ -301,6 +301,23 @@ static void init_io(player_type *player_ptr)
         rogue_like_commands = TRUE;
 }
 
+static void init_riding_pet(player_type *player_ptr, bool new_game)
+{
+    if (!new_game || ((player_ptr->pclass != CLASS_CAVALRY) && (player_ptr->pclass != CLASS_BEASTMASTER)))
+        return;
+
+    MONRACE_IDX pet_r_idx = ((player_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
+    monster_race *r_ptr = &r_info[pet_r_idx];
+    place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
+    m_ptr->mspeed = r_ptr->speed;
+    m_ptr->maxhp = r_ptr->hdice * (r_ptr->hside + 1) / 2;
+    m_ptr->max_maxhp = m_ptr->maxhp;
+    m_ptr->hp = r_ptr->hdice * (r_ptr->hside + 1) / 2;
+    m_ptr->dealt_damage = 0;
+    m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
+}
+
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -347,26 +364,13 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     if (player_ptr->prace == RACE_ANDROID)
         calc_android_exp(player_ptr);
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (new_game && ((player_ptr->pclass == CLASS_CAVALRY) || (player_ptr->pclass == CLASS_BEASTMASTER))) {
-        monster_type *m_ptr;
-        MONRACE_IDX pet_r_idx = ((player_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
-        monster_race *r_ptr = &r_info[pet_r_idx];
-        place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx, (PM_FORCE_PET | PM_NO_KAGE));
-        m_ptr = &floor_ptr->m_list[hack_m_idx_ii];
-        m_ptr->mspeed = r_ptr->speed;
-        m_ptr->maxhp = r_ptr->hdice * (r_ptr->hside + 1) / 2;
-        m_ptr->max_maxhp = m_ptr->maxhp;
-        m_ptr->hp = r_ptr->hdice * (r_ptr->hside + 1) / 2;
-        m_ptr->dealt_damage = 0;
-        m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
-    }
-
+    init_riding_pet(player_ptr, new_game);
     (void)combine_and_reorder_home(player_ptr, STORE_HOME);
     (void)combine_and_reorder_home(player_ptr, STORE_MUSEUM);
     select_floor_music(player_ptr);
 
     bool load_game = TRUE;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     while (TRUE) {
         process_dungeon(player_ptr, load_game);
         current_world_ptr->character_xtra = TRUE;
