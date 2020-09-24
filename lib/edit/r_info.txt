@@ -24339,10 +24339,10 @@ N:1222:ファルメル
 E:Falmer
 G:h:o
 I:110:11d11:1:15:50
-W:8:2:0:32:210:1223
+W:8:2:0:32:0:0
 B:HIT:POISON:5d5
 F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
-F:IM_POIS | RES_LITE | RES_DARK
+F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
 D:$It is the fallen descendant of the snow elf.
 D:$  It is blind but good ears.
 D:スノーエルフの堕落した末裔だ。目は見えないがとても耳が利く。
@@ -24351,11 +24351,11 @@ N:1223:ファルメル・スクルカー
 E:Falmer skulker
 G:h:U
 I:110:21d13:5:45:50
-W:21:2:0:350:2100:1224
+W:21:2:0:350:2100:1228
 B:SHOOT:HURT:8d9
 B:HIT:POISON:11d7
 F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
-F:IM_POIS | RES_LITE | RES_DARK
+F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
 S:1_IN_8 | SHOOT | BA_POIS
 D:$A falmer whose body is covered with a chaurus shell.
 D:$  It is blind and does not shrug in the light.
@@ -24366,13 +24366,13 @@ N:1224:ファルメル・グルームルーカー
 E:Falmer gloomlurker
 G:h:u
 I:115:31d31:10:65:50
-W:36:2:0:1400:10000:1225
+W:36:2:0:1400:10000:1229
 B:SHOOT:HURT:13d9
 B:SLASH:POISON:9d9
 B:SLASH:POISON:9d7
 F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90 | ONLY_ITEM
-F:IM_POIS | RES_LITE | RES_DARK
-S:1_IN_6 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD
+F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
+S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD
 D:$A falmel holding a sword and shield made of chaurus shell.
 D:シャウラスの殻でできた剣と盾を手にしたファルメルだ。
 
@@ -24380,14 +24380,14 @@ N:1225:ファルメル・ナイトプロウラー
 E:Falmer nightprowler
 G:h:B
 I:120:50d49:10:85:50
-W:46:2:0:4200:35000:1226
+W:46:2:0:4200:35000:1230
 B:SHOOT:HURT:15d11
 B:SLASH:POISON:14d12
 B:SLASH:POISON:12d10
 B:SLASH:POISON:12d10
-F:EVIL | DROP_CORPSE | DROP_SKELETON
+F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_90 | DROP_1D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
-S:1_IN_6 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD
+S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD
 D:$A well-trained falmer heavy warrior.
 D:鍛え上げたファルメルの重戦士だ。
 
@@ -24395,12 +24395,12 @@ N:1226:ファルメル・シャドウマスター
 E:Falmer shadowmaster
 G:h:s
 I:120:75d49:10:100:50
-W:52:2:0:10000:140000:1227
+W:52:2:0:10000:140000:1231
 B:SHOOT:HURT:18d11
 B:SLASH:POISON:16d13
 B:SLASH:POISON:14d11
 B:SLASH:POISON:14d11
-F:EVIL | DROP_CORPSE | DROP_SKELETON
+F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_1D2 | DROP_2D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
 S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
 D:$A falmer who even wore magic.
@@ -24411,13 +24411,93 @@ N:1227:ファルメル・ウォーモンガー
 E:Falmer warmonger
 G:h:R
 I:120:100d49:10:120:50
-W:60:2:0:18000:0:0
+W:60:2:0:18000:0:1232
 B:SHOOT:HURT:21d11
 B:SLASH:POISON:17d16
 B:SLASH:POISON:17d11
 B:SLASH:POISON:17d11
-F:EVIL | DROP_CORPSE | DROP_SKELETON
+F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_2D2 | DROP_3D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
 S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
 D:$It is the strongest falmer among general soldiers.
 D:一般兵士の中では最強のファルメルだ。
+
+N:1228:グレーター・ファルメル・スクルカー
+E:Greater falmer skulker
+G:h:W
+I:115:22d22:15:70:50
+W:25:3:0:700:0:0
+B:SHOOT:HURT:11d9
+B:SLASH:POISON:14d10
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_60 | DROP_90 | DROP_1D2 | ONLY_ITEM | ESCORT
+F:SMART | POWERFUL | IM_POIS | RES_LITE | RES_DARK
+S:1_IN_8 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | S_KIN
+D:$Falmer's nose sniffs any adventurer's nose.
+D:ファルメルの鼻はどんな冒険者の匂いも嗅ぎ分ける。
+
+N:1229:グレーター・ファルメル・グルームルーカー
+E:Greater falmer gloomlurker
+G:h:b
+I:120:31d28:15:95:50
+W:41:3:0:1700:0:0
+B:SHOOT:HURT:13d11
+B:SLASH:POISON:12d10
+B:SLASH:POISON:11d10
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_60 | DROP_90 | DROP_2D2 | ONLY_ITEM | ESCORT
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+D:$It has a lot of treasure, but it would be a foolish idea to go hunting.
+D:それは財宝をいくつも抱えているが、探りに行くのは愚策だろう。
+
+N:1230:グレーター・ファルメル・ナイトプロウラー
+E:Greater falmer nightprowler
+G:h:W
+I:120:55d40:15:120:50
+W:51:3:0:10000:0:0
+B:SHOOT:HURT:15d13
+B:SLASH:POISON:17d11
+B:SLASH:POISON:15d11
+B:SLASH:POISON:13d11
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_60 | DROP_90 | DROP_3D2 | ONLY_ITEM | ESCORT
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_5 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+D:$It's finally dangerous falmer.
+D:$  Be careful not to chop it with a poisonous blade!
+D:いよいよ危険なファルメルだ。毒の刃で切り刻まれないように気をつけろ！
+
+N:1231:グレーター・ファルメル・シャドウマスター
+E:Greater falmer shadowmaster
+G:h:r
+I:120:70d40:15:130:50
+W:59:3:0:18000:0:0
+B:SHOOT:HURT:20d15
+B:SLASH:POISON:22d11
+B:SLASH:POISON:20d11
+B:SLASH:POISON:18d11
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_3D2 | DROP_4D2 | ONLY_ITEM | ESCORT
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_4 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+D:$It's an extremely dangerous falmer.
+D:$ In exchange for visibility, a powerful blow is delivered.
+D:極めて危険なファルメルの一体だ。視界と引き換えに強烈な一撃を繰り出してくる。
+
+N:1232:グレーター・ファルメル・ウォーモンガー
+E:Greater falmer warmonger
+G:h:v
+I:125:70d55:15:150:50
+W:68:3:0:27000:0:0
+B:SHOOT:HURT:21d17
+B:SLASH:POISON:25d11
+B:SLASH:POISON:23d11
+B:SLASH:POISON:21d11
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_2D2 | DROP_3D2 | DROP_4D2 | ONLY_ITEM | ESCORT
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_3 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+D:$It is the strongest falmer with many genus.
+D:$  It will be shredded before it gets closer!
+D:数多の眷属を抱える最強のファルメルだ。近づく前に細切れにされてしまうだろう！
