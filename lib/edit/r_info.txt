@@ -24501,3 +24501,55 @@ S:1_IN_3 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
 D:$It is the strongest falmer with many genus.
 D:$  It will be shredded before it gets closer!
 D:数多の眷属を抱える最強のファルメルだ。近づく前に細切れにされてしまうだろう！
+
+N:1233:シャウラス
+E:Chaurus
+G:c:D
+I:115:15d13:40:50:15
+W:18:1:0:100:450:1235
+B:BITE:HURT:1d13
+B:STING:HURT:1d13
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_60 | FRIENDS
+F:IM_POIS | RES_DARK
+D:$It is about the size of a human and is covered with crustaceans.
+D:それは人ほどの大きさを誇り、甲殻に覆われている。
+
+N:1234:シャウラス・リーパー
+E:Chaurus reaper
+G:c:s
+I:120:30d25:40:80:15
+W:33:1:0:500:0:0
+B:BITE:HURT:3d13
+B:STING:HURT:3d13
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | FRIENDS
+F:IM_POIS | RES_DARK
+D:$It is large enough to easily exceed humans
+D:$ and is covered with an extremely hard crustacean.
+D:それは人を軽く超えるほどの大きさを誇り、極めて硬い甲殻に覆われている。
+
+N:1235:シャウラス・ハンターの幼体
+E:Chaurus hunter fledgling
+G:F:G
+I:115:21d15:40:55:15
+W:23:1:0:150:650:1236
+B:BITE:HURT:4d11
+B:STING:HURT:4d11
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_1D2 | FRIENDS
+F:IM_POIS | RES_DARK
+D:$It still has a small body, but it can easily prey on adventurers.
+D:それはまだ小さい体躯をしているが、冒険者を容易に捕食できる。
+
+N:1236:シャウラス・ハンター
+E:Chaurus hunter
+G:F:g
+I:120:38d29:40:70:15
+W:37:1:0:1200:0:0
+B:BITE:HURT:4d11
+B:STING:HURT:4d11
+B:CRUSH:HURT:4d11
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | DROP_1D2 | FRIENDS
+F:IM_POIS | RES_DARK
+D:$It is Chaurus who has grown into a human-like body.
+D:$  It is often seen that they are kept in falmer.
+D:人間並みの身体に成長したシャウラスだ。
+D:ファルメルに飼われている姿をよく見かける。
