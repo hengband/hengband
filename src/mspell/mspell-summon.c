@@ -135,7 +135,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
         count += summon_LOUSE(target_ptr, y, x, rlev, m_idx);
         break;
     case MON_VAIF:
-        count += summon_MOAI(target_ptr, y, x, m_idx);
+        count += summon_MOAI(target_ptr, y, x, rlev, m_idx);
         break;
     case MON_DEMON_SLAYER_SENIOR:
         count += summon_DEMON_SLAYER(target_ptr, y, x, m_idx);
