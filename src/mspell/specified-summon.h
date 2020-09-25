@@ -12,3 +12,5 @@ MONSTER_NUMBER summon_DEMON_SLAYER(player_type *target_ptr, POSITION y, POSITION
 MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_APOCRYPHA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_HIGHEST_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx);
+MONSTER_NUMBER summon_PYRAMID(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
+

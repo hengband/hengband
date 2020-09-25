@@ -24332,7 +24332,7 @@ D:$He assassinated his king.
 D:$  After that, he tried to plunder the mistress but failed.
 D:$  He could not even bring her back from the Netherworld,
 D:$ and its eyes are burning with resentment.
-D:彼は王を暗殺した。その後その愛人を略奪しようとしたが失敗した。
+D:彼は王を暗殺した。その後王の愛人を略奪しようとしたが失敗した。
 D:冥府から彼女を呼び戻すこともままならず、その瞳は恨みに燃えている。
 
 N:1222:ファルメル

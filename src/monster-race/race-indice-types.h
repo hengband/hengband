@@ -157,4 +157,6 @@ typedef enum monster_race_type {
     MON_FOLLOWER_WARRIOR = 1210,
     MON_FOLLOWER_MAGE = 1211,
     MON_MIRAAK = 1212,
+    MON_SCARAB = 1220,
+    MON_IMHOTEP = 1221,
 } monster_race_type;

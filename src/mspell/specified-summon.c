@@ -231,3 +231,13 @@ MONSTER_NUMBER summon_HIGHEST_DRAGON(player_type* target_ptr, POSITION y, POSITI
 
     return count;
 }
+
+MONSTER_NUMBER summon_PYRAMID(player_type* target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 2 + randint1(3);
+    for (int k = 0; k < num; k++)
+        count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_PYRAMID, PM_NONE);
+
+    return count;
+}

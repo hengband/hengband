@@ -146,6 +146,9 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
     case MON_MIRAAK:
         count += summon_APOCRYPHA(target_ptr, y, x, m_idx);
         break;
+    case MON_IMHOTEP:
+        count += summon_PYRAMID(target_ptr, y, x, rlev, m_idx);
+        break;
     default:
         count += summon_Kin(target_ptr, y, x, rlev, m_idx);
         break;

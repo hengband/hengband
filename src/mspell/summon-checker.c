@@ -104,11 +104,8 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
     case SUMMON_SMALL_MOAI:
         is_match = r_idx == MON_SMALL_MOAI;
         break;
-    case SUMMON_HI_DRAGON_LIVING:
-        is_match = ((r_ptr->d_char == 'D') && monster_living(r_idx));
-        break;
-    case SUMMON_LIVING:
-        is_match = monster_living(r_idx);
+    case SUMMON_PYRAMID:
+        is_match = (r_idx == MON_SCARAB) || (r_ptr->d_char == 'z');
         break;
     case SUMMON_PHANTOM:
         is_match = (r_idx == MON_PHANTOM_B) || (r_idx == MON_PHANTOM_W);
@@ -118,6 +115,12 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         break;
     case SUMMON_TOTEM_MOAI:
         is_match = r_idx == MON_TOTEM_MOAI;
+        break;
+    case SUMMON_LIVING:
+        is_match = monster_living(r_idx);
+        break;
+    case SUMMON_HI_DRAGON_LIVING:
+        is_match = ((r_ptr->d_char == 'D') && monster_living(r_idx));
         break;
     case SUMMON_ELEMENTAL:
         is_match = r_ptr->d_char == 'E';
