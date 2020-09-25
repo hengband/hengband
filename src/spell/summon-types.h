@@ -48,4 +48,6 @@ typedef enum summon_type {
     SUMMON_PIRANHAS = 65, /*!< 召喚タイプ: ピラニア・トラップ用 */
     SUMMON_ARMAGE_GOOD = 66, /*!< 召喚タイプ: ハルマゲドン・トラップ用天使陣営 */
     SUMMON_ARMAGE_EVIL = 67, /*!< 召喚タイプ: ハルマゲドン・トラップ用悪魔陣営 */
+    SUMMON_APOCRYPHA_FOLLOWERS = 68, /*!< 召喚タイプ: 信者 */
+    SUMMON_APOCRYPHA_DRAGONS = 69, /*!< 召喚タイプ: 強力な古代ドラゴン */
 } summon_type;

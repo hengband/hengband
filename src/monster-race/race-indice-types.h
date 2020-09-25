@@ -152,4 +152,9 @@ typedef enum monster_race_type {
     MON_BRONZE_LICH = 1180,
     MON_ULT_BEHOLDER = 1185,
     MON_G_TITAN = 1187,
+    MON_WYRM_COLOURS = 1198,
+    MON_ALDUIN = 1209,
+    MON_FOLLOWER_WARRIOR = 1210,
+    MON_FOLLOWER_MAGE = 1211,
+    MON_MIRAAK = 1212,
 } monster_race_type;

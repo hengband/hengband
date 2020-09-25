@@ -140,6 +140,12 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
     case MON_DEMON_SLAYER_SENIOR:
         count += summon_DEMON_SLAYER(target_ptr, y, x, m_idx);
         break;
+    case MON_ALDUIN:
+        count += summon_HIGHEST_DRAGON(target_ptr, y, x, m_idx);
+        break;
+    case MON_MIRAAK:
+        count += summon_APOCRYPHA(target_ptr, y, x, m_idx);
+        break;
     default:
         count += summon_Kin(target_ptr, y, x, rlev, m_idx);
         break;

@@ -210,3 +210,24 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
     msg_print(NULL);
     return count;
 }
+
+MONSTER_NUMBER summon_APOCRYPHA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 4 + randint1(4);
+    summon_type followers = next_bool() ? SUMMON_APOCRYPHA_FOLLOWERS : SUMMON_APOCRYPHA_DRAGONS;
+    for (int k = 0; k < num; k++)
+        count += summon_specific(target_ptr, m_idx, y, x, 200, followers, PM_ALLOW_UNIQUE);
+
+    return count;
+}
+
+MONSTER_NUMBER summon_HIGHEST_DRAGON(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 4 + randint1(4);
+    for (int k = 0; k < num; k++)
+        count += summon_specific(target_ptr, m_idx, y, x, 100, SUMMON_APOCRYPHA_DRAGONS, PM_ALLOW_UNIQUE);
+
+    return count;
+}
