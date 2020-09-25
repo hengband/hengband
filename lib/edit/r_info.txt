@@ -7529,7 +7529,7 @@ N:441:『ガチャピン』
 E:Gachapin
 G:R:G
 I:120:110d9:10:90:20
-W:29:2:0:500:0:0
+W:29:2:0:1500:0:0
 B:SHOW:LOSE_INT
 B:SHOW:LOSE_WIS
 B:CHARGE:EAT_GOLD
@@ -21376,12 +21376,11 @@ N:1061:『恐竜バーニーちゃん』
 E:Barney the Dinosaur
 G:R:v
 I:120:110d9:10:90:20
-W:29:255:0:500:0:0
+W:29:255:0:1500:0:0
 B:SHOW:LOSE_INT
 B:SHOW:LOSE_WIS
 B:CHARGE:EAT_GOLD
 B:CHARGE:EAT_GOLD
-#F:DROP_1D2 | DROP_90 | DROP_GOOD | DROP_GREAT | ONLY_ITEM |
 F:EVIL | MALE | CAN_SPEAK | SMART | RES_TELE | CAN_SWIM | DROP_CORPSE |
 F:ANIMAL | IM_POIS | NO_CONF | NO_SLEEP | FORCE_MAXHP | UNIQUE | FORCE_SLEEP |
 F:RES_CHAO
@@ -23666,7 +23665,7 @@ F:BASH_DOOR | OPEN_DOOR | MOVE_BODY |
 F:EVIL | IM_POIS | IM_ACID | GIANT | EAT_GIVE_STR |
 S:1_IN_8 |
 S:SHOOT
-D:$The thee-eyes cyclops!? What the hell is going on!?
+D:$The thee-eyes cyclops!?  What the hell is going on!?
 D:三つ目のサイクロプス！？　一体何が起きているというんだ！？
 
 #J0#
@@ -24553,3 +24552,57 @@ D:$It is Chaurus who has grown into a human-like body.
 D:$  It is often seen that they are kept in falmer.
 D:人間並みの身体に成長したシャウラスだ。
 D:ファルメルに飼われている姿をよく見かける。
+
+N:1237:バーゲスト
+E:Barghest
+G:C:G
+I:115:25d23:30:45:15
+W:23:1:0:350:0:0
+B:BITE:FIRE:6d5
+B:BITE:FIRE:6d5
+B:CLAW:FIRE:6d5
+F:EVIL | ANIMAL | UNDEAD | DROP_CORPSE
+F:DROP_90 | FRIENDS | IM_FIRE | RES_NETH | RES_DARK
+S:1_IN_8 | BR_FIRE | SCARE
+D:$It's the end of the pathetic dogs whose souls were reaped by people's malice
+D:$ in the middle of the night.
+D:人々の悪意によって真夜中に魂を刈り取られた哀れな犬達の末路だ。
+
+# Here is Wisdom.
+N:1238:悪意の具現『ヘルハウンド』
+E:Hellhound, the Beast
+I:120:30d30:30:70:15
+G:C:R
+W:29:2:0:1200:0:0
+B:BITE:FIRE:12d11
+B:CLAW:FIRE:12d11
+B:CRUSH:SUPERHURT:40d1
+F:UNIQUE | FORCE_MAXHP | EVIL | ANIMAL | UNDEAD | DROP_CORPSE
+F:DROP_2D2 | DROP_GOOD | IM_FIRE | RES_NETH | RES_DARK
+R:1237:13d9
+S:1_IN_5 | S_KIN | BR_FIRE | SCARE | HOLD
+D:$This evil dog wasn't born out of nothing.
+D:$  The illusions created by people's selfishness
+D:$ and fear turned their fangs at people themselves!
+D:この悪しき犬は何もないところから生まれたのではない。
+D:人々の私欲と恐怖が生み出した幻影は、彼ら自身に牙を向けたのだ！
+
+N:1239:惑星生命体『ソラリス』
+E:Solaris, the planet life
+G:j:G
+I:120:50d40:50:90:5
+W:42:1:0:6000:0:0
+B:CRAWL:HURT:13d11
+B:ENGULF:HURT:13d11
+B:GAZE:HURT:13d11
+B:TOUCH:HURT:13d11
+F:UNIQUE | FORCE_MAXHP | NONLIVING | QUANTUM | DROP_2D2 | DROP_GOOD | DROP_GREAT
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_LITE | RES_DARK
+F:RES_NEXU | RES_CHAO | RES_DISE | RES_SHAR | RES_WATE | RES_TIME | RES_NETH
+F:RES_SOUN | RES_TELE | WEIRD_MIND | PASS_WALL
+F:SHAPECHANGER | ATTR_MULTI | NO_CONF | NO_SLEEP | NO_STUN | NO_FEAR
+S:1_IN_5 | BR_LITE | BR_GRAV | BR_INER | BR_WALL | BR_NEXU
+S:HASTE | SLOW | MIND_BLAST | BRAIN_SMASH | BLINK | FORGET | DISPEL
+S:TELE_TO | TELE_AWAY
+D:$Communication with the adventurer is not established properly.
+D:それとは冒険者とのコミュニケーションがまともに成立しない。
