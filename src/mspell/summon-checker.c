@@ -24,14 +24,13 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
 {
     monster_race *r_ptr = &r_info[r_idx];
     bool is_match = FALSE;
-
     switch (summon_specific_type) {
     case SUMMON_ANT: {
-        is_match = (r_ptr->d_char == 'a');
+        is_match = r_ptr->d_char == 'a';
         break;
     }
     case SUMMON_SPIDER: {
-        is_match = (r_ptr->d_char == 'S');
+        is_match = r_ptr->d_char == 'S';
         break;
     }
     case SUMMON_HOUND: {
@@ -39,27 +38,27 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         break;
     }
     case SUMMON_HYDRA: {
-        is_match = (r_ptr->d_char == 'M');
+        is_match = r_ptr->d_char == 'M';
         break;
     }
     case SUMMON_ANGEL: {
-        is_match = (r_ptr->d_char == 'A' && ((r_ptr->flags3 & RF3_EVIL) || (r_ptr->flags3 & RF3_GOOD)));
+        is_match = (r_ptr->d_char == 'A') && (((r_ptr->flags3 & RF3_EVIL) != 0) || ((r_ptr->flags3 & RF3_GOOD) != 0));
         break;
     }
     case SUMMON_DEMON: {
-        is_match = (r_ptr->flags3 & RF3_DEMON);
+        is_match = (r_ptr->flags3 & RF3_DEMON) != 0;
         break;
     }
     case SUMMON_UNDEAD: {
-        is_match = (r_ptr->flags3 & RF3_UNDEAD);
+        is_match = (r_ptr->flags3 & RF3_UNDEAD) != 0;
         break;
     }
     case SUMMON_DRAGON: {
-        is_match = (r_ptr->flags3 & RF3_DRAGON);
+        is_match = (r_ptr->flags3 & RF3_DRAGON) != 0;
         break;
     }
     case SUMMON_HI_UNDEAD: {
-        is_match = ((r_ptr->d_char == 'L') || (r_ptr->d_char == 'V') || (r_ptr->d_char == 'W'));
+        is_match = (r_ptr->d_char == 'L') || (r_ptr->d_char == 'V') || (r_ptr->d_char == 'W');
         break;
     }
     case SUMMON_HI_DRAGON: {
@@ -67,31 +66,31 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         break;
     }
     case SUMMON_HI_DEMON: {
-        is_match = (((r_ptr->d_char == 'U') || (r_ptr->d_char == 'H') || (r_ptr->d_char == 'B')) && (r_ptr->flags3 & RF3_DEMON)) ? TRUE : FALSE;
+        is_match = ((r_ptr->d_char == 'U') || (r_ptr->d_char == 'H') || (r_ptr->d_char == 'B')) && ((r_ptr->flags3 & RF3_DEMON) != 0);
         break;
     }
     case SUMMON_AMBERITES: {
-        is_match = (r_ptr->flags3 & (RF3_AMBERITE)) ? TRUE : FALSE;
+        is_match = (r_ptr->flags3 & RF3_AMBERITE) != 0;
         break;
     }
     case SUMMON_UNIQUE: {
-        is_match = (r_ptr->flags1 & (RF1_UNIQUE)) ? TRUE : FALSE;
+        is_match = (r_ptr->flags1 & RF1_UNIQUE) != 0;
         break;
     }
     case SUMMON_MOLD: {
-        is_match = (r_ptr->d_char == 'm');
+        is_match = r_ptr->d_char == 'm';
         break;
     }
     case SUMMON_BAT: {
-        is_match = (r_ptr->d_char == 'b');
+        is_match = r_ptr->d_char == 'b';
         break;
     }
     case SUMMON_QUYLTHULG: {
-        is_match = (r_ptr->d_char == 'Q');
+        is_match = r_ptr->d_char == 'Q';
         break;
     }
     case SUMMON_COIN_MIMIC: {
-        is_match = (r_ptr->d_char == '$');
+        is_match = r_ptr->d_char == '$';
         break;
     }
     case SUMMON_MIMIC: {
@@ -103,18 +102,12 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         break;
     }
     case SUMMON_CYBER: {
-        is_match = ((r_ptr->d_char == 'U') && (r_ptr->flags4 & RF4_ROCKET));
+        is_match = (r_ptr->d_char == 'U') && ((r_ptr->flags4 & RF4_ROCKET) != 0);
         break;
     }
     case SUMMON_KIN: {
-        SYMBOL_CODE summon_kin_type;
-        if (summoner_idx) {
-            summon_kin_type = r_info[summoner_idx].d_char;
-        } else {
-            summon_kin_type = get_summon_symbol_from_player(player_ptr);
-        }
-
-        is_match = ((r_ptr->d_char == summon_kin_type) && (r_idx != MON_HAGURE));
+        SYMBOL_CODE summon_kin_type = summoner_idx > 0 ? r_info[summoner_idx].d_char : get_summon_symbol_from_player(player_ptr);
+        is_match = (r_ptr->d_char == summon_kin_type) && (r_idx != MON_HAGURE);
         break;
     }
     case SUMMON_DAWN: {
@@ -140,11 +133,11 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         break;
     }
     case SUMMON_PHANTOM: {
-        is_match = (r_idx == MON_PHANTOM_B || r_idx == MON_PHANTOM_W);
+        is_match = (r_idx == MON_PHANTOM_B) || (r_idx == MON_PHANTOM_W);
         break;
     }
     case SUMMON_BLUE_HORROR: {
-        is_match = (r_idx == MON_BLUE_HORROR);
+        is_match = r_idx == MON_BLUE_HORROR;
         break;
     }
     case SUMMON_TOTEM_MOAI: {
@@ -152,47 +145,46 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         break;
     }
     case SUMMON_ELEMENTAL: {
-        is_match = (r_ptr->d_char == 'E');
+        is_match = r_ptr->d_char == 'E';
         break;
     }
     case SUMMON_VORTEX: {
-        is_match = (r_ptr->d_char == 'v');
+        is_match = r_ptr->d_char == 'v';
         break;
     }
     case SUMMON_HYBRID: {
-        is_match = (r_ptr->d_char == 'H');
+        is_match = r_ptr->d_char == 'H';
         break;
     }
     case SUMMON_BIRD: {
-        is_match = (r_ptr->d_char == 'B');
+        is_match = r_ptr->d_char == 'B';
         break;
     }
     case SUMMON_KAMIKAZE: {
-        int i;
-        for (i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
             if (r_ptr->blow[i].method == RBM_EXPLODE)
                 is_match = TRUE;
+
         break;
     }
     case SUMMON_KAMIKAZE_LIVING: {
-        int i;
-
-        for (i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
             if (r_ptr->blow[i].method == RBM_EXPLODE)
                 is_match = TRUE;
-        is_match = (is_match && monster_living(r_idx));
+
+        is_match &= monster_living(r_idx);
         break;
     }
     case SUMMON_MANES: {
-        is_match = (r_idx == MON_MANES);
+        is_match = r_idx == MON_MANES;
         break;
     }
     case SUMMON_LOUSE: {
-        is_match = (r_idx == MON_LOUSE);
+        is_match = r_idx == MON_LOUSE;
         break;
     }
     case SUMMON_GUARDIANS: {
-        is_match = (r_ptr->flags7 & RF7_GUARDIAN);
+        is_match = (r_ptr->flags7 & RF7_GUARDIAN) != 0;
         break;
     }
     case SUMMON_KNIGHTS: {
@@ -201,19 +193,19 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         break;
     }
     case SUMMON_EAGLES: {
-        is_match = (r_ptr->d_char == 'B' && (r_ptr->flags8 & RF8_WILD_MOUNTAIN) && (r_ptr->flags8 & RF8_WILD_ONLY));
+        is_match = (r_ptr->d_char == 'B') && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0) && ((r_ptr->flags8 & RF8_WILD_ONLY) != 0);
         break;
     }
     case SUMMON_PIRANHAS: {
-        is_match = (r_idx == MON_PIRANHA);
+        is_match = r_idx == MON_PIRANHA;
         break;
     }
     case SUMMON_ARMAGE_GOOD: {
-        is_match = (r_ptr->d_char == 'A' && (r_ptr->flags3 & RF3_GOOD));
+        is_match = (r_ptr->d_char == 'A') && ((r_ptr->flags3 & RF3_GOOD) != 0);
         break;
     }
     case SUMMON_ARMAGE_EVIL: {
-        is_match = ((r_ptr->flags3 & RF3_DEMON) || (r_ptr->d_char == 'A' && (r_ptr->flags3 & RF3_EVIL)));
+        is_match = ((r_ptr->flags3 & RF3_DEMON) != 0) || ((r_ptr->d_char == 'A') && ((r_ptr->flags3 & RF3_EVIL) != 0));
         break;
     }
     }
