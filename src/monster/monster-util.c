@@ -40,7 +40,7 @@ int chameleon_change_m_idx = 0;
  * @brief 召喚条件を指定するグローバル変数 / Hack -- the "type" of the current "summon specific"
  * @todo summon_specific_typeグローバル変数の除去と関数引数への代替を行う
  */
-int summon_specific_type = 0;
+summon_type summon_specific_type = SUMMON_NONE;
 
 static monsterrace_hook_type get_mon_num_hook;
 static monsterrace_hook_type get_mon_num2_hook;
