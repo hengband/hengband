@@ -61,6 +61,36 @@ MONSTER_NUMBER summon_Kin(player_type *target_ptr, POSITION y, POSITION x, int r
     return count;
 }
 
+static void decide_summon_kin_caster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, concptr m_name, const bool known)
+{
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    bool see_either = see_monster(target_ptr, m_idx) || see_monster(target_ptr, t_idx);
+    bool mon_to_mon = target_type == MONSTER_TO_MONSTER;
+    bool mon_to_player = target_type == MONSTER_TO_PLAYER;
+    if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT) {
+        monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
+            _("%^sがダンジョンの主を召喚した。", "%^s magically summons guardians of dungeons."),
+            _("%^sがダンジョンの主を召喚した。", "%^s magically summons guardians of dungeons."), target_type);
+        return;
+    }
+
+    if (mon_to_player || (mon_to_mon && known && see_either))
+        disturb(target_ptr, TRUE, TRUE);
+
+    if (target_ptr->blind) {
+        if (mon_to_player)
+            msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
+    } else if (mon_to_player || (mon_to_mon && known && see_either)) {
+        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        _(msg_format("%sが魔法で%sを召喚した。", m_name, ((r_ptr->flags1 & RF1_UNIQUE) ? "手下" : "仲間")),
+            msg_format("%^s magically summons %s %s.", m_name, m_poss, ((r_ptr->flags1 & RF1_UNIQUE) ? "minions" : "kin")));
+    }
+
+    if (mon_to_mon && known && !see_either)
+        floor_ptr->monster_noise = TRUE;
+}
+
 /*!
  * @brief RF6_S_KINの処理。救援召喚。使用するモンスターの種類により、実処理に分岐させる。 /
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -68,16 +98,14 @@ MONSTER_NUMBER summon_Kin(player_type *target_ptr, POSITION y, POSITION x, int r
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
-void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    int count = 0;
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN], m_poss[80];
     monster_name(target_ptr, m_idx, m_name);
     monster_name(target_ptr, t_idx, t_name);
@@ -85,31 +113,8 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 
     disturb(target_ptr, TRUE, TRUE);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
-    bool see_either = see_monster(target_ptr, m_idx) || see_monster(target_ptr, t_idx);
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-    if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT) {
-        monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
-            _("%^sがダンジョンの主を召喚した。", "%^s magically summons guardians of dungeons."),
-            _("%^sがダンジョンの主を召喚した。", "%^s magically summons guardians of dungeons."), TARGET_TYPE);
-    } else {
-        if (mon_to_player || (mon_to_mon && known && see_either))
-            disturb(target_ptr, TRUE, TRUE);
-
-        if (target_ptr->blind) {
-            if (mon_to_player)
-                msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
-        } else {
-            if (mon_to_player || (mon_to_mon && known && see_either)) {
-                _(msg_format("%sが魔法で%sを召喚した。", m_name, ((r_ptr->flags1 & RF1_UNIQUE) ? "手下" : "仲間")),
-                    msg_format("%^s magically summons %s %s.", m_name, m_poss, ((r_ptr->flags1 & RF1_UNIQUE) ? "minions" : "kin")));
-            }
-        }
-
-        if (mon_to_mon && known && !see_either)
-            floor_ptr->monster_noise = TRUE;
-    }
-
+    decide_summon_kin_caster(target_ptr, m_idx, t_idx, target_type, m_name, known);
+    int count = 0;
     switch (m_ptr->r_idx) {
     case MON_MENELDOR:
     case MON_GWAIHIR:
@@ -121,7 +126,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
         break;
     case MON_SERPENT:
     case MON_ZOMBI_SERPENT:
-        count += summon_guardian(target_ptr, y, x, rlev, m_idx, t_idx, TARGET_TYPE);
+        count += summon_guardian(target_ptr, y, x, rlev, m_idx, t_idx, target_type);
         break;
     case MON_CALDARM:
         count += summon_LOCKE_CLONE(target_ptr, y, x, m_idx);
@@ -140,10 +145,10 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
         break;
     }
 
-    if (target_ptr->blind && count && mon_to_player)
+    if (target_ptr->blind && count && (target_type == MONSTER_TO_PLAYER))
         msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-    if (known && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
+    if (known && !see_monster(target_ptr, t_idx) && count && (target_type == MONSTER_TO_MONSTER))
         floor_ptr->monster_noise = TRUE;
 }
 
@@ -154,7 +159,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -190,7 +195,7 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -225,7 +230,7 @@ void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTE
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -261,7 +266,7 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -292,7 +297,7 @@ void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -323,7 +328,7 @@ void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -355,7 +360,7 @@ void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -386,7 +391,7 @@ void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -428,7 +433,7 @@ void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -459,7 +464,7 @@ void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -490,7 +495,7 @@ void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -521,7 +526,7 @@ void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -569,7 +574,7 @@ void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONS
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -606,7 +611,7 @@ void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONS
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
@@ -639,7 +644,7 @@ void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONS
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
- * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
 void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
