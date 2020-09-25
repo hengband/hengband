@@ -129,12 +129,12 @@ MONSTER_NUMBER summon_LOUSE(player_type *target_ptr, POSITION y, POSITION x, int
     return count;
 }
 
-MONSTER_NUMBER summon_MOAI(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+MONSTER_NUMBER summon_MOAI(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
     int count = 0;
     int num = 3 + randint1(3);
     for (int k = 0; k < num; k++)
-        count += summon_named_creature(target_ptr, m_idx, y, x, MON_SMALL_MOAI, PM_NONE);
+        count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_SMALL_MOAI, PM_NONE);
 
     return count;
 }
@@ -145,6 +145,9 @@ MONSTER_NUMBER summon_DEMON_SLAYER(player_type *target_ptr, POSITION y, POSITION
     const int num = 5;
     for (int k = 0; k < num; k++)
         count += summon_named_creature(target_ptr, m_idx, y, x, MON_DEMON_SLAYER_MEMBER, PM_NONE);
+
+    if (count == 0)
+        msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer member were murdered..."));
 
     return count;
 }
