@@ -194,6 +194,19 @@ static void calc_blow_time(player_type *target_ptr, monap_type *monap_ptr)
     monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
 }
 
+static void calc_blow_inertia(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if ((target_ptr->fast > 0) || (target_ptr->pspeed >= 130))
+        monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    if (set_slow(target_ptr, (target_ptr->slow + 4 + randint0(monap_ptr->rlev / 10)), FALSE))
+        monap_ptr->obvious = TRUE;
+}
+
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->effect) {
@@ -396,16 +409,9 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_MANA);
         break;
     }
-    case RBE_INERTIA: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        if (set_slow(target_ptr, (target_ptr->slow + 4 + randint0(monap_ptr->rlev / 10)), FALSE))
-            monap_ptr->obvious = TRUE;
-
+    case RBE_INERTIA:
+        calc_blow_inertia(target_ptr, monap_ptr);
         break;
-    }
     case RBE_STUN: {
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
         if (target_ptr->is_dead)
