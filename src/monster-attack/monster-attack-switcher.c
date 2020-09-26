@@ -194,6 +194,27 @@ static void calc_blow_time(player_type *target_ptr, monap_type *monap_ptr)
     monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
 }
 
+/*!
+ * @brief 生命力吸収ダメージを計算する (経験値維持があれば9/10になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_drain_life(player_type *target_ptr, monap_type *monap_ptr)
+{
+    s32b d = damroll(60, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
+    monap_ptr->obvious = TRUE;
+    if (target_ptr->hold_exp)
+        monap_ptr->damage = monap_ptr->damage * 9 / 10;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    bool resist_drain = check_drain_hp(target_ptr, d);
+    process_drain_life(target_ptr, monap_ptr, resist_drain);
+}
+
 static void calc_blow_inertia(player_type *target_ptr, monap_type *monap_ptr)
 {
     if ((target_ptr->fast > 0) || (target_ptr->pspeed >= 130))
@@ -392,17 +413,9 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_TIME:
         calc_blow_time(target_ptr, monap_ptr);
         break;
-    case RBE_DR_LIFE: {
-        s32b d = damroll(60, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
-        monap_ptr->obvious = TRUE;
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        bool resist_drain = check_drain_hp(target_ptr, d);
-        process_drain_life(target_ptr, monap_ptr, resist_drain);
+    case RBE_DR_LIFE:
+        calc_blow_drain_life(target_ptr, monap_ptr);
         break;
-    }
     case RBE_DR_MANA: {
         monap_ptr->obvious = TRUE;
         process_drain_mana(target_ptr, monap_ptr);
