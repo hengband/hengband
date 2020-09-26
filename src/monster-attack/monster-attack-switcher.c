@@ -151,10 +151,11 @@ static void calc_blow_paralysis(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * @brief 病気ダメージを計算する (耐性があれば、(1d4 + 4) / 9になり、病気になる確率が無耐性の場合より更に2/5へ低下する。二重耐性なら更に低下する)
+ * @brief 病気ダメージを計算する (毒耐性があれば、(1d4 + 4) / 9になる。二重耐性なら更に(1d4 + 4) / 9)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return なし
+ * @details 10% (毒の一次耐性があれば4%、二重耐性ならば1.6%)の確率で耐久が低下し、更に1/10の確率で永久低下する
  */
 static void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -172,7 +173,7 @@ static void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr)
         monap_ptr->obvious = TRUE;
 
     bool disease_possibility = randint1(100) > calc_nuke_damage_rate(target_ptr);
-    if (disease_possibility || (randint1(100) >= 11) || (target_ptr->prace == RACE_ANDROID))
+    if (disease_possibility || (randint1(100) > 10) || (target_ptr->prace == RACE_ANDROID))
         return;
 
     bool perm = one_in_(10);
@@ -180,6 +181,155 @@ static void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr)
         msg_print(_("病があなたを蝕んでいる気がする。", "You feel sickly."));
         monap_ptr->obvious = TRUE;
     }
+}
+
+/*!
+ * @brief 腕力低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_lose_strength(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (is_sustain_str(target_ptr))
+        monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    if (do_dec_stat(target_ptr, A_STR))
+        monap_ptr->obvious = TRUE;
+}
+
+/*!
+ * @brief 知能低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_lose_intelligence(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (is_sustain_int(target_ptr))
+        monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    if (do_dec_stat(target_ptr, A_INT))
+        monap_ptr->obvious = TRUE;
+}
+
+/*!
+ * @brief 賢さ低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_lose_wisdom(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (is_sustain_wis(target_ptr))
+        monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    if (do_dec_stat(target_ptr, A_WIS))
+        monap_ptr->obvious = TRUE;
+}
+
+/*!
+ * @brief 器用低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_lose_dexterity(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (is_sustain_dex(target_ptr))
+        monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    if (do_dec_stat(target_ptr, A_DEX))
+        monap_ptr->obvious = TRUE;
+}
+
+/*!
+ * @brief 耐久低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_lose_constitution(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (is_sustain_con(target_ptr))
+        monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    if (do_dec_stat(target_ptr, A_CON))
+        monap_ptr->obvious = TRUE;
+}
+
+/*!
+ * @brief 魅力低下ダメージを計算する (維持があれば、(1d4 + 4) / 9になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_lose_charisma(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (is_sustain_chr(target_ptr))
+        monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    if (do_dec_stat(target_ptr, A_CHR))
+        monap_ptr->obvious = TRUE;
+}
+
+/*!
+ * @brief 全能力低下ダメージを計算する (維持があれば、1つに付き-3%軽減する)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_lose_all(player_type *target_ptr, monap_type *monap_ptr)
+{
+    int damage_ratio = 100;
+    if (is_sustain_str(target_ptr))
+        damage_ratio -= 3;
+
+    if (is_sustain_int(target_ptr))
+        damage_ratio -= 3;
+
+    if (is_sustain_wis(target_ptr))
+        damage_ratio -= 3;
+
+    if (is_sustain_dex(target_ptr))
+        damage_ratio -= 3;
+
+    if (is_sustain_con(target_ptr))
+        damage_ratio -= 3;
+
+    if (is_sustain_chr(target_ptr))
+        damage_ratio -= 3;
+
+    monap_ptr->damage = monap_ptr->damage * damage_ratio / 100;
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    process_lose_all_attack(target_ptr, monap_ptr);
 }
 
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
@@ -319,74 +469,27 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_PARALYZE:
         calc_blow_paralysis(target_ptr, monap_ptr);
         break;
-    case RBE_LOSE_STR: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        if (do_dec_stat(target_ptr, A_STR))
-            monap_ptr->obvious = TRUE;
-
+    case RBE_LOSE_STR:
+        calc_blow_lose_strength(target_ptr, monap_ptr);
         break;
-    }
-    case RBE_LOSE_INT: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        if (do_dec_stat(target_ptr, A_INT))
-            monap_ptr->obvious = TRUE;
-
+    case RBE_LOSE_INT:
+        calc_blow_lose_intelligence(target_ptr, monap_ptr);
         break;
-    }
-    case RBE_LOSE_WIS: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        if (do_dec_stat(target_ptr, A_WIS))
-            monap_ptr->obvious = TRUE;
-
+    case RBE_LOSE_WIS:
+        calc_blow_lose_wisdom(target_ptr, monap_ptr);
         break;
-    }
-    case RBE_LOSE_DEX: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        if (do_dec_stat(target_ptr, A_DEX))
-            monap_ptr->obvious = TRUE;
-
+    case RBE_LOSE_DEX:
+        calc_blow_lose_dexterity(target_ptr, monap_ptr);
         break;
-    }
-    case RBE_LOSE_CON: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        if (do_dec_stat(target_ptr, A_CON))
-            monap_ptr->obvious = TRUE;
-
+    case RBE_LOSE_CON:
+        calc_blow_lose_constitution(target_ptr, monap_ptr);
         break;
-    }
-    case RBE_LOSE_CHR: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        if (do_dec_stat(target_ptr, A_CHR))
-            monap_ptr->obvious = TRUE;
-
+    case RBE_LOSE_CHR:
+        calc_blow_lose_charisma(target_ptr, monap_ptr);
         break;
-    }
-    case RBE_LOSE_ALL: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        process_lose_all_attack(target_ptr, monap_ptr);
+    case RBE_LOSE_ALL:
+        calc_blow_lose_all(target_ptr, monap_ptr);
         break;
-    }
     case RBE_SHATTER: { /* AC軽減あり / Player armor reduces total damage */
         monap_ptr->obvious = TRUE;
         monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
