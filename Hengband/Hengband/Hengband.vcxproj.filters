@@ -2180,6 +2180,9 @@
     <ClCompile Include="..\..\src\player\player-status-resist.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4716,6 +4719,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-status-resist.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-lose.h">
+      <Filter>monster-attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
