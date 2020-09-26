@@ -176,6 +176,24 @@ static void calc_blow_drain_exp(player_type *target_ptr, monap_type *monap_ptr, 
     (void)drain_exp(target_ptr, d, d / 10, hold_exp_prob);
 }
 
+/*!
+ * @brief 時間逆転ダメージを計算する (耐性があれば、(1d4 + 4) / 9になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_time(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (monap_ptr->explode)
+        return;
+
+    process_monster_attack_time(target_ptr, monap_ptr);
+    if (is_resist_time(target_ptr))
+        monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+}
+
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->effect) {
@@ -358,14 +376,9 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_DISEASE:
         calc_blow_disease(target_ptr, monap_ptr);
         break;
-    case RBE_TIME: {
-        if (monap_ptr->explode)
-            break;
-
-        process_monster_attack_time(target_ptr, monap_ptr);
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    case RBE_TIME:
+        calc_blow_time(target_ptr, monap_ptr);
         break;
-    }
     case RBE_DR_LIFE: {
         s32b d = damroll(60, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
         monap_ptr->obvious = TRUE;
