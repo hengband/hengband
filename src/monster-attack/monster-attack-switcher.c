@@ -215,6 +215,28 @@ static void calc_blow_drain_life(player_type *target_ptr, monap_type *monap_ptr)
     process_drain_life(target_ptr, monap_ptr, resist_drain);
 }
 
+/*!
+ * todo 魔道具使用能力向上フラグの取得関数は未定義、後ほど実施する
+ * @brief MPダメージを計算する (消費魔力減少、呪文失敗率減少、魔道具使用能力向上があればそれぞれ-5%)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_drain_mana(player_type *target_ptr, monap_type *monap_ptr)
+{
+    monap_ptr->obvious = TRUE;
+    int damage_ratio = 100;
+    if (has_dec_mana(target_ptr))
+        damage_ratio -= 5;
+
+    if (has_easy_spell(target_ptr))
+        damage_ratio -= 5;
+
+    monap_ptr->damage = monap_ptr->damage * damage_ratio / 100;
+    process_drain_mana(target_ptr, monap_ptr);
+    update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_MANA);
+}
+
 static void calc_blow_inertia(player_type *target_ptr, monap_type *monap_ptr)
 {
     if ((target_ptr->fast > 0) || (target_ptr->pspeed >= 130))
@@ -416,12 +438,9 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_DR_LIFE:
         calc_blow_drain_life(target_ptr, monap_ptr);
         break;
-    case RBE_DR_MANA: {
-        monap_ptr->obvious = TRUE;
-        process_drain_mana(target_ptr, monap_ptr);
-        update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_MANA);
+    case RBE_DR_MANA:
+        calc_blow_drain_mana(target_ptr, monap_ptr);
         break;
-    }
     case RBE_INERTIA:
         calc_blow_inertia(target_ptr, monap_ptr);
         break;
