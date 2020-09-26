@@ -10,7 +10,7 @@ typedef enum tr_type {
     TR_DEX = 3, /* DEX += "pval" */
     TR_CON = 4, /* CON += "pval" */
     TR_CHR = 5, /* CHR += "pval" */
-    TR_MAGIC_MASTERY = 6, /* Later */
+    TR_MAGIC_MASTERY = 6, /* 魔道具使用能力向上 */
     TR_FORCE_WEAPON = 7, /* Later */
     TR_STEALTH = 8, /* Stealth += "pval" */
     TR_SEARCH = 9, /* Search += "pval" */
@@ -44,15 +44,15 @@ typedef enum tr_type {
     TR_SUST_CON = 36,
     TR_SUST_CHR = 37,
     TR_RIDING = 38,
-    TR_EASY_SPELL = 39,
+    TR_EASY_SPELL = 39, /* 呪文失敗率減少 */
     TR_IM_ACID = 40,
     TR_IM_ELEC = 41,
     TR_IM_FIRE = 42,
     TR_IM_COLD = 43,
-    TR_THROW = 44, /* Later */
+    TR_THROW = 44, /* 強力投擲 */
     TR_REFLECT = 45, /* Reflect 'bolts' */
-    TR_FREE_ACT = 46, /* Free Action */
-    TR_HOLD_EXP = 47, /* Hold EXP */
+    TR_FREE_ACT = 46, /* 耐麻痺 */
+    TR_HOLD_EXP = 47, /* 経験値維持 */
     TR_RES_ACID = 48,
     TR_RES_ELEC = 49,
     TR_RES_FIRE = 50,
@@ -74,8 +74,8 @@ typedef enum tr_type {
     TR_SH_ELEC = 65, /* Electric Sheath */
     TR_SLAY_HUMAN = 66, /* Slay human */
     TR_SH_COLD = 67, /* cold aura */
-    TR_NO_TELE = 68, /* Anti-teleportation */
-    TR_NO_MAGIC = 69, /* Anti-magic */
+    TR_NO_TELE = 68, /* 反テレポート */
+    TR_NO_MAGIC = 69, /* 反魔法 */
     TR_DEC_MANA = 70, /* 消費魔力減少 */
     TR_TY_CURSE = 71, /* The Ancient Curse */
     TR_WARNING = 72, /* Warning */

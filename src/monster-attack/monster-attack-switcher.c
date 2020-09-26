@@ -69,6 +69,87 @@ static void calc_blow_disenchant(player_type *target_ptr, monap_type *monap_ptr)
     update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_DISEN);
 }
 
+/*!
+ * @brief 盲目ダメージを計算する (耐性があれば、(1d4 + 3) / 8になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_blind(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (is_resist_blind(target_ptr))
+        monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead)
+        return;
+
+    process_blind_attack(target_ptr, monap_ptr);
+    update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_BLIND);
+}
+
+/*!
+ * @brief 混乱ダメージを計算する (耐性があれば、(1d4 + 3) / 8になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_confusion(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (monap_ptr->explode)
+        return;
+
+    if (is_resist_conf(target_ptr))
+        monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead)
+        return;
+
+    if (!target_ptr->resist_conf && !check_multishadow(target_ptr) && set_confused(target_ptr, target_ptr->confused + 3 + randint1(monap_ptr->rlev)))
+        monap_ptr->obvious = TRUE;
+
+    update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_CONF);
+}
+
+/*!
+ * @brief 恐怖ダメージを計算する (耐性があれば、(1d4 + 3) / 8になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_fear(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (is_resist_fear(target_ptr))
+        monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead)
+        return;
+
+    process_terrify_attack(target_ptr, monap_ptr);
+    update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_FEAR);
+}
+
+/*!
+ * @brief 麻痺ダメージを計算する (耐性があれば、(1d4 + 3) / 8になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_paralysis(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (has_free_act(target_ptr))
+        monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead)
+        return;
+
+    process_paralyze_attack(target_ptr, monap_ptr);
+    update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_FREE);
+}
+
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->effect) {
@@ -167,6 +248,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_ELEC: {
         if (monap_ptr->explode)
             break;
+
         monap_ptr->obvious = TRUE;
         msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
         monap_ptr->get_damage += elec_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, -1, FALSE);
@@ -176,6 +258,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_FIRE: {
         if (monap_ptr->explode)
             break;
+
         monap_ptr->obvious = TRUE;
         msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
         monap_ptr->get_damage += fire_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, -1, FALSE);
@@ -185,57 +268,25 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_COLD: {
         if (monap_ptr->explode)
             break;
+
         monap_ptr->obvious = TRUE;
         msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
         monap_ptr->get_damage += cold_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, -1, FALSE);
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_COLD);
         break;
     }
-    case RBE_BLIND: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead)
-            break;
-
-        process_blind_attack(target_ptr, monap_ptr);
-        update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_BLIND);
+    case RBE_BLIND:
+        calc_blow_blind(target_ptr, monap_ptr);
         break;
-    }
-    case RBE_CONFUSE: {
-        if (monap_ptr->explode)
-            break;
-
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead)
-            break;
-
-        if (!target_ptr->resist_conf && !check_multishadow(target_ptr)) {
-            if (set_confused(target_ptr, target_ptr->confused + 3 + randint1(monap_ptr->rlev))) {
-                monap_ptr->obvious = TRUE;
-            }
-        }
-
-        update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_CONF);
+    case RBE_CONFUSE:
+        calc_blow_confusion(target_ptr, monap_ptr);
         break;
-    }
-    case RBE_TERRIFY: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead)
-            break;
-
-        process_terrify_attack(target_ptr, monap_ptr);
-        update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_FEAR);
+    case RBE_TERRIFY:
+        calc_blow_fear(target_ptr, monap_ptr);
         break;
-    }
-    case RBE_PARALYZE: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-
-        if (target_ptr->is_dead)
-            break;
-
-        process_paralyze_attack(target_ptr, monap_ptr);
-        update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_FREE);
+    case RBE_PARALYZE:
+        calc_blow_paralysis(target_ptr, monap_ptr);
         break;
-    }
     case RBE_LOSE_STR: {
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
         if (target_ptr->is_dead || check_multishadow(target_ptr))
