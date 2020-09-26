@@ -466,6 +466,7 @@ hengband_SOURCES = \
 	monster-attack/insults-moans.c monster-attack/insults-moans.h \
 	monster-attack/monster-attack-describer.c monster-attack/monster-attack-describer.h \
 	monster-attack/monster-attack-effect.h \
+	monster-attack/monster-attack-lose.c monster-attack/monster-attack-lose.h \
 	monster-attack/monster-attack-player.c monster-attack/monster-attack-player.h \
 	monster-attack/monster-attack-processor.c monster-attack/monster-attack-processor.h \
 	monster-attack/monster-attack-status.c monster-attack/monster-attack-status.h \
