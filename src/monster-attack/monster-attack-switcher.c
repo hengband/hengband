@@ -14,6 +14,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "player/player-damage.h"
+#include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-equipment.h"
@@ -45,6 +46,29 @@ static void calc_blow_poison(player_type *target_ptr, monap_type *monap_ptr)
     update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_POIS);
 }
 
+/*!
+ * @brief 劣化ダメージを計算する (耐性があれば、(1d4 + 4) / 9になる)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_disenchant(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (monap_ptr->explode)
+        return;
+
+    if (!target_ptr->resist_disen && !check_multishadow(target_ptr) && apply_disenchant(target_ptr, 0)) {
+        update_creature(target_ptr);
+        monap_ptr->obvious = TRUE;
+    }
+
+    if (is_resist_disen(target_ptr))
+        monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
+
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_DISEN);
+}
+
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->effect) {
@@ -71,21 +95,9 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_POISON:
         calc_blow_poison(target_ptr, monap_ptr);
         break;
-    case RBE_UN_BONUS: {
-        if (monap_ptr->explode)
-            break;
-
-        if (!target_ptr->resist_disen && !check_multishadow(target_ptr)) {
-            if (apply_disenchant(target_ptr, 0)) {
-                update_creature(target_ptr);
-                monap_ptr->obvious = TRUE;
-            }
-        }
-
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_DISEN);
+    case RBE_UN_BONUS:
+        calc_blow_disenchant(target_ptr, monap_ptr);
         break;
-    }
     case RBE_UN_POWER: {
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
         if (target_ptr->is_dead || check_multishadow(target_ptr))
