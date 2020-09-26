@@ -7,13 +7,14 @@
 
 #include "monster-attack/monster-attack-switcher.h"
 #include "inventory/inventory-slot-types.h"
-#include "monster-attack/monster-attack-status.h"
-#include "monster-attack/monster-eating.h"
 #include "mind/drs-types.h"
 #include "mind/mind-mirror-master.h"
+#include "monster-attack/monster-attack-status.h"
+#include "monster-attack/monster-eating.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "player/player-damage.h"
+#include "player/player-status-resist.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-equipment.h"
 #include "status/bad-status-setter.h"
@@ -23,14 +24,34 @@
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
+/*!
+ * @brief 毒ダメージを計算する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ * @detail 減衰の計算式がpoisではなくnukeなのは仕様 (1/3では減衰が強すぎると判断したため)
+ */
+static void calc_blow_poison(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (monap_ptr->explode)
+        return;
+
+    if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)) && !check_multishadow(target_ptr)
+        && set_poisoned(target_ptr, target_ptr->poisoned + randint1(monap_ptr->rlev) + 5))
+        monap_ptr->obvious = TRUE;
+
+    monap_ptr->damage = monap_ptr->damage * calc_nuke_damage_rate(target_ptr) / 100;
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_POIS);
+}
+
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->effect) {
-    case RBE_NONE: {
+    case RBE_NONE:
         monap_ptr->obvious = TRUE;
         monap_ptr->damage = 0;
         break;
-    }
     case RBE_SUPERHURT: { /* AC軽減あり / Player armor reduces total damage */
         if (((randint1(monap_ptr->rlev * 2 + 300) > (monap_ptr->ac + 200)) || one_in_(13)) && !check_multishadow(target_ptr)) {
             int tmp_damage = monap_ptr->damage - (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
@@ -47,20 +68,9 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
         break;
     }
-    case RBE_POISON: {
-        if (monap_ptr->explode)
-            break;
-
-        if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)) && !check_multishadow(target_ptr)) {
-            if (set_poisoned(target_ptr, target_ptr->poisoned + randint1(monap_ptr->rlev) + 5)) {
-                monap_ptr->obvious = TRUE;
-            }
-        }
-
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_POIS);
+    case RBE_POISON:
+        calc_blow_poison(target_ptr, monap_ptr);
         break;
-    }
     case RBE_UN_BONUS: {
         if (monap_ptr->explode)
             break;
