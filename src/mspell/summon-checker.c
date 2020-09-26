@@ -105,7 +105,7 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         is_match = r_idx == MON_SMALL_MOAI;
         break;
     case SUMMON_PYRAMID:
-        is_match = (r_idx == MON_SCARAB) || (r_ptr->d_char == 'z');
+        is_match = one_in_(16) ? r_ptr->d_char == 'z' : r_idx == MON_SCARAB;
         break;
     case SUMMON_PHANTOM:
         is_match = (r_idx == MON_PHANTOM_B) || (r_idx == MON_PHANTOM_W);
