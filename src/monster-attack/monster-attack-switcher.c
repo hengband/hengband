@@ -151,6 +151,31 @@ static void calc_blow_paralysis(player_type *target_ptr, monap_type *monap_ptr)
     update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_FREE);
 }
 
+/*!
+ * @brief 経験値吸収ダメージを計算する (経験値保持と地獄耐性があれば、それぞれ-7.5%)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_drain_exp(player_type *target_ptr, monap_type *monap_ptr, const int drain_value, const int hold_exp_prob)
+{
+    s32b d = damroll(drain_value, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
+    monap_ptr->obvious = TRUE;
+    int damage_ratio = 1000;
+    if (has_hold_exp(target_ptr))
+        damage_ratio -= 75;
+
+    if (is_resist_neth(target_ptr))
+        damage_ratio -= 75;
+
+    monap_ptr->damage = monap_ptr->damage * damage_ratio / 1000;
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    (void)drain_exp(target_ptr, d, d / 10, hold_exp_prob);
+}
+
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->effect) {
@@ -318,46 +343,18 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 
         break;
     }
-    case RBE_EXP_10: {
-        s32b d = damroll(10, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
-        monap_ptr->obvious = TRUE;
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        (void)drain_exp(target_ptr, d, d / 10, 95);
+    case RBE_EXP_10:
+        calc_blow_drain_exp(target_ptr, monap_ptr, 10, 95);
         break;
-    }
-    case RBE_EXP_20: {
-        s32b d = damroll(20, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
-        monap_ptr->obvious = TRUE;
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        (void)drain_exp(target_ptr, d, d / 10, 90);
+    case RBE_EXP_20:
+        calc_blow_drain_exp(target_ptr, monap_ptr, 20, 90);
         break;
-    }
-    case RBE_EXP_40: {
-        s32b d = damroll(40, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
-        monap_ptr->obvious = TRUE;
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        (void)drain_exp(target_ptr, d, d / 10, 75);
+    case RBE_EXP_40:
+        calc_blow_drain_exp(target_ptr, monap_ptr, 40, 75);
         break;
-    }
-    case RBE_EXP_80: {
-        s32b d = damroll(80, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
-        monap_ptr->obvious = TRUE;
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        (void)drain_exp(target_ptr, d, d / 10, 50);
+    case RBE_EXP_80:
+        calc_blow_drain_exp(target_ptr, monap_ptr, 80, 50);
         break;
-    }
     case RBE_DISEASE:
         calc_blow_disease(target_ptr, monap_ptr);
         break;
@@ -388,16 +385,11 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     }
     case RBE_INERTIA: {
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead)
+        if (target_ptr->is_dead || check_multishadow(target_ptr))
             break;
 
-        if (check_multishadow(target_ptr)) {
-            /* Do nothing */
-        } else {
-            if (set_slow(target_ptr, (target_ptr->slow + 4 + randint0(monap_ptr->rlev / 10)), FALSE)) {
-                monap_ptr->obvious = TRUE;
-            }
-        }
+        if (set_slow(target_ptr, (target_ptr->slow + 4 + randint0(monap_ptr->rlev / 10)), FALSE))
+            monap_ptr->obvious = TRUE;
 
         break;
     }
