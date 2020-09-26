@@ -150,6 +150,38 @@ static void calc_blow_paralysis(player_type *target_ptr, monap_type *monap_ptr)
     update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_FREE);
 }
 
+/*!
+ * @brief 病気ダメージを計算する (耐性があれば、(1d4 + 4) / 9になり、病気になる確率が無耐性の場合より更に2/5へ低下する。二重耐性なら更に低下する)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (is_resist_pois(target_ptr))
+        monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
+
+    if (is_oppose_pois(target_ptr))
+        monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
+    
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)) && set_poisoned(target_ptr, target_ptr->poisoned + randint1(monap_ptr->rlev) + 5))
+        monap_ptr->obvious = TRUE;
+
+    bool disease_possibility = randint1(100) > calc_nuke_damage_rate(target_ptr);
+    if (disease_possibility || (randint1(100) >= 11) || (target_ptr->prace == RACE_ANDROID))
+        return;
+
+    bool perm = one_in_(10);
+    if (dec_stat(target_ptr, A_CON, randint1(10), perm)) {
+        msg_print(_("病があなたを蝕んでいる気がする。", "You feel sickly."));
+        monap_ptr->obvious = TRUE;
+    }
+}
+
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
 {
     switch (monap_ptr->effect) {
@@ -404,27 +436,9 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
         (void)drain_exp(target_ptr, d, d / 10, 50);
         break;
     }
-    case RBE_DISEASE: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr))) {
-            if (set_poisoned(target_ptr, target_ptr->poisoned + randint1(monap_ptr->rlev) + 5)) {
-                monap_ptr->obvious = TRUE;
-            }
-        }
-
-        if ((randint1(100) < 11) && (target_ptr->prace != RACE_ANDROID)) {
-            bool perm = one_in_(10);
-            if (dec_stat(target_ptr, A_CON, randint1(10), perm)) {
-                msg_print(_("病があなたを蝕んでいる気がする。", "You feel sickly."));
-                monap_ptr->obvious = TRUE;
-            }
-        }
-
+    case RBE_DISEASE:
+        calc_blow_didease(target_ptr, monap_ptr);
         break;
-    }
     case RBE_TIME: {
         if (monap_ptr->explode)
             break;
