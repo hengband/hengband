@@ -151,10 +151,10 @@ static void describe_target(player_type *subject_ptr, eg_type *eg_ptr)
 #endif
 }
 
-static bool describe_hallucinated_target(player_type *subject_ptr, eg_type *eg_ptr)
+static process_result describe_hallucinated_target(player_type *subject_ptr, eg_type *eg_ptr)
 {
     if (!subject_ptr->image)
-        return FALSE;
+        return PROCESS_CONTINUE;
 
     concptr name = _("何か奇妙な物", "something strange");
 #ifdef JP
@@ -166,9 +166,9 @@ static bool describe_hallucinated_target(player_type *subject_ptr, eg_type *eg_p
     move_cursor_relative(eg_ptr->y, eg_ptr->x);
     eg_ptr->query = inkey();
     if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n'))
-        return eg_ptr->query;
+        return PROCESS_TRUE;
 
-    return TRUE;
+    return PROCESS_FALSE;
 }
 
 static bool describe_grid_lore(player_type *subject_ptr, eg_type *eg_ptr)
@@ -444,16 +444,16 @@ static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
         return format(
             _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), quest[eg_ptr->g_ptr->special].name, quest[eg_ptr->g_ptr->special].level);
     }
-    
+
     if (has_flag(eg_ptr->f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena)
         return building[eg_ptr->f_ptr->subtype].name;
-    
+
     if (has_flag(eg_ptr->f_ptr->flags, FF_ENTRANCE))
         return format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[eg_ptr->g_ptr->special].text, d_info[eg_ptr->g_ptr->special].mindepth);
-    
+
     if (has_flag(eg_ptr->f_ptr->flags, FF_TOWN))
         return town_info[eg_ptr->g_ptr->special].name;
-    
+
     if (subject_ptr->wild_mode && (eg_ptr->feat == feat_floor))
         return _("道", "road");
 
@@ -483,8 +483,7 @@ static void describe_grid_monster_all(eg_type *eg_ptr)
         travel.cost[eg_ptr->y][eg_ptr->x]);
 #else
     sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info, eg_ptr->g_ptr->info,
-        f_idx_str,
-        eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x);
+        f_idx_str, eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x);
 #endif
 }
 
@@ -504,9 +503,16 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     eg_type *eg_ptr = initialize_eg_type(subject_ptr, &tmp_eg, y, x, mode, info);
     describe_scan_result(subject_ptr, eg_ptr);
     describe_target(subject_ptr, eg_ptr);
-    if (describe_hallucinated_target(subject_ptr, eg_ptr))
+    process_result next_target = describe_hallucinated_target(subject_ptr, eg_ptr);
+    switch (next_target) {
+    case PROCESS_FALSE:
         return 0;
-
+    case PROCESS_TRUE:
+        return eg_ptr->query;
+    case PROCESS_CONTINUE:
+        break;
+    }
+    
     s16b description_grid = describe_grid(subject_ptr, eg_ptr);
     if (within_char_util(description_grid))
         return (char)description_grid;
