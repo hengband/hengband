@@ -23053,7 +23053,7 @@ D:彼は自分の行いを償うつもりはない。
 
 N:1149:全開装甲『カバード・コア』
 E:Opened core, the uncovered fortress
-G:#:G
+G:g:G
 I:110:9d5:35:1:10
 W:4:1:0:40:0:0
 B:SHOOT:HURT:2d6
@@ -24070,7 +24070,7 @@ B:SHOOT:HURT:8d8
 B:SLASH:HURT:8d8
 B:SLASH:HURT:9d7
 B:HIT:HURT:10d2
-F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL | BASH_DOOR
 F:HUMAN | FEMALE | ONLY_ITEM | DROP_90 | DROP_1D2 | DROP_GOOD | NO_SLEEP
 F:IM_FIRE | IM_COLD | IM_ELEC
 S:1_IN_8 | SHOOT | HEAL | CAUSE_3
@@ -24612,3 +24612,15 @@ S:HASTE | SLOW | MIND_BLAST | BRAIN_SMASH | BLINK | FORGET | DISPEL
 S:TELE_TO | TELE_AWAY
 D:$Communication with the adventurer is not established properly.
 D:それとは冒険者とのコミュニケーションがまともに成立しない。
+
+N:1240:ソードマスター『ヤマト』
+E:Yamato, the sword master
+G:p:s
+I:110:25d12:15:40:20
+W:15:1:0:350:0:0
+B:SLASH:HURT:2d11
+B:CRUSH:HURT:1d13
+F:UNIQUE | FORCE_MAXHP | HUMAN | GOOD | NO_FEAR | CAN_SPEAK
+D:$Hey, girlfriend came to me...
+D:$ (inciting words in Monthly Choi Yong Soo; issue number is unknown)
+D:彼女ができました…（「月刊チェヨンス」アオリ文、号不明）

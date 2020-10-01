@@ -52,5 +52,8 @@ points at himself and shouts, 'I finished my life with no regrets!'
 N:1063:lousy, the King of louses
 says, 'Ah, Hengband is too difficult!'
 
+N:1240:Yamato, the sword master
+Believe that Yamato's bravery will save the world...!  Thank you for reading!
+
 N:*:Default
 shouts, 'AAAARRRGGGHHH!!!'
