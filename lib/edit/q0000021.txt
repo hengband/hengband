@@ -61,11 +61,11 @@ F:d:FLOOR:8:357
 # Floor with Revenant
 F:e:FLOOR:8:555
 
-# Floor with Baron of Hell
-F:f:FLOOR:8:609
+# Floor with Duke of Hell
+F:f:FLOOR:8:1244
 
 # Floor with Iron Lich
-F:g:FLOOR:8:666
+F:g:FLOOR:8:1181
 
 # Floor with Maulotaur
 F:h:FLOOR:8:723

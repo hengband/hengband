@@ -10935,19 +10935,17 @@ D:(Ｈ・Ｐ・ラヴクラフト、大瀧啓裕訳「未知なるカダスを�
 D:『ラヴクラフト全集６』、創元推理文庫、p.217)
 
 #JZ#
-#JZ#本当は Lord:公爵  Baron:男爵 ですが、語感からこっちに。
-N:609:地獄の公爵
+N:609:地獄の男爵
 E:Baron of hell
 G:U:U
-I:110:150d12:10:130:40
-W:38:3:0:3000:0:0
-B:CLAW:HURT:11d2
-B:CLAW:HURT:11d2
-B:CLAW:HURT:22d1
+I:110:100d12:10:130:40
+W:38:3:0:3000:20000:1244
+B:CLAW:HURT:10d2
+B:CLAW:HURT:10d2
+B:CLAW:HURT:20d1
 F:IM_POIS | OPEN_DOOR | BASH_DOOR | MALE | RES_PLAS | NONLIVING |
 F:IM_FIRE | NO_CONF | NO_SLEEP | EVIL | DEMON | FORCE_MAXHP | RES_TELE
-S:1_IN_2 |
-S:BO_PLAS
+S:1_IN_3 | BO_PLAS
 D:$A minor demon lord with a goat's head, tough to kill.
 D:山羊の頭を持つ低位の魔王で、簡単には倒せない。
 
@@ -11465,7 +11463,7 @@ N:634:レッサー・タイタン
 E:Lesser titan
 G:P:y
 I:120:30d50:30:80:15
-W:46:1:0:3500:25000:702
+W:46:1:0:5500:25000:702
 B:HIT:CONFUSE:6d6
 B:HIT:CONFUSE:6d6
 B:HIT:CONFUSE:6d6
@@ -12264,21 +12262,20 @@ D:全ての秩序に反して無理矢理に存在しているかのようだ。
 
 #JZ#
 N:668:大バジリスク
-E:Greater basilisk
+E:Large basilisk
 G:R:D
-I:120:20d100:25:100:15
-W:42:7:0:10000:0:0
+I:120:50d30:25:90:15
+W:42:2:0:7000:100000:1243
 B:GAZE:PARALYZE
-B:BITE:HURT:5d12
-B:BITE:HURT:5d12
-B:BITE:HURT:5d12
+B:BITE:HURT:5d11
+B:BITE:HURT:5d11
+B:BITE:HURT:5d11
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | POWERFUL | FORCE_MAXHP |
 F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
 F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
-S:1_IN_8
-S:BR_POIS | BR_DARK | BR_NETH
-D:$A large basilisk, whose shape resembles that of a great wyrm.
-D:大型のバジリスクで、ワイアームに似た姿をしている。
+S:1_IN_8 | BR_POIS | BR_DARK | BR_NETH
+D:$A large basilisk, whose shape resembles that of a ancient dragon.
+D:大型のバジリスクで、古代ドラゴンに似た姿をしている。
 
 #JZ#
 N:669:『カリブディス』
@@ -13113,26 +13110,22 @@ D:爆弾を持ってテロ攻撃を行なう...
 N:701:ドラコリッチ
 E:Dracolich
 G:D:B
-I:120:28d100:25:120:30
-W:46:2:0:18000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:EXP_80:3d6
+I:120:28d70:25:110:30
+W:46:2:0:16000:200000:1241
+B:CLAW:HURT:4d10
+B:CLAW:HURT:4d10
+B:BITE:EXP_40:3d6
 B:BITE:EXP_VAMP:3d6
-F:FORCE_SLEEP | FORCE_MAXHP | 
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | RES_TELE
-F:COLD_BLOOD | CAN_FLY |
-F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
-F:EVIL | DRAGON | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | COLD_BLOOD | EVIL | DRAGON | UNDEAD
+F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK | RES_TELE
 F:NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:CONF | SCARE | 
-S:BR_COLD | BR_NETH
-D:$The skeletal form of a once-great dragon, enchanted by magic most 
-D:$perilous.  Its animated form strikes with speed and drains life from its 
-D:$prey to satisfy its hunger.
-D:古代の偉大なドラゴンの骸骨に、最も危険な魔法によって生命を吹き込んだものだ。
-D:餌食に素早い一撃を食らわせ、その生命を吸い取っては空腹を満たしている。
+S:1_IN_7 | CONF | SCARE | BR_COLD | BR_NETH
+D:$A monster with evil magic in the bones of a decaying dragon.
+D:$  It is wandering while absorbing the soul of living things.
+D:朽ち果てたドラゴンの骨に邪悪な魔法が宿ったモンスターだ。
+D:それは命あるものの魂を吸いながらさまよい歩いている。
 
 N:702:ミッド・タイタン
 E:Middle titan
@@ -13159,24 +13152,22 @@ D:冒険者が挑みかかると彼の憎悪は一層燃え上がる。
 N:703:ドラコリスク
 E:Dracolisk
 G:D:r
-I:120:28d100:25:120:30
-W:46:3:0:14000:0:0
-B:BITE:HURT:5d12
-B:BITE:HURT:5d12
-B:BITE:HURT:8d8
+I:120:28d70:25:110:30
+W:46:2:0:16000:200000:1242
+B:BITE:HURT:5d11
+B:BITE:HURT:5d11
+B:BITE:HURT:8d7
 B:GAZE:PARALYZE
-F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_CORPSE
-F:OPEN_DOOR | BASH_DOOR | RES_NETH | RES_TELE
-F:ANIMAL | EVIL | DRAGON | IM_ACID | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:HOLD | SCARE | 
-S:BR_FIRE | BR_NETH
-D:$A mixture of dragon and basilisk, the dracolisk stares at you with deep 
-D:$piercing eyes, its evil breath burning the ground where it stands.
-D:ドラゴンとバジリスクの混血であるドラコリスクは、深く突き刺すような
-D:視線で冒険者を睨みつける。その邪悪なブレスは、自分の足下の大地ですら燃え上
-D:がらせる。
+F:OPEN_DOOR | BASH_DOOR | ANIMAL | EVIL | DRAGON
+F:IM_FIRE | IM_POIS | RES_NETH | RES_TELE | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_7 | HOLD | SCARE | BR_FIRE | BR_POIS | BR_NETH
+D:$It's a winged basilisk.
+D:$It is aimed at adventurers in order to show off the evil poison
+D:$ and power that it has stored in its body.
+D:翼のあるバジリスクだ。
+D:その身体に蓄えた邪悪な毒と力を見せつけるべく虎視眈々と冒険者を狙っている。
 
 #JZ#
 #JZ#ボルヘスの「幻獣辞典」に記述あり
@@ -14479,7 +14470,7 @@ D:だが、その羽と瞳を見ればそんな思いはどこかに吹き飛ん
 
 #J0#
 N:756:デイドラ・レッド・ドラゴン
-E:Great Hell Wyrm
+E:Daedra Red Dragon
 G:D:r
 I:120:30d80:40:120:40
 W:48:1:0:16000:360000:1192
@@ -23674,7 +23665,7 @@ N:1187:グレーター・タイタン
 E:Greater titan
 G:P:v
 I:120:70d50:30:125:15
-W:52:1:0:13500:0:0
+W:52:1:0:18000:0:0
 B:HIT:CONFUSE:12d12
 B:HIT:CONFUSE:12d12
 B:HIT:CONFUSE:12d12
@@ -24624,3 +24615,74 @@ F:UNIQUE | FORCE_MAXHP | HUMAN | GOOD | NO_FEAR | CAN_SPEAK
 D:$Hey, girlfriend came to me...
 D:$ (inciting words in Monthly Choi Yong Soo; issue number is unknown)
 D:彼女ができました…（「月刊チェヨンス」アオリ文、号不明）
+
+N:1241:グレート・ドラコリッチ
+E:Greater Dracolich
+G:D:b
+I:120:28d100:25:120:30
+W:52:3:0:23000:0:0
+B:CLAW:HURT:4d12
+B:CLAW:HURT:4d12
+B:BITE:EXP_80:3d6
+B:BITE:EXP_VAMP:3d6
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | COLD_BLOOD | EVIL | DRAGON | UNDEAD
+F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK | RES_TELE
+F:NO_CONF | NO_SLEEP | RIDING
+S:1_IN_6 | CONF | SCARE | BR_COLD | BR_DARK | BR_NETH
+D:$The skeletal form of a once-great dragon, enchanted by magic most 
+D:$perilous.  Its animated form strikes with speed and drains life from its 
+D:$prey to satisfy its hunger.
+D:古代の偉大なドラゴンの骸骨に、最も危険な魔法によって生命を吹き込んだものだ。
+D:餌食に素早い一撃を食らわせ、その生命を吸い取っては空腹を満たしている。
+
+N:1242:グレート・ドラコリスク
+E:Greater Dracolisk
+G:D:r
+I:120:28d100:25:120:30
+W:52:3:0:23000:0:0
+B:BITE:HURT:5d12
+B:BITE:HURT:5d12
+B:BITE:HURT:8d8
+B:GAZE:PARALYZE
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_CORPSE
+F:OPEN_DOOR | BASH_DOOR | ANIMAL | EVIL | DRAGON
+F:IM_FIRE | IM_POIS | RES_NETH | RES_TELE | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_6 | HOLD | SCARE | BR_FIRE | BR_POIS | BR_NETH
+D:$A mixture of dragon and basilisk, the dracolisk stares at you with deep 
+D:$piercing eyes, its evil breath burning the ground where it stands.
+D:ドラゴンとバジリスクの混血であるドラコリスクは、深く突き刺すような
+D:視線で冒険者を睨みつける。その邪悪なブレスは、自分の足下の大地ですら燃え上
+D:がらせる。
+
+N:1243:巨大バジリスク
+E:Greater basilisk
+G:R:D
+I:120:75d30:25:100:15
+W:50:2:0:11000:0:0
+B:GAZE:PARALYZE
+B:BITE:HURT:5d12
+B:BITE:HURT:5d12
+B:BITE:HURT:5d12
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | POWERFUL | FORCE_MAXHP |
+F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
+F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
+S:1_IN_6 | BR_POIS | BR_DARK | BR_NETH
+D:$An extra large basilisk, whose shape resembles that of a wyrm.
+D:巨大なバジリスクで、ワイアームに似た姿をしている。
+
+N:1244:地獄の公爵
+E:Duke of hell
+G:U:u
+I:110:150d12:10:130:40
+W:43:3:0:6000:0:0
+B:CLAW:HURT:11d2
+B:CLAW:HURT:11d2
+B:CLAW:HURT:22d1
+F:IM_POIS | OPEN_DOOR | BASH_DOOR | MALE | RES_PLAS | NONLIVING |
+F:IM_FIRE | NO_CONF | NO_SLEEP | EVIL | DEMON | FORCE_MAXHP | RES_TELE
+S:1_IN_2 | BO_PLAS
+D:$A major demon lord with a goat's head, tough to kill.
+D:山羊の頭を持つ高位の魔王で、簡単には倒せない。
