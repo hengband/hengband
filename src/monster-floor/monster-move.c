@@ -397,11 +397,8 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
         turn_flags_ptr->do_turn = TRUE;
         feature_type *f_ptr;
         f_ptr = &f_info[g_ptr->feat];
-        if (has_flag(f_ptr->flags, FF_TREE)) {
-            if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD)) {
-                m_ptr->energy_need += ENERGY_NEED();
-            }
-        }
+        if (has_flag(f_ptr->flags, FF_TREE) && ((r_ptr->flags7 & RF7_CAN_FLY) == 0) && ((r_ptr->flags8 & RF8_WILD_WOOD) == 0))
+            m_ptr->energy_need += ENERGY_NEED();
 
         if (!update_riding_monster(target_ptr, turn_flags_ptr, m_idx, oy, ox, ny, nx))
             break;

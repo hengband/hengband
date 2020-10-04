@@ -1,12 +1,10 @@
 ﻿/*!
-    @file chuukei.c
-    @brief 中継機能の実装
-    @date 2014/01/02
-    @author
-    2014 Deskull rearranged comment for Doxygen.
+ * @brief 録画・再生機能
+ * @date 2014/01/02
+ * @author 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "io/chuukei.h"
+#include "io/record-play-movie.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
@@ -20,29 +18,8 @@
 #include "locale/japanese.h"
 #endif
 
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdio.h>
 #ifdef WINDOWS
 #include <windows.h>
-#endif
-
-#ifdef CHUUKEI
-#if defined(WINDOWS)
-#include <winsock.h>
-#else
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <sys/time.h>
-#include <sys/types.h>
-
-#include <setjmp.h>
-#include <signal.h>
-#endif
-
-#define MAX_HOSTNAME 256
 #endif
 
 #define RINGBUF_SIZE 1024 * 1024
@@ -55,30 +32,10 @@
 #define DEFAULT_DELAY 50
 #define RECVBUF_SIZE 1024
 
-#ifdef CHUUKEI
-bool chuukei_server;
-bool chuukei_client;
-char *server_name;
-int server_port;
-#endif
-
 static long epoch_time; /* バッファ開始時刻 */
 static int browse_delay; /* 表示するまでの時間(100ms単位)(この間にラグを吸収する) */
-#ifdef CHUUKEI
-static int sd; /* ソケットのファイルディスクリプタ */
-static long time_diff; /* プレイ側との時間のずれ(これを見ながらディレイを調整していく) */
-static int server_port;
-static GAME_TEXT server_name[MAX_HOSTNAME];
-#endif
-
 static int movie_fd;
 static int movie_mode;
-
-#ifdef CHUUKEI
-#ifdef WINDOWS
-#define close closesocket
-#endif
-#endif
 
 /* 描画する時刻を覚えておくキュー構造体 */
 static struct {
@@ -107,9 +64,6 @@ static errr (*old_text_hook)(int x, int y, int n, TERM_COLOR a, concptr s);
 static void disable_chuukei_server(void)
 {
     term_type *t = angband_term[0];
-#ifdef CHUUKEI
-    chuukei_server = FALSE;
-#endif /* CHUUKEI */
     t->xtra_hook = old_xtra_hook;
     t->curs_hook = old_curs_hook;
     t->bigcurs_hook = old_bigcurs_hook;
@@ -151,29 +105,12 @@ static errr insert_ringbuf(char *buf)
 
     if (movie_mode) {
         fd_write(movie_fd, buf, len);
-#ifdef CHUUKEI
-        if (!chuukei_server)
-            return 0;
-#else
         return 0;
-#endif
     }
 
     /* バッファをオーバー */
-    if (ring.inlen + len >= RINGBUF_SIZE) {
-#ifdef CHUUKEI
-        if (chuukei_server)
-            disable_chuukei_server();
-        else
-            chuukei_client = FALSE;
-
-        prt("送受信バッファが溢れました。サーバとの接続を切断します。", 0, 0);
-        inkey();
-
-        close(sd);
-#endif
+    if (ring.inlen + len >= RINGBUF_SIZE)
         return -1;
-    }
 
     /* バッファの終端までに収まる */
     if (ring.wptr + len < RINGBUF_SIZE) {
@@ -195,166 +132,6 @@ static errr insert_ringbuf(char *buf)
     /* Success */
     return 0;
 }
-
-#ifdef CHUUKEI
-void flush_ringbuf(void)
-{
-    fd_set fdset;
-    struct timeval tv;
-
-    if (!chuukei_server)
-        return;
-
-    if (ring.inlen == 0)
-        return;
-
-    tv.tv_sec = 0;
-    tv.tv_usec = 0;
-
-    FD_ZERO(&fdset);
-    FD_SET(sd, &fdset);
-
-    while (TRUE) {
-        fd_set tmp_fdset;
-        int result;
-
-        tmp_fdset = fdset;
-
-        /* ソケットにデータを書き込めるかどうか調べる */
-        select(sd + 1, (fd_set *)NULL, &tmp_fdset, (fd_set *)NULL, &tv);
-
-        /* 書き込めなければ戻る */
-        if (FD_ISSET(sd, &tmp_fdset) == 0)
-            break;
-
-        result = send(sd, ring.buf + ring.rptr, ((ring.wptr > ring.rptr) ? ring.wptr : RINGBUF_SIZE) - ring.rptr, 0);
-
-        if (result <= 0) {
-            /* サーバとの接続断？ */
-            if (chuukei_server)
-                disable_chuukei_server();
-
-            prt("サーバとの接続が切断されました。", 0, 0);
-            inkey();
-            close(sd);
-
-            return;
-        }
-
-        ring.rptr += result;
-        ring.inlen -= result;
-
-        if (ring.rptr == RINGBUF_SIZE)
-            ring.rptr = 0;
-        if (ring.inlen == 0)
-            break;
-    }
-}
-
-static int read_chuukei_prf(concptr prf_name)
-{
-    char buf[1024];
-    FILE *fp;
-
-    path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA, prf_name);
-    fp = angband_fopen(buf, "r");
-
-    if (!fp)
-        return -1;
-
-    /* 初期化 */
-    server_port = -1;
-    server_name[0] = 0;
-    browse_delay = DEFAULT_DELAY;
-
-    while (0 == angband_fgets(fp, buf, sizeof(buf))) {
-        /* サーバ名 */
-        if (!strncmp(buf, "server:", 7)) {
-            strncpy(server_name, buf + 7, MAX_HOSTNAME - 1);
-            server_name[MAX_HOSTNAME - 1] = '\0';
-        }
-
-        /* ポート番号 */
-        if (!strncmp(buf, "port:", 5)) {
-            server_port = atoi(buf + 5);
-        }
-
-        /* ディレイ */
-        if (!strncmp(buf, "delay:", 6)) {
-            browse_delay = atoi(buf + 6);
-        }
-    }
-
-    angband_fclose(fp);
-
-    /* prfファイルが完全でない */
-    if (server_port == -1 || server_name[0] == 0)
-        return -1;
-
-    return 0;
-}
-
-int connect_chuukei_server(char *prf_name)
-{
-#ifdef WINDOWS
-    WSADATA wsaData;
-    WORD wVersionRequested = (WORD)((1) | (1 << 8));
-#endif
-
-    struct sockaddr_in ask;
-    struct hostent *hp;
-
-    if (read_chuukei_prf(prf_name) < 0) {
-        printf("Wrong prf file\n");
-        return -1;
-    }
-
-    if (init_buffer() < 0) {
-        printf("Malloc error\n");
-        return -1;
-    }
-
-#ifdef WINDOWS
-    if (WSAStartup(wVersionRequested, &wsaData)) {
-        msg_print("Report: WSAStartup failed.");
-        return -1;
-    }
-#endif
-
-    printf("server = %s\nport = %d\n", server_name, server_port);
-
-    if ((hp = gethostbyname(server_name)) != NULL) {
-        memset(&ask, 0, sizeof(ask));
-        memcpy(&ask.sin_addr, hp->h_addr_list[0], hp->h_length);
-    } else {
-        if ((ask.sin_addr.s_addr = inet_addr(server_name)) == 0) {
-            printf("Bad hostname\n");
-            return -1;
-        }
-    }
-
-    ask.sin_family = AF_INET;
-    ask.sin_port = htons((unsigned short)server_port);
-
-#ifndef WINDOWS
-    if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
-#else
-    if ((sd = socket(PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
-#endif
-    {
-        printf("Can't create socket\n");
-        return -1;
-    }
-
-    if (connect(sd, (struct sockaddr *)&ask, sizeof(ask)) < 0) {
-        close(sd);
-        printf("Can't connect %s port %d\n", server_name, server_port);
-        return -1;
-    }
-
-    return 0;
-}
-#endif /* CHUUKEI */
 
 /* strが同じ文字の繰り返しかどうか調べる */
 static bool string_is_repeat(char *str, int len)
@@ -496,12 +273,7 @@ void prepare_movie_hooks(player_type *player_ptr)
 
     if (movie_mode) {
         movie_mode = 0;
-#ifdef CHUUKEI
-        if (!chuukei_server)
-            disable_chuukei_server();
-#else
         disable_chuukei_server();
-#endif
         fd_close(movie_fd);
         msg_print(_("録画を終了しました。", "Stopped recording."));
     } else {
@@ -536,58 +308,11 @@ void prepare_movie_hooks(player_type *player_ptr)
             }
 
             movie_mode = 1;
-#ifdef CHUUKEI
-            if (!chuukei_server)
-                prepare_chuukei_hooks();
-#else
             prepare_chuukei_hooks();
-#endif
             do_cmd_redraw(player_ptr);
         }
     }
 }
-
-#ifdef CHUUKEI
-static int handle_timestamp_data(int timestamp)
-{
-    long current_time = get_current_time();
-
-    /* 描画キューは空かどうか？ */
-    if (fresh_queue.tail == fresh_queue.next) {
-        /* バッファリングし始めの時間を保存しておく */
-        epoch_time = current_time;
-        epoch_time += browse_delay;
-        epoch_time -= timestamp;
-        time_diff = current_time - timestamp;
-    }
-
-    /* 描画キューに保存し、保存位置を進める */
-    fresh_queue.time[fresh_queue.tail] = timestamp;
-    fresh_queue.tail++;
-
-    /* キューの最後尾に到達したら先頭に戻す */
-    fresh_queue.tail %= FRESH_QUEUE_SIZE;
-
-    if (fresh_queue.tail == fresh_queue.next) {
-        /* 描画キュー溢れ */
-        prt("描画タイミングキューが溢れました。サーバとの接続を切断します。", 0, 0);
-        inkey();
-        close(sd);
-
-        return -1;
-    }
-
-    /* プレイ側とのディレイを調整 */
-    if (time_diff != current_time - timestamp) {
-        long old_time_diff = time_diff;
-        time_diff = current_time - timestamp;
-        epoch_time -= (old_time_diff - time_diff);
-    }
-
-    /* Success */
-    return 0;
-}
-#endif /* CHUUKEI */
 
 static int handle_movie_timestamp_data(int timestamp)
 {
@@ -613,47 +338,6 @@ static int handle_movie_timestamp_data(int timestamp)
     /* Success */
     return 0;
 }
-
-#ifdef CHUUKEI
-static int read_sock(void)
-{
-    static char recv_buf[RECVBUF_SIZE];
-    static int remain_bytes = 0;
-    int recv_bytes;
-    int i;
-
-    /* 前回残ったデータの後につづけて配信サーバからデータ受信 */
-    recv_bytes = recv(sd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes, 0);
-
-    if (recv_bytes <= 0)
-        return -1;
-
-    /* 前回残ったデータ量に今回読んだデータ量を追加 */
-    remain_bytes += recv_bytes;
-
-    for (i = 0; i < remain_bytes; i++) {
-        /* データのくぎり('\0')を探す */
-        if (recv_buf[i] == '\0') {
-            /* 'd'で始まるデータ(タイムスタンプ)の場合は
-               描画キューに保存する処理を呼ぶ */
-            if ((recv_buf[0] == 'd') && (handle_timestamp_data(atoi(recv_buf + 1)) < 0))
-                return -1;
-
-            /* 受信データを保存 */
-            if (insert_ringbuf(recv_buf) < 0)
-                return -1;
-
-            /* 次のデータ移行をrecv_bufの先頭に移動 */
-            memmove(recv_buf, recv_buf + i + 1, remain_bytes - i - 1);
-
-            remain_bytes -= (i + 1);
-            i = 0;
-        }
-    }
-
-    return 0;
-}
-#endif
 
 static int read_movie_file(void)
 {
@@ -854,65 +538,10 @@ static bool flush_ringbuf_client(void)
     return TRUE;
 }
 
-#ifdef CHUUKEI
-void browse_chuukei()
-{
-    fd_set fdset;
-    struct timeval tv;
-
-    tv.tv_sec = 0;
-    tv.tv_usec = WAIT;
-
-    FD_ZERO(&fdset);
-    FD_SET(sd, &fdset);
-
-    term_clear();
-    term_fresh();
-    term_xtra(TERM_XTRA_REACT, 0);
-
-    while (TRUE) {
-        fd_set tmp_fdset;
-        struct timeval tmp_tv;
-
-        if (flush_ringbuf_client())
-            continue;
-
-        tmp_fdset = fdset;
-        tmp_tv = tv;
-
-        /* ソケットにデータが来ているかどうか調べる */
-        select(sd + 1, &tmp_fdset, (fd_set *)NULL, (fd_set *)NULL, &tmp_tv);
-        if (FD_ISSET(sd, &tmp_fdset) == 0) {
-            term_xtra(TERM_XTRA_FLUSH, 0);
-            continue;
-        }
-
-        if (read_sock() < 0) {
-            chuukei_client = FALSE;
-        }
-
-        /* 接続が切れた状態で書くべきデータがなくなっていたら終了 */
-        if (!chuukei_client && fresh_queue.next == fresh_queue.tail)
-            break;
-    }
-}
-#endif /* CHUUKEI */
-
-void prepare_browse_movie_aux(concptr filename)
+void prepare_browse_movie_without_path_build(concptr filename)
 {
     movie_fd = fd_open(filename, O_RDONLY);
-
-    browsing_movie = TRUE;
-
     init_buffer();
-}
-
-void prepare_browse_movie(concptr filename)
-{
-    char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-
-    prepare_browse_movie_aux(buf);
 }
 
 void browse_movie(void)
@@ -936,3 +565,12 @@ void browse_movie(void)
         }
     }
 }
+
+#ifndef WINDOWS
+void prepare_browse_movie_with_path_build(concptr filename)
+{
+    char buf[1024];
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
+    prepare_browse_movie_aux(buf);
+}
+#endif

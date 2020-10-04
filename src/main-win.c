@@ -103,7 +103,7 @@
 #include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
-#include "io/chuukei.h"
+#include "io/record-play-movie.h"
 #include "io/files-util.h"
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"
@@ -2249,7 +2249,7 @@ static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
     strcat(savefile, s);
     validate_file(savefile);
     game_in_progress = TRUE;
-    play_game(player_ptr, FALSE);
+    play_game(player_ptr, FALSE, FALSE);
 }
 
 /*
@@ -2268,7 +2268,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         } else {
             game_in_progress = TRUE;
             term_flush();
-            play_game(player_ptr, TRUE);
+            play_game(player_ptr, TRUE, FALSE);
             quit(NULL);
         }
 
@@ -2294,7 +2294,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
                 validate_file(savefile);
                 game_in_progress = TRUE;
                 term_flush();
-                play_game(player_ptr, FALSE);
+                play_game(player_ptr, FALSE, FALSE);
                 quit(NULL);
             }
         }
@@ -2370,8 +2370,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
             if (GetOpenFileName(&ofn)) {
-                prepare_browse_movie_aux(savefile);
-                play_game(player_ptr, FALSE);
+                prepare_browse_movie_without_path_build(savefile);
+                play_game(player_ptr, FALSE, TRUE);
                 quit(NULL);
                 return;
             }
@@ -3583,53 +3583,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
     term_activate(term_screen);
     init_angband(p_ptr, process_autopick_file_command);
     initialized = TRUE;
-#ifdef CHUUKEI
-    if (lpCmdLine[0] == '-') {
-        switch (lpCmdLine[1]) {
-        case 'p':
-        case 'P': {
-            if (!lpCmdLine[2])
-                break;
-            chuukei_server = TRUE;
-            if (connect_chuukei_server(&lpCmdLine[2]) < 0) {
-                msg_print("connect fail");
-                return 0;
-            }
-            msg_print("connect");
-            msg_print(NULL);
-            break;
-        }
-
-        case 'c':
-        case 'C': {
-            if (!lpCmdLine[2])
-                break;
-            chuukei_client = TRUE;
-            connect_chuukei_server(&lpCmdLine[2]);
-            play_game(player_ptr, FALSE);
-            quit(NULL);
-            return 0;
-        }
-        case 'X':
-        case 'x': {
-            if (!lpCmdLine[2])
-                break;
-            prepare_browse_movie(&lpCmdLine[2]);
-            play_game(player_ptr, FALSE);
-            quit(NULL);
-            return 0;
-        }
-        }
-    }
-#endif
-
-#ifdef CHUUKEI
-    if (!chuukei_server)
-        check_for_save_file(lpCmdLine);
-#else
     check_for_save_file(p_ptr, lpCmdLine);
-#endif
-
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
     term_fresh();
     while (GetMessage(&msg, NULL, 0, 0)) {

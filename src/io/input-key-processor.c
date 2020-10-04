@@ -62,7 +62,7 @@
 #include "game-option/input-options.h"
 #include "game-option/runtime-arguments.h"
 #include "io-dump/random-art-info-dumper.h"
-#include "io/chuukei.h"
+#include "io/record-play-movie.h"
 #include "io/command-repeater.h"
 #include "io/files-util.h"
 #include "io/input-key-requester.h" // todo 相互依存している、後で何とかする.
