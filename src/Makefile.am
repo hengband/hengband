@@ -296,7 +296,6 @@ hengband_SOURCES = \
 	inventory/player-inventory.c inventory/player-inventory.h \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
 	\
-	io/chuukei.c io/chuukei.h \
 	io/command-repeater.c io/command-repeater.h \
 	io/cursor.c io/cursor.h \
 	io/exit-panic.c io/exit-panic.h \
@@ -310,6 +309,7 @@ hengband_SOURCES = \
 	io/mutations-dump.c io/mutations-dump.h \
 	io/pref-file-expressor.c io/pref-file-expressor.h \
 	io/read-pref-file.c io/read-pref-file.h \
+	io/record-play-movie.c io/record-play-movie.h \
 	io/report.c io/report.h \
 	io/screen-util.c io/screen-util.h \
 	io/signal-handlers.c io/signal-handlers.h \

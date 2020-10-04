@@ -1,4 +1,5 @@
 ﻿#include "player/player-status-resist.h"
+#include "player/mimic-info-table.h"
 #include "art-definition/art-sword-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -169,13 +170,37 @@ PERCENTAGE calc_pois_damage_rate(player_type *creature_ptr)
 
 PERCENTAGE calc_nuke_damage_rate(player_type *creature_ptr)
 {
+
     PERCENTAGE per = 100;
     if (creature_ptr->resist_pois)
-        per = (per + 2) / 3;
+        per = (2 * per + 2) / 5;
     if (is_oppose_pois(creature_ptr))
-        per = (per + 2) / 3;
+        per = (2 * per + 2) / 5;
 
     return per;
+}
+
+PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    (mode); // unused
+    if (creature_ptr->mimic_form) {
+        if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) {
+            return 0;
+        }
+    }
+
+    switch (creature_ptr->prace) {
+    case RACE_GOLEM:
+    case RACE_SKELETON:
+    case RACE_ZOMBIE:
+    case RACE_VAMPIRE:
+    case RACE_BALROG:
+    case RACE_SPECTRE:
+        return 0;
+        break;
+    }
+
+    return 100;
 }
 
 PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
@@ -320,7 +345,6 @@ PERCENTAGE calc_time_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
     if (creature_ptr->resist_time) {
         per *= 400;
         per /= randrate(4, 7, mode);
-        return;
     }
 
     return per;
@@ -343,5 +367,15 @@ PERCENTAGE calc_hell_fire_damage_rate(player_type *creature_ptr, rate_calc_type_
     PERCENTAGE per = 100;
     if (creature_ptr->align > 10)
         per *= 2;
+    return per;
+}
+
+PERCENTAGE calc_gravity_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    (mode); // unused
+    PERCENTAGE per = 100;
+    if (creature_ptr->levitation) {
+        per = (per * 2) / 3;
+    }
     return per;
 }

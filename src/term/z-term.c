@@ -1841,10 +1841,6 @@ errr term_inkey(char *ch, bool wait, bool take)
     /* Assume no key */
     (*ch) = '\0';
 
-#ifdef CHUUKEI
-    flush_ringbuf();
-#endif
-
     /* get bored */
     if (!Term->never_bored) {
         /* Process random events */
