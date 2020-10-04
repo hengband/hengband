@@ -13833,8 +13833,8 @@ D:古の鎧に身を包んだ者で、ヘルメットの下から地獄の劫火
 D:睨んでいる。
 
 #JZ#
-N:732:『ブル・ゲイツ』
-E:Bull Gates
+N:732:リンゴ嫌い『ブル・ゲイツ』
+E:Bull Gates, the applephobia
 G:p:D
 I:140:25d100:40:90:0
 W:52:3:0:18000:0:0
@@ -18832,20 +18832,22 @@ D:地獄の軍勢の指揮官であると言われている。
 N:921:インターネット・エクスプローダー
 E:Internet Exploder
 G:e:B
-I:140:20d20:25:0:1
-W:50:4:0:1500:0:0
-B:EXPLODE:LOSE_ALL:10d20
-F:RAND_25 | EMPTY_MIND | REFLECTING | FORCE_SLEEP | CAN_SPEAK |
-F:REGENERATE | AURA_ELEC | BASH_DOOR | KILL_BODY | EVIL |
-F:NONLIVING | IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | 
-F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN |
-F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE |
-F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY |
-S:1_IN_3 |
-S:HOLD | BLIND | CONF | SCARE | SLOW
-D:$This is Bull Gates's most devastating weapon, propagating fear and ruin
-D:$ throughout the world.
-D:ブル・ゲイツの究極兵器であり、全世界に破滅をもたらす恐怖の存在だ。
+I:80:20d20:25:0:1
+W:30:1:0:1500:0:0
+B:EXPLODE:LOSE_INT:10d20
+F:RAND_25 | RAND_50 | STUPID | EMPTY_MIND | REFLECTING | FORCE_SLEEP | CAN_SPEAK
+F:BASH_DOOR | EVIL | NONLIVING | IM_ACID | IM_FIRE | IM_COLD | IM_POIS
+F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
+F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE
+F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY
+S:1_IN_3 | BLINK | HOLD | BLIND | CONF | SCARE
+D:$This was Bull Gates's most devastating weapon once,
+D:$ propagating fear and ruin throughout all multiverse.
+D:$  Its weaknesses are cyber weapons named CSS and JavaScript,
+D:$ but neither exists in this universe.
+D:かつてはブル・ゲイツの究極兵器であり、
+D:全ての多元世界に破滅をもたらす恐怖の存在だった。
+D:弱点はCSSにJavaScriptと呼ばれる電脳兵器だが、どちらもこの世界には存在しない。
 
 N:922:ピカチャウ
 E:Electric rat
@@ -22767,12 +22769,12 @@ S:S_HI_UNDEAD | S_DEMON | DISPEL
 D:$Undoubtedly, it was this man who released the cursed artifacts
 D:$ and called upon the great old ones who came from the outside world
 D:$ and settled in Llouis.
-D:$  It is said that his book, Necronomicon, namely stargate to the abyss,
+D:$  It is said that his book, Al Azif, namely stargate to the abyss,
 D:$ still sleeps somewhere in the land.
 D:呪われしアーティファクトを世に解き放ち、
 D:外界より来たりてルルイエに住み着いた旧支配者達を呼び寄せたのは、
 D:紛れもなくこの男である。
-D:彼の著した深淵の書『ネクロノミコン』は、今もこの地のどこかに眠ると云う。
+D:彼の著した深淵の書『アル・アジフ』は、今もこの地のどこかに眠ると云う。
 
 N:1136:スケイヴン・ウォーリア
 E:Skaven warrior
@@ -24612,6 +24614,7 @@ W:15:1:0:350:0:0
 B:SLASH:HURT:2d11
 B:CRUSH:HURT:1d13
 F:UNIQUE | FORCE_MAXHP | HUMAN | GOOD | NO_FEAR | CAN_SPEAK
+F:ONLY_ITEM | DROP_4D2
 D:$Hey, girlfriend came to me...
 D:$ (inciting words in Monthly Choi Yong Soo; issue number is unknown)
 D:彼女ができました…（「月刊チェヨンス」アオリ文、号不明）
@@ -24686,3 +24689,73 @@ F:IM_FIRE | NO_CONF | NO_SLEEP | EVIL | DEMON | FORCE_MAXHP | RES_TELE
 S:1_IN_2 | BO_PLAS
 D:$A major demon lord with a goat's head, tough to kill.
 D:山羊の頭を持つ高位の魔王で、簡単には倒せない。
+
+N:1245:エッヂ
+E:Chromium edge
+G:e:b
+I:140:20d20:25:0:1
+W:50:1:0:1500:0:0
+B:SLASH:HURT:20d1
+B:SLASH:HURT:20d1
+B:SLASH:HURT:20d1
+B:SLASH:HURT:20d1
+F:RAND_25 | SMART | REFLECTING | FORCE_SLEEP | CAN_SPEAK
+F:REGENERATE | AURA_ELEC | BASH_DOOR | EVIL
+F:NONLIVING | IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
+F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
+F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE
+F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY
+S:1_IN_3 | BLINK | HOLD | BLIND | CONF | SCARE
+D:$Bull Gates' new ultimate weapon.
+D:$  It has been eerily enhanced from Internet Exploder
+D:$ with a great deal of help from the world-dominant conglomerates.
+D:ブル・ゲイツの新たなる究極兵器だ。
+D:それは世界を牛耳るコングロマリットから多額の援助を得て、
+D:インターネット・エクスプローダーから不気味なまでに強化されている。
+
+# phorn = (phone + horn) / 2
+N:1246:アイ・ホーン
+E:Eye phorn
+G:e:o
+I:110:20d20:25:0:1
+W:50:1:0:1500:0:0
+B:GAZE:PARALYZE:5d5
+B:TOUCH:TERRIFY:5d5
+B:SPIT:CONFUSE:5d5
+B:SHOW:BLIND:5d5
+F:SMART | FRIENDS | FORCE_SLEEP
+F:IM_POIS | RES_SOUN | RES_PLAS | RES_LITE | RES_DARK | RES_NETH
+F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
+S:1_IN_5 | BR_SOUN | BR_PLAS
+D:$It is the supreme weapon manufactured by Jobz in response to the plan
+D:$ to conquer the world by Bull Gates' weapon "Internet Exploder".
+D:$  It counters their evil desires with loud noises
+D:$ and electromagnetic waves that cause all electronic devices to malfunction.
+D:ブル・ゲイツの究極兵器「インターネット・エクスプローダー」による
+D:世界征服計画に対抗してジョーブツが製造した至高の兵器だ。
+D:それはけたたましい音と、あらゆる電子機器を誤動作させる電磁波で
+D:彼らの邪悪な欲望に対抗している。
+
+# Jobz (成仏: Joubutsu) means 'going to heaven' and 'attaining Buddhahood'.
+# Bull Gates is evil so he is evil also.
+N:1247:ゲイツの宿敵『スティーヴン・ジョーブツ』
+E:Steven Jobz, the rival of Gates
+G:p:s
+I:140:25d100:40:90:0
+W:52:5:0:20000:0:0
+B:INSULT:SUPERHURT:10d10
+B:INSULT:SUPERHURT:10d10
+B:INSULT:SUPERHURT:10d10
+B:INSULT:SUPERHURT:10d10
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | UNDEAD | HAS_LITE_1
+F:KILL_BODY | BASH_DOOR | CAN_SPEAK
+F:IM_ACID | RES_NETH | RES_NEXU | RES_CHAO
+S:1_IN_5 | BA_ACID |  BA_ELEC | BA_POIS | BA_CHAO | BA_NETH
+S:S_KIN | BLIND | SCARE | CONF
+D:$This devout Buddhist created every information apples
+D:$ with LSD's inspiration.
+D:$  His slogan is "I only accept the usage I envisioned!!
+D:$ I will lock all other usages!".
+D:この敬虔な仏教徒は幻覚によるインスピレーションであらゆる品種のリンゴを作り上げた。
+D:合言葉は「オレが想定した使い方しか認めない！
+D:　他の使い方は全てロックしてやる！！」である。
