@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include "monster-attack/monster-attack-types.h"
-#include "monster-attack/monster-attack-effect.h"
 #include "system/angband.h"
 
 /*
@@ -12,6 +10,8 @@
  *	- Damage Dice
  *	- Damage Sides
  */
+typedef enum rbm_type rbm_type;
+typedef enum rbe_type rbe_type;
 typedef struct monster_blow {
     rbm_type method;
     rbe_type effect;
@@ -73,7 +73,7 @@ typedef struct monster_race {
     ARTIFACT_IDX artifact_id[4]; /* 特定アーティファクトドロップID */
     RARITY artifact_rarity[4]; /* 特定アーティファクトレア度 */
     PERCENTAGE artifact_percent[4]; /* 特定アーティファクトドロップ率 */
-    PERCENTAGE arena_ratio; /* アリーナの評価修正値(%基準 / 0=100%) / Arena */
+    PERCENTAGE arena_ratio; /* モンスター闘技場の掛け金倍率修正値(%基準 / 0=100%) / The adjustment ratio for gambling monster */
     MONRACE_IDX next_r_idx;
     EXP next_exp;
     DEPTH level; /* Level of creature */
