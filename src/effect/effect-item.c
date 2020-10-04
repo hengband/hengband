@@ -34,7 +34,7 @@
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
-bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, spell_type typ)
+bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
     grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 

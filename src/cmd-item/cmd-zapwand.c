@@ -246,7 +246,7 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
     case SV_WAND_DRAGON_BREATH: {
         HIT_POINT dam;
-        spell_type typ;
+        EFFECT_ID typ;
 
         switch (randint1(5)) {
         case 1:

@@ -41,7 +41,7 @@ errr parse_v_info(char *buf, angband_header *head)
         if (!add_text(&v_ptr->text, head, s, FALSE))
             return 7;
     } else if (buf[0] == 'X') {
-        spell_type typ, rat, hgt, wid;
+        EFFECT_ID typ, rat, hgt, wid;
         if (4 != sscanf(buf + 2, "%d:%d:%d:%d", &typ, &rat, &hgt, &wid))
             return 1;
 

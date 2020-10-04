@@ -571,7 +571,7 @@ static void postprocess_spell(player_type *caster_ptr, effect_monster_type *em_p
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
 bool affect_monster(
-    player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, spell_type effect_type, BIT_FLAGS flag, bool see_s_msg)
+    player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {
     effect_monster_type tmp_effect;
     effect_monster_type *em_ptr = initialize_effect_monster(caster_ptr, &tmp_effect, who, r, y, x, dam, effect_type, flag, see_s_msg);
