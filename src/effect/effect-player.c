@@ -26,7 +26,8 @@
 #include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
 
-/*! 盲目時の代替メッセージ // TODO: 各種の盲目時メッセージからまとめ上げて統合 */
+/*! 盲目時の代替メッセージ // TODO: 各種の盲目時メッセージからまとめ上げて統合
+*/
 concptr blind_spell_effect_messages[MAX_GF] =
 {
     "", // GF_NONE = 0,
