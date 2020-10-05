@@ -269,7 +269,10 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!monster_csleep_remaining(m_ptr) || ((target_ptr->cursed & TRC_AGGRAVATE) == 0))
+    if (!monster_csleep_remaining(m_ptr))
+        return TRUE;
+
+    if ((target_ptr->cursed & TRC_AGGRAVATE) == 0)
         return FALSE;
 
     (void)set_monster_csleep(target_ptr, m_idx, 0);
