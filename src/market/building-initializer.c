@@ -1,4 +1,4 @@
-#include "market/building-initializer.h"
+ï»¿#include "market/building-initializer.h"
 #include "floor/floor-town.h"
 #include "market/articles-on-sale.h"
 #include "object/object-kind.h"
@@ -9,9 +9,9 @@
 #include "system/object-type-definition.h"
 
 /*!
- * @brief ’¬î•ñ“Ç‚İ‚İ‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief ç”ºæƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize town array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_towns(void)
 {
@@ -24,8 +24,8 @@ errr init_towns(void)
                 continue;
 
             /*
-             * ‰ä‚ª‰Æ‚ª 20 ƒy[ƒW‚Ü‚Åg‚¦‚é‰B‚µ‹@”\‚Ì‚½‚ß‚Ì€”õB
-             * ƒIƒvƒVƒ‡ƒ“‚ª—LŒø‚Å‚à‚»‚¤‚Å‚È‚­‚Ä‚àˆê‰ƒXƒy[ƒX‚ğì‚Á‚Ä‚¨‚­B
+             * æˆ‘ãŒå®¶ãŒ 20 ãƒšãƒ¼ã‚¸ã¾ã§ä½¿ãˆã‚‹éš ã—æ©Ÿèƒ½ã®ãŸã‚ã®æº–å‚™ã€‚
+             * ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒæœ‰åŠ¹ã§ã‚‚ãã†ã§ãªãã¦ã‚‚ä¸€å¿œã‚¹ãƒšãƒ¼ã‚¹ã‚’ä½œã£ã¦ãŠãã€‚
              */
             if (j == STORE_HOME) {
                 store_ptr->stock_size = STORE_INVEN_MAX * 10;
@@ -63,9 +63,9 @@ errr init_towns(void)
 }
 
 /*!
- * @brief “Xî•ñ‰Šú‰»‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief åº—æƒ…å ±åˆæœŸåŒ–ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize buildings
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_buildings(void)
 {

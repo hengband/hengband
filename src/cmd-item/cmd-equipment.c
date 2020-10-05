@@ -1,4 +1,4 @@
-#include "cmd-item/cmd-equipment.h"
+ï»¿#include "cmd-item/cmd-equipment.h"
 #include "action/weapon-shield.h"
 #include "art-definition/art-protector-types.h"
 #include "autopick/autopick.h"
@@ -6,7 +6,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
-#include "dungeon/quest.h" // todo ˆá˜aŠ´A‰½ŒÌƒAƒCƒeƒ€‚ğ‘•”õ‚·‚é‚ÆƒNƒGƒXƒg‚Ì¬Œ÷”»’è‚ª‘–‚é‚Ì‚©H.
+#include "dungeon/quest.h" // todo é•å’Œæ„Ÿã€ä½•æ•…ã‚¢ã‚¤ãƒ†ãƒ ã‚’è£…å‚™ã™ã‚‹ã¨ã‚¯ã‚¨ã‚¹ãƒˆã®æˆåŠŸåˆ¤å®šãŒèµ°ã‚‹ã®ã‹ï¼Ÿ.
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -43,8 +43,8 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief ‘•”õˆê——‚ğ•\¦‚·‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ / Display equipment
- * @return ‚È‚µ
+ * @brief è£…å‚™ä¸€è¦§ã‚’è¡¨ç¤ºã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ / Display equipment
+ * @return ãªã—
  */
 void do_cmd_equip(player_type *creature_ptr)
 {
@@ -58,7 +58,7 @@ void do_cmd_equip(player_type *creature_ptr)
     WEIGHT weight = calc_inventory_weight(creature_ptr);
     WEIGHT weight_lim = calc_weight_limit(creature_ptr);
 #ifdef JP
-    sprintf(out_val, "‘•”õF ‡Œv %3d.%1d kg (ŒÀŠE‚Ì%ld%%) ƒRƒ}ƒ“ƒh: ", (int)lbtokg1(weight), (int)lbtokg2(weight), (long int)((weight * 100) / weight_lim));
+    sprintf(out_val, "è£…å‚™ï¼š åˆè¨ˆ %3d.%1d kg (é™ç•Œã®%ld%%) ã‚³ãƒãƒ³ãƒ‰: ", (int)lbtokg1(weight), (int)lbtokg2(weight), (long int)((weight * 100) / weight_lim));
 #else
     sprintf(out_val, "Equipment: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(weight / 10), (int)(weight % 10),
         (long int)((weight * 100) / weight_lim);
@@ -82,9 +82,9 @@ void do_cmd_equip(player_type *creature_ptr)
 bool select_ring_slot = FALSE;
 
 /*!
- * @brief ‘•”õ‚·‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ / Wield or wear a single item from the pack or floor
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief è£…å‚™ã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ / Wield or wear a single item from the pack or floor
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void do_cmd_wield(player_type *creature_ptr)
 {
@@ -99,8 +99,8 @@ void do_cmd_wield(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_NONE);
 
     item_tester_hook = item_tester_hook_wear;
-    concptr q = _("‚Ç‚ê‚ğ‘•”õ‚µ‚Ü‚·‚©? ", "Wear/Wield which item? ");
-    concptr s = _("‘•”õ‰Â”\‚ÈƒAƒCƒeƒ€‚ª‚È‚¢B", "You have nothing you can wear or wield.");
+    concptr q = _("ã©ã‚Œã‚’è£…å‚™ã—ã¾ã™ã‹? ", "Wear/Wield which item? ");
+    concptr s = _("è£…å‚™å¯èƒ½ãªã‚¢ã‚¤ãƒ†ãƒ ãŒãªã„ã€‚", "You have nothing you can wear or wield.");
     o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
     if (!o_ptr)
         return;
@@ -113,8 +113,8 @@ void do_cmd_wield(player_type *creature_ptr)
     case TV_CARD:
         if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
             item_tester_hook = item_tester_hook_melee_weapon;
-            q = _("‚Ç‚¿‚ç‚Ì•Ší‚Ææ‚è‘Ö‚¦‚Ü‚·‚©?", "Replace which weapon? ");
-            s = _("‚¨‚Á‚ÆB", "Oops.");
+            q = _("ã©ã¡ã‚‰ã®æ­¦å™¨ã¨å–ã‚Šæ›¿ãˆã¾ã™ã‹?", "Replace which weapon? ");
+            s = _("ãŠã£ã¨ã€‚", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0))
                 return;
 
@@ -125,8 +125,8 @@ void do_cmd_wield(player_type *creature_ptr)
         else if (creature_ptr->inventory_list[INVEN_RARM].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_RARM])
             && creature_ptr->inventory_list[INVEN_LARM].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_LARM])) {
             item_tester_hook = item_tester_hook_mochikae;
-            q = _("‚Ç‚¿‚ç‚Ìè‚É‘•”õ‚µ‚Ü‚·‚©?", "Equip which hand? ");
-            s = _("‚¨‚Á‚ÆB", "Oops.");
+            q = _("ã©ã¡ã‚‰ã®æ‰‹ã«è£…å‚™ã—ã¾ã™ã‹?", "Equip which hand? ");
+            s = _("ãŠã£ã¨ã€‚", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), 0))
                 return;
         }
@@ -137,15 +137,15 @@ void do_cmd_wield(player_type *creature_ptr)
     case TV_POLEARM:
     case TV_SWORD:
         if (slot == INVEN_LARM) {
-            if (!get_check(_("“ñ“—¬‚Åí‚¢‚Ü‚·‚©H", "Dual wielding? ")))
+            if (!get_check(_("äºŒåˆ€æµã§æˆ¦ã„ã¾ã™ã‹ï¼Ÿ", "Dual wielding? ")))
                 slot = INVEN_RARM;
         } else if (!creature_ptr->inventory_list[INVEN_RARM].k_idx && has_melee_weapon(creature_ptr, INVEN_LARM)) {
-            if (!get_check(_("“ñ“—¬‚Åí‚¢‚Ü‚·‚©H", "Dual wielding? ")))
+            if (!get_check(_("äºŒåˆ€æµã§æˆ¦ã„ã¾ã™ã‹ï¼Ÿ", "Dual wielding? ")))
                 slot = INVEN_LARM;
         } else if (creature_ptr->inventory_list[INVEN_LARM].k_idx && creature_ptr->inventory_list[INVEN_RARM].k_idx) {
             item_tester_hook = item_tester_hook_mochikae;
-            q = _("‚Ç‚¿‚ç‚Ìè‚É‘•”õ‚µ‚Ü‚·‚©?", "Equip which hand? ");
-            s = _("‚¨‚Á‚ÆB", "Oops.");
+            q = _("ã©ã¡ã‚‰ã®æ‰‹ã«è£…å‚™ã—ã¾ã™ã‹?", "Equip which hand? ");
+            s = _("ãŠã£ã¨ã€‚", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), 0))
                 return;
 
@@ -156,11 +156,11 @@ void do_cmd_wield(player_type *creature_ptr)
         break;
     case TV_RING:
         if (creature_ptr->inventory_list[INVEN_LEFT].k_idx && creature_ptr->inventory_list[INVEN_RIGHT].k_idx)
-            q = _("‚Ç‚¿‚ç‚Ìw—Ö‚Ææ‚è‘Ö‚¦‚Ü‚·‚©?", "Replace which ring? ");
+            q = _("ã©ã¡ã‚‰ã®æŒ‡è¼ªã¨å–ã‚Šæ›¿ãˆã¾ã™ã‹?", "Replace which ring? ");
         else
-            q = _("‚Ç‚¿‚ç‚Ìè‚É‘•”õ‚µ‚Ü‚·‚©?", "Equip which hand? ");
+            q = _("ã©ã¡ã‚‰ã®æ‰‹ã«è£…å‚™ã—ã¾ã™ã‹?", "Equip which hand? ");
 
-        s = _("‚¨‚Á‚ÆB", "Oops.");
+        s = _("ãŠã£ã¨ã€‚", "Oops.");
         select_ring_slot = TRUE;
         if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) {
             select_ring_slot = FALSE;
@@ -174,7 +174,7 @@ void do_cmd_wield(player_type *creature_ptr)
     if (object_is_cursed(&creature_ptr->inventory_list[slot])) {
         describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], OD_OMIT_PREFIX | OD_NAME_ONLY);
 #ifdef JP
-        msg_format("%s%s‚Íô‚í‚ê‚Ä‚¢‚é‚æ‚¤‚¾B", describe_use(creature_ptr, slot), o_name);
+        msg_format("%s%sã¯å‘ªã‚ã‚Œã¦ã„ã‚‹ã‚ˆã†ã ã€‚", describe_use(creature_ptr, slot), o_name);
 #else
         msg_format("The %s you are %s appears to be cursed.", o_name, describe_use(creature_ptr, slot));
 #endif
@@ -186,7 +186,7 @@ void do_cmd_wield(player_type *creature_ptr)
             || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
         char dummy[MAX_NLEN + 80];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        sprintf(dummy, _("–{“–‚É%s{ô‚í‚ê‚Ä‚¢‚é}‚ğg‚¢‚Ü‚·‚©H", "Really use the %s {cursed}? "), o_name);
+        sprintf(dummy, _("æœ¬å½“ã«%s{å‘ªã‚ã‚Œã¦ã„ã‚‹}ã‚’ä½¿ã„ã¾ã™ã‹ï¼Ÿ", "Really use the %s {cursed}? "), o_name);
 
         if (!get_check(dummy))
             return;
@@ -196,7 +196,7 @@ void do_cmd_wield(player_type *creature_ptr)
         char dummy[MAX_NLEN + 100];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,
-            _("%s‚ğ‘•”õ‚·‚é‚Æ‹zŒŒ‹S‚É‚È‚è‚Ü‚·B‚æ‚ë‚µ‚¢‚Å‚·‚©H", "%s will transforms you into a vampire permanently when equiped. Do you become a vampire?"),
+            _("%sã‚’è£…å‚™ã™ã‚‹ã¨å¸è¡€é¬¼ã«ãªã‚Šã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ", "%s will transforms you into a vampire permanently when equiped. Do you become a vampire?"),
             o_name);
 
         if (!get_check(dummy))
@@ -213,8 +213,8 @@ void do_cmd_wield(player_type *creature_ptr)
         object_copy(otmp_ptr, switch_o_ptr);
         object_copy(switch_o_ptr, slot_o_ptr);
         object_copy(slot_o_ptr, otmp_ptr);
-        msg_format(_("%s‚ğ%s‚É\‚¦‚È‚¨‚µ‚½B", "You wield %s at %s hand."), switch_name,
-            (slot == INVEN_RARM) ? (left_hander ? _("¶è", "left") : _("‰Eè", "right")) : (left_hander ? _("‰Eè", "right") : _("¶è", "left")));
+        msg_format(_("%sã‚’%sã«æ§‹ãˆãªãŠã—ãŸã€‚", "You wield %s at %s hand."), switch_name,
+            (slot == INVEN_RARM) ? (left_hander ? _("å·¦æ‰‹", "left") : _("å³æ‰‹", "right")) : (left_hander ? _("å³æ‰‹", "right") : _("å·¦æ‰‹", "left")));
         slot = need_switch_wielding;
     }
 
@@ -244,9 +244,9 @@ void do_cmd_wield(player_type *creature_ptr)
     o_ptr->marked |= OM_TOUCHED;
     creature_ptr->equip_cnt++;
 
-#define STR_WIELD_RARM _("%s(%c)‚ğ‰Eè‚É‘•”õ‚µ‚½B", "You are wielding %s (%c) in your right hand.")
-#define STR_WIELD_LARM _("%s(%c)‚ğ¶è‚É‘•”õ‚µ‚½B", "You are wielding %s (%c) in your left hand.")
-#define STR_WIELD_ARMS _("%s(%c)‚ğ—¼è‚Å\‚¦‚½B", "You are wielding %s (%c) with both hands.")
+#define STR_WIELD_RARM _("%s(%c)ã‚’å³æ‰‹ã«è£…å‚™ã—ãŸã€‚", "You are wielding %s (%c) in your right hand.")
+#define STR_WIELD_LARM _("%s(%c)ã‚’å·¦æ‰‹ã«è£…å‚™ã—ãŸã€‚", "You are wielding %s (%c) in your left hand.")
+#define STR_WIELD_ARMS _("%s(%c)ã‚’ä¸¡æ‰‹ã§æ§‹ãˆãŸã€‚", "You are wielding %s (%c) with both hands.")
 
     switch (slot) {
     case INVEN_RARM:
@@ -264,20 +264,20 @@ void do_cmd_wield(player_type *creature_ptr)
 
         break;
     case INVEN_BOW:
-        act = _("%s(%c)‚ğËŒ‚—p‚É‘•”õ‚µ‚½B", "You are shooting with %s (%c).");
+        act = _("%s(%c)ã‚’å°„æ’ƒç”¨ã«è£…å‚™ã—ãŸã€‚", "You are shooting with %s (%c).");
         break;
     case INVEN_LITE:
-        act = _("%s(%c)‚ğŒõŒ¹‚É‚µ‚½B", "Your light source is %s (%c).");
+        act = _("%s(%c)ã‚’å…‰æºã«ã—ãŸã€‚", "Your light source is %s (%c).");
         break;
     default:
-        act = _("%s(%c)‚ğ‘•”õ‚µ‚½B", "You are wearing %s (%c).");
+        act = _("%s(%c)ã‚’è£…å‚™ã—ãŸã€‚", "You are wearing %s (%c).");
         break;
     }
 
     describe_flavor(creature_ptr, o_name, o_ptr, 0);
     msg_format(act, o_name, index_to_label(slot));
     if (object_is_cursed(o_ptr)) {
-        msg_print(_("‚¤‚íI ‚·‚³‚Ü‚¶‚­—â‚½‚¢I", "Oops! It feels deathly cold!"));
+        msg_print(_("ã†ã‚ï¼ ã™ã•ã¾ã˜ãå†·ãŸã„ï¼", "Oops! It feels deathly cold!"));
         chg_virtue(creature_ptr, V_HARMONY, -1);
         o_ptr->ident |= (IDENT_SENSE);
     }
@@ -292,8 +292,8 @@ void do_cmd_wield(player_type *creature_ptr)
 }
 
 /*!
- * @brief ‘•”õ‚ğŠO‚·ƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ / Take off an item
- * @return ‚È‚µ
+ * @brief è£…å‚™ã‚’å¤–ã™ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ / Take off an item
+ * @return ãªã—
  */
 void do_cmd_takeoff(player_type *creature_ptr)
 {
@@ -302,28 +302,28 @@ void do_cmd_takeoff(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
-    concptr q = _("‚Ç‚ê‚ğ‘•”õ‚©‚ç‚Í‚¸‚µ‚Ü‚·‚©? ", "Take off which item? ");
-    concptr s = _("‚Í‚¸‚¹‚é‘•”õ‚ª‚È‚¢B", "You are not wearing anything to take off.");
+    concptr q = _("ã©ã‚Œã‚’è£…å‚™ã‹ã‚‰ã¯ãšã—ã¾ã™ã‹? ", "Take off which item? ");
+    concptr s = _("ã¯ãšã›ã‚‹è£…å‚™ãŒãªã„ã€‚", "You are not wearing anything to take off.");
     o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
     if (!o_ptr)
         return;
 
     if (object_is_cursed(o_ptr)) {
         if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER)) {
-            msg_print(_("‚Ó[‚ŞA‚Ç‚¤‚â‚çô‚í‚ê‚Ä‚¢‚é‚æ‚¤‚¾B", "Hmmm, it seems to be cursed."));
+            msg_print(_("ãµãƒ¼ã‚€ã€ã©ã†ã‚„ã‚‰å‘ªã‚ã‚Œã¦ã„ã‚‹ã‚ˆã†ã ã€‚", "Hmmm, it seems to be cursed."));
             return;
         }
 
         if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && one_in_(7)) || one_in_(4)) {
-            msg_print(_("ô‚í‚ê‚½‘•”õ‚ğ—Í‚Ã‚­‚Å”‚ª‚µ‚½I", "You tore off a piece of cursed equipment by sheer strength!"));
+            msg_print(_("å‘ªã‚ã‚ŒãŸè£…å‚™ã‚’åŠ›ã¥ãã§å‰¥ãŒã—ãŸï¼", "You tore off a piece of cursed equipment by sheer strength!"));
             o_ptr->ident |= (IDENT_SENSE);
             o_ptr->curse_flags = 0L;
             o_ptr->feeling = FEEL_NONE;
             creature_ptr->update |= PU_BONUS;
             creature_ptr->window |= PW_EQUIP;
-            msg_print(_("ô‚¢‚ğ‘Å‚¿”j‚Á‚½B", "You break the curse."));
+            msg_print(_("å‘ªã„ã‚’æ‰“ã¡ç ´ã£ãŸã€‚", "You break the curse."));
         } else {
-            msg_print(_("‘•”õ‚ğŠO‚¹‚È‚©‚Á‚½B", "You couldn't remove the equipment."));
+            msg_print(_("è£…å‚™ã‚’å¤–ã›ãªã‹ã£ãŸã€‚", "You couldn't remove the equipment."));
             take_turn(creature_ptr, 50);
             return;
         }

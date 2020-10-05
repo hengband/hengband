@@ -2177,13 +2177,11 @@
     <ClCompile Include="..\..\src\player\player-status-resist.c">
       <Filter>player</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="..\..\src\io\record-play-movie.c">
       <Filter>io</Filter>
-=======
+    </ClCompile>
     <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.c">
       <Filter>monster-attack</Filter>
->>>>>>> 057055900... [Refactor] #37285 Separated monster-attach-lose.c/h from monster-attack-switcher.c
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4719,13 +4717,11 @@
     <ClInclude Include="..\..\src\player\player-status-resist.h">
       <Filter>player</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="..\..\src\io\record-play-movie.h">
       <Filter>io</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="..\..\src\monster-attack\monster-attack-lose.h">
       <Filter>monster-attack</Filter>
->>>>>>> 057055900... [Refactor] #37285 Separated monster-attach-lose.c/h from monster-attack-switcher.c
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

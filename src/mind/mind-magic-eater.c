@@ -1,4 +1,4 @@
-#include "mind/mind-magic-eater.h"
+ï»¿#include "mind/mind-magic-eater.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
@@ -11,32 +11,32 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief –‚“¹‹ïpt‚Ì–‚—Íæ‚è‚İˆ—
- * @param user_ptr ƒAƒCƒeƒ€‚ğæ‚è‚ŞƒNƒŠ[ƒ`ƒƒ[
- * @return æ‚è‚İ‚ğÀs‚µ‚½‚çTRUEAƒLƒƒƒ“ƒZƒ‹‚µ‚½‚çFALSE‚ğ•Ô‚·
+ * @brief é­”é“å…·è¡“å¸«ã®é­”åŠ›å–ã‚Šè¾¼ã¿å‡¦ç†
+ * @param user_ptr ã‚¢ã‚¤ãƒ†ãƒ ã‚’å–ã‚Šè¾¼ã‚€ã‚¯ãƒªãƒ¼ãƒãƒ£ãƒ¼
+ * @return å–ã‚Šè¾¼ã¿ã‚’å®Ÿè¡Œã—ãŸã‚‰TRUEã€ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸã‚‰FALSEã‚’è¿”ã™
  */
 bool import_magic_device(player_type *user_ptr)
 {
     item_tester_hook = item_tester_hook_recharge;
-    concptr q = _("‚Ç‚ÌƒAƒCƒeƒ€‚Ì–‚—Í‚ğæ‚è‚İ‚Ü‚·‚©? ", "Gain power of which item? ");
-    concptr s = _("–‚—Í‚ğæ‚è‚ß‚éƒAƒCƒeƒ€‚ª‚È‚¢B", "You have nothing to gain power.");
+    concptr q = _("ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã®é­”åŠ›ã‚’å–ã‚Šè¾¼ã¿ã¾ã™ã‹? ", "Gain power of which item? ");
+    concptr s = _("é­”åŠ›ã‚’å–ã‚Šè¾¼ã‚ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ãŒãªã„ã€‚", "You have nothing to gain power.");
     OBJECT_IDX item;
     object_type *o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, 0);
     if (!o_ptr)
         return FALSE;
 
     if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING) {
-        msg_print(_("‚±‚Ìñ‚É‚Í”­“®‚Ìˆ×‚Ì”\—Í‚Í‰½‚à”õ‚í‚Á‚Ä‚¢‚È‚¢‚æ‚¤‚¾B", "This staff doesn't have any magical ability."));
+        msg_print(_("ã“ã®æ–ã«ã¯ç™ºå‹•ã®ç‚ºã®èƒ½åŠ›ã¯ä½•ã‚‚å‚™ã‚ã£ã¦ã„ãªã„ã‚ˆã†ã ã€‚", "This staff doesn't have any magical ability."));
         return FALSE;
     }
 
     if (!object_is_known(o_ptr)) {
-        msg_print(_("ŠÓ’è‚³‚ê‚Ä‚¢‚È‚¢‚Ææ‚è‚ß‚È‚¢B", "You need to identify before absorbing."));
+        msg_print(_("é‘‘å®šã•ã‚Œã¦ã„ãªã„ã¨å–ã‚Šè¾¼ã‚ãªã„ã€‚", "You need to identify before absorbing."));
         return FALSE;
     }
 
     if (o_ptr->timeout) {
-        msg_print(_("[“U’†‚ÌƒAƒCƒeƒ€‚Íæ‚è‚ß‚È‚¢B", "This item is still charging."));
+        msg_print(_("å……å¡«ä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ ã¯å–ã‚Šè¾¼ã‚ãªã„ã€‚", "This item is still charging."));
         return FALSE;
     }
 
@@ -78,7 +78,7 @@ bool import_magic_device(player_type *user_ptr)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(user_ptr, o_name, o_ptr, 0);
-    msg_format(_("%s‚Ì–‚—Í‚ğæ‚è‚ñ‚¾B", "You absorb magic of %s."), o_name);
+    msg_format(_("%sã®é­”åŠ›ã‚’å–ã‚Šè¾¼ã‚“ã ã€‚", "You absorb magic of %s."), o_name);
 
     vary_item(user_ptr, item, -999);
     take_turn(user_ptr, 100);

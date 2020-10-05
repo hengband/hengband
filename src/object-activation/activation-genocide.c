@@ -1,17 +1,17 @@
-#include "object-activation/activation-genocide.h"
+ï»¿#include "object-activation/activation-genocide.h"
 #include "spell-kind/spells-genocide.h"
 #include "view/display-messages.h"
 
 bool activate_genocide(player_type *user_ptr)
 {
-    msg_print(_("[ÂF‚É‹P‚¢‚Ä‚¢‚é...", "It glows deep blue..."));
+    msg_print(_("æ·±é’è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows deep blue..."));
     (void)symbol_genocide(user_ptr, 200, TRUE);
     return TRUE;
 }
 
 bool activate_mass_genocide(player_type *user_ptr)
 {
-    msg_print(_("‚Ğ‚Ç‚­‰s‚¢‰¹‚ª—¬‚êo‚½...", "It lets out a long, shrill note..."));
+    msg_print(_("ã²ã©ãé‹­ã„éŸ³ãŒæµã‚Œå‡ºãŸ...", "It lets out a long, shrill note..."));
     (void)mass_genocide(user_ptr, 200, TRUE);
     return TRUE;
 }

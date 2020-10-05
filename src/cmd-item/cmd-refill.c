@@ -1,4 +1,4 @@
-#include "cmd-item/cmd-refill.h"
+ï»¿#include "cmd-item/cmd-refill.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "floor/floor-object.h"
@@ -18,9 +18,9 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief ƒ‰ƒ“ƒ^ƒ“‚É”R—¿‚ğ‰Á‚¦‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“
+ * @brief ãƒ©ãƒ³ã‚¿ãƒ³ã«ç‡ƒæ–™ã‚’åŠ ãˆã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
  * Refill the players lamp (from the pack or floor)
- * @return ‚È‚µ
+ * @return ãªã—
  */
 static void do_cmd_refill_lamp(player_type *user_ptr)
 {
@@ -28,8 +28,8 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
     object_type *o_ptr;
     object_type *j_ptr;
     item_tester_hook = item_tester_refill_lantern;
-    concptr q = _("‚Ç‚Ì–û‚Â‚Ú‚©‚ç’‚¬‚Ü‚·‚©? ", "Refill with which flask? ");
-    concptr s = _("–û‚Â‚Ú‚ª‚È‚¢B", "You have no flasks of oil.");
+    concptr q = _("ã©ã®æ²¹ã¤ã¼ã‹ã‚‰æ³¨ãã¾ã™ã‹? ", "Refill with which flask? ");
+    concptr s = _("æ²¹ã¤ã¼ãŒãªã„ã€‚", "You have no flasks of oil.");
     o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, 0);
     if (!o_ptr)
         return;
@@ -41,16 +41,16 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
     j_ptr = &user_ptr->inventory_list[INVEN_LITE];
     object_flags(user_ptr, j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4;
-    msg_print(_("ƒ‰ƒ“ƒv‚É–û‚ğ’‚¢‚¾B", "You fuel your lamp."));
-    if (has_flag(flgs, TR_DARK_SOURCE) && (j_ptr->xtra4 > 0)) {
+    msg_print(_("ãƒ©ãƒ³ãƒ—ã«æ²¹ã‚’æ³¨ã„ã ã€‚", "You fuel your lamp."));
+    if ((o_ptr->name2 == EGO_LITE_DARKNESS) && (j_ptr->xtra4 > 0)) {
         j_ptr->xtra4 = 0;
-        msg_print(_("ƒ‰ƒ“ƒv‚ªÁ‚¦‚Ä‚µ‚Ü‚Á‚½I", "Your lamp has gone out!"));
+        msg_print(_("ãƒ©ãƒ³ãƒ—ãŒæ¶ˆãˆã¦ã—ã¾ã£ãŸï¼", "Your lamp has gone out!"));
     } else if (has_flag(flgs, TR_DARK_SOURCE) || has_flag(flgs2, TR_DARK_SOURCE)) {
         j_ptr->xtra4 = 0;
-        msg_print(_("‚µ‚©‚µƒ‰ƒ“ƒv‚Í‘S‚­Œõ‚ç‚È‚¢B", "Curiously, your lamp doesn't light."));
+        msg_print(_("ã—ã‹ã—ãƒ©ãƒ³ãƒ—ã¯å…¨ãå…‰ã‚‰ãªã„ã€‚", "Curiously, your lamp doesn't light."));
     } else if (j_ptr->xtra4 >= FUEL_LAMP) {
         j_ptr->xtra4 = FUEL_LAMP;
-        msg_print(_("ƒ‰ƒ“ƒv‚Ì–û‚Íˆê”t‚¾B", "Your lamp is full."));
+        msg_print(_("ãƒ©ãƒ³ãƒ—ã®æ²¹ã¯ä¸€æ¯ã ã€‚", "Your lamp is full."));
     }
 
     vary_item(user_ptr, item, -1);
@@ -58,9 +58,9 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
 }
 
 /*!
- * @brief ¼–¾‚ğ‘©‚Ë‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“
+ * @brief æ¾æ˜ã‚’æŸã­ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
  * Refuel the players torch (from the pack or floor)
- * @return ‚È‚µ
+ * @return ãªã—
  */
 static void do_cmd_refill_torch(player_type *user_ptr)
 {
@@ -68,8 +68,8 @@ static void do_cmd_refill_torch(player_type *user_ptr)
     object_type *o_ptr;
     object_type *j_ptr;
     item_tester_hook = object_can_refill_torch;
-    concptr q = _("‚Ç‚Ì¼–¾‚Å–¾‚©‚è‚ğ‹­‚ß‚Ü‚·‚©? ", "Refuel with which torch? ");
-    concptr s = _("‘¼‚É¼–¾‚ª‚È‚¢B", "You have no extra torches.");
+    concptr q = _("ã©ã®æ¾æ˜ã§æ˜ã‹ã‚Šã‚’å¼·ã‚ã¾ã™ã‹? ", "Refuel with which torch? ");
+    concptr s = _("ä»–ã«æ¾æ˜ãŒãªã„ã€‚", "You have no extra torches.");
     o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, 0);
     if (!o_ptr)
         return;
@@ -81,27 +81,27 @@ static void do_cmd_refill_torch(player_type *user_ptr)
     j_ptr = &user_ptr->inventory_list[INVEN_LITE];
     object_flags(user_ptr, j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4 + 5;
-    msg_print(_("¼–¾‚ğŒ‹‡‚µ‚½B", "You combine the torches."));
+    msg_print(_("æ¾æ˜ã‚’çµåˆã—ãŸã€‚", "You combine the torches."));
     if (has_flag(flgs, TR_DARK_SOURCE) && (j_ptr->xtra4 > 0)) {
         j_ptr->xtra4 = 0;
-        msg_print(_("¼–¾‚ªÁ‚¦‚Ä‚µ‚Ü‚Á‚½I", "Your torch has gone out!"));
+        msg_print(_("æ¾æ˜ãŒæ¶ˆãˆã¦ã—ã¾ã£ãŸï¼", "Your torch has gone out!"));
     } else if (has_flag(flgs, TR_DARK_SOURCE) || has_flag(flgs2, TR_DARK_SOURCE)) {
         j_ptr->xtra4 = 0;
-        msg_print(_("‚µ‚©‚µ¼–¾‚Í‘S‚­Œõ‚ç‚È‚¢B", "Curiously, your torch doesn't light."));
+        msg_print(_("ã—ã‹ã—æ¾æ˜ã¯å…¨ãå…‰ã‚‰ãªã„ã€‚", "Curiously, your torch doesn't light."));
     } else if (j_ptr->xtra4 >= FUEL_TORCH) {
         j_ptr->xtra4 = FUEL_TORCH;
-        msg_print(_("¼–¾‚Ìõ–½‚Í\•ª‚¾B", "Your torch is fully fueled."));
+        msg_print(_("æ¾æ˜ã®å¯¿å‘½ã¯ååˆ†ã ã€‚", "Your torch is fully fueled."));
     } else
-        msg_print(_("¼–¾‚Í‚¢‚Á‚»‚¤–¾‚é‚­‹P‚¢‚½B", "Your torch glows more brightly."));
+        msg_print(_("æ¾æ˜ã¯ã„ã£ãã†æ˜ã‚‹ãè¼ã„ãŸã€‚", "Your torch glows more brightly."));
 
     vary_item(user_ptr, item, -1);
     user_ptr->update |= PU_TORCH;
 }
 
 /*!
- * @brief ”R—¿‚ğ•â[‚·‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“
+ * @brief ç‡ƒæ–™ã‚’è£œå……ã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
  * Refill the players lamp, or restock his torches
- * @return ‚È‚µ
+ * @return ãªã—
  */
 void do_cmd_refill(player_type *user_ptr)
 {
@@ -111,11 +111,11 @@ void do_cmd_refill(player_type *user_ptr)
         set_action(user_ptr, ACTION_NONE);
 
     if (o_ptr->tval != TV_LITE)
-        msg_print(_("ŒõŒ¹‚ğ‘•”õ‚µ‚Ä‚¢‚È‚¢B", "You are not wielding a light."));
+        msg_print(_("å…‰æºã‚’è£…å‚™ã—ã¦ã„ãªã„ã€‚", "You are not wielding a light."));
     else if (o_ptr->sval == SV_LITE_LANTERN)
         do_cmd_refill_lamp(user_ptr);
     else if (o_ptr->sval == SV_LITE_TORCH)
         do_cmd_refill_torch(user_ptr);
     else
-        msg_print(_("‚±‚ÌŒõŒ¹‚Íõ–½‚ğ‰„‚Î‚¹‚È‚¢B", "Your light cannot be refilled."));
+        msg_print(_("ã“ã®å…‰æºã¯å¯¿å‘½ã‚’å»¶ã°ã›ãªã„ã€‚", "Your light cannot be refilled."));
 }

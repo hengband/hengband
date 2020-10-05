@@ -1,4 +1,4 @@
-#include "object-activation/activation-resistance.h"
+ï»¿#include "object-activation/activation-resistance.h"
 #include "core/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
@@ -13,7 +13,7 @@
 
 bool activate_resistance_elements(player_type *user_ptr)
 {
-    msg_print(_("—lX‚ÈF‚É‹P‚¢‚Ä‚¢‚é...", "It glows many colours..."));
+    msg_print(_("æ§˜ã€…ãªè‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows many colours..."));
     (void)set_oppose_acid(user_ptr, randint1(40) + 40, FALSE);
     (void)set_oppose_elec(user_ptr, randint1(40) + 40, FALSE);
     (void)set_oppose_fire(user_ptr, randint1(40) + 40, FALSE);
@@ -23,15 +23,15 @@ bool activate_resistance_elements(player_type *user_ptr)
 }
 
 /*!
- * @brief ƒAƒVƒbƒhEƒ{[ƒ‹‚ğ•ú‚¿AX‚É_‘Ï«‚ğ“¾‚é
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ”­“®‘ÎÛƒAƒCƒeƒ€‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param name ƒAƒCƒeƒ€–¼
- * @return ƒ{[ƒ‹‚ğ“–‚Ä‚ç‚ê‚é‚È‚ç‚ÎTRUE
+ * @brief ã‚¢ã‚·ãƒƒãƒ‰ãƒ»ãƒœãƒ¼ãƒ«ã‚’æ”¾ã¡ã€æ›´ã«é…¸è€æ€§ã‚’å¾—ã‚‹
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr ç™ºå‹•å¯¾è±¡ã‚¢ã‚¤ãƒ†ãƒ ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param name ã‚¢ã‚¤ãƒ†ãƒ å
+ * @return ãƒœãƒ¼ãƒ«ã‚’å½“ã¦ã‚‰ã‚Œã‚‹ãªã‚‰ã°TRUE
  */
 bool activate_resistance_acid(player_type *user_ptr, object_type *o_ptr, concptr name)
 {
-    msg_format(_("%s‚ª•‚­‹P‚¢‚½...", "The %s grows black."), name);
+    msg_format(_("%sãŒé»’ãè¼ã„ãŸ...", "The %s grows black."), name);
     if ((o_ptr->tval != TV_RING) || (o_ptr->sval != SV_RING_ACID))
         return TRUE;
 
@@ -45,15 +45,15 @@ bool activate_resistance_acid(player_type *user_ptr, object_type *o_ptr, concptr
 }
 
 /*!
- * @brief ƒTƒ“ƒ_[Eƒ{[ƒ‹‚ğ•ú‚¿AX‚É“dŒ‚‘Ï«‚ğ“¾‚é
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ”­“®‘ÎÛƒAƒCƒeƒ€‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param name ƒAƒCƒeƒ€–¼
- * @return ƒ{[ƒ‹‚ğ“–‚Ä‚ç‚ê‚é‚È‚ç‚ÎTRUE
+ * @brief ã‚µãƒ³ãƒ€ãƒ¼ãƒ»ãƒœãƒ¼ãƒ«ã‚’æ”¾ã¡ã€æ›´ã«é›»æ’ƒè€æ€§ã‚’å¾—ã‚‹
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr ç™ºå‹•å¯¾è±¡ã‚¢ã‚¤ãƒ†ãƒ ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param name ã‚¢ã‚¤ãƒ†ãƒ å
+ * @return ãƒœãƒ¼ãƒ«ã‚’å½“ã¦ã‚‰ã‚Œã‚‹ãªã‚‰ã°TRUE
  */
 bool activate_resistance_elec(player_type *user_ptr, object_type *o_ptr, concptr name)
 {
-    msg_format(_("%s‚ªÂ‚­‹P‚¢‚½...", "The %s grows blue."), name);
+    msg_format(_("%sãŒé’ãè¼ã„ãŸ...", "The %s grows blue."), name);
     if ((o_ptr->tval != TV_RING) || (o_ptr->sval != SV_RING_ELEC))
         return TRUE;
 
@@ -67,15 +67,15 @@ bool activate_resistance_elec(player_type *user_ptr, object_type *o_ptr, concptr
 }
 
 /*!
- * @brief ƒtƒ@ƒCƒAEƒ{[ƒ‹‚ğ•ú‚¿AX‚É‰Î‰Š‘Ï«‚ğ“¾‚é
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ”­“®‘ÎÛƒAƒCƒeƒ€‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param name ƒAƒCƒeƒ€–¼
- * @return ƒ{[ƒ‹‚ğ“–‚Ä‚ç‚ê‚é‚È‚ç‚ÎTRUE
+ * @brief ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ¼ãƒ«ã‚’æ”¾ã¡ã€æ›´ã«ç«ç‚è€æ€§ã‚’å¾—ã‚‹
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr ç™ºå‹•å¯¾è±¡ã‚¢ã‚¤ãƒ†ãƒ ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param name ã‚¢ã‚¤ãƒ†ãƒ å
+ * @return ãƒœãƒ¼ãƒ«ã‚’å½“ã¦ã‚‰ã‚Œã‚‹ãªã‚‰ã°TRUE
  */
 bool activate_resistance_fire(player_type *user_ptr, object_type *o_ptr, concptr name)
 {
-    msg_format(_("%s‚ªÔ‚­‹P‚¢‚½...", "The %s grows red."), name);
+    msg_format(_("%sãŒèµ¤ãè¼ã„ãŸ...", "The %s grows red."), name);
     if ((o_ptr->tval != TV_RING) || (o_ptr->sval != SV_RING_FLAMES))
         return TRUE;
 
@@ -89,15 +89,15 @@ bool activate_resistance_fire(player_type *user_ptr, object_type *o_ptr, concptr
 }
 
 /*!
- * @brief ƒAƒCƒXEƒ{[ƒ‹‚ğ•ú‚¿AX‚É—â‹C‘Ï«‚ğ“¾‚é
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ”­“®‘ÎÛƒAƒCƒeƒ€‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param name ƒAƒCƒeƒ€–¼
- * @return ƒ{[ƒ‹‚ğ“–‚Ä‚ç‚ê‚é‚È‚ç‚ÎTRUE
+ * @brief ã‚¢ã‚¤ã‚¹ãƒ»ãƒœãƒ¼ãƒ«ã‚’æ”¾ã¡ã€æ›´ã«å†·æ°—è€æ€§ã‚’å¾—ã‚‹
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr ç™ºå‹•å¯¾è±¡ã‚¢ã‚¤ãƒ†ãƒ ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param name ã‚¢ã‚¤ãƒ†ãƒ å
+ * @return ãƒœãƒ¼ãƒ«ã‚’å½“ã¦ã‚‰ã‚Œã‚‹ãªã‚‰ã°TRUE
  */
 bool activate_resistance_cold(player_type *user_ptr, object_type *o_ptr, concptr name)
 {
-    msg_format(_("%s‚ª”’‚­‹P‚¢‚½...", "The %s grows white."), name);
+    msg_format(_("%sãŒç™½ãè¼ã„ãŸ...", "The %s grows white."), name);
     if ((o_ptr->tval != TV_RING) || (o_ptr->sval != SV_RING_ICE))
         return TRUE;
 
@@ -111,15 +111,15 @@ bool activate_resistance_cold(player_type *user_ptr, object_type *o_ptr, concptr
 }
 
 /*!
- * todo ‰½‚©’Ç‰ÁŒø‰Ê‚ª—~‚µ‚¢
- * @brief “Å‘Ï«‚ğ“¾‚é
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param name ƒAƒCƒeƒ€–¼
- * @return í‚ÉTRUE
+ * todo ä½•ã‹è¿½åŠ åŠ¹æœãŒæ¬²ã—ã„
+ * @brief æ¯’è€æ€§ã‚’å¾—ã‚‹
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param name ã‚¢ã‚¤ãƒ†ãƒ å
+ * @return å¸¸ã«TRUE
  */
 bool activate_resistance_pois(player_type *user_ptr, concptr name)
 {
-    msg_format(_("%s‚ª—Î‚É‹P‚¢‚½...", "The %s grows green."), name);
+    msg_format(_("%sãŒç·‘ã«è¼ã„ãŸ...", "The %s grows green."), name);
     (void)set_oppose_pois(user_ptr, randint1(20) + 20, FALSE);
     return TRUE;
 }

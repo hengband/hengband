@@ -1,4 +1,4 @@
-#include "object-activation/activation-teleport.h"
+ï»¿#include "object-activation/activation-teleport.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "game-option/special-options.h"
@@ -42,7 +42,7 @@ bool activate_escape(player_type *user_ptr)
         (void)stair_creation(user_ptr);
         return TRUE;
     default:
-        if (!get_check(_("‚±‚ÌŠK‚ğ‹‚è‚Ü‚·‚©H", "Leave this level? ")))
+        if (!get_check(_("ã“ã®éšã‚’å»ã‚Šã¾ã™ã‹ï¼Ÿ", "Leave this level? ")))
             return TRUE;
 
         if (autosave_l)
@@ -55,7 +55,7 @@ bool activate_escape(player_type *user_ptr)
 
 bool activate_teleport_level(player_type *user_ptr)
 {
-    if (!get_check(_("–{“–‚É‘¼‚ÌŠK‚ÉƒeƒŒƒ|[ƒg‚µ‚Ü‚·‚©H", "Are you sure? (Teleport Level)")))
+    if (!get_check(_("æœ¬å½“ã«ä»–ã®éšã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã—ã¾ã™ã‹ï¼Ÿ", "Are you sure? (Teleport Level)")))
         return FALSE;
 
     teleport_level(user_ptr, 0);
@@ -64,13 +64,13 @@ bool activate_teleport_level(player_type *user_ptr)
 
 bool activate_dimension_door(player_type *user_ptr)
 {
-    msg_print(_("ŸŒ³‚Ì”à‚ªŠJ‚¢‚½B–Ú“I’n‚ğ‘I‚ñ‚Å‰º‚³‚¢B", "You open a dimensional gate. Choose a destination."));
+    msg_print(_("æ¬¡å…ƒã®æ‰‰ãŒé–‹ã„ãŸã€‚ç›®çš„åœ°ã‚’é¸ã‚“ã§ä¸‹ã•ã„ã€‚", "You open a dimensional gate. Choose a destination."));
     return dimension_door(user_ptr);
 }
 
 bool activate_teleport(player_type *user_ptr)
 {
-    msg_print(_("ü‚è‚Ì‹óŠÔ‚ª˜c‚ñ‚Å‚¢‚é...", "It twists space around you..."));
+    msg_print(_("å‘¨ã‚Šã®ç©ºé–“ãŒæ­ªã‚“ã§ã„ã‚‹...", "It twists space around you..."));
     teleport_player(user_ptr, 100, TELEPORT_SPONTANEOUS);
     return TRUE;
 }

@@ -1,4 +1,4 @@
-#include "spell-realm/spells-nature.h"
+ï»¿#include "spell-realm/spells-nature.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -12,15 +12,15 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief –h‹ï‚ÌŽKŽ~‚ß–hŽ~ˆ—
- * @param caster_ptr ŽKŽ~‚ßŽÀsŽÒ‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @return ƒ^[ƒ“Á”ï‚ð—v‚·‚éˆ—‚ðs‚Á‚½‚È‚ç‚ÎTRUE‚ð•Ô‚·
+ * @brief é˜²å…·ã®éŒ†æ­¢ã‚é˜²æ­¢å‡¦ç†
+ * @param caster_ptr éŒ†æ­¢ã‚å®Ÿè¡Œè€…ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚¿ãƒ¼ãƒ³æ¶ˆè²»ã‚’è¦ã™ã‚‹å‡¦ç†ã‚’è¡Œã£ãŸãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool rustproof(player_type *caster_ptr)
 {
     item_tester_hook = object_is_armour;
-    concptr q = _("‚Ç‚Ì–h‹ï‚ÉŽKŽ~‚ß‚ð‚µ‚Ü‚·‚©H", "Rustproof which piece of armour? ");
-    concptr s = _("ŽKŽ~‚ß‚Å‚«‚é‚à‚Ì‚ª‚ ‚è‚Ü‚¹‚ñB", "You have nothing to rustproof.");
+    concptr q = _("ã©ã®é˜²å…·ã«éŒ†æ­¢ã‚ã‚’ã—ã¾ã™ã‹ï¼Ÿ", "Rustproof which piece of armour? ");
+    concptr s = _("éŒ†æ­¢ã‚ã§ãã‚‹ã‚‚ã®ãŒã‚ã‚Šã¾ã›ã‚“ã€‚", "You have nothing to rustproof.");
     OBJECT_IDX item;
     object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, 0);
     if (o_ptr == NULL)
@@ -31,7 +31,7 @@ bool rustproof(player_type *caster_ptr)
     add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
     if ((o_ptr->to_a < 0) && !object_is_cursed(o_ptr)) {
 #ifdef JP
-        msg_format("%s‚ÍV•i“¯—l‚É‚È‚Á‚½I", o_name);
+        msg_format("%sã¯æ–°å“åŒæ§˜ã«ãªã£ãŸï¼", o_name);
 #else
         msg_format("%s %s look%s as good as new!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
@@ -39,7 +39,7 @@ bool rustproof(player_type *caster_ptr)
     }
 
 #ifdef JP
-    msg_format("%s‚Í•…H‚µ‚È‚­‚È‚Á‚½B", o_name);
+    msg_format("%sã¯è…é£Ÿã—ãªããªã£ãŸã€‚", o_name);
 #else
     msg_format("%s %s %s now protected against corrosion.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "are" : "is"));
 #endif

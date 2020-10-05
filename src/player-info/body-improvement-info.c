@@ -1,120 +1,120 @@
-#include "player-info/body-improvement-info.h"
+ï»¿#include "player-info/body-improvement-info.h"
 #include "player-info/self-info-util.h"
 
-/* todo •À‚Ñ‡‚Ì“s‡‚Å˜A”Ô‚ğ•t‚¯‚éB‚Ü‚Æ‚ß‚Ä‚à—Ç‚¢‚È‚ç‚Ü‚Æ‚ß‚Ä‚µ‚Ü‚¤—\’è */
+/* todo ä¸¦ã³é †ã®éƒ½åˆã§é€£ç•ªã‚’ä»˜ã‘ã‚‹ã€‚ã¾ã¨ã‚ã¦ã‚‚è‰¯ã„ãªã‚‰ã¾ã¨ã‚ã¦ã—ã¾ã†äºˆå®š */
 void set_body_improvement_info_1(player_type *creature_ptr, self_info_type *si_ptr)
 {
     if (is_blessed(creature_ptr))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚Œ‰‚³‚ğŠ´‚¶‚Ä‚¢‚éB", "You feel rightous.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é«˜æ½”ã•ã‚’æ„Ÿã˜ã¦ã„ã‚‹ã€‚", "You feel rightous.");
 
     if (is_hero(creature_ptr))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íƒq[ƒ[‹C•ª‚¾B", "You feel heroic.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ãƒ’ãƒ¼ãƒ­ãƒ¼æ°—åˆ†ã ã€‚", "You feel heroic.");
 
     if (is_shero(creature_ptr))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íí“¬‹¶‚¾B", "You are in a battle rage.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æˆ¦é—˜ç‹‚ã ã€‚", "You are in a battle rage.");
 
     if (creature_ptr->protevil)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í×ˆ«‚È‚é‘¶İ‚©‚çç‚ç‚ê‚Ä‚¢‚éB", "You are protected from evil.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é‚ªæ‚ªãªã‚‹å­˜åœ¨ã‹ã‚‰å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã€‚", "You are protected from evil.");
 
     if (creature_ptr->shield)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í_”é‚ÌƒV[ƒ‹ƒh‚Åç‚ç‚ê‚Ä‚¢‚éB", "You are protected by a mystic shield.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç¥ç§˜ã®ã‚·ãƒ¼ãƒ«ãƒ‰ã§å®ˆã‚‰ã‚Œã¦ã„ã‚‹ã€‚", "You are protected by a mystic shield.");
 
     if (is_invuln(creature_ptr))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŒ»İ‚Â‚©‚È‚¢B", "You are temporarily invulnerable.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç¾åœ¨å‚·ã¤ã‹ãªã„ã€‚", "You are temporarily invulnerable.");
 
     if (creature_ptr->wraith_form)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íˆê“I‚É—H‘Ì‰»‚µ‚Ä‚¢‚éB", "You are temporarily incorporeal.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ä¸€æ™‚çš„ã«å¹½ä½“åŒ–ã—ã¦ã„ã‚‹ã€‚", "You are temporarily incorporeal.");
 }
 
-/* todo •À‚Ñ‡‚Ì“s‡‚Å˜A”Ô‚ğ•t‚¯‚éB‚Ü‚Æ‚ß‚Ä‚à—Ç‚¢‚È‚ç‚Ü‚Æ‚ß‚Ä‚µ‚Ü‚¤—\’è */
+/* todo ä¸¦ã³é †ã®éƒ½åˆã§é€£ç•ªã‚’ä»˜ã‘ã‚‹ã€‚ã¾ã¨ã‚ã¦ã‚‚è‰¯ã„ãªã‚‰ã¾ã¨ã‚ã¦ã—ã¾ã†äºˆå®š */
 void set_body_improvement_info_2(player_type *creature_ptr, self_info_type *si_ptr)
 {
     if (creature_ptr->new_spells)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íô•¶‚â‹F‚è‚ğŠw‚Ô‚±‚Æ‚ª‚Å‚«‚éB", "You can learn some spells/prayers.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å‘ªæ–‡ã‚„ç¥ˆã‚Šã‚’å­¦ã¶ã“ã¨ãŒã§ãã‚‹ã€‚", "You can learn some spells/prayers.");
 
     if (creature_ptr->word_recall)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚·‚®‚É‹AŠÒ‚·‚é‚¾‚ë‚¤B", "You will soon be recalled.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã™ãã«å¸°é‚„ã™ã‚‹ã ã‚ã†ã€‚", "You will soon be recalled.");
 
     if (creature_ptr->alter_reality)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚·‚®‚É‚±‚Ì¢ŠE‚ğ—£‚ê‚é‚¾‚ë‚¤B", "You will soon be altered.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã™ãã«ã“ã®ä¸–ç•Œã‚’é›¢ã‚Œã‚‹ã ã‚ã†ã€‚", "You will soon be altered.");
 
     if (creature_ptr->see_infra)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì“µ‚ÍÔŠOü‚É•qŠ´‚Å‚ ‚éB", "Your eyes are sensitive to infrared light.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®ç³ã¯èµ¤å¤–ç·šã«æ•æ„Ÿã§ã‚ã‚‹ã€‚", "Your eyes are sensitive to infrared light.");
 
     if (creature_ptr->see_inv)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“§–¾‚Èƒ‚ƒ“ƒXƒ^[‚ğŒ©‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can see invisible creatures.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é€æ˜ãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’è¦‹ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can see invisible creatures.");
 
     if (creature_ptr->levitation)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í”ò‚Ô‚±‚Æ‚ª‚Å‚«‚éB", "You can fly.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é£›ã¶ã“ã¨ãŒã§ãã‚‹ã€‚", "You can fly.");
 
     if (creature_ptr->free_act)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í–ƒáƒ’m‚ç‚¸‚ÌŒø‰Ê‚ğ‚Á‚Ä‚¢‚éB", "You have free action.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯éº»ç—ºçŸ¥ã‚‰ãšã®åŠ¹æœã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You have free action.");
 
     if (creature_ptr->regenerate)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‘f‘‚­‘Ì—Í‚ğ‰ñ•œ‚·‚éB", "You regenerate quickly.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç´ æ—©ãä½“åŠ›ã‚’å›å¾©ã™ã‚‹ã€‚", "You regenerate quickly.");
 
     if (creature_ptr->slow_digest)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍH—~‚ª­‚È‚¢B", "Your appetite is small.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é£Ÿæ¬²ãŒå°‘ãªã„ã€‚", "Your appetite is small.");
 }
 
-/* todo •À‚Ñ‡‚Ì“s‡‚Å˜A”Ô‚ğ•t‚¯‚éB‚Ü‚Æ‚ß‚Ä‚à—Ç‚¢‚È‚ç‚Ü‚Æ‚ß‚Ä‚µ‚Ü‚¤—\’è */
+/* todo ä¸¦ã³é †ã®éƒ½åˆã§é€£ç•ªã‚’ä»˜ã‘ã‚‹ã€‚ã¾ã¨ã‚ã¦ã‚‚è‰¯ã„ãªã‚‰ã¾ã¨ã‚ã¦ã—ã¾ã†äºˆå®š */
 void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *si_ptr)
 {
     if (creature_ptr->hold_exp)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í©ŒÈ‚ÌŒoŒ±’l‚ğ‚µ‚Á‚©‚è‚ÆˆÛ‚·‚éB", "You have a firm hold on your experience.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è‡ªå·±ã®çµŒé¨“å€¤ã‚’ã—ã£ã‹ã‚Šã¨ç¶­æŒã™ã‚‹ã€‚", "You have a firm hold on your experience.");
 
     if (creature_ptr->reflect)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í–î‚Ìô•¶‚ğ”½Ë‚·‚éB", "You reflect bolt spells.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯çŸ¢ã®å‘ªæ–‡ã‚’åå°„ã™ã‚‹ã€‚", "You reflect bolt spells.");
 
     if (creature_ptr->sh_fire)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰Š‚ÌƒI[ƒ‰‚É•ï‚Ü‚ê‚Ä‚¢‚éB", "You are surrounded with a fiery aura.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç‚ã®ã‚ªãƒ¼ãƒ©ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "You are surrounded with a fiery aura.");
 
     if (creature_ptr->sh_elec)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“d‹C‚É•ï‚Ü‚ê‚Ä‚¢‚éB", "You are surrounded with electricity.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é›»æ°—ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "You are surrounded with electricity.");
 
     if (creature_ptr->sh_cold)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í—â‹C‚ÌƒI[ƒ‰‚É•ï‚Ü‚ê‚Ä‚¢‚éB", "You are surrounded with an aura of coldness.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å†·æ°—ã®ã‚ªãƒ¼ãƒ©ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "You are surrounded with an aura of coldness.");
 
     if (creature_ptr->tim_sh_holy)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í¹‚È‚éƒI[ƒ‰‚É•ï‚Ü‚ê‚Ä‚¢‚éB", "You are surrounded with a holy aura.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è–ãªã‚‹ã‚ªãƒ¼ãƒ©ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "You are surrounded with a holy aura.");
 
     if (creature_ptr->tim_sh_touki)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“¬‹C‚ÌƒI[ƒ‰‚É•ï‚Ü‚ê‚Ä‚¢‚éB", "You are surrounded with an energy aura.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é—˜æ°—ã®ã‚ªãƒ¼ãƒ©ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "You are surrounded with an energy aura.");
 
     if (creature_ptr->anti_magic)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í”½–‚–@ƒV[ƒ‹ƒh‚É•ï‚Ü‚ê‚Ä‚¢‚éB", "You are surrounded by an anti-magic shell.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯åé­”æ³•ã‚·ãƒ¼ãƒ«ãƒ‰ã«åŒ…ã¾ã‚Œã¦ã„ã‚‹ã€‚", "You are surrounded by an anti-magic shell.");
 
     if (creature_ptr->anti_tele)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒeƒŒƒ|[ƒg‚Å‚«‚È‚¢B", "You cannot teleport.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã§ããªã„ã€‚", "You cannot teleport.");
 
     if (creature_ptr->lite)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ìg‘Ì‚ÍŒõ‚Á‚Ä‚¢‚éB", "You are carrying a permanent light.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®èº«ä½“ã¯å…‰ã£ã¦ã„ã‚‹ã€‚", "You are carrying a permanent light.");
 
     if (creature_ptr->warning)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ís“®‚Ì‘O‚ÉŠëŒ¯‚ğ@’m‚·‚é‚±‚Æ‚ª‚Å‚«‚éB", "You will be warned before dangerous actions.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è¡Œå‹•ã®å‰ã«å±é™ºã‚’å¯ŸçŸ¥ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You will be warned before dangerous actions.");
 
     if (creature_ptr->dec_mana)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í­‚È‚¢Á”ï–‚—Í‚Å–‚–@‚ğ¥‚¦‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can cast spells with fewer mana points.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å°‘ãªã„æ¶ˆè²»é­”åŠ›ã§é­”æ³•ã‚’å”±ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can cast spells with fewer mana points.");
 
     if (creature_ptr->easy_spell)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í’á‚¢¸”s—¦‚Å–‚–@‚ğ¥‚¦‚é‚±‚Æ‚ª‚Å‚«‚éB", "Fail rate of your magic is decreased.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ä½ã„å¤±æ•—ç‡ã§é­”æ³•ã‚’å”±ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "Fail rate of your magic is decreased.");
 
     if (creature_ptr->heavy_spell)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚‚¢¸”s—¦‚Å–‚–@‚ğ¥‚¦‚È‚¯‚ê‚Î‚¢‚¯‚È‚¢B", "Fail rate of your magic is increased.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é«˜ã„å¤±æ•—ç‡ã§é­”æ³•ã‚’å”±ãˆãªã‘ã‚Œã°ã„ã‘ãªã„ã€‚", "Fail rate of your magic is increased.");
 
     if (creature_ptr->mighty_throw)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹­‚­•¨‚ğ“Š‚°‚éB", "You can throw objects powerfully.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å¼·ãç‰©ã‚’æŠ•ã’ã‚‹ã€‚", "You can throw objects powerfully.");
 }
 
-/* todo •À‚Ñ‡‚Ì“s‡‚Å˜A”Ô‚ğ•t‚¯‚éB‚Ü‚Æ‚ß‚Ä‚à—Ç‚¢‚È‚ç‚Ü‚Æ‚ß‚Ä‚µ‚Ü‚¤—\’è */
+/* todo ä¸¦ã³é †ã®éƒ½åˆã§é€£ç•ªã‚’ä»˜ã‘ã‚‹ã€‚ã¾ã¨ã‚ã¦ã‚‚è‰¯ã„ãªã‚‰ã¾ã¨ã‚ã¦ã—ã¾ã†äºˆå®š */
 void set_body_improvement_info_4(player_type *creature_ptr, self_info_type *si_ptr)
 {
     if (creature_ptr->resist_fear)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‘S‚­‹°•|‚ğŠ´‚¶‚È‚¢B", "You are completely fearless.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å…¨ãææ€–ã‚’æ„Ÿã˜ãªã„ã€‚", "You are completely fearless.");
     
     if (creature_ptr->resist_blind)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì–Ú‚Í–Ó–Ú‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "Your eyes are resistant to blindness.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®ç›®ã¯ç›²ç›®ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "Your eyes are resistant to blindness.");
     
     if (creature_ptr->resist_time)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŠÔ‹t“]‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to time.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ™‚é–“é€†è»¢ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to time.");
 }

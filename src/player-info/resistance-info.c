@@ -1,4 +1,4 @@
-#include "player-info/resistance-info.h"
+ï»¿#include "player-info/resistance-info.h"
 #include "player-info/self-info-util.h"
 #include "player/player-race.h"
 #include "status/element-resistance.h"
@@ -7,86 +7,85 @@
 void set_element_resistance_info(player_type* creature_ptr, self_info_type* si_ptr)
 {
     if (has_immune_acid(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í_‚É‘Î‚·‚éŠ®‘S‚È‚é–Æ‰u‚ğ‚Á‚Ä‚¢‚éB", "You are completely immune to acid.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é…¸ã«å¯¾ã™ã‚‹å®Œå…¨ãªã‚‹å…ç–«ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are completely immune to acid.");
     } else if (creature_ptr->resist_acid && is_oppose_acid(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í_‚Ö‚Ì‹­—Í‚È‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You resist acid exceptionally well.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é…¸ã¸ã®å¼·åŠ›ãªè€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You resist acid exceptionally well.");
     } else if (creature_ptr->resist_acid || is_oppose_acid(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í_‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to acid.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é…¸ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to acid.");
     }
 
     if (has_immune_elec(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“dŒ‚‚É‘Î‚·‚éŠ®‘S‚È‚é–Æ‰u‚ğ‚Á‚Ä‚¢‚éB", "You are completely immune to lightning.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é›»æ’ƒã«å¯¾ã™ã‚‹å®Œå…¨ãªã‚‹å…ç–«ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are completely immune to lightning.");
     } else if (creature_ptr->resist_elec && is_oppose_elec(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“dŒ‚‚Ö‚Ì‹­—Í‚È‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You resist lightning exceptionally well.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é›»æ’ƒã¸ã®å¼·åŠ›ãªè€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You resist lightning exceptionally well.");
     } else if (creature_ptr->resist_elec || is_oppose_elec(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“dŒ‚‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to lightning.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é›»æ’ƒã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to lightning.");
     }
-
     if (is_specific_player_race(creature_ptr, RACE_ANDROID) && !has_immune_elec(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“dŒ‚‚Éã‚¢B", "You are susceptible to damage from lightning.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é›»æ’ƒã«å¼±ã„ã€‚", "You are susceptible to damage from lightning.");
     }
 
     if (has_immune_fire(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰Î‚É‘Î‚·‚éŠ®‘S‚È‚é–Æ‰u‚ğ‚Á‚Ä‚¢‚éB", "You are completely immune to fire.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç«ã«å¯¾ã™ã‚‹å®Œå…¨ãªã‚‹å…ç–«ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are completely immune to fire.");
     } else if (creature_ptr->resist_fire && is_oppose_fire(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰Î‚Ö‚Ì‹­—Í‚È‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You resist fire exceptionally well.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç«ã¸ã®å¼·åŠ›ãªè€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You resist fire exceptionally well.");
     } else if (creature_ptr->resist_fire || is_oppose_fire(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰Î‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to fire.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç«ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to fire.");
     }
 
     if (is_specific_player_race(creature_ptr, RACE_ENT) && !has_immune_fire(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰Î‚Éã‚¢B", "You are susceptible to damage from fire.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç«ã«å¼±ã„ã€‚", "You are susceptible to damage from fire.");
     }
 
     if (has_immune_cold(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í—â‹C‚É‘Î‚·‚éŠ®‘S‚È‚é–Æ‰u‚ğ‚Á‚Ä‚¢‚éB", "You are completely immune to cold.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å†·æ°—ã«å¯¾ã™ã‚‹å®Œå…¨ãªã‚‹å…ç–«ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are completely immune to cold.");
     } else if (creature_ptr->resist_cold && is_oppose_cold(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í—â‹C‚Ö‚Ì‹­—Í‚È‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You resist cold exceptionally well.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å†·æ°—ã¸ã®å¼·åŠ›ãªè€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You resist cold exceptionally well.");
     } else if (creature_ptr->resist_cold || is_oppose_cold(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í—â‹C‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to cold.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å†·æ°—ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to cold.");
     }
 
     if (creature_ptr->resist_pois && is_oppose_pois(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“Å‚Ö‚Ì‹­—Í‚È‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You resist poison exceptionally well.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ¯’ã¸ã®å¼·åŠ›ãªè€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You resist poison exceptionally well.");
     } else if (creature_ptr->resist_pois || is_oppose_pois(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“Å‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to poison.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ¯’ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to poison.");
     }
 }
 
 void set_high_resistance_info(player_type *creature_ptr, self_info_type *si_ptr)
 {
     if (creature_ptr->resist_lite)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‘MŒõ‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to bright light.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é–ƒå…‰ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to bright light.");
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_S_FAIRY)
         || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‘MŒõ‚Éã‚¢B", "You are susceptible to damage from bright light.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é–ƒå…‰ã«å¼±ã„ã€‚", "You are susceptible to damage from bright light.");
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE) || creature_ptr->wraith_form)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍˆÃ•‚É‘Î‚·‚éŠ®‘S‚È‚é–Æ‰u‚ğ‚Á‚Ä‚¢‚éB", "You are completely immune to darkness.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æš—é»’ã«å¯¾ã™ã‚‹å®Œå…¨ãªã‚‹å…ç–«ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are completely immune to darkness.");
     else if (creature_ptr->resist_dark)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍˆÃ•‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to darkness.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æš—é»’ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to darkness.");
     
     if (creature_ptr->resist_conf)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í¬—‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to confusion.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ··ä¹±ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to confusion.");
     
     if (creature_ptr->resist_sound)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰¹”g‚ÌÕŒ‚‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to sonic attacks.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯éŸ³æ³¢ã®è¡æ’ƒã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to sonic attacks.");
     
     if (creature_ptr->resist_disen)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í—ò‰»‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to disenchantment.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯åŠ£åŒ–ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to disenchantment.");
     
     if (creature_ptr->resist_chaos)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒJƒIƒX‚Ì—Í‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to chaos.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚«ã‚ªã‚¹ã®åŠ›ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to chaos.");
     
     if (creature_ptr->resist_shard)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í”j•Ğ‚ÌUŒ‚‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to blasts of shards.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç ´ç‰‡ã®æ”»æ’ƒã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to blasts of shards.");
     
     if (creature_ptr->resist_nexus)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íˆö‰Ê¬—‚ÌUŒ‚‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to nexus attacks.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å› æœæ··ä¹±ã®æ”»æ’ƒã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to nexus attacks.");
 
     if (is_specific_player_race(creature_ptr, RACE_SPECTRE))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í’n–‚Ì—Í‚ğ‹zû‚Å‚«‚éB", "You can drain nether forces.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯åœ°ç„ã®åŠ›ã‚’å¸åã§ãã‚‹ã€‚", "You can drain nether forces.");
     else if (creature_ptr->resist_neth)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í’n–‚Ì—Í‚Ö‚Ì‘Ï«‚ğ‚Á‚Ä‚¢‚éB", "You are resistant to nether forces.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯åœ°ç„ã®åŠ›ã¸ã®è€æ€§ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You are resistant to nether forces.");
 }

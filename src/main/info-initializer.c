@@ -1,4 +1,4 @@
-#include "main/info-initializer.h"
+ï»¿#include "main/info-initializer.h"
 #include "dungeon/dungeon.h"
 #include "grid/feature.h"
 #include "info-reader/artifact-reader.h"
@@ -29,23 +29,23 @@
 #include "world/world.h"
 #include <sys/stat.h>
 #ifndef WINDOWS
-#include <sys/types.h> // Windows ‚Å‚ÍŽg‚í‚ê‚Ä‚¢‚È‚¢.
+#include <sys/types.h> // Windows ï¿½Å‚ÍŽgï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½.
 #endif
 
 /*!
- * @brief Šî–{î•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief åŸºæœ¬æƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize misc. values
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_misc(player_type *player_ptr) { return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0); }
 
 /*!
- * @brief rawƒtƒ@ƒCƒ‹‚©‚ç‚Ìƒf[ƒ^‚Ì“Ç‚ÝŽæ‚èˆ—
+ * @brief rawãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã®ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿å–ã‚Šå‡¦ç†
  * Initialize the "*_info" array, by parsing a binary "image" file
- * @param fd ƒtƒ@ƒCƒ‹ƒfƒBƒXƒNƒŠƒvƒ^
- * @param head rawƒtƒ@ƒCƒ‹‚Ìƒwƒbƒ_
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param fd ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿
+ * @param head rawãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ˜ãƒƒãƒ€
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 static errr init_info_raw(int fd, angband_header *head)
 {
@@ -93,12 +93,12 @@ static void update_header(angband_header *head, void **info, char **name, char *
 }
 
 /*!
- * @brief ƒwƒbƒ_\‘¢‘Ì‚ÌXV
+ * @brief ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ã®æ›´æ–°
  * Initialize the header of an *_info.raw file.
- * @param head rawƒtƒ@ƒCƒ‹‚Ìƒwƒbƒ_
- * @param num ƒf[ƒ^”
- * @param len ƒf[ƒ^‚Ì’·‚³
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param head rawãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ˜ãƒƒãƒ€
+ * @param num ãƒ‡ãƒ¼ã‚¿æ•°
+ * @param len ãƒ‡ãƒ¼ã‚¿ã®é•·ã•
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 static void init_header(angband_header *head, IDX num, int len)
 {
@@ -115,11 +115,11 @@ static void init_header(angband_header *head, IDX num, int len)
 }
 
 /*!
- * @brief ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ærawƒtƒ@ƒCƒ‹‚ÌXVŽž‚ð”äŠr‚·‚é
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã¨rawãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°æ™‚åˆ»ã‚’æ¯”è¼ƒã™ã‚‹
  * Find the default paths to all of our important sub-directories.
- * @param fd ƒtƒ@ƒCƒ‹ƒfƒBƒXƒNƒŠƒvƒ^
- * @param template_file ƒtƒ@ƒCƒ‹–¼
- * @return ƒeƒLƒXƒg‚Ì•û‚ªV‚µ‚¢‚©Arawƒtƒ@ƒCƒ‹‚ª‚È‚­XV‚Ì•K—v‚ª‚ ‚éê‡-1AXV‚Ì•K—v‚ª‚È‚¢ê‡0B
+ * @param fd ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿
+ * @param template_file ãƒ•ã‚¡ã‚¤ãƒ«å
+ * @return ãƒ†ã‚­ã‚¹ãƒˆã®æ–¹ãŒæ–°ã—ã„ã‹ã€rawãƒ•ã‚¡ã‚¤ãƒ«ãŒãªãæ›´æ–°ã®å¿…è¦ãŒã‚ã‚‹å ´åˆ-1ã€æ›´æ–°ã®å¿…è¦ãŒãªã„å ´åˆ0ã€‚
  */
 static errr check_modification_date(int fd, concptr template_file)
 {
@@ -139,15 +139,15 @@ static errr check_modification_date(int fd, concptr template_file)
 }
 
 /*!
- * @brief ƒwƒbƒ_\‘¢‘Ì‚ÌXV
+ * @brief ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ã®æ›´æ–°
  * Initialize the "*_info" array
- * @param filename ƒtƒ@ƒCƒ‹–¼(Šg’£Žqtxt/raw)
- * @param head ˆ—‚É—p‚¢‚éƒwƒbƒ_\‘¢‘Ì
- * @param info ƒf[ƒ^•ÛŠÇæ‚Ì\‘¢‘Ìƒ|ƒCƒ“ƒ^
- * @param name –¼Ì—p‰Â•Ï•¶Žš—ñ‚Ì•ÛŠÇæ
- * @param text ƒeƒLƒXƒg—p‰Â•Ï•¶Žš—ñ‚Ì•ÛŠÇæ
- * @param tag ƒ^ƒO—p‰Â•Ï•¶Žš—ñ‚Ì•ÛŠÇæ
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param filename ãƒ•ã‚¡ã‚¤ãƒ«å(æ‹¡å¼µå­txt/raw)
+ * @param head å‡¦ç†ã«ç”¨ã„ã‚‹ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“
+ * @param info ãƒ‡ãƒ¼ã‚¿ä¿ç®¡å…ˆã®æ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @param name åç§°ç”¨å¯å¤‰æ–‡å­—åˆ—ã®ä¿ç®¡å…ˆ
+ * @param text ãƒ†ã‚­ã‚¹ãƒˆç”¨å¯å¤‰æ–‡å­—åˆ—ã®ä¿ç®¡å…ˆ
+ * @param tag ã‚¿ã‚°ç”¨å¯å¤‰æ–‡å­—åˆ—ã®ä¿ç®¡å…ˆ
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
@@ -198,22 +198,22 @@ static errr init_info(player_type *player_ptr, concptr filename, angband_header 
     FILE *fp;
     fp = angband_fopen(buf, "r");
     if (!fp)
-        quit(format(_("'%s.txt'ƒtƒ@ƒCƒ‹‚ðƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñB", "Cannot open '%s.txt' file."), filename));
+        quit(format(_("'%s.txt'ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“ã€‚", "Cannot open '%s.txt' file."), filename));
 
     err = init_info_txt(fp, buf, head, head->parse_info_txt);
     angband_fclose(fp);
     if (err) {
         concptr oops;
-        oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : _("–¢’m‚Ì", "unknown"));
+        oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : _("æœªçŸ¥ã®", "unknown"));
 #ifdef JP
-        msg_format("'%s.txt'ƒtƒ@ƒCƒ‹‚Ì %d s–Ú‚ÉƒGƒ‰[B", filename, error_line);
+        msg_format("'%s.txt'ãƒ•ã‚¡ã‚¤ãƒ«ã® %d è¡Œç›®ã«ã‚¨ãƒ©ãƒ¼ã€‚", filename, error_line);
 #else
         msg_format("Error %d at line %d of '%s.txt'.", err, error_line, filename);
 #endif
-        msg_format(_("ƒŒƒR[ƒh %d ‚Í '%s' ƒGƒ‰[‚ª‚ ‚è‚Ü‚·B", "Record %d contains a '%s' error."), error_idx, oops);
-        msg_format(_("\•¶ '%s'B", "Parsing '%s'."), buf);
+        msg_format(_("ãƒ¬ã‚³ãƒ¼ãƒ‰ %d ã¯ '%s' ã‚¨ãƒ©ãƒ¼ãŒã‚ã‚Šã¾ã™ã€‚", "Record %d contains a '%s' error."), error_idx, oops);
+        msg_format(_("æ§‹æ–‡ '%s'ã€‚", "Parsing '%s'."), buf);
         msg_print(NULL);
-        quit(format(_("'%s.txt'ƒtƒ@ƒCƒ‹‚ÉƒGƒ‰[", "Error in '%s.txt' file."), filename));
+        quit(format(_("'%s.txt'ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¨ãƒ©ãƒ¼", "Error in '%s.txt' file."), filename));
     }
 
     if (head->retouch)
@@ -246,21 +246,21 @@ static errr init_info(player_type *player_ptr, concptr filename, angband_header 
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
     fd = fd_open(buf, O_RDONLY);
     if (fd < 0)
-        quit(format(_("'%s_j.raw'ƒtƒ@ƒCƒ‹‚ðƒ[ƒh‚Å‚«‚Ü‚¹‚ñB", "Cannot load '%s.raw' file."), filename));
+        quit(format(_("'%s_j.raw'ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“ã€‚", "Cannot load '%s.raw' file."), filename));
 
     err = init_info_raw(fd, head);
     (void)fd_close(fd);
     if (err)
-        quit(format(_("'%s_j.raw'ƒtƒ@ƒCƒ‹‚ð‰ðÍ‚Å‚«‚Ü‚¹‚ñB", "Cannot parse '%s.raw' file."), filename));
+        quit(format(_("'%s_j.raw'ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è§£æžã§ãã¾ã›ã‚“ã€‚", "Cannot parse '%s.raw' file."), filename));
 
     update_header(head, info, name, text, tag);
     return 0;
 }
 
 /*!
- * @brief ’nŒ`î•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief åœ°å½¢æƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize the "f_info" array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_f_info(player_type *player_ptr)
 {
@@ -271,9 +271,9 @@ errr init_f_info(player_type *player_ptr)
 }
 
 /*!
- * @brief ƒx[ƒXƒAƒCƒeƒ€î•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief ãƒ™ãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize the "k_info" array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_k_info(player_type *player_ptr)
 {
@@ -283,9 +283,9 @@ errr init_k_info(player_type *player_ptr)
 }
 
 /*!
- * @brief ŒÅ’èƒA[ƒeƒBƒtƒ@ƒNƒgî•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆæƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize the "a_info" array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_a_info(player_type *player_ptr)
 {
@@ -295,9 +295,9 @@ errr init_a_info(player_type *player_ptr)
 }
 
 /*!
- * @brief ŒÅ’èƒA[ƒeƒBƒtƒ@ƒNƒgî•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆæƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize the "e_info" array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_e_info(player_type *player_ptr)
 {
@@ -307,9 +307,9 @@ errr init_e_info(player_type *player_ptr)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[Ží‘°î•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—æƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize the "r_info" array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_r_info(player_type *player_ptr)
 {
@@ -319,9 +319,9 @@ errr init_r_info(player_type *player_ptr)
 }
 
 /*!
- * @brief ƒ_ƒ“ƒWƒ‡ƒ“î•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³æƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize the "d_info" array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_d_info(player_type *player_ptr)
 {
@@ -331,9 +331,9 @@ errr init_d_info(player_type *player_ptr)
 }
 
 /*!
- * @brief Vaultî•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief Vaultæƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize the "v_info" array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
@@ -346,9 +346,9 @@ errr init_v_info(player_type *player_ptr)
 }
 
 /*!
- * @brief E‹Æ‹Z”\î•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief è·æ¥­æŠ€èƒ½æƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize the "s_info" array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_s_info(player_type *player_ptr)
 {
@@ -358,9 +358,9 @@ errr init_s_info(player_type *player_ptr)
 }
 
 /*!
- * @brief E‹Æ–‚–@î•ñ“Ç‚Ýž‚Ý‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief è·æ¥­é­”æ³•æƒ…å ±èª­ã¿è¾¼ã¿ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize the "m_info" array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_m_info(player_type *player_ptr)
 {

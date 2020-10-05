@@ -1,7 +1,7 @@
-#include "spell/technic-info-table.h"
+ï»¿#include "spell/technic-info-table.h"
 
 /*!
- * @brief ‰ÌAŒ•pAôp—Ìˆæî•ñƒe[ƒuƒ‹
+ * @brief æ­Œã€å‰£è¡“ã€å‘ªè¡“é ˜åŸŸæƒ…å ±ãƒ†ãƒ¼ãƒ–ãƒ«
  */
 const magic_type technic_info[NUM_TECHNIC][32] =
 {

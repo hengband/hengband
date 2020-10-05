@@ -1,4 +1,4 @@
-#include "effect/effect-player-switcher.h"
+ï»¿#include "effect/effect-player-switcher.h"
 #include "effect/effect-player-curse.h"
 #include "effect/effect-player-oldies.h"
 #include "effect/effect-player-resist-hurt.h"
@@ -8,25 +8,25 @@
 
 /*!
  * @brief
- * –‚–@‚ÌŒø‰Ê‚É‚æ‚Á‚Ä—lX‚ÈƒƒbƒZ[‚ğo—Í‚µ‚½‚è—^‚¦‚éƒ_ƒ[ƒW‚Ì‘Œ¸‚ğs‚Á‚½‚è‚·‚é
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param em_ptr ƒvƒŒ[ƒ„[Œø‰Ê\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * é­”æ³•ã®åŠ¹æœã«ã‚ˆã£ã¦æ§˜ã€…ãªãƒ¡ãƒƒã‚»ãƒ¼ã‚’å‡ºåŠ›ã—ãŸã‚Šä¸ãˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã®å¢—æ¸›ã‚’è¡Œã£ãŸã‚Šã™ã‚‹
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param em_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼åŠ¹æœæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     switch (ep_ptr->effect_type) {
     case GF_ACID:
-        effect_player_elements(target_ptr, ep_ptr, _("_‚ÅUŒ‚‚³‚ê‚½I", "You are hit by acid!"), acid_dam);
+        effect_player_elements(target_ptr, ep_ptr, _("é…¸ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by acid!"), acid_dam);
         return;
     case GF_FIRE:
-        effect_player_elements(target_ptr, ep_ptr, _("‰Î‰Š‚ÅUŒ‚‚³‚ê‚½I", "You are hit by fire!"), fire_dam);
+        effect_player_elements(target_ptr, ep_ptr, _("ç«ç‚ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by fire!"), fire_dam);
         return;
     case GF_COLD:
-        effect_player_elements(target_ptr, ep_ptr, _("—â‹C‚ÅUŒ‚‚³‚ê‚½I", "You are hit by cold!"), cold_dam);
+        effect_player_elements(target_ptr, ep_ptr, _("å†·æ°—ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by cold!"), cold_dam);
         return;
     case GF_ELEC:
-        effect_player_elements(target_ptr, ep_ptr, _("“dŒ‚‚ÅUŒ‚‚³‚ê‚½I", "You are hit by lightning!"), elec_dam);
+        effect_player_elements(target_ptr, ep_ptr, _("é›»æ’ƒã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by lightning!"), elec_dam);
         return;
     case GF_POIS:
         effect_player_poison(target_ptr, ep_ptr);

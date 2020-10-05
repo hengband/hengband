@@ -1,4 +1,4 @@
-#include "player-info/mutation-info.h"
+ï»¿#include "player-info/mutation-info.h"
 #include "mutation/mutation-flag-types.h"
 #include "player-info/self-info-util.h"
 #include "player/player-status-flags.h"
@@ -9,104 +9,104 @@ void set_mutation_info_1(player_type *creature_ptr, self_info_type *si_ptr)
         return;
 
     if (creature_ptr->muta1 & MUT1_SPIT_ACID)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í_‚ğ‚«‚©‚¯‚é‚±‚Æ‚ª‚Å‚«‚éB(ƒ_ƒ[ƒW ƒŒƒxƒ‹X1)", "You can spit acid (dam lvl).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é…¸ã‚’å¹ãã‹ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ ãƒ¬ãƒ™ãƒ«X1)", "You can spit acid (dam lvl).");
 
     if (creature_ptr->muta1 & MUT1_BR_FIRE)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰Š‚ÌƒuƒŒƒX‚ğ“f‚­‚±‚Æ‚ª‚Å‚«‚éB(ƒ_ƒ[ƒW ƒŒƒxƒ‹X2)", "You can breathe fire (dam lvl * 2).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç‚ã®ãƒ–ãƒ¬ã‚¹ã‚’åãã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ ãƒ¬ãƒ™ãƒ«X2)", "You can breathe fire (dam lvl * 2).");
 
     if (creature_ptr->muta1 & MUT1_HYPN_GAZE)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌáÉ‚İ‚ÍÃ–°Œø‰Ê‚ğ‚à‚ÂB", "Your gaze is hypnotic.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®ç¨ã¿ã¯å‚¬çœ åŠ¹æœã‚’ã‚‚ã¤ã€‚", "Your gaze is hypnotic.");
 
     if (creature_ptr->muta1 & MUT1_TELEKINES)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í”O“®—Í‚ğ‚à‚Á‚Ä‚¢‚éB", "You are telekinetic.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å¿µå‹•åŠ›ã‚’ã‚‚ã£ã¦ã„ã‚‹ã€‚", "You are telekinetic.");
 
     if (creature_ptr->muta1 & MUT1_VTELEPORT)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í©•ª‚ÌˆÓv‚ÅƒeƒŒƒ|[ƒg‚Å‚«‚éB", "You can teleport at will.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è‡ªåˆ†ã®æ„æ€ã§ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã§ãã‚‹ã€‚", "You can teleport at will.");
 
     if (creature_ptr->muta1 & MUT1_MIND_BLST)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í¸_UŒ‚‚ğs‚¦‚éB(ƒ_ƒ[ƒW 3`12d3)", "You can Mind Blast your enemies (3 to 12d3 dam).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç²¾ç¥æ”»æ’ƒã‚’è¡Œãˆã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ 3ï½12d3)", "You can Mind Blast your enemies (3 to 12d3 dam).");
 
     if (creature_ptr->muta1 & MUT1_RADIATION)
         si_ptr->info[si_ptr->line++]
-            = _("‚ ‚È‚½‚Í©•ª‚ÌˆÓv‚Å‹­‚¢•úËü‚ğ”­¶‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(ƒ_ƒ[ƒW ƒŒƒxƒ‹X2)", "You can emit hard radiation at will (dam lvl * 2).");
+            = _("ã‚ãªãŸã¯è‡ªåˆ†ã®æ„æ€ã§å¼·ã„æ”¾å°„ç·šã‚’ç™ºç”Ÿã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ ãƒ¬ãƒ™ãƒ«X2)", "You can emit hard radiation at will (dam lvl * 2).");
 
     if (creature_ptr->muta1 & MUT1_VAMPIRISM)
         si_ptr->info[si_ptr->line++] = _(
-            "‚ ‚È‚½‚Í‹zŒŒ‹S‚Ì‚æ‚¤‚É“G‚©‚ç¶–½—Í‚ğ‹zû‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(ƒ_ƒ[ƒW ƒŒƒxƒ‹X2)", "Like a vampire, you can drain life from a foe (dam lvl * 2).");
+            "ã‚ãªãŸã¯å¸è¡€é¬¼ã®ã‚ˆã†ã«æ•µã‹ã‚‰ç”Ÿå‘½åŠ›ã‚’å¸åã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ ãƒ¬ãƒ™ãƒ«X2)", "Like a vampire, you can drain life from a foe (dam lvl * 2).");
 
     if (creature_ptr->muta1 & MUT1_SMELL_MET)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹ß‚­‚É‚ ‚é‹M‹à‘®‚ğ‚©‚¬•ª‚¯‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can smell nearby precious metal.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è¿‘ãã«ã‚ã‚‹è²´é‡‘å±ã‚’ã‹ãåˆ†ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can smell nearby precious metal.");
 
     if (creature_ptr->muta1 & MUT1_SMELL_MON)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹ß‚­‚Ìƒ‚ƒ“ƒXƒ^[‚Ì‘¶İ‚ğ‚©‚¬•ª‚¯‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can smell nearby monsters.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è¿‘ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å­˜åœ¨ã‚’ã‹ãåˆ†ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can smell nearby monsters.");
 
     if (creature_ptr->muta1 & MUT1_BLINK)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í’Z‚¢‹——£‚ğƒeƒŒƒ|[ƒg‚Å‚«‚éB", "You can teleport yourself short distances.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯çŸ­ã„è·é›¢ã‚’ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã§ãã‚‹ã€‚", "You can teleport yourself short distances.");
 
     if (creature_ptr->muta1 & MUT1_EAT_ROCK)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íd‚¢Šâ‚ğH‚×‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can consume solid rock.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç¡¬ã„å²©ã‚’é£Ÿã¹ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can consume solid rock.");
 
     if (creature_ptr->muta1 & MUT1_SWAP_POS)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‘¼‚ÌÒ‚ÆêŠ‚ğ“ü‚ê‘Ö‚í‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can switch locations with another being.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ä»–ã®è€…ã¨å ´æ‰€ã‚’å…¥ã‚Œæ›¿ã‚ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can switch locations with another being.");
 
     if (creature_ptr->muta1 & MUT1_SHRIEK)
         si_ptr->info[si_ptr->line++]
-            = _("‚ ‚È‚½‚Íg‚Ì–Ñ‚à‚æ‚¾‚Â‹©‚Ñº‚ğ”­‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(ƒ_ƒ[ƒW ƒŒƒxƒ‹X2)", "You can emit a horrible shriek (dam 2 * lvl).");
+            = _("ã‚ãªãŸã¯èº«ã®æ¯›ã‚‚ã‚ˆã ã¤å«ã³å£°ã‚’ç™ºã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ ãƒ¬ãƒ™ãƒ«X2)", "You can emit a horrible shriek (dam 2 * lvl).");
 
     if (creature_ptr->muta1 & MUT1_ILLUMINE)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í–¾‚é‚¢Œõ‚ğ•ú‚Â‚±‚Æ‚ª‚Å‚«‚éB", "You can emit bright light.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ˜ã‚‹ã„å…‰ã‚’æ”¾ã¤ã“ã¨ãŒã§ãã‚‹ã€‚", "You can emit bright light.");
 
     if (creature_ptr->muta1 & MUT1_DET_CURSE)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í×ˆ«‚È–‚–@‚ÌŠëŒ¯‚ğŠ´‚¶‚Æ‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can feel the danger of evil magic.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é‚ªæ‚ªãªé­”æ³•ã®å±é™ºã‚’æ„Ÿã˜ã¨ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can feel the danger of evil magic.");
 
     if (creature_ptr->muta1 & MUT1_BERSERK)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í©•ª‚ÌˆÓv‚Å‹¶—í“¬ó‘Ô‚É‚È‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can drive yourself into a berserk frenzy.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è‡ªåˆ†ã®æ„æ€ã§ç‹‚ä¹±æˆ¦é—˜çŠ¶æ…‹ã«ãªã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can drive yourself into a berserk frenzy.");
 
     if (creature_ptr->muta1 & MUT1_POLYMORPH)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í©•ª‚ÌˆÓu‚Å•Ï‰»‚Å‚«‚éB", "You can polymorph yourself at will.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è‡ªåˆ†ã®æ„å¿—ã§å¤‰åŒ–ã§ãã‚‹ã€‚", "You can polymorph yourself at will.");
 
     if (creature_ptr->muta1 & MUT1_MIDAS_TCH)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í’ÊíƒAƒCƒeƒ€‚ğ‹à‚É•Ï‚¦‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can turn ordinary items to gold.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é€šå¸¸ã‚¢ã‚¤ãƒ†ãƒ ã‚’é‡‘ã«å¤‰ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can turn ordinary items to gold.");
 
     if (creature_ptr->muta1 & MUT1_GROW_MOLD)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍüˆÍ‚ÉƒLƒmƒR‚ğ¶‚â‚·‚±‚Æ‚ª‚Å‚«‚éB", "You can cause mold to grow near you.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å‘¨å›²ã«ã‚­ãƒã‚³ã‚’ç”Ÿã‚„ã™ã“ã¨ãŒã§ãã‚‹ã€‚", "You can cause mold to grow near you.");
 
     if (creature_ptr->muta1 & MUT1_RESIST)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŒ³‘f‚ÌUŒ‚‚É‘Î‚µ‚Äg‚ğd‚­‚·‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can harden yourself to the ravages of the elements.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å…ƒç´ ã®æ”»æ’ƒã«å¯¾ã—ã¦èº«ã‚’ç¡¬ãã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can harden yourself to the ravages of the elements.");
 
     if (creature_ptr->muta1 & MUT1_EARTHQUAKE)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍüˆÍ‚Ìƒ_ƒ“ƒWƒ‡ƒ“‚ğ•ö‰ó‚³‚¹‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can bring down the dungeon around your ears.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å‘¨å›²ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã‚’å´©å£Šã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can bring down the dungeon around your ears.");
 
     if (creature_ptr->muta1 & MUT1_EAT_MAGIC)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í–‚–@‚ÌƒGƒlƒ‹ƒM[‚ğ©•ª‚Ì•¨‚Æ‚µ‚Äg—p‚Å‚«‚éB", "You can consume magic energy for your own use.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é­”æ³•ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’è‡ªåˆ†ã®ç‰©ã¨ã—ã¦ä½¿ç”¨ã§ãã‚‹ã€‚", "You can consume magic energy for your own use.");
 
     if (creature_ptr->muta1 & MUT1_WEIGH_MAG)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í©•ª‚É‰e‹¿‚ğ—^‚¦‚é–‚–@‚Ì—Í‚ğŠ´‚¶‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can feel the strength of the magics affecting you.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è‡ªåˆ†ã«å½±éŸ¿ã‚’ä¸ãˆã‚‹é­”æ³•ã®åŠ›ã‚’æ„Ÿã˜ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can feel the strength of the magics affecting you.");
 
     if (creature_ptr->muta1 & MUT1_STERILITY)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍW’c“I¶B•s”\‚ğ‹N‚±‚·‚±‚Æ‚ª‚Å‚«‚éB", "You can cause mass impotence.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é›†å›£çš„ç”Ÿæ®–ä¸èƒ½ã‚’èµ·ã“ã™ã“ã¨ãŒã§ãã‚‹ã€‚", "You can cause mass impotence.");
 
     if (creature_ptr->muta1 & MUT1_HIT_AND_AWAY)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍUŒ‚‚µ‚½Œãg‚ğç‚é‚½‚ß“¦‚°‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can run for your life after hitting something.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ”»æ’ƒã—ãŸå¾Œèº«ã‚’å®ˆã‚‹ãŸã‚é€ƒã’ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can run for your life after hitting something.");
 
     if (creature_ptr->muta1 & MUT1_DAZZLE)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í¬—‚Æ–Ó–Ú‚ğˆø‚«‹N‚±‚·•úË”\‚ğ”­¶‚·‚é‚±‚Æ‚ª‚Å‚«‚éB ", "You can emit confusing, blinding radiation.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ··ä¹±ã¨ç›²ç›®ã‚’å¼•ãèµ·ã“ã™æ”¾å°„èƒ½ã‚’ç™ºç”Ÿã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚ ", "You can emit confusing, blinding radiation.");
 
     if (creature_ptr->muta1 & MUT1_LASER_EYE)
         si_ptr->info[si_ptr->line++]
-            = _("‚ ‚È‚½‚Í–Ú‚©‚çƒŒ[ƒU[Œõü‚ğ”­‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(ƒ_ƒ[ƒW ƒŒƒxƒ‹X2)", "Your eyes can fire laser beams (dam 2 * lvl).");
+            = _("ã‚ãªãŸã¯ç›®ã‹ã‚‰ãƒ¬ãƒ¼ã‚¶ãƒ¼å…‰ç·šã‚’ç™ºã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ ãƒ¬ãƒ™ãƒ«X2)", "Your eyes can fire laser beams (dam 2 * lvl).");
 
     if (creature_ptr->muta1 & MUT1_RECALL)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŠX‚Æƒ_ƒ“ƒWƒ‡ƒ“‚ÌŠÔ‚ğs‚«—ˆ‚·‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can travel between town and the depths.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è¡—ã¨ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®é–“ã‚’è¡Œãæ¥ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can travel between town and the depths.");
 
     if (creature_ptr->muta1 & MUT1_BANISH)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í×ˆ«‚Èƒ‚ƒ“ƒXƒ^[‚ğ’n–‚É—‚Æ‚·‚±‚Æ‚ª‚Å‚«‚éB", "You can send evil creatures directly to Hell.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’åœ°ç„ã«è½ã¨ã™ã“ã¨ãŒã§ãã‚‹ã€‚", "You can send evil creatures directly to Hell.");
 
     if (creature_ptr->muta1 & MUT1_COLD_TOUCH)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“G‚ğG‚Á‚Ä“€‚ç‚¹‚é‚±‚Æ‚ª‚Å‚«‚éB(ƒ_ƒ[ƒW ƒŒƒxƒ‹X3)", "You can freeze things with a touch (dam 3 * lvl).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ•µã‚’è§¦ã£ã¦å‡ã‚‰ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ ãƒ¬ãƒ™ãƒ«X3)", "You can freeze things with a touch (dam 3 * lvl).");
 
     if (creature_ptr->muta1 & MUT1_LAUNCHER)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒAƒCƒeƒ€‚ğ—Í‹­‚­“Š‚°‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can hurl objects with great force.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚¢ã‚¤ãƒ†ãƒ ã‚’åŠ›å¼·ãæŠ•ã’ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can hurl objects with great force.");
 }
 
 void set_mutation_info_2(player_type *creature_ptr, self_info_type *si_ptr)
@@ -115,176 +115,176 @@ void set_mutation_info_2(player_type *creature_ptr, self_info_type *si_ptr)
         return;
 
     if (creature_ptr->muta2 & MUT2_BERS_RAGE)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹¶ím‰»‚Ì”­ì‚ğ‹N‚±‚·B", "You are subject to berserker fits.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç‹‚æˆ¦å£«åŒ–ã®ç™ºä½œã‚’èµ·ã“ã™ã€‚", "You are subject to berserker fits.");
 
     if (creature_ptr->muta2 & MUT2_COWARDICE)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍX‰°•a‚É‚È‚éB", "You are subject to cowardice.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ™‚ã€…è‡†ç—…ã«ãªã‚‹ã€‚", "You are subject to cowardice.");
 
     if (creature_ptr->muta2 & MUT2_RTELEPORT)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íƒ‰ƒ“ƒ_ƒ€‚ÉƒeƒŒƒ|[ƒg‚·‚éB", "You may randomly teleport.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ãƒ©ãƒ³ãƒ€ãƒ ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã™ã‚‹ã€‚", "You may randomly teleport.");
 
     if (creature_ptr->muta2 & MUT2_ALCOHOL)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì‘Ì‚ÍƒAƒ‹ƒR[ƒ‹‚ğ•ª”å‚·‚éB", "Your body produces alcohol.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®ä½“ã¯ã‚¢ãƒ«ã‚³ãƒ¼ãƒ«ã‚’åˆ†æ³Œã™ã‚‹ã€‚", "Your body produces alcohol.");
 
     if (creature_ptr->muta2 & MUT2_HALLU)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŒ¶Šo‚ğˆø‚«‹N‚±‚·¸_ö—‚ÉN‚³‚ê‚Ä‚¢‚éB", "You have a hallucinatory insanity.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å¹»è¦šã‚’å¼•ãèµ·ã“ã™ç²¾ç¥éŒ¯ä¹±ã«ä¾µã•ã‚Œã¦ã„ã‚‹ã€‚", "You have a hallucinatory insanity.");
 
     if (creature_ptr->muta2 & MUT2_FLATULENT)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í§Œä‚Å‚«‚È‚¢‹­—ó‚È››‚ğ‚±‚­B", "You are subject to uncontrollable flatulence.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯åˆ¶å¾¡ã§ããªã„å¼·çƒˆãªå±ã‚’ã“ãã€‚", "You are subject to uncontrollable flatulence.");
 
     if (creature_ptr->muta2 & MUT2_PROD_MANA)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í§Œä•s”\‚È–‚–@‚ÌƒGƒlƒ‹ƒM[‚ğ”­‚µ‚Ä‚¢‚éB", "You produce magical energy uncontrollably.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯åˆ¶å¾¡ä¸èƒ½ãªé­”æ³•ã®ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’ç™ºã—ã¦ã„ã‚‹ã€‚", "You produce magical energy uncontrollably.");
 
     if (creature_ptr->muta2 & MUT2_ATT_DEMON)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íƒf[ƒ‚ƒ“‚ğˆø‚«‚Â‚¯‚éB", "You attract demons.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ãƒ‡ãƒ¼ãƒ¢ãƒ³ã‚’å¼•ãã¤ã‘ã‚‹ã€‚", "You attract demons.");
 
     if (creature_ptr->muta2 & MUT2_SCOR_TAIL)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒTƒ\ƒŠ‚ÌK”ö‚ª¶‚¦‚Ä‚¢‚éB(“ÅAƒ_ƒ[ƒW 3d7)", "You have a scorpion tail (poison, 3d7).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚µã‚½ãƒªã®å°»å°¾ãŒç”Ÿãˆã¦ã„ã‚‹ã€‚(æ¯’ã€ãƒ€ãƒ¡ãƒ¼ã‚¸ 3d7)", "You have a scorpion tail (poison, 3d7).");
 
     if (creature_ptr->muta2 & MUT2_HORNS)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŠp‚ª¶‚¦‚Ä‚¢‚éB(ƒ_ƒ[ƒW 2d6)", "You have horns (dam. 2d6).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è§’ãŒç”Ÿãˆã¦ã„ã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ 2d6)", "You have horns (dam. 2d6).");
 
     if (creature_ptr->muta2 & MUT2_BEAK)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒNƒ`ƒoƒV‚ª¶‚¦‚Ä‚¢‚éB(ƒ_ƒ[ƒW 2d4)", "You have a beak (dam. 2d4).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚¯ãƒãƒã‚·ãŒç”Ÿãˆã¦ã„ã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ 2d4)", "You have a beak (dam. 2d4).");
 
     if (creature_ptr->muta2 & MUT2_SPEED_FLUX)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íƒ‰ƒ“ƒ_ƒ€‚É‘‚­“®‚¢‚½‚è’x‚­“®‚¢‚½‚è‚·‚éB", "You move faster or slower randomly.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ãƒ©ãƒ³ãƒ€ãƒ ã«æ—©ãå‹•ã„ãŸã‚Šé…ãå‹•ã„ãŸã‚Šã™ã‚‹ã€‚", "You move faster or slower randomly.");
 
     if (creature_ptr->muta2 & MUT2_BANISH_ALL)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍX‹ß‚­‚Ìƒ‚ƒ“ƒXƒ^[‚ğÁ–Å‚³‚¹‚éB", "You sometimes cause nearby creatures to vanish.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ™‚ã€…è¿‘ãã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ¶ˆæ»…ã•ã›ã‚‹ã€‚", "You sometimes cause nearby creatures to vanish.");
 
     if (creature_ptr->muta2 & MUT2_EAT_LIGHT)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍXüˆÍ‚ÌŒõ‚ğ‹zû‚µ‚Ä‰h—{‚É‚·‚éB", "You sometimes feed off of the light around you.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ™‚ã€…å‘¨å›²ã®å…‰ã‚’å¸åã—ã¦æ „é¤Šã«ã™ã‚‹ã€‚", "You sometimes feed off of the light around you.");
 
     if (creature_ptr->muta2 & MUT2_TRUNK)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍÛ‚Ì‚æ‚¤‚È•@‚ğ‚Á‚Ä‚¢‚éB(ƒ_ƒ[ƒW 1d4)", "You have an elephantine trunk (dam 1d4).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è±¡ã®ã‚ˆã†ãªé¼»ã‚’æŒã£ã¦ã„ã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ 1d4)", "You have an elephantine trunk (dam 1d4).");
 
     if (creature_ptr->muta2 & MUT2_ATT_ANIMAL)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“®•¨‚ğˆø‚«‚Â‚¯‚éB", "You attract animals.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å‹•ç‰©ã‚’å¼•ãã¤ã‘ã‚‹ã€‚", "You attract animals.");
 
     if (creature_ptr->muta2 & MUT2_TENTACLES)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í×ˆ«‚ÈGè‚ğ‚Á‚Ä‚¢‚éB(ƒ_ƒ[ƒW 2d5)", "You have evil looking tentacles (dam 2d5).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é‚ªæ‚ªãªè§¦æ‰‹ã‚’æŒã£ã¦ã„ã‚‹ã€‚(ãƒ€ãƒ¡ãƒ¼ã‚¸ 2d5)", "You have evil looking tentacles (dam 2d5).");
 
     if (creature_ptr->muta2 & MUT2_RAW_CHAOS)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚µ‚Î‚µ‚ÎƒƒJƒIƒX‚É•ï‚Ü‚ê‚éB", "You occasionally are surrounded with raw chaos.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã—ã°ã—ã°ç´”ã‚«ã‚ªã‚¹ã«åŒ…ã¾ã‚Œã‚‹ã€‚", "You occasionally are surrounded with raw chaos.");
 
     if (creature_ptr->muta2 & MUT2_NORMALITY)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í•ÏˆÙ‚µ‚Ä‚¢‚½‚ªA‰ñ•œ‚µ‚Ä‚«‚Ä‚¢‚éB", "You may be mutated, but you're recovering.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å¤‰ç•°ã—ã¦ã„ãŸãŒã€å›å¾©ã—ã¦ãã¦ã„ã‚‹ã€‚", "You may be mutated, but you're recovering.");
 
     if (creature_ptr->muta2 & MUT2_WRAITH)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì“÷‘Ì‚Í—H‘Ì‰»‚µ‚½‚èÀ‘Ì‰»‚µ‚½‚è‚·‚éB", "You fade in and out of physical reality.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®è‚‰ä½“ã¯å¹½ä½“åŒ–ã—ãŸã‚Šå®Ÿä½“åŒ–ã—ãŸã‚Šã™ã‚‹ã€‚", "You fade in and out of physical reality.");
 
     if (creature_ptr->muta2 & MUT2_POLY_WOUND)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌŒ’N‚ÍƒJƒIƒX‚Ì—Í‚É‰e‹¿‚ğó‚¯‚éB", "Your health is subject to chaotic forces.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®å¥åº·ã¯ã‚«ã‚ªã‚¹ã®åŠ›ã«å½±éŸ¿ã‚’å—ã‘ã‚‹ã€‚", "Your health is subject to chaotic forces.");
 
     if (creature_ptr->muta2 & MUT2_WASTING)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŠã‚·‚é‹°‚ë‚µ‚¢•a‹C‚É‚©‚©‚Á‚Ä‚¢‚éB", "You have a horrible wasting disease.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è¡°å¼±ã™ã‚‹æã‚ã—ã„ç—…æ°—ã«ã‹ã‹ã£ã¦ã„ã‚‹ã€‚", "You have a horrible wasting disease.");
 
     if (creature_ptr->muta2 & MUT2_ATT_DRAGON)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íƒhƒ‰ƒSƒ“‚ğˆø‚«‚Â‚¯‚éB", "You attract dragons.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ãƒ‰ãƒ©ã‚´ãƒ³ã‚’å¼•ãã¤ã‘ã‚‹ã€‚", "You attract dragons.");
 
     if (creature_ptr->muta2 & MUT2_WEIRD_MIND)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì¸_‚Íƒ‰ƒ“ƒ_ƒ€‚ÉŠg‘å‚µ‚½‚èk¬‚µ‚½‚è‚µ‚Ä‚¢‚éB", "Your mind randomly expands and contracts.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®ç²¾ç¥ã¯ãƒ©ãƒ³ãƒ€ãƒ ã«æ‹¡å¤§ã—ãŸã‚Šç¸®å°ã—ãŸã‚Šã—ã¦ã„ã‚‹ã€‚", "Your mind randomly expands and contracts.");
 
     if (creature_ptr->muta2 & MUT2_NAUSEA)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ìˆİ‚Í”ñí‚É—‚¿’…‚«‚ª‚È‚¢B", "You have a seriously upset stomach.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®èƒƒã¯éå¸¸ã«è½ã¡ç€ããŒãªã„ã€‚", "You have a seriously upset stomach.");
 
     if (creature_ptr->muta2 & MUT2_CHAOS_GIFT)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒJƒIƒX‚ÌçŒìˆ«–‚‚©‚ç–J”ü‚ğ‚¤‚¯‚Æ‚éB", "Chaos deities give you gifts.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚«ã‚ªã‚¹ã®å®ˆè­·æ‚ªé­”ã‹ã‚‰è¤’ç¾ã‚’ã†ã‘ã¨ã‚‹ã€‚", "Chaos deities give you gifts.");
 
     if (creature_ptr->muta2 & MUT2_WALK_SHAD)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚µ‚Î‚µ‚Î‘¼‚Ìu‰ev‚É–À‚¢‚ŞB", "You occasionally stumble into other shadows.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã—ã°ã—ã°ä»–ã®ã€Œå½±ã€ã«è¿·ã„è¾¼ã‚€ã€‚", "You occasionally stumble into other shadows.");
 
     if (creature_ptr->muta2 & MUT2_WARNING)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“G‚ÉŠÖ‚·‚éŒx‚ğŠ´‚¶‚éB", "You receive warnings about your foes.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ•µã«é–¢ã™ã‚‹è­¦å‘Šã‚’æ„Ÿã˜ã‚‹ã€‚", "You receive warnings about your foes.");
 
     if (creature_ptr->muta2 & MUT2_INVULN)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍX•‰‚¯’m‚ç‚¸‚È‹C•ª‚É‚È‚éB", "You occasionally feel invincible.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ™‚ã€…è² ã‘çŸ¥ã‚‰ãšãªæ°—åˆ†ã«ãªã‚‹ã€‚", "You occasionally feel invincible.");
 
     if (creature_ptr->muta2 & MUT2_SP_TO_HP)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍXŒŒ‚ª‹Ø“÷‚É‚Ç‚Á‚Æ—¬‚ê‚éB", "Your blood sometimes rushes to your muscles.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ™‚ã€…è¡€ãŒç­‹è‚‰ã«ã©ã£ã¨æµã‚Œã‚‹ã€‚", "Your blood sometimes rushes to your muscles.");
 
     if (creature_ptr->muta2 & MUT2_HP_TO_SP)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍX“ª‚ÉŒŒ‚ª‚Ç‚Á‚Æ—¬‚ê‚éB", "Your blood sometimes rushes to your head.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ™‚ã€…é ­ã«è¡€ãŒã©ã£ã¨æµã‚Œã‚‹ã€‚", "Your blood sometimes rushes to your head.");
 
     if (creature_ptr->muta2 & MUT2_DISARM)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚æ‚­‚Â‚Ü‚Ã‚¢‚Ä•¨‚ğ—‚Æ‚·B", "You occasionally stumble and drop things.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚ˆãã¤ã¾ã¥ã„ã¦ç‰©ã‚’è½ã¨ã™ã€‚", "You occasionally stumble and drop things.");
 }
 
-/* todo FEAELESS ƒtƒ‰ƒO‚à‹Lq‚µ‚Ä–â‘è‚È‚¢‚Æv‚í‚ê‚é */
+/* todo FEAELESS ãƒ•ãƒ©ã‚°ã‚‚è¨˜è¿°ã—ã¦å•é¡Œãªã„ã¨æ€ã‚ã‚Œã‚‹ */
 void set_mutation_info_3(player_type *creature_ptr, self_info_type *si_ptr)
 {
     if (creature_ptr->muta3 == 0)
         return;
 
     if (creature_ptr->muta3 & MUT3_HYPER_STR)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í’´l“I‚É‹­‚¢B(˜r—Í+4)", "You are superhumanly strong (+4 STR).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è¶…äººçš„ã«å¼·ã„ã€‚(è…•åŠ›+4)", "You are superhumanly strong (+4 STR).");
 
     if (creature_ptr->muta3 & MUT3_PUNY)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹•ã‚¾B(˜r—Í-4)", "You are puny (-4 STR).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è™šå¼±ã ã€‚(è…•åŠ›-4)", "You are puny (-4 STR).");
 
     if (creature_ptr->muta3 & MUT3_HYPER_INT)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì”]‚Í¶‘ÌƒRƒ“ƒsƒ…[ƒ^‚¾B(’m”\•Œ«‚³+4)", "Your brain is a living computer (+4 INT/WIS).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®è„³ã¯ç”Ÿä½“ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã ã€‚(çŸ¥èƒ½ï¼†è³¢ã•+4)", "Your brain is a living computer (+4 INT/WIS).");
 
     if (creature_ptr->muta3 & MUT3_MORONIC)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í¸_”–ã‚¾B(’m”\•Œ«‚³-4)", "You are moronic (-4 INT/WIS).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç²¾ç¥è–„å¼±ã ã€‚(çŸ¥èƒ½ï¼†è³¢ã•-4)", "You are moronic (-4 INT/WIS).");
 
     if (creature_ptr->muta3 & MUT3_RESILIENT)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í”ñí‚Éƒ^ƒt‚¾B(‘Ï‹v+4)", "You are very resilient (+4 CON).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯éå¸¸ã«ã‚¿ãƒ•ã ã€‚(è€ä¹…+4)", "You are very resilient (+4 CON).");
 
     if (creature_ptr->muta3 & MUT3_XTRA_FAT)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹É’[‚É‘¾‚Á‚Ä‚¢‚éB(‘Ï‹v+2,ƒXƒs[ƒh-2)", "You are extremely fat (+2 CON, -2 speed).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ¥µç«¯ã«å¤ªã£ã¦ã„ã‚‹ã€‚(è€ä¹…+2,ã‚¹ãƒ”ãƒ¼ãƒ‰-2)", "You are extremely fat (+2 CON, -2 speed).");
 
     if (creature_ptr->muta3 & MUT3_ALBINO)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒAƒ‹ƒrƒm‚¾B(‘Ï‹v-4)", "You are an albino (-4 CON).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚¢ãƒ«ãƒ“ãƒã ã€‚(è€ä¹…-4)", "You are an albino (-4 CON).");
 
     if (creature_ptr->muta3 & MUT3_FLESH_ROT)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì“÷‘Ì‚Í•…”s‚µ‚Ä‚¢‚éB(‘Ï‹v-2,–£—Í-1)", "Your flesh is rotting (-2 CON, -1 CHR).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®è‚‰ä½“ã¯è…æ•—ã—ã¦ã„ã‚‹ã€‚(è€ä¹…-2,é­…åŠ›-1)", "Your flesh is rotting (-2 CON, -1 CHR).");
 
     if (creature_ptr->muta3 & MUT3_SILLY_VOI)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ìº‚ÍŠÔ”²‚¯‚ÈƒL[ƒL[º‚¾B(–£—Í-4)", "Your voice is a silly squeak (-4 CHR).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®å£°ã¯é–“æŠœã‘ãªã‚­ãƒ¼ã‚­ãƒ¼å£°ã ã€‚(é­…åŠ›-4)", "Your voice is a silly squeak (-4 CHR).");
 
     if (creature_ptr->muta3 & MUT3_BLANK_FAC)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚Ì‚Á‚Ø‚ç‚Ú‚¤‚¾B(–£—Í-1)", "Your face is featureless (-1 CHR).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã®ã£ãºã‚‰ã¼ã†ã ã€‚(é­…åŠ›-1)", "Your face is featureless (-1 CHR).");
 
     if (creature_ptr->muta3 & MUT3_ILL_NORM)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŒ¶‰e‚É•¢‚í‚ê‚Ä‚¢‚éB", "Your appearance is masked with illusion.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å¹»å½±ã«è¦†ã‚ã‚Œã¦ã„ã‚‹ã€‚", "Your appearance is masked with illusion.");
 
     if (creature_ptr->muta3 & MUT3_XTRA_EYES)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í—]•ª‚É“ñ‚Â‚Ì–Ú‚ğ‚Á‚Ä‚¢‚éB(’Tõ+15)", "You have an extra pair of eyes (+15 search).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ä½™åˆ†ã«äºŒã¤ã®ç›®ã‚’æŒã£ã¦ã„ã‚‹ã€‚(æ¢ç´¢+15)", "You have an extra pair of eyes (+15 search).");
 
     if (creature_ptr->muta3 & MUT3_MAGIC_RES)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í–‚–@‚Ö‚Ì‘Ï«‚ğ‚à‚Á‚Ä‚¢‚éB", "You are resistant to magic.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é­”æ³•ã¸ã®è€æ€§ã‚’ã‚‚ã£ã¦ã„ã‚‹ã€‚", "You are resistant to magic.");
 
     if (creature_ptr->muta3 & MUT3_XTRA_NOIS)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í•Ï‚È‰¹‚ğ”­‚µ‚Ä‚¢‚éB(‰B–§-3)", "You make a lot of strange noise (-3 stealth).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å¤‰ãªéŸ³ã‚’ç™ºã—ã¦ã„ã‚‹ã€‚(éš å¯†-3)", "You make a lot of strange noise (-3 stealth).");
 
     if (creature_ptr->muta3 & MUT3_INFRAVIS)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‘f°‚ç‚µ‚¢ÔŠOü‹—Í‚ğ‚Á‚Ä‚¢‚éB(+3)", "You have remarkable infravision (+3).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç´ æ™´ã‚‰ã—ã„èµ¤å¤–ç·šè¦–åŠ›ã‚’æŒã£ã¦ã„ã‚‹ã€‚(+3)", "You have remarkable infravision (+3).");
 
     if (creature_ptr->muta3 & MUT3_XTRA_LEGS)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í—]•ª‚É“ñ–{‚Ì‘«‚ª¶‚¦‚Ä‚¢‚éB(‰Á‘¬+3)", "You have an extra pair of legs (+3 speed).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ä½™åˆ†ã«äºŒæœ¬ã®è¶³ãŒç”Ÿãˆã¦ã„ã‚‹ã€‚(åŠ é€Ÿ+3)", "You have an extra pair of legs (+3 speed).");
 
     if (creature_ptr->muta3 & MUT3_SHORT_LEG)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì‘«‚Í’Z‚¢“Ë‹N‚¾B(‰Á‘¬-3)", "Your legs are short stubs (-3 speed).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®è¶³ã¯çŸ­ã„çªèµ·ã ã€‚(åŠ é€Ÿ-3)", "Your legs are short stubs (-3 speed).");
 
     if (creature_ptr->muta3 & MUT3_ELEC_TOUC)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌŒŒŠÇ‚É‚Í“d—¬‚ª—¬‚ê‚Ä‚¢‚éB", "Electricity is running through your veins.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®è¡€ç®¡ã«ã¯é›»æµãŒæµã‚Œã¦ã„ã‚‹ã€‚", "Electricity is running through your veins.");
 
     if (creature_ptr->muta3 & MUT3_FIRE_BODY)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì‘Ì‚Í‰Š‚É‚Â‚Â‚Ü‚ê‚Ä‚¢‚éB", "Your body is enveloped in flames.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®ä½“ã¯ç‚ã«ã¤ã¤ã¾ã‚Œã¦ã„ã‚‹ã€‚", "Your body is enveloped in flames.");
 
     if (creature_ptr->muta3 & MUT3_WART_SKIN)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì”§‚ÍƒCƒ{‚É”í‚í‚ê‚Ä‚¢‚éB(–£—Í-2, AC+5)", "Your skin is covered with warts (-2 CHR, +5 AC).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®è‚Œã¯ã‚¤ãƒœã«è¢«ã‚ã‚Œã¦ã„ã‚‹ã€‚(é­…åŠ›-2, AC+5)", "Your skin is covered with warts (-2 CHR, +5 AC).");
 
     if (creature_ptr->muta3 & MUT3_SCALES)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì”§‚Í—Ø‚É‚È‚Á‚Ä‚¢‚éB(–£—Í-1, AC+10)", "Your skin has turned into scales (-1 CHR, +10 AC).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®è‚Œã¯é±—ã«ãªã£ã¦ã„ã‚‹ã€‚(é­…åŠ›-1, AC+10)", "Your skin has turned into scales (-1 CHR, +10 AC).");
 
     if (creature_ptr->muta3 & MUT3_IRON_SKIN)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì”§‚Í“S‚Å‚Å‚«‚Ä‚¢‚éB(Ší—p-1, AC+25)", "Your skin is made of steel (-1 DEX, +25 AC).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®è‚Œã¯é‰„ã§ã§ãã¦ã„ã‚‹ã€‚(å™¨ç”¨-1, AC+25)", "Your skin is made of steel (-1 DEX, +25 AC).");
 
     if (creature_ptr->muta3 & MUT3_WINGS)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰H‚ğ‚Á‚Ä‚¢‚éB", "You have wings.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç¾½ã‚’æŒã£ã¦ã„ã‚‹ã€‚", "You have wings.");
 
     if (creature_ptr->muta3 & MUT3_FEARLESS) {
         /* Unnecessary */
@@ -299,20 +299,20 @@ void set_mutation_info_3(player_type *creature_ptr, self_info_type *si_ptr)
     }
 
     if (creature_ptr->muta3 & MUT3_LIMBER)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì‘Ì‚Í”ñí‚É‚µ‚È‚â‚©‚¾B(Ší—p+3)", "Your body is very limber (+3 DEX).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®ä½“ã¯éå¸¸ã«ã—ãªã‚„ã‹ã ã€‚(å™¨ç”¨+3)", "Your body is very limber (+3 DEX).");
 
     if (creature_ptr->muta3 & MUT3_ARTHRITIS)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚¢‚Â‚àŠÖß‚É’É‚İ‚ğŠ´‚¶‚Ä‚¢‚éB(Ší—p-3)", "Your joints ache constantly (-3 DEX).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã„ã¤ã‚‚é–¢ç¯€ã«ç—›ã¿ã‚’æ„Ÿã˜ã¦ã„ã‚‹ã€‚(å™¨ç”¨-3)", "Your joints ache constantly (-3 DEX).");
 
     if (creature_ptr->muta3 & MUT3_VULN_ELEM)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŒ³‘f‚ÌUŒ‚‚Éã‚¢B", "You are susceptible to damage from the elements.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å…ƒç´ ã®æ”»æ’ƒã«å¼±ã„ã€‚", "You are susceptible to damage from the elements.");
 
     if (creature_ptr->muta3 & MUT3_MOTION)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì“®ì‚Í³Šm‚Å—Í‹­‚¢B(‰B–§+1)", "Your movements are precise and forceful (+1 STL).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®å‹•ä½œã¯æ­£ç¢ºã§åŠ›å¼·ã„ã€‚(éš å¯†+1)", "Your movements are precise and forceful (+1 STL).");
 
     if (has_good_luck(creature_ptr))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í”’‚¢ƒI[ƒ‰‚É‚Â‚Â‚Ü‚ê‚Ä‚¢‚éB", "There is a white aura surrounding you.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç™½ã„ã‚ªãƒ¼ãƒ©ã«ã¤ã¤ã¾ã‚Œã¦ã„ã‚‹ã€‚", "There is a white aura surrounding you.");
 
     if (creature_ptr->muta3 & MUT3_BAD_LUCK)
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í•‚¢ƒI[ƒ‰‚É‚Â‚Â‚Ü‚ê‚Ä‚¢‚éB", "There is a black aura surrounding you.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é»’ã„ã‚ªãƒ¼ãƒ©ã«ã¤ã¤ã¾ã‚Œã¦ã„ã‚‹ã€‚", "There is a black aura surrounding you.");
 }

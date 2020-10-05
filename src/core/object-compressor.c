@@ -1,4 +1,4 @@
-#include "core/object-compressor.h"
+ï»¿#include "core/object-compressor.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
@@ -13,11 +13,11 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief ƒOƒ[ƒoƒ‹ƒIƒuƒWƒFƒNƒg”z—ñ‚É‘Î‚µŽw’è”ÍˆÍ‚ÌƒIƒuƒWƒFƒNƒg‚ð®—‚µ‚ÄID‚ÌŽá‚¢‡‚ÉŠñ‚¹‚é /
+ * @brief ã‚°ãƒ­ãƒ¼ãƒãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…åˆ—ã«å¯¾ã—æŒ‡å®šç¯„å›²ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ•´ç†ã—ã¦IDã®è‹¥ã„é †ã«å¯„ã›ã‚‹ /
  * Move an object from index i1 to index i2 in the object list
- * @param i1 ®—‚µ‚½‚¢”z—ñ‚ÌŽn“_
- * @param i2 ®—‚µ‚½‚¢”z—ñ‚ÌI“_
- * @return ‚È‚µ
+ * @param i1 æ•´ç†ã—ãŸã„é…åˆ—ã®å§‹ç‚¹
+ * @param i2 æ•´ç†ã—ãŸã„é…åˆ—ã®çµ‚ç‚¹
+ * @return ãªã—
  */
 static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
 {
@@ -55,13 +55,13 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 }
 
 /*!
- * @brief ƒOƒ[ƒoƒ‹ƒIƒuƒWƒFƒNƒg”z—ñ‚©‚ç—Dæ“x‚Ì’á‚¢‚à‚Ì‚ðíœ‚µAƒf[ƒ^‚ðˆ³k‚·‚éB /
+ * @brief ã‚°ãƒ­ãƒ¼ãƒãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…åˆ—ã‹ã‚‰å„ªå…ˆåº¦ã®ä½Žã„ã‚‚ã®ã‚’å‰Šé™¤ã—ã€ãƒ‡ãƒ¼ã‚¿ã‚’åœ§ç¸®ã™ã‚‹ã€‚ /
  * Compact and Reorder the object list.
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @param size Å’á‚Å‚àŒ¸‚ç‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg”‚Ì…€
- * @return ‚È‚µ
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param size æœ€ä½Žã§ã‚‚æ¸›ã‚‰ã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ•°ã®æ°´æº–
+ * @return ãªã—
  * @details
- * iŠëŒ¯‚È‚Ì‚ÅŽg—p‚É‚Í’ˆÓ‚·‚é‚±‚Æj
+ * ï¼ˆå±é™ºãªã®ã§ä½¿ç”¨ã«ã¯æ³¨æ„ã™ã‚‹ã“ã¨ï¼‰
  * This function can be very dangerous, use with caution!\n
  *\n
  * When actually "compacting" objects, we base the saving throw on a\n
@@ -75,7 +75,7 @@ void compact_objects(player_type *player_ptr, int size)
 {
     object_type *o_ptr;
     if (size) {
-        msg_print(_("ƒAƒCƒeƒ€î•ñ‚ðˆ³k‚µ‚Ä‚¢‚Ü‚·...", "Compacting objects..."));
+        msg_print(_("ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’åœ§ç¸®ã—ã¦ã„ã¾ã™...", "Compacting objects..."));
         player_ptr->redraw |= PR_MAP;
         player_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
     }

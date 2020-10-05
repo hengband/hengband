@@ -1,4 +1,4 @@
-#include "player-info/race-ability-info.h"
+ï»¿#include "player-info/race-ability-info.h"
 #include "player-info/self-info-util.h"
 
 void set_race_ability_info(player_type *creature_ptr, self_info_type *si_ptr)
@@ -7,17 +7,17 @@ void set_race_ability_info(player_type *creature_ptr, self_info_type *si_ptr)
     case RACE_NIBELUNG:
     case RACE_DWARF:
         if (creature_ptr->lev > 4)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íã©‚ÆƒhƒA‚ÆŠK’i‚ðŠ´’m‚Å‚«‚éB(5 MP)", "You can find traps, doors and stairs (cost 5).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç½ ã¨ãƒ‰ã‚¢ã¨éšŽæ®µã‚’æ„ŸçŸ¥ã§ãã‚‹ã€‚(5 MP)", "You can find traps, doors and stairs (cost 5).");
 
         break;
     case RACE_HOBBIT:
         if (creature_ptr->lev > 14)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍH—¿‚ð¶¬‚Å‚«‚éB(10 MP)", "You can produce food (cost 10).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é£Ÿæ–™ã‚’ç”Ÿæˆã§ãã‚‹ã€‚(10 MP)", "You can produce food (cost 10).");
 
         break;
     case RACE_GNOME:
         if (creature_ptr->lev > 4) {
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í”ÍˆÍ %d ˆÈ“à‚ÉƒeƒŒƒ|[ƒg‚Å‚«‚éB(%d MP)", "You can teleport, range %d (cost %d)."), (1 + creature_ptr->lev),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ç¯„å›² %d ä»¥å†…ã«ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã§ãã‚‹ã€‚(%d MP)", "You can teleport, range %d (cost %d)."), (1 + creature_ptr->lev),
                 (5 + (creature_ptr->lev / 5)));
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         }
@@ -25,45 +25,45 @@ void set_race_ability_info(player_type *creature_ptr, self_info_type *si_ptr)
         break;
     case RACE_HALF_ORC:
         if (creature_ptr->lev > 2)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹°•|‚ðœ‹Ž‚Å‚«‚éB(5 MP)", "You can remove fear (cost 5).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ææ€–ã‚’é™¤åŽ»ã§ãã‚‹ã€‚(5 MP)", "You can remove fear (cost 5).");
 
         break;
     case RACE_HALF_TROLL:
         if (creature_ptr->lev > 9)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹¶–\‰»‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(12 MP) ", "You can enter a berserk fury (cost 12).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç‹‚æš´åŒ–ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(12 MP) ", "You can enter a berserk fury (cost 12).");
 
         break;
     case RACE_AMBERITE:
         if (creature_ptr->lev > 29)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒVƒƒƒhƒEƒVƒtƒg‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(50 MP)", "You can Shift Shadows (cost 50).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚·ãƒ£ãƒ‰ã‚¦ã‚·ãƒ•ãƒˆã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(50 MP)", "You can Shift Shadows (cost 50).");
 
         if (creature_ptr->lev > 39)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íuƒpƒ^[ƒ“v‚ðS‚É•`‚¢‚Ä•à‚­‚±‚Æ‚ª‚Å‚«‚éB(75 MP)", "You can mentally Walk the Pattern (cost 75).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã€Œãƒ‘ã‚¿ãƒ¼ãƒ³ã€ã‚’å¿ƒã«æã„ã¦æ­©ãã“ã¨ãŒã§ãã‚‹ã€‚(75 MP)", "You can mentally Walk the Pattern (cost 75).");
 
         break;
     case RACE_BARBARIAN:
         if (creature_ptr->lev > 7)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹¶–\‰»‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(10 MP) ", "You can enter a berserk fury (cost 10).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç‹‚æš´åŒ–ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(10 MP) ", "You can enter a berserk fury (cost 10).");
 
         break;
     case RACE_HALF_OGRE:
         if (creature_ptr->lev > 24)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í”š”­‚Ìƒ‹[ƒ“‚ðŽdŠ|‚¯‚é‚±‚Æ‚ª‚Å‚«‚éB(35 MP)", "You can set an Explosive Rune (cost 35).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯çˆ†ç™ºã®ãƒ«ãƒ¼ãƒ³ã‚’ä»•æŽ›ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(35 MP)", "You can set an Explosive Rune (cost 35).");
 
         break;
     case RACE_HALF_GIANT:
         if (creature_ptr->lev > 19)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍÎ‚Ì•Ç‚ð‰ó‚·‚±‚Æ‚ª‚Å‚«‚éB(10 MP)", "You can break stone walls (cost 10).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯çŸ³ã®å£ã‚’å£Šã™ã“ã¨ãŒã§ãã‚‹ã€‚(10 MP)", "You can break stone walls (cost 10).");
 
         break;
     case RACE_HALF_TITAN:
         if (creature_ptr->lev > 34)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íƒ‚ƒ“ƒXƒ^[‚ðƒXƒLƒƒƒ“‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(20 MP)", "You can probe monsters (cost 20).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ã‚¹ã‚­ãƒ£ãƒ³ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(20 MP)", "You can probe monsters (cost 20).");
 
         break;
     case RACE_CYCLOPS:
         if (creature_ptr->lev > 19) {
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚ÌŠâÎ‚ð“Š‚°‚é‚±‚Æ‚ª‚Å‚«‚éB(15 MP)", "You can throw a boulder, dam. %d (cost 15)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®å²©çŸ³ã‚’æŠ•ã’ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(15 MP)", "You can throw a boulder, dam. %d (cost 15)."),
                 3 * creature_ptr->lev);
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         }
@@ -71,19 +71,19 @@ void set_race_ability_info(player_type *creature_ptr, self_info_type *si_ptr)
         break;
     case RACE_YEEK:
         if (creature_ptr->lev > 14)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹°•|‚ðŒÄ‚Ñ‹N‚±‚·‹©‚Ñº‚ð”­‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(15 MP)", "You can make a terrifying scream (cost 15).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ææ€–ã‚’å‘¼ã³èµ·ã“ã™å«ã³å£°ã‚’ç™ºã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(15 MP)", "You can make a terrifying scream (cost 15).");
 
         break;
     case RACE_KLACKON:
         if (creature_ptr->lev > 8) {
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚ÌŽ_‚ð‚«‚©‚¯‚é‚±‚Æ‚ª‚Å‚«‚éB(9 MP)", "You can spit acid, dam. %d (cost 9)."), creature_ptr->lev);
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®é…¸ã‚’å¹ãã‹ã‘ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(9 MP)", "You can spit acid, dam. %d (cost 9)."), creature_ptr->lev);
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         }
 
         break;
     case RACE_KOBOLD:
         if (creature_ptr->lev > 11) {
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚Ì“Å–î‚ð“Š‚°‚é‚±‚Æ‚ª‚Å‚«‚éB(8 MP)", "You can throw a dart of poison, dam. %d (cost 8)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®æ¯’çŸ¢ã‚’æŠ•ã’ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(8 MP)", "You can throw a dart of poison, dam. %d (cost 8)."),
                 creature_ptr->lev);
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         }
@@ -91,34 +91,34 @@ void set_race_ability_info(player_type *creature_ptr, self_info_type *si_ptr)
         break;
     case RACE_DARK_ELF:
         if (creature_ptr->lev > 1) {
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚Ìƒ}ƒWƒbƒNEƒ~ƒTƒCƒ‹‚ÌŽô•¶‚ðŽg‚¦‚éB(2 MP)", "You can cast a Magic Missile, dam %d (cost 2)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ãƒžã‚¸ãƒƒã‚¯ãƒ»ãƒŸã‚µã‚¤ãƒ«ã®å‘ªæ–‡ã‚’ä½¿ãˆã‚‹ã€‚(2 MP)", "You can cast a Magic Missile, dam %d (cost 2)."),
                 (3 + ((creature_ptr->lev - 1) / 5)));
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         }
 
         break;
     case RACE_DRACONIAN:
-        sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚ÌƒuƒŒƒX‚ð“f‚­‚±‚Æ‚ª‚Å‚«‚éB(%d MP)", "You can breathe, dam. %d (cost %d)."), 2 * creature_ptr->lev,
+        sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ãƒ–ãƒ¬ã‚¹ã‚’åãã“ã¨ãŒã§ãã‚‹ã€‚(%d MP)", "You can breathe, dam. %d (cost %d)."), 2 * creature_ptr->lev,
             creature_ptr->lev);
         si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         break;
     case RACE_MIND_FLAYER:
         if (creature_ptr->lev > 14)
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚Ì¸_UŒ‚‚ð‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(12 MP)", "You can mind blast your enemies, dam %d (cost 12)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ç²¾ç¥žæ”»æ’ƒã‚’ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(12 MP)", "You can mind blast your enemies, dam %d (cost 12)."),
                 creature_ptr->lev);
 
         si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         break;
     case RACE_IMP:
         if (creature_ptr->lev > 29) {
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚Ìƒtƒ@ƒCƒAEƒ{[ƒ‹‚ÌŽô•¶‚ðŽg‚¦‚éB(15 MP)", "You can cast a Fire Ball, dam. %d (cost 15)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ¼ãƒ«ã®å‘ªæ–‡ã‚’ä½¿ãˆã‚‹ã€‚(15 MP)", "You can cast a Fire Ball, dam. %d (cost 15)."),
                 creature_ptr->lev);
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
             break;
         }
 
         if (creature_ptr->lev > 8) {
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚Ìƒtƒ@ƒCƒAEƒ{ƒ‹ƒg‚ÌŽô•¶‚ðŽg‚¦‚éB(15 MP)", "You can cast a Fire Bolt, dam. %d (cost 15)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ãƒ•ã‚¡ã‚¤ã‚¢ãƒ»ãƒœãƒ«ãƒˆã®å‘ªæ–‡ã‚’ä½¿ãˆã‚‹ã€‚(15 MP)", "You can cast a Fire Bolt, dam. %d (cost 15)."),
                 creature_ptr->lev);
             si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         }
@@ -127,61 +127,61 @@ void set_race_ability_info(player_type *creature_ptr, self_info_type *si_ptr)
     case RACE_GOLEM:
         if (creature_ptr->lev > 19)
             si_ptr->info[si_ptr->line++]
-                = _("‚ ‚È‚½‚Í d20+30 ƒ^[ƒ“‚ÌŠÔ”§‚ðÎ‚É•Ï‰»‚³‚¹‚ç‚ê‚éB(15 MP)", "You can turn your skin to stone, dur d20+30 (cost 15).");
+                = _("ã‚ãªãŸã¯ d20+30 ã‚¿ãƒ¼ãƒ³ã®é–“è‚Œã‚’çŸ³ã«å¤‰åŒ–ã•ã›ã‚‰ã‚Œã‚‹ã€‚(15 MP)", "You can turn your skin to stone, dur d20+30 (cost 15).");
 
         break;
     case RACE_ZOMBIE:
     case RACE_SKELETON:
         if (creature_ptr->lev > 29)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŽ¸‚Á‚½ŒoŒ±’l‚ð‰ñ•œ‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(30 MP)", "You can restore lost experience (cost 30).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å¤±ã£ãŸçµŒé¨“å€¤ã‚’å›žå¾©ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(30 MP)", "You can restore lost experience (cost 30).");
 
         break;
     case RACE_VAMPIRE:
         if (creature_ptr->lev <= 1)
             break;
 
-        sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í“G‚©‚ç %d-%d HP ‚Ì¶–½—Í‚ð‹zŽû‚Å‚«‚éB(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
+        sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯æ•µã‹ã‚‰ %d-%d HP ã®ç”Ÿå‘½åŠ›ã‚’å¸åŽã§ãã‚‹ã€‚(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
             creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10),
             1 + (creature_ptr->lev / 3));
         si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         break;
     case RACE_SPECTRE:
         if (creature_ptr->lev > 3)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹ƒ‚«‹©‚ñ‚Å“G‚ð‹°•|‚³‚¹‚é‚±‚Æ‚ª‚Å‚«‚éB(3 MP)", "You can wail to terrify your enemies (cost 3).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ³£ãå«ã‚“ã§æ•µã‚’ææ€–ã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(3 MP)", "You can wail to terrify your enemies (cost 3).");
 
         break;
     case RACE_SPRITE:
         if (creature_ptr->lev > 11)
             si_ptr->info[si_ptr->line++]
-                = _("‚ ‚È‚½‚Í“G‚ð–°‚ç‚¹‚é–‚–@‚Ì•²‚ð“Š‚°‚é‚±‚Æ‚ª‚Å‚«‚éB(12 MP)", "You can throw magical dust which induces sleep (cost 12).");
+                = _("ã‚ãªãŸã¯æ•µã‚’çœ ã‚‰ã›ã‚‹é­”æ³•ã®ç²‰ã‚’æŠ•ã’ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(12 MP)", "You can throw magical dust which induces sleep (cost 12).");
 
         break;
     case RACE_BALROG:
-        sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚Ì’n–‚©‰Î‰Š‚ÌƒuƒŒƒX‚ð“f‚­‚±‚Æ‚ª‚Å‚«‚éB(%d MP)", "You can breathe nether, dam. %d (cost %d)."),
+        sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®åœ°ç„ã‹ç«ç‚Žã®ãƒ–ãƒ¬ã‚¹ã‚’åãã“ã¨ãŒã§ãã‚‹ã€‚(%d MP)", "You can breathe nether, dam. %d (cost %d)."),
             3 * creature_ptr->lev, 10 + creature_ptr->lev / 3);
         si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
         break;
     case RACE_KUTAR:
         if (creature_ptr->lev > 19)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í d20+30 ƒ^[ƒ“‚ÌŠÔ‰¡‚ÉL‚Ñ‚é‚±‚Æ‚ª‚Å‚«‚éB(15 MP)", "You can expand horizontally, dur d20+30 (cost 15).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ d20+30 ã‚¿ãƒ¼ãƒ³ã®é–“æ¨ªã«ä¼¸ã³ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(15 MP)", "You can expand horizontally, dur d20+30 (cost 15).");
 
         break;
     case RACE_ANDROID:
         if (creature_ptr->lev < 10)
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚ÌƒŒƒCƒKƒ“‚ðŒ‚‚Â‚±‚Æ‚ª‚Å‚«‚éB(7 MP)", "You can fire a ray gun with damage %d (cost 7)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ãƒ¬ã‚¤ã‚¬ãƒ³ã‚’æ’ƒã¤ã“ã¨ãŒã§ãã‚‹ã€‚(7 MP)", "You can fire a ray gun with damage %d (cost 7)."),
                 (creature_ptr->lev + 1) / 2);
         else if (creature_ptr->lev < 25)
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚Ìƒuƒ‰ƒXƒ^[‚ðŒ‚‚Â‚±‚Æ‚ª‚Å‚«‚éB(13 MP)", "You can fire a blaster with damage %d (cost 13)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ãƒ–ãƒ©ã‚¹ã‚¿ãƒ¼ã‚’æ’ƒã¤ã“ã¨ãŒã§ãã‚‹ã€‚(13 MP)", "You can fire a blaster with damage %d (cost 13)."),
                 creature_ptr->lev);
         else if (creature_ptr->lev < 35)
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚ÌƒoƒY[ƒJ‚ðŒ‚‚Â‚±‚Æ‚ª‚Å‚«‚éB(26 MP)", "You can fire a bazooka with damage %d (cost 26)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ãƒã‚ºãƒ¼ã‚«ã‚’æ’ƒã¤ã“ã¨ãŒã§ãã‚‹ã€‚(26 MP)", "You can fire a bazooka with damage %d (cost 26)."),
                 creature_ptr->lev * 2);
         else if (creature_ptr->lev < 45)
             sprintf(si_ptr->plev_buf,
-                _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚Ìƒr[ƒ€ƒLƒƒƒmƒ“‚ðŒ‚‚Â‚±‚Æ‚ª‚Å‚«‚éB(40 MP)", "You can fire a beam cannon with damage %d (cost 40)."),
+                _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ãƒ“ãƒ¼ãƒ ã‚­ãƒ£ãƒŽãƒ³ã‚’æ’ƒã¤ã“ã¨ãŒã§ãã‚‹ã€‚(40 MP)", "You can fire a beam cannon with damage %d (cost 40)."),
                 creature_ptr->lev * 2);
         else
-            sprintf(si_ptr->plev_buf, _("‚ ‚È‚½‚Í %d ƒ_ƒ[ƒW‚ÌƒƒPƒbƒg‚ðŒ‚‚Â‚±‚Æ‚ª‚Å‚«‚éB(60 MP)", "You can fire a rocket with damage %d (cost 60)."),
+            sprintf(si_ptr->plev_buf, _("ã‚ãªãŸã¯ %d ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ãƒ­ã‚±ãƒƒãƒˆã‚’æ’ƒã¤ã“ã¨ãŒã§ãã‚‹ã€‚(60 MP)", "You can fire a rocket with damage %d (cost 60)."),
                 creature_ptr->lev * 5);
 
         si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;

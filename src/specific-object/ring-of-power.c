@@ -1,4 +1,4 @@
-#include "specific-object/ring-of-power.h"
+ï»¿#include "specific-object/ring-of-power.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "spell-kind/spells-launcher.h"
@@ -9,18 +9,18 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief wˆê‚Â‚Ìw—Öx‚ÌŒø‰Êˆ— /
+ * @brief ã€ä¸€ã¤ã®æŒ‡è¼ªã€ã®åŠ¹æœå‡¦ç† /
  * Hack -- activate the ring of power
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param dir ”­“®‚Ì•ûŒüID
- * @return ‚È‚µ
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param dir ç™ºå‹•ã®æ–¹å‘ID
+ * @return ãªã—
  */
 static void exe_ring_of_power(player_type *caster_ptr, DIRECTION dir)
 {
     switch (randint1(10)) {
     case 1:
     case 2:
-        msg_print(_("‚ ‚È‚½‚Íˆ««‚ÌƒI[ƒ‰‚É•ï‚İ‚Ü‚ê‚½B", "You are surrounded by a malignant aura."));
+        msg_print(_("ã‚ãªãŸã¯æ‚ªæ€§ã®ã‚ªãƒ¼ãƒ©ã«åŒ…ã¿è¾¼ã¾ã‚ŒãŸã€‚", "You are surrounded by a malignant aura."));
         sound(SOUND_EVIL);
         (void)dec_stat(caster_ptr, A_STR, 50, TRUE);
         (void)dec_stat(caster_ptr, A_INT, 50, TRUE);
@@ -33,7 +33,7 @@ static void exe_ring_of_power(player_type *caster_ptr, DIRECTION dir)
         check_experience(caster_ptr);
         break;
     case 3:
-        msg_print(_("‚ ‚È‚½‚Í‹­—Í‚ÈƒI[ƒ‰‚É•ï‚İ‚Ü‚ê‚½B", "You are surrounded by a powerful aura."));
+        msg_print(_("ã‚ãªãŸã¯å¼·åŠ›ãªã‚ªãƒ¼ãƒ©ã«åŒ…ã¿è¾¼ã¾ã‚ŒãŸã€‚", "You are surrounded by a powerful aura."));
         dispel_monsters(caster_ptr, 1000);
         break;
     case 4:
@@ -55,7 +55,7 @@ static void exe_ring_of_power(player_type *caster_ptr, DIRECTION dir)
 bool activate_ring_of_power(player_type *user_ptr, concptr name)
 {
     DIRECTION dir;
-    msg_format(_("%s‚Í½•‚É‹P‚¢‚½...", "The %s glows intensely black..."), name);
+    msg_format(_("%sã¯æ¼†é»’ã«è¼ã„ãŸ...", "The %s glows intensely black..."), name);
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 

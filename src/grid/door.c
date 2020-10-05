@@ -1,4 +1,4 @@
-#include "grid/door.h"
+ï»¿#include "grid/door.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
@@ -52,12 +52,12 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 }
 
 /*!
- * @brief ‰B‚µƒhƒA‚ğ”z’u‚·‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌYÀ•W
- * @param x ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌXÀ•W
- * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN ‚Ì‚¢‚¸‚ê‚©
- * @return ‚È‚µ
+ * @brief éš ã—ãƒ‰ã‚¢ã‚’é…ç½®ã™ã‚‹
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y é…ç½®ã—ãŸã„ãƒ•ãƒ­ã‚¢ã®Yåº§æ¨™
+ * @param x é…ç½®ã—ãŸã„ãƒ•ãƒ­ã‚¢ã®Xåº§æ¨™
+ * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN ã®ã„ãšã‚Œã‹
+ * @return ãªã—
  */
 void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {
@@ -91,11 +91,11 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 }
 
 /*!
- * @brief Œ®‚Ì‚©‚©‚Á‚½ƒhƒA‚ğ”z’u‚·‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌYÀ•W
- * @param x ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌXÀ•W
- * @return ‚È‚µ
+ * @brief éµã®ã‹ã‹ã£ãŸãƒ‰ã‚¢ã‚’é…ç½®ã™ã‚‹
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y é…ç½®ã—ãŸã„ãƒ•ãƒ­ã‚¢ã®Yåº§æ¨™
+ * @param x é…ç½®ã—ãŸã„ãƒ•ãƒ­ã‚¢ã®Xåº§æ¨™
+ * @return ãªã—
  */
 void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 {
@@ -111,12 +111,12 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief Š’è‚ÌˆÊ’u‚É‚³‚Ü‚´‚Ü‚Èó‘Ô‚âí—Ş‚ÌƒhƒA‚ğ”z’u‚·‚é / Place a random type of door at the given location
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ƒhƒA‚Ì”z’u‚ğ‚İ‚½‚¢ƒ}ƒX‚ÌYÀ•W
- * @param x ƒhƒA‚Ì”z’u‚ğ‚İ‚½‚¢ƒ}ƒX‚ÌXÀ•W
- * @param room •”‰®‚ÉÚ‚µ‚Ä‚¢‚éê‡Œü‚¯‚ÌƒhƒA¶¬‚©”Û‚©
- * @return ‚È‚µ
+ * @brief æ‰€å®šã®ä½ç½®ã«ã•ã¾ã–ã¾ãªçŠ¶æ…‹ã‚„ç¨®é¡ã®ãƒ‰ã‚¢ã‚’é…ç½®ã™ã‚‹ / Place a random type of door at the given location
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y ãƒ‰ã‚¢ã®é…ç½®ã‚’è©¦ã¿ãŸã„ãƒã‚¹ã®Yåº§æ¨™
+ * @param x ãƒ‰ã‚¢ã®é…ç½®ã‚’è©¦ã¿ãŸã„ãƒã‚¹ã®Xåº§æ¨™
+ * @param room éƒ¨å±‹ã«æ¥ã—ã¦ã„ã‚‹å ´åˆå‘ã‘ã®ãƒ‰ã‚¢ç”Ÿæˆã‹å¦ã‹
+ * @return ãªã—
  */
 void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room)
 {
@@ -170,12 +170,12 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 }
 
 /*!
- * @brief Š’è‚ÌˆÊ’u‚ÉŠeí‚Ì•Â‚¶‚½ƒhƒA‚ğ”z’u‚·‚é / Place a random type of normal door at the given location.
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ƒhƒA‚Ì”z’u‚ğ‚İ‚½‚¢ƒ}ƒX‚ÌYÀ•W
- * @param x ƒhƒA‚Ì”z’u‚ğ‚İ‚½‚¢ƒ}ƒX‚ÌXÀ•W
- * @param type ƒhƒA‚Ì’nŒ`ID
- * @return ‚È‚µ
+ * @brief æ‰€å®šã®ä½ç½®ã«å„ç¨®ã®é–‰ã˜ãŸãƒ‰ã‚¢ã‚’é…ç½®ã™ã‚‹ / Place a random type of normal door at the given location.
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y ãƒ‰ã‚¢ã®é…ç½®ã‚’è©¦ã¿ãŸã„ãƒã‚¹ã®Yåº§æ¨™
+ * @param x ãƒ‰ã‚¢ã®é…ç½®ã‚’è©¦ã¿ãŸã„ãƒã‚¹ã®Xåº§æ¨™
+ * @param type ãƒ‰ã‚¢ã®åœ°å½¢ID
+ * @return ãªã—
  */
 void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {

@@ -1,4 +1,4 @@
-#include "object-activation/activation-breath.h"
+ï»¿#include "object-activation/activation-breath.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object/object-flags.h"
 #include "spell-kind/spells-launcher.h"
@@ -12,11 +12,11 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief ”­“®‚É‚æ‚éƒuƒŒƒX‚Ì‘®«‚ğƒAƒCƒeƒ€‚Ì‘Ï«‚©‚ç‘I‘ğ‚µAÀs‚ğˆ—‚·‚éB/ Dragon breath activation
- * @details ‘ÎÛ‚Æ‚È‚é‘Ï«‚Í dragonbreath_info ƒe[ƒuƒ‹‚ğQÆ‚Ì‚±‚ÆB
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ‘ÎÛ‚ÌƒIƒuƒWƒFƒNƒg\‘¢‘Ìƒ|ƒCƒ“ƒ^
- * @return ”­“®Às‚Ì¥”ñ‚ğ•Ô‚·B
+ * @brief ç™ºå‹•ã«ã‚ˆã‚‹ãƒ–ãƒ¬ã‚¹ã®å±æ€§ã‚’ã‚¢ã‚¤ãƒ†ãƒ ã®è€æ€§ã‹ã‚‰é¸æŠã—ã€å®Ÿè¡Œã‚’å‡¦ç†ã™ã‚‹ã€‚/ Dragon breath activation
+ * @details å¯¾è±¡ã¨ãªã‚‹è€æ€§ã¯ dragonbreath_info ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’å‚ç…§ã®ã“ã¨ã€‚
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ç™ºå‹•å®Ÿè¡Œã®æ˜¯éã‚’è¿”ã™ã€‚
  */
 bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
 {
@@ -48,7 +48,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
         stop_hex_spell_all(user_ptr);
 
     int t = randint0(n);
-    msg_format(_("‚ ‚È‚½‚Í%s‚ÌƒuƒŒƒX‚ğ“f‚¢‚½B", "You breathe %s."), name[t]);
+    msg_format(_("ã‚ãªãŸã¯%sã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe %s."), name[t]);
     fire_breath(user_ptr, type[t], dir, 250, 4);
     return TRUE;
 }

@@ -1,4 +1,4 @@
-#include "object-activation/activation-bolt-ball.h"
+ï»¿#include "object-activation/activation-bolt-ball.h"
 #include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -14,7 +14,7 @@
 bool activate_missile_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚Íá¿‚µ‚¢‚­‚ç‚¢‚É–¾‚é‚­‹P‚¢‚Ä‚¢‚é...", "It glows extremely brightly..."));
+    msg_print(_("ãã‚Œã¯çœ©ã—ã„ãã‚‰ã„ã«æ˜ã‚‹ãè¼ã„ã¦ã„ã‚‹...", "It glows extremely brightly..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -25,7 +25,7 @@ bool activate_missile_1(player_type *user_ptr)
 bool activate_missile_2(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("–‚–@‚ÌƒgƒQ‚ªŒ»‚ê‚½...", "It grows magical spikes..."));
+    msg_print(_("é­”æ³•ã®ãƒˆã‚²ãŒç¾ã‚ŒãŸ...", "It grows magical spikes..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -39,7 +39,7 @@ bool activate_missile_3(player_type *user_ptr)
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
-    msg_print(_("‚ ‚È‚½‚ÍƒGƒŒƒƒ“ƒg‚ÌƒuƒŒƒX‚ğ“f‚¢‚½B", "You breathe the elements."));
+    msg_print(_("ã‚ãªãŸã¯ã‚¨ãƒ¬ãƒ¡ãƒ³ãƒˆã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe the elements."));
     fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
     return TRUE;
 }
@@ -47,7 +47,7 @@ bool activate_missile_3(player_type *user_ptr)
 bool activate_bolt_acid_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚Í_‚É•¢‚í‚ê‚½...", "It is covered in acid..."));
+    msg_print(_("ãã‚Œã¯é…¸ã«è¦†ã‚ã‚ŒãŸ...", "It is covered in acid..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -58,7 +58,7 @@ bool activate_bolt_acid_1(player_type *user_ptr)
 bool activate_bolt_elec_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚Í‰Î‰Ô‚É•¢‚í‚ê‚½...", "It is covered in sparks..."));
+    msg_print(_("ãã‚Œã¯ç«èŠ±ã«è¦†ã‚ã‚ŒãŸ...", "It is covered in sparks..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -69,7 +69,7 @@ bool activate_bolt_elec_1(player_type *user_ptr)
 bool activate_bolt_fire_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚Í‰Š‚É•¢‚í‚ê‚½...", "It is covered in fire..."));
+    msg_print(_("ãã‚Œã¯ç‚ã«è¦†ã‚ã‚ŒãŸ...", "It is covered in fire..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -80,7 +80,7 @@ bool activate_bolt_fire_1(player_type *user_ptr)
 bool activate_bolt_cold_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚Í‘š‚É•¢‚í‚ê‚½...", "It is covered in frost..."));
+    msg_print(_("ãã‚Œã¯éœœã«è¦†ã‚ã‚ŒãŸ...", "It is covered in frost..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -91,7 +91,7 @@ bool activate_bolt_cold_1(player_type *user_ptr)
 bool activate_bolt_hypodynamia_1(player_type *user_ptr, concptr name)
 {
     DIRECTION dir;
-    msg_format(_("‚ ‚È‚½‚Í%s‚É“G‚ğ’÷‚ßE‚·‚æ‚¤–½‚¶‚½B", "You order the %s to strangle your opponent."), name);
+    msg_format(_("ã‚ãªãŸã¯%sã«æ•µã‚’ç· ã‚æ®ºã™ã‚ˆã†å‘½ã˜ãŸã€‚", "You order the %s to strangle your opponent."), name);
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -102,7 +102,7 @@ bool activate_bolt_hypodynamia_1(player_type *user_ptr, concptr name)
 bool activate_bolt_hypodynamia_2(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("•‚­‹P‚¢‚Ä‚¢‚é...", "It glows black..."));
+    msg_print(_("é»’ãè¼ã„ã¦ã„ã‚‹...", "It glows black..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -139,7 +139,7 @@ bool activate_bolt_drain_2(player_type *user_ptr)
 bool activate_bolt_mana(player_type *user_ptr, concptr name)
 {
     DIRECTION dir;
-    msg_format(_("%s‚É–‚–@‚ÌƒgƒQ‚ªŒ»‚ê‚½...", "The %s grows magical spikes..."), name);
+    msg_format(_("%sã«é­”æ³•ã®ãƒˆã‚²ãŒç¾ã‚ŒãŸ...", "The %s grows magical spikes..."), name);
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -150,7 +150,7 @@ bool activate_bolt_mana(player_type *user_ptr, concptr name)
 bool activate_ball_pois_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚Í”Z—ÎF‚É–¬“®‚µ‚Ä‚¢‚é...", "It throbs deep green..."));
+    msg_print(_("ãã‚Œã¯æ¿ƒç·‘è‰²ã«è„ˆå‹•ã—ã¦ã„ã‚‹...", "It throbs deep green..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -161,7 +161,7 @@ bool activate_ball_pois_1(player_type *user_ptr)
 bool activate_ball_cold_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚Í‘š‚É•¢‚í‚ê‚½...", "It is covered in frost..."));
+    msg_print(_("ãã‚Œã¯éœœã«è¦†ã‚ã‚ŒãŸ...", "It is covered in frost..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -172,7 +172,7 @@ bool activate_ball_cold_1(player_type *user_ptr)
 bool activate_ball_cold_2(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚ÍÂ‚­Œƒ‚µ‚­‹P‚¢‚½...", "It glows an intense blue..."));
+    msg_print(_("ãã‚Œã¯é’ãæ¿€ã—ãè¼ã„ãŸ...", "It glows an intense blue..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -183,7 +183,7 @@ bool activate_ball_cold_2(player_type *user_ptr)
 bool activate_ball_cold_3(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("–¾‚é‚­”’F‚É‹P‚¢‚Ä‚¢‚é...", "It glows bright white..."));
+    msg_print(_("æ˜ã‚‹ãç™½è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows bright white..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -194,7 +194,7 @@ bool activate_ball_cold_3(player_type *user_ptr)
 bool activate_ball_fire_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚ÍÔ‚­Œƒ‚µ‚­‹P‚¢‚½...", "It glows an intense red..."));
+    msg_print(_("ãã‚Œã¯èµ¤ãæ¿€ã—ãè¼ã„ãŸ...", "It glows an intense red..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -205,7 +205,7 @@ bool activate_ball_fire_1(player_type *user_ptr)
 bool activate_ball_fire_2(player_type *user_ptr, concptr name)
 {
     DIRECTION dir;
-    msg_format(_("%s‚©‚ç‰Š‚ª‚«o‚µ‚½...", "The %s rages in fire..."), name);
+    msg_format(_("%sã‹ã‚‰ç‚ãŒå¹ãå‡ºã—ãŸ...", "The %s rages in fire..."), name);
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -216,7 +216,7 @@ bool activate_ball_fire_2(player_type *user_ptr, concptr name)
 bool activate_ball_fire_3(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("[ÔF‚É‹P‚¢‚Ä‚¢‚é...", "It glows deep red..."));
+    msg_print(_("æ·±èµ¤è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows deep red..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -227,7 +227,7 @@ bool activate_ball_fire_3(player_type *user_ptr)
 bool activate_ball_fire_4(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚ÍÔ‚­Œƒ‚µ‚­‹P‚¢‚½...", "It glows an intense red..."));
+    msg_print(_("ãã‚Œã¯èµ¤ãæ¿€ã—ãè¼ã„ãŸ...", "It glows an intense red..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -238,7 +238,7 @@ bool activate_ball_fire_4(player_type *user_ptr)
 bool activate_ball_elec_2(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("“d‹C‚ªƒpƒ`ƒpƒ`‰¹‚ğ—§‚Ä‚½...", "It crackles with electricity..."));
+    msg_print(_("é›»æ°—ãŒãƒ‘ãƒãƒ‘ãƒéŸ³ã‚’ç«‹ã¦ãŸ...", "It crackles with electricity..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -249,7 +249,7 @@ bool activate_ball_elec_2(player_type *user_ptr)
 bool activate_ball_elec_3(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("[ÂF‚É‹P‚¢‚Ä‚¢‚é...", "It glows deep blue..."));
+    msg_print(_("æ·±é’è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows deep blue..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -260,7 +260,7 @@ bool activate_ball_elec_3(player_type *user_ptr)
 bool activate_ball_acid_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚Í•‚­Œƒ‚µ‚­‹P‚¢‚½...", "It glows an intense black..."));
+    msg_print(_("ãã‚Œã¯é»’ãæ¿€ã—ãè¼ã„ãŸ...", "It glows an intense black..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -271,7 +271,7 @@ bool activate_ball_acid_1(player_type *user_ptr)
 bool activate_ball_nuke_1(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("‚»‚ê‚Í—Î‚ÉŒƒ‚µ‚­‹P‚¢‚½...", "It glows an intense green..."));
+    msg_print(_("ãã‚Œã¯ç·‘ã«æ¿€ã—ãè¼ã„ãŸ...", "It glows an intense green..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -285,7 +285,7 @@ bool activate_rocket(player_type *user_ptr)
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
-    msg_print(_("ƒƒPƒbƒg‚ğ”­Ë‚µ‚½I", "You launch a rocket!"));
+    msg_print(_("ãƒ­ã‚±ãƒƒãƒˆã‚’ç™ºå°„ã—ãŸï¼", "You launch a rocket!"));
     (void)fire_ball(user_ptr, GF_ROCKET, dir, 250 + user_ptr->lev * 3, 2);
     return TRUE;
 }
@@ -293,7 +293,7 @@ bool activate_rocket(player_type *user_ptr)
 bool activate_ball_water(player_type *user_ptr, concptr name)
 {
     DIRECTION dir;
-    msg_format(_("%s‚ª[‚¢ÂF‚ÉŒÛ“®‚µ‚Ä‚¢‚é...", "The %s throbs deep blue..."), name);
+    msg_format(_("%sãŒæ·±ã„é’è‰²ã«é¼“å‹•ã—ã¦ã„ã‚‹...", "The %s throbs deep blue..."), name);
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -305,7 +305,7 @@ bool activate_ball_lite(player_type *user_ptr, concptr name)
 {
     HIT_POINT num = damroll(5, 3);
     POSITION y = 0, x = 0;
-    msg_format(_("%s‚ªˆîÈ‚Å•¢‚í‚ê‚½...", "The %s is surrounded by lightning..."), name);
+    msg_format(_("%sãŒç¨²å¦»ã§è¦†ã‚ã‚ŒãŸ...", "The %s is surrounded by lightning..."), name);
     for (int k = 0; k < num; k++) {
         int attempts = 1000;
         while (attempts--) {
@@ -326,7 +326,7 @@ bool activate_ball_lite(player_type *user_ptr, concptr name)
 bool activate_ball_dark(player_type *user_ptr, concptr name)
 {
     DIRECTION dir;
-    msg_format(_("%s‚ª[‚¢ˆÅ‚É•¢‚í‚ê‚½...", "The %s is coverd in pitch-darkness..."), name);
+    msg_format(_("%sãŒæ·±ã„é—‡ã«è¦†ã‚ã‚ŒãŸ...", "The %s is coverd in pitch-darkness..."), name);
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -337,7 +337,7 @@ bool activate_ball_dark(player_type *user_ptr, concptr name)
 bool activate_ball_mana(player_type *user_ptr, concptr name)
 {
     DIRECTION dir;
-    msg_format(_("%s‚ªÂ”’‚­Œõ‚Á‚½DDD", "The %s glows pale..."), name);
+    msg_format(_("%sãŒé’ç™½ãå…‰ã£ãŸï¼ï¼ï¼", "The %s glows pale..."), name);
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 

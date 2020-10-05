@@ -1,4 +1,4 @@
-#include "cmd-io/cmd-floor.h"
+ï»¿#include "cmd-io/cmd-floor.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -16,9 +16,9 @@
 #include "window/main-window-util.h"
 
 /*!
- * @brief ƒ^[ƒQƒbƒg‚ğİ’è‚·‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“
+ * @brief ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¨­å®šã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
  * Target command
- * @return ‚È‚µ
+ * @return ãªã—
  */
 void do_cmd_target(player_type *creature_ptr)
 {
@@ -26,28 +26,28 @@ void do_cmd_target(player_type *creature_ptr)
         return;
 
     if (target_set(creature_ptr, TARGET_KILL))
-        msg_print(_("ƒ^[ƒQƒbƒgŒˆ’èB", "Target Selected."));
+        msg_print(_("ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæ±ºå®šã€‚", "Target Selected."));
     else
-        msg_print(_("ƒ^[ƒQƒbƒg‰ğœB", "Target Aborted."));
+        msg_print(_("ã‚¿ãƒ¼ã‚²ãƒƒãƒˆè§£é™¤ã€‚", "Target Aborted."));
 }
 
 /*!
- * @brief üˆÍ‚ğŒ©“n‚·ƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“
+ * @brief å‘¨å›²ã‚’è¦‹æ¸¡ã™ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
  * Look command
- * @return ‚È‚µ
+ * @return ãªã—
  */
 void do_cmd_look(player_type *creature_ptr)
 {
     creature_ptr->window |= PW_MONSTER_LIST;
     handle_stuff(creature_ptr);
     if (target_set(creature_ptr, TARGET_LOOK))
-        msg_print(_("ƒ^[ƒQƒbƒgŒˆ’èB", "Target Selected."));
+        msg_print(_("ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæ±ºå®šã€‚", "Target Selected."));
 }
 
 /*!
- * @brief ˆÊ’u‚ğŠm”F‚·‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“
+ * @brief ä½ç½®ã‚’ç¢ºèªã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³
  * Allow the player to examine other sectors on the map
- * @return ‚È‚µ
+ * @return ãªã—
  */
 void do_cmd_locate(player_type *creature_ptr)
 {
@@ -61,12 +61,12 @@ void do_cmd_locate(player_type *creature_ptr)
     POSITION x2 = x1 = panel_col_min;
     while (TRUE) {
         if ((y2 == y1) && (x2 == x1))
-            strcpy(tmp_val, _("^ã", "\0"));
+            strcpy(tmp_val, _("çœŸä¸Š", "\0"));
         else
-            sprintf(tmp_val, "%s%s", ((y2 < y1) ? _("–k", " North") : (y2 > y1) ? _("“ì", " South") : ""),
-                ((x2 < x1) ? _("¼", " West") : (x2 > x1) ? _("“Œ", " East") : ""));
+            sprintf(tmp_val, "%s%s", ((y2 < y1) ? _("åŒ—", " North") : (y2 > y1) ? _("å—", " South") : ""),
+                ((x2 < x1) ? _("è¥¿", " West") : (x2 > x1) ? _("æ±", " East") : ""));
 
-        sprintf(out_val, _("ƒ}ƒbƒvˆÊ’u [%d(%02d),%d(%02d)] (ƒvƒŒƒCƒ„[‚Ì%s)  •ûŒü?", "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?"),
+        sprintf(out_val, _("ãƒãƒƒãƒ—ä½ç½® [%d(%02d),%d(%02d)] (ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®%s)  æ–¹å‘?", "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?"),
             y2 / (hgt / 2), y2 % (hgt / 2), x2 / (wid / 2), x2 % (wid / 2), tmp_val);
 
         dir = 0;

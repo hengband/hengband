@@ -1,4 +1,4 @@
-#include "room/vault-builder.h"
+ï»¿#include "room/vault-builder.h"
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-util.h"
@@ -29,12 +29,12 @@ static bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
 }
 
 /*!
- * @brief “Áê‚È•”‰®’nŒ`Œü‚¯‚Éƒ‚ƒ“ƒXƒ^[‚ğ”z’u‚·‚é / Place some sleeping monsters near the given location
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y1 ƒ‚ƒ“ƒXƒ^[‚ğ”z’u‚µ‚½‚¢ƒ}ƒX‚Ì’†SYÀ•W
- * @param x1 ƒ‚ƒ“ƒXƒ^[‚ğ”z’u‚µ‚½‚¢ƒ}ƒX‚Ì’†SXÀ•W
- * @param num ”z’u‚µ‚½‚¢ƒ‚ƒ“ƒXƒ^[‚Ì”
- * @return ‚È‚µ
+ * @brief ç‰¹æ®Šãªéƒ¨å±‹åœ°å½¢å‘ã‘ã«ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é…ç½®ã™ã‚‹ / Place some sleeping monsters near the given location
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y1 ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é…ç½®ã—ãŸã„ãƒã‚¹ã®ä¸­å¿ƒYåº§æ¨™
+ * @param x1 ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’é…ç½®ã—ãŸã„ãƒã‚¹ã®ä¸­å¿ƒXåº§æ¨™
+ * @param num é…ç½®ã—ãŸã„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æ•°
+ * @return ãªã—
  * @details
  * Only really called by some of the "vault" routines.
  */
@@ -59,12 +59,12 @@ void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
 }
 
 /*!
- * @brief “Áê‚È•”‰®Œü‚¯‚ÉŠeíƒAƒCƒeƒ€‚ğ”z’u‚·‚é / Create up to "num" objects near the given coordinates
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ”z’u‚µ‚½‚¢’†Sƒ}ƒX‚ÌYÀ•W
- * @param x ”z’u‚µ‚½‚¢’†Sƒ}ƒX‚ÌXÀ•W
- * @param num ”z’u‚µ‚½‚¢”
- * @return ‚È‚µ
+ * @brief ç‰¹æ®Šãªéƒ¨å±‹å‘ã‘ã«å„ç¨®ã‚¢ã‚¤ãƒ†ãƒ ã‚’é…ç½®ã™ã‚‹ / Create up to "num" objects near the given coordinates
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y é…ç½®ã—ãŸã„ä¸­å¿ƒãƒã‚¹ã®Yåº§æ¨™
+ * @param x é…ç½®ã—ãŸã„ä¸­å¿ƒãƒã‚¹ã®Xåº§æ¨™
+ * @param num é…ç½®ã—ãŸã„æ•°
+ * @return ãªã—
  * @details
  * Only really called by some of the "vault" routines.
  */
@@ -85,7 +85,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
             }
 
             if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room) {
-                msg_print(_("ŒxI’n‰ºº‚ÌƒAƒCƒeƒ€‚ğ”z’u‚Å‚«‚Ü‚¹‚ñI", "Warning! Could not place vault object!"));
+                msg_print(_("è­¦å‘Šï¼åœ°ä¸‹å®¤ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’é…ç½®ã§ãã¾ã›ã‚“ï¼", "Warning! Could not place vault object!"));
             }
 
             grid_type *g_ptr;
@@ -105,12 +105,12 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 }
 
 /*!
- * @brief “Áê‚È•”‰®Œü‚¯‚ÉŠeíƒAƒCƒeƒ€‚ğ”z’u‚·‚é(vault_trap‚ÌƒTƒuƒZƒbƒg) / Place a trap with a given displacement of point
- * @param y ƒgƒ‰ƒbƒv‚ğ”z’u‚µ‚½‚¢ƒ}ƒX‚Ì’†SYÀ•W
- * @param x ƒgƒ‰ƒbƒv‚ğ”z’u‚µ‚½‚¢ƒ}ƒX‚Ì’†SXÀ•W
- * @param yd Y•ûŒü‚Ì”z’u•ªUƒ}ƒX”
- * @param xd X•ûŒü‚Ì”z’u•ªUƒ}ƒX”
- * @return ‚È‚µ
+ * @brief ç‰¹æ®Šãªéƒ¨å±‹å‘ã‘ã«å„ç¨®ã‚¢ã‚¤ãƒ†ãƒ ã‚’é…ç½®ã™ã‚‹(vault_trapã®ã‚µãƒ–ã‚»ãƒƒãƒˆ) / Place a trap with a given displacement of point
+ * @param y ãƒˆãƒ©ãƒƒãƒ—ã‚’é…ç½®ã—ãŸã„ãƒã‚¹ã®ä¸­å¿ƒYåº§æ¨™
+ * @param x ãƒˆãƒ©ãƒƒãƒ—ã‚’é…ç½®ã—ãŸã„ãƒã‚¹ã®ä¸­å¿ƒXåº§æ¨™
+ * @param yd Yæ–¹å‘ã®é…ç½®åˆ†æ•£ãƒã‚¹æ•°
+ * @param xd Xæ–¹å‘ã®é…ç½®åˆ†æ•£ãƒã‚¹æ•°
+ * @return ãªã—
  * @details
  * Only really called by some of the "vault" routines.
  */
@@ -131,7 +131,7 @@ static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSI
         }
 
         if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room) {
-            msg_print(_("ŒxI’n‰ºº‚Ìƒgƒ‰ƒbƒv‚ğ”z’u‚Å‚«‚Ü‚¹‚ñI", "Warning! Could not place vault trap!"));
+            msg_print(_("è­¦å‘Šï¼åœ°ä¸‹å®¤ã®ãƒˆãƒ©ãƒƒãƒ—ã‚’é…ç½®ã§ãã¾ã›ã‚“ï¼", "Warning! Could not place vault trap!"));
         }
 
         g_ptr = &floor_ptr->grid_array[y1][x1];
@@ -144,15 +144,15 @@ static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSI
 }
 
 /*!
- * todo rooms-normal ‚©‚ç‚µ‚©ŒÄ‚Î‚ê‚Ä‚¢‚È‚¢A—v’²®
- * @brief “Áê‚È•”‰®Œü‚¯‚ÉŠeíƒAƒCƒeƒ€‚ğ”z’u‚·‚é(ƒƒCƒ“ƒ‹[ƒ`ƒ“) / Place some traps with a given displacement of given location
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ƒgƒ‰ƒbƒv‚ğ”z’u‚µ‚½‚¢ƒ}ƒX‚Ì’†SYÀ•W
- * @param x ƒgƒ‰ƒbƒv‚ğ”z’u‚µ‚½‚¢ƒ}ƒX‚Ì’†SXÀ•W
- * @param yd Y•ûŒü‚Ì”z’u•ªUƒ}ƒX”
- * @param xd X•ûŒü‚Ì”z’u•ªUƒ}ƒX”
- * @param num ”z’u‚µ‚½‚¢ƒgƒ‰ƒbƒv‚Ì”
- * @return ‚È‚µ
+ * todo rooms-normal ã‹ã‚‰ã—ã‹å‘¼ã°ã‚Œã¦ã„ãªã„ã€è¦èª¿æ•´
+ * @brief ç‰¹æ®Šãªéƒ¨å±‹å‘ã‘ã«å„ç¨®ã‚¢ã‚¤ãƒ†ãƒ ã‚’é…ç½®ã™ã‚‹(ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³) / Place some traps with a given displacement of given location
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y ãƒˆãƒ©ãƒƒãƒ—ã‚’é…ç½®ã—ãŸã„ãƒã‚¹ã®ä¸­å¿ƒYåº§æ¨™
+ * @param x ãƒˆãƒ©ãƒƒãƒ—ã‚’é…ç½®ã—ãŸã„ãƒã‚¹ã®ä¸­å¿ƒXåº§æ¨™
+ * @param yd Yæ–¹å‘ã®é…ç½®åˆ†æ•£ãƒã‚¹æ•°
+ * @param xd Xæ–¹å‘ã®é…ç½®åˆ†æ•£ãƒã‚¹æ•°
+ * @param num é…ç½®ã—ãŸã„ãƒˆãƒ©ãƒƒãƒ—ã®æ•°
+ * @return ãªã—
  * @details
  * Only really called by some of the "vault" routines.
  */

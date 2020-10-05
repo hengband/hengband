@@ -1,4 +1,4 @@
-#include "specific-object/muramasa.h"
+ï»¿#include "specific-object/muramasa.h"
 #include "core/asking-player.h"
 #include "art-definition/art-sword-types.h"
 #include "spell/spells-object.h"
@@ -11,13 +11,13 @@ bool activate_muramasa(player_type *user_ptr, object_type *o_ptr)
     if (o_ptr->name1 != ART_MURAMASA)
         return FALSE;
 
-    if (!get_check(_("–{“–‚Ég‚¢‚Ü‚·‚©H", "Are you sure?!")))
+    if (!get_check(_("æœ¬å½“ã«ä½¿ã„ã¾ã™ã‹ï¼Ÿ", "Are you sure?!")))
         return TRUE;
 
-    msg_print(_("‘º³‚ªk‚¦‚½DDD", "The Muramasa pulsates..."));
+    msg_print(_("æ‘æ­£ãŒéœ‡ãˆãŸï¼ï¼ï¼", "The Muramasa pulsates..."));
     do_inc_stat(user_ptr, A_STR);
     if (one_in_(2)) {
-        msg_print(_("‘º³‚Í‰ó‚ê‚½I", "The Muramasa is destroyed!"));
+        msg_print(_("æ‘æ­£ã¯å£Šã‚ŒãŸï¼", "The Muramasa is destroyed!"));
         curse_weapon_object(user_ptr, TRUE, o_ptr);
     }
 
