@@ -327,7 +327,7 @@ static void update_specific_race_telepathy(player_type *subject_ptr, um_type *um
     }
 }
 
-static bool check_cold_blood(player_type *subject_ptr, um_type *um_ptr)
+static bool check_cold_blood(player_type *subject_ptr, um_type *um_ptr, const POSITION distance)
 {
     if (distance > subject_ptr->see_infra)
         return FALSE;
@@ -386,7 +386,7 @@ static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um
         um_ptr->flag = TRUE;
     }
 
-    bool do_cold_blood = check_cold_blood(subject_ptr, um_ptr);
+    bool do_cold_blood = check_cold_blood(subject_ptr, um_ptr, distance);
     bool do_invisible = check_invisible(subject_ptr, um_ptr);
     if (!um_ptr->flag || !is_original_ap(um_ptr->m_ptr) || subject_ptr->image)
         return;
