@@ -1,6 +1,6 @@
-/*!
- * todo get_string_for_search() ‚Í’·‚¢A—v•ªŠ„
- * @brief ©“®E‚¢‚ÌŒŸõ
+ï»¿/*!
+ * todo get_string_for_search() ã¯é•·ã„ã€è¦åˆ†å‰²
+ * @brief è‡ªå‹•æ‹¾ã„ã®æ¤œç´¢
  * @date 2020/04/26
  * @author Hourier
  */
@@ -22,10 +22,10 @@
 #include "util/string-processor.h"
 
 /*
- * @brief —^‚¦‚ç‚ê‚½ƒAƒCƒeƒ€‚ª©“®E‚¢‚ÌƒŠƒXƒg‚É“o˜^‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğŒŸõ‚·‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @o_ptr ƒAƒCƒeƒ€‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ©“®E‚¢‚ÌƒŠƒXƒg‚É“o˜^‚³‚ê‚Ä‚¢‚½‚ç‚»‚Ì“o˜^”Ô†A‚È‚©‚Á‚½‚ç-1
+ * @brief ä¸ãˆã‚‰ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ãŒè‡ªå‹•æ‹¾ã„ã®ãƒªã‚¹ãƒˆã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’æ¤œç´¢ã™ã‚‹
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @o_ptr ã‚¢ã‚¤ãƒ†ãƒ ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return è‡ªå‹•æ‹¾ã„ã®ãƒªã‚¹ãƒˆã«ç™»éŒ²ã•ã‚Œã¦ã„ãŸã‚‰ãã®ç™»éŒ²ç•ªå·ã€ãªã‹ã£ãŸã‚‰-1
  * @details
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the list of keywords or not.
@@ -52,8 +52,8 @@ int find_autopick_list(player_type *player_ptr, object_type *o_ptr)
  */
 bool get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
 {
-    concptr q = _("‚Ç‚ÌƒAƒCƒeƒ€‚ğŒŸõ‚µ‚Ü‚·‚©? ", "Enter which item? ");
-    concptr s = _("ƒAƒCƒeƒ€‚ğ‚Á‚Ä‚¢‚È‚¢B", "You have nothing to enter.");
+    concptr q = _("ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ¤œç´¢ã—ã¾ã™ã‹? ", "Enter which item? ");
+    concptr s = _("ã‚¢ã‚¤ãƒ†ãƒ ã‚’æŒã£ã¦ã„ãªã„ã€‚", "You have nothing to enter.");
     object_type *o_ptr;
     o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
     if (!o_ptr)
@@ -96,7 +96,7 @@ byte get_string_for_search(player_type *player_ptr, object_type **o_handle, conc
     byte color = TERM_YELLOW;
     char buf[MAX_NLEN + 20];
     const int len = 80;
-    char prompt[] = _("ŒŸõ(^I:‚¿•¨ ^L:”j‰ó‚³‚ê‚½•¨): ", "Search key(^I:inven ^L:destroyed): ");
+    char prompt[] = _("æ¤œç´¢(^I:æŒã¡ç‰© ^L:ç ´å£Šã•ã‚ŒãŸç‰©): ", "Search key(^I:inven ^L:destroyed): ");
     int col = sizeof(prompt) - 1;
     if (*search_strp)
         strcpy(buf, *search_strp);

@@ -1,18 +1,18 @@
-#include "main/init-error-messages-table.h"
+ï»¿#include "main/init-error-messages-table.h"
 
 /*!
- * ƒGƒ‰[ƒƒbƒZ[ƒW‚Ì–¼Ì’è‹` / Standard error message text
+ * ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®åç§°å®šç¾© / Standard error message text
  */
 concptr err_str[PARSE_ERROR_MAX] = {
     NULL,
-    _("•¶–@ƒGƒ‰[", "parse error"),
-    _("ŒÃ‚¢ƒtƒ@ƒCƒ‹", "obsolete file"),
-    _("‹L˜^ƒwƒbƒ_‚ª‚È‚¢", "missing record header"),
-    _("•s˜A‘±ƒŒƒR[ƒh", "non-sequential records"),
-    _("‚¨‚©‚µ‚Èƒtƒ‰ƒO‘¶İ", "invalid flag specification"),
-    _("–¢’è‹`–½—ß", "undefined directive"),
-    _("ƒƒ‚ƒŠ•s‘«", "out of memory"),
-    _("À•W”ÍˆÍŠO", "coordinates out of bounds"),
-    _("ˆø”•s‘«", "too few arguments"),
-    _("–¢’è‹`’nŒ`ƒ^ƒO", "undefined terrain tag"),
+    _("æ–‡æ³•ã‚¨ãƒ©ãƒ¼", "parse error"),
+    _("å¤ã„ãƒ•ã‚¡ã‚¤ãƒ«", "obsolete file"),
+    _("è¨˜éŒ²ãƒ˜ãƒƒãƒ€ãŒãªã„", "missing record header"),
+    _("ä¸é€£ç¶šãƒ¬ã‚³ãƒ¼ãƒ‰", "non-sequential records"),
+    _("ãŠã‹ã—ãªãƒ•ãƒ©ã‚°å­˜åœ¨", "invalid flag specification"),
+    _("æœªå®šç¾©å‘½ä»¤", "undefined directive"),
+    _("ãƒ¡ãƒ¢ãƒªä¸è¶³", "out of memory"),
+    _("åº§æ¨™ç¯„å›²å¤–", "coordinates out of bounds"),
+    _("å¼•æ•°ä¸è¶³", "too few arguments"),
+    _("æœªå®šç¾©åœ°å½¢ã‚¿ã‚°", "undefined terrain tag"),
 };

@@ -1,9 +1,9 @@
-#pragma once
+ï»¿#pragma once
 
 #include "system/angband.h"
 
 /*!
- * @brief Še‰Šúƒf[ƒ^—pƒwƒbƒ_\‘¢‘Ì / Template file header information (see "init.c").
+ * @brief å„åˆæœŸãƒ‡ãƒ¼ã‚¿ç”¨ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ / Template file header information (see "init.c").
  */
 typedef struct angband_header angband_header;
 typedef errr (*parse_info_txt_func)(char *buf, angband_header *head);

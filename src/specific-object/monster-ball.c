@@ -1,4 +1,4 @@
-#include "specific-object/monster-ball.h"
+ï»¿#include "specific-object/monster-ball.h"
 #include "effect/spells-effect-util.h"
 #include "floor/geometry.h"
 #include "game-option/input-options.h"
@@ -183,7 +183,7 @@ bool exe_monster_capture(player_type *user_ptr, ae_type *ae_ptr)
 
     check_monster_ball_use(user_ptr, ae_ptr);
     if (!ae_ptr->success)
-        msg_print(_("‚¨‚Á‚ÆA‰ğ•ú‚É¸”s‚µ‚½B", "Oops.  You failed to release your pet."));
+        msg_print(_("ãŠã£ã¨ã€è§£æ”¾ã«å¤±æ•—ã—ãŸã€‚", "Oops.  You failed to release your pet."));
 
     calc_android_exp(user_ptr);
     return TRUE;

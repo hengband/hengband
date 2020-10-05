@@ -1,5 +1,5 @@
-/*!
- * @brief ƒ‚ƒ“ƒXƒ^[€–S‚Ì“Áêˆ—switch (ˆê”Ê“I‚Èˆ—‚àdefault‚ÅÀ{)
+ï»¿/*!
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ­»äº¡æ™‚ã®ç‰¹æ®Šå‡¦ç†switch (ä¸€èˆ¬çš„ãªå‡¦ç†ã‚‚defaultã§å®Ÿæ–½)
  * @date 2020/08/21
  * @author Hourier
  */
@@ -43,14 +43,14 @@
 #include "world/world.h"
 
 /*!
- * @brief €–S¢Š«ˆ— (¡‚Ì‚Æ‚±‚ë©•ª©g‚Ì‚İ)
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param md_ptr ƒ‚ƒ“ƒXƒ^[Œ‚”j\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param type ¢Š«ƒ^ƒCƒv
- * @param probability ¢Š«Šm—¦ (ŒvZ®F1 - 1/probability)
- * @param radius ¢Š«”¼Œa (ƒ‚ƒ“ƒXƒ^[‚ª€–S‚µ‚½À•W‚©‚ç”¼Œa‰½ƒ}ƒXˆÈ“à‚É¢Š«‚³‚¹‚é‚©)
- * @param message ¢Š«‚ÌƒƒbƒZ[ƒW
- * @return ‚È‚µ
+ * @brief æ­»äº¡æ™‚å¬å–šå‡¦ç† (ä»Šã®ã¨ã“ã‚è‡ªåˆ†è‡ªèº«ã®ã¿)
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param md_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ’ƒç ´æ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param type å¬å–šã‚¿ã‚¤ãƒ—
+ * @param probability å¬å–šç¢ºç‡ (è¨ˆç®—å¼ï¼š1 - 1/probability)
+ * @param radius å¬å–šåŠå¾„ (ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ­»äº¡ã—ãŸåº§æ¨™ã‹ã‚‰åŠå¾„ä½•ãƒã‚¹ä»¥å†…ã«å¬å–šã•ã›ã‚‹ã‹)
+ * @param message å¬å–šæ™‚ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+ * @return ãªã—
  */
 static void summon_self(player_type *player_ptr, monster_death_type *md_ptr, summon_type type, int probability, POSITION radius, concptr message)
 {
@@ -91,7 +91,7 @@ static void on_dead_pink_horror(player_type *player_ptr, monster_death_type *md_
     }
 
     if (notice)
-        msg_print(_("ƒsƒ“ƒNEƒzƒ‰[‚Í•ª—ô‚µ‚½I", "The Pink horror divides!"));
+        msg_print(_("ãƒ”ãƒ³ã‚¯ãƒ»ãƒ›ãƒ©ãƒ¼ã¯åˆ†è£‚ã—ãŸï¼", "The Pink horror divides!"));
 }
 
 static void on_dead_bloodletter(player_type* player_ptr, monster_death_type* md_ptr)
@@ -125,14 +125,14 @@ static void on_dead_raal(player_type *player_ptr, monster_death_type *md_ptr)
 }
 
 /*!
- * @brief 6/7‚ÌŠm—¦‚ÅA20ƒ}ƒXˆÈ“à‚É‹Å‚Ìím©g‚ğ¢Š«‚·‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param md_ptr ƒ‚ƒ“ƒXƒ^[Œ‚”j\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief 6/7ã®ç¢ºç‡ã§ã€20ãƒã‚¹ä»¥å†…ã«æšã®æˆ¦å£«è‡ªèº«ã‚’å¬å–šã™ã‚‹
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param md_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ’ƒç ´æ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void on_dead_dawn(player_type *player_ptr, monster_death_type *md_ptr)
 {
-    summon_self(player_ptr, md_ptr, SUMMON_DAWN, 7, 20, _("V‚½‚Èím‚ªŒ»‚ê‚½I", "A new warrior steps forth!"));
+    summon_self(player_ptr, md_ptr, SUMMON_DAWN, 7, 20, _("æ–°ãŸãªæˆ¦å£«ãŒç¾ã‚ŒãŸï¼", "A new warrior steps forth!"));
 }
 
 static void on_dead_unmaker(player_type *player_ptr, monster_death_type *md_ptr)
@@ -140,7 +140,7 @@ static void on_dead_unmaker(player_type *player_ptr, monster_death_type *md_ptr)
     if (is_seen(player_ptr, md_ptr->m_ptr)) {
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-        msg_format(_("%s‚Í•Ó‚è‚ÉƒƒOƒ‹ƒX‚Ìc‚è‚ğT‚«U‚ç‚µ‚½I", "%^s sprinkled the remaining incense from Logrus!"), m_name);
+        msg_format(_("%sã¯è¾ºã‚Šã«ãƒ­ã‚°ãƒ«ã‚¹ã®æ®‹ã‚Šé¦™ã‚’æ’’ãæ•£ã‚‰ã—ãŸï¼", "%^s sprinkled the remaining incense from Logrus!"), m_name);
     }
 
     (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, GF_CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
@@ -231,7 +231,7 @@ static void on_dead_rolento(player_type *player_ptr, monster_death_type *md_ptr)
     if (is_seen(player_ptr, md_ptr->m_ptr)) {
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-        msg_format(_("%s‚ÍèÖ’e‚ğ•ø‚¦‚Ä©”š‚µ‚½I", "%^s broke himself with grenades!"), m_name);
+        msg_format(_("%sã¯æ‰‹æ¦´å¼¾ã‚’æŠ±ãˆã¦è‡ªçˆ†ã—ãŸï¼", "%^s broke himself with grenades!"), m_name);
     }
 
     (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), GF_FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
@@ -255,18 +255,18 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
     }
 
     if (notice)
-        msg_print(_("–A‚ª’e‚¯‚½I", "The bubble pops!"));
+        msg_print(_("æ³¡ãŒå¼¾ã‘ãŸï¼", "The bubble pops!"));
 }
 
 /*!
- * @brief 7/8‚ÌŠm—¦‚ÅA5ƒ}ƒXˆÈ“à‚Éƒg[ƒeƒ€ƒ‚ƒAƒC©g‚ğ¢Š«‚·‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param md_ptr ƒ‚ƒ“ƒXƒ^[Œ‚”j\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief 7/8ã®ç¢ºç‡ã§ã€5ãƒã‚¹ä»¥å†…ã«ãƒˆãƒ¼ãƒ†ãƒ ãƒ¢ã‚¢ã‚¤è‡ªèº«ã‚’å¬å–šã™ã‚‹
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param md_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ’ƒç ´æ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_ptr)
 {
-    summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("V‚½‚Èƒ‚ƒAƒC‚ªŒ»‚ê‚½I", "A new moai steps forth!"));
+    summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("æ–°ãŸãªãƒ¢ã‚¢ã‚¤ãŒç¾ã‚ŒãŸï¼", "A new moai steps forth!"));
 }
 
 static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)

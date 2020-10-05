@@ -1,4 +1,4 @@
-#include "info-reader/dungeon-reader.h"
+ï»¿#include "info-reader/dungeon-reader.h"
 #include "dungeon/dungeon.h"
 #include "info-reader/dungeon-info-tokens-table.h"
 #include "info-reader/feature-reader.h"
@@ -10,27 +10,27 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief ƒeƒLƒXƒgƒg[ƒNƒ“‚ğ‘–¸‚µ‚Äƒtƒ‰ƒO‚ğˆê‚Â“¾‚é(ƒ_ƒ“ƒWƒ‡ƒ“—p) /
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒˆãƒ¼ã‚¯ãƒ³ã‚’èµ°æŸ»ã—ã¦ãƒ•ãƒ©ã‚°ã‚’ä¸€ã¤å¾—ã‚‹(ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ç”¨) /
  * Grab one flag for a dungeon type from a textual string
- * @param d_ptr •ÛŠÇæ‚Ìƒ_ƒ“ƒWƒ‡ƒ“\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @param what QÆŒ³‚Ì•¶š—ñƒ|ƒCƒ“ƒ^
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param d_ptr ä¿ç®¡å…ˆã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param what å‚ç…§å…ƒã®æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 static errr grab_one_dungeon_flag(dungeon_type *d_ptr, concptr what)
 {
     if (grab_one_flag(&d_ptr->flags1, d_info_flags1, what) == 0)
         return 0;
 
-    msg_format(_("–¢’m‚Ìƒ_ƒ“ƒWƒ‡ƒ“Eƒtƒ‰ƒO '%s'B", "Unknown dungeon type flag '%s'."), what);
+    msg_format(_("æœªçŸ¥ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ãƒ»ãƒ•ãƒ©ã‚° '%s'ã€‚", "Unknown dungeon type flag '%s'."), what);
     return 1;
 }
 
 /*!
- * @brief ƒeƒLƒXƒgƒg[ƒNƒ“‚ğ‘–¸‚µ‚Äƒtƒ‰ƒO‚ğˆê‚Â“¾‚é(ƒ‚ƒ“ƒXƒ^[‚Ìƒ_ƒ“ƒWƒ‡ƒ“oŒ»ğŒ—p1) /
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒˆãƒ¼ã‚¯ãƒ³ã‚’èµ°æŸ»ã—ã¦ãƒ•ãƒ©ã‚°ã‚’ä¸€ã¤å¾—ã‚‹(ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å‡ºç¾æ¡ä»¶ç”¨1) /
  * Grab one (basic) flag in a monster_race from a textual string
- * @param d_ptr •ÛŠÇæ‚Ìƒ_ƒ“ƒWƒ‡ƒ“\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @param what QÆŒ³‚Ì•¶š—ñƒ|ƒCƒ“ƒ^
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param d_ptr ä¿ç®¡å…ˆã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param what å‚ç…§å…ƒã®æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 static errr grab_one_basic_monster_flag(dungeon_type *d_ptr, concptr what)
 {
@@ -55,16 +55,16 @@ static errr grab_one_basic_monster_flag(dungeon_type *d_ptr, concptr what)
     if (grab_one_flag(&d_ptr->mflagsr, r_info_flagsr, what) == 0)
         return 0;
 
-    msg_format(_("–¢’m‚Ìƒ‚ƒ“ƒXƒ^[Eƒtƒ‰ƒO '%s'B", "Unknown monster flag '%s'."), what);
+    msg_format(_("æœªçŸ¥ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãƒ»ãƒ•ãƒ©ã‚° '%s'ã€‚", "Unknown monster flag '%s'."), what);
     return 1;
 }
 
 /*!
- * @brief ƒeƒLƒXƒgƒg[ƒNƒ“‚ğ‘–¸‚µ‚Äƒtƒ‰ƒO‚ğˆê‚Â“¾‚é(ƒ‚ƒ“ƒXƒ^[‚Ìƒ_ƒ“ƒWƒ‡ƒ“oŒ»ğŒ—p2) /
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒˆãƒ¼ã‚¯ãƒ³ã‚’èµ°æŸ»ã—ã¦ãƒ•ãƒ©ã‚°ã‚’ä¸€ã¤å¾—ã‚‹(ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³å‡ºç¾æ¡ä»¶ç”¨2) /
  * Grab one (spell) flag in a monster_race from a textual string
- * @param d_ptr •ÛŠÇæ‚Ìƒ_ƒ“ƒWƒ‡ƒ“\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @param what QÆŒ³‚Ì•¶š—ñƒ|ƒCƒ“ƒ^
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param d_ptr ä¿ç®¡å…ˆã®ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param what å‚ç…§å…ƒã®æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 static errr grab_one_spell_monster_flag(dungeon_type *d_ptr, concptr what)
 {
@@ -77,16 +77,16 @@ static errr grab_one_spell_monster_flag(dungeon_type *d_ptr, concptr what)
     if (grab_one_flag(&d_ptr->m_a_ability_flags2, r_a_ability_flags2, what) == 0)
         return 0;
 
-    msg_format(_("–¢’m‚Ìƒ‚ƒ“ƒXƒ^[Eƒtƒ‰ƒO '%s'B", "Unknown monster flag '%s'."), what);
+    msg_format(_("æœªçŸ¥ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãƒ»ãƒ•ãƒ©ã‚° '%s'ã€‚", "Unknown monster flag '%s'."), what);
     return 1;
 }
 
 /*!
- * @brief ƒ_ƒ“ƒWƒ‡ƒ“î•ñ(d_info)‚Ìƒp[ƒXŠÖ” /
+ * @brief ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³æƒ…å ±(d_info)ã®ãƒ‘ãƒ¼ã‚¹é–¢æ•° /
  * Initialize the "d_info" array, by parsing an ascii "template" file
- * @param buf ƒeƒLƒXƒg—ñ
- * @param head ƒwƒbƒ_\‘¢‘Ì
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param buf ãƒ†ã‚­ã‚¹ãƒˆåˆ—
+ * @param head ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr parse_d_info(char *buf, angband_header *head)
 {

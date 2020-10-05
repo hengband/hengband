@@ -1,4 +1,4 @@
-#include "grid/object-placer.h"
+ï»¿#include "grid/object-placer.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
@@ -10,12 +10,12 @@
 #include "world/world-object.h"
 
 /*!
- * @brief ƒtƒƒA‚Ìw’èˆÊ’u‚É¶¬ŠK‚É‰‚¶‚½à•óƒIƒuƒWƒFƒNƒg‚Ì¶¬‚ğs‚¤B
+ * @brief ãƒ•ãƒ­ã‚¢ã®æŒ‡å®šä½ç½®ã«ç”Ÿæˆéšã«å¿œã˜ãŸè²¡å®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆã‚’è¡Œã†ã€‚
  * Places a treasure (Gold or Gems) at given location
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌYÀ•W
- * @param x ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌXÀ•W
- * @return ¶¬‚É¬Œ÷‚µ‚½‚çTRUE‚ğ•Ô‚·B
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y é…ç½®ã—ãŸã„ãƒ•ãƒ­ã‚¢ã®Yåº§æ¨™
+ * @param x é…ç½®ã—ãŸã„ãƒ•ãƒ­ã‚¢ã®Xåº§æ¨™
+ * @return ç”Ÿæˆã«æˆåŠŸã—ãŸã‚‰TRUEã‚’è¿”ã™ã€‚
  * @details
  * The location must be a legal, clean, floor grid.
  */
@@ -55,13 +55,13 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief ƒtƒƒA‚Ìw’èˆÊ’u‚É¶¬ŠK‚É‰‚¶‚½ƒx[ƒXƒAƒCƒeƒ€‚Ì¶¬‚ğs‚¤B
+ * @brief ãƒ•ãƒ­ã‚¢ã®æŒ‡å®šä½ç½®ã«ç”Ÿæˆéšã«å¿œã˜ãŸãƒ™ãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ ã®ç”Ÿæˆã‚’è¡Œã†ã€‚
  * Attempt to place an object (normal or good/great) at the given location.
- * @param owner_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌYÀ•W
- * @param x ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌXÀ•W
- * @param mode ƒIƒvƒVƒ‡ƒ“ƒtƒ‰ƒO
- * @return ¶¬‚É¬Œ÷‚µ‚½‚çTRUE‚ğ•Ô‚·B
+ * @param owner_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y é…ç½®ã—ãŸã„ãƒ•ãƒ­ã‚¢ã®Yåº§æ¨™
+ * @param x é…ç½®ã—ãŸã„ãƒ•ãƒ­ã‚¢ã®Xåº§æ¨™
+ * @param mode ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ•ãƒ©ã‚°
+ * @return ç”Ÿæˆã«æˆåŠŸã—ãŸã‚‰TRUEã‚’è¿”ã™ã€‚
  * @details
  * This routine plays nasty games to generate the "special artifacts".\n
  * This routine uses "object_level" for the "generation level".\n

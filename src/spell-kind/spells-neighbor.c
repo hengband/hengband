@@ -1,4 +1,4 @@
-#include "spell-kind/spells-neighbor.h"
+ï»¿#include "spell-kind/spells-neighbor.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "effect/effect-characteristics.h"
@@ -12,9 +12,9 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief ƒhƒA¶¬ˆ—(ƒvƒŒƒCƒ„[’†S‚ÉüˆÍ1ƒ}ƒX) / Hooks -- affect adjacent grids (radius 1 ball attack)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief ãƒ‰ã‚¢ç”Ÿæˆå‡¦ç†(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä¸­å¿ƒã«å‘¨å›²1ãƒã‚¹) / Hooks -- affect adjacent grids (radius 1 ball attack)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool door_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
@@ -23,11 +23,11 @@ bool door_creation(player_type *caster_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief ƒgƒ‰ƒbƒv¶¬ˆ—(‹N“_‚©‚çüˆÍ1ƒ}ƒX)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ‹N“_YÀ•W
- * @param x ‹N“_XÀ•W
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief ãƒˆãƒ©ãƒƒãƒ—ç”Ÿæˆå‡¦ç†(èµ·ç‚¹ã‹ã‚‰å‘¨å›²1ãƒã‚¹)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y èµ·ç‚¹Yåº§æ¨™
+ * @param x èµ·ç‚¹Xåº§æ¨™
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool trap_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
@@ -36,9 +36,9 @@ bool trap_creation(player_type *caster_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief X—Ñ¶¬ˆ—(ƒvƒŒƒCƒ„[’†S‚ÉüˆÍ1ƒ}ƒX)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief æ£®æ—ç”Ÿæˆå‡¦ç†(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä¸­å¿ƒã«å‘¨å›²1ãƒã‚¹)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
@@ -47,9 +47,9 @@ bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief –‚–@‚Ìƒ‹[ƒ“¶¬ˆ—(ƒvƒŒƒCƒ„[’†S‚ÉüˆÍ1ƒ}ƒX)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief é­”æ³•ã®ãƒ«ãƒ¼ãƒ³ç”Ÿæˆå‡¦ç†(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä¸­å¿ƒã«å‘¨å›²1ãƒã‚¹)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool glyph_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
@@ -58,9 +58,9 @@ bool glyph_creation(player_type *caster_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief •Ç¶¬ˆ—(ƒvƒŒƒCƒ„[’†S‚ÉüˆÍ1ƒ}ƒX)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief å£ç”Ÿæˆå‡¦ç†(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä¸­å¿ƒã«å‘¨å›²1ãƒã‚¹)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool wall_stone(player_type *caster_ptr)
 {
@@ -72,9 +72,9 @@ bool wall_stone(player_type *caster_ptr)
 }
 
 /*!
- * @brief ƒhƒA”j‰óˆ—(ƒvƒŒƒCƒ„[’†S‚ÉüˆÍ1ƒ}ƒX)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief ãƒ‰ã‚¢ç ´å£Šå‡¦ç†(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä¸­å¿ƒã«å‘¨å›²1ãƒã‚¹)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool destroy_doors_touch(player_type *caster_ptr)
 {
@@ -83,9 +83,9 @@ bool destroy_doors_touch(player_type *caster_ptr)
 }
 
 /*!
- * @brief ƒgƒ‰ƒbƒv‰ğœˆ—(ƒvƒŒƒCƒ„[’†S‚ÉüˆÍ1ƒ}ƒX)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief ãƒˆãƒ©ãƒƒãƒ—è§£é™¤å‡¦ç†(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä¸­å¿ƒã«å‘¨å›²1ãƒã‚¹)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool disarm_traps_touch(player_type *caster_ptr)
 {
@@ -94,9 +94,9 @@ bool disarm_traps_touch(player_type *caster_ptr)
 }
 
 /*!
- * @brief ƒXƒŠ[ƒvƒ‚ƒ“ƒXƒ^[ˆ—(ƒvƒŒƒCƒ„[’†S‚ÉüˆÍ1ƒ}ƒX)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief ã‚¹ãƒªãƒ¼ãƒ—ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‡¦ç†(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä¸­å¿ƒã«å‘¨å›²1ãƒã‚¹)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool sleep_monsters_touch(player_type *caster_ptr)
 {
@@ -105,12 +105,12 @@ bool sleep_monsters_touch(player_type *caster_ptr)
 }
 
 /*!
- * @brief €Ò•œŠˆˆ—(‹N“_‚æ‚èüˆÍ5ƒ}ƒX)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param who pÒƒ‚ƒ“ƒXƒ^[ID(0‚È‚ç‚ÎƒvƒŒƒCƒ„[)
- * @param y ‹N“_YÀ•W
- * @param x ‹N“_XÀ•W
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief æ­»è€…å¾©æ´»å‡¦ç†(èµ·ç‚¹ã‚ˆã‚Šå‘¨å›²5ãƒã‚¹)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param who è¡“è€…ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ID(0ãªã‚‰ã°ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼)
+ * @param y èµ·ç‚¹Yåº§æ¨™
+ * @param x èµ·ç‚¹Xåº§æ¨™
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool animate_dead(player_type *caster_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 {
@@ -119,9 +119,9 @@ bool animate_dead(player_type *caster_ptr, MONSTER_IDX who, POSITION y, POSITION
 }
 
 /*!
- * @brief ü•Ó”j‰óŒø‰Ê(ƒvƒŒƒCƒ„[’†S)
- * @param caster_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ì—p‚ªÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ğ•Ô‚·
+ * @brief å‘¨è¾ºç ´å£ŠåŠ¹æœ(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä¸­å¿ƒ)
+ * @param caster_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 void wall_breaker(player_type *caster_ptr)
 {

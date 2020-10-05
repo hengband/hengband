@@ -1,4 +1,4 @@
-#include "mind/mind-hobbit.h"
+ï»¿#include "mind/mind-hobbit.h"
 #include "floor/floor-object.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
@@ -12,6 +12,6 @@ bool create_ration(player_type *creature_ptr)
     object_type *q_ptr = &forge;
     object_prep(creature_ptr, q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
     (void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
-    msg_print(_("H–‚ğ—¿—‚µ‚Äì‚Á‚½B", "You cook some food."));
+    msg_print(_("é£Ÿäº‹ã‚’æ–™ç†ã—ã¦ä½œã£ãŸã€‚", "You cook some food."));
     return TRUE;
 }

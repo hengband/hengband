@@ -1,4 +1,4 @@
-#include "autopick/autopick-reader-writer.h"
+ï»¿#include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-initializer.h"
 #include "autopick/autopick-pref-processor.h"
 #include "io/files-util.h"
@@ -18,7 +18,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 	errr err = process_autopick_file(player_ptr, buf, process_autopick_file_command);
 	if (err == 0 && disp_mes)
 	{
-		msg_format(_("%s‚ğ“Ç‚İ‚İ‚Ü‚µ‚½B", "Loaded '%s'."), buf);
+		msg_format(_("%sã‚’èª­ã¿è¾¼ã¿ã¾ã—ãŸã€‚", "Loaded '%s'."), buf);
 	}
 
 	if (err < 0)
@@ -27,13 +27,13 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 		err = process_autopick_file(player_ptr, buf, process_autopick_file_command);
 		if (err == 0 && disp_mes)
 		{
-			msg_format(_("%s‚ğ“Ç‚İ‚İ‚Ü‚µ‚½B", "Loaded '%s'."), buf);
+			msg_format(_("%sã‚’èª­ã¿è¾¼ã¿ã¾ã—ãŸã€‚", "Loaded '%s'."), buf);
 		}
 	}
 
 	if (err && disp_mes)
 	{
-		msg_print(_("©“®E‚¢İ’èƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚µ‚½B", "Failed to reload autopick preference."));
+		msg_print(_("è‡ªå‹•æ‹¾ã„è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸã€‚", "Failed to reload autopick preference."));
 	}
 }
 
@@ -95,9 +95,9 @@ static concptr *read_text_lines(concptr filename)
 static void prepare_default_pickpref(player_type *player_ptr)
 {
 	const concptr messages[] = {
-		_("‚ ‚È‚½‚Íu©“®E‚¢ƒGƒfƒBƒ^v‚ğ‰‚ß‚Ä‹N“®‚µ‚Ü‚µ‚½B", "You have activated the Auto-Picker Editor for the first time."),
-		_("©“®E‚¢‚Ìƒ†[ƒU[İ’èƒtƒ@ƒCƒ‹‚ª‚Ü‚¾‘‚©‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅA", "Since user pref file for autopick is not yet created,"),
-		_("Šî–{“I‚È©“®E‚¢İ’èƒtƒ@ƒCƒ‹‚ğlib/pref/picktype.prf‚©‚çƒRƒs[‚µ‚Ü‚·B", "the default setting is loaded from lib/pref/pickpref.prf ."),
+		_("ã‚ãªãŸã¯ã€Œè‡ªå‹•æ‹¾ã„ã‚¨ãƒ‡ã‚£ã‚¿ã€ã‚’åˆã‚ã¦èµ·å‹•ã—ã¾ã—ãŸã€‚", "You have activated the Auto-Picker Editor for the first time."),
+		_("è‡ªå‹•æ‹¾ã„ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ãŒã¾ã æ›¸ã‹ã‚Œã¦ã„ãªã„ã®ã§ã€", "Since user pref file for autopick is not yet created,"),
+		_("åŸºæœ¬çš„ãªè‡ªå‹•æ‹¾ã„è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’lib/pref/picktype.prfã‹ã‚‰ã‚³ãƒ”ãƒ¼ã—ã¾ã™ã€‚", "the default setting is loaded from lib/pref/pickpref.prf ."),
 		NULL
 	};
 

@@ -1,4 +1,4 @@
-#include "action/activation-execution.h"
+ï»¿#include "action/activation-execution.h"
 #include "action/action-limited.h"
 #include "art-definition/random-art-effects.h"
 #include "artifact/artifact-info.h"
@@ -100,7 +100,7 @@ static bool check_activation_success(ae_type *ae_ptr)
     if (flush_failure)
         flush();
 
-    msg_print(_("‚¤‚Ü‚­n“®‚³‚¹‚é‚±‚Æ‚ª‚Å‚«‚È‚©‚Á‚½B", "You failed to activate it properly."));
+    msg_print(_("ã†ã¾ãå§‹å‹•ã•ã›ã‚‹ã“ã¨ãŒã§ããªã‹ã£ãŸã€‚", "You failed to activate it properly."));
     sound(SOUND_FAIL);
     return FALSE;
 }
@@ -111,12 +111,12 @@ static bool check_activation_conditions(player_type *user_ptr, ae_type *ae_ptr)
         return FALSE;
 
     if (ae_ptr->o_ptr->timeout) {
-        msg_print(_("‚»‚ê‚Í”÷‚©‚É‰¹‚ğ—§‚ÄA‹P‚«AÁ‚¦‚½...", "It whines, glows and fades..."));
+        msg_print(_("ãã‚Œã¯å¾®ã‹ã«éŸ³ã‚’ç«‹ã¦ã€è¼ãã€æ¶ˆãˆãŸ...", "It whines, glows and fades..."));
         return FALSE;
     }
 
     if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == TV_FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
-        msg_print(_("”R—¿‚ª‚È‚¢B", "It has no fuel."));
+        msg_print(_("ç‡ƒæ–™ãŒãªã„ã€‚", "It has no fuel."));
         free_turn(user_ptr);
         return FALSE;
     }
@@ -125,10 +125,10 @@ static bool check_activation_conditions(player_type *user_ptr, ae_type *ae_ptr)
 }
 
 /*!
- * @brief ƒAƒCƒeƒ€‚Ì”­“®Œø‰Ê‚ğˆ—‚·‚éB
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ‘ÎÛ‚ÌƒIƒuƒWƒFƒNƒg\‘¢‘Ìƒ|ƒCƒ“ƒ^
- * @return ”­“®Às‚Ì¥”ñ‚ğ•Ô‚·B
+ * @brief ã‚¢ã‚¤ãƒ†ãƒ ã®ç™ºå‹•åŠ¹æœã‚’å‡¦ç†ã™ã‚‹ã€‚
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
+ * @return ç™ºå‹•å®Ÿè¡Œã®æ˜¯éã‚’è¿”ã™ã€‚
  */
 static bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 {
@@ -200,11 +200,11 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
 }
 
 /*!
- * @brief ‘•”õ‚ğ”­“®‚·‚éƒRƒ}ƒ“ƒh‚ÌƒTƒuƒ‹[ƒ`ƒ“ /
+ * @brief è£…å‚™ã‚’ç™ºå‹•ã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ã‚µãƒ–ãƒ«ãƒ¼ãƒãƒ³ /
  * Activate a wielded object.  Wielded objects never stack.
  * And even if they did, activatable objects never stack.
- * @param item ”­“®‚·‚éƒIƒuƒWƒFƒNƒg‚ÌŠ•iID
- * @return ‚È‚µ
+ * @param item ç™ºå‹•ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ‰€æŒå“ID
+ * @return ãªã—
  * @details
  * <pre>
  * Currently, only (some) artifacts, and Dragon Scale Mail, can be activated.
@@ -227,7 +227,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
     if (!check_activation_conditions(user_ptr, ae_ptr))
         return;
 
-    msg_print(_("n“®‚³‚¹‚½...", "You activate it..."));
+    msg_print(_("å§‹å‹•ã•ã›ãŸ...", "You activate it..."));
     sound(SOUND_ZAP);
     if (activation_index(user_ptr, ae_ptr->o_ptr)) {
         (void)activate_artifact(user_ptr, ae_ptr->o_ptr);
@@ -241,5 +241,5 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
     if (exe_monster_capture(user_ptr, ae_ptr))
         return;
 
-    msg_print(_("‚¨‚Á‚ÆA‚±‚ÌƒAƒCƒeƒ€‚Ín“®‚Å‚«‚È‚¢B", "Oops.  That object cannot be activated."));
+    msg_print(_("ãŠã£ã¨ã€ã“ã®ã‚¢ã‚¤ãƒ†ãƒ ã¯å§‹å‹•ã§ããªã„ã€‚", "Oops.  That object cannot be activated."));
 }

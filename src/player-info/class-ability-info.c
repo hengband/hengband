@@ -1,4 +1,4 @@
-#include "player-info/class-ability-info.h"
+ï»¿#include "player-info/class-ability-info.h"
 #include "player-info/self-info-util.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
@@ -9,7 +9,7 @@ void set_class_ability_info(player_type *creature_ptr, self_info_type *si_ptr)
     case CLASS_WARRIOR:
         if (creature_ptr->lev > 39)
             si_ptr->info[si_ptr->line++]
-                = _("‚ ‚È‚½‚Íƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚É‘Î‚µ‚Ä”‰ñUŒ‚‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(75 MP)", "You can attack some random directions simultaneously (cost 75).");
+                = _("ã‚ãªãŸã¯ãƒ©ãƒ³ãƒ€ãƒ ãªæ–¹å‘ã«å¯¾ã—ã¦æ•°å›æ”»æ’ƒã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(75 MP)", "You can attack some random directions simultaneously (cost 75).");
 
         break;
     case CLASS_HIGH_MAGE:
@@ -19,37 +19,37 @@ void set_class_ability_info(player_type *creature_ptr, self_info_type *si_ptr)
     case CLASS_MAGE:
     case CLASS_SORCERER:
         if (creature_ptr->lev > 24)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒAƒCƒeƒ€‚Ì–‚—Í‚ğ‹zû‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(1 MP)", "You can absorb charges from an item (cost 1).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚¢ã‚¤ãƒ†ãƒ ã®é­”åŠ›ã‚’å¸åã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(1 MP)", "You can absorb charges from an item (cost 1).");
 
         break;
     case CLASS_PRIEST:
         if (is_good_realm(creature_ptr->realm1)) {
             if (creature_ptr->lev > 34)
-                si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í•Ší‚ğj•Ÿ‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(70 MP)", "You can bless a weapon (cost 70).");
+                si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ­¦å™¨ã‚’ç¥ç¦ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(70 MP)", "You can bless a weapon (cost 70).");
 
             break;
         }
 
         if (creature_ptr->lev > 41)
             si_ptr->info[si_ptr->line++]
-                = _("‚ ‚È‚½‚Íü‚è‚Ì‚·‚×‚Ä‚Ìƒ‚ƒ“ƒXƒ^[‚ğUŒ‚‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(40 MP)", "You can damage all monsters in sight (cost 40).");
+                = _("ã‚ãªãŸã¯å‘¨ã‚Šã®ã™ã¹ã¦ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ”»æ’ƒã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(40 MP)", "You can damage all monsters in sight (cost 40).");
 
         break;
     case CLASS_ROGUE:
         if (creature_ptr->lev > 7)
             si_ptr->info[si_ptr->line++]
-                = _("‚ ‚È‚½‚ÍUŒ‚‚µ‚Ä‘¦À‚É“¦‚°‚é‚±‚Æ‚ª‚Å‚«‚éB(12 MP)", "You can hit a monster and teleport away simultaneously (cost 12).");
+                = _("ã‚ãªãŸã¯æ”»æ’ƒã—ã¦å³åº§ã«é€ƒã’ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(12 MP)", "You can hit a monster and teleport away simultaneously (cost 12).");
 
         break;
     case CLASS_RANGER:
         if (creature_ptr->lev > 14)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰ö•¨‚ğ’²¸‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(20 MP)", "You can probe monsters (cost 20).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ€ªç‰©ã‚’èª¿æŸ»ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(20 MP)", "You can probe monsters (cost 20).");
 
         break;
     case CLASS_PALADIN:
         if (is_good_realm(creature_ptr->realm1)) {
             if (creature_ptr->lev > 29) {
-                si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í¹‚È‚é‘„‚ğ•ú‚Â‚±‚Æ‚ª‚Å‚«‚éB(30 MP)", "You can fire a holy spear (cost 30).");
+                si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è–ãªã‚‹æ§ã‚’æ”¾ã¤ã“ã¨ãŒã§ãã‚‹ã€‚(30 MP)", "You can fire a holy spear (cost 30).");
             }
 
             break;
@@ -57,93 +57,93 @@ void set_class_ability_info(player_type *creature_ptr, self_info_type *si_ptr)
 
         if (creature_ptr->lev > 29)
             si_ptr->info[si_ptr->line++]
-                = _("‚ ‚È‚½‚Í¶–½—Í‚ğŒ¸­‚³‚¹‚é‘„‚ğ•ú‚Â‚±‚Æ‚ª‚Å‚«‚éB(30 MP)", "You can fire a spear which drains vitality (cost 30).");
+                = _("ã‚ãªãŸã¯ç”Ÿå‘½åŠ›ã‚’æ¸›å°‘ã•ã›ã‚‹æ§ã‚’æ”¾ã¤ã“ã¨ãŒã§ãã‚‹ã€‚(30 MP)", "You can fire a spear which drains vitality (cost 30).");
 
         break;
     case CLASS_WARRIOR_MAGE:
         if (creature_ptr->lev > 24) {
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚g‚o‚ğ‚l‚o‚É•ÏŠ·‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(0 MP)", "You can convert HP to SP (cost 0).");
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‚l‚o‚ğ‚g‚o‚É•ÏŠ·‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(0 MP)", "You can convert SP to HP (cost 0).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ï¼¨ï¼°ã‚’ï¼­ï¼°ã«å¤‰æ›ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(0 MP)", "You can convert HP to SP (cost 0).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ï¼­ï¼°ã‚’ï¼¨ï¼°ã«å¤‰æ›ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(0 MP)", "You can convert SP to HP (cost 0).");
         }
 
         break;
     case CLASS_CHAOS_WARRIOR:
         if (creature_ptr->lev > 39) {
             si_ptr->info[si_ptr->line++]
-                = _("‚ ‚È‚½‚ÍüˆÍ‚É‰ö•¨‚ğ˜f‚í‚·Œõ‚ğ”­¶‚³‚¹‚é‚±‚Æ‚ª‚Å‚«‚éB(50 MP)", "You can radiate light which confuses nearby monsters (cost 50).");
+                = _("ã‚ãªãŸã¯å‘¨å›²ã«æ€ªç‰©ã‚’æƒ‘ã‚ã™å…‰ã‚’ç™ºç”Ÿã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(50 MP)", "You can radiate light which confuses nearby monsters (cost 50).");
         }
 
         break;
     case CLASS_MONK:
         if (creature_ptr->lev > 24)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í\‚¦‚é‚±‚Æ‚ª‚Å‚«‚éB(0 MP)", "You can assume a special stance (cost 0).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ§‹ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(0 MP)", "You can assume a special stance (cost 0).");
 
         if (creature_ptr->lev > 29)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í’Êí‚Ì2”{‚ÌUŒ‚‚ğs‚¤‚±‚Æ‚ª‚Å‚«‚éB(30 MP)", "You can perform two attacks at the same time (cost 30).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é€šå¸¸ã®2å€ã®æ”»æ’ƒã‚’è¡Œã†ã“ã¨ãŒã§ãã‚‹ã€‚(30 MP)", "You can perform two attacks at the same time (cost 30).");
 
         break;
     case CLASS_MINDCRAFTER:
     case CLASS_FORCETRAINER:
         if (creature_ptr->lev > 14)
             si_ptr->info[si_ptr->line++]
-                = _("‚ ‚È‚½‚Í¸_‚ğW’†‚µ‚Ä‚l‚o‚ğ‰ñ•œ‚³‚¹‚é‚±‚Æ‚ª‚Å‚«‚éB(0 MP)", "You can concentrate to regenerate your mana (cost 0).");
+                = _("ã‚ãªãŸã¯ç²¾ç¥ã‚’é›†ä¸­ã—ã¦ï¼­ï¼°ã‚’å›å¾©ã•ã›ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(0 MP)", "You can concentrate to regenerate your mana (cost 0).");
 
         break;
     case CLASS_TOURIST:
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍÊ^‚ğB‰e‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(0 MP)", "You can take a photograph (cost 0).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯å†™çœŸã‚’æ’®å½±ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(0 MP)", "You can take a photograph (cost 0).");
         if (creature_ptr->lev > 24)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍƒAƒCƒeƒ€‚ğŠ®‘S‚ÉŠÓ’è‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(20 MP)", "You can *identify* items (cost 20).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ã‚¢ã‚¤ãƒ†ãƒ ã‚’å®Œå…¨ã«é‘‘å®šã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(20 MP)", "You can *identify* items (cost 20).");
 
         break;
     case CLASS_IMITATOR:
         if (creature_ptr->lev > 29)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‰ö•¨‚Ì“ÁêUŒ‚‚ğƒ_ƒ[ƒW2”{‚Å‚Ü‚Ë‚é‚±‚Æ‚ª‚Å‚«‚éB(100 MP)",
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ€ªç‰©ã®ç‰¹æ®Šæ”»æ’ƒã‚’ãƒ€ãƒ¡ãƒ¼ã‚¸2å€ã§ã¾ã­ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(100 MP)",
                 "You can imitate monster's special attacks with double damage (cost 100).");
 
         break;
     case CLASS_BEASTMASTER:
         si_ptr->info[si_ptr->line++]
-            = _("‚ ‚È‚½‚Í1‘Ì‚Ì¶–½‚Ì‚ ‚éƒ‚ƒ“ƒXƒ^[‚ğx”z‚·‚é‚±‚Æ‚ª‚Å‚«‚éB(ƒŒƒxƒ‹/4 MP)", "You can dominate a monster (cost level/4).");
+            = _("ã‚ãªãŸã¯1ä½“ã®ç”Ÿå‘½ã®ã‚ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ”¯é…ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(ãƒ¬ãƒ™ãƒ«/4 MP)", "You can dominate a monster (cost level/4).");
         if (creature_ptr->lev > 29)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹ŠE“à‚Ì¶–½‚Ì‚ ‚éƒ‚ƒ“ƒXƒ^[‚ğx”z‚·‚é‚±‚Æ‚ª‚Å‚«‚éB((ƒŒƒxƒ‹+20)/2 MP)",
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è¦–ç•Œå†…ã®ç”Ÿå‘½ã®ã‚ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’æ”¯é…ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚((ãƒ¬ãƒ™ãƒ«+20)/2 MP)",
                 "You can dominate living monsters in sight (cost (level+20)/4).");
 
         break;
     case CLASS_MAGIC_EATER:
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Íñ/–‚–@–_/ƒƒbƒh‚Ì–‚—Í‚ğ©•ª‚Ì‚à‚Ì‚É‚·‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can absorb a staff, wand or rod itself.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯æ–/é­”æ³•æ£’/ãƒ­ãƒƒãƒ‰ã®é­”åŠ›ã‚’è‡ªåˆ†ã®ã‚‚ã®ã«ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can absorb a staff, wand or rod itself.");
         break;
     case CLASS_RED_MAGE:
         if (creature_ptr->lev > 47)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í1ƒ^[ƒ“‚É2‰ñ–‚–@‚ğ¥‚¦‚é‚±‚Æ‚ª‚Å‚«‚éB(20 MP)", "You can cast two spells simultaneously (cost 20).");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯1ã‚¿ãƒ¼ãƒ³ã«2å›é­”æ³•ã‚’å”±ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(20 MP)", "You can cast two spells simultaneously (cost 20).");
 
         break;
     case CLASS_SAMURAI:
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í¸_‚ğW’†‚µ‚Ä‹C‡‚¢‚ğ—­‚ß‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can concentrate to regenerate your mana.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç²¾ç¥ã‚’é›†ä¸­ã—ã¦æ°—åˆã„ã‚’æºœã‚ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can concentrate to regenerate your mana.");
         if (creature_ptr->lev > 24)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í“Áê‚ÈŒ^‚Å\‚¦‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can assume a special stance.");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç‰¹æ®Šãªå‹ã§æ§‹ãˆã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can assume a special stance.");
 
         break;
     case CLASS_BLUE_MAGE:
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‘Šè‚Ég‚í‚ê‚½–‚–@‚ğŠw‚Ô‚±‚Æ‚ª‚Å‚«‚éB", "You can study spells which your enemy casts on you.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç›¸æ‰‹ã«ä½¿ã‚ã‚ŒãŸé­”æ³•ã‚’å­¦ã¶ã“ã¨ãŒã§ãã‚‹ã€‚", "You can study spells which your enemy casts on you.");
         break;
     case CLASS_CAVALRY:
         if (creature_ptr->lev > 9)
             si_ptr->info[si_ptr->line++]
-                = _("‚ ‚È‚½‚Íƒ‚ƒ“ƒXƒ^[‚Éæ‚Á‚Ä–³—–î—ƒyƒbƒg‚É‚·‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can ride on a hostile monster to forcibly turn it into a pet.");
+                = _("ã‚ãªãŸã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«ä¹—ã£ã¦ç„¡ç†çŸ¢ç†ãƒšãƒƒãƒˆã«ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can ride on a hostile monster to forcibly turn it into a pet.");
 
         break;
     case CLASS_BERSERKER:
         if (creature_ptr->lev > 9)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÍŠX‚Æƒ_ƒ“ƒWƒ‡ƒ“‚ÌŠÔ‚ğs‚«—ˆ‚·‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can travel between town and the depths.");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯è¡—ã¨ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³ã®é–“ã‚’è¡Œãæ¥ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can travel between town and the depths.");
 
         break;
     case CLASS_MIRROR_MASTER:
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹¾‚ğì‚èo‚·‚±‚Æ‚ª‚Å‚«‚éB(2 MP)", "You can create a Mirror (cost 2).");
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‹¾‚ğŠ„‚é‚±‚Æ‚ª‚Å‚«‚éB(0 MP)", "You can break distant Mirrors (cost 0).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é¡ã‚’ä½œã‚Šå‡ºã™ã“ã¨ãŒã§ãã‚‹ã€‚(2 MP)", "You can create a Mirror (cost 2).");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯é¡ã‚’å‰²ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚(0 MP)", "You can break distant Mirrors (cost 0).");
         break;
     case CLASS_NINJA:
         if (creature_ptr->lev > 19)
-            si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Í‘f‘‚­ˆÚ“®‚·‚é‚±‚Æ‚ª‚Å‚«‚éB", "You can walk extremely fast.");
+            si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã¯ç´ æ—©ãç§»å‹•ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "You can walk extremely fast.");
 
         break;
     }

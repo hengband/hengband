@@ -1,4 +1,4 @@
-#include "specific-object/bloody-moon.h"
+ï»¿#include "specific-object/bloody-moon.h"
 #include "art-definition/art-weapon-types.h"
 #include "core/player-update-types.h"
 #include "object-enchant/object-boost.h"
@@ -10,10 +10,10 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief ŒÅ’èƒA[ƒeƒBƒtƒ@ƒNƒgwƒuƒ‰ƒbƒfƒBƒ€[ƒ“x‚Ì“Á«‚ð•ÏX‚·‚éB
- * @details ƒXƒŒƒC2d2ŽíA‹y‚Ñone_resistance()‚É‚æ‚é‘Ï«1d2ŽíApval2Ží‚ð“¾‚éB
- * @param o_ptr ‘ÎÛ‚ÌƒIƒuƒWƒFƒNƒg\‘¢‘Ì (ƒuƒ‰ƒbƒfƒBƒ€[ƒ“)‚Ìƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã€Žãƒ–ãƒ©ãƒƒãƒ‡ã‚£ãƒ ãƒ¼ãƒ³ã€ã®ç‰¹æ€§ã‚’å¤‰æ›´ã™ã‚‹ã€‚
+ * @details ã‚¹ãƒ¬ã‚¤2d2ç¨®ã€åŠã³one_resistance()ã«ã‚ˆã‚‹è€æ€§1d2ç¨®ã€pval2ç¨®ã‚’å¾—ã‚‹ã€‚
+ * @param o_ptr å¯¾è±¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ§‹é€ ä½“ (ãƒ–ãƒ©ãƒƒãƒ‡ã‚£ãƒ ãƒ¼ãƒ³)ã®ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void get_bloody_moon_flags(object_type *o_ptr)
 {
@@ -48,16 +48,16 @@ void get_bloody_moon_flags(object_type *o_ptr)
 
 /*!
  * @brief Let's dance a RONDO!!
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ƒuƒ‰ƒbƒfƒBEƒ€[ƒ“‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @return ƒIƒuƒWƒFƒNƒgî•ñ‚ÉˆÙí‚ª‚È‚¢ŒÀ‚èTRUE
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr ãƒ–ãƒ©ãƒƒãƒ‡ã‚£ãƒ»ãƒ ãƒ¼ãƒ³ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±ã«ç•°å¸¸ãŒãªã„é™ã‚ŠTRUE
  */
 bool activate_bloody_moon(player_type *user_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_BLOOD)
         return FALSE;
 
-    msg_print(_("Š™‚ª–¾‚é‚­‹P‚¢‚½...", "Your scythe glows brightly!"));
+    msg_print(_("éŽŒãŒæ˜Žã‚‹ãè¼ã„ãŸ...", "Your scythe glows brightly!"));
     get_bloody_moon_flags(o_ptr);
     if (user_ptr->prace == RACE_ANDROID)
         calc_android_exp(user_ptr);

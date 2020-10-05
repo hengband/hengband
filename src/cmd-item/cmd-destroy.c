@@ -1,4 +1,4 @@
-#include "cmd-item/cmd-destroy.h"
+ï»¿#include "cmd-item/cmd-destroy.h"
 #include "autopick/autopick-registry.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
@@ -57,7 +57,7 @@ static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_
         return TRUE;
 
     describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, OD_OMIT_PREFIX);
-    sprintf(destroy_ptr->out_val, _("–{“–‚É%s‚ğ‰ó‚µ‚Ü‚·‚©? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
+    sprintf(destroy_ptr->out_val, _("æœ¬å½“ã«%sã‚’å£Šã—ã¾ã™ã‹? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
     msg_print(NULL);
     message_add(destroy_ptr->out_val);
     creature_ptr->window |= PW_MESSAGE;
@@ -84,8 +84,8 @@ static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_
 
 static bool select_destroying_item(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
-    concptr q = _("‚Ç‚ÌƒAƒCƒeƒ€‚ğ‰ó‚µ‚Ü‚·‚©? ", "Destroy which item? ");
-    concptr s = _("‰ó‚¹‚éƒAƒCƒeƒ€‚ğ‚Á‚Ä‚¢‚È‚¢B", "You have nothing to destroy.");
+    concptr q = _("ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’å£Šã—ã¾ã™ã‹? ", "Destroy which item? ");
+    concptr s = _("å£Šã›ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’æŒã£ã¦ã„ãªã„ã€‚", "You have nothing to destroy.");
     destroy_ptr->o_ptr = choose_object(creature_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR, 0);
     if (destroy_ptr->o_ptr == NULL)
         return FALSE;
@@ -101,10 +101,10 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
 }
 
 /*!
- * @brief ˆê•”E‹Æ‚Å‚ˆÊ–‚–@‘‚Ì”j‰ó‚É‚æ‚éŒoŒ±’lã¸‚Ì”»’è
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param destory_ptr ƒAƒCƒeƒ€”j‰ó\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * return –‚–@‘‚Ì”j‰ó‚É‚æ‚Á‚ÄŒoŒ±’l‚ª“ü‚é‚È‚ç‚ÎTRUE
+ * @brief ä¸€éƒ¨è·æ¥­ã§é«˜ä½é­”æ³•æ›¸ã®ç ´å£Šã«ã‚ˆã‚‹çµŒé¨“å€¤ä¸Šæ˜‡ã®åˆ¤å®š
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param destory_ptr ã‚¢ã‚¤ãƒ†ãƒ ç ´å£Šæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * return é­”æ³•æ›¸ã®ç ´å£Šã«ã‚ˆã£ã¦çµŒé¨“å€¤ãŒå…¥ã‚‹ãªã‚‰ã°TRUE
  */
 static bool decide_magic_book_exp(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
@@ -145,7 +145,7 @@ static void gain_exp_by_destroying_magic_book(player_type *creature_ptr, destroy
     if (tester_exp < 1)
         tester_exp = 1;
 
-    msg_print(_("X‚ÉŒoŒ±‚ğÏ‚ñ‚¾‚æ‚¤‚È‹C‚ª‚·‚éB", "You feel more experienced."));
+    msg_print(_("æ›´ã«çµŒé¨“ã‚’ç©ã‚“ã ã‚ˆã†ãªæ°—ãŒã™ã‚‹ã€‚", "You feel more experienced."));
     gain_exp(creature_ptr, tester_exp * destroy_ptr->amt);
 }
 
@@ -175,7 +175,7 @@ static void process_destroy_magic_book(player_type *creature_ptr, destroy_type *
 static void exe_destroy_item(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
     object_copy(destroy_ptr->q_ptr, destroy_ptr->o_ptr);
-    msg_format(_("%s‚ğ‰ó‚µ‚½B", "You destroy %s."), destroy_ptr->o_name);
+    msg_format(_("%sã‚’å£Šã—ãŸã€‚", "You destroy %s."), destroy_ptr->o_name);
     sound(SOUND_DESTITEM);
     reduce_charges(destroy_ptr->o_ptr, destroy_ptr->amt);
     vary_item(creature_ptr, destroy_ptr->item, -destroy_ptr->amt);
@@ -188,9 +188,9 @@ static void exe_destroy_item(player_type *creature_ptr, destroy_type *destroy_pt
 }
 
 /*!
- * @brief ƒAƒCƒeƒ€‚ğ”j‰ó‚·‚éƒRƒ}ƒ“ƒh‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ / Destroy an item
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief ã‚¢ã‚¤ãƒ†ãƒ ã‚’ç ´å£Šã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ / Destroy an item
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void do_cmd_destroy(player_type *creature_ptr)
 {
@@ -213,7 +213,7 @@ void do_cmd_destroy(player_type *creature_ptr)
     take_turn(creature_ptr, 100);
     if (!can_player_destroy_object(creature_ptr, destroy_ptr->o_ptr)) {
         free_turn(creature_ptr);
-        msg_format(_("%s‚Í”j‰ó•s‰Â”\‚¾B", "You cannot destroy %s."), destroy_ptr->o_name);
+        msg_format(_("%sã¯ç ´å£Šä¸å¯èƒ½ã ã€‚", "You cannot destroy %s."), destroy_ptr->o_name);
         return;
     }
 

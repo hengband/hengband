@@ -1,4 +1,4 @@
-#include "mind/mind-priest.h"
+ï»¿#include "mind/mind-priest.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -20,16 +20,16 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief •Ší‚Ìj•Ÿˆ— /
+ * @brief æ­¦å™¨ã®ç¥ç¦å‡¦ç† /
  * Bless a weapon
- * @return ƒ^[ƒ“Á”ï‚ð—v‚·‚éˆ—‚ðs‚Á‚½‚È‚ç‚ÎTRUE‚ð•Ô‚·
+ * @return ã‚¿ãƒ¼ãƒ³æ¶ˆè²»ã‚’è¦ã™ã‚‹å‡¦ç†ã‚’è¡Œã£ãŸãªã‚‰ã°TRUEã‚’è¿”ã™
  */
 bool bless_weapon(player_type *caster_ptr)
 {
     item_tester_hook = object_is_weapon;
 
-    concptr q = _("‚Ç‚ÌƒAƒCƒeƒ€‚ðj•Ÿ‚µ‚Ü‚·‚©H", "Bless which weapon? ");
-    concptr s = _("j•Ÿ‚Å‚«‚é•Ší‚ª‚ ‚è‚Ü‚¹‚ñB", "You have weapon to bless.");
+    concptr q = _("ã©ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ç¥ç¦ã—ã¾ã™ã‹ï¼Ÿ", "Bless which weapon? ");
+    concptr s = _("ç¥ç¦ã§ãã‚‹æ­¦å™¨ãŒã‚ã‚Šã¾ã›ã‚“ã€‚", "You have weapon to bless.");
 
     OBJECT_IDX item;
     object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, 0);
@@ -45,7 +45,7 @@ bool bless_weapon(player_type *caster_ptr)
         if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)
             || (o_ptr->curse_flags & TRC_PERMA_CURSE)) {
 #ifdef JP
-            msg_format("%s‚ð•¢‚¤•‚¢ƒI[ƒ‰‚Íj•Ÿ‚ð’µ‚Ë•Ô‚µ‚½I", o_name);
+            msg_format("%sã‚’è¦†ã†é»’ã„ã‚ªãƒ¼ãƒ©ã¯ç¥ç¦ã‚’è·³ã­è¿”ã—ãŸï¼", o_name);
 #else
             msg_format("The black aura on %s %s disrupts the blessing!", ((item >= 0) ? "your" : "the"), o_name);
 #endif
@@ -54,7 +54,7 @@ bool bless_weapon(player_type *caster_ptr)
         }
 
 #ifdef JP
-        msg_format("%s ‚©‚çŽ×ˆ«‚ÈƒI[ƒ‰‚ªÁ‚¦‚½B", o_name);
+        msg_format("%s ã‹ã‚‰é‚ªæ‚ªãªã‚ªãƒ¼ãƒ©ãŒæ¶ˆãˆãŸã€‚", o_name);
 #else
         msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), o_name);
 #endif
@@ -75,7 +75,7 @@ bool bless_weapon(player_type *caster_ptr)
      */
     if (has_flag(flgs, TR_BLESSED)) {
 #ifdef JP
-        msg_format("%s ‚ÍŠù‚Éj•Ÿ‚³‚ê‚Ä‚¢‚éB", o_name);
+        msg_format("%s ã¯æ—¢ã«ç¥ç¦ã•ã‚Œã¦ã„ã‚‹ã€‚", o_name);
 #else
         msg_format("%s %s %s blessed already.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
 #endif
@@ -84,7 +84,7 @@ bool bless_weapon(player_type *caster_ptr)
 
     if (!(object_is_artifact(o_ptr) || object_is_ego(o_ptr)) || one_in_(3)) {
 #ifdef JP
-        msg_format("%s‚Í‹P‚¢‚½I", o_name);
+        msg_format("%sã¯è¼ã„ãŸï¼", o_name);
 #else
         msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
@@ -92,7 +92,7 @@ bool bless_weapon(player_type *caster_ptr)
         o_ptr->discount = 99;
     } else {
         bool dis_happened = FALSE;
-        msg_print(_("‚»‚Ì•Ší‚Íj•Ÿ‚ðŒ™‚Á‚Ä‚¢‚éI", "The weapon resists your blessing!"));
+        msg_print(_("ãã®æ­¦å™¨ã¯ç¥ç¦ã‚’å«Œã£ã¦ã„ã‚‹ï¼", "The weapon resists your blessing!"));
 
         /* Disenchant tohit */
         if (o_ptr->to_h > 0) {
@@ -122,10 +122,10 @@ bool bless_weapon(player_type *caster_ptr)
             o_ptr->to_a--;
 
         if (dis_happened) {
-            msg_print(_("ŽüˆÍ‚ª–}—f‚È•µˆÍ‹C‚Å–ž‚¿‚½...", "There is a static feeling in the air..."));
+            msg_print(_("å‘¨å›²ãŒå‡¡åº¸ãªé›°å›²æ°—ã§æº€ã¡ãŸ...", "There is a static feeling in the air..."));
 
 #ifdef JP
-            msg_format("%s ‚Í—ò‰»‚µ‚½I", o_name);
+            msg_format("%s ã¯åŠ£åŒ–ã—ãŸï¼", o_name);
 #else
             msg_format("%s %s %s disenchanted!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
 #endif

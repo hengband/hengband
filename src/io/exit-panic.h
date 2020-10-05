@@ -1,6 +1,6 @@
-#pragma once
+﻿#pragma once
 /*
- * Windows�̃R�[�h����͌Ă΂�Ȃ��B�����VS����͌����Ȃ�
+ * Windowsのコードからは呼ばれない。よってVSからは見えない
  */
 
 #include "angband.h"

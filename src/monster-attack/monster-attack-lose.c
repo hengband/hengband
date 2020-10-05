@@ -1,4 +1,4 @@
-#include "monster-attack/monster-attack-lose.h"
+ï»¿#include "monster-attack/monster-attack-lose.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-attack/monster-attack-status.h"
 #include "monster-attack/monster-attack-util.h"
@@ -11,11 +11,11 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief •a‹Cƒ_ƒ[ƒW‚ğŒvZ‚·‚é (“Å‘Ï«‚ª‚ ‚ê‚ÎA(1d4 + 4) / 9‚É‚È‚éB“ñd‘Ï«‚È‚çX‚É(1d4 + 4) / 9)
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param monap_ptr ƒ‚ƒ“ƒXƒ^[‚©‚çƒvƒŒ[ƒ„[‚Ö‚Ì’¼ÚUŒ‚\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
- * @details 10% (“Å‚ÌˆêŸ‘Ï«‚ª‚ ‚ê‚Î4%A“ñd‘Ï«‚È‚ç‚Î1.6%)‚ÌŠm—¦‚Å‘Ï‹v‚ª’á‰º‚µAX‚É1/10‚ÌŠm—¦‚Å‰i‹v’á‰º‚·‚é
+ * @brief ç—…æ°—ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ (æ¯’è€æ€§ãŒã‚ã‚Œã°ã€(1d4 + 4) / 9ã«ãªã‚‹ã€‚äºŒé‡è€æ€§ãªã‚‰æ›´ã«(1d4 + 4) / 9)
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param monap_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®ç›´æ¥æ”»æ’ƒæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
+ * @details 10% (æ¯’ã®ä¸€æ¬¡è€æ€§ãŒã‚ã‚Œã°4%ã€äºŒé‡è€æ€§ãªã‚‰ã°1.6%)ã®ç¢ºç‡ã§è€ä¹…ãŒä½ä¸‹ã—ã€æ›´ã«1/10ã®ç¢ºç‡ã§æ°¸ä¹…ä½ä¸‹ã™ã‚‹
  */
 void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -38,16 +38,16 @@ void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr)
 
     bool perm = one_in_(10);
     if (dec_stat(target_ptr, A_CON, randint1(10), perm)) {
-        msg_print(_("•a‚ª‚ ‚È‚½‚ğI‚ñ‚Å‚¢‚é‹C‚ª‚·‚éB", "You feel sickly."));
+        msg_print(_("ç—…ãŒã‚ãªãŸã‚’è•ã‚“ã§ã„ã‚‹æ°—ãŒã™ã‚‹ã€‚", "You feel sickly."));
         monap_ptr->obvious = TRUE;
     }
 }
 
 /*!
- * @brief ˜r—Í’á‰ºƒ_ƒ[ƒW‚ğŒvZ‚·‚é (ˆÛ‚ª‚ ‚ê‚ÎA(1d4 + 4) / 9‚É‚È‚é)
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param monap_ptr ƒ‚ƒ“ƒXƒ^[‚©‚çƒvƒŒ[ƒ„[‚Ö‚Ì’¼ÚUŒ‚\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief è…•åŠ›ä½ä¸‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ (ç¶­æŒãŒã‚ã‚Œã°ã€(1d4 + 4) / 9ã«ãªã‚‹)
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param monap_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®ç›´æ¥æ”»æ’ƒæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void calc_blow_lose_strength(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -63,10 +63,10 @@ void calc_blow_lose_strength(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * @brief ’m”\’á‰ºƒ_ƒ[ƒW‚ğŒvZ‚·‚é (ˆÛ‚ª‚ ‚ê‚ÎA(1d4 + 4) / 9‚É‚È‚é)
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param monap_ptr ƒ‚ƒ“ƒXƒ^[‚©‚çƒvƒŒ[ƒ„[‚Ö‚Ì’¼ÚUŒ‚\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief çŸ¥èƒ½ä½ä¸‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ (ç¶­æŒãŒã‚ã‚Œã°ã€(1d4 + 4) / 9ã«ãªã‚‹)
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param monap_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®ç›´æ¥æ”»æ’ƒæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void calc_blow_lose_intelligence(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -82,10 +82,10 @@ void calc_blow_lose_intelligence(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * @brief Œ«‚³’á‰ºƒ_ƒ[ƒW‚ğŒvZ‚·‚é (ˆÛ‚ª‚ ‚ê‚ÎA(1d4 + 4) / 9‚É‚È‚é)
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param monap_ptr ƒ‚ƒ“ƒXƒ^[‚©‚çƒvƒŒ[ƒ„[‚Ö‚Ì’¼ÚUŒ‚\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief è³¢ã•ä½ä¸‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ (ç¶­æŒãŒã‚ã‚Œã°ã€(1d4 + 4) / 9ã«ãªã‚‹)
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param monap_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®ç›´æ¥æ”»æ’ƒæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void calc_blow_lose_wisdom(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -101,10 +101,10 @@ void calc_blow_lose_wisdom(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * @brief Ší—p’á‰ºƒ_ƒ[ƒW‚ğŒvZ‚·‚é (ˆÛ‚ª‚ ‚ê‚ÎA(1d4 + 4) / 9‚É‚È‚é)
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param monap_ptr ƒ‚ƒ“ƒXƒ^[‚©‚çƒvƒŒ[ƒ„[‚Ö‚Ì’¼ÚUŒ‚\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief å™¨ç”¨ä½ä¸‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ (ç¶­æŒãŒã‚ã‚Œã°ã€(1d4 + 4) / 9ã«ãªã‚‹)
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param monap_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®ç›´æ¥æ”»æ’ƒæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void calc_blow_lose_dexterity(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -120,10 +120,10 @@ void calc_blow_lose_dexterity(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * @brief ‘Ï‹v’á‰ºƒ_ƒ[ƒW‚ğŒvZ‚·‚é (ˆÛ‚ª‚ ‚ê‚ÎA(1d4 + 4) / 9‚É‚È‚é)
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param monap_ptr ƒ‚ƒ“ƒXƒ^[‚©‚çƒvƒŒ[ƒ„[‚Ö‚Ì’¼ÚUŒ‚\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief è€ä¹…ä½ä¸‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ (ç¶­æŒãŒã‚ã‚Œã°ã€(1d4 + 4) / 9ã«ãªã‚‹)
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param monap_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®ç›´æ¥æ”»æ’ƒæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void calc_blow_lose_constitution(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -139,10 +139,10 @@ void calc_blow_lose_constitution(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * @brief –£—Í’á‰ºƒ_ƒ[ƒW‚ğŒvZ‚·‚é (ˆÛ‚ª‚ ‚ê‚ÎA(1d4 + 4) / 9‚É‚È‚é)
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param monap_ptr ƒ‚ƒ“ƒXƒ^[‚©‚çƒvƒŒ[ƒ„[‚Ö‚Ì’¼ÚUŒ‚\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief é­…åŠ›ä½ä¸‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ (ç¶­æŒãŒã‚ã‚Œã°ã€(1d4 + 4) / 9ã«ãªã‚‹)
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param monap_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®ç›´æ¥æ”»æ’ƒæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void calc_blow_lose_charisma(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -158,10 +158,10 @@ void calc_blow_lose_charisma(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * @brief ‘S”\—Í’á‰ºƒ_ƒ[ƒW‚ğŒvZ‚·‚é (ˆÛ‚ª‚ ‚ê‚ÎA1‚Â‚É•t‚«-3%ŒyŒ¸‚·‚é)
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param monap_ptr ƒ‚ƒ“ƒXƒ^[‚©‚çƒvƒŒ[ƒ„[‚Ö‚Ì’¼ÚUŒ‚\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief å…¨èƒ½åŠ›ä½ä¸‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ (ç¶­æŒãŒã‚ã‚Œã°ã€1ã¤ã«ä»˜ã-3%è»½æ¸›ã™ã‚‹)
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param monap_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®ç›´æ¥æ”»æ’ƒæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void calc_blow_lose_all(player_type *target_ptr, monap_type *monap_ptr)
 {

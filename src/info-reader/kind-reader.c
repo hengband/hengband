@@ -1,4 +1,4 @@
-#include "info-reader/kind-reader.h"
+ï»¿#include "info-reader/kind-reader.h"
 #include "info-reader/kind-info-tokens-table.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
@@ -9,11 +9,11 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief ƒeƒLƒXƒgƒg[ƒNƒ“‚ğ‘–¸‚µ‚Äƒtƒ‰ƒO‚ğˆê‚Â“¾‚é(ƒx[ƒXƒAƒCƒeƒ€—p) /
+ * @brief ãƒ†ã‚­ã‚¹ãƒˆãƒˆãƒ¼ã‚¯ãƒ³ã‚’èµ°æŸ»ã—ã¦ãƒ•ãƒ©ã‚°ã‚’ä¸€ã¤å¾—ã‚‹(ãƒ™ãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ ç”¨) /
  * Grab one flag in an object_kind from a textual string
- * @param k_ptr •ÛŠÇæ‚Ìƒx[ƒXƒAƒCƒeƒ€\‘¢‘ÌQÆƒ|ƒCƒ“ƒ^
- * @param what QÆŒ³‚Ì•¶š—ñƒ|ƒCƒ“ƒ^
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param k_ptr ä¿ç®¡å…ˆã®ãƒ™ãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ æ§‹é€ ä½“å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param what å‚ç…§å…ƒã®æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 static errr grab_one_kind_flag(object_kind *k_ptr, concptr what)
 {
@@ -27,16 +27,16 @@ static errr grab_one_kind_flag(object_kind *k_ptr, concptr what)
     if (grab_one_flag(&k_ptr->gen_flags, k_info_gen_flags, what) == 0)
         return 0;
 
-    msg_format(_("–¢’m‚ÌƒAƒCƒeƒ€Eƒtƒ‰ƒO '%s'B", "Unknown object flag '%s'."), what);
+    msg_format(_("æœªçŸ¥ã®ã‚¢ã‚¤ãƒ†ãƒ ãƒ»ãƒ•ãƒ©ã‚° '%s'ã€‚", "Unknown object flag '%s'."), what);
     return 1;
 }
 
 /*!
- * @brief ƒx[ƒXƒAƒCƒeƒ€(k_info)‚Ìƒp[ƒXŠÖ” /
+ * @brief ãƒ™ãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ (k_info)ã®ãƒ‘ãƒ¼ã‚¹é–¢æ•° /
  * Initialize the "k_info" array, by parsing an ascii "template" file
- * @param buf ƒeƒLƒXƒg—ñ
- * @param head ƒwƒbƒ_\‘¢‘Ì
- * @return ƒGƒ‰[ƒR[ƒh
+ * @param buf ãƒ†ã‚­ã‚¹ãƒˆåˆ—
+ * @param head ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr parse_k_info(char *buf, angband_header *head)
 {
@@ -80,8 +80,8 @@ errr parse_k_info(char *buf, angband_header *head)
         return 3;
     }
 #ifdef JP
-    /* ‰pŒê–¼‚ğ“Ç‚Şƒ‹[ƒ`ƒ“‚ğ’Ç‰Á */
-    /* 'E' ‚©‚çn‚Ü‚és‚Í‰pŒê–¼‚Æ‚µ‚Ä‚¢‚é */
+    /* è‹±èªåã‚’èª­ã‚€ãƒ«ãƒ¼ãƒãƒ³ã‚’è¿½åŠ  */
+    /* 'E' ã‹ã‚‰å§‹ã¾ã‚‹è¡Œã¯è‹±èªåã¨ã—ã¦ã„ã‚‹ */
     else if (buf[0] == 'E') {
         /* nothing to do */
     }

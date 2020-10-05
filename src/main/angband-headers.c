@@ -1,11 +1,11 @@
-#include "main/angband-headers.h"
+ï»¿#include "main/angband-headers.h"
 
-angband_header f_head; /*!< ’nŒ`î•ñ‚Ìƒwƒbƒ_\‘¢‘Ì */
-angband_header v_head; /*!< Vaultî•ñ‚Ìƒwƒbƒ_\‘¢‘Ì */
-angband_header k_head; /*!< ƒy[ƒXƒAƒCƒeƒ€î•ñ‚Ìƒwƒbƒ_\‘¢‘Ì */
-angband_header a_head; /*!< ŒÅ’èƒA[ƒeƒBƒtƒ@ƒNƒgî•ñ‚Ìƒwƒbƒ_\‘¢‘Ì */
-angband_header e_head; /*!< ƒAƒCƒeƒ€ƒGƒSî•ñ‚Ìƒwƒbƒ_\‘¢‘Ì */
-angband_header r_head; /*!< ƒ‚ƒ“ƒXƒ^[í‘°î•ñ‚Ìƒwƒbƒ_\‘¢‘Ì */
-angband_header d_head; /*!< ƒ_ƒ“ƒWƒ‡ƒ“î•ñ‚Ìƒwƒbƒ_\‘¢‘Ì */
-angband_header s_head; /*!< ƒvƒŒƒCƒ„[E‹Æ‹Z”\î•ñ‚Ìƒwƒbƒ_\‘¢‘Ì */
-angband_header m_head; /*!< ƒvƒŒƒCƒ„[E‹Æ–‚–@î•ñ‚Ìƒwƒbƒ_\‘¢‘Ì */
+angband_header f_head; /*!< åœ°å½¢æƒ…å ±ã®ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ */
+angband_header v_head; /*!< Vaultæƒ…å ±ã®ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ */
+angband_header k_head; /*!< ãƒšãƒ¼ã‚¹ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã®ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ */
+angband_header a_head; /*!< å›ºå®šã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆæƒ…å ±ã®ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ */
+angband_header e_head; /*!< ã‚¢ã‚¤ãƒ†ãƒ ã‚¨ã‚´æƒ…å ±ã®ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ */
+angband_header r_head; /*!< ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç¨®æ—æƒ…å ±ã®ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ */
+angband_header d_head; /*!< ãƒ€ãƒ³ã‚¸ãƒ§ãƒ³æƒ…å ±ã®ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ */
+angband_header s_head; /*!< ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼è·æ¥­æŠ€èƒ½æƒ…å ±ã®ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ */
+angband_header m_head; /*!< ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼è·æ¥­é­”æ³•æƒ…å ±ã®ãƒ˜ãƒƒãƒ€æ§‹é€ ä½“ */

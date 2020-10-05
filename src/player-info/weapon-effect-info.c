@@ -1,4 +1,4 @@
-#include "player-info/weapon-effect-info.h"
+ï»¿#include "player-info/weapon-effect-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"
 #include "player-info/self-info-util.h"
@@ -7,85 +7,85 @@
 static void set_weapon_bless_info(self_info_type *si_ptr)
 {
     if (has_flag(si_ptr->flags, TR_BLESSED))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í_‚Ìj•Ÿ‚ğó‚¯‚Ä‚¢‚éB", "Your weapon has been blessed by the gods.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ç¥ã®ç¥ç¦ã‚’å—ã‘ã¦ã„ã‚‹ã€‚", "Your weapon has been blessed by the gods.");
 
     if (has_flag(si_ptr->flags, TR_CHAOTIC))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚ÍƒƒOƒ‹ƒX‚Ì’¥‚Ì‘®«‚ğ‚à‚ÂB", "Your weapon is branded with the Sign of Logrus.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ãƒ­ã‚°ãƒ«ã‚¹ã®å¾´ã®å±æ€§ã‚’ã‚‚ã¤ã€‚", "Your weapon is branded with the Sign of Logrus.");
 
     if (has_flag(si_ptr->flags, TR_IMPACT))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í‘ÅŒ‚‚Å’nk‚ğ”­¶‚·‚é‚±‚Æ‚ª‚Å‚«‚éB", "The impact of your weapon can cause earthquakes.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯æ‰“æ’ƒã§åœ°éœ‡ã‚’ç™ºç”Ÿã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚", "The impact of your weapon can cause earthquakes.");
 
     if (has_flag(si_ptr->flags, TR_VORPAL))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í”ñí‚É‰s‚¢B", "Your weapon is very sharp.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯éå¸¸ã«é‹­ã„ã€‚", "Your weapon is very sharp.");
 
     if (has_flag(si_ptr->flags, TR_VAMPIRIC))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í“G‚©‚ç¶–½—Í‚ğ‹zû‚·‚éB", "Your weapon drains life from your foes.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯æ•µã‹ã‚‰ç”Ÿå‘½åŠ›ã‚’å¸åã™ã‚‹ã€‚", "Your weapon drains life from your foes.");
 }
 
 static void set_brand_attack_info(self_info_type *si_ptr)
 {
     if (has_flag(si_ptr->flags, TR_BRAND_ACID))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í“G‚ğ—n‚©‚·B", "Your weapon melts your foes.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯æ•µã‚’æº¶ã‹ã™ã€‚", "Your weapon melts your foes.");
 
     if (has_flag(si_ptr->flags, TR_BRAND_ELEC))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í“G‚ğŠ´“d‚³‚¹‚éB", "Your weapon shocks your foes.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯æ•µã‚’æ„Ÿé›»ã•ã›ã‚‹ã€‚", "Your weapon shocks your foes.");
 
     if (has_flag(si_ptr->flags, TR_BRAND_FIRE))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í“G‚ğ”R‚â‚·B", "Your weapon burns your foes.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯æ•µã‚’ç‡ƒã‚„ã™ã€‚", "Your weapon burns your foes.");
 
     if (has_flag(si_ptr->flags, TR_BRAND_COLD))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í“G‚ğ“€‚ç‚¹‚éB", "Your weapon freezes your foes.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯æ•µã‚’å‡ã‚‰ã›ã‚‹ã€‚", "Your weapon freezes your foes.");
 
     if (has_flag(si_ptr->flags, TR_BRAND_POIS))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í“G‚ğ“Å‚ÅN‚·B", "Your weapon poisons your foes.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯æ•µã‚’æ¯’ã§ä¾µã™ã€‚", "Your weapon poisons your foes.");
 }
 
 static void set_slay_info(self_info_type *si_ptr)
 {
     if (has_flag(si_ptr->flags, TR_KILL_ANIMAL))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í“®•¨‚Ì“V“G‚Å‚ ‚éB", "Your weapon is a great bane of animals.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯å‹•ç‰©ã®å¤©æ•µã§ã‚ã‚‹ã€‚", "Your weapon is a great bane of animals.");
     else if (has_flag(si_ptr->flags, TR_SLAY_ANIMAL))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í“®•¨‚É‘Î‚µ‚Ä‹­‚¢—Í‚ğ”­Šö‚·‚éB", "Your weapon strikes at animals with extra force.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯å‹•ç‰©ã«å¯¾ã—ã¦å¼·ã„åŠ›ã‚’ç™ºæ®ã™ã‚‹ã€‚", "Your weapon strikes at animals with extra force.");
 
     if (has_flag(si_ptr->flags, TR_KILL_EVIL))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í×ˆ«‚È‚é‘¶İ‚Ì“V“G‚Å‚ ‚éB", "Your weapon is a great bane of evil.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯é‚ªæ‚ªãªã‚‹å­˜åœ¨ã®å¤©æ•µã§ã‚ã‚‹ã€‚", "Your weapon is a great bane of evil.");
     else if (has_flag(si_ptr->flags, TR_SLAY_EVIL))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í×ˆ«‚È‚é‘¶İ‚É‘Î‚µ‚Ä‹­‚¢—Í‚ğ”­Šö‚·‚éB", "Your weapon strikes at evil with extra force.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯é‚ªæ‚ªãªã‚‹å­˜åœ¨ã«å¯¾ã—ã¦å¼·ã„åŠ›ã‚’ç™ºæ®ã™ã‚‹ã€‚", "Your weapon strikes at evil with extra force.");
 
     if (has_flag(si_ptr->flags, TR_KILL_HUMAN))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚ÍlŠÔ‚Ì“V“G‚Å‚ ‚éB", "Your weapon is a great bane of humans.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯äººé–“ã®å¤©æ•µã§ã‚ã‚‹ã€‚", "Your weapon is a great bane of humans.");
     else if (has_flag(si_ptr->flags, TR_SLAY_HUMAN))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚ÍlŠÔ‚É‘Î‚µ‚Ä“Á‚É‹­‚¢—Í‚ğ”­Šö‚·‚éB", "Your weapon is especially deadly against humans.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯äººé–“ã«å¯¾ã—ã¦ç‰¹ã«å¼·ã„åŠ›ã‚’ç™ºæ®ã™ã‚‹ã€‚", "Your weapon is especially deadly against humans.");
 
     if (has_flag(si_ptr->flags, TR_KILL_UNDEAD))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚ÍƒAƒ“ƒfƒbƒh‚Ì“V“G‚Å‚ ‚éB", "Your weapon is a great bane of undead.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã®å¤©æ•µã§ã‚ã‚‹ã€‚", "Your weapon is a great bane of undead.");
     else if (has_flag(si_ptr->flags, TR_SLAY_UNDEAD))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚ÍƒAƒ“ƒfƒbƒh‚É‘Î‚µ‚Ä_¹‚È‚é—Í‚ğ”­Šö‚·‚éB", "Your weapon strikes at undead with holy wrath.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ã‚¢ãƒ³ãƒ‡ãƒƒãƒ‰ã«å¯¾ã—ã¦ç¥è–ãªã‚‹åŠ›ã‚’ç™ºæ®ã™ã‚‹ã€‚", "Your weapon strikes at undead with holy wrath.");
 
     if (has_flag(si_ptr->flags, TR_KILL_DEMON))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Íƒf[ƒ‚ƒ“‚Ì“V“G‚Å‚ ‚éB", "Your weapon is a great bane of demons.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ãƒ‡ãƒ¼ãƒ¢ãƒ³ã®å¤©æ•µã§ã‚ã‚‹ã€‚", "Your weapon is a great bane of demons.");
     else if (has_flag(si_ptr->flags, TR_SLAY_DEMON))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Íƒf[ƒ‚ƒ“‚É‘Î‚µ‚Ä_¹‚È‚é—Í‚ğ”­Šö‚·‚éB", "Your weapon strikes at demons with holy wrath.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ãƒ‡ãƒ¼ãƒ¢ãƒ³ã«å¯¾ã—ã¦ç¥è–ãªã‚‹åŠ›ã‚’ç™ºæ®ã™ã‚‹ã€‚", "Your weapon strikes at demons with holy wrath.");
 
     if (has_flag(si_ptr->flags, TR_KILL_ORC))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚ÍƒI[ƒN‚Ì“V“G‚Å‚ ‚éB", "Your weapon is a great bane of orcs.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ã‚ªãƒ¼ã‚¯ã®å¤©æ•µã§ã‚ã‚‹ã€‚", "Your weapon is a great bane of orcs.");
     else if (has_flag(si_ptr->flags, TR_SLAY_ORC))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚ÍƒI[ƒN‚É‘Î‚µ‚Ä“Á‚É‹­‚¢—Í‚ğ”­Šö‚·‚éB", "Your weapon is especially deadly against orcs.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ã‚ªãƒ¼ã‚¯ã«å¯¾ã—ã¦ç‰¹ã«å¼·ã„åŠ›ã‚’ç™ºæ®ã™ã‚‹ã€‚", "Your weapon is especially deadly against orcs.");
 
     if (has_flag(si_ptr->flags, TR_KILL_TROLL))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Íƒgƒƒ‹‚Ì“V“G‚Å‚ ‚éB", "Your weapon is a great bane of trolls.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ãƒˆãƒ­ãƒ«ã®å¤©æ•µã§ã‚ã‚‹ã€‚", "Your weapon is a great bane of trolls.");
     else if (has_flag(si_ptr->flags, TR_SLAY_TROLL))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Íƒgƒƒ‹‚É‘Î‚µ‚Ä“Á‚É‹­‚¢—Í‚ğ”­Šö‚·‚éB", "Your weapon is especially deadly against trolls.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ãƒˆãƒ­ãƒ«ã«å¯¾ã—ã¦ç‰¹ã«å¼·ã„åŠ›ã‚’ç™ºæ®ã™ã‚‹ã€‚", "Your weapon is especially deadly against trolls.");
 
     if (has_flag(si_ptr->flags, TR_KILL_GIANT))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í‹l‚Ì“V“G‚Å‚ ‚éB", "Your weapon is a great bane of giants.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯å·¨äººã®å¤©æ•µã§ã‚ã‚‹ã€‚", "Your weapon is a great bane of giants.");
     else if (has_flag(si_ptr->flags, TR_SLAY_GIANT))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í‹l‚É‘Î‚µ‚Ä“Á‚É‹­‚¢—Í‚ğ”­Šö‚·‚éB", "Your weapon is especially deadly against giants.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯å·¨äººã«å¯¾ã—ã¦ç‰¹ã«å¼·ã„åŠ›ã‚’ç™ºæ®ã™ã‚‹ã€‚", "Your weapon is especially deadly against giants.");
 
     if (has_flag(si_ptr->flags, TR_KILL_DRAGON))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Íƒhƒ‰ƒSƒ“‚Ì“V“G‚Å‚ ‚éB", "Your weapon is a great bane of dragons.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ãƒ‰ãƒ©ã‚´ãƒ³ã®å¤©æ•µã§ã‚ã‚‹ã€‚", "Your weapon is a great bane of dragons.");
     else if (has_flag(si_ptr->flags, TR_SLAY_DRAGON))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Íƒhƒ‰ƒSƒ“‚É‘Î‚µ‚Ä“Á‚É‹­‚¢—Í‚ğ”­Šö‚·‚éB", "Your weapon is especially deadly against dragons.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯ãƒ‰ãƒ©ã‚´ãƒ³ã«å¯¾ã—ã¦ç‰¹ã«å¼·ã„åŠ›ã‚’ç™ºæ®ã™ã‚‹ã€‚", "Your weapon is especially deadly against dragons.");
 }
 
 void set_weapon_effect_info(player_type *creature_ptr, self_info_type *si_ptr)
@@ -98,8 +98,8 @@ void set_weapon_effect_info(player_type *creature_ptr, self_info_type *si_ptr)
     set_brand_attack_info(si_ptr);
     set_slay_info(si_ptr);
     if (has_flag(si_ptr->flags, TR_FORCE_WEAPON))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚ÍMP‚ğg‚Á‚ÄUŒ‚‚·‚éB", "Your weapon causes greate damages using your MP.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯MPã‚’ä½¿ã£ã¦æ”»æ’ƒã™ã‚‹ã€‚", "Your weapon causes greate damages using your MP.");
 
     if (has_flag(si_ptr->flags, TR_THROW))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì•Ší‚Í“Š‚°‚â‚·‚¢B", "Your weapon can be thrown well.");
+        si_ptr->info[si_ptr->line++] = _("ã‚ãªãŸã®æ­¦å™¨ã¯æŠ•ã’ã‚„ã™ã„ã€‚", "Your weapon can be thrown well.");
 }

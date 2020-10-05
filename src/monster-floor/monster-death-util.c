@@ -1,4 +1,4 @@
-#include "monster-floor/monster-death-util.h"
+ï»¿#include "monster-floor/monster-death-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-indice-types.h"
@@ -8,9 +8,9 @@
 #include "system/monster-type-definition.h"
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‚ğ“|‚µ‚½Û‚Ìà•ósval‚ğ•Ô‚·
- * @param r_idx “|‚µ‚½ƒ‚ƒ“ƒXƒ^[‚Ìí‘°ID
- * @return à•ó‚Ìsval
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å€’ã—ãŸéš›ã®è²¡å®svalã‚’è¿”ã™
+ * @param r_idx å€’ã—ãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¨®æ—ID
+ * @return è²¡å®ã®sval
  * @details
  * Hack -- Return the "automatic coin type" of a monster race
  * Used to allocate proper treasure when "Creeping coins" die
