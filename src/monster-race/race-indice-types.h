@@ -95,7 +95,6 @@ typedef enum monster_race_type {
     MON_D_ELF_SHADE = 886,
     MON_TROLL_KING = 894,
     MON_ELF_LORD = 900,
-    MON_IE = 921,
     MON_TSUCHINOKO = 926,
     MON_LOCKE_CLONE = 930,
     MON_CALDARM = 931,
@@ -159,4 +158,6 @@ typedef enum monster_race_type {
     MON_MIRAAK = 1212,
     MON_SCARAB = 1220,
     MON_IMHOTEP = 1221,
+    MON_EDGE = 1245,
+    MON_JOBZ = 1247,
 } monster_race_type;

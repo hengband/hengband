@@ -24754,8 +24754,7 @@ S:1_IN_5 | BA_ACID |  BA_ELEC | BA_POIS | BA_CHAO | BA_NETH
 S:S_KIN | BLIND | SCARE | CONF
 D:$This devout Buddhist created every information apples
 D:$ with LSD's inspiration.
-D:$  His slogan is "I only accept the usage I envisioned!!
-D:$ I will lock all other usages!".
+D:$His obsession was terrifying and he sought too much perfection,
+D:$ so he had fired too many employees.
 D:この敬虔な仏教徒は幻覚によるインスピレーションであらゆる品種のリンゴを作り上げた。
-D:合言葉は「オレが想定した使い方しか認めない！
-D:　他の使い方は全てロックしてやる！！」である。
+D:彼の執念は凄まじく、完璧を求めるがあまり組織が機能不全に陥ることがあった。
