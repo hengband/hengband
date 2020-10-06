@@ -209,7 +209,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
     bool resist, saving_throw;
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        resist = (bool)target_ptr->resist_fear;
+        resist = (target_ptr->resist_fear != 0);
         saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
         spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやくと、恐ろしげな音が聞こえた。", "%^s mumbles, and you hear scary noises."),
             _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion."), _("しかし恐怖に侵されなかった。", "You refuse to be frightened."),
