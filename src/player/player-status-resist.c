@@ -33,6 +33,9 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
+/*!
+ * @brief 耐性倍率計算の用途に応じた分岐処理
+ */
 PERCENTAGE randrate(int dice, int fix, rate_calc_type_mode mode)
 {
     switch (mode) {
@@ -54,6 +57,9 @@ PERCENTAGE randrate(int dice, int fix, rate_calc_type_mode mode)
     }
 }
 
+/*!
+ * @brief 酸属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
@@ -82,6 +88,9 @@ PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
     return per;
 }
 
+/*!
+ * @brief 電撃属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
@@ -110,6 +119,9 @@ PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
     return per;
 }
 
+/*!
+ * @brief 火炎属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
@@ -134,6 +146,9 @@ PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr)
     return per;
 }
 
+/*!
+ * @brief 冷気属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_cold_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
@@ -157,6 +172,9 @@ PERCENTAGE calc_cold_damage_rate(player_type *creature_ptr)
     return per;
 }
 
+/*!
+ * @brief 毒属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_pois_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
@@ -168,6 +186,9 @@ PERCENTAGE calc_pois_damage_rate(player_type *creature_ptr)
     return per;
 }
 
+/*!
+ * @brief 放射性廃棄物攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_nuke_damage_rate(player_type *creature_ptr)
 {
 
@@ -180,6 +201,9 @@ PERCENTAGE calc_nuke_damage_rate(player_type *creature_ptr)
     return per;
 }
 
+/*!
+ * @brief 死の光線に対するダメージ倍率計算
+ */
 PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     (mode); // unused
@@ -203,6 +227,9 @@ PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_m
     return 100;
 }
 
+/*!
+ * @brief 閃光属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
@@ -223,6 +250,9 @@ PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
     return per;
 }
 
+/*!
+ * @brief 暗黒属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_dark_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
@@ -239,6 +269,9 @@ PERCENTAGE calc_dark_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
     return per;
 }
 
+/*!
+ * @brief 破片属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_shards_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
@@ -251,6 +284,9 @@ PERCENTAGE calc_shards_damage_rate(player_type *creature_ptr, rate_calc_type_mod
     return per;
 }
 
+/*!
+ * @brief 轟音属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_sound_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
@@ -263,6 +299,9 @@ PERCENTAGE calc_sound_damage_rate(player_type *creature_ptr, rate_calc_type_mode
     return per;
 }
 
+/*!
+ * @brief 混乱属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_conf_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
@@ -275,6 +314,9 @@ PERCENTAGE calc_conf_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
     return per;
 }
 
+/*!
+ * @brief 混沌属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_chaos_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
@@ -287,6 +329,9 @@ PERCENTAGE calc_chaos_damage_rate(player_type *creature_ptr, rate_calc_type_mode
     return per;
 }
 
+/*!
+ * @brief 劣化属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_disenchant_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
@@ -299,6 +344,9 @@ PERCENTAGE calc_disenchant_damage_rate(player_type *creature_ptr, rate_calc_type
     return per;
 }
 
+/*!
+ * @brief 因果混乱属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_nexus_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
@@ -311,6 +359,9 @@ PERCENTAGE calc_nexus_damage_rate(player_type *creature_ptr, rate_calc_type_mode
     return per;
 }
 
+/*!
+ * @brief ロケット属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_rocket_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     (mode); // unused
@@ -323,6 +374,9 @@ PERCENTAGE calc_rocket_damage_rate(player_type *creature_ptr, rate_calc_type_mod
     return per;
 }
 
+/*!
+ * @brief 地獄属性攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
@@ -337,6 +391,10 @@ PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mod
     return per;
 }
 
+
+/*!
+ * @brief 時間逆転攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_time_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     (mode); // unused
@@ -350,6 +408,9 @@ PERCENTAGE calc_time_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
     return per;
 }
 
+/*!
+ * @brief 聖なる火炎攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     (mode); // unused
@@ -361,6 +422,9 @@ PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_
     return per;
 }
 
+/*!
+ * @brief 地獄の火炎攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_hell_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     (mode); // unused
@@ -370,6 +434,9 @@ PERCENTAGE calc_hell_fire_damage_rate(player_type *creature_ptr, rate_calc_type_
     return per;
 }
 
+/*!
+ * @brief 重力攻撃に対するダメージ倍率計算
+ */
 PERCENTAGE calc_gravity_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     (mode); // unused
