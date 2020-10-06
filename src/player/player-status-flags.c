@@ -501,6 +501,14 @@ BIT_FLAGS has_see_inv(player_type *creature_ptr)
     return result;
 }
 
+BIT_FLAGS has_magic_mastery(player_type *creature_ptr)
+{
+    BIT_FLAGS result = 0L;
+
+    result |= check_equipment_flags(creature_ptr, TR_MAGIC_MASTERY);
+    return result;
+}
+
 BIT_FLAGS has_free_act(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
