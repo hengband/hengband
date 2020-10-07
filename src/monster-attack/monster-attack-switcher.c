@@ -216,7 +216,6 @@ static void calc_blow_drain_life(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
- * todo 魔道具使用能力向上フラグの取得関数は未定義、後ほど実施する
  * @brief MPダメージを計算する (消費魔力減少、呪文失敗率減少、魔道具使用能力向上があればそれぞれ-5%)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
@@ -230,6 +229,9 @@ static void calc_blow_drain_mana(player_type *target_ptr, monap_type *monap_ptr)
         damage_ratio -= 5;
 
     if (has_easy_spell(target_ptr))
+        damage_ratio -= 5;
+
+    if (has_magic_mastery(target_ptr))
         damage_ratio -= 5;
 
     monap_ptr->damage = monap_ptr->damage * damage_ratio / 100;
