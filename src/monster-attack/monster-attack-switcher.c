@@ -71,6 +71,43 @@ static void calc_blow_disenchant(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
+ * @brief 魔道具吸収ダメージを計算する (消費魔力減少、呪文失敗率減少、魔道具使用能力向上があればそれぞれ-7.5%)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ * @detals 魔道具使用能力向上フラグがあれば、吸収対象のアイテムをスキャンされる回数が半分で済む
+ */
+static void calc_blow_un_power(player_type *target_ptr, monap_type *monap_ptr)
+{
+    int damage_ratio = 1000;
+    if (has_dec_mana(target_ptr))
+        damage_ratio -= 75;
+
+    if (has_easy_spell(target_ptr))
+        damage_ratio -= 75;
+
+    bool is_magic_mastery = has_magic_mastery(target_ptr) != 0;
+    if (is_magic_mastery)
+        damage_ratio -= 75;
+
+    monap_ptr->damage = monap_ptr->damage * damage_ratio / 1000;
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return;
+
+    int max_draining_item = is_magic_mastery ? 5 : 10;
+    for (int i = 0; i < max_draining_item; i++) {
+        INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
+        monap_ptr->o_ptr = &target_ptr->inventory_list[i_idx];
+        if (monap_ptr->o_ptr->k_idx == 0)
+            continue;
+
+        if (process_un_power(target_ptr, monap_ptr))
+            break;
+    }
+}
+
+/*!
  * @brief 盲目ダメージを計算する (耐性があれば、(1d4 + 3) / 8になる)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
@@ -281,23 +318,9 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_UN_BONUS:
         calc_blow_disenchant(target_ptr, monap_ptr);
         break;
-    case RBE_UN_POWER: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
-            break;
-
-        for (int i = 0; i < 10; i++) {
-            INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
-            monap_ptr->o_ptr = &target_ptr->inventory_list[i_idx];
-            if (monap_ptr->o_ptr->k_idx == 0)
-                continue;
-
-            if (process_un_power(target_ptr, monap_ptr))
-                break;
-        }
-
+    case RBE_UN_POWER:
+        calc_blow_un_power(target_ptr, monap_ptr);
         break;
-    }
     case RBE_EAT_GOLD: {
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
         if (monster_confused_remaining(monap_ptr->m_ptr))
