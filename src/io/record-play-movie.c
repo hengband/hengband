@@ -576,6 +576,7 @@ void prepare_browse_movie_with_path_build(concptr filename)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-    prepare_browse_movie_aux(buf);
+    movie_fd = fd_open(buf, O_RDONLY);
+    init_buffer();
 }
 #endif
