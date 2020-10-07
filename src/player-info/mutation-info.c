@@ -24,7 +24,7 @@ void set_mutation_info_1(player_type *creature_ptr, self_info_type *si_ptr)
         si_ptr->info[si_ptr->line++] = _("あなたは自分の意思でテレポートできる。", "You can teleport at will.");
 
     if (creature_ptr->muta1 & MUT1_MIND_BLST)
-        si_ptr->info[si_ptr->line++] = _("あなたは精神攻撃を行える。(ダメージ 3〜12d3)", "You can Mind Blast your enemies (3 to 12d3 dam).");
+        si_ptr->info[si_ptr->line++] = _("あなたは精神攻撃を行える。(ダメージ 3～12d3)", "You can Mind Blast your enemies (3 to 12d3 dam).");
 
     if (creature_ptr->muta1 & MUT1_RADIATION)
         si_ptr->info[si_ptr->line++]
