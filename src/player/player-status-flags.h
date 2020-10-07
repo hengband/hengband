@@ -58,6 +58,7 @@ BIT_FLAGS has_easy_spell(player_type *creature_ptr);
 BIT_FLAGS has_heavy_spell(player_type *creature_ptr);
 BIT_FLAGS has_hold_exp(player_type *creature_ptr);
 BIT_FLAGS has_see_inv(player_type *creature_ptr);
+BIT_FLAGS has_magic_mastery(player_type *creature_ptr);
 BIT_FLAGS has_free_act(player_type *creature_ptr);
 BIT_FLAGS is_sustain_str(player_type *creature_ptr);
 BIT_FLAGS is_sustain_int(player_type *creature_ptr);
