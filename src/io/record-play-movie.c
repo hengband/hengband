@@ -20,6 +20,11 @@
 
 #ifdef WINDOWS
 #include <windows.h>
+#else
+#include "system/h-basic.h"
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
 #endif
 
 #define RINGBUF_SIZE 1024 * 1024
