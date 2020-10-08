@@ -4197,6 +4197,22 @@ F:INT | FORCE_WEAPON
 F:SHOW_MODS
 F:SLAY_EVIL | SLAY_UNDEAD
 F:FREE_ACT | LITE
+D:$A shining sword that keeps waiting for a hero in the back of the Mirage Tower.
+D:$  The blade was held by many red robes and continued to slaughter the evil ones.
+D:$ (Square, "Final Fantasy", 1987)
 D:蜃気楼の塔の奥で英雄を待ち続ける輝ける剣だ。
 D:その刃は数多くの赤衣の者達に握られ、悪しき者たちを屠り続けてきた。(ファイナルファンタジー1)
 
+N:253:トゲトゲバット『エスカリボルグ』
+E:'Excaliborg, the *thorny* bat'
+I:21:16:4
+W:35:40:190:150000
+P:0:7d7:30:30:10
+F:STR | DEX | CON | SUST_STR | SUST_DEX | SUST_CON
+F:VORPAL | VAMPIRIC | KILL_HUMAN | BLESSED
+F:RES_FIRE | RES_LITE | LEVITATION
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+F:FULL_NAME
+U:ANIM_DEAD
+D:$This bat is filled with the unremitting love of the user.
+D:このバットには使用者のたゆまぬ愛が込められている。
