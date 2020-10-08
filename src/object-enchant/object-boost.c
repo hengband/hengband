@@ -50,42 +50,43 @@
  */
 int m_bonus(int max, DEPTH level)
 {
-	int bonus, stand, extra, value;
+    int bonus, stand, extra, value;
 
+    /* Paranoia -- enforce maximal "level" */
+    if (level > MAX_DEPTH - 1)
+        level = MAX_DEPTH - 1;
 
-	/* Paranoia -- enforce maximal "level" */
-	if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
+    /* The "bonus" moves towards the max */
+    bonus = ((max * level) / MAX_DEPTH);
 
+    /* Hack -- determine fraction of error */
+    extra = ((max * level) % MAX_DEPTH);
 
-	/* The "bonus" moves towards the max */
-	bonus = ((max * level) / MAX_DEPTH);
+    /* Hack -- simulate floating point computations */
+    if (randint0(MAX_DEPTH) < extra)
+        bonus++;
 
-	/* Hack -- determine fraction of error */
-	extra = ((max * level) % MAX_DEPTH);
+    /* The "stand" is equal to one quarter of the max */
+    stand = (max / 4);
 
-	/* Hack -- simulate floating point computations */
-	if (randint0(MAX_DEPTH) < extra) bonus++;
+    /* Hack -- determine fraction of error */
+    extra = (max % 4);
 
+    /* Hack -- simulate floating point computations */
+    if (randint0(4) < extra)
+        stand++;
 
-	/* The "stand" is equal to one quarter of the max */
-	stand = (max / 4);
+    /* Choose an "interesting" value */
+    value = randnor(bonus, stand);
 
-	/* Hack -- determine fraction of error */
-	extra = (max % 4);
+    /* Enforce the minimum value */
+    if (value < 0)
+        return 0;
 
-	/* Hack -- simulate floating point computations */
-	if (randint0(4) < extra) stand++;
-
-
-	/* Choose an "interesting" value */
-	value = randnor(bonus, stand);
-
-	/* Enforce the minimum value */
-	if (value < 0) return 0;
-
-	/* Enforce the maximum value */
-	if (value > max) return (max);
-	return (value);
+    /* Enforce the maximum value */
+    if (value > max)
+        return (max);
+    return (value);
 }
 
 /*!
@@ -96,15 +97,26 @@ int m_bonus(int max, DEPTH level)
  */
 void one_sustain(object_type *o_ptr)
 {
-	switch (randint0(A_MAX))
-	{
-	case 0: add_flag(o_ptr->art_flags, TR_SUST_STR); break;
-	case 1: add_flag(o_ptr->art_flags, TR_SUST_INT); break;
-	case 2: add_flag(o_ptr->art_flags, TR_SUST_WIS); break;
-	case 3: add_flag(o_ptr->art_flags, TR_SUST_DEX); break;
-	case 4: add_flag(o_ptr->art_flags, TR_SUST_CON); break;
-	case 5: add_flag(o_ptr->art_flags, TR_SUST_CHR); break;
-	}
+    switch (randint0(A_MAX)) {
+    case 0:
+        add_flag(o_ptr->art_flags, TR_SUST_STR);
+        break;
+    case 1:
+        add_flag(o_ptr->art_flags, TR_SUST_INT);
+        break;
+    case 2:
+        add_flag(o_ptr->art_flags, TR_SUST_WIS);
+        break;
+    case 3:
+        add_flag(o_ptr->art_flags, TR_SUST_DEX);
+        break;
+    case 4:
+        add_flag(o_ptr->art_flags, TR_SUST_CON);
+        break;
+    case 5:
+        add_flag(o_ptr->art_flags, TR_SUST_CHR);
+        break;
+    }
 }
 
 /*!
@@ -114,16 +126,22 @@ void one_sustain(object_type *o_ptr)
  */
 bool add_esp_strong(object_type *o_ptr)
 {
-	bool nonliv = FALSE;
+    bool nonliv = FALSE;
 
-	switch (randint1(3))
-	{
-	case 1: add_flag(o_ptr->art_flags, TR_ESP_EVIL); break;
-	case 2: add_flag(o_ptr->art_flags, TR_TELEPATHY); break;
-	case 3:	add_flag(o_ptr->art_flags, TR_ESP_NONLIVING); nonliv = TRUE; break;
-	}
+    switch (randint1(3)) {
+    case 1:
+        add_flag(o_ptr->art_flags, TR_ESP_EVIL);
+        break;
+    case 2:
+        add_flag(o_ptr->art_flags, TR_TELEPATHY);
+        break;
+    case 3:
+        add_flag(o_ptr->art_flags, TR_ESP_NONLIVING);
+        nonliv = TRUE;
+        break;
+    }
 
-	return nonliv;
+    return nonliv;
 }
 
 /*!
@@ -134,30 +152,29 @@ bool add_esp_strong(object_type *o_ptr)
  */
 void add_esp_weak(object_type *o_ptr, bool extra)
 {
-	int i;
-	u32b weak_esp_list[] = {
-		TR_ESP_ANIMAL,
-		TR_ESP_UNDEAD,
-		TR_ESP_DEMON,
-		TR_ESP_ORC,
-		TR_ESP_TROLL,
-		TR_ESP_GIANT,
-		TR_ESP_DRAGON,
-		TR_ESP_HUMAN,
-		TR_ESP_GOOD,
-		TR_ESP_UNIQUE,
-	};
-	const int MAX_ESP_WEAK = sizeof(weak_esp_list) / sizeof(weak_esp_list[0]);
-	const int add_count = MIN(MAX_ESP_WEAK, (extra) ? (3 + randint1(randint1(6))) : randint1(3));
+    int i;
+    u32b weak_esp_list[] = {
+        TR_ESP_ANIMAL,
+        TR_ESP_UNDEAD,
+        TR_ESP_DEMON,
+        TR_ESP_ORC,
+        TR_ESP_TROLL,
+        TR_ESP_GIANT,
+        TR_ESP_DRAGON,
+        TR_ESP_HUMAN,
+        TR_ESP_GOOD,
+        TR_ESP_UNIQUE,
+    };
+    const int MAX_ESP_WEAK = sizeof(weak_esp_list) / sizeof(weak_esp_list[0]);
+    const int add_count = MIN(MAX_ESP_WEAK, (extra) ? (3 + randint1(randint1(6))) : randint1(3));
 
-	/* Add unduplicated weak esp flags randomly */
-	for (i = 0; i < add_count; ++i)
-	{
-		int choice = rand_range(i, MAX_ESP_WEAK - 1);
+    /* Add unduplicated weak esp flags randomly */
+    for (i = 0; i < add_count; ++i) {
+        int choice = rand_range(i, MAX_ESP_WEAK - 1);
 
-		add_flag(o_ptr->art_flags, weak_esp_list[choice]);
-		weak_esp_list[choice] = weak_esp_list[i];
-	}
+        add_flag(o_ptr->art_flags, weak_esp_list[choice]);
+        weak_esp_list[choice] = weak_esp_list[i];
+    }
 }
 
 /*!
@@ -168,13 +185,20 @@ void add_esp_weak(object_type *o_ptr, bool extra)
  */
 void one_ele_resistance(object_type *o_ptr)
 {
-	switch (randint0(4))
-	{
-	case  0: add_flag(o_ptr->art_flags, TR_RES_ACID); break;
-	case  1: add_flag(o_ptr->art_flags, TR_RES_ELEC); break;
-	case  2: add_flag(o_ptr->art_flags, TR_RES_COLD); break;
-	case  3: add_flag(o_ptr->art_flags, TR_RES_FIRE); break;
-	}
+    switch (randint0(4)) {
+    case 0:
+        add_flag(o_ptr->art_flags, TR_RES_ACID);
+        break;
+    case 1:
+        add_flag(o_ptr->art_flags, TR_RES_ELEC);
+        break;
+    case 2:
+        add_flag(o_ptr->art_flags, TR_RES_COLD);
+        break;
+    case 3:
+        add_flag(o_ptr->art_flags, TR_RES_FIRE);
+        break;
+    }
 }
 
 /*!
@@ -185,14 +209,11 @@ void one_ele_resistance(object_type *o_ptr)
  */
 void one_dragon_ele_resistance(object_type *o_ptr)
 {
-	if (one_in_(7))
-	{
-		add_flag(o_ptr->art_flags, TR_RES_POIS);
-	}
-	else
-	{
-		one_ele_resistance(o_ptr);
-	}
+    if (one_in_(7)) {
+        add_flag(o_ptr->art_flags, TR_RES_POIS);
+    } else {
+        one_ele_resistance(o_ptr);
+    }
 }
 
 /*!
@@ -203,23 +224,45 @@ void one_dragon_ele_resistance(object_type *o_ptr)
  */
 void one_high_resistance(object_type *o_ptr)
 {
-	switch (randint0(12))
-	{
-	case  0: add_flag(o_ptr->art_flags, TR_RES_POIS);   break;
-	case  1: add_flag(o_ptr->art_flags, TR_RES_LITE);   break;
-	case  2: add_flag(o_ptr->art_flags, TR_RES_DARK);   break;
-	case  3: add_flag(o_ptr->art_flags, TR_RES_SHARDS); break;
-	case  4: add_flag(o_ptr->art_flags, TR_RES_BLIND);  break;
-	case  5: add_flag(o_ptr->art_flags, TR_RES_CONF);   break;
-	case  6: add_flag(o_ptr->art_flags, TR_RES_SOUND);  break;
-	case  7: add_flag(o_ptr->art_flags, TR_RES_NETHER); break;
-	case  8: add_flag(o_ptr->art_flags, TR_RES_NEXUS);  break;
-	case  9: add_flag(o_ptr->art_flags, TR_RES_CHAOS);  break;
-	case 10: add_flag(o_ptr->art_flags, TR_RES_DISEN);  break;
-	case 11: add_flag(o_ptr->art_flags, TR_RES_FEAR);   break;
-	}
+    switch (randint0(12)) {
+    case 0:
+        add_flag(o_ptr->art_flags, TR_RES_POIS);
+        break;
+    case 1:
+        add_flag(o_ptr->art_flags, TR_RES_LITE);
+        break;
+    case 2:
+        add_flag(o_ptr->art_flags, TR_RES_DARK);
+        break;
+    case 3:
+        add_flag(o_ptr->art_flags, TR_RES_SHARDS);
+        break;
+    case 4:
+        add_flag(o_ptr->art_flags, TR_RES_BLIND);
+        break;
+    case 5:
+        add_flag(o_ptr->art_flags, TR_RES_CONF);
+        break;
+    case 6:
+        add_flag(o_ptr->art_flags, TR_RES_SOUND);
+        break;
+    case 7:
+        add_flag(o_ptr->art_flags, TR_RES_NETHER);
+        break;
+    case 8:
+        add_flag(o_ptr->art_flags, TR_RES_NEXUS);
+        break;
+    case 9:
+        add_flag(o_ptr->art_flags, TR_RES_CHAOS);
+        break;
+    case 10:
+        add_flag(o_ptr->art_flags, TR_RES_DISEN);
+        break;
+    case 11:
+        add_flag(o_ptr->art_flags, TR_RES_FEAR);
+        break;
+    }
 }
-
 
 /*!
  * @brief ドラゴン装備にランダムな耐性を与える
@@ -228,15 +271,13 @@ void one_high_resistance(object_type *o_ptr)
  */
 void dragon_resist(object_type *o_ptr)
 {
-	do
-	{
-		if (one_in_(4))
-			one_dragon_ele_resistance(o_ptr);
-		else
-			one_high_resistance(o_ptr);
-	} while (one_in_(2));
+    do {
+        if (one_in_(4))
+            one_dragon_ele_resistance(o_ptr);
+        else
+            one_high_resistance(o_ptr);
+    } while (one_in_(2));
 }
-
 
 /*!
  * @brief 対象のオブジェクトに耐性を一つ付加する。/ Choose one random resistance
@@ -247,16 +288,12 @@ void dragon_resist(object_type *o_ptr)
  */
 void one_resistance(object_type *o_ptr)
 {
-	if (one_in_(3))
-	{
-		one_ele_resistance(o_ptr);
-	}
-	else
-	{
-		one_high_resistance(o_ptr);
-	}
+    if (one_in_(3)) {
+        one_ele_resistance(o_ptr);
+    } else {
+        one_high_resistance(o_ptr);
+    }
 }
-
 
 /*!
  * @brief 対象のオブジェクトに能力を一つ付加する。/ Choose one random ability
@@ -267,23 +304,37 @@ void one_resistance(object_type *o_ptr)
  */
 void one_ability(object_type *o_ptr)
 {
-	switch (randint0(10))
-	{
-	case 0: add_flag(o_ptr->art_flags, TR_LEVITATION);  break;
-	case 1: add_flag(o_ptr->art_flags, TR_LITE_1);      break;
-	case 2: add_flag(o_ptr->art_flags, TR_SEE_INVIS);   break;
-	case 3: add_flag(o_ptr->art_flags, TR_WARNING);     break;
-	case 4: add_flag(o_ptr->art_flags, TR_SLOW_DIGEST); break;
-	case 5: add_flag(o_ptr->art_flags, TR_REGEN);       break;
-	case 6: add_flag(o_ptr->art_flags, TR_FREE_ACT);    break;
-	case 7: add_flag(o_ptr->art_flags, TR_HOLD_EXP);   break;
-	case 8:
-	case 9:
-		one_low_esp(o_ptr);
-		break;
-	}
+    switch (randint0(10)) {
+    case 0:
+        add_flag(o_ptr->art_flags, TR_LEVITATION);
+        break;
+    case 1:
+        add_flag(o_ptr->art_flags, TR_LITE_1);
+        break;
+    case 2:
+        add_flag(o_ptr->art_flags, TR_SEE_INVIS);
+        break;
+    case 3:
+        add_flag(o_ptr->art_flags, TR_WARNING);
+        break;
+    case 4:
+        add_flag(o_ptr->art_flags, TR_SLOW_DIGEST);
+        break;
+    case 5:
+        add_flag(o_ptr->art_flags, TR_REGEN);
+        break;
+    case 6:
+        add_flag(o_ptr->art_flags, TR_FREE_ACT);
+        break;
+    case 7:
+        add_flag(o_ptr->art_flags, TR_HOLD_EXP);
+        break;
+    case 8:
+    case 9:
+        one_low_esp(o_ptr);
+        break;
+    }
 }
-
 
 /*!
  * @brief 対象のオブジェクトに弱いESPを一つ付加する。/ Choose one lower rank esp
@@ -294,21 +345,39 @@ void one_ability(object_type *o_ptr)
  */
 void one_low_esp(object_type *o_ptr)
 {
-	switch (randint1(10))
-	{
-	case 1:  add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);   break;
-	case 2:  add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);   break;
-	case 3:  add_flag(o_ptr->art_flags, TR_ESP_DEMON);   break;
-	case 4:  add_flag(o_ptr->art_flags, TR_ESP_ORC);   break;
-	case 5:  add_flag(o_ptr->art_flags, TR_ESP_TROLL);   break;
-	case 6:  add_flag(o_ptr->art_flags, TR_ESP_GIANT);   break;
-	case 7:  add_flag(o_ptr->art_flags, TR_ESP_DRAGON);   break;
-	case 8:  add_flag(o_ptr->art_flags, TR_ESP_HUMAN);   break;
-	case 9:  add_flag(o_ptr->art_flags, TR_ESP_GOOD);   break;
-	case 10: add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);   break;
-	}
+    switch (randint1(10)) {
+    case 1:
+        add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
+        break;
+    case 2:
+        add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
+        break;
+    case 3:
+        add_flag(o_ptr->art_flags, TR_ESP_DEMON);
+        break;
+    case 4:
+        add_flag(o_ptr->art_flags, TR_ESP_ORC);
+        break;
+    case 5:
+        add_flag(o_ptr->art_flags, TR_ESP_TROLL);
+        break;
+    case 6:
+        add_flag(o_ptr->art_flags, TR_ESP_GIANT);
+        break;
+    case 7:
+        add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
+        break;
+    case 8:
+        add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
+        break;
+    case 9:
+        add_flag(o_ptr->art_flags, TR_ESP_GOOD);
+        break;
+    case 10:
+        add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
+        break;
+    }
 }
-
 
 /*!
  * @brief 対象のオブジェクトに発動を一つ付加する。/ Choose one random activation
@@ -319,118 +388,115 @@ void one_low_esp(object_type *o_ptr)
  */
 void one_activation(object_type *o_ptr)
 {
-	int type = 0;
-	PERCENTAGE chance = 0;
+    int type = 0;
+    PERCENTAGE chance = 0;
 
-	while (randint1(100) >= chance)
-	{
-		type = randint1(255);
-		switch (type)
-		{
-		case ACT_SUNLIGHT:
-		case ACT_BO_MISS_1:
-		case ACT_BA_POIS_1:
-		case ACT_BO_ELEC_1:
-		case ACT_BO_ACID_1:
-		case ACT_BO_COLD_1:
-		case ACT_BO_FIRE_1:
-		case ACT_CONFUSE:
-		case ACT_SLEEP:
-		case ACT_QUAKE:
-		case ACT_CURE_LW:
-		case ACT_CURE_MW:
-		case ACT_CURE_POISON:
-		case ACT_BERSERK:
-		case ACT_LIGHT:
-		case ACT_MAP_LIGHT:
-		case ACT_DEST_DOOR:
-		case ACT_STONE_MUD:
-		case ACT_TELEPORT:
-			chance = 101;
-			break;
-		case ACT_BA_COLD_1:
-		case ACT_BA_FIRE_1:
-		case ACT_HYPODYNAMIA_1:
-		case ACT_TELE_AWAY:
-		case ACT_ESP:
-		case ACT_RESIST_ALL:
-		case ACT_DETECT_ALL:
-		case ACT_RECALL:
-		case ACT_SATIATE:
-		case ACT_RECHARGE:
-			chance = 85;
-			break;
-		case ACT_TERROR:
-		case ACT_PROT_EVIL:
-		case ACT_ID_PLAIN:
-			chance = 75;
-			break;
-		case ACT_HYPODYNAMIA_2:
-		case ACT_DRAIN_1:
-		case ACT_BO_MISS_2:
-		case ACT_BA_FIRE_2:
-		case ACT_REST_EXP:
-			chance = 66;
-			break;
-		case ACT_BA_FIRE_3:
-		case ACT_BA_COLD_3:
-		case ACT_BA_ELEC_3:
-		case ACT_WHIRLWIND:
-		case ACT_DRAIN_2:
-		case ACT_CHARM_ANIMAL:
-			chance = 50;
-			break;
-		case ACT_SUMMON_ANIMAL:
-			chance = 40;
-			break;
-		case ACT_DISP_EVIL:
-		case ACT_BA_MISS_3:
-		case ACT_DISP_GOOD:
-		case ACT_BANISH_EVIL:
-		case ACT_GENOCIDE:
-		case ACT_MASS_GENO:
-		case ACT_CHARM_UNDEAD:
-		case ACT_CHARM_OTHER:
-		case ACT_SUMMON_PHANTOM:
-		case ACT_REST_ALL:
-		case ACT_RUNE_EXPLO:
-			chance = 33;
-			break;
-		case ACT_CALL_CHAOS:
-		case ACT_ROCKET:
-		case ACT_CHARM_ANIMALS:
-		case ACT_CHARM_OTHERS:
-		case ACT_SUMMON_ELEMENTAL:
-		case ACT_CURE_700:
-		case ACT_SPEED:
-		case ACT_ID_FULL:
-		case ACT_RUNE_PROT:
-			chance = 25;
-			break;
-		case ACT_CURE_1000:
-		case ACT_XTRA_SPEED:
-		case ACT_DETECT_XTRA:
-		case ACT_DIM_DOOR:
-			chance = 10;
-			break;
-		case ACT_SUMMON_UNDEAD:
-		case ACT_SUMMON_DEMON:
-		case ACT_WRAITH:
-		case ACT_INVULN:
-		case ACT_ALCHEMY:
-			chance = 5;
-			break;
-		default:
-			chance = 0;
-		}
-	}
+    while (randint1(100) >= chance) {
+        type = randint1(255);
+        switch (type) {
+        case ACT_SUNLIGHT:
+        case ACT_BO_MISS_1:
+        case ACT_BA_POIS_1:
+        case ACT_BO_ELEC_1:
+        case ACT_BO_ACID_1:
+        case ACT_BO_COLD_1:
+        case ACT_BO_FIRE_1:
+        case ACT_CONFUSE:
+        case ACT_SLEEP:
+        case ACT_QUAKE:
+        case ACT_CURE_LW:
+        case ACT_CURE_MW:
+        case ACT_CURE_POISON:
+        case ACT_BERSERK:
+        case ACT_LIGHT:
+        case ACT_MAP_LIGHT:
+        case ACT_DEST_DOOR:
+        case ACT_STONE_MUD:
+        case ACT_TELEPORT:
+            chance = 101;
+            break;
+        case ACT_BA_COLD_1:
+        case ACT_BA_FIRE_1:
+        case ACT_HYPODYNAMIA_1:
+        case ACT_TELE_AWAY:
+        case ACT_ESP:
+        case ACT_RESIST_ALL:
+        case ACT_DETECT_ALL:
+        case ACT_RECALL:
+        case ACT_SATIATE:
+        case ACT_RECHARGE:
+            chance = 85;
+            break;
+        case ACT_TERROR:
+        case ACT_PROT_EVIL:
+        case ACT_ID_PLAIN:
+            chance = 75;
+            break;
+        case ACT_HYPODYNAMIA_2:
+        case ACT_DRAIN_1:
+        case ACT_BO_MISS_2:
+        case ACT_BA_FIRE_2:
+        case ACT_REST_EXP:
+            chance = 66;
+            break;
+        case ACT_BA_FIRE_3:
+        case ACT_BA_COLD_3:
+        case ACT_BA_ELEC_3:
+        case ACT_WHIRLWIND:
+        case ACT_DRAIN_2:
+        case ACT_CHARM_ANIMAL:
+            chance = 50;
+            break;
+        case ACT_SUMMON_ANIMAL:
+            chance = 40;
+            break;
+        case ACT_DISP_EVIL:
+        case ACT_BA_MISS_3:
+        case ACT_DISP_GOOD:
+        case ACT_BANISH_EVIL:
+        case ACT_GENOCIDE:
+        case ACT_MASS_GENO:
+        case ACT_CHARM_UNDEAD:
+        case ACT_CHARM_OTHER:
+        case ACT_SUMMON_PHANTOM:
+        case ACT_REST_ALL:
+        case ACT_RUNE_EXPLO:
+            chance = 33;
+            break;
+        case ACT_CALL_CHAOS:
+        case ACT_ROCKET:
+        case ACT_CHARM_ANIMALS:
+        case ACT_CHARM_OTHERS:
+        case ACT_SUMMON_ELEMENTAL:
+        case ACT_CURE_700:
+        case ACT_SPEED:
+        case ACT_ID_FULL:
+        case ACT_RUNE_PROT:
+            chance = 25;
+            break;
+        case ACT_CURE_1000:
+        case ACT_XTRA_SPEED:
+        case ACT_DETECT_XTRA:
+        case ACT_DIM_DOOR:
+            chance = 10;
+            break;
+        case ACT_SUMMON_UNDEAD:
+        case ACT_SUMMON_DEMON:
+        case ACT_WRAITH:
+        case ACT_INVULN:
+        case ACT_ALCHEMY:
+            chance = 5;
+            break;
+        default:
+            chance = 0;
+        }
+    }
 
-	/* A type was chosen... */
-	o_ptr->xtra2 = (byte)type;
-	add_flag(o_ptr->art_flags, TR_ACTIVATE);
-	o_ptr->timeout = 0;
+    /* A type was chosen... */
+    o_ptr->xtra2 = (byte)type;
+    add_flag(o_ptr->art_flags, TR_ACTIVATE);
+    o_ptr->timeout = 0;
 }
-
 
 /*!
  * @brief 対象のオブジェクトに王者の指輪向けの上位耐性を一つ付加する。/ Choose one random high resistance
@@ -442,17 +508,36 @@ void one_activation(object_type *o_ptr)
  */
 void one_lordly_high_resistance(object_type *o_ptr)
 {
-	switch (randint0(10))
-	{
-	case 0: add_flag(o_ptr->art_flags, TR_RES_LITE);   break;
-	case 1: add_flag(o_ptr->art_flags, TR_RES_DARK);   break;
-	case 2: add_flag(o_ptr->art_flags, TR_RES_SHARDS); break;
-	case 3: add_flag(o_ptr->art_flags, TR_RES_BLIND);  break;
-	case 4: add_flag(o_ptr->art_flags, TR_RES_CONF);   break;
-	case 5: add_flag(o_ptr->art_flags, TR_RES_SOUND);  break;
-	case 6: add_flag(o_ptr->art_flags, TR_RES_NETHER); break;
-	case 7: add_flag(o_ptr->art_flags, TR_RES_NEXUS);  break;
-	case 8: add_flag(o_ptr->art_flags, TR_RES_CHAOS);  break;
-	case 9: add_flag(o_ptr->art_flags, TR_RES_FEAR);   break;
-	}
+    switch (randint0(10)) {
+    case 0:
+        add_flag(o_ptr->art_flags, TR_RES_LITE);
+        break;
+    case 1:
+        add_flag(o_ptr->art_flags, TR_RES_DARK);
+        break;
+    case 2:
+        add_flag(o_ptr->art_flags, TR_RES_SHARDS);
+        break;
+    case 3:
+        add_flag(o_ptr->art_flags, TR_RES_BLIND);
+        break;
+    case 4:
+        add_flag(o_ptr->art_flags, TR_RES_CONF);
+        break;
+    case 5:
+        add_flag(o_ptr->art_flags, TR_RES_SOUND);
+        break;
+    case 6:
+        add_flag(o_ptr->art_flags, TR_RES_NETHER);
+        break;
+    case 7:
+        add_flag(o_ptr->art_flags, TR_RES_NEXUS);
+        break;
+    case 8:
+        add_flag(o_ptr->art_flags, TR_RES_CHAOS);
+        break;
+    case 9:
+        add_flag(o_ptr->art_flags, TR_RES_FEAR);
+        break;
+    }
 }
