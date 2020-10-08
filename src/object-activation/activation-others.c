@@ -346,3 +346,12 @@ bool activate_recall(player_type *user_ptr)
     msg_print(_("やわらかな白色に輝いている...", "It glows soft white..."));
     return recall_player(user_ptr, randint0(21) + 15);
 }
+
+bool activate_animate_dead(player_type *user_ptr, object_type *o_ptr)
+{
+    msg_print(_("黄金色の光が溢れ出た...", "It emitted a golden light..."));
+    if (o_ptr->name1 > 0)
+        msg_print(_("ぴぴるぴるぴるぴぴるぴ～♪", "Pipiru piru piru pipiru pii"));
+
+    return animate_dead(user_ptr, 0, user_ptr->y, user_ptr->x);
+}

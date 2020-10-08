@@ -4205,14 +4205,14 @@ D:その刃は数多くの赤衣の者達に握られ、悪しき者たちを屠
 
 N:253:トゲトゲバット『エスカリボルグ』
 E:'Excaliborg, the *thorny* bat'
-I:21:16:4
-W:35:40:190:150000
-P:0:7d7:30:30:10
+I:21:16:2
+W:35:40:190:85000
+P:0:7d7:18:18:10
 F:STR | DEX | CON | SUST_STR | SUST_DEX | SUST_CON
-F:VORPAL | VAMPIRIC | KILL_HUMAN | BLESSED
+F:VORPAL | VAMPIRIC | KILL_HUMAN | BLESSED | ACTIVATE
 F:RES_FIRE | RES_LITE | LEVITATION
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:FULL_NAME
 U:ANIM_DEAD
-D:$This bat is filled with the unremitting love of the user.
-D:このバットには使用者のたゆまぬ愛が込められている。
+D:$This glowing black bat is filled with the unremitting love of the user.
+D:この黒光りするバットには使用者のたゆまぬ愛が込められている。
