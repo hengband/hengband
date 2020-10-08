@@ -390,9 +390,8 @@ void one_activation(object_type *o_ptr)
 {
     int type = 0;
     PERCENTAGE chance = 0;
-
     while (randint1(100) >= chance) {
-        type = randint1(255);
+        type = randint1(ACT_MAX);
         switch (type) {
         case ACT_SUNLIGHT:
         case ACT_BO_MISS_1:
@@ -481,8 +480,9 @@ void one_activation(object_type *o_ptr)
         case ACT_DIM_DOOR:
             chance = 10;
             break;
-        case ACT_SUMMON_UNDEAD:
+        case ACT_TREE_CREATION:
         case ACT_SUMMON_DEMON:
+        case ACT_SUMMON_UNDEAD:
         case ACT_WRAITH:
         case ACT_INVULN:
         case ACT_ALCHEMY:
@@ -493,7 +493,6 @@ void one_activation(object_type *o_ptr)
         }
     }
 
-    /* A type was chosen... */
     o_ptr->xtra2 = (byte)type;
     add_flag(o_ptr->art_flags, TR_ACTIVATE);
     o_ptr->timeout = 0;

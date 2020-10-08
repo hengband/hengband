@@ -61,7 +61,8 @@ MONSTER_NUMBER summon_Kin(player_type *target_ptr, POSITION y, POSITION x, int r
     return count;
 }
 
-static void decide_summon_kin_caster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, concptr m_name, const bool known)
+static void decide_summon_kin_caster(
+    player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, concptr m_name, concptr m_poss, const bool known)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -83,6 +84,9 @@ static void decide_summon_kin_caster(player_type *target_ptr, MONSTER_IDX m_idx,
             msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
     } else if (mon_to_player || (mon_to_mon && known && see_either)) {
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
+#ifdef JP
+        (void)m_poss;
+#endif
         _(msg_format("%sが魔法で%sを召喚した。", m_name, ((r_ptr->flags1 & RF1_UNIQUE) ? "手下" : "仲間")),
             msg_format("%^s magically summons %s %s.", m_name, m_poss, ((r_ptr->flags1 & RF1_UNIQUE) ? "minions" : "kin")));
     }
@@ -113,7 +117,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 
     disturb(target_ptr, TRUE, TRUE);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
-    decide_summon_kin_caster(target_ptr, m_idx, t_idx, target_type, m_name, known);
+    decide_summon_kin_caster(target_ptr, m_idx, t_idx, target_type, m_name, m_poss, known);
     int count = 0;
     switch (m_ptr->r_idx) {
     case MON_MENELDOR:
