@@ -52,8 +52,8 @@ F:c:GRASS:8:175
 # Floor with Earth elemental
 F:d:GRASS:8:525
 
-# Floor with Great storm wyrm
-F:e:GRASS:8:728
+# Floor with Great Storm Wyrm
+F:e:GRASS:8:1191
 
 # Floor with Colossus
 F:g:GRASS:8:558
