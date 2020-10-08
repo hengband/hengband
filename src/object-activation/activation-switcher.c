@@ -123,6 +123,10 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         return activate_breath_cold(user_ptr, o_ptr);
     case ACT_BR_DRAGON:
         return activate_dragon_breath(user_ptr, o_ptr);
+    case ACT_TREE_CREATION:
+        return activate_tree_creation(user_ptr, o_ptr, name);
+    case ACT_ANIM_DEAD:
+        return activate_animate_dead(user_ptr, o_ptr);
     case ACT_CONFUSE:
         return activate_confusion(user_ptr);
     case ACT_SLEEP:

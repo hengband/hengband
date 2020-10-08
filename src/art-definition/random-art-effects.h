@@ -43,7 +43,9 @@ typedef enum random_art_activation_type {
     ACT_BR_DRAGON = 40,
     ACT_BA_FIRE_4 = 41,
     ACT_BA_NUKE_1 = 42,
-    /* 42 - 50 unused */
+    /* 43 - 48 unused */
+    ACT_TREE_CREATION = 49,
+    ACT_ANIM_DEAD = 50,
     ACT_CONFUSE = 51,
     ACT_SLEEP = 52,
     ACT_QUAKE = 53,
@@ -68,6 +70,7 @@ typedef enum random_art_activation_type {
     ACT_SUMMON_HOUND = 75,
     ACT_SUMMON_DAWN = 76,
     ACT_SUMMON_OCTOPUS = 77,
+    /* 78 - 79 unused */
     ACT_CHOIR_SINGS = 80,
     ACT_CURE_LW = 81,
     ACT_CURE_MW = 82,
@@ -121,6 +124,7 @@ typedef enum random_art_activation_type {
     ACT_PHASE_DOOR = 136,
     ACT_DETECT_ALL_MONS = 137,
     ACT_ULTIMATE_RESIST = 138,
+    /* 139 - 245 unused */
     ACT_FALLING_STAR = 246,
     ACT_STRAIN_HASTE = 247,
     ACT_TELEPORT_LEVEL = 248,
@@ -131,4 +135,5 @@ typedef enum random_art_activation_type {
     ACT_MURAMASA = 253,
     ACT_BLOODY_MOON = 254,
     ACT_CRIMSON = 255,
+    ACT_MAX = 255, /* ダミー、最大値と合わせること / Dummy. Please match the value as max value */
 } random_art_activation_type;
