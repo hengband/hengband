@@ -121,9 +121,8 @@ MONSTER_NUMBER summon_LOUSE(player_type *target_ptr, POSITION y, POSITION x, int
 {
     int count = 0;
     int num = 2 + randint1(3);
-    for (int k = 0; k < num; k++) {
+    for (int k = 0; k < num; k++)
         count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
-    }
 
     return count;
 }
@@ -247,6 +246,16 @@ MONSTER_NUMBER summon_EYE_PHORN(player_type *target_ptr, POSITION y, POSITION x,
     int num = 2 + randint1(1 + rlev / 20);
     for (int k = 0; k < num; k++)
         count += summon_named_creature(target_ptr, m_idx, y, x, MON_EDGE, PM_NONE);
+
+    return count;
+}
+
+MONSTER_NUMBER summon_VESPOID(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 2 + randint1(3);
+    for (int k = 0; k < num; k++)
+        count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_VESPOID, PM_NONE);
 
     return count;
 }

@@ -156,6 +156,9 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
     case MON_JOBZ:
         count += summon_EYE_PHORN(target_ptr, y, x, rlev, m_idx);
         break;
+    case MON_QUEEN_VESPOID:
+        count += summon_VESPOID(target_ptr, y, x, rlev, m_idx);
+        break;
     default:
         count += summon_Kin(target_ptr, y, x, rlev, m_idx);
         break;

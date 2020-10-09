@@ -178,6 +178,8 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
     case SUMMON_APOCRYPHA_DRAGONS:
         is_match = (r_ptr->d_char == 'D') && (r_ptr->level >= 60) && (r_idx != MON_WYRM_COLOURS) && (r_idx != MON_ALDUIN);
         break;
+    case SUMMON_VESPOID:
+        is_match = r_idx == MON_VESPOID;
     default:
         break;
     }
