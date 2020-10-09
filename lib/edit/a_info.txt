@@ -4216,3 +4216,15 @@ F:FULL_NAME
 U:ANIM_DEAD
 D:$This glowing black bat is filled with the unremitting love of the user.
 D:この黒光りするバットには使用者のたゆまぬ愛が込められている。
+
+N:254:巨人夸父の
+E:of Kuafu
+I:21:3:2
+W:30:25:440:300000
+P:0:3d9:5:10:0
+F:STR | CON | SPEED | HIDE_TYPE | ACTIVATE
+F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD
+U:TREE_CREATION
+D:$The staff of Kuafu the sun chased giant.
+D:$This wood staff still alive will someday became peach forest.
+D:太陽を追った巨人、夸父の杖だ。まだ生きているこの木の杖はいずれ桃林になるだろう。
