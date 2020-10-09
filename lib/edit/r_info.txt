@@ -24759,3 +24759,79 @@ D:$His obsession was terrifying and he sought too much perfection,
 D:$ so he had fired too many employees.
 D:この敬虔な仏教徒は幻覚によるインスピレーションであらゆる品種のリンゴを作り上げた。
 D:彼の執念は凄まじく、完璧を求めるがあまり組織が機能不全に陥ることがあった。
+
+N:1248:エキドナの長子『オルトロス』
+E:Orthus, Firstborn of Echidna
+G:C:D
+I:130:100d101:100:165:15
+W:85:1:0:41000:0:0
+B:BITE:HURT:15d15
+B:BITE:HURT:15d15
+B:BITE:POISON:15d15
+F:UNIQUE | MALE | RES_TELE |
+F:BASH_DOOR | DROP_CORPSE | DROP_SKELETON | ANIMAL
+F:FORCE_SLEEP | FORCE_MAXHP | NO_CONF | NO_SLEEP
+F:DROP_4D2 | DROP_1D2 | DROP_GOOD | DROP_60 | DROP_90 | ONLY_ITEM |
+F:EVIL | IM_COLD | IM_ACID | IM_ELEC | IM_FIRE
+S:1_IN_4 |
+S:BR_NETH | S_MONSTERS | S_DEMON | S_HOUND | SCARE
+D:$A two-headed hound with snake tail. He is firstborn of Echidna, father of Sphinx and Lion of Namea, 
+D:$ and deity head the male line in clan. Hades' vassals respond to his call.
+D:２つ首と蛇の尾を持つ猟犬だ。彼はエキドナの長子であり、スフィンクスとネメアのライオンの父たる一族の男系筆頭の魔神だ。
+D:彼が呼びかければハデスの家臣も応える。
+
+N:1249:『リュキアのキマイラ』
+E:The Lycian Chimaera
+G:H:U
+I:125:45d70:20:200:20
+W:65:2:0:20000:0:0
+B:BITE:FIRE:12d6
+B:BUTT:HURT:12d6
+B:BITE:POISON:8d6
+F:UNIQUE
+F:FORCE_SLEEP | FORCE_MAXHP | SMART | DROP_CORPSE | RIDING |
+F:DROP_3D2 | DROP_4D2
+F:OPEN_DOOR | BASH_DOOR | KILL_BODY | POWERFUL | CAN_FLY
+F:ANIMAL | EVIL | IM_FIRE | IM_POIS | IM_COLD | IM_ACID
+F:NO_CONF | NO_SLEEP | RIDING | ESCORT | ATTR_MULTI
+S:1_IN_4
+S:SCARE
+S:BR_FIRE | BR_POIS | BR_CONF | BR_CHAO | BR_NEXU
+S:S_KIN
+R:354:4d7
+R:884:4d7
+R:1250:4d7
+D:$A massive legendary chimera.  She has powerful lion, goat, snake heads.
+D:$ This chaotic female monster is the ancestor of chimera.
+D:$ She's wants to give birth to more powerful offspring by eating you.
+D:巨大な伝説的キメラだ。彼女は力に満ちあふれた牡獅子、山羊、蛇の首を持っている。
+D:このキメラの祖である混沌の女怪はあなたを食べることでより強力な仔を産もうとしている。
+
+N:1250:可燃性ガス
+E:Flammable gas
+G:#:o
+I:90:3d3:20:37:30
+W:30:4:0:15:0:0
+B:TOUCH:POISON:1d3
+B:EXPLODE:FIRE:7d8
+F:RAND_25 | RAND_50 | INVISIBLE | MULTIPLY | 
+F:CAN_FLY | CAN_SWIM | PASS_WALL | KILL_BODY | 
+F:NONLIVING | EMPTY_MIND | COLD_BLOOD | 
+F:WILD_VOLCANO | WILD_SWAMP | 
+F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN | 
+D:$It explodes when shocked.
+D:それは衝撃を与えると爆発する。
+
+N:1251:ギンザメ
+E:Chimaera
+G:l:W
+I:120:6d10:20:45:20
+W:5:2:0:30:0:0
+B:BITE:HURT:2d5
+B:STING:POISON:2d3
+F:AQUATIC | ANIMAL | WILD_ALL | RES_WATE
+D:$This fish is also known as ghost shark, and named after hybrid monster
+D:$ due to its patchwark-like appearance.
+D:$ It has poson needle.
+D:この魚は英語ではキマイラと言い、継ぎ接ぎめいた姿から合成魔獣の名を付けられた。
+D:それは毒針を持っている。
