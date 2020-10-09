@@ -24835,3 +24835,36 @@ D:$ due to its patchwark-like appearance.
 D:$ It has poson needle.
 D:この魚は英語ではキマイラと言い、継ぎ接ぎめいた姿から合成魔獣の名を付けられた。
 D:それは毒針を持っている。
+
+N:1252:ランゴスタ
+E:Vespoid
+G:I:U
+I:125:50d3:10:15:20
+W:17:2:0:50:0:0
+B:STING:PARALYZE:3d3
+B:CRUSH:PARALYZE:3d4
+F:FORCE_SLEEP | ANIMAL | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND
+F:CAN_FLY | RAND_25 | NO_FEAR | ONLY_ITEM | DROP_60 | DROP_CORPSE
+D:$A bee-like insect that has become huge due to mutation.
+D:$  Has a paralytic stinger on the abdomen.
+D:突然変異で巨大化した蜂の様な虫。腹部にマヒ性の毒針を持つ。 
+
+N:1253:女王虫『クイーンランゴスタ』
+E:Vespoid Queen
+G:I:u
+I:124:120d10:10:80:20
+W:28:4:0:1000:0:0
+B:STING:PARALYZE:3d10
+B:STING:PARALYZE:3d10
+B:CRUSH:SUPERHURT:3d12
+S:1_IN_4 | SHRIEK | S_KIN | BR_ACID
+F:UNIQUE | FEMALE | ANIMAL | FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | RAND_25 |
+F:ESCORT | ONLY_ITEM | DROP_60 | DROP_1D2 | DROP_GOOD | DROP_CORPSE |
+F:BASH_DOOR | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND | NO_FEAR
+D:$The Queen of Vespoid, featuring a huge abdomen and bright wings.
+D:$  Command the subordinate Vespoid with a peculiar flight and attack the intruder.
+D:$  The abdominal sting is also very well developed,
+D:$ and in addition to neurological poisons,
+D:$ it may also inject acidic fluids towards its prey.
+D:巨大な腹部と鮮やかな大羽を特徴とするランゴスタの女王。配下のランゴスタに特異な飛行で命令を行い、侵入者を襲う。
+D:腹部の毒針も非常に発達しており、神経性の毒の他、酸性の体液を獲物に向けて噴射することもある。
