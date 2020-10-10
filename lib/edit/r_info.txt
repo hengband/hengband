@@ -24814,11 +24814,10 @@ I:90:3d3:20:37:30
 W:30:4:0:15:0:0
 B:TOUCH:POISON:1d3
 B:EXPLODE:FIRE:7d8
-F:RAND_25 | RAND_50 | INVISIBLE | MULTIPLY | 
-F:CAN_FLY | CAN_SWIM | PASS_WALL | KILL_BODY | 
-F:NONLIVING | EMPTY_MIND | COLD_BLOOD | 
-F:WILD_VOLCANO | WILD_SWAMP | 
-F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN | 
+F:RAND_25 | RAND_50 | INVISIBLE | MULTIPLY | HURT_FIRE
+F:CAN_FLY | CAN_SWIM | PASS_WALL | KILL_BODY
+F:NONLIVING | EMPTY_MIND | COLD_BLOOD | WILD_VOLCANO | WILD_SWAMP
+F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN
 D:$It explodes when shocked.
 D:それは衝撃を与えると爆発する。
 
@@ -24846,7 +24845,7 @@ B:CRUSH:PARALYZE:3d4
 F:FORCE_SLEEP | ANIMAL | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND
 F:CAN_FLY | RAND_25 | NO_FEAR | ONLY_ITEM | DROP_60 | DROP_CORPSE
 D:$A bee-like insect that has become huge due to mutation.
-D:$  Has a paralytic stinger on the abdomen.
+D:$  It has a paralytic stinger on the abdomen.
 D:突然変異で巨大化した蜂の様な虫。腹部にマヒ性の毒針を持つ。 
 
 N:1253:女王虫『クイーンランゴスタ』
