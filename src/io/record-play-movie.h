@@ -7,4 +7,4 @@ void prepare_browse_movie_without_path_build(concptr filename);
 void browse_movie(void);
 #ifndef WINDOWS
 void prepare_browse_movie_with_path_build(concptr filename);
-#endif WINDOWS
+#endif
