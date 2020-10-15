@@ -32,6 +32,9 @@
 
 static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag);
 
+/*!
+ * @brief 装備による所定の特性フラグを得ているかを一括して取得する関数。
+ */
 static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
 {
     object_type *o_ptr;
@@ -50,6 +53,9 @@ static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_fla
     return result;
 }
 
+/*!
+ * @brief クリーチャーが壁破壊進行を持っているかを返す。
+ */
 bool is_kill_wall(player_type *creature_ptr)
 {
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD || music_singing(creature_ptr, MUSIC_WALL)) {
@@ -66,6 +72,9 @@ bool is_kill_wall(player_type *creature_ptr)
     return FALSE;
 }
 
+/*!
+ * @brief クリーチャーが壁通過を持っているかを返す。
+ */
 bool is_pass_wall(player_type *creature_ptr)
 {
     bool pow = FALSE;
@@ -84,6 +93,9 @@ bool is_pass_wall(player_type *creature_ptr)
     return pow;
 }
 
+/*!
+ * @brief クリーチャーが強力射を持っているかを返す。
+ */
 BIT_FLAGS is_xtra_might(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
@@ -91,6 +103,9 @@ BIT_FLAGS is_xtra_might(player_type *creature_ptr)
     return result;
 }
 
+/*!
+ * @brief クリーチャーが邪悪感知を持っているかを返す。
+ */
 BIT_FLAGS is_esp_evil(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
@@ -102,6 +117,9 @@ BIT_FLAGS is_esp_evil(player_type *creature_ptr)
     return result;
 }
 
+/*!
+ * @brief クリーチャーが自然界の動物感知を持っているかを返す。
+ */
 BIT_FLAGS is_esp_animal(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
@@ -109,6 +127,9 @@ BIT_FLAGS is_esp_animal(player_type *creature_ptr)
     return result;
 }
 
+/*!
+ * @brief クリーチャーがアンデッド感知を持っているかを返す。
+ */
 BIT_FLAGS is_esp_undead(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
