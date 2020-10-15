@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-types.h"
 #include "system/angband.h"
 
 /*
@@ -10,8 +12,6 @@
  *	- Damage Dice
  *	- Damage Sides
  */
-typedef enum rbm_type rbm_type;
-typedef enum rbe_type rbe_type;
 typedef struct monster_blow {
     rbm_type method;
     rbe_type effect;
