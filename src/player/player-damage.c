@@ -44,10 +44,10 @@
 #include "player/player-class.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
-#include "player/race-info-table.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
+#include "player/race-info-table.h"
+#include "player/special-defense-types.h"
 #include "racial/racial-android.h"
 #include "save/save.h"
 #include "status/base-status.h"
@@ -67,16 +67,13 @@
  * @param 酸を浴びたキャラクタへの参照ポインタ
  * @return 装備による軽減があったならTRUEを返す
  * @details
+ * 免疫があったらそもそもこの関数は実行されない (確実に錆びない).
  * Note that the "base armor" of an object never changes.
  * If any armor is damaged (or resists), the player takes less damage.
  */
 static bool acid_minus_ac(player_type *creature_ptr)
 {
     object_type *o_ptr = NULL;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    GAME_TEXT o_name[MAX_NLEN];
-
-    /* Pick a (possibly empty) creature_ptr->inventory_list slot */
     switch (randint1(7)) {
     case 1:
         o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
@@ -101,37 +98,28 @@ static bool acid_minus_ac(player_type *creature_ptr)
         break;
     }
 
-    if (!o_ptr->k_idx)
-        return FALSE;
-    if (!object_is_armour(creature_ptr, o_ptr))
+    if ((o_ptr == NULL) || (o_ptr->k_idx == 0) || !object_is_armour(creature_ptr, o_ptr))
         return FALSE;
 
-    describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    GAME_TEXT o_name[MAX_NLEN];
+    describe_flavor(creature_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(creature_ptr, o_ptr, flgs);
-    /* No damage left to be done */
     if (o_ptr->ac + o_ptr->to_a <= 0) {
         msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), o_name);
         return FALSE;
     }
 
-    /* Object resists */
     if (has_flag(flgs, TR_IGNORE_ACID)) {
         msg_format(_("しかし%sには効果がなかった！", "Your %s is unaffected!"), o_name);
         return TRUE;
     }
 
     msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), o_name);
-
-    /* Damage the item */
     o_ptr->to_a--;
-
-    /* Calculate bonuses */
-    creature_ptr->update |= (PU_BONUS);
-    creature_ptr->window |= (PW_EQUIP | PW_PLAYER);
-
+    creature_ptr->update |= PU_BONUS;
+    creature_ptr->window |= PW_EQUIP | PW_PLAYER;
     calc_android_exp(creature_ptr);
-
-    /* Item was damaged */
     return TRUE;
 }
 
@@ -144,15 +132,13 @@ static bool acid_minus_ac(player_type *creature_ptr)
  * @param monspell 原因となったモンスター特殊攻撃ID
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
+ * @details 酸オーラは存在しないが関数ポインタのために引数だけは用意している
  */
 HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 {
-    HIT_POINT get_damage;
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_acid(creature_ptr);
-
     dam = dam * calc_acid_damage_rate(creature_ptr) / 100;
-
     if (dam <= 0) {
         learn_spell(creature_ptr, monspell);
         return 0;
@@ -162,16 +148,14 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
         if ((!(double_resist || creature_ptr->resist_acid)) && one_in_(HURT_CHANCE))
             (void)do_dec_stat(creature_ptr, A_CHR);
 
-        /* If any armor gets hit, defend the player */
         if (acid_minus_ac(creature_ptr))
             dam = (dam + 1) / 2;
     }
 
-    get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
-
-    /* Inventory damage */
+    HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
     if (!aura && !(double_resist && creature_ptr->resist_acid))
         inventory_damage(creature_ptr, set_acid_destroy, inv);
+
     return get_damage;
 }
 
@@ -187,7 +171,6 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
  */
 HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 {
-    HIT_POINT get_damage;
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_elec(creature_ptr);
 
@@ -203,9 +186,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
             (void)do_dec_stat(creature_ptr, A_DEX);
     }
 
-    get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
-
-    /* Inventory damage */
+    HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
     if (!aura && !(double_resist && creature_ptr->resist_elec))
         inventory_damage(creature_ptr, set_elec_destroy, inv);
 
@@ -224,7 +205,6 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
  */
 HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 {
-    HIT_POINT get_damage;
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_fire(creature_ptr);
 
@@ -235,15 +215,12 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     }
 
     dam = dam * calc_fire_damage_rate(creature_ptr) / 100;
-
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || creature_ptr->resist_fire)) && one_in_(HURT_CHANCE))
             (void)do_dec_stat(creature_ptr, A_STR);
     }
 
-    get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
-
-    /* Inventory damage */
+    HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
     if (!aura && !(double_resist && creature_ptr->resist_fire))
         inventory_damage(creature_ptr, set_fire_destroy, inv);
 
@@ -262,7 +239,6 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
  */
 HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 {
-    HIT_POINT get_damage;
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_cold(creature_ptr);
 
@@ -272,23 +248,13 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
         return 0;
     }
 
-    /* Vulnerability (Ouch!) */
     dam = dam * calc_cold_damage_rate(creature_ptr) / 100;
-
-    /* Resist the damage */
-    if (creature_ptr->resist_cold)
-        dam = (dam + 2) / 3;
-    if (double_resist)
-        dam = (dam + 2) / 3;
-
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || creature_ptr->resist_cold)) && one_in_(HURT_CHANCE))
             (void)do_dec_stat(creature_ptr, A_STR);
     }
 
-    get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
-
-    /* Inventory damage */
+    HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
     if (!aura && !(double_resist && creature_ptr->resist_cold))
         inventory_damage(creature_ptr, set_cold_destroy, inv);
 
@@ -333,7 +299,6 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
     if (monspell >= 0)
         learn_spell(creature_ptr, monspell);
 
-    /* Mega-Hack -- Apply "invulnerability" */
     if ((damage_type != DAMAGE_USELIFE) && (damage_type != DAMAGE_LOSELIFE)) {
         if (is_invuln(creature_ptr) && (damage < 9000)) {
             if (damage_type == DAMAGE_FORCE) {
@@ -369,46 +334,36 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             if ((damage == 0) && one_in_(2))
                 damage = 1;
         }
-    } /* not if LOSELIFE USELIFE */
+    }
 
-    /* Hurt the player */
     creature_ptr->chp -= damage;
     if (damage_type == DAMAGE_GENO && creature_ptr->chp < 0) {
         damage += creature_ptr->chp;
         creature_ptr->chp = 0;
     }
 
-    /* Display the hitpoints */
-    creature_ptr->redraw |= (PR_HP);
-
-    creature_ptr->window |= (PW_PLAYER);
+    creature_ptr->redraw |= PR_HP;
+    creature_ptr->window |= PW_PLAYER;
 
     if (damage_type != DAMAGE_GENO && creature_ptr->chp == 0) {
         chg_virtue(creature_ptr, V_SACRIFICE, 1);
         chg_virtue(creature_ptr, V_CHANCE, 2);
     }
 
-    /* Dead player */
     if (creature_ptr->chp < 0) {
         bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
 
 #ifdef JP
         /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
-        if (!cheat_save)
-            if (!save_player(creature_ptr))
-                msg_print("セーブ失敗！");
+        if (!cheat_save && !save_player(creature_ptr))
+            msg_print("セーブ失敗！");
 #endif
 
         sound(SOUND_DEATH);
-
         chg_virtue(creature_ptr, V_SACRIFICE, 10);
-
         handle_stuff(creature_ptr);
         creature_ptr->leaving = TRUE;
-
-        /* Note death */
         creature_ptr->is_dead = TRUE;
-
         if (creature_ptr->current_floor_ptr->inside_arena) {
             concptr m_name = r_name + r_info[arena_info[creature_ptr->arena_number].r_idx].name;
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
@@ -423,11 +378,8 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
 #ifdef WORLD_SCORE
-            /* Make screen dump */
             screen_dump = make_screen_dump(creature_ptr, process_autopick_file_command);
 #endif
-
-            /* Note cause of death */
             if (seppuku) {
                 strcpy(creature_ptr->died_from, hit_from);
 #ifdef JP
@@ -445,9 +397,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                 angband_strcpy(creature_ptr->died_from, dummy, sizeof creature_ptr->died_from);
             }
 
-            /* No longer a winner */
             current_world_ptr->total_winner = FALSE;
-
             if (winning_seppuku) {
                 exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
             } else {
@@ -468,21 +418,15 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
             exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
             exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
-
             flush();
-
-            if (get_check_strict(creature_ptr, _("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY)) {
+            if (get_check_strict(creature_ptr, _("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
                 do_cmd_save_screen(creature_ptr, process_autopick_file_command);
-            }
 
             flush();
-
-            /* Initialize "last message" buffer */
             if (creature_ptr->last_message)
                 string_free(creature_ptr->last_message);
-            creature_ptr->last_message = NULL;
 
-            /* Hack -- Note death */
+            creature_ptr->last_message = NULL;
             if (!last_words) {
 #ifdef JP
                 msg_format("あなたは%sました。", android ? "壊れ" : "死に");
@@ -500,7 +444,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
                 do {
 #ifdef JP
-                    while (!get_string(winning_seppuku ? "辞世の句: " : "断末魔の叫び: ", death_message, 1024))
+                    while (!get_string(winning_seppuku ? "辞世の句: " : "断末魔の叫び: ", death_message, sizeof(death_message)))
                         ;
 #else
                     while (!get_string("Last word: ", death_message, 1024))
@@ -560,16 +504,11 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                             break;
                     }
 
-                    /* Hide cursor */
                     term_putstr(w - 1, h - 1, 1, TERM_WHITE, " ");
-
                     flush();
 #ifdef WORLD_SCORE
-                    /* Make screen dump */
                     screen_dump = make_screen_dump(creature_ptr, process_autopick_file_command);
 #endif
-
-                    /* Wait a key press */
                     (void)inkey();
                 } else
 #endif
@@ -577,20 +516,15 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             }
         }
 
-        /* Dead */
         return damage;
     }
 
     handle_stuff(creature_ptr);
-
-    /* Hitpoint warning */
     if (creature_ptr->chp < warning) {
-        /* Hack -- bell on first notice */
         if (old_chp > warning)
             bell();
 
         sound(SOUND_WARN);
-
         if (record_danger && (old_chp > warning)) {
             if (creature_ptr->image && damage_type == DAMAGE_ATTACK)
                 hit_from = _("何か", "something");
@@ -599,18 +533,17 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, tmp);
         }
 
-        if (auto_more) {
-            /* stop auto_more even if DAMAGE_USELIFE */
+        if (auto_more)
             creature_ptr->now_damaged = TRUE;
-        }
 
         msg_print(_("*** 警告:低ヒット・ポイント！ ***", "*** LOW HITPOINT WARNING! ***"));
         msg_print(NULL);
         flush();
     }
-    if (creature_ptr->wild_mode && !creature_ptr->leaving && (creature_ptr->chp < MAX(warning, creature_ptr->mhp / 5))) {
+
+    if (creature_ptr->wild_mode && !creature_ptr->leaving && (creature_ptr->chp < MAX(warning, creature_ptr->mhp / 5)))
         change_wild_mode(creature_ptr, FALSE);
-    }
+
     return damage;
 }
 
@@ -639,9 +572,8 @@ static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, b
     msg_print(message);
     dam_func(touched_ptr, aura_damage, mon_name, -1, TRUE);
 
-    if (is_original_ap_and_seen(touched_ptr, m_ptr)) {
+    if (is_original_ap_and_seen(touched_ptr, m_ptr))
         atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;
-    }
 
     handle_stuff(touched_ptr);
 }
