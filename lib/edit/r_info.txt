@@ -21022,6 +21022,8 @@ S:1_IN_1
 S:SPECIAL
 D:$This king of the chameleons, like its lesser kin, can change its appearance
 D:$ to blend in with its surroundings.
+D:カメレオンの王は、その眷属たるカメレオン達と同じように、
+D:周囲の環境に合わせてその姿を変えることができる。
 
 N:1042:幻の鯨『イッカク』
 E:Narwhal
@@ -24757,7 +24759,8 @@ D:$This devout Buddhist created every information apples
 D:$ with LSD's inspiration.
 D:$His obsession was terrifying and he sought too much perfection,
 D:$ so he had fired too many employees.
-D:この敬虔な仏教徒は幻覚によるインスピレーションであらゆる品種のリンゴを作り上げた。
+D:この敬虔な仏教徒は幻覚によるインスピレーションで
+D:あらゆる品種のリンゴを作り上げた。
 D:彼の執念は凄まじく、完璧を求めるがあまり組織が機能不全に陥ることがあった。
 
 N:1248:エキドナの長子『オルトロス』
@@ -24777,7 +24780,8 @@ S:1_IN_4 |
 S:BR_NETH | S_MONSTERS | S_DEMON | S_HOUND | SCARE
 D:$A two-headed hound with snake tail. He is firstborn of Echidna, father of Sphinx and Lion of Namea, 
 D:$ and deity head the male line in clan. Hades' vassals respond to his call.
-D:２つ首と蛇の尾を持つ猟犬だ。彼はエキドナの長子であり、スフィンクスとネメアのライオンの父たる一族の男系筆頭の魔神だ。
+D:２つ首と蛇の尾を持つ猟犬だ。彼はエキドナの長子であり、
+D:スフィンクスとネメアのライオンの父たる一族の男系筆頭の魔神だ。
 D:彼が呼びかければハデスの家臣も応える。
 
 N:1249:『リュキアのキマイラ』
@@ -24805,7 +24809,8 @@ D:$A massive legendary chimera.  She has powerful lion, goat, snake heads.
 D:$ This chaotic female monster is the ancestor of chimera.
 D:$ She's wants to give birth to more powerful offspring by eating you.
 D:巨大な伝説的キメラだ。彼女は力に満ちあふれた牡獅子、山羊、蛇の首を持っている。
-D:このキメラの祖である混沌の女怪はあなたを食べることでより強力な仔を産もうとしている。
+D:このキメラの祖である混沌の女怪はあなたを食べることで
+D:より強力な仔を産もうとしている。
 
 N:1250:可燃性ガス
 E:Flammable gas
@@ -24857,14 +24862,43 @@ B:STING:PARALYZE:3d10
 B:STING:PARALYZE:3d10
 B:CRUSH:SUPERHURT:3d12
 S:1_IN_4 | SHRIEK | S_KIN | BR_ACID
-F:UNIQUE | FEMALE | ANIMAL | FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | RAND_25 |
+F:UNIQUE | FEMALE | ANIMAL | FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | RAND_25
 F:ONLY_ITEM | DROP_60 | DROP_1D2 | DROP_GOOD | DROP_CORPSE |
 F:BASH_DOOR | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND | NO_FEAR
 R:1252:5d5
-D:$The Queen of Vespoid, featuring a huge abdomen and bright wings.
-D:$  Command the subordinate Vespoid with a peculiar flight and attack the intruder.
+D:$The Queen of vespoid, featuring a huge abdomen and bright wings.
+D:$  Command the subordinate vespoid
+D: with a peculiar flight and attack the intruder.
 D:$  The abdominal sting is also very well developed,
 D:$ and in addition to neurological poisons,
 D:$ it may also inject acidic fluids towards its prey.
-D:巨大な腹部と鮮やかな大羽を特徴とするランゴスタの女王。配下のランゴスタに特異な飛行で命令を行い、侵入者を襲う。
-D:腹部の毒針も非常に発達しており、神経性の毒の他、酸性の体液を獲物に向けて噴射することもある。
+D:巨大な腹部と鮮やかな大羽を特徴とするランゴスタの女王。
+D:配下のランゴスタに特異な飛行で命令を行い、侵入者を襲う。
+D:腹部の毒針も非常に発達しており、神経性の毒の他、
+D:酸性の体液を獲物に向けて噴射することもある。
+
+N:1254:踊る道化師『ペニーワイズ』
+E:Pennywise, the dancing clown
+G:S:o
+I:120:10d12:20:70:50
+W:32:3:0:1500:0:0
+B:GAZE:TERRIFY:4d5
+B:GAZE:TERRIFY:4d5
+B:SHOW:LOSE_INT
+B:TOUCH:EAT_ITEM
+F:UNIQUE | CAN_SPEAK | FORCE_MAXHP | FORCE_SLEEP
+F:SHAPECHANGER | ATTR_MULTI | ATTR_ANY | SELF_LITE_1
+F:EVIL | DEMON | CAN_SWIM | OPEN_DOOR
+F:NO_FEAR | NO_SLEEP | WEIRD_MIND | ELDRITCH_HORROR | MOVE_BODY
+F:DROP_CORPSE | DROP_SKELETON | DROP_1D2 | DROP_GREAT
+F:IM_POIS | RES_DARK | RES_CHAO | SMART | NO_CONF
+S:1_IN_3 | BR_CONF | CAUSE_3 | MIND_BLAST | S_SPIDER
+S:FORGET | SCARE | BLINK | CONF | DARKNESS
+D:$"Don't you want balloon?"
+D:$  An unknown life form that can transform into a fearful one.
+D:$  The appearance of the clown is just one of them.
+D:$  When you are dragged down, you float too.
+D:「風船、欲しいだろう？」
+D:　相手が恐怖心を抱くものに姿を変えることができる未知の生命体だ。
+D:ピエロの姿もその一つに過ぎない。
+D:それに下に引きずり込まれるとあなたもプカプカ浮かぶ。
