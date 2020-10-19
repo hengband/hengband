@@ -815,7 +815,7 @@ bool monster_can_entry_arena(player_type *player_ptr, MONRACE_IDX r_idx)
     monster_race *r_ptr = &r_info[r_idx];
     bool unselectable = (r_ptr->flags1 & RF1_NEVER_MOVE) != 0;
     unselectable |= (r_ptr->flags2 & RF2_MULTIPLY) != 0;
-    unselectable |= ((r_ptr->flags2 & RF2_QUANTUM) != 0);
+    unselectable |= ((r_ptr->flags2 & RF2_QUANTUM) != 0) && ((r_ptr->flags1 & RF1_UNIQUE) == 0);
     unselectable |= (r_ptr->flags7 & RF7_AQUATIC) != 0;
     unselectable |= (r_ptr->flags7 & RF7_CHAMELEON) != 0;
     if (unselectable)
