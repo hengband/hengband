@@ -3601,15 +3601,16 @@ D:タイトや、ダイアモンドをわざわざ使ってあるくらいだも
 D:（富士見書房「アイスウインド・サーガ１魔石の復活」 R・A・サルヴァトーレ著、
 D:風見潤訳）
 
+# There Will Come Hard Rains
 N:209:『隠者の紫』
 E:'hermit's purple'
 I:21:2:2
 W:40:40:30:40000
 P:0:1d6:10:5:0
-F:INT | WIS | FORCE_WEAPON | SLAY_UNDEAD | RIDING |
+F:INT | WIS | CHR | FORCE_WEAPON | SLAY_UNDEAD | RIDING
 F:SEE_INVIS | TELEPATHY | REGEN | HOLD_EXP
 U:DETECT_UNIQUE
-D:$It's a mysterious, semi-ghosted whip of thorns.
+D:$It's a glam, semi-ghosted whip of thorns.
 D:$  You can convert the mental power of the owner into attack power
 D:$ and protect yourself with the power of ripples.
 When you wear it, you can see what happened in a distant place.
