@@ -813,19 +813,12 @@ bool monster_can_entry_arena(player_type *player_ptr, MONRACE_IDX r_idx)
 
     HIT_POINT dam = 0;
     monster_race *r_ptr = &r_info[r_idx];
-    if (r_ptr->flags1 & (RF1_NEVER_MOVE))
-        return FALSE;
-
-    if (r_ptr->flags2 & (RF2_MULTIPLY))
-        return FALSE;
-
-    if (r_ptr->flags2 & (RF2_QUANTUM))
-        return FALSE;
-
-    if (r_ptr->flags7 & (RF7_AQUATIC))
-        return FALSE;
-
-    if (r_ptr->flags7 & (RF7_CHAMELEON))
+    bool unselectable = (r_ptr->flags1 & RF1_NEVER_MOVE) != 0;
+    unselectable |= (r_ptr->flags2 & RF2_MULTIPLY) != 0;
+    unselectable |= ((r_ptr->flags2 & RF2_QUANTUM) != 0);
+    unselectable |= (r_ptr->flags7 & RF7_AQUATIC) != 0;
+    unselectable |= (r_ptr->flags7 & RF7_CHAMELEON) != 0;
+    if (unselectable)
         return FALSE;
 
     for (int i = 0; i < 4; i++) {
