@@ -14,6 +14,7 @@
 #include "game-option/special-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "player-attack/player-attack.h"
 #include "player-info/avatar.h"
@@ -154,6 +155,9 @@ bool activate_unique_detection(player_type *user_ptr)
         r_ptr = &r_info[m_ptr->r_idx];
         if (r_ptr->flags1 & RF1_UNIQUE)
             msg_format(_("%s． ", "%s. "), r_name + r_ptr->name);
+
+        if (m_ptr->r_idx == MON_DIO)
+            msg_print(_("きさま！　見ているなッ！", "You bastard!, You're watching me, well watch this!"));
     }
 
     return TRUE;
