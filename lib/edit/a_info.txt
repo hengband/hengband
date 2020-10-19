@@ -4228,3 +4228,14 @@ U:TREE_CREATION
 D:$The staff of Kuafu the sun chased giant.
 D:$This wood staff still alive will someday became peach forest.
 D:太陽を追った巨人、夸父の杖だ。まだ生きているこの木の杖はいずれ桃林になるだろう。
+
+N:255:ドン・キホーテの
+E:of Don Quixote
+I:22:29:-3
+W:40:30:300:70000
+P:0:3d8:-12:12:0
+F:INT | WIS | CHR | | IM_ELEC | RES_DARK | RES_CONF | RES_FEAR
+F:FREE_ACT | SUST_INT | SUST_WIS | SUST_CHR | SLAY_EVIL | KILL_GIANT
+D:$Don Quixote born in La Mancha is the brave knight
+D:$ trying to defeat the colossal giant "Windmill".
+D:ラ・マンチャに生まれたドン・キホーテは強大なる巨人『風車』を打ち倒そうとした勇敢な騎士だ。
