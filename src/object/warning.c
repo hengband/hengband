@@ -88,7 +88,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     /* Vulnerability, resistance and immunity */
     switch (typ) {
     case GF_ELEC:
-        if (is_immune_elec(target_ptr)) {
+        if (has_immune_elec(target_ptr)) {
             ignore_wraith_form = TRUE;
         }
         dam = dam * calc_elec_damage_rate(target_ptr) / 100;
@@ -99,7 +99,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_ACID:
-        if (is_immune_acid(target_ptr)) {
+        if (has_immune_acid(target_ptr)) {
             ignore_wraith_form = TRUE;
         }
         dam = dam * calc_acid_damage_rate(target_ptr) / 100;
@@ -107,14 +107,14 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_COLD:
     case GF_ICE:
-        if (is_immune_cold(target_ptr)) {
+        if (has_immune_cold(target_ptr)) {
             ignore_wraith_form = TRUE;
         }
         dam = dam * calc_cold_damage_rate(target_ptr) / 100;
         break;
 
     case GF_FIRE:
-        if (is_immune_fire(target_ptr)) {
+        if (has_immune_fire(target_ptr)) {
             dam = 0;
             ignore_wraith_form = TRUE;
             break;

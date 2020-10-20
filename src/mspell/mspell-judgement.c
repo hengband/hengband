@@ -255,7 +255,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->flags4 & RF4_BR_ACID) {
-        if (!is_immune_acid(creature_ptr) && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_acid(creature_ptr) && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
 
         if (creature_ptr->special_defense & DEFENSE_ACID)
@@ -264,7 +264,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 
     if (r_ptr->flags4 & RF4_BR_FIRE) {
         if (!((creature_ptr->prace == RACE_BALROG) && creature_ptr->lev > 44)) {
-            if (!is_immune_fire(creature_ptr) && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
+            if (!has_immune_fire(creature_ptr) && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
                 return TRUE;
 
             if (creature_ptr->special_defense & DEFENSE_FIRE)
@@ -273,7 +273,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     }
 
     if (r_ptr->flags4 & RF4_BR_ELEC) {
-        if (!is_immune_elec(creature_ptr) && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_elec(creature_ptr) && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
 
         if (creature_ptr->special_defense & DEFENSE_ELEC)
@@ -281,7 +281,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     }
 
     if (r_ptr->flags4 & RF4_BR_COLD) {
-        if (!is_immune_cold(creature_ptr) && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_cold(creature_ptr) && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
 
         if (creature_ptr->special_defense & DEFENSE_COLD)

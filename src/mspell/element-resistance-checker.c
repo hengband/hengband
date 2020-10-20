@@ -15,7 +15,7 @@ void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
     if (is_oppose_acid(target_ptr))
         msr_ptr->smart |= SM_OPP_ACID;
 
-    if (is_immune_acid(target_ptr))
+    if (has_immune_acid(target_ptr))
         msr_ptr->smart |= SM_IMM_ACID;
 
     if (target_ptr->resist_elec)
@@ -24,7 +24,7 @@ void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
     if (is_oppose_elec(target_ptr))
         msr_ptr->smart |= SM_OPP_ELEC;
 
-    if (is_immune_elec(target_ptr))
+    if (has_immune_elec(target_ptr))
         msr_ptr->smart |= SM_IMM_ELEC;
 
     if (target_ptr->resist_fire)
@@ -33,7 +33,7 @@ void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
     if (is_oppose_fire(target_ptr))
         msr_ptr->smart |= SM_OPP_FIRE;
 
-    if (is_immune_fire(target_ptr))
+    if (has_immune_fire(target_ptr))
         msr_ptr->smart |= SM_IMM_FIRE;
 
     if (target_ptr->resist_cold)
@@ -42,7 +42,7 @@ void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
     if (is_oppose_cold(target_ptr))
         msr_ptr->smart |= SM_OPP_COLD;
 
-    if (is_immune_cold(target_ptr))
+    if (has_immune_cold(target_ptr))
         msr_ptr->smart |= SM_IMM_COLD;
 
     if (target_ptr->resist_pois)

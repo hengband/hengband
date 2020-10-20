@@ -91,7 +91,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !is_immune_fire(creature_ptr)) {
+    if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !has_immune_fire(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -130,7 +130,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !is_immune_cold(creature_ptr)) {
+    if (has_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_cold(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -165,7 +165,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !is_immune_elec(creature_ptr)) {
+    if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_elec(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -200,7 +200,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !is_immune_acid(creature_ptr)) {
+    if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_acid(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -282,7 +282,7 @@ void process_player_hp_mp(player_type *creature_ptr)
 
     if (creature_ptr->riding) {
         HIT_POINT damage;
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !is_immune_fire(creature_ptr)) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !has_immune_fire(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (is_specific_player_race(creature_ptr, RACE_ENT))
                 damage += damage / 3;
@@ -293,7 +293,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             msg_print(_("熱い！", "It's hot!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
         }
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !is_immune_elec(creature_ptr)) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !has_immune_elec(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (is_specific_player_race(creature_ptr, RACE_ANDROID))
                 damage += damage / 3;
@@ -304,7 +304,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             msg_print(_("痛い！", "It hurts!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
         }
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !is_immune_cold(creature_ptr)) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !has_immune_cold(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (creature_ptr->resist_cold)
                 damage = damage / 3;

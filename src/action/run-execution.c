@@ -232,7 +232,7 @@ static bool run_test(player_type *creature_ptr)
                     notice = FALSE;
                 } else if (find_ignore_stairs && has_flag(f_ptr->flags, FF_STAIRS)) {
                     notice = FALSE;
-                } else if (has_flag(f_ptr->flags, FF_LAVA) && (is_immune_fire(creature_ptr) || is_invuln(creature_ptr))) {
+                } else if (has_flag(f_ptr->flags, FF_LAVA) && (has_immune_fire(creature_ptr) || is_invuln(creature_ptr))) {
                     notice = FALSE;
                 } else if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP)
                     && (creature_ptr->levitation || creature_ptr->can_swim || (creature_ptr->total_weight <= weight_limit(creature_ptr)))) {

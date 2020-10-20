@@ -545,7 +545,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
         if (is_oppose_acid(player_ptr))
             m_ptr->smart |= SM_OPP_ACID;
 
-        if (is_immune_acid(player_ptr))
+        if (has_immune_acid(player_ptr))
             m_ptr->smart |= SM_IMM_ACID;
 
         break;
@@ -556,7 +556,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
         if (is_oppose_elec(player_ptr))
             m_ptr->smart |= SM_OPP_ELEC;
 
-        if (is_immune_elec(player_ptr))
+        if (has_immune_elec(player_ptr))
             m_ptr->smart |= SM_IMM_ELEC;
 
         break;
@@ -567,7 +567,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
         if (is_oppose_fire(player_ptr))
             m_ptr->smart |= SM_OPP_FIRE;
 
-        if (is_immune_fire(player_ptr))
+        if (has_immune_fire(player_ptr))
             m_ptr->smart |= SM_IMM_FIRE;
 
         break;
@@ -578,7 +578,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
         if (is_oppose_cold(player_ptr))
             m_ptr->smart |= SM_OPP_COLD;
 
-        if (is_immune_cold(player_ptr))
+        if (has_immune_cold(player_ptr))
             m_ptr->smart |= SM_IMM_COLD;
 
         break;

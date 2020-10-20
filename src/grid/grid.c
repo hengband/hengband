@@ -1151,7 +1151,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
                 return FALSE;
         }
 
-        if (has_flag(f_ptr->flags, FF_LAVA) && !is_immune_fire(player_ptr) && !is_invuln(player_ptr)) {
+        if (has_flag(f_ptr->flags, FF_LAVA) && !has_immune_fire(player_ptr) && !is_invuln(player_ptr)) {
             /* Always forbid deep lava */
             if (has_flag(f_ptr->flags, FF_DEEP))
                 return FALSE;

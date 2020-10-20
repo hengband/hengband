@@ -319,22 +319,22 @@ void calc_bonuses(player_type *creature_ptr)
     ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
     ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
 
-    creature_ptr->pass_wall = is_pass_wall(creature_ptr);
-    creature_ptr->kill_wall = is_kill_wall(creature_ptr);
-    creature_ptr->xtra_might = is_xtra_might(creature_ptr);
-    creature_ptr->esp_evil = is_esp_evil(creature_ptr);
-    creature_ptr->esp_animal = is_esp_animal(creature_ptr);
-    creature_ptr->esp_undead = is_esp_undead(creature_ptr);
-    creature_ptr->esp_demon = is_esp_demon(creature_ptr);
-    creature_ptr->esp_orc = is_esp_orc(creature_ptr);
-    creature_ptr->esp_troll = is_esp_troll(creature_ptr);
-    creature_ptr->esp_giant = is_esp_giant(creature_ptr);
-    creature_ptr->esp_dragon = is_esp_dragon(creature_ptr);
-    creature_ptr->esp_human = is_esp_human(creature_ptr);
-    creature_ptr->esp_good = is_esp_good(creature_ptr);
-    creature_ptr->esp_nonliving = is_esp_nonliving(creature_ptr);
-    creature_ptr->esp_unique = is_esp_unique(creature_ptr);
-    creature_ptr->telepathy = is_esp_telepathy(creature_ptr);
+    creature_ptr->pass_wall = has_pass_wall(creature_ptr);
+    creature_ptr->kill_wall = has_kill_wall(creature_ptr);
+    creature_ptr->xtra_might = has_xtra_might(creature_ptr);
+    creature_ptr->esp_evil = has_esp_evil(creature_ptr);
+    creature_ptr->esp_animal = has_esp_animal(creature_ptr);
+    creature_ptr->esp_undead = has_esp_undead(creature_ptr);
+    creature_ptr->esp_demon = has_esp_demon(creature_ptr);
+    creature_ptr->esp_orc = has_esp_orc(creature_ptr);
+    creature_ptr->esp_troll = has_esp_troll(creature_ptr);
+    creature_ptr->esp_giant = has_esp_giant(creature_ptr);
+    creature_ptr->esp_dragon = has_esp_dragon(creature_ptr);
+    creature_ptr->esp_human = has_esp_human(creature_ptr);
+    creature_ptr->esp_good = has_esp_good(creature_ptr);
+    creature_ptr->esp_nonliving = has_esp_nonliving(creature_ptr);
+    creature_ptr->esp_unique = has_esp_unique(creature_ptr);
+    creature_ptr->telepathy = has_esp_telepathy(creature_ptr);
     creature_ptr->bless_blade = has_bless_blade(creature_ptr);
     creature_ptr->easy_2weapon = has_easy2_weapon(creature_ptr);
     creature_ptr->down_saving = has_down_saving(creature_ptr);
@@ -354,12 +354,12 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->hold_exp = has_hold_exp(creature_ptr);
     creature_ptr->see_inv = has_see_inv(creature_ptr);
     creature_ptr->free_act = has_free_act(creature_ptr);
-    creature_ptr->sustain_str = is_sustain_str(creature_ptr);
-    creature_ptr->sustain_int = is_sustain_int(creature_ptr);
-    creature_ptr->sustain_wis = is_sustain_wis(creature_ptr);
-    creature_ptr->sustain_dex = is_sustain_dex(creature_ptr);
-    creature_ptr->sustain_con = is_sustain_con(creature_ptr);
-    creature_ptr->sustain_chr = is_sustain_chr(creature_ptr);
+    creature_ptr->sustain_str = has_sustain_str(creature_ptr);
+    creature_ptr->sustain_int = has_sustain_int(creature_ptr);
+    creature_ptr->sustain_wis = has_sustain_wis(creature_ptr);
+    creature_ptr->sustain_dex = has_sustain_dex(creature_ptr);
+    creature_ptr->sustain_con = has_sustain_con(creature_ptr);
+    creature_ptr->sustain_chr = has_sustain_chr(creature_ptr);
     creature_ptr->levitation = has_levitation(creature_ptr);
     has_can_swim(creature_ptr);
     creature_ptr->slow_digest = has_slow_digest(creature_ptr);
@@ -367,25 +367,25 @@ void calc_bonuses(player_type *creature_ptr)
     has_curses(creature_ptr);
     creature_ptr->impact = has_impact(creature_ptr);
     has_extra_blow(creature_ptr);
-    creature_ptr->resist_acid = is_resist_acid(creature_ptr);
-    creature_ptr->resist_elec = is_resist_elec(creature_ptr);
-    creature_ptr->resist_fire = is_resist_fire(creature_ptr);
-    creature_ptr->resist_cold = is_resist_cold(creature_ptr);
-    creature_ptr->resist_pois = is_resist_pois(creature_ptr);
-    creature_ptr->resist_conf = is_resist_conf(creature_ptr);
-    creature_ptr->resist_sound = is_resist_sound(creature_ptr);
-    creature_ptr->resist_lite = is_resist_lite(creature_ptr);
-    creature_ptr->resist_dark = is_resist_dark(creature_ptr);
-    creature_ptr->resist_chaos = is_resist_chaos(creature_ptr);
-    creature_ptr->resist_disen = is_resist_disen(creature_ptr);
-    creature_ptr->resist_shard = is_resist_shard(creature_ptr);
-    creature_ptr->resist_nexus = is_resist_nexus(creature_ptr);
-    creature_ptr->resist_blind = is_resist_blind(creature_ptr);
-    creature_ptr->resist_neth = is_resist_neth(creature_ptr);
-    creature_ptr->resist_time = is_resist_time(creature_ptr);
-    creature_ptr->resist_fear = is_resist_fear(creature_ptr);
-    creature_ptr->resist_time = is_resist_time(creature_ptr);
-    creature_ptr->resist_water = is_resist_water(creature_ptr);
+    creature_ptr->resist_acid = has_resist_acid(creature_ptr);
+    creature_ptr->resist_elec = has_resist_elec(creature_ptr);
+    creature_ptr->resist_fire = has_resist_fire(creature_ptr);
+    creature_ptr->resist_cold = has_resist_cold(creature_ptr);
+    creature_ptr->resist_pois = has_resist_pois(creature_ptr);
+    creature_ptr->resist_conf = has_resist_conf(creature_ptr);
+    creature_ptr->resist_sound = has_resist_sound(creature_ptr);
+    creature_ptr->resist_lite = has_resist_lite(creature_ptr);
+    creature_ptr->resist_dark = has_resist_dark(creature_ptr);
+    creature_ptr->resist_chaos = has_resist_chaos(creature_ptr);
+    creature_ptr->resist_disen = has_resist_disen(creature_ptr);
+    creature_ptr->resist_shard = has_resist_shard(creature_ptr);
+    creature_ptr->resist_nexus = has_resist_nexus(creature_ptr);
+    creature_ptr->resist_blind = has_resist_blind(creature_ptr);
+    creature_ptr->resist_neth = has_resist_neth(creature_ptr);
+    creature_ptr->resist_time = has_resist_time(creature_ptr);
+    creature_ptr->resist_fear = has_resist_fear(creature_ptr);
+    creature_ptr->resist_time = has_resist_time(creature_ptr);
+    creature_ptr->resist_water = has_resist_water(creature_ptr);
 
     creature_ptr->lite = has_lite(creature_ptr);
 
@@ -428,8 +428,8 @@ void calc_bonuses(player_type *creature_ptr)
     }
 
     for (int i = 0; i < 2; i++) {
-        creature_ptr->icky_wield[i] = is_icky_wield_weapon(creature_ptr, i);
-        creature_ptr->riding_wield[i] = is_riding_wield_weapon(creature_ptr, i);
+        creature_ptr->icky_wield[i] = has_icky_wield_weapon(creature_ptr, i);
+        creature_ptr->riding_wield[i] = has_riding_wield_weapon(creature_ptr, i);
         creature_ptr->num_blow[i] = calc_num_blow(creature_ptr, i);
         creature_ptr->to_dd[i] = calc_to_weapon_dice_num(creature_ptr, INVEN_RARM + i);
         creature_ptr->to_ds[i] = calc_to_weapon_dice_side(creature_ptr, INVEN_RARM + i);
@@ -1701,7 +1701,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
             div = ((o_ptr->weight < wgt) ? wgt : o_ptr->weight);
             str_index = (adj_str_blow[creature_ptr->stat_ind[A_STR]] * mul / div);
 
-            if (has_two_handed_weapons(creature_ptr) && !is_disable_two_handed_bonus(creature_ptr, 0))
+            if (has_two_handed_weapons(creature_ptr) && !has_disable_two_handed_bonus(creature_ptr, 0))
                 str_index++;
             if (creature_ptr->pclass == CLASS_NINJA)
                 str_index = MAX(0, str_index - 1);
@@ -1797,7 +1797,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
         num_blow += 1 + creature_ptr->extra_blows[0];
     }
 
-    if (is_not_ninja_weapon(creature_ptr, i)) {
+    if (has_not_ninja_weapon(creature_ptr, i)) {
         num_blow /= 2;
         if (num_blow < 1)
             num_blow = 1;
@@ -2996,7 +2996,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
 
     if (get_default_hand(creature_ptr) == id) {
         if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
-            || !is_disable_two_handed_bonus(creature_ptr, 0)) {
+            || !has_disable_two_handed_bonus(creature_ptr, 0)) {
             int bonus_to_d = 0;
             bonus_to_d = ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128) / 2;
             damage += MAX(bonus_to_d, 1);
@@ -3107,7 +3107,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
 
     hit += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
 
-    if (is_not_ninja_weapon(creature_ptr, id) || is_not_monk_weapon(creature_ptr, id)) {
+    if (has_not_ninja_weapon(creature_ptr, id) || has_not_monk_weapon(creature_ptr, id)) {
         hit -= 40;
     }
 
@@ -3118,7 +3118,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         }
 
         if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
-            || !is_disable_two_handed_bonus(creature_ptr, 0)) {
+            || !has_disable_two_handed_bonus(creature_ptr, 0)) {
             int bonus_to_h = 0;
             bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
             hit += MAX(bonus_to_h, 1);
