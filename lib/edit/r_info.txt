@@ -24902,3 +24902,53 @@ D:「風船、欲しいだろう？」
 D:　相手が恐怖心を抱くものに姿を変えることができる未知の生命体だ。
 D:ピエロの姿もその一つに過ぎない。
 D:それに下に引きずり込まれるとあなたもプカプカ浮かぶ。
+
+# 龍虫の分裂によってのみ生成される
+N:1255:単龍虫
+E:Dragon insect
+G:c:v
+I:120:25d20:30:150:10
+W:61:255:0:2500:0:0
+B:GAZE:ACID:7d14
+B:GAZE:ACID:7d14
+F:FORCE_MAXHP | ANIMAL | RAND_50 | RAND_25 | WEIRD_MIND | CAN_SWIM
+F:IM_ACID | IM_POIS | RES_PLAS | RES_DISE | RES_WALL | RES_GRAV
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:ONLY_ITEM | DROP_GOOD | DROP_1D2 | DROP_90
+S:1_IN_3 | BA_ACID
+D:この龍虫が多数合体すると百足龍虫になる。
+D:百足龍虫時の脊髄にあたる部分には眼と思われる器官がついている。
+
+# 百足龍虫の分裂によってのみ生成される
+N:1256:龍虫
+E:Dragon worm
+G:c:v
+I:120:50d20:30:150:10
+W:61:255:0:5500:0:0
+B:CRUSH:HURT:5d12
+B:GAZE:ACID:7d14
+B:GAZE:ACID:7d14
+F:FORCE_MAXHP | ANIMAL | RAND_50 | RAND_25 | WEIRD_MIND | CAN_FLY | POWERFUL
+F:IM_ACID | IM_POIS | RES_PLAS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:ONLY_ITEM | DROP_GOOD | DROP_3D2
+S:1_IN_3 | BA_ACID
+D:巨大な百足の正体は多数の巨大生物が合体した生物だった。
+D:百足龍虫から分離した群体は独立した龍虫として活動を始める。
+
+N:1257:百足龍虫
+E:Dragon centipede
+G:c:v
+I:120:100d20:30:150:10
+W:61:3:0:8500:0:0
+D:巨大生物の最終進化形態、ビルよりも高く長い全長を持つ雄大なムカデだ。
+D:無数の突飛から土砂降りのように酸を降り注がせる。
+B:CRUSH:HURT:5d12
+B:CRUSH:HURT:5d12
+B:GAZE:ACID:7d14
+B:GAZE:ACID:7d14
+F:FORCE_MAXHP | ANIMAL | RAND_50 | RAND_25 | WEIRD_MIND | CAN_FLY | POWERFUL
+F:IM_ACID | IM_COLD | IM_POIS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:ONLY_ITEM | DROP_GOOD | DROP_4D2 | DROP_2D2
+S:1_IN_3 | BA_ACID
