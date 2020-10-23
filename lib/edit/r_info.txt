@@ -24759,7 +24759,7 @@ D:$This devout Buddhist created every information apples
 D:$ with LSD's inspiration.
 D:$His obsession was terrifying and he sought too much perfection,
 D:$ so he had fired too many employees.
-D:この敬虔な仏教徒は幻覚によるインスピレーションで
+D:この敬虔な仏教徒はログルスの幻覚によるインスピレーションで
 D:あらゆる品種のリンゴを作り上げた。
 D:彼の執念は凄まじく、完璧を求めるがあまり組織が機能不全に陥ることがあった。
 
@@ -24916,6 +24916,10 @@ F:IM_ACID | IM_POIS | RES_PLAS | RES_DISE | RES_WALL | RES_GRAV
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:ONLY_ITEM | DROP_GOOD | DROP_1D2 | DROP_90
 S:1_IN_3 | BA_ACID
+D:$When many of these dragon insects are united, it becomes a dragon centipede.
+D:$  The part that corresponds to the spinal cord
+D:$ when it was integrated as a dragon centipede
+D:$ has an organ that seems to be the eye.
 D:この龍虫が多数合体すると百足龍虫になる。
 D:百足龍虫時の脊髄にあたる部分には眼と思われる器官がついている。
 
@@ -24933,6 +24937,10 @@ F:IM_ACID | IM_POIS | RES_PLAS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:ONLY_ITEM | DROP_GOOD | DROP_3D2
 S:1_IN_3 | BA_ACID
+D:$The identity of the giant centipede
+D:$ was a combination of many giant creatures.
+D:$The colony separated from the dragon centipede begins its activity
+D:$ as an independent dragon worm.
 D:巨大な百足の正体は多数の巨大生物が合体した生物だった。
 D:百足龍虫から分離した群体は独立した龍虫として活動を始める。
 
@@ -24941,8 +24949,6 @@ E:Dragon centipede
 G:c:v
 I:120:100d20:30:150:10
 W:61:3:0:8500:0:0
-D:巨大生物の最終進化形態、ビルよりも高く長い全長を持つ雄大なムカデだ。
-D:無数の突飛から土砂降りのように酸を降り注がせる。
 B:CRUSH:HURT:5d12
 B:CRUSH:HURT:5d12
 B:GAZE:ACID:7d14
@@ -24952,3 +24958,8 @@ F:IM_ACID | IM_COLD | IM_POIS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:ONLY_ITEM | DROP_GOOD | DROP_4D2 | DROP_2D2
 S:1_IN_3 | BA_ACID
+D:$It is the final evolution of a giant creature,
+D:$ a magnificent centipede that is taller and longer than the WTC.
+D:$  It pours acid like a downpour from countless outrages.
+D:巨大生物の最終進化形態、ビルよりも高く長い全長を持つ雄大なムカデだ。
+D:無数の突飛から土砂降りのように酸を降り注がせる。
