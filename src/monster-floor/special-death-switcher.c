@@ -269,6 +269,30 @@ static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_p
     summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("新たなモアイが現れた！", "A new moai steps forth!"));
 }
 
+static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
+        return;
+
+    bool notice = FALSE;
+    const int reproduced_centipede = 2;
+    MONRACE_IDX centipede_idx = md_ptr->m_ptr->r_idx;
+    for (int i = 0; i < reproduced_centipede; i++) {
+        POSITION wy = md_ptr->md_y;
+        POSITION wx = md_ptr->md_x;
+        bool pet = is_pet(md_ptr->m_ptr);
+        BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+        MONSTER_IDX smaller_bubblle = centipede_idx - 1;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubblle, mode) && player_can_see_bold(player_ptr, wy, wx))
+            notice = TRUE;
+    }
+
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+    if (notice)
+        msg_format(_("%sが再生した！", "The %s was reproduced!"), m_name);
+}
+
 static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (!md_ptr->drop_chosen_item)
@@ -277,7 +301,7 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
     switch (md_ptr->r_ptr->d_char) {
     case '(': {
         if (player_ptr->current_floor_ptr->dun_level <= 0)
-            break;
+            return;
 
         object_type forge;
         object_type *q_ptr = &forge;
@@ -289,7 +313,7 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
     }
     case '/': {
         if (player_ptr->current_floor_ptr->dun_level <= 4)
-            break;
+            return;
 
         object_type forge;
         object_type *q_ptr = &forge;
@@ -297,11 +321,11 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
         get_obj_num_hook = kind_is_polearm;
         make_object(player_ptr, q_ptr, md_ptr->mo_mode);
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
+        return;
     }
     case '[': {
         if (player_ptr->current_floor_ptr->dun_level <= 19)
-            break;
+            return;
 
         object_type forge;
         object_type *q_ptr = &forge;
@@ -309,11 +333,11 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
         get_obj_num_hook = kind_is_armor;
         make_object(player_ptr, q_ptr, md_ptr->mo_mode);
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
+        return;
     }
     case '\\': {
         if (player_ptr->current_floor_ptr->dun_level <= 4)
-            break;
+            return;
 
         object_type forge;
         object_type *q_ptr = &forge;
@@ -321,11 +345,11 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
         get_obj_num_hook = kind_is_hafted;
         make_object(player_ptr, q_ptr, md_ptr->mo_mode);
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
+        return;
     }
     case '|': {
         if (md_ptr->m_ptr->r_idx == MON_STORMBRINGER)
-            break;
+            return;
 
         object_type forge;
         object_type *q_ptr = &forge;
@@ -333,8 +357,10 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
         get_obj_num_hook = kind_is_sword;
         make_object(player_ptr, q_ptr, md_ptr->mo_mode);
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
+        return;
     }
+    default:
+        return;
     }
 }
 
@@ -384,6 +410,10 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         return;
     case MON_TOTEM_MOAI:
         on_dead_totem_moai(player_ptr, md_ptr);
+        return;
+    case MON_DRAGON_CENTIPEDE:
+    case MON_DRAGON_WORM:
+        on_dead_dragon_centipede(player_ptr, md_ptr);
         return;
     default:
         on_dead_mimics(player_ptr, md_ptr);
