@@ -63,7 +63,7 @@ static void calc_blow_disenchant(player_type *target_ptr, monap_type *monap_ptr)
         monap_ptr->obvious = TRUE;
     }
 
-    if (is_resist_disen(target_ptr))
+    if (has_resist_disen(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
 
     monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
@@ -115,7 +115,7 @@ static void calc_blow_un_power(player_type *target_ptr, monap_type *monap_ptr)
  */
 static void calc_blow_blind(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (is_resist_blind(target_ptr))
+    if (has_resist_blind(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
 
     monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
@@ -137,7 +137,7 @@ static void calc_blow_confusion(player_type *target_ptr, monap_type *monap_ptr)
     if (monap_ptr->explode)
         return;
 
-    if (is_resist_conf(target_ptr))
+    if (has_resist_conf(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
 
     monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
@@ -158,7 +158,7 @@ static void calc_blow_confusion(player_type *target_ptr, monap_type *monap_ptr)
  */
 static void calc_blow_fear(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (is_resist_fear(target_ptr))
+    if (has_resist_fear(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
 
     monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
@@ -202,7 +202,7 @@ static void calc_blow_drain_exp(player_type *target_ptr, monap_type *monap_ptr, 
     if (has_hold_exp(target_ptr))
         damage_ratio -= 75;
 
-    if (is_resist_neth(target_ptr))
+    if (has_resist_neth(target_ptr))
         damage_ratio -= 75;
 
     monap_ptr->damage = monap_ptr->damage * damage_ratio / 1000;
@@ -225,7 +225,7 @@ static void calc_blow_time(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     process_monster_attack_time(target_ptr, monap_ptr);
-    if (is_resist_time(target_ptr))
+    if (has_resist_time(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
 
     monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);

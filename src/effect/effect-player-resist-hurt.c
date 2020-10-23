@@ -139,7 +139,7 @@ void effect_player_plasma(player_type *target_ptr, effect_player_type *ep_ptr)
         (void)set_stun(target_ptr, target_ptr->stun + plus_stun);
     }
 
-    if (!(target_ptr->resist_fire || is_oppose_fire(target_ptr) || is_immune_fire(target_ptr)))
+    if (!(target_ptr->resist_fire || is_oppose_fire(target_ptr) || has_immune_fire(target_ptr)))
         inventory_damage(target_ptr, set_acid_destroy, 3);
 }
 
@@ -544,7 +544,7 @@ void effect_player_meteor(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
     if (!target_ptr->resist_shard || one_in_(13)) {
-        if (!is_immune_fire(target_ptr))
+        if (!has_immune_fire(target_ptr))
             inventory_damage(target_ptr, set_fire_destroy, 2);
         inventory_damage(target_ptr, set_cold_destroy, 2);
     }
@@ -568,7 +568,7 @@ void effect_player_icee(player_type *target_ptr, effect_player_type *ep_ptr)
     }
 
     if ((!(target_ptr->resist_cold || is_oppose_cold(target_ptr))) || one_in_(12)) {
-        if (!is_immune_cold(target_ptr))
+        if (!has_immune_cold(target_ptr))
             inventory_damage(target_ptr, set_cold_destroy, 3);
     }
 }
