@@ -249,8 +249,8 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
         POSITION wx = md_ptr->md_x;
         bool pet = is_pet(md_ptr->m_ptr);
         BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
-        MONSTER_IDX smaller_bubblle = md_ptr->m_ptr->r_idx - 1;
-        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubblle, mode) && player_can_see_bold(player_ptr, wy, wx))
+        MONSTER_IDX smaller_bubble = md_ptr->m_ptr->r_idx - 1;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubble, mode) && player_can_see_bold(player_ptr, wy, wx))
             notice = TRUE;
     }
 
@@ -267,6 +267,29 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
 static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_ptr)
 {
     summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("新たなモアイが現れた！", "A new moai steps forth!"));
+}
+
+static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
+        return;
+
+    bool notice = FALSE;
+    const int reproduced_centipede = 2;
+    for (int i = 0; i < reproduced_centipede; i++) {
+        POSITION wy = md_ptr->md_y;
+        POSITION wx = md_ptr->md_x;
+        bool pet = is_pet(md_ptr->m_ptr);
+        BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+        MONSTER_IDX smaller_centipede = md_ptr->m_ptr->r_idx - 1;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_centipede, mode) && player_can_see_bold(player_ptr, wy, wx))
+            notice = TRUE;
+    }
+
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+    if (notice)
+        msg_format(_("%sが再生した！", "The %s was reproduced!"), m_name);
 }
 
 static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)

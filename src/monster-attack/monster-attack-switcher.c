@@ -321,18 +321,14 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_UN_POWER:
         calc_blow_un_power(target_ptr, monap_ptr);
         break;
-    case RBE_EAT_GOLD: {
+    case RBE_EAT_GOLD:
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
-        if (monster_confused_remaining(monap_ptr->m_ptr))
-            break;
-
-        if (target_ptr->is_dead || check_multishadow(target_ptr))
+        if (monster_confused_remaining(monap_ptr->m_ptr) || target_ptr->is_dead || check_multishadow(target_ptr))
             break;
 
         monap_ptr->obvious = TRUE;
         process_eat_gold(target_ptr, monap_ptr);
         break;
-    }
     case RBE_EAT_ITEM: {
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
         if (!check_eat_item(target_ptr, monap_ptr))
@@ -469,13 +465,12 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_INERTIA:
         calc_blow_inertia(target_ptr, monap_ptr);
         break;
-    case RBE_STUN: {
+    case RBE_STUN:
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
         if (target_ptr->is_dead)
             break;
 
         process_stun_attack(target_ptr, monap_ptr);
         break;
-    }
     }
 }
