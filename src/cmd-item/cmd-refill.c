@@ -13,6 +13,9 @@
 #include "status/action-setter.h"
 #include "sv-definition/sv-lite-types.h"
 #include "view/display-messages.h"
+#include "object-enchant/tr-types.h"
+#include "object/object-flags.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief ランタンに燃料を加えるコマンドのメインルーチン
@@ -31,14 +34,18 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
     if (!o_ptr)
         return;
 
+    BIT_FLAGS flgs[TR_FLAG_SIZE], flgs2[TR_FLAG_SIZE];
+    object_flags(user_ptr, o_ptr, flgs);
+
     take_turn(user_ptr, 50);
     j_ptr = &user_ptr->inventory_list[INVEN_LITE];
+    object_flags(user_ptr, j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4;
     msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
-    if ((o_ptr->name2 == EGO_LITE_DARKNESS) && (j_ptr->xtra4 > 0)) {
+    if (has_flag(flgs, TR_DARK_SOURCE) && (j_ptr->xtra4 > 0)) {
         j_ptr->xtra4 = 0;
         msg_print(_("ランプが消えてしまった！", "Your lamp has gone out!"));
-    } else if ((o_ptr->name2 == EGO_LITE_DARKNESS) || (j_ptr->name2 == EGO_LITE_DARKNESS)) {
+    } else if (has_flag(flgs, TR_DARK_SOURCE) || has_flag(flgs2, TR_DARK_SOURCE)) {
         j_ptr->xtra4 = 0;
         msg_print(_("しかしランプは全く光らない。", "Curiously, your lamp doesn't light."));
     } else if (j_ptr->xtra4 >= FUEL_LAMP) {
@@ -67,14 +74,18 @@ static void do_cmd_refill_torch(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
+    BIT_FLAGS flgs[TR_FLAG_SIZE], flgs2[TR_FLAG_SIZE];
+    object_flags(creature_ptr, o_ptr, flgs);
+
     take_turn(creature_ptr, 50);
     j_ptr = &creature_ptr->inventory_list[INVEN_LITE];
+    object_flags(creature_ptr, j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4 + 5;
     msg_print(_("松明を結合した。", "You combine the torches."));
-    if ((o_ptr->name2 == EGO_LITE_DARKNESS) && (j_ptr->xtra4 > 0)) {
+    if (has_flag(flgs, TR_DARK_SOURCE) && (j_ptr->xtra4 > 0)) {
         j_ptr->xtra4 = 0;
         msg_print(_("松明が消えてしまった！", "Your torch has gone out!"));
-    } else if ((o_ptr->name2 == EGO_LITE_DARKNESS) || (j_ptr->name2 == EGO_LITE_DARKNESS)) {
+    } else if (has_flag(flgs, TR_DARK_SOURCE) || has_flag(flgs2, TR_DARK_SOURCE)) {
         j_ptr->xtra4 = 0;
         msg_print(_("しかし松明は全く光らない。", "Curiously, your torch doesn't light."));
     } else if (j_ptr->xtra4 >= FUEL_TORCH) {

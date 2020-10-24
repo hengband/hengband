@@ -28,6 +28,10 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include "player/player-status-resist.h"
+#include "util/bit-flags-calculator.h"
+#include "object/object-flags.h"
+#include "object-enchant/tr-types.h"
+
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
@@ -74,9 +78,12 @@ void process_player_hp_mp(player_type *creature_ptr)
             }
         }
 
-        if (creature_ptr->inventory_list[INVEN_LITE].tval && (creature_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS)
-            && !creature_ptr->resist_lite) {
-            object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
+        object_type *o_ptr;
+        o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (creature_ptr->inventory_list[INVEN_LITE].tval && !has_flag(flgs, TR_DARK_SOURCE) && !creature_ptr->resist_lite) {
             GAME_TEXT o_name[MAX_NLEN];
             char ouch[MAX_NLEN + 40];
             describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
