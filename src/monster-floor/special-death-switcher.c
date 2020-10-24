@@ -249,8 +249,8 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
         POSITION wx = md_ptr->md_x;
         bool pet = is_pet(md_ptr->m_ptr);
         BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
-        MONSTER_IDX smaller_bubblle = md_ptr->m_ptr->r_idx - 1;
-        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubblle, mode) && player_can_see_bold(player_ptr, wy, wx))
+        MONSTER_IDX smaller_bubble = md_ptr->m_ptr->r_idx - 1;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubble, mode) && player_can_see_bold(player_ptr, wy, wx))
             notice = TRUE;
     }
 
@@ -276,14 +276,13 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
 
     bool notice = FALSE;
     const int reproduced_centipede = 2;
-    MONRACE_IDX centipede_idx = md_ptr->m_ptr->r_idx;
     for (int i = 0; i < reproduced_centipede; i++) {
         POSITION wy = md_ptr->md_y;
         POSITION wx = md_ptr->md_x;
         bool pet = is_pet(md_ptr->m_ptr);
         BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
-        MONSTER_IDX smaller_bubblle = centipede_idx - 1;
-        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubblle, mode) && player_can_see_bold(player_ptr, wy, wx))
+        MONSTER_IDX smaller_centipede = md_ptr->m_ptr->r_idx - 1;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_centipede, mode) && player_can_see_bold(player_ptr, wy, wx))
             notice = TRUE;
     }
 
