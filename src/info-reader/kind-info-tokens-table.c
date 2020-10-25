@@ -156,6 +156,7 @@ concptr k_info_flags[NUM_K_FLAGS] = {
     "RES_TIME",
     "RES_WATER",
     "INVULN_ARROW",
+    "DARK_SOURCE",
 };
 
 /*!
