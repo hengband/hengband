@@ -24964,3 +24964,23 @@ D:$ a magnificent centipede that is taller and longer than the WTC.
 D:$  It pours acid like a downpour from countless outrages.
 D:巨大生物の最終進化形態、ビルよりも高く長い全長を持つ雄大なムカデだ。
 D:無数の突飛から土砂降りのように酸を降り注がせる。
+
+N:1258:『ロボ・ガンダルフ』
+E:Robo-Gandalf
+G:g:s
+I:120:55d50:20:140:30
+W:52:3:0:15000:0:0
+B:CRUSH:SUPERHURT:6d12
+B:PUNCH:SUPERHURT:6d12
+B:KICK:SUPERHURT:6d12
+B:SLASH:SHATTER:6d12
+F:UNIQUE | FORCE_MAXHP | NONLIVING | WEIRD_MIND | EVIL
+F:IM_FIRE | IM_COLD | IM_POIS | RES_NETH | RES_DARK
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | REFLECTING
+F:ONLY_ITEM | DROP_GOOD | DROP_4D2
+S:1_IN_10 | SCARE | BO_PLAS
+D:$It's a nightmare robot in the shape of a gray wizard,
+D:$ as if it was created by an evil organization.
+D:$  Be humble about the power of this machine!
+D:悪の組織によって造られたかのような、灰色の魔法使いの姿をした悪夢的ロボットだ。
+D:機械の力を畏れよ！
