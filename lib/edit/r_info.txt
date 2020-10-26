@@ -23196,10 +23196,11 @@ D:不気味な動きをして撃ち返してくる巨大な泡だ。逃げるか
 N:1159:プチモアイ
 E:Small Moai
 G:g:s
-I:120:15d15:10:50:10
+I:120:10d10:10:50:10
 W:34:50:0:250:0:0
 B:CRUSH:HURT:8d8
-F:IM_ELEC | HURT_ROCK | RES_GRAV | DROP_60 | DROP_1D2 | ONLY_GOLD
+F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV
+F:DROP_60 | DROP_1D2 | ONLY_GOLD
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 S:1_IN_2 | BR_ELEC | BR_PLAS
 D:$ Do NOT get behind this Moai!
@@ -23210,7 +23211,8 @@ E:Moai
 G:g:U
 I:105:30d25:10:85:50
 W:40:1:0:700:0:0
-F:IM_ELEC | HURT_ROCK | RES_TELE | RES_GRAV | FRIENDS | FORCE_SLEEP | DROP_90
+F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | RES_TELE
+F:FRIENDS | FORCE_SLEEP | DROP_90
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:NEVER_MOVE | NEVER_BLOW
 S:1_IN_2 | BR_ELEC | BR_PLAS
@@ -23223,7 +23225,7 @@ E:Totem Moai
 G:g:U
 I:110:20d20:10:90:30
 W:40:1:0:750:0:0
-F:IM_ELEC | HURT_ROCK | RES_TELE | RES_GRAV | DROP_90
+F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | RES_TELE | DROP_90
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:NEVER_MOVE | NEVER_BLOW
 S:1_IN_2 | BR_ELEC | BR_PLAS
@@ -23238,13 +23240,14 @@ I:120:60d50:25:100:20
 W:49:1:0:11000:0:0
 B:CRUSH:SUPERHURT:12d15
 F:UNIQUE | FORCE_MAXHP | NEVER_MOVE
-F:IM_ELEC | RES_GRAV | RES_TELE | ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT
+F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | RES_TELE
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 S:1_IN_2 | S_KIN | HOLD | CONF | BLIND | HEAL
 D:$It is a mighty thug from the Bacterian army. It summons many small Moais.
 D:バクテリアン軍が放った強大な刺客だ。それは大量のプチモアイを生み出す。
 
-# テストプレイした結果、戦士なら毒針なしでもギリギリ刺さった
+# テストプレイした結果、戦士＆レンジャーなら毒針なしでも刺さった
 # メイジ系は塔2F＆クローン地獄に毒針必須かも
 N:1163:クリスタル・キューブ
 E:Crystal cube
@@ -23966,7 +23969,7 @@ D:かつて強大な力を誇っていたワイアームの怨霊だ。
 N:1201:グレート・クリスタル・ドレイク
 E:Great Crystal Drake
 G:D:B
-I:120:30d90:25:110:30
+I:120:80d30:25:110:30
 W:54:2:0:18000:0:0
 B:CLAW:HURT:9d9
 B:CLAW:HURT:9d9
@@ -23987,7 +23990,7 @@ D:それが動くと光が反射して体中が奇妙な色にきらめく。
 N:1202:グレート・ロア・ドレイク
 E:Great Roar Drake
 G:D:o
-I:120:30d90:25:110:30
+I:120:80d30:25:110:30
 W:54:2:0:18000:0:0
 B:CLAW:HURT:8d9
 B:CLAW:HURT:8d9
@@ -24371,7 +24374,7 @@ B:SLASH:POISON:9d9
 B:SLASH:POISON:9d7
 F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90 | ONLY_ITEM
 F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
-S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD
+S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD | BLIND
 D:$A falmel holding a sword and shield made of chaurus shell.
 D:シャウラスの殻でできた剣と盾を手にしたファルメルだ。
 
@@ -24386,7 +24389,7 @@ B:SLASH:POISON:12d10
 B:SLASH:POISON:12d10
 F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_90 | DROP_1D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
-S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD
+S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD | BLIND
 D:$A well-trained falmer heavy warrior.
 D:鍛え上げたファルメルの重戦士だ。
 
@@ -24401,7 +24404,7 @@ B:SLASH:POISON:14d11
 B:SLASH:POISON:14d11
 F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_1D2 | DROP_2D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
-S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
 D:$A falmer who even wore magic.
 D:$  You had better stay away from the detour.
 D:魔術すら身に着けたファルメルだ。迂闊には近寄らない方がいい。
@@ -24417,7 +24420,7 @@ B:SLASH:POISON:17d11
 B:SLASH:POISON:17d11
 F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_2D2 | DROP_3D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
-S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
 D:$It is the strongest falmer among general soldiers.
 D:一般兵士の中では最強のファルメルだ。
 
@@ -24431,7 +24434,7 @@ B:SLASH:POISON:14d10
 F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_60 | DROP_90 | DROP_1D2 | ONLY_ITEM | ESCORT
 F:SMART | POWERFUL | IM_POIS | RES_LITE | RES_DARK
-S:1_IN_8 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | S_KIN
+S:1_IN_8 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
 D:$Falmer's nose sniffs any adventurer's nose.
 D:ファルメルの鼻はどんな冒険者の匂いも嗅ぎ分ける。
 
@@ -24446,7 +24449,7 @@ B:SLASH:POISON:11d10
 F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_60 | DROP_90 | DROP_2D2 | ONLY_ITEM | ESCORT
 F:IM_POIS | RES_LITE | RES_DARK
-S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
 D:$It has a lot of treasure, but it would be a foolish idea to go hunting.
 D:それは財宝をいくつも抱えているが、探りに行くのは愚策だろう。
 
@@ -24462,7 +24465,7 @@ B:SLASH:POISON:13d11
 F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_60 | DROP_90 | DROP_3D2 | ONLY_ITEM | ESCORT
 F:IM_POIS | RES_LITE | RES_DARK
-S:1_IN_5 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+S:1_IN_5 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
 D:$It's finally dangerous falmer.
 D:$  Be careful not to chop it with a poisonous blade!
 D:いよいよ危険なファルメルだ。毒の刃で切り刻まれないように気をつけろ！
@@ -24479,7 +24482,7 @@ B:SLASH:POISON:18d11
 F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_3D2 | DROP_4D2 | ONLY_ITEM | ESCORT
 F:IM_POIS | RES_LITE | RES_DARK
-S:1_IN_4 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+S:1_IN_4 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
 D:$It's an extremely dangerous falmer.
 D:$ In exchange for visibility, a powerful blow is delivered.
 D:極めて危険なファルメルの一体だ。視界と引き換えに強烈な一撃を繰り出してくる。
@@ -24496,7 +24499,7 @@ B:SLASH:POISON:21d11
 F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_2D2 | DROP_3D2 | DROP_4D2 | ONLY_ITEM | ESCORT
 F:IM_POIS | RES_LITE | RES_DARK
-S:1_IN_3 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD
+S:1_IN_3 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
 D:$It is the strongest falmer with many genus.
 D:$  It will be shredded before it gets closer!
 D:数多の眷属を抱える最強のファルメルだ。近づく前に細切れにされてしまうだろう！
