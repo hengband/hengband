@@ -24984,3 +24984,82 @@ D:$ as if it was created by an evil organization.
 D:$  Be humble about the power of this machine!
 D:悪の組織によって造られたかのような、灰色の魔法使いの姿をした悪夢的ロボットだ。
 D:機械の力を畏れよ！
+
+N:1259:無敵の恐れ知らずの官能的なる不可思議なる魅惑の頑健なる勤勉なる圧倒的なる華麗なる情熱の恐るべき美しき強力なる灰色の王子『強靭なるゾート』
+E:TOUGH ZOTE, the INVINCIBLE FEARLESS SENSUAL MYSTERIOUS ENCHANTING VIGOROUS DILIGENT OVERWHELMING GORGEOUS PASSIONATE TERRIFYING BEAUTIFUL POWERFUL GREY PRINCE
+G:I:s
+I:130:70d100:20:170:50
+W:76:3:0:36500:0:0
+B:SLASH:HURT:15d15
+B:SLASH:HURT:15d15
+B:CRUSH:SUPERHURT:16d10
+B:CRUSH:SUPERHURT:16d10
+S:1_IN_3 |
+S:SHRIEK | BA_FIRE | PSY_SPEAR | S_KIN
+F:UNIQUE | MALE | DROP_CORPSE | FORCE_MAXHP | FORCE_SLEEP
+F:NONLIVING | CAN_SPEAK | POWERFUL
+F:ONLY_ITEM | DROP_1D2 | DROP_3D2 | DROP_GOOD | DROP_GREAT
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_LITE | RES_DARK
+F:NO_STUN | NO_FEAR | NO_CONF | NO_SLEEP | REGENERATE
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY | MOVE_BODY
+D:$The illusion of a brave man created by Bretta's fantasy
+D:$ and Zote's obsession.
+D:$  Every time he defeats Zote in his dream,
+D:$ he becomes more obsessed, and on the contrary, Bretta's dream awakens.
+D:ブレッタの夢想とゾートの執着心が生み出した、勇者の幻影。
+D:倒す度に夢の中のゾートは執念を増し、それと反対にブレッタの夢は醒めていく。 
+
+N:1260:天使・クイルスルグ
+E:Engel quylthulg
+G:Q:w
+I:120:48d10:20:1:0
+W:51:1:0:3000:0:0
+F:FORCE_SLEEP | FORCE_MAXHP | NEVER_MOVE | NEVER_BLOW | INVISIBLE
+F:EMPTY_MIND | ANIMAL | GOOD | STUPID | NO_CONF | NO_SLEEP | NO_FEAR
+S:1_IN_2 | BLINK | TPORT | S_ANGEL
+D:$The wreckage of an angel is a mass united by evil magic.
+D:$  It is pulsing divinely and horribly.
+D:天使の残骸が、邪悪な魔法で結合した塊だ。それは神々しくも禍々しく脈打っている。
+
+N:1261:グレーター・クイルスルグ
+E:Greater quylthulg
+G:Q:s
+I:120:15d100:20:1:0
+W:71:3:0:10500:0:0
+F:FORCE_SLEEP | FORCE_MAXHP | NEVER_MOVE | NEVER_BLOW | INVISIBLE
+F:EMPTY_MIND | STUPID | RES_TELE | NO_CONF | NO_SLEEP | NO_FEAR
+S:1_IN_2 | BLINK | TELE_TO | S_MONSTERS
+D:$It is a strong pulsing mound of flesh.
+D:それは脈打つ強力な肉の塊だ。 
+
+N:1262:ケット・シー
+E:Cait Sith
+G:f:B
+I:120:40d50:30:80:80
+W:49:3:0:6000:0:0
+B:SLASH:HURT:8d8
+B:SLASH:HURT:8d8
+B:SLASH:HURT:45d1
+F:MALE | FORCE_SLEEP | ONLY_ITEM | ANIMAL
+F:REGENERATE | OPEN_DOOR | MOVE_BODY | TAKE_ITEM | DROP_1D2 | DROP_CORPSE 
+F:IM_ACID | IM_ELEC | IM_COLD | IM_FIRE | IM_POIS
+S:1_IN_4 |
+S:HASTE | HEAL | CAUSE_2 |
+D:$A fairy cat that walks on two legs and understands human language.
+D:$This Cait Sith is like a swordfighter who serves the cat kingdom
+D:$I see you as a prey to give to the king.
+D:二足で歩き、人語を解す妖精猫。
+D:このケット・シーは猫の王国に仕える剣士のようだ。
+D:あなたを王に献上する獲物と見なしている。
+
+N:1263:招き猫
+E:Beckoning cat
+G:f:s
+I:112:37d6:22:22:22
+W:22:2:0:22:0:0
+F:FORCE_MAXHP | NEVER_MOVE | EMPTY_MIND | RES_SHAR
+F:NO_CONF | NO_SLEEP | NO_FEAR | NEVER_BLOW
+S:1_IN_5 | TELE_TO | S_KIN
+D:$It's a cat figurine made of pottery!
+D:$  When it beckons, you will get a lot of money!
+D:陶器でできた猫の置物だ！手招きするとがっぽがっぽだ！
