@@ -94,7 +94,7 @@ static void on_dead_pink_horror(player_type *player_ptr, monster_death_type *md_
         msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
 }
 
-static void on_dead_bloodletter(player_type* player_ptr, monster_death_type* md_ptr)
+static void on_dead_bloodletter(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (!md_ptr->drop_chosen_item || (randint1(100) >= 15))
         return;
@@ -176,7 +176,7 @@ static void on_dead_sacred_treasures(player_type *player_ptr, monster_death_type
 
         return;
     }
-    
+
     if (!preserve_mode)
         a_ptr->cur_num = 1;
 }
@@ -292,6 +292,16 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
         msg_format(_("%sが再生した！", "The %s was reproduced!"), m_name);
 }
 
+static void on_dead_cait_sith(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    object_type forge;
+    object_type *q_ptr = &forge;
+    object_wipe(q_ptr);
+    get_obj_num_hook = kind_is_boots;
+    (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
+    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+}
+
 static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (!md_ptr->drop_chosen_item)
@@ -306,7 +316,7 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
         object_type *q_ptr = &forge;
         object_wipe(q_ptr);
         get_obj_num_hook = kind_is_cloak;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
+        (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
         break;
     }
@@ -414,6 +424,8 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_DRAGON_WORM:
         on_dead_dragon_centipede(player_ptr, md_ptr);
         return;
+    case MON_CAIT_SITH:
+        on_dead_cait_sith(player_ptr, md_ptr);
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;

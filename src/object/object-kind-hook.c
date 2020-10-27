@@ -83,10 +83,21 @@ bool kind_is_armor(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_HARD
  */
 bool kind_is_hafted(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_HAFTED; }
 
-/*
- * Hack -- determine if a template is potion
+/*!
+ * @brief オブジェクトが薬かどうかを判定する /
+ * Hack -- determine if a template is hafted weapon
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトが薬ならばTRUEを返す
  */
 bool kind_is_potion(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_POTION; }
+
+/*!
+ * @brief オブジェクトが靴かどうかを判定する /
+ * Hack -- determine if a template is hafted weapon
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトが薬ならばTRUEを返す
+ */
+bool kind_is_boots(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_BOOTS; }
 
 /*!
  * @brief ベースアイテムが上質として扱われるかどうかを返す。
