@@ -95,7 +95,7 @@ bool kind_is_potion(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_POT
  * @brief オブジェクトが靴かどうかを判定する /
  * Hack -- determine if a template is hafted weapon
  * @param k_idx 判定したいオブジェクトのベースアイテムID
- * @return オブジェクトが薬ならばTRUEを返す
+ * @return オブジェクトが靴ならばTRUEを返す
  */
 bool kind_is_boots(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_BOOTS; }
 
