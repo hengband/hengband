@@ -25040,7 +25040,7 @@ W:49:3:0:6000:0:0
 B:SLASH:HURT:8d8
 B:SLASH:HURT:8d8
 B:SLASH:HURT:45d1
-F:MALE | FORCE_SLEEP |  ANIMAL
+F:MALE | FORCE_SLEEP | ANIMAL
 F:REGENERATE | OPEN_DOOR | MOVE_BODY | TAKE_ITEM | DROP_CORPSE 
 F:IM_ACID | IM_ELEC | IM_COLD | IM_FIRE | IM_POIS
 S:1_IN_4 |
@@ -25063,3 +25063,18 @@ S:1_IN_5 | TELE_TO | S_KIN
 D:$It's a cat figurine made of pottery!
 D:$  When it beckons, you will get a lot of money!
 D:陶器でできた猫の置物だ！手招きするとがっぽがっぽだ！
+
+N:1264:★シヴァの化身の軟革ブーツ (+5,+5) [4,16] (+4加速) {+速器r因;麻浮(器}
+E:The Pair of Soft Leather Boots of Shiva's Avatar (+5,+5) [4,+16] (+4 to speed) {SpDx;Nx;FaLv(Dx}
+G:]:U
+I:140:35d24:10:80:5
+W:45:4:0:1000:0:0
+B:KICK:UN_BONUS:15d15
+B:KICK:LOSE_DEX:15d15
+B:KICK:ACID:15d15
+B:KICK:PARALYZE:15d15
+F:FORCE_MAXHP | NEVER_MOVE | EMPTY_MIND | CAN_FLY
+F:NO_SLEEP | RES_DISE | RES_NEXU
+S:1_IN_7 | HOLD | BR_DISE | BR_NEXU
+D:$The boots have the ability of Shiva, the god of destruction.
+D:破壊神シヴァの力を持った革の靴だ。

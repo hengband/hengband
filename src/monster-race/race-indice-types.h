@@ -165,4 +165,5 @@ typedef enum monster_race_type {
     MON_DRAGON_WORM = 1256,
     MON_DRAGON_CENTIPEDE = 1257,
     MON_CAIT_SITH = 1262,
+    MON_SHIVA_BOOTS = 1264,
 } monster_race_type;

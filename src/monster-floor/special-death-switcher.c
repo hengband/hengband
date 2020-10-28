@@ -292,12 +292,12 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
         msg_format(_("%sが再生した！", "The %s was reproduced!"), m_name);
 }
 
-static void on_dead_cait_sith(player_type *player_ptr, monster_death_type *md_ptr)
+static void drop_specific_item_on_dead(player_type *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
 {
     object_type forge;
     object_type *q_ptr = &forge;
     object_wipe(q_ptr);
-    get_obj_num_hook = kind_is_boots;
+    get_obj_num_hook = object_hook_pf;
     (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
@@ -308,66 +308,42 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
         return;
 
     switch (md_ptr->r_ptr->d_char) {
-    case '(': {
+    case '(':
         if (player_ptr->current_floor_ptr->dun_level <= 0)
             return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_cloak;
-        (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
-    }
-    case '/': {
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_cloak);
+        return;
+    case '/':
         if (player_ptr->current_floor_ptr->dun_level <= 4)
             return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_polearm;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_polearm);
         return;
-    }
-    case '[': {
+    case '[':
         if (player_ptr->current_floor_ptr->dun_level <= 19)
             return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_armor;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_armor);
         return;
-    }
-    case '\\': {
+    case '\\':
         if (player_ptr->current_floor_ptr->dun_level <= 4)
             return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_hafted;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_hafted);
         return;
-    }
-    case '|': {
+    case '|':
         if (md_ptr->m_ptr->r_idx == MON_STORMBRINGER)
             return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_sword;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_sword);
         return;
-    }
+    case ']':
+        if (player_ptr->current_floor_ptr->dun_level <= 19)
+            return;
+
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
+        return;
     default:
         return;
     }
@@ -425,7 +401,7 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         on_dead_dragon_centipede(player_ptr, md_ptr);
         return;
     case MON_CAIT_SITH:
-        on_dead_cait_sith(player_ptr, md_ptr);
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;
