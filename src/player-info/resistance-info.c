@@ -4,88 +4,88 @@
 #include "status/element-resistance.h"
 #include "player/player-status-flags.h"
 
-void set_element_resistance_info(player_type* creature_ptr, self_info_type* si_ptr)
+void set_element_resistance_info(player_type* creature_ptr, self_info_type* self_ptr)
 {
     if (has_immune_acid(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは酸に対する完全なる免疫を持っている。", "You are completely immune to acid.");
+        self_ptr->info[self_ptr->line++] = _("あなたは酸に対する完全なる免疫を持っている。", "You are completely immune to acid.");
     } else if (creature_ptr->resist_acid && is_oppose_acid(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは酸への強力な耐性を持っている。", "You resist acid exceptionally well.");
+        self_ptr->info[self_ptr->line++] = _("あなたは酸への強力な耐性を持っている。", "You resist acid exceptionally well.");
     } else if (creature_ptr->resist_acid || is_oppose_acid(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは酸への耐性を持っている。", "You are resistant to acid.");
+        self_ptr->info[self_ptr->line++] = _("あなたは酸への耐性を持っている。", "You are resistant to acid.");
     }
 
     if (has_immune_elec(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは電撃に対する完全なる免疫を持っている。", "You are completely immune to lightning.");
+        self_ptr->info[self_ptr->line++] = _("あなたは電撃に対する完全なる免疫を持っている。", "You are completely immune to lightning.");
     } else if (creature_ptr->resist_elec && is_oppose_elec(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは電撃への強力な耐性を持っている。", "You resist lightning exceptionally well.");
+        self_ptr->info[self_ptr->line++] = _("あなたは電撃への強力な耐性を持っている。", "You resist lightning exceptionally well.");
     } else if (creature_ptr->resist_elec || is_oppose_elec(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは電撃への耐性を持っている。", "You are resistant to lightning.");
+        self_ptr->info[self_ptr->line++] = _("あなたは電撃への耐性を持っている。", "You are resistant to lightning.");
     }
     if (is_specific_player_race(creature_ptr, RACE_ANDROID) && !has_immune_elec(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは電撃に弱い。", "You are susceptible to damage from lightning.");
+        self_ptr->info[self_ptr->line++] = _("あなたは電撃に弱い。", "You are susceptible to damage from lightning.");
     }
 
     if (has_immune_fire(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは火に対する完全なる免疫を持っている。", "You are completely immune to fire.");
+        self_ptr->info[self_ptr->line++] = _("あなたは火に対する完全なる免疫を持っている。", "You are completely immune to fire.");
     } else if (creature_ptr->resist_fire && is_oppose_fire(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは火への強力な耐性を持っている。", "You resist fire exceptionally well.");
+        self_ptr->info[self_ptr->line++] = _("あなたは火への強力な耐性を持っている。", "You resist fire exceptionally well.");
     } else if (creature_ptr->resist_fire || is_oppose_fire(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは火への耐性を持っている。", "You are resistant to fire.");
+        self_ptr->info[self_ptr->line++] = _("あなたは火への耐性を持っている。", "You are resistant to fire.");
     }
 
     if (is_specific_player_race(creature_ptr, RACE_ENT) && !has_immune_fire(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは火に弱い。", "You are susceptible to damage from fire.");
+        self_ptr->info[self_ptr->line++] = _("あなたは火に弱い。", "You are susceptible to damage from fire.");
     }
 
     if (has_immune_cold(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは冷気に対する完全なる免疫を持っている。", "You are completely immune to cold.");
+        self_ptr->info[self_ptr->line++] = _("あなたは冷気に対する完全なる免疫を持っている。", "You are completely immune to cold.");
     } else if (creature_ptr->resist_cold && is_oppose_cold(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは冷気への強力な耐性を持っている。", "You resist cold exceptionally well.");
+        self_ptr->info[self_ptr->line++] = _("あなたは冷気への強力な耐性を持っている。", "You resist cold exceptionally well.");
     } else if (creature_ptr->resist_cold || is_oppose_cold(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは冷気への耐性を持っている。", "You are resistant to cold.");
+        self_ptr->info[self_ptr->line++] = _("あなたは冷気への耐性を持っている。", "You are resistant to cold.");
     }
 
     if (creature_ptr->resist_pois && is_oppose_pois(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは毒への強力な耐性を持っている。", "You resist poison exceptionally well.");
+        self_ptr->info[self_ptr->line++] = _("あなたは毒への強力な耐性を持っている。", "You resist poison exceptionally well.");
     } else if (creature_ptr->resist_pois || is_oppose_pois(creature_ptr)) {
-        si_ptr->info[si_ptr->line++] = _("あなたは毒への耐性を持っている。", "You are resistant to poison.");
+        self_ptr->info[self_ptr->line++] = _("あなたは毒への耐性を持っている。", "You are resistant to poison.");
     }
 }
 
-void set_high_resistance_info(player_type *creature_ptr, self_info_type *si_ptr)
+void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_ptr)
 {
     if (creature_ptr->resist_lite)
-        si_ptr->info[si_ptr->line++] = _("あなたは閃光への耐性を持っている。", "You are resistant to bright light.");
+        self_ptr->info[self_ptr->line++] = _("あなたは閃光への耐性を持っている。", "You are resistant to bright light.");
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_S_FAIRY)
         || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
-        si_ptr->info[si_ptr->line++] = _("あなたは閃光に弱い。", "You are susceptible to damage from bright light.");
+        self_ptr->info[self_ptr->line++] = _("あなたは閃光に弱い。", "You are susceptible to damage from bright light.");
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE) || creature_ptr->wraith_form)
-        si_ptr->info[si_ptr->line++] = _("あなたは暗黒に対する完全なる免疫を持っている。", "You are completely immune to darkness.");
+        self_ptr->info[self_ptr->line++] = _("あなたは暗黒に対する完全なる免疫を持っている。", "You are completely immune to darkness.");
     else if (creature_ptr->resist_dark)
-        si_ptr->info[si_ptr->line++] = _("あなたは暗黒への耐性を持っている。", "You are resistant to darkness.");
+        self_ptr->info[self_ptr->line++] = _("あなたは暗黒への耐性を持っている。", "You are resistant to darkness.");
     
     if (creature_ptr->resist_conf)
-        si_ptr->info[si_ptr->line++] = _("あなたは混乱への耐性を持っている。", "You are resistant to confusion.");
+        self_ptr->info[self_ptr->line++] = _("あなたは混乱への耐性を持っている。", "You are resistant to confusion.");
     
     if (creature_ptr->resist_sound)
-        si_ptr->info[si_ptr->line++] = _("あなたは音波の衝撃への耐性を持っている。", "You are resistant to sonic attacks.");
+        self_ptr->info[self_ptr->line++] = _("あなたは音波の衝撃への耐性を持っている。", "You are resistant to sonic attacks.");
     
     if (creature_ptr->resist_disen)
-        si_ptr->info[si_ptr->line++] = _("あなたは劣化への耐性を持っている。", "You are resistant to disenchantment.");
+        self_ptr->info[self_ptr->line++] = _("あなたは劣化への耐性を持っている。", "You are resistant to disenchantment.");
     
     if (creature_ptr->resist_chaos)
-        si_ptr->info[si_ptr->line++] = _("あなたはカオスの力への耐性を持っている。", "You are resistant to chaos.");
+        self_ptr->info[self_ptr->line++] = _("あなたはカオスの力への耐性を持っている。", "You are resistant to chaos.");
     
     if (creature_ptr->resist_shard)
-        si_ptr->info[si_ptr->line++] = _("あなたは破片の攻撃への耐性を持っている。", "You are resistant to blasts of shards.");
+        self_ptr->info[self_ptr->line++] = _("あなたは破片の攻撃への耐性を持っている。", "You are resistant to blasts of shards.");
     
     if (creature_ptr->resist_nexus)
-        si_ptr->info[si_ptr->line++] = _("あなたは因果混乱の攻撃への耐性を持っている。", "You are resistant to nexus attacks.");
+        self_ptr->info[self_ptr->line++] = _("あなたは因果混乱の攻撃への耐性を持っている。", "You are resistant to nexus attacks.");
 
     if (is_specific_player_race(creature_ptr, RACE_SPECTRE))
-        si_ptr->info[si_ptr->line++] = _("あなたは地獄の力を吸収できる。", "You can drain nether forces.");
+        self_ptr->info[self_ptr->line++] = _("あなたは地獄の力を吸収できる。", "You can drain nether forces.");
     else if (creature_ptr->resist_neth)
-        si_ptr->info[si_ptr->line++] = _("あなたは地獄の力への耐性を持っている。", "You are resistant to nether forces.");
+        self_ptr->info[self_ptr->line++] = _("あなたは地獄の力への耐性を持っている。", "You are resistant to nether forces.");
 }

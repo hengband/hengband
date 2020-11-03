@@ -13,4 +13,4 @@ typedef struct self_info_type {
     concptr info[220];
 } self_info_type;
 
-self_info_type *initialize_self_info_type(self_info_type *si_ptr);
+self_info_type *initialize_self_info_type(self_info_type *self_ptr);

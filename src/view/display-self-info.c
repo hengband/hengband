@@ -6,35 +6,35 @@
 #include "player/player-status-table.h"
 #include "term/screen-processor.h"
 
-void display_life_rating(player_type *creature_ptr, self_info_type *si_ptr)
+void display_life_rating(player_type *creature_ptr, self_info_type *self_ptr)
 {
     creature_ptr->knowledge |= KNOW_STAT | KNOW_HPRATE;
-    strcpy(si_ptr->plev_buf, "");
+    strcpy(self_ptr->plev_buf, "");
     int percent
         = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
-    sprintf(si_ptr->plev_buf, _("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent);
-    strcpy(si_ptr->buf[0], si_ptr->plev_buf);
-    si_ptr->info[si_ptr->line++] = si_ptr->buf[0];
-    si_ptr->info[si_ptr->line++] = "";
+    sprintf(self_ptr->plev_buf, _("現在の体力ランク : %d/100", "Your current Life Rating is %d/100."), percent);
+    strcpy(self_ptr->buf[0], self_ptr->plev_buf);
+    self_ptr->info[self_ptr->line++] = self_ptr->buf[0];
+    self_ptr->info[self_ptr->line++] = "";
 }
 
-void display_max_base_status(player_type *creature_ptr, self_info_type *si_ptr)
+void display_max_base_status(player_type *creature_ptr, self_info_type *self_ptr)
 {
-    si_ptr->info[si_ptr->line++] = _("能力の最大値", "Limits of maximum stats");
+    self_ptr->info[self_ptr->line++] = _("能力の最大値", "Limits of maximum stats");
     for (base_status_type v_nr = 0; v_nr < A_MAX; v_nr++) {
         char stat_desc[80];
         sprintf(stat_desc, "%s 18/%d", stat_names[v_nr], creature_ptr->stat_max_max[v_nr] - 18);
-        strcpy(si_ptr->s_string[v_nr], stat_desc);
-        si_ptr->info[si_ptr->line++] = si_ptr->s_string[v_nr];
+        strcpy(self_ptr->s_string[v_nr], stat_desc);
+        self_ptr->info[self_ptr->line++] = self_ptr->s_string[v_nr];
     }
 }
 
-void display_virtue(player_type *creature_ptr, self_info_type *si_ptr)
+void display_virtue(player_type *creature_ptr, self_info_type *self_ptr)
 {
-    si_ptr->info[si_ptr->line++] = "";
-    sprintf(si_ptr->plev_buf, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
-    strcpy(si_ptr->buf[1], si_ptr->plev_buf);
-    si_ptr->info[si_ptr->line++] = si_ptr->buf[1];
+    self_ptr->info[self_ptr->line++] = "";
+    sprintf(self_ptr->plev_buf, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
+    strcpy(self_ptr->buf[1], self_ptr->plev_buf);
+    self_ptr->info[self_ptr->line++] = self_ptr->buf[1];
     for (int v_nr = 0; v_nr < 8; v_nr++) {
         GAME_TEXT vir_name[20];
         char vir_desc[80];
@@ -68,34 +68,34 @@ void display_virtue(player_type *creature_ptr, self_info_type *si_ptr)
         else
             sprintf(vir_desc, _("[%s]の具現者 (%d)", "You are the living embodiment of %s (%d)."), vir_name, tester);
 
-        strcpy(si_ptr->v_string[v_nr], vir_desc);
-        si_ptr->info[si_ptr->line++] = si_ptr->v_string[v_nr];
+        strcpy(self_ptr->v_string[v_nr], vir_desc);
+        self_ptr->info[self_ptr->line++] = self_ptr->v_string[v_nr];
     }
 }
 
-void display_mimic_race_ability(player_type *creature_ptr, self_info_type *si_ptr)
+void display_mimic_race_ability(player_type *creature_ptr, self_info_type *self_ptr)
 {
     switch (creature_ptr->mimic_form) {
     case MIMIC_DEMON:
     case MIMIC_DEMON_LORD:
-        sprintf(si_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can nether breathe, dam. %d (cost %d)."),
+        sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can nether breathe, dam. %d (cost %d)."),
             3 * creature_ptr->lev, 10 + creature_ptr->lev / 3);
 
-        si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
+        self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
     case MIMIC_VAMPIRE:
         if (creature_ptr->lev <= 1)
             break;
 
-        sprintf(si_ptr->plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
+        sprintf(self_ptr->plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
             creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10),
             1 + (creature_ptr->lev / 3));
-        si_ptr->info[si_ptr->line++] = si_ptr->plev_buf;
+        self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
     }
 }
 
-void display_self_info(self_info_type *si_ptr)
+void display_self_info(self_info_type *self_ptr)
 {
     screen_save();
     for (int k = 1; k < 24; k++)
@@ -103,11 +103,11 @@ void display_self_info(self_info_type *si_ptr)
 
     prt(_("        あなたの状態:", "     Your Attributes:"), 1, 15);
     int k = 2;
-    for (int j = 0; j < si_ptr->line; j++) {
-        prt(si_ptr->info[j], k++, 15);
+    for (int j = 0; j < self_ptr->line; j++) {
+        prt(self_ptr->info[j], k++, 15);
 
         /* Every 20 entries (lines 2 to 21), start over */
-        if ((k != 22) || (j + 1 >= si_ptr->line))
+        if ((k != 22) || (j + 1 >= self_ptr->line))
             continue;
 
         prt(_("-- 続く --", "-- more --"), k, 15);
