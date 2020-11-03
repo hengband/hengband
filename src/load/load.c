@@ -263,7 +263,7 @@ static errr rd_savefile(player_type *player_ptr)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return 成功すればtrue
  */
-bool load_savedata(player_type *player_ptr)
+bool load_savedata(player_type *player_ptr, bool *new_game)
 {
     concptr what = "generic";
     current_world_ptr->game_turn = 0;
@@ -271,10 +271,13 @@ bool load_savedata(player_type *player_ptr)
     if (!savefile[0])
         return TRUE;
 
-#ifndef WINDOWS
+#ifdef WINDOWS
+    (void)new_game;
+#else
     if (access(savefile, 0) < 0) {
         msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
         msg_print(NULL);
+        *new_game = TRUE;
         return TRUE;
     }
 #endif
