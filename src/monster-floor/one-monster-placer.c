@@ -238,29 +238,13 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     monster_race *r_ptr = &r_info[r_idx];
     concptr name = (r_name + r_ptr->name);
 
-    if (player_ptr->wild_mode)
-        return FALSE;
-    if (!in_bounds(floor_ptr, y, x))
-        return FALSE;
-    if (!r_idx)
-        return FALSE;
-    if (!r_ptr->name)
+    if (player_ptr->wild_mode || !in_bounds(floor_ptr, y, x) || (r_idx == 0) || (r_ptr->name == 0))
         return FALSE;
 
-    if (!(mode & PM_IGNORE_TERRAIN)) {
-        if (pattern_tile(floor_ptr, y, x))
-            return FALSE;
-        if (!monster_can_enter(player_ptr, y, x, r_ptr, 0))
-            return FALSE;
-    }
-
-    if (!check_unique_placeable(player_ptr, r_idx))
+    if (((mode & PM_IGNORE_TERRAIN) == 0) && (pattern_tile(floor_ptr, y, x) || !monster_can_enter(player_ptr, y, x, r_ptr, 0)))
         return FALSE;
 
-    if (!check_quest_placeable(player_ptr, r_idx))
-        return FALSE;
-
-    if (!check_procection_rune(player_ptr, r_idx, y, x))
+    if (!check_unique_placeable(player_ptr, r_idx) || !check_quest_placeable(player_ptr, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x))
         return FALSE;
 
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
