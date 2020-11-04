@@ -261,7 +261,8 @@ static errr rd_savefile(player_type *player_ptr)
  * @brief セーブデータ読み込みのメインルーチン /
  * Attempt to Load a "savefile"
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return 成功すればtrue
+ * @param new_game セーブデータの新規作成が必要か否か
+ * @return セーブデータが読み込めればtrue
  */
 bool load_savedata(player_type *player_ptr, bool *new_game)
 {
@@ -271,9 +272,7 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
     if (!savefile[0])
         return TRUE;
 
-#ifdef WINDOWS
-    (void)new_game;
-#else
+#ifndef WINDOWS
     if (access(savefile, 0) < 0) {
         msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
         msg_print(NULL);
@@ -338,6 +337,7 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
         }
 
         if (player_ptr->is_dead) {
+            *new_game = TRUE;
             if (arg_wizard) {
                 current_world_ptr->character_loaded = TRUE;
                 return TRUE;
