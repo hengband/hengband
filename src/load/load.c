@@ -261,7 +261,8 @@ static errr rd_savefile(player_type *player_ptr)
  * @brief セーブデータ読み込みのメインルーチン /
  * Attempt to Load a "savefile"
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return 成功すればtrue
+ * @param new_game セーブデータの新規作成が必要か否か
+ * @return セーブデータが読み込めればtrue
  */
 bool load_savedata(player_type *player_ptr)
 {
@@ -335,6 +336,7 @@ bool load_savedata(player_type *player_ptr)
         }
 
         if (player_ptr->is_dead) {
+            *new_game = TRUE;
             if (arg_wizard) {
                 current_world_ptr->character_loaded = TRUE;
                 return TRUE;
