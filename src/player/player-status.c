@@ -2518,8 +2518,6 @@ static s16b calc_speed(player_type *creature_ptr)
     int count;
 
     if (!creature_ptr->riding) {
-        count = (int)weight_limit(creature_ptr);
-
         const player_race *tmp_rp_ptr;
         if (creature_ptr->mimic_form)
             tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
@@ -2636,6 +2634,10 @@ static s16b calc_speed(player_type *creature_ptr)
                 pow += 7;
             }
         }
+
+        count = (int)weight_limit(creature_ptr);
+        if (j > count)
+            pow -= ((j - count) / (count / 5));
 
     } else {
         monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
