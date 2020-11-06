@@ -31,6 +31,35 @@ N:*:Default
 しまった！
 勝機は完全になくなった・・・殺せ・・・・・・
 老兵は死なず、ただ消え去るのみ。
+フフフ...ヤツは四天王の中で最弱。
+敗因は...たったひとつだぜ...おれはおめーを怒らせた。
+絶許！
+激おこぷんぷん丸！
+お前なんかがオベロンさんに勝つなんて10万光年早いんだよ！
+はー、はーっ！激しい戦いだった！
+俺の出番は終わりだ！くそっ！次に行ってくれ！
+うう...悔しいが君の変愚蛮怒の腕は本物だ！
+やがて薄れ消えゆくものを記憶に刻みこむため全身全霊を打ちこむ！それが人生です。
+勝たなきゃいけないバトルは楽しくないなぁ。
+...テメェは全国のプレイヤーを敵に回したぜ。
+どうして主人公の私がこんな目に遭わなきゃいけないの？リセットよ！リセット！
+私が何をしたか、お聞かせいただいても？
+死んだショックで前世を思い出した！
+労災は、労災は降りるの？
+死んで花実が咲くものか。
+GAME OVER
+14に来た。
+42TH ZONE!
+$ apt get new-life
+$ make clean; make new-file
+よくも俺たちの計画の邪魔をする気だな！
+やめなされ、そんな無益な殺生はやめなされ。
+くたばれ！ジュラル星人め！
+やった、やったぞ！これで地球の危機は去ったのだ！
+今度という今度は許さないぞ！
+くそー後一歩と言う時に、苦しいあの曲グァー。
+どうも怪しいと思ったらやっぱりそうだったのか。
+やっぱりジュラル星人の仕業だったのか。
 #Live and let live, right..?
 「生き、生かす」、だろ？
 #AAAAAAAAARRRRRRRRRRRRRRGGGGGGGGGGGGGHHHHHHHHHHHHHHH!!!!!!!!!!!!
@@ -45,53 +74,85 @@ N:*:Default
 鎧を着た女が羽根の生えた馬に乗ってやってくる...
 #Oh well, you can't always win.
 まあ、いつも勝てる訳じゃないさ。
-I'm too young to die!
+#I'm too young to die!
+死ぬには若すぎるでしょ！
 #I'll be back!
 アイルビーバック！
-O, untimely death!
-Slave, thou hast slain me!
-Ouch! That smarts!
-Who knocked?
+#O, untimely death!
+えっ、突然死んだ！
+#Slave, thou hast slain me!
+畜生、やられた。
+#Ouch! That smarts!
+クッソできる！
+#Who knocked?
+ノックしたの誰だよ？
 #Did anybody get the number of that truck..?
 あのトラックのナンバー誰か見た？
 #Ouch.
 やりやがったな！
-Et tu, Brute! Then fall, Caesar!
-O! I die, Horatio...
-I told you to be careful with that sword...
-This guy's a little crazy...
-Ok, ok, I get it: No more pals.
-No more mr. nice guy!
+#Et tu, Brute! Then fall, Caesar!
+ブルータス、お前もか！もはやカエサルもここまでか！
+#O! I die, Horatio...
+ホレイシオ、俺は死ぬ...
+#I told you to be careful with that sword...
+その剣は慎重に扱えって言っただろ...
+#This guy's a little crazy...
+こいつぁ、ちょっとばかし狂ってやがるぜ...
+#Ok, ok, I get it: No more pals.
+あー、了解、了解、仲間は全滅ね。
+#No more mr. nice guy!
+#曲名
+ノー・モア・ミスター、ナイス・ガイ！
 #Who turned off the light..?
 明かりを消したのは誰…？
-Join the army, see the world, they said...
-Mom told me there'd be days like this...
-Rats!
-Shall this fellow live?
-Help, ho!
-What ho! Help!
-What hast thou done?
-I'll be revenged on the whole pack of you!
+#Join the army, see the world, they said...
+軍に入って、世界を見てみろ、そう奴らは言ったんだ...
+#Mom told me there'd be days like this...
+こんな日があるって母ちゃんが言った通りだった...
+#Rats!
+ネズミ！！！
+#Shall this fellow live?
+仲間は無事なの！？
+#Help, ho!
+ホーッ、助けて！
+#What ho! Help!
+なんてこった！助けて！
+#What hast thou done?
+何したのっ！？
+#I'll be revenged on the whole pack of you!
+次こそはお前らの全てを叩き潰してやる！
 #You will *pay* for this!
 憶えてろよ！
-They say blood will have blood...
-Violence is no solution!
-Yes?
+#They say blood will have blood...
+復讐は復讐を呼ぶ...
+#Violence is no solution!
+暴力では解決できない！
+#Yes?
+はいぃぃ？
 #&%#&#%*#*&%!!!!!
+くぁwせdrftgyふじこlp！！！
 #F***!
 ファ○ク！
 #No time to make a testament?
 遺言を書く暇もないのか？
 #Ugh!
 うぐっ！
-Aargh!
-Aaagghhh!
-I'm melting!
-Oof..
-Oh!
-Did somebody knock?
-Later, dude...
-CU!
+#Aargh!
+あああああ！
+#Aaagghhh!
+ああぁぁああぁあ！
+#I'm melting!
+露と消えた！
+#Oof..
+おぅふ...
+#Oh!
+あー！！！
+#Did somebody knock?
+誰かノックしたー？
+#Later, dude...
+またあとでね、あ・な・た☆
+#CU!
+クッ！
 #What? Who? Me? Oh, s..t!
 何？誰？俺？くっそー！
 #...amen!
@@ -100,60 +161,88 @@ CU!
 イーーーッッ！
 #Aacch!
 アーーーッッ！
-I hate it when that happens.
-One direct hit can ruin your whole day.
+#I hate it when that happens.
+あれ以来、それが苦手だ。
+#One direct hit can ruin your whole day.
+たった一撃が、一日の全てを無駄にした。
 #Oh no!
 おーのー。
-Not me!
-Ouch.
+#Not me!
+私じゃない！
+#Ouch.
+あうち。
 #Oh no, not again.
 ちきしょう、またかよ！
-Another one bites the dust.
+#Another one bites the dust.
+また一人、死んでゆく。
 #Goodbye.
 さらばだ！
 #Help me!
 助けてくれ！
 #Farewell, cruel world.
 残酷な世界よ、さらば。
-Oh man!
-Doough!
-This is the End, my only friend.
+#Oh man!
+おいおい、頼むぜ！
+#Doough!
+どぅふ！
+#This is the End, my only friend.
+この終末が、我が唯一の友。
 #It's all over.
 全て終った。
-The fat lady sang.
-Why does everything happen to me?
-I'm going down.
-Crapola.
-Pow!
-Bif!
-Bam!
-Zonk!
-I should've listened to my mother...
-No... a Bud light!
-What was that noise?
-Mama said there'd be days like this.
+#The fat lady sang.
+#和訳無理
+#Why does everything happen to me?
+何故全てが俺に降りかかるんだ？
+#I'm going down.
+俺は降りる。
+#Crapola.
+たわごとだ。
+#Pow!
+ポーゥ！
+#Bif!
+ビシュ！
+#Bam!
+ダンッ！
+#Zonk!
+ザンッ！
+#I should've listened to my mother...
+お袋の言うことを聞いとくべきだった...
+#No... a Bud light!
+ビールだビール！
+#What was that noise?
+この雑音は何？
+#Mama said there'd be days like this.
+ママがこんな日もあるって言ってた。
 #It's just one of those days...
 いつものことさ...
 #I see a bright light...
 明るい光が見える...
 #Mommy? Is that you?
 母さん？母さんなのかい？
-I let you hit me!
-Sucker shot!
-I didn't want to live anyway.
--<sob>-
+#I let you hit me!
+ぶん殴っていい？
+#Sucker shot!
+だまし撃ち！
+#I didn't want to live anyway.
+もう生きてたくなかった。
+#-<sob>-
+-- 泣く --
 #Hah haa! Missed me! Ha---
 ワハハ！当たらないぞ！ワハ――
-Was that as close as I think it was?
+#Was that as close as I think it was?
+思ってたより近くにいたんだな？
 #Monsters rejoice: the hero has been defeated.
 怪物どもは喜んでいる。英雄が倒れたのだ。
-It wasn't just a job it was an adventure!
+#It wasn't just a job it was an adventure!
+冒険は仕事じゃない！
 #I didn't like violence anyway!
 ていうか暴力は嫌いだ！
-I thought you liked me?
+#I thought you liked me?
+私のことが好きだったんじゃないの？
 #Such senseless violence! I don't understand it.
 なんてばかげた暴力だ！俺には理解できん。
-I think this guy's a little crazy.
+#I think this guy's a little crazy.
+私思うんだけどさー、こいつってちょっと狂ってない？
 #Somehow, I have a bad feeling about this...
 なんか嫌な感じがする…。
 #Help me! I am undone!
@@ -165,29 +254,44 @@ Hey! Killin' ain't cool.
 そして静けさのみが残った。
 #Guh!
 ガー！
-It's game over, man!
-You've run out of life.
+#It's game over, man!
+おい、詰みだ！
+#You've run out of life.
+人生のゴールまで完走した。
 #Thou art slain.
 汝は死せり
-Finish him!
-Trust me, I know what I'm doing...
+#Finish him!
+やつは終わりだ！
+#Trust me, I know what I'm doing...
+信じてくれ、俺はやるべきことをやった...
 #Die, mortal!
 死ね、定命の者よ！
-Kill men i' the dark! What be these bloody thieves?
-Ho! Murder! Murder!
-O! I am spoil'd, undone by villains!
-O murderous slave! O villain!
-O, falsely, falsely murder'd!
-A guiltless death I die.
-AAAAAAAAAAAAAAAAAAAAAAAAHHHHHHH!
-Trust me.
+#Kill men i' the dark! What be these bloody thieves?
+闇討ちしやがって・・・悪党どもはどこだ・・・
+#Ho! Murder! Murder!
+ホー！殺人だ！殺人だ！
+# O! I am spoil'd, undone by villains!
+おお、どこかの悪党にやられた。殺されるところだった。
+#O murderous slave! O villain!
+この奴隷野郎、悪党。
+#O, falsely, falsely murder'd!
+おお、誤解されて、間違って、殺された。
+#A guiltless death I die.
+冤罪で殺された。
+#AAAAAAAAAAAAAAAAAAAAAAAAHHHHHHH!
+うわああああああああああああああああ、ああああああああああああああおあ
+#Trust me.
+信じて！
 #Dammit, this thing won't die!
 ちくしょー！こいつ死なないぞ！
-He hit me for HOW MUCH?????
-Look, behind you!!!
+#He hit me for HOW MUCH?????
+どれだけ殴れば気が済むんだ？？
+#Look, behind you!!!
+後ろ！
 #Who fed steroids to that kobold?
 あのコボルドに筋肉増強剤を飲ませたのは誰だ？
-Don't worry, be happy!
+#Don't worry, be happy!
+過去は振り返るな、前を向いて行け！
 #I don't believe this!
 信じないぞ！
 #Oops.
@@ -200,161 +304,246 @@ Don't worry, be happy!
 まあ、このキャラはあんまり好きじゃなかったからね…。
 #Oops, sorry... didn't mean to disturb you.
 おっと。ごめん…。邪魔するつもりはなかったんだ。
-I never get to have any fun!
+#I never get to have any fun!
+おもしろくねぇ～！
 #Stop!
 止めろ！
-Cut it out!
+#Cut it out!
+いい加減にして！
 #Don't worry. I've got a plan.
 心配するなよ。考えがあるんだ。
 #It didn't look so tough.
 そんなに強そうには見えなかったのに。
 #Run away!
 逃げろ！
-All clear, guys.
+#All clear, guys.
+見りゃわかる。
 #AGAIN!?!?!
 またか！？！？
 #I don't like this dungeon...
 このダンジョンは嫌いだ…。
 #Maybe this wasn't such a good idea.
 さっきのはあんまりいいアイディアじゃなかったらしいな。
-My God will protect me.
-You wouldn't dare!
-But what about my Parry Skill? Tumbling?
-Don't worry - I have Pilot-7.
-And I've *never* done you any harm.
+#My God will protect me.
+我が主のご加護を。
+#You wouldn't dare!
+そんなことしないでしょ！
+#But what about my Parry Skill? Tumbling?
+次は何か曲芸でもしようか？タンブリングとかどう？
+#Don't worry - I have Pilot-7.
+#和訳無理
+#And I've *never* done you any harm.
+私はあなたに危害を加えたことは*ありません*のに。
 #I don't understand. It should be dead by now.
 理解できない。向こうが先に死んでるはずだ。
-I'm heir to the crown. They wouldn't dare!
+#I'm heir to the crown. They wouldn't dare!
+私こそが王位継承者なのに、あいつらは私に継がせようとはしなかった！
 #Hey! Where's my stomach? My hands?
 おーい！私の胃はどこ？手はどこ？
-Ha! That's the oldest trick in the book.
+#Ha! That's the oldest trick in the book.
+ハッ！使い古された手だな。
 #Cover me.
 俺を援護しろ！
-Watch this.
-And damn'd be him that first cries, 'Hold, enough!'
-I will not yield.
-...but like a man he died.
-If you cut me down, I will only become more powerful.
-Well, at least I tried...?
-What could possibly have gone wrong?
+#Watch this.
+これを見ろよ。
+#And damn'd be him that first cries, 'Hold, enough!'
+負けたと叫ぶ者に呪いあれだ。
+#I will not yield.
+装備してなかった！
+#...but like a man he died.
+...男として死にました。
+#If you cut me down, I will only become more powerful.
+お前が斬れば斬るほど、私は強くなるだろう。
+#Well, at least I tried...?
+まあ、少なくとも試してみた...？
+#What could possibly have gone wrong?
+何がうまくいかなかったのでしょうか？
 #You die...
 死んだ…。
-What's with that weirdo with the teeth?
+#What's with that weirdo with the teeth?
+#和訳無理
 #Surrender? Never!
 降伏だって？するものか！
 #I'm sure reinforcements will get here on time. They promised.
 援軍がちゃんと到着するはずだ。約束してある。
-Funny, didn't *look* like a cyberpsycho....
-I have a very bad feeling about this.
-Do something, SCHMUCK!
+#Funny, didn't *look* like a cyberpsycho....
+変だな、サイバーサイコのようには*見えなかった*ぞ...
+#I have a very bad feeling about this.
+これに関しては背筋がゾワッとして鳥肌が立ったよ。
+#Do something, SCHMUCK!
+何とかして、シュマック！
 #I feel I could cast 'Speak with Dead' and talk to myself.
 「死者との会話」の呪文を憶えた気がする。自分自身と話せるようだ。
 #Oh, that's just a light wound.
 ほんのかすり傷さ！
-Ach, is doch nur 'ne Fleischwunde...
+#Ach, is doch nur 'ne Fleischwunde...
+嗚呼、其只掠傷...
 #I thought you were on MY side...
 味方だと思っていたのに…。
-Next time, try talking!
-Oh shit... I'll try to teleport again.
+#Next time, try talking!
+今度はちゃんと話し合いましょう！
+#Oh shit... I'll try to teleport again.
+あーしまった...もう一回テレポートすべきだった...
 #Somebody get me a Rod of Resurrection... QUICK!
 誰か、生き返りのロッドを恵んでくれ...今すぐに！
-Uhh... oh-oh...
-Gee, where'd everybody go?
-I see it coming...aaargllhhhh! {sough}
-What do you mean 'aaargllhhhh'? Hey man, I've paid for this.
-Ay! Ay! Ay!
-Ohe! Ohe! Ohe!
-Et tu, Caesar! Then fall, Brute!
-Even the best laid plans...
-Hey, not too rough!
+#Uhh... oh-oh...
+ウー...オーオー...
+#Gee, where'd everybody go?
+まあ、みなさまどちらに向かわれたのかしら？
+#I see it coming...aaargllhhhh! {sough}
+ざわ・・・ざわ・・・そしてそれがやってきた・・・ああああああ！
+#What do you mean 'aaargllhhhh'? Hey man, I've paid for this.
+「あああああ」ってどういう意味？ねえ、お金支払ったんだけど。
+#Ay! Ay! Ay!
+アイ！アイ！アイ！
+#Ohe! Ohe! Ohe!
+オヘ！オヘ！オヘ！
+#Et tu, Caesar! Then fall, Brute!
+カエサル、お前もか。もはやブルータスもここまでか！
+#Even the best laid plans...
+かつてないほどよくできた計画だったのに...
+#Hey, not too rough!
+おい、雑過ぎるだろ！
 #The Random Number Generator hates me!
 乱数に嫌われてしまったよ！
-So when I die, the first thing I will see in heaven is a score list?
-Can't we talk this thing over?
+#So when I die, the first thing I will see in heaven is a score list?
+死んで天国に行ったら、最初に目にするのはスコアリストなのかな？
+#Can't we talk this thing over?
+このことについて話せませんか？
 #Wait! Spare me and I'll make you rich! Money is not a problem!
-「待ってくれ！助けてくれたらあんたを金持ちにしてやるよ！金は問題じゃない！」
+待ってくれ！助けてくれたらあんたを金持ちにしてやるよ！金は問題じゃない！
 #I hate you!
 おまえなんか嫌いだ！
-By the kind gods, 'twas most ignobly done!
-Mein Leben!
-Meine Lieder!
+#By the kind gods, 'twas most ignobly done!
+おお、何たる屈辱！
+#Mein Leben!
+私の人生が！
+#Meine Lieder!
+私のストーリーが！
 #I'm the hero of this story! I CAN'T die!
 俺は主役なんだ！死ぬはずがない！
 #I thought heroes were supposed to win!
 主役はいつも勝つんだと思ってたけどな！
-Gee... thanks.
-You've fallen and can't get up!
+#Gee... thanks.
+まあ...ありがとうございますわ。
+#You've fallen and can't get up!
+あなたは倒れて起き上がれない！
 #911?
 119?
-Sure don't look good...
-Oh No! Here I blow again!
-Hey - I've got lawyers.
-Thanks, I needed that.
-I AM toast!!
-Scheisse!
-Fatality!
-Brutality!
-Toasty!
-And you thought Tristan was unlucky...
-Just wait till I get my hands on the crook who sold me this crappy armor...
-All is lost. Monks, monks, monks!
-All my possessions for a moment of time!
-Don't let poor Nelly starve!
-Wally, what is this? It is death, my boy: they have deceived me.
-Everyone dances with the Grim Reaper.
+#Sure don't look good...
+確かに見栄えが良くない...
+#Oh No! Here I blow again!
+あー、嘘！またここ殴っちまった！
+#Hey - I've got lawyers.
+あー、弁護士に相談させてもらおう。
+#Thanks, I needed that.
+ありがとう、必要だったんだ。
+#I AM toast!!
+焼かれたっ！
+#Scheisse!
+糞ッ！
+#Fatality!
+致命的！
+#Brutality!
+残忍！
+#Toasty!
+トースティー！
+#And you thought Tristan was unlucky...
+トリスタンは残念だったね。
+#Just wait till I get my hands on the crook who sold me this crappy armor...
+こんなクズ鎧をつかませた詐欺師を捕まえるまで待ってくれ...
+#All is lost. Monks, monks, monks!
+全てを無に。修行せよ、修行せよ、修行せよ！
+#All my possessions for a moment of time!
+私が得た全ての富も束の間のこと。
+#Don't let poor Nelly starve!
+可愛そうなネリーを飢えさせないでください！
+#Wally, what is this? It is death, my boy: they have deceived me.
+ウォーリー、これは何だ？ 死なのか、わが弟よ。奴らに騙されていた。 
+#Everyone dances with the Grim Reaper.
+不運(ハードラック)と踊(ダンス)っちまったんだよ...
 #Adios.
 アディオス。
-I'm going home, babe.
-I am innocent, innocent, innocent!
-Watch where you're pointing with that sword! You nearly...
-Hmm, some things are better wanted than had...
-And they told me it was not loaded.
-Of course I know what I am doing.
-It looked harmless.
-Hilfe, hilfe, hilfe!
+#I'm going home, babe.
+俺は家に帰るぜ、ベイベー。
+#I am innocent, innocent, innocent!
+私は無実、無実、無実です！
+#Watch where you're pointing with that sword! You nearly...
+こんなに近くで、どこに剣先を向けてるんだよ...！
+#Hmm, some things are better wanted than had...
+うーん、持っていたものよりも欲しいものがいくつかあります...
+#And they told me it was not loaded.
+弾は入ってないって言ってたじゃない。
+#Of course I know what I am doing.
+もちろん、すべきことは知ってた。
+#It looked harmless.
+傷つかないみたい。
+#Hilfe, hilfe, hilfe!
+救助、救助、救助！
 #Look, dad! No head!
 パパ見て！頭がないよ！
 #Look! I'm flying!
 見て！僕は飛んでるよ！
-Think I'm gonna fall for that?
-I'll be back... as soon as I can.
+#Think I'm gonna fall for that?
+地獄に堕ちろと思うのかい？
+#I'll be back... as soon as I can.
+私は舞い戻ってくる...それも早くだ。
 #3... 2... 1... Liftoff!
 3... 2... 1... 発射！
-My wallet? In your dreams!
-Yes! Yes! YES! YES! YY... AAARRRGGGHH!
+#My wallet? In your dreams!
+私の財布？あなたの妄想じゃないの！
+#Yes! Yes! YES! YES! YY... AAARRRGGGHH!
+よし、よしっ！いいぞ、いいぞ！いい...ああああああああああああ！
 #See you later, alligator!
 シーユーレイター、アリゲイター！
-Up, up and awaaaayyy!
+#Up, up and awaaaayyy!
+いけ、いけ、とんでけー！
 #Been nice knowing you.
 君に会えてうれしかったよ。
 #But I just got a little prick!
 でもちょっと刺さっただけなのに！
-And I just wanted that fancy suit of armour you were carrying...
-Hey guys, where are you?
-Hey look... ARCHERS!
-I can't probably miss...
+#And I just wanted that fancy suit of armour you were carrying...
+そのお持ちのステキな鎧が欲しかっただけでして...
+#Hey guys, where are you?
+おいおまえら、どこだ？
+#Hey look... ARCHERS!
+見ろ、射撃手だ！
+#I can't probably miss...
+多分失敗が許されない...
 #I don't care. I have a Scroll of Raise Dead.
 私は死者復活の巻物を持ってるんだ。この程度のことは気にしない。
 #I don't care. I have a Ring of Regeneration.
 私は再生の指輪を持ってるんだ。この程度のことは気にしない。
-I have this dungeon at home, I know where everything is!
-This HAS to be an illusion. I attempt to disbelieve it.
-I thought you could be trusted.
-Never try to sneak in a plate mail.
+#I have this dungeon at home, I know where everything is!
+このダンジョンは私の家なんだ。ここのことなた何でも知ってる！
+#This HAS to be an illusion. I attempt to disbelieve it.
+これは幻覚だッ。私は信じないぞ。
+#I thought you could be trusted.
+あなたはもっと誠実であるべきだと思います。
+#Never try to sneak in a plate mail.
+プレート・メイルで忍び寄ろうなんて考えちゃいけない。
 #I'll never surrender.
 降伏なんかしないぞ。
-I'll use the Cheat Death option...
-I'm invincible!
-I'm death incarnate! Nothing can harm me!
+#I'll use the Cheat Death option...
+次はチートオプションで死を回避しよう...
+#I'm invincible!
+私は無敵だ！
+#I'm death incarnate! Nothing can harm me!
+我こそは死の化身なり！何人も我を傷付けること能わず！
 #Hey, it was only a joke, all right?
 おい、ほんの冗談じゃないか。
-Hey, don't talk to me like that!
+#Hey, don't talk to me like that!
+ねえ、そんな言い方しないでよ！
 #I have rights, too!
 俺にも人権ってものがあるんだぞ！
-Just because you're big and ugly doesn't mean you can push ME around.
-Me first! Me first!
-Let me handle this.
-No problem. That's easy.O
+#Just because you're big and ugly doesn't mean you can push ME around.
+いくらお前が大きく醜くても、この私を押し飛ばせるわけがない。
+#Me first! Me first!
+わたしがさいしょ！わたしがさいしょ！
+#Let me handle this.
+私に処理させてください。
+#No problem. That's easy.O
+問題ありません。難しくないです。あっ
 #Oh, shit.
 くそっ。
 #So what?
@@ -375,122 +564,187 @@ No problem. That's easy.O
 どういうこと？無傷の球が切れたの？
 #Yeah, I knew it was dangerous, but I was thinking about the experience points.
 いや、危険だって知ってたけど経験値が欲しかったんだよ。
-You mean you get to use the critical hit chart too?
-You'd have to be a GOD to smile after that hit!
-I'm not afraid of death. I just don't want to be there when it happens.
-I have such sweet thoughts.
-I pray you all pray for me.
-I shall hear in heaven.
-Is not this dying with courage and true greatness?
+#You mean you get to use the critical hit chart too?
+こいつクリティカルヒットできるの？
+#You'd have to be a GOD to smile after that hit!
+幸運の女神がヤツの一撃に微笑んだ。
+#I'm not afraid of death. I just don't want to be there when it happens.
+死は怖くないけど、巻き込まれたいわけじゃないんだ。
+#I have such sweet thoughts.
+考えが甘かった。
+#I pray you all pray for me.
+あなたが私のことを祈るよう、私があなたのことを祈りましょう。
+#I shall hear in heaven.
+続きは天国で聞くよ。
+#Is not this dying with courage and true greatness?
+大いなる勇気と偉大なる信念こそが、この死を招いたのだ。えっ、違う？
 #I must sleep now.
 もう眠らなきゃ。
-Nurse, nurse, what murder! What blood! I have done wrong!
+#Nurse, nurse, what murder! What blood! I have done wrong!
+看護師さん！看護師さん！これじゃ殺人だ！出血がやばい！何を間違えたんだ！
 #It is finished.
 これで終わりだ。
-That unworthy hand! That unworthy hand!
-I am dying.
-Oh, dear.
-I will not kneel. Strike!
+#That unworthy hand! That unworthy hand!
+なんて卑劣な手！卑劣な手！
+#I am dying.
+我死なんとす。
+#Oh, dear.
+なんと、まあ！
+#I will not kneel. Strike!
+私は屈しない！撃て！
 #I have led a happy life.
 幸せな人生だった。
 #Dying, dying.
 死だ。死だ。
-I feel the flowers growing over me.
-Now it is come.
-Let me die to the sound of sweet music.
-I will now enter the Halls of Mandos.
-Ungrateful traitors!
-We perish, we disappear, but the march of time goes on forever.
+#I feel the flowers growing over me.
+綺麗なお花畑が見える...
+#Now it is come.
+まさに今、それはやってくる。
+#Let me die to the sound of sweet music.
+甘美な音色に包まれて穏やかに死にたい。
+#I will now enter the Halls of Mandos.
+今こそマンドスの館に入るとき。
+#Ungrateful traitors!
+やだっ、裏切り者！
+#We perish, we disappear, but the march of time goes on forever.
+我らが滅び、我らが消え去ろうとも、時の歩みは永遠に続くのだ。
 #Youth, I forgive thee.
 認めたくないものだな。若さ故の過ちというものは。
-Treason! Treason!
+#Treason! Treason!
+反逆だ！反逆だ！
 #Coward! Why did you not protect me?
 臆病者！どうして守ってくれなかったんだ？
 #I am absolutely undone.
 もう完璧に駄目だ。
-It is well. I die hard, but am not afraid to go.
+#It is well. I die hard, but am not afraid to go.
+大丈夫だ。俺はもうダメだが、死は恐れちゃいないさ。
 #Do let me die in peace.
 安らかに死なせてくれ。
-Nothing is real but pain now.
-Violent use brings violent plans.
-Soldier boy, made of clay, now an empty shell.
-Bodies fill the fields I see, the slaughter never ends.
-Life planned out before my birth, nothing could I say.
-Blood will follow blood, dying time is here.
-Never happy endings on these dark sets.
-No one to play soldier now, no one to pretend.
-Time for lust, time for lie, time to kiss your life goodbye.
-Greetings, Death, he's yours to take away.
+#Nothing is real but pain now.
+夢なのに痛いよ。
+#Violent use brings violent plans.
+暴力はさらなる暴力しか生み出さない。
+#Soldier boy, made of clay, now an empty shell.
+#Bodies fill the fields I see, the slaughter never ends.
+#Life planned out before my birth, nothing could I say.
+運命は生前に決まるんだ、口などはさめないさ。
+#Blood will follow blood, dying time is here.
+血は血を呼ぶだろう、死を招くだろう。
+#Never happy endings on these dark sets.
+闇シナリオにハッピーエンドなんてない。
+#No one to play soldier now, no one to pretend.
+#Time for lust, time for lie, time to kiss your life goodbye.
+#Greetings, Death, he's yours to take away.
+やあ、死だ。ヤツがお前を連れ去ってくれる。
 #I was born for dying.
 私は死ぬ為に生まれたんだ。
-The higher you walk, the farther you fall.
-Where's your crown, King Nothing?
-Exit: light - enter: night!
+#The higher you walk, the farther you fall.
+より高みを歩めば、親父が足を引っ張るぜ。
+#Where's your crown, King Nothing?
+お前の王冠はどこだ、冥王？
+#Exit: light - enter: night!
+出らば光、入らば闇。
 #New blood joins this earth...
 新たな血がまた大地を染める...
-You labeled me, I'll label you, so I dub thee unforgiven.
-If you're gonna die, die with your boots on!
-There's a time to live, and a time to die, when it's time to meet the maker.
-Isn't it strange, as soon as you're born you're dying?
-Only the good die young, all the evil seem to live forever.
-I don't wanna die, I'm a god, why can't I live on?
-And in my last hour, I'm a slave to the power of death.
-Now I am cold, but a ghost lives in my veins.
-You got to watch them - be quick or be dead.
-Heaven can wait 'till another day.
+#You labeled me, I'll label you, so I dub thee unforgiven.
+#If you're gonna die, die with your boots on!
+#There's a time to live, and a time to die, when it's time to meet the maker.
+生と死と、創造主はどちらがお望みだ。
+#Isn't it strange, as soon as you're born you're dying?
+変じゃないか？生まれてすぐに死ぬんだぞ？
+#Only the good die young, all the evil seem to live forever.
+善は滅び、悪は栄える。
+#I don't wanna die, I'm a god, why can't I live on?
+私が神だ。なぜ神が死ぬ！死にたくない！
+#And in my last hour, I'm a slave to the power of death.
+そう、最期の時、死神の虜だった。
+#Now I am cold, but a ghost lives in my veins.
+寒気がすると思ったらお化けに取り憑かれていたよ。
+#You got to watch them - be quick or be dead.
+急げ！もしくは死ね！
+#Heaven can wait 'till another day.
+天国行きなら別の日に変更できます。
 #You'll take my life but I'll take yours too.
 殺すなら殺せ！お前も道連れだ！
-We won't live to fight another day.
-As I lay forgotten and alone, without fear I draw my parting groan.
+#We won't live to fight another day.
+生きて相まみえることはないさ。
+#As I lay forgotten and alone, without fear I draw my parting groan.
+もはや別れの涙も枯れ果てて、一人忘ら行く。
 #Somebody please tell me that I'm dreaming!
 誰かこれは夢だって言ってくれ！
 #Can't it be there's been some sort of error?
 何かの間違いってことはないのか？
-Is it really the end not some crazy dream?
-Life down there is just a strange illusion.
-Your body tries to leave your soul.
-I'm so tired of living, I might as well end today.
-Life, life! Death, death! How curious it is!
-Catch my soul 'cos it's willing to fly away!
-Flames? Not yet, I think.
+#Is it really the end not some crazy dream?
+本っ当に、いつこのクソな夢から覚めるんだ？
+#Life down there is just a strange illusion.
+まったく奇妙な幻覚だ。
+#Your body tries to leave your soul.
+あなたの身体が魂から離れようとしています。
+#I'm so tired of living, I might as well end today.
+生きようともがいて参りましたが、本日終わりにしようと思います。
+#Life, life! Death, death! How curious it is!
+生！死！生！死！なんて不思議なの！
+#Catch my soul 'cos it's willing to fly away!
+飛んでいこうとする魂を捕まえて！
+#Flames? Not yet, I think.
+火事？違うでしょ？
 #Someone call the Gendarmes!
 誰か衛兵を呼べ！
 #I split my brain, melt through the floor.
 のーみそ飛び散っちゃって床にしみてるよ。
 #And now the dreams end.
 そして今夢は終る。
-Off to Never-Never Land!
-Death greets me warm, now I will just say goodbye.
-What is this? I've been stricken by fate!
-This can't be happening to me!
-Flash before my eyes: now it's time to die.
-You have been dying since the day you were born.
-No point asking who's to blame.
-But for all his power he couldn't foresee his own demise.
+#Off to Never-Never Land!
+ネバー・ネバー・ランドに向かってテイクオフ！
+#Death greets me warm, now I will just say goodbye.
+暖かに死を迎え、今こそまさに左様なら。
+#What is this? I've been stricken by fate!
+これは何？運命が急転直下！
+#This can't be happening to me!
+これが起きるはずがないんだ！
+#Flash before my eyes: now it's time to die.
+白い光に包まれた今、死の時。
+#You have been dying since the day you were born.
+生まれたときから死に向かっていた。
+#No point asking who's to blame.
+人のせいにする理由がない。
+#But for all his power he couldn't foresee his own demise.
+彼の全力をもってしても、彼の終焉を予見できませんでした。
 #My creator will lay my soul to rest.
 創造主は私の魂を安らかな眠りに就かせてくれるだろう。
 #Was that worth dying for?
 あれは命を賭けるほどのことだったかな？
-Can you say you are proud of what you've done?
-But there are some things which cannot be excused.
-Why is it some of us are here just so that we'll die?
+#Can you say you are proud of what you've done?
+自分のしたことに誇りを持てるって言うのかい？
+#But there are some things which cannot be excused.
+しかし許せないことがいくつかあります。
+#Why is it some of us are here just so that we'll die?
+なんでここにいるヤツだけが死ぬことになってんだ？
 #The shortest straw, pulled for you.
 あなたが引いたのは一番短いワラでした。
-There's got to be just more to it that this or tell me why do we exist?
-I can't believe that really my time has come.
-Too much of a good thing, I guess...
+#There's got to be just more to it that this or tell me why do we exist?
+#I can't believe that really my time has come.
+私の順番が来たなんて信じないぞ。
+#Too much of a good thing, I guess...
+出来が良すぎたんだ...きっと...
 #I really screwed up this time.
 今回はホントにヘマしちまった。
-Wow, what a trip!
-What is Time, friend or foe
+#Wow, what a trip!
+ワオ、意識がぶっ飛んだ！
+#What is Time, friend or foe
+時間とは、味方とは、敵とは何だ。
 #Time waits for none
 歳月人を待たず。
-Running through your fingers like sand
-Taking us along to future unknown
-And all too sudden, like it or not
+#Running through your fingers like sand
+砂のようにあなたの手から零れ落ちた。
+#Taking us along to future unknown
+まだ見ぬ未来へ私達を連れて行って。
+#And all too sudden, like it or not
+好むと好まざるとにかかわらず、あまりにも突然すぎた。
 #We become part of the Land.
 我々は大地の一部となるのだ。
-Hah! I'm not dead yet.  I still have five hit points.
+#Hah! I'm not dead yet.  I still have five hit points.
+やめないで！変愚！まだ私のライフポイントの残りは 5 よ！
 #I don't understand.  It should be dead by now.
 理解できない。向こうが先に死んでるはずだ。
 #I rolled a 20.  How could that be a miss?
