@@ -238,7 +238,6 @@ static void generate_wilderness(player_type *player_ptr)
         return;
 
     parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-    init_buildings();
     init_flags = INIT_ONLY_BUILDINGS;
     parse_fixed_map(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
     select_floor_music(player_ptr);
