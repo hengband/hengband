@@ -310,7 +310,8 @@ void display_monster_never_move(lore_type *lore_ptr)
 
 void display_monster_kind(lore_type *lore_ptr)
 {
-    if (((lore_ptr->flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_ANGEL)) == 0) && ((lore_ptr->flags2 & (RF2_QUANTUM | RF2_HUMAN)) == 0)) {
+    if (((lore_ptr->flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_ANGEL)) == 0)
+        && ((lore_ptr->flags2 & (RF2_QUANTUM | RF2_HUMAN)) == 0)) {
         hooked_roff(_("モンスター", " creature"));
         return;
     }
@@ -484,16 +485,15 @@ void display_monster_collective(lore_type *lore_ptr)
     if ((lore_ptr->flags1 & RF1_ESCORT) || (lore_ptr->flags1 & RF1_ESCORTS) || lore_ptr->reinforce) {
         hooked_roff(format(_("%^sは通常護衛を伴って現れる。", "%^s usually appears with escorts.  "), wd_he[lore_ptr->msex]));
         display_monster_escort_contents(lore_ptr);
-    }
-    else if (lore_ptr->flags1 & RF1_FRIENDS) {
+    } else if (lore_ptr->flags1 & RF1_FRIENDS) {
         hooked_roff(format(_("%^sは通常集団で現れる。", "%^s usually appears in groups.  "), wd_he[lore_ptr->msex]));
     }
 }
 
-
 /*!
- * @brief モンスターの発射に関する情報を表示するルーチン
- * Hack -- display monster launching information
+ * todo max_blows はゲームの中核的なパラメータの1つなのでどこかのヘッダに定数宣言しておきたい
+ * @brief モンスターの発射に関する情報を表示するルーチン /
+ * Display monster launching information
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param lore_ptr モンスターの思い出構造体への参照ポインタ
  * @return なし
@@ -509,32 +509,37 @@ void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
     }
 
-    if ((lore_ptr->flags4 & RF4_SHOOT) != 0)
-    {
-        int p = -1; /* Position of SHOOT */
-        int n = 0; /* Number of blows */
-        for (int m = 0; m < 4; m++) {
-            if (lore_ptr->r_ptr->blow[m].method != RBM_NONE) n++; /* Count blows */
-            if (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT) {
-                p = m; /* Remember position */
-                break;
-            }
-        }
+    if ((lore_ptr->flags4 & RF4_SHOOT) == 0)
+        return;
 
-        if (n == 4) p = 0; /* When full blows, use a first damage */
-        if (p >= 0)
-        {
-            if (know_armour(lore_ptr->r_idx))
-                sprintf(lore_ptr->tmp_msg[lore_ptr->vn],
-                    _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"),
-                    lore_ptr->r_ptr->blow[p].d_side,
-                    lore_ptr->r_ptr->blow[p].d_dice);
-            else
-                sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("射撃をする", "fire an arrow"));
-            lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
-            lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+    int p = -1; /* Position of SHOOT */
+    int n = 0; /* Number of blows */
+    const int max_blows = 4;
+    for (int m = 0; m < max_blows; m++) {
+        if (lore_ptr->r_ptr->blow[m].method != RBM_NONE)
+            n++; /* Count blows */
+
+        if (lore_ptr->r_ptr->blow[m].method == RBM_SHOOT) {
+            p = m; /* Remember position */
+            break;
         }
     }
+
+    /* When full blows, use a first damage */
+    if (n == max_blows)
+        p = 0;
+
+    if (p < 0)
+        return;
+
+    if (know_armour(lore_ptr->r_idx))
+        sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blow[p].d_side,
+            lore_ptr->r_ptr->blow[p].d_dice);
+    else
+        sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("射撃をする", "fire an arrow"));
+
+    lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
+    lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
 }
 
 void display_monster_sometimes(lore_type *lore_ptr)
