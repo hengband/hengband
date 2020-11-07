@@ -179,6 +179,7 @@
  * Include the proper "header" file
  */
 # include <curses.h>
+#include <iconv.h>
 
 typedef struct term_data term_data;
 
@@ -192,7 +193,7 @@ struct term_data
 #define MAX_TERM_DATA 4
 
 static term_data data[MAX_TERM_DATA];
-
+static iconv_t iconvd;
 
 /*
  * Hack -- try to guess which systems use what commands
@@ -959,8 +960,13 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
    term_data *td = (term_data *)(Term->data);
 
    int i;
-
-   char text[81];
+   char intext[n];
+   char text[80 * 3 + 1];
+   size_t inlen = n;
+   size_t outlen = sizeof(text);
+   char *inbuf = intext;
+   char *outbuf = text;
+   size_t res;
 
 #ifdef USE_NCURSES_ACS
    /* do we have colors + 16 ? */
@@ -972,9 +978,19 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
    }
 #endif
 
+   /* Copy to char array because of iconv's warning by const char pointer */
+   memcpy(intext, s, (size_t)n);
+
    /* Obtain a copy of the text */
-   for (i = 0; i < n; i++) text[i] = s[i];
-   text[n] = 0;
+   res = iconv(iconvd, 0, 0, 0, 0);
+   if(res == (size_t)-1) return (-1);
+   res = iconv(iconvd, &inbuf, &inlen, &outbuf, &outlen);
+   if(res == (size_t)-1) return (-1);
+   res = iconv(iconvd, 0, 0, &outbuf, &outlen);
+   if(res == (size_t)-1) return (-1);
+
+   if(outlen == 0) return (-1);
+   *outbuf = '\0';
 
    /* Move the cursor and dump the string */
    wmove(td->win, y, x);
@@ -1047,8 +1063,10 @@ static void hook_quit(concptr str)
 	/* Unused */
 	(void)str;
 
-       /* Exit curses */
-       endwin();
+   /* Exit curses */
+   endwin();
+
+   iconv_close(iconvd);
 }
 
 
@@ -1073,6 +1091,8 @@ errr init_gcu(int argc, char *argv[])
 
 
    setlocale(LC_ALL, "");
+   iconvd = iconv_open("", "EUC-JP");
+   if(iconvd == (iconv_t)-1) return (-1);
 
    /* Build the "sound" path */
    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
