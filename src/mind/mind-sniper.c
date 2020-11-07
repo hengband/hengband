@@ -194,12 +194,14 @@ void display_snipe_list(player_type *sniper_ptr)
 		/* Access the available spell */
 		spell = snipe_powers[i];
 		if (spell.min_lev > plev) continue;
-		if (spell.mana_cost > (int)sniper_ptr->concent) continue;
 
 		sprintf(psi_desc, "  %c) %-30s%2d %4d",
 			I2A(i), spell.name, spell.min_lev, spell.mana_cost);
 
-		term_putstr(x, y + i + 1, -1, TERM_WHITE, psi_desc);
+		if (spell.mana_cost > (int)sniper_ptr->concent)
+			term_putstr(x, y + i + 1, -1, TERM_SLATE, psi_desc);
+		else
+			term_putstr(x, y + i + 1, -1, TERM_WHITE, psi_desc);
 	}
 	return;
 }
@@ -292,32 +294,41 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
 			/* Show the list */
 			if (!redraw)
 			{
-				char psi_desc[80];
+				char psi_index[5];
+				char psi_desc[75];
 				redraw = TRUE;
 				if (!only_browse) screen_save();
 
 				/* Display a list of spells */
 				prt("", y, x);
 				put_str(_("名前", "Name"), y, x + 5);
-				if (only_browse) put_str(_("Lv   集中度", "Lv Pow"), y, x + 35);
+				put_str(_("Lv   集中度", "Lv Pow"), y, x + 35);
 
 				/* Dump the spells */
 				for (i = 0; i < MAX_SNIPE_POWERS; i++)
 				{
+					term_color_type tcol = TERM_WHITE;
 					term_erase(x, y + i + 1, 255);
 
 					/* Access the spell */
 					spell = snipe_powers[i];
-					if (spell.min_lev > plev) continue;
-					if (!only_browse && (spell.mana_cost > (int)sniper_ptr->concent)) continue;
 
 					/* Dump the spell --(-- */
-					if (only_browse)
-						sprintf(psi_desc, "  %c) %-30s%2d %4d",
-							I2A(i), spell.name,	spell.min_lev, spell.mana_cost);
+					if (spell.min_lev > plev)
+						sprintf(psi_index, "   ) ");
 					else
-						sprintf(psi_desc, "  %c) %-30s", I2A(i), spell.name);
-					prt(psi_desc, y + i + 1, x);
+						sprintf(psi_index, "  %c) ", I2A(i));
+
+					sprintf(psi_desc, "%-30s%2d %4d",
+						spell.name,	spell.min_lev, spell.mana_cost);
+
+					if (spell.min_lev > plev)
+						tcol = TERM_SLATE;
+					else if (spell.mana_cost > (int)sniper_ptr->concent)
+						tcol = TERM_L_BLUE;
+
+					term_putstr(x, y + i + 1, -1, tcol, psi_index);
+					term_putstr(x + 5, y + i + 1, -1, tcol, psi_desc);
 				}
 
 				/* Clear the bottom line */
