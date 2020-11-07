@@ -292,6 +292,17 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
         msg_format(_("%sが再生した！", "The %s was reproduced!"), m_name);
 }
 
+/* todo 死亡時の特殊メッセージを表示するだけの処理を複数作るなら、switch/case文に分けられるように汎用化すること */
+static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (!is_seen(player_ptr, md_ptr->m_ptr))
+        return;
+
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+    msg_format(_("%sはお星さまになった！", "%^s became a constellation!"), m_name);
+}
+
 static void drop_specific_item_on_dead(player_type *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
 {
     object_type forge;
@@ -402,6 +413,8 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         return;
     case MON_CAIT_SITH:
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
+    case MON_BIG_RAVEN:
+        on_dead_big_raven(player_ptr, md_ptr);
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;
