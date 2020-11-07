@@ -733,6 +733,16 @@ says, 'Huh... good... I have one thing to say'
 says, 'I felt like I had a younger sister who had survived, but that wasn't the case!'
 says, 'Woooooooooooooo! Be prepared!'
 
+N:1258:Robo-Gandalf
+says, 'BaD EVeninG!'
+says, 'givE mE a rINg!'
+says, 'MoRNing nEVEr coMes tO YOu!'
+says, 'YoU'rE nOt a FLatulENcE coMParEd tO tHe diSASter of dURIN!'
+says, 'yOu'Re noT mY fRIenD!'
+says, 'LOwEr crEAtUrEs!'
+says, 'yoU bASTARD!'
+says, 'tHIs's thE pOWEr oF maChiNE!'
+
 N:*:Default lines
 cackles evilly.
 cackles diabolically.
