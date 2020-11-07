@@ -25130,7 +25130,6 @@ D:$What a cute penguin!
 D:$  They often move around in groups with good behavior.
 D:かわいいペンギンだ。よく群れをなして行儀よく動き回っている。
 
-# 死んだら「お星様になった」とかログに出す
 N:1268:『ビッグキューちゃん』
 E:Raphael, the Raven
 G:B:R
