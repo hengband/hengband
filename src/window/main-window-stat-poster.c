@@ -414,6 +414,12 @@ void print_status(player_type *creature_ptr)
     if (creature_ptr->tim_invis)
         ADD_BAR_FLAG(BAR_SENSEUNSEEN);
 
+    if (creature_ptr->concent >= CONCENT_RADAR_THRESHOLD)
+    {
+        ADD_BAR_FLAG(BAR_SENSEUNSEEN);
+        ADD_BAR_FLAG(BAR_NIGHTSIGHT);
+    }
+
     if (is_time_limit_esp(creature_ptr))
         ADD_BAR_FLAG(BAR_TELEPATHY);
 
