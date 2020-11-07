@@ -3914,6 +3914,10 @@ W:15:15:20:50000
 P:0:2d5:-2:13:0
 F:DEX | BLOWS | SPEED | HIDE_TYPE |
 F:BRAND_COLD | BRAND_POIS | VORPAL | RES_FEAR
+D:$This is the dagger with a very poisonous sharp edge, 
+D:$which can slash and kill anyone quickly.
+D:$Many years ago, Jian ke tied to assasinate the first 
+D:$emperor of unified China.
 D:猛毒の刃を持つ鋭い匕首だ。斬られればたちまち死に至るだろう。
 D:燕の刺客荊軻は、この匕首を用いて秦の始皇帝の暗殺を試みた。
 D:いまもその執念が宿る。
@@ -3996,6 +4000,8 @@ I:23:17:0
 W:10:0:130:2500
 P:0:2d5:5:0:0
 F:SLAY_DEMON | RIDING
+D:$They say that the sword which servants of the law hate 
+D:$and abhor.
 D:秩序の下僕が忌み嫌う剣があるらしい。
 
 N:238:『デーモンベーン』
@@ -4143,6 +4149,8 @@ P:0:3d8:20:12:0
 F:SHOW_MODS | VORPAL |
 F:SPEED | DEX | CHR | SLAY_DEMON | SLAY_ORC | SLAY_TROLL |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+D:$The rose throrn whip which a fox spirit loved whipping. 
+D:$'Beautiful roses have thorns.'
 D:「綺麗なバラには、棘があるのさ」とある妖狐が愛用していた茨の鞭だ。
 
 N:248:『虎殺七丁念仏』
@@ -4153,6 +4161,11 @@ P:0:6d4:11:23:-15
 F:VORPAL | HIDE_TYPE | SHOW_MODS | AGGRAVATE
 F:ACTIVATE | KILL_ANIMAL | KILL_HUMAN
 U:ARTS_FALLING_STAR
+D:$It is the terrible katana, by which, a poor priest 
+D:$did not notice that he is slashed and dead after 
+D:$walking long way with speling Nenbustu. 
+D:$After death of Kogan Iwamoto, added 'Toragoroshi' to 
+D:$the head of its inscription.
 D:辻斬りにあった乞食坊主が切られたことにすら気づかず、
 D:念仏を唱えながら七丁も歩いた後に絶命したという妖刀だ。
 D:持ち主に災いをもたらすと言われ、その主たる所有者であった
@@ -4164,6 +4177,11 @@ I:32:2:0
 W:5:4:12:10000
 P:2:0d0:0:0:0
 F:HIDE_TYPE | XTRA_H_RES
+D:$The girl's hat who helped the hero, who is descendant of 
+D:$angels, to escape from evil monsters and were killed by 
+D:$them as a scapegoat. 
+D:$However it has no features except a feather decoration 
+D:$and few protections.
 D:天空人の血を引く勇者を魔の手から逃すために
 D:犠牲になったとの伝承を持つ女性の帽子だ。
 D:さりとて羽根飾りと微かな加護以上に特筆すべき印象はない。
