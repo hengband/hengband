@@ -234,7 +234,7 @@ static void set_wizard_mode_by_argument(player_type *player_ptr)
 static void generate_wilderness(player_type *player_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level == 0) || floor_ptr->inside_quest)
+    if ((floor_ptr->dun_level == 0) && floor_ptr->inside_quest)
         return;
 
     parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
