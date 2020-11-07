@@ -25078,3 +25078,94 @@ F:NO_SLEEP | NO_FEAR | NO_CONF | REFLECTING | IM_ACID | RES_DISE | RES_NEXU
 S:1_IN_7 | HOLD | BR_ACID | BR_DISE | BR_NEXU
 D:$The boots have the ability of Shiva, the god of destruction.
 D:破壊神シヴァの力を持った革の靴だ。
+
+N:1265:テレサ
+E:Boo
+G:G:W
+I:115:30d19:20:50:20
+W:34:3:0:500:0:0
+B:TOUCH:TERRIFY:5d5
+B:TOUCH:TERRIFY:5d5
+F:INVISIBLE | COLD_BLOOD | PASS_WALL | CAN_FLY | EVIL | UNDEAD | FRIENDS
+F:IM_ELEC | IM_ACID | IM_FIRE | RES_WATE | RES_DARK
+F:HURT_LITE | SELF_DARK_1 | NO_FEAR | NO_CONF | NO_SLEEP | DROP_90
+S:1_IN_8 | BA_ELEC | BR_DARK | SHRIEK | SCARE | BLIND | BLINK | DARKNESS
+D:$A little ghost, it loves to threaten others.
+D:小さな幽霊で、人を脅かすのが大好きだ。
+
+N:1266:テレサの親玉『キングテレサ』
+E:King Boo
+G:G:w
+I:125:60d30:20:50:20
+W:44:4:0:13000:0:0
+B:ENGULF:TERRIFY:6d5
+B:ENGULF:TERRIFY:6d5
+F:UNIQUE | FORCE_MAXHP | INVISIBLE | COLD_BLOOD | ESCORT | SMART
+F:PASS_WALL | MOVE_BODY | CAN_FLY | EVIL | UNDEAD
+F:IM_ELEC | IM_ACID | IM_FIRE | RES_WATE | RES_DARK
+F:HURT_LITE | SELF_DARK_1 | NO_FEAR | NO_CONF | NO_SLEEP
+F:DROP_2D2 | DROP_GOOD | DROP_GREAT | ONLY_ITEM
+S:1_IN_3 | DISPEL | BA_ELEC | BA_DARK
+S:SHRIEK | SCARE | BLIND | BLINK | DARKNESS | S_KIN
+D:$Boo's boss, which has the ability to confine objects
+D:$ and people in a picture frame.  It is worth living to scare people.
+D:$  Ever since losing to Luigi, has been obsessed with revenge on him.
+D:$  It is going to add you to one of the picture frame collections.
+D:物体や人物を額縁に閉じ込め絵にする能力を持つ、テレサの親玉。
+D:人を怖がらせるのが生きがいである。
+D:緑のひげに敗れて以来、彼への仕返しに執念を燃やしている。
+D:八つ当たり気味にあなたも額縁コレクションの一つに加えるつもりだ。 
+
+N:1267:キューちゃん
+E:Raven
+G:B:D
+I:120:24d23:20:60:20
+W:33:3:0:7000:0:0
+B:CRUSH:SHATTER:6d6
+B:CRUSH:TERRIFY:6d6
+F:ANIMAL | MOVE_BODY | EVIL | FRIENDS
+F:NO_CONF | RES_GRAV | DROP_90
+S:1_IN_8 | BR_GRAV
+D:$What a cute penguin!
+D:$  They often move around in groups with good behavior.
+D:かわいいペンギンだ。よく群れをなして行儀よく動き回っている。
+
+# 死んだら「お星様になった」とかログに出す
+N:1268:『ビッグキューちゃん』
+E:Raphael, the Raven
+G:B:R
+I:120:40d30:20:60:20
+W:37:3:0:7000:0:0
+B:CRUSH:SHATTER:12d12
+B:CRUSH:TERRIFY:12d12
+F:UNIQUE | FORCE_MAXHP | ANIMAL | POWERFUL | MOVE_BODY | EVIL
+F:NO_CONF | NO_SLEEP | NO_FEAR | IM_ELEC | RES_GRAV | BASH_DOOR
+F:DROP_GOOD | DROP_2D2 | ONLY_ITEM
+S:1_IN_6 | BA_ELEC | BR_GRAV | TELE_TO
+D:$It is very gentle when the head is stepped on,
+D:$ but it gets angry when a stake is driven into its ass.
+D:それは頭を踏まれたくらいでは温厚だが、お尻に杭を打ち込まれると激怒する。
+
+N:1269:精霊馬
+E:Spirit horse
+G:q:G
+I:123:271d3:40:13:50
+W:38:3:0:813:0:0
+B:KICK:DR_MANA:6d6
+B:KICK:HURT:3d6
+B:KICK:HURT:3d6
+B:KICK:CONFUSE:6d6
+F:FORCE_MAXHP | CAN_SWIM | COLD_BLOOD | WEIRD_MIND | RIDING
+F:IM_COLD | RES_WATE | RES_INER | RES_TIME | RES_TELE
+F:NO_STUN | NO_FEAR | NO_SLEEP
+S:1_IN_5 | BA_WATE | HASTE | S_UNDEAD
+D:$It is a horse born by sticking four sticks into a cucumber
+D:$ that is so huge that people can straddle it.
+D:$  The legs are fast.
+D:$  It should carry the spirits of its ancestors,
+D:$ but since the rider was not found,
+D:$ it carries the appropriate spirits.
+D:$ Juice spouts from the fresh body.
+D:人が跨がれるほど巨大なキュウリに四本の棒を刺すことで誕生した馬だ。足が早い。
+D:先祖の霊を乗せるはずだが、乗り手が見つからなかったため適当な霊を乗せている。
+D:瑞々しい体からは汁が噴き出す。
