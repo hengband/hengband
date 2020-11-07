@@ -53,6 +53,7 @@
 #include "main/sound-of-music.h"
 #include "market/arena-info-table.h"
 #include "market/bounty.h"
+#include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
@@ -237,6 +238,7 @@ static void generate_wilderness(player_type *player_ptr)
         return;
 
     parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+    init_buildings();
     init_flags = INIT_ONLY_BUILDINGS;
     parse_fixed_map(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
     select_floor_music(player_ptr);
