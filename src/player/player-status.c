@@ -2654,7 +2654,7 @@ static s16b calc_speed(player_type *creature_ptr)
             }
         }
 
-        count = (int)weight_limit(creature_ptr);
+        count = (int)calc_weight_limit(creature_ptr);
         if (j > count)
             pow -= ((j - count) / (count / 5));
 
@@ -3377,7 +3377,7 @@ static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY
  * Computes current weight limit.
  * @return 制限重量(ポンド)
  */
-WEIGHT weight_limit(player_type *creature_ptr)
+WEIGHT calc_weight_limit(player_type *creature_ptr)
 {
     WEIGHT i = (WEIGHT)adj_str_wgt[creature_ptr->stat_ind[A_STR]] * 50;
     if (creature_ptr->pclass == CLASS_BERSERKER)

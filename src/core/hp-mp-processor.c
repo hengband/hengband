@@ -280,7 +280,7 @@ void process_player_hp_mp(player_type *creature_ptr)
 
     if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation && !creature_ptr->can_swim
         && !creature_ptr->resist_water) {
-        if (calc_inventory_weight(creature_ptr) > weight_limit(creature_ptr)) {
+        if (calc_inventory_weight(creature_ptr) > calc_weight_limit(creature_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->lev), _("溺れ", "drowning"), -1);
             cave_no_regen = TRUE;
