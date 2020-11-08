@@ -148,18 +148,20 @@ static int get_default_hand(player_type *creature_ptr);
 
 /*** Player information ***/
 
-/*
- * Static player info record
+/*!
+ * @brief プレイヤー用のクリーチャー構造体実体 / Static player info record
  */
 player_type p_body;
 
-/*
- * Pointer to the player info
+/*!
+ * @brief プレイヤー用のクリーチャー構造体参照ポインタ / Pointer to the player info
  */
 player_type *p_ptr = &p_body;
 
-/*
- * Return alignment title
+/*!
+ * @brief クリーチャーの抽象的善悪アライメントの表記を返す。 / Return alignment title
+ * @param creature_ptr 算出するクリーチャーの参照ポインタ。
+ * @return アライメントの表記を返す。
  */
 concptr your_alignment(player_type *creature_ptr)
 {
@@ -179,8 +181,10 @@ concptr your_alignment(player_type *creature_ptr)
         return _("大悪", "Chaotic");
 }
 
-/*
- * Return proficiency level of weapons and misc. skills (except riding)
+/*!
+ * @brief 武器や各種スキル（騎乗以外）の抽象的表現ランクを返す。 /  Return proficiency level of weapons and misc. skills (except riding)
+ * @param weapon_exp 経験値
+ * @return ランク値
  */
 int weapon_exp_level(int weapon_exp)
 {
@@ -196,8 +200,10 @@ int weapon_exp_level(int weapon_exp)
         return EXP_LEVEL_MASTER;
 }
 
-/*
- * Return proficiency level of riding
+/*!
+ * @brief 騎乗スキルの抽象的ランクを返す。 / Return proficiency level of riding
+ * @param weapon_exp 経験値
+ * @return ランク値
  */
 int riding_exp_level(int riding_exp)
 {
@@ -213,8 +219,10 @@ int riding_exp_level(int riding_exp)
         return EXP_LEVEL_MASTER;
 }
 
-/*
- * Return proficiency level of spells
+/*!
+ * @brief クリーチャーの呪文レベルの抽象的ランクを返す。 / Return proficiency level of spells
+ * @param spell_exp 経験値
+ * @return ランク値
  */
 int spell_exp_level(int spell_exp)
 {
