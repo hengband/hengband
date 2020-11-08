@@ -695,21 +695,26 @@ static void term_getsize(term_data *td)
     TERM_LEN wid = td->cols * td->tile_wid + td->size_ow1 + td->size_ow2;
     TERM_LEN hgt = td->rows * td->tile_hgt + td->size_oh1 + td->size_oh2;
 
-    RECT rc;
-    rc.left = 0;
-    rc.right = rc.left + wid;
-    rc.top = 0;
-    rc.bottom = rc.top + hgt;
+    RECT rw, rc;
+    if (td->w) {
+        GetWindowRect(td->w, &rw);
+        GetClientRect(td->w, &rc);
 
-    AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
-    td->size_wid = rc.right - rc.left;
-    td->size_hgt = rc.bottom - rc.top;
-    if (!td->w)
-        return;
+        td->size_wid = (rw.right - rw.left) - (rc.right - rc.left) + wid;
+        td->size_hgt = (rw.bottom - rw.top) - (rc.bottom - rc.top) + hgt;
 
-    GetWindowRect(td->w, &rc);
-    td->pos_x = rc.left;
-    td->pos_y = rc.top;
+        td->pos_x = rw.left;
+        td->pos_y = rw.top;
+    } else {
+        /* Tempolary calculation */
+        rc.left = 0;
+        rc.right = wid;
+        rc.top = 0;
+        rc.bottom = hgt;
+        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
+        td->size_wid = rc.right - rc.left;
+        td->size_hgt = rc.bottom - rc.top;
+    }
 }
 
 /*
@@ -2034,17 +2039,21 @@ static void init_windows(void)
     }
 
     load_prefs();
+
+    /* Atrributes of main window */
     td = &data[0];
     td->dwStyle = (WS_OVERLAPPED | WS_THICKFRAME | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION | WS_VISIBLE);
     td->dwExStyle = 0;
     td->visible = TRUE;
 
+    /* Attributes of sub windows */
     for (int i = 1; i < MAX_TERM_DATA; i++) {
         td = &data[i];
         td->dwStyle = (WS_OVERLAPPED | WS_THICKFRAME | WS_SYSMENU);
         td->dwExStyle = (WS_EX_TOOLWINDOW);
     }
 
+    /* Font of each window */
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         td = &data[i];
         strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
@@ -2055,26 +2064,30 @@ static void init_windows(void)
             td->tile_wid = td->font_wid;
         if (!td->tile_hgt)
             td->tile_hgt = td->font_hgt;
-
         term_getsize(td);
         term_window_resize(td);
     }
 
+    /* Create sub windows */
     for (int i = MAX_TERM_DATA - 1; i >= 1; --i) {
         td = &data[i];
 
         my_td = td;
-        td->w
-            = CreateWindowEx(td->dwExStyle, AngList, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
+        td->w = CreateWindowEx(
+            td->dwExStyle, AngList, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
         my_td = NULL;
+
         if (!td->w)
             quit(_("サブウィンドウに作成に失敗しました", "Failed to create sub-window"));
 
+        td->size_hack = TRUE;
+        term_getsize(td);
+        term_window_resize(td);
+
         if (td->visible) {
-            td->size_hack = TRUE;
             ShowWindow(td->w, SW_SHOW);
-            td->size_hack = FALSE;
         }
+        td->size_hack = FALSE;
 
         term_data_link(td);
         angband_term[i] = &td->t;
@@ -2084,19 +2097,27 @@ static void init_windows(void)
             SetActiveWindow(td->w);
         }
 
-        if (data[i].posfix) {
-            term_window_pos(&data[i], HWND_TOPMOST);
+        if (td->posfix) {
+            term_window_pos(td, HWND_TOPMOST);
         } else {
-            term_window_pos(&data[i], td->w);
+            term_window_pos(td, td->w);
         }
     }
 
+    /* Create main window */
     td = &data[0];
     my_td = td;
     td->w = CreateWindowEx(td->dwExStyle, AppName, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
     my_td = NULL;
+
     if (!td->w)
         quit(_("メインウィンドウの作成に失敗しました", "Failed to create Angband window"));
+
+    /* Resize */
+    td->size_hack = TRUE;
+    term_getsize(td);
+    term_window_resize(td);
+    td->size_hack = FALSE;
 
     term_data_link(td);
     angband_term[0] = &td->t;
