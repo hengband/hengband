@@ -506,6 +506,7 @@ extern int riding_exp_level(int riding_exp);
 extern int spell_exp_level(int spell_exp);
 
 extern int calc_weapon_weight_limit(player_type *creature_ptr);
+extern WEIGHT calc_inventory_weight(player_type *creature_ptr);
 
 extern s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr);
 extern void calc_bonuses(player_type *creature_ptr);

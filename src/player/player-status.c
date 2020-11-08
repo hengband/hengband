@@ -270,6 +270,25 @@ static bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
 }
 
 /*!
+ * @brief 所持品総重量を計算する
+ * @param creature_ptr 計算対象となるクリーチャーの参照ポインタ
+ * @return 総重量
+ */
+WEIGHT calc_inventory_weight(player_type *creature_ptr)
+{
+    WEIGHT weight = 0;
+
+    object_type *o_ptr;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    for (inventory_slot_type i = 0; i < INVEN_TOTAL; i++) {
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+        weight += o_ptr->weight;
+    }
+    return weight;
+}
+/*!
  * @brief プレイヤーの全ステータスを更新する /
  * Calculate the players current "state", taking into account
  * not only race/class intrinsics, but also objects being worn
