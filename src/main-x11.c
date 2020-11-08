@@ -2249,7 +2249,7 @@ static errr term_data_init(term_data *td, int i)
 	char buf[80];
 
 	concptr str;
-text
+
 	int val;
 
 	XClassHint *ch;
