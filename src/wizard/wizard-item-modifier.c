@@ -485,9 +485,6 @@ void wiz_modify_item(player_type *creature_ptr)
     screen_load(creature_ptr);
     if (changed) {
         msg_print("Changes accepted.");
-        if (item >= 0) {
-            creature_ptr->total_weight += (q_ptr->weight * q_ptr->number) - (o_ptr->weight * o_ptr->number);
-        }
 
         object_copy(o_ptr, q_ptr);
         creature_ptr->update |= PU_BONUS;

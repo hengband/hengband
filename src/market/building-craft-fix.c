@@ -145,7 +145,6 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         return 0;
     }
 
-    player_ptr->total_weight -= o_ptr->weight;
     KIND_OBJECT_IDX k_idx;
     if (o_ptr->sval == SV_BROKEN_DAGGER) {
         int n = 1;
@@ -265,7 +264,6 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     o_ptr->ident &= ~(IDENT_BROKEN);
     o_ptr->discount = 99;
 
-    player_ptr->total_weight += o_ptr->weight;
     calc_android_exp(player_ptr);
     inven_item_increase(player_ptr, mater, -1);
     inven_item_optimize(player_ptr, mater);

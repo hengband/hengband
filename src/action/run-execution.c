@@ -235,7 +235,7 @@ static bool run_test(player_type *creature_ptr)
                 } else if (has_flag(f_ptr->flags, FF_LAVA) && (has_immune_fire(creature_ptr) || is_invuln(creature_ptr))) {
                     notice = FALSE;
                 } else if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP)
-                    && (creature_ptr->levitation || creature_ptr->can_swim || (creature_ptr->total_weight <= weight_limit(creature_ptr)))) {
+                    && (creature_ptr->levitation || creature_ptr->can_swim || (calc_inventory_weight(creature_ptr) <= weight_limit(creature_ptr)))) {
                     notice = FALSE;
                 }
             }

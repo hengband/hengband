@@ -472,7 +472,6 @@ static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
 
         it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
         object_copy(it_ptr->o_ptr, it_ptr->q_ptr);
-        creature_ptr->total_weight += it_ptr->q_ptr->weight;
         creature_ptr->equip_cnt++;
         creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
         creature_ptr->window |= PW_EQUIP;

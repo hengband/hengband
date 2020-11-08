@@ -147,8 +147,6 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     o_ptr->next_o_idx = next_o_idx;
     o_ptr->marked = marked;
     o_ptr->inscription = inscription;
-    if (item >= 0)
-        owner_ptr->total_weight += (o_ptr->weight - weight);
 
     calc_android_exp(owner_ptr);
     return TRUE;

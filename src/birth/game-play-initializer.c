@@ -69,7 +69,6 @@ void player_wipe_without_name(player_type *creature_ptr)
         q_ptr->comptime = 0;
     }
 
-    creature_ptr->total_weight = 0;
     creature_ptr->inven_cnt = 0;
     creature_ptr->equip_cnt = 0;
     for (int i = 0; i < INVEN_TOTAL; i++)

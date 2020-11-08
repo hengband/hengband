@@ -35,7 +35,6 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 
         new_o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
         object_copy(new_o_ptr, o_ptr);
-        owner_ptr->total_weight += o_ptr->weight;
         inven_item_increase(owner_ptr, INVEN_LARM, -((int)o_ptr->number));
         inven_item_optimize(owner_ptr, INVEN_LARM);
         if (object_allow_two_hands_wielding(o_ptr) && can_two_hands_wielding(owner_ptr))
@@ -64,7 +63,6 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 
     new_o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
     object_copy(new_o_ptr, o_ptr);
-    owner_ptr->total_weight += o_ptr->weight;
     inven_item_increase(owner_ptr, INVEN_RARM, -((int)o_ptr->number));
     inven_item_optimize(owner_ptr, INVEN_RARM);
     msg_format(_("%sを持ち替えた。", "You switched hand of %s."), o_name);

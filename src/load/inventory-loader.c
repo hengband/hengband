@@ -21,7 +21,6 @@
  */
 static errr rd_inventory(player_type *player_ptr)
 {
-    player_ptr->total_weight = 0;
     player_ptr->inven_cnt = 0;
     player_ptr->equip_cnt = 0;
 
@@ -48,7 +47,6 @@ static errr rd_inventory(player_type *player_ptr)
         if (n >= INVEN_RARM) {
             q_ptr->marked |= OM_TOUCHED;
             object_copy(&player_ptr->inventory_list[n], q_ptr);
-            player_ptr->total_weight += (q_ptr->number * q_ptr->weight);
             player_ptr->equip_cnt++;
             continue;
         }
@@ -61,7 +59,6 @@ static errr rd_inventory(player_type *player_ptr)
         n = slot++;
         q_ptr->marked |= OM_TOUCHED;
         object_copy(&player_ptr->inventory_list[n], q_ptr);
-        player_ptr->total_weight += (q_ptr->number * q_ptr->weight);
         player_ptr->inven_cnt++;
     }
 

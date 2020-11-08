@@ -284,7 +284,7 @@ WEIGHT calc_inventory_weight(player_type *creature_ptr)
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        weight += o_ptr->weight;
+        weight += o_ptr->weight * o_ptr->number;
     }
     return weight;
 }
@@ -2533,7 +2533,7 @@ static s16b calc_speed(player_type *creature_ptr)
 
     s16b pow = 110;
 
-    int j = creature_ptr->total_weight;
+    int j = calc_inventory_weight(creature_ptr);
     int count;
 
     if (!creature_ptr->riding) {

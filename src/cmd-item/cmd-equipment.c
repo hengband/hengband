@@ -55,12 +55,13 @@ void do_cmd_equip(player_type *creature_ptr)
 
     screen_save();
     (void)show_equipment(creature_ptr, 0, USE_FULL, 0);
+    WEIGHT weight = calc_inventory_weight(creature_ptr);
+    WEIGHT weight_lim = weight_limit(creature_ptr);
 #ifdef JP
-    sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", (int)lbtokg1(creature_ptr->total_weight), (int)lbtokg2(creature_ptr->total_weight),
-        (long int)((creature_ptr->total_weight * 100) / weight_limit(creature_ptr)));
+    sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", (int)lbtokg1(weight), (int)lbtokg2(weight), (long int)((weight * 100) / weight_lim));
 #else
-    sprintf(out_val, "Equipment: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(creature_ptr->total_weight / 10),
-        (int)(creature_ptr->total_weight % 10), (long int)((creature_ptr->total_weight * 100) / weight_limit(creature_ptr)));
+    sprintf(out_val, "Equipment: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(weight / 10), (int)(weight % 10),
+        (long int)((weight * 100) / weight_lim);
 #endif
 
     prt(out_val, 0, 0);
@@ -241,7 +242,6 @@ void do_cmd_wield(player_type *creature_ptr)
 
     object_copy(o_ptr, q_ptr);
     o_ptr->marked |= OM_TOUCHED;
-    creature_ptr->total_weight += q_ptr->weight;
     creature_ptr->equip_cnt++;
 
 #define STR_WIELD_RARM _("%s(%c)を右手に装備した。", "You are wielding %s (%c) in your right hand.")

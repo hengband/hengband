@@ -357,8 +357,6 @@ typedef struct player_type {
     s16b running; /* Current counter for running, if any */
     bool suppress_multi_reward; /*!< 複数レベルアップ時のパトロンからの報酬多重受け取りを防止 */
 
-    WEIGHT total_weight; /*!< 所持品と装備品の計算総重量 / Total weight being carried */
-
     s16b stat_add[A_MAX]; /* Modifiers to stat values */
     s16b stat_ind[A_MAX]; /* Indexes into stat tables */
 
