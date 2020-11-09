@@ -333,8 +333,8 @@ static bool check_cold_blood(player_type *subject_ptr, um_type *um_ptr, const PO
         return FALSE;
 
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
-    if ((r_ptr->flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) != RF2_COLD_BLOOD)
-        return TRUE;
+    if ((r_ptr->flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) == RF2_COLD_BLOOD)
+        return FALSE;
 
     um_ptr->easy = TRUE;
     um_ptr->flag = TRUE;
