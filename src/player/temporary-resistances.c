@@ -28,6 +28,8 @@ void tim_player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
     if (is_hero(creature_ptr) || is_shero(creature_ptr))
         add_flag(flags, TR_RES_FEAR);
+    if (creature_ptr->tim_infra)
+        add_flag(flags, TR_INFRA);
     if (creature_ptr->tim_invis)
         add_flag(flags, TR_SEE_INVIS);
     if (creature_ptr->tim_regen)
