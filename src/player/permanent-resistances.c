@@ -196,6 +196,11 @@ static void add_mimic_form_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  */
 static void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
+    /* Common for all races */
+    if (rp_ptr->infra > 0)
+        add_flag(flags, TR_INFRA);
+
+	/* Unique for each race */
 	switch (creature_ptr->prace)
 	{
 	case RACE_ELF:
