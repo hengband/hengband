@@ -238,9 +238,12 @@ int spell_exp_level(int spell_exp)
         return EXP_LEVEL_MASTER;
 }
 
-/*
- * Delayed visual update
- * Only used if update_view(), update_lite() or update_mon_lite() was called
+/*!
+ * @brief 遅延描画更新 / Delayed visual update
+ * @details update_view(), update_lite(), update_mon_lite() においてのみ更新すること / Only used if update_view(), update_lite() or update_mon_lite() was called
+ * @param player_ptr 主観となるプレイヤー構造体参照ポインタ
+ * @todo 将来独自インターフェース実装にはz-term系に追い出すべきか？
+ * @return なし
  */
 static void delayed_visual_update(player_type *player_ptr)
 {
@@ -319,6 +322,7 @@ WEIGHT calc_inventory_weight(player_type *creature_ptr)
  *
  * This function induces various "status" messages.
  * </pre>
+ * @todo ここで計算していた各値は一部の状態変化メッセージ処理を除き、今後必要な時に適示計算する形に移行するためほぼすべて削られる。
  */
 void calc_bonuses(player_type *creature_ptr)
 {
