@@ -239,13 +239,13 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     if (fis_ptr->floor)
         fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, fis_ptr->tval);
 
-    if (fis_ptr->i1 <= fis_ptr->i2)
+    if ((mode & USE_INVEN) && (fis_ptr->i1 <= fis_ptr->i2))
         fis_ptr->allow_inven = TRUE;
 
-    if (fis_ptr->e1 <= fis_ptr->e2)
+    if ((mode & USE_EQUIP) && (fis_ptr->e1 <= fis_ptr->e2))
         fis_ptr->allow_equip = TRUE;
 
-    if (fis_ptr->floor_num)
+    if ((mode & USE_FLOOR) && (fis_ptr->floor_num))
         fis_ptr->allow_floor = TRUE;
 
     if (!fis_ptr->allow_inven && !fis_ptr->allow_equip && !fis_ptr->allow_floor) {
