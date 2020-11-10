@@ -102,9 +102,7 @@ void autopick_pickup_items(player_type *player_ptr, grid_type *g_ptr)
         next_o_idx = o_ptr->next_o_idx;
         int idx = find_autopick_list(player_ptr, o_ptr);
         auto_inscribe_item(player_ptr, o_ptr, idx);
-        bool is_auto_pickup = idx >= 0;
-        is_auto_pickup &= (autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)) != 0;
-        if (!is_auto_pickup) {
+        if ((idx < 0) || (autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)) == 0) {
             auto_destroy_item(player_ptr, o_ptr, idx);
             continue;
         }
