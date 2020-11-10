@@ -63,14 +63,13 @@ PERCENTAGE randrate(int dice, int fix, rate_calc_type_mode mode)
 PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
-    int i;
 
     if (has_immune_acid(creature_ptr)) {
         return 0;
     }
 
     BIT_FLAGS flgs = has_vuln_acid(creature_ptr);
-    for (i = 0; i < FLAG_CAUSE_MAX; i++) {
+    for (int i = 0; i < FLAG_CAUSE_MAX; i++) {
         if (flgs & (0x01 << i)) {
             if (i == FLAG_CAUSE_MUTATION) {
                 per *= 2;
@@ -94,14 +93,13 @@ PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
 PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
-    int i;
 
     if (has_immune_elec(creature_ptr)) {
         return 0;
     }
 
     BIT_FLAGS flgs = has_vuln_elec(creature_ptr);
-    for (i = 0; i < FLAG_CAUSE_MAX; i++) {
+    for (int i = 0; i < FLAG_CAUSE_MAX; i++) {
         if (flgs & (0x01 << i)) {
             if (i == FLAG_CAUSE_MUTATION) {
                 per *= 2;
@@ -125,9 +123,8 @@ PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
 PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
-    int i;
     BIT_FLAGS flgs = has_vuln_fire(creature_ptr);
-    for (i = 0; i < FLAG_CAUSE_MAX; i++) {
+     for (int i = 0; i < FLAG_CAUSE_MAX; i++) {
         if (flgs & (0x01 << i)) {
             if (i == FLAG_CAUSE_MUTATION) {
                 per *= 2;
@@ -152,9 +149,8 @@ PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr)
 PERCENTAGE calc_cold_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
-    int i;
     BIT_FLAGS flgs = has_vuln_cold(creature_ptr);
-    for (i = 0; i < FLAG_CAUSE_MAX; i++) {
+    for (int i = 0; i < FLAG_CAUSE_MAX; i++) {
         if (flgs & (0x01 << i)) {
             if (i == FLAG_CAUSE_MUTATION) {
                 per *= 2;
