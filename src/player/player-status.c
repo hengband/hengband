@@ -3042,62 +3042,20 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
     return damage;
 }
 
+/*!
+ * @brief 武器の命中修正を計算する。 / Calculate hit bonus from a wielded weapon.
+ * @details
+ * 'slot' MUST be INVEN_RARM or INVEM_LARM.
+ */
 static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_true_value)
 {
-    int id = slot - INVEN_RARM;
-    object_type *o_ptr = &creature_ptr->inventory_list[slot];
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_flags(creature_ptr, o_ptr, flgs);
-    tval_type tval = creature_ptr->inventory_list[INVEN_RARM + id].tval - TV_WEAPON_BEGIN;
-    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + id].sval;
-
     s16b hit = 0;
 
+    /* Base bonuses */
     hit += ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
     hit += ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128);
 
-    if ((creature_ptr->pclass == CLASS_PRIEST) && (!(has_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
-        hit -= 2;
-    } else if (creature_ptr->pclass == CLASS_BERSERKER) {
-        hit += creature_ptr->lev / 5;
-        if (((id == 0) && !has_left_hand_weapon(creature_ptr)) || has_two_handed_weapons(creature_ptr)) {
-            hit += creature_ptr->lev / 5;
-        }
-    } else if (creature_ptr->pclass == CLASS_SORCERER) {
-        if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
-            hit -= 200;
-        } else {
-            hit -= 30;
-        }
-    }
-
-    if ((object_is_fully_known(o_ptr) || is_true_value) && o_ptr->curse_flags & TRC_LOW_MELEE) {
-        if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-            hit -= 15;
-        } else {
-            hit -= 5;
-        }
-    }
-
-    if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
-        if (o_ptr->curse_flags & (TRC_CURSED)) {
-            hit += 5;
-        }
-        if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
-            hit += 7;
-        }
-        if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
-            hit += 13;
-        }
-        if (o_ptr->curse_flags & (TRC_TY_CURSE)) {
-            hit += 5;
-        }
-    }
-
-    if (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10) {
-        hit += 2 * (calc_weapon_weight_limit(creature_ptr) - o_ptr->weight / 10);
-    }
-
+    /* Temporary bonuses */
     if (is_blessed(creature_ptr)) {
         hit += 10;
     }
@@ -3116,36 +3074,13 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         hit -= 5;
     }
 
-    if (creature_ptr->riding) {
-        if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
-            hit += 15;
-        }
-    }
-
-    if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
-        && !has_flag(flgs, TR_RIDING)) {
-
-        int penalty;
-        if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
-            penalty = 5;
-        } else {
-            penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
-            penalty += 30;
-            if (penalty < 30)
-                penalty = 30;
-        }
-        hit -= (s16b)penalty;
-    }
-
-    hit += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
-
-    if (has_not_ninja_weapon(creature_ptr, id) || has_not_monk_weapon(creature_ptr, id)) {
-        hit -= 40;
-    }
-
-    if (get_default_hand(creature_ptr) == id) {
-        if ((has_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
-            || (has_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_LARM))) {
+    /* Default hand bonuses */
+    int id = slot - INVEN_RARM;
+    int default_hand = get_default_hand(creature_ptr);
+    if (default_hand == id) {
+        /* Add trained bonus of empty hands' combat when having no weapon and riding */
+        if ((!has_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_LARM))
+            || (!has_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))) {
             hit += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
         }
 
@@ -3153,22 +3088,114 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
             || !has_disable_two_handed_bonus(creature_ptr, 0)) {
             int bonus_to_h = 0;
             bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-            hit += MAX(bonus_to_h, 1);
+             hit += MAX(bonus_to_h, 1);
         }
     }
 
-    int default_hand = get_default_hand(creature_ptr);
+    /* Bonuses and penalties by weapon */
+    if (has_melee_weapon(creature_ptr, slot)) {
+        object_type *o_ptr = &creature_ptr->inventory_list[slot];
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        tval_type tval = o_ptr->tval - TV_WEAPON_BEGIN;
+        OBJECT_SUBTYPE_VALUE sval = o_ptr->sval;
+
+        /* Traind bonuses */
+        hit += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
+
+        /* Weight penalty */
+        if (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10) {
+            hit += 2 * (calc_weapon_weight_limit(creature_ptr) - o_ptr->weight / 10);
+        }
+
+        /* Low melee penalty */
+        if ((object_is_fully_known(o_ptr) || is_true_value) && o_ptr->curse_flags & TRC_LOW_MELEE) {
+            if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+                hit -= 15;
+            } else {
+                hit -= 5;
+            }
+        }
+
+        /* Riding bonus and penalty */
+        if (creature_ptr->riding) {
+            if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
+                hit += 15;
+            }
+        }
+
+        if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
+            && !has_flag(flgs, TR_RIDING)) {
+
+            int penalty;
+            if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
+                penalty = 5;
+            } else {
+                penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+                penalty += 30;
+                if (penalty < 30)
+                    penalty = 30;
+            }
+            hit -= (s16b)penalty;
+        }
+
+        /* Class penalties */
+        if ((creature_ptr->pclass == CLASS_PRIEST) && (!(has_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
+            hit -= 2;
+        } else if (creature_ptr->pclass == CLASS_BERSERKER) {
+            hit += creature_ptr->lev / 5;
+            if (((id == 0) && !has_left_hand_weapon(creature_ptr)) || has_two_handed_weapons(creature_ptr)) {
+                hit += creature_ptr->lev / 5;
+            }
+        } else if (creature_ptr->pclass == CLASS_SORCERER) {
+            if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
+                hit -= 200;
+            } else {
+                hit -= 30;
+            }
+        }
+
+        if (has_not_ninja_weapon(creature_ptr, id) || has_not_monk_weapon(creature_ptr, id)) {
+            hit -= 40;
+        }
+
+        /* Hex realm bonuses */
+        if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
+            if (o_ptr->curse_flags & (TRC_CURSED)) {
+                hit += 5;
+            }
+            if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) {
+                hit += 7;
+            }
+            if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) {
+                hit += 13;
+            }
+            if (o_ptr->curse_flags & (TRC_TY_CURSE)) {
+                hit += 5;
+            }
+        }
+    }
+
+    /* Bonuses from inventory */
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        int bonus_to_h;
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
-            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
+        object_type *o_ptr = &creature_ptr->inventory_list[i];
+
+        /* Ignore empty hands, handed weapons, bows and capture balls */
+        if (!o_ptr->k_idx
+            || o_ptr->tval == TV_CAPTURE
+            || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
+            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i))
+            || i == INVEN_BOW)
             continue;
 
+        /* Fake value does not include unknown objects' value */
         if (is_true_value || !object_is_known(o_ptr))
             continue;
-        bonus_to_h = o_ptr->to_h;
 
+        int bonus_to_h = o_ptr->to_h;
+
+        /* When wields only a weapon */
         if (creature_ptr->pclass == CLASS_NINJA) {
             if (o_ptr->to_h > 0)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
@@ -3179,6 +3206,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
             continue;
         }
 
+        /* When wields two weapons on each hand */
         if (has_right_hand_weapon(creature_ptr) && has_left_hand_weapon(creature_ptr)) {
             if (default_hand == 0)
                 hit += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
@@ -3190,10 +3218,13 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         if (default_hand == id)
             hit += (s16b)bonus_to_h;
     }
+
+    /* Martial arts bonus */
     if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
         hit += (creature_ptr->lev / 3);
     }
 
+    /* Two handed combat penalty */
     hit -= calc_double_weapon_penalty(creature_ptr, slot);
 
     return hit;
@@ -3398,12 +3429,12 @@ WEIGHT calc_weight_limit(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーが現在右手/左手に武器を持っているか判定する /
- * @param i 判定する手のID(右手:0 左手:1)
+ * @param i 判定する手のID(右手:INVEN_RARM 左手:INVEN_LARM)
  * @return 持っているならばTRUE
  */
-bool has_melee_weapon(player_type *creature_ptr, int i)
+bool has_melee_weapon(player_type *creature_ptr, int slot)
 {
-    return ((creature_ptr->inventory_list[i].k_idx && object_is_melee_weapon(&creature_ptr->inventory_list[i])) ? TRUE : FALSE);
+    return ((creature_ptr->inventory_list[slot].k_idx) && object_is_melee_weapon(&creature_ptr->inventory_list[slot]));
 }
 
 /*!
