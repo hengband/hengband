@@ -369,7 +369,6 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 
     while (TRUE) {
         clear_bldg(0, 22);
-        item_tester_hook = item_tester_hook_orthodox_melee_weapons;
         current_world_ptr->character_xtra = TRUE;
         for (int i = 0; i < n; i++) {
             int col = (wid * i + mgn);
@@ -409,6 +408,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
             continue;
         }
 
+        item_tester_hook = item_tester_hook_orthodox_melee_weapons;
         q = _("第二の武器は？", "What is your second weapon? ");
         s = _("比べるものがありません。", "You have nothing to compare.");
         OBJECT_IDX item2;
