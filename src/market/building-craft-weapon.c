@@ -412,10 +412,17 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
         q = _("第二の武器は？", "What is your second weapon? ");
         s = _("比べるものがありません。", "You have nothing to compare.");
         OBJECT_IDX item2;
-        o_ptr[1] = choose_object(customer_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
-        if (!o_ptr[1])
+        object_type *i2_ptr = choose_object(customer_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
+        if (!i2_ptr)
             continue;
 
+        if (i2_ptr == o_ptr[0] || (n == 2 && i2_ptr == o_ptr[1])) {
+            msg_print(_("表示中の武器は選べません！", "You can not select a weapon which is shown now!"));
+            msg_print(NULL);
+            continue;
+        }
+
+        o_ptr[1] = i2_ptr;
         total += cost;
         cost = bcost / 2;
         n = 2;
