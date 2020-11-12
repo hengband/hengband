@@ -1594,16 +1594,25 @@ BIT_FLAGS has_lite(player_type *creature_ptr)
     return result;
 }
 
+/*
+ * @brief 両手持ちボーナスがもらえないかどうかを判定する。 / Does *not * get two hand wielding bonus.
+ * @detail
+ *  Only can get hit bonuses when wieids an enough light weapon which is lighter than 5 times of weight limit.
+ *  If its weight is 10 times heavier or more than weight limit, gets hit penalty in calc_to_hit().
+ */
 bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
 {
-    object_type *o_ptr;
-    o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
-    if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
-        if (calc_weapon_weight_limit(creature_ptr) * 2 >= o_ptr->weight / 10 && has_two_handed_weapons(creature_ptr)
-            && (calc_weapon_weight_limit(creature_ptr) * 2 < o_ptr->weight / 5))
-            return TRUE;
+    if (has_melee_weapon(creature_ptr, INVEN_RARM + i) && has_two_handed_weapons(creature_ptr)) {
+        object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
+        int limit = calc_weapon_weight_limit(creature_ptr) * 2;
+
+        /* Enable when two hand wields an enough light weapon */
+        if (limit >= o_ptr->weight / 5)
+            return FALSE;
     }
-    return FALSE;
+
+    /* Disable when empty hands, one hand wieldings and heavy weapons */
+    return TRUE;
 }
 
 bool has_icky_wield_weapon(player_type *creature_ptr, int i)
@@ -1651,7 +1660,8 @@ bool has_not_monk_weapon(player_type *creature_ptr, int i)
 {
     tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
-    return (creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) && (!s_info[creature_ptr->pclass].w_max[tval][sval]);
+    return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER))
+        && !(s_info[creature_ptr->pclass].w_max[tval][sval]);
 }
 
 bool has_good_luck(player_type *creature_ptr) { return (creature_ptr->pseikaku == PERSONALITY_LUCKY) || (creature_ptr->muta3 & MUT3_GOOD_LUCK); }
