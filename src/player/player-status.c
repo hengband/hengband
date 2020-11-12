@@ -290,7 +290,6 @@ WEIGHT calc_inventory_weight(player_type *creature_ptr)
     WEIGHT weight = 0;
 
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
     for (inventory_slot_type i = 0; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)

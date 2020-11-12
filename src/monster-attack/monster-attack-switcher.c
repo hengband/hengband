@@ -165,7 +165,7 @@ static void calc_blow_drain_exp(player_type *target_ptr, monap_type *monap_ptr, 
     if (has_hold_exp(target_ptr))
         damage_ratio -= 75;
 
-    if (is_resist_neth(target_ptr))
+    if (has_resist_neth(target_ptr))
         damage_ratio -= 75;
 
     monap_ptr->damage = monap_ptr->damage * damage_ratio / 1000;
@@ -188,7 +188,7 @@ static void calc_blow_time(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     process_monster_attack_time(target_ptr, monap_ptr);
-    if (is_resist_time(target_ptr))
+    if (has_resist_time(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
 
     monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
