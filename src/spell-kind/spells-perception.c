@@ -179,7 +179,11 @@ bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tes
     bool old_known = identify_item(caster_ptr, o_ptr);
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
+
+    /* Refrect item informaiton onto subwindows without updating inventory */
+    caster_ptr->update &= ~(PU_COMBINE | PU_REORDER);
     handle_stuff(caster_ptr);
+    caster_ptr->update |= (PU_COMBINE | PU_REORDER);
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, 0);
