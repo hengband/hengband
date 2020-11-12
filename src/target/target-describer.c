@@ -560,7 +560,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     prt(eg_ptr->out_val, 0, 0);
     move_cursor_relative(y, x);
     eg_ptr->query = inkey();
-    if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n') && (eg_ptr->query != ' '))
+    if ((eg_ptr->query != '\r') && (eg_ptr->query != '\n'))
         return eg_ptr->query;
 
     return 0;
