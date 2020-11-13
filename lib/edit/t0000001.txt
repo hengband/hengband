@@ -90,9 +90,17 @@ F:!:FLOOR:3:0:70
 F:b:BUILDING_1:3:0:0:0:0:NONE:14
 F:!:FLOOR:3:0:43
 
+# When iromman_downward is true, continue with quest 14
+?:[AND [EQU $QUEST1 3] [EQU $IRONMAN_DOWNWARD 1] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:18
+
 # Quest 1 finished, continue with quest 14
 ?:[EQU $QUEST1 4]
 F:b:BUILDING_1:3:0:0:0:0:NONE:14
+
+# When iromman_downward is true, continue with quest 14
+?:[AND [EQU $QUEST1 4] [EQU $IRONMAN_DOWNWARD 1] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
 # Quest 1 failed, wait for the player to enter the castle
 ?:[EQU $QUEST1 5]
@@ -101,6 +109,10 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:1
 # Quest 1 failed but done, continue with quest 14
 ?:[EQU $QUEST1 6]
 F:b:BUILDING_1:3:0:0:0:0:NONE:14
+
+# When iromman_downward is true, continue with quest 14
+?:[AND [EQU $QUEST1 6] [EQU $IRONMAN_DOWNWARD 1] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
 ?:1
 
