@@ -213,6 +213,8 @@ static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, ch
         else
             sprintf(tmp, "NORMAL");
         v = tmp;
+    } else if (streq(b + 1, "IRONMAN_DOWNWARD")) {
+        v = (ironman_downward ? "1" : "0");
     }
 
     (*fp) = f;
