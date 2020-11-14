@@ -327,11 +327,11 @@ static bool parse_qtw_P(player_type *player_ptr, qtwg_type *qtwg_ptr, char **zz)
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
     if (floor_ptr->inside_quest) {
-        delete_monster(player_ptr, player_ptr->y, player_ptr->x);
         POSITION py = atoi(zz[0]);
         POSITION px = atoi(zz[1]);
         player_ptr->y = py;
         player_ptr->x = px;
+        delete_monster(player_ptr, player_ptr->y, player_ptr->x);
         return TRUE;
     }
     
