@@ -70,15 +70,6 @@
 
 # include <sys/stat.h>
 
-# ifdef si_ptr
-/*
- * Linux (at least Debian 10) defines this to access a field in siginfo_t
- * (see the sigaction(2) man page).  Get rid of it since Hengband isn't
- * using siginfo_t and does use si_ptr in other contexts.
- */
-#  undef si_ptr
-# endif
-
 #endif /* SET_UID */
 
 #include <string.h>
