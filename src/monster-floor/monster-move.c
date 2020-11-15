@@ -350,6 +350,14 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         bool can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
 
+        /* Non stupid, non confused pets avoid attacking player */
+        if (is_pet(m_ptr)
+            && !(r_ptr->r_flags2 & RF2_STUPID)
+            && !m_ptr->mtimed[MTIMED_CONFUSED]
+            && player_bold(target_ptr, ny, nx)) {
+            continue;
+        }
+
         if (!process_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx, can_cross)) {
             if (!process_door(target_ptr, turn_flags_ptr, m_ptr, ny, nx))
                 return FALSE;
