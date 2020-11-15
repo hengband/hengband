@@ -1528,26 +1528,25 @@ BIT_FLAGS has_immune_dark(player_type *creature_ptr)
     return result;
 }
 
+/*
+ * @brief 右手(利き手)が武器を持っているかどうかを判定する
+ * @detail Includes martial arts and hand combats as weapons.
+ */
 bool has_right_hand_weapon(player_type *creature_ptr)
 {
     if (has_melee_weapon(creature_ptr, INVEN_RARM))
         return TRUE;
 
-    if (can_two_hands_wielding(creature_ptr)) {
-        switch (creature_ptr->pclass) {
-        case CLASS_MONK:
-        case CLASS_FORCETRAINER:
-        case CLASS_BERSERKER:
-            if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
-                return TRUE;
-            }
-            break;
-        }
-    }
+    if ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) && !has_left_hand_weapon(creature_ptr))
+        return TRUE;
 
     return FALSE;
 }
 
+/*
+ * @brief 左手(非利き手)が武器を持っているかどうかを判定する
+ * @detail Exclude martial arts and hand combats from weapons.
+ */
 bool has_left_hand_weapon(player_type *creature_ptr) { return has_melee_weapon(creature_ptr, INVEN_LARM); }
 
 bool has_two_handed_weapons(player_type *creature_ptr)
