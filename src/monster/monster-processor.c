@@ -53,6 +53,7 @@
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "player-info/avatar.h"
+#include "player/player-skill.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
@@ -289,7 +290,7 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 }
 
 /*!
- * @brief モンスターの怒り状態を判定する (起こっていたら敵に回す)
+ * @brief モンスターの怒り状態を判定する (怒っていたら敵に回す)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
@@ -311,9 +312,22 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
     if (target_ptr->phase_out || !gets_angry)
         return;
 
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(target_ptr, m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
+
+    /* When riding a hostile align pet */
+    if (target_ptr->riding == m_idx) {
+        if (abs(target_ptr->align / 10) < randint0(target_ptr->skill_exp[GINOU_RIDING]))
+            return;
+
+        msg_format(_("%^sが突然暴れだした！", "%^s suddenly begins unruly!"), m_name);
+        if (!process_fall_off_horse(target_ptr, 1, TRUE))
+            return;
+
+        msg_format(_("あなたは振り落とされた。", "You have fallen."));
+    }
+
     if (is_pet(m_ptr) || see_m) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(target_ptr, m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
         msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
     }
 
