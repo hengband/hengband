@@ -227,7 +227,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return;
 
-    resist = tr_ptr->flags3 & RF3_NO_FEAR;
+    resist = ((tr_ptr->flags3 & RF3_NO_FEAR) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが恐ろしげな幻覚を作り出した。", "%^s casts a fearful illusion in front of %s."),
@@ -282,7 +282,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
         msg1 = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%^s casts a spell, burning %s's eyes.");
     }
 
-    resist = tr_ptr->flags3 & RF3_NO_CONF;
+    resist = ((tr_ptr->flags3 & RF3_NO_CONF) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     spell_badstatus_message(target_ptr, m_idx, t_idx, msg1, _("%^sには効果がなかった。", "%^s is unaffected."),
@@ -327,7 +327,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return;
 
-    resist = tr_ptr->flags3 & RF3_NO_CONF;
+    resist = ((tr_ptr->flags3 & RF3_NO_CONF) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが%sの前に幻惑的な幻をつくり出した。", "%^s casts a mesmerizing illusion in front of %s."),
@@ -351,11 +351,10 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    bool saving_throw;
-    BIT_FLAGS resist;
+    bool resist, saving_throw;
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        resist = target_ptr->free_act;
+        resist = (target_ptr->free_act != 0);
         saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
         spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
             _("%^sがあなたの目をじっと見つめた！", "%^s stares deep into your eyes!"), _("しかし効果がなかった！", "You are unaffected!"),
@@ -373,7 +372,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return;
 
-    resist = (tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flags3 & RF3_NO_STUN);
+    resist = ((tr_ptr->flags1 & RF1_UNIQUE) != 0 || (tr_ptr->flags3 & RF3_NO_STUN) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sは%sをじっと見つめた。", "%^s stares intently at %s."),
@@ -455,7 +454,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
         msg1 = _("%sが%sの筋肉から力を吸いとった。", "%^s drains power from %s's muscles.");
     }
 
-    resist = tr_ptr->flags1 & RF1_UNIQUE;
+    resist = ((tr_ptr->flags1 & RF1_UNIQUE) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     spell_badstatus_message(target_ptr, m_idx, t_idx, msg1, _("%^sには効果がなかった。", "%^s is unaffected."),
