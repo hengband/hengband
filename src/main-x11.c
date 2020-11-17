@@ -1837,6 +1837,39 @@ static x11_selection_type s_ptr[1];
 
 
 /*
+ * Convert to EUC-JP
+ */
+#ifdef USE_XIM
+static void convert_to_euc(char *buf)
+{
+	size_t inlen = strlen(buf);
+	size_t outlen = inlen + 1;
+	char tmp[outlen];
+
+	iconv_t iconvd = iconv_open("EUC-JP", "UTF-8");
+	char *inbuf = buf;
+	char *outbuf = tmp;
+	iconv(iconvd, &inbuf, &inlen, &outbuf, &outlen);
+	iconv_close(iconvd);
+
+	int i, l = strlen(tmp);
+	for (i = 0; i < l; i++)
+		buf[i] = tmp[i];
+	buf[l] = '\0';
+}
+#endif
+
+/*
+ * Push multiple keys reversal
+ */
+static void term_string_push(char *buf)
+{
+	int i, l = strlen(buf);
+	for (i = l; i >= 0; i--)
+		term_key_push(buf[i]);
+}
+
+/*
  * Process a keypress event
  *
  * Also appears in "main-xaw.c".
@@ -1881,11 +1914,9 @@ static void react_keypress(XKeyEvent *xev)
 	buf[n] = '\0';
 
 #ifdef USE_XIM
-	if(!valid_keysym){
-		/* Enqueue the normal key(s) */
-		for (i = 0; buf[i]; i++) Term_keypress(buf[i]);
-
-		/* All done */
+	if(!valid_keysym) { /* XIMからの入力時のみ FALSE になる */
+		convert_to_euc(buf);
+		term_string_push(buf);
 		return;
 	}
 #endif
@@ -1907,10 +1938,7 @@ static void react_keypress(XKeyEvent *xev)
 	/* Normal keys with no modifiers */
 	if (n && !mo && !mx && !IsSpecialKey(ks))
 	{
-		/* Enqueue the normal key(s) */
-		for (i = 0; buf[i]; i++) Term_keypress(buf[i]);
-
-		/* All done */
+		term_string_push(buf);
 		return;
 	}
 
@@ -1967,9 +1995,7 @@ static void react_keypress(XKeyEvent *xev)
 			ev->keycode, 13);
 	}
 
-	/* Enqueue the "macro trigger" string */
-	for (i = 0; msg[i]; i++) Term_keypress(msg[i]);
-
+	term_string_push(msg);
 
 	/* Hack -- auto-define macros as needed */
 	if (n && (macro_find_exact(msg) < 0))

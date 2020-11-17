@@ -15781,11 +15781,11 @@ F:IM_ACID | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | RES_WATE
 S:1_IN_5 | 
 S:S_DEMON | BR_ACID | S_UNDEAD | S_KIN | CONF | SCARE |
 S:MIND_BLAST | BR_CONF 
-D:$"An almost globular torso, with six long, sinuous limbs terminating 
-D:$in clab-like claws. From the upper end a subsidiary globe bulged 
-D:$forward bubble-like; its triangle of three staring, fishy eyes, 
-D:$its foot-long and evidently flexible proboscis, and a distended 
-D:$lateral system analogous to gills, suggested that it was a head."
+D:$"An almost globular torso, with six long, sinuous limbs terminating
+D:$ in crab-like claws. From the upper end a subsidiary globe bulged
+D:$ forward bubble-like; its triangle of three staring, fishy eyes,
+D:$ its foot-long and evidently flexible proboscis, and a distended
+D:$ lateral system analogous to gills, suggested that it was a head."
 D:太古に宇宙から北極にやって来た神。
 D:「胴はほぼ球形をしていて、まがりくねる手足が６本備わり、先端は蟹
 D:のような鋏になっていた。胴の上からは補助的な球体が泡のようにまえ
@@ -17815,7 +17815,7 @@ F:DROP_GOOD | DROP_GREAT | RES_CHAO | RES_NETH |
 F:SMART | KILL_WALL | KILL_BODY | POWERFUL |
 F:REGENERATE | NONLIVING | CAN_FLY | RIDING |
 F:EVIL | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
-F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | RES_TELE | GUARDIAN |
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | RES_TELE |
 S:1_IN_3 | 
 S:S_MONSTERS | BR_CHAO | BA_CHAO | ROCKET | S_CYBER | S_KIN |
 S:BR_NETH | BR_MANA | S_HI_UNDEAD | S_HI_DRAGON | S_UNIQUE |
@@ -22517,3 +22517,863 @@ D:$This orc is succeeding demon blood. He wears brack flame.
 D:$This unclean combination is bred in unclean tribe
 D:このオークの体にはデーモンの血が流れており、そこから来る暗黒の炎をまとっている。
 D:この不浄な結合は、暗き風習を持つ生き物の中でしばしば育まれる。
+
+#Heng 弦ちゃん無性に出したくなった(DSKL)
+N:1123:巴流『葦名弦一郎』
+E:Way of Tomoe, Genichiro Ashina
+G:p:o
+I:120:30d24:20:70:10
+W:29:2:0:1800:0:0
+B:SHOOT:HURT:10d10
+B:SLASH:HURT:8d4
+B:KICK:HURT:4d5
+B:SLASH:ELEC:14d4
+F:UNIQUE | BASH_DOOR | OPEN_DOOR | ESCORT | DROP_90 |
+F:NO_SLEEP | NO_CONF | FORCE_MAXHP | DROP_4D2 | DROP_GOOD |
+F:MALE | DROP_CORPSE | DROP_SKELETON | CAN_SPEAK | HUMAN
+S:1_IN_5 | S_KIN | SHOOT | BO_ELEC
+D:$The leader of this family, worried about the death of his homeland
+D:$ after the death of Isshin Ashina,
+D:$ seeks to obtain it without regard to any monstrous power.
+D:$  Therefore, it will also be inevitable that
+D:$ he sought them and went to Angband.
+D:葦名一心亡き後の故国の存亡を憂うこの一門の将は、
+D:いかなる異形の力をも顧みず手に入れようとする。
+D:ゆえにそれらを求め鉄獄に至ったこともまた必然であるだろう。
+
+N:1124:撲殺の天使
+E:Dokuro, the Bludgeoning Angel
+G:A:B
+I:115:30d30:30:60:10
+W:30:2:0:1300:0:0
+B:SLASH:SUPERHURT:15d2
+B:HIT:SUPERHURT:15d2
+B:CRAWL:SUPERHURT:15d2
+B:STING:SUPERHURT:15d2
+F:UNIQUE | FORCE_MAXHP | GOOD | FEMALE | ANGEL
+F:IM_FIRE | RES_LITE | RES_GRAV | CAN_FLY
+F:BASH_DOOR | NO_SLEEP | NO_CONF | NO_FEAR
+F:DROP_GOOD | DROP_GREAT | ONLY_ITEM | DROP_1D2
+S:1_IN_6
+S:ANIM_DEAD | BA_LITE | CAUSE_3 | CONF | HOLD | BLIND | SHRIEK | BLINK
+D:$You are a UNIQUE.
+D:$  She will surely fail your animation!
+D:あなたはユニークな存在だ。
+D:あなたの死体は蘇ることなく灰になるだろう。
+
+N:1125:赤鬼
+E:Red ogre
+G:O:R
+I:110:20d18:20:65:15
+W:36:1:0:800:0:0
+B:CRUSH:HURT:10d4
+B:CRUSH:HURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
+F:DROP_CORPSE | DROP_SKELETON
+F:IM_FIRE | RES_NETH | NO_FEAR | HURT_COLD | DROP_60
+S:1_IN_9
+S:SCARE | BLIND | CONF | HOLD
+S:BA_FIRE | BO_NETH | BO_PLAS
+D:$This ogre is the one of the weakest residents in hell.
+D:$  It hits sinners and gives punishment to them in the blood pond.
+D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
+D:それは罪人を殴りつけ、血の池で劫罰を与え続ける。
+
+N:1126:青鬼
+E:Blue ogre
+G:O:b
+I:110:20d18:20:65:15
+W:36:1:0:800:0:0
+B:SLASH:HURT:10d4
+B:SLASH:HURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
+F:DROP_CORPSE | DROP_SKELETON
+F:IM_COLD | RES_NETH | NO_FEAR | HURT_FIRE | DROP_60
+S:1_IN_9
+S:SCARE | BLIND | CONF | HOLD
+S:BA_COLD | BO_NETH | BO_ICEE
+D:$This ogre is the one of the weakest residents in hell.
+D:$  It hashes sinners and gives punishment to them on the mountain of needles.
+D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
+D:それは罪人を斬りつけ、針の山で劫罰を与え続ける。
+
+N:1127:緑鬼
+E:Green ogre
+G:O:G
+I:110:20d18:20:65:15
+W:36:1:0:800:0:0
+B:SLASH:HURT:10d4
+B:SLASH:HURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
+F:DROP_CORPSE | DROP_SKELETON
+F:IM_FIRE | IM_COLD | RES_NETH | NO_FEAR | DROP_60
+S:1_IN_9
+S:SCARE | BLIND | CONF | HOLD
+S:BO_PLAS | BO_ICEE | BO_NETH
+D:$This ogre is the one of the weakest residents in hell.
+D:$  It slashes sinners and gives punishment to them with its heated axe.
+D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
+D:それは罪人を斬りつけ、灼けた斧で劫罰を与え続ける。
+
+N:1128:首なし鬼
+E:Headless ogre
+G:O:U
+I:115:21d19:20:70:15
+W:38:1:0:900:0:0
+B:SLASH:HURT:11d4
+B:CRUSH:HURT:11d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | UNDEAD | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON | HURT_LITE
+F:IM_POIS | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_9
+S:SCARE | BLIND | CONF | HOLD
+S:BA_FIRE | BA_COLD | BO_NETH
+D:$Considering its position as hell guard, this ogre has gone to Asura realm.
+D:$  It attacks whoever is innocent or guilty.
+D:鬼とあろうものが罪を犯して修羅の道へ堕ちた姿だ。
+D:それは罪人でも天上人でもなりふり構わず攻撃する。
+
+# 流石にAC777は攻撃が通らないので控えめに
+N:1129:金銀パールプレゼントの鬼
+E:Ogre gifting gold, silver and pearl
+G:O:y
+I:120:37d21:20:177:15
+W:40:77:0:7777:0:0
+B:CRUSH:HURT:14d10
+B:SLASH:HURT:14d10
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
+F:ONLY_GOLD | DROP_60 | DROP_90 | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2
+F:RES_LITE | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP | HURT_ROCK
+S:1_IN_7
+S:SCARE | BLIND | CONF | HOLD | BR_LITE | BA_LITE | CAUSE_2
+D:$Hmmm, you may have seen this ogre a long time ago.
+D:おや、どこかで見たことがあるぞ？
+
+N:1130:冥界オーガ
+E:Styx ogre
+G:O:s
+I:115:35d20:20:75:15
+W:44:1:0:1000:0:0
+B:CRUSH:SUPERHURT:10d4
+B:SLASH:SUPERHURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON | HURT_LITE
+F:IM_FIRE | RES_DARK | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_8
+S:SCARE | BLIND | CONF | HOLD | BO_NETH | BR_NETH
+D:$It is an ogre who guards Styx following its masters.
+D:$  It destroys the cairns piled up for children who have died before
+D:$ their parents.
+D:奪衣婆と懸衣翁に仕え、三途の川に佇む鬼だ。
+D:それは時々賽の河原を見回って、積石塚を破壊して回る。
+
+N:1131:土の鬼
+E:Earth ogre
+G:O:u
+I:115:40d20:25:80:10
+W:45:2:0:1100:0:0
+B:CRUSH:SUPERHURT:10d4
+B:CRUSH:SUPERHURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON
+F:IM_FIRE | RES_DARK | RES_NETH
+F:NO_FEAR | NO_CONF | NO_SLEEP | DROP_90
+S:1_IN_7
+S:SCARE | BLIND | CONF | HOLD
+S:BR_WALL | BA_NETH | BR_PLAS | S_DEMON
+R:1125:5d3
+D:$This ogre has earthy colored skin.
+D:$  Besides punishing sinners, it also leads lower-class ogres.
+D:土気色の肌をした鬼だ。
+D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
+
+N:1132:水の鬼
+E:Water ogre
+G:O:B
+I:115:40d20:25:80:10
+W:45:2:0:1100:0:0
+B:SLASH:SUPERHURT:10d4
+B:SLASH:SUPERHURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON
+F:IM_COLD | RES_DARK | RES_NETH
+F:NO_FEAR | NO_CONF | NO_SLEEP | DROP_90 | CAN_SWIM
+S:1_IN_7
+S:SCARE | BLIND | CONF | HOLD
+S:BO_WATE | BA_WATE | BA_NETH | S_DEMON
+R:1126:5d3
+D:$This ogre has stagnant river colored skin.
+D:$  Besides punishing sinners, it also leads lower-class ogres.
+D:淀んだ川の色の肌をした鬼だ。
+D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
+
+# 元は羅城門ともいったそうで、英語の発音はそれにならうこととした
+# In Japanese, both "Rashoumon" and "Rajoumon" are valid pronunciation
+N:1133:羅生門の鬼
+E:Ogre in Rajoumon
+G:O:v
+I:115:90d10:25:85:10
+W:46:2:0:1400:0:0
+B:SLASH:SUPERHURT:10d5
+B:SLASH:SUPERHURT:10d5
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON | DROP_90
+F:IM_FIRE | IM_COLD | RES_DARK | RES_NETH | NO_FEAR | NO_CONF
+S:1_IN_6
+S:SCARE | BLIND | CONF | HOLD
+S:BA_NUKE | BA_NETH | BR_GRAV | S_DEMON
+R:1127:5d3
+D:$It lives in Rajoumon.
+D:$  Besides punishing sinners, it also leads lower-class ogres.
+D:羅生門に巣食う鬼だ。
+D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
+
+N:1134:冥界の裁判長『閻魔大王』
+E:Yama, the Judge of the afterlife
+G:O:v
+I:120:50d60:30:100:10
+W:57:2:0:24000:0:0
+B:SLASH:HURT:10d5
+B:SLASH:HURT:10d5
+B:CRUSH:SUPERHURT:40d1
+F:UNIQUE | FORCE_MAXHP
+F:ONLY_ITEM | DROP_GOOD | DROP_1D2 | DROP_GREAT
+F:ATTR_MULTI | ESCORT | ESCORTS
+F:IM_FIRE | IM_COLD | IM_ELEC | RES_NETH | RES_LITE | RES_DARK
+F:NO_FEAR | NO_CONF | NO_SLEEP | CAN_SWIM
+S:1_IN_5
+S:BLIND | CONF | HOLD | SCARE
+S:BO_NETH | BR_NETH | BA_NETH | CAUSE_4 | S_KIN
+D:$Be honest with him. Otherwise, he will send you straight to hell.
+D:彼の前では正直でいることだ。さもなくば地獄へ一直線だろう。
+
+N:1135:狂気を紡ぎしもの『アブドゥル・アルハザード』
+E:Abdul Alhazred, the Mad Arab
+G:p:g
+I:120:50d100:20:100:1
+W:60:1:0:35000:0:0
+B:SLASH:LOSE_ALL:5d5
+B:SLASH:LOSE_ALL:5d5
+B:SLASH:LOSE_ALL:6d8
+B:SLASH:LOSE_ALL:6d8
+F:UNIQUE | FORCE_MAXHP | ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_2D2
+F:DROP_CORPSE | DROP_SKELETON
+F:REGENERATE | ELDRITCH_HORROR | OPEN_DOOR | BASH_DOOR | MOVE_BODY
+F:HUMAN | MALE | SELF_DARK_2 | SMART | POWERFUL
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
+F:NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_2 | BA_NETH | BA_WATE | BA_DARK | BA_NUKE | BA_CHAO
+S:S_HI_UNDEAD | S_DEMON | DISPEL
+D:$Undoubtedly, it was this man who released the cursed artifacts
+D:$ and called upon the great old ones who came from the outside world
+D:$ and settled in Llouis.
+D:$  It is said that his book, Necronomicon, namely stargate to the abyss,
+D:$ still sleeps somewhere in the land.
+D:呪われしアーティファクトを世に解き放ち、
+D:外界より来たりてルルイエに住み着いた旧支配者達を呼び寄せたのは、
+D:紛れもなくこの男である。
+D:彼の著した深淵の書『ネクロノミコン』は、今もこの地のどこかに眠ると云う。
+
+N:1136:スケイヴン・ウォーリア
+E:Skaven warrior
+G:r:u
+I:110:11d11:20:10:25
+W:12:1:0:48:0:0
+B:BITE:HURT:6d3
+B:BITE:HURT:6d3
+F:MALE | WILD_SWAMP | WILD_WASTE
+F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
+F:ANIMAL | EVIL | DROP_60 | FRIENDS
+D:$A warrior of skaven mess around with the power of chaos
+D:$ and slaughter their prey from one end.
+D:スケイヴン族の戦士は混沌の力をいたずらに振り回し、
+D:目についた獲物を片っ端から屠っていく。
+
+N:1137:殺人イタチ
+E:Killer weasel
+G:r:W
+I:110:12d12:20:10:25
+W:15:1:0:55:0:0
+B:BITE:HURT:5d2
+B:BITE:HURT:5d2
+B:CRUSH:HURT:5d2
+F:OPEN_DOOR | BASH_DOOR | DROP_60
+F:ANIMAL | EVIL | DROP_CORPSE | DROP_SKELETON
+D:$It has a bushy tail, but does not allow adventurers to stroke it.
+D:それはふさふさのしっぽを持っているが、冒険者が撫でることを許さない。
+
+N:1138:白き悪魔『ノロイ』
+E:Norowi, the White Devil
+G:r:w
+I:115:20d16:25:35:10
+W:16:2:0:220:0:0
+B:BITE:HURT:7d3
+B:CRUSH:HURT:7d3
+F:ANIMAL | EVIL | ESCORT | ESCORTS | MALE | UNIQUE | FORCE_MAXHP
+F:DROP_GOOD | DROP_60 | DROP_90 | ONLY_ITEM | DROP_CORPSE | DROP_SKELETON
+S:1_IN_8 | CAUSE_2 | MISSILE | SCARE | S_KIN
+D:$It is the head of weasel who works with wisdom.
+D:$  He is obeying not only the weasels,
+D:$ but also the rats with a fearful intimidation.
+D:$  Your adventure will be terminated soon.
+D:悪知恵の働くイタチどもの頭領だ。
+D:イタチだけでなく、その恐怖を引き起こす威圧感でネズミ達をも従わせている。
+D:あなたの冒険は間もなく打ち切られるだろう。
+
+# Beginning small letter "lain" is correct.
+N:1139:遍在する意識『岩倉玲音』
+E:lain, the Master of Wired
+G:p:u
+I:135:130d50:60:100:5
+W:80:3:0:45000:0:0
+B:TOUCH:LOSE_ALL:8d7
+B:TOUCH:UN_BONUS:8d7
+B:TOUCH:UN_POWER:8d7
+B:TOUCH:TIME:8d7
+F:QUANTUM | UNIQUE | FEMALE | ATTR_CLEAR | FORCE_MAXHP | RAND_25
+F:ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_3D2
+F:DROP_CORPSE | DROP_SKELETON
+F:SMART | REFLECTING | INVISIBLE | WEIRD_MIND | REGENERATE
+F:POWERFUL | ELDRITCH_HORROR | AURA_ELEC | PASS_WALL
+F:MOVE_BODY | TAKE_ITEM | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
+F:RES_LITE | RES_DARK | RES_CHAO | RES_NEXU | RES_TIME
+F:CAN_FLY | SELF_DARK_2
+S:1_IN_2
+S:DISPEL | BA_CHAO | BA_LITE | BA_DARK | BA_MANA | HAND_DOOM | BRAIN_SMASH
+S:SLOW | HASTE | HEAL | INVULNER | TPORT | WORLD | PSY_SPEAR
+D:$She recognizes you as a bug that appears to be
+D:$ a myriad of connected consciousness in the Wired.
+D:あなたは、相互に結合している無数の意識達に表れたちっぽけなバグだと
+D:認識されている。
+
+N:1140:ウェンディゴ
+E:Wendigo
+G:Y:v
+I:120:30d19:30:55:10
+W:30:3:0:500:0:0
+B:BITE:LOSE_WIS:3d4
+B:CLAW:COLD:3d4
+B:TOUCH:TERRIFY:3d4
+B:WAIL:CONFUSE:3d4
+F:ONLY_GOLD | DROP_2D2 | 
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY | WEIRD_MIND | ELDRITCH_HORROR
+F:EVIL | DEMON | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP | HURT_FIRE
+S:1_IN_6 | 
+S:MIND_BLAST
+D:$It looks like a skinny large humanoid.
+D:$  Folklore has it that those who commit cannibalism are brought to cognate
+D:それは痩せこけた巨人の姿をしていて、人食いの罪を犯した者を
+D:同族にすると言われている。
+
+N:1141:年経た風のエレメンタル
+E:Elder air elemental
+G:E:B
+I:125:95d20:12:60:50
+W:43:2:0:5000:0:0
+B:CLAW:HURT:5d10
+B:HIT:CONFUSE:2d10
+B:CLAW:HURT:5d10
+F:FORCE_SLEEP | RAND_25 | 
+F:COLD_BLOOD | CAN_FLY | NONLIVING |
+F:KILL_BODY | KILL_ITEM | BASH_DOOR |
+F:EVIL | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
+F:NO_CONF | NO_SLEEP | NO_FEAR | POWERFUL | RIDING | RES_TELE
+S:1_IN_8 | 
+S:BA_ELEC | BR_SOUN | S_DRAGON
+R:241:4d5
+R:379:1d3
+R:526:1d3
+R:560:1d2
+R:1113:4d5
+R:1118:4d5
+D:$It is a too huge towering tornado of winds that looks vaguely like dragons or other winged beast
+D:$ This violent wind enjoying, dragons comes.
+D:それはあまりにも高くそびえ立つような風の竜巻で、漠然とドラゴンか他の翼ある魔獣に見える。
+D:風の暴威を楽しんでドラゴンがやってくる。
+
+N:1142:年経たマグマのエレメンタル
+E:Elder magma elemental
+G:E:o
+I:115:100d20:10:70:90
+W:45:2:0:4500:0:0
+B:HIT:FIRE:5d7
+B:BITE:HURT:6d6
+B:HIT:FIRE:5d7
+F:FORCE_SLEEP |
+F:AURA_FIRE | WILD_VOLCANO |
+F:KILL_ITEM | KILL_BODY | PASS_WALL |
+F:EVIL | IM_FIRE | IM_ELEC | NONLIVING |
+F:IM_POIS | 
+F:NO_CONF | NO_SLEEP | NO_FEAR | POWERFUL | RES_TELE
+S:1_IN_7 | 
+S:BO_PLAS | BA_FIRE | BR_POIS
+R:584:1d3
+R:884:4d10
+R:899:4d5
+R:1098:1d2
+R:1111:4d5
+R:1131:1d3
+D:$It is a too huge towering glowing form of molten hate.that looks vaguely like spiders or other arthropod that live in lava cave.
+D:$ Molten mineral give off toxic gas.
+D:それはあまりにも高くそびえ立つような光を発する憎悪が溶けてできたような塊で、漠然と溶岩洞窟に生息する蜘蛛か他の虫のように見える。
+D:溶けた鉱物が有毒ガスを噴出している。
+
+N:1143:年経た火のエレメンタル
+E:Elder fire elemental
+G:E:r
+I:120:135d20:12:70:50
+W:44:2:0:6000:0:0
+B:HIT:FIRE:4d10
+B:HIT:FIRE:4d10
+B:SLASH:FIRE:5d12
+F:FORCE_SLEEP | RAND_25 | SELF_LITE_2 |
+F:CAN_FLY | WILD_VOLCANO |
+F:KILL_ITEM | KILL_BODY | BASH_DOOR | AURA_FIRE |
+F:EVIL | IM_FIRE | IM_POIS | NONLIVING | HURT_COLD |
+F:NO_CONF | NO_SLEEP | NO_FEAR | POWERFUL | RES_TELE
+S:1_IN_5 | 
+S:BA_FIRE | S_DEMON | BR_FIRE
+R:264:4d5
+R:1111:4d5
+R:1116:4d5
+R:510:1d3
+R:589:1d2
+D:$It is a too huge towering inferno of flames that looks vaguely like Balrog or other demons.
+D:$ This flame of destruction respecting, demons comes.
+D:それはあまりにも高くそびえ立つような火炎地獄で、漠然とバルログか他のデーモンのように見える。
+D:その破壊の炎を慕ってデーモンがやってくる。
+
+N:1144:年経た氷のエレメンタル
+E:Elder ice elemental
+G:E:w
+I:120:125d20:10:70:90
+W:43:2:0:3500:0:0
+B:BITE:COLD:3d10
+B:CLAW:HURT:5d10
+B:BITE:COLD:3d10
+F:FORCE_SLEEP | POWERFUL
+F:COLD_BLOOD | AURA_COLD |
+F:KILL_ITEM | KILL_BODY | BASH_DOOR |
+F:EVIL | IM_COLD | IM_ELEC | CAN_SWIM | HURT_FIRE |
+F:IM_POIS | NONLIVING |
+F:NO_CONF | NO_SLEEP | NO_FEAR | RES_TELE
+S:1_IN_5 | 
+S:BO_ICEE | BA_COLD | BR_COLD
+R:343:1d2
+R:379:4d5
+R:549:1d2
+R:570:1d3
+R:1112:4d5
+R:1117:4d5
+D:$It is a too huge towering glacier of ice that looks vaguely like Animals in cold regions.
+D:それはあまりにも高くそびえ立つような氷河で、漠然と寒冷地の動物のように見える。
+
+N:1145:年経た汚物エレメンタル
+E:Elder ooze elemental
+G:E:U
+I:120:118d20:10:100:90
+W:45:3:0:3600:0:0
+B:TOUCH:ACID:1d12
+B:TOUCH:ACID:1d12
+B:TOUCH:ACID:1d12
+B:BITE:POISON:1d12
+F:FORCE_SLEEP | POWERFUL
+F:COLD_BLOOD | WILD_SHORE | WILD_SWAMP |
+F:KILL_ITEM | KILL_BODY | BASH_DOOR |
+F:EVIL | IM_ACID | IM_FIRE | CAN_SWIM | NONLIVING |
+F:IM_COLD | IM_ELEC | IM_POIS | 
+F:NO_CONF | NO_SLEEP | NO_FEAR | RES_TELE
+S:1_IN_5 | 
+S:BR_ACID | BA_ACID
+R:509:4d6
+R:545:1d3
+R:592:1d2
+R:1115:4d6
+R:1131:1d3
+R:1132:1d3
+D:$It is a too huge towering mass of filth that looks vaguely like Hydras, crocodilians or frogs.
+D:それはあまりにも高くそびえ立つような汚物の塊で、漠然とヒドラやワニやカエルのように見える。
+
+# 紫電は航続距離が短いので鉄獄に入れませんでした
+# Storing cherry-blossom
+N:1146:ハヤブサ
+E:Betty G4M 'Falcon'
+G:B:g
+I:115:40d25:100:50:50
+W:45:2:0:2000:0:0
+B:CRUSH:HURT:5d10
+B:CRUSH:HURT:5d10
+F:FORCE_MAXHP | COLD_BLOOD | CAN_FLY | GOOD | UNDEAD
+F:NO_CONF | NO_SLEEP | NO_FEAR
+S:1_IN_5 | ROCKET
+R:1147:5d5
+D:$It is a ghost of those who made human life a part,
+D:$ ran on the battlefield with iron wings, 
+D:$ and continued to shed a lot of blood on both sides.
+D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
+
+N:1147:ハヤブサ
+E:Betty G4M 'Falcon'
+G:B:g
+I:120:25d25:100:50:50
+W:45:2:0:2000:0:0
+B:CRUSH:HURT:5d10
+B:EXPLODE:SUPERHURT:10d10
+F:COLD_BLOOD | CAN_FLY | GOOD | UNDEAD
+F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_60 | ONLY_ITEM
+S:1_IN_6 | BO_MANA | MISSILE | BLINK
+D:$It is a ghost of those who made human life a part,
+D:$ ran on the battlefield with iron wings,
+D:$ and continued to shed a lot of blood on both sides.
+D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
+
+N:1148:放火魔『雄一』
+E:Yu'uichi, the Arsonist
+G:t:U
+I:109:7d5:5:15:100
+W:3:1:0:30:0:0
+B:WAIL:HURT:2d5
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | DROP_CORPSE | DROP_SKELETON
+F:DROP_90 | ONLY_ITEM | DROP_GOOD
+S:1_IN_12 | BA_FIRE
+D:$He puts a laughing home into misery every day to eradicate his happy family.
+D:$  He has no intention of compensating for what he does.
+D:彼は幸せな家族を根絶やしにするため、日々笑い声の聞こえてくる家庭を不幸の底に沈めている。
+D:彼は自分の行いを償うつもりはない。
+
+N:1149:全開装甲『カバード・コア』
+E:Opened core, the uncovered fortress
+G:#:G
+I:110:9d5:35:1:10
+W:4:1:0:40:0:0
+B:SHOOT:HURT:2d6
+B:CRUSH:HURT:4d4
+F:UNIQUE | FORCE_MAXHP | EVIL | NONLIVING
+F:DROP_90 | DROP_4D2 | ONLY_GOLD
+S:1_IN_8 | MISSILE | ROCKET
+D:$This aircraft protects the home of the Bacterian army
+D:$ with the power reactor exposed.
+D:$  Recently this unit was fired.
+D:この機体は動力炉を剥き出しにしたままバクテリアン軍の本拠地を守っていた。
+D:最近暇を出されたようだ。
+
+N:1150:蜘蛛地獄『ゴライアス』
+E:Goliath, the king of ant-lion
+G:S:r
+I:110:20d10:30:30:20
+W:10:1:0:50:0:0
+B:BITE:HURT:2d10
+B:STING:HURT:2d10
+F:UNIQUE | FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD | NO_SLEEP | ANIMAL
+S:1_IN_8 | S_KIN | BLIND
+D:$It waits to prey on all living things.
+D:それはあらゆる生き物を餌食にしようと待ち構えている。
+
+N:1151:小さな泡
+E:Small aqua illusion
+G:j:B
+I:110:12d12:10:30:10
+W:15:1:0:50:0:0
+B:CRUSH:HURT:6d6
+B:CRUSH:HURT:6d6
+F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+D:$It is a small bubble that makes an weird movement.
+D:$  It collapses suddenly.
+D:不気味な動きをする小さな泡だ。ぷちぷちと潰れる。
+
+# 倒すと小さな泡×4に分裂する
+N:1152:やや大きな泡
+E:Middle aqua illusion
+G:j:B
+I:110:12d12:10:30:10
+W:18:1:0:100:0:0
+B:CRUSH:HURT:7d7
+B:CRUSH:HURT:7d7
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+D:$It is a middle bubble that makes an weird movement.
+D:$  When it is crushed, it becomes a small bubble.
+D:不気味な動きをする、やや大きな泡だ。潰すと小さな泡になる。
+
+# 倒すとやや大きな泡×4に分裂する
+N:1153:大きな泡
+E:Large aqua illusion
+G:j:B
+I:110:18d18:10:30:10
+W:21:1:0:250:0:0
+B:CRUSH:HURT:8d8
+B:CRUSH:HURT:8d8
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+D:$It is a large bubble that makes an weird movement.
+D:$  When it is crushed, it becomes a middle bubble.
+D:不気味な動きをする大きな泡だ。潰しても中々なくならない。
+
+# 倒すと大きな泡×4に分裂する
+N:1154:特大の泡
+E:Extra large aqua illusion
+G:j:B
+I:110:18d18:10:30:10
+W:24:1:0:500:0:0
+B:CRUSH:HURT:9d9
+B:CRUSH:HURT:9d9
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+D:$It is a extra large bubble that makes an weird movement.
+D:$  You must decide whether running away or squashing them all!
+D:不気味な動きをする巨大な泡だ。逃げるか潰すか二つに一つだ！
+
+N:1155:二週目の小さな泡
+E:Small aqua illusion in 2nd lap
+G:j:b
+I:120:20d20:10:50:10
+W:25:1:0:120:0:0
+B:CRUSH:HURT:6d6
+B:CRUSH:HURT:6d6
+B:CRUSH:HURT:6d6
+F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
+S:1_IN_4 | MISSILE
+D:$Holy shit! It will shoot you back at this bubble!
+D:なんてこった、こいつ泡のくせに撃ち返してくるぞ！
+
+# 倒すと小さな泡×4に分裂する
+# 実際の2周目では一番小さいのしか撃ち返してこないが変愚向けに調整
+N:1156:二周目のやや大きな泡
+E:Middle aqua illusion in 2nd lap
+G:j:b
+I:120:20d20:10:50:10
+W:28:1:0:240:0:0
+B:CRUSH:HURT:7d7
+B:CRUSH:HURT:7d7
+B:CRUSH:HURT:7d7
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
+S:1_IN_4 | MISSILE
+D:$It is a middle bubble that makes an weird movement and shoots you back.
+D:$  When it is crushed, it becomes a small bubble.
+D:不気味な動きをして撃ち返してくる、やや大きな泡だ。潰すと小さな泡になる。
+
+# 倒すとやや大きな泡×4に分裂する
+N:1157:二周目の大きな泡
+E:Large aqua illusion in 2nd lap
+G:j:b
+I:120:25d25:10:50:10
+W:31:1:0:600:0:0
+B:CRUSH:HURT:8d8
+B:CRUSH:HURT:8d8
+B:CRUSH:HURT:8d8
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
+S:1_IN_4 | MISSILE
+D:$It is a large bubble that makes an weird movement and shoots you back.
+D:$  When it is crushed, it becomes a middle bubble.
+D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
+
+# 倒すと大きな泡×4に分裂する
+N:1158:二週目の特大の泡
+E:Extra large aqua illusion in 2nd lap
+G:j:b
+I:120:25d25:10:50:10
+W:34:1:0:1200:0:0
+B:CRUSH:HURT:9d9
+B:CRUSH:HURT:9d9
+B:CRUSH:HURT:9d9
+F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
+S:1_IN_4 | MISSILE
+D:$It is a extra large bubble that makes an weird movement and shoots you back!
+D:$  You must decide whether running away or squashing them all!
+D:不気味な動きをして撃ち返してくる巨大な泡だ。逃げるか潰すか二つに一つだ！
+
+# 実質召喚専用にしたいのでRarはかなり高め
+N:1159:プチモアイ
+E:Small Moai
+G:g:s
+I:120:15d15:10:50:10
+W:34:50:0:250:0:0
+B:CRUSH:HURT:8d8
+F:IM_ELEC | HURT_ROCK | RES_GRAV | DROP_60 | DROP_1D2 | ONLY_GOLD
+F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+S:1_IN_2 | BR_ELEC | BR_PLAS
+D:$ Do NOT get behind this Moai!
+D:こいつの背後には近寄るな！
+
+N:1160:モアイ
+E:Moai
+G:g:U
+I:105:30d25:10:85:50
+W:40:1:0:700:0:0
+F:IM_ELEC | HURT_ROCK | RES_TELE | RES_GRAV | FRIENDS | FORCE_SLEEP | DROP_90
+F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:NEVER_MOVE | NEVER_BLOW
+S:1_IN_2 | BR_ELEC | BR_PLAS
+D:$It is Moai who landed in Angband. You can not destroy this ion ring.
+D:鉄獄に降り立ったモアイだ。こいつの吐き出すイオンリングは破壊できない。
+
+# 死に際に7/8の確率で自分自身を召喚する
+N:1161:トーテムモアイ
+E:Totem Moai
+G:g:U
+I:110:20d20:10:90:30
+W:40:1:0:750:0:0
+F:IM_ELEC | HURT_ROCK | RES_TELE | RES_GRAV | DROP_90
+F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:NEVER_MOVE | NEVER_BLOW
+S:1_IN_2 | BR_ELEC | BR_PLAS
+D:$It is a Moai piled up like a totem pole. There is no end in destroying it.
+D:トーテムポール状に積み上がったモアイだ。倒してもきりがない。
+
+# プチモアイのみ召喚
+N:1162:モアイの総大将『ヴァイフ』
+E:Vaif, the general of Moais
+G:g:D
+I:120:60d50:25:100:20
+W:49:1:0:11000:0:0
+B:CRUSH:SUPERHURT:12d15
+F:UNIQUE | FORCE_MAXHP | NEVER_MOVE
+F:IM_ELEC | RES_GRAV | RES_TELE | ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT
+F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+S:1_IN_2 | S_KIN | HOLD | CONF | BLIND | HEAL
+D:$It is a mighty thug from the Bacterian army. It summons many small Moais.
+D:バクテリアン軍が放った強大な刺客だ。それは大量のプチモアイを生み出す。
+
+# テストプレイした結果、戦士なら毒針なしでもギリギリ刺さった
+# メイジ系は塔2F＆クローン地獄に毒針必須かも
+N:1163:クリスタル・キューブ
+E:Crystal cube
+G:g:B
+I:140:2d2:10:200:30
+W:50:2:0:1500:0:0
+B:CRUSH:SHATTER:10d6
+B:CRUSH:SHATTER:10d8
+B:CRUSH:SHATTER:10d10
+B:CRUSH:SHATTER:10d12
+F:RES_ALL | FRIENDS | NONLIVING | RAND_25 | RAND_50
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+D:$If you can dodge them, you are an expert!
+D:避けきれたら君も上級者だ！
+
+N:1164:鬼滅隊の『先輩』
+E:Senior, the nameless member of Demon Slayer Corps
+G:p:g
+I:110:25d10:10:35:100
+W:14:1:0:300:0:0
+B:SLASH:HURT:2d13
+B:HIT:HURT:2d15
+B:TOUCH:TERRIFY
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL
+F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD
+S:1_IN_8 | S_KIN
+D:$This stupid man can not determine his enemy's ability.
+D:この愚かな男は敵の力量を見極めることができない。
+
+N:1165:鬼滅隊の隊士
+E:Members of Demon Slayer Corps
+G:p:U
+I:110:15d10:10:30:100
+W:14:50:0:200:0:0
+F:NAZGUL | FORCE_MAXHP | HUMAN | MALE | UNDEAD
+F:DROP_60
+B:SHOOT:HURT:8d7
+B:SLASH:HURT:2d10
+B:HIT:HURT:2d12
+S:1_IN_6
+D:$These corps are the ghosts killed by Rui.
+D:累に殺された者たちの亡霊だ。
+
+N:1166:チーターマン『アリエス』 
+E:Aries, the youngest cheetahmen
+G:h:y
+I:110:15d15:20:30:25
+W:12:1:0:200:0:0
+B:CLAW:HURT:4d6
+B:BITE:HURT:4d6
+F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
+F:DROP_60 | DROP_90 | DROP_GOOD | RES_SOUN | NO_STUN
+D:$He is the youngest of three brothers and swings a club.
+D:三兄弟の末っ子で、棍棒を振り回している。
+
+N:1167:チーターマン『ヘラクレス』
+G:h:y
+E:Hercules, the second eldest cheetahmen
+I:110:15d16:20:35:25
+W:13:1:0:250:0:0
+B:PUNCH:HURT:4d6
+B:KICK:HURT:4d6
+F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
+F:DROP_60 | DROP_90 | DROP_GOOD | RES_SOUN | NO_STUN
+D:$He is the second son of three brothers and is good at karate.
+D:三兄弟の次男で、空手が得意だ。
+
+N:1168:チーターマン『アポロ』
+G:h:y
+E:Apollo, the eldest cheetahmen
+I:110:15d18:25:40:30
+W:14:1:0:300:0:0
+B:SHOOT:HURT:8d8
+B:STING:HURT:5d6
+B:STING:HURT:5d6
+F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
+F:DROP_90 | DROP_1D2 | DROP_GOOD | RES_SOUN | NO_STUN
+D:$He is the eldest son of the three brothers,
+D:$ and be aware the shot by his cross bow!
+D:三兄弟の長男で、クロスボウからの一撃に要注意だ！
+
+N:1169:怪物の太母『エキドナ』
+E:Echidna, Great mother of monsters
+G:n:u
+I:130:60d100:40:125:30
+W:75:3:0:23500:0:0
+B:CRUSH:SUPERHURT:12d15
+B:CRUSH:SUPERHURT:12d15
+B:CRUSH:SUPERHURT:12d15
+B:BITE:POISON:12d15
+F:FORCE_SLEEP | FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_GREAT | MOVE_BODY |
+F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL
+F:EVIL | FEMALE | UNIQUE | RES_LITE | RES_TIME | RES_DARK | RES_NETH
+F:IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | RES_TELE
+S:1_IN_5 | 
+S:S_MONSTERS | SCARE | BA_DARK | BA_NETH | BR_POIS
+D:$This sacred and untouchable female monster is half a nymph and half a snake, becoming the mother of many monsters.
+D:この半分がニンフで半分は蛇の神聖にして手の付けられない女怪は、数々のモンスターの母となった。
+
+N:1170:ハリモグラ
+E:Echidna
+G:r:u
+I:110:1d2:30:1:10
+W:1:3:0:6:0:0
+B:CRUSH:HURT:3d1
+F:RAND_50 | WILD_GRASS | WILD_WOOD |
+F:ANIMAL | DROP_SKELETON | DROP_CORPSE
+D:$It is relative of platypus and was thought to be a composite of reptiles and mammals, 
+D:$ so it was named after the Greek monster.
+D:それはカモノハシの類縁で、爬虫類と哺乳類の合成と考えられたためギリシアの怪物にちなんで英名を名付けられた。
+
+N:1171:虚界の魔獣『ジェノサイバー』
+E:Genocyber the Vajura Beast
+G:U:w
+I:132:70d100:40:160:10
+W:72:3:0:27500:0:0
+B:PUNCH:HURT:12d12
+B:PUNCH:HURT:12d12
+B:CRUSH:SHATTER:16d11
+B:CRUSH:SHATTER:16d11
+F:UNIQUE | FEMALE | RES_TELE | CAN_FLY
+F:DROP_SKELETON | DROP_CORPSE
+F:FORCE_SLEEP | FORCE_MAXHP | KILL_WALL | DEMON | HUMAN
+F:ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_GREAT | MOVE_BODY
+F:REGENERATE | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | POWERFUL
+F:IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE
+F:OPEN_DOOR | BASH_DOOR | RES_WALL
+S:1_IN_8 |
+S:TELE_TO | BO_MANA | BR_MANA | BR_WALL | BR_PLAS | BR_DISI | HEAL | HASTE
+D:$It is the fusion of twin sisters born at the end of the vaunted study of Vajura energy.
+D:$Its outrageous power will destroy a star and eventually become a new myth.
+D:ヴァジュラエネルギーのおぞましい研究の果てに産みだされた双子の姉妹の融合体だ。
+D:その無法図な力は一個の星を滅ぼし、やがて新たな神話の存在となるに足るものだろう。
+
