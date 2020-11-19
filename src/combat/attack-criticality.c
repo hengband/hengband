@@ -117,7 +117,9 @@ int calc_monster_critical(DICE_NUMBER dice, DICE_SID sides, HIT_POINT dam)
 static void ninja_critical(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    int maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
+    int maxhp = pa_ptr->m_ptr->maxhp;
+
+    /* Yamiuch and Oiuch */
     if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->surprise_attack) ? 15 : 27)) {
         pa_ptr->attack_damage *= 5;
         pa_ptr->drain_result *= 2;
@@ -125,13 +127,16 @@ static void ninja_critical(player_type *attacker_ptr, player_attack_type *pa_ptr
         return;
     }
 
-    bool is_critical = ((pa_ptr->m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10))
-        || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && ((r_ptr->flags1 & RF1_UNIQUE) == 0)
-            && ((r_ptr->flags7 & RF7_UNIQUE2) == 0));
+    /* Todome check */
+    bool is_weaken = (pa_ptr->m_ptr->hp < maxhp / 2);
+    bool is_unique = ((r_ptr->flags1 & RF1_UNIQUE) != 0 || (r_ptr->flags7 & RF7_UNIQUE2) != 0);
+    bool is_critical = (is_weaken && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10))
+        || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !(is_unique));
     if (!is_critical)
         return;
 
-    if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (pa_ptr->m_ptr->hp >= maxhp / 2)) {
+    /* Todome! */
+    if (is_unique || !is_weaken) {
         pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
         pa_ptr->drain_result *= 2;
         msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), pa_ptr->m_name);
