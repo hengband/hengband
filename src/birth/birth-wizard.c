@@ -433,8 +433,16 @@ static bool display_auto_roller_result(player_type *creature_ptr, bool prev, cha
     return TRUE;
 }
 
+/*
+ * @brief オートロールを回して結果を表示し、その数値に決めるかさらに回すか確認する。
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param chara_limit 社会的地位の要求水準
+ * @detail 2つめの結果以降は、'p'キーで1つ前のロール結果に戻せる。
+ */
 static bool display_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit)
 {
+    bool prev = FALSE;
+
     while (TRUE) {
         int col = 42;
         if (autoroller || autochara) {
@@ -457,7 +465,7 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
         get_extra(creature_ptr, TRUE);
         get_money(creature_ptr);
         creature_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
-        bool prev = FALSE;
+
         char c;
         if (!display_auto_roller_result(creature_ptr, prev, &c))
             return FALSE;
