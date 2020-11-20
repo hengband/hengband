@@ -294,7 +294,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
 			/* Show the list */
 			if (!redraw)
 			{
-				char psi_index[5];
+				char psi_index[6];
 				char psi_desc[75];
 				redraw = TRUE;
 				if (!only_browse) screen_save();
