@@ -20,7 +20,7 @@
 static void describe_monster_ball(flavor_type *flavor_ptr)
 {
     monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
-    if (flavor_ptr->known)
+    if (!flavor_ptr->known)
         return;
 
     if (!flavor_ptr->o_ptr->pval) {
