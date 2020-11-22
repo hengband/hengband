@@ -35,7 +35,7 @@
 #include "perception/object-perception.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
-#include "shoot.h"
+#include "combat/shoot.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "util/bit-flags-calculator.h"

@@ -6,12 +6,12 @@
  * Windowsのコードからは呼ばれない。よってVSからは見えない
  */
 
-#include "exit-panic.h"
+#include "io/exit-panic.h"
 #include "core/disturbance.h"
 #include "world/world.h"
-#include "player-move.h"
-#include "signal-handlers.h"
-#include "save.h"
+#include "player/player-move.h"
+#include "io/signal-handlers.h"
+#include "save/save.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
