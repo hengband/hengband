@@ -42,7 +42,7 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
     object_flags(user_ptr, j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4;
     msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
-    if ((o_ptr->name2 == EGO_LITE_DARKNESS) && (j_ptr->xtra4 > 0)) {
+    if (has_flag(flgs, TR_DARK_SOURCE) && (j_ptr->xtra4 > 0)) {
         j_ptr->xtra4 = 0;
         msg_print(_("ランプが消えてしまった！", "Your lamp has gone out!"));
     } else if (has_flag(flgs, TR_DARK_SOURCE) || has_flag(flgs2, TR_DARK_SOURCE)) {
