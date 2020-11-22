@@ -36,9 +36,10 @@
  * @param path パス保管先の文字列
  * @return なし
  */
-void init_file_paths(char *path)
+void init_file_paths(char *libpath, char *varpath)
 {
-    char *tail;
+    char *libtail, *vartail;
+
 #ifdef PRIVATE_USER_PATH
     char buf[1024];
 #endif
@@ -55,37 +56,39 @@ void init_file_paths(char *path)
     string_free(ANGBAND_DIR_USER);
     string_free(ANGBAND_DIR_XTRA);
 
-    ANGBAND_DIR = string_make(path);
-    tail = path + strlen(path);
-    strcpy(tail, "apex");
-    ANGBAND_DIR_APEX = string_make(path);
-    strcpy(tail, "bone");
-    ANGBAND_DIR_BONE = string_make(path);
-    strcpy(tail, "data");
-    ANGBAND_DIR_DATA = string_make(path);
-    strcpy(tail, "edit");
-    ANGBAND_DIR_EDIT = string_make(path);
-    strcpy(tail, "script");
-    ANGBAND_DIR_SCRIPT = string_make(path);
-    strcpy(tail, "file");
-    ANGBAND_DIR_FILE = string_make(path);
-    strcpy(tail, "help");
-    ANGBAND_DIR_HELP = string_make(path);
-    strcpy(tail, "info");
-    ANGBAND_DIR_INFO = string_make(path);
-    strcpy(tail, "pref");
-    ANGBAND_DIR_PREF = string_make(path);
-    strcpy(tail, "save");
-    ANGBAND_DIR_SAVE = string_make(path);
+
+    ANGBAND_DIR = string_make(libpath);
+    libtail = libpath + strlen(libpath);
+    vartail = varpath + strlen(varpath);
+    strcpy(vartail, "apex");
+    ANGBAND_DIR_APEX = string_make(varpath);
+    strcpy(vartail, "bone");
+    ANGBAND_DIR_BONE = string_make(varpath);
+    strcpy(vartail, "data");
+    ANGBAND_DIR_DATA = string_make(varpath);
+    strcpy(libtail, "edit");
+    ANGBAND_DIR_EDIT = string_make(libpath);
+    strcpy(libtail, "script");
+    ANGBAND_DIR_SCRIPT = string_make(libpath);
+    strcpy(libtail, "file");
+    ANGBAND_DIR_FILE = string_make(libpath);
+    strcpy(libtail, "help");
+    ANGBAND_DIR_HELP = string_make(libpath);
+    strcpy(libtail, "info");
+    ANGBAND_DIR_INFO = string_make(libpath);
+    strcpy(libtail, "pref");
+    ANGBAND_DIR_PREF = string_make(libpath);
+    strcpy(vartail, "save");
+    ANGBAND_DIR_SAVE = string_make(varpath);
 #ifdef PRIVATE_USER_PATH
     path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VERSION_NAME);
     ANGBAND_DIR_USER = string_make(buf);
 #else
-    strcpy(tail, "user");
-    ANGBAND_DIR_USER = string_make(path);
+    strcpy(vartail, "user");
+    ANGBAND_DIR_USER = string_make(varpath);
 #endif
-    strcpy(tail, "xtra");
-    ANGBAND_DIR_XTRA = string_make(path);
+    strcpy(libtail, "xtra");
+    ANGBAND_DIR_XTRA = string_make(libpath);
 }
 
 /*!

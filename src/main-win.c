@@ -3447,7 +3447,7 @@ static void init_stuff(void)
 
     strcpy(path + i + 1, "lib\\");
     validate_dir(path, TRUE);
-    init_file_paths(path);
+    init_file_paths(path, path);
     validate_dir(ANGBAND_DIR_APEX, FALSE);
     validate_dir(ANGBAND_DIR_BONE, FALSE);
     if (!check_dir(ANGBAND_DIR_EDIT)) {
