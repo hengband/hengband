@@ -272,9 +272,7 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
     if (!savefile[0])
         return TRUE;
 
-#ifdef WINDOWS
-    (void)new_game;
-#else
+#ifndef WINDOWS
     if (access(savefile, 0) < 0) {
         msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
         msg_print(NULL);
