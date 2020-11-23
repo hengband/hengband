@@ -16,12 +16,86 @@
 /*! オートローラの能力値的要求水準 / Autoroll limit */
 s16b stat_limit[6];
 
-/*! オートローラ中、各能力値が水準を超えた回数 / Autoroll matches */
-s32b stat_match[6];
-
 /*! オートローラの試行回数 / Autoroll round */
 s32b auto_round;
 s32b auto_upper_round;
+
+/*! オートローラの要求値実現確率 */
+s32b autoroll_chance;
+
+/*!
+ * @breif オートローラーで指定した能力値以上が出る確率を計算する。
+ * @return 確率 / 100
+ */
+static s32b get_autoroller_prob(int *minval)
+{
+    /* 1 percent of the valid random space (60^6 && 72<sum<87) */
+    s32b tot_rand_1p = 320669745;
+    int i, j, tmp;
+    int ii[6];
+    int tval[6];
+    int tot = 0;
+
+    /* success count */
+    s32b succ = 0;
+
+    /* random combinations out of 60 (1d3+1d4+1d5) patterns */
+    int pp[18] = {
+        0, 0, 0, 0, 0, 0, 0, 0, /* 0-7 */
+        1, 3, 6, 9, 11, 11, 9, 6, 3, 1 /* 8-17 */
+    };
+
+    /* Copy */
+    for (i = 0; i < 6; i++) {
+        tval[i] = MAX(8, minval[i]);
+        tot += tval[i];
+    }
+
+    /* No Chance */
+    if (tot > 86)
+        return -999;
+
+    /* bubble sort for speed-up */
+    for (i = 0; i < 5; i++) {
+        for (j = 5; j > i; j--) {
+            if (tval[j - 1] < tval[j]) {
+                tmp = tval[j - 1];
+                tval[j - 1] = tval[j];
+                tval[j] = tmp;
+            }
+        }
+    }
+
+    tot = 0;
+
+    /* calc. prob. */
+    for (ii[0] = tval[0]; ii[0] < 18; ii[0]++) {
+        for (ii[1] = tval[1]; ii[1] < 18; ii[1]++) {
+            for (ii[2] = tval[2]; ii[2] < 18; ii[2]++) {
+                for (ii[3] = tval[3]; ii[3] < 18; ii[3]++) {
+                    for (ii[4] = tval[4]; ii[4] < 18; ii[4]++) {
+                        for (ii[5] = tval[5]; ii[5] < 18; ii[5]++) {
+                            tot = ii[0] + ii[1] + ii[2] + ii[3] + ii[4] + ii[5];
+
+                            if (tot > 86)
+                                break;
+                            if (tot <= 72)
+                                continue;
+
+                            succ += (pp[ii[0]] * pp[ii[1]] * pp[ii[2]] * pp[ii[3]] * pp[ii[4]] * pp[ii[5]]);
+
+                            /* If given condition is easy enough, quit calc. to save CPU. */
+                            if (succ > 320670)
+                                return -1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return tot_rand_1p / succ;
+}
 
 /*!
  * @brief オートローラで得たい能力値の基準を決める。
@@ -454,84 +528,4 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
     chara_limit_ptr->scmin = (s16b)cval[6];
     chara_limit_ptr->scmax = (s16b)cval[7];
     return TRUE;
-}
-
-/*
- * @breif オートローラーで指定した能力値以上が出る確率を計算する。
- * @return 確率 / 100
- */
- static s32b get_autoroller_prob(int *minval)
-{
-    /* 1 percent of the valid random space (60^6 && 72<sum<87) */
-    s32b tot_rand_1p = 320669745;
-    int i, j, tmp;
-    int ii[6];
-    int tval[6];
-    int tot = 0;
-
-    /* success count */
-    s32b succ = 0;
-
-    /* random combinations out of 60 (1d3+1d4+1d5) patterns */
-    int pp[18] = {
-        0, 0, 0, 0, 0, 0, 0, 0, /* 0-7 */
-        1, 3, 6, 9, 11, 11, 9, 6, 3, 1 /* 8-17 */
-    };
-
-    /* Copy */
-    for (i = 0; i < 6; i++) 
-    {
-        tval[i] = MAX(8, minval[i]);
-        tot += tval[i];
-    }
-
-    /* No Chance */
-    if (tot > 86) return -999;
-
-    /* bubble sort for speed-up */
-    for (i = 0; i < 5; i++) 
-    {
-        for (j = 5; j > i; j--) 
-        {
-            if (tval[j - 1] < tval[j]) 
-            {
-                tmp = tval[j - 1];
-                tval[j - 1] = tval[j];
-                tval[j] = tmp;
-            }
-        }
-    }
-
-    tot = 0;
-
-    /* calc. prob. */
-    for (ii[0] = tval[0]; ii[0] < 18; ii[0]++) 
-    {
-        for (ii[1] = tval[1]; ii[1] < 18; ii[1]++) 
-        {
-            for (ii[2] = tval[2]; ii[2] < 18; ii[2]++) 
-            {
-                for (ii[3] = tval[3]; ii[3] < 18; ii[3]++) 
-                {
-                    for (ii[4] = tval[4]; ii[4] < 18; ii[4]++) 
-                    {
-                        for (ii[5] = tval[5]; ii[5] < 18; ii[5]++) 
-                        {
-                            tot = ii[0] + ii[1] + ii[2] + ii[3] + ii[4] + ii[5];
-
-                            if (tot > 86) break;
-                            if (tot <= 72) continue;
-
-                            succ += (pp[ii[0]] * pp[ii[1]] * pp[ii[2]] * pp[ii[3]] * pp[ii[4]] * pp[ii[5]]);
-
-                            /* If given condition is easy enough, quit calc. to save CPU. */
-                            if (succ > 320670) return -1;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return tot_rand_1p / succ;
 }
