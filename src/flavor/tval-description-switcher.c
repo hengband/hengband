@@ -307,6 +307,9 @@ static void describe_book_hex(flavor_type *flavor_ptr)
 void switch_tval_description(flavor_type *flavor_ptr)
 {
     switch (flavor_ptr->o_ptr->tval) {
+    case TV_NONE:
+        flavor_ptr->basenm = _("(なし)", "(Nothing)");
+        break;
     case TV_SKELETON:
     case TV_BOTTLE:
     case TV_JUNK:
