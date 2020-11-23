@@ -667,11 +667,11 @@ static void convert_to_sys(char *buf)
    char *inbuf = buf;
    char *outbuf = tmp;
    size_t res;
-   iconv(iconv_to_sys, 0, 0, 0, 0);
+   res = iconv(iconv_to_sys, 0, 0, 0, 0);
    if(res == (size_t)-1) return;
-   iconv(iconv_to_sys, &inbuf, &inlen, &outbuf, &outlen);
+   res = iconv(iconv_to_sys, &inbuf, &inlen, &outbuf, &outlen);
    if(res == (size_t)-1) return;
-   iconv(iconv_to_sys, 0, 0, &outbuf, &outlen);
+   res = iconv(iconv_to_sys, 0, 0, &outbuf, &outlen);
    if(res == (size_t)-1) return;
 
    outbuf[0] = '\0';
