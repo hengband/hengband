@@ -1,6 +1,6 @@
 === Attacking and Weapons===
  
-Attacking is simple in Bakabakaband. If you move into a creature, you
+Attacking is simple in Hengband. If you move into a creature, you
 attack it. If you are wielding a weapon (including digging implements
 which are considered to be weapons) when you do so, the damage for the
 weapon is used when you hit a creature. Otherwise, you will attack with
@@ -70,13 +70,13 @@ when needed.
 
 Weapons have two main magical characteristics, their enchanted ability
 to hit and their enchanted ability to do damage, expressed as
-`(+#,+#)'. A normal weapon would be `(+0,+0)'. Many weapons in Bakabakaband
+`(+#,+#)'. A normal weapon would be `(+0,+0)'. Many weapons in Hengband
 have bonuses to hit and/or do damage. Some weapons are cursed, and have
 penalties that hurt the player. Cursed weapons cannot be unwielded
 until the curse is lifted. Identifying a weapon will inform you of the
 magical bonuses and penalties and whether or not it is cursed.
 
-Bakabakaband assumes that your youth in the rough environment near the
+Hengband assumes that your youth in the rough environment near the
 dungeons has taught you the relative merits of different weapons, and
 displays as part of their description the damage dice which define
 their capabilities. Any damage enchantment is added to the dice roll
@@ -448,7 +448,7 @@ realms contain equivalent spells.
 === Monk Attacks ===
 
 The Monk and ForceTrainer are designed to be barehanded fighters
-rather than using a weapon like the other Bakabakaband classes. As a
+rather than using a weapon like the other Hengband classes. As a
 Monk's level increases the number of attacks they get per round
 increases and new, increasingly powerful attacks become
 available. Higher level attacks have a chance to stun the Monk's
@@ -491,7 +491,7 @@ Crushing Blow   48      10d13     18
 
 Pillardancing
 -------------
-Not recommended in Bakabakaband:  monsters move at irregular speeds.
+Not recommended in Hengband:  monsters move at irregular speeds.
 
 
 Shoot'n Scoot
@@ -528,7 +528,7 @@ monsters.
 Original   : (??) Chris Weisiger and Leon Marrick
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Bakabakaband 1.5.2
+Updated    : Hengband 1.5.2
 
 ***** Begin Hyperlinks
 ***** [b] commdesc.txt#ThrowFire

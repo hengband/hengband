@@ -14,7 +14,7 @@
  */
 const char angband_term_name[8][16] =
 {
-	"Bakabakaband",
+	"Hengband",
 	"Term-1",
 	"Term-2",
 	"Term-3",

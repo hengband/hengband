@@ -1,9 +1,9 @@
-=== The Bakabakaband Newbie Guide ===
+=== The Hengband Newbie Guide ===
 
 
 Note: This guide has been adapted from The Angband Newbie Guide by
 Chris Weisiger and has undergone certain revisions to conform more
-closely to Bakabakaband.
+closely to Hengband.
 
  
 === Basic Training ===
@@ -15,7 +15,7 @@ spellcaster types; they're much more difficult to play. If you want
 basic information about races and classes, go to the on-line help
 (type "?") and read "Character Attributes". You should probably read
 most of the help files here; the commands list is especially important
-to someone new to Bakabakaband.
+to someone new to Hengband.
 
 After naming your character, you'll start in the town. The various
 numbers represent stores, where you can buy new equipment and sell
@@ -26,7 +26,7 @@ return to the surface.
 
 Next, type "<" again on the surface. If there are no hostile monsters
 near you, you will enters the Global Map mode which displays all the
-world of Bakabakaband. Type ">" to return from global map mode to normal
+world of Hengband. Type ">" to return from global map mode to normal
 map mode.
 
 If you want to know what a specific symbol stands for, type "/", and
@@ -67,7 +67,7 @@ rid of old items and buying new ones. If you ever find that there's
 something you need which the stores don't currently have, you can wait
 a while for the stores to refresh.
 
-Bakabakaband's not actually all that difficult to learn to play. You should
+Hengband's not actually all that difficult to learn to play. You should
 get the hang of it fairly quickly.
  
 From here on we'll be giving detailed dungeon survival information.
@@ -208,7 +208,7 @@ not a perfect escape method.
 
 === On Resistances ====
 
-There are many different kinds of attacks in Bakabakaband, generally
+There are many different kinds of attacks in Hengband, generally
 falling under physical, magical, and breath attacks. They can all cause
 specialized kinds of damage, which can kill a character if he/she does
 not have resistance to that attack. The majority of attack types have a
@@ -413,7 +413,7 @@ does not affect every stat in this list! Most items that have a +c only
 affect one or two of these stats. Some items affect more (A Weapon of
 Westernesse affects Strength, Dexterity, and Constitution)].
  
-As a side note for the above: Bakabakaband follows the parenthesis for any
+As a side note for the above: Hengband follows the parenthesis for any
 item. If you see a number in brackets, like this: [b], it is a bonus to
 AC. If it is in parenthesis, like this: (+x), it is either a bonus to a
 stat or to hit/damage (and which should normally be obvious by the name
@@ -475,7 +475,7 @@ it!
 === On the Monster Memory ===
 
 In many other games, you are required to take notes on monster's
-weaknesses, strengths, spells, et cetera. Bakabakaband takes care of this
+weaknesses, strengths, spells, et cetera. Hengband takes care of this
 for you, with the handy Monster Memory. Every time you find out
 something new about a monster, like that it can breathe fire, this is
 added to your knowledge of the monster. To look over this knowledge,
@@ -507,7 +507,7 @@ are poisonous. A Multi-Hued monster is all of these.
 === On the Preferences ===
 
 The preferences screen is reached by typing "=". It contains many
-different preferences that make Bakabakaband more enjoyable. There are a few
+different preferences that make Hengband more enjoyable. There are a few
 that I would recommend. Turn both stacking options ON. This maximizes
 your treasure collection. Turn the Low Hitpoint Warning ON, and place
 the warning percent at about 50%. You'll see the effects of this
@@ -522,12 +522,12 @@ map, and others.
  
 === On Death ===
 
-Death in Bakabakaband is permanent. Saving in Bakabakaband is meant only to let
+Death in Hengband is permanent. Saving in Hengband is meant only to let
 you pick up where you left off; if you die, your savefile is marked.
 The next time you try to use the savefile, you will get the new
 character dialogue. Ancestors of dead characters will retain their
 monster memory and preferences. Many people here have characters like
-"Yuppy XIV"; people die very often in Bakabakaband.
+"Yuppy XIV"; people die very often in Hengband.
 
 Some people make backup savefiles; if their character dies, they simply
 load the older character, and pick up where they left off. They lose
@@ -543,11 +543,11 @@ truly win the game. It also sets your Social Status to zero, so
 everyone knows what a scumbag you are.
 
  
-=== On Bakabakaband Time ===
+=== On Hengband Time ===
 
-If there is one feature of Bakabakaband that tends to confuse people
+If there is one feature of Hengband that tends to confuse people
 (especially veterans of other *band), it is how the speed system in
-Bakabakaband works. 
+Hengband works. 
 
 As in other variants, the energy you and monsters get each turn depends 
 on speed.  Unlike in other variants, this value is only an average; be 
@@ -568,7 +568,7 @@ Be aware that speeds increases above about +28 to +35 are much less useful.
 === Advanced techniques for killing monsters ===
 
 Pillardancing.
-     Not recommended in Bakabakaband:  monsters move at irregular speeds.
+     Not recommended in Hengband:  monsters move at irregular speeds.
 
 Shoot'n Scoot.
      Requires a large room, Phase Door, and some type of missile
@@ -599,4 +599,4 @@ The Anti-Summoning Corridor.
 --
 Original   : Chris Weisiger (TANG version 1.6.2)
 Updated    : Zangband DevTeam
-Updated    : Bakabakaband 1.0.11
+Updated    : Hengband 1.0.11

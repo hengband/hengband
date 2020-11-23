@@ -23,7 +23,7 @@ RC         = brc32
 #
 # Name of the *.exe-file
 
-EXE_FILE = Bakabakaband.exe
+EXE_FILE = hengband.exe
 
 
 ###################################################################

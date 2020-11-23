@@ -2,9 +2,9 @@
 
 AUTOMAKE_OPTIONS = foreign subdir-objects nostdinc
 
-bin_PROGRAMS = Bakabakaband
+bin_PROGRAMS = hengband
 
-Bakabakaband_SOURCES = \
+hengband_SOURCES = \
 	action/action-limited.c action/action-limited.h \
 	action/activation-execution.c action/activation-execution.h \
 	action/movement-execution.c action/movement-execution.h \
@@ -896,7 +896,7 @@ Bakabakaband_SOURCES = \
 	world/world-movement-processor.c world/world-movement-processor.h \
 	world/world-turn-processor.c world/world-turn-processor.h
 
-EXTRA_Bakabakaband_SOURCES = \
+EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \
 	makefile.bcc makefile.std term/readdib.c term/readdib.h wall.bmp
 
@@ -973,6 +973,6 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 
 install-exec-hook:
 if SET_GID
-	chgrp "@GAMEGROUP@" "$(DESTDIR)$(bindir)/Bakabakaband"
-	chmod g+s "$(DESTDIR)$(bindir)/Bakabakaband"
+	chgrp "@GAMEGROUP@" "$(DESTDIR)$(bindir)/hengband"
+	chmod g+s "$(DESTDIR)$(bindir)/hengband"
 endif

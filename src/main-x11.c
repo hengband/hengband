@@ -113,7 +113,7 @@
 #define GRAPHICS_NONE       0
 #define GRAPHICS_ORIGINAL   1
 #define GRAPHICS_ADAM_BOLT  2
-#define GRAPHICS_Bakabakaband   3
+#define GRAPHICS_HENGBAND   3
 #ifdef USE_X11
 #ifndef __MAKEDEPEND__
 #include <X11/Xlib.h>

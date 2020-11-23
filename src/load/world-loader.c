@@ -10,7 +10,7 @@
 #include "system/floor-type-definition.h"
 #include "world/world.h"
 
-static void rd_Bakabakaband_dungeons(void)
+static void rd_hengband_dungeons(void)
 {
     byte max = (byte)current_world_ptr->max_d_idx;
     rd_byte(&max);
@@ -28,7 +28,7 @@ void rd_dungeons(player_type *creature_ptr)
     if (z_older_than(10, 3, 8))
         rd_zangband_dungeon();
     else
-        rd_Bakabakaband_dungeons();
+        rd_hengband_dungeons();
 
     if (creature_ptr->max_plv < creature_ptr->lev)
         creature_ptr->max_plv = creature_ptr->lev;

@@ -34,7 +34,7 @@
 #define GRAPHICS_NONE       0
 #define GRAPHICS_ORIGINAL   1
 #define GRAPHICS_ADAM_BOLT  2
-#define GRAPHICS_Bakabakaband   3
+#define GRAPHICS_HENGBAND   3
 
 /*
  * Some machines have a "main()" function in their "main-xxx.c" file,

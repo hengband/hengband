@@ -127,7 +127,7 @@ Allow unified use command    [use_command]
 
 ***** <over_exert>
 Allow casting spells when short of mana    [over_exert]
-    Normally, Bakabakaband restricts you from casting spells when you don't
+    Normally, Hengband restricts you from casting spells when you don't
     have enough mana.  If this option is set, the program allow you to
     cast spells at such dangerous situation.
 
@@ -435,7 +435,7 @@ Leave last words when your character dies    [last_words]
 
 ***** <send_score>
 Send score dump to the world score server    [send_score]
-    If this option is set, Bakabakaband will allow you to send the score
+    If this option is set, Hengband will allow you to send the score
     record of your character to the world score board on the Internet
     when your character dies.
 
@@ -559,19 +559,19 @@ Alert when leaving trap detected area    [alert_trap_detect]
 
 ***** <destroy_items>
 Use easy auto-destroyer    [destroy_items]
-    If this option is set, Bakabakaband will automatically destroy all
+    If this option is set, Hengband will automatically destroy all
     objects which you touch unless the object is protected by various
     'leave_...'  options below.
 
 ***** <destroy_feeling>
 Apply auto-destroy as sense feeling    [destroy_feeling]
-    If this option is set, Bakabakaband will apply auto-destroyer on an
+    If this option is set, Hengband will apply auto-destroyer on an
     item just when you sensed its feeling.  Typically it will destroy
     {cursed} items just after the sensing.
 
 ***** <destroy_identify>
 Apply auto-destroy as identify an item    [destroy_identify]
-    If this option is set, Bakabakaband will apply auto-destroyer on an
+    If this option is set, Hengband will apply auto-destroyer on an
     item just when you identified it using magical items or spells.
     Typically it will destroy {cursed} items and other useless items
     which you set up to be auto-destroyed.
@@ -828,7 +828,7 @@ Ask for saving death    [cheat_save]
 === Birth options ===
 
 While cheating makes the game easier, the following options can make
-Bakabakaband harder or easier. So if you think the game is too easy or too
+Hengband harder or easier. So if you think the game is too easy or too
 hard, or if you want to impress your friends, then switch on the
 following options. The birth options can only be accessed while
 creating a new character (press '=' while creating the character).
@@ -962,4 +962,4 @@ Original   : Ben Harrison
 Updated    : Zangband 2.1.* by Topi Ylinen
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Bakabakaband 1.5.2
+Updated    : Hengband 1.5.2
