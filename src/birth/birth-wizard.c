@@ -327,7 +327,7 @@ static bool decide_initial_stat(player_type *creature_ptr)
 
     bool accept = TRUE;
     for (int i = 0; i < A_MAX; i++) {
-        if (p_ptr->stat_max[i] < stat_limit[i]) {
+        if (creature_ptr->stat_max[i] < stat_limit[i]) {
             accept = FALSE;
             break;
         }
