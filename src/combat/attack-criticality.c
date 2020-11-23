@@ -1,5 +1,5 @@
-﻿#include "combat/combat-options-type.h"
-#include "combat/attack-criticality.h"
+﻿#include "combat/attack-criticality.h"
+#include "combat/combat-options-type.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -8,15 +8,15 @@
 #include "view/display-messages.h"
 
 /*!
-* @brief プレイヤーからモンスターへの打撃クリティカル判定 /
-* Critical hits (by player) Factor in weapon weight, total plusses, player melee bonus
-* @param weight 矢弾の重量
-* @param plus 武器の命中修正
-* @param dam 現在算出中のダメージ値
-* @param meichuu 打撃の基本命中力
-* @param mode オプションフラグ
-* @return クリティカル修正が入ったダメージ値
-*/
+ * @brief プレイヤーからモンスターへの打撃クリティカル判定 /
+ * Critical hits (by player) Factor in weapon weight, total plusses, player melee bonus
+ * @param weight 矢弾の重量
+ * @param plus 武器の命中修正
+ * @param dam 現在算出中のダメージ値
+ * @param meichuu 打撃の基本命中力
+ * @param mode オプションフラグ
+ * @return クリティカル修正が入ったダメージ値
+ */
 HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, combat_options mode)
 {
     /* Extract "blow" power */
@@ -118,8 +118,6 @@ static void ninja_critical(player_type *attacker_ptr, player_attack_type *pa_ptr
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     int maxhp = pa_ptr->m_ptr->maxhp;
-
-    /* Yamiuch and Oiuch */
     if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->surprise_attack) ? 15 : 27)) {
         pa_ptr->attack_damage *= 5;
         pa_ptr->drain_result *= 2;
@@ -127,15 +125,13 @@ static void ninja_critical(player_type *attacker_ptr, player_attack_type *pa_ptr
         return;
     }
 
-    /* Todome check */
-    bool is_weaken = (pa_ptr->m_ptr->hp < maxhp / 2);
-    bool is_unique = ((r_ptr->flags1 & RF1_UNIQUE) != 0 || (r_ptr->flags7 & RF7_UNIQUE2) != 0);
+    bool is_weaken = pa_ptr->m_ptr->hp < maxhp / 2;
+    bool is_unique = ((r_ptr->flags1 & RF1_UNIQUE) != 0) || ((r_ptr->flags7 & RF7_UNIQUE2) != 0);
     bool is_critical = (is_weaken && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10))
-        || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !(is_unique));
+        || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !is_unique);
     if (!is_critical)
         return;
 
-    /* Todome! */
     if (is_unique || !is_weaken) {
         pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
         pa_ptr->drain_result *= 2;
