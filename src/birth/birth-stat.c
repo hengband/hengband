@@ -1,4 +1,5 @@
 ﻿#include "birth/birth-stat.h"
+#include "birth/auto-roller.h"
 #include "core/player-redraw-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "player/player-class.h"
@@ -56,39 +57,17 @@ void get_stats(player_type* creature_ptr)
             s32b tmp = randint0(60 * 60 * 60);
             BASE_STATUS val;
 
-            /* Extract 5 + 1d3 + 1d4 + 1d5 */
-            val = 5 + 3;
-            val += tmp % 3;
-            tmp /= 3;
-            val += tmp % 4;
-            tmp /= 4;
-            val += tmp % 5;
-            tmp /= 5;
+            for (int j = 0; j < 3; j++) {
+                int stat = i * 3 + j;
 
-            sum += val;
-            creature_ptr->stat_cur[3 * i] = creature_ptr->stat_max[3 * i] = val;
+                /* Extract 5 + 1d3 + 1d4 + 1d5 */
+                val = rand3_4_5[tmp % 60];
 
-            /* Extract 5 + 1d3 + 1d4 + 1d5 */
-            val = 5 + 3;
-            val += tmp % 3;
-            tmp /= 3;
-            val += tmp % 4;
-            tmp /= 4;
-            val += tmp % 5;
-            tmp /= 5;
+                sum += val;
+                creature_ptr->stat_cur[stat] = creature_ptr->stat_max[stat] = val;
 
-            sum += val;
-            creature_ptr->stat_cur[3 * i + 1] = creature_ptr->stat_max[3 * i + 1] = val;
-
-            val = 5 + 3;
-            val += tmp % 3;
-            tmp /= 3;
-            val += tmp % 4;
-            tmp /= 4;
-            val += (BASE_STATUS)tmp;
-
-            sum += val;
-            creature_ptr->stat_cur[3 * i + 2] = creature_ptr->stat_max[3 * i + 2] = val;
+                tmp /= 60;
+            }
         }
 
         if ((sum > 42 + 5 * 6) && (sum < 57 + 5 * 6))

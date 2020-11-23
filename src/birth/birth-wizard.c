@@ -44,7 +44,7 @@
  * system may have problems because the user can't stop the
  * autoroller for this number of rolls.
  */
-#define AUTOROLLER_STEP 5431L
+#define AUTOROLLER_STEP 54321L
 
 static void display_initial_birth_message(player_type *creature_ptr)
 {
@@ -281,16 +281,30 @@ static void display_auto_roller_success_rate(const int col)
     if (!autoroller)
         return;
 
-    put_str(_("最小値", " Limit"), 2, col + 5);
-    put_str(_("成功率", "  Freq"), 2, col + 13);
+    put_str(_("最小値", " Limit"), 2, col + 13);
     put_str(_("現在値", "  Roll"), 2, col + 24);
+
+    char buf[32];
+
+    if (autoroll_chance >= 1)
+        sprintf(buf, _("確率 :  1/%8d00", "Prob :  1/%8d00"), autoroll_chance);
+    else if (autoroll_chance == -999)
+        sprintf(buf, _("確率 :     不可能", "Prob :     Impossible"));
+    else
+        sprintf(buf, _("確率 :     1/10000以上", "Prob :     >1/10000"));
+    put_str(buf, 11, col + 10);
+
+    put_str(_(
+        "注意 : 体格等のオートローラを併用時は、上記確率より困難です。",
+        "Note : Prob may be lower when you use the 'autochara' option."
+        ), 22, 5);
+
     for (int i = 0; i < A_MAX; i++) {
-        put_str(stat_names[i], 3 + i, col);
+        put_str(stat_names[i], 3 + i, col + 8);
         int j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
         int m = adjust_stat(stat_limit[i], j);
-        char buf[32];
         cnv_stat(m, buf);
-        c_put_str(TERM_L_BLUE, buf, 3 + i, col + 5);
+        c_put_str(TERM_L_BLUE, buf, 3 + i, col + 13);
     }
 }
 
@@ -303,9 +317,7 @@ static void auto_roller_count(void)
     if (!autoroller)
         return;
 
-    for (int i = 0; i < A_MAX; i++) {
-        stat_match[i] = 0;
-    }
+    auto_upper_round++;
 }
 
 static bool decide_initial_stat(player_type *creature_ptr)
@@ -315,10 +327,10 @@ static bool decide_initial_stat(player_type *creature_ptr)
 
     bool accept = TRUE;
     for (int i = 0; i < A_MAX; i++) {
-        if (creature_ptr->stat_max[i] >= stat_limit[i])
-            stat_match[i]++;
-        else
+        if (p_ptr->stat_max[i] < stat_limit[i]) {
             accept = FALSE;
+            break;
+        }
     }
 
     return accept;
@@ -352,7 +364,10 @@ static bool display_auto_roller_count(player_type *creature_ptr, const int col)
         return FALSE;
 
     birth_put_stats(creature_ptr);
-    put_str(format("%10ld", auto_round), 10, col + 20);
+    if (auto_upper_round)
+        put_str(format("%ld%09ld", auto_upper_round, auto_round), 10, col + 20);
+    else
+        put_str(format("%10ld", auto_round), 10, col + 20);
     term_fresh();
     inkey_scan = TRUE;
     if (inkey()) {
@@ -444,11 +459,11 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
     bool prev = FALSE;
 
     while (TRUE) {
-        int col = 42;
+        int col = 22;
         if (autoroller || autochara) {
             term_clear();
-            put_str(_("回数 :", "Round:"), 10, col + 13);
-            put_str(_("(ESCで停止)", "(Hit ESC to stop)"), 12, col + 13);
+            put_str(_("回数 :", "Round:"), 10, col + 10);
+            put_str(_("(ESCで停止)", "(Hit ESC to stop)"), 13, col + 13);
         } else {
             get_stats(creature_ptr);
             get_ahw(creature_ptr);
@@ -522,8 +537,11 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
         return FALSE;
 
     display_initial_options(creature_ptr);
-    if (autoroller || autochara)
+    if (autoroller || autochara) {
         auto_round = 0L;
+        auto_upper_round = 0L;
+        autoroll_chance = 0L;
+    }
 
     if (autoroller)
         if (!get_stat_limits(creature_ptr))

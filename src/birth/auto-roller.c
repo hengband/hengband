@@ -21,6 +21,7 @@ s32b stat_match[6];
 
 /*! オートローラの試行回数 / Autoroll round */
 s32b auto_round;
+s32b auto_upper_round;
 
 /*!
  * @brief オートローラで得たい能力値の基準を決める。
@@ -29,17 +30,20 @@ s32b auto_round;
  */
 bool get_stat_limits(player_type *creature_ptr)
 {
+    int col_stat = 25;
+
     clear_from(10);
     put_str(_("最低限得たい能力値を設定して下さい。", "Set minimum stats."), 10, 10);
     put_str(_("2/8で項目選択、4/6で値の増減、Enterで次へ", "2/8 for Select, 4/6 for Change value, Enter for Goto next"), 11, 10);
     put_str(_("         基本値  種族 職業 性格     合計値  最大値", "           Base   Rac  Cla  Per      Total  Maximum"), 13, 10);
+
+    put_str(_("確率: 非常に容易(1/10000以上)", "Prob: Quite Easy(>1/10000)"), 23, col_stat);
 
     int cval[6];
     char buf[80];
     char cur[80];
     char inp[80];
     for (int i = 0; i < A_MAX; i++) {
-        stat_match[i] = 0;
         cval[i] = 3;
         int j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
         int m = adjust_stat(17, j);
@@ -62,7 +66,17 @@ bool get_stat_limits(player_type *creature_ptr)
     int os = 6;
     while (TRUE) {
         if (cs != os) {
-            if (os == 6) {
+            if (os == 7) {
+                autoroll_chance = get_autoroller_prob(cval);
+                if (autoroll_chance == -999)
+                    sprintf(buf, _("確率: 不可能(合計86超)       ", "Prob: Impossible(>86 tot stats)"));
+                else if (autoroll_chance < 1)
+                    sprintf(buf, _("確率: 非常に容易(1/10000以上)", "Prob: Quite Easy(>1/10000)     "));
+                else
+                    sprintf(buf, _("確率: 約 1/%8d00          ", "Prob: ~ 1/%8d00            "), autoroll_chance);
+                put_str(buf, 23, col_stat);
+            }
+            else if (os == 6) {
                 c_put_str(TERM_WHITE, _("決定する", "Accept"), 21, 35);
             } else if (os < A_MAX) {
                 c_put_str(TERM_WHITE, cur, 14 + os, 10);
@@ -176,7 +190,7 @@ bool get_stat_limits(player_type *creature_ptr)
             break;
         }
 
-        if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6))
+        if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6 && autoroll_chance != -999))
             break;
     }
 
@@ -440,4 +454,84 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
     chara_limit_ptr->scmin = (s16b)cval[6];
     chara_limit_ptr->scmax = (s16b)cval[7];
     return TRUE;
+}
+
+/*
+ * @breif オートローラーで指定した能力値以上が出る確率を計算する。
+ * @return 確率 / 100
+ */
+ static s32b get_autoroller_prob(int *minval)
+{
+    /* 1 percent of the valid random space (60^6 && 72<sum<87) */
+    s32b tot_rand_1p = 320669745;
+    int i, j, tmp;
+    int ii[6];
+    int tval[6];
+    int tot = 0;
+
+    /* success count */
+    s32b succ = 0;
+
+    /* random combinations out of 60 (1d3+1d4+1d5) patterns */
+    int pp[18] = {
+        0, 0, 0, 0, 0, 0, 0, 0, /* 0-7 */
+        1, 3, 6, 9, 11, 11, 9, 6, 3, 1 /* 8-17 */
+    };
+
+    /* Copy */
+    for (i = 0; i < 6; i++) 
+    {
+        tval[i] = MAX(8, minval[i]);
+        tot += tval[i];
+    }
+
+    /* No Chance */
+    if (tot > 86) return -999;
+
+    /* bubble sort for speed-up */
+    for (i = 0; i < 5; i++) 
+    {
+        for (j = 5; j > i; j--) 
+        {
+            if (tval[j - 1] < tval[j]) 
+            {
+                tmp = tval[j - 1];
+                tval[j - 1] = tval[j];
+                tval[j] = tmp;
+            }
+        }
+    }
+
+    tot = 0;
+
+    /* calc. prob. */
+    for (ii[0] = tval[0]; ii[0] < 18; ii[0]++) 
+    {
+        for (ii[1] = tval[1]; ii[1] < 18; ii[1]++) 
+        {
+            for (ii[2] = tval[2]; ii[2] < 18; ii[2]++) 
+            {
+                for (ii[3] = tval[3]; ii[3] < 18; ii[3]++) 
+                {
+                    for (ii[4] = tval[4]; ii[4] < 18; ii[4]++) 
+                    {
+                        for (ii[5] = tval[5]; ii[5] < 18; ii[5]++) 
+                        {
+                            tot = ii[0] + ii[1] + ii[2] + ii[3] + ii[4] + ii[5];
+
+                            if (tot > 86) break;
+                            if (tot <= 72) continue;
+
+                            succ += (pp[ii[0]] * pp[ii[1]] * pp[ii[2]] * pp[ii[3]] * pp[ii[4]] * pp[ii[5]]);
+
+                            /* If given condition is easy enough, quit calc. to save CPU. */
+                            if (succ > 320670) return -1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return tot_rand_1p / succ;
 }
