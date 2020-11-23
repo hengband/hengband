@@ -147,6 +147,8 @@ const option_type option_info[MAX_OPTION_INFO] = {
 
     { &last_words, TRUE, OPT_PAGE_GAMEPLAY, 0, 28, "last_words", _("キャラクターが死んだ時遺言をのこす", "Leave last words when your character dies") },
 
+    { &auto_dump, FALSE, OPT_PAGE_GAMEPLAY, 4, 5, "auto_dump", _("自動的にキャラクターの記録をファイルに書き出す", "Dump a character record automatically") },
+
 #ifdef WORLD_SCORE
     { &send_score, TRUE, OPT_PAGE_GAMEPLAY, 4, 6, "send_score", _("スコアサーバにスコアを送る", "Send score dump to the world score server") },
 #endif

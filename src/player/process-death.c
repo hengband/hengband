@@ -12,6 +12,7 @@
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-town.h"
+#include "game-option/game-play-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "object/item-use-flags.h"
@@ -372,6 +373,26 @@ static void export_player_info(player_type *creature_ptr, update_playtime_pf upd
 }
 
 /*!
+ * @brief 自動的にプレイヤーステータスをファイルダンプ出力する
+ * @return なし
+ */
+static void file_character_auto(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player)
+{
+    time_t now_t = time(NULL);
+    struct tm *now_tm = localtime(&now_t);
+
+    char datetime[32];
+    char filename[128];
+
+    strftime(datetime, sizeof(datetime), "%Y-%m-%d_%H%M%S", now_tm);
+    strnfmt(filename, sizeof(filename), "%s_Autodump_%s.txt", p_ptr->name, datetime);
+
+    screen_save();
+    (void)file_character(creature_ptr, filename, update_playtime, display_player);
+    screen_load();
+}
+
+/*!
  * @brief 死亡、引退時の簡易ステータス表示
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param handle_stuff 更新処理チェックへのコールバック
@@ -389,6 +410,9 @@ void show_death_info(player_type *creature_ptr, update_playtime_pf update_playti
     handle_stuff(creature_ptr);
     flush();
     msg_erase();
+
+    if (auto_dump)
+        file_character_auto(creature_ptr, update_playtime, display_player);
 
     export_player_info(creature_ptr, update_playtime, display_player);
     (*update_playtime)();

@@ -76,6 +76,7 @@ X:always_small_levels
 Y:empty_levels
 X:bound_walls_perm
 Y:last_words
+X:auto_dump
 Y:send_score
 X:allow_debug_opts
 
