@@ -48,7 +48,7 @@ Activate quick messages    [quick_messages]
 ***** <auto_more>
 Automatically clear '-more-' prompts    [auto_more]
     The game does not wait for a keypress when it comes to a -more-
-    prompt, but carries on going.
+    prompt and automatically displays the next message.
 
 ***** <command_menu>
 Enable command selection menu    [command_menu]
@@ -93,7 +93,7 @@ Prompt before exiting a quest level    [confirm_quest]
     you go up the stairs from such quest levels.
 
 ***** <target_pet>
-Allow targetting pets    [target_pet]
+Allow targeting pets    [target_pet]
     Normally, the program doesn't automatically choose pets as target
     in the targeting mode of attack spells. If this option is set, the
     program always chooses every monster in sight as target.
@@ -127,7 +127,7 @@ Allow unified use command    [use_command]
 
 ***** <over_exert>
 Allow casting spells when short of mana    [over_exert]
-    Normally, Hengband restricts you from casting spells when you don't
+    Normally, Bakabakaband restricts you from casting spells when you don't
     have enough mana.  If this option is set, the program allow you to
     cast spells at such dangerous situation.
 
@@ -292,8 +292,8 @@ Plain object descriptions    [plain_descriptions]
 ***** <always_show_list>
 Always show list when choosing items    [always_show_list]
     When this option is set, all commands which lets you to choose an
-    item from inventory or equipment list will automatically show list
-    when activated.
+    item from inventory or equipment list will automatically show the
+    list when activated.
 
 ***** <depth_in_feet>
 Show dungeon level in feet    [depth_in_feet]
@@ -435,17 +435,17 @@ Leave last words when your character dies    [last_words]
 
 ***** <send_score>
 Send score dump to the world score server    [send_score]
-    If this option is set, Hengband will allow you to send the score
+    If this option is set, Bakabakaband will allow you to send the score
     record of your character to the world score board on the Internet
     when your character dies.
 
 ***** <allow_debug_opts>
 Allow use of debug/cheat options  [allow_debug_opts]
     Since use of debug command(^A), wizard mode(^W), and Cheating
-    options ('C' in options panel) mark the player as "Cheater" who
-    can't register their score, these debug/cheat options are
+    options ('C' in options panel) mark the player as a "Cheater"
+    who can't register their score, these debug/cheat options are
     forbidden to use on default.  The allow_debug_opts option removes
-    these restrictions, and allow the player to become "Cheater".
+    these restrictions, and allow the player to become a "Cheater".
 
 
 ***** <Disturbance>
@@ -535,7 +535,7 @@ Disturb whenever player state changes    [disturb_state]
 
 ***** <disturb_minor>
 Disturb whenever boring things happen    [disturb_minor]
-    This option causes you to be disturbed by various bring things,
+    This option causes you to be disturbed by various boring things,
     including monsters bashing down doors, inventory feelings, and
     beginning to run out of fuel.
 
@@ -559,19 +559,19 @@ Alert when leaving trap detected area    [alert_trap_detect]
 
 ***** <destroy_items>
 Use easy auto-destroyer    [destroy_items]
-    If this option is set, Hengband will automatically destroy all
+    If this option is set, Bakabakaband will automatically destroy all
     objects which you touch unless the object is protected by various
     'leave_...'  options below.
 
 ***** <destroy_feeling>
 Apply auto-destroy as sense feeling    [destroy_feeling]
-    If this option is set, Hengband will apply auto-destroyer on an
+    If this option is set, Bakabakaband will apply auto-destroyer on an
     item just when you sensed its feeling.  Typically it will destroy
     {cursed} items just after the sensing.
 
 ***** <destroy_identify>
 Apply auto-destroy as identify an item    [destroy_identify]
-    If this option is set, Hengband will apply auto-destroyer on an
+    If this option is set, Bakabakaband will apply auto-destroyer on an
     item just when you identified it using magical items or spells.
     Typically it will destroy {cursed} items and other useless items
     which you set up to be auto-destroyed.
@@ -762,7 +762,7 @@ Display overhead view
     and does not even look very good.
 
 Display monster recall
-    Display a description of the most monster which has been most recently
+    Display a description of the monster which has been most recently
     attacked, targeted, or examined in some way.
 
 Display object recall
@@ -789,7 +789,7 @@ Display borg status
 ***** <Cheating>
 === Option C - Cheating Options ===
 
-Using the cheating options marks your character as "Cheater" and
+Using the cheating options marks your character as a "Cheater" and
 you won't get into the high-score list.  Turning off the cheating
 options later does NOT allow your character to get a highscore entry,
 so think twice before using any cheat.
@@ -828,7 +828,7 @@ Ask for saving death    [cheat_save]
 === Birth options ===
 
 While cheating makes the game easier, the following options can make
-Hengband harder or easier. So if you think the game is too easy or too
+Bakabakaband harder or easier. So if you think the game is too easy or too
 hard, or if you want to impress your friends, then switch on the
 following options. The birth options can only be accessed while
 creating a new character (press '=' while creating the character).
@@ -909,7 +909,7 @@ Always generate very unusual rooms (*)    [ironman_rooms]
 Nightmare mode(it isn't even remotely fair!)(*)    [ironman_nightmare]
     If this option is enabled, all monsters become unusually
     powerful, and fast. And there will be various unbelievable
-    happening in various situations. Furthermore, at 12:00 every
+    happenings from time to time. Furthermore, at 12:00 every
     night, you will have a real nightmare.
 
 ***** <left_hander>
@@ -962,4 +962,4 @@ Original   : Ben Harrison
 Updated    : Zangband 2.1.* by Topi Ylinen
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.5.2
+Updated    : Bakabakaband 1.5.2

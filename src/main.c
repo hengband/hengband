@@ -8,8 +8,33 @@
  * are included in all such copies.
  */
 
-#include "angband.h"
+#include "system/angband.h"
+#include "autopick/autopick-pref-processor.h"
+#include "core/asking-player.h"
+#include "core/game-play.h"
+#include "core/scores.h"
+#include "game-option/runtime-arguments.h"
+#include "io/chuukei.h"
+#include "io/files-util.h"
+#include "io/inet.h"
+#include "io/signal-handlers.h"
+#include "io/uid-checker.h"
+#include "main/angband-initializer.h"
+#include "player/process-name.h"
+#include "system/angband-version.h"
+#include "system/system-variables.h"
+#include "term/gameterm.h"
+#include "term/term-color-types.h"
+#include "util/angband-files.h"
+#include "util/string-processor.h"
 
+/*
+ * Available graphic modes
+ */
+#define GRAPHICS_NONE       0
+#define GRAPHICS_ORIGINAL   1
+#define GRAPHICS_ADAM_BOLT  2
+#define GRAPHICS_Bakabakaband   3
 
 /*
  * Some machines have a "main()" function in their "main-xxx.c" file,
@@ -17,8 +42,67 @@
  */
 
 
-#if !defined(MACINTOSH) && !defined(WINDOWS) && !defined(ACORN)
+#if !defined(WINDOWS)
 
+/*
+ * Nuke a term
+ */
+static errr term_nuke(term_type *t)
+{
+    TERM_LEN w = t->wid;
+    TERM_LEN h = t->hgt;
+
+    /* Call the special "nuke" hook */
+    if (t->active_flag) {
+        /* Call the "nuke" hook */
+        if (t->nuke_hook)
+            (*t->nuke_hook)(t);
+
+        /* Remember */
+        t->active_flag = FALSE;
+
+        /* Assume not mapped */
+        t->mapped_flag = FALSE;
+    }
+
+    /* Nuke "displayed" */
+    term_win_nuke(t->old, w, h);
+
+    /* Kill "displayed" */
+    KILL(t->old, term_win);
+
+    /* Nuke "requested" */
+    term_win_nuke(t->scr, w, h);
+
+    /* Kill "requested" */
+    KILL(t->scr, term_win);
+
+    /* If needed */
+    if (t->mem) {
+        /* Nuke "memorized" */
+        term_win_nuke(t->mem, w, h);
+
+        /* Kill "memorized" */
+        KILL(t->mem, term_win);
+    }
+
+    /* If needed */
+    if (t->tmp) {
+        /* Nuke "temporary" */
+        term_win_nuke(t->tmp, w, h);
+
+        /* Kill "temporary" */
+        KILL(t->tmp, term_win);
+    }
+
+    /* Free some arrays */
+    C_KILL(t->x1, h, TERM_LEN);
+    C_KILL(t->x2, h, TERM_LEN);
+
+    /* Free the input queue */
+    C_KILL(t->key_queue, t->key_size, char);
+    return 0;
+}
 
 /*
  * A hook for "quit()".
@@ -137,7 +221,7 @@ static void change_path(concptr info)
 	concptr s;
 
 	/* Find equal sign */
-	s = my_strchr(info, '=');
+	s = angband_strchr(info, '=');
 
 	/* Verify equal sign */
 	if (!s) quit_fmt("Try '-d<what>=<path>' not '-d%s'", info);
@@ -187,18 +271,6 @@ static void change_path(concptr info)
 			break;
 		}
 
-#ifdef VERIFY_SAVEFILE
-
-		case 'b':
-		case 'd':
-		case 'e':
-		case 's':
-		{
-			quit_fmt("Restricted option '-d%s'", info);
-		}
-
-#else /* VERIFY_SAVEFILE */
-
 		case 'b':
 		{
 			string_free(ANGBAND_DIR_BONE);
@@ -234,13 +306,54 @@ static void change_path(concptr info)
 			break;
 		}
 
-#endif /* VERIFY_SAVEFILE */
-
 		default:
 		{
 			quit_fmt("Bad semantics in '-d%s'", info);
 		}
 	}
+}
+
+static void display_usage(void)
+{
+	/* Dump usage information */
+	puts("Usage: angband [options] [-- subopts]");
+	puts("  -n       Start a new character");
+	puts("  -f       Request fiddle mode");
+	puts("  -w       Request wizard mode");
+	puts("  -b       Request BGM mode");
+	puts("  -v       Request sound mode");
+	puts("  -g       Request graphics mode");
+	puts("  -o       Request original keyset");
+	puts("  -r       Request rogue-like keyset");
+	puts("  -M       Request monochrome mode");
+	puts("  -s<num>  Show <num> high scores");
+	puts("  -u<who>  Use your <who> savefile");
+	puts("  -m<sys>  Force 'main-<sys>.c' usage");
+	puts("  -d<def>  Define a 'lib' dir sub-path");
+	puts("");
+
+#ifdef USE_X11
+	puts("  -mx11    To use X11");
+	puts("  --       Sub options");
+	puts("  -- -d    Set display name");
+	puts("  -- -o    Request old 8x8 tile graphics");
+	puts("  -- -a    Request Adam Bolt 16x16 tile graphics");
+	puts("  -- -b    Request Bigtile graphics mode");
+	puts("  -- -s    Turn off smoothscaling graphics");
+	puts("  -- -n#   Number of terms to use");
+	puts("");
+#endif /* USE_X11 */
+
+#ifdef USE_GCU
+	puts("  -mgcu    To use GCU (GNU Curses)");
+#endif /* USE_GCU */
+
+#ifdef USE_CAP
+	puts("  -mcap    To use CAP (\"Termcap\" calls)");
+#endif /* USE_CAP */
+
+	/* Actually abort the process */
+	quit(NULL);
 }
 
 
@@ -269,11 +382,6 @@ int main(int argc, char *argv[])
 	/* Default permissions on files */
 	(void)umask(022);
 
-# ifdef SECURE
-	/* Authenticate */
-	Authenticate();
-# endif
-
 #endif
 
 
@@ -284,11 +392,11 @@ int main(int argc, char *argv[])
 #ifdef SET_UID
 
 	/* Get the user id (?) */
-	player_uid = getuid();
+	p_ptr->player_uid = getuid();
 
 #ifdef VMS
 	/* Mega-Hack -- Factor group id */
-	player_uid += (getgid() * 1000);
+	p_ptr->player_uid += (getgid() * 1000);
 #endif
 
 # ifdef SAFE_SETUID
@@ -296,25 +404,8 @@ int main(int argc, char *argv[])
 #  ifdef _POSIX_SAVED_IDS
 
 	/* Save some info for later */
-	player_euid = geteuid();
-	player_egid = getegid();
-
-#  endif
-
-#  if 0	/* XXX XXX XXX */
-
-	/* Redundant setting necessary in case root is running the game */
-	/* If not root or game not setuid the following two calls do nothing */
-
-	if (setgid(getegid()) != 0)
-	{
-		quit("setgid(): cannot set permissions correctly!");
-	}
-
-	if (setuid(geteuid()) != 0)
-	{
-		quit("setuid(): cannot set permissions correctly!");
-	}
+	p_ptr->player_euid = geteuid();
+	p_ptr->player_egid = getegid();
 
 #  endif
 
@@ -329,24 +420,8 @@ int main(int argc, char *argv[])
 
 #ifdef SET_UID
 
-	/* Initialize the "time" checker */
-	if (check_time_init() || check_time())
-	{
-		quit("The gates to Angband are closed (bad time).");
-	}
-
-	/* Initialize the "load" checker */
-	if (check_load_init() || check_load())
-	{
-		quit("The gates to Angband are closed (bad load).");
-	}
-
 	/* Acquire the "user name" as a default player name */
-#ifdef ANGBAND_2_8_1
-	user_name(p_ptr->name, player_uid);
-#else /* ANGBAND_2_8_1 */
-	user_name(op_ptr->full_name, player_uid);
-#endif /* ANGBAND_2_8_1 */
+	user_name(p_ptr->name, p_ptr->player_uid);
 
 #ifdef PRIVATE_USER_PATH
 
@@ -362,9 +437,14 @@ int main(int argc, char *argv[])
 	for (i = 1; args && (i < argc); i++)
 	{
 		/* Require proper options */
-		if (argv[i][0] != '-') goto usage;
+		if (argv[i][0] != '-')
+		{
+			display_usage();
+			continue;
+		}
 
 		/* Analyze option */
+		bool is_usage_needed = FALSE;
 		switch (argv[i][1])
 		{
 			case 'N':
@@ -373,35 +453,30 @@ int main(int argc, char *argv[])
 				new_game = TRUE;
 				break;
 			}
-
 			case 'F':
 			case 'f':
 			{
 				arg_fiddle = TRUE;
 				break;
 			}
-
 			case 'W':
 			case 'w':
 			{
 				arg_wizard = TRUE;
 				break;
 			}
-
 			case 'B':
 			case 'b':
 			{
 				arg_music = TRUE;
 				break;
 			}
-
 			case 'V':
 			case 'v':
 			{
 				arg_sound = TRUE;
 				break;
 			}
-
 			case 'G':
 			case 'g':
 			{
@@ -409,21 +484,18 @@ int main(int argc, char *argv[])
 				arg_graphics = GRAPHICS_ORIGINAL;
 				break;
 			}
-
 			case 'R':
 			case 'r':
 			{
 				arg_force_roguelike = TRUE;
 				break;
 			}
-
 			case 'O':
 			case 'o':
 			{
 				arg_force_original = TRUE;
 				break;
 			}
-
 			case 'S':
 			case 's':
 			{
@@ -431,50 +503,50 @@ int main(int argc, char *argv[])
 				if (show_score <= 0) show_score = 10;
 				break;
 			}
-
 			case 'u':
 			case 'U':
 			{
-				if (!argv[i][2]) goto usage;
-#ifdef ANGBAND_2_8_1
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				strcpy(p_ptr->name, &argv[i][2]);
-#else /* ANGBAND_2_8_1 */
-
-				/* Get the savefile name */
-				strncpy(op_ptr->full_name, &argv[i][2], 32);
-
-				/* Make sure it's terminated */
-				op_ptr->full_name[31] = '\0';
-
-#endif /* ANGBAND_2_8_1 */
 				break;
 			}
-
 			case 'm':
 			{
-				if (!argv[i][2]) goto usage;
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				mstr = &argv[i][2];
 				break;
 			}
-
 			case 'M':
 			{
 				arg_monochrome = TRUE;
 				break;
 			}
-
 			case 'd':
 			case 'D':
 			{
 				change_path(&argv[i][2]);
 				break;
 			}
-
 #ifdef CHUUKEI
 			case 'p':
 			case 'P':
 			{
-				if (!argv[i][2]) goto usage;
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				chuukei_server = TRUE;
 				if (connect_chuukei_server(&argv[i][2]) < 0) chuukei_server = FALSE;
 				break;
@@ -483,20 +555,28 @@ int main(int argc, char *argv[])
 			case 'c':
 			case 'C':
 			{
-				if (!argv[i][2]) goto usage;
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				chuukei_client = TRUE;
 				connect_chuukei_server(&argv[i][2]);
 				break;
 			}
 #endif
-
 			case 'x':
 			{
-				if (!argv[i][2]) goto usage;
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				prepare_browse_movie(&argv[i][2]);
 				break;
-			}			
-
+			}
 			case '-':
 			{
 				argv[i] = argv[0];
@@ -505,59 +585,16 @@ int main(int argc, char *argv[])
 				args = FALSE;
 				break;
 			}
-
 			default:
-			usage:
 			{
-				/* Dump usage information */
-				puts("Usage: angband [options] [-- subopts]");
-				puts("  -n       Start a new character");
-				puts("  -f       Request fiddle mode");
-				puts("  -w       Request wizard mode");
-				puts("  -b       Request BGM mode");
-				puts("  -v       Request sound mode");
-				puts("  -g       Request graphics mode");
-				puts("  -o       Request original keyset");
-				puts("  -r       Request rogue-like keyset");
-				puts("  -M       Request monochrome mode");
-				puts("  -s<num>  Show <num> high scores");
-				puts("  -u<who>  Use your <who> savefile");
-				puts("  -m<sys>  Force 'main-<sys>.c' usage");
-				puts("  -d<def>  Define a 'lib' dir sub-path");
-				puts("");
-
-#ifdef USE_X11
-				puts("  -mx11    To use X11");
-				puts("  --       Sub options");
-				puts("  -- -d    Set display name");
-				puts("  -- -o    Request old 8x8 tile graphics");
-				puts("  -- -a    Request Adam Bolt 16x16 tile graphics");
-				puts("  -- -b    Request Bigtile graphics mode");
-				puts("  -- -s    Turn off smoothscaling graphics");
-				puts("  -- -n#   Number of terms to use");
-				puts("");
-#endif /* USE_X11 */
-
-#ifdef USE_GCU
-				puts("  -mgcu    To use GCU (GNU Curses)");
-#endif /* USE_GCU */
-
-#ifdef USE_CAP
-				puts("  -mcap    To use CAP (\"Termcap\" calls)");
-#endif /* USE_CAP */
-
-#ifdef USE_DOS
-				puts("  -mdos    To use DOS (Graphics)");
-#endif /* USE_DOS */
-
-#ifdef USE_IBM
-				puts("  -mibm    To use IBM (BIOS text mode)");
-#endif /* USE_IBM */
-
-				/* Actually abort the process */
-				quit(NULL);
+				is_usage_needed = TRUE;
+				break;
 			}
 		}
+
+		if (!is_usage_needed) continue;
+
+		display_usage();
 	}
 
 	/* Hack -- Forget standard args */
@@ -569,7 +606,7 @@ int main(int argc, char *argv[])
 
 
 	/* Process the player name */
-	process_player_name(TRUE);
+	process_player_name(p_ptr,TRUE);
 
 
 
@@ -630,34 +667,6 @@ int main(int argc, char *argv[])
 	}
 #endif
 
-
-#ifdef USE_DOS
-	/* Attempt to use the "main-dos.c" support */
-	if (!done && (!mstr || (streq(mstr, "dos"))))
-	{
-		extern errr init_dos(void);
-		if (0 == init_dos())
-		{
-			ANGBAND_SYS = "dos";
-			done = TRUE;
-		}
-	}
-#endif
-
-#ifdef USE_IBM
-	/* Attempt to use the "main-ibm.c" support */
-	if (!done && (!mstr || (streq(mstr, "ibm"))))
-	{
-		extern errr init_ibm(void);
-		if (0 == init_ibm())
-		{
-			ANGBAND_SYS = "ibm";
-			done = TRUE;
-		}
-	}
-#endif
-
-
 	/* Make sure we have a display! */
 	if (!done) quit("Unable to prepare any 'display module'!");
 
@@ -670,13 +679,13 @@ int main(int argc, char *argv[])
 	signals_init();
 
 	/* Initialize */
-	init_angband();
+	init_angband(p_ptr, process_autopick_file_command);
 
 	/* Wait for response */
 	pause_line(23);
 
 	/* Play the game */
-	play_game(new_game);
+	play_game(p_ptr, new_game);
 
 	/* Quit */
 	quit(NULL);
@@ -686,6 +695,3 @@ int main(int argc, char *argv[])
 }
 
 #endif
-
-
-

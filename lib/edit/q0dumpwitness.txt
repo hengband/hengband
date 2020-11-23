@@ -11,8 +11,8 @@ Q:34:Q:6:0:0:0:5:0:0:0:6
 
 # Description for quest
 ?:[LEQ $QUEST34 2]
-Q:$34:T:Adventures are dead in the building behind this one. All windows and 
-Q:$34:T:doors are locked, we guess the murderer still hide in the house.
+Q:$34:T:Adventurers are dead in the building behind this one. All windows and 
+Q:$34:T:doors are locked. We guess the murderer still hides in the house.
 Q:$34:T:Your task is to clean everything up in the room.
 Q:34:T:この建物の裏の一軒家で冒険者が不審な死に方をしているとの報告がありました。
 Q:34:T:窓にも扉にも鍵がかかっており、殺戮者はまだ内部に潜んでいると思われます。

@@ -3,7 +3,7 @@
 Please choose one of the following online help files:
 
     (a) The Basics of Auto-picker Editor      (#Editor)            
-    (b) Cur and Paste                         (#CutAndPaste)       
+    (b) Cut and Paste                         (#CutAndPaste)       
     (c) Register to Auto-picker               (#RegisterName)      
     (d) Insert Name from your Inventory       (#InsertObjectName)  
     (e) Insert Fixed Keyword                  (#InsertKeyword)     
@@ -85,7 +85,7 @@ Selected text will be displayed in yellow.  You can press ^X to cut
 the selected text, or press ^C to copy the selected text to the
 clipboard.  Contents of the clipboard will be pasted on pressing ^V.
 
-Note that it's possible that Hengband cannot recognize shift+arrow
+Note that it's possible that Bakabakaband cannot recognize shift+arrow
 keys on a minor environment.  In that case, you can press ^G and then
 move cursor to select text.
 
@@ -111,10 +111,10 @@ move cursor to select text.
 ***** <AutopickFormat>
 [[[[G|--- Format of Auto-picker/destroyer ---
 
-Hengband can automatically pick up or destroy specified objects when
+Bakabakaband can automatically pick up or destroy specified objects when
 you write objects name in the file "pickpref.prf" or
 "pickpref-<<playername>>.prf" in the user directory, this will be
-~/.angband/Hengband/ for UNIX, or Hengband\lib\user\ for other
+~/.angband/Bakabakaband/ for UNIX, or Bakabakaband\lib\user\ for other
 operating systems.
 
 The game will read the file "pickpref-<<playername>>.prf" first and
@@ -165,7 +165,7 @@ Keywords:
   good              : {good} items match.
   nameless          : Non ego/non artifact items match.
   average           : {average} items match.
-  rare              : Rare equipment such as Dragon armors etc. match.
+  rare              : Rare equipment such as Dragon armor etc. match.
   common            : Any equipments except 'rare' equipment match.
   wanted            : Wanted monster's corpses or skeletons match.
   unique monster's  : Unique monster's corpses, skeletons or statues match.
@@ -181,7 +181,8 @@ Keywords:
   items             : All items match. Use it with an adjective for 
                       readability (i.e. "unaware items").
   weapons           : All weapons including missile weapons match.
-  armors            : All armors match.
+  armors            : Any piece of armor (helm, cloak, body armor, shield,
+                      gloves, or boots) matches.
   missiles          : Arrows, bolts, and shots match.
   magical devices   : Wands, staffs, rods and scrolls match.
   lights            : Light sources match.
@@ -194,7 +195,7 @@ Keywords:
   You may also use keywords which match specified kinds of equipment:
   weapons, armors, missiles, magical devices, lights, junks, spellbooks, 
   hafted weapons, shields, bows, rings, amulets, suits, cloaks, helms, 
-  gloves, boots
+  gloves, boots.
 
 
 Character strings:

@@ -119,6 +119,9 @@ N:1004:Pip, the Braver from Another World
 「火の指2！」
 「でくのぼうめ！」
 
+N:1090:『ボルガ博士』
+「お菓子好きかい？」
+
 #N:63:Smeagol
 #N:135:Mughash the Kobold Lord
 #N:137:Wormtongue, Agent of Saruman

@@ -1,7 +1,7 @@
 === Creating a Character ===
 
-Hengband is a role playing game, in which you, the player, control a
-character in the world of Hengband.  Perhaps the most important thing
+Bakabakaband is a role playing game, in which you, the player, control a
+character in the world of Bakabakaband.  Perhaps the most important thing
 you control is the birth of your character, in which you choose or
 allow to be chosen various attributes that will affect the future life
 of your character.
@@ -37,7 +37,7 @@ Each character has a few secondary attributes, height, weight, social
 class, and background history, which are randomly determined, but
 which are affected by the sex and race of the character.  In general,
 these attributes are only used to provide "flavor" to the character,
-to assist in the roll playing, but they do have a few minor effects on
+to assist in role playing, but they do have a few minor effects on
 the game.  For example, background history affects social class, which
 affects the amount of money the character will start with.  And weight
 affects riding ability.
@@ -159,7 +159,7 @@ quantum of this modification can be found in the stat bonus table (see
 raceclas.txt#StatBonusTable [h]).
 
 Once a character that matches or exceeds your expectations has been
-rolled, Hengband stops to ask you whether you accept or not.  If you
+rolled, Bakabakaband stops to ask you whether you accept or not.  If you
 accept the rolled character (by pressing Enter), you will be asked for
 its name.  If not, you may press 'r' to resume rolling and searching
 for the next match or, if this is not your first match, 'p' to return
@@ -183,26 +183,28 @@ above.
 === Background Edit-Mode ===
 
 The computer will randomly generate background information text of the
-character for you.  But you can modify or rewrite it after rolling up
-the character in Background edit-mode.  Use key-pad or cursor keys to
-move cursor, the Enter key to finish edit-mode, and the Escape key to
-finish edit-mode with discarding changes. Use Ctrl-A key to load the
-background information text from "histpref-<<playername>>.prf" or
-"histpref.prf" on lib/user.
+character for you.  After rolling up the character, you can modify or
+rewrite that text in Background edit-mode.  Use key-pad or cursor keys
+to move the cursor. Use the Enter key to finish edit-mode and save any
+changes. Use the Escape key to finish edit-mode and discard any
+changes. Use Ctrl-A to load the background information text from
+"histpref-<<playername>>.prf" or "histpref.prf" in lib/user.
 
-You can use conditional expressions like other pref files. Background
-information text can be modified in background information pref files
-as lines of the form "H:<str>". Text area is not much large, so too
-long text will cut down.
+Background information text can be supplied in the background
+information pref files as lines of the form "H:<str>". You can use
+conditional expressions as in other pref files. When displayed, the
+background information will be cropped to fit the area available for
+display, which is not very large.
 
 
 ***** <QuickStart>
 === Quick Start ===
 
-Once you have generated a character and dead or quit game, you will be
-asked whether you want to use quick start or not at start up.  If you
-choose to use quick start, you get new character with exactly same
-race, class, stat, background and etc. as your last character.
+If you have already generated a character and that character died or
+quit, you will be asked whether you want to use quick start or not at
+start up.  If you choose to use quick start, you get a new character
+with exactly same race, class, stat, background and etc. as your last
+character.
 
 
 ***** <PrimaryStats>
@@ -229,7 +231,7 @@ after the "18/" is as "tenth" points, since it often takes the same
 magic to raise a stat from, say, 4 to 5, or 16 to 17, as it does from,
 say, 18/40 to 18/50.  The important thing to remember is that almost all
 internal calculations "ignore" the final digit of any "bonus", so that,
-for example, "18/40" and "18/49" are always have the same effects.
+for example, "18/40" and "18/49" always have the same effects.
 
 --- The Primary Statistics ---
 
@@ -356,22 +358,22 @@ Searching (Searching Ability)
      entirely upon race and class, and will never improve unless
      magically enhanced.
 
-Infra-vision
-     Infra-vision is the ability to see heat sources.  Since most of
-     the dungeon is cool or cold, infra-vision will not allow the
-     player to see walls and objects.  Infra-vision will allow a
+Infravision
+     Infravision is the ability to see heat sources.  Since most of
+     the dungeon is cool or cold, infravision will not allow the
+     player to see walls and objects.  Infravision will allow a
      character to see any warm-blooded creatures up to a certain
      distance.  This ability works equally well with or with out a
-     light source.  The majority of Hengband's creatures are
+     light source.  The majority of Bakabakaband's creatures are
      cold-blooded, and will not be detected unless lit up by a light
-     source.  Most non-human races have innate infra-vision ability.
-     Humans can gain infra-vision only if it is magically enhanced.
+     source.  Most non-human races have innate infravision ability.
+     Humans can gain infravision only if it is magically enhanced.
 
 
 ***** <Proficiency>
 === Proficiency Levels ===
 
-In Hengband, characters possess different proficiency levels or
+In Bakabakaband, characters possess different proficiency levels or
 experiences for each weapon type, spells, and a few other skills.  The
 starting proficiency levels and the maximum proficiency levels of a
 character are based upon class.  Each proficiency level may increase
@@ -405,7 +407,7 @@ monster.txt#Pets [i])
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.5.2
+Updated    : Bakabakaband 1.5.2
 
 ***** [a] raceclas.hlp
 ***** [b] magic.hlp

@@ -1,9 +1,9 @@
-=== The Hengband Newbie Guide ===
+=== The Bakabakaband Newbie Guide ===
 
 
 Note: This guide has been adapted from The Angband Newbie Guide by
 Chris Weisiger and has undergone certain revisions to conform more
-closely to Hengband.
+closely to Bakabakaband.
 
  
 === Basic Training ===
@@ -15,7 +15,7 @@ spellcaster types; they're much more difficult to play. If you want
 basic information about races and classes, go to the on-line help
 (type "?") and read "Character Attributes". You should probably read
 most of the help files here; the commands list is especially important
-to someone new to Hengband.
+to someone new to Bakabakaband.
 
 After naming your character, you'll start in the town. The various
 numbers represent stores, where you can buy new equipment and sell
@@ -26,7 +26,7 @@ return to the surface.
 
 Next, type "<" again on the surface. If there are no hostile monsters
 near you, you will enters the Global Map mode which displays all the
-world of Hengband. Type ">" to return from global map mode to normal
+world of Bakabakaband. Type ">" to return from global map mode to normal
 map mode.
 
 If you want to know what a specific symbol stands for, type "/", and
@@ -49,15 +49,15 @@ an absolutely ridiculous price. Any good item can show up in this store
 show up in other stores.
 
 
-Be sure to visit shops #1 and #2, the General Store and Armory,
+Be sure to visit shops #1 and #2, the General Store and Armoury,
 respectively. At the General Store, buy a cloak and a Brass Lantern,
-and a flask of oil or two. Sell your torches. At the Armory, buy some
+and a flask of oil or two. Sell your torches. At the Armoury, buy some
 of the light armor. Suggested: Hard Leather Boots, a Leather Cap,
 Leather Gloves. If a Small Leather Shield is on sale and you can afford
 it, buy it.
 
 This should have cleaned out your money. However, if it hasn't, it is
-strongly recommended that you go to the Alchemist's shop (#5) and
+strongly recommended that you go to the Alchemy Shop (#5) and
 purchase a scroll of Phase Door. If you get surrounded by monsters,
 read it, and you'll be teleported a short distance away.
 
@@ -67,7 +67,7 @@ rid of old items and buying new ones. If you ever find that there's
 something you need which the stores don't currently have, you can wait
 a while for the stores to refresh.
 
-Hengband's not actually all that difficult to learn to play. You should
+Bakabakaband's not actually all that difficult to learn to play. You should
 get the hang of it fairly quickly.
  
 From here on we'll be giving detailed dungeon survival information.
@@ -170,7 +170,7 @@ damage, and magical bonuses to stats. It also tells you if the item is
 cursed. It tells you what a wand/rod/staff/potion/scroll/mushroom/etc.
 does, and this is very important. There are nasty potions deep in the
 dungeon that you *do not* want to drink! Sometimes, the descriptions of
-the items are a little obscure; things like Staves of Holiness and
+the items are a little obscure; things like Staffs of Holiness and
 Power, Mushrooms of Unhealth, and others. You may have to experiment a
 bit to determine their powers. 
 
@@ -208,7 +208,7 @@ not a perfect escape method.
 
 === On Resistances ====
 
-There are many different kinds of attacks in Hengband, generally
+There are many different kinds of attacks in Bakabakaband, generally
 falling under physical, magical, and breath attacks. They can all cause
 specialized kinds of damage, which can kill a character if he/she does
 not have resistance to that attack. The majority of attack types have a
@@ -224,7 +224,7 @@ draining attacks respectively.
 Resistances can be provided by certain items and also may be part of
 your racial characteristics. There are certain types of items that
 provide all four elemental resistances. These include Defender weapons,
-Robes of Permanence, armors/shields of Resistance, armor of Elvenkind,
+Robes of Permanence, armor or shields of Resistance, armor of Elvenkind,
 and Helms/Crowns of the Magi. Many artifacts also provide some or all
 of the basic resistances, and also perhaps one or two "high"
 resistances.
@@ -275,7 +275,7 @@ you watch, helpless.
 
 Confusion and Blindness resistance are vital. If you have these, you
 can rely on scrolls of Teleportation to get you out of any situation.
-Before this, you need Staves of Teleportation which can be activated
+Before this, you need Staffs of Teleportation which can be activated
 when blinded or confused, although with a decent failure rate. Scrolls
 are fail-safe.
 
@@ -366,7 +366,7 @@ level" which gives you no information whatsoever.
 === On weapons and armor ===
 
 Your equipment will always carry around little numbers that tell you
-how effective it is. Armors take this form:
+how effective it is. Pieces of armor take this form:
  
 A Robe (+x,+y) [a,+b] (+c)
  
@@ -374,7 +374,7 @@ Weapons take this form:
  
 A Long Sword (XdY) (+x,+y) [+b] (+c)
  
-When unidentified, armors will show just this:
+When unidentified, pieces of armor will show just this:
  
 A Robe [a]
  
@@ -384,13 +384,14 @@ A Long Sword (XdY)
  
 (+x,+y). This is the item's magical bonuses to your to-hit and
 to-damage bonus respectively. These are added to whatever other
-bonuses you have when you attack. Some armors have similar bonuses to
-your to-hit and to-damage, but they are mostly artifacts, the
-exceptions being Gloves/Gauntlets/Cesti of Slaying and Power. Many
-body armors have a small negative number before the base armor bonus
-(see below); this is a penalty to your skill (the armor is so heavy
-that you have trouble moving around in it). However, this penalty is
-small enough for all but the youngest of characters to ignore.
+bonuses you have when you attack. Some pieces of armor have
+similar bonuses to your to-hit and to-damage, but they are mostly
+artifacts, the exceptions being Gloves/Gauntlets/Cesti of Slaying
+and Power. Many pieces of body armor have a small negative number
+before the base armor bonus (see below); this is a penalty to your
+skill (the armor is so heavy that you have trouble moving around
+in it). However, this penalty is small enough for all but the
+youngest of characters to ignore.
 
 Rings of Combat or Skill have a single (+y) or (+x). When worn, they
 affect your to-damage and to-hit bonus in melee battle respectively.
@@ -412,7 +413,7 @@ does not affect every stat in this list! Most items that have a +c only
 affect one or two of these stats. Some items affect more (A Weapon of
 Westernesse affects Strength, Dexterity, and Constitution)].
  
-As a side note for the above: Hengband follows the parenthesis for any
+As a side note for the above: Bakabakaband follows the parenthesis for any
 item. If you see a number in brackets, like this: [b], it is a bonus to
 AC. If it is in parenthesis, like this: (+x), it is either a bonus to a
 stat or to hit/damage (and which should normally be obvious by the name
@@ -448,19 +449,23 @@ melee weapons.)
 
 Many weapons you find in the dungeon are considered to be particularly
 deadly against a type of creature. These qualities are collectively
-known as slays. They double, triple, or multiply by five *the damage
-done by the damage dice*. They DO NOT affect bonuses to damage. Thus,
-while slays may play an important part in the early game (especially if
-you find a weapon of Slay Orc), in the later part of the game, where
-magical bonuses to damage all but take over combat, slays play a very
-minor role. The rundown on slays:
+known as slays. They multiply *the damage done by the damage dice* by
+a value between two and five, depending on the specific quality. They
+DO NOT affect bonuses to damage. Thus, while slays may play an
+important part in the early game (especially if you find a weapon
+of Slay Orc), in the later part of the game, where magical bonuses
+to damage all but take over combat, slays play a very minor role. The
+rundown on slays:
 
-     Slay (or *Slay*) Evil: x2 damage dice against evil monsters
-     Slay (or *Slay*) Animal, Undead, Demon, Giant, Dragon: x2 damage
-       dice against the relevant monster type
+     Slay (or *Slay*) Evil: x2 (x3.5 for *Slay*) damage dice against
+       evil monsters
+     Slay (or *Slay*) Animal, Human: x2.5 (x4.0 for *Slay*) against
+       the relevant monster type
+     Slay (or *Slay*) Undead, Demon, Orc, Troll, Giant, Dragon: x3
+       (x5 for *Slay*) damage dice against the relevant monster type
 
 The brands ("of Melting", "of Burning", "of Freezing", "of Shocking",
-and "of Poisoning") all do x2 damage dice to those monsters not
+and "of Poisoning") all do x2.5 damage dice to those monsters not
 resistant to the relevant element. There is also a "(Vampiric)" brand
 which will suck life from your foes and heal you at the same time and
 a "(Chaotic)" brand which can cause some unexpected results when using
@@ -470,7 +475,7 @@ it!
 === On the Monster Memory ===
 
 In many other games, you are required to take notes on monster's
-weaknesses, strengths, spells, et cetera. Hengband takes care of this
+weaknesses, strengths, spells, et cetera. Bakabakaband takes care of this
 for you, with the handy Monster Memory. Every time you find out
 something new about a monster, like that it can breathe fire, this is
 added to your knowledge of the monster. To look over this knowledge,
@@ -502,7 +507,7 @@ are poisonous. A Multi-Hued monster is all of these.
 === On the Preferences ===
 
 The preferences screen is reached by typing "=". It contains many
-different preferences that make Hengband more enjoyable. There are a few
+different preferences that make Bakabakaband more enjoyable. There are a few
 that I would recommend. Turn both stacking options ON. This maximizes
 your treasure collection. Turn the Low Hitpoint Warning ON, and place
 the warning percent at about 50%. You'll see the effects of this
@@ -517,12 +522,12 @@ map, and others.
  
 === On Death ===
 
-Death in Hengband is permanent. Saving in Hengband is meant only to let
+Death in Bakabakaband is permanent. Saving in Bakabakaband is meant only to let
 you pick up where you left off; if you die, your savefile is marked.
 The next time you try to use the savefile, you will get the new
 character dialogue. Ancestors of dead characters will retain their
 monster memory and preferences. Many people here have characters like
-"Yuppy XIV"; people die very often in Hengband.
+"Yuppy XIV"; people die very often in Bakabakaband.
 
 Some people make backup savefiles; if their character dies, they simply
 load the older character, and pick up where they left off. They lose
@@ -538,11 +543,11 @@ truly win the game. It also sets your Social Status to zero, so
 everyone knows what a scumbag you are.
 
  
-=== On Hengband Time ===
+=== On Bakabakaband Time ===
 
-If there is one feature of Hengband that tends to confuse people
+If there is one feature of Bakabakaband that tends to confuse people
 (especially veterans of other *band), it is how the speed system in
-Hengband works. 
+Bakabakaband works. 
 
 As in other variants, the energy you and monsters get each turn depends 
 on speed.  Unlike in other variants, this value is only an average; be 
@@ -563,7 +568,7 @@ Be aware that speeds increases above about +28 to +35 are much less useful.
 === Advanced techniques for killing monsters ===
 
 Pillardancing.
-     Not recommended in Hengband:  monsters move at irregular speeds.
+     Not recommended in Bakabakaband:  monsters move at irregular speeds.
 
 Shoot'n Scoot.
      Requires a large room, Phase Door, and some type of missile
@@ -594,4 +599,4 @@ The Anti-Summoning Corridor.
 --
 Original   : Chris Weisiger (TANG version 1.6.2)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Bakabakaband 1.0.11

@@ -1,6 +1,6 @@
 === Attacking and Weapons===
  
-Attacking is simple in Hengband. If you move into a creature, you
+Attacking is simple in Bakabakaband. If you move into a creature, you
 attack it. If you are wielding a weapon (including digging implements
 which are considered to be weapons) when you do so, the damage for the
 weapon is used when you hit a creature. Otherwise, you will attack with
@@ -26,7 +26,7 @@ devices.
 
 You can attack creatures from a distance by firing a missile from a bow
 or other missile launcher, by throwing an object or by using magical
-items such as wands, rods and staves. If you have chosen to play a
+items such as wands, rods and staffs. If you have chosen to play a
 spell casting class, you may be able to learn some spells which allow
 you to attack a creature from a distance. You can use distance attacks
 even when your target is next to you.
@@ -54,11 +54,11 @@ creature. If the creature is invisible and you do not have the ability
 to see invisible creatures, you must tunnel into the wall space
 containing the creature.
 
-Bolt spells does full damage to such creature in a wall, but ball
-spells will be stopped and blow up just in front of a wall and does
-only half damages. Inversely, when you have ghost like form, and are
-in a wall, you will take only half damage from ball spells and
-breathes of monsters, which is very important privilege.
+Bolt spells do full damage to a creature in a wall, but ball spells
+will be stopped and blow up just in front of a wall and do only half
+damage. Inversely, when you have ghost like form and are in a wall,
+you will take only half damage from ball spells and breaths of
+monsters, which is a very important privilege.
 
 ***** <MeleeWeapons>
 === Melee Weapons ===
@@ -70,13 +70,13 @@ when needed.
 
 Weapons have two main magical characteristics, their enchanted ability
 to hit and their enchanted ability to do damage, expressed as
-`(+#,+#)'. A normal weapon would be `(+0,+0)'. Many weapons in Hengband
+`(+#,+#)'. A normal weapon would be `(+0,+0)'. Many weapons in Bakabakaband
 have bonuses to hit and/or do damage. Some weapons are cursed, and have
 penalties that hurt the player. Cursed weapons cannot be unwielded
 until the curse is lifted. Identifying a weapon will inform you of the
 magical bonuses and penalties and whether or not it is cursed.
 
-Hengband assumes that your youth in the rough environment near the
+Bakabakaband assumes that your youth in the rough environment near the
 dungeons has taught you the relative merits of different weapons, and
 displays as part of their description the damage dice which define
 their capabilities. Any damage enchantment is added to the dice roll
@@ -323,7 +323,7 @@ Weapon of *Slay* Animal
 
 Weapon of *Slay* Evil
     This weapon is especially effective against evil creatures and
-    will inflict damage with two times the normal dice against such
+    will inflict damage with 3.5 times the normal dice against such
     creatures, and allows wielder to sense the presence of evil
     creatures.  It will increase your wisdom and will also be a
     blessed blade.
@@ -417,7 +417,8 @@ Ammunition of Slaying
     This ammunition will have unusually large damage dice.
 
 Ammunition of Wounding
-    This ammunition will have unusually bonuses +to-hit and +to-dam.
+    This ammunition will have unusually large bonuses +to-hit and
+    +to-dam.
 
 --- Other Items ---
 
@@ -446,8 +447,8 @@ realms contain equivalent spells.
 ***** <MonkAttacks>
 === Monk Attacks ===
 
-The Monk and ForceTrainer is designed to be a barehanded fighter
-rather than using a weapon like the other Hengband classes. As a
+The Monk and ForceTrainer are designed to be barehanded fighters
+rather than using a weapon like the other Bakabakaband classes. As a
 Monk's level increases the number of attacks they get per round
 increases and new, increasingly powerful attacks become
 available. Higher level attacks have a chance to stun the Monk's
@@ -490,7 +491,7 @@ Crushing Blow   48      10d13     18
 
 Pillardancing
 -------------
-Not recommended in Hengband:  monsters move at irregular speeds.
+Not recommended in Bakabakaband:  monsters move at irregular speeds.
 
 
 Shoot'n Scoot
@@ -527,7 +528,7 @@ monsters.
 Original   : (??) Chris Weisiger and Leon Marrick
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.5.2
+Updated    : Bakabakaband 1.5.2
 
 ***** Begin Hyperlinks
 ***** [b] commdesc.txt#ThrowFire

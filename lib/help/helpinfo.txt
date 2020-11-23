@@ -18,6 +18,6 @@ the previous location.                     [[[[y|Down Arrow|(Go down 1 line)
     [[[[y]'|']     (Save current document to a file)
 
 --
-Updated    : Hengband 1.7.0
+Updated    : Bakabakaband 1.7.0
 
 ***** [j] monster.txt#Pets

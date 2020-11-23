@@ -23,7 +23,7 @@ Q:25:T:我々はその家に住み着いている悪霊を退治してくれる�
 ?:[EQU $QUEST25 3]
 Q:$25:T:Well done, indeed! Our citizens can finally sigh in relief.
 Q:$25:T:As a reward, we would like to give you something that will
-Q:$25:T:help you sence enemy even more efficiently!
+Q:$25:T:help you sense the enemy even more efficiently!
 Q:25:T:本当に良くやってくれました！我々住民はようやく安心することが出来ます。
 Q:25:T:お礼として、邪悪な者どもを更に効果的に感知することができるアイテムを
 Q:25:T:差し上げます。

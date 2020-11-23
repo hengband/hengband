@@ -1,6 +1,6 @@
-=== Hengband Monsters ===
+=== Bakabakaband Monsters ===
 
-There are hundreds of different creatures in Hengband each of which
+There are hundreds of different creatures in Bakabakaband each of which
 poses a unique challenge to the adventurer. As you progress deeper into
 the dungeon, the creatures will become progressively more difficult to
 defeat.
@@ -74,7 +74,7 @@ will probably get cleaned up.
 
 Because there are so many monsters and because often different monsters
 share similar colors and symbols; it is very difficult to keep track of
-the capabilities of various creatures. Luckily, Hengband automatically
+the capabilities of various creatures. Luckily, Bakabakaband automatically
 keeps track of your experiences with a particular creature.
  
 This feature is called the monster memory. Your monster memory recalls
@@ -106,9 +106,9 @@ character.
 ***** <Uniques>
 === Unique Monsters ===
 
-The monsters in Hengband are unique in that each variety of monsters
+The monsters in Bakabakaband are unique in that each variety of monsters
 has its own set of physical and, where applicable, magical abilities.
-However, some monsters in Hengband are truly unique and this group
+However, some monsters in Bakabakaband are truly unique and this group
 of monsters are often referred to as "Uniques".
 
 The Unique monsters are made unique for several reasons. Primarily,
@@ -153,7 +153,7 @@ check this periodically to gauge your progress.
 Occasionally, you will find that a Unique monster will speak to you
 as it approaches. Typically, a monster will shout obscenities and
 challenges to combat but they may also refer to events relating to
-themselves. Hengband has no mechanism to allow you to respond to the
+themselves. Bakabakaband has no mechanism to allow you to respond to the
 monsters (other than with violence). You may prevent Unique monsters
 from speaking by changing the appropriate option under the options
 menus.
@@ -170,7 +170,7 @@ upon how deep in the dungeon the relevant Unique is normally found.
 ***** <EldritchHorror>
 === Eldritch Horrors ===
 
-Some of the monsters in the dungeons of Hengband are so fearsome to
+Some of the monsters in the dungeons of Bakabakaband are so fearsome to
 look upon that doing so can have serious repercussions. When you meet
 one of these sanity blasting monsters, one of several nasty things
 may happen to you. These include having your intelligence and/or your
@@ -181,12 +181,12 @@ an attack of amnesia.
 ***** <Pets>
 === Pets and Riding ===
 
-In Hengband, pets are very useful.  In other variants (such as
+In Bakabakaband, pets are very useful.  In other variants (such as
 Zangband), your pets are often so eager to destroy your opponents that
 they may forget all about you, and you get trampled under their feet
-as they charge at your foe.  In Hengband, however, pets will never
+as they charge at your foe.  In Bakabakaband, however, pets will never
 attack you by mistake; you can walk around in safety even as your pet
-Great Hell Wyrm breaths.  Pets will also never be irritated with you;
+Great Hell Wyrm breathes.  Pets will also never be irritated with you;
 their will is perfectly dominated by you, and all pets are permanently
 your pets.
 
@@ -199,7 +199,7 @@ you will only gain experience and items for creatures to whom you
 deliver the death blow yourself.
 
 Monsters which get killed by a pet don't drop items.  This feature of
-Hengband is unique and severe, and you might complain about it because
+Bakabakaband is unique and severe, and you might complain about it because
 this feature is not very realistic, but this is a well-thought-out
 result of weighing game balance with reality.
 
@@ -243,7 +243,7 @@ List of pet commands:
 
 dismiss pets
     Dismiss specified pets. Dismissed pets will immediately disappear
-    from the current level. Hengband asks you whether you want to dismiss
+    from the current level. Bakabakaband asks you whether you want to dismiss
     each pet in order from high level named pets to low level unnamed
     pets. You can press 'U' to dismiss all unnamed pets.
 
@@ -305,7 +305,7 @@ use one hand to control a riding pet
 
 --- Riding ---
 
-In Hengband, the player can ride on pet horses or dragons, etc.  To
+In Bakabakaband, the player can ride on pet horses or dragons, etc.  To
 control your mount, you must keep one hand free for holding the
 reins. But your pet will attack your target together with you, and
 enemy's attack will be dispersed. As a result of these, player's
@@ -345,7 +345,7 @@ not be commanded using the pet commands.
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Bakabakaband 1.0.11
 
 ***** Begin Hyperlinks
 ***** [b] commdesc.txt#Looking

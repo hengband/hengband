@@ -1,7 +1,7 @@
 === User Pref Files ===
 
-Hengband allows you to change various aspects of the game to suit your
-tastes. You may define keymaps (changing the way Hengband maps your
+Bakabakaband allows you to change various aspects of the game to suit your
+tastes. You may define keymaps (changing the way Bakabakaband maps your
 keypresses to underlying commands), create macros (allowing you to map
 a single keypress to a series of keypresses), modify the visuals
 (allowing you to change the appearance of monsters, objects, or terrain
@@ -9,19 +9,19 @@ features), change the colors (allowing you to make a given color
 brighter, darker, or even completely different), or set options
 (turning them off or on).
 
-Hengband stores your preferences in files called "user pref files",
+Bakabakaband stores your preferences in files called "user pref files",
 which contain comments and "user pref commands", which are simple
 strings describing one aspect of the system about which the user has a
 preference. There are many ways to load a user pref file, and in fact,
 some of these files are automatically loaded for you by the game. All
 of the files are kept in the user directory, which is
-"~/.angband/Hengband/" on Unix, otherwise "lib/user/" , though you may
+"~/.angband/Bakabakaband/" on Unix, otherwise "lib/user/" , though you may
 have to use one of the command line arguments to redirect this
 directory, especially on multiuser systems. You may also enter single
 user pref commands directly, using the special "Enter a user pref
 command" command, activated by "double quote". You may have to use the
 "redraw" command (^R) after changing certain of the aspects of the
-game, to allow Hengband to adapt to your changes.
+game, to allow Bakabakaband to adapt to your changes.
 
 When the game starts up, after you have loaded an old character, or
 created a new character, some user pref files are loaded automatically.
@@ -51,8 +51,8 @@ intuitive way than the user pref commands allow. The commands include
 "Interact with macros" (@), "Interact with visuals" (%), and "Interact
 with colors" (&), described below.
 
-In Hengband, all preference which will be generated in-game are not
-simply appended to old files but replaces old lines. You don't need to
+In Bakabakaband, all preferences which will be generated in-game are not
+simply appended to old files but replace old lines. You don't need to
 delete old lines with text editor.
 
 ***** <Commands>
@@ -112,7 +112,7 @@ of encoding, including "\xHH" for character number HH in hexadecimal,
 "return" code, "\s" for the "space" code, "\\" for backslash, "\^" for
 caret, and "^X" for the code for any "control" key "ctrl-X". 
 
-In Hengband, name of special keys as macro-trigger is displayed using
+In Bakabakaband, name of special keys as macro-trigger is displayed using
 its real name, for example the Control-key plus the F1-key is
 displayed as "\[control-F2]", and the Alt-key plus the G is displayed
 as "\[Alt-G]". In other variant these special keys will be, currently,
@@ -126,8 +126,8 @@ both triggers and actions.
 
 The special "\" command (which must be encoded in macros as "\\") is
 very useful in macros, since it bypasses all keymaps and allows the
-next keystroke to be considered a command in the underlying Hengband
-command set. For a list of the Hengband command set, see the
+next keystroke to be considered a command in the underlying Bakabakaband
+command set. For a list of the Bakabakaband command set, see the
 "command.txt" help file. For example, a macro which maps Shift-KP6 to
 "\" + "." + "6" will induce the "run east" behavior, regardless of what
 keyset the user has chosen, and regardless of what keymaps have been
@@ -144,7 +144,7 @@ the form "P:<str>", which defines the encoded macro trigger.
 The "Interact with macros" command also allows you to define "keymaps",
 which are vaguely related to macros. A keymap maps a single keypress to
 a series of keypresses, which bypass both other keymaps and any macros.
-Hengband uses keymaps to map the original and the roguelike keysets to
+Bakabakaband uses keymaps to map the original and the roguelike keysets to
 the underlying command set, and allows the user to modify or add
 keymaps of their own. Note that all keymap actions must be specified
 using underlying commands, not keypresses from the original or
@@ -196,8 +196,8 @@ The "Interact with colors" command allows you to change the actual
 internal values used to display various colors. This command may or may
 not have any effect on your machine. Advanced machines may allow you to
 change the actual RGB values used to represent each of the 16 colors
-used by Hengband, and perhaps even allow you to define new colors which
-are not currently used by Hengband.
+used by Bakabakaband, and perhaps even allow you to define new colors which
+are not currently used by Bakabakaband.
 
 Colors can be specified in user pref files as lines of the form
 "V:<N>:<V>:<R>:<G>:<B>".
@@ -235,4 +235,4 @@ Updated    : (2.7.6) by Russ Allbery (rra@cs.stanford.edu)
 Updated    : (2.7.9) by Ben Harrison (benh@phial.com)
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.7.0
+Updated    : Bakabakaband 1.7.0

@@ -4,7 +4,7 @@ angband_files = \
 	attack.hlp attack.txt birth.hlp birth.txt \
 	bldg.txt raceclas.hlp raceclas.txt command.hlp \
 	command.txt commdesc.hlp commdesc.txt editor.txt \
-	defend.hlp defend.txt dungeon.hlp dungeon.txt \
+	defend.hlp defend.txt dungeon.hlp dungeon.txt faq.txt \
 	gambling.txt general.hlp general.txt help.hlp helpinfo.txt \
 	j_general.txt j_item1.txt j_item2.txt j_trans.txt \
 	jattack.hlp jattack.txt jbirth.hlp jbirth.txt \

@@ -32,7 +32,7 @@ Q:5:T:どうかモンスターどもを一掃して塔を取り戻してくだ�
 Q:$5:T:Thank you for cleaning the tower of all these strange creatures.
 Q:$5:T:I've talked with Astinus, the local librarian, Suiyan, the local
 Q:$5:T:weaponmaster, and Lorien, the local beastmaster. They will offer you
-Q:$5:T:a special discount price when they serve you. And a small reward
+Q:$5:T:a special discount price when they serve you, and a small reward
 Q:$5:T:awaits you outside.
 Q:5:T:塔の怪物を一掃して下さって有難うございます。この街の司書のアスティヌス、
 Q:5:T:武器匠の水庵、モンスター仙人のロリエンに話を付けておいたので、

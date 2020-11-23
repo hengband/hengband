@@ -662,7 +662,7 @@ B:$15:A:1:Wanted unique list:0:0:b:39:0
 B:15:A:1:賞金首リスト:0:0:b:39:0
 B:$15:A:2:Special target:0:0:s:37:0
 B:15:A:2:スペシャル・ターゲット:0:0:s:37:0
-B:$15:A:3:Recieve prize:0:0:c:40:0
+B:$15:A:3:Receive prize:0:0:c:40:0
 B:15:A:3:換金する:0:0:c:40:0
 
 ############### Town Layout ###############

@@ -24,7 +24,7 @@ Inventory list (i)
      equipment. Often, many identical objects can be "stacked" into a
      "pile" which will count as a single item. This is always true of
      things like potions, scrolls, and food, but you may have to set
-     options to allow wands, staves, and other such objects to stack.
+     options to allow wands, staffs, and other such objects to stack.
      Each object has a weight, and if you carry more objects than your
      strength permits, you will begin to slow down.
  
@@ -43,7 +43,7 @@ Equipment list (e)
 Drop an item (d)
      This drops an item from your inventory or equipment onto the
      dungeon floor. If the floor spot you are standing on already has
-     an object in it, Hengband will attempt to drop the item onto an
+     an object in it, Bakabakaband will attempt to drop the item onto an
      adjacent space. Be warned that if the floor is full and you
      attempt to drop something, it may disappear and be destroyed.
      Doors and traps are considered objects for the purpose of
@@ -344,11 +344,11 @@ Inscribe an object ({)
      displayed inside curly braces after the object description. The
      inscription is limited to the particular object (or pile) and is
      not automatically transferred to all similar objects. Under
-     certain circumstances, Hengband will display "fake" inscriptions
+     certain circumstances, Bakabakaband will display "fake" inscriptions
      on certain objects ("cursed", "broken", "tried", "empty", "NN%
      off") when appropriate. These "fake" inscriptions are "covered up"
      by real inscriptions, but will re-appear if the real inscription
-     is removed. In addition, Hengband will occasionally place a "real"
+     is removed. In addition, Bakabakaband will occasionally place a "real"
      inscription on an object for you, normally as the result of your
      character getting a "feeling" about the item. All characters will
      get "feelings" about weapons and armor after carrying them for a
@@ -369,7 +369,7 @@ Uninscribe an object (})
 ***** <MagicalObject>
 ---  Magical Object Commands ---
 
-Activate an artifact (A)
+Activate equipped item (A)
      You have heard rumors of special weapons and armor deep in the
      Pits, items that can let you breath fire like a dragon or light
      rooms with just a thought. Should you ever be lucky enough to
@@ -390,13 +390,13 @@ Aim a wand (a) or Zap a wand (z)
 Use a staff (u) or Zap a staff (Z)
      This command will use a staff. A staff is normally very similar
      to a scroll, in that they normally either have an area effect or
-     affect a specific object. Staves are magical devices, and there
+     affect a specific object. Staffs are magical devices, and there
      is a chance you will not be able to figure out how to use them.
  
 Zap a rod (z) or Activate a rod (a)
      Rods are extremely powerful magical items, which cannot be burnt
      or shattered, and which can have either staff-like or wand-like
-     effects, but unlike staves and wands, they don't have charges.
+     effects, but unlike staffs and wands, they don't have charges.
      Instead, they draw on the ambient magical energy to recharge
      themselves, and therefore can only be activated once every few
      turns. The recharging time varies depending on the type of rod.
@@ -414,7 +414,7 @@ Fire an item (f) or Fire an item (t)
      throwing an object will often cause it to break, so be careful!
      If you throw something at a creature, your chances of hitting it
      are determined by your pluses to hit, your ability at throwing,
-     and the object's pluses to hit. Once the creature is it, the
+     and the object's pluses to hit. Once the creature is hit, the
      object may or may not do any damage to it. You've heard rumors
      that some objects found in the dungeon can do huge amounts of
      damage when thrown, but you're not sure which objects those
@@ -597,12 +597,12 @@ Save and Quit (Ctrl-X)
      your savefile to play again with the same options and such.
 
 Save (Ctrl-S)
-     This command saves the game but doesn't exit Hengband. Use this
+     This command saves the game but doesn't exit Bakabakaband. Use this
      frequently if you are paranoid about having the computer crash
      while you are playing.
 
 Quit (commit suicide) (Q)
-     Kills your character and exits Hengband. You will be prompted to
+     Kills your character and exits Bakabakaband. You will be prompted to
      make sure you really want to do this, and then asked to verify
      that choice. Note that dead characters are dead forever.
 
@@ -653,11 +653,11 @@ Edit auto-picker/destroyer pref (_)
 --- Help ---
 
 Help (?)
-     Brings up the Hengband on-line help system. Note that the help
+     Brings up the Bakabakaband on-line help system. Note that the help
      files are just text files in a particular format, and that other
      help files may be available on the Net. In particular, there are
      a variety of spoiler files which do not come with the standard
-     distribution. Check the place you got Hengband from or ask on the
+     distribution. Check the place you got Bakabakaband from or ask on the
      newsgroup rec.games.roguelike.angband about them. 
 
 Identify Symbol (/)
@@ -686,7 +686,7 @@ Identify Symbol (/)
      on. Pressing ESCAPE at any point will exit this command.
  
 Game Version (V)
-     This command will tell you what version of Hengband you are using.
+     This command will tell you what version of Bakabakaband you are using.
      For more information, see the "version.txt" help file.
 
 
@@ -701,7 +701,7 @@ Repeat last command  (n) or ([)
 Toggle Choice Window (^E) 
      Toggles the display in the choice window (if available) between
      your inventory and your equipment. This command only applies if
-     you are running Hengband under a windowing environment and the
+     you are running Bakabakaband under a windowing environment and the
      choice window is available. This also redraws the choice window.
 
 Redraw Screen (^R)
@@ -735,5 +735,5 @@ Updated    : (2.7.6) by Russ Allbery (rra@cs.stanford.edu)
 Updated    : (2.7.9) by Ben Harrison (benh@phial.com)
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.7.0
+Updated    : Bakabakaband 1.7.0
 

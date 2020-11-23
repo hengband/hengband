@@ -2,8 +2,8 @@
 
 /* Purpose: Support for "term.c" using "termcap" calls */
 
-#include "angband.h"
-
+#include "system/angband.h"
+#include "io/exit-panic.h"
 
 #ifdef USE_CAP
 
@@ -41,21 +41,15 @@
  * Mega-Hack -- try to guess when "POSIX" is available.
  * If the user defines two of these, we will probably crash.
  */
-#if !defined(USE_TPOSIX)
-# if !defined(USE_TERMIO) && !defined(USE_TCHARS)
 #  if defined(_POSIX_VERSION)
 #   define USE_TPOSIX
 #  else
-#   if defined(USG) || defined(linux) || defined(SOLARIS)
+#   if defined(linux)
 #    define USE_TERMIO
 #   else
 #    define USE_TCHARS
 #   endif
 #  endif
-# endif
-#endif
-
-
 
 /*
  * POSIX stuff
@@ -323,20 +317,8 @@ static void do_move(int x1, int y1, int x2, int y2)
 		if ((y2 <= 0) && ho) tp(ho);
 		else if ((y2 >= rows-1) && ll) tp(ll);
 		else if ((y2 == y1) && cr) tp(cr);
-#if 0
-		else if ((y2 == y1+1) && cr && dn)
-		{ tp(cr); tp(dn); }
-		else if ((y2 == y1-1) && cr && up)
-		{ tp(cr); tp(up); }
-#endif
 		else do_cm(x2, y2);
 	}
-
-#if 0
-	/* Up/Down one line */
-	else if ((x2 == x1) && (y2 == y1+1) && dn) tp(dn);
-	else if ((x2 == x1) && (y2 == y1-1) && up) tp(up);
-#endif
 
 	/* Default -- go directly there */
 	else do_cm(x2, y2);
@@ -652,18 +634,6 @@ static void keymap_game_prepare(void)
 	game_termio.c_cc[VEOF] = (char)-1;
 	game_termio.c_cc[VEOL] = (char)-1;
 
-#if 0
-	/* Disable the non-posix control characters */
-	game_termio.c_cc[VEOL2] = (char)-1;
-	game_termio.c_cc[VSWTCH] = (char)-1;
-	game_termio.c_cc[VDSUSP] = (char)-1;
-	game_termio.c_cc[VREPRINT] = (char)-1;
-	game_termio.c_cc[VDISCARD] = (char)-1;
-	game_termio.c_cc[VWERASE] = (char)-1;
-	game_termio.c_cc[VLNEXT] = (char)-1;
-	game_termio.c_cc[VSTATUS] = (char)-1;
-#endif
-
 	/* Normally, block until a character is read */
 	game_termio.c_cc[VMIN] = 1;
 	game_termio.c_cc[VTIME] = 0;
@@ -786,7 +756,7 @@ static errr Term_xtra_cap_event(int v)
 		i = read(0, buf, 1);
 
 		/* Hack -- Handle "errors" */
-		if ((i <= 0) && (errno != EINTR)) exit_game_panic();
+		if ((i <= 0) && (errno != EINTR)) exit_game_panic(p_ptr);
 	}
 
 	/* Do not wait */

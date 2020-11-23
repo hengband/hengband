@@ -1,7 +1,7 @@
 === The Dungeon ===
 
 
-Although Hengband contains an extensive town level featuring multiple
+Although Bakabakaband contains an extensive town level featuring multiple
 towns and a large wilderness area, the bulk of your adventuring will
 take place in the dungeon. Symbols appearing on your screen will
 represent the dungeon's walls, floor, objects, features, and creatures
@@ -39,7 +39,7 @@ to something you are more comfortable with.
   [[[[g|.|   Patch of grass              [[[[b|*|   Section of the Pattern  
   [[[[G|:|   Flower                      [[[[U|1|   General Store             
   [[[[g|:|   Brake                       [[[[s|2|   Armoury                     
-  [[[[B|.|   Swamp                       [[[[w|3|   Weapon Smiths             
+  [[[[B|.|   Swamp                       [[[[w|3|   Weaponsmith's Shop
   [[[[B|~|   Shallow Water               [[[[g|4|   Temple                     
   [[[[b|~|   Deep Water                  [[[[b|5|   Alchemy Shop             
   [[[[U|~|   Shallow Lava                [[[[r|6|   Magic Shop                     
@@ -119,7 +119,7 @@ town. It acts in two manners, depending upon your current location.
 If read within the dungeon, it will teleport you back to town. If read
 in town, it will teleport you back down to the deepest level of the
 dungeon which your character has previously been on. This makes the
-scroll very useful for getting back to the deeper levels of Hengband.
+scroll very useful for getting back to the deeper levels of Bakabakaband.
 Once the scroll has been read it takes a while for the spell to act, so
 don't expect it to save you in a crisis. Reading a second scroll before
 the first has had a chance to take effect will cancel both scrolls.
@@ -127,12 +127,12 @@ the first has had a chance to take effect will cancel both scrolls.
 Since an accidental dive to a new depth (via a trapdoor, for example),
 may result in the Word of Recall dungeon depth being 'broken', so to
 speak (meaning that the next Word of Recall in town will take you back
-deeper than you would like to), there is a new feature in Hengband
+deeper than you would like to), there is a new feature in Bakabakaband
 which allows you to read a scroll of Word of Recall on a different
 level and 'reset' the recall depth to that level (instead of the
 deepest level).
 
-A more complete description of Hengband objects is found elsewhere in
+A more complete description of Bakabakaband objects is found elsewhere in
 the documentation (see object.txt [c]).
 
 
@@ -229,7 +229,7 @@ other objects that are considered 'great' (see objects.txt)). A feeling
 is only indicative of the level at the time you entered it and has no
 impact on subsequent monsters generated or items dropped.
 
-In Hengband, the nastier the feeling prompt, the better the level. From
+In Bakabakaband, the nastier the feeling prompt, the better the level. From
 worst to best, the prompts are as follows:
 
      'What a boring place...'
@@ -255,7 +255,7 @@ aura', the prompts will be changed as follows:
      'You have an excellent feeling...'
      'You have a superb feeling about this level.'
 
-Hengband also uses two other feeling prompts to denote special things.
+Bakabakaband also uses two other feeling prompts to denote special things.
 If you have not yet been on a level long enough to qualify for a prompt
 and press 'Ctrl-F', you will be given the prompt:
 
@@ -307,7 +307,7 @@ staircase or recall. In such case, the quest will be treated as
 Original   : (??)
 Updated    : (??)
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Bakabakaband 1.0.11
 
 ***** Begin Hyperlinks
 ***** [b] command.txt

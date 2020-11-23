@@ -1,12 +1,12 @@
-=== Hengband Commands ===
+=== Bakabakaband Commands ===
 
-Hengband commands are entered as an "underlying command" (a single key)
+Bakabakaband commands are entered as an "underlying command" (a single key)
 plus a variety of optional or required arguments. You may choose how
 the "keyboard keys" are mapped to the "underlying commands" by choosing
 one of two standard "keynotes", the "original" keyset or the "roguelike"
 keyset.
 
-For beginners, Hengband provides the unified command menu that is very
+For beginners, Bakabakaband provides the unified command menu that is very
 easy to use, and can do every thing only with cursor keys, enter key
 and escape key. Simply press Enter to show up the command menu.  The
 command menu can be disable/enabled by the option 'command_menu'.
@@ -54,7 +54,7 @@ any) whose inscription contains "@#" or "@x#", where "x" is the current
 the command. Whenever an item inscription contains "!*" or "!x" (with
 "x" as above) you must verify its selection.
 
-In Hengband, there are items which occasionally teleport you away,
+In Bakabakaband, there are items which occasionally teleport you away,
 asking for permission first. The recurring "Teleport (y/n)?" can be
 annoying, and this behavior can be eliminated by inscribing the object
 which causes the teleportation with "." (or any inscription containing
@@ -99,7 +99,7 @@ example, use "\" + "." + "6", to specify "run east".
               4     6
               1  2  3
 
- a  Aim a wand                           A  Activate an equipment
+ a  Aim a wand                           A  Activate equipped item
  b  Browse magic list                    B  Bash a door
  c  Close a door                         C  Character description
  d  Drop an item                         D  Disarm a trap
@@ -165,7 +165,7 @@ example, use "\" + "." + "6", to specify "run east".
               h     l
               b  j  n
 
- a  Zap a rod (Activate)                 A  Activate an artifact
+ a  Zap a rod (Activate)                 A  Activate equipped item
  b  (walk - south west)                  B  (run - south west)
  c  Close a door                         C  Character description
  d  Drop an item                         D  Disarm a trap or chest
@@ -231,7 +231,7 @@ keys are control keys, and often, you can disable their special
 effects.
 
 If you are playing on a UNIX or similar system, then Ctrl-C will
-interrupt Hengband. The second and third interrupt will induce a
+interrupt Bakabakaband. The second and third interrupt will induce a
 warning bell, and the fourth will induce both a warning bell and a
 special message, since the fifth will quit the game, after killing your
 character. Also, Ctrl-Z will suspend the game, and return you to the
@@ -249,7 +249,7 @@ Pressing backslash ("\") before a command will bypass all keymaps,
 and the next keypress will be interpreted as an "underlying command"
 key, unless it is a caret ("^"), in which case the keypress after that
 will be turned into a control-key and interpreted as a command in the
-underlying Hengband keyset. The backslash key is useful for creating
+underlying Bakabakaband keyset. The backslash key is useful for creating
 macro actions which are not affected by any keymap definitions that may
 be in force, for example, the sequence "\" + "." + "6" will always mean
 "run east", even if the "." key has been mapped to a different
@@ -291,7 +291,7 @@ any character. This character is ignored, but it is safest to use a
 SPACE or ESCAPE which are always ignored as commands in case you type
 the command just after the count expires.
 
-You can tell Hengband to automatically use a repeat count of 99 with
+You can tell Bakabakaband to automatically use a repeat count of 99 with
 commands you normally want to repeat (open, disarm, tunnel, bash, 
 alter, etc) by setting the "always_repeat" option.
  
@@ -328,7 +328,7 @@ If you enter a number between 0 and 9, the first item engraved with
 if you have a shovel engraved with "@0" and you type "w" (for wield)
 and then 0, you will wield the shovel. This is very useful for macros
 (see below), since you can use this to select an object regardless of
-its location in your pack. For example, Hengband automatically defines
+its location in your pack. For example, Bakabakaband automatically defines
 a macro for the key "X" to do "w0". If you then engrave both your
 digging instrument and your primary weapon with @0, pressing X will
 wield whichever one is not being currently wielded (letting you quickly
@@ -337,11 +337,11 @@ object; for example, if a sword is engraved with @1@0, then either "w1"
 or "w0" will wield it. Normally, you inscribe "@1@0" on your primary
 weapon, and "@2@0" on your digger or secondary weapon. Note that an
 inscription containing "@x#" will act like "@#" but only when the
-current "Hengband command" is "x". Thus you can put "@z4" on a rod and
+current "Bakabakaband command" is "x". Thus you can put "@z4" on a rod and
 "@u4" on a staff, and then use both "z4" and "u4" as desired.
 
 Note that any object containing "!x" in its inscription, where "x" is
-the current "Hengband command" (or containing "!*" ever) will induce
+the current "Bakabakaband command" (or containing "!*" ever) will induce
 "verification" whenever that object is "selected". Thus, inscribing,
 say, "!f!k!d" on an object will greatly reduce the odds of you "losing"
 it by accident, and inscribing "!*" on an object will allow you to be
@@ -355,4 +355,4 @@ Updated    : (2.7.6) by Russ Allbery (rra@cs.stanford.edu)
 Updated    : (2.7.9) by Ben Harrison (benh@phial.com)
 Updated    : Zangband 2.2.0 through 2.2.6c by Robert Ruehlmann
 Updated    : Zangband DevTeam
-Updated    : Hengband 1.0.11
+Updated    : Bakabakaband 1.0.11

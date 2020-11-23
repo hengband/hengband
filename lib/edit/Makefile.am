@@ -9,8 +9,8 @@ angband_files = \
 	q0000027.txt \
 	q0000028.txt q00000ms.txt q000chao.txt q000dekn.txt \
 	q000eric.txt q000lyeh.txt q000natu.txt q000sorc.txt \
-	q00water.txt q0clone0.txt q0fields.txt q0thief1.txt \
-	q0thief2.txt q0willow.txt q_info.txt q_oberon.txt \
+	q00water.txt q0clone0.txt q0dumpwitness.txt q0fields.txt \
+	q0thief1.txt q0thief2.txt q0willow.txt q_info.txt q_oberon.txt \
 	q_pref.txt q_random.txt q_serpen.txt q_warg.txt \
 	qdarkelf.txt qhaunted.txt r_info.txt t0000001.txt \
 	t0000002.txt t0000003.txt t0000004.txt t0000005.txt \

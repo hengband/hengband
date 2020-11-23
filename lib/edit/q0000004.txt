@@ -50,7 +50,7 @@ Q:4:T:蔵の物品はお礼にお持ちください。空いた蔵は演劇場�
 # Description for quest failed
 ?:[AND [EQU $QUEST4 5] [EQU $QUEST_TYPE4 3]]
 Q:$4:T:You didn't find the weapon? Well, the monsters have probably
-Q:$4:T:carried it away.  Too bad, it would have been quiet helpful
+Q:$4:T:carried it away.  Too bad, it would have been quite helpful
 Q:$4:T:in driving the evil out of our town.
 Q:4:T:あの武器を見つけられなかったのですか？おそらく、モンスターどもが持っていって
 Q:4:T:しまったんでしょうな。とても残念です。アレはこの街から悪を一掃する
