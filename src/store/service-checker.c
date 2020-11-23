@@ -216,7 +216,7 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
     if (!switch_store_check(player_ptr, o_ptr))
         return FALSE;
 
-    return !object_value(player_ptr, o_ptr) <= 0;
+    return object_value(player_ptr, o_ptr) > 0;
 }
 
 static int mass_lite_produce(const PRICE cost)
