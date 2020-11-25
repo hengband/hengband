@@ -25,6 +25,7 @@ enum flag_cause {
 bool has_pass_wall(player_type *creature_ptr);
 bool has_kill_wall(player_type *creature_ptr);
 BIT_FLAGS has_xtra_might(player_type *creature_ptr);
+BIT_FLAGS has_infra_vision(player_type *creature_ptr);
 BIT_FLAGS has_esp_evil(player_type *creature_ptr);
 BIT_FLAGS has_esp_animal(player_type *creature_ptr);
 BIT_FLAGS has_esp_undead(player_type *creature_ptr);

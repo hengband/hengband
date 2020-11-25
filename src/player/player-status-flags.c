@@ -12,11 +12,13 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
+#include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
+#include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-song-numbers.h"
@@ -109,6 +111,36 @@ BIT_FLAGS has_xtra_might(player_type *creature_ptr)
     result |= check_equipment_flags(creature_ptr, TR_XTRA_MIGHT);
     return result;
 }
+
+/*!
+ * @brief クリーチャーが赤外線視力修正を持っているかを返す。
+ * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @return 持っていたら所持前提ビットフラグを返す。
+ * @details 種族修正は0より大きければTRUEとする。
+ */
+BIT_FLAGS has_infra_vision(player_type *creature_ptr)
+{
+    BIT_FLAGS result = 0L;
+    const player_race *tmp_rp_ptr;
+
+    if (creature_ptr->mimic_form)
+        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
+    else
+        tmp_rp_ptr = &race_info[creature_ptr->prace];
+
+    if (tmp_rp_ptr->infra > 0)
+        result |= FLAG_CAUSE_RACE;
+
+    if (creature_ptr->muta3 & MUT3_INFRAVIS)
+        result |= FLAG_CAUSE_MUTATION;
+
+    if (creature_ptr->tim_infra)
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+
+    result |= check_equipment_flags(creature_ptr, TR_INFRA);
+    return result;
+}
+
 
 /*!
  * @brief クリーチャーが邪悪感知を持っているかを返す。
@@ -383,6 +415,7 @@ BIT_FLAGS has_dec_mana(player_type *creature_ptr)
     result |= check_equipment_flags(creature_ptr, TR_DEC_MANA);
     return result;
 }
+
 
 BIT_FLAGS has_reflect(player_type *creature_ptr)
 {
