@@ -5,4 +5,4 @@
 #define MAX_COLORS 16
 #define MAX_TIME_ZONES 2
 
-TERM_COLOR lighting_colours[MAX_COLORS][MAX_TIME_ZONES];
+extern TERM_COLOR lighting_colours[MAX_COLORS][MAX_TIME_ZONES];
