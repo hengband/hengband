@@ -14,7 +14,7 @@ typedef struct dungeon_grid {
     int random; /* Number of the random effect */
 } dungeon_grid;
 
-dungeon_grid letter[255];
+extern dungeon_grid letter[255];
 
 typedef struct angband_header angband_header;
 typedef errr (*parse_info_txt_func)(char *buf, angband_header *head);

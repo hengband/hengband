@@ -28,7 +28,7 @@
 
 bool compare_virtue(player_type *creature_ptr, int type, int num, int tekitou);
 int virtue_number(player_type *creature_ptr, int type);
-concptr virtue[MAX_VIRTUE];
+extern concptr virtue[MAX_VIRTUE];
 void get_virtues(player_type *creature_ptr);
 void chg_virtue(player_type *creature_ptr, int virtue, int amount);
 void set_virtue(player_type *creature_ptr, int virtue, int amount);

@@ -11,6 +11,8 @@
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
+static ugbldg_type *ugbldg;
+
 /*
  * Precalculate buildings' location of underground arcade
  */

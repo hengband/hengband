@@ -18,8 +18,6 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
-bool select_ring_slot;
-
 /*!
  * @brief プレイヤーの所持/装備オブジェクトIDが指輪枠かを返す /
  * @param i プレイヤーの所持/装備オブジェクトID
