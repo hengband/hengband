@@ -4280,3 +4280,20 @@ D:$A clever and evolving combat uniform worn by Schwarzberth investigators.
 D:$(Shin Megami Tensei: Strange Journey)
 D:シュバルツバース調査隊員が着用するクレバーで進化する戦闘服だ。
 D:（真・女神転生 STRANGE JOURNEY）
+
+N:257:『ジャイアント・キリング』
+E:'Giant-killing'
+I:19:2:4
+W:20:15:20:30000
+P:0:2d1:40:13:0
+F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
+F:SLAY_GIANT | BLESSED | ACTIVATE
+U:HERO
+D:$Then David put his hand in his bag and took out a stone;
+D:$ and he slung it and struck the Philistine in his forehead,
+D:$ so that the stone sank into his forehead,
+D:$ and he fell on his face to the earth.
+D:$(Books of Samuel 17:49)
+D:ダビデは手を袋に入れて、その中から一つの石を取り、石投げで投げて、
+D:ペリシテびとの額を撃ったので、石はその額に突き入り、うつむきに地に倒れた。
+D:（サムエル記上17:49 『聖書 [口語]』日本聖書協会、1955年）

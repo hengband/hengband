@@ -20239,7 +20239,7 @@ N:998:黒チォコヴォ
 E:Black Chiokovo
 G:B:D
 I:115:25d20:20:45:20
-W:25:7:0:250:0:0
+W:25:7:0:250:30000:1274
 B:CLAW:HURT:2d6
 B:CLAW:HURT:2d6
 B:BITE:HURT:2d6
@@ -25140,7 +25140,7 @@ B:CRUSH:TERRIFY:12d12
 F:UNIQUE | FORCE_MAXHP | ANIMAL | POWERFUL | MOVE_BODY | EVIL
 F:NO_CONF | NO_SLEEP | NO_FEAR | IM_ELEC | RES_GRAV | BASH_DOOR
 F:DROP_GOOD | DROP_2D2 | ONLY_ITEM
-S:1_IN_6 | BA_ELEC | BR_GRAV | TELE_TO
+S:1_IN_6 | BA_ELEC | BR_GRAV | TELE_AWAY
 D:$It is very gentle when the head is stepped on,
 D:$ but it gets angry when a stake is driven into its ass.
 D:それは頭を踏まれたくらいでは温厚だが、お尻に杭を打ち込まれると激怒する。
@@ -25168,3 +25168,137 @@ D:$ Juice spouts from the fresh body.
 D:人が跨がれるほど巨大なキュウリに四本の棒を刺すことで誕生した馬だ。足が早い。
 D:先祖の霊を乗せるはずだが、乗り手が見つからなかったため適当な霊を乗せている。
 D:瑞々しい体からは汁が噴き出す。
+
+N:1270:精霊牛
+E:Spirit cow
+G:q:b
+I:94:272d3:40:16:50
+W:41:3:0:816:0:0
+B:BUTT:DR_MANA:12d12
+B:BUTT:HURT:6d12
+B:BUTT:INERTIA:6d12
+B:BUTT:CONFUSE:6d12
+F:FORCE_MAXHP | CAN_SWIM | COLD_BLOOD | WEIRD_MIND | RIDING | TAKE_ITEM
+F:IM_COLD | RES_WATE | RES_TIME | RES_TELE
+F:NO_STUN | NO_FEAR | NO_SLEEP
+S:1_IN_2 | BA_WATE | BR_INER | SLOW | TELE_TO
+D:$It is a cow born by sticking four sticks into an eggplant
+D:$ that is so huge that people can straddle it.
+D:$  The legs are slow.
+D:$  It should carry the spirits of its ancestors,
+D:$ but since the rider is not found,
+D:$ it is trying to carry the appropriate spirits.
+D:$ Juice spouts from the fresh body.
+D:人が跨がれるほど巨大なナスに四本の棒を刺すことで誕生した牛だ。足が遅い。
+D:先祖の霊を乗せるはずだが、乗り手が見つからないため適当な霊を乗せていこうとしている。
+D:瑞々しい体からは汁が噴き出す。
+
+N:1271:吸魂鬼
+E:Dementor
+G:G:D
+I:120:22d202:10:300:50
+W:96:13:0:23000:0:0
+B:GAZE:TERRIFY:10d10
+B:TOUCH:COLD:10d10
+B:ENGULF:EXP_VAMP:100d1
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | INVISIBLE | COLD_BLOOD
+F:EMPTY_MIND | PASS_WALL | CAN_FLY
+F:UNDEAD | EVIL | AURA_COLD | NONLIVING | HAS_DARK_2
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
+F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
+F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV
+F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
+S:1_IN_3 | MIND_BLAST | BRAIN_SMASH | HAND_DOOM | DARKNESS
+D:$"Dementors are among the foulest creatures that walk this earth.
+D:$  They infest the darkest, filthiest places,
+D:$ they glory in decay and despair, they drain peace, hope,
+D:$ and happiness out of the air around them..."
+D:$  -Remus Lupin's description of Dementors-
+D:「吸魂鬼は地上を歩く生物の中でももっとも忌まわしい生き物の一つだ。
+D:もっとも暗く、もっとも穢れた場所にはびこり、凋落と絶望の中に栄え、
+D:平和や希望、幸福を周りの空気から吸い取ってしまう」─リーマス・ルーピン
+
+N:1272:セイレーン
+E:Seiren
+G:l:y
+I:120:80d20:20:50:80
+W:35:3:0:500:0:0
+B:SHOW:CONFUSE:4d5
+B:SHOW:BLIND:4d5
+F:FEMALE | AQUATIC | CAN_FLY | CAN_SWIM | WILD_SHORE | NEVER_MOVE
+F:ONLY_ITEM | DROP_GOOD | DROP_1D2
+F:IM_COLD | IM_POIS | RES_WATE | RES_TELE | NO_STUN
+S:1_IN_2 | SHRIEK | TELE_TO
+D:$In folklore, Seirens wrecked the ship with a singing voice.
+D:$  But, Seirens in Angband knows a quicker way.
+D:伝承のセイレーンは歌声で船を難破させたが、
+D:鉄獄のセイレーンはもっと手っ取り早い方法を知っている。
+
+N:1273:『スーパー・グレート・シルバー・ゼリー』
+E:The Super Great Silver Jelly
+G:j:s
+I:120:15d4:20:1:100
+W:4:1:0:80:0:0
+B:TOUCH:EAT_LITE:1d2
+B:TOUCH:EAT_LITE:1d2
+B:TOUCH:EAT_LITE:1d1
+B:TOUCH:EAT_LITE:1d1
+F:UNIQUE | FORCE_MAXHP | OPEN_DOOR | EMPTY_MIND | HAS_DARK_1 | CAN_SWIM
+F:NO_FEAR | NO_CONF | NO_SLEEP | IM_POIS
+F:DROP_90 | ONLY_ITEM
+D:$It's a lump of silvery flesh-like material
+D:$ that works very hard to absorb nearby light.
+D:$  It seems to have a dream of catching and absorbing
+D:$ all the light that illuminates the dungeon."
+D:それは銀色の肉のような物質の塊で、付近の光をすごくがんばって吸い取っている。
+D:ダンジョンを照らす光をすべてキャッチし吸い尽くすのが夢らしい。 
+
+N:1274:赤チォコヴォ
+E:Red Chiokovo
+G:B:r
+I:120:20d100:25:100:30
+W:80:10:0:10000:0:0
+B:CLAW:HURT:4d10
+B:CLAW:HURT:4d10
+B:CRUSH:HURT:6d12
+B:CRUSH:HURT:6d12
+F:DROP_SKELETON | DROP_CORPSE | FORCE_MAXHP | RIDING
+F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | POWERFUL
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
+F:RES_LITE | RES_CHAO | RES_INER | NO_STUN | NO_CONF | NO_SLEEP
+F:ANIMAL | CAN_SWIM | FRIENDS
+S:1_IN_3 | BA_FIRE | BA_LITE | HEAL
+
+N:1275:コティングリーの妖精
+E:Cottingley Fairies
+G:I:G
+I:115:3d11:15:30:80
+W:12:3:0:20:0:0
+B:STING:POISON:5d1
+B:WAIL:LOSE_INT
+F:FEMALE | QUANTUM | FORCE_SLEEP | FRIENDS | DROP_90 | TAKE_ITEM
+F:HURT_FIRE | CAN_FLY | FRIENDLY | HAS_LITE_1 | IM_POIS | RES_LITE
+S:1_IN_4 | MISSILE
+D:$Only a few old photographs are the only proof that this fairy once existed.
+D:たった数枚の古ぼけた写真が、この妖精がかつて実在したことの唯一の証拠だ。 
+
+N:1276:点『P』
+E:Point P
+G:P:D
+I:140:10d100:30:50:110
+W:39:5:0:5000:0:0
+B:SPORE:LOSE_ALL:2d5
+B:SPORE:LOSE_ALL:2d5
+B:GAZE:DR_MANA:10d1
+B:TOUCH:UN_POWER
+F:UNIQUE | FORCE_SLEEP | FORCE_MAXHP | STUPID | WEIRD_MIND
+F:ATTR_MULTI | ATTR_ANY | RAND_25 | RAND_50 | QUANTUM | ELDRITCH_HORROR
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN
+F:CAN_SWIM | CAN_FLY | PASS_WALL | MOVE_BODY
+F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | DROP_GREAT
+S:1_IN_2 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | SLOW | HASTE | FORGET
+S:BLINK | TPORT | TELE_AWAY
+D:$That point is an abominable existence that makes people
+D:$ all over the world go crazy just by moving.
+D:その点は動くだけで世界中の人間を狂わせる忌むべき存在だ。 
