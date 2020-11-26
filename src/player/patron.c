@@ -291,7 +291,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「我が下僕たちよ、かの傲慢なる者を倒すべし！」", "'My pets, destroy the arrogant mortal!'"));
 
-            for (dummy = 0; dummy < randint1(5) + 1; dummy++) {
+            for (int i = 0, summon_num = randint1(5) + 1; i < summon_num; i++) {
                 (void)summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0,
                     (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
