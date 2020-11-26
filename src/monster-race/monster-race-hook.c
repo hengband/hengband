@@ -119,11 +119,11 @@ bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx)
 bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    if (!(r_ptr->flags8 & RF8_WILD_ONLY))
+    if ((r_ptr->flags8 & RF8_WILD_ONLY) == 0)
         return TRUE;
 
     dungeon_type *d_ptr = &d_info[player_ptr->dungeon_idx];
-    return ((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) != 0) && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0);
+    return (((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) != 0) && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0));
 }
 
 /*!
@@ -277,10 +277,7 @@ bool mon_hook_lava(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!mon_hook_dungeon(player_ptr, r_idx))
         return FALSE;
 
-    if (((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) || (r_ptr->flags7 & RF7_CAN_FLY)) && !(r_ptr->flags3 & RF3_AURA_COLD))
-        return TRUE;
-    else
-        return FALSE;
+    return ((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) || (r_ptr->flags7 & RF7_CAN_FLY)) && !(r_ptr->flags3 & RF3_AURA_COLD);
 }
 
 /*!

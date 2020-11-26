@@ -42,9 +42,6 @@ int chameleon_change_m_idx = 0;
  */
 summon_type summon_specific_type = SUMMON_NONE;
 
-static monsterrace_hook_type get_mon_num_hook;
-static monsterrace_hook_type get_mon_num2_hook;
-
 /*!
  * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -306,17 +303,11 @@ monsterrace_hook_type get_monster_hook(player_type *player_ptr)
 monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x)
 {
     feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
-    if (has_flag(f_ptr->flags, FF_WATER)) {
-        if (has_flag(f_ptr->flags, FF_DEEP)) {
-            return (monsterrace_hook_type)mon_hook_deep_water;
-        } else {
-            return (monsterrace_hook_type)mon_hook_shallow_water;
-        }
-    }
+    if (has_flag(f_ptr->flags, FF_WATER))
+        return has_flag(f_ptr->flags, FF_DEEP) ? (monsterrace_hook_type)mon_hook_deep_water : (monsterrace_hook_type)mon_hook_shallow_water;
 
-    if (has_flag(f_ptr->flags, FF_LAVA)) {
+    if (has_flag(f_ptr->flags, FF_LAVA))
         return (monsterrace_hook_type)mon_hook_lava;
-    }
 
     return (monsterrace_hook_type)mon_hook_floor;
 }
@@ -330,18 +321,13 @@ monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POS
  */
 errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2)
 {
-    /* Todo: Check the hooks for non-changes */
-    get_mon_num_hook = monster_hook;
-    get_mon_num2_hook = monster_hook2;
-
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < alloc_race_size; i++) {
-        monster_race *r_ptr;
         alloc_entry *entry = &alloc_race_table[i];
         entry->prob2 = 0;
-        r_ptr = &r_info[entry->index];
-
-        if ((get_mon_num_hook && !((*get_mon_num_hook)(player_ptr, entry->index))) || (get_mon_num2_hook && !((*get_mon_num2_hook)(player_ptr, entry->index))))
+        monster_race *r_ptr = &r_info[entry->index];
+        if (((monster_hook != NULL) && !((*monster_hook)(player_ptr, entry->index)))
+            || ((monster_hook2 != NULL) && !((*monster_hook2)(player_ptr, entry->index))))
             continue;
 
         if (!player_ptr->phase_out && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {
@@ -351,7 +337,7 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
             if (r_ptr->flags7 & RF7_GUARDIAN)
                 continue;
 
-            if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (r_ptr->level > floor_ptr->dun_level))
+            if (((r_ptr->flags1 & RF1_FORCE_DEPTH) != 0) && (r_ptr->level > floor_ptr->dun_level))
                 continue;
         }
 
