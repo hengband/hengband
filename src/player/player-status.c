@@ -3365,7 +3365,7 @@ static s16b calc_to_hit_misc(player_type *creature_ptr)
             if (o_ptr->to_h > 0)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
         }
-        to_hit += (s16b)o_ptr->to_h;
+        to_hit += (s16b)bonus_to_h;
     }
 
     if (is_blessed(creature_ptr)) {
