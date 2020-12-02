@@ -148,20 +148,20 @@ errr parse_line_feature(floor_type *floor_ptr, char *buf)
                 }
             }
         } else {
-            letter[index].object = (IDX)atoi(zz[4]);
+            letter[index].object = (OBJECT_IDX)atoi(zz[4]);
         }
         /* Fall through */
     case 4:
         if (zz[3][0] == '*') {
             letter[index].random |= RANDOM_MONSTER;
             if (zz[3][1])
-                letter[index].monster = (IDX)atoi(zz[3] + 1);
+                letter[index].monster = (MONSTER_IDX)atoi(zz[3] + 1);
         } else if (zz[3][0] == 'c') {
             if (!zz[3][1])
                 return PARSE_ERROR_GENERIC;
             letter[index].monster = -atoi(zz[3] + 1);
         } else {
-            letter[index].monster = (IDX)atoi(zz[3]);
+            letter[index].monster = (MONSTER_IDX)atoi(zz[3]);
         }
         /* Fall through */
     case 3:
