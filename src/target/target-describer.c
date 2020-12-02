@@ -432,7 +432,7 @@ static s16b sweep_footing_items(player_type *subject_ptr, eg_type *eg_ptr)
 static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
 {
     if (has_flag(eg_ptr->f_ptr->flags, FF_QUEST_ENTER)) {
-        IDX old_quest = subject_ptr->current_floor_ptr->inside_quest;
+        QUEST_IDX old_quest = subject_ptr->current_floor_ptr->inside_quest;
         for (int j = 0; j < 10; j++)
             quest_text[j][0] = '\0';
 
