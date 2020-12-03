@@ -467,7 +467,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                         continue;
 
                     item_selection_ptr->k = 0 - item_selection_ptr->this_o_idx;
-                    if (other_query_flag && !verify(owner_ptr, _("本当に", "Try"), item_selection_ptr->k) || !get_item_allow(owner_ptr, item_selection_ptr->k))
+                    if ((other_query_flag && !verify(owner_ptr, _("本当に", "Try"), item_selection_ptr->k))
+                        || !get_item_allow(owner_ptr, item_selection_ptr->k))
                         continue;
 
                     *item_selection_ptr->cp = item_selection_ptr->k;

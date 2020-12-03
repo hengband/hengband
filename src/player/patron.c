@@ -153,7 +153,6 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 {
     char wrath_reason[32] = "";
     int nasty_chance = 6;
-    tval_type dummy = 0;
     int type, effect;
     concptr reward = NULL;
     GAME_TEXT o_name[MAX_NLEN];
@@ -343,8 +342,8 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_print(_("「汝、謙虚たることを学ぶべし！」", "'Thou needst a lesson in humility, mortal!'"));
             msg_print(_("あなたは以前より弱くなった！", "You feel less powerful!"));
 
-            for (dummy = 0; dummy < A_MAX; dummy++) {
-                (void)dec_stat(creature_ptr, dummy, 10 + randint1(15), TRUE);
+            for (base_status_type stat = 0; stat < A_MAX; stat++) {
+                (void)dec_stat(creature_ptr, stat, 10 + randint1(15), TRUE);
             }
             reward = _("全能力値が下がった。", "decreasing all stats");
             break;
@@ -362,8 +361,8 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
             msg_print(_("「我がささやかなる賜物を受けとるがよい！」", "'Receive this modest gift from me!'"));
 
-            for (dummy = 0; dummy < A_MAX; dummy++) {
-                (void)do_inc_stat(creature_ptr, dummy);
+            for (base_status_type stat = 0; stat < A_MAX; stat++) {
+                (void)do_inc_stat(creature_ptr, stat);
             }
             reward = _("全能力値が上がった。", "increasing all stats");
             break;
@@ -387,23 +386,25 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             reward = _("体力が回復した。", "healing");
             break;
 
-        case REW_CURSE_WP:
+        case REW_CURSE_WP: {
+            inventory_slot_type slot;
 
             if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
                 break;
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「汝、武器に頼ることなかれ。」", "'Thou reliest too much on thy weapon.'"));
 
-            dummy = INVEN_RARM;
+            slot = INVEN_RARM;
             if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-                dummy = INVEN_LARM;
+                slot = INVEN_LARM;
                 if (has_melee_weapon(creature_ptr, INVEN_RARM) && one_in_(2))
-                    dummy = INVEN_RARM;
+                    slot = INVEN_RARM;
             }
-            describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[dummy], OD_NAME_ONLY);
-            (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[dummy]);
+            describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], OD_NAME_ONLY);
+            (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[slot]);
             reward = format(_("%sが破壊された。", "destroying %s"), o_name);
             break;
+        }
 
         case REW_CURSE_AR:
 
@@ -433,16 +434,17 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
                 break;
             case 3:
                 if (one_in_(2)) {
+                    inventory_slot_type slot;
                     if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
                         break;
-                    dummy = INVEN_RARM;
+                    slot = INVEN_RARM;
                     if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-                        dummy = INVEN_LARM;
+                        slot = INVEN_LARM;
                         if (has_melee_weapon(creature_ptr, INVEN_RARM) && one_in_(2))
-                            dummy = INVEN_RARM;
+                            slot = INVEN_RARM;
                     }
-                    describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[dummy], OD_NAME_ONLY);
-                    (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[dummy]);
+                    describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], OD_NAME_ONLY);
+                    (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[slot]);
                     reward = format(_("%sが破壊された。", "destroying %s"), o_name);
                 } else {
                     if (!creature_ptr->inventory_list[INVEN_BODY].k_idx)
@@ -453,8 +455,8 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
                 }
                 break;
             default:
-                for (dummy = 0; dummy < A_MAX; dummy++) {
-                    (void)dec_stat(creature_ptr, dummy, 10 + randint1(15), TRUE);
+                for (base_status_type stat = 0; stat < A_MAX; stat++) {
+                    (void)dec_stat(creature_ptr, stat, 10 + randint1(15), TRUE);
                 }
                 reward = _("全能力値が下がった。", "decreasing all stats");
                 break;
@@ -467,23 +469,23 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_print(_("「死ぬがよい、下僕よ！」", "'Die, mortal!'"));
 
             take_hit(creature_ptr, DAMAGE_LOSELIFE, creature_ptr->lev * 4, wrath_reason, -1);
-            for (dummy = 0; dummy < A_MAX; dummy++) {
-                (void)dec_stat(creature_ptr, dummy, 10 + randint1(15), FALSE);
+            for (base_status_type stat = 0; stat < A_MAX; stat++) {
+                (void)dec_stat(creature_ptr, stat, 10 + randint1(15), FALSE);
             }
             activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, FALSE);
             (void)activate_ty_curse(creature_ptr, FALSE, &count);
             if (one_in_(2)) {
-                dummy = 0;
+                inventory_slot_type slot = 0;
 
                 if (has_melee_weapon(creature_ptr, INVEN_RARM)) {
-                    dummy = INVEN_RARM;
+                    slot = INVEN_RARM;
                     if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2))
-                        dummy = INVEN_LARM;
+                        slot = INVEN_LARM;
                 } else if (has_melee_weapon(creature_ptr, INVEN_LARM))
-                    dummy = INVEN_LARM;
+                    slot = INVEN_LARM;
 
-                if (dummy)
-                    (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[dummy]);
+                if (slot)
+                    (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[slot]);
             }
             if (one_in_(2))
                 (void)curse_armor(creature_ptr);

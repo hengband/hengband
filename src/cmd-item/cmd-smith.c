@@ -239,7 +239,6 @@ static void drain_essence(player_type *creature_ptr)
     byte marked;
     ITEM_NUMBER number;
     OBJECT_IDX next_o_idx;
-    WEIGHT weight;
 
     for (i = 0; i < sizeof(drain_value) / sizeof(int); i++)
         drain_value[i] = 0;
@@ -334,7 +333,6 @@ static void drain_essence(player_type *creature_ptr)
     ix = o_ptr->ix;
     next_o_idx = o_ptr->next_o_idx;
     marked = o_ptr->marked;
-    weight = o_ptr->weight;
     number = o_ptr->number;
 
     object_prep(creature_ptr, o_ptr, o_ptr->k_idx);

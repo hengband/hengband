@@ -1943,7 +1943,7 @@ errr term_load(void)
 /*
  * Exchange the "requested" screen with the "tmp" screen
  */
-static errr term_exchange(void)
+errr term_exchange(void)
 {
     TERM_LEN w = Term->wid;
     TERM_LEN h = Term->hgt;

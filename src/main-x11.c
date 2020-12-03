@@ -1080,7 +1080,7 @@ static void term_string_push(char *buf)
  */
 static void react_keypress(XKeyEvent *xev)
 {
-	int i, n, mc, ms, mo, mx;
+	int n, mc, ms, mo, mx;
 	uint ks1;
 	XKeyEvent *ev = (XKeyEvent*)(xev);
 	KeySym ks;

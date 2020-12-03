@@ -122,10 +122,6 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
  */
 void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
 {
-    int n_alive[10];
-    for (IDX i = 0; i < 10; i++)
-        n_alive[i] = 0;
-
     unique_list_type tmp_list;
     unique_list_type *unique_list_ptr = initialize_unique_lsit_type(&tmp_list, is_alive);
     FILE *fff = NULL;

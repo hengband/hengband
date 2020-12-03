@@ -1036,7 +1036,6 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
 {
    term_data *td = (term_data *)(Term->data);
 
-   int i;
    char intext[n];
    char text[80 * 3 + 1];
    size_t inlen = n;

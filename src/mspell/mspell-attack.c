@@ -181,7 +181,7 @@ static bool check_mspell_continuation(player_type *target_ptr, msa_type *msa_ptr
 
     remove_bad_spells(msa_ptr->m_idx, target_ptr, &msa_ptr->f4, &msa_ptr->f5, &msa_ptr->f6);
     check_mspell_arena(target_ptr, msa_ptr);
-    if ((msa_ptr->f4 == 0) && (msa_ptr->f5 == 0) && (msa_ptr->f6 == 0) || !check_mspell_non_stupid(target_ptr, msa_ptr))
+    if (((msa_ptr->f4 == 0) && (msa_ptr->f5 == 0) && (msa_ptr->f6 == 0)) || !check_mspell_non_stupid(target_ptr, msa_ptr))
         return FALSE;
 
     set_mspell_list(msa_ptr);
