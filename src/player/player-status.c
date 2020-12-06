@@ -419,12 +419,6 @@ void calc_bonuses(player_type *creature_ptr)
 
     creature_ptr->lite = has_lite(creature_ptr);
 
-    const player_race *tmp_rp_ptr;
-    if (creature_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
-    else
-        tmp_rp_ptr = &race_info[creature_ptr->prace];
-
     if (creature_ptr->special_defense & KAMAE_MASK) {
         if (!(empty_hands_status & EMPTY_HAND_RARM)) {
             set_action(creature_ptr, ACTION_NONE);
@@ -2548,12 +2542,6 @@ static s16b calc_speed(player_type *creature_ptr)
     int count;
 
     if (!creature_ptr->riding) {
-        const player_race *tmp_rp_ptr;
-        if (creature_ptr->mimic_form)
-            tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
-        else
-            tmp_rp_ptr = &race_info[creature_ptr->prace];
-
         if (is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE))
             pow += (creature_ptr->lev) / 10;
 
@@ -3409,8 +3397,8 @@ static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_
 
 static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot)
 {
-    (creature_ptr); // unused
-    (slot); // unused
+    (void)creature_ptr; // unused
+    (void)slot; // unused
     return 0;
 }
 

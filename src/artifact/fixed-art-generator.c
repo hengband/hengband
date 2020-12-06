@@ -123,11 +123,12 @@ static void random_artifact_resistance(player_type *player_ptr, object_type *o_p
     if (a_ptr->gen_flags & TRG_XTRA_H_RES)
         give_resistance = TRUE;
 
-    if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER)
+    if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) {
         if (one_in_(2))
             give_resistance = TRUE;
         else
             give_power = TRUE;
+    }
 
     if (give_power)
         one_ability(o_ptr);

@@ -171,6 +171,8 @@ errr term_inkey(char *ch, bool wait, bool take);
 errr term_save(void);
 errr term_load(void);
 
+errr term_exchange(void);
+
 errr term_resize(TERM_LEN w, TERM_LEN h);
 
 errr term_activate(term_type *t);
