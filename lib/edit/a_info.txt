@@ -4238,8 +4238,9 @@ F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:FULL_NAME
 U:ANIM_DEAD
 D:$This glowing black bat is filled with the unremitting love of the user.
+D:$  This is a magical onomatopoeia that can redo the life of the dead.
 D:この黒光りするバットには使用者のたゆまぬ愛が込められている。
-D:ぴぴるぴるぴるぴぴるぴ～。
+D:これは魔法の擬音で死せりし者の人生をやり直させることができる。
 
 N:254:巨人夸父の
 E:of Kuafu
@@ -4253,6 +4254,7 @@ D:$The staff of Kuafu the sun chased giant.
 D:$This wood staff still alive will someday became peach forest.
 D:太陽を追った巨人、夸父の杖だ。まだ生きているこの木の杖はいずれ桃林になるだろう。
 
+# Eat steel, hungry wolves!
 N:255:ドン・キホーテの
 E:of Don Quixote
 I:22:29:-3
