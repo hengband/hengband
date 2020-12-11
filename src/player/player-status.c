@@ -14,7 +14,6 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-//#include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
@@ -3054,7 +3053,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
             || !has_disable_two_handed_bonus(creature_ptr, 0)) {
             int bonus_to_h = 0;
             bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-             hit += MAX(bonus_to_h, 1);
+            hit += MAX(bonus_to_h, 1);
         }
     }
 
@@ -3148,11 +3147,8 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         object_type *o_ptr = &creature_ptr->inventory_list[i];
 
         /* Ignore empty hands, handed weapons, bows and capture balls */
-        if (!o_ptr->k_idx
-            || o_ptr->tval == TV_CAPTURE
-            || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
-            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i))
-            || i == INVEN_BOW)
+        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
+            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
             continue;
 
         /* Fake value does not include unknown objects' value */
