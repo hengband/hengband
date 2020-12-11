@@ -25296,3 +25296,75 @@ S:BLINK | TPORT | TELE_AWAY
 D:$That point is an abominable existence that makes people
 D:$ all over the world go crazy just by moving.
 D:その点は動くだけで世界中の人間を狂わせる忌むべき存在だ。 
+
+N:1277:破壊の怨念『久遠』
+E:Kuwon, the dream exchanger
+G:f:y
+I:120:70d30:80:65:5
+W:41:2:0:6500:0:0
+B:CLAW:HURT:9d12
+B:CLAW:ELEC:15d12
+B:PUNCH:HURT:9d12
+B:PUNCH:ELEC:15d12
+F:UNIQUE | FORCE_MAXHP | FEMALE | EVIL | ANIMAL
+F:DROP_CORPSE | REGENERATE | DROP_GOOD | DROP_4D2
+F:BASH_DOOR | NO_CONF | NO_FEAR | NO_SLEEP
+F:IM_ELEC
+S:1_IN_4 | BA_ELEC | BR_ELEC | BLINK
+D:彼女はかつて愛する人を殺され、その怒りで瞳は怨讐の意思に満ち満ちている。
+D:二人の仲を切り裂いたのが神官であったことから、
+D:鉄獄でもあらゆる宗教施設とその遺跡を破壊し続けている。
+
+N:1278:魔界の一匹狼『クラウス・ローゼンバーグ』
+E:Claus Rosenberg, the maverick of demon's world
+G:U:W
+I:120:45d40:50:100:10
+W:40:1:0:4949:0:0
+B:BITE:EXP_VAMP:5d3
+B:BITE:EXP_VAMP:7d3
+B:BITE:EXP_VAMP:9d3
+B:BITE:EXP_VAMP:11d3
+F:UNIQUE | FORCE_MAXHP | MALE | DEMON | EVIL | FRIENDLY
+F:RES_DARK | RES_CHAO | RES_TIME
+F:OPEN_DOOR | NO_CONF | NO_FEAR | NO_SLEEP | DROP_GOOD | DROP_90
+S:1_IN_4 | BA_DARK | CAUSE_3 | SCARE | FORGET
+D:$He lives inside the "Third Great Door"
+D:$ and looks like a boy in silver hair.
+D:$  From his right hand,
+D:$ there is a slight sweet and sour scent of an apple.
+D:$  It seems to be a gift from a dead subordinate.
+D:彼は"第三の大扉"の内側に住み、銀髪をまとった少年の姿をしている。
+D:彼の右手からはほんのりと林檎の甘酸っぱい香りがする。
+D:それは死んだ部下からの贈り物らしい。
+
+N:1279:紅衣の修行僧
+E:Crimson monk
+G:p:R
+I:115:55d11:20:49:5
+W:36:3:0:800:2500:1278
+B:KICK:FIRE:15d5
+B:HIT:FIRE:15d5
+B:KICK:CONFUSE:5d4
+B:HIT:CONFUSE:5d2
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | RES_CHAO | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_9 | BO_FIRE | BA_FIRE | BA_CHAO | TELE_AWAY | MISSILE | CONF
+D:$A monk in crimson robes trained in the most lethal martial arts.
+D:紅の法衣とログルスの力を身にまとい、拳法に熟練した修行僧だ。
+
+N:1280:紅衣の高位修行僧
+E:High crimson monk
+G:p:r
+I:120:56d12:30:59:10
+W:41:3:0:1100:0:0
+B:KICK:FIRE:15d8
+B:HIT:FIRE:15d8
+B:KICK:CONFUSE:5d5
+B:HIT:CONFUSE:5d3
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_90 | DROP_1D2 | OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | RES_CHAO | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_6 | BO_FIRE | BA_FIRE | BA_CHAO | TELE_AWAY | MISSILE | CONF
+D:$A high-rank crimson-garbed monk, trained in martial arts.
+D:紅色の法衣を身にまとった、拳法に熟練した高位の修行僧だ。
