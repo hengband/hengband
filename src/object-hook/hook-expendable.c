@@ -1,6 +1,5 @@
 ﻿#include "object-hook/hook-expendable.h"
-#include "art-definition/art-accessory-types.h"
-#include "art-definition/art-armor-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "monster-race/monster-race.h"

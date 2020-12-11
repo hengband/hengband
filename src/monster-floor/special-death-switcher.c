@@ -5,10 +5,7 @@
  */
 
 #include "monster-floor/special-death-switcher.h"
-#include "art-definition/art-armor-types.h"
-#include "art-definition/art-bow-types.h"
-#include "art-definition/art-protector-types.h"
-#include "art-definition/art-weapon-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "artifact/fixed-art-generator.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"

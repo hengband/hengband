@@ -798,12 +798,7 @@
     <ClInclude Include="..\..\src\action\travel-execution.h" />
     <ClInclude Include="..\..\src\action\tunnel-execution.h" />
     <ClInclude Include="..\..\src\action\weapon-shield.h" />
-    <ClInclude Include="..\..\src\art-definition\art-accessory-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-armor-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-bow-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-protector-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-sword-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-weapon-types.h" />
+    <ClInclude Include="..\..\src\art-definition\fixed-art-types.h" />
     <ClInclude Include="..\..\src\art-definition\random-art-effects.h" />
     <ClInclude Include="..\..\src\artifact\artifact-info.h" />
     <ClInclude Include="..\..\src\artifact\fixed-art-generator.h" />

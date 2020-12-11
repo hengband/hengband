@@ -1,6 +1,6 @@
 ﻿#include "action/movement-execution.h"
 #include "action/open-close-execution.h"
-#include "art-definition/art-sword-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/disturbance.h"
 #include "core/player-update-types.h"

@@ -6,7 +6,7 @@
  */
 
 #include "player-attack/attack-chaos-effect.h"
-#include "art-definition/art-weapon-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "core/player-redraw-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"

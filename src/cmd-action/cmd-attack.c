@@ -5,7 +5,7 @@
  */
 
 #include "cmd-action/cmd-attack.h"
-#include "art-definition/art-sword-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "core/asking-player.h"

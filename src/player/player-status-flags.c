@@ -1,5 +1,5 @@
 ﻿#include "player/player-status-flags.h"
-#include "art-definition/art-sword-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"

@@ -1,5 +1,5 @@
 ﻿#include "load/item-loader.h"
-#include "art-definition/art-accessory-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "game-option/runtime-arguments.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-v1-5-0.h"
