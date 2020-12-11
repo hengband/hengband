@@ -17,6 +17,7 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-generator.h"
 #include "object/object-info.h"
+#include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "player-info/avatar.h"
 #include "player/mimic-info-table.h"
@@ -197,7 +198,8 @@ void process_eat_lite(player_type *target_ptr, monap_type *monap_ptr)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  * @return 吸収されたらTRUE、されなかったらFALSE
- * @details 魔道具使用能力向上フラグがあれば、吸収量は全部ではなく半分で済む
+ * @details 魔道具使用能力向上フラグがあれば、吸収量は全部ではない
+ * 詳細はOSDN #40911の議論を参照のこと
  */
 bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -205,22 +207,23 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
         return FALSE;
 
     bool is_magic_mastery = has_magic_mastery(target_ptr) != 0;
-    int drain_ratio = is_magic_mastery ? 2 : 1;
-    int heal = monap_ptr->rlev * monap_ptr->o_ptr->pval / drain_ratio;
+    PARAMETER_VALUE pval = k_info[monap_ptr->o_ptr->k_idx].pval;
+    DEPTH level = monap_ptr->rlev;
+    HIT_POINT drain = pval * level / 400 + pval * randint1(level) / 400;
     if (monap_ptr->o_ptr->tval == TV_STAFF)
-        heal *= monap_ptr->o_ptr->number;
+        drain *= monap_ptr->o_ptr->number;
 
-    heal = MIN(heal, (monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp) / drain_ratio);
+    drain = MIN(drain, (monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp) / drain);
     msg_print(_("ザックからエネルギーが吸い取られた！", "Energy drains from your pack!"));
     monap_ptr->obvious = TRUE;
-    monap_ptr->m_ptr->hp += (HIT_POINT)heal;
+    monap_ptr->m_ptr->hp += drain;
     if (target_ptr->health_who == monap_ptr->m_idx)
         target_ptr->redraw |= PR_HEALTH;
 
     if (target_ptr->riding == monap_ptr->m_idx)
         target_ptr->redraw |= PR_UHEALTH;
 
-    monap_ptr->o_ptr->pval = !is_magic_mastery || (monap_ptr->o_ptr->pval == 1) ? 0 : (monap_ptr->o_ptr->pval + 1) / 2;
+    monap_ptr->o_ptr->pval = !is_magic_mastery || (monap_ptr->o_ptr->pval == 1) ? 0 : monap_ptr->o_ptr->pval - drain;
     target_ptr->update |= PU_COMBINE | PU_REORDER;
     target_ptr->window |= PW_INVEN;
     return TRUE;
