@@ -401,10 +401,10 @@ F:@:FLOOR:3:0:0:0:148
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:94
 
-# Quest 27 rewarding (Cavalry gets GaeBolg)
+# Quest 27 rewarding (Cavalry gets Don Quixote)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Cavalry] ]
 F:a:BUILDING_0:3
-F:@:FLOOR:3:0:0:0:163
+F:@:FLOOR:3:0:0:0:255
 
 # Quest 27 rewarding (Chaos-Warrior gets Zarcuthra)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Chaos-Warrior] ]
