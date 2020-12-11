@@ -76,7 +76,7 @@ bool has_kill_wall(player_type *creature_ptr)
 
 /*!
  * @brief クリーチャーが壁通過を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたらTRUE
  * @details
  * * 時限で幽体化、壁抜けをもつか種族幽霊ならばひとまずTRUE。
@@ -102,7 +102,7 @@ bool has_pass_wall(player_type *creature_ptr)
 
 /*!
  * @brief クリーチャーが強力射を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_xtra_might(player_type *creature_ptr)
@@ -114,7 +114,7 @@ BIT_FLAGS has_xtra_might(player_type *creature_ptr)
 
 /*!
  * @brief クリーチャーが赤外線視力修正を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  * @details 種族修正は0より大きければTRUEとする。
  */
@@ -144,7 +144,7 @@ BIT_FLAGS has_infra_vision(player_type *creature_ptr)
 
 /*!
  * @brief クリーチャーが邪悪感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_evil(player_type *creature_ptr)
@@ -160,139 +160,117 @@ BIT_FLAGS has_esp_evil(player_type *creature_ptr)
 
 /*!
  * @brief クリーチャーが自然界の動物感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_animal(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_ANIMAL);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_ANIMAL);
 }
 
 /*!
  * @brief クリーチャーがアンデッド感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_undead(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_UNDEAD);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_UNDEAD);
 }
 
 /*!
  * @brief クリーチャーが悪魔感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_demon(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_DEMON);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_DEMON);
 }
 
 /*!
  * @brief クリーチャーがオーク感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_orc(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_ORC);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_ORC);
 }
 
 /*!
  * @brief クリーチャーがトロル感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_troll(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_TROLL);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_TROLL);
 }
 
 /*!
  * @brief クリーチャーが巨人感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_giant(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_GIANT);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_GIANT);
 }
 
 /*!
  * @brief クリーチャーがドラゴン感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_dragon(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_DRAGON);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_DRAGON);
 }
 
 /*!
  * @brief クリーチャーが人間感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_human(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_HUMAN);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_HUMAN);
 }
 
 /*!
  * @brief クリーチャーが善良感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_good(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_GOOD);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_GOOD);
 }
 
 /*!
  * @brief クリーチャーが無生物感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_nonliving(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_GOOD);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_GOOD);
 }
 
 /*!
  * @brief クリーチャーがユニーク感知を持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_unique(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_ESP_UNIQUE);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_ESP_UNIQUE);
 }
 
 /*!
  * @brief クリーチャーがテレパシーを持っているかを返す。
- * @param cretature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_telepathy(player_type *creature_ptr)
@@ -326,30 +304,22 @@ BIT_FLAGS has_esp_telepathy(player_type *creature_ptr)
 
 BIT_FLAGS has_bless_blade(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_BLESSED);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_BLESSED);
 }
 
 BIT_FLAGS has_easy2_weapon(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_EASY2_WEAPON);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_EASY2_WEAPON);
 }
 
 BIT_FLAGS has_down_saving(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_DOWN_SAVING);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_DOWN_SAVING);
 }
 
 BIT_FLAGS has_no_ac(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_NO_AC);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_NO_AC);
 }
 
 BIT_FLAGS has_invuln_arrow(player_type *creature_ptr)
@@ -404,16 +374,12 @@ void has_no_flowed(player_type *creature_ptr)
 
 BIT_FLAGS has_mighty_throw(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_MIGHTY_THROW);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_MIGHTY_THROW);
 }
 
 BIT_FLAGS has_dec_mana(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_DEC_MANA);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_DEC_MANA);
 }
 
 
@@ -464,16 +430,12 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
 
 BIT_FLAGS has_anti_magic(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_NO_MAGIC);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_NO_MAGIC);
 }
 
 BIT_FLAGS has_anti_tele(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_NO_TELE);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_NO_TELE);
 }
 
 BIT_FLAGS has_sh_fire(player_type *creature_ptr)
@@ -537,16 +499,12 @@ BIT_FLAGS has_sh_cold(player_type *creature_ptr)
 
 BIT_FLAGS has_easy_spell(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_EASY_SPELL);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_EASY_SPELL);
 }
 
 BIT_FLAGS has_heavy_spell(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_HEAVY_SPELL);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_HEAVY_SPELL);
 }
 
 BIT_FLAGS has_hold_exp(player_type *creature_ptr)
@@ -620,10 +578,7 @@ BIT_FLAGS has_see_inv(player_type *creature_ptr)
 
 BIT_FLAGS has_magic_mastery(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-
-    result |= check_equipment_flags(creature_ptr, TR_MAGIC_MASTERY);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_MAGIC_MASTERY);
 }
 
 BIT_FLAGS has_free_act(player_type *creature_ptr)
@@ -1000,9 +955,7 @@ void has_curses(player_type *creature_ptr)
 
 BIT_FLAGS has_impact(player_type *creature_ptr)
 {
-    BIT_FLAGS result = 0L;
-    result |= check_equipment_flags(creature_ptr, TR_IMPACT);
-    return result;
+    return check_equipment_flags(creature_ptr, TR_IMPACT);
 }
 
 void has_extra_blow(player_type *creature_ptr)
