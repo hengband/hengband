@@ -5,7 +5,7 @@
  */
 
 #include "player-attack/player-attack.h"
-#include "art-definition/art-sword-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
@@ -21,9 +21,9 @@
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
 #include "mind/monk-attack.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
@@ -377,8 +377,8 @@ static void apply_actual_attack(
     decide_blood_sucking(attacker_ptr, pa_ptr);
 
     // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでhex_spelling() の判定をしないとダメ.
-    bool vorpal_cut = (has_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
-        && !is_zantetsu_nullified;
+    bool vorpal_cut
+        = (has_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified;
 
     calc_attack_damage(attacker_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
     apply_damage_bonus(attacker_ptr, pa_ptr);
@@ -387,8 +387,8 @@ static void apply_actual_attack(
     pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage,
         (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
     critical_attack(attacker_ptr, pa_ptr);
-    msg_format_wizard(attacker_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
-        pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);
+    msg_format_wizard(attacker_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
+        pa_ptr->attack_damage, pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);
 }
 
 /*!

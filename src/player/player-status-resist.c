@@ -1,6 +1,5 @@
 ﻿#include "player/player-status-resist.h"
-#include "player/mimic-info-table.h"
-#include "art-definition/art-sword-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
@@ -13,6 +12,7 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
+#include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
@@ -386,7 +386,6 @@ PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mod
 
     return per;
 }
-
 
 /*!
  * @brief 時間逆転攻撃に対するダメージ倍率計算

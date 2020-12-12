@@ -11,10 +11,7 @@
  */
 
 #include "artifact/fixed-art-generator.h"
-#include "art-definition/art-armor-types.h"
-#include "art-definition/art-protector-types.h"
-#include "art-definition/art-sword-types.h"
-#include "art-definition/art-weapon-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "floor/floor-object.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"

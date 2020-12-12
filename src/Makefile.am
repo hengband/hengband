@@ -29,12 +29,7 @@ hengband_SOURCES = \
 	artifact/random-art-resistance.c artifact/random-art-resistance.h \
 	artifact/random-art-slay.c artifact/random-art-slay.h \
 	\
-	art-definition/art-accessory-types.h \
-	art-definition/art-armor-types.h \
-	art-definition/art-bow-types.h \
-	art-definition/art-protector-types.h \
-	art-definition/art-sword-types.h \
-	art-definition/art-weapon-types.h \
+	art-definition/fixed-art-types.h
 	art-definition/random-art-effects.h \
 	\
 	autopick/autopick.c autopick/autopick.h \

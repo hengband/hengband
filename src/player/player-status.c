@@ -1,7 +1,5 @@
 ﻿#include "player/player-status.h"
-#include "art-definition/art-bow-types.h"
-#include "art-definition/art-sword-types.h"
-#include "art-definition/art-weapon-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-pet.h"
@@ -16,7 +14,6 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-//#include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
@@ -3076,7 +3073,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
             || !has_disable_two_handed_bonus(creature_ptr, 0)) {
             int bonus_to_h = 0;
             bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
-             hit += MAX(bonus_to_h, 1);
+            hit += MAX(bonus_to_h, 1);
         }
     }
 

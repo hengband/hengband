@@ -5,7 +5,8 @@
  * @brief アイテムの発動効果テーブル /
  * Define flags, levels, values of activations
  */
-const activation_type activation_info[] = { { "SUNLIGHT", ACT_SUNLIGHT, 10, 250, { 10, 0 }, _("太陽光線", "beam of sunlight") },
+const activation_type activation_info[MAX_ACTIVATION_TYPE] = {
+    { "SUNLIGHT", ACT_SUNLIGHT, 10, 250, { 10, 0 }, _("太陽光線", "beam of sunlight") },
     { "BO_MISS_1", ACT_BO_MISS_1, 10, 250, { 2, 0 }, _("マジック・ミサイル(2d6)", "magic missile (2d6)") },
     { "BA_POIS_1", ACT_BA_POIS_1, 10, 300, { 4, 0 }, _("悪臭雲(12)", "stinking cloud (12)") },
     { "BO_ELEC_1", ACT_BO_ELEC_1, 20, 250, { 5, 0 }, _("サンダー・ボルト(4d8)", "lightning bolt (4d8)") },
@@ -51,7 +52,8 @@ const activation_type activation_info[] = { { "SUNLIGHT", ACT_SUNLIGHT, 10, 250,
 
     { "CONFUSE", ACT_CONFUSE, 10, 500, { 10, 0 }, _("パニック・モンスター", "confuse monster") },
     { "SLEEP", ACT_SLEEP, 10, 750, { 15, 0 }, _("周囲のモンスターを眠らせる", "sleep nearby monsters") },
-    { "QUAKE", ACT_QUAKE, 30, 600, { 20, 0 }, _("地震", "earthquake") }, { "TERROR", ACT_TERROR, 20, 2500, { -1, 0 }, _("恐慌", "terror") },
+    { "QUAKE", ACT_QUAKE, 30, 600, { 20, 0 }, _("地震", "earthquake") },
+    { "TERROR", ACT_TERROR, 20, 2500, { -1, 0 }, _("恐慌", "terror") },
     { "TELE_AWAY", ACT_TELE_AWAY, 20, 2000, { 15, 0 }, _("テレポート・アウェイ", "teleport away") },
     { "BANISH_EVIL", ACT_BANISH_EVIL, 40, 2000, { 250, 0 }, _("邪悪消滅", "banish evil") },
     { "GENOCIDE", ACT_GENOCIDE, 50, 10000, { 500, 0 }, _("抹殺", "genocide") },
@@ -111,7 +113,8 @@ const activation_type activation_info[] = { { "SUNLIGHT", ACT_SUNLIGHT, 10, 250,
     { "SATIATE", ACT_SATIATE, 10, 2000, { 200, 0 }, _("空腹充足", "satisfy hunger") },
     { "DEST_DOOR", ACT_DEST_DOOR, 10, 100, { 10, 0 }, _("ドア破壊", "destroy doors") },
     { "STONE_MUD", ACT_STONE_MUD, 20, 1000, { 3, 0 }, _("岩石溶解", "stone to mud") },
-    { "RECHARGE", ACT_RECHARGE, 30, 1000, { 70, 0 }, _("魔力充填", "recharging") }, { "ALCHEMY", ACT_ALCHEMY, 50, 10000, { 500, 0 }, _("錬金術", "alchemy") },
+    { "RECHARGE", ACT_RECHARGE, 30, 1000, { 70, 0 }, _("魔力充填", "recharging") },
+    { "ALCHEMY", ACT_ALCHEMY, 50, 10000, { 500, 0 }, _("錬金術", "alchemy") },
     { "DIM_DOOR", ACT_DIM_DOOR, 50, 10000, { 100, 0 }, _("次元の扉", "dimension door") },
     { "TELEPORT", ACT_TELEPORT, 10, 2000, { 25, 0 }, _("テレポート", "teleport") },
     { "RECALL", ACT_RECALL, 30, 7500, { 200, 0 }, _("帰還の詔", "word of recall") },

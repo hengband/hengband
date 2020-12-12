@@ -1,6 +1,6 @@
 ﻿#include "specific-object/muramasa.h"
+#include "art-definition/fixed-art-types.h"
 #include "core/asking-player.h"
-#include "art-definition/art-sword-types.h"
 #include "spell/spells-object.h"
 #include "status/base-status.h"
 #include "system/object-type-definition.h"

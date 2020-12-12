@@ -712,6 +712,37 @@ says, 'Don't look me as I was a louse!'
 says, 'Here a louse.'
 says, 'Die. Die. Damn thing is strong!'
 
+# Some sentences are out of order
+# because the typographical error is the original story.
+# ex. meatred is typo of hatred
+N:1240:Yamato, the sword master
+says, 'I don't forgive only pants ...!'
+says, 'My meatred never disappears!'
+says, 'I'm Potato!'
+says, 'I'll show you my new technarmpit!'
+says, 'Masoppu'
+says, 'Dammmmmn ittttttt!'
+says, 'New technique; sonic flame sword!'
+says, 'Go to heeeeeeell!'
+says, 'I've done it... I've finally defeated the big for...'
+says, 'This will open the door to the siege castle where Beelzebub lives in!!'
+says, 'This... this is the siege castle...!'
+says, 'I feel... Beelzebub's magical power ...'
+says, 'Wh what the hell!?'
+says, 'Huh... good... I have one thing to say'
+says, 'I felt like I had a younger sister who had survived, but that wasn't the case!'
+says, 'Woooooooooooooo! Be prepared!'
+
+N:1258:Robo-Gandalf
+says, 'BaD EVeninG!'
+says, 'givE mE a rINg!'
+says, 'MoRNing nEVEr coMes tO YOu!'
+says, 'YoU'rE nOt a FLatulENcE coMParEd tO tHe diSASter of dURIN!'
+says, 'yOu'Re noT mY fRIenD!'
+says, 'LOwEr crEAtUrEs!'
+says, 'yoU bASTARD!'
+says, 'tHIs's thE pOWEr oF maChiNE!'
+
 N:*:Default lines
 cackles evilly.
 cackles diabolically.

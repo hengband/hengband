@@ -2177,6 +2177,9 @@
     <ClCompile Include="..\..\src\player\player-status-resist.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\io\record-play-movie.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -3408,24 +3411,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\trg-types.h">
       <Filter>object-enchant</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\art-definition\art-sword-types.h">
-      <Filter>art-definition</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\art-definition\art-accessory-types.h">
-      <Filter>art-definition</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\art-definition\art-armor-types.h">
-      <Filter>art-definition</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\art-definition\art-protector-types.h">
-      <Filter>art-definition</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\art-definition\art-weapon-types.h">
-      <Filter>art-definition</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\art-definition\art-bow-types.h">
-      <Filter>art-definition</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-flags.h">
       <Filter>object</Filter>
@@ -4717,11 +4702,14 @@
     <ClInclude Include="..\..\src\player\player-status-resist.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-lose.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\io\record-play-movie.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-attack\monster-attack-lose.h">
-      <Filter>monster-attack</Filter>
+    <ClInclude Include="..\..\src\art-definition\fixed-art-types.h">
+      <Filter>art-definition</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

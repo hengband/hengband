@@ -8,7 +8,6 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-
 /* Purpose: a simple random number generator -BEN- */
 
 #if defined(WINDOWS)
@@ -16,9 +15,6 @@
 #endif
 
 #include "term/z-rand.h"
-
-
-
 
 /*
  * Angband 2.7.9 introduced a new (optimized) random number generator,
@@ -52,7 +48,6 @@
  * RNG algorithm was fully rewritten. Upper comment is OLD.
  */
 
-
 /*
  * Currently unused
  */
@@ -63,29 +58,25 @@ u16b Rand_place;
  * Only index 0 to 3 are used
  */
 u32b Rand_state[RAND_DEG] = {
-	123456789,
-	362436069,
-	521288629,
-	88675123,
+    123456789,
+    362436069,
+    521288629,
+    88675123,
 };
 
-
-static u32b u32b_rotl(const u32b x, int k)
-{
-	return (x << k) | (x >> (32 - k));
-}
+static u32b u32b_rotl(const u32b x, int k) { return (x << k) | (x >> (32 - k)); }
 
 /*
  * Initialize RNG state
  */
-static void Rand_seed(u32b seed, u32b* state)
+static void Rand_seed(u32b seed, u32b *state)
 {
-	int i;
+    int i;
 
-	for (i = 1; i <= 4; ++ i) {
-		seed = 1812433253UL * (seed ^ (seed >> 30)) + i;
-		state[i-1] = seed;
-	}
+    for (i = 1; i <= 4; ++i) {
+        seed = 1812433253UL * (seed ^ (seed >> 30)) + i;
+        state[i - 1] = seed;
+    }
 }
 
 /*
@@ -93,20 +84,20 @@ static void Rand_seed(u32b seed, u32b* state)
  */
 static u32b Rand_Xoshiro128starstar(u32b *state)
 {
-	const u32b result = u32b_rotl(state[1] * 5, 7) * 9;
+    const u32b result = u32b_rotl(state[1] * 5, 7) * 9;
 
-	const u32b t = state[1] << 9;
+    const u32b t = state[1] << 9;
 
-	state[2] ^= state[0];
-	state[3] ^= state[1];
-	state[1] ^= state[2];
-	state[0] ^= state[3];
+    state[2] ^= state[0];
+    state[3] ^= state[1];
+    state[1] ^= state[2];
+    state[0] ^= state[3];
 
-	state[2] ^= t;
+    state[2] ^= t;
 
-	state[3] = u32b_rotl(state[3], 11);
+    state[3] = u32b_rotl(state[3], 11);
 
-	return result;
+    return result;
 }
 
 static const u32b Rand_Xorshift_max = 0xFFFFFFFF;
@@ -114,46 +105,43 @@ static const u32b Rand_Xorshift_max = 0xFFFFFFFF;
 /*
  * Initialize the RNG using a new seed
  */
-void Rand_state_set(u32b seed)
-{
-	Rand_seed(seed, Rand_state);
-}
+void Rand_state_set(u32b seed) { Rand_seed(seed, Rand_state); }
 
 void Rand_state_init(void)
 {
 #ifdef RNG_DEVICE
 
-	FILE *fp = fopen(RNG_DEVICE, "r");
-	int n;
-	
-	do {
-		n = fread(Rand_state, sizeof(Rand_state[0]), 4, fp);
-	} while (n != 4 || (Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
-	
-	fclose(fp);
+    FILE *fp = fopen(RNG_DEVICE, "r");
+    int n;
+
+    do {
+        n = fread(Rand_state, sizeof(Rand_state[0]), 4, fp);
+    } while (n != 4 || (Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
+
+    fclose(fp);
 
 #elif defined(WINDOWS)
 
-	HCRYPTPROV hProvider;
+    HCRYPTPROV hProvider;
 
-	CryptAcquireContext(&hProvider, NULL, NULL, PROV_RSA_FULL, 0);
+    CryptAcquireContext(&hProvider, NULL, NULL, PROV_RSA_FULL, 0);
 
-	do {
-		CryptGenRandom(hProvider, sizeof(Rand_state[0]) * 4, (BYTE*)Rand_state);
-	} while ((Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
+    do {
+        CryptGenRandom(hProvider, sizeof(Rand_state[0]) * 4, (BYTE *)Rand_state);
+    } while ((Rand_state[0] | Rand_state[1] | Rand_state[2] | Rand_state[3]) == 0);
 
-	CryptReleaseContext(hProvider, 0);	
+    CryptReleaseContext(hProvider, 0);
 
 #else
 
-	/* Basic seed */
-	u32b seed = (time(NULL));
+    /* Basic seed */
+    u32b seed = (time(NULL));
 #ifdef SET_UID
-	/* Mutate the seed on Unix machines */
-	seed = ((seed >> 3) * (getpid() << 1));
+    /* Mutate the seed on Unix machines */
+    seed = ((seed >> 3) * (getpid() << 1));
 #endif
-	/* Seed the RNG */
-	Rand_state_set(seed);
+    /* Seed the RNG */
+    Rand_state_set(seed);
 
 #endif
 }
@@ -161,67 +149,61 @@ void Rand_state_init(void)
 /*
  * Backup the RNG state
  */
-void Rand_state_backup(u32b* backup_state)
+void Rand_state_backup(u32b *backup_state)
 {
-	int i;
+    int i;
 
-	for (i = 0; i < 4; ++ i) {
-		backup_state[i] = Rand_state[i];
-	}
+    for (i = 0; i < 4; ++i) {
+        backup_state[i] = Rand_state[i];
+    }
 }
 
 /*
  * Restore the RNG state
  */
-void Rand_state_restore(u32b* backup_state)
+void Rand_state_restore(u32b *backup_state)
 {
-	int i;
+    int i;
 
-	for (i = 0; i < 4; ++ i) {
-		Rand_state[i] = backup_state[i];
-	}
+    for (i = 0; i < 4; ++i) {
+        Rand_state[i] = backup_state[i];
+    }
 }
-
 
 /*
  * Extract a "random" number from 0 to m-1, via "division"
  */
-static s32b Rand_div_impl(s32b m, u32b* state)
+static s32b Rand_div_impl(s32b m, u32b *state)
 {
-	u32b scaling;
-	u32b past;
-	u32b ret;
+    u32b scaling;
+    u32b past;
+    u32b ret;
 
-	/* Hack -- simple case */
-	if (m <= 1) return 0;
+    /* Hack -- simple case */
+    if (m <= 1)
+        return 0;
 
-	scaling = Rand_Xorshift_max / m;
-	past = scaling * m;
+    scaling = Rand_Xorshift_max / m;
+    past = scaling * m;
 
-	do {
-		ret = Rand_Xoshiro128starstar(state);
-	} while (ret >= past);
+    do {
+        ret = Rand_Xoshiro128starstar(state);
+    } while (ret >= past);
 
-	return ret / scaling;
+    return ret / scaling;
 }
 
-s32b Rand_div(s32b m)
-{
-	return Rand_div_impl(m, Rand_state);
-}
-
-
-
+s32b Rand_div(s32b m) { return Rand_div_impl(m, Rand_state); }
 
 /*
  * The number of entries in the "randnor_table"
  */
-#define RANDNOR_NUM	256
+#define RANDNOR_NUM 256
 
 /*
  * The standard deviation of the "randnor_table"
  */
-#define RANDNOR_STD	64
+#define RANDNOR_STD 64
 
 /*
  * The normal distribution table for the "randnor()" function (below)
@@ -265,8 +247,6 @@ static s16b randnor_table[RANDNOR_NUM] =
 	32765,   32765,   32765,   32766,   32766,	32766,	 32766,	  32767,
 };
 
-
-
 /*
  * Generate a random integer number of NORMAL distribution
  *
@@ -288,65 +268,58 @@ static s16b randnor_table[RANDNOR_NUM] =
  */
 s16b randnor(int mean, int stand)
 {
-	s16b tmp;
-	s16b offset;
+    s16b tmp;
+    s16b offset;
 
-	s16b low = 0;
-	s16b high = RANDNOR_NUM;
-	if (stand < 1) return (s16b)(mean);
+    s16b low = 0;
+    s16b high = RANDNOR_NUM;
+    if (stand < 1)
+        return (s16b)(mean);
 
-	/* Roll for probability */
-	tmp = (s16b)randint0(32768);
+    /* Roll for probability */
+    tmp = (s16b)randint0(32768);
 
-	/* Binary Search */
-	while (low < high)
-	{
-		int mid = (low + high) >> 1;
+    /* Binary Search */
+    while (low < high) {
+        int mid = (low + high) >> 1;
 
-		/* Move right if forced */
-		if (randnor_table[mid] < tmp)
-		{
-			low = mid + 1;
-		}
+        /* Move right if forced */
+        if (randnor_table[mid] < tmp) {
+            low = mid + 1;
+        }
 
-		/* Move left otherwise */
-		else
-		{
-			high = (s16b)mid;
-		}
-	}
+        /* Move left otherwise */
+        else {
+            high = (s16b)mid;
+        }
+    }
 
-	/* Convert the index into an offset */
-	offset = (long)stand * (long)low / RANDNOR_STD;
+    /* Convert the index into an offset */
+    offset = (long)stand * (long)low / RANDNOR_STD;
 
-	/* One half should be negative */
-	if (randint0(100) < 50) return (mean - offset);
+    /* One half should be negative */
+    if (randint0(100) < 50)
+        return (mean - offset);
 
-	/* One half should be positive */
-	return (mean + offset);
+    /* One half should be positive */
+    return (mean + offset);
 }
-
-
 
 /*
  * Generates damage for "2d6" style dice rolls
  */
 s16b damroll(DICE_NUMBER num, DICE_SID sides)
 {
-	int i, sum = 0;
-	for (i = 0; i < num; i++) sum += randint1(sides);
-	return (s16b)(sum);
+    int i, sum = 0;
+    for (i = 0; i < num; i++)
+        sum += randint1(sides);
+    return (s16b)(sum);
 }
-
 
 /*
  * Same as above, but always maximal
  */
-s16b maxroll(DICE_NUMBER num, DICE_SID sides)
-{
-	return (num * sides);
-}
-
+s16b maxroll(DICE_NUMBER num, DICE_SID sides) { return (num * sides); }
 
 /*
  * Given a numerator and a denominator, supply a properly rounded result,
@@ -354,28 +327,27 @@ s16b maxroll(DICE_NUMBER num, DICE_SID sides)
  */
 s32b div_round(s32b n, s32b d)
 {
-        s32b tmp;
+    s32b tmp;
 
-        /* Refuse to divide by zero */
-        if (!d) return (n);
+    /* Refuse to divide by zero */
+    if (!d)
+        return (n);
 
-        /* Division */
-        tmp = n / d;
+    /* Division */
+    tmp = n / d;
 
-        /* Rounding */
-        if ((ABS(n) % ABS(d)) > randint0(ABS(d)))
-        {
-                /* Increase the absolute value */
-                if (n * d > 0L) tmp += 1L;
-                else            tmp -= 1L;
-        }
+    /* Rounding */
+    if ((ABS(n) % ABS(d)) > randint0(ABS(d))) {
+        /* Increase the absolute value */
+        if (n * d > 0L)
+            tmp += 1L;
+        else
+            tmp -= 1L;
+    }
 
-        /* Return */
-        return (tmp);
+    /* Return */
+    return (tmp);
 }
-
-
-
 
 /*
  * Extract a "random" number from 0 to m-1, using the RNG.
@@ -384,20 +356,21 @@ s32b div_round(s32b n, s32b d)
  * "external" program parts like the main-*.c files.  It preserves
  * the current RNG state to prevent influences on game-play.
  *
- * Could also use rand() from <stdlib.h> directly. 
+ * Could also use rand() from <stdlib.h> directly.
  */
 s32b Rand_external(s32b m)
 {
-	static bool initialized = FALSE;
-	static u32b Rand_state_external[4];
+    static bool initialized = FALSE;
+    static u32b Rand_state_external[4];
 
-	if (!initialized)
-	{
-		/* Initialize with new seed */
-		u32b seed = (u32b)time(NULL);
-		Rand_seed(seed, Rand_state_external);
-		initialized = TRUE;
-	}
+    if (!initialized) {
+        /* Initialize with new seed */
+        u32b seed = (u32b)time(NULL);
+        Rand_seed(seed, Rand_state_external);
+        initialized = TRUE;
+    }
 
-	return Rand_div_impl(m, Rand_state_external);
+    return Rand_div_impl(m, Rand_state_external);
 }
+
+bool next_bool() { return randint0(2) == 0; }

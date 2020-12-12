@@ -5,7 +5,7 @@
  */
 
 #include "cmd-action/cmd-attack.h"
-#include "art-definition/art-sword-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "core/asking-player.h"
@@ -31,8 +31,8 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
-#include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/attack-defense-types.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"

@@ -11,9 +11,9 @@
  */
 
 #include "object/object-info.h"
-#include "artifact/artifact-info.h"
-#include "art-definition/art-weapon-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "art-definition/random-art-effects.h"
+#include "artifact/artifact-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/activation-info-table.h"

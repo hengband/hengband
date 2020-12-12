@@ -36,7 +36,7 @@ MONSTER_NUMBER summon_EAGLE(player_type *target_ptr, POSITION y, POSITION x, int
 }
 
 /*!
- * @brief インターネット・エクスプローダー召喚の処理。 /
+ * @brief エッヂ召喚の処理。 /
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
@@ -44,13 +44,12 @@ MONSTER_NUMBER summon_EAGLE(player_type *target_ptr, POSITION y, POSITION x, int
  * @param m_idx 呪文を唱えるモンスターID
  * @return 召喚したモンスターの数を返す。
  */
-MONSTER_NUMBER summon_IE(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+MONSTER_NUMBER summon_EDGE(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
-    for (int k = 0; k < num; k++) {
-        count += summon_named_creature(target_ptr, m_idx, y, x, MON_IE, PM_NONE);
-    }
+    for (int k = 0; k < num; k++)
+        count += summon_named_creature(target_ptr, m_idx, y, x, MON_EDGE, PM_NONE);
 
     return count;
 }
@@ -122,9 +121,8 @@ MONSTER_NUMBER summon_LOUSE(player_type *target_ptr, POSITION y, POSITION x, int
 {
     int count = 0;
     int num = 2 + randint1(3);
-    for (int k = 0; k < num; k++) {
+    for (int k = 0; k < num; k++)
         count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
-    }
 
     return count;
 }
@@ -208,5 +206,56 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 
     msg_format(_("「%d人そろって、リングレンジャー！」", "They say 'The %d meets! We are the Ring-Ranger!'."), count);
     msg_print(NULL);
+    return count;
+}
+
+MONSTER_NUMBER summon_APOCRYPHA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 4 + randint1(4);
+    summon_type followers = next_bool() ? SUMMON_APOCRYPHA_FOLLOWERS : SUMMON_APOCRYPHA_DRAGONS;
+    for (int k = 0; k < num; k++)
+        count += summon_specific(target_ptr, m_idx, y, x, 200, followers, PM_ALLOW_UNIQUE);
+
+    return count;
+}
+
+MONSTER_NUMBER summon_HIGHEST_DRAGON(player_type* target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 4 + randint1(4);
+    for (int k = 0; k < num; k++)
+        count += summon_specific(target_ptr, m_idx, y, x, 100, SUMMON_APOCRYPHA_DRAGONS, PM_ALLOW_UNIQUE);
+
+    return count;
+}
+
+MONSTER_NUMBER summon_PYRAMID(player_type* target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 2 + randint1(3);
+    for (int k = 0; k < num; k++)
+        count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_PYRAMID, PM_NONE);
+
+    return count;
+}
+
+MONSTER_NUMBER summon_EYE_PHORN(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 2 + randint1(1 + rlev / 20);
+    for (int k = 0; k < num; k++)
+        count += summon_named_creature(target_ptr, m_idx, y, x, MON_EDGE, PM_NONE);
+
+    return count;
+}
+
+MONSTER_NUMBER summon_VESPOID(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+{
+    int count = 0;
+    int num = 2 + randint1(3);
+    for (int k = 0; k < num; k++)
+        count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_VESPOID, PM_NONE);
+
     return count;
 }

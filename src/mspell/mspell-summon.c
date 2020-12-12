@@ -126,7 +126,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
         count += summon_EAGLE(target_ptr, y, x, rlev, m_idx);
         break;
     case MON_BULLGATES:
-        count += summon_IE(target_ptr, y, x, rlev, m_idx);
+        count += summon_EDGE(target_ptr, y, x, rlev, m_idx);
         break;
     case MON_SERPENT:
     case MON_ZOMBI_SERPENT:
@@ -143,6 +143,21 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
         break;
     case MON_DEMON_SLAYER_SENIOR:
         count += summon_DEMON_SLAYER(target_ptr, y, x, m_idx);
+        break;
+    case MON_ALDUIN:
+        count += summon_HIGHEST_DRAGON(target_ptr, y, x, m_idx);
+        break;
+    case MON_MIRAAK:
+        count += summon_APOCRYPHA(target_ptr, y, x, m_idx);
+        break;
+    case MON_IMHOTEP:
+        count += summon_PYRAMID(target_ptr, y, x, rlev, m_idx);
+        break;
+    case MON_JOBZ:
+        count += summon_EYE_PHORN(target_ptr, y, x, rlev, m_idx);
+        break;
+    case MON_QUEEN_VESPOID:
+        count += summon_VESPOID(target_ptr, y, x, rlev, m_idx);
         break;
     default:
         count += summon_Kin(target_ptr, y, x, rlev, m_idx);

@@ -241,8 +241,6 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_cold(creature_ptr);
-
-    /* Total immunity */
     if (has_immune_cold(creature_ptr) || (dam <= 0)) {
         learn_spell(creature_ptr, monspell);
         return 0;
@@ -586,16 +584,10 @@ static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, b
  */
 void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
 {
-    process_aura_damage(m_ptr, touched_ptr, (bool)has_immune_fire(touched_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2),
-        RF2_AURA_FIRE,
-        fire_dam,
-        _("突然とても熱くなった！", "You are suddenly very hot!"));
-    process_aura_damage(m_ptr, touched_ptr, (bool)has_immune_cold(touched_ptr), offsetof(monster_race, flags3), offsetof(monster_race, r_flags3),
-        RF3_AURA_COLD,
-        cold_dam,
-        _("突然とても寒くなった！", "You are suddenly very cold!"));
-    process_aura_damage(m_ptr, touched_ptr, (bool)has_immune_elec(touched_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2),
-        RF2_AURA_ELEC,
-		elec_dam,
-        _("電撃をくらった！", "You get zapped!"));
+    process_aura_damage(m_ptr, touched_ptr, (bool)has_immune_fire(touched_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
+        fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
+    process_aura_damage(m_ptr, touched_ptr, (bool)has_immune_cold(touched_ptr), offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
+        cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));
+    process_aura_damage(m_ptr, touched_ptr, (bool)has_immune_elec(touched_ptr), offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
+        elec_dam, _("電撃をくらった！", "You get zapped!"));
 }

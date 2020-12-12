@@ -11,6 +11,7 @@
 #include "core/player-redraw-types.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-indice-types.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
 #include "monster/monster-describer.h"
@@ -533,6 +534,13 @@ void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
     monspell_message_base(target_ptr, m_idx, t_idx, _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
         _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
         _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."), !seen, TARGET_TYPE);
+
+    MONRACE_IDX r_idx = m_ptr->r_idx;
+    if ((r_idx == MON_MARIO) || r_idx == MON_LUIGI) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(target_ptr, m_name, m_ptr, MD_NONE);
+        msg_format(_("%sはスターを取った！", "%^s got a star!"), m_name);
+    }
 
     if (!monster_invulner_remaining(m_ptr))
         (void)set_monster_invulner(target_ptr, m_idx, randint1(4) + 4, FALSE);

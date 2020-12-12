@@ -219,14 +219,19 @@ static bool place_monster_can_escort(player_type *player_ptr, MONRACE_IDX r_idx)
 
     if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx))
         return FALSE;
+
     if (z_ptr->d_char != r_ptr->d_char)
         return FALSE;
+
     if (z_ptr->level > r_ptr->level)
         return FALSE;
+
     if (z_ptr->flags1 & RF1_UNIQUE)
         return FALSE;
+
     if (place_monster_idx == r_idx)
         return FALSE;
+
     if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, z_ptr))
         return FALSE;
 
@@ -316,10 +321,9 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
  */
 bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-    MONRACE_IDX r_idx;
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
-    r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->monster_level, 0);
-    if (!r_idx)
+    MONRACE_IDX r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->monster_level, 0);
+    if (r_idx == 0)
         return FALSE;
 
     if ((one_in_(5) || (player_ptr->current_floor_ptr->base_level == 0)) && !(r_info[r_idx].flags1 & RF1_UNIQUE)
@@ -327,10 +331,7 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
         mode |= PM_JURAL;
     }
 
-    if (place_monster_aux(player_ptr, 0, y, x, r_idx, mode))
-        return TRUE;
-
-    return FALSE;
+    return place_monster_aux(player_ptr, 0, y, x, r_idx, mode);
 }
 
 /*!

@@ -89,8 +89,8 @@ F:l:FLOOR:8:611
 # Vampire Lord (level:39, Speed:120, XP:1800, #:6)
 F:L:FLOOR:8:623
 
-# Lesser Titan (level:40, Speed:120, XP:3500, #:2)
-F:t:FLOOR:8:634
+# Mid Titan (level:49, Speed:120, XP:13500, #:2)
+F:t:FLOOR:8:702
 
 # Enchantress (level:40, Speed:130, XP:2100, #:1)
 F:E:FLOOR:8:636
@@ -101,20 +101,20 @@ F:S:FLOOR:8:638
 # Death Drake (level:40, Speed:120, XP:3500, #:1)
 F:K:FLOOR:8:643
 
-# Ancient Red Dragon (level:40, Speed:120, XP:2750, #:2)
-F:N:FLOOR:8:644
+# Daedra Red Dragon (level:48, Speed:120, XP:16000, #:2)
+F:N:FLOOR:8:756
 
 # Fallen Angel (level:41, Speed:130, XP:15000, #:1)
 F:A:FLOOR:8:652
 
-# Iron Lich (level:42, Speed:120, XP:9000, #:1)
-F:I:FLOOR:8:666
+# Bronze Lich (level:47, Speed:120, XP:14000, #:1)
+F:I:FLOOR:8:1180
 
-# DracoLich (level:46, Speed:120, XP:18000, #:1)
+# Dracolich (level:46, Speed:120, XP:16000, #:1)
 F:z:FLOOR:8:701
 
-# Greater Titan (level:46, Speed:120, XP:13500, #:2)
-F:Z:FLOOR:8:702
+# Greater Titan (level:52, Speed:120, XP:18000, #:2)
+F:Z:FLOOR:8:1187
 
 # Random monster 0 levels out of depth and on no Teleportation grid
 F:5:FLOOR:12:*0

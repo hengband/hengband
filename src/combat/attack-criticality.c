@@ -128,11 +128,10 @@ static void ninja_critical(player_type *attacker_ptr, player_attack_type *pa_ptr
         return;
     }
 
-
     bool is_weaken = pa_ptr->m_ptr->hp < maxhp / 2;
     bool is_unique = ((r_ptr->flags1 & RF1_UNIQUE) != 0) || ((r_ptr->flags7 & RF7_UNIQUE2) != 0);
     bool is_critical = (is_weaken && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10))
-        || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !(is_unique));
+        || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !is_unique);
     if (!is_critical)
         return;
 

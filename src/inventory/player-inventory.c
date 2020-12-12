@@ -32,7 +32,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
-#include "art-definition/art-bow-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "flavor/flavor-util.h"
 #endif
 

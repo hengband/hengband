@@ -1,5 +1,5 @@
 ﻿#include "inventory/inventory-curse.h"
-#include "art-definition/art-accessory-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"

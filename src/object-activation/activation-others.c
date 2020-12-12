@@ -5,7 +5,7 @@
  */
 
 #include "object-activation/activation-others.h"
-#include "art-definition/art-weapon-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"

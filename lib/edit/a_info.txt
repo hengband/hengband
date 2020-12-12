@@ -1258,7 +1258,7 @@ I:30:2:4
 W:30:20:20:100000
 P:4:1d1:5:5:16
 F:SPEED | DEX | SUST_DEX | RES_NEXUS | FREE_ACT | LEVITATION
-D:$The boots have the agility of Shiva, the god of destruction.
+D:$The boots have the ability of Shiva, the god of destruction.
 D:破壊神シヴァの力を持った革の靴だ。
 
 
@@ -3601,14 +3601,19 @@ D:タイトや、ダイアモンドをわざわざ使ってあるくらいだも
 D:（富士見書房「アイスウインド・サーガ１魔石の復活」 R・A・サルヴァトーレ著、
 D:風見潤訳）
 
+# There Will Come Hard Rains
 N:209:『隠者の紫』
 E:'hermit's purple'
 I:21:2:2
 W:40:40:30:40000
 P:0:1d6:10:5:0
-F:INT | WIS | FORCE_WEAPON |
-F:SEE_INVIS | TELEPATHY
-U:PROT_EVIL
+F:INT | WIS | CHR | FORCE_WEAPON | SLAY_UNDEAD | RIDING
+F:SEE_INVIS | TELEPATHY | REGEN | HOLD_EXP | ACTIVATE
+U:DETECT_UNIQUE
+D:$It's a glam, semi-ghosted whip of thorns.
+D:$  You can convert the mental power of the owner into attack power
+D:$ and protect yourself with the power of ripples.
+D:$When you wear it, you can see what happened in a distant place.
 D:半幽体化した不思議な茨の鞭だ。所有者の精神力を攻撃力に変換し、
 D:波紋の力で身を守ることができる。
 D:身につけると遠い場所の出来事がわかる。
@@ -3914,10 +3919,10 @@ W:15:15:20:50000
 P:0:2d5:-2:13:0
 F:DEX | BLOWS | SPEED | HIDE_TYPE |
 F:BRAND_COLD | BRAND_POIS | VORPAL | RES_FEAR
-D:$This is the dagger with a very poisonous sharp edge, 
-D:$which can slash and kill anyone quickly.
-D:$Many years ago, Jian ke tied to assasinate the first 
-D:$emperor of unified China.
+D:$This is the dagger with a very poisonous sharp edge,
+D:$ which can slash and kill anyone quickly.
+D:$  Many years ago, Jian ke tied to assasinate the first
+D:$ emperor of unified China.
 D:猛毒の刃を持つ鋭い匕首だ。斬られればたちまち死に至るだろう。
 D:燕の刺客荊軻は、この匕首を用いて秦の始皇帝の暗殺を試みた。
 D:いまもその執念が宿る。
@@ -4000,8 +4005,8 @@ I:23:17:0
 W:10:0:130:2500
 P:0:2d5:5:0:0
 F:SLAY_DEMON | RIDING
-D:$They say that the sword which servants of the law hate 
-D:$and abhor.
+D:$They say that the sword which servants of the law hate
+D:$ and abhor.
 D:秩序の下僕が忌み嫌う剣があるらしい。
 
 N:238:『デーモンベーン』
@@ -4149,8 +4154,8 @@ P:0:3d8:20:12:0
 F:SHOW_MODS | VORPAL |
 F:SPEED | DEX | CHR | SLAY_DEMON | SLAY_ORC | SLAY_TROLL |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:$The rose throrn whip which a fox spirit loved whipping. 
-D:$'Beautiful roses have thorns.'
+D:$The rose throrn whip which a fox spirit loved whipping.
+D:$  'Beautiful roses have thorns.'
 D:「綺麗なバラには、棘があるのさ」とある妖狐が愛用していた茨の鞭だ。
 
 N:248:『虎殺七丁念仏』
@@ -4215,6 +4220,82 @@ F:INT | FORCE_WEAPON
 F:SHOW_MODS
 F:SLAY_EVIL | SLAY_UNDEAD
 F:FREE_ACT | LITE
+D:$A shining sword that keeps waiting for a hero in the back of the Mirage Tower.
+D:$  The blade was held by many red robes and continued to slaughter the evil ones.
+D:$ (Square, "Final Fantasy", 1987)
 D:蜃気楼の塔の奥で英雄を待ち続ける輝ける剣だ。
 D:その刃は数多くの赤衣の者達に握られ、悪しき者たちを屠り続けてきた。(ファイナルファンタジー1)
 
+N:253:トゲトゲバット『エスカリボルグ』
+E:'Excaliborg, the *thorny* bat'
+I:21:16:2
+W:35:40:190:85000
+P:0:7d7:18:18:10
+F:STR | DEX | CON | SUST_STR | SUST_DEX | SUST_CON
+F:VORPAL | VAMPIRIC | KILL_HUMAN | BLESSED | ACTIVATE
+F:RES_FIRE | RES_LITE | LEVITATION
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
+F:FULL_NAME
+U:ANIM_DEAD
+D:$This glowing black bat is filled with the unremitting love of the user.
+D:$  This is a magical onomatopoeia that can redo the life of the dead.
+D:この黒光りするバットには使用者のたゆまぬ愛が込められている。
+D:これは魔法の擬音で死せりし者の人生をやり直させることができる。
+
+N:254:巨人夸父の
+E:of Kuafu
+I:21:3:2
+W:30:25:440:300000
+P:0:3d9:5:10:0
+F:STR | CON | SPEED | HIDE_TYPE | ACTIVATE
+F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD
+U:TREE_CREATION
+D:$The staff of Kuafu the sun chased giant.
+D:$This wood staff still alive will someday became peach forest.
+D:太陽を追った巨人、夸父の杖だ。まだ生きているこの木の杖はいずれ桃林になるだろう。
+
+# Eat steel, hungry wolves!
+N:255:ドン・キホーテの
+E:of Don Quixote
+I:22:29:-3
+W:40:30:300:70000
+P:0:3d8:-12:12:0
+F:STR | CON | CHR | RES_ELEC | RES_DARK | RES_FEAR | RIDING
+F:FREE_ACT | SUST_STR | SUST_CON | SUST_CHR | SLAY_EVIL | KILL_GIANT
+D:$Don Quixote born in La Mancha is the brave knight
+D:$ trying to defeat the colossal giant "Windmill".
+D:$  The lance he carried has the courage to face any fear.
+D:ラ・マンチャに生まれたドン・キホーテは
+D:強大なる巨人『風車』を打ち倒そうとした勇敢な騎士だ。
+D:そんな彼の携えたランスは、
+D:どんな恐怖にも立ち向かうだけの勇気が込められている。
+
+N:256:『デモニカスーツ』
+E:'Demonica Suit'
+I:36:9:2
+W:30:10:80:100000
+P:6:0d0:0:0:24
+F:STR | CON | SEARCH | INFRA
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_POIS | XTRA_H_RES
+F:WARNING | SEE_INVIS | ESP_DEMON
+D:$A clever and evolving combat uniform worn by Schwarzberth investigators.
+D:$(Shin Megami Tensei: Strange Journey)
+D:シュバルツバース調査隊員が着用するクレバーで進化する戦闘服だ。
+D:（真・女神転生 STRANGE JOURNEY）
+
+N:257:『ジャイアント・キリング』
+E:'Giant-killing'
+I:19:2:4
+W:20:15:20:30000
+P:0:2d1:40:13:0
+F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
+F:SLAY_GIANT | BLESSED | ACTIVATE
+U:HERO
+D:$Then David put his hand in his bag and took out a stone;
+D:$ and he slung it and struck the Philistine in his forehead,
+D:$ so that the stone sank into his forehead,
+D:$ and he fell on his face to the earth.
+D:$(Books of Samuel 17:49)
+D:ダビデは手を袋に入れて、その中から一つの石を取り、石投げで投げて、
+D:ペリシテびとの額を撃ったので、石はその額に突き入り、うつむきに地に倒れた。
+D:（サムエル記上17:49 『聖書 [口語]』日本聖書協会、1955年）

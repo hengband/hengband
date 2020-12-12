@@ -2642,7 +2642,7 @@ N:163:ベビー・ブルー・ドラゴン
 E:Baby blue dragon
 G:d:B
 I:110:10d10:20:30:70
-W:9:2:0:35:700:459
+W:9:1:0:35:700:459
 B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d5
@@ -2650,8 +2650,7 @@ F:FORCE_MAXHP | FORCE_SLEEP | DROP_CORPSE
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | IM_ELEC | EAT_ELEC_RES |
-S:1_IN_11 | 
-S:BR_ELEC
+S:1_IN_11 | BR_ELEC
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a pale blue.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -2662,7 +2661,7 @@ N:164:ベビー・ホワイト・ドラゴン
 E:Baby white dragon
 G:d:W
 I:110:10d10:20:30:70
-W:9:2:0:35:700:460
+W:9:1:0:35:700:460
 B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d5
@@ -2670,8 +2669,7 @@ F:FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | DROP_CORPSE
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | DRAGON | IM_COLD | EAT_COLD_RES |
-S:1_IN_11 | 
-S:BR_COLD
+S:1_IN_11 | BR_COLD
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a pale white.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -2682,7 +2680,7 @@ N:165:ベビー・グリーン・ドラゴン
 E:Baby green dragon
 G:d:G
 I:110:10d10:20:30:70
-W:9:2:0:35:700:461
+W:9:1:0:35:700:461
 B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d5
@@ -2690,8 +2688,7 @@ F:FORCE_MAXHP | FORCE_SLEEP |
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY | DROP_CORPSE
 F:EVIL | DRAGON | IM_POIS | EAT_POIS_RES
-S:1_IN_11 | 
-S:BR_POIS
+S:1_IN_11 | BR_POIS
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a sickly green.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -2702,7 +2699,7 @@ N:166:ベビー・ブラック・ドラゴン
 E:Baby black dragon
 G:d:s
 I:110:10d10:20:30:70
-W:9:2:0:35:750:546
+W:9:1:0:35:750:546
 B:CLAW:HURT:1d4
 B:CLAW:HURT:1d4
 B:BITE:HURT:1d5
@@ -2710,8 +2707,7 @@ F:FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | DROP_CORPSE
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | EAT_ACID_RES | 
 F:EVIL | DRAGON | IM_ACID
-S:1_IN_11 | 
-S:BR_ACID
+S:1_IN_11 | BR_ACID
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a dull black.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -2721,17 +2717,16 @@ D:光に慣れておらず、鱗は鈍い黒色をしている。
 N:167:ベビー・レッド・ドラゴン
 E:Baby red dragon
 G:d:R
-I:110:11d10:20:30:70
-W:9:2:0:35:850:563
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d5
+I:110:23d5:20:30:70
+W:10:1:0:40:850:563
+B:CLAW:HURT:1d5
+B:CLAW:HURT:1d5
+B:BITE:HURT:1d6
 F:FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | DROP_CORPSE
 F:ONLY_GOLD | DROP_60 | DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | EAT_FIRE_RES |
 F:EVIL | DRAGON | IM_FIRE
-S:1_IN_11 | 
-S:BR_FIRE
+S:1_IN_11 | BR_FIRE
 D:$This hatchling dragon is still soft, its eyes unaccustomed to light and 
 D:$its scales a pale red.
 D:このドラゴンは生まれたばかりなので、まだそれほど凶暴ではない。その目は
@@ -5570,11 +5565,11 @@ N:334:ワイバーン
 E:Wyvern
 G:d:G
 I:120:100d5:20:65:20
-W:20:2:0:360:0:0
-B:BITE:HURT:2d6
-B:BITE:HURT:2d6
-B:BITE:HURT:2d6
-B:STING:POISON:1d6
+W:22:2:0:400:0:0
+B:BITE:HURT:2d5
+B:BITE:HURT:2d5
+B:BITE:HURT:2d5
+B:STING:POISON:1d5
 F:FORCE_SLEEP | 
 F:ONLY_GOLD | DROP_60 | DROP_90 | IM_POIS | CAN_FLY |
 F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | DRAGON |
@@ -6208,17 +6203,16 @@ D:それは鋭い刺を持った巨大なサソリだ。
 N:370:緑衣の修行僧
 E:Jade monk
 G:p:G
-I:120:54d12:30:46:10
-W:30:2:0:800:0:0
-B:KICK:SUPERHURT:5d2
-B:HIT:SUPERHURT:5d1
-B:KICK:SUPERHURT:5d5
-B:HIT:SUPERHURT:5d1
-F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2 |
-F:IM_FIRE | IM_COLD | IM_POIS | NO_FEAR | NO_CONF | NO_SLEEP | HUMAN |
-F:DROP_CORPSE | DROP_SKELETON
-S:1_IN_6 | 
-S:BO_ELEC
+I:115:44d12:30:46:10
+W:30:2:0:600:1800:1172
+B:KICK:SUPERHURT:4d2
+B:HIT:SUPERHURT:4d1
+B:KICK:SUPERHURT:4d5
+B:HIT:SUPERHURT:4d1
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2
+F:IM_FIRE | IM_COLD | IM_POIS | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_6 | BO_ELEC
 D:$A green-garbed monk, trained in martial arts.
 D:緑色の法衣を身にまとった、拳法に熟練した修行僧だ。
 
@@ -6621,7 +6615,7 @@ N:393:それ
 E:It
 G:.:W
 I:110:77d11:25:80:25
-W:24:3:0:400:0:0
+W:26:3:0:800:0:0
 B:GAZE:BLIND:8d8
 B:TOUCH:TERRIFY
 B:GAZE:EXP_40
@@ -7535,7 +7529,7 @@ N:441:『ガチャピン』
 E:Gachapin
 G:R:G
 I:120:110d9:10:90:20
-W:29:2:0:500:0:0
+W:29:2:0:1500:0:0
 B:SHOW:LOSE_INT
 B:SHOW:LOSE_WIS
 B:CHARGE:EAT_GOLD
@@ -7592,8 +7586,8 @@ D:感心して夢中になってしまうだろう。
 N:444:サイクロプス
 E:Cyclops
 G:P:u
-I:120:66d12:20:90:20
-W:28:2:0:350:2000:490
+I:120:60d12:20:90:20
+W:30:1:0:350:2000:490
 B:SHOOT:HURT:7d6
 B:HIT:HURT:9d8
 B:HIT:HURT:9d8
@@ -7907,18 +7901,16 @@ D:カオスに汚染された床のタイルだ。
 N:459:ヤング・ブルー・ドラゴン
 E:Young blue dragon
 G:d:b
-I:110:27d10:20:50:70
-W:29:1:0:300:4000:560
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+I:110:30d10:20:50:70
+W:25:1:0:325:4000:560
+B:CLAW:HURT:2d4
+B:CLAW:HURT:2d4
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | WILD_WOOD |
 F:DROP_60 | DROP_90 | DROP_1D2 | DROP_CORPSE | EAT_ELEC_RES |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | IM_ELEC | RIDING | SELF_LITE_1 |
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_ELEC
+S:1_IN_8 | SCARE | BR_ELEC
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$deep blue in hue.  Sparks crackle along its length.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -7928,18 +7920,16 @@ D:まだ柔らかいその鱗は深い青色をしていて、全身から火花
 N:460:ヤング・ホワイト・ドラゴン
 E:Young white dragon
 G:d:w
-I:110:27d10:20:50:70
-W:29:1:0:275:4000:549
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+I:110:30d10:20:50:70
+W:25:1:0:325:4000:549
+B:CLAW:HURT:2d4
+B:CLAW:HURT:2d4
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | WILD_WASTE |
 F:DROP_60 | DROP_90 | DROP_1D2 | DROP_CORPSE | EAT_COLD_RES |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | IM_COLD | RIDING
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_COLD
+S:1_IN_8 | SCARE | BR_COLD
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$frosty white in hue.  Icy blasts of cold air come from it as it breathes.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -7950,18 +7940,16 @@ D:冷気がやってくる。
 N:461:ヤング・グリーン・ドラゴン
 E:Young green dragon
 G:d:g
-I:110:27d10:20:60:70
-W:29:1:0:290:4000:561
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+I:110:30d10:20:50:70
+W:25:1:0:325:4000:561
+B:CLAW:HURT:2d4
+B:CLAW:HURT:2d4
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | WILD_SWAMP |
 F:DROP_60 | DROP_90 | DROP_1D2 | DROP_CORPSE | EAT_POIS_RES |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | IM_POIS | RIDING
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_POIS
+S:1_IN_8 | SCARE | BR_POIS
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$deep green in hue.  Foul gas seeps through its scales.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -7972,18 +7960,16 @@ D:出ている。
 N:462:ヤング・ブロンズ・ドラゴン
 E:Young bronze dragon
 G:d:U
-I:110:27d10:20:63:150
-W:29:3:0:310:4000:562
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+I:110:33d10:20:65:150
+W:29:3:0:350:4000:562
+B:CLAW:HURT:2d4
+B:CLAW:HURT:2d4
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | 
 F:DROP_60 | DROP_90 | DROP_2D2 | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:DRAGON | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_CONF
+S:1_IN_8 | SCARE | BR_CONF
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$rich bronze hue, and its shape masks its true form.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -8133,7 +8119,7 @@ N:471:シャドウ・ドレイク
 E:Shadow drake
 G:d:D
 I:110:30d10:25:50:30
-W:33:3:0:700:15000:643
+W:30:2:0:700:15000:643
 B:CLAW:HURT:2d4
 B:CLAW:HURT:2d4
 B:BITE:EXP_10:3d6
@@ -8141,12 +8127,11 @@ F:FORCE_SLEEP | FORCE_MAXHP | SELF_DARK_1
 F:ONLY_ITEM | DROP_2D2 |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR |
 F:EVIL | DRAGON | NO_CONF | NO_SLEEP 
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | DARKNESS | BR_NETH
-D:$It is a dragon-like form wrapped in shadow.  Glowing red eyes shine out in 
-D:$the dark.
-D:それは暗黒に覆われたドラゴンのような姿をしている。赤い目が暗闇の中で光を
-D:発している。
+S:1_IN_6 | SLOW | CONF | SCARE | DARKNESS | BR_NETH
+D:$It is a dragon-like form wrapped in shadow.
+D:$  Glowing red eyes shine out in the dark.
+D:それは暗黒に覆われたドラゴンのような姿をしている。
+D:赤い目が暗闇の中で光を発している。
 
 #J0#
 N:472:マンティコア
@@ -8512,8 +8497,8 @@ D:（ラヴクラフト「サルナスをみまった災厄」他）
 N:490:バイクロプス
 E:Biclops
 G:P:u
-I:120:60d12:20:90:20
-W:33:5:0:1200:0:0
+I:120:66d12:20:90:20
+W:36:1:0:1200:4500:1186
 B:SHOOT:HURT:9d6
 B:HIT:HURT:11d8
 B:HIT:HURT:11d8
@@ -8551,17 +8536,16 @@ D:餌食を探し回っている、巨大で醜い人間とトロルの混血だ
 N:492:白衣の修行僧
 E:Ivory monk
 G:p:w
-I:120:42d13:25:51:7
-W:33:1:0:900:2000:915
-B:KICK:SUPERHURT:8d1
-B:HIT:SUPERHURT:8d1
-B:KICK:SUPERHURT:8d4
-B:HIT:SUPERHURT:8d1
-F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_FIRE | HUMAN |
-F:IM_POIS | NO_FEAR | NO_CONF | NO_SLEEP | DROP_CORPSE | HAS_LITE_1 |
-F:DROP_SKELETON | HAS_LITE_2 |
-S:1_IN_7 | 
-S:HEAL
+I:115:41d14:25:51:7
+W:33:1:0:700:2000:1173
+B:KICK:SUPERHURT:7d1
+B:HIT:SUPERHURT:7d1
+B:KICK:SUPERHURT:7d4
+B:HIT:SUPERHURT:7d1
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_FIRE | IM_POIS
+F:NO_FEAR | NO_CONF | NO_SLEEP | HAS_LITE_1 | HAS_LITE_2
+S:1_IN_7 | HEAL
 D:$A monk in white robes.  He is skilled in martial arts.
 D:純白の法衣を身にまとった、拳法に熟練した修行僧だ。
 
@@ -8726,17 +8710,16 @@ D:それは屈強なトロルの骸骨に生命を吹き込んだものだ。
 N:501:カオス・ドレイク
 E:Chaos drake
 G:d:v
-I:110:50d10:25:100:30
-W:33:3:0:700:150000:783
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+I:110:50d10:25:80:30
+W:33:3:0:850:150000:783
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d6
 F:ATTR_MULTI | ATTR_ANY | CAN_FLY | FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_2D2 | RES_DISE | OPEN_DOOR | BASH_DOOR | DROP_CORPSE |
 F:EVIL | DRAGON | IM_FIRE | RES_CHAO | NO_CONF | NO_SLEEP | RIDING |
 F:EAT_CONF | EAT_INSANITY
-S:1_IN_6 |
-S:SLOW | CONF | SCARE | BR_DISE | BR_CHAO
+S:1_IN_7 | SLOW | CONF | SCARE | BR_DISE | BR_CHAO
 D:$A dragon twisted by the forces of chaos.  It seems first ugly, then fair, 
 D:$as its form shimmers and changes in front of your eyes.
 D:カオスの力で歪んだドラゴンだ。それは一見すると醜いようだが、眼前で刻々と
@@ -8746,16 +8729,15 @@ D:輝きながら変化する姿は独特の美しさを持っている。
 N:502:ロー・ドレイク
 E:Law drake
 G:d:W
-I:110:55d10:25:100:30
-W:33:3:0:700:150000:784
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+I:110:55d10:25:80:30
+W:33:3:0:850:150000:784
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | GOOD | ONLY_ITEM | DROP_2D2 | CAN_FLY |
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DRAGON | IM_COLD | NO_CONF | NO_SLEEP |
 F:RIDING | RES_SOUN | RES_SHAR
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | BR_SOUN | BR_SHAR
+S:1_IN_7 | SLOW | CONF | SCARE | BR_SOUN | BR_SHAR
 D:$This dragon is clever and cunning.  It laughs at your puny efforts to 
 D:$disturb it.
 D:このドラゴンは頭が良くてずる賢い。攻撃をされても、ものともせずに
@@ -8765,10 +8747,10 @@ D:せせら笑っている。
 N:503:バランス・ドレイク
 E:Balance drake
 G:d:s
-I:110:60d10:25:100:30
+I:110:60d10:25:80:30
 W:33:3:0:700:180000:785
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d6
 F:ATTR_MULTI | ATTR_ANY |
 F:FORCE_SLEEP | FORCE_MAXHP | 
@@ -8776,9 +8758,7 @@ F:ONLY_ITEM | DROP_2D2 | RES_SOUN | RES_SHAR | RES_DISE | RES_CHAO |
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE
 F:DRAGON| CAN_FLY | EAT_CONF | EAT_INSANITY |
 F:IM_FIRE | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | 
-S:BR_SOUN | BR_SHAR | BR_DISE | BR_CHAO
+S:1_IN_7 | SLOW | CONF | SCARE | BR_SOUN | BR_SHAR | BR_DISE | BR_CHAO
 D:$A mighty dragon, the balance drake seeks to maintain the Cosmic Balance, 
 D:$and despises your feeble efforts to destroy evil.
 D:強力なドラゴンであるバランス・ドレイクは、宇宙のバランスを維持することを
@@ -8789,17 +8769,16 @@ D:ている。
 N:504:天上界ドレイク
 E:Ethereal drake
 G:d:o
-I:110:45d10:25:100:15
-W:33:3:0:700:20000:676
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+I:110:45d10:25:80:15
+W:33:2:0:700:20000:676
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | CAN_FLY |
 F:INVISIBLE | PASS_WALL |
 F:DRAGON | RES_LITE | RES_DARK | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | 
+S:1_IN_7 | SLOW | CONF | SCARE | 
 S:BR_LITE | BR_DARK
 D:$A dragon of elemental power, with control over light and dark, the 
 D:$ethereal drake's eyes glare with white hatred from the shadows.
@@ -9257,17 +9236,16 @@ N:527:ドゥーム・ドレイク
 E:Doom drake
 G:d:v
 I:110:40d11:25:100:30
-W:34:3:0:450:3000:589
-B:CLAW:HURT:1d5
-B:CLAW:HURT:1d5
+W:34:3:0:750:3000:589
+B:CLAW:HURT:2d5
+B:CLAW:HURT:2d5
 B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:ONLY_ITEM | DROP_1D2 | FRIENDS |
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY |
 F:EVIL | DRAGON | SELF_LITE_1 |
 F:IM_FIRE | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BR_FIRE
+S:1_IN_6 | BR_FIRE
 D:$Doom drakes are trained firedrakes, always moving in pairs, looking 
 D:$for a battle.
 D:ドゥーム・ドレイクは訓練されたファイア・ドレイクで、常に対になって行動し
@@ -9650,18 +9628,16 @@ D:それはそびえ立つような汚物の塊で、見るも汚らわしいウ
 N:546:ヤング・ブラック・ドラゴン
 E:Young black dragon
 G:d:D
-I:110:25d10:20:60:50
-W:35:1:0:620:4000:592
-B:CLAW:HURT:1d5
-B:CLAW:HURT:1d5
-B:BITE:HURT:1d6
+I:110:30d10:20:50:50
+W:25:1:0:325:4000:592
+B:CLAW:HURT:2d5
+B:CLAW:HURT:2d5
+B:BITE:HURT:2d6
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_SWAMP |
 F:DROP_60 | DROP_90 | DROP_1D2 | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY | 
 F:EVIL | DRAGON | IM_ACID | RIDING
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_ACID
+S:1_IN_8 | SCARE | BR_ACID
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$darkest black hue.  Acid drips from its body.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -9699,17 +9675,15 @@ D:全身が毛で覆われた巨大なアリだ。その強力な顎は熱に輝
 N:549:ホワイト・ドラゴン
 E:Mature white dragon
 G:d:w
-I:110:40d10:20:65:70
-W:35:1:0:1000:10000:617
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
-B:BITE:HURT:2d8
+I:110:40d10:20:70:70
+W:33:1:0:1000:10000:617
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
+B:BITE:HURT:3d8
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_2D2 | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | CAN_FLY | WILD_WASTE | WILD_MOUNTAIN | 
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_10 |
-S:SCARE |
-S:BR_COLD
+S:1_IN_7 | SCARE | BR_COLD
 D:$A large dragon, scales gleaming bright white.
 D:大きなドラゴンで、微かにきらめく白色の鱗を持っている。
 
@@ -9847,10 +9821,10 @@ D:壊れたプレートメイルを身につけている。
 N:556:ヤング万色ドラゴン
 E:Young multi-hued dragon
 G:d:v
-I:110:32d10:20:60:50
-W:36:1:0:1320:7000:593
-B:CLAW:HURT:1d9
-B:CLAW:HURT:1d9
+I:110:42d10:20:60:50
+W:30:1:0:1320:7000:593
+B:CLAW:HURT:2d9
+B:CLAW:HURT:2d9
 B:BITE:HURT:2d10
 F:ATTR_MULTI | 
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
@@ -9858,9 +9832,7 @@ F:DROP_1D2 | DROP_4D2 | CAN_FLY |
 F:OPEN_DOOR | BASH_DOOR | 
 F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | 
 F:IM_POIS | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_1 |
-S:1_IN_5 | 
-S:SCARE | 
-S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
+S:1_IN_7 | SCARE | BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$It has a form that legends are made of.  Beautiful scales of shimmering 
 D:$and magical colours cover it.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -9931,18 +9903,16 @@ D:まだ柔らかいその鱗は曇った金色をしていて、全身で光を
 N:560:ブルー・ドラゴン
 E:Mature blue dragon
 G:d:b
-I:110:40d10:20:75:70
-W:36:1:0:1200:10000:601
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
-B:BITE:HURT:2d10
+I:110:40d10:20:70:70
+W:33:1:0:1200:10000:601
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
+B:BITE:HURT:3d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_60 | DROP_90 | DROP_2D2 | DROP_CORPSE | RIDING
 F:BASH_DOOR | WILD_MOUNTAIN | WILD_WOOD |
 F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | SELF_LITE_1
-S:1_IN_9 | 
-S:SCARE | 
-S:BR_ELEC
+S:1_IN_7 | SCARE | BR_ELEC
 D:$A large dragon, scales tinted deep blue.
 D:大きなドラゴンで、深く淡い青色の鱗を持っている。
 
@@ -9951,17 +9921,15 @@ N:561:グリーン・ドラゴン
 E:Mature green dragon
 G:d:g
 I:110:40d10:20:70:70
-W:36:1:0:1100:10000:618
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d4
-B:BITE:HURT:1d6
+W:33:1:0:1200:10000:618
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
+B:BITE:HURT:3d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_60 | DROP_90 | DROP_2D2 | DROP_CORPSE
 F:BASH_DOOR | WILD_MOUNTAIN | WILD_WOOD |
 F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:SCARE | 
-S:BR_POIS
+S:1_IN_7 | SCARE | BR_POIS
 D:$A large dragon, scales tinted deep green.
 D:大きなドラゴンで、深く淡い緑色の鱗を持っている。
 
@@ -9988,18 +9956,16 @@ D:大きなドラゴンで、豊かな青銅色の鱗を持っている。
 N:563:ヤング・レッド・ドラゴン
 E:Young red dragon
 G:d:r
-I:110:29d10:20:63:50
-W:36:1:0:640:5000:589
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
+I:110:23d15:20:60:50
+W:26:1:0:400:5000:589
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
 B:BITE:HURT:2d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_60 | DROP_90 | DROP_1D2 | WILD_MOUNTAIN | WILD_VOLCANO |
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | RIDING
 F:EVIL | DRAGON | IM_FIRE | SELF_LITE_1 |
-S:1_IN_11 | 
-S:SCARE | 
-S:BR_FIRE
+S:1_IN_8 | SCARE | BR_FIRE
 D:$It has a form that legends are made of.  Its still-tender scales are a 
 D:$deepest red hue.  Heat radiates from its form.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
@@ -10534,18 +10500,16 @@ D:強烈な火炎の渦巻きで、冒険者の足下の床を焦がしている
 N:589:レッド・ドラゴン
 E:Mature red dragon
 G:d:r
-I:110:48d10:20:80:30
-W:37:1:0:1400:10000:644
-B:CLAW:HURT:1d4
-B:CLAW:HURT:1d10
-B:BITE:HURT:2d12
+I:110:46d10:20:75:30
+W:34:1:0:1400:10000:644
+B:CLAW:HURT:2d9
+B:CLAW:HURT:2d9
+B:BITE:HURT:3d9
 F:FORCE_SLEEP | FORCE_MAXHP | WILD_MOUNTAIN | WILD_VOLCANO |
 F:DROP_1D2 | DROP_4D2 | CAN_FLY | DROP_CORPSE | RIDING
 F:BASH_DOOR | SELF_LITE_1 |
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP
-S:1_IN_9 | 
-S:CONF | SCARE | 
-S:BR_FIRE
+S:1_IN_7 | CONF | SCARE | BR_FIRE
 D:$A large dragon, scales tinted deep red.
 D:大きなドラゴンで、深く淡い赤色の鱗を持っている。
 
@@ -10593,18 +10557,16 @@ D:目を眩ませる。
 N:592:ブラック・ドラゴン
 E:Mature black dragon
 G:d:D
-I:110:46d10:20:55:30
-W:37:1:0:1350:10000:624
-B:CLAW:HURT:1d8
-B:CLAW:HURT:1d8
-B:BITE:HURT:2d10
+I:110:40d10:20:70:30
+W:33:1:0:1200:10000:624
+B:CLAW:HURT:2d8
+B:CLAW:HURT:2d8
+B:BITE:HURT:3d8
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | DROP_CORPSE
 F:DROP_60 | DROP_90 | DROP_2D2 | WILD_SWAMP | WILD_MOUNTAIN |
 F:BASH_DOOR | 
 F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:SCARE | 
-S:BR_ACID
+S:1_IN_7 | SCARE | BR_ACID
 D:$A large dragon, with scales of deepest black.
 D:大きなドラゴンで、漆黒の鱗を持っている。
 
@@ -10613,18 +10575,17 @@ N:593:万色ドラゴン
 E:Mature multi-hued dragon
 G:d:v
 I:110:64d10:20:65:50
-W:38:2:0:1700:20000:675
-B:CLAW:HURT:1d10
-B:CLAW:HURT:1d10
-B:BITE:HURT:2d12
+W:35:2:0:1700:20000:675
+B:CLAW:HURT:2d10
+B:CLAW:HURT:2d10
+B:BITE:HURT:3d10
 F:ATTR_MULTI | 
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_3D2 | DROP_4D2 | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | SELF_LITE_1 |
 F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | 
 F:IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_5 | 
-S:BLIND | CONF | SCARE | 
+S:1_IN_5 | BLIND | CONF | SCARE
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$A large dragon, scales shimmering many colours.
 D:大きなドラゴンで、鱗が様々な色に輝いている。
@@ -10802,19 +10763,17 @@ D:ように辺りのモンスターを眠りから目覚めさせる。
 #J0#
 N:601:古代ブルー・ドラゴン
 E:Ancient blue dragon
-G:D:b
-I:120:70d10:20:80:80
-W:38:1:0:1500:100000:728
-B:CLAW:HURT:4d8
-B:CLAW:HURT:4d8
-B:BITE:ELEC:5d8
+G:D:B
+I:120:60d12:20:85:60
+W:39:1:0:2500:100000:728
+B:CLAW:HURT:4d9
+B:CLAW:HURT:4d9
+B:BITE:ELEC:5d12
 F:FORCE_SLEEP | FORCE_MAXHP | SELF_LITE_1 |
-F:DROP_1D2 | DROP_4D2 | DROP_CORPSE | RIDING
+F:DROP_3D2 | DROP_4D2 | DROP_CORPSE | RIDING
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | CAN_FLY |
 F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP
-S:1_IN_9 | 
-S:BLIND | CONF | SCARE | 
-S:BR_ELEC
+S:1_IN_6 | BLIND | CONF | SCARE | BR_ELEC
 D:$A huge draconic form.  Lightning crackles along its length.
 D:巨大なドラゴンで、全身が稲妻で覆われている。
 
@@ -10841,40 +10800,37 @@ D:色の流れに身を包まれた巨大なドラゴンだ。
 N:603:ビホルダー
 E:Beholder
 G:e:g
-I:120:16d100:30:80:10
+I:115:16d99:30:70:10
 W:38:4:0:4000:8000:664
 B:GAZE:EXP_20:2d4
 B:GAZE:PARALYZE:2d4
 B:GAZE:LOSE_INT:2d6
-B:GAZE:DR_MANA:2d12
-F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | CAN_FLY |
-F:BASH_DOOR | DROP_CORPSE |
+B:GAZE:DR_MANA:2d10
+F:FORCE_SLEEP | RES_TELE | CAN_FLY | BASH_DOOR | DROP_CORPSE
 F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
-S:1_IN_2 | 
-S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
+S:1_IN_4
+S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET
 S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
 D:$A disembodied eye, surrounded by twelve smaller eyes on stalks.
 D:触手の先に付いた１２個の小さな目玉に囲まれている、体を持たない目玉だ。
 
-#J0#
-N:604:エンペラー・ワイト
-E:Emperor wight
-G:W:y
-I:120:38d10:20:40:10
-W:38:2:0:1600:0:0
+N:604:ノーブル・ワイト
+E:Noble wight
+G:W:o
+I:115:38d10:20:40:10
+W:38:2:0:1600:4000:1183
 B:HIT:HURT:1d12
 B:HIT:HURT:1d12
-B:TOUCH:EXP_80
-B:TOUCH:EXP_80
-F:FORCE_SLEEP | FORCE_MAXHP | 
-F:ONLY_ITEM | DROP_90 | DROP_4D2 | CAN_FLY |
+B:TOUCH:EXP_40
+B:TOUCH:EXP_40
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_90 | DROP_4D2 | CAN_FLY |
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_NETH |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
 S:HOLD | SCARE | CAUSE_3 | BO_NETH
-D:$Your life force is torn from your body as this powerful unearthly being 
-D:$approaches.
-D:この強力なあの世の者が近づいてくると、自分の魂が肉体から引き裂かれるようだ。
+D:$If you are trapped in the nightmare created by this wight,
+D:$ you will never wake up forever.
+D:この亡霊が生み出す悪夢に囚われたら最期、あなたは永遠に目覚めることはないだろう。
 
 #JZ#
 N:605:熾天使
@@ -10979,19 +10935,17 @@ D:(Ｈ・Ｐ・ラヴクラフト、大瀧啓裕訳「未知なるカダスを�
 D:『ラヴクラフト全集６』、創元推理文庫、p.217)
 
 #JZ#
-#JZ#本当は Lord:公爵  Baron:男爵 ですが、語感からこっちに。
-N:609:地獄の公爵
+N:609:地獄の男爵
 E:Baron of hell
 G:U:U
-I:110:150d12:10:130:40
-W:38:3:0:3000:0:0
-B:CLAW:HURT:11d2
-B:CLAW:HURT:11d2
-B:CLAW:HURT:22d1
+I:110:100d12:10:130:40
+W:38:3:0:3000:20000:1244
+B:CLAW:HURT:10d2
+B:CLAW:HURT:10d2
+B:CLAW:HURT:20d1
 F:IM_POIS | OPEN_DOOR | BASH_DOOR | MALE | RES_PLAS | NONLIVING |
 F:IM_FIRE | NO_CONF | NO_SLEEP | EVIL | DEMON | FORCE_MAXHP | RES_TELE
-S:1_IN_2 |
-S:BO_PLAS
+S:1_IN_3 | BO_PLAS
 D:$A minor demon lord with a goat's head, tough to kill.
 D:山羊の頭を持つ低位の魔王で、簡単には倒せない。
 
@@ -11022,19 +10976,19 @@ D:６つの頭と12本の脚を持つ。
 N:611:リッチの修行僧
 E:Monastic lich
 G:L:u
-I:120:12d100:30:80:30
-W:39:2:0:5000:0:0
-B:KICK:HURT:24d1
-B:HIT:HURT:24d1
+I:115:12d80:30:80:30
+W:39:2:0:2500:5000:1176
+B:KICK:HURT:20d1
+B:HIT:HURT:20d1
 B:CLAW:EXP_80:4d2
 B:CLAW:LOSE_DEX:4d2
-F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE
+F:UNDEAD | FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | 
 F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
-S:1_IN_3 | 
-S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
-S:DRAIN_MANA | BRAIN_SMASH | ANIM_DEAD 
+S:1_IN_4 | 
+S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3
+S:DRAIN_MANA | MIND_BLAST | ANIM_DEAD
 D:$A skeletal form wrapped in priestly robes.  Before its un-death, it 
 D:$was a monk in an evil order...
 D:僧侶の法衣に身を包んだ骸骨のような姿だ。アンデッドになる前は
@@ -11154,24 +11108,24 @@ D:（ロジャー・ゼラズニイ、岡部宏之訳「アンバーの九王子
 
 #J0#
 N:616:多首の『カブラックス』
-E:Kavlax the Many-Headed
+E:Kavlax, the Many-Headed
 G:d:v
 I:120:13d100:20:85:30
-W:39:3:0:3000:0:0
+W:40:3:0:3000:0:0
 B:BITE:HURT:2d12
-B:BITE:HURT:2d12
-B:BITE:HURT:2d12
-B:BITE:HURT:2d12
+B:BITE:HURT:3d12
+B:BUTT:HURT:2d12
+B:BUTT:HURT:3d12
 F:UNIQUE | MALE | ATTR_MULTI | CAN_SPEAK | ATTR_ANY |
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE | SELF_LITE_2 |
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | RES_NEXU | RES_SOUN |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | CAN_FLY |
 F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | RES_SHAR | RES_GRAV |
 F:NO_CONF | NO_SLEEP | RIDING
-S:1_IN_4 | 
+S:1_IN_5 | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_SOUN | BR_CONF | 
 S:BR_SHAR | BR_GRAV | BR_NEXU
-V:150
+V:140
 D:$A large dragon with a selection of heads, all shouting and arguing as they 
 D:$look for prey, but each with its own deadly breath weapon.
 D:多くの首を使い分ける巨大なドラゴンだ。獲物を探しているときは首同士が
@@ -11182,7 +11136,7 @@ D:ブレスを吐いてくる。
 N:617:古代ホワイト・ドラゴン
 E:Ancient white dragon
 G:D:w
-I:120:70d10:20:90:80
+I:120:60d12:20:85:60
 W:39:1:0:2500:100000:741
 B:CLAW:HURT:4d9
 B:CLAW:HURT:4d9
@@ -11191,28 +11145,24 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:DROP_3D2 | DROP_4D2 | DROP_CORPSE
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | CAN_FLY |
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:BLIND | CONF | SCARE | 
-S:BR_COLD
+S:1_IN_6 | BLIND | CONF | SCARE | BR_COLD
 D:$A huge draconic form.  Frost covers it from head to tail.
 D:巨大なドラゴンで、頭の先から爪の先まで冷気に覆われている。
 
 #J0#
 N:618:古代グリーン・ドラゴン
 E:Ancient green dragon
-G:D:g
-I:120:72d10:20:85:80
+G:D:G
+I:120:72d10:20:85:60
 W:39:1:0:2400:100000:890
-B:CLAW:HURT:4d8
-B:CLAW:HURT:4d8
-B:BITE:HURT:5d10
+B:CLAW:HURT:4d9
+B:CLAW:HURT:4d9
+B:BITE:POISON:5d12
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:DROP_3D2 | DROP_4D2 | CAN_FLY |
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:BLIND | CONF | SCARE | 
-S:BR_POIS
+S:1_IN_6 | BLIND | CONF | SCARE | BR_POIS
 D:$A huge draconic form enveloped in clouds of poisonous vapour.
 D:毒の霧に身を包んだ巨大なドラゴンだ。
 
@@ -11337,19 +11287,17 @@ D:この死人のような存在が近づいてくると、汚れた風が冒険
 #J0#
 N:624:古代ブラック・ドラゴン
 E:Ancient black dragon
-G:D:D
-I:120:72d10:20:90:70
+G:D:s
+I:120:60d12:20:85:60
 W:39:1:0:2500:100000:1066
 B:CLAW:HURT:4d9
 B:CLAW:HURT:4d9
-B:BITE:ACID:5d10
+B:BITE:ACID:5d12
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
 F:DROP_3D2 | DROP_4D2 | DROP_CORPSE
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | 
-S:BLIND | CONF | SCARE | 
-S:BR_ACID
+S:1_IN_6 | BLIND | CONF | SCARE | BR_ACID
 D:$A huge draconic form.  Pools of acid melt the floor around it.
 D:巨大なドラゴンで、滴る酸が池のようになって周りの床を溶かしている。
 
@@ -11403,12 +11351,12 @@ N:628:呪われし『マレキス』
 E:Malekith the Accursed
 G:h:v
 I:125:25d100:20:70:10
-W:40:2:0:7500:0:0
+W:47:2:0:7500:0:0
 B:HIT:HURT:12d9
 B:HIT:HURT:12d9
 F:MALE | REGENERATE | UNIQUE | CAN_SPEAK |
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
-F:ONLY_ITEM | DROP_90 | DROP_4D2 | DROP_GOOD |
+F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | DROP_GREAT
 F:SMART | OPEN_DOOR | BASH_DOOR | 
 F:EVIL | HURT_LITE | RES_DARK | NO_CONF | NO_SLEEP | NO_STUN
 S:1_IN_2 | 
@@ -11514,8 +11462,8 @@ D:それは死と退廃の悪臭を振りまく、脈動する肉塊だ。
 N:634:レッサー・タイタン
 E:Lesser titan
 G:P:y
-I:120:10d100:30:80:15
-W:40:3:0:3500:25000:702
+I:120:30d50:30:80:15
+W:46:1:0:5500:25000:702
 B:HIT:CONFUSE:6d6
 B:HIT:CONFUSE:6d6
 B:HIT:CONFUSE:6d6
@@ -11524,9 +11472,7 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:DROP_2D2 | DROP_4D2 | DROP_SKELETON | DROP_CORPSE
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL | GIANT | MALE
-S:1_IN_5 | 
-S:HEAL | TELE_TO | SCARE | 
-S:S_MONSTERS
+S:1_IN_5 | HEAL | TELE_TO | SCARE | S_MONSTERS
 D:$It is a humanoid figure thirty feet tall that gives off an aura of power 
 D:$and hate.
 D:それは力と憎悪のオーラを発散する、背丈が 10 メートル近くある人間型の
@@ -11705,30 +11651,28 @@ D:沈めるほどだが、ブランドは面食いではない。
 N:643:デス・ドレイク
 E:Death drake
 G:D:u
-I:120:10d100:25:100:30
-W:40:2:0:3500:250000:874
+I:120:12d100:25:90:40
+W:41:2:0:3500:30000:874
 B:CLAW:HURT:4d10
 B:CLAW:HURT:4d10
-B:BITE:EXP_80:3d6
-B:BITE:EXP_80:3d6
+B:BITE:EXP_80:4d6
+B:BITE:EXP_80:4d6
 F:FORCE_SLEEP | FORCE_MAXHP | SELF_DARK_1 |
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | RES_TELE
 F:INVISIBLE | TAKE_ITEM | CAN_FLY |
 F:PASS_WALL | POWERFUL | MOVE_BODY | RES_NETH |
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | 
-S:BR_NETH
-D:$It is a dragon-like form wrapped in darkness.  You cannot make out its 
-D:$true form but you sense its evil.
-D:それは暗黒に包まれたドラゴンのようなモンスターだ。その真の姿を把握することは
-D:できないが、その邪悪な気は感じとることができる。
+S:1_IN_6 | SLOW | CONF | SCARE | BR_NETH
+D:$It is a dragon-like form wrapped in darkness. 
+D:$ You cannot make out its true form but you sense its evil.
+D:それは暗黒に包まれたドラゴンのようなモンスターだ。
+D:その真の姿を把握することはできないが、その邪悪な気は感じとることができる。
 
 #J0#
 N:644:古代レッド・ドラゴン
 E:Ancient red dragon
 G:D:r
-I:120:10d100:20:100:70
+I:120:69d12:20:90:60
 W:40:1:0:2750:100000:756
 B:CLAW:HURT:4d10
 B:CLAW:HURT:4d10
@@ -11737,9 +11681,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:DROP_3D2 | DROP_4D2 | CAN_FLY | SELF_LITE_2 |
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
-S:BR_FIRE
+S:1_IN_6 | BLIND | CONF | SCARE | BR_FIRE
 D:$A huge draconic form.  Wisps of smoke steam from its nostrils and the 
 D:$extreme heat surrounding it makes you gasp for breath.
 D:巨大なドラゴンで、その鼻孔から立ち昇る幾筋もの煙と、辺りに充満する
@@ -11749,27 +11691,24 @@ D:高熱で息が苦しくなる。
 N:645:古代ゴールド・ドラゴン
 E:Ancient gold dragon
 G:D:y
-I:120:15d100:20:100:200
-W:40:2:0:4000:0:0
-B:CLAW:HURT:4d10
-B:CLAW:HURT:4d10
-B:BITE:HURT:5d14
+I:120:12d100:20:100:200
+W:41:2:0:3500:30000:1202
+B:CLAW:HURT:4d9
+B:CLAW:HURT:4d9
+B:BITE:HURT:5d12
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
 F:DROP_3D2 | DROP_4D2 | CAN_FLY |
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:DRAGON | RES_SOUN | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
-S:BR_SOUN
+S:1_IN_6 | BLIND | CONF | SCARE | BR_SOUN
 D:$A huge draconic form wreathed in a nimbus of light.
 D:後光に身を包まれた巨大なドラゴンだ。
 
-#J0#
-N:646:グレート・クリスタル・ドレイク
-E:Great crystal drake
-G:D:B
-I:120:15d100:25:100:30
-W:40:2:0:3500:0:0
+N:646:古代クリスタル・ドラゴン
+E:Ancient Crystal Dragon
+G:D:W
+I:120:12d100:25:90:40
+W:41:2:0:3500:30000:1201
 B:CLAW:HURT:4d9
 B:CLAW:HURT:4d9
 B:BITE:HURT:5d12
@@ -11777,15 +11716,13 @@ F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | DROP_CORPSE
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | CAN_FLY | ATTR_CLEAR |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_COLD | NO_CONF | RES_SHAR | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:SLOW | CONF | SCARE | 
-S:BR_SHAR
-D:$A huge crystalline dragon.  Its claws could cut you to shreds and its 
-D:$teeth are razor sharp.  Strange colours ripple through it as it moves in 
-D:$the light.
-D:巨大な水晶のようなドラゴンだ。冒険者の体をバラバラに切り刻むことができる
-D:爪と、剃刀のように鋭い歯を持っている。それが動くと光が反射して体中が奇妙
-D:な色にきらめく。
+S:1_IN_6 | SLOW | CONF | SCARE | BR_SHAR
+D:$A huge crystalline dragon.
+D:$  Every time it moves one step, an unpleasant sound of glass rubbing
+D:$ and a confusing light fill the entire floor.
+D:巨大な水晶のようなドラゴンだ。
+D:それは一歩動く度に硝子の擦れ合うような不快な音と、
+D:幻惑的な光を辺り一面に満ちさせる。
 
 N:647:運命の魔女
 E:Wyrd sister
@@ -12233,34 +12170,24 @@ D:日中ではせいぜい２、３時間しか耐えられない。
 D:ナイアルラトホテップによく仕え、猟犬として活躍する事が多い。
 D:（ダーレス「暗黒の儀式」）
 
-#J0#
-N:664:アンデッド・ビホルダー
-E:Undead beholder
-G:e:s
-I:120:27d100:30:100:10
-W:42:4:0:6000:40000:781
-B:GAZE:EXP_40
-B:GAZE:PARALYZE
+N:664:ビッグ・ビホルダー
+E:Big beholder
+G:e:G
+I:120:16d100:30:75:10
+W:45:4:0:4000:8000:781
+B:GAZE:EXP_40:2d4
+B:GAZE:PARALYZE:2d4
 B:GAZE:LOSE_INT:2d6
-B:GAZE:DR_MANA:4d6
-F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | HAS_DARK_1 |
-F:COLD_BLOOD | BASH_DOOR | 
-F:EVIL | UNDEAD | CAN_FLY |
-F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH |
-F:NO_CONF | NO_SLEEP
-S:1_IN_2 | 
-S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET | 
-S:BO_MANA | ANIM_DEAD 
-S:S_UNDEAD
-V:60
-D:$A disembodied eye, floating in the air.  Black nether storms rage around 
-D:$its bloodshot pupil and light seems to bend as it sucks its power from the 
-D:$very air around it.  Your soul chills as it drains your vitality for its 
-D:$evil enchantments.
-D:宙に浮かぶ巨大な目玉だ。その血走った瞳の周りでは冥界の暗黒の嵐が
-D:巻き起こっている。
-D:また周辺の大気から力を吸い取っているので、どんどんと光が失われていくようだ。
-D:それは邪悪な魔力を得るために冒険者の生命力を吸い取る。
+B:GAZE:DR_MANA:2d12
+F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | CAN_FLY | BASH_DOOR | DROP_CORPSE
+F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_3
+S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
+S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
+D:$A disembodied eye, surrounded by twenty fourth smaller eyes
+D:$ on undulating stalks.
+D:大きくうねる触手の先に付いた２４個の小さな目玉に囲まれている、
+D:体を持たない目玉だ。
 
 #JZ#
 N:665:シャドウ・デーモン
@@ -12284,28 +12211,26 @@ D:$energy from your soul to feed its power.
 D:ぼんやりとした人間のような姿をした強力な暗黒の精霊だ。滑るように近づいては、
 D:その剃刀のような爪で冒険者の生命を奪い、力を得るためにその魂を吸い取る。
 
-N:666:アイアン・リッチ
-E:Iron lich
-G:L:s
-I:120:28d100:30:100:10
-W:42:4:0:9000:0:0
+N:666:ストーン・リッチ
+E:Stone lich
+G:L:D
+I:115:40d35:25:70:15
+W:42:1:0:4000:20000:1180
 B:BUTT:COLD:3d6
 B:BUTT:FIRE:3d6
 B:BUTT:ELEC:3d6
-F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING |
-F:COLD_BLOOD | BASH_DOOR | CAN_FLY |
-F:EVIL | UNDEAD | SMART |
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR | CAN_FLY
+F:EVIL | UNDEAD | SMART | ONLY_ITEM | DROP_60 | DROP_GOOD
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
-F:ONLY_ITEM | DROP_60 | DROP_GOOD |
 F:NO_CONF | NO_SLEEP
-S:1_IN_2 |
-S:BA_WATE | BR_FIRE | BO_ICEE | BA_ELEC | BA_COLD |
-S:CAUSE_4 | DRAIN_MANA | BRAIN_SMASH | 
-S:S_UNDEAD
-D:$It is a huge, twisted grey skull floating through the air. Its cold eyes 
-D:$burn with hatred towards all who live.
-D:それは宙に浮いた巨大で、捻じ曲げられた灰色の髑髏だ。その冷たい目は
-D:全ての命ある物への憎しみに燃えている。
+S:1_IN_4 |
+S:BO_WATE | BR_FIRE | BO_ICEE | BA_ELEC | BA_COLD | CAUSE_3 | CAUSE_4
+S:DRAIN_MANA | MIND_BLAST | S_UNDEAD | BLIND | HOLD | CONF | BLINK
+D:$This skeleton is wearing a tattered robe.
+D:$ It unleashes some magics from a pumice stone staff
+D:$ that has been used for a while.
+D:この骸骨はボロボロの法衣を着ていて、
+D:しばらく使い込んだ軽石の杖からいくつもの魔法を繰り出してくる。
 
 #J0#
 #J0#
@@ -12337,21 +12262,20 @@ D:全ての秩序に反して無理矢理に存在しているかのようだ。
 
 #JZ#
 N:668:大バジリスク
-E:Greater basilisk
+E:Large basilisk
 G:R:D
-I:120:20d100:25:100:15
-W:42:2:0:10000:0:0
+I:120:50d30:25:90:15
+W:42:2:0:7000:100000:1243
 B:GAZE:PARALYZE
-B:BITE:HURT:5d12
-B:BITE:HURT:5d12
-B:BITE:HURT:5d12
+B:BITE:HURT:5d11
+B:BITE:HURT:5d11
+B:BITE:HURT:5d11
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | POWERFUL | FORCE_MAXHP |
 F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
 F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
-S:1_IN_8
-S:BR_POIS | BR_DARK | BR_NETH
-D:$A large basilisk, whose shape resembles that of a great wyrm.
-D:大型のバジリスクで、ワイアームに似た姿をしている。
+S:1_IN_8 | BR_POIS | BR_DARK | BR_NETH
+D:$A large basilisk, whose shape resembles that of a ancient dragon.
+D:大型のバジリスクで、古代ドラゴンに似た姿をしている。
 
 #JZ#
 N:669:『カリブディス』
@@ -12452,9 +12376,7 @@ W:43:2:0:2100:50000:716
 B:BUTT:HURT:4d6
 B:BUTT:HURT:4d6
 B:CRUSH:SUPERHURT:4d6
-F:FRIENDS | DROP_CORPSE
-F:BASH_DOOR | 
-F:ANIMAL | RIDING
+F:FRIENDS | DROP_CORPSE | BASH_DOOR | ANIMAL | RIDING
 D:$A massive elephantine form with eyes twisted by madness.
 D:巨大な象のような姿で、その目は狂気に歪んでいる。
 
@@ -12463,7 +12385,7 @@ N:674:闇の審判『フィアー』
 E:Judge Fear
 G:W:D
 I:120:18d100:90:70:10
-W:43:4:0:12000:0:0
+W:41:4:0:12000:0:0
 B:GAZE:TERRIFY
 B:GAZE:EXP_40
 B:GAZE:DR_MANA:4d8
@@ -12485,8 +12407,8 @@ D:で知られる。
 N:675:古代万色ドラゴン
 E:Ancient multi-hued dragon
 G:D:v
-I:120:21d100:20:100:70
-W:43:1:0:13000:300000:790
+I:120:50d45:20:95:100
+W:42:1:0:10000:300000:790
 B:CLAW:HURT:4d12
 B:CLAW:HURT:4d12
 B:BITE:HURT:6d12
@@ -12496,8 +12418,7 @@ F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 |
 F:SMART | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_ACID | IM_FIRE | IM_COLD | 
 F:IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_5 | 
-S:BLIND | CONF | SCARE | 
+S:1_IN_6 | BLIND | CONF | SCARE | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
 D:$A huge draconic form.  Many colours ripple down its massive frame.  Few 
 D:$live to see another.
@@ -12754,7 +12675,7 @@ N:684:塵の中を歩くもの『クァチル・ウタウス』
 E:Quachil Uttaus, Treader of the Dust
 G:z:D
 I:120:50d66:30:80:15
-W:44:3:0:20000:0:0
+W:52:3:0:20000:0:0
 B:CLAW:HURT:50d1
 B:TOUCH:TIME:1d50
 B:TOUCH:TIME:1d50
@@ -12947,7 +12868,7 @@ N:691:ドローレム
 E:Drolem
 G:g:g
 I:120:30d100:25:130:30
-W:44:3:0:12000:0:0
+W:44:8:0:12000:0:0
 B:BITE:HURT:5d8
 B:BITE:HURT:5d8
 B:CLAW:POISON:3d3
@@ -13187,44 +13108,37 @@ D:爆弾を持ってテロ攻撃を行なう...
 N:701:ドラコリッチ
 E:Dracolich
 G:D:B
-I:120:28d100:25:120:30
-W:46:2:0:18000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:EXP_80:3d6
+I:120:28d70:25:110:30
+W:46:2:0:16000:200000:1241
+B:CLAW:HURT:4d10
+B:CLAW:HURT:4d10
+B:BITE:EXP_40:3d6
 B:BITE:EXP_VAMP:3d6
-F:FORCE_SLEEP | FORCE_MAXHP | 
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | RES_TELE
-F:COLD_BLOOD | CAN_FLY |
-F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
-F:EVIL | DRAGON | UNDEAD | IM_COLD | IM_POIS | RES_NETH |
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | COLD_BLOOD | EVIL | DRAGON | UNDEAD
+F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK | RES_TELE
 F:NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:CONF | SCARE | 
-S:BR_COLD | BR_NETH
-D:$The skeletal form of a once-great dragon, enchanted by magic most 
-D:$perilous.  Its animated form strikes with speed and drains life from its 
-D:$prey to satisfy its hunger.
-D:古代の偉大なドラゴンの骸骨に、最も危険な魔法によって生命を吹き込んだものだ。
-D:餌食に素早い一撃を食らわせ、その生命を吸い取っては空腹を満たしている。
+S:1_IN_7 | CONF | SCARE | BR_COLD | BR_NETH
+D:$A monster with evil magic in the bones of a decaying dragon.
+D:$  It is wandering while absorbing the soul of living things.
+D:朽ち果てたドラゴンの骨に邪悪な魔法が宿ったモンスターだ。
+D:それは命あるものの魂を吸いながらさまよい歩いている。
 
-#J0#
-N:702:グレーター・タイタン
-E:Greater titan
-G:P:v
-I:120:30d100:30:125:15
-W:46:3:0:13500:0:0
-B:HIT:CONFUSE:12d12
-B:HIT:CONFUSE:12d12
-B:HIT:CONFUSE:12d12
-B:HIT:CONFUSE:12d12
+N:702:ミッド・タイタン
+E:Middle titan
+G:P:o
+I:120:50d50:30:110:15
+W:49:1:0:13500:100000:1187
+B:HIT:CONFUSE:9d9
+B:HIT:CONFUSE:9d9
+B:HIT:CONFUSE:9d9
+B:HIT:CONFUSE:9d9
 F:FORCE_SLEEP | FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | MOVE_BODY |
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL | GIANT | MALE
-S:1_IN_5 | 
-S:HEAL | TELE_TO | 
-S:S_MONSTERS
+S:1_IN_5 | HEAL | TELE_TO | S_MONSTERS
 D:$A forty foot tall humanoid that shakes the ground as it walks.  The power 
 D:$radiating from its frame shakes your courage, its hatred inspired by your 
 D:$defiance.
@@ -13236,24 +13150,22 @@ D:冒険者が挑みかかると彼の憎悪は一層燃え上がる。
 N:703:ドラコリスク
 E:Dracolisk
 G:D:r
-I:120:28d100:25:120:30
-W:46:3:0:14000:0:0
-B:BITE:HURT:5d12
-B:BITE:HURT:5d12
-B:BITE:HURT:8d8
+I:120:28d70:25:110:30
+W:46:2:0:16000:200000:1242
+B:BITE:HURT:5d11
+B:BITE:HURT:5d11
+B:BITE:HURT:8d7
 B:GAZE:PARALYZE
-F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY |
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_CORPSE
-F:OPEN_DOOR | BASH_DOOR | RES_NETH | RES_TELE
-F:ANIMAL | EVIL | DRAGON | IM_ACID | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:HOLD | SCARE | 
-S:BR_FIRE | BR_NETH
-D:$A mixture of dragon and basilisk, the dracolisk stares at you with deep 
-D:$piercing eyes, its evil breath burning the ground where it stands.
-D:ドラゴンとバジリスクの混血であるドラコリスクは、深く突き刺すような
-D:視線で冒険者を睨みつける。その邪悪なブレスは、自分の足下の大地ですら燃え上
-D:がらせる。
+F:OPEN_DOOR | BASH_DOOR | ANIMAL | EVIL | DRAGON
+F:IM_FIRE | IM_POIS | RES_NETH | RES_TELE | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_7 | HOLD | SCARE | BR_FIRE | BR_POIS | BR_NETH
+D:$It's a winged basilisk.
+D:$It is aimed at adventurers in order to show off the evil poison
+D:$ and power that it has stored in its body.
+D:翼のあるバジリスクだ。
+D:その身体に蓄えた邪悪な毒と力を見せつけるべく虎視眈々と冒険者を狙っている。
 
 #JZ#
 #JZ#ボルヘスの「幻獣辞典」に記述あり
@@ -13510,12 +13422,12 @@ N:714:双子のひわいなるもの『ツァール』
 E:Zhar the Twin Obscenity
 G:R:D
 I:120:50d100:30:120:15
-W:47:3:0:15000:0:0
+W:55:3:0:15000:0:0
 B:CRUSH:HURT:23d13
 B:CRUSH:HURT:23d13
 B:CRUSH:HURT:23d13
 F:FORCE_SLEEP | FORCE_MAXHP | UNIQUE | ELDRITCH_HORROR |
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | KILL_BODY |
+F:ONLY_ITEM | DROP_4D2 | DROP_GREAT | KILL_BODY |
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | CAN_SWIM |
 F:EVIL
 S:1_IN_6
@@ -13595,20 +13507,17 @@ N:717:地獄の番犬『ガルム』
 E:Garm, Guardian of Hel
 G:C:u
 I:120:30d100:20:120:70
-W:49:2:0:22000:0:0
+W:54:2:0:22000:0:0
 B:CLAW:HURT:7d13
 B:CLAW:HURT:7d13
 B:BITE:HURT:8d13
 B:BITE:HURT:8d13
 F:UNIQUE | DROP_CORPSE | 
 F:FORCE_SLEEP | FORCE_MAXHP | 
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT
 F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | RES_NETH | RES_DARK |
 F:ANIMAL | EVIL | IM_FIRE | NO_CONF | NO_SLEEP
-S:1_IN_3 | 
-S:BR_NETH | 
-S:BR_COLD | BR_DARK | 
-S:S_HOUND | S_UNDEAD
+S:1_IN_3 | BR_NETH | BR_COLD | BR_DARK | S_HOUND | S_UNDEAD
 D:$Garm is a gigantic hound, whose job is to guard that none escapes 
 D:$the tortures of Hel, the Norse place of punishment for the wicked 
 D:$and cowardly dead.
@@ -13833,38 +13742,26 @@ D:$itself seems to cry out against it.
 D:脈動する肉の塊で、その内部は地獄の業火に輝いている。この世界そのものが
 D:このモンスターの存在を嫌悪しているように感じる。
 
-#J0#
-#J0#
-#J0#(コメント)
-#J0# ワイアームについてはすべて「グレート」がつくのだが、文字数をかせぐため
-#J0# (スペースキーを押す回数を減らすため)グレートをはぶいてある。
-#J0#
-#J0# また「ウィルム」「ワーム」という読み方も聞きましたが、「ワイアーム」が
-#J0# 一番気に入りましたので、そうしてあります。
-#J0#
-N:728:ストーム・ワイアーム
-E:Great Storm Wyrm
+N:728:デイドラ・ブルー・ドラゴン
+E:Daedra Blue Dragon
 G:D:b
-I:120:30d100:30:150:80
-W:51:2:0:13000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:ELEC:5d14
+I:120:39d50:30:110:40
+W:47:1:0:12000:100000:1190
+B:CLAW:HURT:4d10
+B:CLAW:ELEC:6d12
+B:BITE:HURT:4d10
+B:BITE:ELEC:6d12
 F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | CAN_FLY |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | SELF_LITE_2 |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
 F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
-S:BR_ELEC
-D:$A vast dragon of power.  Storms and lightning crash around its titanic 
-D:$form.  Deep blue scales reflect the flashes and highlight the creature's 
-D:$great muscles.  It regards you with contempt.
-D:力に満ちた巨大なドラゴンだ。その山のような体の周りには嵐が巻き起こり、稲妻
-D:が光っている。
-D:深い青色の鱗が光を反射して、この生物の隆々たる筋肉を浮き彫りにしている。
-D:それは冒険者を軽蔑すべき者とみなしている。
+S:1_IN_4 | BLIND | CONF | SCARE | BR_ELEC
+D:$It is a dragon that has accumulated great power in the Oblivion
+D:$ and has returned to this world.
+D:$  The electricity produced by this dragon can light one town
+D:$ all year round.
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:この竜一匹が生み出す電気は一つの街に一年中灯りを灯すことができる。
 
 #JZ#
 N:729:トロルの『ウリク』
@@ -13934,8 +13831,8 @@ D:古の鎧に身を包んだ者で、ヘルメットの下から地獄の劫火
 D:睨んでいる。
 
 #JZ#
-N:732:『ブル・ゲイツ』
-E:Bull Gates
+N:732:リンゴ嫌い『ブル・ゲイツ』
+E:Bull Gates, the applephobia
 G:p:D
 I:140:25d100:40:90:0
 W:52:3:0:18000:0:0
@@ -13960,7 +13857,7 @@ N:733:『サンタクロース』
 E:Santa Claus
 G:h:r
 I:150:25d100:90:100:10
-W:52:3:0:40000:0:0
+W:57:3:0:40000:0:0
 B:HIT:LOSE_CHR:5d5
 B:TOUCH:LOSE_ALL:10d1
 B:TOUCH:LOSE_ALL:10d1
@@ -14202,36 +14099,32 @@ D:$resembles a gargantuan octopus and its evil is almost tangible.
 D:とてつもなく強く恐ろしい深海の生き物だ。巨大な蛸に似ていて、
 D:見ただけでその邪悪さが伝わってくる。
 
-#J0#
-N:741:アイス・ワイアーム
-E:Great Ice Wyrm
-G:D:w
-I:120:30d100:30:170:80
-W:54:2:0:15000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:COLD:5d14
+N:741:デイドラ・ホワイト・ドラゴン
+E:Daedra White Dragon
+G:D:W
+I:120:39d50:30:110:40
+W:47:1:0:12000:100000:1194
+B:CLAW:HURT:4d10
+B:CLAW:COLD:6d12
+B:BITE:HURT:4d10
+B:BITE:COLD:6d12
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | AURA_COLD |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
-S:BR_COLD
-D:$An immense dragon capable of awesome destruction.  You have never felt 
-D:$such extreme cold, or witnessed such an icy stare.  Begone quickly or feel 
-D:$its wrath!
-D:恐るべき破壊能力を持った巨大なドラゴンだ。このような冷気はかつて感じたこと
-D:がないし、このような冷たい眼差しはかつて見たことがない。素早く逃げないと
-D:恐るべき怒りを呼び覚ましてしまうだろう！
+S:1_IN_4 | BLIND | CONF | SCARE | BR_COLD
+D:$It is a dragon that has accumulated great power in the Oblivion
+D:$ and has returned to this world.
+D:$  Be careful, this dragon can freeze your body and even your soul!
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:魂まで凍らされないように気をつけろ！
 
 #JZ#
 N:742:デミリッチ
 E:Demilich
 G:L:U
 I:120:30d100:20:100:50
-W:54:2:0:12500:80000:776
+W:61:2:0:14500:80000:776
 B:TOUCH:EXP_VAMP:1d12
 B:TOUCH:UN_POWER
 B:TOUCH:LOSE_DEX:4d12
@@ -14244,7 +14137,6 @@ S:1_IN_3 |
 S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
 S:DRAIN_MANA | BRAIN_SMASH | S_HI_UNDEAD | S_UNDEAD | FORGET |
 S:TPORT | HEAL | ANIM_DEAD
-V:75
 D:$A lich who is partially immaterial, on its way to a new, ethereal form.
 D:部分的に非物質化したリッチで、霊的な存在に生まれ変わる過程にある。
 
@@ -14360,8 +14252,8 @@ D:邪悪な魔法の産物だ。（TRPG ウォーハンマー）
 #JZ#ブライアン・ラムレイの「盗まれた眼」などで言及されています。
 #JZ#クトーニアンたちの主のようです。 by 久留さん
 #JZ#解説は NeSYS さん
-N:747:『シュド=メル』
-E:Shudde M'ell
+N:747:地底を掘り進むもの『シュド=メル』
+E:Shudde M'ell, The Burrowers Beneath
 G:w:s
 I:125:100d40:20:90:20
 W:54:2:0:23000:0:0
@@ -14381,6 +14273,7 @@ D:$The most powerful and most evil of all Chthonians.
 D:$"A great gray thing a mile long chanting and exuding strange acids... 
 D:$charging through the depths of the earth at a fantastic speed, in a 
 D:$dreadful fury... melting basaltic rocks like butter under a blowtorch."
+D:$  (Lumley "The Burrowers Beneath", 1974)
 D:クトーニアンの中で最も卓越した、巨大な個体。
 D:最も邪悪な個体であり、クトーニアン達の長であると考えられている。
 D:単体でマグニチュード３．５程度の地震を起こすことが可能であり、
@@ -14574,29 +14467,26 @@ D:バンパイア族の中で最も恐るべき存在だ。一見したところ
 D:だが、その羽と瞳を見ればそんな思いはどこかに吹き飛んでしまうだろう。
 
 #J0#
-N:756:ヘル・ワイアーム
-E:Great Hell Wyrm
+N:756:デイドラ・レッド・ドラゴン
+E:Daedra Red Dragon
 G:D:r
-I:120:54d100:40:170:40
-W:55:2:0:18000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:HURT:5d14
+I:120:45d50:40:120:40
+W:48:1:0:16000:360000:1192
+B:CLAW:HURT:4d14
+B:CLAW:FIRE:6d16
+B:CLAW:HURT:4d14
+B:BITE:FIRE:6d16
 F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | DROP_CORPSE | SELF_LITE_1 |
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | SELF_LITE_2 |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_6 | 
-S:BLIND | CONF | SCARE | 
-S:BR_FIRE
-D:$A vast dragon of immense power.  Fire leaps continuously from its huge 
-D:$form.  The air around it scalds you.  Its slightest glance burns you, and 
-D:$you truly realize how insignificant you are.
-D:それは信じ難たい程の力を持った巨大なドラゴンで、その体からは常に炎
-D:が吹き上がっている。その周りに立ちこめる熱気だけでも冒険者を火傷させるのに
-D:は充分であり、そのほんの一瞥だけでも冒険者を燃え上がらせるには十分だ。
-D:冒険者はこの生物の前では自分がなんと無力であるのかを痛感するだろう。
+S:1_IN_4 | BLIND | CONF | SCARE | BR_FIRE
+D:$It is a dragon that has accumulated great power in the Oblivion
+D:$ and has returned to this world.
+D:$In front of this fiery flame,
+D:$ you may not be able to leave a proof that you were alive!
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:この激烈な炎の前では、あなたは生きていた証をこの世に残せないかもしれない！
 
 #JZ#名状しがたきものハスター（ハストゥール）
 #JZ#元来はアンブローズ・ビアスの「羊飼いハイタ」で言及された
@@ -15007,13 +14897,13 @@ N:770:混沌の覇者『はぶ』
 E:Habu the Champion of Chaos
 G:h:G
 I:130:111d66:25:175:10
-W:59:2:0:20000:0:0
+W:61:2:0:22000:0:0
 B:HIT:EXP_VAMP:6d6
 B:HIT:EXP_VAMP:8d8
 B:HIT:EXP_VAMP:10d10
 F:UNIQUE | MALE | CAN_SPEAK | HAS_LITE_2 | HUMAN |
 F:FORCE_SLEEP | FORCE_MAXHP | SMART | DROP_CORPSE |
-F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD |
+F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD | DROP_GREAT
 F:OPEN_DOOR | BASH_DOOR | RES_NEXU | RES_NETH | RES_CHAO | EVIL | 
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | 
 S:1_IN_4 | 
@@ -15301,28 +15191,32 @@ S:BRAIN_SMASH | BA_NETH | S_KIN | DARKNESS | BA_DARK
 D:$The most feared of all vampires, the Prince of Darkness himself.
 D:ヴァンパイアの中で最も恐れられている、闇の貴公子その人である。
 
-#JZ#
-N:781:究極ビホルダー
-E:Ultimate beholder
-G:e:o
-I:120:40d100:30:80:10
-W:66:4:0:18000:0:0
-B:GAZE:EXP_40:2d5
-B:GAZE:LOSE_INT:2d6
-B:GAZE:UN_POWER:2d6
-B:GAZE:DR_MANA:5d10
-F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | CAN_FLY |
-F:BASH_DOOR | FEMALE | SMART | DROP_CORPSE |
-F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
-S:1_IN_2 | 
-S:BLIND | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
-S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD | S_KIN | BO_MANA | DISPEL
+#J0#
+N:781:アンデッド・ビホルダー
+E:Undead beholder
+G:e:s
+I:120:37d99:30:80:10
+W:52:4:0:6000:40000:1184
+B:GAZE:EXP_40:4d6
+B:GAZE:PARALYZE:4d6
+B:GAZE:LOSE_INT:4d6
+B:GAZE:DR_MANA:6d6
+F:FORCE_SLEEP | RES_TELE | HAS_DARK_1 | COLD_BLOOD | BASH_DOOR
+F:EVIL | UNDEAD | CAN_FLY
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH |
+F:NO_CONF | NO_SLEEP
+S:1_IN_3 | 
+S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET
+S:BO_MANA | ANIM_DEAD | S_UNDEAD
 V:60
-D:$A disembodied eye, surrounded by twelve smaller eyes on stalks. 
-D:$This is a beholder hive-mother, far more powerful than normal 
-D:$beholders.
-D:柄のついた１２個の小さい目に囲まれた目玉だ。ビホルダーの巣の女王
-D:であり、普通のビホルダーよりはるかに強力だ。
+D:$A disembodied eye, floating in the air.  Black nether storms rage around 
+D:$its bloodshot pupil and light seems to bend as it sucks its power from the 
+D:$very air around it.  Your soul chills as it drains your vitality for its 
+D:$evil enchantments.
+D:宙に浮かぶ巨大な目玉だ。その血走った瞳の周りでは冥界の暗黒の嵐が
+D:巻き起こっている。
+D:また周辺の大気から力を吸い取っているので、どんどんと光が失われていくようだ。
+D:それは邪悪な魔力を得るために冒険者の生命力を吸い取る。
 
 #JZ#
 N:782:リヴァイアサン
@@ -15566,27 +15460,28 @@ D:工の象眼がある。右手には大きな二つの指輪、左手にも一
 D:ド、ルビー、サファイアのもの。」
 D:（ロジャー・ゼラズニイ、岡部宏之訳「アンバーの九王子」早川書房、p.48）
 
-#JZ#
-N:790:万色ワイアーム
-E:Great Wyrm of Many Colours
+N:790:万色デイドラ・ドラゴン
+E:Daedra Dragon of Many Colours
 G:D:v
-I:120:52d100:40:170:255
-W:68:4:0:31000:0:0
-B:CLAW:HURT:6d12
-B:CLAW:HURT:6d12
-B:CLAW:HURT:6d12
-B:BITE:HURT:9d14
-F:ATTR_MULTI | CAN_FLY | EVIL |
-F:FORCE_SLEEP | FORCE_MAXHP | AURA_FIRE | AURA_ELEC | RES_TELE
-F:IM_FIRE | IM_ACID | IM_POIS | IM_COLD | IM_ELEC | AURA_COLD |
-F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD |
-F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE 
-F:DRAGON | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_2 |
-S:1_IN_3 |
+I:120:60d50:40:125:80
+W:50:2:0:21000:200000:1198
+B:CLAW:HURT:6d10
+B:BITE:HURT:6d10
+B:BUTT:HURT:6d10
+B:CRUSH:HURT:6d10
+F:ATTR_MULTI | CAN_FLY
+F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | AURA_FIRE | AURA_COLD
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
+F:EVIL | DRAGON | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_2
+S:1_IN_4 |
 S:BR_POIS | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
 S:CONF | SCARE | BLIND
-D:$A huge dragon whose scales shimmer in myriad hues.
-D:巨大なドラゴンで、その鱗は様々な色に輝いている。
+D:$It is a dragon whose scales change color.
+D:$This giant dragon can control all the elements in this world.
+D:めぐるましく鱗の色が変わるドラゴンだ。
+D:この巨大な竜はこの世界に存在する元素の全てを操ることができる。
 
 #JZ#
 #JZ#フィオナ。愛称ファイ。アンバーの王女。
@@ -15709,7 +15604,7 @@ N:795:地獄界ドラゴン『ティアマット』
 E:Tiamat, Celestial Dragon of Evil
 G:D:v
 I:130:100d100:20:125:70
-W:70:4:0:45000:0:0
+W:80:4:0:45000:0:0
 B:CLAW:HURT:6d12
 B:CLAW:HURT:8d12
 B:CLAW:HURT:8d12
@@ -17999,17 +17894,16 @@ D:（ロジャー・ゼラズニイ、小尾芙佐訳「わが名はコンラッ
 N:870:黒衣の修行僧
 E:Ebony monk
 G:p:D
-I:120:63d11:20:57:5
-W:36:3:0:1100:0:0
-B:KICK:SUPERHURT:7d1
-B:HIT:EXP_10:7d2
-B:KICK:SUPERHURT:7d4
-B:HIT:EXP_10:7d2
-F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_COLD | HAS_LITE_2 |
-F:IM_POIS | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP | HUMAN |
-F:DROP_CORPSE | DROP_SKELETON
-S:1_IN_9 | 
-S:BO_NETH
+I:115:57d11:20:57:5
+W:36:3:0:1000:2500:1175
+B:KICK:SUPERHURT:6d1
+B:HIT:EXP_10:6d2
+B:KICK:SUPERHURT:6d4
+B:HIT:EXP_10:6d2
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON | DROP_60 | DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | IM_COLD | HAS_LITE_2
+F:IM_POIS | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_9 | BO_NETH
 D:$A monk in dusky robes trained in the most lethal martial arts.
 D:漆黒の法衣を身にまとい、暗殺拳に熟練した修行僧だ。
 
@@ -18088,28 +17982,26 @@ D:一匹狼。正義感、勇気とも平均以上だがカッとしやすい所
 D:計画的人生より行き当たりばったりの人生を選んでしまうタイプで、
 D:女性の扱いは苦手。
 
-N:874:幽体ワイアーム
-E:Spectral Wyrm
-G:D:w
-I:130:60d100:40:200:255
-W:77:4:0:35000:0:0
-B:CLAW:HURT:10d12
-B:CLAW:HURT:10d12
-B:CLAW:HURT:10d12
-B:BITE:UN_BONUS:8d8
-F:FORCE_MAXHP | EVIL | UNDEAD | CAN_FLY | AURA_COLD |
-F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
-F:POWERFUL | MOVE_BODY | PASS_WALL | INVISIBLE |
-F:DRAGON | NO_CONF | NO_SLEEP | RES_TELE |
-F:IM_POIS | IM_COLD |
-F:RES_NETH | RES_NEXU | RES_DISE | RIDING |
-S:1_IN_3 |
-S:BR_NEXU | BR_NETH | BR_DISE |
-S:S_HI_DRAGON
-S:SCARE | BLINK | SHRIEK
-V:133
-D:$The tortured soul of a once powerful wyrm.
-D:かつて強大な力を誇っていたワイアームの怨霊だ。
+N:874:グレート・インフェルノ・ドレイク
+E:Great Inferno Drake
+G:D:D
+I:120:30d90:30:110:30
+W:54:2:0:18000:400000:1200
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
+B:BITE:UN_BONUS:6d6
+F:FORCE_SLEEP | FORCE_MAXHP | SELF_DARK_2 |
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | RES_TELE
+F:INVISIBLE | TAKE_ITEM | CAN_FLY
+F:PASS_WALL | POWERFUL | MOVE_BODY | RES_DARK | RES_NETH
+F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BR_NETH | BR_DARK | SCARE | BLINK | SHRIEK
+D:$It draws darkness from the underworld and brings chaos to the dungeon.
+D:$  The space around it is distorted and it is not possible
+D:$ to clearly capture its appearance.
+D:それは冥界から闇を呼び寄せてダンジョンに混沌をもたらしている。
+D:それの周りでは空間が歪み、姿をはっきりと捉えることができない。
 
 N:875:ストームトロル
 E:Storm troll
@@ -18252,7 +18144,6 @@ D:$ the strongest ESPer ever!"
 D:「そうだ！超人ロック！」「僕を知っているのか？」
 D:「もちろん！不老不死にして、史上最強のエスパー！」
 D:（聖悠紀、超人ロック「赤いサーペント」）
-
 
 N:882:皇帝『レイザーク』
 E:Layzark, the Emperor
@@ -18409,29 +18300,24 @@ S:ROCKET | SHOOT | BLINK | BR_POIS | BR_CHAO | BR_NEXU
 D:$It was left here to be used against intruders.
 D:それは侵入者に対して使用するために置かれている。
 
-N:890:ヴェノム・ワイアーム
-E:Great Venom Wyrm
+N:890:デイドラ・グリーン・ドラゴン
+E:Daedra Green Draon
 G:D:g
-I:120:54d100:30:170:80
-W:55:2:0:16000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:POISON:5d14
+I:120:39d50:30:110:40
+W:47:1:0:12000:100000:1196
+B:CLAW:HURT:4d10
+B:CLAW:POISON:6d11
+B:BITE:HURT:4d10
+B:BITE:POISON:6d11
 F:FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | CAN_FLY |
 F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING |
-S:1_IN_6 |
-S:BLIND | CONF | SCARE |
-S:BR_POIS
-V:75
-D:$A huge dragon of incredible destructive power.  Noxious vapours 
-D:$fill the room near it, leaving you gasping for breath.  Flee 
-D:$now while you still can!
-D:信じられない程の破壊的な力を持った巨大なドラゴンだ。
-D:有毒な霧が近くの部屋に充満し、ほとんど息ができない。
-D:逃げられるうちに逃げろ!
+S:1_IN_4 | BLIND | CONF | SCARE | BR_POIS
+D:$It is a dragon that has accumulated great power in the Oblivion
+D:$ and has returned to this world.
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:
 
 N:891:バラヒアを裏切りし『ゴルリム』
 E:Gorlim, Betrayer of Barahir
@@ -18768,7 +18654,8 @@ B:TOUCH:PARALYZE:3d3
 F:NEVER_MOVE | ONLY_GOLD | DROP_1D2 | DROP_90 | MULTIPLY | EMPTY_MIND
 F:ANIMAL | COLD_BLOOD | NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN
 F:HURT_ROCK | IM_FIRE | IM_ACID | IM_POIS | IM_COLD | RES_SHAR
-D:$Look! A nice vein of rock to dig in for gold! Wait a minute...
+D:$Look! A nice vein of rock to dig in for gold!
+D:$  Wait a minute...
 D:おお！この岩はなかなかいい金鉱石を含んでいる！おや、ちょっと待てよ？…
 
 N:912:宙に浮かぶ宝珠
@@ -18818,11 +18705,30 @@ D:$vigour.  He can prove a troublesome opponent.
 D:彼はけた外れの力と体の大きさが有名な、屈強なホビットだ。彼がやっかいな
 D:強敵であることは間違いがない。
 
-N:915:修験者
-E:Mystic
+N:915:初級修験者
+E:Elementary mystic
 G:p:o
-I:120:35d10:30:50:5
-W:33:3:0:500:10000:916
+I:115:35d10:30:50:5
+W:33:3:0:600:5000:916
+B:KICK:HURT:9d2
+B:KICK:HURT:9d2
+B:KICK:HURT:9d2
+B:KICK:HURT:9d2
+F:MALE | GOOD | DROP_CORPSE | DROP_SKELETON |
+F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
+F:ONLY_ITEM | DROP_1D2 | 
+F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
+F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_7 | HEAL | S_SPIDER
+D:$He is constantly training for bears and tigers to sank with a single blow.
+D:彼はクマであれトラであれ一撃で沈めるべく、絶え間ない特訓を続けている。
+
+N:916:中級修験者
+E:Medium mystic
+G:p:o
+G:p:o
+I:120:35d15:30:50:5
+W:38:3:0:500:10000:917
 B:KICK:HURT:10d2
 B:KICK:HURT:10d2
 B:KICK:HURT:10d2
@@ -18832,21 +18738,19 @@ F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
 F:ONLY_ITEM | DROP_1D2 | 
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
 F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP
-S:1_IN_6 | 
-S:HEAL | 
-S:S_SPIDER
-D:$An adept at unarmed combat, the mystic strikes with stunning power.  He 
-D:$can summon help from nature and is able to focus his power to ease any 
-D:$pain.
+S:1_IN_6 | HEAL | S_SPIDER
+D:$An adept at unarmed combat, the mystic strikes with stunning power.
+D:$  He can summon help from nature and is able to focus his power
+D:$ to ease any pain.
 D:素手での戦いに習熟した修験者は、一撃で敵を気絶させることができる。
 D:彼にとって自然は味方であり、自然界の生物を召喚することもできる。
 D:またその鍛えられた精神力によって容易に自分の傷を治癒する。
 
-N:916:上級修験者
-E:Master mystic
+N:917:上級修験者
+E:High mystic
 G:p:o
-I:130:11d100:30:60:5
-W:50:3:0:6000:50000:917
+I:125:11d100:30:60:5
+W:50:3:0:6000:40000:1177
 B:KICK:HURT:15d2
 B:KICK:HURT:15d2
 B:HIT:POISON:20d1
@@ -18857,40 +18761,15 @@ F:ONLY_ITEM | DROP_1D2 | DROP_2D2 |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP
-S:1_IN_3 | 
-S:HEAL | 
-S:S_SPIDER
-V:75
-D:$A lord of all that is natural, skilled in the mystic ways.  He is a master 
-D:$of martial arts and is at one with nature, able to summon help from the 
-D:$wild if need be.
-D:彼は自然の中で修行をする修験道を極めた者である。彼は肉弾戦の熟練者で
-D:あり、自然の理を深く熟知している者でもある。そのため必要があれば、野生の
-D:生物を召喚することもできる。
-
-N:917:修験道免許皆伝者
-E:Grand master mystic
-G:p:o
-I:130:22d100:30:80:5
-W:59:3:0:15000:0:0
-B:KICK:HURT:20d2
-B:KICK:HURT:20d2
-B:HIT:POISON:20d1
-B:HIT:PARALYZE:20d1
-F:MALE | GOOD | DROP_CORPSE | DROP_SKELETON |
-F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
-F:ONLY_ITEM | DROP_4D2 | 
-F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
-F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
-S:1_IN_2 | 
-S:HEAL | MIND_BLAST | 
-S:S_SPIDER | S_HOUND
-V:75
-D:$He is one of the few true masters of the art, being extremely skillful in 
-D:$all forms of unarmed combat and controlling the world's natural creatures 
-D:$with disdainful ease.
-D:彼は修験道を真に極めた数少ない者であり、全ての種類の肉弾戦をマスター
-D:している。そしてこの世界の自然界の生物に顎で命令を与えることができる。
+S:1_IN_4 | HEAL | S_SPIDER
+D:$He is being at the culmination of martial arts,
+D:$ but he never gives up on himself.
+D:$  He is still not fully manipulating the creatures of nature
+D:$ and suffers from that.
+D:$  However, he does not despair and continues steadily step by step.
+D:彼は修験道を極めつつあるが、決して自分に驕ることはない。
+D:まだまだ彼は自然界の生物を完全には操れておらず、そのことを苦悩している。
+D:しかし彼は絶望せず、一歩ずつ着実に進み続けている。
 
 N:918:チョウチンアンコウ
 E:Devilfish
@@ -18951,20 +18830,22 @@ D:地獄の軍勢の指揮官であると言われている。
 N:921:インターネット・エクスプローダー
 E:Internet Exploder
 G:e:B
-I:140:20d20:25:0:1
-W:50:4:0:1500:0:0
-B:EXPLODE:LOSE_ALL:10d20
-F:RAND_25 | EMPTY_MIND | REFLECTING | FORCE_SLEEP | CAN_SPEAK |
-F:REGENERATE | AURA_ELEC | BASH_DOOR | KILL_BODY | EVIL |
-F:NONLIVING | IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | 
-F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN |
-F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE |
-F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY |
-S:1_IN_3 |
-S:HOLD | BLIND | CONF | SCARE | SLOW
-D:$This is Bull Gates's most devastating weapon, propagating fear and ruin
-D:$ throughout the world.
-D:ブル・ゲイツの究極兵器であり、全世界に破滅をもたらす恐怖の存在だ。
+I:80:20d20:25:0:1
+W:30:1:0:1500:0:0
+B:EXPLODE:LOSE_INT:10d20
+F:RAND_25 | RAND_50 | STUPID | EMPTY_MIND | REFLECTING | FORCE_SLEEP | CAN_SPEAK
+F:BASH_DOOR | EVIL | NONLIVING | IM_ACID | IM_FIRE | IM_COLD | IM_POIS
+F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
+F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE
+F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY
+S:1_IN_3 | BLINK | HOLD | BLIND | CONF | SCARE
+D:$This was Bull Gates's most devastating weapon once,
+D:$ propagating fear and ruin throughout all multiverse.
+D:$  Its weaknesses are cyber weapons named CSS and JavaScript,
+D:$ but neither exists in this universe.
+D:かつてはブル・ゲイツの究極兵器であり、
+D:全ての多元世界に破滅をもたらす恐怖の存在だった。
+D:弱点はCSSにJavaScriptと呼ばれる電脳兵器だが、どちらもこの世界には存在しない。
 
 N:922:ピカチャウ
 E:Electric rat
@@ -19052,13 +18933,10 @@ W:31:4:0:2500:0:0
 B:HIT:HURT:3d7
 B:HIT:HURT:3d7
 B:HIT:HURT:3d7
-F:UNIQUE | MALE | DROP_SKELETON | DROP_CORPSE | HAS_LITE_2 |
-F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
-F:DROP_2D2 | ONLY_ITEM | DROP_GOOD |
-F:OPEN_DOOR | GOOD | CAN_SWIM | CAN_FLY |
-F:NO_CONF | NO_SLEEP | FRIENDLY | TAKE_ITEM |
-S:1_IN_4 |
-S:BA_FIRE | HASTE | HOLD | CONF | BLIND
+F:UNIQUE | MALE | DROP_SKELETON | DROP_CORPSE | FORCE_SLEEP | FORCE_MAXHP
+F:HAS_LITE_2 | HUMAN | DROP_2D2 | ONLY_ITEM | DROP_GOOD | OPEN_DOOR
+F:GOOD | FRIENDLY | CAN_SWIM | CAN_FLY | NO_CONF | NO_SLEEP | TAKE_ITEM
+S:1_IN_4 | BA_FIRE | HASTE | HOLD | CONF | BLIND | INVULNER
 D:$A happy plumber jumping up and down, his red mustache matches 
 D:$his red hat.
 D:赤い帽子と口髭がよく似合う、ダンディな配管工だ。
@@ -19122,6 +19000,8 @@ S:PSY_SPEAR | DARKNESS | TRAPS | FORGET | ANIM_DEAD | S_KIN | S_CYBER | S_MONSTE
 S:S_MONSTERS | S_ANT | S_SPIDER | S_HOUND | S_HYDRA | S_DEMON | S_UNDEAD |
 S:S_DRAGON | S_HI_UNDEAD | S_AMBERITES | S_UNIQUE | BA_LITE
 V:133
+D:$You don't know what it is.
+D:それは何が何だか分からない。
 
 N:930:超人ロックのクローン
 E:Clone of Locke the Superman
@@ -19776,13 +19656,10 @@ W:31:4:0:2500:0:0
 B:HIT:HURT:3d7
 B:HIT:HURT:3d7
 B:HIT:HURT:3d7
-F:UNIQUE | MALE | DROP_SKELETON | DROP_CORPSE |
-F:FORCE_SLEEP | FORCE_MAXHP | HAS_LITE_2 | HUMAN |
-F:DROP_2D2 | ONLY_ITEM | DROP_GOOD |
-F:OPEN_DOOR | GOOD | CAN_SWIM | CAN_FLY |
-F:NO_CONF | NO_SLEEP | FRIENDLY | TAKE_ITEM |
-S:1_IN_4 |
-S:BA_FIRE | HASTE | HOLD | CONF | BLIND
+F:UNIQUE | MALE | DROP_SKELETON | DROP_CORPSE | FORCE_SLEEP | FORCE_MAXHP
+F:HAS_LITE_2 | HUMAN | DROP_2D2 | ONLY_ITEM | DROP_GOOD | OPEN_DOOR
+F:GOOD | FRIENDLY | CAN_SWIM | CAN_FLY | NO_CONF | NO_SLEEP | TAKE_ITEM
+S:1_IN_4 | BA_ELEC | HASTE | HOLD | CONF | BLIND | INVULNER
 D:$Absolutely not a Mario analog!
 D:断じてマリオの類似品ではない！(本人主張)
 
@@ -20072,8 +19949,9 @@ B:CRUSH:ELEC:3d5
 B:BITE:ELEC:6d8
 F:BASH_DOOR | CAN_FLY | AURA_ELEC | SELF_LITE_2 |
 F:ANIMAL | IM_ELEC | DROP_CORPSE | RIDING |
-S:1_IN_5
-S:BR_ELEC | BA_ELEC |
+S:1_IN_5 | BR_ELEC | BA_ELEC
+D:$It is neither a email client nor an international rescue team.
+D:これは雷鳥でもなければ国際救助隊でもない。
 
 N:982:デュラハン
 E:Durahan
@@ -20105,7 +19983,9 @@ F:ANIMAL
 D:$Resembling a monkey but, at five feet tall, much larger than monkey, this
 D:$ animal must be one of the mysterious beasts that live around Mt. Hiba in
 D:$ Hiroshima Prefecture.
+D:$  It may or may not appear in a certain psychic photograph.
 D:広島県の比婆山一帯に現れる「サルに似ているが、サルよりも大きな」謎の動物。
+D:とある心霊写真に出たり出なかったりする。
 
 N:984:鵺
 E:Nue
@@ -20170,7 +20050,7 @@ F:NO_CONF | NO_SLEEP | RES_TELE | RIDING |
 S:1_IN_2
 S:S_MONSTERS | CAUSE_3 | CAUSE_4 | CONF | BRAIN_SMASH | DRAIN_MANA | SCARE |
 S:HASTE | HOLD |
-D:It is a fox with nine tails, and you can sense its strong magical power.
+D:$It is a fox with nine tails, and you can sense its strong magical power.
 D:尾が九つに分かれた狐で、強い妖力を秘めている。
 
 N:988:鳳凰
@@ -20217,8 +20097,8 @@ F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_6 |
 S:BLIND | SHRIEK | DISPEL | INVULNER | S_ANGEL
 V:133
-D:$It is deer-like but with the scales of a dragon and the tail of an ox.  All
-D:$ accounts attest to its holiness and power.
+D:$It is deer-like but with the scales of a dragon and the tail of an ox.
+D:$  All accounts attest to its holiness and power.
 D:龍の鱗に牛の尾、馬の蹄を持ち、角の生えた四本足の聖なる獣で、
 D:王者が仁のある政治を行った時に姿を現わすと言われている。
 
@@ -20247,8 +20127,8 @@ B:BITE:HURT:10d10
 F:FORCE_MAXHP | UNIQUE | ANIMAL | CAN_FLY |
 F:REGENERATE | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC |
 F:IM_POIS | NO_CONF | NO_SLEEP | NO_FEAR | DROP_CORPSE | RIDING
-D:$This great eight-legged horse is Odin's mount.  It is said to be the child
-D:$ of Loki, the giant.
+D:$This great eight-legged horse is Odin's mount.
+D:$  It is said to be the child of Loki, the giant.
 D:オーディンの乗馬たるスレイプニルは、8本の足を持つ名馬である。
 D:巨人ロキの子供であると言われている。
 
@@ -20344,6 +20224,9 @@ D:$betraying his friends.
 D:このドワーフはお金に対する欲望が非常に強い。モルゴスはそこにつけ込んで
 D:彼の友人達を誘拐させた。
 
+# 根性がないと開発はできない
+# 根性がないとプレイもできない
+# ……変愚蛮怒のことですよ？
 N:997:チォコヴォ
 E:Chiokovo
 G:B:y
@@ -20353,12 +20236,16 @@ B:KICK:HURT:1d3
 B:KICK:HURT:1d4
 B:BITE:HURT:1d5
 F:ANIMAL | DROP_CORPSE | DROP_SKELETON | RIDING
+D:$It is also called a horse bird.
+D:$  It can run through land quickly instead of being able to fly.
+D:それは馬鳥ともいい、空を飛ぶことができない。
+D:代わりに陸を素早く駆け抜けることができる。
 
 N:998:黒チォコヴォ
 E:Black Chiokovo
 G:B:D
 I:115:25d20:20:45:20
-W:25:7:0:250:0:0
+W:25:7:0:250:30000:1274
 B:CLAW:HURT:2d6
 B:CLAW:HURT:2d6
 B:BITE:HURT:2d6
@@ -20536,19 +20423,15 @@ D:なんてこった！そこらじゅうにいるぞ！
 N:1008:悪魔崇拝者
 E:Demonologist
 G:p:R
-I:120:28d10:20:50:10
-W:36:2:0:700:0:0
-B:HIT:HURT:2d6
-B:HIT:HURT:2d6
+I:115:28d10:20:50:10
+W:36:2:0:700:2250:1179
 B:HIT:HURT:2d5
-F:MALE | DROP_CORPSE | DROP_SKELETON | HAS_LITE_2 |
-F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
-F:ONLY_ITEM | DROP_1D2 | 
-F:SMART | OPEN_DOOR | BASH_DOOR | 
-F:EVIL
-S:1_IN_2 | 
-S:TPORT | HOLD | 
-S:S_DEMON
+B:HIT:HURT:2d5
+B:HIT:HURT:2d4
+F:HUMAN | MALE | EVIL | DROP_CORPSE | DROP_SKELETON | HAS_LITE_2
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_1D2
+F:SMART | OPEN_DOOR | BASH_DOOR
+S:1_IN_4 | TPORT | HOLD | S_DEMON
 D:$A figure twisted by evil standing in robes of deepest crimson.
 D:深紅のローブを身にまとってたたずむ、邪悪に歪んだ人間だ。
 
@@ -21143,6 +21026,8 @@ S:1_IN_1
 S:SPECIAL
 D:$This king of the chameleons, like its lesser kin, can change its appearance
 D:$ to blend in with its surroundings.
+D:カメレオンの王は、その眷属たるカメレオン達と同じように、
+D:周囲の環境に合わせてその姿を変えることができる。
 
 N:1042:幻の鯨『イッカク』
 E:Narwhal
@@ -21243,17 +21128,16 @@ D:背が低くて浅黒い肌をした東夷で、黒い服に身を包んでい
 N:1047:黄衣の修行僧
 E:Topaz monk
 G:p:y
-I:120:59d11:30:46:10
-W:35:2:0:800:0:0
-B:KICK:SUPERHURT:9d1
-B:HIT:SUPERHURT:9d1
-B:KICK:SUPERHURT:9d4
-B:HIT:SUPERHURT:9d1
+I:115:59d11:30:46:10
+W:35:2:0:800:2200:1175
+B:KICK:SUPERHURT:8d1
+B:HIT:SUPERHURT:8d1
+B:KICK:SUPERHURT:8d4
+B:HIT:SUPERHURT:8d1
 F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2 |
 F:IM_FIRE | IM_COLD | IM_POIS | IM_ACID | NO_FEAR | NO_CONF | NO_SLEEP | 
 F:HUMAN | DROP_CORPSE | DROP_SKELETON
-S:1_IN_9 | 
-S:HASTE
+S:1_IN_9 | HASTE
 D:$A yellow-garbed monk, trained in martial arts.
 D:黄色の法衣を身にまとった、拳法に熟練した修行僧だ。
 
@@ -21492,12 +21376,11 @@ N:1061:『恐竜バーニーちゃん』
 E:Barney the Dinosaur
 G:R:v
 I:120:110d9:10:90:20
-W:29:255:0:500:0:0
+W:29:255:0:1500:0:0
 B:SHOW:LOSE_INT
 B:SHOW:LOSE_WIS
 B:CHARGE:EAT_GOLD
 B:CHARGE:EAT_GOLD
-#F:DROP_1D2 | DROP_90 | DROP_GOOD | DROP_GREAT | ONLY_ITEM |
 F:EVIL | MALE | CAN_SPEAK | SMART | RES_TELE | CAN_SWIM | DROP_CORPSE |
 F:ANIMAL | IM_POIS | NO_CONF | NO_SLEEP | FORCE_MAXHP | UNIQUE | FORCE_SLEEP |
 F:RES_CHAO
@@ -21591,28 +21474,25 @@ D:敵軍目がけて攻めかかるんや。忽ちに、辺り一面、闇夜の
 D:蛸の吹き出す毒気にむせたんかしらんけど、もんどり打って馬から落ちる奴、
 D:そこらへひっくり返る奴と、ばたばたばたばたと倒れて…」
 
-N:1066:バイル・ワイアーム
-E:Great Bile Wyrm
-G:D:s
-I:120:40d100:30:150:80
-W:54:2:0:17000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:ACID:6d14
-B:BITE:ACID:6d14
+N:1066:デイドラ・ブラック・ドラゴン
+E:Daedra Black Dragon
+G:D:D
+I:120:39d50:30:110:40
+W:47:1:0:12000:100000:1188
+B:CLAW:HURT:4d10
+B:CLAW:HURT:4d10
+B:BITE:ACID:6d12
+B:BITE:ACID:6d12
 F:FORCE_SLEEP | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | RIDING | CAN_FLY
 F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP
-S:1_IN_4 | 
-S:BLIND | CONF | SCARE | 
-S:BR_ACID
-D:$A huge and very powerful dragon.  Great steaming pools of acid drip from 
-D:$its form onto the ground.  You shudder when you see the acid eating away 
-D:$the very stones of the dungeon - what could it do to you?
-D:巨大でとても強力なドラゴンだ。激しく蒸気を吹きだす酸を地面に滴らせ、
-D:滴った酸はダンジョンの岩石をあっという間に溶解し穴を空けている…
-D:これがあなたに当たったらどうなることか！
+S:1_IN_4 | BLIND | CONF | SCARE | BR_ACID
+D:$It is a dragon that has accumulated great power in Oblivion
+D:$ and has returned to this world.
+D:$  With half-finished armor, your whole body will be melted!
+D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
+D:生半可な鎧では肉体ごと溶かされてしまうだろう！
 
 N:1067:たぬき
 E:Tanuki
@@ -22221,7 +22101,7 @@ D:敵であろうと味方であろうと、間合いに入った者全てを斬
 N:1097:ヤング・クイックシルバー・ドラゴン
 E:Young quicksilver dragon
 G:d:s
-I:115:28d10:20:90:150
+I:115:38d10:20:90:150
 W:33:2:0:900:5500:1098
 B:CLAW:HURT:1d12
 B:CLAW:HURT:1d12
@@ -22684,6 +22564,7 @@ F:BASH_DOOR | NO_SLEEP | NO_CONF | NO_FEAR
 F:DROP_GOOD | DROP_GREAT | ONLY_ITEM | DROP_1D2
 S:1_IN_6
 S:ANIM_DEAD | BA_LITE | CAUSE_3 | CONF | HOLD | BLIND | SHRIEK | BLINK
+A:253:1:30
 D:$You are a UNIQUE.
 D:$  She will surely fail your animation!
 D:あなたはユニークな存在だ。
@@ -22859,7 +22740,7 @@ D:それは罪人を処罰すると同時に、下級の鬼達を統率してい
 N:1134:冥界の裁判長『閻魔大王』
 E:Yama, the Judge of the afterlife
 G:O:v
-I:120:50d60:30:100:10
+I:120:55d60:30:100:10
 W:57:2:0:24000:0:0
 B:SLASH:HURT:10d5
 B:SLASH:HURT:10d5
@@ -22895,12 +22776,12 @@ S:S_HI_UNDEAD | S_DEMON | DISPEL
 D:$Undoubtedly, it was this man who released the cursed artifacts
 D:$ and called upon the great old ones who came from the outside world
 D:$ and settled in Llouis.
-D:$  It is said that his book, Necronomicon, namely stargate to the abyss,
+D:$  It is said that his book, Al Azif, namely stargate to the abyss,
 D:$ still sleeps somewhere in the land.
 D:呪われしアーティファクトを世に解き放ち、
 D:外界より来たりてルルイエに住み着いた旧支配者達を呼び寄せたのは、
 D:紛れもなくこの男である。
-D:彼の著した深淵の書『ネクロノミコン』は、今もこの地のどこかに眠ると云う。
+D:彼の著した深淵の書『アル・アジフ』は、今もこの地のどこかに眠ると云う。
 
 N:1136:スケイヴン・ウォーリア
 E:Skaven warrior
@@ -23137,7 +23018,7 @@ F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_5 | ROCKET
 R:1147:5d5
 D:$It is a ghost of those who made human life a part,
-D:$ ran on the battlefield with iron wings, 
+D:$ flied on the battlefield with iron wings,
 D:$ and continued to shed a lot of blood on both sides.
 D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
 
@@ -23152,7 +23033,7 @@ F:COLD_BLOOD | CAN_FLY | GOOD | UNDEAD
 F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_60 | ONLY_ITEM
 S:1_IN_6 | BO_MANA | MISSILE | BLINK
 D:$It is a ghost of those who made human life a part,
-D:$ ran on the battlefield with iron wings,
+D:$ flied on the battlefield with iron wings,
 D:$ and continued to shed a lot of blood on both sides.
 D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
 
@@ -23172,7 +23053,7 @@ D:彼は自分の行いを償うつもりはない。
 
 N:1149:全開装甲『カバード・コア』
 E:Opened core, the uncovered fortress
-G:#:G
+G:g:G
 I:110:9d5:35:1:10
 W:4:1:0:40:0:0
 B:SHOOT:HURT:2d6
@@ -23193,7 +23074,7 @@ I:110:20d10:30:30:20
 W:10:1:0:50:0:0
 B:BITE:HURT:2d10
 B:STING:HURT:2d10
-F:UNIQUE | FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON
+F:UNIQUE | FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | ESCORT
 F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD | NO_SLEEP | ANIMAL
 S:1_IN_8 | S_KIN | BLIND
 D:$It waits to prey on all living things.
@@ -23207,7 +23088,7 @@ W:15:1:0:50:0:0
 B:CRUSH:HURT:6d6
 B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
-F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a small bubble that makes an weird movement.
 D:$  It collapses suddenly.
 D:不気味な動きをする小さな泡だ。ぷちぷちと潰れる。
@@ -23221,7 +23102,7 @@ W:18:1:0:100:0:0
 B:CRUSH:HURT:7d7
 B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
-F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a middle bubble that makes an weird movement.
 D:$  When it is crushed, it becomes a small bubble.
 D:不気味な動きをする、やや大きな泡だ。潰すと小さな泡になる。
@@ -23235,7 +23116,7 @@ W:21:1:0:250:0:0
 B:CRUSH:HURT:8d8
 B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
-F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a large bubble that makes an weird movement.
 D:$  When it is crushed, it becomes a middle bubble.
 D:不気味な動きをする大きな泡だ。潰しても中々なくならない。
@@ -23249,7 +23130,7 @@ W:24:1:0:500:0:0
 B:CRUSH:HURT:9d9
 B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
-F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a extra large bubble that makes an weird movement.
 D:$  You must decide whether running away or squashing them all!
 D:不気味な動きをする巨大な泡だ。逃げるか潰すか二つに一つだ！
@@ -23264,7 +23145,7 @@ B:CRUSH:HURT:6d6
 B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
-S:1_IN_4 | MISSILE
+S:1_IN_5 | MISSILE
 D:$Holy shit! It will shoot you back at this bubble!
 D:なんてこった、こいつ泡のくせに撃ち返してくるぞ！
 
@@ -23280,7 +23161,7 @@ B:CRUSH:HURT:7d7
 B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
-S:1_IN_4 | MISSILE
+S:1_IN_5 | MISSILE
 D:$It is a middle bubble that makes an weird movement and shoots you back.
 D:$  When it is crushed, it becomes a small bubble.
 D:不気味な動きをして撃ち返してくる、やや大きな泡だ。潰すと小さな泡になる。
@@ -23296,7 +23177,7 @@ B:CRUSH:HURT:8d8
 B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
-S:1_IN_4 | MISSILE
+S:1_IN_5 | MISSILE
 D:$It is a large bubble that makes an weird movement and shoots you back.
 D:$  When it is crushed, it becomes a middle bubble.
 D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
@@ -23312,7 +23193,7 @@ B:CRUSH:HURT:9d9
 B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
-S:1_IN_4 | MISSILE
+S:1_IN_5 | MISSILE
 D:$It is a extra large bubble that makes an weird movement and shoots you back!
 D:$  You must decide whether running away or squashing them all!
 D:不気味な動きをして撃ち返してくる巨大な泡だ。逃げるか潰すか二つに一つだ！
@@ -23321,10 +23202,11 @@ D:不気味な動きをして撃ち返してくる巨大な泡だ。逃げるか
 N:1159:プチモアイ
 E:Small Moai
 G:g:s
-I:120:15d15:10:50:10
+I:120:10d10:10:50:10
 W:34:50:0:250:0:0
 B:CRUSH:HURT:8d8
-F:IM_ELEC | HURT_ROCK | RES_GRAV | DROP_60 | DROP_1D2 | ONLY_GOLD
+F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV
+F:DROP_60 | DROP_1D2 | ONLY_GOLD
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 S:1_IN_2 | BR_ELEC | BR_PLAS
 D:$ Do NOT get behind this Moai!
@@ -23335,7 +23217,8 @@ E:Moai
 G:g:U
 I:105:30d25:10:85:50
 W:40:1:0:700:0:0
-F:IM_ELEC | HURT_ROCK | RES_TELE | RES_GRAV | FRIENDS | FORCE_SLEEP | DROP_90
+F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | RES_TELE
+F:FRIENDS | FORCE_SLEEP | DROP_90
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:NEVER_MOVE | NEVER_BLOW
 S:1_IN_2 | BR_ELEC | BR_PLAS
@@ -23348,7 +23231,7 @@ E:Totem Moai
 G:g:U
 I:110:20d20:10:90:30
 W:40:1:0:750:0:0
-F:IM_ELEC | HURT_ROCK | RES_TELE | RES_GRAV | DROP_90
+F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | RES_TELE | DROP_90
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:NEVER_MOVE | NEVER_BLOW
 S:1_IN_2 | BR_ELEC | BR_PLAS
@@ -23363,13 +23246,14 @@ I:120:60d50:25:100:20
 W:49:1:0:11000:0:0
 B:CRUSH:SUPERHURT:12d15
 F:UNIQUE | FORCE_MAXHP | NEVER_MOVE
-F:IM_ELEC | RES_GRAV | RES_TELE | ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT
+F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | RES_TELE
+F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 S:1_IN_2 | S_KIN | HOLD | CONF | BLIND | HEAL
 D:$It is a mighty thug from the Bacterian army. It summons many small Moais.
 D:バクテリアン軍が放った強大な刺客だ。それは大量のプチモアイを生み出す。
 
-# テストプレイした結果、戦士なら毒針なしでもギリギリ刺さった
+# テストプレイした結果、戦士＆レンジャーなら毒針なしでも刺さった
 # メイジ系は塔2F＆クローン地獄に毒針必須かも
 N:1163:クリスタル・キューブ
 E:Crystal cube
@@ -23505,3 +23389,1999 @@ D:$Its outrageous power will destroy a star and eventually become a new myth.
 D:ヴァジュラエネルギーのおぞましい研究の果てに産みだされた双子の姉妹の融合体だ。
 D:その無法図な力は一個の星を滅ぼし、やがて新たな神話の存在となるに足るものだろう。
 
+N:1172:緑衣の高位修行僧
+E:High jade monk
+G:p:g
+I:120:54d12:30:46:10
+W:35:2:0:800:0:0
+B:KICK:SUPERHURT:5d2
+B:HIT:SUPERHURT:5d1
+B:KICK:SUPERHURT:5d5
+B:HIT:SUPERHURT:5d1
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2
+F:IM_FIRE | IM_COLD | IM_POIS | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_6 | BO_ELEC
+D:$A high-rank green-garbed monk, trained in martial arts.
+D:緑色の法衣を身にまとった、拳法に熟練した高位の修行僧だ。
+
+N:1173:白衣の高位修行僧
+E:High ivory monk
+G:p:W
+I:120:47d17:25:51:7
+W:38:1:0:900:0:0
+B:KICK:SUPERHURT:8d1
+B:HIT:SUPERHURT:8d1
+B:KICK:SUPERHURT:8d4
+B:HIT:SUPERHURT:8d1
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_FIRE | IM_POIS
+F:NO_FEAR | NO_CONF | NO_SLEEP | HAS_LITE_1 | HAS_LITE_2
+S:1_IN_7 | HEAL
+D:$A high-rank monk in white robes.  He is skilled in martial arts.
+D:純白の法衣を身にまとった、拳法に熟練した高位の修行僧だ。
+
+N:1174:黄衣の高位修行僧
+E:High topaz monk
+G:p:o
+I:120:55d15:30:46:10
+W:40:2:0:800:0:0
+B:KICK:SUPERHURT:9d1
+B:HIT:SUPERHURT:9d1
+B:KICK:SUPERHURT:9d4
+B:HIT:SUPERHURT:9d1
+F:MALE | DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_ELEC | HAS_LITE_2 |
+F:IM_FIRE | IM_COLD | IM_POIS | IM_ACID | NO_FEAR | NO_CONF | NO_SLEEP | 
+F:HUMAN | DROP_CORPSE | DROP_SKELETON
+S:1_IN_9 | HASTE
+D:$A high-rank yellow-garbed monk, trained in martial arts.
+D:黄色の法衣を身にまとった、拳法に熟練した高位の修行僧だ。
+
+N:1175:黒衣の高位修行僧
+E:High ebony monk
+G:p:s
+I:120:63d11:20:57:5
+W:41:3:0:1100:0:0
+B:KICK:SUPERHURT:7d1
+B:HIT:EXP_10:7d2
+B:KICK:SUPERHURT:7d4
+B:HIT:EXP_10:7d2
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON | DROP_60 | DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | IM_COLD | HAS_LITE_2
+F:IM_POIS | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_8 | BO_NETH
+D:$A high-rank monk in dusky robes trained in the most lethal martial arts.
+D:漆黒の法衣を身にまとい、暗殺拳に熟練した高位の修行僧だ。
+
+N:1176:リッチの上級修行僧
+E:High monastic lich
+G:L:U
+I:120:12d100:30:80:30
+W:44:2:0:5000:0:0
+B:KICK:HURT:24d1
+B:HIT:HURT:24d1
+B:CLAW:EXP_80:4d2
+B:CLAW:LOSE_DEX:4d2
+F:FORCE_SLEEP | FORCE_MAXHP | SMART | RES_TELE
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | 
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
+S:1_IN_3 | 
+S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | CAUSE_3 | CAUSE_4 | 
+S:DRAIN_MANA | BRAIN_SMASH | ANIM_DEAD 
+D:$A skeletal form wrapped in priestly gold robes.
+D:$  There is a dignity that feels even awe.
+D:金色の僧侶の法衣に身を包んだ骸骨のような姿だ。
+D:そこには畏怖すら感じる気品が漂っている。
+
+N:1177:修験道師範代
+E:Acting master mystic
+G:p:B
+I:125:22d90:30:80:5
+W:59:3:0:15000:60000:1178
+B:KICK:HURT:18d2
+B:KICK:HURT:18d2
+B:HIT:POISON:18d1
+B:HIT:PARALYZE:18d1
+F:HUMAN | MALE | GOOD | DROP_CORPSE | DROP_SKELETON
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_4D2
+F:INVISIBLE | OPEN_DOOR | BASH_DOOR
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_3 | HEAL | MIND_BLAST | S_SPIDER | S_HOUND
+D:$He is a martial arts' examiner who has trained his body and spirit
+D:$ so that he can teach the next generation.
+D:$His fist can catch the rock's deadline and crush it with a single blow.
+D:彼は後進を指導できるほどに肉体も精神も鍛え上げた修験者だ。
+D:彼の拳は岩の死線を捉えて一撃で砕くことができる。
+
+N:1178:修験道免許皆伝者
+E:Grand master mystic
+G:p:v
+I:130:22d100:30:80:5
+W:64:3:0:20000:0:0
+B:KICK:HURT:20d2
+B:KICK:HURT:20d2
+B:HIT:POISON:20d1
+B:HIT:PARALYZE:20d1
+F:HUMAN | MALE | GOOD | DROP_CORPSE | DROP_SKELETON
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_GOOD | DROP_4D2
+F:INVISIBLE | OPEN_DOOR | BASH_DOOR
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_2 | HEAL | MIND_BLAST | S_SPIDER | S_HOUND
+D:$He is one of the few true masters of the art, being extremely skillful in 
+D:$all forms of unarmed combat and controlling the world's natural creatures 
+D:$with disdainful ease.
+D:彼は修験道を真に極めた数少ない者であり、全ての種類の肉弾戦をマスター
+D:している。そしてこの世界の自然界の生物に顎で命令を与えることができる。
+
+N:1179:悪魔崇拝司祭
+E:High demonologist
+G:p:r
+I:120:28d10:20:50:10
+W:41:2:0:700:0:0
+B:HIT:HURT:2d6
+B:HIT:HURT:2d6
+B:HIT:HURT:2d5
+F:HUMAN | MALE | EVIL | DROP_CORPSE | DROP_SKELETON | HAS_LITE_2
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_1D2
+F:SMART | OPEN_DOOR | BASH_DOOR
+S:1_IN_2 | TPORT | HOLD | S_DEMON
+D:$This man will soon be absorbed in the devil's world.
+D:$To that extent he continues to devote his strong prayers to the devil.
+D:この男は間もなく悪魔に取り込まれるだろう。
+D:それほどまでに彼は強い祈りを悪魔に捧げ続けている。
+
+N:1180:ブロンズ・リッチ
+E:Bronze lich
+G:L:B
+I:120:95d20:30:85:10
+W:47:1:0:14000:35000:1181
+B:BUTT:COLD:4d6
+B:BUTT:FIRE:4d6
+B:BUTT:ELEC:4d6
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR | CAN_FLY
+F:EVIL | UNDEAD | SMART | ONLY_ITEM | DROP_60 | DROP_90 | DROP_GOOD
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
+F:NO_CONF | NO_SLEEP
+S:1_IN_3
+S:BO_WATE | BA_WATE | BR_FIRE | BO_ICEE | BA_ELEC | BA_COLD | CAUSE_3 | CAUSE_4
+S:DRAIN_MANA | BRAIN_SMASH | MIND_BLAST | S_UNDEAD | BLINK
+D:$This skeleton wears a robe which has a neat appearance over the years.
+D:$  It unleashes powerful magic from a bronze staff
+D:$ that has been used for many years.
+D:この骸骨は長い年月を経ても小ざっぱりしている法衣を着ていて、
+D:長年使い込んだ青銅の杖から強力な魔法を繰り出してくる。
+
+N:1181:アイアン・リッチ
+E:Iron lich
+G:L:s
+I:120:28d100:30:100:10
+W:52:4:0:19000:0:0
+B:BUTT:COLD:5d6
+B:BUTT:FIRE:5d6
+B:BUTT:ELEC:5d6
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | COLD_BLOOD | BASH_DOOR | CAN_FLY
+F:EVIL | UNDEAD | SMART | ONLY_ITEM | DROP_2D2 | DROP_GOOD
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH | RES_TELE
+F:NO_CONF | NO_SLEEP
+S:1_IN_2
+S:BA_WATE | BR_FIRE | BO_ICEE | BA_ELEC | BA_COLD | CAUSE_4
+S:DRAIN_MANA | BRAIN_SMASH | S_UNDEAD
+D:$It is a huge, twisted grey skull floating through the air. Its cold eyes 
+D:$burn with hatred towards all who live.
+D:それは宙に浮いた巨大で、捻じ曲げられた灰色の髑髏だ。その冷たい目は
+D:全ての命ある物への憎しみに燃えている。
+
+N:1182:リッチの破戒僧
+E:Depraved monk lich
+G:L:r
+I:120:70d39:25:80:15
+W:46:2:0:10000:0:0
+B:CLAW:SUPERHURT:12d11
+B:BITE:SUPERHURT:12d11
+B:PUNCH:TERRIFY:25d1
+B:KICK:TERRIFY:25d1
+F:UNDEAD | EVIL | COLD_BLOOD | DROP_SKELETON | SMART | HAS_DARK_1
+F:FORCE_SLEEP | ONLY_ITEM | DROP_GOOD | DROP_2D2
+F:BASH_DOOR | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
+S:1_IN_5 | BA_FIRE | BA_DARK | BA_CHAO | CAUSE_3 | MIND_BLAST
+S:BLINK | TELE_TO | BLIND | HOLD | CONF | SCARE | ANIM_DEAD | S_UNDEAD
+D:$It is a skull majoring in both scholarship and the martial arts.
+D:$  It is stubborn in his strength and continues to seek blood
+D:$ even when it is dead already.
+D:生前は文武両道だった髑髏だ。強さに拘泥し死してなお血を求め続けている。
+
+#J0#
+N:1183:エンペラー・ワイト
+E:Emperor wight
+G:W:y
+I:120:38d13:20:40:10
+W:43:2:0:2400:0:0
+B:HIT:HURT:1d12
+B:HIT:HURT:1d12
+B:TOUCH:EXP_80
+B:TOUCH:EXP_80
+F:FORCE_SLEEP | FORCE_MAXHP | ONLY_ITEM | DROP_90 | DROP_4D2 | CAN_FLY
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | RES_NETH |
+F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_DARK | HURT_LITE | NO_CONF | NO_SLEEP
+S:1_IN_6 | 
+S:HOLD | SCARE | CAUSE_3 | BO_NETH
+D:$Your life force is torn from your body as this powerful unearthly being 
+D:$approaches.
+D:この強力なあの世の者が近づいてくると、自分の魂が肉体から引き裂かれるようだ。
+
+N:1184:腐敗ビホルダー
+E:Rotten beholder
+G:e:v
+I:120:27d100:30:80:10
+W:57:4:0:6000:40000:1185
+B:GAZE:EXP_80
+B:GAZE:PARALYZE:5d6
+B:GAZE:LOSE_INT:5d6
+B:GAZE:DR_MANA:6d6
+F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | HAS_DARK_1 |
+F:COLD_BLOOD | BASH_DOOR | 
+F:EVIL | UNDEAD | CAN_FLY |
+F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_NETH |
+F:NO_CONF | NO_SLEEP
+S:1_IN_2 | 
+S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET | 
+S:BO_MANA | ANIM_DEAD 
+S:S_UNDEAD
+D:$It is a deviant monster with innumerable eyes with muddy tentacles.
+D:$  It spreads nauseous nasty odors around.
+D:ドロドロした触手に爛れた目が無数についている異形のモンスターだ。
+D:それは吐き気を催す異臭を周囲に撒き散らしている。
+
+#JZ#
+N:1185:究極ビホルダー
+E:Ultimate beholder
+G:e:o
+I:120:40d100:30:80:10
+W:73:4:0:18000:0:0
+B:GAZE:EXP_40:5d5
+B:GAZE:LOSE_INT:5d6
+B:GAZE:UN_POWER:5d6
+B:GAZE:DR_MANA:5d10
+F:FORCE_SLEEP | FORCE_MAXHP | RES_TELE | CAN_FLY |
+F:BASH_DOOR | FEMALE | SMART | DROP_CORPSE |
+F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_2 | 
+S:BLIND | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
+S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD | S_KIN | BO_MANA | DISPEL
+D:$A disembodied eye, surrounded by twelve smaller eyes on stalks. 
+D:$This is a beholder hive-mother, far more powerful than normal 
+D:$beholders.
+D:柄のついた１２個の小さい目に囲まれた目玉だ。ビホルダーの巣の女王
+D:であり、普通のビホルダーよりはるかに強力だ。
+
+N:1186:トリクロプス
+E:Triclops
+G:P:u
+I:120:72d12:20:100:20
+W:42:5:0:2000:0:0
+B:SHOOT:HURT:9d9
+B:HIT:HURT:15d8
+B:HIT:HURT:15d8
+F:FORCE_SLEEP |
+F:ONLY_ITEM | DROP_2D2 | TAKE_ITEM | DROP_CORPSE |
+F:BASH_DOOR | OPEN_DOOR | MOVE_BODY |
+F:EVIL | IM_POIS | IM_ACID | GIANT | EAT_GIVE_STR |
+S:1_IN_8 |
+S:SHOOT
+D:$A three-eyes cyclops!?  What the hell is going on!?
+D:三つ目のサイクロプス！？　一体何が起きているというんだ！？
+
+#J0#
+N:1187:グレーター・タイタン
+E:Greater titan
+G:P:v
+I:120:70d50:30:125:15
+W:52:1:0:18000:0:0
+B:HIT:CONFUSE:12d12
+B:HIT:CONFUSE:12d12
+B:HIT:CONFUSE:12d12
+B:HIT:CONFUSE:12d12
+F:FORCE_SLEEP | FORCE_MAXHP | DROP_SKELETON | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | MOVE_BODY |
+F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
+F:EVIL | GIANT | MALE
+S:1_IN_5 | HEAL | TELE_TO | S_MONSTERS
+D:$This giant is rampaging with a physical structure that
+D:$ can reach ceiling of the cave.
+D:$  Part of the cave is the traces they passed by.
+D:この巨人は天に届かんばかりの体躯で暴れ回っている。
+D:洞窟や階段の一部は彼らが通り過ぎた跡だ。
+
+N:1188:バイル・ワイアーム
+E:Bile Wyrm
+G:D:s
+I:120:66d50:30:125:80
+W:54:1:0:14000:300000:1189
+B:CLAW:HURT:4d12
+B:CLAW:ACID:12d14
+B:BITE:HURT:4d12
+B:BITE:ACID:12d14
+F:FORCE_SLEEP | FORCE_MAXHP | 
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | 
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | RIDING | CAN_FLY
+F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP
+S:1_IN_4 | BLIND | CONF | SCARE | BR_ACID
+D:$A huge and very powerful dragon.
+D:$  Steaming pools of acid drip from its form onto the ground.
+D:$  You shudder when you see the acid eating away
+D:$ the very stones of the dungeon - what could it do to you?
+D:巨大でとても強力なドラゴンだ。激しく蒸気を吹きだす酸を地面に滴らせ、
+D:滴った酸はダンジョンの岩石をあっという間に溶解し穴を空けている…
+D:これがあなたに当たったらどうなることか！
+
+N:1189:グレート・バイル・ワイアーム
+E:Great Bile Wyrm
+G:D:D
+I:125:50d100:30:150:160
+W:64:1:0:30000:0:0
+B:CLAW:SUPERHURT:6d12
+B:CLAW:ACID:21d21
+B:BITE:SUPERHURT:6d12
+B:BITE:ACID:21d21
+F:FORCE_SLEEP | FORCE_MAXHP | 
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD 
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | RIDING | CAN_FLY
+F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP
+S:1_IN_3 | BLIND | CONF | SCARE | BR_ACID
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$  You will be melted by the breath just by approaching!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:近付いただけでその息吹に溶かされてしまうだろう！
+
+N:1190:ストーム・ワイアーム
+E:Storm Wyrm
+G:D:B
+I:120:66d50:30:125:80
+W:54:1:0:14000:300000:1191
+B:CLAW:HURT:4d12
+B:CLAW:ELEC:12d14
+B:BITE:HURT:4d12
+B:BITE:ELEC:12d14
+F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | CAN_FLY
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | SELF_LITE_2
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
+F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | SCARE | BR_ELEC
+D:$A vast dragon of power.  Storms and lightning crash around its titanic form.
+D:$  Deep blue scales reflect the flashes and highlight the creature's 
+D:$great muscles.  It regards you with contempt.
+D:力に満ちた巨大なドラゴンだ。その山のような体の周りには嵐が巻き起こり、稲妻
+D:が光っている。
+D:深い青色の鱗が光を反射して、この生物の隆々たる筋肉を浮き彫りにしている。
+D:それは冒険者を軽蔑すべき者とみなしている。
+
+N:1191:グレート・ストーム・ワイアーム
+E:Great Storm Wyrm
+G:D:b
+I:125:50d100:30:150:160
+W:64:1:0:30000:0:0
+B:CLAW:SUPERHURT:6d12
+B:CLAW:ELEC:21d21
+B:BITE:SUPERHURT:6d12
+B:BITE:ELEC:21d21
+F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | CAN_FLY
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | SELF_LITE_2
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
+F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_3 | BLIND | CONF | SCARE | BR_ELEC
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$  You will be charred by the breath just by approaching!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:近付いただけでその息吹で黒焦げにされてしまうだろう！
+
+#J0#
+N:1192:ヘル・ワイアーム
+E:Great Hell Wyrm
+G:D:R
+I:120:76d50:30:130:80
+W:55:1:0:16000:340000:1193
+B:CLAW:HURT:5d12
+B:CLAW:FIRE:12d15
+B:BITE:HURT:5d12
+B:BITE:FIRE:12d15
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | DROP_CORPSE | SELF_LITE_1
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | SELF_LITE_2
+F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
+F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | SCARE | BR_FIRE
+D:$A vast dragon of immense power.  Fire leaps continuously from its huge 
+D:$form.  The air around it scalds you.  Its slightest glance burns you, and 
+D:$you truly realize how insignificant you are.
+D:それは信じ難たい程の力を持った巨大なドラゴンで、その体からは常に炎
+D:が吹き上がっている。その周りに立ちこめる熱気だけでも冒険者を火傷させるのに
+D:は充分であり、そのほんの一瞥だけでも冒険者を燃え上がらせるには十分だ。
+D:冒険者はこの生物の前では自分がなんと無力であるのかを痛感するだろう。
+
+N:1193:グレート・ヘル・ワイアーム
+E:Great Hell Wyrm
+G:D:r
+I:125:115d50:30:155:160
+W:66:1:0:35000:0:0
+B:CLAW:SUPERHURT:7d12
+B:CLAW:FIRE:22d21
+B:BITE:SUPERHURT:7d12
+B:BITE:FIRE:22d21
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | DROP_CORPSE | SELF_LITE_1
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | SELF_LITE_2
+F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
+F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_3 | BLIND | CONF | SCARE | BR_FIRE
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$  This breath will burn away your body without leaving any bones!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:その息吹はあなたの身体を骨一本残さず焼き尽くす！
+
+#J0#
+N:1194:アイス・ワイアーム
+E:Great Ice Wyrm
+G:D:w
+I:120:66d50:30:125:80
+W:54:1:0:14000:300000:1195
+B:CLAW:HURT:4d12
+B:CLAW:COLD:12d14
+B:BITE:HURT:4d12
+B:BITE:COLD:12d14
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | AURA_COLD
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | 
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
+F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | SCARE | BR_COLD
+D:$An immense dragon capable of awesome destruction.
+D:$  You have never felt such extreme cold, or witnessed such an icy stare.
+D:$  Begone quickly or feel its wrath!
+D:恐るべき破壊能力を持った巨大なドラゴンだ。このような冷気はかつて感じたこと
+D:がないし、このような冷たい眼差しはかつて見たことがない。
+D:素早く逃げないと恐るべき怒りを呼び覚ましてしまうだろう！
+
+#J0#
+N:1195:グレート・アイス・ワイアーム
+E:Great Ice Wyrm
+G:D:W
+I:125:50d100:30:150:160
+W:64:1:0:30000:0:0
+B:CLAW:SUPERHURT:6d12
+B:CLAW:COLD:21d21
+B:BITE:SUPERHURT:6d12
+B:BITE:COLD:21d21
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY | AURA_COLD
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | 
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
+F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_3 | BLIND | CONF | SCARE | BR_COLD
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$  Your body will be freeze-dried on the floor
+D:$ by the breath just by approaching!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:その息吹はあなたが近付いただけでフロアごと氷漬けにしてしまうだろう！
+
+N:1196:ヴェノム・ワイアーム
+E:Venom Wyrm
+G:D:G
+I:120:66d50:30:125:80
+W:54:1:0:14000:300000:1197
+B:CLAW:HURT:4d12
+B:CLAW:POISON:12d14
+B:BITE:HURT:4d12
+B:BITE:POISON:12d14
+F:FORCE_SLEEP | FORCE_MAXHP |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | CAN_FLY
+F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | SCARE | BR_POIS
+D:$A huge dragon of incredible destructive power.  Noxious vapours 
+D:$fill the room near it, leaving you gasping for breath.
+D:$  Free now while you still can!
+D:信じられない程の破壊的な力を持った巨大なドラゴンだ。
+D:有毒な霧が近くの部屋に充満し、ほとんど息ができない。
+D:逃げられるうちに逃げろ！
+
+N:1197:グレート・ヴェノム・ワイアーム
+E:Great Venom Wyrm
+G:D:g
+I:125:50d100:30:150:160
+W:64:1:0:30000:0:0
+B:CLAW:SUPERHURT:6d12
+B:CLAW:POISON:18d19
+B:BITE:SUPERHURT:6d12
+B:BITE:POISON:18d19
+F:FORCE_SLEEP | FORCE_MAXHP |
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD |
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | CAN_FLY
+F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_3 | BLIND | CONF | SCARE | BR_POIS
+D:$It is one of the most powerful and brutal dragons in the world.
+D:$  If you take a breath,
+D:$ the bereaved will not even be able to approach your body!
+D:この世で最も強力で凶悪なドラゴンの一体だ。
+D:一息でも浴びてしまえば、遺族はあなたの遺体に近付くことすらできなくなる！
+
+N:1198:万色ワイアーム
+E:Wyrm of Many Colours
+G:D:v
+I:120:100d48:40:140:255
+W:60:2:0:28000:0:0
+B:CLAW:HURT:6d11
+B:BITE:HURT:6d11
+B:BUTT:HURT:6d11
+B:CRUSH:HURT:6d11
+F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | AURA_FIRE | AURA_COLD
+F:ATTR_MULTI | CAN_FLY
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_TELE
+F:ONLY_ITEM | DROP_60 | DROP_90
+F:DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE 
+F:EVIL | DRAGON | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_2
+S:1_IN_4 |
+S:BR_POIS | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
+S:CONF | SCARE | BLIND
+D:$A huge dragon whose scales shimmer in myriad hues.
+D:巨大なドラゴンで、その鱗は様々な色に輝いている。
+
+N:1199:グレート・万色ワイアーム
+E:Great Wyrm of Many Colours
+G:D:v
+I:125:100d70:40:170:255
+W:72:2:0:38000:0:0
+B:CLAW:SUPERHURT:7d11
+B:BITE:SUPERHURT:7d11
+B:BUTT:SUPERHURT:7d11
+B:CRUSH:SUPERHURT:7d11
+F:FORCE_SLEEP | FORCE_MAXHP | AURA_ELEC | AURA_FIRE | AURA_COLD
+F:ATTR_MULTI | CAN_FLY
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_TELE
+F:ONLY_ITEM | DROP_60 | DROP_90
+F:DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2 | DROP_GOOD
+F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE 
+F:EVIL | DRAGON | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_2
+S:1_IN_3 |
+S:BR_POIS | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
+S:CONF | SCARE | BLIND
+D:$This dragon is the most powerful and evil being in the world
+D:$ who controls all the power of elements.
+D:$  If you want to live, never try to defeat it!!
+D:元素の力を全て支配している、この世で最も強力かつ邪悪な竜だ。
+D:生きていたいなら決して手を出さないことだ！！
+
+N:1200:幽体ワイアーム
+E:Spectral Wyrm
+G:D:w
+I:130:60d100:40:200:255
+W:77:4:0:35000:0:0
+B:CLAW:HURT:10d12
+B:CLAW:HURT:10d12
+B:CLAW:HURT:10d12
+B:BITE:UN_BONUS:8d8
+F:FORCE_MAXHP | EVIL | UNDEAD | CAN_FLY | AURA_COLD |
+F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
+F:POWERFUL | MOVE_BODY | PASS_WALL | INVISIBLE |
+F:DRAGON | NO_CONF | NO_SLEEP | RES_TELE |
+F:IM_POIS | IM_COLD |
+F:RES_NETH | RES_NEXU | RES_DISE | RIDING |
+S:1_IN_3 |
+S:BR_NEXU | BR_NETH | BR_DISE |
+S:S_HI_DRAGON
+S:SCARE | BLINK | SHRIEK
+V:133
+D:$The tortured soul of a once powerful wyrm.
+D:かつて強大な力を誇っていたワイアームの怨霊だ。
+
+#J0#
+N:1201:グレート・クリスタル・ドレイク
+E:Great Crystal Drake
+G:D:B
+I:120:80d30:25:110:30
+W:54:2:0:18000:0:0
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
+B:BITE:HURT:6d14
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | DROP_CORPSE
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | CAN_FLY | ATTR_CLEAR
+F:INVISIBLE | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
+F:EVIL | DRAGON | IM_COLD | NO_CONF | RES_SHAR | NO_SLEEP | RIDING
+S:1_IN_4 | SLOW | CONF | SCARE | BR_SHAR
+D:$A huge crystalline dragon.
+D:$  Its claws could cut you to shreds and its teeth are razor sharp.
+D:$  Strange colours ripple through it as it moves in the light.
+D:巨大な水晶のようなドラゴンだ。冒険者の体をバラバラに切り刻むことができる
+D:爪と、剃刀のように鋭い歯を持っている。
+D:それが動くと光が反射して体中が奇妙な色にきらめく。
+
+N:1202:グレート・ロア・ドレイク
+E:Great Roar Drake
+G:D:o
+I:120:80d30:25:110:30
+W:54:2:0:18000:0:0
+B:CLAW:HURT:8d9
+B:CLAW:HURT:8d9
+B:CLAW:HURT:8d9
+B:BITE:HURT:5d14
+F:FORCE_SLEEP | FORCE_MAXHP | DROP_CORPSE
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | CAN_FLY
+F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY
+F:DRAGON | RES_SOUN | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | SCARE | BR_SOUN
+D:$A powerful roaring dragon that breaks the dungeon ceiling
+D:$ and creates new terrain.
+D:ダンジョンの天井を崩し新しい地形を生み出すほどの力強い咆哮を放つドラゴンだ。
+
+N:1203:アルドゥインの尖兵『ミルムルニル』
+E:Mirmulnir, the vanguard of Alduin
+G:d:o
+I:115:30d17:20:80:30
+W:21:3:0:850:0:0
+B:CLAW:HURT:8d2
+B:CLAW:HURT:7d2
+B:BITE:HURT:8d2
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL
+F:ONLY_ITEM | DROP_90 | DROP_1D2 | DROP_GOOD
+F:CAN_FLY | IM_FIRE | HURT_COLD
+F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_9 | SCARE | BR_FIRE | BA_FIRE
+D:$It is a dragon that has returned from Oblivion.
+D:$  It lightly turns the town guard into a cinder.
+D:冥界から舞い戻ってきたドラゴンの一体だ。
+D:街の衛兵ごときは軽く焼き尽くす。
+
+N:1204:幻影の狩人『サーロクニル』
+E:Sahloknir, the hunter of illusion
+G:d:B
+I:110:30d17:20:80:30
+W:21:3:0:850:0:0
+B:CLAW:HURT:8d2
+B:CLAW:HURT:7d2
+B:BITE:HURT:8d2
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL
+F:ONLY_ITEM | DROP_90 | DROP_1D2 | DROP_GOOD
+F:CAN_FLY | IM_COLD | HURT_FIRE
+F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_9 | SCARE | BR_COLD | BA_COLD
+D:$It is a dragon that has returned from Oblivion.
+D:$  It lightly turns the town guard into an ice statue.
+D:冥界から舞い戻ってきたドラゴンの一体だ。
+D:街の衛兵ごときは軽く氷像にしてしまう。
+
+N:1205:原初への裏切り『オダハヴィーング』
+E:Odahviing, the betrayer of Alduin
+G:d:s
+I:115:30d40:20:95:30
+W:35:3:0:3500:0:0
+B:CLAW:HURT:8d6
+B:CLAW:HURT:7d6
+B:BITE:HURT:8d6
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL | FRIENDLY
+F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | CAN_FLY | FRIENDLY | GOOD
+F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
+F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_8 | SCARE | BA_ELEC | BR_FIRE | BR_COLD | BR_SOUN
+D:$It has a higher pride than the heavens without leaking to other dragons,
+D:$ and it is a character that can quickly rise to provocation.
+D:他のドラゴンに漏れず天より高いプライドを持ち、挑発にはすぐ乗るタチだ。
+
+N:1206:声の道に仇なすもの『デルフィン』
+E:Delphine, the mortal enemy for the way of the voice
+G:p:u
+I:115:55d20:50:90:20
+W:35:1:0:3500:0:0
+B:SHOOT:HURT:8d8
+B:SLASH:HURT:8d8
+B:SLASH:HURT:9d7
+B:HIT:HURT:10d2
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL | BASH_DOOR
+F:HUMAN | FEMALE | ONLY_ITEM | DROP_90 | DROP_1D2 | DROP_GOOD | NO_SLEEP
+F:IM_FIRE | IM_COLD | IM_ELEC
+S:1_IN_8 | SHOOT | HEAL | CAUSE_3
+D:$There are good dragons in this world.
+D:$  She has both an uncomfortable understanding of that
+D:$ and a strength commensurate with it.
+D:この世には善良なドラゴンもいる。
+D:そのことを理解できない頑迷さと、
+D:その意見を貫き通せるだけの強さを併せ持っている。
+
+N:1207:声の道を導きしもの『パーサーナックス』
+E:Paarthurnax, the guru of the way of the voice
+G:D:y
+I:120:50d45:40:120:5
+W:45:3:0:15000:0:0
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | GOOD | FRIENDLY
+F:DROP_4D2 | DROP_GOOD | CAN_FLY | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
+F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_5 | SCARE | BA_ELEC | BR_FIRE | BR_COLD | BR_SOUN
+D:$This dragon exists to counter the evil kins.
+D:$  It is said that the dragon's power can be obtained
+D:$ at the end if strict training is done.
+D:このドラゴンは邪悪なる同族達に対抗するために存在する。
+D:厳しい修行を行えば、その果てにドラゴンの力を手に入れられると伝えられている。
+
+N:1208:冥界の支配者『ダーネヴィール』
+E:Durnehviir, the governor of Soul Cairn
+G:D:v
+I:120:50d60:40:130:5
+W:51:2:0:22000:0:0
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | UNDEAD
+F:ONLY_ITEM DROP_60 | DROP_90 | DROP_1D2 | DROP_GOOD | DROP_GREAT
+F:CAN_FLY | FRIENDLY | GOOD | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
+F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_7 | SCARE | BR_FIRE | BR_SOUN | BR_NETH
+D:$  It is a dragon who has been in Oblivion for so long that
+D:$ it has become difficult to maintain his body in this world.
+D:$  It fully acknowledges your ability.
+D:あまりにも永い間冥界にい続けたため、
+D:現世で肉体を保つことが困難になったドラゴンだ。
+D:それはあなたの実力を十分に認めている。
+
+N:1209:世界を喰らうもの『アルドゥイン』
+E:Alduin, the World Eater
+G:D:v
+I:125:70d100:45:150:10
+W:73:2:0:38000:0:0
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | ATTR_MULTI
+F:DROP_3D2 | DROP_4D2 | DROP_GOOD | DROP_GREAT | CAN_FLY | EVIL
+F:DROP_GOOD | CAN_FLY | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
+F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_STUN | RIDING
+S:1_IN_3 | SCARE | BLINK | S_KIN | ANIM_DEAD
+S:BR_ELEC | BR_FIRE | BR_COLD | BR_SOUN | BR_WALL | BR_MANA
+D:$The first dragon created in one of the plural worlds.
+D:$  It eats people's souls, destroys everything and destroys all dimensions.
+D:$  It had been sealed for too long, but was finally released.
+D:$  Only you can defeat this terrifying dragon!
+D:多元世界の一つにおいて最初に創造されたドラゴンだ。
+D:人の魂を喰らい、次元を消滅させんばかりにあらゆるものを破壊して回っている。
+D:あまりの強さに長い間封印されていたが、ついに解き放たれてしまった。
+D:この恐るべきドラゴンを討ち滅ぼすことができるのはあなただけだ！
+
+N:1210:ミラークの信者
+E:Follower of Miraak
+G:p:U
+I:120:40d40:40:80:20
+W:50:5:0:1600:0:0
+B:SHOOT:HURT:15d15
+B:HIT:HURT:11d10
+B:HIT:HURT:11d10
+B:INSULT:HURT:11d10
+F:HUMAN | EVIL | DROP_CORPSE | DROP_SKELETON | SMART
+F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
+F:NO_SLEEP | NO_CONF | DROP_60
+S:1_IN_5 | SHOOT
+D:$It is one of those who agree with Miraak's corrupt wishes.
+D:$They are relentlessly chasing you as against Mirak's noble will.
+D:ミラークの堕落した願いに賛同している者共の一人だ。
+D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
+
+N:1211:ミラークの信者
+E:Follower of Miraak
+G:p:u
+I:120:40d40:40:80:20
+W:50:5:0:1600:0:0
+B:HIT:HURT:7d9
+B:HIT:HURT:7d9
+B:INSULT:HURT:7d9
+F:HUMAN | EVIL | DROP_CORPSE | DROP_SKELETON | SMART
+F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
+F:NO_SLEEP | NO_CONF | DROP_60
+S:1_IN_2 | BLINK | CONF | HOLD | BA_POIS | BA_FIRE | BA_COLD | BA_ELEC
+D:$It is one of those who agree with Miraak's corrupt wishes.
+D:$They are relentlessly chasing you as against Mirak's noble will.
+D:ミラークの堕落した願いに賛同している者共の一人だ。
+D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
+
+N:1212:原初の竜殺し『ミラーク』
+E:Miraak, the first Dragon-soul Taker
+G:p:v
+I:125:100d90:45:125:10
+W:73:3:0:39000:0:0
+B:SLASH:UN_BONUS:13d11
+B:HIT:UN_POWER:13d11
+B:SLASH:EXP_VAMP:13d11
+B:HIT:SUPERHURT:10d11
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | DROP_SKELETON
+F:POWERFUL | SMART | IM_FIRE | IM_COLD | IM_ELEC | RES_CHAO
+F:NO_SLEEP | NO_CONF | BASH_DOOR | KILL_BODY | PASS_WALL
+F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | DROP_GREAT
+S:1_IN_3 | TELE_TO | TPORT | HEAL | S_KIN | BA_ELEC | BA_FIRE | BA_COLD
+S:BR_SOUN | BR_DISI
+D:$This man can completely absorb the soul of dragons
+D:$ without giving him time to save the power to revive in Mordor nor Oblivion.
+D:$  Will there ever be a dragon who can not hang its head to him?
+D:この男は、冥界で復活する力を蓄える時間すら与えず
+D:ドラゴンの魂を完全に吸収することができる。
+D:彼の前で頭を垂れないドラゴンが果たしてこの世にいるだろうか？
+
+N:1213:ヴォルキハル城の主『ハルコン』
+E:Harkon, the patriarch of Volkihar castle
+G:V:s
+I:120:70d80:45:120:10
+W:61:2:0:32000:0:0
+B:CRUSH:LOSE_INT:10d11
+B:CRUSH:LOSE_WIS:10d11
+B:SLASH:EXP_VAMP:10d11
+B:SLASH:EXP_VAMP:10d11
+F:UNIQUE | FORCE_MAXHP | UNDEAD | EVIL | DEMON | MALE
+F:DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:HURT_LITE | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
+F:RES_NETH | RES_DARK | RES_SHAR | NO_SLEEP | NO_CONF
+S:1_IN_4 | TPORT | BA_DARK | S_UNDEAD | S_KIN | S_HI_UNDEAD | HEAL
+D:$A terrifying vampire trying to extinguish the sun's rays from this land.
+D:$  For that purpose, he is also a ruthless man
+D:$ who easily throws away the genus.
+D:太陽の光をこの大地から消しさそろうとしている恐るべき吸血鬼だ。
+D:そのためには眷属をも容易く使い捨てにする、冷酷な男でもある。
+
+N:1214:ドラウグル
+E:Draugr
+G:z:y
+I:110:10d9:15:20:30
+W:8:1:0:25:150:1215
+B:HIT:HURT:1d10
+F:UNDEAD | DROP_CORPSE | HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
+F:DROP_60 | FRIENDS
+D:$It is a warrior buried in ancient times.
+D:$  It does not forgive intruders for treasure.
+D:太古に埋葬された戦士だ。財宝を狙う侵入者を容赦しない。
+
+N:1215:ドラウグル・ウォーカー
+E:Draugr walker
+G:z:b
+I:110:13d13:20:35:25
+W:16:1:0:70:450:1216
+B:SHOOT:HURT:7d7
+B:HIT:HURT:2d6
+B:SLASH:HURT:2d6
+F:UNDEAD | EVIL | DROP_CORPSE
+F:HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_90 | FRIENDS
+S:1_IN_9 | SHOOT | BA_COLD
+D:$It is a warrior buried in ancient times.
+D:$  It never forgives intruders for treasure.
+D:太古に埋葬された戦士だ。財宝を狙う侵入者を決して容赦しない。
+
+N:1216:ドラウグル・ワイト
+E:Draugr wight
+G:z:W
+I:110:21d21:25:45:20
+W:29:1:0:140:1200:1217
+B:SHOOT:HURT:8d9
+B:HIT:HURT:5d6
+B:SLASH:HURT:5d6
+B:CRUSH:HURT:5d6
+F:UNDEAD | EVIL | DROP_CORPSE
+F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_90 | FRIENDS
+S:1_IN_8 | SHOOT | BA_COLD
+D:$This warrior has continued to protect the tomb for a long time.
+D:$  You may also be a dependent!
+D:この戦士は墳墓を延々と守り続けている。あなたも眷属にされるかもしれない！
+
+N:1217:ドラウグル・スカージ
+E:Draugr scourge
+G:z:B
+I:115:25d25:30:55:15
+W:35:1:0:400:2500:1218
+B:SHOOT:HURT:10d9
+B:HIT:HURT:8d6
+B:SLASH:HURT:8d6
+B:CRUSH:HURT:8d6
+F:UNDEAD | EVIL | DROP_CORPSE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
+F:DROP_90 | DROP_1D2 | ONLY_ITEM | FRIENDS | BASH_DOOR
+S:1_IN_6 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN
+D:$It is a draugr that has acquired a unique cry.
+D:$  It informs the surroundings of the existence of an intruder.
+D:独特の叫びを会得したドラウグルだ。それは侵入者の存在を周囲に知らせる。
+
+N:1218:ドラウグル・デスロード
+E:Draugr deathlord
+G:z:D
+I:120:21d50:40:80:10
+W:42:1:0:3200:0:0
+B:SHOOT:SUPERHURT:12d12
+B:HIT:SUPERHURT:8d9
+B:SLASH:SUPERHURT:8d9
+B:CRUSH:SUPERHURT:8d9
+F:FORCE_MAXHP | UNDEAD | EVIL | ESCORT | DROP_CORPSE
+F:NO_CONF | BASH_DOOR | MOVE_BODY
+F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_2D2 | ONLY_ITEM
+S:1_IN_5 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN | S_UNDEAD
+D:$It is a warrior buried in ancient times.
+D:$  It oversees the draugrs and closely watches the intruders.
+D:太古に埋葬された戦士だ。
+D:それはドラウグル達を統括し、侵入者を注意深く見守っている。
+
+N:1219:ドラウグル・デス・オーバーロード
+E:Draugr death overload
+G:z:r
+I:120:100d26:50:90:10
+W:51:3:0:13000:0:0
+B:SHOOT:SUPERHURT:15d15
+B:HIT:SUPERHURT:15:d13
+B:SLASH:SUPERHURT:15d13
+B:CRUSH:SUPERHURT:15d13
+F:NAZGUL | FORCE_MAXHP | EVIL | UNDEAD | NO_SLEEP | NO_CONF
+F:ESCORT | ESCORTS | BASH_DOOR | MOVE_BODY
+F:IM_COLD | IM_POIS | RES_NETH | RES_TELE | NO_CONF
+F:DROP_90 | DROP_3D2 | DROP_GOOD | ONLY_ITEM | DROP_CORPSE
+S:1_IN_5 | SHOOT | SCARE | HOLD | BA_POIS | BA_COLD | BR_COLD | BR_SOUN
+S:S_UNDEAD | S_KIN
+D:$It is the strongest warrior on top of all draugrs.
+D:$  They are very few buried in the world.
+D:あらゆるドラウグル達の上位に立つ最強の戦士だ。
+D:世界でも埋葬された数はごく少ない。
+
+N:1220:殺人スカラベ
+E:Killer scarab
+G:K:G
+I:120:10d69:25:70:20
+W:40:1:0:350:0:0
+B:CRUSH:HURT:3d12
+B:KICK:HURT:4d12
+F:WEIRD_MIND | ANIMAL | BASH_DOOR | DROP_60 | FRIENDS | DROP_CORPSE
+F:RES_DARK | RES_NETH
+D:$It will keep you rolling to hell!
+D:それはあなたを地獄まで転がしつつけるだろう！
+
+N:1221:太古の大神官『イムホテップ』
+E:Imhotep, the great ancient priest
+G:z:v
+I:120:30d70:30:80:30
+W:43:2:0:14000:0:0
+B:HIT:EXP_VAMP:6d9
+B:CLAW:DISEASE:6d9
+B:BITE:HURT:9d9
+B:INSULT:LOSE_CHR:6d9
+F:UNIQUE | FORCE_MAXHP | EVIL | UNDEAD | MALE | DROP_SKELETON
+F:IM_COLD | IM_POIS | RES_DARK | RES_NETH
+F:HURT_LITE | NO_SLEEP | NO_CONF | DROP_3D2 | DROP_GOOD
+S:1_IN_6 | HOLD | CONF | S_KIN | MIND_BLAST | S_UNDEAD
+S:BA_POIS | BA_DARK | BA_NETH
+D:$He assassinated his king.
+D:$  After that, he tried to plunder the mistress but failed.
+D:$  He could not even bring her back from the Netherworld,
+D:$ and its eyes are burning with resentment.
+D:彼は王を暗殺した。その後王の愛人を略奪しようとしたが失敗した。
+D:冥府から彼女を呼び戻すこともままならず、その瞳は恨みに燃えている。
+
+N:1222:ファルメル
+E:Falmer
+G:h:o
+I:110:11d11:1:15:50
+W:8:2:0:32:0:0
+B:HIT:POISON:5d5
+F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
+F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
+D:$It is the fallen descendant of the snow elf.
+D:$  It is blind but good ears.
+D:スノーエルフの堕落した末裔だ。目は見えないがとても耳が利く。
+
+N:1223:ファルメル・スクルカー
+E:Falmer skulker
+G:h:U
+I:110:21d13:5:45:50
+W:21:2:0:350:2100:1228
+B:SHOOT:HURT:8d9
+B:HIT:POISON:11d7
+F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
+F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
+S:1_IN_8 | SHOOT | BA_POIS
+D:$A falmer whose body is covered with a chaurus shell.
+D:$  It is blind and does not shrug in the light.
+D:シャウラスの殻で身体を覆ったファルメルだ。
+D:目が見えないので光に身をすくめることもない。
+
+N:1224:ファルメル・グルームルーカー
+E:Falmer gloomlurker
+G:h:u
+I:115:31d31:10:65:50
+W:36:2:0:1400:10000:1229
+B:SHOOT:HURT:13d9
+B:SLASH:POISON:9d9
+B:SLASH:POISON:9d7
+F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90 | ONLY_ITEM
+F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
+S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD | BLIND
+D:$A falmel holding a sword and shield made of chaurus shell.
+D:シャウラスの殻でできた剣と盾を手にしたファルメルだ。
+
+N:1225:ファルメル・ナイトプロウラー
+E:Falmer nightprowler
+G:h:B
+I:120:50d49:10:85:50
+W:46:2:0:4200:35000:1230
+B:SHOOT:HURT:15d11
+B:SLASH:POISON:14d12
+B:SLASH:POISON:12d10
+B:SLASH:POISON:12d10
+F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_90 | DROP_1D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
+S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD | BLIND
+D:$A well-trained falmer heavy warrior.
+D:鍛え上げたファルメルの重戦士だ。
+
+N:1226:ファルメル・シャドウマスター
+E:Falmer shadowmaster
+G:h:s
+I:120:75d49:10:100:50
+W:52:2:0:10000:140000:1231
+B:SHOOT:HURT:18d11
+B:SLASH:POISON:16d13
+B:SLASH:POISON:14d11
+B:SLASH:POISON:14d11
+F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_1D2 | DROP_2D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
+S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
+D:$A falmer who even wore magic.
+D:$  You had better stay away from the detour.
+D:魔術すら身に着けたファルメルだ。迂闊には近寄らない方がいい。
+
+N:1227:ファルメル・ウォーモンガー
+E:Falmer warmonger
+G:h:R
+I:120:100d49:10:120:50
+W:60:2:0:18000:0:1232
+B:SHOOT:HURT:21d11
+B:SLASH:POISON:17d16
+B:SLASH:POISON:17d11
+B:SLASH:POISON:17d11
+F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_2D2 | DROP_3D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
+S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
+D:$It is the strongest falmer among general soldiers.
+D:一般兵士の中では最強のファルメルだ。
+
+N:1228:グレーター・ファルメル・スクルカー
+E:Greater falmer skulker
+G:h:W
+I:115:22d22:15:70:50
+W:25:3:0:700:0:0
+B:SHOOT:HURT:11d9
+B:SLASH:POISON:14d10
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_60 | DROP_90 | DROP_1D2 | ONLY_ITEM | ESCORT
+F:SMART | POWERFUL | IM_POIS | RES_LITE | RES_DARK
+S:1_IN_8 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
+D:$Falmer's nose sniffs any adventurer's nose.
+D:ファルメルの鼻はどんな冒険者の匂いも嗅ぎ分ける。
+
+N:1229:グレーター・ファルメル・グルームルーカー
+E:Greater falmer gloomlurker
+G:h:b
+I:120:31d28:15:95:50
+W:41:3:0:1700:0:0
+B:SHOOT:HURT:13d11
+B:SLASH:POISON:12d10
+B:SLASH:POISON:11d10
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_60 | DROP_90 | DROP_2D2 | ONLY_ITEM | ESCORT
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
+D:$It has a lot of treasure, but it would be a foolish idea to go hunting.
+D:それは財宝をいくつも抱えているが、探りに行くのは愚策だろう。
+
+N:1230:グレーター・ファルメル・ナイトプロウラー
+E:Greater falmer nightprowler
+G:h:W
+I:120:55d40:15:120:50
+W:51:3:0:10000:0:0
+B:SHOOT:HURT:15d13
+B:SLASH:POISON:17d11
+B:SLASH:POISON:15d11
+B:SLASH:POISON:13d11
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_60 | DROP_90 | DROP_3D2 | ONLY_ITEM | ESCORT
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_5 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
+D:$It's finally dangerous falmer.
+D:$  Be careful not to chop it with a poisonous blade!
+D:いよいよ危険なファルメルだ。毒の刃で切り刻まれないように気をつけろ！
+
+N:1231:グレーター・ファルメル・シャドウマスター
+E:Greater falmer shadowmaster
+G:h:r
+I:120:70d40:15:130:50
+W:59:3:0:18000:0:0
+B:SHOOT:HURT:20d15
+B:SLASH:POISON:22d11
+B:SLASH:POISON:20d11
+B:SLASH:POISON:18d11
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_3D2 | DROP_4D2 | ONLY_ITEM | ESCORT
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_4 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
+D:$It's an extremely dangerous falmer.
+D:$ In exchange for visibility, a powerful blow is delivered.
+D:極めて危険なファルメルの一体だ。視界と引き換えに強烈な一撃を繰り出してくる。
+
+N:1232:グレーター・ファルメル・ウォーモンガー
+E:Greater falmer warmonger
+G:h:v
+I:125:70d55:15:150:50
+W:68:3:0:27000:0:0
+B:SHOOT:HURT:21d17
+B:SLASH:POISON:25d11
+B:SLASH:POISON:23d11
+B:SLASH:POISON:21d11
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_2D2 | DROP_3D2 | DROP_4D2 | ONLY_ITEM | ESCORT
+F:IM_POIS | RES_LITE | RES_DARK
+S:1_IN_3 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
+D:$It is the strongest falmer with many genus.
+D:$  It will be shredded before it gets closer!
+D:数多の眷属を抱える最強のファルメルだ。近づく前に細切れにされてしまうだろう！
+
+N:1233:シャウラス
+E:Chaurus
+G:c:D
+I:115:15d13:40:50:15
+W:18:1:0:100:450:1235
+B:BITE:HURT:1d13
+B:STING:HURT:1d13
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_60 | FRIENDS
+F:IM_POIS | RES_DARK
+D:$It is about the size of a human and is covered with crustaceans.
+D:それは人ほどの大きさを誇り、甲殻に覆われている。
+
+N:1234:シャウラス・リーパー
+E:Chaurus reaper
+G:c:s
+I:120:30d25:40:80:15
+W:33:1:0:500:0:0
+B:BITE:HURT:3d13
+B:STING:HURT:3d13
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | FRIENDS
+F:IM_POIS | RES_DARK
+D:$It is large enough to easily exceed humans
+D:$ and is covered with an extremely hard crustacean.
+D:それは人を軽く超えるほどの大きさを誇り、極めて硬い甲殻に覆われている。
+
+N:1235:シャウラス・ハンターの幼体
+E:Chaurus hunter fledgling
+G:F:G
+I:115:21d15:40:55:15
+W:23:1:0:150:650:1236
+B:BITE:HURT:4d11
+B:STING:HURT:4d11
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_1D2 | FRIENDS
+F:IM_POIS | RES_DARK
+D:$It still has a small body, but it can easily prey on adventurers.
+D:それはまだ小さい体躯をしているが、冒険者を容易に捕食できる。
+
+N:1236:シャウラス・ハンター
+E:Chaurus hunter
+G:F:g
+I:120:38d29:40:70:15
+W:37:1:0:1200:0:0
+B:BITE:HURT:4d10
+B:STING:HURT:4d10
+B:CRUSH:HURT:4d10
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | DROP_1D2 | FRIENDS
+F:IM_POIS | RES_DARK
+D:$It is Chaurus who has grown into a human-like body.
+D:$  It is often seen that they are kept in falmer.
+D:人間並みの身体に成長したシャウラスだ。
+D:ファルメルに飼われている姿をよく見かける。
+
+N:1237:バーゲスト
+E:Barghest
+G:C:G
+I:115:25d23:30:45:15
+W:23:1:0:350:0:0
+B:BITE:FIRE:6d5
+B:BITE:FIRE:6d5
+B:CLAW:FIRE:6d5
+F:EVIL | ANIMAL | UNDEAD | DROP_CORPSE
+F:DROP_90 | FRIENDS | IM_FIRE | RES_NETH | RES_DARK
+S:1_IN_8 | BR_FIRE | SCARE
+D:$It's the end of the pathetic dogs whose souls were reaped by people's malice
+D:$ in the middle of the night.
+D:人々の悪意によって真夜中に魂を刈り取られた哀れな犬達の末路だ。
+
+# Here is Wisdom.
+N:1238:悪意の具現『ヘルハウンド』
+E:Hellhound, the Beast
+I:120:30d30:30:70:15
+G:C:R
+W:29:2:0:1200:0:0
+B:BITE:FIRE:12d11
+B:CLAW:FIRE:12d11
+B:CRUSH:SUPERHURT:40d1
+F:UNIQUE | FORCE_MAXHP | EVIL | ANIMAL | UNDEAD | DROP_CORPSE
+F:DROP_2D2 | DROP_GOOD | IM_FIRE | RES_NETH | RES_DARK
+R:1237:13d9
+S:1_IN_5 | S_KIN | BR_FIRE | SCARE | HOLD
+D:$This evil dog wasn't born out of nothing.
+D:$  The illusions created by people's selfishness
+D:$ and fear turned their fangs at people themselves!
+D:この悪しき犬は何もないところから生まれたのではない。
+D:人々の私欲と恐怖が生み出した幻影は、彼ら自身に牙を向けたのだ！
+
+N:1239:惑星生命体『ソラリス』
+E:Solaris, the planet life
+G:j:G
+I:120:50d40:50:90:5
+W:42:1:0:6000:0:0
+B:CRAWL:HURT:13d11
+B:ENGULF:HURT:13d11
+B:GAZE:HURT:13d11
+B:TOUCH:HURT:13d11
+F:UNIQUE | FORCE_MAXHP | NONLIVING | QUANTUM | DROP_2D2 | DROP_GOOD | DROP_GREAT
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_LITE | RES_DARK
+F:RES_NEXU | RES_CHAO | RES_DISE | RES_SHAR | RES_WATE | RES_TIME | RES_NETH
+F:RES_SOUN | RES_TELE | WEIRD_MIND | PASS_WALL
+F:SHAPECHANGER | ATTR_MULTI | NO_CONF | NO_SLEEP | NO_STUN | NO_FEAR
+S:1_IN_5 | BR_LITE | BR_GRAV | BR_INER | BR_WALL | BR_NEXU
+S:HASTE | SLOW | MIND_BLAST | BRAIN_SMASH | BLINK | FORGET | DISPEL
+S:TELE_TO | TELE_AWAY
+D:$Communication with the adventurer is not established properly.
+D:それとは冒険者とのコミュニケーションがまともに成立しない。
+
+N:1240:ソードマスター『ヤマト』
+E:Yamato, the sword master
+G:p:s
+I:110:25d12:15:40:20
+W:15:1:0:350:0:0
+B:SLASH:HURT:2d11
+B:CRUSH:HURT:1d13
+F:UNIQUE | FORCE_MAXHP | HUMAN | GOOD | NO_FEAR | CAN_SPEAK
+F:ONLY_ITEM | DROP_4D2
+D:$Hey, girlfriend came to me...
+D:$ (inciting words in Monthly Choi Yong Soo; issue number is unknown)
+D:彼女ができました…（「月刊チェヨンス」アオリ文、号不明）
+
+N:1241:グレート・ドラコリッチ
+E:Greater Dracolich
+G:D:b
+I:120:28d100:25:120:30
+W:52:3:0:23000:0:0
+B:CLAW:HURT:4d12
+B:CLAW:HURT:4d12
+B:BITE:EXP_80:3d6
+B:BITE:EXP_VAMP:3d6
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | COLD_BLOOD | EVIL | DRAGON | UNDEAD
+F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY
+F:IM_COLD | IM_POIS | RES_NETH | RES_DARK | RES_TELE
+F:NO_CONF | NO_SLEEP | RIDING
+S:1_IN_6 | CONF | SCARE | BR_COLD | BR_DARK | BR_NETH
+D:$The skeletal form of a once-great dragon, enchanted by magic most 
+D:$perilous.  Its animated form strikes with speed and drains life from its 
+D:$prey to satisfy its hunger.
+D:古代の偉大なドラゴンの骸骨に、最も危険な魔法によって生命を吹き込んだものだ。
+D:餌食に素早い一撃を食らわせ、その生命を吸い取っては空腹を満たしている。
+
+N:1242:グレート・ドラコリスク
+E:Greater Dracolisk
+G:D:r
+I:120:28d100:25:120:30
+W:52:3:0:23000:0:0
+B:BITE:HURT:5d12
+B:BITE:HURT:5d12
+B:BITE:HURT:8d8
+B:GAZE:PARALYZE
+F:FORCE_SLEEP | FORCE_MAXHP | CAN_FLY
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_CORPSE
+F:OPEN_DOOR | BASH_DOOR | ANIMAL | EVIL | DRAGON
+F:IM_FIRE | IM_POIS | RES_NETH | RES_TELE | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_6 | HOLD | SCARE | BR_FIRE | BR_POIS | BR_NETH
+D:$A mixture of dragon and basilisk, the dracolisk stares at you with deep 
+D:$piercing eyes, its evil breath burning the ground where it stands.
+D:ドラゴンとバジリスクの混血であるドラコリスクは、深く突き刺すような
+D:視線で冒険者を睨みつける。その邪悪なブレスは、自分の足下の大地ですら燃え上
+D:がらせる。
+
+N:1243:巨大バジリスク
+E:Greater basilisk
+G:R:D
+I:120:75d30:25:100:15
+W:50:2:0:11000:0:0
+B:GAZE:PARALYZE
+B:BITE:HURT:5d12
+B:BITE:HURT:5d12
+B:BITE:HURT:5d12
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | POWERFUL | FORCE_MAXHP |
+F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
+F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
+S:1_IN_6 | BR_POIS | BR_DARK | BR_NETH
+D:$An extra large basilisk, whose shape resembles that of a wyrm.
+D:巨大なバジリスクで、ワイアームに似た姿をしている。
+
+N:1244:地獄の公爵
+E:Duke of hell
+G:U:u
+I:110:150d12:10:130:40
+W:43:3:0:6000:0:0
+B:CLAW:HURT:11d2
+B:CLAW:HURT:11d2
+B:CLAW:HURT:22d1
+F:IM_POIS | OPEN_DOOR | BASH_DOOR | MALE | RES_PLAS | NONLIVING |
+F:IM_FIRE | NO_CONF | NO_SLEEP | EVIL | DEMON | FORCE_MAXHP | RES_TELE
+S:1_IN_2 | BO_PLAS
+D:$A major demon lord with a goat's head, tough to kill.
+D:山羊の頭を持つ高位の魔王で、簡単には倒せない。
+
+N:1245:エッヂ
+E:Chromium edge
+G:e:b
+I:140:20d20:25:0:1
+W:50:1:0:1500:0:0
+B:SLASH:HURT:20d1
+B:SLASH:HURT:20d1
+B:SLASH:HURT:20d1
+B:SLASH:HURT:20d1
+F:RAND_25 | SMART | REFLECTING | FORCE_SLEEP | CAN_SPEAK
+F:REGENERATE | AURA_ELEC | BASH_DOOR | EVIL
+F:NONLIVING | IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
+F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
+F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE
+F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY
+S:1_IN_3 | BLINK | HOLD | BLIND | CONF | SCARE
+D:$Bull Gates' new ultimate weapon.
+D:$  It has been eerily enhanced from Internet Exploder
+D:$ with a great deal of help from the world-dominant conglomerates.
+D:ブル・ゲイツの新たなる究極兵器だ。
+D:それは世界を牛耳るコングロマリットから多額の援助を得て、
+D:インターネット・エクスプローダーから不気味なまでに強化されている。
+
+# phorn = (phone + horn) / 2
+N:1246:アイ・ホーン
+E:Eye phorn
+G:e:o
+I:110:20d20:25:0:1
+W:50:1:0:1500:0:0
+B:GAZE:PARALYZE:5d5
+B:TOUCH:TERRIFY:5d5
+B:SPIT:CONFUSE:5d5
+B:SHOW:BLIND:5d5
+F:SMART | FRIENDS | FORCE_SLEEP
+F:IM_POIS | RES_SOUN | RES_PLAS | RES_LITE | RES_DARK | RES_NETH
+F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
+S:1_IN_5 | BR_SOUN | BR_PLAS
+D:$It is the supreme weapon manufactured by Jobz in response to the plan
+D:$ to conquer the world by Bull Gates' weapon "Internet Exploder".
+D:$  It counters their evil desires with loud noises
+D:$ and electromagnetic waves that cause all electronic devices to malfunction.
+D:ブル・ゲイツの究極兵器「インターネット・エクスプローダー」による
+D:世界征服計画に対抗してジョーブツが製造した至高の兵器だ。
+D:それはけたたましい音と、あらゆる電子機器を誤動作させる電磁波で
+D:彼らの邪悪な欲望に対抗している。
+
+# Jobz (成仏: Joubutsu) means 'going to heaven' and 'attaining Buddhahood'.
+# Bull Gates is evil so he is evil also.
+N:1247:ゲイツの宿敵『スティーヴン・ジョーブツ』
+E:Steven Jobz, the rival of Gates
+G:p:s
+I:140:25d100:40:90:0
+W:52:5:0:20000:0:0
+B:INSULT:SUPERHURT:10d10
+B:INSULT:SUPERHURT:10d10
+B:INSULT:SUPERHURT:10d10
+B:INSULT:SUPERHURT:10d10
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | UNDEAD | HAS_LITE_1
+F:KILL_BODY | BASH_DOOR | CAN_SPEAK
+F:IM_ACID | RES_NETH | RES_NEXU | RES_CHAO
+S:1_IN_5 | BA_ACID |  BA_ELEC | BA_POIS | BA_CHAO | BA_NETH
+S:S_KIN | BLIND | SCARE | CONF
+D:$This devout Buddhist created every information apples
+D:$ with LSD's inspiration.
+D:$His obsession was terrifying and he sought too much perfection,
+D:$ so he had fired too many employees.
+D:この敬虔な仏教徒はログルスの幻覚によるインスピレーションで
+D:あらゆる品種のリンゴを作り上げた。
+D:彼の執念は凄まじく、完璧を求めるがあまり組織が機能不全に陥ることがあった。
+
+N:1248:エキドナの長子『オルトロス』
+E:Orthus, Firstborn of Echidna
+G:C:D
+I:130:100d101:100:165:15
+W:85:1:0:41000:0:0
+B:BITE:HURT:15d15
+B:BITE:HURT:15d15
+B:BITE:POISON:15d15
+F:UNIQUE | MALE | RES_TELE |
+F:BASH_DOOR | DROP_CORPSE | DROP_SKELETON | ANIMAL
+F:FORCE_SLEEP | FORCE_MAXHP | NO_CONF | NO_SLEEP
+F:DROP_4D2 | DROP_1D2 | DROP_GOOD | DROP_60 | DROP_90 | ONLY_ITEM |
+F:EVIL | IM_COLD | IM_ACID | IM_ELEC | IM_FIRE
+S:1_IN_4 |
+S:BR_NETH | S_MONSTERS | S_DEMON | S_HOUND | SCARE
+D:$A two-headed hound with snake tail. He is firstborn of Echidna, father of Sphinx and Lion of Namea, 
+D:$ and deity head the male line in clan. Hades' vassals respond to his call.
+D:２つ首と蛇の尾を持つ猟犬だ。彼はエキドナの長子であり、
+D:スフィンクスとネメアのライオンの父たる一族の男系筆頭の魔神だ。
+D:彼が呼びかければハデスの家臣も応える。
+
+N:1249:『リュキアのキマイラ』
+E:The Lycian Chimaera
+G:H:U
+I:125:45d70:20:200:20
+W:65:2:0:20000:0:0
+B:BITE:FIRE:12d6
+B:BUTT:HURT:12d6
+B:BITE:POISON:8d6
+F:UNIQUE
+F:FORCE_SLEEP | FORCE_MAXHP | SMART | DROP_CORPSE | RIDING |
+F:DROP_3D2 | DROP_4D2
+F:OPEN_DOOR | BASH_DOOR | KILL_BODY | POWERFUL | CAN_FLY
+F:ANIMAL | EVIL | IM_FIRE | IM_POIS | IM_COLD | IM_ACID
+F:NO_CONF | NO_SLEEP | RIDING | ESCORT | ATTR_MULTI
+S:1_IN_4
+S:SCARE
+S:BR_FIRE | BR_POIS | BR_CONF | BR_CHAO | BR_NEXU
+S:S_KIN
+R:354:4d7
+R:884:4d7
+R:1250:4d7
+D:$A massive legendary chimera.  She has powerful lion, goat, snake heads.
+D:$ This chaotic female monster is the ancestor of chimera.
+D:$ She's wants to give birth to more powerful offspring by eating you.
+D:巨大な伝説的キメラだ。彼女は力に満ちあふれた牡獅子、山羊、蛇の首を持っている。
+D:このキメラの祖である混沌の女怪はあなたを食べることで
+D:より強力な仔を産もうとしている。
+
+N:1250:可燃性ガス
+E:Flammable gas
+G:#:o
+I:90:3d3:20:37:30
+W:30:4:0:15:0:0
+B:TOUCH:POISON:1d3
+B:EXPLODE:FIRE:7d8
+F:RAND_25 | RAND_50 | INVISIBLE | MULTIPLY | HURT_FIRE
+F:CAN_FLY | CAN_SWIM | PASS_WALL | KILL_BODY
+F:NONLIVING | EMPTY_MIND | COLD_BLOOD | WILD_VOLCANO | WILD_SWAMP
+F:NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN
+D:$It explodes when shocked.
+D:それは衝撃を与えると爆発する。
+
+N:1251:ギンザメ
+E:Chimaera
+G:l:W
+I:120:6d10:20:45:20
+W:5:2:0:30:0:0
+B:BITE:HURT:2d5
+B:STING:POISON:2d3
+F:AQUATIC | ANIMAL | WILD_ALL | RES_WATE
+D:$This fish is also known as ghost shark, and named after hybrid monster
+D:$ due to its patchwark-like appearance.
+D:$ It has poson needle.
+D:この魚は英語ではキマイラと言い、継ぎ接ぎめいた姿から合成魔獣の名を付けられた。
+D:それは毒針を持っている。
+
+N:1252:ランゴスタ
+E:Vespoid
+G:I:U
+I:125:50d3:10:15:20
+W:17:2:0:50:0:0
+B:STING:PARALYZE:3d3
+B:CRUSH:PARALYZE:3d4
+F:FORCE_SLEEP | ANIMAL | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND
+F:CAN_FLY | RAND_25 | NO_FEAR | ONLY_ITEM | DROP_60 | DROP_CORPSE
+D:$A bee-like insect that has become huge due to mutation.
+D:$  It has a paralytic stinger on the abdomen.
+D:突然変異で巨大化した蜂の様な虫。腹部にマヒ性の毒針を持つ。 
+
+N:1253:女王虫『クイーンランゴスタ』
+E:Vespoid Queen
+G:I:u
+I:124:120d10:10:80:20
+W:34:4:0:1000:0:0
+B:STING:PARALYZE:3d10
+B:STING:PARALYZE:3d10
+B:CRUSH:SUPERHURT:3d12
+S:1_IN_4 | SHRIEK | S_KIN | BR_ACID
+F:UNIQUE | FEMALE | ANIMAL | FORCE_MAXHP | FORCE_SLEEP | CAN_FLY | RAND_25
+F:ONLY_ITEM | DROP_60 | DROP_1D2 | DROP_GOOD | DROP_CORPSE |
+F:BASH_DOOR | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND | NO_FEAR
+R:1252:5d5
+D:$The Queen of vespoid, featuring a huge abdomen and bright wings.
+D:$  Command the subordinate vespoid
+D: with a peculiar flight and attack the intruder.
+D:$  The abdominal sting is also very well developed,
+D:$ and in addition to neurological poisons,
+D:$ it may also inject acidic fluids towards its prey.
+D:巨大な腹部と鮮やかな大羽を特徴とするランゴスタの女王。
+D:配下のランゴスタに特異な飛行で命令を行い、侵入者を襲う。
+D:腹部の毒針も非常に発達しており、神経性の毒の他、
+D:酸性の体液を獲物に向けて噴射することもある。
+
+N:1254:踊る道化師『ペニーワイズ』
+E:Pennywise, the dancing clown
+G:S:o
+I:120:10d12:20:70:50
+W:32:3:0:1500:0:0
+B:GAZE:TERRIFY:4d5
+B:GAZE:TERRIFY:4d5
+B:SHOW:LOSE_INT
+B:TOUCH:EAT_ITEM
+F:UNIQUE | CAN_SPEAK | FORCE_MAXHP | FORCE_SLEEP
+F:SHAPECHANGER | ATTR_MULTI | ATTR_ANY | SELF_LITE_1
+F:EVIL | DEMON | CAN_SWIM | OPEN_DOOR
+F:NO_FEAR | NO_SLEEP | WEIRD_MIND | ELDRITCH_HORROR | MOVE_BODY
+F:DROP_CORPSE | DROP_SKELETON | DROP_1D2 | DROP_GREAT
+F:IM_POIS | RES_DARK | RES_CHAO | SMART | NO_CONF
+S:1_IN_3 | BR_CONF | CAUSE_3 | MIND_BLAST | S_SPIDER
+S:FORGET | SCARE | BLINK | CONF | DARKNESS
+D:$"Don't you want balloon?"
+D:$  An unknown life form that can transform into a fearful one.
+D:$  The appearance of the clown is just one of them.
+D:$  When you are dragged down, you float too.
+D:「風船、欲しいだろう？」
+D:　相手が恐怖心を抱くものに姿を変えることができる未知の生命体だ。
+D:ピエロの姿もその一つに過ぎない。
+D:それに下に引きずり込まれるとあなたもプカプカ浮かぶ。
+
+# 龍虫の分裂によってのみ生成される
+N:1255:単龍虫
+E:Dragon insect
+G:c:v
+I:120:25d20:30:150:10
+W:61:255:0:2500:0:0
+B:GAZE:ACID:7d14
+B:GAZE:ACID:7d14
+F:FORCE_MAXHP | ANIMAL | RAND_50 | RAND_25 | WEIRD_MIND | CAN_SWIM
+F:IM_ACID | IM_POIS | RES_PLAS | RES_DISE | RES_WALL | RES_GRAV
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:ONLY_ITEM | DROP_GOOD | DROP_1D2 | DROP_90
+S:1_IN_3 | BA_ACID
+D:$When many of these dragon insects are united, it becomes a dragon centipede.
+D:$  The part that corresponds to the spinal cord
+D:$ when it was integrated as a dragon centipede
+D:$ has an organ that seems to be the eye.
+D:この龍虫が多数合体すると百足龍虫になる。
+D:百足龍虫時の脊髄にあたる部分には眼と思われる器官がついている。
+
+# 百足龍虫の分裂によってのみ生成される
+N:1256:龍虫
+E:Dragon worm
+G:c:v
+I:120:50d20:30:150:10
+W:61:255:0:5500:0:0
+B:CRUSH:HURT:5d12
+B:GAZE:ACID:7d14
+B:GAZE:ACID:7d14
+F:FORCE_MAXHP | ANIMAL | RAND_50 | RAND_25 | WEIRD_MIND | CAN_FLY | POWERFUL
+F:IM_ACID | IM_POIS | RES_PLAS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:ONLY_ITEM | DROP_GOOD | DROP_3D2
+S:1_IN_3 | BA_ACID
+D:$The identity of the giant centipede
+D:$ was a combination of many giant creatures.
+D:$The colony separated from the dragon centipede begins its activity
+D:$ as an independent dragon worm.
+D:巨大な百足の正体は多数の巨大生物が合体した生物だった。
+D:百足龍虫から分離した群体は独立した龍虫として活動を始める。
+
+N:1257:百足龍虫
+E:Dragon centipede
+G:c:v
+I:120:100d20:30:150:10
+W:61:3:0:8500:0:0
+B:CRUSH:HURT:5d12
+B:CRUSH:HURT:5d12
+B:GAZE:ACID:7d14
+B:GAZE:ACID:7d14
+F:FORCE_MAXHP | ANIMAL | RAND_50 | RAND_25 | WEIRD_MIND | CAN_FLY | POWERFUL
+F:IM_ACID | IM_COLD | IM_POIS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+F:ONLY_ITEM | DROP_GOOD | DROP_4D2 | DROP_2D2
+S:1_IN_3 | BA_ACID
+D:$It is the final evolution of a giant creature,
+D:$ a magnificent centipede that is taller and longer than the WTC.
+D:$  It pours acid like a downpour from countless outrages.
+D:巨大生物の最終進化形態、ビルよりも高く長い全長を持つ雄大なムカデだ。
+D:無数の突飛から土砂降りのように酸を降り注がせる。
+
+N:1258:『ロボ・ガンダルフ』
+E:Robo-Gandalf
+G:g:s
+I:120:55d50:20:140:30
+W:52:3:0:15000:0:0
+B:CRUSH:SUPERHURT:6d12
+B:PUNCH:SUPERHURT:6d12
+B:KICK:SUPERHURT:6d12
+B:SLASH:SHATTER:6d12
+F:UNIQUE | FORCE_MAXHP | NONLIVING | WEIRD_MIND | EVIL
+F:IM_FIRE | IM_COLD | IM_POIS | RES_NETH | RES_DARK
+F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | REFLECTING
+F:ONLY_ITEM | DROP_GOOD | DROP_4D2
+S:1_IN_10 | SCARE | BO_PLAS
+D:$It's a nightmare robot in the shape of a gray wizard,
+D:$ as if it was created by an evil organization.
+D:$  Be humble about the power of this machine!
+D:悪の組織によって造られたかのような、灰色の魔法使いの姿をした悪夢的ロボットだ。
+D:機械の力を畏れよ！
+
+N:1259:無敵の恐れ知らずの官能的なる不可思議なる魅惑の頑健なる勤勉なる圧倒的なる華麗なる情熱の恐るべき美しき強力なる灰色の王子『強靭なるゾート』
+E:TOUGH ZOTE, the INVINCIBLE FEARLESS SENSUAL MYSTERIOUS ENCHANTING VIGOROUS DILIGENT OVERWHELMING GORGEOUS PASSIONATE TERRIFYING BEAUTIFUL POWERFUL GREY PRINCE
+G:I:s
+I:130:70d100:20:170:50
+W:76:3:0:36500:0:0
+B:SLASH:HURT:15d15
+B:SLASH:HURT:15d15
+B:CRUSH:SUPERHURT:16d10
+B:CRUSH:SUPERHURT:16d10
+S:1_IN_3 |
+S:SHRIEK | BA_FIRE | PSY_SPEAR | S_KIN
+F:UNIQUE | MALE | DROP_CORPSE | FORCE_MAXHP | FORCE_SLEEP
+F:NONLIVING | CAN_SPEAK | POWERFUL
+F:ONLY_ITEM | DROP_1D2 | DROP_3D2 | DROP_GOOD | DROP_GREAT
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_LITE | RES_DARK
+F:NO_STUN | NO_FEAR | NO_CONF | NO_SLEEP | REGENERATE
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY | MOVE_BODY
+D:$The illusion of a brave man created by Bretta's fantasy
+D:$ and Zote's obsession.
+D:$  Every time he defeats Zote in his dream,
+D:$ he becomes more obsessed, and on the contrary, Bretta's dream awakens.
+D:ブレッタの夢想とゾートの執着心が生み出した、勇者の幻影。
+D:倒す度に夢の中のゾートは執念を増し、それと反対にブレッタの夢は醒めていく。 
+
+N:1260:天使・クイルスルグ
+E:Engel quylthulg
+G:Q:w
+I:120:48d10:20:1:0
+W:51:1:0:3000:0:0
+F:FORCE_SLEEP | FORCE_MAXHP | NEVER_MOVE | NEVER_BLOW | INVISIBLE
+F:EMPTY_MIND | ANIMAL | GOOD | STUPID | NO_CONF | NO_SLEEP | NO_FEAR
+S:1_IN_2 | BLINK | TPORT | S_ANGEL
+D:$The wreckage of an angel is a mass united by evil magic.
+D:$  It is pulsing divinely and horribly.
+D:天使の残骸が、邪悪な魔法で結合した塊だ。それは神々しくも禍々しく脈打っている。
+
+N:1261:グレーター・クイルスルグ
+E:Greater quylthulg
+G:Q:s
+I:120:15d100:20:1:0
+W:71:3:0:10500:0:0
+F:FORCE_SLEEP | FORCE_MAXHP | NEVER_MOVE | NEVER_BLOW | INVISIBLE
+F:EMPTY_MIND | STUPID | RES_TELE | NO_CONF | NO_SLEEP | NO_FEAR
+S:1_IN_2 | BLINK | TELE_TO | S_MONSTERS
+D:$It is a strong pulsing mound of flesh.
+D:それは脈打つ強力な肉の塊だ。 
+
+N:1262:ケット・シー
+E:Cait Sith
+G:f:B
+I:120:40d50:30:80:80
+W:49:3:0:6000:0:0
+B:SLASH:HURT:8d8
+B:SLASH:HURT:8d8
+B:SLASH:HURT:45d1
+F:MALE | FORCE_SLEEP | ANIMAL
+F:REGENERATE | OPEN_DOOR | MOVE_BODY | TAKE_ITEM | DROP_CORPSE 
+F:IM_ACID | IM_ELEC | IM_COLD | IM_FIRE | IM_POIS
+S:1_IN_4 |
+S:HASTE | HEAL | CAUSE_2 |
+D:$A fairy cat that walks on two legs and understands human language.
+D:$This Cait Sith is like a swordfighter who serves the cat kingdom
+D:$I see you as a prey to give to the king.
+D:二足で歩き、人語を解す妖精猫。
+D:このケット・シーは猫の王国に仕える剣士のようだ。
+D:あなたを王に献上する獲物と見なしている。
+
+N:1263:招き猫
+E:Beckoning cat
+G:f:s
+I:112:37d6:22:22:22
+W:22:2:0:22:0:0
+F:FORCE_MAXHP | NEVER_MOVE | EMPTY_MIND | RES_SHAR
+F:NO_CONF | NO_SLEEP | NO_FEAR | NEVER_BLOW
+S:1_IN_5 | TELE_TO | S_KIN
+D:$It's a cat figurine made of pottery!
+D:$  When it beckons, you will get a lot of money!
+D:陶器でできた猫の置物だ！手招きするとがっぽがっぽだ！
+
+N:1264:★シヴァの化身の軟革ブーツ (+5,+5) [4,16] (+4加速) {+速器r因;麻浮(器}
+E:The Pair of Soft Leather Boots of Shiva's Avatar (+5,+5) [4,+16] (+4 to speed) {SpDx;Nx;FaLv(Dx}
+G:]:U
+I:140:35d24:10:80:10
+W:45:4:0:1000:0:0
+B:KICK:UN_BONUS:15d15
+B:KICK:LOSE_DEX:15d15
+B:KICK:ACID:15d15
+B:KICK:PARALYZE:15d15
+F:FORCE_MAXHP | NEVER_MOVE | EMPTY_MIND | CAN_FLY
+F:NO_SLEEP | NO_FEAR | NO_CONF | REFLECTING | IM_ACID | RES_DISE | RES_NEXU
+S:1_IN_7 | HOLD | BR_ACID | BR_DISE | BR_NEXU
+D:$The boots have the ability of Shiva, the god of destruction.
+D:破壊神シヴァの力を持った革の靴だ。
+
+N:1265:テレサ
+E:Boo
+G:G:W
+I:115:30d19:20:50:20
+W:34:3:0:500:0:0
+B:TOUCH:TERRIFY:5d5
+B:TOUCH:TERRIFY:5d5
+F:INVISIBLE | COLD_BLOOD | PASS_WALL | CAN_FLY | EVIL | UNDEAD | FRIENDS
+F:IM_ELEC | IM_ACID | IM_FIRE | RES_WATE | RES_DARK
+F:HURT_LITE | SELF_DARK_1 | NO_FEAR | NO_CONF | NO_SLEEP | DROP_90
+S:1_IN_8 | BA_ELEC | BR_DARK | SHRIEK | SCARE | BLIND | BLINK | DARKNESS
+D:$A little ghost, it loves to threaten others.
+D:小さな幽霊で、人を脅かすのが大好きだ。
+
+N:1266:テレサの親玉『キングテレサ』
+E:King Boo
+G:G:w
+I:125:60d30:20:50:20
+W:44:4:0:13000:0:0
+B:ENGULF:TERRIFY:6d5
+B:ENGULF:TERRIFY:6d5
+F:UNIQUE | FORCE_MAXHP | INVISIBLE | COLD_BLOOD | ESCORT | SMART
+F:PASS_WALL | MOVE_BODY | CAN_FLY | EVIL | UNDEAD
+F:IM_ELEC | IM_ACID | IM_FIRE | RES_WATE | RES_DARK
+F:HURT_LITE | SELF_DARK_1 | NO_FEAR | NO_CONF | NO_SLEEP
+F:DROP_2D2 | DROP_GOOD | DROP_GREAT | ONLY_ITEM
+S:1_IN_3 | DISPEL | BA_ELEC | BA_DARK
+S:SHRIEK | SCARE | BLIND | BLINK | DARKNESS | S_KIN
+D:$Boo's boss, which has the ability to confine objects
+D:$ and people in a picture frame.  It is worth living to scare people.
+D:$  Ever since losing to Luigi, has been obsessed with revenge on him.
+D:$  It is going to add you to one of the picture frame collections.
+D:物体や人物を額縁に閉じ込め絵にする能力を持つ、テレサの親玉。
+D:人を怖がらせるのが生きがいである。
+D:緑のひげに敗れて以来、彼への仕返しに執念を燃やしている。
+D:八つ当たり気味にあなたも額縁コレクションの一つに加えるつもりだ。 
+
+N:1267:キューちゃん
+E:Raven
+G:B:D
+I:120:24d23:20:60:20
+W:33:3:0:7000:0:0
+B:CRUSH:SHATTER:6d6
+B:CRUSH:TERRIFY:6d6
+F:ANIMAL | MOVE_BODY | EVIL | FRIENDS
+F:NO_CONF | RES_GRAV | DROP_90
+S:1_IN_8 | BR_GRAV
+D:$What a cute penguin!
+D:$  They often move around in groups with good behavior.
+D:かわいいペンギンだ。よく群れをなして行儀よく動き回っている。
+
+N:1268:『ビッグキューちゃん』
+E:Raphael, the Raven
+G:B:R
+I:120:40d30:20:60:20
+W:37:3:0:7000:0:0
+B:CRUSH:SHATTER:12d12
+B:CRUSH:TERRIFY:12d12
+F:UNIQUE | FORCE_MAXHP | ANIMAL | POWERFUL | MOVE_BODY | EVIL
+F:NO_CONF | NO_SLEEP | NO_FEAR | IM_ELEC | RES_GRAV | BASH_DOOR
+F:DROP_GOOD | DROP_2D2 | ONLY_ITEM
+S:1_IN_6 | BA_ELEC | BR_GRAV | TELE_AWAY
+D:$It is very gentle when the head is stepped on,
+D:$ but it gets angry when a stake is driven into its ass.
+D:それは頭を踏まれたくらいでは温厚だが、お尻に杭を打ち込まれると激怒する。
+
+N:1269:精霊馬
+E:Spirit horse
+G:q:G
+I:123:271d3:40:13:50
+W:38:3:0:813:0:0
+B:KICK:DR_MANA:6d6
+B:KICK:HURT:3d6
+B:KICK:HURT:3d6
+B:KICK:CONFUSE:6d6
+F:FORCE_MAXHP | CAN_SWIM | COLD_BLOOD | WEIRD_MIND | RIDING
+F:IM_COLD | RES_WATE | RES_INER | RES_TIME | RES_TELE
+F:NO_STUN | NO_FEAR | NO_SLEEP
+S:1_IN_5 | BA_WATE | HASTE | S_UNDEAD
+D:$It is a horse born by sticking four sticks into a cucumber
+D:$ that is so huge that people can straddle it.
+D:$  The legs are fast.
+D:$  It should carry the spirits of its ancestors,
+D:$ but since the rider was not found,
+D:$ it carries the appropriate spirits.
+D:$ Juice spouts from the fresh body.
+D:人が跨がれるほど巨大なキュウリに四本の棒を刺すことで誕生した馬だ。足が早い。
+D:先祖の霊を乗せるはずだが、乗り手が見つからなかったため適当な霊を乗せている。
+D:瑞々しい体からは汁が噴き出す。
+
+N:1270:精霊牛
+E:Spirit cow
+G:q:b
+I:94:272d3:40:16:50
+W:41:3:0:816:0:0
+B:BUTT:DR_MANA:12d12
+B:BUTT:HURT:6d12
+B:BUTT:INERTIA:6d12
+B:BUTT:CONFUSE:6d12
+F:FORCE_MAXHP | CAN_SWIM | COLD_BLOOD | WEIRD_MIND | RIDING | TAKE_ITEM
+F:IM_COLD | RES_WATE | RES_TIME | RES_TELE
+F:NO_STUN | NO_FEAR | NO_SLEEP
+S:1_IN_2 | BA_WATE | BR_INER | SLOW | TELE_TO
+D:$It is a cow born by sticking four sticks into an eggplant
+D:$ that is so huge that people can straddle it.
+D:$  The legs are slow.
+D:$  It should carry the spirits of its ancestors,
+D:$ but since the rider is not found,
+D:$ it is trying to carry the appropriate spirits.
+D:$ Juice spouts from the fresh body.
+D:人が跨がれるほど巨大なナスに四本の棒を刺すことで誕生した牛だ。足が遅い。
+D:先祖の霊を乗せるはずだが、乗り手が見つからないため適当な霊を乗せていこうとしている。
+D:瑞々しい体からは汁が噴き出す。
+
+N:1271:吸魂鬼
+E:Dementor
+G:G:D
+I:120:22d202:10:300:50
+W:96:13:0:23000:0:0
+B:GAZE:TERRIFY:10d10
+B:TOUCH:COLD:10d10
+B:ENGULF:EXP_VAMP:100d1
+F:FORCE_SLEEP | FORCE_MAXHP | REFLECTING | INVISIBLE | COLD_BLOOD
+F:EMPTY_MIND | PASS_WALL | CAN_FLY
+F:UNDEAD | EVIL | AURA_COLD | NONLIVING | HAS_DARK_2
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
+F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
+F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV
+F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
+S:1_IN_3 | MIND_BLAST | BRAIN_SMASH | HAND_DOOM | DARKNESS
+D:$"Dementors are among the foulest creatures that walk this earth.
+D:$  They infest the darkest, filthiest places,
+D:$ they glory in decay and despair, they drain peace, hope,
+D:$ and happiness out of the air around them..."
+D:$  -Remus Lupin's description of Dementors-
+D:「吸魂鬼は地上を歩く生物の中でももっとも忌まわしい生き物の一つだ。
+D:もっとも暗く、もっとも穢れた場所にはびこり、凋落と絶望の中に栄え、
+D:平和や希望、幸福を周りの空気から吸い取ってしまう」─リーマス・ルーピン
+
+N:1272:セイレーン
+E:Seiren
+G:l:y
+I:120:80d20:20:50:80
+W:35:3:0:500:0:0
+B:SHOW:CONFUSE:4d5
+B:SHOW:BLIND:4d5
+F:FEMALE | AQUATIC | CAN_FLY | CAN_SWIM | WILD_SHORE | NEVER_MOVE
+F:ONLY_ITEM | DROP_GOOD | DROP_1D2
+F:IM_COLD | IM_POIS | RES_WATE | RES_TELE | NO_STUN
+S:1_IN_2 | SHRIEK | TELE_TO
+D:$In folklore, Seirens wrecked the ship with a singing voice.
+D:$  But, Seirens in Angband knows a quicker way.
+D:伝承のセイレーンは歌声で船を難破させたが、
+D:鉄獄のセイレーンはもっと手っ取り早い方法を知っている。
+
+N:1273:『スーパー・グレート・シルバー・ゼリー』
+E:The Super Great Silver Jelly
+G:j:s
+I:120:15d4:20:1:100
+W:4:1:0:80:0:0
+B:TOUCH:EAT_LITE:1d2
+B:TOUCH:EAT_LITE:1d2
+B:TOUCH:EAT_LITE:1d1
+B:TOUCH:EAT_LITE:1d1
+F:UNIQUE | FORCE_MAXHP | OPEN_DOOR | EMPTY_MIND | HAS_DARK_1 | CAN_SWIM
+F:NO_FEAR | NO_CONF | NO_SLEEP | IM_POIS
+F:DROP_90 | ONLY_ITEM
+D:$It's a lump of silvery flesh-like material
+D:$ that works very hard to absorb nearby light.
+D:$  It seems to have a dream of catching and absorbing
+D:$ all the light that illuminates the dungeon."
+D:それは銀色の肉のような物質の塊で、付近の光をすごくがんばって吸い取っている。
+D:ダンジョンを照らす光をすべてキャッチし吸い尽くすのが夢らしい。 
+
+N:1274:赤チォコヴォ
+E:Red Chiokovo
+G:B:r
+I:120:20d100:25:100:30
+W:80:10:0:10000:0:0
+B:CLAW:HURT:4d10
+B:CLAW:HURT:4d10
+B:CRUSH:HURT:6d12
+B:CRUSH:HURT:6d12
+F:DROP_SKELETON | DROP_CORPSE | FORCE_MAXHP | RIDING
+F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | POWERFUL
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
+F:RES_LITE | RES_CHAO | RES_INER | NO_STUN | NO_CONF | NO_SLEEP
+F:ANIMAL | CAN_SWIM | FRIENDS
+S:1_IN_3 | BA_FIRE | BA_LITE | HEAL
+
+N:1275:コティングリーの妖精
+E:Cottingley Fairies
+G:I:G
+I:115:3d11:15:30:80
+W:12:3:0:20:0:0
+B:STING:POISON:5d1
+B:WAIL:LOSE_INT
+F:FEMALE | QUANTUM | FORCE_SLEEP | FRIENDS | DROP_90 | TAKE_ITEM
+F:HURT_FIRE | CAN_FLY | FRIENDLY | HAS_LITE_1 | IM_POIS | RES_LITE
+S:1_IN_4 | MISSILE
+D:$Only a few old photographs are the only proof that this fairy once existed.
+D:たった数枚の古ぼけた写真が、この妖精がかつて実在したことの唯一の証拠だ。 
+
+N:1276:点『P』
+E:Point P
+G:P:D
+I:140:10d100:30:50:110
+W:39:5:0:5000:0:0
+B:SPORE:LOSE_ALL:2d5
+B:SPORE:LOSE_ALL:2d5
+B:GAZE:DR_MANA:10d1
+B:TOUCH:UN_POWER
+F:UNIQUE | FORCE_SLEEP | FORCE_MAXHP | STUPID | WEIRD_MIND
+F:ATTR_MULTI | ATTR_ANY | RAND_25 | RAND_50 | QUANTUM | ELDRITCH_HORROR
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN
+F:CAN_SWIM | CAN_FLY | PASS_WALL | MOVE_BODY
+F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | DROP_GREAT
+S:1_IN_2 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | SLOW | HASTE | FORGET
+S:BLINK | TPORT | TELE_AWAY
+D:$That point is an abominable existence that makes people
+D:$ all over the world go crazy just by moving.
+D:その点は動くだけで世界中の人間を狂わせる忌むべき存在だ。 
+
+N:1277:破壊の怨念『久遠』
+E:Kuwon, the dream exchanger
+G:f:y
+I:120:70d30:80:65:5
+W:41:2:0:6500:0:0
+B:CLAW:HURT:9d12
+B:CLAW:ELEC:15d12
+B:PUNCH:HURT:9d12
+B:PUNCH:ELEC:15d12
+F:UNIQUE | FORCE_MAXHP | FEMALE | EVIL | ANIMAL
+F:DROP_CORPSE | REGENERATE | DROP_GOOD | DROP_4D2
+F:BASH_DOOR | NO_CONF | NO_FEAR | NO_SLEEP
+F:IM_ELEC
+S:1_IN_4 | BA_ELEC | BR_ELEC | BLINK
+D:$She is angry and her eyes are full of vengeance.
+D:$  That's because her lover was killed.
+D:$  Since it was the priest who broke the relationship between the two,
+D:$ she continues to destroy all religious facilities and their ruins
+D:$ even in Angband.
+D:彼女はかつて愛する人を殺され、その怒りで瞳は怨讐の意思に満ち満ちている。
+D:二人の仲を切り裂いたのが神官であったことから、
+D:鉄獄でもあらゆる宗教施設とその遺跡を破壊し続けている。
+
+N:1278:魔界の一匹狼『クラウス・ローゼンバーグ』
+E:Claus Rosenberg, the maverick of demon's world
+G:U:W
+I:120:45d40:50:100:10
+W:40:1:0:4949:0:0
+B:BITE:EXP_VAMP:5d3
+B:BITE:EXP_VAMP:7d3
+B:BITE:EXP_VAMP:9d3
+B:BITE:EXP_VAMP:11d3
+F:UNIQUE | FORCE_MAXHP | MALE | DEMON | EVIL | FRIENDLY
+F:RES_DARK | RES_CHAO | RES_TIME
+F:OPEN_DOOR | NO_CONF | NO_FEAR | NO_SLEEP | DROP_GOOD | DROP_90
+S:1_IN_4 | BA_DARK | CAUSE_3 | SCARE | FORGET
+D:$He lives inside the "Third Great Door"
+D:$ and looks like a boy in silver hair.
+D:$  From his right hand,
+D:$ there is a slight sweet and sour scent of an apple.
+D:$  It seems to be a gift from a dead subordinate.
+D:彼は"第三の大扉"の内側に住み、銀髪をまとった少年の姿をしている。
+D:彼の右手からはほんのりと林檎の甘酸っぱい香りがする。
+D:それは死んだ部下からの贈り物らしい。
+
+N:1279:紅衣の修行僧
+E:Crimson monk
+G:p:R
+I:115:55d11:20:49:5
+W:36:3:0:800:2500:1278
+B:KICK:FIRE:15d5
+B:HIT:FIRE:15d5
+B:KICK:CONFUSE:5d4
+B:HIT:CONFUSE:5d2
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | RES_CHAO | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_9 | BO_FIRE | BA_FIRE | BA_CHAO | TELE_AWAY | MISSILE | CONF
+D:$A monk in crimson robes trained in the most lethal martial arts.
+D:紅の法衣とログルスの力を身にまとい、拳法に熟練した修行僧だ。
+
+N:1280:紅衣の高位修行僧
+E:High crimson monk
+G:p:r
+I:120:56d12:30:59:10
+W:41:3:0:1100:0:0
+B:KICK:FIRE:15d8
+B:HIT:FIRE:15d8
+B:KICK:CONFUSE:5d5
+B:HIT:CONFUSE:5d3
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_90 | DROP_1D2 | OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | RES_CHAO | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_6 | BO_FIRE | BA_FIRE | BA_CHAO | TELE_AWAY | MISSILE | CONF
+D:$A high-rank crimson-garbed monk, trained in martial arts.
+D:紅色の法衣を身にまとった、拳法に熟練した高位の修行僧だ。

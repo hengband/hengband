@@ -1,5 +1,5 @@
 ﻿#include "object/warning.h"
-#include "art-definition/art-sword-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "dungeon/dungeon-flag-types.h"
@@ -29,9 +29,9 @@
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
+#include "player/special-defense-types.h"
 #include "spell/spell-types.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
@@ -126,8 +126,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
         break;
 
     case GF_ARROW:
-        if (!target_ptr->blind
-            && (has_invuln_arrow(target_ptr))) {
+        if (!target_ptr->blind && (has_invuln_arrow(target_ptr))) {
             dam = 0;
             ignore_wraith_form = TRUE;
         }
@@ -193,7 +192,8 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_DEATH_RAY:
         dam = dam * calc_deathray_damage_rate(target_ptr, CALC_MAX) / 100;
-        if (dam == 0) ignore_wraith_form = TRUE;
+        if (dam == 0)
+            ignore_wraith_form = TRUE;
         break;
 
     case GF_HOLY_FIRE:

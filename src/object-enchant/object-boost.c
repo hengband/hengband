@@ -447,6 +447,7 @@ void one_activation(object_type *o_ptr)
             chance = 50;
             break;
         case ACT_SUMMON_ANIMAL:
+        case ACT_ANIM_DEAD:
             chance = 40;
             break;
         case ACT_DISP_EVIL:

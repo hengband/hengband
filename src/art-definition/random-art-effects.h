@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 typedef enum random_art_activation_type {
-	ACT_SUNLIGHT = 1,
+    ACT_SUNLIGHT = 1,
     ACT_BO_MISS_1 = 2,
     ACT_BA_POIS_1 = 3,
     ACT_BO_ELEC_1 = 4,

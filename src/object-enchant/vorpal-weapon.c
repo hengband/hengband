@@ -1,5 +1,5 @@
 ﻿#include "object-enchant/vorpal-weapon.h"
-#include "art-definition/art-sword-types.h"
+#include "art-definition/fixed-art-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "monster-race/monster-race.h"

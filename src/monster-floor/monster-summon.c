@@ -103,7 +103,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 
     summon_specific_who = who;
     summon_specific_type = type;
-    summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
+    summon_unique_okay = (mode & PM_ALLOW_UNIQUE) != 0;
     get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
     MONRACE_IDX r_idx = get_mon_num(player_ptr, (floor_ptr->dun_level + lev) / 2 + 5, 0);

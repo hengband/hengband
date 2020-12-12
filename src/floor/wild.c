@@ -2,10 +2,10 @@
  * @brief 荒野マップの生成とルール管理 / Wilderness generation
  * @date 2014/02/13
  * @author
- * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
- * This software may be copied and distributed for educational, research, and\n
- * not for profit purposes provided that this copyright and statement are\n
- * included in all such copies.\n
+ * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+ * This software may be copied and distributed for educational, research, and
+ * not for profit purposes provided that this copyright and statement are
+ * included in all such copies.
  * 2013 Deskull rearranged comment for Doxygen.
  */
 
@@ -608,7 +608,7 @@ void wilderness_gen_small(player_type *creature_ptr)
 }
 
 typedef struct wilderness_grid {
-    int terrain; /* Terrain type */
+    wt_type terrain; /* Terrain type */
     TOWN_IDX town; /* Town number */
     DEPTH level; /* Level of the wilderness */
     byte road; /* Road */
