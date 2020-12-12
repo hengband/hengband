@@ -18145,7 +18145,6 @@ D:「そうだ！超人ロック！」「僕を知っているのか？」
 D:「もちろん！不老不死にして、史上最強のエスパー！」
 D:（聖悠紀、超人ロック「赤いサーペント」）
 
-
 N:882:皇帝『レイザーク』
 E:Layzark, the Emperor
 G:p:y
@@ -18655,7 +18654,8 @@ B:TOUCH:PARALYZE:3d3
 F:NEVER_MOVE | ONLY_GOLD | DROP_1D2 | DROP_90 | MULTIPLY | EMPTY_MIND
 F:ANIMAL | COLD_BLOOD | NO_FEAR | NO_SLEEP | NO_CONF | NO_STUN
 F:HURT_ROCK | IM_FIRE | IM_ACID | IM_POIS | IM_COLD | RES_SHAR
-D:$Look! A nice vein of rock to dig in for gold! Wait a minute...
+D:$Look! A nice vein of rock to dig in for gold!
+D:$  Wait a minute...
 D:おお！この岩はなかなかいい金鉱石を含んでいる！おや、ちょっと待てよ？…
 
 N:912:宙に浮かぶ宝珠
@@ -19000,6 +19000,8 @@ S:PSY_SPEAR | DARKNESS | TRAPS | FORGET | ANIM_DEAD | S_KIN | S_CYBER | S_MONSTE
 S:S_MONSTERS | S_ANT | S_SPIDER | S_HOUND | S_HYDRA | S_DEMON | S_UNDEAD |
 S:S_DRAGON | S_HI_UNDEAD | S_AMBERITES | S_UNIQUE | BA_LITE
 V:133
+D:$You don't know what it is.
+D:それは何が何だか分からない。
 
 N:930:超人ロックのクローン
 E:Clone of Locke the Superman
@@ -19947,8 +19949,9 @@ B:CRUSH:ELEC:3d5
 B:BITE:ELEC:6d8
 F:BASH_DOOR | CAN_FLY | AURA_ELEC | SELF_LITE_2 |
 F:ANIMAL | IM_ELEC | DROP_CORPSE | RIDING |
-S:1_IN_5
-S:BR_ELEC | BA_ELEC |
+S:1_IN_5 | S:BR_ELEC | BA_ELEC
+D:$It is neither a email client nor an international rescue team.
+D:これは雷鳥でもなければ国際救助隊でもない。
 
 N:982:デュラハン
 E:Durahan
@@ -19980,7 +19983,9 @@ F:ANIMAL
 D:$Resembling a monkey but, at five feet tall, much larger than monkey, this
 D:$ animal must be one of the mysterious beasts that live around Mt. Hiba in
 D:$ Hiroshima Prefecture.
+D:$  It may or may not appear in a certain psychic photograph.
 D:広島県の比婆山一帯に現れる「サルに似ているが、サルよりも大きな」謎の動物。
+D:とある心霊写真に出たり出なかったりする。
 
 N:984:鵺
 E:Nue
@@ -20092,8 +20097,8 @@ F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_6 |
 S:BLIND | SHRIEK | DISPEL | INVULNER | S_ANGEL
 V:133
-D:$It is deer-like but with the scales of a dragon and the tail of an ox.  All
-D:$ accounts attest to its holiness and power.
+D:$It is deer-like but with the scales of a dragon and the tail of an ox.
+D:$  All accounts attest to its holiness and power.
 D:龍の鱗に牛の尾、馬の蹄を持ち、角の生えた四本足の聖なる獣で、
 D:王者が仁のある政治を行った時に姿を現わすと言われている。
 
@@ -20122,8 +20127,8 @@ B:BITE:HURT:10d10
 F:FORCE_MAXHP | UNIQUE | ANIMAL | CAN_FLY |
 F:REGENERATE | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC |
 F:IM_POIS | NO_CONF | NO_SLEEP | NO_FEAR | DROP_CORPSE | RIDING
-D:$This great eight-legged horse is Odin's mount.  It is said to be the child
-D:$ of Loki, the giant.
+D:$This great eight-legged horse is Odin's mount.
+D:$  It is said to be the child of Loki, the giant.
 D:オーディンの乗馬たるスレイプニルは、8本の足を持つ名馬である。
 D:巨人ロキの子供であると言われている。
 
@@ -20219,6 +20224,9 @@ D:$betraying his friends.
 D:このドワーフはお金に対する欲望が非常に強い。モルゴスはそこにつけ込んで
 D:彼の友人達を誘拐させた。
 
+# 根性がないと開発はできない
+# 根性がないとプレイもできない
+# ……変愚蛮怒のことですよ？
 N:997:チォコヴォ
 E:Chiokovo
 G:B:y
@@ -20228,6 +20236,10 @@ B:KICK:HURT:1d3
 B:KICK:HURT:1d4
 B:BITE:HURT:1d5
 F:ANIMAL | DROP_CORPSE | DROP_SKELETON | RIDING
+D:$It is also called a horse bird.
+D:$  It can run through land quickly instead of being able to fly.
+D:それは馬鳥ともいい、空を飛ぶことができない。
+D:代わりに陸を素早く駆け抜けることができる。
 
 N:998:黒チォコヴォ
 E:Black Chiokovo
@@ -23657,7 +23669,7 @@ F:BASH_DOOR | OPEN_DOOR | MOVE_BODY |
 F:EVIL | IM_POIS | IM_ACID | GIANT | EAT_GIVE_STR |
 S:1_IN_8 |
 S:SHOOT
-D:$The thee-eyes cyclops!?  What the hell is going on!?
+D:$A three-eyes cyclops!?  What the hell is going on!?
 D:三つ目のサイクロプス！？　一体何が起きているというんだ！？
 
 #J0#
@@ -25311,6 +25323,11 @@ F:DROP_CORPSE | REGENERATE | DROP_GOOD | DROP_4D2
 F:BASH_DOOR | NO_CONF | NO_FEAR | NO_SLEEP
 F:IM_ELEC
 S:1_IN_4 | BA_ELEC | BR_ELEC | BLINK
+D:$She is angry and her eyes are full of vengeance.
+D:$  That's because her lover was killed.
+D:$  Since it was the priest who broke the relationship between the two,
+D:$ she continues to destroy all religious facilities and their ruins
+D:$ even in Angband.
 D:彼女はかつて愛する人を殺され、その怒りで瞳は怨讐の意思に満ち満ちている。
 D:二人の仲を切り裂いたのが神官であったことから、
 D:鉄獄でもあらゆる宗教施設とその遺跡を破壊し続けている。
