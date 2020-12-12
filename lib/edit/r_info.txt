@@ -19949,7 +19949,7 @@ B:CRUSH:ELEC:3d5
 B:BITE:ELEC:6d8
 F:BASH_DOOR | CAN_FLY | AURA_ELEC | SELF_LITE_2 |
 F:ANIMAL | IM_ELEC | DROP_CORPSE | RIDING |
-S:1_IN_5 | S:BR_ELEC | BA_ELEC
+S:1_IN_5 | BR_ELEC | BA_ELEC
 D:$It is neither a email client nor an international rescue team.
 D:これは雷鳥でもなければ国際救助隊でもない。
 
