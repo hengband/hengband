@@ -1,7 +1,7 @@
 ﻿#include "cmd-item/cmd-throw.h"
 #include "action/throw-util.h"
 #include "action/weapon-shield.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "combat/slaying.h"

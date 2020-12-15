@@ -1,5 +1,5 @@
 ﻿#include "effect/effect-player-resist-hurt.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"

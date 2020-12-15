@@ -1,5 +1,5 @@
 ﻿#include "player/player-status-resist.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"

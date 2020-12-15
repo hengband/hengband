@@ -11,8 +11,8 @@
  */
 
 #include "object/object-info.h"
-#include "art-definition/fixed-art-types.h"
-#include "art-definition/random-art-effects.h"
+#include "artifact/fixed-art-types.h"
+#include "artifact/random-art-effects.h"
 #include "artifact/artifact-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"

@@ -5,7 +5,7 @@
  */
 
 #include "object-activation/activation-switcher.h"
-#include "art-definition/random-art-effects.h"
+#include "artifact/random-art-effects.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-activation/activation-bolt-ball.h"

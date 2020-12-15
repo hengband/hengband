@@ -1,5 +1,5 @@
 ﻿#include "artifact/random-art-activation.h"
-#include "art-definition/random-art-effects.h"
+#include "artifact/random-art-effects.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/tr-types.h"

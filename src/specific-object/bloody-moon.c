@@ -1,5 +1,5 @@
 ﻿#include "specific-object/bloody-moon.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "core/player-update-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/tr-types.h"

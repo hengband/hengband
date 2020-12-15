@@ -1,5 +1,5 @@
 ﻿#include "market/building-craft-weapon.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/shoot.h"
 #include "core/player-update-types.h"

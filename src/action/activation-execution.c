@@ -1,6 +1,6 @@
 ﻿#include "action/activation-execution.h"
 #include "action/action-limited.h"
-#include "art-definition/random-art-effects.h"
+#include "artifact/random-art-effects.h"
 #include "artifact/artifact-info.h"
 #include "core/window-redrawer.h"
 #include "effect/spells-effect-util.h"

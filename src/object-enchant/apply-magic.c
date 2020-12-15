@@ -6,7 +6,7 @@
  */
 
 #include "object-enchant/apply-magic.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "artifact/fixed-art-generator.h"
 #include "dungeon/dungeon.h"
 #include "mutation/mutation-flag-types.h"

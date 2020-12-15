@@ -1,5 +1,5 @@
 ﻿#include "market/building-craft-fix.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "artifact/artifact-info.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"

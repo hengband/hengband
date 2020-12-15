@@ -6,7 +6,7 @@
  */
 
 #include "view/status-first-page.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "display-util.h"
