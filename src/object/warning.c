@@ -1,5 +1,5 @@
 ﻿#include "object/warning.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "dungeon/dungeon-flag-types.h"

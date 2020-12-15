@@ -3424,9 +3424,6 @@
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\art-definition\random-art-effects.h">
-      <Filter>art-definition</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h">
       <Filter>monster-race</Filter>
     </ClInclude>
@@ -4708,8 +4705,11 @@
     <ClInclude Include="..\..\src\io\record-play-movie.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\art-definition\fixed-art-types.h">
-      <Filter>art-definition</Filter>
+    <ClInclude Include="..\..\src\artifact\fixed-art-types.h">
+      <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact\random-art-effects.h">
+      <Filter>artifact</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -4848,9 +4848,6 @@
     </Filter>
     <Filter Include="melee">
       <UniqueIdentifier>{642ec95b-f054-4958-a614-49ccf88cfc25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="art-definition">
-      <UniqueIdentifier>{fffcb35e-069c-4a97-ab60-0010a4d5d488}</UniqueIdentifier>
     </Filter>
     <Filter Include="monster-race">
       <UniqueIdentifier>{8de4a55f-fa83-496b-a42f-81078346c918}</UniqueIdentifier>

@@ -1,5 +1,5 @@
 ﻿#include "perception/identification.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"

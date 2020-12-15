@@ -1,5 +1,5 @@
 ﻿#include "io-dump/character-dump.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

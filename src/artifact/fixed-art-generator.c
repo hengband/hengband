@@ -11,7 +11,7 @@
  */
 
 #include "artifact/fixed-art-generator.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "floor/floor-object.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"

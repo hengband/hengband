@@ -1,5 +1,5 @@
 ﻿#include "object-enchant/activation-info-table.h"
-#include "art-definition/random-art-effects.h"
+#include "artifact/random-art-effects.h"
 
 /*!
  * @brief アイテムの発動効果テーブル /

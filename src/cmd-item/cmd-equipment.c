@@ -1,6 +1,6 @@
 ﻿#include "cmd-item/cmd-equipment.h"
 #include "action/weapon-shield.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"

@@ -20,17 +20,16 @@ hengband_SOURCES = \
 	\
 	artifact/artifact-info.c artifact/artifact-info.h \
 	artifact/fixed-art-generator.c artifact/fixed-art-generator.h \
+	artifact/fixed-art-types.h \
 	artifact/random-art-activation.c artifact/random-art-activation.h \
 	artifact/random-art-bias-types.h \
 	artifact/random-art-characteristics.c artifact/random-art-characteristics.h \
+	artifact/random-art-effects.h \
 	artifact/random-art-generator.c artifact/random-art-generator.h \
 	artifact/random-art-misc.c artifact/random-art-misc.h \
 	artifact/random-art-pval-investor.c artifact/random-art-pval-investor.h \
 	artifact/random-art-resistance.c artifact/random-art-resistance.h \
 	artifact/random-art-slay.c artifact/random-art-slay.h \
-	\
-	art-definition/fixed-art-types.h \
-	art-definition/random-art-effects.h \
 	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \

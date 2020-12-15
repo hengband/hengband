@@ -7,7 +7,7 @@
 
 #include "object-use/read-execution.h"
 #include "action/action-limited.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/show-file.h"

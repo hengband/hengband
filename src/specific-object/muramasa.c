@@ -1,5 +1,5 @@
 ﻿#include "specific-object/muramasa.h"
-#include "art-definition/fixed-art-types.h"
+#include "artifact/fixed-art-types.h"
 #include "core/asking-player.h"
 #include "spell/spells-object.h"
 #include "status/base-status.h"
