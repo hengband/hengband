@@ -61,7 +61,7 @@ void do_cmd_equip(player_type *creature_ptr)
     sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", (int)lbtokg1(weight), (int)lbtokg2(weight), (long int)((weight * 100) / weight_lim));
 #else
     sprintf(out_val, "Equipment: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(weight / 10), (int)(weight % 10),
-        (long int)((weight * 100) / weight_lim);
+        (long int)((weight * 100) / weight_lim));
 #endif
 
     prt(out_val, 0, 0);
