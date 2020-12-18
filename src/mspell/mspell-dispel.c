@@ -122,7 +122,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 
         if (is_echizen(target_ptr))
             msg_print(_("やりやがったな！", ""));
-        else if ((target_ptr->pseikaku == PERSONALITY_CHARGEMAN)) {
+        else if (target_ptr->pseikaku == PERSONALITY_CHARGEMAN) {
             if (randint0(2) == 0)
                 msg_print(_("ジュラル星人め！", ""));
             else
