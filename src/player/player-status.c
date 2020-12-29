@@ -1138,7 +1138,7 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 {
     int extra_shots = 0;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->num_fire = 100;
+
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *q_ptr;
         q_ptr = &creature_ptr->inventory_list[i];
