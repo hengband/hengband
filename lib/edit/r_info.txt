@@ -24701,7 +24701,7 @@ D:$A major demon lord with a goat's head, tough to kill.
 D:山羊の頭を持つ高位の魔王で、簡単には倒せない。
 
 N:1245:エッヂ
-E:Chromium edge
+E:Chronium edge
 G:e:b
 I:140:20d20:25:0:1
 W:50:1:0:1500:0:0
@@ -24764,7 +24764,7 @@ S:1_IN_5 | BA_ACID |  BA_ELEC | BA_POIS | BA_CHAO | BA_NETH
 S:S_KIN | BLIND | SCARE | CONF
 D:$This devout Buddhist created every information apples
 D:$ with LSD's inspiration.
-D:$His obsession was terrifying and he sought too much perfection,
+D:$  His obsession was terrifying and he sought too much perfection,
 D:$ so he had fired too many employees.
 D:この敬虔な仏教徒はログルスの幻覚によるインスピレーションで
 D:あらゆる品種のリンゴを作り上げた。
