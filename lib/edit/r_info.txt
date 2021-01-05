@@ -24701,7 +24701,7 @@ D:$A major demon lord with a goat's head, tough to kill.
 D:山羊の頭を持つ高位の魔王で、簡単には倒せない。
 
 N:1245:エッヂ
-E:Chromium edge
+E:Chronium edge
 G:e:b
 I:140:20d20:25:0:1
 W:50:1:0:1500:0:0
@@ -24764,7 +24764,7 @@ S:1_IN_5 | BA_ACID |  BA_ELEC | BA_POIS | BA_CHAO | BA_NETH
 S:S_KIN | BLIND | SCARE | CONF
 D:$This devout Buddhist created every information apples
 D:$ with LSD's inspiration.
-D:$His obsession was terrifying and he sought too much perfection,
+D:$  His obsession was terrifying and he sought too much perfection,
 D:$ so he had fired too many employees.
 D:この敬虔な仏教徒はログルスの幻覚によるインスピレーションで
 D:あらゆる品種のリンゴを作り上げた。
@@ -24785,7 +24785,8 @@ F:DROP_4D2 | DROP_1D2 | DROP_GOOD | DROP_60 | DROP_90 | ONLY_ITEM |
 F:EVIL | IM_COLD | IM_ACID | IM_ELEC | IM_FIRE
 S:1_IN_4 |
 S:BR_NETH | S_MONSTERS | S_DEMON | S_HOUND | SCARE
-D:$A two-headed hound with snake tail. He is firstborn of Echidna, father of Sphinx and Lion of Namea, 
+D:$A two-headed hound with snake tail. He is firstborn of Echidna,
+D:$ father of Sphinx and Lion of Namea, 
 D:$ and deity head the male line in clan. Hades' vassals respond to his call.
 D:２つ首と蛇の尾を持つ猟犬だ。彼はエキドナの長子であり、
 D:スフィンクスとネメアのライオンの父たる一族の男系筆頭の魔神だ。
@@ -25196,7 +25197,8 @@ D:$ but since the rider is not found,
 D:$ it is trying to carry the appropriate spirits.
 D:$ Juice spouts from the fresh body.
 D:人が跨がれるほど巨大なナスに四本の棒を刺すことで誕生した牛だ。足が遅い。
-D:先祖の霊を乗せるはずだが、乗り手が見つからないため適当な霊を乗せていこうとしている。
+D:先祖の霊を乗せるはずだが、
+D:乗り手が見つからないため適当な霊を乗せていこうとしている。
 D:瑞々しい体からは汁が噴き出す。
 
 N:1271:吸魂鬼
@@ -25215,14 +25217,10 @@ F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
 F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV
 F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
 S:1_IN_3 | MIND_BLAST | BRAIN_SMASH | HAND_DOOM | DARKNESS
-D:$"Dementors are among the foulest creatures that walk this earth.
-D:$  They infest the darkest, filthiest places,
-D:$ they glory in decay and despair, they drain peace, hope,
-D:$ and happiness out of the air around them..."
-D:$  -Remus Lupin's description of Dementors-
-D:「吸魂鬼は地上を歩く生物の中でももっとも忌まわしい生き物の一つだ。
-D:もっとも暗く、もっとも穢れた場所にはびこり、凋落と絶望の中に栄え、
-D:平和や希望、幸福を周りの空気から吸い取ってしまう」─リーマス・ルーピン
+D:それはこの世で最も忌まわしい生き物の一つである。
+D:それは相手からあらゆる幸せな気持ちを吸い取り、後には不幸しか残さない。
+D:それのそばでは動く気力すら沸かなくなるため、刑務所の看守として登用されている。
+D:最近、闇の勢力が力を拡大するに連れて、一部が野に放たれてしまったようだ。
 
 N:1272:セイレーン
 E:Seiren
@@ -25290,7 +25288,7 @@ D:たった数枚の古ぼけた写真が、この妖精がかつて実在した
 
 N:1276:点『P』
 E:Point P
-G:P:D
+G:.:v
 I:140:10d100:30:50:110
 W:39:5:0:5000:0:0
 B:SPORE:LOSE_ALL:2d5
