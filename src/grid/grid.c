@@ -302,8 +302,6 @@ bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
         return FALSE;
 }
 
-#define COMPLEX_WALL_ILLUMINATION /*!< 照明状態を壁により影響を受ける、より複雑な判定に切り替えるマクロ */
-
 /*!
  * @brief 指定された座標のマスが現在照らされているかを返す。 / Check for "local" illumination
  * @param y y座標
@@ -318,8 +316,6 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
 
     /* Check for "local" illumination */
 
-#ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
-
     /* Check for "complex" illumination */
     if ((feat_supports_los(get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[yy][xx]))
             && (creature_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW))
@@ -330,13 +326,6 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
         return TRUE;
     } else
         return FALSE;
-
-#else /* COMPLEX_WALL_ILLUMINATION */
-
-    /* Check for "simple" illumination */
-    return (creature_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW) ? TRUE : FALSE;
-
-#endif /* COMPLEX_WALL_ILLUMINATION */
 }
 
 /*! 対象座標のマスの照明状態を更新する際の補助処理マクロ */
@@ -367,8 +356,6 @@ void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x
 
     if (!in_bounds(creature_ptr->current_floor_ptr, y, x))
         return;
-
-#ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
     if ((y != creature_ptr->y) && (x != creature_ptr->x)) {
         yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
@@ -406,37 +393,6 @@ void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x
             update_local_illumination_aux(creature_ptr, yy, xx);
         }
     }
-
-#else /* COMPLEX_WALL_ILLUMINATION */
-
-    if ((y != creature_ptr->y) && (x != creature_ptr->x)) {
-        yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
-        xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
-        update_local_illumination_aux(creature_ptr, yy, xx);
-    } else if (x != creature_ptr->x) /* y == creature_ptr->y */
-    {
-        xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
-        for (i = -1; i <= 1; i++) {
-            yy = y + i;
-            update_local_illumination_aux(creature_ptr, yy, xx);
-        }
-    } else if (y != creature_ptr->y) /* x == creature_ptr->x */
-    {
-        yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
-        for (i = -1; i <= 1; i++) {
-            xx = x + i;
-            update_local_illumination_aux(creature_ptr, yy, xx);
-        }
-    } else /* Player's grid */
-    {
-        for (i = 0; i < 8; i++) {
-            yy = y + ddy_cdd[i];
-            xx = x + ddx_cdd[i];
-            update_local_illumination_aux(creature_ptr, yy, xx);
-        }
-    }
-
-#endif /* COMPLEX_WALL_ILLUMINATION */
 }
 
 /*!
