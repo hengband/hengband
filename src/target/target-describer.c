@@ -259,7 +259,7 @@ static u16b describe_monster_item(player_type *subject_ptr, eg_type *eg_ptr)
     return CONTINUOUS_DESCRIPTION;
 }
 
-static bool within_char_util(u16b input) { return (input > -127) && (input < 128); }
+static bool within_char_util(s16b input) { return (input > -127) && (input < 128); }
 
 static s16b describe_grid(player_type *subject_ptr, eg_type *eg_ptr)
 {
