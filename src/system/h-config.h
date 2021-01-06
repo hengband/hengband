@@ -159,11 +159,6 @@
 # define SAFE_SETUID_POSIX
 #endif
 
- /*
- * OPTION: Handle signals
- */
-#define HANDLE_SIGNALS
-
 /*
  * OPTION: Set the "default" path to the angband "lib" directory.
  *
