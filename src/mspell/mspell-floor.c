@@ -215,7 +215,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         if (is_echizen(target_ptr))
             msg_print(_("くっそ～", ""));
-        else if ((target_ptr->pseikaku == PERSONALITY_CHARGEMAN)) {
+        else if (target_ptr->pseikaku == PERSONALITY_CHARGEMAN) {
             if (randint0(2) == 0)
                 msg_print(_("ジュラル星人め！", ""));
             else
