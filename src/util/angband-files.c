@@ -19,11 +19,7 @@ int usleep(huge usecs)
 
     int nfds = 0;
 
-#ifdef FD_SET
     fd_set *no_fds = NULL;
-#else
-    int *no_fds = NULL;
-#endif
     if (usecs > 4000000L)
         core(_("不当な usleep() 呼び出し", "Illegal usleep() call"));
 
