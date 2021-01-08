@@ -57,18 +57,11 @@
 
 #ifdef SET_UID
 
-#  include <sys/param.h>
-#  include <sys/file.h>
-
-# ifdef linux
-#  include <sys/file.h>
-# endif
-
-# include <pwd.h>
-
-# include <unistd.h>
-
-# include <sys/stat.h>
+#include <sys/param.h>
+#include <sys/file.h>
+#include <pwd.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
 #endif /* SET_UID */
 
