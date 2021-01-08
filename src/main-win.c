@@ -3259,10 +3259,8 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         return 0;
     }
     case WM_NCLBUTTONDOWN: {
-#ifdef HTCLOSE
         if (wParam == HTCLOSE)
             wParam = HTSYSMENU;
-#endif /* HTCLOSE */
 
         if (wParam == HTSYSMENU) {
             if (td->visible) {
