@@ -373,7 +373,7 @@ void describe_named_item(player_type *player_ptr, flavor_type *flavor_ptr)
 
 #ifdef JP
     if (object_is_smith(player_ptr, flavor_ptr->o_ptr))
-        flavor_ptr->t = object_desc_str(flavor_ptr->t, format("鍛冶師%flavor_ptr->sの", player_ptr->name));
+        flavor_ptr->t = object_desc_str(flavor_ptr->t, format("鍛冶師%sの", player_ptr->name));
 
     describe_artifact_ja(flavor_ptr);
 #endif
