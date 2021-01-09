@@ -287,6 +287,8 @@ typedef struct player_type {
 
     /*** Temporary fields ***/
 
+    bool select_ring_slot;
+
     bool playing; /* True if player is playing */
     bool leaving; /* True if player is leaving */
 

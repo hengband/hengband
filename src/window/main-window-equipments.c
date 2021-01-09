@@ -40,7 +40,7 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
     int len = wid - col - 1;
     for (k = 0, i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
-        if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval) || (mode & USE_FULL))
+        if (!(owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval) || (mode & USE_FULL))
             && (!((((i == INVEN_RARM) && has_left_hand_weapon(owner_ptr)) || ((i == INVEN_LARM) && has_right_hand_weapon(owner_ptr))) && has_two_handed_weapons(owner_ptr))
                 || (mode & IGNORE_BOTHHAND_SLOT)))
             continue;

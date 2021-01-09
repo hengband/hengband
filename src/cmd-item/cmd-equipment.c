@@ -79,7 +79,6 @@ void do_cmd_equip(player_type *creature_ptr)
     command_gap = wid - 30;
 }
 
-bool select_ring_slot = FALSE;
 
 /*!
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
@@ -161,13 +160,13 @@ void do_cmd_wield(player_type *creature_ptr)
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
 
         s = _("おっと。", "Oops.");
-        select_ring_slot = TRUE;
+        creature_ptr->select_ring_slot = TRUE;
         if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) {
-            select_ring_slot = FALSE;
+            creature_ptr->select_ring_slot = FALSE;
             return;
         }
 
-        select_ring_slot = FALSE;
+        creature_ptr->select_ring_slot = FALSE;
         break;
     }
 

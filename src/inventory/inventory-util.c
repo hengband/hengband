@@ -171,7 +171,7 @@ bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, tval_type item_tester_t
     if ((i < 0) || (i >= INVEN_TOTAL))
         return FALSE;
 
-    if (select_ring_slot)
+    if (owner_ptr->select_ring_slot)
         return is_ring_slot(i);
 
     return item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], item_tester_tval);
@@ -224,7 +224,7 @@ INVENTORY_IDX label_to_equipment(player_type *owner_ptr, int c)
     if ((i < INVEN_RARM) || (i >= INVEN_TOTAL))
         return -1;
 
-    if (select_ring_slot)
+    if (owner_ptr->select_ring_slot)
         return is_ring_slot(i) ? i : -1;
 
     if (!owner_ptr->inventory_list[i].k_idx)

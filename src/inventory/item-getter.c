@@ -168,7 +168,7 @@ static void test_equipment(player_type *owner_ptr, item_selection_type *item_sel
         return;
 
     for (int j = INVEN_RARM; j < INVEN_TOTAL; j++)
-        if (select_ring_slot ? is_ring_slot(j)
+        if (owner_ptr->select_ring_slot ? is_ring_slot(j)
                              : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL))
             item_selection_ptr->max_equip++;
 

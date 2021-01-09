@@ -3,8 +3,6 @@
 #include "object/tval-types.h"
 #include "system/angband.h"
 
-extern bool select_ring_slot;
-
 bool is_ring_slot(int i);
 bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num);
 bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, tval_type tval);
