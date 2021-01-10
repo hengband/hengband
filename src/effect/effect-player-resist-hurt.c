@@ -567,7 +567,7 @@ void effect_player_icee(player_type *target_ptr, effect_player_type *ep_ptr)
         (void)set_stun(target_ptr, target_ptr->stun + randint1(15));
     }
 
-    if ((!(target_ptr->resist_cold || is_oppose_cold(target_ptr))) || one_in_(12)) {
+    if ((!(has_resist_cold(target_ptr) || is_oppose_cold(target_ptr))) || one_in_(12)) {
         if (!has_immune_cold(target_ptr))
             inventory_damage(target_ptr, set_cold_destroy, 3);
     }

@@ -248,12 +248,12 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 
     dam = dam * calc_cold_damage_rate(creature_ptr) / 100;
     if (aura || !check_multishadow(creature_ptr)) {
-        if ((!(double_resist || creature_ptr->resist_cold)) && one_in_(HURT_CHANCE))
+        if ((!(double_resist || has_resist_cold(creature_ptr))) && one_in_(HURT_CHANCE))
             (void)do_dec_stat(creature_ptr, A_STR);
     }
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
-    if (!aura && !(double_resist && creature_ptr->resist_cold))
+    if (!aura && !(double_resist && has_resist_cold(creature_ptr)))
         inventory_damage(creature_ptr, set_cold_destroy, inv);
 
     return get_damage;

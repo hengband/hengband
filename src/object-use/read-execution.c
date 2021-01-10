@@ -421,7 +421,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_ICE: {
             fire_ball(creature_ptr, GF_ICE, 0, 777, 4);
-            if (!(is_oppose_cold(creature_ptr) || creature_ptr->resist_cold || has_immune_cold(creature_ptr)))
+            if (!(is_oppose_cold(creature_ptr) || has_resist_cold(creature_ptr) || has_immune_cold(creature_ptr)))
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 100 + randint1(100), _("氷の巻物", "a Scroll of Ice"), -1);
 
             ident = TRUE;

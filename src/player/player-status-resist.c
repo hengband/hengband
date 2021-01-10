@@ -160,7 +160,7 @@ PERCENTAGE calc_cold_damage_rate(player_type *creature_ptr)
         }
     }
 
-    if (creature_ptr->resist_cold)
+    if (has_resist_cold(creature_ptr))
         per = (per + 2) / 3;
     if (is_oppose_cold(creature_ptr))
         per = (per + 2) / 3;

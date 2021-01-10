@@ -572,7 +572,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_COLD:
-        if (player_ptr->resist_cold)
+        if (has_resist_cold(player_ptr))
             m_ptr->smart |= SM_RES_COLD;
 
         if (is_oppose_cold(player_ptr))

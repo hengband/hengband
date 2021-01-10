@@ -147,7 +147,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
 
         if (damage) {
-            if (creature_ptr->resist_cold)
+            if (has_resist_cold(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_cold(creature_ptr))
                 damage = damage / 3;
@@ -313,7 +313,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
         if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !has_immune_cold(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
-            if (creature_ptr->resist_cold)
+            if (has_resist_cold(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_cold(creature_ptr))
                 damage = damage / 3;
