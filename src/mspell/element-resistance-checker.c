@@ -27,7 +27,7 @@ void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
     if (has_immune_elec(target_ptr))
         msr_ptr->smart |= SM_IMM_ELEC;
 
-    if (target_ptr->resist_fire)
+    if (has_resist_fire(target_ptr))
         msr_ptr->smart |= SM_RES_FIRE;
 
     if (is_oppose_fire(target_ptr))

@@ -27,9 +27,9 @@ void set_element_resistance_info(player_type* creature_ptr, self_info_type* self
 
     if (has_immune_fire(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたは火に対する完全なる免疫を持っている。", "You are completely immune to fire.");
-    } else if (creature_ptr->resist_fire && is_oppose_fire(creature_ptr)) {
+    } else if (has_resist_fire(creature_ptr) &&is_oppose_fire(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたは火への強力な耐性を持っている。", "You resist fire exceptionally well.");
-    } else if (creature_ptr->resist_fire || is_oppose_fire(creature_ptr)) {
+    } else if (has_resist_fire(creature_ptr) || is_oppose_fire(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたは火への耐性を持っている。", "You are resistant to fire.");
     }
 

@@ -31,7 +31,7 @@ static int travel_flow_cost(player_type *creature_ptr, POSITION y, POSITION x)
 
     if (has_flag(f_ptr->flags, FF_LAVA)) {
         int lava = 2;
-        if (!creature_ptr->resist_fire)
+        if (!has_resist_fire(creature_ptr))
             lava *= 2;
 
         if (!creature_ptr->levitation)

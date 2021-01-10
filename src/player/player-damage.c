@@ -216,12 +216,12 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 
     dam = dam * calc_fire_damage_rate(creature_ptr) / 100;
     if (aura || !check_multishadow(creature_ptr)) {
-        if ((!(double_resist || creature_ptr->resist_fire)) && one_in_(HURT_CHANCE))
+        if ((!(double_resist || has_resist_fire(creature_ptr))) && one_in_(HURT_CHANCE))
             (void)do_dec_stat(creature_ptr, A_STR);
     }
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
-    if (!aura && !(double_resist && creature_ptr->resist_fire))
+    if (!aura && !(double_resist && has_resist_fire(creature_ptr)))
         inventory_damage(creature_ptr, set_fire_destroy, inv);
 
     return get_damage;

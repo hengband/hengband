@@ -413,7 +413,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_FIRE: {
             fire_ball(creature_ptr, GF_FIRE, 0, 666, 4);
-            if (!(is_oppose_fire(creature_ptr) || creature_ptr->resist_fire || has_immune_fire(creature_ptr)))
+            if (!(is_oppose_fire(creature_ptr) || has_resist_fire(creature_ptr) || has_immune_fire(creature_ptr)))
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 50 + randint1(50), _("炎の巻物", "a Scroll of Fire"), -1);
 
             ident = TRUE;

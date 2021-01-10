@@ -135,7 +135,7 @@ PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr)
     }
 
     /* Resist the damage */
-    if (creature_ptr->resist_fire)
+    if (has_resist_fire(creature_ptr))
         per = (per + 2) / 3;
     if (is_oppose_fire(creature_ptr))
         per = (per + 2) / 3;

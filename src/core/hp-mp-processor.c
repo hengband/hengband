@@ -110,7 +110,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         if (damage) {
             if (is_specific_player_race(creature_ptr, RACE_ENT))
                 damage += damage / 3;
-            if (creature_ptr->resist_fire)
+            if (has_resist_fire(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_fire(creature_ptr))
                 damage = damage / 3;
@@ -293,7 +293,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (is_specific_player_race(creature_ptr, RACE_ENT))
                 damage += damage / 3;
-            if (creature_ptr->resist_fire)
+            if (has_resist_fire(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_fire(creature_ptr))
                 damage = damage / 3;
