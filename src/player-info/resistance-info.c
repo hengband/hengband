@@ -16,9 +16,9 @@ void set_element_resistance_info(player_type* creature_ptr, self_info_type* self
 
     if (has_immune_elec(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたは電撃に対する完全なる免疫を持っている。", "You are completely immune to lightning.");
-    } else if (creature_ptr->resist_elec && is_oppose_elec(creature_ptr)) {
+    } else if (has_resist_elec(creature_ptr) && is_oppose_elec(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたは電撃への強力な耐性を持っている。", "You resist lightning exceptionally well.");
-    } else if (creature_ptr->resist_elec || is_oppose_elec(creature_ptr)) {
+    } else if (has_resist_elec(creature_ptr) || is_oppose_elec(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたは電撃への耐性を持っている。", "You are resistant to lightning.");
     }
     if (is_specific_player_race(creature_ptr, RACE_ANDROID) && !has_immune_elec(creature_ptr)) {

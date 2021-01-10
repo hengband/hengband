@@ -18,7 +18,7 @@ void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
     if (has_immune_acid(target_ptr))
         msr_ptr->smart |= SM_IMM_ACID;
 
-    if (target_ptr->resist_elec)
+    if (has_resist_elec(target_ptr))
         msr_ptr->smart |= SM_RES_ELEC;
 
     if (is_oppose_elec(target_ptr))

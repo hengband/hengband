@@ -109,7 +109,7 @@ PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
         }
     }
 
-    if (creature_ptr->resist_elec)
+    if (has_resist_elec(creature_ptr))
         per = (per + 2) / 3;
     if (is_oppose_elec(creature_ptr))
         per = (per + 2) / 3;

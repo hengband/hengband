@@ -90,7 +90,7 @@ static void compensate_death_scythe_reflection_magnification(player_type *attack
     if (!(has_resist_acid(attacker_ptr) || is_oppose_acid(attacker_ptr) || has_immune_acid(attacker_ptr)) && (*magnification < 25))
         *magnification = 25;
 
-    if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || has_immune_elec(attacker_ptr)) && (*magnification < 25))
+    if (!(has_resist_elec(attacker_ptr) || is_oppose_elec(attacker_ptr) || has_immune_elec(attacker_ptr)) && (*magnification < 25))
         *magnification = 25;
 
     if (!(has_resist_fire(attacker_ptr) || is_oppose_fire(attacker_ptr) || has_immune_fire(attacker_ptr)) && (*magnification < 25))

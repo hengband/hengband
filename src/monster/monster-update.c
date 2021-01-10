@@ -550,7 +550,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_ELEC:
-        if (player_ptr->resist_elec)
+        if (has_resist_elec(player_ptr))
             m_ptr->smart |= SM_RES_ELEC;
 
         if (is_oppose_elec(player_ptr))
