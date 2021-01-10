@@ -79,7 +79,7 @@ PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
         }
     }
 
-    if (creature_ptr->resist_acid)
+    if (has_resist_acid(creature_ptr))
         per = (per + 2) / 3;
     if (is_oppose_acid(creature_ptr))
         per = (per + 2) / 3;

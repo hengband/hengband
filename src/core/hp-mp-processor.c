@@ -217,7 +217,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
 
         if (damage) {
-            if (creature_ptr->resist_acid)
+            if (has_resist_acid(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_acid(creature_ptr))
                 damage = damage / 3;

@@ -539,7 +539,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
     switch (what) {
     case DRS_ACID:
-        if (player_ptr->resist_acid)
+        if (has_resist_acid(player_ptr))
             m_ptr->smart |= SM_RES_ACID;
 
         if (is_oppose_acid(player_ptr))

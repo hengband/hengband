@@ -9,7 +9,7 @@
 
 void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
 {
-    if (target_ptr->resist_acid)
+    if (has_resist_acid(target_ptr))
         msr_ptr->smart |= SM_RES_ACID;
 
     if (is_oppose_acid(target_ptr))
