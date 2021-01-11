@@ -332,7 +332,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
                 sustained = TRUE;
             break;
         case A_DEX:
-            if (creature_ptr->sustain_dex)
+            if (has_sustain_dex(creature_ptr))
                 sustained = TRUE;
             break;
         case A_CON:
