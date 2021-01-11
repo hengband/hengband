@@ -394,7 +394,6 @@ void calc_bonuses(player_type *creature_ptr)
     has_curses(creature_ptr);
     creature_ptr->impact = has_impact(creature_ptr);
     has_extra_blow(creature_ptr);
-    creature_ptr->resist_shard = has_resist_shard(creature_ptr);
     creature_ptr->resist_nexus = has_resist_nexus(creature_ptr);
     creature_ptr->resist_blind = has_resist_blind(creature_ptr);
     creature_ptr->resist_neth = has_resist_neth(creature_ptr);

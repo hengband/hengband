@@ -78,7 +78,7 @@ void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_pt
     if (has_resist_chaos(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたはカオスの力への耐性を持っている。", "You are resistant to chaos.");
     
-    if (creature_ptr->resist_shard)
+    if (has_resist_shard(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは破片の攻撃への耐性を持っている。", "You are resistant to blasts of shards.");
     
     if (creature_ptr->resist_nexus)

@@ -230,11 +230,11 @@ void effect_player_shards(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_shards_damage_rate(target_ptr, CALC_RAND) / 100;
 
-    if (!target_ptr->resist_shard && !check_multishadow(target_ptr)) {
+    if (!has_resist_shard(target_ptr) && !check_multishadow(target_ptr)) {
         (void)set_cut(target_ptr, target_ptr->cut + ep_ptr->dam);
     }
 
-    if (!target_ptr->resist_shard || one_in_(13))
+    if (!has_resist_shard(target_ptr) || one_in_(13))
         inventory_damage(target_ptr, set_cold_destroy, 2);
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
@@ -321,11 +321,11 @@ void effect_player_rocket(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_rocket_damage_rate(target_ptr, CALC_RAND) / 100;
 
-    if (!target_ptr->resist_shard && !check_multishadow(target_ptr)) {
+    if (!has_resist_shard(target_ptr) && !check_multishadow(target_ptr)) {
         (void)set_cut(target_ptr, target_ptr->cut + (ep_ptr->dam / 2));
     }
 
-    if (!target_ptr->resist_shard || one_in_(12)) {
+    if (!has_resist_shard(target_ptr) || one_in_(12)) {
         inventory_damage(target_ptr, set_cold_destroy, 3);
     }
 
@@ -543,7 +543,7 @@ void effect_player_meteor(player_type *target_ptr, effect_player_type *ep_ptr)
         msg_print(_("何かが空からあなたの頭上に落ちてきた！", "Something falls from the sky on you!"));
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-    if (!target_ptr->resist_shard || one_in_(13)) {
+    if (!has_resist_shard(target_ptr) || one_in_(13)) {
         if (!has_immune_fire(target_ptr))
             inventory_damage(target_ptr, set_fire_destroy, 2);
         inventory_damage(target_ptr, set_cold_destroy, 2);
@@ -559,7 +559,7 @@ void effect_player_icee(player_type *target_ptr, effect_player_type *ep_ptr)
     if (check_multishadow(target_ptr))
         return;
 
-    if (!target_ptr->resist_shard) {
+    if (!has_resist_shard(target_ptr)) {
         (void)set_cut(target_ptr, target_ptr->cut + damroll(5, 8));
     }
 

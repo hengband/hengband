@@ -272,7 +272,7 @@ PERCENTAGE calc_shards_damage_rate(player_type *creature_ptr, rate_calc_type_mod
 {
     PERCENTAGE per = 100;
 
-    if (creature_ptr->resist_shard) {
+    if (has_resist_shard(creature_ptr)) {
         per *= 600;
         per /= randrate(4, 7, mode);
     }
@@ -363,7 +363,7 @@ PERCENTAGE calc_rocket_damage_rate(player_type *creature_ptr, rate_calc_type_mod
     (void)mode; // unused
     PERCENTAGE per = 100;
 
-    if (creature_ptr->resist_shard) {
+    if (has_resist_shard(creature_ptr)) {
         per /= 2;
     }
 

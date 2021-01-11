@@ -641,7 +641,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_SHARD:
-        if (player_ptr->resist_shard)
+        if (has_resist_shard(player_ptr))
             m_ptr->smart |= SM_RES_SHARD;
 
         break;
