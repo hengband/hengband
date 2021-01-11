@@ -366,7 +366,6 @@ typedef struct player_type {
     bool is_fired;
     bool level_up_message;
 
-    BIT_FLAGS sh_fire; /* Fiery 'immolation' effect */
     BIT_FLAGS sh_elec; /* Electric 'immolation' effect */
     BIT_FLAGS sh_cold; /* Cold 'immolation' effect */
 
