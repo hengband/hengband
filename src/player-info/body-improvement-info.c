@@ -1,5 +1,6 @@
 ﻿#include "player-info/body-improvement-info.h"
 #include "player-info/self-info-util.h"
+#include "player/player-status-flags.h"
 
 /* todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
 void set_body_improvement_info_1(player_type *creature_ptr, self_info_type *self_ptr)
@@ -112,7 +113,7 @@ void set_body_improvement_info_4(player_type *creature_ptr, self_info_type *self
     if (creature_ptr->resist_fear)
         self_ptr->info[self_ptr->line++] = _("あなたは全く恐怖を感じない。", "You are completely fearless.");
     
-    if (creature_ptr->resist_blind)
+    if (has_resist_blind(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたの目は盲目への耐性を持っている。", "Your eyes are resistant to blindness.");
     
     if (creature_ptr->resist_time)

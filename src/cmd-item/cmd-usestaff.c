@@ -70,7 +70,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     /* Analyze the staff */
     switch (sval) {
     case SV_STAFF_DARKNESS: {
-        if (!(creature_ptr->resist_blind) && !has_resist_dark(creature_ptr)) {
+        if (!has_resist_blind(creature_ptr) && !has_resist_dark(creature_ptr)) {
             if (set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5)))
                 ident = TRUE;
         }

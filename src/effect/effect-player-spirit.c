@@ -116,7 +116,7 @@ void effect_player_brain_smash(player_type *target_ptr, effect_player_type *ep_p
     if (check_multishadow(target_ptr))
         return;
 
-    if (!target_ptr->resist_blind) {
+    if (!has_resist_blind(target_ptr)) {
         (void)set_blind(target_ptr, target_ptr->blind + 8 + randint0(8));
     }
 

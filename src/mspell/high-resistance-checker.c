@@ -30,7 +30,7 @@ void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
     if (has_resist_disen(target_ptr))
         msr_ptr->smart |= SM_RES_DISEN;
 
-    if (target_ptr->resist_blind)
+    if (has_resist_blind(target_ptr))
         msr_ptr->smart |= SM_RES_BLIND;
 
     if (has_resist_nexus(target_ptr))

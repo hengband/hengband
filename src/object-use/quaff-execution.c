@@ -191,7 +191,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_BLINDNESS:
-            if (!creature_ptr->resist_blind) {
+            if (!has_resist_blind(creature_ptr)) {
                 if (set_blind(creature_ptr, creature_ptr->blind + randint0(100) + 100)) {
                     ident = TRUE;
                 }

@@ -454,7 +454,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
         msg_print(_("燃えるような閃光が発生した！", "There is a searing blast of light!"));
 
         /* Blind the player */
-        if (!caster_ptr->resist_blind && !has_resist_lite(caster_ptr)) {
+        if (!has_resist_blind(caster_ptr) && !has_resist_lite(caster_ptr)) {
             /* Become blind */
             (void)set_blind(caster_ptr, caster_ptr->blind + 10 + randint1(10));
         }

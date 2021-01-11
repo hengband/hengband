@@ -101,7 +101,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
     if (o_ptr->tval == TV_SCROLL) {
         switch (o_ptr->sval) {
         case SV_SCROLL_DARKNESS: {
-            if (!(creature_ptr->resist_blind) && !has_resist_dark(creature_ptr))
+            if (!has_resist_blind(creature_ptr) && !has_resist_dark(creature_ptr))
                 (void)set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5));
 
             if (unlite_area(creature_ptr, 10, 3))

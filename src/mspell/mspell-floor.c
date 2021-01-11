@@ -25,6 +25,7 @@
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "player/player-personalities-types.h"
+#include "player/player-status-flags.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"

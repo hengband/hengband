@@ -17,7 +17,7 @@
 
 void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (target_ptr->resist_blind || check_multishadow(target_ptr))
+    if (has_resist_blind(target_ptr) || check_multishadow(target_ptr))
         return;
 
     if (!set_blind(target_ptr, target_ptr->blind + 10 + randint1(monap_ptr->rlev)))

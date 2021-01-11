@@ -512,7 +512,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     }
 
     case TRAP_BLIND: {
-        hit_trap_set_abnormal_status_p(trapped_ptr, _("黒いガスに包み込まれた！", "A black gas surrounds you!"), (bool)trapped_ptr->resist_blind, set_blind,
+        hit_trap_set_abnormal_status_p(trapped_ptr, _("黒いガスに包み込まれた！", "A black gas surrounds you!"), (bool)has_resist_blind(trapped_ptr), set_blind,
             trapped_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
         break;
     }

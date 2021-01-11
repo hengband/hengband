@@ -85,7 +85,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         }
 
         case SV_FOOD_BLINDNESS: {
-            if (!creature_ptr->resist_blind) {
+            if (!has_resist_blind(creature_ptr)) {
                 if (set_blind(creature_ptr, creature_ptr->blind + randint0(200) + 200)) {
                     ident = TRUE;
                 }
