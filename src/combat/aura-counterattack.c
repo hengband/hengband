@@ -49,7 +49,7 @@ static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *mon
 
 static void aura_elec_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (!target_ptr->sh_elec || !monap_ptr->alive || target_ptr->is_dead)
+    if (!has_sh_elec(target_ptr) || !monap_ptr->alive || target_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];

@@ -70,7 +70,7 @@ void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *self
     if (has_sh_fire(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは炎のオーラに包まれている。", "You are surrounded with a fiery aura.");
 
-    if (creature_ptr->sh_elec)
+    if (has_sh_elec(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは電気に包まれている。", "You are surrounded with electricity.");
 
     if (has_sh_cold(creature_ptr))
