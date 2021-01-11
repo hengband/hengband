@@ -469,11 +469,11 @@ void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_time_damage_rate(target_ptr, CALC_RAND) / 100;
     if (!check_multishadow(target_ptr)) {
-        if (target_ptr->resist_time) {
+        if (has_resist_time(target_ptr)) {
             msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
         }
         ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-        if (!target_ptr->resist_time) {
+        if (!has_resist_time(target_ptr)) {
             effect_player_time_addition(target_ptr);
         }
     }

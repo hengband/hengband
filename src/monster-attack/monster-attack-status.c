@@ -142,7 +142,7 @@ static void describe_disability(player_type *target_ptr, monap_type *monap_ptr)
 
 void process_monster_attack_time(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (target_ptr->resist_time || check_multishadow(target_ptr))
+    if (has_resist_time(target_ptr) || check_multishadow(target_ptr))
         return;
 
     switch (randint1(10)) {

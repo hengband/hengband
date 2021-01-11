@@ -116,6 +116,6 @@ void set_body_improvement_info_4(player_type *creature_ptr, self_info_type *self
     if (has_resist_blind(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたの目は盲目への耐性を持っている。", "Your eyes are resistant to blindness.");
     
-    if (creature_ptr->resist_time)
+    if (has_resist_time(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは時間逆転への耐性を持っている。", "You are resistant to time.");
 }
