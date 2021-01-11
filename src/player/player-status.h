@@ -369,8 +369,6 @@ typedef struct player_type {
     BIT_FLAGS anti_magic; /* Anti-magic */
     BIT_FLAGS anti_tele; /* Prevent teleportation */
 
-    BIT_FLAGS sustain_chr; /* Keep charisma */
-
     BIT_FLAGS cursed; /* Player is cursed */
 
     bool can_swim; /* No damage falling */

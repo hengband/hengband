@@ -70,10 +70,10 @@ void set_status_sustain_info(player_type *creature_ptr, self_info_type *self_ptr
     if (has_sustain_con(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの耐久力は維持されている。", "Your constitution is sustained.");
     }
-    if (has_sustain_dex (creature_ptr)) {
+    if (has_sustain_dex(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの器用さは維持されている。", "Your dexterity is sustained.");
     }
-    if (creature_ptr->sustain_chr) {
+    if (has_sustain_chr(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの魅力は維持されている。", "Your charisma is sustained.");
     }
 }

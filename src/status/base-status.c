@@ -199,7 +199,7 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
             sust = TRUE;
         break;
     case A_CHR:
-        if (creature_ptr->sustain_chr)
+        if (has_sustain_chr(creature_ptr))
             sust = TRUE;
         break;
     }

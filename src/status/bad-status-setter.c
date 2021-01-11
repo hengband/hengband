@@ -555,7 +555,7 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 
         notice = TRUE;
         if (randint1(1000) < v || one_in_(16)) {
-            if (!creature_ptr->sustain_chr) {
+            if (!has_sustain_chr(creature_ptr)) {
                 msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
                 do_dec_stat(creature_ptr, A_CHR);
             }

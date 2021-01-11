@@ -340,7 +340,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
                 sustained = TRUE;
             break;
         case A_CHR:
-            if (creature_ptr->sustain_chr)
+            if (has_sustain_chr(creature_ptr))
                 sustained = TRUE;
             break;
         default:
