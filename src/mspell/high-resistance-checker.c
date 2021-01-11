@@ -9,7 +9,7 @@
 
 void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
 {
-    if (target_ptr->resist_neth)
+    if (has_resist_neth(target_ptr))
         msr_ptr->smart |= SM_RES_NETH;
 
     if (has_resist_lite(target_ptr))

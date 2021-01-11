@@ -86,6 +86,6 @@ void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_pt
 
     if (is_specific_player_race(creature_ptr, RACE_SPECTRE))
         self_ptr->info[self_ptr->line++] = _("あなたは地獄の力を吸収できる。", "You can drain nether forces.");
-    else if (creature_ptr->resist_neth)
+    else if (has_resist_neth(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは地獄の力への耐性を持っている。", "You are resistant to nether forces.");
 }

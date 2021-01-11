@@ -591,7 +591,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_NETH:
-        if (player_ptr->resist_neth)
+        if (has_resist_neth(player_ptr))
             m_ptr->smart |= SM_RES_NETH;
 
         break;

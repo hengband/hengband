@@ -377,7 +377,7 @@ PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mod
 {
     PERCENTAGE per = 100;
 
-    if (creature_ptr->resist_neth) {
+    if (has_resist_neth(creature_ptr)) {
         if (!is_specific_player_race(creature_ptr, RACE_SPECTRE))
             per *= 6;
         per *= 100;

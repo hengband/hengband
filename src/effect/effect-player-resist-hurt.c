@@ -150,7 +150,7 @@ void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_nether_damage_rate(target_ptr, CALC_RAND) / 100;
 
-    if (!target_ptr->resist_neth && !check_multishadow(target_ptr))
+    if (!has_resist_neth(target_ptr) && !check_multishadow(target_ptr))
         drain_exp(target_ptr, 200 + (target_ptr->exp / 100), 200 + (target_ptr->exp / 1000), 75);
 
     if (!is_specific_player_race(target_ptr, RACE_SPECTRE) || check_multishadow(target_ptr)) {
@@ -211,7 +211,7 @@ void effect_player_chaos(player_type *target_ptr, effect_player_type *ep_ptr)
             (void)gain_mutation(target_ptr, 0);
         }
     }
-    if (!target_ptr->resist_neth && !has_resist_chaos(target_ptr)) {
+    if (!has_resist_neth(target_ptr) && !has_resist_chaos(target_ptr)) {
         drain_exp(target_ptr, 5000 + (target_ptr->exp / 100), 500 + (target_ptr->exp / 1000), 75);
     }
 
