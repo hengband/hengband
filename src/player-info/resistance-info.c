@@ -54,7 +54,7 @@ void set_element_resistance_info(player_type* creature_ptr, self_info_type* self
 
 void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_ptr)
 {
-    if (creature_ptr->resist_lite)
+    if (has_resist_lite(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは閃光への耐性を持っている。", "You are resistant to bright light.");
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_S_FAIRY)

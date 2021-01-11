@@ -346,7 +346,7 @@ void effect_player_lite(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("何かで攻撃された！", "You are hit by something!"));
-    if (!target_ptr->blind && !target_ptr->resist_lite && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
+    if (!target_ptr->blind && !has_resist_lite(target_ptr) && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
         (void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
     }
 

@@ -596,7 +596,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_LITE:
-        if (player_ptr->resist_lite)
+        if (has_resist_lite(player_ptr))
             m_ptr->smart |= SM_RES_LITE;
 
         break;

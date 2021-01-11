@@ -70,7 +70,7 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
-        if (!creature_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !is_invuln(creature_ptr) && is_daytime()) {
+        if (!creature_ptr->current_floor_ptr->dun_level && !has_resist_lite(creature_ptr) && !is_invuln(creature_ptr) && is_daytime()) {
             if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
@@ -83,7 +83,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         BIT_FLAGS flgs[TR_FLAG_SIZE];
         object_flags(creature_ptr, o_ptr, flgs);
 
-        if (creature_ptr->inventory_list[INVEN_LITE].tval && !has_flag(flgs, TR_DARK_SOURCE) && !creature_ptr->resist_lite) {
+        if (creature_ptr->inventory_list[INVEN_LITE].tval && !has_flag(flgs, TR_DARK_SOURCE) && !has_resist_lite(creature_ptr)) {
             GAME_TEXT o_name[MAX_NLEN];
             char ouch[MAX_NLEN + 40];
             describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));

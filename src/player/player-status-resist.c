@@ -235,7 +235,7 @@ PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
         per = per * 4 / 3;
     }
 
-    if (creature_ptr->resist_lite) {
+    if (has_resist_lite(creature_ptr)) {
         per *= 400;
         per /= randrate(4, 7, mode);
     }
