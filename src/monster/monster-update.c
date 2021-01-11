@@ -656,7 +656,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_REFLECT:
-        if (player_ptr->reflect)
+        if (has_reflect(player_ptr))
             m_ptr->smart |= SM_IMM_REFLECT;
 
         break;

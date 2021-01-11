@@ -18,6 +18,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
@@ -187,7 +188,7 @@ static effect_player_type *initialize_effect_player(
  */
 static bool process_bolt_reflection(player_type *target_ptr, effect_player_type *ep_ptr, project_func project)
 {
-    bool can_bolt_hit = target_ptr->reflect || (((target_ptr->special_defense & KATA_FUUJIN) != 0) && !target_ptr->blind);
+    bool can_bolt_hit = has_reflect(target_ptr) || (((target_ptr->special_defense & KATA_FUUJIN) != 0) && !target_ptr->blind);
     can_bolt_hit &= (ep_ptr->flag & PROJECT_REFLECTABLE) != 0;
     can_bolt_hit &= !one_in_(10);
     if (!can_bolt_hit)

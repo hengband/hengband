@@ -64,7 +64,7 @@ void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *self
     if (creature_ptr->hold_exp)
         self_ptr->info[self_ptr->line++] = _("あなたは自己の経験値をしっかりと維持する。", "You have a firm hold on your experience.");
 
-    if (creature_ptr->reflect)
+    if (has_reflect(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは矢の呪文を反射する。", "You reflect bolt spells.");
 
     if (creature_ptr->sh_fire)

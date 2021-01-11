@@ -42,7 +42,7 @@ void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
     if (has_resist_shard(target_ptr))
         msr_ptr->smart |= SM_RES_SHARD;
 
-    if (target_ptr->reflect)
+    if (has_reflect(target_ptr))
         msr_ptr->smart |= SM_IMM_REFLECT;
 
     if (target_ptr->free_act)
