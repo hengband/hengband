@@ -110,7 +110,7 @@ void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *self
 /* todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
 void set_body_improvement_info_4(player_type *creature_ptr, self_info_type *self_ptr)
 {
-    if (creature_ptr->resist_fear)
+    if (has_resist_fear(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは全く恐怖を感じない。", "You are completely fearless.");
     
     if (has_resist_blind(creature_ptr))

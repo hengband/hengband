@@ -120,7 +120,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_COWARDICE) && (randint1(3000) == 13)) {
-        if (!creature_ptr->resist_fear) {
+        if (!has_resist_fear(creature_ptr)) {
             disturb(creature_ptr, FALSE, TRUE);
             msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
             set_afraid(creature_ptr, creature_ptr->afraid + 13 + randint1(26));

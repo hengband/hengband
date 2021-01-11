@@ -235,7 +235,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         break;
     }
     case 2: {
-        if (!(creature_ptr->muta2 & MUT2_COWARDICE) && !creature_ptr->resist_fear) {
+        if (!(creature_ptr->muta2 & MUT2_COWARDICE) && !has_resist_fear(creature_ptr)) {
             msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
             if (creature_ptr->muta3 & MUT3_FEARLESS) {
                 msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));

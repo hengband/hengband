@@ -94,7 +94,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         }
 
         case SV_FOOD_PARANOIA: {
-            if (!creature_ptr->resist_fear) {
+            if (!has_resist_fear(creature_ptr)) {
                 if (set_afraid(creature_ptr, creature_ptr->afraid + randint0(10) + 10)) {
                     ident = TRUE;
                 }

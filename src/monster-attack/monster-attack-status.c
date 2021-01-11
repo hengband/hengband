@@ -35,7 +35,7 @@ void process_terrify_attack(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (target_ptr->resist_fear) {
+    if (has_resist_fear(target_ptr)) {
         msg_print(_("しかし恐怖に侵されなかった！", "You stand your ground!"));
         monap_ptr->obvious = TRUE;
         return;

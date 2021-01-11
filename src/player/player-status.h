@@ -366,7 +366,6 @@ typedef struct player_type {
     bool is_fired;
     bool level_up_message;
 
-    BIT_FLAGS resist_fear; /* Resist fear */
     BIT_FLAGS resist_time; /* Resist time */
     BIT_FLAGS resist_water; /* Resist water */
 

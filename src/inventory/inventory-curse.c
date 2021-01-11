@@ -19,6 +19,7 @@
 #include "perception/object-perception.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
+#include "player/player-status-flags.h"
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/summon-types.h"
@@ -288,7 +289,7 @@ static void curse_cowardice(player_type *creature_ptr)
     if (((creature_ptr->cursed & TRC_COWARDICE) == 0) || !one_in_(1500))
         return;
 
-    if (creature_ptr->resist_fear)
+    if (has_resist_fear(creature_ptr))
         return;
 
     disturb(creature_ptr, FALSE, TRUE);

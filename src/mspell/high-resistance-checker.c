@@ -18,7 +18,7 @@ void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
     if (has_resist_dark(target_ptr))
         msr_ptr->smart |= SM_RES_DARK;
 
-    if (target_ptr->resist_fear)
+    if (has_resist_fear(target_ptr))
         msr_ptr->smart |= SM_RES_FEAR;
 
     if (has_resist_conf(target_ptr))
