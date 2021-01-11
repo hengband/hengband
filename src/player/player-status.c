@@ -373,7 +373,6 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->anti_magic = has_anti_magic(creature_ptr);
     creature_ptr->anti_tele = has_anti_tele(creature_ptr);
     creature_ptr->sh_elec = has_sh_elec(creature_ptr);
-    creature_ptr->sh_cold = has_sh_cold(creature_ptr);
     creature_ptr->easy_spell = has_easy_spell(creature_ptr);
     creature_ptr->heavy_spell = has_heavy_spell(creature_ptr);
     creature_ptr->hold_exp = has_hold_exp(creature_ptr);

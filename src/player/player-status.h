@@ -367,7 +367,6 @@ typedef struct player_type {
     bool level_up_message;
 
     BIT_FLAGS sh_elec; /* Electric 'immolation' effect */
-    BIT_FLAGS sh_cold; /* Cold 'immolation' effect */
 
     BIT_FLAGS anti_magic; /* Anti-magic */
     BIT_FLAGS anti_tele; /* Prevent teleportation */
