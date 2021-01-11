@@ -137,7 +137,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_ALCOHOL) && (randint1(6400) == 321)) {
-        if (!has_resist_conf(creature_ptr) && !creature_ptr->resist_chaos) {
+        if (!has_resist_conf(creature_ptr) && !has_resist_chaos(creature_ptr)) {
             disturb(creature_ptr, FALSE, TRUE);
             creature_ptr->redraw |= PR_EXTRA;
             msg_print(_("いひきがもーろーとひてきたきがふる...ヒック！", "You feel a SSSCHtupor cOmINg over yOu... *HIC*!"));
@@ -147,7 +147,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
             (void)set_confused(creature_ptr, creature_ptr->confused + randint0(20) + 15);
         }
 
-        if (!creature_ptr->resist_chaos) {
+        if (!has_resist_chaos(creature_ptr)) {
             if (one_in_(20)) {
                 msg_print(NULL);
                 if (one_in_(3))
@@ -168,7 +168,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_HALLU) && (randint1(6400) == 42)) {
-        if (!creature_ptr->resist_chaos) {
+        if (!has_resist_chaos(creature_ptr)) {
             disturb(creature_ptr, FALSE, TRUE);
             creature_ptr->redraw |= PR_EXTRA;
             (void)set_image(creature_ptr, creature_ptr->image + randint0(50) + 20);

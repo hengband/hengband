@@ -101,7 +101,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
     if (o_ptr->tval == TV_SCROLL) {
         switch (o_ptr->sval) {
         case SV_SCROLL_DARKNESS: {
-            if (!(creature_ptr->resist_blind) && !(creature_ptr->resist_dark))
+            if (!(creature_ptr->resist_blind) && !has_resist_dark(creature_ptr))
                 (void)set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5));
 
             if (unlite_area(creature_ptr, 10, 3))
@@ -429,7 +429,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_CHAOS: {
             fire_ball(creature_ptr, GF_CHAOS, 0, 1000, 4);
-            if (!creature_ptr->resist_chaos)
+            if (!has_resist_chaos(creature_ptr))
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 111 + randint1(111), _("ログルスの巻物", "a Scroll of Logrus"), -1);
 
             ident = TRUE;

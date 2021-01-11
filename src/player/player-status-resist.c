@@ -257,7 +257,7 @@ PERCENTAGE calc_dark_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
         return 0;
     }
 
-    if (creature_ptr->resist_dark) {
+    if (has_resist_dark(creature_ptr)) {
         per *= 400;
         per /= randrate(4, 7, mode);
     }
@@ -317,7 +317,7 @@ PERCENTAGE calc_chaos_damage_rate(player_type *creature_ptr, rate_calc_type_mode
 {
     PERCENTAGE per = 100;
 
-    if (creature_ptr->resist_chaos) {
+    if (has_resist_chaos(creature_ptr)) {
         per *= 600;
         per /= randrate(4, 7, mode);
     }

@@ -204,18 +204,18 @@ void effect_player_chaos(player_type *target_ptr, effect_player_type *ep_ptr)
     if (!has_resist_conf(target_ptr)) {
         (void)set_confused(target_ptr, target_ptr->confused + randint0(20) + 10);
     }
-    if (!target_ptr->resist_chaos) {
+    if (!has_resist_chaos(target_ptr)) {
         (void)set_image(target_ptr, target_ptr->image + randint1(10));
         if (one_in_(3)) {
             msg_print(_("あなたの身体はカオスの力で捻じ曲げられた！", "Your body is twisted by chaos!"));
             (void)gain_mutation(target_ptr, 0);
         }
     }
-    if (!target_ptr->resist_neth && !target_ptr->resist_chaos) {
+    if (!target_ptr->resist_neth && !has_resist_chaos(target_ptr)) {
         drain_exp(target_ptr, 5000 + (target_ptr->exp / 100), 500 + (target_ptr->exp / 1000), 75);
     }
 
-    if (!target_ptr->resist_chaos || one_in_(9)) {
+    if (!has_resist_chaos(target_ptr) || one_in_(9)) {
         inventory_damage(target_ptr, set_elec_destroy, 2);
         inventory_damage(target_ptr, set_fire_destroy, 2);
     }
@@ -377,7 +377,7 @@ void effect_player_dark(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_dark_damage_rate(target_ptr, CALC_RAND) / 100;
 
-    if (!target_ptr->blind && !target_ptr->resist_dark && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
+    if (!target_ptr->blind && !has_resist_dark(target_ptr) && !target_ptr->resist_blind && !check_multishadow(target_ptr)) {
         (void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
     }
 

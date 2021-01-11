@@ -65,7 +65,7 @@ static bool booze(player_type *creature_ptr)
         ident = TRUE;
     }
 
-    if (creature_ptr->resist_chaos) {
+    if (has_resist_chaos(creature_ptr)) {
         return ident;
     }
 
@@ -533,7 +533,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             msg_print(NULL);
             creature_ptr->tsuyoshi = 1;
             (void)set_tsuyoshi(creature_ptr, 0, TRUE);
-            if (!creature_ptr->resist_chaos) {
+            if (!has_resist_chaos(creature_ptr)) {
                 (void)set_image(creature_ptr, 50 + randint1(50));
             }
             ident = TRUE;

@@ -601,7 +601,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_DARK:
-        if (player_ptr->resist_dark)
+        if (has_resist_dark(player_ptr))
             m_ptr->smart |= SM_RES_DARK;
 
         break;
@@ -616,7 +616,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_CHAOS:
-        if (player_ptr->resist_chaos)
+        if (has_resist_chaos(player_ptr))
             m_ptr->smart |= SM_RES_CHAOS;
 
         break;

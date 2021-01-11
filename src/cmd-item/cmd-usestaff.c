@@ -22,6 +22,7 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-status.h"
+#include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-curse-removal.h"
@@ -69,7 +70,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     /* Analyze the staff */
     switch (sval) {
     case SV_STAFF_DARKNESS: {
-        if (!(creature_ptr->resist_blind) && !(creature_ptr->resist_dark)) {
+        if (!(creature_ptr->resist_blind) && !has_resist_dark(creature_ptr)) {
             if (set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5)))
                 ident = TRUE;
         }

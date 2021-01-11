@@ -112,7 +112,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         }
 
         case SV_FOOD_HALLUCINATION: {
-            if (!creature_ptr->resist_chaos) {
+            if (!has_resist_chaos(creature_ptr)) {
                 if (set_image(creature_ptr, creature_ptr->image + randint0(250) + 250)) {
                     ident = TRUE;
                 }

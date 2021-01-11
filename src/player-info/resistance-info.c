@@ -63,7 +63,7 @@ void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_pt
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE) || creature_ptr->wraith_form)
         self_ptr->info[self_ptr->line++] = _("あなたは暗黒に対する完全なる免疫を持っている。", "You are completely immune to darkness.");
-    else if (creature_ptr->resist_dark)
+    else if (has_resist_dark(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは暗黒への耐性を持っている。", "You are resistant to darkness.");
     
     if (has_resist_conf(creature_ptr))
@@ -75,7 +75,7 @@ void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_pt
     if (creature_ptr->resist_disen)
         self_ptr->info[self_ptr->line++] = _("あなたは劣化への耐性を持っている。", "You are resistant to disenchantment.");
     
-    if (creature_ptr->resist_chaos)
+    if (has_resist_chaos(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたはカオスの力への耐性を持っている。", "You are resistant to chaos.");
     
     if (creature_ptr->resist_shard)

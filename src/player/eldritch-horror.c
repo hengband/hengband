@@ -248,7 +248,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         break;
     }
     case 3: {
-        if (!(creature_ptr->muta2 & MUT2_HALLU) && !creature_ptr->resist_chaos) {
+        if (!(creature_ptr->muta2 & MUT2_HALLU) && !has_resist_chaos(creature_ptr)) {
             msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
             creature_ptr->muta2 |= MUT2_HALLU;
         }
@@ -275,7 +275,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
             (void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
         }
 
-        if (!creature_ptr->resist_chaos && one_in_(3)) {
+        if (!has_resist_chaos(creature_ptr) && one_in_(3)) {
             (void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
         }
 
@@ -292,7 +292,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         if (!creature_ptr->free_act) {
             (void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + randint0(4) + 4);
         }
-        if (!creature_ptr->resist_chaos) {
+        if (!has_resist_chaos(creature_ptr)) {
             (void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
         }
 
