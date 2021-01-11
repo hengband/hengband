@@ -287,7 +287,7 @@ PERCENTAGE calc_sound_damage_rate(player_type *creature_ptr, rate_calc_type_mode
 {
     PERCENTAGE per = 100;
 
-    if (creature_ptr->resist_sound) {
+    if (has_resist_sound(creature_ptr)) {
         per *= 500;
         per /= randrate(4, 7, mode);
     }

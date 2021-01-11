@@ -69,7 +69,7 @@ void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_pt
     if (has_resist_conf(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは混乱への耐性を持っている。", "You are resistant to confusion.");
     
-    if (creature_ptr->resist_sound)
+    if (has_resist_sound(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは音波の衝撃への耐性を持っている。", "You are resistant to sonic attacks.");
     
     if (creature_ptr->resist_disen)

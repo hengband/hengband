@@ -636,7 +636,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_SOUND:
-        if (player_ptr->resist_sound)
+        if (has_resist_sound(player_ptr))
             m_ptr->smart |= SM_RES_SOUND;
 
         break;

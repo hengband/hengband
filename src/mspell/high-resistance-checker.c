@@ -36,7 +36,7 @@ void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
     if (target_ptr->resist_nexus)
         msr_ptr->smart |= SM_RES_NEXUS;
 
-    if (target_ptr->resist_sound)
+    if (has_resist_sound(target_ptr))
         msr_ptr->smart |= SM_RES_SOUND;
 
     if (target_ptr->resist_shard)

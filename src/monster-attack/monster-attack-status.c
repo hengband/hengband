@@ -12,6 +12,7 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/experience.h"
+#include "player/player-status-flags.h"
 #include "view/display-messages.h"
 
 void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)
@@ -95,7 +96,7 @@ void process_lose_all_attack(player_type *target_ptr, monap_type *monap_ptr)
 
 void process_stun_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (target_ptr->resist_sound || check_multishadow(target_ptr))
+    if (has_resist_sound(target_ptr) || check_multishadow(target_ptr))
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
