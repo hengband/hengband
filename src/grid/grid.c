@@ -1152,7 +1152,7 @@ bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 m
         return TRUE;
     if (has_flag(f_ptr->flags, FF_CAN_SWIM) && creature_ptr->can_swim)
         return TRUE;
-    if (has_flag(f_ptr->flags, FF_CAN_PASS) && creature_ptr->pass_wall)
+    if (has_flag(f_ptr->flags, FF_CAN_PASS) && has_pass_wall(creature_ptr))
         return TRUE;
 
     if (!has_flag(f_ptr->flags, FF_MOVE))

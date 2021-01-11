@@ -331,11 +331,11 @@ void process_player_hp_mp(player_type *creature_ptr)
      */
     if (!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY)) {
         if (!is_invuln(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->tim_pass_wall
-            && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall)) {
+            && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !has_pass_wall(creature_ptr))) {
             concptr dam_desc;
             cave_no_regen = TRUE;
 
-            if (creature_ptr->pass_wall) {
+            if (has_pass_wall(creature_ptr)) {
                 msg_print(_("体の分子が分解した気がする！", "Your molecules feel disrupted!"));
                 dam_desc = _("密度", "density");
             } else {

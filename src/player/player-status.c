@@ -346,7 +346,6 @@ void calc_bonuses(player_type *creature_ptr)
     ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
     ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
 
-    creature_ptr->pass_wall = has_pass_wall(creature_ptr);
     creature_ptr->kill_wall = has_kill_wall(creature_ptr);
     creature_ptr->xtra_might = has_xtra_might(creature_ptr);
     creature_ptr->esp_evil = has_esp_evil(creature_ptr);

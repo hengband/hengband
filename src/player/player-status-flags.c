@@ -339,7 +339,7 @@ void has_no_flowed(player_type *creature_ptr)
 
     creature_ptr->no_flowed = FALSE;
 
-    if (creature_ptr->pass_wall && !creature_ptr->kill_wall)
+    if (has_pass_wall(creature_ptr) && !creature_ptr->kill_wall)
         creature_ptr->no_flowed = TRUE;
 
     for (int i = 0; i < INVEN_PACK; i++) {
