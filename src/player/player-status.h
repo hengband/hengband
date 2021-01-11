@@ -369,7 +369,6 @@ typedef struct player_type {
     BIT_FLAGS anti_magic; /* Anti-magic */
     BIT_FLAGS anti_tele; /* Prevent teleportation */
 
-    BIT_FLAGS sustain_str; /* Keep strength */
     BIT_FLAGS sustain_int; /* Keep intelligence */
     BIT_FLAGS sustain_wis; /* Keep wisdom */
     BIT_FLAGS sustain_dex; /* Keep dexterity */

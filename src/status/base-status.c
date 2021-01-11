@@ -7,6 +7,7 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
+#include "player/player-status-flags.h"
 #include "player-info/avatar.h"
 #include "spell-kind/spells-floor.h"
 #include "system/object-type-definition.h"
@@ -178,7 +179,7 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
     bool sust = FALSE;
     switch (stat) {
     case A_STR:
-        if (creature_ptr->sustain_str)
+        if (has_sustain_str(creature_ptr))
             sust = TRUE;
         break;
     case A_INT:

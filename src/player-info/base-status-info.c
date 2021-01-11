@@ -1,6 +1,7 @@
 ﻿#include "player-info/base-status-info.h"
 #include "inventory/inventory-slot-types.h"
 #include "player-info/self-info-util.h"
+#include "player/player-status-flags.h"
 #include "object/object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "util/bit-flags-calculator.h"
@@ -57,7 +58,7 @@ void set_equipment_influence(player_type *creature_ptr, self_info_type *self_ptr
 
 void set_status_sustain_info(player_type *creature_ptr, self_info_type *self_ptr)
 {
-    if (creature_ptr->sustain_str) {
+    if (has_sustain_str(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの腕力は維持されている。", "Your strength is sustained.");
     }
     if (creature_ptr->sustain_int) {

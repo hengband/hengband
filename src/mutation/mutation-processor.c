@@ -320,7 +320,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
         switch (which_stat) {
         case A_STR:
-            if (creature_ptr->sustain_str)
+            if (has_sustain_str(creature_ptr))
                 sustained = TRUE;
             break;
         case A_INT:
