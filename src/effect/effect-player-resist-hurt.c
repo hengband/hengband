@@ -172,18 +172,18 @@ void effect_player_water(player_type *target_ptr, effect_player_type *ep_ptr)
         return;
     }
 
-    if (!has_resist_sound(target_ptr) && !target_ptr->resist_water) {
+    if (!has_resist_sound(target_ptr) && !has_resist_water(target_ptr)) {
         set_stun(target_ptr, target_ptr->stun + randint1(40));
     }
-    if (!has_resist_conf(target_ptr) && !target_ptr->resist_water) {
+    if (!has_resist_conf(target_ptr) && !has_resist_water(target_ptr)) {
         set_confused(target_ptr, target_ptr->confused + randint1(5) + 5);
     }
 
-    if (one_in_(5) && !target_ptr->resist_water) {
+    if (one_in_(5) && !has_resist_water(target_ptr)) {
         inventory_damage(target_ptr, set_cold_destroy, 3);
     }
 
-    if (target_ptr->resist_water)
+    if (has_resist_water(target_ptr))
         ep_ptr->get_damage /= 4;
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
