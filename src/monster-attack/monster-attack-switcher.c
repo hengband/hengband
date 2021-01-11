@@ -58,7 +58,7 @@ static void calc_blow_disenchant(player_type *target_ptr, monap_type *monap_ptr)
     if (monap_ptr->explode)
         return;
 
-    if (!target_ptr->resist_disen && !check_multishadow(target_ptr) && apply_disenchant(target_ptr, 0)) {
+    if (!has_resist_disen(target_ptr) && !check_multishadow(target_ptr) && apply_disenchant(target_ptr, 0)) {
         update_creature(target_ptr);
         monap_ptr->obvious = TRUE;
     }

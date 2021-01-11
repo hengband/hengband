@@ -621,7 +621,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_DISEN:
-        if (player_ptr->resist_disen)
+        if (has_resist_disen(player_ptr))
             m_ptr->smart |= SM_RES_DISEN;
 
         break;

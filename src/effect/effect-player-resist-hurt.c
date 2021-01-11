@@ -279,7 +279,7 @@ void effect_player_disenchant(player_type *target_ptr, effect_player_type *ep_pt
 
     ep_ptr->dam = ep_ptr->dam * calc_disenchant_damage_rate(target_ptr, CALC_RAND) / 100;
 
-    if (!target_ptr->resist_disen && !check_multishadow(target_ptr)) {
+    if (!has_resist_disen(target_ptr) && !check_multishadow(target_ptr)) {
         (void)apply_disenchant(target_ptr, 0);
     }
 
