@@ -25,6 +25,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/warning.h"
 #include "player/player-move.h"
+#include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -140,7 +141,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         stormbringer = TRUE;
 
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    bool p_can_kill_walls = creature_ptr->kill_wall && has_flag(f_ptr->flags, FF_HURT_DISI) && (!p_can_enter || !has_flag(f_ptr->flags, FF_LOS))
+    bool p_can_kill_walls = has_kill_wall(creature_ptr) && has_flag(f_ptr->flags, FF_HURT_DISI) && (!p_can_enter || !has_flag(f_ptr->flags, FF_LOS))
         && !has_flag(f_ptr->flags, FF_PERMANENT);
     GAME_TEXT m_name[MAX_NLEN];
     bool can_move = TRUE;

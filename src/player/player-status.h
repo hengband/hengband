@@ -397,7 +397,6 @@ typedef struct player_type {
     BIT_FLAGS bless_blade; /* Blessed blade */
     BIT_FLAGS xtra_might; /* Extra might bow */
     BIT_FLAGS impact; /* Earthquake blows */
-    bool kill_wall;
     BIT_FLAGS dec_mana;
     BIT_FLAGS easy_spell;
     BIT_FLAGS heavy_spell;

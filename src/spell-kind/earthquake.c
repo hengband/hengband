@@ -90,7 +90,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
     int sn = 0;
     POSITION sy = 0, sx = 0;
-    if (hurt && !has_pass_wall(caster_ptr) && !caster_ptr->kill_wall) {
+    if (hurt && !has_pass_wall(caster_ptr) && !has_kill_wall(caster_ptr)) {
         for (DIRECTION i = 0; i < 8; i++) {
             POSITION y = caster_ptr->y + ddy_ddd[i];
             POSITION x = caster_ptr->x + ddx_ddd[i];
