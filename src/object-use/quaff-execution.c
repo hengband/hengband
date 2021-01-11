@@ -58,10 +58,10 @@ static bool booze(player_type *creature_ptr)
     bool ident = FALSE;
     if (creature_ptr->pclass != CLASS_MONK)
         chg_virtue(creature_ptr, V_HARMONY, -1);
-    else if (!creature_ptr->resist_conf)
+    else if (!has_resist_conf(creature_ptr))
         creature_ptr->special_attack |= ATTACK_SUIKEN;
 
-    if (!creature_ptr->resist_conf && set_confused(creature_ptr, randint0(20) + 15)) {
+    if (!has_resist_conf(creature_ptr) && set_confused(creature_ptr, randint0(20) + 15)) {
         ident = TRUE;
     }
 

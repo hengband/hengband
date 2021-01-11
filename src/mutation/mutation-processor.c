@@ -19,6 +19,7 @@
 #include "object/lite-processor.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
+#include "player/player-status-flags.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
@@ -136,13 +137,13 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_ALCOHOL) && (randint1(6400) == 321)) {
-        if (!creature_ptr->resist_conf && !creature_ptr->resist_chaos) {
+        if (!has_resist_conf(creature_ptr) && !creature_ptr->resist_chaos) {
             disturb(creature_ptr, FALSE, TRUE);
             creature_ptr->redraw |= PR_EXTRA;
             msg_print(_("いひきがもーろーとひてきたきがふる...ヒック！", "You feel a SSSCHtupor cOmINg over yOu... *HIC*!"));
         }
 
-        if (!creature_ptr->resist_conf) {
+        if (!has_resist_conf(creature_ptr)) {
             (void)set_confused(creature_ptr, creature_ptr->confused + randint0(20) + 15);
         }
 

@@ -5,6 +5,7 @@
 #include "monster/smart-learn-types.h"
 #include "mspell/smart-mspell-util.h"
 #include "player/player-race.h"
+#include "player/player-status-flags.h"
 
 void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
 {
@@ -20,7 +21,7 @@ void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
     if (target_ptr->resist_fear)
         msr_ptr->smart |= SM_RES_FEAR;
 
-    if (target_ptr->resist_conf)
+    if (has_resist_conf(target_ptr))
         msr_ptr->smart |= SM_RES_CONF;
 
     if (target_ptr->resist_chaos)

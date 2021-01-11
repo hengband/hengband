@@ -24,6 +24,7 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
 #include "player/player-personalities-types.h"
+#include "player/player-status-flags.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -309,7 +310,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
     bool resist, saving_throw;
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        resist = (target_ptr->resist_conf != 0);
+        resist = (has_resist_conf(target_ptr) != 0);
         saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
         spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやくと、頭を悩ます音がした。", "%^s mumbles, and you hear puzzling noises."),
             _("%^sが誘惑的な幻覚を作り出した。", "%^s creates a mesmerising illusion."),
@@ -427,7 +428,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
     bool resist, saving_throw;
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        resist = (target_ptr->resist_conf != 0);
+        resist = (has_resist_conf(target_ptr) != 0);
         saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
         spell_badstatus_message(target_ptr, m_idx, t_idx, _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
             _("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"), _("しかし効果がなかった！", "You are unaffected!"),

@@ -519,7 +519,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
     case TRAP_CONFUSE: {
         hit_trap_set_abnormal_status_p(trapped_ptr, _("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
-            (trapped_ptr->resist_conf != 0),
+            (has_resist_conf(trapped_ptr) != 0),
             set_confused, trapped_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
         break;
     }

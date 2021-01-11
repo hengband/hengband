@@ -175,7 +175,7 @@ void effect_player_water(player_type *target_ptr, effect_player_type *ep_ptr)
     if (!target_ptr->resist_sound && !target_ptr->resist_water) {
         set_stun(target_ptr, target_ptr->stun + randint1(40));
     }
-    if (!target_ptr->resist_conf && !target_ptr->resist_water) {
+    if (!has_resist_conf(target_ptr) && !target_ptr->resist_water) {
         set_confused(target_ptr, target_ptr->confused + randint1(5) + 5);
     }
 
@@ -201,7 +201,7 @@ void effect_player_chaos(player_type *target_ptr, effect_player_type *ep_ptr)
         return;
     }
 
-    if (!target_ptr->resist_conf) {
+    if (!has_resist_conf(target_ptr)) {
         (void)set_confused(target_ptr, target_ptr->confused + randint0(20) + 10);
     }
     if (!target_ptr->resist_chaos) {
@@ -265,7 +265,7 @@ void effect_player_confusion(player_type *target_ptr, effect_player_type *ep_ptr
 
     ep_ptr->dam = ep_ptr->dam * calc_conf_damage_rate(target_ptr, CALC_RAND) / 100;
 
-    if (!target_ptr->resist_conf && !check_multishadow(target_ptr)) {
+    if (!has_resist_conf(target_ptr) && !check_multishadow(target_ptr)) {
         (void)set_confused(target_ptr, target_ptr->confused + randint1(20) + 10);
     }
 

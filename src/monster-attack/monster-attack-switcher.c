@@ -144,7 +144,7 @@ static void calc_blow_confusion(player_type *target_ptr, monap_type *monap_ptr)
     if (target_ptr->is_dead)
         return;
 
-    if (!target_ptr->resist_conf && !check_multishadow(target_ptr) && set_confused(target_ptr, target_ptr->confused + 3 + randint1(monap_ptr->rlev)))
+    if (!has_resist_conf(target_ptr) && !check_multishadow(target_ptr) && set_confused(target_ptr, target_ptr->confused + 3 + randint1(monap_ptr->rlev)))
         monap_ptr->obvious = TRUE;
 
     update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_CONF);

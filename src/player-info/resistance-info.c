@@ -66,7 +66,7 @@ void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_pt
     else if (creature_ptr->resist_dark)
         self_ptr->info[self_ptr->line++] = _("あなたは暗黒への耐性を持っている。", "You are resistant to darkness.");
     
-    if (creature_ptr->resist_conf)
+    if (has_resist_conf(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは混乱への耐性を持っている。", "You are resistant to confusion.");
     
     if (creature_ptr->resist_sound)

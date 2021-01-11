@@ -5,6 +5,7 @@
  */
 
 #include "player/eldritch-horror.h"
+#include "player/player-status-flags.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "monster-race/monster-race.h"
@@ -255,7 +256,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         break;
     }
     case 4: {
-        if (!(creature_ptr->muta2 & MUT2_BERS_RAGE) && !creature_ptr->resist_conf) {
+        if (!(creature_ptr->muta2 & MUT2_BERS_RAGE) && !has_resist_conf(creature_ptr)) {
             msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
             creature_ptr->muta2 |= MUT2_BERS_RAGE;
         }
@@ -270,7 +271,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
     case 10:
     case 11:
     case 12: {
-        if (!creature_ptr->resist_conf) {
+        if (!has_resist_conf(creature_ptr)) {
             (void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
         }
 
@@ -285,7 +286,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
     case 13:
     case 14:
     case 15: {
-        if (!creature_ptr->resist_conf) {
+        if (!has_resist_conf(creature_ptr)) {
             (void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
         }
         if (!creature_ptr->free_act) {

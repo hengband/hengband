@@ -302,7 +302,7 @@ PERCENTAGE calc_conf_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
 {
     PERCENTAGE per = 100;
 
-    if (creature_ptr->resist_conf) {
+    if (has_resist_conf(creature_ptr)) {
         per *= 500;
         per /= randrate(4, 7, mode);
     }
