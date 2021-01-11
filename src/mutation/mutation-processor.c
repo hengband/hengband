@@ -328,7 +328,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
                 sustained = TRUE;
             break;
         case A_WIS:
-            if (creature_ptr->sustain_wis)
+            if (has_sustain_wis(creature_ptr))
                 sustained = TRUE;
             break;
         case A_DEX:

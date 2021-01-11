@@ -422,13 +422,13 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
             if (one_in_(3)) {
                 if (!has_sustain_int(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_INT);
-                if (!creature_ptr->sustain_wis)
+                if (!has_sustain_wis(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_WIS);
             } else if (one_in_(2)) {
                 if (!has_sustain_int(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_INT);
             } else {
-                if (!creature_ptr->sustain_wis)
+                if (!has_sustain_wis(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_WIS);
             }
         }
