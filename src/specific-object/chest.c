@@ -12,6 +12,7 @@
 #include "perception/object-perception.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
+#include "player/player-status-flags.h"
 #include "spell-kind/spells-equipment.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
@@ -186,7 +187,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 	if (trap & (CHEST_POISON))
 	{
 		msg_print(_("突如吹き出した緑色のガスに包み込まれた！", "A puff of green gas surrounds you!"));
-		if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)))
+            if (!(has_resist_pois(target_ptr) || is_oppose_pois(target_ptr)))
 		{
 			(void)set_poisoned(target_ptr, target_ptr->poisoned + 10 + randint1(20));
 		}

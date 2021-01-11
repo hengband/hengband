@@ -47,13 +47,13 @@ void effect_player_poison(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_pois_damage_rate(target_ptr) / 100;
 
-    if ((!(double_resist || target_ptr->resist_pois)) && one_in_(HURT_CHANCE) && !check_multishadow(target_ptr)) {
+    if ((!(double_resist || has_resist_pois(target_ptr))) && one_in_(HURT_CHANCE) && !check_multishadow(target_ptr)) {
         do_dec_stat(target_ptr, A_CON);
     }
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 
-    if (!(double_resist || target_ptr->resist_pois) && !check_multishadow(target_ptr))
+    if (!(double_resist || has_resist_pois(target_ptr)) && !check_multishadow(target_ptr))
         set_poisoned(target_ptr, target_ptr->poisoned + randint0(ep_ptr->dam) + 10);
 }
 
@@ -66,7 +66,7 @@ void effect_player_nuke(player_type *target_ptr, effect_player_type *ep_ptr)
     ep_ptr->dam = ep_ptr->dam * calc_pois_damage_rate(target_ptr) / 100;
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-    if ((double_resist || target_ptr->resist_pois) || check_multishadow(target_ptr))
+    if ((double_resist || has_resist_pois(target_ptr)) || check_multishadow(target_ptr))
         return;
 
     set_poisoned(target_ptr, target_ptr->poisoned + randint0(ep_ptr->dam) + 10);

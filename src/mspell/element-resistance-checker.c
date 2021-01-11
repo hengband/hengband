@@ -45,7 +45,7 @@ void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
     if (has_immune_cold(target_ptr))
         msr_ptr->smart |= SM_IMM_COLD;
 
-    if (target_ptr->resist_pois)
+    if (has_resist_pois(target_ptr))
         msr_ptr->smart |= SM_RES_POIS;
 
     if (is_oppose_pois(target_ptr))

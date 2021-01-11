@@ -583,7 +583,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_POIS:
-        if (player_ptr->resist_pois)
+        if (has_resist_pois(player_ptr))
             m_ptr->smart |= SM_RES_POIS;
 
         if (is_oppose_pois(player_ptr))

@@ -45,9 +45,9 @@ void set_element_resistance_info(player_type* creature_ptr, self_info_type* self
         self_ptr->info[self_ptr->line++] = _("あなたは冷気への耐性を持っている。", "You are resistant to cold.");
     }
 
-    if (creature_ptr->resist_pois && is_oppose_pois(creature_ptr)) {
+    if (has_resist_pois(creature_ptr) && is_oppose_pois(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたは毒への強力な耐性を持っている。", "You resist poison exceptionally well.");
-    } else if (creature_ptr->resist_pois || is_oppose_pois(creature_ptr)) {
+    } else if (has_resist_pois(creature_ptr) || is_oppose_pois(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたは毒への耐性を持っている。", "You are resistant to poison.");
     }
 }

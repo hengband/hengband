@@ -99,7 +99,7 @@ static void compensate_death_scythe_reflection_magnification(player_type *attack
     if (!(has_resist_cold(attacker_ptr) || is_oppose_cold(attacker_ptr) || has_immune_cold(attacker_ptr)) && (*magnification < 25))
         *magnification = 25;
 
-    if (!(attacker_ptr->resist_pois || is_oppose_pois(attacker_ptr)) && (*magnification < 25))
+    if (!(has_resist_pois(attacker_ptr) || is_oppose_pois(attacker_ptr)) && (*magnification < 25))
         *magnification = 25;
 
     if ((attacker_ptr->pclass != CLASS_SAMURAI) && (has_flag(death_scythe_flags, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (attacker_ptr->msp / 30))) {

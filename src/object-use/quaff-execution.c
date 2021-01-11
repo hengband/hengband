@@ -23,6 +23,7 @@
 #include "player-info/self-info.h"
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/player-status-flags.h"
 #include "player/digestion-processor.h"
 #include "player/eldritch-horror.h"
 #include "player/mimic-info-table.h"
@@ -182,7 +183,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_POISON:
-            if (!(creature_ptr->resist_pois || is_oppose_pois(creature_ptr))) {
+            if (!(has_resist_pois(creature_ptr) || is_oppose_pois(creature_ptr))) {
                 if (set_poisoned(creature_ptr, creature_ptr->poisoned + randint0(15) + 10)) {
                     ident = TRUE;
                 }

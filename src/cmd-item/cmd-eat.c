@@ -32,6 +32,7 @@
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
@@ -75,7 +76,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         /* Analyze the food */
         switch (o_ptr->sval) {
         case SV_FOOD_POISON: {
-            if (!(creature_ptr->resist_pois || is_oppose_pois(creature_ptr))) {
+            if (!(has_resist_pois(creature_ptr) || is_oppose_pois(creature_ptr))) {
                 if (set_poisoned(creature_ptr, creature_ptr->poisoned + randint0(10) + 10)) {
                     ident = TRUE;
                 }
