@@ -9,6 +9,7 @@
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
 #include "player/player-race.h"
+#include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/base-status.h"
@@ -419,12 +420,12 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
             msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
 
             if (one_in_(3)) {
-                if (!creature_ptr->sustain_int)
+                if (!has_sustain_int(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_INT);
                 if (!creature_ptr->sustain_wis)
                     (void)do_dec_stat(creature_ptr, A_WIS);
             } else if (one_in_(2)) {
-                if (!creature_ptr->sustain_int)
+                if (!has_sustain_int(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_INT);
             } else {
                 if (!creature_ptr->sustain_wis)

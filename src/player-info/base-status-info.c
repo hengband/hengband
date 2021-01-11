@@ -61,7 +61,7 @@ void set_status_sustain_info(player_type *creature_ptr, self_info_type *self_ptr
     if (has_sustain_str(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの腕力は維持されている。", "Your strength is sustained.");
     }
-    if (creature_ptr->sustain_int) {
+    if (has_sustain_int(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの知能は維持されている。", "Your intelligence is sustained.");
     }
     if (creature_ptr->sustain_wis) {

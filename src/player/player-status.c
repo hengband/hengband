@@ -377,7 +377,6 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->hold_exp = has_hold_exp(creature_ptr);
     creature_ptr->see_inv = has_see_inv(creature_ptr);
     creature_ptr->free_act = has_free_act(creature_ptr);
-    creature_ptr->sustain_int = has_sustain_int(creature_ptr);
     creature_ptr->sustain_wis = has_sustain_wis(creature_ptr);
     creature_ptr->sustain_dex = has_sustain_dex(creature_ptr);
     creature_ptr->sustain_con = has_sustain_con(creature_ptr);
