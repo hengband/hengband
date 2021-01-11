@@ -631,7 +631,7 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
         break;
     case DRS_NEXUS:
-        if (player_ptr->resist_nexus)
+        if (has_resist_nexus(player_ptr))
             m_ptr->smart |= SM_RES_NEXUS;
 
         break;

@@ -293,7 +293,7 @@ void effect_player_nexus(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_nexus_damage_rate(target_ptr, CALC_RAND) / 100;
 
-    if (!target_ptr->resist_nexus && !check_multishadow(target_ptr)) {
+    if (!has_resist_nexus(target_ptr) && !check_multishadow(target_ptr)) {
         apply_nexus(ep_ptr->m_ptr, target_ptr);
     }
 

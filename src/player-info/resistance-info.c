@@ -81,7 +81,7 @@ void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_pt
     if (has_resist_shard(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは破片の攻撃への耐性を持っている。", "You are resistant to blasts of shards.");
     
-    if (creature_ptr->resist_nexus)
+    if (has_resist_nexus(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは因果混乱の攻撃への耐性を持っている。", "You are resistant to nexus attacks.");
 
     if (is_specific_player_race(creature_ptr, RACE_SPECTRE))

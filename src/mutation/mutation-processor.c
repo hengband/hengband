@@ -128,7 +128,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_RTELEPORT) && (randint1(5000) == 88)) {
-        if (!creature_ptr->resist_nexus && !(creature_ptr->muta1 & MUT1_VTELEPORT) && !creature_ptr->anti_tele) {
+        if (!has_resist_nexus(creature_ptr) && !(creature_ptr->muta1 & MUT1_VTELEPORT) && !creature_ptr->anti_tele) {
             disturb(creature_ptr, FALSE, TRUE);
             msg_print(_("あなたの位置は突然ひじょうに不確定になった...", "Your position suddenly seems very uncertain..."));
             msg_print(NULL);
