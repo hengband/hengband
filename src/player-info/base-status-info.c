@@ -67,7 +67,7 @@ void set_status_sustain_info(player_type *creature_ptr, self_info_type *self_ptr
     if (has_sustain_wis(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの賢さは維持されている。", "Your wisdom is sustained.");
     }
-    if (creature_ptr->sustain_con) {
+    if (has_sustain_con(creature_ptr)) {
         self_ptr->info[self_ptr->line++] = _("あなたの耐久力は維持されている。", "Your constitution is sustained.");
     }
     if (has_sustain_dex (creature_ptr)) {
