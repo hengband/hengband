@@ -26,7 +26,7 @@ bool cmd_limit_cast(player_type *creature_ptr)
         return TRUE;
     }
 
-    if (is_shero(creature_ptr)) {
+    if (is_shero(creature_ptr) && (creature_ptr->pclass != CLASS_BERSERKER)) {
         msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
         return TRUE;
     }
