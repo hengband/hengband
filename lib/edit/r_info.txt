@@ -22872,7 +22872,7 @@ F:EVIL | DEMON | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP | HURT_FIRE
 S:1_IN_6 | 
 S:MIND_BLAST
 D:$It looks like a skinny large humanoid.
-D:$  Folklore has it that those who commit cannibalism are brought to cognate
+D:$  Folklore has it that those who commit cannibalism are brought to cognate.
 D:それは痩せこけた巨人の姿をしていて、人食いの罪を犯した者を
 D:同族にすると言われている。
 
@@ -22897,9 +22897,11 @@ R:526:1d3
 R:560:1d2
 R:1113:4d5
 R:1118:4d5
-D:$It is a too huge towering tornado of winds that looks vaguely like dragons or other winged beast
-D:$ This violent wind enjoying, dragons comes.
-D:それはあまりにも高くそびえ立つような風の竜巻で、漠然とドラゴンか他の翼ある魔獣に見える。
+D:$It is a too huge towering tornado of winds that looks vaguely like
+D:$ dragons or other winged beast.
+D:$  This violent wind enjoying, dragons comes.
+D:それはあまりにも高くそびえ立つような風の竜巻で、
+D:漠然とドラゴンか他の翼ある魔獣に見える。
 D:風の暴威を楽しんでドラゴンがやってくる。
 
 N:1142:年経たマグマのエレメンタル
@@ -22924,9 +22926,11 @@ R:899:4d5
 R:1098:1d2
 R:1111:4d5
 R:1131:1d3
-D:$It is a too huge towering glowing form of molten hate.that looks vaguely like spiders or other arthropod that live in lava cave.
+D:$It is a too huge towering glowing form of molten hate
+D:$ that looks vaguely like spiders or other arthropod that live in lava cave.
 D:$ Molten mineral give off toxic gas.
-D:それはあまりにも高くそびえ立つような光を発する憎悪が溶けてできたような塊で、漠然と溶岩洞窟に生息する蜘蛛か他の虫のように見える。
+D:それはあまりにも高くそびえ立つような光を発する憎悪が溶けてできたような塊で、
+D:漠然と溶岩洞窟に生息する蜘蛛か他の虫のように見える。
 D:溶けた鉱物が有毒ガスを噴出している。
 
 N:1143:年経た火のエレメンタル
@@ -22949,9 +22953,11 @@ R:1111:4d5
 R:1116:4d5
 R:510:1d3
 R:589:1d2
-D:$It is a too huge towering inferno of flames that looks vaguely like Balrog or other demons.
+D:$It is a too huge towering inferno of flames that looks vaguely like
+D:$ Balrog or other demons.
 D:$ This flame of destruction respecting, demons comes.
-D:それはあまりにも高くそびえ立つような火炎地獄で、漠然とバルログか他のデーモンのように見える。
+D:それはあまりにも高くそびえ立つような火炎地獄で、
+D:漠然とバルログか他のデーモンのように見える。
 D:その破壊の炎を慕ってデーモンがやってくる。
 
 N:1144:年経た氷のエレメンタル
@@ -22976,8 +22982,10 @@ R:549:1d2
 R:570:1d3
 R:1112:4d5
 R:1117:4d5
-D:$It is a too huge towering glacier of ice that looks vaguely like Animals in cold regions.
-D:それはあまりにも高くそびえ立つような氷河で、漠然と寒冷地の動物のように見える。
+D:$It is a too huge towering glacier of ice that looks vaguely like
+D:$ Animals in cold regions.
+D:それはあまりにも高くそびえ立つような氷河で、
+D:漠然と寒冷地の動物のように見える。
 
 N:1145:年経た汚物エレメンタル
 E:Elder ooze elemental
@@ -23002,8 +23010,10 @@ R:592:1d2
 R:1115:4d6
 R:1131:1d3
 R:1132:1d3
-D:$It is a too huge towering mass of filth that looks vaguely like Hydras, crocodilians or frogs.
-D:それはあまりにも高くそびえ立つような汚物の塊で、漠然とヒドラやワニやカエルのように見える。
+D:$It is a too huge towering mass of filth that looks vaguely like
+D:$ Hydras, crocodilians or frogs.
+D:それはあまりにも高くそびえ立つような汚物の塊で、
+D:漠然とヒドラやワニやカエルのように見える。
 
 # 紫電は航続距離が短いので鉄獄に入れませんでした
 # Storing cherry-blossom
@@ -23021,7 +23031,8 @@ R:1147:5d5
 D:$It is a ghost of those who made human life a part,
 D:$ flied on the battlefield with iron wings,
 D:$ and continued to shed a lot of blood on both sides.
-D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
+D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、
+D:敵味方共に幾多の血を流し続けた者達の亡霊だ。
 
 N:1147:ハヤブサ
 E:Betty G4M 'Falcon'
@@ -23036,7 +23047,8 @@ S:1_IN_6 | BO_MANA | MISSILE | BLINK
 D:$It is a ghost of those who made human life a part,
 D:$ flied on the battlefield with iron wings,
 D:$ and continued to shed a lot of blood on both sides.
-D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、敵味方共に幾多の血を流し続けた者達の亡霊だ。
+D:それは人の命を部品にし、鉄の翼を纏って戦場を駆け、
+D:敵味方共に幾多の血を流し続けた者達の亡霊だ。
 
 N:1148:放火魔『雄一』
 E:Yu'uichi, the Arsonist
@@ -23223,7 +23235,8 @@ F:FRIENDS | FORCE_SLEEP | DROP_90
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:NEVER_MOVE | NEVER_BLOW
 S:1_IN_2 | BR_ELEC | BR_PLAS
-D:$It is Moai who landed in Angband. You can not destroy this ion ring.
+D:$It is Moai who landed in Angband.
+D:$  You can not destroy this ion ring.
 D:鉄獄に降り立ったモアイだ。こいつの吐き出すイオンリングは破壊できない。
 
 # 死に際に7/8の確率で自分自身を召喚する
@@ -23236,7 +23249,8 @@ F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | RES_TELE | DROP_90
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:NEVER_MOVE | NEVER_BLOW
 S:1_IN_2 | BR_ELEC | BR_PLAS
-D:$It is a Moai piled up like a totem pole. There is no end in destroying it.
+D:$It is a Moai piled up like a totem pole.
+D:$  There is no end in destroying it.
 D:トーテムポール状に積み上がったモアイだ。倒してもきりがない。
 
 # プチモアイのみ召喚
@@ -23251,7 +23265,8 @@ F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | RES_TELE
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | DROP_GREAT
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 S:1_IN_2 | S_KIN | HOLD | CONF | BLIND | HEAL
-D:$It is a mighty thug from the Bacterian army. It summons many small Moais.
+D:$It is a mighty thug from the Bacterian army.
+D:$  It summons many small Moais.
 D:バクテリアン軍が放った強大な刺客だ。それは大量のプチモアイを生み出す。
 
 # テストプレイした結果、戦士＆レンジャーなら毒針なしでも刺さった
@@ -23352,8 +23367,10 @@ F:EVIL | FEMALE | UNIQUE | RES_LITE | RES_TIME | RES_DARK | RES_NETH
 F:IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | RES_TELE
 S:1_IN_5 | 
 S:S_MONSTERS | SCARE | BA_DARK | BA_NETH | BR_POIS
-D:$This sacred and untouchable female monster is half a nymph and half a snake, becoming the mother of many monsters.
-D:この半分がニンフで半分は蛇の神聖にして手の付けられない女怪は、数々のモンスターの母となった。
+D:$This sacred and untouchable female monster is half a nymph
+D:$ and half a snake, becoming the mother of many monsters.
+D:この半分がニンフで半分は蛇の神聖にして手の付けられない女怪は、
+D:数々のモンスターの母となった。
 
 N:1170:ハリモグラ
 E:Echidna
@@ -23363,9 +23380,11 @@ W:1:3:0:6:0:0
 B:CRUSH:HURT:3d1
 F:RAND_50 | WILD_GRASS | WILD_WOOD |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE
-D:$It is relative of platypus and was thought to be a composite of reptiles and mammals, 
+D:$It is relative of platypus and was thought
+D:$ to be a composite of reptiles and mammals,
 D:$ so it was named after the Greek monster.
-D:それはカモノハシの類縁で、爬虫類と哺乳類の合成と考えられたためギリシアの怪物にちなんで英名を名付けられた。
+D:それはカモノハシの類縁で、爬虫類と哺乳類の合成と考えられたため
+D:ギリシアの怪物にちなんで英名を名付けられた。
 
 N:1171:虚界の魔獣『ジェノサイバー』
 E:Genocyber the Vajura Beast
