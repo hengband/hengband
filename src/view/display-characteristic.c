@@ -41,7 +41,7 @@ static bool decide_cursed_equipment_color(u16b mode, TERM_LEN row, TERM_LEN *col
 {
 	if ((mode & DP_CURSE) == 0) return FALSE;
 
-	if (have_flag(flags, TR_ADD_L_CURSE) || have_flag(flags, TR_ADD_H_CURSE))
+	if (has_flag(flags, TR_ADD_L_CURSE) || has_flag(flags, TR_ADD_H_CURSE))
 	{
 		c_put_str(TERM_L_DARK, "+", row, *col);
 		*header_color = TERM_WHITE;
@@ -106,7 +106,7 @@ static bool decide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1,
  */
 static void decide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color, bool vuln)
 {
-	if (have_flag(flags, flag1))
+	if (has_flag(flags, flag1))
 	{
 		c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE),
 			(mode & DP_IMM) ? "*" : "+", row, *col);
@@ -165,25 +165,25 @@ static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TE
 static void display_one_characteristic(TERM_LEN row, TERM_LEN col, concptr header, byte header_color, int header_col, int flag1, bool vuln, all_player_flags *f)
 {
 	c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
-	if (have_flag(f->player_flags, flag1))
+	if (has_flag(f->player_flags, flag1))
 	{
 		c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
 		header_color = TERM_WHITE;
 	}
 
-	if (have_flag(f->tim_player_flags, flag1))
+	if (has_flag(f->tim_player_flags, flag1))
 	{
 		c_put_str((byte)(vuln ? TERM_ORANGE : TERM_YELLOW), "#", row, col);
 		header_color = TERM_WHITE;
 	}
 
-	if (have_flag(f->tim_player_imm, flag1))
+	if (has_flag(f->tim_player_imm, flag1))
 	{
 		c_put_str(TERM_YELLOW, "*", row, col);
 		header_color = TERM_WHITE;
 	}
 
-	if (have_flag(f->player_imm, flag1))
+	if (has_flag(f->player_imm, flag1))
 	{
 		c_put_str(TERM_WHITE, "*", row, col);
 		header_color = TERM_WHITE;
@@ -212,8 +212,8 @@ static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, 
 	byte header_color = TERM_L_DARK;
 	int header_col = col;
 	bool vuln = FALSE;
-	if (have_flag(f->player_vuln, flag1) &&
-		!(have_flag(f->known_obj_imm, flag1) || have_flag(f->player_imm, flag1) || have_flag(f->tim_player_imm, flag1)))
+	if (has_flag(f->player_vuln, flag1) &&
+		!(has_flag(f->known_obj_imm, flag1) || has_flag(f->player_imm, flag1) || has_flag(f->tim_player_imm, flag1)))
 		vuln = TRUE;
 
 	col += strlen(header) + 1;

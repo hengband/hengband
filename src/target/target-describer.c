@@ -431,7 +431,7 @@ static s16b sweep_footing_items(player_type *subject_ptr, eg_type *eg_ptr)
 
 static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
 {
-    if (have_flag(eg_ptr->f_ptr->flags, FF_QUEST_ENTER)) {
+    if (has_flag(eg_ptr->f_ptr->flags, FF_QUEST_ENTER)) {
         IDX old_quest = subject_ptr->current_floor_ptr->inside_quest;
         for (int j = 0; j < 10; j++)
             quest_text[j][0] = '\0';
@@ -445,13 +445,13 @@ static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
             _("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), quest[eg_ptr->g_ptr->special].name, quest[eg_ptr->g_ptr->special].level);
     }
     
-    if (have_flag(eg_ptr->f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena)
+    if (has_flag(eg_ptr->f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena)
         return building[eg_ptr->f_ptr->subtype].name;
     
-    if (have_flag(eg_ptr->f_ptr->flags, FF_ENTRANCE))
+    if (has_flag(eg_ptr->f_ptr->flags, FF_ENTRANCE))
         return format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[eg_ptr->g_ptr->special].text, d_info[eg_ptr->g_ptr->special].mindepth);
     
-    if (have_flag(eg_ptr->f_ptr->flags, FF_TOWN))
+    if (has_flag(eg_ptr->f_ptr->flags, FF_TOWN))
         return town_info[eg_ptr->g_ptr->special].name;
     
     if (subject_ptr->wild_mode && (eg_ptr->feat == feat_floor))
@@ -524,7 +524,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         eg_ptr->feat = feat_none;
 
     eg_ptr->f_ptr = &f_info[eg_ptr->feat];
-    if (!eg_ptr->boring && !have_flag(eg_ptr->f_ptr->flags, FF_REMEMBER))
+    if (!eg_ptr->boring && !has_flag(eg_ptr->f_ptr->flags, FF_REMEMBER))
         return (eg_ptr->query != '\r') && (eg_ptr->query != '\n') ? eg_ptr->query : 0;
 
     /*
@@ -533,18 +533,18 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
      */
     eg_ptr->name = decide_target_floor(subject_ptr, eg_ptr);
     if (*eg_ptr->s2
-        && ((!have_flag(eg_ptr->f_ptr->flags, FF_MOVE) && !have_flag(eg_ptr->f_ptr->flags, FF_CAN_FLY))
-            || (!have_flag(eg_ptr->f_ptr->flags, FF_LOS) && !have_flag(eg_ptr->f_ptr->flags, FF_TREE)) || have_flag(eg_ptr->f_ptr->flags, FF_TOWN))) {
+        && ((!has_flag(eg_ptr->f_ptr->flags, FF_MOVE) && !has_flag(eg_ptr->f_ptr->flags, FF_CAN_FLY))
+            || (!has_flag(eg_ptr->f_ptr->flags, FF_LOS) && !has_flag(eg_ptr->f_ptr->flags, FF_TREE)) || has_flag(eg_ptr->f_ptr->flags, FF_TOWN))) {
         eg_ptr->s2 = _("の中", "in ");
     }
 
-    if (have_flag(eg_ptr->f_ptr->flags, FF_STORE) || have_flag(eg_ptr->f_ptr->flags, FF_QUEST_ENTER)
-        || (have_flag(eg_ptr->f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena) || have_flag(eg_ptr->f_ptr->flags, FF_ENTRANCE))
+    if (has_flag(eg_ptr->f_ptr->flags, FF_STORE) || has_flag(eg_ptr->f_ptr->flags, FF_QUEST_ENTER)
+        || (has_flag(eg_ptr->f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena) || has_flag(eg_ptr->f_ptr->flags, FF_ENTRANCE))
         eg_ptr->s2 = _("の入口", "");
 #ifdef JP
 #else
-    else if (have_flag(eg_ptr->f_ptr->flags, FF_FLOOR) || have_flag(eg_ptr->f_ptr->flags, FF_TOWN) || have_flag(eg_ptr->f_ptr->flags, FF_SHALLOW)
-        || have_flag(eg_ptr->f_ptr->flags, FF_DEEP))
+    else if (has_flag(eg_ptr->f_ptr->flags, FF_FLOOR) || has_flag(eg_ptr->f_ptr->flags, FF_TOWN) || has_flag(eg_ptr->f_ptr->flags, FF_SHALLOW)
+        || has_flag(eg_ptr->f_ptr->flags, FF_DEEP))
         eg_ptr->s3 = "";
     else
         eg_ptr->s3 = (is_a_vowel(eg_ptr->name[0])) ? "an " : "a ";

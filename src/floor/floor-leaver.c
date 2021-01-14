@@ -152,7 +152,7 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
             feature_type *f_ptr = &f_info[g_ptr->feat];
             bool ok = FALSE;
             if (floor_mode & CFM_UP) {
-                if (have_flag(f_ptr->flags, FF_LESS) && have_flag(f_ptr->flags, FF_STAIRS) && !have_flag(f_ptr->flags, FF_SPECIAL)) {
+                if (has_flag(f_ptr->flags, FF_LESS) && has_flag(f_ptr->flags, FF_STAIRS) && !has_flag(f_ptr->flags, FF_SPECIAL)) {
                     ok = TRUE;
                     if (g_ptr->special && g_ptr->special == sf_ptr->upper_floor_id) {
                         sx = x;
@@ -160,7 +160,7 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
                     }
                 }
             } else if (floor_mode & CFM_DOWN) {
-                if (have_flag(f_ptr->flags, FF_MORE) && have_flag(f_ptr->flags, FF_STAIRS) && !have_flag(f_ptr->flags, FF_SPECIAL)) {
+                if (has_flag(f_ptr->flags, FF_MORE) && has_flag(f_ptr->flags, FF_STAIRS) && !has_flag(f_ptr->flags, FF_SPECIAL)) {
                     ok = TRUE;
                     if (g_ptr->special && g_ptr->special == sf_ptr->lower_floor_id) {
                         sx = x;
@@ -168,7 +168,7 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
                     }
                 }
             } else {
-                if (have_flag(f_ptr->flags, FF_BLDG)) {
+                if (has_flag(f_ptr->flags, FF_BLDG)) {
                     ok = TRUE;
                 }
             }
@@ -285,10 +285,10 @@ static void set_grid_by_leaving_floor(player_type *creature_ptr, grid_type **g_p
 
     *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
     feature_type *f_ptr =  &f_info[(*g_ptr)->feat];
-    if ((*g_ptr)->special && !have_flag(f_ptr->flags, FF_SPECIAL) && get_sf_ptr((*g_ptr)->special))
+    if ((*g_ptr)->special && !has_flag(f_ptr->flags, FF_SPECIAL) && get_sf_ptr((*g_ptr)->special))
         new_floor_id = (*g_ptr)->special;
 
-    if (have_flag(f_ptr->flags, FF_STAIRS) && have_flag(f_ptr->flags, FF_SHAFT))
+    if (has_flag(f_ptr->flags, FF_STAIRS) && has_flag(f_ptr->flags, FF_SHAFT))
         prepare_change_floor_mode(creature_ptr, CFM_SHAFT);
 }
 

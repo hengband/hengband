@@ -329,7 +329,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 if (!in_bounds2(floor_ptr, yyy, xxx))
                     continue;
                 cc_ptr = &floor_ptr->grid_array[yyy][xxx];
-                if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW)) {
+                if (has_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

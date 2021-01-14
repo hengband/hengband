@@ -118,7 +118,7 @@ bool is_trap(player_type *player_ptr, FEAT_IDX feat)
 {
 	/* 関数ポインタの都合 */
 	(void)player_ptr;
-	return have_flag(f_info[feat].flags, FF_TRAP);
+	return has_flag(f_info[feat].flags, FF_TRAP);
 }
 
 /*!
@@ -132,8 +132,8 @@ bool is_closed_door(player_type *player_ptr, FEAT_IDX feat)
 	(void)player_ptr;
 	feature_type *f_ptr = &f_info[feat];
 
-	return (have_flag(f_ptr->flags, FF_OPEN) || have_flag(f_ptr->flags, FF_BASH)) &&
-		!have_flag(f_ptr->flags, FF_MOVE);
+	return (has_flag(f_ptr->flags, FF_OPEN) || has_flag(f_ptr->flags, FF_BASH)) &&
+		!has_flag(f_ptr->flags, FF_MOVE);
 }
 
 /*!
@@ -168,7 +168,7 @@ bool is_ascii_graphics(char x) { return (x & 0x80) == 0; }
 /*
  * Determine if a "feature" is "permanent wall"
  */
-bool permanent_wall(feature_type *f_ptr) { return have_flag(f_ptr->flags, FF_WALL) && have_flag(f_ptr->flags, FF_PERMANENT); }
+bool permanent_wall(feature_type *f_ptr) { return has_flag(f_ptr->flags, FF_WALL) && has_flag(f_ptr->flags, FF_PERMANENT); }
 
 FEAT_IDX feat_locked_door_random(int door_type)
 {
@@ -197,7 +197,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     if (!current_world_ptr->character_dungeon) {
         g_ptr->mimic = 0;
         g_ptr->feat = feat;
-        if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) {
+        if (has_flag(f_ptr->flags, FF_GLOW) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) {
             for (DIRECTION i = 0; i < 9; i++) {
                 POSITION yy = y + ddy_ddd[i];
                 POSITION xx = x + ddx_ddd[i];
@@ -225,17 +225,17 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
         update_local_illumination(player_ptr, y, x);
     }
 
-    if (!have_flag(f_ptr->flags, FF_REMEMBER))
+    if (!has_flag(f_ptr->flags, FF_REMEMBER))
         g_ptr->info &= ~(CAVE_MARK);
     if (g_ptr->m_idx)
         update_monster(player_ptr, g_ptr->m_idx, FALSE);
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
-    if (old_los ^ have_flag(f_ptr->flags, FF_LOS))
+    if (old_los ^ has_flag(f_ptr->flags, FF_LOS))
         player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS;
 
-    if (!have_flag(f_ptr->flags, FF_GLOW) || (d_info[player_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+    if (!has_flag(f_ptr->flags, FF_GLOW) || (d_info[player_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
         return;
 
     for (DIRECTION i = 0; i < 9; i++) {
@@ -267,7 +267,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
 {
     feature_type *f_ptr = &f_info[newfeat];
-    if (!have_flag(f_ptr->flags, FF_CONVERT))
+    if (!has_flag(f_ptr->flags, FF_CONVERT))
         return newfeat;
 
     switch (f_ptr->subtype) {

@@ -182,7 +182,7 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
 		if (o_ptr->pval < 10) *c = '0' + o_ptr->pval;
 	}
 
-	if (have_flag(flags, stat + TR_SUST_STR))
+	if (has_flag(flags, stat + TR_SUST_STR))
 	{
 		*a = TERM_GREEN;
 	}
@@ -214,11 +214,11 @@ static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS
 		{
 			TERM_COLOR a = TERM_SLATE;
 			char c = '.';
-			if (have_flag(flags, stat))
+			if (has_flag(flags, stat))
 			{
 				compensate_stat_by_weapon(&c, &a, o_ptr, stat, flags);
 			}
-			else if (have_flag(flags, stat + TR_SUST_STR))
+			else if (has_flag(flags, stat + TR_SUST_STR))
 			{
 				a = TERM_GREEN;
 				c = 's';
@@ -335,7 +335,7 @@ static void display_mutation_compensation(player_type *creature_ptr, BIT_FLAGS *
 		char c = '.';
 		change_display_by_mutation(creature_ptr, stat, &c, &a);
 
-		if (have_flag(flags, stat + TR_SUST_STR))
+		if (has_flag(flags, stat + TR_SUST_STR))
 		{
 			a = TERM_GREEN;
 			c = 's';

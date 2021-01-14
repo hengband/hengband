@@ -85,7 +85,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
     case TV_SHOT:
     case TV_ARROW:
     case TV_BOLT: {
-        if ((have_flag(flgs, TR_SLAY_ANIMAL)) && (r_ptr->flags3 & RF3_ANIMAL)) {
+        if ((has_flag(flgs, TR_SLAY_ANIMAL)) && (r_ptr->flags3 & RF3_ANIMAL)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_ANIMAL;
             }
@@ -93,7 +93,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 17;
         }
 
-        if ((have_flag(flgs, TR_KILL_ANIMAL)) && (r_ptr->flags3 & RF3_ANIMAL)) {
+        if ((has_flag(flgs, TR_KILL_ANIMAL)) && (r_ptr->flags3 & RF3_ANIMAL)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_ANIMAL;
             }
@@ -101,7 +101,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 27;
         }
 
-        if ((have_flag(flgs, TR_SLAY_EVIL)) && (r_ptr->flags3 & RF3_EVIL)) {
+        if ((has_flag(flgs, TR_SLAY_EVIL)) && (r_ptr->flags3 & RF3_EVIL)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_EVIL;
             }
@@ -109,7 +109,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 15;
         }
 
-        if ((have_flag(flgs, TR_KILL_EVIL)) && (r_ptr->flags3 & RF3_EVIL)) {
+        if ((has_flag(flgs, TR_KILL_EVIL)) && (r_ptr->flags3 & RF3_EVIL)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_EVIL;
             }
@@ -117,7 +117,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 25;
         }
 
-        if ((have_flag(flgs, TR_SLAY_HUMAN)) && (r_ptr->flags2 & RF2_HUMAN)) {
+        if ((has_flag(flgs, TR_SLAY_HUMAN)) && (r_ptr->flags2 & RF2_HUMAN)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags2 |= RF2_HUMAN;
             }
@@ -125,7 +125,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 17;
         }
 
-        if ((have_flag(flgs, TR_KILL_HUMAN)) && (r_ptr->flags2 & RF2_HUMAN)) {
+        if ((has_flag(flgs, TR_KILL_HUMAN)) && (r_ptr->flags2 & RF2_HUMAN)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags2 |= RF2_HUMAN;
             }
@@ -133,7 +133,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 27;
         }
 
-        if ((have_flag(flgs, TR_SLAY_UNDEAD)) && (r_ptr->flags3 & RF3_UNDEAD)) {
+        if ((has_flag(flgs, TR_SLAY_UNDEAD)) && (r_ptr->flags3 & RF3_UNDEAD)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_UNDEAD;
             }
@@ -141,7 +141,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 20;
         }
 
-        if ((have_flag(flgs, TR_KILL_UNDEAD)) && (r_ptr->flags3 & RF3_UNDEAD)) {
+        if ((has_flag(flgs, TR_KILL_UNDEAD)) && (r_ptr->flags3 & RF3_UNDEAD)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_UNDEAD;
             }
@@ -149,7 +149,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 30;
         }
 
-        if ((have_flag(flgs, TR_SLAY_DEMON)) && (r_ptr->flags3 & RF3_DEMON)) {
+        if ((has_flag(flgs, TR_SLAY_DEMON)) && (r_ptr->flags3 & RF3_DEMON)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_DEMON;
             }
@@ -157,7 +157,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 20;
         }
 
-        if ((have_flag(flgs, TR_KILL_DEMON)) && (r_ptr->flags3 & RF3_DEMON)) {
+        if ((has_flag(flgs, TR_KILL_DEMON)) && (r_ptr->flags3 & RF3_DEMON)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_DEMON;
             }
@@ -165,7 +165,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 30;
         }
 
-        if ((have_flag(flgs, TR_SLAY_ORC)) && (r_ptr->flags3 & RF3_ORC)) {
+        if ((has_flag(flgs, TR_SLAY_ORC)) && (r_ptr->flags3 & RF3_ORC)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_ORC;
             }
@@ -173,7 +173,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 20;
         }
 
-        if ((have_flag(flgs, TR_KILL_ORC)) && (r_ptr->flags3 & RF3_ORC)) {
+        if ((has_flag(flgs, TR_KILL_ORC)) && (r_ptr->flags3 & RF3_ORC)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_ORC;
             }
@@ -181,7 +181,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 30;
         }
 
-        if ((have_flag(flgs, TR_SLAY_TROLL)) && (r_ptr->flags3 & RF3_TROLL)) {
+        if ((has_flag(flgs, TR_SLAY_TROLL)) && (r_ptr->flags3 & RF3_TROLL)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_TROLL;
             }
@@ -190,7 +190,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 20;
         }
 
-        if ((have_flag(flgs, TR_KILL_TROLL)) && (r_ptr->flags3 & RF3_TROLL)) {
+        if ((has_flag(flgs, TR_KILL_TROLL)) && (r_ptr->flags3 & RF3_TROLL)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_TROLL;
             }
@@ -198,7 +198,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 30;
         }
 
-        if ((have_flag(flgs, TR_SLAY_GIANT)) && (r_ptr->flags3 & RF3_GIANT)) {
+        if ((has_flag(flgs, TR_SLAY_GIANT)) && (r_ptr->flags3 & RF3_GIANT)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_GIANT;
             }
@@ -206,7 +206,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 20;
         }
 
-        if ((have_flag(flgs, TR_KILL_GIANT)) && (r_ptr->flags3 & RF3_GIANT)) {
+        if ((has_flag(flgs, TR_KILL_GIANT)) && (r_ptr->flags3 & RF3_GIANT)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_GIANT;
             }
@@ -214,7 +214,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 30;
         }
 
-        if ((have_flag(flgs, TR_SLAY_DRAGON)) && (r_ptr->flags3 & RF3_DRAGON)) {
+        if ((has_flag(flgs, TR_SLAY_DRAGON)) && (r_ptr->flags3 & RF3_DRAGON)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_DRAGON;
             }
@@ -222,7 +222,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 20;
         }
 
-        if ((have_flag(flgs, TR_KILL_DRAGON)) && (r_ptr->flags3 & RF3_DRAGON)) {
+        if ((has_flag(flgs, TR_KILL_DRAGON)) && (r_ptr->flags3 & RF3_DRAGON)) {
             if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
                 r_ptr->r_flags3 |= RF3_DRAGON;
             }
@@ -232,7 +232,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult *= 5;
         }
 
-        if (have_flag(flgs, TR_BRAND_ACID)) {
+        if (has_flag(flgs, TR_BRAND_ACID)) {
             /* Notice immunity */
             if (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK) {
                 if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
@@ -244,7 +244,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
             }
         }
 
-        if (have_flag(flgs, TR_BRAND_ELEC)) {
+        if (has_flag(flgs, TR_BRAND_ELEC)) {
             /* Notice immunity */
             if (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) {
                 if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
@@ -256,7 +256,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
             }
         }
 
-        if (have_flag(flgs, TR_BRAND_FIRE)) {
+        if (has_flag(flgs, TR_BRAND_FIRE)) {
             /* Notice immunity */
             if (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) {
                 if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
@@ -276,7 +276,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
             }
         }
 
-        if (have_flag(flgs, TR_BRAND_COLD)) {
+        if (has_flag(flgs, TR_BRAND_COLD)) {
             /* Notice immunity */
             if (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK) {
                 if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
@@ -296,7 +296,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
             }
         }
 
-        if (have_flag(flgs, TR_BRAND_POIS)) {
+        if (has_flag(flgs, TR_BRAND_POIS)) {
             /* Notice immunity */
             if (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK) {
                 if (is_original_ap_and_seen(sniper_ptr, m_ptr)) {
@@ -310,7 +310,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
             }
         }
 
-        if ((have_flag(flgs, TR_FORCE_WEAPON)) && (sniper_ptr->csp > (sniper_ptr->msp / 30))) {
+        if ((has_flag(flgs, TR_FORCE_WEAPON)) && (sniper_ptr->csp > (sniper_ptr->msp / 30))) {
             sniper_ptr->csp -= (1 + (sniper_ptr->msp / 30));
             sniper_ptr->redraw |= (PR_MANA);
             mult = mult * 5 / 2;

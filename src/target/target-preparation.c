@@ -86,7 +86,7 @@ static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
         if (g_ptr->info & CAVE_OBJECT)
             return TRUE;
 
-        if (have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_NOTICE))
+        if (has_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_NOTICE))
             return TRUE;
     }
 

@@ -66,12 +66,12 @@ void do_cmd_go_up(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
-    if (!have_flag(f_ptr->flags, FF_LESS)) {
+    if (!has_flag(f_ptr->flags, FF_LESS)) {
         msg_print(_("ここには上り階段が見当たらない。", "I see no up staircase here."));
         return;
     }
 
-    if (have_flag(f_ptr->flags, FF_QUEST)) {
+    if (has_flag(f_ptr->flags, FF_QUEST)) {
         if (!confirm_leave_level(creature_ptr, FALSE))
             return;
 
@@ -125,7 +125,7 @@ void do_cmd_go_up(player_type *creature_ptr)
         creature_ptr->current_floor_ptr->dun_level = 0;
         up_num = 0;
     } else {
-        if (have_flag(f_ptr->flags, FF_SHAFT)) {
+        if (has_flag(f_ptr->flags, FF_SHAFT)) {
             prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
             up_num = 2;
         } else {
@@ -164,20 +164,20 @@ void do_cmd_go_down(player_type *creature_ptr)
 
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    if (!have_flag(f_ptr->flags, FF_MORE)) {
+    if (!has_flag(f_ptr->flags, FF_MORE)) {
         msg_print(_("ここには下り階段が見当たらない。", "I see no down staircase here."));
         return;
     }
 
-    if (have_flag(f_ptr->flags, FF_TRAP))
+    if (has_flag(f_ptr->flags, FF_TRAP))
         fall_trap = TRUE;
 
-    if (have_flag(f_ptr->flags, FF_QUEST_ENTER)) {
+    if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
         do_cmd_quest(creature_ptr);
         return;
     }
 
-    if (have_flag(f_ptr->flags, FF_QUEST)) {
+    if (has_flag(f_ptr->flags, FF_QUEST)) {
         if (!confirm_leave_level(creature_ptr, TRUE))
             return;
 
@@ -210,7 +210,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 
     DUNGEON_IDX target_dungeon = 0;
     if (!creature_ptr->current_floor_ptr->dun_level) {
-        target_dungeon = have_flag(f_ptr->flags, FF_ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
+        target_dungeon = has_flag(f_ptr->flags, FF_ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
             msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
             return;
@@ -233,7 +233,7 @@ void do_cmd_go_down(player_type *creature_ptr)
     if (autosave_l)
         do_cmd_save_game(creature_ptr, TRUE);
 
-    if (have_flag(f_ptr->flags, FF_SHAFT))
+    if (has_flag(f_ptr->flags, FF_SHAFT))
         down_num += 2;
     else
         down_num += 1;
@@ -270,7 +270,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         return;
     }
 
-    if (have_flag(f_ptr->flags, FF_SHAFT))
+    if (has_flag(f_ptr->flags, FF_SHAFT))
         prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
     else
         prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN);

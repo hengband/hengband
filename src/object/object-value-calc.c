@@ -46,368 +46,368 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
     /*
      * Calucurate values of remaining flags
      */
-    if (have_flag(flgs, TR_STR))
+    if (has_flag(flgs, TR_STR))
         total += (1500 * plusses);
-    if (have_flag(flgs, TR_INT))
+    if (has_flag(flgs, TR_INT))
         total += (1500 * plusses);
-    if (have_flag(flgs, TR_WIS))
+    if (has_flag(flgs, TR_WIS))
         total += (1500 * plusses);
-    if (have_flag(flgs, TR_DEX))
+    if (has_flag(flgs, TR_DEX))
         total += (1500 * plusses);
-    if (have_flag(flgs, TR_CON))
+    if (has_flag(flgs, TR_CON))
         total += (1500 * plusses);
-    if (have_flag(flgs, TR_CHR))
+    if (has_flag(flgs, TR_CHR))
         total += (750 * plusses);
-    if (have_flag(flgs, TR_MAGIC_MASTERY))
+    if (has_flag(flgs, TR_MAGIC_MASTERY))
         total += (600 * plusses);
-    if (have_flag(flgs, TR_STEALTH))
+    if (has_flag(flgs, TR_STEALTH))
         total += (250 * plusses);
-    if (have_flag(flgs, TR_SEARCH))
+    if (has_flag(flgs, TR_SEARCH))
         total += (100 * plusses);
-    if (have_flag(flgs, TR_INFRA))
+    if (has_flag(flgs, TR_INFRA))
         total += (150 * plusses);
-    if (have_flag(flgs, TR_TUNNEL))
+    if (has_flag(flgs, TR_TUNNEL))
         total += (175 * plusses);
-    if ((have_flag(flgs, TR_SPEED)) && (plusses > 0))
+    if ((has_flag(flgs, TR_SPEED)) && (plusses > 0))
         total += (10000 + (2500 * plusses));
-    if ((have_flag(flgs, TR_BLOWS)) && (plusses > 0))
+    if ((has_flag(flgs, TR_BLOWS)) && (plusses > 0))
         total += (10000 + (2500 * plusses));
 
     PRICE tmp_cost = 0;
     int count = 0;
-    if (have_flag(flgs, TR_CHAOTIC)) {
+    if (has_flag(flgs, TR_CHAOTIC)) {
         total += 5000;
         count++;
     }
-    if (have_flag(flgs, TR_VAMPIRIC)) {
+    if (has_flag(flgs, TR_VAMPIRIC)) {
         total += 6500;
         count++;
     }
-    if (have_flag(flgs, TR_FORCE_WEAPON)) {
+    if (has_flag(flgs, TR_FORCE_WEAPON)) {
         tmp_cost += 2500;
         count++;
     }
-    if (have_flag(flgs, TR_KILL_ANIMAL)) {
+    if (has_flag(flgs, TR_KILL_ANIMAL)) {
         tmp_cost += 2800;
         count++;
-    } else if (have_flag(flgs, TR_SLAY_ANIMAL)) {
+    } else if (has_flag(flgs, TR_SLAY_ANIMAL)) {
         tmp_cost += 1800;
         count++;
     }
-    if (have_flag(flgs, TR_KILL_EVIL)) {
+    if (has_flag(flgs, TR_KILL_EVIL)) {
         tmp_cost += 3300;
         count++;
-    } else if (have_flag(flgs, TR_SLAY_EVIL)) {
+    } else if (has_flag(flgs, TR_SLAY_EVIL)) {
         tmp_cost += 2300;
         count++;
     }
-    if (have_flag(flgs, TR_KILL_HUMAN)) {
+    if (has_flag(flgs, TR_KILL_HUMAN)) {
         tmp_cost += 2800;
         count++;
-    } else if (have_flag(flgs, TR_SLAY_HUMAN)) {
+    } else if (has_flag(flgs, TR_SLAY_HUMAN)) {
         tmp_cost += 1800;
         count++;
     }
-    if (have_flag(flgs, TR_KILL_UNDEAD)) {
+    if (has_flag(flgs, TR_KILL_UNDEAD)) {
         tmp_cost += 2800;
         count++;
-    } else if (have_flag(flgs, TR_SLAY_UNDEAD)) {
+    } else if (has_flag(flgs, TR_SLAY_UNDEAD)) {
         tmp_cost += 1800;
         count++;
     }
-    if (have_flag(flgs, TR_KILL_DEMON)) {
+    if (has_flag(flgs, TR_KILL_DEMON)) {
         tmp_cost += 2800;
         count++;
-    } else if (have_flag(flgs, TR_SLAY_DEMON)) {
+    } else if (has_flag(flgs, TR_SLAY_DEMON)) {
         tmp_cost += 1800;
         count++;
     }
-    if (have_flag(flgs, TR_KILL_ORC)) {
+    if (has_flag(flgs, TR_KILL_ORC)) {
         tmp_cost += 2500;
         count++;
-    } else if (have_flag(flgs, TR_SLAY_ORC)) {
+    } else if (has_flag(flgs, TR_SLAY_ORC)) {
         tmp_cost += 1500;
         count++;
     }
-    if (have_flag(flgs, TR_KILL_TROLL)) {
+    if (has_flag(flgs, TR_KILL_TROLL)) {
         tmp_cost += 2800;
         count++;
-    } else if (have_flag(flgs, TR_SLAY_TROLL)) {
+    } else if (has_flag(flgs, TR_SLAY_TROLL)) {
         tmp_cost += 1800;
         count++;
     }
-    if (have_flag(flgs, TR_KILL_GIANT)) {
+    if (has_flag(flgs, TR_KILL_GIANT)) {
         tmp_cost += 2800;
         count++;
-    } else if (have_flag(flgs, TR_SLAY_GIANT)) {
+    } else if (has_flag(flgs, TR_SLAY_GIANT)) {
         tmp_cost += 1800;
         count++;
     }
-    if (have_flag(flgs, TR_KILL_DRAGON)) {
+    if (has_flag(flgs, TR_KILL_DRAGON)) {
         tmp_cost += 2800;
         count++;
-    } else if (have_flag(flgs, TR_SLAY_DRAGON)) {
+    } else if (has_flag(flgs, TR_SLAY_DRAGON)) {
         tmp_cost += 1800;
         count++;
     }
 
-    if (have_flag(flgs, TR_VORPAL)) {
+    if (has_flag(flgs, TR_VORPAL)) {
         tmp_cost += 2500;
         count++;
     }
-    if (have_flag(flgs, TR_IMPACT)) {
+    if (has_flag(flgs, TR_IMPACT)) {
         tmp_cost += 2500;
         count++;
     }
-    if (have_flag(flgs, TR_BRAND_POIS)) {
+    if (has_flag(flgs, TR_BRAND_POIS)) {
         tmp_cost += 3800;
         count++;
     }
-    if (have_flag(flgs, TR_BRAND_ACID)) {
+    if (has_flag(flgs, TR_BRAND_ACID)) {
         tmp_cost += 3800;
         count++;
     }
-    if (have_flag(flgs, TR_BRAND_ELEC)) {
+    if (has_flag(flgs, TR_BRAND_ELEC)) {
         tmp_cost += 3800;
         count++;
     }
-    if (have_flag(flgs, TR_BRAND_FIRE)) {
+    if (has_flag(flgs, TR_BRAND_FIRE)) {
         tmp_cost += 2500;
         count++;
     }
-    if (have_flag(flgs, TR_BRAND_COLD)) {
+    if (has_flag(flgs, TR_BRAND_COLD)) {
         tmp_cost += 2500;
         count++;
     }
     total += (tmp_cost * count);
 
-    if (have_flag(flgs, TR_SUST_STR))
+    if (has_flag(flgs, TR_SUST_STR))
         total += 850;
-    if (have_flag(flgs, TR_SUST_INT))
+    if (has_flag(flgs, TR_SUST_INT))
         total += 850;
-    if (have_flag(flgs, TR_SUST_WIS))
+    if (has_flag(flgs, TR_SUST_WIS))
         total += 850;
-    if (have_flag(flgs, TR_SUST_DEX))
+    if (has_flag(flgs, TR_SUST_DEX))
         total += 850;
-    if (have_flag(flgs, TR_SUST_CON))
+    if (has_flag(flgs, TR_SUST_CON))
         total += 850;
-    if (have_flag(flgs, TR_SUST_CHR))
+    if (has_flag(flgs, TR_SUST_CHR))
         total += 250;
-    if (have_flag(flgs, TR_RIDING))
+    if (has_flag(flgs, TR_RIDING))
         total += 0;
-    if (have_flag(flgs, TR_EASY_SPELL))
+    if (has_flag(flgs, TR_EASY_SPELL))
         total += 1500;
-    if (have_flag(flgs, TR_THROW))
+    if (has_flag(flgs, TR_THROW))
         total += 5000;
-    if (have_flag(flgs, TR_FREE_ACT))
+    if (has_flag(flgs, TR_FREE_ACT))
         total += 4500;
-    if (have_flag(flgs, TR_HOLD_EXP))
+    if (has_flag(flgs, TR_HOLD_EXP))
         total += 8500;
 
     tmp_cost = 0;
     count = 0;
-    if (have_flag(flgs, TR_IM_ACID)) {
+    if (has_flag(flgs, TR_IM_ACID)) {
         tmp_cost += 15000;
         count += 2;
     }
-    if (have_flag(flgs, TR_IM_ELEC)) {
+    if (has_flag(flgs, TR_IM_ELEC)) {
         tmp_cost += 15000;
         count += 2;
     }
-    if (have_flag(flgs, TR_IM_FIRE)) {
+    if (has_flag(flgs, TR_IM_FIRE)) {
         tmp_cost += 15000;
         count += 2;
     }
-    if (have_flag(flgs, TR_IM_COLD)) {
+    if (has_flag(flgs, TR_IM_COLD)) {
         tmp_cost += 15000;
         count += 2;
     }
-    if (have_flag(flgs, TR_REFLECT)) {
+    if (has_flag(flgs, TR_REFLECT)) {
         tmp_cost += 5000;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_ACID)) {
+    if (has_flag(flgs, TR_RES_ACID)) {
         tmp_cost += 500;
         count++;
     }
-    if (have_flag(flgs, TR_RES_ELEC)) {
+    if (has_flag(flgs, TR_RES_ELEC)) {
         tmp_cost += 500;
         count++;
     }
-    if (have_flag(flgs, TR_RES_FIRE)) {
+    if (has_flag(flgs, TR_RES_FIRE)) {
         tmp_cost += 500;
         count++;
     }
-    if (have_flag(flgs, TR_RES_COLD)) {
+    if (has_flag(flgs, TR_RES_COLD)) {
         tmp_cost += 500;
         count++;
     }
-    if (have_flag(flgs, TR_RES_POIS)) {
+    if (has_flag(flgs, TR_RES_POIS)) {
         tmp_cost += 1000;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_FEAR)) {
+    if (has_flag(flgs, TR_RES_FEAR)) {
         tmp_cost += 1000;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_LITE)) {
+    if (has_flag(flgs, TR_RES_LITE)) {
         tmp_cost += 800;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_DARK)) {
+    if (has_flag(flgs, TR_RES_DARK)) {
         tmp_cost += 800;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_BLIND)) {
+    if (has_flag(flgs, TR_RES_BLIND)) {
         tmp_cost += 900;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_CONF)) {
+    if (has_flag(flgs, TR_RES_CONF)) {
         tmp_cost += 900;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_SOUND)) {
+    if (has_flag(flgs, TR_RES_SOUND)) {
         tmp_cost += 900;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_SHARDS)) {
+    if (has_flag(flgs, TR_RES_SHARDS)) {
         tmp_cost += 900;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_NETHER)) {
+    if (has_flag(flgs, TR_RES_NETHER)) {
         tmp_cost += 900;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_NEXUS)) {
+    if (has_flag(flgs, TR_RES_NEXUS)) {
         tmp_cost += 900;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_CHAOS)) {
+    if (has_flag(flgs, TR_RES_CHAOS)) {
         tmp_cost += 1000;
         count += 2;
     }
-    if (have_flag(flgs, TR_RES_DISEN)) {
+    if (has_flag(flgs, TR_RES_DISEN)) {
         tmp_cost += 2000;
         count += 2;
     }
     total += (tmp_cost * count);
 
-    if (have_flag(flgs, TR_SH_FIRE))
+    if (has_flag(flgs, TR_SH_FIRE))
         total += 5000;
-    if (have_flag(flgs, TR_SH_ELEC))
+    if (has_flag(flgs, TR_SH_ELEC))
         total += 5000;
-    if (have_flag(flgs, TR_SH_COLD))
+    if (has_flag(flgs, TR_SH_COLD))
         total += 5000;
-    if (have_flag(flgs, TR_NO_TELE))
+    if (has_flag(flgs, TR_NO_TELE))
         total -= 10000;
-    if (have_flag(flgs, TR_NO_MAGIC))
+    if (has_flag(flgs, TR_NO_MAGIC))
         total += 2500;
-    if (have_flag(flgs, TR_TY_CURSE))
+    if (has_flag(flgs, TR_TY_CURSE))
         total -= 15000;
-    if (have_flag(flgs, TR_HIDE_TYPE))
+    if (has_flag(flgs, TR_HIDE_TYPE))
         total += 0;
-    if (have_flag(flgs, TR_SHOW_MODS))
+    if (has_flag(flgs, TR_SHOW_MODS))
         total += 0;
-    if (have_flag(flgs, TR_LEVITATION))
+    if (has_flag(flgs, TR_LEVITATION))
         total += 1250;
-    if (have_flag(flgs, TR_LITE_1))
+    if (has_flag(flgs, TR_LITE_1))
         total += 1500;
-    if (have_flag(flgs, TR_LITE_2))
+    if (has_flag(flgs, TR_LITE_2))
         total += 2500;
-    if (have_flag(flgs, TR_LITE_3))
+    if (has_flag(flgs, TR_LITE_3))
         total += 4000;
-    if (have_flag(flgs, TR_LITE_M1))
+    if (has_flag(flgs, TR_LITE_M1))
         total -= 1500;
-    if (have_flag(flgs, TR_LITE_M2))
+    if (has_flag(flgs, TR_LITE_M2))
         total -= 2500;
-    if (have_flag(flgs, TR_LITE_M3))
+    if (has_flag(flgs, TR_LITE_M3))
         total -= 4000;
-    if (have_flag(flgs, TR_SEE_INVIS))
+    if (has_flag(flgs, TR_SEE_INVIS))
         total += 2000;
-    if (have_flag(flgs, TR_TELEPATHY))
+    if (has_flag(flgs, TR_TELEPATHY))
         total += 20000;
-    if (have_flag(flgs, TR_ESP_ANIMAL))
+    if (has_flag(flgs, TR_ESP_ANIMAL))
         total += 1000;
-    if (have_flag(flgs, TR_ESP_UNDEAD))
+    if (has_flag(flgs, TR_ESP_UNDEAD))
         total += 1000;
-    if (have_flag(flgs, TR_ESP_DEMON))
+    if (has_flag(flgs, TR_ESP_DEMON))
         total += 1000;
-    if (have_flag(flgs, TR_ESP_ORC))
+    if (has_flag(flgs, TR_ESP_ORC))
         total += 1000;
-    if (have_flag(flgs, TR_ESP_TROLL))
+    if (has_flag(flgs, TR_ESP_TROLL))
         total += 1000;
-    if (have_flag(flgs, TR_ESP_GIANT))
+    if (has_flag(flgs, TR_ESP_GIANT))
         total += 1000;
-    if (have_flag(flgs, TR_ESP_DRAGON))
+    if (has_flag(flgs, TR_ESP_DRAGON))
         total += 1000;
-    if (have_flag(flgs, TR_ESP_HUMAN))
+    if (has_flag(flgs, TR_ESP_HUMAN))
         total += 1000;
-    if (have_flag(flgs, TR_ESP_EVIL))
+    if (has_flag(flgs, TR_ESP_EVIL))
         total += 15000;
-    if (have_flag(flgs, TR_ESP_GOOD))
+    if (has_flag(flgs, TR_ESP_GOOD))
         total += 2000;
-    if (have_flag(flgs, TR_ESP_NONLIVING))
+    if (has_flag(flgs, TR_ESP_NONLIVING))
         total += 2000;
-    if (have_flag(flgs, TR_ESP_UNIQUE))
+    if (has_flag(flgs, TR_ESP_UNIQUE))
         total += 10000;
-    if (have_flag(flgs, TR_SLOW_DIGEST))
+    if (has_flag(flgs, TR_SLOW_DIGEST))
         total += 750;
-    if (have_flag(flgs, TR_REGEN))
+    if (has_flag(flgs, TR_REGEN))
         total += 2500;
-    if (have_flag(flgs, TR_WARNING))
+    if (has_flag(flgs, TR_WARNING))
         total += 2000;
-    if (have_flag(flgs, TR_DEC_MANA))
+    if (has_flag(flgs, TR_DEC_MANA))
         total += 10000;
-    if (have_flag(flgs, TR_XTRA_MIGHT))
+    if (has_flag(flgs, TR_XTRA_MIGHT))
         total += 2250;
-    if (have_flag(flgs, TR_XTRA_SHOTS))
+    if (has_flag(flgs, TR_XTRA_SHOTS))
         total += 10000;
-    if (have_flag(flgs, TR_IGNORE_ACID))
+    if (has_flag(flgs, TR_IGNORE_ACID))
         total += 100;
-    if (have_flag(flgs, TR_IGNORE_ELEC))
+    if (has_flag(flgs, TR_IGNORE_ELEC))
         total += 100;
-    if (have_flag(flgs, TR_IGNORE_FIRE))
+    if (has_flag(flgs, TR_IGNORE_FIRE))
         total += 100;
-    if (have_flag(flgs, TR_IGNORE_COLD))
+    if (has_flag(flgs, TR_IGNORE_COLD))
         total += 100;
-    if (have_flag(flgs, TR_ACTIVATE))
+    if (has_flag(flgs, TR_ACTIVATE))
         total += 100;
-    if (have_flag(flgs, TR_DRAIN_EXP))
+    if (has_flag(flgs, TR_DRAIN_EXP))
         total -= 12500;
-    if (have_flag(flgs, TR_DRAIN_HP))
+    if (has_flag(flgs, TR_DRAIN_HP))
         total -= 12500;
-    if (have_flag(flgs, TR_DRAIN_MANA))
+    if (has_flag(flgs, TR_DRAIN_MANA))
         total -= 12500;
-    if (have_flag(flgs, TR_CALL_ANIMAL))
+    if (has_flag(flgs, TR_CALL_ANIMAL))
         total -= 12500;
-    if (have_flag(flgs, TR_CALL_DEMON))
+    if (has_flag(flgs, TR_CALL_DEMON))
         total -= 10000;
-    if (have_flag(flgs, TR_CALL_DRAGON))
+    if (has_flag(flgs, TR_CALL_DRAGON))
         total -= 10000;
-    if (have_flag(flgs, TR_CALL_UNDEAD))
+    if (has_flag(flgs, TR_CALL_UNDEAD))
         total -= 10000;
-    if (have_flag(flgs, TR_COWARDICE))
+    if (has_flag(flgs, TR_COWARDICE))
         total -= 5000;
-    if (have_flag(flgs, TR_LOW_MELEE))
+    if (has_flag(flgs, TR_LOW_MELEE))
         total -= 5000;
-    if (have_flag(flgs, TR_LOW_AC))
+    if (has_flag(flgs, TR_LOW_AC))
         total -= 5000;
-    if (have_flag(flgs, TR_LOW_MAGIC))
+    if (has_flag(flgs, TR_LOW_MAGIC))
         total -= 15000;
-    if (have_flag(flgs, TR_FAST_DIGEST))
+    if (has_flag(flgs, TR_FAST_DIGEST))
         total -= 10000;
-    if (have_flag(flgs, TR_SLOW_REGEN))
+    if (has_flag(flgs, TR_SLOW_REGEN))
         total -= 10000;
-    if (have_flag(flgs, TR_TELEPORT)) {
+    if (has_flag(flgs, TR_TELEPORT)) {
         if (object_is_cursed(o_ptr))
             total -= 7500;
         else
             total += 250;
     }
 
-    if (have_flag(flgs, TR_AGGRAVATE))
+    if (has_flag(flgs, TR_AGGRAVATE))
         total -= 10000;
-    if (have_flag(flgs, TR_BLESSED))
+    if (has_flag(flgs, TR_BLESSED))
         total += 750;
     if (o_ptr->curse_flags & TR_ADD_L_CURSE)
         total -= 5000;
@@ -421,7 +421,7 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         total -= 15000;
 
     /* Also, give some extra for activatable powers... */
-    if (o_ptr->art_name && (have_flag(o_ptr->art_flags, TR_ACTIVATE))) {
+    if (o_ptr->art_name && (has_flag(o_ptr->art_flags, TR_ACTIVATE))) {
         const activation_type *const act_ptr = find_activation_info(player_ptr, o_ptr);
         if (act_ptr) {
             total += act_ptr->value;

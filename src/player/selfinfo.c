@@ -1108,41 +1108,41 @@ void self_knowledge(player_type *creature_ptr)
         info[i++] = _("あなたの魅力は維持されている。", "Your charisma is sustained.");
     }
 
-    if (have_flag(flgs, TR_STR)) {
+    if (has_flag(flgs, TR_STR)) {
         info[i++] = _("あなたの腕力は装備によって影響を受けている。", "Your strength is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_INT)) {
+    if (has_flag(flgs, TR_INT)) {
         info[i++] = _("あなたの知能は装備によって影響を受けている。", "Your intelligence is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_WIS)) {
+    if (has_flag(flgs, TR_WIS)) {
         info[i++] = _("あなたの賢さは装備によって影響を受けている。", "Your wisdom is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_DEX)) {
+    if (has_flag(flgs, TR_DEX)) {
         info[i++] = _("あなたの器用さは装備によって影響を受けている。", "Your dexterity is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_CON)) {
+    if (has_flag(flgs, TR_CON)) {
         info[i++] = _("あなたの耐久力は装備によって影響を受けている。", "Your constitution is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_CHR)) {
+    if (has_flag(flgs, TR_CHR)) {
         info[i++] = _("あなたの魅力は装備によって影響を受けている。", "Your charisma is affected by your equipment.");
     }
 
-    if (have_flag(flgs, TR_STEALTH)) {
+    if (has_flag(flgs, TR_STEALTH)) {
         info[i++] = _("あなたの隠密行動能力は装備によって影響を受けている。", "Your stealth is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_SEARCH)) {
+    if (has_flag(flgs, TR_SEARCH)) {
         info[i++] = _("あなたの探索能力は装備によって影響を受けている。", "Your searching ability is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_INFRA)) {
+    if (has_flag(flgs, TR_INFRA)) {
         info[i++] = _("あなたの赤外線視力は装備によって影響を受けている。", "Your infravision is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_TUNNEL)) {
+    if (has_flag(flgs, TR_TUNNEL)) {
         info[i++] = _("あなたの採掘能力は装備によって影響を受けている。", "Your digging ability is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_SPEED)) {
+    if (has_flag(flgs, TR_SPEED)) {
         info[i++] = _("あなたのスピードは装備によって影響を受けている。", "Your speed is affected by your equipment.");
     }
-    if (have_flag(flgs, TR_BLOWS)) {
+    if (has_flag(flgs, TR_BLOWS)) {
         info[i++] = _("あなたの攻撃速度は装備によって影響を受けている。", "Your attack speed is affected by your equipment.");
     }
 
@@ -1152,95 +1152,95 @@ void self_knowledge(player_type *creature_ptr)
     /* Analyze the weapon */
     if (o_ptr->k_idx) {
         /* Indicate Blessing */
-        if (have_flag(flgs, TR_BLESSED)) {
+        if (has_flag(flgs, TR_BLESSED)) {
             info[i++] = _("あなたの武器は神の祝福を受けている。", "Your weapon has been blessed by the gods.");
         }
 
-        if (have_flag(flgs, TR_CHAOTIC)) {
+        if (has_flag(flgs, TR_CHAOTIC)) {
             info[i++] = _("あなたの武器はログルスの徴の属性をもつ。", "Your weapon is branded with the Sign of Logrus.");
         }
 
-        if (have_flag(flgs, TR_IMPACT)) {
+        if (has_flag(flgs, TR_IMPACT)) {
             info[i++] = _("あなたの武器は打撃で地震を発生することができる。", "The impact of your weapon can cause earthquakes.");
         }
 
-        if (have_flag(flgs, TR_VORPAL)) {
+        if (has_flag(flgs, TR_VORPAL)) {
             info[i++] = _("あなたの武器は非常に鋭い。", "Your weapon is very sharp.");
         }
 
-        if (have_flag(flgs, TR_VAMPIRIC)) {
+        if (has_flag(flgs, TR_VAMPIRIC)) {
             info[i++] = _("あなたの武器は敵から生命力を吸収する。", "Your weapon drains life from your foes.");
         }
 
         /* Special "Attack Bonuses" */
-        if (have_flag(flgs, TR_BRAND_ACID)) {
+        if (has_flag(flgs, TR_BRAND_ACID)) {
             info[i++] = _("あなたの武器は敵を溶かす。", "Your weapon melts your foes.");
         }
-        if (have_flag(flgs, TR_BRAND_ELEC)) {
+        if (has_flag(flgs, TR_BRAND_ELEC)) {
             info[i++] = _("あなたの武器は敵を感電させる。", "Your weapon shocks your foes.");
         }
-        if (have_flag(flgs, TR_BRAND_FIRE)) {
+        if (has_flag(flgs, TR_BRAND_FIRE)) {
             info[i++] = _("あなたの武器は敵を燃やす。", "Your weapon burns your foes.");
         }
-        if (have_flag(flgs, TR_BRAND_COLD)) {
+        if (has_flag(flgs, TR_BRAND_COLD)) {
             info[i++] = _("あなたの武器は敵を凍らせる。", "Your weapon freezes your foes.");
         }
-        if (have_flag(flgs, TR_BRAND_POIS)) {
+        if (has_flag(flgs, TR_BRAND_POIS)) {
             info[i++] = _("あなたの武器は敵を毒で侵す。", "Your weapon poisons your foes.");
         }
 
         /* Special "slay" flags */
-        if (have_flag(flgs, TR_KILL_ANIMAL)) {
+        if (has_flag(flgs, TR_KILL_ANIMAL)) {
             info[i++] = _("あなたの武器は動物の天敵である。", "Your weapon is a great bane of animals.");
-        } else if (have_flag(flgs, TR_SLAY_ANIMAL)) {
+        } else if (has_flag(flgs, TR_SLAY_ANIMAL)) {
             info[i++] = _("あなたの武器は動物に対して強い力を発揮する。", "Your weapon strikes at animals with extra force.");
         }
-        if (have_flag(flgs, TR_KILL_EVIL)) {
+        if (has_flag(flgs, TR_KILL_EVIL)) {
             info[i++] = _("あなたの武器は邪悪なる存在の天敵である。", "Your weapon is a great bane of evil.");
-        } else if (have_flag(flgs, TR_SLAY_EVIL)) {
+        } else if (has_flag(flgs, TR_SLAY_EVIL)) {
             info[i++] = _("あなたの武器は邪悪なる存在に対して強い力を発揮する。", "Your weapon strikes at evil with extra force.");
         }
-        if (have_flag(flgs, TR_KILL_HUMAN)) {
+        if (has_flag(flgs, TR_KILL_HUMAN)) {
             info[i++] = _("あなたの武器は人間の天敵である。", "Your weapon is a great bane of humans.");
-        } else if (have_flag(flgs, TR_SLAY_HUMAN)) {
+        } else if (has_flag(flgs, TR_SLAY_HUMAN)) {
             info[i++] = _("あなたの武器は人間に対して特に強い力を発揮する。", "Your weapon is especially deadly against humans.");
         }
-        if (have_flag(flgs, TR_KILL_UNDEAD)) {
+        if (has_flag(flgs, TR_KILL_UNDEAD)) {
             info[i++] = _("あなたの武器はアンデッドの天敵である。", "Your weapon is a great bane of undead.");
-        } else if (have_flag(flgs, TR_SLAY_UNDEAD)) {
+        } else if (has_flag(flgs, TR_SLAY_UNDEAD)) {
             info[i++] = _("あなたの武器はアンデッドに対して神聖なる力を発揮する。", "Your weapon strikes at undead with holy wrath.");
         }
-        if (have_flag(flgs, TR_KILL_DEMON)) {
+        if (has_flag(flgs, TR_KILL_DEMON)) {
             info[i++] = _("あなたの武器はデーモンの天敵である。", "Your weapon is a great bane of demons.");
-        } else if (have_flag(flgs, TR_SLAY_DEMON)) {
+        } else if (has_flag(flgs, TR_SLAY_DEMON)) {
             info[i++] = _("あなたの武器はデーモンに対して神聖なる力を発揮する。", "Your weapon strikes at demons with holy wrath.");
         }
-        if (have_flag(flgs, TR_KILL_ORC)) {
+        if (has_flag(flgs, TR_KILL_ORC)) {
             info[i++] = _("あなたの武器はオークの天敵である。", "Your weapon is a great bane of orcs.");
-        } else if (have_flag(flgs, TR_SLAY_ORC)) {
+        } else if (has_flag(flgs, TR_SLAY_ORC)) {
             info[i++] = _("あなたの武器はオークに対して特に強い力を発揮する。", "Your weapon is especially deadly against orcs.");
         }
-        if (have_flag(flgs, TR_KILL_TROLL)) {
+        if (has_flag(flgs, TR_KILL_TROLL)) {
             info[i++] = _("あなたの武器はトロルの天敵である。", "Your weapon is a great bane of trolls.");
-        } else if (have_flag(flgs, TR_SLAY_TROLL)) {
+        } else if (has_flag(flgs, TR_SLAY_TROLL)) {
             info[i++] = _("あなたの武器はトロルに対して特に強い力を発揮する。", "Your weapon is especially deadly against trolls.");
         }
-        if (have_flag(flgs, TR_KILL_GIANT)) {
+        if (has_flag(flgs, TR_KILL_GIANT)) {
             info[i++] = _("あなたの武器は巨人の天敵である。", "Your weapon is a great bane of giants.");
-        } else if (have_flag(flgs, TR_SLAY_GIANT)) {
+        } else if (has_flag(flgs, TR_SLAY_GIANT)) {
             info[i++] = _("あなたの武器は巨人に対して特に強い力を発揮する。", "Your weapon is especially deadly against giants.");
         }
         /* Special "kill" flags */
-        if (have_flag(flgs, TR_KILL_DRAGON)) {
+        if (has_flag(flgs, TR_KILL_DRAGON)) {
             info[i++] = _("あなたの武器はドラゴンの天敵である。", "Your weapon is a great bane of dragons.");
-        } else if (have_flag(flgs, TR_SLAY_DRAGON)) {
+        } else if (has_flag(flgs, TR_SLAY_DRAGON)) {
             info[i++] = _("あなたの武器はドラゴンに対して特に強い力を発揮する。", "Your weapon is especially deadly against dragons.");
         }
 
-        if (have_flag(flgs, TR_FORCE_WEAPON)) {
+        if (has_flag(flgs, TR_FORCE_WEAPON)) {
             info[i++] = _("あなたの武器はMPを使って攻撃する。", "Your weapon causes greate damages using your MP.");
         }
-        if (have_flag(flgs, TR_THROW)) {
+        if (has_flag(flgs, TR_THROW)) {
             info[i++] = _("あなたの武器は投げやすい。", "Your weapon can be thrown well.");
         }
     }

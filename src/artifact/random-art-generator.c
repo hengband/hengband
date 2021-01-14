@@ -43,7 +43,7 @@ static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(player_ptr, o_ptr, flgs);
 
-    if (have_flag(flgs, TR_KILL_EVIL)) {
+    if (has_flag(flgs, TR_KILL_EVIL)) {
         remove_flag(o_ptr->art_flags, TR_KILL_EVIL);
         add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
         return TRUE;
@@ -226,7 +226,7 @@ static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powe
 
 static void strengthen_pval(object_type *o_ptr)
 {
-    if (have_flag(o_ptr->art_flags, TR_BLOWS)) {
+    if (has_flag(o_ptr->art_flags, TR_BLOWS)) {
         o_ptr->pval = randint1(2);
         if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
             o_ptr->pval++;
@@ -258,7 +258,7 @@ static void invest_positive_modified_value(player_type *player_ptr, object_type 
 
     o_ptr->to_h += randint1(o_ptr->to_h > 19 ? 1 : 20 - o_ptr->to_h);
     o_ptr->to_d += randint1(o_ptr->to_d > 19 ? 1 : 20 - o_ptr->to_d);
-    if ((have_flag(o_ptr->art_flags, TR_WIS)) && (o_ptr->pval > 0))
+    if ((has_flag(o_ptr->art_flags, TR_WIS)) && (o_ptr->pval > 0))
         add_flag(o_ptr->art_flags, TR_BLESSED);
 }
 

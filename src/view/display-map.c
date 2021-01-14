@@ -91,7 +91,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
     feature_type *f_ptr = &f_info[feat];
     TERM_COLOR a;
     SYMBOL_CODE c;
-    if (!have_flag(f_ptr->flags, FF_REMEMBER)) {
+    if (!has_flag(f_ptr->flags, FF_REMEMBER)) {
         if (!player_ptr->blind
             && ((g_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT))
                 || ((g_ptr->info & CAVE_VIEW) && (((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || player_ptr->see_nocto)))) {
@@ -139,7 +139,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
                     c = f_ptr->x_char[F_LIT_DARK];
                 }
             } else if (darkened_grid(player_ptr, g_ptr) && !player_ptr->blind) {
-                if (have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT)) {
+                if (has_flag(f_ptr->flags, FF_LOS) && has_flag(f_ptr->flags, FF_PROJECT)) {
                     feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
                     f_ptr = &f_info[feat];
                     a = f_ptr->x_attr[F_LIT_STANDARD];
@@ -164,7 +164,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
                     } else if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
                         a = f_ptr->x_attr[F_LIT_DARK];
                         c = f_ptr->x_char[F_LIT_DARK];
-                    } else if (!have_flag(f_ptr->flags, FF_LOS) && !check_local_illumination(player_ptr, y, x)) {
+                    } else if (!has_flag(f_ptr->flags, FF_LOS) && !check_local_illumination(player_ptr, y, x)) {
                         a = f_ptr->x_attr[F_LIT_DARK];
                         c = f_ptr->x_char[F_LIT_DARK];
                     }

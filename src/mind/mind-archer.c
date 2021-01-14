@@ -32,19 +32,19 @@ typedef enum ammo_creation_type {
 } ammo_creation_type;
 
 /*!
- * @briefu’e/–î‚Ì»‘¢vˆ— / do_cmd_cast calls this function if the player's class is 'archer'.
+ * @briefï¿½uï¿½e/ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ / do_cmd_cast calls this function if the player's class is 'archer'.
  * Hook to determine if an object is contertible in an arrow/bolt
- * @return »‘¢‚ðŽÀÛ‚És‚Á‚½‚çTRUEAƒLƒƒƒ“ƒZƒ‹‚µ‚½‚çFALSE‚ð•Ô‚·
+ * @return ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û‚Ésï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TRUEï¿½Aï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½FALSEï¿½ï¿½Ô‚ï¿½
  */
 bool create_ammo(player_type *creature_ptr)
 {
     char com[80];
     if (creature_ptr->lev >= 20)
-        sprintf(com, _("[S]’e, [A]–î, [B]ƒNƒƒXƒ{ƒE‚Ì–î :", "Create [S]hots, Create [A]rrow or Create [B]olt ?"));
+        sprintf(com, _("[S]ï¿½e, [A]ï¿½ï¿½, [B]ï¿½Nï¿½ï¿½ï¿½Xï¿½{ï¿½Eï¿½Ì–ï¿½ :", "Create [S]hots, Create [A]rrow or Create [B]olt ?"));
     else if (creature_ptr->lev >= 10)
-        sprintf(com, _("[S]’e, [A]–î:", "Create [S]hots or Create [A]rrow ?"));
+        sprintf(com, _("[S]ï¿½e, [A]ï¿½ï¿½:", "Create [S]hots or Create [A]rrow ?"));
     else
-        sprintf(com, _("[S]’e:", "Create [S]hots ?"));
+        sprintf(com, _("[S]ï¿½e:", "Create [S]hots ?"));
 
     if (cmd_limit_confused(creature_ptr) || cmd_limit_blind(creature_ptr))
         return FALSE;
@@ -81,13 +81,13 @@ bool create_ammo(player_type *creature_ptr)
         POSITION y = creature_ptr->y + ddy[dir];
         POSITION x = creature_ptr->x + ddx[dir];
         grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-        if (!have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG)) {
-            msg_print(_("‚»‚±‚É‚ÍŠâÎ‚ª‚È‚¢B", "You need a pile of rubble."));
+        if (!has_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG)) {
+            msg_print(_("ï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍŠï¿½Î‚ï¿½ï¿½È‚ï¿½ï¿½B", "You need a pile of rubble."));
             return FALSE;
         }
 
         if (!cave_have_flag_grid(g_ptr, FF_CAN_DIG) || !cave_have_flag_grid(g_ptr, FF_HURT_ROCK)) {
-            msg_print(_("d‚·‚¬‚Ä•ö‚¹‚È‚©‚Á‚½B", "You failed to make ammo."));
+            msg_print(_("ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½Ä•ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B", "You failed to make ammo."));
             return TRUE;
         }
 
@@ -102,7 +102,7 @@ bool create_ammo(player_type *creature_ptr)
         s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
-        msg_format(_("%s‚ðì‚Á‚½B", "You make some ammo."), o_name);
+        msg_format(_("%sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B", "You make some ammo."), o_name);
         if (slot >= 0)
             autopick_alter_item(creature_ptr, slot, FALSE);
 
@@ -112,8 +112,8 @@ bool create_ammo(player_type *creature_ptr)
     }
     case AMMO_ARROW: {
         item_tester_hook = item_tester_hook_convertible;
-        concptr q = _("‚Ç‚ÌƒAƒCƒeƒ€‚©‚çì‚è‚Ü‚·‚©H ", "Convert which item? ");
-        concptr s = _("Þ—¿‚ðŽ‚Á‚Ä‚¢‚È‚¢B", "You have no item to convert.");
+        concptr q = _("ï¿½Ç‚ÌƒAï¿½Cï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½H ", "Convert which item? ");
+        concptr s = _("ï¿½Þ—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½B", "You have no item to convert.");
         OBJECT_IDX item;
         object_type *q_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, 0);
         if (!q_ptr)
@@ -129,7 +129,7 @@ bool create_ammo(player_type *creature_ptr)
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
-        msg_format(_("%s‚ðì‚Á‚½B", "You make some ammo."), o_name);
+        msg_format(_("%sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B", "You make some ammo."), o_name);
         vary_item(creature_ptr, item, -1);
         s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
         if (slot >= 0)
@@ -139,8 +139,8 @@ bool create_ammo(player_type *creature_ptr)
     }
     case AMMO_BOLT: {
         item_tester_hook = item_tester_hook_convertible;
-        concptr q = _("‚Ç‚ÌƒAƒCƒeƒ€‚©‚çì‚è‚Ü‚·‚©H ", "Convert which item? ");
-        concptr s = _("Þ—¿‚ðŽ‚Á‚Ä‚¢‚È‚¢B", "You have no item to convert.");
+        concptr q = _("ï¿½Ç‚ÌƒAï¿½Cï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½H ", "Convert which item? ");
+        concptr s = _("ï¿½Þ—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½B", "You have no item to convert.");
         OBJECT_IDX item;
         object_type *q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
         if (!q_ptr)
@@ -156,7 +156,7 @@ bool create_ammo(player_type *creature_ptr)
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
-        msg_format(_("%s‚ðì‚Á‚½B", "You make some ammo."), o_name);
+        msg_format(_("%sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B", "You make some ammo."), o_name);
         vary_item(creature_ptr, item, -1);
         s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
         if (slot >= 0)

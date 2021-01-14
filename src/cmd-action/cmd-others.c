@@ -71,19 +71,19 @@ static bool exe_alter(player_type *creature_ptr)
         return FALSE;
     }
     
-    if (have_flag(f_ptr->flags, FF_OPEN))
+    if (has_flag(f_ptr->flags, FF_OPEN))
         return exe_open(creature_ptr, y, x);
     
-    if (have_flag(f_ptr->flags, FF_BASH))
+    if (has_flag(f_ptr->flags, FF_BASH))
         return exe_bash(creature_ptr, y, x, dir);
     
-    if (have_flag(f_ptr->flags, FF_TUNNEL))
+    if (has_flag(f_ptr->flags, FF_TUNNEL))
         return exe_tunnel(creature_ptr, y, x);
     
-    if (have_flag(f_ptr->flags, FF_CLOSE))
+    if (has_flag(f_ptr->flags, FF_CLOSE))
         return exe_close(creature_ptr, y, x);
     
-    if (have_flag(f_ptr->flags, FF_DISARM))
+    if (has_flag(f_ptr->flags, FF_DISARM))
         return exe_disarm(creature_ptr, y, x, dir);
 
     msg_print(_("何もない空中を攻撃した。", "You attack the empty air."));

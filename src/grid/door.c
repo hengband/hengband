@@ -52,12 +52,12 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 }
 
 /*!
- * @brief ‰B‚µƒhƒA‚ğ”z’u‚·‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌYÀ•W
- * @param x ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌXÀ•W
- * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN ‚Ì‚¢‚¸‚ê‚©
- * @return ‚È‚µ
+ * @brief ï¿½Bï¿½ï¿½ï¿½hï¿½Aï¿½ï¿½zï¿½uï¿½ï¿½ï¿½ï¿½
+ * @param player_ptr ï¿½vï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½Ö‚ÌQï¿½Æƒ|ï¿½Cï¿½ï¿½ï¿½^
+ * @param y ï¿½zï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Aï¿½ï¿½Yï¿½ï¿½ï¿½W
+ * @param x ï¿½zï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Aï¿½ï¿½Xï¿½ï¿½ï¿½W
+ * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ê‚©
+ * @return ï¿½È‚ï¿½
  */
 void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {
@@ -78,7 +78,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
     if (type != DOOR_CURTAIN) {
         g_ptr->mimic = feat_wall_inner;
         if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
-            if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY)) {
+            if (has_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || has_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY)) {
                 g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
             }
 
@@ -91,11 +91,11 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 }
 
 /*!
- * @brief Œ®‚Ì‚©‚©‚Á‚½ƒhƒA‚ğ”z’u‚·‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌYÀ•W
- * @param x ”z’u‚µ‚½‚¢ƒtƒƒA‚ÌXÀ•W
- * @return ‚È‚µ
+ * @brief ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hï¿½Aï¿½ï¿½zï¿½uï¿½ï¿½ï¿½ï¿½
+ * @param player_ptr ï¿½vï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½Ö‚ÌQï¿½Æƒ|ï¿½Cï¿½ï¿½ï¿½^
+ * @param y ï¿½zï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Aï¿½ï¿½Yï¿½ï¿½ï¿½W
+ * @param x ï¿½zï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Aï¿½ï¿½Xï¿½ï¿½ï¿½W
+ * @return ï¿½È‚ï¿½
  */
 void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 {
@@ -111,12 +111,12 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief Š’è‚ÌˆÊ’u‚É‚³‚Ü‚´‚Ü‚Èó‘Ô‚âí—Ş‚ÌƒhƒA‚ğ”z’u‚·‚é / Place a random type of door at the given location
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ƒhƒA‚Ì”z’u‚ğ‚İ‚½‚¢ƒ}ƒX‚ÌYÀ•W
- * @param x ƒhƒA‚Ì”z’u‚ğ‚İ‚½‚¢ƒ}ƒX‚ÌXÀ•W
- * @param room •”‰®‚ÉÚ‚µ‚Ä‚¢‚éê‡Œü‚¯‚ÌƒhƒA¶¬‚©”Û‚©
- * @return ‚È‚µ
+ * @brief ï¿½ï¿½ï¿½ï¿½ÌˆÊ’uï¿½É‚ï¿½ï¿½Ü‚ï¿½ï¿½Ü‚Èï¿½Ô‚ï¿½ï¿½Ş‚Ìƒhï¿½Aï¿½ï¿½zï¿½uï¿½ï¿½ï¿½ï¿½ / Place a random type of door at the given location
+ * @param player_ptr ï¿½vï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½Ö‚ÌQï¿½Æƒ|ï¿½Cï¿½ï¿½ï¿½^
+ * @param y ï¿½hï¿½Aï¿½Ì”zï¿½uï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½ï¿½}ï¿½Xï¿½ï¿½Yï¿½ï¿½ï¿½W
+ * @param x ï¿½hï¿½Aï¿½Ì”zï¿½uï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½ï¿½}ï¿½Xï¿½ï¿½Xï¿½ï¿½ï¿½W
+ * @param room ï¿½ï¿½ï¿½ï¿½ï¿½ÉÚ‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒhï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û‚ï¿½
+ * @return ï¿½È‚ï¿½
  */
 void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room)
 {
@@ -145,7 +145,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
         if (type != DOOR_CURTAIN) {
             g_ptr->mimic = room ? feat_wall_outer : feat_wall_type[randint0(100)];
             if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
-                if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY)) {
+                if (has_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || has_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY)) {
                     g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
                 }
                 g_ptr->mimic = 0;
@@ -170,12 +170,12 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 }
 
 /*!
- * @brief Š’è‚ÌˆÊ’u‚ÉŠeí‚Ì•Â‚¶‚½ƒhƒA‚ğ”z’u‚·‚é / Place a random type of normal door at the given location.
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y ƒhƒA‚Ì”z’u‚ğ‚İ‚½‚¢ƒ}ƒX‚ÌYÀ•W
- * @param x ƒhƒA‚Ì”z’u‚ğ‚İ‚½‚¢ƒ}ƒX‚ÌXÀ•W
- * @param type ƒhƒA‚Ì’nŒ`ID
- * @return ‚È‚µ
+ * @brief ï¿½ï¿½ï¿½ï¿½ÌˆÊ’uï¿½ÉŠeï¿½ï¿½Ì•Â‚ï¿½ï¿½ï¿½ï¿½hï¿½Aï¿½ï¿½zï¿½uï¿½ï¿½ï¿½ï¿½ / Place a random type of normal door at the given location.
+ * @param player_ptr ï¿½vï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½Ö‚ÌQï¿½Æƒ|ï¿½Cï¿½ï¿½ï¿½^
+ * @param y ï¿½hï¿½Aï¿½Ì”zï¿½uï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½ï¿½}ï¿½Xï¿½ï¿½Yï¿½ï¿½ï¿½W
+ * @param x ï¿½hï¿½Aï¿½Ì”zï¿½uï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½ï¿½}ï¿½Xï¿½ï¿½Xï¿½ï¿½ï¿½W
+ * @param type ï¿½hï¿½Aï¿½Ì’nï¿½`ID
+ * @return ï¿½È‚ï¿½
  */
 void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {

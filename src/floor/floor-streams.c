@@ -136,7 +136,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                         g_ptr->mimic = 0;
 
                         /* Lava terrain glows */
-                        if (have_flag(f_info[feat1].flags, FF_LAVA)) {
+                        if (has_flag(f_info[feat1].flags, FF_LAVA)) {
                             if (!(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
                                 g_ptr->info |= CAVE_GLOW;
                         }
@@ -208,8 +208,8 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
         feature_type *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA))
-                || ((dd_ptr->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER)) || !dd_ptr->laketype)) {
+        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && has_flag(f_ptr->flags, FF_LAVA))
+                || ((dd_ptr->laketype == LAKE_T_WATER) && has_flag(f_ptr->flags, FF_WATER)) || !dd_ptr->laketype)) {
             return;
         }
     }
@@ -283,8 +283,8 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
     feature_type *f_ptr;
 
     feature_type *streamer_ptr = &f_info[feat];
-    bool streamer_is_wall = have_flag(streamer_ptr->flags, FF_WALL) && !have_flag(streamer_ptr->flags, FF_PERMANENT);
-    bool streamer_may_have_gold = have_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
+    bool streamer_is_wall = has_flag(streamer_ptr->flags, FF_WALL) && !has_flag(streamer_ptr->flags, FF_PERMANENT);
+    bool streamer_may_have_gold = has_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -313,11 +313,11 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             g_ptr = &floor_ptr->grid_array[ty][tx];
             f_ptr = &f_info[g_ptr->feat];
 
-            if (have_flag(f_ptr->flags, FF_MOVE) && (have_flag(f_ptr->flags, FF_WATER) || have_flag(f_ptr->flags, FF_LAVA)))
+            if (has_flag(f_ptr->flags, FF_MOVE) && (has_flag(f_ptr->flags, FF_WATER) || has_flag(f_ptr->flags, FF_LAVA)))
                 continue;
 
             /* Do not convert permanent features */
-            if (have_flag(f_ptr->flags, FF_PERMANENT))
+            if (has_flag(f_ptr->flags, FF_PERMANENT))
                 continue;
 
             /* Only convert "granite" walls */
@@ -329,13 +329,13 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             }
 
             if (g_ptr->m_idx
-                && !(have_flag(streamer_ptr->flags, FF_PLACE)
+                && !(has_flag(streamer_ptr->flags, FF_PLACE)
                     && monster_can_cross_terrain(player_ptr, feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, ty, tx);
             }
 
-            if (g_ptr->o_idx && !have_flag(streamer_ptr->flags, FF_DROP)) {
+            if (g_ptr->o_idx && !has_flag(streamer_ptr->flags, FF_DROP)) {
                 OBJECT_IDX this_o_idx, next_o_idx = 0;
 
                 /* Scan all objects in the grid */

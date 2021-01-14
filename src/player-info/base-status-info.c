@@ -18,61 +18,61 @@ void set_equipment_influence(player_type *creature_ptr, self_info_type *si_ptr)
             si_ptr->flags[j] |= tflgs[j];
     }
 
-    if (have_flag(si_ptr->flags, TR_STR))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì˜r—Í‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your strength is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_STR))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì˜rï¿½Í‚Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your strength is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_INT))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì’m”\‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your intelligence is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_INT))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì’mï¿½\ï¿½Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your intelligence is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_WIS))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌŒ«‚³‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your wisdom is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_WIS))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÌŒï¿½ï¿½ï¿½ï¿½Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your wisdom is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_DEX))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌŠí—p‚³‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your dexterity is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_DEX))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÌŠï¿½pï¿½ï¿½ï¿½Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your dexterity is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_CON))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì‘Ï‹v—Í‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your constitution is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_CON))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‘Ï‹vï¿½Í‚Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your constitution is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_CHR))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì–£—Í‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your charisma is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_CHR))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì–ï¿½ï¿½Í‚Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your charisma is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_STEALTH))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì‰B–§s“®”\—Í‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your stealth is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_STEALTH))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‰Bï¿½ï¿½ï¿½sï¿½ï¿½ï¿½\ï¿½Í‚Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your stealth is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_SEARCH))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì’Tõ”\—Í‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your searching ability is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_SEARCH))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì’Tï¿½ï¿½ï¿½\ï¿½Í‚Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your searching ability is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_INFRA))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌÔŠOüŽ‹—Í‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your infravision is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_INFRA))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÌÔŠOï¿½ï¿½ï¿½ï¿½ï¿½Í‚Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your infravision is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_TUNNEL))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌÌŒ@”\—Í‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your digging ability is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_TUNNEL))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÌÌŒ@ï¿½\ï¿½Í‚Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your digging ability is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_SPEED))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌƒXƒs[ƒh‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your speed is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_SPEED))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÌƒXï¿½sï¿½[ï¿½hï¿½Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your speed is affected by your equipment.");
 
-    if (have_flag(si_ptr->flags, TR_BLOWS))
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌUŒ‚‘¬“x‚Í‘•”õ‚É‚æ‚Á‚Ä‰e‹¿‚ðŽó‚¯‚Ä‚¢‚éB", "Your attack speed is affected by your equipment.");
+    if (has_flag(si_ptr->flags, TR_BLOWS))
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÌUï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Í‘ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‰eï¿½ï¿½ï¿½ï¿½ï¿½ó‚¯‚Ä‚ï¿½ï¿½ï¿½B", "Your attack speed is affected by your equipment.");
 }
 
 void set_status_sustain_info(player_type *creature_ptr, self_info_type *si_ptr)
 {
     if (creature_ptr->sustain_str) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì˜r—Í‚ÍˆÛŽ‚³‚ê‚Ä‚¢‚éB", "Your strength is sustained.");
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì˜rï¿½Í‚ÍˆÛŽï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B", "Your strength is sustained.");
     }
     if (creature_ptr->sustain_int) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì’m”\‚ÍˆÛŽ‚³‚ê‚Ä‚¢‚éB", "Your intelligence is sustained.");
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì’mï¿½\ï¿½ÍˆÛŽï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B", "Your intelligence is sustained.");
     }
     if (creature_ptr->sustain_wis) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌŒ«‚³‚ÍˆÛŽ‚³‚ê‚Ä‚¢‚éB", "Your wisdom is sustained.");
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ÍˆÛŽï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B", "Your wisdom is sustained.");
     }
     if (creature_ptr->sustain_con) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì‘Ï‹v—Í‚ÍˆÛŽ‚³‚ê‚Ä‚¢‚éB", "Your constitution is sustained.");
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‘Ï‹vï¿½Í‚ÍˆÛŽï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B", "Your constitution is sustained.");
     }
     if (creature_ptr->sustain_dex) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚ÌŠí—p‚³‚ÍˆÛŽ‚³‚ê‚Ä‚¢‚éB", "Your dexterity is sustained.");
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÌŠï¿½pï¿½ï¿½ï¿½ÍˆÛŽï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B", "Your dexterity is sustained.");
     }
     if (creature_ptr->sustain_chr) {
-        si_ptr->info[si_ptr->line++] = _("‚ ‚È‚½‚Ì–£—Í‚ÍˆÛŽ‚³‚ê‚Ä‚¢‚éB", "Your charisma is sustained.");
+        si_ptr->info[si_ptr->line++] = _("ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì–ï¿½ï¿½Í‚ÍˆÛŽï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B", "Your charisma is sustained.");
     }
 }

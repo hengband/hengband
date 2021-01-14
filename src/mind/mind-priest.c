@@ -20,16 +20,16 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief •Ší‚Ìj•Ÿˆ— /
+ * @brief ï¿½ï¿½ï¿½ï¿½Ìjï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ /
  * Bless a weapon
- * @return ƒ^[ƒ“Á”ï‚ð—v‚·‚éˆ—‚ðs‚Á‚½‚È‚ç‚ÎTRUE‚ð•Ô‚·
+ * @return ï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½éˆï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½TRUEï¿½ï¿½Ô‚ï¿½
  */
 bool bless_weapon(player_type *caster_ptr)
 {
     item_tester_hook = object_is_weapon;
 
-    concptr q = _("‚Ç‚ÌƒAƒCƒeƒ€‚ðj•Ÿ‚µ‚Ü‚·‚©H", "Bless which weapon? ");
-    concptr s = _("j•Ÿ‚Å‚«‚é•Ší‚ª‚ ‚è‚Ü‚¹‚ñB", "You have weapon to bless.");
+    concptr q = _("ï¿½Ç‚ÌƒAï¿½Cï¿½eï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½H", "Bless which weapon? ");
+    concptr s = _("ï¿½jï¿½ï¿½ï¿½Å‚ï¿½ï¿½é•ï¿½í‚ªï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B", "You have weapon to bless.");
 
     OBJECT_IDX item;
     object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, 0);
@@ -42,10 +42,10 @@ bool bless_weapon(player_type *caster_ptr)
     object_flags(caster_ptr, o_ptr, flgs);
 
     if (object_is_cursed(o_ptr)) {
-        if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) || have_flag(flgs, TR_ADD_L_CURSE) || have_flag(flgs, TR_ADD_H_CURSE)
+        if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)
             || (o_ptr->curse_flags & TRC_PERMA_CURSE)) {
 #ifdef JP
-            msg_format("%s‚ð•¢‚¤•‚¢ƒI[ƒ‰‚Íj•Ÿ‚ð’µ‚Ë•Ô‚µ‚½I", o_name);
+            msg_format("%sï¿½ð•¢‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½[ï¿½ï¿½ï¿½Íjï¿½ï¿½ï¿½ð’µ‚Ë•Ô‚ï¿½ï¿½ï¿½ï¿½I", o_name);
 #else
             msg_format("The black aura on %s %s disrupts the blessing!", ((item >= 0) ? "your" : "the"), o_name);
 #endif
@@ -54,7 +54,7 @@ bool bless_weapon(player_type *caster_ptr)
         }
 
 #ifdef JP
-        msg_format("%s ‚©‚çŽ×ˆ«‚ÈƒI[ƒ‰‚ªÁ‚¦‚½B", o_name);
+        msg_format("%s ï¿½ï¿½ï¿½ï¿½×ˆï¿½ï¿½ÈƒIï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B", o_name);
 #else
         msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), o_name);
 #endif
@@ -73,9 +73,9 @@ bool bless_weapon(player_type *caster_ptr)
      * artifact weapon they find. Ego weapons and normal weapons
      * can be blessed automatically.
      */
-    if (have_flag(flgs, TR_BLESSED)) {
+    if (has_flag(flgs, TR_BLESSED)) {
 #ifdef JP
-        msg_format("%s ‚ÍŠù‚Éj•Ÿ‚³‚ê‚Ä‚¢‚éB", o_name);
+        msg_format("%s ï¿½ÍŠï¿½ï¿½Éjï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B", o_name);
 #else
         msg_format("%s %s %s blessed already.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
 #endif
@@ -84,7 +84,7 @@ bool bless_weapon(player_type *caster_ptr)
 
     if (!(object_is_artifact(o_ptr) || object_is_ego(o_ptr)) || one_in_(3)) {
 #ifdef JP
-        msg_format("%s‚Í‹P‚¢‚½I", o_name);
+        msg_format("%sï¿½Í‹Pï¿½ï¿½ï¿½ï¿½ï¿½I", o_name);
 #else
         msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
@@ -92,7 +92,7 @@ bool bless_weapon(player_type *caster_ptr)
         o_ptr->discount = 99;
     } else {
         bool dis_happened = FALSE;
-        msg_print(_("‚»‚Ì•Ší‚Íj•Ÿ‚ðŒ™‚Á‚Ä‚¢‚éI", "The weapon resists your blessing!"));
+        msg_print(_("ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½Íjï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½I", "The weapon resists your blessing!"));
 
         /* Disenchant tohit */
         if (o_ptr->to_h > 0) {
@@ -122,10 +122,10 @@ bool bless_weapon(player_type *caster_ptr)
             o_ptr->to_a--;
 
         if (dis_happened) {
-            msg_print(_("ŽüˆÍ‚ª–}—f‚È•µˆÍ‹C‚Å–ž‚¿‚½...", "There is a static feeling in the air..."));
+            msg_print(_("ï¿½ï¿½ï¿½Í‚ï¿½ï¿½}ï¿½fï¿½È•ï¿½ï¿½Í‹Cï¿½Å–ï¿½ï¿½ï¿½ï¿½ï¿½...", "There is a static feeling in the air..."));
 
 #ifdef JP
-            msg_format("%s ‚Í—ò‰»‚µ‚½I", o_name);
+            msg_format("%s ï¿½Í—ò‰»‚ï¿½ï¿½ï¿½ï¿½I", o_name);
 #else
             msg_format("%s %s %s disenchanted!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
 #endif

@@ -12,11 +12,11 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief ”­“®‚É‚æ‚éƒuƒŒƒX‚Ì‘®«‚ğƒAƒCƒeƒ€‚Ì‘Ï«‚©‚ç‘I‘ğ‚µAÀs‚ğˆ—‚·‚éB/ Dragon breath activation
- * @details ‘ÎÛ‚Æ‚È‚é‘Ï«‚Í dragonbreath_info ƒe[ƒuƒ‹‚ğQÆ‚Ì‚±‚ÆB
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ‘ÎÛ‚ÌƒIƒuƒWƒFƒNƒg\‘¢‘Ìƒ|ƒCƒ“ƒ^
- * @return ”­“®Às‚Ì¥”ñ‚ğ•Ô‚·B
+ * @brief ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½uï¿½ï¿½ï¿½Xï¿½Ì‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½Ì‘Ïï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B/ Dragon breath activation
+ * @details ï¿½ÎÛ‚Æ‚È‚ï¿½Ïï¿½ï¿½ï¿½ dragonbreath_info ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Æ‚Ì‚ï¿½ï¿½ÆB
+ * @param user_ptr ï¿½vï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½Ö‚ÌQï¿½Æƒ|ï¿½Cï¿½ï¿½ï¿½^
+ * @param o_ptr ï¿½ÎÛ‚ÌƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½\ï¿½ï¿½ï¿½Ìƒ|ï¿½Cï¿½ï¿½ï¿½^
+ * @return ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½Ìï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½B
  */
 bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
 {
@@ -31,7 +31,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
     int n = 0;
     concptr name[20];
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
-        if (have_flag(resistance_flags, dragonbreath_info[i].flag)) {
+        if (has_flag(resistance_flags, dragonbreath_info[i].flag)) {
             type[n] = dragonbreath_info[i].type;
             name[n] = dragonbreath_info[i].name;
             n++;
@@ -48,7 +48,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
         stop_hex_spell_all(user_ptr);
 
     int t = randint0(n);
-    msg_format(_("‚ ‚È‚½‚Í%s‚ÌƒuƒŒƒX‚ğ“f‚¢‚½B", "You breathe %s."), name[t]);
+    msg_format(_("ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½%sï¿½Ìƒuï¿½ï¿½ï¿½Xï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½B", "You breathe %s."), name[t]);
     fire_breath(user_ptr, type[t], dir, 250, 4);
     return TRUE;
 }

@@ -209,19 +209,19 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                     break;
                 case 3:
                 case 4:
-                    if (have_flag(k_ptr->flags, TR_REGEN))
+                    if (has_flag(k_ptr->flags, TR_REGEN))
                         break;
                     o_ptr->name2 = EGO_RING_REGEN;
                     break;
                 case 5:
                 case 6:
-                    if (have_flag(k_ptr->flags, TR_LITE_1))
+                    if (has_flag(k_ptr->flags, TR_LITE_1))
                         break;
                     o_ptr->name2 = EGO_RING_LITE;
                     break;
                 case 7:
                 case 8:
-                    if (have_flag(k_ptr->flags, TR_TELEPORT))
+                    if (has_flag(k_ptr->flags, TR_TELEPORT))
                         break;
                     o_ptr->name2 = EGO_RING_TELEPORT;
                     break;
@@ -243,17 +243,17 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                     o_ptr->name2 = EGO_RING_SLAY;
                     break;
                 case 14:
-                    if ((have_flag(k_ptr->flags, TR_STR)) || o_ptr->to_h || o_ptr->to_d)
+                    if ((has_flag(k_ptr->flags, TR_STR)) || o_ptr->to_h || o_ptr->to_d)
                         break;
                     o_ptr->name2 = EGO_RING_WIZARD;
                     break;
                 case 15:
-                    if (have_flag(k_ptr->flags, TR_ACTIVATE))
+                    if (has_flag(k_ptr->flags, TR_ACTIVATE))
                         break;
                     o_ptr->name2 = EGO_RING_HERO;
                     break;
                 case 16:
-                    if (have_flag(k_ptr->flags, TR_ACTIVATE))
+                    if (has_flag(k_ptr->flags, TR_ACTIVATE))
                         break;
                     if (tmp > 8)
                         o_ptr->name2 = EGO_RING_MANA_BALL;
@@ -263,10 +263,10 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                         o_ptr->name2 = EGO_RING_MAGIC_MIS;
                     break;
                 case 17:
-                    if (have_flag(k_ptr->flags, TR_ACTIVATE))
+                    if (has_flag(k_ptr->flags, TR_ACTIVATE))
                         break;
-                    if (!(have_flag(k_ptr->flags, TR_RES_FIRE))
-                        && (have_flag(k_ptr->flags, TR_RES_COLD) || have_flag(k_ptr->flags, TR_RES_ELEC) || have_flag(k_ptr->flags, TR_RES_ACID)))
+                    if (!(has_flag(k_ptr->flags, TR_RES_FIRE))
+                        && (has_flag(k_ptr->flags, TR_RES_COLD) || has_flag(k_ptr->flags, TR_RES_ELEC) || has_flag(k_ptr->flags, TR_RES_ACID)))
                         break;
                     if (tmp > 7)
                         o_ptr->name2 = EGO_RING_DRAGON_F;
@@ -276,10 +276,10 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                         o_ptr->name2 = EGO_RING_FIRE_BOLT;
                     break;
                 case 18:
-                    if (have_flag(k_ptr->flags, TR_ACTIVATE))
+                    if (has_flag(k_ptr->flags, TR_ACTIVATE))
                         break;
-                    if (!(have_flag(k_ptr->flags, TR_RES_COLD))
-                        && (have_flag(k_ptr->flags, TR_RES_FIRE) || have_flag(k_ptr->flags, TR_RES_ELEC) || have_flag(k_ptr->flags, TR_RES_ACID)))
+                    if (!(has_flag(k_ptr->flags, TR_RES_COLD))
+                        && (has_flag(k_ptr->flags, TR_RES_FIRE) || has_flag(k_ptr->flags, TR_RES_ELEC) || has_flag(k_ptr->flags, TR_RES_ACID)))
                         break;
                     if (tmp > 7)
                         o_ptr->name2 = EGO_RING_DRAGON_C;
@@ -289,10 +289,10 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                         o_ptr->name2 = EGO_RING_COLD_BOLT;
                     break;
                 case 19:
-                    if (have_flag(k_ptr->flags, TR_ACTIVATE))
+                    if (has_flag(k_ptr->flags, TR_ACTIVATE))
                         break;
-                    if (!(have_flag(k_ptr->flags, TR_RES_ELEC))
-                        && (have_flag(k_ptr->flags, TR_RES_COLD) || have_flag(k_ptr->flags, TR_RES_FIRE) || have_flag(k_ptr->flags, TR_RES_ACID)))
+                    if (!(has_flag(k_ptr->flags, TR_RES_ELEC))
+                        && (has_flag(k_ptr->flags, TR_RES_COLD) || has_flag(k_ptr->flags, TR_RES_FIRE) || has_flag(k_ptr->flags, TR_RES_ACID)))
                         break;
                     if (tmp > 4)
                         o_ptr->name2 = EGO_RING_ELEC_BALL;
@@ -300,10 +300,10 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                         o_ptr->name2 = EGO_RING_ELEC_BOLT;
                     break;
                 case 20:
-                    if (have_flag(k_ptr->flags, TR_ACTIVATE))
+                    if (has_flag(k_ptr->flags, TR_ACTIVATE))
                         break;
-                    if (!(have_flag(k_ptr->flags, TR_RES_ACID))
-                        && (have_flag(k_ptr->flags, TR_RES_COLD) || have_flag(k_ptr->flags, TR_RES_ELEC) || have_flag(k_ptr->flags, TR_RES_FIRE)))
+                    if (!(has_flag(k_ptr->flags, TR_RES_ACID))
+                        && (has_flag(k_ptr->flags, TR_RES_COLD) || has_flag(k_ptr->flags, TR_RES_ELEC) || has_flag(k_ptr->flags, TR_RES_FIRE)))
                         break;
                     if (tmp > 4)
                         o_ptr->name2 = EGO_RING_ACID_BALL;
@@ -411,7 +411,7 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                 object_kind *k_ptr = &k_info[o_ptr->k_idx];
                 switch (randint1(5)) {
                 case 1:
-                    if (have_flag(k_ptr->flags, TR_DRAIN_EXP))
+                    if (has_flag(k_ptr->flags, TR_DRAIN_EXP))
                         break;
                     o_ptr->name2 = EGO_RING_DRAIN_EXP;
                     break;
@@ -419,12 +419,12 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                     o_ptr->name2 = EGO_RING_NO_MELEE;
                     break;
                 case 3:
-                    if (have_flag(k_ptr->flags, TR_AGGRAVATE))
+                    if (has_flag(k_ptr->flags, TR_AGGRAVATE))
                         break;
                     o_ptr->name2 = EGO_RING_AGGRAVATE;
                     break;
                 case 4:
-                    if (have_flag(k_ptr->flags, TR_TY_CURSE))
+                    if (has_flag(k_ptr->flags, TR_TY_CURSE))
                         break;
                     o_ptr->name2 = EGO_RING_TY_CURSE;
                     break;
@@ -530,7 +530,7 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                 switch (randint1(21)) {
                 case 1:
                 case 2:
-                    if (have_flag(k_ptr->flags, TR_SLOW_DIGEST))
+                    if (has_flag(k_ptr->flags, TR_SLOW_DIGEST))
                         break;
                     o_ptr->name2 = EGO_AMU_SLOW_D;
                     break;
@@ -542,18 +542,18 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                     break;
                 case 5:
                 case 6:
-                    if (have_flag(k_ptr->flags, TR_SEE_INVIS))
+                    if (has_flag(k_ptr->flags, TR_SEE_INVIS))
                         break;
                     o_ptr->name2 = EGO_AMU_SEE_INVIS;
                     break;
                 case 7:
                 case 8:
-                    if (have_flag(k_ptr->flags, TR_HOLD_EXP))
+                    if (has_flag(k_ptr->flags, TR_HOLD_EXP))
                         break;
                     o_ptr->name2 = EGO_AMU_HOLD_EXP;
                     break;
                 case 9:
-                    if (have_flag(k_ptr->flags, TR_LEVITATION))
+                    if (has_flag(k_ptr->flags, TR_LEVITATION))
                         break;
                     o_ptr->name2 = EGO_AMU_LEVITATION;
                     break;
@@ -563,7 +563,7 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                     o_ptr->name2 = EGO_AMU_AC;
                     break;
                 case 12:
-                    if (have_flag(k_ptr->flags, TR_RES_FIRE))
+                    if (has_flag(k_ptr->flags, TR_RES_FIRE))
                         break;
                     if (m_bonus(10, level) > 8)
                         o_ptr->name2 = EGO_AMU_RES_FIRE_;
@@ -571,7 +571,7 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                         o_ptr->name2 = EGO_AMU_RES_FIRE;
                     break;
                 case 13:
-                    if (have_flag(k_ptr->flags, TR_RES_COLD))
+                    if (has_flag(k_ptr->flags, TR_RES_COLD))
                         break;
                     if (m_bonus(10, level) > 8)
                         o_ptr->name2 = EGO_AMU_RES_COLD_;
@@ -579,7 +579,7 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                         o_ptr->name2 = EGO_AMU_RES_COLD;
                     break;
                 case 14:
-                    if (have_flag(k_ptr->flags, TR_RES_ELEC))
+                    if (has_flag(k_ptr->flags, TR_RES_ELEC))
                         break;
                     if (m_bonus(10, level) > 8)
                         o_ptr->name2 = EGO_AMU_RES_ELEC_;
@@ -587,7 +587,7 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                         o_ptr->name2 = EGO_AMU_RES_ELEC;
                     break;
                 case 15:
-                    if (have_flag(k_ptr->flags, TR_RES_ACID))
+                    if (has_flag(k_ptr->flags, TR_RES_ACID))
                         break;
                     if (m_bonus(10, level) > 8)
                         o_ptr->name2 = EGO_AMU_RES_ACID_;
@@ -659,7 +659,7 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                 object_kind *k_ptr = &k_info[o_ptr->k_idx];
                 switch (randint1(5)) {
                 case 1:
-                    if (have_flag(k_ptr->flags, TR_DRAIN_EXP))
+                    if (has_flag(k_ptr->flags, TR_DRAIN_EXP))
                         break;
                     o_ptr->name2 = EGO_AMU_DRAIN_EXP;
                     break;
@@ -667,12 +667,12 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                     o_ptr->name2 = EGO_AMU_FOOL;
                     break;
                 case 3:
-                    if (have_flag(k_ptr->flags, TR_AGGRAVATE))
+                    if (has_flag(k_ptr->flags, TR_AGGRAVATE))
                         break;
                     o_ptr->name2 = EGO_AMU_AGGRAVATE;
                     break;
                 case 4:
-                    if (have_flag(k_ptr->flags, TR_TY_CURSE))
+                    if (has_flag(k_ptr->flags, TR_TY_CURSE))
                         break;
                     o_ptr->name2 = EGO_AMU_TY_CURSE;
                     break;

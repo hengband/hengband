@@ -79,10 +79,10 @@ void known_obj_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
 		if (!o_ptr->k_idx) continue;
 
 		object_flags_known(creature_ptr, o_ptr, o_flags);
-		if (have_flag(o_flags, TR_IM_ACID)) add_flag(flags, TR_RES_ACID);
-		if (have_flag(o_flags, TR_IM_ELEC)) add_flag(flags, TR_RES_ELEC);
-		if (have_flag(o_flags, TR_IM_FIRE)) add_flag(flags, TR_RES_FIRE);
-		if (have_flag(o_flags, TR_IM_COLD)) add_flag(flags, TR_RES_COLD);
+		if (has_flag(o_flags, TR_IM_ACID)) add_flag(flags, TR_RES_ACID);
+		if (has_flag(o_flags, TR_IM_ELEC)) add_flag(flags, TR_RES_ELEC);
+		if (has_flag(o_flags, TR_IM_FIRE)) add_flag(flags, TR_RES_FIRE);
+		if (has_flag(o_flags, TR_IM_COLD)) add_flag(flags, TR_RES_COLD);
 	}
 }
 

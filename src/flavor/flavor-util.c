@@ -159,7 +159,7 @@ static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_
 #endif
 
     while (fi_ptr->english) {
-        if (have_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !have_flag(flgs, fi_ptr->except_flag)))
+        if (has_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !has_flag(flgs, fi_ptr->except_flag)))
             add_inscription(&ptr, _(kanji ? fi_ptr->japanese : fi_ptr->english, fi_ptr->english));
 
         fi_ptr++;
@@ -169,7 +169,7 @@ static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_
 }
 
 /*!
- * @brief オブジェクトの特性表示記号テーブル1つに従いオブジェクトの特性フラグ配列に1つでも該当の特性があるかを返す / Special variation of have_flag for
+ * @brief オブジェクトの特性表示記号テーブル1つに従いオブジェクトの特性フラグ配列に1つでも該当の特性があるかを返す / Special variation of has_flag for
  * auto-inscription
  * @param fi_ptr 参照する特性表示記号テーブル
  * @param flgs 対応するオブジェクトのフラグ文字列
@@ -178,7 +178,7 @@ static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_
 static bool have_flag_of(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
     while (fi_ptr->english) {
-        if (have_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !have_flag(flgs, fi_ptr->except_flag)))
+        if (has_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !has_flag(flgs, fi_ptr->except_flag)))
             return TRUE;
 
         fi_ptr++;
@@ -219,20 +219,20 @@ char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, obje
     }
 
     if (has_dark_flag(flgs)) {
-        if (have_flag(flgs, TR_LITE_1))
+        if (has_flag(flgs, TR_LITE_1))
             remove_flag(flgs, TR_LITE_1);
 
-        if (have_flag(flgs, TR_LITE_2))
+        if (has_flag(flgs, TR_LITE_2))
             remove_flag(flgs, TR_LITE_2);
 
-        if (have_flag(flgs, TR_LITE_3))
+        if (has_flag(flgs, TR_LITE_3))
             remove_flag(flgs, TR_LITE_3);
     } else if (has_lite_flag(flgs)) {
         add_flag(flgs, TR_LITE_1);
-        if (have_flag(flgs, TR_LITE_2))
+        if (has_flag(flgs, TR_LITE_2))
             remove_flag(flgs, TR_LITE_2);
 
-        if (have_flag(flgs, TR_LITE_3))
+        if (has_flag(flgs, TR_LITE_3))
             remove_flag(flgs, TR_LITE_3);
     }
 
@@ -464,6 +464,6 @@ char *object_desc_count_japanese(char *t, object_type *o_ptr)
 }
 #endif
 
-bool has_lite_flag(BIT_FLAGS *flags) { return have_flag(flags, TR_LITE_1) || have_flag(flags, TR_LITE_2) || have_flag(flags, TR_LITE_3); }
+bool has_lite_flag(BIT_FLAGS *flags) { return has_flag(flags, TR_LITE_1) || has_flag(flags, TR_LITE_2) || has_flag(flags, TR_LITE_3); }
 
-bool has_dark_flag(BIT_FLAGS *flags) { return have_flag(flags, TR_LITE_M1) || have_flag(flags, TR_LITE_M2) || have_flag(flags, TR_LITE_M3); }
+bool has_dark_flag(BIT_FLAGS *flags) { return has_flag(flags, TR_LITE_M1) || has_flag(flags, TR_LITE_M2) || has_flag(flags, TR_LITE_M3); }

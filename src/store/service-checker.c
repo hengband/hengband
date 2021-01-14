@@ -22,7 +22,7 @@ static bool is_blessed_item(player_type *player_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(player_ptr, o_ptr, flgs);
-    return have_flag(flgs, TR_BLESSED);
+    return has_flag(flgs, TR_BLESSED);
 }
 
 static bool check_store_general(object_type *o_ptr)

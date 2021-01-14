@@ -97,7 +97,7 @@ static void describe_chest(flavor_type *flavor_ptr)
 
 static void decide_tval_show(player_type *player_ptr, flavor_type *flavor_ptr)
 {
-    if (have_flag(flavor_ptr->tr_flags, TR_SHOW_MODS))
+    if (has_flag(flavor_ptr->tr_flags, TR_SHOW_MODS))
         flavor_ptr->show_weapon = TRUE;
 
     if (object_is_smith(player_ptr, flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
@@ -126,7 +126,7 @@ static void describe_digging(player_type *player_ptr, flavor_type *flavor_ptr)
 static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     flavor_ptr->power = bow_tmul(flavor_ptr->o_ptr->sval);
-    if (have_flag(flavor_ptr->tr_flags, TR_XTRA_MIGHT))
+    if (has_flag(flavor_ptr->tr_flags, TR_XTRA_MIGHT))
         flavor_ptr->power++;
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
@@ -355,12 +355,12 @@ static void describe_charges_rod(flavor_type *flavor_ptr)
 
 static void describe_specific_pval(flavor_type *flavor_ptr)
 {
-    if (have_flag(flavor_ptr->tr_flags, TR_SPEED)) {
+    if (has_flag(flavor_ptr->tr_flags, TR_SPEED)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("加速", " to speed"));
         return;
     }
 
-    if (have_flag(flavor_ptr->tr_flags, TR_BLOWS)) {
+    if (has_flag(flavor_ptr->tr_flags, TR_BLOWS)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
 #ifdef JP
 #else
@@ -369,17 +369,17 @@ static void describe_specific_pval(flavor_type *flavor_ptr)
 #endif
     }
 
-    if (have_flag(flavor_ptr->tr_flags, TR_STEALTH)) {
+    if (has_flag(flavor_ptr->tr_flags, TR_STEALTH)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("隠密", " to stealth"));
         return;
     }
 
-    if (have_flag(flavor_ptr->tr_flags, TR_SEARCH)) {
+    if (has_flag(flavor_ptr->tr_flags, TR_SEARCH)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("探索", " to searching"));
         return;
     }
 
-    if (have_flag(flavor_ptr->tr_flags, TR_INFRA))
+    if (has_flag(flavor_ptr->tr_flags, TR_INFRA))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("赤外線視力", " to infravision"));
 }
 
@@ -391,7 +391,7 @@ static void describe_pval(flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
     flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->pval);
-    if (have_flag(flavor_ptr->tr_flags, TR_HIDE_TYPE)) {
+    if (has_flag(flavor_ptr->tr_flags, TR_HIDE_TYPE)) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
         return;
     }

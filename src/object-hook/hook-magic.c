@@ -25,7 +25,7 @@ bool item_tester_hook_activate(player_type *player_ptr, object_type *o_ptr)
         return FALSE;
 
     object_flags(player_ptr, o_ptr, flags);
-    if (have_flag(flags, TR_ACTIVATE))
+    if (has_flag(flags, TR_ACTIVATE))
         return TRUE;
 
     return FALSE;
@@ -65,7 +65,7 @@ bool item_tester_hook_use(player_type *player_ptr, object_type *o_ptr)
         for (i = INVEN_RARM; i < INVEN_TOTAL; i++) {
             if (&player_ptr->inventory_list[i] == o_ptr) {
                 object_flags(player_ptr, o_ptr, flags);
-                if (have_flag(flags, TR_ACTIVATE))
+                if (has_flag(flags, TR_ACTIVATE))
                     return TRUE;
             }
         }

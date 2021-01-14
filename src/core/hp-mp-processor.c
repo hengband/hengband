@@ -89,10 +89,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !creature_ptr->immune_fire) {
+    if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !creature_ptr->immune_fire) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -126,10 +126,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_cold) {
+    if (has_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_cold) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -161,10 +161,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_elec) {
+    if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_elec) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -196,10 +196,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_acid) {
+    if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_acid) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -231,10 +231,10 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_POISON_PUDDLE) && !is_invuln(creature_ptr)) {
+    if (has_flag(f_ptr->flags, FF_POISON_PUDDLE) && !is_invuln(creature_ptr)) {
         int damage = 0;
 
-        if (have_flag(f_ptr->flags, FF_DEEP)) {
+        if (has_flag(f_ptr->flags, FF_DEEP)) {
             damage = 6000 + randint0(4000);
         } else if (!creature_ptr->levitation) {
             damage = 3000 + randint0(2000);
@@ -270,7 +270,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation && !creature_ptr->can_swim
+    if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation && !creature_ptr->can_swim
         && !creature_ptr->resist_water) {
         if (creature_ptr->total_weight > weight_limit(creature_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
@@ -321,7 +321,7 @@ void process_player_hp_mp(player_type *creature_ptr)
      * reduced below 0 hp by being inside a stone wall; others
      * WILL BE!
      */
-    if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) {
+    if (!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY)) {
         if (!is_invuln(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->tim_pass_wall
             && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall)) {
             concptr dam_desc;
