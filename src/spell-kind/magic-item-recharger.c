@@ -109,7 +109,7 @@ bool recharge(player_type *caster_ptr, int power)
         }
     }
 
-    if (!is_recharge_successful) {
+    if (is_recharge_successful) {
         return update_player(caster_ptr);
     }
 
