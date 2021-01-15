@@ -407,7 +407,7 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
  */
 void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION dis, bool is_quantum_effect)
 {
-    if (!teleport_player_aux(target_ptr, dis, TELEPORT_PASSIVE, is_quantum_effect))
+    if (!teleport_player_aux(target_ptr, dis, is_quantum_effect, TELEPORT_PASSIVE))
         return;
 
     /* Monsters with teleport ability may follow the player */
