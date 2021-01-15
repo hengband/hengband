@@ -31,6 +31,7 @@ static bool check_store_general(object_type *o_ptr)
     case TV_POTION:
         if (o_ptr->sval != SV_POTION_WATER)
             return FALSE;
+        /* Fall through */
     case TV_WHISTLE:
     case TV_FOOD:
     case TV_LITE:

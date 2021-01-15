@@ -2593,8 +2593,8 @@ errr init_x11(int argc, char *argv[])
 			use_graphics = TRUE;
 			pict_wid = pict_hgt = 8;
 			ANGBAND_GRAF = "old";
-			break;
 		}
+		break;
 	case GRAPHICS_ADAM_BOLT:
 		path_build(filename, sizeof(filename), ANGBAND_DIR_XTRA, "graf/16x16.bmp");
 		if (0 == fd_close(fd_open(filename, O_RDONLY)))
@@ -2602,8 +2602,8 @@ errr init_x11(int argc, char *argv[])
 			use_graphics = TRUE;
 			pict_wid = pict_hgt = 16;
 			ANGBAND_GRAF = "new";
-			break;
 		}
+		break;
 	}
 
 	if (use_graphics)

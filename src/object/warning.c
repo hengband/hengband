@@ -115,11 +115,10 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_FIRE:
         if (has_immune_fire(target_ptr)) {
-            dam = 0;
             ignore_wraith_form = TRUE;
-            break;
         }
         dam = dam * calc_fire_damage_rate(target_ptr) / 100;
+        break;
 
     case GF_PSY_SPEAR:
         ignore_wraith_form = TRUE;

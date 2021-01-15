@@ -410,8 +410,10 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         return;
     case MON_CAIT_SITH:
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
+        return;
     case MON_BIG_RAVEN:
         on_dead_big_raven(player_ptr, md_ptr);
+        return;
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;
