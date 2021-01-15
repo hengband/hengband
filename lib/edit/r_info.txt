@@ -22801,7 +22801,7 @@ D:目についた獲物を片っ端から屠っていく。
 
 N:1137:殺人イタチ
 E:Killer weasel
-G:r:W
+G:f:W
 I:110:12d12:20:10:25
 W:15:1:0:55:0:0
 B:BITE:HURT:5d2
@@ -22814,7 +22814,7 @@ D:それはふさふさのしっぽを持っているが、冒険者が撫でる
 
 N:1138:白き悪魔『ノロイ』
 E:Norowi, the White Devil
-G:r:w
+G:f:w
 I:115:20d16:25:35:10
 W:16:2:0:220:0:0
 B:BITE:HURT:7d3
@@ -22827,7 +22827,6 @@ D:$  He is obeying not only the weasels,
 D:$ but also the rats with a fearful intimidation.
 D:$  Your adventure will be terminated soon.
 D:悪知恵の働くイタチどもの頭領だ。
-D:イタチだけでなく、その恐怖を引き起こす威圧感でネズミ達をも従わせている。
 D:あなたの冒険は間もなく打ち切られるだろう。
 
 # Beginning small letter "lain" is correct.
@@ -22841,16 +22840,16 @@ B:TOUCH:UN_BONUS:8d7
 B:TOUCH:UN_POWER:8d7
 B:TOUCH:TIME:8d7
 F:QUANTUM | UNIQUE | FEMALE | ATTR_CLEAR | FORCE_MAXHP | RAND_25
-F:ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_3D2
+F:ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_2D2 | DROP_4D2
 F:DROP_CORPSE | DROP_SKELETON
 F:SMART | REFLECTING | INVISIBLE | WEIRD_MIND | REGENERATE
 F:POWERFUL | ELDRITCH_HORROR | AURA_ELEC | PASS_WALL
-F:MOVE_BODY | TAKE_ITEM | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN
+F:MOVE_BODY | TAKE_ITEM | NO_FEAR | NO_CONF | NO_SLEEP
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
 F:RES_LITE | RES_DARK | RES_CHAO | RES_NEXU | RES_TIME
 F:CAN_FLY | SELF_DARK_2
 S:1_IN_2
-S:DISPEL | BA_CHAO | BA_LITE | BA_DARK | BA_MANA | HAND_DOOM | BRAIN_SMASH
+S:DISPEL | BA_CHAO | BA_LITE | BA_DARK | HAND_DOOM | BRAIN_SMASH
 S:SLOW | HASTE | HEAL | INVULNER | TPORT | WORLD | PSY_SPEAR
 D:$She recognizes you as a bug that appears to be
 D:$ a myriad of connected consciousness in the Wired.
@@ -23099,7 +23098,6 @@ G:j:B
 I:110:12d12:10:30:10
 W:15:1:0:50:0:0
 B:CRUSH:HURT:6d6
-B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a small bubble that makes an weird movement.
@@ -23112,7 +23110,6 @@ E:Middle aqua illusion
 G:j:B
 I:110:12d12:10:30:10
 W:18:1:0:100:0:0
-B:CRUSH:HURT:7d7
 B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
@@ -23127,7 +23124,6 @@ G:j:B
 I:110:18d18:10:30:10
 W:21:1:0:250:0:0
 B:CRUSH:HURT:8d8
-B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a large bubble that makes an weird movement.
@@ -23141,7 +23137,6 @@ G:j:B
 I:110:18d18:10:30:10
 W:24:1:0:500:0:0
 B:CRUSH:HURT:9d9
-B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a extra large bubble that makes an weird movement.
@@ -23153,7 +23148,6 @@ E:Small aqua illusion in 2nd lap
 G:j:b
 I:120:20d20:10:50:10
 W:25:1:0:120:0:0
-B:CRUSH:HURT:6d6
 B:CRUSH:HURT:6d6
 B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
@@ -23171,7 +23165,6 @@ I:120:20d20:10:50:10
 W:28:1:0:240:0:0
 B:CRUSH:HURT:7d7
 B:CRUSH:HURT:7d7
-B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
 S:1_IN_5 | MISSILE
@@ -23187,7 +23180,6 @@ I:120:25d25:10:50:10
 W:31:1:0:600:0:0
 B:CRUSH:HURT:8d8
 B:CRUSH:HURT:8d8
-B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE | POWERFUL
 S:1_IN_5 | MISSILE
@@ -23201,7 +23193,6 @@ E:Extra large aqua illusion in 2nd lap
 G:j:b
 I:120:25d25:10:50:10
 W:34:1:0:1200:0:0
-B:CRUSH:HURT:9d9
 B:CRUSH:HURT:9d9
 B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
@@ -23317,7 +23308,7 @@ N:1166:チーターマン『アリエス』
 E:Aries, the youngest cheetahmen
 G:h:y
 I:110:15d15:20:30:25
-W:12:1:0:200:0:0
+W:11:1:0:200:0:0
 B:CLAW:HURT:4d6
 B:BITE:HURT:4d6
 F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
@@ -23329,7 +23320,7 @@ N:1167:チーターマン『ヘラクレス』
 G:h:y
 E:Hercules, the second eldest cheetahmen
 I:110:15d16:20:35:25
-W:13:1:0:250:0:0
+W:12:1:0:250:0:0
 B:PUNCH:HURT:4d6
 B:KICK:HURT:4d6
 F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
@@ -23340,8 +23331,8 @@ D:三兄弟の次男で、空手が得意だ。
 N:1168:チーターマン『アポロ』
 G:h:y
 E:Apollo, the eldest cheetahmen
-I:110:15d18:25:40:30
-W:14:1:0:300:0:0
+I:110:16d18:25:40:30
+W:15:1:0:320:0:0
 B:SHOOT:HURT:8d8
 B:STING:HURT:5d6
 B:STING:HURT:5d6
@@ -24908,7 +24899,7 @@ D:酸性の体液を獲物に向けて噴射することもある。
 N:1254:踊る道化師『ペニーワイズ』
 E:Pennywise, the dancing clown
 G:S:o
-I:120:10d12:20:70:50
+I:120:100d12:20:70:50
 W:32:3:0:1500:0:0
 B:GAZE:TERRIFY:4d5
 B:GAZE:TERRIFY:4d5
@@ -24990,7 +24981,7 @@ D:$It is the final evolution of a giant creature,
 D:$ a magnificent centipede that is taller and longer than the WTC.
 D:$  It pours acid like a downpour from countless outrages.
 D:巨大生物の最終進化形態、ビルよりも高く長い全長を持つ雄大なムカデだ。
-D:無数の突飛から土砂降りのように酸を降り注がせる。
+D:無数の突起から土砂降りのように酸を降り注がせる。
 
 N:1258:『ロボ・ガンダルフ』
 E:Robo-Gandalf
@@ -25147,7 +25138,7 @@ N:1267:キューちゃん
 E:Raven
 G:B:D
 I:120:24d23:20:60:20
-W:33:3:0:7000:0:0
+W:33:3:0:350:0:0
 B:CRUSH:SHATTER:6d6
 B:CRUSH:TERRIFY:6d6
 F:ANIMAL | MOVE_BODY | EVIL | FRIENDS
@@ -25158,7 +25149,7 @@ D:$  They often move around in groups with good behavior.
 D:かわいいペンギンだ。よく群れをなして行儀よく動き回っている。
 
 N:1268:『ビッグキューちゃん』
-E:Raphael, the Raven
+E:Raphael, the Big Raven
 G:B:R
 I:120:40d30:20:60:20
 W:37:3:0:7000:0:0
