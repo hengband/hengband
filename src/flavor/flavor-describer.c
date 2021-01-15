@@ -26,6 +26,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player/player-status-table.h"
+#include "specific-object/bow.h"
 #include "sv-definition/sv-lite-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -487,7 +488,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     describe_tval(player_ptr, flavor_ptr);
     describe_named_item_tval(flavor_ptr);
     flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    if ((flavor_ptr->bow_ptr->k_idx != 0) && (flavor_ptr->o_ptr->tval == player_ptr->tval_ammo))
+    if ((flavor_ptr->bow_ptr->k_idx != 0) && (flavor_ptr->o_ptr->tval == bow_tval_ammo(flavor_ptr->bow_ptr)))
         describe_bow_power(player_ptr, flavor_ptr);
     else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE))
         describe_spike_power(player_ptr, flavor_ptr);
