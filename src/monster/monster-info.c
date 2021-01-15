@@ -27,6 +27,7 @@
 #include "monster/smart-learn-types.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "player/player-status-flags.h"
 
 /*!
  * @brief モンスターを友好的にする
@@ -63,7 +64,7 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
     if (has_flag(f_ptr->flags, FF_CAN_SWIM) && (r_ptr->flags7 & RF7_CAN_SWIM))
         return TRUE;
     if (has_flag(f_ptr->flags, FF_CAN_PASS)) {
-        if ((r_ptr->flags2 & RF2_PASS_WALL) && (!(mode & CEM_RIDING) || player_ptr->pass_wall))
+        if ((r_ptr->flags2 & RF2_PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr)))
             return TRUE;
     }
 

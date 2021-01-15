@@ -1,15 +1,15 @@
-#include "floor/line-of-sight.h"
+ï»¿#include "floor/line-of-sight.h"
 #include "floor/cave.h"
 #include "system/floor-type-definition.h"
 
 /*!
- * @brief LOS(Line Of Sight / ‹ü‚ª’Ê‚Á‚Ä‚¢‚é‚©)‚Ì”»’è‚ğs‚¤B
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param y1 n“_‚ÌyÀ•W
- * @param x1 n“_‚ÌxÀ•W
- * @param y2 I“_‚ÌyÀ•W
- * @param x2 I“_‚ÌxÀ•W
- * @return LOS‚ª’Ê‚Á‚Ä‚¢‚é‚È‚çTRUE‚ğ•Ô‚·B
+ * @brief LOS(Line Of Sight / è¦–ç·šãŒé€šã£ã¦ã„ã‚‹ã‹)ã®åˆ¤å®šã‚’è¡Œã†ã€‚
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y1 å§‹ç‚¹ã®yåº§æ¨™
+ * @param x1 å§‹ç‚¹ã®xåº§æ¨™
+ * @param y2 çµ‚ç‚¹ã®yåº§æ¨™
+ * @param x2 çµ‚ç‚¹ã®xåº§æ¨™
+ * @return LOSãŒé€šã£ã¦ã„ã‚‹ãªã‚‰TRUEã‚’è¿”ã™ã€‚
  * @details
  * A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,\n
  * 4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.\n

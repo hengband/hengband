@@ -1,4 +1,4 @@
-#include "main/game-data-initializer.h"
+ï»¿#include "main/game-data-initializer.h"
 #include "cmd-io/macro-util.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -18,15 +18,15 @@
 #include "world/world.h"
 
 /*!
- * @brief ƒ}ƒNƒ“o˜^‚ÌÅ‘å” / Maximum number of macros (see "io.c")
+ * @brief ãƒã‚¯ãƒ­ç™»éŒ²ã®æœ€å¤§æ•° / Maximum number of macros (see "io.c")
  * @note Default: assume at most 256 macros are used
  */
 static const int MACRO_MAX = 256;
 
 /*!
- * @brief ƒNƒGƒXƒgî•ñ‰Šú‰»‚ÌƒƒCƒ“ƒ‹[ƒ`ƒ“ /
+ * @brief ã‚¯ã‚¨ã‚¹ãƒˆæƒ…å ±åˆæœŸåŒ–ã®ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒãƒ³ /
  * Initialize quest array
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_quests(void)
 {
@@ -38,13 +38,13 @@ errr init_quests(void)
 }
 
 /*!
- * @brief ‚»‚Ì‘¼‚Ì‰Šúî•ñXV /
+ * @brief ãã®ä»–ã®åˆæœŸæƒ…å ±æ›´æ–° /
  * Initialize some other arrays
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_other(player_type *player_ptr)
 {
-    player_ptr->current_floor_ptr = &floor_info; // TODO:–{“–‚Í‚±‚ñ‚È‚Æ‚±‚ë‚Å‰Šú‰»‚µ‚½‚­‚È‚¢
+    player_ptr->current_floor_ptr = &floor_info; // TODO:æœ¬å½“ã¯ã“ã‚“ãªã¨ã“ã‚ã§åˆæœŸåŒ–ã—ãŸããªã„
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     C_MAKE(floor_ptr->o_list, current_world_ptr->max_o_idx, object_type);
     C_MAKE(floor_ptr->m_list, current_world_ptr->max_m_idx, monster_type);
@@ -95,9 +95,9 @@ errr init_other(player_type *player_ptr)
 }
 
 /*!
- * @brief ƒIƒuƒWƒFƒNƒg”z—ñ‚ğ‰Šú‰»‚·‚é /
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…åˆ—ã‚’åˆæœŸåŒ–ã™ã‚‹ /
  * Initialize some other arrays
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_object_alloc(void)
 {
@@ -126,7 +126,7 @@ errr init_object_alloc(void)
         num[i] += num[i - 1];
 
     if (!num[0])
-        quit(_("’¬‚ÌƒAƒCƒeƒ€‚ª‚È‚¢I", "No town objects!"));
+        quit(_("ç”ºã®ã‚¢ã‚¤ãƒ†ãƒ ãŒãªã„ï¼", "No town objects!"));
 
     C_MAKE(alloc_kind_table, alloc_kind_size, alloc_entry);
     alloc_entry *table;
@@ -155,9 +155,9 @@ errr init_object_alloc(void)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[”z—ñ‚Æ¶¬ƒe[ƒuƒ‹‚ğ‰Šú‰»‚·‚é /
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é…åˆ—ã¨ç”Ÿæˆãƒ†ãƒ¼ãƒ–ãƒ«ã‚’åˆæœŸåŒ–ã™ã‚‹ /
  * Initialize some other arrays
- * @return ƒGƒ‰[ƒR[ƒh
+ * @return ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 errr init_alloc(void)
 {

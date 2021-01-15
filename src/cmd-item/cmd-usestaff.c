@@ -22,6 +22,7 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-status.h"
+#include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-curse-removal.h"
@@ -36,6 +37,7 @@
 #include "spell/spells-staff-only.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/summon-types.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -68,7 +70,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     /* Analyze the staff */
     switch (sval) {
     case SV_STAFF_DARKNESS: {
-        if (!(creature_ptr->resist_blind) && !(creature_ptr->resist_dark)) {
+        if (!has_resist_blind(creature_ptr) && !has_resist_dark(creature_ptr)) {
             if (set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5)))
                 ident = TRUE;
         }
@@ -409,7 +411,6 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 
         /* Unstack the used item */
         o_ptr->number--;
-        creature_ptr->total_weight -= q_ptr->weight;
         item = store_item_to_inventory(creature_ptr, q_ptr);
 
         msg_print(_("杖をまとめなおした。", "You unstack your staff."));

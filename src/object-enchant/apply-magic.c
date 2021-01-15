@@ -6,15 +6,14 @@
  */
 
 #include "object-enchant/apply-magic.h"
+#include "artifact/fixed-art-types.h"
 #include "artifact/fixed-art-generator.h"
-#include "art-definition/art-armor-types.h"
 #include "dungeon/dungeon.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/apply-magic-accessory.h"
 #include "object-enchant/apply-magic-armor.h"
 #include "object-enchant/apply-magic-others.h"
 #include "object-enchant/apply-magic-weapon.h"
-#include "system/artifact-type-definition.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
@@ -26,14 +25,14 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
+#include "player/player-status-flags.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
-#include "player/player-status-flags.h"
-
 
 /*!
  * @brief 生成されたベースアイテムに魔法的な強化を与えるメインルーチン
@@ -61,7 +60,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     if ((owner_ptr->pseikaku != PERSONALITY_MUNCHKIN) && (f2 > d_info[owner_ptr->dungeon_idx].obj_great))
         f2 = d_info[owner_ptr->dungeon_idx].obj_great;
 
-    if (have_good_luck(owner_ptr)) {
+    if (has_good_luck(owner_ptr)) {
         f1 += 5;
         f2 += 2;
     } else if (owner_ptr->muta3 & MUT3_BAD_LUCK) {
@@ -102,7 +101,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     for (int i = 0; i < rolls; i++) {
         if (make_artifact(owner_ptr, o_ptr))
             break;
-        if (have_good_luck(owner_ptr) && one_in_(77)) {
+        if (has_good_luck(owner_ptr) && one_in_(77)) {
             if (make_artifact(owner_ptr, o_ptr))
                 break;
         }

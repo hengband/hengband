@@ -27,6 +27,7 @@
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -89,7 +90,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
     int sn = 0;
     POSITION sy = 0, sx = 0;
-    if (hurt && !caster_ptr->pass_wall && !caster_ptr->kill_wall) {
+    if (hurt && !has_pass_wall(caster_ptr) && !has_kill_wall(caster_ptr)) {
         for (DIRECTION i = 0; i < 8; i++) {
             POSITION y = caster_ptr->y + ddy_ddd[i];
             POSITION x = caster_ptr->x + ddx_ddd[i];
@@ -282,7 +283,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 continue;
 
             delete_all_items_from_floor(caster_ptr, yy, xx);
-            int t = cave_have_flag_bold(floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;
+            int t = cave_has_flag_bold(floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;
             if (t < 20) {
                 cave_set_feat(caster_ptr, yy, xx, feat_granite);
                 continue;

@@ -37,3 +37,5 @@ bool activate_exploding_rune(player_type *user_ptr);
 bool activate_protection_rune(player_type *user_ptr);
 bool activate_light(player_type *user_ptr, concptr name);
 bool activate_recall(player_type *user_ptr);
+bool activate_tree_creation(player_type *user_ptr, object_type *o_ptr, concptr name);
+bool activate_animate_dead(player_type *user_ptr, object_type *o_ptr);

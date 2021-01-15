@@ -42,6 +42,9 @@ void player_wipe_without_name(player_type *creature_ptr)
 {
     player_type tmp;
 
+#ifdef SET_UID
+    int uid = creature_ptr->player_uid;
+#endif
     COPY(&tmp, creature_ptr, player_type);
     if (creature_ptr->last_message)
         string_free(creature_ptr->last_message);
@@ -69,7 +72,6 @@ void player_wipe_without_name(player_type *creature_ptr)
         q_ptr->comptime = 0;
     }
 
-    creature_ptr->total_weight = 0;
     creature_ptr->inven_cnt = 0;
     creature_ptr->equip_cnt = 0;
     for (int i = 0; i < INVEN_TOTAL; i++)
@@ -171,6 +173,10 @@ void player_wipe_without_name(player_type *creature_ptr)
     }
 
     memcpy(creature_ptr->name, tmp.name, sizeof(tmp.name));
+
+#ifdef SET_UID
+    creature_ptr->player_uid = uid;
+#endif
 }
 
 /*!

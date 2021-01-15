@@ -1,5 +1,5 @@
 ﻿#include "artifact/artifact-info.h"
-#include "art-definition/random-art-effects.h"
+#include "artifact/random-art-effects.h"
 #include "cmd-item/cmd-smith.h"
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"

@@ -39,6 +39,7 @@
 #include "object/object-mark-types.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
+#include "player/player-status-flags.h"
 #include "room/rooms-builder.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
@@ -281,7 +282,7 @@ void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
  */
 bool is_known_trap(player_type *player_ptr, grid_type *g_ptr)
 {
-    if (!g_ptr->mimic && !cave_have_flag_grid(g_ptr, FF_SECRET) && is_trap(player_ptr, g_ptr->feat))
+    if (!g_ptr->mimic && !cave_has_flag_grid(g_ptr, FF_SECRET) && is_trap(player_ptr, g_ptr->feat))
         return TRUE;
     else
         return FALSE;
@@ -295,13 +296,11 @@ bool is_known_trap(player_type *player_ptr, grid_type *g_ptr)
  */
 bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
 {
-    if ((g_ptr->mimic || cave_have_flag_grid(g_ptr, FF_SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
+    if ((g_ptr->mimic || cave_has_flag_grid(g_ptr, FF_SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
         return TRUE;
     else
         return FALSE;
 }
-
-#define COMPLEX_WALL_ILLUMINATION /*!< 照明状態を壁により影響を受ける、より複雑な判定に切り替えるマクロ */
 
 /*!
  * @brief 指定された座標のマスが現在照らされているかを返す。 / Check for "local" illumination
@@ -317,8 +316,6 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
 
     /* Check for "local" illumination */
 
-#ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
-
     /* Check for "complex" illumination */
     if ((feat_supports_los(get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[yy][xx]))
             && (creature_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW))
@@ -329,13 +326,6 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
         return TRUE;
     } else
         return FALSE;
-
-#else /* COMPLEX_WALL_ILLUMINATION */
-
-    /* Check for "simple" illumination */
-    return (creature_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW) ? TRUE : FALSE;
-
-#endif /* COMPLEX_WALL_ILLUMINATION */
 }
 
 /*! 対象座標のマスの照明状態を更新する際の補助処理マクロ */
@@ -366,8 +356,6 @@ void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x
 
     if (!in_bounds(creature_ptr->current_floor_ptr, y, x))
         return;
-
-#ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
     if ((y != creature_ptr->y) && (x != creature_ptr->x)) {
         yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
@@ -405,37 +393,6 @@ void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x
             update_local_illumination_aux(creature_ptr, yy, xx);
         }
     }
-
-#else /* COMPLEX_WALL_ILLUMINATION */
-
-    if ((y != creature_ptr->y) && (x != creature_ptr->x)) {
-        yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
-        xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
-        update_local_illumination_aux(creature_ptr, yy, xx);
-    } else if (x != creature_ptr->x) /* y == creature_ptr->y */
-    {
-        xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
-        for (i = -1; i <= 1; i++) {
-            yy = y + i;
-            update_local_illumination_aux(creature_ptr, yy, xx);
-        }
-    } else if (y != creature_ptr->y) /* x == creature_ptr->x */
-    {
-        yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
-        for (i = -1; i <= 1; i++) {
-            xx = x + i;
-            update_local_illumination_aux(creature_ptr, yy, xx);
-        }
-    } else /* Player's grid */
-    {
-        for (i = 0; i < 8; i++) {
-            yy = y + ddy_cdd[i];
-            xx = x + ddx_cdd[i];
-            update_local_illumination_aux(creature_ptr, yy, xx);
-        }
-    }
-
-#endif /* COMPLEX_WALL_ILLUMINATION */
 }
 
 /*!
@@ -914,7 +871,7 @@ void update_flow(player_type *subject_ptr)
                 continue;
 
             /* Ignore "walls" and "rubble" */
-            if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
+            if (!cave_has_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
                 continue;
 
             /* Save the flow cost */
@@ -1150,7 +1107,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
                 return FALSE;
         }
 
-        if (has_flag(f_ptr->flags, FF_LAVA) && !player_ptr->immune_fire && !is_invuln(player_ptr)) {
+        if (has_flag(f_ptr->flags, FF_LAVA) && !has_immune_fire(player_ptr) && !is_invuln(player_ptr)) {
             /* Always forbid deep lava */
             if (has_flag(f_ptr->flags, FF_DEEP))
                 return FALSE;
@@ -1195,7 +1152,7 @@ bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 m
         return TRUE;
     if (has_flag(f_ptr->flags, FF_CAN_SWIM) && creature_ptr->can_swim)
         return TRUE;
-    if (has_flag(f_ptr->flags, FF_CAN_PASS) && creature_ptr->pass_wall)
+    if (has_flag(f_ptr->flags, FF_CAN_PASS) && has_pass_wall(creature_ptr))
         return TRUE;
 
     if (!has_flag(f_ptr->flags, FF_MOVE))

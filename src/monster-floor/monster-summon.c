@@ -47,10 +47,8 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
             return FALSE;
     } else if (summon_specific_who < 0) {
-        if (monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr)) {
-            if (!one_in_(ABS(player_ptr->align) / 2 + 1))
-                return FALSE;
-        }
+        if (monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr) && !one_in_(ABS(player_ptr->align) / 2 + 1))
+            return FALSE;
     }
 
     if (!summon_unique_okay && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
@@ -59,13 +57,14 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!summon_specific_type)
         return TRUE;
 
-    if ((summon_specific_who < 0) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr))
+    if ((summon_specific_who < 0) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
+        && monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr))
         return FALSE;
 
     if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[player_ptr->dungeon_idx].flags1 & DF1_CHAMELEON))
         return TRUE;
 
-    return (check_summon_specific(player_ptr, m_ptr->r_idx, r_idx));
+    return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx);
 }
 
 /*!
@@ -104,7 +103,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 
     summon_specific_who = who;
     summon_specific_type = type;
-    summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
+    summon_unique_okay = (mode & PM_ALLOW_UNIQUE) != 0;
     get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
     MONRACE_IDX r_idx = get_mon_num(player_ptr, (floor_ptr->dun_level + lev) / 2 + 5, 0);
@@ -142,10 +141,7 @@ bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy
         return FALSE;
 
     POSITION x, y;
-    if (player_ptr->current_floor_ptr->inside_arena)
-        return FALSE;
-
-    if (!mon_scatter(player_ptr, r_idx, &y, &x, oy, ox, 2))
+    if (player_ptr->current_floor_ptr->inside_arena || !mon_scatter(player_ptr, r_idx, &y, &x, oy, ox, 2))
         return FALSE;
 
     return place_monster_aux(player_ptr, who, y, x, r_idx, (mode | PM_NO_KAGE));

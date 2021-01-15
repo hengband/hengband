@@ -182,7 +182,7 @@ static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
         return;
 
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++)
-        if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], fis_ptr->tval) || (fis_ptr->mode & USE_FULL))
+        if (owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], fis_ptr->tval) || (fis_ptr->mode & USE_FULL))
             fis_ptr->max_equip++;
 }
 
@@ -218,7 +218,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     fis_ptr->e1 = INVEN_RARM;
     fis_ptr->e2 = INVEN_TOTAL - 1;
     test_equipment_floor(owner_ptr, fis_ptr);
-    if (have_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
+    if (has_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
         fis_ptr->max_equip++;
 
     while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e1, fis_ptr->tval)))
@@ -227,11 +227,11 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e2, fis_ptr->tval)))
         fis_ptr->e2--;
 
-    if (fis_ptr->equip && have_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        if (have_right_hand_weapon(owner_ptr)) {
+    if (fis_ptr->equip && has_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
+        if (has_right_hand_weapon(owner_ptr)) {
             if (fis_ptr->e2 < INVEN_LARM)
                 fis_ptr->e2 = INVEN_LARM;
-        } else if (have_left_hand_weapon(owner_ptr))
+        } else if (has_left_hand_weapon(owner_ptr))
             fis_ptr->e1 = INVEN_RARM;
     }
 
@@ -239,13 +239,13 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     if (fis_ptr->floor)
         fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, fis_ptr->tval);
 
-    if (fis_ptr->i1 <= fis_ptr->i2)
+    if ((mode & USE_INVEN) && (fis_ptr->i1 <= fis_ptr->i2))
         fis_ptr->allow_inven = TRUE;
 
-    if (fis_ptr->e1 <= fis_ptr->e2)
+    if ((mode & USE_EQUIP) && (fis_ptr->e1 <= fis_ptr->e2))
         fis_ptr->allow_equip = TRUE;
 
-    if (fis_ptr->floor_num)
+    if ((mode & USE_FLOOR) && (fis_ptr->floor_num))
         fis_ptr->allow_floor = TRUE;
 
     if (!fis_ptr->allow_inven && !fis_ptr->allow_equip && !fis_ptr->allow_floor) {

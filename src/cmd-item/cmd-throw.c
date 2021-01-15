@@ -1,7 +1,7 @@
 ﻿#include "cmd-item/cmd-throw.h"
 #include "action/throw-util.h"
 #include "action/weapon-shield.h"
-#include "art-definition/art-weapon-types.h"
+#include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "combat/slaying.h"
@@ -45,8 +45,8 @@
 #include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "player/attack-defense-types.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-table.h"
+#include "player/special-defense-types.h"
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
 #include "status/action-setter.h"
@@ -223,7 +223,7 @@ static bool check_racial_target_bold(player_type *creature_ptr, it_type *it_ptr)
     it_ptr->ny[it_ptr->cur_dis] = it_ptr->y;
     it_ptr->nx[it_ptr->cur_dis] = it_ptr->x;
     mmove2(&it_ptr->ny[it_ptr->cur_dis], &it_ptr->nx[it_ptr->cur_dis], creature_ptr->y, creature_ptr->x, it_ptr->ty, it_ptr->tx);
-    if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT))
+    if (cave_has_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT))
         return FALSE;
 
     it_ptr->hit_wall = TRUE;
@@ -366,7 +366,7 @@ void display_figurine_throw(player_type *creature_ptr, it_type *it_ptr)
         msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
         return;
     }
-    
+
     if (object_is_cursed(it_ptr->q_ptr))
         msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
 }
@@ -378,7 +378,7 @@ void display_potion_throw(player_type *creature_ptr, it_type *it_ptr)
 
     if (it_ptr->hit_body || it_ptr->hit_wall || (randint1(100) < it_ptr->corruption_possibility)) {
         it_ptr->corruption_possibility = 0;
-        return;    
+        return;
     }
 
     msg_format(_("%sは砕け散った！", "The %s shatters!"), it_ptr->o_name);
@@ -386,13 +386,13 @@ void display_potion_throw(player_type *creature_ptr, it_type *it_ptr)
         it_ptr->do_drop = FALSE;
         return;
     }
-    
+
     monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx];
     if ((creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx == 0) || !is_friendly(m_ptr) || monster_invulner_remaining(m_ptr)) {
         it_ptr->do_drop = FALSE;
         return;
     }
-    
+
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(creature_ptr, m_name, m_ptr, 0);
     msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
@@ -472,14 +472,13 @@ static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
 
         it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
         object_copy(it_ptr->o_ptr, it_ptr->q_ptr);
-        creature_ptr->total_weight += it_ptr->q_ptr->weight;
         creature_ptr->equip_cnt++;
         creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
         creature_ptr->window |= PW_EQUIP;
         it_ptr->do_drop = FALSE;
         return;
     }
-    
+
     if (it_ptr->equiped_item) {
         verify_equip_slot(creature_ptr, it_ptr->item);
         calc_android_exp(creature_ptr);
@@ -491,7 +490,7 @@ static void drop_thrown_item(player_type *creature_ptr, it_type *it_ptr)
     if (!it_ptr->do_drop)
         return;
 
-    if (cave_have_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
+    if (cave_has_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
         (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->y, it_ptr->x);
     else
         (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->prev_y, it_ptr->prev_x);

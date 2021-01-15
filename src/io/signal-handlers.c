@@ -18,8 +18,6 @@
 
 s16b signal_count; /* Hack -- Count interupts */
 
-#ifdef HANDLE_SIGNALS
-
 #include <signal.h>
 
 /*!
@@ -257,23 +255,3 @@ void signals_init(void)
 #endif
 }
 
-#else
-
-/*!
- * @brief ダミー /
- * Do nothing
- */
-void signals_ignore_tstp(void) {}
-
-/*!
- * @brief ダミー /
- * Do nothing
- */
-void signals_handle_tstp(void) {}
-
-/*!
- * @brief ダミー /
- * Do nothing
- */
-void signals_init(void) {}
-#endif

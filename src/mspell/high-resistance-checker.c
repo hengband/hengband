@@ -5,43 +5,44 @@
 #include "monster/smart-learn-types.h"
 #include "mspell/smart-mspell-util.h"
 #include "player/player-race.h"
+#include "player/player-status-flags.h"
 
 void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
 {
-    if (target_ptr->resist_neth)
+    if (has_resist_neth(target_ptr))
         msr_ptr->smart |= SM_RES_NETH;
 
-    if (target_ptr->resist_lite)
+    if (has_resist_lite(target_ptr))
         msr_ptr->smart |= SM_RES_LITE;
 
-    if (target_ptr->resist_dark)
+    if (has_resist_dark(target_ptr))
         msr_ptr->smart |= SM_RES_DARK;
 
-    if (target_ptr->resist_fear)
+    if (has_resist_fear(target_ptr))
         msr_ptr->smart |= SM_RES_FEAR;
 
-    if (target_ptr->resist_conf)
+    if (has_resist_conf(target_ptr))
         msr_ptr->smart |= SM_RES_CONF;
 
-    if (target_ptr->resist_chaos)
+    if (has_resist_chaos(target_ptr))
         msr_ptr->smart |= SM_RES_CHAOS;
 
-    if (target_ptr->resist_disen)
+    if (has_resist_disen(target_ptr))
         msr_ptr->smart |= SM_RES_DISEN;
 
-    if (target_ptr->resist_blind)
+    if (has_resist_blind(target_ptr))
         msr_ptr->smart |= SM_RES_BLIND;
 
-    if (target_ptr->resist_nexus)
+    if (has_resist_nexus(target_ptr))
         msr_ptr->smart |= SM_RES_NEXUS;
 
-    if (target_ptr->resist_sound)
+    if (has_resist_sound(target_ptr))
         msr_ptr->smart |= SM_RES_SOUND;
 
-    if (target_ptr->resist_shard)
+    if (has_resist_shard(target_ptr))
         msr_ptr->smart |= SM_RES_SHARD;
 
-    if (target_ptr->reflect)
+    if (has_reflect(target_ptr))
         msr_ptr->smart |= SM_IMM_REFLECT;
 
     if (target_ptr->free_act)

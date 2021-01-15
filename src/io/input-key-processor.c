@@ -62,7 +62,7 @@
 #include "game-option/input-options.h"
 #include "game-option/runtime-arguments.h"
 #include "io-dump/random-art-info-dumper.h"
-#include "io/chuukei.h"
+#include "io/record-play-movie.h"
 #include "io/command-repeater.h"
 #include "io/files-util.h"
 #include "io/input-key-requester.h" // todo 相互依存している、後で何とかする.
@@ -392,7 +392,7 @@ void process_command(player_type *creature_ptr)
 
                 msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
                 free_turn(creature_ptr);
-            } else if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER)) {
+            } else if (is_shero(creature_ptr) && (creature_ptr->pclass != CLASS_BERSERKER)) {
                 msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
                 free_turn(creature_ptr);
             } else {

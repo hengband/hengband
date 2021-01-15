@@ -9,10 +9,11 @@
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
 #include "player/player-race.h"
+#include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/base-status.h"
-#include "status/shape-changer.h"
+#include "status/buff-setter.h"
 #include "view/display-messages.h"
 
 /*!
@@ -419,15 +420,15 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
             msg_print(_("割れるような頭痛がする。", "A vicious blow hits your head."));
 
             if (one_in_(3)) {
-                if (!creature_ptr->sustain_int)
+                if (!has_sustain_int(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_INT);
-                if (!creature_ptr->sustain_wis)
+                if (!has_sustain_wis(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_WIS);
             } else if (one_in_(2)) {
-                if (!creature_ptr->sustain_int)
+                if (!has_sustain_int(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_INT);
             } else {
-                if (!creature_ptr->sustain_wis)
+                if (!has_sustain_wis(creature_ptr))
                     (void)do_dec_stat(creature_ptr, A_WIS);
             }
         }
@@ -554,7 +555,7 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 
         notice = TRUE;
         if (randint1(1000) < v || one_in_(16)) {
-            if (!creature_ptr->sustain_chr) {
+            if (!has_sustain_chr(creature_ptr)) {
                 msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
                 do_dec_stat(creature_ptr, A_CHR);
             }

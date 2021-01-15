@@ -1,4 +1,4 @@
-#include "specific-object/blade-turner.h"
+ï»¿#include "specific-object/blade-turner.h"
 #include "core/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
@@ -14,9 +14,9 @@ bool activate_bladeturner(player_type *user_ptr)
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
-    msg_print(_("‚ ‚È‚½‚ÍƒGƒŒƒƒ“ƒg‚ÌƒuƒŒƒX‚ğ“f‚¢‚½B", "You breathe the elements."));
+    msg_print(_("ã‚ãªãŸã¯ã‚¨ãƒ¬ãƒ¡ãƒ³ãƒˆã®ãƒ–ãƒ¬ã‚¹ã‚’åã„ãŸã€‚", "You breathe the elements."));
     fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
-    msg_print(_("ŠZ‚ª—lX‚ÈF‚É‹P‚¢‚½...", "Your armor glows many colours..."));
+    msg_print(_("é§ãŒæ§˜ã€…ãªè‰²ã«è¼ã„ãŸ...", "Your armor glows many colours..."));
     (void)set_afraid(user_ptr, 0);
     (void)set_hero(user_ptr, randint1(50) + 50, FALSE);
     (void)hp_player(user_ptr, 10);

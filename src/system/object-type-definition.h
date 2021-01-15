@@ -20,7 +20,7 @@ typedef struct object_type {
     EGO_IDX name2; /* Ego-Item type, if any */
 
     XTRA8 xtra1; /* Extra info type (now unused) */
-    XTRA8 xtra2; /* Extra info activation index */
+    XTRA8 xtra2; /*!< エゴ/アーティファクトの発動ID / Extra info activation index */
     XTRA8 xtra3; /*!< 複数の使用用途 捕らえたモンスターの速度，付加した特殊なエッセンスID / Extra info for weaponsmith */
     XTRA16 xtra4; /*!< 複数の使用用途 光源の残り寿命、あるいは捕らえたモンスターの現HP / Extra info fuel or captured monster's current HP */
     XTRA16 xtra5; /*!< 複数の使用用途 捕らえたモンスターの最大HP / Extra info captured monster's max HP */

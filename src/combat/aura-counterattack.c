@@ -16,6 +16,7 @@
 #include "monster/monster-status.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-checker.h"
+#include "player/player-status-flags.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
@@ -26,7 +27,7 @@
 
 static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (!target_ptr->sh_fire || !monap_ptr->alive || target_ptr->is_dead)
+    if (!has_sh_fire(target_ptr) || !monap_ptr->alive || target_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
@@ -48,7 +49,7 @@ static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *mon
 
 static void aura_elec_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (!target_ptr->sh_elec || !monap_ptr->alive || target_ptr->is_dead)
+    if (!has_sh_elec(target_ptr) || !monap_ptr->alive || target_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
@@ -70,7 +71,7 @@ static void aura_elec_by_monster_attack(player_type *target_ptr, monap_type *mon
 
 static void aura_cold_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (!target_ptr->sh_cold || !monap_ptr->alive || target_ptr->is_dead)
+    if (!has_sh_cold(target_ptr) || !monap_ptr->alive || target_ptr->is_dead)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];

@@ -30,7 +30,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
             if ((randint1(100) - difficulty * 3) > 50)
                 value = 20;
 
-            if (!is_floor_bold(floor_ptr, y, x) && (!cave_have_flag_bold(floor_ptr, y, x, FF_PLACE) || !cave_have_flag_bold(floor_ptr, y, x, FF_DROP)))
+            if (!is_floor_bold(floor_ptr, y, x) && (!cave_has_flag_bold(floor_ptr, y, x, FF_PLACE) || !cave_has_flag_bold(floor_ptr, y, x, FF_DROP)))
                 continue;
 
             if (value < 0) {

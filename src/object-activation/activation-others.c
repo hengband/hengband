@@ -1,11 +1,11 @@
-/*!
- * @brief ”­“®ˆ—‚»‚Ì‘¼ (”ì‘å‰»‚µ‚ª‚¿‚È‚Ì‚Å“K‹X‚Ü‚Æ‚Ü‚è‚ð•Êƒtƒ@ƒCƒ‹‚Ö•ªŠ„‚·‚é‚±‚Æ)
+ï»¿/*!
+ * @brief ç™ºå‹•å‡¦ç†ãã®ä»– (è‚¥å¤§åŒ–ã—ãŒã¡ãªã®ã§é©å®œã¾ã¨ã¾ã‚Šã‚’åˆ¥ãƒ•ã‚¡ã‚¤ãƒ«ã¸åˆ†å‰²ã™ã‚‹ã“ã¨)
  * @date 2020/08/19
  * @author Hourier
  */
 
 #include "object-activation/activation-others.h"
-#include "art-definition/art-weapon-types.h"
+#include "artifact/fixed-art-types.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
@@ -14,6 +14,7 @@
 #include "game-option/special-options.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "player-attack/player-attack.h"
 #include "player-info/avatar.h"
@@ -42,6 +43,7 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "target/target-getter.h"
+#include "util/quarks.h"
 #include "view/display-messages.h"
 
 bool activate_sunlight(player_type *user_ptr)
@@ -50,7 +52,7 @@ bool activate_sunlight(player_type *user_ptr)
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
-    msg_print(_("‘¾—zŒõü‚ª•ú‚½‚ê‚½B", "A line of sunlight appears."));
+    msg_print(_("å¤ªé™½å…‰ç·šãŒæ”¾ãŸã‚ŒãŸã€‚", "A line of sunlight appears."));
     (void)lite_line(user_ptr, dir, damroll(6, 8));
     return TRUE;
 }
@@ -58,7 +60,7 @@ bool activate_sunlight(player_type *user_ptr)
 bool activate_confusion(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("—lX‚ÈF‚Ì‰Î‰Ô‚ð”­‚µ‚Ä‚¢‚é...", "It glows in scintillating colours..."));
+    msg_print(_("æ§˜ã€…ãªè‰²ã®ç«èŠ±ã‚’ç™ºã—ã¦ã„ã‚‹...", "It glows in scintillating colours..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -69,7 +71,7 @@ bool activate_confusion(player_type *user_ptr)
 bool activate_banish_evil(player_type *user_ptr)
 {
     if (banish_evil(user_ptr, 100))
-        msg_print(_("ƒA[ƒeƒBƒtƒ@ƒNƒg‚Ì—Í‚ªŽ×ˆ«‚ð‘Å‚¿•¥‚Á‚½I", "The power of the artifact banishes evil!"));
+        msg_print(_("ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã®åŠ›ãŒé‚ªæ‚ªã‚’æ‰“ã¡æ‰•ã£ãŸï¼", "The power of the artifact banishes evil!"));
 
     return TRUE;
 }
@@ -82,7 +84,7 @@ bool activate_scare(player_type *user_ptr)
     if (hex_spelling_any(user_ptr))
         stop_hex_spell_all(user_ptr);
 
-    msg_print(_("‚ ‚È‚½‚Í—Í‹­‚¢“Ë•—‚ð‚«–Â‚ç‚µ‚½BŽüˆÍ‚Ì“G‚ªk‚¦ã‚Á‚Ä‚¢‚é!", "You wind a mighty blast; your enemies tremble!"));
+    msg_print(_("ã‚ãªãŸã¯åŠ›å¼·ã„çªé¢¨ã‚’å¹ãé³´ã‚‰ã—ãŸã€‚å‘¨å›²ã®æ•µãŒéœ‡ãˆä¸Šã£ã¦ã„ã‚‹!", "You wind a mighty blast; your enemies tremble!"));
     (void)turn_monsters(user_ptr, (3 * user_ptr->lev / 2) + 10);
     return TRUE;
 }
@@ -90,9 +92,9 @@ bool activate_scare(player_type *user_ptr)
 bool activate_aggravation(player_type *user_ptr, object_type *o_ptr, concptr name)
 {
     if (o_ptr->name1 == ART_HYOUSIGI)
-        msg_print(_("”Žq–Ø‚ð‘Å‚Á‚½B", "You beat your wooden clappers."));
+        msg_print(_("æ‹å­æœ¨ã‚’æ‰“ã£ãŸã€‚", "You beat your wooden clappers."));
     else
-        msg_format(_("%s‚Í•s‰õ‚È•¨‰¹‚ð—§‚Ä‚½B", "The %s sounds an unpleasant noise."), name);
+        msg_format(_("%sã¯ä¸å¿«ãªç‰©éŸ³ã‚’ç«‹ã¦ãŸã€‚", "The %s sounds an unpleasant noise."), name);
 
     aggravate_monsters(user_ptr, 0);
     return TRUE;
@@ -101,7 +103,7 @@ bool activate_aggravation(player_type *user_ptr, object_type *o_ptr, concptr nam
 bool activate_stone_mud(player_type *user_ptr)
 {
     DIRECTION dir;
-    msg_print(_("ŒÛ“®‚µ‚Ä‚¢‚é...", "It pulsates..."));
+    msg_print(_("é¼“å‹•ã—ã¦ã„ã‚‹...", "It pulsates..."));
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
@@ -111,19 +113,19 @@ bool activate_stone_mud(player_type *user_ptr)
 
 bool activate_judgement(player_type *user_ptr, concptr name)
 {
-    msg_format(_("%s‚ÍÔ‚­–¾‚é‚­Œõ‚Á‚½I", "The %s flashes bright red!"), name);
+    msg_format(_("%sã¯èµ¤ãæ˜Žã‚‹ãå…‰ã£ãŸï¼", "The %s flashes bright red!"), name);
     chg_virtue(user_ptr, V_KNOWLEDGE, 1);
     chg_virtue(user_ptr, V_ENLIGHTEN, 1);
     wiz_lite(user_ptr, FALSE);
 
-    msg_format(_("%s‚Í‚ ‚È‚½‚Ì‘Ì—Í‚ð’D‚Á‚½...", "The %s drains your vitality..."), name);
-    take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("R”»‚Ì•óÎ", "the Jewel of Judgement"), -1);
+    msg_format(_("%sã¯ã‚ãªãŸã®ä½“åŠ›ã‚’å¥ªã£ãŸ...", "The %s drains your vitality..."), name);
+    take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("å¯©åˆ¤ã®å®çŸ³", "the Jewel of Judgement"), -1);
 
     (void)detect_traps(user_ptr, DETECT_RAD_DEFAULT, TRUE);
     (void)detect_doors(user_ptr, DETECT_RAD_DEFAULT);
     (void)detect_stairs(user_ptr, DETECT_RAD_DEFAULT);
 
-    if (get_check(_("‹AŠÒ‚Ì—Í‚ðŽg‚¢‚Ü‚·‚©H", "Activate recall? ")))
+    if (get_check(_("å¸°é‚„ã®åŠ›ã‚’ä½¿ã„ã¾ã™ã‹ï¼Ÿ", "Activate recall? ")))
         (void)recall_player(user_ptr, randint0(21) + 15);
 
     return TRUE;
@@ -135,7 +137,7 @@ bool activate_telekinesis(player_type *user_ptr, concptr name)
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
-    msg_format(_("%s‚ðL‚Î‚µ‚½B", "You stretched your %s."), name);
+    msg_format(_("%sã‚’ä¼¸ã°ã—ãŸã€‚", "You stretched your %s."), name);
     fetch_item(user_ptr, dir, 500, TRUE);
     return TRUE;
 }
@@ -144,7 +146,7 @@ bool activate_unique_detection(player_type *user_ptr)
 {
     monster_type *m_ptr;
     monster_race *r_ptr;
-    msg_print(_("Šï–­‚ÈêŠ‚ª“ª‚Ì’†‚É•‚‚©‚ñ‚¾DDD", "Some strange places show up in your mind. And you see ..."));
+    msg_print(_("å¥‡å¦™ãªå ´æ‰€ãŒé ­ã®ä¸­ã«æµ®ã‹ã‚“ã ï¼Žï¼Žï¼Ž", "Some strange places show up in your mind. And you see ..."));
     for (int i = user_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         m_ptr = &user_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
@@ -152,7 +154,10 @@ bool activate_unique_detection(player_type *user_ptr)
 
         r_ptr = &r_info[m_ptr->r_idx];
         if (r_ptr->flags1 & RF1_UNIQUE)
-            msg_format(_("%sD ", "%s. "), r_name + r_ptr->name);
+            msg_format(_("%sï¼Ž ", "%s. "), r_name + r_ptr->name);
+
+        if (m_ptr->r_idx == MON_DIO)
+            msg_print(_("ãã•ã¾ï¼ã€€è¦‹ã¦ã„ã‚‹ãªãƒƒï¼", "You bastard!, You're watching me, well watch this!"));
     }
 
     return TRUE;
@@ -160,7 +165,7 @@ bool activate_unique_detection(player_type *user_ptr)
 
 bool activate_dispel_curse(player_type *user_ptr, concptr name)
 {
-    msg_format(_("%s‚ª^ŽÀ‚ðÆ‚ç‚µo‚·...", "The %s exhibits the truth..."), name);
+    msg_format(_("%sãŒçœŸå®Ÿã‚’ç…§ã‚‰ã—å‡ºã™...", "The %s exhibits the truth..."), name);
     (void)remove_all_curse(user_ptr);
     (void)probing(user_ptr);
     return TRUE;
@@ -175,28 +180,28 @@ bool activate_cure_lw(player_type *user_ptr)
 
 bool activate_grand_cross(player_type *user_ptr)
 {
-    msg_print(_("uˆÅ‚ÉŠÒ‚êIv", "You say, 'Return to darkness!'"));
+    msg_print(_("ã€Œé—‡ã«é‚„ã‚Œï¼ã€", "You say, 'Return to darkness!'"));
     (void)project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
     return TRUE;
 }
 
 bool activate_call_chaos(player_type *user_ptr)
 {
-    msg_print(_("—lX‚ÈF‚Ì‰Î‰Ô‚ð”­‚µ‚Ä‚¢‚é...", "It glows in scintillating colours..."));
+    msg_print(_("æ§˜ã€…ãªè‰²ã®ç«èŠ±ã‚’ç™ºã—ã¦ã„ã‚‹...", "It glows in scintillating colours..."));
     call_chaos(user_ptr);
     return TRUE;
 }
 
 bool activate_dispel_evil(player_type *user_ptr)
 {
-    msg_print(_("_¹‚È•µˆÍ‹C‚ª[–ž‚µ‚½...", "It floods the area with goodness..."));
+    msg_print(_("ç¥žè–ãªé›°å›²æ°—ãŒå……æº€ã—ãŸ...", "It floods the area with goodness..."));
     dispel_evil(user_ptr, user_ptr->lev * 5);
     return TRUE;
 }
 
 bool activate_dispel_good(player_type *user_ptr)
 {
-    msg_print(_("Ž×ˆ«‚È•µˆÍ‹C‚ª[–ž‚µ‚½...", "It floods the area with evil..."));
+    msg_print(_("é‚ªæ‚ªãªé›°å›²æ°—ãŒå……æº€ã—ãŸ...", "It floods the area with evil..."));
     dispel_good(user_ptr, user_ptr->lev * 5);
     return TRUE;
 }
@@ -210,15 +215,15 @@ bool activate_all_monsters_detection(player_type *user_ptr)
 
 bool activate_all_detection(player_type *user_ptr)
 {
-    msg_print(_("”’‚­–¾‚é‚­‹P‚¢‚Ä‚¢‚é...", "It glows bright white..."));
-    msg_print(_("S‚ÉƒCƒ[ƒW‚ª•‚‚©‚ñ‚Å‚«‚½...", "An image forms in your mind..."));
+    msg_print(_("ç™½ãæ˜Žã‚‹ãè¼ã„ã¦ã„ã‚‹...", "It glows bright white..."));
+    msg_print(_("å¿ƒã«ã‚¤ãƒ¡ãƒ¼ã‚¸ãŒæµ®ã‹ã‚“ã§ããŸ...", "An image forms in your mind..."));
     detect_all(user_ptr, DETECT_RAD_DEFAULT);
     return TRUE;
 }
 
 bool activate_extra_detection(player_type *user_ptr)
 {
-    msg_print(_("–¾‚é‚­‹P‚¢‚Ä‚¢‚é...", "It glows brightly..."));
+    msg_print(_("æ˜Žã‚‹ãè¼ã„ã¦ã„ã‚‹...", "It glows brightly..."));
     detect_all(user_ptr, DETECT_RAD_DEFAULT);
     probing(user_ptr);
     identify_fully(user_ptr, FALSE, 0);
@@ -227,29 +232,29 @@ bool activate_extra_detection(player_type *user_ptr)
 
 bool activate_fully_identification(player_type *user_ptr)
 {
-    msg_print(_("‰©F‚­‹P‚¢‚Ä‚¢‚é...", "It glows yellow..."));
+    msg_print(_("é»„è‰²ãè¼ã„ã¦ã„ã‚‹...", "It glows yellow..."));
     identify_fully(user_ptr, FALSE, 0);
     return TRUE;
 }
 
 /*!
- * @brief switch_activation() ‚©‚çŒÂX‚ÌƒXƒyƒ‹‚Ö‚ÌˆË‘¶«‚ð‚È‚­‚·‚½‚ß‚ÌƒVƒ“ƒ^ƒbƒNƒXƒVƒ…ƒK[
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @return ”­“®‚É¬Œ÷‚µ‚½‚çTRUE
+ * @brief switch_activation() ã‹ã‚‰å€‹ã€…ã®ã‚¹ãƒšãƒ«ã¸ã®ä¾å­˜æ€§ã‚’ãªãã™ãŸã‚ã®ã‚·ãƒ³ã‚¿ãƒƒã‚¯ã‚¹ã‚·ãƒ¥ã‚¬ãƒ¼
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ç™ºå‹•ã«æˆåŠŸã—ãŸã‚‰TRUE
  */
 bool activate_identification(player_type *user_ptr) { return ident_spell(user_ptr, FALSE, 0); }
 
 bool activate_pesticide(player_type *user_ptr)
 {
-    msg_print(_("‚ ‚È‚½‚ÍŠQ’Ž‚ðˆê‘|‚µ‚½B", "You exterminate small life."));
+    msg_print(_("ã‚ãªãŸã¯å®³è™«ã‚’ä¸€æŽƒã—ãŸã€‚", "You exterminate small life."));
     (void)dispel_monsters(user_ptr, 4);
     return TRUE;
 }
 
 /*!
- * @brief switch_activation() ‚©‚çŒÂX‚ÌƒXƒyƒ‹‚Ö‚ÌˆË‘¶«‚ð‚È‚­‚·‚½‚ß‚ÌƒVƒ“ƒ^ƒbƒNƒXƒVƒ…ƒK[
- * @param user_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @return ”­“®‚É¬Œ÷‚µ‚½‚çTRUE
+ * @brief switch_activation() ã‹ã‚‰å€‹ã€…ã®ã‚¹ãƒšãƒ«ã¸ã®ä¾å­˜æ€§ã‚’ãªãã™ãŸã‚ã®ã‚·ãƒ³ã‚¿ãƒƒã‚¯ã‚¹ã‚·ãƒ¥ã‚¬ãƒ¼
+ * @param user_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ç™ºå‹•ã«æˆåŠŸã—ãŸã‚‰TRUE
  */
 bool activate_whirlwind(player_type *user_ptr)
 {
@@ -259,7 +264,7 @@ bool activate_whirlwind(player_type *user_ptr)
 
 bool activate_blinding_light(player_type *user_ptr, concptr name)
 {
-    msg_format(_("%s‚ªá¿‚µ‚¢Œõ‚Å‹P‚¢‚½...", "The %s gleams with blinding light..."), name);
+    msg_format(_("%sãŒçœ©ã—ã„å…‰ã§è¼ã„ãŸ...", "The %s gleams with blinding light..."), name);
     (void)fire_ball(user_ptr, GF_LITE, 0, 300, 6);
     confuse_monsters(user_ptr, 3 * user_ptr->lev / 2);
     return TRUE;
@@ -267,14 +272,14 @@ bool activate_blinding_light(player_type *user_ptr, concptr name)
 
 bool activate_sleep(player_type *user_ptr)
 {
-    msg_print(_("[ÂF‚É‹P‚¢‚Ä‚¢‚é...", "It glows deep blue..."));
+    msg_print(_("æ·±é’è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows deep blue..."));
     sleep_monsters_touch(user_ptr);
     return TRUE;
 }
 
 bool activate_door_destroy(player_type *user_ptr)
 {
-    msg_print(_("–¾‚é‚¢ÔF‚É‹P‚¢‚Ä‚¢‚é...", "It glows bright red..."));
+    msg_print(_("æ˜Žã‚‹ã„èµ¤è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows bright red..."));
     destroy_doors_touch(user_ptr);
     return TRUE;
 }
@@ -293,13 +298,13 @@ bool activate_recharge(player_type *user_ptr)
 
 bool activate_recharge_extra(player_type *user_ptr, concptr name)
 {
-    msg_format(_("%s‚ª”’‚­‹P‚¢‚½DDD", "The %s gleams with blinding light..."), name);
+    msg_format(_("%sãŒç™½ãè¼ã„ãŸï¼Žï¼Žï¼Ž", "The %s gleams with blinding light..."), name);
     return recharge(user_ptr, 1000);
 }
 
 bool activate_shikofumi(player_type *user_ptr)
 {
-    msg_print(_("—Í‹­‚­ŽlŒÒ‚ð“¥‚ñ‚¾B", "You stamp. (as if you are in a ring.)"));
+    msg_print(_("åŠ›å¼·ãå››è‚¡ã‚’è¸ã‚“ã ã€‚", "You stamp. (as if you are in a ring.)"));
     (void)set_afraid(user_ptr, 0);
     (void)set_hero(user_ptr, randint1(20) + 20, FALSE);
     (void)dispel_evil(user_ptr, user_ptr->lev * 3);
@@ -314,7 +319,7 @@ bool activate_terror(player_type *user_ptr)
 
 bool activate_map_light(player_type *user_ptr)
 {
-    msg_print(_("á¿‚µ‚­‹P‚¢‚½...", "It shines brightly..."));
+    msg_print(_("çœ©ã—ãè¼ã„ãŸ...", "It shines brightly..."));
     map_area(user_ptr, DETECT_RAD_MAP);
     lite_area(user_ptr, damroll(2, 15), 3);
     return TRUE;
@@ -322,27 +327,42 @@ bool activate_map_light(player_type *user_ptr)
 
 bool activate_exploding_rune(player_type *user_ptr)
 {
-    msg_print(_("–¾‚é‚¢ÔF‚É‹P‚¢‚Ä‚¢‚é...", "It glows bright red..."));
+    msg_print(_("æ˜Žã‚‹ã„èµ¤è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows bright red..."));
     explosive_rune(user_ptr, user_ptr->y, user_ptr->x);
     return TRUE;
 }
 
 bool activate_protection_rune(player_type *user_ptr)
 {
-    msg_print(_("ƒuƒ‹[‚É–¾‚é‚­‹P‚¢‚Ä‚¢‚é...", "It glows light blue..."));
+    msg_print(_("ãƒ–ãƒ«ãƒ¼ã«æ˜Žã‚‹ãè¼ã„ã¦ã„ã‚‹...", "It glows light blue..."));
     warding_glyph(user_ptr);
     return TRUE;
 }
 
 bool activate_light(player_type *user_ptr, concptr name)
 {
-    msg_format(_("%s‚©‚çŸ‚ñ‚¾Œõ‚ª‚ ‚Ó‚êo‚½...", "The %s wells with clear light..."), name);
-    lite_area(user_ptr, damroll(2, 15), 3);
+    msg_format(_("%sã‹ã‚‰æ¾„ã‚“ã å…‰ãŒã‚ãµã‚Œå‡ºãŸ...", "The %s wells with clear light..."), name);
+    (void)lite_area(user_ptr, damroll(2, 15), 3);
     return TRUE;
 }
 
 bool activate_recall(player_type *user_ptr)
 {
-    msg_print(_("‚â‚í‚ç‚©‚È”’F‚É‹P‚¢‚Ä‚¢‚é...", "It glows soft white..."));
+    msg_print(_("ã‚„ã‚ã‚‰ã‹ãªç™½è‰²ã«è¼ã„ã¦ã„ã‚‹...", "It glows soft white..."));
     return recall_player(user_ptr, randint0(21) + 15);
+}
+
+bool activate_tree_creation(player_type *user_ptr, object_type *o_ptr, concptr name)
+{
+    msg_format(_("%s%sã‹ã‚‰æ˜Žã‚‹ã„ç·‘ã®å…‰ãŒã‚ãµã‚Œå‡ºãŸ...", "The %s%s wells with clear light..."), name, quark_str(o_ptr->art_name));
+    return tree_creation(user_ptr, user_ptr->y, user_ptr->x);
+}
+
+bool activate_animate_dead(player_type *user_ptr, object_type *o_ptr)
+{
+    msg_print(_("é»„é‡‘è‰²ã®å…‰ãŒæº¢ã‚Œå‡ºãŸ...", "It emitted a golden light..."));
+    if (o_ptr->name1 > 0)
+        msg_print(_("ã´ã´ã‚‹ã´ã‚‹ã´ã‚‹ã´ã´ã‚‹ã´ï½žâ™ª", "Pipiru piru piru pipiru pii"));
+
+    return animate_dead(user_ptr, 0, user_ptr->y, user_ptr->x);
 }

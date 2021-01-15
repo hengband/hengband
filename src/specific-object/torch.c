@@ -75,13 +75,16 @@ void calc_lite_radius(player_type *creature_ptr)
     for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        object_flags(creature_ptr, o_ptr, flgs);
+
         if (!o_ptr->k_idx)
             continue;
 
         if (o_ptr->name2 == EGO_LITE_SHINE)
             creature_ptr->cur_lite++;
 
-        if (o_ptr->name2 != EGO_LITE_DARKNESS) {
+        if (has_flag(flgs, TR_DARK_SOURCE)) {
             if (o_ptr->tval == TV_LITE) {
                 if ((o_ptr->sval == SV_LITE_TORCH) && !(o_ptr->xtra4 > 0))
                     continue;
@@ -91,17 +94,15 @@ void calc_lite_radius(player_type *creature_ptr)
             }
         }
 
-        BIT_FLAGS flgs[TR_FLAG_SIZE];
-        object_flags(creature_ptr, o_ptr, flgs);
 
         POSITION rad = 0;
-        if (has_flag(flgs, TR_LITE_1) && o_ptr->name2 != EGO_LITE_DARKNESS)
+        if (has_flag(flgs, TR_LITE_1) && !has_flag(flgs, TR_DARK_SOURCE))
             rad += 1;
 
-        if (has_flag(flgs, TR_LITE_2) && o_ptr->name2 != EGO_LITE_DARKNESS)
+        if (has_flag(flgs, TR_LITE_2) && !has_flag(flgs, TR_DARK_SOURCE))
             rad += 2;
 
-        if (has_flag(flgs, TR_LITE_3) && o_ptr->name2 != EGO_LITE_DARKNESS)
+        if (has_flag(flgs, TR_LITE_3) && !has_flag(flgs, TR_DARK_SOURCE))
             rad += 3;
 
         if (has_flag(flgs, TR_LITE_M1))

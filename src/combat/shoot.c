@@ -1,5 +1,5 @@
 ﻿#include "combat/shoot.h"
-#include "art-definition/art-bow-types.h"
+#include "artifact/fixed-art-types.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -49,8 +49,8 @@
 #include "player/player-class.h"
 #include "player/player-personalities-types.h"
 #include "player/player-skill.h"
-#include "player/player-status.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
@@ -514,7 +514,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             if (snipe_type == SP_KILL_WALL) {
                 g_ptr = &shooter_ptr->current_floor_ptr->grid_array[ny][nx];
 
-                if (cave_have_flag_grid(g_ptr, FF_HURT_ROCK) && !g_ptr->m_idx) {
+                if (cave_has_flag_grid(g_ptr, FF_HURT_ROCK) && !g_ptr->m_idx) {
                     if (g_ptr->info & (CAVE_MARK))
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
                     /* Forget the wall */
@@ -530,7 +530,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             }
 
             /* Stopped by walls/doors */
-            if (!cave_have_flag_bold(shooter_ptr->current_floor_ptr, ny, nx, FF_PROJECT) && !shooter_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
+            if (!cave_has_flag_bold(shooter_ptr->current_floor_ptr, ny, nx, FF_PROJECT) && !shooter_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
                 break;
 
             /* Advance the distance */
@@ -832,7 +832,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
             /* Carry object */
             m_ptr->hold_o_idx = o_idx;
-        } else if (cave_have_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
+        } else if (cave_has_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(shooter_ptr, q_ptr, j, y, x);
         } else {

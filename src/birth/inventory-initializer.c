@@ -65,7 +65,6 @@ void wield_all(player_type *creature_ptr)
 
         o_ptr = &creature_ptr->inventory_list[slot];
         object_copy(o_ptr, i_ptr);
-        creature_ptr->total_weight += i_ptr->weight;
         creature_ptr->equip_cnt++;
     }
 }

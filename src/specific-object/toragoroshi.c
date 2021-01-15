@@ -1,11 +1,11 @@
-#include "specific-object/toragoroshi.h"
+ï»¿#include "specific-object/toragoroshi.h"
 #include "player-attack/player-attack.h"
 #include "view/display-messages.h"
 
 bool activate_toragoroshi(player_type *user_ptr)
 {
-    msg_print(_("‚ ‚È‚½‚Í—d“‚É–£“ü‚ç‚ê‚½c", "You are enchanted by cursed blade..."));
-    msg_print(_("u‹¶‚Ù‚µ‚­ ŒŒ‚Ì‚²‚Æ‚« Œ‚Í‚Ì‚Ú‚ê‚è ”é‚ß‚¨‚«‚µ –‚Œ• ‚¢‚¸‚±‚¼‚âv", "'Behold the blade arts.'"));
+    msg_print(_("ã‚ãªãŸã¯å¦–åˆ€ã«é­…å…¥ã‚‰ã‚ŒãŸâ€¦", "You are enchanted by cursed blade..."));
+    msg_print(_("ã€Œç‹‚ã»ã—ã è¡€ã®ã”ã¨ã æœˆã¯ã®ã¼ã‚Œã‚Š ç§˜ã‚ãŠãã— é­”å‰£ ã„ãšã“ãã‚„ã€", "'Behold the blade arts.'"));
     massacre(user_ptr);
     return TRUE;
 }

@@ -88,7 +88,7 @@ F:f:FLOOR:12:577
 F:g:FLOOR:12:607
 
 # Floor + monastic lich 
-F:h:FLOOR:12:611
+F:h:FLOOR:12:1176
 
 # Floor + nether wraith 
 F:i:FLOOR:12:612
@@ -100,7 +100,7 @@ F:j:FLOOR:12:623
 F:k:FLOOR:12:658
 
 # Floor + iron lich 
-F:l:FLOOR:12:666
+F:l:FLOOR:12:1181
 
 # Floor + dread 
 F:m:FLOOR:12:667

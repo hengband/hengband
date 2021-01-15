@@ -52,7 +52,6 @@ void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
         return;
 
     o_ptr->number += num;
-    owner_ptr->total_weight += (num * o_ptr->weight);
     owner_ptr->update |= (PU_BONUS);
     owner_ptr->update |= (PU_MANA);
     owner_ptr->update |= (PU_COMBINE);
@@ -302,7 +301,6 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
         if (object_similar(j_ptr, o_ptr)) {
             object_absorb(j_ptr, o_ptr);
 
-            owner_ptr->total_weight += (o_ptr->number * o_ptr->weight);
             owner_ptr->update |= (PU_BONUS);
             owner_ptr->window |= (PW_INVEN);
             return (j);
@@ -341,7 +339,6 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
     j_ptr->iy = j_ptr->ix = 0;
     j_ptr->marked = OM_TOUCHED;
 
-    owner_ptr->total_weight += (j_ptr->number * j_ptr->weight);
     owner_ptr->inven_cnt++;
     owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
     owner_ptr->window |= (PW_INVEN);

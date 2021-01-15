@@ -41,6 +41,12 @@ static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
         msg_print(_("セーブ失敗！", "death save failed!"));
 }
 
+
+/*!
+ * @brief ゲームクローズ時、プレイヤーが死亡しているかのチェックを行い死亡していないならば、確認キー入力とスコア表示、現フロアの初期化を行う。
+ * @param player_ptr プレイヤー構造体参照ポインタ。
+ * @return 死亡していればTRUE, まだ生きているならば各処理を済ませた上ででFALSE。
+ */
 static bool check_death(player_type *player_ptr)
 {
     if (player_ptr->is_dead)

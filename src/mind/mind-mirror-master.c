@@ -515,7 +515,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
             break;
         }
 
-        reserve_alter_reality(caster_ptr);
+        reserve_alter_reality(caster_ptr, randint0(21) + 15);
         break;
     case MIRROR_TUNNEL:
         msg_print(_("鏡の世界を通り抜け…  ", "You try to enter the mirror..."));

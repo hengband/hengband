@@ -20,7 +20,7 @@
 static void describe_monster_ball(flavor_type *flavor_ptr)
 {
     monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
-    if (flavor_ptr->known)
+    if (!flavor_ptr->known)
         return;
 
     if (!flavor_ptr->o_ptr->pval) {
@@ -307,6 +307,9 @@ static void describe_book_hex(flavor_type *flavor_ptr)
 void switch_tval_description(flavor_type *flavor_ptr)
 {
     switch (flavor_ptr->o_ptr->tval) {
+    case TV_NONE:
+        flavor_ptr->basenm = _("(なし)", "(Nothing)");
+        break;
     case TV_SKELETON:
     case TV_BOTTLE:
     case TV_JUNK:

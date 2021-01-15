@@ -23,6 +23,7 @@
 #include "mspell/mspell-mask-definitions.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "player/player-status-flags.h"
 
  /*!
   * @brief モンスターがプレイヤーから逃走するかどうかを返す /
@@ -112,7 +113,7 @@ static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx,
 		grid_type *g_ptr;
 		g_ptr = &floor_ptr->grid_array[y][x];
 		int cost = g_ptr->cost;
-		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding))))
+		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr))) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding))))
 		{
 			if (cost == 0) continue;
 			if (!can_open_door && is_closed_door(target_ptr, g_ptr->feat)) continue;
@@ -178,7 +179,7 @@ static void sweep_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSIT
 	}
 
 	if (no_flow) return;
-	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) return;
+	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr))) return;
 	if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)) return;
 
 	POSITION y1 = m_ptr->fy;
@@ -314,7 +315,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 	bool will_run = mon_will_run(target_ptr, m_idx);
 	grid_type *g_ptr;
 	bool no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) != 0) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].cost > 2);
-	bool can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) != 0) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall);
+	bool can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) != 0) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr));
 
 	if (!will_run && m_ptr->target_y)
 	{

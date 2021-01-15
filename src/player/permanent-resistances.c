@@ -15,6 +15,7 @@
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @return なし
+ * @todo 最終的にplayer-status系列と統合する
  */
 static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
@@ -70,8 +71,8 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		}
 		else
 		{
-			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || have_right_hand_weapon(creature_ptr)) &&
-				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || have_left_hand_weapon(creature_ptr)))
+			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || has_right_hand_weapon(creature_ptr)) &&
+				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || has_left_hand_weapon(creature_ptr)))
 				add_flag(flags, TR_SPEED);
 			if (creature_ptr->lev > 24)
 				add_flag(flags, TR_FREE_ACT);
@@ -137,6 +138,7 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @return なし
+ * @todo 最終的にplayer-status系列と統合する
  */
 static void add_mimic_form_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
@@ -190,9 +192,15 @@ static void add_mimic_form_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @return なし
+ * @todo 最終的にplayer-status系列と統合する
  */
 static void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
+    /* Common for all races */
+    if (rp_ptr->infra > 0)
+        add_flag(flags, TR_INFRA);
+
+	/* Unique for each race */
 	switch (creature_ptr->prace)
 	{
 	case RACE_ELF:
@@ -467,6 +475,7 @@ static void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @return なし
+ * @todo 最終的にplayer-status系列と統合する
  */
 static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
@@ -504,6 +513,7 @@ static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @return なし
+ * @todo 最終的にplayer-status系列と統合する
  */
 static void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
@@ -528,6 +538,7 @@ static void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @brief 剣術家の型による耐性フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
+ * @todo 最終的にplayer-status系列と統合する
  * @return なし
  */
 static void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
@@ -593,8 +604,7 @@ static void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @return なし
  * @details
  * Obtain the "flags" for the player as if he was an item
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
+ * @todo 最終的にplayer-status系列と統合する
  */
 void player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {

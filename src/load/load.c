@@ -261,9 +261,10 @@ static errr rd_savefile(player_type *player_ptr)
  * @brief セーブデータ読み込みのメインルーチン /
  * Attempt to Load a "savefile"
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return 成功すればtrue
+ * @param new_game セーブデータの新規作成が必要か否か
+ * @return セーブデータが読み込めればtrue
  */
-bool load_savedata(player_type *player_ptr)
+bool load_savedata(player_type *player_ptr, bool *new_game)
 {
     concptr what = "generic";
     current_world_ptr->game_turn = 0;
@@ -275,6 +276,7 @@ bool load_savedata(player_type *player_ptr)
     if (access(savefile, 0) < 0) {
         msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
         msg_print(NULL);
+        *new_game = TRUE;
         return TRUE;
     }
 #endif
@@ -320,47 +322,48 @@ bool load_savedata(player_type *player_ptr)
             what = _("セーブファイルが壊れています", "Broken savefile");
     }
 
-    if (!err) {
-        if ((FAKE_VER_MAJOR != current_world_ptr->z_major) || (FAKE_VER_MINOR != current_world_ptr->z_minor)
-            || (FAKE_VER_PATCH != current_world_ptr->z_patch)) {
-            if (current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6) {
-                msg_print(_("バージョン 2.0.* 用のセーブファイルを変換しました。", "Converted a 2.0.* savefile."));
-            } else {
-                msg_format(_("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。", "Converted a %d.%d.%d savefile."),
-                    (current_world_ptr->z_major > 9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor,
-                    current_world_ptr->z_patch);
-            }
+    if (err) {
+        msg_format(_("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d savefile."), what,
+            (current_world_ptr->z_major > 9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor,
+            current_world_ptr->z_patch);
 
-            msg_print(NULL);
+        msg_print(NULL);
+        return FALSE;
+    }
+
+    /* todo v3.2.0 で削除予定 */
+    if ((FAKE_VER_MAJOR != current_world_ptr->z_major) || (FAKE_VER_MINOR != current_world_ptr->z_minor) || (FAKE_VER_PATCH != current_world_ptr->z_patch)) {
+        if (current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6) {
+            msg_print(_("バージョン 2.0.* 用のセーブファイルを変換しました。", "Converted a 2.0.* savefile."));
+        } else {
+            msg_format(_("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。", "Converted a %d.%d.%d savefile."),
+                (current_world_ptr->z_major > 9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor,
+                current_world_ptr->z_patch);
         }
 
-        if (player_ptr->is_dead) {
-            if (arg_wizard) {
-                current_world_ptr->character_loaded = TRUE;
-                return TRUE;
-            }
+        msg_print(NULL);
+    }
 
-            player_ptr->is_dead = FALSE;
-            current_world_ptr->sf_lives++;
+    if (player_ptr->is_dead) {
+        *new_game = TRUE;
+        if (arg_wizard) {
+            current_world_ptr->character_loaded = TRUE;
             return TRUE;
         }
 
-        current_world_ptr->character_loaded = TRUE;
-        u32b tmp = counts_read(player_ptr, 2);
-        if (tmp > player_ptr->count)
-            player_ptr->count = tmp;
-
-        if (counts_read(player_ptr, 0) > current_world_ptr->play_time || counts_read(player_ptr, 1) == current_world_ptr->play_time)
-            counts_write(player_ptr, 2, ++player_ptr->count);
-
-        counts_write(player_ptr, 1, current_world_ptr->play_time);
+        player_ptr->is_dead = FALSE;
+        current_world_ptr->sf_lives++;
         return TRUE;
     }
 
-    msg_format(_("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d savefile."), what,
-        (current_world_ptr->z_major > 9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor,
-        current_world_ptr->z_patch);
+    current_world_ptr->character_loaded = TRUE;
+    u32b tmp = counts_read(player_ptr, 2);
+    if (tmp > player_ptr->count)
+        player_ptr->count = tmp;
 
-    msg_print(NULL);
-    return FALSE;
+    if (counts_read(player_ptr, 0) > current_world_ptr->play_time || counts_read(player_ptr, 1) == current_world_ptr->play_time)
+        counts_write(player_ptr, 2, ++player_ptr->count);
+
+    counts_write(player_ptr, 1, current_world_ptr->play_time);
+    return TRUE;
 }

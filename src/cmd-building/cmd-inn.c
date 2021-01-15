@@ -4,6 +4,7 @@
 #include "game-option/birth-options.h"
 #include "io/write-diary.h"
 #include "market/building-actions-table.h"
+#include "market/bounty.h"
 #include "status/bad-status-setter.h"
 #include "player/digestion-processor.h"
 #include "player/eldritch-horror.h"
@@ -103,7 +104,7 @@ static void pass_game_turn_by_stay(void)
  * @param customer_ptr プレーヤーへの参照ポインタ
  * @return 悪夢モードならばTRUE
  */
-static bool have_a_nightmare(player_type *customer_ptr)
+static bool has_a_nightmare(player_type *customer_ptr)
 {
 	if (!ironman_nightmare) return FALSE;
 
@@ -202,11 +203,13 @@ static bool stay_inn(player_type *customer_ptr)
 	pass_game_turn_by_stay();
 	prevent_turn_overflow(customer_ptr);
 
-	if ((prev_hour >= 18) && (prev_hour <= 23))
+	if ((prev_hour >= 18) && (prev_hour <= 23)) {
+		determine_daily_bounty(customer_ptr, FALSE); /* Update daily bounty */
 		exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
+	}
 
 	customer_ptr->chp = customer_ptr->mhp;
-	if (have_a_nightmare(customer_ptr)) return TRUE;
+	if (has_a_nightmare(customer_ptr)) return TRUE;
 
 	back_to_health(customer_ptr);
 	charge_magic_eating_energy(customer_ptr);

@@ -1,4 +1,4 @@
-#include "target/projection-path-calculator.h"
+ï»¿#include "target/projection-path-calculator.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
@@ -30,9 +30,9 @@ typedef struct projection_path_type {
 
 /*
  * @brief Convert a "location" (Y, X) into a "grid" (G)
- * @param y YÀ•W
- * @param x XÀ•W
- * return Œo˜HÀ•W
+ * @param y Yåº§æ¨™
+ * @param x Xåº§æ¨™
+ * return çµŒè·¯åº§æ¨™
  */
 static u16b location_to_grid(POSITION y, POSITION x) { return 256 * y + x; }
 
@@ -106,7 +106,7 @@ static void calc_projection_to_target(player_type *player_ptr, projection_path_t
             if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
         } else if (!(pp_ptr->flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_have_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
+            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
                 break;
         }
 
@@ -182,7 +182,7 @@ static void calc_projection_others(player_type *player_ptr, projection_path_type
             if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
         } else if (!(pp_ptr->flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_have_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
+            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
                 break;
         }
 
@@ -199,17 +199,17 @@ static void calc_projection_others(player_type *player_ptr, projection_path_type
 }
 
 /*!
- * @brief n“_‚©‚çI“_‚Ö‚Ì’¼üŒo˜H‚ğ•Ô‚· /
+ * @brief å§‹ç‚¹ã‹ã‚‰çµ‚ç‚¹ã¸ã®ç›´ç·šçµŒè·¯ã‚’è¿”ã™ /
  * Determine the path taken by a projection.
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param gp Œo˜HÀ•WƒŠƒXƒg‚ğ•Ô‚·QÆƒ|ƒCƒ“ƒ^
- * @param range ‹——£
- * @param y1 n“_YÀ•W
- * @param x1 n“_XÀ•W
- * @param y2 I“_YÀ•W
- * @param x2 I“_XÀ•W
- * @param flag ƒtƒ‰ƒOID
- * @return ƒŠƒXƒg‚Ì’·‚³
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param gp çµŒè·¯åº§æ¨™ãƒªã‚¹ãƒˆã‚’è¿”ã™å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param range è·é›¢
+ * @param y1 å§‹ç‚¹Yåº§æ¨™
+ * @param x1 å§‹ç‚¹Xåº§æ¨™
+ * @param y2 çµ‚ç‚¹Yåº§æ¨™
+ * @param x2 çµ‚ç‚¹Xåº§æ¨™
+ * @param flag ãƒ•ãƒ©ã‚°ID
+ * @return ãƒªã‚¹ãƒˆã®é•·ã•
  */
 int projection_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
 {
@@ -258,9 +258,9 @@ bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
 }
 
 /*!
- * @briefƒvƒŒƒCƒ„[‚ÌUŒ‚Ë’ö(ƒ}ƒX) / Maximum range (spells, etc)
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return Ë’ö
+ * @briefãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒå°„ç¨‹(ãƒã‚¹) / Maximum range (spells, etc)
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return å°„ç¨‹
  */
 int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 36 : 18; }
 

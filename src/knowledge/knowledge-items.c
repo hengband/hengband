@@ -244,13 +244,13 @@ static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
     msg_print(NULL);
 }
 
-/*
- * Display known objects
+/**
+ * @brief Display known objects
  */
-void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_k_idx)
+void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool visual_only, KIND_OBJECT_IDX direct_k_idx)
 {
-    IDX object_old, object_top;
-    IDX grp_idx[100];
+    KIND_OBJECT_IDX object_old, object_top;
+    KIND_OBJECT_IDX grp_idx[100];
     int object_cnt;
     OBJECT_IDX *object_idx;
 

@@ -17,6 +17,7 @@
 #include "spell/range-calc.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "player/player-status-flags.h"
 
 /*!
  * @brief ペットが敵に接近するための方向を決定する
@@ -75,7 +76,7 @@ static void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX 
 		if (decide_pet_approch_direction(target_ptr, m_ptr, t_ptr)) continue;
 		if (!are_enemies(target_ptr, m_ptr, t_ptr)) continue;
 
-		if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) ||
+		if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr))) ||
 			((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)))
 		{
 			if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;

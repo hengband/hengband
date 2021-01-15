@@ -14,6 +14,7 @@
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
+#include "player/player-status-flags.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-charm.h"
@@ -157,7 +158,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
             if (cast) {
                 lite_area(caster_ptr, damroll(dice, sides), rad);
 
-                if ((is_specific_player_race(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !caster_ptr->resist_lite) {
+                if ((is_specific_player_race(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !has_resist_lite(caster_ptr)) {
                     msg_print(_("日の光があなたの肉体を焦がした！", "The daylight scorches your flesh!"));
                     take_hit(caster_ptr, DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"), -1);
                 }
@@ -622,7 +623,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
                 wiz_lite(caster_ptr, FALSE);
 
-                if ((is_specific_player_race(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !caster_ptr->resist_lite) {
+                if ((is_specific_player_race(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !has_resist_lite(caster_ptr)) {
                     msg_print(_("日光があなたの肉体を焦がした！", "The sunlight scorches your flesh!"));
                     take_hit(caster_ptr, DAMAGE_NOESCAPE, 50, _("日光", "sunlight"), -1);
                 }

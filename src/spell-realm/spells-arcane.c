@@ -1,4 +1,4 @@
-#include "spell-realm/spells-arcane.h"
+ï»¿#include "spell-realm/spells-arcane.h"
 #include "core/player-update-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "sv-definition/sv-lite-types.h"
@@ -6,9 +6,9 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief Žõ–½‚Â‚«ŒõŒ¹‚Ì”R‘f’Ç‰Áˆ— /
+ * @brief å¯¿å‘½ã¤ãå…‰æºã®ç‡ƒç´ è¿½åŠ å‡¦ç† /
  * Charge a lite (torch or latern)
- * @return ‚È‚µ
+ * @return ãªã—
  */
 void phlogiston(player_type *caster_ptr)
 {
@@ -19,20 +19,20 @@ void phlogiston(player_type *caster_ptr)
     else if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
         max_flog = FUEL_TORCH;
     else {
-        msg_print(_("”R‘f‚ðÁ”ï‚·‚éƒAƒCƒeƒ€‚ð‘•”õ‚µ‚Ä‚¢‚Ü‚¹‚ñB", "You are not wielding anything which uses phlogiston."));
+        msg_print(_("ç‡ƒç´ ã‚’æ¶ˆè²»ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’è£…å‚™ã—ã¦ã„ã¾ã›ã‚“ã€‚", "You are not wielding anything which uses phlogiston."));
         return;
     }
 
     if (o_ptr->xtra4 >= max_flog) {
-        msg_print(_("‚±‚ÌƒAƒCƒeƒ€‚É‚Í‚±‚êˆÈã”R‘f‚ð•â[‚Å‚«‚Ü‚¹‚ñB", "No more phlogiston can be put in this item."));
+        msg_print(_("ã“ã®ã‚¢ã‚¤ãƒ†ãƒ ã«ã¯ã“ã‚Œä»¥ä¸Šç‡ƒç´ ã‚’è£œå……ã§ãã¾ã›ã‚“ã€‚", "No more phlogiston can be put in this item."));
         return;
     }
 
     o_ptr->xtra4 += (XTRA16)(max_flog / 2);
-    msg_print(_("Æ–¾—pƒAƒCƒeƒ€‚É”R‘f‚ð•â[‚µ‚½B", "You add phlogiston to your light item."));
+    msg_print(_("ç…§æ˜Žç”¨ã‚¢ã‚¤ãƒ†ãƒ ã«ç‡ƒç´ ã‚’è£œå……ã—ãŸã€‚", "You add phlogiston to your light item."));
     if (o_ptr->xtra4 >= max_flog) {
         o_ptr->xtra4 = (XTRA16)max_flog;
-        msg_print(_("Æ–¾—pƒAƒCƒeƒ€‚Í–žƒ^ƒ“‚É‚È‚Á‚½B", "Your light item is full."));
+        msg_print(_("ç…§æ˜Žç”¨ã‚¢ã‚¤ãƒ†ãƒ ã¯æº€ã‚¿ãƒ³ã«ãªã£ãŸã€‚", "Your light item is full."));
     }
 
     caster_ptr->update |= PU_TORCH;

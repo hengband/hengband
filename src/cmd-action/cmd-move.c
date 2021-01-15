@@ -308,7 +308,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
         more = TRUE;
     }
 
-    if (creature_ptr->wild_mode && !cave_have_flag_bold(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, FF_TOWN)) {
+    if (creature_ptr->wild_mode && !cave_has_flag_bold(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, FF_TOWN)) {
         int tmp = 120 + creature_ptr->lev * 10 - wilderness[creature_ptr->y][creature_ptr->x].level + 5;
         if (tmp < 1)
             tmp = 1;

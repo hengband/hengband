@@ -29,6 +29,7 @@
 #include "monster/monster-update.h"
 #include "perception/object-perception.h"
 #include "player/attack-defense-types.h"
+#include "player/player-status-flags.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-floor.h"
 #include "spell/spell-types.h"
@@ -277,23 +278,23 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
             return TRUE;
         break;
     case TRAP_FIRE:
-        if (creature_ptr->immune_fire)
+        if (has_immune_fire(creature_ptr))
             return TRUE;
         break;
     case TRAP_ACID:
-        if (creature_ptr->immune_acid)
+        if (has_immune_acid(creature_ptr))
             return TRUE;
         break;
     case TRAP_BLIND:
-        if (creature_ptr->resist_blind)
+        if (has_resist_blind(creature_ptr))
             return TRUE;
         break;
     case TRAP_CONFUSE:
-        if (creature_ptr->resist_conf)
+        if (has_resist_conf(creature_ptr))
             return TRUE;
         break;
     case TRAP_POISON:
-        if (creature_ptr->resist_pois)
+        if (has_resist_pois(creature_ptr))
             return TRUE;
         break;
     case TRAP_SLEEP:

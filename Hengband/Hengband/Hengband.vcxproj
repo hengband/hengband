@@ -79,7 +79,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\src\cmd;..\..\src\combat;..\..\src;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">
     <IncludePath>..\..\src\cmd;..\..\src\combat;..\..\src;$(IncludePath)</IncludePath>
@@ -99,6 +99,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <DisableSpecificWarnings>4061;4062;4127;4244;4255;4668;4710;4820;4996;4774;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -116,13 +117,14 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WINDOWS;SJIS;_CRT_SECURE_NO_WARNINGS;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
       <DisableSpecificWarnings>4127;4996;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -142,6 +144,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4244;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -214,7 +217,6 @@
     <ClCompile Include="..\..\src\core\asking-player.c" />
     <ClCompile Include="..\..\src\core\disturbance.c" />
     <ClCompile Include="..\..\src\core\object-compressor.c" />
-    <ClCompile Include="..\..\src\core\status-reseter.c" />
     <ClCompile Include="..\..\src\core\visuals-reseter.c" />
     <ClCompile Include="..\..\src\core\window-redrawer.c" />
     <ClCompile Include="..\..\src\dungeon\quest-completion-checker.c" />
@@ -305,6 +307,7 @@
     <ClCompile Include="..\..\src\mind\mind-power-getter.c" />
     <ClCompile Include="..\..\src\mind\mind-priest.c" />
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.c" />
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-death-util.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite.c" />
@@ -338,6 +341,7 @@
     <ClCompile Include="..\..\src\player-info\resistance-info.c" />
     <ClCompile Include="..\..\src\player-info\self-info-util.c" />
     <ClCompile Include="..\..\src\player-info\weapon-effect-info.c" />
+    <ClCompile Include="..\..\src\player\player-status-resist.c" />
     <ClCompile Include="..\..\src\room\vault-builder.c" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.c" />
     <ClCompile Include="..\..\src\specific-object\monster-ball.c" />
@@ -623,7 +627,7 @@
     <ClCompile Include="..\..\src\cmd-building\cmd-building.c" />
     <ClCompile Include="..\..\src\io-dump\character-dump.c" />
     <ClCompile Include="..\..\src\specific-object\chest.c" />
-    <ClCompile Include="..\..\src\io\chuukei.c" />
+    <ClCompile Include="..\..\src\io\record-play-movie.c" />
     <ClCompile Include="..\..\src\object-activation\activation-switcher.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-others.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-diary.c" />
@@ -794,13 +798,8 @@
     <ClInclude Include="..\..\src\action\travel-execution.h" />
     <ClInclude Include="..\..\src\action\tunnel-execution.h" />
     <ClInclude Include="..\..\src\action\weapon-shield.h" />
-    <ClInclude Include="..\..\src\art-definition\art-accessory-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-armor-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-bow-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-protector-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-sword-types.h" />
-    <ClInclude Include="..\..\src\art-definition\art-weapon-types.h" />
-    <ClInclude Include="..\..\src\art-definition\random-art-effects.h" />
+    <ClInclude Include="..\..\src\artifact\fixed-art-types.h" />
+    <ClInclude Include="..\..\src\artifact\random-art-effects.h" />
     <ClInclude Include="..\..\src\artifact\artifact-info.h" />
     <ClInclude Include="..\..\src\artifact\fixed-art-generator.h" />
     <ClInclude Include="..\..\src\artifact\random-art-activation.h" />
@@ -855,7 +854,6 @@
     <ClInclude Include="..\..\src\core\disturbance.h" />
     <ClInclude Include="..\..\src\core\object-compressor.h" />
     <ClInclude Include="..\..\src\core\player-redraw-types.h" />
-    <ClInclude Include="..\..\src\core\status-reseter.h" />
     <ClInclude Include="..\..\src\core\visuals-reseter.h" />
     <ClInclude Include="..\..\src\core\window-redrawer.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h" />
@@ -959,6 +957,7 @@
     <ClInclude Include="..\..\src\mind\mind-priest.h" />
     <ClInclude Include="..\..\src\mind\mind-types.h" />
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h" />
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-lose.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-death-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite.h" />
@@ -993,6 +992,7 @@
     <ClInclude Include="..\..\src\player-info\resistance-info.h" />
     <ClInclude Include="..\..\src\player-info\self-info-util.h" />
     <ClInclude Include="..\..\src\player-info\weapon-effect-info.h" />
+    <ClInclude Include="..\..\src\player\player-status-resist.h" />
     <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />
     <ClInclude Include="..\..\src\specific-object\monster-ball.h" />
@@ -1386,7 +1386,7 @@
     <ClInclude Include="..\..\src\cmd-building\cmd-building.h" />
     <ClInclude Include="..\..\src\io-dump\character-dump.h" />
     <ClInclude Include="..\..\src\specific-object\chest.h" />
-    <ClInclude Include="..\..\src\io\chuukei.h" />
+    <ClInclude Include="..\..\src\io\record-play-movie.h" />
     <ClCompile Include="..\..\src\player\player-move.c" />
     <ClCompile Include="..\..\src\io\files-util.c" />
     <ClCompile Include="..\..\src\grid\grid.c" />

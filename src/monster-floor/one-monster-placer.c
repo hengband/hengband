@@ -17,6 +17,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/grid.h"
+#include "monster-attack/monster-attack-types.h"
 #include "monster-floor/monster-move.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
@@ -51,19 +52,16 @@ static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx) { return
 static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-
-    if (r_ptr->flags1 & (RF1_UNIQUE))
-        return FALSE;
-    if (r_ptr->flags2 & RF2_MULTIPLY)
-        return FALSE;
-    if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON))
-        return FALSE;
-    if (r_ptr->flags7 & RF7_AQUATIC)
+    bool unselectable = (r_ptr->flags1 & RF1_UNIQUE) != 0;
+    unselectable |= (r_ptr->flags2 & RF2_MULTIPLY) != 0;
+    unselectable |= (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) != 0;
+    unselectable |= (r_ptr->flags7 & RF7_AQUATIC) != 0;
+    if (unselectable)
         return FALSE;
 
-    if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE)
-        || (r_ptr->blow[3].method == RBM_EXPLODE))
-        return FALSE;
+    for (int i = 0; i < 4; i++)
+        if (r_ptr->blow[i].method == RBM_EXPLODE)
+            return FALSE;
 
     return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);
 }
@@ -77,15 +75,13 @@ static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
 static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN && (generate_mode & PM_JURAL) && !(generate_mode & (PM_MULTIPLY | PM_KAGE))) {
+    if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN && (generate_mode & PM_JURAL) && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
         return MON_ALIEN_JURAL;
-    }
 
     if (!(r_info[r_idx].flags7 & RF7_TANUKI))
         return r_idx;
 
     get_mon_num_prep(player_ptr, monster_hook_tanuki, NULL);
-
     int attempts = 1000;
     DEPTH min = MIN(floor_ptr->base_level - 5, 50);
     while (--attempts) {
@@ -242,29 +238,13 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     monster_race *r_ptr = &r_info[r_idx];
     concptr name = (r_name + r_ptr->name);
 
-    if (player_ptr->wild_mode)
-        return FALSE;
-    if (!in_bounds(floor_ptr, y, x))
-        return FALSE;
-    if (!r_idx)
-        return FALSE;
-    if (!r_ptr->name)
+    if (player_ptr->wild_mode || !in_bounds(floor_ptr, y, x) || (r_idx == 0) || (r_ptr->name == 0))
         return FALSE;
 
-    if (!(mode & PM_IGNORE_TERRAIN)) {
-        if (pattern_tile(floor_ptr, y, x))
-            return FALSE;
-        if (!monster_can_enter(player_ptr, y, x, r_ptr, 0))
-            return FALSE;
-    }
-
-    if (!check_unique_placeable(player_ptr, r_idx))
+    if (((mode & PM_IGNORE_TERRAIN) == 0) && (pattern_tile(floor_ptr, y, x) || !monster_can_enter(player_ptr, y, x, r_ptr, 0)))
         return FALSE;
 
-    if (!check_quest_placeable(player_ptr, r_idx))
-        return FALSE;
-
-    if (!check_procection_rune(player_ptr, r_idx, y, x))
+    if (!check_unique_placeable(player_ptr, r_idx) || !check_quest_placeable(player_ptr, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x))
         return FALSE;
 
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);

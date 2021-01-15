@@ -1841,10 +1841,6 @@ errr term_inkey(char *ch, bool wait, bool take)
     /* Assume no key */
     (*ch) = '\0';
 
-#ifdef CHUUKEI
-    flush_ringbuf();
-#endif
-
     /* get bored */
     if (!Term->never_bored) {
         /* Process random events */
@@ -1947,7 +1943,7 @@ errr term_load(void)
 /*
  * Exchange the "requested" screen with the "tmp" screen
  */
-static errr term_exchange(void)
+errr term_exchange(void)
 {
     TERM_LEN w = Term->wid;
     TERM_LEN h = Term->hgt;
@@ -2267,3 +2263,69 @@ errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
     t->pict_hook = term_pict_hack;
     return 0;
 }
+
+#ifdef JP
+/*
+ * Move to a location and, using an attr, add a string vertically
+ */
+errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
+{
+    errr res;
+    int y0 = y;
+
+    for (int i = 0; i < n && s[i] != 0; i++) {
+        /* Move first */
+        if ((res = term_gotoxy(x, y0)) != 0)
+            return (res);
+
+        if (iskanji(s[i])) {
+            if ((res = term_addstr(2, a, &s[i])) != 0)
+                return (res);
+            i++;
+            y0++;
+            if (s[i] == 0)
+                break;
+        } else {
+            if ((res = term_addstr(1, a, &s[i])) != 0)
+                return (res);
+            y0++;
+        }
+    }
+
+    return 0;
+}
+#endif
+
+#ifndef WINDOWS
+errr term_nuke(term_type *t)
+{
+    TERM_LEN w = t->wid;
+    TERM_LEN h = t->hgt;
+    if (t->active_flag) {
+        if (t->nuke_hook)
+            (*t->nuke_hook)(t);
+
+        t->active_flag = FALSE;
+        t->mapped_flag = FALSE;
+    }
+
+    term_win_nuke(t->old, w, h);
+    KILL(t->old, term_win);
+    term_win_nuke(t->scr, w, h);
+    KILL(t->scr, term_win);
+    if (t->mem) {
+        term_win_nuke(t->mem, w, h);
+        KILL(t->mem, term_win);
+    }
+
+    if (t->tmp) {
+        term_win_nuke(t->tmp, w, h);
+        KILL(t->tmp, term_win);
+    }
+
+    C_KILL(t->x1, h, TERM_LEN);
+    C_KILL(t->x2, h, TERM_LEN);
+    C_KILL(t->key_queue, t->key_size, char);
+    return 0;
+}
+#endif

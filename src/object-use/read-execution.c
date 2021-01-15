@@ -7,8 +7,7 @@
 
 #include "object-use/read-execution.h"
 #include "action/action-limited.h"
-#include "art-definition/art-accessory-types.h"
-#include "art-definition/art-armor-types.h"
+#include "artifact/fixed-art-types.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/show-file.h"
@@ -25,10 +24,11 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
+#include "player/player-status-flags.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
@@ -101,7 +101,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
     if (o_ptr->tval == TV_SCROLL) {
         switch (o_ptr->sval) {
         case SV_SCROLL_DARKNESS: {
-            if (!(creature_ptr->resist_blind) && !(creature_ptr->resist_dark))
+            if (!has_resist_blind(creature_ptr) && !has_resist_dark(creature_ptr))
                 (void)set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5));
 
             if (unlite_area(creature_ptr, 10, 3))
@@ -413,7 +413,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_FIRE: {
             fire_ball(creature_ptr, GF_FIRE, 0, 666, 4);
-            if (!(is_oppose_fire(creature_ptr) || creature_ptr->resist_fire || creature_ptr->immune_fire))
+            if (!(is_oppose_fire(creature_ptr) || has_resist_fire(creature_ptr) || has_immune_fire(creature_ptr)))
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 50 + randint1(50), _("炎の巻物", "a Scroll of Fire"), -1);
 
             ident = TRUE;
@@ -421,7 +421,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_ICE: {
             fire_ball(creature_ptr, GF_ICE, 0, 777, 4);
-            if (!(is_oppose_cold(creature_ptr) || creature_ptr->resist_cold || creature_ptr->immune_cold))
+            if (!(is_oppose_cold(creature_ptr) || has_resist_cold(creature_ptr) || has_immune_cold(creature_ptr)))
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 100 + randint1(100), _("氷の巻物", "a Scroll of Ice"), -1);
 
             ident = TRUE;
@@ -429,7 +429,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_CHAOS: {
             fire_ball(creature_ptr, GF_CHAOS, 0, 1000, 4);
-            if (!creature_ptr->resist_chaos)
+            if (!has_resist_chaos(creature_ptr))
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 111 + randint1(111), _("ログルスの巻物", "a Scroll of Logrus"), -1);
 
             ident = TRUE;

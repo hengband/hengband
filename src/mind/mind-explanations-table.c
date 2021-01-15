@@ -44,7 +44,7 @@ mind_power const mind_powers[MAX_MIND_KINDS] = {
         { 25, 30, 70, _("いてつく波動", "Dispel Magic") },
 
         { 28, 26, 50, _("幻霊召喚", "Summon Ghost") },
-        { 32, 35, 65, _("煉獄火炎", "Exploding Flame") },
+        { 32, 35, 65, _("爆発波", "Exploding Flame") },
         { 38, 42, 75, _("超カメハメ波", "Super Kamehameha") },
         { 44, 50, 80, _("光速移動", "Light Speed") },
         { 99, 0, 0, "" },

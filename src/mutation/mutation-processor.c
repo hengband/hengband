@@ -19,6 +19,7 @@
 #include "object/lite-processor.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
+#include "player/player-status-flags.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
@@ -119,7 +120,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_COWARDICE) && (randint1(3000) == 13)) {
-        if (!creature_ptr->resist_fear) {
+        if (!has_resist_fear(creature_ptr)) {
             disturb(creature_ptr, FALSE, TRUE);
             msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
             set_afraid(creature_ptr, creature_ptr->afraid + 13 + randint1(26));
@@ -127,7 +128,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_RTELEPORT) && (randint1(5000) == 88)) {
-        if (!creature_ptr->resist_nexus && !(creature_ptr->muta1 & MUT1_VTELEPORT) && !creature_ptr->anti_tele) {
+        if (!has_resist_nexus(creature_ptr) && !(creature_ptr->muta1 & MUT1_VTELEPORT) && !creature_ptr->anti_tele) {
             disturb(creature_ptr, FALSE, TRUE);
             msg_print(_("あなたの位置は突然ひじょうに不確定になった...", "Your position suddenly seems very uncertain..."));
             msg_print(NULL);
@@ -136,17 +137,17 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_ALCOHOL) && (randint1(6400) == 321)) {
-        if (!creature_ptr->resist_conf && !creature_ptr->resist_chaos) {
+        if (!has_resist_conf(creature_ptr) && !has_resist_chaos(creature_ptr)) {
             disturb(creature_ptr, FALSE, TRUE);
             creature_ptr->redraw |= PR_EXTRA;
             msg_print(_("いひきがもーろーとひてきたきがふる...ヒック！", "You feel a SSSCHtupor cOmINg over yOu... *HIC*!"));
         }
 
-        if (!creature_ptr->resist_conf) {
+        if (!has_resist_conf(creature_ptr)) {
             (void)set_confused(creature_ptr, creature_ptr->confused + randint0(20) + 15);
         }
 
-        if (!creature_ptr->resist_chaos) {
+        if (!has_resist_chaos(creature_ptr)) {
             if (one_in_(20)) {
                 msg_print(NULL);
                 if (one_in_(3))
@@ -167,7 +168,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_HALLU) && (randint1(6400) == 42)) {
-        if (!creature_ptr->resist_chaos) {
+        if (!has_resist_chaos(creature_ptr)) {
             disturb(creature_ptr, FALSE, TRUE);
             creature_ptr->redraw |= PR_EXTRA;
             (void)set_image(creature_ptr, creature_ptr->image + randint0(50) + 20);
@@ -319,27 +320,27 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
         switch (which_stat) {
         case A_STR:
-            if (creature_ptr->sustain_str)
+            if (has_sustain_str(creature_ptr))
                 sustained = TRUE;
             break;
         case A_INT:
-            if (creature_ptr->sustain_int)
+            if (has_sustain_int(creature_ptr))
                 sustained = TRUE;
             break;
         case A_WIS:
-            if (creature_ptr->sustain_wis)
+            if (has_sustain_wis(creature_ptr))
                 sustained = TRUE;
             break;
         case A_DEX:
-            if (creature_ptr->sustain_dex)
+            if (has_sustain_dex(creature_ptr))
                 sustained = TRUE;
             break;
         case A_CON:
-            if (creature_ptr->sustain_con)
+            if (has_sustain_con(creature_ptr))
                 sustained = TRUE;
             break;
         case A_CHR:
-            if (creature_ptr->sustain_chr)
+            if (has_sustain_chr(creature_ptr))
                 sustained = TRUE;
             break;
         default:
@@ -392,7 +393,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if ((creature_ptr->muta2 & MUT2_WALK_SHAD) && !creature_ptr->anti_magic && one_in_(12000) && !creature_ptr->current_floor_ptr->inside_arena)
-        reserve_alter_reality(creature_ptr);
+        reserve_alter_reality(creature_ptr, randint0(21) + 15);
 
     if ((creature_ptr->muta2 & MUT2_WARNING) && one_in_(1000)) {
         int danger_amount = 0;

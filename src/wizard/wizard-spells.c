@@ -18,6 +18,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-chaos.h"
 #include "spell/spells-status.h"
+#include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
 #include "target/target-checker.h"
 #include "target/grid-selector.h"

@@ -1,4 +1,4 @@
-#include "grid/stair.h"
+ï»¿#include "grid/stair.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
@@ -9,11 +9,11 @@
 #include "system/object-type-definition.h"
 
 /*!
- * @brief Š’è‚ÌˆÊ’u‚Éã‚èŠK’i‚©‰º‚èŠK’i‚ð”z’u‚·‚é / Place an up/down staircase at given location
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @param y ”z’u‚ðŽŽ‚Ý‚½‚¢ƒ}ƒX‚ÌYÀ•W
- * @param x ”z’u‚ðŽŽ‚Ý‚½‚¢ƒ}ƒX‚ÌXÀ•W
- * @return ‚È‚µ
+ * @brief æ‰€å®šã®ä½ç½®ã«ä¸Šã‚ŠéšŽæ®µã‹ä¸‹ã‚ŠéšŽæ®µã‚’é…ç½®ã™ã‚‹ / Place an up/down staircase at given location
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y é…ç½®ã‚’è©¦ã¿ãŸã„ãƒžã‚¹ã®Yåº§æ¨™
+ * @param x é…ç½®ã‚’è©¦ã¿ãŸã„ãƒžã‚¹ã®Xåº§æ¨™
+ * @return ãªã—
  */
 void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 {
@@ -51,18 +51,18 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief Žw’è‚³‚ê‚½À•W‚ª’nk‚âŠK’i¶¬‚Ì‘ÎÛ‚Æ‚È‚éƒ}ƒX‚©‚ð•Ô‚·B / Determine if a given location may be "destroyed"
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @param y yÀ•W
- * @param x xÀ•W
- * @return ŠeŽí‚Ì•ÏX‚ª‰Â”\‚È‚çTRUE‚ð•Ô‚·B
+ * @brief æŒ‡å®šã•ã‚ŒãŸåº§æ¨™ãŒåœ°éœ‡ã‚„éšŽæ®µç”Ÿæˆã®å¯¾è±¡ã¨ãªã‚‹ãƒžã‚¹ã‹ã‚’è¿”ã™ã€‚ / Determine if a given location may be "destroyed"
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param y yåº§æ¨™
+ * @param x xåº§æ¨™
+ * @return å„ç¨®ã®å¤‰æ›´ãŒå¯èƒ½ãªã‚‰TRUEã‚’è¿”ã™ã€‚
  * @details
- * ðŒ‚Í‰i‹v’nŒ`‚Å‚È‚­A‚È‚¨‚©‚ÂŠY“–‚Ìƒ}ƒX‚ÉƒA[ƒeƒBƒtƒ@ƒNƒg‚ª‘¶Ý‚µ‚È‚¢‚©A‚Å‚ ‚éB‰pŒê‚Ì‹ŒƒRƒƒ“ƒg‚É”½‚µ‚Ä–”j‰ó–‚Ì—}Ž~”»’è‚É‚ÍŒ»ÝŽg‚í‚ê‚Ä‚¢‚È‚¢B
+ * æ¡ä»¶ã¯æ°¸ä¹…åœ°å½¢ã§ãªãã€ãªãŠã‹ã¤è©²å½“ã®ãƒžã‚¹ã«ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆãŒå­˜åœ¨ã—ãªã„ã‹ã€ã§ã‚ã‚‹ã€‚è‹±èªžã®æ—§ã‚³ãƒ¡ãƒ³ãƒˆã«åã—ã¦ï¼Šç ´å£Šï¼Šã®æŠ‘æ­¢åˆ¤å®šã«ã¯ç¾åœ¨ä½¿ã‚ã‚Œã¦ã„ãªã„ã€‚
  */
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    if (cave_have_flag_grid(g_ptr, FF_PERMANENT))
+    if (cave_has_flag_grid(g_ptr, FF_PERMANENT))
         return FALSE;
 
     OBJECT_IDX next_o_idx = 0;

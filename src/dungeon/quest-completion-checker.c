@@ -154,7 +154,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 
     if (create_stairs) {
         POSITION ny, nx;
-        while (cave_have_flag_bold(floor_ptr, y, x, FF_PERMANENT) || floor_ptr->grid_array[y][x].o_idx || (floor_ptr->grid_array[y][x].info & CAVE_OBJECT)) {
+        while (cave_has_flag_bold(floor_ptr, y, x, FF_PERMANENT) || floor_ptr->grid_array[y][x].o_idx || (floor_ptr->grid_array[y][x].info & CAVE_OBJECT)) {
             scatter(player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
             y = ny;
             x = nx;

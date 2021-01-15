@@ -210,13 +210,13 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
         object_type *o_ptr;
         o_ptr = &owner_ptr->inventory_list[i];
         tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-        if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval)) {
+        if (owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval)) {
             tmp_val[0] = index_to_label(i);
             tmp_val[1] = ')';
         }
 
         term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
-        if ((((i == INVEN_RARM) && have_left_hand_weapon(owner_ptr)) || ((i == INVEN_LARM) && have_right_hand_weapon(owner_ptr))) && have_two_handed_weapons(owner_ptr)) {
+        if ((((i == INVEN_RARM) && has_left_hand_weapon(owner_ptr)) || ((i == INVEN_LARM) && has_right_hand_weapon(owner_ptr))) && has_two_handed_weapons(owner_ptr)) {
             strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
             attr = TERM_WHITE;
         } else {

@@ -209,8 +209,8 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
     q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
     q_ptr->level = (DEPTH)atoi(zz[6]);
-    q_ptr->r_idx = (IDX)atoi(zz[7]);
-    q_ptr->k_idx = (IDX)atoi(zz[8]);
+    q_ptr->r_idx = (MONRACE_IDX)atoi(zz[7]);
+    q_ptr->k_idx = (KIND_OBJECT_IDX)atoi(zz[8]);
     q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
 
     if (num > 10)
@@ -225,6 +225,10 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     return TRUE;
 }
 
+
+/**
+ * @todo 処理がどうなっているのかいずれチェックする 
+ */
 static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
 {
     if (zz[1][0] != 'R')
@@ -234,9 +238,9 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
         return TRUE;
 
     int count = 0;
-    IDX idx, reward_idx = 0;
+    ARTIFACT_IDX idx, reward_idx = 0;
     for (idx = 2; idx < num; idx++) {
-        IDX a_idx = (IDX)atoi(zz[idx]);
+        ARTIFACT_IDX a_idx = (ARTIFACT_IDX)atoi(zz[idx]);
         if (a_idx < 1)
             continue;
         if (a_info[a_idx].cur_num > 0)
@@ -247,7 +251,7 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
     }
 
     if (reward_idx) {
-        q_ptr->k_idx = reward_idx;
+        q_ptr->k_idx = (KIND_OBJECT_IDX)reward_idx;
         a_info[reward_idx].gen_flags |= TRG_QUESTITEM;
     } else {
         q_ptr->type = QUEST_TYPE_KILL_ALL;
@@ -327,11 +331,11 @@ static bool parse_qtw_P(player_type *player_ptr, qtwg_type *qtwg_ptr, char **zz)
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
     if (floor_ptr->inside_quest) {
-        delete_monster(player_ptr, player_ptr->y, player_ptr->x);
         POSITION py = atoi(zz[0]);
         POSITION px = atoi(zz[1]);
         player_ptr->y = py;
         player_ptr->x = px;
+        delete_monster(player_ptr, player_ptr->y, player_ptr->x);
         return TRUE;
     }
     

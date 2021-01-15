@@ -401,9 +401,44 @@ static HIT_POINT monspell_damage_base(
 }
 
 /*!
+ * @brief モンスターの使う射撃のダイス情報を返す /
+ * @param r_ptr モンスター種族への参照ポインタ
+ * @param dd ダイス数への参照ポインタ
+ * @param ds ダイス面への参照ポインタ
+ * @return なし
+ */
+void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
+{
+    int p = -1; /* Position of SHOOT */
+    int n = 0; /* Number of blows */
+    const int max_blows = 4;
+    for (int m = 0; m < max_blows; m++) {
+        if (r_ptr->blow[m].method != RBM_NONE)
+            n++; /* Count blows */
+
+        if (r_ptr->blow[m].method == RBM_SHOOT) {
+            p = m; /* Remember position */
+            break;
+        }
+    }
+
+    /* When full blows, use a first damage */
+    if (n == max_blows)
+        p = 0;
+
+    if (p < 0) {
+        (*dd) = 0;
+        (*ds) = 0;
+    } else {
+        (*dd) = r_ptr->blow[p].d_dice;
+        (*ds) = r_ptr->blow[p].d_side;
+    }
+}
+
+/*!
  * @brief モンスターの使う呪文の威力を返す /
  * @param target_ptr プレーヤーへの参照ポインタ
- * @param SPELL_NUM 呪文番号
+ * @param ms_type 呪文番号
  * @param m_idx 呪文を唱えるモンスターID
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
@@ -413,19 +448,18 @@ HIT_POINT monspell_damage(player_type *target_ptr, monster_spell_type ms_type, M
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    int hp;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
-    int shoot_dd = r_ptr->blow[0].d_dice;
-    int shoot_ds = r_ptr->blow[0].d_side;
+    HIT_POINT hp = (TYPE == DAM_ROLL) ? m_ptr->hp : m_ptr->max_maxhp;
+    int shoot_dd, shoot_ds;
 
-    hp = (TYPE == DAM_ROLL) ? m_ptr->hp : m_ptr->max_maxhp;
+    monspell_shoot_dice(r_ptr, &shoot_dd, &shoot_ds);
     return monspell_damage_base(target_ptr, ms_type, hp, rlev, monster_is_powerful(floor_ptr, m_idx), shoot_dd, shoot_ds, 0, TYPE);
 }
 
 /*!
- * @brief モンスターの使う呪文の威力を返す /
+ * @brief モンスターの使う所属としての呪文の威力を返す /
  * @param target_ptr プレーヤーへの参照ポインタ
- * @param SPELL_NUM 呪文番号
+ * @param ms_type 呪文番号
  * @param r_idx 呪文を唱えるモンスターの種族ID
  * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
  * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
@@ -433,12 +467,12 @@ HIT_POINT monspell_damage(player_type *target_ptr, monster_spell_type ms_type, M
 HIT_POINT monspell_race_damage(player_type *target_ptr, monster_spell_type ms_type, MONRACE_IDX r_idx, int TYPE)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : FALSE;
-    u32b hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
-    int shoot_dd = r_ptr->blow[0].d_dice;
-    int shoot_ds = r_ptr->blow[0].d_side;
+    HIT_POINT hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
+    int shoot_dd, shoot_ds;
 
+    monspell_shoot_dice(r_ptr, &shoot_dd, &shoot_ds);
     return monspell_damage_base(target_ptr, ms_type, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
 }
 

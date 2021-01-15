@@ -11,10 +11,7 @@
  */
 
 #include "artifact/fixed-art-generator.h"
-#include "art-definition/art-armor-types.h"
-#include "art-definition/art-protector-types.h"
-#include "art-definition/art-sword-types.h"
-#include "art-definition/art-weapon-types.h"
+#include "artifact/fixed-art-types.h"
 #include "floor/floor-object.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
@@ -123,11 +120,12 @@ static void random_artifact_resistance(player_type *player_ptr, object_type *o_p
     if (a_ptr->gen_flags & TRG_XTRA_H_RES)
         give_resistance = TRUE;
 
-    if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER)
+    if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) {
         if (one_in_(2))
             give_resistance = TRUE;
         else
             give_power = TRUE;
+    }
 
     if (give_power)
         one_ability(o_ptr);

@@ -178,7 +178,8 @@
 /*
  * Include the proper "header" file
  */
-# include <curses.h>
+#include <curses.h>
+#include <iconv.h>
 
 typedef struct term_data term_data;
 
@@ -192,7 +193,8 @@ struct term_data
 #define MAX_TERM_DATA 4
 
 static term_data data[MAX_TERM_DATA];
-
+static iconv_t iconv_to_sys;
+static iconv_t iconv_to_gui;
 
 /*
  * Hack -- try to guess which systems use what commands
@@ -653,6 +655,39 @@ static void Term_nuke_gcu(term_type *t)
    keymap_norm();
 }
 
+/*
+ * Convert to EUC-JP
+ */
+static void convert_to_sys(char *buf)
+{
+   size_t inlen = strlen(buf);
+   size_t outlen = inlen;
+   char tmp[outlen + 1];
+
+   char *inbuf = buf;
+   char *outbuf = tmp;
+   size_t res;
+   res = iconv(iconv_to_sys, 0, 0, 0, 0);
+   if(res == (size_t)-1) return;
+   res = iconv(iconv_to_sys, &inbuf, &inlen, &outbuf, &outlen);
+   if(res == (size_t)-1) return;
+   res = iconv(iconv_to_sys, 0, 0, &outbuf, &outlen);
+   if(res == (size_t)-1) return;
+
+   outbuf[0] = '\0';
+   strcpy(buf, tmp);
+}
+
+/*
+ * Push multiple keys reversal
+ */
+static void term_string_push(char *buf)
+{
+   int i, l = strlen(buf);
+   for (i = l; i >= 0; i--)
+      term_key_push(buf[i]);
+}
+
 #ifdef USE_GETCH
 
 /*
@@ -665,18 +700,37 @@ static errr Term_xtra_gcu_event(int v)
    /* Wait */
    if (v)
    {
+      char buf[256];
+      char *bp = buf;
+
       /* Paranoia -- Wait for it */
       nodelay(stdscr, FALSE);
 
       /* Get a keypress */
       i = getch();
 
-      /* Mega-Hack -- allow graceful "suspend" */
-      for (k = 0; (k < 10) && (i == ERR); k++) i = getch();
-
       /* Broken input is special */
       if (i == ERR) exit_game_panic(p_ptr);
       if (i == EOF) exit_game_panic(p_ptr);
+
+      *bp++ = (char)i;
+
+      /* Do not wait for it */
+      nodelay(stdscr, TRUE);
+
+      while((i = getch()) != EOF)
+      {
+         if (i == ERR) exit_game_panic(p_ptr);
+         *bp++ = (char)i;
+         if (bp == &buf[255]) break;
+      }
+
+      /* Wait for it next time */
+      nodelay(stdscr, FALSE);
+
+      *bp = '\0';
+      convert_to_sys(buf);
+      term_string_push(buf);
    }
 
    /* Do not wait */
@@ -694,10 +748,10 @@ static errr Term_xtra_gcu_event(int v)
       /* None ready */
       if (i == ERR) return (1);
       if (i == EOF) return (1);
-   }
 
-   /* Enqueue the keypress */
-   term_key_push(i);
+      /* Enqueue the keypress */
+      term_key_push(i);
+   }
 
    /* Success */
    return (0);
@@ -712,16 +766,40 @@ static errr Term_xtra_gcu_event(int v)
 {
    int i, k;
 
-   char buf[2];
+   char buf[256];
 
    /* Wait */
    if (v)
    {
+      char *bp = buf;
+
       /* Wait for one byte */
-      i = read(0, buf, 1);
+      i = read(0, bp++, 1);
 
       /* Hack -- Handle bizarre "errors" */
       if ((i <= 0) && (errno != EINTR)) exit_game_panic(p_ptr);
+
+      /* Get the current flags for stdin */
+      k = fcntl(0, F_GETFL, 0);
+
+      /* Oops */
+      if (k < 0) return (1);
+
+      /* Tell stdin not to block */
+      if (fcntl(0, F_SETFL, k | O_NDELAY) >= 0)
+      {
+         if ((i = read(0, bp, 254)) > 0)
+         {
+            bp += i;
+         }
+
+         /* Replace the flags for stdin */
+         if (fcntl(0, F_SETFL, k)) return (1);
+      }
+
+      bp[0] = '\0';
+      convert_to_sys(buf);
+      term_string_push(buf);
    }
 
    /* Do not wait */
@@ -741,13 +819,13 @@ static errr Term_xtra_gcu_event(int v)
 
       /* Replace the flags for stdin */
       if (fcntl(0, F_SETFL, k)) return (1);
+
+      /* Ignore "invalid" keys */
+      if ((i != 1) || (!buf[0])) return (1);
+
+      /* Enqueue the keypress */
+      term_key_push(buf[0]);
    }
-
-   /* Ignore "invalid" keys */
-   if ((i != 1) || (!buf[0])) return (1);
-
-   /* Enqueue the keypress */
-   term_key_push(buf[0]);
 
    /* Success */
    return (0);
@@ -958,9 +1036,13 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
 {
    term_data *td = (term_data *)(Term->data);
 
-   int i;
-
-   char text[81];
+   char intext[n];
+   char text[80 * 3 + 1];
+   size_t inlen = n;
+   size_t outlen = sizeof(text);
+   char *inbuf = intext;
+   char *outbuf = text;
+   size_t res;
 
 #ifdef USE_NCURSES_ACS
    /* do we have colors + 16 ? */
@@ -972,9 +1054,19 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
    }
 #endif
 
+   /* Copy to char array because of iconv's warning by const char pointer */
+   memcpy(intext, s, (size_t)n);
+
    /* Obtain a copy of the text */
-   for (i = 0; i < n; i++) text[i] = s[i];
-   text[n] = 0;
+   res = iconv(iconv_to_gui, 0, 0, 0, 0);
+   if(res == (size_t)-1) return (-1);
+   res = iconv(iconv_to_gui, &inbuf, &inlen, &outbuf, &outlen);
+   if(res == (size_t)-1) return (-1);
+   res = iconv(iconv_to_gui, 0, 0, &outbuf, &outlen);
+   if(res == (size_t)-1) return (-1);
+
+   if(outlen == 0) return (-1);
+   *outbuf = '\0';
 
    /* Move the cursor and dump the string */
    wmove(td->win, y, x);
@@ -1047,8 +1139,11 @@ static void hook_quit(concptr str)
 	/* Unused */
 	(void)str;
 
-       /* Exit curses */
-       endwin();
+   /* Exit curses */
+   endwin();
+
+   iconv_close(iconv_to_sys);
+   iconv_close(iconv_to_gui);
 }
 
 
@@ -1073,6 +1168,10 @@ errr init_gcu(int argc, char *argv[])
 
 
    setlocale(LC_ALL, "");
+   iconv_to_sys = iconv_open("EUC-JP", "");
+   if(iconv_to_sys == (iconv_t)-1) return (-1);
+   iconv_to_gui = iconv_open("", "EUC-JP");
+   if(iconv_to_gui == (iconv_t)-1) return (-1);
 
    /* Build the "sound" path */
    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");

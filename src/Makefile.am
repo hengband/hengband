@@ -20,22 +20,16 @@ hengband_SOURCES = \
 	\
 	artifact/artifact-info.c artifact/artifact-info.h \
 	artifact/fixed-art-generator.c artifact/fixed-art-generator.h \
+	artifact/fixed-art-types.h \
 	artifact/random-art-activation.c artifact/random-art-activation.h \
 	artifact/random-art-bias-types.h \
 	artifact/random-art-characteristics.c artifact/random-art-characteristics.h \
+	artifact/random-art-effects.h \
 	artifact/random-art-generator.c artifact/random-art-generator.h \
 	artifact/random-art-misc.c artifact/random-art-misc.h \
 	artifact/random-art-pval-investor.c artifact/random-art-pval-investor.h \
 	artifact/random-art-resistance.c artifact/random-art-resistance.h \
 	artifact/random-art-slay.c artifact/random-art-slay.h \
-	\
-	art-definition/art-accessory-types.h \
-	art-definition/art-armor-types.h \
-	art-definition/art-bow-types.h \
-	art-definition/art-protector-types.h \
-	art-definition/art-sword-types.h \
-	art-definition/art-weapon-types.h \
-	art-definition/random-art-effects.h \
 	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
@@ -167,7 +161,6 @@ hengband_SOURCES = \
 	core/show-file.c core/show-file.h \
 	core/special-internal-keys.h \
 	core/speed-table.c core/speed-table.h \
-	core/status-reseter.c core/status-reseter.h \
 	core/stuff-handler.c core/stuff-handler.h \
 	core/turn-compensator.c core/turn-compensator.h \
 	core/visuals-reseter.c core/visuals-reseter.h \
@@ -297,7 +290,6 @@ hengband_SOURCES = \
 	inventory/player-inventory.c inventory/player-inventory.h \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
 	\
-	io/chuukei.c io/chuukei.h \
 	io/command-repeater.c io/command-repeater.h \
 	io/cursor.c io/cursor.h \
 	io/exit-panic.c io/exit-panic.h \
@@ -311,6 +303,7 @@ hengband_SOURCES = \
 	io/mutations-dump.c io/mutations-dump.h \
 	io/pref-file-expressor.c io/pref-file-expressor.h \
 	io/read-pref-file.c io/read-pref-file.h \
+	io/record-play-movie.c io/record-play-movie.h \
 	io/report.c io/report.h \
 	io/screen-util.c io/screen-util.h \
 	io/signal-handlers.c io/signal-handlers.h \
@@ -383,7 +376,7 @@ hengband_SOURCES = \
 	main/angband-initializer.c main/angband-initializer.h \
 	main/game-data-initializer.c main/game-data-initializer.h \
 	main/info-initializer.c main/info-initializer.h \
-	main/initialization-error-messages-table.c main/initialization-error-messages-table.h \
+	main/init-error-messages-table.c main/init-error-messages-table.h \
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
 	main/sound-of-music.c main/sound-of-music.h \
@@ -467,6 +460,7 @@ hengband_SOURCES = \
 	monster-attack/insults-moans.c monster-attack/insults-moans.h \
 	monster-attack/monster-attack-describer.c monster-attack/monster-attack-describer.h \
 	monster-attack/monster-attack-effect.h \
+	monster-attack/monster-attack-lose.c monster-attack/monster-attack-lose.h \
 	monster-attack/monster-attack-player.c monster-attack/monster-attack-player.h \
 	monster-attack/monster-attack-processor.c monster-attack/monster-attack-processor.h \
 	monster-attack/monster-attack-status.c monster-attack/monster-attack-status.h \
@@ -567,6 +561,7 @@ hengband_SOURCES = \
 	object-activation/activation-resistance.c object-activation/activation-resistance.h \
 	object-activation/activation-switcher.c object-activation/activation-switcher.h \
 	object-activation/activation-teleport.c object-activation/activation-teleport.h \
+	object-activation/activation-util.c object-activation/activation-util.h \
 	\
 	object-enchant/activation-info-table.c object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.c object-enchant/apply-magic.h \
@@ -584,19 +579,18 @@ hengband_SOURCES = \
 	object-enchant/trg-types.h \
 	object-enchant/vorpal-weapon.c object-enchant/vorpal-weapon.h \
 	\
-	spells.h \
-	spells1.c spells2.c spells3.c \
-	spells-diceroll.c spells-diceroll.h \
-	spells-floor.c spells-floor.h \
-	spells-object.c spells-object.h \
-	spells-status.c spells-status.h \
-	spells-summon.c spells-summon.h \
-	spells-world.c spells-world.h \
+	object-hook/hook-armor.c object-hook/hook-armor.h \
+	object-hook/hook-bow.c object-hook/hook-bow.h \
+	object-hook/hook-checker.c object-hook/hook-checker.h \
+	object-hook/hook-enchant.c object-hook/hook-enchant.h \
+	object-hook/hook-expendable.c object-hook/hook-expendable.h \
+	object-hook/hook-magic.c object-hook/hook-magic.h \
+	object-hook/hook-perception.c object-hook/hook-perception.h \
+	object-hook/hook-quest.c object-hook/hook-quest.h \
+	object-hook/hook-weapon.c object-hook/hook-weapon.h \
 	\
-	sort.c sort.h \
-	store.h store.c tables.c term.c term.h trap.c trap.h types.h util.c \
-	variable.c wild.h wild.c wizard1.c wizard2.c \
-	warning.c warning.h world.c world.h \
+	object-use/quaff-execution.c object-use/quaff-execution.h \
+	object-use/read-execution.c object-use/read-execution.h \
 	\
 	perception/identification.c perception/identification.h \
 	perception/object-perception.c perception/object-perception.h \
@@ -628,6 +622,7 @@ hengband_SOURCES = \
 	player/player-status.c player/player-status.h \
 	player/player-status-flags.c player/player-status-flags.h \
 	player/player-status-table.c player/player-status-table.h \
+	player/player-status-resist.c player/player-status-resist.h \
 	player/player-personalities-types.h \
 	player/player-sex.c player/player-sex.h \
 	player/player-view.c player/player-view.h \
@@ -819,7 +814,7 @@ hengband_SOURCES = \
 	system/gamevalue.h \
 	\
 	target/grid-selector.c target/grid-selector.h \
-	target/projection-path-calculator.c target/projection-path-calculator.h
+	target/projection-path-calculator.c target/projection-path-calculator.h \
 	target/target-checker.c target/target-checker.h \
 	target/target-describer.c target/target-describer.h \
 	target/target-getter.c target/target-getter.h \
@@ -903,69 +898,7 @@ EXTRA_hengband_SOURCES = \
 EXTRA_DIST = \
 	gcc-wrap
 
-DEFAULT_INCLUDES = -I$(srcdir) \
-	-I$(srcdir)/artifact \
-	-I$(srcdir)/art-definition \
-	-I$(srcdir)/autopick \
-	-I$(srcdir)/birth \
-	-I$(srcdir)/blue-magic \
-	-I$(srcdir)/cmd-action \
-	-I$(srcdir)/cmd-building \
-	-I$(srcdir)/cmd-io \
-	-I$(srcdir)/cmd-item \
-	-I$(srcdir)/cmd-visual \
-	-I$(srcdir)/combat \
-	-I$(srcdir)/core \
-	-I$(srcdir)/dungeon \
-	-I$(srcdir)/effect \
-	-I$(srcdir)/flavor \
-	-I$(srcdir)/floor \
-	-I$(srcdir)/game-option \
-	-I$(srcdir)/grid \
-	-I$(srcdir)/info-reader \
-	-I$(srcdir)/inventory \
-	-I$(srcdir)/io \
-	-I$(srcdir)/io-dump \
-	-I$(srcdir)/knowledge \
-	-I$(srcdir)/load \
-	-I$(srcdir)/lore \
-	-I$(srcdir)/market \
-	-I$(srcdir)/melee \
-	-I$(srcdir)/mind \
-	-I$(srcdir)/monster \
-	-I$(srcdir)/monster-attack \
-	-I$(srcdir)/monster-floor \
-	-I$(srcdir)/monster-race \
-	-I$(srcdir)/mspell \
-	-I$(srcdir)/mutation \
-	-I$(srcdir)/object \
-	-I$(srcdir)/object-activation \
-	-I$(srcdir)/object-enchant \
-	-I$(srcdir)/object-hook \
-	-I$(srcdir)/object-use \
-	-I$(srcdir)/pet \
-	-I$(srcdir)/player \
-	-I$(srcdir)/player-attack \
-	-I$(srcdir)/player-info \
-	-I$(srcdir)/racial \
-	-I$(srcdir)/realm \
-	-I$(srcdir)/room \
-	-I$(srcdir)/save \
-	-I$(srcdir)/specific-object \
-	-I$(srcdir)/spell \
-	-I$(srcdir)/spell-kind \
-	-I$(srcdir)/spell-realm \
-	-I$(srcdir)/status \
-	-I$(srcdir)/sv-definition \
-	-I$(srcdir)/system \
-	-I$(srcdir)/target \
-	-I$(srcdir)/term \
-	-I$(srcdir)/util \
-	-I$(srcdir)/view \
-	-I$(srcdir)/window \
-	-I$(srcdir)/wizard \
-	-I$(srcdir)/world \
-	-I$(top_builddir)/src 
+DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src 
 CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \

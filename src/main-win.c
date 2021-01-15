@@ -103,7 +103,7 @@
 #include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
-#include "io/chuukei.h"
+#include "io/record-play-movie.h"
 #include "io/files-util.h"
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"
@@ -695,21 +695,26 @@ static void term_getsize(term_data *td)
     TERM_LEN wid = td->cols * td->tile_wid + td->size_ow1 + td->size_ow2;
     TERM_LEN hgt = td->rows * td->tile_hgt + td->size_oh1 + td->size_oh2;
 
-    RECT rc;
-    rc.left = 0;
-    rc.right = rc.left + wid;
-    rc.top = 0;
-    rc.bottom = rc.top + hgt;
+    RECT rw, rc;
+    if (td->w) {
+        GetWindowRect(td->w, &rw);
+        GetClientRect(td->w, &rc);
 
-    AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
-    td->size_wid = rc.right - rc.left;
-    td->size_hgt = rc.bottom - rc.top;
-    if (!td->w)
-        return;
+        td->size_wid = (rw.right - rw.left) - (rc.right - rc.left) + wid;
+        td->size_hgt = (rw.bottom - rw.top) - (rc.bottom - rc.top) + hgt;
 
-    GetWindowRect(td->w, &rc);
-    td->pos_x = rc.left;
-    td->pos_y = rc.top;
+        td->pos_x = rw.left;
+        td->pos_y = rw.top;
+    } else {
+        /* Tempolary calculation */
+        rc.left = 0;
+        rc.right = wid;
+        rc.top = 0;
+        rc.bottom = hgt;
+        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
+        td->size_wid = rc.right - rc.left;
+        td->size_hgt = rc.bottom - rc.top;
+    }
 }
 
 /*
@@ -2034,17 +2039,21 @@ static void init_windows(void)
     }
 
     load_prefs();
+
+    /* Atrributes of main window */
     td = &data[0];
     td->dwStyle = (WS_OVERLAPPED | WS_THICKFRAME | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION | WS_VISIBLE);
     td->dwExStyle = 0;
     td->visible = TRUE;
 
+    /* Attributes of sub windows */
     for (int i = 1; i < MAX_TERM_DATA; i++) {
         td = &data[i];
         td->dwStyle = (WS_OVERLAPPED | WS_THICKFRAME | WS_SYSMENU);
         td->dwExStyle = (WS_EX_TOOLWINDOW);
     }
 
+    /* Font of each window */
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         td = &data[i];
         strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
@@ -2055,26 +2064,30 @@ static void init_windows(void)
             td->tile_wid = td->font_wid;
         if (!td->tile_hgt)
             td->tile_hgt = td->font_hgt;
-
         term_getsize(td);
         term_window_resize(td);
     }
 
+    /* Create sub windows */
     for (int i = MAX_TERM_DATA - 1; i >= 1; --i) {
         td = &data[i];
 
         my_td = td;
-        td->w
-            = CreateWindowEx(td->dwExStyle, AngList, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
+        td->w = CreateWindowEx(
+            td->dwExStyle, AngList, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
         my_td = NULL;
+
         if (!td->w)
             quit(_("サブウィンドウに作成に失敗しました", "Failed to create sub-window"));
 
+        td->size_hack = TRUE;
+        term_getsize(td);
+        term_window_resize(td);
+
         if (td->visible) {
-            td->size_hack = TRUE;
             ShowWindow(td->w, SW_SHOW);
-            td->size_hack = FALSE;
         }
+        td->size_hack = FALSE;
 
         term_data_link(td);
         angband_term[i] = &td->t;
@@ -2084,19 +2097,27 @@ static void init_windows(void)
             SetActiveWindow(td->w);
         }
 
-        if (data[i].posfix) {
-            term_window_pos(&data[i], HWND_TOPMOST);
+        if (td->posfix) {
+            term_window_pos(td, HWND_TOPMOST);
         } else {
-            term_window_pos(&data[i], td->w);
+            term_window_pos(td, td->w);
         }
     }
 
+    /* Create main window */
     td = &data[0];
     my_td = td;
     td->w = CreateWindowEx(td->dwExStyle, AppName, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
     my_td = NULL;
+
     if (!td->w)
         quit(_("メインウィンドウの作成に失敗しました", "Failed to create Angband window"));
+
+    /* Resize */
+    td->size_hack = TRUE;
+    term_getsize(td);
+    term_window_resize(td);
+    td->size_hack = FALSE;
 
     term_data_link(td);
     angband_term[0] = &td->t;
@@ -2249,7 +2270,7 @@ static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
     strcat(savefile, s);
     validate_file(savefile);
     game_in_progress = TRUE;
-    play_game(player_ptr, FALSE);
+    play_game(player_ptr, FALSE, FALSE);
 }
 
 /*
@@ -2268,7 +2289,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         } else {
             game_in_progress = TRUE;
             term_flush();
-            play_game(player_ptr, TRUE);
+            play_game(player_ptr, TRUE, FALSE);
             quit(NULL);
         }
 
@@ -2294,7 +2315,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
                 validate_file(savefile);
                 game_in_progress = TRUE;
                 term_flush();
-                play_game(player_ptr, FALSE);
+                play_game(player_ptr, FALSE, FALSE);
                 quit(NULL);
             }
         }
@@ -2370,8 +2391,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
             if (GetOpenFileName(&ofn)) {
-                prepare_browse_movie_aux(savefile);
-                play_game(player_ptr, FALSE);
+                prepare_browse_movie_without_path_build(savefile);
+                play_game(player_ptr, FALSE, TRUE);
                 quit(NULL);
                 return;
             }
@@ -3238,10 +3259,8 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         return 0;
     }
     case WM_NCLBUTTONDOWN: {
-#ifdef HTCLOSE
         if (wParam == HTCLOSE)
             wParam = HTSYSMENU;
-#endif /* HTCLOSE */
 
         if (wParam == HTSYSMENU) {
             if (td->visible) {
@@ -3411,142 +3430,54 @@ static void hook_quit(concptr str)
  */
 static void init_stuff(void)
 {
-	int i;
+    char path[1024];
+    GetModuleFileName(hInstance, path, 512);
+    argv0 = path;
+    strcpy(path + strlen(path) - 4, ".INI");
+    ini_file = string_make(path);
+    int i = strlen(path);
 
-	char path[1024];
+    for (; i > 0; i--) {
+        if (path[i] == '\\') {
+            break;
+        }
+    }
 
+    strcpy(path + i + 1, "lib\\");
+    validate_dir(path, TRUE);
+    init_file_paths(path, path);
+    validate_dir(ANGBAND_DIR_APEX, FALSE);
+    validate_dir(ANGBAND_DIR_BONE, FALSE);
+    if (!check_dir(ANGBAND_DIR_EDIT)) {
+        validate_dir(ANGBAND_DIR_DATA, TRUE);
+    } else {
+        validate_dir(ANGBAND_DIR_DATA, FALSE);
+    }
 
-	/* Get program name with full path */
-	GetModuleFileName(hInstance, path, 512);
+    validate_dir(ANGBAND_DIR_FILE, TRUE);
+    validate_dir(ANGBAND_DIR_HELP, FALSE);
+    validate_dir(ANGBAND_DIR_INFO, FALSE);
+    validate_dir(ANGBAND_DIR_PREF, TRUE);
+    validate_dir(ANGBAND_DIR_SAVE, FALSE);
+    validate_dir(ANGBAND_DIR_USER, TRUE);
+    validate_dir(ANGBAND_DIR_XTRA, TRUE);
+    path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
-	/* Save the "program name" */
-	argv0 = path;
+    validate_file(path);
+    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
+    ANGBAND_DIR_XTRA_GRAF = string_make(path);
+    validate_dir(ANGBAND_DIR_XTRA_GRAF, TRUE);
 
-	/* Get the name of the "*.ini" file */
-	strcpy(path + strlen(path) - 4, ".INI");
+    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
+    ANGBAND_DIR_XTRA_SOUND = string_make(path);
+    validate_dir(ANGBAND_DIR_XTRA_SOUND, FALSE);
 
-	/* Save the the name of the ini-file */
-	ini_file = string_make(path);
+    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
+    ANGBAND_DIR_XTRA_MUSIC = string_make(path);
+    validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
 
-	/* Analyze the path */
-	i = strlen(path);
-
-	/* Get the path */
-	for (; i > 0; i--)
-	{
-		if (path[i] == '\\')
-		{
-			/* End of path */
-			break;
-		}
-	}
-
-	/* Add "lib" to the path */
-	strcpy(path + i + 1, "lib\\");
-
-	/* Validate the path */
-	validate_dir(path, TRUE);
-
-	/* Init the file paths */
-	init_file_paths(path, path);
-
-	/* Hack -- Validate the paths */
-	validate_dir(ANGBAND_DIR_APEX, FALSE);
-	validate_dir(ANGBAND_DIR_BONE, FALSE);
-
-	/* Allow missing 'edit' directory */
-	if (!check_dir(ANGBAND_DIR_EDIT))
-	{
-		/* Must have 'data'! */
-		validate_dir(ANGBAND_DIR_DATA, TRUE);
-	}
-	else
-	{
-		/* Don't need 'data' */
-		validate_dir(ANGBAND_DIR_DATA, FALSE);
-	}
-
-	validate_dir(ANGBAND_DIR_FILE, TRUE);
-	validate_dir(ANGBAND_DIR_HELP, FALSE);
-	validate_dir(ANGBAND_DIR_INFO, FALSE);
-	validate_dir(ANGBAND_DIR_PREF, TRUE);
-	validate_dir(ANGBAND_DIR_SAVE, FALSE);
-	validate_dir(ANGBAND_DIR_USER, TRUE);
-	validate_dir(ANGBAND_DIR_XTRA, TRUE);
-
-	/* Build the filename */
-	path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-
-	/* Hack -- Validate the "news.txt" file */
-	validate_file(path);
-
-
-#if 0 /* #ifndef JP */
-	/* Build the "font" path */
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "font");
-
-	/* Allocate the path */
-	ANGBAND_DIR_XTRA_FONT = string_make(path);
-
-	/* Validate the "font" directory */
-	validate_dir(ANGBAND_DIR_XTRA_FONT, TRUE);
-
-	/* Build the filename */
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
-
-	/* Hack -- Validate the basic font */
-	validate_file(path);
-#endif
-
-
-#ifdef USE_GRAPHICS
-
-	/* Build the "graf" path */
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
-
-	/* Allocate the path */
-	ANGBAND_DIR_XTRA_GRAF = string_make(path);
-
-	/* Validate the "graf" directory */
-	validate_dir(ANGBAND_DIR_XTRA_GRAF, TRUE);
-
-#endif /* USE_GRAPHICS */
-
-
-#ifdef USE_SOUND
-
-	/* Build the "sound" path */
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
-
-	/* Allocate the path */
-	ANGBAND_DIR_XTRA_SOUND = string_make(path);
-
-	/* Validate the "sound" directory */
-	validate_dir(ANGBAND_DIR_XTRA_SOUND, FALSE);
-
-#endif /* USE_SOUND */
-
-#ifdef USE_MUSIC
-
-	/* Build the "music" path */
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
-
-	/* Allocate the path */
-	ANGBAND_DIR_XTRA_MUSIC = string_make(path);
-
-	/* Validate the "music" directory */
-	validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
-
-#endif /* USE_MUSIC */
-
-	/* Build the "help" path */
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "help");
-
-	/* Allocate the path */
-	ANGBAND_DIR_XTRA_HELP = string_make(path);
-
-	/* Validate the "help" directory */
-	/* validate_dir(ANGBAND_DIR_XTRA_HELP); */
+    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "help");
+    ANGBAND_DIR_XTRA_HELP = string_make(path);
 }
 
 /*!
@@ -3671,53 +3602,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
     term_activate(term_screen);
     init_angband(p_ptr, process_autopick_file_command);
     initialized = TRUE;
-#ifdef CHUUKEI
-    if (lpCmdLine[0] == '-') {
-        switch (lpCmdLine[1]) {
-        case 'p':
-        case 'P': {
-            if (!lpCmdLine[2])
-                break;
-            chuukei_server = TRUE;
-            if (connect_chuukei_server(&lpCmdLine[2]) < 0) {
-                msg_print("connect fail");
-                return 0;
-            }
-            msg_print("connect");
-            msg_print(NULL);
-            break;
-        }
-
-        case 'c':
-        case 'C': {
-            if (!lpCmdLine[2])
-                break;
-            chuukei_client = TRUE;
-            connect_chuukei_server(&lpCmdLine[2]);
-            play_game(player_ptr, FALSE);
-            quit(NULL);
-            return 0;
-        }
-        case 'X':
-        case 'x': {
-            if (!lpCmdLine[2])
-                break;
-            prepare_browse_movie(&lpCmdLine[2]);
-            play_game(player_ptr, FALSE);
-            quit(NULL);
-            return 0;
-        }
-        }
-    }
-#endif
-
-#ifdef CHUUKEI
-    if (!chuukei_server)
-        check_for_save_file(lpCmdLine);
-#else
     check_for_save_file(p_ptr, lpCmdLine);
-#endif
-
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
     term_fresh();
     while (GetMessage(&msg, NULL, 0, 0)) {

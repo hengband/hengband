@@ -239,7 +239,6 @@ static void drain_essence(player_type *creature_ptr)
     byte marked;
     ITEM_NUMBER number;
     OBJECT_IDX next_o_idx;
-    WEIGHT weight;
 
     for (i = 0; i < sizeof(drain_value) / sizeof(int); i++)
         drain_value[i] = 0;
@@ -334,7 +333,6 @@ static void drain_essence(player_type *creature_ptr)
     ix = o_ptr->ix;
     next_o_idx = o_ptr->next_o_idx;
     marked = o_ptr->marked;
-    weight = o_ptr->weight;
     number = o_ptr->number;
 
     object_prep(creature_ptr, o_ptr, o_ptr->k_idx);
@@ -346,8 +344,6 @@ static void drain_essence(player_type *creature_ptr)
     o_ptr->number = number;
     if (o_ptr->tval == TV_DRAG_ARMOR)
         o_ptr->timeout = old_timeout;
-    if (item >= 0)
-        creature_ptr->total_weight += (o_ptr->weight * o_ptr->number - weight * number);
     o_ptr->ident |= (IDENT_FULL_KNOWN);
     object_aware(creature_ptr, o_ptr);
     object_known(o_ptr);
@@ -1028,7 +1024,7 @@ static void erase_essence(player_type *creature_ptr)
     }
     o_ptr->xtra3 = 0;
     object_flags(creature_ptr, o_ptr, flgs);
-    if (!(have_pval_flags(flgs)))
+    if (!(has_pval_flags(flgs)))
         o_ptr->pval = 0;
     msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);

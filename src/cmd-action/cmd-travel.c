@@ -5,6 +5,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "player/player-move.h"
+#include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "target/grid-selector.h"
 #include "view/display-messages.h"
@@ -31,7 +32,7 @@ static int travel_flow_cost(player_type *creature_ptr, POSITION y, POSITION x)
 
     if (has_flag(f_ptr->flags, FF_LAVA)) {
         int lava = 2;
-        if (!creature_ptr->resist_fire)
+        if (!has_resist_fire(creature_ptr))
             lava *= 2;
 
         if (!creature_ptr->levitation)

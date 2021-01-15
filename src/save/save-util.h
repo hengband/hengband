@@ -2,10 +2,10 @@
 
 #include "system/angband.h"
 
-FILE *saving_savefile;
-byte save_xor_byte;
-u32b v_stamp;
-u32b x_stamp;
+extern FILE *saving_savefile;
+extern byte save_xor_byte;
+extern u32b v_stamp;
+extern u32b x_stamp;
 
 void wr_byte(byte v);
 void wr_u16b(u16b v);

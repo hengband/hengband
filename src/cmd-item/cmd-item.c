@@ -74,13 +74,15 @@ void do_cmd_inven(player_type *creature_ptr)
 
     screen_save();
     (void)show_inventory(creature_ptr, 0, USE_FULL, 0);
+    WEIGHT weight = calc_inventory_weight(creature_ptr);
+    WEIGHT weight_lim = calc_weight_limit(creature_ptr);
 #ifdef JP
-    sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", (int)lbtokg1(creature_ptr->total_weight), (int)lbtokg2(creature_ptr->total_weight),
+    sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", (int)lbtokg1(weight), (int)lbtokg2(weight),
 #else
-    sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(creature_ptr->total_weight / 10),
-        (int)(creature_ptr->total_weight % 10),
+    sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(weight / 10),
+        (int)(weight % 10),
 #endif
-        (long int)(creature_ptr->total_weight * 100) / weight_limit(creature_ptr));
+        (long int)(weight * 100) / weight_lim);
 
     prt(out_val, 0, 0);
     command_new = inkey();

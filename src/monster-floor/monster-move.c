@@ -34,6 +34,7 @@
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "player/player-status-flags.h"
 
 static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
 {
@@ -80,7 +81,8 @@ static bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, mo
         return FALSE;
 
     turn_flags_ptr->do_move = TRUE;
-    if (((r_ptr->flags2 & RF2_PASS_WALL) != 0) && (!turn_flags_ptr->is_riding_mon || target_ptr->pass_wall) && has_flag(f_ptr->flags, FF_CAN_PASS)) {
+    if (((r_ptr->flags2 & RF2_PASS_WALL) != 0) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(target_ptr))
+        && has_flag(f_ptr->flags, FF_CAN_PASS)) {
         turn_flags_ptr->did_pass_wall = TRUE;
     }
 
@@ -350,6 +352,14 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         bool can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
 
+        /* Non stupid, non confused pets avoid attacking player */
+        if (is_pet(m_ptr)
+            && !(r_ptr->r_flags2 & RF2_STUPID)
+            && !m_ptr->mtimed[MTIMED_CONFUSED]
+            && player_bold(target_ptr, ny, nx)) {
+            continue;
+        }
+
         if (!process_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx, can_cross)) {
             if (!process_door(target_ptr, turn_flags_ptr, m_ptr, ny, nx))
                 return FALSE;
@@ -397,11 +407,8 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
         turn_flags_ptr->do_turn = TRUE;
         feature_type *f_ptr;
         f_ptr = &f_info[g_ptr->feat];
-        if (has_flag(f_ptr->flags, FF_TREE)) {
-            if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD)) {
-                m_ptr->energy_need += ENERGY_NEED();
-            }
-        }
+        if (has_flag(f_ptr->flags, FF_TREE) && ((r_ptr->flags7 & RF7_CAN_FLY) == 0) && ((r_ptr->flags8 & RF8_WILD_WOOD) == 0))
+            m_ptr->energy_need += ENERGY_NEED();
 
         if (!update_riding_monster(target_ptr, turn_flags_ptr, m_idx, oy, ox, ny, nx))
             break;

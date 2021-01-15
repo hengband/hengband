@@ -24,6 +24,7 @@
 #include "player/attack-defense-types.h"
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"
@@ -115,7 +116,7 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
             if (!cave_los_bold(master_ptr->current_floor_ptr, ny, nx))
                 break;
         } else {
-            if (!cave_have_flag_bold(master_ptr->current_floor_ptr, ny, nx, FF_PROJECT))
+            if (!cave_has_flag_bold(master_ptr->current_floor_ptr, ny, nx, FF_PROJECT))
                 break;
         }
 
@@ -188,7 +189,7 @@ void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITI
     for (int i = 0; i < path_n; i++) {
         sy = get_grid_y(path_g[i]);
         sx = get_grid_x(path_g[i]);
-        if (!cave_have_flag_bold(target_ptr->current_floor_ptr, sy, sx, FF_PROJECT))
+        if (!cave_has_flag_bold(target_ptr->current_floor_ptr, sy, sx, FF_PROJECT))
             break;
 
         *ty = sy;
@@ -254,7 +255,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->flags4 & RF4_BR_ACID) {
-        if (!creature_ptr->immune_acid && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_acid(creature_ptr) && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
 
         if (creature_ptr->special_defense & DEFENSE_ACID)
@@ -263,7 +264,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 
     if (r_ptr->flags4 & RF4_BR_FIRE) {
         if (!((creature_ptr->prace == RACE_BALROG) && creature_ptr->lev > 44)) {
-            if (!creature_ptr->immune_fire && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
+            if (!has_immune_fire(creature_ptr) && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
                 return TRUE;
 
             if (creature_ptr->special_defense & DEFENSE_FIRE)
@@ -272,7 +273,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     }
 
     if (r_ptr->flags4 & RF4_BR_ELEC) {
-        if (!creature_ptr->immune_elec && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_elec(creature_ptr) && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
 
         if (creature_ptr->special_defense & DEFENSE_ELEC)
@@ -280,7 +281,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     }
 
     if (r_ptr->flags4 & RF4_BR_COLD) {
-        if (!creature_ptr->immune_cold && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
+        if (!has_immune_cold(creature_ptr) && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
             return TRUE;
 
         if (creature_ptr->special_defense & DEFENSE_COLD)

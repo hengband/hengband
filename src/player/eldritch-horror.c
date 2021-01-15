@@ -5,6 +5,7 @@
  */
 
 #include "player/eldritch-horror.h"
+#include "player/player-status-flags.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "monster-race/monster-race.h"
@@ -234,7 +235,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         break;
     }
     case 2: {
-        if (!(creature_ptr->muta2 & MUT2_COWARDICE) && !creature_ptr->resist_fear) {
+        if (!(creature_ptr->muta2 & MUT2_COWARDICE) && !has_resist_fear(creature_ptr)) {
             msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
             if (creature_ptr->muta3 & MUT3_FEARLESS) {
                 msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));
@@ -247,7 +248,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         break;
     }
     case 3: {
-        if (!(creature_ptr->muta2 & MUT2_HALLU) && !creature_ptr->resist_chaos) {
+        if (!(creature_ptr->muta2 & MUT2_HALLU) && !has_resist_chaos(creature_ptr)) {
             msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
             creature_ptr->muta2 |= MUT2_HALLU;
         }
@@ -255,7 +256,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         break;
     }
     case 4: {
-        if (!(creature_ptr->muta2 & MUT2_BERS_RAGE) && !creature_ptr->resist_conf) {
+        if (!(creature_ptr->muta2 & MUT2_BERS_RAGE) && !has_resist_conf(creature_ptr)) {
             msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
             creature_ptr->muta2 |= MUT2_BERS_RAGE;
         }
@@ -270,11 +271,11 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
     case 10:
     case 11:
     case 12: {
-        if (!creature_ptr->resist_conf) {
+        if (!has_resist_conf(creature_ptr)) {
             (void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
         }
 
-        if (!creature_ptr->resist_chaos && one_in_(3)) {
+        if (!has_resist_chaos(creature_ptr) && one_in_(3)) {
             (void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
         }
 
@@ -285,13 +286,13 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
     case 13:
     case 14:
     case 15: {
-        if (!creature_ptr->resist_conf) {
+        if (!has_resist_conf(creature_ptr)) {
             (void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
         }
         if (!creature_ptr->free_act) {
             (void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + randint0(4) + 4);
         }
-        if (!creature_ptr->resist_chaos) {
+        if (!has_resist_chaos(creature_ptr)) {
             (void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
         }
 

@@ -1,4 +1,4 @@
-#include "grid/door.h"
+﻿#include "grid/door.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
@@ -52,12 +52,12 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 }
 
 /*!
- * @brief �B���h�A��z�u����
- * @param player_ptr �v���[���[�ւ̎Q�ƃ|�C���^
- * @param y �z�u�������t���A��Y���W
- * @param x �z�u�������t���A��X���W
- * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN �̂����ꂩ
- * @return �Ȃ�
+ * @brief 隠しドアを配置する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
+ * @return なし
  */
 void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {
@@ -91,11 +91,11 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 }
 
 /*!
- * @brief ���̂��������h�A��z�u����
- * @param player_ptr �v���[���[�ւ̎Q�ƃ|�C���^
- * @param y �z�u�������t���A��Y���W
- * @param x �z�u�������t���A��X���W
- * @return �Ȃ�
+ * @brief 鍵のかかったドアを配置する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @return なし
  */
 void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 {
@@ -111,12 +111,12 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief ����̈ʒu�ɂ��܂��܂ȏ�Ԃ��ނ̃h�A��z�u���� / Place a random type of door at the given location
- * @param player_ptr �v���[���[�ւ̎Q�ƃ|�C���^
- * @param y �h�A�̔z�u�����݂����}�X��Y���W
- * @param x �h�A�̔z�u�����݂����}�X��X���W
- * @param room �����ɐڂ��Ă���ꍇ�����̃h�A�������ۂ�
- * @return �Ȃ�
+ * @brief 所定の位置にさまざまな状態や種類のドアを配置する / Place a random type of door at the given location
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param y ドアの配置を試みたいマスのY座標
+ * @param x ドアの配置を試みたいマスのX座標
+ * @param room 部屋に接している場合向けのドア生成か否か
+ * @return なし
  */
 void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room)
 {
@@ -170,12 +170,12 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 }
 
 /*!
- * @brief ����̈ʒu�Ɋe��̕����h�A��z�u���� / Place a random type of normal door at the given location.
- * @param player_ptr �v���[���[�ւ̎Q�ƃ|�C���^
- * @param y �h�A�̔z�u�����݂����}�X��Y���W
- * @param x �h�A�̔z�u�����݂����}�X��X���W
- * @param type �h�A�̒n�`ID
- * @return �Ȃ�
+ * @brief 所定の位置に各種の閉じたドアを配置する / Place a random type of normal door at the given location.
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param y ドアの配置を試みたいマスのY座標
+ * @param x ドアの配置を試みたいマスのX座標
+ * @param type ドアの地形ID
+ * @return なし
  */
 void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {

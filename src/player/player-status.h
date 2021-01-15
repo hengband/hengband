@@ -287,6 +287,8 @@ typedef struct player_type {
 
     /*** Temporary fields ***/
 
+    bool select_ring_slot;
+
     bool playing; /* True if player is playing */
     bool leaving; /* True if player is leaving */
 
@@ -329,9 +331,9 @@ typedef struct player_type {
     bool riding_wield[2]; /* Riding weapon */
     bool riding_ryoute; /* Riding weapon */
     bool monlite;
-    bool yoiyami;
-    bool easy_2weapon;
-    bool down_saving;
+    BIT_FLAGS yoiyami;
+    BIT_FLAGS easy_2weapon;
+    BIT_FLAGS down_saving;
 
     POSITION cur_lite; /* Radius of lite (if any) */
 
@@ -357,8 +359,6 @@ typedef struct player_type {
     s16b running; /* Current counter for running, if any */
     bool suppress_multi_reward; /*!< 複数レベルアップ時のパトロンからの報酬多重受け取りを防止 */
 
-    WEIGHT total_weight; /*!< 所持品と装備品の計算総重量 / Total weight being carried */
-
     s16b stat_add[A_MAX]; /* Modifiers to stat values */
     s16b stat_ind[A_MAX]; /* Indexes into stat tables */
 
@@ -366,57 +366,20 @@ typedef struct player_type {
     bool is_fired;
     bool level_up_message;
 
-    bool immune_acid; /* Immunity to acid */
-    bool immune_elec; /* Immunity to lightning */
-    bool immune_fire; /* Immunity to fire */
-    bool immune_cold; /* Immunity to cold */
-
-    bool resist_acid; /* Resist acid */
-    bool resist_elec; /* Resist lightning */
-    bool resist_fire; /* Resist fire */
-    bool resist_cold; /* Resist cold */
-    bool resist_pois; /* Resist poison */
-
-    bool resist_conf; /* Resist confusion */
-    bool resist_sound; /* Resist sound */
-    bool resist_lite; /* Resist light */
-    bool resist_dark; /* Resist darkness */
-    bool resist_chaos; /* Resist chaos */
-    bool resist_disen; /* Resist disenchant */
-    bool resist_shard; /* Resist shards */
-    bool resist_nexus; /* Resist nexus */
-    bool resist_blind; /* Resist blindness */
-    bool resist_neth; /* Resist nether */
-    bool resist_fear; /* Resist fear */
-    bool resist_time; /* Resist time */
-    bool resist_water; /* Resist water */
-
-    bool reflect; /* Reflect 'bolt' attacks */
-    bool sh_fire; /* Fiery 'immolation' effect */
-    bool sh_elec; /* Electric 'immolation' effect */
-    bool sh_cold; /* Cold 'immolation' effect */
-
-    bool anti_magic; /* Anti-magic */
-    bool anti_tele; /* Prevent teleportation */
-
-    bool sustain_str; /* Keep strength */
-    bool sustain_int; /* Keep intelligence */
-    bool sustain_wis; /* Keep wisdom */
-    bool sustain_dex; /* Keep dexterity */
-    bool sustain_con; /* Keep constitution */
-    bool sustain_chr; /* Keep charisma */
+    BIT_FLAGS anti_magic; /* Anti-magic */
+    BIT_FLAGS anti_tele; /* Prevent teleportation */
 
     BIT_FLAGS cursed; /* Player is cursed */
 
     bool can_swim; /* No damage falling */
-    bool levitation; /* No damage falling */
-    bool lite; /* Permanent light */
-    bool free_act; /* Never paralyzed */
-    bool see_inv; /* Can see invisible */
-    bool regenerate; /* Regenerate hit pts */
-    bool hold_exp; /* Resist exp draining */
+    BIT_FLAGS levitation; /* No damage falling */
+    BIT_FLAGS lite; /* Permanent light */
+    BIT_FLAGS free_act; /* Never paralyzed */
+    BIT_FLAGS see_inv; /* Can see invisible */
+    BIT_FLAGS regenerate; /* Regenerate hit pts */
+    BIT_FLAGS hold_exp; /* Resist exp draining */
 
-    bool telepathy; /* Telepathy */
+    BIT_FLAGS telepathy; /* Telepathy */
     BIT_FLAGS esp_animal;
     BIT_FLAGS esp_undead;
     BIT_FLAGS esp_demon;
@@ -424,24 +387,22 @@ typedef struct player_type {
     BIT_FLAGS esp_troll;
     BIT_FLAGS esp_giant;
     BIT_FLAGS esp_dragon;
-    bool esp_human;
+    BIT_FLAGS esp_human;
     BIT_FLAGS esp_evil;
-    bool esp_good;
-    bool esp_nonliving;
-    bool esp_unique;
+    BIT_FLAGS esp_good;
+    BIT_FLAGS esp_nonliving;
+    BIT_FLAGS esp_unique;
 
-    bool slow_digest; /* Slower digestion */
-    bool bless_blade; /* Blessed blade */
+    BIT_FLAGS slow_digest; /* Slower digestion */
+    BIT_FLAGS bless_blade; /* Blessed blade */
     BIT_FLAGS xtra_might; /* Extra might bow */
-    bool impact[2]; /* Earthquake blows */
-    bool pass_wall; /* Permanent wraithform */
-    bool kill_wall;
-    bool dec_mana;
-    bool easy_spell;
-    bool heavy_spell;
-    bool warning;
-    bool mighty_throw;
-    bool see_nocto; /* Noctovision */
+    BIT_FLAGS impact; /* Earthquake blows */
+    BIT_FLAGS dec_mana;
+    BIT_FLAGS easy_spell;
+    BIT_FLAGS heavy_spell;
+    BIT_FLAGS warning;
+    BIT_FLAGS mighty_throw;
+    BIT_FLAGS see_nocto; /* Noctovision */
     bool invoking_midnight_curse;
 
     DICE_NUMBER to_dd[2]; /* Extra dice/sides */
@@ -511,10 +472,11 @@ extern int riding_exp_level(int riding_exp);
 extern int spell_exp_level(int spell_exp);
 
 extern int calc_weapon_weight_limit(player_type *creature_ptr);
+extern WEIGHT calc_inventory_weight(player_type *creature_ptr);
 
 extern s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr);
 extern void calc_bonuses(player_type *creature_ptr);
-extern WEIGHT weight_limit(player_type *creature_ptr);
+extern WEIGHT calc_weight_limit(player_type *creature_ptr);
 extern bool has_melee_weapon(player_type *creature_ptr, int i);
 
 extern bool heavy_armor(player_type *creature_ptr);
@@ -540,6 +502,7 @@ extern bool can_two_hands_wielding(player_type *creature_ptr);
 bool is_fast(player_type *creature_ptr);
 bool is_invuln(player_type *creature_ptr);
 bool is_hero(player_type *creature_ptr);
+bool is_shero(player_type *creature_ptr);
 bool is_echizen(player_type *creature_ptr);
 
 /*
@@ -560,8 +523,6 @@ bool is_echizen(player_type *creature_ptr);
 #define PY_REGEN_FAINT 33 /* Regen factor*2^16 when fainting */
 #define PY_REGEN_HPBASE 1442 /* Min amount hp regen*2^16 */
 #define PY_REGEN_MNBASE 524 /* Min amount mana regen*2^16 */
-
-extern void cheat_death(player_type *creature_ptr);
 
 extern void stop_singing(player_type *creature_ptr);
 extern void stop_mouth(player_type *caster_ptr);

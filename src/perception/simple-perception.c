@@ -280,7 +280,7 @@ void sense_inventory1(player_type *creature_ptr)
         if ((i < INVEN_RARM) && (0 != randint0(5)))
             continue;
 
-        if (have_good_luck(creature_ptr) && !randint0(13)) {
+        if (has_good_luck(creature_ptr) && !randint0(13)) {
             heavy = TRUE;
         }
 

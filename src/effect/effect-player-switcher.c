@@ -1,143 +1,32 @@
-#include "effect/effect-player-switcher.h"
-#include "blue-magic/blue-magic-checker.h"
-#include "cmd-action/cmd-attack.h"
+ï»¿#include "effect/effect-player-switcher.h"
 #include "effect/effect-player-curse.h"
 #include "effect/effect-player-oldies.h"
 #include "effect/effect-player-resist-hurt.h"
 #include "effect/effect-player-spirit.h"
-#include "inventory/inventory-damage.h"
-#include "mind/mind-mirror-master.h"
-#include "object-enchant/object-curse.h"
-#include "object/object-broken.h"
-#include "player/mimic-info-table.h"
 #include "player/player-damage.h"
-#include "player/player-race-types.h"
 #include "spell/spell-types.h"
-#include "status/bad-status-setter.h"
-#include "status/element-resistance.h"
-#include "view/display-messages.h"
-#include "world/world.h"
-
-void effect_player_mana(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("–‚–@‚ÌƒI[ƒ‰‚ÅUŒ‚‚³‚ê‚½I", "You are hit by an aura of magic!"));
-
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-}
-
-void effect_player_psy_spear(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("ƒGƒlƒ‹ƒM[‚Ì‰ò‚ÅUŒ‚‚³‚ê‚½I", "You are hit by an energy!"));
-
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_FORCE, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-}
-
-void effect_player_meteor(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("‰½‚©‚ª‹ó‚©‚ç‚ ‚È‚½‚Ì“ªã‚É—‚¿‚Ä‚«‚½I", "Something falls from the sky on you!"));
-
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-    if (!target_ptr->resist_shard || one_in_(13)) {
-        if (!target_ptr->immune_fire)
-            inventory_damage(target_ptr, set_fire_destroy, 2);
-        inventory_damage(target_ptr, set_cold_destroy, 2);
-    }
-}
-
-void effect_player_icee(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("‰½‚©‰s‚­—â‚½‚¢‚à‚Ì‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something sharp and cold!"));
-
-    ep_ptr->get_damage = cold_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
-    if (check_multishadow(target_ptr))
-        return;
-
-    if (!target_ptr->resist_shard) {
-        (void)set_cut(target_ptr, target_ptr->cut + damroll(5, 8));
-    }
-
-    if (!target_ptr->resist_sound) {
-        (void)set_stun(target_ptr, target_ptr->stun + randint1(15));
-    }
-
-    if ((!(target_ptr->resist_cold || is_oppose_cold(target_ptr))) || one_in_(12)) {
-        if (!target_ptr->immune_cold)
-            inventory_damage(target_ptr, set_cold_destroy, 3);
-    }
-}
-
-void effect_player_death_ray(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if (target_ptr->blind)
-        msg_print(_("‰½‚©”ñí‚É—â‚½‚¢‚à‚Ì‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something extremely cold!"));
-
-    if (target_ptr->mimic_form) {
-        if (!(mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
-            ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-
-        return;
-    }
-
-    switch (target_ptr->prace) {
-    case RACE_GOLEM:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_VAMPIRE:
-    case RACE_BALROG:
-    case RACE_SPECTRE: {
-        ep_ptr->dam = 0;
-        break;
-    }
-    default: {
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-        break;
-    }
-    }
-}
-
-void effect_player_hand_doom(player_type *target_ptr, effect_player_type *ep_ptr)
-{
-    if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !check_multishadow(target_ptr)) {
-        msg_print(_("‚µ‚©‚µŒø—Í‚ğ’µ‚Ë•Ô‚µ‚½I", "You resist the effects!"));
-        learn_spell(target_ptr, ep_ptr->monspell);
-    } else {
-        if (!check_multishadow(target_ptr)) {
-            msg_print(_("‚ ‚È‚½‚Í–½‚ª”–‚Ü‚Á‚Ä‚¢‚­‚æ‚¤‚ÉŠ´‚¶‚½I", "You feel your life fade away!"));
-            curse_equipment(target_ptr, 40, 20);
-        }
-
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->m_name, ep_ptr->monspell);
-
-        if (target_ptr->chp < 1)
-            target_ptr->chp = 1;
-    }
-}
 
 /*!
  * @brief
- * –‚–@‚ÌŒø‰Ê‚É‚æ‚Á‚Ä—lX‚ÈƒƒbƒZ[‚ğo—Í‚µ‚½‚è—^‚¦‚éƒ_ƒ[ƒW‚Ì‘Œ¸‚ğs‚Á‚½‚è‚·‚é
- * @param target_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param em_ptr ƒvƒŒ[ƒ„[Œø‰Ê\‘¢‘Ì‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * é­”æ³•ã®åŠ¹æœã«ã‚ˆã£ã¦æ§˜ã€…ãªãƒ¡ãƒƒã‚»ãƒ¼ã‚’å‡ºåŠ›ã—ãŸã‚Šä¸ãˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã®å¢—æ¸›ã‚’è¡Œã£ãŸã‚Šã™ã‚‹
+ * @param target_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param em_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼åŠ¹æœæ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     switch (ep_ptr->effect_type) {
     case GF_ACID:
-        effect_player_elements(target_ptr, ep_ptr, _("_‚ÅUŒ‚‚³‚ê‚½I", "You are hit by acid!"), acid_dam);
+        effect_player_elements(target_ptr, ep_ptr, _("é…¸ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by acid!"), acid_dam);
         return;
     case GF_FIRE:
-        effect_player_elements(target_ptr, ep_ptr, _("‰Î‰Š‚ÅUŒ‚‚³‚ê‚½I", "You are hit by fire!"), fire_dam);
+        effect_player_elements(target_ptr, ep_ptr, _("ç«ç‚ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by fire!"), fire_dam);
         return;
     case GF_COLD:
-        effect_player_elements(target_ptr, ep_ptr, _("—â‹C‚ÅUŒ‚‚³‚ê‚½I", "You are hit by cold!"), cold_dam);
+        effect_player_elements(target_ptr, ep_ptr, _("å†·æ°—ã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by cold!"), cold_dam);
         return;
     case GF_ELEC:
-        effect_player_elements(target_ptr, ep_ptr, _("“dŒ‚‚ÅUŒ‚‚³‚ê‚½I", "You are hit by lightning!"), elec_dam);
+        effect_player_elements(target_ptr, ep_ptr, _("é›»æ’ƒã§æ”»æ’ƒã•ã‚ŒãŸï¼", "You are hit by lightning!"), elec_dam);
         return;
     case GF_POIS:
         effect_player_poison(target_ptr, ep_ptr);

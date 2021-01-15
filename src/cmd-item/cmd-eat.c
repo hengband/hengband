@@ -32,6 +32,7 @@
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
@@ -75,7 +76,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         /* Analyze the food */
         switch (o_ptr->sval) {
         case SV_FOOD_POISON: {
-            if (!(creature_ptr->resist_pois || is_oppose_pois(creature_ptr))) {
+            if (!(has_resist_pois(creature_ptr) || is_oppose_pois(creature_ptr))) {
                 if (set_poisoned(creature_ptr, creature_ptr->poisoned + randint0(10) + 10)) {
                     ident = TRUE;
                 }
@@ -84,7 +85,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         }
 
         case SV_FOOD_BLINDNESS: {
-            if (!creature_ptr->resist_blind) {
+            if (!has_resist_blind(creature_ptr)) {
                 if (set_blind(creature_ptr, creature_ptr->blind + randint0(200) + 200)) {
                     ident = TRUE;
                 }
@@ -93,7 +94,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         }
 
         case SV_FOOD_PARANOIA: {
-            if (!creature_ptr->resist_fear) {
+            if (!has_resist_fear(creature_ptr)) {
                 if (set_afraid(creature_ptr, creature_ptr->afraid + randint0(10) + 10)) {
                     ident = TRUE;
                 }
@@ -102,7 +103,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         }
 
         case SV_FOOD_CONFUSION: {
-            if (!creature_ptr->resist_conf) {
+            if (!has_resist_conf(creature_ptr)) {
                 if (set_confused(creature_ptr, creature_ptr->confused + randint0(10) + 10)) {
                     ident = TRUE;
                 }
@@ -111,7 +112,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         }
 
         case SV_FOOD_HALLUCINATION: {
-            if (!creature_ptr->resist_chaos) {
+            if (!has_resist_chaos(creature_ptr)) {
                 if (set_image(creature_ptr, creature_ptr->image + randint0(250) + 250)) {
                     ident = TRUE;
                 }
@@ -354,7 +355,6 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
             /* Unstack the used item */
             o_ptr->number--;
-            creature_ptr->total_weight -= q_ptr->weight;
             item = store_item_to_inventory(creature_ptr, q_ptr);
 
             msg_format(_("杖をまとめなおした。", "You unstack your staff."));

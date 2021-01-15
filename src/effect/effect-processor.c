@@ -317,7 +317,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
 
             if (affect_item(caster_ptr, 0, 0, y, x, dam, GF_SUPER_RAY))
                 notice = TRUE;
-            if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
+            if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
                 if (second_step)
                     continue;
                 break;
@@ -385,7 +385,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             if (!cave_los_bold(caster_ptr->current_floor_ptr, ny, nx) && (rad > 0))
                 break;
         } else {
-            if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, ny, nx, FF_PROJECT) && (rad > 0))
+            if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, ny, nx, FF_PROJECT) && (rad > 0))
                 break;
         }
 

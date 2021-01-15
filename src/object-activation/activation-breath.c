@@ -1,4 +1,4 @@
-#include "object-activation/activation-breath.h"
+﻿#include "object-activation/activation-breath.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object/object-flags.h"
 #include "spell-kind/spells-launcher.h"
@@ -12,11 +12,11 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief �����ɂ��u���X�̑������A�C�e���̑ϐ�����I�����A���s����������B/ Dragon breath activation
- * @details �ΏۂƂȂ�ϐ��� dragonbreath_info �e�[�u�����Q�Ƃ̂��ƁB
- * @param user_ptr �v���[���[�ւ̎Q�ƃ|�C���^
- * @param o_ptr �Ώۂ̃I�u�W�F�N�g�\���̃|�C���^
- * @return �������s�̐����Ԃ��B
+ * @brief 発動によるブレスの属性をアイテムの耐性から選択し、実行を処理する。/ Dragon breath activation
+ * @details 対象となる耐性は dragonbreath_info テーブルを参照のこと。
+ * @param user_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return 発動実行の是非を返す。
  */
 bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
 {
@@ -48,7 +48,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
         stop_hex_spell_all(user_ptr);
 
     int t = randint0(n);
-    msg_format(_("���Ȃ���%s�̃u���X��f�����B", "You breathe %s."), name[t]);
+    msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), name[t]);
     fire_breath(user_ptr, type[t], dir, 250, 4);
     return TRUE;
 }

@@ -1,5 +1,5 @@
 ﻿#include "perception/identification.h"
-#include "art-definition/art-protector-types.h"
+#include "artifact/fixed-art-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
@@ -78,23 +78,31 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは無敵のバリアを切り裂く。", "It always penetrates invulnerability barriers.");
     }
 
-    if (o_ptr->name2 == EGO_2WEAPON) {
+    if (has_flag(flgs, TR_EASY2_WEAPON)) {
         info[i++] = _("それは二刀流での命中率を向上させる。", "It affects your ability to hit when you are wielding two weapons.");
+    }
+
+    if (has_flag(flgs, TR_INVULN_ARROW)) {
+        info[i++] = _("それは視界がある限り物理的な飛び道具の一切をはねのける。", "It repels all physical missiles as long as there is visibility.");
+    }
+
+    if (has_flag(flgs, TR_NO_AC)) {
+        info[i++] = _("それは物理的防護の一切を奪う。", "It robs you of any physical protection.");
     }
 
     if (has_flag(flgs, TR_EASY_SPELL)) {
         info[i++] = _("それは魔法の難易度を下げる。", "It affects your ability to cast spells.");
     }
 
-    if (o_ptr->name2 == EGO_AMU_FOOL) {
+    if (has_flag(flgs, TR_HEAVY_SPELL)) {
         info[i++] = _("それは魔法の難易度を上げる。", "It interferes with casting spells.");
     }
 
-    if (o_ptr->name2 == EGO_RING_THROW) {
+    if (has_flag(flgs, TR_MIGHTY_THROW)) {
         info[i++] = _("それは物を強く投げることを可能にする。", "It provides great strength when you throw an item.");
     }
 
-    if (o_ptr->name2 == EGO_AMU_NAIVETY) {
+    if (has_flag(flgs, TR_LOW_MAGIC)) {
         info[i++] = _("それは魔法抵抗力を下げる。", "It decreases your magic resistance.");
     }
 
@@ -108,15 +116,15 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
             info[i++] = _("それは部屋に飾ると楽しい。", "It is cheerful.");
     }
 
-    if (o_ptr->name2 == EGO_LITE_DARKNESS)
+    if (has_flag(flgs, TR_DARK_SOURCE))
         info[i++] = _("それは全く光らない。", "It provides no light.");
 
     POSITION rad = 0;
-    if (has_flag(flgs, TR_LITE_1) && o_ptr->name2 != EGO_LITE_DARKNESS)
+    if (has_flag(flgs, TR_LITE_1) && !has_flag(flgs, TR_DARK_SOURCE))
         rad += 1;
-    if (has_flag(flgs, TR_LITE_2) && o_ptr->name2 != EGO_LITE_DARKNESS)
+    if (has_flag(flgs, TR_LITE_2) && !has_flag(flgs, TR_DARK_SOURCE))
         rad += 2;
-    if (has_flag(flgs, TR_LITE_3) && o_ptr->name2 != EGO_LITE_DARKNESS)
+    if (has_flag(flgs, TR_LITE_3) && !has_flag(flgs, TR_DARK_SOURCE))
         rad += 3;
     if (has_flag(flgs, TR_LITE_M1))
         rad -= 1;
@@ -128,7 +136,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     if (o_ptr->name2 == EGO_LITE_SHINE)
         rad++;
 
-    if (has_flag(flgs, TR_LITE_FUEL) && o_ptr->name2 != EGO_LITE_DARKNESS) {
+    if (has_flag(flgs, TR_LITE_FUEL) && !has_flag(flgs, TR_DARK_SOURCE)) {
         if (rad > 0)
             sprintf(desc, _("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
     } else {

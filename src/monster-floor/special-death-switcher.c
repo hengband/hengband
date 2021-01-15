@@ -1,14 +1,11 @@
-/*!
- * @brief ƒ‚ƒ“ƒXƒ^[Ž€–SŽž‚Ì“ÁŽêˆ—switch (ˆê”Ê“I‚Èˆ—‚àdefault‚ÅŽÀŽ{)
+ï»¿/*!
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ­»äº¡æ™‚ã®ç‰¹æ®Šå‡¦ç†switch (ä¸€èˆ¬çš„ãªå‡¦ç†ã‚‚defaultã§å®Ÿæ–½)
  * @date 2020/08/21
  * @author Hourier
  */
 
 #include "monster-floor/special-death-switcher.h"
-#include "art-definition/art-armor-types.h"
-#include "art-definition/art-bow-types.h"
-#include "art-definition/art-protector-types.h"
-#include "art-definition/art-weapon-types.h"
+#include "artifact/fixed-art-types.h"
 #include "artifact/fixed-art-generator.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -43,14 +40,14 @@
 #include "world/world.h"
 
 /*!
- * @brief Ž€–SŽž¢Š«ˆ— (¡‚Ì‚Æ‚±‚ëŽ©•ªŽ©g‚Ì‚Ý)
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @param md_ptr ƒ‚ƒ“ƒXƒ^[Œ‚”j\‘¢‘Ì‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @param type ¢Š«ƒ^ƒCƒv
- * @param probability ¢Š«Šm—¦ (ŒvŽZŽ®F1 - 1/probability)
- * @param radius ¢Š«”¼Œa (ƒ‚ƒ“ƒXƒ^[‚ªŽ€–S‚µ‚½À•W‚©‚ç”¼Œa‰½ƒ}ƒXˆÈ“à‚É¢Š«‚³‚¹‚é‚©)
- * @param message ¢Š«Žž‚ÌƒƒbƒZ[ƒW
- * @return ‚È‚µ
+ * @brief æ­»äº¡æ™‚å¬å–šå‡¦ç† (ä»Šã®ã¨ã“ã‚è‡ªåˆ†è‡ªèº«ã®ã¿)
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param md_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ’ƒç ´æ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param type å¬å–šã‚¿ã‚¤ãƒ—
+ * @param probability å¬å–šç¢ºçŽ‡ (è¨ˆç®—å¼ï¼š1 - 1/probability)
+ * @param radius å¬å–šåŠå¾„ (ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæ­»äº¡ã—ãŸåº§æ¨™ã‹ã‚‰åŠå¾„ä½•ãƒžã‚¹ä»¥å†…ã«å¬å–šã•ã›ã‚‹ã‹)
+ * @param message å¬å–šæ™‚ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+ * @return ãªã—
  */
 static void summon_self(player_type *player_ptr, monster_death_type *md_ptr, summon_type type, int probability, POSITION radius, concptr message)
 {
@@ -91,10 +88,10 @@ static void on_dead_pink_horror(player_type *player_ptr, monster_death_type *md_
     }
 
     if (notice)
-        msg_print(_("ƒsƒ“ƒNEƒzƒ‰[‚Í•ª—ô‚µ‚½I", "The Pink horror divides!"));
+        msg_print(_("ãƒ”ãƒ³ã‚¯ãƒ»ãƒ›ãƒ©ãƒ¼ã¯åˆ†è£‚ã—ãŸï¼", "The Pink horror divides!"));
 }
 
-static void on_dead_bloodletter(player_type* player_ptr, monster_death_type* md_ptr)
+static void on_dead_bloodletter(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (!md_ptr->drop_chosen_item || (randint1(100) >= 15))
         return;
@@ -125,14 +122,14 @@ static void on_dead_raal(player_type *player_ptr, monster_death_type *md_ptr)
 }
 
 /*!
- * @brief 6/7‚ÌŠm—¦‚ÅA20ƒ}ƒXˆÈ“à‚É‹Å‚ÌíŽmŽ©g‚ð¢Š«‚·‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @param md_ptr ƒ‚ƒ“ƒXƒ^[Œ‚”j\‘¢‘Ì‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief 6/7ã®ç¢ºçŽ‡ã§ã€20ãƒžã‚¹ä»¥å†…ã«æšã®æˆ¦å£«è‡ªèº«ã‚’å¬å–šã™ã‚‹
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param md_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ’ƒç ´æ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void on_dead_dawn(player_type *player_ptr, monster_death_type *md_ptr)
 {
-    summon_self(player_ptr, md_ptr, SUMMON_DAWN, 7, 20, _("V‚½‚ÈíŽm‚ªŒ»‚ê‚½I", "A new warrior steps forth!"));
+    summon_self(player_ptr, md_ptr, SUMMON_DAWN, 7, 20, _("æ–°ãŸãªæˆ¦å£«ãŒç¾ã‚ŒãŸï¼", "A new warrior steps forth!"));
 }
 
 static void on_dead_unmaker(player_type *player_ptr, monster_death_type *md_ptr)
@@ -140,7 +137,7 @@ static void on_dead_unmaker(player_type *player_ptr, monster_death_type *md_ptr)
     if (is_seen(player_ptr, md_ptr->m_ptr)) {
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-        msg_format(_("%s‚Í•Ó‚è‚ÉƒƒOƒ‹ƒX‚ÌŽc‚è‚ðŽT‚«ŽU‚ç‚µ‚½I", "%^s sprinkled the remaining incense from Logrus!"), m_name);
+        msg_format(_("%sã¯è¾ºã‚Šã«ãƒ­ã‚°ãƒ«ã‚¹ã®æ®‹ã‚Šé¦™ã‚’æ’’ãæ•£ã‚‰ã—ãŸï¼", "%^s sprinkled the remaining incense from Logrus!"), m_name);
     }
 
     (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, GF_CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
@@ -176,7 +173,7 @@ static void on_dead_sacred_treasures(player_type *player_ptr, monster_death_type
 
         return;
     }
-    
+
     if (!preserve_mode)
         a_ptr->cur_num = 1;
 }
@@ -231,7 +228,7 @@ static void on_dead_rolento(player_type *player_ptr, monster_death_type *md_ptr)
     if (is_seen(player_ptr, md_ptr->m_ptr)) {
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-        msg_format(_("%s‚ÍŽèžÖ’e‚ð•ø‚¦‚ÄŽ©”š‚µ‚½I", "%^s broke himself with grenades!"), m_name);
+        msg_format(_("%sã¯æ‰‹æ¦´å¼¾ã‚’æŠ±ãˆã¦è‡ªçˆ†ã—ãŸï¼", "%^s broke himself with grenades!"), m_name);
     }
 
     (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), GF_FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
@@ -249,24 +246,68 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
         POSITION wx = md_ptr->md_x;
         bool pet = is_pet(md_ptr->m_ptr);
         BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
-        MONSTER_IDX smaller_bubblle = md_ptr->m_ptr->r_idx - 1;
-        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubblle, mode) && player_can_see_bold(player_ptr, wy, wx))
+        MONSTER_IDX smaller_bubble = md_ptr->m_ptr->r_idx - 1;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubble, mode) && player_can_see_bold(player_ptr, wy, wx))
             notice = TRUE;
     }
 
     if (notice)
-        msg_print(_("–A‚ª’e‚¯‚½I", "The bubble pops!"));
+        msg_print(_("æ³¡ãŒå¼¾ã‘ãŸï¼", "The bubble pops!"));
 }
 
 /*!
- * @brief 7/8‚ÌŠm—¦‚ÅA5ƒ}ƒXˆÈ“à‚Éƒg[ƒeƒ€ƒ‚ƒAƒCŽ©g‚ð¢Š«‚·‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @param md_ptr ƒ‚ƒ“ƒXƒ^[Œ‚”j\‘¢‘Ì‚Ö‚ÌŽQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief 7/8ã®ç¢ºçŽ‡ã§ã€5ãƒžã‚¹ä»¥å†…ã«ãƒˆãƒ¼ãƒ†ãƒ ãƒ¢ã‚¢ã‚¤è‡ªèº«ã‚’å¬å–šã™ã‚‹
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param md_ptr ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ’ƒç ´æ§‹é€ ä½“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_ptr)
 {
-    summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("V‚½‚Èƒ‚ƒAƒC‚ªŒ»‚ê‚½I", "A new moai steps forth!"));
+    summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("æ–°ãŸãªãƒ¢ã‚¢ã‚¤ãŒç¾ã‚ŒãŸï¼", "A new moai steps forth!"));
+}
+
+static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
+        return;
+
+    bool notice = FALSE;
+    const int reproduced_centipede = 2;
+    for (int i = 0; i < reproduced_centipede; i++) {
+        POSITION wy = md_ptr->md_y;
+        POSITION wx = md_ptr->md_x;
+        bool pet = is_pet(md_ptr->m_ptr);
+        BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
+        MONSTER_IDX smaller_centipede = md_ptr->m_ptr->r_idx - 1;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_centipede, mode) && player_can_see_bold(player_ptr, wy, wx))
+            notice = TRUE;
+    }
+
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+    if (notice)
+        msg_format(_("%sãŒå†ç”Ÿã—ãŸï¼", "The %s was reproduced!"), m_name);
+}
+
+/* todo æ­»äº¡æ™‚ã®ç‰¹æ®Šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã™ã‚‹ã ã‘ã®å‡¦ç†ã‚’è¤‡æ•°ä½œã‚‹ãªã‚‰ã€switch/caseæ–‡ã«åˆ†ã‘ã‚‰ã‚Œã‚‹ã‚ˆã†ã«æ±Žç”¨åŒ–ã™ã‚‹ã“ã¨ */
+static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (!is_seen(player_ptr, md_ptr->m_ptr))
+        return;
+
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+    msg_format(_("%sã¯ãŠæ˜Ÿã•ã¾ã«ãªã£ãŸï¼", "%^s became a constellation!"), m_name);
+}
+
+static void drop_specific_item_on_dead(player_type *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
+{
+    object_type forge;
+    object_type *q_ptr = &forge;
+    object_wipe(q_ptr);
+    get_obj_num_hook = object_hook_pf;
+    (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
+    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
 static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
@@ -275,66 +316,44 @@ static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
         return;
 
     switch (md_ptr->r_ptr->d_char) {
-    case '(': {
+    case '(':
         if (player_ptr->current_floor_ptr->dun_level <= 0)
-            break;
+            return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_cloak;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
-    }
-    case '/': {
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_cloak);
+        return;
+    case '/':
         if (player_ptr->current_floor_ptr->dun_level <= 4)
-            break;
+            return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_polearm;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
-    }
-    case '[': {
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_polearm);
+        return;
+    case '[':
         if (player_ptr->current_floor_ptr->dun_level <= 19)
-            break;
+            return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_armor;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
-    }
-    case '\\': {
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_armor);
+        return;
+    case '\\':
         if (player_ptr->current_floor_ptr->dun_level <= 4)
-            break;
+            return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_hafted;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
-    }
-    case '|': {
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_hafted);
+        return;
+    case '|':
         if (md_ptr->m_ptr->r_idx == MON_STORMBRINGER)
-            break;
+            return;
 
-        object_type forge;
-        object_type *q_ptr = &forge;
-        object_wipe(q_ptr);
-        get_obj_num_hook = kind_is_sword;
-        make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-        (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
-        break;
-    }
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_sword);
+        return;
+    case ']':
+        if (player_ptr->current_floor_ptr->dun_level <= 19)
+            return;
+
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
+        return;
+    default:
+        return;
     }
 }
 
@@ -385,6 +404,14 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_TOTEM_MOAI:
         on_dead_totem_moai(player_ptr, md_ptr);
         return;
+    case MON_DRAGON_CENTIPEDE:
+    case MON_DRAGON_WORM:
+        on_dead_dragon_centipede(player_ptr, md_ptr);
+        return;
+    case MON_CAIT_SITH:
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
+    case MON_BIG_RAVEN:
+        on_dead_big_raven(player_ptr, md_ptr);
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;

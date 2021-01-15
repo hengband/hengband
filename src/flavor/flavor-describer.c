@@ -385,7 +385,7 @@ static void describe_specific_pval(flavor_type *flavor_ptr)
 
 static void describe_pval(flavor_type *flavor_ptr)
 {
-    if (!have_pval_flags(flavor_ptr->tr_flags))
+    if (!has_pval_flags(flavor_ptr->tr_flags))
         return;
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
@@ -402,7 +402,7 @@ static void describe_pval(flavor_type *flavor_ptr)
 
 static void describe_lamp_life(flavor_type *flavor_ptr)
 {
-    if ((flavor_ptr->o_ptr->tval != TV_LITE) || ((object_is_fixed_artifact(flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->sval != SV_LITE_FEANOR))))
+    if ((flavor_ptr->o_ptr->tval != TV_LITE) || (object_is_fixed_artifact(flavor_ptr->o_ptr) || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))
         return;
 
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));

@@ -119,11 +119,11 @@ bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx)
 bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    if (!(r_ptr->flags8 & RF8_WILD_ONLY))
+    if ((r_ptr->flags8 & RF8_WILD_ONLY) == 0)
         return TRUE;
 
     dungeon_type *d_ptr = &d_info[player_ptr->dungeon_idx];
-    return ((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) != 0) && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0);
+    return (((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) != 0) && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0));
 }
 
 /*!
@@ -277,10 +277,7 @@ bool mon_hook_lava(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!mon_hook_dungeon(player_ptr, r_idx))
         return FALSE;
 
-    if (((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) || (r_ptr->flags7 & RF7_CAN_FLY)) && !(r_ptr->flags3 & RF3_AURA_COLD))
-        return TRUE;
-    else
-        return FALSE;
+    return ((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) || (r_ptr->flags7 & RF7_CAN_FLY)) && !(r_ptr->flags3 & RF3_AURA_COLD);
 }
 
 /*!
@@ -813,19 +810,12 @@ bool monster_can_entry_arena(player_type *player_ptr, MONRACE_IDX r_idx)
 
     HIT_POINT dam = 0;
     monster_race *r_ptr = &r_info[r_idx];
-    if (r_ptr->flags1 & (RF1_NEVER_MOVE))
-        return FALSE;
-
-    if (r_ptr->flags2 & (RF2_MULTIPLY))
-        return FALSE;
-
-    if (r_ptr->flags2 & (RF2_QUANTUM))
-        return FALSE;
-
-    if (r_ptr->flags7 & (RF7_AQUATIC))
-        return FALSE;
-
-    if (r_ptr->flags7 & (RF7_CHAMELEON))
+    bool unselectable = (r_ptr->flags1 & RF1_NEVER_MOVE) != 0;
+    unselectable |= (r_ptr->flags2 & RF2_MULTIPLY) != 0;
+    unselectable |= ((r_ptr->flags2 & RF2_QUANTUM) != 0) && ((r_ptr->flags1 & RF1_UNIQUE) == 0);
+    unselectable |= (r_ptr->flags7 & RF7_AQUATIC) != 0;
+    unselectable |= (r_ptr->flags7 & RF7_CHAMELEON) != 0;
+    if (unselectable)
         return FALSE;
 
     for (int i = 0; i < 4; i++) {

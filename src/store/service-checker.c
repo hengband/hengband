@@ -102,7 +102,7 @@ static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
     case TV_STATUE: {
         monster_race *r_ptr = &r_info[o_ptr->pval];
         if (!(r_ptr->flags3 & RF3_EVIL))
-            if (((r_ptr->flags3 & RF3_GOOD) != 0) || ((r_ptr->flags3 & RF3_ANIMAL) != 0) || (angband_strchr("?!", r_ptr->d_char) != '\0'))
+            if (((r_ptr->flags3 & RF3_GOOD) != 0) || ((r_ptr->flags3 & RF3_ANIMAL) != 0) || (angband_strchr("?!", r_ptr->d_char) != NULL))
                 return TRUE;
     }
         /* Fall through */
@@ -216,7 +216,7 @@ bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
     if (!switch_store_check(player_ptr, o_ptr))
         return FALSE;
 
-    return !object_value(player_ptr, o_ptr) <= 0;
+    return object_value(player_ptr, o_ptr) > 0;
 }
 
 static int mass_lite_produce(const PRICE cost)

@@ -77,8 +77,9 @@ typedef enum bar_definition_type {
     BAR_VAMPILIC = 64, /*!< 下部ステータス表示: 吸血 */
     BAR_CURE = 65, /*!< 下部ステータス表示: 回復 */
     BAR_ESP_EVIL = 66, /*!< 下部ステータス表示: 邪悪感知 */
+    BAR_NIGHTSIGHT = 67, /*!< 下部ステータス表示: 暗視 */
 } bar_definition_type;
 
-#define MAX_STAT_BARS 68
+#define MAX_STAT_BARS 69
 
 extern stat_bar stat_bars[MAX_STAT_BARS];

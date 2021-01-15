@@ -1,8 +1,8 @@
-#pragma once
+ï»¿#pragma once
 /*
- * Windows‚ÌƒR[ƒh‚©‚ç‚ÍŒÄ‚Î‚ê‚È‚¢B‚æ‚Á‚ÄVS‚©‚ç‚ÍŒ©‚¦‚È‚¢
+ * Windowsã®ã‚³ãƒ¼ãƒ‰ã‹ã‚‰ã¯å‘¼ã°ã‚Œãªã„ã€‚ã‚ˆã£ã¦VSã‹ã‚‰ã¯è¦‹ãˆãªã„
  */
 
-#include "angband.h"
+#include "system/angband.h"
 
 void exit_game_panic(player_type *creature_ptr);

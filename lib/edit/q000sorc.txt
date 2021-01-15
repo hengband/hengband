@@ -50,7 +50,7 @@ F:c:FLOOR:8:385
 F:d:SHALLOW_WATER:8:526
 
 # Deep water with Great Wyrm of Many Colours
-F:e:DEEP_WATER:8:790
+F:e:DEEP_WATER:8:1199
 
 # Normal wall
 F:#:GRANITE

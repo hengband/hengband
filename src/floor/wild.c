@@ -2,10 +2,10 @@
  * @brief 荒野マップの生成とルール管理 / Wilderness generation
  * @date 2014/02/13
  * @author
- * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
- * This software may be copied and distributed for educational, research, and\n
- * not for profit purposes provided that this copyright and statement are\n
- * included in all such copies.\n
+ * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
+ * This software may be copied and distributed for educational, research, and
+ * not for profit purposes provided that this copyright and statement are
+ * included in all such copies.
  * 2013 Deskull rearranged comment for Doxygen.
  */
 
@@ -353,7 +353,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
     }
 
     bool is_winner = wilderness[y][x].entrance > 0;
-    is_winner &= !wilderness[y][x].town != 0;
+    is_winner &= (wilderness[y][x].town == 0);
     bool is_wild_winner = (d_info[wilderness[y][x].entrance].flags1 & DF1_WINNER) == 0;
     is_winner &= ((current_world_ptr->total_winner != 0) || is_wild_winner);
     if (!is_winner)
@@ -516,7 +516,7 @@ void wilderness_gen(player_type *creature_ptr)
             for (x = 0; x < floor_ptr->width; x++) {
                 grid_type *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
-                if (!cave_have_flag_grid(g_ptr, FF_ENTRANCE))
+                if (!cave_has_flag_grid(g_ptr, FF_ENTRANCE))
                     continue;
 
                 if (g_ptr->m_idx != 0)
@@ -608,7 +608,7 @@ void wilderness_gen_small(player_type *creature_ptr)
 }
 
 typedef struct wilderness_grid {
-    int terrain; /* Terrain type */
+    wt_type terrain; /* Terrain type */
     TOWN_IDX town; /* Town number */
     DEPTH level; /* Level of the wilderness */
     byte road; /* Road */
@@ -867,14 +867,14 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
         return TRUE;
     }
 
-    bool have_pet = FALSE;
+    bool has_pet = FALSE;
     for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
             continue;
 
         if (is_pet(m_ptr) && i != creature_ptr->riding)
-            have_pet = TRUE;
+            has_pet = TRUE;
 
         if (monster_csleep_remaining(m_ptr) || (m_ptr->cdis > MAX_SIGHT) || !is_hostile(m_ptr))
             continue;
@@ -884,7 +884,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
         return FALSE;
     }
 
-    if (have_pet) {
+    if (has_pet) {
         concptr msg = _("ペットを置いて広域マップに入りますか？", "Do you leave your pets behind? ");
         if (!get_check_strict(creature_ptr, msg, CHECK_OKAY_CANCEL)) {
             free_turn(creature_ptr);

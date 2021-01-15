@@ -2,8 +2,6 @@
 
 #include "system/angband.h"
 
-extern bool browsing_movie;
-
 int soc_write(int sd, char *buf, size_t sz);
 int soc_read(int sd, char *buf, size_t sz);
 void set_proxy(char *default_url, int default_port);

@@ -4,6 +4,7 @@
 #include "core/window-redrawer.h"
 #include "mind/mind-mirror-master.h"
 #include "player/player-damage.h"
+#include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "view/display-messages.h"
@@ -74,11 +75,11 @@ void effect_player_mind_blast(player_type *target_ptr, effect_player_type *ep_pt
     }
 
     msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psionic energy."));
-    if (!target_ptr->resist_conf) {
+    if (!has_resist_conf(target_ptr)) {
         (void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
     }
 
-    if (!target_ptr->resist_chaos && one_in_(3)) {
+    if (!has_resist_chaos(target_ptr) && one_in_(3)) {
         (void)set_image(target_ptr, target_ptr->image + randint0(250) + 150);
     }
 
@@ -115,11 +116,11 @@ void effect_player_brain_smash(player_type *target_ptr, effect_player_type *ep_p
     if (check_multishadow(target_ptr))
         return;
 
-    if (!target_ptr->resist_blind) {
+    if (!has_resist_blind(target_ptr)) {
         (void)set_blind(target_ptr, target_ptr->blind + 8 + randint0(8));
     }
 
-    if (!target_ptr->resist_conf) {
+    if (!has_resist_conf(target_ptr)) {
         (void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
     }
 
@@ -134,7 +135,7 @@ void effect_player_brain_smash(player_type *target_ptr, effect_player_type *ep_p
     while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
         (void)do_dec_stat(target_ptr, A_WIS);
 
-    if (!target_ptr->resist_chaos) {
+    if (!has_resist_chaos(target_ptr)) {
         (void)set_image(target_ptr, target_ptr->image + randint0(250) + 150);
     }
 }

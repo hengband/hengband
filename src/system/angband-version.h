@@ -14,15 +14,21 @@
  */
 #define FAKE_VERSION 0
 
-#define FAKE_VER_MAJOR 12 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
-#define FAKE_VER_MINOR 2 /*!< ゲームのバージョン番号定義(マイナー番号) */
-#define FAKE_VER_PATCH 1 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 7 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_MAJOR 13 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
+#define FAKE_VER_MINOR 0 /*!< ゲームのバージョン番号定義(マイナー番号) */
+#define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
+#define FAKE_VER_EXTRA 0 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 /*!
   * @brief バージョンが開発版が安定版かを返す
   */
 #define IS_STABLE_VERSION (FAKE_VER_MINOR % 2 == 0 && FAKE_VER_EXTRA == 0)
+
+/*!
+ * @brief 状態がアルファ版かどうかを返す
+ * @note アルファ版はエクストラ番号一定値までをアルファとし、一定まで進めて安定次第ベータ版、さらにそれも解除して無印版とする。
+ */
+#define IS_ALPHA_VERSION TRUE
 
 /*!
    * @brief セーブファイル上のバージョン定義(メジャー番号) / "Savefile Version Number" for Hengband 1.1.1 and later

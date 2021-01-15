@@ -5,7 +5,7 @@
  */
 
 #include "player-attack/player-attack.h"
-#include "art-definition/art-sword-types.h"
+#include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
@@ -21,9 +21,9 @@
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
 #include "mind/monk-attack.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
@@ -234,7 +234,7 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
     pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, FALSE);
     calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
-    if ((attacker_ptr->impact[pa_ptr->hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
+    if (((attacker_ptr->impact & FLAG_CAUSE_INVEN_RARM) && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
         || (pa_ptr->mode == HISSATSU_QUAKE))
         *do_quake = TRUE;
 
@@ -337,7 +337,7 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
 
     *(pa_ptr->mdeath) = TRUE;
     if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
-        if (have_right_hand_weapon(attacker_ptr) && have_left_hand_weapon(attacker_ptr)) {
+        if (has_right_hand_weapon(attacker_ptr) && has_left_hand_weapon(attacker_ptr)) {
             if (pa_ptr->hand)
                 attacker_ptr->energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
             else
@@ -377,8 +377,8 @@ static void apply_actual_attack(
     decide_blood_sucking(attacker_ptr, pa_ptr);
 
     // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでhex_spelling() の判定をしないとダメ.
-    bool vorpal_cut = (has_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
-        && !is_zantetsu_nullified;
+    bool vorpal_cut
+        = (has_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified;
 
     calc_attack_damage(attacker_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
     apply_damage_bonus(attacker_ptr, pa_ptr);
@@ -387,8 +387,8 @@ static void apply_actual_attack(
     pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage,
         (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
     critical_attack(attacker_ptr, pa_ptr);
-    msg_format_wizard(attacker_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
-        pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);
+    msg_format_wizard(attacker_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
+        pa_ptr->attack_damage, pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);
 }
 
 /*!
@@ -497,7 +497,7 @@ void massacre(player_type *caster_ptr)
         POSITION x = caster_ptr->x + ddx_ddd[dir];
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
         m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
+        if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
             do_cmd_attack(caster_ptr, y, x, 0);
     }
 }

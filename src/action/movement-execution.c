@@ -1,6 +1,6 @@
 ﻿#include "action/movement-execution.h"
 #include "action/open-close-execution.h"
-#include "art-definition/art-sword-types.h"
+#include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/disturbance.h"
 #include "core/player-update-types.h"
@@ -25,6 +25,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/warning.h"
 #include "player/player-move.h"
+#include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -140,7 +141,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         stormbringer = TRUE;
 
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    bool p_can_kill_walls = creature_ptr->kill_wall && has_flag(f_ptr->flags, FF_HURT_DISI) && (!p_can_enter || !has_flag(f_ptr->flags, FF_LOS))
+    bool p_can_kill_walls = has_kill_wall(creature_ptr) && has_flag(f_ptr->flags, FF_HURT_DISI) && (!p_can_enter || !has_flag(f_ptr->flags, FF_LOS))
         && !has_flag(f_ptr->flags, FF_PERMANENT);
     GAME_TEXT m_name[MAX_NLEN];
     bool can_move = TRUE;
@@ -149,7 +150,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         if (!is_hostile(m_ptr)
             && !(creature_ptr->confused || creature_ptr->image || !m_ptr->ml || creature_ptr->stun
-                || ((creature_ptr->muta2 & MUT2_BERS_RAGE) && creature_ptr->shero))
+                || ((creature_ptr->muta2 & MUT2_BERS_RAGE) && is_shero(creature_ptr)))
             && pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
             monster_desc(creature_ptr, m_name, m_ptr, 0);

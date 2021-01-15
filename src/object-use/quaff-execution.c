@@ -23,6 +23,7 @@
 #include "player-info/self-info.h"
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/player-status-flags.h"
 #include "player/digestion-processor.h"
 #include "player/eldritch-horror.h"
 #include "player/mimic-info-table.h"
@@ -57,14 +58,14 @@ static bool booze(player_type *creature_ptr)
     bool ident = FALSE;
     if (creature_ptr->pclass != CLASS_MONK)
         chg_virtue(creature_ptr, V_HARMONY, -1);
-    else if (!creature_ptr->resist_conf)
+    else if (!has_resist_conf(creature_ptr))
         creature_ptr->special_attack |= ATTACK_SUIKEN;
 
-    if (!creature_ptr->resist_conf && set_confused(creature_ptr, randint0(20) + 15)) {
+    if (!has_resist_conf(creature_ptr) && set_confused(creature_ptr, randint0(20) + 15)) {
         ident = TRUE;
     }
 
-    if (creature_ptr->resist_chaos) {
+    if (has_resist_chaos(creature_ptr)) {
         return ident;
     }
 
@@ -182,7 +183,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_POISON:
-            if (!(creature_ptr->resist_pois || is_oppose_pois(creature_ptr))) {
+            if (!(has_resist_pois(creature_ptr) || is_oppose_pois(creature_ptr))) {
                 if (set_poisoned(creature_ptr, creature_ptr->poisoned + randint0(15) + 10)) {
                     ident = TRUE;
                 }
@@ -190,7 +191,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_BLINDNESS:
-            if (!creature_ptr->resist_blind) {
+            if (!has_resist_blind(creature_ptr)) {
                 if (set_blind(creature_ptr, creature_ptr->blind + randint0(100) + 100)) {
                     ident = TRUE;
                 }
@@ -532,7 +533,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             msg_print(NULL);
             creature_ptr->tsuyoshi = 1;
             (void)set_tsuyoshi(creature_ptr, 0, TRUE);
-            if (!creature_ptr->resist_chaos) {
+            if (!has_resist_chaos(creature_ptr)) {
                 (void)set_image(creature_ptr, 50 + randint1(50));
             }
             ident = TRUE;

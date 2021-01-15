@@ -9,6 +9,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object/object-mark-types.h"
+#include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -101,7 +102,7 @@ static void run_init(player_type *creature_ptr, DIRECTION dir)
     creature_ptr->run_px = creature_ptr->x;
     int row = creature_ptr->y + ddy[dir];
     int col = creature_ptr->x + ddx[dir];
-    ignore_avoid_run = cave_have_flag_bold(creature_ptr->current_floor_ptr, row, col, FF_AVOID_RUN);
+    ignore_avoid_run = cave_has_flag_bold(creature_ptr->current_floor_ptr, row, col, FF_AVOID_RUN);
     int i = chome[dir];
     if (see_wall(creature_ptr, cycle[i + 1], creature_ptr->y, creature_ptr->x)) {
         find_breakleft = TRUE;
@@ -231,10 +232,10 @@ static bool run_test(player_type *creature_ptr)
                     notice = FALSE;
                 } else if (find_ignore_stairs && has_flag(f_ptr->flags, FF_STAIRS)) {
                     notice = FALSE;
-                } else if (has_flag(f_ptr->flags, FF_LAVA) && (creature_ptr->immune_fire || is_invuln(creature_ptr))) {
+                } else if (has_flag(f_ptr->flags, FF_LAVA) && (has_immune_fire(creature_ptr) || is_invuln(creature_ptr))) {
                     notice = FALSE;
                 } else if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP)
-                    && (creature_ptr->levitation || creature_ptr->can_swim || (creature_ptr->total_weight <= weight_limit(creature_ptr)))) {
+                    && (creature_ptr->levitation || creature_ptr->can_swim || (calc_inventory_weight(creature_ptr) <= calc_weight_limit(creature_ptr)))) {
                     notice = FALSE;
                 }
             }

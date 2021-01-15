@@ -12,11 +12,12 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/experience.h"
+#include "player/player-status-flags.h"
 #include "view/display-messages.h"
 
 void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (target_ptr->resist_blind || check_multishadow(target_ptr))
+    if (has_resist_blind(target_ptr) || check_multishadow(target_ptr))
         return;
 
     if (!set_blind(target_ptr, target_ptr->blind + 10 + randint1(monap_ptr->rlev)))
@@ -34,7 +35,7 @@ void process_terrify_attack(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (target_ptr->resist_fear) {
+    if (has_resist_fear(target_ptr)) {
         msg_print(_("しかし恐怖に侵されなかった！", "You stand your ground!"));
         monap_ptr->obvious = TRUE;
         return;
@@ -95,7 +96,7 @@ void process_lose_all_attack(player_type *target_ptr, monap_type *monap_ptr)
 
 void process_stun_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (target_ptr->resist_sound || check_multishadow(target_ptr))
+    if (has_resist_sound(target_ptr) || check_multishadow(target_ptr))
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
@@ -141,7 +142,7 @@ static void describe_disability(player_type *target_ptr, monap_type *monap_ptr)
 
 void process_monster_attack_time(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (target_ptr->resist_time || check_multishadow(target_ptr))
+    if (has_resist_time(target_ptr) || check_multishadow(target_ptr))
         return;
 
     switch (randint1(10)) {

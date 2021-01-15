@@ -41,6 +41,7 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
@@ -360,7 +361,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
             delete_all_items_from_floor(caster_ptr, y, x);
 
             /* Destroy "non-permanent" grids */
-            if (cave_have_flag_grid(g_ptr, FF_PERMANENT))
+            if (cave_has_flag_grid(g_ptr, FF_PERMANENT))
                 continue;
 
             /* Wall (or floor) type */
@@ -453,7 +454,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
         msg_print(_("燃えるような閃光が発生した！", "There is a searing blast of light!"));
 
         /* Blind the player */
-        if (!caster_ptr->resist_blind && !caster_ptr->resist_lite) {
+        if (!has_resist_blind(caster_ptr) && !has_resist_lite(caster_ptr)) {
             /* Become blind */
             (void)set_blind(caster_ptr, caster_ptr->blind + 10 + randint1(10));
         }

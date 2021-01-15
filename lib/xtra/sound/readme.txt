@@ -1,7 +1,7 @@
-Œ»Ý—˜—p‚µ‚Ä‚¢‚éŒø‰Ê‰¹‘fÞ(‰ÁH’²®ŠÜ)‚Ì”z•zŒ³‚Å‚·B
+ç¾åœ¨åˆ©ç”¨ã—ã¦ã„ã‚‹åŠ¹æžœéŸ³ç´ æ(åŠ å·¥èª¿æ•´å«)ã®é…å¸ƒå…ƒã§ã™ã€‚
 
-–‚‰¤° —l
+é­”çŽ‹é­‚ æ§˜
 https://maoudamashii.jokersounds.com/
 
-Œø‰Ê‰¹ƒ‰ƒ{ —l
+åŠ¹æžœéŸ³ãƒ©ãƒœ æ§˜
 https://soundeffect-lab.info/

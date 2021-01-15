@@ -5,6 +5,28 @@ R:DUNGEON:1:{Name}の場所はココだ： -続く-
 R:TOWN:*:{Name}という街に行ったことはあるかい？
 
 N:0:Default
+14へ行け。
+42TH ZONE!
+#720
+ダンジョンの中にはメイド服を着たドラゴンがいるらしい。
+実はこの世界は乙女ゲームの舞台なの。
+せっかくだから、俺はこの赤の扉を選ぶぜ！
+たぬきの毛をモフモフしたい？調査して探すんだな。
+調査をすれば敵の正体を暴くことができる。たとえそれがジュラル星人でも。
+敵の攻撃が回りくどい？そいつはジュラル星人の仕業だ。
+箱の中の量子ドットは死んでいる！
+箱の中の量子ドットは生きている！
+運命のオーブを覗くのは危険です。あなたの心にただならぬ線！線！線！が浮かび上がります。
+プラグなんて頭に埋め込んだら、コンピュータの思うがままになっちまうぞ。
+#710
+ハープの弦では矢が撃てないようだ。
+黒い敵には油断するんじゃないぞ！
+これがナズグル・ブラック、ナズグル・ブラック...全部同じじゃないですか。
+幽鬼戦隊ナズグルレンジャーは5人じゃない。
+巨大サイバーワイアーム天使悪魔リッチを見つけた！？今すぐ倒せ！！
+大鷲は柔の使い手だ。気をつけろ、油断してると投げ飛ばされるぞ！
+反魔法の装備を身につけると魔法が使えない？反反魔法を身に着けろ！
+呪われたアイテムの中には使えるものもあるらしい...？
 海を泳ぎ山を登った所にある町は他の町とは一味違うぞ。
 アイテムを惜しむな、命こそ惜しめ。
 #700
@@ -214,10 +236,12 @@ There is a horrible, ghastly fate awaiting you... at 2700'!
 ぐあああああぁぁぁぁ！
 #Imperial assassin looking for a job. Contact: Pak, Master of Sinanju, 2600'.
 帝国のアサシン、職求む。連絡は52階のシナンジュ・マスター Pak まで
-Try inscribing the name of the first monster killed by it in the weapon!
+#Try inscribing the name of the first monster killed by it in the weapon!
+最初に倒したモンスターの名前を武器の銘に刻んでみよう！
 #The richer the victim the happier the thief.
 カモが金持ちなほど泥棒は嬉しい。
-Wanted: Smurfs. Good reward. Contact: Gargamel, 400'.
+#Wanted: Smurfs. Good reward. Contact: Gargamel, 400'.
+募集: ナズグル。完全週休２日制。 連絡先: 99階サウロンまで。
 #Beware the Jabberwock, my son! The jaws that bite, the claws that catch...
 ジャバウォックにゃ気をつけるんだぞ、わが息子！牙むき出して噛みつくぞ、爪むき出して襲いくるぞ！
 #There's something bad about what you are carrying in your backpack...
@@ -226,7 +250,8 @@ Wanted: Smurfs. Good reward. Contact: Gargamel, 400'.
 たくさん金を持っている時ほど泥棒はよく現れる。
 #Brand's sword, Werewindle, probably knows more than just one trick.
 アンバーの王子ブランドの剣『ワーウィンドル』はいくつかの芸当をするだろう。
-They say that Scrolls of *Curse Weapon* can create powerful cursed artifacts.
+#They say that Scrolls of *Curse Weapon* can create powerful cursed artifacts.
+*武器呪縛*の巻物はとても呪われたアーティファクトを生成するだろう。
 #They say that Mjollnir will return to your hand if you throw it.
 ミュルニールを投げると手元に戻ってくるらしい。
 #They say that the Chainsword makes monsters mad with its awful noise!
@@ -239,14 +264,16 @@ They say that Scrolls of *Curse Weapon* can create powerful cursed artifacts.
 すべてのパターンの武器は混沌の悪魔たちに致命的な一撃を与えるそうだ。
 #Klingsor's Castle was destroyed by the the holy might of the Spear of Destiny.
 クリングゾールの城は『ロンギヌス』の聖なる力で打ち壊された。
-Orcs are mortally afraid of weapons that can slay them.
+#Orcs are mortally afraid of weapons that can slay them.
+オークは常にオークスレイヤーの武器に怯えている。
 #There is a way to turn a Ring of Speed (-20) into a Ring of Speed (+20).
 スピードの指輪(-20 加速)をスピードの指輪(+20 加速)に変える方法がある。
 #There is no way to turn a Ring of Speed (-20) into a Ring of Speed (+20).
 スピードの指輪(-20 加速)をスピードの指輪(+20 加速)に変える方法はない。
 #Cool guys can resist fire.
 クールな奴は火への耐性を持っている。
-They say that death incarnate wears heavy metal boots...
+#They say that death incarnate wears heavy metal boots...
+死の化身は重い金属製ブーツを履いているらしい...
 #You feel the Longsword (t) you are carrying in your backpack is special...
 ザックの中のロング・ソード (t)は特別製という気がする...
 If you start seeing red monsters, you have probably gained infravision.
@@ -290,7 +317,8 @@ If you start seeing red monsters, you have probably gained infravision.
 アイテムを自分の周りにばらまいておくと、透明なモンスターはよく姿をさらけだす。
 #They say that the key to killing tougher monsters is called "hit&run".
 強いモンスターを倒すコツは「ヒット＆アウェイ」だそうだ。
-They say that there is no such thing as free advice.
+#They say that there is no such thing as free advice.
+このあたりに無料相談所のような施設はないそうだ。
 #Wearing an Amulet of Doom will take you into the Dungeons of Doom.
 破滅のアミュレット(Amulet of Doom)を装備すると「運命の大迷宮」(Dungeons of Doom)に行けるらしい。
 #They say that when you're hungry you can get a pizza in 30 turns or it's free.
@@ -343,14 +371,16 @@ They say that there is no such thing as free advice.
 ドラゴンスレイヤーはドラゴンのブレスに対する耐性を授けてくれるだろう。
 #They say that only a Warrior will want to wear the Terror Mask.
 戦士のみが『恐怖の仮面』を装備したがるだろうと言われている。
-All that is shall come to an end - a dark day dawns for the gods.
+#All that is shall come to an end - a dark day dawns for the gods.
+全ては終末『神々の黄昏』に向かっている。
 #The One Ring is powerful, but will eventually destroy its owner.
 『一つの指輪』は強力だが、最後には持ち主を滅ぼすだろう。
 #Having troubles with summoners? Door Creation is your friend!
 召喚モンスターに手を焼いてる？ドア生成はあなたの友です！
 #Stairway Creation may be slower than Teleport Level, but safer...
 階段生成はレベルテレポートより遅いけど、安全だ...
-I hid the Jewel in a vault at 4700'. To find it, you need to:
+#I hid the Jewel in a vault at 4700'. To find it, you need to:
+94階に宝石を隠した。見つける方法は: --more--
 #Wands of Heal Monster are useful! Hint: ball spell, @....moo(o)ooo
 回復モンスターの魔法棒は使いでがある！ ヒント：ボール系呪文、@....moo(o)ooo
 #Guaranteed heal self - scenario: o'@, type c4c4c4c4
@@ -359,24 +389,30 @@ I hid the Jewel in a vault at 4700'. To find it, you need to:
 奴にあなたが見えないなら、奴はあなたを傷つけられない！
 #If it can't see you, you might still be able to hurt it...
 奴にあなたが見えないなら、あなたは奴を一方的に攻撃できるかもしれない...
-The Jedi Holocron is the best artifact light source there is.
+#The Jedi Holocron is the best artifact light source there is.
+『ジェダイ・ホロクロン』こそが最も優れた光源アーティファクトだ。
 #I love you, you love me, we are a happy family!
 アイラブユー、ユーラブミー、ボクたちハッピー家族！
-Even *you* can become a Living Trump with the right treatment.
-No animal is interested in sex if it is mortally scared.
+#Even *you* can become a Living Trump with the right treatment.
+正しく過ごせば*あなた*も人間トランプになれる。
+#No animal is interested in sex if it is mortally scared.
+名状しがたい生き物と交わりたい動物なんていないだろう。
 #There is a plenty of Longswords around 1000'.
 20階あたりにはロングソードがたくさん落ちている。
 #Wagner's operas are awfully dissonant! The characters must be deaf!
 ワーグナーのオペラは酷い不調和音だ！登場人物は耳が聞こえないに違いない！
-Groo may be as dumb as an amoeba, but he knows a good sword when he sees one.
+#Groo may be as dumb as an amoeba, but he knows a good sword when he sees one.
+『岩本虎眼』は狂っているが、剣の腕だけは確かだ。
 #Groo is an idiot! Groo is a dolt! He is a fool! He has no mind!
 グルーは馬鹿だ！グルーはバカだ！奴はばかだ！奴には思考というものがない！
-And now, Groo does what Groo does best!
+#And now, Groo does what Groo does best!
+『石川五右衛門』は一番いい場面でしか仕事をしない！
 #Groo is your worst nightmare.
 グルーは最悪の悪夢だ。
 #Freddy Krueger is your worst nightmare.
 フレディ・クルーガーは最悪の悪夢だ。
-Come to Freddy! He needs some sparring urgently.
+#Come to Freddy! He needs some sparring urgently.
+フレディのところに向かって！あいつはいまスパーリングパートナーが必要なの。
 #There are often stairways in graveyards: bad people are carried to hell...
 墓地にはよく階段がある: 悪人共を地獄に送る為の階段が．．．
 #An urgent message from Dworkin: Pattern not found.
@@ -389,7 +425,8 @@ Come to Freddy! He needs some sparring urgently.
 スルトの呪われた剣『神々の黄昏』は永遠の炎で燃えている。
 #Wotan (Odin) carved his Runespear from a branch of the World-Tree Ash.
 オーディンは世界樹の枝から魔槍を作り上げた。
-Hagen slew Siegfried with his spear, stealthily sneaking behind him.
+#Hagen slew Siegfried with his spear, stealthily sneaking behind him.
+ハーゲンはこっそりジークフリードの背後に忍び寄り、その槍で突き殺した。
 #Powerful spells are bound in the Runes of Wotan's Spear.
 オーディンの魔槍にはルーン文字で強力な呪文が封じ込まれている。
 #Flora's sexy boots will make you more attractive.
@@ -408,7 +445,8 @@ Hagen slew Siegfried with his spear, stealthily sneaking behind him.
 火炎の武器は周りを照らすだろう。
 #They say that the gods get angry if you pray too much.
 祈りすぎると神様は怒るらしい。
-For any remedy there is a misery.
+#For any remedy there is a misery.
+どんな救済策でも、悲惨なことは起こり得るだろう。
 #Poison will kill you slowly.
 毒はゆっくりとあなたを殺すだろう。
 #Using a Morningstar in the evening has no effect.
@@ -419,7 +457,8 @@ For any remedy there is a misery.
 死は単に人生があなたに突きつける解雇通告書だ。
 #They say that nobody can defeat his own ghost.
 自分自身の幽霊には誰も勝てないらしい。
-#A greedy genocide can be a fatal mistake, especially if you are low on hits.
+#A greedy genocide can be a fatal mistake
+#They say that the gods get angry if you pray too much., especially if you are low on hits.
 貪欲な抹殺は致命的なミスになりかねない。特にHPが低い時には。
 #PLEASE ignore the previous rumor.
 お願いだから前の噂は忘れてくれ。
@@ -431,23 +470,30 @@ For any remedy there is a misery.
 たった今、ここの一つ下の階で誰かが殺された。
 #Meet me at 1900' if you are a man.
 男なら38階まで来て俺と勝負だ。
-Bashing a creature may sometimes stun it.
+#Bashing a creature may sometimes stun it.
+敵に叩きつければ、たまに朦朧とさせるだろう。
 #One Ring to rule them all, One Ring to find them.
 一つの指輪はすべてを統べ、一つの指輪はすべてを見つける。
 #One Ring to bring them all and in the darkness bind them.
 一つの指輪はすべてを捕えてくらやみのなかにつなぎとめる。
-A person attuned to the Jewel could use it to erase the Pattern.
+#A person attuned to the Jewel could use it to erase the Pattern.
+宝石の扱いに慣れている者は、パターンの模様を消すことができる。
 #Three Rings for the Elven-kings under the sky...
 三つの指輪は空の下なるエルフの王に。
 #Never carry a Potion of Detonations if there is a fire trap nearby!
 近くに炎の罠がある時は、絶対に爆発の薬を持ち歩いてはいけない！
-Laugh to scorn the power of man, for none of woman born shall harm thee!
-All hail thee that shalt be king hereafter!
+#Laugh to scorn the power of man, for none of woman born shall harm thee!
+拙者、おなごは斬れぬ！
+#All hail thee that shalt be king hereafter!
+新たなる王の誕生に万歳！
 #He who laughs at Groo's brains will find there is nothing to laugh about.
 グルーの頭脳を嘲笑う者は、笑う対象が存在しないことに気づくだろう。
-A wise man always speaks too soon...
-Let us not dwell on possible bad fortunes!
-Appearance is only the frosting, not the cake!
+#A wise man always speaks too soon...
+賢人はいつもまくしたてるように早口だ。
+#Let us not dwell on possible bad fortunes!
+起こり得る不幸に惑わされないようにしよう！
+#Appearance is only the frosting, not the cake!
+二度あることは三度もない。
 #A feeling of Death flows through your body.
 死の予感があなたの体を通り抜けた。
 #Violence is no solution.
@@ -456,17 +502,23 @@ Appearance is only the frosting, not the cake!
 スピードの靴 (+50 加速)は夢ではない！
 #You will need to Restore the Constitution if the Anarchists strike.
 無政府主義者の攻撃に対しては Restore Constitution (耐久力復活と憲法擁護をかけてある）が必要だ。
-Drain you of your sanity: Face the Thing That Should Not Be!
+#Drain you of your sanity: Face the Thing That Should Not Be!
+正気をかなぐり捨てて、あるべきではないことに向き合いなさい！
 #Wearing an Amulet of Doom will take you into the Dungeons of Doom.
 破滅のアミュレット(Amulet of Doom)を装備すると画面が３Ｄポリゴンになるらしい。
-Whence come you then, that you have never heard of the Rhinegold?
+#Whence come you then, that you have never heard of the Rhinegold?
+いつ、どこから来たのですか？ラインの黄金について聞いたことがないのですか？
 #The Nibelung, Night-Alberich, in revenge, stole the Rhinegold.
 ニーベルングの『復讐のアルベリヒ』はラインの黄金を盗んだ。
-Since by curse it came to me, accursed be this Ring!
-Each shall itch to possess the Ring, but none in it shall find pleasure!
-Solemn treaties, with symbols of trust, carved by Wotan in his Spear.
-Pudpadnoy Tooboothokoot is possessed by a demon known only as "It".
-Merlin wore the Terror Mask and the last thing he ever saw was a big J...
+#Since by curse it came to me, accursed be this Ring!
+私はこの指輪に呪われている！呪いによって不幸がもたらされた！
+#Each shall itch to possess the Ring, but none in it shall find pleasure!
+指輪をしててもかゆいだけだ、気持ちいいことなんてない！
+#Solemn treaties, with symbols of trust, carved by Wotan in his Spear.
+オーディンは信頼の証を『グングニル』に刻み込んだ。
+#Pudpadnoy Tooboothokoot is possessed by a demon known only as "It".
+#Merlin wore the Terror Mask and the last thing he ever saw was a big J...
+マーリンが『恐怖の仮面』を装備して最後に言った言葉は「ビッグ・ジ...」
 #They say that the One Ring has a very special curse.
 『一つの指輪』には特別な呪いがかけられているそうだ。
 #They say that alcohol is bad for your health.
@@ -475,10 +527,11 @@ Merlin wore the Terror Mask and the last thing he ever saw was a big J...
 自分で作ったアーティファクトに名前を＊付けなかったら＊どうなるだろう？
 #They say that ancient battlefields are often haunted.
 古戦場は呪われていることが多いらしい。
-Beware of pits that fill the whole level!
+#Beware of pits that fill the whole level!
+階全体を埋め尽くすモンスターの巣に気をつけろ！
 #They say that the true name of wall monsters is 177.
 ウォール・モンスターの本当の名前は 177 というらしい。
-Never mind the Phial of Galadriel - the Phial of the Gods kicks its butt!
+#Never mind the Phial of Galadriel - the Phial of the Gods kicks its butt!
 #A Ring of Speed? Phooey! Try looking for a Ring of *Speed*!
 スピードの指輪？ チッチッチッ！ *スピード*の指輪を探しな！
 #Thisss cccity isss guilty... the crime isss life... the ssentence isss DEATH!
@@ -489,23 +542,28 @@ Never mind the Phial of Galadriel - the Phial of the Gods kicks its butt!
 荒野に行ってみるといろいろ教えられる。そこにはたくさん変わった動物がいる。
 #What happens if you wear a Ring of Extra Ring Fingers (-2) {cursed}?
 もし薬指の指輪 (-2 指) {呪われている} を装備したらどうなるだろう？
-Damn! Those alien bastards are gonna pay for shooting up my ride!
+#Damn! Those alien bastards are gonna pay for shooting up my ride!
+クソッ、あのクソッタレの侵略者どもは金を払って俺の車を射的の的にするつもりだ！
 #Oremor nhoj em llik tsum uoy emag siht niw ot.
 Oremor nhoj いならなばねさ倒を私はにつ勝でムーゲのこ。
-If I cancel tomorrow the undead will thank me today.
+#If I cancel tomorrow the undead will thank me today.
+死んで花実が咲くものか。
 #Hellfire will burn your soul... (if you're not of evil alignment!)
 地獄の炎があなたの魂を焼くだろう...(あなたが邪悪な属性でないのなら！)
 #Never attempt to Call the Void in an enclosed space!
 閉じた空間で「虚無招来」を試してはならない！
 #Call the Void needs a lot of room to cast...
 「虚無招来」の呪文は広い空間を必要とする。
-Why doesn't Detect Monsters show invisible monsters? 'Cos you can't see 'em!
-I'll tell you the truth, son: your soul's gonna burn in a lake of fire!
+#Why doesn't Detect Monsters show invisible monsters? 'Cos you can't see 'em!
+なぜモンスター感知で透明なモンスターが感知できないかって？そりゃお前さんが見ることができないだけだ！
+#I'll tell you the truth, son: your soul's gonna burn in a lake of fire!
+我が子よ、お前に真実を教えよう。お前の魂は火の海で焼かれるのだ。
 #Not satisfied with being a human? Then polymorph into an Amberite!
 人間でいることに飽きたかい？じゃあアンバー人に変身するんだな！
 #You cruelly stab the helpless, sleeping Software bug!
 眠っている無抵抗なソフトウェアバグを残忍に切り裂いた！
-Slab: Jus' say AarrghaarrghpleeassennononoUGH.
+#Slab: Jus' say AarrghaarrghpleeassennononoUGH.
+チラ裏: 神は言った、くぁwせdrftgyふじこlp
 #You feel the Windows (98) on your hard disk is broken...
 ハードディスクに入っているウィンドウズ(98)は壊れているという気がする。
 #There is a rare spellbook called [M$ PowerFools] {cursed}
@@ -514,195 +572,341 @@ Slab: Jus' say AarrghaarrghpleeassennononoUGH.
 *** 警告！低ヒットポイント！ ***
 #The Jewel of Judgement is actually the other eye of the Serpent of Chaos.
 『審判の宝石』は実は『混沌のサーペント』の片眼だ。
-The Serpent' dreaming eye is green, his track is moon-silver...
+#The Serpent' dreaming eye is green, his track is moon-silver...
+『混沌のサーペント』は緑色の眼を持ち、彼の軌跡が月のような銀色であることを夢見ている。
 #Isn't your very head an especially prized one?
 あんたのその首には高い賞金がかかってるんじゃないのかい？
 #Would ya like a special nice one-way trip to da underworld?
 地下への特別片道ツアーはいらんかね？
-Die or Deliver! Just assent with a head movement.
-Didn't your blood-brother end his career with an enforced suicide?
-Look out for gaz spreading blobs at the ceilings!
-Don't turn around: the Evil Eye iss jusst beehind thee ..
+#Die or Deliver! Just assent with a head movement.
+死ぬか、行くか！声を出さずに返事しろ。
+#Didn't your blood-brother end his career with an enforced suicide?
+お前の実の兄は自殺を強要されたのではないか？ 確認のため '@' を押してください。
+#Look out for gaz spreading blobs at the ceilings!
+天井に広がる危険なブロッブに気をつけてください！
+#Don't turn around: the Evil Eye iss jusst beehind thee ..
+後ろを振り返るな。邪眼が..背後から..お前を...見ている....
 #Ya want a share of The Ultimate Dungeon Cleaner Trustee?
 『究極ダンジョンクリーナー信託』の配当金が欲しいけ？
-Autorollers aren't wary bright things.
-The Wargs give ah very sharpee Choir tonightee!
-The depths are about as unreliable as a dish of over-ripe figs.
-May all the Crows of the Volcano pick your bones clean!
-Ever made your dance around enthousiastic lice without a certain staff?
-A staff is just like a colleague. But a reliable one!
-You are prepared to thrill us with a traditional heroic display?
-Some underworld lads would *LOVE* to blacken your name!
-Beware! The Castle now and then provides regrettable accidents.
-Let the sun of wilderness melt the chill from your life!
-By combining our minds with motion we can tune for the shadow we desire.
-I can show ya the wayy back to chaos, if ya'r gettin homesick.
-Living trump you are? Your equilibrium is becoming impaired...
-Increase your pace to catch up with your thoughtlessness?
-Ya laik da show off a lott - how strong ya are, how fast ya are, ha!
-Solve your pattern, push on ahead, take mental notes as you proceed.
-Since confrontation is inevitable: give yourself a crash course of the code.
-It strucks you as something similar to color blindness. Contagious trap!
-Hey young magic coder adept, you still owe some contributions.
+#Autorollers aren't wary bright things.
+オートローラーは明るいものを警戒しません。
+#The Wargs give ah very sharpee Choir tonightee!
+今宵の歌は、ワーグ合唱団による素敵な合唱です！
+#The depths are about as unreliable as a dish of over-ripe figs.
+現在の階層は、ネットの口コミ並に信用できない。
+#May all the Crows of the Volcano pick your bones clean!
+ハゲタカ共があなたの骨を残らず綺麗にするだろう。
+#Ever made your dance around enthousiastic lice without a certain staff?
+ハエたたきもなしにハエたたき踊りをしたことはあるかい？
+#A staff is just like a colleague. But a reliable one!
+逃げるは恥だが役に立つ。
+#You are prepared to thrill us with a traditional heroic display?
+勇者の出で立ちで俺達を興奮させる準備はできたかい？
+#Some underworld lads would *LOVE* to blacken your name!
+アングラな若者たちには、あなたの名前を黒くするのが大好きな連中もいる。
+#Beware! The Castle now and then provides regrettable accidents.
+気をつけろ！城では時々残念な事故が起きる。
+#Let the sun of wilderness melt the chill from your life!
+荒野の太陽があなたの寒い人生を溶かします！
+#By combining our minds with motion we can tune for the shadow we desire.
+俺達が心と動きを合わせれば、望むままに影を動かせる。
+#I can show ya the wayy back to chaos, if ya'r gettin homesick.
+故郷に戻りたくなっても、俺が混沌への道へと戻してやれる。
+#Living trump you are? Your equilibrium is becoming impaired...
+人間トランプか、お前さんは。平衡が保てなくなっているぞ...
+#Increase your pace to catch up with your thoughtlessness?
+考えなしに突っ走るペースを上げるつもりか？
+#Ya laik da show off a lott - how strong ya are, how fast ya are, ha!
+守れ！守れ！力の限り。お前の力を見せてやれ！
+#Solve your pattern, push on ahead, take mental notes as you proceed.
+パターンを歩き切るには、前に進め。進みながら精神状況に気をつけろ。
+#Since confrontation is inevitable: give yourself a crash course of the code.
+対立は避けられないので、あなたのプログラムに不具合を仕込んでください。
+#It strucks you as something similar to color blindness. Contagious trap!
+色覚異常のようななにかに見舞われた。伝染病の罠！
+#Hey young magic coder adept, you still owe some contributions.
+よう、若いハッカーの君。君に任せたい仕事があるんだ。
 #Yes, timing is definitely against you today. Never mind.
 そうだ。今日あなたは運が悪い。気にするな。
-Amberites are able to sustain some pretty awful beatings.
-You are a secretive person, even in that incarnation, paradoxical too!
-Pass some time in places where the bad things dwell - be red-eyed for a day!
-Go on Goon! But there will be not sufficient time to flee any farther.
-Avoid overconfidence! Be able to gauge its range and striking angle.
+#Amberites are able to sustain some pretty awful beatings.
+アンバライトはかなり強い衝撃にも耐えることができます。
+#You are a secretive person, even in that incarnation, paradoxical too!
+世に顕現しているのに秘密主義だなんて、逆説的だなあ！
+#Pass some time in places where the bad things dwell - be red-eyed for a day!
+悪霊が住む部屋でしばらく過ごしてください。一日の間は目を赤くしてください。
+#Go on Goon! But there will be not sufficient time to flee any farther.
+グーンに行け！しかし遠くに逃げる時間はあまりない。
+#Avoid overconfidence! Be able to gauge its range and striking angle.
+自信過剰にならないようにしてください！攻撃の範囲や強さは予測することができます。
 #Try to beat them to the punch while they are still off-balance.
 敵がふらついているすきに叩け！
-Regain your mental footing - and detect the sounds of pursuit.
-Fire Angels have a vast array of senses. Shadow bloodhounds.
-The drug-store stuff affects your shadow-shifting ability!
-Not unusual to get drunk with but small successes and a Grinning Cat fading.
-Massage the sour muscles in your leg and rise to your feet!
-If you are slow in withdrawing (S)HE will manage to draw you in a clinch!
-Beat the air! Fly back up the high hole in the cleft at the rear of the cave.
-Sing: "You're not asking for the world, I'm not asking for perfection." 
-Be (n)ever hopeful the poison will wear off eventually.
-A new arrival such as yours should perhaps be cautioned. No mercy to weaklings.
-Drifting bits of memory drawn together, assemble them into an entire fabric.
-From the standpoints of reason, business, caution you are wrong? Who cares!
-If the fogs are but slowly broken, they better were not vampiric!
-Heroes? What them are needed for: imagination, grave-garlands and necromancy.
-After some encounters with jellies you might feel like overnarcotized, lame.
-It came to assail me: no escape? Yet another crawl from the Pit of Creation?
-If in good enough shape you'd better throw your legs over the edge...
-While standing in the shadows to regain stamina have visions of sugar plums...
-Encounter them orcs!, know they are countless: no rest for you for hours!
+#Regain your mental footing - and detect the sounds of pursuit.
+落ち着いて。追跡の気配を感じ取りなさい。
+#Fire Angels have a vast array of senses. Shadow bloodhounds.
+熾天使は様々な危険を感知する。影の追跡者だ。
+#The drug-store stuff affects your shadow-shifting ability!
+ドラッグストアの商品はあなたのシャドウ・シフトの能力に影響を与えます。
+#Not unusual to get drunk with but small successes and a Grinning Cat fading.
+酒に酔うのは珍しいことじゃないが、幸運の女神に見放されていくぞ。
+#Massage the sour muscles in your leg and rise to your feet!
+疲れた脚をマッサージして、立ち上がりましょう！
+#If you are slow in withdrawing (S)HE will manage to draw you in a clinch!
+離れるのが遅れると、クリンチに持ち込まれるぞ！
+#Beat the air! Fly back up the high hole in the cleft at the rear of the cave.
+風に負けず、洞窟の奥の深い穴に飛び込んでください！
+#Sing: "You're not asking for the world, I'm not asking for perfection." 
+世界一を追い求めるな、私は完璧を求めちゃいない。
+#Be (n)ever hopeful the poison will wear off eventually.
+毒が徐々に解毒されることを期待しろ(するな)。
+#A new arrival such as yours should perhaps be cautioned. No mercy to weaklings.
+お前のような新参者は深く注意すべきだ。弱者に容赦はない。
+#Drifting bits of memory drawn together, assemble them into an entire fabric.
+うろ覚えの断片が寄り集まって、全体の記憶を構成している。
+#From the standpoints of reason, business, caution you are wrong? Who cares!
+理由、状況、警戒を鑑みて、なにか間違ったか？誰も気にしないよ！
+#If the fogs are but slowly broken, they better were not vampiric!
+霧がゆっくりと晴れていく場合は、そいつは吸血鬼ではないと思っていいだろう！
+#Heroes? What them are needed for: imagination, grave-garlands and necromancy.
+英雄だと？そいつらに必要なのは、想像力と、献花、そして死霊術だ。
+#After some encounters with jellies you might feel like overnarcotized, lame.
+ゼリーと遭遇したあとに、脚が麻痺しすぎて不自由を感じるかもしれない。
+#It came to assail me: no escape? Yet another crawl from the Pit of Creation?
+輪廻転生の輪から抜け出せない？
+#If in good enough shape you'd better throw your legs over the edge...
+優れた体型になろうってんなら、脚なんぞ端に投げちまった方がいい。
+#While standing in the shadows to regain stamina have visions of sugar plums...
+体力を回復しようと影の中に立っていると、外からはプラムみたいに見える...
+#Encounter them orcs!, know they are countless: no rest for you for hours!
+オークの奴らは無数にいるんだ、お前のために何時間も休みはくれないぞ。
 #A monk might have a very foul blow, about four inches below the belt buckle.
 モンクは、へそ下三寸あたりにファウル攻撃をすることがある。
-Are you really suffering withdrawal symptoms and want something crushable?
-Smaug and allohol may disturb your .. was it sanity, courage or boredom?
-Ha treasures! Like all vaults it was full of depths and dangers.
-The benefits of alchemy are my marriage, danger is my passion.
-Any dungeons offer mazes. But don't they lack the ZAngband sense of humor?
-Bodychecks, bodycounts itching all my ways but the awful software bugs...
-Be constantly on guard, joker, don't take anything at face value.
-Which is better: mind blast or mind wash? Will lost memories return gradually?
+#Are you really suffering withdrawal symptoms and want something crushable?
+薬物解脱症状に苦しんでて、八つ当たりする物が欲しいって本当かい？
+#Smaug and allohol may disturb your .. was it sanity, courage or boredom?
+飲酒はあなたのアレを低下させます。えーと、精神力？行動力？それとも長州力だったか？
+#Ha treasures! Like all vaults it was full of depths and dangers.
+ハッ、財宝だと！深層の危険に満ちた宝物庫の話か。
+#The benefits of alchemy are my marriage, danger is my passion.
+錬金術のいいところは、私の結婚で、危ないところは私の情熱です。
+#Any dungeons offer mazes. But don't they lack the ZAngband sense of humor?
+どのダンジョンも迷路でできてるけどよ、どれも変愚蛮怒の珍妙さを欠いてないか？
+#Bodychecks, bodycounts itching all my ways but the awful software bugs...
+持てる手段のすべてで痒みの原因を調べているが、酷いソフトウェア・バグではないだろうか...
+#Be constantly on guard, joker, don't take anything at face value.
+常にヤツに警戒を怠るな。言うことを真に受けるな。
+#Which is better: mind blast or mind wash? Will lost memories return gradually?
+精神攻撃と脳攻撃、どっちがいいの？失った記憶は戻ってくるの？
 #Have a rest and a rumor in the inn over some comfortable pitchers of beer.
 宿屋でゆっくりビールでも飲んで噂を聞いてみたらどうだい？
-The stakes are far too high for a weak bluff, so watch the scores?
-Be not like the others. Proceed carefully, cover yourself at all times.
-You wouldn't want to fool with the Trumps! Aren't they of Doom quality?
-Smeagols removal is high on your list of things that needed knowing or doing?
-Matter of recollection: find the inn and nurse some rumors for a while.
-Served you right: 3 quarters dead. Wasn't it purely a result of your arrogance?
-Confident - Cocky - Lazy - Dead. The Old Man's mantra, and a serious good one.
-Let your mind drift over the perversely plotted events of the past levels.
-Another loss? Curse your inertia at having let the situation slide for so long.
-So you have been another cockerel who'd crow before he thinks? Foolish heart!
-Wicked adventures? First and foremost: negotiate with the devil (inside)!
-Do not pour vinegar into your own mental wounds of pride.
-Head over heels? There comes a point in any illness when...
-A flash of your all-to-familiar arrogance might make you bungle.
-Ooh, they will sense it, you really love playing with fire.
+#The stakes are far too high for a weak bluff, so watch the scores?
+しょぼいブラフに金を賭けすぎだろう。残金でも気にしたらどうだ？
+#Be not like the others. Proceed carefully, cover yourself at all times.
+他の連中のようにはなるな。注意深く進め、常に自分をケアしろ。
+#You wouldn't want to fool with the Trumps! Aren't they of Doom quality?
+トランプどものような愚を犯したくないだろう！あいつらはクソ低能じゃないか？
+#Smeagols removal is high on your list of things that needed knowing or doing?
+『スメアゴル』退治はお前さんの優先事項かい？
+#Matter of recollection: find the inn and nurse some rumors for a while.
+やっちまったあなたへ。いい旅館を見つけて、噂が静まるまで滞在しましょう。
+#Served you right: 3 quarters dead. Wasn't it purely a result of your arrogance?
+あんたに従った者の3/4が死んだってな。そりゃお前さんの傲慢さが原因じゃないかい？
+#Confident - Cocky - Lazy - Dead. The Old Man's mantra, and a serious good one.
+自信、過信、不注意、死亡。長老の真言だが、的を射ているな。
+#Let your mind drift over the perversely plotted events of the past levels.
+過去にやらかした記憶を思い出してください。
+#Another loss? Curse your inertia at having let the situation slide for so long.
+またやらかしたって？惰性でだらだら続けた自分を呪うんだな。
+#So you have been another cockerel who'd crow before he thinks? Foolish heart!
+それでまた考える前に突っ走ってしまったってか？うずら並か？
+#Wicked adventures? First and foremost: negotiate with the devil (inside)!
+冒険が苦痛だって？まずは何より、(心の中の)悪魔と交渉しろよ！
+#Do not pour vinegar into your own mental wounds of pride.
+傷ついた自尊心の塩を刷り込むような真似はするな。
+#Head over heels? There comes a point in any illness when...
+急転したって？どんな病でも山場ってものがあってだな...
+#A flash of your all-to-familiar arrogance might make you bungle.
+眩いばかりの傲慢さが、お前にヘマをさせるんだ。
+#Ooh, they will sense it, you really love playing with fire.
+ああ、ヤツらはわかってるんだ、お前が火遊びが好きだってことがよ。
 #One ill turn deserves another.
 １ターンのミスはさらなるミスを呼ぶ。
-To say it blunt: you *cannot* afford another mistake. - What you say, really?
-Our dreams are too much with us. They imply a breach of security.
-Groo seems almost too well organized to be a mental case.
+#To say it blunt: you *cannot* afford another mistake. - What you say, really?
+ぶっちゃけていい？率直に言わせてもらえば、あなたにまたヘマをする余裕は*ない*はずだ。
+#Our dreams are too much with us. They imply a breach of security.
+欲しいものが多すぎらーよ。その気持ちが心の緩みなんだ。
+#Groo seems almost too well organized to be a mental case.
+グルーはメンタル攻撃には強いようだ。
 #They say that the Jewel of Judgement controls all the elements.
 『審判の宝石』は全てのエレメントをコントロールするらしい。
-They say: Droppa MaPantz is the court jester of Amber and a master of traps.
-They say: Spores that turn to jewel shards might smash you like bullets.
-They say: Inhale the crisp evening air before going downward hunting.
-They say that when you stop being vain you might even be dead.
-They say that there are ninnies, simpletons. And they never come back.
-They say that the vestal virgins are hidden somewhere downstairs.
-They say that all of them adventurers are destined for Hades.
-They say: Being what you have to be without whining about it.
-They say: Visit a tannery and get used to be tanned!
-They say: "Z" stands for Zelazny, Roger (+1995) and means 'He lives'(greek).
+#They say: Droppa MaPantz is the court jester of Amber and a master of traps.
+『ドロッパ・マパンツ』はアンバーの宮廷道化師で罠の達人らしい。
+#They say: Spores that turn to jewel shards might smash you like bullets.
+石礫のような胞子が弾丸のようにあなたを粉砕するかもしれない。
+#They say: Inhale the crisp evening air before going downward hunting.
+地下に狩りに行く前に、地上の空気をたっぷり吸っておきましょうね。
+#They say that when you stop being vain you might even be dead.
+あなたが無駄な行為をやめるときは、死んだときだ。
+#They say that there are ninnies, simpletons. And they never come back.
+ここらには馬鹿や単純なヤツらがいる。そいつらは二度と戻って来ない。
+#They say that the vestal virgins are hidden somewhere downstairs.
+ウェスタの巫女は地下のどこかに隠されています。
+#They say that all of them adventurers are destined for Hades.
+全ての冒険者は冥王ハーデスに運命付けられている。
+#They say: Being what you have to be without whining about it.
+それについては泣き言を言っている場合ではない。
+#They say: Visit a tannery and get used to be tanned!
+皮鞣し工場で皮を鞣されるのに慣れよう！
+#They say: "Z" stands for Zelazny, Roger (+1995) and means 'He lives'(greek).
+「Z」はR.ゼラズニィに由来する。
 #Zelazny said: "A headlong rush may also result in a broken neck."
 「向こう見ずな突進は首を折ることになるだろう。」--- R.ゼラズニイ
 #Z. says: The full-scale, all-or-nothing reaction may be ok if you always win.
 「完全な all or nothing という態度は、いつも勝つんだったらそれでいいだろう。」--- R.ゼラズニイ
-Z. says: Couldn't we just sit down and talk about it over a couple of beers?
-Z. says: Somewhere there must be a gap in the icy blue logic that surrounds us.
+#Z. says: Couldn't we just sit down and talk about it over a couple of beers?
+「それについては、座ってビールを飲みながら話しませんか？」--- R.ゼラズニイ
+#Z. says: Somewhere there must be a gap in the icy blue logic that surrounds us.
 #Chaos patrons are *very* moody!
 カオス守護魔神はとても気まぐれだ！
-You gonna meet unique personalities who are even more than a challenge.
-To be at cross-purposes over your ways with uniques might prove fatal.
-No good to confront the fiendish, quick Freesia without some good gear.
-Being infuriated by tricky foes will make your timing less immaculate.
-Jellies? Some encounters are chilly though they take you no further forwards.
-The best way to treat enemies is to make friends with them. Charm monsters!
-Uniques remain mostly impervious to your attempts to confuse them.
-Half the treasures of a vault could be crushed by an earthquake.
-A chaotic weapon could haunt you with earthquakes.
-Chaotic weapons tend now and then to change your adversaries seriously.
-Mutations may not increase your beauty but surely your repertoire!
-The thrum of serious risk-taking heightens the suspense. Hitchcock them!
-They pay you the compliment of being perfectly straight? OOps, a hero!
+#You gonna meet unique personalities who are even more than a challenge.
+個性的なヤツらに会いに行くのは、挑戦的だ。
+#To be at cross-purposes over your ways with uniques might prove fatal.
+独自の方法で目的以上に行動することは、致命的な結果につながることがあります。
+#No good to confront the fiendish, quick Freesia without some good gear.
+良質の装備なしに凶暴で素早い『フリージア』に立ち向かうのは良くない。
+#Being infuriated by tricky foes will make your timing less immaculate.
+トリッキーな敵にイラツくと、完璧なタイミングを逃すぜ。
+#Jellies? Some encounters are chilly though they take you no further forwards.
+ゼリー？遭遇したら鳥肌もんだが、アイツらは前に進んでこねえぜ。
+#The best way to treat enemies is to make friends with them. Charm monsters!
+敵と相対する最良の方法は、お友達になることさ。モンスターを魅了しよう！
+#Uniques remain mostly impervious to your attempts to confuse them.
+ユニークモンスターの殆どは、混乱させようとしても効きません。
+#Half the treasures of a vault could be crushed by an earthquake.
+宝物庫の財宝の半分は地震で埋めることができる。
+#A chaotic weapon could haunt you with earthquakes.
+(混沌)の武器は、地震を引き起こすだろう。
+#Chaotic weapons tend now and then to change your adversaries seriously.
+(混沌)の武器は、相手をヤバい敵に変化させることがある。
+#Mutations may not increase your beauty but surely your repertoire!
+突然変異は美容には役立たないが、技のレパートリーは増やせるぞ。
+#The thrum of serious risk-taking heightens the suspense. Hitchcock them!
+リスクを取れば取るほどドキドキできるさ。そう、ヒッチコック映画のようにね。
+#They pay you the compliment of being perfectly straight? OOps, a hero!
+観衆はあなたの底なしのまっすぐさに賛辞を送るのですか？ああー、ヒーローですね！
 #Try to line up your opponents to dispatch them one after the other.
 敵を一人づつ倒すために、一列に並ばせろ。
-Some orcish leaders are extremely keen to meet you quite soon.
-Gee! You say you were nearly vanqished by the trickery of priests?
-Run over the facts in your head before confronting special tough guys.
-Kind creatures? They make you stay put if your free action is unsustained.
-Are you ready to vanish discreetly when those packs are after you?
-Any stupid Umber Hulk might destroy YOU if being not too confusionproof.
-Magic doors make fine fences against weak masses of critters.
-Traps, Summoners, Zephyrs. The foreboding of evil grows heavier with stairs.
-Weak dangers? You may be overwhelmed by sheer numbers.
-Deep waters are a nice separation against some poisonous animals.
-It is best to waylay heavy magic users in narrow passages around the corners.
-Heart is downcast? Huh, that's beyond even your accustomed folly. Courage!
+#Some orcish leaders are extremely keen to meet you quite soon.
+オークのリーダーの中にはすぐにあなたに会いたいという者たちがいるでしょう。
+#Gee! You say you were nearly vanqished by the trickery of priests?
+ゲー！司祭の策略で死にまくったって言うの？
+#Run over the facts in your head before confronting special tough guys.
+屈強な敵と退治する前に、まずは現実を見よう。
+#Kind creatures? They make you stay put if your free action is unsustained.
+友好的なモンスターだって？お前が麻痺ってるときに放っておく連中だぞ。
+#Are you ready to vanish discreetly when those packs are after you?
+敵の軍団が後ろにいるときも、用心深く消える準備はできてるかい？
+#Any stupid Umber Hulk might destroy YOU if being not too confusionproof.
+混乱耐性がなけりゃ、どんなに馬鹿なアンバーハルクでもお前を破壊し尽くすぞ。
+#Magic doors make fine fences against weak masses of critters.
+魔法の扉は弱いモンスターの群れをよく防ぐ。
+#Traps, Summoners, Zephyrs. The foreboding of evil grows heavier with stairs.
+罠、召喚、ハウンド。階段を降りると悪い予感は強まっていく。
+#Weak dangers? You may be overwhelmed by sheer numbers.
+ちょっとした危険？そんなのがいっぱいあったらうんざりするだろ。
+#Deep waters are a nice separation against some poisonous animals.
+深い水は毒のある生物に対していいバリケードになる。
+#It is best to waylay heavy magic users in narrow passages around the corners.
+通路の角を曲がったところに全力で魔法を打ち込むといい。
+#Heart is downcast? Huh, that's beyond even your accustomed folly. Courage!
+落ち込んむんじゃないかって？ふー、馬鹿なことをしなきゃねえよ。前向きにいけよ！
 #Dark is the Shadow and yet your heart rejoices.
 影は暗くとも、私の心は喜んでおります…アルウェン
-In the dreadful light you will stand aghast unless your are indeed an elf.
-How the means unforeseen are revealed whereby Oberon might be overthrown?
-Saroyan: Voyald is a way of saying Void, Voyage and World at the same time.
+#In the dreadful light you will stand aghast unless your are indeed an elf.
+エルフでない限り、恐ろしい光の中で立ちすくむだろう。(妖精さんもOK)
+#How the means unforeseen are revealed whereby Oberon might be overthrown?
+『オベロン』が倒されるかもしれない予期せぬ手段が、どのように明らかとなるのでしょうか？
+#Saroyan: Voyald is a way of saying Void, Voyage and World at the same time.
+「Voyaldというのは空虚(Void)、旅(Voyage)、世界(World)を一緒にした言い方である」---サローヤン
 #Death, next to birth is our best gift, and next to truth it is our best friend.
 「死」は、我々にとって生の次に有難い物だ。そして真実の次に良き友だ。
 #The greatest story-teller of all is time and change, or death.
 全てにおいて最も偉大な語り部とは、時と変化、そして死だ。
-Sing Fury: "This is not the time to wonder, this is not the time to cry!"
-How hope beyond hopes is fulfilled is yours to stumble upon.
-Do not grudge his chance of peril him who advances beyond hopes.
-Thou shalt see what comes to him who sets his foolish webs before these feet.
-Tolkien said: "The dread of the Ringwraith cannot be shaken off." Fearless!
+#Sing Fury: "This is not the time to wonder, this is not the time to cry!"
+今は戸惑うときじゃない、泣くときじゃない！
+#How hope beyond hopes is fulfilled is yours to stumble upon.
+抱いた希望の先の先、そこがうまくいくかどうかが、あなたのつまづくポイントだ。
+#Do not grudge his chance of peril him who advances beyond hopes.
+希望を胸に前に進む彼を危険に晒す可能性を恨んではならない。
+#Thou shalt see what comes to him who sets his foolish webs before these feet.
+自分の足元に愚かにも網を張る彼に何が起きるのか、あなたは見なければならない。
+#Tolkien said: "The dread of the Ringwraith cannot be shaken off." Fearless!
+トールキンは言った。指輪の幽鬼の恐怖は振り払うことができないと。恐れるな！
 #Potion mimics are wicked summoners. Hurry up to knock them out, quickly! 
 ミミック（薬）はたちの悪い召喚をする。急いで倒せ、早く！
-Full-scale priests look innocent but are among the nastiest sort of summoners.
-Summoners? Victory is slipping from your grasp even as you stretch out hands.
-Winning vault treasures is just like pulling chestnuts out of spreading fire.
-A dark full of nightmares? There is only one true Nightmare!
-Strength is crucial. Isn't witchcraft just an embroidery in a bard's tale?
-Whenever doubled over force yourself upright. Who wants a bad loser?
-Give heartened chase when your enemies turned tail. Last bit by missile!
-Vlad Dracula? Die and forget, since death is forbidden - to him, not you!
-Vlad Dracula? He hungers after you and thirstes for you!
-Luck and twice luck to meet a hydra if fearless and breath-shielded you are.
-All your misdeeds are engraved into the very flesh-score of time itself.
-Such a chaos spawn will disenchant your best gear in no time at all.
-Trickster Rinaldo. This memory comes to you unbidden, as bitter as always.
+#Full-scale priests look innocent but are among the nastiest sort of summoners.
+本格的な僧侶は無害に思えますが、実は厄介な召喚者たちなのです。
+#Summoners? Victory is slipping from your grasp even as you stretch out hands.
+召喚者ども？どんなに手を伸ばしてもお前に勝ち目はないさ。
+#Winning vault treasures is just like pulling chestnuts out of spreading fire.
+宝物庫の財宝を手に入れることは、火に油を注ぎながら火中の栗を拾うことに等しい。
+#A dark full of nightmares? There is only one true Nightmare!
+ソフトウェア・バグに満ちた部屋？その中に本物のソフトウェア・バグがあります！
+#Strength is crucial. Isn't witchcraft just an embroidery in a bard's tale?
+強さは大事だ。魔術なんて魔術師どもが色を付けて語ってるだけだろ？
+#Whenever doubled over force yourself upright. Who wants a bad loser?
+倍プッシュするほど痺れていくんだぜ。大負けを望んでいるのか？
+#Give heartened chase when your enemies turned tail. Last bit by missile!
+敵がしっぽ巻いて逃げ出したら、穏便に追いかけましょう。最後の少しは遠隔攻撃で！
+#Vlad Dracula? Die and forget, since death is forbidden - to him, not you!
+吸血鬼『ヴラド』？やめとけ、やめとけ、アイツは死を禁じられているからな！
+#Vlad Dracula? He hungers after you and thirstes for you!
+吸血鬼『ヴラド』？飢えるほどお前の血を欲しているらしいぞ！
+#Luck and twice luck to meet a hydra if fearless and breath-shielded you are.
+恐れ知らずでブレスに耐性があれば、ヒドラに遭うのは倍ラッキーだ。
+#All your misdeeds are engraved into the very flesh-score of time itself.
+あなたの全ての悪行は記録されている。
+#Such a chaos spawn will disenchant your best gear in no time at all.
+そういった混沌の群れはあっという間にあなたの良質な装備を劣化させるだろう。
+#Trickster Rinaldo. This memory comes to you unbidden, as bitter as always.
+トリック・スター『リナルド』。いつもながら苦い思い出だ。
 #The extremely ugly man-eater Grendel got his fame via Beowulf saga.
 とても醜い『人食いグレンデル』はベオウルフの物語で有名になった。
-You'd like anyone who sees you outlined in an archway will turn and run?
-Do not run when Barney approaches, and become a happily crumbling idiot.
-Boldor is just a self-opinionated piece of pomposity. But lots of companions!
-Morgoth is the very brink where hope and despair are akin.
-Give little heed to the wreck and slaughter that will lay around the pits.
-Accidents? what accidents? Mighty were your fallen ancestors.
-Fortune has betrayed you but for the momentum. Confidence!
+#You'd like anyone who sees you outlined in an archway will turn and run?
+パターンの上を歩いている途中に誰かに見られたいかい？
+#Do not run when Barney approaches, and become a happily crumbling idiot.
+『ガチャピン』が来たからって走っちゃいけないよ。純真なバカに戻っちゃいけないよ。
+#Boldor is just a self-opinionated piece of pomposity. But lots of companions!
+『ボルドール』はまさに自己中で尊大だ。しかし大量の取り巻きを連れている！
+#Morgoth is the very brink where hope and despair are akin.
+『モルゴス』は希望と絶望の瀬戸際に瀕している。
+#Give little heed to the wreck and slaughter that will lay around the pits.
+モンスターの巣の周りに散らばる残骸や死体には気を取られないでください。
+#Accidents? what accidents? Mighty were your fallen ancestors.
+事故？どんな事故？強かった先祖が倒れたこと？
+#Fortune has betrayed you but for the momentum. Confidence!
+幸運の女神に見放されたが、まだ勢いがある。信じていけ！
 #On the long run - IF you're survivor - winds of fortune will not wreck you.
 長い道のりにおいて - もしあなたが生き残るのであれば - 運命の風はあなたを難破させはしないでしょう。
-As a spell-striking egghead you'd need convincing offensive powers!
+#As a spell-striking egghead you'd need convincing offensive powers!
+卵のように頭をふっとばすには、説得力のある攻撃魔法が必要です！
 #Once no Recall is left the way up will seem never ending to you.
 帰還の巻物が無くなったら、地上への旅は終りのないものに感じるだろう。
 #The simple scheme ended in failure. That demon called lots of companions.
 簡単なはずのクエストをミスっちまった。あのデーモン、大量の仲間を呼びやがった。
-Sing CCR: "Before you kill me take a look at yourself." Reflection-shields!
-Sing Pythons: "Always look on the bright sight of death." Only a breath away!
-Sing Beck: "I'm a loser, baby dragon, so why don't you kill me?" Suicide, ha!
-Sing Morisette: "Life has a funny way, helping you out." So innovate!
-Sing Garbage: "The trick is keep on breathing." Wear dragon scale mail!
-Sing Crowded House: "Always take your weather with you!" Yeah, have a breath.
-The game is serious. Catch it if you can. But you can leave your head on.
+#Sing CCR: "Before you kill me take a look at yourself." Reflection-shields!
+お前それ鉄獄でも同じこと言えんの？
+#Sing Pythons: "Always look on the bright sight of death." Only a breath away!
+聖なる光弾をくらえ〜。うおっ、まぶしっ！
+#Sing Beck: "I'm a loser, baby dragon, so why don't you kill me?" Suicide, ha!
+敗北の味が知りたい？自殺しますか？[Y/N]
+#Sing Morisette: "Life has a funny way, helping you out." So innovate!
+生命領域の魔法は面白い呪文がある、あなたを助けてくれます。
+#Sing Garbage: "The trick is keep on breathing." Wear dragon scale mail!
+ブレスを防ぎたいって？スケイル・メイルを着ろ！
+#Sing Crowded House: "Always take your weather with you!" Yeah, have a breath.
+天候を操りたい？陽光召喚！
+#The game is serious. Catch it if you can. But you can leave your head on.
+深刻なバグがあります。修正することもできますが、そのままにしておくこともできます。
 #A Grey Mushroom of Restoring will not restore your drained life experience.
 復活のキノコは失われた経験値を回復しない。
 #Close eXamination of splendid shop-wares will provide precious insights. 
@@ -710,60 +914,83 @@ The game is serious. Catch it if you can. But you can leave your head on.
 #Bought items come *identified*, knowledge secure from blank mind attacks.
 店で買ったアイテムは *鑑定* されて、記憶喪失の攻撃がきかない。
 #You even may transmit knowledge of *identified* items by means of stacking.
- *鑑定*されたアイテムの情報を、積み重ねることによって他に移すことができる。
-What average mages get by *identify* the Stone will Tell the Nature adept.
-Malekith the Dark elf has a remarkable repertoire of spells to catch you. 
-Zelazny said: "You are a living example of the absurdity of things."
+*鑑定*されたアイテムの情報を、積み重ねることによって他に移すことができる。
+#What average mages get by *identify* the Stone will Tell the Nature adept.
+普通のメイジでも石を*鑑定*すれば、あたかも自然に精通しているかのようになるぜ。
+#Malekith the Dark elf has a remarkable repertoire of spells to catch you. 
+ダークエルフ『マレキス』はあなたを倒すための呪文をたくさん持っている。
+#Zelazny said: "You are a living example of the absurdity of things."
+「あなたは世の不条理の生きたサンプルだ。」-- R.ゼラズニイ
 #Zelazny said: "Whenever anything outrageous happens, there's a reason for it."
 「何かとてつもない事が起こる時、それには常に理由があるものだ。」-- R.ゼラズニイ
-Zelazny said: "Sometimes it's damned hard to tell the dancer from the dance."
-If it's not quite visible if you caught a gear curse look it up by Ctrl-C.
-Any lesser titan will not just summon a monster but several combos of them.
-Robin Hood nowadays leads a wretched existence as a trapper and master thief.
-Too many different Zephyrs are the heroes death. IF caught on open ground.
-If you ever confront a Hru have a Teleport Other at hand!
-Any Hru will rage, spreading earthquake and ruin. Only Shudde is worse.
-You cannot escape a Hru just by blinking. Your life will be shattered!
+#Zelazny said: "Sometimes it's damned hard to tell the dancer from the dance."
+「時にダンスを見てダンサーかどうかの区別が難しい時がある。」-- R.ゼラズニイ
+#If it's not quite visible if you caught a gear curse look it up by Ctrl-C.
+もし全く見えない呪われた装備を見つけた場合は、Ctrl-Cを押して調べてください。
+#Any lesser titan will not just summon a monster but several combos of them.
+レッサー・タイタンのやつらは、モンスターを呼ぶだけじゃない、何回も呼ぶ。
+#Robin Hood nowadays leads a wretched existence as a trapper and master thief.
+『ロビン・フッド』は罠と盗みの技で悲惨な目に合わせてくれる。
+#Too many different Zephyrs are the heroes death. IF caught on open ground.
+もしだ、そこが開けた場所なら、ゴミのように群れる色とりどりのハウンドどもは死神と化すだろう。
+#If you ever confront a Hru have a Teleport Other at hand!
+もしフルゥと相対したなら、片方の手にはテレポート手段を持つんだ！
+#Any Hru will rage, spreading earthquake and ruin. Only Shudde is worse.
+どんなフルゥも怒り狂い、地震と破壊を繰り広げるだろう。『シュド=メル』だけが悪い。
+#You cannot escape a Hru just by blinking. Your life will be shattered!
+ショート・テレポート程度じゃフルゥからは逃げ切れない。命がクラッシュされるぜ！
 #If Amulets of Resistance don't stack it's caused by different additionals.
 もし複数の耐性のアミュレットが重ならない場合、それは異なる追加耐性を持っているからだ。
 #Seek melee combat with breathing foes so your treasures won't get blasted!
 あなたの宝物を破壊されないよう、ブレスを持つ敵に対しては接近戦を挑むようにせよ！
-Master Vampires won't prey on your life blood only, but love to torture DEX.
-Hellhound Garm is defeatable if you fence out his summoned packs in advance.
-Mighty reptile Zoth-Ommog hates treasures and will crush any, leaving none!
+#Master Vampires won't prey on your life blood only, but love to torture DEX.
+マスター・バンパイアは生き血だけを啜るだけじゃねえ、器用な拷問も得意だ。
+#Hellhound Garm is defeatable if you fence out his summoned packs in advance.
+地獄の番犬『ガルム』はうまく召喚を封じれば倒しやすいだろう。
+#Mighty reptile Zoth-Ommog hates treasures and will crush any, leaving none!
+強固な爬虫類『ゾズ=オムモグ』は財宝が嫌いなんだ。根こそぎぶっ壊されて何も残らないぞ！
 #Drolems are not drolleries but draconic golems with high defenses. They bite!
 ドローレムというのはおどけた挙動(drolleries)ではなくドラゴン型のゴーレムの事だ。噛まれるぞ！
 #You can't get hold on Bully Gates, he charges you and is gone immediately.
-あなたはブルゲイツを捕まえてはおけない、彼は請求して即座にいなくなる。
+あなたは『ブル・ゲイツ』を捕まえてはおけない、彼は請求して即座にいなくなる。
 #Never go near Bull Gates without maximum dexterity or lose lots of money!
-器用度を最高にしない限りはブルゲイツに近寄るな、でないと大金を失うはめになる！
-He cackles and sneers at you and throws traps as his confetti: Bully Gates!
+器用度を最高にしない限りは『ブル・ゲイツ』に近寄るな、でないと大金を失うはめになる！
+#He cackles and sneers at you and throws traps as his confetti: Bully Gates!
+『ブル・ゲイツ』先輩！やつは嘘で誘惑し罠のシャワーを浴びせかけてくるぞ。
 #If the singular naga Jasra finds open ground she will call her hydras on you!
-稀なナーガ・ジャスラがひらけた場所を見つけたら、彼女はヒドラを召喚してくるだろう！
-You must capitalize (s)ecrets to find its Keepers. You'll really love them!
+稀なナーガ『ジャスラ』がひらけた場所を見つけたら、彼女はヒドラを召喚してくるだろう！
+#You must capitalize (s)ecrets to find its Keepers. You'll really love them!
+隠された秘密を暴くには注意深く歩くのがいいらしい。
 #The true name of Shudde is 747. But this will not help you sufficiently. Run!
-シュド=メルの本当の名は747だ。しかしその事実はあまりあなたの助けにはならない。走れ！
+『シュド=メル』の本当の名は747だ。しかしその事実はあまりあなたの助けにはならない。走れ！
 #I balanced all, brought all to mind. In balance with this life, this death.
 私は全ての調和をとり、全てを思い出した。この生に対する調和とは、この死であると。
 #A visit in the Inner Temple is less expensive than bundles of Restore potions.
-寺院を訪れるのは能力回復の薬を求めるより安上がりだ。
+寺院を訪れるのは複数の能力回復の薬を求めるより安上がりだ。
 #Trolls, Paladins or Bloodletters are fine to make money - if you top them.
 トロル、聖騎士、血戮悪魔が、金稼ぎには良い--あなたが彼らを乗り越えられるなら。
 #The goddess of cats drains dexterity dramatically. Don't forget to sustain it.
 猫の女王は器用さを劇的に下げる。維持するのを忘れてはならない。
 #Scrolls of artifact creation need a plain weapon/armour to enhance it.
 アーティファクト生成の巻物は素の武器や防具を必要とする。
-The definitely best way to fill a gear gap is creating your own artifact.
-Iron liches are *very* deadly if you're not hard to breath and summons alike.
+#The definitely best way to fill a gear gap is creating your own artifact.
+装備不足を解消する一番いい方法は、アーティファクト生成だ。
+#Iron liches are *very* deadly if you're not hard to breath and summons alike.
+ブレスを吐き散らし、召喚し散らかすアイアン・リッチはマジでクソだ。
 #Maulotaurs tend to rely on fire and overwhelming shattering strength. Prepare!
-マウロタウルスは炎と圧倒的な粉砕力の怪力とをあてにする傾向がある。心せよ！
+マウロタウロスは炎と圧倒的な粉砕力の怪力とをあてにする傾向がある。心せよ！
 #Think out ways to get hold on some unusual nasty unique thieves. Ooh, Santa!
 何人かの珍しい厄介なユニークの泥棒から持ち物を守る方法を考え抜こう。おお、サンタ！
-They say that everyone has some skeletons in the cellar. Some are harmful!
-GHOST said: "I would not wish to add to your probable present paranoia."
-One of life's smaller puzzles is how to get control of the nearer futures.
-The King in Yellow is strong in help. But he is also quite jumpy by himself.
-Glaurung and all his kinsfolk - send them where the pepper grows! It's timing.
+#They say that everyone has some skeletons in the cellar. Some are harmful!
+地下室にはいくらかの骨が散らばっていると言います。その中のいくつかは有害です！
+#GHOST said: "I would not wish to add to your probable present paranoia."
+あなたを無駄に怖がらせたいわけではありません...幽霊です...幽霊です...
+#One of life's smaller puzzles is how to get control of the nearer futures.
+人生のちょっとした疑問の一つは、どうやって近い将来の出来事をコントロールすればよいか、だ。
+#The King in Yellow is strong in help. But he is also quite jumpy by himself.
+『黄衣の王』は助けに強いが、一人でビビってることもある。
+#Glaurung and all his kinsfolk - send them where the pepper grows! It's timing.
+今こそ、『グラウルング』とその仲間たちを、胡椒の育つ場所に送り込んでください！
 #The swamps south of the Elventown is worthy of some hunting excursions!
 エルフの街の南の湿地帯は狩りの遠足の足音で騒がしい！
 #You would be amazed of what a Greater Kraken is able to give to you.
@@ -776,139 +1003,202 @@ Glaurung and all his kinsfolk - send them where the pepper grows! It's timing.
 あなたは危険なハウンドの集団を、彼らの息を浴びない二つの曲がり角から強襲できる。
 #Only permanent walls will prevent Ethereal or Deathdrakes to come after you.
 永久岩の壁だけが、天上界ドレイクやデスドレイクの追撃を遮れるだろう。
-Drujs are not good for you. So as folks (dare)say: Let sleeping wyverns lie.
-Sort of Pit-diver you are - those who seek after artifacts beyond the Rim.
+#Drujs are not good for you. So as folks (dare)say: Let sleeping wyverns lie.
+ドルジはいいヤツらじゃない。だから、寝ているワイバーンを起こしてけしかけよう。
+#Sort of Pit-diver you are - those who seek after artifacts beyond the Rim.
+枠を超えてアーティファクトを追い求めるあなたは、洞窟探検家のようなものだ。
 #A jagged tentacle of the constantly shifting kind is moving toward your leg...
 絶えずうごめく何者かの触手が、徐々にあなたの足元に近づいている...
-Raal's? Ya might have to fool with it a long while just to figure it out.
+#Raal's? Ya might have to fool with it a long while just to figure it out.
+ラァルの破壊集大成？拾えねえって何遍言ったらわかるんだ。
 #Pattern and Logrus, like reason and feeling, the wells of Powers mages draw on.
 パターンとログルスとは、理由と感性のようなもので、魔術師が力を得る源となるものだ。
 #Apollonian and Dionysiac, light and dark, Order and Chaos need one another.
 アポロ的なるものとデュオニュソス的なるもの、光と影、秩序と混沌は、互いに相手を必要としている。
-The principles game of light and dark is finally to be judged esthetically.
+#The principles game of light and dark is finally to be judged esthetically.
+光と闇の原初の戦いは、最終的には審美的に勝敗が決まる。
 #An uncursed amulet of anti-teleportation supports Your choice of battleground.
 呪われていないテレポートのアミュレットはあなたが戦場を選ぶのを助けてくれる。
-Try to get unknown to your old self. No compromising awhile.
-The inn has rot-gut with a kick that blows the wax out of your ears!
-Too bad who not supports innkeepers! YOU have a stillness which is dangerous.
+#Try to get unknown to your old self. No compromising awhile.
+前世でも経験したことのない高みを目指してください。しばらく妥協はありません。
+#The inn has rot-gut with a kick that blows the wax out of your ears!
+宿には目ん玉飛び出るくらいのキツイ安酒があるらしい！
+#Too bad who not supports innkeepers! YOU have a stillness which is dangerous.
+宿屋に泊まってやってくれ！怖い顔で押し黙るなよ。
 #A moral cudgel is truly not an effective weapon against farmer Maggot.
 モラルの棍棒は、本当に農夫マゴットに対しては有効な武器にはなりえない。
-Where are you going, unbeliever? The stairs down are but seemingly easy!
-You might end up in the grip of sinister forces who rule by torture n infamy?
+#Where are you going, unbeliever? The stairs down are but seemingly easy!
+信じらんない！どこに行くの？そりゃ階段を降りるのは簡単そうだけどさ！
+#You might end up in the grip of sinister forces who rule by torture n infamy?
+あなたは苦痛と汚名にまみれた邪悪な力の前に倒されるかもしれない。
 #The gods love us, they even created birds to throw presents down.
 神々は我々を愛して下さっている、彼らは贈り物を落とさせる為に鳥をも生み出して下さった。
-Anybody gets the beats s/he has ordered at Fortunas Court in the end.
-Pay no attention. Incomers are resented and regarded as fair game!
-At the Courts of Chaos poisonous feuds fester behind every corner.
+#Anybody gets the beats s/he has ordered at Fortunas Court in the end.
+最期は誰しもが運命の女神の裁きに命運を定められる。
+#Pay no attention. Incomers are resented and regarded as fair game!
+気にするな。割り込んで来るやつは不満に思うから、公正なゲームだと見なされているよ！
+#At the Courts of Chaos poisonous feuds fester behind every corner.
+混沌の宮殿ではおどろおどろしい確執が隅々まで行き渡っている。
 #You seem inoffensive, a mere joker, a light-weight. But your eyes ..?
 あなたは当り障りの無い、単なるおどけた、軽い人物に見えます。でもあなたの目は...？
 #Your knife has certainly hacked some bad meats. It's stained.
 君のナイフは何か悪い肉を切ったようだ。錆びているよ。
-The shrewd ones are never fooled. The weak mimic the strong habits.
-I see you have accustomed to plenty of local shopping snobberies.
+#The shrewd ones are never fooled. The weak mimic the strong habits.
+抜け目がないヤツらは決して騙されない。弱いヤツが強者の振る舞いを真似ていても。
+#I see you have accustomed to plenty of local shopping snobberies.
+あなたは上流気取りの爆買いに慣れているようだな。
 #You won? You truly must have a brain as sharp as a woodsman's hatchet!
 勝利した？　あなたは樵の斧の如く研ぎ澄まされた脳を持っているに違いない！
-Mimics: striking down men from behind certainly seems to be their trademark.
-He looks honest. This probably means he is a complete crook. Oh, I'm mocking.
+#Mimics: striking down men from behind certainly seems to be their trademark.
+背後から闇討ちするのがミミックの専売特許のようなものだ。
+#He looks honest. This probably means he is a complete crook. Oh, I'm mocking.
+あいつは正直に見える。つまり、あいつがプロの詐欺師だろうってことだ。ああ、笑っちまう。
 #Flee while you can. Any decent adventurer has to honour the priorities.
 逃げられる間は逃げよ。どんなきちんとした冒険家も優先権は尊重しなければならないのだから。
-The average mage soon becomes accustomed to hard work and poor leisure.
-Are you sure to surpass your predecessors, being more than a mere brawler?
-Life: to mortgage yesterdays gains in order to move on to the next intermezzo.
-The art of dragon mail maintenance is: Never get stuck without escape chance.
+#The average mage soon becomes accustomed to hard work and poor leisure.
+並のメイジはすぐに社畜のような冒険生活に慣れるだろう。
+#Are you sure to surpass your predecessors, being more than a mere brawler?
+ただの喧嘩屋の分際で、以前の冒険者を超えてるって言うのかい？
+#Life: to mortgage yesterdays gains in order to move on to the next intermezzo.
+生命とは、次の幕開けを見るために過去を担保にするようなものだ。
+#The art of dragon mail maintenance is: Never get stuck without escape chance.
+ドラゴン・スケイル・メイルを保持し続けるには、逃げる機会なしに立ち止まらないことだ。
 #Oh I see! Now I'm not good enough!
 オー、ワカリマシタ！ワタシ、タダイマアマリ、キブンヨクナイデス！
-Prices? Any complaints and you'll be bumped out faster than you can breathe.
-Prices? If you insist on haggling you'll never advance seriously!
-Well, I tell ya, the dungeons landlords are mulling this over gloomily!
+#Prices? Any complaints and you'll be bumped out faster than you can breathe.
+価格？息をするよりも早くふっかけることだな。
+#Prices? If you insist on haggling you'll never advance seriously!
+安くしろ？値引けって言わなきゃビタ一文負けないぞ！
+#Well, I tell ya, the dungeons landlords are mulling this over gloomily!
+えー、聞いたところによると、ダンジョンの主はこのことを悲観的であると考えています。
 #Don't you think you are on a descending curve, young firehead?
 若い人よ、あんたは下り坂を下ってるとは思わんかね？
-You are starting to loose your temper? So what? Gnaw your pistachios!
-It shrieks? Don't bother! Presumably there will be just innocent bystanders.
-Still you might still fade out again! Been seeing so many ghostly apparitions.
-Even if the bluff fails them never give up! The caves are hotbed of banditry.
+#You are starting to loose your temper? So what? Gnaw your pistachios!
+意欲がなくなってきてないか？だったら、ピスタチオを食え！
+#It shrieks? Don't bother! Presumably there will be just innocent bystanders.
+悲鳴？気にしないください。きっと無関心な傍観者がいてくださいます。
+#Still you might still fade out again! Been seeing so many ghostly apparitions.
+それでもよ、あんたはまた消えていなくなってしまうかもしれない！そういった幻影をたくさん見てきたんだ。
+#Even if the bluff fails them never give up! The caves are hotbed of banditry.
+ボッタクリに失敗しても決して諦めないぞ！ダンジョンは盗賊の温床だからな。
 #Before I settled down, in my younger days I won the arena prize.
 わしゃ隠居する前にアリーナで優勝したぞ。
-Yegh! Assuming you are not the refined sensitive type you're disguised as?
-However you shouldn't want to upset sensitivities hereabout. Learn xenology!
-Critters? If action was taken early this conspiracy could be nipped in the bed.
-Nothin ever so awful as the advancing everchanging Spawns of Ubbo-Sathla!
-Do not behold the baleful visage of The Greater magic mushroom were-quylthulg!
-And yet it is worth! it to best that Greater hell magic mushroom were-quylthulg!
-Forget your childlike lore: mushrooms are not tasty but awholotta challenge!
-Hi matador, like to get gored to death by an infuriated gory minotaur?
-Never get caught by the notorious bloodhound Judge Porn-Starr, the beholder.
+#Yegh! Assuming you are not the refined sensitive type you're disguised as?
+イェァ！これが演技じゃなければ、あんたは甚く神経質なタイプじゃないな？
+#However you shouldn't want to upset sensitivities hereabout. Learn xenology!
+しかしこのあたりで感知を乱されたくないはずだ。地球外生命体について学ぼう！
+#Critters? If action was taken early this conspiracy could be nipped in the bed.
+モンスターども？さっさと行動すれば、陰謀の芽を早めに摘み取れるかもな。
+#Nothin ever so awful as the advancing everchanging Spawns of Ubbo-Sathla!
+ウボ=サスラの落とし子どもの増殖地獄ほどヒデェものはないぜ！
+#Do not behold the baleful visage of The Greater magic mushroom were-quylthulg!
+『グレーター地獄魔法おばけキノコ=クイルスルグ人間』の下劣な顔を見ないでください！
+#And yet it is worth! it to best that Greater hell magic mushroom were-quylthulg!
+それでもまだ有用なんだ！そこが『グレーター地獄魔法おばけキノコ=クイルスルグ人間』の一番いいところなんだ！
+#Forget your childlike lore: mushrooms are not tasty but awholotta challenge!
+キノコは美味しくねえなんて子供じみた言い伝えは忘れろ。なんとも、とてつもねぇ、挑戦なんだぞ！
+#Hi matador, like to get gored to death by an infuriated gory minotaur?
+やあ、闘牛士さん。ミノタウロスを激怒させて、大地を真っ赤な血で染めたいのかい？
+#Never get caught by the notorious bloodhound Judge Porn-Starr, the beholder.
+悪名高い追跡者、見るもの『ジャッジ・ポルノ=スター』には決して捕まらないでください。
 #Gorgons are fairy tales: mighty useful to get stone sculptures for the palace.
 ゴルゴンは伝説の存在だ：宮殿に飾る石像を得るのに大いに役立つものとして。
 #Selling blessed weapons to a sympathizing temple is not too bad an idea.
 祝福された武器を自分の属性の寺院に売るのはそれほど悪い考えではない。
 #I'd prefer ball sorcery or breath ability to mass genocide for good reason.
 私はもっともな理由の為の大量虐殺において、ボール系呪文やブレスの能力を好みます。
-Scrolls of genocide will extinct annoying monster races from your level area.
+#Scrolls of genocide will extinct annoying monster races from your level area.
+虐殺の巻物は今いる階から迷惑なモンスター種を絶滅させます。
 #*Destruction* will cause a 15x15 area to change completely, but you undamaged.
 *破壊*は15x15の範囲をくまなく変化させるが、あなたに被害は及ばない。
 #There are mostly only rumors about the effects of rarer ZAngband items.
 ここにある噂のほとんどは、よりレアなZAngbandのアイテムに関する噂だ。
-What does NETHER mean? The (arch.) N. regions are the world of the dead/hell.
-What does NEXUS mean? It refers to connexion/bond. Location/stats get unstable.
+#What does NETHER mean? The (arch.) N. regions are the world of the dead/hell.
+ここにある噂のほとんどは、よりレアな変愚蛮怒のアイテムに関する噂だ。
+#What does NEXUS mean? It refers to connexion/bond. Location/stats get unstable.
+ここにある噂のほとんどは、よりレアな変愚蛮怒のモンスターに関する噂だ。
 #Such a Blade of Chaos (chaotic) is quite a rare and precious finding.
 このようなカオスブレード(混沌)は実にレアで貴重な代物だ。
 #Isn't it a scandal that chaos patrons mostly grant inferior weapon gifts?
 カオスパトロンがほとんど粗悪な武器をくれるという事はスキャンダルな事じゃないかな？
 #Precious Blades of Chaos (6d5) are won by defeating a Bloodletter's platoon.
 貴重なカオスブレード(6d5)は血戮悪魔の集団を打ち倒せば獲得する事が出来る。
-Nether and Life draining are not just the same, as by breath or by touching?
-Examination of rings of nether resistance reveals two granted intrinsics.
-To stand your ground against adversaries who heal-self you'll need...
-It's the Grail Brotherhood who is behind it all!
-There is no such thing as 'fearless', not unless a man is mad. But hide it!
+#Nether and Life draining are not just the same, as by breath or by touching?
+地獄と経験値吸収の違いって、ブレスか打撃かだけなのか？
+#Examination of rings of nether resistance reveals two granted intrinsics.
+耐地獄の指輪を調査すると、２つの能力があることがわかる。
+#To stand your ground against adversaries who heal-self you'll need...
+治癒の呪文を使ってくる敵に立ち向かうのに必要なのは...
+#It's the Grail Brotherhood who is behind it all!
+全ての背後にいるのは、聖杯の騎士団だ。
+#There is no such thing as 'fearless', not unless a man is mad. But hide it!
+興奮してなけりゃ「恐れ知らず」なんてねえ。だがそいつは隠しておけ！
 #When the monsters don't eat you, ooh, let's say you're home.
 怪物があなたを食べないなら、おおっ、私には帰る家があるのだと言ってみよう。
 #Young ones are made stupid, it's their protection against life's unkindness.
 若い人間は愚かなものだが、それは人生の不親切さに対する防御なのだ。
 #And what about your due contribution to All-Fool's Day celebration? None?
 そして、四月一日の祝賀に対してあなたはどんな充分な貢献をしましたか？無し？
-For the shared blood of your Ancestors you'll know about depth devilries.
-It takes a practiced eye to see through the glitter the rotten core of Thuringwethil.
+#For the shared blood of your Ancestors you'll know about depth devilries.
+過去に血を流して死んでったヤツらの積み重ねのおかげで、階層という悪魔については理解できるだろう。
+#It takes a practiced eye to see through the glitter the rotten core of Thuringwethil.
+スリングウェシルのギラギラとした腐った性根を見通すには、訓練された目が必要だ。
 #I saw dragon scale mail priced 11000 gp more for having +17 instead of +16.
 私は+17のドラゴン・スケイルメイルが+16のものより11000ゴールド高いのを見た事がある。
-The strong rely on strength. The not-so-strong must mint means of shrewdness.
-If not your might might make tremble them and flee you need good spy ability.
+#The strong rely on strength. The not-so-strong must mint means of shrewdness.
+強者は強さに依存しています。あまり強くない者は知的な手段がたくさん必要です。
+#If not your might might make tremble them and flee you need good spy ability.
+力で敵をビビらせてトンズラこかせられないなら、高いスパイ能力が必要だぜ。
 #Pay heed to the Quylthulg race: invisible, powerful summoners, able to escape.
 クイルスルグ族に注意せよ：透明で、強力な召喚師で、逃げる事もできる。
 #(S)He has the devil of a time who encounters the neversleeping quylthulgs.
 不眠のクイスルグスに出会う者は、時の悪魔に憑かれているに違いない。
-Your pet aversion against all sorts of hounds won't lead you to anything!
+#Your pet aversion against all sorts of hounds won't lead you to anything!
+どんなハウンドでも犬嫌いって言っても、いいことなんざないぜ！
 #An inertia hound is gorgeous dinner: giving pleasure and sleepy satisfaction.
 遅鈍ハウンドは豪華なディナーだ：喜びと夢うつつな満足を与えてくれる。
 #Patience at ambush will help to defeat many hounds.
 忍耐強い待ち伏せはハウンドの群を倒すのに役立つだろう。
 #Without catching acid I have once eliminated 10 water hounds 1 by 1 in melee!
 私はかつて十匹のウォーターハウンドを一匹づつ酸を浴びることなく打撃で倒した！
-You'll get The_object_resists_the_spell if your Rune of Protection won't work.
-As shopkeepers rarely change you'll be glad about any high maximum merchants.
-It seems not smart to have your high bonus missiles destroyed by breathers.
-Against those some_hundert_hp_drain attacks you'll need means of heal-self!
-If you cover your back by fencing or digging no summoned will surround you.
-It's deciding which things are crucial that separates the wise from others.
-Being clocked backwards is just a terrible irony of fate.
-Time is a weird attack - not even sustained stats will save you.
-Stumble on a death mold: another unsettling occurrence in an unsettling world.
-Too many errors and one's luck would run out at last.
-Errorowwww!
+#You'll get The_object_resists_the_spell if your Rune of Protection won't work.
+もし守りのルーンがうまく働かないなら、呪文に耐えるナニカを得られる。
+#As shopkeepers rarely change you'll be glad about any high maximum merchants.
+たまに店主が入れ替わるから、買い取り上限が高い店主に変わって嬉しいかもしれない。
+#It seems not smart to have your high bonus missiles destroyed by breathers.
+高い修正値の矢弾をブレス持ちに壊されるのは賢くないな。
+#Against those some_hundert_hp_drain attacks you'll need means of heal-self!
+何百ものHPを削っていく攻撃に対応するには、自分を回復させる手段が必要でしょう。
+#If you cover your back by fencing or digging no summoned will surround you.
+背後を埋めるか穴にこもれば、周りに召喚されることはない。
+#It's deciding which things are crucial that separates the wise from others.
+何が重要か決めることが、他の愚かなヤツらとの違いにつながる。
+#Being clocked backwards is just a terrible irony of fate.
+時間逆転とはまるで、運命に対するひどい皮肉だ。
+#Time is a weird attack - not even sustained stats will save you.
+時間逆転は不気味な攻撃です。能力維持があなたを助けるでしょう。
+#Stumble on a death mold: another unsettling occurrence in an unsettling world.
+不安な世の中で起こるとある不安な出来事...デス・モルドにつまずく...
+#Too many errors and one's luck would run out at last.
+失敗しすぎると、幸運が尽きてしまうぜ。
+#Errorowwww!
+やらかしたぁぁぁぁぁぁ！
 #The highest bonused ring of damage I have seen was +23!
 私が今まで見たことのある一番いいダメージの指輪は +23 だ！
 #The highest bonused amulets of searching/brilliance I have seen was +6!
 私が今まで見たことのある一番いい探索/知性のアミュレットは +6 だ！
-It's your own fault if you don't use all non-cheating means of awareness.
+#It's your own fault if you don't use all non-cheating means of awareness.
+不正でもしていない限り、辺りに注意を払わないのなら、あなたの責任になる。
 #Pay ANY price for a Rod of Perception for it saves you lots of scrolls/staffs.
 鑑定のロッドは、いかなる代償を払ってでも手に入れろ。たくさんの巻物や杖を節約できる。
 #Rods seem somewhat secure from fire/acid/lightning attacks, but get stolen!
 ロッドは火/酸/電気の攻撃に対して無傷なようだが、盗まれることはある！
 #Some black humored remarks (rumors) on common morals are not easily outwitted.
 一般のモラルに裏打ちされた幾つかのブラックユーモアは、容易に裏をかかれる事がない。
-Ever read Ambrose Bierce, From the devil's dictionary? No, didn't steal there.
-Remember that? Irony is a sophisticated art of talk by saying some opposite.
+#Ever read Ambrose Bierce, From the devil's dictionary? No, didn't steal there.
+アンブローズ・ビアスの悪魔の辞典を読んだことがあるかって？い、いや、パクッてないよ？
+#Remember that? Irony is a sophisticated art of talk by saying some opposite.
+覚えているかい？皮肉は反対のことを述べる修辞学の技法だ。
 #There are Uniques that are (friendly), but alas! they won't [yet] talk to you.
 いくつかのユニークモンスターは(友好的)だが、なんとまあ、[今のところ]彼らは話しかけてこない。
 #Ents (friendly) are equally strong as Hrus and tend to clear the vault fields.
@@ -917,14 +1207,18 @@ Remember that? Irony is a sophisticated art of talk by saying some opposite.
 放置していたドラゴン・スケイルメイルを友好的なエントが拾った時、あなたは怒りを覚えるかもしれない。
 #Ahtu is somewhat the evil mirror of Treebeard. Beware to confront these foes!
 『アフトゥ』は木の鬚の悪の写し身のようなものだ。気をつけろ！
-They say that there's work to be done, and no rest this side of Heaven.
+#They say that there's work to be done, and no rest this side of Heaven.
+天国の連中が、やるべき仕事があって休む暇もないって言ってたぞ。
 #There are no guarantees in life, but it's smarter to take fewer chances.
 人生に保障などない、だが少しのチャンスをものにする事は出来る。
-Artsi is not susceptible to sorcery, ideal warrior! If ever get him in melee.
-It's a crying shame but 30000's the highest one_item_price you ever will get.
+#Artsi is not susceptible to sorcery, ideal warrior! If ever get him in melee.
+混沌の覇者『はぶ』は魔法の影響を受けにくく、理想的な戦士だ！もし彼に打撃攻撃させたら。
+#It's a crying shame but 30000's the highest one_item_price you ever will get.
+完全な赤っ恥ですが、30000が買い取りの最高値です。
 #Is it really true that a good chain armour once rusted can't be restored?
 一度錆びた鎖かたびらは元に戻らないって本当？
-Never thought about that daylight might be not just an illumination?
+#Never thought about that daylight might be not just an illumination?
+その日光は単なる照明ではないと考えたことはないですか？
 #Stone Skin is valuable as diamonds: even the tougher foes will miss you.
 石肌化はダイヤのように価値がある：あなたより強い仇敵すらも攻撃をミスすることだろう。
 #You WILL need some means to prevent to be teleported to and fro unwanted.
@@ -950,22 +1244,30 @@ Never thought about that daylight might be not just an illumination?
 運がいいなら、やっかいなアンバー王族の血の呪いさえも無効にできるだろう。
 #Don't go deeper down the cliffs unless you find secure footholds (equipment).
 安全な足場(装備)を見つけるまではさらに絶壁を下って行こうとしないこと。
-Value in ART is so to say your scores relation of light and shade.
-You'd like an illustration on "sowing dragon's teeth"? Try Sorcery tower Quest!
+#Value in ART is so to say your scores relation of light and shade.
+アーティファクトの価値は、あなたのスコアの浮沈に影響している。
+#You'd like an illustration on "sowing dragon's teeth"? Try Sorcery tower Quest!
+「Sowing dragon teeth」のイラストが欲しいって？魔術師の塔のクエストに挑みなよ！
 #Waste of time, the crying. Fight and live - fight and die, then enter renewed.
 嘆くのは時間の無駄だ。戦って生きよ--戦って死ね、そして再挑戦だ。
 #The say that to want too much was stupidity, waste of precious time and effort.
 あまりに多くのものを求めるのは、貴重な時間と努力を浪費する無知な行いだそうだ。
-Down at 650' is an ill-omened place where the swift ochre jellies roam.
-Below 2500' you'll need sustained maximum spell stats to secure your heal-self.
+#Down at 650' is an ill-omened place where the swift ochre jellies roam.
+13階以降は、汚い黄土色のゼリーが歩き回る不吉な場所だ。
+#Below 2500' you'll need sustained maximum spell stats to secure your heal-self.
+50階に行く前に能力を高めて回復魔法を失敗しないようにしておく必要があるだろう。
 #The miracle of Herbal Healing is like Book-stories told by priests, amazing.
 薬草治療の奇跡は、まるで聖職者によって語られる本の中の話のようで、驚かされる。
 #A fallen Angel is likely to stay behind a stone obstacle in chequered pits.
 堕天使は格子状ピットでの石の障害物のそばで待ち構えて居そうだ。
-A screaming willingness to the flash and bang of damnation, freed of the suspence.
-They say that all these inevitable tombstones are but blessings in disguise. 
-Survival challenges use up superabundant energies, burn off the gland-juices.
-Kittens. Always going for the dramatic. Watching too many adventure holos.
+#A screaming willingness to the flash and bang of damnation, freed of the suspence.
+惨々たる破滅を迎えての悲鳴には、サスペンス性はないね。
+#They say that all these inevitable tombstones are but blessings in disguise. 
+墓石になるのは避けられない呪福だってばっちゃが言ってた。
+#Survival challenges use up superabundant energies, burn off the gland-juices.
+生き残りの挑戦は、脳汁をドバドバ出させ、大量のカロリーを消費させる。
+#Kittens. Always going for the dramatic. Watching too many adventure holos.
+子猫たちよ。中二病が過ぎる。アニメの見過ぎだ。
 #Young Heroes-to-be are always kept on diet, to increase their aggressiveness.
 若い未来の英雄というものは、自らの攻撃性を保つ為に常にダイエットしているものだ。
 #Free at last from the blood curse: mirth welled up, boiled over as pure laughter.
@@ -980,7 +1282,8 @@ Kittens. Always going for the dramatic. Watching too many adventure holos.
 まれにだが、本一冊に満額25000ゴールドを払う店主がいる。
 #Being hit by Cold breathes while carrying potions might speed and heal foes!
 薬をたくさん持っている時に冷気のブレスを浴びたら周囲の敵を速くしたり治療したりしてしまうだろう！
-You'll rarely get a chance to fight Fiona down and off, she loves her jumpiness!
+#You'll rarely get a chance to fight Fiona down and off, she loves her jumpiness!
+フィオナと戦うチャンスはあまりありません。彼女はテレポートが好きです！
 #Why are Poison Resistance rings higher priced than even Disenchantment rings?
 なんで耐毒の指輪が耐劣化の指輪より高いんだ？
 #Are there any cumulative effects by adding another means of resistance? Well?

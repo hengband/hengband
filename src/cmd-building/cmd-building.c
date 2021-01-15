@@ -306,7 +306,7 @@ void do_cmd_building(player_type *player_ptr)
 
 	take_turn(player_ptr, 100);
 
-	if (!cave_have_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF_BLDG))
+	if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF_BLDG))
 	{
 		msg_print(_("ここには建物はない。", "You see no building here."));
 		return;

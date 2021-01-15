@@ -1,4 +1,5 @@
 ﻿#include "lore/combat-types-setter.h"
+#include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
 
 void set_monster_blow_method(lore_type *lore_ptr, int m)

@@ -1,4 +1,4 @@
-#include "mind/mind-priest.h"
+﻿#include "mind/mind-priest.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -20,16 +20,16 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief ����̏j������ /
+ * @brief 武器の祝福処理 /
  * Bless a weapon
- * @return �^�[�������v���鏈�����s�����Ȃ��TRUE��Ԃ�
+ * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
 bool bless_weapon(player_type *caster_ptr)
 {
     item_tester_hook = object_is_weapon;
 
-    concptr q = _("�ǂ̃A�C�e�����j�����܂����H", "Bless which weapon? ");
-    concptr s = _("�j���ł��镐�킪����܂���B", "You have weapon to bless.");
+    concptr q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
+    concptr s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
     OBJECT_IDX item;
     object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, 0);
@@ -45,7 +45,7 @@ bool bless_weapon(player_type *caster_ptr)
         if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)
             || (o_ptr->curse_flags & TRC_PERMA_CURSE)) {
 #ifdef JP
-            msg_format("%s�𕢂������I�[���͏j���𒵂˕Ԃ����I", o_name);
+            msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", o_name);
 #else
             msg_format("The black aura on %s %s disrupts the blessing!", ((item >= 0) ? "your" : "the"), o_name);
 #endif
@@ -54,7 +54,7 @@ bool bless_weapon(player_type *caster_ptr)
         }
 
 #ifdef JP
-        msg_format("%s ����׈��ȃI�[�����������B", o_name);
+        msg_format("%s から邪悪なオーラが消えた。", o_name);
 #else
         msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), o_name);
 #endif
@@ -75,7 +75,7 @@ bool bless_weapon(player_type *caster_ptr)
      */
     if (has_flag(flgs, TR_BLESSED)) {
 #ifdef JP
-        msg_format("%s �͊��ɏj������Ă���B", o_name);
+        msg_format("%s は既に祝福されている。", o_name);
 #else
         msg_format("%s %s %s blessed already.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
 #endif
@@ -84,7 +84,7 @@ bool bless_weapon(player_type *caster_ptr)
 
     if (!(object_is_artifact(o_ptr) || object_is_ego(o_ptr)) || one_in_(3)) {
 #ifdef JP
-        msg_format("%s�͋P�����I", o_name);
+        msg_format("%sは輝いた！", o_name);
 #else
         msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
@@ -92,7 +92,7 @@ bool bless_weapon(player_type *caster_ptr)
         o_ptr->discount = 99;
     } else {
         bool dis_happened = FALSE;
-        msg_print(_("���̕���͏j���������Ă���I", "The weapon resists your blessing!"));
+        msg_print(_("その武器は祝福を嫌っている！", "The weapon resists your blessing!"));
 
         /* Disenchant tohit */
         if (o_ptr->to_h > 0) {
@@ -122,10 +122,10 @@ bool bless_weapon(player_type *caster_ptr)
             o_ptr->to_a--;
 
         if (dis_happened) {
-            msg_print(_("���͂��}�f�ȕ��͋C�Ŗ�����...", "There is a static feeling in the air..."));
+            msg_print(_("周囲が凡庸な雰囲気で満ちた...", "There is a static feeling in the air..."));
 
 #ifdef JP
-            msg_format("%s �͗򉻂����I", o_name);
+            msg_format("%s は劣化した！", o_name);
 #else
             msg_format("%s %s %s disenchanted!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "were" : "was"));
 #endif

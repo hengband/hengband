@@ -20,12 +20,18 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include "player/player-status-resist.h"
+#include "util/bit-flags-calculator.h"
+#include "object/object-flags.h"
+#include "object-enchant/tr-types.h"
+
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
@@ -64,7 +70,7 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
-        if (!creature_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !is_invuln(creature_ptr) && is_daytime()) {
+        if (!creature_ptr->current_floor_ptr->dun_level && !has_resist_lite(creature_ptr) && !is_invuln(creature_ptr) && is_daytime()) {
             if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
@@ -72,9 +78,12 @@ void process_player_hp_mp(player_type *creature_ptr)
             }
         }
 
-        if (creature_ptr->inventory_list[INVEN_LITE].tval && (creature_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS)
-            && !creature_ptr->resist_lite) {
-            object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
+        object_type *o_ptr;
+        o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        object_flags(creature_ptr, o_ptr, flgs);
+
+        if (creature_ptr->inventory_list[INVEN_LITE].tval && !has_flag(flgs, TR_DARK_SOURCE) && !has_resist_lite(creature_ptr)) {
             GAME_TEXT o_name[MAX_NLEN];
             char ouch[MAX_NLEN + 40];
             describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -89,7 +98,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !creature_ptr->immune_fire) {
+    if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !has_immune_fire(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -101,10 +110,12 @@ void process_player_hp_mp(player_type *creature_ptr)
         if (damage) {
             if (is_specific_player_race(creature_ptr, RACE_ENT))
                 damage += damage / 3;
-            if (creature_ptr->resist_fire)
+            if (has_resist_fire(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_fire(creature_ptr))
                 damage = damage / 3;
+
+
             if (creature_ptr->levitation)
                 damage = damage / 5;
 
@@ -126,7 +137,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_cold) {
+    if (has_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_cold(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -136,7 +147,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
 
         if (damage) {
-            if (creature_ptr->resist_cold)
+            if (has_resist_cold(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_cold(creature_ptr))
                 damage = damage / 3;
@@ -161,7 +172,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_elec) {
+    if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_elec(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -171,7 +182,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
 
         if (damage) {
-            if (creature_ptr->resist_elec)
+            if (has_resist_elec(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_elec(creature_ptr))
                 damage = damage / 3;
@@ -196,7 +207,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !creature_ptr->immune_acid) {
+    if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_acid(creature_ptr)) {
         int damage = 0;
 
         if (has_flag(f_ptr->flags, FF_DEEP)) {
@@ -206,7 +217,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
 
         if (damage) {
-            if (creature_ptr->resist_acid)
+            if (has_resist_acid(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_acid(creature_ptr))
                 damage = damage / 3;
@@ -241,10 +252,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
 
         if (damage) {
-            if (creature_ptr->resist_pois)
-                damage = damage / 3;
-            if (is_oppose_pois(creature_ptr))
-                damage = damage / 3;
+            damage = calc_pois_damage_rate(creature_ptr) / 100;
             if (creature_ptr->levitation)
                 damage = damage / 5;
 
@@ -256,13 +264,13 @@ void process_player_hp_mp(player_type *creature_ptr)
                     format(_("%sの上に浮遊したダメージ", "flying over %s"),
                         f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
                     -1);
-                if (creature_ptr->resist_pois)
+                if (has_resist_pois(creature_ptr))
                     (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 1);
             } else {
                 concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
                 msg_format(_("%sに毒された！", "The %s poisons you!"), name);
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
-                if (creature_ptr->resist_pois)
+                if (has_resist_pois(creature_ptr))
                     (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 3);
             }
 
@@ -271,8 +279,8 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation && !creature_ptr->can_swim
-        && !creature_ptr->resist_water) {
-        if (creature_ptr->total_weight > weight_limit(creature_ptr)) {
+        && !has_resist_water(creature_ptr)) {
+        if (calc_inventory_weight(creature_ptr) > calc_weight_limit(creature_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->lev), _("溺れ", "drowning"), -1);
             cave_no_regen = TRUE;
@@ -281,31 +289,31 @@ void process_player_hp_mp(player_type *creature_ptr)
 
     if (creature_ptr->riding) {
         HIT_POINT damage;
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !creature_ptr->immune_fire) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !has_immune_fire(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (is_specific_player_race(creature_ptr, RACE_ENT))
                 damage += damage / 3;
-            if (creature_ptr->resist_fire)
+            if (has_resist_fire(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_fire(creature_ptr))
                 damage = damage / 3;
             msg_print(_("熱い！", "It's hot!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
         }
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !creature_ptr->immune_elec) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !has_immune_elec(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
             if (is_specific_player_race(creature_ptr, RACE_ANDROID))
                 damage += damage / 3;
-            if (creature_ptr->resist_elec)
+            if (has_resist_elec(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_elec(creature_ptr))
                 damage = damage / 3;
             msg_print(_("痛い！", "It hurts!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
         }
-        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !creature_ptr->immune_cold) {
+        if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !has_immune_cold(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
-            if (creature_ptr->resist_cold)
+            if (has_resist_cold(creature_ptr))
                 damage = damage / 3;
             if (is_oppose_cold(creature_ptr))
                 damage = damage / 3;
@@ -323,11 +331,11 @@ void process_player_hp_mp(player_type *creature_ptr)
      */
     if (!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY)) {
         if (!is_invuln(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->tim_pass_wall
-            && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall)) {
+            && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !has_pass_wall(creature_ptr))) {
             concptr dam_desc;
             cave_no_regen = TRUE;
 
-            if (creature_ptr->pass_wall) {
+            if (has_pass_wall(creature_ptr)) {
                 msg_print(_("体の分子が分解した気がする！", "Your molecules feel disrupted!"));
                 dam_desc = _("密度", "density");
             } else {

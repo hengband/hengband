@@ -36,7 +36,7 @@ bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tva
             return FALSE;
     }
 
-    if ((item_tester_hook == NULL))
+    if (item_tester_hook == NULL)
         return TRUE;
 
     return (*item_tester_hook)(player_ptr, o_ptr);

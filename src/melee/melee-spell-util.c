@@ -14,7 +14,7 @@ melee_spell_type *initialize_melee_spell_type(player_type *target_ptr, melee_spe
     ms_ptr->y = 0;
     ms_ptr->x = 0;
     ms_ptr->target_idx = 0;
-    ms_ptr->thrown_spell;
+    ms_ptr->thrown_spell = 0;
     ms_ptr->dam = 0;
     ms_ptr->num = 0;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;

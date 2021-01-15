@@ -82,7 +82,7 @@ static void print_header(void)
  * @param name1 生成するアーティファクトID
  * @return 生成が成功した場合TRUEを返す
  */
-static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, IDX name1)
+static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, ARTIFACT_IDX name1)
 {
     artifact_type *a_ptr = &a_info[name1];
     if (!a_ptr->name)

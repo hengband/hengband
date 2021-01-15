@@ -299,8 +299,6 @@ static int compensation_stat_by_mutation(player_type *creature_ptr, int stat)
  */
 static void change_display_by_mutation(player_type *creature_ptr, int stat, char *c, TERM_COLOR *a)
 {
-	if ((creature_ptr->muta3 != 0) && !creature_ptr->tsuyoshi) return;
-
 	int compensation = compensation_stat_by_mutation(creature_ptr, stat);
 	if (compensation == 0) return;
 

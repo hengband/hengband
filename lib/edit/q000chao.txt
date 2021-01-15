@@ -49,8 +49,8 @@ F:c:SHALLOW_LAVA:10:510
 # Shallow lava with Magma elemental
 F:d:SHALLOW_LAVA:10:584
 
-# Deep lava with Great hell wyrm
-F:e:DEEP_LAVA:10:756
+# Deep lava with Great Hell Wyrm
+F:e:DEEP_LAVA:10:1193
 
 # Deep lava
 F:l:DEEP_LAVA:2
