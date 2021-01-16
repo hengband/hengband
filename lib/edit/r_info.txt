@@ -627,7 +627,7 @@ I:110:2d7:20:16:10
 W:1:1:0:10:8:30
 B:HIT:HURT:1d9
 F:DROP_60 | WILD_ALL | DROP_SKELETON | DROP_CORPSE
-F:OPEN_DOOR | BASH_DOOR | EAT_POISONOUS |
+F:OPEN_DOOR | BASH_DOOR | EAT_POISONOUS
 F:EVIL | IM_POIS
 D:$It is a squat and ugly humanoid figure.
 D:それは地に潜む、醜い人間型のモンスターだ。
@@ -23252,7 +23252,7 @@ F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 D:$If you can dodge them, you are an expert!
 D:避けきれたら君も上級者だ！
 
-N:1164:鬼滅隊の『先輩』
+N:1164:鬼殺隊の『先輩』
 E:Senior, the nameless member of Demon Slayer Corps
 G:p:g
 I:110:25d10:10:35:100
@@ -23263,10 +23263,12 @@ B:TOUCH:TERRIFY
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL
 F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD
 S:1_IN_8 | S_KIN
-D:$This stupid man can not determine his enemy's ability.
-D:この愚かな男は敵の力量を見極めることができない。
+D:$A man without pride who hunts ogres just for money.
+D:$  This stupid man can not determine his enemy's ability.
+D:金のためだけに鬼を狩るプライドのない男だ。
+D:この愚かな者は敵の力量を見極めることができない。
 
-N:1165:鬼滅隊の隊士
+N:1165:鬼殺隊の隊士
 E:Members of Demon Slayer Corps
 G:p:U
 I:110:15d10:10:30:100
@@ -24007,9 +24009,11 @@ F:ONLY_ITEM | DROP_90 | DROP_1D2 | DROP_GOOD
 F:CAN_FLY | IM_FIRE | HURT_COLD
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_9 | SCARE | BR_FIRE | BA_FIRE
-D:$It is a dragon that has returned from Oblivion.
+D:$This dragon is the most loyal subordinate
+D:$ who rushed to the news of the return of Alduin from Oblivion.
 D:$  It lightly turns the town guard into a cinder.
-D:冥界から舞い戻ってきたドラゴンの一体だ。
+D:このドラゴンはアルドゥイン復活の報を受け、
+D:イの一番に駆けつけた最も忠実な部下だ。
 D:街の衛兵ごときは軽く焼き尽くす。
 
 N:1204:幻影の狩人『サーロクニル』
