@@ -627,7 +627,7 @@ I:110:2d7:20:16:10
 W:1:1:0:10:8:30
 B:HIT:HURT:1d9
 F:DROP_60 | WILD_ALL | DROP_SKELETON | DROP_CORPSE
-F:OPEN_DOOR | BASH_DOOR | EAT_POISONOUS |
+F:OPEN_DOOR | BASH_DOOR | EAT_POISONOUS
 F:EVIL | IM_POIS
 D:$It is a squat and ugly humanoid figure.
 D:それは地に潜む、醜い人間型のモンスターだ。
@@ -18832,8 +18832,8 @@ N:921:インターネット・エクスプローダー
 E:Internet Exploder
 G:e:B
 I:80:20d20:25:0:1
-W:30:1:0:1500:0:0
-B:EXPLODE:LOSE_INT:10d20
+W:30:1:0:200:0:0
+B:EXPLODE:LOSE_INT:10d10
 F:RAND_25 | RAND_50 | STUPID | EMPTY_MIND | REFLECTING | FORCE_SLEEP | CAN_SPEAK
 F:BASH_DOOR | EVIL | NONLIVING | IM_ACID | IM_FIRE | IM_COLD | IM_POIS
 F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
@@ -21479,7 +21479,7 @@ N:1066:デイドラ・ブラック・ドラゴン
 E:Daedra Black Dragon
 G:D:D
 I:120:39d50:30:110:40
-W:47:1:0:12000:100000:1188
+W:47:1:0:9000:100000:1188
 B:CLAW:HURT:4d10
 B:CLAW:HURT:4d10
 B:BITE:ACID:6d12
@@ -22408,12 +22408,10 @@ I:110:20d10:25:40:20
 W:23:1:0:240:0:0
 B:HIT:FIRE:8d6
 B:HIT:FIRE:8d6
-S:1_IN_10
-S:BR_FIRE
-F:DROP_90
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:DROP_60 | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_FIRE | FRIENDS
+S:1_IN_10 | BR_FIRE
 D:$This red kobold has flames on its hands and wisps of smoke issuing
 D:$ from its mouth.
 D:大木を焼き尽くすほどの強力な炎を吐き出すことができるようになったコボルドだ。
@@ -22426,16 +22424,15 @@ I:110:20d10:25:40:20
 W:23:1:0:240:0:0
 B:HIT:COLD:8d6
 B:HIT:COLD:8d6
-S:1_IN_10
-S:BR_COLD | BR_WALL
-F:DROP_90
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:DROP_60 | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_COLD | FRIENDS
+S:1_IN_10 | BR_COLD | BR_WALL
 D:$This white kobold has frost covering its hands, and small ice crystals swirl
 D:$ in the air around it.
 D:部屋の全てを永遠に凍りつかせるほどの強力な冷気を吐き出すことができる。
 D:それの周りではダイアモンドダストを見ることができるという。
+D:こいつが話すジョークの質はお察しの通りだ。
 
 N:1118:ライトニング・コボルド
 E:Lightning kobold
@@ -22444,13 +22441,11 @@ I:110:20d10:25:40:20
 W:23:1:0:240:0:0
 B:HIT:ELEC:8d6
 B:HIT:ELEC:8d6
-S:1_IN_10
-S:BR_ELEC
-F:DROP_90
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:DROP_60 | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_ELEC | FRIENDS
 F:SELF_LITE_1
+S:1_IN_10 | BR_ELEC
 D:$Electric sparks fly from the hands and mouth of this blue kobold.
 D:君は見たことがあるだろうか、あのヱヅソンの忌まわしい実験を！
 D:このコボルドはあれと同じことができる！
@@ -22462,12 +22457,10 @@ I:110:20d10:25:40:20
 W:23:1:0:240:0:0
 B:HIT:ACID:8d6
 B:HIT:ACID:8d6
-S:1_IN_10
-S:BR_ACID
-F:DROP_90
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:DROP_60 | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_ACID | FRIENDS
+S:1_IN_10 | BR_ACID
 D:$This black kobold has caustic liquid dripping from its hands and mouth.
 D:ああ、何ということだ！
 D:このコボルドが吐き出す酸はロウソクをも溶かしてしまう！
@@ -22479,11 +22472,9 @@ I:115:21d11:30:45:15
 W:24:1:0:333:0:0
 B:HIT:POISON:9d6
 B:HIT:POISON:9d6
-S:1_IN_10
-S:BR_POIS | BR_TIME
-F:DROP_1D2
-F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:DROP_90 | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
+S:1_IN_10 | BR_POIS | BR_TIME
 D:$Be aware!
 D:$  This kobold's poison can change a tough guy to a frail kid!
 D:気をつけろ！
@@ -22814,7 +22805,7 @@ D:それはふさふさのしっぽを持っているが、冒険者が撫でる
 
 N:1138:白き悪魔『ノロイ』
 E:Norowi, the White Devil
-G:f:w
+G:r:w
 I:115:20d16:25:35:10
 W:16:2:0:220:0:0
 B:BITE:HURT:7d3
@@ -22827,6 +22818,7 @@ D:$  He is obeying not only the weasels,
 D:$ but also the rats with a fearful intimidation.
 D:$  Your adventure will be terminated soon.
 D:悪知恵の働くイタチどもの頭領だ。
+D:イタチだけでなく、その恐怖を引き起こす威圧感でネズミ達をも従わせている。
 D:あなたの冒険は間もなく打ち切られるだろう。
 
 # Beginning small letter "lain" is correct.
@@ -23276,7 +23268,7 @@ F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 D:$If you can dodge them, you are an expert!
 D:避けきれたら君も上級者だ！
 
-N:1164:鬼滅隊の『先輩』
+N:1164:鬼殺隊の『先輩』
 E:Senior, the nameless member of Demon Slayer Corps
 G:p:g
 I:110:25d10:10:35:100
@@ -23287,10 +23279,12 @@ B:TOUCH:TERRIFY
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL
 F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD
 S:1_IN_8 | S_KIN
-D:$This stupid man can not determine his enemy's ability.
-D:この愚かな男は敵の力量を見極めることができない。
+D:$A man without pride who hunts ogres just for money.
+D:$  This stupid man can not determine his enemy's ability.
+D:金のためだけに鬼を狩るプライドのない男だ。
+D:この愚かな者は敵の力量を見極めることができない。
 
-N:1165:鬼滅隊の隊士
+N:1165:鬼殺隊の隊士
 E:Members of Demon Slayer Corps
 G:p:U
 I:110:15d10:10:30:100
@@ -24035,9 +24029,11 @@ F:ONLY_ITEM | DROP_90 | DROP_1D2 | DROP_GOOD
 F:CAN_FLY | IM_FIRE | HURT_COLD
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_9 | SCARE | BR_FIRE | BA_FIRE
-D:$It is a dragon that has returned from Oblivion.
+D:$This dragon is the most loyal subordinate
+D:$ who rushed to the news of the return of Alduin from Oblivion.
 D:$  It lightly turns the town guard into a cinder.
-D:冥界から舞い戻ってきたドラゴンの一体だ。
+D:このドラゴンはアルドゥイン復活の報を受け、
+D:イの一番に駆けつけた最も忠実な部下だ。
 D:街の衛兵ごときは軽く焼き尽くす。
 
 N:1204:幻影の狩人『サーロクニル』
@@ -24098,8 +24094,12 @@ D:その意見を貫き通せるだけの強さを併せ持っている。
 N:1207:声の道を導きしもの『パーサーナックス』
 E:Paarthurnax, the guru of the way of the voice
 G:D:y
-I:120:50d45:40:120:5
-W:45:3:0:15000:0:0
+I:120:50d75:40:120:5
+W:55:3:0:25000:0:0
+B:BITE:HURT:10d9
+B:CRUSH:HURT:10d9
+B:CLAW:HURT:10d9
+B:CRUSH:SUPERHURT:60d1
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | GOOD | FRIENDLY
 F:DROP_4D2 | DROP_GOOD | CAN_FLY | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
@@ -24182,7 +24182,7 @@ D:$They are relentlessly chasing you as against Mirak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
-N:1212:原初の竜殺し『ミラーク』
+N:1212:竜殺しの始祖『ミラーク』
 E:Miraak, the first Dragon-soul Taker
 G:p:v
 I:125:100d90:45:125:10
@@ -24208,7 +24208,7 @@ N:1213:ヴォルキハル城の主『ハルコン』
 E:Harkon, the patriarch of Volkihar castle
 G:V:s
 I:120:70d80:45:120:10
-W:61:2:0:32000:0:0
+W:61:2:0:29000:0:0
 B:CRUSH:LOSE_INT:10d11
 B:CRUSH:LOSE_WIS:10d11
 B:SLASH:EXP_VAMP:10d11
@@ -24255,7 +24255,7 @@ N:1216:ドラウグル・ワイト
 E:Draugr wight
 G:z:W
 I:110:21d21:25:45:20
-W:29:1:0:140:1200:1217
+W:29:1:0:200:1200:1217
 B:SHOOT:HURT:8d9
 B:HIT:HURT:5d6
 B:SLASH:HURT:5d6
@@ -24739,7 +24739,7 @@ N:1246:アイ・ホーン
 E:Eye phorn
 G:e:o
 I:110:20d20:25:0:1
-W:50:1:0:1500:0:0
+W:50:1:0:500:0:0
 B:GAZE:PARALYZE:5d5
 B:TOUCH:TERRIFY:5d5
 B:SPIT:CONFUSE:5d5
@@ -25144,9 +25144,9 @@ B:CRUSH:TERRIFY:6d6
 F:ANIMAL | MOVE_BODY | EVIL | FRIENDS
 F:NO_CONF | RES_GRAV | DROP_90
 S:1_IN_8 | BR_GRAV
-D:$What a cute penguin!
+D:$What a cute terrestrial raven!
 D:$  They often move around in groups with good behavior.
-D:かわいいペンギンだ。よく群れをなして行儀よく動き回っている。
+D:かわいい陸行性のカラスだ。よく群れをなして行儀よく動き回っている。
 
 N:1268:『ビッグキューちゃん』
 E:Raphael, the Big Raven
