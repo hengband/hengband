@@ -84,7 +84,7 @@ void calc_lite_radius(player_type *creature_ptr)
         if (o_ptr->name2 == EGO_LITE_SHINE)
             creature_ptr->cur_lite++;
 
-        if (has_flag(flgs, TR_DARK_SOURCE)) {
+        if (!has_flag(flgs, TR_DARK_SOURCE)) {
             if (o_ptr->tval == TV_LITE) {
                 if ((o_ptr->sval == SV_LITE_TORCH) && !(o_ptr->xtra4 > 0))
                     continue;
