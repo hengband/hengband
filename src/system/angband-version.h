@@ -28,7 +28,7 @@
  * @brief 状態がアルファ版かどうかを返す
  * @note アルファ版はエクストラ番号一定値までをアルファとし、一定まで進めて安定次第ベータ版、さらにそれも解除して無印版とする。
  */
-#define IS_ALPHA_VERSION TRUE
+#define IS_ALPHA_VERSION 1
 
 /*!
    * @brief セーブファイル上のバージョン定義(メジャー番号) / "Savefile Version Number" for Hengband 1.1.1 and later
@@ -48,3 +48,5 @@
 #define H_VER_MINOR FAKE_VER_MINOR /*!< セーブファイル上のバージョン定義(マイナー番号) */
 #define H_VER_PATCH FAKE_VER_PATCH /*!< セーブファイル上のバージョン定義(パッチ番号) */
 #define H_VER_EXTRA FAKE_VER_EXTRA /*!< セーブファイル上のバージョン定義(エクストラ番号) */
+
+void put_version(char *buf);
