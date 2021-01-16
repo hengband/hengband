@@ -18832,7 +18832,7 @@ E:Internet Exploder
 G:e:B
 I:80:20d20:25:0:1
 W:30:1:0:200:0:0
-B:EXPLODE:LOSE_INT:10d20
+B:EXPLODE:LOSE_INT:10d10
 F:RAND_25 | RAND_50 | STUPID | EMPTY_MIND | REFLECTING | FORCE_SLEEP | CAN_SPEAK
 F:BASH_DOOR | EVIL | NONLIVING | IM_ACID | IM_FIRE | IM_COLD | IM_POIS
 F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
@@ -22804,7 +22804,7 @@ D:それはふさふさのしっぽを持っているが、冒険者が撫でる
 
 N:1138:白き悪魔『ノロイ』
 E:Norowi, the White Devil
-G:f:w
+G:r:w
 I:115:20d16:25:35:10
 W:16:2:0:220:0:0
 B:BITE:HURT:7d3
@@ -22817,6 +22817,7 @@ D:$  He is obeying not only the weasels,
 D:$ but also the rats with a fearful intimidation.
 D:$  Your adventure will be terminated soon.
 D:悪知恵の働くイタチどもの頭領だ。
+D:イタチだけでなく、その恐怖を引き起こす威圧感でネズミ達をも従わせている。
 D:あなたの冒険は間もなく打ち切られるだろう。
 
 # Beginning small letter "lain" is correct.
