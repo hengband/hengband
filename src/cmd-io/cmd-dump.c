@@ -192,12 +192,9 @@ void do_cmd_note(void)
  */
 void do_cmd_version(void)
 {
-#if FAKE_VER_EXTRA > 0
-    msg_format(
-        _("変愚蛮怒(Hengband) %d.%d.%d.%d", "You are playing Hengband %d.%d.%d.%d."), FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
-#else
-    msg_format(_("変愚蛮怒(Hengband) %d.%d.%d", "You are playing Hengband %d.%d.%d."), FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#endif
+    char buf[120];
+    put_version(buf);
+    msg_print(buf);
 }
 
 /*
