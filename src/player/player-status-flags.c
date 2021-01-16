@@ -593,7 +593,7 @@ BIT_FLAGS has_free_act(player_type *creature_ptr)
         result |= 0x01 << FLAG_CAUSE_RACE;
     }
 
-    if (heavy_armor(creature_ptr) && (!creature_ptr->inventory_list[INVEN_RARM].k_idx || has_right_hand_weapon(creature_ptr))
+    if (creature_ptr->pclass == CLASS_NINJA && !heavy_armor(creature_ptr) && (!creature_ptr->inventory_list[INVEN_RARM].k_idx || has_right_hand_weapon(creature_ptr))
         && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || has_left_hand_weapon(creature_ptr))) {
         if (creature_ptr->lev > 24)
             result |= 0x01 << FLAG_CAUSE_CLASS;
