@@ -89,15 +89,14 @@ static bool calc_fall_off_possibility(player_type *creature_ptr, const HIT_POINT
  */
 bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force)
 {
-    POSITION sy = 0, sx = 0;
+    POSITION sy = 0;
+    POSITION sx = 0;
     int sn = 0;
     GAME_TEXT m_name[MAX_NLEN];
     monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (!creature_ptr->riding)
-        return FALSE;
-    if (creature_ptr->wild_mode)
+    if (!creature_ptr->riding || creature_ptr->wild_mode)
         return FALSE;
 
     if (dam >= 0 || force) {
