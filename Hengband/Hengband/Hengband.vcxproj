@@ -440,6 +440,7 @@
     <ClCompile Include="..\..\src\store\purchase-order.c" />
     <ClCompile Include="..\..\src\store\sell-order.c" />
     <ClCompile Include="..\..\src\store\service-checker.c" />
+    <ClCompile Include="..\..\src\system\angband-version.c" />
     <ClCompile Include="..\..\src\target\grid-selector.c" />
     <ClCompile Include="..\..\src\target\projection-path-calculator.c" />
     <ClCompile Include="..\..\src\target\target-describer.c" />
