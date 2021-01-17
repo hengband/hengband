@@ -207,7 +207,8 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
         return FALSE;
 
     bool is_magic_mastery = has_magic_mastery(target_ptr) != 0;
-    PARAMETER_VALUE pval = k_info[monap_ptr->o_ptr->k_idx].pval;
+    object_kind *kind_ptr = &k_info[monap_ptr->o_ptr->k_idx];
+    PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
     HIT_POINT drain = pval * level / 400 + pval * randint1(level) / 400;
     if (monap_ptr->o_ptr->tval == TV_STAFF)
@@ -220,7 +221,8 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
     
     msg_print(_("ザックからエネルギーが吸い取られた！", "Energy drains from your pack!"));
     monap_ptr->obvious = TRUE;
-    monap_ptr->m_ptr->hp += drain;
+    HIT_POINT recovery = drain * kind_ptr->level;
+    monap_ptr->m_ptr->hp += recovery;
     if (target_ptr->health_who == monap_ptr->m_idx)
         target_ptr->redraw |= PR_HEALTH;
 
