@@ -23325,7 +23325,7 @@ D:三兄弟の次男で、空手が得意だ。
 N:1168:チーターマン『アポロ』
 G:h:y
 E:Apollo, the eldest cheetahmen
-I:110:16d18:25:40:30
+I:120:16d18:25:40:30
 W:15:1:0:320:0:0
 B:SHOOT:HURT:8d8
 B:STING:HURT:5d6
