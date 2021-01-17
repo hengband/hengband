@@ -101,7 +101,8 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
         return FALSE;
 
     if (dam >= 0 || force) {
-        calc_fall_off_possibility(creature_ptr, dam, force, r_ptr);
+        if (!calc_fall_off_possibility(creature_ptr, dam, force, r_ptr))
+            return FALSE;
 
         /* Check around the player */
         for (DIRECTION i = 0; i < 8; i++) {
