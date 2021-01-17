@@ -4260,7 +4260,7 @@ E:of Don Quixote
 I:22:29:-3
 W:40:30:300:70000
 P:0:3d8:-12:12:0
-F:STR | CON | CHR | RES_ELEC | RES_DARK | RES_FEAR | RIDING
+F:STR | CON | CHR | IM_ELEC | RES_DARK | RES_FEAR | RIDING
 F:FREE_ACT | SUST_STR | SUST_CON | SUST_CHR | SLAY_EVIL | KILL_GIANT
 D:$Don Quixote born in La Mancha is the brave knight
 D:$ trying to defeat the colossal giant "Windmill".
