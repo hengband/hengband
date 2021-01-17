@@ -30,27 +30,22 @@
  * Perform the basic "open" command on doors
  * @param y 対象を行うマスのY座標
  * @param x 対象を行うマスのX座標
- * @return 実際に処理が行われた場合TRUEを返す。
- * @details
- * Assume destination is a closed/locked/jammed door
- * Assume there is no monster blocking the destination
- * Returns TRUE if repeated commands may continue
+ * @return 連続でコマンドを実行する時のみTRUE、1回きりの時はFALSE
  */
 bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    bool more = FALSE;
     take_turn(creature_ptr, 100);
     if (!has_flag(f_ptr->flags, FF_OPEN)) {
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_name + f_info[get_feat_mimic(g_ptr)].name);
-        return more;
+        return FALSE;
     }
 
     if (!f_ptr->power) {
         cave_alter_feat(creature_ptr, y, x, FF_OPEN);
         sound(SOUND_OPENDOOR);
-        return more;
+        return FALSE;
     }
 
     int i = creature_ptr->skill_dis;
@@ -70,14 +65,14 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
             flush();
 
         msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
-        more = TRUE;
+        return TRUE;
     }
 
     msg_print(_("鍵をはずした。", "You have picked the lock."));
     cave_alter_feat(creature_ptr, y, x, FF_OPEN);
     sound(SOUND_OPENDOOR);
     gain_exp(creature_ptr, 1);
-    return more;
+    return FALSE;
 }
 
 /*
