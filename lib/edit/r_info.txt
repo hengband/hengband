@@ -22792,7 +22792,7 @@ D:目についた獲物を片っ端から屠っていく。
 
 N:1137:殺人イタチ
 E:Killer weasel
-G:f:W
+G:r:W
 I:110:12d12:20:10:25
 W:15:1:0:55:0:0
 B:BITE:HURT:5d2
@@ -24054,7 +24054,7 @@ D:$  It lightly turns the town guard into an ice statue.
 D:冥界から舞い戻ってきたドラゴンの一体だ。
 D:街の衛兵ごときは軽く氷像にしてしまう。
 
-N:1205:始祖への裏切り『オダハヴィーング』
+N:1205:原初への裏切り『オダハヴィーング』
 E:Odahviing, the betrayer of Alduin
 G:d:s
 I:115:30d40:20:95:30
