@@ -92,8 +92,11 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
         return;
     }
 
-    sprintf(buf, "Monster Spoilers for Hengband Version %d.%d.%d\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+    char title[200];
+    put_version(title);
+    sprintf(buf, "Monster Spoilers for %s\n", title);
     spoil_out(buf);
+
     spoil_out("------------------------------------------\n\n");
     C_MAKE(evol_tree, max_r_idx, int *);
     C_MAKE(*evol_tree, max_r_idx * (max_evolution_depth + 1), int);
