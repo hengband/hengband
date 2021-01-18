@@ -204,6 +204,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         return TRUE;
 
     msg_print(NULL);
+    handle_stuff(owner_ptr);
     test_inventory_floor(owner_ptr, fis_ptr);
     fis_ptr->done = FALSE;
     fis_ptr->item = FALSE;
