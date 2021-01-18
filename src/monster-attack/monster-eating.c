@@ -211,15 +211,17 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
     PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
     HIT_POINT drain = pval * level / 400 + pval * randint1(level) / 400;
+    if (drain <= 0)
+        return FALSE;
+
     if (monap_ptr->o_ptr->tval == TV_STAFF)
         drain *= monap_ptr->o_ptr->number;
 
-    if (drain > 0)
-        drain = MIN(drain, (monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp) / drain);
-    else
-        return FALSE;
-    
-    msg_print(_("ザックからエネルギーが吸い取られた！", "Energy drains from your pack!"));
+    drain = MIN(drain, (monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp) / drain);
+    msg_print(_("ザックからエネルギーが吸い取られた！", "Energy was drained from your pack!"));
+    if (is_magic_mastery)
+        msg_print(_("しかし、あなたの魔法を操る力がその一部を取り返した！", "However, your skill of magic mastery got back the part of energy!"));
+
     monap_ptr->obvious = TRUE;
     HIT_POINT recovery = drain * kind_ptr->level;
     monap_ptr->m_ptr->hp += recovery;
