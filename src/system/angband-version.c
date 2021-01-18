@@ -1,5 +1,4 @@
-﻿#pragma once
-#include "system/angband.h"
+﻿#include "system/angband.h"
 #include "system/angband-version.h"
 
 void put_version(char *buf)
