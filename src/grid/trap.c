@@ -1,4 +1,4 @@
-#include "grid/trap.h"
+﻿#include "grid/trap.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
