@@ -1656,14 +1656,12 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    s16b num_blow = 0;
+    s16b num_blow = 1;
 
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     object_flags(creature_ptr, o_ptr, flgs);
     creature_ptr->heavy_wield[i] = FALSE;
-    if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
-        num_blow = 1;
-    } else {
+    if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
         if (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10) {
             creature_ptr->heavy_wield[i] = TRUE;
         }
