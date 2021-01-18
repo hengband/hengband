@@ -33,7 +33,7 @@ hengband_SOURCES = \
 	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
-	autopick/autopick-editor-table.h autopick/autopick-flags-table.h \
+	autopick/autopick-flags-table.h \
 	autopick/autopick-key-flag-process.h autopick/autopick-keys-table.h \
 	autopick/autopick-menu-data-table.c autopick/autopick-menu-data-table.h \
 	autopick/autopick-methods-table.h \
