@@ -482,6 +482,7 @@ void calc_bonuses(player_type *creature_ptr)
         return;
 
     put_equipment_warning(creature_ptr);
+    check_no_flowed(creature_ptr);
 }
 
 static void calc_alignment(player_type *creature_ptr)
