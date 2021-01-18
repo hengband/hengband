@@ -24040,7 +24040,7 @@ D:街の衛兵ごときは軽く焼き尽くす。
 N:1204:幻影の狩人『サーロクニル』
 E:Sahloknir, the hunter of illusion
 G:d:B
-I:110:30d17:20:80:30
+I:115:30d17:20:80:30
 W:21:3:0:850:0:0
 B:CLAW:HURT:8d2
 B:CLAW:HURT:7d2
@@ -24058,7 +24058,7 @@ D:街の衛兵ごときは軽く氷像にしてしまう。
 N:1205:原初への裏切り『オダハヴィーング』
 E:Odahviing, the betrayer of Alduin
 G:d:s
-I:115:30d40:20:95:30
+I:120:30d40:20:95:30
 W:35:3:0:3500:0:0
 B:CLAW:HURT:8d6
 B:CLAW:HURT:7d6
