@@ -255,14 +255,24 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         (void)set_fast(user_ptr, randint1(50) + 50, FALSE);
         (void)heroism(user_ptr, 50);
         return TRUE;
+    case ACT_ACID_BALL_AND_RESISTANCE:
+        return activate_acid_ball_and_resistance(user_ptr, name);
+    case ACT_FIRE_BALL_AND_RESISTANCE:
+        return activate_fire_ball_and_resistance(user_ptr, name);
+    case ACT_COLD_BALL_AND_RESISTANCE:
+        return activate_cold_ball_and_resistance(user_ptr, name);
+    case ACT_ELEC_BALL_AND_RESISTANCE:
+        return activate_elec_ball_and_resistance(user_ptr, name);
+    case ACT_POIS_BALL_AND_RESISTANCE:
+        return activate_pois_ball_and_resistance(user_ptr, name);
     case ACT_RESIST_ACID:
-        return activate_resistance_acid(user_ptr, o_ptr, name);
+        return activate_resistance_acid(user_ptr, name);
     case ACT_RESIST_FIRE:
-        return activate_resistance_fire(user_ptr, o_ptr, name);
+        return activate_resistance_fire(user_ptr, name);
     case ACT_RESIST_COLD:
-        return activate_resistance_cold(user_ptr, o_ptr, name);
+        return activate_resistance_cold(user_ptr, name);
     case ACT_RESIST_ELEC:
-        return activate_resistance_elec(user_ptr, o_ptr, name);
+        return activate_resistance_elec(user_ptr, name);
     case ACT_RESIST_POIS:
         return activate_resistance_pois(user_ptr, name);
     case ACT_LIGHT:
