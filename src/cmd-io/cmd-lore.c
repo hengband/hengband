@@ -15,6 +15,8 @@
 #include "util/string-processor.h"
 #include "view/display-lore.h"
 
+#define MAX_MONSTER_NAME_LENGTH 160
+
 /*!
  * @brief モンスターの思い出を見るコマンドのメインルーチン
  * Identify a character, allow recall of monsters
@@ -44,7 +46,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     bool uniq = FALSE;
     bool norm = FALSE;
     bool ride = FALSE;
-    char temp[80] = "";
+    char temp[MAX_MONSTER_NAME_LENGTH] = "";
 
     bool recall = FALSE;
 
@@ -104,9 +106,9 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 
         if (temp[0]) {
             TERM_LEN xx;
-            char temp2[80];
+            char temp2[MAX_MONSTER_NAME_LENGTH];
 
-            for (xx = 0; temp[xx] && xx < 80; xx++) {
+            for (xx = 0; temp[xx] && xx < MAX_MONSTER_NAME_LENGTH; xx++) {
 #ifdef JP
                 if (iskanji(temp[xx])) {
                     xx++;
@@ -122,7 +124,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 #else
             strcpy(temp2, r_name + r_ptr->name);
 #endif
-            for (xx = 0; temp2[xx] && xx < 80; xx++)
+            for (xx = 0; temp2[xx] && xx < MAX_MONSTER_NAME_LENGTH; xx++)
                 if (isupper(temp2[xx]))
                     temp2[xx] = (char)tolower(temp2[xx]);
 
