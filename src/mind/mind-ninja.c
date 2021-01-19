@@ -27,6 +27,7 @@
 #include "object/object-kind-hook.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
+#include "player/player-status-flags.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-floor.h"

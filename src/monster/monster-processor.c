@@ -54,6 +54,7 @@
 #include "pet/pet-fall-off.h"
 #include "player-info/avatar.h"
 #include "player/player-skill.h"
+#include "player/player-status-flags.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
