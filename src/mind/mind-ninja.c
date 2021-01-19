@@ -203,7 +203,7 @@ void process_surprise_attack(player_type *attacker_ptr, player_attack_type *pa_p
     int tmp = attacker_ptr->lev * 6 + (attacker_ptr->skill_stl + 10) * 4;
     if (attacker_ptr->monlite && (pa_ptr->mode != HISSATSU_NYUSIN))
         tmp /= 3;
-    if (attacker_ptr->cursed & TRC_AGGRAVATE)
+    if (has_aggravate(attacker_ptr))
         tmp /= 2;
     if (r_ptr->level > (attacker_ptr->lev * attacker_ptr->lev / 20 + 10))
         tmp /= 3;
