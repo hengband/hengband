@@ -54,6 +54,7 @@
 #include "pet/pet-fall-off.h"
 #include "player-info/avatar.h"
 #include "player/player-skill.h"
+#include "player/player-status-flags.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
@@ -197,7 +198,7 @@ bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx)
     if (target_ptr->monlite)
         tmp /= 3;
 
-    if (target_ptr->cursed & TRC_AGGRAVATE)
+    if (has_aggravate(target_ptr))
         tmp /= 2;
 
     if (r_ptr->level > (target_ptr->lev * target_ptr->lev / 20 + 10))
@@ -273,7 +274,7 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!monster_csleep_remaining(m_ptr))
         return TRUE;
 
-    if ((target_ptr->cursed & TRC_AGGRAVATE) == 0)
+    if (has_aggravate(target_ptr))
         return FALSE;
 
     (void)set_monster_csleep(target_ptr, m_idx, 0);
@@ -301,7 +302,7 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool gets_angry = FALSE;
-    if (is_friendly(m_ptr) && (target_ptr->cursed & TRC_AGGRAVATE))
+    if (is_friendly(m_ptr) && has_aggravate(target_ptr))
         gets_angry = TRUE;
 
     if (is_pet(m_ptr)
@@ -588,7 +589,7 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
     if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
         return TRUE;
 
-    if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) && (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) || (target_ptr->cursed & TRC_AGGRAVATE)))
+    if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) && (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(target_ptr)))
         return TRUE;
 
     if (m_ptr->target_y)
