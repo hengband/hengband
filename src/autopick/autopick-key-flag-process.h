@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#define MATCH_KEY(KEY) (!strncmp(ptr, KEY, sizeof(KEY)-1)\
-     ? (ptr += sizeof(KEY)-1, (' '==*ptr) ? ptr++ : 0, TRUE) : FALSE)
-#define MATCH_KEY2(KEY) (!strncmp(ptr, KEY, sizeof(KEY)-1)\
-     ? (prev_ptr = ptr, ptr += sizeof(KEY)-1, (' '==*ptr) ? ptr++ : 0, TRUE) : FALSE)
+#define MATCH_KEY(KEY) (!strncmp(ptr, KEY, strlen(KEY))\
+     ? (ptr += strlen(KEY), (' '==*ptr) ? ptr++ : 0, TRUE) : FALSE)
+#define MATCH_KEY2(KEY) (!strncmp(ptr, KEY, strlen(KEY))\
+     ? (prev_ptr = ptr, ptr += strlen(KEY), (' '==*ptr) ? ptr++ : 0, TRUE) : FALSE)
 
 #ifdef JP
 #define ADD_KEY(KEY) strcat(ptr, KEY)
