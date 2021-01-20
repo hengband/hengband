@@ -255,7 +255,7 @@ BIT_FLAGS has_esp_good(player_type *creature_ptr)
  */
 BIT_FLAGS has_esp_nonliving(player_type *creature_ptr)
 {
-    return check_equipment_flags(creature_ptr, TR_ESP_GOOD);
+    return check_equipment_flags(creature_ptr, TR_ESP_NONLIVING);
 }
 
 /*!
