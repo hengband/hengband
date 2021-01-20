@@ -184,7 +184,7 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
     if (monster_to_player || (monster_to_monster && target_ptr->riding == t_idx)) {
         get_damage = take_hit(target_ptr, DAMAGE_NOESCAPE, dam, m_name, -1);
         if (target_ptr->tim_eyeeye && get_damage > 0 && !target_ptr->is_dead) {
-            GAME_TEXT m_name_self[80];
+            GAME_TEXT m_name_self[MAX_MONSTER_NAME];
             monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
             msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
             project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);

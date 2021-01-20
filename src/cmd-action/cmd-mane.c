@@ -135,7 +135,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
     PERCENTAGE chance = 0;
     int ask;
     char choice;
-    char out_val[160];
+    char out_val[MAX_MONSTER_NAME];
     char comment[80];
     concptr p = _("能力", "power");
 

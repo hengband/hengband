@@ -77,13 +77,13 @@ void spoil_mon_desc(player_type *player_ptr, concptr fname)
     u16b why = 2;
     MONRACE_IDX *who;
     char buf[1024];
-    char nam[80];
+    char nam[MAX_MONSTER_NAME];
     char lev[80];
     char rar[80];
     char spd[80];
     char ac[80];
     char hp[80];
-    char exp[80];
+    char symbol[80];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
@@ -94,8 +94,8 @@ void spoil_mon_desc(player_type *player_ptr, concptr fname)
     C_MAKE(who, max_r_idx, MONRACE_IDX);
     fprintf(spoiler_file, "Monster Spoilers for Hengband Version %d.%d.%d\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
     fprintf(spoiler_file, "------------------------------------------\n\n");
-    fprintf(spoiler_file, "    %-38.38s%4s%4s%4s%7s%5s  %11.11s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
-    fprintf(spoiler_file, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n", "--------", "---", "---", "---", "--", "--", "-----------");
+    fprintf(spoiler_file, "    %-38.38s%4s%4s%4s%7s%5s  %15.15s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "  Visual Info  ");
+    fprintf(spoiler_file, "%-42.42s%4s%4s%4s%7s%5s  %15.15s\n", "--------", "---", "---", "---", "--", "--", "---------------");
 
     int n = 0;
     for (int i = 1; i < max_r_idx; i++) {
@@ -128,9 +128,9 @@ void spoil_mon_desc(player_type *player_ptr, concptr fname)
         else
             sprintf(hp, "%dd%d", r_ptr->hdice, r_ptr->hside);
 
-        sprintf(exp, "%ld", (long)(r_ptr->mexp));
-        sprintf(exp, "%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
-        fprintf(spoiler_file, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n", nam, lev, rar, spd, hp, ac, exp);
+        sprintf(symbol, "%ld", (long)(r_ptr->mexp));
+        sprintf(symbol, "%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
+        fprintf(spoiler_file, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n", nam, lev, rar, spd, hp, ac, symbol);
     }
 
     fprintf(spoiler_file, "\n");

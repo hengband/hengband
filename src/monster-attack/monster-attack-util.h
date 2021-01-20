@@ -30,7 +30,7 @@ typedef struct monap_type {
     bool blinked;
     GAME_TEXT o_name[MAX_NLEN];
     HIT_POINT get_damage;
-    GAME_TEXT ddesc[80];
+    GAME_TEXT ddesc[MAX_MONSTER_NAME];
     ARMOUR_CLASS ac;
     bool alive;
     bool fear;
