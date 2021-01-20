@@ -1260,7 +1260,7 @@ static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
         if (hex_spelling_any(creature_ptr))
             pow -= (1 + casting_hex_num(creature_ptr));
     }
-    if (has_aggravate(creature_ptr) == AGGRAVATE_S_FAIRY) {
+    if (player_aggravate_state(creature_ptr) == AGGRAVATE_S_FAIRY) {
         pow = MIN(pow - 3, (pow + 2) / 2);
     }
 
