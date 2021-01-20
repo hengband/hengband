@@ -14,6 +14,9 @@ doxygen/html/
 Hengband.exe
 Hengband.exe.lastcodeanalysissucceeded
 
+# English version build result by Visual Studio
+[Ee]nglish-[Dd]ebug/
+
 # game data files auto generated
 Hengband.INI
 lib/user/
