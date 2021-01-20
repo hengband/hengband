@@ -20018,7 +20018,7 @@ B:BITE:LOSE_ALL:3d8
 F:REFLECTING | DROP_1D2 | DROP_2D2 | RES_DISE | ANIMAL |
 F:REGENERATE | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP | RES_TELE | CAN_SWIM | RIDING
-D:It is a white horse with a horn on its forehead.
+D:$It is a white horse with a horn on its forehead.
 D:額に一本の角を持った白馬で、乙女にのみ心を許すと言われる。
 
 N:986:猫又
@@ -21729,20 +21729,21 @@ F:RES_LITE | RES_DARK | RES_NETH | RES_CHAO | RES_NEXU |
 S:1_IN_3 |
 S:BLINK | HEAL | SHRIEK | SCARE | CONF | BLIND |
 S:DARKNESS | FORGET | MIND_BLAST | BRAIN_SMASH |
-D:$"Invisible Pink Unicorns are beings of great spiritual power. 
-D:$We know this because they are capable of being invisible 
-D:$and pink at the same time. Like all religions, the Faith 
-D:$of the Invisible Pink Unicorns is based upon both logic 
-D:$and faith. We have faith that they are pink; we logically 
-D:$know that they are invisible because we can't see them." 
-D:$(Steve Eley)
-D:「見えざるピンクのユニコーン達は偉大なるスピリチュアルパワ
-D:ーの存在である。我々は彼女らが目に見えないと同時にピンク色
-D:で存在することが出来るがゆえにそれを承知している。すべての
-D:宗教と同様、見えざるピンクのユニコーンの教義は論理と信仰に
-D:基づいている。我々は彼女らがピンクであると信じている。我々
-D:は、我々が彼女らを見ることができないから見えないのだと論理
-D:的に知っている。」
+D:$"Invisible Pink Unicorns are beings of great spiritual power.
+D:$  We know this because they are capable of being invisible
+D:$ and pink at the same time.
+D:$  Like all religions, the Faith of the Invisible Pink Unicorns
+D:$ is based upon both logic and faith.
+D:$  We have faith that they are pink;
+D:$ we logically know that they are invisible because we can't see them."
+D:$  (Steve Eley)
+D:「見えざるピンクのユニコーン達は偉大なるスピリチュアルパワーの存在である。
+D:我々は彼女らが目に見えないと同時にピンク色で存在することが出来るがゆえに
+D:それを承知している。
+D:すべての宗教と同様、見えざるピンクのユニコーンの教義は論理と信仰に
+D:基づいている。我々は彼女らがピンクであると信じている。
+D:我々は、我々が彼女らを見ることができないから見えないのだと
+D:論理的に知っている。」
 D:(スティーヴ・イーリー)
 
 N:1080:『空飛ぶスパゲッティ・モンスター』
