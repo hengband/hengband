@@ -14,5 +14,5 @@ typedef struct activation_type {
     concptr desc;
 } activation_type;
 
-#define MAX_ACTIVATION_TYPE 131
+#define MAX_ACTIVATION_TYPE 136
 extern const activation_type activation_info[MAX_ACTIVATION_TYPE];
