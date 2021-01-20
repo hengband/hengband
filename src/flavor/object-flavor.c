@@ -100,11 +100,11 @@ static bool object_easy_know(int i)
 void get_table_name_aux(char *out_string)
 {
 #ifdef JP
-    char Syllable[80];
-    get_rnd_line("aname_j.txt", 1, Syllable);
-    strcpy(out_string, Syllable);
-    get_rnd_line("aname_j.txt", 2, Syllable);
-    strcat(out_string, Syllable);
+    char syllable[80];
+    get_rnd_line("aname_j.txt", 1, syllable);
+    strcpy(out_string, syllable);
+    get_rnd_line("aname_j.txt", 2, syllable);
+    strcat(out_string, syllable);
 #else
 #define MAX_SYLLABLES 164 /* Used with scrolls (see below) */
 
@@ -123,11 +123,11 @@ void get_table_name_aux(char *out_string)
         while (testcounter--)
             strcat(out_string, syllables[randint0(MAX_SYLLABLES)]);
     } else {
-        char Syllable[80];
+        char syllable[80];
         testcounter = randint1(2) + 1;
         while (testcounter--) {
-            (void)get_rnd_line("elvish.txt", 0, Syllable);
-            strcat(out_string, Syllable);
+            (void)get_rnd_line("elvish.txt", 0, syllable);
+            strcat(out_string, syllable);
         }
     }
 
@@ -157,19 +157,19 @@ void get_table_name(char *out_string)
  */
 void get_table_sindarin_aux(char *out_string)
 {
-    char Syllable[80];
+    char syllable[80];
 #ifdef JP
     char tmp[80];
 #endif
 
-    get_rnd_line("sname.txt", 1, Syllable);
-    strcpy(_(tmp, out_string), Syllable);
-    get_rnd_line("sname.txt", 2, Syllable);
+    get_rnd_line("sname.txt", 1, syllable);
+    strcpy(_(tmp, out_string), syllable);
+    get_rnd_line("sname.txt", 2, syllable);
 #ifdef JP
-    strcat(tmp, Syllable);
+    strcat(tmp, syllable);
     sindarin_to_kana(out_string, tmp);
 #else
-    strcat(out_string, Syllable);
+    strcat(out_string, syllable);
 #endif
 }
 

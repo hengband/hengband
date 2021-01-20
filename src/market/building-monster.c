@@ -31,7 +31,7 @@ bool research_mon(player_type *player_ptr)
     bool all = FALSE;
     bool uniq = FALSE;
     bool norm = FALSE;
-    char temp[80] = "";
+    char temp[MAX_MONSTER_NAME] = "";
 
     static int old_sym = '\0';
     static IDX old_i = 0;
@@ -116,7 +116,7 @@ bool research_mon(player_type *player_ptr)
                     temp[xx] = (char)tolower(temp[xx]);
             }
 
-            char temp2[80];
+            char temp2[MAX_MONSTER_NAME];
 #ifdef JP
             strcpy(temp2, r_name + r_ptr->E_name);
 #else

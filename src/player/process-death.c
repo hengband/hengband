@@ -84,32 +84,32 @@ static int show_killing_monster(player_type *dead_ptr, char *buf, char *tomb_mes
     if (!*t)
         return 0;
 
-    char dummy[80];
-    strcpy(dummy, t); /* 2nd line */
+    char killer[MAX_MONSTER_NAME];
+    strcpy(killer, t); /* 2nd line */
     if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
     {
-        for (t = dummy + strlen(dummy) - 2; iskanji(*(t - 1)); t--) /* Loop */
+        for (t = killer + strlen(killer) - 2; iskanji(*(t - 1)); t--) /* Loop */
             ;
         strcpy(t, "…");
-    } else if (angband_strstr(tomb_message, "『") && suffix(dummy, "』")) {
-        char dummy2[80];
+    } else if (angband_strstr(tomb_message, "『") && suffix(killer, "』")) {
+        char killer2[MAX_MONSTER_NAME];
         char *name_head = angband_strstr(tomb_message, "『");
-        sprintf(dummy2, "%s%s", name_head, dummy);
-        if (strlen(dummy2) <= GRAVE_LINE_WIDTH) {
-            strcpy(dummy, dummy2);
+        sprintf(killer2, "%s%s", name_head, killer);
+        if (strlen(killer2) <= GRAVE_LINE_WIDTH) {
+            strcpy(killer, killer2);
             *name_head = '\0';
         }
-    } else if (angband_strstr(tomb_message, "「") && suffix(dummy, "」")) {
-        char dummy2[80];
+    } else if (angband_strstr(tomb_message, "「") && suffix(killer, "」")) {
+        char killer2[MAX_MONSTER_NAME];
         char *name_head = angband_strstr(tomb_message, "「");
-        sprintf(dummy2, "%s%s", name_head, dummy);
-        if (strlen(dummy2) <= GRAVE_LINE_WIDTH) {
-            strcpy(dummy, dummy2);
+        sprintf(killer2, "%s%s", name_head, killer);
+        if (strlen(killer2) <= GRAVE_LINE_WIDTH) {
+            strcpy(killer, killer2);
             *name_head = '\0';
         }
     }
 
-    center_string(buf, dummy);
+    center_string(buf, killer);
     put_str(buf, 15, 11);
     return 1;
 }
@@ -194,15 +194,15 @@ static void show_tomb_detail(player_type *dead_ptr, char *buf)
     if (!*t)
         return;
 
-    char dummy[80];
-    strcpy(dummy, t); /* 2nd line */
+    char killer[MAX_MONSTER_NAME];
+    strcpy(killer, t); /* 2nd line */
     if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
     {
-        int dummy_len = strlen(dummy);
-        strcpy(dummy + MIN(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
+        int dummy_len = strlen(killer);
+        strcpy(killer + MIN(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
     }
 
-    center_string(buf, dummy);
+    center_string(buf, killer);
     put_str(buf, 16, 11);
 }
 #endif
