@@ -1716,7 +1716,7 @@ bool has_not_monk_weapon(player_type *creature_ptr, int i)
 
 bool has_good_luck(player_type *creature_ptr) { return (creature_ptr->pseikaku == PERSONALITY_LUCKY) || (creature_ptr->muta3 & MUT3_GOOD_LUCK); }
 
-BIT_FLAGS has_aggravate(player_type *creature_ptr)
+BIT_FLAGS player_aggravate_state(player_type *creature_ptr)
 {
     if (creature_ptr->cursed & TRC_AGGRAVATE) {
         if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY)) {
@@ -1727,4 +1727,6 @@ BIT_FLAGS has_aggravate(player_type *creature_ptr)
     
     return AGGRAVATE_NONE; 
 }
+
+bool has_aggravate(player_type *creature_ptr) { return player_aggravate_state(creature_ptr) == AGGRAVATE_NORMAL; }
 
