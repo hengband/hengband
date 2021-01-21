@@ -161,6 +161,7 @@ typedef enum monster_race_type {
     MON_SCARAB = 1220,
     MON_IMHOTEP = 1221,
     MON_EDGE = 1245,
+    MON_EYE_PHORN = 1246,
     MON_JOBZ = 1247,
     MON_VESPOID = 1252,
     MON_QUEEN_VESPOID = 1253,
