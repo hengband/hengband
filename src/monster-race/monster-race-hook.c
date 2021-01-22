@@ -471,7 +471,7 @@ bool vault_aux_mimic(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return FALSE;
 
-    if (!angband_strchr("!$&(/=?[\\|", r_ptr->d_char))
+    if (!angband_strchr("!$&(/=?[\\|][`~>+", r_ptr->d_char))
         return FALSE;
 
     return TRUE;
