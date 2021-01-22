@@ -12399,7 +12399,7 @@ D:で知られる。
 N:675:古代万色ドラゴン
 E:Ancient multi-hued dragon
 G:D:v
-I:120:50d45:20:95:100
+I:120:40d45:20:95:100
 W:42:1:0:10000:300000:790
 B:CLAW:HURT:4d12
 B:CLAW:HURT:4d12
@@ -13828,8 +13828,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | HUMAN |
 F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD |
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | 
 F:IM_POIS | IM_FIRE | NO_CONF | NO_SLEEP | EVIL | RES_TELE
-S:1_IN_6 | 
-S:TRAPS | S_KIN
+S:1_IN_6 | TRAPS | S_KIN
 A:139:1:66
 D:$He may not code worth a dime, but he certainly knows how to make money.
 D:彼の書くプログラムは一銭の価値もないかもしれないが、彼は金を儲ける方法を
@@ -16191,8 +16190,7 @@ F:BASH_DOOR | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | IM_ACID |
 F:RES_LITE | RES_DARK | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN |
 F:RES_CHAO | RES_NEXU | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV |
 F:COLD_BLOOD | NONLIVING | RAND_50
-S:1_IN_5 |
-S:BR_CHAO
+S:1_IN_5 | BR_CHAO
 D:$Summoned from the Courts of Chaos, it is a mass of sentient Logrus, 
 D:$spreading uncontrollably and destroying everything in its path.
 D:混沌の宮廷から召喚された、意識を持ったログルスの塊だ。
