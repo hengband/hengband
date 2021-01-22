@@ -210,7 +210,7 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
     object_kind *kind_ptr = &k_info[monap_ptr->o_ptr->k_idx];
     PARAMETER_VALUE pval = kind_ptr->pval;
     DEPTH level = monap_ptr->rlev;
-    HIT_POINT drain = pval * level / 400 + pval * randint1(level) / 400;
+    HIT_POINT drain = is_magic_mastery ? pval * level / 400 + pval * randint1(level) / 400 : pval;
     if (drain <= 0)
         return FALSE;
 
