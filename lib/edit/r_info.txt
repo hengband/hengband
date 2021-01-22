@@ -12895,16 +12895,13 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | DROP_CORPSE
 F:BASH_DOOR | POWERFUL | MOVE_BODY | CAN_FLY |
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_3 | 
-S:CONF | CAUSE_3 | 
-S:BR_COLD
-D:$An ancient and wise Dragon.  Scatha has grown clever over the long years.  
-D:$His scales are covered with frost, and his breath sends a shower of ice 
-D:$into the air.
-D:太古の賢明なるドラゴンであるスカサは、長い年月を通してその知能に磨きをかけて
-D:きた。
-D:彼の鱗は冷気で覆われていて、そのブレスは空気中に氷のシャワーを
-D:まき散らす。
+S:1_IN_3 | CONF | CAUSE_3 | BR_COLD
+D:$An ancient and wise Dragon.  Scatha has grown clever over the long years.
+D:$  His scales are covered with frost, and his breath sends a shower of ice
+D:$ into the air.
+D:太古の賢明なるドラゴンであるスカサは、
+D:長い年月を通してその知能に磨きをかけてきた。
+D:彼の鱗は冷気で覆われていて、そのブレスは空気中に氷のシャワーをまき散らす。
 
 #JZ#
 N:693:暁の戦士
@@ -13027,9 +13024,7 @@ F:FORCE_SLEEP | FORCE_MAXHP | CAN_SPEAK | SELF_LITE_2 |
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
 F:BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_3 | 
-S:CONF | CAUSE_3 | 
-S:BR_FIRE
+S:1_IN_3 | CONF | CAUSE_3 | BR_FIRE
 D:$Smaug is one of the Uruloki that still survive, a fire-drake of immense 
 D:$cunning and intelligence.  His speed through air is matched by few other 
 D:$dragons and his dragonfire is what legends are made of.
@@ -23052,7 +23047,7 @@ F:DROP_90 | DROP_4D2 | ONLY_GOLD
 S:1_IN_8 | MISSILE | ROCKET
 D:$This aircraft protects the home of the Bacterian army
 D:$ with the power reactor exposed.
-D:$  Recently this unit was fired.
+D:$  Recently this unit seemed to be fired.
 D:この機体は動力炉を剥き出しにしたままバクテリアン軍の本拠地を守っていた。
 D:最近暇を出されたようだ。
 
@@ -23060,12 +23055,12 @@ N:1150:蜘蛛地獄『ゴライアス』
 E:Goliath, the king of ant-lion
 G:S:r
 I:110:20d10:30:30:20
-W:10:1:0:50:0:0
+W:10:2:0:180:0:0
 B:BITE:HURT:2d10
 B:STING:HURT:2d10
 F:UNIQUE | FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | ESCORT
 F:DROP_60 | DROP_90 | ONLY_ITEM | DROP_GOOD | NO_SLEEP | ANIMAL
-S:1_IN_8 | S_KIN | BLIND
+S:1_IN_10 | S_KIN | BLIND
 D:$It waits to prey on all living things.
 D:それはあらゆる生き物を餌食にしようと待ち構えている。
 
@@ -23227,7 +23222,7 @@ E:Vaif, the general of Moais
 G:g:D
 I:120:60d50:25:100:20
 W:49:1:0:11000:0:0
-B:CRUSH:SUPERHURT:12d15
+B:CRUSH:HURT:8d12
 F:UNIQUE | FORCE_MAXHP | NEVER_MOVE
 F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV | RES_TELE
 F:ONLY_ITEM | DROP_2D2 | DROP_GREAT
@@ -23242,12 +23237,12 @@ D:バクテリアン軍が放った強大な刺客だ。それは大量のプチ
 N:1163:クリスタル・キューブ
 E:Crystal cube
 G:g:B
-I:140:2d2:10:200:30
-W:50:3:0:1500:0:0
+I:135:1d2:10:200:30
+W:50:3:0:2500:0:0
 B:CRUSH:SHATTER:10d6
+B:CRUSH:SHATTER:10d7
 B:CRUSH:SHATTER:10d8
-B:CRUSH:SHATTER:10d10
-B:CRUSH:SHATTER:10d12
+B:CRUSH:SHATTER:10d9
 F:RES_ALL | FRIENDS | NONLIVING | RAND_25 | RAND_50
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 D:$If you can dodge them, you are an expert!
@@ -24085,7 +24080,7 @@ W:55:3:0:25000:0:0
 B:BITE:HURT:10d9
 B:CRUSH:HURT:10d9
 B:CLAW:HURT:10d9
-B:CRUSH:SUPERHURT:60d1
+B:CRUSH:HURT:1d59
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | GOOD | FRIENDLY
 F:DROP_4D2 | DROP_GOOD | CAN_FLY | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
@@ -24101,12 +24096,16 @@ E:Durnehviir, the governor of Soul Cairn
 G:D:v
 I:120:50d60:40:130:5
 W:51:2:0:22000:0:0
+B:BITE:HURT:9d9
+B:CRUSH:HURT:9d9
+B:CLAW:HURT:9d9
+B:CRUSH:HURT:1d49
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | UNDEAD
-F:ONLY_ITEM DROP_60 | DROP_90 | DROP_1D2 | DROP_GREAT
+F:ONLY_ITEM | DROP_60 | DROP_90 | DROP_1D2 | DROP_GREAT
 F:CAN_FLY | FRIENDLY | GOOD | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_FIRE | BR_SOUN | BR_NETH
-D:$  It is a dragon who has been in Oblivion for so long that
+D:$It is a dragon who has been in Oblivion for so long that
 D:$ it has become difficult to maintain his body in this world.
 D:$  It fully acknowledges your ability.
 D:あまりにも永い間冥界にい続けたため、
@@ -24118,10 +24117,14 @@ E:Alduin, the World Eater
 G:D:v
 I:125:70d100:45:150:10
 W:73:2:0:38000:0:0
+B:BITE:HURT:15d9
+B:CRUSH:HURT:15d9
+B:CLAW:HURT:15d9
+B:CRUSH:HURT:1d89
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | ATTR_MULTI
-F:DROP_3D2 | DROP_4D2 | DROP_GREAT | CAN_FLY | EVIL
-F:DROP_GOOD | CAN_FLY | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
-F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_STUN | RIDING
+F:DROP_3D2 | DROP_4D2 | DROP_GREAT | ONLY_ITEM | CAN_FLY | EVIL
+F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
+F:BASH_DOOR | KILL_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_STUN | RIDING
 S:1_IN_3 | SCARE | BLINK | S_KIN | ANIM_DEAD
 S:BR_ELEC | BR_FIRE | BR_COLD | BR_SOUN | BR_WALL | BR_MANA
 D:$The first dragon created in one of the plural worlds.
@@ -24370,7 +24373,7 @@ D:目が見えないので光に身をすくめることもない。
 N:1224:ファルメル・グルームルーカー
 E:Falmer gloomlurker
 G:h:u
-I:115:31d31:10:65:50
+I:115:30d29:10:65:50
 W:36:2:0:1400:10000:1229
 B:SHOOT:HURT:13d9
 B:SLASH:POISON:9d9
@@ -24582,7 +24585,7 @@ G:C:R
 W:29:2:0:1200:0:0
 B:BITE:FIRE:12d11
 B:CLAW:FIRE:12d11
-B:CRUSH:SUPERHURT:40d1
+B:CRUSH:SUPERHURT:30d1
 F:UNIQUE | FORCE_MAXHP | EVIL | ANIMAL | UNDEAD | DROP_CORPSE
 F:DROP_2D2 | DROP_GOOD | IM_FIRE | RES_NETH | RES_DARK
 R:1237:13d9
@@ -24597,7 +24600,7 @@ N:1239:惑星生命体『ソラリス』
 E:Solaris, the planet life
 G:j:G
 I:120:50d40:50:90:5
-W:42:1:0:6000:0:0
+W:42:4:0:6000:0:0
 B:CRAWL:HURT:13d11
 B:ENGULF:HURT:13d11
 B:GAZE:HURT:13d11
@@ -24620,7 +24623,7 @@ I:110:25d12:15:40:20
 W:15:1:0:350:0:0
 B:SLASH:HURT:2d11
 B:CRUSH:HURT:1d13
-F:UNIQUE | FORCE_MAXHP | HUMAN | GOOD | NO_FEAR | CAN_SPEAK
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | GOOD | NO_FEAR | CAN_SPEAK
 F:ONLY_ITEM | DROP_4D2
 D:$Hey, girlfriend came to me...
 D:$ (inciting words in Monthly Choi Yong Soo; issue number is unknown)
@@ -24730,9 +24733,9 @@ B:GAZE:PARALYZE:5d5
 B:TOUCH:TERRIFY:5d5
 B:SPIT:CONFUSE:5d5
 B:SHOW:BLIND:5d5
-F:SMART | FRIENDS | FORCE_SLEEP
+F:SMART | FRIENDS | FORCE_SLEEP | AURA_ELEC
 F:IM_POIS | RES_SOUN | RES_PLAS | RES_LITE | RES_DARK | RES_NETH
-F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
+F:NO_FEAR | NO_STUN | NO_CONF | CAN_SPEAK
 S:1_IN_5 | BR_SOUN | BR_PLAS
 D:$It is the supreme weapon manufactured by Jobz in response to the plan
 D:$ to conquer the world by Bull Gates' weapon "Internet Exploder".
@@ -25044,8 +25047,7 @@ B:SLASH:HURT:45d1
 F:MALE | FORCE_SLEEP | ANIMAL
 F:REGENERATE | OPEN_DOOR | MOVE_BODY | TAKE_ITEM | DROP_CORPSE 
 F:IM_ACID | IM_ELEC | IM_COLD | IM_FIRE | IM_POIS
-S:1_IN_4 |
-S:HASTE | HEAL | CAUSE_2 |
+S:1_IN_4 | HASTE | HEAL | CAUSE_2
 D:$A fairy cat that walks on two legs and understands human language.
 D:$This Cait Sith is like a swordfighter who serves the cat kingdom
 D:$I see you as a prey to give to the king.
@@ -25069,7 +25071,7 @@ N:1264:★シヴァの化身の軟革ブーツ (+5,+5) [4,16] (+4加速) {+速�
 E:The Pair of Soft Leather Boots of Shiva's Avatar (+5,+5) [4,+16] (+4 to speed) {SpDx;Nx;FaLv(Dx}
 G:]:U
 I:140:35d24:10:80:10
-W:45:4:0:1000:0:0
+W:45:4:0:3000:0:0
 B:KICK:UN_BONUS:15d15
 B:KICK:LOSE_DEX:15d15
 B:KICK:ACID:15d15
@@ -25311,10 +25313,9 @@ B:CLAW:ELEC:15d12
 B:PUNCH:HURT:9d12
 B:PUNCH:ELEC:15d12
 F:UNIQUE | FORCE_MAXHP | FEMALE | EVIL | ANIMAL
-F:DROP_CORPSE | REGENERATE | DROP_GOOD | DROP_4D2
-F:BASH_DOOR | NO_CONF | NO_FEAR | NO_SLEEP
-F:IM_ELEC
-S:1_IN_4 | BA_ELEC | BR_ELEC | BLINK
+F:DROP_CORPSE | DROP_GOOD | DROP_4D2 | ONLY_ITEM | KILL_BODY
+F:BASH_DOOR | NO_CONF | NO_FEAR | NO_SLEEP | IM_ELEC
+S:1_IN_4 | BA_ELEC | BR_ELEC | BLINK | CAUSE_3
 D:$She is angry and her eyes are full of vengeance.
 D:$  That's because her lover was killed.
 D:$  Since it was the priest who broke the relationship between the two,
