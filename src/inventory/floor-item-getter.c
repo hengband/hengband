@@ -80,8 +80,18 @@ static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_p
     if ((*prev_tag == '\0') || !command_cmd)
         return FALSE;
 
-    if (!get_tag(owner_ptr, &fis_ptr->k, *prev_tag, (*fis_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, fis_ptr->tval)
-        || ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip) || !get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval)) {
+    bool flag = FALSE;
+    item_use_flag use_flag = (*fis_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN;
+
+    flag |= !get_tag(owner_ptr, &fis_ptr->k, *prev_tag, use_flag, fis_ptr->tval);
+    flag |= !get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval);
+
+    if (fis_ptr->k < INVEN_RARM)
+        flag |= !fis_ptr->inven;
+    else
+        flag |= !fis_ptr->equip;
+
+    if (!flag) {
         *prev_tag = '\0';
         return FALSE;
     }

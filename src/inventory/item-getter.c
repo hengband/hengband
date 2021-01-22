@@ -81,10 +81,19 @@ static bool check_item_tag_inventory(player_type *owner_ptr, item_selection_type
         return FALSE;
 
     if (*prev_tag && command_cmd) {
-        if (!get_tag(owner_ptr, &item_selection_ptr->k, *prev_tag, (*item_selection_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, item_selection_ptr->tval)
-                    || (item_selection_ptr->k < INVEN_RARM)
-                ? !item_selection_ptr->inven
-                : !item_selection_ptr->equip || !get_item_okay(owner_ptr, item_selection_ptr->k, item_selection_ptr->tval)) {
+        
+        bool flag = FALSE;
+        item_use_flag use_flag = (*item_selection_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN;
+
+        flag |= !get_tag(owner_ptr, &item_selection_ptr->k, *prev_tag, use_flag, item_selection_ptr->tval);
+        flag |= !get_item_okay(owner_ptr, item_selection_ptr->k, item_selection_ptr->tval);
+
+        if (item_selection_ptr->k < INVEN_RARM)
+            flag |= !item_selection_ptr->inven;
+        else
+            flag |= !item_selection_ptr->equip;
+
+        if (flag) {
             *prev_tag = '\0';
             return FALSE;
         }
