@@ -34,46 +34,31 @@
 */
 static int pick_vault_type(floor_type *floor_ptr, vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
 {
-	int tmp, total, count;
-
+    int total;
+    int count;
 	vault_aux_type *n_ptr;
-
-	/* Calculate the total possibilities */
 	for (n_ptr = l_ptr, total = 0, count = 0; TRUE; n_ptr++, count++)
 	{
-		/* Note end */
 		if (!n_ptr->name) break;
 
-		/* Ignore excessive depth */
 		if (n_ptr->level > floor_ptr->dun_level) continue;
 
-		/* Not matched with pit/nest flag */
 		if (!(allow_flag_mask & (1L << count))) continue;
 
-		/* Count this possibility */
 		total += n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
 	}
 
-	/* Pick a random type */
-	tmp = randint0(total);
-
-	/* Find this type */
+	int random_type = randint0(total);
 	for (n_ptr = l_ptr, total = 0, count = 0; TRUE; n_ptr++, count++)
 	{
-		/* Note end */
 		if (!n_ptr->name) break;
 
-		/* Ignore excessive depth */
 		if (n_ptr->level > floor_ptr->dun_level) continue;
 
-		/* Not matched with pit/nest flag */
 		if (!(allow_flag_mask & (1L << count))) continue;
 
-		/* Count this possibility */
 		total += n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
-
-		/* Found the type */
-		if (tmp < total) break;
+		if (random_type < total) break;
 	}
 
 	return n_ptr->name ? count : -1;
@@ -92,10 +77,8 @@ static int pick_vault_type(floor_type *floor_ptr, vault_aux_type *l_ptr, BIT_FLA
 static concptr pit_subtype_string(int type, bool nest)
 {
 	static char inner_buf[256] = "";
-
-	inner_buf[0] = '\0'; /* Init string */
-
-	if (nest) /* Nests */
+	inner_buf[0] = '\0';
+	if (nest)
 	{
 		switch (type)
 		{
@@ -107,30 +90,42 @@ static concptr pit_subtype_string(int type, bool nest)
 			sprintf(inner_buf, "(%c)", vault_aux_char);
 			break;
 		}
+
+		return inner_buf;
 	}
-	else /* Pits */
-	{
-		switch (type)
-		{
-		case PIT_TYPE_SYMBOL_GOOD:
-		case PIT_TYPE_SYMBOL_EVIL:
-			sprintf(inner_buf, "(%c)", vault_aux_char);
-			break;
-		case PIT_TYPE_DRAGON:
-			switch (vault_aux_dragon_mask4)
-			{
-			case RF4_BR_ACID: strcpy(inner_buf, _("(酸)", "(acid)"));   break;
-			case RF4_BR_ELEC: strcpy(inner_buf, _("(稲妻)", "(lightning)")); break;
-			case RF4_BR_FIRE: strcpy(inner_buf, _("(火炎)", "(fire)")); break;
-			case RF4_BR_COLD: strcpy(inner_buf, _("(冷気)", "(frost)")); break;
-			case RF4_BR_POIS: strcpy(inner_buf, _("(毒)", "(poison)"));   break;
-			case (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS) :
-				strcpy(inner_buf, _("(万色)", "(multi-hued)")); break;
-			default: strcpy(inner_buf, _("(未定義)", "(undefined)")); break;
-			}
-			break;
-		}
-	}
+	
+	/* Pits */
+	switch (type) {
+        case PIT_TYPE_SYMBOL_GOOD:
+        case PIT_TYPE_SYMBOL_EVIL:
+            sprintf(inner_buf, "(%c)", vault_aux_char);
+            break;
+        case PIT_TYPE_DRAGON:
+            switch (vault_aux_dragon_mask4) {
+            case RF4_BR_ACID:
+                strcpy(inner_buf, _("(酸)", "(acid)"));
+                break;
+            case RF4_BR_ELEC:
+                strcpy(inner_buf, _("(稲妻)", "(lightning)"));
+                break;
+            case RF4_BR_FIRE:
+                strcpy(inner_buf, _("(火炎)", "(fire)"));
+                break;
+            case RF4_BR_COLD:
+                strcpy(inner_buf, _("(冷気)", "(frost)"));
+                break;
+            case RF4_BR_POIS:
+                strcpy(inner_buf, _("(毒)", "(poison)"));
+                break;
+            case (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS):
+                strcpy(inner_buf, _("(万色)", "(multi-hued)"));
+                break;
+            default:
+                strcpy(inner_buf, _("(未定義)", "(undefined)"));
+                break;
+            }
+            break;
+        }
 
 	return inner_buf;
 }
@@ -156,25 +151,18 @@ static bool ang_sort_comp_nest_mon_info(player_type *player_ptr, vptr u, vptr v,
 	MONSTER_IDX w2 = nest_mon_info[b].r_idx;
 	monster_race *r1_ptr = &r_info[w1];
 	monster_race *r2_ptr = &r_info[w2];
-	int z1, z2;
+	int z1 = nest_mon_info[a].used;
+	int z2 = nest_mon_info[b].used;
 
-	/* Extract used info */
-	z1 = nest_mon_info[a].used;
-	z2 = nest_mon_info[b].used;
-
-	/* Compare used status */
 	if (z1 < z2) return FALSE;
 	if (z1 > z2) return TRUE;
 
-	/* Compare levels */
 	if (r1_ptr->level < r2_ptr->level) return TRUE;
 	if (r1_ptr->level > r2_ptr->level) return FALSE;
 
-	/* Compare experience */
 	if (r1_ptr->mexp < r2_ptr->mexp) return TRUE;
 	if (r1_ptr->mexp > r2_ptr->mexp) return FALSE;
 
-	/* Compare indexes */
 	return w1 <= w2;
 }
 
@@ -195,10 +183,7 @@ static void ang_sort_swap_nest_mon_info(player_type *player_ptr, vptr u, vptr v,
     (void)v;
 
     nest_mon_info_type *nest_mon_info = (nest_mon_info_type *)u;
-	nest_mon_info_type holder;
-
-	/* Swap */
-	holder = nest_mon_info[a];
+	nest_mon_info_type holder = nest_mon_info[a];
 	nest_mon_info[a] = nest_mon_info[b];
 	nest_mon_info[b] = holder;
 }
