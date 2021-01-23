@@ -14,6 +14,7 @@
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
+#include "main/sound-definitions-table.h"
 #include "monster-floor/monster-death-util.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
@@ -251,8 +252,10 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
             notice = TRUE;
     }
 
-    if (notice)
+    if (notice) {
         msg_print(_("泡が弾けた！", "The bubble pops!"));
+        sound(SOUND_SUMMON);
+    }
 }
 
 /*!
@@ -285,8 +288,10 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
 
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-    if (notice)
+    if (notice) {
         msg_format(_("%sが再生した！", "The %s was reproduced!"), m_name);
+        sound(SOUND_SUMMON);
+    }
 }
 
 /* todo 死亡時の特殊メッセージを表示するだけの処理を複数作るなら、switch/case文に分けられるように汎用化すること */
