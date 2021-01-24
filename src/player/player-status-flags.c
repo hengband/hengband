@@ -1659,23 +1659,32 @@ bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
     return TRUE;
 }
 
+/*
+ * todo 相応しい時にFALSEで相応しくない時にTRUEという負論理は良くない、後で修正する
+ */
 bool has_icky_wield_weapon(player_type *creature_ptr, int i)
 {
-    object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
+    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     object_flags(creature_ptr, o_ptr, flgs);
 
-    if ((creature_ptr->pclass == CLASS_PRIEST) && (!(has_flag(flgs, TR_BLESSED))) && ((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM))) {
-        return TRUE;
-    } else if (creature_ptr->pclass == CLASS_SORCERER) {
-        if (!((o_ptr->tval == TV_HAFTED) && ((o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER)))) {
-            return TRUE;
-        }
+    bool is_bare_hands = o_ptr->tval == TV_NONE;
+    if (creature_ptr->pclass == CLASS_PRIEST) {
+        bool is_suitable_weapon = has_flag(flgs, TR_BLESSED);
+        is_suitable_weapon |= o_ptr->tval != TV_SWORD;
+        is_suitable_weapon |= o_ptr->tval != TV_POLEARM;
+        return !is_bare_hands && !is_suitable_weapon;
     }
-    if (has_not_monk_weapon(creature_ptr, i) || has_not_ninja_weapon(creature_ptr, i)) {
-        return TRUE;
+    
+    if (creature_ptr->pclass == CLASS_SORCERER) {
+        bool is_suitable_weapon = o_ptr->tval == TV_HAFTED;
+        is_suitable_weapon &= (o_ptr->sval == SV_WIZSTAFF) || (o_ptr->sval == SV_NAMAKE_HAMMER);
+        return !is_bare_hands && !is_suitable_weapon;
     }
+
+    if (has_not_monk_weapon(creature_ptr, i) || has_not_ninja_weapon(creature_ptr, i))
+        return TRUE;
+    
     return FALSE;
 }
 
