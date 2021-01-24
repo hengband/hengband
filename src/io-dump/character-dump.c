@@ -561,8 +561,9 @@ static concptr get_check_sum(void)
  */
 void make_character_dump(player_type *creature_ptr, FILE *fff, void (*update_playtime)(void), display_player_pf display_player)
 {
-    fprintf(
-        fff, _("  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n", "  [Hengband %d.%d.%d Character Dump]\n\n"), FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+    char title[127];
+    put_version(title);
+    fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), title);
     (*update_playtime)();
 
     dump_aux_player_status(creature_ptr, fff, display_player);

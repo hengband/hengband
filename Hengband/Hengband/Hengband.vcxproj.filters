@@ -2186,6 +2186,9 @@
     <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.c">
       <Filter>monster-attack</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\angband-version.c">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">

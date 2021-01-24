@@ -99,7 +99,9 @@ void spoil_obj_desc(player_type *player_ptr, concptr fname)
         return;
     }
 
-    fprintf(spoiler_file, "Spoiler File -- Basic Items (Hengband %d.%d.%d.%d)\n\n\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
+    char title[200];
+    put_version(title);
+    fprintf(spoiler_file, "Spoiler File -- Basic Items (%s)\n\n\n", title);
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
     fprintf(spoiler_file, "%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
     int n = 0;
