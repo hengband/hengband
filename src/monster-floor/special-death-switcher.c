@@ -15,6 +15,7 @@
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-floor/monster-death-util.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
