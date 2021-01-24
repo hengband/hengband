@@ -1243,7 +1243,6 @@
     <ClInclude Include="..\..\src\autopick\autopick-dirty-flags.h" />
     <ClInclude Include="..\..\src\autopick\autopick-drawer.h" />
     <ClInclude Include="..\..\src\autopick\autopick-editor-command.h" />
-    <ClInclude Include="..\..\src\autopick\autopick-editor-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-editor-util.h" />
     <ClInclude Include="..\..\src\autopick\autopick-entry.h" />
     <ClInclude Include="..\..\src\autopick\autopick-finder.h" />

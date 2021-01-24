@@ -67,7 +67,7 @@ static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, co
 
     if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
         item_tester_hook = item_tester_hook_boomerang;
-        *q = _("どの武器を投げますか? ", "Throw which it_ptr->item? ");
+        *q = _("どの武器を投げますか? ", "Throw which item? ");
         *s = _("投げる武器がない。", "You have nothing to throw.");
         it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, *q, *s, USE_EQUIP, 0);
         if (!it_ptr->o_ptr) {
@@ -101,7 +101,7 @@ static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
     if (!check_throw_boomerang(creature_ptr, it_ptr, &q, &s))
         return FALSE;
 
-    q = _("どのアイテムを投げますか? ", "Throw which it_ptr->item? ");
+    q = _("どのアイテムを投げますか? ", "Throw which item? ");
     s = _("投げるアイテムがない。", "You have nothing to throw.");
     it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
     if (!it_ptr->o_ptr) {
