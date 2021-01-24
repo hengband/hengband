@@ -274,7 +274,7 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!monster_csleep_remaining(m_ptr))
         return TRUE;
 
-    if (has_aggravate(target_ptr))
+    if (!has_aggravate(target_ptr))
         return FALSE;
 
     (void)set_monster_csleep(target_ptr, m_idx, 0);
