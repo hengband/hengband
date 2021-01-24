@@ -396,20 +396,20 @@ N:766:Ancalagon the Black
 says, 'You cannot avoid the ballyhack.'
 says, 'A mere mortal, Be burned to the ground by my fire.'
 
-#N:729:Ulik the Troll
-#N:730:Baphomet the Minotaur Lord
-
 N:732:Bull Gates
-says, '640K should be enough for ANYBODY!'
-says, 'Buy Windows 2000; the filesystem rocks!'
-says, 'Linux?  Never heard of it...'
+says, 'Did I once say '640K should be enough for ANYBODY!'?'
+says, 'Unlike that passionate person, I'm humble, apologize. 640K wasn't enough for a Millennium party. Even if you have 640M of user memory.'
+says, 'So now is the time to say it again, '640G should be enough for ANYBODY!''
+says, 'Buy Windows 10; the system will be updated automatically without saving any datum'
+says, 'Linux?  I've only heard that it's the worst...'
 says, 'Resistance is futile--you will be assimilated.'
-says, 'NT is the solution for ALL your needs!'
-hacks out some code and calls it a Service Pack.
-says, 'We don't have a monopoly... MacOS still exists!'
+says, 'Pro version is the solution for ALL your needs.'
+hacks out some code and calls it a Feature Update.
+says, 'We've had a monopoly, but iOS's stronghold hasn't collapsed'
 wonders if he should buy a small country.
 says, 'Where will we let you go today?  HELL!'
 cackles diabolically.
+is even buying up an apple orchard.
 
 N:733:Santa Claus
 says, 'Ho ho ho! You're gonna die!'
@@ -662,6 +662,14 @@ says, 'Everything is as I like... huh...'
 N:921:Internet Exploder
 is slow.
 throws off some dorky packets.
+became unresponsive.
+displayed a screen that was different from what the technician expected.
+receives a hot look from the officials.
+is still trying to get ActiveX working.
+is still trying to get Flash working.
+is still trying to get Shockwave working.
+is still trying to get Java applet working.
+lifted Trident ... but dropped it.
 
 N:931:Caldarm the third
 says, 'Lookup failure, human race will go to ruin.'
@@ -714,7 +722,8 @@ says, 'Die. Die. Damn thing is strong!'
 
 # Some sentences are out of order
 # because the typographical error is the original story.
-# ex. meatred is typo of hatred
+# ex1. hatred => meatred
+# ex2. Yamato => Potato
 N:1240:Yamato, the sword master
 says, 'I don't forgive only pants ...!'
 says, 'My meatred never disappears!'
@@ -732,6 +741,46 @@ says, 'Wh what the hell!?'
 says, 'Huh... good... I have one thing to say'
 says, 'I felt like I had a younger sister who had survived, but that wasn't the case!'
 says, 'Woooooooooooooo! Be prepared!'
+
+N:1245:Chronium Edge
+trampled the wreckage of the Internet Exploder.
+ridiculed when he saw the Internet Exploder.
+is sending sensitive data without your permission.
+sent an ad to your email address.
+was attempted to crack by someone, but the protection was not breached.
+grasped your propensity.
+
+N:1246:Eye phorn
+# Siri with Japanese pronunciation means ass.
+says your ass somehow.
+displayed a portrait of Guru Steven.
+cracked the engine and replaced it with WebKit.
+did not display the billing screen.
+fell and the panel broke.
+refused to resize the icon.
+
+N:1247:Steven Jobz, the rival of Gates
+says, 'Is your tie red today?  I hate red! You are fired!!'
+says, 'Is your tie blue today?  I hate blue! You are fired!!'
+says, 'Is your tie green today?  I hate green! You are fired!!'
+says, 'Is your tie yellow today?  I hate yellow! You are fired!!'
+says, 'Is your tie purple today?  I hate purple! You are fired!!'
+says, 'Is your tie orange today?  I hate orange! You are fired!!'
+says, 'Is your tie blue today?  I only like red! You are fired!!'
+says, 'Is your tie green today?  I only like red! You are fired!!'
+says, 'Is your tie yellow today?  I only like red! You are fired!!'
+says, 'Is your tie purple today?  I only like red! You are fired!!'
+says, 'Is your tie orange today?  I only like red! You are fired!!'
+says, 'Whenever I geek the acid, I'll always ideas come up! You too!!'
+says, 'What the fuck is the idea for that new model!  Are you planning to release such a boring product to the world!?  You are fired!!'
+says, 'I have an idea for a great new model!  What is it, "I rejected it myself last week"!?  Lie!  My idea is perfect!'
+says, 'I came up with an idea for a wonderful new model!  What is "that's my idea"!?  Lie!  It's my idea!'
+says, 'List the stock!  I am the only shareholder at hand!!'
+says, 'Write this code by tomorrow!  If possible, $200,000, otherwise you'll be fired!!'
+says, 'I only accept the usage I expected!  I'll lock all other usages!!'
+says, 'The very I listen to the opinions of users!?  Absolutely impossible!  The opposite, idiots!  The user listens my opinion!'
+says, 'It's not worth listening to the opinions of ignorant customers!  I'm busy!'
+says, 'You'll cover the best apples I've produced!?  Impossible!!'
 
 N:1258:Robo-Gandalf
 says, 'BaD EVeninG!'

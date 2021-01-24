@@ -245,7 +245,7 @@ MONSTER_NUMBER summon_EYE_PHORN(player_type *target_ptr, POSITION y, POSITION x,
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
     for (int k = 0; k < num; k++)
-        count += summon_named_creature(target_ptr, m_idx, y, x, MON_EDGE, PM_NONE);
+        count += summon_named_creature(target_ptr, m_idx, y, x, MON_EYE_PHORN, PM_NONE);
 
     return count;
 }
