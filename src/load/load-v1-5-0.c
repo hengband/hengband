@@ -153,7 +153,8 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
 
     rd_s16b(&o_ptr->held_m_idx);
     rd_byte(&o_ptr->xtra1);
-    rd_byte(&o_ptr->xtra2);
+    rd_byte(&tmp8u);
+    o_ptr->xtra2 = tmp8u;
 
     if (z_older_than(11, 0, 10)) {
         if (o_ptr->xtra1 == EGO_XTRA_SUSTAIN) {
