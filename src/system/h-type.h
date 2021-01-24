@@ -56,6 +56,7 @@ typedef int errr;
 #define MAX_SHORT       32767    /*!< Maximum value storable in a "s16b" (hard-coded) */
 
 #define MAX_NLEN        160 /*!< Maximum length of object's name */
+#define MAX_MONSTER_NAME 160 /*!< モンスター名称の最大バイト数 / Max characters of monster's name */
 
 /* Note that "signed char" is not always "defined" */
 /* So always use "s16b" to hold small signed values */

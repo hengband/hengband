@@ -114,9 +114,9 @@ void spoil_out(concptr str)
 
         if (!wrap) {
 #ifdef JP
-            if (roff_p >= roff_buf + (k_flag ? 74 : 75))
+            if (roff_p >= roff_buf + (iskanji_flag ? 74 : 75))
                 wrap = TRUE;
-            else if ((ch == ' ') && (roff_p >= roff_buf + (k_flag ? 72 : 73)))
+            else if ((ch == ' ') && (roff_p >= roff_buf + (iskanji_flag ? 72 : 73)))
                 wrap = TRUE;
 #else
             if (roff_p >= roff_buf + 75)
@@ -129,7 +129,7 @@ void spoil_out(concptr str)
 #ifdef JP
                 bool k_flag_local;
                 bool iskanji_flag_local = FALSE;
-                concptr tail = str + (k_flag ? 2 : 1);
+                concptr tail = str + (iskanji_flag ? 2 : 1);
 #else
                 concptr tail = str + 1;
 #endif

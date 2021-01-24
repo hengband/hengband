@@ -482,6 +482,7 @@ void calc_bonuses(player_type *creature_ptr)
         return;
 
     put_equipment_warning(creature_ptr);
+    check_no_flowed(creature_ptr);
 }
 
 static void calc_alignment(player_type *creature_ptr)
@@ -1259,7 +1260,7 @@ static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
         if (hex_spelling_any(creature_ptr))
             pow -= (1 + casting_hex_num(creature_ptr));
     }
-    if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE)) {
+    if (player_aggravate_state(creature_ptr) == AGGRAVATE_S_FAIRY) {
         pow = MIN(pow - 3, (pow + 2) / 2);
     }
 
@@ -1656,14 +1657,12 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    s16b num_blow = 0;
+    s16b num_blow = 1;
 
     o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
     object_flags(creature_ptr, o_ptr, flgs);
     creature_ptr->heavy_wield[i] = FALSE;
-    if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
-        num_blow = 1;
-    } else {
+    if (has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
         if (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10) {
             creature_ptr->heavy_wield[i] = TRUE;
         }

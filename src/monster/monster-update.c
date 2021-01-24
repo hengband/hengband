@@ -33,6 +33,7 @@
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "world/world.h"
 
 // Update Monster.
 typedef struct um_type {
@@ -202,15 +203,16 @@ static void update_smart_stupid_flags(monster_race *r_ptr)
  * @brief WEIRD_MINDフラグ持ちのモンスターを1/10の確率でテレパシーに引っかける
  * @param subject_ptr プレーヤーへの参照ポインタ
  * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
+ * @param m_idx モンスターID
  * @return WEIRD_MINDフラグがあるならTRUE
  */
-static bool update_weird_telepathy(player_type *subject_ptr, um_type *um_ptr)
+static bool update_weird_telepathy(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((r_ptr->flags2 & RF2_WEIRD_MIND) == 0)
         return FALSE;
 
-    if (!one_in_(10))
+    if ((m_idx % 10) != (current_world_ptr->game_turn % 10))
         return TRUE;
 
     um_ptr->flag = TRUE;
@@ -222,7 +224,7 @@ static bool update_weird_telepathy(player_type *subject_ptr, um_type *um_ptr)
     return TRUE;
 }
 
-static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr)
+static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (subject_ptr->special_defense & KATA_MUSOU) {
@@ -243,7 +245,7 @@ static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr)
         return;
     }
 
-    if (update_weird_telepathy(subject_ptr, um_ptr))
+    if (update_weird_telepathy(subject_ptr, um_ptr, m_idx))
         return;
 
     um_ptr->flag = TRUE;
@@ -366,7 +368,7 @@ static bool check_invisible(player_type *subject_ptr, um_type *um_ptr)
  * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
  * @return なし
  */
-static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um_ptr)
+static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     POSITION distance = decide_updated_distance(subject_ptr, um_ptr);
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
@@ -374,7 +376,7 @@ static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um
         return;
 
     if (!um_ptr->in_darkness || (distance <= MAX_SIGHT / 4)) {
-        update_telepathy_sight(subject_ptr, um_ptr);
+        update_telepathy_sight(subject_ptr, um_ptr, m_idx);
         update_specific_race_telepathy(subject_ptr, um_ptr);
     }
 
@@ -491,7 +493,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
     if (um_ptr->m_ptr->mflag2 & MFLAG2_MARK)
         um_ptr->flag = TRUE;
 
-    decide_sight_invisible_monster(subject_ptr, um_ptr);
+    decide_sight_invisible_monster(subject_ptr, um_ptr, m_idx);
     if (um_ptr->flag)
         update_invisible_monster(subject_ptr, um_ptr, m_idx);
     else

@@ -255,7 +255,7 @@ BIT_FLAGS has_esp_good(player_type *creature_ptr)
  */
 BIT_FLAGS has_esp_nonliving(player_type *creature_ptr)
 {
-    return check_equipment_flags(creature_ptr, TR_ESP_GOOD);
+    return check_equipment_flags(creature_ptr, TR_ESP_NONLIVING);
 }
 
 /*!
@@ -331,7 +331,7 @@ BIT_FLAGS has_invuln_arrow(player_type *creature_ptr)
     return result;
 }
 
-void has_no_flowed(player_type *creature_ptr)
+void check_no_flowed(player_type *creature_ptr)
 {
     object_type *o_ptr;
     bool has_sw = FALSE, has_kabe = FALSE;
@@ -947,10 +947,6 @@ void has_curses(player_type *creature_ptr)
 
     if (creature_ptr->cursed & TRC_TELEPORT)
         creature_ptr->cursed &= ~(TRC_TELEPORT_SELF);
-
-    if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE)) {
-        creature_ptr->cursed &= ~(TRC_AGGRAVATE);
-    }
 }
 
 BIT_FLAGS has_impact(player_type *creature_ptr)
@@ -1356,7 +1352,7 @@ BIT_FLAGS has_resist_shard(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (!creature_ptr->mimic_form && (creature_ptr->prace == RACE_HALF_TITAN || creature_ptr->prace == RACE_SKELETON))
+    if (!creature_ptr->mimic_form && (creature_ptr->prace == RACE_HALF_GIANT || creature_ptr->prace == RACE_SKELETON))
         result |= 0x01 << FLAG_CAUSE_RACE;
 
     if (creature_ptr->special_defense & KATA_MUSOU) {
@@ -1698,6 +1694,9 @@ bool has_riding_wield_weapon(player_type *creature_ptr, int i)
 
 bool has_not_ninja_weapon(player_type *creature_ptr, int i)
 {
+    if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
+        return FALSE;
+    }
     tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
     return creature_ptr->pclass == CLASS_NINJA
@@ -1706,6 +1705,9 @@ bool has_not_ninja_weapon(player_type *creature_ptr, int i)
 
 bool has_not_monk_weapon(player_type *creature_ptr, int i)
 {
+    if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
+        return FALSE;
+    }
     tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
     return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER))
@@ -1713,3 +1715,17 @@ bool has_not_monk_weapon(player_type *creature_ptr, int i)
 }
 
 bool has_good_luck(player_type *creature_ptr) { return (creature_ptr->pseikaku == PERSONALITY_LUCKY) || (creature_ptr->muta3 & MUT3_GOOD_LUCK); }
+
+BIT_FLAGS player_aggravate_state(player_type *creature_ptr)
+{
+    if (creature_ptr->cursed & TRC_AGGRAVATE) {
+        if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY)) {
+            return AGGRAVATE_S_FAIRY;
+        }
+        return AGGRAVATE_NORMAL;
+    }
+    
+    return AGGRAVATE_NONE; 
+}
+
+bool has_aggravate(player_type *creature_ptr) { return player_aggravate_state(creature_ptr) == AGGRAVATE_NORMAL; }

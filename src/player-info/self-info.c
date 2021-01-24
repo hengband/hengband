@@ -23,6 +23,7 @@
 #include "player-info/self-info-util.h"
 #include "player-info/weapon-effect-info.h"
 #include "player/attack-defense-types.h"
+#include "player/player-status-flags.h"
 #include "term/screen-processor.h"
 #include "view/display-self-info.h"
 
@@ -55,7 +56,7 @@ static void set_curse_info(player_type *creature_ptr, self_info_type *self_ptr)
     if (creature_ptr->cursed & TRC_TY_CURSE)
         self_ptr->info[self_ptr->line++] = _("あなたは邪悪な怨念に包まれている。", "You carry an ancient foul curse.");
 
-    if (creature_ptr->cursed & TRC_AGGRAVATE)
+    if (has_aggravate(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたはモンスターを怒らせている。", "You aggravate monsters.");
 
     if (creature_ptr->cursed & TRC_DRAIN_EXP)
