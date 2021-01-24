@@ -97,8 +97,11 @@ void spoil_mon_desc(player_type *player_ptr, concptr fname)
     C_MAKE(who, max_r_idx, MONRACE_IDX);
     fprintf(spoiler_file, "Monster Spoilers for %s\n", title);
     fprintf(spoiler_file, "------------------------------------------\n\n");
-    fprintf(spoiler_file, "    %-38.38s%4s%4s%4s%7s%5s  %15.15s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "  Visual Info  ");
-    fprintf(spoiler_file, "%-42.42s%4s%4s%4s%7s%5s  %15.15s\n", "--------", "---", "---", "---", "--", "--", "---------------");
+    fprintf(spoiler_file, "%-158.158s    %4s%4s%4s%7s%5s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
+    fprintf(spoiler_file, "%-162.162s%4s%4s%4s%7s%5s  %4.19s\n",
+        "------------------------------------------------------------------------------------------------------------------------------------------------------"
+        "----------",
+        "---", "---", "---", "--", "--", "-------------------");
 
     int n = 0;
     for (int i = 1; i < max_r_idx; i++) {
@@ -133,7 +136,7 @@ void spoil_mon_desc(player_type *player_ptr, concptr fname)
 
         sprintf(symbol, "%ld", (long)(r_ptr->mexp));
         sprintf(symbol, "%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
-        fprintf(spoiler_file, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n", nam, lev, rar, spd, hp, ac, symbol);
+        fprintf(spoiler_file, "%-162.162s%4s%4s%4s%7s%5s  %19.19s\n", nam, lev, rar, spd, hp, ac, symbol);
     }
 
     fprintf(spoiler_file, "\n");
