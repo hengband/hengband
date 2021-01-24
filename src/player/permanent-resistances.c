@@ -74,7 +74,7 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || has_right_hand_weapon(creature_ptr)) &&
 				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || has_left_hand_weapon(creature_ptr)))
 				add_flag(flags, TR_SPEED);
-			if (creature_ptr->lev > 24)
+			if (creature_ptr->lev > 24 && !creature_ptr->icky_wield[0] && !creature_ptr->icky_wield[1])
 				add_flag(flags, TR_FREE_ACT);
 		}
 
