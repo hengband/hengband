@@ -495,7 +495,9 @@ void wiz_dump_options(void)
             exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
     }
 
-    fprintf(fff, "[Option bits usage on Hengband %d.%d.%d]\n\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+    char title[200];
+    put_version(title);
+    fprintf(fff, "[Option bits usage on %s\n]", title);
     fputs("Set - Bit (Page) Option Name\n", fff);
     fputs("------------------------------------------------\n", fff);
     for (int i = 0; i < NUM_O_SET; i++) {

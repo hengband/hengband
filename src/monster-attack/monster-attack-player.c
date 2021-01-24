@@ -423,7 +423,7 @@ static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
 #ifdef JP
     msg_format("攻撃が%s自身を傷つけた！", monap_ptr->m_name);
 #else
-    GAME_TEXT m_name_self[80];
+    GAME_TEXT m_name_self[MAX_MONSTER_NAME];
     monster_desc(target_ptr, m_name_self, monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
     msg_format("The attack of %s has wounded %s!", monap_ptr->m_name, m_name_self);
 #endif
@@ -473,7 +473,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     monap_type tmp_monap;
     monap_type *monap_ptr = initialize_monap_type(target_ptr, &tmp_monap, m_idx);
-    check_no_blow(target_ptr, monap_ptr);
+    if (!check_no_blow(target_ptr, monap_ptr))
+        return FALSE;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);

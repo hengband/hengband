@@ -33,7 +33,7 @@ hengband_SOURCES = \
 	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
-	autopick/autopick-editor-table.h autopick/autopick-flags-table.h \
+	autopick/autopick-flags-table.h \
 	autopick/autopick-key-flag-process.h autopick/autopick-keys-table.h \
 	autopick/autopick-menu-data-table.c autopick/autopick-menu-data-table.h \
 	autopick/autopick-methods-table.h \
@@ -799,7 +799,8 @@ hengband_SOURCES = \
 	\
 	system/alloc-entries.c system/alloc-entries.h \
 	system/alloc-entry-definition.h \
-	system/angband.h system/angband-version.h \
+	system/angband.h \
+	system/angband-version.c system/angband-version.h \
 	system/artifact-type-definition.c system/artifact-type-definition.h \
 	system/building-type-definition.c system/building-type-definition.h \
 	system/dungeon-data-definition.h \

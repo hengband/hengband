@@ -101,7 +101,7 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
 {
     wr_s16b((s16b)o_ptr->weight);
     if (flags & SAVE_ITEM_NAME1)
-        wr_byte((byte)o_ptr->name1);
+        wr_s16b(o_ptr->name1);
 
     if (flags & SAVE_ITEM_NAME2)
         wr_byte((byte)o_ptr->name2);
@@ -158,7 +158,7 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
         wr_byte(o_ptr->xtra1);
 
     if (flags & SAVE_ITEM_XTRA2)
-        wr_byte(o_ptr->xtra2);
+        wr_s16b(o_ptr->xtra2);
 
     if (flags & SAVE_ITEM_XTRA3)
         wr_byte(o_ptr->xtra3);

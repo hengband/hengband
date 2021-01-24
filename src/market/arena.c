@@ -278,7 +278,7 @@ bool monster_arena_comm(player_type *player_ptr)
 {
     PRICE maxbet;
     PRICE wager;
-    char out_val[160], tmp_str[80];
+    char out_val[MAX_MONSTER_NAME], tmp_str[80];
     concptr p;
 
     if ((current_world_ptr->game_turn - current_world_ptr->arena_start_turn) > TURNS_PER_TICK * 250) {
@@ -300,7 +300,7 @@ bool monster_arena_comm(player_type *player_ptr)
 
     prt(_("モンスター                                                     倍率", "Monsters                                                       Odds"), 4, 4);
     for (int i = 0; i < 4; i++) {
-        char buf[80];
+        char buf[MAX_MONSTER_NAME];
         monster_race *r_ptr = &r_info[battle_mon[i]];
 
         sprintf(buf, _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld"), i + 1,

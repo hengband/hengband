@@ -172,7 +172,7 @@ static bool http_post(int sd, concptr url, BUF *buf)
 
     output = buf_new();
     buf_sprintf(output, "POST %s HTTP/1.0\r\n", url);
-    buf_sprintf(output, "User-Agent: Hengband %d.%d.%d\r\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+    buf_sprintf(output, "User-Agent: Hengband %d.%d.%d.%d\r\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
 
     buf_sprintf(output, "Content-Length: %d\r\n", buf->size);
     buf_sprintf(output, "Content-Encoding: binary\r\n");
@@ -382,6 +382,8 @@ errr report_score(player_type *creature_ptr, void (*update_playtime)(void), disp
     score = buf_new();
 
     char seikakutmp[128];
+    char title[128];
+    put_version(title);
 #ifdef JP
     sprintf(seikakutmp, "%s%s", ap_ptr->title, (ap_ptr->no ? "の" : ""));
 #else
@@ -389,11 +391,7 @@ errr report_score(player_type *creature_ptr, void (*update_playtime)(void), disp
 #endif
 
     buf_sprintf(score, "name: %s\n", creature_ptr->name);
-#ifdef JP
-    buf_sprintf(score, "version: 変愚蛮怒 %d.%d.%d\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#else
-    buf_sprintf(score, "version: Hengband %d.%d.%d\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#endif
+    buf_sprintf(score, "version: %s\n", title);
     buf_sprintf(score, "score: %d\n", calc_score(creature_ptr));
     buf_sprintf(score, "level: %d\n", creature_ptr->lev);
     buf_sprintf(score, "depth: %d\n", creature_ptr->current_floor_ptr->dun_level);

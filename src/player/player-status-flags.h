@@ -22,6 +22,12 @@ enum flag_cause {
     FLAG_CAUSE_MAX = 18
 };
 
+enum aggravate_state {
+    AGGRAVATE_NONE = 0x00000000L,
+    AGGRAVATE_S_FAIRY = 0x00000001L,
+    AGGRAVATE_NORMAL = 0x00000002L,
+};
+
 bool has_pass_wall(player_type *creature_ptr);
 bool has_kill_wall(player_type *creature_ptr);
 BIT_FLAGS has_xtra_might(player_type *creature_ptr);
@@ -44,7 +50,7 @@ BIT_FLAGS has_easy2_weapon(player_type *creature_ptr);
 BIT_FLAGS has_down_saving(player_type *creature_ptr);
 BIT_FLAGS has_no_ac(player_type *creature_ptr);
 BIT_FLAGS has_invuln_arrow(player_type *creature_ptr);
-void has_no_flowed(player_type *creature_ptr);
+void check_no_flowed(player_type *creature_ptr);
 BIT_FLAGS has_mighty_throw(player_type *creature_ptr);
 BIT_FLAGS has_dec_mana(player_type *creature_ptr);
 BIT_FLAGS has_reflect(player_type *creature_ptr);
@@ -112,3 +118,5 @@ bool has_not_monk_weapon(player_type *creature_ptr, int i);
 bool has_icky_wield_weapon(player_type *creature_ptr, int i);
 bool has_riding_wield_weapon(player_type *creature_ptr, int i);
 bool has_good_luck(player_type *creature_ptr);
+BIT_FLAGS player_aggravate_state(player_type *creature_ptr);
+bool has_aggravate(player_type *creature_ptr);

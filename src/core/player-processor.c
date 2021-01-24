@@ -236,6 +236,7 @@ void process_player(player_type *creature_ptr)
         creature_ptr->counter = FALSE;
         creature_ptr->now_damaged = FALSE;
 
+        update_monsters(creature_ptr, FALSE);
         handle_stuff(creature_ptr);
         move_cursor_relative(creature_ptr->y, creature_ptr->x);
         if (fresh_before)

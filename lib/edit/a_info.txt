@@ -4117,11 +4117,12 @@ W:70:70:15:45000
 P:0:1d1:0:0:20
 F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 | INSTA_ART
 U:TELEPORT_LEVEL
-D:"You may take the Orb of Fate with you.  I have removed from it the power
-D: to foretell the future, for that power no mortal should have.  Its other
-D: abilities, however, you have at your disposal.  You must now begin in Tyr's
-D: name to search for the Amulet of Yendor.  May your steps be guided by Tyr,
-D: my child." (Norn, Nethack)
+D:$"You may take the Orb of Fate with you.
+D:$  I have removed from it the power to foretell the future,
+D:$ for that power no mortal should have.
+D:$  Its other abilities, however, you have at your disposal.
+D:$  You must now begin in Tyr's name to search for the Amulet of Yendor.
+D:$  May your steps be guided by Tyr, my child." (Norn, Nethack)
 D:「運命のオーブを持っていきなさい。わたしは運命のオーブから
 D:人間の手に触れてはならぬ未来を告げる力を取り除きました。
 D:しかしながら運命のオーブの他の力は，あなたの思い通りに
@@ -4229,10 +4230,9 @@ D:その刃は数多くの赤衣の者達に握られ、悪しき者たちを屠
 N:253:トゲトゲバット『エスカリボルグ』
 E:'Excaliborg, the *thorny* bat'
 I:21:16:2
-W:35:40:190:85000
-P:0:7d7:18:18:10
-F:STR | DEX | CON | SUST_STR | SUST_DEX | SUST_CON
-F:VORPAL | VAMPIRIC | KILL_HUMAN | BLESSED | ACTIVATE
+W:35:100:190:85000
+P:0:6d6:10:10:5
+F:STR | SUST_STR | VORPAL | VAMPIRIC | KILL_HUMAN | BLESSED | ACTIVATE
 F:RES_FIRE | RES_LITE | LEVITATION
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:FULL_NAME
@@ -4260,7 +4260,7 @@ E:of Don Quixote
 I:22:29:-3
 W:40:30:300:70000
 P:0:3d8:-12:12:0
-F:STR | CON | CHR | RES_ELEC | RES_DARK | RES_FEAR | RIDING
+F:STR | CON | CHR | IM_ELEC | RES_DARK | RES_FEAR | RIDING
 F:FREE_ACT | SUST_STR | SUST_CON | SUST_CHR | SLAY_EVIL | KILL_GIANT
 D:$Don Quixote born in La Mancha is the brave knight
 D:$ trying to defeat the colossal giant "Windmill".

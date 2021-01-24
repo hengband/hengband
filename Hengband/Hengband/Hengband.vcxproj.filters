@@ -2186,6 +2186,9 @@
     <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.c">
       <Filter>monster-attack</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\angband-version.c">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2321,9 +2324,6 @@
       <Filter>knowledge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick.h">
-      <Filter>autopick</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\autopick\autopick-editor-table.h">
       <Filter>autopick</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-keys-table.h">

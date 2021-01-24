@@ -211,10 +211,10 @@ static chaotic_effect select_chaotic_effect(player_type *attacker_ptr, player_at
         return CE_VAMPIRIC;
 
     if (one_in_(250))
-        return CE_CONFUSION;
+        return CE_QUAKE;
 
     if (!one_in_(10))
-        return CE_QUAKE;
+        return CE_CONFUSION;
 
     return one_in_(2) ? CE_TELE_AWAY : CE_POLYMORPH;
 }

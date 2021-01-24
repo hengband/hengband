@@ -271,8 +271,13 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
     if (qtwg_ptr->buf[0] != 'Q')
         return PARSE_CONTINUE;
 
+#ifdef JP
     if (qtwg_ptr->buf[2] == '$')
         return PARSE_ERROR_NONE;
+#else
+    if (qtwg_ptr->buf[2] != '$')
+        return PARSE_ERROR_NONE;
+#endif
 
     int num = tokenize(qtwg_ptr->buf + _(2, 3), 33, zz, 0);
     if (num < 3)
