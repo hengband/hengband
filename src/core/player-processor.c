@@ -277,6 +277,10 @@ void process_player(player_type *creature_ptr)
             process_command(creature_ptr);
         } else {
             move_cursor_relative(creature_ptr->y, creature_ptr->x);
+
+            creature_ptr->window |= PW_MONSTER_LIST;
+            window_stuff(creature_ptr);
+
             can_save = TRUE;
             request_command(creature_ptr, FALSE);
             can_save = FALSE;
