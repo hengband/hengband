@@ -197,7 +197,7 @@ void update_gambling_monsters(player_type *player_ptr)
             int j;
             while (TRUE) {
                 get_mon_num_prep(player_ptr, monster_can_entry_arena, NULL);
-                r_idx = get_mon_num(player_ptr, mon_level, GMN_ARENA);
+                r_idx = get_mon_num(player_ptr, 0, mon_level, GMN_ARENA);
                 if (!r_idx)
                     continue;
 

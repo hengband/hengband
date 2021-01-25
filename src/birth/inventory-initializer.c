@@ -96,7 +96,7 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
         get_mon_num_prep(creature_ptr, monster_hook_human, NULL);
         for (int i = rand_range(3, 4); i > 0; i--) {
             object_prep(creature_ptr, q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
-            q_ptr->pval = get_mon_num(creature_ptr, 2, 0);
+            q_ptr->pval = get_mon_num(creature_ptr, 0, 2, 0);
             if (q_ptr->pval) {
                 q_ptr->number = 1;
                 add_outfit(creature_ptr, q_ptr);

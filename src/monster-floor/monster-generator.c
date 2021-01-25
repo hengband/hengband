@@ -298,7 +298,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
             continue;
 
         get_mon_num_prep(player_ptr, place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
-        z = get_mon_num(player_ptr, r_ptr->level, 0);
+        z = get_mon_num(player_ptr, 0, r_ptr->level, 0);
         if (!z)
             break;
 
@@ -322,7 +322,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
-    MONRACE_IDX r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->monster_level, 0);
+    MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, 0);
     if (r_idx == 0)
         return FALSE;
 
@@ -350,7 +350,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
     int attempts = 1000;
     monster_race *r_ptr = NULL;
     while (--attempts) {
-        r_idx = get_mon_num(player_ptr, floor_ptr->monster_level, 0);
+        r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, 0);
         if (!r_idx)
             return FALSE;
 
