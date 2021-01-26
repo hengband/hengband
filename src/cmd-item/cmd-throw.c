@@ -376,7 +376,7 @@ void display_potion_throw(player_type *creature_ptr, it_type *it_ptr)
     if (!object_is_potion(it_ptr->q_ptr))
         return;
 
-    if (it_ptr->hit_body || it_ptr->hit_wall || (randint1(100) < it_ptr->corruption_possibility)) {
+    if (!it_ptr->hit_body && !it_ptr->hit_wall && (randint1(100) >= it_ptr->corruption_possibility)) {
         it_ptr->corruption_possibility = 0;
         return;
     }
