@@ -6,6 +6,7 @@
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
+#include "game-option/cheat-options.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
@@ -283,9 +284,13 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
     get_mon_num_prep(player_ptr, NULL, NULL);
 
     while (TRUE) {
-        today_mon = get_mon_num(player_ptr, max_dl, GMN_ARENA);
+        today_mon = get_mon_num(player_ptr, MIN(max_dl / 2, 40), max_dl, GMN_ARENA);
         monster_race *r_ptr;
         r_ptr = &r_info[today_mon];
+
+        if (cheat_hear) {
+            msg_format("日替わり候補: %s ", r_ptr->name + r_name);
+        }
 
         if (r_ptr->flags1 & RF1_UNIQUE)
             continue;
@@ -294,8 +299,6 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
         if (r_ptr->flags2 & RF2_MULTIPLY)
             continue;
         if ((r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != (RF9_DROP_CORPSE | RF9_DROP_SKELETON))
-            continue;
-        if (r_ptr->level < MIN(max_dl / 2, 40))
             continue;
         if (r_ptr->rarity > 10)
             continue;
@@ -313,7 +316,7 @@ void determine_bounty_uniques(player_type *player_ptr)
     get_mon_num_prep(player_ptr, NULL, NULL);
     for (int i = 0; i < MAX_BOUNTY; i++) {
         while (TRUE) {
-            current_world_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, MAX_DEPTH - 1, GMN_ARENA);
+            current_world_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
             monster_race *r_ptr;
             r_ptr = &r_info[current_world_ptr->bounty_r_idx[i]];
 
