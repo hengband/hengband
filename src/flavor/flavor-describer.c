@@ -368,6 +368,8 @@ static void describe_specific_pval(flavor_type *flavor_ptr)
         if (ABS(flavor_ptr->o_ptr->pval) != 1)
             flavor_ptr->t = object_desc_chr(flavor_ptr->t, 's');
 #endif
+
+        return;
     }
 
     if (has_flag(flavor_ptr->tr_flags, TR_STEALTH)) {
@@ -443,24 +445,24 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         strcpy(flavor_ptr->fake_insc_buf, game_inscriptions[flavor_ptr->o_ptr->feeling]);
         return;
     }
-    
+
     if (object_is_cursed(flavor_ptr->o_ptr) && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE))) {
         strcpy(flavor_ptr->fake_insc_buf, _("呪われている", "cursed"));
         return;
     }
-    
+
     if (((flavor_ptr->o_ptr->tval == TV_RING) || (flavor_ptr->o_ptr->tval == TV_AMULET) || (flavor_ptr->o_ptr->tval == TV_LITE)
-                 || (flavor_ptr->o_ptr->tval == TV_FIGURINE))
+            || (flavor_ptr->o_ptr->tval == TV_FIGURINE))
         && flavor_ptr->aware && !flavor_ptr->known && !(flavor_ptr->o_ptr->ident & IDENT_SENSE)) {
         strcpy(flavor_ptr->fake_insc_buf, _("未鑑定", "unidentified"));
         return;
     }
-    
+
     if (!flavor_ptr->known && (flavor_ptr->o_ptr->ident & IDENT_EMPTY)) {
         strcpy(flavor_ptr->fake_insc_buf, _("空", "empty"));
         return;
     }
-    
+
     if (!flavor_ptr->aware && object_is_tried(flavor_ptr->o_ptr))
         strcpy(flavor_ptr->fake_insc_buf, _("未判明", "tried"));
 }
