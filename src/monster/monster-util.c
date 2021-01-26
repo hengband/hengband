@@ -17,6 +17,8 @@
 #include "system/alloc-entries.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "game-option/cheat-options.h"
+#include "view/display-messages.h"
 
 typedef enum dungeon_mode_type {
     DUNGEON_MODE_AND = 1,
@@ -321,6 +323,9 @@ monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POS
  */
 errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2)
 {
+    int mon_num = 0;
+    DEPTH lev_min = 127;
+    DEPTH lev_max = 0;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < alloc_race_size; i++) {
         alloc_entry *entry = &alloc_race_table[i];
@@ -341,6 +346,12 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
                 continue;
         }
 
+        mon_num++;
+        if (lev_min > entry->level)
+            lev_min = entry->level;
+        if (lev_max < entry->level)
+            lev_max = entry->level;
+
         entry->prob2 = entry->prob1;
         if (floor_ptr->dun_level && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest))
             && !restrict_monster_to_dungeon(player_ptr, entry->index) && !player_ptr->phase_out) {
@@ -350,6 +361,8 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
                 entry->prob2++;
         }
     }
-
+    if (cheat_hear) {
+        msg_format(_("モンスター第2次候補数:%d(%d-%dF) ", "monster second selection:%d(%d-%dF) "), mon_num, lev_min, lev_max);
+    }
     return 0;
 }

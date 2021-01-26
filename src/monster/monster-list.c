@@ -36,6 +36,7 @@
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include "game-option/cheat-options.h"
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
 #define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */
@@ -83,6 +84,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
     int i, j, p;
     int r_idx;
     long value, total;
+    int mon_num = 0;
     monster_race *r_ptr;
     alloc_entry *table = alloc_race_table;
 
@@ -154,8 +156,13 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
             }
         }
 
+        mon_num++;
         table[i].prob3 = table[i].prob2;
         total += table[i].prob3;
+    }
+
+    if (cheat_hear) {
+        msg_format(_("モンスター第3次候補数:%d(%d-%dF) ", "monster third selection:%d(%d-%dF) "), mon_num, min_level, max_level);
     }
 
     if (total <= 0)
