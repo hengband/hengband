@@ -326,6 +326,7 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
     int mon_num = 0;
     DEPTH lev_min = 127;
     DEPTH lev_max = 0;
+    int total = 0;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (int i = 0; i < alloc_race_size; i++) {
         alloc_entry *entry = &alloc_race_table[i];
@@ -346,11 +347,15 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
                 continue;
         }
 
+        if (entry->prob1 <= 0)
+            continue;
+
         mon_num++;
         if (lev_min > entry->level)
             lev_min = entry->level;
         if (lev_max < entry->level)
             lev_max = entry->level;
+
 
         entry->prob2 = entry->prob1;
         if (floor_ptr->dun_level && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest))
@@ -359,10 +364,15 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
             entry->prob2 = hoge / 64;
             if (randint0(64) < (hoge & 0x3f))
                 entry->prob2++;
+            if (entry->prob2 <= 0)
+                entry->prob2 = 1;
         }
+
+        total += entry->prob2; 
+
     }
     if (cheat_hear) {
-        msg_format(_("モンスター第2次候補数:%d(%d-%dF) ", "monster second selection:%d(%d-%dF) "), mon_num, lev_min, lev_max);
+        msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)&d "), mon_num, lev_min, lev_max, total);
     }
     return 0;
 }
