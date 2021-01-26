@@ -134,8 +134,8 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
 
     /* Process probabilities */
     for (i = 0; i < alloc_race_size; i++) {
-        if (table[i].level < min_level || max_level < table[i].level)
-            break;
+        if (table[i].level < min_level) continue; 
+        if (max_level < table[i].level) break; // sorted by depth array,
         table[i].prob3 = 0;
         r_idx = table[i].index;
         r_ptr = &r_info[r_idx];
