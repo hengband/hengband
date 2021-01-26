@@ -226,7 +226,8 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
                 }
 
                 prt(format(q, i, correct, matches, better, worse, other), 0, 0);
-                term_fresh();
+                if (need_term_fresh())
+                    term_fresh();
             }
 
             object_type forge;

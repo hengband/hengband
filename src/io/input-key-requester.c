@@ -208,6 +208,9 @@ void request_command(player_type *player_ptr, int shopping)
             msg_flag = FALSE;
             num_more = 0;
             inkey_flag = TRUE;
+            if (need_term_fresh()) {
+                term_fresh();
+            }
             cmd = inkey();
             if (!shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[mode][(byte)(cmd)])
                 cmd = inkey_from_menu(player_ptr);

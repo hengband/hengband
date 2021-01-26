@@ -12,6 +12,8 @@
 #include "game-option/special-options.h"
 #include "term/term-color-types.h"
 #include "term/z-virt.h"
+#include "term/gameterm.h"
+#include "game-option/map-screen-options.h"
 
 /* Special flags in the attr data */
 #define AF_BIGTILE2 0xf0
@@ -1021,6 +1023,12 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
     }
 }
 
+bool macro_running(void) { 
+    int diff = angband_term[0]->key_head - angband_term[0]->key_tail;
+    return diff < -1 || 1 < diff; 
+}
+
+bool need_term_fresh(void) { return !macro_running() || fresh_after; }
 /*
  * @brief Actually perform all requested changes to the window
  */
