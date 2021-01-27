@@ -171,7 +171,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     if (!has_right_hand_weapon(attacker_ptr) && !has_left_hand_weapon(attacker_ptr)
         && !(attacker_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES))) {
-        msg_format(_("%s攻撃できない。", "You cannot do attacking."), (empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
+        msg_format(_("%s攻撃できない。", "You cannot attack."), (empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
         return FALSE;
     }
 
