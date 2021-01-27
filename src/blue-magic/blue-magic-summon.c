@@ -27,7 +27,7 @@ bool cast_blue_summon_cyber(player_type *caster_ptr, bmc_type *bmc_ptr)
     for (int k = 0; k < 1; k++) {
         if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_CYBER, bmc_ptr->p_mode)) {
             if (!bmc_ptr->pet)
-                msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon are angry!"));
+                msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon is angry!"));
         } else {
             bmc_ptr->no_trump = TRUE;
         }
