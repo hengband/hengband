@@ -877,7 +877,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         trap_creation(caster_ptr, target_row, target_col);
         break;
     case MS_FORGET:
-        msg_print(_("しかし何も起きなかった。", "Nothing happen."));
+        msg_print(_("しかし何も起きなかった。", "Nothing happens."));
         break;
     case MS_RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You animate the dead."));
