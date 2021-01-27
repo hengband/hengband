@@ -2549,7 +2549,7 @@ static s16b calc_speed(player_type *creature_ptr)
             }
         }
 
-        if (creature_ptr->pclass == CLASS_FORCETRAINER && !(heavy_armor(creature_ptr))) {
+        if ((creature_ptr->pclass == CLASS_MONK || creature_ptr->pclass == CLASS_FORCETRAINER) && !(heavy_armor(creature_ptr))) {
             if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
                     || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
                 pow += (creature_ptr->lev) / 10;
