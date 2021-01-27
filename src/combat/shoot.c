@@ -551,10 +551,12 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                 /* Draw, Hilite, Fresh, Pause, Erase */
                 print_rel(shooter_ptr, c, a, ny, nx);
                 move_cursor_relative(ny, nx);
-                term_fresh();
-                term_xtra(TERM_XTRA_DELAY, msec);
-                lite_spot(shooter_ptr, ny, nx);
-                term_fresh();
+                if (need_term_fresh()) {
+                    term_fresh();
+                    term_xtra(TERM_XTRA_DELAY, msec);
+                    lite_spot(shooter_ptr, ny, nx);
+                    term_fresh();
+                }
             }
 
             /* The player cannot see the missile */
@@ -774,8 +776,10 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                                 lite_spot(shooter_ptr, ny, nx);
                                 lite_spot(shooter_ptr, oy, ox);
 
-                                term_fresh();
-                                term_xtra(TERM_XTRA_DELAY, msec);
+                                if (need_term_fresh()) {
+                                    term_fresh();
+                                    term_xtra(TERM_XTRA_DELAY, msec);
+                                }
 
                                 x = nx;
                                 y = ny;
