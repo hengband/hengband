@@ -150,7 +150,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
             }
 
             if (pet_ctr == creature_ptr->riding) {
-                msg_format(_("%sから降りた。", "You have got off %s. "), friend_name);
+                msg_format(_("%sから降りた。", "You dismount from %s. "), friend_name);
 
                 creature_ptr->riding = 0;
 
