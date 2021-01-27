@@ -28,7 +28,7 @@
 #define MN_DOWN _("下          (↓矢印キー)", "Down     (Down Arrow key)")
 #define MN_UP _("上          (↑矢印キー)", "Up       (Up Arrow key)")
 #define MN_RIGHT _("右          (→矢印キー)", "Right    (Right Arrow key)")
-#define MN_BOL _("行の先頭", "Beggining of line")
+#define MN_BOL _("行の先頭", "Beginning of line")
 #define MN_EOL _("行の終端", "End of line")
 #define MN_PGUP _("上のページ  (PageUpキー)", "Page up  (PageUp key)")
 #define MN_PGDOWN _("下のページ  (PageDownキー)", "Page down(PageDown key)")
