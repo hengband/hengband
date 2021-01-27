@@ -335,7 +335,7 @@ static void do_name_pet(player_type *creature_ptr)
             return;
         }
         if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE) {
-            msg_print(_("そのモンスターの名前は変えられない！", "You cannot change name of this monster!"));
+            msg_print(_("そのモンスターの名前は変えられない！", "You cannot change the name of this monster!"));
             return;
         }
         monster_desc(creature_ptr, m_name, m_ptr, 0);
