@@ -2969,14 +2969,9 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
                 bonus_to_d = (o_ptr->to_d + 1) / 2;
         }
 
-        if ((i == INVEN_LEFT || i == INVEN_RIGHT) && !has_two_handed_weapons(creature_ptr)) {
+        if ((i == INVEN_LEFT || i == INVEN_RIGHT) && has_two_handed_weapons(creature_ptr)) {
             damage += (s16b)bonus_to_d;
-        } else if (has_right_hand_weapon(creature_ptr) && has_left_hand_weapon(creature_ptr)) {
-            if (id == 0)
-                damage += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
-            if (id == 1)
-                damage += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
-        } else if (id == get_default_hand(creature_ptr)) {
+        } else if ((has_right_hand_weapon(creature_ptr) && id == 0 && i == INVEN_RIGHT)) {// || (has_left_hand_weapon(creature_ptr) && id == 1 && i == INVEN_LEFT)) {
             damage += (s16b)bonus_to_d;
         }
     }

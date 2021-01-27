@@ -1594,6 +1594,9 @@ bool has_right_hand_weapon(player_type *creature_ptr)
  */
 bool has_left_hand_weapon(player_type *creature_ptr) { return has_melee_weapon(creature_ptr, INVEN_LARM); }
 
+/*
+ * @brief 両手持ち状態かどうかを判定する
+ */
 bool has_two_handed_weapons(player_type *creature_ptr)
 {
     if (can_two_hands_wielding(creature_ptr)) {
