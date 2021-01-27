@@ -171,7 +171,7 @@ concptr KEY_MISSILES = MKEY_MISSILES;
 concptr KEY_DEVICES = MKEY_DEVICES;
 #define MKEY_LIGHTS _("光源", "lights")
 concptr KEY_LIGHTS = MKEY_LIGHTS;
-#define MKEY_JUNKS _("がらくた", "junks")
+#define MKEY_JUNKS _("がらくた", "junk")
 concptr KEY_JUNKS = MKEY_JUNKS;
 #define MKEY_CORPSES _("死体や骨", "corpses or skeletons")
 concptr KEY_CORPSES = MKEY_CORPSES;
