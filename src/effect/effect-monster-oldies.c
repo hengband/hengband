@@ -79,7 +79,8 @@ process_result effect_monster_star_heal(player_type *caster_ptr, effect_monster_
 
 		return PROCESS_FALSE;
 	}
-
+        
+	effect_monster_old_heal(caster_ptr, em_ptr);
 	return PROCESS_TRUE;
 }
 

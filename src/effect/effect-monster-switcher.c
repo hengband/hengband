@@ -359,9 +359,7 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
 	case GF_OLD_CLONE:
 		return effect_monster_old_clone(caster_ptr, em_ptr);
 	case GF_STAR_HEAL:
-		if (effect_monster_old_clone(caster_ptr, em_ptr) == PROCESS_TRUE)
-			return PROCESS_CONTINUE;
-	/* Fall through */
+		return effect_monster_star_heal(caster_ptr, em_ptr);
 	case GF_OLD_HEAL:
 		return effect_monster_old_heal(caster_ptr, em_ptr);
 	case GF_OLD_SPEED:
