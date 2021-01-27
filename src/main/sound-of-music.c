@@ -75,6 +75,10 @@ void select_floor_music(player_type *player_ptr)
             return;
     }
 
+    QUEST_IDX id = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
+    if ((id != 0) && !play_music(TERM_XTRA_MUSIC_QUEST, id))
+        return;
+    
     if (player_ptr->dungeon_idx) {
         if (player_ptr->feeling == 2) {
             if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL2))
