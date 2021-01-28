@@ -20876,7 +20876,7 @@ N:1034:『迷宮のミノタウロス』
 E:The Minotaur of the Labyrinth
 G:H:U
 I:120:25d10:13:25:10
-W:40:3:0:600:0:0
+W:18:3:0:600:0:0
 B:BUTT:HURT:4d6
 B:BUTT:HURT:4d6
 B:BUTT:HURT:2d6
