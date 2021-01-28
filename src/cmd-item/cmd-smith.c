@@ -1001,7 +1001,7 @@ static void erase_essence(player_type *creature_ptr)
     item_tester_hook = object_is_smith;
 
     q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
-    s = _("エッセンスを付加したアイテムがありません。", "You have nothing to remove essence.");
+    s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");
 
     o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
     if (!o_ptr)
