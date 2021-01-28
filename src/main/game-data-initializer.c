@@ -12,6 +12,7 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "term/gameterm.h"
+#include "util/angband-files.h"
 #include "util/quarks.h"
 #include "util/tag-sorter.h"
 #include "view/display-messages.h"
@@ -58,7 +59,7 @@ errr init_other(player_type *player_ptr)
     C_MAKE(macro__pat, MACRO_MAX, concptr);
     C_MAKE(macro__act, MACRO_MAX, concptr);
     C_MAKE(macro__cmd, MACRO_MAX, bool);
-    C_MAKE(macro__buf, 1024, char);
+    C_MAKE(macro__buf, FILE_READ_BUFF_SIZE, char);
     quark_init();
 
     C_MAKE(message__ptr, MESSAGE_MAX, u32b);
