@@ -44,7 +44,7 @@ static bool is_healthy_stay(player_type *customer_ptr)
 
 	msg_print(_("あなたに必要なのは部屋ではなく、治療者です。", "You need a healer, not a room."));
 	msg_print(NULL);
-	msg_print(_("すみません、でもうちで誰かに死なれちゃ困りますんで。", "Sorry, but don't want anyone dying in here."));
+	msg_print(_("すみません、でもうちで誰かに死なれちゃ困りますんで。", "Sorry, but I don't want anyone dying in here."));
 	return FALSE;
 }
 
