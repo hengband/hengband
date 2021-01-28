@@ -128,7 +128,7 @@ static void sweep_hiding_candidate(player_type *target_ptr, monster_type *m_ptr,
 		POSITION x = m_ptr->fx + dx;
 		if (!in_bounds(target_ptr->current_floor_ptr, y, x)) continue;
 		if (!monster_can_enter(target_ptr, y, x, r_ptr, 0)) continue;
-		if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x) && clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, y, x, FALSE))
+		if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x) || !clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, y, x, FALSE))
 			continue;
 
 		POSITION dis = distance(y, x, target_ptr->y, target_ptr->x);
