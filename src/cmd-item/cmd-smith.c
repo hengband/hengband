@@ -100,7 +100,7 @@ static essence_type essence_info[] = { { TR_STR, "腕力", 4, TR_STR, 20 }, { TR
 #else
 static essence_type essence_info[] = { { TR_STR, "strength", 4, TR_STR, 20 }, { TR_INT, "intelligence", 4, TR_INT, 20 }, { TR_WIS, "wisdom", 4, TR_WIS, 20 },
     { TR_DEX, "dexterity", 4, TR_DEX, 20 }, { TR_CON, "constitution", 4, TR_CON, 20 }, { TR_CHR, "charisma", 4, TR_CHR, 20 },
-    { TR_MAGIC_MASTERY, "magic mastery", 4, TR_MAGIC_MASTERY, 20 }, { TR_STEALTH, "stealth", 4, TR_STEALTH, 40 }, { TR_SEARCH, "serching", 4, TR_SEARCH, 15 },
+    { TR_MAGIC_MASTERY, "magic mastery", 4, TR_MAGIC_MASTERY, 20 }, { TR_STEALTH, "stealth", 4, TR_STEALTH, 40 }, { TR_SEARCH, "searching", 4, TR_SEARCH, 15 },
     { TR_INFRA, "infravision", 4, TR_INFRA, 15 }, { TR_TUNNEL, "digging", 4, TR_TUNNEL, 15 }, { TR_SPEED, "speed", 4, TR_SPEED, 12 },
     { TR_BLOWS, "extra attack", 1, TR_BLOWS, 20 }, { TR_CHAOTIC, "chaos brand", 1, TR_CHAOTIC, 15 }, { TR_VAMPIRIC, "vampiric brand", 1, TR_VAMPIRIC, 60 },
     { TR_IMPACT, "quake activation", 7, TR_IMPACT, 15 }, { TR_BRAND_POIS, "poison brand", 1, TR_BRAND_POIS, 20 },
@@ -166,7 +166,7 @@ concptr essence_name[] = { "腕力", "知能", "賢さ", "器用さ", "耐久力
 
 #else
 
-concptr essence_name[] = { "strength", "intelligen.", "wisdom", "dexterity", "constitut.", "charisma", "magic mast.", "", "stealth", "serching", "infravision",
+concptr essence_name[] = { "strength", "intelligen.", "wisdom", "dexterity", "constitut.", "charisma", "magic mast.", "", "stealth", "searching", "infravision",
     "digging", "speed", "extra atk", "chaos brand", "vampiric", "slay animal", "slay evil", "slay undead", "slay demon", "slay orc", "slay troll", "slay giant",
     "slay dragon", "", "", "quake", "pois. brand", "acid brand", "elec. brand", "fire brand", "cold brand", "sustain", "", "", "", "", "", "", "", "immunity",
     "", "", "", "", "reflection", "free action", "hold exp", "res. acid", "res. elec.", "res. fire", "res. cold", "res. poison", "res. fear", "res. light",
