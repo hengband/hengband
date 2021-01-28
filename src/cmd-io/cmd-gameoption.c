@@ -491,7 +491,7 @@ void do_cmd_options(player_type *player_ptr)
         case 'b': {
             do_cmd_options_aux(player_ptr, OPT_PAGE_BIRTH,
                 (!current_world_ptr->wizard || !allow_debug_opts) ? _("初期オプション(参照のみ)", "Birth Options(browse only)")
-                                                                  : _("初期オプション((*)はスコアに影響)", "Birth Options((*)s effect score)"));
+                                                                  : _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             break;
         }
         case 'C': {
