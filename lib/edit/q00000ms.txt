@@ -89,8 +89,8 @@ F:f:FLOOR:8:516
 # Gates himself
 F:g:FLOOR:12:732
 
-# Internet Exploder
-F:h:FLOOR:8:921
+# Chronium edge
+F:h:FLOOR:8:1245
 
 # Internet Exploder + no tele
 F:i:FLOOR:12:921
