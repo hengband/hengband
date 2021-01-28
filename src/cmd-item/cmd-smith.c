@@ -777,7 +777,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
                 char tmp_val[160];
 
                 /* Prompt */
-                (void)strnfmt(tmp_val, 78, _("%sを付加しますか？ ", "Add the abilitiy of %s? "), essence_info[num[i]].add_name);
+                (void)strnfmt(tmp_val, 78, _("%sを付加しますか？ ", "Add the ability of %s? "), essence_info[num[i]].add_name);
 
                 /* Belay that order */
                 if (!get_check(tmp_val))
