@@ -51,6 +51,14 @@ enum empty_hand_status {
     EMPTY_HAND_RARM = 0x0002 /*!<Right hand is empty */
 };
 
+/*!< Weapon hand status */
+typedef enum player_hand {
+    PLAYER_HAND_RIGHT = 0x0000, /*!<default hand is RIGHT */
+    PLAYER_HAND_LEFT = 0x0001, /*!<default hand is LEFT */
+    PLAYER_HAND_OTHER = 0x0002 /*!<default hand is NOT RIGHT or LEFT */
+} player_hand;
+
+
 /*
  * Player sex constants (hard-coded by save-files, arrays, etc)
  */

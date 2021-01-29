@@ -23,14 +23,14 @@ enum flag_cause {
 };
 
 typedef enum melee_type {
-    BAREHAND_TWO = 0,
-    BAREHAND_RIGHT = 1,
-    BAREHAND_LEFT = 2,
-    WEAPON_RIGHT = 3,
-    WEAPON_LEFT = 4,
-    WEAPON_TWOHAND = 5,
-    WEAPON_DOUBLE = 6,
-    SHIELD_DOUBLE = 7
+    MELEE_TYPE_BAREHAND_TWO = 0,
+    MELEE_TYPE_BAREHAND_RIGHT = 1,
+    MELEE_TYPE_BAREHAND_LEFT = 2,
+    MELEE_TYPE_WEAPON_RIGHT = 3,
+    MELEE_TYPE_WEAPON_LEFT = 4,
+    MELEE_TYPE_WEAPON_TWOHAND = 5,
+    MELEE_TYPE_WEAPON_DOUBLE = 6,
+    MELEE_TYPE_SHIELD_DOUBLE = 7
 } melee_type;
 
 enum aggravate_state {

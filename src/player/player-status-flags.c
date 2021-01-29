@@ -1576,28 +1576,28 @@ BIT_FLAGS has_immune_dark(player_type *creature_ptr)
 melee_type player_melee_type(player_type *creature_ptr)
 {
     if (has_two_handed_weapons(creature_ptr))
-        return WEAPON_TWOHAND;
+        return MELEE_TYPE_WEAPON_TWOHAND;
 
     if (has_melee_weapon(creature_ptr, INVEN_RARM)) {
         if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-            return WEAPON_DOUBLE;
+            return MELEE_TYPE_WEAPON_DOUBLE;
         }
-        return WEAPON_RIGHT;
+        return MELEE_TYPE_WEAPON_RIGHT;
     }
 
     if (has_melee_weapon(creature_ptr, INVEN_LARM))
-        return WEAPON_LEFT;
+        return MELEE_TYPE_WEAPON_LEFT;
 
     if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
-        return BAREHAND_TWO; 
+        return MELEE_TYPE_BAREHAND_TWO; 
 
     if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
-        return BAREHAND_RIGHT;
+        return MELEE_TYPE_BAREHAND_RIGHT;
 
     if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
-        return BAREHAND_LEFT;
+        return MELEE_TYPE_BAREHAND_LEFT;
 
-    return SHIELD_DOUBLE;
+    return MELEE_TYPE_SHIELD_DOUBLE;
 }
 
 /*
