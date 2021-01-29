@@ -126,8 +126,8 @@ static essence_type essence_info[] = { { TR_STR, "strength", 4, TR_STR, 20 }, { 
     { TR_TELEPATHY, "telepathy", 6, TR_TELEPATHY, 15 }, { TR_SLOW_DIGEST, "slow digestion", 3, TR_SLOW_DIGEST, 15 },
     { TR_REGEN, "regeneration", 3, TR_REGEN, 20 }, { TR_TELEPORT, "teleport", 3, TR_TELEPORT, 25 },
 
-    { TR_SLAY_EVIL, "slay evil", 5, TR_SLAY_EVIL, 100 }, { TR_SLAY_ANIMAL, "slay animal", 5, TR_SLAY_ANIMAL, 20 },
-    { TR_KILL_ANIMAL, "kill animal", 5, TR_SLAY_ANIMAL, 60 }, { TR_KILL_EVIL, "kill evil", 0, TR_SLAY_EVIL, 60 },
+    { TR_SLAY_EVIL, "slay evil", 5, TR_SLAY_EVIL, 100 }, { TR_KILL_EVIL, "kill evil", 0, TR_SLAY_EVIL, 60 }, ,
+    { TR_SLAY_ANIMAL, "slay animal", 5, TR_SLAY_ANIMAL, 20 }, { TR_KILL_ANIMAL, "kill animal", 5, TR_SLAY_ANIMAL, 60 },
     { TR_SLAY_UNDEAD, "slay undead", 5, TR_SLAY_UNDEAD, 20 }, { TR_KILL_UNDEAD, "kill undead", 5, TR_SLAY_UNDEAD, 60 },
     { TR_SLAY_DEMON, "slay demon", 5, TR_SLAY_DEMON, 20 }, { TR_KILL_DEMON, "kill demon", 5, TR_SLAY_DEMON, 60 },
     { TR_SLAY_ORC, "slay orc", 5, TR_SLAY_ORC, 15 }, { TR_KILL_ORC, "kill orc", 5, TR_SLAY_ORC, 60 }, { TR_SLAY_TROLL, "slay troll", 5, TR_SLAY_TROLL, 15 },
