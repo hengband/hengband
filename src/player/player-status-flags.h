@@ -22,6 +22,17 @@ enum flag_cause {
     FLAG_CAUSE_MAX = 18
 };
 
+typedef enum melee_type {
+    BAREHAND_TWO = 0,
+    BAREHAND_RIGHT = 1,
+    BAREHAND_LEFT = 2,
+    WEAPON_RIGHT = 3,
+    WEAPON_LEFT = 4,
+    WEAPON_TWOHAND = 5,
+    WEAPON_DOUBLE = 6,
+    SHIELD_DOUBLE = 7
+} melee_type;
+
 enum aggravate_state {
     AGGRAVATE_NONE = 0x00000000L,
     AGGRAVATE_S_FAIRY = 0x00000001L,
@@ -119,4 +130,5 @@ bool has_icky_wield_weapon(player_type *creature_ptr, int i);
 bool has_riding_wield_weapon(player_type *creature_ptr, int i);
 bool has_good_luck(player_type *creature_ptr);
 BIT_FLAGS player_aggravate_state(player_type *creature_ptr);
+melee_type player_melee_type(player_type *creature_ptr);
 bool has_aggravate(player_type *creature_ptr);
