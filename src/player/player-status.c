@@ -3249,11 +3249,11 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         hit += (creature_ptr->lev / 3);
     }
 
-    if ((empty_hands(creature_ptr, FALSE) & EMPTY_HAND_RARM) && id == 0) {
+    if ((empty_hands(creature_ptr, FALSE) & EMPTY_HAND_RARM) && calc_hand == PLAYER_HAND_RIGHT) {
         hit += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
     }
 
-    if ((empty_hands(creature_ptr, FALSE) & EMPTY_HAND_LARM) && id == 1) {
+    if ((empty_hands(creature_ptr, FALSE) & EMPTY_HAND_LARM) && calc_hand == PLAYER_HAND_LEFT) {
         hit += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
     }
 
