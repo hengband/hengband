@@ -255,29 +255,32 @@ void message_add(concptr str)
     }
 }
 
+bool is_msg_window_flowed(void) { 
+    int i;
+    for (i = 0; i < 8; i++) {
+        if (angband_term[i] && (window_flag[i] & PW_MESSAGE))
+            break;
+    }
+    if (i < 8) {
+        if (num_more < angband_term[i]->hgt)
+            return FALSE;
+    }
+    return TRUE; 
+}
+
 /*
  * Hack -- flush
  */
 static void msg_flush(player_type *player_ptr, int x)
 {
     byte a = TERM_L_BLUE;
-    bool nagasu = FALSE;
-    if ((auto_more && !player_ptr->now_damaged) || num_more < 0) {
-        int i;
-        for (i = 0; i < 8; i++) {
-            if (angband_term[i] && (window_flag[i] & PW_MESSAGE))
-                break;
-        }
-        if (i < 8) {
-            if (num_more < angband_term[i]->hgt)
-                nagasu = TRUE;
-        } else {
-            nagasu = TRUE;
-        }
-    }
+    bool show_more = !auto_more || is_msg_window_flowed();
+
+    if (auto_more && (quick_messages || !player_ptr->now_damaged))
+        show_more = FALSE;
 
     player_ptr->now_damaged = FALSE;
-    if (!player_ptr->playing || !nagasu) {
+    if (!player_ptr->playing || show_more) {
         term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
         while (TRUE) {
             int cmd = inkey();
