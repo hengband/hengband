@@ -109,7 +109,7 @@ concptr horror_desc_neutral[MAX_SAN_HORROR_NEUTRAL] =
 	"otherworldly",
 	"hallucinating",
 	"rhythmically bobbing",
-	"soul-crushing",
+	"overwhelming",
 	"unintelligible",
 
 	"psychedelic",
