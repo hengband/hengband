@@ -242,13 +242,12 @@ errr angband_fgets(FILE *fff, char *buf, huge n)
 {
     huge i = 0;
     char *s;
-    char tmp[1024];
 
-    if (fgets(tmp, 1024, fff)) {
+    if (fgets(file_read__tmp, FILE_READ_BUFF_SIZE, fff)) {
 #ifdef JP
-        guess_convert_to_system_encoding(tmp, sizeof(tmp));
+        guess_convert_to_system_encoding(file_read__tmp, FILE_READ_BUFF_SIZE);
 #endif
-        for (s = tmp; *s; s++) {
+        for (s = file_read__tmp; *s; s++) {
             if (*s == '\n') {
                 buf[i] = '\0';
                 return 0;

@@ -1972,7 +1972,7 @@ static void windows_map(player_type *player_ptr)
 static void term_data_link(term_data *td)
 {
     term_type *t = &td->t;
-    term_init(t, td->cols, td->rows, td->keys);
+    term_init(t, td->cols, td->rows, FILE_READ_BUFF_SIZE);
     t->soft_cursor = TRUE;
     t->higher_pict = TRUE;
     t->attr_blank = TERM_WHITE;

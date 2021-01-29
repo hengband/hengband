@@ -58,30 +58,31 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 	fp = angband_fopen(name, "r");
 	if (!fp) return -1;
 
-	char buf[1024];
-	char old[1024];
 	int line = -1;
 	errr err = 0;
 	bool bypass = FALSE;
-	while (angband_fgets(fp, buf, sizeof(buf)) == 0)
+	while (angband_fgets(fp, file_read__buf, FILE_READ_BUFF_SIZE) == 0)
 	{
 		line++;
-		if (!buf[0]) continue;
+        if (!file_read__buf[0])
+            continue;
 
 #ifdef JP
-		if (!iskanji(buf[0]))
+        if (!iskanji(file_read__buf[0]))
 #endif
-			if (iswspace(buf[0])) continue;
+            if (iswspace(file_read__buf[0]))
+                continue;
 
-		if (buf[0] == '#') continue;
-		strcpy(old, buf);
+		if (file_read__buf[0] == '#')
+            continue;
+        strcpy(file_read__swp, file_read__buf);
 
 		/* Process "?:<expr>" */
-		if ((buf[0] == '?') && (buf[1] == ':'))
+        if ((file_read__buf[0] == '?') && (file_read__buf[1] == ':'))
 		{
 			char f;
 			char *s;
-			s = buf + 2;
+            s = file_read__buf + 2;
 			concptr v = process_pref_file_expr(creature_ptr, &s, &f);
 			bypass = streq(v, "0");
 			continue;
@@ -90,7 +91,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 		if (bypass) continue;
 
 		/* Process "%:<file>" */
-		if (buf[0] == '%')
+        if (file_read__buf[0] == '%')
 		{
 			static int depth_count = 0;
 			if (depth_count > 20) continue;
@@ -99,13 +100,13 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 			switch (preftype)
 			{
 			case PREF_TYPE_AUTOPICK:
-				(void)process_autopick_file(creature_ptr, buf + 2, process_autopick_file_command);
+                (void)process_autopick_file(creature_ptr, file_read__buf + 2, process_autopick_file_command);
 				break;
 			case PREF_TYPE_HISTPREF:
-				(void)process_histpref_file(creature_ptr, buf + 2, process_autopick_file_command);
+                (void)process_histpref_file(creature_ptr, file_read__buf + 2, process_autopick_file_command);
 				break;
 			default:
-				(void)process_pref_file(creature_ptr, buf + 2, process_autopick_file_command);
+                (void)process_pref_file(creature_ptr, file_read__buf + 2, process_autopick_file_command);
 				break;
 			}
 
@@ -113,13 +114,13 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 			continue;
 		}
 
-		err = interpret_pref_file(creature_ptr, buf);
+		err = interpret_pref_file(creature_ptr, file_read__buf);
 		if (err != 0)
 		{
 			if (preftype != PREF_TYPE_AUTOPICK)
 				break;
 			
-			(*process_autopick_file_command)(buf);
+			(*process_autopick_file_command)(file_read__buf);
 			err = 0;
 		}
 	}
@@ -130,7 +131,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 		/* ToDo: Add better error messages */
 		msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."),
 			_(name, err), line, _(err, name));
-		msg_format(_("('%s'を解析中)", "Parsing '%s'"), old);
+		msg_format(_("('%s'を解析中)", "Parsing '%s'"), file_read__swp);
 		msg_print(NULL);
 	}
 
