@@ -45,7 +45,7 @@ errr play_music(int type, int val)
  * @brief ダンジョン用の通常BGMまたはクエスト用BGM
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return BGMを鳴らすか後続処理で鳴らすBGMを決めるならばTRUE、鳴らさないならばFALSE
- * @details
+ * @details v3.0.0現在、フロアクエストとはワーグクエストとランダムクエストのみ該当する
  */
 bool dungeon_quest_music(player_type *player_ptr)
 {
