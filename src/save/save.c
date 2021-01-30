@@ -18,8 +18,8 @@
 #include "floor/wild.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/uid-checker.h"
 #include "io/report.h"
+#include "io/uid-checker.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-compaction.h"
 #include "object/object-kind.h"
@@ -265,7 +265,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return 成功すればtrue
  */
-bool save_player(player_type *player_ptr)
+bool save_player(player_type *player_ptr, bool debug_save)
 {
     char safe[1024];
     strcpy(safe, savefile);
@@ -277,12 +277,16 @@ bool save_player(player_type *player_ptr)
     bool result = FALSE;
     if (save_player_aux(player_ptr, safe)) {
         char temp[1024];
+        char filename[1024];
         strcpy(temp, savefile);
         strcat(temp, ".old");
         safe_setuid_grab(player_ptr);
         fd_kill(temp);
-        fd_move(savefile, temp);
-        fd_move(safe, savefile);
+        strcpy(filename, savefile);
+        if (debug_save)
+            strcat(filename, ".debug");
+        fd_move(filename, temp);
+        fd_move(safe, filename);
         fd_kill(temp);
         safe_setuid_drop();
         current_world_ptr->character_loaded = TRUE;

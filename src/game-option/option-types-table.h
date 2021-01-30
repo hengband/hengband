@@ -22,7 +22,7 @@ typedef struct option_type {
     concptr o_desc;
 } option_type;
 
-#define MAX_OPTION_INFO 120
+#define MAX_OPTION_INFO 121
 #define MAX_CHEAT_OPTIONS 10
 #define MAX_AUTOSAVE_INFO 2
 

@@ -3,4 +3,4 @@
 #include "floor/floor-save.h"
 #include "system/angband.h"
 
-bool save_player(player_type *player_ptr);
+bool save_player(player_type *player_ptr, bool debug_save);
