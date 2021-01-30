@@ -129,7 +129,7 @@ static void send_waiting_record(player_type *player_ptr)
     } else {
         player_ptr->wait_report_score = FALSE;
         top_twenty(player_ptr);
-        if (!save_player(player_ptr, FALSE))
+        if (!save_player(player_ptr, SAVE_TYPE_NORMAL))
             msg_print(_("セーブ失敗！", "death save failed!"));
     }
 

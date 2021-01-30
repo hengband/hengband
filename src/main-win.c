@@ -3050,7 +3050,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         p_ptr->panic_save = 1;
         signals_ignore_tstp();
         (void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
-        (void)save_player(p_ptr, FALSE);
+        (void)save_player(p_ptr, SAVE_TYPE_NORMAL);
         quit(NULL);
         return 0;
     }

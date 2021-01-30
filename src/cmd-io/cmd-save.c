@@ -31,7 +31,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
     term_fresh();
     (void)strcpy(creature_ptr->died_from, _("(セーブ)", "(saved)"));
     signals_ignore_tstp();
-    if (save_player(creature_ptr, FALSE))
+    if (save_player(creature_ptr, SAVE_TYPE_NORMAL))
         prt(_("ゲームをセーブしています... 終了", "Saving game... done."), 0, 0);
     else
         prt(_("ゲームをセーブしています... 失敗！", "Saving game... failed!"), 0, 0);
