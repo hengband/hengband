@@ -89,7 +89,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
                 break;
             }
             while (TRUE) {
-                o_ptr->name2 = get_random_ego(INVEN_RARM, TRUE);
+                o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, TRUE);
                 if (o_ptr->name2 == EGO_SHARPNESS && o_ptr->tval != TV_SWORD)
                     continue;
                 if (o_ptr->name2 == EGO_EARTHQUAKES && o_ptr->tval != TV_HAFTED)
@@ -193,7 +193,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
         } else if (power < -1) {
             if (randint0(MAX_DEPTH) < level) {
                 while (TRUE) {
-                    o_ptr->name2 = get_random_ego(INVEN_RARM, FALSE);
+                    o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, FALSE);
                     if (o_ptr->name2 == EGO_WEIRD && o_ptr->tval != TV_SWORD) {
                         continue;
                     }

@@ -185,7 +185,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     }
 
     if ((r_ptr->flags1 & RF1_FEMALE) && !(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || !m_ptr->ml)) {
-        if ((attacker_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (attacker_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU)) {
+        if ((attacker_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ZANTETSU) || (attacker_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_ZANTETSU)) {
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return FALSE;
         }
@@ -198,9 +198,9 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     bool stormbringer = FALSE;
     if (!is_hostile(m_ptr) && !(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || is_shero(attacker_ptr) || !m_ptr->ml)) {
-        if (attacker_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER)
+        if (attacker_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_STORMBRINGER)
             stormbringer = TRUE;
-        if (attacker_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER)
+        if (attacker_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_STORMBRINGER)
             stormbringer = TRUE;
         if (stormbringer) {
             msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name);

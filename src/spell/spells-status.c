@@ -461,7 +461,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 {
     /* Cast off activated item */
     INVENTORY_IDX inv;
-    for (inv = INVEN_RARM; inv <= INVEN_FEET; inv++) {
+    for (inv = INVEN_MAIN_HAND; inv <= INVEN_FEET; inv++) {
         if (o_ptr == &creature_ptr->inventory_list[inv])
             break;
     }

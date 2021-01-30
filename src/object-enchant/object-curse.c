@@ -63,7 +63,7 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
     if (randint1(100) > chance)
         return;
 
-    object_type *o_ptr = &owner_ptr->inventory_list[INVEN_RARM + randint0(12)];
+    object_type *o_ptr = &owner_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
     if (!o_ptr->k_idx)
         return;
     BIT_FLAGS oflgs[TR_FLAG_SIZE];

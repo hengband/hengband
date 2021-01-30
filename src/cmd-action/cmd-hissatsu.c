@@ -311,7 +311,7 @@ void do_cmd_hissatsu(player_type *creature_ptr)
 
     if (cmd_limit_confused(creature_ptr))
         return;
-    if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM)) {
+    if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
         if (flush_failure)
             flush();
         msg_print(_("武器を持たないと必殺技は使えない！", "You need to wield a weapon!"));

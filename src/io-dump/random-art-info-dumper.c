@@ -84,7 +84,7 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
     sprintf(buf, "Random artifacts list.\r");
     spoiler_underline(buf);
     for (int j = 0; group_artifact[j].tval; j++) {
-        for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             q_ptr = &creature_ptr->inventory_list[i];
             spoil_random_artifact_aux(creature_ptr, q_ptr, j);
         }

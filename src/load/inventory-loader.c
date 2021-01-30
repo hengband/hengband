@@ -44,7 +44,7 @@ static errr rd_inventory(player_type *player_ptr)
         if (!q_ptr->k_idx)
             return (53);
 
-        if (n >= INVEN_RARM) {
+        if (n >= INVEN_MAIN_HAND) {
             q_ptr->marked |= OM_TOUCHED;
             object_copy(&player_ptr->inventory_list[n], q_ptr);
             player_ptr->equip_cnt++;

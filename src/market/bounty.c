@@ -46,7 +46,7 @@ bool exchange_cash(player_type *player_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     object_type *o_ptr;
 
-    for (INVENTORY_IDX i = 0; i <= INVEN_LARM; i++) {
+    for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO)) {
             char buf[MAX_NLEN + 20];

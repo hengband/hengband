@@ -8,7 +8,7 @@
 
 void set_equipment_influence(player_type *creature_ptr, self_info_type *self_ptr)
 {
-    for (int k = INVEN_RARM; k < INVEN_TOTAL; k++) {
+    for (int k = INVEN_MAIN_HAND; k < INVEN_TOTAL; k++) {
         u32b tflgs[TR_FLAG_SIZE];
         object_type *o_ptr = &creature_ptr->inventory_list[k];
         if (o_ptr->k_idx == 0)

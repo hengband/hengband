@@ -207,7 +207,7 @@ void store_sell(player_type *owner_ptr)
     if (!o_ptr)
         return;
 
-    if ((item >= INVEN_RARM) && object_is_cursed(o_ptr)) {
+    if ((item >= INVEN_MAIN_HAND) && object_is_cursed(o_ptr)) {
         msg_print(_("ふーむ、どうやらそれは呪われているようだね。", "Hmmm, it seems to be cursed."));
         return;
     }
@@ -344,7 +344,7 @@ void store_sell(player_type *owner_ptr)
         }
     }
 
-    if ((choice == 0) && (item >= INVEN_RARM)) {
+    if ((choice == 0) && (item >= INVEN_MAIN_HAND)) {
         calc_android_exp(owner_ptr);
         verify_equip_slot(owner_ptr, item);
     }

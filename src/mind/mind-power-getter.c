@@ -170,8 +170,8 @@ bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                 put_str(_("名前", "Name"), y, x + 5);
                 put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"), ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y,
                     x + 35);
-                has_weapon[0] = has_melee_weapon(caster_ptr, INVEN_RARM);
-                has_weapon[1] = has_melee_weapon(caster_ptr, INVEN_LARM);
+                has_weapon[0] = has_melee_weapon(caster_ptr, INVEN_MAIN_HAND);
+                has_weapon[1] = has_melee_weapon(caster_ptr, INVEN_SUB_HAND);
                 for (i = 0; i < MAX_MIND_POWERS; i++) {
                     int mana_cost;
                     spell = mind_ptr->info[i];

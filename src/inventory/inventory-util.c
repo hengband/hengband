@@ -23,7 +23,7 @@
  * @param i プレイヤーの所持/装備オブジェクトID
  * @return 指輪枠ならばTRUEを返す。
  */
-bool is_ring_slot(int i) { return (i == INVEN_RIGHT) || (i == INVEN_LEFT); }
+bool is_ring_slot(int i) { return (i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING); }
 
 /*!
  * @brief 床オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
@@ -103,7 +103,7 @@ bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
     COMMAND_CODE start, end;
     switch (mode) {
     case USE_EQUIP:
-        start = INVEN_RARM;
+        start = INVEN_MAIN_HAND;
         end = INVEN_TOTAL - 1;
         break;
 
@@ -219,9 +219,9 @@ bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
  */
 INVENTORY_IDX label_to_equipment(player_type *owner_ptr, int c)
 {
-    INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_RARM;
+    INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_MAIN_HAND;
 
-    if ((i < INVEN_RARM) || (i >= INVEN_TOTAL))
+    if ((i < INVEN_MAIN_HAND) || (i >= INVEN_TOTAL))
         return -1;
 
     if (owner_ptr->select_ring_slot)
@@ -286,7 +286,7 @@ bool verify(player_type *owner_ptr, concptr prompt, INVENTORY_IDX item)
 void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, tval_type tval)
 {
     concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    int offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
+    int offset = (mode == USE_EQUIP) ? INVEN_MAIN_HAND : 0;
     strcpy(label, alphabet_chars);
     for (int i = 0; i < 52; i++) {
         COMMAND_CODE index;

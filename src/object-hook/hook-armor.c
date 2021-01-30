@@ -17,7 +17,7 @@ bool item_tester_hook_wear(player_type *player_ptr, object_type *o_ptr)
             return FALSE;
 
     /* Check for a usable slot */
-    if (wield_slot(player_ptr, o_ptr) >= INVEN_RARM)
+    if (wield_slot(player_ptr, o_ptr) >= INVEN_MAIN_HAND)
         return TRUE;
 
     return FALSE;

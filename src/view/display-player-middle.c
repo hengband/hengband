@@ -31,7 +31,7 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
 {
     HIT_PROB show_tohit = creature_ptr->dis_to_h[hand];
     HIT_POINT show_todam = creature_ptr->dis_to_d[hand];
-    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM + hand];
+    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + hand];
 
     if (object_is_known(o_ptr))
         show_tohit += o_ptr->to_h;
@@ -43,7 +43,7 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
     char buf[160];
     sprintf(buf, "(%+d,%+d)", (int)show_tohit, (int)show_todam);
 
-    if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
+    if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
         display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
     else if (has_two_handed_weapons(creature_ptr))
         display_player_one_line(ENTRY_TWO_HANDS, buf, TERM_L_BLUE);
@@ -63,7 +63,7 @@ static void display_left_hand(player_type *creature_ptr)
         return;
     }
 
-    if ((creature_ptr->pclass != CLASS_MONK) || ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) == 0))
+    if ((creature_ptr->pclass != CLASS_MONK) || ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN) == 0))
         return;
 
     if ((creature_ptr->special_defense & KAMAE_MASK) == 0) {

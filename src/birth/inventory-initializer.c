@@ -43,7 +43,7 @@ void wield_all(player_type *creature_ptr)
             continue;
 
         int slot = wield_slot(creature_ptr, o_ptr);
-        if (slot < INVEN_RARM)
+        if (slot < INVEN_MAIN_HAND)
             continue;
         if (slot == INVEN_LITE)
             continue;
