@@ -1573,6 +1573,33 @@ BIT_FLAGS has_immune_dark(player_type *creature_ptr)
     return result;
 }
 
+melee_type player_melee_type(player_type *creature_ptr)
+{
+    if (has_two_handed_weapons(creature_ptr))
+        return MELEE_TYPE_WEAPON_TWOHAND;
+
+    if (has_melee_weapon(creature_ptr, INVEN_RARM)) {
+        if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
+            return MELEE_TYPE_WEAPON_DOUBLE;
+        }
+        return MELEE_TYPE_WEAPON_RIGHT;
+    }
+
+    if (has_melee_weapon(creature_ptr, INVEN_LARM))
+        return MELEE_TYPE_WEAPON_LEFT;
+
+    if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
+        return MELEE_TYPE_BAREHAND_TWO; 
+
+    if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
+        return MELEE_TYPE_BAREHAND_RIGHT;
+
+    if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
+        return MELEE_TYPE_BAREHAND_LEFT;
+
+    return MELEE_TYPE_SHIELD_DOUBLE;
+}
+
 /*
  * @brief 右手(利き手)が武器を持っているかどうかを判定する
  * @detail Includes martial arts and hand combats as weapons.
@@ -1594,6 +1621,9 @@ bool has_right_hand_weapon(player_type *creature_ptr)
  */
 bool has_left_hand_weapon(player_type *creature_ptr) { return has_melee_weapon(creature_ptr, INVEN_LARM); }
 
+/*
+ * @brief 両手持ち状態かどうかを判定する
+ */
 bool has_two_handed_weapons(player_type *creature_ptr)
 {
     if (can_two_hands_wielding(creature_ptr)) {
