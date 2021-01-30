@@ -3070,9 +3070,16 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
 
     /* Default hand bonuses */
     if (get_default_hand(creature_ptr) == calc_hand) {
-        /* Add trained bonus of empty hands' combat when having no weapon and riding */
-        if ((!has_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_LARM))
-            || (!has_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))) {
+        switch (player_melee_type(creature_ptr)) {
+        case MELEE_TYPE_BAREHAND_RIGHT:
+            if (creature_ptr->riding)
+                break;
+            /* fall through */
+        case MELEE_TYPE_BAREHAND_LEFT:
+            if (creature_ptr->riding)
+                break;
+            /* fall through */
+        case MELEE_TYPE_BAREHAND_TWO:
             hit += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
         }
 
@@ -3236,14 +3243,6 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
     /* Martial arts bonus */
     if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
         hit += (creature_ptr->lev / 3);
-    }
-
-    if ((empty_hands(creature_ptr, FALSE) & EMPTY_HAND_RARM) && calc_hand == PLAYER_HAND_RIGHT) {
-        hit += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
-    }
-
-    if ((empty_hands(creature_ptr, FALSE) & EMPTY_HAND_LARM) && calc_hand == PLAYER_HAND_LEFT) {
-        hit += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
     }
 
     /* Two handed combat penalty */
