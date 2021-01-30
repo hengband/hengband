@@ -68,7 +68,7 @@ static void print_visuals_menu(concptr choice_msg)
     prt(_("(8) アイテムの   色/文字 を変更する (シンボルエディタ)", "(8) Change object attr/chars (visual mode)"), 11, 5);
     prt(_("(9) 地形の       色/文字 を変更する (シンボルエディタ)", "(9) Change feature attr/chars (visual mode)"), 12, 5);
     prt(_("(R) 画面表示方法の初期化", "(R) Reset visuals"), 13, 5);
-    prt(format("コマンド: %s", choice_msg ? choice_msg : _("", "")), 15, 0);
+    prt(format(_("コマンド: %s", "Command: %s"), choice_msg ? choice_msg : _("", "")), 15, 0);
 }
 
 /*
