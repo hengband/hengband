@@ -337,7 +337,7 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
 
     *(pa_ptr->mdeath) = TRUE;
     if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
-        if (has_right_hand_weapon(attacker_ptr) && has_left_hand_weapon(attacker_ptr)) {
+        if (can_attack_with_main_hand(attacker_ptr) && can_attack_with_sub_hand(attacker_ptr)) {
             if (pa_ptr->hand)
                 attacker_ptr->energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
             else

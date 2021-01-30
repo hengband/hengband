@@ -1271,8 +1271,8 @@ static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
     if (creature_ptr->pclass == CLASS_NINJA) {
         if (heavy_armor(creature_ptr)) {
             pow -= (creature_ptr->lev) / 10;
-        } else if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || has_right_hand_weapon(creature_ptr))
-            && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || has_left_hand_weapon(creature_ptr))) {
+        } else if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(creature_ptr))
+            && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(creature_ptr))) {
             pow += (creature_ptr->lev) / 10;
         }
     }
@@ -1652,7 +1652,7 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
 static bool is_martial_arts_mode(player_type *creature_ptr)
 {
     return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_BERSERKER))
-        && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN) && !has_left_hand_weapon(creature_ptr);
+        && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN) && !can_attack_with_sub_hand(creature_ptr);
 }
 
 static s16b calc_num_blow(player_type *creature_ptr, int i)
@@ -2456,8 +2456,8 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
     }
 
     if (creature_ptr->pclass == CLASS_NINJA) {
-        if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || has_right_hand_weapon(creature_ptr))
-            && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || has_left_hand_weapon(creature_ptr))) {
+        if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(creature_ptr))
+            && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(creature_ptr))) {
             ac += creature_ptr->lev / 2 + 5;
         }
     }
@@ -2539,8 +2539,8 @@ static s16b calc_speed(player_type *creature_ptr)
         if (creature_ptr->pclass == CLASS_NINJA) {
             if (heavy_armor(creature_ptr)) {
                 pow -= (creature_ptr->lev) / 10;
-            } else if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || has_right_hand_weapon(creature_ptr))
-                && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || has_left_hand_weapon(creature_ptr))) {
+            } else if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(creature_ptr))
+                && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(creature_ptr))) {
                 pow += 3;
                 if (!(is_specific_player_race(creature_ptr, RACE_KLACKON) || is_specific_player_race(creature_ptr, RACE_SPRITE)
                         || (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
@@ -2932,7 +2932,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         damage -= 2;
     } else if (creature_ptr->pclass == CLASS_BERSERKER) {
         damage += creature_ptr->lev / 6;
-        if (((calc_hand == PLAYER_HAND_MAIN) && !has_left_hand_weapon(creature_ptr)) || has_two_handed_weapons(creature_ptr)) {
+        if (((calc_hand == PLAYER_HAND_MAIN) && !can_attack_with_sub_hand(creature_ptr)) || has_two_handed_weapons(creature_ptr)) {
             damage += creature_ptr->lev / 6;
         }
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
@@ -3146,7 +3146,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
             hit -= 2;
         } else if (creature_ptr->pclass == CLASS_BERSERKER) {
             hit += creature_ptr->lev / 5;
-            if (((calc_hand == PLAYER_HAND_MAIN) && !has_left_hand_weapon(creature_ptr)) || has_two_handed_weapons(creature_ptr)) {
+            if (((calc_hand == PLAYER_HAND_MAIN) && !can_attack_with_sub_hand(creature_ptr)) || has_two_handed_weapons(creature_ptr)) {
                 hit += creature_ptr->lev / 5;
             }
         } else if (creature_ptr->pclass == CLASS_SORCERER) {

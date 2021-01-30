@@ -230,10 +230,10 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         item_selection_ptr->e2--;
 
     if (item_selection_ptr->equip && has_two_handed_weapons(owner_ptr) && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        if (has_right_hand_weapon(owner_ptr)) {
+        if (can_attack_with_main_hand(owner_ptr)) {
             if (item_selection_ptr->e2 < INVEN_SUB_HAND)
                 item_selection_ptr->e2 = INVEN_SUB_HAND;
-        } else if (has_left_hand_weapon(owner_ptr))
+        } else if (can_attack_with_sub_hand(owner_ptr))
             item_selection_ptr->e1 = INVEN_MAIN_HAND;
     }
 

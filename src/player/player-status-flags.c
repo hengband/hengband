@@ -526,8 +526,8 @@ BIT_FLAGS has_free_act(player_type *creature_ptr)
     }
 
     if (creature_ptr->pclass == CLASS_NINJA && !heavy_armor(creature_ptr)
-        && (!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || has_right_hand_weapon(creature_ptr))
-        && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || has_left_hand_weapon(creature_ptr))) {
+        && (!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(creature_ptr))
+        && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(creature_ptr))) {
         if (creature_ptr->lev > 24)
             result |= 0x01 << FLAG_CAUSE_CLASS;
     }
@@ -1531,25 +1531,28 @@ melee_type player_melee_type(player_type *creature_ptr)
 }
 
 /*
- * @brief 右手(利き手)が武器を持っているかどうかを判定する
+ * @brief 利き手で攻撃可能かどうかを判定する
+ *        利き手で攻撃可能とは、利き手に武器を持っているか、
+ *        利き手が素手かつ左手も素手もしくは盾を装備している事を意味する。
  * @detail Includes martial arts and hand combats as weapons.
  */
-bool has_right_hand_weapon(player_type *creature_ptr)
+bool can_attack_with_main_hand(player_type *creature_ptr)
 {
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND))
         return TRUE;
 
-    if ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN) && !has_left_hand_weapon(creature_ptr))
+    if ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN) && !can_attack_with_sub_hand(creature_ptr))
         return TRUE;
 
     return FALSE;
 }
 
 /*
- * @brief 左手(非利き手)が武器を持っているかどうかを判定する
+ * @brief 非利き手で攻撃可能かどうかを判定する
+ *        非利き手で攻撃可能とは、非利き手に武器を持っている事に等しい
  * @detail Exclude martial arts and hand combats from weapons.
  */
-bool has_left_hand_weapon(player_type *creature_ptr) { return has_melee_weapon(creature_ptr, INVEN_SUB_HAND); }
+bool can_attack_with_sub_hand(player_type *creature_ptr) { return has_melee_weapon(creature_ptr, INVEN_SUB_HAND); }
 
 /*
  * @brief 両手持ち状態かどうかを判定する
@@ -1557,10 +1560,10 @@ bool has_left_hand_weapon(player_type *creature_ptr) { return has_melee_weapon(c
 bool has_two_handed_weapons(player_type *creature_ptr)
 {
     if (can_two_hands_wielding(creature_ptr)) {
-        if (has_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB)
+        if (can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_MAIN_HAND])) {
             return TRUE;
-        } else if (has_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN)
+        } else if (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
             return TRUE;
         }

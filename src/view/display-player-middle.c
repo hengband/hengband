@@ -56,9 +56,9 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void display_left_hand(player_type *creature_ptr)
+static void display_sub_hand(player_type *creature_ptr)
 {
-    if (has_left_hand_weapon(creature_ptr)) {
+    if (can_attack_with_sub_hand(creature_ptr)) {
         display_player_melee_bonus(creature_ptr, 1, left_hander ? ENTRY_RIGHT_HAND2 : ENTRY_LEFT_HAND2);
         return;
     }
@@ -291,10 +291,10 @@ static void display_real_playtime(void)
  */
 void display_player_middle(player_type *creature_ptr)
 {
-    if (has_right_hand_weapon(creature_ptr))
+    if (can_attack_with_main_hand(creature_ptr))
         display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
 
-    display_left_hand(creature_ptr);
+    display_sub_hand(creature_ptr);
     display_hit_damage(creature_ptr);
     display_shoot_magnification(creature_ptr);
     display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", creature_ptr->dis_ac, creature_ptr->dis_to_a), TERM_L_BLUE);

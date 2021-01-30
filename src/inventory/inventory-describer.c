@@ -20,23 +20,25 @@ concptr mention_use(player_type *owner_ptr, int i)
     switch (i) {
 #ifdef JP
     case INVEN_MAIN_HAND:
-        p = owner_ptr->heavy_wield[0] ? "運搬中"
-                                      : ((has_two_handed_weapons(owner_ptr) && has_right_hand_weapon(owner_ptr)) ? " 両手" : (left_hander ? " 左手" : " 右手"));
+        p = owner_ptr->heavy_wield[0]
+            ? "運搬中"
+            : ((has_two_handed_weapons(owner_ptr) && can_attack_with_main_hand(owner_ptr)) ? " 両手" : (left_hander ? " 左手" : " 右手"));
         break;
 #else
     case INVEN_MAIN_HAND:
-        p = owner_ptr->heavy_wield[0] ? "Just lifting" : (has_right_hand_weapon(owner_ptr) ? "Wielding" : "On arm");
+        p = owner_ptr->heavy_wield[0] ? "Just lifting" : (can_attack_with_main_hand(owner_ptr) ? "Wielding" : "On arm");
         break;
 #endif
 
 #ifdef JP
     case INVEN_SUB_HAND:
-        p = owner_ptr->heavy_wield[1] ? "運搬中"
-                                      : ((has_two_handed_weapons(owner_ptr) && has_left_hand_weapon(owner_ptr)) ? " 両手" : (left_hander ? " 右手" : " 左手"));
+        p = owner_ptr->heavy_wield[1]
+            ? "運搬中"
+            : ((has_two_handed_weapons(owner_ptr) && can_attack_with_sub_hand(owner_ptr)) ? " 両手" : (left_hander ? " 右手" : " 左手"));
         break;
 #else
     case INVEN_SUB_HAND:
-        p = owner_ptr->heavy_wield[1] ? "Just lifting" : (has_left_hand_weapon(owner_ptr) ? "Wielding" : "On arm");
+        p = owner_ptr->heavy_wield[1] ? "Just lifting" : (can_attack_with_sub_hand(owner_ptr) ? "Wielding" : "On arm");
         break;
 #endif
 
@@ -94,12 +96,12 @@ concptr describe_use(player_type *owner_ptr, int i)
     case INVEN_MAIN_HAND:
         p = owner_ptr->heavy_wield[0]
             ? "運搬中の"
-            : ((has_two_handed_weapons(owner_ptr) && has_right_hand_weapon(owner_ptr)) ? "両手に装備している"
-                                                                                       : (left_hander ? "左手に装備している" : "右手に装備している"));
+            : ((has_two_handed_weapons(owner_ptr) && can_attack_with_main_hand(owner_ptr)) ? "両手に装備している"
+                                                                                           : (left_hander ? "左手に装備している" : "右手に装備している"));
         break;
 #else
     case INVEN_MAIN_HAND:
-        p = owner_ptr->heavy_wield[0] ? "just lifting" : (has_right_hand_weapon(owner_ptr) ? "attacking monsters with" : "wearing on your arm");
+        p = owner_ptr->heavy_wield[0] ? "just lifting" : (can_attack_with_main_hand(owner_ptr) ? "attacking monsters with" : "wearing on your arm");
         break;
 #endif
 
@@ -107,12 +109,12 @@ concptr describe_use(player_type *owner_ptr, int i)
     case INVEN_SUB_HAND:
         p = owner_ptr->heavy_wield[1]
             ? "運搬中の"
-            : ((has_two_handed_weapons(owner_ptr) && has_left_hand_weapon(owner_ptr)) ? "両手に装備している"
-                                                                                      : (left_hander ? "右手に装備している" : "左手に装備している"));
+            : ((has_two_handed_weapons(owner_ptr) && can_attack_with_sub_hand(owner_ptr)) ? "両手に装備している"
+                                                                                          : (left_hander ? "右手に装備している" : "左手に装備している"));
         break;
 #else
     case INVEN_SUB_HAND:
-        p = owner_ptr->heavy_wield[1] ? "just lifting" : (has_left_hand_weapon(owner_ptr) ? "attacking monsters with" : "wearing on your arm");
+        p = owner_ptr->heavy_wield[1] ? "just lifting" : (can_attack_with_sub_hand(owner_ptr) ? "attacking monsters with" : "wearing on your arm");
         break;
 #endif
 
