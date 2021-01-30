@@ -18,6 +18,7 @@
 #include "floor/floor-object.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-race/monster-race.h"
@@ -36,7 +37,6 @@
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include "game-option/cheat-options.h"
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
 #define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */

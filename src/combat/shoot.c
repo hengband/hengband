@@ -476,7 +476,6 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Sniper - Repeat shooting when double shots */
     for (i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++) {
-
         /* Start at the player */
         y = shooter_ptr->y;
         x = shooter_ptr->x;

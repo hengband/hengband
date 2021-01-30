@@ -11,21 +11,21 @@
 #include "info-reader/general-parser.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
+#include "monster-floor/monster-generator.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "monster-floor/monster-generator.h"
 #include "monster/monster-util.h"
-#include "monster-floor/place-monster-types.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-generator.h"
+#include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/object-info.h"
 #include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/artifact-type-definition.h"
@@ -225,9 +225,8 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     return TRUE;
 }
 
-
 /**
- * @todo 処理がどうなっているのかいずれチェックする 
+ * @todo 処理がどうなっているのかいずれチェックする
  */
 static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
 {
@@ -343,7 +342,7 @@ static bool parse_qtw_P(player_type *player_ptr, qtwg_type *qtwg_ptr, char **zz)
         delete_monster(player_ptr, player_ptr->y, player_ptr->x);
         return TRUE;
     }
-    
+
     if (!player_ptr->oldpx && !player_ptr->oldpy) {
         player_ptr->oldpy = atoi(zz[0]);
         player_ptr->oldpx = atoi(zz[1]);
@@ -427,7 +426,7 @@ parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qt
     /* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
     if (qtwg_ptr->buf[0] == 'F')
         return parse_line_feature(player_ptr->current_floor_ptr, qtwg_ptr->buf);
-    
+
     if (qtwg_ptr->buf[0] == 'D') {
         char *s = qtwg_ptr->buf + 2;
         if (init_flags & INIT_ONLY_BUILDINGS)
@@ -437,20 +436,20 @@ parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qt
         (*qtwg_ptr->y)++;
         return PARSE_ERROR_NONE;
     }
-    
+
     parse_error_type parse_result_Q = parse_qtw_Q(qtwg_ptr, zz);
     if (parse_result_Q != PARSE_CONTINUE)
         return parse_result_Q;
 
     if (qtwg_ptr->buf[0] == 'W')
         return parse_line_wilderness(player_ptr, qtwg_ptr->buf, qtwg_ptr->xmin, qtwg_ptr->xmax, qtwg_ptr->y, qtwg_ptr->x);
-    
+
     if (parse_qtw_P(player_ptr, qtwg_ptr, zz))
         return PARSE_ERROR_NONE;
 
     if (qtwg_ptr->buf[0] == 'B')
         return parse_line_building(qtwg_ptr->buf);
-    
+
     if (parse_qtw_M(qtwg_ptr, zz))
         return PARSE_ERROR_NONE;
 

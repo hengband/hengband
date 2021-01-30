@@ -17,8 +17,8 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
@@ -28,18 +28,15 @@
 #include "view/display-messages.h"
 
 /*! 盲目時の代替メッセージ // TODO: 各種の盲目時メッセージからまとめ上げて統合
-*/
-concptr blind_spell_effect_messages[MAX_GF] =
-{
+ */
+concptr blind_spell_effect_messages[MAX_GF] = {
     "", // GF_NONE = 0,
     "", // GF_ELEC = 1, /*!< 魔法効果: 電撃*/
     "", // GF_POIS = 2, /*!< 魔法効果: 毒*/
     "", // GF_ACID = 3, /*!< 魔法効果: 酸*/
     "", // GF_COLD = 4, /*!< 魔法効果: 冷気*/
     "", // GF_FIRE = 5, /*!< 魔法効果: 火炎*/
-    "",
-    "",
-    "",
+    "", "", "",
     "", // GF_PSY_SPEAR = 9, /*!< 魔法効果: 光の剣*/
     "", // GF_MISSILE = 10, /*!< 魔法効果: 弱魔力*/
     "", // GF_ARROW = 11, /*!< 魔法効果: 射撃*/
@@ -67,16 +64,11 @@ concptr blind_spell_effect_messages[MAX_GF] =
     "", // GF_NEXUS = 33, /*!< 魔法効果: 因果混乱*/
     "", // GF_TIME = 34, /*!< 魔法効果: 時間逆転*/
     "", // GF_GRAVITY = 35, /*!< 魔法効果: 重力*/
-    "",
-    "",
-    "",
-    "",
-    "",
+    "", "", "", "", "",
     "", // GF_KILL_WALL = 40, /*!< 魔法効果: 岩石溶解*/
     "", // GF_KILL_DOOR = 41, /*!< 魔法効果: ドア破壊*/
     "", // GF_KILL_TRAP = 42, /*!< 魔法効果: トラップ破壊*/
-    "",
-    "",
+    "", "",
     "", // GF_MAKE_WALL = 45, /*!< 魔法効果: 壁生成*/
     "", // GF_MAKE_DOOR = 46, /*!< 魔法効果: ドア生成*/
     "", // GF_MAKE_TRAP = 47, /*!< 魔法効果: トラップ生成*/
@@ -90,8 +82,7 @@ concptr blind_spell_effect_messages[MAX_GF] =
     "", // GF_OLD_CONF = 56, /*!< 魔法効果: パニック・モンスター*/
     "", // GF_OLD_SLEEP = 57, /*!< 魔法効果: スリープ・モンスター*/
     "", // GF_HYPODYNAMIA = 58, /*!< 魔法効果: 衰弱*/
-    "",
-    "",
+    "", "",
     "", // GF_AWAY_UNDEAD = 61, /*!< 魔法効果: アンデッド・アウェイ*/
     "", // GF_AWAY_EVIL = 62, /*!< 魔法効果: 邪悪飛ばし*/
     "", // GF_AWAY_ALL = 63, /*!< 魔法効果: テレポート・アウェイ*/

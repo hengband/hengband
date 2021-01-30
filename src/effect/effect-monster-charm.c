@@ -2,6 +2,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-monster-util.h"
 #include "effect/spells-effect-util.h"
+#include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -11,15 +12,14 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
-#include "monster-floor/monster-remover.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "player-info/avatar.h"
 #include "player/player-status-flags.h"
-#include "status/bad-status-setter.h"
 #include "spell/spells-diceroll.h"
+#include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
@@ -305,8 +305,8 @@ static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_mo
         return TRUE;
     }
 
-    if ((em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->m_ptr->mflag2 & MFLAG2_NOPET)
-        || has_aggravate(caster_ptr) || ((em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam))) {
+    if ((em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->m_ptr->mflag2 & MFLAG2_NOPET) || has_aggravate(caster_ptr)
+        || ((em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam))) {
         if (one_in_(4))
             em_ptr->m_ptr->mflag2 |= MFLAG2_NOPET;
 

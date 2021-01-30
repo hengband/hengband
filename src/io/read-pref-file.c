@@ -31,7 +31,7 @@
 #include "world/world.h"
 
 // todo コールバック関数に変更するので、いずれ消す.
-#define PREF_TYPE_NORMAL   0
+#define PREF_TYPE_NORMAL 0
 #define PREF_TYPE_AUTOPICK 1
 #define PREF_TYPE_HISTPREF 2
 
@@ -52,18 +52,18 @@ static int auto_dump_line_num;
  * @param preftype prefファイルのタイプ
  * @return エラーコード
  */
-static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int preftype, void(*process_autopick_file_command)(char*))
+static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int preftype, void (*process_autopick_file_command)(char *))
 {
-	FILE *fp;
-	fp = angband_fopen(name, "r");
-	if (!fp) return -1;
+    FILE *fp;
+    fp = angband_fopen(name, "r");
+    if (!fp)
+        return -1;
 
-	int line = -1;
-	errr err = 0;
-	bool bypass = FALSE;
-	while (angband_fgets(fp, file_read__buf, FILE_READ_BUFF_SIZE) == 0)
-	{
-		line++;
+    int line = -1;
+    errr err = 0;
+    bool bypass = FALSE;
+    while (angband_fgets(fp, file_read__buf, FILE_READ_BUFF_SIZE) == 0) {
+        line++;
         if (!file_read__buf[0])
             continue;
 
@@ -73,72 +73,67 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
             if (iswspace(file_read__buf[0]))
                 continue;
 
-		if (file_read__buf[0] == '#')
+        if (file_read__buf[0] == '#')
             continue;
         strcpy(file_read__swp, file_read__buf);
 
-		/* Process "?:<expr>" */
-        if ((file_read__buf[0] == '?') && (file_read__buf[1] == ':'))
-		{
-			char f;
-			char *s;
+        /* Process "?:<expr>" */
+        if ((file_read__buf[0] == '?') && (file_read__buf[1] == ':')) {
+            char f;
+            char *s;
             s = file_read__buf + 2;
-			concptr v = process_pref_file_expr(creature_ptr, &s, &f);
-			bypass = streq(v, "0");
-			continue;
-		}
+            concptr v = process_pref_file_expr(creature_ptr, &s, &f);
+            bypass = streq(v, "0");
+            continue;
+        }
 
-		if (bypass) continue;
+        if (bypass)
+            continue;
 
-		/* Process "%:<file>" */
-        if (file_read__buf[0] == '%')
-		{
-			static int depth_count = 0;
-			if (depth_count > 20) continue;
+        /* Process "%:<file>" */
+        if (file_read__buf[0] == '%') {
+            static int depth_count = 0;
+            if (depth_count > 20)
+                continue;
 
-			depth_count++;
-			switch (preftype)
-			{
-			case PREF_TYPE_AUTOPICK:
+            depth_count++;
+            switch (preftype) {
+            case PREF_TYPE_AUTOPICK:
                 (void)process_autopick_file(creature_ptr, file_read__buf + 2, process_autopick_file_command);
-				break;
-			case PREF_TYPE_HISTPREF:
+                break;
+            case PREF_TYPE_HISTPREF:
                 (void)process_histpref_file(creature_ptr, file_read__buf + 2, process_autopick_file_command);
-				break;
-			default:
+                break;
+            default:
                 (void)process_pref_file(creature_ptr, file_read__buf + 2, process_autopick_file_command);
-				break;
-			}
+                break;
+            }
 
-			depth_count--;
-			continue;
-		}
+            depth_count--;
+            continue;
+        }
 
-		err = interpret_pref_file(creature_ptr, file_read__buf);
-		if (err != 0)
-		{
-			if (preftype != PREF_TYPE_AUTOPICK)
-				break;
-			
-			(*process_autopick_file_command)(file_read__buf);
-			err = 0;
-		}
-	}
+        err = interpret_pref_file(creature_ptr, file_read__buf);
+        if (err != 0) {
+            if (preftype != PREF_TYPE_AUTOPICK)
+                break;
 
-	if (err != 0)
-	{
-		/* Print error message */
-		/* ToDo: Add better error messages */
-		msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."),
-			_(name, err), line, _(err, name));
-		msg_format(_("('%s'を解析中)", "Parsing '%s'"), file_read__swp);
-		msg_print(NULL);
-	}
+            (*process_autopick_file_command)(file_read__buf);
+            err = 0;
+        }
+    }
 
-	angband_fclose(fp);
-	return (err);
+    if (err != 0) {
+        /* Print error message */
+        /* ToDo: Add better error messages */
+        msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."), _(name, err), line, _(err, name));
+        msg_format(_("('%s'を解析中)", "Parsing '%s'"), file_read__swp);
+        msg_print(NULL);
+    }
+
+    angband_fclose(fp);
+    return (err);
 }
-
 
 /*!
  * @brief pref設定ファイルを読み込み設定を反映させる /
@@ -153,22 +148,22 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
  * allow conditional evaluation and filename inclusion.
  * </pre>
  */
-errr process_pref_file(player_type *creature_ptr, concptr name, void(*process_autopick_file_command)(char*))
+errr process_pref_file(player_type *creature_ptr, concptr name, void (*process_autopick_file_command)(char *))
 {
-	char buf[1024];
-	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
+    char buf[1024];
+    path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
 
-	errr err1 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL, process_autopick_file_command);
-	if (err1 > 0) return err1;
+    errr err1 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL, process_autopick_file_command);
+    if (err1 > 0)
+        return err1;
 
-	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
-	errr err2 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL, process_autopick_file_command);
-	if (err2 < 0 && !err1)
-		return -2;
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
+    errr err2 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL, process_autopick_file_command);
+    if (err2 < 0 && !err1)
+        return -2;
 
-	return err2;
+    return err2;
 }
-
 
 /*!
  * @brief 自動拾いファイルを読み込む /
@@ -176,14 +171,13 @@ errr process_pref_file(player_type *creature_ptr, concptr name, void(*process_au
  * @param name ファイル名
  * @details
  */
-errr process_autopick_file(player_type *creature_ptr, concptr name, void(*process_autopick_file_command)(char*))
+errr process_autopick_file(player_type *creature_ptr, concptr name, void (*process_autopick_file_command)(char *))
 {
-	char buf[1024];
-	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
-	errr err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_AUTOPICK, process_autopick_file_command);
-	return err;
+    char buf[1024];
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
+    errr err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_AUTOPICK, process_autopick_file_command);
+    return err;
 }
-
 
 /*!
  * @brief プレイヤーの生い立ちファイルを読み込む /
@@ -193,19 +187,18 @@ errr process_autopick_file(player_type *creature_ptr, concptr name, void(*proces
  * @return エラーコード
  * @details
  */
-errr process_histpref_file(player_type *creature_ptr, concptr name, void(*process_autopick_file_command)(char*))
+errr process_histpref_file(player_type *creature_ptr, concptr name, void (*process_autopick_file_command)(char *))
 {
-	bool old_character_xtra = current_world_ptr->character_xtra;
-	char buf[1024];
-	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
+    bool old_character_xtra = current_world_ptr->character_xtra;
+    char buf[1024];
+    path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
-	/* Hack -- prevent modification birth options in this file */
-	current_world_ptr->character_xtra = TRUE;
-	errr err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_HISTPREF, process_autopick_file_command);
-	current_world_ptr->character_xtra = old_character_xtra;
-	return err;
+    /* Hack -- prevent modification birth options in this file */
+    current_world_ptr->character_xtra = TRUE;
+    errr err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_HISTPREF, process_autopick_file_command);
+    current_world_ptr->character_xtra = old_character_xtra;
+    return err;
 }
-
 
 /*!
  * @brief prfファイルのフォーマットに従った内容を出力する /
@@ -214,19 +207,18 @@ errr process_histpref_file(player_type *creature_ptr, concptr name, void(*proces
  */
 void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
 {
-	va_list vp;
-	char buf[1024];
-	va_start(vp, fmt);
-	(void)vstrnfmt(buf, sizeof(buf), fmt, vp);
-	va_end(vp);
-	for (concptr p = buf; *p; p++)
-	{
-		if (*p == '\n') auto_dump_line_num++;
-	}
+    va_list vp;
+    char buf[1024];
+    va_start(vp, fmt);
+    (void)vstrnfmt(buf, sizeof(buf), fmt, vp);
+    va_end(vp);
+    for (concptr p = buf; *p; p++) {
+        if (*p == '\n')
+            auto_dump_line_num++;
+    }
 
-	fprintf(auto_dump_stream, "%s", buf);
+    fprintf(auto_dump_stream, "%s", buf);
 }
-
 
 /*!
  * @brief prfファイルをファイルオープンする /
@@ -237,25 +229,23 @@ void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
  */
 bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
 {
-	char header_mark_str[80];
-	concptr auto_dump_mark = mark;
-	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
-	remove_auto_dump(buf, mark);
-	*fpp = angband_fopen(buf, "a");
-	if (!fpp)
-	{
-		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
-		msg_print(NULL);
-		return FALSE;
-	}
+    char header_mark_str[80];
+    concptr auto_dump_mark = mark;
+    sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
+    remove_auto_dump(buf, mark);
+    *fpp = angband_fopen(buf, "a");
+    if (!fpp) {
+        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
+        msg_print(NULL);
+        return FALSE;
+    }
 
-	fprintf(*fpp, "%s\n", header_mark_str);
-	auto_dump_line_num = 0;
-	auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n",
-		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(*fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
-		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
-	return TRUE;
+    fprintf(*fpp, "%s\n", header_mark_str);
+    auto_dump_line_num = 0;
+    auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
+    auto_dump_printf(
+        *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
+    return TRUE;
 }
 
 /*!
@@ -265,14 +255,13 @@ bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
  */
 void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
 {
-	char footer_mark_str[80];
-	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
-	auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n",
-		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(*fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
-		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
-	fprintf(*fpp, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
-	angband_fclose(*fpp);
+    char footer_mark_str[80];
+    sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
+    auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
+    auto_dump_printf(
+        *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
+    fprintf(*fpp, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
+    angband_fclose(*fpp);
 }
 
 /*!
@@ -283,7 +272,7 @@ void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.
  */
-void load_all_pref_files(player_type* player_ptr)
+void load_all_pref_files(player_type *player_ptr)
 {
     char buf[1024];
     sprintf(buf, "user.prf");

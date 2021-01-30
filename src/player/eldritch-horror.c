@@ -5,14 +5,13 @@
  */
 
 #include "player/eldritch-horror.h"
-#include "player/player-status-flags.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/horror-descriptions.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
@@ -20,9 +19,10 @@
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/mutation-flag-types.h"
-#include "status/bad-status-setter.h"
-#include "player/player-status.h"
 #include "player/mimic-info-table.h"
+#include "player/player-status-flags.h"
+#include "player/player-status.h"
+#include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
@@ -131,12 +131,13 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         }
 
         see_eldritch_horror(m_name, r_ptr);
-        if (is_specific_player_race(creature_ptr, RACE_IMP) || is_specific_player_race(creature_ptr, RACE_BALROG) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)
-            || current_world_ptr->wizard)
+        if (is_specific_player_race(creature_ptr, RACE_IMP) || is_specific_player_race(creature_ptr, RACE_BALROG)
+            || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON) || current_world_ptr->wizard)
             return;
 
-        if (is_specific_player_race(creature_ptr, RACE_SKELETON) || is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_VAMPIRE)
-            || is_specific_player_race(creature_ptr, RACE_SPECTRE) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)) {
+        if (is_specific_player_race(creature_ptr, RACE_SKELETON) || is_specific_player_race(creature_ptr, RACE_ZOMBIE)
+            || is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_SPECTRE)
+            || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)) {
             if (saving_throw(25 + creature_ptr->lev))
                 return;
         }

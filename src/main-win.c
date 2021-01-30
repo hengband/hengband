@@ -103,10 +103,10 @@
 #include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
-#include "io/record-play-movie.h"
 #include "io/files-util.h"
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"
+#include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
 #include "main/angband-initializer.h"
@@ -2073,8 +2073,8 @@ static void init_windows(void)
         td = &data[i];
 
         my_td = td;
-        td->w = CreateWindowEx(
-            td->dwExStyle, AngList, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
+        td->w
+            = CreateWindowEx(td->dwExStyle, AngList, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
         my_td = NULL;
 
         if (!td->w)

@@ -60,7 +60,6 @@ void init_file_paths(char *libpath, char *varpath)
     string_free(ANGBAND_DIR_USER);
     string_free(ANGBAND_DIR_XTRA);
 
-
     ANGBAND_DIR = string_make(libpath);
     libtail = libpath + strlen(libpath);
     vartail = varpath + strlen(varpath);

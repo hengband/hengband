@@ -8,12 +8,12 @@
  */
 
 #include "term/z-term.h"
+#include "game-option/map-screen-options.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
+#include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "term/z-virt.h"
-#include "term/gameterm.h"
-#include "game-option/map-screen-options.h"
 
 /* Special flags in the attr data */
 #define AF_BIGTILE2 0xf0
@@ -276,7 +276,6 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta
  */
 void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
 {
-
 #ifdef JP
     /*
      * A table which relates each ascii character to a multibyte
@@ -513,7 +512,6 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
      * (条件追加：タイルの1文字目でない事を確かめるように。)
      */
     {
-
         int w, h;
         term_get_size(&w, &h);
         if (x != w && !(scr_aa[x] & AF_TILE1) && (scr_aa[x] & AF_KANJI2)) {
@@ -1023,9 +1021,10 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
     }
 }
 
-bool macro_running(void) { 
+bool macro_running(void)
+{
     int diff = angband_term[0]->key_head - angband_term[0]->key_tail;
-    return diff < -1 || 1 < diff; 
+    return diff < -1 || 1 < diff;
 }
 
 bool need_term_fresh(void) { return !macro_running() || fresh_after; }

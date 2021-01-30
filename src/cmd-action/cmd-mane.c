@@ -35,8 +35,8 @@
 #include "monster/monster-status.h"
 #include "mspell/monster-power-table.h"
 #include "mspell/mspell-type.h"
-#include "player/player-status.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
@@ -304,7 +304,6 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
     /* spell code */
     switch (spell) {
-
     case MS_SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
         aggravate_monsters(caster_ptr, 0);

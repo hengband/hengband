@@ -20,8 +20,8 @@
 #define FAKE_VER_EXTRA 3 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 /*!
-  * @brief バージョンが開発版が安定版かを返す
-  */
+ * @brief バージョンが開発版が安定版かを返す
+ */
 #define IS_STABLE_VERSION (FAKE_VER_MINOR % 2 == 0 && FAKE_VER_EXTRA == 0)
 
 /*!
@@ -31,19 +31,19 @@
 #define IS_ALPHA_VERSION 1
 
 /*!
-   * @brief セーブファイル上のバージョン定義(メジャー番号) / "Savefile Version Number" for Hengband 1.1.1 and later
-   * @details
-   * 当面FAKE_VER_*を参照しておく。
-   * <pre>
-   * First three digits may be same as the Program Version.  But not
-   * always same.  It means that newer version may preserves lower
-   * compatibility with the older version.
-   * For example, newer Hengband 1.4.4 creates savefiles marked with
-   * Savefile Version 1.4.0.0 .  It means that Hengband 1.4.0 can load a
-   * savefile of Hengband 1.4.4 (lower compatibility!).
-   * Upper compatibility is always guaranteed.
-   * </pre>
-   */
+ * @brief セーブファイル上のバージョン定義(メジャー番号) / "Savefile Version Number" for Hengband 1.1.1 and later
+ * @details
+ * 当面FAKE_VER_*を参照しておく。
+ * <pre>
+ * First three digits may be same as the Program Version.  But not
+ * always same.  It means that newer version may preserves lower
+ * compatibility with the older version.
+ * For example, newer Hengband 1.4.4 creates savefiles marked with
+ * Savefile Version 1.4.0.0 .  It means that Hengband 1.4.0 can load a
+ * savefile of Hengband 1.4.4 (lower compatibility!).
+ * Upper compatibility is always guaranteed.
+ * </pre>
+ */
 #define H_VER_MAJOR (FAKE_VER_MAJOR - 10) /*!< セーブファイル上のバージョン定義(メジャー番号) */
 #define H_VER_MINOR FAKE_VER_MINOR /*!< セーブファイル上のバージョン定義(マイナー番号) */
 #define H_VER_PATCH FAKE_VER_PATCH /*!< セーブファイル上のバージョン定義(パッチ番号) */

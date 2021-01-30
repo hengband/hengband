@@ -15,6 +15,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "perception/object-perception.h"
+#include "player/player-status-table.h"
 #include "specific-object/chest.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
@@ -23,7 +24,6 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "player/player-status-table.h"
 
 /*!
  * @brief 「開ける」動作コマンドのサブルーチン /

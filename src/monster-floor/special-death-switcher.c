@@ -5,8 +5,8 @@
  */
 
 #include "monster-floor/special-death-switcher.h"
-#include "artifact/fixed-art-types.h"
 #include "artifact/fixed-art-generator.h"
+#include "artifact/fixed-art-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"

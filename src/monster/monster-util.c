@@ -3,6 +3,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/wild.h"
+#include "game-option/cheat-options.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
@@ -17,7 +18,6 @@
 #include "system/alloc-entries.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
-#include "game-option/cheat-options.h"
 #include "view/display-messages.h"
 
 typedef enum dungeon_mode_type {
@@ -356,7 +356,6 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
         if (lev_max < entry->level)
             lev_max = entry->level;
 
-
         entry->prob2 = entry->prob1;
         if (floor_ptr->dun_level && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest))
             && !restrict_monster_to_dungeon(player_ptr, entry->index) && !player_ptr->phase_out) {
@@ -368,8 +367,7 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
                 entry->prob2 = 1;
         }
 
-        total += entry->prob2; 
-
+        total += entry->prob2;
     }
     if (cheat_hear) {
         msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)&d "), mon_num, lev_min, lev_max, total);

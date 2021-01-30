@@ -255,7 +255,8 @@ void message_add(concptr str)
     }
 }
 
-bool is_msg_window_flowed(void) { 
+bool is_msg_window_flowed(void)
+{
     int i;
     for (i = 0; i < 8; i++) {
         if (angband_term[i] && (window_flag[i] & PW_MESSAGE))
@@ -265,7 +266,7 @@ bool is_msg_window_flowed(void) {
         if (num_more < angband_term[i]->hgt)
             return FALSE;
     }
-    return TRUE; 
+    return TRUE;
 }
 
 /*

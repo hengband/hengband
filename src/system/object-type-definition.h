@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "object/tval-types.h"
+#include "system/angband.h"
 
 #define TR_FLAG_SIZE 5
 

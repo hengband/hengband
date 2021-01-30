@@ -337,18 +337,22 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
 
                 path_n = i;
                 second_step = i + 1;
+                path_n += projection_path(
+                    caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x - 1, flag);
                 path_n
-                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x - 1, flag);
-                path_n += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x, flag);
+                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x, flag);
+                path_n += projection_path(
+                    caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x + 1, flag);
                 path_n
-                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y - 1, x + 1, flag);
-                path_n += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x - 1, flag);
-                path_n += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x + 1, flag);
+                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x - 1, flag);
                 path_n
-                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x - 1, flag);
-                path_n += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x, flag);
+                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y, x + 1, flag);
+                path_n += projection_path(
+                    caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x - 1, flag);
                 path_n
-                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x + 1, flag);
+                    += projection_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x, flag);
+                path_n += projection_path(
+                    caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : get_max_range(caster_ptr)), y, x, y + 1, x + 1, flag);
             }
         }
 

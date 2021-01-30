@@ -364,7 +364,6 @@ void process_player(player_type *creature_ptr)
             }
 
             if (creature_ptr->timewalk && (creature_ptr->energy_need > -1000)) {
-
                 creature_ptr->redraw |= (PR_MAP);
                 creature_ptr->update |= (PU_MONSTERS);
                 creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

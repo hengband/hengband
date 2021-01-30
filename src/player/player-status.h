@@ -58,7 +58,6 @@ typedef enum player_hand {
     PLAYER_HAND_OTHER = 0x0002 /*!<default hand is NOT RIGHT or LEFT */
 } player_hand;
 
-
 /*
  * Player sex constants (hard-coded by save-files, arrays, etc)
  */
@@ -469,7 +468,6 @@ typedef struct player_type {
     POSITION x; /*!< ダンジョンの現在X座標 / Player location in dungeon */
     GAME_TEXT name[32]; /*!< 現在のプレイヤー名 / Current player's character name */
     char base_name[32]; /*!< Stripped version of "player_name" */
-
 } player_type;
 
 extern player_type *p_ptr;

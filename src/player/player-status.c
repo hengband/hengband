@@ -1867,7 +1867,6 @@ static s16b calc_strength_addition(player_type *creature_ptr)
     }
 
     if (creature_ptr->muta3) {
-
         if (creature_ptr->muta3 & MUT3_HYPER_STR) {
             pow += 4;
         }
@@ -1995,7 +1994,6 @@ static s16b calc_wisdom_addition(player_type *creature_ptr)
     }
 
     if (creature_ptr->muta3) {
-
         if (creature_ptr->muta3 & MUT3_HYPER_INT) {
             pow += 4;
         }
@@ -2592,7 +2590,6 @@ static s16b calc_speed(player_type *creature_ptr)
             pow += 10;
 
         if (creature_ptr->muta3) {
-
             if (creature_ptr->muta3 & MUT3_XTRA_FAT) {
                 pow -= 2;
             }
@@ -2623,7 +2620,6 @@ static s16b calc_speed(player_type *creature_ptr)
         count = (int)calc_weight_limit(creature_ptr);
         if (j > count)
             pow -= ((j - count) / (count / 5));
-
     } else {
         monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
@@ -2909,14 +2905,12 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(creature_ptr, o_ptr, flgs);
-    
+
     player_hand calc_hand = PLAYER_HAND_OTHER;
     if (slot == INVEN_RARM)
         calc_hand = PLAYER_HAND_RIGHT;
     if (slot == INVEN_LARM)
         calc_hand = PLAYER_HAND_LEFT;
-
-
 
     s16b damage = 0;
     damage += ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
@@ -2977,47 +2971,46 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         }
 
         switch (player_melee_type(creature_ptr)) {
-            case MELEE_TYPE_BAREHAND_TWO: /* fall through */
-            case MELEE_TYPE_WEAPON_TWOHAND: 
-                if (calc_hand == get_default_hand(creature_ptr))
-                    damage += (s16b)bonus_to_d;
-                break;
+        case MELEE_TYPE_BAREHAND_TWO: /* fall through */
+        case MELEE_TYPE_WEAPON_TWOHAND:
+            if (calc_hand == get_default_hand(creature_ptr))
+                damage += (s16b)bonus_to_d;
+            break;
 
-            case MELEE_TYPE_BAREHAND_RIGHT: /* fall through */
-            case MELEE_TYPE_WEAPON_RIGHT:
-                if ((calc_hand == PLAYER_HAND_RIGHT) && (i != INVEN_LEFT))
-                    damage += (s16b)bonus_to_d;
-                break;
+        case MELEE_TYPE_BAREHAND_RIGHT: /* fall through */
+        case MELEE_TYPE_WEAPON_RIGHT:
+            if ((calc_hand == PLAYER_HAND_RIGHT) && (i != INVEN_LEFT))
+                damage += (s16b)bonus_to_d;
+            break;
 
-            case MELEE_TYPE_BAREHAND_LEFT: /* fall through */
-            case MELEE_TYPE_WEAPON_LEFT:
-                if ((calc_hand == PLAYER_HAND_LEFT) && (i != INVEN_RIGHT))
-                    damage += (s16b)bonus_to_d;
-                break;
+        case MELEE_TYPE_BAREHAND_LEFT: /* fall through */
+        case MELEE_TYPE_WEAPON_LEFT:
+            if ((calc_hand == PLAYER_HAND_LEFT) && (i != INVEN_RIGHT))
+                damage += (s16b)bonus_to_d;
+            break;
 
-            case MELEE_TYPE_WEAPON_DOUBLE:
-                if ((calc_hand == PLAYER_HAND_RIGHT)) {
-                    if (i == INVEN_RIGHT) {
-                        damage += (s16b)bonus_to_d;
-                    } 
-                    else if (i != INVEN_LEFT) {
-                        damage += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
-                    }
+        case MELEE_TYPE_WEAPON_DOUBLE:
+            if ((calc_hand == PLAYER_HAND_RIGHT)) {
+                if (i == INVEN_RIGHT) {
+                    damage += (s16b)bonus_to_d;
+                } else if (i != INVEN_LEFT) {
+                    damage += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
                 }
-                if ((calc_hand == PLAYER_HAND_LEFT)) {
-                    if (i == INVEN_LEFT) {
-                        damage += (s16b)bonus_to_d;
-                    } else if (i != INVEN_RIGHT) {
-                        damage += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
-                    }
+            }
+            if ((calc_hand == PLAYER_HAND_LEFT)) {
+                if (i == INVEN_LEFT) {
+                    damage += (s16b)bonus_to_d;
+                } else if (i != INVEN_RIGHT) {
+                    damage += (bonus_to_d > 0) ? bonus_to_d / 2 : bonus_to_d;
                 }
-                break;
+            }
+            break;
 
-            case MELEE_TYPE_SHIELD_DOUBLE:
-                break;
+        case MELEE_TYPE_SHIELD_DOUBLE:
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -3126,7 +3119,6 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
 
         if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
             && !has_flag(flgs, TR_RIDING)) {
-
             int penalty;
             if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
                 penalty = 5;
@@ -3181,11 +3173,8 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         object_type *o_ptr = &creature_ptr->inventory_list[i];
 
         /* Ignore empty hands, handed weapons, bows and capture balls */
-        if (!o_ptr->k_idx
-            || o_ptr->tval == TV_CAPTURE
-            || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
-            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i))
-            || i == INVEN_BOW)
+        if (!o_ptr->k_idx || o_ptr->tval == TV_CAPTURE || (i == INVEN_RARM && has_melee_weapon(creature_ptr, i))
+            || (i == INVEN_LARM && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
             continue;
 
         /* Fake value does not include unknown objects' value */
@@ -3201,46 +3190,46 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         }
 
         switch (player_melee_type(creature_ptr)) {
-            case MELEE_TYPE_BAREHAND_TWO: /* fall through */
-            case MELEE_TYPE_WEAPON_TWOHAND:
-                if (calc_hand == get_default_hand(creature_ptr))
-                    hit += (s16b)bonus_to_h;
-                break;
+        case MELEE_TYPE_BAREHAND_TWO: /* fall through */
+        case MELEE_TYPE_WEAPON_TWOHAND:
+            if (calc_hand == get_default_hand(creature_ptr))
+                hit += (s16b)bonus_to_h;
+            break;
 
-            case MELEE_TYPE_BAREHAND_RIGHT: /* fall through */
-            case MELEE_TYPE_WEAPON_RIGHT:
-                if ((calc_hand == PLAYER_HAND_RIGHT) && (i != INVEN_LEFT))
-                    hit += (s16b)bonus_to_h;
-                break;
+        case MELEE_TYPE_BAREHAND_RIGHT: /* fall through */
+        case MELEE_TYPE_WEAPON_RIGHT:
+            if ((calc_hand == PLAYER_HAND_RIGHT) && (i != INVEN_LEFT))
+                hit += (s16b)bonus_to_h;
+            break;
 
-            case MELEE_TYPE_BAREHAND_LEFT: /* fall through */
-            case MELEE_TYPE_WEAPON_LEFT:
-                if ((calc_hand == PLAYER_HAND_LEFT) && (i != INVEN_RIGHT))
-                    hit += (s16b)bonus_to_h;
-                break;
+        case MELEE_TYPE_BAREHAND_LEFT: /* fall through */
+        case MELEE_TYPE_WEAPON_LEFT:
+            if ((calc_hand == PLAYER_HAND_LEFT) && (i != INVEN_RIGHT))
+                hit += (s16b)bonus_to_h;
+            break;
 
-            case MELEE_TYPE_WEAPON_DOUBLE:
-                if ((calc_hand == PLAYER_HAND_RIGHT)) {
-                    if (i == INVEN_RIGHT) {
-                        hit += (s16b)bonus_to_h;
-                    } else if (i != INVEN_LEFT) {
-                        hit += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
-                    }
+        case MELEE_TYPE_WEAPON_DOUBLE:
+            if ((calc_hand == PLAYER_HAND_RIGHT)) {
+                if (i == INVEN_RIGHT) {
+                    hit += (s16b)bonus_to_h;
+                } else if (i != INVEN_LEFT) {
+                    hit += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
                 }
-                if ((calc_hand == PLAYER_HAND_LEFT)) {
-                    if (i == INVEN_LEFT) {
-                        hit += (s16b)bonus_to_h;
-                    } else if (i != INVEN_RIGHT) {
-                        hit += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
-                    }
+            }
+            if ((calc_hand == PLAYER_HAND_LEFT)) {
+                if (i == INVEN_LEFT) {
+                    hit += (s16b)bonus_to_h;
+                } else if (i != INVEN_RIGHT) {
+                    hit += (bonus_to_h > 0) ? bonus_to_h / 2 : bonus_to_h;
                 }
-                break;
+            }
+            break;
 
-            case MELEE_TYPE_SHIELD_DOUBLE:
-                break;
+        case MELEE_TYPE_SHIELD_DOUBLE:
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -3431,7 +3420,6 @@ static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_
     DICE_NUMBER dn = 0;
 
     if (creature_ptr->riding) {
-
         if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
             dn += 2;
         }
@@ -4113,14 +4101,22 @@ int calc_weapon_weight_limit(player_type *creature_ptr)
 static player_hand get_default_hand(player_type *creature_ptr)
 {
     switch (player_melee_type(creature_ptr)) {
-        case MELEE_TYPE_BAREHAND_TWO: return PLAYER_HAND_RIGHT;
-        case MELEE_TYPE_BAREHAND_RIGHT: return PLAYER_HAND_RIGHT;
-        case MELEE_TYPE_BAREHAND_LEFT: return PLAYER_HAND_LEFT;
-        case MELEE_TYPE_WEAPON_RIGHT: return PLAYER_HAND_RIGHT;
-        case MELEE_TYPE_WEAPON_LEFT: return PLAYER_HAND_LEFT;
-        case MELEE_TYPE_WEAPON_TWOHAND: return PLAYER_HAND_RIGHT;
-        case MELEE_TYPE_WEAPON_DOUBLE: return PLAYER_HAND_RIGHT;
-        case MELEE_TYPE_SHIELD_DOUBLE: return PLAYER_HAND_RIGHT;
+    case MELEE_TYPE_BAREHAND_TWO:
+        return PLAYER_HAND_RIGHT;
+    case MELEE_TYPE_BAREHAND_RIGHT:
+        return PLAYER_HAND_RIGHT;
+    case MELEE_TYPE_BAREHAND_LEFT:
+        return PLAYER_HAND_LEFT;
+    case MELEE_TYPE_WEAPON_RIGHT:
+        return PLAYER_HAND_RIGHT;
+    case MELEE_TYPE_WEAPON_LEFT:
+        return PLAYER_HAND_LEFT;
+    case MELEE_TYPE_WEAPON_TWOHAND:
+        return PLAYER_HAND_RIGHT;
+    case MELEE_TYPE_WEAPON_DOUBLE:
+        return PLAYER_HAND_RIGHT;
+    case MELEE_TYPE_SHIELD_DOUBLE:
+        return PLAYER_HAND_RIGHT;
     }
     return 0;
 }
