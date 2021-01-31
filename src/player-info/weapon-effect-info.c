@@ -90,7 +90,7 @@ static void set_slay_info(self_info_type *self_ptr)
 
 void set_weapon_effect_info(player_type *creature_ptr, self_info_type *self_ptr)
 {
-    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
+    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND];
     if (o_ptr->k_idx == 0)
         return;
 

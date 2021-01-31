@@ -25,10 +25,10 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
     int t = 0;
     switch (randint1(8)) {
     case 1:
-        t = INVEN_RARM;
+        t = INVEN_MAIN_HAND;
         break;
     case 2:
-        t = INVEN_LARM;
+        t = INVEN_SUB_HAND;
         break;
     case 3:
         t = INVEN_BOW;
@@ -43,7 +43,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
         t = INVEN_HEAD;
         break;
     case 7:
-        t = INVEN_HANDS;
+        t = INVEN_ARMS;
         break;
     case 8:
         t = INVEN_FEET;

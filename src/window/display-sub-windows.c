@@ -206,7 +206,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
     TERM_COLOR attr = TERM_WHITE;
     char tmp_val[80];
     GAME_TEXT o_name[MAX_NLEN];
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         o_ptr = &owner_ptr->inventory_list[i];
         tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
@@ -215,8 +215,9 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
             tmp_val[1] = ')';
         }
 
-        term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
-        if ((((i == INVEN_RARM) && has_left_hand_weapon(owner_ptr)) || ((i == INVEN_LARM) && has_right_hand_weapon(owner_ptr))) && has_two_handed_weapons(owner_ptr)) {
+        term_putstr(0, i - INVEN_MAIN_HAND, 3, TERM_WHITE, tmp_val);
+        if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(owner_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(owner_ptr)))
+            && has_two_handed_weapons(owner_ptr)) {
             strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
             attr = TERM_WHITE;
         } else {
@@ -228,21 +229,21 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
         if (o_ptr->timeout)
             attr = TERM_L_DARK;
 
-        term_putstr(3, i - INVEN_RARM, n, attr, o_name);
-        term_erase(3 + n, i - INVEN_RARM, 255);
+        term_putstr(3, i - INVEN_MAIN_HAND, n, attr, o_name);
+        term_erase(3 + n, i - INVEN_MAIN_HAND, 255);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
             sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
-            prt(tmp_val, i - INVEN_RARM, wid - (show_labels ? 28 : 9));
+            prt(tmp_val, i - INVEN_MAIN_HAND, wid - (show_labels ? 28 : 9));
         }
 
         if (show_labels) {
-            term_putstr(wid - 20, i - INVEN_RARM, -1, TERM_WHITE, " <-- ");
-            prt(mention_use(owner_ptr, i), i - INVEN_RARM, wid - 15);
+            term_putstr(wid - 20, i - INVEN_MAIN_HAND, -1, TERM_WHITE, " <-- ");
+            prt(mention_use(owner_ptr, i), i - INVEN_MAIN_HAND, wid - 15);
         }
     }
 
-    for (int i = INVEN_TOTAL - INVEN_RARM; i < hgt; i++)
+    for (int i = INVEN_TOTAL - INVEN_MAIN_HAND; i < hgt; i++)
         term_erase(0, i, 255);
 }
 

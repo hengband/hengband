@@ -55,7 +55,7 @@ void recharge_magic_items(player_type *creature_ptr)
     int i;
     bool changed;
 
-    for (changed = FALSE, i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (changed = FALSE, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;

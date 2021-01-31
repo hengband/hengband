@@ -205,7 +205,7 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
  */
 static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS *flags, int row, int *col)
 {
-	for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[i];

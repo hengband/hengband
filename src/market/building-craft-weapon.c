@@ -350,7 +350,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 
     screen_save();
     clear_bldg(0, 22);
-    i_ptr = &customer_ptr->inventory_list[INVEN_RARM];
+    i_ptr = &customer_ptr->inventory_list[INVEN_MAIN_HAND];
     object_copy(&orig_weapon, i_ptr);
 
     item_tester_hook = item_tester_hook_orthodox_melee_weapons;

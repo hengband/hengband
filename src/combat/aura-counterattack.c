@@ -170,7 +170,7 @@ static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *m
         return;
 
     HIT_POINT dam = 1;
-    object_type *o_armed_ptr = &target_ptr->inventory_list[INVEN_RARM];
+    object_type *o_armed_ptr = &target_ptr->inventory_list[INVEN_MAIN_HAND];
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (((r_ptr->flagsr & RFR_RES_ALL) != 0) || ((r_ptr->flagsr & RFR_RES_DARK) != 0)) {
         if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
@@ -197,7 +197,7 @@ static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *m
     }
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    EFFECT_ID typ[4][2] = { { INVEN_HEAD, GF_OLD_CONF }, { INVEN_LARM, GF_OLD_SLEEP }, { INVEN_HANDS, GF_TURN_ALL }, { INVEN_FEET, GF_OLD_SLOW } };
+    EFFECT_ID typ[4][2] = { { INVEN_HEAD, GF_OLD_CONF }, { INVEN_SUB_HAND, GF_OLD_SLEEP }, { INVEN_ARMS, GF_TURN_ALL }, { INVEN_FEET, GF_OLD_SLOW } };
 
     /* Some cursed armours gives an extra effect */
     for (int j = 0; j < 4; j++) {

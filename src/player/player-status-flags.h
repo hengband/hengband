@@ -1,17 +1,17 @@
 ﻿#include "player/player-status.h"
 
 enum flag_cause {
-    FLAG_CAUSE_INVEN_RARM = 0, /*!< アイテムスロット…右手 */
-    FLAG_CAUSE_INVEN_LARM = 1, /*!< アイテムスロット…左手 */
+    FLAG_CAUSE_INVEN_MAIN_HAND = 0, /*!< アイテムスロット…利手 */
+    FLAG_CAUSE_INVEN_SUB_HAND = 1, /*!< アイテムスロット…逆手 */
     FLAG_CAUSE_INVEN_BOW = 2, /*!< アイテムスロット…射撃 */
-    FLAG_CAUSE_INVEN_RIGHT = 3, /*!< アイテムスロット…右手指 */
-    FLAG_CAUSE_INVEN_LEFT = 4, /*!< アイテムスロット…左手指 */
+    FLAG_CAUSE_INVEN_MAIN_RING = 3, /*!< アイテムスロット…利手指 */
+    FLAG_CAUSE_INVEN_SUB_RING = 4, /*!< アイテムスロット…逆手指 */
     FLAG_CAUSE_INVEN_NECK = 5, /*!< アイテムスロット…首 */
     FLAG_CAUSE_INVEN_LITE = 6, /*!< アイテムスロット…光源 */
     FLAG_CAUSE_INVEN_BODY = 7, /*!< アイテムスロット…体 */
     FLAG_CAUSE_INVEN_OUTER = 8, /*!< アイテムスロット…体の上 */
     FLAG_CAUSE_INVEN_HEAD = 9, /*!< アイテムスロット…頭部 */
-    FLAG_CAUSE_INVEN_HANDS = 10, /*!< アイテムスロット…腕部 */
+    FLAG_CAUSE_INVEN_ARMS = 10, /*!< アイテムスロット…腕部 */
     FLAG_CAUSE_INVEN_FEET = 11, /*!< アイテムスロット…脚部 */
     FLAG_CAUSE_RACE = 12, /*!< 種族上の体得 */
     FLAG_CAUSE_CLASS = 13, /*!< 職業上の体得 */
@@ -24,10 +24,10 @@ enum flag_cause {
 
 typedef enum melee_type {
     MELEE_TYPE_BAREHAND_TWO = 0,
-    MELEE_TYPE_BAREHAND_RIGHT = 1,
-    MELEE_TYPE_BAREHAND_LEFT = 2,
-    MELEE_TYPE_WEAPON_RIGHT = 3,
-    MELEE_TYPE_WEAPON_LEFT = 4,
+    MELEE_TYPE_BAREHAND_MAIN = 1,
+    MELEE_TYPE_BAREHAND_SUB = 2,
+    MELEE_TYPE_WEAPON_MAIN = 3,
+    MELEE_TYPE_WEAPON_SUB = 4,
     MELEE_TYPE_WEAPON_TWOHAND = 5,
     MELEE_TYPE_WEAPON_DOUBLE = 6,
     MELEE_TYPE_SHIELD_DOUBLE = 7
@@ -119,8 +119,8 @@ BIT_FLAGS has_immune_elec(player_type *creature_ptr);
 BIT_FLAGS has_immune_fire(player_type *creature_ptr);
 BIT_FLAGS has_immune_cold(player_type *creature_ptr);
 BIT_FLAGS has_immune_dark(player_type *creature_ptr);
-bool has_right_hand_weapon(player_type *creature_ptr);
-bool has_left_hand_weapon(player_type *creature_ptr);
+bool can_attack_with_main_hand(player_type *creature_ptr);
+bool can_attack_with_sub_hand(player_type *creature_ptr);
 bool has_two_handed_weapons(player_type *creature_ptr);
 BIT_FLAGS has_lite(player_type *creature_ptr);
 bool has_disable_two_handed_bonus(player_type *creature_ptr, int i);

@@ -81,12 +81,12 @@ static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_p
         return FALSE;
 
     bool flag = FALSE;
-    item_use_flag use_flag = (*fis_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN;
+    item_use_flag use_flag = (*fis_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
 
     flag |= !get_tag(owner_ptr, &fis_ptr->k, *prev_tag, use_flag, fis_ptr->tval);
     flag |= !get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval);
 
-    if (fis_ptr->k < INVEN_RARM)
+    if (fis_ptr->k < INVEN_MAIN_HAND)
         flag |= !fis_ptr->inven;
     else
         flag |= !fis_ptr->equip;
@@ -113,7 +113,7 @@ static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_p
 static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
 {
     if ((!fis_ptr->inven || (*fis_ptr->cp < 0) || (*fis_ptr->cp >= INVEN_PACK))
-        && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_RARM) || (*fis_ptr->cp >= INVEN_TOTAL)))
+        && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_MAIN_HAND) || (*fis_ptr->cp >= INVEN_TOTAL)))
         return FALSE;
 
     if (get_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag))
@@ -191,7 +191,7 @@ static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
     if (!use_menu)
         return;
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++)
+    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
         if (owner_ptr->select_ring_slot ? is_ring_slot(i)
                                         : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], fis_ptr->tval) || (fis_ptr->mode & USE_FULL))
             fis_ptr->max_equip++;
@@ -227,7 +227,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i2, fis_ptr->tval)))
         fis_ptr->i2--;
 
-    fis_ptr->e1 = INVEN_RARM;
+    fis_ptr->e1 = INVEN_MAIN_HAND;
     fis_ptr->e2 = INVEN_TOTAL - 1;
     test_equipment_floor(owner_ptr, fis_ptr);
     if (has_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
@@ -240,11 +240,11 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         fis_ptr->e2--;
 
     if (fis_ptr->equip && has_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        if (has_right_hand_weapon(owner_ptr)) {
-            if (fis_ptr->e2 < INVEN_LARM)
-                fis_ptr->e2 = INVEN_LARM;
-        } else if (has_left_hand_weapon(owner_ptr))
-            fis_ptr->e1 = INVEN_RARM;
+        if (can_attack_with_main_hand(owner_ptr)) {
+            if (fis_ptr->e2 < INVEN_SUB_HAND)
+                fis_ptr->e2 = INVEN_SUB_HAND;
+        } else if (can_attack_with_sub_hand(owner_ptr))
+            fis_ptr->e1 = INVEN_MAIN_HAND;
     }
 
     fis_ptr->floor_num = 0;
@@ -315,8 +315,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             if (command_see)
                 get_item_label = show_inventory(owner_ptr, fis_ptr->menu_line, fis_ptr->mode, fis_ptr->tval);
         } else if (command_wrk == USE_EQUIP) {
-            fis_ptr->n1 = I2A(fis_ptr->e1 - INVEN_RARM);
-            fis_ptr->n2 = I2A(fis_ptr->e2 - INVEN_RARM);
+            fis_ptr->n1 = I2A(fis_ptr->e1 - INVEN_MAIN_HAND);
+            fis_ptr->n2 = I2A(fis_ptr->e2 - INVEN_MAIN_HAND);
             if (command_see)
                 get_item_label = show_equipment(owner_ptr, fis_ptr->menu_line, mode, fis_ptr->tval);
         } else if (command_wrk == USE_FLOOR) {
@@ -711,7 +711,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     break;
                 }
 
-                if ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip) {
+                if ((fis_ptr->k < INVEN_MAIN_HAND) ? !fis_ptr->inven : !fis_ptr->equip) {
                     bell();
                     break;
                 }
@@ -755,7 +755,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 bool not_found = FALSE;
                 if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, fis_ptr->tval))
                     not_found = TRUE;
-                else if ((fis_ptr->k < INVEN_RARM) ? !fis_ptr->inven : !fis_ptr->equip)
+                else if ((fis_ptr->k < INVEN_MAIN_HAND) ? !fis_ptr->inven : !fis_ptr->equip)
                     not_found = TRUE;
                 else if (!get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval))
                     not_found = TRUE;

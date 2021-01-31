@@ -42,7 +42,7 @@ static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_fla
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
@@ -50,7 +50,7 @@ static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_fla
         object_flags(creature_ptr, o_ptr, flgs);
 
         if (has_flag(flgs, tr_flag))
-            result |= 0x01 << (i - INVEN_RARM);
+            result |= 0x01 << (i - INVEN_MAIN_HAND);
     }
     return result;
 }
@@ -360,7 +360,7 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
@@ -369,7 +369,7 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
 
         if (has_flag(flgs, TR_WARNING)) {
             if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
-                result |= 0x01 << (i - INVEN_RARM);
+                result |= 0x01 << (i - INVEN_MAIN_HAND);
         }
     }
     return result;
@@ -526,8 +526,8 @@ BIT_FLAGS has_free_act(player_type *creature_ptr)
     }
 
     if (creature_ptr->pclass == CLASS_NINJA && !heavy_armor(creature_ptr)
-        && (!creature_ptr->inventory_list[INVEN_RARM].k_idx || has_right_hand_weapon(creature_ptr))
-        && (!creature_ptr->inventory_list[INVEN_LARM].k_idx || has_left_hand_weapon(creature_ptr))) {
+        && (!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(creature_ptr))
+        && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(creature_ptr))) {
         if (creature_ptr->lev > 24)
             result |= 0x01 << FLAG_CAUSE_CLASS;
     }
@@ -819,7 +819,7 @@ void has_curses(player_type *creature_ptr)
     if (creature_ptr->pseikaku == PERSONALITY_SEXY)
         creature_ptr->cursed |= (TRC_AGGRAVATE);
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
@@ -890,16 +890,16 @@ void has_extra_blow(player_type *creature_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     creature_ptr->extra_blows[0] = creature_ptr->extra_blows[1] = 0;
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
         object_flags(creature_ptr, o_ptr, flgs);
         if (has_flag(flgs, TR_BLOWS)) {
-            if ((i == INVEN_RARM || i == INVEN_RIGHT) && !has_two_handed_weapons(creature_ptr))
+            if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !has_two_handed_weapons(creature_ptr))
                 creature_ptr->extra_blows[0] += o_ptr->pval;
-            else if ((i == INVEN_LARM || i == INVEN_LEFT) && !has_two_handed_weapons(creature_ptr))
+            else if ((i == INVEN_SUB_HAND || i == INVEN_SUB_RING) && !has_two_handed_weapons(creature_ptr))
                 creature_ptr->extra_blows[1] += o_ptr->pval;
             else {
                 creature_ptr->extra_blows[0] += o_ptr->pval;
@@ -1508,48 +1508,51 @@ melee_type player_melee_type(player_type *creature_ptr)
     if (has_two_handed_weapons(creature_ptr))
         return MELEE_TYPE_WEAPON_TWOHAND;
 
-    if (has_melee_weapon(creature_ptr, INVEN_RARM)) {
-        if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
+    if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)) {
+        if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
             return MELEE_TYPE_WEAPON_DOUBLE;
         }
-        return MELEE_TYPE_WEAPON_RIGHT;
+        return MELEE_TYPE_WEAPON_MAIN;
     }
 
-    if (has_melee_weapon(creature_ptr, INVEN_LARM))
-        return MELEE_TYPE_WEAPON_LEFT;
+    if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
+        return MELEE_TYPE_WEAPON_SUB;
 
-    if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
+    if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
         return MELEE_TYPE_BAREHAND_TWO;
 
-    if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
-        return MELEE_TYPE_BAREHAND_RIGHT;
+    if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN)
+        return MELEE_TYPE_BAREHAND_MAIN;
 
-    if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
-        return MELEE_TYPE_BAREHAND_LEFT;
+    if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB)
+        return MELEE_TYPE_BAREHAND_SUB;
 
     return MELEE_TYPE_SHIELD_DOUBLE;
 }
 
 /*
- * @brief 右手(利き手)が武器を持っているかどうかを判定する
+ * @brief 利き手で攻撃可能かどうかを判定する
+ *        利き手で攻撃可能とは、利き手に武器を持っているか、
+ *        利き手が素手かつ左手も素手もしくは盾を装備している事を意味する。
  * @detail Includes martial arts and hand combats as weapons.
  */
-bool has_right_hand_weapon(player_type *creature_ptr)
+bool can_attack_with_main_hand(player_type *creature_ptr)
 {
-    if (has_melee_weapon(creature_ptr, INVEN_RARM))
+    if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND))
         return TRUE;
 
-    if ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) && !has_left_hand_weapon(creature_ptr))
+    if ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN) && !can_attack_with_sub_hand(creature_ptr))
         return TRUE;
 
     return FALSE;
 }
 
 /*
- * @brief 左手(非利き手)が武器を持っているかどうかを判定する
+ * @brief 非利き手で攻撃可能かどうかを判定する
+ *        非利き手で攻撃可能とは、非利き手に武器を持っている事に等しい
  * @detail Exclude martial arts and hand combats from weapons.
  */
-bool has_left_hand_weapon(player_type *creature_ptr) { return has_melee_weapon(creature_ptr, INVEN_LARM); }
+bool can_attack_with_sub_hand(player_type *creature_ptr) { return has_melee_weapon(creature_ptr, INVEN_SUB_HAND); }
 
 /*
  * @brief 両手持ち状態かどうかを判定する
@@ -1557,11 +1560,11 @@ bool has_left_hand_weapon(player_type *creature_ptr) { return has_melee_weapon(c
 bool has_two_handed_weapons(player_type *creature_ptr)
 {
     if (can_two_hands_wielding(creature_ptr)) {
-        if (has_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
-            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM])) {
+        if (can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB)
+            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_MAIN_HAND])) {
             return TRUE;
-        } else if (has_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
-            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])) {
+        } else if (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN)
+            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
             return TRUE;
         }
     }
@@ -1606,8 +1609,8 @@ BIT_FLAGS has_lite(player_type *creature_ptr)
  */
 bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
 {
-    if (has_melee_weapon(creature_ptr, INVEN_RARM + i) && has_two_handed_weapons(creature_ptr)) {
-        object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
+    if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i) && has_two_handed_weapons(creature_ptr)) {
+        object_type *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
         int limit = calc_weapon_weight_limit(creature_ptr) * 2;
 
         /* Enable when two hand wields an enough light weapon */
@@ -1625,7 +1628,7 @@ bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
 bool has_icky_wield_weapon(player_type *creature_ptr, int i)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
+    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     object_flags(creature_ptr, o_ptr, flgs);
 
     bool is_bare_hands = o_ptr->tval == TV_NONE;
@@ -1652,7 +1655,7 @@ bool has_riding_wield_weapon(player_type *creature_ptr, int i)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
+    o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     object_flags(creature_ptr, o_ptr, flgs);
     if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
         && !has_flag(flgs, TR_RIDING)) {
@@ -1663,22 +1666,22 @@ bool has_riding_wield_weapon(player_type *creature_ptr, int i)
 
 bool has_not_ninja_weapon(player_type *creature_ptr, int i)
 {
-    if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
+    if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i)) {
         return FALSE;
     }
-    tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
-    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
+    tval_type tval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
+    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return creature_ptr->pclass == CLASS_NINJA
-        && !((s_info[CLASS_NINJA].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (creature_ptr->inventory_list[INVEN_LARM - i].tval != TV_SHIELD));
+        && !((s_info[CLASS_NINJA].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (creature_ptr->inventory_list[INVEN_SUB_HAND - i].tval != TV_SHIELD));
 }
 
 bool has_not_monk_weapon(player_type *creature_ptr, int i)
 {
-    if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) {
+    if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i)) {
         return FALSE;
     }
-    tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
-    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
+    tval_type tval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
+    OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && !(s_info[creature_ptr->pclass].w_max[tval][sval]);
 }
 

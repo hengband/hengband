@@ -490,10 +490,10 @@ HIT_POINT monspell_bluemage_damage(player_type *target_ptr, monster_spell_type m
     int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
     object_type *o_ptr = NULL;
 
-    if (has_melee_weapon(target_ptr, INVEN_RARM))
-        o_ptr = &target_ptr->inventory_list[INVEN_RARM];
-    else if (has_melee_weapon(target_ptr, INVEN_LARM))
-        o_ptr = &target_ptr->inventory_list[INVEN_LARM];
+    if (has_melee_weapon(target_ptr, INVEN_MAIN_HAND))
+        o_ptr = &target_ptr->inventory_list[INVEN_MAIN_HAND];
+    else if (has_melee_weapon(target_ptr, INVEN_SUB_HAND))
+        o_ptr = &target_ptr->inventory_list[INVEN_SUB_HAND];
 
     if (o_ptr) {
         shoot_dd = o_ptr->dd;

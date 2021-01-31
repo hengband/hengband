@@ -193,7 +193,7 @@ concptr activation_explanation(player_type *owner_ptr, object_type *o_ptr)
  * @return 対応するアルファベット
  * @details Note that the label does NOT distinguish inven/equip.
  */
-char index_to_label(int i) { return (i < INVEN_RARM) ? (I2A(i)) : (I2A(i - INVEN_RARM)); }
+char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - INVEN_MAIN_HAND)); }
 
 /*!
  * @brief オブジェクトの該当装備部位IDを返す /
@@ -208,29 +208,29 @@ s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
     case TV_HAFTED:
     case TV_POLEARM:
     case TV_SWORD: {
-        if (!owner_ptr->inventory_list[INVEN_RARM].k_idx)
-            return (INVEN_RARM);
-        if (owner_ptr->inventory_list[INVEN_LARM].k_idx)
-            return (INVEN_RARM);
-        return (INVEN_LARM);
+        if (!owner_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
+            return (INVEN_MAIN_HAND);
+        if (owner_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
+            return (INVEN_MAIN_HAND);
+        return (INVEN_SUB_HAND);
     }
     case TV_CAPTURE:
     case TV_CARD:
     case TV_SHIELD: {
-        if (!owner_ptr->inventory_list[INVEN_LARM].k_idx)
-            return (INVEN_LARM);
-        if (owner_ptr->inventory_list[INVEN_RARM].k_idx)
-            return (INVEN_LARM);
-        return (INVEN_RARM);
+        if (!owner_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
+            return (INVEN_SUB_HAND);
+        if (owner_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
+            return (INVEN_SUB_HAND);
+        return (INVEN_MAIN_HAND);
     }
     case TV_BOW: {
         return (INVEN_BOW);
     }
     case TV_RING: {
-        if (!owner_ptr->inventory_list[INVEN_RIGHT].k_idx)
-            return (INVEN_RIGHT);
+        if (!owner_ptr->inventory_list[INVEN_MAIN_RING].k_idx)
+            return (INVEN_MAIN_RING);
 
-        return (INVEN_LEFT);
+        return (INVEN_SUB_RING);
     }
     case TV_AMULET:
     case TV_WHISTLE: {
@@ -252,7 +252,7 @@ s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
         return (INVEN_HEAD);
     }
     case TV_GLOVES: {
-        return (INVEN_HANDS);
+        return (INVEN_ARMS);
     }
     case TV_BOOTS: {
         return (INVEN_FEET);

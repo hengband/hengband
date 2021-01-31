@@ -59,14 +59,14 @@ void calc_android_exp(player_type *creature_ptr)
     if (creature_ptr->is_dead || (creature_ptr->prace != RACE_ANDROID))
         return;
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         object_type forge;
         object_type *q_ptr = &forge;
         u32b value, exp;
         DEPTH level = MAX(k_info[o_ptr->k_idx].level - 8, 1);
 
-        if ((i == INVEN_RIGHT) || (i == INVEN_LEFT) || (i == INVEN_NECK) || (i == INVEN_LITE))
+        if ((i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING) || (i == INVEN_NECK) || (i == INVEN_LITE))
             continue;
         if (!o_ptr->k_idx)
             continue;
@@ -131,7 +131,7 @@ void calc_android_exp(player_type *creature_ptr)
             if (value > 100000L)
                 exp += (value - 100000L) / 4 * level;
         }
-        if ((((i == INVEN_RARM) || (i == INVEN_LARM)) && (has_melee_weapon(creature_ptr, i))) || (i == INVEN_BOW))
+        if ((((i == INVEN_MAIN_HAND) || (i == INVEN_SUB_HAND)) && (has_melee_weapon(creature_ptr, i))) || (i == INVEN_BOW))
             total_exp += exp / 48;
         else
             total_exp += exp / 16;

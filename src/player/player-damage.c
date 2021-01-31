@@ -76,10 +76,10 @@ static bool acid_minus_ac(player_type *creature_ptr)
     object_type *o_ptr = NULL;
     switch (randint1(7)) {
     case 1:
-        o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
+        o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND];
         break;
     case 2:
-        o_ptr = &creature_ptr->inventory_list[INVEN_LARM];
+        o_ptr = &creature_ptr->inventory_list[INVEN_SUB_HAND];
         break;
     case 3:
         o_ptr = &creature_ptr->inventory_list[INVEN_BODY];
@@ -88,7 +88,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
         o_ptr = &creature_ptr->inventory_list[INVEN_OUTER];
         break;
     case 5:
-        o_ptr = &creature_ptr->inventory_list[INVEN_HANDS];
+        o_ptr = &creature_ptr->inventory_list[INVEN_ARMS];
         break;
     case 6:
         o_ptr = &creature_ptr->inventory_list[INVEN_HEAD];

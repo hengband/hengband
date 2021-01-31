@@ -20,11 +20,11 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
     object_type *o_ptr, *new_o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
-    if (item == INVEN_RARM) {
-        if (!has_melee_weapon(owner_ptr, INVEN_LARM))
+    if (item == INVEN_MAIN_HAND) {
+        if (!has_melee_weapon(owner_ptr, INVEN_SUB_HAND))
             return;
 
-        o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
+        o_ptr = &owner_ptr->inventory_list[INVEN_SUB_HAND];
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
 
         if (object_is_cursed(o_ptr)) {
@@ -33,10 +33,10 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
             return;
         }
 
-        new_o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
+        new_o_ptr = &owner_ptr->inventory_list[INVEN_MAIN_HAND];
         object_copy(new_o_ptr, o_ptr);
-        inven_item_increase(owner_ptr, INVEN_LARM, -((int)o_ptr->number));
-        inven_item_optimize(owner_ptr, INVEN_LARM);
+        inven_item_increase(owner_ptr, INVEN_SUB_HAND, -((int)o_ptr->number));
+        inven_item_optimize(owner_ptr, INVEN_SUB_HAND);
         if (object_allow_two_hands_wielding(o_ptr) && can_two_hands_wielding(owner_ptr))
             msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
         else
@@ -44,26 +44,26 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
         return;
     }
 
-    if (item != INVEN_LARM)
+    if (item != INVEN_SUB_HAND)
         return;
 
-    o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
+    o_ptr = &owner_ptr->inventory_list[INVEN_MAIN_HAND];
     if (o_ptr->k_idx)
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
 
-    if (has_melee_weapon(owner_ptr, INVEN_RARM)) {
+    if (has_melee_weapon(owner_ptr, INVEN_MAIN_HAND)) {
         if (object_allow_two_hands_wielding(o_ptr) && can_two_hands_wielding(owner_ptr))
             msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 
         return;
     }
 
-    if ((empty_hands(owner_ptr, FALSE) & EMPTY_HAND_RARM) || object_is_cursed(o_ptr))
+    if ((empty_hands(owner_ptr, FALSE) & EMPTY_HAND_MAIN) || object_is_cursed(o_ptr))
         return;
 
-    new_o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
+    new_o_ptr = &owner_ptr->inventory_list[INVEN_SUB_HAND];
     object_copy(new_o_ptr, o_ptr);
-    inven_item_increase(owner_ptr, INVEN_RARM, -((int)o_ptr->number));
-    inven_item_optimize(owner_ptr, INVEN_RARM);
+    inven_item_increase(owner_ptr, INVEN_MAIN_HAND, -((int)o_ptr->number));
+    inven_item_optimize(owner_ptr, INVEN_MAIN_HAND);
     msg_format(_("%sを持ち替えた。", "You switched hand of %s."), o_name);
 }

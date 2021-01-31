@@ -62,7 +62,7 @@ bool item_tester_hook_use(player_type *player_ptr, object_type *o_ptr)
 
         if (!object_is_known(o_ptr))
             return FALSE;
-        for (i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             if (&player_ptr->inventory_list[i] == o_ptr) {
                 object_flags(player_ptr, o_ptr, flags);
                 if (has_flag(flags, TR_ACTIVATE))

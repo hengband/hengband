@@ -169,7 +169,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     take_turn(attacker_ptr, 100);
 
-    if (!has_right_hand_weapon(attacker_ptr) && !has_left_hand_weapon(attacker_ptr)
+    if (!can_attack_with_main_hand(attacker_ptr) && !can_attack_with_sub_hand(attacker_ptr)
         && !(attacker_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES))) {
         msg_format(_("%s攻撃できない。", "You cannot do attacking."), (empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
         return FALSE;
@@ -185,7 +185,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     }
 
     if ((r_ptr->flags1 & RF1_FEMALE) && !(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || !m_ptr->ml)) {
-        if ((attacker_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (attacker_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU)) {
+        if ((attacker_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ZANTETSU) || (attacker_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_ZANTETSU)) {
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return FALSE;
         }
@@ -198,9 +198,9 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     bool stormbringer = FALSE;
     if (!is_hostile(m_ptr) && !(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || is_shero(attacker_ptr) || !m_ptr->ml)) {
-        if (attacker_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER)
+        if (attacker_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_STORMBRINGER)
             stormbringer = TRUE;
-        if (attacker_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER)
+        if (attacker_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_STORMBRINGER)
             stormbringer = TRUE;
         if (stormbringer) {
             msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name);
@@ -238,7 +238,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
             chg_virtue(attacker_ptr, V_HONOUR, -1);
     }
 
-    if (has_right_hand_weapon(attacker_ptr) && has_left_hand_weapon(attacker_ptr)) {
+    if (can_attack_with_main_hand(attacker_ptr) && can_attack_with_sub_hand(attacker_ptr)) {
         if ((attacker_ptr->skill_exp[GINOU_NITOURYU] < s_info[attacker_ptr->pclass].s_max[GINOU_NITOURYU])
             && ((attacker_ptr->skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_ptr->level)) {
             if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_BEGINNER)
@@ -281,9 +281,9 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     attacker_ptr->riding_t_m_idx = g_ptr->m_idx;
     bool fear = FALSE;
     bool mdeath = FALSE;
-    if (has_right_hand_weapon(attacker_ptr))
+    if (can_attack_with_main_hand(attacker_ptr))
         exe_player_attack_to_monster(attacker_ptr, y, x, &fear, &mdeath, 0, mode);
-    if (has_left_hand_weapon(attacker_ptr) && !mdeath)
+    if (can_attack_with_sub_hand(attacker_ptr) && !mdeath)
         exe_player_attack_to_monster(attacker_ptr, y, x, &fear, &mdeath, 1, mode);
 
     if (!mdeath) {

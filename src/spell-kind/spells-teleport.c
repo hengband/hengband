@@ -514,7 +514,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
         object_type *o_ptr;
         INVENTORY_IDX i;
 
-        for (i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             o_ptr = &tracer_ptr->inventory_list[i];
             if (o_ptr->k_idx && !object_is_cursed(o_ptr)) {
                 object_flags(tracer_ptr, o_ptr, flgs);

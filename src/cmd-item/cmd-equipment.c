@@ -110,19 +110,19 @@ void do_cmd_wield(player_type *creature_ptr)
     case TV_CAPTURE:
     case TV_SHIELD:
     case TV_CARD:
-        if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
             item_tester_hook = item_tester_hook_melee_weapon;
             q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0))
                 return;
 
-            if (slot == INVEN_RARM)
-                need_switch_wielding = INVEN_LARM;
-        } else if (has_melee_weapon(creature_ptr, INVEN_LARM))
-            slot = INVEN_RARM;
-        else if (creature_ptr->inventory_list[INVEN_RARM].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_RARM])
-            && creature_ptr->inventory_list[INVEN_LARM].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_LARM])) {
+            if (slot == INVEN_MAIN_HAND)
+                need_switch_wielding = INVEN_SUB_HAND;
+        } else if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
+            slot = INVEN_MAIN_HAND;
+        else if (creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_MAIN_HAND])
+            && creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
             item_tester_hook = item_tester_hook_mochikae;
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
@@ -135,26 +135,26 @@ void do_cmd_wield(player_type *creature_ptr)
     case TV_HAFTED:
     case TV_POLEARM:
     case TV_SWORD:
-        if (slot == INVEN_LARM) {
+        if (slot == INVEN_SUB_HAND) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? ")))
-                slot = INVEN_RARM;
-        } else if (!creature_ptr->inventory_list[INVEN_RARM].k_idx && has_melee_weapon(creature_ptr, INVEN_LARM)) {
+                slot = INVEN_MAIN_HAND;
+        } else if (!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? ")))
-                slot = INVEN_LARM;
-        } else if (creature_ptr->inventory_list[INVEN_LARM].k_idx && creature_ptr->inventory_list[INVEN_RARM].k_idx) {
+                slot = INVEN_SUB_HAND;
+        } else if (creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx && creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
             item_tester_hook = item_tester_hook_mochikae;
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), 0))
                 return;
 
-            if ((slot == INVEN_LARM) && !has_melee_weapon(creature_ptr, INVEN_RARM))
-                need_switch_wielding = INVEN_RARM;
+            if ((slot == INVEN_SUB_HAND) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND))
+                need_switch_wielding = INVEN_MAIN_HAND;
         }
 
         break;
     case TV_RING:
-        if (creature_ptr->inventory_list[INVEN_LEFT].k_idx && creature_ptr->inventory_list[INVEN_RIGHT].k_idx)
+        if (creature_ptr->inventory_list[INVEN_SUB_RING].k_idx && creature_ptr->inventory_list[INVEN_MAIN_RING].k_idx)
             q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
         else
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
@@ -213,7 +213,7 @@ void do_cmd_wield(player_type *creature_ptr)
         object_copy(switch_o_ptr, slot_o_ptr);
         object_copy(slot_o_ptr, otmp_ptr);
         msg_format(_("%sを%sに構えなおした。", "You wield %s at %s hand."), switch_name,
-            (slot == INVEN_RARM) ? (left_hander ? _("左手", "left") : _("右手", "right")) : (left_hander ? _("右手", "right") : _("左手", "left")));
+            (slot == INVEN_MAIN_HAND) ? (left_hander ? _("左手", "left") : _("右手", "right")) : (left_hander ? _("右手", "right") : _("左手", "left")));
         slot = need_switch_wielding;
     }
 
@@ -243,23 +243,23 @@ void do_cmd_wield(player_type *creature_ptr)
     o_ptr->marked |= OM_TOUCHED;
     creature_ptr->equip_cnt++;
 
-#define STR_WIELD_RARM _("%s(%c)を右手に装備した。", "You are wielding %s (%c) in your right hand.")
-#define STR_WIELD_LARM _("%s(%c)を左手に装備した。", "You are wielding %s (%c) in your left hand.")
-#define STR_WIELD_ARMS _("%s(%c)を両手で構えた。", "You are wielding %s (%c) with both hands.")
+#define STR_WIELD_HAND_RIGHT _("%s(%c)を右手に装備した。", "You are wielding %s (%c) in your right hand.")
+#define STR_WIELD_HAND_LEFT _("%s(%c)を左手に装備した。", "You are wielding %s (%c) in your left hand.")
+#define STR_WIELD_HANDS_TWO _("%s(%c)を両手で構えた。", "You are wielding %s (%c) with both hands.")
 
     switch (slot) {
-    case INVEN_RARM:
-        if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM) && can_two_hands_wielding(creature_ptr))
-            act = STR_WIELD_ARMS;
+    case INVEN_MAIN_HAND:
+        if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB) && can_two_hands_wielding(creature_ptr))
+            act = STR_WIELD_HANDS_TWO;
         else
-            act = (left_hander ? STR_WIELD_LARM : STR_WIELD_RARM);
+            act = (left_hander ? STR_WIELD_HAND_LEFT : STR_WIELD_HAND_RIGHT);
 
         break;
-    case INVEN_LARM:
-        if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM) && can_two_hands_wielding(creature_ptr))
-            act = STR_WIELD_ARMS;
+    case INVEN_SUB_HAND:
+        if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN) && can_two_hands_wielding(creature_ptr))
+            act = STR_WIELD_HANDS_TWO;
         else
-            act = (left_hander ? STR_WIELD_RARM : STR_WIELD_LARM);
+            act = (left_hander ? STR_WIELD_HAND_RIGHT : STR_WIELD_HAND_LEFT);
 
         break;
     case INVEN_BOW:

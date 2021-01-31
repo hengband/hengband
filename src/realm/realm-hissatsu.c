@@ -652,9 +652,9 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             for (i = 0; i < 2; i++) {
                 int damage;
 
-                if (!has_melee_weapon(caster_ptr, INVEN_RARM + i))
+                if (!has_melee_weapon(caster_ptr, INVEN_MAIN_HAND + i))
                     break;
-                o_ptr = &caster_ptr->inventory_list[INVEN_RARM + i];
+                o_ptr = &caster_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
                 object_flags(caster_ptr, o_ptr, flgs);
@@ -933,9 +933,9 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
             for (i = 0; i < 2; i++) {
                 int damage;
-                if (!has_melee_weapon(caster_ptr, INVEN_RARM + i))
+                if (!has_melee_weapon(caster_ptr, INVEN_MAIN_HAND + i))
                     break;
-                o_ptr = &caster_ptr->inventory_list[INVEN_RARM + i];
+                o_ptr = &caster_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
                 object_flags(caster_ptr, o_ptr, flgs);

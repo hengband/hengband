@@ -77,18 +77,18 @@ static bool check_item_tag_aux(player_type *owner_ptr, item_selection_type *item
 static bool check_item_tag_inventory(player_type *owner_ptr, item_selection_type *item_selection_ptr, char *prev_tag)
 {
     if ((!item_selection_ptr->inven || (*item_selection_ptr->cp < 0) || (*item_selection_ptr->cp >= INVEN_PACK))
-        && (!item_selection_ptr->equip || (*item_selection_ptr->cp < INVEN_RARM) || (*item_selection_ptr->cp >= INVEN_TOTAL)))
+        && (!item_selection_ptr->equip || (*item_selection_ptr->cp < INVEN_MAIN_HAND) || (*item_selection_ptr->cp >= INVEN_TOTAL)))
         return FALSE;
 
     if (*prev_tag && command_cmd) {
         
         bool flag = FALSE;
-        item_use_flag use_flag = (*item_selection_ptr->cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN;
+        item_use_flag use_flag = (*item_selection_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
 
         flag |= !get_tag(owner_ptr, &item_selection_ptr->k, *prev_tag, use_flag, item_selection_ptr->tval);
         flag |= !get_item_okay(owner_ptr, item_selection_ptr->k, item_selection_ptr->tval);
 
-        if (item_selection_ptr->k < INVEN_RARM)
+        if (item_selection_ptr->k < INVEN_MAIN_HAND)
             flag |= !item_selection_ptr->inven;
         else
             flag |= !item_selection_ptr->equip;
@@ -176,7 +176,7 @@ static void test_equipment(player_type *owner_ptr, item_selection_type *item_sel
     if (!use_menu)
         return;
 
-    for (int j = INVEN_RARM; j < INVEN_TOTAL; j++)
+    for (int j = INVEN_MAIN_HAND; j < INVEN_TOTAL; j++)
         if (owner_ptr->select_ring_slot ? is_ring_slot(j)
                              : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL))
             item_selection_ptr->max_equip++;
@@ -220,7 +220,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     while ((item_selection_ptr->i1 <= item_selection_ptr->i2) && (!get_item_okay(owner_ptr, item_selection_ptr->i2, item_selection_ptr->tval)))
         item_selection_ptr->i2--;
 
-    item_selection_ptr->e1 = INVEN_RARM;
+    item_selection_ptr->e1 = INVEN_MAIN_HAND;
     item_selection_ptr->e2 = INVEN_TOTAL - 1;
     test_equipment(owner_ptr, item_selection_ptr);
     while ((item_selection_ptr->e1 <= item_selection_ptr->e2) && (!get_item_okay(owner_ptr, item_selection_ptr->e1, item_selection_ptr->tval)))
@@ -230,11 +230,11 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         item_selection_ptr->e2--;
 
     if (item_selection_ptr->equip && has_two_handed_weapons(owner_ptr) && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        if (has_right_hand_weapon(owner_ptr)) {
-            if (item_selection_ptr->e2 < INVEN_LARM)
-                item_selection_ptr->e2 = INVEN_LARM;
-        } else if (has_left_hand_weapon(owner_ptr))
-            item_selection_ptr->e1 = INVEN_RARM;
+        if (can_attack_with_main_hand(owner_ptr)) {
+            if (item_selection_ptr->e2 < INVEN_SUB_HAND)
+                item_selection_ptr->e2 = INVEN_SUB_HAND;
+        } else if (can_attack_with_sub_hand(owner_ptr))
+            item_selection_ptr->e1 = INVEN_MAIN_HAND;
     }
 
     if (item_selection_ptr->floor) {
@@ -508,7 +508,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 break;
             }
 
-            if ((item_selection_ptr->k < INVEN_RARM) ? !item_selection_ptr->inven : !item_selection_ptr->equip) {
+            if ((item_selection_ptr->k < INVEN_MAIN_HAND) ? !item_selection_ptr->inven : !item_selection_ptr->equip) {
                 bell();
                 break;
             }
@@ -543,7 +543,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             bool not_found = FALSE;
             if (!get_tag(owner_ptr, &item_selection_ptr->k, item_selection_ptr->which, command_wrk ? USE_EQUIP : USE_INVEN, item_selection_ptr->tval)) {
                 not_found = TRUE;
-            } else if ((item_selection_ptr->k < INVEN_RARM) ? !item_selection_ptr->inven : !item_selection_ptr->equip) {
+            } else if ((item_selection_ptr->k < INVEN_MAIN_HAND) ? !item_selection_ptr->inven : !item_selection_ptr->equip) {
                 not_found = TRUE;
             } else if (!get_item_okay(owner_ptr, item_selection_ptr->k, item_selection_ptr->tval)) {
                 not_found = TRUE;
