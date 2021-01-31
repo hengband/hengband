@@ -100,23 +100,23 @@ concptr horror_desc_neutral[MAX_SAN_HORROR_NEUTRAL] =
 	"頭が真っ白になるような",
 	"無限に加速した",
 #else
-	"causing great awe",
-	"laughing insanely",
-	"existence, that SHOULD NOT be there, ",
+	"awe-inspiring",
+	"slyly grinning",
+	"impossible",
 	"sucking",
-	"transcending senses",
+	"transcendent",
 
-	"rising on the another dimension",
+	"otherworldly",
 	"hallucinating",
-	"swaying and swaying",
-	"overwhelming enough to doubt your own existence",
+	"rhythmically bobbing",
+	"overwhelming",
 	"unintelligible",
 
 	"psychedelic",
-	"spoiling your life",
+	"transfixing",
 	"trippy",
-	"going blank",
-	"unlimitedly accelerated",
+	"hypnotic",
+	"blurred, with motion,",
 #endif
 };
 

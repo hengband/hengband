@@ -150,7 +150,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
             }
 
             if (pet_ctr == creature_ptr->riding) {
-                msg_format(_("%sから降りた。", "You have got off %s. "), friend_name);
+                msg_format(_("%sから降りた。", "You dismount from %s. "), friend_name);
 
                 creature_ptr->riding = 0;
 
@@ -335,7 +335,7 @@ static void do_name_pet(player_type *creature_ptr)
             return;
         }
         if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE) {
-            msg_print(_("そのモンスターの名前は変えられない！", "You cannot change name of this monster!"));
+            msg_print(_("そのモンスターの名前は変えられない！", "You cannot change the name of this monster!"));
             return;
         }
         monster_desc(creature_ptr, m_name, m_ptr, 0);
