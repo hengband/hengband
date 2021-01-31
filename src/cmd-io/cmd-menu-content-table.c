@@ -120,7 +120,7 @@ menu_content menu_info[MAX_COMMAND_MENU_NUM][MAX_COMMAND_PER_SCREEN] = {
 
     { { _("セーブ&中断(^x)", "Save and quit(^x)"), KTRL('X'), TRUE },
         { _("セーブ(^s)", "Save(^s)"), KTRL('S'), TRUE },
-        { _("ヘルプ(?)", "Help(obsoleted)(?)"), '?', TRUE },
+        { _("ヘルプ(?)", "Help(out-of-date)(?)"), '?', TRUE },
         { _("再描画(^r)", "Redraw(^r)"), KTRL('R'), TRUE },
         { _("メモ(:)", "Take note(:)"), ':', TRUE },
         { _("記念撮影())", "Dump screen dump(()"), ')', TRUE },

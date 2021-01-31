@@ -27,7 +27,7 @@ bool cast_blue_summon_cyber(player_type *caster_ptr, bmc_type *bmc_ptr)
     for (int k = 0; k < 1; k++) {
         if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_CYBER, bmc_ptr->p_mode)) {
             if (!bmc_ptr->pet)
-                msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon are angry!"));
+                msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon is angry!"));
         } else {
             bmc_ptr->no_trump = TRUE;
         }
@@ -86,7 +86,7 @@ bool cast_blue_summon_spider(player_type *caster_ptr, bmc_type *bmc_ptr)
     if (summon_specific(
             caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_SPIDER, (PM_ALLOW_GROUP | bmc_ptr->p_mode))) {
         if (!bmc_ptr->pet)
-            msg_print(_("召喚された蜘蛛は怒っている！", "Summoned spiders are angry!"));
+            msg_print(_("召喚された蜘蛛は怒っている！", "The summoned spiders are angry!"));
     } else {
         bmc_ptr->no_trump = TRUE;
     }
@@ -100,7 +100,7 @@ bool cast_blue_summon_hound(player_type *caster_ptr, bmc_type *bmc_ptr)
     if (summon_specific(
             caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_HOUND, (PM_ALLOW_GROUP | bmc_ptr->p_mode))) {
         if (!bmc_ptr->pet)
-            msg_print(_("召喚されたハウンドは怒っている！", "Summoned hounds are angry!"));
+            msg_print(_("召喚されたハウンドは怒っている！", "The summoned hounds are angry!"));
     } else {
         bmc_ptr->no_trump = TRUE;
     }
@@ -114,7 +114,7 @@ bool cast_blue_summon_hydra(player_type *caster_ptr, bmc_type *bmc_ptr)
     if (summon_specific(
             caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_HYDRA, (bmc_ptr->g_mode | bmc_ptr->p_mode))) {
         if (!bmc_ptr->pet)
-            msg_print(_("召喚されたヒドラは怒っている！", "Summoned hydras are angry!"));
+            msg_print(_("召喚されたヒドラは怒っている！", "The summoned hydras are angry!"));
     } else {
         bmc_ptr->no_trump = TRUE;
     }
