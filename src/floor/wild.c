@@ -879,7 +879,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
         if (monster_csleep_remaining(m_ptr) || (m_ptr->cdis > MAX_SIGHT) || !is_hostile(m_ptr))
             continue;
 
-        msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！", "You cannot enter global map, since there is some monsters nearby!"));
+        msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！", "You cannot enter global map, since there are some monsters nearby!"));
         free_turn(creature_ptr);
         return FALSE;
     }
