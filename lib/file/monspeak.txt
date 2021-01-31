@@ -402,6 +402,8 @@ says, 'Unlike that passionate person, I'm humble, apologize. 640K wasn't enough 
 says, 'So now is the time to say it again, '640G should be enough for ANYBODY!''
 says, 'Buy Windows 10; the system will be updated automatically without saving any datum'
 says, 'Linux?  I've only heard that it's the worst...'
+says, 'I don't know who is the best manager. But the worst owner is definitely that apple store.'
+says, 'Are you still using Fuckintosh?  It's very pathetic.'
 says, 'Resistance is futile--you will be assimilated.'
 says, 'Pro version is the solution for ALL your needs.'
 hacks out some code and calls it a Feature Update.
@@ -781,6 +783,7 @@ says, 'I only accept the usage I expected!  I'll lock all other usages!!'
 says, 'The very I listen to the opinions of users!?  Absolutely impossible!  The opposite, idiots!  The user listens my opinion!'
 says, 'It's not worth listening to the opinions of ignorant customers!  I'm busy!'
 says, 'You'll cover the best apples I've produced!?  Impossible!!'
+says, 'Don't show the command prompt to users!  They're absolutely stupid!  That's why Gates' OS is SM-DOS!'
 
 N:1258:Robo-Gandalf
 says, 'BaD EVeninG!'

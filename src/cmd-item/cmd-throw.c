@@ -243,7 +243,7 @@ static void check_racial_target_seen(player_type *creature_ptr, it_type *it_ptr)
     TERM_COLOR a = object_attr(it_ptr->q_ptr);
     print_rel(creature_ptr, c, a, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
     move_cursor_relative(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
-    if (need_term_fresh()) {
+    if (it_ptr->msec > 0) {
         term_fresh();
         term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
         lite_spot(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
@@ -434,7 +434,8 @@ static void process_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
 
         SYMBOL_CODE c = object_char(it_ptr->q_ptr);
         byte a = object_attr(it_ptr->q_ptr);
-        if (need_term_fresh()) {
+
+        if (it_ptr->msec > 0) {
             print_rel(creature_ptr, c, a, it_ptr->ny[i], it_ptr->nx[i]);
             move_cursor_relative(it_ptr->ny[i], it_ptr->nx[i]);
             term_fresh();
