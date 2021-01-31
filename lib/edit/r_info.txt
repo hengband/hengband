@@ -22714,7 +22714,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_NETH | RES_LITE | RES_DARK
 F:NO_FEAR | NO_CONF | NO_SLEEP | CAN_SWIM
 S:1_IN_5
 S:BLIND | CONF | HOLD | SCARE
-S:BO_NETH | BR_NETH | BA_NETH | CAUSE_4 | S_KIN
+S:BO_NETH | BR_NETH | BA_NETH | CAUSE_4 | S_KIN | BLIND
 D:$Be honest with him. Otherwise, he will send you straight to hell.
 D:彼の前では正直でいることだ。さもなくば地獄へ一直線だろう。
 
