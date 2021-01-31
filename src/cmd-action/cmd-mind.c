@@ -35,8 +35,8 @@
 #include "mind/mind-types.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "spell-kind/spells-teleport.h"
 #include "player/player-status-table.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -111,12 +111,12 @@ static void decide_mind_ki_chance(player_type *caster_ptr, cm_type *cm_ptr)
 
     if (caster_ptr->icky_wield[0])
         cm_ptr->chance += 20;
-    else if (has_melee_weapon(caster_ptr, INVEN_RARM))
+    else if (has_melee_weapon(caster_ptr, INVEN_MAIN_HAND))
         cm_ptr->chance += 10;
 
     if (caster_ptr->icky_wield[1])
         cm_ptr->chance += 20;
-    else if (has_melee_weapon(caster_ptr, INVEN_LARM))
+    else if (has_melee_weapon(caster_ptr, INVEN_SUB_HAND))
         cm_ptr->chance += 10;
 
     if (cm_ptr->n == 5)

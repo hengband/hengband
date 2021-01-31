@@ -85,7 +85,7 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
     int attempts = 1000;
     DEPTH min = MIN(floor_ptr->base_level - 5, 50);
     while (--attempts) {
-        MONRACE_IDX ap_r_idx = get_mon_num(player_ptr, floor_ptr->base_level + 10, 0);
+        MONRACE_IDX ap_r_idx = get_mon_num(player_ptr, 0, floor_ptr->base_level + 10, 0);
         if (r_info[ap_r_idx].level >= min)
             return ap_r_idx;
     }

@@ -412,7 +412,7 @@ bool choose_kata(player_type *creature_ptr)
  */
 int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     int bonus = attacker_ptr->to_h[pa_ptr->hand] + o_ptr->to_h;
     int chance = (attacker_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
     if (pa_ptr->mode == HISSATSU_IAI)

@@ -116,7 +116,7 @@ void do_cmd_drop(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if ((item >= INVEN_RARM) && object_is_cursed(o_ptr)) {
+    if ((item >= INVEN_MAIN_HAND) && object_is_cursed(o_ptr)) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
         return;
     }
@@ -129,7 +129,7 @@ void do_cmd_drop(player_type *creature_ptr)
 
     take_turn(creature_ptr, 50);
     drop_from_inventory(creature_ptr, item, amt);
-    if (item >= INVEN_RARM) {
+    if (item >= INVEN_MAIN_HAND) {
         verify_equip_slot(creature_ptr, item);
         calc_android_exp(creature_ptr);
     }

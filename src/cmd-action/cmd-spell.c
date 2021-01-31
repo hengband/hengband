@@ -30,9 +30,9 @@
 #include "object-hook/hook-magic.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "player-info/avatar.h"
 #include "player-info/self-info.h"
 #include "player/attack-defense-types.h"
-#include "player-info/avatar.h"
 #include "player/eldritch-horror.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
@@ -62,6 +62,13 @@
 #ifdef JP
 #include "locale/japanese.h"
 #endif
+
+concptr KWD_DAM = _("損傷:", "dam ");
+concptr KWD_RANGE = _("射程:", "rng ");
+concptr KWD_DURATION = _("期間:", "dur ");
+concptr KWD_SPHERE = _("範囲:", "range ");
+concptr KWD_HEAL = _("回復:", "heal ");
+concptr KWD_RANDOM = _("ランダム", "random");
 
 /*!
  * 魔法領域フラグ管理テーブル /

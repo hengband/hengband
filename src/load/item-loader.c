@@ -63,7 +63,6 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     o_ptr->weight = tmp16s;
 
     if (flags & SAVE_ITEM_NAME1) {
-
         if (h_older_than(3, 0, 0, 2)) {
             rd_byte(&tmp8u);
             o_ptr->name1 = tmp8u;
@@ -171,8 +170,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     else
         o_ptr->xtra1 = 0;
 
-    if (flags & SAVE_ITEM_XTRA2){
-
+    if (flags & SAVE_ITEM_XTRA2) {
         if (h_older_than(3, 0, 0, 2)) {
             rd_byte(&tmp8u);
             o_ptr->xtra2 = tmp8u;
@@ -180,8 +178,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
             rd_s16b(&tmp16s);
             o_ptr->xtra2 = tmp16s;
         }
-    } 
-    else
+    } else
         o_ptr->xtra2 = 0;
 
     if (flags & SAVE_ITEM_XTRA3)

@@ -35,7 +35,7 @@ static MONRACE_IDX poly_r_idx(player_type *caster_ptr, MONRACE_IDX r_idx)
     DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
     MONRACE_IDX r;
     for (int i = 0; i < 1000; i++) {
-        r = get_mon_num(caster_ptr, (caster_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, 0);
+        r = get_mon_num(caster_ptr, 0, (caster_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5, 0);
         if (!r)
             break;
 

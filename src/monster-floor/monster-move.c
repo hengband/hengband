@@ -29,12 +29,12 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
+#include "player/player-status-flags.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "player/player-status-flags.h"
 
 static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
 {
@@ -81,8 +81,7 @@ static bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, mo
         return FALSE;
 
     turn_flags_ptr->do_move = TRUE;
-    if (((r_ptr->flags2 & RF2_PASS_WALL) != 0) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(target_ptr))
-        && has_flag(f_ptr->flags, FF_CAN_PASS)) {
+    if (((r_ptr->flags2 & RF2_PASS_WALL) != 0) && (!turn_flags_ptr->is_riding_mon || has_pass_wall(target_ptr)) && has_flag(f_ptr->flags, FF_CAN_PASS)) {
         turn_flags_ptr->did_pass_wall = TRUE;
     }
 

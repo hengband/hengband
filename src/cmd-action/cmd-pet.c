@@ -39,9 +39,9 @@
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
+#include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
-#include "player/player-status-flags.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "target/target-checker.h"
@@ -150,7 +150,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
             }
 
             if (pet_ctr == creature_ptr->riding) {
-                msg_format(_("%sから降りた。", "You have got off %s. "), friend_name);
+                msg_format(_("%sから降りた。", "You dismount from %s. "), friend_name);
 
                 creature_ptr->riding = 0;
 
@@ -170,7 +170,8 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 
     Term->scr->cu = cu;
     Term->scr->cv = cv;
-    term_fresh();
+    if (need_term_fresh())
+        term_fresh();
 
     C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);
 
@@ -334,7 +335,7 @@ static void do_name_pet(player_type *creature_ptr)
             return;
         }
         if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE) {
-            msg_print(_("そのモンスターの名前は変えられない！", "You cannot change name of this monster!"));
+            msg_print(_("そのモンスターの名前は変えられない！", "You cannot change the name of this monster!"));
             return;
         }
         monster_desc(creature_ptr, m_name, m_ptr, 0);
@@ -495,10 +496,10 @@ void do_cmd_pet(player_type *creature_ptr)
     powers[num++] = PET_NAME;
 
     if (creature_ptr->riding) {
-        if ((has_right_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM)
-                && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM]))
-            || (has_left_hand_weapon(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM)
-                && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM]))) {
+        if ((can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB)
+                && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_MAIN_HAND]))
+            || (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN)
+                && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_SUB_HAND]))) {
             if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                 power_desc[num] = _("武器を片手で持つ", "use one hand to control the pet you are riding");
             } else {
@@ -511,7 +512,7 @@ void do_cmd_pet(player_type *creature_ptr)
             case CLASS_MONK:
             case CLASS_FORCETRAINER:
             case CLASS_BERSERKER:
-                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM)) {
+                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
                     if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("片手で格闘する", "use one hand to control the pet you are riding");
                     } else {
@@ -519,8 +520,8 @@ void do_cmd_pet(player_type *creature_ptr)
                     }
 
                     powers[num++] = PET_TWO_HANDS;
-                } else if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_RARM)
-                    && !has_melee_weapon(creature_ptr, INVEN_LARM)) {
+                } else if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
+                    && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
                     if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("格闘を行わない", "use one hand to control the pet you are riding");
                     } else {

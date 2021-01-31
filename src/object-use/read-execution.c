@@ -123,12 +123,12 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_CURSE_WEAPON: {
             k = 0;
-            if (has_melee_weapon(creature_ptr, INVEN_RARM)) {
-                k = INVEN_RARM;
-                if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2))
-                    k = INVEN_LARM;
-            } else if (has_melee_weapon(creature_ptr, INVEN_LARM))
-                k = INVEN_LARM;
+            if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)) {
+                k = INVEN_MAIN_HAND;
+                if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND) && one_in_(2))
+                    k = INVEN_SUB_HAND;
+            } else if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
+                k = INVEN_SUB_HAND;
 
             if (k && curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[k]))
                 ident = TRUE;

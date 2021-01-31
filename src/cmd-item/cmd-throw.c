@@ -65,7 +65,7 @@ static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, co
     if (!it_ptr->boomerang)
         return TRUE;
 
-    if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM)) {
+    if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
         item_tester_hook = item_tester_hook_boomerang;
         *q = _("どの武器を投げますか? ", "Throw which item? ");
         *s = _("投げる武器がない。", "You have nothing to throw.");
@@ -78,13 +78,13 @@ static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, co
         return TRUE;
     }
 
-    if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-        it_ptr->item = INVEN_LARM;
+    if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
+        it_ptr->item = INVEN_SUB_HAND;
         it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
         return TRUE;
     }
 
-    it_ptr->item = INVEN_RARM;
+    it_ptr->item = INVEN_MAIN_HAND;
     it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
     return TRUE;
 }
@@ -117,7 +117,7 @@ static bool check_can_throw(player_type *creature_ptr, it_type *it_ptr)
     if (!check_what_throw(creature_ptr, it_ptr))
         return FALSE;
 
-    if (object_is_cursed(it_ptr->o_ptr) && (it_ptr->item >= INVEN_RARM)) {
+    if (object_is_cursed(it_ptr->o_ptr) && (it_ptr->item >= INVEN_MAIN_HAND)) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
         return FALSE;
     }
@@ -243,10 +243,12 @@ static void check_racial_target_seen(player_type *creature_ptr, it_type *it_ptr)
     TERM_COLOR a = object_attr(it_ptr->q_ptr);
     print_rel(creature_ptr, c, a, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
     move_cursor_relative(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
-    term_fresh();
-    term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
-    lite_spot(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
-    term_fresh();
+    if (it_ptr->msec > 0) {
+        term_fresh();
+        term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
+        lite_spot(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
+        term_fresh();
+    }
 }
 
 static bool check_racial_target_monster(player_type *creature_ptr, it_type *it_ptr)
@@ -290,7 +292,7 @@ static void calc_racial_power_damage(player_type *creature_ptr, it_type *it_ptr)
         it_ptr->tdam += -it_ptr->q_ptr->to_d;
 
     if (it_ptr->boomerang) {
-        it_ptr->tdam *= (it_ptr->mult + creature_ptr->num_blow[it_ptr->item - INVEN_RARM]);
+        it_ptr->tdam *= (it_ptr->mult + creature_ptr->num_blow[it_ptr->item - INVEN_MAIN_HAND]);
         it_ptr->tdam += creature_ptr->to_d_m;
     } else if (has_flag(it_ptr->obj_flags, TR_THROW)) {
         it_ptr->tdam *= (3 + it_ptr->mult);
@@ -376,7 +378,7 @@ void display_potion_throw(player_type *creature_ptr, it_type *it_ptr)
     if (!object_is_potion(it_ptr->q_ptr))
         return;
 
-    if (it_ptr->hit_body || it_ptr->hit_wall || (randint1(100) < it_ptr->corruption_possibility)) {
+    if (!it_ptr->hit_body && !it_ptr->hit_wall && (randint1(100) >= it_ptr->corruption_possibility)) {
         it_ptr->corruption_possibility = 0;
         return;
     }
@@ -432,12 +434,15 @@ static void process_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
 
         SYMBOL_CODE c = object_char(it_ptr->q_ptr);
         byte a = object_attr(it_ptr->q_ptr);
-        print_rel(creature_ptr, c, a, it_ptr->ny[i], it_ptr->nx[i]);
-        move_cursor_relative(it_ptr->ny[i], it_ptr->nx[i]);
-        term_fresh();
-        term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
-        lite_spot(creature_ptr, it_ptr->ny[i], it_ptr->nx[i]);
-        term_fresh();
+
+        if (it_ptr->msec > 0) {
+            print_rel(creature_ptr, c, a, it_ptr->ny[i], it_ptr->nx[i]);
+            move_cursor_relative(it_ptr->ny[i], it_ptr->nx[i]);
+            term_fresh();
+            term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
+            lite_spot(creature_ptr, it_ptr->ny[i], it_ptr->nx[i]);
+            term_fresh();
+        }
     }
 
     display_boomerang_throw(creature_ptr, it_ptr);
@@ -464,7 +469,7 @@ static void check_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
 static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
 {
     if (it_ptr->come_back) {
-        if ((it_ptr->item != INVEN_RARM) && (it_ptr->item != INVEN_LARM)) {
+        if ((it_ptr->item != INVEN_MAIN_HAND) && (it_ptr->item != INVEN_SUB_HAND)) {
             store_item_to_inventory(creature_ptr, it_ptr->q_ptr);
             it_ptr->do_drop = FALSE;
             return;
@@ -532,7 +537,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
         return FALSE;
 
     reflect_inventory_by_throw(creature_ptr, it_ptr);
-    if (it_ptr->item >= INVEN_RARM) {
+    if (it_ptr->item >= INVEN_MAIN_HAND) {
         it_ptr->equiped_item = TRUE;
         creature_ptr->redraw |= PR_EQUIPPY;
     }

@@ -11,6 +11,7 @@
 
 #include "flavor/object-flavor.h"
 #include "cmd-item/cmd-smith.h"
+#include "combat/shoot.h"
 #include "flavor/flag-inscriptions-table.h"
 #include "flavor/flavor-util.h"
 #include "flavor/object-flavor-types.h"
@@ -35,7 +36,6 @@
 #include "perception/object-perception.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
-#include "combat/shoot.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "util/bit-flags-calculator.h"

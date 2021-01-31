@@ -208,6 +208,9 @@ void request_command(player_type *player_ptr, int shopping)
             msg_flag = FALSE;
             num_more = 0;
             inkey_flag = TRUE;
+            if (need_term_fresh()) {
+                term_fresh();
+            }
             cmd = inkey();
             if (!shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[mode][(byte)(cmd)])
                 cmd = inkey_from_menu(player_ptr);
@@ -317,7 +320,7 @@ void request_command(player_type *player_ptr, int shopping)
         caretcmd = command_cmd;
 #endif
 
-    for (inventory_slot_type i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;

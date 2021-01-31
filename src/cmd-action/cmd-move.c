@@ -22,8 +22,8 @@
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
-#include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/attack-defense-types.h"
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
@@ -425,5 +425,6 @@ void do_cmd_rest(player_type *creature_ptr)
     update_creature(creature_ptr);
     creature_ptr->redraw |= (PR_STATE);
     update_output(creature_ptr);
-    term_fresh();
+    if (need_term_fresh())
+        term_fresh();
 }

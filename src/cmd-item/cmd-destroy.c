@@ -183,7 +183,7 @@ static void exe_destroy_item(player_type *creature_ptr, destroy_type *destroy_pt
     if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_d != 0) || (destroy_ptr->q_ptr->to_h != 0))
         chg_virtue(creature_ptr, V_HARMONY, 1);
 
-    if (destroy_ptr->item >= INVEN_RARM)
+    if (destroy_ptr->item >= INVEN_MAIN_HAND)
         calc_android_exp(creature_ptr);
 }
 

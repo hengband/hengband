@@ -34,7 +34,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
             prt(_("(1) 既知の伝説のアイテム                 の一覧", "(1) Display known artifacts"), 6, 5);
             prt(_("(2) 既知のアイテム                       の一覧", "(2) Display known objects"), 7, 5);
             prt(_("(3) 既知の生きているユニーク・モンスター の一覧", "(3) Display remaining uniques"), 8, 5);
-            prt(_("(4) 既知の撃破したユニーク・モンスター   の一覧", "(4) Display having defeated uniques"), 9, 5);
+            prt(_("(4) 既知の撃破したユニーク・モンスター   の一覧", "(4) Display defeated uniques"), 9, 5);
             prt(_("(5) 既知のモンスター                     の一覧", "(5) Display known monster"), 10, 5);
             prt(_("(6) 倒した敵の数                         の一覧", "(6) Display kill count"), 11, 5);
             if (!vanilla_town)

@@ -9,17 +9,17 @@
 #include "artifact/random-art-generator.h"
 #include "game-option/cheat-options.h"
 #include "inventory/inventory-slot-types.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags9.h"
 #include "monster-race/race-indice-types.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "perception/object-perception.h"
 #include "object/object-kind.h"
+#include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
@@ -163,7 +163,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
 
         get_mon_num_prep(owner_ptr, item_monster_okay, NULL);
         while (TRUE) {
-            i = get_mon_num(owner_ptr, floor_ptr->dun_level, 0);
+            i = get_mon_num(owner_ptr, 0, floor_ptr->dun_level, 0);
             r_ptr = &r_info[i];
             check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
             if (!r_ptr->rarity)

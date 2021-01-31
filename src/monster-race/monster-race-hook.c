@@ -36,7 +36,7 @@ BIT_FLAGS vault_aux_dragon_mask4;
 void vault_prep_clone(player_type *player_ptr)
 {
     get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
-    vault_aux_race = get_mon_num(player_ptr, player_ptr->current_floor_ptr->dun_level + 10, 0);
+    vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, 0);
     get_mon_num_prep(player_ptr, NULL, NULL);
 }
 
@@ -48,7 +48,7 @@ void vault_prep_clone(player_type *player_ptr)
 void vault_prep_symbol(player_type *player_ptr)
 {
     get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
-    MONRACE_IDX r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->dun_level + 10, 0);
+    MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, 0);
     get_mon_num_prep(player_ptr, NULL, NULL);
     vault_aux_char = r_info[r_idx].d_char;
 }
@@ -878,6 +878,5 @@ bool item_monster_okay(player_type *player_ptr, MONRACE_IDX r_idx)
 bool vault_monster_okay(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     return (mon_hook_dungeon(player_ptr, r_idx) && !(r_info[r_idx].flags1 & RF1_UNIQUE) && !(r_info[r_idx].flags7 & RF7_UNIQUE2)
-        && !(r_info[r_idx].flagsr & RFR_RES_ALL)
-        && !(r_info[r_idx].flags7 & RF7_AQUATIC));
+        && !(r_info[r_idx].flagsr & RFR_RES_ALL) && !(r_info[r_idx].flags7 & RF7_AQUATIC));
 }

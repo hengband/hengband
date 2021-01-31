@@ -2,7 +2,6 @@
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
-#include "status/buff-setter.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon.h"
@@ -12,15 +11,16 @@
 #include "market/arena-info-table.h"
 #include "market/building-actions-table.h"
 #include "market/building-util.h"
+#include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-ability1.h"
 #include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
+#include "status/buff-setter.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
@@ -197,7 +197,7 @@ void update_gambling_monsters(player_type *player_ptr)
             int j;
             while (TRUE) {
                 get_mon_num_prep(player_ptr, monster_can_entry_arena, NULL);
-                r_idx = get_mon_num(player_ptr, mon_level, GMN_ARENA);
+                r_idx = get_mon_num(player_ptr, 0, mon_level, GMN_ARENA);
                 if (!r_idx)
                     continue;
 

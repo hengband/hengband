@@ -31,7 +31,7 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
 {
     HIT_PROB show_tohit = creature_ptr->dis_to_h[hand];
     HIT_POINT show_todam = creature_ptr->dis_to_d[hand];
-    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM + hand];
+    object_type *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + hand];
 
     if (object_is_known(o_ptr))
         show_tohit += o_ptr->to_h;
@@ -43,7 +43,7 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
     char buf[160];
     sprintf(buf, "(%+d,%+d)", (int)show_tohit, (int)show_todam);
 
-    if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
+    if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
         display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
     else if (has_two_handed_weapons(creature_ptr))
         display_player_one_line(ENTRY_TWO_HANDS, buf, TERM_L_BLUE);
@@ -56,14 +56,14 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void display_left_hand(player_type *creature_ptr)
+static void display_sub_hand(player_type *creature_ptr)
 {
-    if (has_left_hand_weapon(creature_ptr)) {
+    if (can_attack_with_sub_hand(creature_ptr)) {
         display_player_melee_bonus(creature_ptr, 1, left_hander ? ENTRY_RIGHT_HAND2 : ENTRY_LEFT_HAND2);
         return;
     }
 
-    if ((creature_ptr->pclass != CLASS_MONK) || ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) == 0))
+    if ((creature_ptr->pclass != CLASS_MONK) || ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN) == 0))
         return;
 
     if ((creature_ptr->special_defense & KAMAE_MASK) == 0) {
@@ -291,10 +291,10 @@ static void display_real_playtime(void)
  */
 void display_player_middle(player_type *creature_ptr)
 {
-    if (has_right_hand_weapon(creature_ptr))
+    if (can_attack_with_main_hand(creature_ptr))
         display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
 
-    display_left_hand(creature_ptr);
+    display_sub_hand(creature_ptr);
     display_hit_damage(creature_ptr);
     display_shoot_magnification(creature_ptr);
     display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", creature_ptr->dis_ac, creature_ptr->dis_to_a), TERM_L_BLUE);

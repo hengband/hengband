@@ -172,7 +172,7 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
             }
 
             while (TRUE) {
-                o_ptr->name2 = get_random_ego(INVEN_LARM, TRUE);
+                o_ptr->name2 = get_random_ego(INVEN_SUB_HAND, TRUE);
                 if (o_ptr->sval != SV_SMALL_METAL_SHIELD && o_ptr->sval != SV_LARGE_METAL_SHIELD && o_ptr->name2 == EGO_S_DWARVEN) {
                     continue;
                 }
@@ -214,9 +214,9 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 become_random_artifact(owner_ptr, o_ptr, FALSE);
                 break;
             }
-            o_ptr->name2 = get_random_ego(INVEN_HANDS, TRUE);
+            o_ptr->name2 = get_random_ego(INVEN_ARMS, TRUE);
         } else if (power < -1) {
-            o_ptr->name2 = get_random_ego(INVEN_HANDS, FALSE);
+            o_ptr->name2 = get_random_ego(INVEN_ARMS, FALSE);
         }
 
         break;

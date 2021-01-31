@@ -81,7 +81,7 @@ bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, HIT_POIN
 #endif
 
     player_ptr->au -= (cost * o_ptr->number);
-    if (item >= INVEN_RARM)
+    if (item >= INVEN_MAIN_HAND)
         calc_android_exp(player_ptr);
     return TRUE;
 }

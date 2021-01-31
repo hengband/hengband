@@ -47,9 +47,16 @@
 /*!< Empty hand status */
 enum empty_hand_status {
     EMPTY_HAND_NONE = 0x0000, /*!<Both hands are used */
-    EMPTY_HAND_LARM = 0x0001, /*!<Left hand is empty */
-    EMPTY_HAND_RARM = 0x0002 /*!<Right hand is empty */
+    EMPTY_HAND_SUB = 0x0001, /*!<Sub hand is empty */
+    EMPTY_HAND_MAIN = 0x0002 /*!<Main hand is empty */
 };
+
+/*!< Weapon hand status */
+typedef enum player_hand {
+    PLAYER_HAND_MAIN = 0x0000,
+    PLAYER_HAND_SUB = 0x0001,
+    PLAYER_HAND_OTHER = 0x0002
+} player_hand;
 
 /*
  * Player sex constants (hard-coded by save-files, arrays, etc)
@@ -461,7 +468,6 @@ typedef struct player_type {
     POSITION x; /*!< ダンジョンの現在X座標 / Player location in dungeon */
     GAME_TEXT name[32]; /*!< 現在のプレイヤー名 / Current player's character name */
     char base_name[32]; /*!< Stripped version of "player_name" */
-
 } player_type;
 
 extern player_type *p_ptr;

@@ -9,6 +9,7 @@
 #include "grid/grid.h"
 #include "io/cursor.h"
 #include "io/write-diary.h"
+#include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
@@ -18,7 +19,6 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
-#include "monster-floor/monster-remover.h"
 #include "monster/monster-status.h"
 #include "player-info/avatar.h"
 #include "player/player-damage.h"
@@ -100,7 +100,8 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
     caster_ptr->redraw |= (PR_HP);
     caster_ptr->window |= (PW_PLAYER);
     handle_stuff(caster_ptr);
-    term_fresh();
+    if (need_term_fresh())
+        term_fresh();
 
     int msec = delay_factor * delay_factor * delay_factor;
     term_xtra(TERM_XTRA_DELAY, msec);

@@ -1,9 +1,8 @@
 ﻿#include "cmd-io/cmd-lore.h"
 #include "core/asking-player.h"
-#include "util/sort.h"
 #include "core/stuff-handler.h"
-#include "game-option/game-play-options.h"
 #include "game-option/cheat-options.h"
+#include "game-option/game-play-options.h"
 #include "io/input-key-acceptor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -12,6 +11,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
+#include "util/sort.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
 

@@ -472,17 +472,17 @@ bool drop_weapons(player_type *creature_ptr)
         return FALSE;
 
     msg_print(NULL);
-    if (has_melee_weapon(creature_ptr, INVEN_RARM)) {
-        slot = INVEN_RARM;
-        o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
+    if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)) {
+        slot = INVEN_MAIN_HAND;
+        o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND];
 
-        if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2)) {
-            o_ptr = &creature_ptr->inventory_list[INVEN_LARM];
-            slot = INVEN_LARM;
+        if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND) && one_in_(2)) {
+            o_ptr = &creature_ptr->inventory_list[INVEN_SUB_HAND];
+            slot = INVEN_SUB_HAND;
         }
-    } else if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-        o_ptr = &creature_ptr->inventory_list[INVEN_LARM];
-        slot = INVEN_LARM;
+    } else if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
+        o_ptr = &creature_ptr->inventory_list[INVEN_SUB_HAND];
+        slot = INVEN_SUB_HAND;
     }
 
     if ((slot == 0) || object_is_cursed(o_ptr))

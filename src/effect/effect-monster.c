@@ -217,7 +217,7 @@ static bool process_monster_fear(player_type *caster_ptr, effect_monster_type *e
     if (em_ptr->do_sleep)
         anger_monster(caster_ptr, em_ptr->m_ptr);
 
-    if (em_ptr->note && em_ptr->seen_msg)
+    if (em_ptr->note && em_ptr->seen)
         msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
     else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear))
         message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);

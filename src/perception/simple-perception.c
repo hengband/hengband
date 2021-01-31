@@ -89,7 +89,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
         disturb(creature_ptr, FALSE, FALSE);
 
     describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (slot >= INVEN_RARM) {
+    if (slot >= INVEN_MAIN_HAND) {
 #ifdef JP
         msg_format("%s%s(%c)は%sという感じがする...", describe_use(creature_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);
 #else
@@ -277,7 +277,7 @@ void sense_inventory1(player_type *creature_ptr)
 
         if (!okay)
             continue;
-        if ((i < INVEN_RARM) && (0 != randint0(5)))
+        if ((i < INVEN_MAIN_HAND) && (0 != randint0(5)))
             continue;
 
         if (has_good_luck(creature_ptr) && !randint0(13)) {
@@ -376,7 +376,7 @@ void sense_inventory2(player_type *creature_ptr)
 
         if (!okay)
             continue;
-        if ((i < INVEN_RARM) && (0 != randint0(5)))
+        if ((i < INVEN_MAIN_HAND) && (0 != randint0(5)))
             continue;
 
         sense_inventory_aux(creature_ptr, i, TRUE);

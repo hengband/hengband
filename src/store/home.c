@@ -2,9 +2,9 @@
 #include "floor/floor-town.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
+#include "object/object-generator.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "object/object-generator.h"
 #include "player-info/avatar.h"
 #include "store/store-util.h"
 #include "util/object-sort.h"
@@ -83,7 +83,7 @@ int home_carry(player_type *player_ptr, object_type *o_ptr)
 
 static bool exe_combine_store_items(object_type *o_ptr, object_type *j_ptr, const int max_num, const int i, bool *combined)
 {
-    if (o_ptr->number + j_ptr->number <= max_num)
+    if (o_ptr->number + j_ptr->number > max_num)
         return FALSE;
 
     object_absorb(j_ptr, o_ptr);

@@ -14,8 +14,8 @@
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
-#include "window/display-sub-windows.h"
 #include "window/display-sub-window-spells.h"
+#include "window/display-sub-windows.h"
 #include "window/main-window-left-frame.h"
 #include "window/main-window-row-column.h"
 #include "window/main-window-stat-poster.h"
@@ -227,6 +227,9 @@ void redraw_stuff(player_type *creature_ptr)
 void window_stuff(player_type *player_ptr)
 {
     if (!player_ptr->window)
+        return;
+
+    if (!need_term_fresh())
         return;
 
     BIT_FLAGS mask = 0L;

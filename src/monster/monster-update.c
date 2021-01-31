@@ -498,7 +498,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
         update_invisible_monster(subject_ptr, um_ptr, m_idx);
     else
         update_visible_monster(subject_ptr, um_ptr, m_idx);
-    
+
     if (update_clear_monster(subject_ptr, um_ptr) || ((um_ptr->m_ptr->mflag & MFLAG_VIEW) == 0))
         return;
 

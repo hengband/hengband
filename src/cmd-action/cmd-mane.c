@@ -35,8 +35,8 @@
 #include "monster/monster-status.h"
 #include "mspell/monster-power-table.h"
 #include "mspell/mspell-type.h"
-#include "player/player-status.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
@@ -304,7 +304,6 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
     /* spell code */
     switch (spell) {
-
     case MS_SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
         aggravate_monsters(caster_ptr, 0);
@@ -878,7 +877,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         trap_creation(caster_ptr, target_row, target_col);
         break;
     case MS_FORGET:
-        msg_print(_("しかし何も起きなかった。", "Nothing happen."));
+        msg_print(_("しかし何も起きなかった。", "Nothing happens."));
         break;
     case MS_RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You animate the dead."));

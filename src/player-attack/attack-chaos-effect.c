@@ -168,7 +168,7 @@ static void attack_golden_hammer(player_type *attacker_ptr, player_attack_type *
 void change_monster_stat(player_type *attacker_ptr, player_attack_type *pa_ptr, const POSITION y, const POSITION x, int *num)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (pa_ptr->chaos_effect == CE_CONFUSION) || (pa_ptr->mode == HISSATSU_CONF)
         || hex_spelling(attacker_ptr, HEX_CONFUSION))
         attack_confuse(attacker_ptr, pa_ptr);

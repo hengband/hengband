@@ -51,7 +51,7 @@ bool activate_acid_ball_and_resistance(player_type *user_ptr, concptr name)
 bool activate_elec_ball_and_resistance(player_type *user_ptr, concptr name)
 {
     msg_format(_("%sが青く輝いた...", "The %s grows blue."), name);
-    
+
     DIRECTION dir;
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;

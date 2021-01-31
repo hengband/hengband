@@ -16,6 +16,7 @@ Hengband.exe.lastcodeanalysissucceeded
 
 # English version build result by Visual Studio
 [Ee]nglish-[Dd]ebug/
+[Ee]nglish-[Rr]elease/
 
 # game data files auto generated
 Hengband.INI

@@ -389,16 +389,16 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
         case REW_CURSE_WP: {
             inventory_slot_type slot;
 
-            if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
+            if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
                 break;
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「汝、武器に頼ることなかれ。」", "'Thou reliest too much on thy weapon.'"));
 
-            slot = INVEN_RARM;
-            if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-                slot = INVEN_LARM;
-                if (has_melee_weapon(creature_ptr, INVEN_RARM) && one_in_(2))
-                    slot = INVEN_RARM;
+            slot = INVEN_MAIN_HAND;
+            if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
+                slot = INVEN_SUB_HAND;
+                if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && one_in_(2))
+                    slot = INVEN_MAIN_HAND;
             }
             describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], OD_NAME_ONLY);
             (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[slot]);
@@ -435,13 +435,13 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             case 3:
                 if (one_in_(2)) {
                     inventory_slot_type slot;
-                    if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
+                    if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
                         break;
-                    slot = INVEN_RARM;
-                    if (has_melee_weapon(creature_ptr, INVEN_LARM)) {
-                        slot = INVEN_LARM;
-                        if (has_melee_weapon(creature_ptr, INVEN_RARM) && one_in_(2))
-                            slot = INVEN_RARM;
+                    slot = INVEN_MAIN_HAND;
+                    if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
+                        slot = INVEN_SUB_HAND;
+                        if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && one_in_(2))
+                            slot = INVEN_MAIN_HAND;
                     }
                     describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], OD_NAME_ONLY);
                     (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[slot]);
@@ -477,12 +477,12 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             if (one_in_(2)) {
                 inventory_slot_type slot = 0;
 
-                if (has_melee_weapon(creature_ptr, INVEN_RARM)) {
-                    slot = INVEN_RARM;
-                    if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2))
-                        slot = INVEN_LARM;
-                } else if (has_melee_weapon(creature_ptr, INVEN_LARM))
-                    slot = INVEN_LARM;
+                if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)) {
+                    slot = INVEN_MAIN_HAND;
+                    if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND) && one_in_(2))
+                        slot = INVEN_SUB_HAND;
+                } else if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
+                    slot = INVEN_SUB_HAND;
 
                 if (slot)
                     (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[slot]);

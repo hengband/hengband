@@ -56,7 +56,7 @@ static void process_fishing(player_type *creature_ptr)
         MONRACE_IDX r_idx;
         bool success = FALSE;
         get_mon_num_prep(creature_ptr, monster_is_fishing_target, NULL);
-        r_idx = get_mon_num(creature_ptr,
+        r_idx = get_mon_num(creature_ptr, 0,
             creature_ptr->current_floor_ptr->dun_level ? creature_ptr->current_floor_ptr->dun_level
                                                        : wilderness[creature_ptr->wilderness_y][creature_ptr->wilderness_x].level,
             0);
@@ -277,6 +277,10 @@ void process_player(player_type *creature_ptr)
             process_command(creature_ptr);
         } else {
             move_cursor_relative(creature_ptr->y, creature_ptr->x);
+
+            creature_ptr->window |= PW_MONSTER_LIST;
+            window_stuff(creature_ptr);
+
             can_save = TRUE;
             request_command(creature_ptr, FALSE);
             can_save = FALSE;
@@ -360,7 +364,6 @@ void process_player(player_type *creature_ptr)
             }
 
             if (creature_ptr->timewalk && (creature_ptr->energy_need > -1000)) {
-
                 creature_ptr->redraw |= (PR_MAP);
                 creature_ptr->update |= (PU_MONSTERS);
                 creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

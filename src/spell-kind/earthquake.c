@@ -23,11 +23,11 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
-#include "status/bad-status-setter.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/special-defense-types.h"
+#include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -129,8 +129,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
         if (!sn) {
             msg_print(_("あなたはひどい怪我を負った！", "You are severely crushed!"));
             damage = 200;
-        }
-        else {
+        } else {
             switch (randint1(3)) {
             case 1: {
                 msg_print(_("降り注ぐ岩をうまく避けた！", "You nimbly dodge the blast!"));

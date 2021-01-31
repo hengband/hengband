@@ -1,8 +1,8 @@
 ﻿#include "market/building-quest.h"
 #include "cmd-building/cmd-building.h"
-#include "info-reader/fixed-map-parser.h"
 #include "dungeon/quest.h"
 #include "grid/grid.h"
+#include "info-reader/fixed-map-parser.h"
 #include "market/building-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -98,13 +98,13 @@ void castle_quest(player_type *player_ptr)
     }
 
     if (q_ptr->r_idx == 0) {
-        q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level + 4 + randint1(6), 0);
+        q_ptr->r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 4 + randint1(6), 0);
     }
 
     monster_race *r_ptr;
     r_ptr = &r_info[q_ptr->r_idx];
     while ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->rarity != 1)) {
-        q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level + 4 + randint1(6), 0);
+        q_ptr->r_idx = get_mon_num(player_ptr, 0, q_ptr->level + 4 + randint1(6), 0);
         r_ptr = &r_info[q_ptr->r_idx];
     }
 

@@ -10,11 +10,11 @@
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
-#include "perception/object-perception.h"
 #include "object/object-generator.h"
+#include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/object-info.h"
+#include "perception/object-perception.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "realm/realm-types.h"
@@ -43,7 +43,7 @@ void wield_all(player_type *creature_ptr)
             continue;
 
         int slot = wield_slot(creature_ptr, o_ptr);
-        if (slot < INVEN_RARM)
+        if (slot < INVEN_MAIN_HAND)
             continue;
         if (slot == INVEN_LITE)
             continue;
@@ -96,7 +96,7 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
         get_mon_num_prep(creature_ptr, monster_hook_human, NULL);
         for (int i = rand_range(3, 4); i > 0; i--) {
             object_prep(creature_ptr, q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
-            q_ptr->pval = get_mon_num(creature_ptr, 2, 0);
+            q_ptr->pval = get_mon_num(creature_ptr, 0, 2, 0);
             if (q_ptr->pval) {
                 q_ptr->number = 1;
                 add_outfit(creature_ptr, q_ptr);

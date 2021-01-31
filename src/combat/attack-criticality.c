@@ -153,7 +153,7 @@ static void ninja_critical(player_type *attacker_ptr, player_attack_type *pa_ptr
  */
 void critical_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
         if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2)) {
@@ -165,7 +165,7 @@ void critical_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
         return;
     }
 
-    bool is_ninja_hit = (attacker_ptr->pclass == CLASS_NINJA) && has_melee_weapon(attacker_ptr, INVEN_RARM + pa_ptr->hand)
+    bool is_ninja_hit = (attacker_ptr->pclass == CLASS_NINJA) && has_melee_weapon(attacker_ptr, INVEN_MAIN_HAND + pa_ptr->hand)
         && !attacker_ptr->icky_wield[pa_ptr->hand] && ((attacker_ptr->cur_lite <= 0) || one_in_(7));
     if (is_ninja_hit)
         ninja_critical(attacker_ptr, pa_ptr);

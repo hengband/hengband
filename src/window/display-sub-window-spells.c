@@ -1,9 +1,9 @@
 ﻿#include "window/display-sub-window-spells.h"
 #include "core/window-redrawer.h"
 #include "game-option/option-flags.h"
-#include "mind/mind-sniper.h"
 #include "mind/mind-explanations-table.h"
 #include "mind/mind-info.h"
+#include "mind/mind-sniper.h"
 #include "mind/mind-types.h"
 #include "player/player-class.h"
 #include "player/player-status-table.h"
@@ -184,7 +184,10 @@ void fix_spell(player_type *player_ptr)
 
         term_activate(angband_term[j]);
         display_spell_list(player_ptr);
-        term_fresh();
+        if (need_term_fresh()) {
+            term_fresh();
+            player_ptr->window &= ~(PW_SPELL);
+        }
         term_activate(old);
     }
 }

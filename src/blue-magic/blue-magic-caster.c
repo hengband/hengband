@@ -103,7 +103,7 @@ static bool exe_blue_teleport_back(player_type *caster_ptr, GAME_TEXT *m_name)
         msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name);
         return TRUE;
     }
-    
+
     if (r_ptr->level <= randint1(100))
         return FALSE;
 

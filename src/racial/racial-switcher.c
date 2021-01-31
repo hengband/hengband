@@ -128,7 +128,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
     case CLASS_CHAOS_WARRIOR:
         return confusing_light(creature_ptr);
     case CLASS_MONK:
-        if (!(empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM)) {
+        if (!(empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN)) {
             msg_print(_("素手じゃないとできません。", "You need to be barehanded."));
             return FALSE;
         }
@@ -214,7 +214,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         if (command != -4)
             return TRUE;
 
-        if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM)) {
+        if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
             msg_print(_("武器を持たないといけません。", "You need to wield a weapon."));
             return FALSE;
         }

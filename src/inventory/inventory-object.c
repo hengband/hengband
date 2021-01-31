@@ -59,9 +59,9 @@ void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
 
     if (o_ptr->number || !owner_ptr->ele_attack)
         return;
-    if (!(item == INVEN_RARM) && !(item == INVEN_LARM))
+    if (!(item == INVEN_MAIN_HAND) && !(item == INVEN_SUB_HAND))
         return;
-    if (has_melee_weapon(owner_ptr, INVEN_RARM + INVEN_LARM - item))
+    if (has_melee_weapon(owner_ptr, INVEN_MAIN_HAND + INVEN_SUB_HAND - item))
         return;
 
     set_ele_attack(owner_ptr, 0, 0);
@@ -82,7 +82,7 @@ void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
     if (o_ptr->number)
         return;
 
-    if (item >= INVEN_RARM) {
+    if (item >= INVEN_MAIN_HAND) {
         owner_ptr->equip_cnt--;
         object_wipe(&owner_ptr->inventory_list[item]);
         owner_ptr->update |= PU_BONUS;
@@ -128,7 +128,7 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
     if (amt > o_ptr->number)
         amt = o_ptr->number;
 
-    if (item >= INVEN_RARM) {
+    if (item >= INVEN_MAIN_HAND) {
         item = inven_takeoff(owner_ptr, item, amt);
         o_ptr = &owner_ptr->inventory_list[item];
     }
@@ -404,7 +404,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
     object_copy(q_ptr, o_ptr);
     q_ptr->number = amt;
     describe_flavor(owner_ptr, o_name, q_ptr, 0);
-    if (((item == INVEN_RARM) || (item == INVEN_LARM)) && object_is_melee_weapon(o_ptr)) {
+    if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && object_is_melee_weapon(o_ptr)) {
         act = _("を装備からはずした", "You were wielding");
     } else if (item == INVEN_BOW) {
         act = _("を装備からはずした", "You were holding");
