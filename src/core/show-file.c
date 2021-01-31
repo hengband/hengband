@@ -237,6 +237,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
     term_clear();
 
     concptr find = NULL;
+    concptr shower = NULL;
     while (TRUE) {
         if (line >= size - rows)
             line = size - rows;
@@ -261,7 +262,6 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
         }
 
         int row_count;
-        concptr shower = NULL;
         for (row_count = 0; row_count < rows;) {
             concptr str = buf;
             if (!row_count)
