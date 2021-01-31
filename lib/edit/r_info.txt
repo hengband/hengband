@@ -13739,7 +13739,7 @@ F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | SELF_LITE_2
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
 F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BLIND | CONF | SCARE | BR_ELEC
-D:$It is a dragon that has accumulated great power in the Oblivion
+D:$It is a dragon that has accumulated great power in Oblivion
 D:$ and has returned to this world.
 D:$  The electricity produced by this dragon can light one town
 D:$ all year round.
@@ -14094,7 +14094,7 @@ F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BLIND | CONF | SCARE | BR_COLD
-D:$It is a dragon that has accumulated great power in the Oblivion
+D:$It is a dragon that has accumulated great power in Oblivion
 D:$ and has returned to this world.
 D:$  Be careful, this dragon can freeze your body and even your soul!
 D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
@@ -14462,7 +14462,7 @@ F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | SELF_LITE_2
 F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BLIND | CONF | SCARE | BR_FIRE
-D:$It is a dragon that has accumulated great power in the Oblivion
+D:$It is a dragon that has accumulated great power in Oblivion
 D:$ and has returned to this world.
 D:$In front of this fiery flame,
 D:$ you may not be able to leave a proof that you were alive!
@@ -18285,7 +18285,7 @@ F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | CAN_FLY |
 F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING |
 S:1_IN_4 | BLIND | CONF | SCARE | BR_POIS
-D:$It is a dragon that has accumulated great power in the Oblivion
+D:$It is a dragon that has accumulated great power in Oblivion
 D:$ and has returned to this world.
 D:$  It scatters a breathtakingly ferocious miasma.
 D:冥界で強大な力を蓄えて現世に舞い戻ってきたドラゴンだ。
@@ -20297,7 +20297,7 @@ D:ご老公を助けて旅から旅へ。とんだ爺に仕えたもんだ。
 N:1003:ゴースト『Ｑ』
 E:The Ghost 'Q'
 G:G:w
-I:140:10d20:10:30:10
+I:140:10d20:20:30:10
 W:15:3:0:150:0:0
 B:TOUCH:EAT_FOOD:1d1
 B:TOUCH:EAT_FOOD:1d1
