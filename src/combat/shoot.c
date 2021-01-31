@@ -548,9 +548,9 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                 byte a = object_attr(q_ptr);
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
-                print_rel(shooter_ptr, c, a, ny, nx);
-                move_cursor_relative(ny, nx);
-                if (need_term_fresh()) {
+                if (msec > 0) {
+                    print_rel(shooter_ptr, c, a, ny, nx);
+                    move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, msec);
                     lite_spot(shooter_ptr, ny, nx);
@@ -560,8 +560,10 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
             /* The player cannot see the missile */
             else {
-                /* Pause anyway, for consistancy */
-                term_xtra(TERM_XTRA_DELAY, msec);
+                /* Pause anyway, for consistancy **/
+                if (msec > 0) {
+                    term_xtra(TERM_XTRA_DELAY, msec);
+                }
             }
 
             /* Sniper */
@@ -772,10 +774,9 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
                                 update_monster(shooter_ptr, c_mon_ptr->m_idx, TRUE);
 
-                                lite_spot(shooter_ptr, ny, nx);
-                                lite_spot(shooter_ptr, oy, ox);
-
-                                if (need_term_fresh()) {
+                                if (msec > 0) {
+                                    lite_spot(shooter_ptr, ny, nx);
+                                    lite_spot(shooter_ptr, oy, ox);
                                     term_fresh();
                                     term_xtra(TERM_XTRA_DELAY, msec);
                                 }
