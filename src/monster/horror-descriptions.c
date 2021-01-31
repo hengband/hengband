@@ -113,9 +113,9 @@ concptr horror_desc_neutral[MAX_SAN_HORROR_NEUTRAL] =
 	"unintelligible",
 
 	"psychedelic",
-	"strangely rigid",
+	"transfixing",
 	"trippy",
-	"featureless",
+	"hypnotic",
 	"blurred, with motion,",
 #endif
 };
