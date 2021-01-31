@@ -282,9 +282,12 @@ bool save_player(player_type *player_ptr, save_type type)
         strcat(temp, ".old");
         safe_setuid_grab(player_ptr);
         fd_kill(temp);
-        strcpy(filename, savefile);
+
         if (type == SAVE_TYPE_DEBUG)
-            strcat(filename, ".debug");
+            strcpy(filename, debug_savefile);
+        if (type == SAVE_TYPE_NORMAL)
+            strcpy(filename, savefile);
+
         fd_move(filename, temp);
         fd_move(safe, filename);
         fd_kill(temp);

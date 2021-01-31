@@ -4,6 +4,7 @@
 
 extern char savefile[1024];
 extern char savefile_base[40];
+extern char debug_savefile[1024];
 
 extern concptr ANGBAND_DIR;
 extern concptr ANGBAND_DIR_APEX;
@@ -16,6 +17,7 @@ extern concptr ANGBAND_DIR_HELP;
 extern concptr ANGBAND_DIR_INFO;
 extern concptr ANGBAND_DIR_PREF;
 extern concptr ANGBAND_DIR_SAVE;
+extern concptr ANGBAND_DIR_DEBUG_SAVE;
 extern concptr ANGBAND_DIR_USER;
 extern concptr ANGBAND_DIR_XTRA;
 
