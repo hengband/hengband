@@ -182,7 +182,7 @@ process_result effect_monster_charm_living(player_type *caster_ptr, effect_monst
         em_ptr->dam -= caster_ptr->virtues[vir - 1] / 20;
     }
 
-    msg_format(_("%sを見つめた。", "You stare into %s."), em_ptr->m_name);
+    msg_format(_("%sを見つめた。", "You stare at %s."), em_ptr->m_name);
 
     if (common_saving_throw_charm(caster_ptr, em_ptr->dam, em_ptr->m_ptr) || !monster_living(em_ptr->m_ptr->r_idx)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");

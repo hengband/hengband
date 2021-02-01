@@ -26,7 +26,7 @@ void effect_player_drain_mana(player_type *target_ptr, effect_player_type *ep_pt
     if (ep_ptr->who > 0)
         msg_format(_("%^sに精神エネルギーを吸い取られてしまった！", "%^s draws psychic energy from you!"), ep_ptr->m_name);
     else
-        msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drawn!"));
+        msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drained!"));
 
     if (ep_ptr->dam >= target_ptr->csp) {
         ep_ptr->dam = target_ptr->csp;
