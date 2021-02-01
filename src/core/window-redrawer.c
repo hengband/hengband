@@ -229,7 +229,7 @@ void window_stuff(player_type *player_ptr)
     if (!player_ptr->window)
         return;
 
-    if (!need_term_fresh())
+    if (!need_term_fresh(player_ptr))
         return;
 
     BIT_FLAGS mask = 0L;

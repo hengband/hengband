@@ -203,7 +203,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
                     SYMBOL_CODE c = PICT_C(p);
                     print_rel(caster_ptr, c, a, y, x);
                     move_cursor_relative(y, x);
-                    if (need_term_fresh()) {
+                    if (need_term_fresh(caster_ptr)) {
                         term_fresh();
                         term_xtra(TERM_XTRA_DELAY, msec);
                         lite_spot(caster_ptr, y, x);
@@ -523,7 +523,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
 
             move_cursor_relative(by, bx);
 
-            if (need_term_fresh())
+            if (need_term_fresh(caster_ptr))
                 term_fresh();
             if (visual || drawn) {
                 term_xtra(TERM_XTRA_DELAY, msec);
@@ -540,7 +540,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             }
 
             move_cursor_relative(by, bx);
-            if (need_term_fresh())
+            if (need_term_fresh(caster_ptr))
                 term_fresh();
         }
     }

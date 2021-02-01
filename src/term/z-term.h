@@ -96,6 +96,8 @@ typedef struct term_type {
         concptr tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
 } term_type;
 
+typedef struct player_type player_type;
+
 /**** Available Constants ****/
 
 /*
@@ -145,7 +147,8 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta
 void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
 
 void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
-bool need_term_fresh(void);
+
+bool need_term_fresh(player_type *player_ptr);
 
 errr term_fresh(void);
 errr term_set_cursor(int v);
