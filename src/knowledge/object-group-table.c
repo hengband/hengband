@@ -11,7 +11,7 @@
  * Description of each monster group.
  */
 concptr object_group_text[MAX_OBJECT_GROUP_TEXT] = { _("キノコ", "Mushrooms"), _("薬", "Potions"), _("油つぼ", "Flasks"), _("巻物", "Scrolls"),
-    _("指輪", "Rings"), _("アミュレット", "Amulets"), _("笛", "Whistle"), _("光源", "Lanterns"), _("魔法棒", "Wands"), _("杖", "Staffs"), _("ロッド", "Rods"),
+    _("指輪", "Rings"), _("アミュレット", "Amulets"), _("笛", "Whistles"), _("光源", "Lanterns"), _("魔法棒", "Wands"), _("杖", "Staffs"), _("ロッド", "Rods"),
     _("カード", "Cards"), _("モンスター・ボール", "Capture Balls"), _("羊皮紙", "Parchments"), _("くさび", "Spikes"), _("箱", "Boxes"), _("人形", "Figurines"),
     _("像", "Statues"), _("ゴミ", "Junk"), _("空のビン", "Bottles"), _("骨", "Skeletons"), _("死体", "Corpses"), _("刀剣類", "Swords"),
     _("鈍器", "Blunt Weapons"), _("長柄武器", "Polearms"), _("採掘道具", "Diggers"), _("飛び道具", "Bows"), _("弾", "Shots"), _("矢", "Arrows"),
