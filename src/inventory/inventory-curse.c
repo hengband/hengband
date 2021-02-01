@@ -269,7 +269,7 @@ static void curse_call_monster(player_type *creature_ptr)
         if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, floor_ptr->dun_level, SUMMON_DRAGON, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
             describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DRAGON), obj_desc_type);
-            msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted an dragon!"), o_name);
+            msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted a dragon!"), o_name);
             disturb(creature_ptr, FALSE, TRUE);
         }
     }
