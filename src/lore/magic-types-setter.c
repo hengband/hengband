@@ -402,7 +402,7 @@ void set_teleport_types(lore_type *lore_ptr)
     }
 
     if (lore_ptr->a_ability_flags2 & (RF6_WORLD)) {
-        lore_ptr->vp[lore_ptr->vn] = _("時を止める", "stop the time");
+        lore_ptr->vp[lore_ptr->vn] = _("時を止める", "stop time");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_BLUE;
     }
 
