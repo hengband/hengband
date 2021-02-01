@@ -164,7 +164,7 @@ static void curse_teleport(player_type *creature_ptr)
 
     o_ptr = &creature_ptr->inventory_list[i_keep];
     describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
+    msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s tries to teleport you."), o_name);
     if (get_check_strict(creature_ptr, _("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL)) {
         disturb(creature_ptr, FALSE, TRUE);
         teleport_player(creature_ptr, 50, TELEPORT_SPONTANEOUS);
