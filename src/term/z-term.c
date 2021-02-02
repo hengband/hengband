@@ -1029,10 +1029,7 @@ bool macro_running(void)
     return diff < -1 || 1 < diff;
 }
 
-bool need_term_fresh(player_type *player_ptr) { 
-    return (!macro_running() && !continuous_action_running(player_ptr)) 
-        || fresh_after; 
-}
+bool need_term_fresh(player_type *player_ptr) { return (!macro_running() && !continuous_action_running(player_ptr)) || fresh_after; }
 
 /*
  * @brief Actually perform all requested changes to the window

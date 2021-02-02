@@ -185,7 +185,8 @@ void fix_monster_list(player_type *player_ptr)
         term_clear();
         target_set_prepare(player_ptr, TARGET_LOOK);
         print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
-        term_fresh();
+        if (need_term_fresh(player_ptr))
+            term_fresh();
         term_activate(old);
     }
 }
