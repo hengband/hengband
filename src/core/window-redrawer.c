@@ -22,7 +22,6 @@
 #include "window/main-window-util.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
-#include <target\target-types.h>
 
 /*!
  * todo ここにplayer_type を追加するとz-termに影響が行くので保留
