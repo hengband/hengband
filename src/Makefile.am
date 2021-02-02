@@ -900,8 +900,8 @@ EXTRA_DIST = \
 	gcc-wrap
 
 DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src 
-CFLAGS += $(XFT_CFLAGS)
-LIBS += $(XFT_LIBS)
+CFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
+LIBS += $(XFT_LIBS) $(libcurl_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) 
 
