@@ -203,6 +203,10 @@ static bool http_post(concptr url, BUF *buf)
 
     curl_easy_setopt(curl, CURLOPT_POST, 1);
 
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+    curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 10);
+    curl_easy_setopt(curl, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
+
     buf->read_head = 0;
     curl_easy_setopt(curl, CURLOPT_READDATA, buf);
     curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
