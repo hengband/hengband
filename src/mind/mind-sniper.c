@@ -71,7 +71,7 @@ static concptr const snipe_tips[MAX_SNIPE_POWERS] =
 	"Shoot an arrow able to shatter rocks.",
 	"Deals extra damage of ice.",
 	"Shoot an arrow that pushes away the target.",
-	"An allow pierces some monsters.",
+	"Shoot an arrow that does not always stop at the first target on its path."
 	"Deals more damage to good monsters.",
 	"Deals more damage to evil monsters.",
 	"Shoot an arrow that explodes when it hits a monster.",
