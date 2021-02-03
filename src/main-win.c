@@ -968,8 +968,12 @@ static void load_music_prefs(void)
     char *zz[SAMPLE_MUSIC_MAX];
     char key[80];
 
-    path_build(ini_path, 1024, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
-    GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path);
+    path_build(ini_path, 1024, ANGBAND_DIR_XTRA_MUSIC, "music_debug.cfg");
+    if (GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path) == 0) {
+        path_build(ini_path, 1024, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
+        GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path);
+    }
+
     for (int i = 0; i < MUSIC_BASIC_MAX; i++) {
         GetPrivateProfileString("Basic", angband_music_basic_name[i], "", tmp, 1024, ini_path);
         int num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
