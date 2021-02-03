@@ -128,7 +128,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     if (!mo_ptr)
         return 0;
     if (mater == item) {
-        msg_print(_("クラインの壷じゃない！", "This is not a klein bottle!"));
+        msg_print(_("クラインの壷じゃない！", "This is not a Klein bottle!"));
         return 0;
     }
 
