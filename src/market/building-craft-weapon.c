@@ -417,7 +417,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
             continue;
 
         if (i2_ptr == o_ptr[0] || (n == 2 && i2_ptr == o_ptr[1])) {
-            msg_print(_("表示中の武器は選べません！", "You can not select a weapon which is shown now!"));
+            msg_print(_("表示中の武器は選べません！", "Select a different weapon than those displayed."));
             msg_print(NULL);
             continue;
         }
