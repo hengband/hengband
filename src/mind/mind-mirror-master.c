@@ -299,7 +299,7 @@ bool mirror_tunnel(player_type *caster_ptr)
     if (exe_dimension_door(caster_ptr, x, y))
         return TRUE;
 
-    msg_print(_("鏡の世界をうまく通れなかった！", "You fail to pass the mirror plane correctly!"));
+    msg_print(_("鏡の世界をうまく通れなかった！", "You could not enter the mirror!"));
     return TRUE;
 }
 
