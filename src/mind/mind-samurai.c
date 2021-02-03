@@ -340,7 +340,7 @@ bool choose_kata(player_type *creature_ptr)
         return FALSE;
 
     if (creature_ptr->stun) {
-        msg_print(_("意識がはっきりとしない。", "You are not clear headed"));
+        msg_print(_("意識がはっきりとしない。", "You are not clear-headed"));
         return FALSE;
     }
 
