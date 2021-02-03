@@ -64,7 +64,7 @@ static concptr const snipe_tips[MAX_SNIPE_POWERS] =
 	"全てのモンスターに高威力を発揮する矢を放つ。反動による副次効果を受ける。",
 #else
 	"Concentrate your mind for shooting.",
-	"Shot an allow with brightness.",
+	"Shoot a glowing arrow effective against light-sensitive foes.",
 	"Blink after shooting.",
 	"Shoot an arrow able to shatter traps.",
 	"Deals extra damege of fire.",
@@ -105,7 +105,7 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] =
 	{ 48,  7,  "セイントスターアロー" },
 #else
 	{  1,  0,  "Concentration" },
-	{  2,  1,  "Flush Arrow" },
+	{  2,  1,  "Flash Arrow" },
 	{  3,  1,  "Shoot & Away" },
 	{  5,  1,  "Disarm Shot" },
 	{  8,  2,  "Fire Shot" },
