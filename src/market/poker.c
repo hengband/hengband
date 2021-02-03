@@ -605,7 +605,7 @@ int do_poker(void)
 		is_put[i] = 0;
 	}
 
-	prt(_("残すカードを決めて下さい(方向で移動, スペースで選択)。", "Stay witch? "), 0, 0);
+	prt(_("残すカードを決めて下さい(方向で移動, スペースで選択)。", "Keep which cards (direction keys move; space selects)? "), 0, 0);
 
 	display_cards();
 	poker_hand_check();
