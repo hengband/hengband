@@ -251,7 +251,7 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
  */
 bool confusing_light(player_type *creature_ptr)
 {
-    msg_print(_("辺りを睨んだ...", "You glare nearby monsters..."));
+    msg_print(_("辺りを睨んだ...", "You glare at nearby monsters..."));
     slow_monsters(creature_ptr, creature_ptr->lev);
     stun_monsters(creature_ptr, creature_ptr->lev * 4);
     confuse_monsters(creature_ptr, creature_ptr->lev * 4);
