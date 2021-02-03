@@ -74,7 +74,7 @@ static concptr const snipe_tips[MAX_SNIPE_POWERS] =
 	"An allow pierces some monsters.",
 	"Deals more damage to good monsters.",
 	"Deals more damage to evil monsters.",
-	"An allow explodes when it hits a monster.",
+	"Shoot an arrow that explodes when it hits a monster.",
 	"Shot allows twice.",
 	"Deals extra damage of lightning.",
 	"Deals quick death or 1 damage.",
