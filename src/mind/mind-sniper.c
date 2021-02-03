@@ -75,7 +75,7 @@ static concptr const snipe_tips[MAX_SNIPE_POWERS] =
 	"Deals more damage to good monsters.",
 	"Deals more damage to evil monsters.",
 	"Shoot an arrow that explodes when it hits a monster.",
-	"Shot allows twice.",
+	"Shoot two arrows at once.",
 	"Deals extra damage of lightning.",
 	"Deals quick death or 1 damage.",
 	"Deals great damage to all monsters, and some side effects to you.",
