@@ -208,7 +208,7 @@ void request_command(player_type *player_ptr, int shopping)
             msg_flag = FALSE;
             num_more = 0;
             inkey_flag = TRUE;
-            if (need_term_fresh()) {
+            if (need_term_fresh(player_ptr)) {
                 term_fresh();
             }
             cmd = inkey();

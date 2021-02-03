@@ -425,6 +425,6 @@ void do_cmd_rest(player_type *creature_ptr)
     update_creature(creature_ptr);
     creature_ptr->redraw |= (PR_STATE);
     update_output(creature_ptr);
-    if (need_term_fresh())
+    if (need_term_fresh(creature_ptr))
         term_fresh();
 }

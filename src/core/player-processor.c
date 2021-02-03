@@ -81,6 +81,11 @@ static void process_fishing(player_type *creature_ptr)
     }
 }
 
+bool continuous_action_running(player_type *creature_ptr)
+{
+    return creature_ptr->running || travel.run || command_rep || (creature_ptr->action == ACTION_REST) || (creature_ptr->action == ACTION_FISH);
+}
+
 /*!
  * @brief プレイヤーの行動処理 / Process the player
  * @return なし
@@ -141,7 +146,7 @@ void process_player(player_type *creature_ptr)
         process_fishing(creature_ptr);
 
     if (check_abort) {
-        if (creature_ptr->running || travel.run || command_rep || (creature_ptr->action == ACTION_REST) || (creature_ptr->action == ACTION_FISH)) {
+        if (continuous_action_running(creature_ptr)) {
             inkey_scan = TRUE;
             if (inkey()) {
                 flush();

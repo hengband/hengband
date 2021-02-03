@@ -196,29 +196,29 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             gx[grids] = x;
             grids++;
 
-            if (!blind && !(flag & (PROJECT_HIDE))) {
-                if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
-                    u16b p = bolt_pict(oy, ox, y, x, typ);
-                    TERM_COLOR a = PICT_A(p);
-                    SYMBOL_CODE c = PICT_C(p);
-                    print_rel(caster_ptr, c, a, y, x);
-                    move_cursor_relative(y, x);
-                    if (need_term_fresh()) {
+            if (msec > 0) {
+                if (!blind && !(flag & (PROJECT_HIDE))) {
+                    if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
+                        u16b p = bolt_pict(oy, ox, y, x, typ);
+                        TERM_COLOR a = PICT_A(p);
+                        SYMBOL_CODE c = PICT_C(p);
+                        print_rel(caster_ptr, c, a, y, x);
+                        move_cursor_relative(y, x);
                         term_fresh();
                         term_xtra(TERM_XTRA_DELAY, msec);
                         lite_spot(caster_ptr, y, x);
                         term_fresh();
-                    }
-                    if (flag & (PROJECT_BEAM)) {
-                        p = bolt_pict(y, x, y, x, typ);
-                        a = PICT_A(p);
-                        c = PICT_C(p);
-                        print_rel(caster_ptr, c, a, y, x);
-                    }
+                        if (flag & (PROJECT_BEAM)) {
+                            p = bolt_pict(y, x, y, x, typ);
+                            a = PICT_A(p);
+                            c = PICT_C(p);
+                            print_rel(caster_ptr, c, a, y, x);
+                        }
 
-                    visual = TRUE;
-                } else if (visual) {
-                    term_xtra(TERM_XTRA_DELAY, msec);
+                        visual = TRUE;
+                    } else if (visual) {
+                        term_xtra(TERM_XTRA_DELAY, msec);
+                    }
                 }
             }
 
@@ -291,29 +291,31 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             gx[grids] = x;
             grids++;
             {
-                if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
-                    u16b p;
-                    TERM_COLOR a;
-                    SYMBOL_CODE c;
-                    p = bolt_pict(oy, ox, y, x, typ);
-                    a = PICT_A(p);
-                    c = PICT_C(p);
-                    print_rel(caster_ptr, c, a, y, x);
-                    move_cursor_relative(y, x);
-                    term_fresh();
-                    term_xtra(TERM_XTRA_DELAY, msec);
-                    lite_spot(caster_ptr, y, x);
-                    term_fresh();
-                    if (flag & (PROJECT_BEAM)) {
-                        p = bolt_pict(y, x, y, x, typ);
+                if (msec > 0) {
+                    if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
+                        u16b p;
+                        TERM_COLOR a;
+                        SYMBOL_CODE c;
+                        p = bolt_pict(oy, ox, y, x, typ);
                         a = PICT_A(p);
                         c = PICT_C(p);
                         print_rel(caster_ptr, c, a, y, x);
-                    }
+                        move_cursor_relative(y, x);
+                        term_fresh();
+                        term_xtra(TERM_XTRA_DELAY, msec);
+                        lite_spot(caster_ptr, y, x);
+                        term_fresh();
+                        if (flag & (PROJECT_BEAM)) {
+                            p = bolt_pict(y, x, y, x, typ);
+                            a = PICT_A(p);
+                            c = PICT_C(p);
+                            print_rel(caster_ptr, c, a, y, x);
+                        }
 
-                    visual = TRUE;
-                } else if (visual) {
-                    term_xtra(TERM_XTRA_DELAY, msec);
+                        visual = TRUE;
+                    } else if (visual) {
+                        term_xtra(TERM_XTRA_DELAY, msec);
+                    }
                 }
             }
 
@@ -403,30 +405,32 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             grids++;
         }
 
-        if (!blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
-            if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
-                u16b p;
-                TERM_COLOR a;
-                SYMBOL_CODE c;
-                p = bolt_pict(oy, ox, y, x, typ);
-                a = PICT_A(p);
-                c = PICT_C(p);
-                print_rel(caster_ptr, c, a, y, x);
-                move_cursor_relative(y, x);
-                term_fresh();
-                term_xtra(TERM_XTRA_DELAY, msec);
-                lite_spot(caster_ptr, y, x);
-                term_fresh();
-                if (flag & (PROJECT_BEAM)) {
-                    p = bolt_pict(y, x, y, x, typ);
+        if (msec > 0) {
+            if (!blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
+                if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
+                    u16b p;
+                    TERM_COLOR a;
+                    SYMBOL_CODE c;
+                    p = bolt_pict(oy, ox, y, x, typ);
                     a = PICT_A(p);
                     c = PICT_C(p);
                     print_rel(caster_ptr, c, a, y, x);
-                }
+                    move_cursor_relative(y, x);
+                    term_fresh();
+                    term_xtra(TERM_XTRA_DELAY, msec);
+                    lite_spot(caster_ptr, y, x);
+                    term_fresh();
+                    if (flag & (PROJECT_BEAM)) {
+                        p = bolt_pict(y, x, y, x, typ);
+                        a = PICT_A(p);
+                        c = PICT_C(p);
+                        print_rel(caster_ptr, c, a, y, x);
+                    }
 
-                visual = TRUE;
-            } else if (visual) {
-                term_xtra(TERM_XTRA_DELAY, msec);
+                    visual = TRUE;
+                } else if (visual) {
+                    term_xtra(TERM_XTRA_DELAY, msec);
+                }
             }
         }
     }
@@ -504,7 +508,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
     if (!grids)
         return FALSE;
 
-    if (!blind && !(flag & (PROJECT_HIDE))) {
+    if (!blind && !(flag & (PROJECT_HIDE)) && (msec > 0)) {
         for (int t = 0; t <= gm_rad; t++) {
             for (int i = gm[t]; i < gm[t + 1]; i++) {
                 y = gy[i];
@@ -522,9 +526,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             }
 
             move_cursor_relative(by, bx);
-
-            if (need_term_fresh())
-                term_fresh();
+            term_fresh();
             if (visual || drawn) {
                 term_xtra(TERM_XTRA_DELAY, msec);
             }
@@ -540,7 +542,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             }
 
             move_cursor_relative(by, bx);
-            if (need_term_fresh())
+            if (need_term_fresh(caster_ptr))
                 term_fresh();
         }
     }
