@@ -290,7 +290,7 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
     if (notice) {
-        msg_format(_("%sが再生した！", "The %s was reproduced!"), m_name);
+        msg_format(_("%sが再生した！", "The %s reproduced!"), m_name);
         sound(SOUND_SUMMON);
     }
 }
