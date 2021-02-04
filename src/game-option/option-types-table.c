@@ -86,7 +86,7 @@ const option_type option_info[MAX_OPTION_INFO] = {
 
     { &fresh_message, FALSE, OPT_PAGE_MAPSCREEN, 1, 25, "fresh_message", _("メッセージの後に画面を再描画する", "Flush output after every message") },
 
-    { &hilite_player, FALSE, OPT_PAGE_MAPSCREEN, 1, 27, "hilite_player", _("プレイヤーにカーソルを合わせる", "Hilite the player with the cursor") },
+    { &hilite_player, FALSE, OPT_PAGE_MAPSCREEN, 1, 27, "hilite_player", _("プレイヤーにカーソルを合わせる", "Highlight the player with the cursor") },
 
     { &display_path, FALSE, OPT_PAGE_MAPSCREEN, 2, 8, "display_path", _("魔法や矢の軌跡を表示する", "Display actual path before shooting") },
 
