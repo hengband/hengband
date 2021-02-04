@@ -303,6 +303,6 @@ concptr realm_subinfo[VALID_REALM] = {
     _("攻撃と防御の両面に優れています", "Good at both offence and defence."),
     _("邪悪な怪物に対する攻撃に優れています", "Destroys evil creatures."),
     _("様々な魔法効果を持った歌を歌います", "Songs with magical effects."),
-    _("打撃攻撃に特殊能力を付加します", "Special attacks on melee."),
+    _("打撃攻撃に特殊能力を付加します", "Special abilities for melee."),
     _("敵を邪魔しつつ復讐を狙います", "Good at obstacle and revenge."),
 };
