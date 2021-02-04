@@ -230,7 +230,7 @@ static void on_dead_rolento(player_type *player_ptr, monster_death_type *md_ptr)
     if (is_seen(player_ptr, md_ptr->m_ptr)) {
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
-        msg_format(_("%sは手榴弾を抱えて自爆した！", "%^s broke himself with grenades!"), m_name);
+        msg_format(_("%sは手榴弾を抱えて自爆した！", "%^s blew himself up with grenades!"), m_name);
     }
 
     (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), GF_FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
@@ -290,7 +290,7 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
     if (notice) {
-        msg_format(_("%sが再生した！", "The %s was reproduced!"), m_name);
+        msg_format(_("%sが再生した！", "The %s reproduced!"), m_name);
         sound(SOUND_SUMMON);
     }
 }
