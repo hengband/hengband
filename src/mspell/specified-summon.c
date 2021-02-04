@@ -145,7 +145,7 @@ MONSTER_NUMBER summon_DEMON_SLAYER(player_type *target_ptr, POSITION y, POSITION
         count += summon_named_creature(target_ptr, m_idx, y, x, MON_DEMON_SLAYER_MEMBER, PM_NONE);
 
     if (count == 0)
-        msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer member were murdered..."));
+        msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer members were murdered..."));
 
     return count;
 }
