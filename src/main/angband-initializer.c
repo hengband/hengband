@@ -102,6 +102,22 @@ void init_file_paths(char *libpath, char *varpath)
     char tmp[128];
     strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
     path_build(debug_savefile, sizeof(debug_savefile), ANGBAND_DIR_DEBUG_SAVE, tmp);
+
+    struct _finddata_t c_file;
+    intptr_t hFile;
+    char log_file_expr[1024];
+    path_build(log_file_expr, sizeof(log_file_expr), ANGBAND_DIR_DEBUG_SAVE, "*-*");
+
+    if ((hFile = _findfirst(log_file_expr, &c_file)) != -1L) {
+        do {
+            if (((t->tm_yday + 365 - localtime(&c_file.time_write)->tm_yday) % 365) > 7) {
+                char c_file_fullpath[1024];
+                path_build(c_file_fullpath, sizeof(c_file_fullpath), ANGBAND_DIR_DEBUG_SAVE, c_file.name);
+                remove(c_file_fullpath);
+            }
+        } while (_findnext(hFile, &c_file) == 0);
+        _findclose(hFile);
+    }
 }
 
 /*!
