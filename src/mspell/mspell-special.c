@@ -160,8 +160,8 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
     int get_damage = 0;
     bool fear, dead; /* dummy */
 
-    simple_monspell_message(target_ptr, m_idx, t_idx, _("%^sがあなたを掴んで空中から投げ落とした。", "%^s holds you, and drops from the sky."),
-        _("%^sが%sを掴んで空中から投げ落とした。", "%^s holds %s, and drops from the sky."), TARGET_TYPE);
+    simple_monspell_message(target_ptr, m_idx, t_idx, _("%^sがあなたを掴んで空中から投げ落とした。", "%^s snatches you, soars into the sky, and drops you."),
+        _("%^sが%sを掴んで空中から投げ落とした。", "%^s snatches %s, soars into the sky, and releases its grip."), TARGET_TYPE);
 
     dam = damroll(4, 8);
 
