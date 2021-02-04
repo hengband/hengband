@@ -149,8 +149,8 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 
     disturb(target_ptr, TRUE, TRUE);
     if (one_in_(3) || !direct) {
-        simple_monspell_message(target_ptr, m_idx, t_idx, _("%^sは突然視界から消えた!", "%^s suddenly go out of your sight!"),
-            _("%^sは突然急上昇して視界から消えた!", "%^s suddenly go out of your sight!"), TARGET_TYPE);
+        simple_monspell_message(target_ptr, m_idx, t_idx, _("%^sは突然視界から消えた!", "You lose sight of %s!"),
+            _("%^sは突然急上昇して視界から消えた!", "You lose sight of %s!"), TARGET_TYPE);
 
         teleport_away(target_ptr, m_idx, 10, TELEPORT_NONMAGICAL);
         target_ptr->update |= (PU_MONSTERS);
