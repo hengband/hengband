@@ -279,7 +279,7 @@ concptr const mind_tips[MAX_MIND_KINDS][MAX_MIND_POWERS] = {
         _("自分を中心とした火の球を発生させ、テレポートする。さらに、一定時間炎に対する耐性を得る。装備による耐性に累積する。",
             "Generates a fire ball and immediately teleports you away. Gives resistance to fire for a while."
             " This resistance can be added to that from equipment for more powerful resistance."),
-        _("素早く相手に近寄り攻撃する。", "Steps close to a monster and attacks at a time."),
+        _("素早く相手に近寄り攻撃する。", "In one action, steps close to a monster and attacks."),
         _("ランダムな方向に8回くさびを投げる。", "Shoots 8 iron Spikes in 8 random directions."),
         _("敵を1体自分の近くに引き寄せる。", "Teleports a monster to a place adjacent to you."),
         _("ダメージのない混乱の球を放つ。", "Releases a confusion ball which doesn't inflict any damage."),

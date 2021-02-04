@@ -251,7 +251,7 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
  */
 bool confusing_light(player_type *creature_ptr)
 {
-    msg_print(_("辺りを睨んだ...", "You glare nearby monsters..."));
+    msg_print(_("辺りを睨んだ...", "You glare at nearby monsters..."));
     slow_monsters(creature_ptr, creature_ptr->lev);
     stun_monsters(creature_ptr, creature_ptr->lev * 4);
     confuse_monsters(creature_ptr, creature_ptr->lev * 4);
@@ -299,7 +299,7 @@ bool mirror_tunnel(player_type *caster_ptr)
     if (exe_dimension_door(caster_ptr, x, y))
         return TRUE;
 
-    msg_print(_("鏡の世界をうまく通れなかった！", "You fail to pass the mirror plane correctly!"));
+    msg_print(_("鏡の世界をうまく通れなかった！", "You could not enter the mirror!"));
     return TRUE;
 }
 
@@ -361,7 +361,7 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
             if (creature_ptr->dustrobe > v)
                 return FALSE;
         } else if (!creature_ptr->dustrobe) {
-            msg_print(_("体が鏡のオーラで覆われた。", "You were enveloped by mirror shards."));
+            msg_print(_("体が鏡のオーラで覆われた。", "You are enveloped by mirror shards."));
             notice = TRUE;
         }
     } else {

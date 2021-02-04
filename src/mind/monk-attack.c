@@ -182,7 +182,7 @@ static void process_attack_vital_spot(player_type *attacker_ptr, player_attack_t
 
     if ((special_effect == MA_SLOW) && ((pa_ptr->attack_damage + attacker_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
         if (!(r_ptr->flags1 & RF1_UNIQUE) && (randint1(attacker_ptr->lev) > r_ptr->level) && pa_ptr->m_ptr->mspeed > 60) {
-            msg_format(_("%^sは足をひきずり始めた。", "%^s starts limping slower."), pa_ptr->m_name);
+            msg_format(_("%^sは足をひきずり始めた。", "You've hobbled %^s."), pa_ptr->m_name);
             pa_ptr->m_ptr->mspeed -= 10;
         }
     }
