@@ -30,6 +30,10 @@
 #include "time.h"
 #include "util/angband-files.h"
 #include "world/world.h"
+#ifndef WINDOWS
+#include <dirent.h>
+#include "util/string-processor.h"
+#endif
 
 char *file_read__buf;
 char *file_read__swp;
@@ -97,6 +101,7 @@ void init_file_paths(char *libpath, char *varpath)
     strcpy(libtail, "xtra");
     ANGBAND_DIR_XTRA = string_make(libpath);
 
+#ifdef WINDOWS
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
     char tmp[128];
@@ -118,6 +123,32 @@ void init_file_paths(char *libpath, char *varpath)
         } while (_findnext(hFile, &c_file) == 0);
         _findclose(hFile);
     }
+#else
+    {
+        DIR *saves_dir = opendir(ANGBAND_DIR_DEBUG_SAVE);
+
+        if (saves_dir) {
+            time_t now = time(NULL);
+            struct dirent *next_entry;
+
+            while ((next_entry = readdir(saves_dir))) {
+                const char *dash_loc = angband_strchr(next_entry->d_name, '-');
+                struct stat next_stat;
+
+                if (dash_loc && stat(next_entry->d_name, &next_stat) == 0) {
+                    /*
+                     * Remove if modified more than a week ago,
+                     * 7*24*60*60 seconds.
+                     */
+                    if (difftime(now, next_stat.st_mtime) > 604800) {
+                        remove(next_entry->d_name);
+                    }
+                }
+            }
+            closedir(saves_dir);
+        }
+    }
+#endif
 }
 
 /*!
