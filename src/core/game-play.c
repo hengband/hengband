@@ -41,11 +41,11 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
-#include "io/record-play-movie.h"
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
 #include "io/read-pref-file.h"
+#include "io/record-play-movie.h"
 #include "io/screen-util.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
@@ -129,7 +129,7 @@ static void send_waiting_record(player_type *player_ptr)
     } else {
         player_ptr->wait_report_score = FALSE;
         top_twenty(player_ptr);
-        if (!save_player(player_ptr))
+        if (!save_player(player_ptr, SAVE_TYPE_NORMAL))
             msg_print(_("セーブ失敗！", "death save failed!"));
     }
 
@@ -226,7 +226,7 @@ static void set_wizard_mode_by_argument(player_type *player_ptr)
 
         return;
     }
-    
+
     if (player_ptr->is_dead)
         quit("Already dead.");
 }
@@ -329,7 +329,7 @@ static void decide_arena_death(player_type *player_ptr)
         if ((current_world_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
             cheat_death(player_ptr);
 
-        return;    
+        return;
     }
 
     floor_ptr->inside_arena = FALSE;
@@ -409,7 +409,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
         init_world_floor_info(player_ptr);
     else
         restore_world_floor_info(player_ptr);
-    
+
     generate_world(player_ptr, new_game);
     player_ptr->playing = TRUE;
     reset_visuals(player_ptr, process_autopick_file_command);

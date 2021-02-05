@@ -3054,7 +3054,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         p_ptr->panic_save = 1;
         signals_ignore_tstp();
         (void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
-        (void)save_player(p_ptr);
+        (void)save_player(p_ptr, SAVE_TYPE_NORMAL);
         quit(NULL);
         return 0;
     }
@@ -3463,6 +3463,7 @@ static void init_stuff(void)
     validate_dir(ANGBAND_DIR_INFO, FALSE);
     validate_dir(ANGBAND_DIR_PREF, TRUE);
     validate_dir(ANGBAND_DIR_SAVE, FALSE);
+    validate_dir(ANGBAND_DIR_DEBUG_SAVE, FALSE);
     validate_dir(ANGBAND_DIR_USER, TRUE);
     validate_dir(ANGBAND_DIR_XTRA, TRUE);
     path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));

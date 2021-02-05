@@ -36,6 +36,6 @@ void exit_game_panic(player_type *creature_ptr)
 	creature_ptr->panic_save = 1;
 	signals_ignore_tstp();
 	(void)strcpy(creature_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
-	if (!save_player(creature_ptr)) quit(_("緊急セーブ失敗！", "panic save failed!"));
+	if (!save_player(creature_ptr, SAVE_TYPE_NORMAL)) quit(_("緊急セーブ失敗！", "panic save failed!"));
 	quit(_("緊急セーブ成功！", "panic save succeeded!"));
 }

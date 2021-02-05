@@ -2,11 +2,13 @@
 #include "cmd-io/cmd-menu-content-table.h"
 #include "cmd-io/macro-util.h"
 #include "core/asking-player.h" // todo 相互依存している、後で何とかする.
+#include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "save/save.h"
 #include "system/floor-type-definition.h" // todo 違和感、後で調査する.
 #include "system/object-type-definition.h"
 #include "term/screen-processor.h" // todo 相互依存している、後で何とかする.
@@ -15,6 +17,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
+#include "world/world.h"
 
 /*
  * Keymaps for each "mode" associated with each keypress.
@@ -200,6 +203,9 @@ void request_command(player_type *player_ptr, int shopping)
     use_menu = FALSE;
 
     while (TRUE) {
+        if (!macro_running() && !command_new && auto_debug_save)
+            save_player(player_ptr, SAVE_TYPE_DEBUG);
+
         if (command_new) {
             msg_erase();
             cmd = command_new;

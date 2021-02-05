@@ -18,8 +18,8 @@
 #include "floor/wild.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
-#include "io/uid-checker.h"
 #include "io/report.h"
+#include "io/uid-checker.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-compaction.h"
 #include "object/object-kind.h"
@@ -43,7 +43,7 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return 成功すればtrue
  */
-static bool wr_savefile_new(player_type *player_ptr)
+static bool wr_savefile_new(player_type *player_ptr, save_type type)
 {
     compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
@@ -90,7 +90,7 @@ static bool wr_savefile_new(player_type *player_ptr)
 #endif
 
     wr_randomizer();
-    wr_options();
+    wr_options(type);
     u32b tmp32u = message_num();
     if (compress_savefile && (tmp32u > 40))
         tmp32u = 40;
@@ -222,7 +222,7 @@ static bool wr_savefile_new(player_type *player_ptr)
  * @details
  * Angband 2.8.0 will use "fd" instead of "fff" if possible
  */
-static bool save_player_aux(player_type *player_ptr, char *name)
+static bool save_player_aux(player_type *player_ptr, char *name, save_type type)
 {
     safe_setuid_grab(player_ptr);
     int file_permission = 0644;
@@ -237,7 +237,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
         saving_savefile = angband_fopen(name, "wb");
         safe_setuid_drop();
         if (saving_savefile) {
-            if (wr_savefile_new(player_ptr))
+            if (wr_savefile_new(player_ptr, type))
                 is_save_successful = TRUE;
 
             if (angband_fclose(saving_savefile))
@@ -265,7 +265,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return 成功すればtrue
  */
-bool save_player(player_type *player_ptr)
+bool save_player(player_type *player_ptr, save_type type)
 {
     char safe[1024];
     strcpy(safe, savefile);
@@ -275,14 +275,21 @@ bool save_player(player_type *player_ptr)
     safe_setuid_drop();
     update_playtime();
     bool result = FALSE;
-    if (save_player_aux(player_ptr, safe)) {
+    if (save_player_aux(player_ptr, safe, type)) {
         char temp[1024];
+        char filename[1024];
         strcpy(temp, savefile);
         strcat(temp, ".old");
         safe_setuid_grab(player_ptr);
         fd_kill(temp);
-        fd_move(savefile, temp);
-        fd_move(safe, savefile);
+
+        if (type == SAVE_TYPE_DEBUG)
+            strcpy(filename, debug_savefile);
+        if (type == SAVE_TYPE_NORMAL)
+            strcpy(filename, savefile);
+
+        fd_move(filename, temp);
+        fd_move(safe, filename);
         fd_kill(temp);
         safe_setuid_drop();
         current_world_ptr->character_loaded = TRUE;

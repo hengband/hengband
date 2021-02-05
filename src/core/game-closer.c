@@ -37,10 +37,9 @@ static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
 
     player_ptr->wait_report_score = TRUE;
     player_ptr->is_dead = FALSE;
-    if (!save_player(player_ptr))
+    if (!save_player(player_ptr, SAVE_TYPE_NORMAL))
         msg_print(_("セーブ失敗！", "death save failed!"));
 }
-
 
 /*!
  * @brief ゲームクローズ時、プレイヤーが死亡しているかのチェックを行い死亡していないならば、確認キー入力とスコア表示、現フロアの初期化を行う。
@@ -94,7 +93,7 @@ void close_game(player_type *player_ptr)
         kingly(player_ptr);
 
     if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
-        if (!save_player(player_ptr))
+        if (!save_player(player_ptr, SAVE_TYPE_NORMAL))
             msg_print(_("セーブ失敗！", "death save failed!"));
     } else
         do_send = FALSE;

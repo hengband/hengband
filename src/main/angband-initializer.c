@@ -27,6 +27,7 @@
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "time.h"
 #include "util/angband-files.h"
 #include "world/world.h"
 
@@ -57,6 +58,7 @@ void init_file_paths(char *libpath, char *varpath)
     string_free(ANGBAND_DIR_HELP);
     string_free(ANGBAND_DIR_INFO);
     string_free(ANGBAND_DIR_SAVE);
+    string_free(ANGBAND_DIR_DEBUG_SAVE);
     string_free(ANGBAND_DIR_USER);
     string_free(ANGBAND_DIR_XTRA);
 
@@ -83,6 +85,8 @@ void init_file_paths(char *libpath, char *varpath)
     ANGBAND_DIR_PREF = string_make(libpath);
     strcpy(vartail, "save");
     ANGBAND_DIR_SAVE = string_make(varpath);
+    strcpy(vartail, "save\\log");
+    ANGBAND_DIR_DEBUG_SAVE = string_make(varpath);
 #ifdef PRIVATE_USER_PATH
     path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VERSION_NAME);
     ANGBAND_DIR_USER = string_make(buf);
@@ -92,6 +96,28 @@ void init_file_paths(char *libpath, char *varpath)
 #endif
     strcpy(libtail, "xtra");
     ANGBAND_DIR_XTRA = string_make(libpath);
+
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+    char tmp[128];
+    strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
+    path_build(debug_savefile, sizeof(debug_savefile), ANGBAND_DIR_DEBUG_SAVE, tmp);
+
+    struct _finddata_t c_file;
+    intptr_t hFile;
+    char log_file_expr[1024];
+    path_build(log_file_expr, sizeof(log_file_expr), ANGBAND_DIR_DEBUG_SAVE, "*-*");
+
+    if ((hFile = _findfirst(log_file_expr, &c_file)) != -1L) {
+        do {
+            if (((t->tm_yday + 365 - localtime(&c_file.time_write)->tm_yday) % 365) > 7) {
+                char c_file_fullpath[1024];
+                path_build(c_file_fullpath, sizeof(c_file_fullpath), ANGBAND_DIR_DEBUG_SAVE, c_file.name);
+                remove(c_file_fullpath);
+            }
+        } while (_findnext(hFile, &c_file) == 0);
+        _findclose(hFile);
+    }
 }
 
 /*!
