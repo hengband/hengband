@@ -18,6 +18,7 @@
 #include "floor/wild.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
+#include "io/files-util.h"
 #include "io/report.h"
 #include "io/uid-checker.h"
 #include "monster-race/monster-race.h"
