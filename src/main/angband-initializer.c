@@ -131,16 +131,18 @@ void init_file_paths(char *libpath, char *varpath)
             struct dirent *next_entry;
 
             while ((next_entry = readdir(saves_dir))) {
-                const char *dash_loc = angband_strchr(next_entry->d_name, '-');
-                struct stat next_stat;
+                if (angband_strchr(next_entry->d_name, '-')) {
+                    char path[1024];
+                    struct stat next_stat;
 
-                if (dash_loc && stat(next_entry->d_name, &next_stat) == 0) {
+                    path_build(path, sizeof(path), ANGBAND_DIR_DEBUG_SAVE, next_entry->d_name);
                     /*
                      * Remove if modified more than a week ago,
                      * 7*24*60*60 seconds.
                      */
-                    if (difftime(now, next_stat.st_mtime) > 604800) {
-                        remove(next_entry->d_name);
+                    if (stat(path, &next_stat) == 0 &&
+                            difftime(now, next_stat.st_mtime) > 604800) {
+                        remove(path);
                     }
                 }
             }
