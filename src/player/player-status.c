@@ -121,7 +121,7 @@ static s16b calc_constitution_addition(player_type *creature_ptr);
 static s16b calc_charisma_addition(player_type *creature_ptr);
 static s16b calc_to_magic_chance(player_type *creature_ptr);
 static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr);
-static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value);
+static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value);
 static s16b calc_speed(player_type *creature_ptr);
 static s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_use_status(player_type *creature_ptr, int status);
@@ -130,10 +130,10 @@ static void calc_ind_status(player_type *creature_ptr, int status);
 static s16b calc_riding_bow_penalty(player_type *creature_ptr);
 static void put_equipment_warning(player_type *creature_ptr);
 
-static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_true_value);
-static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_true_value);
+static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value);
+static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value);
 
-static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value);
+static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value);
 
 static s16b calc_to_damage_misc(player_type *creature_ptr);
 static s16b calc_to_hit_misc(player_type *creature_ptr);
@@ -2314,7 +2314,7 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
     return ac;
 }
 
-static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
+static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
 {
     ARMOUR_CLASS ac = 0;
     if (creature_ptr->yoiyami)
@@ -2347,15 +2347,15 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        if (is_true_value || object_is_known(o_ptr))
+        if (is_real_value || object_is_known(o_ptr))
             ac += o_ptr->to_a;
 
         if (o_ptr->curse_flags & TRC_LOW_AC) {
             if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-                if (is_true_value || object_is_fully_known(o_ptr))
+                if (is_real_value || object_is_fully_known(o_ptr))
                     ac -= 30;
             } else {
-                if (is_true_value || object_is_fully_known(o_ptr))
+                if (is_real_value || object_is_fully_known(o_ptr))
                     ac -= 10;
             }
         }
@@ -2903,7 +2903,7 @@ void put_equipment_warning(player_type *creature_ptr)
     }
 }
 
-static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_true_value)
+static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -2964,7 +2964,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
             || (i == INVEN_SUB_HAND && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
             continue;
 
-        if (!object_is_known(o_ptr) && !is_true_value)
+        if (!object_is_known(o_ptr) && !is_real_value)
             continue;
         bonus_to_d = o_ptr->to_d;
 
@@ -3038,7 +3038,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
  * @details
  * 'slot' MUST be INVEN_MAIN_HAND or INVEM_SUB_HAND.
  */
-static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_true_value)
+static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
     s16b hit = 0;
 
@@ -3112,7 +3112,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         }
 
         /* Low melee penalty */
-        if ((object_is_fully_known(o_ptr) || is_true_value) && o_ptr->curse_flags & TRC_LOW_MELEE) {
+        if ((object_is_fully_known(o_ptr) || is_real_value) && o_ptr->curse_flags & TRC_LOW_MELEE) {
             if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
                 hit -= 15;
             } else {
@@ -3188,7 +3188,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
             continue;
 
         /* Fake value does not include unknown objects' value */
-        if (is_true_value || !object_is_known(o_ptr))
+        if (!object_is_known(o_ptr) && !is_real_value)
             continue;
 
         int bonus_to_h = o_ptr->to_h;
@@ -3254,7 +3254,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
     return hit;
 }
 
-static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
+static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value)
 {
     s16b pow = 0;
 
@@ -3325,7 +3325,7 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
         }
 
-        if (is_true_value || object_is_known(o_ptr))
+        if (is_real_value || object_is_known(o_ptr))
             pow += (s16b)bonus_to_h;
     }
 
