@@ -33,8 +33,8 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
-#include "target/target-checker.h"
 #include "target/grid-selector.h"
+#include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -381,17 +381,15 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
         for (POSITION yy = -1; yy < 2; yy++) {
             MONSTER_IDX tmp_m_idx = creature_ptr->current_floor_ptr->grid_array[oy + yy][ox + xx].m_idx;
             if (tmp_m_idx && (creature_ptr->riding != tmp_m_idx)) {
-                continue;
-            }
+                monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[tmp_m_idx];
+                monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-            monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[tmp_m_idx];
-            monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-            bool is_resistible = (r_ptr->a_ability_flags2 & RF6_TPORT) != 0;
-            is_resistible &= (r_ptr->flagsr & RFR_RES_TELE) == 0;
-            is_resistible &= monster_csleep_remaining(m_ptr) == 0;
-            if (is_resistible) {
-                teleport_monster_to(creature_ptr, tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
+                bool is_resistible = (r_ptr->a_ability_flags2 & RF6_TPORT) != 0;
+                is_resistible &= (r_ptr->flagsr & RFR_RES_TELE) == 0;
+                is_resistible &= monster_csleep_remaining(m_ptr) == 0;
+                if (is_resistible) {
+                    teleport_monster_to(creature_ptr, tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
+                }
             }
         }
     }
