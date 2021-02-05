@@ -49,7 +49,7 @@ HIT_POINT spell_RF5_BO_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
     HIT_POINT dam;
 
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
-        _("%^sがアシッド・ボルトの呪文を唱えた。", "%^s casts a acid bolt."),
+        _("%^sがアシッド・ボルトの呪文を唱えた。", "%^s casts an acid bolt."),
         _("%sが%sに向かってアシッド・ボルトの呪文を唱えた。", "%^s casts an acid bolt at %s."), TARGET_TYPE);
 
     dam = monspell_damage(target_ptr, (MS_BOLT_ACID), m_idx, DAM_ROLL);
