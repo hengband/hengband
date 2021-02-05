@@ -30,32 +30,21 @@
 #include "world/world.h"
 
 #ifdef WORLD_SCORE
-#ifdef WINDOWS
-#include <winsock.h>
-#else
-#include <netdb.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <sys/time.h>
-#include <sys/types.h>
 
-#include <setjmp.h>
-#include <signal.h>
+#ifdef WINDOWS
+#define CURL_STATICLIB
 #endif
+#include <curl/curl.h>
 
 concptr screen_dump = NULL;
 
 /*
  * internet resource value
  */
-#define HTTP_PROXY "" /*!< デフォルトのプロキシURL / Default proxy url */
-#define HTTP_PROXY_PORT 0 /*!< デフォルトのプロキシポート / Default proxy port */
-#define HTTP_TIMEOUT 20 /*!< デフォルトのタイムアウト時間(秒) / Timeout length (second) */
-#define SCORE_SERVER "hengband.osdn.jp" /*!< デフォルトのスコアサーバURL / Default score server url */
-#define SCORE_PORT 80 /*!< デフォルトのスコアサーバポート / Default score server port */
+#define HTTP_TIMEOUT 30 /*!< デフォルトのタイムアウト時間(秒) / Timeout length (second) */
 
 #ifdef JP
-#define SCORE_PATH "http://hengband.osdn.jp/score/register_score.php" /*!< スコア開示URL */
+#define SCORE_PATH "https://hengband.osdn.jp/score/register_score.php" /*!< スコア開示URL */
 #else
 #define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
@@ -66,6 +55,7 @@ concptr screen_dump = NULL;
 typedef struct {
     size_t max_size;
     size_t size;
+    size_t read_head;
     char *data;
 } BUF;
 
@@ -157,43 +147,83 @@ static int buf_sprintf(BUF *buf, concptr fmt, ...)
     return ret;
 }
 
+size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
+{
+    BUF *buf = userdata;
+    const size_t remain = buf->size - buf->read_head;
+    const size_t copy_size = MIN(size * nitems, remain);
+
+    strncpy(buffer, buf->data + buf->read_head, copy_size);
+    buf->read_head += copy_size;
+
+    return copy_size;
+}
+
 /*!
  * @brief HTTPによるダンプ内容伝送
- * @param sd ソケットID
  * @param url 伝送先URL
  * @param buf 伝送内容バッファ
- * @return なし
+ * @return 送信に成功した場合TRUE、失敗した場合FALSE
  */
-static bool http_post(int sd, concptr url, BUF *buf)
+static bool http_post(concptr url, BUF *buf)
 {
-    BUF *output;
-    char response_buf[1024] = "";
-    concptr HTTP_RESPONSE_CODE_OK = "HTTP/1.1 200 OK";
+    bool succeeded = FALSE;
+    CURL *curl = curl_easy_init();
+    if (curl == NULL) {
+        return FALSE;
+    }
 
-    output = buf_new();
-    buf_sprintf(output, "POST %s HTTP/1.0\r\n", url);
-    buf_sprintf(output, "User-Agent: Hengband %d.%d.%d.%d\r\n", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
-
-    buf_sprintf(output, "Content-Length: %d\r\n", buf->size);
-    buf_sprintf(output, "Content-Encoding: binary\r\n");
+    struct curl_slist *slist = NULL;
+    slist = curl_slist_append(slist,
 #ifdef JP
 #ifdef SJIS
-    buf_sprintf(output, "Content-Type: text/plain; charset=SHIFT_JIS\r\n");
+        "Content-Type: text/plain; charset=SHIFT_JIS"
 #endif
 #ifdef EUC
-    buf_sprintf(output, "Content-Type: text/plain; charset=EUC-JP\r\n");
+        "Content-Type: text/plain; charset=EUC-JP"
 #endif
 #else
-    buf_sprintf(output, "Content-Type: text/plain; charset=ASCII\r\n");
+        "Content-Type: text/plain; charset=ASCII"
 #endif
-    buf_sprintf(output, "\r\n");
-    buf_append(output, buf->data, buf->size);
+    );
 
-    soc_write(sd, output->data, output->size);
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
 
-    soc_read(sd, response_buf, sizeof(response_buf));
+    char user_agent[64];
+    snprintf(user_agent, sizeof(user_agent), "Hengband %d.%d.%d", FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent);
 
-    return strncmp(response_buf, HTTP_RESPONSE_CODE_OK, strlen(HTTP_RESPONSE_CODE_OK)) == 0;
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
+
+    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, HTTP_TIMEOUT);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, HTTP_TIMEOUT);
+
+    curl_easy_setopt(curl, CURLOPT_POST, 1);
+
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+    curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 10);
+    curl_easy_setopt(curl, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
+
+    buf->read_head = 0;
+    curl_easy_setopt(curl, CURLOPT_READDATA, buf);
+    curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, buf->size);
+
+    if (curl_easy_perform(curl) == CURLE_OK) {
+        long response_code;
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+        if (response_code == 200) {
+            succeeded = TRUE;
+        }
+    }
+
+    curl_slist_free_all(slist);
+    curl_easy_cleanup(curl);
+
+    return succeeded;
 }
 
 /*!
@@ -373,11 +403,6 @@ concptr make_screen_dump(player_type *creature_ptr, void (*process_autopick_file
  */
 errr report_score(player_type *creature_ptr, void (*update_playtime)(void), display_player_pf display_player)
 {
-#ifdef WINDOWS
-    WSADATA wsaData;
-    WORD wVersionRequested = (WORD)((1) | (1 << 8));
-#endif
-
     BUF *score;
     score = buf_new();
 
@@ -415,98 +440,29 @@ errr report_score(player_type *creature_ptr, void (*update_playtime)(void), disp
         buf_append(score, screen_dump, strlen(screen_dump));
     }
 
-#ifdef WINDOWS
-    if (WSAStartup(wVersionRequested, &wsaData)) {
-        msg_print("Report: WSAStartup failed.");
-#ifdef WINDOWS
-        WSACleanup();
-#endif
-        return 1;
-    }
-#endif
-
     term_clear();
 
-    int sd;
-    while (TRUE) {
-        char buff[160];
-#ifdef JP
-        prt("接続中...", 0, 0);
-#else
-        prt("connecting...", 0, 0);
-#endif
+    bool succeeded = FALSE;
+    while (!succeeded) {
         term_fresh();
 
-        /* プロキシを設定する */
-        set_proxy(HTTP_PROXY, HTTP_PROXY_PORT);
-
-        /* Connect to the score server */
-        sd = connect_server(HTTP_TIMEOUT, SCORE_SERVER, SCORE_PORT);
-
-        if (sd < 0) {
-#ifdef JP
-            sprintf(buff, "スコア・サーバへの接続に失敗しました。(%s)", soc_err());
-#else
-            sprintf(buff, "Failed to connect to the score server.(%s)", soc_err());
-#endif
-            prt(buff, 0, 0);
-            (void)inkey();
-
-#ifdef JP
-            if (!get_check_strict(creature_ptr, "もう一度接続を試みますか? ", CHECK_NO_HISTORY))
-#else
-            if (!get_check_strict(creature_ptr, "Try again? ", CHECK_NO_HISTORY))
-#endif
-            {
-#ifdef WINDOWS
-                WSACleanup();
-#endif
-                return 1;
-            }
-
-            continue;
-        }
-
-#ifdef JP
-        prt("スコア送信中...", 0, 0);
-#else
-        prt("Sending the score...", 0, 0);
-#endif
+        prt(_("スコア送信中...", "Sending the score..."), 0, 0);
         term_fresh();
 
-        if (!http_post(sd, SCORE_PATH, score)) {
-            disconnect_server(sd);
-#ifdef JP
-            sprintf(buff, "スコア・サーバへの送信に失敗しました。");
-#else
-            sprintf(buff, "Failed to send to the score server.");
-#endif
-            prt(buff, 0, 0);
+        if (http_post(SCORE_PATH, score)) {
+            succeeded = TRUE;
+        } else {
+            prt(_("スコア・サーバへの送信に失敗しました。", "Failed to send to the score server."), 0, 0);
             (void)inkey();
 
-#ifdef JP
-            if (!get_check_strict(creature_ptr, "もう一度接続を試みますか? ", CHECK_NO_HISTORY))
-#else
-            if (!get_check_strict(creature_ptr, "Try again? ", CHECK_NO_HISTORY))
-#endif
-            {
-#ifdef WINDOWS
-                WSACleanup();
-#endif
-                return 1;
+            if (!get_check_strict(creature_ptr, _("もう一度接続を試みますか? ", "Try again? "), CHECK_NO_HISTORY)) {
+                break;
             }
-
-            continue;
         }
-
-        disconnect_server(sd);
-        break;
     }
 
-#ifdef WINDOWS
-    WSACleanup();
-#endif
+    buf_delete(score);
 
-    return 0;
+    return succeeded ? 0 : 1;
 }
 #endif /* WORLD_SCORE */
