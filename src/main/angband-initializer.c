@@ -101,13 +101,13 @@ void init_file_paths(char *libpath, char *varpath)
     strcpy(libtail, "xtra");
     ANGBAND_DIR_XTRA = string_make(libpath);
 
-#ifdef WINDOWS
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
     char tmp[128];
     strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
     path_build(debug_savefile, sizeof(debug_savefile), ANGBAND_DIR_DEBUG_SAVE, tmp);
 
+#ifdef WINDOWS
     struct _finddata_t c_file;
     intptr_t hFile;
     char log_file_expr[1024];
@@ -128,7 +128,6 @@ void init_file_paths(char *libpath, char *varpath)
         DIR *saves_dir = opendir(ANGBAND_DIR_DEBUG_SAVE);
 
         if (saves_dir) {
-            time_t now = time(NULL);
             struct dirent *next_entry;
 
             while ((next_entry = readdir(saves_dir))) {
