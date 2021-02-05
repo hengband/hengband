@@ -335,7 +335,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
 
         if (item_selection_ptr->allow_floor)
-            strcat(item_selection_ptr->out_val, _(" '-'床上,", " - for item_selection_ptr->floor,"));
+            strcat(item_selection_ptr->out_val, _(" '-'床上,", " - for floor,"));
 
         if (item_selection_ptr->mode & USE_FORCE)
             strcat(item_selection_ptr->out_val, _(" 'w'練気術,", " w for the Force,"));
