@@ -1763,8 +1763,6 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
             num_blow /= 2;
 
         if (creature_ptr->special_defense & KAMAE_GENBU) {
-            creature_ptr->to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
-            creature_ptr->dis_to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
             num_blow -= 2;
             if ((creature_ptr->pclass == CLASS_MONK) && (creature_ptr->lev > 42))
                 num_blow--;
@@ -2422,7 +2420,9 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         }
     }
 
-    if (creature_ptr->special_defense & KAMAE_BYAKKO) {
+    if (creature_ptr->special_defense & KAMAE_GENBU) {
+        ac += (creature_ptr->lev * creature_ptr->lev) / 50;
+    } else if (creature_ptr->special_defense & KAMAE_BYAKKO) {
         ac -= 40;
     } else if (creature_ptr->special_defense & KAMAE_SEIRYU) {
         ac -= 50;
