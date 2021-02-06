@@ -397,11 +397,6 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->stat_add[A_DEX] = calc_dexterity_addition(creature_ptr);
     creature_ptr->stat_add[A_CON] = calc_constitution_addition(creature_ptr);
     creature_ptr->stat_add[A_CHR] = calc_charisma_addition(creature_ptr);
-    creature_ptr->to_m_chance = calc_to_magic_chance(creature_ptr);
-    creature_ptr->ac = calc_base_ac(creature_ptr);
-    creature_ptr->to_a = calc_to_ac(creature_ptr, TRUE);
-    creature_ptr->dis_ac = calc_base_ac(creature_ptr);
-    creature_ptr->dis_to_a = calc_to_ac(creature_ptr, FALSE);
 
     for (int i = 0; i < A_MAX; i++) {
         calc_top_status(creature_ptr, i);
@@ -449,6 +444,11 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->to_d_m = calc_to_damage_misc(creature_ptr);
     creature_ptr->to_h_m = calc_to_hit_misc(creature_ptr);
     creature_ptr->skill_dig = calc_skill_dig(creature_ptr);
+    creature_ptr->to_m_chance = calc_to_magic_chance(creature_ptr);
+    creature_ptr->ac = calc_base_ac(creature_ptr);
+    creature_ptr->to_a = calc_to_ac(creature_ptr, TRUE);
+    creature_ptr->dis_ac = calc_base_ac(creature_ptr);
+    creature_ptr->dis_to_a = calc_to_ac(creature_ptr, FALSE);
 
     if (old_mighty_throw != creature_ptr->mighty_throw) {
         creature_ptr->window |= PW_INVEN;
