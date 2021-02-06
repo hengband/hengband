@@ -30,6 +30,10 @@
 #include "time.h"
 #include "util/angband-files.h"
 #include "world/world.h"
+#ifndef WINDOWS
+#include <dirent.h>
+#include "util/string-processor.h"
+#endif
 
 char *file_read__buf;
 char *file_read__swp;
@@ -44,10 +48,8 @@ char *file_read__tmp;
 void init_file_paths(char *libpath, char *varpath)
 {
     char *libtail, *vartail;
-
-#ifdef PRIVATE_USER_PATH
     char buf[1024];
-#endif
+
     string_free(ANGBAND_DIR);
     string_free(ANGBAND_DIR_APEX);
     string_free(ANGBAND_DIR_BONE);
@@ -85,8 +87,8 @@ void init_file_paths(char *libpath, char *varpath)
     ANGBAND_DIR_PREF = string_make(libpath);
     strcpy(vartail, "save");
     ANGBAND_DIR_SAVE = string_make(varpath);
-    strcpy(vartail, "save\\log");
-    ANGBAND_DIR_DEBUG_SAVE = string_make(varpath);
+    path_build(buf, sizeof(buf), ANGBAND_DIR_SAVE, "log");
+    ANGBAND_DIR_DEBUG_SAVE = string_make(buf);
 #ifdef PRIVATE_USER_PATH
     path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VERSION_NAME);
     ANGBAND_DIR_USER = string_make(buf);
@@ -103,6 +105,7 @@ void init_file_paths(char *libpath, char *varpath)
     strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
     path_build(debug_savefile, sizeof(debug_savefile), ANGBAND_DIR_DEBUG_SAVE, tmp);
 
+#ifdef WINDOWS
     struct _finddata_t c_file;
     intptr_t hFile;
     char log_file_expr[1024];
@@ -118,6 +121,33 @@ void init_file_paths(char *libpath, char *varpath)
         } while (_findnext(hFile, &c_file) == 0);
         _findclose(hFile);
     }
+#else
+    {
+        DIR *saves_dir = opendir(ANGBAND_DIR_DEBUG_SAVE);
+
+        if (saves_dir) {
+            struct dirent *next_entry;
+
+            while ((next_entry = readdir(saves_dir))) {
+                if (angband_strchr(next_entry->d_name, '-')) {
+                    char path[1024];
+                    struct stat next_stat;
+
+                    path_build(path, sizeof(path), ANGBAND_DIR_DEBUG_SAVE, next_entry->d_name);
+                    /*
+                     * Remove if modified more than a week ago,
+                     * 7*24*60*60 seconds.
+                     */
+                    if (stat(path, &next_stat) == 0 &&
+                            difftime(now, next_stat.st_mtime) > 604800) {
+                        remove(path);
+                    }
+                }
+            }
+            closedir(saves_dir);
+        }
+    }
+#endif
 }
 
 /*!
