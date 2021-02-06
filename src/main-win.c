@@ -949,7 +949,7 @@ static void load_sound_prefs(void)
 
     path_build(ini_path, 1024, ANGBAND_DIR_XTRA_SOUND, "sound_debug.cfg");
     if (GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path) == 0) {
-        path_build(ini_path, 1024, ANGBAND_DIR_XTRA_MUSIC, "sound.cfg");
+        path_build(ini_path, 1024, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
         GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path);
     }
 
