@@ -139,25 +139,21 @@ void kill_saved_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
     sf_ptr->floor_id = 0;
 }
 
-static void find_oldest_floor_id(player_type *creature_ptr, saved_floor_type *sf_ptr, FLOOR_IDX *fl_idx)
+static FLOOR_IDX find_oldest_floor_idx(player_type *creature_ptr)
 {
-    if (*fl_idx != MAX_SAVED_FLOORS)
-        return;
-
-    s16b oldest = 0;
+    FLOOR_IDX oldest_floor_idx = 0;
     u32b oldest_visit = 0xffffffffL;
-    for (*fl_idx = 0; *fl_idx < MAX_SAVED_FLOORS; (*fl_idx)++) {
-        sf_ptr = &saved_floors[*fl_idx];
+
+    for (FLOOR_IDX fl_idx = 0; fl_idx < MAX_SAVED_FLOORS; fl_idx++) {
+        const saved_floor_type* sf_ptr = &saved_floors[fl_idx];
         if ((sf_ptr->floor_id == creature_ptr->floor_id) || (sf_ptr->visit_mark > oldest_visit))
             continue;
 
-        oldest = *fl_idx;
+        oldest_floor_idx = fl_idx;
         oldest_visit = sf_ptr->visit_mark;
     }
 
-    sf_ptr = &saved_floors[oldest];
-    kill_saved_floor(creature_ptr, sf_ptr);
-    *fl_idx = oldest;
+    return oldest_floor_idx;
 }
 
 /*!
@@ -177,7 +173,12 @@ FLOOR_IDX get_new_floor_id(player_type *creature_ptr)
             break;
     }
 
-    find_oldest_floor_id(creature_ptr, sf_ptr, &fl_idx);
+    if (fl_idx == MAX_SAVED_FLOORS) {
+        fl_idx = find_oldest_floor_idx(creature_ptr);
+        sf_ptr = &saved_floors[fl_idx];
+        kill_saved_floor(creature_ptr, sf_ptr);
+    }
+
     sf_ptr->savefile_id = fl_idx;
     sf_ptr->floor_id = max_floor_id;
     sf_ptr->last_visit = 0;
