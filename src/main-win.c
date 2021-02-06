@@ -2297,6 +2297,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         } else {
             game_in_progress = TRUE;
             term_flush();
+            strcpy(savefile, "");
             play_game(player_ptr, TRUE, FALSE);
             quit(NULL);
         }
