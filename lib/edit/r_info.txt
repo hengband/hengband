@@ -24562,8 +24562,8 @@ W:23:1:0:350:0:0
 B:BITE:FIRE:6d5
 B:BITE:FIRE:6d5
 B:CLAW:FIRE:6d5
-F:EVIL | ANIMAL | UNDEAD | DROP_CORPSE
-F:DROP_90 | FRIENDS | IM_FIRE | RES_NETH | RES_DARK
+F:EVIL | ANIMAL | UNDEAD | DROP_CORPSE | NO_FEAR
+F:DROP_90 | IM_FIRE | RES_NETH | RES_DARK
 S:1_IN_8 | BR_FIRE | SCARE
 D:$It's the end of the pathetic dogs whose souls were reaped by people's malice
 D:$ in the middle of the night.
