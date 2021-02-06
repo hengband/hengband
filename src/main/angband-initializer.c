@@ -30,6 +30,10 @@
 #include "time.h"
 #include "util/angband-files.h"
 #include "world/world.h"
+#ifndef WINDOWS
+#include <dirent.h>
+#include "util/string-processor.h"
+#endif
 
 char *file_read__buf;
 char *file_read__swp;
@@ -103,6 +107,7 @@ void init_file_paths(char *libpath, char *varpath)
     strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);
     path_build(debug_savefile, sizeof(debug_savefile), ANGBAND_DIR_DEBUG_SAVE, tmp);
 
+#ifdef WINDOWS
     struct _finddata_t c_file;
     intptr_t hFile;
     char log_file_expr[1024];
@@ -118,6 +123,33 @@ void init_file_paths(char *libpath, char *varpath)
         } while (_findnext(hFile, &c_file) == 0);
         _findclose(hFile);
     }
+#else
+    {
+        DIR *saves_dir = opendir(ANGBAND_DIR_DEBUG_SAVE);
+
+        if (saves_dir) {
+            struct dirent *next_entry;
+
+            while ((next_entry = readdir(saves_dir))) {
+                if (angband_strchr(next_entry->d_name, '-')) {
+                    char path[1024];
+                    struct stat next_stat;
+
+                    path_build(path, sizeof(path), ANGBAND_DIR_DEBUG_SAVE, next_entry->d_name);
+                    /*
+                     * Remove if modified more than a week ago,
+                     * 7*24*60*60 seconds.
+                     */
+                    if (stat(path, &next_stat) == 0 &&
+                            difftime(now, next_stat.st_mtime) > 604800) {
+                        remove(path);
+                    }
+                }
+            }
+            closedir(saves_dir);
+        }
+    }
+#endif
 }
 
 /*!
