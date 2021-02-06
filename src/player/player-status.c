@@ -1742,12 +1742,6 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
                 num_blow++;
             if (blow_base > 58)
                 num_blow++;
-
-            MAGIC_NUM1 current_ki = get_current_ki(creature_ptr);
-            if (current_ki != i) {
-                creature_ptr->to_d[i] += current_ki / 5;
-                creature_ptr->dis_to_d[i] += current_ki / 5;
-            }
         } else {
             if (blow_base > 12)
                 num_blow++;
@@ -2940,6 +2934,11 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
             damage -= 200;
         } else {
             damage -= 10;
+        }
+    } else if (creature_ptr->pclass == CLASS_FORCETRAINER) {
+        // 練気術師は格闘ダメージに (気)/5 の修正を得る。
+        if (is_martial_arts_mode(creature_ptr) && calc_hand == PLAYER_HAND_MAIN) {
+            damage += get_current_ki(creature_ptr) / 5;
         }
     }
 
