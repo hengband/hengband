@@ -947,15 +947,17 @@ static void load_sound_prefs(void)
     char wav_path[1024];
     char *zz[SAMPLE_SOUND_MAX];
 
-    path_build(ini_path, 1024, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
+    path_build(ini_path, 1024, ANGBAND_DIR_XTRA_SOUND, "sound_debug.cfg");
+    if (GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path) == 0) {
+        path_build(ini_path, 1024, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
+        GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path);
+    }
+
     for (int i = 0; i < SOUND_MAX; i++) {
         GetPrivateProfileString("Sound", angband_sound_name[i], "", tmp, 1024, ini_path);
         int num = tokenize_whitespace(tmp, SAMPLE_SOUND_MAX, zz);
         for (int j = 0; j < num; j++) {
-            /* Access the sound */
             path_build(wav_path, 1024, ANGBAND_DIR_XTRA_SOUND, zz[j]);
-
-            /* Save the sound filename, if it exists */
             if (check_file(wav_path))
                 sound_file[i][j] = string_make(zz[j]);
         }
