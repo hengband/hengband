@@ -1771,11 +1771,6 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
             if (num_blow < 0)
                 num_blow = 0;
         } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
-            creature_ptr->to_h[i] -= (creature_ptr->lev / 3);
-            creature_ptr->to_d[i] -= (creature_ptr->lev / 6);
-
-            creature_ptr->dis_to_h[i] -= (creature_ptr->lev / 3);
-            creature_ptr->dis_to_d[i] -= (creature_ptr->lev / 6);
             num_blow /= 2;
         }
 
@@ -3029,6 +3024,13 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         damage += (creature_ptr->lev / 6);
     }
 
+    // 朱雀の構えをとっているとき、格闘ダメージに -(レベル)/6 の修正を得る。
+    if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        if (is_martial_arts_mode(creature_ptr) && calc_hand == PLAYER_HAND_MAIN) {
+            damage -= (creature_ptr->lev / 6);
+        }
+    }
+
     return damage;
 }
 
@@ -3249,6 +3251,13 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
 
     /* Two handed combat penalty */
     hit -= calc_double_weapon_penalty(creature_ptr, slot);
+
+    // 朱雀の構えをとっているとき、格闘命中に -(レベル)/3 の修正を得る。
+    if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        if (is_martial_arts_mode(creature_ptr) && calc_hand == PLAYER_HAND_MAIN) {
+            hit -= (creature_ptr->lev / 3);
+        }
+    }
 
     return hit;
 }
