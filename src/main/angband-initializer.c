@@ -48,10 +48,8 @@ char *file_read__tmp;
 void init_file_paths(char *libpath, char *varpath)
 {
     char *libtail, *vartail;
-
-#ifdef PRIVATE_USER_PATH
     char buf[1024];
-#endif
+
     string_free(ANGBAND_DIR);
     string_free(ANGBAND_DIR_APEX);
     string_free(ANGBAND_DIR_BONE);
@@ -89,8 +87,8 @@ void init_file_paths(char *libpath, char *varpath)
     ANGBAND_DIR_PREF = string_make(libpath);
     strcpy(vartail, "save");
     ANGBAND_DIR_SAVE = string_make(varpath);
-    strcpy(vartail, "save\\log");
-    ANGBAND_DIR_DEBUG_SAVE = string_make(varpath);
+    path_build(buf, sizeof(buf), ANGBAND_DIR_SAVE, "log");
+    ANGBAND_DIR_DEBUG_SAVE = string_make(buf);
 #ifdef PRIVATE_USER_PATH
     path_build(buf, sizeof(buf), PRIVATE_USER_PATH, VERSION_NAME);
     ANGBAND_DIR_USER = string_make(buf);
