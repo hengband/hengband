@@ -31,7 +31,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
     term_fresh();
     (void)strcpy(creature_ptr->died_from, _("(セーブ)", "(saved)"));
     signals_ignore_tstp();
-    if (save_player(creature_ptr, SAVE_TYPE_NORMAL))
+    if (save_player(creature_ptr, SAVE_TYPE_CONTINUE_GAME))
         prt(_("ゲームをセーブしています... 終了", "Saving game... done."), 0, 0);
     else
         prt(_("ゲームをセーブしています... 失敗！", "Saving game... failed!"), 0, 0);
@@ -39,10 +39,6 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
     signals_handle_tstp();
     term_fresh();
     (void)strcpy(creature_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
-    current_world_ptr->is_loading_now = FALSE;
-    update_creature(creature_ptr);
-    mproc_init(creature_ptr->current_floor_ptr);
-    current_world_ptr->is_loading_now = TRUE;
 }
 
 /*!

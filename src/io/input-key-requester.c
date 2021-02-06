@@ -205,7 +205,6 @@ void request_command(player_type *player_ptr, int shopping)
     while (TRUE) {
         if (!macro_running() && !command_new && auto_debug_save) {
             save_player(player_ptr, SAVE_TYPE_DEBUG);
-            update_creature(player_ptr);
         }
 
         if (command_new) {

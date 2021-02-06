@@ -22,6 +22,7 @@
 #include "io/uid-checker.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-compaction.h"
+#include "monster/monster-status.h"
 #include "object/object-kind.h"
 #include "save/floor-writer.h"
 #include "save/info-writer.h"
@@ -285,7 +286,7 @@ bool save_player(player_type *player_ptr, save_type type)
 
         if (type == SAVE_TYPE_DEBUG)
             strcpy(filename, debug_savefile);
-        if (type == SAVE_TYPE_NORMAL)
+        if (type != SAVE_TYPE_DEBUG)
             strcpy(filename, savefile);
 
         fd_move(filename, temp);
@@ -294,6 +295,13 @@ bool save_player(player_type *player_ptr, save_type type)
         safe_setuid_drop();
         current_world_ptr->character_loaded = TRUE;
         result = TRUE;
+    }
+
+    if (type != SAVE_TYPE_CLOSE_GAME) {
+        current_world_ptr->is_loading_now = FALSE;
+        update_creature(player_ptr);
+        mproc_init(player_ptr->current_floor_ptr);
+        current_world_ptr->is_loading_now = TRUE;
     }
 
     return result;
