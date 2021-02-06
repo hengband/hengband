@@ -1742,12 +1742,6 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
                 num_blow++;
             if (blow_base > 58)
                 num_blow++;
-
-            MAGIC_NUM1 current_ki = get_current_ki(creature_ptr);
-            if (current_ki != i) {
-                creature_ptr->to_d[i] += current_ki / 5;
-                creature_ptr->dis_to_d[i] += current_ki / 5;
-            }
         } else {
             if (blow_base > 12)
                 num_blow++;
@@ -1769,19 +1763,12 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
             num_blow /= 2;
 
         if (creature_ptr->special_defense & KAMAE_GENBU) {
-            creature_ptr->to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
-            creature_ptr->dis_to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
             num_blow -= 2;
             if ((creature_ptr->pclass == CLASS_MONK) && (creature_ptr->lev > 42))
                 num_blow--;
             if (num_blow < 0)
                 num_blow = 0;
         } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
-            creature_ptr->to_h[i] -= (creature_ptr->lev / 3);
-            creature_ptr->to_d[i] -= (creature_ptr->lev / 6);
-
-            creature_ptr->dis_to_h[i] -= (creature_ptr->lev / 3);
-            creature_ptr->dis_to_d[i] -= (creature_ptr->lev / 6);
             num_blow /= 2;
         }
 
@@ -2433,7 +2420,9 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         }
     }
 
-    if (creature_ptr->special_defense & KAMAE_BYAKKO) {
+    if (creature_ptr->special_defense & KAMAE_GENBU) {
+        ac += (creature_ptr->lev * creature_ptr->lev) / 50;
+    } else if (creature_ptr->special_defense & KAMAE_BYAKKO) {
         ac -= 40;
     } else if (creature_ptr->special_defense & KAMAE_SEIRYU) {
         ac -= 50;
@@ -2941,6 +2930,11 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         } else {
             damage -= 10;
         }
+    } else if (creature_ptr->pclass == CLASS_FORCETRAINER) {
+        // 練気術師は格闘ダメージに (気)/5 の修正を得る。
+        if (is_martial_arts_mode(creature_ptr) && calc_hand == PLAYER_HAND_MAIN) {
+            damage += get_current_ki(creature_ptr) / 5;
+        }
     }
 
     if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
@@ -3028,6 +3022,13 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
 
     if (is_martial_arts_mode(creature_ptr) && (!heavy_armor(creature_ptr) || creature_ptr->pclass != CLASS_BERSERKER)) {
         damage += (creature_ptr->lev / 6);
+    }
+
+    // 朱雀の構えをとっているとき、格闘ダメージに -(レベル)/6 の修正を得る。
+    if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        if (is_martial_arts_mode(creature_ptr) && calc_hand == PLAYER_HAND_MAIN) {
+            damage -= (creature_ptr->lev / 6);
+        }
     }
 
     return damage;
@@ -3250,6 +3251,13 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
 
     /* Two handed combat penalty */
     hit -= calc_double_weapon_penalty(creature_ptr, slot);
+
+    // 朱雀の構えをとっているとき、格闘命中に -(レベル)/3 の修正を得る。
+    if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        if (is_martial_arts_mode(creature_ptr) && calc_hand == PLAYER_HAND_MAIN) {
+            hit -= (creature_ptr->lev / 3);
+        }
+    }
 
     return hit;
 }
