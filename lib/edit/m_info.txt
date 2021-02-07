@@ -1912,7 +1912,7 @@ R:9:0
 
 ### Mindcrafter ###
 N:9
-I:LIFE:WIS:0x00:0:99:400
+I:NONE:WIS:0x00:0:1:400
 # Life
 R:0:0
 
@@ -3503,7 +3503,7 @@ T:50:100:80:250
 
 ### Blue Mage ###
 N:21
-I:SORCERY:INT:0x01:0:99:430
+I:NONE:INT:0x01:0:1:430
 # Life
 R:0:0
 
@@ -3639,7 +3639,7 @@ R:9:0
 
 ### Mirror Master ###
 N:25
-I:LIFE:INT:0x00:0:99:400
+I:NONE:INT:0x00:0:1:400
 # Life
 R:0:0
 
