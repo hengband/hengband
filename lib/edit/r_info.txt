@@ -25056,7 +25056,7 @@ I:112:37d6:22:22:22
 W:22:2:0:22:0:0
 F:FORCE_MAXHP | NEVER_MOVE | EMPTY_MIND | RES_SHAR
 F:NO_CONF | NO_SLEEP | NO_FEAR | NEVER_BLOW
-S:1_IN_5 | TELE_TO | S_KIN
+S:1_IN_6 | TELE_TO | S_KIN
 D:$It's a cat figurine made of pottery!
 D:$  When it beckons, you will get a lot of money!
 D:陶器でできた猫の置物だ！手招きするとがっぽがっぽだ！
