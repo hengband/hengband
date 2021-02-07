@@ -24582,7 +24582,7 @@ B:CLAW:FIRE:12d11
 B:CRUSH:SUPERHURT:30d1
 F:UNIQUE | FORCE_MAXHP | EVIL | ANIMAL | UNDEAD | DROP_CORPSE | NO_FEAR
 F:DROP_2D2 | DROP_GOOD | IM_FIRE | RES_NETH | RES_DARK
-R:1237:13d9
+R:1237:9d9
 S:1_IN_5 | S_KIN | BR_FIRE | SCARE | HOLD
 D:$This evil dog wasn't born out of nothing.
 D:$  The illusions created by people's selfishness
