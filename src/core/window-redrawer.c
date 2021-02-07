@@ -261,7 +261,7 @@ void window_stuff(player_type *player_ptr)
     }
 
     if (player_ptr->window & (PW_MONSTER_LIST)) {
-        if (need_term_fresh)
+        if (need_term_fresh(player_ptr))
             player_ptr->window &= ~(PW_MONSTER_LIST);
         fix_monster_list(player_ptr); //need this side-effect for work targetting collect
     }
