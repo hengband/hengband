@@ -246,7 +246,7 @@ bool activate_identification(player_type *user_ptr) { return ident_spell(user_pt
 
 bool activate_pesticide(player_type *user_ptr)
 {
-    msg_print(_("あなたは害虫を一掃した。", "You exterminate small life."));
+    msg_print(_("あなたは害虫を一掃した。", "You exterminate some pests."));
     (void)dispel_monsters(user_ptr, 4);
     return TRUE;
 }
