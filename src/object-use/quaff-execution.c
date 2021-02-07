@@ -145,7 +145,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
         switch (q_ptr->sval) {
             /* 飲みごたえをオリジナルより細かく表現 */
         case SV_POTION_WATER:
-            msg_print(_("口の中がさっぱりした。", ""));
+            msg_print(_("口の中がさっぱりした。", "That was refreshing."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
             ident = TRUE;
             break;
