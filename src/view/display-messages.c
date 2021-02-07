@@ -283,8 +283,6 @@ static void msg_flush(player_type *player_ptr, int x)
         show_more = is_msg_window_flowed();
 
     player_ptr->now_damaged = FALSE;
-
-    player_ptr->now_damaged = FALSE;
     if (!player_ptr->playing || show_more) {
         term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
         while (TRUE) {
