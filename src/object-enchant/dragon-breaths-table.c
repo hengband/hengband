@@ -13,7 +13,7 @@ const dragonbreath_type dragonbreath_info[] = {
 	{ TR_RES_POIS, GF_POIS, _("毒", "poison") },
 	{ TR_RES_LITE, GF_LITE, _("閃光", "light") },
 	{ TR_RES_DARK, GF_DARK, _("暗黒", "dark") },
-	{ TR_RES_SHARDS, GF_SHARDS, _("破片", "shard") },
+	{ TR_RES_SHARDS, GF_SHARDS, _("破片", "shards") },
 	{ TR_RES_CONF, GF_CONFUSION, _("混乱", "confusion") },
 	{ TR_RES_SOUND, GF_SOUND, _("轟音", "sound") },
 	{ TR_RES_NEXUS, GF_NEXUS, _("因果混乱", "nexus") },
