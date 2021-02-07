@@ -157,7 +157,7 @@ bool activate_unique_detection(player_type *user_ptr)
             msg_format(_("%s． ", "%s. "), r_name + r_ptr->name);
 
         if (m_ptr->r_idx == MON_DIO)
-            msg_print(_("きさま！　見ているなッ！", "You bastard!, You're watching me, well watch this!"));
+            msg_print(_("きさま！　見ているなッ！", "You bastard! You're watching me, well watch this!"));
     }
 
     return TRUE;
