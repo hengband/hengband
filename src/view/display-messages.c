@@ -277,10 +277,12 @@ bool is_msg_window_flowed(void)
 static void msg_flush(player_type *player_ptr, int x)
 {
     byte a = TERM_L_BLUE;
-    bool show_more = is_msg_window_flowed();
+    bool show_more = (num_more >= 0);
 
     if (auto_more && (quick_messages || !player_ptr->now_damaged))
-        show_more = FALSE;
+        show_more = is_msg_window_flowed();
+
+    player_ptr->now_damaged = FALSE;
 
     player_ptr->now_damaged = FALSE;
     if (!player_ptr->playing || show_more) {
