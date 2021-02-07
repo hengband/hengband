@@ -337,7 +337,7 @@ bool activate_ball_dark(player_type *user_ptr, concptr name)
 bool activate_ball_mana(player_type *user_ptr, concptr name)
 {
     DIRECTION dir;
-    msg_format(_("%sが青白く光った．．．", "The %s glows pale..."), name);
+    msg_format(_("%sが青白く光った．．．", "The %s becomes pale..."), name);
     if (!get_aim_dir(user_ptr, &dir))
         return FALSE;
 
