@@ -8,9 +8,11 @@
  */
 
 #include "term/z-term.h"
+#include "core/player-processor.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
+#include "io/input-key-requester.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "term/z-virt.h"
@@ -1027,7 +1029,8 @@ bool macro_running(void)
     return diff < -1 || 1 < diff;
 }
 
-bool need_term_fresh(void) { return !macro_running() || fresh_after; }
+bool need_term_fresh(player_type *player_ptr) { return (!macro_running() && !continuous_action_running(player_ptr)) || fresh_after; }
+
 /*
  * @brief Actually perform all requested changes to the window
  */

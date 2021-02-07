@@ -192,13 +192,13 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 
 		case BACT_DICE_SLOTS: /* The Dice Slots */
 			c_put_str(TERM_GREEN, _("ダイス・スロット", "Dice Slots"), 5, 2);
-			c_put_str(TERM_YELLOW, _("レモン   レモン            2", ""), 6, 37);
-			c_put_str(TERM_YELLOW, _("レモン   レモン   レモン   5", ""), 7, 37);
-			c_put_str(TERM_ORANGE, _("オレンジ オレンジ オレンジ 10", ""), 8, 37);
-			c_put_str(TERM_UMBER, _("剣       剣       剣       20", ""), 9, 37);
-			c_put_str(TERM_SLATE, _("盾       盾       盾       50", ""), 10, 37);
-			c_put_str(TERM_VIOLET, _("プラム   プラム   プラム   200", ""), 11, 37);
-			c_put_str(TERM_RED, _("チェリー チェリー チェリー 1000", ""), 12, 37);
+			c_put_str(TERM_YELLOW, _("レモン   レモン            2", "Lemon    Lemon             2"), 6, 37);
+			c_put_str(TERM_YELLOW, _("レモン   レモン   レモン   5", "Lemon    Lemon    Lemon    5"), 7, 37);
+			c_put_str(TERM_ORANGE, _("オレンジ オレンジ オレンジ 10", "Orange   Orange   Orange   10"), 8, 37);
+			c_put_str(TERM_UMBER, _("剣       剣       剣       20", "Sword    Sword    Sword    20"), 9, 37);
+			c_put_str(TERM_SLATE, _("盾       盾       盾       50", "Shield   Shield   Shield   50"), 10, 37);
+			c_put_str(TERM_VIOLET, _("プラム   プラム   プラム   200", "Plum     Plum     Plum     200"), 11, 37);
+			c_put_str(TERM_RED, _("チェリー チェリー チェリー 1000", "Cherry   Cherry   Cherry   1000"), 12, 37);
 
 			win = FALSE;
 			roll1 = randint1(21);

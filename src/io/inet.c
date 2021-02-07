@@ -209,7 +209,7 @@ int connect_server(int timeout, concptr host, int port)
 #ifdef JP
             errstr = "エラー: プロキシのアドレスが不正です";
 #else
-            errstr = "Error : wrong proxy addres";
+            errstr = "Error : wrong proxy address";
 #endif
 
             restore_signal();
@@ -220,7 +220,7 @@ int connect_server(int timeout, concptr host, int port)
 #ifdef JP
         errstr = "エラー: サーバのアドレスが不正です";
 #else
-        errstr = "Error : wrong server adress";
+        errstr = "Error : wrong server address";
 #endif
 
         restore_signal();

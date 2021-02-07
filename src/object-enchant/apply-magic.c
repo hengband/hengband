@@ -35,6 +35,22 @@
 #include "world/world.h"
 
 /*!
+ * @brief 0 および負数に対応した randint1()
+ * @param n
+ *
+ * n == 0 のとき、常に 0 を返す。
+ * n >  0 のとき、[1, n] の乱数を返す。
+ * n <  0 のとき、[n,-1] の乱数を返す。
+ */
+static int randint1_signed(const int n)
+{
+    if (n == 0)
+        return 0;
+
+    return n > 0 ? randint1(n) : -randint1(-n);
+}
+
+/*!
  * @brief 生成されたベースアイテムに魔法的な強化を与えるメインルーチン
  * Complete the "creation" of an object by applying "magic" to the item
  * @param owner_ptr プレーヤーへの参照ポインタ
@@ -264,26 +280,9 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
             if (e_ptr->max_pval)
                 o_ptr->pval -= randint1(e_ptr->max_pval);
         } else {
-            if (e_ptr->max_to_h) {
-                if (e_ptr->max_to_h > 127)
-                    o_ptr->to_h -= randint1(256 - e_ptr->max_to_h);
-                else
-                    o_ptr->to_h += randint1(e_ptr->max_to_h);
-            }
-
-            if (e_ptr->max_to_d) {
-                if (e_ptr->max_to_d > 127)
-                    o_ptr->to_d -= randint1(256 - e_ptr->max_to_d);
-                else
-                    o_ptr->to_d += randint1(e_ptr->max_to_d);
-            }
-
-            if (e_ptr->max_to_a) {
-                if (e_ptr->max_to_a > 127)
-                    o_ptr->to_a -= randint1(256 - e_ptr->max_to_a);
-                else
-                    o_ptr->to_a += randint1(e_ptr->max_to_a);
-            }
+            o_ptr->to_h += (HIT_PROB)randint1_signed(e_ptr->max_to_h);
+            o_ptr->to_d += randint1_signed(e_ptr->max_to_d);
+            o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(e_ptr->max_to_a);
 
             if (o_ptr->name2 == EGO_ACCURACY) {
                 while (o_ptr->to_h < o_ptr->to_d + 10) {

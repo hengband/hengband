@@ -121,7 +121,7 @@ static s16b calc_constitution_addition(player_type *creature_ptr);
 static s16b calc_charisma_addition(player_type *creature_ptr);
 static s16b calc_to_magic_chance(player_type *creature_ptr);
 static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr);
-static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value);
+static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value);
 static s16b calc_speed(player_type *creature_ptr);
 static s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
 static void calc_use_status(player_type *creature_ptr, int status);
@@ -130,10 +130,10 @@ static void calc_ind_status(player_type *creature_ptr, int status);
 static s16b calc_riding_bow_penalty(player_type *creature_ptr);
 static void put_equipment_warning(player_type *creature_ptr);
 
-static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_true_value);
-static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_true_value);
+static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value);
+static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value);
 
-static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value);
+static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value);
 
 static s16b calc_to_damage_misc(player_type *creature_ptr);
 static s16b calc_to_hit_misc(player_type *creature_ptr);
@@ -397,11 +397,6 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->stat_add[A_DEX] = calc_dexterity_addition(creature_ptr);
     creature_ptr->stat_add[A_CON] = calc_constitution_addition(creature_ptr);
     creature_ptr->stat_add[A_CHR] = calc_charisma_addition(creature_ptr);
-    creature_ptr->to_m_chance = calc_to_magic_chance(creature_ptr);
-    creature_ptr->ac = calc_base_ac(creature_ptr);
-    creature_ptr->to_a = calc_to_ac(creature_ptr, TRUE);
-    creature_ptr->dis_ac = calc_base_ac(creature_ptr);
-    creature_ptr->dis_to_a = calc_to_ac(creature_ptr, FALSE);
 
     for (int i = 0; i < A_MAX; i++) {
         calc_top_status(creature_ptr, i);
@@ -449,6 +444,11 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->to_d_m = calc_to_damage_misc(creature_ptr);
     creature_ptr->to_h_m = calc_to_hit_misc(creature_ptr);
     creature_ptr->skill_dig = calc_skill_dig(creature_ptr);
+    creature_ptr->to_m_chance = calc_to_magic_chance(creature_ptr);
+    creature_ptr->ac = calc_base_ac(creature_ptr);
+    creature_ptr->to_a = calc_to_ac(creature_ptr, TRUE);
+    creature_ptr->dis_ac = calc_base_ac(creature_ptr);
+    creature_ptr->dis_to_a = calc_to_ac(creature_ptr, FALSE);
 
     if (old_mighty_throw != creature_ptr->mighty_throw) {
         creature_ptr->window |= PW_INVEN;
@@ -893,7 +893,7 @@ static void calc_spells(player_type *creature_ptr)
  */
 static void calc_mana(player_type *creature_ptr)
 {
-    if (!mp_ptr->spell_book)
+    if (!mp_ptr->spell_book && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL)
         return;
 
     int levels;
@@ -1742,12 +1742,6 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
                 num_blow++;
             if (blow_base > 58)
                 num_blow++;
-
-            MAGIC_NUM1 current_ki = get_current_ki(creature_ptr);
-            if (current_ki != i) {
-                creature_ptr->to_d[i] += current_ki / 5;
-                creature_ptr->dis_to_d[i] += current_ki / 5;
-            }
         } else {
             if (blow_base > 12)
                 num_blow++;
@@ -1769,19 +1763,12 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
             num_blow /= 2;
 
         if (creature_ptr->special_defense & KAMAE_GENBU) {
-            creature_ptr->to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
-            creature_ptr->dis_to_a += (creature_ptr->lev * creature_ptr->lev) / 50;
             num_blow -= 2;
             if ((creature_ptr->pclass == CLASS_MONK) && (creature_ptr->lev > 42))
                 num_blow--;
             if (num_blow < 0)
                 num_blow = 0;
         } else if (creature_ptr->special_defense & KAMAE_SUZAKU) {
-            creature_ptr->to_h[i] -= (creature_ptr->lev / 3);
-            creature_ptr->to_d[i] -= (creature_ptr->lev / 6);
-
-            creature_ptr->dis_to_h[i] -= (creature_ptr->lev / 3);
-            creature_ptr->dis_to_d[i] -= (creature_ptr->lev / 6);
             num_blow /= 2;
         }
 
@@ -2314,7 +2301,7 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
     return ac;
 }
 
-static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
+static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
 {
     ARMOUR_CLASS ac = 0;
     if (creature_ptr->yoiyami)
@@ -2347,15 +2334,15 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        if (is_true_value || object_is_known(o_ptr))
+        if (is_real_value || object_is_known(o_ptr))
             ac += o_ptr->to_a;
 
         if (o_ptr->curse_flags & TRC_LOW_AC) {
             if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
-                if (is_true_value || object_is_fully_known(o_ptr))
+                if (is_real_value || object_is_fully_known(o_ptr))
                     ac -= 30;
             } else {
-                if (is_true_value || object_is_fully_known(o_ptr))
+                if (is_real_value || object_is_fully_known(o_ptr))
                     ac -= 10;
             }
         }
@@ -2433,7 +2420,9 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_true_value)
         }
     }
 
-    if (creature_ptr->special_defense & KAMAE_BYAKKO) {
+    if (creature_ptr->special_defense & KAMAE_GENBU) {
+        ac += (creature_ptr->lev * creature_ptr->lev) / 50;
+    } else if (creature_ptr->special_defense & KAMAE_BYAKKO) {
         ac -= 40;
     } else if (creature_ptr->special_defense & KAMAE_SEIRYU) {
         ac -= 50;
@@ -2903,7 +2892,7 @@ void put_equipment_warning(player_type *creature_ptr)
     }
 }
 
-static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_true_value)
+static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -2941,6 +2930,11 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         } else {
             damage -= 10;
         }
+    } else if (creature_ptr->pclass == CLASS_FORCETRAINER) {
+        // 練気術師は格闘ダメージに (気)/5 の修正を得る。
+        if (is_martial_arts_mode(creature_ptr) && calc_hand == PLAYER_HAND_MAIN) {
+            damage += get_current_ki(creature_ptr) / 5;
+        }
     }
 
     if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
@@ -2964,7 +2958,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
             || (i == INVEN_SUB_HAND && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
             continue;
 
-        if (!object_is_known(o_ptr) && !is_true_value)
+        if (!object_is_known(o_ptr) && !is_real_value)
             continue;
         bonus_to_d = o_ptr->to_d;
 
@@ -3030,6 +3024,13 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         damage += (creature_ptr->lev / 6);
     }
 
+    // 朱雀の構えをとっているとき、格闘ダメージに -(レベル)/6 の修正を得る。
+    if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        if (is_martial_arts_mode(creature_ptr) && calc_hand == PLAYER_HAND_MAIN) {
+            damage -= (creature_ptr->lev / 6);
+        }
+    }
+
     return damage;
 }
 
@@ -3038,7 +3039,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
  * @details
  * 'slot' MUST be INVEN_MAIN_HAND or INVEM_SUB_HAND.
  */
-static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_true_value)
+static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
     s16b hit = 0;
 
@@ -3112,7 +3113,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
         }
 
         /* Low melee penalty */
-        if ((object_is_fully_known(o_ptr) || is_true_value) && o_ptr->curse_flags & TRC_LOW_MELEE) {
+        if ((object_is_fully_known(o_ptr) || is_real_value) && o_ptr->curse_flags & TRC_LOW_MELEE) {
             if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
                 hit -= 15;
             } else {
@@ -3188,7 +3189,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
             continue;
 
         /* Fake value does not include unknown objects' value */
-        if (is_true_value || !object_is_known(o_ptr))
+        if (!object_is_known(o_ptr) && !is_real_value)
             continue;
 
         int bonus_to_h = o_ptr->to_h;
@@ -3251,10 +3252,17 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_t
     /* Two handed combat penalty */
     hit -= calc_double_weapon_penalty(creature_ptr, slot);
 
+    // 朱雀の構えをとっているとき、格闘命中に -(レベル)/3 の修正を得る。
+    if (creature_ptr->special_defense & KAMAE_SUZAKU) {
+        if (is_martial_arts_mode(creature_ptr) && calc_hand == PLAYER_HAND_MAIN) {
+            hit -= (creature_ptr->lev / 3);
+        }
+    }
+
     return hit;
 }
 
-static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
+static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value)
 {
     s16b pow = 0;
 
@@ -3325,7 +3333,7 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_true_value)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
         }
 
-        if (is_true_value || object_is_known(o_ptr))
+        if (is_real_value || object_is_known(o_ptr))
             pow += (s16b)bonus_to_h;
     }
 

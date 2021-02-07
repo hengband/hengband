@@ -217,7 +217,7 @@ static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
         describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         msg_format(_("%sは%s光った。", "%s glows %s."), o_name, color);
     } else {
-        msg_format(_("%s光る物が頭に浮かんだ。", "An %s image forms in your mind."), color);
+        msg_format(_("%s光る物が頭に浮かんだ。", "A %s image forms in your mind."), color);
     }
 }
 

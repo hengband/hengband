@@ -1063,14 +1063,29 @@ static void convert_to_euc(char *buf)
 }
 #endif
 
-/*
- * Push multiple keys reversal
- */
-static void term_string_push(char *buf)
+// ゲーム側へキーを送る
+static void send_key(const char key)
 {
-	int i, l = strlen(buf);
-	for (i = l; i >= 0; i--)
-		term_key_push(buf[i]);
+    // Windows ドライバと同様、自前でキューを操作する。
+    // 逆順に term_key_push() する方法だと長い日本語を入力したときにテキストの
+    // 順序が入れ替わってしまう。
+
+    // キーバッファが一杯なら入力を捨てる
+    const int head_nxt = Term->key_head + 1 == Term->key_size ? 0 : Term->key_head + 1;
+    if(head_nxt == Term->key_tail) {
+        plog_fmt("key buffer overflow, ignoring key 0x%02X", key);
+        return;
+    }
+
+    Term->key_queue[Term->key_head] = key;
+    Term->key_head = head_nxt;
+}
+
+// ゲーム側へキー列を送る
+static void send_keys(const char* const keys)
+{
+    for(const char* p = keys; *p != '\0'; ++p)
+        send_key(*p);
 }
 
 /*
@@ -1114,7 +1129,7 @@ static void react_keypress(XKeyEvent *xev)
 #ifdef USE_XIM
 	if(!valid_keysym) { /* XIMからの入力時のみ FALSE になる */
 		convert_to_euc(buf);
-		term_string_push(buf);
+		send_keys(buf);
 		return;
 	}
 #endif
@@ -1128,7 +1143,7 @@ static void react_keypress(XKeyEvent *xev)
 	mx = (ev->state & Mod2Mask) ? TRUE : FALSE;
 	if (n && !mo && !mx && !IsSpecialKey(ks))
 	{
-		term_string_push(buf);
+		send_keys(buf);
 		return;
 	}
 
@@ -1136,30 +1151,30 @@ static void react_keypress(XKeyEvent *xev)
 	{
 		case XK_Escape:
 		{
-			term_key_push(ESCAPE);
+			send_key(ESCAPE);
 			return;
 		}
 
 		case XK_Return:
 		{
-			term_key_push('\r');
+			send_key('\r');
 			return;
 		}
 
 		case XK_Tab:
 		{
-			term_key_push('\t');
+			send_key('\t');
 			return;
 		}
 
 		case XK_Delete:
 		{
-			term_key_push(0x7f);
+			send_key(0x7f);
 			return;
 		}
 		case XK_BackSpace:
 		{
-			term_key_push('\010');
+			send_key('\010');
 			return;
 		}
 	}
@@ -1179,7 +1194,7 @@ static void react_keypress(XKeyEvent *xev)
 			ev->keycode, 13);
 	}
 
-	term_string_push(msg);
+	send_keys(msg);
 
 	if (n && (macro_find_exact(msg) < 0))
 	{

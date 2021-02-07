@@ -71,7 +71,7 @@ static void display_help_on_sex_select(player_type *creature_ptr, char c)
         do_cmd_help(creature_ptr);
     else if (c == '=') {
         screen_save();
-        do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+        do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
         screen_load();
     } else if (c != '4' && c != '6')
         bell();
@@ -272,7 +272,7 @@ static void display_initial_options(player_type *creature_ptr)
     put_str("                                   ", 4, 40);
     put_str("                                   ", 5, 40);
     screen_save();
-    do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+    do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
     screen_load();
 }
 

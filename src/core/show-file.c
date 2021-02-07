@@ -237,6 +237,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
     term_clear();
 
     concptr find = NULL;
+    concptr shower = NULL;
     while (TRUE) {
         if (line >= size - rows)
             line = size - rows;
@@ -260,18 +261,17 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
             next++;
         }
 
-        int row_count = 0;
-        concptr shower = NULL;
-        for (int i = 0; i < rows; i++) {
+        int row_count;
+        for (row_count = 0; row_count < rows;) {
             concptr str = buf;
-            if (!i)
+            if (!row_count)
                 line = next;
             if (angband_fgets(fff, buf, sizeof(buf)))
                 break;
             if (prefix(buf, "***** "))
                 continue;
             next++;
-            if (find && !i) {
+            if (find && !row_count) {
                 char lc_buf[1024];
                 strcpy(lc_buf, str);
                 str_tolower(lc_buf);
@@ -280,7 +280,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
             }
 
             find = NULL;
-            show_file_aux_line(str, i + 2, shower);
+            show_file_aux_line(str, row_count + 2, shower);
             row_count++;
         }
 

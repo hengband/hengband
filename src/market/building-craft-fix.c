@@ -119,7 +119,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row + 3, 2);
 
     q = _("材料となる武器は？", "Which weapon for material? ");
-    s = _("材料となる武器がありません。", "You have no material to repair.");
+    s = _("材料となる武器がありません。", "You have no material for the repair.");
 
     item_tester_hook = item_tester_hook_orthodox_melee_weapons;
     OBJECT_IDX mater;
@@ -128,7 +128,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     if (!mo_ptr)
         return 0;
     if (mater == item) {
-        msg_print(_("クラインの壷じゃない！", "This is not a klein bottle!"));
+        msg_print(_("クラインの壷じゃない！", "This is not a Klein bottle!"));
         return 0;
     }
 

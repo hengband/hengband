@@ -86,7 +86,7 @@ const option_type option_info[MAX_OPTION_INFO] = {
 
     { &fresh_message, FALSE, OPT_PAGE_MAPSCREEN, 1, 25, "fresh_message", _("メッセージの後に画面を再描画する", "Flush output after every message") },
 
-    { &hilite_player, FALSE, OPT_PAGE_MAPSCREEN, 1, 27, "hilite_player", _("プレイヤーにカーソルを合わせる", "Hilite the player with the cursor") },
+    { &hilite_player, FALSE, OPT_PAGE_MAPSCREEN, 1, 27, "hilite_player", _("プレイヤーにカーソルを合わせる", "Highlight the player with the cursor") },
 
     { &display_path, FALSE, OPT_PAGE_MAPSCREEN, 2, 8, "display_path", _("魔法や矢の軌跡を表示する", "Display actual path before shooting") },
 
@@ -152,6 +152,8 @@ const option_type option_info[MAX_OPTION_INFO] = {
 #ifdef WORLD_SCORE
     { &send_score, TRUE, OPT_PAGE_GAMEPLAY, 4, 6, "send_score", _("スコアサーバにスコアを送る", "Send score dump to the world score server") },
 #endif
+
+    { &auto_debug_save, TRUE, OPT_PAGE_GAMEPLAY, 4, 7, "auto_debug_save", _("デバッグ用セーブデータを自動生成する", "Create a debug save automatically") },
 
     { &allow_debug_opts, FALSE, OPT_PAGE_GAMEPLAY, 6, 11, "allow_debug_opts", _("デバッグ/詐欺オプションを許可する", "Allow use of debug/cheat options") },
 

@@ -33,6 +33,7 @@ concptr ANGBAND_DIR_HELP; //!< Help files (normal) for the online help (ascii) T
 concptr ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
 concptr ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
 concptr ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
+concptr ANGBAND_DIR_DEBUG_SAVE; //*< Savefiles for debug data
 concptr ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
 concptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
 
@@ -42,6 +43,7 @@ concptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rare
  */
 char savefile[1024];
 char savefile_base[40];
+char debug_savefile[1024];
 
 /*!
  * @brief プレイヤーステータスをファイルダンプ出力する

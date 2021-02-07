@@ -46,7 +46,7 @@ void wr_randomizer(void)
  * @brief ゲームオプション情報を書き込む / Write the "options"
  * @return なし
  */
-void wr_options(void)
+void wr_options(save_type type)
 {
     for (int i = 0; i < 4; i++)
         wr_u32b(0L);
@@ -89,6 +89,9 @@ void wr_options(void)
 
     if (cheat_diary_output)
         c |= 0x8000;
+
+    if (type == SAVE_TYPE_DEBUG)
+        c |= 0xFFFF;
 
     wr_u16b(c);
 

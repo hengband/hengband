@@ -396,7 +396,7 @@ bool probing(player_type *caster_ptr)
 
     Term->scr->cu = cu;
     Term->scr->cv = cv;
-    if (need_term_fresh())
+    if (need_term_fresh(caster_ptr))
         term_fresh();
 
     if (probe) {

@@ -29,7 +29,7 @@ bool ask_quick_start(player_type *creature_ptr)
 
     term_clear();
     put_str(_("クイック・スタートを使うと以前と全く同じキャラクターで始められます。",
-                "Do you want to use the quick start function(same character as your last one)."),
+                "Do you want to use the quick start function (same character as your last one)."),
         11, 2);
     while (TRUE) {
         char c;

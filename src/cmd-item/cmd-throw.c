@@ -239,11 +239,11 @@ static void check_racial_target_seen(player_type *creature_ptr, it_type *it_ptr)
         return;
     }
 
-    SYMBOL_CODE c = object_char(it_ptr->q_ptr);
-    TERM_COLOR a = object_attr(it_ptr->q_ptr);
-    print_rel(creature_ptr, c, a, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
-    move_cursor_relative(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
     if (it_ptr->msec > 0) {
+        SYMBOL_CODE c = object_char(it_ptr->q_ptr);
+        TERM_COLOR a = object_attr(it_ptr->q_ptr);
+        print_rel(creature_ptr, c, a, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
+        move_cursor_relative(it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
         term_fresh();
         term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
         lite_spot(creature_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis]);
