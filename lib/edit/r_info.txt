@@ -24002,7 +24002,7 @@ F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL
 F:ONLY_ITEM | DROP_90 | DROP_1D2 | DROP_GOOD
 F:CAN_FLY | IM_FIRE | HURT_COLD
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | SCARE | BR_FIRE | BA_FIRE
+S:1_IN_7 | SCARE | BR_FIRE | BA_FIRE
 D:$This dragon is the most loyal subordinate
 D:$ who rushed to the news of the return of Alduin from Oblivion.
 D:$  It lightly turns the town guard into a cinder.
@@ -24022,7 +24022,7 @@ F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL
 F:ONLY_ITEM | DROP_90 | DROP_1D2 | DROP_GOOD
 F:CAN_FLY | IM_COLD | HURT_FIRE
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_9 | SCARE | BR_COLD | BA_COLD
+S:1_IN_7 | SCARE | BR_COLD | BA_COLD
 D:$It is a dragon that has returned from Oblivion.
 D:$  It lightly turns the town guard into an ice statue.
 D:冥界から舞い戻ってきたドラゴンの一体だ。
