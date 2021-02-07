@@ -54,7 +54,7 @@ static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type
         }
     }
 
-    strcat(desc, _("のブレス(250)", ""));
+    strcat(desc, _("のブレス(250)", " (250)"));
     return (desc);
 }
 
