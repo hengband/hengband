@@ -95,7 +95,7 @@ const activation_type activation_info[MAX_ACTIVATION_TYPE] = {
     { "WRAITH", ACT_WRAITH, 90, 25000, { 1000, 0 }, _("幽体化(期間 (レベル/2)+d(レベル/2))", "wraith form (dur level/2 + d(level/2))") },
     { "INVULN", ACT_INVULN, 90, 25000, { 1000, 0 }, _("無敵化(期間 8+d8)", "invulnerability (dur 8+d8)") },
     { "HERO", ACT_HERO, 10, 500, { 30, 30 }, _("士気高揚", "heroism") },
-    { "HERO_SPEED", ACT_HERO_SPEED, 30, 20000, { 100, 200 }, _("士気高揚, スピード(期間 50+d50ターン)", "hero and +10 to speed (50)") },
+    { "HERO_SPEED", ACT_HERO_SPEED, 30, 20000, { 100, 200 }, _("士気高揚, スピード(期間 50+d50ターン)", "hero and +10 to speed (dur 50+d50)") },
     { "ACID_BALL_AND_RESISTANCE", ACT_ACID_BALL_AND_RESISTANCE, 20, 2000, { 40, 40 }, _("酸の球と酸への耐性", "acid ball and resist") },
     { "FIRE_BALL_AND_RESITANCE", ACT_FIRE_BALL_AND_RESISTANCE, 20, 2000, { 40, 40 }, _("火炎の球と火炎への耐性", "fire ball and resist") },
     { "COLD_BALL_AND_RESITANCE", ACT_COLD_BALL_AND_RESISTANCE, 20, 2000, { 40, 40 }, _("冷気の球と冷気への耐性", "cold ball and resist") },
