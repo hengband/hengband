@@ -105,19 +105,19 @@ static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
         desc = _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist elec");
         break;
     case ACT_RESIST_ACID:
-        desc = _("一時的な酸への耐性", "tempral resist acid");
+        desc = _("一時的な酸への耐性", "temporary resist acid");
         break;
     case ACT_RESIST_FIRE:
-        desc = _("一時的な火への耐性", "tempral resist fire");
+        desc = _("一時的な火への耐性", "temporary resist fire");
         break;
     case ACT_RESIST_COLD:
-        desc = _("一時的な冷気への耐性", "tempral resist cold");
+        desc = _("一時的な冷気への耐性", "temporary resist cold");
         break;
     case ACT_RESIST_ELEC:
-        desc = _("一時的な電撃への耐性", "tempral resist elec");
+        desc = _("一時的な電撃への耐性", "temporary resist elec");
         break;
     case ACT_RESIST_POIS:
-        desc = _("一時的な毒への耐性", "tempral resist elec");
+        desc = _("一時的な毒への耐性", "temporary resist elec");
         break;
     }
 
