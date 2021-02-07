@@ -19,7 +19,7 @@ const dragonbreath_type dragonbreath_info[] = {
 	{ TR_RES_NEXUS, GF_NEXUS, _("因果混乱", "nexus") },
 	{ TR_RES_NETHER, GF_NETHER, _("地獄", "nether") },
 	{ TR_RES_CHAOS, GF_CHAOS, _("カオス", "chaos") },
-	{ TR_RES_DISEN, GF_DISENCHANT, _("劣化", "disenchant") },
+	{ TR_RES_DISEN, GF_DISENCHANT, _("劣化", "disenchantment") },
 	{ 0, 0, NULL }
 };
 
