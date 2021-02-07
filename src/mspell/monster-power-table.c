@@ -139,7 +139,7 @@ const concptr monster_powers_short[MAX_MONSPELLS] = {
     _("放射能球", "Nuke"),
     _("放射性廃棄物", "Nuke"),
     _("純ログルス", "Logrus"),
-    _("分解", "Disintergrate"),
+    _("分解", "Disintegration"),
 
     _("酸", "Acid"),
     _("電撃", "Lightning"),
