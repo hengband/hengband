@@ -893,7 +893,7 @@ static void calc_spells(player_type *creature_ptr)
  */
 static void calc_mana(player_type *creature_ptr)
 {
-    if (!mp_ptr->spell_book && mp_ptr->spell_first == 99)
+    if (!mp_ptr->spell_book && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL)
         return;
 
     int levels;
