@@ -40,7 +40,7 @@ const activation_type activation_info[MAX_ACTIVATION_TYPE] = {
     { "BA_STAR", ACT_BA_STAR, 50, 2200, { 25, 0 }, _("巨大スター・ボール(200)", "large star ball (200)") },
     { "BA_DARK", ACT_BA_DARK, 50, 2200, { 30, 0 }, _("暗黒の嵐(250)", "darkness storm (250)") },
     { "BA_MANA", ACT_BA_MANA, 70, 2500, { 30, 0 }, _("魔力の嵐(250)", "a mana storm (250)") },
-    { "PESTICIDE", ACT_PESTICIDE, 10, 500, { 10, 0 }, _("害虫の駆除", "dispel small life") },
+    { "PESTICIDE", ACT_PESTICIDE, 10, 500, { 10, 0 }, _("害虫の駆除", "dispel pests") },
     { "BLINDING_LIGHT", ACT_BLINDING_LIGHT, 30, 5000, { 40, 0 }, _("眩しい光", "blinding light") },
     { "BIZARRE", ACT_BIZARRE, 90, 10000, { 50, 0 }, _("信じ難いこと", "bizarre things") },
     { "CAST_BA_STAR", ACT_CAST_BA_STAR, 70, 7500, { 100, 0 }, _("スター・ボール・ダスト(150)", "cast star balls (150)") },
