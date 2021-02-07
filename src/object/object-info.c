@@ -42,7 +42,7 @@ static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type
     int n = 0;
 
     object_flags(owner_ptr, o_ptr, flgs);
-    strcpy(desc, _("", "breath "));
+    strcpy(desc, _("", "breathe "));
 
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
         if (has_flag(flgs, dragonbreath_info[i].flag)) {
@@ -76,11 +76,11 @@ static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
     switch (act_ptr->index) {
     case ACT_BR_FIRE:
         if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-            desc = _("火炎のブレス (200) と火への耐性", "breath of fire (200) and resist fire");
+            desc = _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
         break;
     case ACT_BR_COLD:
         if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-            desc = _("冷気のブレス (200) と冷気への耐性", "breath of cold (200) and resist cold");
+            desc = _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
         break;
     case ACT_BR_DRAGON:
         desc = item_activation_dragon_breath(owner_ptr, o_ptr);
