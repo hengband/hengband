@@ -2822,7 +2822,7 @@ void put_equipment_warning(player_type *creature_ptr)
             } else if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i)) {
                 msg_print(_("これなら装備していても辛くない。", "You have no trouble wielding your weapon."));
             } else if (creature_ptr->heavy_wield[1 - i]) {
-                msg_print(_("まだ武器が重い。", "You have still trouble wielding a heavy weapon."));
+                msg_print(_("まだ武器が重い。", "You still have trouble wielding a heavy weapon."));
             } else {
                 msg_print(_("重い武器を装備からはずして体が楽になった。", "You feel relieved to put down your heavy weapon."));
             }
