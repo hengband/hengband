@@ -70,7 +70,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     }
 
     if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) {
-        info[i++] = _("それは相手を一撃で倒すことがある。", "It will attempt to kill a monster instantly.");
+        info[i++] = _("それは相手を一撃で倒すことがある。", "It will attempt to instantly kill a monster.");
     }
 
     if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) {
@@ -143,7 +143,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         if (rad > 0)
             sprintf(desc, _("それは永遠なる明かり(半径 %d)を授ける。", "It provides light (radius %d) forever."), (int)rad);
         if (rad < 0)
-            sprintf(desc, _("それは明かりの半径を狭める(半径に-%d)。", "It decreases radius of light source by %d."), (int)-rad);
+            sprintf(desc, _("それは明かりの半径を狭める(半径に-%d)。", "It decreases the radius of your light by %d."), (int)-rad);
     }
 
     if (rad != 0)
@@ -603,7 +603,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     }
 
     if ((has_flag(flgs, TR_CALL_UNDEAD)) || (o_ptr->curse_flags & TRC_CALL_UNDEAD)) {
-        info[i++] = _("それは死霊を呼び寄せる。", "It attracts undeads.");
+        info[i++] = _("それは死霊を呼び寄せる。", "It attracts undead.");
     }
 
     if ((has_flag(flgs, TR_COWARDICE)) || (o_ptr->curse_flags & TRC_COWARDICE)) {
