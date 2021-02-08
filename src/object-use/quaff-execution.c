@@ -151,7 +151,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_APPLE_JUICE:
-            msg_print(_("甘くてサッパリとしていて、とてもおいしい。", ""));
+            msg_print(_("甘くてサッパリとしていて、とてもおいしい。", "It's sweet, refreshing and very tasty."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
             ident = TRUE;
             break;
