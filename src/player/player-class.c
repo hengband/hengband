@@ -1111,7 +1111,7 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Archmage",
 	},
 
-	/* Warrior */
+	/* Cavalry */
 	{
 		"Rookie",
 		"Soldier",
