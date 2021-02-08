@@ -157,7 +157,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_SLIME_MOLD:
-            msg_print(_("なんとも不気味な味だ。", ""));
+            msg_print(_("なんとも不気味な味だ。", "That was strange."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
             ident = TRUE;
             break;
