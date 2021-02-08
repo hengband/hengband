@@ -137,8 +137,8 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
 
         if (!sn) {
             monster_desc(creature_ptr, m_name, m_ptr, 0);
-            msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s, but bumped into wall."), m_name);
-            take_hit(creature_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into wall"), -1);
+            msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s but bumped into a wall."), m_name);
+            take_hit(creature_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into a wall"), -1);
             return FALSE;
         }
 
