@@ -167,7 +167,7 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
     bool fall_dam = FALSE;
     if (creature_ptr->levitation && !force) {
         monster_desc(creature_ptr, m_name, m_ptr, 0);
-        msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s, but make a good landing."), m_name);
+        msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s but make a good landing."), m_name);
     } else {
         take_hit(creature_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("落馬", "Falling from riding"), -1);
         fall_dam = TRUE;
