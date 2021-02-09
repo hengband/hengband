@@ -498,7 +498,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         {
             if (cast) {
                 if (!summon_specific(caster_ptr, -1, caster_ptr->y, caster_ptr->x, plev, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_FORCE_PET))) {
-                    msg_print(_("エレメンタルは現れなかった。", "No Elementals arrive."));
+                    msg_print(_("エレメンタルは現れなかった。", "No elementals arrive."));
                 }
             }
         }
