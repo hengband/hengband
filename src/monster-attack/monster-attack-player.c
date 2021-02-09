@@ -392,10 +392,9 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
         if ((monap_ptr->effect == RBE_NONE)
             || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr))) {
-            if (!process_monster_attack_hit(target_ptr, monap_ptr))
-                continue;
-            else
-                process_monster_attack_evasion(target_ptr, monap_ptr);
+            (void)process_monster_attack_hit(target_ptr, monap_ptr);
+        } else {
+            process_monster_attack_evasion(target_ptr, monap_ptr);
         }
 
         increase_blow_type_seen(target_ptr, monap_ptr);
