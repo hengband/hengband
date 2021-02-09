@@ -98,7 +98,7 @@ void set_weapon_effect_info(player_type *creature_ptr, self_info_type *self_ptr)
     set_brand_attack_info(self_ptr);
     set_slay_info(self_ptr);
     if (has_flag(self_ptr->flags, TR_FORCE_WEAPON))
-        self_ptr->info[self_ptr->line++] = _("あなたの武器はMPを使って攻撃する。", "Your weapon causes greate damages using your MP.");
+        self_ptr->info[self_ptr->line++] = _("あなたの武器はMPを使って攻撃する。", "Your weapon causes great damage using your MP.");
 
     if (has_flag(self_ptr->flags, TR_THROW))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は投げやすい。", "Your weapon can be thrown well.");
