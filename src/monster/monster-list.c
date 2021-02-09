@@ -83,7 +83,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
 {
     int i, j, p;
     int r_idx;
-    long value, total;
+    long value, total_prob3;
     int mon_num = 0;
     monster_race *r_ptr;
     alloc_entry *table = alloc_race_table;
@@ -130,7 +130,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
         }
     }
 
-    total = 0L;
+    total_prob3 = 0L;
 
     /* Process probabilities */
     for (i = 0; i < alloc_race_size; i++) {
@@ -158,19 +158,22 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
             }
         }
 
-        mon_num++;
         table[i].prob3 = table[i].prob2;
-        total += table[i].prob3;
+
+        if (table[i].prob3 > 0) {
+            mon_num++;
+            total_prob3 += table[i].prob3;
+        }
     }
 
     if (cheat_hear) {
-        msg_format(_("モンスター第3次候補数:%d(%d-%dF)%d ", "monster third selection:%d(%d-%dF)%d "), mon_num, min_level, max_level, total);
+        msg_format(_("モンスター第3次候補数:%d(%d-%dF)%d ", "monster third selection:%d(%d-%dF)%d "), mon_num, min_level, max_level, total_prob3);
     }
 
-    if (total <= 0)
+    if (total_prob3 <= 0)
         return 0;
 
-    value = randint0(total);
+    value = randint0(total_prob3);
     int found_count = 0;
     for (i = 0; i < alloc_race_size; i++) {
         if (value < table[i].prob3)
@@ -184,7 +187,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
     /* Try for a "harder" monster once (50%) or twice (10%) */
     if (p < 60) {
         j = found_count;
-        value = randint0(total);
+        value = randint0(total_prob3);
         for (found_count = 0; found_count < alloc_race_size; found_count++) {
             if (value < table[found_count].prob3)
                 break;
@@ -199,7 +202,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
     /* Try for a "harder" monster twice (10%) */
     if (p < 10) {
         j = found_count;
-        value = randint0(total);
+        value = randint0(total_prob3);
         for (found_count = 0; found_count < alloc_race_size; found_count++) {
             if (value < table[found_count].prob3)
                 break;
