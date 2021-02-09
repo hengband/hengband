@@ -237,7 +237,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             return _("エントロピーの球", "Orb of Entropy");
         if (desc)
             return _(
-                "生命のある者のHPと最大HP双方にダメージを与える効果のある球を放つ。", "Fires a ball which damages to both HP and MaxHP of living monsters.");
+                "生命のある者のHPと最大HP双方にダメージを与える効果のある球を放つ。", "Fires a ball which reduces both HP and MaxHP of living monsters.");
 
         {
             DICE_NUMBER dice = 3;
