@@ -261,7 +261,3 @@
 #define DEFAULT_X11_FONT_6		"5x8"
 #define DEFAULT_X11_FONT_7		"5x8"
 #endif
-
-#ifndef HAVE_CONFIG_H
-#define WORLD_SCORE
-#endif /* HAVE_CONFIG_H */

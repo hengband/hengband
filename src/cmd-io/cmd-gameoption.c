@@ -608,7 +608,7 @@ void do_cmd_options(player_type *player_ptr)
  * @param info 表示メッセージ
  * @return なし
  */
-void do_cmd_options_aux(player_type *player_ptr, int page, concptr info)
+void do_cmd_options_aux(player_type *player_ptr, game_option_types page, concptr info)
 {
     char ch;
     int i, k = 0, n = 0, l;
