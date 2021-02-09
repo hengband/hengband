@@ -446,7 +446,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                     while (!get_string(winning_seppuku ? "辞世の句: " : "断末魔の叫び: ", death_message, sizeof(death_message)))
                         ;
 #else
-                    while (!get_string("Last word: ", death_message, 1024))
+                    while (!get_string("Last words: ", death_message, 1024))
                         ;
 #endif
                 } while (winning_seppuku && !get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
