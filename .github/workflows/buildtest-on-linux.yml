@@ -1,0 +1,43 @@
+name: Build test on Linux
+
+on:
+  # プルリクエストがopen、synchronize、reopenされた時にトリガーする
+  pull_request:
+
+  # 手動トリガーを許可
+  workflow_dispatch:
+
+jobs:
+  build_test:
+    name: Build test on Ubuntu-20.04
+    runs-on: ubuntu-20.04
+    env:
+      CFLAGS: "-pipe -Werror -Wall -Wextra -Wno-format-overflow -Wno-switch -Wno-sign-compare -Wno-unused-parameter -Wno-unused-function"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install required packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install \
+            libncursesw5-dev \
+            libcurl4-openssl-dev \
+            nkf \
+
+      - name: Generate configure
+        run: ./bootstrap
+
+      - name: Configuratoin for Japanese version
+        run: ./configure
+
+      - name: Build Japanese version
+        run: make
+
+      - name: Clean source tree
+        run: make clean
+
+      - name: Configure for English versoin
+        run: ./configure --disable-japanese
+
+      - name: Build English version
+        run: make
