@@ -98,10 +98,10 @@ void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *self
         self_ptr->info[self_ptr->line++] = _("あなたは少ない消費魔力で魔法を唱えることができる。", "You can cast spells with fewer mana points.");
 
     if (creature_ptr->easy_spell)
-        self_ptr->info[self_ptr->line++] = _("あなたは低い失敗率で魔法を唱えることができる。", "Fail rate of your magic is decreased.");
+        self_ptr->info[self_ptr->line++] = _("あなたは低い失敗率で魔法を唱えることができる。", "Your magic fails less often.");
 
     if (creature_ptr->heavy_spell)
-        self_ptr->info[self_ptr->line++] = _("あなたは高い失敗率で魔法を唱えなければいけない。", "Fail rate of your magic is increased.");
+        self_ptr->info[self_ptr->line++] = _("あなたは高い失敗率で魔法を唱えなければいけない。", "Your magic fails more often.");
 
     if (creature_ptr->mighty_throw)
         self_ptr->info[self_ptr->line++] = _("あなたは強く物を投げる。", "You can throw objects powerfully.");
