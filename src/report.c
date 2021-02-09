@@ -37,11 +37,11 @@
 #define HTTP_PROXY ""                   /*!< デフォルトのプロキシURL / Default proxy url */
 #define HTTP_PROXY_PORT 0               /*!< デフォルトのプロキシポート / Default proxy port */
 #define HTTP_TIMEOUT    20              /*!< デフォルトのタイムアウト時間(秒) / Timeout length (second) */
-#define SCORE_SERVER "hengband.osdn.jp" /*!< デフォルトのスコアサーバURL / Default score server url */
+#define SCORE_SERVER "mars.kmc.gr.jp"   /*!< デフォルトのスコアサーバURL / Default score server url */
 #define SCORE_PORT 80                   /*!< デフォルトのスコアサーバポート / Default score server port */
 
 #ifdef JP
-#define SCORE_PATH "http://hengband.osdn.jp/score/register_score.php" /*!< スコア開示URL */
+#define SCORE_PATH "http://mars.kmc.gr.jp/~dis/heng_score/register_score.php" /*!< スコア開示URL */
 #else
 #define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
