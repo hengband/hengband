@@ -385,13 +385,19 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
         if (!check_monster_attack_terminated(target_ptr, monap_ptr))
             break;
 
+        // effect が RBE_NONE (無効値)になることはあり得ないはずだが、万一そう
+        // なっていたら単に攻撃を打ち切る。
+        if (monap_ptr->effect == RBE_NONE) {
+            plog("unexpected: monap_ptr->effect == RBE_NONE");
+            break;
+        }
+
         if (monap_ptr->method == RBM_SHOOT)
             continue;
 
         power = mbe_info[monap_ptr->effect].power;
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
-        if ((monap_ptr->effect == RBE_NONE)
-            || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr))) {
+        if (check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr))) {
             (void)process_monster_attack_hit(target_ptr, monap_ptr);
         } else {
             process_monster_attack_evasion(target_ptr, monap_ptr);
