@@ -508,7 +508,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
         if (name)
             return _("呪い退散", "Dispel Curse");
         if (desc)
-            return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curse from equipped items.");
+            return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curses from equipped items.");
 
         {
             if (cast)
