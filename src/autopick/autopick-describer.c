@@ -53,7 +53,8 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
 		before_str[describer->before_n++] = "ダメージダイスの最大値が";
 		describer->body_str = "武器";
 
-		sprintf(more_than_desc_str, "%d", entry->dice);
+		snprintf(more_than_desc_str, sizeof(more_than_desc_str), "%d",
+			entry->dice);
 		before_str[describer->before_n++] = more_than_desc_str;
 		before_str[describer->before_n++] = "以上の";
 	}
@@ -63,7 +64,8 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
 		static char more_bonus_desc_str[] = "___";
 		before_str[describer->before_n++] = "修正値が(+";
 
-		sprintf(more_bonus_desc_str, "%d", entry->bonus);
+		snprintf(more_bonus_desc_str, sizeof(more_bonus_desc_str),
+			"%d", entry->bonus);
 		before_str[describer->before_n++] = more_bonus_desc_str;
 		before_str[describer->before_n++] = ")以上の";
 	}
@@ -283,14 +285,18 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
 void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *describer)
 {
 	concptr before_str[20], after_str[20], which_str[20], whose_str[20];
-	int after_n = 0, which_n = 0, whose_n = 0;
+	concptr whose_arg_str[20];
+	char arg_str[2][24];
+	int after_n = 0, which_n = 0, whose_n = 0, arg_n = 0;
 	if (IS_FLG(FLG_COLLECTING))
 		which_str[which_n++] = "can be absorbed into an existing inventory list slot";
 
 	if (IS_FLG(FLG_UNAWARE))
 	{
 		before_str[describer->before_n++] = "unidentified";
-		whose_str[whose_n++] = "basic abilities are not known";
+		whose_str[whose_n] = "basic abilities are not known";
+		whose_arg_str[whose_n] = "";
+		++whose_n;
 	}
 
 	if (IS_FLG(FLG_UNIDENTIFIED))
@@ -349,28 +355,41 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 	if (IS_FLG(FLG_BOOSTED))
 	{
 		describer->body_str = "weapons";
-		whose_str[whose_n++] = "damage dice is bigger than normal";
+		whose_str[whose_n] = "damage dice is bigger than normal";
+		whose_arg_str[whose_n] = "";
+		++whose_n;
 	}
 
 	if (IS_FLG(FLG_MORE_DICE))
 	{
-		static char more_than_desc_str[] =
-			"maximum damage from dice is bigger than __";
 		describer->body_str = "weapons";
-
-		sprintf(more_than_desc_str + sizeof(more_than_desc_str) - 3,
-			"%d", entry->dice);
-		whose_str[whose_n++] = more_than_desc_str;
+		whose_str[whose_n] =
+			"maximum damage from dice is bigger than ";
+		if (arg_n < (int) (sizeof(arg_str) / sizeof(arg_str[0]))) {
+			snprintf(arg_str[arg_n], sizeof(arg_str[arg_n]), "%d",
+				entry->dice);
+			whose_arg_str[whose_n] = arg_str[arg_n];
+			++arg_n;
+		}
+		else {
+			whose_arg_str[whose_n] = "garbled";
+		}
+		++whose_n;
 	}
 
 	if (IS_FLG(FLG_MORE_BONUS))
 	{
-		static char more_bonus_desc_str[] =
-			"magical bonus is bigger than (+__)";
-
-		sprintf(more_bonus_desc_str + sizeof(more_bonus_desc_str) - 4,
-			"%d)", entry->bonus);
-		whose_str[whose_n++] = more_bonus_desc_str;
+		whose_str[whose_n] = "magical bonus is bigger than (+";
+		if (arg_n < (int) (sizeof(arg_str) / sizeof(arg_str[0]))) {
+			snprintf(arg_str[arg_n], sizeof(arg_str[arg_n]),
+				"%d)", entry->bonus);
+			whose_arg_str[whose_n] = arg_str[arg_n];
+			++arg_n;
+		}
+		else {
+			whose_arg_str[whose_n] = "garbled)";
+		}
+		++whose_n;
 	}
 
 	if (IS_FLG(FLG_WANTED))
@@ -481,7 +500,9 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 		{
 			describer->str++;
 			describer->top = TRUE;
-			whose_str[whose_n++] = "name begins with \"";
+			whose_str[whose_n] = "name begins with \"";
+			whose_arg_str[whose_n] = "";
+			++whose_n;
 		}
 		else
 			which_str[which_n++] = "have \"";
@@ -532,6 +553,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 			strcat(buff, ", and ");
 
 		strcat(buff, whose_str[i]);
+		strcat(buff, whose_arg_str[i]);
 	}
 
 	if (*describer->str && describer->top)
