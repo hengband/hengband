@@ -1208,7 +1208,7 @@ bool build_type17(player_type *player_ptr, dun_data_type *dd_ptr)
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, abs(y), abs(x)))
         return FALSE;
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fixed Room (%s)."), v_name + v_ptr->name);
 
     /* Hack -- Build the vault */
     build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_text + v_ptr->text, xoffset, yoffset, transno);
