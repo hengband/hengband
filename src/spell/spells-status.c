@@ -254,7 +254,7 @@ void roll_hitdice(player_type *creature_ptr, spell_operation options)
         return;
     }
 
-    msg_print(_("体力ランクが変わった。", "Life rate is changed."));
+    msg_print(_("体力ランクが変わった。", "Life rate has changed."));
     creature_ptr->knowledge &= ~(KNOW_HPRATE);
 }
 
