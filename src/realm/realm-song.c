@@ -616,7 +616,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             stop_singing(caster_ptr);
 
         if (cast) {
-            msg_print(_("軽快な歌を口ずさみ始めた．．．", "You start singing joyful pop song..."));
+            msg_print(_("軽快な歌を口ずさみ始めた．．．", "You start singing a joyful pop song..."));
             start_singing(caster_ptr, spell, MUSIC_SPEED);
         }
 
