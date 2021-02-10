@@ -916,7 +916,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
     case 29:
         if (name)
-            return _("再生の歌", "Goddess' rebirth");
+            return _("再生の歌", "Goddess's rebirth");
         if (desc)
             return _("すべてのステータスと経験値を回復する。", "Restores all stats and experience.");
 
