@@ -620,7 +620,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (name)
             return _("反増殖結界", "Anti multiply barrier");
         if (desc)
-            return _("その階の増殖するモンスターの増殖を阻止する。", "Obstructs all multiplying by monsters in entire floor.");
+            return _("その階の増殖するモンスターの増殖を阻止する。", "Obstructs all multiplying by monsters on entire floor.");
         if (cast) {
             msg_print(_("増殖を阻止する呪いをかけた。", "You feel anyone can not already multiply."));
         }
