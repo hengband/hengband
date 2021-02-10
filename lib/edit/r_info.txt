@@ -23104,7 +23104,7 @@ D:$It is a extra large bubble that makes an weird movement.
 D:$  You must decide whether running away or squashing them all!
 D:不気味な動きをする巨大な泡だ。逃げるか潰すか二つに一つだ！
 
-N:1155:二週目の小さな泡
+N:1155:二周目の小さな泡
 E:Small aqua illusion in 2nd lap
 G:j:b
 I:120:20d20:10:50:10
@@ -23149,7 +23149,7 @@ D:$  When it is crushed, it becomes a middle bubble.
 D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
-N:1158:二週目の特大の泡
+N:1158:二周目の特大の泡
 E:Extra large aqua illusion in 2nd lap
 G:j:b
 I:120:25d25:10:50:10
