@@ -2987,14 +2987,14 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
             break;
 
         case MELEE_TYPE_WEAPON_DOUBLE:
-            if ((calc_hand == PLAYER_HAND_MAIN)) {
+            if (calc_hand == PLAYER_HAND_MAIN) {
                 if (i == INVEN_MAIN_RING) {
                     damage += (s16b)bonus_to_d;
                 } else if (i != INVEN_SUB_RING) {
                     damage += (bonus_to_d > 0) ? (bonus_to_d + 1) / 2 : bonus_to_d;
                 }
             }
-            if ((calc_hand == PLAYER_HAND_SUB)) {
+            if (calc_hand == PLAYER_HAND_SUB) {
                 if (i == INVEN_SUB_RING) {
                     damage += (s16b)bonus_to_d;
                 } else if (i != INVEN_MAIN_RING) {
@@ -3220,14 +3220,14 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
             break;
 
         case MELEE_TYPE_WEAPON_DOUBLE:
-            if ((calc_hand == PLAYER_HAND_MAIN)) {
+            if (calc_hand == PLAYER_HAND_MAIN) {
                 if (i == INVEN_MAIN_RING) {
                     hit += (s16b)bonus_to_h;
                 } else if (i != INVEN_SUB_RING) {
                     hit += (bonus_to_h > 0) ? (bonus_to_h + 1) / 2 : bonus_to_h;
                 }
             }
-            if ((calc_hand == PLAYER_HAND_SUB)) {
+            if (calc_hand == PLAYER_HAND_SUB) {
                 if (i == INVEN_SUB_RING) {
                     hit += (s16b)bonus_to_h;
                 } else if (i != INVEN_MAIN_RING) {
