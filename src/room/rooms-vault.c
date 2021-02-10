@@ -71,7 +71,7 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
     POSITION xhsize = xsize / 2;
     POSITION yhsize = ysize / 2;
 
-    msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Room Vault."));
+    msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Bubble-shaped Vault."));
 
     /* Allocate center of bubbles */
     center[0].x = (byte)randint1(xsize - 3) + 1;
