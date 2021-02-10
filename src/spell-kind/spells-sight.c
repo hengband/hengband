@@ -6,6 +6,7 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "game-option/birth-options.h"
+#include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
@@ -396,7 +397,7 @@ bool probing(player_type *caster_ptr)
 
     Term->scr->cu = cu;
     Term->scr->cv = cv;
-    if (need_term_fresh(caster_ptr))
+    if (fresh_after)
         term_fresh();
 
     if (probe) {

@@ -12,6 +12,7 @@
 #include "game-option/input-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
+#include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -170,7 +171,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 
     Term->scr->cu = cu;
     Term->scr->cv = cv;
-    if (need_term_fresh(creature_ptr))
+    if (fresh_after)
         term_fresh();
 
     C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);

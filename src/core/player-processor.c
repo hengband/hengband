@@ -44,6 +44,7 @@
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
+#include "window/display-sub-windows.h"
 #include "world/world-turn-processor.h"
 
 bool load = TRUE;
@@ -125,8 +126,13 @@ void process_player(player_type *creature_ptr)
 
     if (creature_ptr->energy_need > 0)
         return;
-    if (!command_rep)
+    if (!command_rep) {
         print_time(creature_ptr);
+    }
+
+    if (!fresh_after && (continuous_action_running(creature_ptr) || !command_rep)) {
+        stop_term_fresh();
+    }
 
     if (creature_ptr->resting < 0) {
         if (creature_ptr->resting == COMMAND_ARG_REST_FULL_HEALING) {

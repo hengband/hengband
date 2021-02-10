@@ -102,7 +102,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     handle_stuff(player_ptr);
-    if (need_term_fresh(player_ptr))
+    if (fresh_after)
         term_fresh();
 
     if (quest_num

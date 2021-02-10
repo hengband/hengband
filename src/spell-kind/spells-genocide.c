@@ -4,6 +4,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "dungeon/quest.h"
+#include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
@@ -100,7 +101,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
     caster_ptr->redraw |= (PR_HP);
     caster_ptr->window |= (PW_PLAYER);
     handle_stuff(caster_ptr);
-    if (need_term_fresh(caster_ptr))
+    if (fresh_after)
         term_fresh();
 
     int msec = delay_factor * delay_factor * delay_factor;

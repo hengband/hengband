@@ -12,6 +12,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "game-option/disturbance-options.h"
+#include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "io/cursor.h"
@@ -168,7 +169,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
                         u16b p = bolt_pict(y, x, y, x, GF_MANA);
                         print_rel(caster_ptr, PICT_C(p), PICT_A(p), y, x);
                         move_cursor_relative(y, x);
-                        if (need_term_fresh(caster_ptr)) {
+                        if (fresh_after) {
                             term_fresh();
                             term_xtra(TERM_XTRA_DELAY, msec);
                         }
