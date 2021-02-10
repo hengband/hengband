@@ -279,7 +279,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         if (name)
             return _("解毒", "Cure Poison");
         if (desc)
-            return _("毒を体内から完全に取り除く。", "Cures poison status.");
+            return _("毒を体内から完全に取り除く。", "Cures yourself of any poisons.");
 
         {
             if (cast) {
