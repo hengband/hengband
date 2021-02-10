@@ -22794,7 +22794,7 @@ D:あなたの冒険は間もなく打ち切られるだろう。
 N:1139:遍在する意識『岩倉玲音』
 E:lain, the Master of Wired
 G:p:u
-I:135:130d50:60:100:5
+I:130:130d50:60:100:5
 W:80:3:0:45000:0:0
 B:TOUCH:LOSE_ALL:8d7
 B:TOUCH:UN_BONUS:8d7
