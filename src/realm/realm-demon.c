@@ -489,7 +489,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
     case 22:
         if (name)
-            return _("サキュバスの接吻", "Kiss of Succubus");
+            return _("サキュバスの接吻", "Succubus's Kiss");
         if (desc)
             return _("因果混乱の球を放つ。", "Fires a ball of nexus.");
 
