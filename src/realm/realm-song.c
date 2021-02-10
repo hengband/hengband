@@ -549,7 +549,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             stop_singing(caster_ptr);
 
         if (cast) {
-            msg_print(_("粉砕するメロディを奏で始めた．．．", "You weave a violent pattern of sounds to break wall."));
+            msg_print(_("粉砕するメロディを奏で始めた．．．", "You weave a violent pattern of sounds to break walls."));
             start_singing(caster_ptr, spell, MUSIC_WALL);
         }
 
