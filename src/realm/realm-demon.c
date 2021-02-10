@@ -171,7 +171,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         if (name)
             return _("古代の死霊召喚", "Summon Manes");
         if (desc)
-            return _("古代の死霊を召喚する。", "Summons a manes.");
+            return _("古代の死霊を召喚する。", "Summons one or more Manes.");
 
         {
             if (cast) {
