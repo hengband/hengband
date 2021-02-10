@@ -622,7 +622,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (desc)
             return _("その階の増殖するモンスターの増殖を阻止する。", "Obstructs all multiplying by monsters on entire floor.");
         if (cast) {
-            msg_print(_("増殖を阻止する呪いをかけた。", "You feel anyone can not already multiply."));
+            msg_print(_("増殖を阻止する呪いをかけた。", "You feel anyone can not multiply."));
         }
         break;
 
