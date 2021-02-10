@@ -357,7 +357,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         if (!get_aim_dir(creature_ptr, &dir))
             return FALSE;
 
-        msg_print(_("毒のダーツを投げた。", "You throw a dart of poison."));
+        msg_print(_("毒のダーツを投げた。", "You throw a poisoned dart."));
         (void)fire_bolt(creature_ptr, GF_POIS, dir, creature_ptr->lev);
         return TRUE;
     case RACE_NIBELUNG:
