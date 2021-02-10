@@ -242,7 +242,7 @@ void process_player(player_type *creature_ptr)
 
     /*** Handle actual user input ***/
     while (creature_ptr->energy_need <= 0) {
-        creature_ptr->window |= PW_PLAYER;
+        creature_ptr->window_flags |= PW_PLAYER;
         creature_ptr->sutemi = FALSE;
         creature_ptr->counter = FALSE;
         creature_ptr->now_damaged = FALSE;
@@ -289,7 +289,7 @@ void process_player(player_type *creature_ptr)
         } else {
             move_cursor_relative(creature_ptr->y, creature_ptr->x);
 
-            creature_ptr->window |= PW_MONSTER_LIST;
+            creature_ptr->window_flags |= PW_MONSTER_LIST;
             window_stuff(creature_ptr);
 
             can_save = TRUE;
@@ -377,7 +377,7 @@ void process_player(player_type *creature_ptr)
             if (creature_ptr->timewalk && (creature_ptr->energy_need > -1000)) {
                 creature_ptr->redraw |= (PR_MAP);
                 creature_ptr->update |= (PU_MONSTERS);
-                creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+                creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
                 msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
                 msg_print(NULL);

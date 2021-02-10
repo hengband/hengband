@@ -37,7 +37,7 @@ static int exe_curse_removal(player_type *creature_ptr, int all)
         o_ptr->feeling = FEEL_NONE;
 
         creature_ptr->update |= (PU_BONUS);
-        creature_ptr->window |= (PW_EQUIP);
+        creature_ptr->window_flags |= (PW_EQUIP);
         cnt++;
     }
 

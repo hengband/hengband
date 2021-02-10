@@ -158,7 +158,7 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
     creature_ptr->update |= (PU_BONUS | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
     handle_stuff(creature_ptr);
 
-    creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     creature_ptr->redraw |= (PR_EXTRA);
 
     /* Update health track of mount */

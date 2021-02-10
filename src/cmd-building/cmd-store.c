@@ -197,5 +197,5 @@ void do_cmd_store(player_type *player_ptr)
     player_ptr->update |= PU_MONSTERS;
     player_ptr->redraw |= PR_BASIC | PR_EXTRA | PR_EQUIPPY;
     player_ptr->redraw |= PR_MAP;
-    player_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+    player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 }

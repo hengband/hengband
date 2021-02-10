@@ -186,7 +186,7 @@ void do_cmd_uninscribe(player_type *creature_ptr)
     msg_print(_("銘を消した。", "Inscription removed."));
     o_ptr->inscription = 0;
     creature_ptr->update |= (PU_COMBINE);
-    creature_ptr->window |= (PW_INVEN | PW_EQUIP);
+    creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
     creature_ptr->update |= (PU_BONUS);
 }
 
@@ -217,7 +217,7 @@ void do_cmd_inscribe(player_type *creature_ptr)
     if (get_string(_("銘: ", "Inscription: "), out_val, 80)) {
         o_ptr->inscription = quark_add(out_val);
         creature_ptr->update |= (PU_COMBINE);
-        creature_ptr->window |= (PW_INVEN | PW_EQUIP);
+        creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
         creature_ptr->update |= (PU_BONUS);
     }
 }

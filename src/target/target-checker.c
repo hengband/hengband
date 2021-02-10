@@ -109,7 +109,7 @@ void verify_panel(player_type *creature_ptr)
     panel_bounds_center();
     creature_ptr->update |= PU_MONSTERS;
     creature_ptr->redraw |= PR_MAP;
-    creature_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+    creature_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 }
 
 /*

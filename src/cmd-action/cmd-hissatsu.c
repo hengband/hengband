@@ -284,7 +284,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
     if (redraw)
         screen_load();
 
-    creature_ptr->window |= (PW_SPELL);
+    creature_ptr->window_flags |= (PW_SPELL);
     handle_stuff(creature_ptr);
 
     /* Abort if needed */
@@ -355,7 +355,7 @@ void do_cmd_hissatsu(player_type *creature_ptr)
     if (creature_ptr->csp < 0)
         creature_ptr->csp = 0;
     creature_ptr->redraw |= (PR_MANA);
-    creature_ptr->window |= (PW_PLAYER | PW_SPELL);
+    creature_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
 }
 
 /*!

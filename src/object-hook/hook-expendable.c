@@ -126,7 +126,7 @@ bool can_player_destroy_object(player_type *player_ptr, object_type *o_ptr)
         o_ptr->feeling = feel;
         o_ptr->ident |= IDENT_SENSE;
         player_ptr->update |= (PU_COMBINE);
-        player_ptr->window |= (PW_INVEN | PW_EQUIP);
+        player_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
         return FALSE;
     }
 

@@ -77,7 +77,7 @@ void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx)
 	if (!o_ptr->inscription)
 		o_ptr->inscription = quark_add(autopick_list[idx].insc);
 
-	player_ptr->window |= (PW_EQUIP | PW_INVEN);
+	player_ptr->window_flags |= (PW_EQUIP | PW_INVEN);
 	player_ptr->update |= (PU_BONUS);
 }
 

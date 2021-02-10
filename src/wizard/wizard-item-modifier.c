@@ -350,7 +350,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
     object_copy(o_ptr, q_ptr);
     owner_ptr->update |= PU_BONUS;
     owner_ptr->update |= PU_COMBINE | PU_REORDER;
-    owner_ptr->window |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER;
+    owner_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER;
 }
 
 /*!
@@ -489,7 +489,7 @@ void wiz_modify_item(player_type *creature_ptr)
         object_copy(o_ptr, q_ptr);
         creature_ptr->update |= PU_BONUS;
         creature_ptr->update |= PU_COMBINE | PU_REORDER;
-        creature_ptr->window |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER;
+        creature_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER;
     } else {
         msg_print("Changes ignored.");
     }

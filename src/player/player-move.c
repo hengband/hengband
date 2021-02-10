@@ -157,7 +157,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         }
 
         creature_ptr->update |= PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE;
-        creature_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+        creature_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
         if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(creature_ptr, g_ptr->feat))
             g_ptr->info &= ~(CAVE_UNSAFE);
 

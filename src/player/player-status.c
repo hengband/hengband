@@ -451,7 +451,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->dis_to_a = calc_to_ac(creature_ptr, FALSE);
 
     if (old_mighty_throw != creature_ptr->mighty_throw) {
-        creature_ptr->window |= PW_INVEN;
+        creature_ptr->window_flags |= PW_INVEN;
     }
 
     if (creature_ptr->telepathy != old_telepathy) {
@@ -475,7 +475,7 @@ void calc_bonuses(player_type *creature_ptr)
 
     if ((creature_ptr->dis_ac != old_dis_ac) || (creature_ptr->dis_to_a != old_dis_to_a)) {
         creature_ptr->redraw |= (PR_ARMOR);
-        creature_ptr->window |= (PW_PLAYER);
+        creature_ptr->window_flags |= (PW_PLAYER);
     }
 
     if (current_world_ptr->character_xtra)
@@ -632,7 +632,7 @@ static void calc_hitpoints(player_type *creature_ptr)
     creature_ptr->mhp = mhp;
 
     creature_ptr->redraw |= PR_HP;
-    creature_ptr->window |= PW_PLAYER;
+    creature_ptr->window_flags |= PW_PLAYER;
 }
 
 /*!
@@ -880,7 +880,7 @@ static void calc_spells(player_type *creature_ptr)
 
     creature_ptr->old_spells = creature_ptr->new_spells;
     creature_ptr->redraw |= PR_STUDY;
-    creature_ptr->window |= PW_OBJECT;
+    creature_ptr->window_flags |= PW_OBJECT;
 }
 
 /*!
@@ -1072,7 +1072,7 @@ static void calc_mana(player_type *creature_ptr)
 #endif
         creature_ptr->msp = msp;
         creature_ptr->redraw |= (PR_MANA);
-        creature_ptr->window |= (PW_PLAYER | PW_SPELL);
+        creature_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
     }
 
     if (current_world_ptr->character_xtra)
@@ -2729,7 +2729,7 @@ static void calc_ind_status(player_type *creature_ptr, int status)
         }
     }
 
-    creature_ptr->window |= (PW_PLAYER);
+    creature_ptr->window_flags |= (PW_PLAYER);
 }
 
 static void calc_use_status(player_type *creature_ptr, int status)
@@ -2746,7 +2746,7 @@ static void calc_use_status(player_type *creature_ptr, int status)
     if (creature_ptr->stat_use[status] != use) {
         creature_ptr->stat_use[status] = (s16b)use;
         creature_ptr->redraw |= (PR_STATS);
-        creature_ptr->window |= (PW_PLAYER);
+        creature_ptr->window_flags |= (PW_PLAYER);
     }
 }
 
@@ -2757,7 +2757,7 @@ static void calc_top_status(player_type *creature_ptr, int status)
     if (creature_ptr->stat_top[status] != top) {
         creature_ptr->stat_top[status] = (s16b)top;
         creature_ptr->redraw |= (PR_STATS);
-        creature_ptr->window |= (PW_PLAYER);
+        creature_ptr->window_flags |= (PW_PLAYER);
     }
 }
 
@@ -3726,7 +3726,7 @@ void check_experience(player_type *creature_ptr)
         creature_ptr->lev--;
         creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
         creature_ptr->redraw |= (PR_LEV | PR_TITLE);
-        creature_ptr->window |= (PW_PLAYER);
+        creature_ptr->window_flags |= (PW_PLAYER);
         handle_stuff(creature_ptr);
     }
 
@@ -3755,7 +3755,7 @@ void check_experience(player_type *creature_ptr)
         msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), creature_ptr->lev);
         creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
         creature_ptr->redraw |= (PR_LEV | PR_TITLE | PR_EXP);
-        creature_ptr->window |= (PW_PLAYER | PW_SPELL | PW_INVEN);
+        creature_ptr->window_flags |= (PW_PLAYER | PW_SPELL | PW_INVEN);
         creature_ptr->level_up_message = TRUE;
         handle_stuff(creature_ptr);
 
@@ -3818,7 +3818,7 @@ void check_experience(player_type *creature_ptr)
 
         creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
         creature_ptr->redraw |= (PR_LEV | PR_TITLE);
-        creature_ptr->window |= (PW_PLAYER | PW_SPELL);
+        creature_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
         handle_stuff(creature_ptr);
     }
 

@@ -481,14 +481,14 @@ void toggle_inventory_equipment(player_type *owner_ptr)
         if (window_flag[j] & (PW_INVEN)) {
             window_flag[j] &= ~(PW_INVEN);
             window_flag[j] |= (PW_EQUIP);
-            owner_ptr->window |= (PW_EQUIP);
+            owner_ptr->window_flags |= (PW_EQUIP);
             continue;
         }
 
         if (window_flag[j] & PW_EQUIP) {
             window_flag[j] &= ~(PW_EQUIP);
             window_flag[j] |= PW_INVEN;
-            owner_ptr->window |= PW_INVEN;
+            owner_ptr->window_flags |= PW_INVEN;
         }
     }
 }

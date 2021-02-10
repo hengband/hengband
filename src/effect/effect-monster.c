@@ -593,7 +593,7 @@ bool affect_monster(
 
     lite_spot(caster_ptr, em_ptr->y, em_ptr->x);
     if ((caster_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx))
-        caster_ptr->window |= (PW_MONSTER);
+        caster_ptr->window_flags |= (PW_MONSTER);
 
     postprocess_spell(caster_ptr, em_ptr);
     return em_ptr->obvious;

@@ -449,7 +449,7 @@ static void drain_essence(player_type *creature_ptr)
     /* Apply autodestroy/inscription to the drained item */
     autopick_alter_item(creature_ptr, item, TRUE);
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-    creature_ptr->window |= (PW_INVEN);
+    creature_ptr->window_flags |= (PW_INVEN);
 }
 
 /*!
@@ -983,7 +983,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
     take_turn(creature_ptr, 100);
     _(msg_format("%sに%sの能力を付加しました。", o_name, es_ptr->add_name), msg_format("You have added ability of %s to %s.", es_ptr->add_name, o_name));
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-    creature_ptr->window |= (PW_INVEN);
+    creature_ptr->window_flags |= (PW_INVEN);
 }
 
 /*!
@@ -1028,7 +1028,7 @@ static void erase_essence(player_type *creature_ptr)
         o_ptr->pval = 0;
     msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-    creature_ptr->window |= (PW_INVEN);
+    creature_ptr->window_flags |= (PW_INVEN);
 }
 
 /*!

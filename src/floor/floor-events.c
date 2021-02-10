@@ -58,7 +58,7 @@ void day_break(player_type *subject_ptr)
 
     subject_ptr->update |= PU_MONSTERS | PU_MON_LITE;
     subject_ptr->redraw |= PR_MAP;
-    subject_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+    subject_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     if (((subject_ptr->special_defense & NINJA_S_STEALTH) != 0) && ((floor_ptr->grid_array[subject_ptr->y][subject_ptr->x].info & CAVE_GLOW) != 0))
         set_superstealth(subject_ptr, FALSE);
 }
@@ -88,7 +88,7 @@ void night_falls(player_type *subject_ptr)
 
     subject_ptr->update |= PU_MONSTERS | PU_MON_LITE;
     subject_ptr->redraw |= PR_MAP;
-    subject_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+    subject_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
 
     if (((subject_ptr->special_defense & NINJA_S_STEALTH) != 0) && ((floor_ptr->grid_array[subject_ptr->y][subject_ptr->x].info & CAVE_GLOW) != 0))
         set_superstealth(subject_ptr, FALSE);

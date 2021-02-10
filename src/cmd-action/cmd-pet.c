@@ -162,7 +162,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
             /* HACK : Add the line to message buffer */
             msg_format(_("%s を放した。", "Dismissed %s."), friend_name);
             creature_ptr->update |= (PU_BONUS);
-            creature_ptr->window |= (PW_MESSAGE);
+            creature_ptr->window_flags |= (PW_MESSAGE);
 
             delete_monster_idx(creature_ptr, pet_ctr);
             Dismissed++;

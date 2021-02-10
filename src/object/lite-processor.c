@@ -42,7 +42,7 @@ void reduce_lite_life(player_type* creature_ptr)
 void notice_lite_change(player_type* creature_ptr, object_type* o_ptr)
 {
     if ((o_ptr->xtra4 < 100) || (!(o_ptr->xtra4 % 100))) {
-        creature_ptr->window |= (PW_EQUIP);
+        creature_ptr->window_flags |= (PW_EQUIP);
     }
 
     if (creature_ptr->blind) {

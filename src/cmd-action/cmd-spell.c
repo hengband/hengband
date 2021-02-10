@@ -330,7 +330,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     flag = FALSE;
     redraw = FALSE;
 
-    caster_ptr->window |= (PW_SPELL);
+    caster_ptr->window_flags |= (PW_SPELL);
     handle_stuff(caster_ptr);
 
     /* Build a prompt (accept all spells) */
@@ -483,7 +483,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     if (redraw)
         screen_load();
 
-    caster_ptr->window |= (PW_SPELL);
+    caster_ptr->window_flags |= (PW_SPELL);
     handle_stuff(caster_ptr);
 
     /* Abort if needed */
@@ -927,7 +927,7 @@ void do_cmd_study(player_type *caster_ptr)
     update_creature(caster_ptr);
 
     /* Redraw object recall */
-    caster_ptr->window |= (PW_OBJECT);
+    caster_ptr->window_flags |= (PW_OBJECT);
 }
 
 /*!
@@ -1173,7 +1173,7 @@ void do_cmd_cast(player_type *caster_ptr)
             }
 
             gain_exp(caster_ptr, e * s_ptr->slevel);
-            caster_ptr->window |= (PW_OBJECT);
+            caster_ptr->window_flags |= (PW_OBJECT);
 
             switch (realm) {
             case REALM_LIFE:
@@ -1343,6 +1343,6 @@ void do_cmd_cast(player_type *caster_ptr)
         }
     }
 
-    caster_ptr->window |= (PW_PLAYER);
-    caster_ptr->window |= (PW_SPELL);
+    caster_ptr->window_flags |= (PW_PLAYER);
+    caster_ptr->window_flags |= (PW_SPELL);
 }

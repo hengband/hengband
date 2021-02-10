@@ -82,7 +82,7 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
             creature_ptr->redraw |= (PR_MAP);
             creature_ptr->update |= (PU_MONSTERS);
 
-            creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+            creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     } else {
         if (creature_ptr->invuln && !music_singing(creature_ptr, MUSIC_INVULN)) {
@@ -92,7 +92,7 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
             creature_ptr->redraw |= (PR_MAP);
             creature_ptr->update |= (PU_MONSTERS);
 
-            creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+            creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
             creature_ptr->energy_need += ENERGY_NEED();
         }

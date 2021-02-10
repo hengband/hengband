@@ -269,7 +269,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
     if (redraw)
         screen_load();
 
-    caster_ptr->window |= (PW_SPELL);
+    caster_ptr->window_flags |= (PW_SPELL);
     handle_stuff(caster_ptr);
 
     /* Abort if needed */
@@ -1135,8 +1135,8 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
     take_turn(creature_ptr, 100);
 
     creature_ptr->redraw |= (PR_IMITATION);
-    creature_ptr->window |= (PW_PLAYER);
-    creature_ptr->window |= (PW_SPELL);
+    creature_ptr->window_flags |= (PW_PLAYER);
+    creature_ptr->window_flags |= (PW_SPELL);
 
     return TRUE;
 }

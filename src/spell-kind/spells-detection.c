@@ -365,7 +365,7 @@ bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
 
         if (r_ptr->flags2 & RF2_INVISIBLE) {
             if (caster_ptr->monster_race_idx == m_ptr->r_idx) {
-                caster_ptr->window |= (PW_MONSTER);
+                caster_ptr->window_flags |= (PW_MONSTER);
             }
 
             repair_monsters = TRUE;
@@ -412,7 +412,7 @@ bool detect_monsters_evil(player_type *caster_ptr, POSITION range)
             if (is_original_ap(m_ptr)) {
                 r_ptr->r_flags3 |= (RF3_EVIL);
                 if (caster_ptr->monster_race_idx == m_ptr->r_idx) {
-                    caster_ptr->window |= (PW_MONSTER);
+                    caster_ptr->window_flags |= (PW_MONSTER);
                 }
             }
 
@@ -454,7 +454,7 @@ bool detect_monsters_nonliving(player_type *caster_ptr, POSITION range)
 
         if (!monster_living(m_ptr->r_idx)) {
             if (caster_ptr->monster_race_idx == m_ptr->r_idx) {
-                caster_ptr->window |= (PW_MONSTER);
+                caster_ptr->window_flags |= (PW_MONSTER);
             }
 
             repair_monsters = TRUE;
@@ -497,7 +497,7 @@ bool detect_monsters_mind(player_type *caster_ptr, POSITION range)
 
         if (!(r_ptr->flags2 & RF2_EMPTY_MIND)) {
             if (caster_ptr->monster_race_idx == m_ptr->r_idx) {
-                caster_ptr->window |= (PW_MONSTER);
+                caster_ptr->window_flags |= (PW_MONSTER);
             }
 
             repair_monsters = TRUE;
@@ -541,7 +541,7 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
 
         if (angband_strchr(Match, r_ptr->d_char)) {
             if (caster_ptr->monster_race_idx == m_ptr->r_idx) {
-                caster_ptr->window |= (PW_MONSTER);
+                caster_ptr->window_flags |= (PW_MONSTER);
             }
 
             repair_monsters = TRUE;
@@ -589,7 +589,7 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_fla
             if (is_original_ap(m_ptr)) {
                 r_ptr->r_flags3 |= (match_flag);
                 if (caster_ptr->monster_race_idx == m_ptr->r_idx) {
-                    caster_ptr->window |= (PW_MONSTER);
+                    caster_ptr->window_flags |= (PW_MONSTER);
                 }
             }
 

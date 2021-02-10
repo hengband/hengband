@@ -301,7 +301,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
 
-    creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
     /* Food can feed the player */
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
@@ -328,7 +328,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
             msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
             o_ptr->ident |= (IDENT_EMPTY);
             creature_ptr->update |= inventory_flags;
-            creature_ptr->window |= (PW_INVEN);
+            creature_ptr->window_flags |= (PW_INVEN);
 
             return;
         }
@@ -370,7 +370,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
             floor_item_charges(creature_ptr->current_floor_ptr, 0 - item);
         }
 
-        creature_ptr->window |= (PW_INVEN | PW_EQUIP);
+        creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
         creature_ptr->update |= inventory_flags;
 
         /* Don't eat a staff/wand itself */

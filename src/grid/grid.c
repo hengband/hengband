@@ -569,7 +569,7 @@ void lite_spot(player_type *player_ptr, POSITION y, POSITION x)
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
 
         /* Update sub-windows */
-        player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+        player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     }
 }
 

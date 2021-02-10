@@ -46,7 +46,7 @@ void regenhp(player_type *creature_ptr, int percent)
 
     if (old_chp != creature_ptr->chp) {
         creature_ptr->redraw |= (PR_HP);
-        creature_ptr->window |= (PW_PLAYER);
+        creature_ptr->window_flags |= (PW_PLAYER);
         wild_regen = 20;
     }
 }
@@ -103,8 +103,8 @@ void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT r
 
     if (old_csp != creature_ptr->csp) {
         creature_ptr->redraw |= (PR_MANA);
-        creature_ptr->window |= (PW_PLAYER);
-        creature_ptr->window |= (PW_SPELL);
+        creature_ptr->window_flags |= (PW_PLAYER);
+        creature_ptr->window_flags |= (PW_SPELL);
         wild_regen = 20;
     }
 }
@@ -229,8 +229,8 @@ void regenerate_captured_monsters(player_type *creature_ptr)
 
     if (heal) {
         creature_ptr->update |= (PU_COMBINE);
-        creature_ptr->window |= (PW_INVEN);
-        creature_ptr->window |= (PW_EQUIP);
+        creature_ptr->window_flags |= (PW_INVEN);
+        creature_ptr->window_flags |= (PW_EQUIP);
         wild_regen = 20;
     }
 }

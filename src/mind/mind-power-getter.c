@@ -281,7 +281,7 @@ bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
     if (redraw && !only_browse)
         screen_load();
 
-    caster_ptr->window |= PW_SPELL;
+    caster_ptr->window_flags |= PW_SPELL;
     handle_stuff(caster_ptr);
     if (!flag)
         return FALSE;

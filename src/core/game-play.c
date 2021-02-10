@@ -293,7 +293,7 @@ static void generate_world(player_type *player_ptr, bool new_game)
 static void init_io(player_type *player_ptr)
 {
     term_xtra(TERM_XTRA_REACT, 0);
-    player_ptr->window |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT;
+    player_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT;
     handle_stuff(player_ptr);
     if (arg_force_original)
         rogue_like_commands = FALSE;

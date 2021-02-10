@@ -511,7 +511,7 @@ void do_cmd_options(player_type *player_ptr)
         case 'W':
         case 'w': {
             do_cmd_options_win(player_ptr);
-            player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MESSAGE | PW_OVERHEAD | PW_MONSTER | PW_OBJECT | PW_SNAPSHOT | PW_DUNGEON
+            player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MESSAGE | PW_OVERHEAD | PW_MONSTER | PW_OBJECT | PW_SNAPSHOT | PW_DUNGEON
                 | PW_MONSTER_LIST);
             break;
         }

@@ -384,7 +384,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
 	}
 	if (redraw && !only_browse) screen_load();
 
-	sniper_ptr->window |= (PW_SPELL);
+	sniper_ptr->window_flags |= (PW_SPELL);
 	handle_stuff(sniper_ptr);
 
 	/* Abort if needed */
@@ -568,8 +568,8 @@ void do_cmd_snipe(player_type *sniper_ptr)
 
 	if (!cast) return;
 	sniper_ptr->redraw |= (PR_HP | PR_MANA);
-	sniper_ptr->window |= (PW_PLAYER);
-	sniper_ptr->window |= (PW_SPELL);
+	sniper_ptr->window_flags |= (PW_PLAYER);
+	sniper_ptr->window_flags |= (PW_SPELL);
 }
 
 /*!

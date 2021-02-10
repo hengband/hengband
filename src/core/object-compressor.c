@@ -77,7 +77,7 @@ void compact_objects(player_type *player_ptr, int size)
     if (size) {
         msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
         player_ptr->redraw |= PR_MAP;
-        player_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+        player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;

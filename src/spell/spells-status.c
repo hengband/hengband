@@ -199,7 +199,7 @@ bool time_walk(player_type *creature_ptr)
     creature_ptr->energy_need -= 1000 + (100 + creature_ptr->csp - 50) * TURNS_PER_TICK / 10;
     creature_ptr->redraw |= (PR_MAP);
     creature_ptr->update |= (PU_MONSTERS);
-    creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     handle_stuff(creature_ptr);
     return TRUE;
 }
@@ -240,7 +240,7 @@ void roll_hitdice(player_type *creature_ptr, spell_operation options)
     /* Update and redraw hitpoints */
     creature_ptr->update |= (PU_HP);
     creature_ptr->redraw |= (PR_HP);
-    creature_ptr->window |= (PW_PLAYER);
+    creature_ptr->window_flags |= (PW_PLAYER);
 
     if (!(options & SPOP_NO_UPDATE))
         handle_stuff(creature_ptr);
@@ -397,7 +397,7 @@ bool restore_mana(player_type *creature_ptr, bool magic_eater)
         }
 
         msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-        creature_ptr->window |= (PW_PLAYER);
+        creature_ptr->window_flags |= (PW_PLAYER);
         return TRUE;
     }
 
@@ -408,8 +408,8 @@ bool restore_mana(player_type *creature_ptr, bool magic_eater)
     creature_ptr->csp_frac = 0;
     msg_print(_("頭がハッキリとした。", "You feel your head clear."));
     creature_ptr->redraw |= (PR_MANA);
-    creature_ptr->window |= (PW_PLAYER);
-    creature_ptr->window |= (PW_SPELL);
+    creature_ptr->window_flags |= (PW_PLAYER);
+    creature_ptr->window_flags |= (PW_SPELL);
     return TRUE;
 }
 

@@ -99,7 +99,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 
     move_cursor_relative(caster_ptr->y, caster_ptr->x);
     caster_ptr->redraw |= (PR_HP);
-    caster_ptr->window |= (PW_PLAYER);
+    caster_ptr->window_flags |= (PW_PLAYER);
     handle_stuff(caster_ptr);
     if (fresh_after)
         term_fresh();

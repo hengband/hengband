@@ -97,7 +97,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s."), (long)o_ptr->pval, o_name);
             owner_ptr->au += o_ptr->pval;
             owner_ptr->redraw |= (PR_GOLD);
-            owner_ptr->window |= (PW_PLAYER);
+            owner_ptr->window_flags |= (PW_PLAYER);
             delete_object_idx(owner_ptr, this_o_idx);
             continue;
         } else if (o_ptr->marked & OM_NOMSG) {
@@ -241,7 +241,7 @@ void carry(player_type *creature_ptr, bool pickup)
     verify_panel(creature_ptr);
     creature_ptr->update |= PU_MONSTERS;
     creature_ptr->redraw |= PR_MAP;
-    creature_ptr->window |= PW_OVERHEAD;
+    creature_ptr->window_flags |= PW_OVERHEAD;
     handle_stuff(creature_ptr);
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
     autopick_pickup_items(creature_ptr, g_ptr);
@@ -265,7 +265,7 @@ void carry(player_type *creature_ptr, bool pickup)
             sound(SOUND_SELL);
             creature_ptr->au += value;
             creature_ptr->redraw |= (PR_GOLD);
-            creature_ptr->window |= (PW_PLAYER);
+            creature_ptr->window_flags |= (PW_PLAYER);
             continue;
         }
 

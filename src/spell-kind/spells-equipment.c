@@ -111,7 +111,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
     chg_virtue(target_ptr, V_HARMONY, 1);
     chg_virtue(target_ptr, V_ENCHANT, -2);
     target_ptr->update |= (PU_BONUS);
-    target_ptr->window |= (PW_EQUIP | PW_PLAYER);
+    target_ptr->window_flags |= (PW_EQUIP | PW_PLAYER);
 
     calc_android_exp(target_ptr);
     return TRUE;

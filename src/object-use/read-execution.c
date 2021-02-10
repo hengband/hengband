@@ -510,7 +510,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
 
-    creature_ptr->window |= PW_INVEN | PW_EQUIP | PW_PLAYER;
+    creature_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
     creature_ptr->update |= inventory_flags;
     if (!used_up)
         return;

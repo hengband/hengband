@@ -185,7 +185,7 @@ static bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, mo
         cave_alter_feat(target_ptr, ny, nx, FF_BASH);
         if (!monster_is_valid(m_ptr)) {
             target_ptr->update |= (PU_FLOW);
-            target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+            target_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             if (is_original_ap_and_seen(target_ptr, m_ptr))
                 r_ptr->r_flags2 |= (RF2_BASH_DOOR);
 
@@ -308,7 +308,7 @@ static bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flag
 
     if (!monster_is_valid(m_ptr)) {
         target_ptr->update |= (PU_FLOW);
-        target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+        target_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         if (is_original_ap_and_seen(target_ptr, m_ptr))
             r_ptr->r_flags2 |= (RF2_KILL_WALL);
 

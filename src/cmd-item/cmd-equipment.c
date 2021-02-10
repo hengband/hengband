@@ -286,7 +286,7 @@ void do_cmd_wield(player_type *creature_ptr)
 
     creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
     creature_ptr->redraw |= PR_EQUIPPY;
-    creature_ptr->window |= PW_INVEN | PW_EQUIP | PW_PLAYER;
+    creature_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
     calc_android_exp(creature_ptr);
 }
 
@@ -319,7 +319,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
             o_ptr->curse_flags = 0L;
             o_ptr->feeling = FEEL_NONE;
             creature_ptr->update |= PU_BONUS;
-            creature_ptr->window |= PW_EQUIP;
+            creature_ptr->window_flags |= PW_EQUIP;
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
             msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
