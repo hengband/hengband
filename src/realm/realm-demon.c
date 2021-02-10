@@ -468,7 +468,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
     case 21:
         if (name)
-            return _("地獄の波動", "Nather Wave");
+            return _("地獄の波動", "Nether Wave");
         if (desc)
             return _("視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。",
                 "Damages all monsters in sight. Hurts good monsters greatly.");
