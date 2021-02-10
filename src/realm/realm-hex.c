@@ -484,7 +484,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (name)
             return _("防具呪縛", "Curse armor");
         if (desc)
-            return _("装備している防具に呪いをかける。", "Curse a piece of armour that you wielding.");
+            return _("装備している防具に呪いをかける。", "Curse a piece of armour that you are wielding.");
         if (cast) {
             OBJECT_IDX item;
             concptr q, s;
