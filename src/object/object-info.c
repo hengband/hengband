@@ -42,7 +42,7 @@ static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type
     int n = 0;
 
     object_flags(owner_ptr, o_ptr, flgs);
-    strcpy(desc, _("", "breath "));
+    strcpy(desc, _("", "breathe "));
 
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
         if (has_flag(flgs, dragonbreath_info[i].flag)) {
@@ -54,7 +54,7 @@ static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type
         }
     }
 
-    strcat(desc, _("のブレス(250)", ""));
+    strcat(desc, _("のブレス(250)", " (250)"));
     return (desc);
 }
 
@@ -76,11 +76,11 @@ static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
     switch (act_ptr->index) {
     case ACT_BR_FIRE:
         if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-            desc = _("火炎のブレス (200) と火への耐性", "breath of fire (200) and resist fire");
+            desc = _("火炎のブレス (200) と火への耐性", "breathe fire (200) and resist fire");
         break;
     case ACT_BR_COLD:
         if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-            desc = _("冷気のブレス (200) と冷気への耐性", "breath of cold (200) and resist cold");
+            desc = _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
         break;
     case ACT_BR_DRAGON:
         desc = item_activation_dragon_breath(owner_ptr, o_ptr);
@@ -105,19 +105,19 @@ static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
         desc = _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist elec");
         break;
     case ACT_RESIST_ACID:
-        desc = _("一時的な酸への耐性", "tempral resist acid");
+        desc = _("一時的な酸への耐性", "temporary resist acid");
         break;
     case ACT_RESIST_FIRE:
-        desc = _("一時的な火への耐性", "tempral resist fire");
+        desc = _("一時的な火への耐性", "temporary resist fire");
         break;
     case ACT_RESIST_COLD:
-        desc = _("一時的な冷気への耐性", "tempral resist cold");
+        desc = _("一時的な冷気への耐性", "temporary resist cold");
         break;
     case ACT_RESIST_ELEC:
-        desc = _("一時的な電撃への耐性", "tempral resist elec");
+        desc = _("一時的な電撃への耐性", "temporary resist elec");
         break;
     case ACT_RESIST_POIS:
-        desc = _("一時的な毒への耐性", "tempral resist elec");
+        desc = _("一時的な毒への耐性", "temporary resist elec");
         break;
     }
 
