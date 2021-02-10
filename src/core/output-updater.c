@@ -11,6 +11,6 @@ void update_output(player_type* player_ptr)
 {
     if (player_ptr->redraw)
         redraw_stuff(player_ptr);
-    if (player_ptr->window)
+    if (player_ptr->window_flags)
         window_stuff(player_ptr);
 }

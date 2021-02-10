@@ -3222,7 +3222,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             term_resize(td->cols, td->rows);
             term_activate(old_term);
             InvalidateRect(td->w, NULL, TRUE);
-            p_ptr->window = 0xFFFFFFFF;
+            p_ptr->window_flags = 0xFFFFFFFF;
             handle_stuff(p_ptr);
         }
 

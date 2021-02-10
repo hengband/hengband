@@ -197,7 +197,7 @@ static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_mons
 	if (caster_ptr->csp < 0) caster_ptr->csp = 0;
 
 	caster_ptr->redraw |= PR_MANA;
-	caster_ptr->window |= (PW_SPELL);
+	caster_ptr->window_flags |= (PW_SPELL);
 	take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
 	em_ptr->dam = 0;
 }
@@ -214,7 +214,7 @@ static void effect_monster_psi_drain_change_power(player_type *caster_ptr, effec
 	b = MIN(caster_ptr->msp, caster_ptr->csp + b);
 	caster_ptr->csp = b;
 	caster_ptr->redraw |= PR_MANA;
-	caster_ptr->window |= (PW_SPELL);
+	caster_ptr->window_flags |= (PW_SPELL);
 }
 
 

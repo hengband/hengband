@@ -34,8 +34,8 @@ void redraw_window(void)
     if (!current_world_ptr->character_dungeon)
         return;
 
-    p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-    p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+    p_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
+    p_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
     handle_stuff(p_ptr);
     term_redraw();
@@ -226,68 +226,63 @@ void redraw_stuff(player_type *creature_ptr)
  */
 void window_stuff(player_type *player_ptr)
 {
-    if (!player_ptr->window)
+    if (!player_ptr->window_flags)
         return;
     
     BIT_FLAGS mask = 0L;
     for (int j = 0; j < 8; j++) {
-        if (angband_term[j])
+        if (angband_term[j] && !angband_term[j]->never_fresh)
             mask |= window_flag[j];
     }
+    BIT_FLAGS window_flags = player_ptr->window_flags & mask;
 
-    player_ptr->window &= mask;
-
-    if (!player_ptr->window)
-        return;
-
-    if (need_term_fresh(player_ptr) && player_ptr->window & (PW_INVEN)) {
-        player_ptr->window &= ~(PW_INVEN);
+    if (window_flags & (PW_INVEN)) {
+        player_ptr->window_flags &= ~(PW_INVEN);
         fix_inventory(player_ptr, 0); // TODO:2.2.2 まともなtval参照手段を確保
     }
 
-    if (need_term_fresh(player_ptr) && player_ptr->window & (PW_EQUIP)) {
-        player_ptr->window &= ~(PW_EQUIP);
+    if (window_flags & (PW_EQUIP)) {
+        player_ptr->window_flags &= ~(PW_EQUIP);
         fix_equip(player_ptr, 0); // TODO:2.2.2 まともなtval参照手段を確保
     }
 
-    if (need_term_fresh(player_ptr) && player_ptr->window & (PW_SPELL)) {
-        player_ptr->window &= ~(PW_SPELL);
+    if (window_flags & (PW_SPELL)) {
+        player_ptr->window_flags &= ~(PW_SPELL);
         fix_spell(player_ptr);
     }
 
-    if (need_term_fresh(player_ptr) && player_ptr->window & (PW_PLAYER)) {
-        player_ptr->window &= ~(PW_PLAYER);
+    if (window_flags & (PW_PLAYER)) {
+        player_ptr->window_flags &= ~(PW_PLAYER);
         fix_player(player_ptr);
     }
 
-    if (player_ptr->window & (PW_MONSTER_LIST)) {
-        if (need_term_fresh(player_ptr))
-            player_ptr->window &= ~(PW_MONSTER_LIST);
-        fix_monster_list(player_ptr); //need this side-effect for work targetting collect
+    if (window_flags & (PW_MONSTER_LIST)) {
+        player_ptr->window_flags &= ~(PW_MONSTER_LIST);
+        fix_monster_list(player_ptr, FALSE);
     }
 
-    if (need_term_fresh(player_ptr) && player_ptr->window & (PW_MESSAGE)) {
-        player_ptr->window &= ~(PW_MESSAGE);
+    if (window_flags & (PW_MESSAGE)) {
+        player_ptr->window_flags &= ~(PW_MESSAGE);
         fix_message();
     }
 
-    if (need_term_fresh(player_ptr) && player_ptr->window & (PW_OVERHEAD)) {
-        player_ptr->window &= ~(PW_OVERHEAD);
+    if (window_flags & (PW_OVERHEAD)) {
+        player_ptr->window_flags &= ~(PW_OVERHEAD);
         fix_overhead(player_ptr);
     }
 
-    if (need_term_fresh(player_ptr) && player_ptr->window & (PW_DUNGEON)) {
-        player_ptr->window &= ~(PW_DUNGEON);
+    if (window_flags & (PW_DUNGEON)) {
+        player_ptr->window_flags &= ~(PW_DUNGEON);
         fix_dungeon(player_ptr);
     }
 
-    if (need_term_fresh(player_ptr) && player_ptr->window & (PW_MONSTER)) {
-        player_ptr->window &= ~(PW_MONSTER);
+    if (window_flags & (PW_MONSTER)) {
+        player_ptr->window_flags &= ~(PW_MONSTER);
         fix_monster(player_ptr);
     }
 
-    if (need_term_fresh(player_ptr) && player_ptr->window & (PW_OBJECT)) {
-        player_ptr->window &= ~(PW_OBJECT);
+    if (window_flags & (PW_OBJECT)) {
+        player_ptr->window_flags &= ~(PW_OBJECT);
         fix_object(player_ptr);
     }
 }

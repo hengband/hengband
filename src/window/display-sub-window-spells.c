@@ -184,10 +184,8 @@ void fix_spell(player_type *player_ptr)
 
         term_activate(angband_term[j]);
         display_spell_list(player_ptr);
-        if (need_term_fresh(player_ptr)) {
-            term_fresh();
-            player_ptr->window &= ~(PW_SPELL);
-        }
+        term_fresh();
+        player_ptr->window_flags &= ~(PW_SPELL);
         term_activate(old);
     }
 }

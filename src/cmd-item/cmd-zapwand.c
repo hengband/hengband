@@ -395,7 +395,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
         msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
         o_ptr->ident |= (IDENT_EMPTY);
         creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-        creature_ptr->window |= (PW_INVEN);
+        creature_ptr->window_flags |= (PW_INVEN);
 
         return;
     }
@@ -427,7 +427,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
 
-    creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
     creature_ptr->update |= inventory_flags;
 
     /* Use a single charge */

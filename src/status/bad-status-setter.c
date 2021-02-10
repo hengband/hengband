@@ -68,7 +68,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 
     creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
     creature_ptr->redraw |= (PR_MAP);
-    creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     handle_stuff(creature_ptr);
     return TRUE;
 }
@@ -321,7 +321,7 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 
     creature_ptr->redraw |= (PR_MAP | PR_HEALTH | PR_UHEALTH);
     creature_ptr->update |= (PU_MONSTERS);
-    creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     handle_stuff(creature_ptr);
     return TRUE;
 }

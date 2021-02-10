@@ -29,3 +29,5 @@ extern concptr inkey_next;
 
 char inkey(void);
 int inkey_special(bool numpad_cursor);
+void start_term_fresh(void);
+void stop_term_fresh(void);

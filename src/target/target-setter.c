@@ -202,7 +202,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
         verify_panel(creature_ptr);
         creature_ptr->update |= PU_MONSTERS;
         creature_ptr->redraw |= PR_MAP;
-        creature_ptr->window |= PW_OVERHEAD;
+        creature_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(creature_ptr);
         target_set_prepare(creature_ptr, ts_ptr->mode);
         ts_ptr->y = creature_ptr->y;
@@ -266,7 +266,7 @@ static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
         panel_bounds_center();
         creature_ptr->update |= PU_MONSTERS;
         creature_ptr->redraw |= PR_MAP;
-        creature_ptr->window |= PW_OVERHEAD;
+        creature_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(creature_ptr);
         target_set_prepare(creature_ptr, ts_ptr->mode);
         ts_ptr->flag = FALSE;
@@ -352,7 +352,7 @@ static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
         verify_panel(creature_ptr);
         creature_ptr->update |= PU_MONSTERS;
         creature_ptr->redraw |= PR_MAP;
-        creature_ptr->window |= PW_OVERHEAD;
+        creature_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(creature_ptr);
         target_set_prepare(creature_ptr, ts_ptr->mode);
         ts_ptr->y = creature_ptr->y;
@@ -475,7 +475,15 @@ bool target_set(player_type *creature_ptr, target_type mode)
     verify_panel(creature_ptr);
     creature_ptr->update |= (PU_MONSTERS);
     creature_ptr->redraw |= (PR_MAP);
-    creature_ptr->window |= (PW_OVERHEAD);
+    creature_ptr->window_flags |= (PW_OVERHEAD);
     handle_stuff(creature_ptr);
     return target_who != 0;
+}
+
+void target_clear(player_type *creature_ptr) {
+    ts_type tmp_ts;
+    ts_type *ts_ptr = initialize_target_set_type(creature_ptr, &tmp_ts, TARGET_LOOK);
+    ts_ptr->done = TRUE;
+    tmp_pos.n = 0;
+    verify_panel(creature_ptr);
 }

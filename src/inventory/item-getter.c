@@ -295,7 +295,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             item_selection_ptr->toggle = !item_selection_ptr->toggle;
         }
 
-        owner_ptr->window |= (PW_INVEN | PW_EQUIP);
+        owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
         handle_stuff(owner_ptr);
 
         if (!command_wrk) {
@@ -608,7 +608,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     if (item_selection_ptr->toggle)
         toggle_inventory_equipment(owner_ptr);
 
-    owner_ptr->window |= (PW_INVEN | PW_EQUIP);
+    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
     handle_stuff(owner_ptr);
     prt("", 0, 0);
     if (item_selection_ptr->oops && str)

@@ -9,6 +9,7 @@
 #include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "game-option/special-options.h"
+#include "game-option/map-screen-options.h"
 #include "grid/feature-flag-types.h"
 #include "io/cursor.h"
 #include "io/screen-util.h"
@@ -542,7 +543,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             }
 
             move_cursor_relative(by, bx);
-            if (need_term_fresh(caster_ptr))
+            if (fresh_after)
                 term_fresh();
         }
     }

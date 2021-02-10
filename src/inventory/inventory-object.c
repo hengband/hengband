@@ -55,7 +55,7 @@ void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
     owner_ptr->update |= (PU_BONUS);
     owner_ptr->update |= (PU_MANA);
     owner_ptr->update |= (PU_COMBINE);
-    owner_ptr->window |= (PW_INVEN | PW_EQUIP);
+    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
 
     if (o_ptr->number || !owner_ptr->ele_attack)
         return;
@@ -89,8 +89,8 @@ void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
         owner_ptr->update |= PU_TORCH;
         owner_ptr->update |= PU_MANA;
 
-        owner_ptr->window |= PW_EQUIP;
-        owner_ptr->window |= PW_SPELL;
+        owner_ptr->window_flags |= PW_EQUIP;
+        owner_ptr->window_flags |= PW_SPELL;
         return;
     }
 
@@ -101,8 +101,8 @@ void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
     }
 
     object_wipe(&owner_ptr->inventory_list[i]);
-    owner_ptr->window |= PW_INVEN;
-    owner_ptr->window |= PW_SPELL;
+    owner_ptr->window_flags |= PW_INVEN;
+    owner_ptr->window_flags |= PW_SPELL;
 }
 
 /*!
@@ -206,7 +206,7 @@ void combine_pack(player_type *owner_ptr)
                     }
                 }
 
-                owner_ptr->window |= (PW_INVEN);
+                owner_ptr->window_flags |= (PW_INVEN);
                 combined = TRUE;
                 break;
             }
@@ -259,7 +259,7 @@ void reorder_pack(player_type *owner_ptr)
         }
 
         object_copy(&owner_ptr->inventory_list[j], q_ptr);
-        owner_ptr->window |= (PW_INVEN);
+        owner_ptr->window_flags |= (PW_INVEN);
     }
 
     if (flag)
@@ -302,7 +302,7 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
             object_absorb(j_ptr, o_ptr);
 
             owner_ptr->update |= (PU_BONUS);
-            owner_ptr->window |= (PW_INVEN);
+            owner_ptr->window_flags |= (PW_INVEN);
             return (j);
         }
     }
@@ -341,7 +341,7 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 
     owner_ptr->inven_cnt++;
     owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    owner_ptr->window |= (PW_INVEN);
+    owner_ptr->window_flags |= (PW_INVEN);
 
     return i;
 }

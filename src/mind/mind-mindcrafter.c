@@ -84,7 +84,7 @@ bool psychometry(player_type *caster_ptr)
     o_ptr->marked |= OM_TOUCHED;
 
     caster_ptr->update |= (PU_COMBINE | PU_REORDER);
-    caster_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    caster_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
     bool okay = FALSE;
     switch (o_ptr->tval) {

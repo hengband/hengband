@@ -260,7 +260,7 @@ bool curse_armor(player_type *owner_ptr)
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
     owner_ptr->update |= (PU_BONUS | PU_MANA);
-    owner_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
     return TRUE;
 }
 
@@ -315,7 +315,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
     owner_ptr->update |= (PU_BONUS | PU_MANA);
-    owner_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
     return TRUE;
 }
 
@@ -530,7 +530,7 @@ bool enchant(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
     if (!res)
         return FALSE;
     caster_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    caster_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    caster_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
     calc_android_exp(caster_ptr);
 

@@ -21,6 +21,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "target/target-preparation.h"
+#include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -170,7 +171,7 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void fix_monster_list(player_type *player_ptr)
+void fix_monster_list(player_type *player_ptr, bool force_term_fresh)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -178,15 +179,18 @@ void fix_monster_list(player_type *player_ptr)
             continue;
         if (!(window_flag[j] & PW_MONSTER_LIST))
             continue;
+        if (angband_term[j]->never_fresh && !force_term_fresh)
+            continue;
 
+        angband_term[j]->never_fresh = FALSE;
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
         term_clear();
         target_set_prepare(player_ptr, TARGET_LOOK);
         print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
-        if (need_term_fresh(player_ptr))
-            term_fresh();
+        target_clear(player_ptr);
+        term_fresh();
         term_activate(old);
     }
 }
@@ -477,14 +481,14 @@ void toggle_inventory_equipment(player_type *owner_ptr)
         if (window_flag[j] & (PW_INVEN)) {
             window_flag[j] &= ~(PW_INVEN);
             window_flag[j] |= (PW_EQUIP);
-            owner_ptr->window |= (PW_EQUIP);
+            owner_ptr->window_flags |= (PW_EQUIP);
             continue;
         }
 
         if (window_flag[j] & PW_EQUIP) {
             window_flag[j] &= ~(PW_EQUIP);
             window_flag[j] |= PW_INVEN;
-            owner_ptr->window |= PW_INVEN;
+            owner_ptr->window_flags |= PW_INVEN;
         }
     }
 }

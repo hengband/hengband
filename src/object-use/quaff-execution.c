@@ -576,7 +576,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
 
-    creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
     /* Potions can feed the player */
     switch (creature_ptr->mimic_form) {

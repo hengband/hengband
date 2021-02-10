@@ -62,7 +62,7 @@ void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
     }
 
     target_ptr->redraw |= (PR_GOLD);
-    target_ptr->window |= (PW_PLAYER);
+    target_ptr->window_flags |= (PW_PLAYER);
     monap_ptr->blinked = TRUE;
 }
 
@@ -190,7 +190,7 @@ void process_eat_lite(player_type *target_ptr, monap_type *monap_ptr)
         monap_ptr->obvious = TRUE;
     }
 
-    target_ptr->window |= (PW_EQUIP);
+    target_ptr->window_flags |= (PW_EQUIP);
 }
 
 /*!
@@ -233,7 +233,7 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
 
     monap_ptr->o_ptr->pval = !is_magic_mastery || (monap_ptr->o_ptr->pval == 1) ? 0 : monap_ptr->o_ptr->pval - drain;
     target_ptr->update |= PU_COMBINE | PU_REORDER;
-    target_ptr->window |= PW_INVEN;
+    target_ptr->window_flags |= PW_INVEN;
     return TRUE;
 }
 

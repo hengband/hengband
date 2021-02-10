@@ -2,8 +2,10 @@
 #include "cmd-io/cmd-menu-content-table.h"
 #include "cmd-io/macro-util.h"
 #include "core/asking-player.h" // todo 相互依存している、後で何とかする.
+#include "core/player-processor.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
+#include "game-option/map-screen-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
@@ -16,6 +18,7 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 
@@ -206,6 +209,11 @@ void request_command(player_type *player_ptr, int shopping)
         if (!macro_running() && !command_new && auto_debug_save) {
             save_player(player_ptr, SAVE_TYPE_DEBUG);
         }
+        if (macro_running() && !fresh_after) {
+            stop_term_fresh();
+        } else {
+            fix_monster_list(player_ptr, TRUE);
+        }
 
         if (command_new) {
             msg_erase();
@@ -215,9 +223,7 @@ void request_command(player_type *player_ptr, int shopping)
             msg_flag = FALSE;
             num_more = 0;
             inkey_flag = TRUE;
-            if (need_term_fresh(player_ptr)) {
-                term_fresh();
-            }
+            term_fresh();
             cmd = inkey();
             if (!shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[mode][(byte)(cmd)])
                 cmd = inkey_from_menu(player_ptr);

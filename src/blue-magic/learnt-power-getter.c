@@ -427,7 +427,7 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
     if (lm_ptr->redraw)
         screen_load();
 
-    caster_ptr->window |= PW_SPELL;
+    caster_ptr->window_flags |= PW_SPELL;
     handle_stuff(caster_ptr);
 
     if (!lm_ptr->flag)

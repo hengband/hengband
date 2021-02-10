@@ -976,7 +976,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             caster_ptr->redraw |= (PR_MAP);
             caster_ptr->update |= (PU_MONSTERS);
-            caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+            caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
             start_singing(caster_ptr, spell, MUSIC_INVULN);
         }
@@ -987,7 +987,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
                 caster_ptr->redraw |= (PR_MAP);
                 caster_ptr->update |= (PU_MONSTERS);
-                caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+                caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
             }
         }
 

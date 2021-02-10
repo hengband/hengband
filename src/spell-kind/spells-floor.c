@@ -120,7 +120,7 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
 
     caster_ptr->update |= (PU_MONSTERS);
     caster_ptr->redraw |= (PR_MAP);
-    caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
     if (caster_ptr->special_defense & NINJA_S_STEALTH) {
         if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)
@@ -176,7 +176,7 @@ void wiz_dark(player_type *caster_ptr)
     caster_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
     caster_ptr->update |= (PU_MONSTERS);
     caster_ptr->redraw |= (PR_MAP);
-    caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
 /*
@@ -232,7 +232,7 @@ void map_area(player_type *caster_ptr, POSITION range)
     }
 
     caster_ptr->redraw |= (PR_MAP);
-    caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
 /*!
@@ -465,7 +465,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
     /* Mega-Hack -- Forget the view and lite */
     caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
     caster_ptr->redraw |= (PR_MAP);
-    caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
     if (caster_ptr->special_defense & NINJA_S_STEALTH) {
         if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)

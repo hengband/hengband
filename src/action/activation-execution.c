@@ -231,7 +231,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
     sound(SOUND_ZAP);
     if (activation_index(user_ptr, ae_ptr->o_ptr)) {
         (void)activate_artifact(user_ptr, ae_ptr->o_ptr);
-        user_ptr->window |= PW_INVEN | PW_EQUIP;
+        user_ptr->window_flags |= PW_INVEN | PW_EQUIP;
         return;
     }
 

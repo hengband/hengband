@@ -346,7 +346,7 @@ typedef struct player_type {
 
     BIT_FLAGS update; /* Pending Updates */
     BIT_FLAGS redraw; /* Normal Redraws */
-    BIT_FLAGS window; /* Window Redraws */
+    BIT_FLAGS window_flags; /* Window Redraws */
     s16b stat_use[A_MAX]; /* Current modified stats */
     s16b stat_top[A_MAX]; /* Maximal modified stats */
 

@@ -420,7 +420,7 @@ void msg_print(concptr msg)
     }
 
     term_putstr(p, 0, n, TERM_WHITE, t);
-    p_ptr->window |= (PW_MESSAGE);
+    p_ptr->window_flags |= (PW_MESSAGE);
     update_output(p_ptr);
 
     msg_flag = TRUE;

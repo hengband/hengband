@@ -339,7 +339,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
     caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
     caster_ptr->redraw |= (PR_HEALTH | PR_UHEALTH | PR_MAP);
-    caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     if (caster_ptr->special_defense & NINJA_S_STEALTH) {
         if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)
             set_superstealth(caster_ptr, FALSE);

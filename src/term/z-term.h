@@ -57,6 +57,7 @@ typedef struct term_type {
     bool unused_flag; //!< Flag "unused_flag" Reserved for future use
     bool never_bored; //!< Flag "never_bored" Never call the "TERM_XTRA_BORED" action
     bool never_frosh; //!< Flag "never_frosh" Never call the "TERM_XTRA_FROSH" action
+    bool never_fresh; //!< Flag "never_fresh" Never redraw the Term
 
     byte attr_blank; //!< Value "attr_blank" Use this "attr" value for "blank" grids
     char char_blank; //!< Value "char_blank" Use this "char" value for "blank" grids
@@ -95,8 +96,6 @@ typedef struct term_type {
     errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap,
         concptr tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
 } term_type;
-
-typedef struct player_type player_type;
 
 /**** Available Constants ****/
 
@@ -145,10 +144,7 @@ errr term_xtra(int n, int v);
 
 void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
 void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc);
-
 void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
-
-bool need_term_fresh(player_type *player_ptr);
 bool macro_running(void);
 
 errr term_fresh(void);

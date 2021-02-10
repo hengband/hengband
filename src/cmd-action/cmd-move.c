@@ -17,6 +17,7 @@
 #include "game-option/input-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
+#include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
@@ -425,6 +426,6 @@ void do_cmd_rest(player_type *creature_ptr)
     update_creature(creature_ptr);
     creature_ptr->redraw |= (PR_STATE);
     update_output(creature_ptr);
-    if (need_term_fresh(creature_ptr))
+    if (fresh_after)
         term_fresh();
 }

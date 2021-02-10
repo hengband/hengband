@@ -1,7 +1,8 @@
 ﻿#include "io/input-key-acceptor.h"
 #include "cmd-io/macro-util.h"
-#include "game-option/map-screen-options.h"
+#include "core/window-redrawer.h"
 #include "game-option/input-options.h"
+#include "game-option/map-screen-options.h"
 #include "io/signal-handlers.h"
 #include "term/gameterm.h"
 #include "util/string-processor.h"
@@ -201,6 +202,7 @@ char inkey(void)
         }
 
         if (!done && (0 != term_inkey(&kk, FALSE, FALSE))) {
+            start_term_fresh();
             term_activate(old);
             term_fresh();
             term_activate(angband_term[0]);
@@ -394,4 +396,20 @@ int inkey_special(bool numpad_cursor)
 
     inkey_macro_trigger_string[0] = '\0';
     return (int)((unsigned char)key);
+}
+
+void stop_term_fresh(void)
+{
+    for (int j = 0; j < 8; j++) {
+        if (angband_term[j])
+            angband_term[j]->never_fresh = TRUE;
+    }
+}
+
+void start_term_fresh(void)
+{
+    for (int j = 0; j < 8; j++) {
+        if (angband_term[j])
+            angband_term[j]->never_fresh = FALSE;
+    }
 }

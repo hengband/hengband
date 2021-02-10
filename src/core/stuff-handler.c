@@ -14,7 +14,7 @@ void handle_stuff(player_type* player_ptr)
         update_creature(player_ptr);
     if (player_ptr->redraw)
         redraw_stuff(player_ptr);
-    if (player_ptr->window)
+    if (player_ptr->window_flags)
         window_stuff(player_ptr);
 }
 
@@ -24,7 +24,7 @@ void handle_stuff(player_type* player_ptr)
 void monster_race_track(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     player_ptr->monster_race_idx = r_idx;
-    player_ptr->window |= (PW_MONSTER);
+    player_ptr->window_flags |= (PW_MONSTER);
 }
 
 /*
@@ -33,7 +33,7 @@ void monster_race_track(player_type *player_ptr, MONRACE_IDX r_idx)
 void object_kind_track(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
 {
     player_ptr->object_kind_idx = k_idx;
-    player_ptr->window |= (PW_OBJECT);
+    player_ptr->window_flags |= (PW_OBJECT);
 }
 
 /*
@@ -54,7 +54,7 @@ void health_track(player_type *player_ptr, MONSTER_IDX m_idx)
 bool update_player(player_type *caster_ptr)
 {
     caster_ptr->update |= PU_COMBINE | PU_REORDER;
-    caster_ptr->window |= PW_INVEN;
+    caster_ptr->window_flags |= PW_INVEN;
     return TRUE;
 }
 
@@ -66,6 +66,6 @@ bool redraw_player(player_type *caster_ptr)
 
     caster_ptr->redraw |= PR_MANA;
     caster_ptr->update |= PU_COMBINE | PU_REORDER;
-    caster_ptr->window |= PW_INVEN;
+    caster_ptr->window_flags |= PW_INVEN;
     return TRUE;
 }

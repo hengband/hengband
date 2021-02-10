@@ -86,7 +86,7 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
     r_ptr->r_xtra1 |= MR1_EVOLUTION;
 
     if (player_ptr->monster_race_idx == r_idx) {
-        player_ptr->window |= (PW_MONSTER);
+        player_ptr->window_flags |= (PW_MONSTER);
     }
 
     return n;
@@ -118,5 +118,5 @@ void lore_treasure(player_type *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_i
     if (r_ptr->flags1 & (RF1_DROP_GREAT))
         r_ptr->r_flags1 |= (RF1_DROP_GREAT);
     if (player_ptr->monster_race_idx == m_ptr->r_idx)
-        player_ptr->window |= (PW_MONSTER);
+        player_ptr->window_flags |= (PW_MONSTER);
 }

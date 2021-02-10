@@ -413,5 +413,5 @@ void do_cmd_building(player_type *player_ptr)
 
 	player_ptr->update |= (PU_VIEW | PU_MONSTERS | PU_BONUS | PU_LITE | PU_MON_LITE);
 	player_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
-	player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 }

@@ -380,7 +380,7 @@ static void generate_unnatural_random_artifact(player_type *player_ptr, object_t
     msg_format_wizard(player_ptr, CHEAT_OBJECT,
         _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
         total_flags, artifact_bias_name[o_ptr->artifact_bias]);
-    player_ptr->window |= PW_INVEN | PW_EQUIP;
+    player_ptr->window_flags |= PW_INVEN | PW_EQUIP;
 }
 
 /*!

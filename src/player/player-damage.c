@@ -119,7 +119,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
     msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), o_name);
     o_ptr->to_a--;
     creature_ptr->update |= PU_BONUS;
-    creature_ptr->window |= PW_EQUIP | PW_PLAYER;
+    creature_ptr->window_flags |= PW_EQUIP | PW_PLAYER;
     calc_android_exp(creature_ptr);
     return TRUE;
 }
@@ -342,7 +342,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
     }
 
     creature_ptr->redraw |= PR_HP;
-    creature_ptr->window |= PW_PLAYER;
+    creature_ptr->window_flags |= PW_PLAYER;
 
     if (damage_type != DAMAGE_GENO && creature_ptr->chp == 0) {
         chg_virtue(creature_ptr, V_SACRIFICE, 1);

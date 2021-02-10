@@ -70,7 +70,7 @@ void recharge_magic_items(player_type *creature_ptr)
     }
 
     if (changed) {
-        creature_ptr->window |= (PW_EQUIP);
+        creature_ptr->window_flags |= (PW_EQUIP);
         wild_regen = 20;
     }
 
@@ -104,7 +104,7 @@ void recharge_magic_items(player_type *creature_ptr)
     }
 
     if (changed) {
-        creature_ptr->window |= (PW_INVEN);
+        creature_ptr->window_flags |= (PW_INVEN);
         wild_regen = 20;
     }
 

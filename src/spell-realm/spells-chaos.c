@@ -176,7 +176,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 
     caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
     caster_ptr->redraw |= (PR_MAP);
-    caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     return TRUE;
 }
 
