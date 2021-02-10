@@ -53,7 +53,8 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
 		before_str[describer->before_n++] = "ダメージダイスの最大値が";
 		describer->body_str = "武器";
 
-		sprintf(more_than_desc_str, "%d", entry->dice);
+		snprintf(more_than_desc_str, sizeof(more_than_desc_str), "%d",
+			entry->dice);
 		before_str[describer->before_n++] = more_than_desc_str;
 		before_str[describer->before_n++] = "以上の";
 	}
@@ -63,7 +64,8 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
 		static char more_bonus_desc_str[] = "___";
 		before_str[describer->before_n++] = "修正値が(+";
 
-		sprintf(more_bonus_desc_str, "%d", entry->bonus);
+		snprintf(more_bonus_desc_str, sizeof(more_bonus_desc_str),
+			"%d", entry->bonus);
 		before_str[describer->before_n++] = more_bonus_desc_str;
 		before_str[describer->before_n++] = ")以上の";
 	}
@@ -364,7 +366,8 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 		whose_str[whose_n] =
 			"maximum damage from dice is bigger than ";
 		if (arg_n < (int) (sizeof(arg_str) / sizeof(arg_str[0]))) {
-			sprintf(arg_str[arg_n], "%d", entry->dice);
+			snprintf(arg_str[arg_n], sizeof(arg_str[arg_n]), "%d",
+				entry->dice);
 			whose_arg_str[whose_n] = arg_str[arg_n];
 			++arg_n;
 		}
@@ -378,7 +381,8 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 	{
 		whose_str[whose_n] = "magical bonus is bigger than (+";
 		if (arg_n < (int) (sizeof(arg_str) / sizeof(arg_str[0]))) {
-			sprintf(arg_str[arg_n], "%d)", entry->bonus);
+			snprintf(arg_str[arg_n], sizeof(arg_str[arg_n]),
+				"%d)", entry->bonus);
 			whose_arg_str[whose_n] = arg_str[arg_n];
 			++arg_n;
 		}
