@@ -495,7 +495,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (name)
             return _("フィリエルの歌", "Firiel's Song");
         if (desc)
-            return _("周囲の死体や骨を生き返す。", "Resurrects nearby corpse and skeletons. And makes them your pets.");
+            return _("周囲の死体や骨を生き返す。", "Resurrects nearby corpses and skeletons. And makes them your pets.");
 
         {
             /* Stop singing before start another */
@@ -549,7 +549,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             stop_singing(caster_ptr);
 
         if (cast) {
-            msg_print(_("粉砕するメロディを奏で始めた．．．", "You weave a violent pattern of sounds to break wall."));
+            msg_print(_("粉砕するメロディを奏で始めた．．．", "You weave a violent pattern of sounds to break walls."));
             start_singing(caster_ptr, spell, MUSIC_WALL);
         }
 
@@ -616,7 +616,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             stop_singing(caster_ptr);
 
         if (cast) {
-            msg_print(_("軽快な歌を口ずさみ始めた．．．", "You start singing joyful pop song..."));
+            msg_print(_("軽快な歌を口ずさみ始めた．．．", "You start singing a joyful pop song..."));
             start_singing(caster_ptr, spell, MUSIC_SPEED);
         }
 
@@ -916,7 +916,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
     case 29:
         if (name)
-            return _("再生の歌", "Goddess' rebirth");
+            return _("再生の歌", "Goddess's rebirth");
         if (desc)
             return _("すべてのステータスと経験値を回復する。", "Restores all stats and experience.");
 

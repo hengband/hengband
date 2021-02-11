@@ -171,7 +171,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         if (name)
             return _("古代の死霊召喚", "Summon Manes");
         if (desc)
-            return _("古代の死霊を召喚する。", "Summons a manes.");
+            return _("古代の死霊を召喚する。", "Summons one or more Manes.");
 
         {
             if (cast) {
@@ -407,7 +407,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
     case 18:
         if (name)
-            return _("溶岩流", "The Flow of Lava");
+            return _("溶岩流", "Lava Flow");
         if (desc)
             return _("自分を中心とした炎の球を作り出し、床を溶岩に変える。", "Generates a ball of fire centered on you which transforms floors to magma.");
 
@@ -468,7 +468,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
     case 21:
         if (name)
-            return _("地獄の波動", "Nather Wave");
+            return _("地獄の波動", "Nether Wave");
         if (desc)
             return _("視界内の全てのモンスターにダメージを与える。善良なモンスターに特に大きなダメージを与える。",
                 "Damages all monsters in sight. Hurts good monsters greatly.");
@@ -489,7 +489,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
     case 22:
         if (name)
-            return _("サキュバスの接吻", "Kiss of Succubus");
+            return _("サキュバスの接吻", "Succubus's Kiss");
         if (desc)
             return _("因果混乱の球を放つ。", "Fires a ball of nexus.");
 

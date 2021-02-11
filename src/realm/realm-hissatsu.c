@@ -882,7 +882,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (name)
             return _("二重の剣撃", "Twin Slash");
         if (desc)
-            return _("1ターンで2度攻撃を行う。", "double attacks at a time.");
+            return _("1ターンで2度攻撃を行う。", "Attack twice in one turn.");
 
         if (cast) {
             POSITION x, y;

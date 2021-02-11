@@ -214,7 +214,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (name)
             return _("カミカゼのカード", "Trump Kamikaze");
         if (desc)
-            return _("複数の爆発するモンスターを召喚する。", "Summons monsters which explode by itself.");
+            return _("複数の爆発するモンスターを召喚する。", "Summons multiple exploding monsters.");
 
         {
             if (cast || fail) {
