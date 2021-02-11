@@ -131,7 +131,7 @@ bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFFECT v)
     if ((v) && (immune_type)) {
         creature_ptr->special_defense |= (immune_type);
         creature_ptr->ele_immune = v;
-        msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, You are immune to %s"),
+        msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, you are immune to %s"),
             ((immune_type == DEFENSE_ACID)
                     ? _("酸", "acid!")
                     : ((immune_type == DEFENSE_ELEC)
@@ -140,7 +140,7 @@ bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFFECT v)
                                     ? _("火炎", "fire!")
                                     : ((immune_type == DEFENSE_COLD)
                                             ? _("冷気", "cold!")
-                                            : ((immune_type == DEFENSE_POIS) ? _("毒", "poison!") : _("(なし)", "do nothing special.")))))));
+                                            : ((immune_type == DEFENSE_POIS) ? _("毒", "poison!") : _("(なし)", "nothing special.")))))));
     }
 
     if (disturb_state)
