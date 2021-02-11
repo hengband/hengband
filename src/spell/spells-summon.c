@@ -152,9 +152,9 @@ bool cast_summon_hound(player_type *creature_ptr, int power)
 	if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, SUMMON_HOUND, mode))
 	{
 		if (pet)
-			msg_print(_("ハウンドがあなたの下僕として出現した。", "A group of hounds appear as your servant."));
+			msg_print(_("ハウンドがあなたの下僕として出現した。", "A group of hounds appear as your servants."));
 		else
-			msg_print(_("ハウンドはあなたに牙を向けている！", "A group of hounds appear as your enemy!"));
+			msg_print(_("ハウンドはあなたに牙を向けている！", "A group of hounds appear as your enemies!"));
 	}
 
 	return TRUE;
@@ -190,9 +190,9 @@ bool cast_summon_octopus(player_type *creature_ptr)
 	if (summon_named_creature(creature_ptr, 0, creature_ptr->y, creature_ptr->x, MON_JIZOTAKO, mode))
 	{
 		if (pet)
-			msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servant."));
+			msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servants."));
 		else
-			msg_print(_("蛸はあなたを睨んでいる！", "A group of octopuses appear as your enemy!"));
+			msg_print(_("蛸はあなたを睨んでいる！", "A group of octopuses appear as your enemies!"));
 	}
 
 	return TRUE;
