@@ -395,19 +395,25 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
         if (monap_ptr->method == RBM_SHOOT)
             continue;
 
+        // 命中判定の成否によらず思い出処理は行う。
+        // ご都合主義的な仕様ではある(魔力吸収など、食らってみるまでわからないはずのものもあるので)。
+        increase_blow_type_seen(target_ptr, monap_ptr);
+
+        // 命中判定。
         power = mbe_info[monap_ptr->effect].power;
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
         if (check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr))) {
+            // 命中した。
+            // 命中時の処理、落馬処理、変わり身のテレポート処理を行う。
             (void)process_monster_attack_hit(target_ptr, monap_ptr);
+            check_fall_off_horse(target_ptr, monap_ptr);
+            if (target_ptr->special_defense & NINJA_KAWARIMI) {
+                if (kawarimi(target_ptr, FALSE))
+                    return TRUE;
+            }
         } else {
+            // 命中しなかった。回避時の処理を行う。
             process_monster_attack_evasion(target_ptr, monap_ptr);
-        }
-
-        increase_blow_type_seen(target_ptr, monap_ptr);
-        check_fall_off_horse(target_ptr, monap_ptr);
-        if (target_ptr->special_defense & NINJA_KAWARIMI) {
-            if (kawarimi(target_ptr, FALSE))
-                return TRUE;
         }
     }
 
