@@ -911,7 +911,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 		char *kanji = malloc(outlen);
 		char *sp; char *kp = kanji;
 		char sbuf[1024];
-		angband_strcpy(sbuf, str, sizeof(sbuf));
+		memcpy(sbuf, str, (size_t)len);
 		sp = sbuf;
 		iconv(cd, &sp, &inlen, &kp, &outlen);
 		iconv_close(cd);
