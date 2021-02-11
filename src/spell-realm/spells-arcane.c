@@ -29,10 +29,10 @@ void phlogiston(player_type *caster_ptr)
     }
 
     o_ptr->xtra4 += (XTRA16)(max_flog / 2);
-    msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light item."));
+    msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light."));
     if (o_ptr->xtra4 >= max_flog) {
         o_ptr->xtra4 = (XTRA16)max_flog;
-        msg_print(_("照明用アイテムは満タンになった。", "Your light item is full."));
+        msg_print(_("照明用アイテムは満タンになった。", "Your light is full."));
     }
 
     caster_ptr->update |= PU_TORCH;
