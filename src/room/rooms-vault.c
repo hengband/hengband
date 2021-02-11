@@ -71,7 +71,7 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
     POSITION xhsize = xsize / 2;
     POSITION yhsize = ysize / 2;
 
-    msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Room Vault."));
+    msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("泡型ランダムVaultを生成しました。", "Bubble-shaped Vault."));
 
     /* Allocate center of bubbles */
     center[0].x = (byte)randint1(xsize - 3) + 1;
@@ -763,7 +763,7 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
     h3 = randint1(32);
     h4 = randint1(32) - 16;
 
-    msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("対称形ランダムVaultを生成しました。", "Elemental Vault"));
+    msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("対称形ランダムVaultを生成しました。", "Target Vault"));
 
     /* work out outer radius */
     if (xsize > ysize) {
@@ -1208,7 +1208,7 @@ bool build_type17(player_type *player_ptr, dun_data_type *dd_ptr)
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, abs(y), abs(x)))
         return FALSE;
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fixed Room (%s)."), v_name + v_ptr->name);
 
     /* Hack -- Build the vault */
     build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_text + v_ptr->text, xoffset, yoffset, transno);
