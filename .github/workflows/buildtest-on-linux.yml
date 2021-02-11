@@ -31,7 +31,7 @@ jobs:
         run: ./configure
 
       - name: Build Japanese version
-        run: make
+        run: make -j$(nproc)
 
       - name: Clean source tree
         run: make clean
@@ -40,4 +40,4 @@ jobs:
         run: ./configure --disable-japanese
 
       - name: Build English version
-        run: make
+        run: make -j$(nproc)
