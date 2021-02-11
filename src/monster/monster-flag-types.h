@@ -6,7 +6,7 @@ typedef enum monster_flags_type {
     MFLAG_XXX2 = 0x04, /* (unused) */
     MFLAG_ETF = 0x08, /* Monster is entering the field. */
     MFLAG_BORN = 0x10, /* Monster is still being born */
-    MFLAG_NICE = 0x20, /* Monster is still being nice */
+    MFLAG_PREVENT_MAGIC = 0x20, /* Monster is still being no-magic */
 } monster_flags_type;
 
 typedef enum monster_flags2_type {
