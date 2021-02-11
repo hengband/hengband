@@ -333,8 +333,8 @@ void process_player(player_type *creature_ptr)
                     if (!monster_is_valid(m_ptr))
                         continue;
 
-                    if (m_ptr->mflag & MFLAG_NICE) {
-                        m_ptr->mflag &= ~(MFLAG_NICE);
+                    if (m_ptr->mflag & MFLAG_PREVENT_MAGIC) {
+                        m_ptr->mflag &= ~(MFLAG_PREVENT_MAGIC);
                     }
 
                     if (m_ptr->mflag2 & MFLAG2_MARK) {
