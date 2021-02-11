@@ -37,7 +37,7 @@ void check_music(player_type *caster_ptr)
     MANA_POINT need_mana = mod_need_mana(caster_ptr, s_ptr->smana, spell, REALM_MUSIC);
     u32b need_mana_frac = 0;
 
-    s64b_RSHIFT(need_mana, need_mana_frac, 1);
+    s64b_rshift(&need_mana, &need_mana_frac, 1);
     if (s64b_cmp(caster_ptr->csp, caster_ptr->csp_frac, need_mana, need_mana_frac) < 0) {
         stop_singing(caster_ptr);
         return;

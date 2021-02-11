@@ -37,7 +37,7 @@ void regenhp(player_type *creature_ptr, int percent)
      */
     HIT_POINT new_chp = 0;
     u32b new_chp_frac = (creature_ptr->mhp * percent + PY_REGEN_HPBASE);
-    s64b_LSHIFT(new_chp, new_chp_frac, 16);
+    s64b_lshift(&new_chp, &new_chp_frac, 16);
     s64b_add(&(creature_ptr->chp), &(creature_ptr->chp_frac), new_chp, new_chp_frac);
     if (0 < s64b_cmp(creature_ptr->chp, creature_ptr->chp_frac, creature_ptr->mhp, 0)) {
         creature_ptr->chp = creature_ptr->mhp;
@@ -69,7 +69,7 @@ void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT r
     if (creature_ptr->csp > creature_ptr->msp) {
         s32b decay = 0;
         u32b decay_frac = (creature_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
-        s64b_LSHIFT(decay, decay_frac, 16);
+        s64b_lshift(&decay, &decay_frac, 16);
         s64b_sub(&(creature_ptr->csp), &(creature_ptr->csp_frac), decay, decay_frac);
         if (creature_ptr->csp < creature_ptr->msp) {
             creature_ptr->csp = creature_ptr->msp;
@@ -81,7 +81,7 @@ void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT r
     else if (regen_rate > 0) {
         MANA_POINT new_mana = 0;
         u32b new_mana_frac = (creature_ptr->msp * regen_rate / 100 + PY_REGEN_MNBASE);
-        s64b_LSHIFT(new_mana, new_mana_frac, 16);
+        s64b_lshift(&new_mana, &new_mana_frac, 16);
         s64b_add(&(creature_ptr->csp), &(creature_ptr->csp_frac), new_mana, new_mana_frac);
         if (creature_ptr->csp >= creature_ptr->msp) {
             creature_ptr->csp = creature_ptr->msp;
@@ -93,7 +93,7 @@ void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT r
     if (regen_rate < 0) {
         s32b reduce_mana = 0;
         u32b reduce_mana_frac = (creature_ptr->msp * (-1) * regen_rate / 100 + PY_REGEN_MNBASE);
-        s64b_LSHIFT(reduce_mana, reduce_mana_frac, 16);
+        s64b_lshift(&reduce_mana, &reduce_mana_frac, 16);
         s64b_sub(&(creature_ptr->csp), &(creature_ptr->csp_frac), reduce_mana, reduce_mana_frac);
         if (creature_ptr->csp < 0) {
             creature_ptr->csp = 0;
