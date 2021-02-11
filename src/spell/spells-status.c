@@ -254,7 +254,7 @@ void roll_hitdice(player_type *creature_ptr, spell_operation options)
         return;
     }
 
-    msg_print(_("体力ランクが変わった。", "Life rate is changed."));
+    msg_print(_("体力ランクが変わった。", "Life rate has changed."));
     creature_ptr->knowledge &= ~(KNOW_HPRATE);
 }
 
@@ -440,7 +440,7 @@ bool fishing(player_type *creature_ptr)
     POSITION x = creature_ptr->x + ddx[dir];
     creature_ptr->fishing_dir = dir;
     if (!cave_has_flag_bold(creature_ptr->current_floor_ptr, y, x, FF_WATER)) {
-        msg_print(_("そこは水辺ではない。", "There is no fishing place."));
+        msg_print(_("そこは水辺ではない。", "You can't fish here."));
         return FALSE;
     }
 
