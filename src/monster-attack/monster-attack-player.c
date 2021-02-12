@@ -411,10 +411,16 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
         power = mbe_info[monap_ptr->effect].power;
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
         if (check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr))) {
-            // 命中した。
-            // 命中時の処理、思い出処理、落馬処理、変わり身のテレポート処理を行う。
-            (void)process_monster_attack_hit(target_ptr, monap_ptr);
+            // 命中した。命中処理と思い出処理を行う。
+            // 打撃そのものは対邪悪結界で撃退した可能性がある。
+            const bool protect = !process_monster_attack_hit(target_ptr, monap_ptr);
             increase_blow_type_seen(target_ptr, monap_ptr);
+
+            // 撃退成功時はそのまま次の打撃へ移行。
+            if (protect)
+                continue;
+
+            // 撃退失敗時は落馬処理、変わり身のテレポート処理を行う。
             check_fall_off_horse(target_ptr, monap_ptr);
             if (target_ptr->special_defense & NINJA_KAWARIMI) {
                 // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
