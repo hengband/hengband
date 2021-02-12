@@ -16,5 +16,6 @@ typedef enum inventory_slot_type {
     INVEN_FEET = 35, /*!< アイテムスロット…脚部 */
     INVEN_AMMO = 23, /*!< used for get_random_ego()  */
     INVEN_TOTAL = 36, /*!< Total number of inventory_list slots (hard-coded). */
+    INVEN_NONE = 1000, /*!< アイテムスロット非選択状態 */
     INVEN_FORCE = 1111, /*!< inventory_list slot for selecting force (hard-coded). */
 } inventory_slot_type;
