@@ -73,7 +73,7 @@ static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return 攻撃続行ならばTRUE、打ち切りになったらFALSE
  */
-static bool check_monster_attack_terminated(player_type *target_ptr, monap_type *monap_ptr)
+static bool check_monster_continuous_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
     if (!monster_is_valid(monap_ptr->m_ptr))
         return FALSE;
@@ -383,7 +383,7 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
         monap_ptr->d_dice = r_ptr->blow[monap_ptr->ap_cnt].d_dice;
         monap_ptr->d_side = r_ptr->blow[monap_ptr->ap_cnt].d_side;
 
-        if (!check_monster_attack_terminated(target_ptr, monap_ptr))
+        if (!check_monster_continuous_attack(target_ptr, monap_ptr))
             break;
 
         if (monap_ptr->method == RBM_SHOOT)
