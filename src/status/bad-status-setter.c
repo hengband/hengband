@@ -562,7 +562,7 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
         }
     } else if (new_aux < old_aux) {
         if (new_aux == 0) {
-            msg_format(_("やっと%s。", "You are no longer bleeding."), creature_ptr->prace == RACE_ANDROID ? "怪我が直った" : "出血が止まった");
+            msg_format(_("やっと%s。", "You are no longer %s."), creature_ptr->prace == RACE_ANDROID ? _("怪我が直った", "leaking fluid") : _("出血が止まった", "bleeding"));
             if (disturb_state)
                 disturb(creature_ptr, FALSE, FALSE);
         }
