@@ -261,8 +261,8 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
  */
 bool pulish_shield(player_type *caster_ptr)
 {
-    concptr q = _("どの盾を磨きますか？", "Pulish which weapon? ");
-    concptr s = _("磨く盾がありません。", "You have weapon to pulish.");
+    concptr q = _("どの盾を磨きますか？", "Polish which shield? ");
+    concptr s = _("磨く盾がありません。", "You have no shield to polish.");
 
     OBJECT_IDX item;
     object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_SHIELD);
