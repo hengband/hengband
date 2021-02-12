@@ -194,9 +194,9 @@ void store_sell(player_type *owner_ptr)
     /* 我が家でおかしなメッセージが出るオリジナルのバグを修正 */
     concptr s;
     if (cur_store_num == STORE_HOME) {
-        s = _("置けるアイテムを持っていません。", "You don't have any item to drop.");
+        s = _("置けるアイテムを持っていません。", "You don't have any items to drop.");
     } else if (cur_store_num == STORE_MUSEUM) {
-        s = _("寄贈できるアイテムを持っていません。", "You don't have any item to give.");
+        s = _("寄贈できるアイテムを持っていません。", "You don't have any items to give.");
     } else {
         s = _("欲しい物がないですねえ。", "You have nothing that I want.");
     }
