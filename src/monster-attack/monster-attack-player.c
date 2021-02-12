@@ -273,7 +273,8 @@ static void describe_attack_evasion(player_type *target_ptr, monap_type *monap_p
 
 static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (!object_is_armour(target_ptr, &target_ptr->inventory_list[INVEN_MAIN_HAND]) && !object_is_armour(target_ptr, &target_ptr->inventory_list[INVEN_SUB_HAND]))
+    if (!object_is_armour(target_ptr, &target_ptr->inventory_list[INVEN_MAIN_HAND])
+        && !object_is_armour(target_ptr, &target_ptr->inventory_list[INVEN_SUB_HAND]))
         return;
 
     int cur = target_ptr->skill_exp[GINOU_SHIELD];
@@ -390,20 +391,16 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
 
         power = mbe_info[monap_ptr->effect].power;
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
-        if ((monap_ptr->effect == RBE_NONE)
-            || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr))) {
-            if (!process_monster_attack_hit(target_ptr, monap_ptr))
-                continue;
-            else
-                process_monster_attack_evasion(target_ptr, monap_ptr);
+        if (!check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr)) ||
+            !process_monster_attack_hit(target_ptr, monap_ptr)) {
+            process_monster_attack_evasion(target_ptr, monap_ptr);
+            continue;
         }
 
         increase_blow_type_seen(target_ptr, monap_ptr);
         check_fall_off_horse(target_ptr, monap_ptr);
-        if (target_ptr->special_defense & NINJA_KAWARIMI) {
-            if (kawarimi(target_ptr, FALSE))
-                return TRUE;
-        }
+        if (((target_ptr->special_defense & NINJA_KAWARIMI) != 0) && kawarimi(target_ptr, FALSE))
+            return TRUE;
     }
 
     return FALSE;
