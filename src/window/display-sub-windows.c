@@ -79,6 +79,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     MONRACE_IDX r_idx = m_ptr->ap_r_idx;
     monster_race *r_ptr = &r_info[r_idx];
 
+    term_erase(0, y, 255);
     term_gotoxy(x, y);
     if (!r_ptr)
         return;
@@ -158,11 +159,14 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
     }
 
     if (line - y - 1 == max_lines && i != tmp_pos.n) {
+        term_erase(0, line, 255);
         term_gotoxy(x, line);
         term_addstr(-1, TERM_WHITE, "-- and more --");
     } else {
         if (last_mons)
             print_monster_line(x, line++, last_mons, n_same);
+        for (; line < max_lines; line++)
+            term_erase(0, line, 255);
     }
 }
 
@@ -186,7 +190,6 @@ void fix_monster_list(player_type *player_ptr, bool force_term_fresh)
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
-        term_clear();
         target_set_prepare(player_ptr, TARGET_LOOK);
         print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
         target_clear(player_ptr);
