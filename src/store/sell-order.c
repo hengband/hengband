@@ -239,7 +239,7 @@ void store_sell(player_type *owner_ptr)
             msg_print(_("我が家にはもう置く場所がない。", "Your home is full."));
 
         else if (cur_store_num == STORE_MUSEUM)
-            msg_print(_("博物館はもう満杯だ。", "Museum is full."));
+            msg_print(_("博物館はもう満杯だ。", "The Museum is full."));
 
         else
             msg_print(_("すいませんが、店にはもう置く場所がありません。", "I have not the room in my store to keep it."));
