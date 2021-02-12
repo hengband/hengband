@@ -123,7 +123,7 @@ bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
     is_special_floor |= caster_ptr->current_floor_ptr->inside_arena;
     is_special_floor |= caster_ptr->phase_out;
     if (is_special_floor) {
-        msg_print(_("何も起きないようだ……", "It seems nothing happen here..."));
+        msg_print(_("何も起きないようだ……", "Nothing seems to happen..."));
         return FALSE;
     }
 

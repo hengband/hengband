@@ -53,7 +53,7 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
 
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
         if (!g_ptr->o_idx) {
-            msg_print(_("そこには何もありません。", "There is no object at this place."));
+            msg_print(_("そこには何もありません。", "There is no object there."));
             return;
         }
 
