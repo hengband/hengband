@@ -373,7 +373,7 @@ static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_p
 static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
 {
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    for (monap_ptr->ap_cnt = 0; monap_ptr->ap_cnt < 4; monap_ptr->ap_cnt++) {
+    for (monap_ptr->ap_cnt = 0; monap_ptr->ap_cnt < MAX_NUM_BLOWS; monap_ptr->ap_cnt++) {
         monap_ptr->obvious = FALSE;
         HIT_POINT power = 0;
         monap_ptr->damage = 0;

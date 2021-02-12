@@ -35,9 +35,6 @@
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
-/* todo モンスター共通なので、monster-attack-player.cでも使うはず */
-const int MAX_BLOW = 4;
-
 static void heal_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     if (!monster_living(mam_ptr->m_idx) || (mam_ptr->damage <= 2))
@@ -269,7 +266,7 @@ static void explode_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr
 void repeat_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    for (mam_ptr->ap_cnt = 0; mam_ptr->ap_cnt < MAX_BLOW; mam_ptr->ap_cnt++) {
+    for (mam_ptr->ap_cnt = 0; mam_ptr->ap_cnt < MAX_NUM_BLOWS; mam_ptr->ap_cnt++) {
         mam_ptr->effect = r_ptr->blow[mam_ptr->ap_cnt].effect;
         mam_ptr->method = r_ptr->blow[mam_ptr->ap_cnt].method;
         mam_ptr->d_dice = r_ptr->blow[mam_ptr->ap_cnt].d_dice;
