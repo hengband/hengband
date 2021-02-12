@@ -136,7 +136,7 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         }
     } else {
         if (creature_ptr->tim_regen) {
-            msg_print(_("素早く回復する感じがなくなった。", "You feel yourself regenerating slowly."));
+            msg_print(_("素早く回復する感じがなくなった。", "You feel you are no longer regenerating quickly."));
             notice = TRUE;
         }
     }

@@ -37,7 +37,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
     if (v) {
         if (!creature_ptr->blind) {
             if (creature_ptr->prace == RACE_ANDROID) {
-                msg_print(_("センサーをやられた！", "You are blind!"));
+                msg_print(_("センサーをやられた！", "The sensor broke!"));
             } else {
                 msg_print(_("目が見えなくなってしまった！", "You are blind!"));
             }
@@ -50,7 +50,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
     else {
         if (creature_ptr->blind) {
             if (creature_ptr->prace == RACE_ANDROID) {
-                msg_print(_("センサーが復旧した。", "You can see again."));
+                msg_print(_("センサーが復旧した。", "The sensor has been restored."));
             } else {
                 msg_print(_("やっと目が見えるようになった。", "You can see again."));
             }
@@ -562,7 +562,7 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
         }
     } else if (new_aux < old_aux) {
         if (new_aux == 0) {
-            msg_format(_("やっと%s。", "You are no longer bleeding."), creature_ptr->prace == RACE_ANDROID ? "怪我が直った" : "出血が止まった");
+            msg_format(_("やっと%s。", "You are no longer %s."), creature_ptr->prace == RACE_ANDROID ? _("怪我が直った", "leaking fluid") : _("出血が止まった", "bleeding"));
             if (disturb_state)
                 disturb(creature_ptr, FALSE, FALSE);
         }
