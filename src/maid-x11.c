@@ -115,6 +115,7 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 	xcol.red = xcolour.red;
 	xcol.green = xcolour.green;
 	xcol.blue = xcolour.blue;
+	xcol.alpha = 0xFFFF;
 	if (!XftColorAllocValue(dpy, DefaultVisual(dpy, 0), cmap, &xcol, &color))
 	{
 		quit_fmt("Couldn't allocate bitmap color '#%02x%02x%02x'\n",
