@@ -1240,7 +1240,8 @@ Oremor nhoj いならなばねさ倒を私はにつ勝でムーゲのこ。
 #There is but one use for charisma boosting items: shopkeeper charming.
 あるにはあるけど1つだけの、魅力増加アイテムの使い道：店主魅了。
 #It's a happy moment when sufficient DEX makes you "grab hold of your backpack".
-十分な器用さが「ザックを取り返した」ときはうれしい瞬間だ。#Even a nasty Amberite blood curse could fail if you're lucky.
+十分な器用さが「ザックを取り返した」ときはうれしい瞬間だ。
+#Even a nasty Amberite blood curse could fail if you're lucky.
 運がいいなら、やっかいなアンバー王族の血の呪いさえも無効にできるだろう。
 #Don't go deeper down the cliffs unless you find secure footholds (equipment).
 安全な足場(装備)を見つけるまではさらに絶壁を下って行こうとしないこと。
