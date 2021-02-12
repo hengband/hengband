@@ -357,31 +357,38 @@ static void process_monster_attack_evasion(player_type *target_ptr, monap_type *
     }
 }
 
-static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_ptr)
+/*!
+ * @brief モンスターの打撃情報を蓄積させる
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param ap_cnt モンスターの打撃 N回目
+ * @return なし
+ */
+static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_ptr, const int ap_cnt)
 {
     if (!is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) || monap_ptr->do_silly_attack)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (!monap_ptr->obvious && (monap_ptr->damage == 0) && (r_ptr->r_blows[monap_ptr->ap_cnt] <= 10))
+    if (!monap_ptr->obvious && (monap_ptr->damage == 0) && (r_ptr->r_blows[ap_cnt] <= 10))
         return;
 
-    if (r_ptr->r_blows[monap_ptr->ap_cnt] < MAX_UCHAR)
-        r_ptr->r_blows[monap_ptr->ap_cnt]++;
+    if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR)
+        r_ptr->r_blows[ap_cnt]++;
 }
 
 static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
 {
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    for (monap_ptr->ap_cnt = 0; monap_ptr->ap_cnt < MAX_NUM_BLOWS; monap_ptr->ap_cnt++) {
+    for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         monap_ptr->obvious = FALSE;
         HIT_POINT power = 0;
         monap_ptr->damage = 0;
         monap_ptr->act = NULL;
-        monap_ptr->effect = r_ptr->blow[monap_ptr->ap_cnt].effect;
-        monap_ptr->method = r_ptr->blow[monap_ptr->ap_cnt].method;
-        monap_ptr->d_dice = r_ptr->blow[monap_ptr->ap_cnt].d_dice;
-        monap_ptr->d_side = r_ptr->blow[monap_ptr->ap_cnt].d_side;
+        monap_ptr->effect = r_ptr->blow[ap_cnt].effect;
+        monap_ptr->method = r_ptr->blow[ap_cnt].method;
+        monap_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
+        monap_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
 
         if (!check_monster_continuous_attack(target_ptr, monap_ptr))
             break;
@@ -397,7 +404,7 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
             continue;
         }
 
-        increase_blow_type_seen(target_ptr, monap_ptr);
+        increase_blow_type_seen(target_ptr, monap_ptr, ap_cnt);
         check_fall_off_horse(target_ptr, monap_ptr);
         if (((target_ptr->special_defense & NINJA_KAWARIMI) != 0) && kawarimi(target_ptr, FALSE))
             return TRUE;
