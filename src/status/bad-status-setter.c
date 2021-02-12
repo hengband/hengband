@@ -37,7 +37,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
     if (v) {
         if (!creature_ptr->blind) {
             if (creature_ptr->prace == RACE_ANDROID) {
-                msg_print(_("センサーをやられた！", "You are blind!"));
+                msg_print(_("センサーをやられた！", "The sensor broke!"));
             } else {
                 msg_print(_("目が見えなくなってしまった！", "You are blind!"));
             }
@@ -50,7 +50,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
     else {
         if (creature_ptr->blind) {
             if (creature_ptr->prace == RACE_ANDROID) {
-                msg_print(_("センサーが復旧した。", "You can see again."));
+                msg_print(_("センサーが復旧した。", "The sensor has been restored."));
             } else {
                 msg_print(_("やっと目が見えるようになった。", "You can see again."));
             }
