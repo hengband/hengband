@@ -12,4 +12,5 @@ extern summon_type summon_specific_type;
 
 monsterrace_hook_type get_monster_hook(player_type *player_ptr);
 monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x);
-errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
+errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type hook1, monsterrace_hook_type hook2);
+errr get_mon_num_prep_bounty(player_type *player_ptr);

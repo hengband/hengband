@@ -281,7 +281,7 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
         max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
     }
 
-    get_mon_num_prep(player_ptr, NULL, NULL);
+    get_mon_num_prep_bounty(player_ptr);
 
     while (TRUE) {
         today_mon = get_mon_num(player_ptr, MIN(max_dl / 2, 40), max_dl, GMN_ARENA);
@@ -313,7 +313,8 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
  */
 void determine_bounty_uniques(player_type *player_ptr)
 {
-    get_mon_num_prep(player_ptr, NULL, NULL);
+    get_mon_num_prep_bounty(player_ptr);
+
     for (int i = 0; i < MAX_BOUNTY; i++) {
         while (TRUE) {
             current_world_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
