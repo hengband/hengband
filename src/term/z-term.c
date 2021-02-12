@@ -250,15 +250,15 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta
 
     /* Check for new min/max row info */
     if (y < Term->y1)
-        Term->y1 = (byte)y;
+        Term->y1 = y;
     if (y > Term->y2)
-        Term->y2 = (byte)y;
+        Term->y2 = y;
 
     /* Check for new min/max col info for this row */
     if (x < Term->x1[y])
-        Term->x1[y] = (byte)x;
+        Term->x1[y] = x;
     if (x > Term->x2[y])
-        Term->x2[y] = (byte)x;
+        Term->x2[y] = x;
 
 #ifdef JP
     if (((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2) || (scrn->a[y][x] & AF_KANJI2))
@@ -398,15 +398,15 @@ void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM
     if (x1 >= 0) {
         /* Check for new min/max row info */
         if (y < Term->y1)
-            Term->y1 = (byte)y;
+            Term->y1 = y;
         if (y > Term->y2)
-            Term->y2 = (byte)y;
+            Term->y2 = y;
 
         /* Check for new min/max col info in this row */
         if (x1 < Term->x1[y])
-            Term->x1[y] = (byte)x1;
+            Term->x1[y] = x1;
         if (x2 > Term->x2[y])
-            Term->x2[y] = (byte)x2;
+            Term->x2[y] = x2;
     }
 }
 
@@ -528,15 +528,15 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
     if (x1 >= 0) {
         /* Check for new min/max row info */
         if (y < Term->y1)
-            Term->y1 = (byte)y;
+            Term->y1 = y;
         if (y > Term->y2)
-            Term->y2 = (byte)y;
+            Term->y2 = y;
 
         /* Check for new min/max col info in this row */
         if (x1 < Term->x1[y])
-            Term->x1[y] = (byte)x1;
+            Term->x1[y] = x1;
         if (x2 > Term->x2[y])
-            Term->x2[y] = (byte)x2;
+            Term->x2[y] = x2;
     }
 }
 
@@ -1048,7 +1048,7 @@ errr term_fresh(void)
 
     if (Term->never_fresh)
         return 1;
-    
+
     /* Do nothing unless "mapped" */
     if (!Term->mapped_flag)
         return 1;
@@ -1198,7 +1198,7 @@ errr term_fresh(void)
                 }
 
                 /* This row is all done */
-                Term->x1[y] = (byte)w;
+                Term->x1[y] = w;
                 Term->x2[y] = 0;
 
                 /* Flush that row (if allowed) */
@@ -1208,7 +1208,7 @@ errr term_fresh(void)
         }
 
         /* No rows are invalid */
-        Term->y1 = (byte)h;
+        Term->y1 = h;
         Term->y2 = 0;
     }
 
@@ -1307,8 +1307,8 @@ errr term_gotoxy(TERM_LEN x, TERM_LEN y)
         return -1;
 
     /* Remember the cursor */
-    Term->scr->cx = (byte)x;
-    Term->scr->cy = (byte)y;
+    Term->scr->cx = x;
+    Term->scr->cy = y;
 
     /* The cursor is not useless */
     Term->scr->cu = 0;
@@ -1466,7 +1466,7 @@ errr term_addstr(int n, TERM_COLOR a, concptr s)
     term_queue_chars(Term->scr->cx, Term->scr->cy, n, a, s);
 
     /* Advance the cursor */
-    Term->scr->cx += (byte)n;
+    Term->scr->cx += n;
 
     /* Notice "Useless" cursor */
     if (res)
@@ -1599,15 +1599,15 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
     if (x1 >= 0) {
         /* Check for new min/max row info */
         if (y < Term->y1)
-            Term->y1 = (byte)y;
+            Term->y1 = y;
         if (y > Term->y2)
-            Term->y2 = (byte)y;
+            Term->y2 = y;
 
         /* Check for new min/max col info in this row */
         if (x1 < Term->x1[y])
-            Term->x1[y] = (byte)x1;
+            Term->x1[y] = x1;
         if (x2 > Term->x2[y])
-            Term->x2[y] = (byte)x2;
+            Term->x2[y] = x2;
     }
 
     return 0;
@@ -1692,14 +1692,14 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
         x1 = 0;
 
     /* Set y limits */
-    Term->y1 = (byte)y1;
-    Term->y2 = (byte)y2;
+    Term->y1 = y1;
+    Term->y2 = y2;
 
     /* Set the x limits */
     for (int i = Term->y1; i <= Term->y2; i++) {
 #ifdef JP
-        int x1j = x1;
-        int x2j = x2;
+        TERM_LEN x1j = x1;
+        TERM_LEN x2j = x2;
 
         if (x1j > 0) {
             if (Term->scr->a[i][x1j] & AF_KANJI2)
@@ -1711,8 +1711,8 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
                 x2j++;
         }
 
-        Term->x1[i] = (byte)x1j;
-        Term->x2[i] = (byte)x2j;
+        Term->x1[i] = x1j;
+        Term->x2[i] = x2j;
 
         g_ptr = Term->old->c[i];
 
