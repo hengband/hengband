@@ -229,6 +229,10 @@ void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
     case RBE_STUN:
         mam_ptr->pt = GF_SOUND;
         break;
+    case RBE_FLAVOR:
+        // フレーバー打撃には何の効果もない。
+        mam_ptr->pt = GF_NONE;
+        break;
     default:
         mam_ptr->pt = GF_NONE;
         break;

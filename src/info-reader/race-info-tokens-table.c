@@ -75,6 +75,7 @@ concptr r_info_blow_effect[NUM_R_BLOW_EFFECT] = {
 	"SUPERHURT",
 	"INERTIA",
 	"STUN",
+	"FLAVOR",
 	NULL
 };
 

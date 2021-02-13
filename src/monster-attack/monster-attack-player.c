@@ -390,7 +390,6 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
 
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         monap_ptr->obvious = FALSE;
-        HIT_POINT power = 0;
         monap_ptr->damage = 0;
         monap_ptr->act = NULL;
         monap_ptr->effect = r_ptr->blow[ap_cnt].effect;
@@ -403,6 +402,7 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
 
         // effect が RBE_NONE (無効値)になることはあり得ないはずだが、万一そう
         // なっていたら単に攻撃を打ち切る。
+        // r_info.txt の "B:" トークンに effect 以降を書き忘れた場合が該当する。
         if (monap_ptr->effect == RBE_NONE) {
             plog("unexpected: monap_ptr->effect == RBE_NONE");
             break;
@@ -411,10 +411,17 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
         if (monap_ptr->method == RBM_SHOOT)
             continue;
 
-        // 命中判定。
-        power = mbe_info[monap_ptr->effect].power;
+        // フレーバーの打撃は必中扱い。それ以外は通常の命中判定を行う。
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
-        if (check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr))) {
+        bool hit;
+        if (monap_ptr->effect == RBE_FLAVOR) {
+            hit = TRUE;
+        } else {
+            const int power = mbe_info[monap_ptr->effect].power;
+            hit = (bool)check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr));
+        }
+
+        if (hit) {
             // 命中した。命中処理と思い出処理を行う。
             // 打撃そのものは対邪悪結界で撃退した可能性がある。
             const bool protect = !process_monster_attack_hit(target_ptr, monap_ptr);
