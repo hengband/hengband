@@ -1152,7 +1152,7 @@ Oremor nhoj いならなばねさ倒を私はにつ勝でムーゲのこ。
 #Pay heed to the Quylthulg race: invisible, powerful summoners, able to escape.
 クイルスルグ族に注意せよ：透明で、強力な召喚師で、逃げる事もできる。
 #(S)He has the devil of a time who encounters the neversleeping quylthulgs.
-不眠のクイスルグスに出会う者は、時の悪魔に憑かれているに違いない。
+不眠のクイルスルグに出会う者は、時の悪魔に憑かれているに違いない。
 #Your pet aversion against all sorts of hounds won't lead you to anything!
 どんなハウンドでも犬嫌いって言っても、いいことなんざないぜ！
 #An inertia hound is gorgeous dinner: giving pleasure and sleepy satisfaction.
