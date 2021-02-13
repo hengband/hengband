@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 #define NUM_R_BLOW_METHOD 27
-#define NUM_R_BLOW_EFFECT 37
+#define NUM_R_BLOW_EFFECT 38
 #define NUM_R_FLAGS_1 32
 #define NUM_R_FLAGS_2 32
 #define NUM_R_FLAGS_3 32

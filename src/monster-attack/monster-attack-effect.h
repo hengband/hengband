@@ -40,4 +40,5 @@ typedef enum rbe_type {
     RBE_SUPERHURT = 33, /*!< モンスターの攻撃効果: 強力に攻撃する*/
     RBE_INERTIA = 34, /*!< モンスターの攻撃効果: 減速させる*/
     RBE_STUN = 35, /*!< モンスターの攻撃効果: 朦朧とさせる*/
+    RBE_FLAVOR = 36, /*!< モンスターの攻撃効果: フレーバー(メッセージ表示のみ) */
 } rbe_type;
